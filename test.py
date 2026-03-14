@@ -23,6 +23,7 @@ SEARCH_ITEMS = [
     {"label": "50mm Summilux ASPH", "keywords": ["50mm Summilux ASPH", "Summilux 50mm ASPH"], "must_contain": ["summilux", "50", "asph"]},
     # ── Noctilux ──
     {"label": "50mm Noctilux", "keywords": ["50mm Noctilux", "Noctilux 50mm", "Noctilux"], "must_contain": ["noctilux"]},
+    {"label": "75mm Noctilux", "keywords": ["75mm Noctilux", "Noctilux 75mm", "Noctilux 75", "75 Noctilux"], "must_contain": ["noctilux", "75"]},
     # ── Summaron ──
     {"label": "35mm Summaron", "keywords": ["35mm Summaron", "Summaron 35mm", "Summaron"], "must_contain": ["summaron"]},
     # ── 광각 ──

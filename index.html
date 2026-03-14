@@ -162,13 +162,13 @@ select:focus{border-color:var(--accent);color:var(--text);}
       <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key==='Enter') doHeroSearch()">
       <button onclick="doHeroSearch()">Search →</button>
     </div>
-    <div class="hero-tags">
-      <span class="hero-tag" onclick="quickSearch('Summilux 50mm')">Summilux 50mm</span>
-      <span class="hero-tag" onclick="quickSearch('Elmarit 28mm')">Elmarit 28mm</span>
-      <span class="hero-tag" onclick="quickSearch('Summicron 35mm')">Summicron 35mm</span>
-      <span class="hero-tag" onclick="quickSearch('Noctilux')">Noctilux</span>
-      <span class="hero-tag" onclick="quickSearch('M11')">M11</span>
-      <span class="hero-tag" onclick="quickSearch('M10')">M10</span>
+    <div class="hero-tags" id="hero-tags">
+      <span class="hero-tag" onclick="quickSearch('50lux')">50lux</span>
+      <span class="hero-tag" onclick="quickSearch('35cron')">35cron</span>
+      <span class="hero-tag" onclick="quickSearch('50nocti')">50nocti</span>
+      <span class="hero-tag" onclick="quickSearch('50apo')">50apo</span>
+      <span class="hero-tag" onclick="quickSearch('35lux')">35lux</span>
+      <span class="hero-tag" onclick="quickSearch('75nocti')">75nocti</span>
     </div>
   </div>
   <div id="results-section" style="display:none">
@@ -222,22 +222,38 @@ async function loadData(){
   catch(e){console.error(e);}
   return allData;
 }
-// 슬랭 → 정식명 변환
+// 슬랭 → 검색 토큰 변환
 const SLANG_MAP = {
-  '50lux':'Summilux 50mm','50 lux':'Summilux 50mm',
-  '35lux':'Summilux 35mm','35 lux':'Summilux 35mm',
-  '21lux':'Summilux 21mm','28lux':'Summilux 28mm',
-  '50cron':'Summicron 50mm','50 cron':'Summicron 50mm',
-  '35cron':'Summicron 35mm','35 cron':'Summicron 35mm',
-  '28cron':'Summicron 28mm','75cron':'Summicron 75mm','90cron':'Summicron 90mm',
-  'nocti':'Noctilux','50nocti':'Noctilux 50mm',
-  'apocron':'APO Summicron','apo cron':'APO Summicron',
-  '50elmar':'Elmar 50mm','elmar50':'Elmar 50mm',
-  '35lux steelrim':'Summilux 35mm Steel Rim',
+  // Summilux
+  '50lux':'summilux 50','50 lux':'summilux 50',
+  '35lux':'summilux 35','35 lux':'summilux 35',
+  '28lux':'summilux 28','21lux':'summilux 21',
+  // Summicron
+  '50cron':'summicron 50','50 cron':'summicron 50',
+  '35cron':'summicron 35','35 cron':'summicron 35',
+  '28cron':'summicron 28','75cron':'summicron 75','90cron':'summicron 90',
+  // Noctilux
+  'nocti':'noctilux','50nocti':'noctilux 50',
+  '75nocti':'noctilux 75','75 nocti':'noctilux 75',
+  // APO
+  '50apo':'apo summicron 50','50 apo':'apo summicron 50',
+  '75apo':'apo summicron 75','75 apo':'apo summicron 75',
+  '90apo':'apo summicron 90','90 apo':'apo summicron 90',
+  'apocron':'apo summicron','apo cron':'apo summicron',
+  // Elmar
+  '50elmar':'elmar 50','elmar50':'elmar 50',
 };
 function normalizeQuery(q){
   const lower=q.toLowerCase().trim();
   return SLANG_MAP[lower]||q;
+}
+function matchesQuery(item, query){
+  const q=query.toLowerCase();
+  const name=(item['상품명']||'').toLowerCase();
+  const label=(item['label']||'').toLowerCase();
+  // 공백으로 분리된 모든 토큰이 상품명 또는 label에 포함되면 매칭
+  const tokens=q.split(/\s+/).filter(Boolean);
+  return tokens.every(t=>name.includes(t)||label.includes(t));
 }
 function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
 function doHeroSearch(){
@@ -269,7 +285,7 @@ function renderResults(query){
   const cur=document.getElementById('currency-select').value;
   const sort=document.getElementById('sort-select').value;
   let filtered=allData.filter(r=>{
-    if(query&&!r['상품명'].toLowerCase().includes(query.toLowerCase()))return false;
+    if(query&&!matchesQuery(r,query))return false;
     if(site!=='all'&&r.site!==site)return false;
     if(cur!=='all'&&r['통화']!==cur)return false;
     return true;
