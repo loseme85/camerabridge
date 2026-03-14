@@ -222,9 +222,28 @@ async function loadData(){
   catch(e){console.error(e);}
   return allData;
 }
+// 슬랭 → 정식명 변환
+const SLANG_MAP = {
+  '50lux':'Summilux 50mm','50 lux':'Summilux 50mm',
+  '35lux':'Summilux 35mm','35 lux':'Summilux 35mm',
+  '21lux':'Summilux 21mm','28lux':'Summilux 28mm',
+  '50cron':'Summicron 50mm','50 cron':'Summicron 50mm',
+  '35cron':'Summicron 35mm','35 cron':'Summicron 35mm',
+  '28cron':'Summicron 28mm','75cron':'Summicron 75mm','90cron':'Summicron 90mm',
+  'nocti':'Noctilux','50nocti':'Noctilux 50mm',
+  'apocron':'APO Summicron','apo cron':'APO Summicron',
+  '50elmar':'Elmar 50mm','elmar50':'Elmar 50mm',
+  '35lux steelrim':'Summilux 35mm Steel Rim',
+};
+function normalizeQuery(q){
+  const lower=q.toLowerCase().trim();
+  return SLANG_MAP[lower]||q;
+}
 function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
 function doHeroSearch(){
-  const q=document.getElementById('hero-input').value.trim();if(!q)return;
+  const raw=document.getElementById('hero-input').value.trim();if(!raw)return;
+  const q=normalizeQuery(raw);
+  document.getElementById('hero-input').value=q;
   document.getElementById('search-input').value=q;
   document.getElementById('header-search-wrap').style.display='flex';
   document.getElementById('hero-section').style.display='none';
