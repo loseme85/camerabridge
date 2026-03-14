@@ -220,6 +220,7 @@ async function loadData(){
   const sel=document.getElementById('site-select');
   sites.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=(FLAGS[s]||'🌐')+' '+s;sel.appendChild(o);});}
   catch(e){console.error(e);}
+  return allData;
 }
 function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
 function doHeroSearch(){
@@ -228,6 +229,7 @@ function doHeroSearch(){
   document.getElementById('header-search-wrap').style.display='flex';
   document.getElementById('hero-section').style.display='none';
   document.getElementById('results-section').style.display='block';
+  history.pushState({query:q},'','?q='+encodeURIComponent(q));
   renderResults(q);
 }
 function doSearch(){renderResults(document.getElementById('search-input').value.trim());}
@@ -280,7 +282,7 @@ function renderResults(query){
     const sold=r['품절']?`<span class="badge badge-soldout">SOLD OUT</span>`:'';
     return `<a class="result-row${r['품절']?' soldout':''}" href="${r['링크']}" target="_blank">
       <div>${imgEl}${ph}</div>
-      <div><div class="product-name">${r['상품명']}</div><div class="product-meta">${gen}${cond}${sold}</div></div>
+      <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}</div></div>
       <div class="site-col"><span>${flag}</span>${r.site}</div>
       <div><div class="price">${r['가격']}</div><div class="currency">${r['통화']}</div></div>
       <div>${cond||'<span style="color:var(--text-muted);font-size:11px">—</span>'}</div>
@@ -290,6 +292,30 @@ function renderResults(query){
 document.addEventListener('DOMContentLoaded',()=>{
   loadData();
   document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+  // 뒤로가기 처리
+  window.addEventListener('popstate', e=>{
+    if(e.state&&e.state.query){
+      document.getElementById('hero-input').value=e.state.query;
+      document.getElementById('search-input').value=e.state.query;
+      document.getElementById('header-search-wrap').style.display='flex';
+      document.getElementById('hero-section').style.display='none';
+      document.getElementById('results-section').style.display='block';
+      renderResults(e.state.query);
+    } else {
+      showHero();
+    }
+  });
+  // URL 파라미터로 초기 검색
+  const params=new URLSearchParams(window.location.search);
+  const q=params.get('q');
+  if(q){
+    document.getElementById('hero-input').value=q;
+    document.getElementById('search-input').value=q;
+    document.getElementById('header-search-wrap').style.display='flex';
+    document.getElementById('hero-section').style.display='none';
+    document.getElementById('results-section').style.display='block';
+    loadData().then(()=>renderResults(q));
+  }
 });
 </script>
 </body>
