@@ -312,7 +312,7 @@ function renderResults(query){
     const hasImg=r['이미지']&&r['이미지']!=='이미지 없음';
     const imgEl=hasImg?`<img class="result-img" src="${r['이미지']}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:'';
     const ph=`<div class="img-placeholder" style="${hasImg?'display:none':''}">◻</div>`;
-    const gen=r['세대']!=='세대미상'?`<span class="badge badge-gen">${r['세대']}</span>`:'';
+    const gen='';
     const cond=r['컨디션']&&r['컨디션']!=='정보없음'?`<span class="badge badge-cond">${r['컨디션']}</span>`:'';
     const sold=r['품절']?`<span class="badge badge-soldout">SOLD OUT</span>`:'';
     return `<a class="result-row${r['품절']?' soldout':''}" href="${r['링크']}" target="_blank">
@@ -335,6 +335,10 @@ document.addEventListener('DOMContentLoaded',()=>{
       document.getElementById('header-search-wrap').style.display='flex';
       document.getElementById('hero-section').style.display='none';
       document.getElementById('results-section').style.display='block';
+      // 필터 초기화
+      document.getElementById('site-select').value='all';
+      document.getElementById('currency-select').value='all';
+      document.getElementById('sort-select').value='default';
       renderResults(e.state.query);
     } else {
       showHero();
