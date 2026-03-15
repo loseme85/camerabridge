@@ -6,9 +6,7 @@ import re
 # ══════════════════════════════════════════════════════
 # 검색 아이템 정의
 # ══════════════════════════════════════════════════════
-SEARCH_ITEMS = [
-    # ── 35mm Summicron ──
-    {"label": "35mm Summicron", "keywords": ["35mm Summicron", "Summicron 35mm", "35cron"], "must_contain": ["summicron", "35"]},
+SEARCH_ITEMS = ['0.95', 'Noctilux', '녹티', '녹티룩스', 'nocti'], "must_contain": ["summicron", "35"]},
     {"label": "35mm Summicron ASPH", "keywords": ["35mm Summicron ASPH", "Summicron 35mm ASPH"], "must_contain": ["summicron", "35", "asph"]},
     # ── 35mm Summilux ──
     {"label": "35mm Summilux", "keywords": ["35mm Summilux", "Summilux 35mm", "35lux"], "must_contain": ["summilux", "35"]},
