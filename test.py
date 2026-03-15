@@ -66,12 +66,29 @@ GENERATION_TAGS = [
 # 유틸 함수
 # ══════════════════════════════════════════════════════
 def detect_generation(name):
-    name_lower = name.lower()
-    for tag in GENERATION_TAGS:
+    name_upper = name.upper()
+    found_tags = []
+    slang_dict = {
+        '8매': '35mm Summicron 1st (8-Elements)',
+        '스틸림': '35mm Summilux 1st Steel Rim',
+        '리짓': '50mm Summicron Rigid',
+        'DR': '50mm Summicron Dual Range',
+        '6매': '35mm Summicron 4th (6-Elements)'
+    }
+    for slang, full_name in slang_dict.items():
+        if slang in name_upper: found_tags.append(full_name)
+    gen_patterns = [
+        {"gen": "1세대 (v1/E58)", "patterns": [r"1st", r"v\.?1\b", r"1세대", r"E58"]},
+        {"gen": "2세대 (v2/E60)", "patterns": [r"2nd", r"v\.?2\b", r"2세대", r"E60"]},
+        {"gen": "3세대 (v3/E46)", "patterns": [r"3rd", r"v\.?3\b", r"3세대", r"E46"]},
+        {"gen": "4세대 (v4/E39)", "patterns": [r"4th", r"v\.?4\b", r"4세대", r"E39"]},
+    ]
+    for tag in gen_patterns:
         for pattern in tag["patterns"]:
-            if re.search(pattern, name_lower, re.IGNORECASE):
-                return tag["gen"]
-    return "세대미상"
+            if re.search(pattern, name_upper, re.IGNORECASE):
+                found_tags.append(tag["gen"])
+                break
+    return " | ".join(list(set(found_tags))) if found_tags else "세대미상"
 
 def passes_filter(name, must_contain):
     name_lower = " ".join(name.lower().split())
