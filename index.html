@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0049)file:///Users/changdaepark/Downloads/index_9.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root{--bg:#0a0a0a;--surface:#111111;--surface2:#161616;--border:#222222;--border2:#2a2a2a;--text:#e0e0e0;--text-dim:#555;--text-muted:#333;--accent:#c8ff00;--accent-dim:rgba(200,255,0,0.08);--red:#ff3333;--white:#fff;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -148,7 +148,7 @@ select:focus{border-color:var(--accent);color:var(--text);}
         <span id="lang-flag">🇺🇸</span>
         <span id="lang-code">EN</span> ▾
       </button>
-      <div class="lang-dropdown" id="lang-dropdown"></div>
+      <div class="lang-dropdown" id="lang-dropdown"><div class="lang-option" onclick="selectLang(&#39;🇺🇸&#39;,&#39;EN&#39;)"><span>🇺🇸</span><span>English</span><span class="lang-code">EN</span></div><div class="lang-option" onclick="selectLang(&#39;🇰🇷&#39;,&#39;KO&#39;)"><span>🇰🇷</span><span>Korean</span><span class="lang-code">KO</span></div><div class="lang-option" onclick="selectLang(&#39;🇯🇵&#39;,&#39;JA&#39;)"><span>🇯🇵</span><span>Japanese</span><span class="lang-code">JA</span></div><div class="lang-option" onclick="selectLang(&#39;🇩🇪&#39;,&#39;DE&#39;)"><span>🇩🇪</span><span>German</span><span class="lang-code">DE</span></div><div class="lang-option" onclick="selectLang(&#39;🇨🇳&#39;,&#39;ZH-CN&#39;)"><span>🇨🇳</span><span>Chinese (Simplified)</span><span class="lang-code">ZH-CN</span></div><div class="lang-option" onclick="selectLang(&#39;🇹🇼&#39;,&#39;ZH-TW&#39;)"><span>🇹🇼</span><span>Chinese (Traditional)</span><span class="lang-code">ZH-TW</span></div><div class="lang-option" onclick="selectLang(&#39;🇫🇷&#39;,&#39;FR&#39;)"><span>🇫🇷</span><span>French</span><span class="lang-code">FR</span></div><div class="lang-option" onclick="selectLang(&#39;🇮🇹&#39;,&#39;IT&#39;)"><span>🇮🇹</span><span>Italian</span><span class="lang-code">IT</span></div></div>
     </div>
   </div>
 </header>
@@ -159,16 +159,16 @@ select:focus{border-color:var(--accent);color:var(--text);}
     <div class="hero-title-2">BRIDGE</div>
     <p class="hero-sub">// searching across dealers worldwide</p>
     <div class="hero-search">
-      <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key==='Enter') doHeroSearch()">
+      <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key===&#39;Enter&#39;) doHeroSearch()">
       <button onclick="doHeroSearch()">Search →</button>
     </div>
     <div class="hero-tags" id="hero-tags">
-      <span class="hero-tag" onclick="quickSearch('50lux')">50lux</span>
-      <span class="hero-tag" onclick="quickSearch('35cron')">35cron</span>
-      <span class="hero-tag" onclick="quickSearch('50nocti')">50nocti</span>
-      <span class="hero-tag" onclick="quickSearch('50apo')">50apo</span>
-      <span class="hero-tag" onclick="quickSearch('35lux')">35lux</span>
-      <span class="hero-tag" onclick="quickSearch('75nocti')">75nocti</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;50lux&#39;)">50lux</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;35cron&#39;)">35cron</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;50nocti f0.95&#39;)">Nocti f0.95</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;50nocti f1.0&#39;)">Nocti f1.0</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;75nocti&#39;)">75nocti</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;50apo&#39;)">50apo</span>
     </div>
   </div>
   <div id="results-section" style="display:none">
@@ -176,8 +176,8 @@ select:focus{border-color:var(--accent);color:var(--text);}
       <div class="results-title"><strong id="result-count">0</strong> results for "<span id="query-display"></span>"</div>
     </div>
     <div class="tabs">
-      <button class="tab active" onclick="setTab('sale',this)">For Sale (<span id="sale-count">0</span>)</button>
-      <button class="tab" onclick="setTab('sold',this)">Sold Out (<span id="sold-count">0</span>)</button>
+      <button class="tab active" onclick="setTab(&#39;sale&#39;,this)">For Sale (<span id="sale-count">0</span>)</button>
+      <button class="tab" onclick="setTab(&#39;sold&#39;,this)">Sold Out (<span id="sold-count">0</span>)</button>
     </div>
     <div class="filters-row">
       <span class="filter-label">Sort</span>
@@ -247,13 +247,48 @@ function normalizeQuery(q){
   const lower=q.toLowerCase().trim();
   return SLANG_MAP[lower]||q;
 }
+// 세대 슬랭 변환
+const GEN_MAP = {
+  '1st':'1세대','1gen':'1세대','1세대':'1세대',
+  '2nd':'2세대','2gen':'2세대','2세대':'2세대',
+  '3rd':'3세대','3gen':'3세대','3세대':'3세대',
+  '4th':'4세대','4gen':'4세대','4세대':'4세대',
+  '5th':'5세대','5gen':'5세대','5세대':'5세대',
+};
+// 네거티브 필터 키워드 (부속품)
+const NEGATIVE_KEYWORDS = [
+  '케이스','스트랩','필터','캡','설명서','박스only','box only',
+  '충전기','배터리','후드only','hood only','어댑터','파우치',
+  '케이블','핸드그립','grip only','strap only','cap only',
+  'lens cap','body cap','filter only',
+];
+function isAccessory(item){
+  const name=(item['상품명']||'').toLowerCase();
+  return NEGATIVE_KEYWORDS.some(k=>name.includes(k.toLowerCase()));
+}
+// 세대별 동의어 목록
+const GEN_SYNONYMS = {
+  '1세대': ['1st','1세대','1 st','(1st)','first','초기','nickel','니켈','ver.1','v.1'],
+  '2세대': ['2nd','2세대','2 nd','(2nd)','second','ver.2','v.2'],
+  '3세대': ['3rd','3세대','3 rd','(3rd)','third','asph','비구면','ver.3','v.3'],
+  '4세대': ['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
+  '5세대': ['5th','5세대','5 th','(5th)','ver.5','v.5'],
+};
 function matchesQuery(item, query){
+  if(isAccessory(item)) return false;
   const q=query.toLowerCase();
   const name=(item['상품명']||'').toLowerCase();
   const label=(item['label']||'').toLowerCase();
-  // 공백으로 분리된 모든 토큰이 상품명 또는 label에 포함되면 매칭
   const tokens=q.split(/\s+/).filter(Boolean);
-  return tokens.every(t=>name.includes(t)||label.includes(t));
+  return tokens.every(t=>{
+    const gen=GEN_MAP[t];
+    if(gen){
+      // 세대 동의어 모두 체크
+      const synonyms=GEN_SYNONYMS[gen]||[gen];
+      return synonyms.some(s=>name.includes(s));
+    }
+    return name.includes(t)||label.includes(t);
+  });
 }
 function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
 function doHeroSearch(){
@@ -357,5 +392,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 </script>
-</body>
-</html>
+
+
+</body></html>
