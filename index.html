@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_12.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_13.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -233,7 +233,9 @@ const SLANG_MAP = {
   '35cron':'summicron 35','35 cron':'summicron 35',
   '28cron':'summicron 28','75cron':'summicron 75','90cron':'summicron 90',
   // Noctilux
-  'nocti':'noctilux','50nocti':'noctilux 50',
+  'nocti':'noctilux','50nocti':'noctilux',
+  '50nocti f0.95':'noctilux f0.95','50nocti f1.0':'noctilux f1.0','50nocti f1.2':'noctilux f1.2',
+  '75nocti':'noctilux 75mm','75 nocti':'noctilux 75mm',
   '75nocti':'noctilux 75','75 nocti':'noctilux 75',
   // APO
   '50apo':'apo summicron 50','50 apo':'apo summicron 50',
@@ -277,11 +279,8 @@ const GEN_SYNONYMS = {
 function matchesQuery(item, query){
   if(isAccessory(item)) return false;
   const q=query.toLowerCase();
-  // 상품명에서 "상품명 :" 제거
   const name=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
   const label=(item['label']||'').toLowerCase();
-  // label에서 숫자+mm 패턴 추출 (예: "50mm noctilux f0.95" → ["50","noctilux","f0.95"])
-  const labelTokens=label.split(/[\s\-]+/).filter(Boolean);
   const tokens=q.split(/\s+/).filter(Boolean);
   return tokens.every(t=>{
     // 세대 토큰 체크
@@ -290,16 +289,8 @@ function matchesQuery(item, query){
       const synonyms=GEN_SYNONYMS[gen]||[gen];
       return synonyms.some(s=>name.includes(s));
     }
-    // f값 체크 (f0.95, f1.0 등)
-    if(t.startsWith('f') && t.match(/^f[\d.]+$/)){
-      return name.includes(t) || label.includes(t);
-    }
-    // 숫자만인 경우 (50, 35 등) - label이나 name에서 체크
-    if(t.match(/^\d+$/)){
-      return name.includes(t) || labelTokens.some(lt=>lt.includes(t));
-    }
-    // 일반 텍스트 - name과 label 모두 체크
-    return name.includes(t) || label.includes(t) || labelTokens.some(lt=>lt.includes(t));
+    // label이나 name 어디든 포함되면 매칭
+    return name.includes(t) || label.includes(t);
   });
 }
 function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
