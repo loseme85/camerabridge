@@ -6,7 +6,8 @@ import re
 # ══════════════════════════════════════════════════════
 # 검색 아이템 정의
 # ══════════════════════════════════════════════════════
-SEARCH_ITEMS = ['0.95', 'Noctilux', '녹티', '녹티룩스', 'nocti'], "must_contain": ["summicron", "35"]},
+SEARCH_ITEMS = [
+    {"label": "35mm Summicron", "keywords": ["35mm Summicron", "Summicron 35mm", "35cron"], "must_contain": ["summicron", "35"]},
     {"label": "35mm Summicron ASPH", "keywords": ["35mm Summicron ASPH", "Summicron 35mm ASPH"], "must_contain": ["summicron", "35", "asph"]},
     # ── 35mm Summilux ──
     {"label": "35mm Summilux", "keywords": ["35mm Summilux", "Summilux 35mm", "35lux"], "must_contain": ["summilux", "35"]},
@@ -64,7 +65,7 @@ GENERATION_TAGS = [
 # 유틸 함수
 # ══════════════════════════════════════════════════════
 def detect_generation(name):
-    name_upper = name.upper()
+    name_upper = name.upper().replace(' ', '') # 판별 시에는 공백을 다 제거하고 비교
     found_tags = []
     slang_dict = {
         '8매': '35mm Summicron 1st (8-Elements)',
@@ -280,7 +281,7 @@ def crawl_cafe24(page, site, keyword, label, must_contain):
 
             results.append({
                 "site": site["name"],
-                "label": label,
+    "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -368,7 +369,7 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain):
 
             results.append({
                 "site": site["name"],
-                "label": label,
+    "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -442,7 +443,7 @@ def crawl_godo(page, site, keyword, label, must_contain):
             soldout = item.get("soldout", False)
             results.append({
                 "site": site["name"],
-                "label": label,
+    "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -499,7 +500,7 @@ def crawl_ffordes_search(page, site, keyword, label, must_contain):
             gen = detect_generation(name)
             results.append({
                 "site": site["name"],
-                "label": label,
+    "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -593,7 +594,7 @@ def crawl_ffordes(page, site, label, must_contain):
                     gen = detect_generation(name)
                     results.append({
                         "site": site["name"],
-                        "label": label,
+    "label": label,
                         "상품명": name,
                         "세대": gen,
                         "컨디션": condition,
