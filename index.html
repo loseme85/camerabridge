@@ -81,6 +81,7 @@ select:focus{border-color:var(--accent);color:var(--text);}
 .badge-gen{background:rgba(255,255,255,0.05);color:var(--text-dim);border:1px solid var(--border2);}
 .badge-cond{background:rgba(200,255,0,0.08);color:var(--accent);border:1px solid rgba(200,255,0,0.2);}
 .badge-soldout{background:rgba(255,51,51,0.08);color:var(--red);border:1px solid rgba(255,51,51,0.2);}
+.badge-reserved{background:rgba(255,136,0,0.08);color:#ff8800;border:1px solid rgba(255,136,0,0.2);}
 .site-col{display:flex;align-items:center;gap:7px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.3px;}
 .price{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:-0.5px;}
 .currency{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;letter-spacing:1px;}
@@ -361,9 +362,10 @@ function renderResults(query){
     const gen='';
     const cond=r['컨디션']&&r['컨디션']!=='정보없음'?`<span class="badge badge-cond">${r['컨디션']}</span>`:'';
     const sold=r['품절']?`<span class="badge badge-soldout">SOLD OUT</span>`:'';
+    const reserved=r['예약중']?`<span class="badge badge-reserved">예약중</span>`:'';
     return `<a class="result-row${r['품절']?' soldout':''}" href="${r['링크']}" target="_blank">
       <div>${imgEl}${ph}</div>
-      <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}</div></div>
+      <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}${reserved}</div></div>
       <div class="site-col"><span>${flag}</span>${r.site}</div>
       <div>
         <div class="price">${r['가격']}</div>
