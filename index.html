@@ -8,7 +8,7 @@
 <style>
 :root{--bg:#0a0a0a;--surface:#111111;--surface2:#161616;--border:#222222;--border2:#2a2a2a;--text:#e0e0e0;--text-dim:#555;--text-muted:#333;--accent:#c8ff00;--accent-dim:rgba(200,255,0,0.08);--red:#ff3333;--white:#fff;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:9999;}
 header{border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);}
 .logo{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:3px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:10px;flex-shrink:0;}
@@ -72,7 +72,7 @@ select:focus{border-color:var(--accent);color:var(--text);}
 .result-row{display:grid;grid-template-columns:72px 1fr 180px 140px 90px;padding:14px 20px;border-bottom:1px solid var(--border);align-items:center;text-decoration:none;color:inherit;transition:background 0.1s;}
 .result-row:last-child{border-bottom:none;}
 .result-row:hover{background:var(--surface2);}
-.result-row.soldout{opacity:0.35;}
+.result-row.soldout{opacity:0.35;background:rgba(255,51,51,0.03);border-left:2px solid rgba(255,51,51,0.2);}
 .result-img{width:52px;height:52px;object-fit:cover;border-radius:2px;border:1px solid var(--border2);display:block;filter:grayscale(20%);}
 .img-placeholder{width:52px;height:52px;border-radius:2px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:16px;background:var(--surface2);}
 .product-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;padding-right:16px;}
@@ -218,7 +218,8 @@ async function loadData(){
   try{const res=await fetch('results.json');allData=await res.json();
   const sites=[...new Set(allData.map(r=>r.site))];
   const sel=document.getElementById('site-select');
-  sites.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=(FLAGS[s]||'🌐')+' '+s;sel.appendChild(o);});}
+  const existingVals=[...sel.options].map(o=>o.value);
+  sites.forEach(s=>{if(!existingVals.includes(s)){const o=document.createElement('option');o.value=s;o.textContent=(FLAGS[s]||'🌐')+' '+s;sel.appendChild(o);}});}
   catch(e){console.error(e);}
   return allData;
 }
@@ -227,7 +228,7 @@ const SLANG_MAP = {
   // Summilux
   '50lux':'summilux 50','50 lux':'summilux 50',
   '35lux':'summilux 35','35 lux':'summilux 35',
-  '28lux':'summilux 28','21lux':'summilux 21',
+  '28lux':'summilux 28','21lux':'summilux 21','75lux':'summilux 75','75 lux':'summilux 75',
   // Summicron
   '50cron':'summicron 50','50 cron':'summicron 50',
   '35cron':'summicron 35','35 cron':'summicron 35',
@@ -311,6 +312,13 @@ function showHero(){
   document.getElementById('hero-section').style.display='flex';
   document.getElementById('results-section').style.display='none';
   document.getElementById('header-search-wrap').style.display='none';
+  // 필터 초기화
+  document.getElementById('site-select').value='all';
+  document.getElementById('currency-select').value='all';
+  document.getElementById('sort-select').value='default';
+  document.getElementById('search-input').value='';
+  document.getElementById('hero-input').value='';
+  history.pushState({},'','/');
 }
 function setTab(tab,el){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderResults();}
 function togglePriceSort(){const s=document.getElementById('sort-select');s.value=s.value==='price-asc'?'price-desc':'price-asc';renderResults();}
@@ -357,7 +365,10 @@ function renderResults(query){
       <div>${imgEl}${ph}</div>
       <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}</div></div>
       <div class="site-col"><span>${flag}</span>${r.site}</div>
-      <div><div class="price">${r['가격']}</div><div class="currency">${r['통화']}</div></div>
+      <div>
+        <div class="price">${r['가격']}</div>
+        <div class="currency">${r['통화']}${r['할인가']?'<span style="color:var(--red);font-size:9px;margin-left:4px;">-'+r['할인가']+'</span>':''}</div>
+      </div>
       <div>${cond||'<span style="color:var(--text-muted);font-size:11px">—</span>'}</div>
     </a>`;
   }).join('');
