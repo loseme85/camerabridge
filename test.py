@@ -21,8 +21,10 @@ SEARCH_ITEMS = [
     {"label": "50mm Summilux", "keywords": ["50mm Summilux", "Summilux 50mm", "50lux"], "must_contain": ["summilux", "50"]},
     {"label": "50mm Summilux ASPH", "keywords": ["50mm Summilux ASPH", "Summilux 50mm ASPH"], "must_contain": ["summilux", "50", "asph"]},
     # ── Noctilux ──
-    {"label": "50mm Noctilux", "keywords": ["50mm Noctilux", "Noctilux 50mm", "Noctilux"], "must_contain": ["noctilux"]},
-    {"label": "75mm Noctilux", "keywords": ["75mm Noctilux", "Noctilux 75mm", "Noctilux 75", "75 Noctilux"], "must_contain": ["noctilux", "75"]},
+    {"label": "50mm Noctilux f0.95", "keywords": ["Noctilux f0.95", "Noctilux ASPH", "50mm Noctilux"], "must_contain": ["noctilux", "0.95"]},
+    {"label": "50mm Noctilux f1.0", "keywords": ["Noctilux f1.0", "Noctilux 50mm", "50mm Noctilux f1"], "must_contain": ["noctilux", "1.0"]},
+    {"label": "50mm Noctilux f1.2", "keywords": ["Noctilux f1.2", "Noctilux 50mm f1.2"], "must_contain": ["noctilux", "1.2"]},
+    {"label": "75mm Noctilux f1.25", "keywords": ["75mm Noctilux", "Noctilux 75mm", "Noctilux 75"], "must_contain": ["noctilux", "75"]},
     # ── Summaron ──
     {"label": "35mm Summaron", "keywords": ["35mm Summaron", "Summaron 35mm", "Summaron"], "must_contain": ["summaron"]},
     # ── 광각 ──
@@ -34,6 +36,19 @@ SEARCH_ITEMS = [
     {"label": "85mm Summarex", "keywords": ["85mm Summarex", "Summarex 85mm", "Summarex"], "must_contain": ["summarex"]},
     {"label": "Hektor", "keywords": ["Hektor"], "must_contain": ["hektor"]},
     {"label": "Elmax", "keywords": ["Elmax"], "must_contain": ["elmax"]},
+    # ── 바디 ──
+    {"label": "Leica M3", "keywords": ["Leica M3", "M3 Body", "M3 바디"], "must_contain": ["m3"]},
+    {"label": "Leica M2", "keywords": ["Leica M2", "M2 Body"], "must_contain": ["m2"]},
+    {"label": "Leica M4", "keywords": ["Leica M4", "M4 Body"], "must_contain": ["m4"]},
+    {"label": "Leica M6", "keywords": ["Leica M6", "M6 Body", "M6 TTL"], "must_contain": ["m6"]},
+    {"label": "Leica M7", "keywords": ["Leica M7", "M7 Body"], "must_contain": ["m7"]},
+    {"label": "Leica MP", "keywords": ["Leica MP", "MP Body"], "must_contain": ["leica", "mp"]},
+    {"label": "Leica M-A", "keywords": ["Leica MA", "M-A Body"], "must_contain": ["m-a"]},
+    {"label": "Leica M8", "keywords": ["Leica M8", "M8 Body"], "must_contain": ["m8"]},
+    {"label": "Leica M9", "keywords": ["Leica M9", "M9 Body", "M9-P"], "must_contain": ["m9"]},
+    {"label": "Leica M10", "keywords": ["Leica M10", "M10 Body", "M10-P", "M10-R"], "must_contain": ["m10"]},
+    {"label": "Leica M11", "keywords": ["Leica M11", "M11 Body", "M11-P"], "must_contain": ["m11"]},
+    {"label": "Leica M240", "keywords": ["Leica M240", "M 240", "Typ 240"], "must_contain": ["240"]},
     # ── APO 라인업 ──
     {"label": "75mm APO-Summicron", "keywords": ["75mm APO Summicron", "APO Summicron 75mm", "APO Summicron 75"], "must_contain": ["apo", "summicron", "75"]},
     {"label": "90mm APO-Summicron", "keywords": ["90mm APO Summicron", "APO Summicron 90mm", "APO Summicron 90"], "must_contain": ["apo", "summicron", "90"]},
@@ -42,30 +57,10 @@ SEARCH_ITEMS = [
 ]
 
 # ══════════════════════════════════════════════════════
-# 세대 태깅 규칙
-# ══════════════════════════════════════════════════════
-GENERATION_TAGS = [
-    {"gen": "1세대", "patterns": [
-        r"1st", r"ver\.?1", r"v\.?1\b", r"1세대", r"初期", r"第1", r"1型",
-        r"first", r"early", r"초기", r"nickel", r"니켈",
-    ]},
-    {"gen": "2세대", "patterns": [
-        r"2nd", r"ver\.?2", r"v\.?2\b", r"2세대", r"第2", r"2型", r"second",
-    ]},
-    {"gen": "3세대", "patterns": [
-        r"3rd", r"ver\.?3", r"v\.?3\b", r"3세대", r"第3", r"3型",
-        r"third", r"asph", r"비구면",
-    ]},
-    {"gen": "4세대", "patterns": [
-        r"4th", r"ver\.?4", r"v\.?4\b", r"4세대", r"第4", r"4型",
-    ]},
-]
-
-# ══════════════════════════════════════════════════════
 # 유틸 함수
 # ══════════════════════════════════════════════════════
 def detect_generation(name):
-    name_upper = name.upper().replace(' ', '') # 판별 시에는 공백을 다 제거하고 비교
+    name_upper = name.upper().replace(' ', '')  # 판별 시에는 공백을 다 제거하고 비교
     found_tags = []
     slang_dict = {
         '8매': '35mm Summicron 1st (8-Elements)',
@@ -75,7 +70,8 @@ def detect_generation(name):
         '6매': '35mm Summicron 4th (6-Elements)'
     }
     for slang, full_name in slang_dict.items():
-        if slang in name_upper: found_tags.append(full_name)
+        if slang in name_upper:
+            found_tags.append(full_name)
     gen_patterns = [
         {"gen": "1세대 (v1/E58)", "patterns": [r"1st", r"v\.?1\b", r"1세대", r"E58"]},
         {"gen": "2세대 (v2/E60)", "patterns": [r"2nd", r"v\.?2\b", r"2세대", r"E60"]},
@@ -101,17 +97,6 @@ def passes_filter(name, must_contain):
             if w not in name_lower:
                 return False
     return True
-
-def extract_condition_domestic(page):
-    """국내 사이트: 상세 페이지에서 XX% 컨디션 추출"""
-    try:
-        body_text = page.inner_text('body')
-        match = re.search(r'제품설명.*?(\d{2,3})%', body_text)
-        if match:
-            return match.group(1) + "%"
-    except:
-        pass
-    return "정보없음"
 
 def extract_condition_overseas(name):
     """해외 사이트: 상품명에서 컨디션 텍스트 추출"""
@@ -203,7 +188,7 @@ SITES = [
         "통화": "KRW",
         "condition_type": "domestic",
     },
-        {
+    {
         "name": "Ffordes (영국)",
         "search_url": "https://www.ffordes.com/search?q={query}",
         "base": "https://www.ffordes.com",
@@ -269,9 +254,8 @@ def crawl_cafe24(page, site, keyword, label, must_contain):
                 raw = img_el.get_attribute("src") or img_el.get_attribute("data-src") or ""
                 img_url = fix_img_url(raw, site["base"])
 
-            # 컨디션 (목록에서 직접 추출)
+            # 컨디션 (카드 텍스트 + 상품명에서 추출)
             card_text = card.inner_text()
-            # 카드 텍스트 + 상품명에서 컨디션 추출
             cond_match = re.search(r"(\d{2,3})%", card_text)
             if not cond_match:
                 cond_match = re.search(r"(\d{2,3})%", name)
@@ -279,9 +263,18 @@ def crawl_cafe24(page, site, keyword, label, must_contain):
 
             gen = detect_generation(name)
 
+            # 충무로 품절/예약중 감지
+            card_html = card.inner_html()
+            is_soldout = (
+                "icon_202209171535309800.gif" in card_html or
+                "SOLD OUT" in card_html or
+                "품절" in card_html
+            )
+            is_reserved = "예약중" in card_html
+
             results.append({
                 "site": site["name"],
-    "label": label,
+                "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -289,8 +282,11 @@ def crawl_cafe24(page, site, keyword, label, must_contain):
                 "통화": site["통화"],
                 "이미지": img_url,
                 "링크": href,
+                "품절": is_soldout,
+                "예약중": is_reserved,
             })
-            print(f"    ✔  {name[:40]} | {gen} | {condition} | {price}")
+            status = "🚫품절" if is_soldout else ("📋예약중" if is_reserved else "✔ ")
+            print(f"    {status} {name[:40]} | {gen} | {condition} | {price}")
 
         except Exception as e:
             print(f"    ⚠️  카드 파싱 오류: {e}")
@@ -336,9 +332,9 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain):
                 href = site["base"] + href
             href = href.split("#")[0]
 
-            card_text = card.inner_text()
             # 상품명 줄바꿈 정리
             name = " ".join(name.split())
+            card_text = card.inner_text()
 
             # 가격: "원" 포함된 숫자 추출
             price_match = re.search(r"([\d,]+원)", card_text)
@@ -358,18 +354,29 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain):
 
             gen = detect_generation(name)
 
-            # 품절 감지
-            soldout_keywords = ["품절", "sold out", "판매완료", "out of stock"]
+            # 품절 감지 (사이트별 이미지 패턴)
+            card_html = card.inner_html()
             card_text_lower = card_text.lower()
-            is_soldout = any(kw in card_text_lower for kw in soldout_keywords)
-            # 품절 버튼 확인
-            soldout_btn = card.query_selector(".icon-sold-out, .soldout, [class*='soldout'], [class*='sold-out']")
-            if soldout_btn:
-                is_soldout = True
+            site_name = site["name"]
+            is_soldout = False
+            is_reserved = False
+
+            if site_name == "사진집":
+                is_soldout = "pdi_sold.png" in card_html or "품절" in card_html
+            elif site_name == "장씨카메라":
+                is_soldout = ('alt="품절"' in card_html or
+                             "icon_202505071559330700.gif" in card_html or
+                             "품절" in card_html)
+                is_reserved = "예약중" in card_html
+            else:
+                is_soldout = any(kw in card_text_lower for kw in ["품절", "sold out", "판매완료"])
+                soldout_btn = card.query_selector(".icon-sold-out, .soldout, [class*='soldout']")
+                if soldout_btn:
+                    is_soldout = True
 
             results.append({
                 "site": site["name"],
-    "label": label,
+                "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -378,8 +385,10 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain):
                 "이미지": img_url,
                 "링크": href,
                 "품절": is_soldout,
+                "예약중": is_reserved,
             })
-            print(f"    {'🚫품절' if is_soldout else '✔ '} {name[:40]} | {gen} | {condition} | {price}")
+            status = "🚫품절" if is_soldout else ("📋예약중" if is_reserved else "✔ ")
+            print(f"    {status} {name[:40]} | {gen} | {condition} | {price}")
 
         except Exception as e:
             print(f"    ⚠️  카드 파싱 오류: {e}")
@@ -388,7 +397,6 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain):
     return results
 
 def crawl_godo(page, site, keyword, label, must_contain):
-    import re as _re
     results = []
     url = site["search_url"].format(query=keyword.replace(" ", "+"))
     print(f"    URL: {url}")
@@ -434,16 +442,16 @@ def crawl_godo(page, site, keyword, label, must_contain):
             if not name or not passes_filter(name, must_contain):
                 continue
             card_text = item["text"]
-            price_match = _re.search(r"([\d,]+원)", card_text)
+            price_match = re.search(r"([\d,]+원)", card_text)
             price = price_match.group(1) if price_match else "문의요망"
-            cond_match = _re.search(r"(\d{2,3})%", card_text)
+            cond_match = re.search(r"(\d{2,3})%", card_text)
             condition = cond_match.group(1) + "%" if cond_match else "정보없음"
             img_url = fix_img_url(item["img"], site["base"])
             gen = detect_generation(name)
             soldout = item.get("soldout", False)
             results.append({
                 "site": site["name"],
-    "label": label,
+                "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -500,7 +508,7 @@ def crawl_ffordes_search(page, site, keyword, label, must_contain):
             gen = detect_generation(name)
             results.append({
                 "site": site["name"],
-    "label": label,
+                "label": label,
                 "상품명": name,
                 "세대": gen,
                 "컨디션": condition,
@@ -508,6 +516,7 @@ def crawl_ffordes_search(page, site, keyword, label, must_contain):
                 "통화": site["통화"],
                 "이미지": img_url,
                 "링크": full_href,
+                "품절": False,
             })
             print(f"    ✔  {name[:40]} | {gen} | {condition} | {price}")
         except Exception as e:
@@ -516,136 +525,10 @@ def crawl_ffordes_search(page, site, keyword, label, must_contain):
 
     return results
 
-def crawl_ffordes(page, site, label, must_contain):
-    results = []
-
-    for base_url in site["category_urls"]:
-        # 초기 로드 (retry 포함)
-        loaded = False
-        for attempt in range(3):
-            try:
-                page.goto(base_url, wait_until="domcontentloaded", timeout=30_000)
-                loaded = True
-                break
-            except Exception as e:
-                print(f"    ⚠️  로드 재시도 {attempt+1}/3: {e}")
-                time.sleep(3)
-        if not loaded:
-            print(f"    ❌ {base_url} 로드 실패, 건너뜀")
-            continue
-        time.sleep(2)
-
-        page_num = 1
-        while True:
-            # 1페이지는 이미 로드됨, 2페이지부터 클릭
-            if page_num > 1:
-                next_btn = page.query_selector("a.next")
-                next_href = next_btn.get_attribute("href") if next_btn else ""
-                if not next_btn or "javascript" in next_href or not next_href:
-                    print(f"    └─ 마지막 페이지, 중단")
-                    break
-                # 클릭 전 첫 상품 href로 페이지 변경 감지
-                first_item = page.query_selector("div.catGridCol a[href]")
-                prev_first = first_item.get_attribute("href") if first_item else ""
-                next_btn.click()
-                # 콘텐츠가 바뀔 때까지 최대 5초 대기
-                for _ in range(10):
-                    time.sleep(0.5)
-                    fi = page.query_selector("div.catGridCol a[href]")
-                    if fi and fi.get_attribute("href") != prev_first:
-                        break
-                else:
-                    print(f"    └─ 마지막 페이지, 중단")
-                    break
-
-            print(f"    페이지 {page_num}: {page.url}")
-
-            items = page.query_selector_all("div.catGridCol")
-            items = [i for i in items if i.query_selector(".priceTxt")]
-
-            if not items:
-                print(f"    └─ 상품 없음, 중단")
-                break
-
-            print(f"    └─ {len(items)}개 상품 발견")
-
-            for item in items:
-                try:
-                    a_el = item.query_selector("a[href]")
-                    href = a_el.get_attribute("href") if a_el else ""
-                    if not href or not is_ffordes_used(href):
-                        continue
-                    full_href = site["base"] + href if not href.startswith("http") else href
-                    name_el = item.query_selector("a.setScroll, .prodName, h2, h3")
-                    name = name_el.inner_text().strip() if name_el else ""
-                    if not name:
-                        name = href.split("/")[-1].replace("-", " ").title()
-                    if not passes_filter(name, must_contain):
-                        continue
-                    price_el = item.query_selector(".priceTxt")
-                    price_text = price_el.inner_text().strip() if price_el else ""
-                    price = normalize_price(price_text)
-                    img_el = item.query_selector("img")
-                    img_url = ""
-                    if img_el:
-                        raw = img_el.get_attribute("src") or img_el.get_attribute("data-src") or ""
-                        img_url = fix_img_url(raw, site["base"])
-                    condition = extract_condition_overseas(name)
-                    gen = detect_generation(name)
-                    results.append({
-                        "site": site["name"],
-    "label": label,
-                        "상품명": name,
-                        "세대": gen,
-                        "컨디션": condition,
-                        "가격": price,
-                        "통화": site["통화"],
-                        "이미지": img_url,
-                        "링크": full_href,
-                    })
-                    print(f"    ✔  {name[:40]} | {gen} | {condition} | {price}")
-                except Exception as e:
-                    print(f"    ⚠️  파싱 오류: {e}")
-                    continue
-
-            page_num += 1
-
-    return results
-
 # ══════════════════════════════════════════════════════
-# 메인 실행
+# 단일 사이트 크롤링 - 병렬 처리용
 # ══════════════════════════════════════════════════════
-def push_to_github():
-    import subprocess, os
-    token = os.environ.get("GITHUB_TOKEN")
-    if not token:
-        print("❌ GITHUB_TOKEN 환경변수가 없어요!")
-        return
-
-    repo = "loseme85/camerabridge"
-    remote = f"https://{token}@github.com/{repo}.git"
-
-    cmds = [
-        ["git", "add", "results.json"],
-        ["git", "commit", "-m", "Auto update results.json"],
-        ["git", "push", remote, "main"],
-    ]
-
-    for cmd in cmds:
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        combined = result.stdout + result.stderr
-        if result.returncode != 0 and "nothing to commit" not in combined and "nothing added to commit" not in combined:
-            print(f"❌ {' '.join(cmd)}: {result.stderr}")
-            return
-
-    print("✅ GitHub push 완료! Vercel 자동 배포 시작됨")
-
-
 def crawl_site(site):
-    """단일 사이트 크롤링 - 병렬 처리용"""
-    import time as _time
-    from playwright.sync_api import sync_playwright
-
     site_results = []
 
     # 억불카메라는 headless=False 필요
@@ -685,8 +568,6 @@ def crawl_site(site):
                         res = crawl_cafe24(page, site, keyword, label, must_contain)
                     elif site["type"] == "cafe24_all":
                         res = crawl_cafe24_all(page, site, keyword, label, must_contain)
-                    elif site["type"] == "ffordes":
-                        res = crawl_ffordes(page, site, label, must_contain)
                     elif site["type"] == "godo":
                         res = crawl_godo(page, site, keyword, label, must_contain)
                     elif site["type"] == "ffordes_search":
@@ -701,7 +582,7 @@ def crawl_site(site):
                                 site_results.append(r)
                 except Exception as e:
                     print(f"    ❌ {keyword} 오류: {e}")
-                _time.sleep(0.3)
+                time.sleep(0.3)
 
         browser.close()
 
@@ -710,10 +591,9 @@ def crawl_site(site):
 
 
 def crawl_all():
-    import time as _time
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
-    start_time = _time.time()
+    start_time = time.time()
     all_results = []
 
     # 억불카메라(godo)는 별도 순차 처리 (headless=False 필요)
@@ -747,7 +627,24 @@ def crawl_all():
             seen.add(r["링크"])
             unique_results.append(r)
 
-    elapsed = _time.time() - start_time
+    elapsed = time.time() - start_time
+
+    # label 자동 보정 + 상품명 정리
+    for r in unique_results:
+        name = r['상품명']
+        # 상품명에서 "상품명 :" 제거
+        if name.startswith('상품명') and ':' in name:
+            name = name.split(':', 1)[-1].strip()
+            r['상품명'] = name
+        name_lower = name.lower()
+        # Noctilux label 조리개별 보정
+        if r['label'] in ['50mm Noctilux']:
+            if '0.95' in name_lower:
+                r['label'] = '50mm Noctilux f0.95'
+            elif '1.2' in name_lower:
+                r['label'] = '50mm Noctilux f1.2'
+            elif '1.0' in name_lower or 'e58' in name_lower or 'e60' in name_lower:
+                r['label'] = '50mm Noctilux f1.0'
 
     with open("results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
@@ -762,10 +659,35 @@ def crawl_all():
         print(f"     🖼  {r['이미지'] or '이미지 없음'}")
         print(f"     🔗 {r['링크']}")
 
-if __name__ == "__main__":
-    crawl_all()
-    push_to_github()
-
 # ══════════════════════════════════════════════════════
 # GitHub 자동 Push
 # ══════════════════════════════════════════════════════
+def push_to_github():
+    import subprocess, os
+    token = os.environ.get("GITHUB_TOKEN")
+    if not token:
+        print("❌ GITHUB_TOKEN 환경변수가 없어요!")
+        return
+
+    repo = "loseme85/camerabridge"
+    remote = f"https://{token}@github.com/{repo}.git"
+
+    cmds = [
+        ["git", "add", "results.json", "index.html", "admin.html"],
+        ["git", "commit", "-m", "Auto update results.json"],
+        ["git", "push", remote, "main"],
+    ]
+
+    for cmd in cmds:
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        combined = result.stdout + result.stderr
+        if result.returncode != 0 and "nothing to commit" not in combined and "nothing added to commit" not in combined:
+            print(f"❌ {' '.join(cmd)}: {result.stderr}")
+            return
+
+    print("✅ GitHub push 완료! Vercel 자동 배포 시작됨")
+
+
+if __name__ == "__main__":
+    crawl_all()
+    push_to_github()
