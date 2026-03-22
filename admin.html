@@ -120,6 +120,7 @@ input[type=text]{width:160px;}
 .badge-sold{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,51,51,0.2);}
 .badge-res{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(255,136,0,0.2);}
 .badge-deal{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(200,255,0,0.2);}
+.deal-row{border-left:2px solid rgba(200,255,0,0.4);}
 .pagination{display:flex;gap:4px;justify-content:center;margin-top:12px;align-items:center;}
 .page-btn{font-family:'Space Mono',monospace;font-size:10px;padding:4px 9px;border:1px solid var(--border2);background:transparent;color:var(--dim);cursor:pointer;border-radius:2px;}
 .page-btn.active{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700;}
@@ -171,8 +172,12 @@ input[type=text]{width:160px;}
       <div class="chart-wrap"><canvas id="site-chart"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-title">Top Labels (by count)</div>
+      <div class="card-title"><span>Top Labels</span><span id="sys-summary" style="font-size:9px;color:var(--muted)"></span></div>
       <div id="label-bars"></div>
+      <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;">SYSTEM BREAKDOWN</div>
+        <div id="system-bars"></div>
+      </div>
     </div>
     <div class="card">
       <div class="card-title">Sale vs Sold Out</div>
@@ -214,6 +219,36 @@ input[type=text]{width:160px;}
       <select id="f-site" onchange="applyFilters()"><option value="all">All</option></select>
       <span class="filter-lbl">Label</span>
       <select id="f-label" onchange="applyFilters()"><option value="all">All</option></select>
+      <span class="filter-lbl">System</span>
+      <select id="f-system" onchange="applyFilters()">
+        <option value="all">All</option>
+        <option value="M System">M System</option>
+        <option value="R System">R System</option>
+        <option value="SL/Q/S">SL/Q/S</option>
+        <option value="P&S">P&S</option>
+      </select>
+      <span class="filter-lbl">Category</span>
+      <select id="f-category" onchange="applyFilters()">
+        <option value="all">All</option>
+        <option value="Lens">Lens</option>
+        <option value="Body">Body</option>
+        <option value="Accessory">Accessory</option>
+      </select>
+      <span class="filter-lbl">System</span>
+      <select id="f-system" onchange="applyFilters()">
+        <option value="all">All</option>
+        <option value="M System">M System</option>
+        <option value="R System">R System</option>
+        <option value="SL/Q/S">SL/Q/S</option>
+        <option value="P&S">P&S</option>
+      </select>
+      <span class="filter-lbl">Category</span>
+      <select id="f-cat" onchange="applyFilters()">
+        <option value="all">All</option>
+        <option value="Lens">Lens</option>
+        <option value="Body">Body</option>
+        <option value="Accessory">Accessory</option>
+      </select>
       <span class="filter-lbl">Status</span>
       <select id="f-status" onchange="applyFilters()">
         <option value="all">All</option><option value="sale">For Sale</option>
@@ -231,7 +266,7 @@ input[type=text]{width:160px;}
     <div class="data-head">
       <span>#</span><span>Product</span><span>Site</span>
       <span onclick="setSortPrice()">Price ↕</span>
-      <span>Condition</span><span>Status</span>
+      <span>System</span><span>Status</span>
     </div>
     <div id="data-body"></div>
     <div class="pagination" id="pagination"></div>
@@ -254,6 +289,24 @@ function log(msg,type='info'){
   box.appendChild(div);box.scrollTop=box.scrollHeight;
 }
 function clearLog(){document.getElementById('log-box').innerHTML='';}
+
+async function loadStatus(){
+  try{
+    const res=await fetch('status.json?t='+Date.now());
+    const s=await res.json();
+    if(s.last_crawl){
+      document.getElementById('crawl-info').textContent=`Last: ${s.last_crawl} (${s.elapsed_sec}s)`;
+      log(`// Last crawl: ${s.last_crawl}, ${s.total} items in ${s.elapsed_sec}s`,'info');
+    }
+    // System 분포 업데이트
+    if(s.by_system){
+      const sys=s.by_system;
+      log(`// Systems: M=${sys['M System']||0}, R=${sys['R System']||0}, SL/Q=${sys['SL/Q/S']||0}, P&S=${sys['P&S']||0}`,'ok');
+    }
+  }catch(e){
+    log('// status.json not found (run crawler first)','warn');
+  }
+}
 
 function parsePrice(p,cur){
   if(!p||p==='문의요망')return null;
@@ -285,6 +338,7 @@ async function loadData(){
     updateCharts();
     updatePriceAnalysis();
     updateDeals();
+    loadStatus();
     populateFilters();
     applyFilters();
   }catch(e){
@@ -373,6 +427,21 @@ function updateCharts(){
       <div class="site-bar-track"><div class="site-bar-fill" style="width:${n/max*100}%"></div></div>
       <div class="site-bar-count">${n}</div>
     </div>`).join('');
+
+  // System breakdown
+  const sysCounts={};
+  allData.forEach(r=>{if(r.system)sysCounts[r.system]=(sysCounts[r.system]||0)+1;});
+  const sysColors={'M System':'var(--accent)','R System':'var(--blue)','SL/Q/S':'var(--orange)','P&S':'#aa88ff','Other':'var(--muted)'};
+  const sysMax=Math.max(...Object.values(sysCounts))||1;
+  const sysBars=document.getElementById('system-bars');
+  if(sysBars)sysBars.innerHTML=Object.entries(sysCounts).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`
+    <div class="site-bar-row">
+      <div class="site-bar-label">${s}</div>
+      <div class="site-bar-track"><div class="site-bar-fill" style="width:${n/sysMax*100}%;background:${sysColors[s]||'var(--accent)'}"></div></div>
+      <div class="site-bar-count">${n}</div>
+    </div>`).join('');
+  const sysSummary=document.getElementById('sys-summary');
+  if(sysSummary)sysSummary.textContent=Object.entries(sysCounts).map(([s,n])=>`${s.split(' ')[0]}:${n}`).join(' | ');
 }
 
 function updatePriceAnalysis(){
@@ -445,15 +514,19 @@ function applyFilters(){
   const label=document.getElementById('f-label').value;
   const status=document.getElementById('f-status').value;
   const sort=document.getElementById('f-sort').value;
+  const fsystem=document.getElementById('f-system').value;
+  const fcategory=document.getElementById('f-category').value;
   filtered=allData.filter(r=>{
     const name=(r['상품명']||'').toLowerCase();
     if(search&&!name.includes(search)&&!(r['label']||'').toLowerCase().includes(search))return false;
     if(site!=='all'&&r.site!==site)return false;
     if(label!=='all'&&r.label!==label)return false;
+    if(fsystem!=='all'&&r.system!==fsystem)return false;
+    if(fcategory!=='all'&&r.category!==fcategory)return false;
     if(status==='sale'&&(r['품절']||r['예약중']))return false;
     if(status==='sold'&&!r['품절'])return false;
     if(status==='reserved'&&!r['예약중'])return false;
-    if(status==='deal'){const p=parsePrice(r['가격'],r['통화']);const avg=labelAvg[r.label];if(!p||!avg||p>=avg*0.8)return false;}
+    if(status==='deal'){const p=parsePrice(r['가격'],r['통화']);const avg=labelAvg[r.label];if(!p||!avg||p>=avg*0.9)return false;}
     return true;
   });
   if(sort==='price-asc')filtered.sort((a,b)=>(parsePrice(a['가격'],a['통화'])||Infinity)-(parsePrice(b['가격'],b['통화'])||Infinity));
@@ -479,14 +552,24 @@ function renderTable(){
     const isDeal=p&&avg&&p<avg*0.8;
     const sold=r['품절']?'<span class="badge badge-sold">SOLD</span>':'';
     const res=r['예약중']?'<span class="badge badge-res">예약</span>':'';
-    const deal=isDeal?'<span class="badge badge-deal">DEAL</span>':'';
+    const deal=isDeal?'<span class="badge badge-deal">🔥DEAL</span>':'';
+    const sysColor={'M System':'var(--accent)','R System':'var(--blue)','SL/Q/S':'var(--orange)','P&S':'#aa88ff'};
+    const sysTag=r.system?`<span style="font-family:Space Mono,monospace;font-size:8px;color:${sysColor[r.system]||'var(--dim)'}">${r.system||''}</span>`:'';
+    const catTag=r.category&&r.category!=='Lens'?`<span class="badge" style="background:rgba(255,255,255,0.04);color:var(--muted);border:1px solid var(--border2)">${r.category}</span>`:'';
+    // NEW 표시 (오늘 크롤링)
+    const today=new Date().toISOString().slice(0,10);
+    const isNew=r.crawl_time&&r.crawl_time.startsWith(today);
+    const newTag=isNew?'<span class="badge" style="background:rgba(200,255,0,0.15);color:var(--accent);border:1px solid rgba(200,255,0,0.3)">NEW</span>':'';
     return `<div class="data-row${r['품절']?' soldout':''}">
       <div class="data-num">${start+i+1}</div>
-      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,55)}${name.length>55?'…':''}</a></div>
+      <div class="data-name">
+        <a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>
+        <div style="margin-top:3px;display:flex;gap:3px;flex-wrap:wrap;">${newTag}${deal}</div>
+      </div>
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
       <div class="data-price">${r['가격']||'—'}</div>
-      <div class="data-cond">${r['컨디션']||'—'}</div>
-      <div style="display:flex;gap:3px;flex-wrap:wrap;">${sold}${res}${deal}</div>
+      <div style="display:flex;flex-direction:column;gap:2px;">${sysTag}${catTag}</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;">${sold}${res}</div>
     </div>`;
   }).join('');
 }
@@ -504,10 +587,31 @@ function renderPagination(){
 }
 function goPage(n){currentPage=n;renderTable();renderPagination();window.scrollTo(0,600);}
 
+async function pollStatus(){
+  try{
+    const res=await fetch('status.json?t='+Date.now());
+    const s=await res.json();
+    const pct=s.progress||0;
+    document.getElementById('progress-bar').style.width=pct+'%';
+    if(s.current_site){
+      document.getElementById('crawl-info').textContent=
+        `${pct}% — ${s.current_site} (${s.total_collected||0} collected)`;
+    }
+    if(s.eta_seconds>0){
+      const m=Math.floor(s.eta_seconds/60),sc=s.eta_seconds%60;
+      document.getElementById('status-text').textContent=`ETA ${m}m ${sc}s`;
+    }
+    if(pct>0&&pct<100){
+      document.getElementById('status-dot').className='status-dot running';
+    }
+  }catch(e){}
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   log('// Camera Bridge Admin ready','info');
   loadData();
   setInterval(loadData,5*60*1000);
+  setInterval(pollStatus,3000);
 });
 </script>
 </body>
