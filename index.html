@@ -337,6 +337,16 @@ function setTab(tab,el){currentTab=tab;document.querySelectorAll('.tab').forEach
 function togglePriceSort(){const s=document.getElementById('sort-select');s.value=s.value==='price-asc'?'price-desc':'price-asc';renderResults();}
 function parsePrice(p,cur){if(!p||p==='문의요망')return Infinity;const n=parseFloat(p.replace(/[^0-9.]/g,''));return cur==='GBP'?n*1700:n;}
 function fmt(n){if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
+function timeAgo(dt){
+  if(!dt)return '확인 중';
+  const d=new Date(dt),now=new Date();
+  const diff=Math.floor((now-d)/1000);
+  if(diff<3600)return Math.floor(diff/60)+'분 전';
+  if(diff<86400)return Math.floor(diff/3600)+'시간 전';
+  if(diff<604800)return Math.floor(diff/86400)+'일 전';
+  return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+function isNew(dt){if(!dt)return false;return(new Date()-new Date(dt))<86400000;}
 function renderResults(query){
   if(query===undefined)query=document.getElementById('search-input').value.trim();
   document.getElementById('query-display').textContent=query;

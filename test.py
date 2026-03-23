@@ -54,13 +54,46 @@ SEARCH_ITEMS = [
     {"label": "90mm APO-Summicron", "keywords": ["90mm APO Summicron", "APO Summicron 90mm", "APO Summicron 90"], "must_contain": ["apo", "summicron", "90"]},
     {"label": "100mm APO-Macro-Elmarit", "keywords": ["100mm APO Macro Elmarit", "APO Macro Elmarit 100mm", "APO-Macro-Elmarit"], "must_contain": ["apo", "elmarit", "100"]},
     {"label": "APO-Telyt", "keywords": ["APO Telyt", "APO-Telyt-R"], "must_contain": ["apo", "telyt"]},
+    # ── R System 바디 ──
+    {"label": "Leica R3", "keywords": ["Leica R3", "R3 Body"], "must_contain": ["leica", "r3"]},
+    {"label": "Leica R4", "keywords": ["Leica R4", "R4 Body"], "must_contain": ["leica", "r4"]},
+    {"label": "Leica R5", "keywords": ["Leica R5", "R5 Body"], "must_contain": ["leica", "r5"]},
+    {"label": "Leica R6", "keywords": ["Leica R6", "R6 Body", "R6.2"], "must_contain": ["leica", "r6"]},
+    {"label": "Leica R7", "keywords": ["Leica R7", "R7 Body"], "must_contain": ["leica", "r7"]},
+    {"label": "Leica R8", "keywords": ["Leica R8", "R8 Body"], "must_contain": ["leica", "r8"]},
+    {"label": "Leica R9", "keywords": ["Leica R9", "R9 Body"], "must_contain": ["leica", "r9"]},
+    # ── R System 렌즈 ──
+    {"label": "35mm Summilux-R", "keywords": ["35mm Summilux-R", "Summilux-R 35mm"], "must_contain": ["summilux", "r", "35"]},
+    {"label": "50mm Summicron-R", "keywords": ["50mm Summicron-R", "Summicron-R 50mm"], "must_contain": ["summicron", "r", "50"]},
+    {"label": "90mm Summicron-R", "keywords": ["90mm Summicron-R", "Summicron-R 90mm"], "must_contain": ["summicron", "r", "90"]},
+    # ── P&S (Compact) ──
+    {"label": "Leica Minilux", "keywords": ["Leica Minilux", "Minilux Zoom"], "must_contain": ["minilux"]},
+    {"label": "Leica CM", "keywords": ["Leica CM", "Leica CM Zoom"], "must_contain": ["leica", "cm"]},
+    {"label": "Leica Q2", "keywords": ["Leica Q2", "Q2 Monochrom"], "must_contain": ["leica", "q2"]},
+    {"label": "Leica Q3", "keywords": ["Leica Q3"], "must_contain": ["leica", "q3"]},
 ]
 
 # ══════════════════════════════════════════════════════
 # 유틸 함수
 # ══════════════════════════════════════════════════════
+def detect_noctilux_gen(name):
+    """Noctilux 전용 세대 감지"""
+    n = name.lower()
+    if 'f1.2' in n or '1.2' in n:
+        return 'v1 (f1.2)'
+    if 'f0.95' in n or '0.95' in n:
+        return 'v4 (f0.95 ASPH)'
+    if 'f1.0' in n or '1.0' in n:
+        # E58 vs E60 구분
+        if 'e58' in n or 'e 58' in n:
+            return 'v2/v3 (f1.0 E58)'
+        if 'e60' in n or 'e 60' in n:
+            return 'v2/v3 (f1.0 E60)'
+        return 'v2/v3 (f1.0)'
+    return None
+
 def detect_generation(name):
-    name_upper = name.upper().replace(' ', '')  # 판별 시에는 공백을 다 제거하고 비교
+    name_upper = name.upper().replace(' ', '')
     found_tags = []
     slang_dict = {
         '8매': '35mm Summicron 1st (8-Elements)',
@@ -72,11 +105,17 @@ def detect_generation(name):
     for slang, full_name in slang_dict.items():
         if slang in name_upper:
             found_tags.append(full_name)
+    # Noctilux 전용 세대 감지
+    if 'NOCTILUX' in name_upper:
+        nocti_gen = detect_noctilux_gen(name)
+        if nocti_gen:
+            found_tags.append(nocti_gen)
     gen_patterns = [
-        {"gen": "1세대 (v1/E58)", "patterns": [r"1st", r"v\.?1\b", r"1세대", r"E58"]},
-        {"gen": "2세대 (v2/E60)", "patterns": [r"2nd", r"v\.?2\b", r"2세대", r"E60"]},
-        {"gen": "3세대 (v3/E46)", "patterns": [r"3rd", r"v\.?3\b", r"3세대", r"E46"]},
-        {"gen": "4세대 (v4/E39)", "patterns": [r"4th", r"v\.?4\b", r"4세대", r"E39"]},
+        {"gen": "1세대 (v1)", "patterns": [r"1st", r"v\.?1", r"1세대", r"E58"]},
+        {"gen": "2세대 (v2)", "patterns": [r"2nd", r"v\.?2", r"2세대", r"E60"]},
+        {"gen": "3세대 (v3)", "patterns": [r"3rd", r"v\.?3", r"3세대", r"E46"]},
+        {"gen": "4세대 (v4)", "patterns": [r"4th", r"v\.?4", r"4세대", r"E39"]},
+        {"gen": "5세대 (v5)", "patterns": [r"5th", r"v\.?5", r"5세대"]},
     ]
     for tag in gen_patterns:
         for pattern in tag["patterns"]:
@@ -84,6 +123,135 @@ def detect_generation(name):
                 found_tags.append(tag["gen"])
                 break
     return " | ".join(list(set(found_tags))) if found_tags else "세대미상"
+
+def detect_system(name):
+    """상품명에서 시스템 분류"""
+    n = name.upper()
+    # R System (M보다 먼저 체크)
+    if any(x in n for x in [
+        'SUMMILUX-R', 'SUMMICRON-R', 'ELMARIT-R', 'ELMAR-R', 'APO-MACRO-ELMARIT-R',
+        'VARIO-ELMARIT-R', 'APO-TELYT-R', 'TELYT-R', 'SUPER-ELMAR-R',
+        'R3 ', 'R4 ', 'R5 ', 'R6 ', 'R7 ', 'R8 ', 'R9 ', ' R3', ' R4', ' R5', ' R6',
+        ' R7', ' R8', ' R9', 'LEICA R', '-R SN', '-R (', 'ROM', ' ROM '
+    ]):
+        return "R System"
+    # SL/Q/S System
+    if any(x in n for x in ['SL2', 'SL-2', ' SL ', 'VARIO-ELMARIT-SL', 'APO-VARIO',
+                              'LEICA Q', 'Q2 ', 'Q3 ', ' Q2', ' Q3',
+                              'LEICA S ', ' S3', 'S-E', 'SUPER-APO']):
+        return "SL/Q/S"
+    # P&S (Compact) - Barnack보다 먼저
+    if any(x in n for x in ['MINILUX', 'AF-C1', 'Z2X', 'LEICA C ', 'MINILUX ZOOM', 'LEICA MINI']):
+        return "P&S"
+    # Barnack (LTM/M39) - 나사마운트 올드 카메라/렌즈
+    barnack_bodies = ['LEICA I ', 'LEICA II ', 'LEICA III', 'LEICA IF', 'LEICA IIF',
+                      'LEICA IIIA', 'LEICA IIIB', 'LEICA IIIC', 'LEICA IIIF', 'LEICA IIIG',
+                      'LEICA 250', 'LEICA 72', 'ERNST LEITZ']
+    barnack_lens = ['3.5CM', '5CM ', '5CM/', '7.3CM', '9CM ', '13.5CM',
+                    'SUMMITAR', 'HEKTOR', 'SUMMAR ', 'ELMAX', 'XENON',
+                    'LTM', 'L39', 'M39', 'SCREW MOUNT', '나사', 'LEITZ']
+    if any(x in n for x in barnack_bodies + barnack_lens):
+        return "Barnack"
+    # M System
+    if any(x in n for x in ['SUMMICRON', 'SUMMILUX', 'NOCTILUX', 'ELMARIT-M',
+                              'SUMMARON', 'SUPER-ANGULON', 'LEICA M', ' M3', ' M4',
+                              ' M5', ' M6', ' M7', ' M8', ' M9', ' M10', ' M11',
+                              'LEICA MP', 'LEICA MA', 'LEICA M-A']):
+        return "M System"
+    return "Other"
+
+# 렌즈 보호 키워드 - 조리개값(f숫자)이 있으면 렌즈로 보호
+# "HOOD"만 있고 렌즈 모델명+조리개가 없으면 악세사리
+import re as _re
+def _has_aperture(name):
+    """상품명에 조리개값(f숫자)이 있으면 렌즈"""
+    return bool(_re.search(r'f\s*\d+[\./]\d+', name, _re.IGNORECASE))
+
+LENS_PROTECT_KW = [
+    # 조리개 표기가 있는 렌즈명 패턴 (함수로 보완)
+    'super-angulon', 'angulon',
+    'elmarit-m', 'summicron-m', 'summilux-m', 'noctilux',
+    'summitar', 'nokton', 'voigtlander',
+    # 시리얼 넘버 패턴 (sn. 이 있으면 개별 렌즈/바디)
+    ' sn.', ' sn ',
+]
+# 명백한 악세사리 코드네임 (5자리 영문/숫자)
+ACCESSORY_CODES = [
+    'itooy', 'irooa', 'sbooi', 'viooh', 'sbloo', 'sgvoo', 'iufoo',
+    'fookh', 'fison', 'tooca', 'valoo', 'itdoo', 'irooa',
+    '12585', '12504', '12501', '14464', '14066', '12522', '12526',
+    '12564', '12575', '12595', '14100', '14101', '14269', '14358',
+]
+
+def detect_category(name, price_str=""):
+    """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
+    n = name.lower()
+    nu = name.upper()
+
+    # ── 0순위: 악세사리 코드네임 → 무조건 Accessory ──
+    if any(code in n for code in ACCESSORY_CODES):
+        return "Accessory"
+
+    # ── 렌즈 보호 체크 (조리개값 또는 렌즈 키워드 있으면 보호) ──
+    is_lens = any(kw in n for kw in LENS_PROTECT_KW) or _has_aperture(name)
+
+    # ── 1순위: Accessory 키워드 (단, 렌즈 보호 키워드 없을 때만) ──
+    # 단독 악세사리 키워드 (렌즈 이름 없이 단독으로 있는 경우)
+    strict_acc_kw = [
+        '후드', '스트랩', 'hood', 'strap', 'case', '케이스',
+        '파인더', 'viewfinder', 'adapter', '어댑터',
+        'grip', '그립', 'cover', '커버', 'pouch', '파우치',
+        'charger', '충전기', 'battery', '배터리', 'cable', '케이블',
+        'flash', '플래시', '리어캡', '프론트캡', 'front cap', 'rear cap',
+        'eye cup', 'lens cap', 'body cap',
+    ]
+    # 캡/필터는 렌즈 이름 없을 때만 악세사리
+    cap_filter_kw = ['캡', 'cap', 'filter', '필터']
+
+    is_strict_acc = any(kw in n for kw in strict_acc_kw)
+    is_cap_filter = any(kw in n for kw in cap_filter_kw)
+
+    if is_strict_acc and not is_lens:
+        return "Accessory"
+    if is_cap_filter and not is_lens:
+        return "Accessory"
+
+    # ── 가격 50만원 이하 → Accessory (단, 렌즈 보호 키워드 없을 때만) ──
+    if not is_lens and price_str and price_str not in ['문의요망', '']:
+        try:
+            nums = re.findall(r"[\d,]+", price_str.replace('£', ''))
+            if nums:
+                p = float(nums[0].replace(',', ''))
+                if 0 < p <= 500000:
+                    return "Accessory"
+        except:
+            pass
+
+    # ── 2순위: Body 키워드 ──
+    body_kw = ['body', '바디', 'leica m3', 'leica m2', 'leica m4', 'leica m5',
+               'leica m6', 'leica m7', 'leica mp', 'leica m-a', 'leica ma',
+               'leica m8', 'leica m9', 'leica m10', 'leica m11', 'leica m240',
+               'typ 240', 'r3 ', 'r4 ', 'r5 ', 'r6 ', 'r7 ', 'r8 ', 'r9 ',
+               'leica i ', 'leica ii', 'leica iii', 'leica if', 'leica iif']
+    if any(kw in n for kw in body_kw):
+        return "Body"
+
+    return "Lens"
+
+# 부속품 제외 키워드
+ACCESSORY_KEYWORDS = [
+    "케이스", "스트랩", "필터", "캡", "설명서", "충전기", "배터리",
+    "후드only", "hood only", "어댑터", "파우치", "케이블", "핸드그립",
+    "grip only", "strap only", "cap only", "lens cap", "body cap",
+    "filter only", "box only", "박스only", "뷰파인더", "viewfinder",
+    "hood", "case", "strap", "pouch", "charger", "flash", "플래시",
+    "리어캡", "프론트캡", "front cap", "rear cap", "eye cup",
+    # 코드네임
+    "itooy", "irooa", "sbooi", "viooh", "sbloo", "sgvoo", "iufoo",
+    "fookh", "fison", "tooca", "valoo", "itdoo",
+    "12585", "12504", "12501", "14464", "14066", "12522", "12526",
+    "12564", "12575", "12595", "14100", "14269", "14358",
+]
 
 def passes_filter(name, must_contain):
     name_lower = " ".join(name.lower().split())
@@ -531,12 +699,13 @@ def crawl_ffordes_search(page, site, keyword, label, must_contain):
 def crawl_site(site):
     site_results = []
 
-    # 억불카메라는 headless=False 필요
-    is_godo = site["type"] == "godo"
-
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=not is_godo)
-        page = browser.new_page()
+        browser = p.chromium.launch(headless=True)
+        ctx = browser.new_context(
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            viewport={"width": 1280, "height": 800},
+        )
+        page = ctx.new_page()
 
         # 리소스 차단 (CSS/폰트/광고, 이미지는 허용)
         def block_resources(route):
@@ -547,7 +716,7 @@ def crawl_site(site):
             else:
                 route.continue_()
         page.route("**/*", block_resources)
-        page.set_default_timeout(15000)
+        page.set_default_timeout(20000)
 
         print(f"\n{'='*50}")
         print(f"▶ {site['name']} 수집 시작")
@@ -584,10 +753,30 @@ def crawl_site(site):
                     print(f"    ❌ {keyword} 오류: {e}")
                 time.sleep(0.3)
 
+        ctx.close()
         browser.close()
 
     print(f"\n  ✅ {site['name']}: {len(site_results)}개 수집 완료")
     return site_results
+
+
+def write_status(pct, current_site, total_count, done_sites, eta=0):
+    """실시간 진행률을 status.json에 기록"""
+    import datetime
+    status = {
+        "pct": pct,
+        "current_site": current_site,
+        "total_count": total_count,
+        "done_sites": done_sites,
+        "eta_seconds": eta,
+        "updated_at": datetime.datetime.now().isoformat(),
+        "running": pct < 100,
+    }
+    try:
+        with open("status.json", "w", encoding="utf-8") as f:
+            json.dump(status, f, ensure_ascii=False)
+    except Exception as e:
+        print(f"    ⚠️ status.json 쓰기 실패: {e}")
 
 
 def crawl_all():
@@ -595,6 +784,17 @@ def crawl_all():
 
     start_time = time.time()
     all_results = []
+    write_status(0, "Starting...", 0, 0)
+
+    # 기존 results.json 로드 (조기종료용)
+    existing_links = set()
+    try:
+        with open("results.json", "r", encoding="utf-8") as f:
+            existing = json.load(f)
+            existing_links = {r["링크"] for r in existing}
+        print(f"📋 기존 매물 {len(existing_links)}개 링크 로드 완료")
+    except:
+        pass
 
     # 억불카메라(godo)는 별도 순차 처리 (headless=False 필요)
     parallel_sites = [s for s in SITES if s["type"] != "godo"]
@@ -603,8 +803,11 @@ def crawl_all():
     print(f"🚀 병렬 크롤링 시작 ({len(parallel_sites)}개 사이트 동시 처리)")
     print(f"⏳ 억불카메라 ({len(godo_sites)}개)는 별도 처리")
 
+    total_sites = len(parallel_sites) + len(godo_sites)
+    done_sites = 0
+
     # 병렬 처리
-    with ThreadPoolExecutor(max_workers=len(parallel_sites)) as executor:
+    with ThreadPoolExecutor(max_workers=min(len(parallel_sites), 4)) as executor:
         futures = {executor.submit(crawl_site, site): site for site in parallel_sites}
         for future in as_completed(futures):
             site = futures[future]
@@ -613,11 +816,17 @@ def crawl_all():
                 all_results.extend(results)
             except Exception as e:
                 print(f"❌ {site['name']} 오류: {e}")
+            done_sites += 1
+            elapsed = time.time() - start_time
+            eta = int(elapsed / done_sites * (total_sites - done_sites))
+            write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, eta)
 
     # 억불카메라 순차 처리
     for site in godo_sites:
         results = crawl_site(site)
         all_results.extend(results)
+        done_sites += 1
+        write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, 0)
 
     # 전체 중복 제거
     seen = set()
@@ -629,7 +838,9 @@ def crawl_all():
 
     elapsed = time.time() - start_time
 
-    # label 자동 보정 + 상품명 정리
+    # label 자동 보정 + 상품명 정리 + system/category 분류
+    import datetime
+    crawl_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for r in unique_results:
         name = r['상품명']
         # 상품명에서 "상품명 :" 제거
@@ -637,7 +848,16 @@ def crawl_all():
             name = name.split(':', 1)[-1].strip()
             r['상품명'] = name
         name_lower = name.lower()
-        # Noctilux label 조리개별 보정
+        # system/category 분류
+        r['system'] = detect_system(r['상품명'])
+        r['category'] = detect_category(r['상품명'], r.get('가격', ''))
+        if 'crawl_time' not in r:
+            r['crawl_time'] = crawl_time
+        # Noctilux label 조리개별 보정 + generation 필드
+        if 'noctilux' in name_lower:
+            nocti_gen = detect_noctilux_gen(name)
+            if nocti_gen:
+                r['noctilux_gen'] = nocti_gen
         if r['label'] in ['50mm Noctilux']:
             if '0.95' in name_lower:
                 r['label'] = '50mm Noctilux f0.95'
@@ -646,9 +866,59 @@ def crawl_all():
             elif '1.0' in name_lower or 'e58' in name_lower or 'e60' in name_lower:
                 r['label'] = '50mm Noctilux f1.0'
 
+    # ── 판매 완료 추적 (sold_items.json) ──
+    import datetime as dt
+    now_str = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    new_links = {r["링크"] for r in unique_results}
+
+    # 기존 sold_items 로드
+    sold_items = []
+    try:
+        with open("sold_items.json", "r", encoding="utf-8") as f:
+            sold_items = json.load(f)
+    except:
+        # 없으면 빈 파일 생성
+        with open("sold_items.json", "w", encoding="utf-8") as f:
+            import json as _j; _j.dump([], f)
+
+    sold_links = {r["링크"] for r in sold_items}
+
+    # 이전에 있었으나 지금 없는 매물 → 판매 완료
+    newly_sold = []
+    try:
+        with open("results.json", "r", encoding="utf-8") as f:
+            prev_results = json.load(f)
+        for r in prev_results:
+            if r["링크"] not in new_links and r["링크"] not in sold_links and not r.get("품절"):
+                sold_r = dict(r)
+                sold_r["is_sold"] = True
+                sold_r["sold_at"] = now_str
+                # 판매 소요 시간 계산
+                if r.get("crawl_time"):
+                    try:
+                        t0 = dt.datetime.strptime(r["crawl_time"], "%Y-%m-%d %H:%M:%S")
+                        t1 = dt.datetime.strptime(now_str, "%Y-%m-%d %H:%M:%S")
+                        hours = round((t1 - t0).total_seconds() / 3600, 1)
+                        sold_r["hours_to_sell"] = hours
+                    except:
+                        sold_r["hours_to_sell"] = None
+                newly_sold.append(sold_r)
+                print(f"  💸 판매 완료: {r['상품명'][:40]}")
+    except:
+        pass
+
+    if newly_sold:
+        sold_items.extend(newly_sold)
+        # 최근 500개만 유지
+        sold_items = sold_items[-500:]
+        with open("sold_items.json", "w", encoding="utf-8") as f:
+            json.dump(sold_items, f, ensure_ascii=False, indent=2)
+        print(f"  💸 총 {len(newly_sold)}개 판매 완료 추가 → sold_items.json")
+
     with open("results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
 
+    write_status(100, "완료", len(unique_results), len(SITES), 0)
     print(f"\n{'='*50}")
     print(f"✅ 최종 {len(unique_results)}개 → results.json 저장 완료")
     print(f"⏱️  총 소요 시간: {elapsed:.1f}초 ({elapsed/60:.1f}분)")
@@ -673,7 +943,7 @@ def push_to_github():
     remote = f"https://{token}@github.com/{repo}.git"
 
     cmds = [
-        ["git", "add", "results.json", "index.html", "admin.html"],
+        ["git", "add", "--ignore-errors", "results.json", "index.html", "admin.html", "sold_items.json"],
         ["git", "commit", "-m", "Auto update results.json"],
         ["git", "push", remote, "main"],
     ]
