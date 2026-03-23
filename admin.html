@@ -152,6 +152,10 @@ input[type=text]{width:150px;}
     <span class="golden-text">지금이 매물 선점 골든 타임입니다!</span>
     <span class="golden-sub" id="golden-sub-text"></span>
   </div>
+  <div id="velocity-section" style="display:none;margin-bottom:20px;">
+    <div class="section-label">Sales Velocity — 가장 빠른 판매 TOP 3</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="velocity-cards"></div>
+  </div>
   <div class="section-label">Overview</div>
   <div class="stats-row">
     <div class="stat leica"><div class="stat-val" id="s-total">—</div><div class="stat-lbl">Total</div><div class="stat-sub" id="s-sub">—</div></div>
@@ -207,7 +211,7 @@ input[type=text]{width:150px;}
         <button class="sys-btn" onclick="setSys('M System',this)">M</button>
         <button class="sys-btn" onclick="setSys('R System',this)">R</button>
         <button class="sys-btn" onclick="setSys('P&S',this)">P&S</button>
-        <button class="sys-btn" onclick="setSys('Accessory',this)">ACC</button>
+        <button class="sys-btn" onclick="setSys('__acc__',this)">ACC</button>
       </div>
       <select id="f-cat" onchange="applyFilters()">
         <option value="all">Body + Lens</option>
@@ -256,7 +260,7 @@ function log(msg,type='info'){
 function clearLog(){document.getElementById('log-box').innerHTML='';}
 function parsePrice(p,cur){if(!p||p==='문의요망')return null;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(isNaN(n)||n===0)return null;return cur==='GBP'?Math.round(n*1700):n;}
 function fmtP(n){if(!n)return '—';if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
-function timeAgo(dt){if(!dt)return null;const d=new Date(dt),now=new Date();const diff=Math.floor((now-d)/1000);if(diff<3600)return Math.floor(diff/60)+'분 전';if(diff<86400)return Math.floor(diff/3600)+'시간 전';if(diff<604800)return Math.floor(diff/86400)+'일 전';return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
+function timeAgo(dt){if(!dt)return '확인 중';const d=new Date(dt),now=new Date();const diff=Math.floor((now-d)/1000);if(diff<3600)return Math.floor(diff/60)+'분 전';if(diff<86400)return Math.floor(diff/3600)+'시간 전';if(diff<604800)return Math.floor(diff/86400)+'일 전';return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
 function isNew(dt){if(!dt)return false;return(new Date()-new Date(dt))<86400000;}
 
 async function loadStatus(){
@@ -277,10 +281,28 @@ async function loadData(){
     allData=await res.json();
     document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString();
     log('// Loaded '+allData.length+' listings','ok');
-    buildLabelAvg();updateStats();updateSiteProgress();updateCharts();updateGoldenTime();updatePriceAnalysis();updateDeals();populateFilters();applyFilters();loadStatus();
+    buildLabelAvg();updateStats();updateSiteProgress();updateCharts();updateGoldenTime();updatePriceAnalysis();updateDeals();populateFilters();applyFilters();loadStatus();loadVelocity();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
 
+
+async function loadVelocity(){
+  try{
+    const res=await fetch('sold_items.json?t='+Date.now());
+    const sold=await res.json();
+    const labelTimes={};
+    sold.forEach(r=>{if(r.hours_to_sell!=null&&r.label){if(!labelTimes[r.label])labelTimes[r.label]=[];labelTimes[r.label].push(r.hours_to_sell);}});
+    const top3=Object.entries(labelTimes).map(([l,ts])=>({label:l,avg:ts.reduce((a,b)=>a+b,0)/ts.length,count:ts.length})).filter(x=>x.count>=1).sort((a,b)=>a.avg-b.avg).slice(0,3);
+    if(top3.length){
+      document.getElementById('velocity-section').style.display='block';
+      document.getElementById('velocity-cards').innerHTML=top3.map((x,i)=>{
+        const t=x.avg<1?Math.round(x.avg*60)+'분':x.avg.toFixed(1)+'시간';
+        return '<div class="stat" style="border-top:2px solid var(--leica)"><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px">#'+(i+1)+' 빠른 판매</div><div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">'+x.label+'</div><div style="font-family:Space Mono,monospace;font-size:22px;font-weight:700;color:var(--leica)">'+t+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:4px">평균 판매 소요 ('+x.count+'건)</div></div>';
+      }).join('');
+      log('// Velocity: '+top3[0].label+' avg '+top3[0].avg.toFixed(1)+'h','ok');
+    }
+  }catch(e){}
+}
 function buildLabelAvg(){
   const tmp={};
   allData.forEach(r=>{if(r.category==='Accessory')return;if(!r['품절']&&r.label){const p=parsePrice(r['가격'],r['통화']);if(p){if(!tmp[r.label])tmp[r.label]=[];tmp[r.label].push(p);}}});
@@ -354,7 +376,12 @@ function applyFilters(){
     const name=(r['상품명']||'').toLowerCase();
     if(search&&!name.includes(search)&&!(r['label']||'').toLowerCase().includes(search))return false;
     if(site!=='all'&&r.site!==site)return false;
-    if(currentSys!=='all'&&(r.system||'')!==currentSys)return false;
+    if(currentSys==='__acc__'){
+      if(r.category!=='Accessory')return false;
+    } else if(currentSys!=='all'){
+      if((r.system||'')!==currentSys)return false;
+      if(r.category==='Accessory')return false; // 일반 시스템 필터에서 악세사리 제외
+    }
     if(cat!=='all'&&r.category!==cat)return false;
     if(status==='sale'&&(r['품절']||r['예약중']))return false;
     if(status==='sold'&&!r['품절'])return false;
@@ -384,7 +411,7 @@ function renderTable(){
     const ta=timeAgo(r.crawl_time);
     return `<div class="data-row${r['품절']?' soldout':''}">
       <div class="data-num">${start+i+1}</div>
-      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,52)}${name.length>52?'…':''}</a>${newBadge}${ta?`<div class="time-label${isNew(r.crawl_time)?' new-item':''}">${ta}</div>`:''}</div>
+      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,52)}${name.length>52?'…':''}</a>${newBadge}<div class="time-label${isNew(r.crawl_time)?' new-item':''}">${ta}</div></div>
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
       <div class="data-price">${r['가격']||'—'}</div>
       <div class="data-cond">${r['컨디션']||'—'}</div>
