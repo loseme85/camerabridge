@@ -81,6 +81,26 @@ SEARCH_ITEMS = [
 # ══════════════════════════════════════════════════════
 # 유틸 함수
 # ══════════════════════════════════════════════════════
+def detect_mount(name):
+    """마운트 타입 자동 분류"""
+    n = name.upper()
+    # LTM/M39 (Barnack 나사마운트)
+    if any(x in n for x in ['LTM', 'L39', 'M39', 'SCREW', '나사', 'LEICA I ', 'LEICA II', 'LEICA III',
+                              '3.5CM', '5CM ', '7.3CM', 'SUMMITAR', 'LEITZ']):
+        return "LTM"
+    # R-mount
+    if any(x in n for x in ['-R ', '-R/', 'SUMMILUX-R', 'SUMMICRON-R', 'ELMARIT-R',
+                              'ELMAR-R', 'TELYT-R', 'LEICA R']):
+        return "R"
+    # SL/L-mount
+    if any(x in n for x in ['SL2', ' SL ', 'VARIO-ELMARIT-SL', 'L-MOUNT', 'LMOUNT']):
+        return "L"
+    # M-mount (기본)
+    if any(x in n for x in ['SUMMICRON', 'SUMMILUX', 'NOCTILUX', 'ELMARIT-M',
+                              'SUMMARON', 'SUPER-ANGULON', 'LEICA M', '-M ', '-M/']):
+        return "M"
+    return "Unknown"
+
 def detect_noctilux_gen(name):
     """Noctilux 전용 세대 감지"""
     n = name.lower()
@@ -912,9 +932,14 @@ def crawl_all():
         r['category'] = detect_category(r['상품명'], r.get('가격', ''))
         # Accessory는 system을 Accessory로 통일
         if r['category'] == 'Accessory':
-            r['system'] = 'Accessory' 
+            r['system'] = 'Accessory'
+        # mount 분류
+        r['mount'] = detect_mount(r['상품명'])
         if 'crawl_time' not in r:
             r['crawl_time'] = crawl_time
+        # first_seen: 처음 발견된 시간 (기존 데이터면 유지)
+        if 'first_seen' not in r:
+            r['first_seen'] = crawl_time
         # Noctilux label 조리개별 보정 + generation 필드
         if 'noctilux' in name_lower:
             nocti_gen = detect_noctilux_gen(name)
@@ -955,6 +980,14 @@ def crawl_all():
                 sold_r = dict(r)
                 sold_r["is_sold"] = True
                 sold_r["sold_at"] = now_str
+                # first_seen → sold까지 소요시간
+                if r.get("first_seen"):
+                    try:
+                        t0 = dt.datetime.strptime(r["first_seen"], "%Y-%m-%d %H:%M:%S")
+                        t1 = dt.datetime.strptime(now_str, "%Y-%m-%d %H:%M:%S")
+                        sold_r["hours_to_sell"] = round((t1-t0).total_seconds()/3600, 1)
+                    except:
+                        pass
                 # 판매 소요 시간 계산
                 if r.get("crawl_time"):
                     try:
