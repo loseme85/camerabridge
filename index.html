@@ -290,20 +290,42 @@ const GEN_SYNONYMS = {
   '4세대': ['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
   '5세대': ['5th','5세대','5 th','(5th)','ver.5','v.5'],
 };
+// 마운트 명시 검색 시 다른 마운트 제외
+function detectQueryMount(q){
+  const tokens=q.toLowerCase().split(/\s+/);
+  // " m " 또는 끝에 " m" → M-mount 명시
+  if(tokens.includes('m')) return 'M';
+  if(tokens.includes('r')) return 'R';
+  if(tokens.includes('ltm')||tokens.includes('l39')||tokens.includes('m39')) return 'LTM';
+  return null;
+}
 function matchesQuery(item, query){
   if(isAccessory(item)) return false;
   const q=query.toLowerCase();
   const name=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
   const label=(item['label']||'').toLowerCase();
-  const tokens=q.split(/\s+/).filter(Boolean);
+  const mount=(item['mount']||'');
+
+  // 마운트 명시 필터링
+  const queryMount=detectQueryMount(q);
+  if(queryMount){
+    if(mount&&mount!=='Unknown'&&mount!==queryMount) return false;
+    // mount 없어도 상품명에 명백히 다른 마운트 표기 있으면 제외
+    if(queryMount==='M'){
+      if(/-r/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return false;
+    }
+    if(queryMount==='R'){
+      if(/m(?!ount)/i.test(name)&&!/-r/i.test(name)) return false;
+    }
+  }
+
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm');
   return tokens.every(t=>{
-    // 세대 토큰 체크
     const gen=GEN_MAP[t];
     if(gen){
       const synonyms=GEN_SYNONYMS[gen]||[gen];
       return synonyms.some(s=>name.includes(s));
     }
-    // label이나 name 어디든 포함되면 매칭
     return name.includes(t) || label.includes(t);
   });
 }
