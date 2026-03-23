@@ -54,6 +54,11 @@ SEARCH_ITEMS = [
     {"label": "90mm APO-Summicron", "keywords": ["90mm APO Summicron", "APO Summicron 90mm", "APO Summicron 90"], "must_contain": ["apo", "summicron", "90"]},
     {"label": "100mm APO-Macro-Elmarit", "keywords": ["100mm APO Macro Elmarit", "APO Macro Elmarit 100mm", "APO-Macro-Elmarit"], "must_contain": ["apo", "elmarit", "100"]},
     {"label": "APO-Telyt", "keywords": ["APO Telyt", "APO-Telyt-R"], "must_contain": ["apo", "telyt"]},
+    # ── Barnack 바디 ──
+    {"label": "Leica I", "keywords": ["Leica I", "Leica Standard"], "must_contain": ["leica"], "category": "Body", "barnack": True},
+    {"label": "Leica II", "keywords": ["Leica II", "Leica IIa", "Leica IIb", "Leica IIc"], "must_contain": ["leica"], "category": "Body", "barnack": True},
+    {"label": "Leica III", "keywords": ["Leica III", "Leica IIIa", "Leica IIIb", "Leica IIIc", "Leica IIIf", "Leica IIIg"], "must_contain": ["leica"], "category": "Body", "barnack": True},
+    {"label": "Leica IIf", "keywords": ["Leica IIf", "Leica If"], "must_contain": ["leica"], "category": "Body", "barnack": True},
     # ── R System 바디 ──
     {"label": "Leica R3", "keywords": ["Leica R3", "R3 Body"], "must_contain": ["leica", "r3"]},
     {"label": "Leica R4", "keywords": ["Leica R4", "R4 Body"], "must_contain": ["leica", "r4"]},
@@ -144,12 +149,19 @@ def detect_system(name):
     if any(x in n for x in ['MINILUX', 'AF-C1', 'Z2X', 'LEICA C ', 'MINILUX ZOOM', 'LEICA MINI']):
         return "P&S"
     # Barnack (LTM/M39) - 나사마운트 올드 카메라/렌즈
+    # 악세사리 코드네임이 있으면 Barnack 제외
+    acc_codes = ['FOOKH', 'FIKUS', 'SOOMP', 'SOOKY', 'FILCA', 'TOOCA', 'VALOO',
+                 'ITOOY', 'IROOA', 'SBOOI', 'VIOOH', 'SBLOO', 'SGVOO', 'IUFOO',
+                 '12504', '12501', '12522', '12526', '12530', '12505', '14464']
+    if any(x in n for x in acc_codes):
+        return "Other"  # 악세사리는 시스템 분류 안 함
     barnack_bodies = ['LEICA I ', 'LEICA II ', 'LEICA III', 'LEICA IF', 'LEICA IIF',
                       'LEICA IIIA', 'LEICA IIIB', 'LEICA IIIC', 'LEICA IIIF', 'LEICA IIIG',
                       'LEICA 250', 'LEICA 72', 'ERNST LEITZ']
     barnack_lens = ['3.5CM', '5CM ', '5CM/', '7.3CM', '9CM ', '13.5CM',
                     'SUMMITAR', 'HEKTOR', 'SUMMAR ', 'ELMAX', 'XENON',
                     'LTM', 'L39', 'M39', 'SCREW MOUNT', '나사', 'LEITZ']
+    # LEICA IIIF + 렌즈 세트는 Barnack으로 분류 (렌즈 동반해도 OK)
     if any(x in n for x in barnack_bodies + barnack_lens):
         return "Barnack"
     # M System
@@ -253,11 +265,57 @@ ACCESSORY_KEYWORDS = [
     "12564", "12575", "12595", "14100", "14269", "14358",
 ]
 
-def passes_filter(name, must_contain):
+# 바디 전용 제외 키워드
+BODY_EXCLUDE_KW = ['lens only', '렌즈만', 'no body', 'lenses only', 'lens set']
+# 렌즈 전용 제외 키워드
+LENS_EXCLUDE_KW = ['body only', '바디만', 'no lens', 'body set']
+# Barnack 바디 오인식 방지 - 이게 있으면 렌즈/악세사리
+BARNACK_EXCLUDE = ['elmarit', 'summicron', 'summilux', 'noctilux', 'summaron',
+                   'summitar', 'hektor', 'elmar', 'summarex', 'telyt',
+                   'minilux', 'digital', 'typ ', 'q2', 'q3', 'm9', 'm10', 'm11',
+                   'f/', 'f=', '1:2', '1:3', '1:4', '1:1', 'filter', 'hood', 'cap']
+# 디지털/M기종 키워드 (Barnack 검색에서 제외)
+MODERN_LEICA = ['m9', 'm10', 'm11', 'digital', 'typ 240', 'typ 262', 'q2', 'q3',
+                'sl2', ' sl ', 'monochrom', 'ccd', 'cmos']
+
+def passes_barnack_filter(name):
+    """Barnack 바디 전용 필터 - 렌즈/악세사리 오인식 방지"""
+    n = name.lower()
+    # 렌즈명 포함 시 제외
+    if any(kw in n for kw in BARNACK_EXCLUDE):
+        return False
+    # 디지털/현행 기종 제외
+    if any(kw in n for kw in MODERN_LEICA):
+        return False
+    # 로마자 I/II/III가 독립 단어인지 확인 (regex )
+    if re.search(r'I{1,3}', name, re.IGNORECASE):
+        # 조리개 표기 근처면 렌즈 → 제외
+        if re.search(r'[f]\s*[/=]?\s*\d|1:\d|\d\.\d', n):
+            return False
+        return True
+    return True
+
+def passes_filter(name, must_contain, item_meta=None):
+    """향상된 필터 - 카테고리별 상호 배타적 필터링"""
     name_lower = " ".join(name.lower().split())
+
+    # Barnack 바디 전용 필터
+    if item_meta and item_meta.get("barnack"):
+        if not passes_barnack_filter(name):
+            return False
+
+    # 카테고리별 상호 배제
+    item_cat = item_meta.get("category", "") if item_meta else ""
+    if item_cat == "Body":
+        if any(kw in name_lower for kw in BODY_EXCLUDE_KW):
+            return False
+    elif item_cat == "Lens":
+        if any(kw in name_lower for kw in LENS_EXCLUDE_KW):
+            return False
+
     for word in must_contain:
         w = word.lower()
-        # "50" 같은 숫자는 단독 토큰으로만 매칭 (sn.2548 같은 시리얼 넘버 제외)
+        # 숫자 단독 매칭 방지 (sn.2548 같은 시리얼 넘버 제외)
         if re.match(r"^\d+$", w):
             if not re.search(r"(?<!\d)" + w + r"(?!\d)", name_lower):
                 return False
@@ -370,7 +428,7 @@ SITES = [
 # ══════════════════════════════════════════════════════
 # 크롤러: 카페24 (충무로 등 국내)
 # ══════════════════════════════════════════════════════
-def crawl_cafe24(page, site, keyword, label, must_contain):
+def crawl_cafe24(page, site, keyword, label, must_contain, item_meta=None):
     results = []
     url = site["search_url"].format(query=keyword.replace(" ", "+"))
     print(f"    URL: {url}")
@@ -400,7 +458,7 @@ def crawl_cafe24(page, site, keyword, label, must_contain):
                 continue
             if "[중고]" not in name and "[위탁]" not in name:
                 continue
-            if not passes_filter(name, must_contain):
+            if not passes_filter(name, must_contain, item_meta):
                 continue
 
             # 링크
@@ -462,7 +520,7 @@ def crawl_cafe24(page, site, keyword, label, must_contain):
 
     return results
 
-def crawl_cafe24_all(page, site, keyword, label, must_contain):
+def crawl_cafe24_all(page, site, keyword, label, must_contain, item_meta=None):
     """중고 태그([중고],[위탁]) 없이 전체 상품을 중고로 간주하는 카페24 크롤러"""
     results = []
     url = site["search_url"].format(query=keyword.replace(" ", "+"))
@@ -491,7 +549,7 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain):
             name = name_el.inner_text().strip() if name_el else ""
             if not name:
                 continue
-            if not passes_filter(name, must_contain):
+            if not passes_filter(name, must_contain, item_meta):
                 continue
 
             link_el = card.query_selector("a")
@@ -564,7 +622,7 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain):
 
     return results
 
-def crawl_godo(page, site, keyword, label, must_contain):
+def crawl_godo(page, site, keyword, label, must_contain, item_meta=None):
     results = []
     url = site["search_url"].format(query=keyword.replace(" ", "+"))
     print(f"    URL: {url}")
@@ -635,7 +693,7 @@ def crawl_godo(page, site, keyword, label, must_contain):
             print(f"    ⚠️  파싱 오류: {e}")
     return results
 
-def crawl_ffordes_search(page, site, keyword, label, must_contain):
+def crawl_ffordes_search(page, site, keyword, label, must_contain, item_meta=None):
     """Ffordes 검색 방식 크롤러"""
     results = []
     url = site["search_url"].format(query=keyword.replace(" ", "+"))
@@ -663,7 +721,7 @@ def crawl_ffordes_search(page, site, keyword, label, must_contain):
             name = name_el.inner_text().strip() if name_el else ""
             if not name:
                 name = href.split("/")[-1].replace("-", " ").title()
-            if not passes_filter(name, must_contain):
+            if not passes_filter(name, must_contain, item_meta):
                 continue
             price_el = item.query_selector(".priceTxt")
             price = normalize_price(price_el.inner_text().strip() if price_el else "")
@@ -728,19 +786,20 @@ def crawl_site(site):
             label = search_item["label"]
             must_contain = search_item["must_contain"]
             keywords = search_item["keywords"]
+            item_meta = search_item  # category, barnack 등 메타 전달
             print(f"\n  🔍 필터: '{label}'")
 
             seen_in_item = set()
             for keyword in keywords:
                 try:
                     if site["type"] == "cafe24":
-                        res = crawl_cafe24(page, site, keyword, label, must_contain)
+                        res = crawl_cafe24(page, site, keyword, label, must_contain, item_meta)
                     elif site["type"] == "cafe24_all":
-                        res = crawl_cafe24_all(page, site, keyword, label, must_contain)
+                        res = crawl_cafe24_all(page, site, keyword, label, must_contain, item_meta)
                     elif site["type"] == "godo":
-                        res = crawl_godo(page, site, keyword, label, must_contain)
+                        res = crawl_godo(page, site, keyword, label, must_contain, item_meta)
                     elif site["type"] == "ffordes_search":
-                        res = crawl_ffordes_search(page, site, keyword, label, must_contain)
+                        res = crawl_ffordes_search(page, site, keyword, label, must_contain, item_meta)
                     else:
                         res = []
                     for r in res:
@@ -851,6 +910,9 @@ def crawl_all():
         # system/category 분류
         r['system'] = detect_system(r['상품명'])
         r['category'] = detect_category(r['상품명'], r.get('가격', ''))
+        # Accessory는 system을 Accessory로 통일
+        if r['category'] == 'Accessory':
+            r['system'] = 'Accessory' 
         if 'crawl_time' not in r:
             r['crawl_time'] = crawl_time
         # Noctilux label 조리개별 보정 + generation 필드
