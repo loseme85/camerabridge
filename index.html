@@ -292,9 +292,14 @@ const GEN_SYNONYMS = {
 };
 function detectQueryMount(q){
   const tokens=q.toLowerCase().split(/\s+/);
+  // 첫 토큰이 단독 m/r이면 마운트 명시
+  const first=tokens[0];
+  if(first==='m') return 'M';
+  if(first==='r') return 'R';
+  // 어느 위치든 단독 토큰
   if(tokens.includes('m')) return 'M';
   if(tokens.includes('r')) return 'R';
-  if(tokens.includes('ltm')||tokens.includes('l39')||tokens.includes('m39')) return 'LTM';
+  if(tokens.some(t=>t==='ltm'||t==='l39'||t==='m39')) return 'LTM';
   return null;
 }
 function matchesQuery(item, query){
@@ -303,14 +308,27 @@ function matchesQuery(item, query){
   const name=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
   const label=(item['label']||'').toLowerCase();
   const mount=(item['mount']||'');
-  // 마운트 명시 필터
+    // 마운트 명시 필터
   const qMount=detectQueryMount(q);
   if(qMount){
-    if(mount&&mount!=='Unknown'&&mount!==qMount) return false;
-    if(qMount==='M'&&(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name))) return false;
+    if(mount&&mount!=='Unknown'){
+      // LTM은 M/LTM 필터 양쪽에서 보임 (이중 마운트)
+      if(qMount==='M'&&mount==='LTM'){/* LTM은 M 필터에서도 보임 */}
+      else if(qMount==='LTM'&&mount==='M'){/* M도 LTM 필터에서 보임 */}
+      else if(mount!==qMount) return false;
+    }
+    // R 필터: -M 붙은 건 무조건 제외
+    if(qMount==='R'){
+      if(/-m\b/i.test(name)||/-m$/i.test(name)) return false;
+      if(/summicron-m|summilux-m|elmarit-m|noctilux-m/i.test(name)) return false;
+    }
+    // M 필터: R마운트 제외
+    if(qMount==='M'){
+      if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return false;
+    }
   }
   // 마운트 토큰 제외한 나머지로 검색
-  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm');
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm'&&t!=='l39'&&t!=='m39');
   return tokens.every(t=>{
     const gen=GEN_MAP[t];
     if(gen){

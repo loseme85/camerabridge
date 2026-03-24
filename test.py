@@ -82,26 +82,46 @@ SEARCH_ITEMS = [
 # 유틸 함수
 # ══════════════════════════════════════════════════════
 def detect_mount(name):
-    """마운트 타입 자동 분류"""
+    """마운트 타입 자동 분류 - 이중 마운트(LTM) 지원"""
     n = name.upper()
-    # LTM/M39 (Barnack)
-    if any(x in n for x in ['LTM','L39','M39','SCREW','나사','LEICA I ','LEICA II','LEICA III','3.5CM','5CM ','SUMMITAR','LEITZ']):
-        return "LTM"
-    # R-mount (반드시 M보다 먼저)
-    if any(x in n for x in ['-R ','-R/','SUMMILUX-R','SUMMICRON-R','ELMARIT-R','ELMAR-R','TELYT-R','LEICA R']):
+
+    # R-mount (가장 먼저 - -R 표기가 명확)
+    if any(x in n for x in ['-R ','-R/','SUMMILUX-R','SUMMICRON-R','ELMARIT-R',
+                              'ELMAR-R','TELYT-R','LEICA R3','LEICA R4','LEICA R5',
+                              'LEICA R6','LEICA R7','LEICA R8','LEICA R9']):
         return "R"
+
     # L-mount (SL/Q/S)
-    if any(x in n for x in ['SL2',' SL ','VARIO-ELMARIT-SL','L-MOUNT','LEICA Q','LEICA SL']):
+    if any(x in n for x in ['SL2',' SL ','VARIO-ELMARIT-SL','L-MOUNT','LEICA Q',
+                              'LEICA SL','Q2 ','Q3 ',' Q2',' Q3']):
         return "L"
+
+    # LTM/M39 - 이중 마운트 (M과 LTM 양쪽)
+    # Summar/Summarit (구형, f1.5/f2.0) → LTM
+    # SUMMARIT-M → M-mount (별도 처리)
+    ltm_kw = ['LTM','L39','M39','SCREW','나사',
+               'LEICA I ','LEICA IIF','LEICA IF',
+               'LEICA IIA','LEICA IIB','LEICA IIC',
+               'LEICA IIIA','LEICA IIIB','LEICA IIIC','LEICA IIIF','LEICA IIIG',
+               '3.5CM','7.3CM','9CM ','13.5CM',
+               'LEITZ WETZLAR','ERNST LEITZ']
+    # Summar/Summarit (구형 나사마운트) - SUMMARIT-M 제외
+    if 'SUMMAR' in n and 'SUMMARIT-M' not in n and 'SUMMARON' not in n:
+        return "LTM"
+    if any(x in n for x in ltm_kw):
+        return "LTM"
+
     # M-mount (확장)
     if any(x in n for x in [
         'SUMMICRON','SUMMILUX','NOCTILUX','ELMARIT','ELMAR',
         'SUMMARON','SUPER-ANGULON','SUMMAREX','HEKTOR','XENON',
+        'SUMMARIT-M','SUMMARIT-S',
         'LEICA M',' M3',' M4',' M5',' M6',' M7',' M8',
         ' M9',' M10',' M11','LEICA MP','LEICA MA','LEICA M-A',
-        '-M ','-M/','APO-SUMMICRON','APO-TELYT',
+        '-M ','-M/','APO-SUMMICRON','APO-TELYT','APO-MACRO',
     ]):
         return "M"
+
     return "Unknown"
 
 def detect_noctilux_gen(name):
