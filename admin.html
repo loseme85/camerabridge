@@ -209,10 +209,10 @@ input[type=text]{width:150px;}
   </div>
   <!-- Unknown Mount 섹션 -->
   <div id="unknown-section" style="display:none;margin-bottom:20px;">
-    <div class="section-label" style="color:var(--orange);">⚠️ Unknown Mount — 분류 필요</div>
-    <div style="background:var(--white);border:1px solid rgba(200,90,0,0.3);border-radius:3px;overflow:hidden;">
-      <div style="padding:10px 16px;background:rgba(200,90,0,0.05);border-bottom:1px solid rgba(200,90,0,0.15);display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--orange);">// <span id="unk-count">0</span>개 미분류 매물 — 클릭하여 마운트 직접 지정</span>
+    <div class="section-label">Unknown Mount</div>
+    <div class="card">
+      <div class="card-title">
+        <span>// <span id="unk-count">0</span>개 미분류 매물</span>
         <button class="btn" onclick="exportUnknown()" style="font-size:9px;padding:3px 8px;">CSV 내보내기</button>
       </div>
       <div id="unknown-list"></div>
@@ -230,7 +230,7 @@ input[type=text]{width:150px;}
         <button class="sys-btn" onclick="setSys('P&S',this)">P&S</button>
         <button class="sys-btn" onclick="setSys('SL/Q/S',this)">SL/Q</button>
         <button class="sys-btn" onclick="setSys('__acc__',this)">ACC</button>
-        <button class="sys-btn" onclick="setSys('__unk__',this)" style="border-color:var(--orange);color:var(--orange);">? UNK</button>
+        <button class="sys-btn" onclick="setSys('__unk__',this)">? UNK</button>
       </div>
       <select id="f-mount" onchange="applyFilters()">
         <option value="all">All Mounts</option>
