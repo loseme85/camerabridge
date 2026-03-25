@@ -207,6 +207,18 @@ input[type=text]{width:150px;}
     <div class="card-title"><span>// Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
     <div class="log-box" id="log-box"></div>
   </div>
+  <!-- Unknown Mount 섹션 -->
+  <div id="unknown-section" style="display:none;margin-bottom:20px;">
+    <div class="section-label" style="color:var(--orange);">⚠️ Unknown Mount — 분류 필요</div>
+    <div style="background:var(--white);border:1px solid rgba(200,90,0,0.3);border-radius:3px;overflow:hidden;">
+      <div style="padding:10px 16px;background:rgba(200,90,0,0.05);border-bottom:1px solid rgba(200,90,0,0.15);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--orange);">// <span id="unk-count">0</span>개 미분류 매물 — 클릭하여 마운트 직접 지정</span>
+        <button class="btn" onclick="exportUnknown()" style="font-size:9px;padding:3px 8px;">CSV 내보내기</button>
+      </div>
+      <div id="unknown-list"></div>
+    </div>
+  </div>
+
   <div class="section-label">All Listings</div>
   <div class="card">
     <div class="filter-row">
@@ -218,6 +230,7 @@ input[type=text]{width:150px;}
         <button class="sys-btn" onclick="setSys('P&S',this)">P&S</button>
         <button class="sys-btn" onclick="setSys('SL/Q/S',this)">SL/Q</button>
         <button class="sys-btn" onclick="setSys('__acc__',this)">ACC</button>
+        <button class="sys-btn" onclick="setSys('__unk__',this)" style="border-color:var(--orange);color:var(--orange);">? UNK</button>
       </div>
       <select id="f-mount" onchange="applyFilters()">
         <option value="all">All Mounts</option>
@@ -344,6 +357,50 @@ function updateNewItems(){
   document.getElementById('new-items-table').innerHTML='<div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;"><div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);">'+['Product','Site','Price','Found','Link'].map(h=>'<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">'+h+'</span>').join('')+'</div>'+items.slice(0,20).map(r=>{const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();const isV=VIP.some(k=>name.toLowerCase().includes(k));const fs=r.first_seen||r.crawl_time;const found=fs?new Date(fs).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'—';return '<div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;'+(isV?'background:rgba(225,31,38,0.04);':'')+'"><div>'+(isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;">HOT</span>':'')+'<a href="'+r['링크']+'" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">'+name.slice(0,50)+'</a></div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+(F[r.site]||'🌐')+' '+(r.site||'').slice(0,8)+'</div><div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">'+(r['가격']||'—')+'</div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+found+'</div><div><a href="'+r['링크']+'" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div></div>';}).join('')+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:6px;text-align:right;">'+items.length+'개 신규 매물</div>';
   log('// Today new: '+items.length+' items','ok');
 }
+const MOUNT_OPTIONS=['M','R','LTM','L','Unknown'];
+function renderUnknown(){
+  const items=allData.filter(r=>(r.mount||'Unknown')==='Unknown');
+  document.getElementById('unk-count').textContent=items.length;
+  if(!items.length){
+    document.getElementById('unknown-list').innerHTML='<div style="text-align:center;padding:30px;font-size:12px;color:var(--muted);">// 모든 매물 분류 완료!</div>';
+    return;
+  }
+  document.getElementById('unknown-list').innerHTML=items.slice(0,50).map((r,i)=>{
+    const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+    const opts=MOUNT_OPTIONS.map(m=>`<option value="${m}" ${r.mount===m?'selected':''}>${m}</option>`).join('');
+    return `<div style="display:grid;grid-template-columns:1fr 120px 110px 90px;padding:8px 14px;border-bottom:1px solid var(--border);align-items:center;gap:8px;" id="unk-row-${i}">
+      <div>
+        <a href="${r['링크']}" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">${name.slice(0,55)}</a>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px;">${r.site||''} | ${r['가격']||'—'}</div>
+      </div>
+      <select onchange="setMount('${r['링크'].replace(/'/g,"\'")}','${i}',this.value)" style="font-size:10px;padding:3px 6px;border:1px solid var(--border2);border-radius:2px;background:var(--white);">
+        ${opts}
+      </select>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--leica);">${r['가격']||'—'}</div>
+      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);">${r['system']||'Other'}</div>
+    </div>`;
+  }).join('');
+}
+function setMount(link, idx, mount){
+  const item=allData.find(r=>r['링크']===link);
+  if(item){
+    item.mount=mount;
+    log('// Mount 수정: '+item['상품명'].slice(0,30)+' → '+mount,'ok');
+    // 해당 행 스타일 변경
+    const row=document.getElementById('unk-row-'+idx);
+    if(row&&mount!=='Unknown') row.style.opacity='0.4';
+  }
+}
+function exportUnknown(){
+  const items=allData.filter(r=>(r.mount||'Unknown')==='Unknown');
+  const csv=['상품명,사이트,가격,링크'].concat(
+    items.map(r=>`"${(r['상품명']||'').replace(/"/g,'""')}","${r.site||''}","${r['가격']||''}","${r['링크']||''}"`)
+  ).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='unknown_mounts.csv';
+  a.click();
+}
 function buildLabelAvg(){
   const tmp={};
   allData.forEach(r=>{if(r.category==='Accessory')return;if(!r['품절']&&r.label){const p=parsePrice(r['가격'],r['통화']);if(p){if(!tmp[r.label])tmp[r.label]=[];tmp[r.label].push(p);}}});
@@ -405,7 +462,20 @@ function populateFilters(){
   sites.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=(FLAGS[s]||'🌐')+' '+s;fs.appendChild(o);});
 }
 
-function setSys(sys,el){currentSys=sys;document.querySelectorAll('.sys-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');applyFilters();}
+function setSys(sys,el){
+  currentSys=sys;
+  document.querySelectorAll('.sys-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  // Unknown 섹션 토글
+  const unkSec=document.getElementById('unknown-section');
+  if(sys==='__unk__'){
+    renderUnknown();
+    unkSec.style.display='block';
+  } else {
+    unkSec.style.display='none';
+  }
+  applyFilters();
+}
 
 function applyFilters(){
   const search=document.getElementById('f-search').value.toLowerCase();
@@ -420,9 +490,11 @@ function applyFilters(){
     if(site!=='all'&&r.site!==site)return false;
     if(currentSys==='__acc__'){
       if(r.category!=='Accessory')return false;
+    } else if(currentSys==='__unk__'){
+      if((r.mount||'Unknown')!=='Unknown')return false;
     } else if(currentSys!=='all'){
       if((r.system||'')!==currentSys)return false;
-      if(r.category==='Accessory')return false; // 일반 시스템 필터에서 악세사리 제외
+      if(r.category==='Accessory')return false;
     }
     if(cat!=='all'&&r.category!==cat)return false;
     if(mount!=='all'&&(r.mount||'')!==mount)return false;
