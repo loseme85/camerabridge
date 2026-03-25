@@ -2,6 +2,27 @@ from playwright.sync_api import sync_playwright
 import time
 import json
 import re
+import argparse
+import random
+import os
+
+# ── 실행 모드 파싱 ──
+parser = argparse.ArgumentParser(description='Camera Bridge Crawler')
+parser.add_argument('--mock', action='store_true', help='로컬 HTML 파일로 테스트')
+parser.add_argument('--live', action='store_true', help='실제 사이트 크롤링 (기본)')
+parser.add_argument('--site', type=str, help='특정 사이트만 크롤링 (예: 사진집)')
+args, _ = parser.parse_known_args()
+MOCK_MODE = args.mock
+SITE_FILTER = args.site
+
+# ── User-Agent 풀 ──
+USER_AGENTS = [
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+]
 
 # ══════════════════════════════════════════════════════
 # 검색 아이템 정의
@@ -482,10 +503,8 @@ def crawl_cafe24(page, site, keyword, label, must_contain, item_meta=None):
         print(f"    ❌ 페이지 로드 실패: {e}")
         return results
 
-    time.sleep(2)
-
     try:
-        page.wait_for_selector("ul.prdList > li", timeout=5_000)
+        page.wait_for_selector("ul.prdList > li", timeout=6_000)
     except:
         print(f"    검색 결과 없음")
         return results
@@ -575,10 +594,8 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain, item_meta=None):
         print(f"    ❌ 페이지 로드 실패: {e}")
         return results
 
-    time.sleep(2)
-
     try:
-        page.wait_for_selector("ul.prdList > li", timeout=5_000)
+        page.wait_for_selector("ul.prdList > li", timeout=6_000)
     except:
         print(f"    검색 결과 없음")
         return results
@@ -800,19 +817,29 @@ def crawl_ffordes_search(page, site, keyword, label, must_contain, item_meta=Non
 def crawl_site(site):
     site_results = []
 
+    # Mock 모드: 로컬 HTML 파일 파싱
+    if MOCK_MODE:
+        mock_file = f"mock_{site['name'].replace(' ','_')}.html"
+        if os.path.exists(mock_file):
+            print(f"  [MOCK] {site['name']} → {mock_file}")
+        else:
+            print(f"  [MOCK] {mock_file} 없음, 스킵")
+        return site_results
+
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         ctx = browser.new_context(
-            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            user_agent=random.choice(USER_AGENTS),
             viewport={"width": 1280, "height": 800},
+            locale="ko-KR",
         )
         page = ctx.new_page()
 
-        # 리소스 차단 (CSS/폰트/광고, 이미지는 허용)
+        # 리소스 차단 (이미지/CSS/폰트/광고)
         def block_resources(route):
-            if route.request.resource_type in ["stylesheet", "font"]:
+            if route.request.resource_type in ["stylesheet", "font", "image", "media"]:
                 route.abort()
-            elif any(x in route.request.url for x in ["google-analytics", "googletagmanager", "facebook", "ads", "tracker"]):
+            elif any(x in route.request.url for x in ["google-analytics", "googletagmanager", "facebook", "ads", "tracker", "hotjar", "clarity"]):
                 route.abort()
             else:
                 route.continue_()
@@ -899,8 +926,13 @@ def crawl_all():
         pass
 
     # 억불카메라(godo)는 별도 순차 처리 (headless=False 필요)
-    parallel_sites = [s for s in SITES if s["type"] != "godo"]
-    godo_sites = [s for s in SITES if s["type"] == "godo"]
+    # 특정 사이트만 크롤링 (--site 옵션)
+    active_sites = SITES
+    if SITE_FILTER:
+        active_sites = [s for s in SITES if SITE_FILTER in s["name"]]
+        print(f"🎯 사이트 필터: {SITE_FILTER} ({len(active_sites)}개)")
+    parallel_sites = [s for s in active_sites if s["type"] != "godo"]
+    godo_sites = [s for s in active_sites if s["type"] == "godo"]
 
     print(f"🚀 병렬 크롤링 시작 ({len(parallel_sites)}개 사이트 동시 처리)")
     print(f"⏳ 억불카메라 ({len(godo_sites)}개)는 별도 처리")
