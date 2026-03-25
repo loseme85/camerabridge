@@ -152,8 +152,6 @@ input[type=text]{width:150px;}
     <span class="golden-text">지금이 매물 선점 골든 타임입니다!</span>
     <span class="golden-sub" id="golden-sub-text"></span>
   </div>
-  <div id="velocity-section" style="display:none;margin-bottom:20px;">
-    <div class="section-label">Sales Velocity — 가장 빠른 판매 TOP 3</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="velocity-cards"></div>
   </div>
   <div id="new-items-section" style="display:none;margin-bottom:20px;">
@@ -248,10 +246,14 @@ input[type=text]{width:150px;}
       <input type="text" id="f-search" placeholder="search..." oninput="applyFilters()">
       <select id="f-site" onchange="applyFilters()"><option value="all">All Sites</option></select>
       <select id="f-status" onchange="applyFilters()">
-        <option value="all">All</option><option value="sale">For Sale</option>
-        <option value="sold">Sold Out</option><option value="deal">Deals</option>
+        <option value="all">All</option>
+        <option value="sale">For Sale</option>
+        <option value="sold">Sold Out</option>
+        <option value="deal">Deals</option>
+        <option value="new">🆕 New Only</option>
       </select>
       <select id="f-sort" onchange="applyFilters()">
+        <option value="newest">Newest First</option>
         <option value="default">Default</option>
         <option value="price-asc">Price ↑</option>
         <option value="price-desc">Price ↓</option>
@@ -287,7 +289,11 @@ function clearLog(){document.getElementById('log-box').innerHTML='';}
 function parsePrice(p,cur){if(!p||p==='문의요망')return null;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(isNaN(n)||n===0)return null;return cur==='GBP'?Math.round(n*1700):n;}
 function fmtP(n){if(!n)return '—';if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
 function timeAgo(dt){if(!dt)return '확인 중';const d=new Date(dt),now=new Date();const diff=Math.floor((now-d)/1000);if(diff<3600)return Math.floor(diff/60)+'분 전';if(diff<86400)return Math.floor(diff/3600)+'시간 전';if(diff<604800)return Math.floor(diff/86400)+'일 전';return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
-function isNew(dt){if(!dt)return false;return(new Date()-new Date(dt))<86400000;}
+function isNew(dt){
+  if(!dt)return false;
+  const today=new Date().toISOString().slice(0,10);
+  return dt.slice(0,10)===today;
+}
 
 async function loadStatus(){
   try{
@@ -307,42 +313,13 @@ async function loadData(){
     allData=await res.json();
     document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString();
     log('// Loaded '+allData.length+' listings','ok');
-    buildLabelAvg();updateStats();updateSiteProgress();updateCharts();updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();applyFilters();loadStatus();loadVelocity();
+    buildLabelAvg();updateStats();updateSiteProgress();updateCharts();updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();applyFilters();loadStatus();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
 
 
-async function loadVelocity(){
-  try{
-    const res=await fetch('sold_items.json?t='+Date.now());
-    const sold=await res.json();
-    const labelTimes={};
-    sold.forEach(r=>{if(r.hours_to_sell!=null&&r.label){if(!labelTimes[r.label])labelTimes[r.label]=[];labelTimes[r.label].push(r.hours_to_sell);}});
-    const top3=Object.entries(labelTimes).map(([l,ts])=>({label:l,avg:ts.reduce((a,b)=>a+b,0)/ts.length,count:ts.length})).filter(x=>x.count>=1).sort((a,b)=>a.avg-b.avg).slice(0,3);
-    if(top3.length){
-      document.getElementById('velocity-section').style.display='block';
-      document.getElementById('velocity-cards').innerHTML=top3.map((x,i)=>{
-        const t=x.avg<1?Math.round(x.avg*60)+'분':x.avg.toFixed(1)+'시간';
-        return '<div class="stat" style="border-top:2px solid var(--leica)"><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px">#'+(i+1)+' 빠른 판매</div><div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">'+x.label+'</div><div style="font-family:Space Mono,monospace;font-size:22px;font-weight:700;color:var(--leica)">'+t+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:4px">평균 판매 소요 ('+x.count+'건)</div></div>';
-      }).join('');
-      log('// Velocity: '+top3[0].label+' avg '+top3[0].avg.toFixed(1)+'h','ok');
-    }
   }catch(e){}
 }
-async function loadVelocity(){
-  try{
-    const res=await fetch('sold_items.json?t='+Date.now());
-    const sold=await res.json();
-    const lt={};
-    sold.forEach(r=>{if(r.hours_to_sell!=null&&r.label){if(!lt[r.label])lt[r.label]=[];lt[r.label].push(r.hours_to_sell);}});
-    const top3=Object.entries(lt).map(([l,ts])=>({label:l,avg:ts.reduce((a,b)=>a+b,0)/ts.length,count:ts.length})).sort((a,b)=>a.avg-b.avg).slice(0,3);
-    if(top3.length){
-      document.getElementById('velocity-section').style.display='block';
-      document.getElementById('velocity-cards').innerHTML=top3.map((x,i)=>{
-        const t=x.avg<1?Math.round(x.avg*60)+'분':x.avg.toFixed(1)+'시간';
-        return '<div class="stat" style="border-top:2px solid var(--leica)"><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px">#'+(i+1)+' 빠른판매</div><div style="font-size:12px;font-weight:600;margin-bottom:6px">'+x.label+'</div><div style="font-family:Space Mono,monospace;font-size:20px;font-weight:700;color:var(--leica)">'+t+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:3px">평균 ('+x.count+'건)</div></div>';
-      }).join('');
-    }
   }catch(e){}
 }
 function updateNewItems(){
@@ -403,7 +380,7 @@ function exportUnknown(){
 }
 function buildLabelAvg(){
   const tmp={};
-  allData.forEach(r=>{if(r.category==='Accessory')return;if(!r['품절']&&r.label){const p=parsePrice(r['가격'],r['통화']);if(p){if(!tmp[r.label])tmp[r.label]=[];tmp[r.label].push(p);}}});
+  allData.forEach(r=>{if(r.category==='Accessory')return;if(!r['품절']&&r.label&&r.label!==''){const p=parsePrice(r['가격'],r['통화']);if(p&&p>=500000){if(!tmp[r.label])tmp[r.label]=[];tmp[r.label].push(p);}}});
   labelAvg={};Object.keys(tmp).forEach(l=>{const ps=tmp[l];if(ps.length>=2)labelAvg[l]=ps.reduce((a,b)=>a+b,0)/ps.length;});
 }
 
@@ -452,7 +429,18 @@ function updatePriceAnalysis(){
 }
 
 function updateDeals(){
-  const deals=allData.filter(r=>{if(r['품절']||r.category==='Accessory')return false;const p=parsePrice(r['가격'],r['통화']);const avg=labelAvg[r.label];return p&&avg&&p<avg*0.9;}).map(r=>{const p=parsePrice(r['가격'],r['통화']);return {...r,_p:p,_disc:Math.round((1-p/labelAvg[r.label])*100)};}).sort((a,b)=>b._disc-a._disc).slice(0,10);
+  const deals=allData.filter(r=>{
+    if(r['품절']||r.category==='Accessory')return false;
+    if(!r.label||r.label==='')return false; // label 없는 것 제외
+    const p=parsePrice(r['가격'],r['통화']);
+    const avg=labelAvg[r.label];
+    if(!p||!avg)return false;
+    // 평균가 대비 10% 이상 저렴하고, 가격이 50만원 이상인 것만
+    return p<avg*0.9 && p>=500000;
+  }).map(r=>{
+    const p=parsePrice(r['가격'],r['통화']);
+    return {...r,_p:p,_disc:Math.round((1-p/labelAvg[r.label])*100)};
+  }).sort((a,b)=>b._disc-a._disc).slice(0,10);
   document.getElementById('deals-list').innerHTML=deals.length?deals.map(r=>`<div class="deal-row"><div class="deal-name"><a href="${r['링크']}" target="_blank">🔥 ${(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').slice(0,35)}</a></div><div class="deal-site">${FLAGS[r.site]||'🌐'} ${(r.site||'').slice(0,5)}</div><div class="deal-price">${r['가격']||'—'}</div><div class="deal-disc">-${r._disc}%</div></div>`).join(''):'<div style="font-size:11px;color:var(--muted);padding:12px 0;text-align:center;">No hot deals found</div>';
   if(deals.length)log('// '+deals.length+' hot deals (>10% below avg)','ok');
 }
@@ -500,6 +488,11 @@ function applyFilters(){
     if(mount!=='all'&&(r.mount||'')!==mount)return false;
     if(status==='sale'&&(r['품절']||r['예약중']))return false;
     if(status==='sold'&&!r['품절'])return false;
+    if(status==='new'){
+      const today=new Date().toISOString().slice(0,10);
+      const fs=(r.first_seen||r.crawl_time||'').slice(0,10);
+      if(fs!==today)return false;
+    }
     if(status==='deal'){const p=parsePrice(r['가격'],r['통화']);const avg=labelAvg[r.label];if(!p||!avg||p>=avg*0.9||r.category==='Accessory')return false;}
     return true;
   });
@@ -522,7 +515,7 @@ function renderTable(){
     const sold=r['품절']?'<span class="badge badge-sold">SOLD</span>':'';
     const res=r['예약중']?'<span class="badge badge-res">예약</span>':'';
     const deal=isDeal?'<span class="badge badge-deal">🔥DEAL</span>':'';
-    const newBadge=isNew(r.crawl_time)?'<span class="badge badge-new">NEW</span>':'';
+    const newBadge=isNew(r.first_seen||r.crawl_time)?'<span class="badge badge-new">NEW</span>':'';
     const ta=timeAgo(r.crawl_time);
     return `<div class="data-row${r['품절']?' soldout':''}">
       <div class="data-num">${start+i+1}</div>
