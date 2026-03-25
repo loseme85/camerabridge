@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_15.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge — Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="./admin_files/css2" rel="stylesheet">
+<script src="./admin_files/chart.umd.min.js"></script>
 <style>
 :root{--bg:#f8f7f5;--surface:#fff;--surface2:#f3f2f0;--border:#e5e2dc;--border2:#d4d0c8;--text:#1a1a1a;--dim:#6b6560;--muted:#a09890;--leica:#E11F26;--leica-dim:rgba(225,31,38,0.08);--green:#2d7a2d;--orange:#c85a00;--blue:#0055aa;--white:#fff;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -137,13 +137,13 @@ input[type=text]{width:150px;}
 </head>
 <body>
 <header>
-  <a href="index.html" class="logo"><div class="logo-dot"></div>CAMERA <span>BRIDGE</span></a>
+  <a href="file:///Users/changdaepark/Downloads/index.html" class="logo"><div class="logo-dot"></div>CAMERA <span>BRIDGE</span></a>
   <span class="header-badge">ADMIN</span>
   <div class="crawl-status"><div class="status-dot" id="status-dot"></div><span id="status-text">IDLE</span></div>
   <div class="header-right">
     <span class="last-updated" id="last-updated">—</span>
     <button class="btn" onclick="loadData()">↺ Refresh</button>
-    <a href="index.html" class="btn">← Site</a>
+    <a href="file:///Users/changdaepark/Downloads/index.html" class="btn">← Site</a>
   </div>
 </header>
 <main>
@@ -153,7 +153,7 @@ input[type=text]{width:150px;}
     <span class="golden-sub" id="golden-sub-text"></span>
   </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="velocity-cards"></div>
-  </div>
+  
   <div id="new-items-section" style="display:none;margin-bottom:20px;">
     <div class="section-label">🆕 Today's New Listings</div>
     <div id="new-items-table"></div>
@@ -171,7 +171,7 @@ input[type=text]{width:150px;}
   <div class="crawl-card">
     <div class="crawl-header">
       <div class="crawl-title">// Site Progress</div>
-      <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--leica)" id="crawl-info">—</span>
+      <span style="font-family:&#39;Space Mono&#39;,monospace;font-size:10px;color:var(--leica)" id="crawl-info">—</span>
     </div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
     <div class="site-progress" id="site-progress"></div>
@@ -185,7 +185,7 @@ input[type=text]{width:150px;}
   <div class="two-col">
     <div class="card">
       <div class="card-title"><span>⏰ Golden Time</span></div>
-      <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:8px;">업로드 빈도 by hour</div>
+      <div style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--muted);margin-bottom:8px;">업로드 빈도 by hour</div>
       <div class="hour-grid" id="hour-grid"></div>
       <div style="display:flex;gap:4px;margin-top:2px;" id="hour-labels"></div>
       <div id="golden-tips" style="margin-top:12px;"></div>
@@ -221,14 +221,14 @@ input[type=text]{width:150px;}
   <div class="card">
     <div class="filter-row">
       <div class="system-filter">
-        <button class="sys-btn active" onclick="setSys('all',this)">ALL</button>
-        <button class="sys-btn" onclick="setSys('M System',this)">M</button>
-        <button class="sys-btn" onclick="setSys('Barnack',this)">BARN</button>
-        <button class="sys-btn" onclick="setSys('R System',this)">R</button>
-        <button class="sys-btn" onclick="setSys('P&S',this)">P&S</button>
-        <button class="sys-btn" onclick="setSys('SL/Q/S',this)">SL/Q</button>
-        <button class="sys-btn" onclick="setSys('__acc__',this)">ACC</button>
-        <button class="sys-btn" onclick="setSys('__unk__',this)">? UNK</button>
+        <button class="sys-btn active" onclick="setSys(&#39;all&#39;,this)">ALL</button>
+        <button class="sys-btn" onclick="setSys(&#39;M System&#39;,this)">M</button>
+        <button class="sys-btn" onclick="setSys(&#39;Barnack&#39;,this)">BARN</button>
+        <button class="sys-btn" onclick="setSys(&#39;R System&#39;,this)">R</button>
+        <button class="sys-btn" onclick="setSys(&#39;P&amp;S&#39;,this)">P&amp;S</button>
+        <button class="sys-btn" onclick="setSys(&#39;SL/Q/S&#39;,this)">SL/Q</button>
+        <button class="sys-btn" onclick="setSys(&#39;__acc__&#39;,this)">ACC</button>
+        <button class="sys-btn" onclick="setSys(&#39;__unk__&#39;,this)">? UNK</button>
       </div>
       <select id="f-mount" onchange="applyFilters()">
         <option value="all">All Mounts</option>
@@ -259,7 +259,7 @@ input[type=text]{width:150px;}
         <option value="price-desc">Price ↓</option>
         <option value="newest">Newest</option>
       </select>
-      <span id="f-count" style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:auto;"></span>
+      <span id="f-count" style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--muted);margin-left:auto;"></span>
     </div>
     <div class="data-head">
       <span>#</span><span>Product</span><span>Site</span>
@@ -547,5 +547,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   setInterval(loadData,5*60*1000);
 });
 </script>
-</body>
-</html>
+
+
+</body></html>
