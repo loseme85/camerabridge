@@ -316,10 +316,6 @@ async function loadData(){
     buildLabelAvg();updateStats();updateSiteProgress();updateCharts();updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();applyFilters();loadStatus();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
-
-
-  }catch(e){}
-}
 function updateNewItems(){
   const today=new Date().toISOString().slice(0,10);
   const VIP=['noctilux','nocti','summilux','50mm','m6','m10','m11'];
