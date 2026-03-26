@@ -1001,6 +1001,7 @@ def crawl_all():
         r['category'] = detect_category(r['상품명'], r.get('가격', ''))
         if r['category'] == 'Accessory':
             r['system'] = 'Accessory'
+            r['label'] = ''  # Accessory는 label 제거 (평균가 왜곡 방지)
         r['mount'] = detect_mount(r['상품명'])
         # crawl_time은 항상 최신으로
         r['crawl_time'] = crawl_time

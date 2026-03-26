@@ -375,8 +375,29 @@ function exportUnknown(){
 }
 function buildLabelAvg(){
   const tmp={};
-  allData.forEach(r=>{if(r.category==='Accessory')return;if(!r['품절']&&r.label&&r.label!==''){const p=parsePrice(r['가격'],r['통화']);if(p&&p>=500000){if(!tmp[r.label])tmp[r.label]=[];tmp[r.label].push(p);}}});
-  labelAvg={};Object.keys(tmp).forEach(l=>{const ps=tmp[l];if(ps.length>=2)labelAvg[l]=ps.reduce((a,b)=>a+b,0)/ps.length;});
+  allData.forEach(r=>{
+    if(r.category==='Accessory'||!r.label||r.label==='')return;
+    if(r['품절'])return;
+    const p=parsePrice(r['가격'],r['통화']);
+    if(!p||p<500000)return;
+    // label+mount 조합 키 사용
+    const mount=r.mount&&r.mount!=='Unknown'?r.mount:'';
+    const key=mount?r.label+'__'+mount:r.label;
+    if(!tmp[key])tmp[key]=[];
+    tmp[key].push(p);
+  });
+  labelAvg={};
+  Object.keys(tmp).forEach(k=>{
+    const ps=tmp[k];
+    if(ps.length>=2)labelAvg[k]=ps.reduce((a,b)=>a+b,0)/ps.length;
+  });
+  // label만으로도 접근 가능하게 (mount 없는 경우 fallback)
+  allData.forEach(r=>{
+    if(!r.label||r.label==='')return;
+    const mount=r.mount&&r.mount!=='Unknown'?r.mount:'';
+    const key=mount?r.label+'__'+mount:r.label;
+    if(!labelAvg[r.label]&&labelAvg[key])labelAvg[r.label]=labelAvg[key];
+  });
 }
 
 function updateStats(){
@@ -419,22 +440,41 @@ function updateGoldenTime(){
 }
 
 function updatePriceAnalysis(){
-  const sorted=Object.entries(labelAvg).sort((a,b)=>b[1]-a[1]).slice(0,10);const max=sorted[0]?.[1]||1;
-  document.getElementById('price-bars').innerHTML=sorted.length?sorted.map(([l,avg])=>{const items=allData.filter(r=>!r['품절']&&r.label===l&&r.category!=='Accessory');const prices=items.map(r=>parsePrice(r['가격'],r['통화'])).filter(Boolean);const min=prices.length?Math.min(...prices):null;return `<div class="bar-row"><div class="bar-label" title="${l}">${l}</div><div class="bar-track" title="Min: ${fmtP(min)}"><div class="bar-fill blue" style="width:${avg/max*100}%"></div></div><div class="bar-count" style="width:90px;text-align:right;">${fmtP(avg)}</div></div>`;}).join(''):'<div style="font-size:11px;color:var(--muted);padding:8px;">Not enough data</div>';
+  // label+mount 조합 키 중 __ 포함된 것만 (정확한 마운트별 분류)
+  const priceSorted=Object.entries(labelAvg)
+    .filter(([k])=>k.includes('__'))  // mount 명시된 것만
+    .sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const fallback=priceSorted.length<5?Object.entries(labelAvg).filter(([k])=>!k.includes('__')).sort((a,b)=>b[1]-a[1]).slice(0,10):[];
+  const allSorted=[...priceSorted,...fallback].sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const max=allSorted[0]?.[1]||1;
+  document.getElementById('price-bars').innerHTML=allSorted.length?allSorted.map(([k,avg])=>{
+    const [label,mount]=k.includes('__')?k.split('__'):[k,''];
+    const displayLabel=mount?label+' ('+mount+')':label;
+    const items=allData.filter(r=>!r['품절']&&r.label===label&&r.category!=='Accessory'&&(!mount||r.mount===mount));
+    const prices=items.map(r=>parsePrice(r['가격'],r['통화'])).filter(Boolean);
+    const min=prices.length?Math.min(...prices):null;
+    return `<div class="bar-row"><div class="bar-label" title="${displayLabel}">${displayLabel}</div><div class="bar-track" title="Min: ${fmtP(min)}"><div class="bar-fill blue" style="width:${avg/max*100}%"></div></div><div class="bar-count" style="width:90px;text-align:right;">${fmtP(avg)}</div></div>`;
+  }).join(''):'<div style="font-size:11px;color:var(--muted);padding:8px;">Not enough data</div>';
 }
 
 function updateDeals(){
   const deals=allData.filter(r=>{
     if(r['품절']||r.category==='Accessory')return false;
-    if(!r.label||r.label==='')return false; // label 없는 것 제외
+    if(!r.label||r.label==='')return false;
     const p=parsePrice(r['가격'],r['통화']);
-    const avg=labelAvg[r.label];
-    if(!p||!avg)return false;
-    // 평균가 대비 10% 이상 저렴하고, 가격이 50만원 이상인 것만
-    return p<avg*0.9 && p>=500000;
+    if(!p||p<500000)return false;
+    // label+mount 조합으로 평균가 비교
+    const mount=r.mount&&r.mount!=='Unknown'?r.mount:'';
+    const key=mount?r.label+'__'+mount:r.label;
+    const avg=labelAvg[key]||labelAvg[r.label];
+    if(!avg)return false;
+    return p<avg*0.9;
   }).map(r=>{
     const p=parsePrice(r['가격'],r['통화']);
-    return {...r,_p:p,_disc:Math.round((1-p/labelAvg[r.label])*100)};
+    const mount=r.mount&&r.mount!=='Unknown'?r.mount:'';
+    const key=mount?r.label+'__'+mount:r.label;
+    const avg=labelAvg[key]||labelAvg[r.label];
+    return {...r,_p:p,_disc:Math.round((1-p/avg)*100)};
   }).sort((a,b)=>b._disc-a._disc).slice(0,10);
   document.getElementById('deals-list').innerHTML=deals.length?deals.map(r=>`<div class="deal-row"><div class="deal-name"><a href="${r['링크']}" target="_blank">🔥 ${(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').slice(0,35)}</a></div><div class="deal-site">${FLAGS[r.site]||'🌐'} ${(r.site||'').slice(0,5)}</div><div class="deal-price">${r['가격']||'—'}</div><div class="deal-disc">-${r._disc}%</div></div>`).join(''):'<div style="font-size:11px;color:var(--muted);padding:12px 0;text-align:center;">No hot deals found</div>';
   if(deals.length)log('// '+deals.length+' hot deals (>10% below avg)','ok');
