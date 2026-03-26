@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_15.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_19.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge — Admin</title>
-<link href="./admin_files/css2" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="file:///Users/changdaepark/Downloads/admin_files/css2" rel="stylesheet">
+<script src="./admin_files/chart.umd.min.js"></script>
 <style>
 :root{--bg:#f8f7f5;--surface:#fff;--surface2:#f3f2f0;--border:#e5e2dc;--border2:#d4d0c8;--text:#1a1a1a;--dim:#6b6560;--muted:#a09890;--leica:#E11F26;--leica-dim:rgba(225,31,38,0.08);--green:#2d7a2d;--orange:#c85a00;--blue:#0055aa;--white:#fff;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -203,7 +203,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:00:51</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:00:51</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:00:51</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
   <!-- Unknown Mount 섹션 -->
@@ -320,7 +320,7 @@ async function loadData(){
 function updateNewItems(){
   const today=new Date().toISOString().slice(0,10);
   const VIP=['noctilux','nocti','summilux','50mm','m6','m10','m11'];
-  const items=allData.filter(r=>{const fs=r.first_seen||r.crawl_time;return fs&&fs.slice(0,10)===today&&!r['품절'];});
+  const items=allData.filter(r=>{const fs=r.first_seen;return fs&&fs.slice(0,10)===today&&!r['품절'];});
   const sec=document.getElementById('new-items-section');
   if(!items.length){sec.style.display='none';return;}
   sec.style.display='block';
@@ -525,7 +525,7 @@ function applyFilters(){
     if(status==='sold'&&!r['품절'])return false;
     if(status==='new'){
       const today=new Date().toISOString().slice(0,10);
-      const fs=(r.first_seen||r.crawl_time||'').slice(0,10);
+      const fs=(r.first_seen||'').slice(0,10);
       if(fs!==today)return false;
     }
     if(status==='deal'){const p=parsePrice(r['가격'],r['통화']);const avg=labelAvg[r.label];if(!p||!avg||p>=avg*0.9||r.category==='Accessory')return false;}
@@ -550,11 +550,11 @@ function renderTable(){
     const sold=r['품절']?'<span class="badge badge-sold">SOLD</span>':'';
     const res=r['예약중']?'<span class="badge badge-res">예약</span>':'';
     const deal=isDeal?'<span class="badge badge-deal">🔥DEAL</span>':'';
-    const newBadge=isNew(r.first_seen||r.crawl_time)?'<span class="badge badge-new">NEW</span>':'';
+    const newBadge=isNew(r.first_seen)?'<span class="badge badge-new">NEW</span>':'';
     const ta=timeAgo(r.crawl_time);
     return `<div class="data-row${r['품절']?' soldout':''}">
       <div class="data-num">${start+i+1}</div>
-      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>${newBadge}${r.noctilux_gen?`<span class="badge" style="background:rgba(225,31,38,0.08);color:var(--leica);border:1px solid rgba(225,31,38,0.2);margin-left:3px;font-size:8px;">${r.noctilux_gen}</span>`:''}<div class="time-label${isNew(r.crawl_time)?' new-item':''}">${ta}</div></div>
+      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>${newBadge}${r.noctilux_gen?`<span class="badge" style="background:rgba(225,31,38,0.08);color:var(--leica);border:1px solid rgba(225,31,38,0.2);margin-left:3px;font-size:8px;">${r.noctilux_gen}</span>`:''}<div class="time-label${isNew(r.first_seen)?' new-item':''}">${ta}</div></div>
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
       <div class="data-price">${r['가격']||'—'}</div>
       <div class="data-cond">${r['컨디션']||'—'}</div>
