@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_22.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_23.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -203,7 +203,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:11:18</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:11:18</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:11:18</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:16:22</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:16:22</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:16:22</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
   <!-- Unknown Mount 섹션 -->
@@ -290,10 +290,16 @@ function clearLog(){document.getElementById('log-box').innerHTML='';}
 function parsePrice(p,cur){if(!p||p==='문의요망')return null;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(isNaN(n)||n===0)return null;return cur==='GBP'?Math.round(n*1700):n;}
 function fmtP(n){if(!n)return '—';if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
 function timeAgo(dt){if(!dt)return '확인 중';const d=new Date(dt),now=new Date();const diff=Math.floor((now-d)/1000);if(diff<3600)return Math.floor(diff/60)+'분 전';if(diff<86400)return Math.floor(diff/3600)+'시간 전';if(diff<604800)return Math.floor(diff/86400)+'일 전';return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
+function getLastCrawlTime(){
+  if(!allData.length) return null;
+  return allData.reduce((max,r)=>r.crawl_time>max?r.crawl_time:max, '');
+}
 function isNew(dt){
-  if(!dt)return false;
-  const today=new Date().toISOString().slice(0,10);
-  return dt.slice(0,10)===today;
+  if(!dt) return false;
+  const lastCrawl = getLastCrawlTime();
+  if(!lastCrawl) return false;
+  // first_seen이 마지막 크롤링 시각과 같으면 신규
+  return dt.slice(0,16) === lastCrawl.slice(0,16);
 }
 
 async function loadStatus(){
@@ -318,7 +324,6 @@ async function loadData(){
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
 function updateNewItems(){
-  const today=new Date().toISOString().slice(0,10);
   const VIP=['noctilux','nocti','summilux','50mm','m6','m10','m11'];
   const items=allData.filter(r=>{const fs=r.first_seen||r.crawl_time;return fs&&fs.slice(0,10)===today&&!r['품절'];});
   const sec=document.getElementById('new-items-section');
@@ -326,7 +331,7 @@ function updateNewItems(){
   sec.style.display='block';
   items.sort((a,b)=>{const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));return bv-av;});
   const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
-  document.getElementById('new-items-table').innerHTML='<div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;"><div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);">'+['Product','Site','Price','Found','Link'].map(h=>'<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">'+h+'</span>').join('')+'</div>'+items.slice(0,20).map(r=>{const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();const isV=VIP.some(k=>name.toLowerCase().includes(k));const fs=r.first_seen||r.crawl_time;const found=fs?new Date(fs).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'—';return '<div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;'+(isV?'background:rgba(225,31,38,0.04);':'')+'"><div>'+(isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;">HOT</span>':'')+'<a href="'+r['링크']+'" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">'+name.slice(0,50)+'</a></div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+(F[r.site]||'🌐')+' '+(r.site||'').slice(0,8)+'</div><div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">'+(r['가격']||'—')+'</div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+found+'</div><div><a href="'+r['링크']+'" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div></div>';}).join('')+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:6px;text-align:right;">'+items.length+'개 신규 매물</div>';
+  document.getElementById('new-items-table').innerHTML='<div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;"><div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);">'+['Product','Site','Price','Found','Link'].map(h=>'<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">'+h+'</span>').join('')+'</div>'+items.slice(0,20).map(r=>{const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();const isV=VIP.some(k=>name.toLowerCase().includes(k));const fs=r.first_seen||r.crawl_time;const found=fs?new Date(fs).toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+new Date(fs).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'—';return '<div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;'+(isV?'background:rgba(225,31,38,0.04);':'')+'"><div>'+(isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;">HOT</span>':'')+'<a href="'+r['링크']+'" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">'+name.slice(0,50)+'</a></div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+(F[r.site]||'🌐')+' '+(r.site||'').slice(0,8)+'</div><div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">'+(r['가격']||'—')+'</div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+found+'</div><div><a href="'+r['링크']+'" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div></div>';}).join('')+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:6px;text-align:right;">'+items.length+'개 신규 매물</div>';
   log('// Today new: '+items.length+' items','ok');
 }
 const MOUNT_OPTIONS=['M','R','LTM','L','Unknown'];
@@ -546,7 +551,7 @@ function applyFilters(){
     if(status==='sale'&&(r['품절']||r['예약중']))return false;
     if(status==='sold'&&!r['품절'])return false;
     if(status==='new'){
-      const today=new Date().toISOString().slice(0,10);
+      const _d=new Date();const today=_d.getFullYear()+'-'+String(_d.getMonth()+1).padStart(2,'0')+'-'+String(_d.getDate()).padStart(2,'0');
       const fs=(r.first_seen||r.crawl_time||'').slice(0,10);
       if(fs!==today)return false;
     }
@@ -556,7 +561,7 @@ function applyFilters(){
   if(sort==='price-asc')filtered.sort((a,b)=>(parsePrice(a['가격'],a['통화'])||Infinity)-(parsePrice(b['가격'],b['통화'])||Infinity));
   else if(sort==='price-desc')filtered.sort((a,b)=>(parsePrice(b['가격'],b['통화'])||0)-(parsePrice(a['가격'],a['통화'])||0));
   else if(sort==="newest")filtered.sort((a,b)=>new Date(b.crawl_time||0)-new Date(a.crawl_time||0));
-  else if(sort==="new_only"){const today=new Date().toISOString().slice(0,10);filtered=filtered.filter(r=>(r.first_seen||"").slice(0,10)===today);}
+  else if(sort==="new_only"){const lc=getLastCrawlTime();if(lc)filtered=filtered.filter(r=>(r.first_seen||"").slice(0,16)===lc.slice(0,16));}
   document.getElementById('f-count').textContent=filtered.length+' results';
   currentPage=1;renderTable();renderPagination();
 }
@@ -573,7 +578,9 @@ function renderTable(){
     const sold=r['품절']?'<span class="badge badge-sold">SOLD</span>':'';
     const res=r['예약중']?'<span class="badge badge-res">예약</span>':'';
     const deal=isDeal?'<span class="badge badge-deal">🔥DEAL</span>':'';
-    const newBadge=isNew(r.first_seen||r.crawl_time)?'<span class="badge badge-new">NEW</span>':'';
+    const _fs=r.first_seen;const _isNew=isNew(_fs);
+    const _foundTime=_fs?new Date(_fs).toLocaleTimeString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+    const newBadge=_isNew?'<span class="badge badge-new">NEW</span><span style="font-family:Space Mono,monospace;font-size:9px;color:var(--leica);margin-left:3px;">'+_foundTime+'</span>':''
     const ta=timeAgo(r.crawl_time);
     return `<div class="data-row${r['품절']?' soldout':''}">
       <div class="data-num">${start+i+1}</div>
