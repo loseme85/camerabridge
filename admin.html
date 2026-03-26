@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_19.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_20.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -203,7 +203,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:00:51</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:00:51</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:00:51</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:05:55</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:05:55</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:05:55</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
   <!-- Unknown Mount 섹션 -->
@@ -258,7 +258,6 @@ input[type=text]{width:150px;}
         <option value="default">Default</option>
         <option value="price-asc">Price ↑</option>
         <option value="price-desc">Price ↓</option>
-        <option value="newest">Newest</option>
       </select>
       <span id="f-count" style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--muted);margin-left:auto;"></span>
     </div>
@@ -314,13 +313,13 @@ async function loadData(){
     allData=await res.json();
     document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString();
     log('// Loaded '+allData.length+' listings','ok');
-    buildLabelAvg();updateStats();updateSiteProgress();updateCharts();updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();applyFilters();loadStatus();
+    buildLabelAvg();updateStats();updateSiteProgress();try{updateCharts();}catch(e){log("// Chart error: "+e.message,"err");}updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();applyFilters();loadStatus();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
 function updateNewItems(){
   const today=new Date().toISOString().slice(0,10);
   const VIP=['noctilux','nocti','summilux','50mm','m6','m10','m11'];
-  const items=allData.filter(r=>{const fs=r.first_seen;return fs&&fs.slice(0,10)===today&&!r['품절'];});
+  const items=allData.filter(r=>{const fs=r.first_seen||r.crawl_time;return fs&&fs.slice(0,10)===today&&!r['품절'];});
   const sec=document.getElementById('new-items-section');
   if(!items.length){sec.style.display='none';return;}
   sec.style.display='block';
@@ -414,6 +413,11 @@ function updateSiteProgress(){
 }
 
 function updateCharts(){
+  if(typeof Chart==='undefined'){
+    // Chart.js 아직 로드 안됨 - 1초 후 재시도
+    setTimeout(updateCharts, 1000);
+    return;
+  }
   const sc={};allData.forEach(r=>{sc[r.site]=(sc[r.site]||0)+1;});
   const lc=['#E11F26','#0055aa','#c85a00','#2d7a2d','#7b2d7b','#2d7a7a'];
   if(siteChart)siteChart.destroy();
@@ -525,7 +529,7 @@ function applyFilters(){
     if(status==='sold'&&!r['품절'])return false;
     if(status==='new'){
       const today=new Date().toISOString().slice(0,10);
-      const fs=(r.first_seen||'').slice(0,10);
+      const fs=(r.first_seen||r.crawl_time||'').slice(0,10);
       if(fs!==today)return false;
     }
     if(status==='deal'){const p=parsePrice(r['가격'],r['통화']);const avg=labelAvg[r.label];if(!p||!avg||p>=avg*0.9||r.category==='Accessory')return false;}
@@ -533,7 +537,8 @@ function applyFilters(){
   });
   if(sort==='price-asc')filtered.sort((a,b)=>(parsePrice(a['가격'],a['통화'])||Infinity)-(parsePrice(b['가격'],b['통화'])||Infinity));
   else if(sort==='price-desc')filtered.sort((a,b)=>(parsePrice(b['가격'],b['통화'])||0)-(parsePrice(a['가격'],a['통화'])||0));
-  else if(sort==='newest')filtered.sort((a,b)=>new Date(b.crawl_time||0)-new Date(a.crawl_time||0));
+  else if(sort==="newest")filtered.sort((a,b)=>new Date(b.crawl_time||0)-new Date(a.crawl_time||0));
+  else if(sort==="new_only"){const today=new Date().toISOString().slice(0,10);filtered=filtered.filter(r=>(r.first_seen||"").slice(0,10)===today);}
   document.getElementById('f-count').textContent=filtered.length+' results';
   currentPage=1;renderTable();renderPagination();
 }
@@ -550,11 +555,11 @@ function renderTable(){
     const sold=r['품절']?'<span class="badge badge-sold">SOLD</span>':'';
     const res=r['예약중']?'<span class="badge badge-res">예약</span>':'';
     const deal=isDeal?'<span class="badge badge-deal">🔥DEAL</span>':'';
-    const newBadge=isNew(r.first_seen)?'<span class="badge badge-new">NEW</span>':'';
+    const newBadge=isNew(r.first_seen||r.crawl_time)?'<span class="badge badge-new">NEW</span>':'';
     const ta=timeAgo(r.crawl_time);
     return `<div class="data-row${r['품절']?' soldout':''}">
       <div class="data-num">${start+i+1}</div>
-      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>${newBadge}${r.noctilux_gen?`<span class="badge" style="background:rgba(225,31,38,0.08);color:var(--leica);border:1px solid rgba(225,31,38,0.2);margin-left:3px;font-size:8px;">${r.noctilux_gen}</span>`:''}<div class="time-label${isNew(r.first_seen)?' new-item':''}">${ta}</div></div>
+      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>${newBadge}${r.noctilux_gen?`<span class="badge" style="background:rgba(225,31,38,0.08);color:var(--leica);border:1px solid rgba(225,31,38,0.2);margin-left:3px;font-size:8px;">${r.noctilux_gen}</span>`:''}<div class="time-label${isNew(r.crawl_time)?' new-item':''}">${ta}</div></div>
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
       <div class="data-price">${r['가격']||'—'}</div>
       <div class="data-cond">${r['컨디션']||'—'}</div>
