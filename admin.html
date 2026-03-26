@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_23.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_24.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -203,7 +203,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:16:22</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:16:22</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:16:22</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:18:52</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:18:52</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:18:52</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
   <!-- Unknown Mount 섹션 -->
@@ -325,7 +325,7 @@ async function loadData(){
 }
 function updateNewItems(){
   const VIP=['noctilux','nocti','summilux','50mm','m6','m10','m11'];
-  const items=allData.filter(r=>{const fs=r.first_seen||r.crawl_time;return fs&&fs.slice(0,10)===today&&!r['품절'];});
+  const lastCrawl=getLastCrawlTime();const items=allData.filter(r=>{const fs=r.first_seen;return fs&&lastCrawl&&fs.slice(0,16)===lastCrawl.slice(0,16)&&!r['품절'];});
   const sec=document.getElementById('new-items-section');
   if(!items.length){sec.style.display='none';return;}
   sec.style.display='block';
@@ -551,9 +551,8 @@ function applyFilters(){
     if(status==='sale'&&(r['품절']||r['예약중']))return false;
     if(status==='sold'&&!r['품절'])return false;
     if(status==='new'){
-      const _d=new Date();const today=_d.getFullYear()+'-'+String(_d.getMonth()+1).padStart(2,'0')+'-'+String(_d.getDate()).padStart(2,'0');
-      const fs=(r.first_seen||r.crawl_time||'').slice(0,10);
-      if(fs!==today)return false;
+      const lc=getLastCrawlTime();
+      if(!lc||(r.first_seen||'').slice(0,16)!==lc.slice(0,16))return false;
     }
     if(status==='deal'){const p=parsePrice(r['가격'],r['통화']);const avg=labelAvg[r.label];if(!p||!avg||p>=avg*0.9||r.category==='Accessory')return false;}
     return true;
