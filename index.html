@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_23.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_24.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -341,14 +341,14 @@ function matchesQuery(item, query){
     // "50mm", "50 mm", "50/", " 50 " 등은 매칭하되 "150", "350" 등은 제외
     if(/^\d+$/.test(t)){
       const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
-      return re.test(name) || re.test(label);
+      return re.test(name);
     }
-    // "50mm" 형태로 입력한 경우 → 숫자 부분을 단어 경계로 체크
+    // "50mm" 형태로 입력한 경우 → name에서만 체크
     const mmMatch=t.match(/^(\d+)mm$/);
     if(mmMatch){
       const num=mmMatch[1];
       const re=new RegExp('(?<![0-9])'+num+'(?![0-9])');
-      return re.test(name) || re.test(label);
+      return re.test(name);
     }
     return name.includes(t) || label.includes(t);
   });
