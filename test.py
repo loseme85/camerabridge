@@ -58,18 +58,18 @@ SEARCH_ITEMS = [
     {"label": "Hektor", "keywords": ["Hektor"], "must_contain": ["hektor"]},
     {"label": "Elmax", "keywords": ["Elmax"], "must_contain": ["elmax"]},
     # ── 바디 ──
-    {"label": "Leica M3", "keywords": ["Leica M3", "M3 Body", "M3 바디"], "must_contain": ["m3"]},
-    {"label": "Leica M2", "keywords": ["Leica M2", "M2 Body"], "must_contain": ["m2"]},
-    {"label": "Leica M4", "keywords": ["Leica M4", "M4 Body"], "must_contain": ["m4"]},
-    {"label": "Leica M6", "keywords": ["Leica M6", "M6 Body", "M6 TTL"], "must_contain": ["m6"]},
-    {"label": "Leica M7", "keywords": ["Leica M7", "M7 Body"], "must_contain": ["m7"]},
-    {"label": "Leica MP", "keywords": ["Leica MP", "MP Body"], "must_contain": ["leica", "mp"]},
+    {"label": "Leica M3", "keywords": ["Leica M3", "M3 Body", "M3 바디"], "must_contain": ["leica", "m3"]},
+    {"label": "Leica M2", "keywords": ["Leica M2", "M2 Body"], "must_contain": ["leica", "m2"]},
+    {"label": "Leica M4", "keywords": ["Leica M4", "M4 Body"], "must_contain": ["leica", "m4"]},
+    {"label": "Leica M6", "keywords": ["Leica M6", "M6 Body", "M6 TTL"], "must_contain": ["leica", "m6"]},
+    {"label": "Leica M7", "keywords": ["Leica M7", "M7 Body"], "must_contain": ["leica", "m7"]},
+    {"label": "Leica MP", "keywords": ["Leica MP", "MP Body"], "must_contain": ["leica", "mp", "body"]},
     {"label": "Leica M-A", "keywords": ["Leica MA", "M-A Body"], "must_contain": ["m-a"]},
-    {"label": "Leica M8", "keywords": ["Leica M8", "M8 Body"], "must_contain": ["m8"]},
-    {"label": "Leica M9", "keywords": ["Leica M9", "M9 Body", "M9-P"], "must_contain": ["m9"]},
-    {"label": "Leica M10", "keywords": ["Leica M10", "M10 Body", "M10-P", "M10-R"], "must_contain": ["m10"]},
-    {"label": "Leica M11", "keywords": ["Leica M11", "M11 Body", "M11-P"], "must_contain": ["m11"]},
-    {"label": "Leica M240", "keywords": ["Leica M240", "M 240", "Typ 240"], "must_contain": ["240"]},
+    {"label": "Leica M8", "keywords": ["Leica M8", "M8 Body"], "must_contain": ["leica", "m8"]},
+    {"label": "Leica M9", "keywords": ["Leica M9", "M9 Body", "M9-P"], "must_contain": ["leica", "m9"]},
+    {"label": "Leica M10", "keywords": ["Leica M10", "M10 Body", "M10-P", "M10-R"], "must_contain": ["leica", "m10"]},
+    {"label": "Leica M11", "keywords": ["Leica M11", "M11 Body", "M11-P"], "must_contain": ["leica", "m11"]},
+    {"label": "Leica M240", "keywords": ["Leica M240", "M 240", "Typ 240"], "must_contain": ["leica", "240"]},
     # ── APO 라인업 ──
     {"label": "75mm APO-Summicron", "keywords": ["75mm APO Summicron", "APO Summicron 75mm", "APO Summicron 75"], "must_contain": ["apo", "summicron", "75"]},
     {"label": "90mm APO-Summicron", "keywords": ["90mm APO Summicron", "APO Summicron 90mm", "APO Summicron 90"], "must_contain": ["apo", "summicron", "90"]},
@@ -359,9 +359,19 @@ def passes_barnack_filter(name):
         return True
     return True
 
+# 비라이카 브랜드 키워드 (바디 검색 시 제외)
+NON_LEICA = ['nikon', 'canon', 'sony', 'fuji', 'olympus', 'panasonic', 'hasselblad',
+             'pentax', 'minolta', 'contax', '니콘', '소니', '캐논', '후지']
+
 def passes_filter(name, must_contain, item_meta=None):
     """향상된 필터 - 카테고리별 상호 배타적 필터링"""
     name_lower = " ".join(name.lower().split())
+
+    # 바디 검색 시 비라이카 브랜드 제외
+    item_cat = item_meta.get("category", "") if item_meta else ""
+    if item_cat == "Body":
+        if any(kw in name_lower for kw in NON_LEICA):
+            return False
 
     # Barnack 바디 전용 필터
     if item_meta and item_meta.get("barnack"):
@@ -915,13 +925,17 @@ def crawl_all():
     all_results = []
     write_status(0, "Starting...", 0, 0)
 
-    # 기존 results.json 로드 (조기종료용)
+    # 기존 results.json 로드 (first_seen 보존 + 조기종료용)
     existing_links = set()
+    existing_first_seen = {}  # 링크 → first_seen 맵
     try:
         with open("results.json", "r", encoding="utf-8") as f:
             existing = json.load(f)
-            existing_links = {r["링크"] for r in existing}
-        print(f"📋 기존 매물 {len(existing_links)}개 링크 로드 완료")
+            for r in existing:
+                existing_links.add(r["링크"])
+                if r.get("first_seen"):
+                    existing_first_seen[r["링크"]] = r["first_seen"]
+        print(f"📋 기존 매물 {len(existing_links)}개 로드 (first_seen {len(existing_first_seen)}개 보존)")
     except:
         pass
 
@@ -988,10 +1002,16 @@ def crawl_all():
         if r['category'] == 'Accessory':
             r['system'] = 'Accessory'
         r['mount'] = detect_mount(r['상품명'])
-        if 'crawl_time' not in r:
-            r['crawl_time'] = crawl_time
-        if 'first_seen' not in r:
-            r['first_seen'] = crawl_time
+        # crawl_time은 항상 최신으로
+        r['crawl_time'] = crawl_time
+        # first_seen: 기존 데이터면 보존, 신규면 현재 시간
+        link = r.get('링크', '')
+        if link in existing_first_seen:
+            r['first_seen'] = existing_first_seen[link]  # 기존 날짜 유지
+        else:
+            r['first_seen'] = crawl_time  # 신규 매물!
+            if 'first_seen' not in r or r.get('first_seen') == crawl_time:
+                print(f"  🆕 신규: {r['상품명'][:40]}")
         # Noctilux label 조리개별 보정 + generation 필드
         if 'noctilux' in name_lower:
             nocti_gen = detect_noctilux_gen(name)
@@ -1057,9 +1077,12 @@ def crawl_all():
     with open("results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
 
+    # 신규 매물 통계
+    new_count = sum(1 for r in unique_results if r.get('first_seen') == crawl_time)
     write_status(100, "완료", len(unique_results), len(SITES), 0)
     print(f"\n{'='*50}")
     print(f"✅ 최종 {len(unique_results)}개 → results.json 저장 완료")
+    print(f"🆕 신규 매물: {new_count}개 추가됨")
     print(f"⏱️  총 소요 시간: {elapsed:.1f}초 ({elapsed/60:.1f}분)")
     print(f"{'='*50}")
     for r in unique_results:
