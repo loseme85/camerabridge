@@ -463,7 +463,7 @@ SITES = [
     },
     {
         "name": "장씨카메라",
-        "search_url": "https://j-camera.com/product/search.html?keyword={query}",
+        "search_url": "https://j-camera.com/product/search.html?keyword={query}&soldout_type=N",
         "base": "https://j-camera.com",
         "type": "cafe24_all",
         "lang": "ko",
@@ -660,9 +660,11 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain, item_meta=None):
             if site_name == "사진집":
                 is_soldout = "pdi_sold.png" in card_html or "품절" in card_html
             elif site_name == "장씨카메라":
+                # 정확한 품절 아이콘/버튼만 체크 (card_html 전체에서 "품절" 검색하면 오탐 많음)
                 is_soldout = ('alt="품절"' in card_html or
                              "icon_202505071559330700.gif" in card_html or
-                             "품절" in card_html)
+                             "soldout" in card_html.lower() or
+                             "sold_out" in card_html.lower())
                 is_reserved = "예약중" in card_html
             else:
                 is_soldout = any(kw in card_text_lower for kw in ["품절", "sold out", "판매완료"])
