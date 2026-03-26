@@ -196,14 +196,15 @@ input[type=text]{width:150px;}
       <div id="deals-list"></div>
     </div>
   </div>
-  <div class="card" style="margin-bottom:20px;">
-    <div class="card-title"><span>💰 Price Analysis</span><span style="font-size:8px;color:var(--muted)">accessories excluded</span></div>
-    <div id="price-bars"></div>
-  </div>
-  <div class="section-label">Activity Log</div>
-  <div class="card" style="margin-bottom:20px;">
-    <div class="card-title"><span>// Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-    <div class="log-box" id="log-box"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+    <div class="card">
+      <div class="card-title"><span>💰 Price Analysis</span><span style="font-size:8px;color:var(--muted)">accessories excluded</span></div>
+      <div id="price-bars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
+      <div class="log-box" id="log-box" style="height:200px;"></div>
+    </div>
   </div>
   <!-- Unknown Mount 섹션 -->
   <div id="unknown-section" style="display:none;margin-bottom:20px;">
