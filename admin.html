@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_25.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_26.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -203,7 +203,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:22:46</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:22:46</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:22:46</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">01:28:48</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">01:28:48</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">01:28:48</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
   <!-- Unknown Mount 섹션 -->
@@ -560,7 +560,7 @@ function applyFilters(){
   if(sort==='price-asc')filtered.sort((a,b)=>(parsePrice(a['가격'],a['통화'])||Infinity)-(parsePrice(b['가격'],b['통화'])||Infinity));
   else if(sort==='price-desc')filtered.sort((a,b)=>(parsePrice(b['가격'],b['통화'])||0)-(parsePrice(a['가격'],a['통화'])||0));
   else if(sort==="newest")filtered.sort((a,b)=>new Date(b.crawl_time||0)-new Date(a.crawl_time||0));
-  else if(sort==="new_only"){const lc=getLastCrawlTime();if(lc)filtered=filtered.filter(r=>(r.first_seen||"").slice(0,16)===lc.slice(0,16)&&!r["품절"]);}
+  else if(sort==="new_only"){const lc=getLastCrawlTime();if(lc)filtered=filtered.filter(r=>(r.first_seen||"").slice(0,16)===lc.slice(0,16));}
   document.getElementById('f-count').textContent=filtered.length+' results';
   currentPage=1;renderTable();renderPagination();
 }
