@@ -517,33 +517,7 @@ SITES = [
         "통화": "KRW",
         "condition_type": "domestic",
     },
-    {
-        "name": "신성카메라",
-        "search_url": "https://www.scamera.co.kr/product/search.html?keyword={query}",
-        "base": "https://www.scamera.co.kr",
-        "type": "cafe24_all",
-        "lang": "ko",
-        "통화": "KRW",
-        "condition_type": "domestic",
-    },
-    {
-        "name": "억불카메라",
-        "search_url": "https://www.ukbulcamera.co.kr/goods/goods_search.php?keyword={query}&pageNum=80&reSearch=n",
-        "base": "https://www.ukbulcamera.co.kr",
-        "type": "godo",
-        "lang": "ko",
-        "통화": "KRW",
-        "condition_type": "domestic",
-    },
-    {
-        "name": "Ffordes (영국)",
-        "search_url": "https://www.ffordes.com/search?q={query}",
-        "base": "https://www.ffordes.com",
-        "type": "ffordes_search",
-        "lang": "en",
-        "통화": "GBP",
-        "condition_type": "overseas",
-    },
+
 ]
 
 # ══════════════════════════════════════════════════════
