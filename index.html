@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_25.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_26.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -258,8 +258,8 @@ const SLANG_MAP = {
   '90apo':'apo summicron 90','90 apo':'apo summicron 90',
   'apocron':'apo summicron','apo cron':'apo summicron',
   // Tri-Elmar
-  'tri':'tri-elmar','tri elmar':'tri-elmar','trielmar':'tri-elmar',
-  'wate':'tri-elmar 16','mate':'tri-elmar 28',
+  'tri':'tri elmar','tri-elmar':'tri elmar','trielmar':'tri elmar',
+  'wate':'tri elmar 16','mate':'tri elmar 28',
   // Elmar
   '50elmar':'elmar 50','elmar50':'elmar 50',
 };
@@ -310,7 +310,8 @@ function detectQueryMount(q){
 function matchesQuery(item, query){
   if(isAccessory(item)) return false;
   const q=query.toLowerCase();
-  const name=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');  // 하이픈→공백 정규화로 tri-elmar=tri elmar
   const label=(item['label']||'').toLowerCase();
   const mount=(item['mount']||'');
     // 마운트 명시 필터

@@ -52,8 +52,8 @@ SEARCH_ITEMS = [
     {"label": "21mm Super Angulon", "keywords": ["21mm Super Angulon", "Super Angulon 21mm", "Super Angulon"], "must_contain": ["angulon", "21"]},
     {"label": "28mm Elmarit", "keywords": ["28mm Elmarit", "Elmarit 28mm", "Elmarit 28"], "must_contain": ["elmarit", "28"]},
     # ── Tri-Elmar ──
-    {"label": "Tri-Elmar-M 28-35-50 (MATE)", "keywords": ["tri-elmar", "TRI-ELMAR-M", "28-35-50", "MATE"], "must_contain": ["tri-elmar"]},
-    {"label": "Tri-Elmar-M 16-18-21 (WATE)", "keywords": ["tri-elmar 16", "16-18-21mm", "WATE"], "must_contain": ["tri-elmar"]},
+    {"label": "Tri-Elmar-M 28-35-50 (MATE)", "keywords": ["tri-elmar", "tri elmar", "TRI-ELMAR-M", "28-35-50", "MATE"], "must_contain": ["tri", "elmar"]},
+    {"label": "Tri-Elmar-M 16-18-21 (WATE)", "keywords": ["tri-elmar 16", "tri elmar 16", "16-18-21mm", "WATE"], "must_contain": ["tri", "elmar"]},
     # ── 올드/클래식 ──
     {"label": "50mm Elmar", "keywords": ["50mm Elmar", "Elmar 50mm", "Elmar 50"], "must_contain": ["elmar", "50"]},
     {"label": "50mm Summar", "keywords": ["50mm Summar", "Summar 50mm", "Summar 50"], "must_contain": ["summar", "50"]},
