@@ -55,7 +55,7 @@ SEARCH_ITEMS = [
     {"label": "21mm Super-Angulon f3.4", "keywords": ["Super Angulon 21", "Super-Angulon 21mm"],     "must_contain": ["angulon", "21", "3.4"]},
     {"label": "21mm Elmarit f2.8",       "keywords": ["Elmarit 21", "21mm Elmarit"],                "must_contain": ["elmarit", "21"]},
     {"label": "21mm Elmarit ASPH",       "keywords": ["Elmarit 21 ASPH", "21mm Elmarit ASPH"],      "must_contain": ["elmarit", "21", "asph"]},
-    {"label": "21mm Summilux ASPH",      "keywords": ["Summilux 21", "21mm Summilux"],              "must_contain": ["summilux", "21"]},
+    {"label": "21mm Summilux ASPH",      "keywords": ["Summilux 21", "21mm Summilux", "Summilux-M 21", "21/1.4"],   "must_contain": ["summilux", "21"]},
     # ── 24mm ──
     {"label": "24mm Elmarit ASPH",       "keywords": ["Elmarit 24", "24mm Elmarit"],                "must_contain": ["elmarit", "24"]},
     # ── 28mm 세대별 ──
@@ -112,7 +112,7 @@ SEARCH_ITEMS = [
     {"label": "Leica CM",           "keywords": ["Leica CM", "Leica CM Zoom"],               "must_contain": ["leica", "cm"]},
     # C 시리즈 (C1/C2/C3/C11)
     {"label": "Leica C1",           "keywords": ["Leica C1"],                                "must_contain": ["leica", "c1"]},
-    {"label": "Leica C2",           "keywords": ["Leica C2"],                                "must_contain": ["leica", "c2"]},
+    {"label": "Leica C2",           "keywords": ["Leica C2", "C2 Zoom", "C2-Zoom"],         "must_contain": ["leica", "c2"]},
     {"label": "Leica C3",           "keywords": ["Leica C3"],                                "must_contain": ["leica", "c3"]},
     {"label": "Leica C11",          "keywords": ["Leica C11"],                               "must_contain": ["leica", "c11"]},
     # C-LUX 시리즈
