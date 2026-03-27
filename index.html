@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_26.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_27.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -284,6 +284,7 @@ const NEGATIVE_KEYWORDS = [
   'original hood','hood m ','hood e ','후드 단품',
 ];
 function isAccessory(item){
+  if(item.category==='Accessory') return true;
   const name=(item['상품명']||'').toLowerCase();
   return NEGATIVE_KEYWORDS.some(k=>name.includes(k.toLowerCase()));
 }
