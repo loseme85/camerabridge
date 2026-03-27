@@ -55,7 +55,7 @@ SEARCH_ITEMS = [
     {"label": "21mm Super-Angulon f3.4", "keywords": ["Super Angulon 21", "Super-Angulon 21mm"],     "must_contain": ["angulon", "21", "3.4"]},
     {"label": "21mm Elmarit f2.8",       "keywords": ["Elmarit 21", "21mm Elmarit"],                "must_contain": ["elmarit", "21"]},
     {"label": "21mm Elmarit ASPH",       "keywords": ["Elmarit 21 ASPH", "21mm Elmarit ASPH"],      "must_contain": ["elmarit", "21", "asph"]},
-    {"label": "21mm Summilux ASPH",      "keywords": ["Summilux 21", "21mm Summilux", "Summilux-M 21", "21/1.4"],   "must_contain": ["summilux", "21"]},
+    {"label": "21mm Summilux ASPH",      "keywords": ["Summilux 21", "21mm Summilux"],              "must_contain": ["summilux", "21"]},
     # ── 24mm ──
     {"label": "24mm Elmarit ASPH",       "keywords": ["Elmarit 24", "24mm Elmarit"],                "must_contain": ["elmarit", "24"]},
     # ── 28mm 세대별 ──
@@ -112,7 +112,7 @@ SEARCH_ITEMS = [
     {"label": "Leica CM",           "keywords": ["Leica CM", "Leica CM Zoom"],               "must_contain": ["leica", "cm"]},
     # C 시리즈 (C1/C2/C3/C11)
     {"label": "Leica C1",           "keywords": ["Leica C1"],                                "must_contain": ["leica", "c1"]},
-    {"label": "Leica C2",           "keywords": ["Leica C2", "C2 Zoom", "C2-Zoom", "c2 zoom black"], "must_contain": ["c2"]},
+    {"label": "Leica C2",           "keywords": ["Leica C2"],                                "must_contain": ["leica", "c2"]},
     {"label": "Leica C3",           "keywords": ["Leica C3"],                                "must_contain": ["leica", "c3"]},
     {"label": "Leica C11",          "keywords": ["Leica C11"],                               "must_contain": ["leica", "c11"]},
     # C-LUX 시리즈
@@ -492,33 +492,211 @@ def is_ffordes_used(href):
 SITES = [
     {
         "name": "라이카스토어 충무로",
-        "search_url": "https://leica-storebando.co.kr/product/search.html?keyword={query}",
         "base": "https://leica-storebando.co.kr",
-        "type": "cafe24",
-        "lang": "ko",
+        "categories": [
+            "https://leica-storebando.co.kr/product/list.html?cate_no=442",
+        ],
         "통화": "KRW",
-        "condition_type": "domestic",
     },
     {
         "name": "사진집",
-        "search_url": "https://www.sazinzibb.com/product/search.html?keyword={query}",
         "base": "https://www.sazinzibb.com",
-        "type": "cafe24_all",
-        "lang": "ko",
+        "categories": [
+            "https://www.sazinzibb.com/category/%EC%A4%91%EA%B3%A0%EC%83%81%ED%92%88/27/",
+            "https://www.sazinzibb.com/category/%EC%9C%84%ED%83%81%EC%A0%9C%ED%92%88/28/",
+        ],
         "통화": "KRW",
-        "condition_type": "domestic",
     },
     {
         "name": "장씨카메라",
-        "search_url": "https://j-camera.com/product/search.html?keyword={query}",
         "base": "https://j-camera.com",
-        "type": "cafe24_all",
-        "lang": "ko",
+        "categories": [
+            "https://j-camera.com/product/list.html?cate_no=358",
+        ],
         "통화": "KRW",
-        "condition_type": "domestic",
     },
-
 ]
+
+# 카테고리 기반 크롤러 함수 추가
+
+def crawl_category(page, site):
+    """카테고리 페이지를 전체 순회하며 상품 수집"""
+    results = []
+    site_name = site["name"]
+    base = site["base"]
+
+    for cat_url in site["categories"]:
+        print(f"\n  📂 카테고리: {cat_url}")
+        page_num = 1
+
+        while True:
+            # 페이지 URL 구성
+            if "?" in cat_url:
+                url = cat_url + f"&page={page_num}"
+            else:
+                url = cat_url + f"?page={page_num}"
+
+            print(f"    └─ {page_num}페이지 수집 중...")
+
+            try:
+                page.goto(url, wait_until="domcontentloaded", timeout=15_000)
+            except Exception as e:
+                print(f"    ❌ 로드 실패: {e}")
+                break
+
+            try:
+                page.wait_for_selector("ul.prdList > li", timeout=6_000)
+            except:
+                print(f"    마지막 페이지 도달")
+                break
+
+            cards = page.query_selector_all("ul.prdList > li")
+            if not cards:
+                break
+
+            print(f"    └─ {len(cards)}개 상품 발견")
+            found_any = False
+
+            for card in cards:
+                try:
+                    name_el = card.query_selector(".name")
+                    if not name_el:
+                        continue
+                    name = " ".join(name_el.inner_text().strip().split())
+                    if not name:
+                        continue
+
+                    # 악세사리 제외
+                    cat = detect_category(name)
+                    if cat == "Accessory":
+                        continue
+
+                    # 링크
+                    link_el = card.query_selector("a")
+                    href = link_el.get_attribute("href") if link_el else ""
+                    if href and not href.startswith("http"):
+                        href = base + href
+                    href = href.split("#")[0]
+
+                    # 가격
+                    card_text = card.inner_text()
+                    price_match = re.search(r"([\d,]+원)", card_text)
+                    price = price_match.group(1) if price_match else "문의요망"
+                    price = normalize_price(price)
+
+                    # 이미지
+                    img_el = card.query_selector("img")
+                    img_url = ""
+                    if img_el:
+                        raw = img_el.get_attribute("src") or img_el.get_attribute("data-src") or ""
+                        img_url = fix_img_url(raw, base)
+
+                    # 컨디션
+                    cond_match = re.search(r"(\d{2,3})%", card_text)
+                    if not cond_match:
+                        cond_match = re.search(r"(\d{2,3})%", name)
+                    condition = cond_match.group(1) + "%" if cond_match else "정보없음"
+
+                    # 품절 감지
+                    card_html = card.inner_html()
+                    is_soldout = False
+                    is_reserved = False
+
+                    if site_name == "사진집":
+                        is_soldout = "pdi_sold.png" in card_html or "품절" in card_html
+                    elif site_name == "장씨카메라":
+                        is_soldout = ('alt="품절"' in card_html or
+                                     "icon_202505071559330700.gif" in card_html or
+                                     "soldout" in card_html.lower())
+                        is_reserved = "예약중" in card_html
+                    elif site_name == "라이카스토어 충무로":
+                        is_soldout = ("icon_202209171535309800.gif" in card_html or
+                                     "SOLD OUT" in card_html or "품절" in card_html)
+                        is_reserved = "예약중" in card_html
+
+                    # label 자동 감지
+                    gen = detect_generation(name)
+                    sys = detect_system(name)
+                    mount = detect_mount(name)
+                    label = auto_label(name)
+
+                    results.append({
+                        "site": site_name,
+                        "label": label,
+                        "상품명": name,
+                        "세대": gen,
+                        "컨디션": condition,
+                        "가격": price,
+                        "통화": site["통화"],
+                        "이미지": img_url,
+                        "링크": href,
+                        "품절": is_soldout,
+                        "예약중": is_reserved,
+                        "category": cat,
+                        "system": sys,
+                        "mount": mount,
+                    })
+                    found_any = True
+                    status = "🚫품절" if is_soldout else ("📋예약중" if is_reserved else "✔ ")
+                    print(f"    {status} {name[:45]} | {condition} | {price}")
+
+                except Exception as e:
+                    print(f"    ⚠️  파싱 오류: {e}")
+                    continue
+
+            if not found_any:
+                break
+            page_num += 1
+
+    return results
+
+
+def auto_label(name):
+    """상품명에서 label 자동 감지"""
+    n = name.lower()
+    # Noctilux
+    if "noctilux" in n:
+        if "0.95" in n: return "50mm Noctilux f0.95"
+        if "1.2" in n: return "50mm Noctilux f1.2"
+        if "1.0" in n: return "50mm Noctilux f1.0"
+        if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
+        return "Noctilux"
+    # Summilux
+    if "summilux" in n:
+        for mm in ["21","28","35","50","75"]:
+            if mm in n: return f"{mm}mm Summilux"
+        return "Summilux"
+    # Summicron
+    if "summicron" in n:
+        if "apo" in n:
+            for mm in ["50","75","90"]:
+                if mm in n: return f"{mm}mm APO-Summicron"
+        for mm in ["28","35","50","75","90"]:
+            if mm in n: return f"{mm}mm Summicron"
+        return "Summicron"
+    # Elmarit
+    if "elmarit" in n:
+        for mm in ["21","24","28","90"]:
+            if mm in n: return f"{mm}mm Elmarit"
+        return "Elmarit"
+    # Summaron
+    if "summaron" in n: return "Summaron"
+    # Super-Angulon
+    if "angulon" in n: return "Super-Angulon"
+    # Elmar
+    if "elmar" in n and "elmarit" not in n: return "Elmar"
+    # Tri-Elmar
+    if "tri" in n and "elmar" in n: return "Tri-Elmar"
+    # Bodies
+    for m in ["m11","m10","m9","m8","m7","m6","m4","m3","m2","mp","m-a","m240"]:
+        if m in n.replace(" ",""): return f"Leica {m.upper()}"
+    if "q3" in n: return "Leica Q3"
+    if "q2" in n: return "Leica Q2"
+    # Compact
+    for c in ["d-lux","v-lux","c-lux","minilux","c2","c1","mini"]:
+        if c in n: return f"Leica {c.upper()}"
+    return ""
+
 
 # ══════════════════════════════════════════════════════
 # 크롤러: 카페24 (충무로 등 국내)
@@ -883,35 +1061,12 @@ def crawl_site(site):
 
         seen_links = set()
 
-        for search_item in SEARCH_ITEMS:
-            label = search_item["label"]
-            must_contain = search_item["must_contain"]
-            keywords = search_item["keywords"]
-            item_meta = search_item  # category, barnack 등 메타 전달
-            print(f"\n  🔍 필터: '{label}'")
-
-            seen_in_item = set()
-            for keyword in keywords:
-                try:
-                    if site["type"] == "cafe24":
-                        res = crawl_cafe24(page, site, keyword, label, must_contain, item_meta)
-                    elif site["type"] == "cafe24_all":
-                        res = crawl_cafe24_all(page, site, keyword, label, must_contain, item_meta)
-                    elif site["type"] == "godo":
-                        res = crawl_godo(page, site, keyword, label, must_contain, item_meta)
-                    elif site["type"] == "ffordes_search":
-                        res = crawl_ffordes_search(page, site, keyword, label, must_contain, item_meta)
-                    else:
-                        res = []
-                    for r in res:
-                        if r["링크"] not in seen_in_item:
-                            seen_in_item.add(r["링크"])
-                            if r["링크"] not in seen_links:
-                                seen_links.add(r["링크"])
-                                site_results.append(r)
-                except Exception as e:
-                    print(f"    ❌ {keyword} 오류: {e}")
-                time.sleep(0.3)
+        # 카테고리 방식으로 전체 수집
+        res = crawl_category(page, site)
+        for r in res:
+            if r["링크"] not in seen_links:
+                seen_links.add(r["링크"])
+                site_results.append(r)
 
         ctx.close()
         browser.close()
