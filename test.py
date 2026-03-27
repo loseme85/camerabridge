@@ -51,9 +51,6 @@ SEARCH_ITEMS = [
     # ── 광각 ──
     {"label": "21mm Super Angulon", "keywords": ["21mm Super Angulon", "Super Angulon 21mm", "Super Angulon"], "must_contain": ["angulon", "21"]},
     {"label": "28mm Elmarit", "keywords": ["28mm Elmarit", "Elmarit 28mm", "Elmarit 28"], "must_contain": ["elmarit", "28"]},
-    # ── Tri-Elmar ──
-    {"label": "Tri-Elmar-M 28-35-50 (MATE)", "keywords": ["tri-elmar", "tri elmar", "TRI-ELMAR-M", "28-35-50", "MATE"], "must_contain": ["tri", "elmar"]},
-    {"label": "Tri-Elmar-M 16-18-21 (WATE)", "keywords": ["tri-elmar 16", "tri elmar 16", "16-18-21mm", "WATE"], "must_contain": ["tri", "elmar"]},
     # ── 올드/클래식 ──
     {"label": "50mm Elmar", "keywords": ["50mm Elmar", "Elmar 50mm", "Elmar 50"], "must_contain": ["elmar", "50"]},
     {"label": "50mm Summar", "keywords": ["50mm Summar", "Summar 50mm", "Summar 50"], "must_contain": ["summar", "50"]},
@@ -663,11 +660,9 @@ def crawl_cafe24_all(page, site, keyword, label, must_contain, item_meta=None):
             if site_name == "사진집":
                 is_soldout = "pdi_sold.png" in card_html or "품절" in card_html
             elif site_name == "장씨카메라":
-                # 정확한 품절 아이콘/버튼만 체크 (card_html 전체에서 "품절" 검색하면 오탐 많음)
                 is_soldout = ('alt="품절"' in card_html or
                              "icon_202505071559330700.gif" in card_html or
-                             "soldout" in card_html.lower() or
-                             "sold_out" in card_html.lower())
+                             "품절" in card_html)
                 is_reserved = "예약중" in card_html
             else:
                 is_soldout = any(kw in card_text_lower for kw in ["품절", "sold out", "판매완료"])
