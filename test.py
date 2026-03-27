@@ -1121,13 +1121,12 @@ def crawl_all():
     if SITE_FILTER:
         active_sites = [s for s in SITES if SITE_FILTER in s["name"]]
         print(f"🎯 사이트 필터: {SITE_FILTER} ({len(active_sites)}개)")
-    parallel_sites = [s for s in active_sites if s["type"] != "godo"]
-    godo_sites = [s for s in active_sites if s["type"] == "godo"]
+    parallel_sites = active_sites
+    godo_sites = []
 
     print(f"🚀 병렬 크롤링 시작 ({len(parallel_sites)}개 사이트 동시 처리)")
-    print(f"⏳ 억불카메라 ({len(godo_sites)}개)는 별도 처리")
 
-    total_sites = len(parallel_sites) + len(godo_sites)
+    total_sites = len(parallel_sites)
     done_sites = 0
 
     # 병렬 처리
