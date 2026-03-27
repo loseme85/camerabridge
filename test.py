@@ -112,7 +112,7 @@ SEARCH_ITEMS = [
     {"label": "Leica CM",           "keywords": ["Leica CM", "Leica CM Zoom"],               "must_contain": ["leica", "cm"]},
     # C 시리즈 (C1/C2/C3/C11)
     {"label": "Leica C1",           "keywords": ["Leica C1"],                                "must_contain": ["leica", "c1"]},
-    {"label": "Leica C2",           "keywords": ["Leica C2", "C2 Zoom", "C2-Zoom"],         "must_contain": ["leica", "c2"]},
+    {"label": "Leica C2",           "keywords": ["Leica C2", "C2 Zoom", "C2-Zoom", "c2 zoom black"], "must_contain": ["c2"]},
     {"label": "Leica C3",           "keywords": ["Leica C3"],                                "must_contain": ["leica", "c3"]},
     {"label": "Leica C11",          "keywords": ["Leica C11"],                               "must_contain": ["leica", "c11"]},
     # C-LUX 시리즈
