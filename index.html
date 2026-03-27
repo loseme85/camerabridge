@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_27.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_28.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -238,6 +238,7 @@ async function loadData(){
   return allData;
 }
 // 슬랭 → 검색 토큰 변환
+// 전체 쿼리 변환 (완전한 슬랭 문구)
 const SLANG_MAP = {
   // Summilux
   '50lux':'summilux 50','50 lux':'summilux 50',
@@ -247,10 +248,8 @@ const SLANG_MAP = {
   '50cron':'summicron 50','50 cron':'summicron 50',
   '35cron':'summicron 35','35 cron':'summicron 35',
   '28cron':'summicron 28','75cron':'summicron 75','90cron':'summicron 90',
-  // Noctilux
-  'nocti':'noctilux','50nocti':'noctilux',
-  '50nocti f0.95':'noctilux f0.95','50nocti f1.0':'noctilux f1.0','50nocti f1.2':'noctilux f1.2',
-  '75nocti':'noctilux 75mm','75 nocti':'noctilux 75mm',
+  // Noctilux 완전 슬랭
+  '50nocti f0.95':'noctilux 0.95','50nocti f1.0':'noctilux 1.0','50nocti f1.2':'noctilux 1.2',
   '75nocti':'noctilux 75','75 nocti':'noctilux 75',
   // APO
   '50apo':'apo summicron 50','50 apo':'apo summicron 50',
@@ -263,9 +262,35 @@ const SLANG_MAP = {
   // Elmar
   '50elmar':'elmar 50','elmar50':'elmar 50',
 };
+
+// 토큰 단위 슬랭 변환 (조합 검색용: "nocti 35mm" → "noctilux 35mm")
+const TOKEN_MAP = {
+  // Noctilux
+  'nocti':'noctilux','50nocti':'noctilux',
+  // Noctilux 세대 연관어 → GEN_SYNONYMS 키로 매핑
+  '1st':'nocti1st','오리지널':'nocti1st','original':'nocti1st','aspherical':'nocti1st',
+  'e58':'e58','e60':'e60',
+  'v1':'e58',          // v1 = 2세대 E58
+  'v2':'e60','v3':'e60', // v2/v3 = 3세대 E60
+  'v4':'v4',           // v4 = 4세대 내장후드
+  '복각':'1.2','f0.95':'0.95','f1.0':'1.0','f1.2':'1.2','f1.25':'1.25',
+  '0.95':'0.95','1.0':'1.0','1.2':'1.2','1.25':'1.25',
+  // Summilux 토큰
+  'lux':'summilux',
+  // Summicron 토큰
+  'cron':'summicron',
+  // APO 토큰
+  'apo':'apo',
+};
+
 function normalizeQuery(q){
   const lower=q.toLowerCase().trim();
-  return SLANG_MAP[lower]||q;
+  // 1. 전체 문구 변환 우선 (50nocti f0.95 같은 완전 슬랭)
+  if(SLANG_MAP[lower]) return SLANG_MAP[lower];
+  // 2. 토큰별 변환 (nocti 35mm → noctilux 35mm)
+  const tokens=lower.split(/\s+/);
+  const mapped=tokens.map(t=>TOKEN_MAP[t]||t);
+  return mapped.join(' ');
 }
 // 세대 슬랭 변환
 const GEN_MAP = {
@@ -295,6 +320,21 @@ const GEN_SYNONYMS = {
   '3세대': ['3rd','3세대','3 rd','(3rd)','third','ver.3','v.3'],
   '4세대': ['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
   '5세대': ['5th','5세대','5 th','(5th)','ver.5','v.5'],
+  // ── Noctilux 세대별 연관어 ──
+  // 1세대 f1.2 오리지널: Aspherical 풀네임, Series 1, 1st, sn.2xxx대
+  'nocti1st':  ['aspherical','series 1','1st','series1'],
+  // f1.2 (오리지널+복각 혼재): 조리개값으로만
+  '1.2':   ['1.2','f1.2','1:1.2'],
+  // f1.0 E58 2세대 (v1) - 상품명에 E58 명시된 것만
+  'e58':   ['e58','e 58','58mm'],
+  // f1.0 E60 3세대 (v2/v3) - 상품명에 E60 명시된 것만
+  'e60':   ['e60','e 60','60mm'],
+  // f1.0 4세대 내장후드
+  'v4':    ['built-in','internal hood','6bit'],
+  // f0.95 현행 5세대
+  '0.95':  ['0.95','f0.95','1:0.95'],
+  '1.0':   ['1.0','f1.0','1:1.0'],
+  '1.25':  ['1.25','f1.25','1:1.25'],
 };
 function detectQueryMount(q){
   const tokens=q.toLowerCase().split(/\s+/);
@@ -341,6 +381,10 @@ function matchesQuery(item, query){
     if(gen){
       const synonyms=GEN_SYNONYMS[gen]||[gen];
       return synonyms.some(s=>name.includes(s));
+    }
+    // GEN_SYNONYMS 직접 키 매칭 (0.95, 1.2, e58 등 Noctilux 연관어)
+    if(GEN_SYNONYMS[t]){
+      return GEN_SYNONYMS[t].some(s=>name.includes(s));
     }
     // 초점거리 숫자 토큰 (예: "50", "35", "75") → 단어 경계 정밀 매칭
     // "50mm", "50 mm", "50/", " 50 " 등은 매칭하되 "150", "350" 등은 제외
