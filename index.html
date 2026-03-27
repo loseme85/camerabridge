@@ -1,178 +1,217 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LeicaShark — Used Leica Search</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Camera Bridge</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red: #cc0000;
-    --black: #111;
-    --gray-dark: #333;
-    --gray-mid: #888;
-    --gray-light: #e8e8e8;
-    --bg: #f5f5f3;
-    --white: #fff;
-    --border: #ddd;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--black); min-height: 100vh; }
+:root{
+  --bg:#f8f7f5;--surface:#ffffff;--surface2:#f3f2f0;--surface3:#ede9e3;
+  --border:#e5e2dc;--border2:#d4d0c8;
+  --text:#1a1a1a;--text-dim:#6b6560;--text-muted:#a09890;
+  --accent:#E11F26;--accent-dim:rgba(225,31,38,0.06);
+  --red:#E11F26;--white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;}
+header{border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:100;background:rgba(248,247,245,0.97);backdrop-filter:blur(12px);box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.logo{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:3px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.logo span{color:var(--accent);}
+.logo-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+.search-wrap{flex:1;max-width:560px;display:flex;align-items:center;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;overflow:hidden;transition:border-color 0.2s;}
+.search-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+#search-input{flex:1;border:none;background:transparent;padding:10px 14px;font-family:'Space Mono',monospace;font-size:13px;outline:none;color:var(--text);letter-spacing:0.5px;}
+#search-input::placeholder{color:var(--text-dim);}
+.search-btn{background:var(--accent);border:none;padding:10px 16px;cursor:pointer;color:var(--white);font-size:14px;font-weight:700;transition:opacity 0.2s;}
+.search-btn:hover{opacity:0.85;}
+.clear-btn{background:none;border:none;padding:10px 12px;cursor:pointer;color:var(--text-dim);font-size:18px;line-height:1;}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
+.lang-wrap{position:relative;}
+.lang-btn{background:var(--white);border:1px solid var(--border2);padding:6px 10px;border-radius:3px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:1px;transition:all 0.2s;}
+.lang-btn:hover{border-color:var(--accent);color:var(--accent);}
+.lang-dropdown{display:none;position:absolute;right:0;top:calc(100% + 8px);background:var(--white);border:1px solid var(--border);border-radius:3px;min-width:200px;z-index:999;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.lang-dropdown.open{display:block;}
+.lang-option{padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:12px;font-family:'Space Mono',monospace;color:var(--text-dim);transition:all 0.1s;border-bottom:1px solid var(--border);}
+.lang-option:last-child{border-bottom:none;}
+.lang-option:hover{background:var(--accent-dim);color:var(--accent);}
+.lang-code{font-size:10px;color:var(--text-muted);margin-left:auto;}
+main{max-width:1100px;margin:0 auto;padding:40px 24px;}
+.hero{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px;background:var(--bg);}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--accent);text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';width:40px;height:1px;background:var(--accent);opacity:0.4;}
+.hero-title{font-family:'Space Mono',monospace;font-size:clamp(42px,8vw,80px);font-weight:700;letter-spacing:-1px;line-height:0.95;margin-bottom:8px;color:var(--text);}
+.hero-title-2{font-family:'Space Mono',monospace;font-size:clamp(42px,8vw,80px);font-weight:700;letter-spacing:-1px;line-height:0.95;margin-bottom:32px;color:var(--accent);font-style:italic;}
+.hero-sub{font-size:13px;color:var(--text-dim);letter-spacing:1px;margin-bottom:48px;font-family:'Space Mono',monospace;}
+.hero-search{width:100%;max-width:540px;display:flex;border:1px solid var(--border2);border-radius:3px;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;}
+.hero-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 24px rgba(200,255,0,0.08);}
+.hero-search input{flex:1;padding:16px 20px;font-family:'Space Mono',monospace;font-size:13px;border:none;outline:none;background:var(--white);color:var(--text);letter-spacing:0.5px;}
+.hero-search input::placeholder{color:var(--text-dim);}
+.hero-search button{background:var(--accent);color:var(--white);border:none;padding:16px 28px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:opacity 0.2s;}
+.hero-search button:hover{opacity:0.85;}
+.hero-tags{margin-top:24px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+.hero-tag{padding:5px 12px;border:1px solid var(--border2);border-radius:2px;font-family:'Space Mono',monospace;font-size:11px;cursor:pointer;color:var(--text-dim);letter-spacing:0.5px;transition:all 0.15s;background:var(--white);}
+.hero-tag:hover{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.results-header{margin-bottom:20px;}
+.results-title{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;display:flex;align-items:baseline;gap:8px;}
+.results-title strong{font-size:28px;color:var(--accent);letter-spacing:-1px;line-height:1;}
+.tabs{display:flex;margin-bottom:20px;}
+.tab{padding:8px 18px;border:1px solid var(--border2);background:var(--white);cursor:pointer;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:1px;transition:all 0.15s;text-transform:uppercase;}
+.tab:last-child{border-left:none;}
+.tab.active{background:var(--accent);border-color:var(--accent);color:var(--white);font-weight:700;}
+.filters-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.filter-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;}
+select{border:1px solid var(--border2);background:var(--white);padding:7px 12px;border-radius:2px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);cursor:pointer;outline:none;letter-spacing:0.5px;transition:border-color 0.2s;}
+select:focus{border-color:var(--accent);color:var(--text);}
+.stats-bar{display:flex;margin-bottom:20px;border:1px solid var(--border);border-radius:3px;overflow:hidden;background:var(--white);}
+.stat{flex:1;padding:14px 20px;border-right:1px solid var(--border2);display:flex;flex-direction:column;gap:4px;}
+.stat:last-child{border-right:none;}
+.stat-value{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.5px;line-height:1;}
+.stat-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;}
+.table-wrap{border:1px solid var(--border);border-radius:3px;overflow:hidden;background:var(--white);}
+.table-head{display:grid;grid-template-columns:72px 1fr 180px 140px 90px;padding:10px 20px;border-bottom:1px solid var(--border);background:var(--surface2);}
+.table-head span{font-family:'Space Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-muted);}
+.table-head .sortable{cursor:pointer;transition:color 0.15s;}
+.table-head .sortable:hover{color:var(--accent);}
+.result-row{display:grid;grid-template-columns:72px 1fr 180px 140px 90px;padding:14px 20px;border-bottom:1px solid var(--border);align-items:center;text-decoration:none;color:inherit;transition:background 0.1s;background:var(--white);}
+.result-row:last-child{border-bottom:none;}
+.result-row:hover{background:var(--surface2);}
+.result-row.soldout{opacity:0.35;background:rgba(225,31,38,0.02);border-left:2px solid rgba(225,31,38,0.15);}
+.result-img{width:52px;height:52px;object-fit:cover;border-radius:2px;border:1px solid var(--border);display:block;}
+.img-placeholder{width:52px;height:52px;border-radius:2px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:16px;background:var(--surface2);}
+.product-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;padding-right:16px;}
+.product-meta{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+.badge{font-family:'Space Mono',monospace;font-size:10px;padding:2px 6px;border-radius:2px;letter-spacing:0.3px;}
+.badge-gen{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border);}
+.badge-cond{background:rgba(225,31,38,0.06);color:var(--accent);border:1px solid rgba(225,31,38,0.2);}
+.badge-soldout{background:rgba(255,51,51,0.08);color:var(--red);border:1px solid rgba(255,51,51,0.2);}
+.badge-reserved{background:rgba(255,136,0,0.08);color:#ff8800;border:1px solid rgba(255,136,0,0.2);}
+.site-col{display:flex;align-items:center;gap:7px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.3px;}
+.price{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:-0.5px;}
+.currency{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;letter-spacing:1px;}
+.no-results{text-align:center;padding:80px 20px;font-family:'Space Mono',monospace;color:var(--text-muted);font-size:12px;letter-spacing:1px;}
+.no-results .icon{font-size:32px;margin-bottom:16px;opacity:0.3;}
 
-  header {
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    padding: 0 32px;
-    height: 64px;
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--black); text-decoration: none; flex-shrink: 0; cursor: pointer; }
-  .logo span { color: var(--red); }
-  .search-wrap { flex: 1; max-width: 600px; display: flex; align-items: center; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px; overflow: hidden; transition: border-color 0.2s; }
-  .search-wrap:focus-within { border-color: var(--black); }
-  #search-input { flex: 1; border: none; background: transparent; padding: 10px 16px; font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; color: var(--black); }
-  .search-btn { background: var(--black); border: none; padding: 10px 18px; cursor: pointer; color: var(--white); font-size: 16px; transition: background 0.2s; }
-  .search-btn:hover { background: var(--red); }
-  .clear-btn { background: none; border: none; padding: 10px 12px; cursor: pointer; color: var(--gray-mid); font-size: 20px; line-height: 1; }
+/* ── MOBILE ── */
+@media (max-width:640px){
+  header{padding:0 16px;gap:10px;height:52px;}
+  .logo{font-size:12px;letter-spacing:2px;}
+  .logo-dot{width:5px;height:5px;}
+  main{padding:16px 12px;}
+  .hero{min-height:55vh;padding:32px 16px;}
+  .hero-eyebrow{font-size:8px;letter-spacing:2px;}
+  .hero-title{font-size:clamp(32px,10vw,52px);}
+  .hero-title-2{font-size:clamp(32px,10vw,52px);margin-bottom:20px;}
+  .hero-sub{font-size:10px;margin-bottom:24px;}
+  .hero-search input{padding:12px 14px;font-size:12px;}
+  .hero-search button{padding:12px 16px;font-size:11px;letter-spacing:1px;}
+  .hero-tags{gap:6px;}
+  .hero-tag{font-size:10px;padding:4px 10px;}
+  #search-input{font-size:12px;padding:8px 10px;}
+  .search-btn{padding:8px 12px;font-size:12px;}
+  .lang-wrap{display:none;}
+  .filters-row{gap:6px;}
+  .filter-label{font-size:9px;}
+  select{font-size:10px;padding:5px 7px;}
+  .tab{font-size:10px;padding:6px 12px;}
+  .stats-bar{overflow-x:auto;}
+  .stat{padding:10px 12px;min-width:65px;flex-shrink:0;}
+  .stat-value{font-size:15px;}
+  .stat-label{font-size:8px;}
+  .table-head{display:none;}
+  .result-row{display:flex;flex-direction:column;padding:12px 14px;position:relative;}
+  .result-row > div:nth-child(1){position:absolute;top:12px;right:14px;}
+  .result-row > div:nth-child(2){padding-right:70px;margin-bottom:6px;}
+  .result-row > div:nth-child(3){font-size:11px;color:var(--text-muted);margin-bottom:4px;}
+  .result-row > div:nth-child(4){display:flex;align-items:baseline;gap:6px;}
+  .result-row > div:nth-child(5){display:none;}
+  .result-img{width:52px;height:52px;}
+  .img-placeholder{width:52px;height:52px;}
+  .product-name{font-size:12px;line-height:1.4;}
+  .price{font-size:14px;}
+  .currency{font-size:9px;}
+  .badge{font-size:9px;padding:2px 5px;}
+  .results-title strong{font-size:20px;}
+  .results-title{font-size:10px;}
+}
 
-  main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
-
-  .hero { text-align: center; padding: 100px 20px; }
-  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: 72px; letter-spacing: 4px; line-height: 1; margin-bottom: 12px; }
-  .hero-title span { color: var(--red); }
-  .hero-sub { font-size: 16px; color: var(--gray-mid); margin-bottom: 40px; }
-  .hero-search { max-width: 520px; margin: 0 auto; display: flex; border: 2px solid var(--black); border-radius: 6px; overflow: hidden; }
-  .hero-search input { flex: 1; padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 16px; border: none; outline: none; }
-  .hero-search button { background: var(--black); color: var(--white); border: none; padding: 14px 28px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
-  .hero-search button:hover { background: var(--red); }
-  .hero-tags { margin-top: 20px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  .hero-tag { padding: 6px 14px; border: 1.5px solid var(--border); border-radius: 20px; font-size: 13px; cursor: pointer; background: var(--white); transition: all 0.15s; }
-  .hero-tag:hover { background: var(--black); color: var(--white); border-color: var(--black); }
-
-  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .results-title { font-size: 13px; color: var(--gray-mid); }
-  .results-title strong { color: var(--black); font-size: 24px; font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; margin-right: 6px; }
-
-  .tabs { display: flex; margin-bottom: 20px; }
-  .tab { padding: 8px 20px; border: 1.5px solid var(--border); background: var(--white); cursor: pointer; font-size: 13px; font-weight: 500; color: var(--gray-mid); transition: all 0.15s; }
-  .tab:first-child { border-radius: 6px 0 0 6px; }
-  .tab:last-child { border-radius: 0 6px 6px 0; border-left: none; }
-  .tab.active { background: var(--black); border-color: var(--black); color: var(--white); }
-
-  .filters-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-  .filter-label { font-size: 11px; font-weight: 500; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 0.8px; }
-  select { border: 1.5px solid var(--border); background: var(--white); padding: 7px 12px; border-radius: 5px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--black); cursor: pointer; outline: none; }
-  select:focus { border-color: var(--black); }
-
-  .stats-bar { display: flex; gap: 24px; margin-bottom: 20px; padding: 16px 20px; background: var(--white); border: 1px solid var(--border); border-radius: 8px; }
-  .stat { display: flex; flex-direction: column; gap: 2px; }
-  .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; color: var(--black); line-height: 1; }
-  .stat-label { font-size: 11px; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 0.6px; }
-  .stat-divider { width: 1px; background: var(--border); align-self: stretch; }
-
-  .table-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .table-head { display: grid; grid-template-columns: 72px 1fr 170px 130px 90px; padding: 10px 20px; border-bottom: 1.5px solid var(--border); background: var(--bg); }
-  .table-head span { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; color: var(--gray-mid); }
-  .table-head .sortable { cursor: pointer; }
-  .table-head .sortable:hover { color: var(--black); }
-
-  .result-row { display: grid; grid-template-columns: 72px 1fr 170px 130px 90px; padding: 12px 20px; border-bottom: 1px solid var(--border); align-items: center; text-decoration: none; color: inherit; transition: background 0.1s; }
-  .result-row:last-child { border-bottom: none; }
-  .result-row:hover { background: #fafafa; }
-  .result-row.soldout { opacity: 0.45; }
-
-  .result-img { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; background: var(--gray-light); display: block; }
-  .img-placeholder { width: 56px; height: 56px; border-radius: 4px; background: var(--gray-light); display: flex; align-items: center; justify-content: center; color: var(--gray-mid); font-size: 18px; }
-
-  .product-name { font-size: 14px; font-weight: 500; line-height: 1.4; padding-right: 16px; }
-  .product-meta { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
-  .badge { font-size: 11px; padding: 2px 7px; border-radius: 3px; font-family: 'DM Mono', monospace; }
-  .badge-gen { background: #f0f0f0; color: var(--gray-dark); }
-  .badge-cond { background: #e8f4e8; color: #2a7a2a; }
-  .badge-soldout { background: #fde8e8; color: #cc0000; }
-
-  .site-col { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gray-dark); }
-  .price { font-family: 'DM Mono', monospace; font-size: 14px; font-weight: 500; color: var(--red); }
-  .currency { font-size: 11px; color: var(--gray-mid); margin-top: 2px; }
-
-  .no-results { text-align: center; padding: 60px 20px; color: var(--gray-mid); }
-  .no-results .icon { font-size: 40px; margin-bottom: 12px; }
+/* ── LIGHT MODE EXTRAS ── */
+.hero-search{border:1.5px solid var(--border2);}
+.hero-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(225,31,38,0.08);}
+.search-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px rgba(225,31,38,0.1);}
+.results-title strong{color:var(--accent);}
+.price{color:var(--accent);}
+.stat-value{color:var(--text);}
 </style>
 </head>
 <body>
-
 <header>
-  <div class="logo" onclick="showHero()">LEICA<span>SHARK</span></div>
+  <div class="logo" onclick="showHero()">
+    <div class="logo-dot"></div>
+    CAMERA <span>BRIDGE</span>
+  </div>
   <div class="search-wrap" id="header-search-wrap" style="display:none">
-    <input id="search-input" type="text" placeholder="Summilux, Elmarit, M11...">
+    <input id="search-input" type="text" placeholder="// search used leica...">
     <button class="clear-btn" onclick="clearSearch()">×</button>
-    <button class="search-btn" onclick="doSearch()">⌕</button>
+    <button class="search-btn" onclick="doSearch()">→</button>
+  </div>
+  <div class="header-right">
+    <div class="lang-wrap" id="lang-wrap">
+      <button class="lang-btn" onclick="toggleLang()">
+        <span id="lang-flag">🇺🇸</span>
+        <span id="lang-code">EN</span> ▾
+      </button>
+      <div class="lang-dropdown" id="lang-dropdown"><div class="lang-option" onclick="selectLang(&#39;🇺🇸&#39;,&#39;EN&#39;)"><span>🇺🇸</span><span>English</span><span class="lang-code">EN</span></div><div class="lang-option" onclick="selectLang(&#39;🇰🇷&#39;,&#39;KO&#39;)"><span>🇰🇷</span><span>Korean</span><span class="lang-code">KO</span></div><div class="lang-option" onclick="selectLang(&#39;🇯🇵&#39;,&#39;JA&#39;)"><span>🇯🇵</span><span>Japanese</span><span class="lang-code">JA</span></div><div class="lang-option" onclick="selectLang(&#39;🇩🇪&#39;,&#39;DE&#39;)"><span>🇩🇪</span><span>German</span><span class="lang-code">DE</span></div><div class="lang-option" onclick="selectLang(&#39;🇨🇳&#39;,&#39;ZH-CN&#39;)"><span>🇨🇳</span><span>Chinese (Simplified)</span><span class="lang-code">ZH-CN</span></div><div class="lang-option" onclick="selectLang(&#39;🇹🇼&#39;,&#39;ZH-TW&#39;)"><span>🇹🇼</span><span>Chinese (Traditional)</span><span class="lang-code">ZH-TW</span></div><div class="lang-option" onclick="selectLang(&#39;🇫🇷&#39;,&#39;FR&#39;)"><span>🇫🇷</span><span>French</span><span class="lang-code">FR</span></div><div class="lang-option" onclick="selectLang(&#39;🇮🇹&#39;,&#39;IT&#39;)"><span>🇮🇹</span><span>Italian</span><span class="lang-code">IT</span></div></div>
+    </div>
   </div>
 </header>
-
 <main>
-  <!-- HERO -->
   <div id="hero-section" class="hero">
-    <div class="hero-title">LEICA<span>SHARK</span></div>
-    <p class="hero-sub">전세계 라이카 중고 매물 통합 검색</p>
+    <div class="hero-eyebrow">Global Used Leica Search Engine</div>
+    <div class="hero-title">CAMERA</div>
+    <div class="hero-title-2">BRIDGE</div>
+    <p class="hero-sub">// searching across dealers worldwide</p>
     <div class="hero-search">
-      <input type="text" id="hero-input" placeholder="Summilux 50, Elmarit 28, M11..."
-             onkeydown="if(event.key==='Enter') doHeroSearch()">
-      <button onclick="doHeroSearch()">Search</button>
+      <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key===&#39;Enter&#39;) doHeroSearch()">
+      <button onclick="doHeroSearch()">Search →</button>
     </div>
-    <div class="hero-tags">
-      <span class="hero-tag" onclick="quickSearch('Summilux 50')">Summilux 50</span>
-      <span class="hero-tag" onclick="quickSearch('Elmarit 28')">Elmarit 28</span>
-      <span class="hero-tag" onclick="quickSearch('Summicron 35')">Summicron 35</span>
-      <span class="hero-tag" onclick="quickSearch('Noctilux')">Noctilux</span>
-      <span class="hero-tag" onclick="quickSearch('M11')">M11</span>
+    <div class="hero-tags" id="hero-tags">
+      <span class="hero-tag" onclick="quickSearch(&#39;50lux&#39;)">50lux</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;35cron&#39;)">35cron</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;50nocti f0.95&#39;)">Nocti f0.95</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;50nocti f1.0&#39;)">Nocti f1.0</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;75nocti&#39;)">75nocti</span>
+      <span class="hero-tag" onclick="quickSearch(&#39;50apo&#39;)">50apo</span>
     </div>
   </div>
-
-  <!-- RESULTS -->
   <div id="results-section" style="display:none">
     <div class="results-header">
-      <div class="results-title">
-        <strong id="result-count">0</strong> results for "<span id="query-display"></span>"
-      </div>
+      <div class="results-title"><strong id="result-count">0</strong> results for "<span id="query-display"></span>"</div>
     </div>
-
     <div class="tabs">
-      <button class="tab active" onclick="setTab('sale',this)">For Sale (<span id="sale-count">0</span>)</button>
-      <button class="tab" onclick="setTab('sold',this)">품절 (<span id="sold-count">0</span>)</button>
+      <button class="tab active" onclick="setTab(&#39;sale&#39;,this)">For Sale (<span id="sale-count">0</span>)</button>
+      <button class="tab" onclick="setTab(&#39;sold&#39;,this)">Sold Out (<span id="sold-count">0</span>)</button>
     </div>
-
     <div class="filters-row">
       <span class="filter-label">Sort</span>
       <select id="sort-select" onchange="renderResults()">
-        <option value="default">기본순</option>
-        <option value="price-asc">가격 낮은순</option>
-        <option value="price-desc">가격 높은순</option>
+        <option value="default">Default</option>
+        <option value="price-asc">Price ↑</option>
+        <option value="price-desc">Price ↓</option>
       </select>
-      <span class="filter-label">사이트</span>
-      <select id="site-select" onchange="renderResults()">
-        <option value="all">전체</option>
-      </select>
-      <span class="filter-label">통화</span>
+      <span class="filter-label">Site</span>
+      <select id="site-select" onchange="renderResults()"><option value="all">All Sites</option></select>
+      <span class="filter-label">Currency</span>
       <select id="currency-select" onchange="renderResults()">
-        <option value="all">전체</option>
-        <option value="KRW">KRW 🇰🇷</option>
-        <option value="GBP">GBP 🇬🇧</option>
+        <option value="all">All</option>
+        <option value="KRW">KRW</option>
+        <option value="GBP">GBP</option>
       </select>
     </div>
-
     <div class="stats-bar" id="stats-bar"></div>
-
     <div class="table-wrap">
       <div class="table-head">
-        <span></span>
-        <span>Product</span>
-        <span>Site</span>
+        <span></span><span>Product</span><span>Source</span>
         <span class="sortable" onclick="togglePriceSort()">Price ↕</span>
         <span>Condition</span>
       </div>
@@ -180,153 +219,311 @@
     </div>
   </div>
 </main>
-
 <script>
-let allData = [];
-let currentTab = 'sale';
-let priceSort = 0; // 0=default, 1=asc, -1=desc
-
-const FLAGS = {
-  '라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷',
-  '신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'
+let allData=[],currentTab='sale';
+const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
+const LANGS=[['🇺🇸','EN','English'],['🇰🇷','KO','Korean'],['🇯🇵','JA','Japanese'],['🇩🇪','DE','German'],['🇨🇳','ZH-CN','Chinese (Simplified)'],['🇹🇼','ZH-TW','Chinese (Traditional)'],['🇫🇷','FR','French'],['🇮🇹','IT','Italian']];
+document.getElementById('lang-dropdown').innerHTML=LANGS.map(([f,c,n])=>`<div class="lang-option" onclick="selectLang('${f}','${c}')"><span>${f}</span><span>${n}</span><span class="lang-code">${c}</span></div>`).join('');
+function toggleLang(){document.getElementById('lang-dropdown').classList.toggle('open');}
+function selectLang(f,c){document.getElementById('lang-flag').textContent=f;document.getElementById('lang-code').textContent=c;document.getElementById('lang-dropdown').classList.remove('open');}
+document.addEventListener('click',e=>{const w=document.getElementById('lang-wrap');if(w&&!w.contains(e.target))document.getElementById('lang-dropdown').classList.remove('open');});
+async function loadData(){
+  try{const res=await fetch('results.json');allData=await res.json();
+  const sites=[...new Set(allData.map(r=>r.site))];
+  const sel=document.getElementById('site-select');
+  const existingVals=[...sel.options].map(o=>o.value);
+  sites.forEach(s=>{if(!existingVals.includes(s)){const o=document.createElement('option');o.value=s;o.textContent=(FLAGS[s]||'🌐')+' '+s;sel.appendChild(o);}});}
+  catch(e){console.error(e);}
+  return allData;
+}
+// 슬랭 → 검색 토큰 변환
+// 전체 쿼리 변환 (완전한 슬랭 문구)
+const SLANG_MAP = {
+  // Summilux
+  '50lux':'summilux 50','50 lux':'summilux 50',
+  '35lux':'summilux 35','35 lux':'summilux 35',
+  '28lux':'summilux 28','21lux':'summilux 21','75lux':'summilux 75','75 lux':'summilux 75',
+  // Summicron
+  '50cron':'summicron 50','50 cron':'summicron 50',
+  '35cron':'summicron 35','35 cron':'summicron 35',
+  '28cron':'summicron 28','75cron':'summicron 75','90cron':'summicron 90',
+  // Noctilux 완전 슬랭
+  '50nocti f0.95':'noctilux 0.95','50nocti f1.0':'noctilux 1.0','50nocti f1.2':'noctilux 1.2',
+  '75nocti':'noctilux 75','75 nocti':'noctilux 75',
+  // APO
+  '50apo':'apo summicron 50','50 apo':'apo summicron 50',
+  '75apo':'apo summicron 75','75 apo':'apo summicron 75',
+  '90apo':'apo summicron 90','90 apo':'apo summicron 90',
+  'apocron':'apo summicron','apo cron':'apo summicron',
+  // Tri-Elmar
+  'tri':'tri elmar','tri-elmar':'tri elmar','trielmar':'tri elmar',
+  'wate':'tri elmar 16','mate':'tri elmar 28',
+  // Elmar
+  '50elmar':'elmar 50','elmar50':'elmar 50',
 };
 
-async function loadData() {
-  try {
-    const res = await fetch('results.json');
-    allData = await res.json();
-    const sites = [...new Set(allData.map(r => r.site))];
-    const sel = document.getElementById('site-select');
-    sites.forEach(s => {
-      const o = document.createElement('option');
-      o.value = s; o.textContent = (FLAGS[s]||'🌐') + ' ' + s;
-      sel.appendChild(o);
-    });
-  } catch(e) { console.error(e); }
-}
+// 토큰 단위 슬랭 변환 (조합 검색용: "nocti 35mm" → "noctilux 35mm")
+const TOKEN_MAP = {
+  // Noctilux
+  'nocti':'noctilux','50nocti':'noctilux',
+  // Noctilux 세대 연관어 → GEN_SYNONYMS 키로 매핑
+  '1st':'nocti1st','오리지널':'nocti1st','original':'nocti1st','aspherical':'nocti1st',
+  'e58':'e58','e60':'e60',
+  'v1':'e58',          // v1 = 2세대 E58
+  'v2':'e60','v3':'e60', // v2/v3 = 3세대 E60
+  'v4':'v4',           // v4 = 4세대 내장후드
+  '복각':'1.2','f0.95':'0.95','f1.0':'1.0','f1.2':'1.2','f1.25':'1.25',
+  '0.95':'0.95','1.0':'1.0','1.2':'1.2','1.25':'1.25',
+  // Summilux 토큰
+  'lux':'summilux',
+  // Summicron 토큰
+  'cron':'summicron',
+  // APO 토큰
+  'apo':'apo',
+};
 
-function quickSearch(q) {
-  document.getElementById('hero-input').value = q;
-  doHeroSearch();
+function normalizeQuery(q){
+  const lower=q.toLowerCase().trim();
+  // 1. 전체 문구 변환 우선 (50nocti f0.95 같은 완전 슬랭)
+  if(SLANG_MAP[lower]) return SLANG_MAP[lower];
+  // 2. 토큰별 변환 (nocti 35mm → noctilux 35mm)
+  const tokens=lower.split(/\s+/);
+  const mapped=tokens.map(t=>TOKEN_MAP[t]||t);
+  return mapped.join(' ');
 }
-
-function doHeroSearch() {
-  const q = document.getElementById('hero-input').value.trim();
-  if (!q) return;
-  document.getElementById('search-input').value = q;
-  document.getElementById('header-search-wrap').style.display = 'flex';
-  document.getElementById('hero-section').style.display = 'none';
-  document.getElementById('results-section').style.display = 'block';
+// 세대 슬랭 변환
+const GEN_MAP = {
+  '1st':'1세대','1gen':'1세대','1세대':'1세대',
+  '2nd':'2세대','2gen':'2세대','2세대':'2세대',
+  '3rd':'3세대','3gen':'3세대','3세대':'3세대',
+  '4th':'4세대','4gen':'4세대','4세대':'4세대',
+  '5th':'5세대','5gen':'5세대','5세대':'5세대',
+};
+// 네거티브 필터 키워드 (부속품)
+const NEGATIVE_KEYWORDS = [
+  '케이스','스트랩','필터','캡','설명서','박스only','box only',
+  '충전기','배터리','후드only','hood only','어댑터','파우치',
+  '케이블','핸드그립','grip only','strap only','cap only',
+  'lens cap','body cap','filter only',
+  'original hood','hood m ','hood e ','후드 단품',
+];
+function isAccessory(item){
+  if(item.category==='Accessory') return true;
+  const name=(item['상품명']||'').toLowerCase();
+  return NEGATIVE_KEYWORDS.some(k=>name.includes(k.toLowerCase()));
+}
+// 세대별 동의어 목록
+const GEN_SYNONYMS = {
+  '1세대': ['1st','1세대','1 st','(1st)','first','초기','nickel','니켈','ver.1','v.1'],
+  '2세대': ['2nd','2세대','2 nd','(2nd)','second','ver.2','v.2'],
+  '3세대': ['3rd','3세대','3 rd','(3rd)','third','ver.3','v.3'],
+  '4세대': ['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
+  '5세대': ['5th','5세대','5 th','(5th)','ver.5','v.5'],
+  // ── Noctilux 세대별 연관어 ──
+  // 1세대 f1.2 오리지널: Aspherical 풀네임, Series 1, 1st, sn.2xxx대
+  'nocti1st':  ['aspherical','series 1','1st','series1'],
+  // f1.2 (오리지널+복각 혼재): 조리개값으로만
+  '1.2':   ['1.2','f1.2','1:1.2'],
+  // f1.0 E58 2세대 (v1) - 상품명에 E58 명시된 것만
+  'e58':   ['e58','e 58','58mm'],
+  // f1.0 E60 3세대 (v2/v3) - 상품명에 E60 명시된 것만
+  'e60':   ['e60','e 60','60mm'],
+  // f1.0 4세대 내장후드
+  'v4':    ['built-in','internal hood','6bit'],
+  // f0.95 현행 5세대
+  '0.95':  ['0.95','f0.95','1:0.95'],
+  '1.0':   ['1.0','f1.0','1:1.0'],
+  '1.25':  ['1.25','f1.25','1:1.25'],
+};
+function detectQueryMount(q){
+  const tokens=q.toLowerCase().split(/\s+/);
+  // 첫 토큰이 단독 m/r이면 마운트 명시
+  const first=tokens[0];
+  if(first==='m') return 'M';
+  if(first==='r') return 'R';
+  // 어느 위치든 단독 토큰
+  if(tokens.includes('m')) return 'M';
+  if(tokens.includes('r')) return 'R';
+  if(tokens.some(t=>t==='ltm'||t==='l39'||t==='m39')) return 'LTM';
+  return null;
+}
+function matchesQuery(item, query){
+  if(isAccessory(item)) return false;
+  const q=query.toLowerCase();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');  // 하이픈→공백 정규화로 tri-elmar=tri elmar
+  const label=(item['label']||'').toLowerCase();
+  const mount=(item['mount']||'');
+    // 마운트 명시 필터
+  const qMount=detectQueryMount(q);
+  if(qMount){
+    if(mount&&mount!=='Unknown'){
+      // LTM은 M/LTM 필터 양쪽에서 보임 (이중 마운트)
+      if(qMount==='M'&&mount==='LTM'){/* LTM은 M 필터에서도 보임 */}
+      else if(qMount==='LTM'&&mount==='M'){/* M도 LTM 필터에서 보임 */}
+      else if(mount!==qMount) return false;
+    }
+    // R 필터: -M 붙은 건 무조건 제외
+    if(qMount==='R'){
+      if(/-m\b/i.test(name)||/-m$/i.test(name)) return false;
+      if(/summicron-m|summilux-m|elmarit-m|noctilux-m/i.test(name)) return false;
+    }
+    // M 필터: R마운트 제외
+    if(qMount==='M'){
+      if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return false;
+    }
+  }
+  // 마운트 토큰 제외한 나머지로 검색
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm'&&t!=='l39'&&t!=='m39');
+  return tokens.every(t=>{
+    const gen=GEN_MAP[t];
+    if(gen){
+      const synonyms=GEN_SYNONYMS[gen]||[gen];
+      return synonyms.some(s=>name.includes(s));
+    }
+    // GEN_SYNONYMS 직접 키 매칭 (0.95, 1.2, e58 등 Noctilux 연관어)
+    if(GEN_SYNONYMS[t]){
+      return GEN_SYNONYMS[t].some(s=>name.includes(s));
+    }
+    // 초점거리 숫자 토큰 (예: "50", "35", "75") → 단어 경계 정밀 매칭
+    // "50mm", "50 mm", "50/", " 50 " 등은 매칭하되 "150", "350" 등은 제외
+    if(/^\d+$/.test(t)){
+      const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
+      return re.test(name);
+    }
+    // "50mm" 형태로 입력한 경우 → name에서만 체크
+    const mmMatch=t.match(/^(\d+)mm$/);
+    if(mmMatch){
+      const num=mmMatch[1];
+      const re=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return re.test(name);
+    }
+    return name.includes(t) || label.includes(t);
+  });
+}
+function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
+function doHeroSearch(){
+  const raw=document.getElementById('hero-input').value.trim();if(!raw)return;
+  const q=normalizeQuery(raw);
+  document.getElementById('hero-input').value=q;
+  document.getElementById('search-input').value=q;
+  document.getElementById('header-search-wrap').style.display='flex';
+  document.getElementById('hero-section').style.display='none';
+  document.getElementById('results-section').style.display='block';
+  history.pushState({query:q},'','?q='+encodeURIComponent(q));
   renderResults(q);
 }
-
-function doSearch() {
-  renderResults(document.getElementById('search-input').value.trim());
+function doSearch(){renderResults(document.getElementById('search-input').value.trim());}
+function clearSearch(){document.getElementById('search-input').value='';showHero();}
+function showHero(){
+  document.getElementById('hero-section').style.display='flex';
+  document.getElementById('results-section').style.display='none';
+  document.getElementById('header-search-wrap').style.display='none';
+  // 필터 초기화
+  document.getElementById('site-select').value='all';
+  document.getElementById('currency-select').value='all';
+  document.getElementById('sort-select').value='default';
+  document.getElementById('search-input').value='';
+  document.getElementById('hero-input').value='';
+  history.pushState({},'','/');
 }
-
-function clearSearch() {
-  document.getElementById('search-input').value = '';
-  showHero();
+function setTab(tab,el){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderResults();}
+function togglePriceSort(){const s=document.getElementById('sort-select');s.value=s.value==='price-asc'?'price-desc':'price-asc';renderResults();}
+function parsePrice(p,cur){if(!p||p==='문의요망')return Infinity;const n=parseFloat(p.replace(/[^0-9.]/g,''));return cur==='GBP'?n*1700:n;}
+function fmt(n){if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
+function timeAgo(dt){
+  if(!dt)return '확인 중';
+  const d=new Date(dt),now=new Date();
+  const diff=Math.floor((now-d)/1000);
+  if(diff<3600)return Math.floor(diff/60)+'분 전';
+  if(diff<86400)return Math.floor(diff/3600)+'시간 전';
+  if(diff<604800)return Math.floor(diff/86400)+'일 전';
+  return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
 }
-
-function showHero() {
-  document.getElementById('hero-section').style.display = 'block';
-  document.getElementById('results-section').style.display = 'none';
-  document.getElementById('header-search-wrap').style.display = 'none';
-}
-
-function setTab(tab, el) {
-  currentTab = tab;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderResults();
-}
-
-function togglePriceSort() {
-  if (priceSort === 0 || priceSort === -1) priceSort = 1;
-  else priceSort = -1;
-  document.getElementById('sort-select').value = priceSort === 1 ? 'price-asc' : 'price-desc';
-  renderResults();
-}
-
-function parsePrice(p, cur) {
-  if (!p || p === '문의요망') return Infinity;
-  const n = parseFloat(p.replace(/[^0-9.]/g,''));
-  return cur === 'GBP' ? n * 1700 : n;
-}
-
-function renderResults(query) {
-  if (query === undefined) query = document.getElementById('search-input').value.trim();
-  document.getElementById('query-display').textContent = query;
-
-  const site = document.getElementById('site-select').value;
-  const cur = document.getElementById('currency-select').value;
-  const sort = document.getElementById('sort-select').value;
-
-  let filtered = allData.filter(r => {
-    if (query && !r['상품명'].toLowerCase().includes(query.toLowerCase())) return false;
-    if (site !== 'all' && r.site !== site) return false;
-    if (cur !== 'all' && r['통화'] !== cur) return false;
+function isNew(dt){if(!dt)return false;return(new Date()-new Date(dt))<86400000;}
+function renderResults(query){
+  if(query===undefined)query=document.getElementById('search-input').value.trim();
+  document.getElementById('query-display').textContent=query;
+  const site=document.getElementById('site-select').value;
+  const cur=document.getElementById('currency-select').value;
+  const sort=document.getElementById('sort-select').value;
+  let filtered=allData.filter(r=>{
+    if(query&&!matchesQuery(r,query))return false;
+    if(site!=='all'&&r.site!==site)return false;
+    if(cur!=='all'&&r['통화']!==cur)return false;
     return true;
   });
-
-  const forSale = filtered.filter(r => !r['품절']);
-  const soldOut = filtered.filter(r => r['품절']);
-  document.getElementById('sale-count').textContent = forSale.length;
-  document.getElementById('sold-count').textContent = soldOut.length;
-  document.getElementById('result-count').textContent = filtered.length;
-
-  let display = currentTab === 'sale' ? forSale : soldOut;
-
-  if (sort === 'price-asc') display = [...display].sort((a,b) => parsePrice(a['가격'],a['통화']) - parsePrice(b['가격'],b['통화']));
-  else if (sort === 'price-desc') display = [...display].sort((a,b) => parsePrice(b['가격'],b['통화']) - parsePrice(a['가격'],a['통화']));
-
-  const prices = display.map(r => parsePrice(r['가격'],r['통화'])).filter(p => p !== Infinity);
-  const fmt = n => n >= 1000000 ? '₩'+Math.round(n/10000)+'만' : '₩'+Math.round(n/1000)+'K';
-  document.getElementById('stats-bar').innerHTML = `
+  const forSale=filtered.filter(r=>!r['품절']);
+  const soldOut=filtered.filter(r=>r['품절']);
+  document.getElementById('sale-count').textContent=forSale.length;
+  document.getElementById('sold-count').textContent=soldOut.length;
+  document.getElementById('result-count').textContent=filtered.length;
+  let display=currentTab==='sale'?forSale:soldOut;
+  if(sort==='price-asc')display=[...display].sort((a,b)=>parsePrice(a['가격'],a['통화'])-parsePrice(b['가격'],b['통화']));
+  else if(sort==='price-desc')display=[...display].sort((a,b)=>parsePrice(b['가격'],b['통화'])-parsePrice(a['가격'],a['통화']));
+  const prices=display.map(r=>parsePrice(r['가격'],r['통화'])).filter(p=>p!==Infinity);
+  document.getElementById('stats-bar').innerHTML=`
     <div class="stat"><span class="stat-value">${display.length}</span><span class="stat-label">Listings</span></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><span class="stat-value">${prices.length ? fmt(Math.min(...prices)) : '-'}</span><span class="stat-label">Lowest</span></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><span class="stat-value">${prices.length ? fmt(prices.reduce((a,b)=>a+b,0)/prices.length) : '-'}</span><span class="stat-label">Average</span></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><span class="stat-value">${prices.length ? fmt(Math.max(...prices)) : '-'}</span><span class="stat-label">Highest</span></div>
-    <div class="stat-divider"></div>
-    <div class="stat"><span class="stat-value">${new Set(display.map(r=>r.site)).size}</span><span class="stat-label">Sites</span></div>
-  `;
-
-  const list = document.getElementById('results-list');
-  if (!display.length) {
-    list.innerHTML = `<div class="no-results"><div class="icon">🔍</div><p>검색 결과가 없어요</p></div>`;
-    return;
-  }
-
-  list.innerHTML = display.map(r => {
-    const flag = FLAGS[r.site] || '🌐';
-    const hasImg = r['이미지'] && r['이미지'] !== '이미지 없음';
-    const imgEl = hasImg
-      ? `<img class="result-img" src="${r['이미지']}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
-      : '';
-    const ph = `<div class="img-placeholder" style="${hasImg?'display:none':''}">📷</div>`;
-    const gen = r['세대'] !== '세대미상' ? `<span class="badge badge-gen">${r['세대']}</span>` : '';
-    const cond = r['컨디션'] && r['컨디션'] !== '정보없음' ? `<span class="badge badge-cond">${r['컨디션']}</span>` : '';
-    const sold = r['품절'] ? `<span class="badge badge-soldout">품절</span>` : '';
+    <div class="stat"><span class="stat-value">${prices.length?fmt(Math.min(...prices)):'-'}</span><span class="stat-label">Lowest</span></div>
+    <div class="stat"><span class="stat-value">${prices.length?fmt(prices.reduce((a,b)=>a+b,0)/prices.length):'-'}</span><span class="stat-label">Average</span></div>
+    <div class="stat"><span class="stat-value">${prices.length?fmt(Math.max(...prices)):'-'}</span><span class="stat-label">Highest</span></div>
+    <div class="stat"><span class="stat-value">${new Set(display.map(r=>r.site)).size}</span><span class="stat-label">Sources</span></div>`;
+  const list=document.getElementById('results-list');
+  if(!display.length){list.innerHTML='<div class="no-results"><div class="icon">◌</div><p>// no results found</p></div>';return;}
+  list.innerHTML=display.map(r=>{
+    const flag=FLAGS[r.site]||'🌐';
+    const hasImg=r['이미지']&&r['이미지']!=='이미지 없음';
+    const imgEl=hasImg?`<img class="result-img" src="${r['이미지']}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:'';
+    const ph=`<div class="img-placeholder" style="${hasImg?'display:none':''}">◻</div>`;
+    const gen='';
+    const cond=r['컨디션']&&r['컨디션']!=='정보없음'?`<span class="badge badge-cond">${r['컨디션']}</span>`:'';
+    const sold=r['품절']?`<span class="badge badge-soldout">SOLD OUT</span>`:'';
+    const reserved=r['예약중']?`<span class="badge badge-reserved">예약중</span>`:'';
     return `<a class="result-row${r['품절']?' soldout':''}" href="${r['링크']}" target="_blank">
       <div>${imgEl}${ph}</div>
-      <div><div class="product-name">${r['상품명']}</div><div class="product-meta">${gen}${cond}${sold}</div></div>
+      <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}${reserved}</div></div>
       <div class="site-col"><span>${flag}</span>${r.site}</div>
-      <div><div class="price">${r['가격']}</div><div class="currency">${r['통화']}</div></div>
-      <div>${cond || '-'}</div>
+      <div>
+        <div class="price">${r['가격']}</div>
+        <div class="currency">${r['통화']}${r['할인가']?'<span style="color:var(--red);font-size:9px;margin-left:4px;">-'+r['할인가']+'</span>':''}</div>
+      </div>
+      <div>${cond||'<span style="color:var(--text-muted);font-size:11px">—</span>'}</div>
     </a>`;
   }).join('');
 }
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',()=>{
   loadData();
-  document.getElementById('search-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doSearch();
+  document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+  // 뒤로가기 처리
+  window.addEventListener('popstate', e=>{
+    if(e.state&&e.state.query){
+      document.getElementById('hero-input').value=e.state.query;
+      document.getElementById('search-input').value=e.state.query;
+      document.getElementById('header-search-wrap').style.display='flex';
+      document.getElementById('hero-section').style.display='none';
+      document.getElementById('results-section').style.display='block';
+      // 필터 초기화
+      document.getElementById('site-select').value='all';
+      document.getElementById('currency-select').value='all';
+      document.getElementById('sort-select').value='default';
+      renderResults(e.state.query);
+    } else {
+      showHero();
+    }
   });
+  // URL 파라미터로 초기 검색
+  const params=new URLSearchParams(window.location.search);
+  const q=params.get('q');
+  if(q){
+    document.getElementById('hero-input').value=q;
+    document.getElementById('search-input').value=q;
+    document.getElementById('header-search-wrap').style.display='flex';
+    document.getElementById('hero-section').style.display='none';
+    document.getElementById('results-section').style.display='block';
+    loadData().then(()=>renderResults(q));
+  }
 });
 </script>
-</body>
-</html>
+
+
+</body></html>
