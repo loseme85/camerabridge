@@ -532,9 +532,9 @@ def crawl_category(page, site):
         while True:
             # 페이지 URL 구성
             if "?" in cat_url:
-                url = cat_url + f"&page={page_num}"
+                url = cat_url + f"&rows=100&page={page_num}"
             else:
-                url = cat_url + f"?page={page_num}"
+                url = cat_url + f"?rows=100&page={page_num}"
 
             print(f"    └─ {page_num}페이지 수집 중...")
 
