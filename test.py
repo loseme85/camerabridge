@@ -721,21 +721,24 @@ def auto_label(name):
         if "apo" in n:
             for mm in ["35","50","75","90"]:
                 if mm in n: return f"{mm}mm APO-Summicron"
+        # mm 추출 - 가장 먼저
+        import re as _re2
+        mm_match = _re2.search(r"(\d+)(?:mm|/)", n)
+        mm = mm_match.group(1) if mm_match else ""
         # 50mm 세분화
-        if "50" in n or "5/2" in n or "50/2" in n:
+        if mm == "50":
             if "asph" in n: return "50mm Summicron ASPH"
             if "dr" in n or "dual" in n: return "50mm Summicron DR"
             if "rigid" in n or "침동" in n: return "50mm Summicron Rigid"
             if "2세대" in n or "3세대" in n or "4세대" in n: return "50mm Summicron (올드)"
             return "50mm Summicron"
         # 35mm 세분화
-        if "35" in n or "35/2" in n:
+        if mm == "35":
             if "asph" in n: return "35mm Summicron ASPH"
             if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
             if "6매" in n or "6-el" in n: return "35mm Summicron (6매)"
             return "35mm Summicron"
-        for mm in ["28","75","90"]:
-            if mm in n: return f"{mm}mm Summicron"
+        if mm in ["28","75","90"]: return f"{mm}mm Summicron"
         return "Summicron"
 
     # ── Elmarit ──
