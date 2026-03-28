@@ -163,17 +163,20 @@ def detect_mount(name):
     if _re.search(r'R\s+\d+[/.]', n):
         return "R"
 
-    # L-mount (SL/Q/S)
+    # L-mount (SL/Q/S) - 명확한 패턴만
     if any(x in n for x in ['SL2',' SL ','VARIO-ELMARIT-SL','L-MOUNT','LEICA Q',
-                              'LEICA SL','Q2 ','Q3 ',' Q2',' Q3',
-                              'LEICA L ','LEICA L/',' L 50',' L 35',' L 28',' L 21',
-                              ' L 75',' L 90',' L 24']):
+                              'LEICA SL','Q2 ','Q3 ',' Q2',' Q3']):
+        return "L"
+    # LEICA L + 숫자 패턴 (예: Leica L 50mm, Leica L 35mm)
+    if 'LEICA L ' in n and any(c.isdigit() for c in n[n.index('LEICA L ')+8:n.index('LEICA L ')+12]):
         return "L"
 
     # LTM/M39 - 이중 마운트 (M과 LTM 양쪽)
     # Summar/Summarit (구형, f1.5/f2.0) → LTM
     # SUMMARIT-M → M-mount (별도 처리)
     ltm_kw = ['LTM','L39','M39','SCREW','나사',
+               ' L 50/',' L 35/',' L 28/',' L 21/',' L 90/',' L 135/',
+               ' L50/',' L35/',' L28/',' L90/',
                'LEICA I ','LEICA IIF','LEICA IF',
                'LEICA IIA','LEICA IIB','LEICA IIC',
                'LEICA IIIA','LEICA IIIB','LEICA IIIC','LEICA IIIF','LEICA IIIG',
@@ -181,9 +184,9 @@ def detect_mount(name):
                'LEITZ WETZLAR','ERNST LEITZ']
     # Summar/Summarit (구형 나사마운트) - SUMMARIT-M 제외
     if 'SUMMAR' in n and 'SUMMARIT-M' not in n and 'SUMMARON' not in n:
-        return "LTM"
+        return "L39"
     if any(x in n for x in ltm_kw):
-        return "LTM"
+        return "L39"
 
     # M-mount (확장)
     if any(x in n for x in [

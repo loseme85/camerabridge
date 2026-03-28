@@ -344,7 +344,7 @@ function detectQueryMount(q){
   // 어느 위치든 단독 토큰
   if(tokens.includes('m')) return 'M';
   if(tokens.includes('r')) return 'R';
-  if(tokens.some(t=>t==='ltm'||t==='l39'||t==='m39')) return 'LTM';
+  if(tokens.some(t=>t==='ltm'||t==='l39'||t==='l39'||t==='m39')) return 'L39';
   return null;
 }
 function matchesQuery(item, query){
@@ -359,8 +359,8 @@ function matchesQuery(item, query){
   if(qMount){
     if(mount&&mount!=='Unknown'){
       // LTM은 M/LTM 필터 양쪽에서 보임 (이중 마운트)
-      if(qMount==='M'&&mount==='LTM'){/* LTM은 M 필터에서도 보임 */}
-      else if(qMount==='LTM'&&mount==='M'){/* M도 LTM 필터에서 보임 */}
+      if(qMount==='M'&&mount==='L39'){/* LTM은 M 필터에서도 보임 */}
+      else if(qMount==='L39'&&mount==='M'){/* M도 LTM 필터에서 보임 */}
       else if(mount!==qMount) return false;
     }
     // R 필터: -M 붙은 건 무조건 제외

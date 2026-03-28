@@ -235,7 +235,7 @@ input[type=text]{width:150px;}
         <option value="all">All Mounts</option>
         <option value="M">M-mount</option>
         <option value="R">R-mount</option>
-        <option value="LTM">LTM/M39</option>
+        <option value="L39">L39 (Screw)</option>
         <option value="L">L-mount</option>
       </select>
       <select id="f-cat" onchange="applyFilters()">
@@ -334,7 +334,7 @@ function updateNewItems(){
   document.getElementById('new-items-table').innerHTML='<div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;"><div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);">'+['Product','Site','Price','Found','Link'].map(h=>'<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">'+h+'</span>').join('')+'</div>'+items.slice(0,20).map(r=>{const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();const isV=VIP.some(k=>name.toLowerCase().includes(k));const fs=r.first_seen||r.crawl_time;const found=fs?new Date(fs).toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+new Date(fs).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'—';return '<div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;'+(isV?'background:rgba(225,31,38,0.04);':'')+'"><div>'+(isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;">HOT</span>':'')+'<a href="'+r['링크']+'" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">'+name.slice(0,50)+'</a></div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+(F[r.site]||'🌐')+' '+(r.site||'').slice(0,8)+'</div><div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">'+(r['가격']||'—')+'</div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+found+'</div><div><a href="'+r['링크']+'" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div></div>';}).join('')+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:6px;text-align:right;">'+items.length+'개 신규 매물</div>';
   log('// Today new: '+items.length+' items','ok');
 }
-const MOUNT_OPTIONS=['M','R','LTM','L','Unknown'];
+const MOUNT_OPTIONS=['M','R','L39','L','Unknown'];
 function renderUnknown(){
   const items=allData.filter(r=>(r.mount||'Unknown')==='Unknown');
   document.getElementById('unk-count').textContent=items.length;
