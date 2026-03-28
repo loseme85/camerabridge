@@ -158,6 +158,10 @@ def detect_mount(name):
                               'ELMAR-R','TELYT-R','LEICA R3','LEICA R4','LEICA R5',
                               'LEICA R6','LEICA R7','LEICA R8','LEICA R9']):
         return "R"
+    # R 마운트 - "R 50/", "R 35/", "R 28/" 등 충무로식 표기
+    import re as _re
+    if _re.search(r'R\s+\d+[/.]', n):
+        return "R"
 
     # L-mount (SL/Q/S)
     if any(x in n for x in ['SL2',' SL ','VARIO-ELMARIT-SL','L-MOUNT','LEICA Q',
@@ -581,6 +585,8 @@ def crawl_category(page, site):
                         'ttartisan', '7artisans', 'meike', 'kamlan', 'pergear',
                         'contax', 'contarex', 'nokton', 'nikkor', 'summicron-c',
                         'w-nikkor', 'biogon', 'planar', 'distagon',
+                        'light lens', 'light lens lab', 'kolari', 'handevision',
+                        'laowa', 'venus', 'mitakon', 'sun optics', 'funleader',
                     ]
                     name_lower = name.lower()
                     if any(b in name_lower for b in NON_LEICA_BRANDS):
