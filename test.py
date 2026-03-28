@@ -692,47 +692,109 @@ def crawl_category(page, site):
 
 
 def auto_label(name):
-    """상품명에서 label 자동 감지"""
+    """상품명에서 label 자동 감지 - 세대/조리개별 세분화"""
     n = name.lower()
-    # Noctilux
+
+    # ── Noctilux ──
     if "noctilux" in n:
         if "0.95" in n: return "50mm Noctilux f0.95"
         if "1.2" in n: return "50mm Noctilux f1.2"
         if "1.0" in n: return "50mm Noctilux f1.0"
         if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
         return "Noctilux"
-    # Summilux
+
+    # ── Summilux 세대별 ──
     if "summilux" in n:
+        if "asph" in n:
+            for mm in ["21","28","35","50","75"]:
+                if mm in n: return f"{mm}mm Summilux ASPH"
+        if "pre-asph" in n or "steel" in n or "steel rim" in n:
+            return "35mm Summilux Pre-ASPH"
+        if "aspherical" in n and "asph" not in n:
+            return "35mm Summilux AA"
         for mm in ["21","28","35","50","75"]:
             if mm in n: return f"{mm}mm Summilux"
         return "Summilux"
-    # Summicron
+
+    # ── Summicron 세대별 ──
     if "summicron" in n:
         if "apo" in n:
-            for mm in ["50","75","90"]:
+            for mm in ["35","50","75","90"]:
                 if mm in n: return f"{mm}mm APO-Summicron"
-        for mm in ["28","35","50","75","90"]:
+        # 50mm 세분화
+        if "50" in n or "5/2" in n or "50/2" in n:
+            if "asph" in n: return "50mm Summicron ASPH"
+            if "dr" in n or "dual" in n: return "50mm Summicron DR"
+            if "rigid" in n or "침동" in n: return "50mm Summicron Rigid"
+            if "2세대" in n or "3세대" in n or "4세대" in n: return "50mm Summicron (올드)"
+            return "50mm Summicron"
+        # 35mm 세분화
+        if "35" in n or "35/2" in n:
+            if "asph" in n: return "35mm Summicron ASPH"
+            if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
+            if "6매" in n or "6-el" in n: return "35mm Summicron (6매)"
+            return "35mm Summicron"
+        for mm in ["28","75","90"]:
             if mm in n: return f"{mm}mm Summicron"
         return "Summicron"
-    # Elmarit
-    if "elmarit" in n:
+
+    # ── Elmarit ──
+    if "elmarit" in n and "tri" not in n:
         for mm in ["21","24","28","90"]:
             if mm in n: return f"{mm}mm Elmarit"
         return "Elmarit"
-    # Summaron
-    if "summaron" in n: return "Summaron"
-    # Super-Angulon
-    if "angulon" in n: return "Super-Angulon"
-    # Elmar
-    if "elmar" in n and "elmarit" not in n: return "Elmar"
-    # Tri-Elmar
-    if "tri" in n and "elmar" in n: return "Tri-Elmar"
-    # Bodies
+
+    # ── Summarit ──
+    if "summarit" in n:
+        for mm in ["35","50","75","90"]:
+            if mm in n: return f"{mm}mm Summarit"
+        return "Summarit"
+
+    # ── Summaron ──
+    if "summaron" in n:
+        if "35" in n: return "35mm Summaron"
+        if "28" in n: return "28mm Summaron"
+        return "Summaron"
+
+    # ── Super-Angulon ──
+    if "angulon" in n:
+        for mm in ["21","16"]:
+            if mm in n: return f"{mm}mm Super-Angulon"
+        return "Super-Angulon"
+
+    # ── Elmar 세분화 ──
+    if "elmar" in n and "elmarit" not in n and "tri" not in n:
+        if "50" in n or "5/2.8" in n or "5/3.5" in n:
+            if "asph" in n: return "50mm Elmar-M ASPH"
+            if "2.8" in n: return "50mm Elmar f2.8"
+            return "50mm Elmar"
+        if "35" in n: return "35mm Elmar"
+        for mm in ["90","65","24"]:
+            if mm in n: return f"{mm}mm Elmar"
+        return "Elmar"
+
+    # ── Tri-Elmar ──
+    if "tri" in n and "elmar" in n:
+        if "16" in n or "21" in n: return "Tri-Elmar 16-18-21 (WATE)"
+        return "Tri-Elmar 28-35-50 (MATE)"
+
+    # ── Hektor ──
+    if "hektor" in n: return "Hektor"
+
+    # ── Summar ──
+    if "summar" in n and "summarit" not in n and "summaron" not in n:
+        return "50mm Summar"
+
+    # ── Hologon ──
+    if "hologon" in n: return "15mm Hologon"
+
+    # ── Bodies M 시스템 ──
     for m in ["m11","m10","m9","m8","m7","m6","m4","m3","m2","mp","m-a","m240"]:
         if m in n.replace(" ",""): return f"Leica {m.upper()}"
     if "q3" in n: return "Leica Q3"
     if "q2" in n: return "Leica Q2"
-    # Compact
+
+    # ── Compact ──
     for c in ["d-lux","v-lux","c-lux","minilux","c2","c1","mini"]:
         if c in n: return f"Leica {c.upper()}"
     return ""
