@@ -1063,7 +1063,7 @@ def crawl_site(site):
 
         # 리소스 차단 (이미지/CSS/폰트/광고)
         def block_resources(route):
-            if route.request.resource_type in ["stylesheet", "font", "image", "media"]:
+            if route.request.resource_type in ["stylesheet", "font", "media"]:
                 route.abort()
             elif any(x in route.request.url for x in ["google-analytics", "googletagmanager", "facebook", "ads", "tracker", "hotjar", "clarity"]):
                 route.abort()
