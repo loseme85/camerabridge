@@ -590,12 +590,13 @@ def crawl_category(page, site):
                     price = price_match.group(1) if price_match else "문의요망"
                     price = normalize_price(price)
 
-                    # 이미지 - 실제 상품 이미지 찾기 (product/medium 경로)
+                    # 이미지 - 실제 상품 이미지 찾기
                     img_url = ""
                     all_imgs = card.query_selector_all("img")
                     for img_el in all_imgs:
                         raw = img_el.get_attribute("src") or ""
-                        if "/web/product/" in raw or "/upload/product/" in raw:
+                        # //도메인/web/product/ 또는 /web/product/ 패턴
+                        if "web/product/" in raw or "upload/product/" in raw:
                             img_url = fix_img_url(raw, base)
                             break
                     # 못찾으면 data-src 시도
