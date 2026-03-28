@@ -161,7 +161,9 @@ def detect_mount(name):
 
     # L-mount (SL/Q/S)
     if any(x in n for x in ['SL2',' SL ','VARIO-ELMARIT-SL','L-MOUNT','LEICA Q',
-                              'LEICA SL','Q2 ','Q3 ',' Q2',' Q3']):
+                              'LEICA SL','Q2 ','Q3 ',' Q2',' Q3',
+                              'LEICA L ','LEICA L/',' L 50',' L 35',' L 28',' L 21',
+                              ' L 75',' L 90',' L 24']):
         return "L"
 
     # LTM/M39 - 이중 마운트 (M과 LTM 양쪽)
