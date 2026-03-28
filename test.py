@@ -159,10 +159,10 @@ def detect_mount(name):
                               'LEICA R6','LEICA R7','LEICA R8','LEICA R9']):
         return "R"
     # R 마운트 - "R 50/", "R 35/", "R 28/" 등 충무로식 표기
-    import re as _re
-    if _re.search(r'R\s+\d+[/.]', n):
+    if any(x in (' ' + n) for x in [' R 50',' R 35',' R 28',' R 21',' R 24',
+                                      ' R 60',' R 70',' R 80',' R 90',' R 100',
+                                      ' R 16',' R 19','ROM ']):
         return "R"
-
     # L-mount (SL/Q/S) - 명확한 패턴만
     if any(x in n for x in ['SL2',' SL ','VARIO-ELMARIT-SL','L-MOUNT','LEICA Q',
                               'LEICA SL','Q2 ','Q3 ',' Q2',' Q3']):
