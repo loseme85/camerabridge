@@ -494,7 +494,8 @@ SITES = [
         "name": "라이카스토어 충무로",
         "base": "https://leica-storebando.co.kr",
         "categories": [
-            "https://leica-storebando.co.kr/product/list.html?cate_no=442",
+            "https://leica-storebando.co.kr/product/list.html?cate_no=442",  # 충무로
+            "https://leica-storebando.co.kr/product/list.html?cate_no=436",  # 대치
         ],
         "통화": "KRW",
     },
@@ -532,9 +533,9 @@ def crawl_category(page, site):
         while True:
             # 페이지 URL 구성
             if "?" in cat_url:
-                url = cat_url + f"&rows=100&page={page_num}"
+                url = cat_url + f"&page={page_num}"
             else:
-                url = cat_url + f"?rows=100&page={page_num}"
+                url = cat_url + f"?page={page_num}"
 
             print(f"    └─ {page_num}페이지 수집 중...")
 
@@ -549,6 +550,11 @@ def crawl_category(page, site):
             except:
                 print(f"    마지막 페이지 도달")
                 break
+
+            # lazy loading 트리거 - 페이지 전체 스크롤
+            page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            page.wait_for_timeout(500)
+            page.evaluate("window.scrollTo(0, 0)")
 
             cards = page.query_selector_all("ul.prdList > li")
             if not cards:
