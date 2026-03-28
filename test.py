@@ -729,7 +729,8 @@ def auto_label(name):
         if mm == "50":
             if "asph" in n: return "50mm Summicron ASPH"
             if "dr" in n or "dual" in n: return "50mm Summicron DR"
-            if "rigid" in n or "침동" in n: return "50mm Summicron Rigid"
+            if "rigid" in n: return "50mm Summicron Rigid"
+            if "침동" in n or "collapsible" in n: return "50mm Summicron (침동)"
             if "2세대" in n or "3세대" in n or "4세대" in n: return "50mm Summicron (올드)"
             return "50mm Summicron"
         # 35mm 세분화
