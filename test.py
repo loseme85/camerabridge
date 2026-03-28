@@ -590,16 +590,22 @@ def crawl_category(page, site):
                     price = price_match.group(1) if price_match else "문의요망"
                     price = normalize_price(price)
 
-                    # 이미지 - data-src 우선 (lazy loading 대응), 플레이스홀더 제외
-                    img_el = card.query_selector("img")
+                    # 이미지 - 실제 상품 이미지 찾기 (product/medium 경로)
                     img_url = ""
-                    if img_el:
-                        raw = (img_el.get_attribute("data-src") or
-                               img_el.get_attribute("data-original") or
-                               img_el.get_attribute("src") or "")
-                        # 카페24 플레이스홀더 제외
-                        if "img_product_big.gif" not in raw and "no_image" not in raw:
+                    all_imgs = card.query_selector_all("img")
+                    for img_el in all_imgs:
+                        raw = img_el.get_attribute("src") or ""
+                        if "/web/product/" in raw or "/upload/product/" in raw:
                             img_url = fix_img_url(raw, base)
+                            break
+                    # 못찾으면 data-src 시도
+                    if not img_url:
+                        img_el = card.query_selector("img")
+                        if img_el:
+                            raw = (img_el.get_attribute("data-src") or
+                                   img_el.get_attribute("data-original") or "")
+                            if raw and "img_product_big.gif" not in raw:
+                                img_url = fix_img_url(raw, base)
 
                     # 컨디션
                     cond_match = re.search(r"(\d{2,3})%", card_text)
