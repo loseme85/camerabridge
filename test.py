@@ -572,6 +572,18 @@ def crawl_category(page, site):
                     if not name:
                         continue
 
+                    # 비라이카 브랜드 제외
+                    NON_LEICA_BRANDS = [
+                        'sigma', 'voigtlander', 'zeiss', 'cosina', 'canon', 'nikon',
+                        'sony', 'fuji', 'olympus', 'panasonic', 'thypoch', 'leeworks',
+                        'ttartisan', '7artisans', 'meike', 'kamlan', 'pergear',
+                        'contax', 'contarex', 'nokton', 'nikkor', 'summicron-c',
+                        'w-nikkor', 'biogon', 'planar', 'distagon',
+                    ]
+                    name_lower = name.lower()
+                    if any(b in name_lower for b in NON_LEICA_BRANDS):
+                        continue
+
                     # 악세사리 제외
                     cat = detect_category(name)
                     if cat == "Accessory":
