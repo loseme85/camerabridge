@@ -705,15 +705,31 @@ def auto_label(name):
 
     # ── Summilux 세대별 ──
     if "summilux" in n:
-        if "asph" in n:
-            for mm in ["21","28","35","50","75"]:
-                if mm in n: return f"{mm}mm Summilux ASPH"
-        if "pre-asph" in n or "steel" in n or "steel rim" in n:
-            return "35mm Summilux Pre-ASPH"
-        if "aspherical" in n and "asph" not in n:
-            return "35mm Summilux AA"
-        for mm in ["21","28","35","50","75"]:
-            if mm in n: return f"{mm}mm Summilux"
+        import re as _re3
+        mm_m = _re3.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_m.group(1) if mm_m else ""
+        # 35mm 세분화
+        if mm == "35":
+            if "aspherical" in n and "asph" not in n: return "35mm Summilux AA"
+            if "fle ii" in n or "fle2" in n: return "35mm Summilux ASPH FLE II"
+            if "fle" in n: return "35mm Summilux ASPH FLE"
+            if "asph" in n: return "35mm Summilux ASPH"
+            if "pre-asph" in n: return "35mm Summilux Pre-ASPH"
+            if "steel rim" in n or "steel" in n: return "35mm Summilux Steel Rim"
+            if "titan" in n: return "35mm Summilux Titan"
+            if "2매" in n or "2 매" in n: return "35mm Summilux AA"
+            if "1세대" in n or "1st" in n: return "35mm Summilux Steel Rim"
+            if "2세대" in n or "2nd" in n or "pre" in n: return "35mm Summilux Pre-ASPH"
+            if "3세대" in n or "3rd" in n: return "35mm Summilux Pre-ASPH"
+            if "4세대" in n or "4th" in n: return "35mm Summilux ASPH"
+            return "35mm Summilux"
+        # 50mm 세분화
+        if mm == "50":
+            if "asph" in n: return "50mm Summilux ASPH"
+            return "50mm Summilux"
+        # 기타 mm
+        if "asph" in n and mm: return f"{mm}mm Summilux ASPH"
+        if mm: return f"{mm}mm Summilux"
         return "Summilux"
 
     # ── Summicron 세대별 ──
