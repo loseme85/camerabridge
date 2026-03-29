@@ -817,6 +817,7 @@ def auto_label(name):
         if "50" in n or "5/2.8" in n or "5/3.5" in n:
             if "asph" in n: return "50mm Elmar-M ASPH"
             if "2.8" in n: return "50mm Elmar f2.8"
+            if "3.5" in n: return "50mm Elmar f3.5"
             return "50mm Elmar"
         if "35" in n: return "35mm Elmar"
         for mm in ["90","65","24"]:
