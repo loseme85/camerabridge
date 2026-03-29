@@ -163,13 +163,16 @@ def detect_mount(name):
                                       ' R 60',' R 70',' R 80',' R 90',' R 100',
                                       ' R 16',' R 19','ROM ']):
         return "R"
-    # L-mount (SL/Q/S) - 명확한 패턴만
-    if any(x in n for x in ['SL2',' SL ','VARIO-ELMARIT-SL','L-MOUNT','LEICA Q',
-                              'LEICA SL','Q2 ','Q3 ',' Q2',' Q3']):
-        return "L"
-    # LEICA L + 숫자 패턴 (예: Leica L 50mm, Leica L 35mm)
-    if 'LEICA L ' in n and any(c.isdigit() for c in n[n.index('LEICA L ')+8:n.index('LEICA L ')+12]):
-        return "L"
+    # SL 마운트 (디지털 미러리스 SL/SL2 시스템)
+    if any(x in n for x in ['SL2','LEICA SL','VARIO-ELMARIT-SL','APO-VARIO-ELMARIT-SL',
+                              ' SL ',' SL/']):
+        return "SL"
+    # Q 시스템
+    if any(x in n for x in ['LEICA Q','Q2 ','Q3 ',' Q2',' Q3']):
+        return "Q"
+    # L-MOUNT 명시
+    if 'L-MOUNT' in n:
+        return "SL"
 
     # LTM/M39 - 이중 마운트 (M과 LTM 양쪽)
     # Summar/Summarit (구형, f1.5/f2.0) → LTM
@@ -726,6 +729,16 @@ def auto_label(name):
         # 50mm 세분화
         if mm == "50":
             if "asph" in n: return "50mm Summilux ASPH"
+            if "black paint" in n or "blackpaint" in n: return "50mm Summilux Black Paint"
+            if "titan" in n: return "50mm Summilux Titan"
+            if "1세대" in n or "1st" in n: return "50mm Summilux 1세대"
+            if "2세대" in n or "2nd" in n: return "50mm Summilux 2세대"
+            if "3세대" in n or "3rd" in n: return "50mm Summilux 3세대"
+            if "4세대" in n or "4th" in n: return "50mm Summilux 4세대"
+            if not any(x in n for x in ["asph","black paint","blackpaint","titan",
+                                          "세대","1st","2nd","3rd","4th","special",
+                                          "edition","limited","한정"]):
+                return "50mm Summilux (올드)"
             return "50mm Summilux"
         # 기타 mm
         if "asph" in n and mm: return f"{mm}mm Summilux ASPH"
@@ -760,8 +773,23 @@ def auto_label(name):
 
     # ── Elmarit ──
     if "elmarit" in n and "tri" not in n:
-        for mm in ["21","24","28","90"]:
-            if mm in n: return f"{mm}mm Elmarit"
+        import re as _re4
+        mm_e = _re4.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_e.group(1) if mm_e else ""
+        # 28mm 세분화
+        if mm == "28":
+            if "asph" in n: return "28mm Elmarit ASPH"
+            if "1세대" in n or "1st" in n or "9 element" in n or "9element" in n: return "28mm Elmarit 1세대"
+            if "2세대" in n or "2nd" in n: return "28mm Elmarit 2세대"
+            if "3세대" in n or "3rd" in n: return "28mm Elmarit 3세대"
+            if "4세대" in n or "4th" in n: return "28mm Elmarit 4세대"
+            if "vario" in n: return "28mm Vario-Elmarit"
+            return "28mm Elmarit"
+        # 21mm 세분화
+        if mm == "21":
+            if "asph" in n: return "21mm Elmarit ASPH"
+            return "21mm Elmarit"
+        if mm: return f"{mm}mm Elmarit"
         return "Elmarit"
 
     # ── Summarit ──
