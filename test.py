@@ -147,8 +147,8 @@ SEARCH_ITEMS = [
 ]
 
 # ══════════════════════════════════════════════════════
-# 비라이카 브랜드 필터 (크롤러 전역)
-# 이 목록에 해당하는 상품은 카테고리 크롤링 시 수집하지 않음
+# 완전 제외 브랜드 (크롤링 자체를 하지 않음)
+# 라이카와 전혀 무관한 타 시스템 카메라/렌즈
 # ══════════════════════════════════════════════════════
 NON_LEICA_BRANDS = [
     # ── 일본 카메라 브랜드 ──
@@ -159,22 +159,29 @@ NON_LEICA_BRANDS = [
     # ── 독일/유럽 비라이카 ──
     'contax', 'contarex', 'rollei', 'rolleiflex', 'rolleicord',
     'rodenstock', 'schneider',
-    # ── 보이그랜더 / 코시나 계열 ──
-    'voigtlander', 'cosina', 'nokton', 'ultron', 'color-skopar',
-    # ── 자이스 계열 ──
-    'zeiss', 'biogon', 'planar', 'distagon', 'sonnar', 'hologon c',
-    # ── 라이카 마운트 써드파티 ──
-    'sigma', 'ttartisan', '7artisans', '7 artisans',
-    'thypoch', 'leeworks',
-    'meike', 'kamlan', 'pergear',
-    'laowa', 'venus optics',
-    'mitakon', 'sun optics', 'funleader', 'handevision',
-    'kolari', 'mandler',
-    'light lens lab',  # "light lens"는 너무 광범위하여 "light lens lab"만 제외
     # ── 중국 필름 카메라 ──
     'seagull', '갈매기',
-    # ── 기타 ──
+    # ── 기타 완전 타 시스템 ──
     'hasselblad', 'mamiya', 'bronica', 'graflex',
+]
+
+# ══════════════════════════════════════════════════════
+# 라이카 마운트 호환 써드파티 브랜드
+# 크롤링은 하되 "3rd Party"로 태깅
+# M마운트 / L39 호환 렌즈들
+# ══════════════════════════════════════════════════════
+THIRD_PARTY_BRANDS = [
+    # ── 보이그랜더 / 코시나 계열 (M마운트) ──
+    'voigtlander', 'nokton', 'ultron', 'color-skopar', 'heliar',
+    # ── 자이스 ZM 계열 (M마운트) ──
+    'zeiss', 'biogon', 'distagon', 'c-sonnar', 'planar zm',
+    # ── 중국 M마운트 써드파티 ──
+    'ttartisan', '7artisans', '7 artisans',
+    'thypoch', 'leeworks',
+    'meike', 'kamlan', 'pergear',
+    'laowa', 'mitakon', 'sun optics', 'funleader', 'handevision',
+    'kolari', 'mandler',
+    'light lens lab',
 ]
 
 # ══════════════════════════════════════════════════════
@@ -405,11 +412,12 @@ def detect_category(name, price_str=""):
     return "Lens"
 
 def detect_brand(name):
-    """상품명에서 브랜드 자동 분류 (전역 NON_LEICA_BRANDS 기준)"""
+    """상품명에서 브랜드 자동 분류
+    ※ 라이카 키워드를 반드시 먼저 체크 → 라이카 상품이 3rd Party로 빠지지 않도록
+    """
     n = name.lower()
-    for brand in NON_LEICA_BRANDS:
-        if brand in n:
-            return "3rd Party"
+
+    # ── 1순위: 라이카 키워드 (무조건 Leica) ──
     leica_kw = [
         'leica', 'summicron', 'summilux', 'noctilux', 'elmarit',
         'summaron', 'elmar', 'summar', 'summarit', 'summarex',
@@ -420,6 +428,17 @@ def detect_brand(name):
     for kw in leica_kw:
         if kw in n:
             return "Leica"
+
+    # ── 2순위: 라이카 마운트 호환 써드파티 ──
+    for brand in THIRD_PARTY_BRANDS:
+        if brand in n:
+            return "3rd Party"
+
+    # ── 3순위: 완전 비라이카 (크롤링 단계에서 이미 걸러지지만 혹시 몰라) ──
+    for brand in NON_LEICA_BRANDS:
+        if brand in n:
+            return "Non-Leica"
+
     return "Other"
 
 # 부속품 제외 키워드
