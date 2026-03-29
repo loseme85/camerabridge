@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_32.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_34.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -404,18 +404,31 @@ function matchesQuery(item, query){
       else if(qMount==='L39'&&mount==='M'){/* M도 LTM 필터에서 보임 */}
       else if(mount!==qMount) return false;
     }
-    // R 필터: -M 붙은 건 무조건 제외
+    // R 필터: mount가 Unknown이면 상품명에서 R 패턴 직접 확인
     if(qMount==='R'){
       if(/-m\b/i.test(name)||/-m$/i.test(name)) return false;
       if(/summicron-m|summilux-m|elmarit-m|noctilux-m/i.test(name)) return false;
+      // mount가 R이 아니면(Unknown 포함) 상품명에 R 마운트 패턴이 있어야 통과
+      if(mount!=='R'){
+        // \br\b 는 "Summitar"끝 r도 잡으므로, R마운트 명시 패턴만 체크
+        const hasRPattern=(
+          /\bleica\s+r\s*\d/i.test(rawName) ||   // "Leica R3", "Leica R 50"
+          /\br\s+\d+mm/i.test(rawName) ||          // "R 50mm"
+          /\br\s+\d+\//i.test(rawName) ||           // "R 50/2"
+          /\summilux-r\b|\summicron-r\b|\belmarit-r\b|\belmar-r\b|\btelyt-r\b/i.test(rawName) || // -R 렌즈명
+          /\br\d+\b/i.test(rawName)                // "R50", "R3"
+        );
+        if(!hasRPattern) return false;
+      }
     }
     // M 필터: R마운트 제외
     if(qMount==='M'){
       if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return false;
     }
   }
-  // 마운트 토큰 제외한 나머지로 검색
-  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm'&&t!=='l39'&&t!=='m39');
+  // 마운트 토큰 + 'leica' 토큰 제외한 나머지로 검색
+  // ('leica'는 전체 DB가 라이카 관련이므로 검색 토큰에서 제거)
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
   return tokens.every(t=>{
     const gen=GEN_MAP[t];
     if(gen){
