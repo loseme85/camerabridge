@@ -740,6 +740,8 @@ def auto_label(name):
                                           "edition","limited","한정"]):
                 return "50mm Summilux (올드)"
             return "50mm Summilux"
+        # 75mm
+        if mm == "75": return "75mm Summilux"
         # 기타 mm
         if "asph" in n and mm: return f"{mm}mm Summilux ASPH"
         if mm: return f"{mm}mm Summilux"
@@ -836,9 +838,20 @@ def auto_label(name):
     # ── Hologon ──
     if "hologon" in n: return "15mm Hologon"
 
-    # ── Bodies M 시스템 ──
-    for m in ["m11","m10","m9","m8","m7","m6","m4","m3","m2","mp","m-a","m240"]:
-        if m in n.replace(" ",""): return f"Leica {m.upper()}"
+    # M75, M90 등 렌즈 표기 먼저 처리
+    import re as _re5
+    lens_focal = _re5.search(r'm(\d{2,3})/(\d)', n.replace(" ",""))
+    if lens_focal:
+        focal = lens_focal.group(1)
+        if focal in ["75","90","135","50","35","28","21"]:
+            return f"{focal}mm Lens"
+
+    # ── Bodies M 시스템 ── (렌즈 키워드 없을 때만)
+    lens_kw = ["summicron","summilux","noctilux","elmarit","elmar","summaron","nokton",
+                "angulon","hektor","summar","hologon","telyt","vario","apo"]
+    if not any(kw in n for kw in lens_kw):
+        for m in ["m11","m10","m9","m8","m7","m6","m4","m3","m2","mp","m-a","m240"]:
+            if m in n.replace(" ",""): return f"Leica {m.upper()}"
     if "q3" in n: return "Leica Q3"
     if "q2" in n: return "Leica Q2"
 
