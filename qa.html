@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///Users/changdaepark/Downloads/qa_3.html -->
+<!-- saved from url=(0046)file:///Users/changdaepark/Downloads/qa_4.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,7 +119,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <button class="search-btn" onclick="runQA()">▶ RUN QA</button>
     </div>
     <div class="normalized" id="normalized-display">정규화: <span id="normalized-val"></span></div>
-    <div class="test-cases" id="test-cases"><span class="test-tag" onclick="quickTest(&#39;summicron 35&#39;)">summicron 35</span><span class="test-tag" onclick="quickTest(&#39;summilux 50&#39;)">summilux 50</span><span class="test-tag" onclick="quickTest(&#39;leica r 50mm&#39;)">leica r 50mm</span><span class="test-tag" onclick="quickTest(&#39;noctilux 0.95&#39;)">noctilux 0.95</span><span class="test-tag" onclick="quickTest(&#39;35cron&#39;)">35cron</span><span class="test-tag" onclick="quickTest(&#39;50lux&#39;)">50lux</span><span class="test-tag" onclick="quickTest(&#39;leica m6&#39;)">leica m6</span><span class="test-tag" onclick="quickTest(&#39;elmarit 28&#39;)">elmarit 28</span><span class="test-tag" onclick="quickTest(&#39;voigtlander&#39;)">voigtlander</span><span class="test-tag" onclick="quickTest(&#39;ttartisan&#39;)">ttartisan</span><span class="test-tag" onclick="quickTest(&#39;leica m3&#39;)">leica m3</span><span class="test-tag" onclick="quickTest(&#39;apo summicron 50&#39;)">apo summicron 50</span></div>
+    <div class="test-cases" id="test-cases"></div>
   </div>
 
   <!-- 결과 요약 -->
@@ -162,7 +162,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_3.html#" target="_blank">→ 사진집에서 검색</a>
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_4.html#" target="_blank">→ 사진집에서 검색</a>
           <div class="link-count" id="count-sazin">—</div>
         </div>
       </div>
@@ -170,7 +170,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_3.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_4.html#" target="_blank">→ 장씨카메라에서 검색</a>
           <div class="link-count" id="count-jang">—</div>
         </div>
       </div>
@@ -178,7 +178,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_3.html#" target="_blank">→ 충무로에서 검색</a>
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_4.html#" target="_blank">→ 충무로에서 검색</a>
           <div class="link-count" id="count-chung">—</div>
         </div>
       </div>
@@ -186,7 +186,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇬🇧</span><span class="link-site">Ffordes</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_3.html#" target="_blank">→ Ffordes에서 검색</a>
+          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_4.html#" target="_blank">→ Ffordes에서 검색</a>
           <div class="link-count" id="count-ffordes">—</div>
         </div>
       </div>
@@ -198,72 +198,223 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
 
 <script>
 // ══════════════════════════════════════════════════════
-// 검색 로직 (index.html과 동일)
+// 검색 로직 — index.html 완전 동일 복사본
+// ※ 이 블록은 index.html의 것과 항상 동일해야 함
 // ══════════════════════════════════════════════════════
 const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
 
-const SLANG_MAP={
-  '50lux':'summilux 50','50 lux':'summilux 50','35lux':'summilux 35','35 lux':'summilux 35',
+// 슬랭 → 검색 토큰 변환
+const SLANG_MAP = {
+  '50lux':'summilux 50','50 lux':'summilux 50',
+  '35lux':'summilux 35','35 lux':'summilux 35',
   '28lux':'summilux 28','21lux':'summilux 21','75lux':'summilux 75','75 lux':'summilux 75',
-  '50cron':'summicron 50','50 cron':'summicron 50','35cron':'summicron 35','35 cron':'summicron 35',
+  '50cron':'summicron 50','50 cron':'summicron 50',
+  '35cron':'summicron 35','35 cron':'summicron 35',
   '28cron':'summicron 28','75cron':'summicron 75','90cron':'summicron 90',
   '50nocti f0.95':'noctilux 0.95','50nocti f1.0':'noctilux 1.0','50nocti f1.2':'noctilux 1.2',
   '75nocti':'noctilux 75','75 nocti':'noctilux 75',
   '50apo':'apo summicron 50','50 apo':'apo summicron 50',
-  '75apo':'apo summicron 75','90apo':'apo summicron 90',
+  '75apo':'apo summicron 75','75 apo':'apo summicron 75',
+  '90apo':'apo summicron 90','90 apo':'apo summicron 90',
   'apocron':'apo summicron','apo cron':'apo summicron',
   'tri':'tri elmar','tri-elmar':'tri elmar','trielmar':'tri elmar',
   'wate':'tri elmar 16','mate':'tri elmar 28',
   '50elmar':'elmar 50','elmar50':'elmar 50',
 };
-const TOKEN_MAP={
+const TOKEN_MAP = {
   'nocti':'noctilux','50nocti':'noctilux',
-  '1st':'nocti1st','오리지널':'nocti1st','original':'nocti1st',
-  'e58':'e58','e60':'e60','v1':'e58','v2':'e60','v3':'e60','v4':'v4',
+  '1st':'nocti1st','오리지널':'nocti1st','original':'nocti1st','aspherical':'nocti1st',
+  'e58':'e58','e60':'e60',
+  'v1':'e58','v2':'e60','v3':'e60','v4':'v4',
   '복각':'1.2','f0.95':'0.95','f1.0':'1.0','f1.2':'1.2','f1.25':'1.25',
   '0.95':'0.95','1.0':'1.0','1.2':'1.2','1.25':'1.25',
   'lux':'summilux','cron':'summicron','apo':'apo',
 };
-const GEN_MAP={
-  '1st':'1세대','1gen':'1세대','1세대':'1세대','2nd':'2세대','2gen':'2세대','2세대':'2세대',
-  '3rd':'3세대','3gen':'3세대','3세대':'3세대','4th':'4세대','4gen':'4세대','4세대':'4세대',
-  '5th':'5세대','5gen':'5세대','5세대':'5세대',
-};
-const GEN_SYNONYMS={
-  '1세대':['1st','1세대','1 st','(1st)','first','초기','nickel','니켈','ver.1','v.1'],
-  '2세대':['2nd','2세대','2 nd','(2nd)','second','ver.2','v.2'],
-  '3세대':['3rd','3세대','3 rd','(3rd)','third','ver.3','v.3'],
-  '4세대':['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
-  '5세대':['5th','5세대','5 th','(5th)','ver.5','v.5'],
-  'nocti1st':['aspherical','series 1','1st','series1'],
-  '1.2':['1.2','f1.2','1:1.2'],
-  'e58':['e58','e 58','58mm'],'e60':['e60','e 60','60mm'],
-  'v4':['built-in','internal hood','6bit'],
-  '0.95':['0.95','f0.95','1:0.95'],'1.0':['1.0','f1.0','1:1.0'],'1.25':['1.25','f1.25','1:1.25'],
-};
-const NEGATIVE_KEYWORDS=['케이스','스트랩','필터','캡','설명서','박스only','box only','충전기','배터리','후드only','hood only','어댑터','파우치','케이블','핸드그립','grip only','strap only','cap only','lens cap','body cap','filter only','original hood','hood m ','후드 단품'];
-
 function normalizeQuery(q){
   const lower=q.toLowerCase().trim();
   if(SLANG_MAP[lower]) return SLANG_MAP[lower];
   const tokens=lower.split(/\s+/);
-  return tokens.map(t=>TOKEN_MAP[t]||t).join(' ');
+  const mapped=tokens.map(t=>TOKEN_MAP[t]||t);
+  return mapped.join(' ');
 }
+const GEN_MAP = {
+  '1st':'1세대','1gen':'1세대','1세대':'1세대',
+  '2nd':'2세대','2gen':'2세대','2세대':'2세대',
+  '3rd':'3세대','3gen':'3세대','3세대':'3세대',
+  '4th':'4세대','4gen':'4세대','4세대':'4세대',
+  '5th':'5세대','5gen':'5세대','5세대':'5세대',
+};
+const NEGATIVE_KEYWORDS = [
+  '케이스','스트랩','필터','캡','설명서','박스only','box only',
+  '충전기','배터리','후드only','hood only','어댑터','파우치',
+  '케이블','핸드그립','grip only','strap only','cap only',
+  'lens cap','body cap','filter only',
+  'original hood','hood m ','hood e ','후드 단품',
+];
 function isAccessory(item){
   if(item.category==='Accessory') return true;
   const name=(item['상품명']||'').toLowerCase();
   return NEGATIVE_KEYWORDS.some(k=>name.includes(k.toLowerCase()));
 }
+const GEN_SYNONYMS = {
+  '1세대': ['1st','1세대','1 st','(1st)','first','초기','nickel','니켈','ver.1','v.1'],
+  '2세대': ['2nd','2세대','2 nd','(2nd)','second','ver.2','v.2'],
+  '3세대': ['3rd','3세대','3 rd','(3rd)','third','ver.3','v.3'],
+  '4세대': ['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
+  '5세대': ['5th','5세대','5 th','(5th)','ver.5','v.5'],
+  'nocti1st':  ['aspherical','series 1','1st','series1','1세대','오리지널','original'],
+  '1.2':   ['1.2','f1.2','1:1.2'],
+  'e58':   ['e58','e 58','58mm'],
+  'e60':   ['e60','e 60','60mm'],
+  'v4':    ['built-in','internal hood','6bit'],
+  '0.95':  ['0.95','f0.95','1:0.95'],
+  '1.0':   ['1.0','f1.0','1:1.0'],
+  '1.25':  ['1.25','f1.25','1:1.25'],
+};
 function detectQueryMount(q){
   const tokens=q.toLowerCase().split(/\s+/);
-  if(tokens[0]==='m') return 'M';
-  if(tokens[0]==='r') return 'R';
+  const first=tokens[0];
+  if(first==='m') return 'M';
+  if(first==='r') return 'R';
   if(tokens.includes('m')) return 'M';
   if(tokens.includes('r')) return 'R';
-  if(tokens.some(t=>t==='ltm'||t==='l39'||t==='m39')) return 'L39';
+  if(tokens.some(t=>t==='ltm'||t==='l39'||t==='l39'||t==='m39')) return 'L39';
   return null;
 }
+// index.html의 matchesQuery 원본 (return true/false)
+function _matchesQuery(item, query){
+  if(isAccessory(item)) return false;
+  const q=query.toLowerCase();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');
+  const label=(item['label']||'').toLowerCase();
+  const mount=(item['mount']||'');
+  const LEICA_SEARCH_TRIGGERS = [
+    'summicron','summilux','noctilux','elmarit','elmar',
+    'summaron','summarex','summarit','hektor','hologon',
+    'super-angulon','angulon','telyt',
+    'leica','lux','cron','nocti','apo',
+    'minilux','leitz',
+    'm3','m4','m5','m6','m7','m8','m9','m10','m11','m240',
+    'leica r','r3','r4','r5','r6','r7','r8','r9',
+    'q2','q3',
+  ];
+  const THIRD_PARTY_BRANDS = [
+    'light lens','light lens lab','mandler','seagull','nikon','canon',
+    'voigtlander','zeiss','contax','sigma','ttartisan','7artisans',
+    'thypoch','leeworks','nokton','nikkor','w-nikkor','biogon','planar',
+    'laowa','mitakon','funleader','meike','kolari',
+    'rollei','yashica','polaroid','sony','fuji','olympus','panasonic',
+  ];
+  const isLeicaQuery = LEICA_SEARCH_TRIGGERS.some(t=>q.includes(t));
+  if(isLeicaQuery){
+    if(item.brand && item.brand!=='Leica' && item.brand!=='Other'){
+      return false;
+    }
+    if(!item.brand || item.brand==='Other'){
+      if(THIRD_PARTY_BRANDS.some(b=>name.includes(b))){
+        return false;
+      }
+    }
+  }
+  const qMount=detectQueryMount(q);
+  if(qMount){
+    if(mount&&mount!=='Unknown'){
+      if(qMount==='M'&&mount==='L39'){}
+      else if(qMount==='L39'&&mount==='M'){}
+      else if(mount!==qMount) return false;
+    }
+    if(qMount==='R'){
+      if(/-m\b/i.test(name)||/-m$/i.test(name)) return false;
+      if(/summicron-m|summilux-m|elmarit-m|noctilux-m/i.test(name)) return false;
+      if(mount!=='R'){
+        const hasRPattern=(
+          /\bleica\s+r\s*\d/i.test(rawName) ||
+          /\br\s+\d+mm/i.test(rawName) ||
+          /\br\s+\d+\//i.test(rawName) ||
+          /\summilux-r\b|\summicron-r\b|\belmarit-r\b|\belmar-r\b|\btelyt-r\b/i.test(rawName) ||
+          /\br\d+\b/i.test(rawName)
+        );
+        if(!hasRPattern) return false;
+      }
+    }
+    if(qMount==='M'){
+      if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return false;
+    }
+  }
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
+  return tokens.every(t=>{
+    const gen=GEN_MAP[t];
+    if(gen){
+      const synonyms=GEN_SYNONYMS[gen]||[gen];
+      return synonyms.some(s=>name.includes(s));
+    }
+    if(GEN_SYNONYMS[t]){
+      return GEN_SYNONYMS[t].some(s=>name.includes(s));
+    }
+    if(/^\d+$/.test(t)){
+      const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
+      return re.test(name);
+    }
+    const mmMatch=t.match(/^(\d+)mm$/);
+    if(mmMatch){
+      const num=mmMatch[1];
+      const re=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return re.test(name);
+    }
+    return name.includes(t) || label.includes(t);
+  });
+}
+
+// ── QA 전용 래퍼: 왜 제외됐는지 이유 반환 ──
 function matchesQuery(item, query){
+  if(isAccessory(item)) return {pass:false, reason:'악세사리 제외'};
+  const q=query.toLowerCase();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');
+  const mount=(item['mount']||'');
+  const LEICA_SEARCH_TRIGGERS=['summicron','summilux','noctilux','elmarit','elmar','summaron','summarex','summarit','hektor','hologon','super-angulon','angulon','telyt','leica','lux','cron','nocti','apo','minilux','leitz','m3','m4','m5','m6','m7','m8','m9','m10','m11','m240','leica r','r3','r4','r5','r6','r7','r8','r9','q2','q3'];
+  const THIRD_PARTY_BRANDS=['light lens','light lens lab','mandler','seagull','nikon','canon','voigtlander','zeiss','contax','sigma','ttartisan','7artisans','thypoch','leeworks','nokton','nikkor','w-nikkor','biogon','planar','laowa','mitakon','funleader','meike','kolari','rollei','yashica','polaroid','sony','fuji','olympus','panasonic'];
+  const isLeicaQuery=LEICA_SEARCH_TRIGGERS.some(t=>q.includes(t));
+  if(isLeicaQuery){
+    if(item.brand&&item.brand!=='Leica'&&item.brand!=='Other') return {pass:false,reason:`Non-Leica brand: ${item.brand}`};
+    if(!item.brand||item.brand==='Other'){
+      const matched=THIRD_PARTY_BRANDS.find(b=>name.includes(b));
+      if(matched) return {pass:false,reason:`3rd Party 감지: "${matched}"`};
+    }
+  }
+  const qMount=detectQueryMount(q);
+  if(qMount){
+    if(mount&&mount!=='Unknown'){
+      if(!(qMount==='M'&&mount==='L39')&&!(qMount==='L39'&&mount==='M')&&mount!==qMount)
+        return {pass:false,reason:`마운트 불일치 (item:${mount}, query:${qMount})`};
+    }
+    if(qMount==='R'){
+      if(/-m\b/i.test(name)||/-m$/i.test(name)) return {pass:false,reason:'R검색 -M 제외'};
+      if(/summicron-m|summilux-m|elmarit-m|noctilux-m/i.test(name)) return {pass:false,reason:'R검색 M마운트 제외'};
+      if(mount!=='R'){
+        const hasR=(/\bleica\s+r\s*\d/i.test(rawName)||/\br\s+\d+mm/i.test(rawName)||/\br\s+\d+\//i.test(rawName)||/summilux-r\b|summicron-r\b|elmarit-r\b/i.test(rawName)||/\br\d+\b/i.test(rawName));
+        if(!hasR) return {pass:false,reason:'R마운트 패턴 없음'};
+      }
+    }
+    if(qMount==='M'){
+      if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return {pass:false,reason:'M검색 R마운트 제외'};
+    }
+  }
+  // 나머지는 _matchesQuery 결과 활용
+  const pass=_matchesQuery(item,query);
+  if(!pass){
+    const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
+    for(const t of tokens){
+      if(GEN_MAP[t]){const syn=GEN_SYNONYMS[GEN_MAP[t]]||[GEN_MAP[t]];if(!syn.some(s=>name.includes(s)))return{pass:false,reason:`세대 불일치: "${t}"`};}
+      else if(GEN_SYNONYMS[t]){if(!GEN_SYNONYMS[t].some(s=>name.includes(s)))return{pass:false,reason:`동의어 불일치: "${t}"`};}
+      else if(/^\d+$/.test(t)){const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');if(!re.test(name))return{pass:false,reason:`숫자 불일치: "${t}"`};}
+      else if(!name.includes(t)&&!(item['label']||'').toLowerCase().includes(t))return{pass:false,reason:`키워드 없음: "${t}"`};
+    }
+    return{pass:false,reason:'필터링됨'};
+  }
+  return {pass:true, reason:'✅ 매칭'};
+}
   if(isAccessory(item)) return {pass:false, reason:'악세사리 제외'};
   const q=query.toLowerCase();
   const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
