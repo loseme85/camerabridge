@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_32.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root{
   --bg:#f8f7f5;--surface:#ffffff;--surface2:#f3f2f0;--surface3:#ede9e3;
@@ -199,6 +200,12 @@ select:focus{border-color:var(--accent);color:var(--text);}
         <option value="price-asc">Price ↑</option>
         <option value="price-desc">Price ↓</option>
       </select>
+      <span class="filter-label">Brand</span>
+      <select id="brand-select" onchange="renderResults()">
+        <option value="all">All Brands</option>
+        <option value="Leica">Leica Only</option>
+        <option value="3rd Party">3rd Party</option>
+      </select>
       <span class="filter-label">Site</span>
       <select id="site-select" onchange="renderResults()"><option value="all">All Sites</option></select>
       <span class="filter-label">Currency</span>
@@ -354,6 +361,40 @@ function matchesQuery(item, query){
   const name=rawName.replace(/-/g,' ');  // 하이픈→공백 정규화로 tri-elmar=tri elmar
   const label=(item['label']||'').toLowerCase();
   const mount=(item['mount']||'');
+
+  // ── 라이카 브랜드 키워드가 검색어에 포함된 경우 → Non-Leica 자동 제외 ──
+  // (단, brand 필터가 이미 적용된 경우 중복 방지를 위해 brand 드롭다운과 별도 동작)
+  const LEICA_SEARCH_TRIGGERS = [
+    'summicron','summilux','noctilux','elmarit','elmar',
+    'summaron','summarex','summarit','hektor','hologon',
+    'super-angulon','angulon','telyt',
+    'leica','lux','cron','nocti','apo',
+    'minilux','leitz',
+    // 모델별 바디
+    'm3','m4','m5','m6','m7','m8','m9','m10','m11','m240',
+    'leica r','r3','r4','r5','r6','r7','r8','r9',
+    'q2','q3',
+  ];
+  const THIRD_PARTY_BRANDS = [
+    'light lens','light lens lab','mandler','seagull','nikon','canon',
+    'voigtlander','zeiss','contax','sigma','ttartisan','7artisans',
+    'thypoch','leeworks','nokton','nikkor','w-nikkor','biogon','planar',
+    'laowa','mitakon','funleader','meike','kolari',
+    'rollei','yashica','polaroid','sony','fuji','olympus','panasonic',
+  ];
+  const isLeicaQuery = LEICA_SEARCH_TRIGGERS.some(t=>q.includes(t));
+  if(isLeicaQuery){
+    // brand 필드가 있으면 그걸 우선 사용
+    if(item.brand && item.brand!=='Leica' && item.brand!=='Other'){
+      return false;
+    }
+    // brand 필드가 없거나 Other인 경우 → 상품명에서 3rd party 브랜드 감지
+    if(!item.brand || item.brand==='Other'){
+      if(THIRD_PARTY_BRANDS.some(b=>name.includes(b))){
+        return false;
+      }
+    }
+  }
     // 마운트 명시 필터
   const qMount=detectQueryMount(q);
   if(qMount){
@@ -421,6 +462,7 @@ function showHero(){
   document.getElementById('header-search-wrap').style.display='none';
   // 필터 초기화
   document.getElementById('site-select').value='all';
+  document.getElementById('brand-select').value='all';
   document.getElementById('currency-select').value='all';
   document.getElementById('sort-select').value='default';
   document.getElementById('search-input').value='';
@@ -447,10 +489,12 @@ function renderResults(query){
   const site=document.getElementById('site-select').value;
   const cur=document.getElementById('currency-select').value;
   const sort=document.getElementById('sort-select').value;
+  const brand=document.getElementById('brand-select').value;
   let filtered=allData.filter(r=>{
     if(query&&!matchesQuery(r,query))return false;
     if(site!=='all'&&r.site!==site)return false;
     if(cur!=='all'&&r['통화']!==cur)return false;
+    if(brand!=='all'&&r.brand!==brand)return false;
     return true;
   });
   const forSale=filtered.filter(r=>!r['품절']);
@@ -479,9 +523,10 @@ function renderResults(query){
     const cond=r['컨디션']&&r['컨디션']!=='정보없음'?`<span class="badge badge-cond">${r['컨디션']}</span>`:'';
     const sold=r['품절']?`<span class="badge badge-soldout">SOLD OUT</span>`:'';
     const reserved=r['예약중']?`<span class="badge badge-reserved">예약중</span>`:'';
+    const brandBadge=r.brand&&r.brand==='3rd Party'?`<span class="badge" style="background:rgba(0,120,255,0.07);color:#0078ff;border:1px solid rgba(0,120,255,0.2);">3rd Party</span>`:'';
     return `<a class="result-row${r['품절']?' soldout':''}" href="${r['링크']}" target="_blank">
       <div>${imgEl}${ph}</div>
-      <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}${reserved}</div></div>
+      <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}${reserved}${brandBadge}</div></div>
       <div class="site-col"><span>${flag}</span>${r.site}</div>
       <div>
         <div class="price">${r['가격']}</div>
