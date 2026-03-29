@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_15.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_29.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge — Admin</title>
-<link href="./admin_files/css2" rel="stylesheet">
+<link href="file:///Users/changdaepark/Downloads/admin_files/css2" rel="stylesheet">
 
 <style>
 :root{--bg:#f8f7f5;--surface:#fff;--surface2:#f3f2f0;--border:#e5e2dc;--border2:#d4d0c8;--text:#1a1a1a;--dim:#6b6560;--muted:#a09890;--leica:#E11F26;--leica-dim:rgba(225,31,38,0.08);--green:#2d7a2d;--orange:#c85a00;--blue:#0055aa;--white:#fff;}
@@ -167,6 +167,12 @@ input[type=text]{width:150px;}
     <div class="stat leica"><div class="stat-val" id="s-f095">—</div><div class="stat-lbl">Nocti f0.95</div></div>
     <div class="stat blue"><div class="stat-val" id="s-f10">—</div><div class="stat-lbl">Nocti f1.0</div></div>
   </div>
+  <div class="section-label">Brand Breakdown</div>
+  <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+    <div class="stat leica"><div class="stat-val" id="s-brand-leica">—</div><div class="stat-lbl">Leica</div><div class="stat-sub" id="s-brand-leica-sub">—</div></div>
+    <div class="stat blue"><div class="stat-val" id="s-brand-3rd">—</div><div class="stat-lbl">3rd Party</div><div class="stat-sub" id="s-brand-3rd-sub">—</div></div>
+    <div class="stat"><div class="stat-val" id="s-brand-other">—</div><div class="stat-lbl">Other / Unclassified</div><div class="stat-sub" id="s-brand-other-sub">—</div></div>
+  </div>
   <div class="section-label">Crawl Status</div>
   <div class="crawl-card">
     <div class="crawl-header">
@@ -181,6 +187,25 @@ input[type=text]{width:150px;}
     <div class="card"><div class="card-title">Site Distribution</div><div class="chart-wrap"><canvas id="site-chart"></canvas></div></div>
     <div class="card"><div class="card-title">Top Labels</div><div id="label-bars"></div></div>
     <div class="card"><div class="card-title">System Breakdown</div><div class="chart-wrap"><canvas id="system-chart"></canvas></div></div>
+  </div>
+  <div class="three-col">
+    <div class="card" style="grid-column:span 2">
+      <div class="card-title"><span>🏷️ Brand Breakdown</span><span style="font-size:8px;color:var(--muted)">Accessory 제외</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">LEICA</div>
+          <div id="brand-leica-bars"></div>
+        </div>
+        <div>
+          <div style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--blue);margin-bottom:8px;letter-spacing:1px;">3RD PARTY</div>
+          <div id="brand-3rd-bars"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📊 Brand Chart</span></div>
+      <div class="chart-wrap"><canvas id="brand-chart"></canvas></div>
+    </div>
   </div>
   <div class="two-col">
     <div class="card">
@@ -203,7 +228,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">22:46:47</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">22:46:47</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">22:46:47</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
   <!-- Unknown Mount 섹션 -->
@@ -229,6 +254,7 @@ input[type=text]{width:150px;}
         <button class="sys-btn" onclick="setSys(&#39;P&amp;S&#39;,this)">P&amp;S</button>
         <button class="sys-btn" onclick="setSys(&#39;SL/Q/S&#39;,this)">SL/Q</button>
         <button class="sys-btn" onclick="setSys(&#39;__acc__&#39;,this)">ACC</button>
+        <button class="sys-btn" onclick="setSys(&#39;__3rd__&#39;,this)" style="border-color:var(--blue);color:var(--blue);">3RD</button>
         <button class="sys-btn" onclick="setSys(&#39;__unk__&#39;,this)">? UNK</button>
       </div>
       <select id="f-mount" onchange="applyFilters()">
@@ -320,7 +346,7 @@ async function loadData(){
     allData=await res.json();
     document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString();
     log('// Loaded '+allData.length+' listings','ok');
-    buildLabelAvg();updateStats();updateSiteProgress();try{updateCharts();}catch(e){log("// Chart error: "+e.message,"err");}updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();applyFilters();loadStatus();
+    buildLabelAvg();updateStats();updateSiteProgress();try{updateCharts();}catch(e){log("// Chart error: "+e.message,"err");}updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();renderBrandStats();applyFilters();loadStatus();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
 function updateNewItems(){
@@ -512,6 +538,65 @@ function populateFilters(){
   sites.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=(FLAGS[s]||'🌐')+' '+s;fs.appendChild(o);});
 }
 
+function renderBrandStats(){
+  const nonAcc=allData.filter(r=>r.category!=='Accessory');
+  const leica=nonAcc.filter(r=>r.brand==='Leica');
+  const third=nonAcc.filter(r=>r.brand==='3rd Party');
+  const other=nonAcc.filter(r=>!r.brand||r.brand==='Other');
+
+  const leicaSale=leica.filter(r=>!r['품절']).length;
+  const thirdSale=third.filter(r=>!r['품절']).length;
+  const otherSale=other.filter(r=>!r['품절']).length;
+
+  document.getElementById('s-brand-leica').textContent=leica.length;
+  document.getElementById('s-brand-leica-sub').textContent=leicaSale+' for sale';
+  document.getElementById('s-brand-3rd').textContent=third.length;
+  document.getElementById('s-brand-3rd-sub').textContent=thirdSale+' for sale';
+  document.getElementById('s-brand-other').textContent=other.length;
+  document.getElementById('s-brand-other-sub').textContent=otherSale+' for sale';
+
+  // Leica 상품 top labels 바
+  const leicaLabels={};
+  leica.forEach(r=>{const l=r.label||r['상품명']?.slice(0,20)||'?';leicaLabels[l]=(leicaLabels[l]||0)+1;});
+  const leicaTop=Object.entries(leicaLabels).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const leicaMax=leicaTop[0]?leicaTop[0][1]:1;
+  document.getElementById('brand-leica-bars').innerHTML=leicaTop.map(([l,c])=>`
+    <div class="bar-row">
+      <div class="bar-label" title="${l}">${l}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/leicaMax*100)}%"></div></div>
+      <div class="bar-count">${c}</div>
+    </div>`).join('');
+
+  // 3rd Party 상품 top 상품명 바
+  const thirdNames={};
+  third.forEach(r=>{
+    const n=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim().slice(0,28);
+    thirdNames[n]=(thirdNames[n]||0)+1;
+  });
+  const thirdTop=Object.entries(thirdNames).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const thirdMax=thirdTop[0]?thirdTop[0][1]:1;
+  document.getElementById('brand-3rd-bars').innerHTML=thirdTop.map(([l,c])=>`
+    <div class="bar-row">
+      <div class="bar-label" title="${l}">${l}</div>
+      <div class="bar-track"><div class="bar-fill blue" style="width:${Math.round(c/thirdMax*100)}%"></div></div>
+      <div class="bar-count">${c}</div>
+    </div>`).join('')||'<div style="font-size:11px;color:var(--muted);padding:8px 0;">3rd Party 매물 없음</div>';
+
+  // Brand 도넛 차트
+  const brandCtx=document.getElementById('brand-chart');
+  if(brandCtx){
+    if(window._brandChart) window._brandChart.destroy();
+    window._brandChart=new Chart(brandCtx,{
+      type:'doughnut',
+      data:{
+        labels:['Leica','3rd Party','Other'],
+        datasets:[{data:[leica.length,third.length,other.length],backgroundColor:['#E11F26','#0055aa','#d4d0c8'],borderWidth:0}]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:'Space Mono',size:9},color:'#6b6560',padding:8}}}}
+    });
+  }
+}
+
 function setSys(sys,el){
   currentSys=sys;
   document.querySelectorAll('.sys-btn').forEach(b=>b.classList.remove('active'));
@@ -542,6 +627,8 @@ function applyFilters(){
       if(r.category!=='Accessory')return false;
     } else if(currentSys==='__unk__'){
       if((r.mount||'Unknown')!=='Unknown')return false;
+    } else if(currentSys==='__3rd__'){
+      if(r.brand!=='3rd Party')return false;
     } else if(currentSys!=='all'){
       if((r.system||'')!==currentSys)return false;
       if(r.category==='Accessory')return false;
@@ -577,6 +664,7 @@ function renderTable(){
     const sold=r['품절']?'<span class="badge badge-sold">SOLD</span>':'';
     const res=r['예약중']?'<span class="badge badge-res">예약</span>':'';
     const deal=isDeal?'<span class="badge badge-deal">🔥DEAL</span>':'';
+    const brandB=r.brand==='3rd Party'?'<span class="badge" style="background:rgba(0,85,170,0.08);color:var(--blue);border:1px solid rgba(0,85,170,0.2);">3RD</span>':r.brand==='Other'?'<span class="badge" style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);">?</span>':'';
     const _fs=r.first_seen;const _isNew=isNew(_fs);
     const _foundTime=_fs?new Date(_fs).toLocaleTimeString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
     const newBadge=_isNew?'<span class="badge badge-new">NEW</span><span style="font-family:Space Mono,monospace;font-size:9px;color:var(--leica);margin-left:3px;">'+_foundTime+'</span>':''
@@ -587,7 +675,7 @@ function renderTable(){
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
       <div class="data-price">${r['가격']||'—'}</div>
       <div class="data-cond">${r['컨디션']||'—'}</div>
-      <div style="display:flex;gap:3px;flex-wrap:wrap;">${sold}${res}${deal}</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;">${sold}${res}${deal}${brandB}</div>
     </div>`;
   }).join('');
 }

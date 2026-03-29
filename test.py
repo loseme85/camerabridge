@@ -147,6 +147,37 @@ SEARCH_ITEMS = [
 ]
 
 # ══════════════════════════════════════════════════════
+# 비라이카 브랜드 필터 (크롤러 전역)
+# 이 목록에 해당하는 상품은 카테고리 크롤링 시 수집하지 않음
+# ══════════════════════════════════════════════════════
+NON_LEICA_BRANDS = [
+    # ── 일본 카메라 브랜드 ──
+    'nikon', 'canon', 'sony', 'fuji', 'fujifilm', 'olympus', 'panasonic',
+    'pentax', 'minolta', 'ricoh', 'konica', 'yashica', 'polaroid', 'argus',
+    # ── 니콘 렌즈 ──
+    'nikkor', 'w-nikkor', 'nikon s',
+    # ── 독일/유럽 비라이카 ──
+    'contax', 'contarex', 'rollei', 'rolleiflex', 'rolleicord',
+    'rodenstock', 'schneider',
+    # ── 보이그랜더 / 코시나 계열 ──
+    'voigtlander', 'cosina', 'nokton', 'ultron', 'color-skopar',
+    # ── 자이스 계열 ──
+    'zeiss', 'biogon', 'planar', 'distagon', 'sonnar', 'hologon c',
+    # ── 라이카 마운트 써드파티 ──
+    'sigma', 'ttartisan', '7artisans', '7 artisans',
+    'thypoch', 'leeworks',
+    'meike', 'kamlan', 'pergear',
+    'laowa', 'venus optics',
+    'mitakon', 'sun optics', 'funleader', 'handevision',
+    'kolari', 'mandler',
+    'light lens lab',  # "light lens"는 너무 광범위하여 "light lens lab"만 제외
+    # ── 중국 필름 카메라 ──
+    'seagull', '갈매기',
+    # ── 기타 ──
+    'hasselblad', 'mamiya', 'bronica', 'graflex',
+]
+
+# ══════════════════════════════════════════════════════
 # 유틸 함수
 # ══════════════════════════════════════════════════════
 def detect_mount(name):
@@ -373,6 +404,24 @@ def detect_category(name, price_str=""):
 
     return "Lens"
 
+def detect_brand(name):
+    """상품명에서 브랜드 자동 분류 (전역 NON_LEICA_BRANDS 기준)"""
+    n = name.lower()
+    for brand in NON_LEICA_BRANDS:
+        if brand in n:
+            return "3rd Party"
+    leica_kw = [
+        'leica', 'summicron', 'summilux', 'noctilux', 'elmarit',
+        'summaron', 'elmar', 'summar', 'summarit', 'summarex',
+        'hektor', 'hologon', 'telyt', 'super-angulon', 'angulon',
+        'minilux', 'leitz', 'wetzlar', 'ernst leitz',
+        'd-lux', 'v-lux', 'c-lux',
+    ]
+    for kw in leica_kw:
+        if kw in n:
+            return "Leica"
+    return "Other"
+
 # 부속품 제외 키워드
 ACCESSORY_KEYWORDS = [
     "케이스", "스트랩", "필터", "캡", "설명서", "충전기", "배터리",
@@ -418,9 +467,7 @@ def passes_barnack_filter(name):
         return True
     return True
 
-# 비라이카 브랜드 키워드 (바디 검색 시 제외)
-NON_LEICA = ['nikon', 'canon', 'sony', 'fuji', 'olympus', 'panasonic', 'hasselblad',
-             'pentax', 'minolta', 'contax', '니콘', '소니', '캐논', '후지']
+# 비라이카 브랜드 키워드 (바디 검색 시 제외) → NON_LEICA_BRANDS 전역 상수 사용
 
 def passes_filter(name, must_contain, item_meta=None):
     """향상된 필터 - 카테고리별 상호 배타적 필터링"""
@@ -429,7 +476,7 @@ def passes_filter(name, must_contain, item_meta=None):
     # 바디 검색 시 비라이카 브랜드 제외
     item_cat = item_meta.get("category", "") if item_meta else ""
     if item_cat == "Body":
-        if any(kw in name_lower for kw in NON_LEICA):
+        if any(kw in name_lower for kw in NON_LEICA_BRANDS):
             return False
 
     # Barnack 바디 전용 필터
@@ -584,16 +631,7 @@ def crawl_category(page, site):
                     if not name:
                         continue
 
-                    # 비라이카 브랜드 제외
-                    NON_LEICA_BRANDS = [
-                        'sigma', 'voigtlander', 'zeiss', 'cosina', 'canon', 'nikon',
-                        'sony', 'fuji', 'olympus', 'panasonic', 'thypoch', 'leeworks',
-                        'ttartisan', '7artisans', 'meike', 'kamlan', 'pergear',
-                        'contax', 'contarex', 'nokton', 'nikkor', 'summicron-c',
-                        'w-nikkor', 'biogon', 'planar', 'distagon',
-                        'light lens', 'light lens lab', 'kolari', 'handevision',
-                        'laowa', 'venus', 'mitakon', 'sun optics', 'funleader',
-                    ]
+                    # 비라이카 브랜드 제외 (전역 NON_LEICA_BRANDS 사용)
                     name_lower = name.lower()
                     if any(b in name_lower for b in NON_LEICA_BRANDS):
                         continue
@@ -663,6 +701,7 @@ def crawl_category(page, site):
                     mount = detect_mount(name)
                     label = auto_label(name)
 
+                    brand = detect_brand(name)
                     results.append({
                         "site": site_name,
                         "label": label,
@@ -678,6 +717,7 @@ def crawl_category(page, site):
                         "category": cat,
                         "system": sys,
                         "mount": mount,
+                        "brand": brand,
                     })
                     found_any = True
                     status = "🚫품절" if is_soldout else ("📋예약중" if is_reserved else "✔ ")
@@ -1342,6 +1382,9 @@ def crawl_all():
             r['system'] = 'Accessory'
             r['label'] = ''  # Accessory는 label 제거 (평균가 왜곡 방지)
         r['mount'] = detect_mount(r['상품명'])
+        # brand 필드: 없으면 상품명에서 자동 감지
+        if not r.get('brand'):
+            r['brand'] = detect_brand(r['상품명'])
         # crawl_time은 항상 최신으로
         r['crawl_time'] = crawl_time
         # first_seen: 기존 데이터면 보존, 신규면 현재 시간
