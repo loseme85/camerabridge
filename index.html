@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_41.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_42.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -493,7 +493,7 @@ function doHeroSearch(){
   history.pushState({query:q},'','?q='+encodeURIComponent(q));
   renderResults(q);
 }
-function doSearch(){renderResults(document.getElementById('search-input').value.trim());}
+function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;const q=normalizeQuery(raw);document.getElementById('search-input').value=q;renderResults(q);}
 function clearSearch(){document.getElementById('search-input').value='';showHero();}
 function showHero(){
   document.getElementById('hero-section').style.display='flex';
@@ -599,12 +599,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   const params=new URLSearchParams(window.location.search);
   const q=params.get('q');
   if(q){
-    document.getElementById('hero-input').value=q;
-    document.getElementById('search-input').value=q;
+    const nq=normalizeQuery(q);
+    document.getElementById('hero-input').value=nq;
+    document.getElementById('search-input').value=nq;
     document.getElementById('header-search-wrap').style.display='flex';
     document.getElementById('hero-section').style.display='none';
     document.getElementById('results-section').style.display='block';
-    loadData().then(()=>renderResults(q));
+    loadData().then(()=>renderResults(nq));
   }
 });
 </script>
