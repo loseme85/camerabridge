@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///Users/changdaepark/Downloads/qa_5.html -->
+<!-- saved from url=(0046)file:///Users/changdaepark/Downloads/qa_6.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -152,7 +152,14 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
           <span class="debug-title">🔍 Excluded Items (왜 안나왔나?)</span>
           <span id="debug-toggle-icon" style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">▼ 펼치기</span>
         </div>
-        <div class="debug-body" id="debug-body"></div>
+        <div class="debug-body" id="debug-body">
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;">
+            <input type="text" id="debug-search" placeholder="상품명 검색..." oninput="renderDebug()" style="flex:1;border:1px solid var(--border2);border-radius:2px;padding:6px 10px;font-family:&#39;Space Mono&#39;,monospace;font-size:10px;outline:none;background:var(--surface2);">
+            <span id="debug-count" style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--muted);flex-shrink:0;"></span>
+          </div>
+          <div id="debug-list"></div>
+          <div id="debug-pagination" style="display:flex;gap:4px;justify-content:center;padding:10px;flex-wrap:wrap;"></div>
+        </div>
       </div>
     </div>
 
@@ -162,7 +169,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_5.html#" target="_blank">→ 사진집에서 검색</a>
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_6.html#" target="_blank">→ 사진집에서 검색</a>
           <div class="link-count" id="count-sazin">—</div>
         </div>
       </div>
@@ -170,7 +177,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_5.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_6.html#" target="_blank">→ 장씨카메라에서 검색</a>
           <div class="link-count" id="count-jang">—</div>
         </div>
       </div>
@@ -178,7 +185,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_5.html#" target="_blank">→ 충무로에서 검색</a>
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_6.html#" target="_blank">→ 충무로에서 검색</a>
           <div class="link-count" id="count-chung">—</div>
         </div>
       </div>
@@ -186,7 +193,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇬🇧</span><span class="link-site">Ffordes</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_5.html#" target="_blank">→ Ffordes에서 검색</a>
+          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_6.html#" target="_blank">→ Ffordes에서 검색</a>
           <div class="link-count" id="count-ffordes">—</div>
         </div>
       </div>
@@ -516,14 +523,12 @@ function runQA(){
   const debugPanel=document.getElementById('debug-panel');
   if(excluded.length>0){
     debugPanel.style.display='block';
-    const debugBody=document.getElementById('debug-body');
-    debugBody.innerHTML=excluded.slice(0,30).map(r=>{
-      const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
-      return `<div class="debug-item">
-        <span class="debug-name" title="${name}"><a href="${r['링크']}" target="_blank" style="color:inherit;text-decoration:none;">${name.slice(0,45)}</a></span>
-        <span class="debug-fail">${r._reason}</span>
-      </div>`;
-    }).join('')+(excluded.length>30?`<div style="text-align:center;padding:8px;font-family:Space Mono,monospace;font-size:9px;color:var(--muted);">+${excluded.length-30}개 더...</div>`:'');
+    window._excluded=excluded;
+    window._debugPage=1;
+    // 자동으로 펼치기
+    document.getElementById('debug-body').classList.add('open');
+    document.getElementById('debug-toggle-icon').textContent='▲ 접기';
+    renderDebug();
   } else {
     debugPanel.style.display='none';
   }
@@ -539,6 +544,47 @@ function toggleDebug(){
   body.classList.toggle('open');
   icon.textContent=isOpen?'▼ 펼치기':'▲ 접기';
 }
+
+const DEBUG_PER_PAGE=50;
+function renderDebug(){
+  const excluded=window._excluded||[];
+  const search=(document.getElementById('debug-search')||{value:''}).value.toLowerCase().trim();
+  const filtered=search
+    ? excluded.filter(r=>(r['상품명']||'').toLowerCase().includes(search)||r._reason.toLowerCase().includes(search))
+    : excluded;
+
+  const totalPages=Math.ceil(filtered.length/DEBUG_PER_PAGE);
+  if(!window._debugPage||window._debugPage>totalPages) window._debugPage=1;
+  const page=window._debugPage;
+  const start=(page-1)*DEBUG_PER_PAGE;
+  const pageItems=filtered.slice(start,start+DEBUG_PER_PAGE);
+
+  document.getElementById('debug-count').textContent=filtered.length+'개 제외됨';
+
+  document.getElementById('debug-list').innerHTML=pageItems.map(r=>{
+    const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+    return `<div class="debug-item">
+      <span class="debug-name" title="${name}">
+        <a href="${r['링크']}" target="_blank" style="color:inherit;text-decoration:none;">${name.slice(0,50)}</a>
+      </span>
+      <span class="debug-fail">${r._reason}</span>
+    </div>`;
+  }).join('');
+
+  // 페이지네이션
+  const pag=document.getElementById('debug-pagination');
+  if(totalPages<=1){pag.innerHTML='';return;}
+  let html='';
+  if(page>1) html+=`<button onclick="goDebugPage(${page-1})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">←</button>`;
+  const s=Math.max(1,page-3),e=Math.min(totalPages,page+3);
+  if(s>1) html+=`<button onclick="goDebugPage(1)" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">1</button><span style="font-size:9px;color:var(--muted);padding:0 4px;">...</span>`;
+  for(let i=s;i<=e;i++) html+=`<button onclick="goDebugPage(${i})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:${i===page?'var(--accent)':'transparent'};color:${i===page?'#fff':'var(--dim)'};cursor:pointer;border-radius:2px;">${i}</button>`;
+  if(e<totalPages) html+=`<span style="font-size:9px;color:var(--muted);padding:0 4px;">...</span><button onclick="goDebugPage(${totalPages})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">${totalPages}</button>`;
+  if(page<totalPages) html+=`<button onclick="goDebugPage(${page+1})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">→</button>`;
+  html+=`<span style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-left:4px;">${page}/${totalPages}</span>`;
+  pag.innerHTML=html;
+}
+function goDebugPage(n){window._debugPage=n;renderDebug();}
 
 // 빠른 테스트 케이스
 const TEST_CASES=[
