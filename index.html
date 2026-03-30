@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_44.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_45.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -523,7 +523,7 @@ function timeAgo(dt){
 }
 function isNew(dt){if(!dt)return false;return(new Date()-new Date(dt))<86400000;}
 function renderResults(query){
-  if(query===undefined)query=document.getElementById('search-input').value.trim();
+  if(query===undefined)query=normalizeQuery(document.getElementById('search-input').value.trim());
   document.getElementById('query-display').textContent=query;
   const site=document.getElementById('site-select').value;
   const cur=document.getElementById('currency-select').value;
