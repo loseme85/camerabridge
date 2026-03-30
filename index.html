@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_35.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_36.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -439,8 +439,22 @@ function matchesQuery(item, query){
     if(GEN_SYNONYMS[t]){
       return GEN_SYNONYMS[t].some(s=>name.includes(s));
     }
+    // 조리개값 소수점 토큰 (예: "2.0", "1.4", "2.8") → 다양한 표기 매칭
+    // f2, f/2, f2.0, f/2.0, 1:2, 1:2.0 등
+    const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
+    if(apertureMatch){
+      const full=apertureMatch[0];          // "2.0"
+      const int=apertureMatch[1];           // "2"
+      const dec=apertureMatch[2];           // "0"
+      const isZeroDec=(dec==='0');          // 2.0, 1.0 등 .0으로 끝나는 경우
+      // 매칭 패턴: f2.0 / f/2.0 / 1:2.0 / f2 / f/2 / 1:2
+      const patterns=[
+        `f${full}`,`f/${full}`,`f ${full}`,`1:${full}`,`f${int}/${dec}`,
+        ...(isZeroDec?[`f${int}`,`f/${int}`,`f ${int}`,`1:${int}`]:[])
+      ];
+      return patterns.some(p=>name.includes(p));
+    }
     // 초점거리 숫자 토큰 (예: "50", "35", "75") → 단어 경계 정밀 매칭
-    // "50mm", "50 mm", "50/", " 50 " 등은 매칭하되 "150", "350" 등은 제외
     if(/^\d+$/.test(t)){
       const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
       return re.test(name);
