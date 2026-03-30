@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_38.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_39.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -267,6 +267,10 @@ const SLANG_MAP = {
   'wate':'tri elmar 16','mate':'tri elmar 28',
   // Elmar
   '50elmar':'elmar 50','elmar50':'elmar 50',
+  // Summilux AA (35mm 2매 Aspherical)
+  '35aa':'summilux 35 aspherical','35 aa':'summilux 35 aspherical',
+  'summilux aa':'summilux 35 aspherical','35lux aa':'summilux 35 aspherical',
+  '두매':'summilux 35 aspherical','2매':'summilux 35 aspherical',
 };
 
 // 토큰 단위 슬랭 변환 (조합 검색용: "nocti 35mm" → "noctilux 35mm")
@@ -274,7 +278,7 @@ const TOKEN_MAP = {
   // Noctilux
   'nocti':'noctilux','50nocti':'noctilux',
   // Noctilux 세대 연관어 → GEN_SYNONYMS 키로 매핑
-  '1st':'nocti1st','오리지널':'nocti1st','original':'nocti1st','aspherical':'nocti1st',
+  '1st':'nocti1st','오리지널':'nocti1st','original':'nocti1st',
   'e58':'e58','e60':'e60',
   'v1':'e58',          // v1 = 2세대 E58
   'v2':'e60','v3':'e60', // v2/v3 = 3세대 E60
@@ -442,21 +446,21 @@ function matchesQuery(item, query){
     // 조리개값 소수점 토큰 (예: "2.0", "1.4", "2.8") → 다양한 표기 매칭
     const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
     if(apertureMatch){
-      const full=apertureMatch[0];          // "2.0"
-      const int=apertureMatch[1];           // "2"
-      const dec=apertureMatch[2];           // "0"
-      const isZeroDec=(dec==='0');          // 2.0, 1.0 등 .0으로 끝나는 경우
+      const full=apertureMatch[0];          // "1.4"
+      const int=apertureMatch[1];           // "1"
+      const dec=apertureMatch[2];           // "4"
+      const isZeroDec=(dec==='0');
       // 소수점 포함 패턴 (정확 매칭)
-      const exactPatterns=[`f${full}`,`f/${full}`,`f ${full}`,`1:${full}`,`f${int}/${dec}`];
+      const exactPatterns=[`f${full}`,`f/${full}`,`f ${full}`,`1:${full}`,`f${int}/${dec}`,`/${full}`];
       if(exactPatterns.some(p=>name.includes(p))) return true;
-      // 정수 패턴 (.0인 경우만) → 뒤에 숫자/점이 없어야 함 (f2 ≠ f2.8)
+      // 정수 패턴 (.0인 경우만) → 뒤에 숫자/점이 없어야 함
       if(isZeroDec){
         const intPatterns=[`f${int}`,`f/${int}`,`f ${int}`,`1:${int}`];
         return intPatterns.some(p=>{
           const idx=name.indexOf(p);
           if(idx===-1) return false;
           const after=name[idx+p.length];
-          return !after||!/[\d.]/.test(after); // 뒤에 숫자나 점이 없어야 함
+          return !after||!/[\d.]/.test(after);
         });
       }
       return false;
