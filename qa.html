@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0047)file:///Users/changdaepark/Downloads/qa_11.html -->
+<!-- saved from url=(0047)file:///Users/changdaepark/Downloads/qa_12.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -169,7 +169,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_11.html#" target="_blank">→ 사진집에서 검색</a>
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_12.html#" target="_blank">→ 사진집에서 검색</a>
           <div class="link-count" id="count-sazin">—</div>
         </div>
       </div>
@@ -177,7 +177,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_11.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_12.html#" target="_blank">→ 장씨카메라에서 검색</a>
           <div class="link-count" id="count-jang">—</div>
         </div>
       </div>
@@ -185,7 +185,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_11.html#" target="_blank">→ 충무로에서 검색</a>
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_12.html#" target="_blank">→ 충무로에서 검색</a>
           <div class="link-count" id="count-chung">—</div>
         </div>
       </div>
@@ -193,7 +193,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇬🇧</span><span class="link-site">Ffordes</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_11.html#" target="_blank">→ Ffordes에서 검색</a>
+          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_12.html#" target="_blank">→ Ffordes에서 검색</a>
           <div class="link-count" id="count-ffordes">—</div>
         </div>
       </div>
@@ -518,11 +518,17 @@ function runQA(){
       const mount=r['mount']&&r['mount']!=='Unknown'?`<span class="mbadge mbadge-mount">${r['mount']}</span>`:'';
       const brand=r.brand==='3rd Party'?`<span class="mbadge mbadge-3rd">3RD</span>`:'';
       const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+      // 매칭 이유 분석
+      const matchReasons=getMatchReasons(r, q);
+      const reasonBadges=matchReasons.map(reason=>
+        `<span class="mbadge" style="background:rgba(45,122,45,0.1);color:#2d7a2d;border:1px solid rgba(45,122,45,0.25);">✓ ${reason}</span>`
+      ).join('');
       return `<div class="result-row${r['품절']?' soldout':''}">
         <div>${imgEl}</div>
         <div>
           <div class="r-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}</a></div>
           <div class="r-meta">${mount}${cond}${sold}${brand}</div>
+          <div class="r-meta" style="margin-top:3px;">${reasonBadges}</div>
         </div>
         <div class="r-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
         <div class="r-price">${r['가격']||'—'}</div>
@@ -548,6 +554,62 @@ function runQA(){
 
   document.getElementById('summary').style.display='grid';
   document.getElementById('qa-grid').style.display='grid';
+}
+
+function getMatchReasons(item, query){
+  const q=query.toLowerCase();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');
+  const label=(item['label']||'').toLowerCase();
+  const reasons=[];
+
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
+  for(const t of tokens){
+    const gen=GEN_MAP[t];
+    if(gen){
+      const synonyms=GEN_SYNONYMS[gen]||[gen];
+      const matched=synonyms.find(s=>name.includes(s));
+      if(matched) reasons.push(`세대: ${matched}`);
+      continue;
+    }
+    if(GEN_SYNONYMS[t]){
+      const matched=GEN_SYNONYMS[t].find(s=>name.includes(s));
+      if(matched) reasons.push(`${t}→${matched}`);
+      continue;
+    }
+    // 조리개값
+    const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
+    if(apertureMatch){
+      const full=apertureMatch[0];
+      const int=apertureMatch[1];
+      const dec=apertureMatch[2];
+      const isZeroDec=(dec==='0');
+      const patterns=[`f${full}`,`f/${full}`,`f ${full}`,`1:${full}`,`f${int}/${dec}`,...(isZeroDec?[`f${int}`,`f/${int}`,`1:${int}`]:[])];
+      const matched=patterns.find(p=>name.includes(p));
+      if(matched) reasons.push(`조리개: ${matched}`);
+      continue;
+    }
+    // 숫자 (초점거리)
+    if(/^\d+$/.test(t)){
+      const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
+      if(re.test(name)) reasons.push(`${t}mm`);
+      continue;
+    }
+    // mm 형태
+    const mmMatch=t.match(/^(\d+)mm$/);
+    if(mmMatch){
+      reasons.push(`${mmMatch[1]}mm`);
+      continue;
+    }
+    // 일반 키워드
+    if(name.includes(t)) reasons.push(t);
+    else if(label.includes(t)) reasons.push(`label:${t}`);
+  }
+  // 마운트
+  const qMount=detectQueryMount(q);
+  if(qMount&&item.mount===qMount) reasons.push(`${qMount}마운트`);
+
+  return reasons;
 }
 
 function toggleDebug(){
