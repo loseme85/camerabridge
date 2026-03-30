@@ -182,6 +182,7 @@ THIRD_PARTY_BRANDS = [
     'laowa', 'mitakon', 'sun optics', 'funleader', 'handevision',
     'kolari', 'mandler',
     'light lens lab',
+    'polar',  # Polar M마운트 렌즈 (Polar M 35mm 등)
 ]
 
 # ══════════════════════════════════════════════════════
