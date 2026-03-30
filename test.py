@@ -773,14 +773,18 @@ def auto_label(name):
         mm = mm_m.group(1) if mm_m else ""
         # 35mm 세분화
         if mm == "35":
-            if "aspherical" in n and "asph" not in n: return "35mm Summilux AA"
+            # ── Rule A: ASPHERICAL 풀스펠링 → AA (두매, 컬렉터 아이템) ──
+            # "aspherical"이 풀스펠링으로 있으면 AA (ASPH. 약어와 구분)
+            if "aspherical" in n: return "35mm Summilux AA"
+            # ── Rule B: 2매/두매/Double/AA 키워드 → AA ──
+            if any(kw in n for kw in ["2매","2 매","두매","double"," aa ","(aa)"]): return "35mm Summilux AA"
+            # ── 현행 ASPH (약어) ──
             if "fle ii" in n or "fle2" in n: return "35mm Summilux ASPH FLE II"
             if "fle" in n: return "35mm Summilux ASPH FLE"
             if "asph" in n: return "35mm Summilux ASPH"
             if "pre-asph" in n: return "35mm Summilux Pre-ASPH"
             if "steel rim" in n or "steel" in n: return "35mm Summilux Steel Rim"
             if "titan" in n: return "35mm Summilux Titan"
-            if "2매" in n or "2 매" in n: return "35mm Summilux AA"
             if "1세대" in n or "1st" in n: return "35mm Summilux Steel Rim"
             if "2세대" in n or "2nd" in n or "pre" in n: return "35mm Summilux Pre-ASPH"
             if "3세대" in n or "3rd" in n: return "35mm Summilux Pre-ASPH"
