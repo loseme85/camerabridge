@@ -1528,4 +1528,8 @@ def push_to_github():
 
 if __name__ == "__main__":
     crawl_all()
-    push_to_github()
+    # GitHub Actions 환경에서는 워크플로우가 push 담당
+    if os.environ.get('GITHUB_ACTIONS'):
+        print("ℹ️  GitHub Actions 환경 → 워크플로우에서 push 처리")
+    else:
+        push_to_github()
