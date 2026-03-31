@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0047)file:///Users/changdaepark/Downloads/qa_23.html -->
+<!-- saved from url=(0047)file:///Users/changdaepark/Downloads/qa_24.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,7 +115,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
   <div class="search-box">
     <div class="search-title">// Search Query Test</div>
     <div class="search-row">
-      <input class="search-input" id="qa-input" type="text" placeholder="검색어 입력... (예: summicron 35, leica r 50mm, 50lux)">
+      <input class="search-input" id="qa-input" type="text" placeholder="검색어 입력... (예: summicron 35, leica r 50mm, 50lux)" oninput="debounceQA()">
       <button class="search-btn" onclick="runQA()">▶ RUN QA</button>
     </div>
     <div class="normalized" id="normalized-display">정규화: <span id="normalized-val"></span></div>
@@ -169,7 +169,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_23.html#" target="_blank">→ 사진집에서 검색</a>
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_24.html#" target="_blank">→ 사진집에서 검색</a>
           <div class="link-count" id="count-sazin">—</div>
         </div>
       </div>
@@ -177,7 +177,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_23.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_24.html#" target="_blank">→ 장씨카메라에서 검색</a>
           <div class="link-count" id="count-jang">—</div>
         </div>
       </div>
@@ -185,7 +185,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_23.html#" target="_blank">→ 충무로에서 검색</a>
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_24.html#" target="_blank">→ 충무로에서 검색</a>
           <div class="link-count" id="count-chung">—</div>
         </div>
       </div>
@@ -722,6 +722,14 @@ function quickTest(q){
 document.getElementById('qa-input').addEventListener('keydown',e=>{
   if(e.key==='Enter') runQA();
 });
+
+let _debounceTimer=null;
+function debounceQA(){
+  clearTimeout(_debounceTimer);
+  const val=document.getElementById('qa-input').value.trim();
+  if(!val) return;
+  _debounceTimer=setTimeout(()=>runQA(), 300);
+}
 
 // 초기 로드
 loadData();
