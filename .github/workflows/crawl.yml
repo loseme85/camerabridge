@@ -1,0 +1,52 @@
+name: Camera Bridge Auto Crawl
+
+on:
+  schedule:
+    # 매일 오전 9시, 오후 3시, 오후 9시 (UTC+9 기준)
+    # UTC로는 0시, 6시, 12시
+    - cron: '0 0 * * *'   # 오전 9시 KST
+    - cron: '0 6 * * *'   # 오후 3시 KST
+    - cron: '0 12 * * *'  # 오후 9시 KST
+  workflow_dispatch:  # 수동 실행 버튼
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60  # 최대 60분 (사이트 20개 대비)
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. Python 설치
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. 패키지 설치
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+          playwright install-deps chromium
+
+      # 4. 크롤러 실행
+      - name: Run crawler
+        run: python3 test.py --live
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 5. 결과 파일 커밋 & 푸시
+      - name: Commit and push results
+        run: |
+          git config user.name "Camera Bridge Bot"
+          git config user.email "bot@camerabridge.app"
+          git add results.json sold_items.json
+          git diff --staged --quiet || git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
