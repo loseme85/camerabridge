@@ -592,6 +592,7 @@ SITES = [
         "base": "https://j-camera.com",
         "categories": [
             "https://j-camera.com/product/list.html?cate_no=358",
+            "https://j-camera.com/product/list.html?cate_no=421",  # 악세사리
         ],
         "통화": "KRW",
     },
@@ -656,10 +657,8 @@ def crawl_category(page, site):
                     if any(b in name_lower for b in NON_LEICA_BRANDS):
                         continue
 
-                    # 악세사리 제외
+                    # 카테고리 분류 (악세사리도 수집하되 태깅만)
                     cat = detect_category(name)
-                    if cat == "Accessory":
-                        continue
 
                     # 링크
                     link_el = card.query_selector("a")

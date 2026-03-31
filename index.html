@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_46.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_47.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -318,10 +318,22 @@ const NEGATIVE_KEYWORDS = [
   'lens cap','body cap','filter only',
   'original hood','hood m ','hood e ','후드 단품',
 ];
+// 악세사리 전용 검색 키워드 - 이 키워드로 검색 시 악세사리도 포함
+const ACCESSORY_SEARCH_KEYWORDS = [
+  'leicavit','vit','lhsa','viewfinder','finder','brightline',
+  'voosm','iufoo','sbooi','viooh',  // 코드네임 파인더
+  'rapid winder','winder','motor',
+  'handgrip','grip','half case',
+  'goggle','magnifier','magnification',
+  'hood','후드',  // 후드는 단독 검색 시만
+];
 function isAccessory(item){
   if(item.category==='Accessory') return true;
   const name=(item['상품명']||'').toLowerCase();
   return NEGATIVE_KEYWORDS.some(k=>name.includes(k.toLowerCase()));
+}
+function isAccessorySearchQuery(q){
+  return ACCESSORY_SEARCH_KEYWORDS.some(k=>q.toLowerCase().includes(k));
 }
 // 세대별 동의어 목록
 const GEN_SYNONYMS = {
@@ -360,7 +372,7 @@ function detectQueryMount(q){
   return null;
 }
 function matchesQuery(item, query){
-  if(isAccessory(item)) return false;
+  if(isAccessory(item) && !isAccessorySearchQuery(query)) return false;
   const q=query.toLowerCase();
   const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
   const name=rawName.replace(/-/g,' ');  // 하이픈→공백 정규화로 tri-elmar=tri elmar
