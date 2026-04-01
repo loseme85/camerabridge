@@ -1339,6 +1339,126 @@ def write_status(pct, current_site, total_count, done_sites, eta=0):
         print(f"    ⚠️ status.json 쓰기 실패: {e}")
 
 
+def crawl_ffordes(page):
+    """Ffordes 크롤러 - Leica 카테고리 전체"""
+    results = []
+    base = "https://www.ffordes.com"
+
+    # 라이카 관련 카테고리 (렌즈/바디 중심)
+    categories = [
+        ("https://www.ffordes.com/c/194/leica-m", "M"),      # Leica M 렌즈
+        ("https://www.ffordes.com/c/192/leica-m", "M"),      # Leica M 바디
+        ("https://www.ffordes.com/c/202/leica-r", "R"),      # Leica R 렌즈
+        ("https://www.ffordes.com/c/199/leica-r", "R"),      # Leica R 바디
+        ("https://www.ffordes.com/c/211/leica-screw", "L"),  # Leica Screw 렌즈
+        ("https://www.ffordes.com/c/1080/leica-screw", "L"), # Leica Screw 바디
+        ("https://www.ffordes.com/c/189/leica", "M"),        # Leica 디지털
+        ("https://www.ffordes.com/c/1413/leica-sl", "SL"),   # Leica SL
+        ("https://www.ffordes.com/c/1433/l-mount", "SL"),    # L-Mount
+    ]
+
+    seen_links = set()
+
+    for cat_url, mount_hint in categories:
+        print(f"\n  📂 Ffordes: {cat_url}")
+        try:
+            page.goto(cat_url, wait_until="domcontentloaded", timeout=20_000)
+            page.wait_for_timeout(2000)
+        except Exception as e:
+            print(f"    ❌ 로드 실패: {e}")
+            continue
+
+        # 페이지네이션
+        page_num = 1
+        while True:
+            if page_num > 1:
+                try:
+                    page.goto(f"{cat_url}?p={page_num}", wait_until="domcontentloaded", timeout=15_000)
+                    page.wait_for_timeout(1500)
+                except:
+                    break
+
+            items = page.evaluate("""() => {
+                const results = [];
+                const cards = document.querySelectorAll('.product-list-item, .product-item, li.item, .product');
+                for (const card of cards) {
+                    const nameEl = card.querySelector('.product-name a, .name a, h2 a, h3 a, .title a');
+                    if (!nameEl) continue;
+                    const name = nameEl.innerText.trim();
+                    if (!name) continue;
+                    const href = nameEl.href || '';
+                    const priceEl = card.querySelector('.price, .product-price, [class*="price"]');
+                    const price = priceEl ? priceEl.innerText.trim().replace(/\\s+/g,' ') : '';
+                    const imgEl = card.querySelector('img');
+                    const img = imgEl ? (imgEl.src || imgEl.dataset.src || '') : '';
+                    const condEl = card.querySelector('.condition, [class*="condition"], .grade');
+                    const cond = condEl ? condEl.innerText.trim() : '';
+                    const soldEl = card.querySelector('.sold-out, [class*="sold"], .out-of-stock');
+                    const sold = !!soldEl || card.innerText.toLowerCase().includes('sold');
+                    results.push({name, href, price, img, cond, sold});
+                }
+                return results;
+            }""")
+
+            if not items:
+                print(f"    마지막 페이지 도달 (p{page_num})")
+                break
+
+            print(f"    └─ p{page_num}: {len(items)}개")
+            found_any = False
+
+            for item in items:
+                href = item.get('href', '')
+                if not href or href in seen_links:
+                    continue
+                seen_links.add(href)
+                found_any = True
+
+                name = item.get('name', '').strip()
+                price_raw = item.get('price', '')
+                # 가격 정리 (£1,234.00 → £1,234)
+                price = price_raw.replace('\n', ' ').strip()
+                # 첫 번째 가격만
+                import re as _re
+                pm = _re.search(r'£[\d,]+(?:\.\d+)?', price)
+                price = pm.group(0) if pm else price
+
+                is_sold = item.get('sold', False)
+                img = item.get('img', '')
+                cond = item.get('cond', '')
+
+                label = auto_label(name)
+                mount = detect_mount(name)
+                if mount == 'Unknown' and mount_hint:
+                    mount = mount_hint
+
+                status = "🚫sold" if is_sold else "✔ "
+                print(f"    {status} {name[:45]} | {price}")
+
+                results.append({
+                    "site": "Ffordes",
+                    "label": label,
+                    "상품명": name,
+                    "세대": "",
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "GBP",
+                    "이미지": img,
+                    "링크": href,
+                    "품절": is_sold,
+                    "예약중": False,
+                    "mount": mount,
+                    "brand": "Leica",
+                })
+
+            if not found_any or len(items) < 20:
+                break
+            page_num += 1
+
+    print(f"\n  ✅ Ffordes 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -1371,7 +1491,7 @@ def crawl_all():
 
     print(f"🚀 병렬 크롤링 시작 ({len(parallel_sites)}개 사이트 동시 처리)")
 
-    total_sites = len(parallel_sites)
+    total_sites = len(parallel_sites) + 1  # +1 for Ffordes
     done_sites = 0
 
     # 병렬 처리
@@ -1395,6 +1515,22 @@ def crawl_all():
         all_results.extend(results)
         done_sites += 1
         write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, 0)
+
+    # Ffordes 크롤링
+    print(f"\n🇬🇧 Ffordes 크롤링 시작")
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.set_extra_http_headers({"Accept-Language": "en-GB,en;q=0.9"})
+        try:
+            ffordes_results = crawl_ffordes(page)
+            all_results.extend(ffordes_results)
+        except Exception as e:
+            print(f"❌ Ffordes 오류: {e}")
+        finally:
+            browser.close()
+    done_sites += 1
+    write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
 
     # 전체 중복 제거
     seen = set()
