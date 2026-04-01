@@ -1364,39 +1364,40 @@ def crawl_ffordes(page):
         print(f"\n  📂 Ffordes: {cat_url}")
         try:
             page.goto(cat_url, wait_until="domcontentloaded", timeout=20_000)
-            page.wait_for_timeout(2000)
+            page.wait_for_selector('#sscProductArray article', timeout=10_000)
         except Exception as e:
             print(f"    ❌ 로드 실패: {e}")
             continue
 
-        # 페이지네이션
-        page_num = 1
-        while True:
+        total_pages = page.evaluate("()=>parseInt(document.getElementById('TotalPages')?.value||'1')")
+        print(f"    총 {total_pages}페이지")
+
+        for page_num in range(1, total_pages + 1):
             if page_num > 1:
                 try:
                     page.goto(f"{cat_url}?p={page_num}", wait_until="domcontentloaded", timeout=15_000)
-                    page.wait_for_timeout(1500)
+                    page.wait_for_selector('#sscProductArray article', timeout=8_000)
                 except:
                     break
 
             items = page.evaluate("""() => {
                 const results = [];
-                const cards = document.querySelectorAll('.product-list-item, .product-item, li.item, .product');
-                for (const card of cards) {
-                    const nameEl = card.querySelector('.product-name a, .name a, h2 a, h3 a, .title a');
-                    if (!nameEl) continue;
-                    const name = nameEl.innerText.trim();
+                const articles = document.querySelectorAll('#sscProductArray article');
+                for (const a of articles) {
+                    const name = a.querySelector('meta[itemprop="name"]')?.content?.trim() || '';
                     if (!name) continue;
-                    const href = nameEl.href || '';
-                    const priceEl = card.querySelector('.price, .product-price, [class*="price"]');
-                    const price = priceEl ? priceEl.innerText.trim().replace(/\\s+/g,' ') : '';
-                    const imgEl = card.querySelector('img');
-                    const img = imgEl ? (imgEl.src || imgEl.dataset.src || '') : '';
-                    const condEl = card.querySelector('.condition, [class*="condition"], .grade');
-                    const cond = condEl ? condEl.innerText.trim() : '';
-                    const soldEl = card.querySelector('.sold-out, [class*="sold"], .out-of-stock');
-                    const sold = !!soldEl || card.innerText.toLowerCase().includes('sold');
-                    results.push({name, href, price, img, cond, sold});
+                    const img = a.querySelector('meta[itemprop="image"]')?.content || '';
+                    const linkEl = a.querySelector('a[href*="/p/"]');
+                    const href = linkEl ? 'https://www.ffordes.com' + linkEl.getAttribute('href') : '';
+                    if (!href) continue;
+                    const priceEl = a.querySelector('.ourprice, [itemprop="price"], .price');
+                    const priceRaw = priceEl ? priceEl.innerText.trim() : '';
+                    const priceMatch = priceRaw.match(/£[\d,]+(?:\\.\\d+)?/);
+                    const price = priceMatch ? priceMatch[0] : priceRaw;
+                    const isUsed = a.classList.contains('Used');
+                    const isSold = a.querySelector('.soldout, .out-of-stock') !== null ||
+                                   a.innerText.toLowerCase().includes('sold out');
+                    results.push({name, href, img, price, isUsed, isSold});
                 }
                 return results;
             }""")
@@ -1416,17 +1417,10 @@ def crawl_ffordes(page):
                 found_any = True
 
                 name = item.get('name', '').strip()
-                price_raw = item.get('price', '')
-                # 가격 정리 (£1,234.00 → £1,234)
-                price = price_raw.replace('\n', ' ').strip()
-                # 첫 번째 가격만
-                import re as _re
-                pm = _re.search(r'£[\d,]+(?:\.\d+)?', price)
-                price = pm.group(0) if pm else price
-
-                is_sold = item.get('sold', False)
+                price = item.get('price', '')
+                is_sold = item.get('isSold', False)
+                is_used = item.get('isUsed', True)
                 img = item.get('img', '')
-                cond = item.get('cond', '')
 
                 label = auto_label(name)
                 mount = detect_mount(name)
@@ -1434,7 +1428,8 @@ def crawl_ffordes(page):
                     mount = mount_hint
 
                 status = "🚫sold" if is_sold else "✔ "
-                print(f"    {status} {name[:45]} | {price}")
+                cond = "Used" if is_used else "New"
+                print(f"    {status} {name[:45]} | {price} | {cond}")
 
                 results.append({
                     "site": "Ffordes",
@@ -1452,9 +1447,8 @@ def crawl_ffordes(page):
                     "brand": "Leica",
                 })
 
-            if not found_any or len(items) < 20:
+            if not found_any:
                 break
-            page_num += 1
 
     print(f"\n  ✅ Ffordes 완료: {len(results)}개")
     return results
