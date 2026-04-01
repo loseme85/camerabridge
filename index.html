@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_54.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_56.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -448,8 +448,8 @@ function matchesQuery(item, query){
       if(mount==='Unknown'){
         // 상품명에 M마운트 패턴이 있으면 제외
         const hasMPattern=(
-          /\bleica\s+m\b|\bm\s*\d+\/|\bsummicron-m\b|\bsummilux-m\b|\belmarit-m\b|\bnoctilux-m\b/i.test(rawName)||
-          /^\[?(중고|위탁)\]?\s*m\s*\d+/i.test(rawName)  // "[중고] M 50/2" 패턴
+          /\bleica\s+m\b|\bsummicron-m\b|\bsummilux-m\b|\belmarit-m\b|\bnoctilux-m\b/i.test(rawName)||
+          /\bm\s*\d+[\/\.]/i.test(rawName)  // "M 28/1.4", "M28/1.4" 패턴
         );
         if(hasMPattern) return false;
         // 상품명에 L 패턴이 있어야 통과
