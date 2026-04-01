@@ -1382,8 +1382,11 @@ def crawl_ffordes(page):
                 try:
                     next_url = f"{cat_url}?p={page_num}&q={cat_id}"
                     page.goto(next_url, wait_until="domcontentloaded", timeout=15_000)
+                    # AJAX 로딩 대기
+                    page.wait_for_timeout(1500)
                     page.wait_for_selector('#sscProductArray article', timeout=8_000)
-                except:
+                except Exception as e:
+                    print(f"    ⚠️ p{page_num} 이동 실패: {e}")
                     break
 
             items = page.evaluate("""() => {
