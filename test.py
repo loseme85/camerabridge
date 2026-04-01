@@ -1369,13 +1369,19 @@ def crawl_ffordes(page):
             print(f"    ❌ 로드 실패: {e}")
             continue
 
+        # 카테고리 ID 추출 (URL에서 숫자 부분)
+        import re as _re
+        cat_id = _re.search(r'/c/(\d+)/', cat_url)
+        cat_id = cat_id.group(1) if cat_id else ''
+
         total_pages = page.evaluate("()=>parseInt(document.getElementById('TotalPages')?.value||'1')")
         print(f"    총 {total_pages}페이지")
 
         for page_num in range(1, total_pages + 1):
             if page_num > 1:
                 try:
-                    page.goto(f"{cat_url}?p={page_num}", wait_until="domcontentloaded", timeout=15_000)
+                    next_url = f"{cat_url}?p={page_num}&q={cat_id}"
+                    page.goto(next_url, wait_until="domcontentloaded", timeout=15_000)
                     page.wait_for_selector('#sscProductArray article', timeout=8_000)
                 except:
                     break
