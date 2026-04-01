@@ -10,10 +10,11 @@ import os
 parser = argparse.ArgumentParser(description='Camera Bridge Crawler')
 parser.add_argument('--mock', action='store_true', help='로컬 HTML 파일로 테스트')
 parser.add_argument('--live', action='store_true', help='실제 사이트 크롤링 (기본)')
-parser.add_argument('--site', type=str, help='특정 사이트만 크롤링 (예: 사진집)')
+parser.add_argument('--site', type=str, help='특정 사이트만 크롤링 (예: 사진집, Ffordes)')
 args, _ = parser.parse_known_args()
 MOCK_MODE = args.mock
 SITE_FILTER = args.site
+FFORDES_ONLY = SITE_FILTER and 'ffordes' in SITE_FILTER.lower()
 
 # ── User-Agent 풀 ──
 USER_AGENTS = [
@@ -1483,11 +1484,19 @@ def crawl_all():
     # 억불카메라(godo)는 별도 순차 처리 (headless=False 필요)
     # 특정 사이트만 크롤링 (--site 옵션)
     active_sites = SITES
-    if SITE_FILTER:
+    if FFORDES_ONLY:
+        # Ffordes만 실행
+        parallel_sites = []
+        godo_sites = []
+        print(f"🎯 Ffordes 전용 모드")
+    elif SITE_FILTER:
         active_sites = [s for s in SITES if SITE_FILTER in s["name"]]
         print(f"🎯 사이트 필터: {SITE_FILTER} ({len(active_sites)}개)")
-    parallel_sites = active_sites
-    godo_sites = []
+        parallel_sites = active_sites
+        godo_sites = []
+    else:
+        parallel_sites = active_sites
+        godo_sites = []
 
     print(f"🚀 병렬 크롤링 시작 ({len(parallel_sites)}개 사이트 동시 처리)")
 
@@ -1495,19 +1504,20 @@ def crawl_all():
     done_sites = 0
 
     # 병렬 처리
-    with ThreadPoolExecutor(max_workers=min(len(parallel_sites), 4)) as executor:
-        futures = {executor.submit(crawl_site, site): site for site in parallel_sites}
-        for future in as_completed(futures):
-            site = futures[future]
-            try:
-                results = future.result()
-                all_results.extend(results)
-            except Exception as e:
-                print(f"❌ {site['name']} 오류: {e}")
-            done_sites += 1
-            elapsed = time.time() - start_time
-            eta = int(elapsed / done_sites * (total_sites - done_sites))
-            write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, eta)
+    if parallel_sites:
+        with ThreadPoolExecutor(max_workers=min(len(parallel_sites), 4)) as executor:
+            futures = {executor.submit(crawl_site, site): site for site in parallel_sites}
+            for future in as_completed(futures):
+                site = futures[future]
+                try:
+                    results = future.result()
+                    all_results.extend(results)
+                except Exception as e:
+                    print(f"❌ {site['name']} 오류: {e}")
+                done_sites += 1
+                elapsed = time.time() - start_time
+                eta = int(elapsed / done_sites * (total_sites - done_sites)) if done_sites else 0
+                write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, eta)
 
     # 억불카메라 순차 처리
     for site in godo_sites:
