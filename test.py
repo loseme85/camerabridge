@@ -213,22 +213,36 @@ def detect_mount(name):
     if 'L-MOUNT' in n:
         return "SL"
 
-    # LTM/M39 - 이중 마운트 (M과 LTM 양쪽)
-    # Summar/Summarit (구형, f1.5/f2.0) → LTM
-    # SUMMARIT-M → M-mount (별도 처리)
-    ltm_kw = ['LTM','L39','M39','SCREW','나사',
-               ' L 50/',' L 35/',' L 28/',' L 21/',' L 90/',' L 135/',
-               ' L50/',' L35/',' L28/',' L90/',
-               'LEICA I ','LEICA IIF','LEICA IF',
-               'LEICA IIA','LEICA IIB','LEICA IIC',
-               'LEICA IIIA','LEICA IIIB','LEICA IIIC','LEICA IIIF','LEICA IIIG',
-               '3.5CM','7.3CM','9CM ','13.5CM',
-               'LEITZ WETZLAR','ERNST LEITZ']
-    # Summar/Summarit (구형 나사마운트) - SUMMARIT-M 제외
+    # Leica L 마운트 (나사마운트 렌즈/바디)
+    # LTM 단독 (어댑터만) vs 렌즈/바디와 함께 있는 경우 구분
+    LENS_BODY_KW = [
+        'SUMMICRON','SUMMILUX','NOCTILUX','ELMARIT','ELMAR','SUMMAR',
+        'HEKTOR','XENON','SUMMAREX','TELYT','ANGULON','HOLOGON',
+        'LEICA I ','LEICA II','LEICA III','LEICA IF','LEICA IIF',
+        'LEITZ WETZLAR','ERNST LEITZ',
+        '3.5CM','7.3CM','9CM ','13.5CM',
+    ]
+    l_kw = ['L39','M39','SCREW','나사',
+            ' L 50/',' L 35/',' L 28/',' L 21/',' L 90/',' L 135/',
+            ' L50/',' L35/',' L28/',' L90/']
+
+    # LTM 키워드가 있을 때: 렌즈/바디 키워드도 있으면 L마운트, 없으면 어댑터(Unknown)
+    has_ltm = 'LTM' in n
+    has_lens_body = any(x in n for x in LENS_BODY_KW)
+    has_l_kw = any(x in n for x in l_kw)
+
+    if has_ltm and not has_lens_body:
+        return "Unknown"  # LTM 단독 어댑터 → detect_category에서 Accessory로
+
+    if has_ltm and has_lens_body:
+        return "L"  # LTM + 렌즈/바디 → L마운트
+
+    # Summar/Summarit 구형 나사마운트 - SUMMARIT-M 제외
     if 'SUMMAR' in n and 'SUMMARIT-M' not in n and 'SUMMARON' not in n:
-        return "L39"
-    if any(x in n for x in ltm_kw):
-        return "L39"
+        return "L"
+
+    if has_l_kw:
+        return "L"
 
     # M-mount (확장)
     if any(x in n for x in [
