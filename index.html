@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_51.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_52.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -417,10 +417,8 @@ function matchesQuery(item, query){
   const qMount=detectQueryMount(q);
   if(qMount){
     if(mount&&mount!=='Unknown'){
-      // L마운트 검색 시 L 또는 L39 태깅 모두 포함
+      // L마운트 검색 시 L 또는 L39 태깅 모두 포함 (기존 데이터 호환)
       if(qMount==='L'&&(mount==='L'||mount==='L39')){}
-      // M 검색 시 L(나사마운트)도 보임 (어댑터로 M바디에 사용)
-      else if(qMount==='M'&&(mount==='L'||mount==='L39')){}
       else if(mount!==qMount) return false;
     }
     // R 필터: mount가 Unknown이면 상품명에서 R 패턴 직접 확인
