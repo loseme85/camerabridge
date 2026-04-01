@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_30.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_31.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -228,7 +228,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">23:07:59</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">23:07:59</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">23:07:59</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">16:41:33</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">16:41:33</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">16:41:33</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
   <!-- Unknown Mount 섹션 -->
@@ -350,15 +350,115 @@ async function loadData(){
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
 function updateNewItems(){
-  const VIP=['noctilux','nocti','summilux','50mm','m6','m10','m11'];
-  const lastCrawl=getLastCrawlTime();const items=allData.filter(r=>{const fs=r.first_seen;return fs&&lastCrawl&&fs.slice(0,16)===lastCrawl.slice(0,16);});
-  const sec=document.getElementById('new-items-section');
-  if(!items.length){sec.style.display='none';return;}
-  sec.style.display='block';
-  items.sort((a,b)=>{const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));return bv-av;});
+  const VIP=['noctilux','nocti','summilux','m6','m10','m11','aspherical','apo'];
   const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
-  document.getElementById('new-items-table').innerHTML='<div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;"><div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);">'+['Product','Site','Price','Found','Link'].map(h=>'<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">'+h+'</span>').join('')+'</div>'+items.slice(0,20).map(r=>{const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();const isV=VIP.some(k=>name.toLowerCase().includes(k));const fs=r.first_seen||r.crawl_time;const found=fs?new Date(fs).toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+new Date(fs).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}):'—';return '<div style="display:grid;grid-template-columns:1fr 110px 100px 80px 60px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;'+(isV?'background:rgba(225,31,38,0.04);':'')+'"><div>'+(isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 5px;border-radius:2px;margin-right:4px;">HOT</span>':'')+'<a href="'+r['링크']+'" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">'+name.slice(0,50)+'</a></div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+(F[r.site]||'🌐')+' '+(r.site||'').slice(0,8)+'</div><div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">'+(r['가격']||'—')+'</div><div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">'+found+'</div><div><a href="'+r['링크']+'" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div></div>';}).join('')+'</div><div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-top:6px;text-align:right;">'+items.length+'개 신규 매물</div>';
-  log('// Today new: '+items.length+' items','ok');
+  const sec=document.getElementById('new-items-section');
+
+  // 3일 이내 first_seen 있는 것들
+  const threeDaysAgo=new Date(Date.now()-3*24*60*60*1000);
+  const recentItems=allData.filter(r=>r.first_seen&&new Date(r.first_seen)>=threeDaysAgo);
+
+  if(!recentItems.length){sec.style.display='none';return;}
+  sec.style.display='block';
+
+  // 30분 단위로 반올림해서 회차 그룹핑
+  function roundToSession(dt){
+    const d=new Date(dt);
+    d.setMinutes(d.getMinutes()<30?0:30,0,0);
+    return d.toISOString().slice(0,16);
+  }
+
+  const sessions={};
+  recentItems.forEach(r=>{
+    const key=roundToSession(r.first_seen);
+    if(!sessions[key]) sessions[key]=[];
+    sessions[key].push(r);
+  });
+
+  const sortedKeys=Object.keys(sessions).sort((a,b)=>b.localeCompare(a));
+
+  // 필터 버튼 렌더링
+  function renderSession(key){
+    const items=sessions[key];
+    items.sort((a,b)=>{
+      const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));
+      const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));
+      return bv-av;
+    });
+    const dt=new Date(key);
+    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+
+    document.getElementById('new-items-table').innerHTML=`
+      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} — ${items.length}개 신규</div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border2);">
+          ${['Product','Site','Price','Link'].map(h=>`<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">${h}</span>`).join('')}
+        </div>
+        ${items.map(r=>{
+          const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+          const isV=VIP.some(k=>name.toLowerCase().includes(k));
+          return `<div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:8px 12px;border-bottom:1px solid var(--border);align-items:center;${isV?'background:rgba(225,31,38,0.03);':''}">
+            <div>
+              ${isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 4px;border-radius:2px;margin-right:4px;">HOT</span>':''}
+              <a href="${r['링크']}" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">${name.slice(0,50)}${name.length>50?'…':''}</a>
+            </div>
+            <div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">${F[r.site]||'🌐'} ${(r.site||'').slice(0,6)}</div>
+            <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">${r['가격']||'—'}</div>
+            <div><a href="${r['링크']}" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  // 필터 버튼 생성
+  const btnHtml=sortedKeys.map((key,idx)=>{
+    const dt=new Date(key);
+    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    const count=sessions[key].length;
+    return `<button onclick="window._newItemSession='${key}';document.querySelectorAll('.session-btn').forEach(b=>b.style.background='');this.style.background='var(--leica)';this.style.color='#fff';window._renderNewSession('${key}')" 
+      class="session-btn"
+      style="font-family:Space Mono,monospace;font-size:9px;padding:4px 10px;border:1px solid var(--border2);border-radius:2px;background:${idx===0?'var(--leica)':'var(--surface2)'};color:${idx===0?'#fff':'var(--dim)'};cursor:pointer;white-space:nowrap;">
+      ${idx===0?'⬤ ':''}${label} <span style="opacity:0.7;">(${count})</span>
+    </button>`;
+  }).join('');
+
+  document.getElementById('new-items-table').innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">${btnHtml}</div><div id="session-detail"></div>`;
+
+  // 렌더 함수 글로벌 등록
+  window._renderNewSession=function(key){
+    const items=sessions[key];
+    items.sort((a,b)=>{
+      const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));
+      const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));
+      return bv-av;
+    });
+    const dt=new Date(key);
+    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('session-detail').innerHTML=`
+      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} — ${items.length}개 신규</div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border2);">
+          ${['Product','Site','Price','Link'].map(h=>`<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">${h}</span>`).join('')}
+        </div>
+        ${items.map(r=>{
+          const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+          const isV=VIP.some(k=>name.toLowerCase().includes(k));
+          return `<div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:8px 12px;border-bottom:1px solid var(--border);align-items:center;${isV?'background:rgba(225,31,38,0.03);':''}">
+            <div>
+              ${isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 4px;border-radius:2px;margin-right:4px;">HOT</span>':''}
+              <a href="${r['링크']}" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">${name.slice(0,50)}${name.length>50?'…':''}</a>
+            </div>
+            <div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">${F[r.site]||'🌐'} ${(r.site||'').slice(0,6)}</div>
+            <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">${r['가격']||'—'}</div>
+            <div><a href="${r['링크']}" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  };
+
+  // 기본값: 최신 회차
+  window._renderNewSession(sortedKeys[0]);
+  log('// Recent sessions: '+sortedKeys.length+', items: '+recentItems.length,'ok');
 }
 const MOUNT_OPTIONS=['M','R','L39','L','Unknown'];
 function renderUnknown(){
