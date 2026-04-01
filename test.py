@@ -1488,6 +1488,17 @@ def crawl_all():
     except:
         pass
 
+    # sold_items.json 로드 → 이미 품절된 링크는 크롤링 스킵
+    sold_links = set()
+    try:
+        with open("sold_items.json", "r", encoding="utf-8") as f:
+            sold = json.load(f)
+            for r in sold:
+                sold_links.add(r["링크"])
+        print(f"🚫 품절 링크 {len(sold_links)}개 로드 → 크롤링 스킵")
+    except:
+        pass
+
     # 억불카메라(godo)는 별도 순차 처리 (headless=False 필요)
     # 특정 사이트만 크롤링 (--site 옵션)
     active_sites = SITES
@@ -1549,13 +1560,22 @@ def crawl_all():
     done_sites += 1
     write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
 
-    # 전체 중복 제거
+    # 전체 중복 제거 + 품절 링크 스킵
     seen = set()
     unique_results = []
+    skipped_sold = 0
     for r in all_results:
-        if r["링크"] not in seen:
-            seen.add(r["링크"])
-            unique_results.append(r)
+        link = r["링크"]
+        if link in seen:
+            continue
+        if link in sold_links:
+            skipped_sold += 1
+            continue
+        seen.add(link)
+        unique_results.append(r)
+
+    if skipped_sold:
+        print(f"⏭️  품절 링크 {skipped_sold}개 스킵")
 
     elapsed = time.time() - start_time
 
