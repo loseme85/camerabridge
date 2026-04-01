@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_52.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_53.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -442,7 +442,24 @@ function matchesQuery(item, query){
     if(qMount==='M'){
       if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return false;
     }
-  }
+    // L 필터: Unknown mount일 때 상품명에서 L 패턴 확인
+    if(qMount==='L'){
+      if(mount==='M'||mount==='R'||mount==='SL'||mount==='Q') return false;
+      if(mount==='Unknown'){
+        // 상품명에 M마운트 패턴이 있으면 제외
+        const hasMPattern=(
+          /\bleica\s+m\b|\bm\s*\d+\/|\bsummicron-m\b|\bsummilux-m\b|\belmarit-m\b|\bnoctilux-m\b/i.test(rawName)||
+          /^\[?(중고|위탁)\]?\s*m\s*\d+/i.test(rawName)  // "[중고] M 50/2" 패턴
+        );
+        if(hasMPattern) return false;
+        // 상품명에 L 패턴이 있어야 통과
+        const hasLPattern=(
+          /\bleica\s+l\b|\bl\s*\d+\/|\bl\s+\d+mm/i.test(rawName)||
+          /\bl39\b|\bltm\b|\bscrew\b|\bsummar\b|\bsummarit\b|\bhektor\b/i.test(rawName)
+        );
+        if(!hasLPattern) return false;
+      }
+    }
   // 마운트 토큰 + 'leica' 토큰 제외한 나머지로 검색
   // ('leica'는 전체 DB가 라이카 관련이므로 검색 토큰에서 제거)
   const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='l'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
