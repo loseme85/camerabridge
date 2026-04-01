@@ -692,6 +692,10 @@ def crawl_category(page, site):
                         href = base + href
                     href = href.split("#")[0]
 
+                    # 이미 품절된 링크 스킵 (크롤링 시간 단축)
+                    if href in globals().get('SOLD_LINKS', set()):
+                        continue
+
                     # 가격
                     card_text = card.inner_text()
                     price_match = re.search(r"([\d,]+원)", card_text)
@@ -1426,6 +1430,9 @@ def crawl_ffordes(page):
                 href = item.get('href', '')
                 if not href or href in seen_links:
                     continue
+                # 이미 품절된 링크 스킵
+                if href in globals().get('SOLD_LINKS', set()):
+                    continue
                 seen_links.add(href)
                 found_any = True
 
@@ -1498,6 +1505,7 @@ def crawl_all():
         print(f"🚫 품절 링크 {len(sold_links)}개 로드 → 크롤링 스킵")
     except:
         pass
+    globals()['SOLD_LINKS'] = sold_links
 
     # 억불카메라(godo)는 별도 순차 처리 (headless=False 필요)
     # 특정 사이트만 크롤링 (--site 옵션)
@@ -1560,22 +1568,13 @@ def crawl_all():
     done_sites += 1
     write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
 
-    # 전체 중복 제거 + 품절 링크 스킵
+    # 전체 중복 제거
     seen = set()
     unique_results = []
-    skipped_sold = 0
     for r in all_results:
-        link = r["링크"]
-        if link in seen:
-            continue
-        if link in sold_links:
-            skipped_sold += 1
-            continue
-        seen.add(link)
-        unique_results.append(r)
-
-    if skipped_sold:
-        print(f"⏭️  품절 링크 {skipped_sold}개 스킵")
+        if r["링크"] not in seen:
+            seen.add(r["링크"])
+            unique_results.append(r)
 
     elapsed = time.time() - start_time
 
