@@ -205,6 +205,7 @@ def detect_mount(name):
         return "R"
     # SL 마운트 (디지털 미러리스 SL/SL2 시스템)
     if any(x in n for x in ['SL2','LEICA SL','VARIO-ELMARIT-SL','APO-VARIO-ELMARIT-SL',
+                              'SUMMILUX-SL','SUMMICRON-SL','ELMARIT-SL','APO-SUMMICRON-SL',
                               ' SL ',' SL/']):
         return "SL"
     # Q 시스템
