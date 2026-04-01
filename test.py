@@ -249,6 +249,12 @@ def detect_mount(name):
     if 'LEICA L' in n and 'LEICA L-MOUNT' not in n:
         return "L"
 
+    # Ffordes 스타일: 끝에 " M BLACK", " M CHROME" 등
+    if re.search(r'\bM\s+(BLACK|CHROME|SILVER|ANTHRACITE|BODY)$', n):
+        return "M"
+    if re.search(r'\bM\s+\d', n):  # "M 50mm", "M 28mm" 등
+        return "M"
+
     # M-mount (확장)
     if any(x in n for x in [
         'SUMMICRON','SUMMILUX','NOCTILUX','ELMARIT','ELMAR',
