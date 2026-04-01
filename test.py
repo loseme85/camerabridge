@@ -692,10 +692,6 @@ def crawl_category(page, site):
                         href = base + href
                     href = href.split("#")[0]
 
-                    # 이미 품절된 링크 스킵 (크롤링 시간 단축)
-                    if href in globals().get('SOLD_LINKS', set()):
-                        continue
-
                     # 가격
                     card_text = card.inner_text()
                     price_match = re.search(r"([\d,]+원)", card_text)
@@ -1429,9 +1425,6 @@ def crawl_ffordes(page):
             for item in items:
                 href = item.get('href', '')
                 if not href or href in seen_links:
-                    continue
-                # 이미 품절된 링크 스킵
-                if href in globals().get('SOLD_LINKS', set()):
                     continue
                 seen_links.add(href)
                 found_any = True
