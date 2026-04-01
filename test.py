@@ -1436,6 +1436,10 @@ def crawl_ffordes(page):
                 is_used = item.get('isUsed', True)
                 img = item.get('img', '')
 
+                # 신품 제외 (중고 사이트 목적)
+                if not is_used:
+                    continue
+
                 label = auto_label(name)
                 mount = detect_mount(name)
                 if mount == 'Unknown' and mount_hint:
