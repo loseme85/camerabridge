@@ -1445,7 +1445,7 @@ def crawl_ffordes(page):
                 print(f"    {status} {name[:45]} | {price} | {cond}")
 
                 results.append({
-                    "site": "Ffordes",
+                    "site": "Ffordes (영국)",
                     "label": label,
                     "상품명": name,
                     "세대": "",
