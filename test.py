@@ -1369,7 +1369,7 @@ def crawl_ffordes(page):
     for cat_url, mount_hint in categories:
         print(f"\n  📂 Ffordes: {cat_url}")
         try:
-            page.goto(cat_url, wait_until="domcontentloaded", timeout=20_000)
+            page.goto(cat_url, wait_until="networkidle", timeout=20_000)
             page.wait_for_selector('#sscProductArray article', timeout=10_000)
         except Exception as e:
             print(f"    ❌ 로드 실패: {e}")
