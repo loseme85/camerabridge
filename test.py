@@ -1399,10 +1399,10 @@ def crawl_ffordes(page):
                     const linkEl = a.querySelector('a[href*="/p/"]');
                     const href = linkEl ? 'https://www.ffordes.com' + linkEl.getAttribute('href') : '';
                     if (!href) continue;
-                    const priceEl = a.querySelector('.ourprice, [itemprop="price"], .price');
+                    const priceEl = a.querySelector('.prodPrice .priceTxt, .priceTxt, .prodPrice');
                     const priceRaw = priceEl ? priceEl.innerText.trim() : '';
-                    const priceMatch = priceRaw.match(/£[\d,]+(?:\\.\\d+)?/);
-                    const price = priceMatch ? priceMatch[0] : priceRaw;
+                    const priceMatch = priceRaw.match(/£[\d,\.]+/);
+                    const price = priceMatch ? priceMatch[0] : '';
                     const isUsed = a.classList.contains('Used');
                     const isSold = a.querySelector('.soldout, .out-of-stock') !== null ||
                                    a.innerText.toLowerCase().includes('sold out');
