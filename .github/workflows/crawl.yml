@@ -16,32 +16,34 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      # 1. 코드 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 2. Python 설치
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # 3. 패키지 설치
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
           playwright install chromium
           playwright install-deps chromium
 
-      # 4. 크롤러 실행
+      - name: Notify start
+        run: |
+          KST=$(date '+%Y-%m-%d %H:%M' -d '+9 hours')
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="🤖 Camera Bridge 크롤링 시작%0A📅 ${KST} KST"
+
       - name: Run crawler
-        run: python3 test.py --live
+        run: python3 test.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 5. 결과 파일 커밋 & 푸시
       - name: Commit and push results
         run: |
           git config user.name "Camera Bridge Bot"
@@ -56,3 +58,20 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify success
+        if: success()
+        run: |
+          KST=$(date '+%Y-%m-%d %H:%M' -d '+9 hours')
+          COUNT=$(python3 -c "import json; data=json.load(open('results.json')); print(len(data))" 2>/dev/null || echo "?")
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="✅ 크롤링 완료!%0A📦 총 ${COUNT}개 상품%0A📅 ${KST} KST"
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          KST=$(date '+%Y-%m-%d %H:%M' -d '+9 hours')
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="❌ 크롤링 실패!%0A📅 ${KST} KST%0A🔗 https://github.com/loseme85/camerabridge/actions"
