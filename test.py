@@ -244,6 +244,10 @@ def detect_mount(name):
     if has_l_kw:
         return "L"
 
+    # 상품명에 'LEICA L' 명시된 경우 → L마운트 우선
+    if 'LEICA L' in n and 'LEICA L-MOUNT' not in n:
+        return "L"
+
     # M-mount (확장)
     if any(x in n for x in [
         'SUMMICRON','SUMMILUX','NOCTILUX','ELMARIT','ELMAR',
