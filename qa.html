@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0047)file:///Users/changdaepark/Downloads/qa_32.html -->
+<!-- saved from url=(0047)file:///Users/changdaepark/Downloads/qa_34.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -169,7 +169,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_32.html#" target="_blank">→ 사진집에서 검색</a>
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_34.html#" target="_blank">→ 사진집에서 검색</a>
           <div class="link-count" id="count-sazin">—</div>
         </div>
       </div>
@@ -177,7 +177,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_32.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_34.html#" target="_blank">→ 장씨카메라에서 검색</a>
           <div class="link-count" id="count-jang">—</div>
         </div>
       </div>
@@ -185,8 +185,16 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_32.html#" target="_blank">→ 충무로에서 검색</a>
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_34.html#" target="_blank">→ 충무로에서 검색</a>
           <div class="link-count" id="count-chung">—</div>
+        </div>
+      </div>
+
+      <div class="link-card">
+        <div class="link-card-header"><span class="link-flag">🇬🇧</span><span class="link-site">Ffordes</span></div>
+        <div class="link-body">
+          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_34.html#" target="_blank">→ Ffordes에서 검색</a>
+          <div class="link-count" id="count-ffordes">—</div>
         </div>
       </div>
 
@@ -496,6 +504,7 @@ function runQA(){
   document.getElementById('link-sazin').href=`https://www.sazinzibb.com/product/search.html?view_type=&supplier_code=&category_no=0&search_type=product_name&keyword=${encPlus}&exceptkeyword=&product_price1=&product_price2=&order_by=`;
   document.getElementById('link-jang').href=`https://j-camera.com/product/search.html?banner_action=&keyword=${encPlus}`;
   document.getElementById('link-chung').href=`https://leica-storebando.co.kr/product/search.html?view_type=&supplier_code=&keyword=${encPlus}&order_by=`;
+  document.getElementById('link-ffordes').href=`https://www.ffordes.com/search?q=${encPlus}`;
 
   if(!allData.length){
     document.getElementById('results-body').innerHTML='<div class="loading">results.json 로딩 중... 잠시 후 다시 시도해주세요</div>';
@@ -526,6 +535,7 @@ function runQA(){
   document.getElementById('count-sazin').textContent=(siteCounts['사진집']||0)+'개 매칭';
   document.getElementById('count-jang').textContent=(siteCounts['장씨카메라']||0)+'개 매칭';
   document.getElementById('count-chung').textContent=(siteCounts['라이카스토어 충무로']||0)+'개 매칭';
+  document.getElementById('count-ffordes').textContent=(siteCounts['Ffordes (영국)']||0)+'개 매칭';
 
   document.getElementById('result-count').textContent=passed.length+' results';
 
