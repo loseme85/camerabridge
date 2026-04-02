@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///Users/changdaepark/Downloads/qa_fixed_4.html -->
+<!-- saved from url=(0052)file:///Users/changdaepark/Downloads/qa_fixed_5.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,7 +99,6 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
 .debug-name{flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .debug-pass{color:var(--green);font-weight:700;flex-shrink:0;}
 .debug-fail{color:var(--accent);font-weight:700;flex-shrink:0;}
-.debug-price{color:var(--dim);font-size:9px;flex-shrink:0;margin-right:2px;}
 
 .empty{text-align:center;padding:60px 20px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
 .loading{text-align:center;padding:40px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
@@ -170,7 +169,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ 사진집에서 검색</a>
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_fixed_5.html#" target="_blank">→ 사진집에서 검색</a>
           <div class="link-count" id="count-sazin">—</div>
         </div>
       </div>
@@ -178,7 +177,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_fixed_5.html#" target="_blank">→ 장씨카메라에서 검색</a>
           <div class="link-count" id="count-jang">—</div>
         </div>
       </div>
@@ -186,7 +185,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ 충무로에서 검색</a>
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_fixed_5.html#" target="_blank">→ 충무로에서 검색</a>
           <div class="link-count" id="count-chung">—</div>
         </div>
       </div>
@@ -194,7 +193,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇬🇧</span><span class="link-site">Ffordes</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ Ffordes에서 검색</a>
+          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_fixed_5.html#" target="_blank">→ Ffordes에서 검색</a>
           <div class="link-count" id="count-ffordes">—</div>
         </div>
       </div>
@@ -399,10 +398,10 @@ function _matchesQuery(item, query){
     const gen=GEN_MAP[t];
     if(gen){
       const synonyms=GEN_SYNONYMS[gen]||[gen];
-      return synonyms.some(s=>name.includes(s)||label.includes(s));
+      return synonyms.some(s=>name.includes(s));
     }
     if(GEN_SYNONYMS[t]){
-      return GEN_SYNONYMS[t].some(s=>name.includes(s)||label.includes(s));
+      return GEN_SYNONYMS[t].some(s=>name.includes(s));
     }
     // 조리개값 소수점 토큰 (예: "2.0", "1.4", "2.8") → 다양한 표기 매칭
     const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
@@ -445,7 +444,6 @@ function matchesQuery(item, query){
   const q=query.toLowerCase();
   const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
   const name=rawName.replace(/-/g,' ');
-  const label=(item['label']||'').toLowerCase();
   const mount=(item['mount']||'');
   const LEICA_SEARCH_TRIGGERS=['summicron','summilux','noctilux','elmarit','elmar','summaron','summarex','summarit','hektor','hologon','super-angulon','angulon','telyt','leica','lux','cron','nocti','apo','minilux','leitz','aspherical','m3','m4','m5','m6','m7','m8','m9','m10','m11','m240','leica r','r3','r4','r5','r6','r7','r8','r9','q2','q3'];
   const THIRD_PARTY_BRANDS=['light lens','light lens lab','mandler','seagull','nikon','canon','voigtlander','zeiss','contax','sigma','ttartisan','7artisans','thypoch','leeworks','nokton','nikkor','w-nikkor','biogon','planar','laowa','mitakon','funleader','meike','kolari','polar','rollei','yashica','polaroid','sony','fuji','olympus','panasonic'];
@@ -480,9 +478,9 @@ function matchesQuery(item, query){
   if(!pass){
     const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='l'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
     for(const t of tokens){
-      if(GEN_MAP[t]){const syn=GEN_SYNONYMS[GEN_MAP[t]]||[GEN_MAP[t]];if(!syn.some(s=>name.includes(s)||label.includes(s)))return{pass:false,reason:`세대 불일치: "${t}"`};}
-      else if(GEN_SYNONYMS[t]){if(!GEN_SYNONYMS[t].some(s=>name.includes(s)||label.includes(s)))return{pass:false,reason:`동의어 불일치: "${t}"`};}
-      else if(/^\d+$/.test(t)){const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');if(!re.test(name)&&!re.test(label))return{pass:false,reason:`숫자 불일치: "${t}"`};}
+      if(GEN_MAP[t]){const syn=GEN_SYNONYMS[GEN_MAP[t]]||[GEN_MAP[t]];if(!syn.some(s=>name.includes(s)))return{pass:false,reason:`세대 불일치: "${t}"`};}
+      else if(GEN_SYNONYMS[t]){if(!GEN_SYNONYMS[t].some(s=>name.includes(s)))return{pass:false,reason:`동의어 불일치: "${t}"`};}
+      else if(/^\d+$/.test(t)){const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');if(!re.test(name))return{pass:false,reason:`숫자 불일치: "${t}"`};}
       else if(!name.includes(t)&&!(item['label']||'').toLowerCase().includes(t))return{pass:false,reason:`키워드 없음: "${t}"`};
     }
     return{pass:false,reason:'필터링됨'};
@@ -495,6 +493,8 @@ function matchesQuery(item, query){
 // ══════════════════════════════════════════════════════
 let allData=[];
 let lastResults=[];
+const QA_PAGE_SIZE=20;
+let qaPage=1;
 
 async function loadData(){
   try{
@@ -508,7 +508,10 @@ async function loadData(){
   }
 }
 
-function runQA(){
+function qaGoPage(page){qaPage=page;runQA(false);window.scrollTo({top:document.getElementById('results-body').offsetTop-80,behavior:'smooth'});}
+
+function runQA(resetPage=true){
+  if(resetPage) qaPage=1;
   const raw=document.getElementById('qa-input').value.trim();
   if(!raw) return;
   const q=normalizeQuery(raw);
@@ -567,7 +570,10 @@ function runQA(){
   } else {
     // 판매중 먼저, 품절 나중에
     const sorted=[...forSale, ...soldOut];
-    body.innerHTML=sorted.map(r=>{
+    const qaTotalPages=Math.ceil(sorted.length/QA_PAGE_SIZE);
+    if(qaPage>qaTotalPages)qaPage=1;
+    const qaItems=sorted.slice((qaPage-1)*QA_PAGE_SIZE, qaPage*QA_PAGE_SIZE);
+    body.innerHTML=qaItems.map(r=>{
       const hasImg=r['이미지']&&r['이미지']!=='이미지 없음';
       const imgEl=hasImg?`<img class="result-img" src="${r['이미지']}" onerror="this.style.display='none'">`:`<div class="img-ph">◻</div>`;
       const cond=r['컨디션']&&r['컨디션']!=='정보없음'?`<span class="mbadge mbadge-mount">${r['컨디션']}</span>`:'';
@@ -592,6 +598,22 @@ function runQA(){
         <div class="r-cond">${r['컨디션']||'—'}</div>
       </div>`;
     }).join('');
+    // 페이지네이션
+    let pagEl=document.getElementById('qa-pagination');
+    if(!pagEl){pagEl=document.createElement('div');pagEl.id='qa-pagination';pagEl.style.cssText='display:flex;align-items:center;justify-content:center;gap:6px;padding:16px 0 4px;flex-wrap:wrap;';body.after(pagEl);}
+    if(qaTotalPages<=1){pagEl.innerHTML='';}
+    else{
+      const s=Math.max(1,qaPage-3),e=Math.min(qaTotalPages,qaPage+3);
+      const btn=(lbl,pg,active=false)=>`<button onclick="qaGoPage(${pg})" style="font-family:'Space Mono',monospace;font-size:10px;padding:5px 10px;border:1px solid ${active?'var(--accent)':'var(--border2)'};background:${active?'var(--accent)':'transparent'};color:${active?'#fff':'var(--dim)'};cursor:pointer;border-radius:2px;">${lbl}</button>`;
+      let ph='';
+      if(qaPage>1) ph+=btn('←',qaPage-1);
+      if(s>1) ph+=btn('1',1)+`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`;
+      for(let i=s;i<=e;i++) ph+=btn(i,i,i===qaPage);
+      if(e<qaTotalPages) ph+=`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`+btn(qaTotalPages,qaTotalPages);
+      if(qaPage<qaTotalPages) ph+=btn('→',qaPage+1);
+      ph+=`<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:8px;">${sorted.length}개 중 ${(qaPage-1)*QA_PAGE_SIZE+1}–${Math.min(qaPage*QA_PAGE_SIZE,sorted.length)}</span>`;
+      pagEl.innerHTML=ph;
+    }
   }
 
   // 디버그: 제외된 항목 (악세사리 제외하고 실제로 필터링된 것만)
@@ -738,12 +760,10 @@ function renderDebug(){
 
   document.getElementById('debug-list').innerHTML=pageItems.map(r=>{
     const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
-    const price=r['가격']||'';
     return `<div class="debug-item">
       <span class="debug-name" title="${name}">
         <a href="${r['링크']}" target="_blank" style="color:inherit;text-decoration:none;">${name.slice(0,50)}</a>
       </span>
-      ${price?`<span class="debug-price">${price}</span>`:''}
       <span class="debug-fail">${r._reason}</span>
     </div>`;
   }).join('');
