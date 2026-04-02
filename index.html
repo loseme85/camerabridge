@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- saved from url=(0053)file:///Users/changdaepark/Downloads/index_fixed.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 :root{
   --bg:#f8f7f5;--surface:#ffffff;--surface2:#f3f2f0;--surface3:#ede9e3;
@@ -478,11 +479,11 @@ function matchesQuery(item, query){
     const gen=GEN_MAP[t];
     if(gen){
       const synonyms=GEN_SYNONYMS[gen]||[gen];
-      return synonyms.some(s=>name.includes(s));
+      return synonyms.some(s=>name.includes(s)||label.includes(s));
     }
     // GEN_SYNONYMS 직접 키 매칭 (0.95, 1.2, e58 등 Noctilux 연관어)
     if(GEN_SYNONYMS[t]){
-      return GEN_SYNONYMS[t].some(s=>name.includes(s));
+      return GEN_SYNONYMS[t].some(s=>name.includes(s)||label.includes(s));
     }
     // 조리개값 소수점 토큰 (예: "2.0", "1.4", "2.8") → 다양한 표기 매칭
     const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
@@ -509,14 +510,14 @@ function matchesQuery(item, query){
     // 초점거리 숫자 토큰 (예: "50", "35", "75") → 단어 경계 정밀 매칭
     if(/^\d+$/.test(t)){
       const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
-      return re.test(name);
+      return re.test(name)||re.test(label);
     }
-    // "50mm" 형태로 입력한 경우 → name에서만 체크
+    // "50mm" 형태로 입력한 경우
     const mmMatch=t.match(/^(\d+)mm$/);
     if(mmMatch){
       const num=mmMatch[1];
       const re=new RegExp('(?<![0-9])'+num+'(?![0-9])');
-      return re.test(name);
+      return re.test(name)||re.test(label);
     }
     return name.includes(t) || label.includes(t);
   });
