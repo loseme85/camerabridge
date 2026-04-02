@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0055)file:///Users/changdaepark/Downloads/index_fixed_3.html -->
+<!-- saved from url=(0055)file:///Users/changdaepark/Downloads/index_fixed_4.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -634,16 +634,16 @@ function renderPagination(totalPages, total){
     document.getElementById('results-list').after(el);
   }
   if(totalPages<=1){el.innerHTML='';return;}
-  const s=Math.max(1,currentPage-3), e=Math.min(totalPages,currentPage+3);
-  const btn=(label,page,active=false,disabled=false)=>
-    `<button onclick="goPage(${page})" style="font-family:'Space Mono',monospace;font-size:10px;padding:5px 10px;border:1px solid ${active?'var(--accent)':'var(--border)'};background:${active?'var(--accent)':'transparent'};color:${active?'#fff':'var(--dim)'};cursor:${disabled?'default':'pointer'};border-radius:2px;letter-spacing:0.5px;" ${disabled?'disabled':''}>${label}</button>`;
+  const s=Math.max(1,currentPage-3),e=Math.min(totalPages,currentPage+3);
+  const btn=(label,page,active=false)=>
+    `<button onclick="goPage(${page})" style="font-family:'Space Mono',monospace;font-size:10px;padding:5px 10px;border:1px solid ${active?'var(--accent)':'var(--border)'};background:${active?'var(--accent)':'transparent'};color:${active?'#fff':'var(--dim)'};cursor:pointer;border-radius:2px;">${label}</button>`;
   let html='';
-  if(currentPage>1) html+=btn('←', currentPage-1);
+  if(currentPage>1) html+=btn('←',currentPage-1);
   if(s>1) html+=btn('1',1)+`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`;
   for(let i=s;i<=e;i++) html+=btn(i,i,i===currentPage);
   if(e<totalPages) html+=`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`+btn(totalPages,totalPages);
-  if(currentPage<totalPages) html+=btn('→', currentPage+1);
-  html+=`<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:6px;">${total}개 중 ${(currentPage-1)*PAGE_SIZE+1}–${Math.min(currentPage*PAGE_SIZE,total)}</span>`;
+  if(currentPage<totalPages) html+=btn('→',currentPage+1);
+  html+=`<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:8px;">${total}개 중 ${(currentPage-1)*PAGE_SIZE+1}–${Math.min(currentPage*PAGE_SIZE,total)}</span>`;
   el.innerHTML=html;
 }
 
