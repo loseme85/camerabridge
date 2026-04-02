@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///Users/changdaepark/Downloads/qa_fixed_3.html -->
+<!-- saved from url=(0052)file:///Users/changdaepark/Downloads/qa_fixed_4.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -170,7 +170,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_fixed_3.html#" target="_blank">→ 사진집에서 검색</a>
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ 사진집에서 검색</a>
           <div class="link-count" id="count-sazin">—</div>
         </div>
       </div>
@@ -178,7 +178,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_fixed_3.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ 장씨카메라에서 검색</a>
           <div class="link-count" id="count-jang">—</div>
         </div>
       </div>
@@ -186,7 +186,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_fixed_3.html#" target="_blank">→ 충무로에서 검색</a>
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ 충무로에서 검색</a>
           <div class="link-count" id="count-chung">—</div>
         </div>
       </div>
@@ -194,7 +194,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
       <div class="link-card">
         <div class="link-card-header"><span class="link-flag">🇬🇧</span><span class="link-site">Ffordes</span></div>
         <div class="link-body">
-          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_fixed_3.html#" target="_blank">→ Ffordes에서 검색</a>
+          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_fixed_4.html#" target="_blank">→ Ffordes에서 검색</a>
           <div class="link-count" id="count-ffordes">—</div>
         </div>
       </div>
@@ -399,10 +399,10 @@ function _matchesQuery(item, query){
     const gen=GEN_MAP[t];
     if(gen){
       const synonyms=GEN_SYNONYMS[gen]||[gen];
-      return synonyms.some(s=>name.includes(s));
+      return synonyms.some(s=>name.includes(s)||label.includes(s));
     }
     if(GEN_SYNONYMS[t]){
-      return GEN_SYNONYMS[t].some(s=>name.includes(s));
+      return GEN_SYNONYMS[t].some(s=>name.includes(s)||label.includes(s));
     }
     // 조리개값 소수점 토큰 (예: "2.0", "1.4", "2.8") → 다양한 표기 매칭
     const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
@@ -483,7 +483,7 @@ function matchesQuery(item, query){
       if(GEN_MAP[t]){const syn=GEN_SYNONYMS[GEN_MAP[t]]||[GEN_MAP[t]];if(!syn.some(s=>name.includes(s)||label.includes(s)))return{pass:false,reason:`세대 불일치: "${t}"`};}
       else if(GEN_SYNONYMS[t]){if(!GEN_SYNONYMS[t].some(s=>name.includes(s)||label.includes(s)))return{pass:false,reason:`동의어 불일치: "${t}"`};}
       else if(/^\d+$/.test(t)){const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');if(!re.test(name)&&!re.test(label))return{pass:false,reason:`숫자 불일치: "${t}"`};}
-      else if(!name.includes(t)&&!label.includes(t))return{pass:false,reason:`키워드 없음: "${t}"`};
+      else if(!name.includes(t)&&!(item['label']||'').toLowerCase().includes(t))return{pass:false,reason:`키워드 없음: "${t}"`};
     }
     return{pass:false,reason:'필터링됨'};
   }
