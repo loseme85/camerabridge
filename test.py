@@ -197,38 +197,154 @@ def detect_mount(name):
     import re as _re
     n = _re.sub(r'^\[[^\]]+\]\s*', '', n).strip()
 
-    # M 바디 단독 표기 (접두어 제거 후 M으로 시작하는 경우) - R보다 먼저 체크
-    if re.match(r'^M[2-9]\b|^M1[0-9]\b|^MP\b|^M-A\b|^MA\b|^M-D\b|^M-E\b|^M-P\b|^M240\b|^M MONOCHROM\b|^MONOCHROM\b', n):
-        return "M"
+    # ── Fixed lens 시스템 (마운트 없는 카메라) - 먼저 걸러야 M/R 오인식 방지 ──
+    if any(x in n for x in [
+        'LEICA X VARIO','LEICA X-VARIO','X-VABIO',          # X Vario
+        'LEICA X1','LEICA X2','LEICA X-1','LEICA X-2',
+        'LEICA X-U','LEICA X-MONCLER','LEICA X MONCLER',
+        'LEICA X EDITION','LEICA X VISION','X MONCLER',
+        'LEICA D-LUX','D-LUX','LEICA V-LUX','V-LUX',
+        'LEICA C-LUX','C-LUX',
+        'LEICA SOFORT','SOFORT',
+        'LEICA DIGILUX','DIGILUX',
+        'LEICA MINILUX','MINILUX',
+        'LEICA AF-C1',
+    ]):
+        return "Fixed"
+    # X Typ 표기 (LEICA X (Typ 113) 등)
+    if re.search(r'LEICA X\s*\(TYP', n) or re.search(r'^X\s*\(TYP', n):
+        return "Fixed"
+    # X sn. 단독 표기 (장씨카메라: "LEICA X sn.4897")
+    if re.match(r'^LEICA X\s+SN\.', n) or re.match(r'^X\s+SN\.', n):
+        return "Fixed"
+    # C sn. / C2 / CM / C1 단독 표기
+    if re.match(r'^LEICA C\s+SN\.', n) or re.match(r'^C\s+SN\.', n):
+        return "Fixed"
+    if re.match(r'^LEICA C[12M]?\s*(ZOOM|SN\.|$|\()', n) or re.match(r'^C[12M]\s*(ZOOM|SN\.|$)', n):
+        return "Fixed"
+    if re.match(r'^CM\s*(ZOOM|SN\.|$)', n):
+        return "Fixed"
+    # X/x-vario 단독 표기
+    if re.match(r'^X-VARIO\b|^X VARIO\b', n) or re.match(r'^LEICA X\s*/\s*X-VARIO', n):
+        return "Fixed"
+    # LEICA 150 JAHRE C = 한정판 Compact
+    if re.search(r'JAHRE.*\bC\b|\bC\s+\d+\s+SN\.', n) and 'SUMMICRON' not in n:
+        return "Fixed"
+    # Sigma DP (Fixed lens compact)
+    if re.match(r'^SIGMA DP', n):
+        return "Fixed"
 
-    # R-mount (가장 먼저 - -R 표기가 명확)
-    if any(x in n for x in ['-R ','-R/','SUMMILUX-R','SUMMICRON-R','ELMARIT-R',
-                              'ELMAR-R','TELYT-R','LEICA R3','LEICA R4','LEICA R5',
-                              'LEICA R6','LEICA R7','LEICA R8','LEICA R9']):
+    # ── Q 시스템 (Fixed) ──
+    if any(x in n for x in ['LEICA Q','Q2 ','Q3 ','Q-P ',' Q2',' Q3']):
+        return "Q"
+    if re.match(r'^Q[23]?\s*[\(\-]|^Q-P\b', n):
+        return "Q"
+
+    # ── R 마운트 ──
+    # 충무로 약식: "[위탁] R6 (Black)" → 접두어 제거 후 R6/R7/R8/R9로 시작
+    if re.match(r'^R[3-9]\s*[\(\.\s]|^R[3-9]$', n):
         return "R"
-    # R 마운트 - "R 50/", "R 35/", "R 28/" 등 충무로식 표기
+    if any(x in n for x in ['-R ','-R/','SUMMILUX-R','SUMMICRON-R','ELMARIT-R',
+                              'ELMAR-R','TELYT-R','VARIO-ELMARIT-R','APO-MACRO-ELMARIT-R',
+                              'LEICA R3','LEICA R4','LEICA R5',
+                              'LEICA R6','LEICA R7','LEICA R8','LEICA R9',
+                              'LEICA R-E','3CAM','2CAM','1CAM']):
+        return "R"
+    # R 마운트 - "R 50/", "R 35/" 등 충무로식, "R250/4" 등 장씨카메라식
     if any(x in (' ' + n) for x in [' R 50',' R 35',' R 28',' R 21',' R 24',
                                       ' R 60',' R 70',' R 80',' R 90',' R 100',
                                       ' R 16',' R 19','ROM ']):
         return "R"
-    # SL 마운트 (디지털 미러리스 SL/SL2 시스템)
+    if re.search(r'\bR\d{3}/\d', n):  # "R250/4 Telyt" 등
+        return "R"
+
+    # ── SL 마운트 (L-Mount Alliance: Leica SL/TL/CL, Lumix S, Sigma DN 등) ──
     if any(x in n for x in ['SL2','SL3','LEICA SL','VARIO-ELMARIT-SL','APO-VARIO-ELMARIT-SL',
                               'SUMMILUX-SL','SUMMICRON-SL','ELMARIT-SL','APO-SUMMICRON-SL',
-                              ' SL ',' SL/','SL 24','SL 35','SL 50','SL 75','SL 90']):
+                              ' SL ',' SL/','SL 24','SL 35','SL 50','SL 75','SL 90',
+                              'L-MOUNT','L 마운트','L마운트']):
         return "SL"
-    # TL 마운트
+    # TL/CL 마운트 (SL과 동일 L-Mount)
     if any(x in n for x in ['LEICA TL','LEICA CL',' TL ',' TL/',' TL2','TL ',
                               'SUMMILUX-TL','SUMMICRON-TL','ELMARIT-TL','SUPER-VARIO-ELMAR-TL']):
         return "SL"
-    # Q 시스템
-    if any(x in n for x in ['LEICA Q','Q2 ','Q3 ',' Q2',' Q3']):
-        return "Q"
-    # L-MOUNT 명시
-    if 'L-MOUNT' in n:
+    # 단독 바디 표기: "SL", "TL2", "CL" (접두어 제거 후)
+    if re.match(r'^SL[23]?\s*[\(\s]|^SL$', n) or re.match(r'^TL[2]?\s*[\(\s]|^TL$', n):
+        return "SL"
+    if re.match(r'^CL\s*[\(\+]|^CL$', n):
+        return "SL"
+    # Lumix S 시리즈 (L-Mount)
+    if 'LUMIX S' in n or re.match(r'^LUMIX S\d|^S PRO \d|^S \d+MM', n):
+        return "SL"
+    # 루믹스/파나소닉 L마운트
+    if '루믹스' in name or ('파나소닉' in name and ('L마운트' in name or 'L 마운트' in name)):
+        return "SL"
+    # Sigma DG DN (L마운트 또는 E마운트, 여기선 L로 가정)
+    if 'SIGMA' in n and 'DG DN' in n:
         return "SL"
 
-    # Leica L 마운트 (나사마운트 렌즈/바디)
-    # LTM 단독 (어댑터만) vs 렌즈/바디와 함께 있는 경우 구분
+    # ── S 마운트 (Leica S 중형) ──
+    if re.match(r'^S\s+TYP\s+\d|^LEICA S\s+TYP', n):
+        return "S"
+    if re.match(r'^S-E\b|^LEICA S-E', n):
+        return "S"
+    if re.match(r'^LEICA S\s+&|^LEICA S\s+\d', n):
+        return "S"
+
+    # ── L 마운트 (나사식 / Barnack) ──
+    # Barnack 바디: 일반 로마자 + 유니코드 로마자(Ⅰ~Ⅻ) 모두 처리
+    barnack_pattern = (
+        r'LEICA\s+'
+        r'(STANDARD|O-SER|0-SER|BARNACK|'          # 특수 모델
+        r'[IⅠ]{1,3}[ABCDFG]?'                      # I, II, III + 변형
+        r'|[IⅠ][IⅡ][IⅢ][ABCDFG]?'                 # III 계열
+        r'|[IⅠ][IⅡ][ABCDFG]?'                      # II 계열
+        r'|[IⅠ][ABCDFG]?'                           # I 계열
+        r')\s*(SN\.|BODY|\(|$|\+)'
+    )
+    if re.search(barnack_pattern, n):
+        return "L"
+    # 오타/변형: "IIlC" (소문자 l), "BARCNACK", "BARNACK"
+    if re.search(r'LEICA\s+II[lL]C|BARCNACK|LEICA BARNACK|\bBARNACK\b', n):
+        return "L"
+    # 유니코드 로마자 Barnack (장씨카메라: "LEICA Ⅰ", "LEICA ⅢF")
+    if re.search(r'LEICA\s+[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ]', name.upper()):
+        return "L"
+    # "LEICA Standard", "LEICA O-serise" 등
+    if re.search(r'LEICA STANDARD|LEICA O-SERISE|LEICA O-SERIES|LEICA OSKAR BARNACK', n):
+        return "L"
+    # Barnack 세트 표기: "LEICA IIIf / 50mm" 등
+    if re.search(r'LEICA\s+III[A-F]?\s*/\s*\d+MM', n):
+        return "L"
+    # LEICA IG, IID, IIIC repaint 등 미처리 변형
+    if re.search(r'LEICA\s+(IG|IIG|IIIC|IID|IIC|IIIF|IIIG)\b', n):
+        return "L"
+    # Summitar, Thambar, Xenon, Elmax, Stemar (올드 L39 렌즈)
+    if any(x in n for x in ['SUMMITAR','THAMBAR','ELMAX','STEMAR','LOCTILUX']):
+        return "L"
+    # Zeiss-Opton / Carl Zeiss C (Contax-era, L39 호환)
+    if 'ZEISS-OPTON' in n or re.search(r'CARL ZEISS\s+C\s+\d+MM', n) or re.search(r'\bZEISS C\s+\d+MM', n):
+        return "L"
+    # Cooke Amotal (L39 호환 올드 영국 렌즈)
+    if 'COOKE' in n and 'AMOTAL' in n:
+        return "L"
+    # LEICA KE-7A ELCAN (군용 M마운트이지만 L39 바디용)
+    if 'KE-7A' in n or ('ELCAN' in n and 'LEICA' in n):
+        return "L"
+    # "Leica IF Red Scale" 등 Barnack 변형
+    if re.search(r'LEICA\s+I[FG]\b', n):
+        return "L"
+    # Voigtlander LTM 명시 (뷰파인더라도 LTM 마운트 관련)
+    if 'VOIGTLANDER LTM' in n or re.search(r'\bLTM\s+\d+[-–]\d+', n):
+        return "L"
+    # "LEICA LTM", "LEICA 28-90 LTM" 등
+    if re.search(r'LEICA\s+\d+.*LTM|LEICA\s+LTM', n):
+        return "L"
+    # Carl Zeiss Sonnar/Tessar 세트 (L39 어댑터 포함)
+    if 'CARL ZEISS' in n and any(x in n for x in ['SONNAR','TESSAR','BIOTAR']):
+        return "L"
+
+    # LTM 키워드: 렌즈/바디 키워드 동반 여부로 구분
     LENS_BODY_KW = [
         'SUMMICRON','SUMMILUX','NOCTILUX','ELMARIT','ELMAR','SUMMAR',
         'HEKTOR','XENON','SUMMAREX','TELYT','ANGULON','HOLOGON',
@@ -239,36 +355,73 @@ def detect_mount(name):
     l_kw = ['L39','M39','SCREW','나사',
             ' L 50/',' L 35/',' L 28/',' L 21/',' L 90/',' L 135/',
             ' L50/',' L35/',' L28/',' L90/']
-
-    # LTM 키워드가 있을 때: 렌즈/바디 키워드도 있으면 L마운트, 없으면 어댑터(Unknown)
     has_ltm = 'LTM' in n
     has_lens_body = any(x in n for x in LENS_BODY_KW)
     has_l_kw = any(x in n for x in l_kw)
 
     if has_ltm and not has_lens_body:
-        return "Unknown"  # LTM 단독 어댑터 → detect_category에서 Accessory로
-
+        return "Unknown"  # LTM 단독 어댑터
     if has_ltm and has_lens_body:
-        return "L"  # LTM + 렌즈/바디 → L마운트
-
-    # Summar/Summarit 구형 나사마운트 - SUMMARIT-M 제외
-    if 'SUMMAR' in n and 'SUMMARIT-M' not in n and 'SUMMARON' not in n:
         return "L"
-
     if has_l_kw:
         return "L"
 
-    # 상품명에 'LEICA L' 명시된 경우 → L마운트 우선
-    if 'LEICA L' in n and 'LEICA L-MOUNT' not in n:
+    # Summar 계열 구형 나사마운트 (SUMMARIT-M 제외)
+    if 'SUMMAR' in n and 'SUMMARIT-M' not in n and 'SUMMARON' not in n:
         return "L"
 
+    # 써드파티 L마운트 렌즈: "Voigtlander L 50mm", "Laowa L 9mm", "TTArtisan L 90mm"
+    if re.search(r'\bL\s+\d+MM\b', n) or re.search(r'\bL\s+\d+/\d', n):
+        return "L"
+    # "Leica L" 명시 (단, "L-Mount" 중복 방지)
+    if 'LEICA L' in n and 'LEICA L-MOUNT' not in n and 'LEICA L 마운트' not in n:
+        return "L"
+
+    # ── M 마운트 ──
+    # 충무로/장씨 약식: M으로 시작하는 바디/악세사리
+    if re.match(r'^M[2-9]\b|^M1[0-9]\b|^MP\b|^M-A\b|^MA\b|^M-D\b|^M-E\b|^M-P\b|^M240\b|^M MONOCHROM\b|^MONOCHROM\b', n):
+        return "M"
+    if re.match(r'^MP\d\b|^LECIA MP\b', n):  # "MP3 (Silver)", "LECIA MP" 오타
+        return "M"
+    # Leicavit, Visoflex (M바디 악세사리)
+    if 'LEICAVIT' in n or 'VISOFLEX' in n:
+        return "M"
+    # VM 표기 (Voigtlander VM 마운트)
+    if re.match(r'^VM\s+\d', n) or 'VOIGTLANDER VM' in n or 'VM-E' in n:
+        return "M"
+    # "for M" 표기
+    if re.search(r'FOR M\b', n):
+        return "M"
+    # M-Rokkor (CL/Minolta용, M 호환)
+    if 'M-ROKKOR' in n or 'SUMMICRON-C' in n or 'SUMMCRON-C' in n:
+        return "M"
     # Ffordes 스타일: 끝에 " M BLACK", " M CHROME" 등
     if re.search(r'\bM\s+(BLACK|CHROME|SILVER|ANTHRACITE|BODY)$', n):
         return "M"
     if re.search(r'\bM\s+\d', n):  # "M 50mm", "M 28mm" 등
         return "M"
-
-    # M-mount (확장)
+    # ZM, Biogon, Distagon (Zeiss M마운트)
+    if ' ZM' in n or 'BIOGON' in n or ('DISTAGON' in n and 'C/Y' not in n):
+        return "M"
+    # Nokton (Voigtlander VM)
+    if 'NOKTON' in n:
+        return "M"
+    # 충무로/장씨 한글 약식: "보이그랜더 35/2", "보이그랜더 50/1.5" 등 (M마운트 Voigtlander)
+    if ('보이그랜더' in name or 'VOIGTLANDER' in n) and re.search(r'\d+/\d', n):
+        return "M"
+    # 충무로 약식 렌즈: "M35/2 ASPH", "M50/2 Rigid", "M21/3.4" 등
+    if re.match(r'^M\d+/\d', n):
+        return "M"
+    # ZM 표기 (장씨카메라: "ZM 50/1.5 C Sonnar")
+    if re.match(r'^ZM\s+\d', n):
+        return "M"
+    # Light Lens Lab (모두 M마운트 복각 렌즈)
+    if 'LIGHT LENS LAB' in n:
+        return "M"
+    # C/Y 마운트 (Contax/Yashica)
+    if 'C/Y' in n or re.search(r'CARLZEISS\s*C/Y|CARL ZEISS\s*C/Y', n.replace(' ','')):
+        return "C/Y"
+    # M-mount 렌즈/바디 키워드
     if any(x in n for x in [
         'SUMMICRON','SUMMILUX','NOCTILUX','ELMARIT','ELMAR',
         'SUMMARON','SUPER-ANGULON','SUMMAREX','HEKTOR','XENON',
