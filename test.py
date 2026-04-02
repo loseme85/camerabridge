@@ -193,6 +193,14 @@ def detect_mount(name):
     """마운트 타입 자동 분류 - 이중 마운트(LTM) 지원"""
     n = name.upper()
 
+    # [중고], [위탁], [매장진열] 등 접두어 제거
+    import re as _re
+    n = _re.sub(r'^\[[^\]]+\]\s*', '', n).strip()
+
+    # M 바디 단독 표기 (접두어 제거 후 M으로 시작하는 경우) - R보다 먼저 체크
+    if re.match(r'^M[2-9]\b|^M1[0-9]\b|^MP\b|^M-A\b|^MA\b|^M-D\b|^M-E\b|^M-P\b|^M240\b|^M MONOCHROM\b|^MONOCHROM\b', n):
+        return "M"
+
     # R-mount (가장 먼저 - -R 표기가 명확)
     if any(x in n for x in ['-R ','-R/','SUMMILUX-R','SUMMICRON-R','ELMARIT-R',
                               'ELMAR-R','TELYT-R','LEICA R3','LEICA R4','LEICA R5',
@@ -204,9 +212,13 @@ def detect_mount(name):
                                       ' R 16',' R 19','ROM ']):
         return "R"
     # SL 마운트 (디지털 미러리스 SL/SL2 시스템)
-    if any(x in n for x in ['SL2','LEICA SL','VARIO-ELMARIT-SL','APO-VARIO-ELMARIT-SL',
+    if any(x in n for x in ['SL2','SL3','LEICA SL','VARIO-ELMARIT-SL','APO-VARIO-ELMARIT-SL',
                               'SUMMILUX-SL','SUMMICRON-SL','ELMARIT-SL','APO-SUMMICRON-SL',
-                              ' SL ',' SL/']):
+                              ' SL ',' SL/','SL 24','SL 35','SL 50','SL 75','SL 90']):
+        return "SL"
+    # TL 마운트
+    if any(x in n for x in ['LEICA TL','LEICA CL',' TL ',' TL/',' TL2','TL ',
+                              'SUMMILUX-TL','SUMMICRON-TL','ELMARIT-TL','SUPER-VARIO-ELMAR-TL']):
         return "SL"
     # Q 시스템
     if any(x in n for x in ['LEICA Q','Q2 ','Q3 ',' Q2',' Q3']):
