@@ -803,14 +803,16 @@ def auto_label(name):
         if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
         return "Noctilux"
     # 충무로/장씨 약식: "M 50/1.2", "M50/1.2", "복각" 등 → Noctilux 추론
-    if re.search(r'50/1\.2', n) or ("1.2" in n and "50" in n and "1.25" not in n):
-        return "50mm Noctilux f1.2"
-    if re.search(r'75/1\.25', n) or ("1.25" in n and "75" in n):
-        return "75mm Noctilux f1.25"
-    if re.search(r'50/0\.95', n) or ("0.95" in n and "50" in n):
-        return "50mm Noctilux f0.95"
-    if re.search(r'50/1\.0', n) or (re.search(r'1\.0', n) and "50" in n and "noctilux" not in n and "summilux" not in n and "summicron" not in n):
-        return "50mm Noctilux f1.0"
+    _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
+    if not any(k in n for k in _nocti_exc):
+        if re.search(r'\b50/1\.2\b', n) or ("f1.2" in n and "50" in n and "1.25" not in n):
+            return "50mm Noctilux f1.2"
+        if re.search(r'\b75/1\.25\b', n) or ("f1.25" in n and "75" in n):
+            return "75mm Noctilux f1.25"
+        if re.search(r'\b50/0\.95\b', n) or ("f0.95" in n and "50" in n):
+            return "50mm Noctilux f0.95"
+        if re.search(r'\b50/1\.0\b', n):
+            return "50mm Noctilux f1.0"
 
     # ── Summilux 세대별 ──
     if "summilux" in n:
