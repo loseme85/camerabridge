@@ -263,6 +263,13 @@ input[type=text]{width:150px;}
         <option value="R">R-mount</option>
         <option value="L39">L39 (Screw)</option>
         <option value="L">L-mount</option>
+        <option value="SL">SL / L-Mount</option>
+        <option value="Q">Q</option>
+        <option value="S">S</option>
+        <option value="Compact">Compact</option>
+        <option value="PNS">PNS</option>
+        <option value="Accessory">Accessory</option>
+        <option value="Unknown">Unknown</option>
       </select>
       <select id="f-cat" onchange="applyFilters()">
         <option value="all">Body + Lens</option>
@@ -460,7 +467,7 @@ function updateNewItems(){
   window._renderNewSession(sortedKeys[0]);
   log('// Recent sessions: '+sortedKeys.length+', items: '+recentItems.length,'ok');
 }
-const MOUNT_OPTIONS=['M','R','L39','L','Unknown'];
+const MOUNT_OPTIONS=['M','R','L','L39','SL','Q','S','Compact','PNS','Accessory','Unknown'];
 function renderUnknown(){
   const items=allData.filter(r=>(r.mount||'Unknown')==='Unknown');
   document.getElementById('unk-count').textContent=items.length;
