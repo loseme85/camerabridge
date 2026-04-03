@@ -384,7 +384,10 @@ def detect_system(name):
         'SUMMILUX-R', 'SUMMICRON-R', 'ELMARIT-R', 'ELMAR-R', 'APO-MACRO-ELMARIT-R',
         'VARIO-ELMARIT-R', 'APO-TELYT-R', 'TELYT-R', 'SUPER-ELMAR-R',
         'R3 ', 'R4 ', 'R5 ', 'R6 ', 'R7 ', 'R8 ', 'R9 ', ' R3', ' R4', ' R5', ' R6',
-        ' R7', ' R8', ' R9', 'LEICA R3', 'LEICA R4', 'LEICA R5', 'LEICA R6', 'LEICA R7', 'LEICA R8', 'LEICA R9', '-R SN', '-R ('
+        ' R7', ' R8', ' R9', 'LEICA R3', 'LEICA R4', 'LEICA R5', 'LEICA R6', 'LEICA R7', 'LEICA R8', 'LEICA R9', '-R SN', '-R (',
+        'LEICA R 50', 'LEICA R 35', 'LEICA R 28', 'LEICA R 21',
+        'LEICA R 90', 'LEICA R 100', 'LEICA R 180', 'LEICA R 135',
+        'LEICA R 60', 'LEICA R 70', 'LEICAFLEX'
     ]):
         return "R System"
     # SL/Q/S System
