@@ -790,7 +790,7 @@ function renderTable(){
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
       <div class="data-price">${r['가격']||'—'}</div>
       <div class="data-cond">${r['컨디션']||'—'}</div>
-      <div style="display:flex;gap:3px;flex-wrap:wrap;">${sold}${res}${deal}${brandB}</div>
+      <div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center;">${sold}${res}${deal}${brandB}${r.mount&&r.mount!=='Unknown'?`<span class="badge" style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-size:9px;">${r.mount}</span>`:''}</div>
     </div>`;
   }).join('');
 }
