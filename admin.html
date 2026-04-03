@@ -734,7 +734,18 @@ function applyFilters(){
     } else if(currentSys==='__3rd__'){
       if(r.brand!=='3rd Party')return false;
     } else if(currentSys!=='all'){
-      if((r.system||'')!==currentSys)return false;
+      const m=(r.mount||'');
+      if(currentSys==='M System'){
+        if(m!=='M')return false;
+      } else if(currentSys==='R System'){
+        if(m!=='R')return false;
+      } else if(currentSys==='Barnack'){
+        if(m!=='L')return false;
+      } else if(currentSys==='SL/Q/S'){
+        if(!['SL','Q','S'].includes(m))return false;
+      } else if(currentSys==='P&S'){
+        if(!['Compact','PNS'].includes(m))return false;
+      }
       if(r.category==='Accessory')return false;
     }
     if(cat!=='all'&&r.category!==cat)return false;
