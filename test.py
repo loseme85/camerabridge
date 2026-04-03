@@ -318,6 +318,12 @@ def detect_mount(name):
 
     return "Unknown"
 
+def resolve_mount_from_category(mount, category):
+    """mount가 Unknown이고 category가 Accessory면 Accessory 반환"""
+    if mount == "Unknown" and category == "Accessory":
+        return "Accessory"
+    return mount
+
 def detect_noctilux_gen(name):
     """Noctilux 전용 세대 감지"""
     n = name.lower()
