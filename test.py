@@ -201,6 +201,10 @@ def detect_mount(name):
     if re.match(r'^M[2-9]\b|^M1[0-9]\b|^MP\b|^M-A\b|^MA\b|^M-D\b|^M-E\b|^M-P\b|^M240\b|^M MONOCHROM\b|^MONOCHROM\b', n):
         return "M"
 
+    # ── Leicaflex (필름 SLR) → R 마운트 ──
+    if 'LEICAFLEX' in n:
+        return "R"
+
     # R-mount (가장 먼저 - -R 표기가 명확)
     if any(x in n for x in ['-R ','-R/','SUMMILUX-R','SUMMICRON-R','ELMARIT-R',
                               'ELMAR-R','TELYT-R','LEICA R3','LEICA R4','LEICA R5',
