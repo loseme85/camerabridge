@@ -786,7 +786,7 @@ function renderTable(){
     const ta=timeAgo(r.crawl_time);
     return `<div class="data-row${r['품절']?' soldout':''}">
       <div class="data-num">${start+i+1}</div>
-      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>${newBadge}${r.noctilux_gen?`<span class="badge" style="background:rgba(225,31,38,0.08);color:var(--leica);border:1px solid rgba(225,31,38,0.2);margin-left:3px;font-size:8px;">${r.noctilux_gen}</span>`:''}<div class="time-label${isNew(r.crawl_time)?' new-item':''}">${ta}</div></div>
+      <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>${newBadge}${r.noctilux_gen?`<span class="badge" style="background:rgba(225,31,38,0.08);color:var(--leica);border:1px solid rgba(225,31,38,0.2);margin-left:3px;font-size:8px;">${r.noctilux_gen}</span>`:''}<div class="time-label${isNew(r.crawl_time)?' new-item':''}">${ta}${r.mount&&r.mount!=='Unknown'?` · <span style="font-weight:600;">${r.mount}</span>`:''}</div></div>
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
       <div class="data-price">${r['가격']||'—'}</div>
       <div class="data-cond">${r['컨디션']||'—'}</div>
