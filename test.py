@@ -279,12 +279,20 @@ def detect_mount(name):
     ]):
         return "M"
 
+    # ── Visoflex (M 바디 액세서리) ──
+    if 'VISOFLEX' in n and 'VISOFLEX2' not in n and 'VISOFLEX 2' not in n:
+        return "M"
+
+    # ── Leica C 렌즈 (CL/SL 마운트) ──
+    if re.match(r'LEICA C \d+', n) or re.match(r'CL \d+', n):
+        return "SL"
+
     # ── Compact (디지털 컴팩트/미러리스 바디) ──
     _compact_kw = [
         'D-LUX','DLUX','C-LUX','CLUX','DIGILUX',
         'LEICA X1','LEICA X2','LEICA X ','LEICA X-','X TYP','X(TYP','X-U ',
         'X VARIO','X-VARIO','V-LUX','VLUX',
-        'LEICA TL','LEICA CL','SOFORT','LEICA T ',
+        'LEICA TL','LEICA CL','SOFORT','LEICA T ','DIGILUX',
         'D-LUX 3','D-LUX 4','D-LUX 5','D-LUX 6','D-LUX 7','D-LUX 8',
         'D-LUX TYP','D-LUX (TYP',
     ]
