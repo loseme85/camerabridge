@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0055)file:///Users/changdaepark/Downloads/index_fixed_4.html -->
+<!-- saved from url=(0053)file:///Users/changdaepark/Downloads/index_mount.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -195,21 +195,33 @@ select:focus{border-color:var(--accent);color:var(--text);}
     </div>
     <div class="filters-row">
       <span class="filter-label">Sort</span>
-      <select id="sort-select" onchange="currentPage=1;renderResults()">
+      <select id="sort-select" onchange="renderResults()">
         <option value="default">Default</option>
         <option value="price-asc">Price ↑</option>
         <option value="price-desc">Price ↓</option>
       </select>
       <span class="filter-label">Brand</span>
-      <select id="brand-select" onchange="currentPage=1;renderResults()">
+      <select id="brand-select" onchange="renderResults()">
         <option value="all">All Brands</option>
         <option value="Leica">Leica Only</option>
         <option value="3rd Party">3rd Party</option>
       </select>
       <span class="filter-label">Site</span>
-      <select id="site-select" onchange="currentPage=1;renderResults()"><option value="all">All Sites</option></select>
+      <select id="site-select" onchange="renderResults()"><option value="all">All Sites</option></select>
+      <span class="filter-label">Mount</span>
+      <select id="mount-select" onchange="currentPage=1;renderResults()">
+        <option value="all">All Mounts</option>
+        <option value="M">M</option>
+        <option value="L">L (Screw)</option>
+        <option value="R">R</option>
+        <option value="SL">SL / L-Mount</option>
+        <option value="Q">Q</option>
+        <option value="S">S</option>
+        <option value="Compact">Compact</option>
+        <option value="PNS">PNS</option>
+      </select>
       <span class="filter-label">Currency</span>
-      <select id="currency-select" onchange="currentPage=1;renderResults()">
+      <select id="currency-select" onchange="renderResults()">
         <option value="all">All</option>
         <option value="KRW">KRW</option>
         <option value="GBP">GBP</option>
@@ -534,7 +546,7 @@ function doHeroSearch(){
   history.pushState({query:raw},'','?q='+encodeURIComponent(raw));
   renderResults(q);
 }
-function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;const q=normalizeQuery(raw);currentPage=1;renderResults(q);}
+function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;const q=normalizeQuery(raw);renderResults(q);}
 function clearSearch(){document.getElementById('search-input').value='';showHero();}
 function showHero(){
   document.getElementById('hero-section').style.display='flex';
@@ -549,7 +561,7 @@ function showHero(){
   document.getElementById('hero-input').value='';
   history.pushState({},'','/');
 }
-function setTab(tab,el){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');currentPage=1;renderResults();}
+function setTab(tab,el){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderResults();}
 function togglePriceSort(){const s=document.getElementById('sort-select');s.value=s.value==='price-asc'?'price-desc':'price-asc';renderResults();}
 function parsePrice(p,cur){if(!p||p==='문의요망')return Infinity;const n=parseFloat(p.replace(/[^0-9.]/g,''));return cur==='GBP'?n*gbpToKrw:n;}
 function fmt(n){if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
@@ -563,9 +575,6 @@ function timeAgo(dt){
   return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
 }
 function isNew(dt){if(!dt)return false;return(new Date()-new Date(dt))<86400000;}
-const PAGE_SIZE = 20;
-let currentPage = 1;
-
 function renderResults(query){
   if(query===undefined)query=normalizeQuery(document.getElementById('search-input').value.trim());
   document.getElementById('query-display').textContent=query;
@@ -573,11 +582,13 @@ function renderResults(query){
   const cur=document.getElementById('currency-select').value;
   const sort=document.getElementById('sort-select').value;
   const brand=document.getElementById('brand-select').value;
+  const mount=document.getElementById('mount-select').value;
   let filtered=allData.filter(r=>{
     if(query&&!matchesQuery(r,query))return false;
     if(site!=='all'&&r.site!==site)return false;
     if(cur!=='all'&&r['통화']!==cur)return false;
     if(brand!=='all'&&r.brand!==brand)return false;
+    if(mount!=='all'&&(r.mount||'Unknown')!==mount)return false;
     return true;
   });
   const forSale=filtered.filter(r=>!r['품절']);
@@ -596,11 +607,8 @@ function renderResults(query){
     <div class="stat"><span class="stat-value">${prices.length?fmt(Math.max(...prices)):'-'}</span><span class="stat-label">Highest</span></div>
     <div class="stat"><span class="stat-value">${new Set(display.map(r=>r.site)).size}</span><span class="stat-label">Sources</span></div>`;
   const list=document.getElementById('results-list');
-  if(!display.length){list.innerHTML='<div class="no-results"><div class="icon">◌</div><p>// no results found</p></div>';renderPagination(0,0);return;}
-  const totalPages=Math.ceil(display.length/PAGE_SIZE);
-  if(currentPage>totalPages)currentPage=1;
-  const pageItems=display.slice((currentPage-1)*PAGE_SIZE, currentPage*PAGE_SIZE);
-  list.innerHTML=pageItems.map(r=>{
+  if(!display.length){list.innerHTML='<div class="no-results"><div class="icon">◌</div><p>// no results found</p></div>';return;}
+  list.innerHTML=display.map(r=>{
     const flag=FLAGS[r.site]||'🌐';
     const hasImg=r['이미지']&&r['이미지']!=='이미지 없음';
     const imgEl=hasImg?`<img class="result-img" src="${r['이미지']}" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:'';
@@ -622,37 +630,7 @@ function renderResults(query){
       <div>${cond||'<span style="color:var(--text-muted);font-size:11px">—</span>'}</div>
     </a>`;
   }).join('');
-  renderPagination(totalPages, display.length);
 }
-
-function renderPagination(totalPages, total){
-  let el=document.getElementById('pagination');
-  if(!el){
-    el=document.createElement('div');
-    el.id='pagination';
-    el.style.cssText='display:flex;align-items:center;justify-content:center;gap:6px;padding:20px 0 8px;flex-wrap:wrap;';
-    document.getElementById('results-list').after(el);
-  }
-  if(totalPages<=1){el.innerHTML='';return;}
-  const s=Math.max(1,currentPage-3),e=Math.min(totalPages,currentPage+3);
-  const btn=(label,page,active=false)=>
-    `<button onclick="goPage(${page})" style="font-family:'Space Mono',monospace;font-size:10px;padding:5px 10px;border:1px solid ${active?'var(--accent)':'var(--border)'};background:${active?'var(--accent)':'transparent'};color:${active?'#fff':'var(--dim)'};cursor:pointer;border-radius:2px;">${label}</button>`;
-  let html='';
-  if(currentPage>1) html+=btn('←',currentPage-1);
-  if(s>1) html+=btn('1',1)+`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`;
-  for(let i=s;i<=e;i++) html+=btn(i,i,i===currentPage);
-  if(e<totalPages) html+=`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`+btn(totalPages,totalPages);
-  if(currentPage<totalPages) html+=btn('→',currentPage+1);
-  html+=`<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:8px;">${total}개 중 ${(currentPage-1)*PAGE_SIZE+1}–${Math.min(currentPage*PAGE_SIZE,total)}</span>`;
-  el.innerHTML=html;
-}
-
-function goPage(page){
-  currentPage=page;
-  renderResults();
-  window.scrollTo({top:document.getElementById('results-section').offsetTop-60,behavior:'smooth'});
-}
-
 document.addEventListener('DOMContentLoaded',()=>{
   loadData();
   document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
@@ -668,6 +646,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       document.getElementById('site-select').value='all';
       document.getElementById('currency-select').value='all';
       document.getElementById('sort-select').value='default';
+      document.getElementById('mount-select').value='all';
       renderResults(e.state.query);
     } else {
       showHero();
