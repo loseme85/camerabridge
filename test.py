@@ -279,6 +279,35 @@ def detect_mount(name):
     ]):
         return "M"
 
+    # ── Compact (디지털 컴팩트/미러리스 바디) ──
+    _compact_kw = [
+        'D-LUX','DLUX','C-LUX','CLUX','DIGILUX',
+        'LEICA X1','LEICA X2','LEICA X ','LEICA X-','X TYP','X(TYP','X-U ',
+        'X VARIO','X-VARIO','V-LUX','VLUX',
+        'LEICA TL','LEICA CL','SOFORT','LEICA T ',
+        'D-LUX 3','D-LUX 4','D-LUX 5','D-LUX 6','D-LUX 7','D-LUX 8',
+        'D-LUX TYP','D-LUX (TYP',
+    ]
+    if any(x in n for x in _compact_kw):
+        return "Compact"
+
+    # ── PNS (필름 자동카메라) ──
+    _pns_kw = [
+        'MINILUX','CM ZOOM','LEICA CM ','LEICA C1 ','LEICA C2 ','AF-C1',
+        'LEICA MINI ','LEICA C ZOOM','C2 ZOOM','CM-ZOOM',
+    ]
+    if any(x in n for x in _pns_kw):
+        return "PNS"
+
+    # ── S 마운트 (중형 시스템) ──
+    _s_kw = [
+        'LEICA S ','LEICA S(','S TYP 006','S TYP 007','SUMMARIT-S',
+        'VARIO-ELMAR-S','SUPER-ELMAR-S','ELMAR-S','APO-MACRO-SUMMARIT-S',
+        ' S 35/',' S 45/',' S 70/',' S 120/',' S 180/',
+    ]
+    if any(x in n for x in _s_kw):
+        return "S"
+
     return "Unknown"
 
 def detect_noctilux_gen(name):
