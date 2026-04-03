@@ -155,8 +155,11 @@ input[type=text]{width:150px;}
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;" id="velocity-cards"></div>
   
   <div id="new-items-section" style="display:none;margin-bottom:20px;">
-    <div class="section-label">🆕 Today's New Listings</div>
-    <div id="new-items-table"></div>
+    <div class="section-label" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>🆕 Today's New Listings</span>
+      <button onclick="toggleNewListings()" id="new-toggle-btn" style="font-family:'Space Mono',monospace;font-size:9px;padding:2px 8px;border:1px solid var(--border2);border-radius:2px;background:transparent;color:var(--dim);cursor:pointer;">접기 ▲</button>
+    </div>
+    <div id="new-listings-wrap"><div id="new-items-table"></div></div>
   </div>
   <div class="section-label">Overview</div>
   <div class="stats-row">
@@ -285,6 +288,12 @@ input[type=text]{width:150px;}
         <option value="sold">Sold Out</option>
         <option value="deal">Deals</option>
         <option value="new">🆕 New Only</option>
+      </select>
+      <select id="f-perpage" onchange="PER_PAGE=parseInt(this.value);currentPage=1;renderTable();renderPagination();">
+        <option value="50">50개</option>
+        <option value="100">100개</option>
+        <option value="200">200개</option>
+        <option value="400">400개</option>
       </select>
       <select id="f-sort" onchange="applyFilters()">
         <option value="newest">Newest First</option>
@@ -765,6 +774,19 @@ function applyFilters(){
   else if(sort==="new_only"){const lc=getLastCrawlTime();if(lc)filtered=filtered.filter(r=>(r.first_seen||"").slice(0,16)===lc.slice(0,16));}
   document.getElementById('f-count').textContent=filtered.length+' results';
   currentPage=1;renderTable();renderPagination();
+}
+
+function toggleNewListings(){
+  const el=document.getElementById('new-listings-wrap');
+  const btn=document.getElementById('new-toggle-btn');
+  if(!el)return;
+  if(el.style.display==='none'){
+    el.style.display='';
+    btn.textContent='접기 ▲';
+  } else {
+    el.style.display='none';
+    btn.textContent='펼치기 ▼';
+  }
 }
 
 function setSortPrice(){const s=document.getElementById('f-sort');s.value=s.value==='price-asc'?'price-desc':'price-asc';applyFilters();}
