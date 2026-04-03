@@ -1502,8 +1502,19 @@ def crawl_ffordes(page):
 
                 label = auto_label(name)
                 mount = detect_mount(name)
-                if mount == 'Unknown' and mount_hint:
-                    mount = mount_hint
+                # URL 기반 마운트 보완 (detect_mount가 Unknown일 때)
+                if mount == 'Unknown':
+                    _url_lower = href.lower()
+                    if '/leica-screw/' in _url_lower:
+                        mount = 'L'
+                    elif '/leica-m/' in _url_lower:
+                        mount = 'M'
+                    elif '/leica-r/' in _url_lower:
+                        mount = 'R'
+                    elif '/l-mount/' in _url_lower or '/leica-sl/' in _url_lower:
+                        mount = 'SL'
+                    elif mount_hint:
+                        mount = mount_hint
 
                 status = "🚫sold" if is_sold else "✔ "
                 cond = "Used" if is_used else "New"
