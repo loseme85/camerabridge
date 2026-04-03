@@ -317,7 +317,7 @@ input[type=text]{width:150px;}
 const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
 const SITES_ORDER=['라이카스토어 충무로','사진집','장씨카메라','신성카메라','억불카메라','Ffordes (영국)'];
 let allData=[],filtered=[],currentPage=1,labelAvg={},currentSys='all';
-const PER_PAGE=50;
+let PER_PAGE=50;
 let siteChart=null,sysChart=null;
 
 function log(msg,type='info'){
