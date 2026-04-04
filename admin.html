@@ -715,14 +715,6 @@ function setSys(sys,el){
   currentSys=sys;
   document.querySelectorAll('.sys-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  // Unknown 섹션 토글
-  const unkSec=document.getElementById('unknown-section');
-  if(sys==='__unk__'){
-    renderUnknown();
-    unkSec.style.display='block';
-  } else {
-    unkSec.style.display='none';
-  }
   applyFilters();
 }
 
