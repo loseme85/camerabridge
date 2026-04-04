@@ -2242,6 +2242,10 @@ def crawl_all():
                 r['noctilux_gen'] = nocti_gen
             elif r.get('label') == '50mm Noctilux f1.2 복각':
                 r['noctilux_gen'] = '복각 (f1.2)'
+            elif r.get('label') == '35mm Noctilux f1.2':
+                r['noctilux_gen'] = '35mm (f1.2)'
+            elif r.get('label') == '75mm Noctilux f1.25':
+                r['noctilux_gen'] = '75mm (f1.25)'
             elif r.get('label') == '50mm Noctilux f1.2':
                 r['noctilux_gen'] = 'v1 (f1.2)'
             elif r.get('label') == '50mm Noctilux f0.95':
