@@ -671,7 +671,8 @@ function renderResults(query){
     const cond=r['컨디션']&&r['컨디션']!=='정보없음'?`<span class="badge badge-cond">${r['컨디션']}</span>`:'';
     const sold=r['품절']?`<span class="badge badge-soldout">SOLD OUT</span>`:'';
     const reserved=r['예약중']?`<span class="badge badge-reserved">예약중</span>`:'';
-    const brandBadge=r.brand&&r.brand==='3rd Party'?`<span class="badge" style="background:rgba(0,120,255,0.07);color:#0078ff;border:1px solid rgba(0,120,255,0.2);">3rd Party</span>`:'';
+    const _3rdBrands=['Voigtlander','Zeiss','Light Lens Lab','TTArtisan','7Artisans','Laowa','MS-Optics','Artizlab','Sigma','Lumix','3rd Party'];
+    const brandBadge=_3rdBrands.includes(r.brand)?`<span class="badge" style="background:rgba(0,120,255,0.07);color:#0078ff;border:1px solid rgba(0,120,255,0.2);">${r.brand}</span>`:'';
     return `<a class="result-row${r['품절']?' soldout':''}" href="${r['링크']}" target="_blank">
       <div>${imgEl}${ph}</div>
       <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}${reserved}${brandBadge}</div></div>
