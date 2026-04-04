@@ -1706,6 +1706,33 @@ def crawl_all():
             elif '1.0' in name_lower or 'e58' in name_lower or 'e60' in name_lower:
                 r['label'] = '50mm Noctilux f1.0'
 
+        # ── 가격 기반 브랜드/label 보정 ──
+        try:
+            price_str = r.get('가격', '')
+            currency = r.get('통화', 'KRW')
+            price_num = int(re.sub(r'[^0-9]', '', price_str)) if price_str else 0
+            # GBP→KRW 환산 (대략 1GBP=1,700원)
+            if currency == 'GBP':
+                price_num = price_num * 1700
+
+            # Noctilux f1.2 가격 기반 추론
+            if r['label'] in ['50mm Lens', '50mm Noctilux f1.2', ''] and                re.search(r'50/1\.2|50mm.*1\.2|1\.2.*50mm', name_lower):
+                if price_num >= 15_000_000:
+                    # 1,500만원↑ → 오리지널
+                    r['label'] = '50mm Noctilux f1.2'
+                    r['brand'] = 'Leica'
+                elif price_num >= 5_000_000:
+                    # 500~1,500만원 → 라이카 공식 복각
+                    r['label'] = '50mm Noctilux f1.2'
+                    r['brand'] = 'Leica'
+                elif 1_000_000 <= price_num < 5_000_000:
+                    # 100~500만원 → 써드파티 복각
+                    r['label'] = '50mm Noctilux f1.2'
+                    if r.get('brand') not in ['Leica']:
+                        r['brand'] = '3rd Party'
+        except Exception:
+            pass
+
     # ── 판매 완료 추적 (sold_items.json) ──
     import datetime as dt
     now_str = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
