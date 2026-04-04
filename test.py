@@ -368,6 +368,76 @@ def detect_mount(name):
     if any(x in n for x in ['3CAM','2CAM','1CAM',' ROM','APO EXTENDER R']):
         return "R"
 
+    # ── 플래시/악세사리 코드명 → Accessory ──
+    flash_kw = ['SF20','SF24','SF26','SF40','SF58','SF60','SF64','SF 20','SF 24',
+                'SF 26','SF 40','SF 58','SF 60','SF 64','SF-20','SF-26','SF-60',
+                'ULTRAVID','ULTRAVD','GEOVID','TRINOVID',
+                'TRIPOD','BALL HEAD','TABLETOP','CARBON TRAVEL',
+                'EVF2','VC METER','HANDGRIP','FINGER LOOP','SYSTEM CASE',
+                'SCA-ADAPTER','ELPRO','VTROO','OZTNO','APDOO',
+                'SGOOD','SBKOO','SHOOC','SAIOO','SUOOQ','SOOTF','SOOGZ','XOOIM',
+                'SERIE ','SERIE7','SERIE8','POCKET WATCH','RAPIDWINDER',
+                'WOTANCRAFT','FOGG ','OBERWERTH','ABRAHAMSSON',
+                'UVA','UV/IR','UVIR','YELLOW FI','A36 ORANGE','A36-E']
+    if any(x in n for x in flash_kw):
+        return "Accessory"
+    # ── Q 시스템 ──
+    if re.search(r'^\[.*?\]\s*Q[2-3P]?[\s\(\-]', n) or re.search(r'^\[.*?\]Q[2-3]?', n):
+        return "Q"
+    # ── SL 바디 단독 표기 ──
+    if re.search(r'^\[.*?\]\s*SL\s*[\(\-\s]|^\[.*?\]\s*SL$', n):
+        return "SL"
+    # ── TL2 → SL ──
+    if re.search(r'^\[.*?\]\s*TL2?\s*[\(\-\s]', n):
+        return "SL"
+    # ── ZM 렌즈 → M ──
+    if 'ZM' in n and any(x in n for x in ['ZEISS','BIOGON','DISTAGON','PLANAR','SONNAR']):
+        return "M"
+    # ── Voigtlander → M ──
+    if any(x in n for x in ['VOIGTLANDER','보이그랜더']) and        not any(x in n for x in ['FINDER','METER','파인더']):
+        return "M"
+    # ── Sigma/파나소닉/루믹스 L마운트 → SL ──
+    if 'SIGMA' in n and any(x in n for x in ['SL 마운트','L 마운트','L마운트','SL마운트','DG DN','HSM','L MOUNT']):
+        return "SL"
+    if any(x in n for x in ['파나소닉','루믹스','PANASONIC','LUMIX']) and        any(x in n for x in ['L 마운트','L마운트','L MOUNT',' S ']):
+        return "SL"
+    # ── R8/R9 바디 → R ──
+    if re.search(r'^\[.*?\]\s*R[89]\s*[\(\-\s]', n):
+        return "R"
+    # ── IIIf/IIIc 등 바르낙 약식 → L ──
+    if re.search(r'^\[.*?\]\s*III[A-Z]?\s*[\(\-\s]', n):
+        return "L"
+    # ── MDa → M ──
+    if re.search(r'^\[.*?\]\s*MDA?\s', n):
+        return "M"
+    # ── M-Rokkor → M ──
+    if 'M-ROKKOR' in n or 'M ROKKOR' in n:
+        return "M"
+    # ── M50/, M35/ 약식 → M ──
+    if re.search(r'^\[.*?\]\s*M\d+/\d', n):
+        return "M"
+    # ── Thambar, KE-7A, Summcron-C → L ──
+    if any(x in n for x in ['THAMBAR','KE-7A','KE7A','LOCTILUX','SUMMCRON-C','SUMMICRON-C']):
+        return "L"
+    # ── LEICA C 바디 → Compact ──
+    if re.search(r'LEICA C SN\.|LEICA C \(TY|LEICA C2-ZOOM', n):
+        return "Compact"
+    # ── LEICA S-E → S ──
+    if re.search(r'LEICA S-E', n):
+        return "S"
+    # ── LTM → L ──
+    if 'LTM' in n:
+        return "L"
+    # ── MS-Optics → M ──
+    if 'MS-OPTICS' in n or 'MS OPTICS' in n:
+        return "M"
+    # ── Extender L → SL ──
+    if 'EXTENDER L' in n:
+        return "SL"
+    # ── TTArtisan L → SL ──
+    if 'TTARTISAN' in n and any(x in n for x in ['L MOUNT','L- MOUNT',' L ']):
+        return "SL"
+
     return "Unknown"
 
 
