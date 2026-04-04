@@ -212,10 +212,22 @@ select:focus{border-color:var(--accent);color:var(--text);}
         <option value="price-desc">Price ↓</option>
       </select>
       <span class="filter-label">Brand</span>
-      <select id="brand-select" onchange="renderResults()">
+      <select id="brand-select" onchange="currentPage=1;renderResults()">
         <option value="all">All Brands</option>
         <option value="Leica">Leica Only</option>
-        <option value="3rd Party">3rd Party</option>
+        <optgroup label="3rd Party">
+          <option value="Voigtlander">Voigtlander</option>
+          <option value="Zeiss">Zeiss</option>
+          <option value="Light Lens Lab">Light Lens Lab</option>
+          <option value="TTArtisan">TTArtisan</option>
+          <option value="7Artisans">7Artisans</option>
+          <option value="Laowa">Laowa</option>
+          <option value="MS-Optics">MS-Optics</option>
+          <option value="Artizlab">Artizlab</option>
+          <option value="Sigma">Sigma</option>
+          <option value="Lumix">Lumix</option>
+          <option value="3rd Party">기타 3rd Party</option>
+        </optgroup>
       </select>
       <span class="filter-label">Site</span>
       <select id="site-select" onchange="renderResults()"><option value="all">All Sites</option></select>
