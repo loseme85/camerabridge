@@ -932,9 +932,15 @@ def auto_label(name):
         return "90mm Elmar f4"
 
     # ── Summilux 세대별 ──
-    # ── Ffordes 스타일 패턴 추론 (조리개+mm 기반) ──
-    # Summilux (f1.4)
-    if re.search(r'50mm f1\.4.{0,15}asph', n) and 'summilux' not in n:
+    # ── Ffordes 스타일 패턴 추론 (조리개+mm 기반, Leica 상품명만) ──
+    if 'leica' in n:
+     if False: pass  # dummy
+    if 'leica' in n and re.search(r'tri.?elmar', n):
+        return "28-35-50mm Tri-Elmar"
+    if 'leica' in n and re.search(r'28mm f1\.4', n):
+        return "28mm Summilux ASPH"
+    # Summilux (f1.4) - Leica만
+    if 'leica' in n and re.search(r'50mm f1\.4.{0,15}asph', n) and 'summilux' not in n:
         if 'fle' in n: return "50mm Summilux ASPH FLE"
         return "50mm Summilux ASPH"
     if re.search(r'35mm f1\.4.{0,15}asph', n) and 'summilux' not in n:
