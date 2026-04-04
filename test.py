@@ -269,12 +269,21 @@ def detect_mount(name):
     if 'LEICA L' in n and 'LEICA L-MOUNT' not in n:
         return "L"
 
-    # Ffordes 스타일: 끝에 " M BLACK", " M CHROME" 등
-    if re.search(r'\bM\s+(BLACK|CHROME|SILVER|ANTHRACITE|BODY)(\s*[-–]?\s*\d*)?$', n):
+    # Ffordes 스타일: VM, ZM → M 마운트
+    if re.search(r'\bVM\b', n) and not any(x in n for x in ['ADAPTER','CONVERTER']):
         return "M"
+    if re.search(r'\bZM\b', n):
+        return "M"
+    # Ffordes 스타일: 끝에 " M BLACK", " M CHROME" 등
     if re.search(r'\bM\s+(BLACK|CHROME|SILVER|ANTHRACITE|BODY)\b', n):
         return "M"
     if re.search(r'\bM\s+\d', n):  # "M 50mm", "M 28mm" 등
+        return "M"
+    # Ffordes 스타일: 6bit → M 마운트
+    if '6BIT' in n and 'LEICA' in n:
+        return "M"
+    # M Rokkor, Elcan → M 마운트
+    if 'M ROKKOR' in n or 'ELCAN' in n or 'COLLAPSIBLE' in n:
         return "M"
 
     # M-mount (확장)
