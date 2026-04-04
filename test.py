@@ -1371,6 +1371,10 @@ def auto_label(name):
     if 'leica' in n:
         if re.search(r'tri.?elmar', n): return "28-35-50mm Tri-Elmar"
         if re.search(r'28mm f1\.4', n): return "28mm Summilux ASPH"
+        if re.search(r'50mm f1\.0', n) and 'noctilux' not in n:
+            return "50mm Noctilux f1.0"
+        if re.search(r'50mm f0\.95', n) and 'noctilux' not in n:
+            return "50mm Noctilux f0.95"
         if re.search(r'50mm f1\.4', n) and 'summilux' not in n:
             if 'fle' in n: return "50mm Summilux ASPH FLE"
             return "50mm Summilux ASPH"
