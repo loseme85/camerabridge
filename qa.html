@@ -26,6 +26,12 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
 .search-row{display:flex;gap:8px;align-items:center;}
 .search-input{flex:1;border:1px solid var(--border2);border-radius:2px;padding:10px 14px;font-family:'Space Mono',monospace;font-size:13px;outline:none;color:var(--text);background:var(--surface2);}
 .search-input:focus{border-color:var(--accent);}
+.recent-tag{font-family:'Space Mono',monospace;font-size:10px;padding:2px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);cursor:pointer;background:transparent;}
+.recent-tag:hover{border-color:var(--accent);color:var(--accent);}
+.recent-wrap{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+.recent-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.5px;}
+.recent-clear{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);cursor:pointer;background:none;border:none;padding:0;margin-left:2px;opacity:0.5;}
+.recent-clear:hover{opacity:1;color:var(--accent);}
 .search-btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;border-radius:2px;}
 .search-btn:hover{opacity:0.85;}
 .normalized{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;display:none;}
@@ -117,6 +123,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
     <div class="search-title">// Search Query Test</div>
     <div class="search-row">
       <input class="search-input" id="qa-input" type="text" placeholder="검색어 입력... (예: summicron 35, leica r 50mm, 50lux)" oninput="debounceQA()">
+      <div id="qa-recent-wrap" class="recent-wrap"></div>
       <button class="search-btn" onclick="runQA()">▶ RUN QA</button>
     </div>
     <div class="normalized" id="normalized-display">정규화: <span id="normalized-val"></span></div>
@@ -510,12 +517,21 @@ async function loadData(){
   }
 }
 
+// ── 최근 검색어 ──
+const QA_RECENT_KEY='cb_qa_recent';
+const QA_MAX_RECENT=8;
+function getQARecent(){try{return JSON.parse(localStorage.getItem(QA_RECENT_KEY)||'[]');}catch(e){return[];}}
+function saveQARecent(q){if(!q||q.length<2)return;let l=getQARecent().filter(x=>x!==q);l.unshift(q);if(l.length>QA_MAX_RECENT)l=l.slice(0,QA_MAX_RECENT);try{localStorage.setItem(QA_RECENT_KEY,JSON.stringify(l));}catch(e){}renderQARecent();}
+function clearQARecent(){try{localStorage.removeItem(QA_RECENT_KEY);}catch(e){}renderQARecent();}
+function renderQARecent(){const wrap=document.getElementById('qa-recent-wrap');if(!wrap)return;const l=getQARecent();if(!l.length){wrap.innerHTML='';return;}wrap.innerHTML=`<span class="recent-label">// recent</span>`+l.map(q=>`<button class="recent-tag" onclick="document.getElementById('qa-input').value='${q.replace(/'/g,"\''")}';runQA();">${q}</button>`).join('')+`<button class="recent-clear" onclick="clearQARecent()">✕</button>`;}
+
 function qaGoPage(page){qaPage=page;runQA(false);window.scrollTo({top:document.getElementById('results-body').offsetTop-80,behavior:'smooth'});}
 
 function runQA(resetPage=true){
   if(resetPage) qaPage=1;
   const raw=document.getElementById('qa-input').value.trim();
   if(!raw) return;
+  saveQARecent(raw);
   const q=normalizeQuery(raw);
 
   // 정규화 표시
@@ -801,6 +817,7 @@ function quickTest(q){
   runQA();
 }
 
+renderQARecent();
 document.getElementById('qa-input').addEventListener('keydown',e=>{
   if(e.key==='Enter') runQA();
 });

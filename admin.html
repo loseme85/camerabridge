@@ -280,7 +280,8 @@ input[type=text]{width:150px;}
         <option value="Lens">Lens Only</option>
         <option value="Accessory">Accessory</option>
       </select>
-      <input type="text" id="f-search" placeholder="search..." oninput="applyFilters()">
+      <input type="text" id="f-search" placeholder="search..." oninput="applyFiltersAndSave()">
+      <div id="admin-recent-wrap" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;align-items:center;"></div>
       <select id="f-site" onchange="applyFilters()"><option value="all">All Sites</option></select>
       <select id="f-status" onchange="applyFilters()">
         <option value="all">All</option>
@@ -362,7 +363,7 @@ async function loadData(){
     allData=await res.json();
     document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString();
     log('// Loaded '+allData.length+' listings','ok');
-    buildLabelAvg();updateStats();updateSiteProgress();try{updateCharts();}catch(e){log("// Chart error: "+e.message,"err");}updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();renderBrandStats();applyFilters();loadStatus();
+    buildLabelAvg();updateStats();updateSiteProgress();try{updateCharts();}catch(e){log("// Chart error: "+e.message,"err");}updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();renderBrandStats();applyFilters();loadStatus();renderAdminRecent();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
 function updateNewItems(){
@@ -787,6 +788,25 @@ function toggleNewListings(){
     el.style.display='none';
     btn.textContent='펼치기 ▼';
   }
+}
+
+// ── 최근 검색어 ──
+const ADMIN_RECENT_KEY='cb_admin_recent';
+const ADMIN_MAX_RECENT=8;
+function getAdminRecent(){try{return JSON.parse(localStorage.getItem(ADMIN_RECENT_KEY)||'[]');}catch(e){return[];}}
+function saveAdminRecent(q){if(!q||q.length<2)return;let l=getAdminRecent().filter(x=>x!==q);l.unshift(q);if(l.length>ADMIN_MAX_RECENT)l=l.slice(0,ADMIN_MAX_RECENT);try{localStorage.setItem(ADMIN_RECENT_KEY,JSON.stringify(l));}catch(e){}renderAdminRecent();}
+function clearAdminRecent(){try{localStorage.removeItem(ADMIN_RECENT_KEY);}catch(e){}renderAdminRecent();}
+function renderAdminRecent(){
+  const wrap=document.getElementById('admin-recent-wrap');if(!wrap)return;
+  const l=getAdminRecent();if(!l.length){wrap.innerHTML='';return;}
+  wrap.innerHTML=`<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);">// recent</span>`
+    +l.map(q=>`<button style="font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);cursor:pointer;background:transparent;" onclick="document.getElementById('f-search').value='${q.replace(/'/g,"\''")}';applyFilters();">${q}</button>`).join('')
+    +`<button style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);cursor:pointer;background:none;border:none;padding:0;margin-left:2px;opacity:0.5;" onclick="clearAdminRecent()">✕</button>`;
+}
+function applyFiltersAndSave(){
+  const q=document.getElementById('f-search').value.trim();
+  if(q.length>=2) saveAdminRecent(q);
+  applyFilters();
 }
 
 function setSortPrice(){const s=document.getElementById('f-sort');s.value=s.value==='price-asc'?'price-desc':'price-asc';applyFilters();}
