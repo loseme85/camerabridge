@@ -368,6 +368,45 @@ def detect_mount(name):
     if any(x in n for x in ['3CAM','2CAM','1CAM',' ROM','APO EXTENDER R']):
         return "R"
 
+    # ── CL 바디 → SL ──
+    if re.search(r'^CL\s*[\(\[]', n) or re.search(r'^CL\s+(SILVER|BLACK)', n):
+        return "SL"
+    # ── Leicavit → M Accessory ──
+    if 'LEICAVIT' in n:
+        return "M"
+    # ── MP3 → M 바디 ──
+    if re.match(r'^MP\d\b', n):
+        return "M"
+    # ── M EV1 → M 바디 ──
+    if re.match(r'^M EV\d', n):
+        return "M"
+    # ── Novoflex 어댑터 → Accessory ──
+    if 'NOVOFLEX' in n:
+        return "Accessory"
+    # ── Panasonic S → SL (L-Mount Alliance) ──
+    if 'PANASONIC' in n and re.search(r'\d+mm.*\bS\b', n):
+        return "SL"
+    # ── Angenieux R → R ──
+    if 'ANGENIEUX' in n and ' R' in n:
+        return "R"
+    # ── PC Super Angulon R → R ──
+    if 'PC SUPER ANGULON' in n and ' R' in n:
+        return "R"
+    # ── Summitar → L ──
+    if 'SUMMITAR' in n:
+        return "L"
+    # ── Apo Macro TL → SL ──
+    if 'APO MACRO TL' in n or 'MACRO TL' in n:
+        return "SL"
+    # ── Oskar Barnack / O-series → L ──
+    if 'OSKAR BARNACK' in n or 'O-SERIE' in n or 'O SERIE' in n:
+        return "L"
+    # ── IF/IIIF/IIIG 바디 (장씨 스타일) ──
+    if re.search(r'^LEICA\s+(IF|IIF|IIIF|IIIG|IIIC|IIIA|IIC|IID|IIlC)\b', n):
+        return "L"
+    # ── Barnack IF/II → L ──
+    if 'BARNACK' in n:
+        return "L"
     # ── 플래시/악세사리 코드명 → Accessory ──
     flash_kw = ['SF20','SF24','SF26','SF40','SF58','SF60','SF64','SF 20','SF 24',
                 'SF 26','SF 40','SF 58','SF 60','SF 64','SF-20','SF-26','SF-60',
@@ -1897,6 +1936,9 @@ def crawl_all():
         if r['category'] == 'Accessory':
             r['label'] = ''  # Accessory는 label 제거 (평균가 왜곡 방지)
         r['mount'] = detect_mount(r['상품명'])
+        # Accessory는 mount도 Accessory로
+        if r.get('category') == 'Accessory' and r.get('mount') == 'Unknown':
+            r['mount'] = 'Accessory'
         # brand 필드: 항상 재계산 (분류 정확도 유지)
         r['brand'] = detect_brand(r['상품명'])
         # crawl_time은 항상 최신으로
