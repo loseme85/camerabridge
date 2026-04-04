@@ -904,6 +904,27 @@ def auto_label(name):
         if re.search(r'\b50/1\.0\b', n):
             return "50mm Noctilux f1.0"
 
+    # ── Summarit ──
+    if 'summarit' in n:
+        mm = re.search(r'(\d+)(?:mm|/)', n)
+        mm = mm.group(1) if mm else ''
+        if mm == '35': return "35mm Summarit f2.5"
+        if mm == '50': return "50mm Summarit f2.5"
+        if mm == '75': return "75mm Summarit f2.5"
+        if mm == '90': return "90mm Summarit f2.5"
+        return "Summarit"
+    # Ffordes 스타일: F2.5 M → Summarit 추론
+    if re.search(r'75mm f2\.5', n) and 'summarit' not in n:
+        return "75mm Summarit f2.5"
+    if re.search(r'35mm f2\.5', n) and 'summarit' not in n and 'color' not in n:
+        return "35mm Summarit f2.5"
+
+    # ── Elmar Collapsible (침동) ──
+    if 'collapsible' in n and '50' in n:
+        return "50mm Elmar f3.5"
+    if 'collapsible' in n and '90' in n:
+        return "90mm Elmar f4"
+
     # ── Summilux 세대별 ──
     # Ffordes 스타일: "50mm F1.4 Asph" → Summilux로 추론
     if re.search(r'50mm f1\.4.{0,10}asph', n) and 'summilux' not in n:
