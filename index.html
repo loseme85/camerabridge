@@ -577,6 +577,7 @@ function renderRecentSearches(){
 function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
 function doHeroSearch(){
   const raw=document.getElementById('hero-input').value.trim();if(!raw)return;
+  saveRecentSearch(raw);
   const q=normalizeQuery(raw);
   document.getElementById('hero-input').value=raw;
   document.getElementById('search-input').value=raw;
@@ -586,7 +587,7 @@ function doHeroSearch(){
   history.pushState({query:raw},'','?q='+encodeURIComponent(raw));
   renderResults(q);
 }
-function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;const q=normalizeQuery(raw);renderResults(q);}
+function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;saveRecentSearch(raw);const q=normalizeQuery(raw);renderResults(q);}
 function clearSearch(){document.getElementById('search-input').value='';showHero();}
 function showHero(){
   document.getElementById('hero-section').style.display='flex';
