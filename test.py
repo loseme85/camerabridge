@@ -882,6 +882,7 @@ def auto_label(name):
     # ── Noctilux (키워드 명시 또는 조리개로 추론) ──
     if "noctilux" in n or "loctilux" in n:
         if "0.95" in n: return "50mm Noctilux f0.95"
+        if "35" in n and "1.2" in n: return "35mm Noctilux f1.2"
         if "1.2" in n: return "50mm Noctilux f1.2"
         if "original" in n: return "50mm Noctilux f1.2"  # 충무로 1세대 표기
         if "1.0" in n: return "50mm Noctilux f1.0"
