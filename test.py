@@ -270,7 +270,9 @@ def detect_mount(name):
         return "L"
 
     # Ffordes 스타일: 끝에 " M BLACK", " M CHROME" 등
-    if re.search(r'\bM\s+(BLACK|CHROME|SILVER|ANTHRACITE|BODY)$', n):
+    if re.search(r'\bM\s+(BLACK|CHROME|SILVER|ANTHRACITE|BODY)(\s*[-–]?\s*\d*)?$', n):
+        return "M"
+    if re.search(r'\bM\s+(BLACK|CHROME|SILVER|ANTHRACITE|BODY)\b', n):
         return "M"
     if re.search(r'\bM\s+\d', n):  # "M 50mm", "M 28mm" 등
         return "M"
