@@ -388,10 +388,10 @@ function updateNewItems(){
   if(!recentItems.length){sec.style.display='none';return;}
   sec.style.display='block';
 
-  // 30분 단위로 반올림해서 회차 그룹핑
+  // 정확한 크롤링 시간으로 그룹핑
   function roundToSession(dt){
     const d=new Date(dt);
-    d.setMinutes(d.getMinutes()<30?0:30,0,0);
+    d.setSeconds(0,0);
     return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0')+'T'+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
   }
 
