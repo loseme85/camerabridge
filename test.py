@@ -1694,10 +1694,16 @@ def crawl_all():
             if 'first_seen' not in r or r.get('first_seen') == crawl_time:
                 print(f"  🆕 신규: {r['상품명'][:40]}")
         # Noctilux label 조리개별 보정 + generation 필드
-        if 'noctilux' in name_lower:
+        if 'noctilux' in name_lower or r.get('label','').startswith('50mm Noctilux'):
             nocti_gen = detect_noctilux_gen(name)
             if nocti_gen:
                 r['noctilux_gen'] = nocti_gen
+            elif r.get('label') == '50mm Noctilux f1.2':
+                r['noctilux_gen'] = 'v1 (f1.2)'
+            elif r.get('label') == '50mm Noctilux f0.95':
+                r['noctilux_gen'] = 'v4 (f0.95 ASPH)'
+            elif r.get('label') == '50mm Noctilux f1.0':
+                r['noctilux_gen'] = 'v2/v3 (f1.0)'
         if r['label'] in ['50mm Noctilux']:
             if '0.95' in name_lower:
                 r['label'] = '50mm Noctilux f0.95'
