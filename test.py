@@ -206,6 +206,9 @@ def detect_mount(name):
         return "R"
 
     # R-mount (가장 먼저 - -R 표기가 명확)
+    # ROM, 3cam, 2cam → R 마운트
+    if any(x in n for x in ['3CAM','2CAM','1CAM',' ROM ','ROM\"','-ROM','APO EXTENDER R','EXTENDER R']):
+        return 'R'
     if any(x in n for x in ['-R ','-R/','SUMMILUX-R','SUMMICRON-R','ELMARIT-R',
                               'ELMAR-R','TELYT-R','LEICA R3','LEICA R4','LEICA R5',
                               'LEICA R6','LEICA R7','LEICA R8','LEICA R9']):
@@ -537,6 +540,9 @@ def detect_brand(name):
     # 7Artisans
     if any(x in n for x in ['7artisans','7 artisans']):
         return '7Artisans'
+    # Angenieux
+    if 'angenieux' in n:
+        return 'Angenieux'
     # Laowa
     if 'laowa' in n:
         return 'Laowa'
