@@ -926,13 +926,49 @@ def auto_label(name):
         return "90mm Elmar f4"
 
     # ── Summilux 세대별 ──
-    # Ffordes 스타일: "50mm F1.4 Asph" → Summilux로 추론
-    if re.search(r'50mm f1\.4.{0,10}asph', n) and 'summilux' not in n:
+    # ── Ffordes 스타일 패턴 추론 (조리개+mm 기반) ──
+    # Summilux (f1.4)
+    if re.search(r'50mm f1\.4.{0,15}asph', n) and 'summilux' not in n:
         if 'fle' in n: return "50mm Summilux ASPH FLE"
         return "50mm Summilux ASPH"
-    if re.search(r'35mm f1\.4.{0,10}asph', n) and 'summilux' not in n:
+    if re.search(r'35mm f1\.4.{0,15}asph', n) and 'summilux' not in n:
         if 'fle' in n: return "35mm Summilux ASPH FLE"
         return "35mm Summilux ASPH"
+    if re.search(r'21mm f1\.4', n) and 'summilux' not in n:
+        return "21mm Summilux ASPH"
+    # Summicron (f2)
+    if re.search(r'35mm f2.{0,15}asph', n) and 'summicron' not in n and 'summilux' not in n:
+        return "35mm Summicron ASPH"
+    if re.search(r'50mm f2', n) and 'summicron' not in n and 'noctilux' not in n:
+        if 'rigid' in n: return "50mm Summicron Rigid"
+        if '6bit' in n or 'asph' in n: return "50mm Summicron ASPH"
+        return "50mm Summicron"
+    if re.search(r'28mm f2', n) and 'summicron' not in n:
+        return "28mm Summicron ASPH"
+    if re.search(r'90mm f2', n) and 'summicron' not in n:
+        return "90mm APO-Summicron ASPH"
+    # Elmarit (f2.8)
+    if re.search(r'28mm f2\.8.{0,15}asph', n) and 'elmarit' not in n:
+        return "28mm Elmarit ASPH"
+    if re.search(r'21mm f2\.8.{0,15}asph', n) and 'elmarit' not in n:
+        return "21mm Elmarit ASPH"
+    if re.search(r'135mm f2\.8', n) and 'elmarit' not in n:
+        return "135mm Elmarit"
+    # Summaron (f5.6, f2.8 28mm 구형)
+    if re.search(r'28mm f5\.6', n) and 'summaron' not in n:
+        return "28mm Summaron f5.6"
+    if re.search(r'35mm f2\.8', n) and 'summaron' not in n and 'elmarit' not in n:
+        return "35mm Summaron f2.8"
+    # Elmar Collapsible
+    if 'collapsible' in n and '50' in n:
+        return "50mm Elmar f3.5"
+    if 'collapsible' in n and '90' in n:
+        return "90mm Elmar f4"
+    # Elmar (f3.5, f4)
+    if re.search(r'50mm f3\.5', n) and 'elmar' not in n:
+        return "50mm Elmar f3.5"
+    if re.search(r'90mm f4', n) and 'elmar' not in n and 'macro' not in n:
+        return "90mm Elmar f4"
     if "summilux" in n:
         import re as _re3
         mm_m = _re3.search(r'(\d+)(?:mm|/)', n)
