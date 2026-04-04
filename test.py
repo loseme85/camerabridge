@@ -852,6 +852,10 @@ def auto_label(name):
         if "1.0" in n: return "50mm Noctilux f1.0"
         if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
         return "Noctilux"
+    # 복각 + 1.2 → Noctilux f1.2
+    if '복각' in n and '1.2' in n and not any(k in n for k in _nocti_exc):
+        return "50mm Noctilux f1.2"
+
     # 충무로/장씨 약식: "M 50/1.2", "M50/1.2", "복각" 등 → Noctilux 추론
     _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
     if not any(k in n for k in _nocti_exc):
