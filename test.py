@@ -1766,8 +1766,8 @@ def crawl_all():
 
     # label 자동 보정 + 상품명 정리 + system/category 분류
     import datetime
-    import pytz
-    KST = pytz.timezone("Asia/Seoul")
+    import datetime as _dt2
+    KST = _dt2.timezone(_dt2.timedelta(hours=9))
     crawl_time = datetime.datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S")
     for r in unique_results:
         name = r['상품명']
@@ -1846,8 +1846,7 @@ def crawl_all():
 
     # ── 판매 완료 추적 (sold_items.json) ──
     import datetime as dt
-    import pytz as _pytz
-    _KST = _pytz.timezone("Asia/Seoul")
+    _KST = dt.timezone(dt.timedelta(hours=9))
     now_str = dt.datetime.now(_KST).strftime("%Y-%m-%d %H:%M:%S")
     new_links = {r["링크"] for r in unique_results}
 
