@@ -279,7 +279,13 @@ function normalizeQuery(q){
   if(SLANG_MAP[lower]) return SLANG_MAP[lower];
   const tokens=lower.split(/\s+/);
   const mapped=tokens.map(t=>TOKEN_MAP[t]||t);
-  return mapped.join(' ');
+  const joined=mapped.join(' ');
+  // 조합 기반 보정: nocti/noctilux 없이 1st → 그냥 1세대
+  const hasNocti=tokens.some(t=>t==='nocti'||t==='noctilux'||t==='nocti1st');
+  if(!hasNocti){
+    return joined.replace(/\bnocti1st\b/g,'1세대');
+  }
+  return joined;
 }
 const GEN_MAP = {
   '1st':'1세대','1gen':'1세대','1세대':'1세대',
