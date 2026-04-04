@@ -951,12 +951,12 @@ def auto_label(name):
             if 'rigid' in n: return "50mm Summicron Rigid"
             if '6bit' in n or 'asph' in n: return "50mm Summicron ASPH"
             return "50mm Summicron"
+        if re.search(r'28mm f2\.8', n) and 'elmarit' not in n:
+            return "28mm Elmarit ASPH"
         if re.search(r'28mm f2\b', n) and 'summicron' not in n:
             return "28mm Summicron ASPH"
         if re.search(r'90mm f2\b', n) and 'summicron' not in n:
             return "90mm APO-Summicron ASPH"
-        if re.search(r'28mm f2\.8', n) and 'elmarit' not in n:
-            return "28mm Elmarit ASPH"
         if re.search(r'21mm f2\.8', n) and 'elmarit' not in n:
             return "21mm Elmarit ASPH"
         if re.search(r'135mm f2\.8', n) and 'elmarit' not in n:
