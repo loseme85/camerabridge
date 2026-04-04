@@ -1715,9 +1715,8 @@ def crawl_all():
         if r['category'] == 'Accessory':
             r['label'] = ''  # Accessory는 label 제거 (평균가 왜곡 방지)
         r['mount'] = detect_mount(r['상품명'])
-        # brand 필드: 없으면 상품명에서 자동 감지
-        if not r.get('brand'):
-            r['brand'] = detect_brand(r['상품명'])
+        # brand 필드: 항상 재계산 (분류 정확도 유지)
+        r['brand'] = detect_brand(r['상품명'])
         # crawl_time은 항상 최신으로
         r['crawl_time'] = crawl_time
         # first_seen: 기존 데이터면 보존, 신규면 현재 시간
