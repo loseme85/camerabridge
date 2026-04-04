@@ -1050,6 +1050,9 @@ def passes_barnack_filter(name):
 # 비라이카 브랜드 키워드 (바디 검색 시 제외) → NON_LEICA_BRANDS 전역 상수 사용
 
 def passes_filter(name, must_contain, item_meta=None):
+    # 판매완료/보류 항목 제외
+    if re.search(r'판매완료|보류|\d+ - 보류|\d+-판매완료', name):
+        return False
     """향상된 필터 - 카테고리별 상호 배타적 필터링"""
     name_lower = " ".join(name.lower().split())
 
