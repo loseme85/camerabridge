@@ -905,6 +905,13 @@ def auto_label(name):
             return "50mm Noctilux f1.0"
 
     # ── Summilux 세대별 ──
+    # Ffordes 스타일: "50mm F1.4 Asph" → Summilux로 추론
+    if re.search(r'50mm f1\.4.{0,10}asph', n) and 'summilux' not in n:
+        if 'fle' in n: return "50mm Summilux ASPH FLE"
+        return "50mm Summilux ASPH"
+    if re.search(r'35mm f1\.4.{0,10}asph', n) and 'summilux' not in n:
+        if 'fle' in n: return "35mm Summilux ASPH FLE"
+        return "35mm Summilux ASPH"
     if "summilux" in n:
         import re as _re3
         mm_m = _re3.search(r'(\d+)(?:mm|/)', n)
