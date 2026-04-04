@@ -334,7 +334,42 @@ def detect_mount(name):
     if any(x in n for x in _s_kw):
         return "S"
 
+    # ── Finder/뷰파인더/악세사리 → Accessory ──
+    if any(x in n for x in ['FINDER','VIEWFINDER','UNIVERSALSUCHER','VIEW FINDER',
+                              'SUCHER','SOFT RELEASE','TELEVID','TRINOVID']):
+        return "Accessory"
+    if any(x in n for x in ['HOLSTER','LUIGI','OBERWERTH','ZEGNA','ACAM-']):
+        return "Accessory"
+    # ── Carl Zeiss Jena → L ──
+    if 'CARL ZEISS JENA' in n:
+        return "L"
+    # ── Sigma L Mount → SL ──
+    if 'SIGMA' in n and any(x in n for x in ['DG DN','L MOUNT','L-MOUNT']):
+        return "SL"
+    # ── Lumix S → SL ──
+    if 'LUMIX S' in n or ('PANASONIC' in n and ' S ' in n):
+        return "SL"
+    # ── Meyer Optik → M ──
+    if 'MEYER OPTIK' in n:
+        return "M"
+    # ── Artizlab → M ──
+    if 'ARTIZLAB' in n:
+        return "M"
+    # ── Visoflex2 → M ──
+    if 'VISOFLEX2' in n or 'VISOFLEX 2' in n:
+        return "M"
+    # ── Laowa/TTArtisan L → SL ──
+    if any(x in n for x in ['LAOWA','TTARTISAN']) and any(x in n for x in ['L MOUNT','L-MOUNT',' L ']):
+        return "SL"
+    # ── Light Lens Lab L → SL ──
+    if 'LIGHT LENS LAB L' in n:
+        return "SL"
+    # ── ROM, 3CAM → R ──
+    if any(x in n for x in ['3CAM','2CAM','1CAM',' ROM','APO EXTENDER R']):
+        return "R"
+
     return "Unknown"
+
 
 def resolve_mount_from_category(mount, category):
     """mount가 Unknown이고 category가 Accessory면 Accessory 반환"""
