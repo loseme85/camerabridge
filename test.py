@@ -518,10 +518,44 @@ def detect_brand(name):
         if kw in n:
             return "Leica"
 
-    # ── 2순위: 라이카 마운트 호환 써드파티 ──
+    # ── 2순위: 라이카 마운트 호환 써드파티 (브랜드별 세분화) ──
+    # Voigtlander
+    if any(x in n for x in ['voigtlander','보이그랜더','nokton','ultron','color-skopar',
+                              'heliar','bessa','prominent']):
+        return 'Voigtlander'
+    # Zeiss ZM
+    if any(x in n for x in ['zeiss','biogon','distagon','planar zm','c-sonnar zm',
+                              'zm 35','zm 50','zm 21','zm 18','zm 15','zm 25','zm 28',
+                              'zeiss ikon']):
+        return 'Zeiss'
+    # Light Lens Lab
+    if 'light lens lab' in n:
+        return 'Light Lens Lab'
+    # TTArtisan
+    if any(x in n for x in ['ttartisan','tt artisan']):
+        return 'TTArtisan'
+    # 7Artisans
+    if any(x in n for x in ['7artisans','7 artisans']):
+        return '7Artisans'
+    # Laowa
+    if 'laowa' in n:
+        return 'Laowa'
+    # MS-Optics
+    if any(x in n for x in ['ms-optics','ms optics']):
+        return 'MS-Optics'
+    # Artizlab
+    if 'artizlab' in n:
+        return 'Artizlab'
+    # Sigma (L마운트)
+    if 'sigma' in n:
+        return 'Sigma'
+    # Lumix/Panasonic (L마운트)
+    if any(x in n for x in ['lumix','panasonic']):
+        return 'Lumix'
+    # 나머지 써드파티
     for brand in THIRD_PARTY_BRANDS:
         if brand in n:
-            return "3rd Party"
+            return '3rd Party'
 
     # ── 3순위: 완전 비라이카 (크롤링 단계에서 이미 걸러지지만 혹시 몰라) ──
     for brand in NON_LEICA_BRANDS:
