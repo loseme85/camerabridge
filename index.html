@@ -140,12 +140,15 @@ select:focus{border-color:var(--accent);color:var(--text);}
 .hero-search{border:1.5px solid var(--border2);}
 .hero-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(225,31,38,0.08);}
 .search-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px rgba(225,31,38,0.1);}
-.recent-searches{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center;}
-.recent-tag{font-family:'Space Mono',monospace;font-size:10px;padding:3px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--text-dim);cursor:pointer;background:transparent;transition:all 0.15s;}
-.recent-tag:hover{border-color:var(--accent);color:var(--accent);}
-.recent-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:0.5px;}
-.recent-clear{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);cursor:pointer;background:none;border:none;padding:0;margin-left:4px;opacity:0.5;}
-.recent-clear:hover{opacity:1;color:var(--accent);}
+.recent-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border2);border-top:none;border-radius:0 0 3px 3px;z-index:100;display:none;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.recent-dropdown.open{display:block;}
+.recent-dropdown-item{font-family:'Space Mono',monospace;font-size:11px;padding:8px 14px;cursor:pointer;color:var(--text);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.recent-dropdown-item:last-child{border-bottom:none;}
+.recent-dropdown-item:hover{background:var(--surface2);color:var(--accent);}
+.recent-dropdown-item .recent-icon{color:var(--muted);font-size:10px;}
+.recent-dropdown-header{font-family:'Space Mono',monospace;font-size:9px;padding:6px 14px 4px;color:var(--muted);letter-spacing:0.5px;display:flex;justify-content:space-between;align-items:center;}
+.recent-dropdown-clear{cursor:pointer;color:var(--muted);font-size:9px;}
+.recent-dropdown-clear:hover{color:var(--accent);}
 .results-title strong{color:var(--accent);}
 .price{color:var(--accent);}
 .stat-value{color:var(--text);}
@@ -157,10 +160,11 @@ select:focus{border-color:var(--accent);color:var(--text);}
     <div class="logo-dot"></div>
     CAMERA <span>BRIDGE</span>
   </div>
-  <div class="search-wrap" id="header-search-wrap" style="display:none">
-    <input id="search-input" type="text" placeholder="// search used leica...">
+  <div class="search-wrap" id="header-search-wrap" style="display:none;position:relative;">
+    <input id="search-input" type="text" placeholder="// search used leica..." onfocus="openRecentDropdown('header')" onblur="setTimeout(()=>closeRecentDropdown(),150)">
     <button class="clear-btn" onclick="clearSearch()">×</button>
     <button class="search-btn" onclick="doSearch()">→</button>
+    <div class="recent-dropdown" id="header-recent-dropdown"></div>
   </div>
   <div class="header-right">
     <div class="lang-wrap" id="lang-wrap">
@@ -178,11 +182,11 @@ select:focus{border-color:var(--accent);color:var(--text);}
     <div class="hero-title">CAMERA</div>
     <div class="hero-title-2">BRIDGE</div>
     <p class="hero-sub">// searching across dealers worldwide</p>
-    <div class="hero-search">
-      <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key===&#39;Enter&#39;) doHeroSearch()">
+    <div class="hero-search" style="position:relative;">
+      <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key==='Enter'){doHeroSearch();closeRecentDropdown();}" onfocus="openRecentDropdown('hero')" onblur="setTimeout(()=>closeRecentDropdown(),150)">
       <button onclick="doHeroSearch()">Search →</button>
+      <div class="recent-dropdown" id="hero-recent-dropdown"></div>
     </div>
-    <div id="recent-searches-wrap" class="recent-searches" style="justify-content:center;margin-bottom:4px;"></div>
     <div class="hero-tags" id="hero-tags">
       <span class="hero-tag" onclick="quickSearch(&#39;50lux&#39;)">50lux</span>
       <span class="hero-tag" onclick="quickSearch(&#39;35cron&#39;)">35cron</span>
@@ -541,38 +545,47 @@ function matchesQuery(item, query){
     return name.includes(t) || label.includes(t);
   });
 }
-// ── 최근 검색어 ──
-const RECENT_KEY = 'cb_recent_searches';
-const MAX_RECENT = 8;
+// ── 최근 검색어 드롭다운 ──
+const RECENT_KEY='cb_recent_searches';
+const MAX_RECENT=8;
+let _activeDropdown=null;
 
-function getRecentSearches(){
-  try { return JSON.parse(localStorage.getItem(RECENT_KEY)||'[]'); }
-  catch(e){ return []; }
-}
+function getRecentSearches(){try{return JSON.parse(localStorage.getItem(RECENT_KEY)||'[]');}catch(e){return[];}}
 
 function saveRecentSearch(q){
-  if(!q||q.length<2) return;
-  let list = getRecentSearches().filter(x=>x!==q);
+  if(!q||q.length<2)return;
+  let list=getRecentSearches().filter(x=>x!==q);
   list.unshift(q);
-  if(list.length>MAX_RECENT) list=list.slice(0,MAX_RECENT);
-  try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch(e){}
-  renderRecentSearches();
+  if(list.length>MAX_RECENT)list=list.slice(0,MAX_RECENT);
+  try{localStorage.setItem(RECENT_KEY,JSON.stringify(list));}catch(e){}
 }
 
 function clearRecentSearches(){
-  try { localStorage.removeItem(RECENT_KEY); } catch(e){}
-  renderRecentSearches();
+  try{localStorage.removeItem(RECENT_KEY);}catch(e){}
+  closeRecentDropdown();
 }
 
-function renderRecentSearches(){
-  const wrap = document.getElementById('recent-searches-wrap');
-  if(!wrap) return;
-  const list = getRecentSearches();
-  if(!list.length){ wrap.innerHTML=''; return; }
-  wrap.innerHTML = `<span class="recent-label">// recent</span>`
-    + list.map(q=>`<button class="recent-tag" onclick="quickSearch('${q.replace(/'/g,"\'")}')">${q}</button>`).join('')
-    + `<button class="recent-clear" onclick="clearRecentSearches()">✕ clear</button>`;
+function buildDropdown(dropId, onSelect){
+  const el=document.getElementById(dropId);
+  if(!el)return;
+  const list=getRecentSearches();
+  if(!list.length){el.classList.remove('open');return;}
+  el.innerHTML=`<div class="recent-dropdown-header"><span>// recent searches</span><span class="recent-dropdown-clear" onmousedown="clearRecentSearches()">clear</span></div>`
+    +list.map(q=>`<div class="recent-dropdown-item" onmousedown="onSelect('${q.replace(/'/g,"\''")}')"><span class="recent-icon">↵</span>${q}</div>`).join('');
+  el.classList.add('open');
+  _activeDropdown=el;
 }
+
+function openRecentDropdown(type){
+  if(type==='hero') buildDropdown('hero-recent-dropdown', q=>{document.getElementById('hero-input').value=q;doHeroSearch();});
+  else if(type==='header') buildDropdown('header-recent-dropdown', q=>{document.getElementById('search-input').value=q;doSearch();});
+}
+
+function closeRecentDropdown(){
+  if(_activeDropdown){_activeDropdown.classList.remove('open');_activeDropdown=null;}
+}
+
+function renderRecentSearches(){}
 
 function quickSearch(q){document.getElementById('hero-input').value=q;doHeroSearch();}
 function doHeroSearch(){
