@@ -368,6 +368,126 @@ def detect_mount(name):
     if any(x in n for x in ['3CAM','2CAM','1CAM',' ROM','APO EXTENDER R']):
         return "R"
 
+    # ── 판매완료/보류 → Unknown 유지 ──
+    if re.search(r'판매완료|보류|SOLD', n):
+        return "Unknown"
+    # ── 가방/쌍안경/삼각대/기타 악세사리 → Accessory ──
+    if any(x in n for x in ['가방','BAG','쌍안경','BC SN','10X25','10×25','BC ','TRIPOD',
+                              'BALL HEAD','TABLETOP','디옵터','DIOPTER','JNK (',
+                              '오버베르트','OBERWERTH','ONA BAG']):
+        return "Accessory"
+    # ── VIT M (Leicavit) → M Accessory ──
+    if 'VIT M' in n or 'VIT(MP)' in n or 'LEICAVIT' in n:
+        return "M"
+    # ── Coiro/호환 Vit → M Accessory ──
+    if 'COIRO' in n or 'VIT FOR M' in n:
+        return "M"
+    # ── BE@RBRICK → Accessory ──
+    if 'BE@RBRICK' in n:
+        return "Accessory"
+    # ── Q/Q2/Q3/Q-P 바디 ──
+    if re.search(r'^\[.*?\]\s*Q[23]?\s*[\(\s\-]|^\[.*?\]\s*Q-P|^\[.*?\]Q[23]?', n):
+        return "Q"
+    # ── SL 바디 단독 ──
+    if re.search(r'^\[.*?\]\s*SL\s*[\(\-\s]|^\[.*?\]\s*SL$', n):
+        return "SL"
+    # ── TL2/TL 바디 → SL ──
+    if re.search(r'^\[.*?\]\s*TL2?\s*[\(\-\s]', n):
+        return "SL"
+    # ── CL + 세트 → SL ──
+    if re.search(r'^\[.*?\]\s*CL[\+\s]', n):
+        return "SL"
+    # ── X1/X2/X typ → Compact ──
+    if re.search(r'^\[.*?\]\s*X[12]?\s*[\(\s]|^\[.*?\]\s*X\s*TYP', n):
+        return "Compact"
+    # ── R6/R6.2/R8/R9 → R ──
+    if re.search(r'^\[.*?\]\s*R[6-9][\.\s\{\(]', n):
+        return "R"
+    # ── R-E → R ──
+    if re.search(r'LEICA R-E', n):
+        return "R"
+    # ── S 마운트 약식 → S ──
+    if re.search(r'^\[.*?\]\s*S \d+/\d', n):
+        return "S"
+    # ── Sigma SL/L마운트 → SL ──
+    if 'SIGMA' in n and any(x in n for x in ['SL 마운트','L마운트','DG DN','CONTEMPORARY','DG HSM','DN OS']):
+        return "SL"
+    elif '시그마' in n and any(x in n for x in ['SL 마운트','L마운트']):
+        return "SL"
+    # ── Light Lens Lab M → M ──
+    if 'LIGHT LENS LAB' in n and 'LIGHT LENS LAB L' not in n:
+        return "M"
+    # ── M50/M35/M21/M90 약식 → M ──
+    if re.search(r'^\[.*?\]\s*M\d+/\d', n):
+        return "M"
+    # ── M21/3.4 Super Angulon → M ──
+    if 'SUPER ANGULON' in n and 'M21' in n:
+        return "M"
+    # ── M-10R → M ──
+    if re.search(r'^\[.*?\]\s*M-10R', n):
+        return "M"
+    # ── T 바디 → SL ──
+    if re.search(r'^\[.*?\]\s*T\s*[\(\-\s]', n):
+        return "SL"
+    # ── MDa → M ──
+    if re.search(r'^\[.*?\]\s*MDA?\s', n):
+        return "M"
+    # ── IIIf/IIIg 단독 표기 → L ──
+    if re.search(r'^\[.*?\]\s*III[A-Z]?\s*[\(\-\s]', n):
+        return "L"
+    # ── L 85/1.5 Sumalex → L ──
+    if 'SUMALEX' in n or 'SUMMROAN' in n:
+        return "L"
+    # ── 장씨 바르낙 로마숫자 ──
+    if any(x in n for x in ['LEICA Ⅰ','LEICA ⅡF','LEICA ⅡD','LEICA ⅡC','LEICA ⅢF',
+                              'LEICA ⅢG','LEICA ⅢA','LEICA Ⅲ ','LEICA ⅢF',
+                              'LEICA STANDARD NICKEL','LEICA IG ','LEICA IF ']):
+        return "L"
+    # ── 장씨 LEICA III/II/I 바디 ──
+    if re.search(r'LEICA\s+II[ICD]?\s+', n) or re.search(r'LEICA\s+III[ABCDFG]?\s', n):
+        return "L"
+    # ── LEICA VIT M → M ──
+    if 'LEICA VIT' in n:
+        return "M"
+    # ── Carl Zeiss Sonnar/Opton → L ──
+    if any(x in n for x in ['CARL ZEISS','ZEISS-OPTON']) and 'C/Y' not in n:
+        return "L"
+    # ── Zeiss ZM (충무로 약식) → M ──
+    if re.search(r'^\[.*?\]\s*ZEISS\s+', n) or re.search(r'^\[.*?\]\s*ZM\s+', n):
+        return "M"
+    # ── Cooke L → L ──
+    if 'COOKE' in n:
+        return "L"
+    # ── Voigtlander LTM → L ──
+    if 'VOIGTLANDER' in n and 'LTM' in n:
+        return "L"
+    # ── angenieux R → R ──
+    if 'ANGENIEUX' in n:
+        return "R"
+    # ── Panasonic S → SL ──
+    if 'PANASONIC' in n:
+        return "SL"
+    # ── 50 Jahre CL → L (특별판) ──
+    if '50 JAHRE CL' in n:
+        return "L"
+    # ── LEICA O-series → L ──
+    if 'O-SERISE' in n or 'O-SERIES' in n or 'OSKAR BARNACK' in n:
+        return "L"
+    # ── Stemar 스테레오 → L ──
+    if 'STEMAR' in n:
+        return "L"
+    # ── LTM → L ──
+    if 'LTM' in n:
+        return "L"
+    # ── R250 Telyt → R ──
+    if 'R250' in n:
+        return "R"
+    # ── LECIA MP (오타) → M ──
+    if 'LECIA MP' in n:
+        return "M"
+    # ── 캐논 → M (어댑터로 사용) ──
+    if '캐논' in n:
+        return "M"
     # ── CL 바디 → SL ──
     if re.search(r'^CL\s*[\(\[]', n) or re.search(r'^CL\s+(SILVER|BLACK)', n):
         return "SL"
