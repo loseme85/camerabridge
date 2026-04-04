@@ -1906,11 +1906,7 @@ def crawl_all():
     print(f"🆕 신규 매물: {new_count}개 추가됨")
     print(f"⏱️  총 소요 시간: {elapsed:.1f}초 ({elapsed/60:.1f}분)")
     print(f"{'='*50}")
-    for r in unique_results:
-        print(f"\n  📷 [{r['세대']}] {r['상품명']}")
-        print(f"     💰 {r['가격']} {r['통화']} | 컨디션: {r['컨디션']}")
-        print(f"     🖼  {r['이미지'] or '이미지 없음'}")
-        print(f"     🔗 {r['링크']}")
+
 
 # ══════════════════════════════════════════════════════
 # GitHub 자동 Push
