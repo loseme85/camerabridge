@@ -402,7 +402,7 @@ function updateNewItems(){
     sessions[key].push(r);
   });
 
-  const sortedKeys=Object.keys(sessions).sort((a,b)=>b.localeCompare(a));
+  const sortedKeys=Object.keys(sessions).sort((a,b)=>b.localeCompare(a)).slice(0,10);
 
   // 필터 버튼 렌더링
   function renderSession(key){
