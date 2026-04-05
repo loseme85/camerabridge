@@ -431,7 +431,7 @@ function updateNewItems(){
   const btnHtml=sortedKeys.map((key,idx)=>{
     const dt=new Date(key);
     const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    const count=sessions[key].length;
+    const count=sessions[key]?sessions[key].length:0;
     return `<button onclick="window._newItemSession='${key}';document.querySelectorAll('.session-btn').forEach(b=>b.style.background='');this.style.background='var(--leica)';this.style.color='#fff';window._renderNewSession('${key}')" 
       class="session-btn"
       style="font-family:Space Mono,monospace;font-size:9px;padding:4px 10px;border:1px solid var(--border2);border-radius:2px;background:${idx===0?'var(--leica)':'var(--surface2)'};color:${idx===0?'#fff':'var(--dim)'};cursor:pointer;white-space:nowrap;">
@@ -443,7 +443,13 @@ function updateNewItems(){
 
   // 렌더 함수 글로벌 등록
   window._renderNewSession=function(key){
-    const items=sessions[key];
+    const items=sessions[key]||[];
+    if(!items.length){
+      const dt=new Date(key);
+      const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('session-detail').innerHTML=`<div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:20px 0;">📅 ${label} — 신규 매물 없음</div>`;
+      return;
+    }
     items.sort((a,b)=>{
       const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));
       const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));
