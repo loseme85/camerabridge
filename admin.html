@@ -371,28 +371,27 @@ function updateNewItems(){
   const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
   const sec=document.getElementById('new-items-section');
 
-  // 3일 이내 first_seen 신규 매물
+  // 3일 이내 크롤링 세션 + 신규 매물
   const threeDaysAgo=new Date(Date.now()-3*24*60*60*1000);
-  const recentItems=allData.filter(r=>r.first_seen&&new Date(r.first_seen)>=threeDaysAgo);
-
-  if(!recentItems.length){sec.style.display='none';return;}
   sec.style.display='block';
-
-  // 정확한 크롤링 시간으로 그룹핑
   function roundToSession(dt){
     const d=new Date(dt);
     d.setSeconds(0,0);
     return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0')+'T'+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
   }
-
+  const crawlKeys={};
+  allData.filter(r=>r.crawl_time&&new Date(r.crawl_time)>=threeDaysAgo).forEach(r=>{
+    const key=roundToSession(r.crawl_time);
+    crawlKeys[key]=true;
+  });
   const sessions={};
-  recentItems.forEach(r=>{
+  allData.filter(r=>r.first_seen&&new Date(r.first_seen)>=threeDaysAgo).forEach(r=>{
     const key=roundToSession(r.first_seen);
     if(!sessions[key]) sessions[key]=[];
     sessions[key].push(r);
   });
-
-  const sortedKeys=Object.keys(sessions).sort((a,b)=>b.localeCompare(a)).slice(0,10);
+  const sortedKeys=Object.keys(crawlKeys).sort((a,b)=>b.localeCompare(a)).slice(0,10);
+  if(!sortedKeys.length){sec.style.display='none';return;}
 
   // 필터 버튼 렌더링
   function renderSession(key){
