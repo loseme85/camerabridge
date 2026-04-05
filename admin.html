@@ -387,7 +387,7 @@ function updateNewItems(){
 
   const sessions={};
   recentItems.forEach(r=>{
-    const key=roundToSession(r.crawl_time);
+    const key=roundToSession(r.first_seen);
     if(!sessions[key]) sessions[key]=[];
     sessions[key].push(r);
   });
