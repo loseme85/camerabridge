@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_32.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_34.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -165,7 +165,7 @@ input[type=text]{width:150px;}
   <div id="new-items-section" style="display:none;margin-bottom:20px;">
     <div class="section-label" style="display:flex;align-items:center;justify-content:space-between;">
       <span>🆕 Today's New Listings</span>
-      <button onclick="toggleNewListings()" id="new-toggle-btn" style="font-family:'Space Mono',monospace;font-size:9px;padding:2px 8px;border:1px solid var(--border2);border-radius:2px;background:transparent;color:var(--dim);cursor:pointer;">접기 ▲</button>
+      <button onclick="toggleNewListings()" id="new-toggle-btn" style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;padding:2px 8px;border:1px solid var(--border2);border-radius:2px;background:transparent;color:var(--dim);cursor:pointer;">접기 ▲</button>
     </div>
     <div id="new-listings-wrap"><div id="new-items-table"></div></div>
   </div>
@@ -239,7 +239,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
 
@@ -359,10 +359,14 @@ async function loadData(){
   log('// Loading results.json...','info');
   document.getElementById('status-dot').className='status-dot running';
   try{
-    const res=await fetch('results.json?t='+Date.now());
+    const [res,sessRes]=await Promise.all([
+      fetch('results.json?t='+Date.now()),
+      fetch('crawl_sessions.json?t='+Date.now()).catch(()=>null)
+    ]);
     allData=await res.json();
+    window.crawlSessions=sessRes?await sessRes.json().catch(()=>[]):[];
     document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString();
-    log('// Loaded '+allData.length+' listings','ok');
+    log('// Loaded '+allData.length+' listings, '+window.crawlSessions.length+' sessions','ok');
     buildLabelAvg();updateStats();updateSiteProgress();try{updateCharts();}catch(e){log("// Chart error: "+e.message,"err");}updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();renderBrandStats();applyFilters();loadStatus();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
@@ -370,83 +374,53 @@ function updateNewItems(){
   const VIP=['noctilux','nocti','summilux','m6','m10','m11','aspherical','apo'];
   const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
   const sec=document.getElementById('new-items-section');
-
-  // 3일 이내 크롤링 세션 + 신규 매물
-  const threeDaysAgo=new Date(Date.now()-3*24*60*60*1000);
   sec.style.display='block';
-  function roundToSession(dt){
-    const d=new Date(dt);
-    d.setSeconds(0,0);
-    return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0')+'T'+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
-  }
-  const crawlKeys={};
-  allData.filter(r=>r.crawl_time&&new Date(r.crawl_time)>=threeDaysAgo).forEach(r=>{
-    const key=roundToSession(r.crawl_time);
-    crawlKeys[key]=true;
-  });
-  const sessions={};
-  allData.filter(r=>r.first_seen&&new Date(r.first_seen)>=threeDaysAgo).forEach(r=>{
-    const key=roundToSession(r.first_seen);
-    if(!sessions[key]) sessions[key]=[];
-    sessions[key].push(r);
-  });
-  const sortedKeys=Object.keys(crawlKeys).sort((a,b)=>b.localeCompare(a)).slice(0,10);
-  if(!sortedKeys.length){sec.style.display='none';return;}
 
-  // 필터 버튼 렌더링
-  function renderSession(key){
-    const items=sessions[key];
-    items.sort((a,b)=>{
-      const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));
-      const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));
-      return bv-av;
+  const sessions=window.crawlSessions||[];
+  if(!sessions.length){sec.style.display='none';return;}
+
+  // 최신순 정렬, 최대 9개 (3일 × 3회)
+  const sorted=[...sessions].sort((a,b)=>b.start_time.localeCompare(a.start_time)).slice(0,9);
+
+  // 각 세션의 start~end 범위 안에 first_seen이 있는 아이템
+  function getSessionItems(s){
+    const start=new Date(s.start_time);
+    const end=new Date(s.end_time);
+    return allData.filter(r=>{
+      if(!r.first_seen) return false;
+      const fs=new Date(r.first_seen);
+      return fs>=start && fs<=end;
     });
-    const dt=new Date(key);
-    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-
-    document.getElementById('new-items-table').innerHTML=`
-      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} — ${items.length}개 신규</div>
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
-        <div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border2);">
-          ${['Product','Site','Price','Link'].map(h=>`<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">${h}</span>`).join('')}
-        </div>
-        ${items.map(r=>{
-          const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
-          const isV=VIP.some(k=>name.toLowerCase().includes(k));
-          return `<div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:8px 12px;border-bottom:1px solid var(--border);align-items:center;${isV?'background:rgba(225,31,38,0.03);':''}">
-            <div>
-              ${isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 4px;border-radius:2px;margin-right:4px;">HOT</span>':''}
-              <a href="${r['링크']}" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">${name.slice(0,50)}${name.length>50?'…':''}</a>
-            </div>
-            <div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">${F[r.site]||'🌐'} ${(r.site||'').slice(0,6)}</div>
-            <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">${r['가격']||'—'}</div>
-            <div><a href="${r['링크']}" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div>
-          </div>`;
-        }).join('')}
-      </div>`;
   }
 
-  // 필터 버튼 생성
-  const btnHtml=sortedKeys.map((key,idx)=>{
-    const dt=new Date(key);
-    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    const count=sessions[key]?sessions[key].length:0;
-    return `<button onclick="window._newItemSession='${key}';document.querySelectorAll('.session-btn').forEach(b=>b.style.background='');this.style.background='var(--leica)';this.style.color='#fff';window._renderNewSession('${key}')" 
+  function fmtLabel(s){
+    const d=new Date(s.start_time);
+    const e=new Date(s.end_time);
+    const date=d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'});
+    const startT=d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    const endT=e.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    return `${date} ${startT}~${endT}`;
+  }
+
+  const btnHtml=sorted.map((s,idx)=>{
+    const items=getSessionItems(s);
+    const label=fmtLabel(s);
+    return `<button onclick="document.querySelectorAll('.session-btn').forEach(b=>{b.style.background='';b.style.color='var(--dim)'});this.style.background='var(--leica)';this.style.color='#fff';window._renderNewSession(${idx})"
       class="session-btn"
       style="font-family:Space Mono,monospace;font-size:9px;padding:4px 10px;border:1px solid var(--border2);border-radius:2px;background:${idx===0?'var(--leica)':'var(--surface2)'};color:${idx===0?'#fff':'var(--dim)'};cursor:pointer;white-space:nowrap;">
-      ${idx===0?'⬤ ':''}${label} <span style="opacity:0.7;">(${count})</span>
+      ${idx===0?'⬤ ':''}${label} <span style="opacity:0.7;">(${items.length})</span>
     </button>`;
   }).join('');
 
   document.getElementById('new-items-table').innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">${btnHtml}</div><div id="session-detail"></div>`;
 
-  // 렌더 함수 글로벌 등록
-  window._renderNewSession=function(key){
-    const items=sessions[key]||[];
+  window._renderNewSession=function(idx){
+    const s=sorted[idx];
+    const items=getSessionItems(s);
+    const label=fmtLabel(s);
+    const dur=Math.round((new Date(s.end_time)-new Date(s.start_time))/1000/60);
     if(!items.length){
-      const dt=new Date(key);
-      const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-      document.getElementById('session-detail').innerHTML=`<div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:20px 0;">📅 ${label} — 신규 매물 없음</div>`;
+      document.getElementById('session-detail').innerHTML=`<div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:20px 0;">📅 ${label} (${dur}분 소요) — 신규 매물 없음</div>`;
       return;
     }
     items.sort((a,b)=>{
@@ -454,10 +428,8 @@ function updateNewItems(){
       const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));
       return bv-av;
     });
-    const dt=new Date(key);
-    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('session-detail').innerHTML=`
-      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} — ${items.length}개 신규</div>
+      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} (${dur}분 소요) — ${items.length}개 신규</div>
       <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
         <div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border2);">
           ${['Product','Site','Price','Link'].map(h=>`<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">${h}</span>`).join('')}
@@ -478,9 +450,8 @@ function updateNewItems(){
       </div>`;
   };
 
-  // 기본값: 최신 회차
-  window._renderNewSession(sortedKeys[0]);
-  log('// Recent sessions: '+sortedKeys.length+', items: '+recentItems.length,'ok');
+  window._renderNewSession(0);
+  log('// Sessions loaded: '+sorted.length,'ok');
 }
 const MOUNT_OPTIONS=['M','R','L','L39','SL','Q','S','Compact','PNS','Accessory','Unknown'];
 function renderUnknown(){
