@@ -371,9 +371,10 @@ function updateNewItems(){
   const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
   const sec=document.getElementById('new-items-section');
 
-  // first_seen이 있는 항목들 (신규 매물)
+  // 마지막 crawl_time과 first_seen이 같은 항목 = 신규 매물
   const lastCrawl=allData.reduce((max,r)=>r.crawl_time>max?r.crawl_time:max,'');
-  const recentItems=allData.filter(r=>r.first_seen&&r.first_seen===r.crawl_time);
+  const lastCrawlPrefix=lastCrawl.slice(0,16);
+  const recentItems=allData.filter(r=>r.first_seen&&r.first_seen.slice(0,16)===lastCrawlPrefix);
 
   if(!recentItems.length){sec.style.display='none';return;}
   sec.style.display='block';
