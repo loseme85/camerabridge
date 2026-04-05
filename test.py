@@ -1277,6 +1277,10 @@ def crawl_category(page, site):
                                      "SOLD OUT" in card_html or "품절" in card_html)
                         is_reserved = "예약중" in card_html
 
+                    # 판매완료/보류 제외
+                    import re as _re2
+                    if _re2.search(r"판매완료|보류", name):
+                        continue
                     # label 자동 감지
                     gen = detect_generation(name)
                     sys = detect_system(name)
