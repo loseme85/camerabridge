@@ -446,6 +446,62 @@ function _matchesQuery(item, query){
       }
       return false;
     }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(slashMatch){
+      const num=slashMatch[1];
+      const apt=slashMatch[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(slashMatch){
+      const num=slashMatch[1];
+      const apt=slashMatch[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(slashMatch){
+      const num=slashMatch[1];
+      const apt=slashMatch[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(slashMatch){
+      const num=slashMatch[1];
+      const apt=slashMatch[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(slashMatch){
+      const num=slashMatch[1];
+      const apt=slashMatch[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(slashMatch){
+      const num=slashMatch[1];
+      const apt=slashMatch[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(slashMatch){
+      const num=slashMatch[1];
+      const apt=slashMatch[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
     // 숫자 (초점거리)
     if(/^\d+$/.test(t)){
       const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
