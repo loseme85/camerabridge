@@ -321,31 +321,26 @@ const SLANG_MAP = {
 
 // 토큰 단위 슬랭 변환 (조합 검색용: "nocti 35mm" → "noctilux 35mm")
 const TOKEN_MAP = {
-  // Noctilux
   'nocti':'noctilux','50nocti':'noctilux',
-  // Noctilux 세대 연관어 → GEN_SYNONYMS 키로 매핑 (nocti와 함께 쓰일 때만 의미있음)
+  '1st':'nocti1st','오리지널':'nocti1st','오리지날':'nocti1st','original':'nocti1st',
   'e58':'e58','e60':'e60',
-  'v1':'e58',          // v1 = 2세대 E58
-  'v2':'e60','v3':'e60', // v2/v3 = 3세대 E60
-  'v4':'v4',           // v4 = 4세대 내장후드
+  'v1':'e58','v2':'e60','v3':'e60','v4':'v4',
   '복각':'1.2','f0.95':'0.95','f1.0':'1.0','f1.2':'1.2','f1.25':'1.25',
   '0.95':'0.95','1.0':'1.0','1.2':'1.2','1.25':'1.25',
-  // Summilux 토큰
-  'lux':'summilux',
-  // Summicron 토큰
-  'cron':'summicron',
-  // APO 토큰
-  'apo':'apo',
+  'lux':'summilux','cron':'summicron','apo':'apo',
 };
-
 function normalizeQuery(q){
   const lower=q.toLowerCase().trim();
-  // 1. 전체 문구 변환 우선 (50nocti f0.95 같은 완전 슬랭)
   if(SLANG_MAP[lower]) return SLANG_MAP[lower];
-  // 2. 토큰별 변환 (nocti 35mm → noctilux 35mm)
   const tokens=lower.split(/\s+/);
   const mapped=tokens.map(t=>TOKEN_MAP[t]||t);
-  return mapped.join(' ');
+  const joined=mapped.join(' ');
+  // nocti 없이 1st만 오면 → 1세대로 변환
+  const hasNocti=tokens.some(t=>t==='nocti'||t==='noctilux'||t==='nocti1st');
+  if(!hasNocti){
+    return joined.replace(/\bnocti1st\b/g,'1세대');
+  }
+  return joined;
 }
 // 세대 슬랭 변환
 const GEN_MAP = {
