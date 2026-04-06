@@ -774,7 +774,10 @@ function renderDebug(){
   const excluded=window._excluded||[];
   const search=(document.getElementById('debug-search')||{value:''}).value.toLowerCase().trim();
   const filtered=search
-    ? excluded.filter(r=>(r['상품명']||'').toLowerCase().includes(search))
+    ? excluded.filter(r=>{
+        const n=(r['상품명']||'').toLowerCase();
+        return search.split(/\s+/).every(t=>n.includes(t));
+      })
     : excluded;
 
   // 검색어 바뀌면 1페이지로 리셋
