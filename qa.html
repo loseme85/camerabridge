@@ -775,8 +775,16 @@ function renderDebug(){
   const search=(document.getElementById('debug-search')||{value:''}).value.toLowerCase().trim();
   const filtered=search
     ? excluded.filter(r=>{
-        const n=(r['상품명']||'').toLowerCase();
-        return search.split(/\s+/).every(t=>n.includes(t));
+        const n=(r['상품명']||'').toLowerCase().replace(/-/g,' ');
+        return search.split(/\s+/).every(t=>{
+          if(n.includes(t)) return true;
+          // 35/1.4 ↔ 35mm f1.4 상호변환
+          const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+          if(slashMatch) return n.includes(slashMatch[1]) && n.includes(slashMatch[2]);
+          const mmMatch=t.match(/^(\d+)mm$/);
+          if(mmMatch) return n.includes(mmMatch[1]+'/') || n.includes(mmMatch[1]+' ');
+          return false;
+        });
       })
     : excluded;
 
