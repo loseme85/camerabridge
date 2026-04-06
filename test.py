@@ -2107,6 +2107,9 @@ def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
     start_time = time.time()
+    import datetime as _dt_start
+    _KST = _dt_start.timezone(_dt_start.timedelta(hours=9))
+    crawl_time = _dt_start.datetime.now(_KST).strftime("%Y-%m-%d %H:%M:%S")
     all_results = []
     write_status(0, "Starting...", 0, 0)
 
@@ -2211,7 +2214,6 @@ def crawl_all():
     import datetime
     import datetime as _dt2
     KST = _dt2.timezone(_dt2.timedelta(hours=9))
-    crawl_time = datetime.datetime.now(KST).strftime("%Y-%m-%d %H:%M:%S")
     for r in unique_results:
         name = r['상품명']
         # 상품명에서 "상품명 :" 제거
