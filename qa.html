@@ -564,7 +564,6 @@ function runQA(resetPage=true){
   const raw=document.getElementById('qa-input').value.trim();
   if(raw) history.pushState({q:raw},'','?q='+encodeURIComponent(raw));
   if(resetPage) qaPage=1;
-  const raw=document.getElementById('qa-input').value.trim();
   if(!raw) return;
   saveQARecent(raw);
   const q=normalizeQuery(raw);
