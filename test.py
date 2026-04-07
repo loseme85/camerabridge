@@ -1990,23 +1990,11 @@ def crawl_ffordes(page):
     for cat_url, mount_hint in categories:
         print(f"\n  📂 Ffordes: {cat_url}")
         try:
-            # 이전 navigation 완료 대기
-            try:
-                page.wait_for_load_state("domcontentloaded", timeout=5_000)
-            except:
-                pass
-            page.goto(cat_url, wait_until="domcontentloaded", timeout=30_000)
-            page.wait_for_selector('#sscProductArray article', timeout=15_000)
+            page.goto(cat_url, wait_until="networkidle", timeout=20_000)
+            page.wait_for_selector('#sscProductArray article', timeout=10_000)
         except Exception as e:
             print(f"    ❌ 로드 실패: {e}")
-            # 재시도 한번
-            try:
-                print(f"    🔄 재시도...")
-                page.goto(cat_url, wait_until="domcontentloaded", timeout=30_000)
-                page.wait_for_selector('#sscProductArray article', timeout=15_000)
-            except Exception as e2:
-                print(f"    ❌ 재시도 실패: {e2}")
-                continue
+            continue
 
         # 카테고리 ID 추출 (URL에서 숫자 부분)
         import re as _re
@@ -2020,8 +2008,8 @@ def crawl_ffordes(page):
             if page_num > 1:
                 try:
                     next_url = f"{cat_url}?p={page_num}&q={cat_id}"
-                    page.goto(next_url, wait_until="domcontentloaded", timeout=30_000)
-                    page.wait_for_selector('#sscProductArray article', timeout=15_000)
+                    page.goto(next_url, wait_until="networkidle", timeout=15_000)
+                    page.wait_for_selector('#sscProductArray article', timeout=8_000)
                 except Exception as e:
                     print(f"    ⚠️ p{page_num} 이동 실패: {e}")
                     break
@@ -2040,7 +2028,8 @@ def crawl_ffordes(page):
                     const priceRaw = priceEl ? priceEl.innerText.trim() : '';
                     const priceMatch = priceRaw.match(/£[\d,\.]+/);
                     const price = priceMatch ? priceMatch[0] : '';
-                    const isUsed = a.classList.contains('Used');
+                    // Used 클래스가 없으면 중고로 간주 (Ffordes 카테고리는 중고 위주)
+                    const isUsed = !a.classList.contains('New');
                     const isSold = a.querySelector('.soldout, .out-of-stock') !== null ||
                                    a.innerText.toLowerCase().includes('sold out');
                     results.push({name, href, img, price, isUsed, isSold});
