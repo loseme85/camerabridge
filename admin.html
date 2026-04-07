@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_34.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_35.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -239,7 +239,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card">
       <div class="card-title"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;"><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">00:21:48</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry"><span class="log-time">07:53:19</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">07:53:19</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">07:53:19</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
 
@@ -252,7 +252,8 @@ input[type=text]{width:150px;}
         <button class="sys-btn" onclick="setSys(&#39;M System&#39;,this)">M</button>
         <button class="sys-btn" onclick="setSys(&#39;Barnack&#39;,this)">BARN</button>
         <button class="sys-btn" onclick="setSys(&#39;R System&#39;,this)">R</button>
-        <button class="sys-btn" onclick="setSys(&#39;P&amp;S&#39;,this)">P&amp;S</button>
+        <button class="sys-btn" onclick="setSys(&#39;Compact&#39;,this)">Compact</button>
+        <button class="sys-btn" onclick="setSys(&#39;P&amp;S&#39;,this)">PNS</button>
         <button class="sys-btn" onclick="setSys(&#39;SL/Q/S&#39;,this)">SL/Q</button>
         <button class="sys-btn" onclick="setSys(&#39;__acc__&#39;,this)">ACC</button>
         <button class="sys-btn" onclick="setSys(&#39;__3rd__&#39;,this)">3RD</button>
@@ -721,8 +722,12 @@ function applyFilters(){
         if(m!=='L')return false;
       } else if(currentSys==='SL/Q/S'){
         if(!['SL','Q','S'].includes(m))return false;
+      } else if(currentSys==='Compact'){
+        if(m!=='Compact')return false;
+      } else if(currentSys==='Compact'){
+        if(m!=='Compact')return false;
       } else if(currentSys==='P&S'){
-        if(!['Compact','PNS'].includes(m))return false;
+        if(m!=='PNS')return false;
       }
       if(r.category==='Accessory')return false;
     }
