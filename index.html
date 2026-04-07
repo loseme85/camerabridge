@@ -716,16 +716,26 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.addEventListener('popstate',e=>{
     const q=new URLSearchParams(window.location.search).get('q')||'';
     document.getElementById('search-input').value=q;
-    if(allData.length){
-      if(q) renderResults(normalizeQuery(q)); else renderResults('');
+    if(q){
+      if(allData.length){
+        renderResults(normalizeQuery(q));
+      } else {
+        loadData().then(()=>renderResults(normalizeQuery(q)));
+      }
+    } else {
+      // 초기 화면으로
+      document.getElementById('header-search-wrap').style.display='none';
+      document.getElementById('hero-section').style.display='flex';
+      document.getElementById('results-section').style.display='none';
     }
   });
   // BFCache 복원 시 처리
   window.addEventListener('pageshow',e=>{
-    if(e.persisted){
-      const q=new URLSearchParams(window.location.search).get('q')||'';
-      document.getElementById('search-input').value=q;
-      if(q) renderResults(normalizeQuery(q));
+    const q=new URLSearchParams(window.location.search).get('q')||'';
+    document.getElementById('search-input').value=q;
+    if(q){
+      if(allData.length) renderResults(normalizeQuery(q));
+      else loadData().then(()=>renderResults(normalizeQuery(q)));
     }
   });
   renderRecentSearches();
