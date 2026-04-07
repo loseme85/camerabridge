@@ -730,24 +730,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   renderRecentSearches();
   document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
-  // 뒤로가기 처리
-  window.addEventListener('popstate', e=>{
-    if(e.state&&e.state.query){
-      document.getElementById('hero-input').value=e.state.query;
-      document.getElementById('search-input').value=e.state.query;
-      document.getElementById('header-search-wrap').style.display='flex';
-      document.getElementById('hero-section').style.display='none';
-      document.getElementById('results-section').style.display='block';
-      // 필터 초기화
-      document.getElementById('site-select').value='all';
-      document.getElementById('currency-select').value='all';
-      document.getElementById('sort-select').value='default';
-      document.getElementById('mount-select').value='all';
-      renderResults(e.state.query);
-    } else {
-      showHero();
-    }
-  });
+
   // URL 파라미터로 초기 검색
   const params=new URLSearchParams(window.location.search);
   const q=params.get('q');
