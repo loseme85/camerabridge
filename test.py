@@ -1990,11 +1990,23 @@ def crawl_ffordes(page):
     for cat_url, mount_hint in categories:
         print(f"\n  📂 Ffordes: {cat_url}")
         try:
-            page.goto(cat_url, wait_until="networkidle", timeout=20_000)
-            page.wait_for_selector('#sscProductArray article', timeout=10_000)
+            # 이전 navigation 완료 대기
+            try:
+                page.wait_for_load_state("domcontentloaded", timeout=5_000)
+            except:
+                pass
+            page.goto(cat_url, wait_until="domcontentloaded", timeout=30_000)
+            page.wait_for_selector('#sscProductArray article', timeout=15_000)
         except Exception as e:
             print(f"    ❌ 로드 실패: {e}")
-            continue
+            # 재시도 한번
+            try:
+                print(f"    🔄 재시도...")
+                page.goto(cat_url, wait_until="domcontentloaded", timeout=30_000)
+                page.wait_for_selector('#sscProductArray article', timeout=15_000)
+            except Exception as e2:
+                print(f"    ❌ 재시도 실패: {e2}")
+                continue
 
         # 카테고리 ID 추출 (URL에서 숫자 부분)
         import re as _re
@@ -2008,8 +2020,8 @@ def crawl_ffordes(page):
             if page_num > 1:
                 try:
                     next_url = f"{cat_url}?p={page_num}&q={cat_id}"
-                    page.goto(next_url, wait_until="networkidle", timeout=15_000)
-                    page.wait_for_selector('#sscProductArray article', timeout=8_000)
+                    page.goto(next_url, wait_until="domcontentloaded", timeout=30_000)
+                    page.wait_for_selector('#sscProductArray article', timeout=15_000)
                 except Exception as e:
                     print(f"    ⚠️ p{page_num} 이동 실패: {e}")
                     break
