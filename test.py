@@ -436,6 +436,10 @@ LENS_PROTECT_KW = [
     'summitar', 'nokton', 'voigtlander',
     # 시리얼 넘버 패턴 (sn. 이 있으면 개별 렌즈/바디)
     ' sn.', ' sn ',
+    # Compact/PNS 카메라 (가격 기반 Accessory 오분류 방지)
+    'minilux', 'd-lux', 'v-lux', 'c-lux', 'c1', 'c2', 'cl ',
+    'leica m', 'leica r', 'leica q', 'leica sl', 'leica s',
+    'sofort', 'digilux',
 ]
 # 명백한 악세사리 코드네임 (5자리 영문/숫자)
 ACCESSORY_CODES = [
@@ -1058,7 +1062,9 @@ def crawl_cafe24(page, site, keyword, label, must_contain, item_meta=None):
             name = name_el.inner_text().strip() if name_el else ""
             if not name:
                 continue
-            if "[중고]" not in name and "[위탁]" not in name:
+            # 위탁/중고 카테고리면 태그 없어도 통과
+            is_used_category = '중고' in cat_url or '위탁' in cat_url
+            if not is_used_category and "[중고]" not in name and "[위탁]" not in name:
                 continue
             if not passes_filter(name, must_contain, item_meta):
                 continue
