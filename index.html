@@ -712,14 +712,20 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById('search-input').value=urlQ;
     setTimeout(()=>doSearch(),500);
   }
-  // 뒤로가기 처리
+  // 뒤로가기/앞으로가기 처리
   window.addEventListener('popstate',e=>{
-    const q=e.state&&e.state.q?e.state.q:new URLSearchParams(window.location.search).get('q')||'';
+    const q=new URLSearchParams(window.location.search).get('q')||'';
     document.getElementById('search-input').value=q;
     if(allData.length){
-      if(q) doSearch(); else renderResults('');
-    } else {
-      setTimeout(()=>{if(q) doSearch(); else renderResults('');},800);
+      if(q) renderResults(normalizeQuery(q)); else renderResults('');
+    }
+  });
+  // BFCache 복원 시 처리
+  window.addEventListener('pageshow',e=>{
+    if(e.persisted){
+      const q=new URLSearchParams(window.location.search).get('q')||'';
+      document.getElementById('search-input').value=q;
+      if(q) renderResults(normalizeQuery(q));
     }
   });
   renderRecentSearches();
