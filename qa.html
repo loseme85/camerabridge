@@ -859,15 +859,7 @@ document.getElementById('test-cases').innerHTML=TEST_CASES.map(t=>
 
 function quickTest(q){
   document.getElementById('qa-input').value=q;
-  // URL에서 검색어 복원
-  const urlParams=new URLSearchParams(window.location.search);
-  const urlQ=urlParams.get('q');
-  if(urlQ){
-    document.getElementById('qa-input').value=urlQ;
-    setTimeout(()=>runQA(),500);
-  } else {
-    runQA();
-  }
+  runQA();
   // 뒤로가기/앞으로가기 처리
   window.addEventListener('popstate',e=>{
     const q=new URLSearchParams(window.location.search).get('q')||'';
