@@ -1840,3 +1840,4 @@ if __name__ == "__main__":
     if os.environ.get('GITHUB_ACTIONS'):
         print("ℹ️  GitHub Actions 환경 → 워크플로우에서 push 처리")
     else:
+        push_to_github()
