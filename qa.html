@@ -318,7 +318,7 @@ function isAccessorySearchQuery(q){
   return ACCESSORY_SEARCH_KEYWORDS.some(k=>q.toLowerCase().includes(k));
 }
 const GEN_SYNONYMS = {
-  '1세대': ['1st','1세대','1 st','(1st)','first','초기','nickel','니켈','ver.1','v.1'],
+  '1세대': ['1st','1세대','1 st','(1st)','first','초기','nickel','니켈','ver.1','v.1','steel rim','스틸림'],
   '2세대': ['2nd','2세대','2 nd','(2nd)','second','ver.2','v.2','e58','e 58'],
   '3세대': ['3rd','3세대','3 rd','(3rd)','third','ver.3','v.3'],
   '4세대': ['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
@@ -424,7 +424,10 @@ function _matchesQuery(item, query){
       return synonyms.some(s=>name.includes(s));
     }
     if(GEN_SYNONYMS[t]){
-      return GEN_SYNONYMS[t].some(s=>name.includes(s));
+      const syns = name.includes('복각')
+        ? GEN_SYNONYMS[t].filter(s=>s!=='steel rim'&&s!=='스틸림')
+        : GEN_SYNONYMS[t];
+      return syns.some(s=>name.includes(s));
     }
     // 조리개값 소수점 토큰 (예: "2.0", "1.4", "2.8") → 다양한 표기 매칭
     const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
