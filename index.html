@@ -714,12 +714,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   // 뒤로가기 처리
   window.addEventListener('popstate',e=>{
-    if(e.state&&e.state.q){
-      document.getElementById('search-input').value=e.state.q;
-      doSearch();
+    const q=e.state&&e.state.q?e.state.q:new URLSearchParams(window.location.search).get('q')||'';
+    document.getElementById('search-input').value=q;
+    if(allData.length){
+      if(q) doSearch(); else renderResults('');
     } else {
-      document.getElementById('search-input').value='';
-      renderResults('');
+      setTimeout(()=>{if(q) doSearch(); else renderResults('');},800);
     }
   });
   renderRecentSearches();
