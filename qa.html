@@ -561,6 +561,8 @@ function closeQARecent(){const el=document.getElementById('qa-recent-dropdown');
 function qaGoPage(page){qaPage=page;runQA(false);window.scrollTo({top:document.getElementById('results-body').offsetTop-80,behavior:'smooth'});}
 
 function runQA(resetPage=true){
+  const raw=document.getElementById('qa-input').value.trim();
+  if(raw) history.pushState({q:raw},'','?q='+encodeURIComponent(raw));
   if(resetPage) qaPage=1;
   const raw=document.getElementById('qa-input').value.trim();
   if(!raw) return;
@@ -858,7 +860,25 @@ document.getElementById('test-cases').innerHTML=TEST_CASES.map(t=>
 
 function quickTest(q){
   document.getElementById('qa-input').value=q;
-  runQA();
+  // URL에서 검색어 복원
+  const urlParams=new URLSearchParams(window.location.search);
+  const urlQ=urlParams.get('q');
+  if(urlQ){
+    document.getElementById('qa-input').value=urlQ;
+    setTimeout(()=>runQA(),500);
+  } else {
+    runQA();
+  }
+  // 뒤로가기 처리
+  window.addEventListener('popstate',e=>{
+    if(e.state&&e.state.q){
+      document.getElementById('qa-input').value=e.state.q;
+      runQA();
+    } else {
+      document.getElementById('qa-input').value='';
+      runQA();
+    }
+  });
 }
 
 document.getElementById('qa-input').addEventListener('keydown',e=>{

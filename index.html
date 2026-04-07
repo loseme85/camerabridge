@@ -617,7 +617,7 @@ function doHeroSearch(){
   history.pushState({query:raw},'','?q='+encodeURIComponent(raw));
   renderResults(q);
 }
-function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;saveRecentSearch(raw);const q=normalizeQuery(raw);renderResults(q);}
+function doSearch(){const raw=document.getElementById('search-input').value.trim();if(!raw)return;saveRecentSearch(raw);const q=normalizeQuery(raw);history.pushState({q:raw},'','?q='+encodeURIComponent(raw));renderResults(q);}
 function clearSearch(){document.getElementById('search-input').value='';showHero();}
 function showHero(){
   document.getElementById('hero-section').style.display='flex';
@@ -705,6 +705,23 @@ function renderResults(query){
 }
 document.addEventListener('DOMContentLoaded',()=>{
   loadData();
+  // URL에서 검색어 복원
+  const urlParams=new URLSearchParams(window.location.search);
+  const urlQ=urlParams.get('q');
+  if(urlQ){
+    document.getElementById('search-input').value=urlQ;
+    setTimeout(()=>doSearch(),500);
+  }
+  // 뒤로가기 처리
+  window.addEventListener('popstate',e=>{
+    if(e.state&&e.state.q){
+      document.getElementById('search-input').value=e.state.q;
+      doSearch();
+    } else {
+      document.getElementById('search-input').value='';
+      renderResults('');
+    }
+  });
   renderRecentSearches();
   document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
   // 뒤로가기 처리
