@@ -447,58 +447,34 @@ function _matchesQuery(item, query){
       return false;
     }
     // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
-    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-    if(slashMatch){
-      const num=slashMatch[1];
-      const apt=slashMatch[2];
+    const _sm=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(_sm){
+      const num=_sm[1];
+      const apt=_sm[2];
       const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
       return reNum.test(name) && name.includes(apt);
     }
     // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
-    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-    if(slashMatch){
-      const num=slashMatch[1];
-      const apt=slashMatch[2];
+    const _sm=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(_sm){
+      const num=_sm[1];
+      const apt=_sm[2];
       const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
       return reNum.test(name) && name.includes(apt);
     }
     // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
-    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-    if(slashMatch){
-      const num=slashMatch[1];
-      const apt=slashMatch[2];
+    const _sm=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(_sm){
+      const num=_sm[1];
+      const apt=_sm[2];
       const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
       return reNum.test(name) && name.includes(apt);
     }
     // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
-    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-    if(slashMatch){
-      const num=slashMatch[1];
-      const apt=slashMatch[2];
-      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
-      return reNum.test(name) && name.includes(apt);
-    }
-    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
-    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-    if(slashMatch){
-      const num=slashMatch[1];
-      const apt=slashMatch[2];
-      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
-      return reNum.test(name) && name.includes(apt);
-    }
-    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
-    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-    if(slashMatch){
-      const num=slashMatch[1];
-      const apt=slashMatch[2];
-      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
-      return reNum.test(name) && name.includes(apt);
-    }
-    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
-    const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-    if(slashMatch){
-      const num=slashMatch[1];
-      const apt=slashMatch[2];
+    const _sm=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(_sm){
+      const num=_sm[1];
+      const apt=_sm[2];
       const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
       return reNum.test(name) && name.includes(apt);
     }
@@ -835,8 +811,8 @@ function renderDebug(){
         return search.split(/\s+/).every(t=>{
           if(n.includes(t)) return true;
           // 35/1.4 ↔ 35mm f1.4 상호변환
-          const slashMatch=t.match(/^(\d+)\/(\d+\.?\d*)$/);
-          if(slashMatch) return n.includes(slashMatch[1]) && n.includes(slashMatch[2]);
+          const _sm=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+          if(_sm) return n.includes(_sm[1]) && n.includes(_sm[2]);
           const mmMatch=t.match(/^(\d+)mm$/);
           if(mmMatch) return n.includes(mmMatch[1]+'/') || n.includes(mmMatch[1]+' ');
           return false;
