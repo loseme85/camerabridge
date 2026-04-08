@@ -1474,7 +1474,7 @@ def crawl_ffordes(page):
                     next_url = f"{cat_url}?p={page_num}&q={cat_id}"
                     page.goto(next_url, wait_until="domcontentloaded", timeout=30_000)
                     page.wait_for_timeout(1500)
-                    page.wait_for_selector('#sscProductArray article', timeout=8_000)
+                    page.wait_for_selector('#sscProductArray article', timeout=20_000)
                 except Exception as e:
                     print(f"    ⚠️ p{page_num} 이동 실패: {e}")
                     break
