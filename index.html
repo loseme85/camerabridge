@@ -264,7 +264,8 @@ select:focus{border-color:var(--accent);color:var(--text);}
 <script>
 let allData=[],currentTab='sale';
 let gbpToKrw=1700; // 기본값, 실시간 환율로 업데이트됨
-const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
+let usdToKrw=1400; // 기본값, 실시간 환율로 업데이트됨
+const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸'};
 const LANGS=[['🇺🇸','EN','English'],['🇰🇷','KO','Korean'],['🇯🇵','JA','Japanese'],['🇩🇪','DE','German'],['🇨🇳','ZH-CN','Chinese (Simplified)'],['🇹🇼','ZH-TW','Chinese (Traditional)'],['🇫🇷','FR','French'],['🇮🇹','IT','Italian']];
 document.getElementById('lang-dropdown').innerHTML=LANGS.map(([f,c,n])=>`<div class="lang-option" onclick="selectLang('${f}','${c}')"><span>${f}</span><span>${n}</span><span class="lang-code">${c}</span></div>`).join('');
 function toggleLang(){document.getElementById('lang-dropdown').classList.toggle('open');}
@@ -273,11 +274,16 @@ document.addEventListener('click',e=>{const w=document.getElementById('lang-wrap
 async function loadData(){
   // 실시간 환율 가져오기
   try{
-    const fx=await fetch('https://api.frankfurter.app/latest?from=GBP&to=KRW');
+    const [fx,fx2]=await Promise.all([fetch('https://api.frankfurter.app/latest?from=GBP&to=KRW'),fetch('https://api.frankfurter.app/latest?from=USD&to=KRW')]);
     const fxData=await fx.json();
     if(fxData.rates&&fxData.rates.KRW){
       gbpToKrw=fxData.rates.KRW;
       console.log(`💱 GBP→KRW 환율: ${gbpToKrw.toFixed(0)}`);
+    }
+    const fx2Data=await fx2.json();
+    if(fx2Data.rates&&fx2Data.rates.KRW){
+      usdToKrw=fx2Data.rates.KRW;
+      console.log(`💱 USD→KRW 환율: ${usdToKrw.toFixed(0)}`);
     }
   }catch(e){console.warn('환율 API 실패, 기본값 사용:', gbpToKrw);}
 
@@ -634,7 +640,7 @@ function showHero(){
 }
 function setTab(tab,el){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderResults();}
 function togglePriceSort(){const s=document.getElementById('sort-select');s.value=s.value==='price-asc'?'price-desc':'price-asc';renderResults();}
-function parsePrice(p,cur){if(!p||p==='문의요망')return Infinity;const n=parseFloat(p.replace(/[^0-9.]/g,''));return cur==='GBP'?n*gbpToKrw:n;}
+function parsePrice(p,cur){if(!p||p==='문의요망')return Infinity;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(cur==='GBP')return n*gbpToKrw;if(cur==='USD')return n*usdToKrw;return n;}
 function fmt(n){if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
 function timeAgo(dt){
   if(!dt)return '확인 중';
@@ -698,6 +704,7 @@ function renderResults(query){
         <div class="price">${r['가격']}</div>
         <div class="currency">${r['통화']}${r['할인가']?'<span style="color:var(--red);font-size:9px;margin-left:4px;">-'+r['할인가']+'</span>':''}</div>
         ${r['통화']==='GBP'&&r['가격']?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">≈ ${fmt(parsePrice(r['가격'],'GBP'))}</div>`:''}
+        ${r['통화']==='USD'&&r['가격']?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">≈ ${fmt(parsePrice(r['가격'],'USD'))}</div>`:''}
       </div>
       <div>${cond||'<span style="color:var(--text-muted);font-size:11px">—</span>'}</div>
     </a>`;
