@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_38.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script>
+<!-- saved from url=(0042)https://camerabridge.vercel.app/admin.html -->
+<html lang="en"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge — Admin</title>
@@ -241,7 +241,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card" bis_skin_checked="1">
       <div class="card-title" bis_skin_checked="1"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;" bis_skin_checked="1"><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// Loaded 7732 listings</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// 10 hot deals (&gt;10% below avg)</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-err">// Error: recentItems is not defined</span></div><div class="log-entry"><span class="log-time">10:41:24</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">10:41:24</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">10:41:24</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;" bis_skin_checked="1"><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// Loaded 7732 listings</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// 10 hot deals (&gt;10% below avg)</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-err">// Error: recentItems is not defined</span></div></div>
     </div>
   </div>
 
@@ -254,8 +254,7 @@ input[type=text]{width:150px;}
         <button class="sys-btn" onclick="setSys(&#39;M System&#39;,this)">M</button>
         <button class="sys-btn" onclick="setSys(&#39;Barnack&#39;,this)">BARN</button>
         <button class="sys-btn" onclick="setSys(&#39;R System&#39;,this)">R</button>
-        <button class="sys-btn" onclick="setSys(&#39;Compact&#39;,this)">Compact</button>
-        <button class="sys-btn" onclick="setSys(&#39;P&amp;S&#39;,this)">PNS</button>
+        <button class="sys-btn" onclick="setSys(&#39;P&amp;S&#39;,this)">P&amp;S</button>
         <button class="sys-btn" onclick="setSys(&#39;SL/Q/S&#39;,this)">SL/Q</button>
         <button class="sys-btn" onclick="setSys(&#39;__acc__&#39;,this)">ACC</button>
         <button class="sys-btn" onclick="setSys(&#39;__3rd__&#39;,this)">3RD</button>
@@ -362,14 +361,10 @@ async function loadData(){
   log('// Loading results.json...','info');
   document.getElementById('status-dot').className='status-dot running';
   try{
-    const [res,sessRes]=await Promise.all([
-      fetch('results.json?t='+Date.now()),
-      fetch('crawl_sessions.json?t='+Date.now()).catch(()=>null)
-    ]);
+    const res=await fetch('results.json?t='+Date.now());
     allData=await res.json();
-    window.crawlSessions=sessRes?await sessRes.json().catch(()=>[]):[];
     document.getElementById('last-updated').textContent='Updated '+new Date().toLocaleTimeString();
-    log('// Loaded '+allData.length+' listings, '+window.crawlSessions.length+' sessions','ok');
+    log('// Loaded '+allData.length+' listings','ok');
     buildLabelAvg();updateStats();updateSiteProgress();try{updateCharts();}catch(e){log("// Chart error: "+e.message,"err");}updateGoldenTime();updatePriceAnalysis();updateDeals();updateNewItems();populateFilters();renderBrandStats();applyFilters();loadStatus();
   }catch(e){log('// Error: '+e.message,'err');document.getElementById('status-dot').className='status-dot';}
 }
@@ -377,51 +372,83 @@ function updateNewItems(){
   const VIP=['noctilux','nocti','summilux','m6','m10','m11','aspherical','apo'];
   const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
   const sec=document.getElementById('new-items-section');
+
+  // 3일 이내 크롤링 세션 + 신규 매물
+  const threeDaysAgo=new Date(Date.now()-3*24*60*60*1000);
   sec.style.display='block';
+  function roundToSession(dt){
+    const d=new Date(dt);
+    d.setSeconds(0,0);
+    return d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0')+'T'+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+  }
+  const crawlKeys={};
+  allData.filter(r=>r.crawl_time&&new Date(r.crawl_time)>=threeDaysAgo).forEach(r=>{
+    const key=roundToSession(r.crawl_time);
+    crawlKeys[key]=true;
+  });
+  const sessions={};
+  allData.filter(r=>r.first_seen&&new Date(r.first_seen)>=threeDaysAgo).forEach(r=>{
+    const key=roundToSession(r.first_seen);
+    if(!sessions[key]) sessions[key]=[];
+    sessions[key].push(r);
+  });
+  const sortedKeys=Object.keys(crawlKeys).sort((a,b)=>b.localeCompare(a)).slice(0,10);
+  if(!sortedKeys.length){sec.style.display='none';return;}
 
-  const sessions=window.crawlSessions||[];
-  if(!sessions.length){sec.style.display='none';return;}
-
-  const sorted=[...sessions].sort((a,b)=>b.start_time.localeCompare(a.start_time)).slice(0,9);
-
-  function getSessionItems(s){
-    const start=new Date(s.start_time);
-    const end=new Date(s.end_time);
-    return allData.filter(r=>{
-      if(!r.first_seen) return false;
-      const fs=new Date(r.first_seen);
-      return fs>=start && fs<=end;
+  // 필터 버튼 렌더링
+  function renderSession(key){
+    const items=sessions[key];
+    items.sort((a,b)=>{
+      const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));
+      const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));
+      return bv-av;
     });
+    const dt=new Date(key);
+    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+
+    document.getElementById('new-items-table').innerHTML=`
+      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} — ${items.length}개 신규</div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+        <div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border2);">
+          ${['Product','Site','Price','Link'].map(h=>`<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">${h}</span>`).join('')}
+        </div>
+        ${items.map(r=>{
+          const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+          const isV=VIP.some(k=>name.toLowerCase().includes(k));
+          return `<div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:8px 12px;border-bottom:1px solid var(--border);align-items:center;${isV?'background:rgba(225,31,38,0.03);':''}">
+            <div>
+              ${isV?'<span style="font-family:Space Mono,monospace;font-size:8px;background:var(--leica);color:#fff;padding:1px 4px;border-radius:2px;margin-right:4px;">HOT</span>':''}
+              <a href="${r['링크']}" target="_blank" style="font-size:11px;color:var(--text);text-decoration:none;">${name.slice(0,50)}${name.length>50?'…':''}</a>
+            </div>
+            <div style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">${F[r.site]||'🌐'} ${(r.site||'').slice(0,6)}</div>
+            <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--leica);">${r['가격']||'—'}</div>
+            <div><a href="${r['링크']}" target="_blank" style="font-family:Space Mono,monospace;font-size:9px;padding:2px 6px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);text-decoration:none;">→</a></div>
+          </div>`;
+        }).join('')}
+      </div>`;
   }
 
-  function fmtLabel(s){
-    const d=new Date(s.start_time);
-    const e=new Date(s.end_time);
-    const date=d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'});
-    const startT=d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    const endT=e.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    return `${date} ${startT}~${endT}`;
-  }
-
-  const btnHtml=sorted.map((s,idx)=>{
-    const items=getSessionItems(s);
-    const label=fmtLabel(s);
-    return `<button onclick="document.querySelectorAll('.session-btn').forEach(b=>{b.style.background='';b.style.color='var(--dim)'});this.style.background='var(--leica)';this.style.color='#fff';window._renderNewSession(${idx})"
+  // 필터 버튼 생성
+  const btnHtml=sortedKeys.map((key,idx)=>{
+    const dt=new Date(key);
+    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+    const count=sessions[key]?sessions[key].length:0;
+    return `<button onclick="window._newItemSession='${key}';document.querySelectorAll('.session-btn').forEach(b=>b.style.background='');this.style.background='var(--leica)';this.style.color='#fff';window._renderNewSession('${key}')" 
       class="session-btn"
       style="font-family:Space Mono,monospace;font-size:9px;padding:4px 10px;border:1px solid var(--border2);border-radius:2px;background:${idx===0?'var(--leica)':'var(--surface2)'};color:${idx===0?'#fff':'var(--dim)'};cursor:pointer;white-space:nowrap;">
-      ${idx===0?'⬤ ':''}${label} <span style="opacity:0.7;">(${items.length})</span>
+      ${idx===0?'⬤ ':''}${label} <span style="opacity:0.7;">(${count})</span>
     </button>`;
   }).join('');
 
   document.getElementById('new-items-table').innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">${btnHtml}</div><div id="session-detail"></div>`;
 
-  window._renderNewSession=function(idx){
-    const s=sorted[idx];
-    const items=getSessionItems(s);
-    const label=fmtLabel(s);
-    const dur=Math.round((new Date(s.end_time)-new Date(s.start_time))/1000/60);
+  // 렌더 함수 글로벌 등록
+  window._renderNewSession=function(key){
+    const items=sessions[key]||[];
     if(!items.length){
-      document.getElementById('session-detail').innerHTML=`<div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:20px 0;">📅 ${label} (${dur}분 소요) — 신규 매물 없음</div>`;
+      const dt=new Date(key);
+      const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+      document.getElementById('session-detail').innerHTML=`<div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:20px 0;">📅 ${label} — 신규 매물 없음</div>`;
       return;
     }
     items.sort((a,b)=>{
@@ -429,8 +456,10 @@ function updateNewItems(){
       const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));
       return bv-av;
     });
+    const dt=new Date(key);
+    const label=dt.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})+' '+dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('session-detail').innerHTML=`
-      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} (${dur}분 소요) — ${items.length}개 신규</div>
+      <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${label} — ${items.length}개 신규</div>
       <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
         <div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border2);">
           ${['Product','Site','Price','Link'].map(h=>`<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">${h}</span>`).join('')}
@@ -451,11 +480,11 @@ function updateNewItems(){
       </div>`;
   };
 
-  window._renderNewSession(0);
-  log('// Sessions loaded: '+sorted.length,'ok');
+  // 기본값: 최신 회차
+  window._renderNewSession(sortedKeys[0]);
+  log('// Recent sessions: '+sortedKeys.length+', items: '+recentItems.length,'ok');
 }
 const MOUNT_OPTIONS=['M','R','L','L39','SL','Q','S','Compact','PNS','Accessory','Unknown'];
-
 function renderUnknown(){
   const items=allData.filter(r=>(r.mount||'Unknown')==='Unknown');
   document.getElementById('unk-count').textContent=items.length;
@@ -723,10 +752,8 @@ function applyFilters(){
         if(m!=='L')return false;
       } else if(currentSys==='SL/Q/S'){
         if(!['SL','Q','S'].includes(m))return false;
-      } else if(currentSys==='Compact'){
-        if(m!=='Compact')return false;
       } else if(currentSys==='P&S'){
-        if(m!=='PNS')return false;
+        if(!['Compact','PNS'].includes(m))return false;
       }
       if(r.category==='Accessory')return false;
     }
