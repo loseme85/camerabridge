@@ -1791,6 +1791,28 @@ def crawl_all():
     with open("results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
 
+    # ── crawl_sessions.json 누적 저장 ──
+    import datetime as _dt3
+    _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
+    end_time = _dt3.datetime.now(_KST3).strftime("%Y-%m-%d %H:%M:%S")
+    session_entry = {
+        "start_time": crawl_time,
+        "end_time": end_time,
+        "new_items": new_count,
+        "total_items": len(unique_results),
+    }
+    try:
+        with open("crawl_sessions.json", "r", encoding="utf-8") as f:
+            sessions_log = json.load(f)
+    except:
+        sessions_log = []
+    sessions_log = [s for s in sessions_log if s.get("start_time") != crawl_time]
+    sessions_log.append(session_entry)
+    sessions_log = sessions_log[-100:]
+    with open("crawl_sessions.json", "w", encoding="utf-8") as f:
+        json.dump(sessions_log, f, ensure_ascii=False, indent=2)
+    print(f"📋 crawl_sessions.json 저장 완료 (총 {len(sessions_log)}개 세션)")
+
     # 신규 매물 통계
     new_count = sum(1 for r in unique_results if r.get('first_seen') == crawl_time)
     write_status(100, "완료", len(unique_results), len(SITES), 0)
