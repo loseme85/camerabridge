@@ -1432,6 +1432,129 @@ def write_status(pct, current_site, total_count, done_sites, eta=0):
 
 
 
+
+def translate_mapcamera_name(jp_name):
+    """맵카메라 일본어 상품명 → 영어 변환"""
+    name = jp_name
+    # 렌즈명 변환
+    replacements = [
+        ("アポズミクロン", "APO-Summicron"),
+        ("ズミクロン", "Summicron"),
+        ("ズミルックス", "Summilux"),
+        ("ズマロン", "Summaron"),
+        ("ズマール", "Summar"),
+        ("ノクティルックス", "Noctilux"),
+        ("エルマリート", "Elmarit"),
+        ("エルマー", "Elmar"),
+        ("ヘクトール", "Hektor"),
+        ("テリート", "Telyt"),
+        ("スーパーアンギュロン", "Super-Angulon"),
+        ("バリオ・エルマリート", "Vario-Elmarit"),
+        ("バリオ・エルマー", "Vario-Elmar"),
+        ("アポ・テリート", "APO-Telyt"),
+        ("DRズミクロン", "DR Summicron"),
+        # 색상
+        ("ブラックペイント", "Black Paint"),
+        ("ブラッククローム", "Black Chrome"),
+        ("シルバークローム", "Silver Chrome"),
+        ("ブラック", "Black"),
+        ("シルバー", "Silver"),
+        ("ホワイト", "White"),
+        ("ゴールド", "Gold"),
+        # 상태/설명
+        ("沈胴", "Collapsible"),
+        ("固定鏡筒", "Rigid"),
+        ("フード付", "with Hood"),
+        ("後期", "Late"),
+        ("前期", "Early"),
+        ("中期", "Mid"),
+        ("カナダ", "Canada"),
+        ("ドイツ", "Germany"),
+        ("復刻版", "Reprint"),
+        # 바디
+        ("モノクローム", "Monochrom"),
+        ("ブラックペイント", "Black Paint"),
+        # 기타
+        ("回巻き上げ", "-stroke"),
+        ("ASPH.", "ASPH"),
+    ]
+    for jp, en in replacements:
+        name = name.replace(jp, en)
+    return name.strip()
+
+
+def crawl_mapcamera():
+    """맵카메라 - JSON API 크롤링"""
+    import urllib.request
+    results = []
+    base = "https://www.mapcamera.com"
+    base_url = f"{base}/ec/api/itemsearch?maker=13&sell=used&siteid=1&limit=100&devicetype=pc&format=searchresult"
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "Referer": "https://www.mapcamera.com/search?maker=13&sell=used",
+        "Accept": "application/json",
+    }
+    
+    # 전체 수 파악
+    try:
+        req = urllib.request.Request(f"{base_url}&page=1", headers=headers)
+        data = json.loads(urllib.request.urlopen(req, timeout=15).read())
+        total = data["response"]["numFound"]
+        total_pages = (total // 100) + 1
+        print(f"  총 {total}개 상품, {total_pages}페이지")
+    except Exception as e:
+        print(f"  ❌ 초기화 실패: {e}")
+        return results
+
+    seen_codes = set()
+    for page in range(1, total_pages + 1):
+        try:
+            url = f"{base_url}&page={page}"
+            req = urllib.request.Request(url, headers=headers)
+            data = json.loads(urllib.request.urlopen(req, timeout=15).read())
+            docs = data["response"]["docs"]
+            print(f"    └─ p{page}: {len(docs)}개")
+            for d in docs:
+                mapcode = str(d.get("mapcode", ""))
+                if not mapcode or mapcode in seen_codes:
+                    continue
+                seen_codes.add(mapcode)
+                jp_name = d.get("genpin_name", "").strip()
+                en_name = translate_mapcamera_name(jp_name)
+                price_jpy = d.get("salesprice") or d.get("usedsalespricemin")
+                price = f"¥{int(price_jpy):,}" if price_jpy else "문의요망"
+                is_sold = d.get("sellstatusid", 1) != 1
+                link = f"{base}/item/detail/{mapcode}"
+                img = f"https://www.mapcamera.com/ec/img/product/{mapcode[:4]}/{mapcode}.jpg"
+                label = auto_label(en_name)
+                mount = detect_mount(en_name)
+                gen = detect_generation(en_name)
+                brand = detect_brand(en_name)
+                cat = detect_category(en_name, price)
+                results.append({
+                    "site": "맵카메라 (일본)",
+                    "label": label,
+                    "상품명": en_name,
+                    "세대": gen,
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "JPY",
+                    "이미지": img,
+                    "링크": link,
+                    "품절": is_sold,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": brand,
+                })
+        except Exception as e:
+            print(f"    ❌ p{page} 오류: {e}")
+            continue
+
+    print(f"  ✅ 맵카메라 완료: {len(results)}개")
+    return results
+
 def crawl_leicamiami():
     """Leica Store Miami - Shopify JSON API 크롤링"""
     import urllib.request
@@ -1729,6 +1852,15 @@ def crawl_all():
     all_results.extend(miami_results)
     done_sites += 1
     write_status(int(done_sites/total_sites*100), 'Leica Store Miami', len(all_results), done_sites, 0)
+
+
+    # ── 맵카메라 크롤링 ──
+    print('\n' + '='*50)
+    print('맵카메라 크롤링 시작')
+    mapcamera_results = crawl_mapcamera()
+    all_results.extend(mapcamera_results)
+    done_sites += 1
+    write_status(int(done_sites/total_sites*100), '맵카메라', len(all_results), done_sites, 0)
 
 
     # 전체 중복 제거
