@@ -1431,6 +1431,63 @@ def write_status(pct, current_site, total_count, done_sites, eta=0):
         print(f"    ⚠️ status.json 쓰기 실패: {e}")
 
 
+
+def crawl_leicamiami():
+    """Leica Store Miami - Shopify JSON API 크롤링"""
+    import urllib.request
+    results = []
+    base = "https://leicastoremiami.com"
+    url = f"{base}/collections/used/products.json?limit=250"
+    print(f"\n  📂 Leica Store Miami: {url}")
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        data = json.loads(urllib.request.urlopen(req, timeout=15).read())
+        products = data.get("products", [])
+        print(f"    └─ {len(products)}개 상품 발견")
+        for p in products:
+            name = p.get("title", "").strip()
+            if not name:
+                continue
+            variant = p["variants"][0] if p.get("variants") else {}
+            price_raw = variant.get("price", "")
+            try:
+                price = f"${float(price_raw):,.0f}" if price_raw else "문의요망"
+            except:
+                price = "문의요망"
+            available = variant.get("available", True)
+            handle = p.get("handle", "")
+            link = f"{base}/products/{handle}" if handle else ""
+            img = ""
+            if p.get("images"):
+                img = p["images"][0].get("src", "")
+            label = auto_label(name)
+            mount = detect_mount(name)
+            gen = detect_generation(name)
+            brand = detect_brand(name)
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Leica Store Miami",
+                "label": label,
+                "상품명": name,
+                "세대": gen,
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "USD",
+                "이미지": img,
+                "링크": link,
+                "품절": not available,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": brand,
+            })
+            status = "✔ " if not available is False else "✔ "
+            print(f"    {'✔ ' if available else '✘ '} {name[:50]} | {price}")
+    except Exception as e:
+        print(f"    ❌ 오류: {e}")
+    print(f"  ✅ Leica Store Miami 완료: {len(results)}개")
+    return results
+
 def crawl_ffordes(page):
     """Ffordes 크롤러 - Leica 카테고리 전체"""
     results = []
@@ -1664,6 +1721,15 @@ def crawl_all():
             browser.close()
     done_sites += 1
     write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
+
+    # ── Leica Store Miami 크롤링 ──
+    print('\n' + '='*50)
+    print('Leica Store Miami 크롤링 시작')
+    miami_results = crawl_leicamiami()
+    all_results.extend(miami_results)
+    done_sites += 1
+    write_status(int(done_sites/total_sites*100), 'Leica Store Miami', len(all_results), done_sites, 0)
+
 
     # 전체 중복 제거
     seen = set()
