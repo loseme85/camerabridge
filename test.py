@@ -1473,6 +1473,7 @@ def crawl_ffordes(page):
                 try:
                     next_url = f"{cat_url}?p={page_num}&q={cat_id}"
                     page.goto(next_url, wait_until="domcontentloaded", timeout=30_000)
+                    page.wait_for_timeout(1500)
                     page.wait_for_selector('#sscProductArray article', timeout=8_000)
                 except Exception as e:
                     print(f"    ⚠️ p{page_num} 이동 실패: {e}")
@@ -1571,6 +1572,9 @@ def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
     start_time = time.time()
+    import datetime as _dt_start
+    _KST_start = _dt_start.timezone(_dt_start.timedelta(hours=9))
+    crawl_time = _dt_start.datetime.now(_KST_start).strftime("%Y-%m-%d %H:%M:%S")
     all_results = []
     write_status(0, "Starting...", 0, 0)
 
@@ -1673,7 +1677,7 @@ def crawl_all():
 
     # label 자동 보정 + 상품명 정리 + system/category 분류
     import datetime
-    crawl_time = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M:%S")
+
     for r in unique_results:
         name = r['상품명']
         # 상품명에서 "상품명 :" 제거
