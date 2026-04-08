@@ -265,7 +265,7 @@ select:focus{border-color:var(--accent);color:var(--text);}
 let allData=[],currentTab='sale';
 let gbpToKrw=1700; // 기본값, 실시간 환율로 업데이트됨
 let usdToKrw=1400; // 기본값, 실시간 환율로 업데이트됨
-const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸'};
+const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸 Miami'};
 const LANGS=[['🇺🇸','EN','English'],['🇰🇷','KO','Korean'],['🇯🇵','JA','Japanese'],['🇩🇪','DE','German'],['🇨🇳','ZH-CN','Chinese (Simplified)'],['🇹🇼','ZH-TW','Chinese (Traditional)'],['🇫🇷','FR','French'],['🇮🇹','IT','Italian']];
 document.getElementById('lang-dropdown').innerHTML=LANGS.map(([f,c,n])=>`<div class="lang-option" onclick="selectLang('${f}','${c}')"><span>${f}</span><span>${n}</span><span class="lang-code">${c}</span></div>`).join('');
 function toggleLang(){document.getElementById('lang-dropdown').classList.toggle('open');}
