@@ -1476,7 +1476,7 @@ def crawl_ffordes(page):
                     page.wait_for_timeout(1500)
                     page.wait_for_selector('#sscProductArray article', timeout=20_000)
                 except Exception as e:
-                    print(f"    ⚠️ p{page_num} 이동 실패: {e}")
+                    print(f"    └─ p{page_num} 빈 페이지 또는 타임아웃, 종료")
                     break
 
             items = page.evaluate("""() => {
