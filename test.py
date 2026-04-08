@@ -1673,7 +1673,7 @@ def crawl_all():
 
     # label 자동 보정 + 상품명 정리 + system/category 분류
     import datetime
-    crawl_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    crawl_time = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M:%S")
     for r in unique_results:
         name = r['상품명']
         # 상품명에서 "상품명 :" 제거
