@@ -1791,6 +1791,9 @@ def crawl_all():
     with open("results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
 
+    # 신규 매물 카운트 (crawl_sessions 저장에 필요)
+    new_count = sum(1 for r in unique_results if r.get('first_seen') == crawl_time)
+
     # ── crawl_sessions.json 누적 저장 ──
     import datetime as _dt3
     _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
@@ -1813,8 +1816,6 @@ def crawl_all():
         json.dump(sessions_log, f, ensure_ascii=False, indent=2)
     print(f"📋 crawl_sessions.json 저장 완료 (총 {len(sessions_log)}개 세션)")
 
-    # 신규 매물 통계
-    new_count = sum(1 for r in unique_results if r.get('first_seen') == crawl_time)
     write_status(100, "완료", len(unique_results), len(SITES), 0)
     print(f"\n{'='*50}")
     print(f"✅ 최종 {len(unique_results)}개 → results.json 저장 완료")
