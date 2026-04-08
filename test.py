@@ -1492,7 +1492,7 @@ def crawl_ffordes(page):
                     const priceRaw = priceEl ? priceEl.innerText.trim() : '';
                     const priceMatch = priceRaw.match(/£[\d,\.]+/);
                     const price = priceMatch ? priceMatch[0] : '';
-                    const isUsed = a.classList.contains('Used');
+                    const isUsed = !a.classList.contains('New');
                     const isSold = a.querySelector('.soldout, .out-of-stock') !== null ||
                                    a.innerText.toLowerCase().includes('sold out');
                     results.push({name, href, img, price, isUsed, isSold});
