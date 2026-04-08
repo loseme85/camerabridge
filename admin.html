@@ -318,8 +318,8 @@ input[type=text]{width:150px;}
   </div>
 </main>
 <script>
-const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
-const SITES_ORDER=['라이카스토어 충무로','사진집','장씨카메라','신성카메라','억불카메라','Ffordes (영국)'];
+const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸'};
+const SITES_ORDER=['라이카스토어 충무로','사진집','장씨카메라','Ffordes (영국)','Leica Store Miami'];
 let allData=[],filtered=[],currentPage=1,labelAvg={},currentSys='all';
 let PER_PAGE=50;
 let siteChart=null,sysChart=null;
@@ -375,7 +375,7 @@ async function loadData(){
 }
 function updateNewItems(){
   const VIP=['noctilux','nocti','summilux','m6','m10','m11','aspherical','apo'];
-  const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧'};
+  const F={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸'};
   const sec=document.getElementById('new-items-section');
 
   sec.style.display='block';
