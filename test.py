@@ -1918,6 +1918,155 @@ def crawl_leicamiami():
     return results
 
 
+def crawl_kitamura(page):
+    """기타무라 크롤러 - 라이카 중고 카테고리 전체"""
+    import re as _re
+    results = []
+    base = "https://www.kitamuracamera.jp"
+    base_url = f"{base}/buy/item-list/?type=u&narrow1=%E3%83%A9%E3%82%A4%E3%82%AB(LEICA)"
+
+    # 일본어 → 영어 변환 매핑
+    JA_TO_EN = {
+        'ズミルックス': 'Summilux', 'ズミクロン': 'Summicron', 'ノクティルックス': 'Noctilux',
+        'ズマリット': 'Summarit', 'エルマー': 'Elmar', 'エルマリート': 'Elmarit',
+        'スーパーアンギュロン': 'Super-Angulon', 'テレエルマー': 'Tele-Elmar',
+        'アポズミクロン': 'APO-Summicron', 'ズマロン': 'Summaron',
+        'ライカ': 'Leica', 'ミラーレス一眼': '', '交換レンズ': '',
+        'カメラ用品': '', 'フィルムカメラ': '', 'ボディ': 'Body',
+        'ブラック': 'Black', 'シルバー': 'Silver', 'クローム': 'Chrome',
+        '状態': 'Condition', 'アルミ': 'Aluminium',
+        'ペイント': 'Paint', 'ブラックペイント': 'Black Paint',
+    }
+
+    def ja_to_en(text):
+        for ja, en in JA_TO_EN.items():
+            text = text.replace(ja, en)
+        return text.strip()
+
+    print(f"\n  📂 기타무라 크롤링 시작")
+    page_num = 1
+
+    while True:
+        url = base_url if page_num == 1 else f"{base_url}&page={page_num}"
+        print(f"    └─ {page_num}페이지 수집 중...")
+
+        try:
+            page.goto(url, wait_until="domcontentloaded", timeout=30_000)
+            page.wait_for_timeout(1500)
+        except Exception as e:
+            print(f"    ❌ 로드 실패: {e}")
+            break
+
+        # 상품 카드 수집
+        try:
+            items = page.evaluate("""() => {
+                const results = [];
+                const cards = document.querySelectorAll('a[href*="/buy/item/"]');
+                for (const card of cards) {
+                    const href = card.getAttribute('href') || '';
+                    if (!href.includes('/buy/item/')) continue;
+                    const nameEl = card.querySelector('h3, .item-name, p');
+                    const name = nameEl ? nameEl.innerText.trim() : card.innerText.trim();
+                    if (!name) continue;
+                    const priceEl = card.querySelector('.price, [class*="price"]');
+                    const price = priceEl ? priceEl.innerText.trim() : '';
+                    const imgEl = card.querySelector('img');
+                    const img = imgEl ? (imgEl.getAttribute('src') || '') : '';
+                    const condEl = card.querySelector('[class*="rank"], [class*="cond"], [class*="grade"]');
+                    const cond = condEl ? condEl.innerText.trim() : '';
+                    results.push({name, href, price, img, cond});
+                }
+                return results;
+            }""")
+        except Exception as e:
+            print(f"    ❌ 파싱 오류: {e}")
+            break
+
+        if not items:
+            print(f"    마지막 페이지 도달")
+            break
+
+        print(f"    └─ {len(items)}개 상품 발견")
+        found_any = False
+
+        for item in items:
+            try:
+                name_ja = item.get('name', '').strip()
+                if not name_ja:
+                    continue
+
+                # 일본어 → 영어 변환
+                name_en = ja_to_en(name_ja)
+
+                href = item.get('href', '')
+                if href and not href.startswith('http'):
+                    href = base + href
+
+                # 가격 파싱 (엔화)
+                price_raw = item.get('price', '')
+                price_clean = _re.sub(r'[^\d]', '', price_raw)
+                price = f"¥{int(price_clean):,}" if price_clean else "문의요망"
+
+                img = item.get('img', '')
+                if img and not img.startswith('http'):
+                    img = base + img
+
+                cond = item.get('cond', '정보없음') or '정보없음'
+
+                label = auto_label(name_en)
+                mount = detect_mount(name_en)
+                gen = detect_generation(name_en)
+                brand = detect_brand(name_en)
+                cat = detect_category(name_en, price)
+
+                if cat == 'Accessory':
+                    mount = 'Accessory'
+
+                results.append({
+                    "site": "기타무라 (일본)",
+                    "label": label,
+                    "상품명": name_en,
+                    "세대": gen,
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "JPY",
+                    "이미지": img,
+                    "링크": href,
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": brand,
+                })
+                found_any = True
+                print(f"    ✔  {name_en[:45]} | {price}")
+
+            except Exception as e:
+                print(f"    ⚠️  파싱 오류: {e}")
+                continue
+
+        if not found_any:
+            break
+
+        # 다음 페이지 있는지 확인
+        has_next = page.evaluate("""() => {
+            const links = document.querySelectorAll('a');
+            for (const l of links) {
+                if (l.innerText.includes('次') || l.getAttribute('aria-label') === 'Next') return true;
+            }
+            return false;
+        }""")
+
+        if not has_next:
+            print(f"    마지막 페이지 도달")
+            break
+
+        page_num += 1
+
+    print(f"  ✅ 기타무라 완료: {len(results)}개")
+    return results
+
+
 def crawl_ffordes(page):
     """Ffordes 크롤러 - Leica 카테고리 전체"""
     results = []
@@ -2157,6 +2306,20 @@ def crawl_all():
         print(f"  ✅ Leica Store Miami: {len(miami_results)}개")
     except Exception as e:
         print(f"❌ Leica Store Miami 오류: {e}")
+
+    # ── 기타무라 크롤링 ──
+    print('\n' + '='*50)
+    print('기타무라 크롤링 시작')
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        try:
+            kitamura_results = crawl_kitamura(page)
+            all_results.extend(kitamura_results)
+        except Exception as e:
+            print(f"❌ 기타무라 오류: {e}")
+        finally:
+            browser.close()
 
     # 전체 중복 제거
     seen = set()
