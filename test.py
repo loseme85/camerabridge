@@ -1852,7 +1852,7 @@ def write_status(pct, current_site, total_count, done_sites, eta=0):
         "total_count": total_count,
         "done_sites": done_sites,
         "eta_seconds": eta,
-        "updated_at": datetime.datetime.now().isoformat(),
+        "updated_at": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).isoformat(),
         "running": pct < 100,
     }
     try:
@@ -2170,7 +2170,8 @@ def crawl_all():
 
     # label 자동 보정 + 상품명 정리 + system/category 분류
     import datetime
-    crawl_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    _KST = datetime.timezone(datetime.timedelta(hours=9))
+    crawl_time = datetime.datetime.now(_KST).strftime("%Y-%m-%d %H:%M:%S")
     for r in unique_results:
         name = r['상품명']
         # 상품명에서 "상품명 :" 제거
@@ -2241,7 +2242,8 @@ def crawl_all():
 
     # ── 판매 완료 추적 (sold_items.json) ──
     import datetime as dt
-    now_str = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    _KST2 = dt.timezone(dt.timedelta(hours=9))
+    now_str = dt.datetime.now(_KST2).strftime("%Y-%m-%d %H:%M:%S")
     new_links = {r["링크"] for r in unique_results}
 
     # 기존 sold_items 로드
