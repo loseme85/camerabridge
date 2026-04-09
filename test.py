@@ -320,6 +320,49 @@ def detect_mount(name):
     if any(x in n for x in _s_kw):
         return "S"
 
+    # ── 충무로 스타일 Q/SL 단독 표기 ──
+    if re.match(r'^Q[\s(]|^Q2[\s(]|^Q3[\s(]|^Q$|^Q2$|^Q3$', n):
+        return "Q"
+    if re.match(r'^SL[\s(]|^SL2[\s(]|^SL$|^SL2$|^SL3$', n):
+        return "SL"
+    if re.match(r'^CL[\s(]|^CL$', n):
+        return "SL"
+    # ── Barnack 바디 ──
+    if any(x in n for x in ['BARNACK','IIIF','IIIG','IIIC','IIIB','IIIA']):
+        return "L"
+    # ── 11xxx/12xxx 카탈로그 번호 → M마운트 ──
+    if re.search(r'- 1[12]\d{3}', n) or re.search(r'\b1[12]\d{3}\b', n):
+        return "M"
+
+    # ── Accessory 패턴 ──
+    if any(x in n for x in ['EVF2','EVF 2','BP-SCL','BP-DC','SF-C1','SF60','SF 60',
+                              'SF40','SF 40','SF24D','SF20','SF 24','SF 20',
+                              'SOFT BUTTON','SOFTBUTTON','SOFT RELEASE',
+                              'M ADAPTER L','M ADAPTER T','M-ADAPTER-L',
+                              'MACRO ADAPTER','R MACRO ADAPTER',
+                              'VIEW FINDER','VIEWFINDER','UNIVERSALSUCHER',
+                              'PL FILTER','POLARIZING','POLFILTER','FIXIO',
+                              'VIT M','VIT FOR','BARNACK VIT','LEICAVIT','LEICA VIT',
+                              'E49 UVA','E46 UVA','E39 UVA','E60 UVA','E82 UVA',
+                              'NIPPON KOGAKU','WEISU','IWKOO',
+                              'WRIST STRAP','AC-ADAPTER','CAMERA BAG','OBERWERTH',
+                              'ARTISAN','ULTRAVID','AUDIO ADAPTER',
+                              'GRAF VON','FABER-CASTELL','ONA ',
+                              'THUMBS UP','THUMB UP','BATTERY','CHARGER']):
+        return "Accessory"
+
+    # ── Ffordes M마운트 ──
+    if 'ZM' in n or ' VM ' in n or 'VM NOKTON' in n:
+        return "M"
+    if 'M ROKKOR' in n or 'M-ROKKOR' in n:
+        return "M"
+    if 'COLLAPSIBLE' in n and 'LEICA' in n:
+        return "M"
+    if 'SUMMITAR' in n:
+        return "L"
+    if 'VOIGTLANDER' in n and any(x in n for x in ['NOKTON','ULTRON','HELIAR','COLOR-SKOPAR']):
+        return "M"
+
     return "Unknown"
 
 def resolve_mount_from_category(mount, category):
