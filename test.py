@@ -1539,11 +1539,15 @@ def crawl_mapcamera():
             context = browser.new_context(
                 user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                 locale="ja-JP",
+                extra_http_headers={"Accept-Language": "ja,en-US;q=0.9,en;q=0.8"},
             )
             page = context.new_page()
             # 먼저 메인 페이지 방문해서 쿠키/세션 확보
-            page.goto("https://www.mapcamera.com/search?maker=13&sell=used", wait_until="domcontentloaded", timeout=30000)
-            page.wait_for_timeout(2000)
+            try:
+                page.goto("https://www.mapcamera.com/search?maker=13&sell=used", wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_timeout(3000)
+            except Exception as e:
+                print(f"  ⚠️ 메인 페이지 로드 실패 ({e}), API 직접 시도")
 
             # API 호출
             resp = page.evaluate(f"""async () => {{
@@ -1917,13 +1921,8 @@ def crawl_all():
     write_status(int(done_sites/total_sites*100), 'Leica Store Miami', len(all_results), done_sites, 0)
 
 
-    # ── 맵카메라 크롤링 ──
-    print('\n' + '='*50)
-    print('맵카메라 크롤링 시작')
-    mapcamera_results = crawl_mapcamera()
-    all_results.extend(mapcamera_results)
-    done_sites += 1
-    write_status(int(done_sites/total_sites*100), '맵카메라', len(all_results), done_sites, 0)
+    # ── 맵카메라 크롤링 (IP 차단으로 비활성화) ──
+    # mapcamera_results = crawl_mapcamera()
 
 
     # 전체 중복 제거
