@@ -1527,76 +1527,93 @@ def translate_mapcamera_name(jp_name):
 
 
 def crawl_mapcamera():
-    """맵카메라 - JSON API 크롤링"""
-    import urllib.request
+    """맵카메라 - Playwright 브라우저로 JSON API 크롤링"""
+    from playwright.sync_api import sync_playwright
     results = []
     base = "https://www.mapcamera.com"
     base_url = f"{base}/ec/api/itemsearch?maker=13&sell=used&siteid=1&limit=100&devicetype=pc&format=searchresult"
-    
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Referer": "https://www.mapcamera.com/search?maker=13&sell=used",
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
-        "X-Requested-With": "XMLHttpRequest",
-        "Origin": "https://www.mapcamera.com",
-    }
-    
-    # 전체 수 파악
-    try:
-        req = urllib.request.Request(f"{base_url}&page=1", headers=headers)
-        data = json.loads(urllib.request.urlopen(req, timeout=30).read())
-        total = data["response"]["numFound"]
-        total_pages = (total // 100) + 1
-        print(f"  총 {total}개 상품, {total_pages}페이지")
-    except Exception as e:
-        print(f"  ❌ 초기화 실패: {e}")
-        return results
 
-    seen_codes = set()
-    for page in range(1, total_pages + 1):
-        try:
-            url = f"{base_url}&page={page}"
-            req = urllib.request.Request(url, headers=headers)
-            data = json.loads(urllib.request.urlopen(req, timeout=30).read())
-            docs = data["response"]["docs"]
-            print(f"    └─ p{page}: {len(docs)}개")
-            for d in docs:
-                mapcode = str(d.get("mapcode", ""))
-                if not mapcode or mapcode in seen_codes:
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(
+                user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                locale="ja-JP",
+            )
+            page = context.new_page()
+            # 먼저 메인 페이지 방문해서 쿠키/세션 확보
+            page.goto("https://www.mapcamera.com/search?maker=13&sell=used", wait_until="domcontentloaded", timeout=30000)
+            page.wait_for_timeout(2000)
+
+            # API 호출
+            resp = page.evaluate(f"""async () => {{
+                const r = await fetch('{base_url}&page=1', {{
+                    headers: {{
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Referer': 'https://www.mapcamera.com/search?maker=13&sell=used',
+                    }}
+                }});
+                return await r.json();
+            }}""")
+            total = resp["response"]["numFound"]
+            total_pages = (total // 100) + 1
+            print(f"  총 {total}개 상품, {total_pages}페이지")
+
+            seen_codes = set()
+            for page_num in range(1, total_pages + 1):
+                try:
+                    data = page.evaluate(f"""async () => {{
+                        const r = await fetch('{base_url}&page={page_num}', {{
+                            headers: {{
+                                'Accept': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Referer': 'https://www.mapcamera.com/search?maker=13&sell=used',
+                            }}
+                        }});
+                        return await r.json();
+                    }}""")
+                    docs = data["response"]["docs"]
+                    print(f"    └─ p{page_num}: {len(docs)}개")
+                    for d in docs:
+                        mapcode = str(d.get("mapcode", ""))
+                        if not mapcode or mapcode in seen_codes:
+                            continue
+                        seen_codes.add(mapcode)
+                        jp_name = d.get("genpin_name", "").strip()
+                        en_name = translate_mapcamera_name(jp_name)
+                        price_jpy = d.get("salesprice") or d.get("usedsalespricemin")
+                        price = f"¥{int(price_jpy):,}" if price_jpy else "문의요망"
+                        is_sold = d.get("sellstatusid", 1) != 1
+                        link = f"{base}/item/detail/{mapcode}"
+                        img = f"https://www.mapcamera.com/ec/img/product/{mapcode[:4]}/{mapcode}.jpg"
+                        label = auto_label(en_name)
+                        mount = detect_mount(en_name)
+                        gen = detect_generation(en_name)
+                        brand = detect_brand(en_name)
+                        cat = detect_category(en_name, price)
+                        results.append({{
+                            "site": "맵카메라 (일본)",
+                            "label": label,
+                            "상품명": en_name,
+                            "세대": gen,
+                            "컨디션": "정보없음",
+                            "가격": price,
+                            "통화": "JPY",
+                            "이미지": img,
+                            "링크": link,
+                            "품절": is_sold,
+                            "예약중": False,
+                            "mount": mount,
+                            "category": cat,
+                            "brand": brand,
+                        }})
+                except Exception as e:
+                    print(f"    ❌ p{page_num} 오류: {e}")
                     continue
-                seen_codes.add(mapcode)
-                jp_name = d.get("genpin_name", "").strip()
-                en_name = translate_mapcamera_name(jp_name)
-                price_jpy = d.get("salesprice") or d.get("usedsalespricemin")
-                price = f"¥{int(price_jpy):,}" if price_jpy else "문의요망"
-                is_sold = d.get("sellstatusid", 1) != 1
-                link = f"{base}/item/detail/{mapcode}"
-                img = f"https://www.mapcamera.com/ec/img/product/{mapcode[:4]}/{mapcode}.jpg"
-                label = auto_label(en_name)
-                mount = detect_mount(en_name)
-                gen = detect_generation(en_name)
-                brand = detect_brand(en_name)
-                cat = detect_category(en_name, price)
-                results.append({
-                    "site": "맵카메라 (일본)",
-                    "label": label,
-                    "상품명": en_name,
-                    "세대": gen,
-                    "컨디션": "정보없음",
-                    "가격": price,
-                    "통화": "JPY",
-                    "이미지": img,
-                    "링크": link,
-                    "품절": is_sold,
-                    "예약중": False,
-                    "mount": mount,
-                    "category": cat,
-                    "brand": brand,
-                })
-        except Exception as e:
-            print(f"    ❌ p{page} 오류: {e}")
-            continue
+            browser.close()
+    except Exception as e:
+        print(f"  ❌ 맵카메라 오류: {e}")
 
     print(f"  ✅ 맵카메라 완료: {len(results)}개")
     return results
