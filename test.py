@@ -320,49 +320,6 @@ def detect_mount(name):
     if any(x in n for x in _s_kw):
         return "S"
 
-    # ── 충무로 스타일 Q/SL 단독 표기 ──
-    if re.match(r'^Q[\s(]|^Q2[\s(]|^Q3[\s(]|^Q$|^Q2$|^Q3$', n):
-        return "Q"
-    if re.match(r'^SL[\s(]|^SL2[\s(]|^SL$|^SL2$|^SL3$', n):
-        return "SL"
-    if re.match(r'^CL[\s(]|^CL$', n):
-        return "SL"
-    # ── Barnack 바디 ──
-    if any(x in n for x in ['BARNACK','IIIF','IIIG','IIIC','IIIB','IIIA']):
-        return "L"
-    # ── 11xxx/12xxx 카탈로그 번호 → M마운트 ──
-    if re.search(r'- 1[12]\d{3}', n) or re.search(r'\b1[12]\d{3}\b', n):
-        return "M"
-
-    # ── Accessory 패턴 ──
-    if any(x in n for x in ['EVF2','EVF 2','BP-SCL','BP-DC','SF-C1','SF60','SF 60',
-                              'SF40','SF 40','SF24D','SF20','SF 24','SF 20',
-                              'SOFT BUTTON','SOFTBUTTON','SOFT RELEASE',
-                              'M ADAPTER L','M ADAPTER T','M-ADAPTER-L',
-                              'MACRO ADAPTER','R MACRO ADAPTER',
-                              'VIEW FINDER','VIEWFINDER','UNIVERSALSUCHER',
-                              'PL FILTER','POLARIZING','POLFILTER','FIXIO',
-                              'VIT M','VIT FOR','BARNACK VIT','LEICAVIT','LEICA VIT',
-                              'E49 UVA','E46 UVA','E39 UVA','E60 UVA','E82 UVA',
-                              'NIPPON KOGAKU','WEISU','IWKOO',
-                              'WRIST STRAP','AC-ADAPTER','CAMERA BAG','OBERWERTH',
-                              'ARTISAN','ULTRAVID','AUDIO ADAPTER',
-                              'GRAF VON','FABER-CASTELL','ONA ',
-                              'THUMBS UP','THUMB UP','BATTERY','CHARGER']):
-        return "Accessory"
-
-    # ── Ffordes M마운트 ──
-    if 'ZM' in n or ' VM ' in n or 'VM NOKTON' in n:
-        return "M"
-    if 'M ROKKOR' in n or 'M-ROKKOR' in n:
-        return "M"
-    if 'COLLAPSIBLE' in n and 'LEICA' in n:
-        return "M"
-    if 'SUMMITAR' in n:
-        return "L"
-    if 'VOIGTLANDER' in n and any(x in n for x in ['NOKTON','ULTRON','HELIAR','COLOR-SKOPAR']):
-        return "M"
-
     return "Unknown"
 
 def resolve_mount_from_category(mount, category):
@@ -479,10 +436,6 @@ LENS_PROTECT_KW = [
     'summitar', 'nokton', 'voigtlander',
     # 시리얼 넘버 패턴 (sn. 이 있으면 개별 렌즈/바디)
     ' sn.', ' sn ',
-    # Compact/PNS 카메라 (가격 기반 Accessory 오분류 방지)
-    'minilux', 'd-lux', 'v-lux', 'c-lux', 'c1', 'c2', 'cl ',
-    'leica m', 'leica r', 'leica q', 'leica sl', 'leica s',
-    'sofort', 'digilux',
 ]
 # 명백한 악세사리 코드네임 (5자리 영문/숫자)
 ACCESSORY_CODES = [
@@ -901,11 +854,11 @@ def auto_label(name):
         if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
         return "Noctilux"
     # 복각 + 1.2 → Noctilux f1.2
+    _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
     if '복각' in n and '1.2' in n and not any(k in n for k in _nocti_exc):
         return "50mm Noctilux f1.2"
 
     # 충무로/장씨 약식: "M 50/1.2", "M50/1.2", "복각" 등 → Noctilux 추론
-    _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
     if not any(k in n for k in _nocti_exc):
         if re.search(r'\b50/1\.2\b', n) or ("f1.2" in n and "50" in n and "1.25" not in n):
             return "50mm Noctilux f1.2"
@@ -1474,210 +1427,6 @@ def write_status(pct, current_site, total_count, done_sites, eta=0):
         print(f"    ⚠️ status.json 쓰기 실패: {e}")
 
 
-
-
-def translate_mapcamera_name(jp_name):
-    """맵카메라 일본어 상품명 → 영어 변환"""
-    name = jp_name
-    # 렌즈명 변환
-    replacements = [
-        ("アポズミクロン", "APO-Summicron"),
-        ("ズミクロン", "Summicron"),
-        ("ズミルックス", "Summilux"),
-        ("ズマロン", "Summaron"),
-        ("ズマール", "Summar"),
-        ("ノクティルックス", "Noctilux"),
-        ("エルマリート", "Elmarit"),
-        ("エルマー", "Elmar"),
-        ("ヘクトール", "Hektor"),
-        ("テリート", "Telyt"),
-        ("スーパーアンギュロン", "Super-Angulon"),
-        ("バリオ・エルマリート", "Vario-Elmarit"),
-        ("バリオ・エルマー", "Vario-Elmar"),
-        ("アポ・テリート", "APO-Telyt"),
-        ("DRズミクロン", "DR Summicron"),
-        # 색상
-        ("ブラックペイント", "Black Paint"),
-        ("ブラッククローム", "Black Chrome"),
-        ("シルバークローム", "Silver Chrome"),
-        ("ブラック", "Black"),
-        ("シルバー", "Silver"),
-        ("ホワイト", "White"),
-        ("ゴールド", "Gold"),
-        # 상태/설명
-        ("沈胴", "Collapsible"),
-        ("固定鏡筒", "Rigid"),
-        ("フード付", "with Hood"),
-        ("後期", "Late"),
-        ("前期", "Early"),
-        ("中期", "Mid"),
-        ("カナダ", "Canada"),
-        ("ドイツ", "Germany"),
-        ("復刻版", "Reprint"),
-        # 바디
-        ("モノクローム", "Monochrom"),
-        ("ブラックペイント", "Black Paint"),
-        # 기타
-        ("回巻き上げ", "-stroke"),
-        ("ASPH.", "ASPH"),
-    ]
-    for jp, en in replacements:
-        name = name.replace(jp, en)
-    return name.strip()
-
-
-def crawl_mapcamera():
-    """맵카메라 - Playwright 브라우저로 JSON API 크롤링"""
-    from playwright.sync_api import sync_playwright
-    results = []
-    base = "https://www.mapcamera.com"
-    base_url = f"{base}/ec/api/itemsearch?maker=13&sell=used&siteid=1&limit=100&devicetype=pc&format=searchresult"
-
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(
-                user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                locale="ja-JP",
-                extra_http_headers={"Accept-Language": "ja,en-US;q=0.9,en;q=0.8"},
-            )
-            page = context.new_page()
-            # 먼저 메인 페이지 방문해서 쿠키/세션 확보
-            try:
-                page.goto("https://www.mapcamera.com/search?maker=13&sell=used", wait_until="domcontentloaded", timeout=30000)
-                page.wait_for_timeout(3000)
-            except Exception as e:
-                print(f"  ⚠️ 메인 페이지 로드 실패 ({e}), API 직접 시도")
-
-            # API 호출
-            resp = page.evaluate(f"""async () => {{
-                const r = await fetch('{base_url}&page=1', {{
-                    headers: {{
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Referer': 'https://www.mapcamera.com/search?maker=13&sell=used',
-                    }}
-                }});
-                return await r.json();
-            }}""")
-            total = resp["response"]["numFound"]
-            total_pages = (total // 100) + 1
-            print(f"  총 {total}개 상품, {total_pages}페이지")
-
-            seen_codes = set()
-            for page_num in range(1, total_pages + 1):
-                try:
-                    data = page.evaluate(f"""async () => {{
-                        const r = await fetch('{base_url}&page={page_num}', {{
-                            headers: {{
-                                'Accept': 'application/json',
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Referer': 'https://www.mapcamera.com/search?maker=13&sell=used',
-                            }}
-                        }});
-                        return await r.json();
-                    }}""")
-                    docs = data["response"]["docs"]
-                    print(f"    └─ p{page_num}: {len(docs)}개")
-                    for d in docs:
-                        mapcode = str(d.get("mapcode", ""))
-                        if not mapcode or mapcode in seen_codes:
-                            continue
-                        seen_codes.add(mapcode)
-                        jp_name = d.get("genpin_name", "").strip()
-                        en_name = translate_mapcamera_name(jp_name)
-                        price_jpy = d.get("salesprice") or d.get("usedsalespricemin")
-                        price = f"¥{int(price_jpy):,}" if price_jpy else "문의요망"
-                        is_sold = d.get("sellstatusid", 1) != 1
-                        link = f"{base}/item/detail/{mapcode}"
-                        img = f"https://www.mapcamera.com/ec/img/product/{mapcode[:4]}/{mapcode}.jpg"
-                        label = auto_label(en_name)
-                        mount = detect_mount(en_name)
-                        gen = detect_generation(en_name)
-                        brand = detect_brand(en_name)
-                        cat = detect_category(en_name, price)
-                        results.append({{
-                            "site": "맵카메라 (일본)",
-                            "label": label,
-                            "상품명": en_name,
-                            "세대": gen,
-                            "컨디션": "정보없음",
-                            "가격": price,
-                            "통화": "JPY",
-                            "이미지": img,
-                            "링크": link,
-                            "품절": is_sold,
-                            "예약중": False,
-                            "mount": mount,
-                            "category": cat,
-                            "brand": brand,
-                        }})
-                except Exception as e:
-                    print(f"    ❌ p{page_num} 오류: {e}")
-                    continue
-            browser.close()
-    except Exception as e:
-        print(f"  ❌ 맵카메라 오류: {e}")
-
-    print(f"  ✅ 맵카메라 완료: {len(results)}개")
-    return results
-
-def crawl_leicamiami():
-    """Leica Store Miami - Shopify JSON API 크롤링"""
-    import urllib.request
-    results = []
-    base = "https://leicastoremiami.com"
-    url = f"{base}/collections/used/products.json?limit=250"
-    print(f"\n  📂 Leica Store Miami: {url}")
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        data = json.loads(urllib.request.urlopen(req, timeout=30).read())
-        products = data.get("products", [])
-        print(f"    └─ {len(products)}개 상품 발견")
-        for p in products:
-            name = p.get("title", "").strip()
-            if not name:
-                continue
-            variant = p["variants"][0] if p.get("variants") else {}
-            price_raw = variant.get("price", "")
-            try:
-                price = f"${float(price_raw):,.0f}" if price_raw else "문의요망"
-            except:
-                price = "문의요망"
-            available = variant.get("available", True)
-            handle = p.get("handle", "")
-            link = f"{base}/products/{handle}" if handle else ""
-            img = ""
-            if p.get("images"):
-                img = p["images"][0].get("src", "")
-            label = auto_label(name)
-            mount = detect_mount(name)
-            gen = detect_generation(name)
-            brand = detect_brand(name)
-            cat = detect_category(name, price)
-            results.append({
-                "site": "Leica Store Miami",
-                "label": label,
-                "상품명": name,
-                "세대": gen,
-                "컨디션": "정보없음",
-                "가격": price,
-                "통화": "USD",
-                "이미지": img,
-                "링크": link,
-                "품절": not available,
-                "예약중": False,
-                "mount": mount,
-                "category": cat,
-                "brand": brand,
-            })
-            status = "✔ " if not available is False else "✔ "
-            print(f"    {'✔ ' if available else '✘ '} {name[:50]} | {price}")
-    except Exception as e:
-        print(f"    ❌ 오류: {e}")
-    print(f"  ✅ Leica Store Miami 완료: {len(results)}개")
-    return results
-
 def crawl_ffordes(page):
     """Ffordes 크롤러 - Leica 카테고리 전체"""
     results = []
@@ -1701,8 +1450,8 @@ def crawl_ffordes(page):
     for cat_url, mount_hint in categories:
         print(f"\n  📂 Ffordes: {cat_url}")
         try:
-            page.goto(cat_url, wait_until="domcontentloaded", timeout=30_000)
-            page.wait_for_selector('#sscProductArray article', timeout=20_000)
+            page.goto(cat_url, wait_until="networkidle", timeout=20_000)
+            page.wait_for_selector('#sscProductArray article', timeout=10_000)
         except Exception as e:
             print(f"    ❌ 로드 실패: {e}")
             continue
@@ -1719,11 +1468,10 @@ def crawl_ffordes(page):
             if page_num > 1:
                 try:
                     next_url = f"{cat_url}?p={page_num}&q={cat_id}"
-                    page.goto(next_url, wait_until="domcontentloaded", timeout=30_000)
-                    page.wait_for_timeout(1500)
-                    page.wait_for_selector('#sscProductArray article', timeout=20_000)
+                    page.goto(next_url, wait_until="networkidle", timeout=15_000)
+                    page.wait_for_selector('#sscProductArray article', timeout=8_000)
                 except Exception as e:
-                    print(f"    └─ p{page_num} 빈 페이지 또는 타임아웃, 종료")
+                    print(f"    ⚠️ p{page_num} 이동 실패: {e}")
                     break
 
             items = page.evaluate("""() => {
@@ -1740,7 +1488,7 @@ def crawl_ffordes(page):
                     const priceRaw = priceEl ? priceEl.innerText.trim() : '';
                     const priceMatch = priceRaw.match(/£[\d,\.]+/);
                     const price = priceMatch ? priceMatch[0] : '';
-                    const isUsed = !a.classList.contains('New');
+                    const isUsed = a.classList.contains('Used');
                     const isSold = a.querySelector('.soldout, .out-of-stock') !== null ||
                                    a.innerText.toLowerCase().includes('sold out');
                     results.push({name, href, img, price, isUsed, isSold});
@@ -1819,9 +1567,6 @@ def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
     start_time = time.time()
-    import datetime as _dt_start
-    _KST_start = _dt_start.timezone(_dt_start.timedelta(hours=9))
-    crawl_time = _dt_start.datetime.now(_KST_start).strftime("%Y-%m-%d %H:%M:%S")
     all_results = []
     write_status(0, "Starting...", 0, 0)
 
@@ -1912,19 +1657,6 @@ def crawl_all():
     done_sites += 1
     write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
 
-    # ── Leica Store Miami 크롤링 ──
-    print('\n' + '='*50)
-    print('Leica Store Miami 크롤링 시작')
-    miami_results = crawl_leicamiami()
-    all_results.extend(miami_results)
-    done_sites += 1
-    write_status(int(done_sites/total_sites*100), 'Leica Store Miami', len(all_results), done_sites, 0)
-
-
-    # ── 맵카메라 크롤링 (IP 차단으로 비활성화) ──
-    # mapcamera_results = crawl_mapcamera()
-
-
     # 전체 중복 제거
     seen = set()
     unique_results = []
@@ -1937,7 +1669,7 @@ def crawl_all():
 
     # label 자동 보정 + 상품명 정리 + system/category 분류
     import datetime
-
+    crawl_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     for r in unique_results:
         name = r['상품명']
         # 상품명에서 "상품명 :" 제거
@@ -2055,31 +1787,8 @@ def crawl_all():
     with open("results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
 
-    # 신규 매물 카운트 (crawl_sessions 저장에 필요)
+    # 신규 매물 통계
     new_count = sum(1 for r in unique_results if r.get('first_seen') == crawl_time)
-
-    # ── crawl_sessions.json 누적 저장 ──
-    import datetime as _dt3
-    _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
-    end_time = _dt3.datetime.now(_KST3).strftime("%Y-%m-%d %H:%M:%S")
-    session_entry = {
-        "start_time": crawl_time,
-        "end_time": end_time,
-        "new_items": new_count,
-        "total_items": len(unique_results),
-    }
-    try:
-        with open("crawl_sessions.json", "r", encoding="utf-8") as f:
-            sessions_log = json.load(f)
-    except:
-        sessions_log = []
-    sessions_log = [s for s in sessions_log if s.get("start_time") != crawl_time]
-    sessions_log.append(session_entry)
-    sessions_log = sessions_log[-100:]
-    with open("crawl_sessions.json", "w", encoding="utf-8") as f:
-        json.dump(sessions_log, f, ensure_ascii=False, indent=2)
-    print(f"📋 crawl_sessions.json 저장 완료 (총 {len(sessions_log)}개 세션)")
-
     write_status(100, "완료", len(unique_results), len(SITES), 0)
     print(f"\n{'='*50}")
     print(f"✅ 최종 {len(unique_results)}개 → results.json 저장 완료")
