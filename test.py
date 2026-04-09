@@ -1534,15 +1534,18 @@ def crawl_mapcamera():
     base_url = f"{base}/ec/api/itemsearch?maker=13&sell=used&siteid=1&limit=100&devicetype=pc&format=searchresult"
     
     headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Referer": "https://www.mapcamera.com/search?maker=13&sell=used",
-        "Accept": "application/json",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Language": "ja,en-US;q=0.9,en;q=0.8",
+        "X-Requested-With": "XMLHttpRequest",
+        "Origin": "https://www.mapcamera.com",
     }
     
     # 전체 수 파악
     try:
         req = urllib.request.Request(f"{base_url}&page=1", headers=headers)
-        data = json.loads(urllib.request.urlopen(req, timeout=15).read())
+        data = json.loads(urllib.request.urlopen(req, timeout=30).read())
         total = data["response"]["numFound"]
         total_pages = (total // 100) + 1
         print(f"  총 {total}개 상품, {total_pages}페이지")
@@ -1555,7 +1558,7 @@ def crawl_mapcamera():
         try:
             url = f"{base_url}&page={page}"
             req = urllib.request.Request(url, headers=headers)
-            data = json.loads(urllib.request.urlopen(req, timeout=15).read())
+            data = json.loads(urllib.request.urlopen(req, timeout=30).read())
             docs = data["response"]["docs"]
             print(f"    └─ p{page}: {len(docs)}개")
             for d in docs:
@@ -1607,7 +1610,7 @@ def crawl_leicamiami():
     print(f"\n  📂 Leica Store Miami: {url}")
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        data = json.loads(urllib.request.urlopen(req, timeout=15).read())
+        data = json.loads(urllib.request.urlopen(req, timeout=30).read())
         products = data.get("products", [])
         print(f"    └─ {len(products)}개 상품 발견")
         for p in products:
