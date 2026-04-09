@@ -751,7 +751,7 @@ def crawl_category(page, site):
             print(f"    └─ {page_num}페이지 수집 중...")
 
             try:
-                page.goto(url, wait_until="domcontentloaded", timeout=15_000)
+                page.goto(url, wait_until="domcontentloaded", timeout=30_000)
             except Exception as e:
                 print(f"    ❌ 로드 실패: {e}")
                 break
