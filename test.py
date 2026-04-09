@@ -1791,6 +1791,9 @@ def crawl_all():
         if r['category'] == 'Accessory':
             r['label'] = ''  # Accessory는 label 제거 (평균가 왜곡 방지)
         r['mount'] = detect_mount(r['상품명'])
+        # Accessory는 mount=Accessory로 강제
+        if r['category'] == 'Accessory':
+            r['mount'] = 'Accessory'
         # brand 필드: 없으면 상품명에서 자동 감지
         if not r.get('brand'):
             r['brand'] = detect_brand(r['상품명'])
