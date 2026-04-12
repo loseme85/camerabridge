@@ -1283,6 +1283,29 @@ def auto_label(name):
     """상품명에서 label 자동 감지 - 세대/조리개별 세분화"""
     n = name.lower()
 
+    # ── R 마운트 렌즈 (M 마운트보다 먼저 체크) ──
+    _is_r = any(x in n for x in ["elmarit-r","summicron-r","summilux-r","apo-macro-elmarit",
+                                   "macro-elmarit-r","vario-apo-elmarit","vario-elmar-r",
+                                   "vario-elmarit-r","telyt-r","apo-telyt-r"])
+    if _is_r:
+        import re as _re9
+        mm_r = _re9.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_r.group(1) if mm_r else ""
+        if "apo-macro" in n or "macro-elmarit" in n:
+            if mm: return f"{mm}mm APO-Macro-Elmarit-R"
+            return "APO-Macro-Elmarit-R"
+        if "summilux-r" in n:
+            if mm: return f"{mm}mm Summilux-R"
+            return "Summilux-R"
+        if "summicron-r" in n:
+            if mm: return f"{mm}mm Summicron-R"
+            return "Summicron-R"
+        if "elmarit-r" in n:
+            if mm: return f"{mm}mm Elmarit-R"
+            return "Elmarit-R"
+        if "vario" in n and mm: return f"Vario-{mm}mm R"
+        if mm: return f"{mm}mm R Lens"
+
     # ── Noctilux (키워드 명시 또는 조리개로 추론) ──
     if "noctilux" in n or "loctilux" in n:
         if "0.95" in n: return "50mm Noctilux f0.95"
@@ -1312,14 +1335,22 @@ def auto_label(name):
         import re as _re3
         mm_m = _re3.search(r'(\d+)(?:mm|/)', n)
         mm = mm_m.group(1) if mm_m else ""
+        # 21mm
+        if mm == "21":
+            if "asph" in n: return "21mm Summilux ASPH"
+            return "21mm Summilux"
+        # 24mm
+        if mm == "24":
+            if "asph" in n: return "24mm Summilux ASPH"
+            return "24mm Summilux"
+        # 28mm
+        if mm == "28":
+            if "asph" in n: return "28mm Summilux ASPH"
+            return "28mm Summilux"
         # 35mm 세분화
         if mm == "35":
-            # ── Rule A: ASPHERICAL 풀스펠링 → AA (두매, 컬렉터 아이템) ──
-            # "aspherical"이 풀스펠링으로 있으면 AA (ASPH. 약어와 구분)
             if "aspherical" in n: return "35mm Summilux AA"
-            # ── Rule B: 2매/두매/Double/AA 키워드 → AA ──
             if any(kw in n for kw in ["2매","2 매","두매","double"," aa ","(aa)"]): return "35mm Summilux AA"
-            # ── 현행 ASPH (약어) ──
             if "fle ii" in n or "fle2" in n: return "35mm Summilux ASPH FLE II"
             if "fle" in n: return "35mm Summilux ASPH FLE"
             if "asph" in n: return "35mm Summilux ASPH"
@@ -1347,6 +1378,10 @@ def auto_label(name):
             return "50mm Summilux"
         # 75mm
         if mm == "75": return "75mm Summilux"
+        # 90mm
+        if mm == "90":
+            if "asph" in n: return "90mm Summilux ASPH"
+            return "90mm Summilux"
         # 기타 mm
         if "asph" in n and mm: return f"{mm}mm Summilux ASPH"
         if mm: return f"{mm}mm Summilux"
@@ -1355,9 +1390,8 @@ def auto_label(name):
     # ── Summicron 세대별 ──
     if "summicron" in n:
         if "apo" in n:
-            for mm in ["35","50","75","90"]:
+            for mm in ["21","28","35","50","75","90"]:
                 if mm in n: return f"{mm}mm APO-Summicron"
-        # mm 추출 - 가장 먼저
         import re as _re2
         mm_match = _re2.search(r"(\d+)(?:mm|/)", n)
         mm = mm_match.group(1) if mm_match else ""
@@ -1375,7 +1409,19 @@ def auto_label(name):
             if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
             if "6매" in n or "6-el" in n: return "35mm Summicron (6매)"
             return "35mm Summicron"
-        if mm in ["28","75","90"]: return f"{mm}mm Summicron"
+        # 28mm 세분화
+        if mm == "28":
+            if "asph" in n: return "28mm Summicron ASPH"
+            return "28mm Summicron"
+        # 75mm
+        if mm == "75": return "75mm Summicron"
+        # 90mm 세분화
+        if mm == "90":
+            if "asph" in n or "apo" in n: return "90mm Summicron ASPH"
+            return "90mm Summicron"
+        # 40mm (CL용)
+        if mm == "40": return "40mm Summicron-C"
+        if mm: return f"{mm}mm Summicron"
         return "Summicron"
 
     # ── Elmarit ──
@@ -1383,7 +1429,12 @@ def auto_label(name):
         import re as _re4
         mm_e = _re4.search(r'(\d+)(?:mm|/)', n)
         mm = mm_e.group(1) if mm_e else ""
-        # 28mm 세분화
+        if mm == "21":
+            if "asph" in n: return "21mm Elmarit ASPH"
+            return "21mm Elmarit"
+        if mm == "24":
+            if "asph" in n: return "24mm Elmarit ASPH"
+            return "24mm Elmarit"
         if mm == "28":
             if "asph" in n: return "28mm Elmarit ASPH"
             if "1세대" in n or "1st" in n or "9 element" in n or "9element" in n: return "28mm Elmarit 1세대"
@@ -1392,10 +1443,9 @@ def auto_label(name):
             if "4세대" in n or "4th" in n: return "28mm Elmarit 4세대"
             if "vario" in n: return "28mm Vario-Elmarit"
             return "28mm Elmarit"
-        # 21mm 세분화
-        if mm == "21":
-            if "asph" in n: return "21mm Elmarit ASPH"
-            return "21mm Elmarit"
+        if mm == "90":
+            if "asph" in n: return "90mm Elmarit ASPH"
+            return "90mm Elmarit"
         if mm: return f"{mm}mm Elmarit"
         return "Elmarit"
 
@@ -1413,19 +1463,46 @@ def auto_label(name):
 
     # ── Super-Angulon ──
     if "angulon" in n:
-        for mm in ["21","16"]:
+        for mm in ["21","16","18"]:
             if mm in n: return f"{mm}mm Super-Angulon"
         return "Super-Angulon"
 
+    # ── Super-Elmar ──
+    if "super-elmar" in n or "super elmar" in n:
+        import re as _re6
+        mm_se = _re6.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_se.group(1) if mm_se else ""
+        if mm: return f"{mm}mm Super-Elmar"
+        return "Super-Elmar"
+
+    # ── Thambar ──
+    if "thambar" in n: return "90mm Thambar"
+
+    # ── APO-Telyt ──
+    if "apo-telyt" in n or "apo telyt" in n:
+        import re as _re7
+        mm_at = _re7.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_at.group(1) if mm_at else ""
+        if mm: return f"{mm}mm APO-Telyt"
+        return "APO-Telyt"
+
+    # ── Telyt ──
+    if "telyt" in n and "apo" not in n:
+        import re as _re8
+        mm_t = _re8.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_t.group(1) if mm_t else ""
+        if mm: return f"{mm}mm Telyt"
+        return "Telyt"
+
     # ── Elmar 세분화 ──
-    if "elmar" in n and "elmarit" not in n and "tri" not in n:
+    if "elmar" in n and "elmarit" not in n and "tri" not in n and "super" not in n:
         if "50" in n or "5/2.8" in n or "5/3.5" in n:
             if "asph" in n: return "50mm Elmar-M ASPH"
             if "2.8" in n: return "50mm Elmar f2.8"
             if "3.5" in n: return "50mm Elmar f3.5"
             return "50mm Elmar"
         if "35" in n: return "35mm Elmar"
-        for mm in ["90","65","24"]:
+        for mm in ["90","65","24","18"]:
             if mm in n: return f"{mm}mm Elmar"
         return "Elmar"
 
