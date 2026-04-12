@@ -1930,15 +1930,41 @@ def crawl_kitamura(page):
 
     # 일본어 → 영어 변환 매핑
     JA_TO_EN = {
+        # 렌즈명
         'ズミルックス': 'Summilux', 'ズミクロン': 'Summicron', 'ノクティルックス': 'Noctilux',
         'ズマリット': 'Summarit', 'エルマー': 'Elmar', 'エルマリート': 'Elmarit',
         'スーパーアンギュロン': 'Super-Angulon', 'テレエルマー': 'Tele-Elmar',
         'アポズミクロン': 'APO-Summicron', 'ズマロン': 'Summaron',
-        'ライカ': 'Leica', 'ミラーレス一眼': '', '交換レンズ': '',
-        'カメラ用品': '', 'フィルムカメラ': '', 'ボディ': 'Body',
+        'ヘクトール': 'Hektor', 'ズマール': 'Summar', 'エルカン': 'Elcan',
+        'トリエルマー': 'Tri-Elmar', 'バリオエルマー': 'Vario-Elmar',
+        'バリオエルマリート': 'Vario-Elmarit', 'アポテリート': 'APO-Telyt',
+        'スーパーエルマー': 'Super-Elmar', 'テリート': 'Telyt',
+        'ズミター': 'Summitar', 'ヘクター': 'Hektor',
+        # 브랜드/기기명
+        'ライカ': 'Leica', 'ライカビット': 'Leicavit', 'ライカフード': 'Leica Hood',
+        'ライカファインダー': 'Leica Finder', 'レンズフード': 'Lens Hood',
+        # 카테고리 (제거)
+        'ミラーレス一眼': '', '交換レンズ': '', 'カメラ用品': '',
+        'フィルムカメラ': '', '中古': '', '新品': 'New',
+        # 색상
         'ブラック': 'Black', 'シルバー': 'Silver', 'クローム': 'Chrome',
-        '状態': 'Condition', 'アルミ': 'Aluminium',
-        'ペイント': 'Paint', 'ブラックペイント': 'Black Paint',
+        'ゴールド': 'Gold', 'チタン': 'Titan', 'グリーン': 'Green',
+        'レッド': 'Red', 'ホワイト': 'White', 'ブルー': 'Blue',
+        # 상태/소재
+        'ブラックペイント': 'Black Paint', 'ペイント': 'Paint',
+        'アルミ': 'Aluminium', '状態': '', 'ボディ': 'Body',
+        # 특수 에디션
+        'エルメスエディション': 'Hermes Edition', 'エルメス': 'Hermes',
+        'オリジナル': 'Original', 'スペシャルエディション': 'Special Edition',
+        # 시기
+        '初期': 'Early', '後期': 'Late', '前期': 'Early',
+        # 악세사리
+        'フード': 'Hood', 'アダプター': 'Adapter', 'ファインダー': 'Finder',
+        'ケース': 'Case', 'ストラップ': 'Strap', 'キャップ': 'Cap',
+        'フィルター': 'Filter', 'グリップ': 'Grip', 'バッテリー': 'Battery',
+        # 기타
+        'アポ': 'APO', 'セット': 'Set', 'プロトタイプ': 'Prototype',
+        'ミリ': 'mm', 'レンズ': 'Lens',
     }
 
     def ja_to_en(text):
