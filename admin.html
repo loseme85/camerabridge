@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_27.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_28.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -411,7 +411,13 @@ function updateNewItems(){
             ${F[site]||'🌐'} ${site.slice(0,6)} <strong>${cnt}</strong>
           </div>`).join('')}
       </div>`:'';
-    if(!items.length){document.getElementById('session-detail').innerHTML=`
+    // SITE PROGRESS 업데이트
+    if(Object.keys(siteCounts).length){
+      document.getElementById('site-progress').innerHTML=SITES_ORDER.map(s=>{
+        const cnt=siteCounts[s]||0;
+        return `<div class="site-prog${cnt>0?' done':''}"><div class="site-prog-flag">${FLAGS[s]||'🌐'}</div><div class="site-prog-name">${s.replace('라이카스토어 ','')}</div><div class="site-prog-count">${cnt}</div></div>`;
+      }).join('');
+    }
       <div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:12px 0 4px;">📅 ${fmtLabel(s)} (${dur}분) — 신규 매물 없음</div>
       ${siteCountsHtml}
     `;return;}
