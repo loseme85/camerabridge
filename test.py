@@ -1974,6 +1974,7 @@ def crawl_kitamura(page):
                     const allText = card.innerText;
                     const priceMatch = allText.match(/[\d,]+円/);
                     const price = priceMatch ? priceMatch[0] : '';
+                    const imgEl = card.querySelector('img');
                     const img = imgEl ? (imgEl.getAttribute('src') || '') : '';
                     const condEl = card.querySelector('[class*="rank"], [class*="cond"], [class*="grade"]');
                     const cond = condEl ? condEl.innerText.trim() : '';
