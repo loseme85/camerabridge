@@ -1286,10 +1286,10 @@ def auto_label(name):
     # ── Noctilux (키워드 명시 또는 조리개로 추론) ──
     if "noctilux" in n or "loctilux" in n:
         if "0.95" in n: return "50mm Noctilux f0.95"
-        if "1.2" in n: return "50mm Noctilux f1.2"
+        if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
+        if "1.2" in n and "1.25" not in n: return "50mm Noctilux f1.2"
         if "original" in n: return "50mm Noctilux f1.2"  # 충무로 1세대 표기
         if "1.0" in n: return "50mm Noctilux f1.0"
-        if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
         return "Noctilux"
     # 복각 + 1.2 → Noctilux f1.2
     _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
@@ -2429,12 +2429,12 @@ def crawl_all():
                     r['label'] = '50mm Noctilux f1.2'
                     r['brand'] = 'Leica'
                 elif price_num >= 5_000_000:
-                    # 500~1,500만원 → 라이카 공식 복각
-                    r['label'] = '50mm Noctilux f1.2'
+                    # 500~1,500만원 → 라이카 공식 복각 (ASPH)
+                    r['label'] = '50mm Noctilux f1.2 ASPH'
                     r['brand'] = 'Leica'
                 elif 1_000_000 <= price_num < 5_000_000:
                     # 100~500만원 → 써드파티 복각
-                    r['label'] = '50mm Noctilux f1.2'
+                    r['label'] = '50mm Noctilux f1.2 복각'
                     if r.get('brand') not in ['Leica']:
                         r['brand'] = '3rd Party'
         except Exception:
