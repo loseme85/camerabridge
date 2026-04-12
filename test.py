@@ -1951,8 +1951,8 @@ def crawl_kitamura(page):
         print(f"    └─ {page_num}페이지 수집 중...")
 
         try:
-            page.goto(url, wait_until="domcontentloaded", timeout=30_000)
-            page.wait_for_timeout(1500)
+            page.goto(url, wait_until="networkidle", timeout=30_000)
+            page.wait_for_selector('a[href*="/buy/item/"] h3', timeout=15_000)
         except Exception as e:
             print(f"    ❌ 로드 실패: {e}")
             break
@@ -1965,12 +1965,12 @@ def crawl_kitamura(page):
                 for (const card of cards) {
                     const href = card.getAttribute('href') || '';
                     if (!href.includes('/buy/item/')) continue;
-                    const nameEl = card.querySelector('h3, .item-name, p');
-                    const name = nameEl ? nameEl.innerText.trim() : card.innerText.trim();
+                    const nameEl = card.querySelector('h3');
+                    const name = nameEl ? nameEl.innerText.trim() : '';
                     if (!name) continue;
-                    const priceEl = card.querySelector('.price, [class*="price"]');
-                    const price = priceEl ? priceEl.innerText.trim() : '';
-                    const imgEl = card.querySelector('img');
+                    const allText = card.innerText;
+                    const priceMatch = allText.match(/[\d,]+円/);
+                    const price = priceMatch ? priceMatch[0] : '';
                     const img = imgEl ? (imgEl.getAttribute('src') || '') : '';
                     const condEl = card.querySelector('[class*="rank"], [class*="cond"], [class*="grade"]');
                     const cond = condEl ? condEl.innerText.trim() : '';
