@@ -418,6 +418,7 @@ function updateNewItems(){
         return `<div class="site-prog${cnt>0?' done':''}"><div class="site-prog-flag">${FLAGS[s]||'🌐'}</div><div class="site-prog-name">${s.replace('라이카스토어 ','')}</div><div class="site-prog-count">${cnt}</div></div>`;
       }).join('');
     }
+    if(!items.length){document.getElementById('session-detail').innerHTML=`
       <div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:12px 0 4px;">📅 ${fmtLabel(s)} (${dur}분) — 신규 매물 없음</div>
       ${siteCountsHtml}
     `;return;}
