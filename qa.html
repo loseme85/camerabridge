@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)file:///Users/changdaepark/Downloads/qa.html -->
+<!-- saved from url=(0046)file:///Users/changdaepark/Downloads/qa_1.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -148,6 +148,15 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
     <div class="sum-card green"><div class="sum-val" id="s-sale">0</div><div class="sum-lbl">For Sale</div></div>
     <div class="sum-card"><div class="sum-val" id="s-sold" style="color:var(--accent)">0</div><div class="sum-lbl">Sold Out</div></div>
     <div class="sum-card blue"><div class="sum-val" id="s-query">—</div><div class="sum-lbl">Normalized Query</div></div>
+  </div>
+  <!-- 평균가 분석 섹션 -->
+  <div id="avg-section" style="display:none;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+    <div id="avg-header" style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid var(--border);" onclick="toggleAvgList()">
+      <div style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">// Price Analysis</div>
+      <div id="avg-summary" style="font-family:&#39;Space Mono&#39;,monospace;font-size:11px;color:var(--text);"></div>
+      <span id="avg-toggle" style="font-size:10px;color:var(--muted);">▼ 목록 보기</span>
+    </div>
+    <div id="avg-list" style="display:none;max-height:300px;overflow-y:auto;"></div>
   </div>
 
   <!-- 메인 QA 그리드 -->
@@ -589,6 +598,14 @@ function closeQARecent(){const el=document.getElementById('qa-recent-dropdown');
 
 function qaGoPage(page){qaPage=page;runQA(false);window.scrollTo({top:document.getElementById('results-body').offsetTop-80,behavior:'smooth'});}
 
+function toggleAvgList(){
+  const list=document.getElementById('avg-list');
+  const toggle=document.getElementById('avg-toggle');
+  const open=list.style.display==='none';
+  list.style.display=open?'block':'none';
+  toggle.textContent=open?'▲ 닫기':'▼ 목록 보기';
+}
+
 function runQA(resetPage=true){
   const raw=document.getElementById('qa-input').value.trim();
   if(raw) history.pushState({q:raw},'','?q='+encodeURIComponent(raw));
@@ -643,6 +660,56 @@ function runQA(resetPage=true){
   document.getElementById('count-ffordes').textContent=(siteCounts['Ffordes (영국)']||0)+'개 매칭';
 
   document.getElementById('result-count').textContent=passed.length+' results';
+
+  // 평균가 분석
+  const priceItems = passed.filter(r=>r['가격']&&r['가격']!=='문의요망');
+  const prices = priceItems.map(r=>({
+    name: (r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim(),
+    site: r.site,
+    price: r['가격'],
+    cur: r['통화'],
+    krw: parseToKrw(r['가격'], r['통화']),
+    soldout: r['품절'],
+  })).filter(r=>r.krw&&r.krw>0);
+
+  const avgSec = document.getElementById('avg-section');
+  if(prices.length>=2) {
+    const forSalePrices = prices.filter(r=>!r.soldout);
+    const allPrices = prices;
+    const calcAvg = arr => arr.length ? Math.round(arr.reduce((s,r)=>s+r.krw,0)/arr.length) : 0;
+    const calcMin = arr => arr.length ? Math.min(...arr.map(r=>r.krw)) : 0;
+    const calcMax = arr => arr.length ? Math.max(...arr.map(r=>r.krw)) : 0;
+    const avg = calcAvg(forSalePrices.length ? forSalePrices : allPrices);
+    const min = calcMin(forSalePrices.length ? forSalePrices : allPrices);
+    const max = calcMax(forSalePrices.length ? forSalePrices : allPrices);
+    const fmtK = n => n>=10000?'₩'+Math.round(n/10000)+'만':'₩'+n.toLocaleString();
+
+    document.getElementById('avg-summary').innerHTML = `
+      <span style="color:var(--accent);font-weight:700;">${fmtK(avg)}</span>
+      <span style="color:var(--muted);margin:0 6px;">avg</span>
+      <span style="color:#22a06b;">${fmtK(min)}</span>
+      <span style="color:var(--muted);margin:0 4px;">~</span>
+      <span style="color:#e11f26;">${fmtK(max)}</span>
+      <span style="color:var(--muted);font-size:9px;margin-left:6px;">(${forSalePrices.length}개 판매중 기준)</span>
+    `;
+
+    const sortedPrices = [...prices].sort((a,b)=>a.krw-b.krw);
+    document.getElementById('avg-list').innerHTML = sortedPrices.map(r=>{
+      const diff = avg ? Math.round((r.krw-avg)/avg*100) : 0;
+      const diffColor = diff<-3?'#22a06b':diff>3?'#e11f26':'var(--muted)';
+      const diffTxt = Math.abs(diff)<3?'avg':(diff>0?'+':'')+diff+'%';
+      return `<div style="display:grid;grid-template-columns:1fr 80px 90px 50px;padding:8px 16px;border-bottom:1px solid var(--border);align-items:center;${r.soldout?'opacity:0.4':''}">
+        <div style="font-size:11px;color:var(--text);">${r.name.slice(0,45)}${r.soldout?'<span style="font-size:9px;color:var(--muted);margin-left:4px;">SOLD</span>':''}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);">${FLAGS[r.site]||'🌐'} ${(r.site||'').slice(0,5)}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--accent);">${fmtQAPrice(r.price,r.cur)}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:${diffColor};">${diffTxt}</div>
+      </div>`;
+    }).join('');
+
+    avgSec.style.display='block';
+  } else {
+    avgSec.style.display='none';
+  }
 
   // 결과 렌더
   const body=document.getElementById('results-body');
