@@ -1175,6 +1175,9 @@ def crawl_category(page, site):
                     if not name:
                         continue
 
+                    # 판매완료/보류 텍스트 제외
+                    if re.search(r'^\d+[-\s]*판매완료|^\d+[-\s]*보류', name):
+                        continue
                     # 비라이카 브랜드 제외 (전역 NON_LEICA_BRANDS 사용)
                     name_lower = name.lower()
                     if any(b in name_lower for b in NON_LEICA_BRANDS):
