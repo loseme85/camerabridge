@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)https://camerabridge.vercel.app/admin.html -->
-<html lang="en"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_27.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge — Admin</title>
@@ -241,7 +241,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card" bis_skin_checked="1">
       <div class="card-title" bis_skin_checked="1"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;" bis_skin_checked="1"><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// Loaded 7732 listings</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// 10 hot deals (&gt;10% below avg)</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-err">// Error: recentItems is not defined</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;" bis_skin_checked="1"><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// Loaded 7732 listings</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// 10 hot deals (&gt;10% below avg)</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-err">// Error: recentItems is not defined</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
 
@@ -402,10 +402,23 @@ function updateNewItems(){
   window._renderNewSession=function(idx){
     const s=sorted[idx],items=getSessionItems(s);
     const dur=Math.round((new Date(s.end_time)-new Date(s.start_time))/1000/60);
-    if(!items.length){document.getElementById('session-detail').innerHTML=`<div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:20px 0;">📅 ${fmtLabel(s)} (${dur}분) — 신규 매물 없음</div>`;return;}
+    // 사이트별 현황
+    const siteCounts=s.site_counts||{};
+    const siteCountsHtml=Object.keys(siteCounts).length?`
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+        ${Object.entries(siteCounts).map(([site,cnt])=>`
+          <div style="font-family:Space Mono,monospace;font-size:9px;padding:2px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--dim);">
+            ${F[site]||'🌐'} ${site.slice(0,6)} <strong>${cnt}</strong>
+          </div>`).join('')}
+      </div>`:'';
+    if(!items.length){document.getElementById('session-detail').innerHTML=`
+      <div style="font-family:Space Mono,monospace;font-size:11px;color:var(--muted);padding:12px 0 4px;">📅 ${fmtLabel(s)} (${dur}분) — 신규 매물 없음</div>
+      ${siteCountsHtml}
+    `;return;}
     items.sort((a,b)=>{const av=VIP.some(k=>(a['상품명']||'').toLowerCase().includes(k));const bv=VIP.some(k=>(b['상품명']||'').toLowerCase().includes(k));return bv-av;});
     document.getElementById('session-detail').innerHTML=`
       <div style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-bottom:6px;">📅 ${fmtLabel(s)} (${dur}분 소요) — ${items.length}개 신규</div>
+      ${siteCountsHtml}
       <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
         <div style="display:grid;grid-template-columns:1fr 100px 100px 60px;padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border2);">
           ${['Product','Site','Price','Link'].map(h=>`<span style="font-family:Space Mono,monospace;font-size:8px;color:var(--muted);text-transform:uppercase;">${h}</span>`).join('')}
