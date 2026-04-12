@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0047)file:///Users/changdaepark/Downloads/qa_36.html -->
+<!-- saved from url=(0044)file:///Users/changdaepark/Downloads/qa.html -->
 <html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -131,7 +131,13 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
         <div class="recent-dropdown" id="qa-recent-dropdown"></div>
       </div>
       <button class="search-btn" onclick="runQA()">▶ RUN QA</button>
-    </div>
+      <select id="currency-display" onchange="runQA(false)" style="font-family:&#39;Space Mono&#39;,monospace;font-size:11px;padding:8px 10px;border:1px solid var(--border2);border-radius:2px;background:var(--surface2);color:var(--text);cursor:pointer;">
+        <option value="KRW">₩ KRW</option>
+        <option value="USD">$ USD</option>
+        <option value="JPY">¥ JPY</option>
+        <option value="EUR">€ EUR</option>
+        <option value="GBP">£ GBP</option>
+      </select>
     <div class="normalized" id="normalized-display">정규화: <span id="normalized-val"></span></div>
     <div class="test-cases" id="test-cases"><span class="test-tag" onclick="quickTest(&#39;summicron 35&#39;)">summicron 35</span><span class="test-tag" onclick="quickTest(&#39;summilux 50&#39;)">summilux 50</span><span class="test-tag" onclick="quickTest(&#39;leica r 50mm&#39;)">leica r 50mm</span><span class="test-tag" onclick="quickTest(&#39;noctilux 0.95&#39;)">noctilux 0.95</span><span class="test-tag" onclick="quickTest(&#39;35cron&#39;)">35cron</span><span class="test-tag" onclick="quickTest(&#39;50lux&#39;)">50lux</span><span class="test-tag" onclick="quickTest(&#39;leica m6&#39;)">leica m6</span><span class="test-tag" onclick="quickTest(&#39;elmarit 28&#39;)">elmarit 28</span><span class="test-tag" onclick="quickTest(&#39;voigtlander&#39;)">voigtlander</span><span class="test-tag" onclick="quickTest(&#39;ttartisan&#39;)">ttartisan</span><span class="test-tag" onclick="quickTest(&#39;leica m3&#39;)">leica m3</span><span class="test-tag" onclick="quickTest(&#39;apo summicron 50&#39;)">apo summicron 50</span></div>
   </div>
@@ -231,7 +237,7 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
     </div>
   </div>
 
-</main>
+</div></main>
 
 <script>
 // ══════════════════════════════════════════════════════
@@ -527,7 +533,30 @@ function matchesQuery(item, query){
 // QA 실행
 // ══════════════════════════════════════════════════════
 let allData=[];
-let lastResults=[];
+let gbpToKrw=1700, usdToKrw=1400, jpyToKrw=9.5;
+
+function parseToKrw(price, cur) {
+  if(!price||price==='문의요망') return null;
+  const n = parseFloat(price.replace(/[^0-9.]/g,''));
+  if(isNaN(n)) return null;
+  if(cur==='GBP') return n * gbpToKrw;
+  if(cur==='USD') return n * usdToKrw;
+  if(cur==='JPY') return n * jpyToKrw;
+  return n;
+}
+
+function fmtQAPrice(price, cur) {
+  if(!price||price==='문의요망') return '—';
+  const targetCur = document.getElementById('currency-display')?.value || 'KRW';
+  const krw = parseToKrw(price, cur);
+  if(krw === null) return price;
+  if(targetCur === 'KRW') return '₩' + Math.round(krw).toLocaleString();
+  if(targetCur === 'USD') return '$' + Math.round(krw/usdToKrw).toLocaleString();
+  if(targetCur === 'JPY') return '¥' + Math.round(krw/jpyToKrw).toLocaleString();
+  if(targetCur === 'EUR') return '€' + Math.round(krw/1520).toLocaleString();
+  if(targetCur === 'GBP') return '£' + Math.round(krw/gbpToKrw).toLocaleString();
+  return price;
+}let lastResults=[];
 const QA_PAGE_SIZE=20;
 let qaPage=1;
 
@@ -646,7 +675,7 @@ function runQA(resetPage=true){
           <div class="r-meta" style="margin-top:3px;">${reasonBadges}</div>
         </div>
         <div class="r-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
-        <div class="r-price">${r['가격']||'—'}</div>
+        <div class="r-price">${fmtQAPrice(r['가격'],r['통화'])}</div>
         <div class="r-cond">${r['컨디션']||'—'}</div>
       </div>`;
     }).join('');
