@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_28.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_29.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -255,7 +255,7 @@ select:focus{border-color:var(--accent);color:var(--text);}
       <div class="table-head">
         <span></span><span>Product</span><span>Source</span>
         <span class="sortable" onclick="togglePriceSort()">Price ↕</span>
-        <span>Condition</span>
+        <span>vs Avg</span>
       </div>
       <div id="results-list"></div>
     </div>
@@ -263,7 +263,19 @@ select:focus{border-color:var(--accent);color:var(--text);}
 </main>
 <script>
 let allData=[],currentTab='sale';
-let gbpToKrw=1700; // 기본값, 실시간 환율로 업데이트됨
+let labelAvg={};
+
+function buildLabelAvg(){
+  const tmp={};
+  allData.forEach(r=>{
+    if(!r['품절']&&r.label&&r.category!=='Accessory'){
+      const p=parsePrice(r['가격'],r['통화']);
+      if(p&&p>0){if(!tmp[r.label])tmp[r.label]=[];tmp[r.label].push(p);}
+    }
+  });
+  labelAvg={};
+  Object.keys(tmp).forEach(l=>{const ps=tmp[l];if(ps.length>=2)labelAvg[l]=ps.reduce((a,b)=>a+b,0)/ps.length;});
+}let gbpToKrw=1700; // 기본값, 실시간 환율로 업데이트됨
 let usdToKrw=1400; // 기본값, 실시간 환율로 업데이트됨
 const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸 Miami','기타무라 (일본)':'🇯🇵'};
 const LANGS=[['🇺🇸','EN','English'],['🇰🇷','KO','Korean'],['🇯🇵','JA','Japanese'],['🇩🇪','DE','German'],['🇨🇳','ZH-CN','Chinese (Simplified)'],['🇹🇼','ZH-TW','Chinese (Traditional)'],['🇫🇷','FR','French'],['🇮🇹','IT','Italian']];
@@ -412,6 +424,7 @@ async function loadData(){
   const existingVals=[...sel.options].map(o=>o.value);
   sites.forEach(s=>{if(!existingVals.includes(s)){const o=document.createElement('option');o.value=s;o.textContent=(FLAGS[s]||'🌐')+' '+s;sel.appendChild(o);}});}
   catch(e){console.error(e);}
+  buildLabelAvg();
   return allData;
 }
 // 슬랭 → 검색 토큰 변환
@@ -857,7 +870,15 @@ function renderResults(query){
         ${(r['통화']==='GBP'||r['통화']==='USD'||r['통화']==='JPY')&&r['가격']&&currentLang==='KO'?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">≈ ${fmt(parsePrice(r['가격'],r['통화']))}</div>`:''}
         ${r['통화']==='USD'&&r['가격']?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">≈ ${fmt(parsePrice(r['가격'],'USD'))}</div>`:''}
       </div>
-      <div>${cond||'<span style="color:var(--text-muted);font-size:11px">—</span>'}</div>
+      <div>${(()=>{
+        const p=parsePrice(r['가격'],r['통화']);
+        const avg=labelAvg[r.label];
+        if(!p||!avg||r.category==='Accessory'||r['품절'])return '<span style="color:var(--text-muted);font-size:11px">—</span>';
+        const diff=Math.round((p-avg)/avg*100);
+        if(Math.abs(diff)<3)return '<span style="font-family:\'Space Mono\',monospace;font-size:10px;color:var(--text-muted);">avg</span>';
+        const color=diff<0?'#22a06b':'#e11f26';
+        return `<span style="font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:${color};">${diff>0?'+':''}${diff}%</span>`;
+      })()}</div>
     </a>`;
   }).join('');
 }
