@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///Users/changdaepark/Downloads/index_mount.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/index_28.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Camera Bridge</title>
-<link href="./index_files/css2" rel="stylesheet">
+<link href="file:///Users/changdaepark/Downloads/index_files/css2" rel="stylesheet">
 <style>
 :root{
   --bg:#f8f7f5;--surface:#ffffff;--surface2:#f3f2f0;--surface3:#ede9e3;
@@ -161,7 +161,7 @@ select:focus{border-color:var(--accent);color:var(--text);}
     CAMERA <span>BRIDGE</span>
   </div>
   <div class="search-wrap" id="header-search-wrap" style="display:none;position:relative;">
-    <input id="search-input" type="text" placeholder="// search used leica..." onfocus="openRecentDropdown('header')" onblur="setTimeout(()=>closeRecentDropdown(),150)">
+    <input id="search-input" type="text" placeholder="// search used leica..." onfocus="openRecentDropdown(&#39;header&#39;)" onblur="setTimeout(()=&gt;closeRecentDropdown(),150)">
     <button class="clear-btn" onclick="clearSearch()">×</button>
     <button class="search-btn" onclick="doSearch()">→</button>
     <div class="recent-dropdown" id="header-recent-dropdown"></div>
@@ -183,7 +183,7 @@ select:focus{border-color:var(--accent);color:var(--text);}
     <div class="hero-title-2">BRIDGE</div>
     <p class="hero-sub">// searching across dealers worldwide</p>
     <div class="hero-search" style="position:relative;">
-      <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key==='Enter'){doHeroSearch();closeRecentDropdown();}" onfocus="openRecentDropdown('hero')" onblur="setTimeout(()=>closeRecentDropdown(),150)">
+      <input type="text" id="hero-input" placeholder="Summilux 50mm, Elmarit 28mm, M11..." onkeydown="if(event.key===&#39;Enter&#39;){doHeroSearch();closeRecentDropdown();}" onfocus="openRecentDropdown(&#39;hero&#39;)" onblur="setTimeout(()=&gt;closeRecentDropdown(),150)">
       <button onclick="doHeroSearch()">Search →</button>
       <div class="recent-dropdown" id="hero-recent-dropdown"></div>
     </div>
@@ -268,8 +268,126 @@ let usdToKrw=1400; // 기본값, 실시간 환율로 업데이트됨
 const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸 Miami','기타무라 (일본)':'🇯🇵'};
 const LANGS=[['🇺🇸','EN','English'],['🇰🇷','KO','Korean'],['🇯🇵','JA','Japanese'],['🇩🇪','DE','German'],['🇨🇳','ZH-CN','Chinese (Simplified)'],['🇹🇼','ZH-TW','Chinese (Traditional)'],['🇫🇷','FR','French'],['🇮🇹','IT','Italian']];
 document.getElementById('lang-dropdown').innerHTML=LANGS.map(([f,c,n])=>`<div class="lang-option" onclick="selectLang('${f}','${c}')"><span>${f}</span><span>${n}</span><span class="lang-code">${c}</span></div>`).join('');
-function toggleLang(){document.getElementById('lang-dropdown').classList.toggle('open');}
-function selectLang(f,c){document.getElementById('lang-flag').textContent=f;document.getElementById('lang-code').textContent=c;document.getElementById('lang-dropdown').classList.remove('open');}
+
+// ── 번역 데이터 ──
+const I18N = {
+  EN: {
+    search_btn:'Search →', for_sale:'For Sale', sold_out:'Sold Out',
+    sort:'Sort', brand:'Brand', site:'Site', mount:'Mount', currency:'Currency',
+    condition:'Condition', product:'Product', source:'Source', price:'Price',
+    results_for:'results for', default_:'Default', all_brands:'All Brands',
+    all_sites:'All Sites', all_mounts:'All Mounts', all:'All',
+    price_asc:'Price ↑', price_desc:'Price ↓', leica_only:'Leica Only',
+    currency_symbol:'₩', currency_code:'KRW',
+  },
+  KO: {
+    search_btn:'검색 →', for_sale:'판매중', sold_out:'판매완료',
+    sort:'정렬', brand:'브랜드', site:'사이트', mount:'마운트', currency:'통화',
+    condition:'상태', product:'상품명', source:'출처', price:'가격',
+    results_for:'검색결과', default_:'기본', all_brands:'전체 브랜드',
+    all_sites:'전체 사이트', all_mounts:'전체 마운트', all:'전체',
+    price_asc:'가격 낮은순', price_desc:'가격 높은순', leica_only:'라이카만',
+    currency_symbol:'₩', currency_code:'KRW',
+  },
+  JA: {
+    search_btn:'検索 →', for_sale:'販売中', sold_out:'売切れ',
+    sort:'並替', brand:'ブランド', site:'サイト', mount:'マウント', currency:'通貨',
+    condition:'状態', product:'商品名', source:'出典', price:'価格',
+    results_for:'検索結果', default_:'デフォルト', all_brands:'全ブランド',
+    all_sites:'全サイト', all_mounts:'全マウント', all:'全て',
+    price_asc:'価格 低い順', price_desc:'価格 高い順', leica_only:'ライカのみ',
+    currency_symbol:'¥', currency_code:'JPY',
+  },
+  DE: {
+    search_btn:'Suchen →', for_sale:'Verfügbar', sold_out:'Verkauft',
+    sort:'Sortieren', brand:'Marke', site:'Shop', mount:'Mount', currency:'Währung',
+    condition:'Zustand', product:'Produkt', source:'Quelle', price:'Preis',
+    results_for:'Ergebnisse für', default_:'Standard', all_brands:'Alle Marken',
+    all_sites:'Alle Shops', all_mounts:'Alle Mounts', all:'Alle',
+    price_asc:'Preis aufsteigend', price_desc:'Preis absteigend', leica_only:'Nur Leica',
+    currency_symbol:'€', currency_code:'EUR',
+  },
+  'ZH-CN': {
+    search_btn:'搜索 →', for_sale:'在售', sold_out:'已售出',
+    sort:'排序', brand:'品牌', site:'店铺', mount:'卡口', currency:'货币',
+    condition:'成色', product:'商品', source:'来源', price:'价格',
+    results_for:'搜索结果', default_:'默认', all_brands:'全部品牌',
+    all_sites:'全部店铺', all_mounts:'全部卡口', all:'全部',
+    price_asc:'价格从低到高', price_desc:'价格从高到低', leica_only:'仅徕卡',
+    currency_symbol:'¥', currency_code:'CNY',
+  },
+  'ZH-TW': {
+    search_btn:'搜尋 →', for_sale:'在售', sold_out:'已售出',
+    sort:'排序', brand:'品牌', site:'店鋪', mount:'卡口', currency:'貨幣',
+    condition:'成色', product:'商品', source:'來源', price:'價格',
+    results_for:'搜尋結果', default_:'預設', all_brands:'全部品牌',
+    all_sites:'全部店鋪', all_mounts:'全部卡口', all:'全部',
+    price_asc:'價格低到高', price_desc:'價格高到低', leica_only:'僅徠卡',
+    currency_symbol:'NT$', currency_code:'TWD',
+  },
+  FR: {
+    search_btn:'Chercher →', for_sale:'En vente', sold_out:'Vendu',
+    sort:'Trier', brand:'Marque', site:'Boutique', mount:'Monture', currency:'Devise',
+    condition:'État', product:'Produit', source:'Source', price:'Prix',
+    results_for:'résultats pour', default_:'Défaut', all_brands:'Toutes marques',
+    all_sites:'Toutes boutiques', all_mounts:'Toutes montures', all:'Tout',
+    price_asc:'Prix croissant', price_desc:'Prix décroissant', leica_only:'Leica seulement',
+    currency_symbol:'€', currency_code:'EUR',
+  },
+  IT: {
+    search_btn:'Cerca →', for_sale:'In vendita', sold_out:'Venduto',
+    sort:'Ordina', brand:'Marca', site:'Negozio', mount:'Attacco', currency:'Valuta',
+    condition:'Condizione', product:'Prodotto', source:'Fonte', price:'Prezzo',
+    results_for:'risultati per', default_:'Default', all_brands:'Tutti i marchi',
+    all_sites:'Tutti i negozi', all_mounts:'Tutti gli attacchi', all:'Tutto',
+    price_asc:'Prezzo crescente', price_desc:'Prezzo decrescente', leica_only:'Solo Leica',
+    currency_symbol:'€', currency_code:'EUR',
+  },
+};
+
+// 환율 (KRW 기준)
+const EXCHANGE = {KRW:1, USD:1/usdToKrw, JPY:1/9.5, EUR:1/1520, GBP:1/gbpToKrw, CNY:1/195, TWD:1/43};
+let currentLang = 'EN';
+
+function applyLang(code) {
+  const t = I18N[code] || I18N['EN'];
+  // 버튼/탭
+  const sb = document.querySelector('.hero-search button');
+  if(sb) sb.textContent = t.search_btn;
+  const tabs = document.querySelectorAll('.tab');
+  if(tabs[0]) tabs[0].innerHTML = `${t.for_sale} (<span id="sale-count">0</span>)`;
+  if(tabs[1]) tabs[1].innerHTML = `${t.sold_out} (<span id="sold-count">0</span>)`;
+  // 필터 라벨
+  const labels = document.querySelectorAll('.filter-label');
+  const labelKeys = ['sort','brand','site','mount','currency'];
+  labels.forEach((el,i) => { if(labelKeys[i]) el.textContent = t[labelKeys[i]]; });
+  // 테이블 헤더
+  const heads = document.querySelectorAll('.table-head span');
+  if(heads[1]) heads[1].textContent = t.product;
+  if(heads[2]) heads[2].textContent = t.source;
+  if(heads[3]) heads[3].textContent = t.price;
+  if(heads[4]) heads[4].textContent = t.condition;
+  // 셀렉트 옵션
+  const sortSel = document.getElementById('sort-select');
+  if(sortSel) { sortSel.options[0].text=t.default_; sortSel.options[1].text=t.price_asc; sortSel.options[2].text=t.price_desc; }
+  const brandSel = document.getElementById('brand-select');
+  if(brandSel) { brandSel.options[0].text=t.all_brands; if(brandSel.options[1]) brandSel.options[1].text=t.leica_only; }
+  const siteSel = document.getElementById('site-select');
+  if(siteSel && siteSel.options[0]) siteSel.options[0].text=t.all_sites;
+  const mountSel = document.getElementById('mount-select');
+  if(mountSel && mountSel.options[0]) mountSel.options[0].text=t.all_mounts;
+  // 결과 다시 렌더
+  renderResults();
+}
+
+function selectLang(f,c){
+  document.getElementById('lang-flag').textContent=f;
+  document.getElementById('lang-code').textContent=c;
+  document.getElementById('lang-dropdown').classList.remove('open');
+  currentLang=c;
+  localStorage.setItem('cb_lang',c);
+  applyLang(c);
+}
 document.addEventListener('click',e=>{const w=document.getElementById('lang-wrap');if(w&&!w.contains(e.target))document.getElementById('lang-dropdown').classList.remove('open');});
 async function loadData(){
   // 실시간 환율 가져오기
@@ -640,7 +758,30 @@ function showHero(){
 }
 function setTab(tab,el){currentTab=tab;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderResults();}
 function togglePriceSort(){const s=document.getElementById('sort-select');s.value=s.value==='price-asc'?'price-desc':'price-asc';renderResults();}
-function parsePrice(p,cur){if(!p||p==='문의요망')return Infinity;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(cur==='GBP')return n*gbpToKrw;if(cur==='USD')return n*usdToKrw;return n;}
+function parsePrice(p,cur){if(!p||p==='문의요망')return Infinity;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(cur==='GBP')return n*gbpToKrw;if(cur==='USD')return n*usdToKrw;if(cur==='JPY')return n*9.5;return n;}
+
+function fmtLangPrice(price, cur) {
+  if(!price||price==='문의요망') return '문의요망';
+  const t = I18N[currentLang]||I18N['EN'];
+  const targetCur = t.currency_code;
+  if(targetCur === cur) return price; // 같은 통화면 그대로
+  const krw = parsePrice(price, cur);
+  if(krw === Infinity) return price;
+  const rate = EXCHANGE[targetCur]||1;
+  const converted = Math.round(krw * rate);
+  if(targetCur==='KRW') return fmt(converted);
+  if(targetCur==='JPY') return `¥${converted.toLocaleString()}`;
+  if(targetCur==='USD') return `$${(krw/usdToKrw).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}`;
+  if(targetCur==='EUR') return `€${(krw/1520).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}`;
+  if(targetCur==='CNY') return `¥${(krw/195).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}`;
+  if(targetCur==='TWD') return `NT$${(krw/43).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}`;
+  return price;
+}
+
+function getLangCurrency(cur) {
+  const t = I18N[currentLang]||I18N['EN'];
+  return t.currency_code;
+}
 function fmt(n){if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
 function timeAgo(dt){
   if(!dt)return '확인 중';
@@ -701,9 +842,9 @@ function renderResults(query){
       <div><div class="product-name">${r['상품명'].replace(/^상품명\s*:\s*/i,'')}</div><div class="product-meta">${gen}${cond}${sold}${reserved}${brandBadge}</div></div>
       <div class="site-col"><span>${flag}</span>${r.site}</div>
       <div>
-        <div class="price">${r['가격']}</div>
-        <div class="currency">${r['통화']}${r['할인가']?'<span style="color:var(--red);font-size:9px;margin-left:4px;">-'+r['할인가']+'</span>':''}</div>
-        ${r['통화']==='GBP'&&r['가격']?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">≈ ${fmt(parsePrice(r['가격'],'GBP'))}</div>`:''}
+        <div class="price">${fmtLangPrice(r['가격'],r['통화'])}</div>
+        <div class="currency">${getLangCurrency(r['통화'])}${r['할인가']?'<span style="color:var(--red);font-size:9px;margin-left:4px;">-'+r['할인가']+'</span>':''}</div>
+        ${(r['통화']==='GBP'||r['통화']==='USD'||r['통화']==='JPY')&&r['가격']&&currentLang==='KO'?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">≈ ${fmt(parsePrice(r['가격'],r['통화']))}</div>`:''}
         ${r['통화']==='USD'&&r['가격']?`<div style="font-size:10px;color:var(--text-muted);margin-top:2px;">≈ ${fmt(parsePrice(r['가격'],'USD'))}</div>`:''}
       </div>
       <div>${cond||'<span style="color:var(--text-muted);font-size:11px">—</span>'}</div>
@@ -712,6 +853,12 @@ function renderResults(query){
 }
 document.addEventListener('DOMContentLoaded',()=>{
   loadData();
+  // 저장된 언어 복원
+  const savedLang = localStorage.getItem('cb_lang')||'EN';
+  const savedLangData = LANGS.find(([f,c,n])=>c===savedLang);
+  if(savedLangData && savedLang!=='EN') {
+    selectLang(savedLangData[0], savedLang);
+  }
   // URL에서 검색어 복원
   const urlParams=new URLSearchParams(window.location.search);
   const urlQ=urlParams.get('q');
