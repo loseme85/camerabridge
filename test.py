@@ -1955,6 +1955,13 @@ def crawl_kitamura(page):
         'アルミ': 'Aluminium', '状態': '', 'ボディ': 'Body',
         # 특수 에디션
         'エルメスエディション': 'Hermes Edition', 'エルメス': 'Hermes',
+        'グロッシー': 'Glossy', 'ノクチ': 'Nocti', 'ビット': 'Vit',
+        'メーター': 'Meter', 'アポ': 'APO', 'アポ·': 'APO-',
+        'ファインダー': 'Finder', 'フード': 'Hood',
+        'レンズフード': 'Lens Hood', 'ライカフード': 'Leica Hood',
+        'ライカファインダー': 'Leica Finder', 'ライカビット': 'Leicavit',
+        'ライカMRメーター': 'Leica MR Meter',
+        'オリジナル': 'Original', 'プロトタイプ': 'Prototype',
         'オリジナル': 'Original', 'スペシャルエディション': 'Special Edition',
         # 시기
         '初期': 'Early', '後期': 'Late', '前期': 'Early',
