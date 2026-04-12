@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_28.html -->
+<!-- saved from url=(0050)file:///Users/changdaepark/Downloads/admin_29.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -241,7 +241,7 @@ input[type=text]{width:150px;}
     </div>
     <div class="card" bis_skin_checked="1">
       <div class="card-title" bis_skin_checked="1"><span>// Activity Log</span><button class="btn" onclick="clearLog()" style="padding:3px 8px;font-size:8px;">Clear</button></div>
-      <div class="log-box" id="log-box" style="height:200px;" bis_skin_checked="1"><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// Loaded 7732 listings</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// 10 hot deals (&gt;10% below avg)</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-err">// Error: recentItems is not defined</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-err">// Error: Failed to fetch</span></div></div>
+      <div class="log-box" id="log-box" style="height:200px;" bis_skin_checked="1"><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">16:42:05</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// Loaded 7732 listings</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-ok">// 10 hot deals (&gt;10% below avg)</span></div><div class="log-entry" bis_skin_checked="1"><span class="log-time">23:59:11</span><span class="log-err">// Error: recentItems is not defined</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">17:33:14</span><span class="log-err">// Error: Failed to fetch</span></div><div class="log-entry"><span class="log-time">00:18:50</span><span class="log-info">// Camera Bridge Admin ready</span></div><div class="log-entry"><span class="log-time">00:18:50</span><span class="log-info">// Loading results.json...</span></div><div class="log-entry"><span class="log-time">00:18:50</span><span class="log-err">// Error: Failed to fetch</span></div></div>
     </div>
   </div>
 
@@ -306,6 +306,13 @@ input[type=text]{width:150px;}
         <option value="price-asc">Price ↑</option>
         <option value="price-desc">Price ↓</option>
       </select>
+      <select id="f-currency" onchange="applyFilters()" style="font-family:&#39;Space Mono&#39;,monospace;font-size:10px;padding:4px 8px;border:1px solid var(--border2);border-radius:2px;background:var(--surface2);color:var(--text);cursor:pointer;">
+        <option value="KRW">₩ KRW</option>
+        <option value="USD">$ USD</option>
+        <option value="JPY">¥ JPY</option>
+        <option value="EUR">€ EUR</option>
+        <option value="GBP">£ GBP</option>
+      </select>
       <span id="f-count" style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--muted);margin-left:auto;"></span>
     </div>
     <div class="data-head" bis_skin_checked="1">
@@ -333,8 +340,20 @@ function log(msg,type='info'){
   box.appendChild(div);box.scrollTop=box.scrollHeight;
 }
 function clearLog(){document.getElementById('log-box').innerHTML='';}
-function parsePrice(p,cur){if(!p||p==='문의요망')return null;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(isNaN(n)||n===0)return null;return cur==='GBP'?Math.round(n*1700):n;}
+function parsePrice(p,cur){if(!p||p==='문의요망')return null;const n=parseFloat(p.replace(/[^0-9.]/g,''));if(isNaN(n)||n===0)return null;return cur==='GBP'?Math.round(n*1700):cur==='USD'?Math.round(n*1400):cur==='JPY'?Math.round(n*9.5):n;}
 function fmtP(n){if(!n)return '—';if(n>=100000000)return '₩'+Math.round(n/100000000)+'억';if(n>=10000)return '₩'+Math.round(n/10000)+'만';return '₩'+Math.round(n/1000)+'K';}
+function fmtAdminPrice(price, cur) {
+  if(!price||price==='문의요망') return '—';
+  const targetCur = document.getElementById('f-currency')?.value || 'KRW';
+  const krw = parsePrice(price, cur);
+  if(!krw) return price;
+  if(targetCur==='KRW') return fmtP(krw);
+  if(targetCur==='USD') return '$'+Math.round(krw/1400).toLocaleString();
+  if(targetCur==='JPY') return '¥'+Math.round(krw/9.5).toLocaleString();
+  if(targetCur==='EUR') return '€'+Math.round(krw/1520).toLocaleString();
+  if(targetCur==='GBP') return '£'+Math.round(krw/1700).toLocaleString();
+  return price;
+}
 function timeAgo(dt){if(!dt)return '확인 중';const d=new Date(dt),now=new Date();const diff=Math.floor((now-d)/1000);if(diff<3600)return Math.floor(diff/60)+'분 전';if(diff<86400)return Math.floor(diff/3600)+'시간 전';if(diff<604800)return Math.floor(diff/86400)+'일 전';return d.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
 function getLastCrawlTime(){
   if(!allData.length) return null;
@@ -876,7 +895,7 @@ function renderTable(){
       <div class="data-num">${start+i+1}</div>
       <div class="data-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}${name.length>50?'…':''}</a>${newBadge}${r.noctilux_gen?`<span class="badge" style="background:rgba(225,31,38,0.08);color:var(--leica);border:1px solid rgba(225,31,38,0.2);margin-left:3px;font-size:8px;">${r.noctilux_gen}</span>`:''}<div class="time-label${isNew(r.crawl_time)?' new-item':''}">${ta}${r.mount&&r.mount!=='Unknown'?` · <span style="font-weight:600;">${r.mount}</span>`:''}</div></div>
       <div class="data-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
-      <div class="data-price">${r['가격']||'—'}</div>
+      <div class="data-price">${fmtAdminPrice(r['가격'],r['통화'])}</div>
       <div class="data-cond">${r['컨디션']||'—'}</div>
       <div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center;">${sold}${res}${deal}${brandB}${r.mount&&r.mount!=='Unknown'?`<span class="badge" style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-size:9px;">${r.mount}</span>`:''}</div>
     </div>`;
