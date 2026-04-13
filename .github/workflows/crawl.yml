@@ -48,12 +48,12 @@ jobs:
         run: |
           git config user.name "Camera Bridge Bot"
           git config user.email "bot@camerabridge.app"
-          git add -f data/raw/results.json data/sold_items.json crawler/sessions/crawl_sessions.json data/status.json data/raw/ data/normalized/ data/derived/
+          git add -f data/ crawler/sessions/
           git diff --staged --quiet && echo "No changes" && exit 0
           git stash
           git pull --rebase origin main
           git stash pop
-          git add -f data/raw/results.json data/sold_items.json crawler/sessions/crawl_sessions.json data/status.json data/raw/ data/normalized/ data/derived/
+          git add -f data/ crawler/sessions/
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
           git push
         env:
