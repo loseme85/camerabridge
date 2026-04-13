@@ -2678,6 +2678,58 @@ def crawl_all():
     with open("data/derived/flags_latest.json", "w", encoding="utf-8") as f:
         _json_flags.dump(_flagged, f, ensure_ascii=False, indent=2)
     print(f"  🚩 플래그 추출 → data/derived/flags_latest.json ({len(_flagged)}개 리스크 매물)")
+    # ── sold 품질 분류 ──
+    import json as _json_sold
+    _sold_quality = []
+    try:
+        with open("data/sold_items.json", "r", encoding="utf-8") as f:
+            _sold_raw = _json_sold.load(f)
+        for _s in _sold_raw:
+            _price = _s.get("가격","")
+            _hrs = _s.get("hours_to_sell", None)
+            _label = _s.get("label","")
+            _category = _s.get("category","")
+            # 분류
+            if _price and _hrs is not None and _hrs > 0:
+                _quality = "sold_confirmed"
+                _confidence = "high"
+            elif _price and _hrs is not None and _hrs < 0:
+                _quality = "sold_likely"
+                _confidence = "medium"
+            elif _price and _hrs is None:
+                _quality = "sold_likely"
+                _confidence = "low"
+            else:
+                _quality = "expired_unknown"
+                _confidence = "low"
+            # 시세 계산 포함 여부 (Accessory, label 없음 제외)
+            _include_in_market = (
+                _quality in ["sold_confirmed", "sold_likely"] and
+                _category not in ["Accessory"] and
+                bool(_label)
+            )
+            _sold_quality.append({
+                "listing_id": _s.get("링크",""),
+                "source": _s.get("site",""),
+                "title": _s.get("상품명",""),
+                "label": _label,
+                "mount": _s.get("mount",""),
+                "price": _price,
+                "currency": _s.get("통화",""),
+                "sold_quality": _quality,
+                "confidence": _confidence,
+                "hours_to_sell": _hrs,
+                "include_in_market": _include_in_market,
+                "sold_at": _s.get("sold_at",""),
+            })
+        with open("data/derived/sold_quality_latest.json", "w", encoding="utf-8") as f:
+            _json_sold.dump(_sold_quality, f, ensure_ascii=False, indent=2)
+        _confirmed = sum(1 for s in _sold_quality if s["sold_quality"]=="sold_confirmed")
+        _likely = sum(1 for s in _sold_quality if s["sold_quality"]=="sold_likely")
+        _unknown = sum(1 for s in _sold_quality if s["sold_quality"]=="expired_unknown")
+        print(f"  💰 sold 품질 분류 → confirmed:{_confirmed} likely:{_likely} unknown:{_unknown}")
+    except Exception as _e:
+        print(f"  ⚠️ sold 품질 분류 실패: {_e}")
     # ── crawl_sessions.json 누적 저장 ──
     import datetime as _dt3
     _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
