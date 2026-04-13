@@ -2643,6 +2643,41 @@ def crawl_all():
     for _old_nf in _norm_files[:-10]:
         _os_norm.remove(f"data/normalized/{_old_nf}")
     print(f"  📋 normalized 저장 → data/normalized/normalized_latest.json ({len(_normalized)}개)")
+    # ── 상태 플래그 추출 ──
+    import os as _os_flags
+    _os_flags.makedirs("data/derived", exist_ok=True)
+    _FLAG_RULES = {
+        "fungus":      ["fungus","곰팡이","fungi"],
+        "haze":        ["haze 후드","haze filter","헤이즈 후드"],
+        "separation":  ["separation","코팅분리","코팅 분리","balsam"],
+        "repair":      ["repair","수리","수리이력","수리 이력","repaired"],
+        "cla":         [" cla ","(cla)","cla'd","정비완료","정비 완료","overhaul"],
+        "serviced":    ["serviced","서비스완료"],
+        "repaint":     ["repaint","리페인트","re-paint","black repaint","페인트"],
+        "no_serial":   ["no serial","시리얼없음","시리얼 없음","s/n unknown"],
+        "not_working": ["not working","작동불량","불량","broken","as-is","asis"],
+        "oil_blades":  ["oil on blades","조리개 오일","oily blades"],
+        "modified":    ["modified","개조","모디파이"],
+    }
+    _flagged = []
+    for r in unique_results:
+        _n = (r.get('상품명','') + ' ' + r.get('컨디션','')).lower()
+        _flags = []
+        for _flag, _kws in _FLAG_RULES.items():
+            if any(_kw in _n for _kw in _kws):
+                _flags.append(_flag)
+        if _flags:
+            _flagged.append({
+                "listing_id": r.get("링크",""),
+                "source": r.get("site",""),
+                "title": r.get("상품명",""),
+                "flags": _flags,
+                "crawl_time": r.get("crawl_time",""),
+            })
+    import json as _json_flags
+    with open("data/derived/flags_latest.json", "w", encoding="utf-8") as f:
+        _json_flags.dump(_flagged, f, ensure_ascii=False, indent=2)
+    print(f"  🚩 플래그 추출 → data/derived/flags_latest.json ({len(_flagged)}개 리스크 매물)")
     # ── crawl_sessions.json 누적 저장 ──
     import datetime as _dt3
     _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
