@@ -48,12 +48,12 @@ jobs:
         run: |
           git config user.name "Camera Bridge Bot"
           git config user.email "bot@camerabridge.app"
-          git add -f data/raw/results.json data/sold_items.json crawler/sessions/crawl_sessions.json data/status.json data/raw/
+          git add -f data/raw/results.json data/sold_items.json crawler/sessions/crawl_sessions.json data/status.json data/raw/ data/normalized/ data/derived/
           git diff --staged --quiet && echo "No changes" && exit 0
           git stash
           git pull --rebase origin main
           git stash pop
-          git add -f data/raw/results.json data/sold_items.json crawler/sessions/crawl_sessions.json data/status.json data/raw/
+          git add -f data/raw/results.json data/sold_items.json crawler/sessions/crawl_sessions.json data/status.json data/raw/ data/normalized/ data/derived/
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
           git push
         env:
@@ -63,7 +63,7 @@ jobs:
         if: success()
         run: |
           KST=$(date '+%Y-%m-%d %H:%M' -d '+9 hours')
-          COUNT=$(python3 -c "import json; data=json.load(open('results.json')); print(len(data))" 2>/dev/null || echo "?")
+          COUNT=$(python3 -c "import json; data=json.load(open('data/raw/results.json')); print(len(data))" 2>/dev/null || echo "?")
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
             -d text="✅ 크롤링 완료!%0A📦 총 ${COUNT}개 상품%0A📅 ${KST} KST"
