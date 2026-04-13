@@ -571,7 +571,7 @@ let qaPage=1;
 
 async function loadData(){
   try{
-    const res=await fetch('results.json?t='+Date.now());
+    const res=await fetch('data/raw/results.json?t='+Date.now());
     allData=await res.json();
     console.log('Loaded',allData.length,'items');
     document.getElementById('csv-section').style.display='block';
