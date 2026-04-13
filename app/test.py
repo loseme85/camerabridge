@@ -2609,6 +2609,40 @@ def crawl_all():
         _os.remove(f"data/raw/{_old_f}")
     with open("data/raw/results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
+    # ── normalized 저장 ──
+    import os as _os_norm
+    _os_norm.makedirs("data/normalized", exist_ok=True)
+    import datetime as _dt_norm
+    _KST_norm = _dt_norm.timezone(_dt_norm.timedelta(hours=9))
+    _norm_ts = _dt_norm.datetime.now(_KST_norm).strftime("%Y%m%d_%H%M%S")
+    _normalized = []
+    for r in unique_results:
+        _normalized.append({
+            "listing_id": r.get("링크",""),
+            "source": r.get("site",""),
+            "source_url": r.get("링크",""),
+            "title_raw": r.get("상품명",""),
+            "price": r.get("가격",""),
+            "currency": r.get("통화",""),
+            "label": r.get("label",""),
+            "mount": r.get("mount",""),
+            "brand": r.get("brand",""),
+            "category": r.get("category",""),
+            "condition_raw": r.get("컨디션",""),
+            "is_sold": r.get("품절", False),
+            "image": r.get("이미지",""),
+            "first_seen": r.get("first_seen",""),
+            "crawl_time": r.get("crawl_time",""),
+        })
+    with open("data/normalized/normalized_latest.json", "w", encoding="utf-8") as f:
+        json.dump(_normalized, f, ensure_ascii=False, indent=2)
+    with open(f"data/normalized/normalized_{_norm_ts}.json", "w", encoding="utf-8") as f:
+        json.dump(_normalized, f, ensure_ascii=False, indent=2)
+    # normalized 파일은 최근 10개만 유지
+    _norm_files = sorted([x for x in _os_norm.listdir("data/normalized") if x.startswith("normalized_2") and x.endswith(".json")])
+    for _old_nf in _norm_files[:-10]:
+        _os_norm.remove(f"data/normalized/{_old_nf}")
+    print(f"  📋 normalized 저장 → data/normalized/normalized_latest.json ({len(_normalized)}개)")
     # ── crawl_sessions.json 누적 저장 ──
     import datetime as _dt3
     _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
