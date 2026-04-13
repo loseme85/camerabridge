@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/app/templates/index.html" },
+    { "source": "/admin.html", "destination": "/app/templates/admin.html" },
+    { "source": "/qa.html", "destination": "/app/templates/qa.html" },
+    { "source": "/api/telegram", "destination": "/api/telegram.py" }
+  ]
+}
