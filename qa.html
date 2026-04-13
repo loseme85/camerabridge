@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)file:///Users/changdaepark/Downloads/qa_1.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camera Bridge — QA Tool</title>
+<link href="file:///Users/changdaepark/Downloads/qa_files/css2" rel="stylesheet">
+<style>
+:root{
+  --bg:#f8f7f5;--surface:#fff;--surface2:#f3f2f0;--border:#e5e2dc;--border2:#d4d0c8;
+  --text:#1a1a1a;--dim:#6b6560;--muted:#a09890;
+  --accent:#E11F26;--green:#2d7a2d;--blue:#0055aa;--orange:#c85a00;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;height:54px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.logo{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:3px;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;}
+.logo span{color:var(--accent);}
+.badge{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);border:1px solid var(--border2);padding:3px 8px;border-radius:2px;}
+main{max-width:1200px;margin:0 auto;padding:24px;}
+
+/* 검색 영역 */
+.search-box{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:20px 24px;margin-bottom:20px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.search-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:12px;}
+.search-row{display:flex;gap:8px;align-items:center;}
+.search-input{flex:1;border:1px solid var(--border2);border-radius:2px;padding:10px 14px;font-family:'Space Mono',monospace;font-size:13px;outline:none;color:var(--text);background:var(--surface2);}
+.search-input:focus{border-color:var(--accent);}
+.qa-search-wrap{position:relative;}
+.recent-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border2);border-top:none;border-radius:0 0 3px 3px;z-index:100;display:none;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.recent-dropdown.open{display:block;}
+.recent-dropdown-item{font-family:'Space Mono',monospace;font-size:11px;padding:8px 14px;cursor:pointer;color:var(--text);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.recent-dropdown-item:last-child{border-bottom:none;}
+.recent-dropdown-item:hover{background:var(--surface2);color:var(--accent);}
+.recent-dropdown-item .recent-icon{color:var(--muted);font-size:10px;}
+.recent-dropdown-header{font-family:'Space Mono',monospace;font-size:9px;padding:6px 14px 4px;color:var(--muted);letter-spacing:0.5px;display:flex;justify-content:space-between;}
+.recent-dropdown-clear{cursor:pointer;color:var(--muted);}
+.recent-dropdown-clear:hover{color:var(--accent);}
+.search-btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1px;cursor:pointer;border-radius:2px;}
+.search-btn:hover{opacity:0.85;}
+.normalized{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);margin-top:8px;display:none;}
+.normalized span{color:var(--accent);font-weight:700;}
+
+/* 빠른 테스트 케이스 */
+.test-cases{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.test-tag{font-family:'Space Mono',monospace;font-size:10px;padding:4px 10px;border:1px solid var(--border2);border-radius:2px;cursor:pointer;color:var(--dim);background:var(--surface);transition:all 0.15s;}
+.test-tag:hover{border-color:var(--accent);color:var(--accent);}
+
+/* 결과 요약 */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.sum-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:12px 16px;}
+.sum-val{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;line-height:1;margin-bottom:3px;}
+.sum-lbl{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;}
+.sum-card.accent .sum-val{color:var(--accent);}
+.sum-card.green .sum-val{color:var(--green);}
+.sum-card.blue .sum-val{color:var(--blue);}
+.sum-card.orange .sum-val{color:var(--orange);}
+
+/* 메인 레이아웃 */
+.qa-grid{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+.results-panel{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.panel-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2);}
+.panel-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;}
+.panel-count{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);font-weight:700;}
+
+/* 결과 테이블 */
+.result-head{display:grid;grid-template-columns:52px 1fr 120px 110px 70px;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);}
+.result-head span{font-family:'Space Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+.result-row{display:grid;grid-template-columns:52px 1fr 120px 110px 70px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;transition:background 0.1s;}
+.result-row:last-child{border-bottom:none;}
+.result-row:hover{background:var(--surface2);}
+.result-row.soldout{opacity:0.4;}
+.result-img{width:40px;height:40px;object-fit:cover;border-radius:2px;border:1px solid var(--border);}
+.img-ph{width:40px;height:40px;border-radius:2px;border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted);}
+.r-name{font-size:11px;font-weight:500;line-height:1.4;}
+.r-name a{color:var(--text);text-decoration:none;}
+.r-name a:hover{color:var(--accent);}
+.r-meta{display:flex;gap:4px;margin-top:3px;flex-wrap:wrap;}
+.r-site{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);}
+.r-price{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--accent);}
+.r-cond{font-family:'Space Mono',monospace;font-size:10px;color:var(--dim);}
+.mbadge{font-family:'Space Mono',monospace;font-size:8px;padding:1px 5px;border-radius:2px;}
+.mbadge-sold{background:rgba(225,31,38,0.08);color:var(--accent);border:1px solid rgba(225,31,38,0.2);}
+.mbadge-mount{background:var(--surface2);color:var(--dim);border:1px solid var(--border);}
+.mbadge-3rd{background:rgba(0,85,170,0.08);color:var(--blue);border:1px solid rgba(0,85,170,0.2);}
+.mbadge-new{background:var(--accent);color:#fff;font-weight:700;}
+
+/* 사이트 링크 패널 */
+.links-panel{display:flex;flex-direction:column;gap:10px;}
+.link-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+.link-card-header{padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.link-flag{font-size:14px;}
+.link-site{font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:var(--dim);}
+.link-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px;}
+.link-btn{display:block;font-family:'Space Mono',monospace;font-size:10px;padding:8px 12px;border:1px solid var(--border2);border-radius:2px;text-decoration:none;color:var(--dim);text-align:center;transition:all 0.15s;letter-spacing:0.5px;}
+.link-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(225,31,38,0.04);}
+.link-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.link-btn.primary:hover{opacity:0.85;}
+.link-count{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);text-align:center;}
+
+/* 디버그 패널 */
+.debug-panel{background:var(--surface);border:1px solid var(--border);border-radius:3px;margin-top:16px;overflow:hidden;}
+.debug-toggle{padding:10px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.debug-title{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;}
+.debug-body{padding:14px 16px;display:none;}
+.debug-body.open{display:block;}
+.debug-item{font-family:'Space Mono',monospace;font-size:10px;padding:5px 8px;border-bottom:1px solid var(--border);display:flex;gap:12px;}
+.debug-item:last-child{border-bottom:none;}
+.debug-name{flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.debug-pass{color:var(--green);font-weight:700;flex-shrink:0;}
+.debug-fail{color:var(--accent);font-weight:700;flex-shrink:0;}
+.debug-price{color:var(--dim);font-size:9px;flex-shrink:0;margin-right:2px;}
+
+.empty{text-align:center;padding:60px 20px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+.loading{text-align:center;padding:40px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="logo-dot"></div>CAMERA <span>BRIDGE</span></div>
+  <span class="badge">QA TOOL</span>
+</header>
+<main>
+
+  <!-- 검색 영역 -->
+  <div class="search-box">
+    <div class="search-title">// Search Query Test</div>
+    <div class="search-row">
+      <div class="qa-search-wrap">
+        <input class="search-input" id="qa-input" type="text" placeholder="검색어 입력... (예: summicron 35, leica r 50mm, 50lux)" oninput="debounceQA()" onfocus="openQARecent()" onblur="setTimeout(closeQARecent,150)">
+        <div class="recent-dropdown" id="qa-recent-dropdown"></div>
+      </div>
+      <button class="search-btn" onclick="runQA()">▶ RUN QA</button>
+      <select id="currency-display" onchange="runQA(false)" style="font-family:&#39;Space Mono&#39;,monospace;font-size:11px;padding:8px 10px;border:1px solid var(--border2);border-radius:2px;background:var(--surface2);color:var(--text);cursor:pointer;">
+        <option value="KRW">₩ KRW</option>
+        <option value="USD">$ USD</option>
+        <option value="JPY">¥ JPY</option>
+        <option value="EUR">€ EUR</option>
+        <option value="GBP">£ GBP</option>
+      </select>
+    <div class="normalized" id="normalized-display">정규화: <span id="normalized-val"></span></div>
+    <div class="test-cases" id="test-cases"><span class="test-tag" onclick="quickTest(&#39;summicron 35&#39;)">summicron 35</span><span class="test-tag" onclick="quickTest(&#39;summilux 50&#39;)">summilux 50</span><span class="test-tag" onclick="quickTest(&#39;leica r 50mm&#39;)">leica r 50mm</span><span class="test-tag" onclick="quickTest(&#39;noctilux 0.95&#39;)">noctilux 0.95</span><span class="test-tag" onclick="quickTest(&#39;35cron&#39;)">35cron</span><span class="test-tag" onclick="quickTest(&#39;50lux&#39;)">50lux</span><span class="test-tag" onclick="quickTest(&#39;leica m6&#39;)">leica m6</span><span class="test-tag" onclick="quickTest(&#39;elmarit 28&#39;)">elmarit 28</span><span class="test-tag" onclick="quickTest(&#39;voigtlander&#39;)">voigtlander</span><span class="test-tag" onclick="quickTest(&#39;ttartisan&#39;)">ttartisan</span><span class="test-tag" onclick="quickTest(&#39;leica m3&#39;)">leica m3</span><span class="test-tag" onclick="quickTest(&#39;apo summicron 50&#39;)">apo summicron 50</span></div>
+  </div>
+
+  <!-- 결과 요약 -->
+  <div class="summary" id="summary" style="display:none;">
+    <div class="sum-card accent"><div class="sum-val" id="s-total">0</div><div class="sum-lbl">Total Results</div></div>
+    <div class="sum-card green"><div class="sum-val" id="s-sale">0</div><div class="sum-lbl">For Sale</div></div>
+    <div class="sum-card"><div class="sum-val" id="s-sold" style="color:var(--accent)">0</div><div class="sum-lbl">Sold Out</div></div>
+    <div class="sum-card blue"><div class="sum-val" id="s-query">—</div><div class="sum-lbl">Normalized Query</div></div>
+  </div>
+  <!-- 평균가 분석 섹션 -->
+  <div id="avg-section" style="display:none;margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+    <div id="avg-header" style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid var(--border);" onclick="toggleAvgList()">
+      <div style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">// Price Analysis</div>
+      <div id="avg-summary" style="font-family:&#39;Space Mono&#39;,monospace;font-size:11px;color:var(--text);"></div>
+      <span id="avg-toggle" style="font-size:10px;color:var(--muted);">▼ 목록 보기</span>
+    </div>
+    <div id="avg-list" style="display:none;max-height:300px;overflow-y:auto;"></div>
+  </div>
+
+  <!-- 메인 QA 그리드 -->
+  <div class="qa-grid" id="qa-grid" style="display:none;">
+
+    <!-- 결과 패널 -->
+    <div>
+      <div class="results-panel">
+        <div class="panel-header">
+          <span class="panel-title">// Camera Bridge Results</span>
+          <span class="panel-count" id="result-count">0 results</span>
+        </div>
+        <div class="result-head">
+          <span></span><span>Product</span><span>Site</span><span>Price</span><span>Cond</span>
+        </div>
+        <div id="results-body"></div>
+      </div>
+
+      <!-- 디버그: 왜 안나왔나 -->
+      <div class="debug-panel" id="debug-panel" style="display:none;">
+        <div class="debug-toggle" onclick="toggleDebug()">
+          <span class="debug-title">🔍 Excluded Items (왜 안나왔나?)</span>
+          <span id="debug-toggle-icon" style="font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">▼ 펼치기</span>
+        </div>
+        <div class="debug-body" id="debug-body">
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;">
+            <input type="text" id="debug-search" placeholder="상품명 검색..." oninput="renderDebug()" style="flex:1;border:1px solid var(--border2);border-radius:2px;padding:6px 10px;font-family:&#39;Space Mono&#39;,monospace;font-size:10px;outline:none;background:var(--surface2);">
+            <span id="debug-count" style="font-family:&#39;Space Mono&#39;,monospace;font-size:9px;color:var(--muted);flex-shrink:0;"></span>
+          </div>
+          <div id="debug-list"></div>
+          <div id="debug-pagination" style="display:flex;gap:4px;justify-content:center;padding:10px;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사이트 링크 패널 -->
+    <div class="links-panel">
+
+      <div class="link-card">
+        <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">사진집</span></div>
+        <div class="link-body">
+          <a class="link-btn primary" id="link-sazin" href="file:///Users/changdaepark/Downloads/qa_fixed_6.html#" target="_blank">→ 사진집에서 검색</a>
+          <div class="link-count" id="count-sazin">—</div>
+        </div>
+      </div>
+
+      <div class="link-card">
+        <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">장씨카메라</span></div>
+        <div class="link-body">
+          <a class="link-btn primary" id="link-jang" href="file:///Users/changdaepark/Downloads/qa_fixed_6.html#" target="_blank">→ 장씨카메라에서 검색</a>
+          <div class="link-count" id="count-jang">—</div>
+        </div>
+      </div>
+
+      <div class="link-card">
+        <div class="link-card-header"><span class="link-flag">🇰🇷</span><span class="link-site">라이카스토어 충무로</span></div>
+        <div class="link-body">
+          <a class="link-btn primary" id="link-chung" href="file:///Users/changdaepark/Downloads/qa_fixed_6.html#" target="_blank">→ 충무로에서 검색</a>
+          <div class="link-count" id="count-chung">—</div>
+        </div>
+      </div>
+
+      <div class="link-card">
+        <div class="link-card-header"><span class="link-flag">🇬🇧</span><span class="link-site">Ffordes</span></div>
+        <div class="link-body">
+          <a class="link-btn primary" id="link-ffordes" href="file:///Users/changdaepark/Downloads/qa_fixed_6.html#" target="_blank">→ Ffordes에서 검색</a>
+          <div class="link-count" id="count-ffordes">—</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CSV 내보내기 -->
+  <div id="csv-section" style="margin:16px 0;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;display:none;">
+    <div style="font-family:&#39;Space Mono&#39;,monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:10px;">// CSV 내보내기</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button onclick="exportCSV(&#39;unknown&#39;)" style="font-family:&#39;Space Mono&#39;,monospace;font-size:10px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:2px;cursor:pointer;">
+        Unknown 마운트 내보내기
+      </button>
+      <button onclick="exportCSV(&#39;results&#39;)" style="font-family:&#39;Space Mono&#39;,monospace;font-size:10px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:2px;cursor:pointer;">
+        현재 검색결과 내보내기
+      </button>
+      <button onclick="exportCSV(&#39;all&#39;)" style="font-family:&#39;Space Mono&#39;,monospace;font-size:10px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:2px;cursor:pointer;">
+        전체 데이터 내보내기
+      </button>
+    </div>
+  </div>
+
+</div></main>
+
+<script>
+// ══════════════════════════════════════════════════════
+// 검색 로직 — index.html 완전 동일 복사본
+// ※ 이 블록은 index.html의 것과 항상 동일해야 함
+// ══════════════════════════════════════════════════════
+const FLAGS={'라이카스토어 충무로':'🇰🇷','사진집':'🇰🇷','장씨카메라':'🇰🇷','신성카메라':'🇰🇷','억불카메라':'🇰🇷','Ffordes (영국)':'🇬🇧','Leica Store Miami':'🇺🇸 Miami','기타무라 (일본)':'🇯🇵'};
+
+// 슬랭 → 검색 토큰 변환
+const SLANG_MAP = {
+  'barnack':'barnack','iiif':'barnack','iiig':'barnack','iiic':'barnack',
+  'iif':'barnack','iid':'barnack','leica i':'barnack','leica ii':'barnack',
+  'leica iii':'barnack','바르낙':'barnack','screw mount':'barnack',
+  '50lux':'summilux 50','50 lux':'summilux 50',
+  '35lux':'summilux 35','35 lux':'summilux 35',
+  '28lux':'summilux 28','21lux':'summilux 21','75lux':'summilux 75','75 lux':'summilux 75',
+  '50cron':'summicron 50','50 cron':'summicron 50',
+  '35cron':'summicron 35','35 cron':'summicron 35',
+  '28cron':'summicron 28','75cron':'summicron 75','90cron':'summicron 90',
+  '50nocti f0.95':'noctilux 0.95','50nocti f1.0':'noctilux 1.0','50nocti f1.2':'noctilux 1.2',
+  '75nocti':'noctilux 75','75 nocti':'noctilux 75',
+  '50apo':'apo summicron 50','50 apo':'apo summicron 50',
+  '75apo':'apo summicron 75','75 apo':'apo summicron 75',
+  '90apo':'apo summicron 90','90 apo':'apo summicron 90',
+  'apocron':'apo summicron','apo cron':'apo summicron',
+  'tri':'tri elmar','tri-elmar':'tri elmar','trielmar':'tri elmar',
+  'wate':'tri elmar 16','mate':'tri elmar 28',
+  '50elmar':'elmar 50','elmar50':'elmar 50',
+  // Summilux AA (35mm 2매 Aspherical)
+  '35aa':'summilux 35 aspherical','35 aa':'summilux 35 aspherical',
+  'summilux aa':'summilux 35 aspherical','35lux aa':'summilux 35 aspherical',
+  '두매':'summilux 35 aspherical','2매':'summilux 35 aspherical',
+};
+const TOKEN_MAP = {
+  'nocti':'noctilux','50nocti':'noctilux',
+  '1st':'nocti1st','오리지널':'nocti1st','오리지날':'nocti1st','original':'nocti1st',
+  'e58':'e58','e60':'e60',
+  'v1':'e58','v2':'e60','v3':'e60','v4':'v4',
+  '복각':'1.2','f0.95':'0.95','f1.0':'1.0','f1.2':'1.2','f1.25':'1.25',
+  '0.95':'0.95','1.0':'1.0','1.2':'1.2','1.25':'1.25',
+  'lux':'summilux','cron':'summicron','apo':'apo',
+};
+function normalizeQuery(q){
+  const lower=q.toLowerCase().trim();
+  if(SLANG_MAP[lower]) return SLANG_MAP[lower];
+  const tokens=lower.split(/\s+/);
+  const mapped=tokens.map(t=>TOKEN_MAP[t]||t);
+  const joined=mapped.join(' ');
+  // 조합 기반 보정: nocti/noctilux 없이 1st → 그냥 1세대
+  const hasNocti=tokens.some(t=>t==='nocti'||t==='noctilux'||t==='nocti1st');
+  if(!hasNocti){
+    return joined.replace(/\bnocti1st\b/g,'1세대');
+  }
+  return joined;
+}
+const GEN_MAP = {
+  '1st':'1세대','1gen':'1세대','1세대':'1세대',
+  '2nd':'2세대','2gen':'2세대','2세대':'2세대',
+  '3rd':'3세대','3gen':'3세대','3세대':'3세대',
+  '4th':'4세대','4gen':'4세대','4세대':'4세대',
+  '5th':'5세대','5gen':'5세대','5세대':'5세대',
+};
+const NEGATIVE_KEYWORDS = [
+  '케이스','스트랩','필터','캡','설명서','박스only','box only',
+  '충전기','배터리','후드only','hood only','어댑터','파우치',
+  '케이블','핸드그립','grip only','strap only','cap only',
+  'lens cap','body cap','filter only',
+  'original hood','hood m ','hood e ','후드 단품',
+];
+const ACCESSORY_SEARCH_KEYWORDS = [
+  'leicavit','vit','lhsa','viewfinder','finder','brightline',
+  'voosm','iufoo','sbooi','viooh',
+  'rapid winder','winder','motor',
+  'handgrip','grip','half case',
+  'goggle','magnifier','magnification',
+  'hood','후드',
+];
+function isAccessory(item){
+  if(item.category==='Accessory') return true;
+  const name=(item['상품명']||'').toLowerCase();
+  return NEGATIVE_KEYWORDS.some(k=>name.includes(k.toLowerCase()));
+}
+function isAccessorySearchQuery(q){
+  return ACCESSORY_SEARCH_KEYWORDS.some(k=>q.toLowerCase().includes(k));
+}
+const GEN_SYNONYMS = {
+  '1세대': ['1st','1세대','1 st','(1st)','first','초기','nickel','니켈','ver.1','v.1','steel rim','스틸림','original','오리지널','오리지날'],
+  '2세대': ['2nd','2세대','2 nd','(2nd)','second','ver.2','v.2','e58','e 58'],
+  '3세대': ['3rd','3세대','3 rd','(3rd)','third','ver.3','v.3'],
+  '4세대': ['4th','4세대','4 th','(4th)','fle','ver.4','v.4'],
+  '5세대': ['5th','5세대','5 th','(5th)','ver.5','v.5'],
+  // ── Summilux AA / Aspherical 동의어 ──
+  'aspherical': ['aspherical','2매','두매','double aspherical',' aa ','(aa)','aa black','aa silver','3세대 (2매)','3세대(2매)'],
+  'nocti1st':  ['aspherical','series 1','1st','series1','1세대','오리지널','오리지날','original'],
+  '1.2':   ['1.2','f1.2','1:1.2'],
+  'e58':   ['e58','e 58','58mm','2세대'],
+  'e60':   ['e60','e 60','60mm'],
+  'v4':    ['built-in','internal hood','6bit'],
+  '0.95':  ['0.95','f0.95','1:0.95'],
+  '1.0':   ['1.0','f1.0','1:1.0'],
+  '1.25':  ['1.25','f1.25','1:1.25'],
+};
+function detectQueryMount(q){
+  const tokens=q.toLowerCase().split(/\s+/);
+  const first=tokens[0];
+  if(first==='m') return 'M';
+  if(first==='r') return 'R';
+  if(first==='l') return 'L';
+  if(tokens.includes('m')) return 'M';
+  if(tokens.includes('r')) return 'R';
+  if(tokens.includes('l')) return 'L';
+  if(tokens.some(t=>t==='ltm'||t==='l39'||t==='m39')) return 'L';
+  if(tokens.includes('sl')) return 'SL';
+  return null;
+}
+// index.html의 matchesQuery 원본 (return true/false)
+function _matchesQuery(item, query){
+  if(isAccessory(item) && !isAccessorySearchQuery(query)) return false;
+  const q=query.toLowerCase();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');
+  const label=(item['label']||'').toLowerCase();
+  const mount=(item['mount']||'');
+  const LEICA_SEARCH_TRIGGERS = [
+    'summicron','summilux','noctilux','elmarit','elmar',
+    'summaron','summarex','summarit','hektor','hologon',
+    'super-angulon','angulon','telyt',
+    'leica','lux','cron','nocti','apo',
+    'minilux','leitz','aspherical',
+    'm3','m4','m5','m6','m7','m8','m9','m10','m11','m240',
+    'leica r','r3','r4','r5','r6','r7','r8','r9',
+    'q2','q3',
+  ];
+  const THIRD_PARTY_BRANDS = [
+    'light lens','light lens lab','mandler','seagull','nikon','canon',
+    'voigtlander','zeiss','contax','sigma','ttartisan','7artisans',
+    'thypoch','leeworks','nokton','nikkor','w-nikkor','biogon','planar',
+    'laowa','mitakon','funleader','meike','kolari','polar',
+    'rollei','yashica','polaroid','sony','fuji','olympus','panasonic',
+  ];
+  const isLeicaQuery = LEICA_SEARCH_TRIGGERS.some(t=>q.includes(t));
+  if(isLeicaQuery){
+    if(item.brand && item.brand!=='Leica' && item.brand!=='Other'){
+      return false;
+    }
+    if(!item.brand || item.brand==='Other'){
+      if(THIRD_PARTY_BRANDS.some(b=>name.includes(b))){
+        return false;
+      }
+    }
+  }
+  const qMount=detectQueryMount(q);
+  if(qMount){
+    if(mount&&mount!=='Unknown'){
+      if(qMount==='L'&&(mount==='L'||mount==='L39')){}
+      else if(mount!==qMount) return false;
+    }
+    if(qMount==='R'){
+      if(/-m\b/i.test(name)||/-m$/i.test(name)) return false;
+      if(/summicron-m|summilux-m|elmarit-m|noctilux-m/i.test(name)) return false;
+      if(mount!=='R'){
+        const hasRPattern=(
+          /\bleica\s+r\s*\d/i.test(rawName) ||
+          /\br\s+\d+mm/i.test(rawName) ||
+          /\br\s+\d+\//i.test(rawName) ||
+          /\summilux-r\b|\summicron-r\b|\belmarit-r\b|\belmar-r\b|\btelyt-r\b/i.test(rawName) ||
+          /\br\d+\b/i.test(rawName)
+        );
+        if(!hasRPattern) return false;
+      }
+    }
+    if(qMount==='M'){
+      if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return false;
+    }
+    if(qMount==='L'){
+      if(mount==='M'||mount==='R'||mount==='SL'||mount==='Q') return false;
+      if(mount==='Unknown'){
+        const hasMPattern=(/\bleica\s+m\b|\bsummicron-m\b|\bsummilux-m\b|\belmarit-m\b|\bnoctilux-m\b/i.test(rawName)||/\bm\s*\d+[\/\.]/i.test(rawName));
+        if(hasMPattern) return false;
+        const hasLPattern=(/\bleica\s+l\b|\bl\s*\d+\/|\bl\s+\d+mm/i.test(rawName)||/\bl39\b|\bltm\b|\bscrew\b|\bsummar\b|\bsummarit\b|\bhektor\b/i.test(rawName));
+        if(!hasLPattern) return false;
+      }
+    }
+  }
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='l'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
+  return tokens.every(t=>{
+    const gen=GEN_MAP[t];
+    if(gen){
+      const synonyms=GEN_SYNONYMS[gen]||[gen];
+      return synonyms.some(s=>name.includes(s));
+    }
+    if(GEN_SYNONYMS[t]){
+      const syns = name.includes('복각')
+        ? GEN_SYNONYMS[t].filter(s=>s!=='steel rim'&&s!=='스틸림')
+        : GEN_SYNONYMS[t];
+      return syns.some(s=>name.includes(s));
+    }
+    // 조리개값 소수점 토큰 (예: "2.0", "1.4", "2.8") → 다양한 표기 매칭
+    const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
+    if(apertureMatch){
+      const full=apertureMatch[0];
+      const int=apertureMatch[1];
+      const dec=apertureMatch[2];
+      const isZeroDec=(dec==='0');
+      const exactPatterns=[`f${full}`,`f/${full}`,`f ${full}`,`1:${full}`,`f${int}/${dec}`,`/${full}`];
+      if(exactPatterns.some(p=>name.includes(p))) return true;
+      if(isZeroDec){
+        const intPatterns=[`f${int}`,`f/${int}`,`f ${int}`,`1:${int}`];
+        return intPatterns.some(p=>{
+          const idx=name.indexOf(p);
+          if(idx===-1) return false;
+          const after=name[idx+p.length];
+          return !after||!/[\d.]/.test(after);
+        });
+      }
+      return false;
+    }
+    // 35/1.4 형식 → 35 + 1.4 둘 다 포함 여부로 매칭
+    const _sm=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+    if(_sm){
+      const num=_sm[1];
+      const apt=_sm[2];
+      const reNum=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return reNum.test(name) && name.includes(apt);
+    }
+    // 숫자 (초점거리)
+    if(/^\d+$/.test(t)){
+      const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
+      return re.test(name);
+    }
+    const mmMatch=t.match(/^(\d+)mm$/);
+    if(mmMatch){
+      const num=mmMatch[1];
+      const re=new RegExp('(?<![0-9])'+num+'(?![0-9])');
+      return re.test(name);
+    }
+    return name.includes(t) || label.includes(t);
+  });
+}
+
+// ── QA 전용 래퍼: 왜 제외됐는지 이유 반환 ──
+function matchesQuery(item, query){
+  if(isAccessory(item) && !isAccessorySearchQuery(query)) return {pass:false, reason:'악세사리 제외'};
+  const q=query.toLowerCase();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');
+  const label=(item['label']||'').toLowerCase();
+  const mount=(item['mount']||'');
+  const LEICA_SEARCH_TRIGGERS=['summicron','summilux','noctilux','elmarit','elmar','summaron','summarex','summarit','hektor','hologon','super-angulon','angulon','telyt','leica','lux','cron','nocti','apo','minilux','leitz','aspherical','m3','m4','m5','m6','m7','m8','m9','m10','m11','m240','leica r','r3','r4','r5','r6','r7','r8','r9','q2','q3'];
+  const THIRD_PARTY_BRANDS=['light lens','light lens lab','mandler','seagull','nikon','canon','voigtlander','zeiss','contax','sigma','ttartisan','7artisans','thypoch','leeworks','nokton','nikkor','w-nikkor','biogon','planar','laowa','mitakon','funleader','meike','kolari','polar','rollei','yashica','polaroid','sony','fuji','olympus','panasonic'];
+  const isLeicaQuery=LEICA_SEARCH_TRIGGERS.some(t=>q.includes(t));
+  if(isLeicaQuery){
+    if(item.brand&&item.brand!=='Leica'&&item.brand!=='Other') return {pass:false,reason:`Non-Leica brand: ${item.brand}`};
+    if(!item.brand||item.brand==='Other'){
+      const matched=THIRD_PARTY_BRANDS.find(b=>name.includes(b));
+      if(matched) return {pass:false,reason:`3rd Party 감지: "${matched}"`};
+    }
+  }
+  const qMount=detectQueryMount(q);
+  if(qMount){
+    if(mount&&mount!=='Unknown'){
+      if(!(qMount==='L'&&(mount==='L'||mount==='L39'))&&mount!==qMount)
+        return {pass:false,reason:`마운트 불일치 (item:${mount}, query:${qMount})`};
+    }
+    if(qMount==='R'){
+      if(/-m\b/i.test(name)||/-m$/i.test(name)) return {pass:false,reason:'R검색 -M 제외'};
+      if(/summicron-m|summilux-m|elmarit-m|noctilux-m/i.test(name)) return {pass:false,reason:'R검색 M마운트 제외'};
+      if(mount!=='R'){
+        const hasR=(/\bleica\s+r\s*\d/i.test(rawName)||/\br\s+\d+mm/i.test(rawName)||/\br\s+\d+\//i.test(rawName)||/summilux-r\b|summicron-r\b|elmarit-r\b/i.test(rawName)||/\br\d+\b/i.test(rawName));
+        if(!hasR) return {pass:false,reason:'R마운트 패턴 없음'};
+      }
+    }
+    if(qMount==='M'){
+      if(/-r\b/i.test(name)||/summilux-r|summicron-r|elmarit-r/i.test(name)) return {pass:false,reason:'M검색 R마운트 제외'};
+    }
+  }
+  // 나머지는 _matchesQuery 결과 활용
+  const pass=_matchesQuery(item,query);
+  if(!pass){
+    const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='l'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
+    for(const t of tokens){
+      if(GEN_MAP[t]){const syn=GEN_SYNONYMS[GEN_MAP[t]]||[GEN_MAP[t]];if(!syn.some(s=>name.includes(s)||label.includes(s)))return{pass:false,reason:`세대 불일치: "${t}"`};}
+      else if(GEN_SYNONYMS[t]){if(!GEN_SYNONYMS[t].some(s=>name.includes(s)||label.includes(s)))return{pass:false,reason:`동의어 불일치: "${t}"`};}
+      else if(/^\d+$/.test(t)){const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');if(!re.test(name)&&!re.test(label))return{pass:false,reason:`숫자 불일치: "${t}"`};}
+      else if(!name.includes(t)&&!(item['label']||'').toLowerCase().includes(t))return{pass:false,reason:`키워드 없음: "${t}"`};
+    }
+    return{pass:false,reason:'필터링됨'};
+  }
+  return {pass:true, reason:'✅ 매칭'};
+}
+
+// ══════════════════════════════════════════════════════
+// QA 실행
+// ══════════════════════════════════════════════════════
+let allData=[];
+let gbpToKrw=1700, usdToKrw=1400, jpyToKrw=9.5;
+
+function parseToKrw(price, cur) {
+  if(!price||price==='문의요망') return null;
+  const n = parseFloat(price.replace(/[^0-9.]/g,''));
+  if(isNaN(n)) return null;
+  if(cur==='GBP') return n * gbpToKrw;
+  if(cur==='USD') return n * usdToKrw;
+  if(cur==='JPY') return n * jpyToKrw;
+  return n;
+}
+
+function fmtQAPrice(price, cur) {
+  if(!price||price==='문의요망') return '—';
+  const targetCur = document.getElementById('currency-display')?.value || 'KRW';
+  const krw = parseToKrw(price, cur);
+  if(krw === null) return price;
+  if(targetCur === 'KRW') return '₩' + Math.round(krw).toLocaleString();
+  if(targetCur === 'USD') return '$' + Math.round(krw/usdToKrw).toLocaleString();
+  if(targetCur === 'JPY') return '¥' + Math.round(krw/jpyToKrw).toLocaleString();
+  if(targetCur === 'EUR') return '€' + Math.round(krw/1520).toLocaleString();
+  if(targetCur === 'GBP') return '£' + Math.round(krw/gbpToKrw).toLocaleString();
+  return price;
+}let lastResults=[];
+const QA_PAGE_SIZE=20;
+let qaPage=1;
+
+async function loadData(){
+  try{
+    const res=await fetch('results.json?t='+Date.now());
+    allData=await res.json();
+    console.log('Loaded',allData.length,'items');
+    document.getElementById('csv-section').style.display='block';
+  }catch(e){
+    console.error('results.json 로드 실패:', e);
+    allData=[];
+  }
+}
+
+// ── 최근 검색어 드롭다운 ──
+const QA_RECENT_KEY='cb_qa_recent';
+const QA_MAX_RECENT=8;
+function getQARecent(){try{return JSON.parse(localStorage.getItem(QA_RECENT_KEY)||'[]');}catch(e){return[];}}
+function saveQARecent(q){if(!q||q.length<2)return;let l=getQARecent().filter(x=>x!==q);l.unshift(q);if(l.length>QA_MAX_RECENT)l=l.slice(0,QA_MAX_RECENT);try{localStorage.setItem(QA_RECENT_KEY,JSON.stringify(l));}catch(e){}}
+function clearQARecent(){try{localStorage.removeItem(QA_RECENT_KEY);}catch(e){}closeQARecent();}
+function openQARecent(){
+  const el=document.getElementById('qa-recent-dropdown');if(!el)return;
+  const l=getQARecent();if(!l.length)return;
+  el.innerHTML=`<div class="recent-dropdown-header"><span>// recent</span><span class="recent-dropdown-clear" onmousedown="clearQARecent()">clear</span></div>`
+    +l.map(q=>`<div class="recent-dropdown-item" onmousedown="document.getElementById('qa-input').value='${q.replace(/'/g,"\''")}';runQA();closeQARecent();"><span class="recent-icon">↵</span>${q}</div>`).join('');
+  el.classList.add('open');
+}
+function closeQARecent(){const el=document.getElementById('qa-recent-dropdown');if(el)el.classList.remove('open');}
+
+function qaGoPage(page){qaPage=page;runQA(false);window.scrollTo({top:document.getElementById('results-body').offsetTop-80,behavior:'smooth'});}
+
+function toggleAvgList(){
+  const list=document.getElementById('avg-list');
+  const toggle=document.getElementById('avg-toggle');
+  const open=list.style.display==='none';
+  list.style.display=open?'block':'none';
+  toggle.textContent=open?'▲ 닫기':'▼ 목록 보기';
+}
+
+function runQA(resetPage=true){
+  const raw=document.getElementById('qa-input').value.trim();
+  if(raw) history.pushState({q:raw},'','?q='+encodeURIComponent(raw));
+  if(resetPage) qaPage=1;
+  if(!raw) return;
+  saveQARecent(raw);
+  const q=normalizeQuery(raw);
+
+  // 정규화 표시
+  const normEl=document.getElementById('normalized-display');
+  document.getElementById('normalized-val').textContent=q;
+  normEl.style.display = raw.toLowerCase()!==q ? 'block' : 'none';
+  document.getElementById('s-query').textContent=q;
+
+  // 사이트 검색 URL 생성 (키워드를 +로 연결)
+  const encPlus=q.replace(/\s+/g,'+');
+  document.getElementById('link-sazin').href=`https://www.sazinzibb.com/product/search.html?view_type=&supplier_code=&category_no=0&search_type=product_name&keyword=${encPlus}&exceptkeyword=&product_price1=&product_price2=&order_by=`;
+  document.getElementById('link-jang').href=`https://j-camera.com/product/search.html?banner_action=&keyword=${encPlus}`;
+  document.getElementById('link-chung').href=`https://leica-storebando.co.kr/product/search.html?view_type=&supplier_code=&keyword=${encPlus}&order_by=`;
+  document.getElementById('link-ffordes').href=`https://www.ffordes.com/search?q=${encPlus}`;
+
+  if(!allData.length){
+    document.getElementById('results-body').innerHTML='<div class="loading">results.json 로딩 중... 잠시 후 다시 시도해주세요</div>';
+    document.getElementById('summary').style.display='grid';
+    document.getElementById('qa-grid').style.display='grid';
+    return;
+  }
+
+  // 매칭 실행 - pass/fail 분리
+  const passed=[], failed=[];
+  allData.forEach(r=>{
+    const result=matchesQuery(r, q);
+    if(result.pass) passed.push(r);
+    else failed.push({...r, _reason: result.reason});
+  });
+  lastResults=passed; // CSV 내보내기용
+
+  const forSale=passed.filter(r=>!r['품절']);
+  const soldOut=passed.filter(r=>r['품절']);
+
+  // 요약
+  document.getElementById('s-total').textContent=passed.length;
+  document.getElementById('s-sale').textContent=forSale.length;
+  document.getElementById('s-sold').textContent=soldOut.length;
+
+  // 사이트별 카운트
+  const siteCounts={};
+  passed.forEach(r=>{siteCounts[r.site]=(siteCounts[r.site]||0)+1;});
+  document.getElementById('count-sazin').textContent=(siteCounts['사진집']||0)+'개 매칭';
+  document.getElementById('count-jang').textContent=(siteCounts['장씨카메라']||0)+'개 매칭';
+  document.getElementById('count-chung').textContent=(siteCounts['라이카스토어 충무로']||0)+'개 매칭';
+  document.getElementById('count-ffordes').textContent=(siteCounts['Ffordes (영국)']||0)+'개 매칭';
+
+  document.getElementById('result-count').textContent=passed.length+' results';
+
+  // 평균가 분석
+  const priceItems = passed.filter(r=>r['가격']&&r['가격']!=='문의요망');
+  const prices = priceItems.map(r=>({
+    name: (r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim(),
+    site: r.site,
+    price: r['가격'],
+    cur: r['통화'],
+    krw: parseToKrw(r['가격'], r['통화']),
+    soldout: r['품절'],
+  })).filter(r=>r.krw&&r.krw>0);
+
+  const avgSec = document.getElementById('avg-section');
+  if(prices.length>=2) {
+    const forSalePrices = prices.filter(r=>!r.soldout);
+    const allPrices = prices;
+    const calcAvg = arr => arr.length ? Math.round(arr.reduce((s,r)=>s+r.krw,0)/arr.length) : 0;
+    const calcMin = arr => arr.length ? Math.min(...arr.map(r=>r.krw)) : 0;
+    const calcMax = arr => arr.length ? Math.max(...arr.map(r=>r.krw)) : 0;
+    const avg = calcAvg(forSalePrices.length ? forSalePrices : allPrices);
+    const min = calcMin(forSalePrices.length ? forSalePrices : allPrices);
+    const max = calcMax(forSalePrices.length ? forSalePrices : allPrices);
+    const fmtK = n => n>=10000?'₩'+Math.round(n/10000)+'만':'₩'+n.toLocaleString();
+
+    document.getElementById('avg-summary').innerHTML = `
+      <span style="color:var(--accent);font-weight:700;">${fmtK(avg)}</span>
+      <span style="color:var(--muted);margin:0 6px;">avg</span>
+      <span style="color:#22a06b;">${fmtK(min)}</span>
+      <span style="color:var(--muted);margin:0 4px;">~</span>
+      <span style="color:#e11f26;">${fmtK(max)}</span>
+      <span style="color:var(--muted);font-size:9px;margin-left:6px;">(${forSalePrices.length}개 판매중 기준)</span>
+    `;
+
+    const sortedPrices = [...prices].sort((a,b)=>a.krw-b.krw);
+    document.getElementById('avg-list').innerHTML = sortedPrices.map(r=>{
+      const diff = avg ? Math.round((r.krw-avg)/avg*100) : 0;
+      const diffColor = diff<-3?'#22a06b':diff>3?'#e11f26':'var(--muted)';
+      const diffTxt = Math.abs(diff)<3?'avg':(diff>0?'+':'')+diff+'%';
+      return `<div style="display:grid;grid-template-columns:1fr 80px 90px 50px;padding:8px 16px;border-bottom:1px solid var(--border);align-items:center;${r.soldout?'opacity:0.4':''}">
+        <div style="font-size:11px;color:var(--text);">${r.name.slice(0,45)}${r.soldout?'<span style="font-size:9px;color:var(--muted);margin-left:4px;">SOLD</span>':''}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);">${FLAGS[r.site]||'🌐'} ${(r.site||'').slice(0,5)}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--accent);">${fmtQAPrice(r.price,r.cur)}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;font-weight:700;color:${diffColor};">${diffTxt}</div>
+      </div>`;
+    }).join('');
+
+    avgSec.style.display='block';
+  } else {
+    avgSec.style.display='none';
+  }
+
+  // 결과 렌더
+  const body=document.getElementById('results-body');
+  if(!passed.length){
+    body.innerHTML='<div class="empty">// no results found<br><span style="font-size:9px;margin-top:8px;display:block;">검색어를 확인해보세요: '+q+'</span></div>';
+  } else {
+    // 판매중 먼저, 품절 나중에
+    const sorted=[...forSale, ...soldOut];
+    const qaTotalPages=Math.ceil(sorted.length/QA_PAGE_SIZE);
+    if(qaPage>qaTotalPages)qaPage=1;
+    const qaItems=sorted.slice((qaPage-1)*QA_PAGE_SIZE, qaPage*QA_PAGE_SIZE);
+    body.innerHTML=qaItems.map(r=>{
+      const hasImg=r['이미지']&&r['이미지']!=='이미지 없음';
+      const imgEl=hasImg?`<img class="result-img" src="${r['이미지']}" onerror="this.style.display='none'">`:`<div class="img-ph">◻</div>`;
+      const cond=r['컨디션']&&r['컨디션']!=='정보없음'?`<span class="mbadge mbadge-mount">${r['컨디션']}</span>`:'';
+      const sold=r['품절']?`<span class="mbadge mbadge-sold">SOLD</span>`:'';
+      const mount=r['mount']&&r['mount']!=='Unknown'?`<span class="mbadge mbadge-mount">${r['mount']}</span>`:'';
+      const brand=r.brand==='3rd Party'?`<span class="mbadge mbadge-3rd">3RD</span>`:'';
+      const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+      // 매칭 이유 분석
+      const matchReasons=getMatchReasons(r, q);
+      const reasonBadges=matchReasons.map(reason=>
+        `<span class="mbadge" style="background:rgba(45,122,45,0.1);color:#2d7a2d;border:1px solid rgba(45,122,45,0.25);">✓ ${reason}</span>`
+      ).join('');
+      return `<div class="result-row${r['품절']?' soldout':''}">
+        <div>${imgEl}</div>
+        <div>
+          <div class="r-name"><a href="${r['링크']}" target="_blank">${name.slice(0,50)}</a></div>
+          <div class="r-meta">${mount}${cond}${sold}${brand}</div>
+          <div class="r-meta" style="margin-top:3px;">${reasonBadges}</div>
+        </div>
+        <div class="r-site">${FLAGS[r.site]||'🌐'} ${r.site||''}</div>
+        <div class="r-price">${fmtQAPrice(r['가격'],r['통화'])}</div>
+        <div class="r-cond">${r['컨디션']||'—'}</div>
+      </div>`;
+    }).join('');
+    let pagEl=document.getElementById('qa-pagination');
+    if(!pagEl){pagEl=document.createElement('div');pagEl.id='qa-pagination';pagEl.style.cssText='display:flex;align-items:center;justify-content:center;gap:6px;padding:16px 0 4px;flex-wrap:wrap;';body.after(pagEl);}
+    if(qaTotalPages<=1){pagEl.innerHTML='';}
+    else{
+      const s=Math.max(1,qaPage-3),e=Math.min(qaTotalPages,qaPage+3);
+      const btn=(lbl,pg,active=false)=>`<button onclick="qaGoPage(${pg})" style="font-family:'Space Mono',monospace;font-size:10px;padding:5px 10px;border:1px solid ${active?'var(--accent)':'var(--border2)'};background:${active?'var(--accent)':'transparent'};color:${active?'#fff':'var(--dim)'};cursor:pointer;border-radius:2px;">${lbl}</button>`;
+      let ph='';
+      if(qaPage>1) ph+=btn('←',qaPage-1);
+      if(s>1) ph+=btn('1',1)+`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`;
+      for(let i=s;i<=e;i++) ph+=btn(i,i,i===qaPage);
+      if(e<qaTotalPages) ph+=`<span style="font-size:10px;color:var(--muted);padding:0 2px;">…</span>`+btn(qaTotalPages,qaTotalPages);
+      if(qaPage<qaTotalPages) ph+=btn('→',qaPage+1);
+      ph+=`<span style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-left:8px;">${sorted.length}개 중 ${(qaPage-1)*QA_PAGE_SIZE+1}–${Math.min(qaPage*QA_PAGE_SIZE,sorted.length)}</span>`;
+      pagEl.innerHTML=ph;
+    }
+  }
+
+  // 디버그: 제외된 항목 (악세사리 제외하고 실제로 필터링된 것만)
+  const excluded=failed.filter(r=>r._reason!=='악세사리 제외'&&r.category!=='Accessory');
+  const debugPanel=document.getElementById('debug-panel');
+  if(excluded.length>0){
+    debugPanel.style.display='block';
+    window._excluded=excluded;
+    window._debugPage=1;
+    // 자동으로 펼치기
+    document.getElementById('debug-body').classList.add('open');
+    document.getElementById('debug-toggle-icon').textContent='▲ 접기';
+    renderDebug();
+  } else {
+    debugPanel.style.display='none';
+  }
+
+  document.getElementById('summary').style.display='grid';
+  document.getElementById('qa-grid').style.display='grid';
+}
+
+function getMatchReasons(item, query){
+  const q=query.toLowerCase();
+  const rawName=(item['상품명']||'').toLowerCase().replace(/^상품명\s*[:\s]+/,'').trim();
+  const name=rawName.replace(/-/g,' ');
+  const label=(item['label']||'').toLowerCase();
+  const reasons=[];
+
+  // leica 토큰 체크
+  if(q.includes('leica')&&name.includes('leica')) reasons.push('leica');
+
+  // 마운트 토큰 체크
+  const qMount=detectQueryMount(q);
+  if(qMount){
+    if(item.mount===qMount) reasons.push(`${qMount}마운트`);
+    else if(qMount==='M'&&(item.mount==='L'||item.mount==='L39')) reasons.push('L마운트(M호환)');
+  }
+
+  const tokens=q.split(/\s+/).filter(t=>t!=='m'&&t!=='r'&&t!=='l'&&t!=='ltm'&&t!=='l39'&&t!=='m39'&&t!=='leica');
+  for(const t of tokens){
+    const gen=GEN_MAP[t];
+    if(gen){
+      const synonyms=GEN_SYNONYMS[gen]||[gen];
+      const matched=synonyms.find(s=>name.includes(s));
+      if(matched) reasons.push(`세대: ${matched}`);
+      continue;
+    }
+    if(GEN_SYNONYMS[t]){
+      const matched=GEN_SYNONYMS[t].find(s=>name.includes(s));
+      if(matched) reasons.push(`${t}→${matched}`);
+      continue;
+    }
+    // 조리개값
+    const apertureMatch=t.match(/^(\d+)\.(\d+)$/);
+    if(apertureMatch){
+      const full=apertureMatch[0];
+      const int=apertureMatch[1];
+      const dec=apertureMatch[2];
+      const isZeroDec=(dec==='0');
+      const exactPatterns=[`f${full}`,`f/${full}`,`f ${full}`,`1:${full}`,`f${int}/${dec}`,`/${full}`];
+      let matched=exactPatterns.find(p=>name.includes(p));
+      if(!matched&&isZeroDec){
+        const intPatterns=[`f${int}`,`f/${int}`,`1:${int}`];
+        matched=intPatterns.find(p=>{
+          const idx=name.indexOf(p);
+          if(idx===-1) return false;
+          const after=name[idx+p.length];
+          return !after||!/[\d.]/.test(after);
+        });
+      }
+      if(matched) reasons.push(`조리개: ${matched}`);
+      continue;
+    }
+    // 숫자 (초점거리)
+    if(/^\d+$/.test(t)){
+      const re=new RegExp('(?<![0-9])'+t+'(?![0-9])');
+      if(re.test(name)) reasons.push(`${t}mm`);
+      continue;
+    }
+    // mm 형태
+    const mmMatch=t.match(/^(\d+)mm$/);
+    if(mmMatch){
+      reasons.push(`${mmMatch[1]}mm`);
+      continue;
+    }
+    // 일반 키워드
+    if(name.includes(t)) reasons.push(t);
+    else if(label.includes(t)) reasons.push(`label:${t}`);
+  }
+
+  return reasons;
+}
+
+function toggleDebug(){
+  const body=document.getElementById('debug-body');
+  const icon=document.getElementById('debug-toggle-icon');
+  const isOpen=body.classList.contains('open');
+  body.classList.toggle('open');
+  icon.textContent=isOpen?'▼ 펼치기':'▲ 접기';
+}
+
+function exportCSV(type){
+  let items=[];
+  if(type==='unknown') items=allData.filter(r=>(r.mount||'Unknown')==='Unknown');
+  else if(type==='results') items=lastResults||[];
+  else items=allData;
+
+  const csv=['상품명,사이트,마운트,카테고리,가격,통화,컨디션,링크'].concat(
+    items.map(r=>`"${(r['상품명']||'').replace(/"/g,'""')}","${r.site||''}","${r.mount||''}","${r.category||''}","${r['가격']||''}","${r['통화']||''}","${r['컨디션']||''}","${r['링크']||''}"`)
+  ).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download=`camerabridge_${type}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+const DEBUG_PER_PAGE=50;
+function renderDebug(){
+  const excluded=window._excluded||[];
+  const search=(document.getElementById('debug-search')||{value:''}).value.toLowerCase().trim();
+  const filtered=search
+    ? excluded.filter(r=>{
+        const n=(r['상품명']||'').toLowerCase().replace(/-/g,' ');
+        return search.split(/\s+/).every(t=>{
+          if(n.includes(t)) return true;
+          // 35/1.4 ↔ 35mm f1.4 상호변환
+          const _sm=t.match(/^(\d+)\/(\d+\.?\d*)$/);
+          if(_sm) return n.includes(_sm[1]) && n.includes(_sm[2]);
+          const mmMatch=t.match(/^(\d+)mm$/);
+          if(mmMatch) return n.includes(mmMatch[1]+'/') || n.includes(mmMatch[1]+' ');
+          return false;
+        });
+      })
+    : excluded;
+
+  // 검색어 바뀌면 1페이지로 리셋
+  if(window._lastDebugSearch!==search){
+    window._debugPage=1;
+    window._lastDebugSearch=search;
+  }
+
+  const totalPages=Math.ceil(filtered.length/DEBUG_PER_PAGE)||1;
+  if(!window._debugPage||window._debugPage>totalPages) window._debugPage=1;
+  const page=window._debugPage;
+  const start=(page-1)*DEBUG_PER_PAGE;
+  const pageItems=filtered.slice(start,start+DEBUG_PER_PAGE);
+
+  document.getElementById('debug-count').textContent=filtered.length+'개'+(search?' 검색됨':' 제외됨');
+
+  if(!filtered.length){
+    document.getElementById('debug-list').innerHTML='<div style="text-align:center;padding:20px;font-family:Space Mono,monospace;font-size:10px;color:var(--muted);">// 검색 결과 없음</div>';
+    document.getElementById('debug-pagination').innerHTML='';
+    return;
+  }
+
+  document.getElementById('debug-list').innerHTML=pageItems.map(r=>{
+    const name=(r['상품명']||'').replace(/^상품명\s*[:\s]+/i,'').trim();
+    const price=r['가격']||'';
+    return `<div class="debug-item">
+      <span class="debug-name" title="${name}">
+        <a href="${r['링크']}" target="_blank" style="color:inherit;text-decoration:none;">${name.slice(0,50)}</a>
+      </span>
+      ${price?`<span class="debug-price">${price}</span>`:''}
+      <span class="debug-fail">${r._reason}</span>
+    </div>`;
+  }).join('');
+
+  // 페이지네이션
+  const pag=document.getElementById('debug-pagination');
+  if(totalPages<=1){pag.innerHTML='';return;}
+  let html='';
+  if(page>1) html+=`<button onclick="goDebugPage(${page-1})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">←</button>`;
+  const s=Math.max(1,page-3),e=Math.min(totalPages,page+3);
+  if(s>1) html+=`<button onclick="goDebugPage(1)" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">1</button><span style="font-size:9px;color:var(--muted);padding:0 4px;">...</span>`;
+  for(let i=s;i<=e;i++) html+=`<button onclick="goDebugPage(${i})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:${i===page?'var(--accent)':'transparent'};color:${i===page?'#fff':'var(--dim)'};cursor:pointer;border-radius:2px;">${i}</button>`;
+  if(e<totalPages) html+=`<span style="font-size:9px;color:var(--muted);padding:0 4px;">...</span><button onclick="goDebugPage(${totalPages})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">${totalPages}</button>`;
+  if(page<totalPages) html+=`<button onclick="goDebugPage(${page+1})" style="font-family:Space Mono,monospace;font-size:9px;padding:3px 8px;border:1px solid var(--border2);background:transparent;cursor:pointer;border-radius:2px;">→</button>`;
+  html+=`<span style="font-family:Space Mono,monospace;font-size:9px;color:var(--muted);margin-left:4px;">${page}/${totalPages}</span>`;
+  pag.innerHTML=html;
+}
+function goDebugPage(n){window._debugPage=n;renderDebug();}
+
+// 빠른 테스트 케이스
+const TEST_CASES=[
+  'summicron 35','summilux 50','leica r 50mm','noctilux 0.95',
+  '35cron','50lux','leica m6','elmarit 28',
+  'voigtlander','ttartisan','leica m3','apo summicron 50',
+];
+document.getElementById('test-cases').innerHTML=TEST_CASES.map(t=>
+  `<span class="test-tag" onclick="quickTest('${t}')">${t}</span>`
+).join('');
+
+function quickTest(q){
+  document.getElementById('qa-input').value=q;
+  runQA();
+  // 뒤로가기/앞으로가기 처리
+  window.addEventListener('popstate',e=>{
+    const q=new URLSearchParams(window.location.search).get('q')||'';
+    document.getElementById('qa-input').value=q;
+    if(q){
+      if(allData.length) runQA();
+      else loadData().then(()=>runQA());
+    } else {
+      document.getElementById('qa-input').value='';
+      runQA();
+    }
+  });
+  // BFCache 복원 시 처리
+  window.addEventListener('pageshow',e=>{
+    const q=new URLSearchParams(window.location.search).get('q')||'';
+    document.getElementById('qa-input').value=q;
+    if(q){
+      if(allData.length) runQA();
+      else loadData().then(()=>runQA());
+    }
+  });
+}
+
+document.getElementById('qa-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter') runQA();
+});
+
+let _debounceTimer=null;
+function debounceQA(){
+  clearTimeout(_debounceTimer);
+  const val=document.getElementById('qa-input').value.trim();
+  if(!val) return;
+  _debounceTimer=setTimeout(()=>runQA(), 300);
+}
+
+// 초기 로드
+loadData();
+</script>
+
+
+</body></html>
