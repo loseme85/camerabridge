@@ -1558,6 +1558,28 @@ def auto_label(name):
     # ── Leicavit / 악세사리 ──
     if "leicavit" in n: return "Leicavit"
 
+    # ── 3rd Party 브랜드 (label 없어도 됨, 명시적 처리) ──
+    _3rd_brands = ["thypoch","peace ","cooke ","oberwerth","luigi","ona ","rrs ","sekonic","artisan"]
+    if any(b in n for b in _3rd_brands): return ""
+
+    # ── 악세사리 브랜드/키워드 ──
+    if "be@rbrick" in n or "bebrick" in n: return "Accessory"
+
+    # ── SL 렌즈 ──
+    if any(x in n for x in ["super-vario-elmar-sl","vario-elmarit-sl","summicron-sl","summilux-sl","apo-summicron-sl","vario-elmar-sl"]):
+        import re as _re_sl
+        mm_sl = _re_sl.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_sl.group(1) if mm_sl else ""
+        if mm: return f"{mm}mm SL Lens"
+        return "SL Lens"
+
+    # ── M-D 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "m-d" in n.replace(" ",""): return "Leica M-D"
+
+    # ── 오타 보정 (summicrom → summicron) ──
+    if "summicrom" in n: n = n.replace("summicrom","summicron")
+
     # ── Barnack 바디 ──
     if not any(kw in n for kw in lens_kw):
         for barnack in ["iiig","iiif","iiic","iiia","iif","iic","if ","i "," ii "]:
@@ -1602,6 +1624,39 @@ def auto_label(name):
 
     # ── Sofort ──
     if "sofort" in n: return "Leica Sofort"
+
+    # ── M-D / MDa 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "m-d" in n.replace(" ",""): return "Leica M-D"
+        if "mda" in n.replace(" ",""): return "Leica MDa"
+        if "m-a" in n.replace(" ",""): return "Leica M-A"
+
+    # ── Barnack 로마숫자 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        import re as _re_bn
+        if _re_bn.search(r'leica\s+(i|ii|iii|if|iif|iiif|iiig|iiic|standard)', n):
+            return "Leica Barnack"
+
+    # ── SL 렌즈 ──
+    if "sl" in n and any(x in n for x in ["elmar","summicron","summilux","vario","apo","elmarit"]):
+        import re as _re_sl
+        mm_sl = _re_sl.search(r'(\d+[-~]\d+mm|\d+mm)', n)
+        mm = mm_sl.group(0).replace('mm','') if mm_sl else ""
+        if "apo-summicron" in n or "apo summicron" in n:
+            return f"{mm}mm APO-Summicron-SL" if mm else "APO-Summicron-SL"
+        if "summilux" in n:
+            return f"{mm}mm Summilux-SL" if mm else "Summilux-SL"
+        if "vario" in n:
+            return f"{mm}mm Vario-SL" if mm else "Vario-SL"
+        if mm: return f"{mm}mm SL Lens"
+        return "SL Lens"
+
+    # ── Summicron 오타 (SUMMICROM) ──
+    if "summicrom" in n:
+        import re as _re_sc
+        mm_sc = _re_sc.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_sc.group(1) if mm_sc else "50"
+        return f"{mm}mm Summicron"
 
     return ""
 
