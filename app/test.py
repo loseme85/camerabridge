@@ -2751,7 +2751,7 @@ def crawl_all():
         _inline_sold = [
             {**r, "hours_to_sell": 1, "sold_at": r.get("crawl_time","")}
             for r in unique_results
-            if r.get("품절") and r.get("가격") and r.get("label")
+            if r.get("품절") and r.get("가격") and r.get("가격")!="문의요망" and r.get("label")
             and r.get("링크","") not in _sold_base_links
         ]
         _sold_raw = _sold_base + _inline_sold
