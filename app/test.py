@@ -1558,6 +1558,51 @@ def auto_label(name):
     # ── Leicavit / 악세사리 ──
     if "leicavit" in n: return "Leicavit"
 
+    # ── Barnack 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        for barnack in ["iiig","iiif","iiic","iiia","iif","iic","if ","i "," ii "]:
+            if barnack in n: return "Leica Barnack"
+        if "barnack" in n: return "Leica Barnack"
+
+    # ── Visoflex (X2보다 먼저) ──
+    if "visoflex" in n: return "Visoflex"
+
+    # ── X Vario (vario가 lens_kw에 있어서 먼저 체크) ──
+    if "leica x vario" in n or " x vario" in n or "x-vario" in n: return "Leica X Vario"
+
+    # ── X 시리즈 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "x2" in n.replace(" ",""): return "Leica X2"
+        if "x1" in n.replace(" ",""): return "Leica X1"
+        if "x " in n or n.endswith(" x"): return "Leica X"
+
+    # ── SL3 추가 ──
+    if not any(kw in n for kw in lens_kw):
+        if "sl3" in n.replace(" ",""): return "Leica SL3"
+
+    # ── M 모노크롬 ──
+    if not any(kw in n for kw in lens_kw):
+        if "monochrom" in n or "m-m" in n.replace(" ",""): return "Leica M Monochrom"
+        if "m-e" in n.replace(" ",""): return "Leica M-E"
+        if "m-p" in n.replace(" ",""): return "Leica M-P"
+
+    # ── TL 시스템 렌즈 ──
+    if "tl" in n and any(x in n for x in ["elmar","summicron","summilux","vario","apo"]):
+        import re as _re_tl
+        mm_tl = _re_tl.search(r'(\d+[-~]\d+mm|\d+mm)', n)
+        mm = mm_tl.group(0).replace('mm','') if mm_tl else ""
+        if mm: return f"{mm}mm TL Lens"
+        return "TL Lens"
+
+    # ── Summitar (L39) ──
+    if "summitar" in n: return "50mm Summitar"
+
+    # ── Visoflex ──
+    if "visoflex" in n: return "Visoflex"
+
+    # ── Sofort ──
+    if "sofort" in n: return "Leica Sofort"
+
     return ""
 
 
