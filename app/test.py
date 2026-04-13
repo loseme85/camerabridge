@@ -2730,6 +2730,68 @@ def crawl_all():
         print(f"  💰 sold 품질 분류 → confirmed:{_confirmed} likely:{_likely} unknown:{_unknown}")
     except Exception as _e:
         print(f"  ⚠️ sold 품질 분류 실패: {_e}")
+    # ── QA 리포트 생성 ──
+    try:
+        import json as _json_qa
+        import datetime as _dt_qa
+        _KST_qa = _dt_qa.timezone(_dt_qa.timedelta(hours=9))
+        _qa_time = _dt_qa.datetime.now(_KST_qa).strftime("%Y-%m-%d %H:%M:%S")
+        # 기본 통계
+        _total = len(unique_results)
+        _no_label = sum(1 for r in unique_results if not r.get("label"))
+        _no_mount = sum(1 for r in unique_results if not r.get("mount") or r.get("mount")=="Unknown")
+        _no_price = sum(1 for r in unique_results if not r.get("가격"))
+        _for_sale = sum(1 for r in unique_results if not r.get("품절"))
+        _sold_out = sum(1 for r in unique_results if r.get("품절"))
+        # 사이트별
+        from collections import Counter as _Counter
+        _site_counts = dict(_Counter(r.get("site","") for r in unique_results).most_common())
+        _label_counts = dict(_Counter(r.get("label","") for r in unique_results if r.get("label")).most_common(20))
+        # 플래그
+        try:
+            _flags_data = _json_qa.load(open("data/derived/flags_latest.json"))
+            _flag_count = len(_flags_data)
+            _flag_types = dict(_Counter(f for r in _flags_data for f in r.get("flags",[])).most_common())
+        except:
+            _flag_count = 0
+            _flag_types = {}
+        # sold 품질
+        try:
+            _sq_data = _json_qa.load(open("data/derived/sold_quality_latest.json"))
+            _sq_confirmed = sum(1 for s in _sq_data if s["sold_quality"]=="sold_confirmed")
+            _sq_likely = sum(1 for s in _sq_data if s["sold_quality"]=="sold_likely")
+            _sq_unknown = sum(1 for s in _sq_data if s["sold_quality"]=="expired_unknown")
+            _sq_market = sum(1 for s in _sq_data if s.get("include_in_market"))
+        except:
+            _sq_confirmed = _sq_likely = _sq_unknown = _sq_market = 0
+        _qa_report = {
+            "generated_at": _qa_time,
+            "total_listings": _total,
+            "for_sale": _for_sale,
+            "sold_out": _sold_out,
+            "no_label": _no_label,
+            "no_mount": _no_mount,
+            "no_price": _no_price,
+            "label_accuracy": round((_total - _no_label) / _total * 100, 1) if _total else 0,
+            "mount_accuracy": round((_total - _no_mount) / _total * 100, 1) if _total else 0,
+            "site_counts": _site_counts,
+            "top_labels": _label_counts,
+            "flags": {
+                "total_flagged": _flag_count,
+                "by_type": _flag_types,
+            },
+            "sold_quality": {
+                "confirmed": _sq_confirmed,
+                "likely": _sq_likely,
+                "unknown": _sq_unknown,
+                "market_eligible": _sq_market,
+            },
+        }
+        with open("data/derived/qa_report_latest.json", "w", encoding="utf-8") as f:
+            _json_qa.dump(_qa_report, f, ensure_ascii=False, indent=2)
+        print(f"  📊 QA 리포트 → label정확도:{_qa_report['label_accuracy']}% mount정확도:{_qa_report['mount_accuracy']}%")
+    except Exception as _e:
+        print(f"  ⚠️ QA 리포트 실패: {_e}")
     # ── crawl_sessions.json 누적 저장 ──
     import datetime as _dt3
     _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
