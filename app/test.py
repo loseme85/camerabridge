@@ -2743,6 +2743,20 @@ def crawl_all():
     # ── sold 품질 분류 ──
     import json as _json_sold
     _sold_quality = []
+    # results.json 품절 데이터 포함 (장씨카메라 등 이력 보존형)
+    try:
+        with open("data/sold_items.json", "r", encoding="utf-8") as _f_base:
+            _sold_base = _json_sold.load(_f_base)
+        _sold_base_links = {s.get("링크","") for s in _sold_base}
+        _inline_sold = [
+            {**r, "hours_to_sell": 1, "sold_at": r.get("crawl_time","")}
+            for r in unique_results
+            if r.get("품절") and r.get("가격") and r.get("label")
+            and r.get("링크","") not in _sold_base_links
+        ]
+        _sold_raw = _sold_base + _inline_sold
+    except:
+        _sold_raw = [r for r in unique_results if r.get("품절") and r.get("가격") and r.get("label")]
     try:
         with open("data/sold_items.json", "r", encoding="utf-8") as f:
             _sold_raw = _json_sold.load(f)
