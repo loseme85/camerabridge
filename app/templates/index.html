@@ -418,7 +418,7 @@ async function loadData(){
     }
   }catch(e){console.warn('환율 API 실패, 기본값 사용:', gbpToKrw);}
 
-  try{const res=await fetch('results.json');allData=await res.json();
+  try{const res=await fetch('data/raw/results.json');allData=await res.json();
   const sites=[...new Set(allData.map(r=>r.site))];
   const sel=document.getElementById('site-select');
   const existingVals=[...sel.options].map(o=>o.value);
