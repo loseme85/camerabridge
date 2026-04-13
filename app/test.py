@@ -1537,10 +1537,27 @@ def auto_label(name):
             if m in n.replace(" ",""): return f"Leica {m.upper()}"
     if "q3" in n: return "Leica Q3"
     if "q2" in n: return "Leica Q2"
+    if "q " in n or n.endswith(" q") or "/q " in n: return "Leica Q"
+
+    # ── SL 시스템 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "sl2-s" in n.replace(" ",""): return "Leica SL2-S"
+        if "sl2" in n.replace(" ",""): return "Leica SL2"
+        if "sl " in n or n.endswith(" sl"): return "Leica SL"
+        if " cl" in n or n.startswith("cl "): return "Leica CL"
+        if "m10-r" in n.replace(" ",""): return "Leica M10-R"
+        if "m10-p" in n.replace(" ",""): return "Leica M10-P"
+        if "m10" in n.replace(" ",""): return "Leica M10"
+        if "m11-p" in n.replace(" ",""): return "Leica M11-P"
+        if "m11" in n.replace(" ",""): return "Leica M11"
 
     # ── Compact ──
     for c in ["d-lux","v-lux","c-lux","minilux","c2","c1","mini"]:
         if c in n: return f"Leica {c.upper()}"
+
+    # ── Leicavit / 악세사리 ──
+    if "leicavit" in n: return "Leicavit"
+
     return ""
 
 
