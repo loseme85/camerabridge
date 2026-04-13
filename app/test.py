@@ -2743,7 +2743,6 @@ def crawl_all():
     # ── sold 품질 분류 ──
     import json as _json_sold
     _sold_quality = []
-    # results.json 품절 데이터 포함 (장씨카메라 등 이력 보존형)
     try:
         with open("data/sold_items.json", "r", encoding="utf-8") as _f_base:
             _sold_base = _json_sold.load(_f_base)
@@ -2755,17 +2754,11 @@ def crawl_all():
             and r.get("링크","") not in _sold_base_links
         ]
         _sold_raw = _sold_base + _inline_sold
-    except:
-        _sold_raw = [r for r in unique_results if r.get("품절") and r.get("가격") and r.get("label")]
-    try:
-        with open("data/sold_items.json", "r", encoding="utf-8") as f:
-            _sold_raw = _json_sold.load(f)
         for _s in _sold_raw:
             _price = _s.get("가격","")
             _hrs = _s.get("hours_to_sell", None)
             _label = _s.get("label","")
             _category = _s.get("category","")
-            # 분류
             if _price and _hrs is not None and _hrs > 0:
                 _quality = "sold_confirmed"
                 _confidence = "high"
@@ -2778,7 +2771,6 @@ def crawl_all():
             else:
                 _quality = "expired_unknown"
                 _confidence = "low"
-            # 시세 계산 포함 여부 (Accessory, label 없음 제외)
             _include_in_market = (
                 _quality in ["sold_confirmed", "sold_likely"] and
                 _category not in ["Accessory"] and
@@ -2803,7 +2795,7 @@ def crawl_all():
         _confirmed = sum(1 for s in _sold_quality if s["sold_quality"]=="sold_confirmed")
         _likely = sum(1 for s in _sold_quality if s["sold_quality"]=="sold_likely")
         _unknown = sum(1 for s in _sold_quality if s["sold_quality"]=="expired_unknown")
-        print(f"  💰 sold 품질 분류 → confirmed:{_confirmed} likely:{_likely} unknown:{_unknown}")
+        print(f"  💰 sold 품질 분류 → confirmed:{_confirmed} likely:{_likely} unknown:{_unknown} (총 {len(_sold_quality)}개)")
     except Exception as _e:
         print(f"  ⚠️ sold 품질 분류 실패: {_e}")
     # ── QA 리포트 생성 ──
