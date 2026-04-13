@@ -1936,7 +1936,7 @@ def write_status(pct, current_site, total_count, done_sites, eta=0):
         "running": pct < 100,
     }
     try:
-        with open("status.json", "w", encoding="utf-8") as f:
+        with open("data/status.json", "w", encoding="utf-8") as f:
             json.dump(status, f, ensure_ascii=False)
     except Exception as e:
         print(f"    ⚠️ status.json 쓰기 실패: {e}")
@@ -2328,7 +2328,7 @@ def crawl_all():
     existing_links = set()
     existing_first_seen = {}  # 링크 → first_seen 맵
     try:
-        with open("results.json", "r", encoding="utf-8") as f:
+        with open("data/raw/results.json", "r", encoding="utf-8") as f:
             existing = json.load(f)
             for r in existing:
                 existing_links.add(r["링크"])
@@ -2341,7 +2341,7 @@ def crawl_all():
     # sold_items.json 로드 → 이미 품절된 링크는 크롤링 스킵
     sold_links = set()
     try:
-        with open("sold_items.json", "r", encoding="utf-8") as f:
+        with open("data/sold_items.json", "r", encoding="utf-8") as f:
             sold = json.load(f)
             for r in sold:
                 sold_links.add(r["링크"])
@@ -2552,11 +2552,11 @@ def crawl_all():
     # 기존 sold_items 로드
     sold_items = []
     try:
-        with open("sold_items.json", "r", encoding="utf-8") as f:
+        with open("data/sold_items.json", "r", encoding="utf-8") as f:
             sold_items = json.load(f)
     except:
         # 없으면 빈 파일 생성
-        with open("sold_items.json", "w", encoding="utf-8") as f:
+        with open("data/sold_items.json", "w", encoding="utf-8") as f:
             import json as _j; _j.dump([], f)
 
     sold_links = {r["링크"] for r in sold_items}
@@ -2564,7 +2564,7 @@ def crawl_all():
     # 이전에 있었으나 지금 없는 매물 → 판매 완료
     newly_sold = []
     try:
-        with open("results.json", "r", encoding="utf-8") as f:
+        with open("data/raw/results.json", "r", encoding="utf-8") as f:
             prev_results = json.load(f)
         for r in prev_results:
             if r["링크"] not in new_links and r["링크"] not in sold_links and not r.get("품절"):
@@ -2589,7 +2589,7 @@ def crawl_all():
         sold_items.extend(newly_sold)
         # 최근 500개만 유지
         sold_items = sold_items[-500:]
-        with open("sold_items.json", "w", encoding="utf-8") as f:
+        with open("data/sold_items.json", "w", encoding="utf-8") as f:
             json.dump(sold_items, f, ensure_ascii=False, indent=2)
         print(f"  💸 총 {len(newly_sold)}개 판매 완료 추가 → sold_items.json")
 
@@ -2607,7 +2607,7 @@ def crawl_all():
     _raw_files = sorted([x for x in _os.listdir("data/raw") if x.startswith("raw_") and x.endswith(".json")])
     for _old_f in _raw_files[:-30]:
         _os.remove(f"data/raw/{_old_f}")
-    with open("results.json", "w", encoding="utf-8") as f:
+    with open("data/raw/results.json", "w", encoding="utf-8") as f:
         json.dump(unique_results, f, ensure_ascii=False, indent=2)
     # ── crawl_sessions.json 누적 저장 ──
     import datetime as _dt3
@@ -2630,14 +2630,14 @@ def crawl_all():
         "new_listings": new_listings,
     }
     try:
-        with open("crawl_sessions.json", "r", encoding="utf-8") as f:
+        with open("crawler/sessions/crawl_sessions.json", "r", encoding="utf-8") as f:
             sessions_log = json.load(f)
     except:
         sessions_log = []
     sessions_log = [s for s in sessions_log if s.get("start_time") != crawl_time]
     sessions_log.append(session_entry)
     sessions_log = sessions_log[-100:]
-    with open("crawl_sessions.json", "w", encoding="utf-8") as f:
+    with open("crawler/sessions/crawl_sessions.json", "w", encoding="utf-8") as f:
         json.dump(sessions_log, f, ensure_ascii=False, indent=2)
 
     # 신규 매물 통계
@@ -2668,7 +2668,7 @@ def push_to_github():
     remote = f"https://{token}@github.com/{repo}.git"
 
     cmds = [
-        ["git", "add", "--ignore-errors", "results.json", "index.html", "admin.html", "sold_items.json"],
+        ["git", "add", "--ignore-errors", "data/raw/results.json", "index.html", "admin.html", "data/sold_items.json"],
         ["git", "commit", "-m", "Auto update results.json"],
         ["git", "push", remote, "main"],
     ]
