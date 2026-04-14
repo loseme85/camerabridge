@@ -1299,6 +1299,20 @@ def crawl_category(page, site):
 def auto_label(name):
     """상품명에서 label 자동 감지 - 세대/조리개별 세분화"""
     n = name.lower()
+    # ── 오타 보정 (맨 앞에서 처리) ──
+    import re as _re_typo
+    _typo_map = [
+        ("summicrom","summicron"), ("summiarit","summarit"), ("loctilux","noctilux"),
+        ("elmatit","elmarit"), ("eleamrit","elmarit"), ("elemarit","elmarit"),
+        ("summcron-c","summicron-c"), ("summcron","summicron"), ("summmicron","summicron"),
+        ("summicton","summicron"), ("apo-sumicron","apo-summicron"),
+        ("super -elmar","super-elmar"), ("super-angvlon","super-angulon"),
+        ("tri-elamr","tri-elmar"), ("tri elamr","tri-elmar"),
+        ("summroan","summaron"), ("suimmilux","summilux"),
+    ]
+    for _wrong, _right in _typo_map:
+        if _wrong in n: n = n.replace(_wrong, _right)
+    if _re_typo.search(r'sui+mmilux', n): n = _re_typo.sub(r'sui+mmilux','summilux',n)
     # 판매완료/보류 → 빈 문자열
     if re.search(r"판매완료|보류|-판매|sold out", n): return ""
 
@@ -1404,6 +1418,7 @@ def auto_label(name):
             return "28mm Summilux"
         # 35mm 세분화
         if mm == "35":
+            if "f2" in n and "asph" in n: return "35mm Summicron ASPH"
             if "aspherical" in n: return "35mm Summilux AA"
             if any(kw in n for kw in ["2매","2 매","두매","double"," aa ","(aa)"]): return "35mm Summilux AA"
             if "fle ii" in n or "fle2" in n: return "35mm Summilux ASPH FLE II"
@@ -1460,6 +1475,7 @@ def auto_label(name):
             return "50mm Summicron"
         # 35mm 세분화
         if mm == "35":
+            if "f2" in n and "asph" in n: return "35mm Summicron ASPH"
             if "asph" in n: return "35mm Summicron ASPH"
             if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
             if "6매" in n or "6-el" in n: return "35mm Summicron (6매)"
@@ -1491,6 +1507,9 @@ def auto_label(name):
             if "asph" in n: return "24mm Elmarit ASPH"
             return "24mm Elmarit"
         if mm == "28":
+            if "asph" in n and "elmarit" in n: return "28mm Elmarit ASPH"
+            if "asph" in n and "summicron" in n: return "28mm Summicron ASPH"
+            if "asph" in n and "summilux" in n: return "28mm Summilux ASPH"
             if "asph" in n: return "28mm Elmarit ASPH"
             if "1세대" in n or "1st" in n or "9 element" in n or "9element" in n: return "28mm Elmarit 1세대"
             if "2세대" in n or "2nd" in n: return "28mm Elmarit 2세대"
@@ -1840,34 +1859,7 @@ def auto_label(name):
     if not any(kw in n for kw in lens_kw):
         if "m-d" in n.replace(" ",""): return "Leica M-D"
 
-    # ── 오타 보정 ──
-    if "summicrom" in n: n = n.replace("summicrom","summicron")
-    if "summiarit" in n: n = n.replace("summiarit","summarit")
-    if "loctilux" in n: n = n.replace("loctilux","noctilux")
-    if "elmatit" in n: n = n.replace("elmatit","elmarit")
-    if "apo-sumicron" in n: n = n.replace("apo-sumicron","apo-summicron")
-    if "summcron" in n: n = n.replace("summcron","summicron")
-    if "summmicron" in n: n = n.replace("summmicron","summicron")
-    if "summicton" in n: n = n.replace("summicton","summicron")
-    if "suimmilux" in n: n = n.replace("suimmilux","summilux")
-    if "eleamrit" in n: n = n.replace("eleamrit","elmarit")
-    if "elemarit" in n: n = n.replace("elemarit","elmarit")
-    if "tri-elamr" in n: n = n.replace("tri-elamr","tri-elmar")
-    if "tri elamr" in n: n = n.replace("tri elamr","tri-elmar")
-    if "suimmilux" in n: n = n.replace("suimmilux","summilux")
-    if "summcron-c" in n: n = n.replace("summcron-c","summicron")
-    if "apo-sumicron" in n: n = n.replace("apo-sumicron","apo-summicron")
-    if "summmicron" in n: n = n.replace("summmicron","summicron")
-    if "super -elmar" in n: n = n.replace("super -elmar","super-elmar")
-    if "super-angvlon" in n: n = n.replace("super-angvlon","super-angulon")
-    if "eleamrit" in n or "elemarit" in n: n = re.sub(r'ele[am]arit','elmarit',n)
-    if "summicton" in n: n = n.replace("summicton","summicron")
-    if "summicrom" in n: n = n.replace("summicrom","summicron")
-    if "suimmilux" in n: n = re.sub(r'sui+mmilux','summilux',n)
-    if "summcron-c" in n: n = n.replace("summcron-c","summicron-c")
-    if "summcron" in n: n = n.replace("summcron","summicron")
-    if "summmicron" in n: n = n.replace("summmicron","summicron")
-    if "summroan" in n: n = n.replace("summroan","summaron")
+
     if "eleamrit" in n: n = n.replace("eleamrit","elmarit")
     if re.search(r'el[ea]marit', n): n = re.sub(r'el[ea]marit','elmarit',n)
     if "apo-sumicron" in n: n = n.replace("apo-sumicron","apo-summicron")
