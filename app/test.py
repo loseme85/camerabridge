@@ -901,12 +901,12 @@ def detect_category(name, price_str=""):
         'charger', '충전기', 'battery', '배터리', 'cable', '케이블',
         'flash', '플래시', '리어캡', '프론트캡', 'front cap', 'rear cap',
         'eye cup', 'lens cap', 'body cap',
-        'leicavit', 'vit m', 'rapidwinder', 'rapid winder',
+        'leicavit', 'rapidwinder', 'rapid winder',
         'evf2', 'evf 2', 'sf60', 'sf 60', 'sf40', 'sf 40', 'sf24', 'sf 24',
-        'uva', 'uvb', 'uv filter', 'polariz', 'polfilter',
+        'uv filter', 'polariz', 'polfilter',
         'handgrip', 'hand grip', 'thumbs up', 'thumb up',
         'protector', 'holster', 'wrist strap', 'neck strap',
-        'motor', 'winder', 'trigger',
+        'motor winder', 'trigger',
         'correction lens', 'diopter',
     ]
     # 캡/필터는 렌즈 이름 없을 때만 악세사리
