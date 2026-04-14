@@ -896,11 +896,18 @@ def detect_category(name, price_str=""):
     # 단독 악세사리 키워드 (렌즈 이름 없이 단독으로 있는 경우)
     strict_acc_kw = [
         '후드', '스트랩', 'hood', 'strap', 'case', '케이스',
-        '파인더', 'viewfinder', 'adapter', '어댑터',
+        '파인더', 'viewfinder', 'view finder', 'finder', 'adapter', '어댑터',
         'grip', '그립', 'cover', '커버', 'pouch', '파우치',
         'charger', '충전기', 'battery', '배터리', 'cable', '케이블',
         'flash', '플래시', '리어캡', '프론트캡', 'front cap', 'rear cap',
         'eye cup', 'lens cap', 'body cap',
+        'leicavit', 'vit m', 'rapidwinder', 'rapid winder',
+        'evf2', 'evf 2', 'sf60', 'sf 60', 'sf40', 'sf 40', 'sf24', 'sf 24',
+        'uva', 'uvb', 'uv filter', 'polariz', 'polfilter',
+        'handgrip', 'hand grip', 'thumbs up', 'thumb up',
+        'protector', 'holster', 'wrist strap', 'neck strap',
+        'motor', 'winder', 'trigger',
+        'correction lens', 'diopter',
     ]
     # 캡/필터는 렌즈 이름 없을 때만 악세사리
     cap_filter_kw = ['캡', 'cap', 'filter', '필터']
