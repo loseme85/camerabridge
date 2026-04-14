@@ -875,6 +875,8 @@ LENS_PROTECT_KW = [
 # 명백한 악세사리 코드네임 (5자리 영문/숫자)
 ACCESSORY_CODES = [
     'itooy', 'irooa', 'sbooi', 'viooh', 'sbloo', 'sgvoo', 'iufoo',
+    'e39', 'e43', 'e46', 'e49', 'evf2', 'sf20', 'sf24', 'sf26', 'sf40', 'sf58', 'sf64',
+    'xooim', 'sgood', 'sbkoo', 'shooc', 'sootf', 'soogz', 'saioo', 'elpro', 'vtroo',
     'fookh', 'fison', 'tooca', 'valoo', 'itdoo', 'irooa',
     '12585', '12504', '12501', '14464', '14066', '12522', '12526',
     '12564', '12575', '12595', '14100', '14101', '14269', '14358',
@@ -885,6 +887,8 @@ def detect_category(name, price_str=""):
     n = name.lower()
     nu = name.upper()
 
+    # ── 0순위: 판매완료/보류 → Accessory ──
+    if '판매완료' in name or '보류' in name: return "Accessory"
     # ── 0순위: 악세사리 코드네임 → 무조건 Accessory ──
     if any(code in n for code in ACCESSORY_CODES):
         return "Accessory"
@@ -902,7 +906,13 @@ def detect_category(name, price_str=""):
         'flash', '플래시', '리어캡', '프론트캡', 'front cap', 'rear cap',
         'eye cup', 'lens cap', 'body cap',
         'leicavit', 'rapidwinder', 'rapid winder',
+        'e39 uva','e43 uva','e46 uva','e49 uva','43mm uva','yellow fiter','yellow filter',
+        'm motor','10x25','10×25','view finder','21-24-28mm','evf2','evf 2',
+        'sf20','sf24','sf26','sf40','sf58','sf64','sf-20','sf-26','sf-60',
+        'ultravid','ultravd','150 jahre','stemar','stereo','tripod','ball head',
         'evf2', 'evf 2', 'sf60', 'sf 60', 'sf40', 'sf 40', 'sf24', 'sf 24',
+        '21-24-28mm view','21-24-28mm','view finder','10×25','10x25','150 jahre','jahre photo','jahre photographie',
+        'bc sn','leica t ','leica ig ','visoflex',
         'uv filter', 'polariz', 'polfilter',
         'handgrip', 'hand grip', 'thumbs up', 'thumb up',
         'protector', 'holster', 'wrist strap', 'neck strap',
@@ -1289,6 +1299,44 @@ def crawl_category(page, site):
 def auto_label(name):
     """상품명에서 label 자동 감지 - 세대/조리개별 세분화"""
     n = name.lower()
+    # 판매완료/보류 → 빈 문자열
+    if re.search(r"판매완료|보류|-판매|sold out", n): return ""
+
+    # ── 판매완료/보류 포함된 상품명 ──
+    if '판매완료' in name or '보류' in name or re.search(r'^\d+\s*-\s*(판매완료|보류)', name): return ""
+
+    # ── 충무로 단축 표기 R 렌즈 (예: R 100/2.8, R 19/2.8) ──
+    _n_strip = n.strip().lstrip('[중고] ').lstrip('[위탁] ')
+    _r_lens_match = re.search(r'^r\s+(\d+)[-/]', _n_strip)
+    if _r_lens_match:
+        mm = _r_lens_match.group(1)
+        return f"{mm}mm R Lens"
+    _r_zoom_match = re.search(r'^r\s+(\d+)-(\d+)', _n_strip)
+    if _r_zoom_match:
+        return f"{_r_zoom_match.group(1)}-{_r_zoom_match.group(2)}mm R Zoom"
+    _r_zoom2 = re.search(r'^r\s+(\d+)-(\d+)\s*/\s*', _n_strip)
+    if _r_zoom2:
+        return f"{_r_zoom2.group(1)}-{_r_zoom2.group(2)}mm R Zoom"
+
+    # ── 충무로 단축 표기 S 렌즈 (예: S 35/2.5) ──
+    _s_lens_match = re.search(r'^s\s+(\d+)/', _n_strip)
+    if _s_lens_match:
+        mm = _s_lens_match.group(1)
+        return f"{mm}mm S Lens"
+
+    # ── 충무로 단축 표기 TL 렌즈 (예: TL 11-23) ──
+    _tl_match = re.search(r'^tl\s+(\d+)', _n_strip)
+    if _tl_match:
+        return "TL Lens"
+
+    # ── ZM 렌즈 (Zeiss M마운트) ──
+    if "zm " in n or " zm" in n: return "3rd Party"
+
+    # ── L 35/3.5 Summaron 오타 ──
+    if "summroan" in n: n = n.replace("summroan", "summaron")
+
+    # ── O-series (초기 바르낙) ──
+    if "o-series" in n or "o series" in n: return "Leica O-Series"
 
     # ── R 마운트 렌즈 (M 마운트보다 먼저 체크) ──
     _is_r = any(x in n for x in ["elmarit-r","summicron-r","summilux-r","apo-macro-elmarit",
@@ -1518,6 +1566,50 @@ def auto_label(name):
         if "16" in n or "21" in n: return "Tri-Elmar 16-18-21 (WATE)"
         return "Tri-Elmar 28-35-50 (MATE)"
 
+    # ── 135mm 렌즈 ──
+    if "135" in n:
+        if "elmarit" in n: return "135mm Elmarit-M"
+        if "tele-elmar" in n or "tele elmar" in n: return "135mm Tele-Elmar"
+        if "apo-telyt" in n: return "135mm APO-Telyt"
+        if "hektor" in n: return "135mm Hektor"
+
+    # ── Ffordes 표기 렌즈 (mm + F값) ──
+    import re as _re_ff
+    _ff = _re_ff.search(r'^leica\s+(\d+)mm\s+f([\d\.]+)', n)
+    if _ff:
+        mm, fval = _ff.group(1), _ff.group(2)
+        if mm=="28" and fval=="1.4": return "28mm Summilux ASPH"
+        if mm=="28" and fval in ["2.8","2"]: return "28mm Elmarit ASPH"
+        if mm=="28" and fval=="5.6": return "28mm Summaron"
+        if mm=="50" and fval=="1.0": return "50mm Noctilux f1.0"
+        if mm=="50" and fval=="1.4": return "50mm Summilux ASPH"
+        if mm=="50" and fval=="3.5": return "50mm Elmar f3.5"
+        if mm=="75" and fval=="2.5": return "75mm Summarit"
+        if mm=="90" and fval=="2.8": return "90mm Elmarit"
+        if mm=="90" and fval=="2": return "90mm Summicron"
+        if mm=="100" and fval=="2.8": return "100mm APO-Macro-Elmarit-R"
+        if mm=="135" and fval=="2.8": return "135mm Elmarit-M"
+        if mm=="280" and fval=="2.8": return "280mm APO-Telyt-R"
+        if mm=="16": return "16-35mm SL Lens"
+        if mm=="28": return f"{mm}mm Elmarit"
+        return f"{mm}mm Lens"
+    # ── 28mm Summicron ASPH (Ffordes 표기) ──
+    # 이미 Summicron 섹션에서 처리됨
+
+    # ── ELCAN ──
+    if "elcan" in n: return "50mm ELCAN"
+
+    # ── Stemar (스테레오 렌즈) ──
+    if "stemar" in n or "stereo" in n: return "Stemar"
+
+    # ── O-series ──
+    if "o-serise" in n or "o-series" in n or "o series" in n: return "Leica O-Series"
+
+    # ── 28mm F6.3 (바르낙 렌즈) ──
+    if "28" in n and "6.3" in n: return "28mm Hektor"
+
+    # ── ASPHERICAL (35mm Summilux 1세대) ──
+    if "aspherical" in n and "35" in n and "summilux" not in n: return "35mm Summilux Steel Rim"
     # ── Hektor ──
     if "hektor" in n: return "Hektor"
 
@@ -1536,12 +1628,50 @@ def auto_label(name):
         if focal in ["75","90","135","50","35","28","21"]:
             return f"{focal}mm Lens"
 
+    # ── 악세사리 (렌즈 키워드 없을 때) ──
+    if any(x in n for x in ["10×25","10x25","21-24-28mm","view finder","150 jahre","jahre photo","bc sn"]): return "Accessory"
+
     # ── Bodies M 시스템 ── (렌즈 키워드 없을 때만)
     lens_kw = ["summicron","summilux","noctilux","elmarit","elmar","summaron","nokton",
                 "angulon","hektor","summar","hologon","telyt","vario","apo"]
     if not any(kw in n for kw in lens_kw):
         for m in ["m11","m10","m9","m8","m7","m6","m4","m3","m2","mp","m-a","m240"]:
             if m in n.replace(" ",""): return f"Leica {m.upper()}"
+    # ── Q-P 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "q-p" in n.replace(" ",""): return "Leica Q-P"
+    # ── T 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if re.search(r'leica t', n) and "tl" not in n: return "Leica T"
+        if re.search(r'leica t\s+sn', n): return "Leica T"
+    # ── IG 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if re.search(r'leica ig', n): return "Leica IG"
+    # ── S-E 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "leica s-e" in n: return "Leica S-E"
+    # ── Barnack IID/IIC/IIIa ──
+    if not any(kw in n for kw in lens_kw):
+        if any(x in n for x in ["ⅱd","ⅱc","ⅲa","iid","iic","iiic","iiia","leica ⅱ","leica ⅲ","illc","illd"]): return "Leica Barnack"
+    # ── Leica C 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if re.search(r'leica c\s+sn\.', n): return "Leica C"
+    # ── T/IG 바디 (lens_kw 정의 후) ──
+    if not any(kw in n for kw in lens_kw):
+        _tn = n.replace('[중고]','').replace('[위탁]','').strip()
+        if _tn in ["t","t (silver)","t (black)"] : return "Leica T"
+        if "leica t " in n and "tl" not in n: return "Leica T"
+        if n == "leica t" or re.search(r'leica t', n) and "tl" not in n: return "Leica T"
+    if not any(kw in n for kw in lens_kw):
+        if "leica ig" in n: return "Leica IG"
+    # ── Barnack IIlC (소문자 l) ──
+    if not any(kw in n for kw in lens_kw):
+        if "illc" in n or "illd" in n or "iilc" in n or "iiic" in n: return "Leica Barnack"
+    # ── 150 JAHRE ──
+    if "jahre" in n: return "Accessory"
+    # ── Tri-Elmar MATE (28-35-50) ──
+    if "28-35-50" in n: return "Tri-Elmar 28-35-50 (MATE)"
+
     if "q3" in n: return "Leica Q3"
     if "q2" in n: return "Leica Q2"
     if "q " in n or n.endswith(" q") or "/q " in n: return "Leica Q"
@@ -1565,9 +1695,16 @@ def auto_label(name):
     # ── Leicavit / 악세사리 ──
     if "leicavit" in n: return "Leicavit"
 
-    # ── 3rd Party 브랜드 (label 없어도 됨, 명시적 처리) ──
-    _3rd_brands = ["thypoch","peace ","cooke ","oberwerth","luigi","ona ","rrs ","sekonic","artisan"]
-    if any(b in n for b in _3rd_brands): return ""
+    # ── 3rd Party 브랜드 ──
+    _3rd_brands = ["thypoch","peace ","cooke ","oberwerth","luigi","ona ","rrs ","sekonic",
+                   "artisan","coiro","carlzeiss","carl zeiss","zeiss-opton","zeiss opton",
+                   "meyer optik","cosina","voigtlander","bessa","prominent",
+                   "sigma ","lumix ","panasonic","루믹스","시그마","파나소닉",
+                   "보이그랜더","linhof","nippon kogaku","nikon","canon ","캐논","minolta",
+                   "ms-optics","laowa","light lens lab","7artisan","ttartisan",
+                   "fogg ","wotancraft","zeiss zm","zeiss biogon","zeiss 21","zeiss 25","zeiss 28","zeiss 35",
+                   "obo ob","오버베르트","오버베르","wotancraft","fogg "]
+    if any(b in n for b in _3rd_brands): return "3rd Party"
 
     # ── 악세사리 브랜드/키워드 ──
     if "be@rbrick" in n or "bebrick" in n: return "Accessory"
@@ -1580,12 +1717,163 @@ def auto_label(name):
         if mm: return f"{mm}mm SL Lens"
         return "SL Lens"
 
+    # ── R 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        for rb in ["r9","r8","r7","r6","r5","r4","r3","r-e","re "]:
+            if rb in n.replace(" ",""): return f"Leica {rb.upper().strip()}"
+
+    # ── M 바디 추가 ──
+    if not any(kw in n for kw in lens_kw):
+        if "m5" in n.replace(" ",""): return "Leica M5"
+        if "m240" in n.replace(" ","") or "typ 240" in n or "typ240" in n.replace(" ",""): return "Leica M240"
+        if "m typ 262" in n or "typ262" in n.replace(" ",""): return "Leica M262"
+
+    # ── Barnack 추가 ──
+    if not any(kw in n for kw in lens_kw):
+        for bk in ["iiid","iid ","iic ","if "]:
+            if bk in n: return "Leica Barnack"
+
+    # ── S 시스템 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        for sb in ["leica s "," s2 "," s3 "]:
+            if sb in n: return "Leica S"
+
+    # ── 악세사리 추가 ──
+    if any(x in n for x in ["ev1","trinovid","televid","leica meter","macro-adapter-r","macro adapter r",
+                              "lupe","self timer","pocket watch","extender","geovid","noctovid",
+                              "uva e","uvb e","soft release","release button",
+                              "oztno","fokos","apdoo","igemo","elpro","vtroo","xooim",
+                              "sgood","sbkoo","shooc","sootf","soogz","saioo",
+                              "sf20","sf24","sf26","sf40","sf58","sf64","sf 20","sf 24","sf 26","sf 40","sf 58","sf 64","sf-20","sf-26","sf-60",
+                              "uva slim","serie 7 uva","serie 8 uva","uvir","uv/ir",
+                              "vit m","m vit","m-vit","leicavit",
+                              "handgrip","finger loop","finger loo","system case","tabletop tripod","ball head",
+                              "leica bag","leica 가방","가방","tripod","sca-adapter",
+                              "디옵터","diopter","correction lens",
+                              "12549","12586","12521","12503","12544",
+                              "flash sf","ultravid","ultravd","a36 orange"]): return "Accessory"
+
+    # ── UVa/UV 필터 (E39/E43/E46/E49) ──
+    if re.search(r'e\d{2}\s*uva|uva\s*e\d{2}|serie\s*\d+\s*uva', n): return "Accessory"
+
+    # ── SL(Typ 601) 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "typ 601" in n or "typ601" in n.replace(" ",""): return "Leica SL"
+        if "typ 240" in n or "typ240" in n.replace(" ",""): return "Leica M240"
+        if "typ 262" in n or "typ262" in n.replace(" ",""): return "Leica M262"
+        if "tye112" in n.replace(" ",""): return "Leica C"
+        if "tye240" in n.replace(" ","") or "tye 240" in n: return "Leica M240"
+
+    # ── T/TL 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "tl2" in n.replace(" ",""): return "Leica TL2"
+        if re.search(r'leica t', n): return "Leica T"
+
+    # ── M 바디 추가 ──
+    if not any(kw in n for kw in lens_kw):
+        if "m-9p" in n.replace(" ",""): return "Leica M9-P"
+        if "m-10r" in n.replace(" ",""): return "Leica M10-R"
+        if "m-240" in n.replace(" ",""): return "Leica M240"
+        if "m-262" in n.replace(" ",""): return "Leica M262"
+        if "monocrom" in n or "monochrom" in n: return "Leica M Monochrom"
+
+    # ── X 시리즈 추가 ──
+    if not any(kw in n for kw in lens_kw):
+        if "x-u" in n.replace(" ",""): return "Leica X-U"
+        if "x-1" in n.replace(" ",""): return "Leica X1"
+        if "x-2" in n.replace(" ",""): return "Leica X2"
+        if "x-moncler" in n.replace(" ",""): return "Leica X"
+        if "x-vabio" in n.replace(" ",""): return "Leica X Vario"
+
+    # ── Ffordes R 줌렌즈 (28-70, 28-90) ──
+    import re as _re_rz
+    _rz = _re_rz.search(r'leica\s+(\d+)-(\d+)mm', n)
+    if _rz:
+        m1, m2 = _rz.group(1), _rz.group(2)
+        if "vario-elmar" in n or "super vario" in n: return f"{m1}-{m2}mm Super-Vario-Elmar"
+        return f"{m1}-{m2}mm R Zoom"
+
+    # ── LTM 렌즈 (바르낙용 줌) ──
+    if "ltm" in n:
+        import re as _re_ltm
+        mm_ltm = _re_ltm.search(r'(\d+)-(\d+)', n)
+        if mm_ltm: return f"{mm_ltm.group(1)}-{mm_ltm.group(2)}mm LTM Lens"
+        return "LTM Lens"
+
+    # ── Super-Vario-Elmar-T (TL 렌즈) ──
+    if "super-vario-elmar-t" in n or "super vario elmar t" in n:
+        import re as _re_svt
+        mm_svt = _re_svt.search(r'(\d+)-(\d+)', n)
+        if mm_svt: return f"{mm_svt.group(1)}-{mm_svt.group(2)}mm TL Lens"
+        return "TL Lens"
+
+    # ── Barnack 바디 추가 패턴 (로마숫자) ──
+    if not any(kw in n for kw in lens_kw):
+        if any(x in n for x in ["ⅰ ","ⅱ ","ⅲ ","ⅰf","ⅱf","ⅲf","ⅲg","iiig","iiif","standard nickel","model b","model c","model e","leica i ","leica ii ","leica iii "]): return "Leica Barnack"
+
+    # ── Leica C 렌즈 ──
+    if re.search(r'leica c\s+\d+/', n): return "Leica C Lens"
+
+    # ── Leica CL kit ──
+    if "cl vario" in n or "cl kit" in n: return "Leica CL"
+
+    # ── Xenon (바르낙 렌즈) ──
+    if "xenon" in n: return "50mm Xenon"
+
+    # ── CM/C 컴팩트 ──
+    if not any(kw in n for kw in lens_kw):
+        if "cm zoom" in n or "leica cm" in n: return "Leica CM"
+        if re.search(r'leica c', n) and "40" not in n: return "Leica C"
+
+    # ── M1 바디 ──
+    if not any(kw in n for kw in lens_kw):
+        if "m1 " in n or n.endswith("m1"): return "Leica M1"
+
+    # ── S 시스템 렌즈 ──
+    if re.search(r's\s*\d+/', n) or re.search(r's\s*\d+mm', n):
+        import re as _re_s
+        mm_s = _re_s.search(r'(\d+)(?:mm|/)', n)
+        mm = mm_s.group(1) if mm_s else ""
+        if mm: return f"{mm}mm S Lens"
+
     # ── M-D 바디 ──
     if not any(kw in n for kw in lens_kw):
         if "m-d" in n.replace(" ",""): return "Leica M-D"
 
-    # ── 오타 보정 (summicrom → summicron) ──
+    # ── 오타 보정 ──
     if "summicrom" in n: n = n.replace("summicrom","summicron")
+    if "summiarit" in n: n = n.replace("summiarit","summarit")
+    if "loctilux" in n: n = n.replace("loctilux","noctilux")
+    if "elmatit" in n: n = n.replace("elmatit","elmarit")
+    if "apo-sumicron" in n: n = n.replace("apo-sumicron","apo-summicron")
+    if "summcron" in n: n = n.replace("summcron","summicron")
+    if "summmicron" in n: n = n.replace("summmicron","summicron")
+    if "summicton" in n: n = n.replace("summicton","summicron")
+    if "suimmilux" in n: n = n.replace("suimmilux","summilux")
+    if "eleamrit" in n: n = n.replace("eleamrit","elmarit")
+    if "elemarit" in n: n = n.replace("elemarit","elmarit")
+    if "tri-elamr" in n: n = n.replace("tri-elamr","tri-elmar")
+    if "tri elamr" in n: n = n.replace("tri elamr","tri-elmar")
+    if "suimmilux" in n: n = n.replace("suimmilux","summilux")
+    if "summcron-c" in n: n = n.replace("summcron-c","summicron")
+    if "apo-sumicron" in n: n = n.replace("apo-sumicron","apo-summicron")
+    if "summmicron" in n: n = n.replace("summmicron","summicron")
+    if "super -elmar" in n: n = n.replace("super -elmar","super-elmar")
+    if "super-angvlon" in n: n = n.replace("super-angvlon","super-angulon")
+    if "eleamrit" in n or "elemarit" in n: n = re.sub(r'ele[am]arit','elmarit',n)
+    if "summicton" in n: n = n.replace("summicton","summicron")
+    if "summicrom" in n: n = n.replace("summicrom","summicron")
+    if "suimmilux" in n: n = re.sub(r'sui+mmilux','summilux',n)
+    if "summcron-c" in n: n = n.replace("summcron-c","summicron-c")
+    if "summcron" in n: n = n.replace("summcron","summicron")
+    if "summmicron" in n: n = n.replace("summmicron","summicron")
+    if "summroan" in n: n = n.replace("summroan","summaron")
+    if "eleamrit" in n: n = n.replace("eleamrit","elmarit")
+    if re.search(r'el[ea]marit', n): n = re.sub(r'el[ea]marit','elmarit',n)
+    if "apo-sumicron" in n: n = n.replace("apo-sumicron","apo-summicron")
+    if "super -elmar" in n: n = n.replace("super -elmar","super-elmar")
+    if "super-angvlon" in n: n = n.replace("super-angvlon","super-angulon")
+    if "summiarit" in n: n = n.replace("summiarit","summarit")
 
     # ── Barnack 바디 ──
     if not any(kw in n for kw in lens_kw):
@@ -1625,6 +1913,9 @@ def auto_label(name):
 
     # ── Summitar (L39) ──
     if "summitar" in n: return "50mm Summitar"
+
+    # ── 세트 매물 (여러 렌즈) ──
+    if re.search(r'\d+mm/\d+mm|\d+mm\s*/\s*\d+mm', n): return "Set"
 
     # ── Visoflex ──
     if "visoflex" in n: return "Visoflex"
