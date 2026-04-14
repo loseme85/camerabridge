@@ -2891,6 +2891,10 @@ def crawl_all():
         name_lower = name.lower()
         # system/category 분류
         r['category'] = detect_category(r['상품명'], r.get('가격', ''))
+        # label 항상 재계산 (코드 업데이트 반영)
+        r['label'] = auto_label(r['상품명'])
+        r['mount'] = detect_mount(r['상품명'])
+        r['brand'] = detect_brand(r['상품명'])
         if r['category'] == 'Accessory':
             r['label'] = ''  # Accessory는 label 제거 (평균가 왜곡 방지)
         r['mount'] = detect_mount(r['상품명'])
