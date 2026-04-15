@@ -249,6 +249,46 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
 </div></main>
 
 <script>
+// ── QA 대시보드 로드 ──
+async function loadQADashboard() {
+  try {
+    const [qaRes, priceRes] = await Promise.all([
+      fetch('/data/derived/qa_report_latest.json'),
+      fetch('/data/derived/market_prices.json')
+    ]);
+    const qa = await qaRes.json();
+    const prices = await priceRes.json();
+
+    document.getElementById('qa-label-acc').textContent = qa.label_accuracy + '%';
+    document.getElementById('qa-mount-acc').textContent = qa.mount_accuracy + '%';
+    document.getElementById('qa-market-count').textContent = Object.keys(prices).length + '개';
+    document.getElementById('qa-sold-count').textContent = (qa.sold_quality?.confirmed || 0).toLocaleString() + '개';
+
+    window._allPrices = Object.entries(prices).sort((a,b) => b[1].sample_count - a[1].sample_count);
+    renderPriceTable(window._allPrices);
+  } catch(e) { console.error(e); }
+}
+
+function renderPriceTable(entries) {
+  const fmt = n => n ? '₩' + n.toLocaleString() : '—';
+  const tbody = document.getElementById('price-table-body');
+  tbody.innerHTML = entries.map(([label, d]) => `
+    <tr style="border-top:1px solid var(--border);cursor:pointer;" onclick="document.getElementById('qa-input').value='${label}';runQA();" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
+      <td style="padding:8px 16px;color:var(--text);">${label}</td>
+      <td style="padding:8px 16px;text-align:right;color:var(--leica);font-weight:600;">${fmt(d.weighted_median)}</td>
+      <td style="padding:8px 16px;text-align:right;color:var(--muted);font-size:10px;">${fmt(d.min)} ~ ${fmt(d.max)}</td>
+      <td style="padding:8px 16px;text-align:right;color:var(--muted);">${d.sample_count}</td>
+    </tr>`).join('');
+}
+
+function filterPrices() {
+  const q = document.getElementById('price-search').value.toLowerCase();
+  const filtered = (window._allPrices || []).filter(([label]) => label.toLowerCase().includes(q));
+  renderPriceTable(filtered);
+}
+
+loadQADashboard();
+
 // ══════════════════════════════════════════════════════
 // 검색 로직 — index.html 완전 동일 복사본
 // ※ 이 블록은 index.html의 것과 항상 동일해야 함
