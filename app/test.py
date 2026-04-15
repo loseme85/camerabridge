@@ -1379,14 +1379,18 @@ def auto_label(name):
     if "noctilux" in n or "loctilux" in n:
         if "0.95" in n: return "50mm Noctilux f0.95"
         if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
-        if "1.2" in n and "1.25" not in n: return "50mm Noctilux f1.2"
+        if "1.2" in n and "1.25" not in n:
+            # 복각 여부 확인
+            _3rd_nocti = ['light lens lab','lll','복각','thypoch','ttartisan','7artisan','voigtlander nokton']
+            if any(k in n for k in _3rd_nocti): return "50mm Noctilux f1.2 복각"
+            return "50mm Noctilux f1.2"
         if "original" in n: return "50mm Noctilux f1.2"  # 충무로 1세대 표기
         if "1.0" in n: return "50mm Noctilux f1.0"
         return "Noctilux"
-    # 복각 + 1.2 → Noctilux f1.2
+    # 복각 + 1.2 → Noctilux f1.2 복각
     _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
     if '복각' in n and '1.2' in n and not any(k in n for k in _nocti_exc):
-        return "50mm Noctilux f1.2"
+        return "50mm Noctilux f1.2 복각"
 
     # 충무로/장씨 약식: "M 50/1.2", "M50/1.2", "복각" 등 → Noctilux 추론
     if not any(k in n for k in _nocti_exc):
@@ -1489,7 +1493,18 @@ def auto_label(name):
             if "50 jahre" in n or "50주년" in n: return "50mm Summicron 50th"
             if "black paint" in n or "blackpaint" in n: return "50mm Summicron Black Paint"
             if "sl " in n or "/sl" in n or "summicron-sl" in n: return "50mm Summicron SL"
+            if "토륨" in n or "thorium" in n: return "50mm Summicron 토륨"
             if "2세대" in n or "3세대" in n or "4세대" in n: return "50mm Summicron (올드)"
+            # 시리얼 번호로 세대 추론
+            import re as _re_sn50
+            _sn50 = _re_sn50.search(r'sn\.(\d+)', n)
+            if _sn50:
+                _sn50_num = int(_sn50.group(1)[:4])
+                if _sn50_num <= 1600: return "50mm Summicron (침동)"
+                if _sn50_num <= 2200: return "50mm Summicron Rigid"
+                if _sn50_num <= 3000: return "50mm Summicron DR"
+                if _sn50_num <= 3500: return "50mm Summicron (올드)"
+                return "50mm Summicron"
             return "50mm Summicron"
         # 35mm 세분화
         if mm == "35":
@@ -1508,7 +1523,15 @@ def auto_label(name):
                 if "eye" in n and "summicron" in n: return "35mm Summicron Eye"
             if "asph" in n: return "35mm Summicron ASPH"
             if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
-            if "6매" in n or "6-el" in n: return "35mm Summicron (6매)"
+            if "6매" in n or "6-el" in n: return "35mm Summicron v2"
+            # 시리얼 번호로 세대 추론
+            import re as _re_sn
+            _sn = _re_sn.search(r'sn\.(\d+)', n)
+            if _sn:
+                _sn_num = int(_sn.group(1)[:4])
+                if _sn_num <= 2315: return "35mm Summicron 1st (8매)"
+                if _sn_num <= 2974: return "35mm Summicron v2"
+                if _sn_num <= 3799: return "35mm Summicron v4"
             return "35mm Summicron"
         # 28mm 세분화
         if mm == "28":
