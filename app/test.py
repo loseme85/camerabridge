@@ -1419,6 +1419,15 @@ def auto_label(name):
         # 35mm 세분화
         if mm == "35":
             if "f2" in n and "asph" in n: return "35mm Summicron ASPH"
+            if "f2" in n or "summicron" in n:
+                if "8 element" in n or "8element" in n or "8매" in n: return "35mm Summicron 8-element"
+                if "1세대" in n or "1st" in n: return "35mm Summicron 8-element"
+                if "2세대" in n or "2nd" in n: return "35mm Summicron v2"
+                if "4세대" in n or "4th" in n: return "35mm Summicron v4"
+                if "5세대" in n or "5th" in n: return "35mm Summicron v5"
+                if "millennium" in n: return "35mm Summicron Millennium"
+                if "your mark" in n: return "35mm Summicron Your Mark"
+                if "eye" in n and "summicron" in n: return "35mm Summicron Eye"
             if "aspherical" in n: return "35mm Summilux AA"
             if any(kw in n for kw in ["2매","2 매","두매","double"," aa ","(aa)"]): return "35mm Summilux AA"
             if "fle ii" in n or "fle2" in n: return "35mm Summilux ASPH FLE II"
@@ -1471,11 +1480,24 @@ def auto_label(name):
             if "dr" in n or "dual" in n: return "50mm Summicron DR"
             if "rigid" in n: return "50mm Summicron Rigid"
             if "침동" in n or "collapsible" in n: return "50mm Summicron (침동)"
+            if "6bit" in n or "6 bit" in n: return "50mm Summicron 6bit"
+            if "50 jahre" in n or "50주년" in n: return "50mm Summicron 50th"
+            if "black paint" in n or "blackpaint" in n: return "50mm Summicron Black Paint"
+            if "sl " in n or "/sl" in n or "summicron-sl" in n: return "50mm Summicron SL"
             if "2세대" in n or "3세대" in n or "4세대" in n: return "50mm Summicron (올드)"
             return "50mm Summicron"
         # 35mm 세분화
         if mm == "35":
             if "f2" in n and "asph" in n: return "35mm Summicron ASPH"
+            if "f2" in n or "summicron" in n:
+                if "8 element" in n or "8element" in n or "8매" in n: return "35mm Summicron 8-element"
+                if "1세대" in n or "1st" in n: return "35mm Summicron 8-element"
+                if "2세대" in n or "2nd" in n: return "35mm Summicron v2"
+                if "4세대" in n or "4th" in n: return "35mm Summicron v4"
+                if "5세대" in n or "5th" in n: return "35mm Summicron v5"
+                if "millennium" in n: return "35mm Summicron Millennium"
+                if "your mark" in n: return "35mm Summicron Your Mark"
+                if "eye" in n and "summicron" in n: return "35mm Summicron Eye"
             if "asph" in n: return "35mm Summicron ASPH"
             if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
             if "6매" in n or "6-el" in n: return "35mm Summicron (6매)"

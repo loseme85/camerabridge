@@ -90,21 +90,30 @@ def compute_market_prices(sold_quality_path: str = "data/derived/sold_quality_la
 
     return results
 
-if __name__ == "__main__":
+# 시세 계산에서 제외할 generic label
+EXCLUDED_LABELS = {
+    "3rd Party", "Set", "Accessory", "Visoflex", "Leicavit",
+    "50mm Lens", "35mm Lens", "28mm Lens", "21mm Lens", "90mm Lens",
+    "75mm Lens", "135mm Lens", "TL Lens", "SL Lens", "R Lens", "S Lens",
+    "LTM Lens", "Hektor", "Leica C Lens",
+}
+
+def save_market_prices(output_path: str = "data/derived/market_prices.json"):
+    """시세 계산 결과 저장"""
+    import json as _json
     results = compute_market_prices()
+    # Generic/Bucket 라벨 제외
+    results = {k: v for k, v in results.items() if k not in EXCLUDED_LABELS}
+    with open(output_path, "w", encoding="utf-8") as f:
+        _json.dump(results, f, ensure_ascii=False, indent=2)
+    print(f"  💰 시세 저장 → {output_path} ({len(results)}개 label)")
+    return results
+
+if __name__ == "__main__":
+    results = save_market_prices()
     print(f"시세 산출 완료: {len(results)}개 label")
     for label, data in sorted(results.items(), key=lambda x: -x[1]["sample_count"])[:20]:
         wmed = f"{data['weighted_median']:,}"
         cnt = data['sample_count']
         print(f"  {label:40s} {wmed:>12s}원  ({cnt}개)")
 
-def save_market_prices(output_path: str = "data/derived/market_prices.json"):
-    """시세 계산 결과 저장"""
-    import json as _json
-    results = compute_market_prices()
-    # 3rd Party 제외
-    results = {k: v for k, v in results.items() if k != "3rd Party"}
-    with open(output_path, "w", encoding="utf-8") as f:
-        _json.dump(results, f, ensure_ascii=False, indent=2)
-    print(f"  💰 시세 저장 → {output_path} ({len(results)}개 label)")
-    return results
