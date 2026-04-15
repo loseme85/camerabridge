@@ -3,12 +3,7 @@
     { "source": "/", "destination": "/app/templates/index.html" },
     { "source": "/admin.html", "destination": "/app/templates/admin.html" },
     { "source": "/qa.html", "destination": "/app/templates/qa.html" },
-    { "source": "/api/telegram", "destination": "/api/telegram.py" }
-  ],
-  "headers": [
-    {
-      "source": "/data/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
-    }
+    { "source": "/api/telegram", "destination": "/api/telegram.py" },
+    { "source": "/data/:path*", "destination": "/data/:path*" }
   ]
 }
