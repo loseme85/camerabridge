@@ -121,6 +121,46 @@ main{max-width:1200px;margin:0 auto;padding:24px;}
   <span class="badge">QA TOOL</span>
 </header>
 <main>
+  <!-- QA 대시보드 -->
+  <div id="qa-dashboard" style="margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px 16px;">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Label 정확도</div>
+        <div id="qa-label-acc" style="font-size:24px;font-weight:700;color:#2ecc71;">—</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px 16px;">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Mount 정확도</div>
+        <div id="qa-mount-acc" style="font-size:24px;font-weight:700;color:#2ecc71;">—</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px 16px;">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">시세 산출 Label</div>
+        <div id="qa-market-count" style="font-size:24px;font-weight:700;color:var(--text);">—</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:14px 16px;">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Sold 데이터</div>
+        <div id="qa-sold-count" style="font-size:24px;font-weight:700;color:var(--text);">—</div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">// Market Prices</div>
+        <input id="price-search" type="text" placeholder="렌즈명 검색..." oninput="filterPrices()" style="font-family:'Space Mono',monospace;font-size:11px;padding:4px 8px;border:1px solid var(--border);border-radius:2px;background:var(--surface2);color:var(--text);width:180px;">
+      </div>
+      <div style="max-height:320px;overflow-y:auto;">
+        <table style="width:100%;border-collapse:collapse;font-family:'Space Mono',monospace;font-size:11px;">
+          <thead>
+            <tr style="position:sticky;top:0;background:var(--surface2);">
+              <th style="padding:8px 16px;text-align:left;color:var(--muted);font-weight:400;font-size:9px;letter-spacing:1px;">LABEL</th>
+              <th style="padding:8px 16px;text-align:right;color:var(--muted);font-weight:400;font-size:9px;letter-spacing:1px;">WEIGHTED MEDIAN</th>
+              <th style="padding:8px 16px;text-align:right;color:var(--muted);font-weight:400;font-size:9px;letter-spacing:1px;">RANGE</th>
+              <th style="padding:8px 16px;text-align:right;color:var(--muted);font-weight:400;font-size:9px;letter-spacing:1px;">SAMPLES</th>
+            </tr>
+          </thead>
+          <tbody id="price-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   <!-- 검색 영역 -->
   <div class="search-box">
