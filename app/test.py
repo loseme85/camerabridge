@@ -3212,6 +3212,31 @@ def crawl_all():
         print(f"  📊 QA 리포트 → label정확도:{_qa_report['label_accuracy']}% mount정확도:{_qa_report['mount_accuracy']}%")
     except Exception as _e:
         print(f"  ⚠️ QA 리포트 실패: {_e}")
+    # ── 시세 엔진 실행 ──
+    try:
+        import sys as _sys_pe
+        _sys_pe.path.insert(0, ".")
+        from app.services.price_engine import save_market_prices
+        save_market_prices("data/derived/market_prices.json")
+    except Exception as _e_pe:
+        print(f"  ⚠️ 시세 엔진 실패: {_e_pe}")
+    # ── 시세 엔진 실행 ──
+    try:
+        import sys as _sys_pe
+        _sys_pe.path.insert(0, ".")
+        from app.services.price_engine import save_market_prices
+        save_market_prices()
+    except Exception as _e_pe:
+        print(f"  ⚠️ 시세 엔진 실패: {_e_pe}")
+
+    # ── 시세 엔진 실행 ──
+    try:
+        import sys as _sys
+        _sys.path.insert(0, ".")
+        from app.services.price_engine import save_market_prices
+        save_market_prices("data/derived/market_prices.json")
+    except Exception as _e:
+        print(f"  ⚠️ 시세 엔진 실패: {_e}")
     # ── crawl_sessions.json 누적 저장 ──
     import datetime as _dt3
     _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
