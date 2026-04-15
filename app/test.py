@@ -3155,7 +3155,10 @@ def crawl_all():
         _qa_time = _dt_qa.datetime.now(_KST_qa).strftime("%Y-%m-%d %H:%M:%S")
         # 기본 통계
         _total = len(unique_results)
-        _no_label = sum(1 for r in unique_results if not r.get("label"))
+        # label 정확도 계산 시 Accessory 제외 (Accessory는 label 없어도 정상)
+        _non_acc = [r for r in unique_results if r.get("category") != "Accessory"]
+        _no_label = sum(1 for r in _non_acc if not r.get("label"))
+        _total_for_accuracy = len(_non_acc)
         _no_mount = sum(1 for r in unique_results if not r.get("mount") or r.get("mount")=="Unknown")
         _no_price = sum(1 for r in unique_results if not r.get("가격"))
         _for_sale = sum(1 for r in unique_results if not r.get("품절"))
@@ -3189,7 +3192,7 @@ def crawl_all():
             "no_label": _no_label,
             "no_mount": _no_mount,
             "no_price": _no_price,
-            "label_accuracy": round((_total - _no_label) / _total * 100, 1) if _total else 0,
+            "label_accuracy": round((_total_for_accuracy - _no_label) / _total_for_accuracy * 100, 1) if _total_for_accuracy else 0,
             "mount_accuracy": round((_total - _no_mount) / _total * 100, 1) if _total else 0,
             "site_counts": _site_counts,
             "top_labels": _label_counts,
