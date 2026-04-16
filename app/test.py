@@ -1431,6 +1431,177 @@ def auto_label(name):
     # ── Summarex (85mm 희귀 렌즈) ──
     if "summarex" in n: return "85mm Summarex"
 
+    # ── Thambar (소프트 포커스) ──
+    if "thambar" in n:
+        if "복각" in n or "reissue" in n or "modern" in n: return "90mm Thambar-M (복각)"
+        return "90mm Thambar"
+
+    # ── Noctilux 35mm (2025) ──
+    if "noctilux" in n and "35" in n: return "35mm Noctilux f1.2 ASPH"
+
+    # ── Noctilux 75mm ──
+    if "noctilux" in n and "75" in n: return "75mm Noctilux f1.25"
+
+    # ── Summaron-M 28mm 현대 복각 ──
+    if "summaron" in n and "28" in n:
+        if "복각" in n or "reissue" in n or "-m" in n: return "28mm Summaron-M (복각)"
+        return "28mm Summaron"
+
+    # ── Super-Angulon 21mm 세분화 ──
+    if "super-angulon" in n or "super angulon" in n:
+        if "3.4" in n: return "21mm Super-Angulon f3.4"
+        if "4" in n: return "21mm Super-Angulon f4"
+        return "21mm Super-Angulon"
+
+    # ── Tele-Elmarit 90mm FAT/THIN ──
+    if "tele-elmarit" in n or "tele elmarit" in n:
+        if "thin" in n: return "90mm Tele-Elmarit (THIN)"
+        if "fat" in n: return "90mm Tele-Elmarit (FAT)"
+        return "90mm Tele-Elmarit"
+
+    # ── Elmarit-C 40mm (CL용 희귀) ──
+    if "elmarit-c" in n or ("elmarit" in n and "40" in n and "c " in n): return "40mm Elmarit-C"
+
+    # ── Summicron-C 40mm (CL용) ──
+    if "summicron-c" in n or ("summicron" in n and "40" in n): return "40mm Summicron-C"
+
+    # ── Summarit-M 세분화 ──
+    if "summarit" in n and ("-m" in n or "summarit-m" in n):
+        if "35" in n:
+            if "2.4" in n: return "35mm Summarit-M f2.4"
+            return "35mm Summarit-M f2.5"
+        if "50" in n:
+            if "2.4" in n: return "50mm Summarit-M f2.4"
+            return "50mm Summarit-M f2.5"
+        if "75" in n:
+            if "2.4" in n: return "75mm Summarit-M f2.4"
+            return "75mm Summarit-M f2.5"
+        if "90" in n:
+            if "2.4" in n: return "90mm Summarit-M f2.4"
+            return "90mm Summarit-M f2.5"
+
+    # ── Summilux-M 90mm ──
+    if "summilux" in n and "90" in n: return "90mm Summilux ASPH"
+
+    # ── APO-Summicron-M 90mm ──
+    if "apo" in n and "summicron" in n and "90" in n: return "90mm APO-Summicron"
+
+    # ── Elmar-C 90mm (CL용) ──
+    if "elmar-c" in n or ("elmar" in n and "90" in n and "elmarit" not in n and "c " in n): return "90mm Elmar-C"
+
+    # ── Super-Elmar-M 21mm ──
+    if ("super-elmar" in n or "super elmar" in n) and "21" in n: return "21mm Super-Elmar ASPH"
+
+    # ── Elmar-M 24mm ──
+    if "elmar" in n and "24" in n and "elmarit" not in n and "super" not in n: return "24mm Elmar-M"
+
+    # ── Summilux-M 24mm ──
+    if "summilux" in n and "24" in n: return "24mm Summilux ASPH"
+
+    # ── Elmarit-M 135mm 세분화 ──
+    if "elmarit" in n and "135" in n:
+        if "1세대" in n or "1st" in n or "i " in n: return "135mm Elmarit-M v1"
+        if "2세대" in n or "2nd" in n or "ii " in n: return "135mm Elmarit-M v2"
+        if "3세대" in n or "3rd" in n: return "135mm Elmarit-M v3"
+        return "135mm Elmarit-M"
+
+    # ── Hektor 5cm/50mm ──
+    if "hektor" in n and ("5cm" in n or "50" in n or "5.0" in n): return "50mm Hektor"
+
+    # ── Hektor ──
+    if "hektor" in n:
+        if "7.3" in n or "73" in n: return "73mm Hektor"
+        if "13.5" in n or "135" in n: return "135mm Hektor"
+        if "5" in n or "50" in n: return "50mm Hektor"
+        if "2.8" in n or "28" in n: return "28mm Hektor"
+        return "Hektor"
+
+    # ── Elmar 세분화 ──
+    if "elmar" in n and "elmarit" not in n and "tri" not in n and "super" not in n and "tele" not in n and "macro" not in n and "vario" not in n:
+        if "105" in n or "10.5" in n: return "105mm Elmar"
+        if "135" in n or "13.5" in n: return "135mm Elmar"
+        if "90" in n or "9cm" in n: return "90mm Elmar"
+        if "73" in n or "7.3" in n: return "73mm Elmar"
+        if "65" in n: return "65mm Elmar"
+        if "24" in n: return "24mm Elmar"
+        if "18" in n: return "18mm Elmar"
+
+    # ── Summarit-M (현행) ──
+    if "summarit" in n and "-m" in n:
+        if "35" in n: return "35mm Summarit-M"
+        if "50" in n: return "50mm Summarit-M"
+        if "75" in n: return "75mm Summarit-M"
+        if "90" in n: return "90mm Summarit-M"
+        return "Summarit-M"
+
+    # ── APO-Summicron-M 35mm ──
+    if "apo" in n and "summicron" in n and "35" in n: return "35mm APO-Summicron"
+
+    # ── Summilux-M 28mm ──
+    if "summilux" in n and "28" in n: return "28mm Summilux ASPH"
+
+    # ── Summilux-M 24mm ──
+    if "summilux" in n and "24" in n: return "24mm Summilux ASPH"
+
+    # ── Summilux-M 90mm ──
+    if "summilux" in n and "90" in n: return "90mm Summilux ASPH"
+
+    # ── Summicron-M 35mm Classic Line ──
+    if "classic line" in n and "35" in n: return "35mm Summilux Classic Line"
+    if "classic line" in n and "50" in n: return "50mm Summilux Classic Line"
+
+    # ── Noctilux-M 35mm (2025) ──
+    if "noctilux" in n and "35" in n: return "35mm Noctilux f1.2"
+
+    # ── APO-Summicron-M 75mm ──
+    if "apo" in n and "summicron" in n and "75" in n: return "75mm APO-Summicron"
+
+    # ── Summilux-M 21mm ──
+    if "summilux" in n and "21" in n: return "21mm Summilux ASPH"
+
+    # ── Super-Elmar-M 18mm / 21mm ──
+    if "super-elmar" in n or "super elmar" in n:
+        if "18" in n: return "18mm Super-Elmar"
+        if "21" in n: return "21mm Super-Elmar"
+
+    # ── Elmar-M 24mm ──
+    if "elmar" in n and "24" in n and "elmarit" not in n: return "24mm Elmar"
+
+    # ── Summaron-M 28mm (현대 복각) ──
+    if "summaron" in n and "28" in n: return "28mm Summaron"
+
+    # ── Elmarit-C 40mm (CL용) ──
+    if "elmarit" in n and ("40" in n or "elmarit-c" in n): return "40mm Elmarit-C"
+
+    # ── Macro-Elmar-M 90mm ──
+    if "macro" in n and "elmar" in n and "90" in n: return "90mm Macro-Elmar"
+
+    # ── APO-Telyt-M 135mm ──
+    if "apo" in n and "telyt" in n and "135" in n: return "135mm APO-Telyt"
+
+    # ── Tele-Elmar 135mm ──
+    if "tele-elmar" in n or "tele elmar" in n:
+        if "135" in n: return "135mm Tele-Elmar"
+
+    # ── Anastigmat 50mm (초기) ──
+    if "anastigmat" in n: return "50mm Anastigmat"
+
+    # ── Summar 50mm ──
+    if "summar" in n and "summaron" not in n and "summarit" not in n and "summarex" not in n and "summicron" not in n and "summilux" not in n:
+        return "50mm Summar"
+
+    # ── Summitar 50mm ──
+    if "summitar" in n: return "50mm Summitar"
+
+    # ── Xenon 50mm ──
+    if "xenon" in n: return "50mm Xenon"
+
+    # ── WATE (Tri-Elmar 16-18-21) ──
+    if "wate" in n or ("tri-elmar" in n and "16" in n): return "Tri-Elmar 16-18-21 (WATE)"
+
+    # ── MATE (Tri-Elmar 28-35-50) ──
+    if "mate" in n or ("tri-elmar" in n and "28" in n and "35" in n): return "Tri-Elmar 28-35-50 (MATE)"
+
     # ── Summilux 세대별 ──
     if "summilux" in n:
         import re as _re3
