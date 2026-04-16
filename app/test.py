@@ -1316,6 +1316,31 @@ def auto_label(name):
     # 판매완료/보류 → 빈 문자열
     if re.search(r"판매완료|보류|-판매|sold out", n): return ""
 
+    # ── D-LUX/V-LUX/Digilux/Minilux (X시리즈보다 먼저) ──
+    if "d-lux" in n or "d lux" in n:
+        if "109" in n or "typ 109" in n: return "Leica D-LUX Typ 109"
+        for v in ["8","7","6","5","4","3","2"]:
+            if f"lux{v}" in n.replace(" ","").replace("-","") or f"lux {v}" in n: return f"Leica D-LUX {v}"
+        return "Leica D-LUX"
+    if "v-lux" in n or "v lux" in n:
+        if "114" in n or "typ 114" in n: return "Leica V-LUX Typ 114"
+        for v in ["5","4","3","2","1"]:
+            if f"lux{v}" in n.replace(" ","").replace("-","") or f"lux {v}" in n: return f"Leica V-LUX {v}"
+        return "Leica V-LUX"
+    if "digilux" in n:
+        for v in ["3","2","1"]:
+            if v in n: return f"Leica Digilux {v}"
+        return "Leica Digilux"
+    if "minilux" in n:
+        if "zoom" in n: return "Leica Minilux Zoom"
+        return "Leica Minilux"
+
+    # ── Leicaflex (SL2보다 먼저) ──
+    if "leicaflex" in n:
+        if "sl2" in n.replace(" ",""): return "Leicaflex SL2"
+        if "sl" in n: return "Leicaflex SL"
+        return "Leicaflex"
+
     # ── 판매완료/보류 포함된 상품명 ──
     if '판매완료' in name or '보류' in name or re.search(r'^\d+\s*-\s*(판매완료|보류)', name): return ""
 
@@ -1402,6 +1427,9 @@ def auto_label(name):
             return "50mm Noctilux f0.95"
         if re.search(r'\b50/1\.0\b', n):
             return "50mm Noctilux f1.0"
+
+    # ── Summarex (85mm 희귀 렌즈) ──
+    if "summarex" in n: return "85mm Summarex"
 
     # ── Summilux 세대별 ──
     if "summilux" in n:
@@ -2013,7 +2041,8 @@ def auto_label(name):
 
     # ── CM/C 컴팩트 ──
     if not any(kw in n for kw in lens_kw):
-        if "cm zoom" in n or "leica cm" in n: return "Leica CM"
+        if "cm zoom" in n or "cm-zoom" in n: return "Leica CM Zoom"
+        if "leica cm" in n: return "Leica CM"
         if re.search(r'leica c', n) and "40" not in n: return "Leica C"
 
     # ── M1 바디 ──
@@ -2083,6 +2112,36 @@ def auto_label(name):
 
     # ── Visoflex ──
     if "visoflex" in n: return "Visoflex"
+
+    # ── D-LUX 시리즈 ──
+    if "d-lux" in n or "d lux" in n:
+        _dlux = n.replace("d-lux","").replace("d lux","").replace("dlux","").strip()
+        if "109" in _dlux or "typ 109" in _dlux: return "Leica D-LUX Typ 109"
+        for v in ["8","7","6","5","4","3"]:
+            if _dlux.startswith(v) or f" {v}" in _dlux or _dlux.endswith(v): return f"Leica D-LUX {v}"
+        return "Leica D-LUX"
+
+    # ── V-LUX 시리즈 ──
+    if "v-lux" in n or "v lux" in n:
+        _vlux = n.replace("v-lux","").replace("v lux","").replace("vlux","").strip()
+        if "114" in _vlux or "typ 114" in _vlux: return "Leica V-LUX Typ 114"
+        for v in ["5","4","3","2","1"]:
+            if _vlux.startswith(v) or f" {v}" in _vlux or _vlux.endswith(v): return f"Leica V-LUX {v}"
+        return "Leica V-LUX"
+
+    # ── Digilux 시리즈 ──
+    if "digilux" in n:
+        for v in ["3","2","1"]:
+            if v in n: return f"Leica Digilux {v}"
+        return "Leica Digilux"
+
+    # ── Minilux ──
+    if "minilux" in n:
+        if "zoom" in n: return "Leica Minilux Zoom"
+        return "Leica Minilux"
+
+    # ── CM Zoom ──
+    if "cm zoom" in n or "cm-zoom" in n: return "Leica CM Zoom"
 
     # ── Sofort ──
     if "sofort" in n: return "Leica Sofort"
