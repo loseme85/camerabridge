@@ -55,6 +55,7 @@ jobs:
           git stash pop
           git add -f data/ crawler/sessions/
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
+          git pull --rebase origin main
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
