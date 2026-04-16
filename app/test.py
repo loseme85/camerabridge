@@ -1478,6 +1478,13 @@ def auto_label(name):
             if "2세대" in n or "2nd" in n or "pre" in n: return "35mm Summilux Pre-ASPH"
             if "3세대" in n or "3rd" in n: return "35mm Summilux Pre-ASPH"
             if "4세대" in n or "4th" in n: return "35mm Summilux ASPH"
+            import re as _re_sn35lux
+            _sn35lux = _re_sn35lux.search(r'sn\.(\d+)', n)
+            if _sn35lux:
+                _num = int(_sn35lux.group(1)[:4])
+                if _num <= 1999: return "35mm Summilux Steel Rim"
+                if _num <= 3419: return "35mm Summilux Pre-ASPH"
+                return "35mm Summilux ASPH"
             return "35mm Summilux"
         # 50mm 세분화
         if mm == "50":
@@ -1496,7 +1503,12 @@ def auto_label(name):
                 return "50mm Summilux (올드)"
             return "50mm Summilux"
         # 75mm
-        if mm == "75": return "75mm Summilux"
+        if mm == "75":
+            if "캐나다" in n or "canada" in n: return "75mm Summilux (캐나다)"
+            if "독일" in n or "germany" in n or "made in germany" in n: return "75mm Summilux (독일)"
+            if "1세대" in n or "1st" in n: return "75mm Summilux (캐나다)"
+            if "2세대" in n or "2nd" in n: return "75mm Summilux (독일)"
+            return "75mm Summilux"
         # 90mm
         if mm == "90":
             if "asph" in n: return "90mm Summilux ASPH"
@@ -1619,6 +1631,7 @@ def auto_label(name):
             if "vario" in n: return "28mm Vario-Elmarit"
             return "28mm Elmarit"
         if mm == "90":
+            if "vario" in n: return "24-90mm Vario-Elmarit SL"
             if "asph" in n: return "90mm Elmarit ASPH"
             if "tele" in n: return "90mm Tele-Elmarit"
             import re as _re_sn90
@@ -1767,6 +1780,10 @@ def auto_label(name):
             if "ttl" in n: return "Leica M6 TTL"
             if "복각" in n or "replica" in n: return "Leica M6 복각"
             if "big logo" in n or "big-logo" in n: return "Leica M6 (Big Logo)"
+            if "panda" in n: return "Leica M6 Panda"
+            if "0.85" in n: return "Leica M6 0.85"
+            if "0.58" in n: return "Leica M6 0.58"
+            if "60주년" in n or "60th" in n: return "Leica M6 한정판"
             if "colombo" in n or "ics" in n: return "Leica M6 한정판"
             if "black paint" in n or "blackpaint" in n: return "Leica M6 Black Paint"
             return "Leica M6"
@@ -1782,7 +1799,7 @@ def auto_label(name):
                 return "Leica M3 SS"
             return "Leica M3"
         # ── MP 세분화 ──
-        if "mp" in n.replace(" ","") and ("leica mp" in n or "mp " in n or " mp" in n):
+        if "mp" in n.replace(" ","") and ("leica mp" in n or "mp " in n or " mp" in n) and not any(x in n for x in ["케이스","case","strap","가방","bag","hood","후드","grip"]):
             if "black paint" in n or "blackpaint" in n: return "Leica MP Black Paint"
             if "alacarte" in n or "a la carte" in n: return "Leica MP A La Carte"
             if "hermes" in n: return "Leica MP Hermes"
