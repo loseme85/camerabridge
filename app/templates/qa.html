@@ -309,10 +309,52 @@ async function loadQADashboard() {
   } catch(e) { console.error(e); }
 }
 
+function getLabelSortKey(label) {
+  // mm 추출
+  const mmMatch = label.match(/^(\d+)(?:-(\d+))?mm/);
+  const mm = mmMatch ? parseInt(mmMatch[1]) : 9999;
+  // 세대 순서
+  const genOrder = [
+    'Super-Angulon','Hologon','Elmar','Summaron','Hektor','Summar',
+    'Elmarit v1','Elmarit v2','Elmarit v3','Elmarit v4','Elmarit ASPH','Elmarit',
+    'Summicron 1st','Summicron 8','Summicron v2','Summicron v3','Summicron v4','Summicron v5',
+    'Summicron Rigid','Summicron DR','Summicron (침동)','Summicron (올드)','Summicron 6bit',
+    'Summicron 50th','Summicron Black Paint','Summicron SL','Summicron ASPH','Summicron',
+    'Summilux Steel Rim 복각','Summilux Steel Rim','Summilux Pre-ASPH','Summilux AA',
+    'Summilux 1세대','Summilux 2세대','Summilux 3세대','Summilux Titan',
+    'Summilux ASPH FLE II','Summilux ASPH FLE','Summilux ASPH','Summilux',
+    'Noctilux f1.2 복각','Noctilux f1.2','Noctilux f1.0','Noctilux f0.95',
+    'APO-Summicron','APO-Telyt','Telyt','Tele-Elmarit',
+    'Tri-Elmar','Super-Elmar','Vario-Elmar',
+  ];
+  const genIdx = genOrder.findIndex(g => label.includes(g));
+  const gen = genIdx >= 0 ? genIdx : 99;
+  // 바디는 뒤로
+  const isBody = /^Leica (M|Q|SL|R|T|CL|MP|Barnack)/.test(label);
+  const bodyOrder = ['Barnack','M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11',
+                     'MP','M-A','M240','M262','Q','Q2','Q3','SL','SL2','SL3','CL','T','TL'];
+  const bodyIdx = isBody ? bodyOrder.findIndex(b => label.includes(b)) : -1;
+
+  return [isBody ? 1 : 0, mm, gen, bodyIdx, label];
+}
+
+function sortByGeneration(entries) {
+  return [...entries].sort((a, b) => {
+    const ka = getLabelSortKey(a[0]);
+    const kb = getLabelSortKey(b[0]);
+    for (let i = 0; i < ka.length; i++) {
+      if (ka[i] < kb[i]) return -1;
+      if (ka[i] > kb[i]) return 1;
+    }
+    return 0;
+  });
+}
+
 function renderPriceTable(entries) {
   const fmt = n => n ? '₩' + n.toLocaleString() : '—';
   const tbody = document.getElementById('price-table-body');
-  tbody.innerHTML = entries.map(([label, d]) => `
+  const sorted = sortByGeneration(entries);
+  tbody.innerHTML = sorted.map(([label, d]) => `
     <tr style="border-top:1px solid var(--border);cursor:pointer;" onclick="document.getElementById('qa-input').value='${label}';runQA();" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
       <td style="padding:8px 16px;color:var(--text);">${label}</td>
       <td style="padding:8px 16px;text-align:right;color:var(--leica);font-weight:600;">${fmt(d.weighted_median)}</td>
