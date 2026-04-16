@@ -1441,7 +1441,10 @@ def auto_label(name):
             if "fle" in n: return "35mm Summilux ASPH FLE"
             if "asph" in n: return "35mm Summilux ASPH"
             if "pre-asph" in n: return "35mm Summilux Pre-ASPH"
-            if "steel rim" in n or "steel" in n: return "35mm Summilux Steel Rim"
+            if "복각" in n or "replica" in n:
+                if "steel rim" in n or "스틸림" in n or "steel" in n: return "35mm Summilux Steel Rim 복각"
+                return "35mm Summilux 복각"
+            if "steel rim" in n or "스틸림" in n or "steel" in n: return "35mm Summilux Steel Rim"
             if "titan" in n: return "35mm Summilux Titan"
             if "1세대" in n or "1st" in n: return "35mm Summilux Steel Rim"
             if "2세대" in n or "2nd" in n or "pre" in n: return "35mm Summilux Pre-ASPH"
@@ -1561,10 +1564,20 @@ def auto_label(name):
             return "24mm Elmarit"
         if mm == "28":
             if "asph" in n: return "28mm Elmarit ASPH"
+            if "1.5세대" in n or "1.5st" in n: return "28mm Elmarit v2"
             if "1세대" in n or "1st" in n: return "28mm Elmarit v1"
             if "2세대" in n or "2nd" in n: return "28mm Elmarit v2"
             if "3세대" in n or "3rd" in n: return "28mm Elmarit v3"
             if "4세대" in n or "4th" in n: return "28mm Elmarit v4"
+            if "tele" in n: return "28mm Elmarit v1"
+            import re as _re_sn28
+            _sn28 = _re_sn28.search(r'sn\.(\d+)', n)
+            if _sn28:
+                _sn28_num = int(_sn28.group(1)[:4])
+                if _sn28_num <= 2533: return "28mm Elmarit v1"
+                if _sn28_num <= 2978: return "28mm Elmarit v2"
+                if _sn28_num <= 3585: return "28mm Elmarit v3"
+                if _sn28_num <= 3999: return "28mm Elmarit v4"
             return "28mm Elmarit"
         if mm == "28":
             if "asph" in n and "elmarit" in n: return "28mm Elmarit ASPH"
@@ -1579,6 +1592,13 @@ def auto_label(name):
             return "28mm Elmarit"
         if mm == "90":
             if "asph" in n: return "90mm Elmarit ASPH"
+            if "tele" in n: return "90mm Tele-Elmarit"
+            import re as _re_sn90
+            _sn90 = _re_sn90.search(r'sn\.(\d+)', n)
+            if _sn90:
+                _sn90_num = int(_sn90.group(1)[:4])
+                if _sn90_num <= 2800: return "90mm Elmarit (올드)"
+                if _sn90_num <= 3500: return "90mm Elmarit v2"
             return "90mm Elmarit"
         if mm: return f"{mm}mm Elmarit"
         return "Elmarit"
@@ -1714,7 +1734,34 @@ def auto_label(name):
     lens_kw = ["summicron","summilux","noctilux","elmarit","elmar","summaron","nokton",
                 "angulon","hektor","summar","hologon","telyt","vario","apo"]
     if not any(kw in n for kw in lens_kw):
-        for m in ["m11","m10","m9","m8","m7","m6","m4","m3","m2","mp","m-a","m240"]:
+        # ── M6 세분화 ──
+        if "m6" in n.replace(" ",""):
+            if "ttl" in n: return "Leica M6 TTL"
+            if "복각" in n or "replica" in n: return "Leica M6 복각"
+            if "big logo" in n or "big-logo" in n: return "Leica M6 (Big Logo)"
+            if "colombo" in n or "ics" in n: return "Leica M6 한정판"
+            if "black paint" in n or "blackpaint" in n: return "Leica M6 Black Paint"
+            return "Leica M6"
+        # ── M3 세분화 ──
+        if "m3" in n.replace(" ","").replace("(","").replace(")","") and ("m3 sn" in n or "leica m3" in n or "m3 " in n or "m3(" in n.replace(" ","") or n.endswith("m3")):
+            if "single" in n or "싱글" in n or " ss" in n: return "Leica M3 SS"
+            if "double" in n or "더블" in n or " ds" in n: return "Leica M3 DS"
+            import re as _re_m3sn
+            _m3sn = _re_m3sn.search(r'sn\.(\d+)', n)
+            if _m3sn:
+                _m3sn_num = int(_m3sn.group(1)[:4])
+                if _m3sn_num <= 8550: return "Leica M3 DS"
+                return "Leica M3 SS"
+            return "Leica M3"
+        # ── MP 세분화 ──
+        if "mp" in n.replace(" ","") and ("leica mp" in n or "mp " in n or " mp" in n):
+            if "black paint" in n or "blackpaint" in n: return "Leica MP Black Paint"
+            if "alacarte" in n or "a la carte" in n: return "Leica MP A La Carte"
+            if "hermes" in n: return "Leica MP Hermes"
+            if "mp3" in n: return "Leica MP3"
+            return "Leica MP"
+        # ── 나머지 M 바디 ──
+        for m in ["m11","m10","m9","m8","m7","m4","m2","m-a","m240"]:
             if m in n.replace(" ",""): return f"Leica {m.upper()}"
     # ── Q-P 바디 ──
     if not any(kw in n for kw in lens_kw):
@@ -1732,6 +1779,70 @@ def auto_label(name):
     # ── Barnack IID/IIC/IIIa ──
     if not any(kw in n for kw in lens_kw):
         if any(x in n for x in ["ⅱd","ⅱc","ⅲa","iid","iic","iiic","iiia","leica ⅱ","leica ⅲ","illc","illd"]): return "Leica Barnack"
+    # ── Leica M6 세분화 ──
+    if not any(kw in n for kw in lens_kw):
+        if "m6" in n.replace(" ",""):
+            if "ttl" in n: return "Leica M6 TTL"
+            if "복각" in n or "replica" in n: return "Leica M6 복각"
+            if "big logo" in n or "big-logo" in n: return "Leica M6 (Big Logo)"
+            if "colombo" in n or "ics" in n or "limited" in n or "한정" in n: return "Leica M6 한정판"
+            if "black paint" in n or "blackpaint" in n: return "Leica M6 Black Paint"
+            return "Leica M6"
+
+    # ── Leica M3 세분화 ──
+    if not any(kw in n for kw in lens_kw):
+        if re.search(r'm3', n):
+            if "single" in n or "싱글" in n or "ss" in n: return "Leica M3 SS"
+            if "double" in n or "더블" in n or "ds" in n: return "Leica M3 DS"
+            import re as _re_sn_m3
+            _snm3 = _re_sn_m3.search(r'sn\.(\d+)', n)
+            if _snm3:
+                _snm3_num = int(_snm3.group(1)[:4])
+                if _snm3_num <= 8550: return "Leica M3 DS"
+                return "Leica M3 SS"
+            return "Leica M3"
+
+    # ── Leica MP 세분화 ──
+    if not any(kw in n for kw in lens_kw):
+        if re.search(r'mp', n) and "leica" in n:
+            if "black paint" in n or "blackpaint" in n: return "Leica MP Black Paint"
+            if "alacarte" in n or "a la carte" in n: return "Leica MP A La Carte"
+            if "hermes" in n: return "Leica MP Hermes"
+            if "mp3" in n: return "Leica MP3"
+            return "Leica MP"
+
+    # ── Leica M6 세분화 ──
+    if not any(kw in n for kw in lens_kw):
+        if "m6" in n.replace(" ",""):
+            if "ttl" in n: return "Leica M6 TTL"
+            if "복각" in n or "replica" in n: return "Leica M6 복각"
+            if "big logo" in n or "big-logo" in n: return "Leica M6 (Big Logo)"
+            if "colombo" in n or "ics" in n or "limited" in n or "한정" in n: return "Leica M6 한정판"
+            if "black paint" in n or "blackpaint" in n: return "Leica M6 Black Paint"
+            return "Leica M6"
+
+    # ── Leica M3 세분화 ──
+    if not any(kw in n for kw in lens_kw):
+        if re.search(r'm3', n):
+            if "single" in n or "싱글" in n or "ss" in n: return "Leica M3 SS"
+            if "double" in n or "더블" in n or "ds" in n: return "Leica M3 DS"
+            import re as _re_sn_m3
+            _snm3 = _re_sn_m3.search(r'sn\.(\d+)', n)
+            if _snm3:
+                _snm3_num = int(_snm3.group(1)[:4])
+                if _snm3_num <= 8550: return "Leica M3 DS"
+                return "Leica M3 SS"
+            return "Leica M3"
+
+    # ── Leica MP 세분화 ──
+    if not any(kw in n for kw in lens_kw):
+        if re.search(r'mp', n) and "leica" in n:
+            if "black paint" in n or "blackpaint" in n: return "Leica MP Black Paint"
+            if "alacarte" in n or "a la carte" in n: return "Leica MP A La Carte"
+            if "hermes" in n: return "Leica MP Hermes"
+            if "mp3" in n: return "Leica MP3"
+            return "Leica MP"
+
     # ── Leica C 바디 ──
     if not any(kw in n for kw in lens_kw):
         if re.search(r'leica c\s+sn\.', n): return "Leica C"
@@ -1782,7 +1893,8 @@ def auto_label(name):
                    "보이그랜더","linhof","nippon kogaku","nikon","canon ","캐논","minolta",
                    "ms-optics","laowa","light lens lab","7artisan","ttartisan",
                    "fogg ","wotancraft","zeiss zm","zeiss biogon","zeiss 21","zeiss 25","zeiss 28","zeiss 35",
-                   "obo ob","오버베르트","오버베르","wotancraft","fogg "]
+                   "obo ob","오버베르트","오버베르","wotancraft","fogg ",
+                   "mandler","polar m ","solaron"]
     if any(b in n for b in _3rd_brands): return "3rd Party"
 
     # ── 악세사리 브랜드/키워드 ──
@@ -1818,7 +1930,7 @@ def auto_label(name):
             if sb in n: return "Leica S"
 
     # ── 악세사리 추가 ──
-    if any(x in n for x in ["ev1","trinovid","televid","leica meter","macro-adapter-r","macro adapter r",
+    if any(x in n for x in ["vit(mp)","vit (mp)","leicavit","ev1","trinovid","televid","leica meter","macro-adapter-r","macro adapter r",
                               "lupe","self timer","pocket watch","extender","geovid","noctovid",
                               "uva e","uvb e","soft release","release button",
                               "oztno","fokos","apdoo","igemo","elpro","vtroo","xooim",
