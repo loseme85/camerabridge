@@ -51,6 +51,22 @@ def compute_market_prices(sold_quality_path: str = "data/derived/sold_quality_la
     with open(sold_quality_path, "r", encoding="utf-8") as f:
         sold_data = json.load(f)
 
+    # results.json의 label을 최신 코드로 재계산해서 매핑
+    try:
+        import sys, os
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        with open("data/raw/results.json", "r", encoding="utf-8") as f:
+            results = json.load(f)
+        # 링크 → 최신 label 매핑
+        link_to_label = {r["링크"]: r.get("label","") for r in results if r.get("label")}
+        # sold_data의 label 업데이트
+        for s in sold_data:
+            link = s.get("listing_id", "")
+            if link in link_to_label and link_to_label[link]:
+                s["label"] = link_to_label[link]
+    except Exception as e:
+        pass
+
     now = datetime.now(timezone.utc)
 
     # label별 그룹핑
