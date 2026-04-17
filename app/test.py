@@ -1411,7 +1411,15 @@ def auto_label(name):
             return "50mm Noctilux f1.2"
         if "original" in n: return "50mm Noctilux f1.2"  # 충무로 1세대 표기
         if "1.0" in n: return "50mm Noctilux f1.0"
-        return "Noctilux"
+        # 시리얼로 추론
+        import re as _re_nocti
+        _nocti_sn = _re_nocti.search(r'sn\.(\d+)', n)
+        if _nocti_sn:
+            _nocti_num = int(_nocti_sn.group(1)[:4])
+            if _nocti_num <= 2750: return "50mm Noctilux f1.2"
+            if _nocti_num <= 3900: return "50mm Noctilux f1.0"
+            return "50mm Noctilux f0.95"
+        return "50mm Noctilux f0.95"  # 시리얼 없으면 현행으로
     # 복각 + 1.2 → Noctilux f1.2 복각
     _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
     if '복각' in n and '1.2' in n and not any(k in n for k in _nocti_exc):
@@ -1736,14 +1744,14 @@ def auto_label(name):
                 if "your mark" in n: return "35mm Summicron Your Mark"
                 if "eye" in n and "summicron" in n: return "35mm Summicron Eye"
             if "asph" in n: return "35mm Summicron ASPH"
-            if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
+            if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 8-element"
             if "6매" in n or "6-el" in n: return "35mm Summicron v2"
             # 시리얼 번호로 세대 추론
             import re as _re_sn
             _sn = _re_sn.search(r'sn\.(\d+)', n)
             if _sn:
                 _sn_num = int(_sn.group(1)[:4])
-                if _sn_num <= 2315: return "35mm Summicron 1st (8매)"
+                if _sn_num <= 2315: return "35mm Summicron 8-element"
                 if _sn_num <= 2974: return "35mm Summicron v2"
                 if _sn_num <= 3799: return "35mm Summicron v4"
             return "35mm Summicron"
@@ -1760,7 +1768,7 @@ def auto_label(name):
         # 40mm (CL용)
         if mm == "40": return "40mm Summicron-C"
         if mm: return f"{mm}mm Summicron"
-        return "Summicron"
+        return "50mm Summicron"  # mm 없으면 50mm로
 
     # ── Elmarit ──
     if "elmarit" in n and "tri" not in n:
