@@ -222,6 +222,35 @@ def test_price_sort_keeps_strong_match_above_cheap_weak_match() -> None:
     assert response["results"][1]["match_quality"] == "weak"
 
 
+def test_quality_summary_keeps_weak_as_broader_matches_after_strong() -> None:
+    response = search_records(
+        "ltm summaron 35",
+        [L_BODY_WEAK_LOW_PRICE, SUMMARON_L_35],
+        min_score=1,
+    )
+    summary = response["result_quality_summary"]
+
+    assert summary["strong_result_count"] == 1
+    assert summary["weak_result_count"] == 1
+    assert summary["fallback_applied"] is False
+    assert summary["fallback_reason"] == "strong_results_first_broader_matches_available"
+    assert "Broader matches" in summary["display_message"]
+
+
+def test_quality_summary_marks_fallback_when_no_strong_results() -> None:
+    response = search_records(
+        "ltm summaron 35",
+        [L_BODY_WEAK_LOW_PRICE],
+        min_score=1,
+    )
+    summary = response["result_quality_summary"]
+
+    assert summary["strong_result_count"] == 0
+    assert summary["weak_result_count"] == 1
+    assert summary["fallback_applied"] is True
+    assert summary["fallback_reason"] == "no_strong_results_weak_matches_included"
+
+
 def test_strong_only_filters_medium_and_weak_matches() -> None:
     response = search_records(
         "ltm summaron 35",
@@ -232,6 +261,8 @@ def test_strong_only_filters_medium_and_weak_matches() -> None:
     assert response["result_count"] == 1
     assert response["results"][0]["match_quality"] == "strong"
     assert response["applied_quality_filter"]["strong_only"] is True
+    assert response["result_quality_summary"]["fallback_applied"] is False
+    assert response["result_quality_summary"]["fallback_reason"] == "strong_only_enabled"
 
 
 def test_debug_hidden_by_default() -> None:
@@ -251,6 +282,8 @@ def test_empty_result_response() -> None:
     assert response["result_count"] == 0
     assert response["pagination"]["has_more"] is False
     assert "no_results" in response["warnings"]
+    assert response["result_quality_summary"]["fallback_applied"] is False
+    assert response["result_quality_summary"]["fallback_reason"] == "no_results"
 
 
 def test_out_of_range_offset_warning() -> None:
@@ -267,6 +300,8 @@ if __name__ == "__main__":
     test_price_sort_ascending()
     test_default_min_score_filters_mount_only_weak_matches()
     test_price_sort_keeps_strong_match_above_cheap_weak_match()
+    test_quality_summary_keeps_weak_as_broader_matches_after_strong()
+    test_quality_summary_marks_fallback_when_no_strong_results()
     test_strong_only_filters_medium_and_weak_matches()
     test_debug_hidden_by_default()
     test_debug_visible_when_requested()

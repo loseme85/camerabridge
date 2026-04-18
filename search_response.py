@@ -47,6 +47,59 @@ FINAL_OUTPUT_FIELDS = [
 ]
 
 
+QUALITY_LEVELS = ["strong", "medium", "weak", "none"]
+
+
+def summarize_result_quality(
+    results: list[dict[str, Any]],
+    strong_only: bool = False,
+) -> dict[str, Any]:
+    counts = {quality: 0 for quality in QUALITY_LEVELS}
+    for result in results:
+        quality = str(result.get("match_quality") or "none")
+        if quality not in counts:
+            quality = "none"
+        counts[quality] += 1
+
+    broader_count = counts["medium"] + counts["weak"] + counts["none"]
+    total = sum(counts.values())
+    fallback_applied = False
+    fallback_reason = None
+    display_message = None
+
+    if strong_only:
+        fallback_reason = "strong_only_enabled"
+        display_message = "Showing strong matches only."
+    elif total == 0:
+        fallback_reason = "no_results"
+        display_message = "No matching listings found."
+    elif counts["strong"] == 0:
+        fallback_applied = True
+        if counts["medium"] > 0:
+            fallback_reason = "no_strong_results_broader_matches_included"
+            display_message = "No exact strong matches. Showing broader matches."
+        else:
+            fallback_reason = "no_strong_results_weak_matches_included"
+            display_message = "No exact strong matches. Showing weak matches."
+    elif broader_count > 0:
+        fallback_reason = "strong_results_first_broader_matches_available"
+        display_message = "Strong matches are shown first. Broader matches may appear after them."
+    else:
+        fallback_reason = "strong_results_only"
+        display_message = "Strong matches found."
+
+    return {
+        "total": total,
+        "strong_result_count": counts["strong"],
+        "medium_result_count": counts["medium"],
+        "weak_result_count": counts["weak"],
+        "none_result_count": counts["none"],
+        "fallback_applied": fallback_applied,
+        "fallback_reason": fallback_reason,
+        "display_message": display_message,
+    }
+
+
 def _compact_final_output(final_output: dict[str, Any]) -> dict[str, Any]:
     return {
         field_name: final_output.get(field_name)
@@ -145,6 +198,7 @@ def format_search_response(
         "intent": intent,
         "result_count": len(results),
         "total_ranked": ranked_payload.get("total_ranked", len(results)),
+        "result_quality_summary": summarize_result_quality(ranked_results),
         "warnings": response_warnings,
         "results": results,
     }

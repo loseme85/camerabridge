@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from query_resolver import DEFAULT_MIN_SCORE, DEFAULT_RESOLVED_PATH, load_resolved_records, rank_listings
-from search_response import format_search_response
+from search_response import format_search_response, summarize_result_quality
 
 
 SEARCH_SERVICE_SCHEMA_VERSION = "search_service.v1"
@@ -348,6 +348,10 @@ def search_records(
     response["applied_filters"] = filters or {}
     response["applied_sort"] = applied_sort
     response["applied_quality_filter"] = {"min_score": min_score, "strong_only": strong_only}
+    response["result_quality_summary"] = summarize_result_quality(
+        sorted_results,
+        strong_only=strong_only,
+    )
     response["warnings"] = list(response.get("warnings") or []) + sort_warnings + pagination_warnings
     return response
 

@@ -219,6 +219,124 @@ def test_aperture_hint_breaks_focal_mount_tie() -> None:
     assert "aperture_hint" in ranked["results"][0]["matched_fields"]
 
 
+def test_brand_unspecified_query_uses_soft_preference_for_strong_ties() -> None:
+    zeiss_21 = _record(
+        {
+            "brand": "Zeiss",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Biogon",
+            "variant": [],
+            "focal_length": "21",
+            "title_raw": "Zeiss M 21mm f2.8 Biogon ZM",
+        },
+        index=1,
+    )
+    leica_21 = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Elmarit-M",
+            "variant": [],
+            "focal_length": "21",
+            "title_raw": "Leica M 21mm f2.8 Elmarit-M",
+        },
+        index=2,
+    )
+    voigtlander_21 = _record(
+        {
+            "brand": "Voigtlander",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Color-Skopar",
+            "variant": [],
+            "focal_length": "21",
+            "title_raw": "Voigtlander M 21mm f2.8 Color-Skopar",
+        },
+        index=3,
+    )
+    ranked = rank_listings("m 21/2.8", [zeiss_21, leica_21, voigtlander_21], limit=3)
+
+    assert [result["match_quality"] for result in ranked["results"]] == ["strong", "strong", "strong"]
+    assert ranked["results"][0]["final_output"]["brand"] == "Leica"
+    assert ranked["results"][0]["score"] == 100.0
+    assert ranked["results"][0]["implicit_brand_preference_score"] > ranked["results"][1]["implicit_brand_preference_score"]
+    assert "listing_brand_matches_default:Leica" in ranked["results"][0]["implicit_brand_preference_reasons"]
+
+
+def test_explicit_brand_query_does_not_add_implicit_preference() -> None:
+    zeiss_21 = _record(
+        {
+            "brand": "Zeiss",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Biogon",
+            "variant": [],
+            "focal_length": "21",
+            "title_raw": "Zeiss M 21mm f2.8 Biogon ZM",
+        },
+        index=1,
+    )
+    leica_21 = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Elmarit-M",
+            "variant": [],
+            "focal_length": "21",
+            "title_raw": "Leica M 21mm f2.8 Elmarit-M",
+        },
+        index=2,
+    )
+    ranked = rank_listings("leica m 21/2.8", [zeiss_21, leica_21], limit=2, min_score=1)
+
+    assert ranked["results"][0]["final_output"]["brand"] == "Leica"
+    assert all(result["implicit_brand_preference_score"] == 0.0 for result in ranked["results"])
+    assert "hard_constraint_mismatch:brand" in ranked["results"][1]["warnings"]
+
+
+def test_implicit_preference_does_not_promote_weak_result() -> None:
+    leica_mount_only = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Body",
+            "label": "M Body",
+            "model_canonical": "M3",
+            "variant": [],
+            "focal_length": None,
+            "title_raw": "Leica M3 Body",
+        },
+        index=1,
+    )
+    zeiss_21 = _record(
+        {
+            "brand": "Zeiss",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Biogon",
+            "variant": [],
+            "focal_length": "21",
+            "title_raw": "Zeiss M 21mm f2.8 Biogon ZM",
+        },
+        index=2,
+    )
+    ranked = rank_listings("m 21/2.8", [leica_mount_only, zeiss_21], limit=2, min_score=1)
+
+    assert ranked["results"][0]["final_output"]["brand"] == "Zeiss"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert ranked["results"][1]["match_quality"] == "weak"
+    assert ranked["results"][1]["implicit_brand_preference_score"] == 0.0
+
+
 if __name__ == "__main__":
     test_exact_family_and_focal_match_scores_high()
     test_alias_expanded_family_match_scores_high()
@@ -229,4 +347,7 @@ if __name__ == "__main__":
     test_strong_structured_match_ranks_above_mount_only_weak_match()
     test_mount_system_mismatch_is_capped()
     test_aperture_hint_breaks_focal_mount_tie()
+    test_brand_unspecified_query_uses_soft_preference_for_strong_ties()
+    test_explicit_brand_query_does_not_add_implicit_preference()
+    test_implicit_preference_does_not_promote_weak_result()
     print("test_query_resolver: ok")

@@ -668,10 +668,14 @@
       }
       const warnings = state.response.warnings || [];
       const filters = state.response.applied_filters || {};
+      const quality = state.response.result_quality_summary || {};
       const filterText = Object.keys(filters).length
         ? `filters: ${Object.entries(filters).map(([key,value]) => `${key}=${value}`).join(', ')}`
         : 'filters: none';
-      els['warning-region'].textContent = `${filterText}${warnings.length ? ' | ' + warnings.join(', ') : ''}`;
+      const parts = [filterText];
+      if(quality.display_message) parts.push(quality.display_message);
+      if(warnings.length) parts.push(warnings.join(', '));
+      els['warning-region'].textContent = parts.join(' | ');
     }
 
     function hydrateFromUrl(){

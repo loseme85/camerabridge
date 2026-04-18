@@ -50,9 +50,17 @@ def test_demo_queries_are_available() -> None:
             assert f'data-query="{query}"' in html
 
 
+def test_quality_summary_message_is_consumed_from_api() -> None:
+    for html in _html_files():
+        assert "result_quality_summary" in html
+        assert "quality.display_message" in html
+        assert "match_quality ===" not in html
+
+
 if __name__ == "__main__":
     test_index_calls_search_endpoint()
     test_index_does_not_reimplement_legacy_search()
     test_required_ui_controls_exist()
     test_demo_queries_are_available()
+    test_quality_summary_message_is_consumed_from_api()
     print("test_search_ui: ok")

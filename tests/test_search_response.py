@@ -82,7 +82,9 @@ def test_response_has_required_top_level_fields() -> None:
     assert response["query"] == "35lux aa"
     assert "intent" in response
     assert "results" in response
+    assert "result_quality_summary" in response
     assert response["result_count"] == 1
+    assert response["result_quality_summary"]["strong_result_count"] == 1
 
 
 def test_result_has_required_public_fields() -> None:
@@ -125,6 +127,7 @@ def test_empty_results_add_response_warning() -> None:
     assert response["result_count"] == 0
     assert response["results"] == []
     assert "no_results" in response["warnings"]
+    assert response["result_quality_summary"]["fallback_reason"] == "no_results"
 
 
 def test_ambiguous_query_preserves_parser_warning() -> None:

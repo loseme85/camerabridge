@@ -49,6 +49,45 @@ MATCH_QUALITY_RANKS = {
     "strong": 3,
 }
 
+BRAND_FAMILY_HINTS = {
+    "Leica": {
+        "elmar",
+        "elmarit",
+        "hektor",
+        "mp3",
+        "noctilux",
+        "q2",
+        "q3",
+        "summarit",
+        "summaron",
+        "summicron",
+        "summilux",
+        "telyt",
+        "tri elmar",
+    },
+    "Zeiss": {
+        "biogon",
+        "distagon",
+        "planar",
+        "sonnar",
+        "zm",
+    },
+    "Voigtlander": {
+        "color skopar",
+        "heliar",
+        "nokton",
+        "skopar",
+        "ultron",
+    },
+}
+
+BRAND_CONTEXT_SIGNALS = {
+    "Leica": {
+        "mounts": {"L", "M", "SL"},
+        "systems": {"Q"},
+    },
+}
+
 
 @dataclass
 class ScoreItem:
@@ -71,6 +110,8 @@ class MatchResult:
     possible_score: float
     match_quality: str = "none"
     match_quality_rank: int = 0
+    implicit_brand_preference_score: float = 0.0
+    implicit_brand_preference_reasons: list[str] = field(default_factory=list)
     matched_fields: list[str] = field(default_factory=list)
     score_breakdown: list[dict[str, Any]] = field(default_factory=list)
     mismatch_reasons: list[str] = field(default_factory=list)
@@ -132,6 +173,78 @@ def _explicit_brand_requested(intent: dict[str, Any]) -> bool:
     if any(token.get("type") == "brand" for token in intent.get("tokens", [])):
         return True
     return bool(re.search(r"\b(leica|라이카)\b", intent.get("normalized_query", ""), re.IGNORECASE))
+
+
+def _family_hint_brands(value: Any) -> set[str]:
+    text = _normalize(value)
+    if not text:
+        return set()
+
+    brands = set()
+    for brand, hints in BRAND_FAMILY_HINTS.items():
+        for hint in hints:
+            hint_norm = _normalize(hint)
+            if hint_norm and re.search(rf"\b{re.escape(hint_norm)}\b", text):
+                brands.add(brand)
+                break
+    return brands
+
+
+def _listing_family_hint_brands(final: dict[str, Any]) -> set[str]:
+    values = [
+        final.get("model_canonical"),
+        final.get("model_raw"),
+        final.get("label"),
+    ]
+    brands: set[str] = set()
+    for value in values:
+        brands.update(_family_hint_brands(value))
+    return brands
+
+
+def _query_has_brand_context(intent: dict[str, Any], brand: str) -> bool:
+    context = BRAND_CONTEXT_SIGNALS.get(brand, {})
+    if intent.get("model_family") and brand in _family_hint_brands(intent.get("model_family")):
+        return True
+    if intent.get("mount") in context.get("mounts", set()):
+        return True
+    if intent.get("system") in context.get("systems", set()):
+        return True
+    return False
+
+
+def _implicit_brand_preference(
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    match_quality: str,
+) -> tuple[float, list[str]]:
+    """
+    Soft tie-break for brand-unspecified collector shorthand.
+
+    This does not change the relevance score and is only applied to strong
+    matches, so it cannot promote weak or under-specified listings.
+    """
+    if match_quality != "strong" or _explicit_brand_requested(intent):
+        return 0.0, []
+
+    preferred_brand = intent.get("brand")
+    if not preferred_brand or not _query_has_brand_context(intent, preferred_brand):
+        return 0.0, []
+
+    reasons: list[str] = []
+    preference = 0.0
+    listing_brand = final.get("brand")
+    family_brands = _listing_family_hint_brands(final)
+
+    if _normalize(listing_brand) == _normalize(preferred_brand):
+        preference += 2.0
+        reasons.append(f"listing_brand_matches_default:{preferred_brand}")
+
+    if preferred_brand in family_brands:
+        preference += 1.0
+        reasons.append(f"model_family_affinity:{preferred_brand}")
+
+    return preference, reasons
 
 
 def _alias_expanded(intent: dict[str, Any], field_type: str, canonical_value: str) -> bool:
@@ -579,6 +692,11 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         score = min(score, 40.0)
         warnings.append("hard_constraint_mismatch:brand")
     match_quality, match_quality_rank = _match_quality(intent, breakdown, mismatches)
+    implicit_preference_score, implicit_preference_reasons = _implicit_brand_preference(
+        intent,
+        final,
+        match_quality,
+    )
     if possible_score and (score < 35 or match_quality in {"none", "weak"}):
         warnings.append("weak_match")
 
@@ -588,6 +706,8 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         possible_score=round(possible_score, 2),
         match_quality=match_quality,
         match_quality_rank=match_quality_rank,
+        implicit_brand_preference_score=implicit_preference_score,
+        implicit_brand_preference_reasons=implicit_preference_reasons,
         matched_fields=matched,
         score_breakdown=breakdown,
         mismatch_reasons=mismatches,
@@ -614,6 +734,7 @@ def rank_listings(
         key=lambda item: (
             -int(item.get("match_quality_rank") or 0),
             -item["score"],
+            -float(item.get("implicit_brand_preference_score") or 0.0),
             item.get("record_index") if item.get("record_index") is not None else 10**9,
         )
     )
@@ -645,6 +766,8 @@ def _compact_result(result: dict[str, Any]) -> dict[str, Any]:
         "mount": final.get("mount"),
         "variant": final.get("variant"),
         "match_quality": result.get("match_quality"),
+        "implicit_brand_preference_score": result.get("implicit_brand_preference_score"),
+        "implicit_brand_preference_reasons": result.get("implicit_brand_preference_reasons"),
         "warnings": result["warnings"],
     }
 
