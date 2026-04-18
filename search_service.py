@@ -21,7 +21,7 @@ import re
 from pathlib import Path
 from typing import Any, Optional
 
-from query_resolver import DEFAULT_RESOLVED_PATH, load_resolved_records, rank_listings
+from query_resolver import DEFAULT_MIN_SCORE, DEFAULT_RESOLVED_PATH, load_resolved_records, rank_listings
 from search_response import format_search_response
 
 
@@ -36,6 +36,13 @@ SUPPORTED_SORTS = {
     "source",
     "condition",
     "newest",
+}
+
+QUALITY_RANKS = {
+    "none": 0,
+    "weak": 1,
+    "medium": 2,
+    "strong": 3,
 }
 
 
@@ -162,6 +169,26 @@ def apply_filters(
     ]
 
 
+def apply_quality_filter(
+    ranked_results: list[dict[str, Any]],
+    strong_only: bool = False,
+) -> list[dict[str, Any]]:
+    if not strong_only:
+        return ranked_results
+    return [
+        result
+        for result in ranked_results
+        if result.get("match_quality") == "strong"
+    ]
+
+
+def _quality_rank(result: dict[str, Any]) -> int:
+    value = result.get("match_quality_rank")
+    if isinstance(value, int):
+        return value
+    return QUALITY_RANKS.get(str(result.get("match_quality") or "none"), 0)
+
+
 def _sort_key_price(result: dict[str, Any]) -> tuple[int, float]:
     price = parse_price_number((result.get("final_output") or {}).get("price_raw"))
     if price is None:
@@ -194,23 +221,33 @@ def apply_sort(
     if sort_name == "relevance":
         return ranked_results, sort_name, warnings
     if sort_name == "price_asc":
-        return sorted(ranked_results, key=_sort_key_price), sort_name, warnings
+        return sorted(
+            ranked_results,
+            key=lambda result: (
+                -_quality_rank(result),
+                _sort_key_price(result)[0],
+                _sort_key_price(result)[1],
+                -float(result.get("score") or 0),
+            ),
+        ), sort_name, warnings
     if sort_name == "price_desc":
         return sorted(
             ranked_results,
             key=lambda result: (
+                -_quality_rank(result),
                 _sort_key_price(result)[0],
                 -_sort_key_price(result)[1],
+                -float(result.get("score") or 0),
             ),
         ), sort_name, warnings
     if sort_name == "title":
-        return sorted(ranked_results, key=lambda result: _sort_key_text(result, "title")), sort_name, warnings
+        return sorted(ranked_results, key=lambda result: (-_quality_rank(result), _sort_key_text(result, "title"))), sort_name, warnings
     if sort_name == "source":
-        return sorted(ranked_results, key=lambda result: _sort_key_text(result, "source")), sort_name, warnings
+        return sorted(ranked_results, key=lambda result: (-_quality_rank(result), _sort_key_text(result, "source"))), sort_name, warnings
     if sort_name == "condition":
-        return sorted(ranked_results, key=lambda result: _sort_key_text(result, "condition_raw")), sort_name, warnings
+        return sorted(ranked_results, key=lambda result: (-_quality_rank(result), _sort_key_text(result, "condition_raw"))), sort_name, warnings
     if sort_name == "newest":
-        return sorted(ranked_results, key=_sort_key_newest, reverse=True), sort_name, warnings
+        return sorted(ranked_results, key=lambda result: (_quality_rank(result), _sort_key_newest(result)), reverse=True), sort_name, warnings
 
     return ranked_results, "relevance", warnings
 
@@ -274,7 +311,8 @@ def search_records(
     filters: Optional[dict[str, Any]] = None,
     sort: str = "relevance",
     include_debug: bool = False,
-    min_score: float = 1.0,
+    min_score: float = DEFAULT_MIN_SCORE,
+    strong_only: bool = False,
 ) -> dict[str, Any]:
     ranked_payload = rank_listings(
         query,
@@ -284,7 +322,8 @@ def search_records(
     )
     ranked_results = ranked_payload["results"]
     total_before_filters = len(ranked_results)
-    filtered_results = apply_filters(ranked_results, filters=filters, records=records)
+    quality_filtered_results = apply_quality_filter(ranked_results, strong_only=strong_only)
+    filtered_results = apply_filters(quality_filtered_results, filters=filters, records=records)
     sorted_results, applied_sort, sort_warnings = apply_sort(filtered_results, sort=sort)
     paginated_results, pagination, pagination_warnings = paginate_results(
         sorted_results,
@@ -308,6 +347,7 @@ def search_records(
     response["pagination"] = pagination
     response["applied_filters"] = filters or {}
     response["applied_sort"] = applied_sort
+    response["applied_quality_filter"] = {"min_score": min_score, "strong_only": strong_only}
     response["warnings"] = list(response.get("warnings") or []) + sort_warnings + pagination_warnings
     return response
 
@@ -320,7 +360,8 @@ def load_and_search(
     filters: Optional[dict[str, Any]] = None,
     sort: str = "relevance",
     include_debug: bool = False,
-    min_score: float = 1.0,
+    min_score: float = DEFAULT_MIN_SCORE,
+    strong_only: bool = False,
 ) -> dict[str, Any]:
     records = load_resolved_records(path)
     return search_records(
@@ -332,6 +373,7 @@ def load_and_search(
         sort=sort,
         include_debug=include_debug,
         min_score=min_score,
+        strong_only=strong_only,
     )
 
 

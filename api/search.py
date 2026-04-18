@@ -167,6 +167,20 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
     if normalized.get("include_debug") is not None:
         include_debug = _parse_bool(normalized["include_debug"], "include_debug")
 
+    strong_only = False
+    if normalized.get("strong_only") is not None:
+        strong_only = _parse_bool(normalized["strong_only"], "strong_only")
+
+    min_score = None
+    if normalized.get("min_score") is not None and str(normalized.get("min_score")).strip():
+        min_score = _parse_float(normalized["min_score"], "min_score")
+        if min_score < 0 or min_score > 100:
+            raise SearchEndpointError(
+                "invalid_min_score",
+                "min_score must be between 0 and 100",
+                details={"value": normalized["min_score"]},
+            )
+
     filters: dict[str, Any] = {}
     category = normalized.get("category")
     if category is not None:
@@ -222,6 +236,8 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
         "sort": sort,
         "filters": filters,
         "include_debug": include_debug,
+        "min_score": min_score,
+        "strong_only": strong_only,
     }
 
 
@@ -240,6 +256,8 @@ def search_from_params(
             filters=parsed["filters"],
             sort=parsed["sort"],
             include_debug=parsed["include_debug"],
+            strong_only=parsed["strong_only"],
+            **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
         )
 
     return load_and_search(
@@ -250,6 +268,8 @@ def search_from_params(
         filters=parsed["filters"],
         sort=parsed["sort"],
         include_debug=parsed["include_debug"],
+        strong_only=parsed["strong_only"],
+        **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
     )
 
 

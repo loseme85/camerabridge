@@ -128,6 +128,8 @@ def test_parse_required_and_optional_params() -> None:
         "sort": ["price_asc"],
         "category": ["Lens"],
         "include_debug": ["true"],
+        "min_score": ["42.5"],
+        "strong_only": ["true"],
     })
     assert parsed["query"] == "35lux aa"
     assert parsed["limit"] == 2
@@ -135,6 +137,8 @@ def test_parse_required_and_optional_params() -> None:
     assert parsed["sort"] == "price_asc"
     assert parsed["filters"]["category"] == "Lens"
     assert parsed["include_debug"] is True
+    assert parsed["min_score"] == 42.5
+    assert parsed["strong_only"] is True
 
 
 def test_endpoint_response_has_service_schema_fields() -> None:
@@ -179,6 +183,17 @@ def test_pagination_filter_and_sort_are_connected() -> None:
     assert response["results"][0]["price"] == "7,300,000원"
 
 
+def test_quality_options_are_connected() -> None:
+    status, response = endpoint_response(
+        {"q": "q3 28", "strong_only": "true", "min_score": "1"},
+        records=RECORDS,
+    )
+    assert status == 200
+    assert response["applied_quality_filter"]["strong_only"] is True
+    assert response["applied_quality_filter"]["min_score"] == 1.0
+    assert response["result_count"] == 0
+
+
 def test_empty_result_is_success_with_no_results_warning() -> None:
     status, response = endpoint_response({"q": "nocti e60", "category": "Accessory"}, records=RECORDS)
     assert status == 200
@@ -206,6 +221,10 @@ def test_invalid_params_return_400() -> None:
     assert status == 400
     assert response["error"]["code"] == "invalid_price_min"
 
+    status, response = endpoint_response({"q": "q3 28", "min_score": "101"}, records=RECORDS)
+    assert status == 400
+    assert response["error"]["code"] == "invalid_min_score"
+
 
 def test_data_file_missing_returns_503() -> None:
     missing = Path(__file__).resolve().parents[1] / "data/derived/does_not_exist.json"
@@ -219,6 +238,7 @@ if __name__ == "__main__":
     test_endpoint_response_has_service_schema_fields()
     test_debug_toggle_hides_and_shows_classifier_output()
     test_pagination_filter_and_sort_are_connected()
+    test_quality_options_are_connected()
     test_empty_result_is_success_with_no_results_warning()
     test_missing_query_returns_400()
     test_invalid_params_return_400()

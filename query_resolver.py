@@ -27,6 +27,7 @@ from query_parser import parse_query
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 DEFAULT_RESOLVED_PATH = PROJECT_ROOT / "data/derived/results_resolved_v2.json"
+DEFAULT_MIN_SCORE = 25.0
 
 
 WEIGHTS = {
@@ -39,6 +40,13 @@ WEIGHTS = {
     "filter_size": 6,
     "optical_formula": 6,
     "aperture_hint": 5,
+}
+
+MATCH_QUALITY_RANKS = {
+    "none": 0,
+    "weak": 1,
+    "medium": 2,
+    "strong": 3,
 }
 
 
@@ -61,6 +69,8 @@ class MatchResult:
     score: float
     raw_score: float
     possible_score: float
+    match_quality: str = "none"
+    match_quality_rank: int = 0
     matched_fields: list[str] = field(default_factory=list)
     score_breakdown: list[dict[str, Any]] = field(default_factory=list)
     mismatch_reasons: list[str] = field(default_factory=list)
@@ -434,6 +444,80 @@ def _score_aperture_hint(intent: dict[str, Any], text: str, breakdown: list[dict
     return awarded_total, possible
 
 
+def _has_positive(
+    breakdown: list[dict[str, Any]],
+    field_name: str,
+    match_types: Optional[set[str]] = None,
+) -> bool:
+    for item in breakdown:
+        if item.get("field") != field_name or float(item.get("awarded") or 0) <= 0:
+            continue
+        if match_types is None or item.get("match_type") in match_types:
+            return True
+    return False
+
+
+def _match_quality(
+    intent: dict[str, Any],
+    breakdown: list[dict[str, Any]],
+    mismatches: list[str],
+) -> tuple[str, int]:
+    """
+    Summarize ranking confidence without changing classifier output.
+
+    Strong means a listing satisfies multiple structured anchors. Medium means
+    a plausible core match exists but is missing one important anchor. Weak is
+    reserved for mount-only, focal-only, or source-text-only hits.
+    """
+    if not any(float(item.get("awarded") or 0) > 0 for item in breakdown):
+        return "none", MATCH_QUALITY_RANKS["none"]
+
+    if "mount_mismatch" in mismatches or "system_mismatch" in mismatches or "brand_mismatch" in mismatches:
+        return "weak", MATCH_QUALITY_RANKS["weak"]
+
+    precise_family = _has_positive(breakdown, "model_family", {"exact", "alias_expanded", "normalized"})
+    precise_focal = _has_positive(breakdown, "focal_length", {"exact", "range_compatible"})
+    focal_hit = _has_positive(breakdown, "focal_length")
+    mount_hit = _has_positive(breakdown, "mount", {"exact"})
+    system_hit = _has_positive(breakdown, "system", {"exact", "mount_system_equivalent"})
+    variant_hit = _has_positive(breakdown, "variant")
+    aperture_hit = _has_positive(breakdown, "aperture_hint", {"exact_text_hint"})
+    generation_hit = _has_positive(breakdown, "generation")
+    filter_hit = _has_positive(breakdown, "filter_size")
+    formula_hit = _has_positive(breakdown, "optical_formula")
+    mount_or_system_hit = mount_hit or system_hit
+
+    if precise_family and precise_focal and (
+        mount_or_system_hit
+        or variant_hit
+        or aperture_hit
+        or generation_hit
+        or filter_hit
+        or formula_hit
+    ):
+        return "strong", MATCH_QUALITY_RANKS["strong"]
+
+    if precise_family and variant_hit and not intent.get("focal_length"):
+        return "strong", MATCH_QUALITY_RANKS["strong"]
+
+    if mount_or_system_hit and precise_focal and aperture_hit:
+        return "strong", MATCH_QUALITY_RANKS["strong"]
+
+    if precise_family and precise_focal:
+        return "medium", MATCH_QUALITY_RANKS["medium"]
+
+    if precise_family and (variant_hit or mount_or_system_hit or aperture_hit or generation_hit or filter_hit or formula_hit):
+        return "medium", MATCH_QUALITY_RANKS["medium"]
+
+    if mount_or_system_hit and focal_hit:
+        return "medium", MATCH_QUALITY_RANKS["medium"]
+
+    if formula_hit or filter_hit:
+        return "medium", MATCH_QUALITY_RANKS["medium"]
+
+    return "weak", MATCH_QUALITY_RANKS["weak"]
+
+
 def _structured_constraints(intent: dict[str, Any]) -> list[str]:
     fields = [
         "model_family",
@@ -494,13 +578,16 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
     if "brand_mismatch" in mismatches:
         score = min(score, 40.0)
         warnings.append("hard_constraint_mismatch:brand")
-    if possible_score and score < 35:
+    match_quality, match_quality_rank = _match_quality(intent, breakdown, mismatches)
+    if possible_score and (score < 35 or match_quality in {"none", "weak"}):
         warnings.append("weak_match")
 
     return MatchResult(
         score=score,
         raw_score=round(raw_score, 2),
         possible_score=round(possible_score, 2),
+        match_quality=match_quality,
+        match_quality_rank=match_quality_rank,
         matched_fields=matched,
         score_breakdown=breakdown,
         mismatch_reasons=mismatches,
@@ -518,12 +605,18 @@ def rank_listings(
     query_or_intent: str | dict[str, Any],
     records: list[dict[str, Any]],
     limit: int = 10,
-    min_score: float = 1.0,
+    min_score: float = DEFAULT_MIN_SCORE,
 ) -> dict[str, Any]:
     intent = parse_query(query_or_intent) if isinstance(query_or_intent, str) else query_or_intent
     results = [score_listing(intent, record) for record in records]
     results = [result for result in results if result["score"] >= min_score]
-    results.sort(key=lambda item: (-item["score"], item.get("record_index") if item.get("record_index") is not None else 10**9))
+    results.sort(
+        key=lambda item: (
+            -int(item.get("match_quality_rank") or 0),
+            -item["score"],
+            item.get("record_index") if item.get("record_index") is not None else 10**9,
+        )
+    )
     return {
         "intent": intent,
         "results": results[:limit],
@@ -551,6 +644,7 @@ def _compact_result(result: dict[str, Any]) -> dict[str, Any]:
         "focal_length": final.get("focal_length"),
         "mount": final.get("mount"),
         "variant": final.get("variant"),
+        "match_quality": result.get("match_quality"),
         "warnings": result["warnings"],
     }
 

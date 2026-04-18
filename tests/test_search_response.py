@@ -96,12 +96,14 @@ def test_result_has_required_public_fields() -> None:
         "source_url",
         "final_output",
         "used_override",
+        "match_quality",
         "matched_fields",
         "score_breakdown",
         "warnings",
     ]:
         assert field_name in result
     assert result["final_output"]["model_canonical"] == "Summilux-M"
+    assert result["match_quality"] == "strong"
 
 
 def test_used_override_is_visible() -> None:
@@ -135,6 +137,7 @@ def test_ambiguous_query_preserves_parser_warning() -> None:
 def test_debug_mode_can_expose_classifier_and_audit() -> None:
     response = build_search_response("mp3 silver", [MP3_SILVER], limit=1, include_debug=True)
     debug = response["results"][0]["debug"]
+    assert debug["match_quality_rank"] == 3
     assert debug["classifier_output"]["brand"] == "Unknown"
     assert debug["audit_trail"][0]["changed_fields"]["mount"]["after"] == "M"
 

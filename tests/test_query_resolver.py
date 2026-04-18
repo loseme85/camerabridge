@@ -9,9 +9,9 @@ from query_parser import parse_query
 from query_resolver import rank_listings, score_listing
 
 
-def _record(final_output: dict, override_applied: bool = False) -> dict:
+def _record(final_output: dict, override_applied: bool = False, index: int = 1) -> dict:
     return {
-        "record_index": 1,
+        "record_index": index,
         "raw_item": {
             "site": "test",
             "상품명": final_output.get("title_raw", ""),
@@ -70,6 +70,7 @@ MP3_SILVER = _record(
 def test_exact_family_and_focal_match_scores_high() -> None:
     result = score_listing(parse_query("35 summilux"), SUMMILUX_35)
     assert result["score"] >= 95
+    assert result["match_quality"] == "medium"
     assert "model_family" in result["matched_fields"]
     assert "focal_length" in result["matched_fields"]
 
@@ -84,12 +85,14 @@ def test_alias_expanded_family_match_scores_high() -> None:
 def test_variant_hit_contributes_to_score() -> None:
     result = score_listing(parse_query("35lux aa"), SUMMILUX_35)
     assert result["score"] >= 90
+    assert result["match_quality"] == "strong"
     assert "variant" in result["matched_fields"]
 
 
 def test_override_listing_matches_on_final_output() -> None:
     result = score_listing(parse_query("mp3 silver"), MP3_SILVER)
     assert result["score"] == 100
+    assert result["match_quality"] == "strong"
     assert result["used_override"] is True
     assert result["final_output"]["model_canonical"] == "MP3"
 
@@ -117,6 +120,42 @@ def test_rank_listings_orders_by_score() -> None:
     )
     ranked = rank_listings("35lux aa", [summicron_50, SUMMILUX_35], limit=2)
     assert ranked["results"][0]["final_output"]["model_canonical"] == "Summilux-M"
+
+
+def test_strong_structured_match_ranks_above_mount_only_weak_match() -> None:
+    summaron_l_35 = _record(
+        {
+            "brand": "Leica",
+            "mount": "L",
+            "category": "Lens",
+            "label": "L Lens",
+            "model_raw": "Summaron",
+            "model_canonical": "Summaron",
+            "variant": [],
+            "focal_length": "35",
+            "title_raw": "L 35mm Summaron f2.8",
+        },
+        index=2,
+    )
+    l_body_mount_only = _record(
+        {
+            "brand": "Leica",
+            "mount": "L",
+            "category": "Body",
+            "label": "L Body",
+            "model_raw": "If",
+            "model_canonical": "If",
+            "variant": [],
+            "focal_length": None,
+            "title_raw": "Leica IF Red Scale + 50mm F2.8",
+        },
+        index=1,
+    )
+    ranked = rank_listings("ltm summaron 35", [l_body_mount_only, summaron_l_35], limit=2, min_score=1)
+    assert ranked["results"][0]["final_output"]["model_canonical"] == "Summaron"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert ranked["results"][1]["match_quality"] == "weak"
+    assert "weak_match" in ranked["results"][1]["warnings"]
 
 
 def test_mount_system_mismatch_is_capped() -> None:
@@ -147,6 +186,7 @@ def test_mount_system_mismatch_is_capped() -> None:
     ranked = rank_listings("q3 28", [m_lens, q_body], limit=2)
     assert ranked["results"][0]["final_output"]["mount"] == "Q"
     assert ranked["results"][1]["score"] == 40.0
+    assert ranked["results"][1]["match_quality"] == "weak"
 
 
 def test_aperture_hint_breaks_focal_mount_tie() -> None:
@@ -186,6 +226,7 @@ if __name__ == "__main__":
     test_override_listing_matches_on_final_output()
     test_ambiguous_query_keeps_warnings()
     test_rank_listings_orders_by_score()
+    test_strong_structured_match_ranks_above_mount_only_weak_match()
     test_mount_system_mismatch_is_capped()
     test_aperture_hint_breaks_focal_mount_tie()
     print("test_query_resolver: ok")

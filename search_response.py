@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 from query_resolver import (
+    DEFAULT_MIN_SCORE,
     DEFAULT_RESOLVED_PATH,
     load_resolved_records,
     rank_listings,
@@ -86,6 +87,7 @@ def format_search_result(
         "condition": final_output.get("condition_raw"),
         "final_output": _compact_final_output(final_output),
         "used_override": bool(ranked_result.get("used_override")),
+        "match_quality": ranked_result.get("match_quality"),
         "matched_fields": list(ranked_result.get("matched_fields") or []),
         "score_breakdown": list(ranked_result.get("score_breakdown") or []),
         "warnings": list(ranked_result.get("warnings") or []),
@@ -96,6 +98,7 @@ def format_search_result(
             "record_index": ranked_result.get("record_index"),
             "raw_score": ranked_result.get("raw_score"),
             "possible_score": ranked_result.get("possible_score"),
+            "match_quality_rank": ranked_result.get("match_quality_rank"),
             "mismatch_reasons": list(ranked_result.get("mismatch_reasons") or []),
             "classifier_output": (
                 source_record.get("classifier_output")
@@ -151,7 +154,7 @@ def build_search_response(
     query: str,
     records: list[dict[str, Any]],
     limit: int = 10,
-    min_score: float = 1.0,
+    min_score: float = DEFAULT_MIN_SCORE,
     include_debug: bool = False,
 ) -> dict[str, Any]:
     ranked = rank_listings(query, records, limit=limit, min_score=min_score)
@@ -166,7 +169,7 @@ def load_and_build_search_response(
     query: str,
     path: str | Path = DEFAULT_RESOLVED_PATH,
     limit: int = 10,
-    min_score: float = 1.0,
+    min_score: float = DEFAULT_MIN_SCORE,
     include_debug: bool = False,
 ) -> dict[str, Any]:
     records = load_resolved_records(path)

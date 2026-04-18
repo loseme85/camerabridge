@@ -117,6 +117,48 @@ MP3_SILVER = _record(
     override_applied=True,
 )
 
+SUMMARON_L_35 = _record(
+    5,
+    {
+        "source": "L dealer",
+        "source_url": "https://example.invalid/summaron",
+        "title_raw": "L 35mm Summaron f2.8",
+        "price_raw": "900,000원",
+        "currency": "KRW",
+        "condition_raw": "92%",
+        "brand": "Leica",
+        "mount": "L",
+        "category": "Lens",
+        "label": "L Lens",
+        "model_raw": "Summaron",
+        "model_canonical": "Summaron",
+        "variant": [],
+        "focal_length": "35",
+        "sold_quality": "asking",
+    },
+)
+
+L_BODY_WEAK_LOW_PRICE = _record(
+    6,
+    {
+        "source": "Cheap dealer",
+        "source_url": "https://example.invalid/l-body",
+        "title_raw": "Leica IF Red Scale + 50mm F2.8",
+        "price_raw": "100,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "L",
+        "category": "Body",
+        "label": "L Body",
+        "model_raw": "If",
+        "model_canonical": "If",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
 
 def test_pagination_fields_and_next_offset() -> None:
     response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW, SUMMICRON_50], limit=1)
@@ -148,12 +190,48 @@ def test_relevance_default_sort_is_preserved() -> None:
     response = search_records("35lux aa", [SUMMICRON_50, SUMMILUX_HIGH], limit=2)
     assert response["applied_sort"] == "relevance"
     assert response["results"][0]["final_output"]["model_canonical"] == "Summilux-M"
+    assert response["results"][0]["match_quality"] == "strong"
 
 
 def test_price_sort_ascending() -> None:
     response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW], limit=2, sort="price_asc")
     assert response["applied_sort"] == "price_asc"
     assert response["results"][0]["price"] == "6,100,000원"
+
+
+def test_default_min_score_filters_mount_only_weak_matches() -> None:
+    response = search_records(
+        "ltm summaron 35",
+        [L_BODY_WEAK_LOW_PRICE],
+        filters={"brand": "Leica", "mount": "L"},
+    )
+    assert response["total_ranked"] == 0
+    assert response["result_count"] == 0
+    assert response["applied_quality_filter"]["min_score"] == 25.0
+
+
+def test_price_sort_keeps_strong_match_above_cheap_weak_match() -> None:
+    response = search_records(
+        "ltm summaron 35",
+        [L_BODY_WEAK_LOW_PRICE, SUMMARON_L_35],
+        sort="price_asc",
+        min_score=1,
+    )
+    assert response["results"][0]["final_output"]["model_canonical"] == "Summaron"
+    assert response["results"][0]["match_quality"] == "strong"
+    assert response["results"][1]["match_quality"] == "weak"
+
+
+def test_strong_only_filters_medium_and_weak_matches() -> None:
+    response = search_records(
+        "ltm summaron 35",
+        [L_BODY_WEAK_LOW_PRICE, SUMMARON_L_35],
+        strong_only=True,
+        min_score=1,
+    )
+    assert response["result_count"] == 1
+    assert response["results"][0]["match_quality"] == "strong"
+    assert response["applied_quality_filter"]["strong_only"] is True
 
 
 def test_debug_hidden_by_default() -> None:
@@ -187,6 +265,9 @@ if __name__ == "__main__":
     test_sold_quality_category_brand_filters()
     test_relevance_default_sort_is_preserved()
     test_price_sort_ascending()
+    test_default_min_score_filters_mount_only_weak_matches()
+    test_price_sort_keeps_strong_match_above_cheap_weak_match()
+    test_strong_only_filters_medium_and_weak_matches()
     test_debug_hidden_by_default()
     test_debug_visible_when_requested()
     test_empty_result_response()
