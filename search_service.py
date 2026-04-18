@@ -21,6 +21,7 @@ import re
 from pathlib import Path
 from typing import Any, Optional
 
+from query_parser import parse_query
 from query_resolver import DEFAULT_MIN_SCORE, DEFAULT_RESOLVED_PATH, load_resolved_records, rank_listings
 from search_response import format_search_response, summarize_result_quality
 from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index
@@ -29,6 +30,8 @@ from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index
 SEARCH_SERVICE_SCHEMA_VERSION = "search_service.v1"
 DEFAULT_LIMIT = 20
 MAX_LIMIT = 100
+CANDIDATE_MIN_BROAD_RECORDS = 120
+CANDIDATE_MAX_RECORDS = 900
 SUPPORTED_SORTS = {
     "relevance",
     "price_asc",
@@ -49,6 +52,13 @@ QUALITY_RANKS = {
 
 def _normalize_text(value: Any) -> str:
     return re.sub(r"\s+", " ", str(value or "").strip().lower())
+
+
+def _normalize_search_text(value: Any) -> str:
+    text = str(value or "").lower()
+    text = text.replace("㎜", "mm").replace("ｍｍ", "mm")
+    text = re.sub(r"[^a-z0-9가-힣]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def _as_list(value: Any) -> list[Any]:
@@ -121,6 +131,198 @@ def _source_record_by_index(records: list[dict[str, Any]]) -> dict[int, dict[str
         if isinstance(index, int):
             output[index] = record
     return output
+
+
+def _final_output(record: dict[str, Any]) -> dict[str, Any]:
+    final = record.get("final_output")
+    return final if isinstance(final, dict) else record
+
+
+def _candidate_search_text(record: dict[str, Any]) -> str:
+    final = _final_output(record)
+    raw = record.get("raw_item") if isinstance(record.get("raw_item"), dict) else {}
+    parts = [
+        final.get("model_canonical"),
+        final.get("model_raw"),
+        final.get("label"),
+        final.get("title_raw"),
+        final.get("normalized_name"),
+        final.get("normalized_title"),
+        raw.get("상품명"),
+        raw.get("label"),
+        " ".join(str(item) for item in _as_list(final.get("variant"))),
+    ]
+    return _normalize_search_text(" ".join(str(part) for part in parts if part))
+
+
+def _contains_word(text: str, value: Any) -> bool:
+    needle = _normalize_search_text(value)
+    if not needle:
+        return False
+    return bool(re.search(rf"\b{re.escape(needle)}\b", text))
+
+
+def _candidate_focal_match(intent: dict[str, Any], final: dict[str, Any], text: str) -> bool:
+    focal = str(intent.get("focal_length") or "")
+    if not focal:
+        return False
+    listing_focal = final.get("focal_length")
+    if listing_focal:
+        if _normalize_search_text(listing_focal) == _normalize_search_text(focal):
+            return True
+        if focal in re.findall(r"\d{2,3}", str(listing_focal)):
+            return True
+    return bool(re.search(rf"\b{re.escape(focal)}\s*(mm|/)\b", text))
+
+
+def _candidate_aperture_match(intent: dict[str, Any], text: str) -> bool:
+    aperture = str(intent.get("aperture") or "")
+    if not aperture:
+        for token in intent.get("tokens", []):
+            if token.get("type") in {"aperture", "aperture_hint"}:
+                aperture = str(token.get("value") or "")
+                break
+    if not aperture:
+        return False
+    parts = aperture.split(".")
+    if len(parts) == 1:
+        pattern = rf"\bf\s*{re.escape(parts[0])}\b"
+    else:
+        pattern = rf"\bf\s*{re.escape(parts[0])}\s+{re.escape(parts[1])}\b"
+    return bool(re.search(pattern, text))
+
+
+def _candidate_system(record: dict[str, Any], final: dict[str, Any]) -> str:
+    raw = record.get("raw_item") if isinstance(record.get("raw_item"), dict) else {}
+    return str(final.get("system") or raw.get("system") or "")
+
+
+def _candidate_anchor_matches(intent: dict[str, Any], record: dict[str, Any]) -> set[str]:
+    final = _final_output(record)
+    text = _candidate_search_text(record)
+    matches: set[str] = set()
+
+    if intent.get("model_family") and any(
+        _contains_word(_normalize_search_text(value), intent["model_family"])
+        for value in [final.get("model_canonical"), final.get("model_raw"), final.get("label"), text]
+    ):
+        matches.add("model_family")
+
+    if _candidate_focal_match(intent, final, text):
+        matches.add("focal_length")
+
+    query_mount = intent.get("mount")
+    if query_mount and _normalize_search_text(query_mount) == _normalize_search_text(final.get("mount")):
+        matches.add("mount")
+
+    query_system = intent.get("system")
+    if query_system:
+        system_values = {_normalize_search_text(final.get("mount")), _normalize_search_text(_candidate_system(record, final))}
+        if _normalize_search_text(query_system) in system_values:
+            matches.add("system")
+
+    for variant in intent.get("variant") or []:
+        variant_norm = _normalize_search_text(variant)
+        listing_variants = {_normalize_search_text(item) for item in _as_list(final.get("variant"))}
+        if variant_norm in listing_variants or _contains_word(text, variant):
+            matches.add("variant")
+            break
+
+    if intent.get("generation") and _contains_word(text, intent["generation"]):
+        matches.add("generation")
+
+    if intent.get("filter_size") and _contains_word(text, intent["filter_size"]):
+        matches.add("filter_size")
+
+    if intent.get("optical_formula"):
+        formula_norm = _normalize_search_text(intent["optical_formula"])
+        if formula_norm in text or "8 element" in text or "8매" in text:
+            matches.add("optical_formula")
+
+    if _candidate_aperture_match(intent, text):
+        matches.add("aperture")
+
+    return matches
+
+
+def _candidate_anchor_fields(intent: dict[str, Any]) -> set[str]:
+    fields = {
+        field
+        for field in [
+            "model_family",
+            "focal_length",
+            "mount",
+            "system",
+            "generation",
+            "filter_size",
+            "optical_formula",
+        ]
+        if intent.get(field)
+    }
+    if intent.get("variant"):
+        fields.add("variant")
+    if intent.get("aperture") or any(token.get("type") in {"aperture", "aperture_hint"} for token in intent.get("tokens", [])):
+        fields.add("aperture")
+    return fields
+
+
+def narrow_candidate_records(
+    intent: dict[str, Any],
+    records: list[dict[str, Any]],
+    max_records: int = CANDIDATE_MAX_RECORDS,
+    min_broad_records: int = CANDIDATE_MIN_BROAD_RECORDS,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """
+    Reduce expensive resolver scoring to likely candidates.
+
+    The resolver still owns scoring and match quality. This helper only builds a
+    cheap candidate pool from already-classified compact fields.
+    """
+    input_count = len(records)
+    anchor_fields = _candidate_anchor_fields(intent)
+    stats = {
+        "applied": False,
+        "input_record_count": input_count,
+        "scored_record_count": input_count,
+        "anchor_fields": sorted(anchor_fields),
+        "strong_candidate_count": 0,
+        "broad_candidate_count": 0,
+    }
+    if input_count <= max_records or not anchor_fields:
+        return records, stats
+
+    strong: list[tuple[int, int, dict[str, Any]]] = []
+    broad: list[tuple[int, int, dict[str, Any]]] = []
+    for position, record in enumerate(records):
+        matches = _candidate_anchor_matches(intent, record)
+        match_count = len(matches)
+        if match_count >= 2:
+            strong.append((-match_count, position, record))
+        elif match_count == 1:
+            broad.append((-match_count, position, record))
+
+    if not strong:
+        return records, stats
+
+    strong.sort()
+    broad.sort()
+    selected: list[dict[str, Any]] = [item[2] for item in strong[:max_records]]
+    remaining_slots = max_records - len(selected)
+    broad_limit = min(max(min_broad_records, remaining_slots), remaining_slots) if remaining_slots > 0 else 0
+    selected.extend(item[2] for item in broad[:broad_limit])
+
+    if not selected or len(selected) >= input_count:
+        return records, stats
+
+    stats.update(
+        {
+            "applied": True,
+            "scored_record_count": len(selected),
+            "strong_candidate_count": len(strong),
+            "broad_candidate_count": len(broad),
+        }
+    )
+    return selected, stats
 
 
 def _matches_filters(
@@ -321,17 +523,34 @@ def search_records(
     include_debug: bool = False,
     min_score: float = DEFAULT_MIN_SCORE,
     strong_only: bool = False,
+    use_candidate_narrowing: bool = True,
 ) -> dict[str, Any]:
+    intent = parse_query(query)
+    candidate_records, candidate_stats = (
+        narrow_candidate_records(intent, records)
+        if use_candidate_narrowing
+        else (
+            records,
+            {
+                "applied": False,
+                "input_record_count": len(records),
+                "scored_record_count": len(records),
+                "anchor_fields": sorted(_candidate_anchor_fields(intent)),
+                "strong_candidate_count": 0,
+                "broad_candidate_count": 0,
+            },
+        )
+    )
     ranked_payload = rank_listings(
-        query,
-        records,
-        limit=len(records),
+        intent,
+        candidate_records,
+        limit=len(candidate_records),
         min_score=min_score,
     )
     ranked_results = ranked_payload["results"]
     total_before_filters = len(ranked_results)
     quality_filtered_results = apply_quality_filter(ranked_results, strong_only=strong_only)
-    filtered_results = apply_filters(quality_filtered_results, filters=filters, records=records)
+    filtered_results = apply_filters(quality_filtered_results, filters=filters, records=candidate_records)
     sorted_results, applied_sort, sort_warnings = apply_sort(filtered_results, sort=sort)
     paginated_results, pagination, pagination_warnings = paginate_results(
         sorted_results,
@@ -345,7 +564,7 @@ def search_records(
             "results": paginated_results,
             "total_ranked": len(sorted_results),
         },
-        records=records,
+        records=candidate_records,
         include_debug=include_debug,
     )
     response["schema_version"] = SEARCH_SERVICE_SCHEMA_VERSION
@@ -356,6 +575,7 @@ def search_records(
     response["applied_filters"] = filters or {}
     response["applied_sort"] = applied_sort
     response["applied_quality_filter"] = {"min_score": min_score, "strong_only": strong_only}
+    response["candidate_narrowing"] = candidate_stats
     response["result_quality_summary"] = summarize_result_quality(
         sorted_results,
         strong_only=strong_only,
@@ -375,6 +595,7 @@ def load_and_search(
     min_score: float = DEFAULT_MIN_SCORE,
     strong_only: bool = False,
     use_cache: bool = True,
+    use_candidate_narrowing: bool = True,
 ) -> dict[str, Any]:
     records = load_search_records(path=path, include_debug=include_debug, use_cache=use_cache)
     return search_records(
@@ -387,6 +608,7 @@ def load_and_search(
         include_debug=include_debug,
         min_score=min_score,
         strong_only=strong_only,
+        use_candidate_narrowing=use_candidate_narrowing,
     )
 
 

@@ -312,6 +312,41 @@ def test_load_and_search_uses_compact_index_cache_without_changing_results() -> 
         assert cached["results"][0]["match_quality"] == "strong"
 
 
+def test_candidate_narrowing_reduces_scored_records_without_changing_top_result() -> None:
+    distractors = [
+        _record(
+            1000 + index,
+            {
+                "source": "Distractor dealer",
+                "source_url": f"https://example.invalid/distractor-{index}",
+                "title_raw": f"Leica M body listing {index}",
+                "price_raw": "1,000,000원",
+                "currency": "KRW",
+                "condition_raw": "Used",
+                "brand": "Leica",
+                "mount": "M",
+                "category": "Body",
+                "label": "M Body",
+                "model_raw": "M",
+                "model_canonical": "M Body",
+                "variant": [],
+                "focal_length": None,
+                "sold_quality": "asking",
+            },
+        )
+        for index in range(1500)
+    ]
+    records = [SUMMARON_L_35, L_BODY_WEAK_LOW_PRICE] + distractors
+
+    narrowed = search_records("ltm summaron 35", records, limit=2, min_score=1)
+    full = search_records("ltm summaron 35", records, limit=2, min_score=1, use_candidate_narrowing=False)
+
+    assert narrowed["candidate_narrowing"]["applied"] is True
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+    assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+    assert narrowed["results"][0]["match_quality"] == "strong"
+
+
 if __name__ == "__main__":
     test_pagination_fields_and_next_offset()
     test_offset_pagination_returns_second_page()
@@ -328,4 +363,5 @@ if __name__ == "__main__":
     test_empty_result_response()
     test_out_of_range_offset_warning()
     test_load_and_search_uses_compact_index_cache_without_changing_results()
+    test_candidate_narrowing_reduces_scored_records_without_changing_top_result()
     print("test_search_service: ok")
