@@ -1,0 +1,194 @@
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from search_service import search_records
+
+
+def _record(index: int, final_output: dict, override_applied: bool = False) -> dict:
+    return {
+        "record_index": index,
+        "raw_item": {
+            "site": final_output.get("source"),
+            "상품명": final_output.get("title_raw"),
+            "링크": final_output.get("source_url"),
+            "system": final_output.get("system"),
+        },
+        "classifier_output": {
+            "brand": "Unknown",
+            "mount": "Unknown",
+            "category": "Lens",
+            "label": "Lens",
+            "model_canonical": None,
+        },
+        "final_output": final_output,
+        "override_applied": override_applied,
+        "audit_trail": [
+            {"changed_fields": {"mount": {"before": "Unknown", "after": "M"}}}
+        ] if override_applied else [],
+    }
+
+
+SUMMILUX_HIGH = _record(
+    1,
+    {
+        "source": "A dealer",
+        "source_url": "https://example.invalid/high",
+        "title_raw": "Leica M 35mm Summilux ASPH AA",
+        "price_raw": "7,300,000원",
+        "currency": "KRW",
+        "condition_raw": "98%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Summilux",
+        "model_canonical": "Summilux-M",
+        "variant": ["ASPH", "AA"],
+        "focal_length": "35",
+        "sold_quality": "asking",
+    },
+)
+
+SUMMILUX_LOW = _record(
+    2,
+    {
+        "source": "B dealer",
+        "source_url": "https://example.invalid/low",
+        "title_raw": "Leica M 35mm Summilux ASPH AA",
+        "price_raw": "6,100,000원",
+        "currency": "KRW",
+        "condition_raw": "95%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Summilux",
+        "model_canonical": "Summilux-M",
+        "variant": ["ASPH", "AA"],
+        "focal_length": "35",
+        "sold_quality": "sold_confirmed",
+    },
+)
+
+SUMMICRON_50 = _record(
+    3,
+    {
+        "source": "C dealer",
+        "source_url": "https://example.invalid/cron",
+        "title_raw": "Leica M 50mm Summicron",
+        "price_raw": "2,000,000원",
+        "currency": "KRW",
+        "condition_raw": "90%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Summicron",
+        "model_canonical": "Summicron-M",
+        "variant": [],
+        "focal_length": "50",
+        "sold_quality": "asking",
+    },
+)
+
+MP3_SILVER = _record(
+    4,
+    {
+        "source": "Trusted dealer",
+        "source_url": "https://example.invalid/mp3",
+        "title_raw": "[위탁] MP3 (Silver)",
+        "price_raw": "20,500,000원",
+        "currency": "KRW",
+        "condition_raw": "93%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": None,
+        "model_canonical": "MP3",
+        "variant": ["Silver"],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+    override_applied=True,
+)
+
+
+def test_pagination_fields_and_next_offset() -> None:
+    response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW, SUMMICRON_50], limit=1)
+    assert response["pagination"]["limit"] == 1
+    assert response["pagination"]["offset"] == 0
+    assert response["pagination"]["has_more"] is True
+    assert response["pagination"]["next_offset"] == 1
+    assert response["result_count"] == 1
+
+
+def test_offset_pagination_returns_second_page() -> None:
+    response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW], limit=1, offset=1)
+    assert response["pagination"]["offset"] == 1
+    assert response["result_count"] == 1
+    assert response["pagination"]["has_more"] is False
+
+
+def test_sold_quality_category_brand_filters() -> None:
+    response = search_records(
+        "35lux aa",
+        [SUMMILUX_HIGH, SUMMILUX_LOW, MP3_SILVER],
+        filters={"sold_quality": "asking", "category": "Lens", "brand": "Leica"},
+    )
+    assert response["result_count"] == 1
+    assert response["results"][0]["source_url"] == "https://example.invalid/high"
+
+
+def test_relevance_default_sort_is_preserved() -> None:
+    response = search_records("35lux aa", [SUMMICRON_50, SUMMILUX_HIGH], limit=2)
+    assert response["applied_sort"] == "relevance"
+    assert response["results"][0]["final_output"]["model_canonical"] == "Summilux-M"
+
+
+def test_price_sort_ascending() -> None:
+    response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW], limit=2, sort="price_asc")
+    assert response["applied_sort"] == "price_asc"
+    assert response["results"][0]["price"] == "6,100,000원"
+
+
+def test_debug_hidden_by_default() -> None:
+    response = search_records("mp3 silver", [MP3_SILVER], limit=1)
+    assert "debug" not in response["results"][0]
+
+
+def test_debug_visible_when_requested() -> None:
+    response = search_records("mp3 silver", [MP3_SILVER], limit=1, include_debug=True)
+    assert response["results"][0]["debug"]["classifier_output"]["brand"] == "Unknown"
+    assert response["results"][0]["debug"]["audit_trail"][0]["changed_fields"]["mount"]["after"] == "M"
+
+
+def test_empty_result_response() -> None:
+    response = search_records("35lux aa", [], limit=5)
+    assert response["total_ranked"] == 0
+    assert response["result_count"] == 0
+    assert response["pagination"]["has_more"] is False
+    assert "no_results" in response["warnings"]
+
+
+def test_out_of_range_offset_warning() -> None:
+    response = search_records("35lux aa", [SUMMILUX_HIGH], limit=5, offset=99)
+    assert response["result_count"] == 0
+    assert "offset_out_of_range" in response["warnings"]
+
+
+if __name__ == "__main__":
+    test_pagination_fields_and_next_offset()
+    test_offset_pagination_returns_second_page()
+    test_sold_quality_category_brand_filters()
+    test_relevance_default_sort_is_preserved()
+    test_price_sort_ascending()
+    test_debug_hidden_by_default()
+    test_debug_visible_when_requested()
+    test_empty_result_response()
+    test_out_of_range_offset_warning()
+    print("test_search_service: ok")

@@ -1,0 +1,85 @@
+[
+  {
+    "id": "trusted_listing_mp3_silver_chungmuro_20889",
+    "status": "active",
+    "source": "trusted_metadata",
+    "match": {
+      "source": "라이카스토어 충무로",
+      "source_url": "https://leica-storebando.co.kr/product/위탁-mp3-silver/20889/category/442/display/1/",
+      "normalized_title": "mp3 (silver)"
+    },
+    "override": {
+      "fields": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": ["Silver"]
+      },
+      "confidence": 0.99,
+      "reason": "Trusted dealer exact listing identifies this as Leica MP3 body.",
+      "evidence": [
+        "Exact source_url match",
+        "Trusted dealer listing label: Leica MP3"
+      ],
+      "updated_at": "2026-04-18",
+      "updated_by": "manual_review"
+    }
+  },
+  {
+    "id": "trusted_listing_mp3_blackpaint_chungmuro_17883",
+    "status": "active",
+    "source": "trusted_metadata",
+    "match": {
+      "source": "라이카스토어 충무로",
+      "source_url": "https://leica-storebando.co.kr/product/중고-mp3-black-paint/17883/category/442/display/1/",
+      "normalized_title": "mp3 (black paint)"
+    },
+    "override": {
+      "fields": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": ["Black Paint"]
+      },
+      "confidence": 0.99,
+      "reason": "Trusted dealer exact listing identifies this as Leica MP3 body.",
+      "evidence": [
+        "Exact source_url match",
+        "Trusted dealer listing label: Leica MP Black Paint"
+      ],
+      "updated_at": "2026-04-18",
+      "updated_by": "manual_review"
+    }
+  },
+  {
+    "id": "trusted_listing_kitamura_mp3_lhsa_2119340930118",
+    "status": "active",
+    "source": "trusted_metadata",
+    "match": {
+      "source": "기타무라 (일본)",
+      "source_url": "https://www.kitamuracamera.jp/buy/item/2119340930118/",
+      "normalized_title": "leica leica mp3 （0.72） lhsa スペシャル・エディション set silver"
+    },
+    "override": {
+      "fields": {
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": ["0.72", "LHSA", "Silver"]
+      },
+      "confidence": 0.98,
+      "reason": "Trusted source exact listing for Leica MP3 LHSA body.",
+      "evidence": [
+        "Exact source_url match",
+        "Title includes Leica MP3 LHSA Special Edition"
+      ],
+      "updated_at": "2026-04-18",
+      "updated_by": "manual_review"
+    }
+  }
+]

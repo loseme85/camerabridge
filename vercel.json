@@ -4,6 +4,7 @@
     { "source": "/admin.html", "destination": "/app/templates/admin.html" },
     { "source": "/qa.html", "destination": "/app/templates/qa.html" },
     { "source": "/api/telegram", "destination": "/api/telegram.py" },
+    { "source": "/api/search", "destination": "/api/search.py" },
     { "source": "/data/:path*", "destination": "/data/:path*" }
   ]
 }
