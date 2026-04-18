@@ -7,7 +7,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from search_index import build_search_index, load_search_index, write_search_index
+from search_index import (
+    build_search_index,
+    clear_search_index_cache,
+    load_search_index,
+    search_index_cache_info,
+    write_search_index,
+)
 from search_service import search_records
 
 
@@ -90,8 +96,71 @@ def test_write_and_load_search_index_object() -> None:
         assert loaded[0]["final_output"]["model_canonical"] == "Summilux-M"
 
 
+def test_load_search_index_reuses_module_cache_for_unchanged_file() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        resolved_path = tmp_path / "resolved.json"
+        output_path = tmp_path / "search_index.json"
+        resolved_path.write_text(json.dumps([RESOLVED_RECORD], ensure_ascii=False), encoding="utf-8")
+
+        write_search_index(resolved_path, output_path)
+        clear_search_index_cache(output_path)
+        first = load_search_index(output_path)
+        second = load_search_index(output_path)
+        cache_info = search_index_cache_info(output_path)
+
+        assert first is second
+        assert cache_info["cached"] is True
+        assert cache_info["record_count"] == 1
+
+
+def test_load_search_index_reloads_when_file_changes() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        resolved_path = tmp_path / "resolved.json"
+        output_path = tmp_path / "search_index.json"
+        resolved_path.write_text(json.dumps([RESOLVED_RECORD], ensure_ascii=False), encoding="utf-8")
+
+        write_search_index(resolved_path, output_path)
+        clear_search_index_cache(output_path)
+        first = load_search_index(output_path)
+
+        updated_record = json.loads(json.dumps(RESOLVED_RECORD, ensure_ascii=False))
+        updated_record["record_index"] = 43
+        updated_record["final_output"]["model_canonical"] = "Summicron-M"
+        updated_record["final_output"]["title_raw"] = "Leica M 50mm Summicron"
+        resolved_path.write_text(json.dumps([RESOLVED_RECORD, updated_record], ensure_ascii=False), encoding="utf-8")
+        write_search_index(resolved_path, output_path)
+        second = load_search_index(output_path)
+
+        assert len(first) == 1
+        assert len(second) == 2
+        assert second is not first
+        assert second[1]["final_output"]["model_canonical"] == "Summicron-M"
+
+
+def test_load_search_index_can_bypass_cache_for_timing_comparisons() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        resolved_path = tmp_path / "resolved.json"
+        output_path = tmp_path / "search_index.json"
+        resolved_path.write_text(json.dumps([RESOLVED_RECORD], ensure_ascii=False), encoding="utf-8")
+
+        write_search_index(resolved_path, output_path)
+        clear_search_index_cache(output_path)
+        cached = load_search_index(output_path)
+        uncached = load_search_index(output_path, use_cache=False)
+
+        assert cached == uncached
+        assert cached is not uncached
+        assert search_index_cache_info(output_path)["cached"] is True
+
+
 if __name__ == "__main__":
     test_build_search_index_keeps_only_serving_fields()
     test_search_records_accepts_compact_index_records()
     test_write_and_load_search_index_object()
+    test_load_search_index_reuses_module_cache_for_unchanged_file()
+    test_load_search_index_reloads_when_file_changes()
+    test_load_search_index_can_bypass_cache_for_timing_comparisons()
     print("test_search_index: ok")

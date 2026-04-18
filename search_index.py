@@ -29,6 +29,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 SEARCH_INDEX_SCHEMA_VERSION = "search_index.v1"
 DEFAULT_RESOLVED_PATH = PROJECT_ROOT / "data/derived/results_resolved_v2.json"
 DEFAULT_SEARCH_INDEX_PATH = PROJECT_ROOT / "data/derived/results_search_index_v1.json"
+_SEARCH_INDEX_CACHE: dict[str, dict[str, Any]] = {}
 
 RAW_ITEM_FIELDS = [
     "site",
@@ -154,16 +155,62 @@ def write_search_index(
     }
 
 
-def load_search_index(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> list[dict[str, Any]]:
-    with open(path, encoding="utf-8") as f:
+def _cache_key(path: str | Path) -> str:
+    return str(Path(path).resolve())
+
+
+def clear_search_index_cache(path: str | Path | None = None) -> None:
+    """Clear cached compact index records for tests, demos, and local rebuilds."""
+    if path is None:
+        _SEARCH_INDEX_CACHE.clear()
+        return
+    _SEARCH_INDEX_CACHE.pop(_cache_key(path), None)
+
+
+def search_index_cache_info(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dict[str, Any]:
+    """Return lightweight cache diagnostics without exposing record payloads."""
+    entry = _SEARCH_INDEX_CACHE.get(_cache_key(path))
+    if not entry:
+        return {"cached": False, "record_count": 0}
+    return {
+        "cached": True,
+        "record_count": len(entry["records"]),
+        "mtime_ns": entry["mtime_ns"],
+        "size": entry["size"],
+    }
+
+
+def load_search_index(
+    path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
+    use_cache: bool = True,
+) -> list[dict[str, Any]]:
+    index_path = Path(path)
+    stat = index_path.stat()
+    cache_key = _cache_key(index_path)
+    cached = _SEARCH_INDEX_CACHE.get(cache_key) if use_cache else None
+    if (
+        cached
+        and cached["mtime_ns"] == stat.st_mtime_ns
+        and cached["size"] == stat.st_size
+    ):
+        return cached["records"]
+
+    with index_path.open(encoding="utf-8") as f:
         payload = json.load(f)
     if isinstance(payload, list):
-        return payload
-    if isinstance(payload, dict):
-        records = payload.get("records")
-        if isinstance(records, list):
-            return records
-    raise ValueError(f"{path} must contain a search index object or record list")
+        records = payload
+    elif isinstance(payload, dict) and isinstance(payload.get("records"), list):
+        records = payload["records"]
+    else:
+        raise ValueError(f"{path} must contain a search index object or record list")
+
+    if use_cache:
+        _SEARCH_INDEX_CACHE[cache_key] = {
+            "mtime_ns": stat.st_mtime_ns,
+            "size": stat.st_size,
+            "records": records,
+        }
+    return records
 
 
 def _parse_args() -> argparse.Namespace:

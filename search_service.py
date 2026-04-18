@@ -374,8 +374,9 @@ def load_and_search(
     include_debug: bool = False,
     min_score: float = DEFAULT_MIN_SCORE,
     strong_only: bool = False,
+    use_cache: bool = True,
 ) -> dict[str, Any]:
-    records = load_search_records(path=path, include_debug=include_debug)
+    records = load_search_records(path=path, include_debug=include_debug, use_cache=use_cache)
     return search_records(
         query=query,
         records=records,
@@ -392,6 +393,7 @@ def load_and_search(
 def load_search_records(
     path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
     include_debug: bool = False,
+    use_cache: bool = True,
 ) -> list[dict[str, Any]]:
     """
     Load compact records for normal search and full resolved records for debug.
@@ -404,7 +406,7 @@ def load_search_records(
     if include_debug and data_path == DEFAULT_SEARCH_INDEX_PATH and DEFAULT_RESOLVED_PATH.exists():
         return load_resolved_records(DEFAULT_RESOLVED_PATH)
     try:
-        return load_search_index(data_path)
+        return load_search_index(data_path, use_cache=use_cache)
     except FileNotFoundError:
         if data_path == DEFAULT_SEARCH_INDEX_PATH:
             return load_resolved_records(DEFAULT_RESOLVED_PATH)

@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import json
 import sys
+import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from search_service import search_records
+from search_index import clear_search_index_cache, write_search_index
+from search_service import load_and_search, search_records
 
 
 def _record(index: int, final_output: dict, override_applied: bool = False) -> dict:
@@ -292,6 +295,23 @@ def test_out_of_range_offset_warning() -> None:
     assert "offset_out_of_range" in response["warnings"]
 
 
+def test_load_and_search_uses_compact_index_cache_without_changing_results() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        resolved_path = tmp_path / "resolved.json"
+        output_path = tmp_path / "search_index.json"
+        resolved_path.write_text(json.dumps([SUMMILUX_HIGH], ensure_ascii=False), encoding="utf-8")
+        write_search_index(resolved_path, output_path)
+
+        clear_search_index_cache(output_path)
+        cached = load_and_search("35lux aa", path=output_path, limit=1)
+        uncached = load_and_search("35lux aa", path=output_path, limit=1, use_cache=False)
+
+        assert cached["result_count"] == uncached["result_count"] == 1
+        assert cached["results"][0]["final_output"] == uncached["results"][0]["final_output"]
+        assert cached["results"][0]["match_quality"] == "strong"
+
+
 if __name__ == "__main__":
     test_pagination_fields_and_next_offset()
     test_offset_pagination_returns_second_page()
@@ -307,4 +327,5 @@ if __name__ == "__main__":
     test_debug_visible_when_requested()
     test_empty_result_response()
     test_out_of_range_offset_warning()
+    test_load_and_search_uses_compact_index_cache_without_changing_results()
     print("test_search_service: ok")
