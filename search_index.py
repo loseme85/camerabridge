@@ -27,6 +27,7 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 SEARCH_INDEX_SCHEMA_VERSION = "search_index.v1"
+SEARCH_FIELDS_SCHEMA_VERSION = "search_fields.v1"
 DEFAULT_RESOLVED_PATH = PROJECT_ROOT / "data/derived/results_resolved_v2.json"
 DEFAULT_SEARCH_INDEX_PATH = PROJECT_ROOT / "data/derived/results_search_index_v1.json"
 _SEARCH_INDEX_CACHE: dict[str, dict[str, Any]] = {}
@@ -74,6 +75,33 @@ def normalize_title(value: Any) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
+def _tokens(value: Any) -> list[str]:
+    normalized = normalize_title(value)
+    if not normalized:
+        return []
+    return sorted(set(normalized.split()))
+
+
+def _joined_tokens(values: list[Any]) -> list[str]:
+    joined = " ".join(str(value) for value in values if value)
+    return _tokens(joined)
+
+
+def _extract_aperture_tokens(normalized_text: str) -> list[str]:
+    tokens: set[str] = set()
+    for match in re.finditer(r"\bf\s*(0|1|2|3|4|5|6|7|8|9)\s+(\d{1,2})\b", normalized_text):
+        tokens.add(f"{match.group(1)}.{match.group(2)}")
+    return sorted(tokens)
+
+
 def parse_price_numeric(value: Any) -> float | None:
     text = str(value or "")
     if not text or any(keyword in text for keyword in ["문의", "ASK", "Ask", "상담"]):
@@ -95,6 +123,51 @@ def _compact_dict(source: dict[str, Any], fields: list[str]) -> dict[str, Any]:
     }
 
 
+def build_search_fields(compact_final: dict[str, Any], raw_item: dict[str, Any]) -> dict[str, Any]:
+    variant_values = [str(item) for item in _as_list(compact_final.get("variant")) if item]
+    model_values = [
+        compact_final.get("model_canonical"),
+        compact_final.get("model_raw"),
+        compact_final.get("label"),
+    ]
+    text_parts = [
+        *model_values,
+        compact_final.get("title_raw"),
+        compact_final.get("normalized_name"),
+        compact_final.get("normalized_title"),
+        raw_item.get("상품명"),
+        raw_item.get("label"),
+        " ".join(variant_values),
+    ]
+    searchable_text = normalize_title(" ".join(str(part) for part in text_parts if part))
+    model_text = normalize_title(" ".join(str(value) for value in model_values if value))
+
+    mount_token = normalize_title(compact_final.get("mount"))
+    system_token = normalize_title(compact_final.get("system") or raw_item.get("system"))
+    category_token = normalize_title(compact_final.get("category"))
+    focal_token = normalize_title(compact_final.get("focal_length"))
+    variant_tokens = _joined_tokens(variant_values)
+
+    anchor_tokens = set(searchable_text.split())
+    anchor_tokens.update(token for token in [mount_token, system_token, category_token, focal_token] if token)
+    anchor_tokens.update(variant_tokens)
+
+    return {
+        "schema_version": SEARCH_FIELDS_SCHEMA_VERSION,
+        "searchable_text": searchable_text,
+        "tokens": sorted(anchor_tokens),
+        "normalized_title_tokens": _tokens(compact_final.get("normalized_title") or compact_final.get("title_raw")),
+        "model_text": model_text,
+        "model_tokens": _tokens(model_text),
+        "variant_tokens": variant_tokens,
+        "aperture_tokens": _extract_aperture_tokens(searchable_text),
+        "focal_token": focal_token,
+        "mount_token": mount_token,
+        "system_token": system_token,
+        "category_token": category_token,
+    }
+
+
 def compact_resolved_record(record: dict[str, Any]) -> dict[str, Any]:
     raw_item = record.get("raw_item") if isinstance(record.get("raw_item"), dict) else {}
     final_output = record.get("final_output") if isinstance(record.get("final_output"), dict) else {}
@@ -107,12 +180,14 @@ def compact_resolved_record(record: dict[str, Any]) -> dict[str, Any]:
     compact_final["source_url"] = source_url
     compact_final["parsed_price_numeric"] = parse_price_numeric(compact_final.get("price_raw"))
     compact_final["normalized_title"] = normalize_title(title)
+    search_fields = build_search_fields(compact_final, raw_item)
 
     return {
         "search_id": source_url or f"record:{record.get('record_index')}",
         "record_index": record.get("record_index"),
         "raw_item": _compact_dict(raw_item, RAW_ITEM_FIELDS),
         "final_output": compact_final,
+        "search_fields": search_fields,
         "override_applied": bool(record.get("override_applied")),
     }
 

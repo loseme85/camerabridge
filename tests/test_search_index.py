@@ -69,6 +69,13 @@ def test_build_search_index_keeps_only_serving_fields() -> None:
     assert "risk_flags" not in compact["final_output"]
     assert compact["final_output"]["parsed_price_numeric"] == 7300000.0
     assert compact["final_output"]["normalized_title"] == "leica m 35mm summilux asph aa"
+    assert compact["search_fields"]["schema_version"] == "search_fields.v1"
+    assert "leica m 35mm summilux asph aa" in compact["search_fields"]["searchable_text"]
+    assert compact["search_fields"]["focal_token"] == "35"
+    assert compact["search_fields"]["mount_token"] == "m"
+    assert compact["search_fields"]["system_token"] == "m"
+    assert "summilux" in compact["search_fields"]["model_tokens"]
+    assert "aa" in compact["search_fields"]["variant_tokens"]
 
 
 def test_search_records_accepts_compact_index_records() -> None:
@@ -80,6 +87,7 @@ def test_search_records_accepts_compact_index_records() -> None:
     assert result["final_output"]["model_canonical"] == "Summilux-M"
     assert result["used_override"] is True
     assert "debug" not in result
+    assert response["candidate_narrowing"]["precomputed_field_record_count"] == 0
 
 
 def test_write_and_load_search_index_object() -> None:

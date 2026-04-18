@@ -138,7 +138,24 @@ def _final_output(record: dict[str, Any]) -> dict[str, Any]:
     return final if isinstance(final, dict) else record
 
 
+def _search_fields(record: dict[str, Any]) -> dict[str, Any]:
+    fields = record.get("search_fields")
+    return fields if isinstance(fields, dict) else {}
+
+
+def _search_field_tokens(record: dict[str, Any], field_name: str) -> set[str]:
+    value = _search_fields(record).get(field_name)
+    if isinstance(value, list):
+        return {_normalize_search_text(item) for item in value if item}
+    return set()
+
+
 def _candidate_search_text(record: dict[str, Any]) -> str:
+    search_fields = _search_fields(record)
+    searchable_text = search_fields.get("searchable_text")
+    if isinstance(searchable_text, str) and searchable_text:
+        return searchable_text
+
     final = _final_output(record)
     raw = record.get("raw_item") if isinstance(record.get("raw_item"), dict) else {}
     parts = [
@@ -156,34 +173,82 @@ def _candidate_search_text(record: dict[str, Any]) -> str:
 
 
 def _contains_word(text: str, value: Any) -> bool:
-    needle = _normalize_search_text(value)
+    return _contains_normalized_word(text, _normalize_search_text(value))
+
+
+def _contains_normalized_word(text: str, needle: str) -> bool:
     if not needle:
         return False
+    if " " not in needle and needle in set(text.split()):
+        return True
     return bool(re.search(rf"\b{re.escape(needle)}\b", text))
 
 
-def _candidate_focal_match(intent: dict[str, Any], final: dict[str, Any], text: str) -> bool:
-    focal = str(intent.get("focal_length") or "")
+def _aperture_from_intent(intent: dict[str, Any]) -> str:
+    aperture = str(intent.get("aperture") or "")
+    if aperture:
+        return aperture
+    for token in intent.get("tokens", []):
+        if token.get("type") in {"aperture", "aperture_hint"}:
+            return str(token.get("value") or "")
+    return ""
+
+
+def _candidate_anchor_query(intent: dict[str, Any]) -> dict[str, Any]:
+    aperture = _aperture_from_intent(intent)
+    return {
+        "model_family": _normalize_search_text(intent.get("model_family")),
+        "focal_length": str(intent.get("focal_length") or ""),
+        "focal_length_norm": _normalize_search_text(intent.get("focal_length")),
+        "mount": _normalize_search_text(intent.get("mount")),
+        "system": _normalize_search_text(intent.get("system")),
+        "variant": [_normalize_search_text(item) for item in intent.get("variant") or [] if item],
+        "generation": _normalize_search_text(intent.get("generation")),
+        "filter_size": _normalize_search_text(intent.get("filter_size")),
+        "optical_formula": _normalize_search_text(intent.get("optical_formula")),
+        "aperture": aperture,
+        "aperture_norm": _normalize_search_text(aperture),
+    }
+
+
+def _record_has_precomputed_search_fields(record: dict[str, Any]) -> bool:
+    fields = _search_fields(record)
+    return bool(fields.get("searchable_text") and isinstance(fields.get("tokens"), list))
+
+
+def _search_field_value(record: dict[str, Any], field_name: str) -> str:
+    value = _search_fields(record).get(field_name)
+    return value if isinstance(value, str) else ""
+
+
+def _contains_precomputed_token(record: dict[str, Any], field_name: str, value: str) -> bool:
+    if not value:
+        return False
+    return value in _search_field_tokens(record, field_name)
+
+
+def _candidate_focal_match(anchor_query: dict[str, Any], record: dict[str, Any], final: dict[str, Any], text: str) -> bool:
+    focal = str(anchor_query.get("focal_length") or "")
     if not focal:
         return False
+    focal_norm = str(anchor_query.get("focal_length_norm") or _normalize_search_text(focal))
+    if _search_field_value(record, "focal_token") == focal_norm:
+        return True
     listing_focal = final.get("focal_length")
     if listing_focal:
-        if _normalize_search_text(listing_focal) == _normalize_search_text(focal):
+        if _normalize_search_text(listing_focal) == focal_norm:
             return True
         if focal in re.findall(r"\d{2,3}", str(listing_focal)):
             return True
     return bool(re.search(rf"\b{re.escape(focal)}\s*(mm|/)\b", text))
 
 
-def _candidate_aperture_match(intent: dict[str, Any], text: str) -> bool:
-    aperture = str(intent.get("aperture") or "")
-    if not aperture:
-        for token in intent.get("tokens", []):
-            if token.get("type") in {"aperture", "aperture_hint"}:
-                aperture = str(token.get("value") or "")
-                break
+def _candidate_aperture_match(anchor_query: dict[str, Any], record: dict[str, Any], text: str) -> bool:
+    aperture = str(anchor_query.get("aperture") or "")
     if not aperture:
         return False
+    if _contains_precomputed_token(record, "aperture_tokens", str(anchor_query.get("aperture_norm") or aperture)):
+        return True
     parts = aperture.split(".")
     if len(parts) == 1:
         pattern = rf"\bf\s*{re.escape(parts[0])}\b"
@@ -197,49 +262,59 @@ def _candidate_system(record: dict[str, Any], final: dict[str, Any]) -> str:
     return str(final.get("system") or raw.get("system") or "")
 
 
-def _candidate_anchor_matches(intent: dict[str, Any], record: dict[str, Any]) -> set[str]:
+def _candidate_anchor_matches(
+    intent: dict[str, Any],
+    record: dict[str, Any],
+    anchor_query: Optional[dict[str, Any]] = None,
+) -> set[str]:
+    anchor_query = anchor_query or _candidate_anchor_query(intent)
     final = _final_output(record)
     text = _candidate_search_text(record)
     matches: set[str] = set()
 
-    if intent.get("model_family") and any(
-        _contains_word(_normalize_search_text(value), intent["model_family"])
-        for value in [final.get("model_canonical"), final.get("model_raw"), final.get("label"), text]
+    model_family = anchor_query.get("model_family")
+    model_text = _search_field_value(record, "model_text")
+    if model_family and (
+        _contains_normalized_word(model_text, model_family)
+        or _contains_normalized_word(text, model_family)
     ):
         matches.add("model_family")
 
-    if _candidate_focal_match(intent, final, text):
+    if _candidate_focal_match(anchor_query, record, final, text):
         matches.add("focal_length")
 
-    query_mount = intent.get("mount")
-    if query_mount and _normalize_search_text(query_mount) == _normalize_search_text(final.get("mount")):
+    query_mount = anchor_query.get("mount")
+    if query_mount and query_mount == (_search_field_value(record, "mount_token") or _normalize_search_text(final.get("mount"))):
         matches.add("mount")
 
-    query_system = intent.get("system")
+    query_system = anchor_query.get("system")
     if query_system:
-        system_values = {_normalize_search_text(final.get("mount")), _normalize_search_text(_candidate_system(record, final))}
-        if _normalize_search_text(query_system) in system_values:
+        system_values = {
+            _search_field_value(record, "mount_token") or _normalize_search_text(final.get("mount")),
+            _search_field_value(record, "system_token") or _normalize_search_text(_candidate_system(record, final)),
+        }
+        if query_system in system_values:
             matches.add("system")
 
-    for variant in intent.get("variant") or []:
-        variant_norm = _normalize_search_text(variant)
-        listing_variants = {_normalize_search_text(item) for item in _as_list(final.get("variant"))}
-        if variant_norm in listing_variants or _contains_word(text, variant):
+    listing_variant_tokens = _search_field_tokens(record, "variant_tokens")
+    for variant_norm in anchor_query.get("variant") or []:
+        listing_variants = listing_variant_tokens or {_normalize_search_text(item) for item in _as_list(final.get("variant"))}
+        if variant_norm in listing_variants or _contains_normalized_word(text, variant_norm):
             matches.add("variant")
             break
 
-    if intent.get("generation") and _contains_word(text, intent["generation"]):
+    if anchor_query.get("generation") and _contains_normalized_word(text, anchor_query["generation"]):
         matches.add("generation")
 
-    if intent.get("filter_size") and _contains_word(text, intent["filter_size"]):
+    if anchor_query.get("filter_size") and _contains_normalized_word(text, anchor_query["filter_size"]):
         matches.add("filter_size")
 
-    if intent.get("optical_formula"):
-        formula_norm = _normalize_search_text(intent["optical_formula"])
+    if anchor_query.get("optical_formula"):
+        formula_norm = anchor_query["optical_formula"]
         if formula_norm in text or "8 element" in text or "8매" in text:
             matches.add("optical_formula")
 
-    if _candidate_aperture_match(intent, text):
+    if _candidate_aperture_match(anchor_query, record, text):
         matches.add("aperture")
 
     return matches
@@ -287,14 +362,19 @@ def narrow_candidate_records(
         "anchor_fields": sorted(anchor_fields),
         "strong_candidate_count": 0,
         "broad_candidate_count": 0,
+        "precomputed_field_record_count": 0,
     }
     if input_count <= max_records or not anchor_fields:
         return records, stats
 
+    anchor_query = _candidate_anchor_query(intent)
     strong: list[tuple[int, int, dict[str, Any]]] = []
     broad: list[tuple[int, int, dict[str, Any]]] = []
+    precomputed_count = 0
     for position, record in enumerate(records):
-        matches = _candidate_anchor_matches(intent, record)
+        if _record_has_precomputed_search_fields(record):
+            precomputed_count += 1
+        matches = _candidate_anchor_matches(intent, record, anchor_query=anchor_query)
         match_count = len(matches)
         if match_count >= 2:
             strong.append((-match_count, position, record))
@@ -302,6 +382,7 @@ def narrow_candidate_records(
             broad.append((-match_count, position, record))
 
     if not strong:
+        stats["precomputed_field_record_count"] = precomputed_count
         return records, stats
 
     strong.sort()
@@ -320,6 +401,7 @@ def narrow_candidate_records(
             "scored_record_count": len(selected),
             "strong_candidate_count": len(strong),
             "broad_candidate_count": len(broad),
+            "precomputed_field_record_count": precomputed_count,
         }
     )
     return selected, stats
@@ -538,6 +620,7 @@ def search_records(
                 "anchor_fields": sorted(_candidate_anchor_fields(intent)),
                 "strong_candidate_count": 0,
                 "broad_candidate_count": 0,
+                "precomputed_field_record_count": 0,
             },
         )
     )

@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from search_index import clear_search_index_cache, write_search_index
+from search_index import build_search_index, clear_search_index_cache, write_search_index
 from search_service import load_and_search, search_records
 
 
@@ -347,6 +347,41 @@ def test_candidate_narrowing_reduces_scored_records_without_changing_top_result(
     assert narrowed["results"][0]["match_quality"] == "strong"
 
 
+def test_candidate_narrowing_uses_precomputed_search_fields_when_available() -> None:
+    distractors = [
+        _record(
+            2000 + index,
+            {
+                "source": "Distractor dealer",
+                "source_url": f"https://example.invalid/precomputed-distractor-{index}",
+                "title_raw": f"Leica M body listing {index}",
+                "price_raw": "1,000,000원",
+                "currency": "KRW",
+                "condition_raw": "Used",
+                "brand": "Leica",
+                "mount": "M",
+                "category": "Body",
+                "label": "M Body",
+                "model_raw": "M",
+                "model_canonical": "M Body",
+                "variant": [],
+                "focal_length": None,
+                "sold_quality": "asking",
+            },
+        )
+        for index in range(1500)
+    ]
+    records = build_search_index([SUMMARON_L_35, L_BODY_WEAK_LOW_PRICE] + distractors)
+
+    response = search_records("ltm summaron 35", records, limit=2, min_score=1)
+
+    assert response["candidate_narrowing"]["applied"] is True
+    assert response["candidate_narrowing"]["precomputed_field_record_count"] == len(records)
+    assert response["candidate_narrowing"]["scored_record_count"] < len(records)
+    assert response["results"][0]["title"] == "L 35mm Summaron f2.8"
+    assert response["results"][0]["match_quality"] == "strong"
+
+
 if __name__ == "__main__":
     test_pagination_fields_and_next_offset()
     test_offset_pagination_returns_second_page()
@@ -364,4 +399,5 @@ if __name__ == "__main__":
     test_out_of_range_offset_warning()
     test_load_and_search_uses_compact_index_cache_without_changing_results()
     test_candidate_narrowing_reduces_scored_records_without_changing_top_result()
+    test_candidate_narrowing_uses_precomputed_search_fields_when_available()
     print("test_search_service: ok")
