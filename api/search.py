@@ -30,7 +30,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from query_resolver import DEFAULT_RESOLVED_PATH  # noqa: E402
+from search_index import DEFAULT_SEARCH_INDEX_PATH  # noqa: E402
 from search_service import (  # noqa: E402
     MAX_LIMIT,
     SUPPORTED_SORTS,
@@ -244,7 +244,7 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
 def search_from_params(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
-    path: str | Path = DEFAULT_RESOLVED_PATH,
+    path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
 ) -> dict[str, Any]:
     parsed = parse_search_params(params)
     if records is not None:
@@ -276,7 +276,7 @@ def search_from_params(
 def endpoint_response(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
-    path: str | Path = DEFAULT_RESOLVED_PATH,
+    path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
 ) -> tuple[int, dict[str, Any]]:
     try:
         return 200, search_from_params(params, records=records, path=path)
@@ -285,14 +285,14 @@ def endpoint_response(
     except FileNotFoundError as exc:
         return 503, error_payload(
             "data_file_missing",
-            "resolved results file was not found",
+            "search data file was not found",
             503,
             {"path": str(getattr(exc, "filename", "") or path)},
         )
     except JSONDecodeError as exc:
         return 503, error_payload(
-            "resolved_results_load_failed",
-            "resolved results file is not valid JSON",
+            "search_data_load_failed",
+            "search data file is not valid JSON",
             503,
             {"message": str(exc)},
         )

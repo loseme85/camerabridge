@@ -23,6 +23,7 @@ from typing import Any, Optional
 
 from query_resolver import DEFAULT_MIN_SCORE, DEFAULT_RESOLVED_PATH, load_resolved_records, rank_listings
 from search_response import format_search_response, summarize_result_quality
+from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index
 
 
 SEARCH_SERVICE_SCHEMA_VERSION = "search_service.v1"
@@ -106,6 +107,13 @@ def _listing_system(result: dict[str, Any], source_record: Optional[dict[str, An
     return None
 
 
+def _price_value(final: dict[str, Any]) -> Optional[float]:
+    numeric = final.get("parsed_price_numeric")
+    if isinstance(numeric, (int, float)):
+        return float(numeric)
+    return parse_price_number(final.get("price_raw"))
+
+
 def _source_record_by_index(records: list[dict[str, Any]]) -> dict[int, dict[str, Any]]:
     output = {}
     for record in records:
@@ -137,7 +145,7 @@ def _matches_filters(
     if "source" in filters and not _filter_values_match(result.get("source") or final.get("source"), filters["source"]):
         return False
 
-    price = parse_price_number(final.get("price_raw"))
+    price = _price_value(final)
     if filters.get("price_min") is not None:
         if price is None or price < float(filters["price_min"]):
             return False
@@ -190,7 +198,7 @@ def _quality_rank(result: dict[str, Any]) -> int:
 
 
 def _sort_key_price(result: dict[str, Any]) -> tuple[int, float]:
-    price = parse_price_number((result.get("final_output") or {}).get("price_raw"))
+    price = _price_value(result.get("final_output") or {})
     if price is None:
         return (1, 0.0)
     return (0, price)
@@ -358,7 +366,7 @@ def search_records(
 
 def load_and_search(
     query: str,
-    path: str | Path = DEFAULT_RESOLVED_PATH,
+    path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
     limit: int = DEFAULT_LIMIT,
     offset: int = 0,
     filters: Optional[dict[str, Any]] = None,
@@ -367,7 +375,7 @@ def load_and_search(
     min_score: float = DEFAULT_MIN_SCORE,
     strong_only: bool = False,
 ) -> dict[str, Any]:
-    records = load_resolved_records(path)
+    records = load_search_records(path=path, include_debug=include_debug)
     return search_records(
         query=query,
         records=records,
@@ -381,8 +389,30 @@ def load_and_search(
     )
 
 
-def run_service_demo(path: str | Path = DEFAULT_RESOLVED_PATH) -> dict[str, Any]:
-    records = load_resolved_records(path)
+def load_search_records(
+    path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
+    include_debug: bool = False,
+) -> list[dict[str, Any]]:
+    """
+    Load compact records for normal search and full resolved records for debug.
+
+    The compact index is the production default. If it has not been generated
+    yet, local development falls back to the full resolved file without changing
+    search semantics.
+    """
+    data_path = Path(path)
+    if include_debug and data_path == DEFAULT_SEARCH_INDEX_PATH and DEFAULT_RESOLVED_PATH.exists():
+        return load_resolved_records(DEFAULT_RESOLVED_PATH)
+    try:
+        return load_search_index(data_path)
+    except FileNotFoundError:
+        if data_path == DEFAULT_SEARCH_INDEX_PATH:
+            return load_resolved_records(DEFAULT_RESOLVED_PATH)
+        raise
+
+
+def run_service_demo(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dict[str, Any]:
+    records = load_search_records(path)
     return {
         "basic_mp3_silver": search_records("mp3 silver", records, limit=2),
         "filter_q3_28_body_asking": search_records(

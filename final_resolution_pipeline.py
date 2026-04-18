@@ -26,6 +26,7 @@ from trusted_metadata import (
     load_trusted_metadata,
     resolve_listing,
 )
+from search_index import DEFAULT_SEARCH_INDEX_PATH, write_search_index
 
 
 DEFAULT_INPUT_PATH = PROJECT_ROOT / "data/raw/results.json"
@@ -33,6 +34,7 @@ DEFAULT_DERIVED_DIR = PROJECT_ROOT / "data/derived"
 DEFAULT_CLASSIFIED_OUTPUT_PATH = DEFAULT_DERIVED_DIR / "results_classified_v2.json"
 DEFAULT_RESOLVED_OUTPUT_PATH = DEFAULT_DERIVED_DIR / "results_resolved_v2.json"
 DEFAULT_OVERRIDE_REPORT_PATH = DEFAULT_DERIVED_DIR / "override_report.json"
+DEFAULT_SEARCH_INDEX_OUTPUT_PATH = DEFAULT_SEARCH_INDEX_PATH
 
 
 ClassifierFn = Callable[[dict[str, Any]], dict[str, Any]]
@@ -167,6 +169,7 @@ def write_resolved_outputs(
     classified_output_path: str | Path = DEFAULT_CLASSIFIED_OUTPUT_PATH,
     resolved_output_path: str | Path = DEFAULT_RESOLVED_OUTPUT_PATH,
     override_report_path: str | Path = DEFAULT_OVERRIDE_REPORT_PATH,
+    search_index_output_path: str | Path = DEFAULT_SEARCH_INDEX_OUTPUT_PATH,
     trusted_path: str | Path = DEFAULT_TRUSTED_METADATA_PATH,
     curated_path: str | Path = DEFAULT_CURATED_REFERENCE_PATH,
     limit: Optional[int] = None,
@@ -188,10 +191,16 @@ def write_resolved_outputs(
     _write_json(classified_output_path, classified_records)
     _write_json(resolved_output_path, resolved_records)
     _write_json(override_report_path, report)
+    search_index_result = write_search_index(
+        resolved_path=resolved_output_path,
+        output_path=search_index_output_path,
+    )
     return {
         "classified_output_path": str(classified_output_path),
         "resolved_output_path": str(resolved_output_path),
         "override_report_path": str(override_report_path),
+        "search_index_output_path": str(search_index_output_path),
+        "search_index": search_index_result,
         "report": report,
     }
 
@@ -202,6 +211,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--classified-output", default=str(DEFAULT_CLASSIFIED_OUTPUT_PATH))
     parser.add_argument("--resolved-output", default=str(DEFAULT_RESOLVED_OUTPUT_PATH))
     parser.add_argument("--override-report", default=str(DEFAULT_OVERRIDE_REPORT_PATH))
+    parser.add_argument("--search-index-output", default=str(DEFAULT_SEARCH_INDEX_OUTPUT_PATH))
     parser.add_argument("--trusted-metadata", default=str(DEFAULT_TRUSTED_METADATA_PATH))
     parser.add_argument("--curated-reference", default=str(DEFAULT_CURATED_REFERENCE_PATH))
     parser.add_argument("--limit", type=int, default=None)
@@ -215,6 +225,7 @@ def main() -> None:
         classified_output_path=args.classified_output,
         resolved_output_path=args.resolved_output,
         override_report_path=args.override_report,
+        search_index_output_path=args.search_index_output,
         trusted_path=args.trusted_metadata,
         curated_path=args.curated_reference,
         limit=args.limit,
