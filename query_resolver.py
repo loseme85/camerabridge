@@ -40,6 +40,8 @@ WEIGHTS = {
     "filter_size": 6,
     "optical_formula": 6,
     "aperture_hint": 5,
+    "accessory_intent": 18,
+    "accessory_code": 22,
 }
 
 MATCH_QUALITY_RANKS = {
@@ -132,6 +134,14 @@ def _normalize(value: Any) -> str:
     text = text.replace("㎜", "mm").replace("ｍｍ", "mm")
     text = re.sub(r"[^a-z0-9가-힣]+", " ", text)
     return re.sub(r"\s+", " ", text).strip()
+
+
+def _contains_normalized_word(text: str, needle: str) -> bool:
+    if not needle:
+        return False
+    if " " not in needle and needle in set(text.split()):
+        return True
+    return bool(re.search(rf"\b{re.escape(needle)}\b", text))
 
 
 def _as_list(value: Any) -> list[Any]:
@@ -522,18 +532,24 @@ def _score_optical_formula(intent: dict[str, Any], final: dict[str, Any], text: 
 
 
 def _aperture_hints(intent: dict[str, Any]) -> list[str]:
-    return [
-        str(token.get("value"))
-        for token in intent.get("tokens", [])
-        if token.get("type") == "aperture_hint" and token.get("value")
-    ]
+    hints: list[str] = []
+    if intent.get("aperture"):
+        hints.append(str(intent["aperture"]))
+
+    for token in intent.get("tokens", []):
+        if token.get("type") not in {"aperture", "aperture_hint"} or not token.get("value"):
+            continue
+        value = str(token["value"])
+        if value not in hints:
+            hints.append(value)
+    return hints
 
 
 def _aperture_pattern(value: str) -> str:
     parts = str(value).split(".")
     if len(parts) == 1:
         return rf"\bf\s*{re.escape(parts[0])}\b"
-    return rf"\bf\s*{re.escape(parts[0])}\s*{re.escape(parts[1])}\b"
+    return rf"\bf\s*{re.escape(parts[0])}\s+{re.escape(parts[1])}\b"
 
 
 def _score_aperture_hint(intent: dict[str, Any], text: str, breakdown: list[dict[str, Any]], matched: list[str], mismatches: list[str]) -> tuple[float, float]:
@@ -555,6 +571,76 @@ def _score_aperture_hint(intent: dict[str, Any], text: str, breakdown: list[dict
             mismatches.append(f"aperture_hint_mismatch:{hint}")
             breakdown.append(ScoreItem("aperture_hint", hint, None, per_hint, 0, "mismatch", "title_raw").to_dict())
     return awarded_total, possible
+
+
+def _score_accessory_intent(
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    text: str,
+    breakdown: list[dict[str, Any]],
+    matched: list[str],
+    mismatches: list[str],
+) -> tuple[float, float]:
+    accessory_intent = intent.get("accessory_intent")
+    accessory_code = intent.get("accessory_code")
+    if not accessory_intent and not accessory_code:
+        return 0.0, 0.0
+
+    awarded_total = 0.0
+    possible_total = 0.0
+
+    if accessory_intent:
+        possible = WEIGHTS["accessory_intent"]
+        possible_total += possible
+        category = final.get("category")
+        accessory_type = final.get("accessory_type")
+        if _normalize(category) == "accessory":
+            has_intent_text = accessory_intent == "hood" and re.search(r"\bhood\b|후드", text)
+            if accessory_type and _normalize(accessory_type) == _normalize(accessory_intent):
+                match_type = "category_type_exact"
+                awarded = possible
+            elif has_intent_text:
+                match_type = "category_text_exact"
+                awarded = possible
+            else:
+                match_type = "category_broad_accessory"
+                awarded = 3
+            awarded_total += _add_score(
+                breakdown,
+                matched,
+                ScoreItem("accessory_intent", accessory_intent, category, possible, awarded, match_type, "category/title_raw"),
+            )
+        elif accessory_intent == "hood" and re.search(r"\bhood\b|후드", text):
+            # Lens bundles such as "21mm lens + Hood" remain visible, but they
+            # should not outrank standalone Accessory records for hood queries.
+            awarded_total += _add_score(
+                breakdown,
+                matched,
+                ScoreItem("accessory_intent", accessory_intent, category, possible, 4, "bundle_text_hint", "title_raw"),
+            )
+        else:
+            mismatches.append("accessory_intent_mismatch")
+            breakdown.append(
+                ScoreItem("accessory_intent", accessory_intent, category, possible, 0, "mismatch", "category").to_dict()
+            )
+
+    if accessory_code:
+        possible = WEIGHTS["accessory_code"]
+        possible_total += possible
+        code_norm = _normalize(accessory_code)
+        if code_norm and _contains_normalized_word(text, code_norm):
+            awarded_total += _add_score(
+                breakdown,
+                matched,
+                ScoreItem("accessory_code", accessory_code, "source_text", possible, possible, "exact_text_hint", "title_raw"),
+            )
+        else:
+            mismatches.append("accessory_code_mismatch")
+            breakdown.append(
+                ScoreItem("accessory_code", accessory_code, None, possible, 0, "mismatch", "title_raw").to_dict()
+            )
+
+    return awarded_total, possible_total
 
 
 def _has_positive(
@@ -595,6 +681,8 @@ def _match_quality(
     system_hit = _has_positive(breakdown, "system", {"exact", "mount_system_equivalent"})
     variant_hit = _has_positive(breakdown, "variant")
     aperture_hit = _has_positive(breakdown, "aperture_hint", {"exact_text_hint"})
+    accessory_hit = _has_positive(breakdown, "accessory_intent", {"category_type_exact", "category_text_exact"})
+    accessory_code_hit = _has_positive(breakdown, "accessory_code", {"exact_text_hint"})
     generation_hit = _has_positive(breakdown, "generation")
     filter_hit = _has_positive(breakdown, "filter_size")
     formula_hit = _has_positive(breakdown, "optical_formula")
@@ -616,6 +704,12 @@ def _match_quality(
     if mount_or_system_hit and precise_focal and aperture_hit:
         return "strong", MATCH_QUALITY_RANKS["strong"]
 
+    if precise_focal and aperture_hit and generation_hit:
+        return "strong", MATCH_QUALITY_RANKS["strong"]
+
+    if accessory_hit and accessory_code_hit:
+        return "strong", MATCH_QUALITY_RANKS["strong"]
+
     if precise_family and precise_focal:
         return "medium", MATCH_QUALITY_RANKS["medium"]
 
@@ -625,7 +719,13 @@ def _match_quality(
     if mount_or_system_hit and focal_hit:
         return "medium", MATCH_QUALITY_RANKS["medium"]
 
+    if precise_focal and aperture_hit:
+        return "medium", MATCH_QUALITY_RANKS["medium"]
+
     if formula_hit or filter_hit:
+        return "medium", MATCH_QUALITY_RANKS["medium"]
+
+    if accessory_hit or accessory_code_hit:
         return "medium", MATCH_QUALITY_RANKS["medium"]
 
     return "weak", MATCH_QUALITY_RANKS["weak"]
@@ -640,6 +740,8 @@ def _structured_constraints(intent: dict[str, Any]) -> list[str]:
         "generation",
         "filter_size",
         "optical_formula",
+        "accessory_intent",
+        "accessory_code",
     ]
     present = [field for field in fields if intent.get(field)]
     if intent.get("variant"):
@@ -649,6 +751,55 @@ def _structured_constraints(intent: dict[str, Any]) -> list[str]:
     if _aperture_hints(intent):
         present.append("aperture_hint")
     return present
+
+
+def _essential_unparsed_tokens(intent: dict[str, Any]) -> list[str]:
+    return [
+        str(token.get("raw"))
+        for token in intent.get("tokens", [])
+        if token.get("type") == "unknown"
+        and re.fullmatch(r"f/?\d+(?:\.\d+)?|\d+\.\d+", str(token.get("raw") or ""))
+    ]
+
+
+def _has_aperture_mismatch(mismatches: list[str]) -> bool:
+    return any(reason.startswith("aperture_hint_mismatch:") for reason in mismatches)
+
+
+def _suppress_broad_essential_fallback(
+    score: float,
+    match_quality: str,
+    match_quality_rank: int,
+    intent: dict[str, Any],
+    breakdown: list[dict[str, Any]],
+    mismatches: list[str],
+    warnings: list[str],
+) -> tuple[float, str, int]:
+    """
+    Keep broad fallback visible but stop it from dominating essential misses.
+
+    This is intentionally narrow: aperture-like user intent is treated as an
+    essential search constraint only when the parser saw it or flagged an
+    aperture-like token as unparsed. It does not change classifier output.
+    """
+    essential_unknowns = _essential_unparsed_tokens(intent)
+    if essential_unknowns:
+        warnings.append("essential_unparsed_tokens:" + ",".join(essential_unknowns))
+        if match_quality in {"weak", "medium"}:
+            score = min(score, 60.0)
+            match_quality = "weak"
+            match_quality_rank = MATCH_QUALITY_RANKS["weak"]
+
+    if _has_aperture_mismatch(mismatches):
+        warnings.append("essential_constraint_mismatch:aperture")
+        precise_family = _has_positive(breakdown, "model_family", {"exact", "alias_expanded", "normalized"})
+        if not precise_family:
+            score = min(score, 72.0)
+            if match_quality == "medium":
+                match_quality = "weak"
+                match_quality_rank = MATCH_QUALITY_RANKS["weak"]
+
+    return score, match_quality, match_quality_rank
 
 
 def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, Any]:
@@ -679,6 +830,7 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         lambda: _score_filter_size(intent, text, breakdown, matched, mismatches),
         lambda: _score_optical_formula(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_aperture_hint(intent, text, breakdown, matched, mismatches),
+        lambda: _score_accessory_intent(intent, final, text, breakdown, matched, mismatches),
     ]:
         awarded, possible = scorer()
         raw_score += awarded
@@ -691,7 +843,20 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
     if "brand_mismatch" in mismatches:
         score = min(score, 40.0)
         warnings.append("hard_constraint_mismatch:brand")
+    if "accessory_intent_mismatch" in mismatches and intent.get("accessory_intent"):
+        warnings.append("accessory_intent_non_accessory_listing")
+    if "accessory_code_mismatch" in mismatches and intent.get("accessory_code"):
+        warnings.append("accessory_code_mismatch")
     match_quality, match_quality_rank = _match_quality(intent, breakdown, mismatches)
+    score, match_quality, match_quality_rank = _suppress_broad_essential_fallback(
+        score,
+        match_quality,
+        match_quality_rank,
+        intent,
+        breakdown,
+        mismatches,
+        warnings,
+    )
     implicit_preference_score, implicit_preference_reasons = _implicit_brand_preference(
         intent,
         final,

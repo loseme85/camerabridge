@@ -67,6 +67,80 @@ MP3_SILVER = _record(
 )
 
 
+CM_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "PNS",
+        "category": "Body",
+        "label": "PNS Body",
+        "model_raw": "CM",
+        "model_canonical": "CM",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "LEICA CM sn.2950",
+        "source": "trusted",
+        "source_url": "https://example.invalid/cm",
+    },
+    index=3,
+)
+
+
+HOOD_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "hood",
+        "title_raw": "Leica 12475 Hood Black for M 50mm F1.2 Noctilux ASPH",
+        "source": "test",
+        "source_url": "https://example.invalid/hood-12475",
+    },
+    index=4,
+)
+
+
+HOOD_CODE_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "hood",
+        "title_raw": "LEICA 12586 50mm F1.4 Hood",
+        "source": "test",
+        "source_url": "https://example.invalid/hood-12586",
+    },
+    index=5,
+)
+
+
+HOOD_BUNDLE_LENS = _record(
+    {
+        "brand": "Zeiss",
+        "mount": "M",
+        "category": "Lens",
+        "label": "3rd Party M Lens",
+        "model_raw": "Biogon",
+        "model_canonical": "Biogon",
+        "variant": [],
+        "focal_length": "21",
+        "title_raw": "Zeiss 21mm F2.8 ZM + Hood - Silver",
+        "source": "test",
+        "source_url": "https://example.invalid/zeiss-21-bundle",
+    },
+    index=6,
+)
+
+
 def test_exact_family_and_focal_match_scores_high() -> None:
     result = score_listing(parse_query("35 summilux"), SUMMILUX_35)
     assert result["score"] >= 95
@@ -95,6 +169,57 @@ def test_override_listing_matches_on_final_output() -> None:
     assert result["match_quality"] == "strong"
     assert result["used_override"] is True
     assert result["final_output"]["model_canonical"] == "MP3"
+
+
+def test_short_cm_alias_matches_leica_cm_body() -> None:
+    generic_leica = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Summilux-M",
+            "variant": [],
+            "focal_length": "50",
+            "title_raw": "Leica M 50mm Summilux",
+        },
+        index=1,
+    )
+    ranked = rank_listings("leica cm", [generic_leica, CM_BODY], limit=2, min_score=1)
+
+    assert ranked["intent"]["model_family"] == "CM"
+    assert ranked["intent"]["system"] == "PNS"
+    assert ranked["results"][0]["final_output"]["model_canonical"] == "CM"
+    assert ranked["results"][0]["match_quality"] == "medium"
+
+
+def test_hood_accessory_intent_prefers_accessory_over_broad_lens() -> None:
+    ranked = rank_listings("leica hood", [SUMMILUX_35, HOOD_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "hood"
+    assert ranked["results"][0]["final_output"]["category"] == "Accessory"
+    assert ranked["results"][0]["match_quality"] == "medium"
+    assert ranked["results"][1]["final_output"]["category"] == "Lens"
+    assert "accessory_intent_non_accessory_listing" in ranked["results"][1]["warnings"]
+
+
+def test_hood_accessory_code_ranks_exact_hood_first() -> None:
+    ranked = rank_listings("12586 hood", [HOOD_ACCESSORY, HOOD_CODE_ACCESSORY, SUMMILUX_35], limit=3, min_score=1)
+
+    assert ranked["intent"]["accessory_code"] == "12586"
+    assert ranked["results"][0]["final_output"]["title_raw"] == "LEICA 12586 50mm F1.4 Hood"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert "accessory_code" in ranked["results"][0]["matched_fields"]
+
+
+def test_hood_intent_keeps_lens_bundle_visible_but_lower() -> None:
+    ranked = rank_listings("zeiss 21mm f2.8 zm hood", [HOOD_ACCESSORY, HOOD_BUNDLE_LENS], limit=2, min_score=1)
+
+    assert any(result["final_output"]["category"] == "Lens" for result in ranked["results"])
+    bundle = next(result for result in ranked["results"] if result["final_output"]["category"] == "Lens")
+    assert bundle["final_output"]["title_raw"] == "Zeiss 21mm F2.8 ZM + Hood - Silver"
+    assert "accessory_intent" in bundle["matched_fields"]
+    assert any(item["match_type"] == "bundle_text_hint" for item in bundle["score_breakdown"] if item["field"] == "accessory_intent")
 
 
 def test_ambiguous_query_keeps_warnings() -> None:
@@ -217,6 +342,77 @@ def test_aperture_hint_breaks_focal_mount_tie() -> None:
     ranked = rank_listings("m 21/2.8", [m_21_f14, m_21_f28], limit=2)
     assert ranked["results"][0]["final_output"]["model_canonical"] == "Elmarit-M"
     assert "aperture_hint" in ranked["results"][0]["matched_fields"]
+
+
+def test_standalone_aperture_ranks_exact_aperture_above_broad_fallback() -> None:
+    m_50_f12 = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Noctilux",
+            "variant": ["f1.2"],
+            "focal_length": "50",
+            "title_raw": "Leica M 50mm f1.2 Noctilux 1st Black",
+        },
+        index=2,
+    )
+    m_50_f14 = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Summilux-M",
+            "variant": ["f1.4"],
+            "focal_length": "50",
+            "title_raw": "Leica M 50mm f1.4 Summilux",
+        },
+        index=1,
+    )
+    ranked = rank_listings("leica 50mm 1.2 m", [m_50_f14, m_50_f12], limit=2, min_score=1)
+
+    assert ranked["intent"]["aperture"] == "1.2"
+    assert ranked["results"][0]["final_output"]["model_canonical"] == "Noctilux"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert ranked["results"][1]["score"] == 72.0
+    assert ranked["results"][1]["match_quality"] == "weak"
+    assert "essential_constraint_mismatch:aperture" in ranked["results"][1]["warnings"]
+
+
+def test_prefixed_aperture_and_generation_find_exact_first_version() -> None:
+    noctilux_first = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Noctilux",
+            "variant": ["f1.2", "v1"],
+            "focal_length": "50",
+            "title_raw": "Leica M 50mm f1.2 Noctilux 1st Black",
+        },
+        index=1,
+    )
+    summilux_first = _record(
+        {
+            "brand": "Leica",
+            "mount": "M",
+            "category": "Lens",
+            "label": "M Lens",
+            "model_canonical": "Summilux-M",
+            "variant": ["f1.4", "v1"],
+            "focal_length": "50",
+            "title_raw": "Leica M 50mm f1.4 Summilux 1st",
+        },
+        index=2,
+    )
+    ranked = rank_listings("leica 50mm f1.2 1st", [summilux_first, noctilux_first], limit=2, min_score=1)
+
+    assert ranked["results"][0]["final_output"]["model_canonical"] == "Noctilux"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert ranked["results"][1]["match_quality"] == "weak"
 
 
 def test_brand_unspecified_query_uses_soft_preference_for_strong_ties() -> None:
@@ -342,11 +538,17 @@ if __name__ == "__main__":
     test_alias_expanded_family_match_scores_high()
     test_variant_hit_contributes_to_score()
     test_override_listing_matches_on_final_output()
+    test_short_cm_alias_matches_leica_cm_body()
+    test_hood_accessory_intent_prefers_accessory_over_broad_lens()
+    test_hood_accessory_code_ranks_exact_hood_first()
+    test_hood_intent_keeps_lens_bundle_visible_but_lower()
     test_ambiguous_query_keeps_warnings()
     test_rank_listings_orders_by_score()
     test_strong_structured_match_ranks_above_mount_only_weak_match()
     test_mount_system_mismatch_is_capped()
     test_aperture_hint_breaks_focal_mount_tie()
+    test_standalone_aperture_ranks_exact_aperture_above_broad_fallback()
+    test_prefixed_aperture_and_generation_find_exact_first_version()
     test_brand_unspecified_query_uses_soft_preference_for_strong_ties()
     test_explicit_brand_query_does_not_add_implicit_preference()
     test_implicit_preference_does_not_promote_weak_result()

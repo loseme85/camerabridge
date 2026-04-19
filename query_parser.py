@@ -21,6 +21,7 @@ from search_aliases import (
     DEFAULT_BRAND,
     GENERATION_ALIASES,
     MODEL_FAMILY_ALIASES,
+    MODEL_SYSTEM_ALIASES,
     MOUNT_ALIASES,
     SYSTEM_ALIASES,
     VARIANT_ALIASES,
@@ -34,12 +35,15 @@ class QueryIntent:
     brand: Optional[str] = None
     model_family: Optional[str] = None
     focal_length: Optional[str] = None
+    aperture: Optional[str] = None
     mount: Optional[str] = None
     system: Optional[str] = None
     variant: list[str] = field(default_factory=list)
     generation: Optional[str] = None
     filter_size: Optional[str] = None
     optical_formula: Optional[str] = None
+    accessory_intent: Optional[str] = None
+    accessory_code: Optional[str] = None
     confidence: float = 0.0
     tokens: list[dict[str, str]] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
@@ -61,6 +65,55 @@ def _add_variant(intent: QueryIntent, value: str, source: str) -> None:
     if value not in intent.variant:
         intent.variant.append(value)
     intent.tokens.append({"type": "variant", "raw": source, "value": value})
+
+
+def _set_accessory_intent(intent: QueryIntent, value: str, source: str) -> None:
+    intent.accessory_intent = value
+    if not any(token.get("type") == "accessory_intent" and token.get("value") == value for token in intent.tokens):
+        intent.tokens.append({"type": "accessory_intent", "raw": source, "value": value})
+
+
+def _set_accessory_code(intent: QueryIntent, value: str, source: str) -> None:
+    intent.accessory_code = value.upper()
+    intent.tokens.append({"type": "accessory_code", "raw": source, "value": intent.accessory_code})
+
+
+def _set_aperture(intent: QueryIntent, value: str, source: str, token_type: str = "aperture") -> None:
+    intent.aperture = value
+    intent.tokens.append({"type": token_type, "raw": source, "value": value})
+
+
+def _aperture_value(raw_value: str) -> Optional[str]:
+    try:
+        numeric = float(raw_value)
+    except ValueError:
+        return None
+    if 0.5 <= numeric <= 8.0:
+        return raw_value
+    return None
+
+
+def _has_bare_aperture_context(normalized: str) -> bool:
+    if re.search(r"\b\d{2,3}mm\b|\b\d{2,3}/\d", normalized):
+        return True
+    lens_family_aliases = [
+        alias
+        for alias, family in MODEL_FAMILY_ALIASES.items()
+        if family not in {"MP3", "CM"}
+    ]
+    family_aliases = "|".join(re.escape(alias) for alias in sorted(lens_family_aliases, key=len, reverse=True))
+    return bool(re.search(rf"\b(?:{family_aliases})\b", normalized))
+
+
+def _parse_aperture_token(token: str, normalized: str) -> Optional[str]:
+    prefixed = re.fullmatch(r"f/?(\d+(?:\.\d+)?)", token)
+    if prefixed:
+        return _aperture_value(prefixed.group(1))
+
+    if re.fullmatch(r"\d+\.\d+", token) and _has_bare_aperture_context(normalized):
+        return _aperture_value(token)
+
+    return None
 
 
 def _parse_compact_family_token(intent: QueryIntent, token: str) -> bool:
@@ -90,12 +143,27 @@ def _parse_optical_formula(intent: QueryIntent, normalized: str) -> None:
             _add_variant(intent, "8-element", f"{groups}군{elements}매")
 
 
+def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
+    if re.search(r"\blens\s+hood\b", normalized):
+        _set_accessory_intent(intent, "hood", "lens hood")
+    elif re.search(r"\bhood\b", normalized) or "후드" in normalized:
+        _set_accessory_intent(intent, "hood", "hood" if "hood" in normalized else "후드")
+
+    # Leica accessory codes are intentionally parsed only inside an explicit
+    # accessory-intent query. A standalone 5-digit number remains unparsed.
+    if intent.accessory_intent:
+        for code in re.findall(r"\b\d{5}[a-z]?\b", normalized):
+            _set_accessory_code(intent, code, code)
+
+
 def _score_confidence(intent: QueryIntent) -> float:
     score = 0.20
     if intent.model_family:
         score += 0.25
     if intent.focal_length:
         score += 0.20
+    if intent.aperture:
+        score += 0.05
     if intent.variant:
         score += 0.12
     if intent.generation:
@@ -103,6 +171,10 @@ def _score_confidence(intent: QueryIntent) -> float:
     if intent.filter_size:
         score += 0.08
     if intent.mount or intent.system:
+        score += 0.08
+    if intent.accessory_intent:
+        score += 0.10
+    if intent.accessory_code:
         score += 0.08
     if intent.brand:
         score += 0.05
@@ -127,6 +199,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
     )
 
     _parse_optical_formula(intent, normalized)
+    _parse_accessory_intent(intent, normalized)
 
     rough_tokens = re.findall(r"[a-z0-9가-힣./-]+", normalized)
     for token in rough_tokens:
@@ -150,7 +223,12 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             focal, aperture = focal_aperture_match.groups()
             intent.focal_length = focal
             intent.tokens.append({"type": "focal_length", "raw": token, "value": focal})
-            intent.tokens.append({"type": "aperture_hint", "raw": token, "value": aperture})
+            _set_aperture(intent, aperture, token, token_type="aperture_hint")
+            continue
+
+        aperture = _parse_aperture_token(token, normalized)
+        if aperture:
+            _set_aperture(intent, aperture, token)
             continue
 
         focal_match = re.fullmatch(r"(\d{2,3})(?:mm)?", token)
@@ -164,6 +242,10 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             intent.model_family = family
             intent.brand = intent.brand or DEFAULT_BRAND
             intent.tokens.append({"type": "model_family", "raw": token, "value": family})
+            family_system = MODEL_SYSTEM_ALIASES.get(token)
+            if family_system and not intent.system:
+                intent.system = family_system
+                intent.tokens.append({"type": "system", "raw": token, "value": family_system})
             continue
 
         variant = VARIANT_ALIASES.get(token)
@@ -192,8 +274,19 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
         if re.fullmatch(r"\d+군\d+매", token):
             continue
 
+        if intent.accessory_intent == "hood" and token in {"hood", "후드", "for", "용"}:
+            continue
+
+        if intent.accessory_intent == "hood" and token == "lens" and re.search(r"\blens\s+hood\b", normalized):
+            continue
+
+        if intent.accessory_code and token.upper() == intent.accessory_code:
+            continue
+
         if token not in {"매", "군"}:
             intent.tokens.append({"type": "unknown", "raw": token, "value": token})
+            if re.fullmatch(r"f/?\d+(?:\.\d+)?|\d+\.\d+", token):
+                intent.warnings.append(f"possible_unparsed_aperture:{token}")
 
     if not any([
         intent.model_family,
@@ -204,6 +297,8 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
         intent.mount,
         intent.system,
         intent.optical_formula,
+        intent.accessory_intent,
+        intent.accessory_code,
     ]):
         intent.warnings.append("no_structured_search_intent")
 
