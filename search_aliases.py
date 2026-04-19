@@ -29,6 +29,12 @@ MODEL_FAMILY_ALIASES: dict[str, str] = {
     "tri-elmar": "Tri-Elmar",
     "trielmar": "Tri-Elmar",
     "mp3": "MP3",
+    "cm": "CM",
+}
+
+
+MODEL_SYSTEM_ALIASES: dict[str, str] = {
+    "cm": "PNS",
 }
 
 
