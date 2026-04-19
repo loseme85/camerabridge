@@ -32,6 +32,8 @@ DEFAULT_LIMIT = 20
 MAX_LIMIT = 100
 CANDIDATE_MIN_BROAD_RECORDS = 120
 CANDIDATE_MAX_RECORDS = 900
+ACCESSORY_CANDIDATE_MAX_RECORDS = 260
+ACCESSORY_CANDIDATE_BROAD_RECORDS = 120
 SUPPORTED_SORTS = {
     "relevance",
     "price_asc",
@@ -208,6 +210,8 @@ def _candidate_anchor_query(intent: dict[str, Any]) -> dict[str, Any]:
         "optical_formula": _normalize_search_text(intent.get("optical_formula")),
         "aperture": aperture,
         "aperture_norm": _normalize_search_text(aperture),
+        "accessory_intent": _normalize_search_text(intent.get("accessory_intent")),
+        "accessory_code": _normalize_search_text(intent.get("accessory_code")),
     }
 
 
@@ -255,6 +259,29 @@ def _candidate_aperture_match(anchor_query: dict[str, Any], record: dict[str, An
     else:
         pattern = rf"\bf\s*{re.escape(parts[0])}\s+{re.escape(parts[1])}\b"
     return bool(re.search(pattern, text))
+
+
+def _candidate_accessory_intent_match(anchor_query: dict[str, Any], final: dict[str, Any], text: str) -> bool:
+    accessory_intent = str(anchor_query.get("accessory_intent") or "")
+    if not accessory_intent:
+        return False
+
+    category = _normalize_search_text(final.get("category"))
+    accessory_type = _normalize_search_text(final.get("accessory_type"))
+    if accessory_intent == "hood":
+        has_hood_text = bool(re.search(r"\bhood\b|후드", text))
+        if category == "accessory" and (accessory_type == "hood" or has_hood_text):
+            return True
+        # Keep lens bundles such as "Zeiss 21mm + Hood" eligible, but let the
+        # resolver keep them behind standalone accessory records.
+        return has_hood_text
+
+    return category == "accessory" and accessory_type == accessory_intent
+
+
+def _candidate_accessory_code_match(anchor_query: dict[str, Any], text: str) -> bool:
+    code = str(anchor_query.get("accessory_code") or "")
+    return bool(code and _contains_normalized_word(text, code))
 
 
 def _candidate_system(record: dict[str, Any], final: dict[str, Any]) -> str:
@@ -317,6 +344,12 @@ def _candidate_anchor_matches(
     if _candidate_aperture_match(anchor_query, record, text):
         matches.add("aperture")
 
+    if _candidate_accessory_intent_match(anchor_query, final, text):
+        matches.add("accessory_intent")
+
+    if _candidate_accessory_code_match(anchor_query, text):
+        matches.add("accessory_code")
+
     return matches
 
 
@@ -331,6 +364,8 @@ def _candidate_anchor_fields(intent: dict[str, Any]) -> set[str]:
             "generation",
             "filter_size",
             "optical_formula",
+            "accessory_intent",
+            "accessory_code",
         ]
         if intent.get(field)
     }
@@ -339,6 +374,10 @@ def _candidate_anchor_fields(intent: dict[str, Any]) -> set[str]:
     if intent.get("aperture") or any(token.get("type") in {"aperture", "aperture_hint"} for token in intent.get("tokens", [])):
         fields.add("aperture")
     return fields
+
+
+def _accessory_anchor_active(intent: dict[str, Any]) -> bool:
+    return bool(intent.get("accessory_intent") or intent.get("accessory_code"))
 
 
 def narrow_candidate_records(
@@ -355,6 +394,7 @@ def narrow_candidate_records(
     """
     input_count = len(records)
     anchor_fields = _candidate_anchor_fields(intent)
+    accessory_anchor_active = _accessory_anchor_active(intent)
     stats = {
         "applied": False,
         "input_record_count": input_count,
@@ -363,6 +403,8 @@ def narrow_candidate_records(
         "strong_candidate_count": 0,
         "broad_candidate_count": 0,
         "precomputed_field_record_count": 0,
+        "accessory_intent_applied": False,
+        "accessory_code_applied": False,
     }
     if input_count <= max_records or not anchor_fields:
         return records, stats
@@ -381,16 +423,22 @@ def narrow_candidate_records(
         elif match_count == 1:
             broad.append((-match_count, position, record))
 
-    if not strong:
+    if not strong and not (accessory_anchor_active and broad):
         stats["precomputed_field_record_count"] = precomputed_count
         return records, stats
 
     strong.sort()
     broad.sort()
-    selected: list[dict[str, Any]] = [item[2] for item in strong[:max_records]]
-    remaining_slots = max_records - len(selected)
-    broad_limit = min(max(min_broad_records, remaining_slots), remaining_slots) if remaining_slots > 0 else 0
-    selected.extend(item[2] for item in broad[:broad_limit])
+    candidate_max = ACCESSORY_CANDIDATE_MAX_RECORDS if accessory_anchor_active else max_records
+    candidate_broad_records = ACCESSORY_CANDIDATE_BROAD_RECORDS if accessory_anchor_active else min_broad_records
+
+    if accessory_anchor_active and not strong and broad:
+        selected = [item[2] for item in broad[:candidate_max]]
+    else:
+        selected = [item[2] for item in strong[:candidate_max]]
+        remaining_slots = candidate_max - len(selected)
+        broad_limit = min(candidate_broad_records, remaining_slots) if remaining_slots > 0 else 0
+        selected.extend(item[2] for item in broad[:broad_limit])
 
     if not selected or len(selected) >= input_count:
         return records, stats
@@ -402,6 +450,8 @@ def narrow_candidate_records(
             "strong_candidate_count": len(strong),
             "broad_candidate_count": len(broad),
             "precomputed_field_record_count": precomputed_count,
+            "accessory_intent_applied": bool(intent.get("accessory_intent")),
+            "accessory_code_applied": bool(intent.get("accessory_code")),
         }
     )
     return selected, stats

@@ -162,6 +162,71 @@ L_BODY_WEAK_LOW_PRICE = _record(
     },
 )
 
+HOOD_ACCESSORY = _record(
+    7,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/hood",
+        "title_raw": "Leica 12538 Hood Black",
+        "price_raw": "200,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "hood",
+        "sold_quality": "asking",
+    },
+)
+
+HOOD_CODE_ACCESSORY = _record(
+    8,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/12586",
+        "title_raw": "LEICA 12586 50mm F1.4 Hood",
+        "price_raw": "250,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "hood",
+        "sold_quality": "asking",
+    },
+)
+
+ZEISS_HOOD_BUNDLE = _record(
+    9,
+    {
+        "source": "Lens dealer",
+        "source_url": "https://example.invalid/zeiss-hood-bundle",
+        "title_raw": "Zeiss 21mm F2.8 ZM + Hood - Silver",
+        "price_raw": "900,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Zeiss",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Biogon",
+        "model_canonical": "Biogon ZM",
+        "variant": ["ZM"],
+        "focal_length": "21",
+        "sold_quality": "asking",
+    },
+)
+
 
 def test_pagination_fields_and_next_offset() -> None:
     response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW, SUMMICRON_50], limit=1)
@@ -382,6 +447,72 @@ def test_candidate_narrowing_uses_precomputed_search_fields_when_available() -> 
     assert response["results"][0]["match_quality"] == "strong"
 
 
+def _accessory_narrowing_distractors(count: int = 1500) -> list[dict]:
+    return [
+        _record(
+            3000 + index,
+            {
+                "source": "Distractor dealer",
+                "source_url": f"https://example.invalid/accessory-distractor-{index}",
+                "title_raw": f"Leica M lens listing {index}",
+                "price_raw": "1,000,000원",
+                "currency": "KRW",
+                "condition_raw": "Used",
+                "brand": "Leica",
+                "mount": "M",
+                "category": "Lens",
+                "label": "M Lens",
+                "model_raw": "Elmarit",
+                "model_canonical": "Elmarit-M",
+                "variant": [],
+                "focal_length": "50",
+                "sold_quality": "asking",
+            },
+        )
+        for index in range(count)
+    ]
+
+
+def test_accessory_intent_candidate_narrowing_reduces_scored_records_without_changing_top() -> None:
+    records = [HOOD_ACCESSORY, HOOD_CODE_ACCESSORY] + _accessory_narrowing_distractors()
+
+    narrowed = search_records("leica hood", records, limit=2, min_score=1)
+    full = search_records("leica hood", records, limit=2, min_score=1, use_candidate_narrowing=False)
+
+    assert narrowed["candidate_narrowing"]["applied"] is True
+    assert narrowed["candidate_narrowing"]["accessory_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+    assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+    assert narrowed["results"][0]["final_output"]["category"] == "Accessory"
+
+
+def test_accessory_code_candidate_narrowing_keeps_code_match_top() -> None:
+    records = [HOOD_ACCESSORY, HOOD_CODE_ACCESSORY] + _accessory_narrowing_distractors()
+
+    response = search_records("12586 hood", records, limit=2, min_score=1)
+
+    assert response["candidate_narrowing"]["applied"] is True
+    assert response["candidate_narrowing"]["accessory_intent_applied"] is True
+    assert response["candidate_narrowing"]["accessory_code_applied"] is True
+    assert response["candidate_narrowing"]["scored_record_count"] < response["candidate_narrowing"]["input_record_count"]
+    assert response["results"][0]["title"] == "LEICA 12586 50mm F1.4 Hood"
+    assert response["results"][0]["final_output"]["category"] == "Accessory"
+
+
+def test_accessory_intent_candidate_narrowing_keeps_bundle_lens_visible() -> None:
+    records = [HOOD_ACCESSORY, ZEISS_HOOD_BUNDLE] + _accessory_narrowing_distractors()
+
+    narrowed = search_records("zeiss 21mm f2.8 zm hood", records, limit=5, min_score=1)
+    full = search_records("zeiss 21mm f2.8 zm hood", records, limit=5, min_score=1, use_candidate_narrowing=False)
+
+    assert narrowed["candidate_narrowing"]["applied"] is True
+    assert narrowed["candidate_narrowing"]["accessory_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+    assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+    assert narrowed["results"][0]["final_output"]["category"] == "Lens"
+    assert any(result["title"] == "Leica 12538 Hood Black" for result in narrowed["results"])
+
+
 if __name__ == "__main__":
     test_pagination_fields_and_next_offset()
     test_offset_pagination_returns_second_page()
@@ -400,4 +531,7 @@ if __name__ == "__main__":
     test_load_and_search_uses_compact_index_cache_without_changing_results()
     test_candidate_narrowing_reduces_scored_records_without_changing_top_result()
     test_candidate_narrowing_uses_precomputed_search_fields_when_available()
+    test_accessory_intent_candidate_narrowing_reduces_scored_records_without_changing_top()
+    test_accessory_code_candidate_narrowing_keeps_code_match_top()
+    test_accessory_intent_candidate_narrowing_keeps_bundle_lens_visible()
     print("test_search_service: ok")
