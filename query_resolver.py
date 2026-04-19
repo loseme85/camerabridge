@@ -38,6 +38,7 @@ WEIGHTS = {
     "variant": 15,
     "generation": 8,
     "filter_size": 6,
+    "filter_detail": 8,
     "optical_formula": 6,
     "aperture_hint": 5,
     "accessory_intent": 18,
@@ -504,6 +505,39 @@ def _score_filter_size(intent: dict[str, Any], text: str, breakdown: list[dict[s
     return 0.0, possible
 
 
+def _filter_detail_tokens(intent: dict[str, Any]) -> list[dict[str, str]]:
+    if intent.get("accessory_intent") != "filter":
+        return []
+    return [
+        token
+        for token in intent.get("tokens", [])
+        if token.get("type") in {"filter_kind", "filter_brand", "filter_color"}
+    ]
+
+
+def _score_filter_detail(intent: dict[str, Any], text: str, breakdown: list[dict[str, Any]], matched: list[str], mismatches: list[str]) -> tuple[float, float]:
+    details = _filter_detail_tokens(intent)
+    if not details:
+        return 0.0, 0.0
+
+    possible = WEIGHTS["filter_detail"]
+    per_detail = possible / len(details)
+    awarded_total = 0.0
+    for detail in details:
+        value = detail.get("value") or detail.get("raw")
+        value_norm = _normalize(value)
+        if value_norm and _contains_normalized_word(text, value_norm):
+            awarded_total += _add_score(
+                breakdown,
+                matched,
+                ScoreItem("filter_detail", value, "source_text", per_detail, per_detail, "exact_text_hint", "title_raw"),
+            )
+        else:
+            mismatches.append(f"filter_detail_mismatch:{value}")
+            breakdown.append(ScoreItem("filter_detail", value, None, per_detail, 0, "mismatch", "title_raw").to_dict())
+    return awarded_total, possible
+
+
 def _score_optical_formula(intent: dict[str, Any], final: dict[str, Any], text: str, breakdown: list[dict[str, Any]], matched: list[str], mismatches: list[str]) -> tuple[float, float]:
     formula = intent.get("optical_formula")
     if not formula:
@@ -595,7 +629,7 @@ def _score_accessory_intent(
         category = final.get("category")
         accessory_type = final.get("accessory_type")
         if _normalize(category) == "accessory":
-            has_intent_text = accessory_intent == "hood" and re.search(r"\bhood\b|후드", text)
+            has_intent_text = _accessory_intent_text_hit(accessory_intent, text)
             if accessory_type and _normalize(accessory_type) == _normalize(accessory_intent):
                 match_type = "category_type_exact"
                 awarded = possible
@@ -610,9 +644,10 @@ def _score_accessory_intent(
                 matched,
                 ScoreItem("accessory_intent", accessory_intent, category, possible, awarded, match_type, "category/title_raw"),
             )
-        elif accessory_intent == "hood" and re.search(r"\bhood\b|후드", text):
-            # Lens bundles such as "21mm lens + Hood" remain visible, but they
-            # should not outrank standalone Accessory records for hood queries.
+        elif _accessory_intent_text_hit(accessory_intent, text):
+            # Lens bundles such as "21mm lens + Hood" or "lens - UVa Filter"
+            # remain visible, but they should not outrank standalone Accessory
+            # records for explicit accessory queries.
             awarded_total += _add_score(
                 breakdown,
                 matched,
@@ -641,6 +676,19 @@ def _score_accessory_intent(
             )
 
     return awarded_total, possible_total
+
+
+def _accessory_intent_text_hit(accessory_intent: str, text: str) -> bool:
+    if accessory_intent == "hood":
+        return bool(re.search(r"\bhood\b|후드", text))
+    if accessory_intent == "filter":
+        return bool(
+            re.search(
+                r"\b(?:filter|fiter|uv|uva|uvir|nd|skylight)\b|\bb\s+w\b|필터",
+                text,
+            )
+        )
+    return False
 
 
 def _has_positive(
@@ -828,6 +876,7 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         lambda: _score_variants(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_generation(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_filter_size(intent, text, breakdown, matched, mismatches),
+        lambda: _score_filter_detail(intent, text, breakdown, matched, mismatches),
         lambda: _score_optical_formula(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_aperture_hint(intent, text, breakdown, matched, mismatches),
         lambda: _score_accessory_intent(intent, final, text, breakdown, matched, mismatches),

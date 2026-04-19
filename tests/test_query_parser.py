@@ -100,6 +100,48 @@ def test_hood_accessory_code_is_contextual() -> None:
     assert any(token["raw"] == "12586" and token["type"] == "unknown" for token in bare["tokens"])
 
 
+def test_filter_accessory_intent_query() -> None:
+    examples = {
+        "uv filter": "uv filter",
+        "nd filter": "nd filter",
+        "b+w filter": "b+w filter",
+        "e39 filter": "filter_thread",
+        "skylight filter": "skylight filter",
+        "필터": "필터",
+        "uva": "uva",
+        "uvir": "uvir",
+    }
+
+    for query, raw in examples.items():
+        intent = parse_query(query)
+        assert intent["accessory_intent"] == "filter"
+        assert {"type": "accessory_intent", "raw": raw, "value": "filter"} in intent["tokens"]
+        assert not any(token["type"] == "unknown" and token["raw"] in {"filter", "필터", "uv", "uva", "uvir", "nd", "skylight"} for token in intent["tokens"])
+
+
+def test_filter_thread_context_does_not_turn_all_filter_sizes_into_accessories() -> None:
+    e39 = parse_query("e39 filter")
+    nocti = parse_query("nocti e60")
+
+    assert e39["accessory_intent"] == "filter"
+    assert e39["filter_size"] == "E39"
+    assert nocti["accessory_intent"] is None
+    assert nocti["model_family"] == "Noctilux"
+    assert nocti["filter_size"] == "E60"
+
+
+def test_a36_color_filter_intent_is_contextual() -> None:
+    a36 = parse_query("a36 orange")
+    bare_color = parse_query("orange")
+
+    assert a36["accessory_intent"] == "filter"
+    assert a36["filter_size"] == "A36"
+    assert {"type": "filter_color", "raw": "orange", "value": "orange"} in a36["tokens"]
+    assert not any(token["type"] == "unknown" for token in a36["tokens"])
+    assert bare_color["accessory_intent"] is None
+    assert any(token["type"] == "unknown" and token["raw"] == "orange" for token in bare_color["tokens"])
+
+
 if __name__ == "__main__":
     test_search_layer_does_not_import_classifier()
     test_compact_lux_aa_query()
@@ -113,4 +155,7 @@ if __name__ == "__main__":
     test_mp3_silver_search_intent()
     test_hood_accessory_intent_query()
     test_hood_accessory_code_is_contextual()
+    test_filter_accessory_intent_query()
+    test_filter_thread_context_does_not_turn_all_filter_sizes_into_accessories()
+    test_a36_color_filter_intent_is_contextual()
     print("test_query_parser: ok")

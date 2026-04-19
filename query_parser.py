@@ -78,6 +78,12 @@ def _set_accessory_code(intent: QueryIntent, value: str, source: str) -> None:
     intent.tokens.append({"type": "accessory_code", "raw": source, "value": intent.accessory_code})
 
 
+def _set_filter_size(intent: QueryIntent, value: str, source: str) -> None:
+    intent.filter_size = value.upper()
+    if not any(token.get("type") == "filter_size" and token.get("raw") == source for token in intent.tokens):
+        intent.tokens.append({"type": "filter_size", "raw": source, "value": intent.filter_size})
+
+
 def _set_aperture(intent: QueryIntent, value: str, source: str, token_type: str = "aperture") -> None:
     intent.aperture = value
     intent.tokens.append({"type": token_type, "raw": source, "value": value})
@@ -149,11 +155,54 @@ def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
     elif re.search(r"\bhood\b", normalized) or "후드" in normalized:
         _set_accessory_intent(intent, "hood", "hood" if "hood" in normalized else "후드")
 
+    if not intent.accessory_intent:
+        filter_source: Optional[str] = None
+        if "필터" in normalized:
+            filter_source = "필터"
+        elif re.search(r"\bb\+w\b.*\b(?:filter|fiter)\b", normalized):
+            filter_source = "b+w filter"
+        elif re.search(r"\be\d{2,3}\b.*\b(?:filter|fiter|uv|uva|uvir|nd|skylight)\b", normalized):
+            filter_source = "filter_thread"
+        elif re.search(r"\b(?:uv|uva|uvir|nd|skylight)\s+(?:filter|fiter)\b", normalized):
+            filter_source = re.search(r"\b(?:uv|uva|uvir|nd|skylight)\s+(?:filter|fiter)\b", normalized).group(0)  # type: ignore[union-attr]
+        elif re.search(r"\b(?:filter|fiter)\b", normalized):
+            filter_source = "filter"
+        elif re.search(r"\b(?:uva|uvir)\b", normalized):
+            filter_source = re.search(r"\b(?:uva|uvir)\b", normalized).group(0)  # type: ignore[union-attr]
+
+        a36_color = re.search(r"\ba36\s+(orange|yellow|green|red)\b", normalized)
+        if a36_color:
+            filter_source = a36_color.group(0)
+            _set_filter_size(intent, "A36", "a36")
+            intent.tokens.append({"type": "filter_color", "raw": a36_color.group(1), "value": a36_color.group(1)})
+
+        if filter_source:
+            _set_accessory_intent(intent, "filter", filter_source)
+            kind = re.search(r"\b(uv|uva|uvir|nd|skylight)\b", filter_source)
+            if kind:
+                intent.tokens.append({"type": "filter_kind", "raw": kind.group(1), "value": kind.group(1).upper()})
+            if "b+w" in filter_source:
+                intent.tokens.append({"type": "filter_brand", "raw": "b+w", "value": "B+W"})
+
     # Leica accessory codes are intentionally parsed only inside an explicit
     # accessory-intent query. A standalone 5-digit number remains unparsed.
     if intent.accessory_intent:
         for code in re.findall(r"\b\d{5}[a-z]?\b", normalized):
             _set_accessory_code(intent, code, code)
+
+
+def _filter_intent_token_consumed(intent: QueryIntent, token: str, normalized: str) -> bool:
+    if intent.accessory_intent != "filter":
+        return False
+    if token in {"filter", "fiter", "필터", "uv", "uva", "uvir", "nd", "skylight"}:
+        return True
+    if token in {"b", "w"} and "b+w" in normalized:
+        return True
+    if token == "a36" and intent.filter_size == "A36":
+        return True
+    if token in {"orange", "yellow", "green", "red"} and re.search(rf"\ba36\s+{re.escape(token)}\b", normalized):
+        return True
+    return False
 
 
 def _score_confidence(intent: QueryIntent) -> float:
@@ -214,8 +263,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
         filter_match = re.fullmatch(r"e\s*([0-9]{2,3})|e([0-9]{2,3})", token)
         if filter_match:
             size = filter_match.group(1) or filter_match.group(2)
-            intent.filter_size = f"E{size}"
-            intent.tokens.append({"type": "filter_size", "raw": token, "value": intent.filter_size})
+            _set_filter_size(intent, f"E{size}", token)
             continue
 
         focal_aperture_match = re.fullmatch(r"(\d{2,3})/(\d+(?:\.\d+)?)", token)
@@ -278,6 +326,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             continue
 
         if intent.accessory_intent == "hood" and token == "lens" and re.search(r"\blens\s+hood\b", normalized):
+            continue
+
+        if _filter_intent_token_consumed(intent, token, normalized):
             continue
 
         if intent.accessory_code and token.upper() == intent.accessory_code:

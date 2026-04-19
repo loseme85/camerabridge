@@ -141,6 +141,81 @@ HOOD_BUNDLE_LENS = _record(
 )
 
 
+FILTER_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "filter",
+        "title_raw": "[위탁] Leica UVa E39 & Skylight E39",
+        "source": "test",
+        "source_url": "https://example.invalid/filter-e39",
+    },
+    index=7,
+)
+
+
+FILTER_A36_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "filter",
+        "title_raw": "LEICA A36 Orange",
+        "source": "test",
+        "source_url": "https://example.invalid/filter-a36-orange",
+    },
+    index=8,
+)
+
+
+FILTER_BUNDLE_LENS = _record(
+    {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Summilux",
+        "model_canonical": "Summilux-M",
+        "variant": [],
+        "focal_length": "35",
+        "title_raw": "Used Leica Summilux-M 35mm f/1.4 ASPH FLE, silver - UVa Filter",
+        "source": "test",
+        "source_url": "https://example.invalid/summilux-filter-bundle",
+    },
+    index=9,
+)
+
+
+E39_HOOD_ACCESSORY = _record(
+    {
+        "brand": "Other",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "hood",
+        "title_raw": "Overgaard Ventilated Lens Hood Black for 35mm, 28mm [e39]",
+        "source": "test",
+        "source_url": "https://example.invalid/hood-e39",
+    },
+    index=10,
+)
+
+
 def test_exact_family_and_focal_match_scores_high() -> None:
     result = score_listing(parse_query("35 summilux"), SUMMILUX_35)
     assert result["score"] >= 95
@@ -220,6 +295,53 @@ def test_hood_intent_keeps_lens_bundle_visible_but_lower() -> None:
     assert bundle["final_output"]["title_raw"] == "Zeiss 21mm F2.8 ZM + Hood - Silver"
     assert "accessory_intent" in bundle["matched_fields"]
     assert any(item["match_type"] == "bundle_text_hint" for item in bundle["score_breakdown"] if item["field"] == "accessory_intent")
+
+
+def test_filter_accessory_intent_prefers_filter_over_broad_lens() -> None:
+    ranked = rank_listings("uv filter", [SUMMILUX_35, FILTER_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "filter"
+    assert ranked["results"][0]["final_output"]["category"] == "Accessory"
+    assert ranked["results"][0]["final_output"]["accessory_type"] == "filter"
+    assert ranked["results"][0]["match_quality"] == "medium"
+    assert all(result["final_output"]["category"] == "Accessory" for result in ranked["results"])
+
+
+def test_a36_filter_intent_ranks_a36_filter_first() -> None:
+    ranked = rank_listings("a36 orange", [SUMMILUX_35, FILTER_ACCESSORY, FILTER_A36_ACCESSORY], limit=3, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "filter"
+    assert ranked["intent"]["filter_size"] == "A36"
+    assert ranked["results"][0]["final_output"]["title_raw"] == "LEICA A36 Orange"
+    assert "filter_size" in ranked["results"][0]["matched_fields"]
+
+
+def test_filter_thread_does_not_promote_non_filter_accessory_above_filter() -> None:
+    ranked = rank_listings("e39 filter", [E39_HOOD_ACCESSORY, FILTER_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "filter"
+    assert ranked["intent"]["filter_size"] == "E39"
+    assert ranked["results"][0]["final_output"]["accessory_type"] == "filter"
+    assert ranked["results"][1]["final_output"]["accessory_type"] == "hood"
+
+
+def test_filter_intent_keeps_lens_bundle_visible_but_lower_than_filter() -> None:
+    ranked = rank_listings("summilux uva filter", [FILTER_ACCESSORY, FILTER_BUNDLE_LENS], limit=2, min_score=1)
+
+    assert any(result["final_output"]["category"] == "Accessory" for result in ranked["results"])
+    assert any(result["final_output"]["category"] == "Lens" for result in ranked["results"])
+    bundle = next(result for result in ranked["results"] if result["final_output"]["category"] == "Lens")
+    assert bundle["final_output"]["title_raw"] == "Used Leica Summilux-M 35mm f/1.4 ASPH FLE, silver - UVa Filter"
+    assert "accessory_intent" in bundle["matched_fields"]
+    assert any(item["match_type"] == "bundle_text_hint" for item in bundle["score_breakdown"] if item["field"] == "accessory_intent")
+
+
+def test_non_filter_query_keeps_existing_lens_ranking() -> None:
+    ranked = rank_listings("35lux aa", [FILTER_ACCESSORY, SUMMILUX_35], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] is None
+    assert ranked["results"][0]["final_output"]["category"] == "Lens"
+    assert ranked["results"][0]["final_output"]["model_canonical"] == "Summilux-M"
 
 
 def test_ambiguous_query_keeps_warnings() -> None:
@@ -542,6 +664,11 @@ if __name__ == "__main__":
     test_hood_accessory_intent_prefers_accessory_over_broad_lens()
     test_hood_accessory_code_ranks_exact_hood_first()
     test_hood_intent_keeps_lens_bundle_visible_but_lower()
+    test_filter_accessory_intent_prefers_filter_over_broad_lens()
+    test_a36_filter_intent_ranks_a36_filter_first()
+    test_filter_thread_does_not_promote_non_filter_accessory_above_filter()
+    test_filter_intent_keeps_lens_bundle_visible_but_lower_than_filter()
+    test_non_filter_query_keeps_existing_lens_ranking()
     test_ambiguous_query_keeps_warnings()
     test_rank_listings_orders_by_score()
     test_strong_structured_match_ranks_above_mount_only_weak_match()
