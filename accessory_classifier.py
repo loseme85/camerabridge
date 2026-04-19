@@ -129,6 +129,11 @@ _ACCESSORY_TYPE_PATTERNS: list[tuple[str, str]] = [
     ("macro",      "closeup"),
 ]
 
+_FILTER_TYPE_REGEX: list[tuple[str, str]] = [
+    (r'\bb\+w\b.*\be\d{2,3}\b', "bw_thread_filter"),
+    (r'\b(?:leica\s+)?a36\s+(?:orange|yellow|green|red)\b', "a36_color_filter"),
+]
+
 # ─────────────────────────────────────────────
 # compatible_mounts 추출
 # 물리적 마운트 호환 정보 (M, R, L, SL 등)
@@ -304,6 +309,12 @@ def classify_accessory(
             acc_type = atype
             reasons.append(f"type:{atype}:{kw}")
             break
+    if acc_type is None:
+        for pattern, label in _FILTER_TYPE_REGEX:
+            if re.search(pattern, combined):
+                acc_type = "filter"
+                reasons.append(f"type:filter_rx:{label}")
+                break
 
     # ── compatible_mounts ──
     compat_mounts: list[str] = []

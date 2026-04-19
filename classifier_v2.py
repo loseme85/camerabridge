@@ -757,6 +757,8 @@ _HARD_ACC_REGEX = (
     (r'\buvir\b', "uvir_filter"),
     (r'\b(?:nd|skylight|yellow)\s+(?:filter|fiter)\b', "optical_filter"),
     (r'\bb\+w\b.*\b(?:nd|uv|filter|fiter)\b', "bw_filter"),
+    (r'\bb\+w\b.*\b(?:gradation|cpl|soft|xs[-\s]?pro|007|010|022|103|803|basic|master|slim|orange|yellow|red|green)\b.*\be\d{2,3}\b', "bw_thread_filter"),
+    (r'\b(?:leica\s+)?a36\s+(?:orange|yellow|green|red)\b', "a36_color_filter"),
     (r'\bpl\s+e\d{2}\b', "polarizing_filter"),
     (r'\b(?:light|exposure)\s+meter\b|\bmeter\b', "meter"),
     (r'\bsekonic\b', "sekonic_meter"),
@@ -776,6 +778,30 @@ _ACCESSORY_PRIMARY_REGEX = (
     (r'\b\d{5}[a-z]?\b[^+]{0,80}\bhood\b|\bhood\b[^+]{0,80}\b\d{5}[a-z]?\b', "hood_code"),
     (r'\b\d{5}[a-z]?\b[^+]{0,80}후드|후드[^+]{0,80}\b\d{5}[a-z]?\b', "hood_code_kr"),
 )
+
+_FILTER_BUNDLE_REGEX = (
+    r'\bwith\s+(?:uva\s+|uv\s+|uv/ir\s+|nd\s+|cpl\s+)?(?:filter|fiter)\b'
+    r'|\+\s*(?:uva\s+|uv\s+|uv/ir\s+|nd\s+|cpl\s+)?(?:filter|fiter)\b'
+    r'|-\s*(?:uva\s+|uv\s+|uv/ir\s+|nd\s+|cpl\s+)?(?:filter|fiter)\b'
+)
+
+_FILTER_ACCESSORY_SIGNALS = {
+    "filter", "필터", "polariz", "polfilter",
+    "e_uv_filter", "uva", "uv", "uvir_filter",
+    "optical_filter", "bw_filter", "bw_thread_filter",
+    "a36_color_filter", "polarizing_filter",
+}
+
+
+def _is_lens_filter_bundle(combined: str, is_lens_protected_strong: bool) -> bool:
+    """
+    Lens + included filter bundles should remain Lens.
+
+    Standalone filter titles such as "Leica Serie8 UV Filter (M 50/1.2)" still
+    flow through the hard accessory gate; only explicit bundle separators are
+    protected here.
+    """
+    return is_lens_protected_strong and bool(re.search(_FILTER_BUNDLE_REGEX, combined))
 
 
 def _iter_hard_accessory_hits(combined: str):
@@ -939,6 +965,8 @@ def detect_category(
         if is_lens_protected_strong and signal in {"hood", "후드"}:
             if has_aperture and has_focal and has_lens_kw:
                 continue
+        if signal in _FILTER_ACCESSORY_SIGNALS and _is_lens_filter_bundle(combined, is_lens_protected_strong):
+            continue
         reasons.append(f"hard_acc_{hit_type}:{signal}")
         return {"category": "Accessory", "category_confidence": 0.97, "category_reason": reasons}
 
