@@ -768,6 +768,16 @@ _HARD_ACC_REGEX = (
 )
 
 
+_ACCESSORY_PRIMARY_REGEX = (
+    (r'\blens\s+hood\b', "lens_hood_primary"),
+    (r'\bleica\s*hood\b[^+]{0,80}\b\d{5}[a-z]?\b', "leicahood_code"),
+    (r'\bhood\b[^+]{0,80}\bfor\b', "hood_for_lens"),
+    (r'\b(?:for|용)\b[^+]{0,80}(?:\bhood\b|후드)', "for_hood"),
+    (r'\b\d{5}[a-z]?\b[^+]{0,80}\bhood\b|\bhood\b[^+]{0,80}\b\d{5}[a-z]?\b', "hood_code"),
+    (r'\b\d{5}[a-z]?\b[^+]{0,80}후드|후드[^+]{0,80}\b\d{5}[a-z]?\b', "hood_code_kr"),
+)
+
+
 def _iter_hard_accessory_hits(combined: str):
     for kw in _HARD_ACC_PHRASES:
         if kw in combined:
@@ -912,6 +922,15 @@ def detect_category(
     is_lens_protected_strong = (has_aperture and has_focal) or has_lens_kw
     # 약한 렌즈 보호: 조리개 또는 초점거리 단독 (가격 판단만 막음)
     is_lens_protected_weak   = has_aperture or has_focal
+
+    # ── 0.8순위: accessory 본품 제목 패턴 ─────────────────────
+    # "Lens Hood", "Hood ... for M 50mm", "12586 ... Hood"는
+    # 렌즈 모델/초점거리/조리개가 compatibility 설명으로 들어와도
+    # 상품 정체성은 후드다. 반면 "Lens + Hood" 번들형은 Lens로 유지한다.
+    for pattern, label in _ACCESSORY_PRIMARY_REGEX:
+        if re.search(pattern, combined):
+            reasons.append(f"primary_acc_rx:{label}")
+            return {"category": "Accessory", "category_confidence": 0.98, "category_reason": reasons}
 
     # ── 1순위: 강제 Accessory 신호 ────────────────────────────
     # 이 신호들은 mount/system/숫자/mm 신호보다 먼저 category를 확정한다.
@@ -1352,6 +1371,9 @@ def _qa_v2_likely_correct_note(
             return "v2_likely_correct:v1_accessory_but_lens_signals"
         if "body_kw" in cat_reason or "mount_compact_pns_q" in cat_reason:
             return "v2_likely_correct:v1_accessory_but_body_signals"
+
+    if v2_cat == "Accessory" and "primary_acc_rx" in cat_reason:
+        return "v2_likely_correct:accessory_primary_signal"
 
     if v2_cat == "Body" and v2_mt in ("PNS", "Compact", "Q"):
         if any(x in mt_reason for x in [

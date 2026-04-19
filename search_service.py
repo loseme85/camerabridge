@@ -213,7 +213,7 @@ def _candidate_anchor_query(intent: dict[str, Any]) -> dict[str, Any]:
 
 def _record_has_precomputed_search_fields(record: dict[str, Any]) -> bool:
     fields = _search_fields(record)
-    return bool(fields.get("searchable_text") and isinstance(fields.get("tokens"), list))
+    return bool(fields.get("searchable_text"))
 
 
 def _search_field_value(record: dict[str, Any], field_name: str) -> str:

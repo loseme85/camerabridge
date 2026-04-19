@@ -27,7 +27,6 @@ from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 SEARCH_INDEX_SCHEMA_VERSION = "search_index.v1"
-SEARCH_FIELDS_SCHEMA_VERSION = "search_fields.v1"
 DEFAULT_RESOLVED_PATH = PROJECT_ROOT / "data/derived/results_resolved_v2.json"
 DEFAULT_SEARCH_INDEX_PATH = PROJECT_ROOT / "data/derived/results_search_index_v1.json"
 _SEARCH_INDEX_CACHE: dict[str, dict[str, Any]] = {}
@@ -83,16 +82,12 @@ def _as_list(value: Any) -> list[Any]:
     return [value]
 
 
-def _tokens(value: Any) -> list[str]:
-    normalized = normalize_title(value)
+def _joined_tokens(values: list[Any]) -> list[str]:
+    joined = " ".join(str(value) for value in values if value)
+    normalized = normalize_title(joined)
     if not normalized:
         return []
     return sorted(set(normalized.split()))
-
-
-def _joined_tokens(values: list[Any]) -> list[str]:
-    joined = " ".join(str(value) for value in values if value)
-    return _tokens(joined)
 
 
 def _extract_aperture_tokens(normalized_text: str) -> list[str]:
@@ -139,32 +134,29 @@ def build_search_fields(compact_final: dict[str, Any], raw_item: dict[str, Any])
         raw_item.get("label"),
         " ".join(variant_values),
     ]
-    searchable_text = normalize_title(" ".join(str(part) for part in text_parts if part))
+    normalized_parts = []
+    seen_parts = set()
+    for part in text_parts:
+        normalized_part = normalize_title(part)
+        if normalized_part and normalized_part not in seen_parts:
+            normalized_parts.append(normalized_part)
+            seen_parts.add(normalized_part)
+    searchable_text = " ".join(normalized_parts)
     model_text = normalize_title(" ".join(str(value) for value in model_values if value))
 
     mount_token = normalize_title(compact_final.get("mount"))
     system_token = normalize_title(compact_final.get("system") or raw_item.get("system"))
-    category_token = normalize_title(compact_final.get("category"))
     focal_token = normalize_title(compact_final.get("focal_length"))
     variant_tokens = _joined_tokens(variant_values)
 
-    anchor_tokens = set(searchable_text.split())
-    anchor_tokens.update(token for token in [mount_token, system_token, category_token, focal_token] if token)
-    anchor_tokens.update(variant_tokens)
-
     return {
-        "schema_version": SEARCH_FIELDS_SCHEMA_VERSION,
         "searchable_text": searchable_text,
-        "tokens": sorted(anchor_tokens),
-        "normalized_title_tokens": _tokens(compact_final.get("normalized_title") or compact_final.get("title_raw")),
         "model_text": model_text,
-        "model_tokens": _tokens(model_text),
         "variant_tokens": variant_tokens,
         "aperture_tokens": _extract_aperture_tokens(searchable_text),
         "focal_token": focal_token,
         "mount_token": mount_token,
         "system_token": system_token,
-        "category_token": category_token,
     }
 
 
