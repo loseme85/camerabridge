@@ -34,6 +34,8 @@ CANDIDATE_MIN_BROAD_RECORDS = 120
 CANDIDATE_MAX_RECORDS = 900
 ACCESSORY_CANDIDATE_MAX_RECORDS = 260
 ACCESSORY_CANDIDATE_BROAD_RECORDS = 120
+FILTER_DETAIL_CANDIDATE_MAX_RECORDS = 140
+FILTER_DETAIL_CANDIDATE_BROAD_RECORDS = 40
 SUPPORTED_SORTS = {
     "relevance",
     "price_asc",
@@ -212,7 +214,23 @@ def _candidate_anchor_query(intent: dict[str, Any]) -> dict[str, Any]:
         "aperture_norm": _normalize_search_text(aperture),
         "accessory_intent": _normalize_search_text(intent.get("accessory_intent")),
         "accessory_code": _normalize_search_text(intent.get("accessory_code")),
+        "filter_details": _filter_detail_values(intent),
     }
+
+
+def _filter_detail_values(intent: dict[str, Any]) -> list[str]:
+    if _normalize_search_text(intent.get("accessory_intent")) != "filter":
+        return []
+
+    values: list[str] = []
+    for token in intent.get("tokens", []):
+        if token.get("type") not in {"filter_kind", "filter_brand", "filter_color"}:
+            continue
+        for value in [token.get("value"), token.get("raw")]:
+            value_norm = _normalize_search_text(value)
+            if value_norm and value_norm not in values:
+                values.append(value_norm)
+    return values
 
 
 def _record_has_precomputed_search_fields(record: dict[str, Any]) -> bool:
@@ -284,6 +302,25 @@ def _candidate_accessory_code_match(anchor_query: dict[str, Any], text: str) -> 
     return bool(code and _contains_normalized_word(text, code))
 
 
+def _candidate_filter_detail_match(anchor_query: dict[str, Any], record: dict[str, Any], text: str) -> bool:
+    details = anchor_query.get("filter_details") or []
+    if not details:
+        return False
+
+    token_fields = [
+        _search_field_tokens(record, "tokens"),
+        _search_field_tokens(record, "normalized_title_tokens"),
+        _search_field_tokens(record, "model_tokens"),
+        _search_field_tokens(record, "variant_tokens"),
+    ]
+    for detail in details:
+        if any(detail in tokens for tokens in token_fields):
+            return True
+        if _contains_normalized_word(text, detail):
+            return True
+    return False
+
+
 def _candidate_system(record: dict[str, Any], final: dict[str, Any]) -> str:
     raw = record.get("raw_item") if isinstance(record.get("raw_item"), dict) else {}
     return str(final.get("system") or raw.get("system") or "")
@@ -336,6 +373,9 @@ def _candidate_anchor_matches(
     if anchor_query.get("filter_size") and _contains_normalized_word(text, anchor_query["filter_size"]):
         matches.add("filter_size")
 
+    if _candidate_filter_detail_match(anchor_query, record, text):
+        matches.add("filter_detail")
+
     if anchor_query.get("optical_formula"):
         formula_norm = anchor_query["optical_formula"]
         if formula_norm in text or "8 element" in text or "8매" in text:
@@ -373,11 +413,22 @@ def _candidate_anchor_fields(intent: dict[str, Any]) -> set[str]:
         fields.add("variant")
     if intent.get("aperture") or any(token.get("type") in {"aperture", "aperture_hint"} for token in intent.get("tokens", [])):
         fields.add("aperture")
+    if _filter_detail_values(intent):
+        fields.add("filter_detail")
     return fields
 
 
 def _accessory_anchor_active(intent: dict[str, Any]) -> bool:
     return bool(intent.get("accessory_intent") or intent.get("accessory_code"))
+
+
+def _filter_detail_anchor_active(intent: dict[str, Any]) -> bool:
+    lens_like_anchor = bool(intent.get("model_family") or intent.get("focal_length") or _aperture_from_intent(intent))
+    return (
+        _normalize_search_text(intent.get("accessory_intent")) == "filter"
+        and bool(intent.get("filter_size") or _filter_detail_values(intent))
+        and not lens_like_anchor
+    )
 
 
 def narrow_candidate_records(
@@ -405,6 +456,8 @@ def narrow_candidate_records(
         "precomputed_field_record_count": 0,
         "accessory_intent_applied": False,
         "accessory_code_applied": False,
+        "filter_intent_applied": False,
+        "filter_detail_applied": False,
     }
     if input_count <= max_records or not anchor_fields:
         return records, stats
@@ -429,8 +482,16 @@ def narrow_candidate_records(
 
     strong.sort()
     broad.sort()
-    candidate_max = ACCESSORY_CANDIDATE_MAX_RECORDS if accessory_anchor_active else max_records
-    candidate_broad_records = ACCESSORY_CANDIDATE_BROAD_RECORDS if accessory_anchor_active else min_broad_records
+    filter_detail_active = _filter_detail_anchor_active(intent)
+    if filter_detail_active:
+        candidate_max = FILTER_DETAIL_CANDIDATE_MAX_RECORDS
+        candidate_broad_records = FILTER_DETAIL_CANDIDATE_BROAD_RECORDS
+    elif accessory_anchor_active:
+        candidate_max = ACCESSORY_CANDIDATE_MAX_RECORDS
+        candidate_broad_records = ACCESSORY_CANDIDATE_BROAD_RECORDS
+    else:
+        candidate_max = max_records
+        candidate_broad_records = min_broad_records
 
     if accessory_anchor_active and not strong and broad:
         selected = [item[2] for item in broad[:candidate_max]]
@@ -452,6 +513,8 @@ def narrow_candidate_records(
             "precomputed_field_record_count": precomputed_count,
             "accessory_intent_applied": bool(intent.get("accessory_intent")),
             "accessory_code_applied": bool(intent.get("accessory_code")),
+            "filter_intent_applied": _normalize_search_text(intent.get("accessory_intent")) == "filter",
+            "filter_detail_applied": filter_detail_active,
         }
     )
     return selected, stats

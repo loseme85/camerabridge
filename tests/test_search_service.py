@@ -227,6 +227,93 @@ ZEISS_HOOD_BUNDLE = _record(
     },
 )
 
+FILTER_ND_ACCESSORY = _record(
+    10,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/nd-filter",
+        "title_raw": "B+W ND 1000 E46 Black",
+        "price_raw": "180,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "B+W",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "filter",
+        "sold_quality": "asking",
+    },
+)
+
+FILTER_E39_ACCESSORY = _record(
+    11,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/e39-filter",
+        "title_raw": "Leica UVa E39 & Skylight E39",
+        "price_raw": "120,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "filter",
+        "sold_quality": "asking",
+    },
+)
+
+E39_HOOD_ACCESSORY = _record(
+    12,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/e39-hood",
+        "title_raw": "Leica E39 Lens Hood",
+        "price_raw": "160,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "hood",
+        "sold_quality": "asking",
+    },
+)
+
+SUMMILUX_FILTER_BUNDLE = _record(
+    13,
+    {
+        "source": "Lens dealer",
+        "source_url": "https://example.invalid/summilux-filter-bundle",
+        "title_raw": "Leica Summilux-M 35mm ASPH with UVa Filter",
+        "price_raw": "5,900,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Summilux",
+        "model_canonical": "Summilux-M",
+        "variant": ["ASPH"],
+        "focal_length": "35",
+        "sold_quality": "asking",
+    },
+)
+
 
 def test_pagination_fields_and_next_offset() -> None:
     response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW, SUMMICRON_50], limit=1)
@@ -513,6 +600,50 @@ def test_accessory_intent_candidate_narrowing_keeps_bundle_lens_visible() -> Non
     assert any(result["title"] == "Leica 12538 Hood Black" for result in narrowed["results"])
 
 
+def test_filter_intent_candidate_narrowing_uses_filter_detail_without_changing_top() -> None:
+    records = build_search_index([FILTER_ND_ACCESSORY, FILTER_E39_ACCESSORY] + _accessory_narrowing_distractors())
+
+    narrowed = search_records("nd filter", records, limit=2, min_score=1)
+    full = search_records("nd filter", records, limit=2, min_score=1, use_candidate_narrowing=False)
+
+    assert narrowed["candidate_narrowing"]["applied"] is True
+    assert narrowed["candidate_narrowing"]["filter_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["filter_detail_applied"] is True
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+    assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+    assert narrowed["results"][0]["final_output"]["accessory_type"] == "filter"
+
+
+def test_filter_thread_candidate_narrowing_keeps_related_accessory_visible() -> None:
+    records = build_search_index(
+        [FILTER_E39_ACCESSORY, E39_HOOD_ACCESSORY] + _accessory_narrowing_distractors()
+    )
+
+    response = search_records("e39 filter", records, limit=5, min_score=1)
+
+    assert response["candidate_narrowing"]["applied"] is True
+    assert response["candidate_narrowing"]["filter_detail_applied"] is True
+    assert response["results"][0]["title"] == "Leica UVa E39 & Skylight E39"
+    assert response["results"][0]["final_output"]["accessory_type"] == "filter"
+    assert any(result["title"] == "Leica E39 Lens Hood" for result in response["results"])
+
+
+def test_filter_intent_candidate_narrowing_keeps_lens_bundle_visible() -> None:
+    records = build_search_index(
+        [FILTER_E39_ACCESSORY, SUMMILUX_FILTER_BUNDLE] + _accessory_narrowing_distractors()
+    )
+
+    narrowed = search_records("summilux uva filter", records, limit=5, min_score=1)
+    full = search_records("summilux uva filter", records, limit=5, min_score=1, use_candidate_narrowing=False)
+
+    assert narrowed["candidate_narrowing"]["applied"] is True
+    assert narrowed["candidate_narrowing"]["filter_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["filter_detail_applied"] is False
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+    assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+    assert any(result["final_output"]["category"] == "Lens" for result in narrowed["results"])
+
+
 if __name__ == "__main__":
     test_pagination_fields_and_next_offset()
     test_offset_pagination_returns_second_page()
@@ -534,4 +665,7 @@ if __name__ == "__main__":
     test_accessory_intent_candidate_narrowing_reduces_scored_records_without_changing_top()
     test_accessory_code_candidate_narrowing_keeps_code_match_top()
     test_accessory_intent_candidate_narrowing_keeps_bundle_lens_visible()
+    test_filter_intent_candidate_narrowing_uses_filter_detail_without_changing_top()
+    test_filter_thread_candidate_narrowing_keeps_related_accessory_visible()
+    test_filter_intent_candidate_narrowing_keeps_lens_bundle_visible()
     print("test_search_service: ok")
