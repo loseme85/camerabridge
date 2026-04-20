@@ -107,6 +107,7 @@ def test_lens_or_body_with_included_adapter_keeps_primary_category() -> None:
     expected = {
         "Carl Zeiss C 50mm F1.5 Sonnar + Amadeo adaptor": "Lens",
         "Leica 90mm F4 Macro Elmar M + Macro Adapter M": "Lens",
+        "LEICA 90mm F4 (6bit) Macro Elmar-M Macro-Adapter-M sn.3976": "Lens",
         "Leica M10 Body with M-L Adapter": "Body",
     }
 

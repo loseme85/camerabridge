@@ -791,6 +791,11 @@ _ADAPTER_BUNDLE_REGEX = (
     r'|\s-\s*(?:[\w+-]+\s+){0,4}(?:adapter|adaptor|어댑터)\b'
 )
 
+_LENS_INLINE_ADAPTER_BUNDLE_REGEX = (
+    r'\b\d{2,3}\s*mm\b.{0,120}\bf\s*\d+(?:[\./]\d+)?\b.{0,120}\b(?:adapter|adaptor|어댑터)\b'
+    r'|\bf\s*\d+(?:[\./]\d+)?\b.{0,120}\b(?:summicron|summilux|noctilux|elmarit|elmar|summarit|summaron|sonnar)\b.{0,120}\b(?:adapter|adaptor|어댑터)\b'
+)
+
 _FILTER_ACCESSORY_SIGNALS = {
     "filter", "필터", "polariz", "polfilter",
     "e_uv_filter", "uva", "uv", "uvir_filter",
@@ -813,7 +818,10 @@ def _is_lens_filter_bundle(combined: str, is_lens_protected_strong: bool) -> boo
 
 
 def _is_lens_adapter_bundle(combined: str, is_lens_protected_strong: bool) -> bool:
-    return is_lens_protected_strong and bool(re.search(_ADAPTER_BUNDLE_REGEX, combined))
+    return is_lens_protected_strong and bool(
+        re.search(_ADAPTER_BUNDLE_REGEX, combined)
+        or re.search(_LENS_INLINE_ADAPTER_BUNDLE_REGEX, combined)
+    )
 
 
 def _is_body_adapter_bundle(combined: str) -> bool:
