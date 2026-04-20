@@ -708,7 +708,7 @@ _ACCESSORY_CODES = {
 
 _HARD_ACC_PHRASES = (
     # 어댑터/익스텐더
-    "adapter", "어댑터",
+    "adapter", "adaptor", "어댑터",
     "extender", "익스텐더",
     # 케이스/백/스트랩
     "bag", "가방", "case", "케이스", "pouch", "파우치",
@@ -785,12 +785,20 @@ _FILTER_BUNDLE_REGEX = (
     r'|-\s*(?:uva\s+|uv\s+|uv/ir\s+|nd\s+|cpl\s+)?(?:filter|fiter)\b'
 )
 
+_ADAPTER_BUNDLE_REGEX = (
+    r'\bwith\s+(?:[\w+-]+\s+){0,4}(?:adapter|adaptor|어댑터)\b'
+    r'|\s\+\s*(?:[\w+-]+\s+){0,4}(?:adapter|adaptor|어댑터)\b'
+    r'|\s-\s*(?:[\w+-]+\s+){0,4}(?:adapter|adaptor|어댑터)\b'
+)
+
 _FILTER_ACCESSORY_SIGNALS = {
     "filter", "필터", "polariz", "polfilter",
     "e_uv_filter", "uva", "uv", "uvir_filter",
     "optical_filter", "bw_filter", "bw_thread_filter",
     "a36_color_filter", "polarizing_filter",
 }
+
+_ADAPTER_ACCESSORY_SIGNALS = {"adapter", "adaptor", "어댑터"}
 
 
 def _is_lens_filter_bundle(combined: str, is_lens_protected_strong: bool) -> bool:
@@ -802,6 +810,14 @@ def _is_lens_filter_bundle(combined: str, is_lens_protected_strong: bool) -> boo
     protected here.
     """
     return is_lens_protected_strong and bool(re.search(_FILTER_BUNDLE_REGEX, combined))
+
+
+def _is_lens_adapter_bundle(combined: str, is_lens_protected_strong: bool) -> bool:
+    return is_lens_protected_strong and bool(re.search(_ADAPTER_BUNDLE_REGEX, combined))
+
+
+def _is_body_adapter_bundle(combined: str) -> bool:
+    return any(kw in combined for kw in _BODY_KW) and bool(re.search(_ADAPTER_BUNDLE_REGEX, combined))
 
 
 def _iter_hard_accessory_hits(combined: str):
@@ -967,11 +983,21 @@ def detect_category(
                 continue
         if signal in _FILTER_ACCESSORY_SIGNALS and _is_lens_filter_bundle(combined, is_lens_protected_strong):
             continue
+        if signal in _ADAPTER_ACCESSORY_SIGNALS and (
+            _is_lens_adapter_bundle(combined, is_lens_protected_strong)
+            or _is_body_adapter_bundle(combined)
+        ):
+            continue
         reasons.append(f"hard_acc_{hit_type}:{signal}")
         return {"category": "Accessory", "category_confidence": 0.97, "category_reason": reasons}
 
     # ── 2순위: 일반 Accessory 키워드 (강한 렌즈 보호 없을 때만) ──
     for kw in _ACCESSORY_KW:
+        if kw in _ADAPTER_ACCESSORY_SIGNALS and (
+            _is_lens_adapter_bundle(combined, is_lens_protected_strong)
+            or _is_body_adapter_bundle(combined)
+        ):
+            continue
         if kw in combined and not is_lens_protected_strong:
             reasons.append(f"acc_kw:{kw}")
             return {"category": "Accessory", "category_confidence": 0.92, "category_reason": reasons}

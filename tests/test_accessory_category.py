@@ -87,10 +87,40 @@ def test_lens_with_included_filter_stays_lens() -> None:
         assert result["category"] == "Lens", title
 
 
+def test_standalone_adapter_and_adaptor_titles_stay_accessory() -> None:
+    titles = [
+        "Leica M Adapter L",
+        "M-L Adapter Black",
+        "LTM to M Adapter",
+        "R Macro Adapter",
+        "Amadeo adaptor for Contax RF to Leica M",
+    ]
+
+    for title in titles:
+        result = _classify(title)
+        assert result["category"] == "Accessory", title
+        assert result["label"] == "Accessory", title
+        assert result["accessory_type"] == "adapter", title
+
+
+def test_lens_or_body_with_included_adapter_keeps_primary_category() -> None:
+    expected = {
+        "Carl Zeiss C 50mm F1.5 Sonnar + Amadeo adaptor": "Lens",
+        "Leica 90mm F4 Macro Elmar M + Macro Adapter M": "Lens",
+        "Leica M10 Body with M-L Adapter": "Body",
+    }
+
+    for title, category in expected.items():
+        result = _classify(title)
+        assert result["category"] == category, title
+
+
 if __name__ == "__main__":
     test_standalone_hood_with_lens_compatibility_stays_accessory()
     test_lens_with_included_hood_stays_lens()
     test_existing_accessory_classes_remain_accessory()
     test_filter_primary_titles_stay_accessory()
     test_lens_with_included_filter_stays_lens()
+    test_standalone_adapter_and_adaptor_titles_stay_accessory()
+    test_lens_or_body_with_included_adapter_keeps_primary_category()
     print("test_accessory_category: ok")

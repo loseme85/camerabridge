@@ -45,6 +45,7 @@ from typing import Optional
 _ACCESSORY_TYPE_PATTERNS: list[tuple[str, str]] = [
     # 어댑터
     ("adapter", "adapter"),
+    ("adaptor", "adapter"),
     ("어댑터",   "adapter"),
     ("mount adapter", "adapter"),
     ("m-l",      "adapter"),    # M to L 어댑터
