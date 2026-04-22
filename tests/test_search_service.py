@@ -162,6 +162,143 @@ L_BODY_WEAK_LOW_PRICE = _record(
     },
 )
 
+
+M6_BODY = _record(
+    40,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/m6-body",
+        "title_raw": "Leica M6 TTL 0.72 Body",
+        "price_raw": "4,800,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M6",
+        "model_canonical": "M6",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+
+M6_CASE_ACCESSORY = _record(
+    41,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/m6-case",
+        "title_raw": "Leica M6 Leather Case",
+        "price_raw": "250,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "case",
+        "sold_quality": "asking",
+    },
+)
+
+
+Q3_BODY = _record(
+    42,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/q3-body",
+        "title_raw": "Leica Q3 Digital Camera",
+        "price_raw": "7,900,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "Q",
+        "system": "Q",
+        "category": "Body",
+        "label": "Q Body",
+        "model_raw": "Q3",
+        "model_canonical": "Q3",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+
+Q3_CASE_ACCESSORY = _record(
+    43,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/q3-case",
+        "title_raw": "Leica Q3 Half Case",
+        "price_raw": "300,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "Q",
+        "system": "Q",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "case",
+        "sold_quality": "asking",
+    },
+)
+
+
+R8_BODY = _record(
+    44,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/r8-body",
+        "title_raw": "Leica R8 Body Black",
+        "price_raw": "1,200,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "R",
+        "category": "Body",
+        "label": "R Body",
+        "model_raw": "R8",
+        "model_canonical": "R8",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+
+BARNACK_IIIF_BODY = _record(
+    45,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/iiif-body",
+        "title_raw": "Leica Barnack IIIF Silver",
+        "price_raw": "1,500,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "L",
+        "category": "Body",
+        "label": "L Body",
+        "model_raw": "IIIf",
+        "model_canonical": "IIIf",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+
 HOOD_ACCESSORY = _record(
     7,
     {
@@ -644,6 +781,70 @@ def test_filter_intent_candidate_narrowing_keeps_lens_bundle_visible() -> None:
     assert any(result["final_output"]["category"] == "Lens" for result in narrowed["results"])
 
 
+def _body_narrowing_distractors(count: int = 1500) -> list[dict]:
+    return [
+        _record(
+            5000 + index,
+            {
+                "source": "Distractor dealer",
+                "source_url": f"https://example.invalid/body-distractor-{index}",
+                "title_raw": f"Leica M 50mm lens listing {index}",
+                "price_raw": "1,000,000원",
+                "currency": "KRW",
+                "condition_raw": "Used",
+                "brand": "Leica",
+                "mount": "M",
+                "category": "Lens",
+                "label": "M Lens",
+                "model_raw": "Summicron",
+                "model_canonical": "Summicron-M",
+                "variant": [],
+                "focal_length": "50",
+                "sold_quality": "asking",
+            },
+        )
+        for index in range(count)
+    ]
+
+
+def test_body_intent_candidate_narrowing_reduces_scored_records_without_changing_top() -> None:
+    records = build_search_index(
+        [M6_BODY, Q3_BODY, R8_BODY, BARNACK_IIIF_BODY, M6_CASE_ACCESSORY, Q3_CASE_ACCESSORY]
+        + _body_narrowing_distractors()
+    )
+
+    for query, expected_model in [
+        ("m6", "M6"),
+        ("q3", "Q3"),
+        ("r8", "R8"),
+        ("barnack", "IIIf"),
+        ("iiif", "IIIf"),
+    ]:
+        narrowed = search_records(query, records, limit=5, min_score=1)
+        full = search_records(query, records, limit=5, min_score=1, use_candidate_narrowing=False)
+
+        assert narrowed["candidate_narrowing"]["applied"] is True
+        assert narrowed["candidate_narrowing"]["body_intent_applied"] is True
+        assert narrowed["candidate_narrowing"]["body_family_applied"] is True
+        assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+        assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+        assert narrowed["results"][0]["final_output"]["category"] == "Body"
+        assert narrowed["results"][0]["final_output"]["model_canonical"] == expected_model
+        assert narrowed["results"][0]["match_quality"] == "strong"
+
+
+def test_body_intent_candidate_narrowing_keeps_accessory_and_lens_visible() -> None:
+    records = build_search_index([M6_BODY, M6_CASE_ACCESSORY] + _body_narrowing_distractors())
+
+    response = search_records("m6", records, limit=10, min_score=1)
+
+    assert response["candidate_narrowing"]["applied"] is True
+    assert response["candidate_narrowing"]["body_intent_applied"] is True
+    assert response["results"][0]["final_output"]["category"] == "Body"
+    assert any(result["final_output"]["category"] == "Accessory" for result in response["results"])
+    assert any(result["final_output"]["category"] == "Lens" for result in response["results"])
+
+
 if __name__ == "__main__":
     test_pagination_fields_and_next_offset()
     test_offset_pagination_returns_second_page()
@@ -668,4 +869,6 @@ if __name__ == "__main__":
     test_filter_intent_candidate_narrowing_uses_filter_detail_without_changing_top()
     test_filter_thread_candidate_narrowing_keeps_related_accessory_visible()
     test_filter_intent_candidate_narrowing_keeps_lens_bundle_visible()
+    test_body_intent_candidate_narrowing_reduces_scored_records_without_changing_top()
+    test_body_intent_candidate_narrowing_keeps_accessory_and_lens_visible()
     print("test_search_service: ok")

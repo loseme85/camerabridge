@@ -36,6 +36,8 @@ ACCESSORY_CANDIDATE_MAX_RECORDS = 260
 ACCESSORY_CANDIDATE_BROAD_RECORDS = 120
 FILTER_DETAIL_CANDIDATE_MAX_RECORDS = 140
 FILTER_DETAIL_CANDIDATE_BROAD_RECORDS = 40
+BODY_CANDIDATE_MAX_RECORDS = 260
+BODY_CANDIDATE_BROAD_RECORDS = 80
 SUPPORTED_SORTS = {
     "relevance",
     "price_asc",
@@ -206,6 +208,7 @@ def _candidate_anchor_query(intent: dict[str, Any]) -> dict[str, Any]:
         "focal_length_norm": _normalize_search_text(intent.get("focal_length")),
         "mount": _normalize_search_text(intent.get("mount")),
         "system": _normalize_search_text(intent.get("system")),
+        "body_intent": _normalize_search_text(intent.get("body_intent")),
         "variant": [_normalize_search_text(item) for item in intent.get("variant") or [] if item],
         "generation": _normalize_search_text(intent.get("generation")),
         "filter_size": _normalize_search_text(intent.get("filter_size")),
@@ -321,6 +324,42 @@ def _candidate_filter_detail_match(anchor_query: dict[str, Any], record: dict[st
     return False
 
 
+def _candidate_body_intent_text_hit(body_intent: str, text: str) -> bool:
+    body_norm = _normalize_search_text(body_intent)
+    if not body_norm:
+        return False
+    if body_norm == "barnack":
+        return bool(
+            re.search(
+                r"\bbarnack\b|\bleica\s+i{1,3}[cfg]?\b|\biii[cfg]\b|\biiif\b|\biiig\b|\biiic\b",
+                text,
+            )
+        )
+    return _contains_normalized_word(text, body_norm)
+
+
+def _candidate_body_intent_match(anchor_query: dict[str, Any], final: dict[str, Any], text: str) -> str:
+    body_intent = str(anchor_query.get("body_intent") or "")
+    if not body_intent:
+        return ""
+
+    body_norm = _normalize_search_text(body_intent)
+    category = _normalize_search_text(final.get("category"))
+    model_values = [
+        _normalize_search_text(final.get("model_canonical")),
+        _normalize_search_text(final.get("model_raw")),
+        _normalize_search_text(final.get("label")),
+    ]
+    model_hit = body_norm in model_values
+    text_hit = _candidate_body_intent_text_hit(body_intent, text)
+
+    if category == "body" and (model_hit or text_hit):
+        return "body_exact"
+    if text_hit:
+        return "body_text_hint"
+    return ""
+
+
 def _candidate_system(record: dict[str, Any], final: dict[str, Any]) -> str:
     raw = record.get("raw_item") if isinstance(record.get("raw_item"), dict) else {}
     return str(final.get("system") or raw.get("system") or "")
@@ -346,6 +385,12 @@ def _candidate_anchor_matches(
 
     if _candidate_focal_match(anchor_query, record, final, text):
         matches.add("focal_length")
+
+    body_match = _candidate_body_intent_match(anchor_query, final, text)
+    if body_match == "body_exact":
+        matches.add("body_intent")
+    elif body_match == "body_text_hint":
+        matches.add("body_text_hint")
 
     query_mount = anchor_query.get("mount")
     if query_mount and query_mount == (_search_field_value(record, "mount_token") or _normalize_search_text(final.get("mount"))):
@@ -398,6 +443,7 @@ def _candidate_anchor_fields(intent: dict[str, Any]) -> set[str]:
         field
         for field in [
             "model_family",
+            "body_intent",
             "focal_length",
             "mount",
             "system",
@@ -420,6 +466,10 @@ def _candidate_anchor_fields(intent: dict[str, Any]) -> set[str]:
 
 def _accessory_anchor_active(intent: dict[str, Any]) -> bool:
     return bool(intent.get("accessory_intent") or intent.get("accessory_code"))
+
+
+def _body_anchor_active(intent: dict[str, Any]) -> bool:
+    return bool(intent.get("body_intent"))
 
 
 def _filter_detail_anchor_active(intent: dict[str, Any]) -> bool:
@@ -458,6 +508,8 @@ def narrow_candidate_records(
         "accessory_code_applied": False,
         "filter_intent_applied": False,
         "filter_detail_applied": False,
+        "body_intent_applied": False,
+        "body_family_applied": False,
     }
     if input_count <= max_records or not anchor_fields:
         return records, stats
@@ -483,12 +535,16 @@ def narrow_candidate_records(
     strong.sort()
     broad.sort()
     filter_detail_active = _filter_detail_anchor_active(intent)
+    body_anchor_active = _body_anchor_active(intent)
     if filter_detail_active:
         candidate_max = FILTER_DETAIL_CANDIDATE_MAX_RECORDS
         candidate_broad_records = FILTER_DETAIL_CANDIDATE_BROAD_RECORDS
     elif accessory_anchor_active:
         candidate_max = ACCESSORY_CANDIDATE_MAX_RECORDS
         candidate_broad_records = ACCESSORY_CANDIDATE_BROAD_RECORDS
+    elif body_anchor_active:
+        candidate_max = BODY_CANDIDATE_MAX_RECORDS
+        candidate_broad_records = BODY_CANDIDATE_BROAD_RECORDS
     else:
         candidate_max = max_records
         candidate_broad_records = min_broad_records
@@ -496,7 +552,10 @@ def narrow_candidate_records(
     if accessory_anchor_active and not strong and broad:
         selected = [item[2] for item in broad[:candidate_max]]
     else:
-        selected = [item[2] for item in strong[:candidate_max]]
+        strong_limit = candidate_max
+        if body_anchor_active and broad:
+            strong_limit = max(candidate_max - min(candidate_broad_records, len(broad)), 0)
+        selected = [item[2] for item in strong[:strong_limit]]
         remaining_slots = candidate_max - len(selected)
         broad_limit = min(candidate_broad_records, remaining_slots) if remaining_slots > 0 else 0
         selected.extend(item[2] for item in broad[:broad_limit])
@@ -515,6 +574,8 @@ def narrow_candidate_records(
             "accessory_code_applied": bool(intent.get("accessory_code")),
             "filter_intent_applied": _normalize_search_text(intent.get("accessory_intent")) == "filter",
             "filter_detail_applied": filter_detail_active,
+            "body_intent_applied": body_anchor_active,
+            "body_family_applied": body_anchor_active and bool(intent.get("mount") or intent.get("system")),
         }
     )
     return selected, stats
