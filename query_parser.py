@@ -84,6 +84,11 @@ def _set_filter_size(intent: QueryIntent, value: str, source: str) -> None:
         intent.tokens.append({"type": "filter_size", "raw": source, "value": intent.filter_size})
 
 
+def _add_adapter_detail(intent: QueryIntent, value: str, source: str) -> None:
+    if not any(token.get("type") == "adapter_detail" and token.get("value") == value for token in intent.tokens):
+        intent.tokens.append({"type": "adapter_detail", "raw": source, "value": value})
+
+
 def _set_aperture(intent: QueryIntent, value: str, source: str, token_type: str = "aperture") -> None:
     intent.aperture = value
     intent.tokens.append({"type": token_type, "raw": source, "value": value})
@@ -156,6 +161,30 @@ def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
         _set_accessory_intent(intent, "hood", "hood" if "hood" in normalized else "후드")
 
     if not intent.accessory_intent:
+        adapter_source: Optional[str] = None
+        if re.search(r"\bm\s*-\s*l\s+(?:adapter|adaptor)\b", normalized):
+            adapter_source = "m-l adapter"
+            _add_adapter_detail(intent, "m-l", adapter_source)
+        elif re.search(r"\bm\s+to\s+l\s+(?:adapter|adaptor)\b", normalized):
+            adapter_source = "m to l adapter"
+            _add_adapter_detail(intent, "m-l", adapter_source)
+        elif re.search(r"\bmacro\s+(?:adapter|adaptor)\s+m\b", normalized):
+            adapter_source = "macro adapter m"
+            _add_adapter_detail(intent, "macro", adapter_source)
+        elif re.search(r"\bmount\s+(?:adapter|adaptor)\b", normalized):
+            adapter_source = "mount adapter"
+        elif re.search(r"\b(?:adapter|adaptor)\s+ring\b", normalized):
+            adapter_source = "adapter ring"
+        elif re.search(r"\bleica\s+m\s+(?:adapter|adaptor)\b", normalized):
+            adapter_source = "leica m adapter"
+            _add_adapter_detail(intent, "m", adapter_source)
+        elif re.search(r"\b(?:adapter|adaptor)\b", normalized) or "어댑터" in normalized:
+            adapter_source = "adaptor" if re.search(r"\badaptor\b", normalized) else ("어댑터" if "어댑터" in normalized else "adapter")
+
+        if adapter_source:
+            _set_accessory_intent(intent, "adapter", adapter_source)
+
+    if not intent.accessory_intent:
         filter_source: Optional[str] = None
         if "필터" in normalized:
             filter_source = "필터"
@@ -201,6 +230,18 @@ def _filter_intent_token_consumed(intent: QueryIntent, token: str, normalized: s
     if token == "a36" and intent.filter_size == "A36":
         return True
     if token in {"orange", "yellow", "green", "red"} and re.search(rf"\ba36\s+{re.escape(token)}\b", normalized):
+        return True
+    return False
+
+
+def _adapter_intent_token_consumed(intent: QueryIntent, token: str, normalized: str) -> bool:
+    if intent.accessory_intent != "adapter":
+        return False
+    if token in {"adapter", "adaptor", "어댑터", "mount", "ring", "to", "macro"}:
+        return True
+    if token in {"m", "l"} and re.search(r"\b(?:m\s*-\s*l|m\s+to\s+l|leica\s+m|macro\s+(?:adapter|adaptor)\s+m)\b", normalized):
+        return True
+    if token == "m-l" and re.search(r"\bm\s*-\s*l\s+(?:adapter|adaptor)\b", normalized):
         return True
     return False
 
@@ -258,6 +299,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
         if token in {"leica", "라이카"}:
             intent.brand = "Leica"
             intent.tokens.append({"type": "brand", "raw": token, "value": "Leica"})
+            continue
+
+        if _adapter_intent_token_consumed(intent, token, normalized):
             continue
 
         filter_match = re.fullmatch(r"e\s*([0-9]{2,3})|e([0-9]{2,3})", token)
@@ -326,6 +370,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             continue
 
         if intent.accessory_intent == "hood" and token == "lens" and re.search(r"\blens\s+hood\b", normalized):
+            continue
+
+        if _adapter_intent_token_consumed(intent, token, normalized):
             continue
 
         if _filter_intent_token_consumed(intent, token, normalized):

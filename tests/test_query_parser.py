@@ -142,6 +142,40 @@ def test_a36_color_filter_intent_is_contextual() -> None:
     assert any(token["type"] == "unknown" and token["raw"] == "orange" for token in bare_color["tokens"])
 
 
+def test_adapter_accessory_intent_query() -> None:
+    examples = {
+        "adapter": "adapter",
+        "adaptor": "adaptor",
+        "mount adapter": "mount adapter",
+        "adapter ring": "adapter ring",
+        "m-l adapter": "m-l adapter",
+        "m to l adapter": "m to l adapter",
+        "macro adapter m": "macro adapter m",
+        "leica m adapter": "leica m adapter",
+    }
+
+    for query, raw in examples.items():
+        intent = parse_query(query)
+        assert intent["accessory_intent"] == "adapter"
+        assert {"type": "accessory_intent", "raw": raw, "value": "adapter"} in intent["tokens"]
+
+    m_to_l = parse_query("m to l adapter")
+    assert m_to_l["mount"] is None
+    assert {"type": "adapter_detail", "raw": "m to l adapter", "value": "m-l"} in m_to_l["tokens"]
+    assert not any(token["type"] == "unknown" and token["raw"] in {"m", "to", "l", "adapter"} for token in m_to_l["tokens"])
+
+    macro = parse_query("macro adapter m")
+    assert macro["mount"] is None
+    assert {"type": "adapter_detail", "raw": "macro adapter m", "value": "macro"} in macro["tokens"]
+    assert not any(token["type"] == "unknown" and token["raw"] in {"macro", "adapter", "m"} for token in macro["tokens"])
+
+
+def test_mount_token_alone_does_not_create_adapter_intent() -> None:
+    intent = parse_query("m")
+    assert intent["accessory_intent"] is None
+    assert intent["mount"] == "M"
+
+
 if __name__ == "__main__":
     test_search_layer_does_not_import_classifier()
     test_compact_lux_aa_query()
@@ -158,4 +192,6 @@ if __name__ == "__main__":
     test_filter_accessory_intent_query()
     test_filter_thread_context_does_not_turn_all_filter_sizes_into_accessories()
     test_a36_color_filter_intent_is_contextual()
+    test_adapter_accessory_intent_query()
+    test_mount_token_alone_does_not_create_adapter_intent()
     print("test_query_parser: ok")

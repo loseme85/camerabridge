@@ -197,6 +197,99 @@ FILTER_BUNDLE_LENS = _record(
 )
 
 
+ADAPTER_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "adapter",
+        "title_raw": "Leica M-Adapter-L Black",
+        "source": "test",
+        "source_url": "https://example.invalid/adapter-m-l",
+    },
+    index=11,
+)
+
+
+ADAPTOR_ACCESSORY = _record(
+    {
+        "brand": "Other",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "adapter",
+        "title_raw": "Amadeo adaptor for Contax RF to Leica M",
+        "source": "test",
+        "source_url": "https://example.invalid/adaptor-contax-m",
+    },
+    index=12,
+)
+
+
+ADAPTER_MACRO_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "adapter",
+        "title_raw": "[위탁] Macro Adapter M",
+        "source": "test",
+        "source_url": "https://example.invalid/macro-adapter-m",
+    },
+    index=15,
+)
+
+
+ADAPTER_BUNDLE_LENS = _record(
+    {
+        "brand": "Zeiss",
+        "mount": "M",
+        "category": "Lens",
+        "label": "3rd Party M Lens",
+        "model_raw": "Sonnar",
+        "model_canonical": "Sonnar",
+        "variant": [],
+        "focal_length": "50",
+        "title_raw": "Carl Zeiss C 50mm F1.5 Sonnar + Amadeo adaptor",
+        "source": "test",
+        "source_url": "https://example.invalid/zeiss-50-adaptor-bundle",
+    },
+    index=13,
+)
+
+
+ADAPTER_BUNDLE_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10",
+        "model_canonical": "M10",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "Leica M10 Body with M-L Adapter",
+        "source": "test",
+        "source_url": "https://example.invalid/m10-adapter-bundle",
+    },
+    index=14,
+)
+
+
 E39_HOOD_ACCESSORY = _record(
     {
         "brand": "Other",
@@ -334,6 +427,63 @@ def test_filter_intent_keeps_lens_bundle_visible_but_lower_than_filter() -> None
     assert bundle["final_output"]["title_raw"] == "Used Leica Summilux-M 35mm f/1.4 ASPH FLE, silver - UVa Filter"
     assert "accessory_intent" in bundle["matched_fields"]
     assert any(item["match_type"] == "bundle_text_hint" for item in bundle["score_breakdown"] if item["field"] == "accessory_intent")
+
+
+def test_adapter_accessory_intent_prefers_adapter_over_broad_lens() -> None:
+    ranked = rank_listings("adapter", [SUMMILUX_35, ADAPTER_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "adapter"
+    assert ranked["results"][0]["final_output"]["category"] == "Accessory"
+    assert ranked["results"][0]["final_output"]["accessory_type"] == "adapter"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert all(result["final_output"]["category"] == "Accessory" for result in ranked["results"])
+
+
+def test_adaptor_variant_parses_and_matches_adapter_type() -> None:
+    ranked = rank_listings("adaptor", [ADAPTER_ACCESSORY, ADAPTOR_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "adapter"
+    assert ranked["results"][0]["final_output"]["category"] == "Accessory"
+    assert ranked["results"][0]["final_output"]["accessory_type"] == "adapter"
+    assert any(result["final_output"]["title_raw"] == "Amadeo adaptor for Contax RF to Leica M" for result in ranked["results"])
+
+
+def test_adapter_intent_does_not_treat_compatibility_mount_as_listing_mount() -> None:
+    ranked = rank_listings("m to l adapter", [SUMMILUX_35, ADAPTER_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "adapter"
+    assert ranked["intent"]["mount"] is None
+    assert ranked["results"][0]["final_output"]["category"] == "Accessory"
+    assert ranked["results"][0]["score"] == 100.0
+
+
+def test_macro_adapter_detail_ranks_macro_adapter_first() -> None:
+    ranked = rank_listings("macro adapter m", [ADAPTER_ACCESSORY, ADAPTER_MACRO_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "adapter"
+    assert ranked["intent"]["mount"] is None
+    assert ranked["results"][0]["final_output"]["title_raw"] == "[위탁] Macro Adapter M"
+    assert "adapter_detail" in ranked["results"][0]["matched_fields"]
+
+
+def test_adapter_intent_keeps_lens_and_body_bundles_visible_but_lower() -> None:
+    ranked = rank_listings(
+        "zeiss 50mm f1.5 sonnar adapter",
+        [ADAPTER_ACCESSORY, ADAPTER_BUNDLE_LENS, ADAPTER_BUNDLE_BODY],
+        limit=3,
+        min_score=1,
+    )
+
+    assert any(result["final_output"]["category"] == "Accessory" for result in ranked["results"])
+    assert any(result["final_output"]["category"] == "Lens" for result in ranked["results"])
+    bundle = next(result for result in ranked["results"] if result["final_output"]["category"] == "Lens")
+    assert bundle["final_output"]["title_raw"] == "Carl Zeiss C 50mm F1.5 Sonnar + Amadeo adaptor"
+    assert "accessory_intent" in bundle["matched_fields"]
+    assert any(item["match_type"] == "bundle_text_hint" for item in bundle["score_breakdown"] if item["field"] == "accessory_intent")
+
+    body_bundle = score_listing(parse_query("leica m adapter"), ADAPTER_BUNDLE_BODY)
+    assert body_bundle["final_output"]["category"] == "Body"
+    assert "accessory_intent" in body_bundle["matched_fields"]
 
 
 def test_non_filter_query_keeps_existing_lens_ranking() -> None:
@@ -668,6 +818,11 @@ if __name__ == "__main__":
     test_a36_filter_intent_ranks_a36_filter_first()
     test_filter_thread_does_not_promote_non_filter_accessory_above_filter()
     test_filter_intent_keeps_lens_bundle_visible_but_lower_than_filter()
+    test_adapter_accessory_intent_prefers_adapter_over_broad_lens()
+    test_adaptor_variant_parses_and_matches_adapter_type()
+    test_adapter_intent_does_not_treat_compatibility_mount_as_listing_mount()
+    test_macro_adapter_detail_ranks_macro_adapter_first()
+    test_adapter_intent_keeps_lens_and_body_bundles_visible_but_lower()
     test_non_filter_query_keeps_existing_lens_ranking()
     test_ambiguous_query_keeps_warnings()
     test_rank_listings_orders_by_score()

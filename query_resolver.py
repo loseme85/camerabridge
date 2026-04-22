@@ -39,6 +39,7 @@ WEIGHTS = {
     "generation": 8,
     "filter_size": 6,
     "filter_detail": 8,
+    "adapter_detail": 8,
     "optical_formula": 6,
     "aperture_hint": 5,
     "accessory_intent": 18,
@@ -538,6 +539,49 @@ def _score_filter_detail(intent: dict[str, Any], text: str, breakdown: list[dict
     return awarded_total, possible
 
 
+def _adapter_detail_tokens(intent: dict[str, Any]) -> list[dict[str, str]]:
+    if intent.get("accessory_intent") != "adapter":
+        return []
+    return [
+        token
+        for token in intent.get("tokens", [])
+        if token.get("type") == "adapter_detail"
+    ]
+
+
+def _adapter_detail_text_hit(value: str, text: str) -> bool:
+    value_norm = _normalize(value)
+    if value_norm == "macro":
+        return _contains_normalized_word(text, "macro")
+    if value_norm == "m l":
+        return bool(re.search(r"\bm\s+l\b|\bm\s+adapter\s+l\b|\blm\s+to\s+l\b|\bm\s+to\s+l\b", text))
+    if value_norm == "m":
+        return bool(re.search(r"\bm\s+adapter\b|\badapter\s+m\b|\bm\s+l\b|\bm\s+adapter\s+l\b", text))
+    return bool(value_norm and _contains_normalized_word(text, value_norm))
+
+
+def _score_adapter_detail(intent: dict[str, Any], text: str, breakdown: list[dict[str, Any]], matched: list[str], mismatches: list[str]) -> tuple[float, float]:
+    details = _adapter_detail_tokens(intent)
+    if not details:
+        return 0.0, 0.0
+
+    possible = WEIGHTS["adapter_detail"]
+    per_detail = possible / len(details)
+    awarded_total = 0.0
+    for detail in details:
+        value = detail.get("value") or detail.get("raw")
+        if value and _adapter_detail_text_hit(value, text):
+            awarded_total += _add_score(
+                breakdown,
+                matched,
+                ScoreItem("adapter_detail", value, "source_text", per_detail, per_detail, "exact_text_hint", "title_raw"),
+            )
+        else:
+            mismatches.append(f"adapter_detail_mismatch:{value}")
+            breakdown.append(ScoreItem("adapter_detail", value, None, per_detail, 0, "mismatch", "title_raw").to_dict())
+    return awarded_total, possible
+
+
 def _score_optical_formula(intent: dict[str, Any], final: dict[str, Any], text: str, breakdown: list[dict[str, Any]], matched: list[str], mismatches: list[str]) -> tuple[float, float]:
     formula = intent.get("optical_formula")
     if not formula:
@@ -688,6 +732,8 @@ def _accessory_intent_text_hit(accessory_intent: str, text: str) -> bool:
                 text,
             )
         )
+    if accessory_intent == "adapter":
+        return bool(re.search(r"\b(?:adapter|adaptor)\b|어댑터", text))
     return False
 
 
@@ -756,6 +802,16 @@ def _match_quality(
         return "strong", MATCH_QUALITY_RANKS["strong"]
 
     if accessory_hit and accessory_code_hit:
+        return "strong", MATCH_QUALITY_RANKS["strong"]
+
+    has_lens_specific_adapter_constraint = bool(
+        intent.get("model_family")
+        or intent.get("focal_length")
+        or _aperture_hints(intent)
+        or intent.get("generation")
+        or intent.get("variant")
+    )
+    if intent.get("accessory_intent") == "adapter" and accessory_hit and not has_lens_specific_adapter_constraint:
         return "strong", MATCH_QUALITY_RANKS["strong"]
 
     if precise_family and precise_focal:
@@ -877,6 +933,7 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         lambda: _score_generation(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_filter_size(intent, text, breakdown, matched, mismatches),
         lambda: _score_filter_detail(intent, text, breakdown, matched, mismatches),
+        lambda: _score_adapter_detail(intent, text, breakdown, matched, mismatches),
         lambda: _score_optical_formula(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_aperture_hint(intent, text, breakdown, matched, mismatches),
         lambda: _score_accessory_intent(intent, final, text, breakdown, matched, mismatches),
