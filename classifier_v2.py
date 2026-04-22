@@ -791,6 +791,17 @@ _ADAPTER_BUNDLE_REGEX = (
     r'|\s-\s*(?:[\w+-]+\s+){0,4}(?:adapter|adaptor|어댑터)\b'
 )
 
+_FINDER_BUNDLE_REGEX = (
+    r'\bwith\s+(?:[\w+-]+\s+){0,5}(?:finder|viewfinder|view\s+finder|파인더|visoflex|evf|electronic\s+viewfinder)\b'
+    r'|\+\s*(?:[\w+-]+\s+){0,5}(?:finder|viewfinder|view\s+finder|파인더|visoflex|evf|electronic\s+viewfinder)\b'
+    r'|\s-\s*(?:[\w+-]+\s+){0,5}(?:finder|viewfinder|view\s+finder|파인더|visoflex|evf|electronic\s+viewfinder)\b'
+)
+
+_LENS_INLINE_FINDER_BUNDLE_REGEX = (
+    r'\b\d{2,3}(?:-\d{2,3}){0,2}\s*/\s*\d+(?:\.\d+)?\b.{0,120}'
+    r'(?:\+|\s-|\bwith\b).{0,80}\b(?:finder|viewfinder|view\s+finder|파인더|visoflex|evf|electronic\s+viewfinder)\b'
+)
+
 _LENS_INLINE_ADAPTER_BUNDLE_REGEX = (
     r'\b\d{2,3}\s*mm\b.{0,120}\bf\s*\d+(?:[\./]\d+)?\b.{0,120}\b(?:adapter|adaptor|어댑터)\b'
     r'|\bf\s*\d+(?:[\./]\d+)?\b.{0,120}\b(?:summicron|summilux|noctilux|elmarit|elmar|summarit|summaron|sonnar)\b.{0,120}\b(?:adapter|adaptor|어댑터)\b'
@@ -804,6 +815,11 @@ _FILTER_ACCESSORY_SIGNALS = {
 }
 
 _ADAPTER_ACCESSORY_SIGNALS = {"adapter", "adaptor", "어댑터"}
+
+_FINDER_ACCESSORY_SIGNALS = {
+    "finder", "viewfinder", "view finder", "파인더",
+    "visoflex", "evf", "electronic viewfinder",
+}
 
 
 def _is_lens_filter_bundle(combined: str, is_lens_protected_strong: bool) -> bool:
@@ -826,6 +842,17 @@ def _is_lens_adapter_bundle(combined: str, is_lens_protected_strong: bool) -> bo
 
 def _is_body_adapter_bundle(combined: str) -> bool:
     return any(kw in combined for kw in _BODY_KW) and bool(re.search(_ADAPTER_BUNDLE_REGEX, combined))
+
+
+def _is_lens_finder_bundle(combined: str, is_lens_protected_strong: bool) -> bool:
+    return bool(
+        (is_lens_protected_strong and re.search(_FINDER_BUNDLE_REGEX, combined))
+        or re.search(_LENS_INLINE_FINDER_BUNDLE_REGEX, combined)
+    )
+
+
+def _is_body_finder_bundle(combined: str) -> bool:
+    return any(kw in combined for kw in _BODY_KW) and bool(re.search(_FINDER_BUNDLE_REGEX, combined))
 
 
 def _iter_hard_accessory_hits(combined: str):
@@ -996,6 +1023,11 @@ def detect_category(
             or _is_body_adapter_bundle(combined)
         ):
             continue
+        if signal in _FINDER_ACCESSORY_SIGNALS and (
+            _is_lens_finder_bundle(combined, is_lens_protected_strong)
+            or _is_body_finder_bundle(combined)
+        ):
+            continue
         reasons.append(f"hard_acc_{hit_type}:{signal}")
         return {"category": "Accessory", "category_confidence": 0.97, "category_reason": reasons}
 
@@ -1004,6 +1036,11 @@ def detect_category(
         if kw in _ADAPTER_ACCESSORY_SIGNALS and (
             _is_lens_adapter_bundle(combined, is_lens_protected_strong)
             or _is_body_adapter_bundle(combined)
+        ):
+            continue
+        if kw in _FINDER_ACCESSORY_SIGNALS and (
+            _is_lens_finder_bundle(combined, is_lens_protected_strong)
+            or _is_body_finder_bundle(combined)
         ):
             continue
         if kw in combined and not is_lens_protected_strong:
@@ -1024,7 +1061,12 @@ def detect_category(
 
     # ── 4순위: 가격 기반 Accessory ──
     # 약한 렌즈 보호 있으면 스킵 (서드파티 렌즈 저가 보호)
-    if not is_lens_protected_weak and price_str and price_str not in ("문의요망", ""):
+    if (
+        not is_lens_protected_weak
+        and not _is_body_finder_bundle(combined)
+        and price_str
+        and price_str not in ("문의요망", "")
+    ):
         try:
             nums = re.findall(r"[\d,]+", price_str.replace("£", ""))
             if nums:

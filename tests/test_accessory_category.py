@@ -116,6 +116,42 @@ def test_lens_or_body_with_included_adapter_keeps_primary_category() -> None:
         assert result["category"] == category, title
 
 
+def test_standalone_finder_titles_stay_accessory() -> None:
+    titles = [
+        "Leica 35mm Brightline Finder Silver",
+        "Leica SBOOI 50mm Finder",
+        "Leica Universal Viewfinder M",
+        "Leica VIDOM 35-135mm Universal Finder Nickel",
+    ]
+
+    for title in titles:
+        result = _classify(title)
+        assert result["category"] == "Accessory", title
+        assert result["label"] == "Accessory", title
+        assert result["accessory_type"] == "finder", title
+
+
+def test_lens_or_body_with_included_finder_keeps_primary_category() -> None:
+    expected = {
+        "Leica M 16-18-21mm f4 Tri-elmar ASPH 6bit Black + Finder set": "Lens",
+        "[위탁] Avenon 28/3.5 + 파인더 Set": "Lens",
+        "LEICA 135mm F4 ELMAR + finder sn.1769": "Lens",
+        "Voigtlander 12mm F5.6 + Finder": "Lens",
+        "Used Leica M6 0.72, black chrome 'Big Logo' (1988) with MP Finder - Recent Leica CLA": "Body",
+        "Leica M10 Body with Visoflex Finder": "Body",
+    }
+
+    for title, category in expected.items():
+        result = _classify(title)
+        assert result["category"] == category, title
+
+    low_foreign_price_body = classify_listing_v2({
+        "상품명": "Used Leica M6 0.72, black chrome 'Big Logo' (1988) with MP Finder - Recent Leica CLA",
+        "가격": "£4,295",
+    })
+    assert low_foreign_price_body["category"] == "Body"
+
+
 if __name__ == "__main__":
     test_standalone_hood_with_lens_compatibility_stays_accessory()
     test_lens_with_included_hood_stays_lens()
@@ -124,4 +160,6 @@ if __name__ == "__main__":
     test_lens_with_included_filter_stays_lens()
     test_standalone_adapter_and_adaptor_titles_stay_accessory()
     test_lens_or_body_with_included_adapter_keeps_primary_category()
+    test_standalone_finder_titles_stay_accessory()
+    test_lens_or_body_with_included_finder_keeps_primary_category()
     print("test_accessory_category: ok")
