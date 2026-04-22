@@ -85,6 +85,118 @@ CM_BODY = _record(
 )
 
 
+M6_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M6",
+        "model_canonical": "M6",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "Leica M6 TTL 0.72 Body",
+        "source": "test",
+        "source_url": "https://example.invalid/m6",
+    },
+    index=16,
+)
+
+
+M6_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "case",
+        "title_raw": "Leica M6 Leather Case",
+        "source": "test",
+        "source_url": "https://example.invalid/m6-case",
+    },
+    index=17,
+)
+
+
+Q3_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Q",
+        "system": "Q",
+        "category": "Body",
+        "label": "Q Body",
+        "model_raw": "Q3",
+        "model_canonical": "Q3",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "Leica Q3 Digital Camera",
+        "source": "test",
+        "source_url": "https://example.invalid/q3",
+    },
+    index=18,
+)
+
+
+Q3_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Q",
+        "system": "Q",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "case",
+        "title_raw": "Leica Q3 Half Case",
+        "source": "test",
+        "source_url": "https://example.invalid/q3-case",
+    },
+    index=19,
+)
+
+
+R8_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "R",
+        "category": "Body",
+        "label": "R Body",
+        "model_raw": "R8",
+        "model_canonical": "R8",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "Leica R8 Body Black",
+        "source": "test",
+        "source_url": "https://example.invalid/r8",
+    },
+    index=20,
+)
+
+
+BARNACK_IIIF_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "L",
+        "category": "Body",
+        "label": "L Body",
+        "model_raw": "IIIf",
+        "model_canonical": "IIIf",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "Leica IIIf Body",
+        "source": "test",
+        "source_url": "https://example.invalid/iiif",
+    },
+    index=21,
+)
+
+
 HOOD_ACCESSORY = _record(
     {
         "brand": "Leica",
@@ -361,6 +473,57 @@ def test_short_cm_alias_matches_leica_cm_body() -> None:
     assert ranked["results"][0]["match_quality"] == "medium"
 
 
+def test_body_shorthand_prefers_body_over_accessory() -> None:
+    ranked = rank_listings("m6", [M6_ACCESSORY, M6_BODY, SUMMILUX_35], limit=3, min_score=1)
+
+    assert ranked["intent"]["body_intent"] == "M6"
+    assert ranked["intent"]["mount"] == "M"
+    assert ranked["results"][0]["final_output"]["category"] == "Body"
+    assert ranked["results"][0]["final_output"]["model_canonical"] == "M6"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert any(result["final_output"]["category"] == "Accessory" for result in ranked["results"])
+    accessory = next(result for result in ranked["results"] if result["final_output"]["category"] == "Accessory")
+    assert accessory["match_quality"] == "weak"
+
+
+def test_q3_bare_body_query_prefers_body_but_keeps_accessory_visible() -> None:
+    ranked = rank_listings("q3", [Q3_ACCESSORY, Q3_BODY], limit=2, min_score=1)
+
+    assert ranked["intent"]["body_intent"] == "Q3"
+    assert ranked["intent"]["system"] == "Q"
+    assert ranked["results"][0]["final_output"]["category"] == "Body"
+    assert ranked["results"][0]["final_output"]["model_canonical"] == "Q3"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert ranked["results"][1]["final_output"]["category"] == "Accessory"
+
+
+def test_r_body_and_barnack_shorthand_rank_body_first() -> None:
+    r_ranked = rank_listings("r8", [SUMMILUX_35, R8_BODY], limit=2, min_score=1)
+    barnack_ranked = rank_listings("barnack", [SUMMILUX_35, BARNACK_IIIF_BODY], limit=2, min_score=1)
+    iiif_ranked = rank_listings("iiif", [SUMMILUX_35, BARNACK_IIIF_BODY], limit=2, min_score=1)
+
+    assert r_ranked["intent"]["body_intent"] == "R8"
+    assert r_ranked["results"][0]["final_output"]["model_canonical"] == "R8"
+    assert r_ranked["results"][0]["match_quality"] == "strong"
+    assert barnack_ranked["intent"]["body_intent"] == "Barnack"
+    assert barnack_ranked["results"][0]["final_output"]["category"] == "Body"
+    assert iiif_ranked["intent"]["body_intent"] == "IIIf"
+    assert iiif_ranked["results"][0]["final_output"]["model_canonical"] == "IIIf"
+
+
+def test_body_intent_does_not_disturb_non_body_queries() -> None:
+    lens = rank_listings("35lux aa", [Q3_BODY, SUMMILUX_35], limit=2, min_score=1)
+    hood = rank_listings("leica hood", [Q3_BODY, HOOD_ACCESSORY], limit=2, min_score=1)
+    adapter = rank_listings("adapter", [Q3_BODY, ADAPTER_ACCESSORY], limit=2, min_score=1)
+
+    assert lens["intent"].get("body_intent") is None
+    assert lens["results"][0]["final_output"]["category"] == "Lens"
+    assert hood["intent"].get("body_intent") is None
+    assert hood["results"][0]["final_output"]["accessory_type"] == "hood"
+    assert adapter["intent"].get("body_intent") is None
+    assert adapter["results"][0]["final_output"]["accessory_type"] == "adapter"
+
+
 def test_hood_accessory_intent_prefers_accessory_over_broad_lens() -> None:
     ranked = rank_listings("leica hood", [SUMMILUX_35, HOOD_ACCESSORY], limit=2, min_score=1)
 
@@ -582,8 +745,9 @@ def test_mount_system_mismatch_is_capped() -> None:
     )
     ranked = rank_listings("q3 28", [m_lens, q_body], limit=2)
     assert ranked["results"][0]["final_output"]["mount"] == "Q"
-    assert ranked["results"][1]["score"] == 40.0
+    assert ranked["results"][1]["score"] <= 40.0
     assert ranked["results"][1]["match_quality"] == "weak"
+    assert "body_intent_non_body_listing" in ranked["results"][1]["warnings"]
 
 
 def test_aperture_hint_breaks_focal_mount_tie() -> None:
@@ -811,6 +975,10 @@ if __name__ == "__main__":
     test_variant_hit_contributes_to_score()
     test_override_listing_matches_on_final_output()
     test_short_cm_alias_matches_leica_cm_body()
+    test_body_shorthand_prefers_body_over_accessory()
+    test_q3_bare_body_query_prefers_body_but_keeps_accessory_visible()
+    test_r_body_and_barnack_shorthand_rank_body_first()
+    test_body_intent_does_not_disturb_non_body_queries()
     test_hood_accessory_intent_prefers_accessory_over_broad_lens()
     test_hood_accessory_code_ranks_exact_hood_first()
     test_hood_intent_keeps_lens_bundle_visible_but_lower()

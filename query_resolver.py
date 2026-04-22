@@ -33,6 +33,7 @@ DEFAULT_MIN_SCORE = 25.0
 WEIGHTS = {
     "brand": 6,
     "model_family": 25,
+    "body_intent": 24,
     "focal_length": 20,
     "mount_system": 12,
     "variant": 15,
@@ -345,6 +346,70 @@ def _score_model_family(intent: dict[str, Any], final: dict[str, Any], text: str
 
     mismatches.append("model_family_mismatch")
     breakdown.append(ScoreItem("model_family", family, None, possible, 0, "mismatch", "model_canonical").to_dict())
+    return 0.0, possible
+
+
+def _body_intent_text_hit(body_intent: str, text: str) -> bool:
+    intent_norm = _normalize(body_intent)
+    if not intent_norm:
+        return False
+    if intent_norm == "barnack":
+        return bool(
+            re.search(
+                r"\bbarnack\b|\bleica\s+i{1,3}[cfg]?\b|\biii[cfg]\b|\biiif\b|\biiig\b|\biiic\b",
+                text,
+            )
+        )
+    return _contains_normalized_word(text, intent_norm)
+
+
+def _score_body_intent(
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    text: str,
+    breakdown: list[dict[str, Any]],
+    matched: list[str],
+    mismatches: list[str],
+) -> tuple[float, float]:
+    body_intent = intent.get("body_intent")
+    if not body_intent:
+        return 0.0, 0.0
+
+    possible = WEIGHTS["body_intent"]
+    category = final.get("category")
+    text_hit = _body_intent_text_hit(str(body_intent), text)
+    body_norm = _normalize(body_intent)
+    model_values = _candidate_text_values(final, ["model_canonical", "model_raw", "label"])
+    model_hit = any(_normalize(value) == body_norm for _, value in model_values)
+
+    if _normalize(category) == "body":
+        if model_hit:
+            match_type = "category_model_exact"
+            awarded = possible
+            listing_value = next((value for _, value in model_values if _normalize(value) == body_norm), category)
+        elif text_hit:
+            match_type = "category_text_exact"
+            awarded = possible - 2
+            listing_value = "source_text"
+        else:
+            match_type = "category_body_broad"
+            awarded = 5
+            listing_value = category
+        return _add_score(
+            breakdown,
+            matched,
+            ScoreItem("body_intent", body_intent, listing_value, possible, awarded, match_type, "category/model/title_raw"),
+        ), possible
+
+    if text_hit:
+        return _add_score(
+            breakdown,
+            matched,
+            ScoreItem("body_intent", body_intent, "source_text", possible, 4, "non_body_text_hint", "title_raw"),
+        ), possible
+
+    mismatches.append("body_intent_mismatch")
+    breakdown.append(ScoreItem("body_intent", body_intent, category, possible, 0, "mismatch", "category").to_dict())
     return 0.0, possible
 
 
@@ -773,6 +838,7 @@ def _match_quality(
     focal_hit = _has_positive(breakdown, "focal_length")
     mount_hit = _has_positive(breakdown, "mount", {"exact"})
     system_hit = _has_positive(breakdown, "system", {"exact", "mount_system_equivalent"})
+    body_hit = _has_positive(breakdown, "body_intent", {"category_model_exact", "category_text_exact"})
     variant_hit = _has_positive(breakdown, "variant")
     aperture_hit = _has_positive(breakdown, "aperture_hint", {"exact_text_hint"})
     accessory_hit = _has_positive(breakdown, "accessory_intent", {"category_type_exact", "category_text_exact"})
@@ -781,6 +847,12 @@ def _match_quality(
     filter_hit = _has_positive(breakdown, "filter_size")
     formula_hit = _has_positive(breakdown, "optical_formula")
     mount_or_system_hit = mount_hit or system_hit
+
+    if body_hit and mount_or_system_hit:
+        return "strong", MATCH_QUALITY_RANKS["strong"]
+
+    if body_hit:
+        return "medium", MATCH_QUALITY_RANKS["medium"]
 
     if precise_family and precise_focal and (
         mount_or_system_hit
@@ -838,6 +910,7 @@ def _match_quality(
 def _structured_constraints(intent: dict[str, Any]) -> list[str]:
     fields = [
         "model_family",
+        "body_intent",
         "focal_length",
         "mount",
         "system",
@@ -927,6 +1000,7 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
     for scorer in [
         lambda: _score_brand(intent, final, breakdown, matched, mismatches),
         lambda: _score_model_family(intent, final, text, breakdown, matched, mismatches),
+        lambda: _score_body_intent(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_focal_length(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_mount_system(intent, record, final, breakdown, matched, mismatches),
         lambda: _score_variants(intent, final, text, breakdown, matched, mismatches),
@@ -953,6 +1027,8 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         warnings.append("accessory_intent_non_accessory_listing")
     if "accessory_code_mismatch" in mismatches and intent.get("accessory_code"):
         warnings.append("accessory_code_mismatch")
+    if "body_intent_mismatch" in mismatches and intent.get("body_intent"):
+        warnings.append("body_intent_non_body_listing")
     match_quality, match_quality_rank = _match_quality(intent, breakdown, mismatches)
     score, match_quality, match_quality_rank = _suppress_broad_essential_fallback(
         score,

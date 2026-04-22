@@ -191,7 +191,9 @@ def test_quality_options_are_connected() -> None:
     assert status == 200
     assert response["applied_quality_filter"]["strong_only"] is True
     assert response["applied_quality_filter"]["min_score"] == 1.0
-    assert response["result_count"] == 0
+    assert response["result_count"] == 1
+    assert response["results"][0]["final_output"]["category"] == "Body"
+    assert response["results"][0]["match_quality"] == "strong"
 
 
 def test_empty_result_is_success_with_no_results_warning() -> None:

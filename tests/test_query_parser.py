@@ -176,6 +176,50 @@ def test_mount_token_alone_does_not_create_adapter_intent() -> None:
     assert intent["mount"] == "M"
 
 
+def test_body_shorthand_intent_query() -> None:
+    examples = {
+        "m2": ("M2", "M", None),
+        "m3": ("M3", "M", None),
+        "m4": ("M4", "M", None),
+        "m5": ("M5", "M", None),
+        "m6": ("M6", "M", None),
+        "mp": ("MP", "M", None),
+        "r6": ("R6", "R", None),
+        "r7": ("R7", "R", None),
+        "r8": ("R8", "R", None),
+        "q2": ("Q2", None, "Q"),
+        "q3": ("Q3", None, "Q"),
+        "barnack": ("Barnack", "L", None),
+        "iiic": ("IIIc", "L", None),
+        "iiif": ("IIIf", "L", None),
+        "iiig": ("IIIg", "L", None),
+    }
+
+    for query, (body_intent, mount, system) in examples.items():
+        intent = parse_query(query)
+        assert intent["body_intent"] == body_intent
+        assert intent["mount"] == mount
+        assert intent["system"] == system
+        assert {"type": "body_intent", "raw": query, "value": body_intent} in intent["tokens"]
+        assert not any(token["type"] == "unknown" and token["raw"] == query for token in intent["tokens"])
+        assert "no_structured_search_intent" not in intent["warnings"]
+
+
+def test_body_shorthand_does_not_override_existing_lens_or_accessory_intent() -> None:
+    mp3 = parse_query("mp3 silver")
+    lens = parse_query("m 21/2.8")
+    adapter = parse_query("m to l adapter")
+    compatibility = parse_query("vit for m2")
+
+    assert mp3["model_family"] == "MP3"
+    assert mp3["body_intent"] is None
+    assert lens["mount"] == "M"
+    assert lens["body_intent"] is None
+    assert adapter["accessory_intent"] == "adapter"
+    assert adapter["body_intent"] is None
+    assert compatibility["body_intent"] is None
+
+
 if __name__ == "__main__":
     test_search_layer_does_not_import_classifier()
     test_compact_lux_aa_query()
@@ -194,4 +238,6 @@ if __name__ == "__main__":
     test_a36_color_filter_intent_is_contextual()
     test_adapter_accessory_intent_query()
     test_mount_token_alone_does_not_create_adapter_intent()
+    test_body_shorthand_intent_query()
+    test_body_shorthand_does_not_override_existing_lens_or_accessory_intent()
     print("test_query_parser: ok")

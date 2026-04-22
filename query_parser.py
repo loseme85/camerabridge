@@ -34,6 +34,7 @@ class QueryIntent:
     normalized_query: str
     brand: Optional[str] = None
     model_family: Optional[str] = None
+    body_intent: Optional[str] = None
     focal_length: Optional[str] = None
     aperture: Optional[str] = None
     mount: Optional[str] = None
@@ -76,6 +77,53 @@ def _set_accessory_intent(intent: QueryIntent, value: str, source: str) -> None:
 def _set_accessory_code(intent: QueryIntent, value: str, source: str) -> None:
     intent.accessory_code = value.upper()
     intent.tokens.append({"type": "accessory_code", "raw": source, "value": intent.accessory_code})
+
+
+_BODY_INTENT_ALIASES = {
+    "m2": ("M2", "M", None),
+    "m3": ("M3", "M", None),
+    "m4": ("M4", "M", None),
+    "m5": ("M5", "M", None),
+    "m6": ("M6", "M", None),
+    "mp": ("MP", "M", None),
+    "q2": ("Q2", None, "Q"),
+    "q3": ("Q3", None, "Q"),
+    "r6": ("R6", "R", None),
+    "r7": ("R7", "R", None),
+    "r8": ("R8", "R", None),
+    "barnack": ("Barnack", "L", None),
+    "iiic": ("IIIc", "L", None),
+    "iiif": ("IIIf", "L", None),
+    "iiig": ("IIIg", "L", None),
+}
+
+
+def _set_body_intent(
+    intent: QueryIntent,
+    value: str,
+    source: str,
+    mount: Optional[str] = None,
+    system: Optional[str] = None,
+) -> None:
+    intent.body_intent = value
+    intent.tokens.append({"type": "body_intent", "raw": source, "value": value})
+    if mount and not intent.mount:
+        intent.mount = mount
+        intent.tokens.append({"type": "mount", "raw": source, "value": mount})
+    if system and not intent.system:
+        intent.system = system
+        intent.tokens.append({"type": "system", "raw": source, "value": system})
+
+
+def _body_intent_token_allowed(token: str, rough_tokens: list[str]) -> bool:
+    try:
+        index = rough_tokens.index(token)
+    except ValueError:
+        return True
+    previous = rough_tokens[index - 1] if index > 0 else ""
+    if previous in {"for", "용", "호환", "compatible"}:
+        return False
+    return True
 
 
 def _set_filter_size(intent: QueryIntent, value: str, source: str) -> None:
@@ -250,6 +298,8 @@ def _score_confidence(intent: QueryIntent) -> float:
     score = 0.20
     if intent.model_family:
         score += 0.25
+    if intent.body_intent:
+        score += 0.22
     if intent.focal_length:
         score += 0.20
     if intent.aperture:
@@ -302,6 +352,12 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             continue
 
         if _adapter_intent_token_consumed(intent, token, normalized):
+            continue
+
+        body_alias = _BODY_INTENT_ALIASES.get(token)
+        if body_alias and _body_intent_token_allowed(token, rough_tokens):
+            body_intent, body_mount, body_system = body_alias
+            _set_body_intent(intent, body_intent, token, mount=body_mount, system=body_system)
             continue
 
         filter_match = re.fullmatch(r"e\s*([0-9]{2,3})|e([0-9]{2,3})", token)
@@ -388,6 +444,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
 
     if not any([
         intent.model_family,
+        intent.body_intent,
         intent.focal_length,
         intent.variant,
         intent.generation,
