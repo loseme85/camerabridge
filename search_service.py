@@ -297,6 +297,14 @@ def _candidate_accessory_intent_match(anchor_query: dict[str, Any], final: dict[
         # resolver keep them behind standalone accessory records.
         return has_hood_text
 
+    if accessory_intent == "finder":
+        has_finder_text = bool(re.search(r"\b(?:finder|viewfinder|brightline|external|visoflex)\b|파인더", text))
+        if category == "accessory" and (accessory_type == "finder" or has_finder_text):
+            return True
+        # Keep lens/body bundles such as "Tri-Elmar + Finder set" eligible,
+        # while the resolver keeps them behind standalone finder accessories.
+        return has_finder_text
+
     return category == "accessory" and accessory_type == accessory_intent
 
 

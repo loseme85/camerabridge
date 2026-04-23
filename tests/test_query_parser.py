@@ -176,6 +176,38 @@ def test_mount_token_alone_does_not_create_adapter_intent() -> None:
     assert intent["mount"] == "M"
 
 
+def test_finder_accessory_intent_query() -> None:
+    examples = {
+        "finder": "finder",
+        "viewfinder": "viewfinder",
+        "brightline finder": "brightline finder",
+        "external finder": "external finder",
+        "visoflex": "visoflex",
+        "28mm finder": "finder",
+        "35mm finder": "finder",
+        "파인더": "파인더",
+    }
+
+    for query, raw in examples.items():
+        intent = parse_query(query)
+        assert intent["accessory_intent"] == "finder"
+        assert {"type": "accessory_intent", "raw": raw, "value": "finder"} in intent["tokens"]
+        assert not any(
+            token["type"] == "unknown" and token["raw"] in {"finder", "viewfinder", "brightline", "external", "visoflex", "파인더"}
+            for token in intent["tokens"]
+        )
+
+    assert parse_query("28mm finder")["focal_length"] == "28"
+    assert parse_query("35mm finder")["focal_length"] == "35"
+
+
+def test_code_only_finder_aliases_are_deferred() -> None:
+    for query in ["sbooi", "vidom", "fokos"]:
+        intent = parse_query(query)
+        assert intent["accessory_intent"] is None
+        assert any(token["type"] == "unknown" and token["raw"] == query for token in intent["tokens"])
+
+
 def test_body_shorthand_intent_query() -> None:
     examples = {
         "m2": ("M2", "M", None),
@@ -238,6 +270,8 @@ if __name__ == "__main__":
     test_a36_color_filter_intent_is_contextual()
     test_adapter_accessory_intent_query()
     test_mount_token_alone_does_not_create_adapter_intent()
+    test_finder_accessory_intent_query()
+    test_code_only_finder_aliases_are_deferred()
     test_body_shorthand_intent_query()
     test_body_shorthand_does_not_override_existing_lens_or_accessory_intent()
     print("test_query_parser: ok")

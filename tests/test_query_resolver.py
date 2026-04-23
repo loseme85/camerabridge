@@ -421,6 +421,99 @@ E39_HOOD_ACCESSORY = _record(
 )
 
 
+FINDER_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "finder",
+        "title_raw": "Leica 28mm Brightline Finder Black",
+        "source": "test",
+        "source_url": "https://example.invalid/finder-28",
+    },
+    index=22,
+)
+
+
+FINDER_35_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "finder",
+        "title_raw": "Leica 35mm Brightline Finder Silver",
+        "source": "test",
+        "source_url": "https://example.invalid/finder-35",
+    },
+    index=26,
+)
+
+
+VISOFLEX_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "finder",
+        "title_raw": "Leica Visoflex Electronic Viewfinder",
+        "source": "test",
+        "source_url": "https://example.invalid/visoflex",
+    },
+    index=23,
+)
+
+
+FINDER_BUNDLE_LENS = _record(
+    {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Tri-Elmar",
+        "model_canonical": "Tri-Elmar-M",
+        "variant": [],
+        "focal_length": "16-18-21",
+        "title_raw": "Leica M 16-18-21mm F4 Tri-Elmar + Finder set",
+        "source": "test",
+        "source_url": "https://example.invalid/tri-elmar-finder-set",
+    },
+    index=24,
+)
+
+
+FINDER_BUNDLE_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10",
+        "model_canonical": "M10",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "Leica M10 Body with Visoflex Finder",
+        "source": "test",
+        "source_url": "https://example.invalid/m10-visoflex-bundle",
+    },
+    index=25,
+)
+
+
 def test_exact_family_and_focal_match_scores_high() -> None:
     result = score_listing(parse_query("35 summilux"), SUMMILUX_35)
     assert result["score"] >= 95
@@ -645,6 +738,53 @@ def test_adapter_intent_keeps_lens_and_body_bundles_visible_but_lower() -> None:
     assert any(item["match_type"] == "bundle_text_hint" for item in bundle["score_breakdown"] if item["field"] == "accessory_intent")
 
     body_bundle = score_listing(parse_query("leica m adapter"), ADAPTER_BUNDLE_BODY)
+    assert body_bundle["final_output"]["category"] == "Body"
+    assert "accessory_intent" in body_bundle["matched_fields"]
+
+
+def test_finder_accessory_intent_prefers_finder_over_broad_lens() -> None:
+    examples = {
+        "finder": FINDER_ACCESSORY,
+        "viewfinder": FINDER_ACCESSORY,
+        "brightline finder": FINDER_ACCESSORY,
+        "28mm finder": FINDER_ACCESSORY,
+        "35mm finder": FINDER_35_ACCESSORY,
+    }
+
+    for query, finder_record in examples.items():
+        ranked = rank_listings(query, [SUMMILUX_35, finder_record], limit=2, min_score=1)
+
+        assert ranked["intent"]["accessory_intent"] == "finder"
+        assert ranked["results"][0]["final_output"]["category"] == "Accessory"
+        assert ranked["results"][0]["final_output"]["accessory_type"] == "finder"
+        assert ranked["results"][0]["match_quality"] == "medium"
+
+
+def test_visoflex_parses_and_matches_finder_accessory() -> None:
+    ranked = rank_listings("visoflex", [SUMMILUX_35, VISOFLEX_ACCESSORY], limit=2, min_score=1)
+
+    assert ranked["intent"]["accessory_intent"] == "finder"
+    assert ranked["results"][0]["final_output"]["category"] == "Accessory"
+    assert ranked["results"][0]["final_output"]["accessory_type"] == "finder"
+    assert ranked["results"][0]["final_output"]["title_raw"] == "Leica Visoflex Electronic Viewfinder"
+
+
+def test_finder_intent_keeps_lens_and_body_bundles_visible_but_lower() -> None:
+    ranked = rank_listings(
+        "tri-elmar finder set",
+        [FINDER_ACCESSORY, FINDER_BUNDLE_LENS, FINDER_BUNDLE_BODY],
+        limit=3,
+        min_score=1,
+    )
+
+    assert any(result["final_output"]["category"] == "Accessory" for result in ranked["results"])
+    assert any(result["final_output"]["category"] == "Lens" for result in ranked["results"])
+    bundle = next(result for result in ranked["results"] if result["final_output"]["category"] == "Lens")
+    assert bundle["final_output"]["title_raw"] == "Leica M 16-18-21mm F4 Tri-Elmar + Finder set"
+    assert "accessory_intent" in bundle["matched_fields"]
+    assert any(item["match_type"] == "bundle_text_hint" for item in bundle["score_breakdown"] if item["field"] == "accessory_intent")
+
+    body_bundle = score_listing(parse_query("m10 visoflex"), FINDER_BUNDLE_BODY)
     assert body_bundle["final_output"]["category"] == "Body"
     assert "accessory_intent" in body_bundle["matched_fields"]
 
@@ -991,6 +1131,9 @@ if __name__ == "__main__":
     test_adapter_intent_does_not_treat_compatibility_mount_as_listing_mount()
     test_macro_adapter_detail_ranks_macro_adapter_first()
     test_adapter_intent_keeps_lens_and_body_bundles_visible_but_lower()
+    test_finder_accessory_intent_prefers_finder_over_broad_lens()
+    test_visoflex_parses_and_matches_finder_accessory()
+    test_finder_intent_keeps_lens_and_body_bundles_visible_but_lower()
     test_non_filter_query_keeps_existing_lens_ranking()
     test_ambiguous_query_keeps_warnings()
     test_rank_listings_orders_by_score()

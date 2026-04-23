@@ -452,6 +452,51 @@ SUMMILUX_FILTER_BUNDLE = _record(
 )
 
 
+FINDER_ACCESSORY = _record(
+    14,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/finder",
+        "title_raw": "Leica 28mm Brightline Finder Black",
+        "price_raw": "420,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "Unknown",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "finder",
+        "sold_quality": "asking",
+    },
+)
+
+
+TRI_ELMAR_FINDER_BUNDLE = _record(
+    15,
+    {
+        "source": "Lens dealer",
+        "source_url": "https://example.invalid/tri-elmar-finder-bundle",
+        "title_raw": "Leica M 16-18-21mm F4 Tri-Elmar + Finder set",
+        "price_raw": "6,300,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Tri-Elmar",
+        "model_canonical": "Tri-Elmar-M",
+        "variant": [],
+        "focal_length": "16-18-21",
+        "sold_quality": "asking",
+    },
+)
+
+
 def test_pagination_fields_and_next_offset() -> None:
     response = search_records("35lux aa", [SUMMILUX_HIGH, SUMMILUX_LOW, SUMMICRON_50], limit=1)
     assert response["pagination"]["limit"] == 1
@@ -781,6 +826,22 @@ def test_filter_intent_candidate_narrowing_keeps_lens_bundle_visible() -> None:
     assert any(result["final_output"]["category"] == "Lens" for result in narrowed["results"])
 
 
+def test_finder_intent_candidate_narrowing_keeps_lens_bundle_visible() -> None:
+    records = build_search_index(
+        [FINDER_ACCESSORY, TRI_ELMAR_FINDER_BUNDLE] + _accessory_narrowing_distractors()
+    )
+
+    narrowed = search_records("tri-elmar finder set", records, limit=5, min_score=1)
+    full = search_records("tri-elmar finder set", records, limit=5, min_score=1, use_candidate_narrowing=False)
+
+    assert narrowed["candidate_narrowing"]["applied"] is True
+    assert narrowed["candidate_narrowing"]["accessory_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+    assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+    assert any(result["final_output"]["category"] == "Lens" for result in narrowed["results"])
+    assert any(result["final_output"]["category"] == "Accessory" for result in narrowed["results"])
+
+
 def _body_narrowing_distractors(count: int = 1500) -> list[dict]:
     return [
         _record(
@@ -869,6 +930,7 @@ if __name__ == "__main__":
     test_filter_intent_candidate_narrowing_uses_filter_detail_without_changing_top()
     test_filter_thread_candidate_narrowing_keeps_related_accessory_visible()
     test_filter_intent_candidate_narrowing_keeps_lens_bundle_visible()
+    test_finder_intent_candidate_narrowing_keeps_lens_bundle_visible()
     test_body_intent_candidate_narrowing_reduces_scored_records_without_changing_top()
     test_body_intent_candidate_narrowing_keeps_accessory_and_lens_visible()
     print("test_search_service: ok")

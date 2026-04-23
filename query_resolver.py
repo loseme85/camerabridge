@@ -799,6 +799,8 @@ def _accessory_intent_text_hit(accessory_intent: str, text: str) -> bool:
         )
     if accessory_intent == "adapter":
         return bool(re.search(r"\b(?:adapter|adaptor)\b|어댑터", text))
+    if accessory_intent == "finder":
+        return bool(re.search(r"\b(?:finder|viewfinder|brightline|external|visoflex)\b|파인더", text))
     return False
 
 

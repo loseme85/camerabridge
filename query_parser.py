@@ -209,6 +209,22 @@ def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
         _set_accessory_intent(intent, "hood", "hood" if "hood" in normalized else "후드")
 
     if not intent.accessory_intent:
+        finder_source: Optional[str] = None
+        if re.search(r"\bbrightline\s+(?:view)?finder\b", normalized):
+            finder_source = "brightline finder"
+        elif re.search(r"\bexternal\s+(?:view)?finder\b", normalized):
+            finder_source = "external finder"
+        elif re.search(r"\bviewfinder\b", normalized):
+            finder_source = "viewfinder"
+        elif re.search(r"\bvisoflex\b", normalized):
+            finder_source = "visoflex"
+        elif re.search(r"\bfinder\b", normalized) or "파인더" in normalized:
+            finder_source = "finder" if re.search(r"\bfinder\b", normalized) else "파인더"
+
+        if finder_source:
+            _set_accessory_intent(intent, "finder", finder_source)
+
+    if not intent.accessory_intent:
         adapter_source: Optional[str] = None
         if re.search(r"\bm\s*-\s*l\s+(?:adapter|adaptor)\b", normalized):
             adapter_source = "m-l adapter"
@@ -290,6 +306,14 @@ def _adapter_intent_token_consumed(intent: QueryIntent, token: str, normalized: 
     if token in {"m", "l"} and re.search(r"\b(?:m\s*-\s*l|m\s+to\s+l|leica\s+m|macro\s+(?:adapter|adaptor)\s+m)\b", normalized):
         return True
     if token == "m-l" and re.search(r"\bm\s*-\s*l\s+(?:adapter|adaptor)\b", normalized):
+        return True
+    return False
+
+
+def _finder_intent_token_consumed(intent: QueryIntent, token: str, normalized: str) -> bool:
+    if intent.accessory_intent != "finder":
+        return False
+    if token in {"finder", "viewfinder", "brightline", "external", "visoflex", "파인더"}:
         return True
     return False
 
@@ -426,6 +450,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             continue
 
         if intent.accessory_intent == "hood" and token == "lens" and re.search(r"\blens\s+hood\b", normalized):
+            continue
+
+        if _finder_intent_token_consumed(intent, token, normalized):
             continue
 
         if _adapter_intent_token_consumed(intent, token, normalized):
