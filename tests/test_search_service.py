@@ -836,10 +836,77 @@ def test_finder_intent_candidate_narrowing_keeps_lens_bundle_visible() -> None:
 
     assert narrowed["candidate_narrowing"]["applied"] is True
     assert narrowed["candidate_narrowing"]["accessory_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["finder_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["finder_detail_applied"] is False
     assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
     assert narrowed["results"][0]["title"] == full["results"][0]["title"]
     assert any(result["final_output"]["category"] == "Lens" for result in narrowed["results"])
     assert any(result["final_output"]["category"] == "Accessory" for result in narrowed["results"])
+
+
+def _finder_narrowing_distractors(count: int = 300) -> list[dict]:
+    return [
+        _record(
+            4000 + index,
+            {
+                "source": "Finder distractor dealer",
+                "source_url": f"https://example.invalid/finder-distractor-{index}",
+                "title_raw": f"Leica Finder Accessory {index}",
+                "price_raw": "300,000원",
+                "currency": "KRW",
+                "condition_raw": "Used",
+                "brand": "Leica",
+                "mount": "Unknown",
+                "category": "Accessory",
+                "label": "Accessory",
+                "model_raw": None,
+                "model_canonical": None,
+                "variant": [],
+                "focal_length": None,
+                "accessory_type": "finder",
+                "sold_quality": "asking",
+            },
+        )
+        for index in range(count)
+    ]
+
+
+def test_finder_intent_candidate_narrowing_uses_finder_specific_cap() -> None:
+    records = build_search_index(
+        [FINDER_ACCESSORY, TRI_ELMAR_FINDER_BUNDLE]
+        + _finder_narrowing_distractors()
+        + _accessory_narrowing_distractors()
+    )
+
+    narrowed = search_records("finder", records, limit=5, min_score=1)
+    full = search_records("finder", records, limit=5, min_score=1, use_candidate_narrowing=False)
+
+    assert narrowed["candidate_narrowing"]["applied"] is True
+    assert narrowed["candidate_narrowing"]["finder_intent_applied"] is True
+    assert narrowed["candidate_narrowing"]["finder_detail_applied"] is False
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < narrowed["candidate_narrowing"]["input_record_count"]
+    assert narrowed["candidate_narrowing"]["scored_record_count"] < full["candidate_narrowing"]["scored_record_count"]
+    assert narrowed["results"][0]["title"] == full["results"][0]["title"]
+    assert narrowed["results"][0]["final_output"]["accessory_type"] == "finder"
+
+
+def test_finder_detail_candidate_narrowing_reduces_pool_more_than_generic_finder() -> None:
+    records = build_search_index(
+        [FINDER_ACCESSORY, TRI_ELMAR_FINDER_BUNDLE]
+        + _finder_narrowing_distractors()
+        + _accessory_narrowing_distractors()
+    )
+
+    generic = search_records("finder", records, limit=5, min_score=1)
+    detail = search_records("28mm finder", records, limit=5, min_score=1)
+    detail_full = search_records("28mm finder", records, limit=5, min_score=1, use_candidate_narrowing=False)
+
+    assert detail["candidate_narrowing"]["applied"] is True
+    assert detail["candidate_narrowing"]["finder_intent_applied"] is True
+    assert detail["candidate_narrowing"]["finder_detail_applied"] is True
+    assert detail["candidate_narrowing"]["scored_record_count"] < generic["candidate_narrowing"]["scored_record_count"]
+    assert detail["results"][0]["title"] == detail_full["results"][0]["title"]
+    assert detail["results"][0]["final_output"]["accessory_type"] == "finder"
 
 
 def _body_narrowing_distractors(count: int = 1500) -> list[dict]:
@@ -931,6 +998,8 @@ if __name__ == "__main__":
     test_filter_thread_candidate_narrowing_keeps_related_accessory_visible()
     test_filter_intent_candidate_narrowing_keeps_lens_bundle_visible()
     test_finder_intent_candidate_narrowing_keeps_lens_bundle_visible()
+    test_finder_intent_candidate_narrowing_uses_finder_specific_cap()
+    test_finder_detail_candidate_narrowing_reduces_pool_more_than_generic_finder()
     test_body_intent_candidate_narrowing_reduces_scored_records_without_changing_top()
     test_body_intent_candidate_narrowing_keeps_accessory_and_lens_visible()
     print("test_search_service: ok")

@@ -36,6 +36,10 @@ ACCESSORY_CANDIDATE_MAX_RECORDS = 260
 ACCESSORY_CANDIDATE_BROAD_RECORDS = 120
 FILTER_DETAIL_CANDIDATE_MAX_RECORDS = 140
 FILTER_DETAIL_CANDIDATE_BROAD_RECORDS = 40
+FINDER_CANDIDATE_MAX_RECORDS = 120
+FINDER_CANDIDATE_BROAD_RECORDS = 60
+FINDER_DETAIL_CANDIDATE_MAX_RECORDS = 90
+FINDER_DETAIL_CANDIDATE_BROAD_RECORDS = 35
 BODY_CANDIDATE_MAX_RECORDS = 260
 BODY_CANDIDATE_BROAD_RECORDS = 80
 SUPPORTED_SORTS = {
@@ -489,6 +493,20 @@ def _filter_detail_anchor_active(intent: dict[str, Any]) -> bool:
     )
 
 
+def _finder_anchor_active(intent: dict[str, Any]) -> bool:
+    return _normalize_search_text(intent.get("accessory_intent")) == "finder"
+
+
+def _finder_detail_anchor_active(intent: dict[str, Any]) -> bool:
+    if not _finder_anchor_active(intent):
+        return False
+    normalized = _normalize_search_text(intent.get("normalized_query"))
+    return bool(
+        intent.get("focal_length")
+        or re.search(r"\b(?:visoflex|viewfinder|brightline|external)\b", normalized)
+    )
+
+
 def narrow_candidate_records(
     intent: dict[str, Any],
     records: list[dict[str, Any]],
@@ -516,6 +534,8 @@ def narrow_candidate_records(
         "accessory_code_applied": False,
         "filter_intent_applied": False,
         "filter_detail_applied": False,
+        "finder_intent_applied": False,
+        "finder_detail_applied": False,
         "body_intent_applied": False,
         "body_family_applied": False,
     }
@@ -543,10 +563,18 @@ def narrow_candidate_records(
     strong.sort()
     broad.sort()
     filter_detail_active = _filter_detail_anchor_active(intent)
+    finder_anchor_active = _finder_anchor_active(intent)
+    finder_detail_active = _finder_detail_anchor_active(intent)
     body_anchor_active = _body_anchor_active(intent)
     if filter_detail_active:
         candidate_max = FILTER_DETAIL_CANDIDATE_MAX_RECORDS
         candidate_broad_records = FILTER_DETAIL_CANDIDATE_BROAD_RECORDS
+    elif finder_detail_active:
+        candidate_max = FINDER_DETAIL_CANDIDATE_MAX_RECORDS
+        candidate_broad_records = FINDER_DETAIL_CANDIDATE_BROAD_RECORDS
+    elif finder_anchor_active:
+        candidate_max = FINDER_CANDIDATE_MAX_RECORDS
+        candidate_broad_records = FINDER_CANDIDATE_BROAD_RECORDS
     elif accessory_anchor_active:
         candidate_max = ACCESSORY_CANDIDATE_MAX_RECORDS
         candidate_broad_records = ACCESSORY_CANDIDATE_BROAD_RECORDS
@@ -582,6 +610,8 @@ def narrow_candidate_records(
             "accessory_code_applied": bool(intent.get("accessory_code")),
             "filter_intent_applied": _normalize_search_text(intent.get("accessory_intent")) == "filter",
             "filter_detail_applied": filter_detail_active,
+            "finder_intent_applied": finder_anchor_active,
+            "finder_detail_applied": finder_detail_active,
             "body_intent_applied": body_anchor_active,
             "body_family_applied": body_anchor_active and bool(intent.get("mount") or intent.get("system")),
         }
