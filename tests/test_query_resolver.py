@@ -161,6 +161,45 @@ Q3_ACCESSORY = _record(
 )
 
 
+D_LUX_8_BODY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Compact",
+        "system": "Compact",
+        "category": "Body",
+        "label": "Leica Body",
+        "model_raw": "D-LUX 8",
+        "model_canonical": "D-LUX 8",
+        "variant": [],
+        "focal_length": None,
+        "title_raw": "Leica D-Lux 8 black paint finish",
+        "source": "test",
+        "source_url": "https://example.invalid/d-lux-8",
+    },
+    index=26,
+)
+
+
+D_LUX_8_ACCESSORY = _record(
+    {
+        "brand": "Leica",
+        "mount": "Compact",
+        "system": "Compact",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": "D-LUX 8",
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "case",
+        "title_raw": "Leica D-Lux 8 Automatic Lens Cap Black",
+        "source": "test",
+        "source_url": "https://example.invalid/d-lux-8-cap",
+    },
+    index=27,
+)
+
+
 R8_BODY = _record(
     {
         "brand": "Leica",
@@ -588,6 +627,40 @@ def test_q3_bare_body_query_prefers_body_but_keeps_accessory_visible() -> None:
     assert ranked["results"][0]["final_output"]["model_canonical"] == "Q3"
     assert ranked["results"][0]["match_quality"] == "strong"
     assert ranked["results"][1]["final_output"]["category"] == "Accessory"
+
+
+def test_d_lux_forms_prefer_compact_body_over_summilux_or_accessory() -> None:
+    for query in ["d lux 8", "d-lux 8", "dlux 8", "leica d-lux 8"]:
+        ranked = rank_listings(
+            query,
+            [SUMMILUX_35, D_LUX_8_ACCESSORY, D_LUX_8_BODY],
+            limit=3,
+            min_score=1,
+        )
+
+        assert ranked["intent"]["body_intent"] == "D-LUX 8"
+        assert ranked["intent"]["model_family"] is None
+        assert ranked["intent"]["system"] == "Compact"
+        assert ranked["results"][0]["final_output"]["category"] == "Body"
+        assert ranked["results"][0]["final_output"]["model_canonical"] == "D-LUX 8"
+        assert ranked["results"][0]["match_quality"] == "strong"
+        assert any(result["final_output"]["category"] == "Accessory" for result in ranked["results"])
+        assert not any(
+            result["final_output"].get("model_canonical") == "Summilux-M"
+            and result["score"] >= ranked["results"][0]["score"]
+            for result in ranked["results"]
+        )
+
+
+def test_bare_d_lux_keeps_compact_accessory_visible_but_lower() -> None:
+    ranked = rank_listings("d-lux", [D_LUX_8_ACCESSORY, D_LUX_8_BODY], limit=2, min_score=1)
+
+    assert ranked["intent"]["body_intent"] == "D-LUX"
+    assert ranked["intent"]["system"] == "Compact"
+    assert ranked["results"][0]["final_output"]["category"] == "Body"
+    assert ranked["results"][0]["match_quality"] == "strong"
+    assert ranked["results"][1]["final_output"]["category"] == "Accessory"
+    assert ranked["results"][1]["match_quality"] == "weak"
 
 
 def test_r_body_and_barnack_shorthand_rank_body_first() -> None:
@@ -1117,6 +1190,8 @@ if __name__ == "__main__":
     test_short_cm_alias_matches_leica_cm_body()
     test_body_shorthand_prefers_body_over_accessory()
     test_q3_bare_body_query_prefers_body_but_keeps_accessory_visible()
+    test_d_lux_forms_prefer_compact_body_over_summilux_or_accessory()
+    test_bare_d_lux_keeps_compact_accessory_visible_but_lower()
     test_r_body_and_barnack_shorthand_rank_body_first()
     test_body_intent_does_not_disturb_non_body_queries()
     test_hood_accessory_intent_prefers_accessory_over_broad_lens()

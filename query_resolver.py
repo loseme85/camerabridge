@@ -353,6 +353,11 @@ def _body_intent_text_hit(body_intent: str, text: str) -> bool:
     intent_norm = _normalize(body_intent)
     if not intent_norm:
         return False
+    if intent_norm.startswith(("d lux", "v lux", "c lux", "sofort")):
+        compact_intent = intent_norm.replace(" ", "")
+        compact_text = text.replace(" ", "")
+        if compact_intent and compact_intent in compact_text:
+            return True
     if intent_norm == "barnack":
         return bool(
             re.search(

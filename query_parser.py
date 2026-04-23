@@ -98,6 +98,14 @@ _BODY_INTENT_ALIASES = {
 }
 
 
+_COMPACT_BODY_PATTERNS: tuple[tuple[str, str], ...] = (
+    (r"\bd\s*-\s*lux\s*([0-9]{1,3})?\b|\bd\s+lux\s*([0-9]{1,3})?\b|\bdlux\s*([0-9]{1,3})?\b", "D-LUX"),
+    (r"\bv\s*-\s*lux\s*([0-9]{1,3})?\b|\bv\s+lux\s*([0-9]{1,3})?\b|\bvlux\s*([0-9]{1,3})?\b", "V-LUX"),
+    (r"\bc\s*-\s*lux\s*([0-9]{1,3})?\b|\bc\s+lux\s*([0-9]{1,3})?\b|\bclux\s*([0-9]{1,3})?\b", "C-LUX"),
+    (r"\bsofort\s*([0-9]{1,2})?\b", "Sofort"),
+)
+
+
 def _set_body_intent(
     intent: QueryIntent,
     value: str,
@@ -113,6 +121,17 @@ def _set_body_intent(
     if system and not intent.system:
         intent.system = system
         intent.tokens.append({"type": "system", "raw": source, "value": system})
+
+
+def _parse_compact_body_intent(intent: QueryIntent, normalized: str) -> None:
+    for pattern, family in _COMPACT_BODY_PATTERNS:
+        match = re.search(pattern, normalized)
+        if not match:
+            continue
+        suffix = next((group for group in match.groups() if group), None)
+        value = f"{family} {suffix}" if suffix else family
+        _set_body_intent(intent, value, match.group(0), system="Compact")
+        break
 
 
 def _body_intent_token_allowed(token: str, rough_tokens: list[str]) -> bool:
@@ -318,6 +337,29 @@ def _finder_intent_token_consumed(intent: QueryIntent, token: str, normalized: s
     return False
 
 
+def _compact_body_intent_token_consumed(intent: QueryIntent, token: str, normalized: str) -> bool:
+    body_intent = intent.body_intent or ""
+    body_norm = body_intent.lower()
+    if not body_norm.startswith(("d-lux", "v-lux", "c-lux", "sofort")):
+        return False
+
+    if token in {"d", "v", "c", "lux", "d-lux", "v-lux", "c-lux", "dlux", "vlux", "clux", "sofort"}:
+        return True
+
+    compacted = re.sub(r"[^a-z0-9]+", "", token)
+    if compacted in {"dlux", "vlux", "clux"}:
+        return True
+
+    suffix_match = re.search(r"\b(?:d|v|c)-?lux\s*([0-9]{1,3})\b|\b(?:d|v|c)\s+lux\s*([0-9]{1,3})\b|\b(?:d|v|c)lux\s*([0-9]{1,3})\b|\bsofort\s*([0-9]{1,2})\b", normalized)
+    suffix = next((group for group in suffix_match.groups() if group), None) if suffix_match else None
+    if suffix and token == suffix:
+        return True
+    if suffix and compacted in {f"dlux{suffix}", f"vlux{suffix}", f"clux{suffix}", f"sofort{suffix}"}:
+        return True
+
+    return False
+
+
 def _score_confidence(intent: QueryIntent) -> float:
     score = 0.20
     if intent.model_family:
@@ -364,6 +406,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
 
     _parse_optical_formula(intent, normalized)
     _parse_accessory_intent(intent, normalized)
+    _parse_compact_body_intent(intent, normalized)
 
     rough_tokens = re.findall(r"[a-z0-9가-힣./-]+", normalized)
     for token in rough_tokens:
@@ -376,6 +419,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             continue
 
         if _adapter_intent_token_consumed(intent, token, normalized):
+            continue
+
+        if _compact_body_intent_token_consumed(intent, token, normalized):
             continue
 
         body_alias = _BODY_INTENT_ALIASES.get(token)

@@ -252,6 +252,37 @@ def test_body_shorthand_does_not_override_existing_lens_or_accessory_intent() ->
     assert compatibility["body_intent"] is None
 
 
+def test_compact_body_line_normalization_query() -> None:
+    examples = {
+        "d lux 8": "D-LUX 8",
+        "d-lux 8": "D-LUX 8",
+        "dlux 8": "D-LUX 8",
+        "leica d-lux 8": "D-LUX 8",
+        "d-lux": "D-LUX",
+        "v-lux": "V-LUX",
+        "v lux": "V-LUX",
+        "c-lux": "C-LUX",
+        "c lux": "C-LUX",
+        "sofort": "Sofort",
+    }
+
+    for query, body_intent in examples.items():
+        intent = parse_query(query)
+        assert intent["body_intent"] == body_intent
+        assert intent["system"] == "Compact"
+        assert intent["model_family"] is None
+        assert not any(token["type"] == "unknown" and token["raw"] in {"d", "v", "c", "lux", "8"} for token in intent["tokens"])
+        assert "no_structured_search_intent" not in intent["warnings"]
+
+
+def test_d_lux_phrase_does_not_parse_lux_as_summilux() -> None:
+    intent = parse_query("d lux 8")
+
+    assert intent["body_intent"] == "D-LUX 8"
+    assert intent["model_family"] is None
+    assert not any(token["type"] == "model_family" and token["raw"] == "lux" for token in intent["tokens"])
+
+
 if __name__ == "__main__":
     test_search_layer_does_not_import_classifier()
     test_compact_lux_aa_query()
@@ -274,4 +305,6 @@ if __name__ == "__main__":
     test_code_only_finder_aliases_are_deferred()
     test_body_shorthand_intent_query()
     test_body_shorthand_does_not_override_existing_lens_or_accessory_intent()
+    test_compact_body_line_normalization_query()
+    test_d_lux_phrase_does_not_parse_lux_as_summilux()
     print("test_query_parser: ok")
