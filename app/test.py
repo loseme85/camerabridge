@@ -1,5 +1,3 @@
-grep -n "def save_market_prices\|if __name__" ./app/services/price_engine.py
-grep -n "qa-dashboard\|qa-label-acc\|Market Prices" ./app/templates/qa.html | head -5from playwright.sync_api import sync_playwright
 import time
 import json
 import re
