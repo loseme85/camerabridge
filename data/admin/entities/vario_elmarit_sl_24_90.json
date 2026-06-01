@@ -1,0 +1,73 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_vario_elmarit_sl_24_90",
+  "family_name": "Vario-Elmarit-SL 24-90mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "L"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread",
+    "version_marker",
+    "asph",
+    "ois"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_vario_elmarit_sl_24_90_f2_8_4_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "L",
+      "system": "SL System",
+      "label": "SL Lens",
+      "model_raw": "Vario-Elmarit-SL",
+      "model_canonical": "Vario-Elmarit-SL",
+      "focal_length": "24-90",
+      "canonical_name": "Leica Vario-Elmarit-SL 24-90mm f/2.8-4 ASPH",
+      "aliases": [
+        "vario-elmarit-sl 24-90",
+        "vario elmarit sl 24-90",
+        "24-90 vario-elmarit-sl",
+        "24-90mm f2.8-4 vario-elmarit-sl",
+        "24-90mm f/2.8-4 vario-elmarit-sl",
+        "24-90mm asph vario-elmarit-sl",
+        "leica sl 24-90mm f2.8-4",
+        "leica sl 24-90mm f/2.8-4",
+        "leica sl 24-90 asph",
+        "vario elmarit sl 24 90"
+      ],
+      "key_discriminators": [
+        "vario-elmarit-sl",
+        "24-90",
+        "24-90mm",
+        "f2.8-4",
+        "24-90mm f2.8-4",
+        "leica sl",
+        "asph"
+      ],
+      "variant": [
+        "f/2.8-4",
+        "ASPH",
+        "Vario-Elmarit-SL"
+      ],
+      "price_group": "vario_elmarit_sl_24_90_f2_8_4_asph",
+      "notes": "Round-1 conservative core seed for the Leica SL-side 24-90 standard zoom family. ASPH, OIS, E82 or filter-thread markers, and hood or case bundle wording remain below row level, and bare 24-90 or other broad standard-zoom shorthand is intentionally excluded to avoid Leica R 28-90, neighboring SL zooms, or Sigma/Panasonic/Lumix L-mount zoom contamination.",
+      "status": "core"
+    }
+  ]
+}

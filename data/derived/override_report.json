@@ -1,0 +1,349 @@
+{
+  "generated_at": "2026-04-22T14:39:03.940242+00:00",
+  "total_records": 7860,
+  "override_applied_count": 8,
+  "trusted_metadata_applied_count": 2,
+  "curated_reference_applied_count": 6,
+  "changed_fields": {
+    "brand": 1,
+    "category": 1,
+    "label": 1,
+    "model_canonical": 1,
+    "mount": 1,
+    "variant": 8
+  },
+  "examples": [
+    {
+      "record_index": 1380,
+      "title_raw": "[중고] MP3 (Black Paint)",
+      "source": "라이카스토어 충무로",
+      "source_url": "https://leica-storebando.co.kr/product/중고-mp3-black-paint/17883/category/442/display/1/",
+      "override_source": "trusted_metadata",
+      "override_source_id": "trusted_listing_mp3_blackpaint_chungmuro_17883",
+      "override_reason": "Trusted dealer exact listing identifies this as Leica MP3 body.",
+      "changed_fields": {
+        "brand": {
+          "before": "Unknown",
+          "after": "Leica"
+        },
+        "mount": {
+          "before": "Unknown",
+          "after": "M"
+        },
+        "category": {
+          "before": "Lens",
+          "after": "Body"
+        },
+        "label": {
+          "before": "Lens",
+          "after": "M Body"
+        },
+        "model_canonical": {
+          "before": null,
+          "after": "MP3"
+        },
+        "variant": {
+          "before": [
+            "Black Paint",
+            "Black"
+          ],
+          "after": [
+            "Black Paint"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Unknown",
+        "mount": "Unknown",
+        "category": "Lens",
+        "label": "Lens",
+        "model_canonical": null,
+        "variant": [
+          "Black Paint",
+          "Black"
+        ],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "Black Paint"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 3731,
+      "title_raw": "LEICA MP3 + Vit LHSA Special Edition 251/1000",
+      "source": "장씨카메라",
+      "source_url": "https://j-camera.com/product/detail.html?product_no=9534&cate_no=358&display_group=1",
+      "override_source": "curated_reference",
+      "override_source_id": "curated_model_leica_mp3_lhsa",
+      "override_reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "changed_fields": {
+        "variant": {
+          "before": [],
+          "after": [
+            "LHSA"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "LHSA"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 4507,
+      "title_raw": "LEICA MP3 LHSA Special Edition 789/1000",
+      "source": "장씨카메라",
+      "source_url": "https://j-camera.com/product/detail.html?product_no=8511&cate_no=358&display_group=1",
+      "override_source": "curated_reference",
+      "override_source_id": "curated_model_leica_mp3_lhsa",
+      "override_reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "changed_fields": {
+        "variant": {
+          "before": [],
+          "after": [
+            "LHSA"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "LHSA"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 4579,
+      "title_raw": "LEICA MP3 + Vit LHSA Special Edition 251/1000",
+      "source": "장씨카메라",
+      "source_url": "https://j-camera.com/product/detail.html?product_no=8660&cate_no=358&display_group=1",
+      "override_source": "curated_reference",
+      "override_source_id": "curated_model_leica_mp3_lhsa",
+      "override_reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "changed_fields": {
+        "variant": {
+          "before": [],
+          "after": [
+            "LHSA"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "LHSA"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 5147,
+      "title_raw": "LEICA MP3 SET LHSA Special Edition sn.3026",
+      "source": "장씨카메라",
+      "source_url": "https://j-camera.com/product/detail.html?product_no=7152&cate_no=358&display_group=1",
+      "override_source": "curated_reference",
+      "override_source_id": "curated_model_leica_mp3_lhsa",
+      "override_reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "changed_fields": {
+        "variant": {
+          "before": [],
+          "after": [
+            "LHSA"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "LHSA"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 6245,
+      "title_raw": "LEICA MP3-set LHSA special Edition sn.3026",
+      "source": "장씨카메라",
+      "source_url": "https://j-camera.com/product/detail.html?product_no=4234&cate_no=358&display_group=1",
+      "override_source": "curated_reference",
+      "override_source_id": "curated_model_leica_mp3_lhsa",
+      "override_reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "changed_fields": {
+        "variant": {
+          "before": [],
+          "after": [
+            "LHSA"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "LHSA"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 6281,
+      "title_raw": "LEICA MP3-set LHSA special Edition sn.3026",
+      "source": "장씨카메라",
+      "source_url": "https://j-camera.com/product/detail.html?product_no=4142&cate_no=358&display_group=1",
+      "override_source": "curated_reference",
+      "override_source_id": "curated_model_leica_mp3_lhsa",
+      "override_reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "changed_fields": {
+        "variant": {
+          "before": [],
+          "after": [
+            "LHSA"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "LHSA"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 7822,
+      "title_raw": "Leica Leica MP3 （0.72） LHSA スペシャル・エディション Set Silver",
+      "source": "기타무라 (일본)",
+      "source_url": "https://www.kitamuracamera.jp/buy/item/2119340930118/",
+      "override_source": "trusted_metadata",
+      "override_source_id": "trusted_listing_kitamura_mp3_lhsa_2119340930118",
+      "override_reason": "Trusted source exact listing for Leica MP3 LHSA body.",
+      "changed_fields": {
+        "variant": {
+          "before": [
+            "Silver",
+            "0.72"
+          ],
+          "after": [
+            "0.72",
+            "LHSA",
+            "Silver"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "Silver",
+          "0.72"
+        ],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "0.72",
+          "LHSA",
+          "Silver"
+        ],
+        "focal_length": null
+      }
+    }
+  ]
+}

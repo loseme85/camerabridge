@@ -1,0 +1,63 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_tele_elmar_135",
+  "family_name": "Tele-Elmar 135mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_tele_elmar_135_f4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Tele-Elmar",
+      "model_canonical": "Tele-Elmar",
+      "focal_length": "135",
+      "canonical_name": "Leica Tele-Elmar 135mm f/4",
+      "aliases": [
+        "tele-elmar 135",
+        "tele elmar 135",
+        "135 tele-elmar",
+        "135mm f4 tele-elmar",
+        "135mm f/4 tele-elmar",
+        "m 135/4 tele-elmar",
+        "135/4 tele elmar"
+      ],
+      "key_discriminators": [
+        "tele-elmar",
+        "135",
+        "f4",
+        "m 135/4"
+      ],
+      "variant": [
+        "Tele-Elmar",
+        "f/4"
+      ],
+      "price_group": "tele_elmar_135_f4",
+      "notes": "Round-1 conservative core seed for the broad Leica M Tele-Elmar 135 line. Tele-Elmar-M remains outside the initial seed row as a future hold candidate.",
+      "status": "core"
+    }
+  ]
+}

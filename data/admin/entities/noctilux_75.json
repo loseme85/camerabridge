@@ -1,0 +1,58 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_noctilux_75",
+  "family_name": "Noctilux 75mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_noctilux_m_75_f1_25_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Noctilux-M",
+      "model_canonical": "Noctilux-M",
+      "focal_length": "75",
+      "canonical_name": "Leica Noctilux-M 75mm f/1.25 ASPH",
+      "aliases": [
+        "noctilux 75",
+        "75 noctilux",
+        "noctilux-m 75",
+        "75mm f1.25 noctilux",
+        "m 75/1.25 noctilux",
+        "75/1.25 noctilux"
+      ],
+      "key_discriminators": [
+        "75",
+        "f1.25",
+        "noctilux-m",
+        "m 75/1.25",
+        "e67"
+      ],
+      "variant": [
+        "f/1.25",
+        "ASPH",
+        "Noctilux-M"
+      ],
+      "price_group": "noctilux_m_75_f1_25_asph",
+      "notes": "Round-1 conservative core seed for the clean single-line Noctilux 75 family. 6bit, finish, country, and special-edition axes remain below row level, and SL/non-Noctilux contamination stays out of family.",
+      "status": "core"
+    }
+  ]
+}

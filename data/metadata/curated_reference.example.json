@@ -1,0 +1,68 @@
+[
+  {
+    "id": "curated_model_leica_mp3_lhsa",
+    "status": "active",
+    "source": "curated_reference",
+    "canonical_name": "Leica MP3",
+    "match": {
+      "required_title_patterns": [
+        "\\bLEICA\\s+MP3\\b",
+        "\\bLHSA\\b"
+      ],
+      "classifier_must_equal": {
+        "brand": "Leica",
+        "category": "Body"
+      }
+    },
+    "patch": {
+      "fields": {
+        "mount": "M",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": ["LHSA"]
+      },
+      "confidence": 0.95,
+      "reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "evidence": [
+        "Title explicitly contains Leica MP3",
+        "Title explicitly contains LHSA",
+        "Classifier already identifies Leica Body"
+      ],
+      "updated_at": "2026-04-18",
+      "updated_by": "curated_reference"
+    }
+  },
+  {
+    "id": "curated_model_leica_mp3_set",
+    "status": "active",
+    "source": "curated_reference",
+    "canonical_name": "Leica MP3",
+    "match": {
+      "required_title_patterns": [
+        "\\bLEICA\\s+MP3\\b",
+        "\\bSET\\b"
+      ],
+      "classifier_must_equal": {
+        "brand": "Leica",
+        "category": "Body"
+      }
+    },
+    "patch": {
+      "fields": {
+        "mount": "M",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": ["Set"]
+      },
+      "confidence": 0.93,
+      "reason": "Curated model reference: explicit Leica MP3 set listing.",
+      "evidence": [
+        "Title explicitly contains Leica MP3",
+        "Title explicitly contains Set",
+        "Classifier already identifies Leica Body"
+      ],
+      "updated_at": "2026-04-18",
+      "updated_by": "curated_reference"
+    }
+  }
+]

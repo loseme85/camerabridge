@@ -1,0 +1,295 @@
+{
+  "task_name": "P3-MODEL-MARKET-PAGE-FRONTEND-IMPLEMENTATION",
+  "modified_files": [
+    "model_market_page_frontend.py",
+    "scripts/run_p3_model_market_page_frontend_implementation.py",
+    "tests/test_model_market_page_frontend_implementation.py",
+    "data/admin/p3_model_market_page_frontend_implementation_v0.md",
+    "data/admin/p3_model_market_page_frontend_implementation_v0.jsonl",
+    "data/admin/model_market_page_frontend_implementation_v0.json",
+    "data/admin/model_market_page_frontend_preview_v0.html"
+  ],
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "model_market_page_frontend_implementation.v0",
+    "contract_version": "p3_model_market_page_frontend_implementation_v0",
+    "implementation_mode": "local_preview",
+    "local_preview_enabled": true,
+    "production_frontend_enabled": false,
+    "react_component_enabled": false,
+    "api_route_enabled": false,
+    "db_query_enabled": false,
+    "price_calculation_enabled": false,
+    "archive_builder_enabled": false,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "broad_query_refinement_required": true,
+    "adjacent_family_substitution_allowed": false,
+    "active_vs_sold_price_disclosure_required": true,
+    "confidence_disclosure_required": true,
+    "source_mix_disclosure_required": true,
+    "beta_status_disclosure_required": true,
+    "no_affiliation_disclaimer_required": true,
+    "future_placeholder_disclosure_required": true,
+    "raw_url_display_allowed": false,
+    "raw_email_display_allowed": false,
+    "raw_html_display_allowed": false,
+    "contract_only": true,
+    "frontend_implementation_enabled": false
+  },
+  "preview_ids": [
+    "preview::noctilux_exact",
+    "preview::35lux_aa_rare",
+    "preview::sigma_source_gap",
+    "preview::broad_summicron",
+    "preview::boundary_conflict",
+    "preview::unsupported_model",
+    "preview::active_only_noctilux",
+    "preview::archive_only_noctilux"
+  ],
+  "batch_summary": {
+    "preview_count": 8,
+    "exact_count": 1,
+    "rare_count": 1,
+    "source_gap_count": 1,
+    "blocked_or_review_count": 3
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "Noctilux exact full page",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "35 lux AA limited rare variant page",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "Sigma 14-24 L source-gap page",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "broad Summicron refinement page",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "unsafe boundary conflict page",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "unsupported model page",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "active-only no sold history",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "sold_likely lane",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "expired_removed lane",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "accessory lane",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "related-not-substitute lane",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "source coverage limited",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "confidence disclosure",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "target price watch CTA",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "future placeholders",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "mobile layout priority",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "desktop layout priority",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "copy safety",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "legal disclaimer",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "source-gap not absence",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "U",
+      "scenario_group": "raw data display guard",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "V",
+      "scenario_group": "static preview HTML",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "W",
+      "scenario_group": "batch frontend preview generation",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "model market page frontend local preview scenario validation"
+    }
+  ],
+  "html_preview_path": "/Users/changdaepark/Desktop/LEICA SEARCH/data/admin/model_market_page_frontend_preview_v0.html",
+  "raw_url_present": false,
+  "raw_html_present": false,
+  "raw_email_present": false,
+  "provider_payload_present": false,
+  "raw_webhook_body_present": false
+}

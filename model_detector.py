@@ -297,6 +297,14 @@ _VARIANT_WORD_BOUNDARY: set[str] = {"rom", "ds", "ss", "ttl", "zoom"}
 
 def extract_focal_length(text: str) -> Optional[str]:
     n = text.lower()
+    # 충무로식 SL zoom shorthand: "24-90/2.8-4", "16-35/3.5-4.5"
+    zoom_shorthand = re.search(r'(\d{1,3}(?:-\d{1,3})+)\s*/\s*\d', n)
+    if zoom_shorthand:
+        return zoom_shorthand.group(1)
+    # mm 없는 zoom range: "90-280 f/2.8-4"
+    zoom_range = re.search(r'(\d{1,3}(?:-\d{1,3})+)\b(?=[^a-zA-Z]{0,12}f\s*/?\s*\d)', n)
+    if zoom_range:
+        return zoom_range.group(1)
     # 줌: "24-90mm", "16-18-21mm"
     zoom = re.search(r'(\d{1,3}(?:-\d{1,3})+)\s*mm', n)
     if zoom:
@@ -370,6 +378,54 @@ _BODY_VARIANT_SPLIT: dict[str, tuple[str, str]] = {
 }
 
 
+def _detect_sl_zoom_shorthand_model(
+    normalized_name: str,
+    category: str,
+    mount: Optional[str],
+) -> Optional[str]:
+    """
+    Leica SL zoom shorthand restoration.
+
+    Strictly limited to explicit SL zoom title structures so that bare focal
+    ranges like "14-24" or broad "vario elmarit" wording are not hard-pinned.
+    """
+    if category != "lens" or mount != "SL":
+        return None
+
+    n = normalized_name.lower()
+
+    if (
+        re.search(r'\b14-24(?:mm)?\s*/\s*2\.8\b', n)
+        and "vario elmarit" in n
+        and "sl" in n
+    ):
+        return "Super-Vario-Elmarit-SL"
+
+    if (
+        re.search(r'\b16-35(?:mm)?\s*/\s*3\.5-4\.5\b', n)
+        and "super vario elmar" in n
+        and "sl" in n
+    ):
+        return "Super-Vario-Elmar-SL"
+
+    if (
+        re.search(r'\b24-90(?:mm)?\s*/\s*2\.8-4\b', n)
+        and ("vario elmar" in n or "vario-elmar" in n)
+        and "sl" in n
+    ):
+        return "Vario-Elmarit-SL"
+
+    if (
+        re.search(r'\b90-280(?:mm)?\b', n)
+        and re.search(r'\bf\s*/?\s*2\.8-4\b', n)
+        and "apo vario elmarit" in n
+        and "sl" in n
+    ):
+        return "APO-Vario-Elmarit-SL"
+
+    return None
+
+
 # ─────────────────────────────────────────────
 # 메인 함수
 # ─────────────────────────────────────────────
@@ -406,7 +462,10 @@ def detect_model(
                 model_raw = canon
                 break
     elif cat == "lens":
+        model_raw = _detect_sl_zoom_shorthand_model(n, cat, mount)
         for kw, canon in _LENS_MODEL_PATTERNS:
+            if model_raw:
+                break
             if kw in n:
                 model_raw = canon
                 break

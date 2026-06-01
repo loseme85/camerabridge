@@ -1,0 +1,77 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_apo_summicron_sl_35",
+  "family_name": "APO-Summicron-SL 35mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "L"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread",
+    "version_marker",
+    "apo",
+    "asph"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_apo_summicron_sl_35_f2_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "L",
+      "system": "SL System",
+      "label": "SL Lens",
+      "model_raw": "APO-Summicron-SL",
+      "model_canonical": "APO-Summicron-SL",
+      "focal_length": "35",
+      "canonical_name": "Leica APO-Summicron-SL 35mm f/2 ASPH",
+      "aliases": [
+        "apo-summicron-sl 35",
+        "apo summicron sl 35",
+        "35 apo-summicron-sl",
+        "35mm f2 apo-summicron-sl",
+        "35mm f/2 apo-summicron-sl",
+        "leica sl 35mm f2 apo summicron",
+        "leica sl 35mm f/2 apo summicron",
+        "leica apo-summicron-sl 35mm",
+        "apo summicron sl 35 asph",
+        "sl 35 apo summicron",
+        "sl 35/2 apo summicron",
+        "sl 35/2 apo summicron asph"
+      ],
+      "key_discriminators": [
+        "apo-summicron-sl",
+        "35",
+        "35mm",
+        "f2",
+        "35mm f2",
+        "leica sl",
+        "apo",
+        "asph"
+      ],
+      "variant": [
+        "f/2",
+        "APO",
+        "ASPH",
+        "APO-Summicron-SL"
+      ],
+      "price_group": "apo_summicron_sl_35_f2_asph",
+      "notes": "Round-1 conservative core seed for the Leica SL-side 35mm APO wide-normal prime family. APO, ASPH, E67 or filter-thread markers, and hood or case bundle wording remain below row level. Adjacent non-APO Summicron-SL 35 is literature-real and intentionally excluded as a boundary, and broad 35mm Summicron shorthand is intentionally excluded to avoid M-side, R-side, neighboring SL prime, neighboring SL zoom, or Sigma/Panasonic/Lumix contamination.",
+      "status": "core"
+    }
+  ]
+}

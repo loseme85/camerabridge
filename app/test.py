@@ -1,4 +1,5 @@
-from playwright.sync_api import sync_playwright
+grep -n "def save_market_prices\|if __name__" ./app/services/price_engine.py
+grep -n "qa-dashboard\|qa-label-acc\|Market Prices" ./app/templates/qa.html | head -5from playwright.sync_api import sync_playwright
 import time
 import json
 import re
@@ -1316,31 +1317,6 @@ def auto_label(name):
     # 판매완료/보류 → 빈 문자열
     if re.search(r"판매완료|보류|-판매|sold out", n): return ""
 
-    # ── D-LUX/V-LUX/Digilux/Minilux (X시리즈보다 먼저) ──
-    if "d-lux" in n or "d lux" in n:
-        if "109" in n or "typ 109" in n: return "Leica D-LUX Typ 109"
-        for v in ["8","7","6","5","4","3","2"]:
-            if f"lux{v}" in n.replace(" ","").replace("-","") or f"lux {v}" in n: return f"Leica D-LUX {v}"
-        return "Leica D-LUX"
-    if "v-lux" in n or "v lux" in n:
-        if "114" in n or "typ 114" in n: return "Leica V-LUX Typ 114"
-        for v in ["5","4","3","2","1"]:
-            if f"lux{v}" in n.replace(" ","").replace("-","") or f"lux {v}" in n: return f"Leica V-LUX {v}"
-        return "Leica V-LUX"
-    if "digilux" in n:
-        for v in ["3","2","1"]:
-            if v in n: return f"Leica Digilux {v}"
-        return "Leica Digilux"
-    if "minilux" in n:
-        if "zoom" in n: return "Leica Minilux Zoom"
-        return "Leica Minilux"
-
-    # ── Leicaflex (SL2보다 먼저) ──
-    if "leicaflex" in n:
-        if "sl2" in n.replace(" ",""): return "Leicaflex SL2"
-        if "sl" in n: return "Leicaflex SL"
-        return "Leicaflex"
-
     # ── 판매완료/보류 포함된 상품명 ──
     if '판매완료' in name or '보류' in name or re.search(r'^\d+\s*-\s*(판매완료|보류)', name): return ""
 
@@ -1404,26 +1380,14 @@ def auto_label(name):
     if "noctilux" in n or "loctilux" in n:
         if "0.95" in n: return "50mm Noctilux f0.95"
         if "75" in n or "1.25" in n: return "75mm Noctilux f1.25"
-        if "1.2" in n and "1.25" not in n:
-            # 복각 여부 확인
-            _3rd_nocti = ['light lens lab','lll','복각','thypoch','ttartisan','7artisan','voigtlander nokton']
-            if any(k in n for k in _3rd_nocti): return "50mm Noctilux f1.2 복각"
-            return "50mm Noctilux f1.2"
+        if "1.2" in n and "1.25" not in n: return "50mm Noctilux f1.2"
         if "original" in n: return "50mm Noctilux f1.2"  # 충무로 1세대 표기
         if "1.0" in n: return "50mm Noctilux f1.0"
-        # 시리얼로 추론
-        import re as _re_nocti
-        _nocti_sn = _re_nocti.search(r'sn\.(\d+)', n)
-        if _nocti_sn:
-            _nocti_num = int(_nocti_sn.group(1)[:4])
-            if _nocti_num <= 2750: return "50mm Noctilux f1.2"
-            if _nocti_num <= 3900: return "50mm Noctilux f1.0"
-            return "50mm Noctilux f0.95"
-        return "50mm Noctilux f0.95"  # 시리얼 없으면 현행으로
-    # 복각 + 1.2 → Noctilux f1.2 복각
+        return "Noctilux"
+    # 복각 + 1.2 → Noctilux f1.2
     _nocti_exc = ['filter','필터','hood','후드','cap','case','strap','serie','canon','nikon','sony','fuji','sigma dp']
     if '복각' in n and '1.2' in n and not any(k in n for k in _nocti_exc):
-        return "50mm Noctilux f1.2 복각"
+        return "50mm Noctilux f1.2"
 
     # 충무로/장씨 약식: "M 50/1.2", "M50/1.2", "복각" 등 → Noctilux 추론
     if not any(k in n for k in _nocti_exc):
@@ -1435,180 +1399,6 @@ def auto_label(name):
             return "50mm Noctilux f0.95"
         if re.search(r'\b50/1\.0\b', n):
             return "50mm Noctilux f1.0"
-
-    # ── Summarex (85mm 희귀 렌즈) ──
-    if "summarex" in n: return "85mm Summarex"
-
-    # ── Thambar (소프트 포커스) ──
-    if "thambar" in n:
-        if "복각" in n or "reissue" in n or "modern" in n: return "90mm Thambar-M (복각)"
-        return "90mm Thambar"
-
-    # ── Noctilux 35mm (2025) ──
-    if "noctilux" in n and "35" in n: return "35mm Noctilux f1.2 ASPH"
-
-    # ── Noctilux 75mm ──
-    if "noctilux" in n and "75" in n: return "75mm Noctilux f1.25"
-
-    # ── Summaron-M 28mm 현대 복각 ──
-    if "summaron" in n and "28" in n:
-        if "복각" in n or "reissue" in n or "-m" in n: return "28mm Summaron-M (복각)"
-        return "28mm Summaron"
-
-    # ── Super-Angulon 21mm 세분화 ──
-    if "super-angulon" in n or "super angulon" in n:
-        if "3.4" in n: return "21mm Super-Angulon f3.4"
-        if "4" in n: return "21mm Super-Angulon f4"
-        return "21mm Super-Angulon"
-
-    # ── Tele-Elmarit 90mm FAT/THIN ──
-    if "tele-elmarit" in n or "tele elmarit" in n:
-        if "thin" in n: return "90mm Tele-Elmarit (THIN)"
-        if "fat" in n: return "90mm Tele-Elmarit (FAT)"
-        return "90mm Tele-Elmarit"
-
-    # ── Elmarit-C 40mm (CL용 희귀) ──
-    if "elmarit-c" in n or ("elmarit" in n and "40" in n and "c " in n): return "40mm Elmarit-C"
-
-    # ── Summicron-C 40mm (CL용) ──
-    if "summicron-c" in n or ("summicron" in n and "40" in n): return "40mm Summicron-C"
-
-    # ── Summarit-M 세분화 ──
-    if "summarit" in n and ("-m" in n or "summarit-m" in n):
-        if "35" in n:
-            if "2.4" in n: return "35mm Summarit-M f2.4"
-            return "35mm Summarit-M f2.5"
-        if "50" in n:
-            if "2.4" in n: return "50mm Summarit-M f2.4"
-            return "50mm Summarit-M f2.5"
-        if "75" in n:
-            if "2.4" in n: return "75mm Summarit-M f2.4"
-            return "75mm Summarit-M f2.5"
-        if "90" in n:
-            if "2.4" in n: return "90mm Summarit-M f2.4"
-            return "90mm Summarit-M f2.5"
-
-    # ── Summilux-M 90mm ──
-    if "summilux" in n and "90" in n: return "90mm Summilux ASPH"
-
-    # ── APO-Summicron-M 90mm ──
-    if "apo" in n and "summicron" in n and "90" in n: return "90mm APO-Summicron"
-
-    # ── Elmar-C 90mm (CL용) ──
-    if "elmar-c" in n or ("elmar" in n and "90" in n and "elmarit" not in n and "c " in n): return "90mm Elmar-C"
-
-    # ── Super-Elmar-M 21mm ──
-    if ("super-elmar" in n or "super elmar" in n) and "21" in n: return "21mm Super-Elmar ASPH"
-
-    # ── Elmar-M 24mm ──
-    if "elmar" in n and "24" in n and "elmarit" not in n and "super" not in n: return "24mm Elmar-M"
-
-    # ── Summilux-M 24mm ──
-    if "summilux" in n and "24" in n: return "24mm Summilux ASPH"
-
-    # ── Elmarit-M 135mm 세분화 ──
-    if "elmarit" in n and "135" in n:
-        if "1세대" in n or "1st" in n or "i " in n: return "135mm Elmarit-M v1"
-        if "2세대" in n or "2nd" in n or "ii " in n: return "135mm Elmarit-M v2"
-        if "3세대" in n or "3rd" in n: return "135mm Elmarit-M v3"
-        return "135mm Elmarit-M"
-
-    # ── Hektor 5cm/50mm ──
-    if "hektor" in n and ("5cm" in n or "50" in n or "5.0" in n): return "50mm Hektor"
-
-    # ── Hektor ──
-    if "hektor" in n:
-        if "7.3" in n or "73" in n: return "73mm Hektor"
-        if "13.5" in n or "135" in n: return "135mm Hektor"
-        if "5" in n or "50" in n: return "50mm Hektor"
-        if "2.8" in n or "28" in n: return "28mm Hektor"
-        return "Hektor"
-
-    # ── Elmar 세분화 ──
-    if "elmar" in n and "elmarit" not in n and "tri" not in n and "super" not in n and "tele" not in n and "macro" not in n and "vario" not in n:
-        if "105" in n or "10.5" in n: return "105mm Elmar"
-        if "135" in n or "13.5" in n: return "135mm Elmar"
-        if "90" in n or "9cm" in n: return "90mm Elmar"
-        if "73" in n or "7.3" in n: return "73mm Elmar"
-        if "65" in n: return "65mm Elmar"
-        if "24" in n: return "24mm Elmar"
-        if "18" in n: return "18mm Elmar"
-
-    # ── Summarit-M (현행) ──
-    if "summarit" in n and "-m" in n:
-        if "35" in n: return "35mm Summarit-M"
-        if "50" in n: return "50mm Summarit-M"
-        if "75" in n: return "75mm Summarit-M"
-        if "90" in n: return "90mm Summarit-M"
-        return "Summarit-M"
-
-    # ── APO-Summicron-M 35mm ──
-    if "apo" in n and "summicron" in n and "35" in n: return "35mm APO-Summicron"
-
-    # ── Summilux-M 28mm ──
-    if "summilux" in n and "28" in n: return "28mm Summilux ASPH"
-
-    # ── Summilux-M 24mm ──
-    if "summilux" in n and "24" in n: return "24mm Summilux ASPH"
-
-    # ── Summilux-M 90mm ──
-    if "summilux" in n and "90" in n: return "90mm Summilux ASPH"
-
-    # ── Summicron-M 35mm Classic Line ──
-    if "classic line" in n and "35" in n: return "35mm Summilux Classic Line"
-    if "classic line" in n and "50" in n: return "50mm Summilux Classic Line"
-
-    # ── Noctilux-M 35mm (2025) ──
-    if "noctilux" in n and "35" in n: return "35mm Noctilux f1.2"
-
-    # ── APO-Summicron-M 75mm ──
-    if "apo" in n and "summicron" in n and "75" in n: return "75mm APO-Summicron"
-
-    # ── Summilux-M 21mm ──
-    if "summilux" in n and "21" in n: return "21mm Summilux ASPH"
-
-    # ── Super-Elmar-M 18mm / 21mm ──
-    if "super-elmar" in n or "super elmar" in n:
-        if "18" in n: return "18mm Super-Elmar"
-        if "21" in n: return "21mm Super-Elmar"
-
-    # ── Elmar-M 24mm ──
-    if "elmar" in n and "24" in n and "elmarit" not in n: return "24mm Elmar"
-
-    # ── Summaron-M 28mm (현대 복각) ──
-    if "summaron" in n and "28" in n: return "28mm Summaron"
-
-    # ── Elmarit-C 40mm (CL용) ──
-    if "elmarit" in n and ("40" in n or "elmarit-c" in n): return "40mm Elmarit-C"
-
-    # ── Macro-Elmar-M 90mm ──
-    if "macro" in n and "elmar" in n and "90" in n: return "90mm Macro-Elmar"
-
-    # ── APO-Telyt-M 135mm ──
-    if "apo" in n and "telyt" in n and "135" in n: return "135mm APO-Telyt"
-
-    # ── Tele-Elmar 135mm ──
-    if "tele-elmar" in n or "tele elmar" in n:
-        if "135" in n: return "135mm Tele-Elmar"
-
-    # ── Anastigmat 50mm (초기) ──
-    if "anastigmat" in n: return "50mm Anastigmat"
-
-    # ── Summar 50mm ──
-    if "summar" in n and "summaron" not in n and "summarit" not in n and "summarex" not in n and "summicron" not in n and "summilux" not in n:
-        return "50mm Summar"
-
-    # ── Summitar 50mm ──
-    if "summitar" in n: return "50mm Summitar"
-
-    # ── Xenon 50mm ──
-    if "xenon" in n: return "50mm Xenon"
-
-    # ── WATE (Tri-Elmar 16-18-21) ──
-    if "wate" in n or ("tri-elmar" in n and "16" in n): return "Tri-Elmar 16-18-21 (WATE)"
-
-    # ── MATE (Tri-Elmar 28-35-50) ──
-    if "mate" in n or ("tri-elmar" in n and "28" in n and "35" in n): return "Tri-Elmar 28-35-50 (MATE)"
 
     # ── Summilux 세대별 ──
     if "summilux" in n:
@@ -1634,11 +1424,8 @@ def auto_label(name):
                 if "8 element" in n or "8element" in n or "8매" in n: return "35mm Summicron 8-element"
                 if "1세대" in n or "1st" in n: return "35mm Summicron 8-element"
                 if "2세대" in n or "2nd" in n: return "35mm Summicron v2"
-                if "3세대" in n or "3rd" in n: return "35mm Summicron v3"
-                if "4세대" in n or "4th" in n or "king of bokeh" in n or "보케의 왕" in n: return "35mm Summicron v4"
+                if "4세대" in n or "4th" in n: return "35mm Summicron v4"
                 if "5세대" in n or "5th" in n: return "35mm Summicron v5"
-                if "6세대" in n or "6th" in n: return "35mm Summicron ASPH"
-                if "7 element" in n or "7element" in n or "7매" in n: return "35mm Summicron v4"
                 if "millennium" in n: return "35mm Summicron Millennium"
                 if "your mark" in n: return "35mm Summicron Your Mark"
                 if "eye" in n and "summicron" in n: return "35mm Summicron Eye"
@@ -1648,46 +1435,29 @@ def auto_label(name):
             if "fle" in n: return "35mm Summilux ASPH FLE"
             if "asph" in n: return "35mm Summilux ASPH"
             if "pre-asph" in n: return "35mm Summilux Pre-ASPH"
-            if "복각" in n or "replica" in n:
-                if "steel rim" in n or "스틸림" in n or "steel" in n: return "35mm Summilux Steel Rim 복각"
-                return "35mm Summilux 복각"
-            if "steel rim" in n or "스틸림" in n or "steel" in n: return "35mm Summilux Steel Rim"
+            if "steel rim" in n or "steel" in n: return "35mm Summilux Steel Rim"
             if "titan" in n: return "35mm Summilux Titan"
             if "1세대" in n or "1st" in n: return "35mm Summilux Steel Rim"
             if "2세대" in n or "2nd" in n or "pre" in n: return "35mm Summilux Pre-ASPH"
             if "3세대" in n or "3rd" in n: return "35mm Summilux Pre-ASPH"
             if "4세대" in n or "4th" in n: return "35mm Summilux ASPH"
-            import re as _re_sn35lux
-            _sn35lux = _re_sn35lux.search(r'sn\.(\d+)', n)
-            if _sn35lux:
-                _num = int(_sn35lux.group(1)[:4])
-                if _num <= 1999: return "35mm Summilux Steel Rim"
-                if _num <= 3419: return "35mm Summilux Pre-ASPH"
-                return "35mm Summilux ASPH"
             return "35mm Summilux"
         # 50mm 세분화
         if mm == "50":
             if "asph" in n: return "50mm Summilux ASPH"
             if "black paint" in n or "blackpaint" in n: return "50mm Summilux Black Paint"
             if "titan" in n: return "50mm Summilux Titan"
-            if "pre-asph" in n or "pre asph" in n: return "50mm Summilux Pre-ASPH"
             if "1세대" in n or "1st" in n: return "50mm Summilux 1세대"
             if "2세대" in n or "2nd" in n: return "50mm Summilux 2세대"
-            if "3세대" in n or "3rd" in n: return "50mm Summilux Pre-ASPH"
-            if "4세대" in n or "4th" in n: return "50mm Summilux ASPH"
-            if "classic" in n: return "50mm Summilux Pre-ASPH"
+            if "3세대" in n or "3rd" in n: return "50mm Summilux 3세대"
+            if "4세대" in n or "4th" in n: return "50mm Summilux 4세대"
             if not any(x in n for x in ["asph","black paint","blackpaint","titan",
                                           "세대","1st","2nd","3rd","4th","special",
                                           "edition","limited","한정"]):
                 return "50mm Summilux (올드)"
             return "50mm Summilux"
         # 75mm
-        if mm == "75":
-            if "캐나다" in n or "canada" in n: return "75mm Summilux (캐나다)"
-            if "독일" in n or "germany" in n or "made in germany" in n: return "75mm Summilux (독일)"
-            if "1세대" in n or "1st" in n: return "75mm Summilux (캐나다)"
-            if "2세대" in n or "2nd" in n: return "75mm Summilux (독일)"
-            return "75mm Summilux"
+        if mm == "75": return "75mm Summilux"
         # 90mm
         if mm == "90":
             if "asph" in n: return "90mm Summilux ASPH"
@@ -1715,18 +1485,7 @@ def auto_label(name):
             if "50 jahre" in n or "50주년" in n: return "50mm Summicron 50th"
             if "black paint" in n or "blackpaint" in n: return "50mm Summicron Black Paint"
             if "sl " in n or "/sl" in n or "summicron-sl" in n: return "50mm Summicron SL"
-            if "토륨" in n or "thorium" in n: return "50mm Summicron 토륨"
             if "2세대" in n or "3세대" in n or "4세대" in n: return "50mm Summicron (올드)"
-            # 시리얼 번호로 세대 추론
-            import re as _re_sn50
-            _sn50 = _re_sn50.search(r'sn\.(\d+)', n)
-            if _sn50:
-                _sn50_num = int(_sn50.group(1)[:4])
-                if _sn50_num <= 1600: return "50mm Summicron (침동)"
-                if _sn50_num <= 2200: return "50mm Summicron Rigid"
-                if _sn50_num <= 3000: return "50mm Summicron DR"
-                if _sn50_num <= 3500: return "50mm Summicron (올드)"
-                return "50mm Summicron"
             return "50mm Summicron"
         # 35mm 세분화
         if mm == "35":
@@ -1735,25 +1494,14 @@ def auto_label(name):
                 if "8 element" in n or "8element" in n or "8매" in n: return "35mm Summicron 8-element"
                 if "1세대" in n or "1st" in n: return "35mm Summicron 8-element"
                 if "2세대" in n or "2nd" in n: return "35mm Summicron v2"
-                if "3세대" in n or "3rd" in n: return "35mm Summicron v3"
-                if "4세대" in n or "4th" in n or "king of bokeh" in n or "보케의 왕" in n: return "35mm Summicron v4"
+                if "4세대" in n or "4th" in n: return "35mm Summicron v4"
                 if "5세대" in n or "5th" in n: return "35mm Summicron v5"
-                if "6세대" in n or "6th" in n: return "35mm Summicron ASPH"
-                if "7 element" in n or "7element" in n or "7매" in n: return "35mm Summicron v4"
                 if "millennium" in n: return "35mm Summicron Millennium"
                 if "your mark" in n: return "35mm Summicron Your Mark"
                 if "eye" in n and "summicron" in n: return "35mm Summicron Eye"
             if "asph" in n: return "35mm Summicron ASPH"
-            if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 8-element"
-            if "6매" in n or "6-el" in n: return "35mm Summicron v2"
-            # 시리얼 번호로 세대 추론
-            import re as _re_sn
-            _sn = _re_sn.search(r'sn\.(\d+)', n)
-            if _sn:
-                _sn_num = int(_sn.group(1)[:4])
-                if _sn_num <= 2315: return "35mm Summicron 8-element"
-                if _sn_num <= 2974: return "35mm Summicron v2"
-                if _sn_num <= 3799: return "35mm Summicron v4"
+            if "8매" in n or "8-el" in n or "8el" in n: return "35mm Summicron 1st (8매)"
+            if "6매" in n or "6-el" in n: return "35mm Summicron (6매)"
             return "35mm Summicron"
         # 28mm 세분화
         if mm == "28":
@@ -1768,7 +1516,7 @@ def auto_label(name):
         # 40mm (CL용)
         if mm == "40": return "40mm Summicron-C"
         if mm: return f"{mm}mm Summicron"
-        return "50mm Summicron"  # mm 없으면 50mm로
+        return "Summicron"
 
     # ── Elmarit ──
     if "elmarit" in n and "tri" not in n:
@@ -1782,23 +1530,6 @@ def auto_label(name):
             if "asph" in n: return "24mm Elmarit ASPH"
             return "24mm Elmarit"
         if mm == "28":
-            if "asph" in n: return "28mm Elmarit ASPH"
-            if "1.5세대" in n or "1.5st" in n: return "28mm Elmarit v2"
-            if "1세대" in n or "1st" in n: return "28mm Elmarit v1"
-            if "2세대" in n or "2nd" in n: return "28mm Elmarit v2"
-            if "3세대" in n or "3rd" in n: return "28mm Elmarit v3"
-            if "4세대" in n or "4th" in n: return "28mm Elmarit v4"
-            if "tele" in n: return "28mm Elmarit v1"
-            import re as _re_sn28
-            _sn28 = _re_sn28.search(r'sn\.(\d+)', n)
-            if _sn28:
-                _sn28_num = int(_sn28.group(1)[:4])
-                if _sn28_num <= 2533: return "28mm Elmarit v1"
-                if _sn28_num <= 2978: return "28mm Elmarit v2"
-                if _sn28_num <= 3585: return "28mm Elmarit v3"
-                if _sn28_num <= 3999: return "28mm Elmarit v4"
-            return "28mm Elmarit"
-        if mm == "28":
             if "asph" in n and "elmarit" in n: return "28mm Elmarit ASPH"
             if "asph" in n and "summicron" in n: return "28mm Summicron ASPH"
             if "asph" in n and "summilux" in n: return "28mm Summilux ASPH"
@@ -1810,15 +1541,7 @@ def auto_label(name):
             if "vario" in n: return "28mm Vario-Elmarit"
             return "28mm Elmarit"
         if mm == "90":
-            if "vario" in n: return "24-90mm Vario-Elmarit SL"
             if "asph" in n: return "90mm Elmarit ASPH"
-            if "tele" in n: return "90mm Tele-Elmarit"
-            import re as _re_sn90
-            _sn90 = _re_sn90.search(r'sn\.(\d+)', n)
-            if _sn90:
-                _sn90_num = int(_sn90.group(1)[:4])
-                if _sn90_num <= 2800: return "90mm Elmarit (올드)"
-                if _sn90_num <= 3500: return "90mm Elmarit v2"
             return "90mm Elmarit"
         if mm: return f"{mm}mm Elmarit"
         return "Elmarit"
@@ -1954,38 +1677,7 @@ def auto_label(name):
     lens_kw = ["summicron","summilux","noctilux","elmarit","elmar","summaron","nokton",
                 "angulon","hektor","summar","hologon","telyt","vario","apo"]
     if not any(kw in n for kw in lens_kw):
-        # ── M6 세분화 ──
-        if "m6" in n.replace(" ",""):
-            if "ttl" in n: return "Leica M6 TTL"
-            if "복각" in n or "replica" in n: return "Leica M6 복각"
-            if "big logo" in n or "big-logo" in n: return "Leica M6 (Big Logo)"
-            if "panda" in n: return "Leica M6 Panda"
-            if "0.85" in n: return "Leica M6 0.85"
-            if "0.58" in n: return "Leica M6 0.58"
-            if "60주년" in n or "60th" in n: return "Leica M6 한정판"
-            if "colombo" in n or "ics" in n: return "Leica M6 한정판"
-            if "black paint" in n or "blackpaint" in n: return "Leica M6 Black Paint"
-            return "Leica M6"
-        # ── M3 세분화 ──
-        if "m3" in n.replace(" ","").replace("(","").replace(")","") and ("m3 sn" in n or "leica m3" in n or "m3 " in n or "m3(" in n.replace(" ","") or n.endswith("m3")):
-            if "single" in n or "싱글" in n or " ss" in n: return "Leica M3 SS"
-            if "double" in n or "더블" in n or " ds" in n: return "Leica M3 DS"
-            import re as _re_m3sn
-            _m3sn = _re_m3sn.search(r'sn\.(\d+)', n)
-            if _m3sn:
-                _m3sn_num = int(_m3sn.group(1)[:4])
-                if _m3sn_num <= 8550: return "Leica M3 DS"
-                return "Leica M3 SS"
-            return "Leica M3"
-        # ── MP 세분화 ──
-        if "mp" in n.replace(" ","") and ("leica mp" in n or "mp " in n or " mp" in n) and not any(x in n for x in ["케이스","case","strap","가방","bag","hood","후드","grip"]):
-            if "black paint" in n or "blackpaint" in n: return "Leica MP Black Paint"
-            if "alacarte" in n or "a la carte" in n: return "Leica MP A La Carte"
-            if "hermes" in n: return "Leica MP Hermes"
-            if "mp3" in n: return "Leica MP3"
-            return "Leica MP"
-        # ── 나머지 M 바디 ──
-        for m in ["m11","m10","m9","m8","m7","m4","m2","m-a","m240"]:
+        for m in ["m11","m10","m9","m8","m7","m6","m4","m3","m2","mp","m-a","m240"]:
             if m in n.replace(" ",""): return f"Leica {m.upper()}"
     # ── Q-P 바디 ──
     if not any(kw in n for kw in lens_kw):
@@ -2003,70 +1695,6 @@ def auto_label(name):
     # ── Barnack IID/IIC/IIIa ──
     if not any(kw in n for kw in lens_kw):
         if any(x in n for x in ["ⅱd","ⅱc","ⅲa","iid","iic","iiic","iiia","leica ⅱ","leica ⅲ","illc","illd"]): return "Leica Barnack"
-    # ── Leica M6 세분화 ──
-    if not any(kw in n for kw in lens_kw):
-        if "m6" in n.replace(" ",""):
-            if "ttl" in n: return "Leica M6 TTL"
-            if "복각" in n or "replica" in n: return "Leica M6 복각"
-            if "big logo" in n or "big-logo" in n: return "Leica M6 (Big Logo)"
-            if "colombo" in n or "ics" in n or "limited" in n or "한정" in n: return "Leica M6 한정판"
-            if "black paint" in n or "blackpaint" in n: return "Leica M6 Black Paint"
-            return "Leica M6"
-
-    # ── Leica M3 세분화 ──
-    if not any(kw in n for kw in lens_kw):
-        if re.search(r'm3', n):
-            if "single" in n or "싱글" in n or "ss" in n: return "Leica M3 SS"
-            if "double" in n or "더블" in n or "ds" in n: return "Leica M3 DS"
-            import re as _re_sn_m3
-            _snm3 = _re_sn_m3.search(r'sn\.(\d+)', n)
-            if _snm3:
-                _snm3_num = int(_snm3.group(1)[:4])
-                if _snm3_num <= 8550: return "Leica M3 DS"
-                return "Leica M3 SS"
-            return "Leica M3"
-
-    # ── Leica MP 세분화 ──
-    if not any(kw in n for kw in lens_kw):
-        if re.search(r'mp', n) and "leica" in n:
-            if "black paint" in n or "blackpaint" in n: return "Leica MP Black Paint"
-            if "alacarte" in n or "a la carte" in n: return "Leica MP A La Carte"
-            if "hermes" in n: return "Leica MP Hermes"
-            if "mp3" in n: return "Leica MP3"
-            return "Leica MP"
-
-    # ── Leica M6 세분화 ──
-    if not any(kw in n for kw in lens_kw):
-        if "m6" in n.replace(" ",""):
-            if "ttl" in n: return "Leica M6 TTL"
-            if "복각" in n or "replica" in n: return "Leica M6 복각"
-            if "big logo" in n or "big-logo" in n: return "Leica M6 (Big Logo)"
-            if "colombo" in n or "ics" in n or "limited" in n or "한정" in n: return "Leica M6 한정판"
-            if "black paint" in n or "blackpaint" in n: return "Leica M6 Black Paint"
-            return "Leica M6"
-
-    # ── Leica M3 세분화 ──
-    if not any(kw in n for kw in lens_kw):
-        if re.search(r'm3', n):
-            if "single" in n or "싱글" in n or "ss" in n: return "Leica M3 SS"
-            if "double" in n or "더블" in n or "ds" in n: return "Leica M3 DS"
-            import re as _re_sn_m3
-            _snm3 = _re_sn_m3.search(r'sn\.(\d+)', n)
-            if _snm3:
-                _snm3_num = int(_snm3.group(1)[:4])
-                if _snm3_num <= 8550: return "Leica M3 DS"
-                return "Leica M3 SS"
-            return "Leica M3"
-
-    # ── Leica MP 세분화 ──
-    if not any(kw in n for kw in lens_kw):
-        if re.search(r'mp', n) and "leica" in n:
-            if "black paint" in n or "blackpaint" in n: return "Leica MP Black Paint"
-            if "alacarte" in n or "a la carte" in n: return "Leica MP A La Carte"
-            if "hermes" in n: return "Leica MP Hermes"
-            if "mp3" in n: return "Leica MP3"
-            return "Leica MP"
-
     # ── Leica C 바디 ──
     if not any(kw in n for kw in lens_kw):
         if re.search(r'leica c\s+sn\.', n): return "Leica C"
@@ -2117,8 +1745,7 @@ def auto_label(name):
                    "보이그랜더","linhof","nippon kogaku","nikon","canon ","캐논","minolta",
                    "ms-optics","laowa","light lens lab","7artisan","ttartisan",
                    "fogg ","wotancraft","zeiss zm","zeiss biogon","zeiss 21","zeiss 25","zeiss 28","zeiss 35",
-                   "obo ob","오버베르트","오버베르","wotancraft","fogg ",
-                   "mandler","polar m ","solaron"]
+                   "obo ob","오버베르트","오버베르","wotancraft","fogg "]
     if any(b in n for b in _3rd_brands): return "3rd Party"
 
     # ── 악세사리 브랜드/키워드 ──
@@ -2154,7 +1781,7 @@ def auto_label(name):
             if sb in n: return "Leica S"
 
     # ── 악세사리 추가 ──
-    if any(x in n for x in ["vit(mp)","vit (mp)","leicavit","ev1","trinovid","televid","leica meter","macro-adapter-r","macro adapter r",
+    if any(x in n for x in ["ev1","trinovid","televid","leica meter","macro-adapter-r","macro adapter r",
                               "lupe","self timer","pocket watch","extender","geovid","noctovid",
                               "uva e","uvb e","soft release","release button",
                               "oztno","fokos","apdoo","igemo","elpro","vtroo","xooim",
@@ -2237,8 +1864,7 @@ def auto_label(name):
 
     # ── CM/C 컴팩트 ──
     if not any(kw in n for kw in lens_kw):
-        if "cm zoom" in n or "cm-zoom" in n: return "Leica CM Zoom"
-        if "leica cm" in n: return "Leica CM"
+        if "cm zoom" in n or "leica cm" in n: return "Leica CM"
         if re.search(r'leica c', n) and "40" not in n: return "Leica C"
 
     # ── M1 바디 ──
@@ -2308,36 +1934,6 @@ def auto_label(name):
 
     # ── Visoflex ──
     if "visoflex" in n: return "Visoflex"
-
-    # ── D-LUX 시리즈 ──
-    if "d-lux" in n or "d lux" in n:
-        _dlux = n.replace("d-lux","").replace("d lux","").replace("dlux","").strip()
-        if "109" in _dlux or "typ 109" in _dlux: return "Leica D-LUX Typ 109"
-        for v in ["8","7","6","5","4","3"]:
-            if _dlux.startswith(v) or f" {v}" in _dlux or _dlux.endswith(v): return f"Leica D-LUX {v}"
-        return "Leica D-LUX"
-
-    # ── V-LUX 시리즈 ──
-    if "v-lux" in n or "v lux" in n:
-        _vlux = n.replace("v-lux","").replace("v lux","").replace("vlux","").strip()
-        if "114" in _vlux or "typ 114" in _vlux: return "Leica V-LUX Typ 114"
-        for v in ["5","4","3","2","1"]:
-            if _vlux.startswith(v) or f" {v}" in _vlux or _vlux.endswith(v): return f"Leica V-LUX {v}"
-        return "Leica V-LUX"
-
-    # ── Digilux 시리즈 ──
-    if "digilux" in n:
-        for v in ["3","2","1"]:
-            if v in n: return f"Leica Digilux {v}"
-        return "Leica Digilux"
-
-    # ── Minilux ──
-    if "minilux" in n:
-        if "zoom" in n: return "Leica Minilux Zoom"
-        return "Leica Minilux"
-
-    # ── CM Zoom ──
-    if "cm zoom" in n or "cm-zoom" in n: return "Leica CM Zoom"
 
     # ── Sofort ──
     if "sofort" in n: return "Leica Sofort"

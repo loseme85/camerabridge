@@ -1,0 +1,34 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "elmarit_28",
+  "family_name": "Elmarit-M 28",
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmarit_28_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Elmarit",
+      "model_canonical": "Elmarit-M",
+      "focal_length": "28",
+      "canonical_name": "Leica Elmarit-M 28mm f/2.8 ASPH",
+      "aliases": [
+        "28 elmarit asph",
+        "28mm elmarit asph",
+        "elmarit 28 asph"
+      ],
+      "key_discriminators": [
+        "28",
+        "f2.8",
+        "asph"
+      ],
+      "variant": [
+        "ASPH"
+      ],
+      "status": "core"
+    }
+  ]
+}

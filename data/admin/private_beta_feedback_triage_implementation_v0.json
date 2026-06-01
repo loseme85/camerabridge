@@ -1,0 +1,3955 @@
+{
+  "task_name": "P3-PRIVATE-BETA-FEEDBACK-TRIAGE-IMPLEMENTATION",
+  "artifact_version": "p3_private_beta_feedback_triage_implementation_v0",
+  "schema_version": "private_beta_feedback_triage_implementation.v0",
+  "generated_at": "2026-06-02T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-02T00:00:00Z",
+    "schema_version": "private_beta_feedback_triage_implementation.v0",
+    "artifact_version": "p3_private_beta_feedback_triage_implementation_v0",
+    "feedback_triage_implementation_only": true,
+    "local_runtime_only": true,
+    "actual_feedback_storage_enabled": false,
+    "external_feedback_provider_enabled": false,
+    "actual_deployment_enabled": false,
+    "production_launch_enabled": false,
+    "production_launch_go": false,
+    "raw_user_message_storage_allowed": false,
+    "raw_email_storage_allowed": false,
+    "raw_listing_url_storage_allowed": false,
+    "provider_payload_storage_allowed": false,
+    "webhook_body_storage_allowed": false,
+    "PII_storage_allowed": false,
+    "safe_category_only_allowed": true,
+    "redacted_preview_allowed": true,
+    "backlog_candidate_generation_enabled": true,
+    "direct_taxonomy_or_classifier_mutation_enabled": false,
+    "CTA_send_enabled": false,
+    "feedback_can_trigger_rollback_candidate": true,
+    "progress_previous_pct": 99.999,
+    "progress_after_pct": 99.9995,
+    "progress_delta_pct": 0.0005
+  },
+  "contract_evidence": {
+    "row_type": "feedback_triage_contract_evidence",
+    "decision_status": "feedback_triage_contract_ready",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_feedback_storage_enabled": false,
+    "feedback_category_count": 20,
+    "safety_gate_count": 13,
+    "severity_level_count": 4,
+    "triage_rule_count": 20,
+    "action_route_count": 15,
+    "backlog_mapping_count": 13,
+    "sample_scenario_count": 18,
+    "raw_storage_allowed": false,
+    "notes": "Loaded from feedback triage contract artifact. This is local triage evidence only."
+  },
+  "sanitization_results": [
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_001",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_001",
+        "submitted_at": "2026-06-02T10:00:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-summilux-m-35mm-f14-asph-aa",
+        "feedback_category": "wrong_model_match",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "exact_page",
+          "wrong_model_match"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a1",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_002",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_002",
+        "submitted_at": "2026-06-02T10:02:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "missing_source",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "missing_source",
+          "source_request"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a2",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_003",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_003",
+        "submitted_at": "2026-06-02T10:04:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "source_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a3",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_004",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_004",
+        "submitted_at": "2026-06-02T10:06:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "price_confidence_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_confidence",
+          "trust"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a4",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_005",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_005",
+        "submitted_at": "2026-06-02T10:08:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "alert_cta_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "cta",
+          "expectation_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a5",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_006",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_006",
+        "submitted_at": "2026-06-02T10:10:00Z",
+        "route_state": "broad_query_refinement_route",
+        "model_slug_or_safe_label": "summicron",
+        "feedback_category": "broad_query_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "broad_query",
+          "market_page_confusion"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a6",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_007",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_007",
+        "submitted_at": "2026-06-02T10:12:00Z",
+        "route_state": "unsafe_boundary_review_route",
+        "model_slug_or_safe_label": "boundary-review",
+        "feedback_category": "unsafe_boundary_exposed",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_cta_visible",
+          "unsafe_boundary_exposed"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a7",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_008",
+      "status": "accepted_with_redaction",
+      "safe_feedback": {
+        "feedback_id": "fb_008",
+        "submitted_at": "2026-06-02T10:14:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "raw_field_exposed",
+          "raw_listing_url_visible"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a8",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "redaction_events": [
+        "url_redacted"
+      ],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": true,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": true
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_009",
+      "status": "accepted_with_redaction",
+      "safe_feedback": {
+        "feedback_id": "fb_009",
+        "submitted_at": "2026-06-02T10:16:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_email",
+        "safe_context_tags": [
+          "email_pasted",
+          "other_redacted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a9",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [
+        "email_redacted"
+      ],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": true,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_010",
+      "status": "accepted_with_redaction",
+      "safe_feedback": {
+        "feedback_id": "fb_010",
+        "submitted_at": "2026-06-02T10:18:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "other_redacted",
+          "url_pasted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a10",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "redaction_events": [
+        "url_redacted"
+      ],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": true,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_011",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_011",
+        "submitted_at": "2026-06-02T10:20:00Z",
+        "route_state": "stale_data_safe_route",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "stale_data_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "stale_warning"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a11",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_012",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_012",
+        "submitted_at": "2026-06-02T10:22:00Z",
+        "route_state": "archive_only_public_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "sold_history_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "active_asking_confusing",
+          "sold_history_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a12",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_013",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_013",
+        "submitted_at": "2026-06-02T10:24:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "duplicate_or_relist_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_pattern",
+          "duplicate_relist_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a13",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_014",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_014",
+        "submitted_at": "2026-06-02T10:26:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "mobile_layout_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "mobile_layout_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": true
+        },
+        "beta_session_hash": "beta_a14",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_015",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_015",
+        "submitted_at": "2026-06-02T10:28:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "trust_disclaimer_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "trust_disclaimer_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a15",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_016",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_016",
+        "submitted_at": "2026-06-02T10:30:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a16",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_017",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_017",
+        "submitted_at": "2026-06-02T10:32:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "recurring_pattern",
+          "source_gap_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a17",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_018",
+      "status": "rejected_fail_close",
+      "safe_feedback": {
+        "feedback_id": "fb_018",
+        "submitted_at": "2026-06-02T10:34:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::provider_payload_concern",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "provider_payload_concern"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a18",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [
+        "provider_payload_rejected"
+      ],
+      "rejection_reason": "provider_payload_rejected_fail_close",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": true,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    },
+    {
+      "row_type": "feedback_sanitization_result",
+      "feedback_id": "fb_019",
+      "status": "accepted",
+      "safe_feedback": {
+        "feedback_id": "fb_019",
+        "submitted_at": "2026-06-02T10:36:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a19",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "redaction_events": [],
+      "rejection_reason": "",
+      "safety_flags": {
+        "contains_email": false,
+        "contains_url": false,
+        "provider_payload_present": false,
+        "webhook_body_present": false,
+        "access_token_present": false,
+        "db_string_present": false,
+        "pii_present": false,
+        "system_exposure_claim_present": false
+      },
+      "no_raw_storage_confirmed": true,
+      "notes": "Sanitization stores safe metadata only and never preserves raw user payload."
+    }
+  ],
+  "classification_results": [
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_001",
+      "classified_category": "wrong_model_match",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_001",
+        "submitted_at": "2026-06-02T10:00:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-summilux-m-35mm-f14-asph-aa",
+        "feedback_category": "wrong_model_match",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "exact_page",
+          "wrong_model_match"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a1",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_002",
+      "classified_category": "missing_source",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_002",
+        "submitted_at": "2026-06-02T10:02:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "missing_source",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "missing_source",
+          "source_request"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a2",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_003",
+      "classified_category": "source_gap_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_003",
+        "submitted_at": "2026-06-02T10:04:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "source_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a3",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_004",
+      "classified_category": "price_confidence_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_004",
+        "submitted_at": "2026-06-02T10:06:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "price_confidence_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_confidence",
+          "trust"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a4",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_005",
+      "classified_category": "alert_cta_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_005",
+        "submitted_at": "2026-06-02T10:08:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "alert_cta_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "cta",
+          "expectation_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a5",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_006",
+      "classified_category": "broad_query_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_006",
+        "submitted_at": "2026-06-02T10:10:00Z",
+        "route_state": "broad_query_refinement_route",
+        "model_slug_or_safe_label": "summicron",
+        "feedback_category": "broad_query_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "broad_query",
+          "market_page_confusion"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a6",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_007",
+      "classified_category": "unsafe_boundary_exposed",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_007",
+        "submitted_at": "2026-06-02T10:12:00Z",
+        "route_state": "unsafe_boundary_review_route",
+        "model_slug_or_safe_label": "boundary-review",
+        "feedback_category": "unsafe_boundary_exposed",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_cta_visible",
+          "unsafe_boundary_exposed"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a7",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_008",
+      "classified_category": "privacy_or_raw_data_concern",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_008",
+        "submitted_at": "2026-06-02T10:14:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "raw_field_exposed",
+          "raw_listing_url_visible"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a8",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_009",
+      "classified_category": "other_redacted",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_009",
+        "submitted_at": "2026-06-02T10:16:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_email",
+        "safe_context_tags": [
+          "email_pasted",
+          "other_redacted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a9",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_010",
+      "classified_category": "other_redacted",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_010",
+        "submitted_at": "2026-06-02T10:18:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "other_redacted",
+          "url_pasted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a10",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_011",
+      "classified_category": "stale_data_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_011",
+        "submitted_at": "2026-06-02T10:20:00Z",
+        "route_state": "stale_data_safe_route",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "stale_data_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "stale_warning"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a11",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_012",
+      "classified_category": "sold_history_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_012",
+        "submitted_at": "2026-06-02T10:22:00Z",
+        "route_state": "archive_only_public_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "sold_history_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "active_asking_confusing",
+          "sold_history_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a12",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_013",
+      "classified_category": "duplicate_or_relist_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_013",
+        "submitted_at": "2026-06-02T10:24:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "duplicate_or_relist_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_pattern",
+          "duplicate_relist_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a13",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_014",
+      "classified_category": "mobile_layout_issue",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_014",
+        "submitted_at": "2026-06-02T10:26:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "mobile_layout_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "mobile_layout_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": true
+        },
+        "beta_session_hash": "beta_a14",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_015",
+      "classified_category": "trust_disclaimer_issue",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_015",
+        "submitted_at": "2026-06-02T10:28:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "trust_disclaimer_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "trust_disclaimer_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a15",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_016",
+      "classified_category": "page_copy_unclear",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_016",
+        "submitted_at": "2026-06-02T10:30:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a16",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_017",
+      "classified_category": "source_gap_confusing",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_017",
+        "submitted_at": "2026-06-02T10:32:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "recurring_pattern",
+          "source_gap_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a17",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_018",
+      "classified_category": "privacy_or_raw_data_concern",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_018",
+        "submitted_at": "2026-06-02T10:34:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::provider_payload_concern",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "provider_payload_concern"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a18",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    },
+    {
+      "row_type": "feedback_category_classification_result",
+      "feedback_id": "fb_019",
+      "classified_category": "page_copy_unclear",
+      "classification_source": "safety_flags_or_safe_tags",
+      "safe_feedback": {
+        "feedback_id": "fb_019",
+        "submitted_at": "2026-06-02T10:36:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a19",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Category classification uses safe fields only and never consults raw text after sanitization."
+    }
+  ],
+  "severity_results": [
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_001",
+      "classified_category": "wrong_model_match",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_001",
+        "submitted_at": "2026-06-02T10:00:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-summilux-m-35mm-f14-asph-aa",
+        "feedback_category": "wrong_model_match",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "exact_page",
+          "wrong_model_match"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a1",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_002",
+      "classified_category": "missing_source",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_002",
+        "submitted_at": "2026-06-02T10:02:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "missing_source",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "missing_source",
+          "source_request"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a2",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_003",
+      "classified_category": "source_gap_confusing",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_003",
+        "submitted_at": "2026-06-02T10:04:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "source_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a3",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_004",
+      "classified_category": "price_confidence_confusing",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_004",
+        "submitted_at": "2026-06-02T10:06:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "price_confidence_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_confidence",
+          "trust"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a4",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_005",
+      "classified_category": "alert_cta_confusing",
+      "severity": "P3",
+      "safe_feedback": {
+        "feedback_id": "fb_005",
+        "submitted_at": "2026-06-02T10:08:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "alert_cta_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "cta",
+          "expectation_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a5",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_006",
+      "classified_category": "broad_query_confusing",
+      "severity": "P1",
+      "safe_feedback": {
+        "feedback_id": "fb_006",
+        "submitted_at": "2026-06-02T10:10:00Z",
+        "route_state": "broad_query_refinement_route",
+        "model_slug_or_safe_label": "summicron",
+        "feedback_category": "broad_query_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "broad_query",
+          "market_page_confusion"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a6",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_007",
+      "classified_category": "unsafe_boundary_exposed",
+      "severity": "P1",
+      "safe_feedback": {
+        "feedback_id": "fb_007",
+        "submitted_at": "2026-06-02T10:12:00Z",
+        "route_state": "unsafe_boundary_review_route",
+        "model_slug_or_safe_label": "boundary-review",
+        "feedback_category": "unsafe_boundary_exposed",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_cta_visible",
+          "unsafe_boundary_exposed"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a7",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_008",
+      "classified_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "safe_feedback": {
+        "feedback_id": "fb_008",
+        "submitted_at": "2026-06-02T10:14:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "raw_field_exposed",
+          "raw_listing_url_visible"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a8",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_009",
+      "classified_category": "other_redacted",
+      "severity": "P3",
+      "safe_feedback": {
+        "feedback_id": "fb_009",
+        "submitted_at": "2026-06-02T10:16:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_email",
+        "safe_context_tags": [
+          "email_pasted",
+          "other_redacted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a9",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_010",
+      "classified_category": "other_redacted",
+      "severity": "P3",
+      "safe_feedback": {
+        "feedback_id": "fb_010",
+        "submitted_at": "2026-06-02T10:18:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "other_redacted",
+          "url_pasted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a10",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_011",
+      "classified_category": "stale_data_confusing",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_011",
+        "submitted_at": "2026-06-02T10:20:00Z",
+        "route_state": "stale_data_safe_route",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "stale_data_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "stale_warning"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a11",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_012",
+      "classified_category": "sold_history_confusing",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_012",
+        "submitted_at": "2026-06-02T10:22:00Z",
+        "route_state": "archive_only_public_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "sold_history_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "active_asking_confusing",
+          "sold_history_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a12",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_013",
+      "classified_category": "duplicate_or_relist_confusing",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_013",
+        "submitted_at": "2026-06-02T10:24:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "duplicate_or_relist_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_pattern",
+          "duplicate_relist_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a13",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_014",
+      "classified_category": "mobile_layout_issue",
+      "severity": "P3",
+      "safe_feedback": {
+        "feedback_id": "fb_014",
+        "submitted_at": "2026-06-02T10:26:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "mobile_layout_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "mobile_layout_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": true
+        },
+        "beta_session_hash": "beta_a14",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_015",
+      "classified_category": "trust_disclaimer_issue",
+      "severity": "P3",
+      "safe_feedback": {
+        "feedback_id": "fb_015",
+        "submitted_at": "2026-06-02T10:28:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "trust_disclaimer_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "trust_disclaimer_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a15",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_016",
+      "classified_category": "page_copy_unclear",
+      "severity": "P3",
+      "safe_feedback": {
+        "feedback_id": "fb_016",
+        "submitted_at": "2026-06-02T10:30:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a16",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_017",
+      "classified_category": "source_gap_confusing",
+      "severity": "P2",
+      "safe_feedback": {
+        "feedback_id": "fb_017",
+        "submitted_at": "2026-06-02T10:32:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "recurring_pattern",
+          "source_gap_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a17",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_018",
+      "classified_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "safe_feedback": {
+        "feedback_id": "fb_018",
+        "submitted_at": "2026-06-02T10:34:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::provider_payload_concern",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "provider_payload_concern"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a18",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    },
+    {
+      "row_type": "feedback_severity_assignment_result",
+      "feedback_id": "fb_019",
+      "classified_category": "page_copy_unclear",
+      "severity": "P3",
+      "safe_feedback": {
+        "feedback_id": "fb_019",
+        "submitted_at": "2026-06-02T10:36:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a19",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Severity assignment can override category default when stronger safety flags are present."
+    }
+  ],
+  "action_results": [
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_001",
+      "classified_category": "wrong_model_match",
+      "severity": "P2",
+      "action_route": "taxonomy_review_backlog",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_001",
+        "submitted_at": "2026-06-02T10:00:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-summilux-m-35mm-f14-asph-aa",
+        "feedback_category": "wrong_model_match",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "exact_page",
+          "wrong_model_match"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a1",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_002",
+      "classified_category": "missing_source",
+      "severity": "P2",
+      "action_route": "source_coverage_backlog",
+      "owner_role": "data_safety_reviewer",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "source_coverage_gap",
+      "safe_feedback": {
+        "feedback_id": "fb_002",
+        "submitted_at": "2026-06-02T10:02:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "missing_source",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "missing_source",
+          "source_request"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a2",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_003",
+      "classified_category": "source_gap_confusing",
+      "severity": "P2",
+      "action_route": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "source_coverage_gap",
+      "safe_feedback": {
+        "feedback_id": "fb_003",
+        "submitted_at": "2026-06-02T10:04:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "source_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a3",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_004",
+      "classified_category": "price_confidence_confusing",
+      "severity": "P2",
+      "action_route": "price_guide_backlog",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "price_confidence_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_004",
+        "submitted_at": "2026-06-02T10:06:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "price_confidence_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_confidence",
+          "trust"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a4",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_005",
+      "classified_category": "alert_cta_confusing",
+      "severity": "P3",
+      "action_route": "rollback_required",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "CTA_verification_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_005",
+        "submitted_at": "2026-06-02T10:08:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "alert_cta_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "cta",
+          "expectation_gap"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a5",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_006",
+      "classified_category": "broad_query_confusing",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_006",
+        "submitted_at": "2026-06-02T10:10:00Z",
+        "route_state": "broad_query_refinement_route",
+        "model_slug_or_safe_label": "summicron",
+        "feedback_category": "broad_query_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "broad_query",
+          "market_page_confusion"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a6",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_007",
+      "classified_category": "unsafe_boundary_exposed",
+      "severity": "P1",
+      "action_route": "rollback_required",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_007",
+        "submitted_at": "2026-06-02T10:12:00Z",
+        "route_state": "unsafe_boundary_review_route",
+        "model_slug_or_safe_label": "boundary-review",
+        "feedback_category": "unsafe_boundary_exposed",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "price_cta_visible",
+          "unsafe_boundary_exposed"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a7",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_008",
+      "classified_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "privacy_safety_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_008",
+        "submitted_at": "2026-06-02T10:14:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "raw_field_exposed",
+          "raw_listing_url_visible"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a8",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_009",
+      "classified_category": "other_redacted",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_009",
+        "submitted_at": "2026-06-02T10:16:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_email",
+        "safe_context_tags": [
+          "email_pasted",
+          "other_redacted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a9",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_010",
+      "classified_category": "other_redacted",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_010",
+        "submitted_at": "2026-06-02T10:18:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "other_redacted",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::contains_url",
+        "safe_context_tags": [
+          "other_redacted",
+          "url_pasted"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a10",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": true
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_011",
+      "classified_category": "stale_data_confusing",
+      "severity": "P2",
+      "action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_011",
+        "submitted_at": "2026-06-02T10:20:00Z",
+        "route_state": "stale_data_safe_route",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "stale_data_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::copy_confusion",
+        "safe_context_tags": [
+          "copy_confusion",
+          "stale_warning"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a11",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_012",
+      "classified_category": "sold_history_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "sold_archive_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_012",
+        "submitted_at": "2026-06-02T10:22:00Z",
+        "route_state": "archive_only_public_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "sold_history_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "active_asking_confusing",
+          "sold_history_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a12",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_013",
+      "classified_category": "duplicate_or_relist_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "duplicate_relist_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_013",
+        "submitted_at": "2026-06-02T10:24:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+        "feedback_category": "duplicate_or_relist_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_pattern",
+          "duplicate_relist_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a13",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_014",
+      "classified_category": "mobile_layout_issue",
+      "severity": "P3",
+      "action_route": "frontend_ui_backlog",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "frontend_mobile_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_014",
+        "submitted_at": "2026-06-02T10:26:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "mobile_layout_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "mobile_layout_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": true
+        },
+        "beta_session_hash": "beta_a14",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_015",
+      "classified_category": "trust_disclaimer_issue",
+      "severity": "P3",
+      "action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "trust_disclaimer_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_015",
+        "submitted_at": "2026-06-02T10:28:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "trust_disclaimer_issue",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "trust_disclaimer_issue"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a15",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_016",
+      "classified_category": "page_copy_unclear",
+      "severity": "P3",
+      "action_route": "ignore_duplicate",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_016",
+        "submitted_at": "2026-06-02T10:30:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a16",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_017",
+      "classified_category": "source_gap_confusing",
+      "severity": "P2",
+      "action_route": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "source_coverage_gap",
+      "safe_feedback": {
+        "feedback_id": "fb_017",
+        "submitted_at": "2026-06-02T10:32:00Z",
+        "route_state": "source_gap_public_page",
+        "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+        "feedback_category": "source_gap_confusing",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "recurring_pattern",
+          "source_gap_confusing"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a17",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_018",
+      "classified_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "privacy_safety_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_018",
+        "submitted_at": "2026-06-02T10:34:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "privacy_or_raw_data_concern",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present::provider_payload_concern",
+        "safe_context_tags": [
+          "privacy_or_raw_data_concern",
+          "provider_payload_concern"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a18",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    },
+    {
+      "row_type": "feedback_action_routing_result",
+      "feedback_id": "fb_019",
+      "classified_category": "page_copy_unclear",
+      "severity": "P3",
+      "action_route": "ignore_duplicate",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "safe_feedback": {
+        "feedback_id": "fb_019",
+        "submitted_at": "2026-06-02T10:36:00Z",
+        "route_state": "exact_model_public_market_page",
+        "model_slug_or_safe_label": "general",
+        "feedback_category": "page_copy_unclear",
+        "severity_claimed_by_user": "",
+        "redacted_message_preview": "message_present",
+        "safe_context_tags": [
+          "duplicate_hint",
+          "page_copy_unclear"
+        ],
+        "client_context_safe_flags": {
+          "mobile": false
+        },
+        "beta_session_hash": "beta_a19",
+        "triage_status": "pending",
+        "owner_role": "",
+        "url_presence": false
+      },
+      "notes": "Action routing decides candidate operational path only and never performs runtime mutation."
+    }
+  ],
+  "queue_items": [
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_001",
+      "submitted_at": "2026-06-02T10:00:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "leica-summilux-m-35mm-f14-asph-aa",
+      "feedback_category": "wrong_model_match",
+      "severity": "P2",
+      "action_route": "taxonomy_review_backlog",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "exact_page",
+        "wrong_model_match"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"wrong_model_match\",\"model_slug_or_safe_label\":\"leica-summilux-m-35mm-f14-asph-aa\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_002",
+      "submitted_at": "2026-06-02T10:02:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+      "feedback_category": "missing_source",
+      "severity": "P2",
+      "action_route": "source_coverage_backlog",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "missing_source",
+        "source_request"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "data_safety_reviewer",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "source_coverage_gap",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"missing_source\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_003",
+      "submitted_at": "2026-06-02T10:04:00Z",
+      "route_state": "source_gap_public_page",
+      "model_slug_or_safe_label": "sigma-14-24mm-dg-dn-art-l-mount",
+      "feedback_category": "source_gap_confusing",
+      "severity": "P2",
+      "action_route": "hold_for_fix",
+      "redacted_message_preview": "message_present::copy_confusion",
+      "safe_context_tags": [
+        "copy_confusion",
+        "source_gap"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "source_coverage_gap",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"source_gap_confusing\",\"model_slug_or_safe_label\":\"sigma-14-24mm-dg-dn-art-l-mount\",\"route_state\":\"source_gap_public_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 1,
+      "aggregated_feedback_count": 2
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_004",
+      "submitted_at": "2026-06-02T10:06:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+      "feedback_category": "price_confidence_confusing",
+      "severity": "P2",
+      "action_route": "price_guide_backlog",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "price_confidence",
+        "trust"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "price_confidence_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"price_confidence_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_005",
+      "submitted_at": "2026-06-02T10:08:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+      "feedback_category": "alert_cta_confusing",
+      "severity": "P3",
+      "action_route": "rollback_required",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "cta",
+        "expectation_gap"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "CTA_verification_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"alert_cta_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_006",
+      "submitted_at": "2026-06-02T10:10:00Z",
+      "route_state": "broad_query_refinement_route",
+      "model_slug_or_safe_label": "summicron",
+      "feedback_category": "broad_query_confusing",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "broad_query",
+        "market_page_confusion"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"broad_query_confusing\",\"model_slug_or_safe_label\":\"summicron\",\"route_state\":\"broad_query_refinement_route\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_007",
+      "submitted_at": "2026-06-02T10:12:00Z",
+      "route_state": "unsafe_boundary_review_route",
+      "model_slug_or_safe_label": "boundary-review",
+      "feedback_category": "unsafe_boundary_exposed",
+      "severity": "P1",
+      "action_route": "rollback_required",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "price_cta_visible",
+        "unsafe_boundary_exposed"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"unsafe_boundary_exposed\",\"model_slug_or_safe_label\":\"boundary-review\",\"route_state\":\"unsafe_boundary_review_route\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_008",
+      "submitted_at": "2026-06-02T10:14:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+      "feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "redacted_message_preview": "message_present::contains_url",
+      "safe_context_tags": [
+        "privacy_or_raw_data_concern",
+        "raw_field_exposed",
+        "raw_listing_url_visible"
+      ],
+      "redaction_events": [
+        "url_redacted"
+      ],
+      "triage_status": "triaged",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "privacy_safety_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"privacy_or_raw_data_concern\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_009",
+      "submitted_at": "2026-06-02T10:16:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "general",
+      "feedback_category": "other_redacted",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "redacted_message_preview": "message_present::contains_email",
+      "safe_context_tags": [
+        "email_pasted",
+        "other_redacted"
+      ],
+      "redaction_events": [
+        "email_redacted"
+      ],
+      "triage_status": "triaged",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"other_redacted\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 1,
+      "aggregated_feedback_count": 2
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_011",
+      "submitted_at": "2026-06-02T10:20:00Z",
+      "route_state": "stale_data_safe_route",
+      "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+      "feedback_category": "stale_data_confusing",
+      "severity": "P2",
+      "action_route": "copy_fix_backlog",
+      "redacted_message_preview": "message_present::copy_confusion",
+      "safe_context_tags": [
+        "copy_confusion",
+        "stale_warning"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"stale_data_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"stale_data_safe_route\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_012",
+      "submitted_at": "2026-06-02T10:22:00Z",
+      "route_state": "archive_only_public_page",
+      "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+      "feedback_category": "sold_history_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "active_asking_confusing",
+        "sold_history_confusing"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "sold_archive_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"sold_history_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"archive_only_public_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_013",
+      "submitted_at": "2026-06-02T10:24:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "leica-noctilux-m-50mm-f095-asph",
+      "feedback_category": "duplicate_or_relist_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "duplicate_pattern",
+        "duplicate_relist_confusing"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "duplicate_relist_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"duplicate_or_relist_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_014",
+      "submitted_at": "2026-06-02T10:26:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "general",
+      "feedback_category": "mobile_layout_issue",
+      "severity": "P3",
+      "action_route": "frontend_ui_backlog",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "mobile_layout_issue"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "frontend_mobile_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"mobile_layout_issue\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_015",
+      "submitted_at": "2026-06-02T10:28:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "general",
+      "feedback_category": "trust_disclaimer_issue",
+      "severity": "P3",
+      "action_route": "copy_fix_backlog",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "trust_disclaimer_issue"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "trust_disclaimer_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"trust_disclaimer_issue\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_016",
+      "submitted_at": "2026-06-02T10:30:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "general",
+      "feedback_category": "page_copy_unclear",
+      "severity": "P3",
+      "action_route": "ignore_duplicate",
+      "redacted_message_preview": "message_present",
+      "safe_context_tags": [
+        "duplicate_hint",
+        "page_copy_unclear"
+      ],
+      "redaction_events": [],
+      "triage_status": "triaged",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"page_copy_unclear\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 1,
+      "aggregated_feedback_count": 2
+    },
+    {
+      "row_type": "feedback_triage_queue_item",
+      "feedback_id": "fb_018",
+      "submitted_at": "2026-06-02T10:34:00Z",
+      "route_state": "exact_model_public_market_page",
+      "model_slug_or_safe_label": "general",
+      "feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "redacted_message_preview": "message_present::provider_payload_concern",
+      "safe_context_tags": [
+        "privacy_or_raw_data_concern",
+        "provider_payload_concern"
+      ],
+      "redaction_events": [
+        "provider_payload_rejected"
+      ],
+      "triage_status": "triaged",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "backlog_candidate_type": "privacy_safety_issue",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"privacy_or_raw_data_concern\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "created_at": "2026-06-02T00:00:00Z",
+      "duplicate_count": 0,
+      "aggregated_feedback_count": 1
+    }
+  ],
+  "backlog_candidates": [
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_0b9407049fe42f2e",
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "source_feedback_category": "wrong_model_match",
+      "severity": "P2",
+      "action_route": "taxonomy_review_backlog",
+      "safe_model_label": "leica-summilux-m-35mm-f14-asph-aa",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "exact_page",
+        "wrong_model_match"
+      ],
+      "count": 1,
+      "owner_role": "QA_operator",
+      "suggested_next_round": "P3-TAXONOMY-BOUNDARY-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_2e0a04641f79c08e",
+      "backlog_candidate_type": "source_coverage_gap",
+      "source_feedback_category": "missing_source",
+      "severity": "P2",
+      "action_route": "source_coverage_backlog",
+      "safe_model_label": "leica-noctilux-m-50mm-f095-asph",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "missing_source",
+        "source_request"
+      ],
+      "count": 1,
+      "owner_role": "data_safety_reviewer",
+      "suggested_next_round": "P3-SOURCE-COVERAGE-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_aded3530bb371040",
+      "backlog_candidate_type": "source_coverage_gap",
+      "source_feedback_category": "source_gap_confusing",
+      "severity": "P2",
+      "action_route": "hold_for_fix",
+      "safe_model_label": "sigma-14-24mm-dg-dn-art-l-mount",
+      "safe_route_state": "source_gap_public_page",
+      "safe_context_tags": [
+        "copy_confusion",
+        "source_gap"
+      ],
+      "count": 2,
+      "owner_role": "data_safety_reviewer",
+      "suggested_next_round": "P3-SOURCE-COVERAGE-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_cb5ccb29a6effa41",
+      "backlog_candidate_type": "price_confidence_issue",
+      "source_feedback_category": "price_confidence_confusing",
+      "severity": "P2",
+      "action_route": "price_guide_backlog",
+      "safe_model_label": "leica-noctilux-m-50mm-f095-asph",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "price_confidence",
+        "trust"
+      ],
+      "count": 1,
+      "owner_role": "beta_owner",
+      "suggested_next_round": "P3-PRICE-CONFIDENCE-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_4b47277102ac5e8e",
+      "backlog_candidate_type": "CTA_verification_issue",
+      "source_feedback_category": "alert_cta_confusing",
+      "severity": "P3",
+      "action_route": "rollback_required",
+      "safe_model_label": "leica-noctilux-m-50mm-f095-asph",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "cta",
+        "expectation_gap"
+      ],
+      "count": 1,
+      "owner_role": "QA_operator",
+      "suggested_next_round": "P3-CTA-EMAIL-VERIFICATION-RUNTIME-CHECK",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_af6a948b1185ccca",
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "source_feedback_category": "broad_query_confusing",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "safe_model_label": "summicron",
+      "safe_route_state": "broad_query_refinement_route",
+      "safe_context_tags": [
+        "broad_query",
+        "market_page_confusion"
+      ],
+      "count": 1,
+      "owner_role": "QA_operator",
+      "suggested_next_round": "P3-TAXONOMY-BOUNDARY-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_6bb8625daf1e2c03",
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "source_feedback_category": "unsafe_boundary_exposed",
+      "severity": "P1",
+      "action_route": "rollback_required",
+      "safe_model_label": "boundary-review",
+      "safe_route_state": "unsafe_boundary_review_route",
+      "safe_context_tags": [
+        "price_cta_visible",
+        "unsafe_boundary_exposed"
+      ],
+      "count": 1,
+      "owner_role": "QA_operator",
+      "suggested_next_round": "P3-TAXONOMY-BOUNDARY-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_047df7af44159a6c",
+      "backlog_candidate_type": "privacy_safety_issue",
+      "source_feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "safe_model_label": "leica-noctilux-m-50mm-f095-asph",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "privacy_or_raw_data_concern",
+        "raw_field_exposed",
+        "raw_listing_url_visible"
+      ],
+      "count": 1,
+      "owner_role": "data_safety_reviewer",
+      "suggested_next_round": "P3-PRIVACY-SAFETY-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_cd8c4ae132527c4f",
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "source_feedback_category": "stale_data_confusing",
+      "severity": "P2",
+      "action_route": "copy_fix_backlog",
+      "safe_model_label": "leica-noctilux-m-50mm-f095-asph",
+      "safe_route_state": "stale_data_safe_route",
+      "safe_context_tags": [
+        "copy_confusion",
+        "stale_warning"
+      ],
+      "count": 1,
+      "owner_role": "beta_owner",
+      "suggested_next_round": "P3-MARKET-PAGE-COPY-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_0ecaf84dfcdc46c2",
+      "backlog_candidate_type": "sold_archive_issue",
+      "source_feedback_category": "sold_history_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "safe_model_label": "leica-noctilux-m-50mm-f095-asph",
+      "safe_route_state": "archive_only_public_page",
+      "safe_context_tags": [
+        "active_asking_confusing",
+        "sold_history_confusing"
+      ],
+      "count": 1,
+      "owner_role": "beta_owner",
+      "suggested_next_round": "P3-SOLD-ARCHIVE-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_89e2d8046d5b99c3",
+      "backlog_candidate_type": "duplicate_relist_issue",
+      "source_feedback_category": "duplicate_or_relist_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "safe_model_label": "leica-noctilux-m-50mm-f095-asph",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "duplicate_pattern",
+        "duplicate_relist_confusing"
+      ],
+      "count": 1,
+      "owner_role": "QA_operator",
+      "suggested_next_round": "P3-DUPLICATE-RELIST-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_67091612aba491df",
+      "backlog_candidate_type": "frontend_mobile_issue",
+      "source_feedback_category": "mobile_layout_issue",
+      "severity": "P3",
+      "action_route": "frontend_ui_backlog",
+      "safe_model_label": "general",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "mobile_layout_issue"
+      ],
+      "count": 1,
+      "owner_role": "QA_operator",
+      "suggested_next_round": "P3-FRONTEND-MOBILE-ISSUE-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_c0696c73bdf58fda",
+      "backlog_candidate_type": "trust_disclaimer_issue",
+      "source_feedback_category": "trust_disclaimer_issue",
+      "severity": "P3",
+      "action_route": "copy_fix_backlog",
+      "safe_model_label": "general",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "trust_disclaimer_issue"
+      ],
+      "count": 1,
+      "owner_role": "beta_owner",
+      "suggested_next_round": "P3-TRUST-DISCLAIMER-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_5f1e42375e74c8f1",
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "source_feedback_category": "page_copy_unclear",
+      "severity": "P3",
+      "action_route": "ignore_duplicate",
+      "safe_model_label": "general",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "duplicate_hint",
+        "page_copy_unclear"
+      ],
+      "count": 2,
+      "owner_role": "beta_owner",
+      "suggested_next_round": "P3-MARKET-PAGE-COPY-REVIEW",
+      "no_raw_fields_confirmed": true
+    },
+    {
+      "row_type": "feedback_backlog_candidate",
+      "backlog_candidate_id": "backlog_ad3219b2e1a998e2",
+      "backlog_candidate_type": "privacy_safety_issue",
+      "source_feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "safe_model_label": "general",
+      "safe_route_state": "exact_model_public_market_page",
+      "safe_context_tags": [
+        "privacy_or_raw_data_concern",
+        "provider_payload_concern"
+      ],
+      "count": 1,
+      "owner_role": "data_safety_reviewer",
+      "suggested_next_round": "P3-PRIVACY-SAFETY-REVIEW",
+      "no_raw_fields_confirmed": true
+    }
+  ],
+  "duplicate_rows": [
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"wrong_model_match\",\"model_slug_or_safe_label\":\"leica-summilux-m-35mm-f14-asph-aa\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "wrong_model_match",
+      "severity": "P2",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"missing_source\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "missing_source",
+      "severity": "P2",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"source_gap_confusing\",\"model_slug_or_safe_label\":\"sigma-14-24mm-dg-dn-art-l-mount\",\"route_state\":\"source_gap_public_page\"}",
+      "feedback_category": "source_gap_confusing",
+      "severity": "P2",
+      "duplicate_count": 1,
+      "aggregate_count": 2,
+      "status": "duplicate_aggregated",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"price_confidence_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "price_confidence_confusing",
+      "severity": "P2",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"alert_cta_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "alert_cta_confusing",
+      "severity": "P3",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"broad_query_confusing\",\"model_slug_or_safe_label\":\"summicron\",\"route_state\":\"broad_query_refinement_route\"}",
+      "feedback_category": "broad_query_confusing",
+      "severity": "P1",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"unsafe_boundary_exposed\",\"model_slug_or_safe_label\":\"boundary-review\",\"route_state\":\"unsafe_boundary_review_route\"}",
+      "feedback_category": "unsafe_boundary_exposed",
+      "severity": "P1",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"privacy_or_raw_data_concern\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"other_redacted\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "other_redacted",
+      "severity": "P3",
+      "duplicate_count": 1,
+      "aggregate_count": 2,
+      "status": "duplicate_aggregated",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"stale_data_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"stale_data_safe_route\"}",
+      "feedback_category": "stale_data_confusing",
+      "severity": "P2",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"sold_history_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"archive_only_public_page\"}",
+      "feedback_category": "sold_history_confusing",
+      "severity": "P2",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"duplicate_or_relist_confusing\",\"model_slug_or_safe_label\":\"leica-noctilux-m-50mm-f095-asph\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "duplicate_or_relist_confusing",
+      "severity": "P2",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"mobile_layout_issue\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "mobile_layout_issue",
+      "severity": "P3",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"trust_disclaimer_issue\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "trust_disclaimer_issue",
+      "severity": "P3",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"page_copy_unclear\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "page_copy_unclear",
+      "severity": "P3",
+      "duplicate_count": 1,
+      "aggregate_count": 2,
+      "status": "duplicate_aggregated",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    },
+    {
+      "row_type": "feedback_duplicate_result",
+      "duplicate_key": "{\"beta_window_bucket\":\"2026-06-02\",\"feedback_category\":\"privacy_or_raw_data_concern\",\"model_slug_or_safe_label\":\"general\",\"route_state\":\"exact_model_public_market_page\"}",
+      "feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "duplicate_count": 0,
+      "aggregate_count": 1,
+      "status": "unique",
+      "notes": "Duplicate aggregation uses safe keys only and never compares raw text."
+    }
+  ],
+  "metrics": {
+    "row_type": "feedback_metric_result",
+    "feedback_count_by_category": {
+      "wrong_model_match": 1,
+      "missing_source": 1,
+      "source_gap_confusing": 1,
+      "price_confidence_confusing": 1,
+      "alert_cta_confusing": 1,
+      "broad_query_confusing": 1,
+      "unsafe_boundary_exposed": 1,
+      "privacy_or_raw_data_concern": 2,
+      "other_redacted": 1,
+      "stale_data_confusing": 1,
+      "sold_history_confusing": 1,
+      "duplicate_or_relist_confusing": 1,
+      "mobile_layout_issue": 1,
+      "trust_disclaimer_issue": 1,
+      "page_copy_unclear": 1
+    },
+    "feedback_count_by_severity": {
+      "P2": 7,
+      "P3": 5,
+      "P1": 2,
+      "P0": 2
+    },
+    "P0_count": 2,
+    "P1_count": 2,
+    "false_positive_count": 0,
+    "false_negative_count": 0,
+    "source_gap_confusion_count": 1,
+    "price_confidence_confusion_count": 1,
+    "CTA_confusion_count": 1,
+    "stale_warning_confusion_count": 1,
+    "duplicate_relist_confusion_count": 1,
+    "copy_issue_count": 3,
+    "mobile_issue_count": 1,
+    "feedback_duplicate_count": 3,
+    "feedback_ignored_count": 3,
+    "feedback_to_backlog_count": 8,
+    "feedback_to_rollback_count": 4,
+    "notes": "Metrics are count-only and do not store any raw user fields."
+  },
+  "escalation_results": [
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_001",
+      "escalation_status": "backlog_candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "accuracy_or_trust_backlog",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_002",
+      "escalation_status": "backlog_candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "accuracy_or_trust_backlog",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_003",
+      "escalation_status": "backlog_candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "accuracy_or_trust_backlog",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_004",
+      "escalation_status": "backlog_candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "accuracy_or_trust_backlog",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_005",
+      "escalation_status": "monitor_or_backlog",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_or_monitor",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "low_risk_clarity_issue",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_006",
+      "escalation_status": "hold_or_route_hide",
+      "owner_roles": [
+        "beta_owner",
+        "QA_operator",
+        "SEO_safety_reviewer",
+        "data_safety_reviewer"
+      ],
+      "required_action": "hold_for_fix",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": false,
+      "safe_reason_code": "unsafe_or_misleading_route_behavior",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_007",
+      "escalation_status": "hold_or_route_hide",
+      "owner_roles": [
+        "beta_owner",
+        "QA_operator",
+        "SEO_safety_reviewer",
+        "data_safety_reviewer"
+      ],
+      "required_action": "route_hide_required",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "safe_reason_code": "unsafe_or_misleading_route_behavior",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_008",
+      "escalation_status": "rollback_required",
+      "owner_roles": [
+        "beta_owner",
+        "data_safety_reviewer",
+        "rollback_owner"
+      ],
+      "required_action": "rollback_required",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "safe_reason_code": "privacy_or_secret_exposure",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_009",
+      "escalation_status": "monitor_or_backlog",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_or_monitor",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "low_risk_clarity_issue",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_010",
+      "escalation_status": "monitor_or_backlog",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_or_monitor",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "low_risk_clarity_issue",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_011",
+      "escalation_status": "backlog_candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "accuracy_or_trust_backlog",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_012",
+      "escalation_status": "backlog_candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "accuracy_or_trust_backlog",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_013",
+      "escalation_status": "backlog_candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "accuracy_or_trust_backlog",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_014",
+      "escalation_status": "monitor_or_backlog",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_or_monitor",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "low_risk_clarity_issue",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_015",
+      "escalation_status": "monitor_or_backlog",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_or_monitor",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "low_risk_clarity_issue",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_016",
+      "escalation_status": "monitor_or_backlog",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "monitor_only",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "low_risk_clarity_issue",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_017",
+      "escalation_status": "priority_raise",
+      "owner_roles": [
+        "beta_owner",
+        "SEO_safety_reviewer"
+      ],
+      "required_action": "copy_or_price_backlog_priority_raise",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "repeated_pattern",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_018",
+      "escalation_status": "rollback_required",
+      "owner_roles": [
+        "beta_owner",
+        "data_safety_reviewer",
+        "rollback_owner"
+      ],
+      "required_action": "rollback_required",
+      "blocks_beta_expansion": true,
+      "rollback_relevant": true,
+      "safe_reason_code": "privacy_or_secret_exposure",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    },
+    {
+      "row_type": "feedback_escalation_result",
+      "feedback_id": "fb_019",
+      "escalation_status": "monitor_or_backlog",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "monitor_only",
+      "blocks_beta_expansion": false,
+      "rollback_relevant": false,
+      "safe_reason_code": "low_risk_clarity_issue",
+      "notes": "Escalation result is a local triage candidate only and does not trigger production automation."
+    }
+  ],
+  "batch_rows": [
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_001",
+      "feedback_category": "wrong_model_match",
+      "severity": "P2",
+      "action_route": "taxonomy_review_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "backlog_candidate",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_002",
+      "feedback_category": "missing_source",
+      "severity": "P2",
+      "action_route": "source_coverage_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "backlog_candidate",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_003",
+      "feedback_category": "source_gap_confusing",
+      "severity": "P2",
+      "action_route": "hold_for_fix",
+      "duplicate_count": 1,
+      "backlog_candidate_created": true,
+      "escalation_status": "backlog_candidate",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_004",
+      "feedback_category": "price_confidence_confusing",
+      "severity": "P2",
+      "action_route": "price_guide_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "backlog_candidate",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_005",
+      "feedback_category": "alert_cta_confusing",
+      "severity": "P3",
+      "action_route": "rollback_required",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "monitor_or_backlog",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_006",
+      "feedback_category": "broad_query_confusing",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "hold_or_route_hide",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_007",
+      "feedback_category": "unsafe_boundary_exposed",
+      "severity": "P1",
+      "action_route": "rollback_required",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "hold_or_route_hide",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_008",
+      "feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "rollback_required",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_009",
+      "feedback_category": "other_redacted",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "duplicate_count": 1,
+      "backlog_candidate_created": false,
+      "escalation_status": "monitor_or_backlog",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_010",
+      "feedback_category": "other_redacted",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "duplicate_count": 1,
+      "backlog_candidate_created": false,
+      "escalation_status": "monitor_or_backlog",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_011",
+      "feedback_category": "stale_data_confusing",
+      "severity": "P2",
+      "action_route": "copy_fix_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "backlog_candidate",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_012",
+      "feedback_category": "sold_history_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "backlog_candidate",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_013",
+      "feedback_category": "duplicate_or_relist_confusing",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "backlog_candidate",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_014",
+      "feedback_category": "mobile_layout_issue",
+      "severity": "P3",
+      "action_route": "frontend_ui_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "monitor_or_backlog",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_015",
+      "feedback_category": "trust_disclaimer_issue",
+      "severity": "P3",
+      "action_route": "copy_fix_backlog",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "monitor_or_backlog",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_016",
+      "feedback_category": "page_copy_unclear",
+      "severity": "P3",
+      "action_route": "ignore_duplicate",
+      "duplicate_count": 1,
+      "backlog_candidate_created": true,
+      "escalation_status": "monitor_or_backlog",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_017",
+      "feedback_category": "source_gap_confusing",
+      "severity": "P2",
+      "action_route": "hold_for_fix",
+      "duplicate_count": 1,
+      "backlog_candidate_created": true,
+      "escalation_status": "priority_raise",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_018",
+      "feedback_category": "privacy_or_raw_data_concern",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "duplicate_count": 0,
+      "backlog_candidate_created": true,
+      "escalation_status": "rollback_required",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    },
+    {
+      "row_type": "feedback_sample_batch_result",
+      "feedback_id": "fb_019",
+      "feedback_category": "page_copy_unclear",
+      "severity": "P3",
+      "action_route": "ignore_duplicate",
+      "duplicate_count": 1,
+      "backlog_candidate_created": true,
+      "escalation_status": "monitor_or_backlog",
+      "no_raw_fields_confirmed": true,
+      "notes": "Batch result reflects safe triage outcome only."
+    }
+  ],
+  "summary": {
+    "row_type": "feedback_triage_implementation_summary",
+    "sanitization_pass_count": 19,
+    "category_classification_count": 19,
+    "severity_assignment_count": 19,
+    "action_routing_count": 19,
+    "triage_queue_item_count": 19,
+    "deduped_queue_item_count": 16,
+    "backlog_candidate_count": 15,
+    "duplicate_group_count": 16,
+    "metrics_count": 15,
+    "escalation_count": 19,
+    "batch_result_count": 19,
+    "raw_storage_detected": false,
+    "production_launch_go": false,
+    "actual_feedback_storage_enabled": false,
+    "notes": "Implementation summary reflects local safe triage runtime only."
+  },
+  "decision": {
+    "row_type": "feedback_triage_implementation_decision",
+    "decision_status": "feedback_triage_implementation_local_pass",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_feedback_storage_enabled": false,
+    "notes": "Local pass means local triage runtime is safe. It does not mean production feedback system ready."
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy_forbids_deployment_and_storage",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "contract_evidence_loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "sanitization_safe",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "category_classification_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "severity_assignment_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "action_routing_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "queue_items_safe",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "backlog_candidates_safe",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "duplicate_policy_applied",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "metrics_count_only",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "escalation_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "sample_batch_processed",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "raw_storage_blocked",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "final_decision_honest",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "progress_report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "progress_basis": "P3 Market Intelligence / Model Market Page private beta feedback implementation readiness",
+    "previous_progress_pct": 99.999,
+    "expected_after_completion_pct": 99.9995,
+    "delta_pct": 0.0005
+  },
+  "modified_files": [
+    "private_beta_feedback_triage.py",
+    "scripts/run_p3_private_beta_feedback_triage_implementation.py",
+    "tests/test_private_beta_feedback_triage_implementation.py",
+    "data/admin/p3_private_beta_feedback_triage_implementation_v0.md",
+    "data/admin/p3_private_beta_feedback_triage_implementation_v0.jsonl",
+    "data/admin/private_beta_feedback_triage_implementation_v0.json"
+  ]
+}

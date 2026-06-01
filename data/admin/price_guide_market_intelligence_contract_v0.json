@@ -1,0 +1,295 @@
+{
+  "task_name": "P3-PRICE-GUIDE-MARKET-INTELLIGENCE-CONTRACT",
+  "modified_files": [
+    "price_guide_market_intelligence_contract.py",
+    "scripts/run_p3_price_guide_market_intelligence_contract.py",
+    "tests/test_price_guide_market_intelligence_contract.py",
+    "data/admin/p3_price_guide_market_intelligence_contract_v0.md",
+    "data/admin/p3_price_guide_market_intelligence_contract_v0.jsonl",
+    "data/admin/price_guide_market_intelligence_contract_v0.json"
+  ],
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "price_guide_market_intelligence_contract.v0",
+    "contract_version": "p3_price_guide_market_intelligence_contract_v0",
+    "contract_only": true,
+    "calculator_enabled": false,
+    "db_enabled": false,
+    "api_enabled": false,
+    "frontend_enabled": false,
+    "archive_builder_enabled": false,
+    "live_crawl_enabled": false,
+    "active_asking_price_median_allowed": false,
+    "sold_confirmed_required_for_median": true,
+    "sold_likely_allowed_as_weak_supplement": true,
+    "expired_removed_allowed_for_median": false,
+    "removed_unknown_allowed_for_median": false,
+    "source_gap_allowed_for_median": false,
+    "sample_threshold_required": true,
+    "confidence_score_required": true,
+    "source_mix_disclosure_required": true,
+    "condition_overlay_required": true,
+    "variant_overlay_required": true,
+    "no_fake_fill_required": true,
+    "adjacent_family_substitution_allowed": false,
+    "investment_advice_language_allowed": false
+  },
+  "benchmark_mapping": [
+    {
+      "benchmark": "WatchCharts",
+      "applied_to": [
+        "price history",
+        "trend confidence",
+        "Pro / CSV / API placeholder"
+      ],
+      "notes": "Paid data and trend framing direction only."
+    },
+    {
+      "benchmark": "CLASSIC.COM",
+      "applied_to": [
+        "model market summary",
+        "market trend",
+        "value estimate framing"
+      ],
+      "notes": "Model-level market summary inspiration."
+    },
+    {
+      "benchmark": "Reverb / PriceCharting / WorthPoint",
+      "applied_to": [
+        "sold-based price guide",
+        "archive dependency"
+      ],
+      "notes": "Confirmed sold history as price guide substrate."
+    },
+    {
+      "benchmark": "HiFi Shark",
+      "applied_to": [
+        "active vs expired history separation",
+        "multi-source archive context"
+      ],
+      "notes": "Archive coverage and reference separation."
+    },
+    {
+      "benchmark": "Keepa",
+      "applied_to": [
+        "price / availability history UX",
+        "trend caution"
+      ],
+      "notes": "History UX inspiration only."
+    },
+    {
+      "benchmark": "StockX",
+      "applied_to": [
+        "target price watch",
+        "buyer intent placeholder"
+      ],
+      "notes": "Buyer-intent signal only, not exchange mechanics."
+    }
+  ],
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "sold_confirmed_enough_for_median",
+      "expected_status": "price_guide_high_confidence",
+      "actual_status": "price_guide_high_confidence",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "sold_confirmed_too_few",
+      "expected_status": "insufficient_data_or_limited_price_guide",
+      "actual_status": "insufficient_data_or_limited_price_guide",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "sold_likely_only",
+      "expected_status": "no_median_weak_support_only",
+      "actual_status": "no_median_weak_support_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "active_only_market",
+      "expected_status": "active_reference_only",
+      "actual_status": "active_reference_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "expired_removed_only",
+      "expected_status": "archive_depth_only_no_median",
+      "actual_status": "archive_depth_only_no_median",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "source_gap_only",
+      "expected_status": "source_gap_no_price_guide",
+      "actual_status": "source_gap_no_price_guide",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "unsafe_boundary_conflict",
+      "expected_status": "unsafe_boundary_conflict",
+      "actual_status": "unsafe_boundary_conflict",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "35_lux_aa_vs_regular",
+      "expected_status": "variant_boundary_prevents_merge",
+      "actual_status": "variant_boundary_prevents_merge",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "noctilux_095_vs_f1_0",
+      "expected_status": "adjacent_family_excluded",
+      "actual_status": "adjacent_family_excluded",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "active_asking_below_sold_median",
+      "expected_status": "target_price_distance_possible_only",
+      "actual_status": "target_price_distance_possible_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "single_source_dominance",
+      "expected_status": "confidence_not_high",
+      "actual_status": "confidence_not_high",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "stale_sold_data",
+      "expected_status": "stale_data_warning",
+      "actual_status": "stale_data_warning",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "duplicate_merged_records",
+      "expected_status": "no_double_count",
+      "actual_status": "no_double_count",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "relisted_item",
+      "expected_status": "lineage_aware_count",
+      "actual_status": "lineage_aware_count",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "condition_overlay_missing",
+      "expected_status": "price_spread_caution",
+      "actual_status": "price_spread_caution",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "boxed_special_edition_overlay",
+      "expected_status": "overlay_warning_no_separate_median_without_samples",
+      "actual_status": "overlay_warning_no_separate_median_without_samples",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "broad_query",
+      "expected_status": "broad_query_refinement_required",
+      "actual_status": "broad_query_refinement_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "unseeded_model",
+      "expected_status": "model_not_supported_or_review_required",
+      "actual_status": "model_not_supported_or_review_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "paid_csv_api_placeholder",
+      "expected_status": "future_placeholder_only",
+      "actual_status": "future_placeholder_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "model_market_page_integration",
+      "expected_status": "price_guide_summary_display_state_returned",
+      "actual_status": "price_guide_summary_display_state_returned",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "price guide contract scenario validation"
+    }
+  ],
+  "raw_url_present": false,
+  "raw_html_present": false,
+  "raw_email_present": false,
+  "raw_provider_payload_present": false
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_tele_elmarit_90",
+  "family_name": "Tele-Elmarit 90mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_tele_elmarit_90_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Tele-Elmarit",
+      "model_canonical": "Tele-Elmarit",
+      "focal_length": "90",
+      "canonical_name": "Leica Tele-Elmarit 90mm f/2.8",
+      "aliases": [
+        "tele elmarit 90",
+        "tele-elmarit 90",
+        "90 tele elmarit",
+        "90mm f2.8 tele-elmarit",
+        "m 90/2.8 tele elmarit"
+      ],
+      "key_discriminators": [
+        "90",
+        "f2.8",
+        "tele-elmarit",
+        "tele elmarit",
+        "m 90/2.8"
+      ],
+      "variant": [
+        "f/2.8",
+        "Tele-Elmarit"
+      ],
+      "price_group": "tele_elmarit_90_f2_8",
+      "notes": "Round-1 conservative core seed for the broad Tele-Elmarit 90 line. Tele-Elmarit-M 90 remains a future hold candidate, while fat/thin collector language and finish/country/coding stay below seed split level.",
+      "status": "core"
+    },
+    {
+      "id": "seed_tele_elmarit_m_90_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Tele-Elmarit-M",
+      "model_canonical": "Tele-Elmarit-M",
+      "focal_length": "90",
+      "canonical_name": "Leica Tele-Elmarit-M 90mm f/2.8",
+      "aliases": [
+        "tele-elmarit-m 90",
+        "tele elmarit m 90",
+        "90 tele-elmarit-m",
+        "90mm f2.8 tele-elmarit-m"
+      ],
+      "key_discriminators": [
+        "90",
+        "f2.8",
+        "tele-elmarit-m",
+        "tele elmarit m"
+      ],
+      "variant": [
+        "f/2.8",
+        "Tele-Elmarit-M"
+      ],
+      "price_group": "tele_elmarit_m_90_f2_8",
+      "notes": "Round-2 explicit hold seed for the later Tele-Elmarit-M subtype. Fat/thin collector naming and country/coding/finish remain below row level.",
+      "status": "hold"
+    }
+  ]
+}

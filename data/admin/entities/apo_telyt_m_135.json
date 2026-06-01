@@ -1,0 +1,66 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_apo_telyt_m_135",
+  "family_name": "APO-Telyt-M 135mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_apo_telyt_m_135_f3_4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "APO-Telyt-M",
+      "model_canonical": "APO-Telyt-M",
+      "focal_length": "135",
+      "canonical_name": "Leica APO-Telyt-M 135mm f/3.4",
+      "aliases": [
+        "apo-telyt 135",
+        "apo telyt 135",
+        "apo-telyt-m 135",
+        "135 apo telyt",
+        "135mm f3.4 apo telyt",
+        "135mm f/3.4 apo telyt",
+        "135mm f3.4 apo-telyt-m",
+        "135mm f/3.4 apo-telyt-m",
+        "m 135/3.4 apo telyt"
+      ],
+      "key_discriminators": [
+        "apo-telyt-m",
+        "apo-telyt",
+        "135",
+        "f3.4",
+        "m 135/3.4"
+      ],
+      "variant": [
+        "APO-Telyt-M",
+        "f/3.4"
+      ],
+      "price_group": "apo_telyt_m_135_f3_4",
+      "notes": "Round-1 conservative core seed for the modern Leica M APO-Telyt 135 line. Broad apo 135 shorthand remains intentionally outside the initial alias set.",
+      "status": "core"
+    }
+  ]
+}

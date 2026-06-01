@@ -1,0 +1,76 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_apo_macro_elmarit_r_100",
+  "family_name": "APO-Macro-Elmarit-R 100mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "R"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "rom",
+    "cam_version",
+    "filter_thread",
+    "version_marker",
+    "elpro_included",
+    "macro_adapter_included",
+    "tripod_collar_included"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_apo_macro_elmarit_r_100_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "R",
+      "system": "R System",
+      "label": "R Lens",
+      "model_raw": "APO-Macro-Elmarit-R",
+      "model_canonical": "APO-Macro-Elmarit-R",
+      "focal_length": "100",
+      "canonical_name": "Leica APO-Macro-Elmarit-R 100mm f/2.8",
+      "aliases": [
+        "apo-macro-elmarit-r 100",
+        "apo macro elmarit r 100",
+        "apo macro elmarit-r 100",
+        "100 apo macro elmarit-r",
+        "100mm f2.8 apo macro elmarit-r",
+        "100mm f/2.8 apo macro elmarit-r",
+        "r 100/2.8 apo macro elmarit",
+        "leica r 100mm f2.8 apo macro",
+        "leica r 100mm f/2.8 apo macro",
+        "100mm f2.8 apo-macro-elmarit-r"
+      ],
+      "key_discriminators": [
+        "apo-macro-elmarit-r",
+        "apo macro elmarit",
+        "100",
+        "100mm",
+        "f2.8",
+        "100mm f2.8",
+        "r 100/2.8",
+        "leica r"
+      ],
+      "variant": [
+        "f/2.8",
+        "APO-Macro-Elmarit-R"
+      ],
+      "price_group": "apo_macro_elmarit_r_100_f2_8",
+      "notes": "Round-1 conservative core seed for the Leica R-side APO Macro 100 family. ROM, E60, ELPRO 1:2-1:1, macro adapter, and tripod collar remain below row level, and broad macro elmarit 100 or apo macro 100 shorthand is intentionally excluded to avoid weak Leica R anchoring and adjacent macro contamination.",
+      "status": "core"
+    }
+  ]
+}

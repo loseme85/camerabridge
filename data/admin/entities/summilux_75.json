@@ -1,0 +1,90 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summilux_75",
+  "family_name": "Summilux 75mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summilux_m_75_f1_4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux-M",
+      "model_canonical": "Summilux-M",
+      "focal_length": "75",
+      "canonical_name": "Leica Summilux-M 75mm f/1.4",
+      "aliases": [
+        "summilux 75",
+        "75 summilux",
+        "summilux-m 75",
+        "75mm f1.4 summilux",
+        "m 75/1.4 summilux",
+        "75/1.4 summilux"
+      ],
+      "key_discriminators": [
+        "75",
+        "f1.4",
+        "summilux-m",
+        "m 75/1.4",
+        "e60"
+      ],
+      "variant": [
+        "f/1.4",
+        "Summilux-M"
+      ],
+      "price_group": "summilux_m_75_f1_4",
+      "notes": "Round-1 conservative core seed for the broad Summilux 75 line. Built-in-hood / 2nd-generation Canada wording, Germany marking, 6bit, titanium, ELC/ELW, and anniversary variants remain below row-split level.",
+      "status": "core"
+    },
+    {
+      "id": "seed_summilux_m_75_f1_4_late_bih",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux-M",
+      "model_canonical": "Summilux-M",
+      "focal_length": "75",
+      "canonical_name": "Leica Summilux-M 75mm f/1.4 later built-in-hood generation",
+      "aliases": [
+        "summilux 75 2세대 캐나다",
+        "m75/1.4 summilux 2세대 캐나다",
+        "m 75/1.4 summilux 2세대",
+        "75 summilux 2세대"
+      ],
+      "key_discriminators": [
+        "75",
+        "f1.4",
+        "summilux-m",
+        "2세대",
+        "캐나다",
+        "built-in hood generation"
+      ],
+      "variant": [
+        "f/1.4",
+        "later built-in-hood generation"
+      ],
+      "price_group": "summilux_m_75_f1_4_late_bih",
+      "notes": "Round-2 explicit hold seed for the later built-in-hood progression, using dealer shorthand 2세대 캐나다 as an operational alias only.",
+      "status": "hold"
+    }
+  ]
+}

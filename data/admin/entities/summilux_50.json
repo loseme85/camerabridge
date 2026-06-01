@@ -1,0 +1,245 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "summilux_50",
+  "family_name": "Summilux-M 50",
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summilux_50_pre_asph_e43",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux-M 50mm f/1.4 pre-ASPH E43 external hood",
+      "aliases": [
+        "50 lux e43",
+        "50 lux 2nd",
+        "50 lux 2세대",
+        "50 lux external hood",
+        "50 lux 외장후드",
+        "50 summilux e43",
+        "50 summilux external hood"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.4",
+        "pre-asph",
+        "e43",
+        "external hood",
+        "1m minimum focus"
+      ],
+      "variant": [
+        "pre-ASPH",
+        "E43",
+        "external hood"
+      ],
+      "price_group": "summilux50_preasph_e43",
+      "notes": "pre-ASPH E43 version with external hood and 1m minimum focus.",
+      "status": "core"
+    },
+    {
+      "id": "seed_summilux_50_1st_m",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux 50mm f/1.4 1st M-bayonet",
+      "aliases": [
+        "50 lux 1st m",
+        "50 summilux 1st m",
+        "first summilux m"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.4",
+        "1st generation",
+        "m-bayonet"
+      ],
+      "variant": [
+        "1st generation",
+        "M-bayonet"
+      ],
+      "price_group": "summilux50_1st_m",
+      "notes": "First Summilux 50 M-bayonet version.",
+      "status": "core"
+    },
+    {
+      "id": "seed_summilux_50_1st_ltm",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "LTM",
+      "system": "Thread Mount",
+      "label": "LTM Lens",
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux 50mm f/1.4 1st LTM",
+      "aliases": [
+        "50 lux 1st ltm",
+        "50 lux m39",
+        "50 summilux screw",
+        "first summilux screw"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.4",
+        "1st generation",
+        "ltm",
+        "m39",
+        "screw mount"
+      ],
+      "variant": [
+        "1st generation",
+        "LTM"
+      ],
+      "price_group": "summilux50_1st_ltm",
+      "notes": "First Summilux 50 screw-mount / LTM version.",
+      "status": "core"
+    },
+    {
+      "id": "seed_summilux_50_pre_asph_e46",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux-M 50mm f/1.4 pre-ASPH E46 built-in hood",
+      "aliases": [
+        "50 lux e46",
+        "50 lux 3rd",
+        "50 lux 3세대",
+        "50 lux 4th",
+        "50 lux 4세대",
+        "50 lux built in hood",
+        "50 lux 내장후드"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.4",
+        "pre-asph",
+        "e46",
+        "built-in hood",
+        "0.7m minimum focus"
+      ],
+      "variant": [
+        "pre-ASPH",
+        "E46",
+        "built-in hood"
+      ],
+      "price_group": "summilux50_preasph_e46",
+      "notes": "pre-ASPH E46 version with built-in hood and 0.7m minimum focus.",
+      "status": "core"
+    },
+    {
+      "id": "seed_summilux_50_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux-M 50mm f/1.4 ASPH old generation",
+      "aliases": [
+        "50 lux asph",
+        "50 lux asph old",
+        "50 summilux asph old",
+        "50 lux old asph",
+        "50 lux 구형 asph",
+        "summilux 50 asph",
+        "50 summilux asph"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.4",
+        "asph",
+        "old asph"
+      ],
+      "variant": [
+        "ASPH",
+        "old generation"
+      ],
+      "price_group": "summilux50_asph_old",
+      "notes": "Earlier ASPH generation before the 2023 close-focus redesign.",
+      "status": "core"
+    },
+    {
+      "id": "seed_summilux_50_asph_new",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux-M 50mm f/1.4 ASPH new generation",
+      "aliases": [
+        "50 lux asph new",
+        "50 summilux asph new",
+        "50 lux new asph",
+        "50 lux 신형 asph",
+        "50 lux asph ii",
+        "50 summilux asph ii"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.4",
+        "asph",
+        "new asph",
+        "45cm",
+        "2023"
+      ],
+      "variant": [
+        "ASPH",
+        "new generation"
+      ],
+      "price_group": "summilux50_asph_new",
+      "notes": "2023 close-focus redesign generation. Search entity is explicit; price-table promotion remains on hold.",
+      "status": "hold"
+    },
+    {
+      "id": "seed_summilux_50_classic",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux-M 50mm f/1.4 Classic reinterpretation",
+      "aliases": [
+        "50 lux classic",
+        "50 lux reissue",
+        "50 lux reinterpretation",
+        "50 lux classic line"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.4",
+        "current classic reinterpretation",
+        "modern production",
+        "not asph"
+      ],
+      "variant": [
+        "Classic reinterpretation"
+      ],
+      "price_group": "summilux50_classic",
+      "notes": "Modern Classic reinterpretation line, separate from vintage pre-ASPH versions.",
+      "status": "core"
+    }
+  ]
+}

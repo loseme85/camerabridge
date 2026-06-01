@@ -1,0 +1,72 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_super_vario_elmar_sl_16_35",
+  "family_name": "Super-Vario-Elmar-SL 16-35mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "L"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread",
+    "version_marker",
+    "asph"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_super_vario_elmar_sl_16_35_f3_5_4_5_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "L",
+      "system": "SL System",
+      "label": "SL Lens",
+      "model_raw": "Super-Vario-Elmar-SL",
+      "model_canonical": "Super-Vario-Elmar-SL",
+      "focal_length": "16-35",
+      "canonical_name": "Leica Super-Vario-Elmar-SL 16-35mm f/3.5-4.5 ASPH",
+      "aliases": [
+        "super-vario-elmar-sl 16-35",
+        "super vario elmar sl 16-35",
+        "16-35 super-vario-elmar-sl",
+        "16-35mm f3.5-4.5 super-vario-elmar-sl",
+        "16-35mm f/3.5-4.5 super-vario-elmar-sl",
+        "16-35mm asph super-vario-elmar-sl",
+        "leica sl 16-35mm f3.5-4.5",
+        "leica sl 16-35mm f/3.5-4.5",
+        "leica sl 16-35 asph",
+        "super vario elmar sl 16 35"
+      ],
+      "key_discriminators": [
+        "super-vario-elmar-sl",
+        "16-35",
+        "16-35mm",
+        "f3.5-4.5",
+        "16-35mm f3.5-4.5",
+        "leica sl",
+        "asph"
+      ],
+      "variant": [
+        "f/3.5-4.5",
+        "ASPH",
+        "Super-Vario-Elmar-SL"
+      ],
+      "price_group": "super_vario_elmar_sl_16_35_f3_5_4_5_asph",
+      "notes": "Round-1 conservative core seed for the Leica SL-side 16-35 ultra-wide zoom family. Canonical naming intentionally follows the literature-supported Super-Vario-Elmar-SL form, not the incorrect Super-Vario-Elmarit-SL label. ASPH, E82 or filter-thread markers, and hood or case bundle wording remain below row level, and bare 16-35 or other broad wide-zoom shorthand is intentionally excluded to avoid SL body-kit rows, neighboring SL zooms, Leica R 21-35, M Tri-Elmar families, or third-party wide zoom contamination.",
+      "status": "core"
+    }
+  ]
+}

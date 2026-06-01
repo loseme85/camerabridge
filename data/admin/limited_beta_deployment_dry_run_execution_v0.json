@@ -1,0 +1,1495 @@
+{
+  "task_name": "P3-LIMITED-BETA-DEPLOYMENT-DRY-RUN-EXECUTION",
+  "artifact_version": "p3_limited_beta_deployment_dry_run_execution_v0",
+  "schema_version": "limited_beta_deployment_dry_run_execution.v0",
+  "generated_at": "2026-06-02T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-02T00:00:00Z",
+    "schema_version": "limited_beta_deployment_dry_run_execution.v0",
+    "artifact_version": "p3_limited_beta_deployment_dry_run_execution_v0",
+    "deployment_dry_run_execution_only": true,
+    "actual_deployment_enabled": false,
+    "production_launch_enabled": false,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "read_only_runtime_required": true,
+    "db_mutation_enabled": false,
+    "actual_cta_send_enabled": false,
+    "CTA_send_enabled": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "raw_listing_links_enabled": false,
+    "user_specific_public_response_enabled": false,
+    "smart_deal_enabled": false,
+    "csv_export_enabled": false,
+    "dealer_visibility_enabled": false,
+    "no_fake_fill_required": true,
+    "source_gap_confirmed_absence_allowed": false,
+    "raw_value_artifact_storage_allowed": false,
+    "local_bridge_required": true,
+    "deployed_runtime_required_for_actual_open": true,
+    "dry_run_pass_is_not_deployment_pass": true,
+    "progress_previous_pct": 99.997,
+    "progress_after_pct": 99.998,
+    "progress_delta_pct": 0.001
+  },
+  "contract_evidence": {
+    "row_type": "deployment_dry_run_contract_evidence",
+    "decision_status": "dry_run_contract_ready_for_execution",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_deployed_surface_count": 0,
+    "dry_run_stage_count": 15,
+    "route_matrix_count": 12,
+    "feature_flag_gate_count": 11,
+    "data_safety_gate_count": 12,
+    "seo_gate_count": 8,
+    "robots_gate_count": 3,
+    "cta_gate_count": 8,
+    "rollback_gate_count": 11,
+    "monitoring_gate_count": 14,
+    "feedback_gate_count": 9,
+    "incident_gate_count": 3,
+    "unresolved_actual_deployment_gap_count": 21,
+    "notes": "Loaded from deployment dry-run contract artifact. This is rehearsal evidence, not deployment evidence."
+  },
+  "stage_results": [
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "preflight_policy_guard",
+      "sequence_order": 1,
+      "status": "pass",
+      "result_count": 1,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "runtime_feature_flag_gate",
+      "sequence_order": 2,
+      "status": "pass",
+      "result_count": 11,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "API_adapter_dry_run",
+      "sequence_order": 3,
+      "status": "pass",
+      "result_count": 12,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "frontend_adapter_dry_run",
+      "sequence_order": 4,
+      "status": "pass",
+      "result_count": 12,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "DB_read_adapter_dry_run",
+      "sequence_order": 5,
+      "status": "pass",
+      "result_count": 8,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "allowed_route_matrix_dry_run",
+      "sequence_order": 6,
+      "status": "pass",
+      "result_count": 6,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "blocked_route_matrix_dry_run",
+      "sequence_order": 7,
+      "status": "pass",
+      "result_count": 6,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "response_safety_dry_run",
+      "sequence_order": 8,
+      "status": "pass",
+      "result_count": 11,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "SEO_robots_dry_run",
+      "sequence_order": 9,
+      "status": "pass",
+      "result_count": 11,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "CTA_disabled_dry_run",
+      "sequence_order": 10,
+      "status": "pass",
+      "result_count": 8,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "rollback_simulation_dry_run",
+      "sequence_order": 11,
+      "status": "pass",
+      "result_count": 11,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "monitoring_event_dry_run",
+      "sequence_order": 12,
+      "status": "pass",
+      "result_count": 14,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "feedback_channel_dry_run",
+      "sequence_order": 13,
+      "status": "pass",
+      "result_count": 9,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "incident_log_dry_run",
+      "sequence_order": 14,
+      "status": "pass",
+      "result_count": 3,
+      "failure_action": "",
+      "notes": "Stage executed against local bridge only."
+    },
+    {
+      "row_type": "dry_run_stage_execution_result",
+      "stage_id": "final_decision_gate",
+      "sequence_order": 15,
+      "status": "pass",
+      "result_count": 1,
+      "failure_action": "",
+      "notes": "Final decision gate confirms dry-run meaning stays separate from deployment meaning."
+    }
+  ],
+  "feature_flag_results": [
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "LIMITED_BETA_RUNTIME_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "PUBLIC_UNRESTRICTED_ACCESS_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "PRODUCTION_LAUNCH_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "CTA_EMAIL_SEND_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "NUMERIC_PRICE_DISPLAY_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "STRUCTURED_DATA_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "RAW_LISTING_LINKS_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "USER_SPECIFIC_PUBLIC_RESPONSE_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "SMART_DEAL_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "CSV_EXPORT_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    },
+    {
+      "row_type": "feature_flag_gate_execution_result",
+      "flag_id": "DEALER_VISIBILITY_ENABLED",
+      "observed_value": false,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Feature flag gate is evaluated against local bridge safety, not deployed runtime."
+    }
+  ],
+  "api_results": [
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "A",
+      "request_id": "request::exact_noctilux",
+      "request_path": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph",
+      "route_state": "exact_model_public_market_page",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "B",
+      "request_id": "request::rare_35lux_aa",
+      "request_path": "/camera-bridge/models/leica-summilux-m-35mm-f14-asph-aa",
+      "route_state": "exact_rare_variant_public_market_page",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "C",
+      "request_id": "request::sigma_source_gap",
+      "request_path": "/camera-bridge/source-gap/sigma-14-24mm-dg-dn-art-l-mount",
+      "route_state": "source_gap_public_page",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "D",
+      "request_id": "request::broad_summicron",
+      "request_path": "/camera-bridge/search/summicron",
+      "route_state": "broad_query_refinement_route",
+      "status_code_preview": 302,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "E",
+      "request_id": "request::unsafe_boundary",
+      "request_path": "/camera-bridge/market/sl-14-24-vs-sigma-14-24-boundary",
+      "route_state": "unsafe_boundary_review_route",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "F",
+      "request_id": "request::unsupported",
+      "request_path": "/camera-bridge/unsupported/unknown-rare-lens",
+      "route_state": "unsupported_model_route",
+      "status_code_preview": 404,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "G",
+      "request_id": "request::active_only",
+      "request_path": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-active-only",
+      "route_state": "active_only_public_page",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "H",
+      "request_id": "request::archive_only",
+      "request_path": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-archive-only",
+      "route_state": "archive_only_public_page",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "I",
+      "request_id": "request::stale_data",
+      "request_path": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-stale",
+      "route_state": "stale_data_safe_route",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "J",
+      "request_id": "request::privacy_blocked",
+      "request_path": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-privacy-blocked",
+      "route_state": "privacy_blocked_route",
+      "status_code_preview": 403,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "K",
+      "request_id": "request::db_unavailable",
+      "request_path": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-db-unavailable",
+      "route_state": "db_unavailable_safe_route",
+      "status_code_preview": 503,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    },
+    {
+      "row_type": "api_adapter_dry_run_result",
+      "scenario_letter": "M",
+      "request_id": "request::slug_conflict",
+      "request_path": "/camera-bridge/models/conflict-noctilux-summilux",
+      "route_state": "error_safe_fallback_route",
+      "status_code_preview": 409,
+      "response_status": "public_response_safe",
+      "cta_send_enabled": false,
+      "safe_field_flags_clear": true,
+      "status": "pass",
+      "notes": "Local API-like adapter dry-run only; not a deployed API route."
+    }
+  ],
+  "frontend_results": [
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "A",
+      "route_state": "exact_model_public_market_page",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "B",
+      "route_state": "exact_rare_variant_public_market_page",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "C",
+      "route_state": "source_gap_public_page",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "D",
+      "route_state": "broad_query_refinement_route",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "E",
+      "route_state": "unsafe_boundary_review_route",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "F",
+      "route_state": "unsupported_model_route",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "G",
+      "route_state": "active_only_public_page",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "H",
+      "route_state": "archive_only_public_page",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "I",
+      "route_state": "stale_data_safe_route",
+      "view_kind": "market_page_runtime_view",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "J",
+      "route_state": "privacy_blocked_route",
+      "view_kind": "fallback",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "K",
+      "route_state": "db_unavailable_safe_route",
+      "view_kind": "fallback",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_adapter_dry_run_result",
+      "scenario_letter": "M",
+      "route_state": "error_safe_fallback_route",
+      "view_kind": "fallback",
+      "cta_mode": "disabled",
+      "numeric_price_visible": false,
+      "structured_data_enabled": false,
+      "source_gap_copy_safe": true,
+      "status": "pass",
+      "notes": "Local frontend adapter dry-run only; not a deployed page."
+    }
+  ],
+  "db_results": [
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "exact_bundle",
+      "page_state": "model_not_supported_page",
+      "fallback_state": "unsupported_model_fallback",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": false,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    },
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "rare_variant_bundle",
+      "page_state": "model_not_supported_page",
+      "fallback_state": "unsupported_model_fallback",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": false,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    },
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "source_gap_bundle",
+      "page_state": "source_gap_market_page",
+      "fallback_state": "",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": true,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    },
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "active_only_bundle",
+      "page_state": "model_not_supported_page",
+      "fallback_state": "unsupported_model_fallback",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": false,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    },
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "archive_only_bundle",
+      "page_state": "model_not_supported_page",
+      "fallback_state": "unsupported_model_fallback",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": false,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    },
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "stale_bundle",
+      "page_state": "model_not_supported_page",
+      "fallback_state": "unsupported_model_fallback",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": false,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    },
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "db_unavailable_bundle",
+      "page_state": "db_unavailable_safe_page",
+      "fallback_state": "db_unavailable_safe_route",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": false,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    },
+    {
+      "row_type": "db_read_adapter_dry_run_result",
+      "check_id": "unsupported_bundle",
+      "page_state": "model_not_supported_page",
+      "fallback_state": "unsupported_model_fallback",
+      "db_mutation_enabled": false,
+      "production_db_connected": false,
+      "source_gap_disclosed": false,
+      "status": "pass",
+      "notes": "Local DB read adapter dry-run only; not production DB wiring."
+    }
+  ],
+  "allowed_route_results": [
+    {
+      "row_type": "allowed_route_matrix_dry_run_result",
+      "route_state": "exact_model_public_market_page",
+      "expected_robots": "index,follow",
+      "actual_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "copy_guard_safe": true,
+      "status": "pass",
+      "notes": "Allowed route dry-run stays within local bridge semantics only."
+    },
+    {
+      "row_type": "allowed_route_matrix_dry_run_result",
+      "route_state": "exact_rare_variant_public_market_page",
+      "expected_robots": "index,follow",
+      "actual_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "copy_guard_safe": true,
+      "status": "pass",
+      "notes": "Allowed route dry-run stays within local bridge semantics only."
+    },
+    {
+      "row_type": "allowed_route_matrix_dry_run_result",
+      "route_state": "source_gap_public_page",
+      "expected_robots": "noindex,follow",
+      "actual_robots": "noindex,follow",
+      "expected_price_policy": "price_widget_hidden",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "copy_guard_safe": true,
+      "status": "pass",
+      "notes": "Allowed route dry-run stays within local bridge semantics only."
+    },
+    {
+      "row_type": "allowed_route_matrix_dry_run_result",
+      "route_state": "active_only_public_page",
+      "expected_robots": "index,follow",
+      "actual_robots": "index,follow",
+      "expected_price_policy": "active_reference_only_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "copy_guard_safe": true,
+      "status": "pass",
+      "notes": "Allowed route dry-run stays within local bridge semantics only."
+    },
+    {
+      "row_type": "allowed_route_matrix_dry_run_result",
+      "route_state": "archive_only_public_page",
+      "expected_robots": "index,follow",
+      "actual_robots": "index,follow",
+      "expected_price_policy": "archive_history_only_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "copy_guard_safe": true,
+      "status": "pass",
+      "notes": "Allowed route dry-run stays within local bridge semantics only."
+    },
+    {
+      "row_type": "allowed_route_matrix_dry_run_result",
+      "route_state": "stale_data_safe_route",
+      "expected_robots": "index,follow",
+      "actual_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "copy_guard_safe": true,
+      "status": "pass",
+      "notes": "Allowed route dry-run stays within local bridge semantics only."
+    }
+  ],
+  "blocked_route_results": [
+    {
+      "row_type": "blocked_route_matrix_dry_run_result",
+      "route_state": "broad_query_refinement_route",
+      "expected_robots": "noindex,follow",
+      "actual_robots": "noindex,follow",
+      "no_market_price_page_exposure": true,
+      "no_fast_alert_cta": true,
+      "safe_fallback_copy": true,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Blocked route dry-run must never behave like an open market page."
+    },
+    {
+      "row_type": "blocked_route_matrix_dry_run_result",
+      "route_state": "unsafe_boundary_review_route",
+      "expected_robots": "noindex,follow",
+      "actual_robots": "noindex,follow",
+      "no_market_price_page_exposure": true,
+      "no_fast_alert_cta": true,
+      "safe_fallback_copy": true,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Blocked route dry-run must never behave like an open market page."
+    },
+    {
+      "row_type": "blocked_route_matrix_dry_run_result",
+      "route_state": "unsupported_model_route",
+      "expected_robots": "noindex,follow",
+      "actual_robots": "noindex,follow",
+      "no_market_price_page_exposure": true,
+      "no_fast_alert_cta": true,
+      "safe_fallback_copy": true,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Blocked route dry-run must never behave like an open market page."
+    },
+    {
+      "row_type": "blocked_route_matrix_dry_run_result",
+      "route_state": "privacy_blocked_route",
+      "expected_robots": "noindex,nofollow",
+      "actual_robots": "noindex,nofollow",
+      "no_market_price_page_exposure": true,
+      "no_fast_alert_cta": true,
+      "safe_fallback_copy": true,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Blocked route dry-run must never behave like an open market page."
+    },
+    {
+      "row_type": "blocked_route_matrix_dry_run_result",
+      "route_state": "db_unavailable_safe_route",
+      "expected_robots": "noindex,nofollow",
+      "actual_robots": "noindex,nofollow",
+      "no_market_price_page_exposure": true,
+      "no_fast_alert_cta": true,
+      "safe_fallback_copy": true,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Blocked route dry-run must never behave like an open market page."
+    },
+    {
+      "row_type": "blocked_route_matrix_dry_run_result",
+      "route_state": "error_safe_fallback_route",
+      "expected_robots": "noindex,nofollow",
+      "actual_robots": "noindex,nofollow",
+      "no_market_price_page_exposure": true,
+      "no_fast_alert_cta": true,
+      "safe_fallback_copy": true,
+      "status": "pass",
+      "failure_action": "",
+      "notes": "Blocked route dry-run must never behave like an open market page."
+    }
+  ],
+  "response_safety_results": [
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "raw_url",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "listing_url",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "raw_html",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "user_email",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "provider_payload",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "webhook_body",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "access_token",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "db_connection_string",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "raw_user_message",
+      "status": "pass",
+      "storage_behavior": "blocked_or_redacted_not_stored",
+      "notes": "Dry-run artifact stores sample classification only and never stores raw injected values."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "privacy_error_fail_close",
+      "status": "pass",
+      "storage_behavior": "safe_metadata_only",
+      "notes": "Privacy boundary remains fail-close in dry-run execution."
+    },
+    {
+      "row_type": "response_safety_dry_run_result",
+      "sample_type": "policy_violation_fail_close",
+      "status": "pass",
+      "storage_behavior": "safe_metadata_only",
+      "notes": "Policy violation remains fail-close in dry-run execution."
+    }
+  ],
+  "seo_robots_results": [
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_1",
+      "sample_label": "all sources",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_2",
+      "sample_label": "guaranteed price",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_3",
+      "sample_label": "official Leica",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_4",
+      "sample_label": "investment advice",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_5",
+      "sample_label": "confirmed absence",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_6",
+      "sample_label": "매물 없음 확정",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_7",
+      "sample_label": "공식 라이카",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "seo_claim",
+      "gate_id": "seo_claim_8",
+      "sample_label": "최저가 보장",
+      "status": "pass",
+      "notes": "SEO prohibited claim must be blocked in dry-run execution, including contract-level Korean phrase guards."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "robots_matrix",
+      "gate_id": "robots_index_follow_family",
+      "sample_label": "exact_model_public_market_page,exact_rare_variant_public_market_page,active_only_public_page,archive_only_public_page,stale_data_safe_route",
+      "status": "pass",
+      "notes": "Expected robots family hint = index,follow."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "robots_matrix",
+      "gate_id": "robots_noindex_follow_family",
+      "sample_label": "source_gap_public_page,broad_query_refinement_route,unsafe_boundary_review_route,unsupported_model_route",
+      "status": "pass",
+      "notes": "Expected robots family hint = noindex,follow."
+    },
+    {
+      "row_type": "seo_robots_dry_run_result",
+      "gate_type": "robots_matrix",
+      "gate_id": "robots_noindex_nofollow_family",
+      "sample_label": "privacy_blocked_route,db_unavailable_safe_route,error_safe_fallback_route",
+      "status": "pass",
+      "notes": "Expected robots family hint = noindex,nofollow."
+    }
+  ],
+  "cta_results": [
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "actual_send_disabled",
+      "status": "pass",
+      "notes": "CTA send remains disabled in local dry-run execution."
+    },
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "no_email_fields",
+      "status": "pass",
+      "notes": "No email fields are exposed in API adapter responses."
+    },
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "no_provider_payload",
+      "status": "pass",
+      "notes": "No provider payload is exposed in API adapter responses."
+    },
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "allowed_source_gap_cta_safe_placeholder",
+      "status": "pass",
+      "notes": "Allowed/source-gap local bridge keeps CTA in disabled-safe placeholder mode rather than any send path."
+    },
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "blocked_routes_cta_disabled",
+      "status": "pass",
+      "notes": "Blocked/fallback routes keep CTA disabled."
+    },
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "privacy_db_error_cta_disabled",
+      "status": "pass",
+      "notes": "Privacy, DB unavailable, and error routes keep CTA disabled."
+    },
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "cta_click_routes_to_safe_placeholder_only",
+      "status": "pass",
+      "notes": "Dry-run supports disabled placeholder semantics only and never invokes send."
+    },
+    {
+      "row_type": "cta_disabled_dry_run_result",
+      "gate_id": "cta_send_not_deployment_signal",
+      "status": "pass",
+      "notes": "Any CTA-safe behavior here is local bridge rehearsal only, not a deployment signal."
+    }
+  ],
+  "rollback_results": [
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "hide_all_limited_beta_routes",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "hide_specific_model_route",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "force_noindex_for_affected_route",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "disable_cta_visible_candidates",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "disable_source_gap_pages",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "disable_market_page_price_widget",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "disable_route_seo_metadata",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "force_safe_fallback_page",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "stop_beta_traffic",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "log_incident",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    },
+    {
+      "row_type": "rollback_simulation_dry_run_result",
+      "action_id": "notify_owner_roles",
+      "simulation_status": "simulation_pass",
+      "production_configured": false,
+      "status": "pass",
+      "notes": "Rollback simulation dry-run is local only and does not mean production rollback is configured."
+    }
+  ],
+  "monitoring_results": [
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "CTA_send_attempt_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "DB_unavailable_fallback_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "SEO_claim_violation_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "false_negative_report_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "false_positive_report_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "feedback_submission_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "privacy_block_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "public_response_blocked_policy_violation_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "raw_field_leak_attempt_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "rollback_trigger_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "route_404_unexpected_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "route_500_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "route_noindex_mismatch_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    },
+    {
+      "row_type": "monitoring_event_dry_run_result",
+      "event_id": "source_gap_overclaim_incident_count",
+      "record_status": "recorded",
+      "external_provider_configured": false,
+      "status": "pass",
+      "notes": "Monitoring dry-run records count/metadata only and does not imply production provider wiring."
+    }
+  ],
+  "feedback_results": [
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "wrong_model_match",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "missing_source",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "source_gap_confusing",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "price_confidence_confusing",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "alert_cta_confusing",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "page_copy_unclear",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "route_seo_issue",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "mobile_layout_issue",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    },
+    {
+      "row_type": "feedback_channel_dry_run_result",
+      "category_id": "trust_disclaimer_issue",
+      "feedback_status": "accepted_preview",
+      "raw_message_stored": false,
+      "status": "pass",
+      "notes": "Feedback dry-run stores redacted preview metadata only and does not imply production feedback storage."
+    }
+  ],
+  "incident_results": [
+    {
+      "row_type": "incident_log_dry_run_result",
+      "gate_id": "incident_levels_present",
+      "levels": [
+        "P0",
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "status": "pass",
+      "notes": "Incident ladder is present as dry-run metadata only."
+    },
+    {
+      "row_type": "incident_log_dry_run_result",
+      "gate_id": "incident_log_safe_metadata_only",
+      "levels": [
+        "P0",
+        "P1",
+        "P2",
+        "P3"
+      ],
+      "status": "pass",
+      "notes": "Incident dry-run artifact stores safe metadata only and no raw payload."
+    },
+    {
+      "row_type": "incident_log_dry_run_result",
+      "gate_id": "owner_notification_shape_present",
+      "levels": [
+        "rollback_owner",
+        "beta_owner",
+        "QA_operator"
+      ],
+      "status": "pass",
+      "notes": "Owner notification path is represented for dry-run only and is not a production alert pipeline."
+    }
+  ],
+  "summary": {
+    "row_type": "dry_run_execution_summary",
+    "total_stage_count": 15,
+    "stage_pass_count": 15,
+    "stage_warning_count": 0,
+    "stage_fail_count": 0,
+    "rollback_required_count": 0,
+    "route_result_count": 12,
+    "allowed_route_pass_count": 6,
+    "blocked_route_pass_count": 6,
+    "feature_flag_pass_count": 11,
+    "data_safety_pass_count": 11,
+    "seo_robots_pass_count": 11,
+    "cta_gate_pass_count": 8,
+    "rollback_simulation_pass_count": 11,
+    "monitoring_event_pass_count": 14,
+    "feedback_channel_pass_count": 9,
+    "incident_gate_pass_count": 3,
+    "forbidden_field_leak_count": 0,
+    "unresolved_actual_deployment_gap_count": 21,
+    "actual_deployed_surface_count": 0,
+    "local_bridge_surface_count": 6,
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "notes": "Dry-run execution pass reflects local bridge rehearsal only."
+  },
+  "decision": {
+    "row_type": "dry_run_execution_decision",
+    "decision_status": "dry_run_execution_passed_local_bridge",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_deployed_surface_count": 0,
+    "unresolved_actual_deployment_gap_count": 21,
+    "notes": "Dry-run execution pass does not equal deployment pass and does not create deployed runtime surfaces."
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy_forbids_deployment",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "contract_evidence_loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "15_stages_executed",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "feature_flag_gate_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "api_adapter_dry_run_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "frontend_adapter_dry_run_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "db_read_adapter_dry_run_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "allowed_route_matrix_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "blocked_route_matrix_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "data_safety_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "seo_robots_cta_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "rollback_monitoring_feedback_incident_passes",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "final_decision_honest",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "production_launch_guard",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "progress_report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "progress_basis": "P3 Market Intelligence / Model Market Page limited private beta deployment-dry-run execution",
+    "previous_progress_pct": 99.997,
+    "expected_after_completion_pct": 99.998,
+    "delta_pct": 0.001
+  },
+  "modified_files": [
+    "limited_beta_deployment_dry_run_execution.py",
+    "scripts/run_p3_limited_beta_deployment_dry_run_execution.py",
+    "tests/test_limited_beta_deployment_dry_run_execution.py",
+    "data/admin/p3_limited_beta_deployment_dry_run_execution_v0.md",
+    "data/admin/p3_limited_beta_deployment_dry_run_execution_v0.jsonl",
+    "data/admin/limited_beta_deployment_dry_run_execution_v0.json"
+  ]
+}

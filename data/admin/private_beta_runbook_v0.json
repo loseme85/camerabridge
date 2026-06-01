@@ -1,0 +1,2810 @@
+{
+  "task_name": "P3-PRIVATE-BETA-RUNBOOK",
+  "policy": {
+    "generated_at": "2026-05-29T00:00:00Z",
+    "schema_version": "private_beta_runbook.v0",
+    "contract_version": "p3_private_beta_runbook_v0",
+    "real_send_enabled": false,
+    "actual_cron_enabled": false,
+    "actual_live_crawl_enabled": false,
+    "actual_db_enabled": false,
+    "provider_sdk_call_allowed": false,
+    "webhook_endpoint_enabled": false,
+    "preview_only_private_beta_allowed": true,
+    "provider_payload_preview_allowed": false,
+    "private_beta_real_email_allowed": false,
+    "public_beta_allowed": false,
+    "production_candidate_allowed": false
+  },
+  "validation": {
+    "ok": true,
+    "row_count": 183,
+    "missing_row_types": [],
+    "failed_scenarios": []
+  },
+  "rows": [
+    {
+      "row_type": "runbook_check",
+      "check_name": "real_send_disabled",
+      "status": "pass",
+      "notes": "real send stays disabled in this runbook",
+      "value": true
+    },
+    {
+      "row_type": "runbook_check",
+      "check_name": "actual_cron_disabled",
+      "status": "pass",
+      "notes": "actual cron stays disabled in this runbook",
+      "value": true
+    },
+    {
+      "row_type": "runbook_check",
+      "check_name": "actual_db_disabled",
+      "status": "pass",
+      "notes": "actual DB stays disabled in this runbook",
+      "value": true
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_internal_fixture_dry_run",
+      "phase_name": "internal_fixture_dry_run",
+      "phase_status": "allowed",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": false,
+      "actual_provider_required": false,
+      "user_visible": false,
+      "allowed_recipient_scope": "internal_fixture_only",
+      "max_users": 0,
+      "max_alerts_per_day": 0,
+      "required_gates": [
+        "storage_repository_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate"
+      ],
+      "entry_criteria": [
+        "local fixture pipeline passes",
+        "golden_set remains green"
+      ],
+      "exit_criteria": [
+        "scheduler to detection preview passes",
+        "privacy-safe artifacts generated"
+      ],
+      "rollback_criteria": [
+        "fixture outputs drift",
+        "privacy policy violation detected"
+      ],
+      "notes": "safe internal-only dry run phase"
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_local_end_to_end_preview",
+      "phase_name": "local_end_to_end_preview",
+      "phase_status": "allowed",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": false,
+      "actual_provider_required": false,
+      "user_visible": false,
+      "allowed_recipient_scope": "internal_preview_only",
+      "max_users": 0,
+      "max_alerts_per_day": 0,
+      "required_gates": [
+        "storage_repository_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate",
+        "delivery_queue_gate"
+      ],
+      "entry_criteria": [
+        "local orchestrator preview passes",
+        "storage preview persists safe records"
+      ],
+      "exit_criteria": [
+        "end-to-end preview artifacts reviewed",
+        "manual review queue policy drafted"
+      ],
+      "rollback_criteria": [
+        "source_change_detection mismatch",
+        "duplicate alert preview risk"
+      ],
+      "notes": "scheduler -> adapter -> storage -> detection -> queue preview only"
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_preview_only_private_beta",
+      "phase_name": "preview_only_private_beta",
+      "phase_status": "allowed_with_limits",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": false,
+      "actual_provider_required": false,
+      "user_visible": true,
+      "allowed_recipient_scope": "limited_beta_signup_preview",
+      "max_users": 25,
+      "max_alerts_per_day": 0,
+      "required_gates": [
+        "storage_repository_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate",
+        "delivery_queue_gate",
+        "email_template_gate",
+        "unsubscribe_manage_endpoint_gate",
+        "manual_review_queue_gate",
+        "privacy_delete_gate"
+      ],
+      "entry_criteria": [
+        "preview-only UX/copy reviewed",
+        "unsubscribe/manage contract complete",
+        "manual review runbook present"
+      ],
+      "exit_criteria": [
+        "preview beta user feedback loop stable",
+        "false positive review manageable"
+      ],
+      "rollback_criteria": [
+        "user confusion around preview state",
+        "manual review backlog spike",
+        "privacy issue found"
+      ],
+      "notes": "user-visible preview may be allowed, but no real email send"
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_provider_payload_preview",
+      "phase_name": "provider_payload_preview",
+      "phase_status": "blocked",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": true,
+      "actual_provider_required": false,
+      "user_visible": false,
+      "allowed_recipient_scope": "internal_verified_preview",
+      "max_users": 5,
+      "max_alerts_per_day": 0,
+      "required_gates": [
+        "actual_db_adapter_gate",
+        "send_enablement_gate",
+        "unsubscribe_manage_endpoint_gate",
+        "monitoring_audit_gate",
+        "rate_limit_gate"
+      ],
+      "entry_criteria": [
+        "payload boundary implementation exists",
+        "runtime redaction policy implemented"
+      ],
+      "exit_criteria": [
+        "provider payload preview audited",
+        "monitoring counters wired"
+      ],
+      "rollback_criteria": [
+        "payload logging risk",
+        "unsafe placeholder substitution"
+      ],
+      "notes": "blocked until provider payload boundary implementation exists"
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_internal_real_send_limited",
+      "phase_name": "internal_real_send_limited",
+      "phase_status": "blocked",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": true,
+      "actual_provider_required": true,
+      "user_visible": false,
+      "allowed_recipient_scope": "internal_verified_allowlist_only",
+      "max_users": 10,
+      "max_alerts_per_day": 25,
+      "required_gates": [
+        "actual_db_adapter_gate",
+        "send_enablement_gate",
+        "unsubscribe_manage_endpoint_gate",
+        "webhook_readiness_gate",
+        "monitoring_audit_gate",
+        "rollback_plan_gate",
+        "rate_limit_gate"
+      ],
+      "entry_criteria": [
+        "provider credential/domain/webhook readiness passes",
+        "unsubscribe endpoint implemented",
+        "DB adapter implemented"
+      ],
+      "exit_criteria": [
+        "limited internal send evidence reviewed",
+        "bounce/complaint path proven safe"
+      ],
+      "rollback_criteria": [
+        "unsubscribe failure",
+        "suppression failure",
+        "duplicate send risk"
+      ],
+      "notes": "still blocked; actual provider call remains disabled"
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_private_beta_real_email",
+      "phase_name": "private_beta_real_email",
+      "phase_status": "blocked",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": true,
+      "actual_provider_required": true,
+      "user_visible": true,
+      "allowed_recipient_scope": "private_beta_verified_users",
+      "max_users": 100,
+      "max_alerts_per_day": 200,
+      "required_gates": [
+        "storage_repository_gate",
+        "actual_db_adapter_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate",
+        "source_selector_gate",
+        "source_health_gate",
+        "delivery_queue_gate",
+        "email_template_gate",
+        "provider_adapter_gate",
+        "send_enablement_gate",
+        "unsubscribe_manage_endpoint_gate",
+        "email_verification_gate",
+        "suppression_gate",
+        "webhook_readiness_gate",
+        "monitoring_audit_gate",
+        "privacy_delete_gate",
+        "compliance_copy_gate",
+        "manual_review_queue_gate",
+        "rollback_plan_gate",
+        "rate_limit_gate"
+      ],
+      "entry_criteria": [
+        "internal real send evidence exists",
+        "support workflow staffed",
+        "compliance copy approved"
+      ],
+      "exit_criteria": [
+        "private beta incident rate acceptable",
+        "unsubscribe/suppression success stable"
+      ],
+      "rollback_criteria": [
+        "complaint spike",
+        "privacy incident",
+        "wrong item alert trend"
+      ],
+      "notes": "must remain blocked in current project state"
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_public_beta_candidate",
+      "phase_name": "public_beta_candidate",
+      "phase_status": "blocked",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": true,
+      "actual_provider_required": true,
+      "user_visible": true,
+      "allowed_recipient_scope": "public_verified_waitlist",
+      "max_users": 500,
+      "max_alerts_per_day": 1000,
+      "required_gates": [
+        "storage_repository_gate",
+        "actual_db_adapter_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate",
+        "source_selector_gate",
+        "source_health_gate",
+        "delivery_queue_gate",
+        "email_template_gate",
+        "provider_adapter_gate",
+        "send_enablement_gate",
+        "unsubscribe_manage_endpoint_gate",
+        "email_verification_gate",
+        "suppression_gate",
+        "webhook_readiness_gate",
+        "monitoring_audit_gate",
+        "privacy_delete_gate",
+        "compliance_copy_gate",
+        "manual_review_queue_gate",
+        "rollback_plan_gate",
+        "rate_limit_gate"
+      ],
+      "entry_criteria": [
+        "private beta evidence accepted",
+        "support/compliance runbook expanded"
+      ],
+      "exit_criteria": [
+        "public beta support metrics within target"
+      ],
+      "rollback_criteria": [
+        "manual review overload",
+        "bounce/complaint spike",
+        "false positive surge"
+      ],
+      "notes": "blocked until private beta evidence and operations support are ready"
+    },
+    {
+      "row_type": "beta_phase",
+      "phase_id": "phase_production_candidate",
+      "phase_name": "production_candidate",
+      "phase_status": "blocked",
+      "provider_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_live_crawl_enabled": false,
+      "actual_db_required": true,
+      "actual_provider_required": true,
+      "user_visible": true,
+      "allowed_recipient_scope": "production_verified_users",
+      "max_users": 5000,
+      "max_alerts_per_day": 10000,
+      "required_gates": [
+        "storage_repository_gate",
+        "actual_db_adapter_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate",
+        "source_selector_gate",
+        "source_health_gate",
+        "delivery_queue_gate",
+        "email_template_gate",
+        "provider_adapter_gate",
+        "send_enablement_gate",
+        "unsubscribe_manage_endpoint_gate",
+        "email_verification_gate",
+        "suppression_gate",
+        "webhook_readiness_gate",
+        "monitoring_audit_gate",
+        "privacy_delete_gate",
+        "compliance_copy_gate",
+        "manual_review_queue_gate",
+        "rollback_plan_gate",
+        "rate_limit_gate"
+      ],
+      "entry_criteria": [
+        "public beta completed safely",
+        "compliance and support matured"
+      ],
+      "exit_criteria": [
+        "production launch decision made separately"
+      ],
+      "rollback_criteria": [
+        "systemic privacy/compliance risk",
+        "provider deliverability failure"
+      ],
+      "notes": "out of scope and blocked"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::storage_repository_gate",
+      "gate_name": "storage_repository_gate",
+      "required_for_phase": [
+        "internal_fixture_dry_run",
+        "local_end_to_end_preview",
+        "preview_only_private_beta"
+      ],
+      "current_status": "passed",
+      "blocking_level": "high",
+      "evidence_source": "data/admin/persistent_alert_storage_implementation_v0.json",
+      "required_artifact": "data/admin/persistent_alert_storage_implementation_v0.json",
+      "owner_component": "persistent_alert_storage.py",
+      "pass_condition": "local repository preview exists",
+      "fail_condition": "storage preview unavailable",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::actual_db_adapter_gate",
+      "gate_name": "actual_db_adapter_gate",
+      "required_for_phase": [
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email",
+        "public_beta_candidate",
+        "production_candidate"
+      ],
+      "current_status": "blocked_missing_dependency",
+      "blocking_level": "blocker",
+      "evidence_source": "P3-PERSISTENT-ALERT-STORAGE-DB-ADAPTER-CONTRACT",
+      "required_artifact": "P3-PERSISTENT-ALERT-STORAGE-DB-ADAPTER-CONTRACT",
+      "owner_component": "persistent_alert_storage.py",
+      "pass_condition": "provider-neutral DB adapter exists",
+      "fail_condition": "no actual DB adapter yet",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::cron_orchestrator_gate",
+      "gate_name": "cron_orchestrator_gate",
+      "required_for_phase": [
+        "internal_fixture_dry_run",
+        "local_end_to_end_preview",
+        "preview_only_private_beta"
+      ],
+      "current_status": "passed",
+      "blocking_level": "high",
+      "evidence_source": "data/admin/crawl_freshness_scheduler_cron_implementation_v0.json",
+      "required_artifact": "data/admin/crawl_freshness_scheduler_cron_implementation_v0.json",
+      "owner_component": "crawl_freshness_scheduler_cron.py",
+      "pass_condition": "local cron preview passes scenarios",
+      "fail_condition": "orchestrator preview missing",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::live_adapter_gate",
+      "gate_name": "live_adapter_gate",
+      "required_for_phase": [
+        "internal_fixture_dry_run",
+        "local_end_to_end_preview",
+        "preview_only_private_beta"
+      ],
+      "current_status": "passed",
+      "blocking_level": "high",
+      "evidence_source": "data/admin/source_change_detection_live_adapter_implementation_v0.json",
+      "required_artifact": "data/admin/source_change_detection_live_adapter_implementation_v0.json",
+      "owner_component": "source_change_detection_live_adapter.py",
+      "pass_condition": "local adapter preview passes scenarios",
+      "fail_condition": "adapter preview unavailable",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::source_selector_gate",
+      "gate_name": "source_selector_gate",
+      "required_for_phase": [
+        "private_beta_real_email",
+        "public_beta_candidate",
+        "production_candidate"
+      ],
+      "current_status": "requires_manual_review",
+      "blocking_level": "high",
+      "evidence_source": "selector audit backlog",
+      "required_artifact": "selector audit backlog",
+      "owner_component": "source selector production",
+      "pass_condition": "allowed source list audited",
+      "fail_condition": "selector audit incomplete",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::source_health_gate",
+      "gate_name": "source_health_gate",
+      "required_for_phase": [
+        "internal_fixture_dry_run",
+        "local_end_to_end_preview",
+        "preview_only_private_beta",
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email",
+        "public_beta_candidate",
+        "production_candidate"
+      ],
+      "current_status": "requires_manual_review",
+      "blocking_level": "medium",
+      "evidence_source": "data/admin/crawl_freshness_scheduler_cron_implementation_v0.json",
+      "required_artifact": "data/admin/crawl_freshness_scheduler_cron_implementation_v0.json",
+      "owner_component": "crawl_freshness_scheduler_cron.py",
+      "pass_condition": "allowed sources healthy/low anti-bot",
+      "fail_condition": "source health degraded or anti-bot spike",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::delivery_queue_gate",
+      "gate_name": "delivery_queue_gate",
+      "required_for_phase": [
+        "local_end_to_end_preview",
+        "preview_only_private_beta",
+        "provider_payload_preview",
+        "internal_real_send_limited"
+      ],
+      "current_status": "passed",
+      "blocking_level": "high",
+      "evidence_source": "data/admin/delivery_queue_implementation_v0.json",
+      "required_artifact": "data/admin/delivery_queue_implementation_v0.json",
+      "owner_component": "delivery_queue.py",
+      "pass_condition": "preview queue flow stable",
+      "fail_condition": "delivery queue preview broken",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::email_template_gate",
+      "gate_name": "email_template_gate",
+      "required_for_phase": [
+        "preview_only_private_beta",
+        "provider_payload_preview",
+        "internal_real_send_limited"
+      ],
+      "current_status": "passed",
+      "blocking_level": "medium",
+      "evidence_source": "data/admin/email_template_implementation_v0.json",
+      "required_artifact": "data/admin/email_template_implementation_v0.json",
+      "owner_component": "email_template.py",
+      "pass_condition": "template preview and footer placeholders present",
+      "fail_condition": "template unsafe or missing placeholders",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::provider_adapter_gate",
+      "gate_name": "provider_adapter_gate",
+      "required_for_phase": [
+        "preview_only_private_beta",
+        "provider_payload_preview",
+        "internal_real_send_limited"
+      ],
+      "current_status": "passed",
+      "blocking_level": "medium",
+      "evidence_source": "data/admin/email_provider_adapter_implementation_v0.json",
+      "required_artifact": "data/admin/email_provider_adapter_implementation_v0.json",
+      "owner_component": "email_provider_adapter.py",
+      "pass_condition": "preview adapter available",
+      "fail_condition": "adapter preview missing",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::send_enablement_gate",
+      "gate_name": "send_enablement_gate",
+      "required_for_phase": [
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email",
+        "public_beta_candidate",
+        "production_candidate"
+      ],
+      "current_status": "blocked_missing_dependency",
+      "blocking_level": "blocker",
+      "evidence_source": "data/admin/email_provider_send_enablement_contract_v0.json",
+      "required_artifact": "data/admin/email_provider_send_enablement_contract_v0.json",
+      "owner_component": "email_provider_send_enablement_contract.py",
+      "pass_condition": "send enablement implementation exists and passes",
+      "fail_condition": "send enablement remains contract-only",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::unsubscribe_manage_endpoint_gate",
+      "gate_name": "unsubscribe_manage_endpoint_gate",
+      "required_for_phase": [
+        "preview_only_private_beta",
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email"
+      ],
+      "current_status": "passed",
+      "blocking_level": "blocker",
+      "evidence_source": "data/admin/unsubscribe_manage_endpoint_contract_v0.json",
+      "required_artifact": "data/admin/unsubscribe_manage_endpoint_contract_v0.json",
+      "owner_component": "unsubscribe_manage_endpoint_contract.py",
+      "pass_condition": "endpoint contract exists and implementation path defined",
+      "fail_condition": "unsubscribe/manage path missing",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::email_verification_gate",
+      "gate_name": "email_verification_gate",
+      "required_for_phase": [
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email"
+      ],
+      "current_status": "requires_manual_review",
+      "blocking_level": "high",
+      "evidence_source": "data/admin/alert_mvp_email_verification_contract_v0.json",
+      "required_artifact": "data/admin/alert_mvp_email_verification_contract_v0.json",
+      "owner_component": "alert email verification contract",
+      "pass_condition": "verified email flow implemented",
+      "fail_condition": "verification runtime missing",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::suppression_gate",
+      "gate_name": "suppression_gate",
+      "required_for_phase": [
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email"
+      ],
+      "current_status": "requires_manual_review",
+      "blocking_level": "blocker",
+      "evidence_source": "persistent storage suppression contract+implementation",
+      "required_artifact": "persistent storage suppression contract+implementation",
+      "owner_component": "persistent_alert_storage.py",
+      "pass_condition": "suppression enforced pre-dispatch and webhook path",
+      "fail_condition": "suppression runtime path incomplete",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::webhook_readiness_gate",
+      "gate_name": "webhook_readiness_gate",
+      "required_for_phase": [
+        "internal_real_send_limited",
+        "private_beta_real_email",
+        "public_beta_candidate",
+        "production_candidate"
+      ],
+      "current_status": "blocked_missing_dependency",
+      "blocking_level": "blocker",
+      "evidence_source": "data/admin/email_provider_send_enablement_contract_v0.json",
+      "required_artifact": "data/admin/email_provider_send_enablement_contract_v0.json",
+      "owner_component": "provider webhook runtime",
+      "pass_condition": "bounce/complaint/unsubscribe webhooks implemented",
+      "fail_condition": "webhook runtime absent",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::monitoring_audit_gate",
+      "gate_name": "monitoring_audit_gate",
+      "required_for_phase": [
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email",
+        "public_beta_candidate"
+      ],
+      "current_status": "requires_manual_review",
+      "blocking_level": "high",
+      "evidence_source": "private beta runbook",
+      "required_artifact": "private beta runbook",
+      "owner_component": "operations",
+      "pass_condition": "metrics dashboard and audit cadence defined+implemented",
+      "fail_condition": "monitoring not operationalized",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::privacy_delete_gate",
+      "gate_name": "privacy_delete_gate",
+      "required_for_phase": [
+        "preview_only_private_beta",
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email"
+      ],
+      "current_status": "passed",
+      "blocking_level": "high",
+      "evidence_source": "data/admin/persistent_alert_storage_implementation_v0.json",
+      "required_artifact": "data/admin/persistent_alert_storage_implementation_v0.json",
+      "owner_component": "persistent_alert_storage.py",
+      "pass_condition": "privacy delete preview path defined",
+      "fail_condition": "privacy delete path missing",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::compliance_copy_gate",
+      "gate_name": "compliance_copy_gate",
+      "required_for_phase": [
+        "preview_only_private_beta",
+        "private_beta_real_email",
+        "public_beta_candidate"
+      ],
+      "current_status": "requires_manual_review",
+      "blocking_level": "high",
+      "evidence_source": "landing/copy backlog",
+      "required_artifact": "landing/copy backlog",
+      "owner_component": "copy/compliance",
+      "pass_condition": "disclaimers and policy copy reviewed",
+      "fail_condition": "copy/disclaimer review incomplete",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::manual_review_queue_gate",
+      "gate_name": "manual_review_queue_gate",
+      "required_for_phase": [
+        "preview_only_private_beta",
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email"
+      ],
+      "current_status": "passed",
+      "blocking_level": "high",
+      "evidence_source": "private beta runbook",
+      "required_artifact": "private beta runbook",
+      "owner_component": "operations",
+      "pass_condition": "manual review queues defined with no fast path",
+      "fail_condition": "manual review policy missing",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::rollback_plan_gate",
+      "gate_name": "rollback_plan_gate",
+      "required_for_phase": [
+        "internal_real_send_limited",
+        "private_beta_real_email",
+        "public_beta_candidate"
+      ],
+      "current_status": "passed",
+      "blocking_level": "blocker",
+      "evidence_source": "private beta runbook",
+      "required_artifact": "private beta runbook",
+      "owner_component": "operations",
+      "pass_condition": "documented stop/rollback playbook exists",
+      "fail_condition": "rollback plan undefined",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "readiness_gate",
+      "gate_id": "gate::rate_limit_gate",
+      "gate_name": "rate_limit_gate",
+      "required_for_phase": [
+        "provider_payload_preview",
+        "internal_real_send_limited",
+        "private_beta_real_email",
+        "public_beta_candidate"
+      ],
+      "current_status": "blocked_missing_dependency",
+      "blocking_level": "high",
+      "evidence_source": "data/admin/email_provider_send_enablement_contract_v0.json",
+      "required_artifact": "data/admin/email_provider_send_enablement_contract_v0.json",
+      "owner_component": "provider send runtime",
+      "pass_condition": "per-provider send throttling implemented",
+      "fail_condition": "rate limit runtime absent",
+      "notes": "runbook gate row"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::01",
+      "category": "data/source readiness",
+      "item_name": "allowed source list audited and limited",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "runbook source limit",
+      "blocking_if_failed": true,
+      "remediation_task": "tighten source allowlist",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::02",
+      "category": "crawl/scheduler readiness",
+      "item_name": "cron preview execution plan reviewed daily",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "cron implementation artifact",
+      "blocking_if_failed": true,
+      "remediation_task": "review skip/budget anomalies",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::03",
+      "category": "detection/normalization readiness",
+      "item_name": "fake-fill and adjacent-family guard verified",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "source change detection artifacts",
+      "blocking_if_failed": true,
+      "remediation_task": "strengthen watch target review",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::04",
+      "category": "alert decision readiness",
+      "item_name": "manual-review targets blocked from fast path",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "runbook queue policy",
+      "blocking_if_failed": true,
+      "remediation_task": "expand reviewer SOP",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::05",
+      "category": "delivery queue readiness",
+      "item_name": "preview queue states and suppression checks reviewed",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "delivery queue artifact",
+      "blocking_if_failed": true,
+      "remediation_task": "queue pause procedure",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::06",
+      "category": "template/provider readiness",
+      "item_name": "preview-only template footer and disclaimers reviewed",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "requires_manual_review",
+      "evidence": "email template artifact",
+      "blocking_if_failed": false,
+      "remediation_task": "complete copy review",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::07",
+      "category": "unsubscribe/manage readiness",
+      "item_name": "manage/unsubscribe token contract approved",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "unsubscribe contract artifact",
+      "blocking_if_failed": true,
+      "remediation_task": "implement endpoint later",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::08",
+      "category": "privacy/compliance readiness",
+      "item_name": "raw email/url/payload/token policy reviewed",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "storage + endpoint contracts",
+      "blocking_if_failed": true,
+      "remediation_task": "document DSAR placeholder",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::09",
+      "category": "monitoring/readiness",
+      "item_name": "warning/critical thresholds documented",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "private beta runbook",
+      "blocking_if_failed": true,
+      "remediation_task": "wire dashboard later",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::10",
+      "category": "manual review/readiness",
+      "item_name": "reviewer queue ownership assigned",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "private beta runbook",
+      "blocking_if_failed": true,
+      "remediation_task": "assign weekly rotation",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::11",
+      "category": "rollback/incident readiness",
+      "item_name": "incident stop/rollback procedures documented",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "private beta runbook",
+      "blocking_if_failed": true,
+      "remediation_task": "practice tabletop review",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::12",
+      "category": "template/provider readiness",
+      "item_name": "provider credentials/domain/webhooks ready",
+      "required_for_phase": "private_beta_real_email",
+      "current_status": "blocked_missing_dependency",
+      "evidence": "send enablement contract",
+      "blocking_if_failed": true,
+      "remediation_task": "implement provider runtime",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::13",
+      "category": "privacy/compliance readiness",
+      "item_name": "compliance copy and provider terms reviewed",
+      "required_for_phase": "private_beta_real_email",
+      "current_status": "requires_manual_review",
+      "evidence": "copy/legal review",
+      "blocking_if_failed": true,
+      "remediation_task": "complete compliance signoff",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "launch_checklist_item",
+      "checklist_id": "checklist::14",
+      "category": "monitoring/readiness",
+      "item_name": "provider bounce/complaint dashboards operating",
+      "required_for_phase": "private_beta_real_email",
+      "current_status": "blocked_missing_dependency",
+      "evidence": "send runtime monitoring",
+      "blocking_if_failed": true,
+      "remediation_task": "implement monitoring stack",
+      "notes": "private beta checklist item"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "internal_fixture_dry_run",
+      "decision_status": "go",
+      "passed_gates": [],
+      "failed_gates": [],
+      "blocker_count": 0,
+      "critical_blockers": [],
+      "allowed_actions": [
+        "local fixture dry run"
+      ],
+      "forbidden_actions": [],
+      "next_required_action": "continue local validation",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "local_end_to_end_preview",
+      "decision_status": "go",
+      "passed_gates": [
+        "storage_repository_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate"
+      ],
+      "failed_gates": [],
+      "blocker_count": 0,
+      "critical_blockers": [],
+      "allowed_actions": [
+        "preview run"
+      ],
+      "forbidden_actions": [],
+      "next_required_action": "review outputs daily",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "preview_only_private_beta",
+      "decision_status": "go_with_limits",
+      "passed_gates": [
+        "storage_repository_gate",
+        "cron_orchestrator_gate",
+        "live_adapter_gate",
+        "manual_review_queue_gate"
+      ],
+      "failed_gates": [
+        "compliance_copy_gate"
+      ],
+      "blocker_count": 1,
+      "critical_blockers": [
+        "compliance copy not yet finalized"
+      ],
+      "allowed_actions": [
+        "limited preview signup",
+        "manual review"
+      ],
+      "forbidden_actions": [
+        "real send",
+        "actual cron enablement"
+      ],
+      "next_required_action": "keep preview-only",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "provider_payload_preview",
+      "decision_status": "blocked",
+      "passed_gates": [
+        "storage_repository_gate"
+      ],
+      "failed_gates": [
+        "actual_db_adapter_gate",
+        "send_enablement_gate"
+      ],
+      "blocker_count": 2,
+      "critical_blockers": [
+        "DB adapter missing",
+        "send runtime missing"
+      ],
+      "allowed_actions": [],
+      "forbidden_actions": [
+        "payload generation"
+      ],
+      "next_required_action": "implement payload boundary/runtime first",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "internal_real_send_limited",
+      "decision_status": "no_go",
+      "passed_gates": [
+        "rollback_plan_gate"
+      ],
+      "failed_gates": [
+        "actual_db_adapter_gate",
+        "send_enablement_gate",
+        "webhook_readiness_gate",
+        "rate_limit_gate"
+      ],
+      "blocker_count": 4,
+      "critical_blockers": [
+        "provider not ready",
+        "webhooks absent"
+      ],
+      "allowed_actions": [],
+      "forbidden_actions": [
+        "actual provider call"
+      ],
+      "next_required_action": "configure provider credentials/domain/webhooks and DB adapter",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "private_beta_real_email",
+      "decision_status": "blocked",
+      "passed_gates": [
+        "unsubscribe_manage_endpoint_gate"
+      ],
+      "failed_gates": [
+        "actual_db_adapter_gate",
+        "send_enablement_gate",
+        "webhook_readiness_gate",
+        "monitoring_audit_gate",
+        "rate_limit_gate"
+      ],
+      "blocker_count": 5,
+      "critical_blockers": [
+        "real-email beta missing multiple critical gates"
+      ],
+      "allowed_actions": [],
+      "forbidden_actions": [
+        "real beta email"
+      ],
+      "next_required_action": "complete private beta prerequisites",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "public_beta_candidate",
+      "decision_status": "blocked",
+      "passed_gates": [],
+      "failed_gates": [
+        "private beta evidence",
+        "compliance_copy_gate",
+        "monitoring_audit_gate"
+      ],
+      "blocker_count": 3,
+      "critical_blockers": [
+        "private beta evidence missing"
+      ],
+      "allowed_actions": [],
+      "forbidden_actions": [
+        "public launch"
+      ],
+      "next_required_action": "finish private beta safely first",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "go_no_go_decision",
+      "phase": "production_candidate",
+      "decision_status": "blocked",
+      "passed_gates": [],
+      "failed_gates": [
+        "public beta evidence",
+        "provider hardening",
+        "support workflow"
+      ],
+      "blocker_count": 3,
+      "critical_blockers": [
+        "production launch out of scope"
+      ],
+      "allowed_actions": [],
+      "forbidden_actions": [
+        "production launch"
+      ],
+      "next_required_action": "separate production readiness program",
+      "notes": "phase decision row"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::daily_preview_run_review",
+      "procedure_name": "daily_preview_run_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "daily preview batch completed",
+      "step_order": 1,
+      "step_description": "check run artifact",
+      "expected_artifact_or_log": "daily preview report",
+      "stop_condition": "privacy violation found",
+      "escalation_condition": "unexpected spike in skipped/blocked jobs",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::daily_preview_run_review",
+      "procedure_name": "daily_preview_run_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "daily preview batch completed",
+      "step_order": 2,
+      "step_description": "review due/skipped counts",
+      "expected_artifact_or_log": "daily preview report",
+      "stop_condition": "privacy violation found",
+      "escalation_condition": "unexpected spike in skipped/blocked jobs",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::daily_preview_run_review",
+      "procedure_name": "daily_preview_run_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "daily preview batch completed",
+      "step_order": 3,
+      "step_description": "confirm no raw policy violations",
+      "expected_artifact_or_log": "daily preview report",
+      "stop_condition": "privacy violation found",
+      "escalation_condition": "unexpected spike in skipped/blocked jobs",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::source_health_review",
+      "procedure_name": "source_health_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "source health drift or anti-bot spike",
+      "step_order": 1,
+      "step_description": "review source_state summaries",
+      "expected_artifact_or_log": "source health notes",
+      "stop_condition": "source enters blocked state",
+      "escalation_condition": "anti-bot spike persists",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::source_health_review",
+      "procedure_name": "source_health_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "source health drift or anti-bot spike",
+      "step_order": 2,
+      "step_description": "downgrade or disable noisy sources",
+      "expected_artifact_or_log": "source health notes",
+      "stop_condition": "source enters blocked state",
+      "escalation_condition": "anti-bot spike persists",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::crawl_job_skip_review",
+      "procedure_name": "crawl_job_skip_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "high skipped count",
+      "step_order": 1,
+      "step_description": "review cooldown/concurrency/budget reasons",
+      "expected_artifact_or_log": "skip reason summary",
+      "stop_condition": "policy mismatch found",
+      "escalation_condition": "repeated unexpected skips",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::crawl_job_skip_review",
+      "procedure_name": "crawl_job_skip_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "high skipped count",
+      "step_order": 2,
+      "step_description": "confirm skips match policy",
+      "expected_artifact_or_log": "skip reason summary",
+      "stop_condition": "policy mismatch found",
+      "escalation_condition": "repeated unexpected skips",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::fake_fill_guard_review",
+      "procedure_name": "fake_fill_guard_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "candidate review session",
+      "step_order": 1,
+      "step_description": "inspect fake-fill blocked candidates",
+      "expected_artifact_or_log": "review decision log",
+      "stop_condition": "fake-fill alert candidate leaked",
+      "escalation_condition": "taxonomy ambiguity repeats",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::fake_fill_guard_review",
+      "procedure_name": "fake_fill_guard_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "candidate review session",
+      "step_order": 2,
+      "step_description": "confirm no adjacent-family substitution",
+      "expected_artifact_or_log": "review decision log",
+      "stop_condition": "fake-fill alert candidate leaked",
+      "escalation_condition": "taxonomy ambiguity repeats",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::alert_candidate_review",
+      "procedure_name": "alert_candidate_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "new candidate batch",
+      "step_order": 1,
+      "step_description": "spot-check rare/source-gap candidates",
+      "expected_artifact_or_log": "candidate review notes",
+      "stop_condition": "wrong item risk identified",
+      "escalation_condition": "candidate precision degrades",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::alert_candidate_review",
+      "procedure_name": "alert_candidate_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "new candidate batch",
+      "step_order": 2,
+      "step_description": "verify confidence and watch target fit",
+      "expected_artifact_or_log": "candidate review notes",
+      "stop_condition": "wrong item risk identified",
+      "escalation_condition": "candidate precision degrades",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::email_template_preview_review",
+      "procedure_name": "email_template_preview_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "template preview updated",
+      "step_order": 1,
+      "step_description": "review footer placeholders",
+      "expected_artifact_or_log": "template preview screenshot/log",
+      "stop_condition": "unsafe copy found",
+      "escalation_condition": "manage/unsubscribe link placeholder missing",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::email_template_preview_review",
+      "procedure_name": "email_template_preview_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "template preview updated",
+      "step_order": 2,
+      "step_description": "review disclaimer copy",
+      "expected_artifact_or_log": "template preview screenshot/log",
+      "stop_condition": "unsafe copy found",
+      "escalation_condition": "manage/unsubscribe link placeholder missing",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::email_template_preview_review",
+      "procedure_name": "email_template_preview_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "template preview updated",
+      "step_order": 3,
+      "step_description": "check preview-only language",
+      "expected_artifact_or_log": "template preview screenshot/log",
+      "stop_condition": "unsafe copy found",
+      "escalation_condition": "manage/unsubscribe link placeholder missing",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::delivery_queue_preview_review",
+      "procedure_name": "delivery_queue_preview_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "delivery queue preview batch",
+      "step_order": 1,
+      "step_description": "review ready/cancelled/suppressed preview states",
+      "expected_artifact_or_log": "queue preview report",
+      "stop_condition": "suppression mismatch found",
+      "escalation_condition": "duplicate queue behavior seen",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::delivery_queue_preview_review",
+      "procedure_name": "delivery_queue_preview_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "delivery queue preview batch",
+      "step_order": 2,
+      "step_description": "confirm digest/common are not urgent",
+      "expected_artifact_or_log": "queue preview report",
+      "stop_condition": "suppression mismatch found",
+      "escalation_condition": "duplicate queue behavior seen",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::unsubscribe_suppression_review",
+      "procedure_name": "unsubscribe_suppression_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "weekly policy audit",
+      "step_order": 1,
+      "step_description": "review unsubscribe/suppression event previews",
+      "expected_artifact_or_log": "unsubscribe audit notes",
+      "stop_condition": "unsubscribe or suppression gap detected",
+      "escalation_condition": "repeat gap across scenarios",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::unsubscribe_suppression_review",
+      "procedure_name": "unsubscribe_suppression_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "weekly policy audit",
+      "step_order": 2,
+      "step_description": "confirm queue side-effects",
+      "expected_artifact_or_log": "unsubscribe audit notes",
+      "stop_condition": "unsubscribe or suppression gap detected",
+      "escalation_condition": "repeat gap across scenarios",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::privacy_delete_review",
+      "procedure_name": "privacy_delete_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "privacy delete request or drill",
+      "step_order": 1,
+      "step_description": "review privacy delete preview path",
+      "expected_artifact_or_log": "privacy delete audit note",
+      "stop_condition": "redaction missing",
+      "escalation_condition": "privacy delete backlog grows",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::privacy_delete_review",
+      "procedure_name": "privacy_delete_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "privacy delete request or drill",
+      "step_order": 2,
+      "step_description": "confirm encrypted refs redacted",
+      "expected_artifact_or_log": "privacy delete audit note",
+      "stop_condition": "redaction missing",
+      "escalation_condition": "privacy delete backlog grows",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::provider_send_gate_review",
+      "procedure_name": "provider_send_gate_review",
+      "phase": "provider_payload_preview",
+      "trigger": "go/no-go meeting",
+      "step_order": 1,
+      "step_description": "review send enablement gates",
+      "expected_artifact_or_log": "gate review note",
+      "stop_condition": "real send accidentally enabled",
+      "escalation_condition": "gates misrepresented",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::provider_send_gate_review",
+      "procedure_name": "provider_send_gate_review",
+      "phase": "provider_payload_preview",
+      "trigger": "go/no-go meeting",
+      "step_order": 2,
+      "step_description": "confirm real send remains disabled",
+      "expected_artifact_or_log": "gate review note",
+      "stop_condition": "real send accidentally enabled",
+      "escalation_condition": "gates misrepresented",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::beta_user_feedback_review",
+      "procedure_name": "beta_user_feedback_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "user feedback received",
+      "step_order": 1,
+      "step_description": "triage confusion/complaint",
+      "expected_artifact_or_log": "feedback tracker",
+      "stop_condition": "user reports unsafe alert behavior",
+      "escalation_condition": "feedback trend worsens",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::beta_user_feedback_review",
+      "procedure_name": "beta_user_feedback_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "user feedback received",
+      "step_order": 2,
+      "step_description": "map to copy, queue, or review policy",
+      "expected_artifact_or_log": "feedback tracker",
+      "stop_condition": "user reports unsafe alert behavior",
+      "escalation_condition": "feedback trend worsens",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::weekly_go_no_go_review",
+      "procedure_name": "weekly_go_no_go_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "weekly beta review",
+      "step_order": 1,
+      "step_description": "review metrics",
+      "expected_artifact_or_log": "weekly decision memo",
+      "stop_condition": "critical blocker active",
+      "escalation_condition": "multiple warnings trend upward",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::weekly_go_no_go_review",
+      "procedure_name": "weekly_go_no_go_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "weekly beta review",
+      "step_order": 2,
+      "step_description": "review incidents",
+      "expected_artifact_or_log": "weekly decision memo",
+      "stop_condition": "critical blocker active",
+      "escalation_condition": "multiple warnings trend upward",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "operational_procedure",
+      "procedure_id": "procedure::weekly_go_no_go_review",
+      "procedure_name": "weekly_go_no_go_review",
+      "phase": "preview_only_private_beta",
+      "trigger": "weekly beta review",
+      "step_order": 3,
+      "step_description": "review blockers",
+      "expected_artifact_or_log": "weekly decision memo",
+      "stop_condition": "critical blocker active",
+      "escalation_condition": "multiple warnings trend upward",
+      "owner_role": "ops",
+      "notes": "runbook operational procedure"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::01",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "false_positive_rate",
+      "threshold": ">=2 high-confidence mistakes in 24h",
+      "severity": "high",
+      "required_action": "pause affected watch targets and increase manual review",
+      "provider_send_disable_required": false,
+      "cron_disable_required": false,
+      "queue_pause_required": true,
+      "source_disable_required": true,
+      "user_notification_required": true,
+      "notes": "false_positive_alert_above_threshold"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::02",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "fake_fill_detected",
+      "threshold": ">=1 confirmed event",
+      "severity": "critical",
+      "required_action": "stop affected alert path immediately",
+      "provider_send_disable_required": false,
+      "cron_disable_required": false,
+      "queue_pause_required": true,
+      "source_disable_required": true,
+      "user_notification_required": true,
+      "notes": "fake_fill_or_adjacent_substitution"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::03",
+      "phase": "private_beta_real_email",
+      "trigger_metric": "unsubscribe_success_rate",
+      "threshold": "<100% for confirmed requests",
+      "severity": "critical",
+      "required_action": "disable send and pause queue",
+      "provider_send_disable_required": true,
+      "cron_disable_required": true,
+      "queue_pause_required": true,
+      "source_disable_required": false,
+      "user_notification_required": true,
+      "notes": "unsubscribe_failure"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::04",
+      "phase": "private_beta_real_email",
+      "trigger_metric": "suppression_block_rate",
+      "threshold": "<100% when suppression active",
+      "severity": "critical",
+      "required_action": "disable send and audit suppression",
+      "provider_send_disable_required": true,
+      "cron_disable_required": true,
+      "queue_pause_required": true,
+      "source_disable_required": false,
+      "user_notification_required": true,
+      "notes": "suppression_failure"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::05",
+      "phase": "private_beta_real_email",
+      "trigger_metric": "duplicate_block_count",
+      "threshold": "unexpected duplicate send >0",
+      "severity": "critical",
+      "required_action": "pause queue and audit idempotency",
+      "provider_send_disable_required": true,
+      "cron_disable_required": true,
+      "queue_pause_required": true,
+      "source_disable_required": false,
+      "user_notification_required": false,
+      "notes": "duplicate_send_risk"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::06",
+      "phase": "private_beta_real_email",
+      "trigger_metric": "provider_complaint_rate",
+      "threshold": "complaint spike above provider threshold",
+      "severity": "critical",
+      "required_action": "stop send phase and review copy/targeting",
+      "provider_send_disable_required": true,
+      "cron_disable_required": true,
+      "queue_pause_required": true,
+      "source_disable_required": false,
+      "user_notification_required": true,
+      "notes": "provider_bounce_complaint_spike"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::07",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "privacy_policy_violation_count",
+      "threshold": ">=1 confirmed leak",
+      "severity": "critical",
+      "required_action": "stop beta and trigger privacy incident response",
+      "provider_send_disable_required": true,
+      "cron_disable_required": true,
+      "queue_pause_required": true,
+      "source_disable_required": true,
+      "user_notification_required": true,
+      "notes": "raw_privacy_leak"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::08",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "source_anti_bot_skip_rate",
+      "threshold": ">30% on allowed source",
+      "severity": "high",
+      "required_action": "disable or downgrade source",
+      "provider_send_disable_required": false,
+      "cron_disable_required": false,
+      "queue_pause_required": false,
+      "source_disable_required": true,
+      "user_notification_required": false,
+      "notes": "source_anti_bot_spike"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::09",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "source_crawl_success_rate",
+      "threshold": "<85% on allowed source set",
+      "severity": "high",
+      "required_action": "pause source expansion and inspect scheduler",
+      "provider_send_disable_required": false,
+      "cron_disable_required": false,
+      "queue_pause_required": true,
+      "source_disable_required": false,
+      "user_notification_required": false,
+      "notes": "crawl_failure_spike"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::10",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "crawl_to_alert_latency_minutes",
+      "threshold": ">120 minutes median for priority watches",
+      "severity": "medium",
+      "required_action": "reduce beta scope and review bottlenecks",
+      "provider_send_disable_required": false,
+      "cron_disable_required": false,
+      "queue_pause_required": true,
+      "source_disable_required": false,
+      "user_notification_required": false,
+      "notes": "alert_latency_above_threshold"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::11",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "manual_review_count",
+      "threshold": ">50 pending items",
+      "severity": "high",
+      "required_action": "stop beta expansion and tighten source/watch scope",
+      "provider_send_disable_required": false,
+      "cron_disable_required": false,
+      "queue_pause_required": true,
+      "source_disable_required": false,
+      "user_notification_required": false,
+      "notes": "manual_review_backlog_above_threshold"
+    },
+    {
+      "row_type": "rollback_criterion",
+      "rollback_id": "rollback::12",
+      "phase": "preview_only_private_beta",
+      "trigger_metric": "user_complaint_count",
+      "threshold": ">=3 serious complaints in 7 days",
+      "severity": "high",
+      "required_action": "pause onboarding and review incidents",
+      "provider_send_disable_required": false,
+      "cron_disable_required": false,
+      "queue_pause_required": true,
+      "source_disable_required": true,
+      "user_notification_required": true,
+      "notes": "user_complaint_escalation"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::01",
+      "incident_type": "raw_data_privacy_leak",
+      "severity": "critical",
+      "detection_signal": "privacy policy violation detected",
+      "first_response_action": "freeze beta activity",
+      "containment_action": "disable send/queue and isolate evidence",
+      "investigation_steps": [
+        "review recent artifacts",
+        "identify exposed field",
+        "scope affected records"
+      ],
+      "recovery_steps": [
+        "redact artifact path",
+        "document breach review"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::02",
+      "incident_type": "duplicate_email_send",
+      "severity": "critical",
+      "detection_signal": "duplicate delivery event or complaint",
+      "first_response_action": "pause queue",
+      "containment_action": "disable send and idempotency review",
+      "investigation_steps": [
+        "inspect delivery_job and provider_request_event preview",
+        "trace idempotency keys"
+      ],
+      "recovery_steps": [
+        "resume only after duplicate block fix"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::03",
+      "incident_type": "unsubscribe_not_honored",
+      "severity": "critical",
+      "detection_signal": "user reports post-unsubscribe alert",
+      "first_response_action": "stop send path",
+      "containment_action": "cancel queued jobs for affected profile",
+      "investigation_steps": [
+        "audit unsubscribe_event and queue effects",
+        "trace token scope"
+      ],
+      "recovery_steps": [
+        "replay suppression/unsubscribe checks"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::04",
+      "incident_type": "suppression_not_honored",
+      "severity": "critical",
+      "detection_signal": "suppressed profile still queued",
+      "first_response_action": "pause queue",
+      "containment_action": "disable send and audit suppression filter",
+      "investigation_steps": [
+        "review suppression_event chain",
+        "inspect pre-dispatch decisions"
+      ],
+      "recovery_steps": [
+        "resume after suppression audit"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::05",
+      "incident_type": "wrong_item_alert",
+      "severity": "high",
+      "detection_signal": "user or reviewer flags wrong item",
+      "first_response_action": "pause affected watch target",
+      "containment_action": "route future candidates to manual review",
+      "investigation_steps": [
+        "compare listing fingerprints",
+        "inspect watch target specificity"
+      ],
+      "recovery_steps": [
+        "tighten adapter or taxonomy rule"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::06",
+      "incident_type": "fake_fill_alert",
+      "severity": "critical",
+      "detection_signal": "adjacent-family substitution confirmed",
+      "first_response_action": "stop affected alert path",
+      "containment_action": "disable candidate family until reviewed",
+      "investigation_steps": [
+        "inspect blocked fake-fill counter",
+        "review source-gap logic"
+      ],
+      "recovery_steps": [
+        "restore only after explicit review"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::07",
+      "incident_type": "source_crawl_blocked",
+      "severity": "high",
+      "detection_signal": "anti-bot or crawl failure spike",
+      "first_response_action": "downgrade source cadence",
+      "containment_action": "disable source fast path",
+      "investigation_steps": [
+        "review source health",
+        "inspect scheduler cooldowns"
+      ],
+      "recovery_steps": [
+        "resume with lower aggression"
+      ],
+      "user_communication_required": false,
+      "postmortem_required": false,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::08",
+      "incident_type": "provider_bounce_spike",
+      "severity": "critical",
+      "detection_signal": "bounce rate exceeds threshold",
+      "first_response_action": "stop real send phase",
+      "containment_action": "provider send disabled",
+      "investigation_steps": [
+        "review domain readiness",
+        "review recipient hygiene"
+      ],
+      "recovery_steps": [
+        "re-enable after provider review"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::09",
+      "incident_type": "provider_complaint_spike",
+      "severity": "critical",
+      "detection_signal": "complaint rate exceeds threshold",
+      "first_response_action": "stop real send phase",
+      "containment_action": "provider send disabled",
+      "investigation_steps": [
+        "review copy/targeting",
+        "review suppression timing"
+      ],
+      "recovery_steps": [
+        "resume only after complaint mitigation"
+      ],
+      "user_communication_required": true,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::10",
+      "incident_type": "webhook_signature_failure",
+      "severity": "critical",
+      "detection_signal": "invalid webhook signatures",
+      "first_response_action": "ignore webhook event",
+      "containment_action": "block real send until verification restored",
+      "investigation_steps": [
+        "review signature config",
+        "inspect event ingestion logs"
+      ],
+      "recovery_steps": [
+        "retest webhook path"
+      ],
+      "user_communication_required": false,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::11",
+      "incident_type": "storage_corruption",
+      "severity": "critical",
+      "detection_signal": "storage export summary inconsistent",
+      "first_response_action": "freeze write path",
+      "containment_action": "review repository preview integrity",
+      "investigation_steps": [
+        "check domain counts",
+        "trace idempotency indexes"
+      ],
+      "recovery_steps": [
+        "restore from clean preview state"
+      ],
+      "user_communication_required": false,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::12",
+      "incident_type": "queue_stuck",
+      "severity": "high",
+      "detection_signal": "delivery queue stops transitioning",
+      "first_response_action": "pause new queue intake",
+      "containment_action": "manually drain or inspect queue",
+      "investigation_steps": [
+        "review delivery states",
+        "inspect blockers"
+      ],
+      "recovery_steps": [
+        "resume after queue health review"
+      ],
+      "user_communication_required": false,
+      "postmortem_required": true,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "incident_scenario",
+      "incident_id": "incident::13",
+      "incident_type": "latency_spike",
+      "severity": "high",
+      "detection_signal": "crawl_to_alert latency threshold crossed",
+      "first_response_action": "reduce beta scope",
+      "containment_action": "pause non-critical alerts",
+      "investigation_steps": [
+        "compare crawl vs alert timestamps",
+        "inspect manual review backlog"
+      ],
+      "recovery_steps": [
+        "resume when latency stabilizes"
+      ],
+      "user_communication_required": false,
+      "postmortem_required": false,
+      "notes": "private beta incident row"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::01",
+      "metric_name": "source_crawl_success_rate",
+      "phase": "preview_only_private_beta",
+      "source_component": "crawl_freshness_scheduler_cron.py",
+      "measurement": "successful preview crawls / total",
+      "warning_threshold": "<90%",
+      "critical_threshold": "<85%",
+      "action_on_warning": "review source failures",
+      "action_on_critical": "pause source expansion",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::02",
+      "metric_name": "source_parse_success_rate",
+      "phase": "preview_only_private_beta",
+      "source_component": "source_change_detection_live_adapter.py",
+      "measurement": "adapted rows accepted / attempted",
+      "warning_threshold": "<92%",
+      "critical_threshold": "<85%",
+      "action_on_warning": "review parser confidence",
+      "action_on_critical": "disable noisy source",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::03",
+      "metric_name": "source_anti_bot_skip_rate",
+      "phase": "preview_only_private_beta",
+      "source_component": "crawl_freshness_scheduler_cron.py",
+      "measurement": "anti-bot skips / source attempts",
+      "warning_threshold": ">15%",
+      "critical_threshold": ">30%",
+      "action_on_warning": "downgrade source cadence",
+      "action_on_critical": "disable source fast path",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::04",
+      "metric_name": "page_hash_unchanged_rate",
+      "phase": "preview_only_private_beta",
+      "source_component": "source_change_detection.py",
+      "measurement": "unchanged pages / total snapshots",
+      "warning_threshold": "trend shift >20%",
+      "critical_threshold": "sudden collapse",
+      "action_on_warning": "review source page stability",
+      "action_on_critical": "audit adapter mapping",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::05",
+      "metric_name": "new_listing_candidate_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "source_change_detection.py",
+      "measurement": "count per daily run",
+      "warning_threshold": "unexpected drop",
+      "critical_threshold": "unexpected zero on all allowed sources",
+      "action_on_warning": "review source health",
+      "action_on_critical": "pause beta claims",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::06",
+      "metric_name": "price_change_candidate_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "source_change_detection.py",
+      "measurement": "count per daily run",
+      "warning_threshold": "unexpected spike",
+      "critical_threshold": "extreme spike",
+      "action_on_warning": "review price parsing",
+      "action_on_critical": "disable source if parse drift",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::07",
+      "metric_name": "sold_removed_candidate_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "source_change_detection.py",
+      "measurement": "count per daily run",
+      "warning_threshold": "unexpected spike",
+      "critical_threshold": "extreme spike",
+      "action_on_warning": "review availability mapping",
+      "action_on_critical": "manual review source",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::08",
+      "metric_name": "fake_fill_block_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "fast_alert_path.py",
+      "measurement": "blocked fake-fill candidates",
+      "warning_threshold": "non-zero trend",
+      "critical_threshold": "confirmed leak",
+      "action_on_warning": "review blocked candidates",
+      "action_on_critical": "stop affected alert path",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::09",
+      "metric_name": "manual_review_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "operations",
+      "measurement": "pending review queue size",
+      "warning_threshold": ">25",
+      "critical_threshold": ">50",
+      "action_on_warning": "slow onboarding",
+      "action_on_critical": "stop beta expansion",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::10",
+      "metric_name": "fast_alert_queue_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "fast_alert_path.py",
+      "measurement": "preview fast queue size",
+      "warning_threshold": "unexpected spike",
+      "critical_threshold": "sustained abnormal spike",
+      "action_on_warning": "review watch target mix",
+      "action_on_critical": "pause lower-priority paths",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::11",
+      "metric_name": "delivery_queue_ready_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "delivery_queue.py",
+      "measurement": "ready preview jobs",
+      "warning_threshold": "unexpected buildup",
+      "critical_threshold": "queue stuck",
+      "action_on_warning": "review queue transitions",
+      "action_on_critical": "pause queue intake",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::12",
+      "metric_name": "duplicate_block_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "delivery_queue.py",
+      "measurement": "duplicate/idempotency blocks",
+      "warning_threshold": "unexpected increase",
+      "critical_threshold": "duplicate send risk",
+      "action_on_warning": "inspect idempotency",
+      "action_on_critical": "pause queue",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::13",
+      "metric_name": "unsubscribe_success_rate",
+      "phase": "private_beta_real_email",
+      "source_component": "unsubscribe/manage runtime",
+      "measurement": "<successful unsubscribe actions / total>",
+      "warning_threshold": "<100%",
+      "critical_threshold": "<100%",
+      "action_on_warning": "audit endpoint flow",
+      "action_on_critical": "disable send",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::14",
+      "metric_name": "suppression_block_rate",
+      "phase": "private_beta_real_email",
+      "source_component": "persistent_alert_storage.py",
+      "measurement": "suppressed jobs blocked / suppressed attempts",
+      "warning_threshold": "<100%",
+      "critical_threshold": "<100%",
+      "action_on_warning": "audit suppression filter",
+      "action_on_critical": "disable send",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::15",
+      "metric_name": "privacy_policy_violation_count",
+      "phase": "preview_only_private_beta",
+      "source_component": "storage+endpoint guards",
+      "measurement": "count of privacy violations",
+      "warning_threshold": ">0",
+      "critical_threshold": ">0",
+      "action_on_warning": "stop review and investigate",
+      "action_on_critical": "stop beta",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::16",
+      "metric_name": "template_render_success_rate",
+      "phase": "preview_only_private_beta",
+      "source_component": "email_template.py",
+      "measurement": "successful previews / attempted renders",
+      "warning_threshold": "<95%",
+      "critical_threshold": "<90%",
+      "action_on_warning": "review template copy",
+      "action_on_critical": "pause template rollout",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::17",
+      "metric_name": "provider_send_enabled_decision_count",
+      "phase": "provider_payload_preview",
+      "source_component": "email_provider_send_enablement_contract.py",
+      "measurement": "allowed decisions count",
+      "warning_threshold": "unexpected non-zero",
+      "critical_threshold": "non-zero without approval",
+      "action_on_warning": "review gate logic",
+      "action_on_critical": "freeze send path",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::18",
+      "metric_name": "provider_send_blocked_count",
+      "phase": "provider_payload_preview",
+      "source_component": "email_provider_send_enablement_contract.py",
+      "measurement": "blocked decisions count",
+      "warning_threshold": "unexpected drop",
+      "critical_threshold": "zero while blocked phase",
+      "action_on_warning": "review send gate coverage",
+      "action_on_critical": "freeze send path",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::19",
+      "metric_name": "alert_latency_minutes",
+      "phase": "preview_only_private_beta",
+      "source_component": "operations",
+      "measurement": "alert candidate ready to queue latency",
+      "warning_threshold": ">60",
+      "critical_threshold": ">120",
+      "action_on_warning": "review queue/man review bottleneck",
+      "action_on_critical": "limit beta scope",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "monitoring_metric",
+      "metric_id": "metric::20",
+      "metric_name": "crawl_to_alert_latency_minutes",
+      "phase": "preview_only_private_beta",
+      "source_component": "operations",
+      "measurement": "crawl snapshot to alert candidate latency",
+      "warning_threshold": ">90",
+      "critical_threshold": ">180",
+      "action_on_warning": "review scheduler/adapter path",
+      "action_on_critical": "pause non-critical scopes",
+      "notes": "private beta monitoring metric"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::01",
+      "queue_name": "low_confidence_listing",
+      "trigger_condition": "listing confidence below threshold",
+      "priority": "high",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "review listing identity and parser confidence",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "repeat low confidence from same source",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::02",
+      "queue_name": "manual_review_required_watch_target",
+      "trigger_condition": "watch target flagged manual review",
+      "priority": "high",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "do not fast-path; require reviewer approval",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "repeated candidate ambiguity",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::03",
+      "queue_name": "source_selector_audit_needed",
+      "trigger_condition": "source readiness not audited",
+      "priority": "high",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "keep source out of fast path",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "source requested for expansion",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::04",
+      "queue_name": "fake_fill_detected",
+      "trigger_condition": "fake-fill block raised",
+      "priority": "critical",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "stop alert send and review taxonomy/source gap logic",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "more than one similar incident",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::05",
+      "queue_name": "adjacent_family_substitution_detected",
+      "trigger_condition": "adjacent family leak risk",
+      "priority": "critical",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "block send and inspect matching logic",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "repeat substitution pattern",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::06",
+      "queue_name": "broad_query_refinement_required",
+      "trigger_condition": "broad query candidate requested",
+      "priority": "medium",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "route to refinement only",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "users repeatedly request broad terms",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::07",
+      "queue_name": "anti_bot_guard",
+      "trigger_condition": "anti-bot risk high",
+      "priority": "high",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "disable source fast path and review cadence",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "anti-bot spike persists",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::08",
+      "queue_name": "raw_policy_violation",
+      "trigger_condition": "raw token/url/email/payload risk",
+      "priority": "critical",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "stop affected path and investigate",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "any confirmed leak",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::09",
+      "queue_name": "provider_not_ready",
+      "trigger_condition": "real send dependency missing",
+      "priority": "medium",
+      "allowed_phase": "provider_payload_preview",
+      "reviewer_action": "keep provider actions preview-only",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "stakeholder requests real send",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::10",
+      "queue_name": "user_complaint",
+      "trigger_condition": "user reports wrong/unsafe behavior",
+      "priority": "high",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "triage complaint and inspect relevant watch/source",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "multiple serious complaints",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "manual_review_queue_policy",
+      "queue_id": "queue::11",
+      "queue_name": "privacy_delete_request",
+      "trigger_condition": "privacy delete requested",
+      "priority": "high",
+      "allowed_phase": "preview_only_private_beta",
+      "reviewer_action": "review delete flow and confirm redaction",
+      "auto_fast_path_allowed": false,
+      "escalation_condition": "delete backlog grows",
+      "notes": "manual review queue policy"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::01",
+      "check_name": "raw email storage prohibited",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "storage contract + implementation",
+      "blocking_if_failed": true,
+      "notes": "raw_email_storage_prohibited"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::02",
+      "check_name": "raw URL storage prohibited",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "adapter/storage contract",
+      "blocking_if_failed": true,
+      "notes": "raw_url_storage_prohibited"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::03",
+      "check_name": "raw provider payload storage prohibited",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "send enablement contract",
+      "blocking_if_failed": true,
+      "notes": "raw_provider_payload_storage_prohibited"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::04",
+      "check_name": "raw webhook body storage prohibited",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "send enablement contract",
+      "blocking_if_failed": true,
+      "notes": "raw_webhook_body_storage_prohibited"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::05",
+      "check_name": "token_hash only",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "unsubscribe/manage endpoint contract",
+      "blocking_if_failed": true,
+      "notes": "token_hash_only"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::06",
+      "check_name": "unsubscribe/manage link present",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "requires_manual_review",
+      "evidence": "template/footer placeholders",
+      "blocking_if_failed": true,
+      "notes": "unsubscribe_manage_link_present"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::07",
+      "check_name": "privacy delete path defined",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "persistent storage implementation",
+      "blocking_if_failed": true,
+      "notes": "privacy_delete_path_defined"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::08",
+      "check_name": "suppression path defined",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "persistent storage + send contract",
+      "blocking_if_failed": true,
+      "notes": "suppression_path_defined"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::09",
+      "check_name": "user data export/delete policy placeholder",
+      "required_for_phase": "private_beta_real_email",
+      "current_status": "requires_manual_review",
+      "evidence": "ops/compliance backlog",
+      "blocking_if_failed": true,
+      "notes": "user_data_export_delete_policy_placeholder"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::10",
+      "check_name": "no account enumeration",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "passed",
+      "evidence": "unsubscribe/manage contract",
+      "blocking_if_failed": true,
+      "notes": "no_account_enumeration"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::11",
+      "check_name": "provider terms reviewed",
+      "required_for_phase": "private_beta_real_email",
+      "current_status": "blocked_missing_dependency",
+      "evidence": "legal/provider backlog",
+      "blocking_if_failed": true,
+      "notes": "provider_terms_reviewed"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::12",
+      "check_name": "source terms reviewed",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "requires_manual_review",
+      "evidence": "source ops review",
+      "blocking_if_failed": true,
+      "notes": "source_terms_reviewed"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::13",
+      "check_name": "compliance copy reviewed",
+      "required_for_phase": "private_beta_real_email",
+      "current_status": "requires_manual_review",
+      "evidence": "copy/legal backlog",
+      "blocking_if_failed": true,
+      "notes": "compliance_copy_reviewed"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::14",
+      "check_name": "no affiliation disclaimer present",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "requires_manual_review",
+      "evidence": "copy backlog",
+      "blocking_if_failed": true,
+      "notes": "no_affiliation_disclaimer_present"
+    },
+    {
+      "row_type": "privacy_compliance_check",
+      "check_id": "privacy::15",
+      "check_name": "source disclaimer present",
+      "required_for_phase": "preview_only_private_beta",
+      "current_status": "requires_manual_review",
+      "evidence": "copy backlog",
+      "blocking_if_failed": true,
+      "notes": "source_disclaimer_present"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::01",
+      "source_name": "Map Camera",
+      "limit_status": "allowed_preview_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "ready candidate from adapter contract"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::02",
+      "source_name": "Fujiya Camera",
+      "limit_status": "allowed_preview_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "ready candidate from adapter contract"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::03",
+      "source_name": "Leica Store Miami",
+      "limit_status": "allowed_preview_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "ready candidate from adapter contract"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::04",
+      "source_name": "Ffordes",
+      "limit_status": "allowed_preview_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "ready candidate from adapter contract"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::05",
+      "source_name": "MPB US",
+      "limit_status": "allowed_preview_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "ready candidate from adapter contract"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::06",
+      "source_name": "Mercari Japan",
+      "limit_status": "blocked_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "anti-bot blocked"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::07",
+      "source_name": "KEH",
+      "limit_status": "review_required_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "selector audit needed"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::08",
+      "source_name": "MPB UK/EU",
+      "limit_status": "review_required_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "selector audit needed"
+    },
+    {
+      "row_type": "beta_source_limit",
+      "source_limit_id": "source_limit::09",
+      "source_name": "Korean sources",
+      "limit_status": "review_required_source",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "sample HTML validation pending"
+    },
+    {
+      "row_type": "beta_watch_target_limit",
+      "watch_target_limit_id": "watch_limit::01",
+      "watch_target_name": "rare_new_listing_only",
+      "limit_status": "allowed_watch_target",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "rare new listing only"
+    },
+    {
+      "row_type": "beta_watch_target_limit",
+      "watch_target_limit_id": "watch_limit::02",
+      "watch_target_name": "source_gap_exact_only",
+      "limit_status": "allowed_watch_target",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "exact-only source gap"
+    },
+    {
+      "row_type": "beta_watch_target_limit",
+      "watch_target_limit_id": "watch_limit::03",
+      "watch_target_name": "selected_high_confidence_watch_targets",
+      "limit_status": "allowed_watch_target",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "high-confidence targets only"
+    },
+    {
+      "row_type": "beta_watch_target_limit",
+      "watch_target_limit_id": "watch_limit::04",
+      "watch_target_name": "broad_query_direct_alert",
+      "limit_status": "blocked_watch_target",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "broad query direct alert forbidden"
+    },
+    {
+      "row_type": "beta_watch_target_limit",
+      "watch_target_limit_id": "watch_limit::05",
+      "watch_target_name": "manual_review_fast_path",
+      "limit_status": "blocked_watch_target",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "manual review targets cannot fast-path"
+    },
+    {
+      "row_type": "beta_watch_target_limit",
+      "watch_target_limit_id": "watch_limit::06",
+      "watch_target_name": "common_digest_urgent_email",
+      "limit_status": "blocked_watch_target",
+      "allowed_phase": "preview_only_private_beta",
+      "notes": "common digest no urgent email"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "internal_fixture_dry_run",
+      "expected_decision_status": "go",
+      "actual_decision_status": "go",
+      "expected_operational_effect": "no actual send",
+      "actual_operational_effect": "local fixture only",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "local_end_to_end_preview",
+      "expected_decision_status": "go",
+      "actual_decision_status": "go",
+      "expected_operational_effect": "scheduler to queue preview allowed",
+      "actual_operational_effect": "local preview path complete",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "preview_only_private_beta",
+      "expected_decision_status": "go_with_limits",
+      "actual_decision_status": "go_with_limits",
+      "expected_operational_effect": "user-visible preview allowed",
+      "actual_operational_effect": "no real email send",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "internal_real_send_limited",
+      "expected_decision_status": "no_go",
+      "actual_decision_status": "no_go",
+      "expected_operational_effect": "missing provider/webhook/db runtime",
+      "actual_operational_effect": "real send blocked",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "private_beta_real_email",
+      "expected_decision_status": "blocked",
+      "actual_decision_status": "blocked",
+      "expected_operational_effect": "send enablement impl + unsubscribe impl + DB adapter + webhooks + monitoring required",
+      "actual_operational_effect": "real email blocked",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "public_beta_candidate",
+      "expected_decision_status": "blocked",
+      "actual_decision_status": "blocked",
+      "expected_operational_effect": "private beta evidence missing",
+      "actual_operational_effect": "public beta blocked",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "fake_fill_detected",
+      "expected_decision_status": "manual_review_required",
+      "actual_decision_status": "manual_review_required",
+      "expected_operational_effect": "alert send blocked",
+      "actual_operational_effect": "manual review required",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "unsubscribe_failure",
+      "expected_decision_status": "blocked",
+      "actual_decision_status": "blocked",
+      "expected_operational_effect": "provider send disabled and queue paused",
+      "actual_operational_effect": "critical incident path",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "suppression_failure",
+      "expected_decision_status": "blocked",
+      "actual_decision_status": "blocked",
+      "expected_operational_effect": "provider send disabled and suppression audit required",
+      "actual_operational_effect": "critical incident path",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "duplicate_send_risk",
+      "expected_decision_status": "blocked",
+      "actual_decision_status": "blocked",
+      "expected_operational_effect": "queue paused and idempotency audit",
+      "actual_operational_effect": "critical incident path",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "raw_privacy_leak",
+      "expected_decision_status": "blocked",
+      "actual_decision_status": "blocked",
+      "expected_operational_effect": "beta stop and privacy incident",
+      "actual_operational_effect": "critical incident path",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_anti_bot_spike",
+      "expected_decision_status": "go_with_limits",
+      "actual_decision_status": "go_with_limits",
+      "expected_operational_effect": "source disabled or downgraded",
+      "actual_operational_effect": "no fast path",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "manual_review_backlog_spike",
+      "expected_decision_status": "go_with_limits",
+      "actual_decision_status": "go_with_limits",
+      "expected_operational_effect": "slow beta expansion",
+      "actual_operational_effect": "no expansion",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "wrong_item_alert",
+      "expected_decision_status": "manual_review_required",
+      "actual_decision_status": "manual_review_required",
+      "expected_operational_effect": "adapter/taxonomy/source check required",
+      "actual_operational_effect": "manual review required",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "provider_complaint_spike",
+      "expected_decision_status": "blocked",
+      "actual_decision_status": "blocked",
+      "expected_operational_effect": "send phase stop and copy review",
+      "actual_operational_effect": "critical incident path",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "preview_only_user_feedback_loop",
+      "expected_decision_status": "go_with_limits",
+      "actual_decision_status": "go_with_limits",
+      "expected_operational_effect": "feedback accepted without provider dependency",
+      "actual_operational_effect": "preview-only feedback loop",
+      "expected_privacy_safe": true,
+      "actual_privacy_safe": true,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": "private beta runbook scenario"
+    },
+    {
+      "row_type": "summary",
+      "phase_count": 8,
+      "gate_count": 20,
+      "checklist_count": 14,
+      "go_no_go_count": 8,
+      "procedure_count": 27,
+      "rollback_count": 12,
+      "incident_count": 13,
+      "metric_count": 20,
+      "manual_review_queue_count": 11,
+      "privacy_check_count": 15,
+      "beta_limit_count": 15,
+      "scenario_count": 16,
+      "phase_status_counts": {
+        "allowed": 2,
+        "allowed_with_limits": 1,
+        "blocked": 5
+      },
+      "gate_status_counts": {
+        "passed": 10,
+        "blocked_missing_dependency": 4,
+        "requires_manual_review": 6
+      },
+      "preview_only_private_beta_status": "allowed_with_limits",
+      "private_beta_real_email_status": "blocked",
+      "real_send_enabled": false,
+      "actual_cron_enabled": false,
+      "actual_db_enabled": false,
+      "status": "pass",
+      "notes": "private beta runbook summary"
+    }
+  ]
+}

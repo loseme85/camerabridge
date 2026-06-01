@@ -1,0 +1,73 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_apo_vario_elmarit_sl_90_280",
+  "family_name": "APO-Vario-Elmarit-SL 90-280mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "L"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread",
+    "version_marker",
+    "apo",
+    "ois",
+    "tripod_collar_included"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_apo_vario_elmarit_sl_90_280_f2_8_4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "L",
+      "system": "SL System",
+      "label": "SL Lens",
+      "model_raw": "APO-Vario-Elmarit-SL",
+      "model_canonical": "APO-Vario-Elmarit-SL",
+      "focal_length": "90-280",
+      "canonical_name": "Leica APO-Vario-Elmarit-SL 90-280mm f/2.8-4",
+      "aliases": [
+        "apo-vario-elmarit-sl 90-280",
+        "apo vario elmarit sl 90-280",
+        "90-280 apo-vario-elmarit-sl",
+        "90-280mm f2.8-4 apo-vario-elmarit-sl",
+        "90-280mm f/2.8-4 apo-vario-elmarit-sl",
+        "leica sl 90-280mm f2.8-4",
+        "leica sl 90-280mm f/2.8-4",
+        "leica sl 90-280 apo",
+        "apo vario elmarit sl 90 280"
+      ],
+      "key_discriminators": [
+        "apo-vario-elmarit-sl",
+        "90-280",
+        "90-280mm",
+        "f2.8-4",
+        "90-280mm f2.8-4",
+        "leica sl",
+        "apo"
+      ],
+      "variant": [
+        "f/2.8-4",
+        "APO",
+        "APO-Vario-Elmarit-SL"
+      ],
+      "price_group": "apo_vario_elmarit_sl_90_280_f2_8_4",
+      "notes": "Round-1 conservative core seed for the Leica SL-side 90-280 tele zoom family. APO, OIS, E82 or filter-thread markers, tripod collar wording, and hood or case bundle wording remain below row level, and bare 90-280 or other broad tele-zoom shorthand is intentionally excluded to avoid neighboring SL zooms, Leica R tele zooms, R 180 or 280 primes, or Sigma/Panasonic/Lumix tele zoom contamination.",
+      "status": "core"
+    }
+  ]
+}

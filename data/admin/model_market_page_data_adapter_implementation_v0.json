@@ -1,0 +1,294 @@
+{
+  "task_name": "P3-MODEL-MARKET-PAGE-DATA-ADAPTER-IMPLEMENTATION",
+  "modified_files": [
+    "model_market_page_data_adapter.py",
+    "scripts/run_p3_model_market_page_data_adapter_implementation.py",
+    "tests/test_model_market_page_data_adapter_implementation.py",
+    "data/admin/p3_model_market_page_data_adapter_implementation_v0.md",
+    "data/admin/p3_model_market_page_data_adapter_implementation_v0.jsonl",
+    "data/admin/model_market_page_data_adapter_implementation_v0.json"
+  ],
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "model_market_page_data_adapter_implementation.v0",
+    "contract_version": "p3_model_market_page_data_adapter_implementation_v0",
+    "implementation_mode": "local_preview",
+    "contract_only": false,
+    "local_preview_enabled": true,
+    "production_adapter_enabled": false,
+    "db_query_enabled": false,
+    "api_enabled": false,
+    "frontend_props_enabled": false,
+    "price_guide_calculation_enabled": false,
+    "archive_builder_enabled": false,
+    "live_crawl_enabled": false,
+    "no_fake_fill_required": true,
+    "adjacent_family_substitution_allowed": false,
+    "broad_query_direct_page_allowed": false,
+    "broad_query_fast_alert_allowed": false,
+    "source_gap_disclosure_required": true,
+    "confidence_required": true,
+    "source_mix_required": true,
+    "raw_url_storage_allowed": false,
+    "raw_html_storage_allowed": false,
+    "raw_email_storage_allowed": false,
+    "raw_provider_payload_allowed": false,
+    "raw_webhook_body_allowed": false,
+    "minimum_sold_confirmed_for_median": 3,
+    "minimum_sources_for_high_confidence": 2,
+    "maximum_single_source_dominance": 0.8,
+    "source_coverage_stale_after_days": 30,
+    "price_guide_stale_warning_days": 180,
+    "adapter_implementation_enabled": false
+  },
+  "bundle_ids": [
+    "bundle_f96a916b6ef3e781",
+    "bundle_90b4e7d3b6db94d1",
+    "bundle_ca0a61f7b39c9432",
+    "bundle_952d45f739f89fcf",
+    "bundle_74dd105e01505b20",
+    "bundle_2a54e1ea70329442"
+  ],
+  "batch_summary": {
+    "exact_ready_count": 2,
+    "source_gap_count": 1,
+    "blocked_count": 3
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "exact_noctilux_market_page_bundle",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "35_lux_aa_exact_rare_variant",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "broad_summicron_query",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "sigma_14_24_l_source_gap",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "active_listing_high_confidence",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "active_listing_low_confidence",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "sold_confirmed_archive_input",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "sold_likely_archive_input",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "expired_removed_input",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "removed_unknown_input",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "anti_bot_skipped_source",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "duplicate_relisted_lineage",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "accessory_listing",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "unsafe_boundary_conflict",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "source_coverage_limited",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "active_only_no_sold_data",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "sold_data_stale",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "target_price_watch",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "smart_deal_placeholder",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "public_bundle_privacy",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "U",
+      "scenario_group": "model_market_page_integration",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "V",
+      "scenario_group": "raw_policy_violation",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "W",
+      "scenario_group": "batch_bundle_generation",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page data adapter implementation scenario validation"
+    }
+  ],
+  "raw_url_present": false,
+  "raw_html_present": false,
+  "raw_email_present": false,
+  "provider_payload_present": false,
+  "raw_webhook_body_present": false
+}

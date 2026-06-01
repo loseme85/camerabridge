@@ -1,0 +1,72 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summicron_r_50",
+  "family_name": "Summicron-R 50mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "R"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "rom",
+    "cam_version",
+    "filter_thread",
+    "version_marker",
+    "special_edition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summicron_r_50_f2",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "R",
+      "system": "R System",
+      "label": "R Lens",
+      "model_raw": "Summicron-R",
+      "model_canonical": "Summicron-R",
+      "focal_length": "50",
+      "canonical_name": "Leica Summicron-R 50mm f/2",
+      "aliases": [
+        "summicron-r 50",
+        "summicron r 50",
+        "r 50 summicron",
+        "50 summicron-r",
+        "50mm f2 summicron-r",
+        "50mm f/2 summicron-r",
+        "r 50/2 summicron",
+        "leica r 50mm f2",
+        "leica r 50mm f/2",
+        "50mm f2 summicron r"
+      ],
+      "key_discriminators": [
+        "summicron-r",
+        "50",
+        "f2",
+        "50mm f2",
+        "r 50/2",
+        "leica r"
+      ],
+      "variant": [
+        "f/2",
+        "Summicron-R"
+      ],
+      "price_group": "summicron_r_50_f2",
+      "notes": "Round-1 conservative core seed for the Leica R-side Summicron 50 family. Summicron-R I/II, ROM, cam markers, Safari, and E55 remain below row level, and broad summicron 50 shorthand is intentionally excluded to avoid M-side, Rigid, anniversary, and SL contamination.",
+      "status": "core"
+    }
+  ]
+}

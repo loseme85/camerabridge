@@ -1,0 +1,68 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_hektor_135",
+  "family_name": "Hektor 135mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "LTM",
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread",
+    "adapter_included",
+    "mount_description"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_hektor_135_f4_5",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "LTM",
+      "system": "Barnack / M System",
+      "label": "Leica Lens",
+      "model_raw": "Hektor",
+      "model_canonical": "Hektor",
+      "focal_length": "135",
+      "canonical_name": "Leica Hektor 135mm f/4.5",
+      "aliases": [
+        "hektor 135",
+        "135 hektor",
+        "hektor 13.5cm",
+        "13.5cm hektor",
+        "135mm f4.5 hektor",
+        "135mm f/4.5 hektor",
+        "m 135/4.5 hektor",
+        "135/4.5 hektor"
+      ],
+      "key_discriminators": [
+        "hektor",
+        "135",
+        "13.5cm",
+        "f4.5",
+        "135/4.5"
+      ],
+      "variant": [
+        "Hektor",
+        "f/4.5"
+      ],
+      "price_group": "hektor_135_f4_5",
+      "notes": "Round-1 conservative core seed for the broad Leica Hektor 135 family. 13.5cm naming, LTM/screw-thread wording, and M shorthand remain inside the same row rather than opening separate seeded variants.",
+      "status": "core"
+    }
+  ]
+}

@@ -1,0 +1,592 @@
+{
+  "task_name": "P3-LIMITED-BETA-RUNTIME-GAP-CLOSURE",
+  "artifact_version": "p3_limited_beta_runtime_gap_closure_v0",
+  "schema_version": "limited_beta_runtime_gap_closure.v0",
+  "generated_at": "2026-06-01T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "limited_beta_runtime_gap_closure.v0",
+    "artifact_version": "p3_limited_beta_runtime_gap_closure_v0",
+    "runtime_gap_closure_only": true,
+    "actual_deployment_enabled": false,
+    "production_launch_enabled": false,
+    "production_launch_go": false,
+    "limited_private_beta_only": true,
+    "public_unrestricted_access_enabled": false,
+    "read_only_runtime_enabled": true,
+    "db_mutation_enabled": false,
+    "actual_cta_send_enabled": false,
+    "CTA_send_enabled": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "raw_listing_links_enabled": false,
+    "user_specific_public_response_enabled": false,
+    "smart_deal_enabled": false,
+    "csv_export_enabled": false,
+    "dealer_visibility_enabled": false,
+    "no_fake_fill_required": true,
+    "source_gap_confirmed_absence_allowed": false,
+    "raw_value_artifact_storage_allowed": false,
+    "local_runtime_bridge_allowed": true,
+    "actual_runtime_pass_requires_callable_test": true,
+    "prior_timeout_resolution_seconds": 75.0,
+    "progress_previous_pct": 99.99,
+    "progress_after_pct": 99.995,
+    "progress_delta_pct": 0.005
+  },
+  "runtime_revalidation_evidence": {
+    "row_type": "runtime_revalidation_evidence",
+    "previous_decision_status": "hold_for_actual_runtime_wiring",
+    "local_module_pass_count": 59,
+    "actual_runtime_pass_count": 0,
+    "unresolved_before_actual_deployment_count": 22,
+    "fail_count": 0,
+    "rollback_required_count": 0,
+    "actual_runtime_surfaces_not_available": [
+      "actual_api_route",
+      "actual_nextjs_frontend_route",
+      "actual_production_db_connection",
+      "monitoring_hook_implementation",
+      "feedback_channel_implementation",
+      "incident_log_implementation",
+      "rollback_switch_implementation"
+    ],
+    "prior_timeout_status": "unresolved_blocker_before_actual_deployment",
+    "notes": "Loaded from limited beta runtime revalidation execution artifact."
+  },
+  "repo_runtime_structure_inspection": {
+    "row_type": "repo_runtime_structure_inspection",
+    "available_runtime_structure": {
+      "app_directory": true,
+      "pages_directory": false,
+      "api_directory": true,
+      "app_api_directory": true,
+      "db_adapter_module": true,
+      "monitoring_module": true,
+      "feedback_module": true,
+      "feature_flag_module": true
+    },
+    "missing_runtime_structure": {
+      "actual_market_page_api_route": true,
+      "actual_market_page_frontend_route": true,
+      "actual_production_db_connection": true
+    },
+    "adapter_needed": true,
+    "route_file_creation_safe": true,
+    "production_deployment_unknown": true,
+    "notes": "Inspection uses local filesystem only and does not infer deployed runtime from directory presence alone."
+  },
+  "runtime_feature_flags": {
+    "flags": {
+      "LIMITED_BETA_RUNTIME_ENABLED": false,
+      "PRODUCTION_LAUNCH_ENABLED": false,
+      "CTA_EMAIL_SEND_ENABLED": false,
+      "NUMERIC_PRICE_DISPLAY_ENABLED": false,
+      "STRUCTURED_DATA_ENABLED": false,
+      "RAW_LISTING_LINKS_ENABLED": false,
+      "USER_SPECIFIC_PUBLIC_RESPONSE_ENABLED": false,
+      "SMART_DEAL_ENABLED": false,
+      "CSV_EXPORT_ENABLED": false,
+      "DEALER_VISIBILITY_ENABLED": false
+    },
+    "safety": {
+      "safe_flag_status": "safe",
+      "violations": [],
+      "risky_flag_count": 9,
+      "safe_flag_count": 9
+    },
+    "explanations": [
+      {
+        "feature_flag": "LIMITED_BETA_RUNTIME_ENABLED",
+        "enabled": false,
+        "reason": "Runtime flag state recorded."
+      },
+      {
+        "feature_flag": "PRODUCTION_LAUNCH_ENABLED",
+        "enabled": false,
+        "reason": "Production launch stays disabled in runtime gap closure."
+      },
+      {
+        "feature_flag": "CTA_EMAIL_SEND_ENABLED",
+        "enabled": false,
+        "reason": "CTA send remains disabled in limited beta runtime bridge."
+      },
+      {
+        "feature_flag": "NUMERIC_PRICE_DISPLAY_ENABLED",
+        "enabled": false,
+        "reason": "Numeric price display stays off to avoid price overclaim."
+      },
+      {
+        "feature_flag": "STRUCTURED_DATA_ENABLED",
+        "enabled": false,
+        "reason": "Structured data stays off to avoid metadata leakage."
+      },
+      {
+        "feature_flag": "RAW_LISTING_LINKS_ENABLED",
+        "enabled": false,
+        "reason": "Raw listing links stay off to avoid unsafe source exposure."
+      },
+      {
+        "feature_flag": "USER_SPECIFIC_PUBLIC_RESPONSE_ENABLED",
+        "enabled": false,
+        "reason": "Public runtime bridge cannot expose user-specific fields."
+      },
+      {
+        "feature_flag": "SMART_DEAL_ENABLED",
+        "enabled": false,
+        "reason": "Smart deal remains a future placeholder only."
+      },
+      {
+        "feature_flag": "CSV_EXPORT_ENABLED",
+        "enabled": false,
+        "reason": "CSV export remains disabled in beta runtime bridge."
+      },
+      {
+        "feature_flag": "DEALER_VISIBILITY_ENABLED",
+        "enabled": false,
+        "reason": "Dealer visibility remains disabled in beta runtime bridge."
+      }
+    ]
+  },
+  "api_results": [
+    {
+      "row_type": "api_runtime_adapter_result",
+      "check_id": "exact_request",
+      "request_path": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph",
+      "route_state": "exact_model_public_market_page",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local API-like runtime adapter only; not a deployed API route."
+    },
+    {
+      "row_type": "api_runtime_adapter_result",
+      "check_id": "source_gap_request",
+      "request_path": "/camera-bridge/source-gap/sigma-14-24mm-dg-dn-art-l-mount",
+      "route_state": "source_gap_public_page",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local API-like runtime adapter only; not a deployed API route."
+    },
+    {
+      "row_type": "api_runtime_adapter_result",
+      "check_id": "broad_request",
+      "request_path": "/camera-bridge/search/summicron",
+      "route_state": "broad_query_refinement_route",
+      "status_code_preview": 302,
+      "response_status": "public_response_safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local API-like runtime adapter only; not a deployed API route."
+    },
+    {
+      "row_type": "api_runtime_adapter_result",
+      "check_id": "unsafe_request",
+      "request_path": "/camera-bridge/market/sl-14-24-vs-sigma-14-24-boundary",
+      "route_state": "unsafe_boundary_review_route",
+      "status_code_preview": 200,
+      "response_status": "public_response_safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local API-like runtime adapter only; not a deployed API route."
+    }
+  ],
+  "frontend_results": [
+    {
+      "row_type": "frontend_runtime_adapter_result",
+      "route_state": "exact_model_public_market_page",
+      "view_kind": "market_page_runtime_view",
+      "view_status": "safe",
+      "cta_mode": "disabled",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local frontend runtime adapter only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_runtime_adapter_result",
+      "route_state": "source_gap_public_page",
+      "view_kind": "market_page_runtime_view",
+      "view_status": "safe",
+      "cta_mode": "disabled",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local frontend runtime adapter only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_runtime_adapter_result",
+      "route_state": "broad_query_refinement_route",
+      "view_kind": "market_page_runtime_view",
+      "view_status": "safe",
+      "cta_mode": "disabled",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local frontend runtime adapter only; not a deployed page."
+    },
+    {
+      "row_type": "frontend_runtime_adapter_result",
+      "route_state": "unsafe_boundary_review_route",
+      "view_kind": "market_page_runtime_view",
+      "view_status": "safe",
+      "cta_mode": "disabled",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable local frontend runtime adapter only; not a deployed page."
+    }
+  ],
+  "db_results": [
+    {
+      "row_type": "db_runtime_adapter_result",
+      "check_id": "exact_bundle",
+      "page_state": "exact_model_full_market_page",
+      "db_runtime_status": "safe",
+      "db_mutation_enabled": false,
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable read-only DB runtime adapter only; not a production DB connection."
+    },
+    {
+      "row_type": "db_runtime_adapter_result",
+      "check_id": "source_gap_bundle",
+      "page_state": "source_gap_market_page",
+      "db_runtime_status": "safe",
+      "db_mutation_enabled": false,
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable read-only DB runtime adapter only; not a production DB connection."
+    },
+    {
+      "row_type": "db_runtime_adapter_result",
+      "check_id": "db_unavailable_bundle",
+      "page_state": "db_unavailable_safe_page",
+      "db_runtime_status": "safe",
+      "db_mutation_enabled": false,
+      "status": "local_runtime_bridge_pass",
+      "notes": "Callable read-only DB runtime adapter only; not a production DB connection."
+    }
+  ],
+  "response_safety_and_route_behavior_results": [
+    {
+      "row_type": "response_safety_check",
+      "check_id": "raw_url_block",
+      "status": "pass",
+      "notes": "Raw injected values are not stored in artifact rows."
+    },
+    {
+      "row_type": "response_safety_check",
+      "check_id": "user_email_block",
+      "status": "pass",
+      "notes": "Raw injected values are not stored in artifact rows."
+    },
+    {
+      "row_type": "response_safety_check",
+      "check_id": "provider_payload_block",
+      "status": "pass",
+      "notes": "Raw injected values are not stored in artifact rows."
+    },
+    {
+      "row_type": "route_behavior_preservation_check",
+      "check_id": "source_gap_no_confirmed_absence",
+      "status": "pass",
+      "notes": "Behavior preserved through local runtime bridge."
+    },
+    {
+      "row_type": "route_behavior_preservation_check",
+      "check_id": "broad_refinement_preserved",
+      "status": "pass",
+      "notes": "Behavior preserved through local runtime bridge."
+    },
+    {
+      "row_type": "route_behavior_preservation_check",
+      "check_id": "unsafe_no_price_cta_preserved",
+      "status": "pass",
+      "notes": "Behavior preserved through local runtime bridge."
+    }
+  ],
+  "rollback_results": [
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "hide_all_limited_beta_routes",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "hide_specific_model_route",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "force_noindex_for_affected_route",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "disable_cta_visible_candidates",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "disable_source_gap_pages",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "disable_market_page_price_widget",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "disable_route_seo_metadata",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "force_safe_fallback_page",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "stop_beta_traffic",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "log_incident",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    },
+    {
+      "row_type": "rollback_runtime_simulation",
+      "action_id": "notify_owner_roles",
+      "simulation_status": "simulation_pass",
+      "validation_status": "safe_simulation_only",
+      "status": "simulation_pass",
+      "notes": "Simulation only; not a configured production rollback switch."
+    }
+  ],
+  "monitoring_results": [
+    {
+      "row_type": "monitoring_runtime_hook_result",
+      "check_id": "public_response_blocked_policy_violation_count",
+      "record_status": "recorded",
+      "event_status": "safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Local count-only monitoring hook; no external provider configured."
+    },
+    {
+      "row_type": "monitoring_runtime_hook_result",
+      "check_id": "feedback_submission_count",
+      "record_status": "recorded",
+      "event_status": "safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Local count-only monitoring hook; no external provider configured."
+    },
+    {
+      "row_type": "monitoring_runtime_hook_result",
+      "check_id": "monitoring_summary",
+      "record_status": "summary",
+      "event_status": "safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Monitoring summary is local-only and count-based."
+    }
+  ],
+  "feedback_results": [
+    {
+      "row_type": "feedback_runtime_channel_result",
+      "category_id": "wrong_model_match",
+      "feedback_status": "accepted_preview",
+      "safety_status": "safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Feedback stored as redacted preview only; not a production feedback system."
+    },
+    {
+      "row_type": "feedback_runtime_channel_result",
+      "category_id": "route_seo_issue",
+      "feedback_status": "accepted_preview",
+      "safety_status": "redacted_safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Feedback stored as redacted preview only; not a production feedback system."
+    },
+    {
+      "row_type": "feedback_runtime_channel_result",
+      "category_id": "summary",
+      "feedback_status": "summary",
+      "safety_status": "safe",
+      "status": "local_runtime_bridge_pass",
+      "notes": "Feedback summary remains category-only."
+    }
+  ],
+  "prior_timeout_resolution": {
+    "row_type": "prior_timeout_resolution_check",
+    "command": "python3 tests/test_limited_beta_operator_signoff_check.py",
+    "timeout_seconds": 75.0,
+    "observed_duration_seconds": 63.836,
+    "status": "resolved",
+    "completion_output_observed": true,
+    "result_summary": "ok (18 tests)",
+    "return_code": 0,
+    "blocker_before_actual_deployment": false,
+    "notes": "Resolved only if direct pass output is observed."
+  },
+  "summary": {
+    "row_type": "runtime_gap_closure_summary",
+    "gap_count_before": 7,
+    "gap_count_closed_local_bridge": 7,
+    "gap_count_still_pending_actual_runtime": 6,
+    "local_runtime_surface_count": 6,
+    "actual_deployed_surface_count": 0,
+    "feature_flags_safe_count": 9,
+    "risky_feature_flags_enabled_count": 0,
+    "rollback_simulation_count": 11,
+    "monitoring_hook_count": 3,
+    "feedback_category_count": 3,
+    "prior_timeout_status": "resolved",
+    "unresolved_before_actual_deployment_count": 21,
+    "decision_status": "runtime_gap_closed_for_local_runtime_bridge",
+    "notes": "Local runtime bridge gaps were closed where adapters can be executed safely. Actual deployed runtime wiring remains separate."
+  },
+  "decision": {
+    "row_type": "runtime_gap_closure_decision",
+    "decision_status": "runtime_gap_closed_for_local_runtime_bridge",
+    "actual_deployment_still_pending": true,
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "notes": "Runtime bridge closure is not deployment and not production launch approval."
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy forbids deployment",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "runtime revalidation evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "repo runtime structure inspected",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "feature flags safe",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "API runtime adapter works",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "frontend runtime adapter works",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "DB runtime adapter works",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "response safety remains enforced",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "source-gap/broad/unsafe behavior preserved",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "rollback simulation works locally",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "monitoring hook works locally",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "feedback channel works locally",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "prior signoff timeout recheck",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "final decision",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "progress report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page limited private beta actual-runtime readiness",
+    "previous_progress_pct": 99.99,
+    "expected_after_completion_pct": 99.995,
+    "delta_pct": 0.005,
+    "notes": "Local runtime bridge surfaces were added without claiming deployment or production launch readiness."
+  },
+  "modified_files": [
+    "limited_beta_runtime_gap_closure.py",
+    "model_market_page_runtime_feature_flags.py",
+    "model_market_page_api_runtime_adapter.py",
+    "model_market_page_frontend_runtime_adapter.py",
+    "model_market_page_db_runtime_adapter.py",
+    "model_market_page_runtime_rollback.py",
+    "model_market_page_runtime_monitoring.py",
+    "model_market_page_runtime_feedback.py",
+    "scripts/run_p3_limited_beta_runtime_gap_closure.py",
+    "tests/test_limited_beta_runtime_gap_closure.py",
+    "data/admin/p3_limited_beta_runtime_gap_closure_v0.md",
+    "data/admin/p3_limited_beta_runtime_gap_closure_v0.jsonl",
+    "data/admin/limited_beta_runtime_gap_closure_v0.json"
+  ]
+}

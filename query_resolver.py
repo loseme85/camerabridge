@@ -182,6 +182,348 @@ def _source_text(record: dict[str, Any], final: dict[str, Any]) -> str:
     return _normalize(" ".join(str(part) for part in parts if part))
 
 
+_SL_ZOOM_QUERY_RANGES = {
+    "14-24": "Super-Vario-Elmarit-SL",
+    "16-35": "Super-Vario-Elmar-SL",
+    "24-90": "Vario-Elmarit-SL",
+    "90-280": "APO-Vario-Elmarit-SL",
+}
+
+_BROAD_LENS_ALIAS_FAMILIES = {
+    "summicron",
+    "summilux",
+}
+
+_THIRD_PARTY_BRAND_PATTERNS = {
+    "sigma": r"\b(?:sigma|시그마)\b",
+    "panasonic": r"\b(?:panasonic|lumix|파나소닉|루믹스)\b",
+    "lumix": r"\b(?:lumix|panasonic|루믹스|파나소닉)\b",
+}
+
+_STALE_THIRD_PARTY_BRAND_PATTERNS = (
+    r"\b(?:sigma|시그마)\b",
+    r"\b(?:panasonic|lumix|파나소닉|루믹스)\b",
+    r"\b(?:voigtlander|보이그랜더)\b",
+    r"\b(?:zeiss|carl zeiss|자이스)\b",
+    r"\b(?:ttartisan|티티아티산)\b",
+    r"\b(?:7artisans|7 artisans|7아티산)\b",
+    r"\b(?:thypoch)\b",
+    r"\b(?:light lens lab)\b",
+    r"\b(?:laowa)\b",
+)
+
+
+def _range_text_patterns(focal_range: str) -> list[str]:
+    parts = re.findall(r"\d{2,3}", focal_range)
+    if len(parts) != 2:
+        return []
+    start, end = parts
+    return [
+        rf"\b{re.escape(start)}\s*-\s*{re.escape(end)}\b",
+        rf"\b{re.escape(start)}\s*/\s*{re.escape(end)}\b",
+        rf"\b{re.escape(start)}\s+{re.escape(end)}\b",
+        rf"\b{re.escape(start)}\s+{re.escape(end)}mm\b",
+        rf"\b{re.escape(start)}mm\s+{re.escape(end)}\b",
+        rf"\b{re.escape(start)}mm\s*-\s*{re.escape(end)}mm\b",
+    ]
+
+
+def _text_has_focal_range(focal_range: str, text: str) -> bool:
+    return any(re.search(pattern, text) for pattern in _range_text_patterns(focal_range))
+
+
+def _project_sl_zoom_like_final_output(intent: dict[str, Any], record: dict[str, Any], final: dict[str, Any]) -> dict[str, Any]:
+    """
+    Search-time only cleanup for stale SL zoom rows in the compact search index.
+
+    Keep this narrow:
+    - explicit SL mount query
+    - one of the known Leica SL zoom focal ranges
+    - obvious SL zoom title/model text
+    """
+    query_mount = _normalize(intent.get("mount"))
+    focal_range = str(intent.get("focal_length") or "")
+    expected_model = _SL_ZOOM_QUERY_RANGES.get(focal_range)
+    if query_mount != "sl" or not expected_model:
+        return final
+
+    category = _normalize(final.get("category"))
+    if category != "lens":
+        return final
+
+    raw = _raw_item(record)
+    title_norm = _normalize(final.get("title_raw") or raw.get("상품명"))
+    model_text = _normalize(" ".join(str(x or "") for x in [final.get("model_canonical"), final.get("model_raw"), final.get("label")]))
+    combined = f"{title_norm} {model_text}".strip()
+
+    if not _text_has_focal_range(focal_range, combined):
+        return final
+
+    sl_zoom_markers = [
+        "vario",
+        "vario elmar",
+        "vario elmarit",
+        "super vario elmar",
+        "super vario elmarit",
+        "apo vario elmarit",
+        "-sl",
+    ]
+    has_marker = any(marker in combined for marker in sl_zoom_markers)
+    has_sl_context = (
+        _normalize(final.get("mount")) == "sl"
+        or _normalize((raw.get("system") or "")) == "sl q s"
+        or bool(re.search(r"\bsl2\b|\bsl3\b|\bsl\b", combined))
+    )
+    if not (has_marker or has_sl_context):
+        return final
+
+    projected = dict(final)
+    projected["mount"] = "SL"
+    projected["label"] = "SL Lens"
+    projected["model_canonical"] = expected_model
+    projected["focal_length"] = focal_range
+    return projected
+
+
+def _project_stale_third_party_brand_final_output(record: dict[str, Any], final: dict[str, Any]) -> dict[str, Any]:
+    """
+    Search-time only brand cleanup for stale compact-index rows whose brand was
+    serialized as Unknown/Other even though the stored raw metadata already
+    marks them as 3rd Party or the title contains an explicit third-party
+    maker token.
+
+    This is intentionally conservative:
+    - do not override explicit Leica / Canon / Nikon / Hasselblad / Zeiss etc.
+    - only recover to the existing canonical bucket `3rd Party`
+    - do not invent a new brand schema
+    """
+    brand_norm = _normalize(final.get("brand"))
+    if brand_norm and brand_norm not in {"unknown", "other"}:
+        return final
+
+    raw = _raw_item(record)
+    raw_label_norm = _normalize(raw.get("label"))
+    title_norm = _normalize(final.get("title_raw") or raw.get("상품명"))
+
+    explicit_third_party = any(re.search(pattern, title_norm) for pattern in _STALE_THIRD_PARTY_BRAND_PATTERNS)
+    if raw_label_norm != "3rd party" and not explicit_third_party:
+        return final
+
+    projected = dict(final)
+    projected["brand"] = "3rd Party"
+    return projected
+
+
+def _broad_lens_alias_family(intent: dict[str, Any]) -> str:
+    """
+    Narrow control for broad Leica lens-family alias queries.
+
+    This intentionally only applies to:
+    - `summicron`
+    - `summilux`
+    - `leica summicron`
+    - `leica summilux`
+
+    It does not apply to:
+    - `cron`
+    - `lux`
+    - focal/mount-specific queries such as `35 lux`, `summicron sl 35`
+    """
+    family = _normalize(intent.get("model_family"))
+    if family not in _BROAD_LENS_ALIAS_FAMILIES:
+        return ""
+
+    normalized_query = _normalize(intent.get("normalized_query") or intent.get("original_query"))
+    if normalized_query not in {family, f"leica {family}"}:
+        return ""
+
+    constrained_fields = [
+        "body_intent",
+        "focal_length",
+        "aperture",
+        "mount",
+        "system",
+        "generation",
+        "filter_size",
+        "optical_formula",
+        "accessory_intent",
+        "accessory_code",
+    ]
+    if any(intent.get(field) for field in constrained_fields):
+        return ""
+    if intent.get("variant"):
+        return ""
+
+    return family
+
+
+def _apply_broad_lens_alias_control(
+    score: float,
+    match_quality: str,
+    match_quality_rank: int,
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    text: str,
+    warnings: list[str],
+) -> tuple[float, str, int]:
+    family = _broad_lens_alias_family(intent)
+    if not family:
+        return score, match_quality, match_quality_rank
+
+    category = _normalize(final.get("category"))
+    mount = _normalize(final.get("mount"))
+    model_text = _normalize(
+        " ".join(
+            str(value or "")
+            for value in [
+                final.get("model_canonical"),
+                final.get("model_raw"),
+                final.get("label"),
+                final.get("title_raw"),
+            ]
+        )
+    )
+    family_text_hit = _contains_normalized_word(model_text or text, family)
+    sl_zoom_like = (
+        category == "lens"
+        and mount == "sl"
+        and (
+            "vario" in model_text
+            or "super vario" in model_text
+            or "apo vario" in model_text
+        )
+    )
+
+    if category in {"accessory", "body"} and family_text_hit:
+        warnings.append("broad_family_alias_non_lens_demoted")
+        score = min(score, 84.0)
+        match_quality = "weak"
+        match_quality_rank = MATCH_QUALITY_RANKS["weak"]
+        return score, match_quality, match_quality_rank
+
+    if sl_zoom_like:
+        warnings.append("broad_family_alias_sl_zoom_demoted")
+        score = min(score, 82.0)
+        match_quality = "weak"
+        match_quality_rank = MATCH_QUALITY_RANKS["weak"]
+
+    return score, match_quality, match_quality_rank
+
+
+def _third_party_l_mount_query_hint(intent: dict[str, Any]) -> tuple[str, str] | tuple[None, None]:
+    brand_raw = None
+    for token in intent.get("tokens", []):
+        if token.get("type") == "brand" and token.get("value") == "3rd Party":
+            brand_raw = _normalize(token.get("raw"))
+            break
+
+    focal_range = str(intent.get("focal_length") or "")
+    if not brand_raw or focal_range not in {"24-70", "14-24", "24-105"}:
+        return None, None
+
+    if not any(token.get("type") == "third_party_l_mount_hint" for token in intent.get("tokens", [])):
+        return None, None
+
+    return brand_raw, focal_range
+
+
+def _third_party_brand_text_hit(brand_raw: str, text: str) -> bool:
+    pattern = _THIRD_PARTY_BRAND_PATTERNS.get(brand_raw)
+    if not pattern:
+        return False
+    return bool(re.search(pattern, text))
+
+
+def _apply_third_party_l_mount_control(
+    score: float,
+    match_quality: str,
+    match_quality_rank: int,
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    text: str,
+    warnings: list[str],
+) -> tuple[float, str, int]:
+    brand_raw, focal_range = _third_party_l_mount_query_hint(intent)
+    if not brand_raw or not focal_range:
+        return score, match_quality, match_quality_rank
+
+    category = _normalize(final.get("category"))
+    mount = _normalize(final.get("mount"))
+    brand_hit = _third_party_brand_text_hit(brand_raw, text)
+    focal_hit = (
+        _normalize(final.get("focal_length")) == _normalize(focal_range)
+        or _text_has_focal_range(focal_range, text)
+    )
+
+    if category != "lens" or mount != "sl" or not brand_hit or not focal_hit:
+        warnings.append("third_party_l_mount_non_exact_demoted")
+        score = min(score, 24.0)
+        match_quality = "weak"
+        match_quality_rank = MATCH_QUALITY_RANKS["weak"]
+
+    return score, match_quality, match_quality_rank
+
+
+_BODY_QUERY_PROJECTION_MODELS = {
+    "SL2": "SL",
+    "SL3": "SL",
+    "M10": "M",
+}
+
+_BODY_QUERY_PROJECTION_ACCESSORY_BLOCKERS = {
+    "battery", "handgrip", "grip", "case", "plate", "strap", "hood",
+    "filter", "adapter", "finder", "charger", "protector", "holster",
+    "thumb", "thumbs", "support", "door", "cover", "cap", "pouch",
+}
+
+_BODY_QUERY_PROJECTION_LENS_BLOCKERS = {
+    "summicron", "summilux", "noctilux", "elmarit", "elmar", "summarit",
+    "summaron", "telyt", "vario", "apo",
+}
+
+
+def _project_body_like_final_output(intent: dict[str, Any], record: dict[str, Any], final: dict[str, Any]) -> dict[str, Any]:
+    """
+    Search-time only body projection for explicit body queries when the stored
+    search index still carries stale lens/accessory labels for obvious body
+    rows like `Leica SL2 Black` / `Leica SL3 Black`.
+
+    This does not modify stored output; it only affects ranking/response for
+    explicit body-intent queries.
+    """
+    body_intent = str(intent.get("body_intent") or "")
+    expected_mount = _BODY_QUERY_PROJECTION_MODELS.get(body_intent)
+    if not expected_mount:
+        return final
+
+    if _normalize(final.get("category")) == "body" and _normalize(final.get("model_canonical")) == _normalize(body_intent):
+        return final
+
+    raw = _raw_item(record)
+    title_norm = _normalize(final.get("title_raw") or raw.get("상품명"))
+    raw_label_norm = _normalize(raw.get("label"))
+    model_norm = _normalize(body_intent)
+
+    if model_norm not in title_norm and model_norm not in raw_label_norm:
+        return final
+
+    if any(token in title_norm for token in _BODY_QUERY_PROJECTION_ACCESSORY_BLOCKERS):
+        return final
+    if any(token in title_norm for token in _BODY_QUERY_PROJECTION_LENS_BLOCKERS):
+        return final
+    if re.search(r"\b\d{2,3}mm\b|\bf\s*/?\s*\d|\b\d{2,3}/\d", title_norm):
+        return final
+
+    projected = dict(final)
+    projected["brand"] = projected.get("brand") or "Leica"
+    projected["mount"] = projected.get("mount") or expected_mount
+    projected["category"] = "Body"
+    projected["label"] = f"{expected_mount} Body"
+    projected["model_raw"] = body_intent
+    projected["model_canonical"] = body_intent
+    return projected
+
+
 def _explicit_brand_requested(intent: dict[str, Any]) -> bool:
     if any(token.get("type") == "brand" for token in intent.get("tokens", [])):
         return True
@@ -397,9 +739,19 @@ def _score_body_intent(
             awarded = possible - 2
             listing_value = "source_text"
         else:
-            match_type = "category_body_broad"
-            awarded = 5
-            listing_value = category
+            mismatches.append("body_intent_mismatch")
+            breakdown.append(
+                ScoreItem(
+                    "body_intent",
+                    body_intent,
+                    category,
+                    possible,
+                    0,
+                    "mismatch",
+                    "category",
+                ).to_dict()
+            )
+            return 0.0, possible
         return _add_score(
             breakdown,
             matched,
@@ -442,6 +794,13 @@ def _score_focal_length(intent: dict[str, Any], final: dict[str, Any], text: str
                 matched,
                 ScoreItem("focal_length", focal, listing_focal, possible, 15, "range_compatible", "focal_length"),
             ), possible
+
+    if _text_has_focal_range(str(focal), text):
+        return _add_score(
+            breakdown,
+            matched,
+            ScoreItem("focal_length", focal, "source_text", possible, possible, "range_text_exact", "title_raw"),
+        ), possible
 
     if re.search(rf"\b{re.escape(str(focal))}\s*(mm|/)\b", text):
         return _add_score(
@@ -748,8 +1107,12 @@ def _score_accessory_intent(
                 match_type = "category_type_exact"
                 awarded = possible
             elif has_intent_text:
-                match_type = "category_text_exact"
-                awarded = possible
+                if accessory_type:
+                    match_type = "category_text_compatible"
+                    awarded = 7
+                else:
+                    match_type = "category_text_exact"
+                    awarded = possible - 2
             else:
                 match_type = "category_broad_accessory"
                 awarded = 3
@@ -795,6 +1158,8 @@ def _score_accessory_intent(
 def _accessory_intent_text_hit(accessory_intent: str, text: str) -> bool:
     if accessory_intent == "hood":
         return bool(re.search(r"\bhood\b|후드", text))
+    if accessory_intent == "battery":
+        return bool(re.search(r"\bbatter(?:y|ies)\b|\bbp\s*-?\s*scl\s*\d+\b|배터리", text))
     if accessory_intent == "filter":
         return bool(
             re.search(
@@ -806,6 +1171,8 @@ def _accessory_intent_text_hit(accessory_intent: str, text: str) -> bool:
         return bool(re.search(r"\b(?:adapter|adaptor)\b|어댑터", text))
     if accessory_intent == "finder":
         return bool(re.search(r"\b(?:finder|viewfinder|brightline|external|visoflex)\b|파인더", text))
+    if accessory_intent == "strap":
+        return bool(re.search(r"\b(?:strap|hand strap|neck strap|shoulder strap)\b|스트랩", text))
     return False
 
 
@@ -987,7 +1354,14 @@ def _suppress_broad_essential_fallback(
 
 
 def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, Any]:
-    final = _final_output(record)
+    final = _project_stale_third_party_brand_final_output(
+        record,
+        _project_sl_zoom_like_final_output(
+            intent,
+            record,
+            _project_body_like_final_output(intent, record, _final_output(record)),
+        ),
+    )
     text = _source_text(record, final)
     matched: list[str] = []
     breakdown: list[dict[str, Any]] = []
@@ -1044,6 +1418,24 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         intent,
         breakdown,
         mismatches,
+        warnings,
+    )
+    score, match_quality, match_quality_rank = _apply_broad_lens_alias_control(
+        score,
+        match_quality,
+        match_quality_rank,
+        intent,
+        final,
+        text,
+        warnings,
+    )
+    score, match_quality, match_quality_rank = _apply_third_party_l_mount_control(
+        score,
+        match_quality,
+        match_quality_rank,
+        intent,
+        final,
+        text,
         warnings,
     )
     implicit_preference_score, implicit_preference_reasons = _implicit_brand_preference(

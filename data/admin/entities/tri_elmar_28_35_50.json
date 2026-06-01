@@ -1,0 +1,73 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_tri_elmar_28_35_50",
+  "family_name": "Tri-Elmar 28-35-50mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "coding",
+    "filter_thread",
+    "version_marker"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_tri_elmar_m_28_35_50_f4_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Tri-Elmar-M",
+      "model_canonical": "Tri-Elmar-M",
+      "focal_length": "28-35-50",
+      "canonical_name": "Leica Tri-Elmar-M 28-35-50mm f/4 ASPH",
+      "aliases": [
+        "tri-elmar 28-35-50",
+        "28-35-50 tri-elmar",
+        "tri-elmar-m 28-35-50",
+        "28 35 50 tri-elmar",
+        "28-35-50mm f4 tri-elmar",
+        "28-35-50mm f/4 tri-elmar",
+        "28-35-50mm f4 asph tri-elmar",
+        "m 28-35-50/4 tri-elmar",
+        "m 28-35-50 f4 tri-elmar",
+        "28/35/50mm f4 tri-elmar"
+      ],
+      "key_discriminators": [
+        "tri-elmar-m",
+        "tri-elmar",
+        "28-35-50",
+        "28 35 50",
+        "28/35/50",
+        "f4",
+        "asph",
+        "m 28-35-50/4"
+      ],
+      "variant": [
+        "28-35-50mm",
+        "f/4",
+        "ASPH"
+      ],
+      "price_group": "tri_elmar_m_28_35_50_f4_asph",
+      "notes": "Round-1 conservative core seed for the Leica M medium-angle Tri-Elmar line. MATE shorthand, focal-length-only shorthand, and E49/E55 version markers remain below row level for the initial seed pass.",
+      "status": "core"
+    }
+  ]
+}

@@ -1,0 +1,1963 @@
+{
+  "task_name": "P3-PRIVATE-BETA-FEEDBACK-TRIAGE-CONTRACT",
+  "artifact_version": "p3_private_beta_feedback_triage_contract_v0",
+  "schema_version": "private_beta_feedback_triage_contract.v0",
+  "generated_at": "2026-06-02T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-02T00:00:00Z",
+    "schema_version": "private_beta_feedback_triage_contract.v0",
+    "artifact_version": "p3_private_beta_feedback_triage_contract_v0",
+    "feedback_triage_contract_only": true,
+    "feedback_system_implementation_enabled": false,
+    "actual_feedback_storage_enabled": false,
+    "external_feedback_provider_enabled": false,
+    "actual_deployment_enabled": false,
+    "production_launch_enabled": false,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "raw_user_message_storage_allowed": false,
+    "raw_email_storage_allowed": false,
+    "raw_listing_url_storage_allowed": false,
+    "provider_payload_storage_allowed": false,
+    "webhook_body_storage_allowed": false,
+    "PII_storage_allowed": false,
+    "redacted_preview_allowed": true,
+    "safe_category_only_allowed": true,
+    "feedback_can_trigger_rollback": true,
+    "feedback_can_create_backlog_candidate": true,
+    "feedback_cannot_directly_modify_taxonomy_or_classifier": true,
+    "feedback_cannot_send_CTA_email": true,
+    "progress_previous_pct": 99.998,
+    "progress_after_pct": 99.999,
+    "progress_delta_pct": 0.001
+  },
+  "dry_run_execution_evidence": {
+    "row_type": "dry_run_execution_evidence",
+    "decision_status": "dry_run_execution_passed_local_bridge",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_deployed_surface_count": 0,
+    "total_stage_count": 15,
+    "stage_pass_count": 15,
+    "rollback_required_count": 0,
+    "forbidden_field_leak_count": 0,
+    "allowed_route_pass_count": 6,
+    "blocked_route_pass_count": 6,
+    "scenario_pass_count": 15,
+    "scenario_total_count": 15,
+    "notes": "Loaded from deployment dry-run execution artifact. This is local bridge evidence only."
+  },
+  "feedback_categories": [
+    {
+      "row_type": "feedback_category",
+      "category_id": "wrong_model_match",
+      "display_name": "Wrong model match",
+      "description": "Exact page resolved to the wrong Leica model or variant.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "taxonomy_review_backlog",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "missing_source",
+      "display_name": "Missing source",
+      "description": "User knows a source or dealer not yet represented safely.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "source_coverage_backlog",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "source_gap_confusing",
+      "display_name": "Source-gap confusing",
+      "description": "User interprets source-gap as a stronger claim than intended.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "SEO_copy_backlog",
+      "owner_role": "SEO_safety_reviewer",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "price_confidence_confusing",
+      "display_name": "Price confidence confusing",
+      "description": "Confidence, guide framing, or price trust is unclear.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "price_guide_backlog",
+      "owner_role": "beta_owner",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "alert_cta_confusing",
+      "display_name": "Alert CTA confusing",
+      "description": "CTA wording or expectation is unclear even though send is disabled.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P3",
+      "default_action_route": "CTA_copy_or_verification_backlog",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "page_copy_unclear",
+      "display_name": "Page copy unclear",
+      "description": "Explanatory copy is understandable only with extra context.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P3",
+      "default_action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "route_seo_issue",
+      "display_name": "Route or SEO issue",
+      "description": "Route title, meta, robots, or public route meaning feels off.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "SEO_copy_backlog",
+      "owner_role": "SEO_safety_reviewer",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "mobile_layout_issue",
+      "display_name": "Mobile layout issue",
+      "description": "Mobile rendering or interaction reduces trust or clarity.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P3",
+      "default_action_route": "frontend_ui_backlog",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "trust_disclaimer_issue",
+      "display_name": "Trust disclaimer issue",
+      "description": "Safety disclaimer or trust framing is unclear.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P3",
+      "default_action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "false_positive_listing",
+      "display_name": "False positive listing",
+      "description": "A shown listing should not have been shown for this model.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "parser_recall_backlog",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "false_negative_missing_listing",
+      "display_name": "False negative missing listing",
+      "description": "A relevant listing is missing from a route the user expected.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "source_coverage_backlog",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "wrong_route_state",
+      "display_name": "Wrong route state",
+      "description": "A route opened as the wrong state for the query or slug.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P1",
+      "default_action_route": "hold_for_fix",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "unsafe_boundary_exposed",
+      "display_name": "Unsafe boundary exposed",
+      "description": "Unsafe boundary opened price or CTA semantics it should block.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P1",
+      "default_action_route": "rollback_required",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "broad_query_confusing",
+      "display_name": "Broad query confusing",
+      "description": "Broad family query looked too much like a market page.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P1",
+      "default_action_route": "hold_for_fix",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "stale_data_confusing",
+      "display_name": "Stale data confusing",
+      "description": "Stale warning existed but did not land clearly enough.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "sold_history_confusing",
+      "display_name": "Sold history confusing",
+      "description": "Sold history lane or state is hard to interpret.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "archive_sold_history_backlog",
+      "owner_role": "beta_owner",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "active_asking_confusing",
+      "display_name": "Active asking confusing",
+      "description": "Active asking and sold history separation is unclear.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "price_guide_backlog",
+      "owner_role": "beta_owner",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "duplicate_or_relist_confusing",
+      "display_name": "Duplicate or relist confusing",
+      "description": "Duplicate or relist behavior feels double-counted.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P2",
+      "default_action_route": "archive_sold_history_backlog",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "privacy_or_raw_data_concern",
+      "display_name": "Privacy or raw data concern",
+      "description": "User observed raw field, provider payload, secret, or privacy leak.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P0",
+      "default_action_route": "rollback_required",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    },
+    {
+      "row_type": "feedback_category",
+      "category_id": "other_redacted",
+      "display_name": "Other redacted",
+      "description": "Feedback was accepted only as redacted preview or safe category.",
+      "accepted_in_private_beta": true,
+      "requires_redaction": true,
+      "default_severity": "P3",
+      "default_action_route": "needs_manual_review",
+      "owner_role": "QA_operator",
+      "notes": "Feedback category contract only; not feedback storage implementation."
+    }
+  ],
+  "feedback_intake_contract": {
+    "row_type": "feedback_intake_contract",
+    "allowed_fields": [
+      "feedback_id",
+      "submitted_at",
+      "route_state",
+      "model_slug_or_safe_label",
+      "feedback_category",
+      "severity_claimed_by_user",
+      "redacted_message_preview",
+      "safe_context_tags",
+      "client_context_safe_flags",
+      "beta_session_hash",
+      "triage_status",
+      "owner_role"
+    ],
+    "forbidden_fields": [
+      "raw_user_message",
+      "user_email",
+      "raw_listing_url",
+      "listing_url",
+      "raw_html",
+      "provider_payload",
+      "webhook_body",
+      "access_token",
+      "DB connection string",
+      "full IP address",
+      "precise device fingerprint",
+      "payment info",
+      "private account identifier"
+    ],
+    "rules": [
+      "Free text may be stored only as redacted preview or safe category only.",
+      "If a URL appears, store only URL presence or safe domain class, never the raw URL.",
+      "If email appears, redact before any triage artifact field is written.",
+      "Provider payload or webhook body causes fail-close rejection.",
+      "Feedback contract does not create user accounts or identity records."
+    ],
+    "notes": "Feedback intake contract stores safe metadata only and blocks raw input fields."
+  },
+  "feedback_safety_gates": [
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "raw_text_redaction",
+      "input_sample_type": "raw_user_message",
+      "expected_result": "redacted_or_category_only",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "email_redaction",
+      "input_sample_type": "user_email",
+      "expected_result": "redacted_or_rejected",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "url_redaction",
+      "input_sample_type": "raw_listing_url",
+      "expected_result": "redacted_or_url_presence_only",
+      "severity_if_failed": "P1",
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "provider_payload_rejection",
+      "input_sample_type": "provider_payload",
+      "expected_result": "rejected_fail_close",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "webhook_rejection",
+      "input_sample_type": "webhook_body",
+      "expected_result": "rejected_fail_close",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "access_token_rejection",
+      "input_sample_type": "access_token",
+      "expected_result": "rejected_fail_close",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "db_string_rejection",
+      "input_sample_type": "DB connection string",
+      "expected_result": "rejected_fail_close",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "pii_rejection",
+      "input_sample_type": "private account identifier",
+      "expected_result": "rejected_fail_close",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "no_raw_in_jsonl",
+      "input_sample_type": "artifact_jsonl",
+      "expected_result": "safe_metadata_only",
+      "severity_if_failed": "P0",
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "no_raw_in_markdown",
+      "input_sample_type": "artifact_markdown",
+      "expected_result": "safe_metadata_only",
+      "severity_if_failed": "P0",
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "no_direct_production_action_from_unreviewed_feedback",
+      "input_sample_type": "direct_runtime_action",
+      "expected_result": "blocked",
+      "severity_if_failed": "P1",
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "no_direct_taxonomy_or_classifier_mutation",
+      "input_sample_type": "taxonomy_or_classifier_write",
+      "expected_result": "blocked",
+      "severity_if_failed": "P1",
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    },
+    {
+      "row_type": "feedback_safety_gate",
+      "safety_gate_id": "no_cta_send_from_feedback",
+      "input_sample_type": "CTA_send",
+      "expected_result": "blocked",
+      "severity_if_failed": "P0",
+      "failure_action": "rollback_required",
+      "notes": "Safety contract blocks raw storage and direct production behavior from feedback inputs."
+    }
+  ],
+  "severity_model": [
+    {
+      "row_type": "feedback_severity_model",
+      "severity_id": "P0",
+      "definition": "Privacy, raw data, CTA email exposure, provider/webhook leak, secret or PII exposure.",
+      "examples": [
+        "privacy leak",
+        "raw URL visible",
+        "provider payload",
+        "webhook body",
+        "CTA email exposure"
+      ],
+      "default_action": "rollback_required",
+      "sla_expectation": "immediate",
+      "owner_role": "data_safety_reviewer",
+      "rollback_relevant": true,
+      "notes": "Severity labels are qualitative triage guidance only."
+    },
+    {
+      "row_type": "feedback_severity_model",
+      "severity_id": "P1",
+      "definition": "Misleading route behavior that can overclaim or open blocked states.",
+      "examples": [
+        "source-gap overclaim",
+        "confirmed absence wording",
+        "unsafe boundary opens price/CTA",
+        "broad query opens market page"
+      ],
+      "default_action": "hold_for_fix",
+      "sla_expectation": "urgent",
+      "owner_role": "QA_operator",
+      "rollback_relevant": true,
+      "notes": "Severity labels are qualitative triage guidance only."
+    },
+    {
+      "row_type": "feedback_severity_model",
+      "severity_id": "P2",
+      "definition": "Meaningful trust or accuracy issues that need review and backlog action.",
+      "examples": [
+        "wrong model match",
+        "false negative missing listing",
+        "stale warning unclear",
+        "sold/active confusion",
+        "duplicate or relist confusion"
+      ],
+      "default_action": "backlog_or_monitor",
+      "sla_expectation": "soon",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "notes": "Severity labels are qualitative triage guidance only."
+    },
+    {
+      "row_type": "feedback_severity_model",
+      "severity_id": "P3",
+      "definition": "Lower-risk clarity, copy, or UX issues.",
+      "examples": [
+        "copy confusion",
+        "mobile layout issue",
+        "trust disclaimer unclear",
+        "minor CTA wording confusion"
+      ],
+      "default_action": "backlog_or_monitor",
+      "sla_expectation": "normal",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "notes": "Severity labels are qualitative triage guidance only."
+    }
+  ],
+  "triage_rules": [
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_privacy_raw_leak",
+      "category": "privacy_or_raw_data_concern",
+      "condition": "any raw field, provider payload, webhook body, secret, or PII exposure",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "owner_role": "data_safety_reviewer",
+      "rollback_relevant": true,
+      "backlog_candidate_type": "privacy_safety_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_cta_email_exposure",
+      "category": "alert_cta_confusing",
+      "condition": "CTA email exposure or send path implied",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "owner_role": "data_safety_reviewer",
+      "rollback_relevant": true,
+      "backlog_candidate_type": "CTA_verification_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_source_gap_overclaim",
+      "category": "source_gap_confusing",
+      "condition": "copy implies confirmed absence or closes coverage gap dishonestly",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer",
+      "rollback_relevant": true,
+      "backlog_candidate_type": "source_coverage_gap",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_unsafe_boundary_exposed",
+      "category": "unsafe_boundary_exposed",
+      "condition": "price or CTA becomes visible across unsafe boundary",
+      "severity": "P1",
+      "action_route": "rollback_required",
+      "owner_role": "data_safety_reviewer",
+      "rollback_relevant": true,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_broad_query_market_page",
+      "category": "broad_query_confusing",
+      "condition": "broad query opened direct market page semantics",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "owner_role": "QA_operator",
+      "rollback_relevant": true,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_wrong_route_state",
+      "category": "wrong_route_state",
+      "condition": "route state misrepresents safe route intent",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "owner_role": "QA_operator",
+      "rollback_relevant": true,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_wrong_model_match",
+      "category": "wrong_model_match",
+      "condition": "exact page or variant resolution is wrong",
+      "severity": "P2",
+      "action_route": "taxonomy_review_backlog",
+      "owner_role": "QA_operator",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_false_positive_listing",
+      "category": "false_positive_listing",
+      "condition": "shown listing should not qualify for this model",
+      "severity": "P2",
+      "action_route": "parser_recall_backlog",
+      "owner_role": "QA_operator",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "parser_recall_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_false_negative_missing_listing",
+      "category": "false_negative_missing_listing",
+      "condition": "expected listing is missing from safe route",
+      "severity": "P2",
+      "action_route": "source_coverage_backlog",
+      "owner_role": "QA_operator",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "source_coverage_gap",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_price_confidence_confusing",
+      "category": "price_confidence_confusing",
+      "condition": "confidence, guide framing, or price trust is unclear",
+      "severity": "P2",
+      "action_route": "price_guide_backlog",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "price_confidence_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_stale_data_confusing",
+      "category": "stale_data_confusing",
+      "condition": "stale warning exists but is not understandable",
+      "severity": "P2",
+      "action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_sold_history_confusing",
+      "category": "sold_history_confusing",
+      "condition": "sold history semantics are unclear or feel mixed",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "sold_archive_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_active_asking_confusing",
+      "category": "active_asking_confusing",
+      "condition": "active asking feels merged with sold history",
+      "severity": "P2",
+      "action_route": "price_guide_backlog",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "active_listing_confusion",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_duplicate_relist_confusing",
+      "category": "duplicate_or_relist_confusing",
+      "condition": "duplicate or relist handling feels double-counted",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "owner_role": "QA_operator",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "duplicate_relist_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_missing_source",
+      "category": "missing_source",
+      "condition": "user identifies likely source coverage gap without raw source capture",
+      "severity": "P2",
+      "action_route": "source_coverage_backlog",
+      "owner_role": "data_safety_reviewer",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "source_coverage_gap",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_page_copy_unclear",
+      "category": "page_copy_unclear",
+      "condition": "copy is confusing but not misleading",
+      "severity": "P3",
+      "action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_mobile_layout_issue",
+      "category": "mobile_layout_issue",
+      "condition": "mobile view creates trust or usability issue",
+      "severity": "P3",
+      "action_route": "frontend_ui_backlog",
+      "owner_role": "QA_operator",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "frontend_mobile_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_trust_disclaimer_issue",
+      "category": "trust_disclaimer_issue",
+      "condition": "disclaimer is present but not clear enough",
+      "severity": "P3",
+      "action_route": "copy_fix_backlog",
+      "owner_role": "beta_owner",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "trust_disclaimer_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_route_seo_issue",
+      "category": "route_seo_issue",
+      "condition": "SEO or robots copy feels risky or unclear",
+      "severity": "P2",
+      "action_route": "SEO_copy_backlog",
+      "owner_role": "SEO_safety_reviewer",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "SEO_robots_copy_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    },
+    {
+      "row_type": "feedback_triage_rule",
+      "rule_id": "rule_other_redacted",
+      "category": "other_redacted",
+      "condition": "feedback accepted only as redacted preview or safe category",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "owner_role": "QA_operator",
+      "rollback_relevant": false,
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "notes": "Triage rules classify safely and never mutate taxonomy, parser, or classifier directly."
+    }
+  ],
+  "action_routes": [
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "rollback_required",
+      "when_used": "P0 privacy/safety or severe boundary issue",
+      "allowed_from_severity": "P0",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "can_trigger_rollback": true,
+      "creates_backlog_item": false,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "route_hide_required",
+      "when_used": "affected route must be hidden while reviewed",
+      "allowed_from_severity": "P1",
+      "owner_role": "rollback_owner",
+      "blocks_beta_expansion": true,
+      "can_trigger_rollback": true,
+      "creates_backlog_item": false,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "hold_for_fix",
+      "when_used": "route or copy behavior needs fix before confidence expands",
+      "allowed_from_severity": "P1",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": true,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": false,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "copy_fix_backlog",
+      "when_used": "copy or disclosure needs work",
+      "allowed_from_severity": "P2",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "parser_recall_backlog",
+      "when_used": "parser or recall issue suspected",
+      "allowed_from_severity": "P2",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "taxonomy_review_backlog",
+      "when_used": "boundary or model family issue suspected",
+      "allowed_from_severity": "P2",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "source_coverage_backlog",
+      "when_used": "source coverage gap likely",
+      "allowed_from_severity": "P2",
+      "owner_role": "data_safety_reviewer",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "price_guide_backlog",
+      "when_used": "price confidence or sold/active framing issue",
+      "allowed_from_severity": "P2",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "archive_sold_history_backlog",
+      "when_used": "archive or sold history issue",
+      "allowed_from_severity": "P2",
+      "owner_role": "beta_owner",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "frontend_ui_backlog",
+      "when_used": "frontend layout issue",
+      "allowed_from_severity": "P3",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "SEO_copy_backlog",
+      "when_used": "SEO, robots, or wording issue",
+      "allowed_from_severity": "P2",
+      "owner_role": "SEO_safety_reviewer",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "CTA_copy_or_verification_backlog",
+      "when_used": "CTA wording or verification issue",
+      "allowed_from_severity": "P2",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": true,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "monitor_only",
+      "when_used": "issue should be watched for repetition",
+      "allowed_from_severity": "P3",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": false,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "ignore_duplicate",
+      "when_used": "duplicate safe category with no new evidence",
+      "allowed_from_severity": "P3",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": false,
+      "notes": "Action route contract only; not automation implementation."
+    },
+    {
+      "row_type": "feedback_action_route",
+      "action_route_id": "needs_manual_review",
+      "when_used": "safe category accepted but needs human review",
+      "allowed_from_severity": "P3",
+      "owner_role": "QA_operator",
+      "blocks_beta_expansion": false,
+      "can_trigger_rollback": false,
+      "creates_backlog_item": false,
+      "notes": "Action route contract only; not automation implementation."
+    }
+  ],
+  "feedback_to_backlog_mapping": [
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "parser_recall_issue",
+      "source_feedback_categories": [
+        "false_positive_listing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "model_slug_or_safe_label"
+      ],
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url"
+      ],
+      "suggested_next_round": "P3-PARSER-RECALL-REVIEW",
+      "owner_role": "QA_operator",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "source_feedback_categories": [
+        "wrong_model_match",
+        "wrong_route_state",
+        "unsafe_boundary_exposed",
+        "broad_query_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "model_slug_or_safe_label"
+      ],
+      "forbidden_fields": [
+        "raw_user_message",
+        "provider_payload"
+      ],
+      "suggested_next_round": "P3-TAXONOMY-BOUNDARY-REVIEW",
+      "owner_role": "QA_operator",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "source_coverage_gap",
+      "source_feedback_categories": [
+        "missing_source",
+        "false_negative_missing_listing",
+        "source_gap_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "safe_context_tags"
+      ],
+      "forbidden_fields": [
+        "raw_listing_url",
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-SOURCE-COVERAGE-REVIEW",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "source_feedback_categories": [
+        "page_copy_unclear",
+        "stale_data_confusing",
+        "other_redacted"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state"
+      ],
+      "forbidden_fields": [
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-MARKET-PAGE-COPY-REVIEW",
+      "owner_role": "beta_owner",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "price_confidence_issue",
+      "source_feedback_categories": [
+        "price_confidence_confusing",
+        "active_asking_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "model_slug_or_safe_label"
+      ],
+      "forbidden_fields": [
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-PRICE-CONFIDENCE-REVIEW",
+      "owner_role": "beta_owner",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "sold_archive_issue",
+      "source_feedback_categories": [
+        "sold_history_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "model_slug_or_safe_label"
+      ],
+      "forbidden_fields": [
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-SOLD-ARCHIVE-REVIEW",
+      "owner_role": "beta_owner",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "active_listing_confusion",
+      "source_feedback_categories": [
+        "active_asking_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "model_slug_or_safe_label"
+      ],
+      "forbidden_fields": [
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-ACTIVE-LISTING-CONFUSION-REVIEW",
+      "owner_role": "beta_owner",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "duplicate_relist_issue",
+      "source_feedback_categories": [
+        "duplicate_or_relist_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "model_slug_or_safe_label"
+      ],
+      "forbidden_fields": [
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-DUPLICATE-RELIST-REVIEW",
+      "owner_role": "QA_operator",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "CTA_verification_issue",
+      "source_feedback_categories": [
+        "alert_cta_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state"
+      ],
+      "forbidden_fields": [
+        "user_email",
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-CTA-EMAIL-VERIFICATION-RUNTIME-CHECK",
+      "owner_role": "QA_operator",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "frontend_mobile_issue",
+      "source_feedback_categories": [
+        "mobile_layout_issue"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "client_context_safe_flags"
+      ],
+      "forbidden_fields": [
+        "precise device fingerprint",
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-FRONTEND-MOBILE-ISSUE-REVIEW",
+      "owner_role": "QA_operator",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "SEO_robots_copy_issue",
+      "source_feedback_categories": [
+        "route_seo_issue",
+        "source_gap_confusing"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state"
+      ],
+      "forbidden_fields": [
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-SEO-ROBOTS-COPY-REVIEW",
+      "owner_role": "SEO_safety_reviewer",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "trust_disclaimer_issue",
+      "source_feedback_categories": [
+        "trust_disclaimer_issue"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state"
+      ],
+      "forbidden_fields": [
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-TRUST-DISCLAIMER-REVIEW",
+      "owner_role": "beta_owner",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    },
+    {
+      "row_type": "feedback_to_backlog_mapping",
+      "backlog_candidate_type": "privacy_safety_issue",
+      "source_feedback_categories": [
+        "privacy_or_raw_data_concern"
+      ],
+      "required_safe_fields": [
+        "feedback_category",
+        "route_state",
+        "safe_context_tags"
+      ],
+      "forbidden_fields": [
+        "provider_payload",
+        "webhook_body",
+        "access_token",
+        "raw_user_message"
+      ],
+      "suggested_next_round": "P3-PRIVACY-SAFETY-REVIEW",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Backlog candidate uses safe metadata only and never copies raw user payload."
+    }
+  ],
+  "metrics_contract": [
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "feedback_count_by_category",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "feedback_count_by_severity",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "P0_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "P1_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "false_positive_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "false_negative_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "source_gap_confusion_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "price_confidence_confusion_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "CTA_confusion_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "stale_warning_confusion_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "duplicate_relist_confusion_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "copy_issue_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "mobile_issue_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "feedback_duplicate_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "feedback_ignored_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "feedback_to_backlog_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    },
+    {
+      "row_type": "feedback_metric_contract",
+      "metric_id": "feedback_to_rollback_count",
+      "aggregation": "count_only",
+      "safe_fields_only": true,
+      "forbidden_fields": [
+        "raw_user_message",
+        "user_email",
+        "raw_listing_url",
+        "provider_payload",
+        "webhook_body"
+      ],
+      "notes": "Feedback metrics are counts only and do not imply production launch readiness."
+    }
+  ],
+  "duplicate_policy": {
+    "row_type": "feedback_duplicate_policy",
+    "duplicate_policy_id": "safe_feedback_duplicate_policy_v1",
+    "dedupe_keys": [
+      "feedback_category",
+      "route_state",
+      "model_slug_or_safe_label",
+      "beta_window_bucket"
+    ],
+    "duplicate_action": "ignore_duplicate",
+    "severity_exception": "P0/P1 with new safe evidence may escalate independently.",
+    "safe_storage_fields": [
+      "feedback_category",
+      "route_state",
+      "model_slug_or_safe_label",
+      "beta_session_hash",
+      "safe_context_tags"
+    ],
+    "notes": "Duplicate policy compares safe tags only and never stores raw text similarity."
+  },
+  "escalation_policy": [
+    {
+      "row_type": "feedback_escalation_policy",
+      "escalation_id": "escalate_p0",
+      "severity": "P0",
+      "trigger": "privacy leak, raw field exposure, CTA email exposure, provider/webhook leak, secret or PII exposure",
+      "owner_roles": [
+        "beta_owner",
+        "data_safety_reviewer",
+        "rollback_owner"
+      ],
+      "required_action": "rollback_required",
+      "blocks_beta_expansion": true,
+      "notes": "Escalation paths are contract-only and do not automate runtime actions."
+    },
+    {
+      "row_type": "feedback_escalation_policy",
+      "escalation_id": "escalate_p1",
+      "severity": "P1",
+      "trigger": "unsafe boundary, source-gap overclaim, broad query market page, wrong route state",
+      "owner_roles": [
+        "beta_owner",
+        "QA_operator",
+        "SEO_safety_reviewer",
+        "data_safety_reviewer"
+      ],
+      "required_action": "hold_for_fix_or_route_hide",
+      "blocks_beta_expansion": true,
+      "notes": "Escalation paths are contract-only and do not automate runtime actions."
+    },
+    {
+      "row_type": "feedback_escalation_policy",
+      "escalation_id": "escalate_p2",
+      "severity": "P2",
+      "trigger": "accuracy/trust issue requiring backlog candidate",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_candidate",
+      "blocks_beta_expansion": false,
+      "notes": "Escalation paths are contract-only and do not automate runtime actions."
+    },
+    {
+      "row_type": "feedback_escalation_policy",
+      "escalation_id": "escalate_p3",
+      "severity": "P3",
+      "trigger": "copy, layout, or minor wording issue",
+      "owner_roles": [
+        "QA_operator",
+        "beta_owner"
+      ],
+      "required_action": "backlog_or_monitor",
+      "blocks_beta_expansion": false,
+      "notes": "Escalation paths are contract-only and do not automate runtime actions."
+    },
+    {
+      "row_type": "feedback_escalation_policy",
+      "escalation_id": "escalate_repeated_p2_p3",
+      "severity": "P2/P3",
+      "trigger": "repeated safe-pattern complaints cross recurrence threshold",
+      "owner_roles": [
+        "beta_owner",
+        "QA_operator"
+      ],
+      "required_action": "promote_to_p1_review",
+      "blocks_beta_expansion": true,
+      "notes": "Escalation paths are contract-only and do not automate runtime actions."
+    },
+    {
+      "row_type": "feedback_escalation_policy",
+      "escalation_id": "escalate_repeated_source_gap_or_price_confidence",
+      "severity": "P2/P3",
+      "trigger": "repeated source-gap or price trust confusion pattern",
+      "owner_roles": [
+        "SEO_safety_reviewer",
+        "beta_owner"
+      ],
+      "required_action": "copy_or_price_backlog_priority_raise",
+      "blocks_beta_expansion": false,
+      "notes": "Escalation paths are contract-only and do not automate runtime actions."
+    }
+  ],
+  "sample_scenarios": [
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S01",
+      "description": "User reports wrong Leica model shown on exact page.",
+      "classified_category": "wrong_model_match",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "Leica Summilux-M 35mm f/1.4 ASPH AA",
+      "severity": "P2",
+      "action_route": "taxonomy_review_backlog",
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "redaction_status": "category_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S02",
+      "description": "User says a missing listing exists on a source not covered.",
+      "classified_category": "missing_source",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "severity": "P2",
+      "action_route": "source_coverage_backlog",
+      "backlog_candidate_type": "source_coverage_gap",
+      "redaction_status": "category_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S03",
+      "description": "User thinks source-gap means no listings exist.",
+      "classified_category": "source_gap_confusing",
+      "route_state": "source_gap_public_page",
+      "safe_model_label": "Sigma 14-24mm DG DN Art L-mount",
+      "severity": "P2",
+      "action_route": "SEO_copy_backlog",
+      "backlog_candidate_type": "SEO_robots_copy_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S04",
+      "description": "User is confused by price confidence.",
+      "classified_category": "price_confidence_confusing",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "severity": "P2",
+      "action_route": "price_guide_backlog",
+      "backlog_candidate_type": "price_confidence_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S05",
+      "description": "User clicks CTA and expects email sent.",
+      "classified_category": "alert_cta_confusing",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "severity": "P3",
+      "action_route": "CTA_copy_or_verification_backlog",
+      "backlog_candidate_type": "CTA_verification_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S06",
+      "description": "User sees broad Summicron as market page.",
+      "classified_category": "broad_query_confusing",
+      "route_state": "broad_query_refinement_route",
+      "safe_model_label": "summicron",
+      "severity": "P1",
+      "action_route": "hold_for_fix",
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "redaction_status": "category_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S07",
+      "description": "User reports unsafe boundary price page.",
+      "classified_category": "unsafe_boundary_exposed",
+      "route_state": "unsafe_boundary_review_route",
+      "safe_model_label": "boundary review",
+      "severity": "P1",
+      "action_route": "rollback_required",
+      "backlog_candidate_type": "taxonomy_boundary_issue",
+      "redaction_status": "category_only",
+      "rollback_triggered": true,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S08",
+      "description": "User reports raw listing URL visible.",
+      "classified_category": "privacy_or_raw_data_concern",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "backlog_candidate_type": "privacy_safety_issue",
+      "redaction_status": "url_presence_only",
+      "rollback_triggered": true,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S09",
+      "description": "User pastes email in feedback text.",
+      "classified_category": "other_redacted",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "general",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "redaction_status": "email_redacted",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S10",
+      "description": "User pastes raw listing URL.",
+      "classified_category": "other_redacted",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "general",
+      "severity": "P3",
+      "action_route": "needs_manual_review",
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "redaction_status": "url_redacted",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S11",
+      "description": "User reports stale data warning unclear.",
+      "classified_category": "stale_data_confusing",
+      "route_state": "stale_data_safe_route",
+      "safe_model_label": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "severity": "P2",
+      "action_route": "copy_fix_backlog",
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S12",
+      "description": "User reports sold history mixed with active asking.",
+      "classified_category": "sold_history_confusing",
+      "route_state": "archive_only_public_page",
+      "safe_model_label": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "backlog_candidate_type": "sold_archive_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S13",
+      "description": "User reports duplicate or relist counted twice.",
+      "classified_category": "duplicate_or_relist_confusing",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "severity": "P2",
+      "action_route": "archive_sold_history_backlog",
+      "backlog_candidate_type": "duplicate_relist_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S14",
+      "description": "User reports mobile layout issue.",
+      "classified_category": "mobile_layout_issue",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "general",
+      "severity": "P3",
+      "action_route": "frontend_ui_backlog",
+      "backlog_candidate_type": "frontend_mobile_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S15",
+      "description": "User reports trust disclaimer unclear.",
+      "classified_category": "trust_disclaimer_issue",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "general",
+      "severity": "P3",
+      "action_route": "copy_fix_backlog",
+      "backlog_candidate_type": "trust_disclaimer_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S16",
+      "description": "Duplicate P3 copy complaint.",
+      "classified_category": "page_copy_unclear",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "general",
+      "severity": "P3",
+      "action_route": "ignore_duplicate",
+      "backlog_candidate_type": "model_market_page_copy_issue",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": true,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S17",
+      "description": "Repeated source-gap confusion pattern.",
+      "classified_category": "source_gap_confusing",
+      "route_state": "source_gap_public_page",
+      "safe_model_label": "Sigma 14-24mm DG DN Art L-mount",
+      "severity": "P2",
+      "action_route": "SEO_copy_backlog",
+      "backlog_candidate_type": "source_coverage_gap",
+      "redaction_status": "redacted_preview_only",
+      "rollback_triggered": false,
+      "duplicate_detected": false,
+      "recurring_pattern": true,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    },
+    {
+      "row_type": "feedback_sample_scenario",
+      "scenario_id": "S18",
+      "description": "P0 privacy concern with provider payload sample.",
+      "classified_category": "privacy_or_raw_data_concern",
+      "route_state": "exact_model_public_market_page",
+      "safe_model_label": "general",
+      "severity": "P0",
+      "action_route": "rollback_required",
+      "backlog_candidate_type": "privacy_safety_issue",
+      "redaction_status": "provider_payload_rejected",
+      "rollback_triggered": true,
+      "duplicate_detected": false,
+      "recurring_pattern": false,
+      "classification_valid": true,
+      "notes": "Sample scenario stores safe category and redaction outcome only."
+    }
+  ],
+  "summary": {
+    "row_type": "feedback_triage_contract_summary",
+    "feedback_category_count": 20,
+    "intake_allowed_field_count": 12,
+    "intake_forbidden_field_count": 13,
+    "safety_gate_count": 13,
+    "severity_level_count": 4,
+    "triage_rule_count": 20,
+    "action_route_count": 15,
+    "backlog_mapping_count": 13,
+    "metric_count": 17,
+    "sample_scenario_count": 18,
+    "escalation_rule_count": 6,
+    "decision_status": "feedback_triage_contract_ready",
+    "production_launch_go": false,
+    "actual_feedback_storage_enabled": false,
+    "raw_storage_allowed": false,
+    "notes": "Feedback triage contract is ready only as a safe classification contract."
+  },
+  "decision": {
+    "row_type": "feedback_triage_contract_decision",
+    "decision_status": "feedback_triage_contract_ready",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_feedback_storage_enabled": false,
+    "notes": "Contract ready means classification rules are defined. It does not mean feedback system implemented or deployed."
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy_forbids_deployment_and_storage",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "dry_run_evidence_loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "feedback_categories_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "intake_contract_safe",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "safety_gates_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "severity_model_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "triage_rules_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "action_routes_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "feedback_to_backlog_mapping_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "metrics_contract_safe",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "duplicate_policy_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "escalation_policy_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "sample_scenarios_classify_correctly",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "final_decision_honest",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "progress_report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "progress_basis": "P3 Market Intelligence / Model Market Page private beta feedback readiness",
+    "previous_progress_pct": 99.998,
+    "expected_after_completion_pct": 99.999,
+    "delta_pct": 0.001
+  },
+  "modified_files": [
+    "private_beta_feedback_triage_contract.py",
+    "scripts/run_p3_private_beta_feedback_triage_contract.py",
+    "tests/test_private_beta_feedback_triage_contract.py",
+    "data/admin/p3_private_beta_feedback_triage_contract_v0.md",
+    "data/admin/p3_private_beta_feedback_triage_contract_v0.jsonl",
+    "data/admin/private_beta_feedback_triage_contract_v0.json"
+  ]
+}

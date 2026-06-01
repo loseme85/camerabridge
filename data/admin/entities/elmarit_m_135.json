@@ -1,0 +1,68 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_elmarit_m_135",
+  "family_name": "Elmarit-M 135mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread",
+    "goggles",
+    "eyes"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmarit_m_135_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Elmarit-M",
+      "model_canonical": "Elmarit-M",
+      "focal_length": "135",
+      "canonical_name": "Leica Elmarit-M 135mm f/2.8",
+      "aliases": [
+        "elmarit 135",
+        "elmarit-m 135",
+        "135 elmarit",
+        "135mm f2.8 elmarit",
+        "135mm f/2.8 elmarit",
+        "135mm f2.8 elmarit-m",
+        "135mm f/2.8 elmarit-m",
+        "m 135/2.8 elmarit",
+        "135/2.8 elmarit"
+      ],
+      "key_discriminators": [
+        "elmarit-m",
+        "elmarit",
+        "135",
+        "f2.8",
+        "m 135/2.8"
+      ],
+      "variant": [
+        "Elmarit-M",
+        "f/2.8"
+      ],
+      "price_group": "elmarit_m_135_f2_8",
+      "notes": "Round-1 conservative core seed for the broad Leica M Elmarit 135 line. Generations and eyes/goggles remain outside the initial seed row.",
+      "status": "core"
+    }
+  ]
+}

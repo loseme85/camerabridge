@@ -1,0 +1,2327 @@
+{
+  "task_name": "P3-EXPIRED-SOLD-LISTING-ARCHIVE-DB-INTEGRATION-CONTRACT",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "expired_sold_listing_archive_db_integration_contract.v0",
+    "contract_version": "p3_expired_sold_listing_archive_db_integration_contract_v0",
+    "contract_only": true,
+    "actual_db_enabled": false,
+    "db_connection_enabled": false,
+    "db_query_enabled": false,
+    "db_migration_enabled": false,
+    "orm_model_enabled": false,
+    "archive_builder_enabled": false,
+    "crawler_runtime_enabled": false,
+    "sold_detector_runtime_enabled": false,
+    "price_guide_calculator_enabled": false,
+    "api_enabled": false,
+    "frontend_enabled": false,
+    "read_only_contract": true,
+    "write_path_contract_only": true,
+    "production_write_enabled": false,
+    "public_page_safe_fields_only": true,
+    "raw_snapshot_direct_read_allowed": false,
+    "raw_url_read_allowed": false,
+    "raw_html_read_allowed": false,
+    "raw_email_read_allowed": false,
+    "provider_payload_read_allowed": false,
+    "webhook_body_read_allowed": false,
+    "sold_overclaim_guard_required": true,
+    "source_gap_disclosure_required": true,
+    "lineage_dedup_required": true,
+    "repeated_observation_required_for_uncertain_states": true,
+    "price_guide_projection_guard_required": true
+  },
+  "archive_db_domains": [
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_record_domain",
+      "purpose": "Safe archive record projection for lane assembly.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "safe_projection_only",
+      "required_join_keys": [
+        "archive_record_id",
+        "archive_listing_id",
+        "canonical_model_id"
+      ],
+      "blocked_join_keys": [],
+      "notes": "Public archive surface."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_identity_domain",
+      "purpose": "Stable archive listing identity and fingerprint boundary.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "safe_projection_only",
+      "required_join_keys": [
+        "archive_listing_id",
+        "source_id",
+        "source_listing_id",
+        "listing_url_fingerprint"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "email"
+      ],
+      "notes": "Identity join anchor."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "source_signal_history_domain",
+      "purpose": "Normalized source signal history without raw payload.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "normalized_signal_only",
+      "required_join_keys": [
+        "archive_record_id",
+        "source_id",
+        "signal_id"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "provider_payload"
+      ],
+      "notes": "Signal history input."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "source_fetch_history_domain",
+      "purpose": "Fetch outcome history and repeated observation window.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "safe_fetch_outcome_only",
+      "required_join_keys": [
+        "source_id",
+        "source_listing_id",
+        "listing_url_fingerprint"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "raw_fetch_response"
+      ],
+      "notes": "Freshness and confidence input."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_status_transition_domain",
+      "purpose": "Archive status transition surface with sold-overclaim guard.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "status_transition_only",
+      "required_join_keys": [
+        "archive_record_id",
+        "archive_status"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "email"
+      ],
+      "notes": "Status state machine."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_price_snapshot_domain",
+      "purpose": "Safe price snapshot presence/type projection.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "hashed_price_text_only",
+      "required_join_keys": [
+        "archive_record_id",
+        "price_snapshot_id"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "raw_html"
+      ],
+      "notes": "No raw price text."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_lineage_domain",
+      "purpose": "Duplicate/relist lineage materialization boundary.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "lineage_projection_only",
+      "required_join_keys": [
+        "lineage_key",
+        "archive_record_id"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "email"
+      ],
+      "notes": "Double-count guard."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_manual_review_domain",
+      "purpose": "Manual review and unsafe boundary state projection.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "review_state_only",
+      "required_join_keys": [
+        "archive_record_id",
+        "canonical_model_id"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "email"
+      ],
+      "notes": "Unsafe state support."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_source_policy_domain",
+      "purpose": "Source reliability and sold-confirmed allowance snapshot.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "source_policy_snapshot_only",
+      "required_join_keys": [
+        "source_id"
+      ],
+      "blocked_join_keys": [
+        "provider_payload",
+        "email"
+      ],
+      "notes": "Reliable-source gate."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "archive_privacy_filter_domain",
+      "purpose": "Privacy filter state for public projection blocking.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "privacy_guard_only",
+      "required_join_keys": [
+        "archive_record_id"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "raw_html",
+        "email"
+      ],
+      "notes": "Projection block state."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "price_guide_projection_domain",
+      "purpose": "Strong/weak/excluded archive projection summary only.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "summary_only",
+      "required_join_keys": [
+        "archive_record_id",
+        "canonical_model_id",
+        "lineage_key"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "raw_html"
+      ],
+      "notes": "Price guide handoff."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "market_page_archive_lane_projection_domain",
+      "purpose": "Market Page sold/expired/source-gap lane projection.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "lane_safe_projection_only",
+      "required_join_keys": [
+        "canonical_model_id",
+        "archive_record_id",
+        "lane_id"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "email"
+      ],
+      "notes": "Lane output."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "source_gap_projection_domain",
+      "purpose": "Source-gap projection for anti-bot/fetch/selector failures.",
+      "read_mode": "projection_only",
+      "write_mode": "contract_only",
+      "public_safe": true,
+      "contains_raw_sensitive_data": false,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": true,
+      "required_privacy_filter": "source_gap_only",
+      "required_join_keys": [
+        "archive_record_id",
+        "source_id"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "raw_fetch_response"
+      ],
+      "notes": "Gap disclosure only."
+    },
+    {
+      "row_type": "archive_db_domain_contract",
+      "domain_id": "raw_source_snapshot_domain",
+      "purpose": "Raw crawler/source snapshot payload store.",
+      "read_mode": "blocked",
+      "write_mode": "implementation_only",
+      "public_safe": false,
+      "contains_raw_sensitive_data": true,
+      "allowed_for_archive_builder": true,
+      "allowed_for_public_projection": false,
+      "required_privacy_filter": "never_public",
+      "required_join_keys": [
+        "internal_snapshot_ref"
+      ],
+      "blocked_join_keys": [
+        "raw_url",
+        "provider_payload",
+        "email"
+      ],
+      "notes": "Defined for boundary only; never public."
+    }
+  ],
+  "archive_record_projection_contracts": [
+    {
+      "row_type": "archive_record_projection_contract",
+      "projection_id": "archive_record_safe_projection",
+      "allowed_fields": [
+        "archive_record_id",
+        "archive_listing_id",
+        "canonical_model_id",
+        "canonical_family_id",
+        "source_id",
+        "source_name",
+        "source_listing_id",
+        "listing_url_fingerprint",
+        "title_fingerprint",
+        "normalized_title_fingerprint",
+        "image_fingerprint_placeholder",
+        "archive_status",
+        "archive_status_confidence",
+        "model_confidence",
+        "manual_review_required",
+        "source_gap_flag",
+        "accessory_flag",
+        "adjacent_family_flag",
+        "lineage_key",
+        "double_count_allowed",
+        "first_seen_at_bucket",
+        "last_observed_at_bucket",
+        "status_updated_at_bucket",
+        "public_dealer_name",
+        "notes_safe"
+      ],
+      "blocked_fields": [
+        "raw_url",
+        "listing_url",
+        "source_url",
+        "raw_html",
+        "html",
+        "raw_image_binary",
+        "raw_email",
+        "email",
+        "raw_seller_personal_info",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output"
+      ],
+      "required_filters": [
+        "privacy_filter_passed",
+        "lineage_projection_attached",
+        "source_policy_snapshot_attached"
+      ],
+      "required_sort": [
+        "status_updated_at_bucket desc",
+        "archive_status_confidence desc"
+      ],
+      "required_limit": 200,
+      "notes": "Public archive/read model projection only; no raw crawler snapshot fields."
+    }
+  ],
+  "source_signal_history_contracts": [
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_69f970a79658f4e4",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "explicit_sold_badge",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "sold_confirmed_candidate",
+      "transition_rule": "requires_sold_confirmed_allowed",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_f8d62f3c55fa8b92",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "sold_page_status",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "sold_confirmed_candidate",
+      "transition_rule": "requires_sold_confirmed_allowed",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_cc3f3e992a6754da",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "dealer_marked_sold",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "sold_confirmed_candidate",
+      "transition_rule": "requires_sold_confirmed_allowed",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_e1386ce061a4bbbc",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "dealer_marked_reserved",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "sold_likely_candidate",
+      "transition_rule": "caution",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_0e23a039a1ed25b3",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "dealer_marked_hold",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "manual_review_or_sold_likely",
+      "transition_rule": "caution",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_8ae40fac21c92fc2",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "out_of_stock_badge",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "sold_likely_candidate",
+      "transition_rule": "caution",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_40dd7715c3626618",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "add_to_cart_disabled",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "sold_likely_candidate",
+      "transition_rule": "caution",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_683adf01f200271c",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "removed_404",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "expired_removed_candidate",
+      "transition_rule": "not_sold",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_8d2bc0db8a8d5be3",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "removed_410",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "expired_removed_candidate",
+      "transition_rule": "not_sold",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_a389a97fdeff38e1",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "redirect_to_search",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "removed_unknown_candidate",
+      "transition_rule": "not_sold",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_6d4f0a4d6a6b6101",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "listing_missing_from_index",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "expired_removed_candidate",
+      "transition_rule": "not_sold",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_415a32c3e17f0715",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "price_disappeared",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "price_changed_candidate",
+      "transition_rule": "not_sold",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_5f77bd4aa58219bb",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "page_content_changed",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "active_observed_candidate",
+      "transition_rule": "not_sold",
+      "source_gap_only": false,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_9dfb0fe8ab3fe011",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "anti_bot_blocked",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "source_gap_only",
+      "transition_rule": "not_sold_not_expired",
+      "source_gap_only": true,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_51eb1bdf9a2b991a",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "source_fetch_failed",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "source_gap_only",
+      "transition_rule": "not_sold_not_expired",
+      "source_gap_only": true,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    },
+    {
+      "row_type": "source_signal_history_contract",
+      "signal_contract_id": "signal_contract_2c3272ae71fc4e33",
+      "signal_id": "signal_id",
+      "archive_record_id": "archive_record_id",
+      "source_id": "source_id",
+      "normalized_signal_type": "source_selector_gap",
+      "signal_confidence": "source_specific_confidence_bucket",
+      "observed_at_bucket": "hour_or_day_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "source_policy_snapshot_ref": "source_policy_snapshot_ref",
+      "raw_payload_present": false,
+      "candidate_state": "source_gap_only",
+      "transition_rule": "not_sold_not_expired",
+      "source_gap_only": true,
+      "notes_safe": "Normalized signal only; raw payload excluded."
+    }
+  ],
+  "archive_status_transition_contracts": [
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_d537808ca58bd510",
+      "from_status": "active_observed",
+      "to_status": "price_changed",
+      "allowed_triggers": [
+        "price_disappeared",
+        "page_content_changed"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Price changed remains active reference only."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_6da9c600a9521f2b",
+      "from_status": "active_observed",
+      "to_status": "sold_confirmed",
+      "allowed_triggers": [
+        "explicit_sold_badge",
+        "sold_page_status",
+        "dealer_marked_sold"
+      ],
+      "requires_reliable_explicit_sold_signal": true,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Reliable explicit sold signal required."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_33fffc1eaade049c",
+      "from_status": "active_observed",
+      "to_status": "sold_likely",
+      "allowed_triggers": [
+        "dealer_marked_reserved",
+        "dealer_marked_hold",
+        "out_of_stock_badge",
+        "add_to_cart_disabled"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Caution state only."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_3a34f2e26acd2a75",
+      "from_status": "active_observed",
+      "to_status": "expired_removed",
+      "allowed_triggers": [
+        "removed_404",
+        "removed_410",
+        "listing_missing_from_index"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Expired/removed, never sold-confirmed."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_d6d6e4b159450316",
+      "from_status": "active_observed",
+      "to_status": "removed_unknown",
+      "allowed_triggers": [
+        "redirect_to_search"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Redirect/search fallback is unknown removal."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_93a76cd084ed341b",
+      "from_status": "active_observed",
+      "to_status": "source_gap_unobserved",
+      "allowed_triggers": [
+        "anti_bot_blocked",
+        "source_fetch_failed",
+        "source_selector_gap"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Coverage gap only."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_bd08e96e0effa5d6",
+      "from_status": "any",
+      "to_status": "manual_review_required",
+      "allowed_triggers": [
+        "low_model_confidence",
+        "review_required_source"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Review state blocks auto sold-confirmed."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_3b7bea4e39fb786b",
+      "from_status": "any",
+      "to_status": "unsafe_boundary_conflict",
+      "allowed_triggers": [
+        "adjacent_family_conflict"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Boundary conflict excluded from target model history."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_0efeee44df5e0959",
+      "from_status": "duplicate_candidate",
+      "to_status": "duplicate_merged",
+      "allowed_triggers": [
+        "same_source_listing_id",
+        "same_url_fingerprint"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Lineage merge only."
+    },
+    {
+      "row_type": "archive_status_transition_contract",
+      "transition_id": "archive_transition_44cc74add499cec1",
+      "from_status": "relist_candidate",
+      "to_status": "relisted",
+      "allowed_triggers": [
+        "relist_identity_match"
+      ],
+      "requires_reliable_explicit_sold_signal": false,
+      "forbidden_transitions": [
+        [
+          "anti_bot_blocked",
+          "sold_confirmed"
+        ],
+        [
+          "source_fetch_failed",
+          "sold_confirmed"
+        ],
+        [
+          "source_selector_gap",
+          "sold_confirmed"
+        ],
+        [
+          "removed_404",
+          "sold_confirmed"
+        ],
+        [
+          "removed_410",
+          "sold_confirmed"
+        ],
+        [
+          "redirect_to_search",
+          "sold_confirmed"
+        ],
+        [
+          "active_price_changed",
+          "sold_confirmed"
+        ],
+        [
+          "accessory",
+          "sold_confirmed"
+        ],
+        [
+          "adjacent_family",
+          "sold_confirmed"
+        ]
+      ],
+      "notes": "Lineage continuation only."
+    }
+  ],
+  "price_snapshot_projection_contracts": [
+    {
+      "row_type": "price_snapshot_projection_contract",
+      "projection_id": "archive_price_snapshot_safe_projection",
+      "allowed_fields": [
+        "price_snapshot_id",
+        "archive_record_id",
+        "source_id",
+        "price_type",
+        "currency_code",
+        "price_amount_present",
+        "price_amount_bucket_or_hash",
+        "original_price_text_hash",
+        "shipping_included_unknown",
+        "tax_included_unknown",
+        "source_price_confidence",
+        "price_changed_from_previous",
+        "observed_at_bucket",
+        "price_guide_eligible",
+        "input_strength",
+        "exclusion_reason",
+        "notes_safe"
+      ],
+      "price_types": [
+        "sale_price_confirmed",
+        "listed_price",
+        "asking_price",
+        "price_on_application",
+        "unknown_price",
+        "removed_before_price_capture"
+      ],
+      "rules": [
+        "sale_price_confirmed + sold_confirmed + reliable source + exact model may become strong projection",
+        "asking/listed active price is active_reference only",
+        "expired/removed/source-gap/boundary/accessory/duplicate cannot become sold median strong input",
+        "numeric raw price public exposure is not required in this contract"
+      ],
+      "notes": "Price type and price presence only; no raw numeric exposure requirement."
+    }
+  ],
+  "lineage_materialization_contracts": [
+    {
+      "row_type": "lineage_materialization_contract",
+      "lineage_key": "materialized_lineage_key",
+      "primary_archive_record_id": "primary_archive_record_id",
+      "related_archive_record_refs": [
+        "archive_record_ref_a",
+        "archive_record_ref_b"
+      ],
+      "lineage_decision": "same_listing_lineage",
+      "double_count_allowed": false,
+      "price_guide_sample_policy": "dedup_to_one_sample",
+      "market_page_display_policy": "single_lane_summary",
+      "manual_review_required": false,
+      "materialized_at_bucket": "day_bucket",
+      "notes_safe": "Exact lineage anchor.",
+      "lineage_hint": "same source_listing_id"
+    },
+    {
+      "row_type": "lineage_materialization_contract",
+      "lineage_key": "materialized_lineage_key",
+      "primary_archive_record_id": "primary_archive_record_id",
+      "related_archive_record_refs": [
+        "archive_record_ref_a",
+        "archive_record_ref_b"
+      ],
+      "lineage_decision": "likely_same_listing_lineage",
+      "double_count_allowed": false,
+      "price_guide_sample_policy": "dedup_to_one_sample",
+      "market_page_display_policy": "single_lane_summary",
+      "manual_review_required": false,
+      "materialized_at_bucket": "day_bucket",
+      "notes_safe": "Fallback lineage anchor.",
+      "lineage_hint": "same source_id + listing_url_fingerprint"
+    },
+    {
+      "row_type": "lineage_materialization_contract",
+      "lineage_key": "materialized_lineage_key",
+      "primary_archive_record_id": "primary_archive_record_id",
+      "related_archive_record_refs": [
+        "archive_record_ref_a",
+        "archive_record_ref_b"
+      ],
+      "lineage_decision": "duplicate_merged",
+      "double_count_allowed": false,
+      "price_guide_sample_policy": "exclude_secondary_records",
+      "market_page_display_policy": "summary_only",
+      "manual_review_required": false,
+      "materialized_at_bucket": "day_bucket",
+      "notes_safe": "No double count.",
+      "lineage_hint": "duplicate merge materialized"
+    },
+    {
+      "row_type": "lineage_materialization_contract",
+      "lineage_key": "materialized_lineage_key",
+      "primary_archive_record_id": "primary_archive_record_id",
+      "related_archive_record_refs": [
+        "archive_record_ref_a",
+        "archive_record_ref_b"
+      ],
+      "lineage_decision": "relisted_link_previous_lineage",
+      "double_count_allowed": false,
+      "price_guide_sample_policy": "count_once_per_lineage",
+      "market_page_display_policy": "timeline_summary_only",
+      "manual_review_required": false,
+      "materialized_at_bucket": "day_bucket",
+      "notes_safe": "Relist continuation.",
+      "lineage_hint": "relisted same source identity"
+    },
+    {
+      "row_type": "lineage_materialization_contract",
+      "lineage_key": "materialized_lineage_key",
+      "primary_archive_record_id": "primary_archive_record_id",
+      "related_archive_record_refs": [
+        "archive_record_ref_a",
+        "archive_record_ref_b"
+      ],
+      "lineage_decision": "cross_source_duplicate_review_only",
+      "double_count_allowed": false,
+      "price_guide_sample_policy": "exclude_until_verified",
+      "market_page_display_policy": "review_only_or_hidden",
+      "manual_review_required": true,
+      "materialized_at_bucket": "day_bucket",
+      "notes_safe": "No auto merge across sources.",
+      "lineage_hint": "cross-source duplicate review"
+    },
+    {
+      "row_type": "lineage_materialization_contract",
+      "lineage_key": "materialized_lineage_key",
+      "primary_archive_record_id": "primary_archive_record_id",
+      "related_archive_record_refs": [
+        "archive_record_ref_a",
+        "archive_record_ref_b"
+      ],
+      "lineage_decision": "no_lineage_match",
+      "double_count_allowed": true,
+      "price_guide_sample_policy": "count_once",
+      "market_page_display_policy": "normal_lane_visibility",
+      "manual_review_required": false,
+      "materialized_at_bucket": "day_bucket",
+      "notes_safe": "Default independent record.",
+      "lineage_hint": "no duplicate or relist evidence"
+    }
+  ],
+  "source_fetch_history_contracts": [
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_ok",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_404",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_410",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_redirect",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_missing_from_index",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_anti_bot_blocked",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_timeout",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_parse_failed",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_selector_gap",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_rate_limited",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    },
+    {
+      "row_type": "source_fetch_history_contract",
+      "fetch_history_id": "fetch_history_id",
+      "source_id": "source_id",
+      "source_listing_id": "source_listing_id",
+      "listing_url_fingerprint": "listing_url_fingerprint",
+      "fetch_outcome": "fetch_unknown_error",
+      "observed_at_bucket": "hour_bucket",
+      "repeated_observation_count": "observation_count_bucket",
+      "selector_version_hash": "selector_version_hash",
+      "raw_response_body_present": false,
+      "raw_url_present": false,
+      "notes_safe": "Fetch outcome only; raw response body excluded."
+    }
+  ],
+  "repeated_observation_contracts": [
+    {
+      "row_type": "repeated_observation_contract",
+      "contract_id": "repeated_observation_default",
+      "strengthens_statuses": [
+        "expired_removed",
+        "removed_unknown",
+        "source_gap_unobserved",
+        "manual_review_required"
+      ],
+      "never_creates_statuses": [
+        "sold_confirmed"
+      ],
+      "requires_explicit_sold_signal_for_sold_confirmed": true,
+      "source_fetch_history_dependency": true,
+      "confidence_effect": "repeated expired observations can raise expired confidence only",
+      "notes": "Repeated observation can strengthen expired/uncertain states but cannot invent sold."
+    }
+  ],
+  "price_guide_projection_contracts": [
+    {
+      "row_type": "price_guide_projection_contract",
+      "projection_id": "sold_confirmed_strong_projection",
+      "allowed_archive_statuses": [
+        "sold_confirmed"
+      ],
+      "allowed_price_types": [
+        "sale_price_confirmed"
+      ],
+      "required_source_policy": "sold_confirmed_allowed_source",
+      "required_identity_confidence": "exact_model_high_or_medium",
+      "required_lineage_filter": "lineage_required_no_double_count",
+      "blocked_statuses": [
+        "sold_likely",
+        "expired_removed",
+        "source_gap_unobserved",
+        "duplicate_merged",
+        "relisted",
+        "accessory_archive_only",
+        "unsafe_boundary_conflict",
+        "manual_review_required"
+      ],
+      "sample_count_policy": "strong_sample_count_only",
+      "source_mix_policy": "source_mix_disclosure_required",
+      "output_fields": [
+        "archive_record_id",
+        "canonical_model_id",
+        "source_id",
+        "price_type",
+        "lineage_key",
+        "archive_status_confidence"
+      ],
+      "notes": "Strong sold projection only."
+    },
+    {
+      "row_type": "price_guide_projection_contract",
+      "projection_id": "sold_likely_weak_projection",
+      "allowed_archive_statuses": [
+        "sold_likely"
+      ],
+      "allowed_price_types": [
+        "sale_price_confirmed",
+        "asking_price",
+        "listed_price"
+      ],
+      "required_source_policy": "sold_likely_allowed_source",
+      "required_identity_confidence": "exact_model_high_or_medium",
+      "required_lineage_filter": "lineage_required_no_double_count",
+      "blocked_statuses": [
+        "sold_confirmed"
+      ],
+      "sample_count_policy": "weak_caution_only",
+      "source_mix_policy": "source_mix_disclosure_required",
+      "output_fields": [
+        "archive_record_id",
+        "canonical_model_id",
+        "source_id",
+        "price_type",
+        "archive_status_confidence"
+      ],
+      "notes": "Weak only; cannot become median."
+    },
+    {
+      "row_type": "price_guide_projection_contract",
+      "projection_id": "active_reference_projection",
+      "allowed_archive_statuses": [
+        "active_observed",
+        "price_changed"
+      ],
+      "allowed_price_types": [
+        "asking_price",
+        "listed_price"
+      ],
+      "required_source_policy": "safe_active_source",
+      "required_identity_confidence": "exact_or_review",
+      "required_lineage_filter": "lineage_required_no_double_count",
+      "blocked_statuses": [
+        "sold_confirmed"
+      ],
+      "sample_count_policy": "reference_only",
+      "source_mix_policy": "source_mix_optional",
+      "output_fields": [
+        "archive_record_id",
+        "canonical_model_id",
+        "source_id",
+        "price_type"
+      ],
+      "notes": "Active asking is not sold median."
+    },
+    {
+      "row_type": "price_guide_projection_contract",
+      "projection_id": "archive_depth_projection",
+      "allowed_archive_statuses": [
+        "expired_removed"
+      ],
+      "allowed_price_types": [
+        "removed_before_price_capture",
+        "unknown_price",
+        "sale_price_confirmed"
+      ],
+      "required_source_policy": "safe_archive_source",
+      "required_identity_confidence": "exact_or_review",
+      "required_lineage_filter": "lineage_optional",
+      "blocked_statuses": [
+        "sold_confirmed"
+      ],
+      "sample_count_policy": "archive_depth_only",
+      "source_mix_policy": "source_mix_optional",
+      "output_fields": [
+        "archive_record_id",
+        "canonical_model_id",
+        "archive_status"
+      ],
+      "notes": "Archive depth only, not median."
+    },
+    {
+      "row_type": "price_guide_projection_contract",
+      "projection_id": "source_gap_projection",
+      "allowed_archive_statuses": [
+        "source_gap_unobserved"
+      ],
+      "allowed_price_types": [
+        "unknown_price"
+      ],
+      "required_source_policy": "source_gap_safe_source",
+      "required_identity_confidence": "exact_or_review",
+      "required_lineage_filter": "lineage_optional",
+      "blocked_statuses": [
+        "sold_confirmed"
+      ],
+      "sample_count_policy": "no_price_signal",
+      "source_mix_policy": "source_mix_optional",
+      "output_fields": [
+        "archive_record_id",
+        "canonical_model_id",
+        "source_id",
+        "archive_status"
+      ],
+      "notes": "Coverage gap only."
+    },
+    {
+      "row_type": "price_guide_projection_contract",
+      "projection_id": "excluded_projection",
+      "allowed_archive_statuses": [
+        "removed_unknown",
+        "duplicate_merged",
+        "relisted",
+        "manual_review_required",
+        "unsafe_boundary_conflict",
+        "accessory_archive_only",
+        "adjacent_family_excluded"
+      ],
+      "allowed_price_types": [
+        "sale_price_confirmed",
+        "listed_price",
+        "asking_price",
+        "price_on_application",
+        "unknown_price"
+      ],
+      "required_source_policy": "excluded",
+      "required_identity_confidence": "excluded",
+      "required_lineage_filter": "lineage_optional",
+      "blocked_statuses": [
+        "sold_confirmed"
+      ],
+      "sample_count_policy": "excluded",
+      "source_mix_policy": "source_mix_optional",
+      "output_fields": [
+        "archive_record_id",
+        "canonical_model_id",
+        "exclusion_reason"
+      ],
+      "notes": "Excluded from price guide input."
+    }
+  ],
+  "market_page_archive_lane_projection_contracts": [
+    {
+      "row_type": "market_page_archive_lane_projection_contract",
+      "lane_id": "sold_confirmed",
+      "allowed_archive_statuses": [
+        "sold_confirmed"
+      ],
+      "allowed_flags": [
+        "exact_model_only",
+        "reliable_source_only"
+      ],
+      "display_label": "Sold confirmed",
+      "caution_required": false,
+      "price_label_policy": "sold_confirmed_price_only",
+      "raw_field_policy": "safe_fields_only",
+      "sort_policy": "status_updated_at_bucket desc",
+      "limit_policy": 24,
+      "notes": "Exact + reliable only."
+    },
+    {
+      "row_type": "market_page_archive_lane_projection_contract",
+      "lane_id": "sold_likely",
+      "allowed_archive_statuses": [
+        "sold_likely"
+      ],
+      "allowed_flags": [
+        "caution_required"
+      ],
+      "display_label": "Sold likely",
+      "caution_required": true,
+      "price_label_policy": "caution_price_only",
+      "raw_field_policy": "safe_fields_only",
+      "sort_policy": "status_updated_at_bucket desc",
+      "limit_policy": 24,
+      "notes": "Caution required."
+    },
+    {
+      "row_type": "market_page_archive_lane_projection_contract",
+      "lane_id": "expired_removed",
+      "allowed_archive_statuses": [
+        "expired_removed"
+      ],
+      "allowed_flags": [
+        "not_sold_price"
+      ],
+      "display_label": "Expired / removed",
+      "caution_required": true,
+      "price_label_policy": "not_sold_price_label",
+      "raw_field_policy": "safe_fields_only",
+      "sort_policy": "status_updated_at_bucket desc",
+      "limit_policy": 24,
+      "notes": "Expired removed is not sold price."
+    },
+    {
+      "row_type": "market_page_archive_lane_projection_contract",
+      "lane_id": "active_uncertain_review",
+      "allowed_archive_statuses": [
+        "active_observed",
+        "price_changed",
+        "manual_review_required",
+        "removed_unknown",
+        "relisted"
+      ],
+      "allowed_flags": [
+        "review_context"
+      ],
+      "display_label": "Review / uncertain",
+      "caution_required": true,
+      "price_label_policy": "reference_only",
+      "raw_field_policy": "safe_fields_only",
+      "sort_policy": "status_updated_at_bucket desc",
+      "limit_policy": 24,
+      "notes": "Uncertain lane only."
+    },
+    {
+      "row_type": "market_page_archive_lane_projection_contract",
+      "lane_id": "source_gap_watch",
+      "allowed_archive_statuses": [
+        "source_gap_unobserved"
+      ],
+      "allowed_flags": [
+        "source_gap_only"
+      ],
+      "display_label": "Source gap watch",
+      "caution_required": true,
+      "price_label_policy": "no_price_label",
+      "raw_field_policy": "safe_fields_only",
+      "sort_policy": "status_updated_at_bucket desc",
+      "limit_policy": 24,
+      "notes": "Anti-bot/fetch/selector gap only."
+    },
+    {
+      "row_type": "market_page_archive_lane_projection_contract",
+      "lane_id": "related_but_not_substitute",
+      "allowed_archive_statuses": [
+        "unsafe_boundary_conflict",
+        "adjacent_family_excluded"
+      ],
+      "allowed_flags": [
+        "not_substitute"
+      ],
+      "display_label": "Related, not substitute",
+      "caution_required": true,
+      "price_label_policy": "no_model_history_price",
+      "raw_field_policy": "safe_fields_only",
+      "sort_policy": "status_updated_at_bucket desc",
+      "limit_policy": 24,
+      "notes": "Adjacent family separated."
+    },
+    {
+      "row_type": "market_page_archive_lane_projection_contract",
+      "lane_id": "accessory_compatible_not_model",
+      "allowed_archive_statuses": [
+        "accessory_archive_only"
+      ],
+      "allowed_flags": [
+        "accessory_only"
+      ],
+      "display_label": "Compatible accessory",
+      "caution_required": true,
+      "price_label_policy": "not_model_listing_price",
+      "raw_field_policy": "safe_fields_only",
+      "sort_policy": "status_updated_at_bucket desc",
+      "limit_policy": 24,
+      "notes": "Accessory separated from model history."
+    }
+  ],
+  "privacy_boundary_contracts": [
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "raw_url_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "archive_record_public_projection_blocked",
+      "notes": "raw URL cannot enter projection"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "raw_html_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "archive_record_public_projection_blocked",
+      "notes": "raw HTML cannot enter projection"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "raw_email_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "archive_record_public_projection_blocked",
+      "notes": "raw email cannot enter projection"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "provider_payload_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "archive_record_public_projection_blocked",
+      "notes": "provider payload cannot enter projection"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "raw_fetch_response_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "price_guide_projection_blocked",
+      "notes": "raw fetch response cannot enter public read model"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "raw_selector_output_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "market_page_lane_blocked",
+      "notes": "raw selector output cannot enter public read model"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "token_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "archive_record_public_projection_blocked",
+      "notes": "tokens cannot enter public projection"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "raw_join_key_block",
+      "violation_result": "projection_invalid",
+      "blocked_projection_state": "market_page_lane_blocked",
+      "notes": "raw URL/email join keys are forbidden"
+    },
+    {
+      "row_type": "privacy_boundary_contract",
+      "privacy_check_id": "public_projection_safe_fields_only",
+      "violation_result": "policy_violation_logged",
+      "blocked_projection_state": "archive_record_public_projection_blocked",
+      "notes": "safe field allowlist enforced"
+    }
+  ],
+  "fallback_error_contracts": [
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "archive_projection_unavailable",
+      "fallback_behavior": "safe_archive_empty_state",
+      "notes": "Never create sold_confirmed from missing projection."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "signal_history_unavailable",
+      "fallback_behavior": "manual_review_or_unknown",
+      "notes": "Missing signal history cannot create sold."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "price_snapshot_unavailable",
+      "fallback_behavior": "keep_status_but_hide_strong_input",
+      "notes": "No strong price-guide input without snapshot."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "lineage_materialization_unavailable",
+      "fallback_behavior": "reduce_confidence_or_hide_price_guide",
+      "notes": "No double count until lineage recovers."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "source_fetch_history_unavailable",
+      "fallback_behavior": "stale_or_unknown_fetch_history",
+      "notes": "Show unknown/stale warning."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "privacy_filter_failed",
+      "fallback_behavior": "archive_record_public_projection_blocked",
+      "notes": "Privacy failure blocks public projection."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "source_policy_unavailable",
+      "fallback_behavior": "manual_review_required",
+      "notes": "No auto sold_confirmed without source policy."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "stale_or_unknown_fetch_history",
+      "fallback_behavior": "stale_or_unknown_fetch_history",
+      "notes": "Unknown fetch history lowers confidence."
+    },
+    {
+      "row_type": "fallback_error_contract",
+      "fallback_state": "safe_archive_empty_state",
+      "fallback_behavior": "safe_archive_empty_state",
+      "notes": "No fake sold record."
+    }
+  ],
+  "privacy_boundary_checks": [
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "raw_url_block",
+      "field_or_join": "raw_url",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "raw_html_block",
+      "field_or_join": "raw_html",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "raw_email_block",
+      "field_or_join": "raw_email",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "provider_payload_block",
+      "field_or_join": "provider_payload",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "raw_fetch_response_block",
+      "field_or_join": "raw_fetch_response",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "raw_selector_output_block",
+      "field_or_join": "raw_selector_output",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "token_block",
+      "field_or_join": "verification_token",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "raw_join_key_block",
+      "field_or_join": "raw_url/email join",
+      "status": "blocked",
+      "notes": "Archive public projection privacy boundary."
+    },
+    {
+      "row_type": "privacy_boundary_check",
+      "check_id": "public_projection_safe_fields_only",
+      "field_or_join": "safe_field_allowlist",
+      "status": "enforced",
+      "notes": "Archive public projection privacy boundary."
+    }
+  ],
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "reliable explicit sold DB projection",
+      "expected_assertions": [
+        "sold_confirmed",
+        "strong projection allowed",
+        "no raw field"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "review-required source sold signal",
+      "expected_assertions": [
+        "manual_review_required or sold_likely",
+        "no auto sold_confirmed"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "404/410 projection",
+      "expected_assertions": [
+        "expired_removed",
+        "no sold_confirmed",
+        "no median strong input"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "redirect removed unknown",
+      "expected_assertions": [
+        "removed_unknown",
+        "no price guide input"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "anti-bot blocked",
+      "expected_assertions": [
+        "source_gap_unobserved",
+        "no sold/expired"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "fetch failed / selector gap",
+      "expected_assertions": [
+        "source_gap_unobserved",
+        "no sold/expired"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "active price changed",
+      "expected_assertions": [
+        "price_changed",
+        "active_reference only"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "duplicate same source_listing_id",
+      "expected_assertions": [
+        "same_listing_lineage",
+        "double count false"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "duplicate same URL fingerprint",
+      "expected_assertions": [
+        "likely_same_listing_lineage",
+        "double count false"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "relisted same source identity",
+      "expected_assertions": [
+        "relisted lineage",
+        "double count false"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "cross-source duplicate",
+      "expected_assertions": [
+        "review_only_no_auto_merge"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "accessory removed",
+      "expected_assertions": [
+        "accessory archive only",
+        "not model sold history"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "adjacent family conflict",
+      "expected_assertions": [
+        "unsafe_boundary_conflict or adjacent_family_excluded",
+        "no target model strong input"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "raw URL in archive projection",
+      "expected_assertions": [
+        "projection invalid"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "raw HTML/fetch response",
+      "expected_assertions": [
+        "projection invalid"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "raw email/provider payload",
+      "expected_assertions": [
+        "projection invalid"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "raw URL/email join key",
+      "expected_assertions": [
+        "join invalid"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "source policy unavailable",
+      "expected_assertions": [
+        "no auto sold_confirmed"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "lineage unavailable",
+      "expected_assertions": [
+        "confidence reduced or price guide hidden"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "price snapshot unavailable",
+      "expected_assertions": [
+        "sold status may remain",
+        "no strong price guide input"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "U",
+      "scenario_group": "repeated observation strengthens expired removed",
+      "expected_assertions": [
+        "expired confidence can increase",
+        "still not sold_confirmed"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "V",
+      "scenario_group": "source fetch history unavailable",
+      "expected_assertions": [
+        "stale/unknown warning"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "W",
+      "scenario_group": "price guide projection summary",
+      "expected_assertions": [
+        "strong/weak/active/archive/source-gap/excluded separated"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "X",
+      "scenario_group": "Market Page archive lane projection",
+      "expected_assertions": [
+        "sold/sold_likely/expired/source-gap/related/accessory lanes separated"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Y",
+      "scenario_group": "fallback safe archive empty state",
+      "expected_assertions": [
+        "no fake sold record"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Z",
+      "scenario_group": "progress report",
+      "expected_assertions": [
+        "previous 83",
+        "expected 87",
+        "delta 4"
+      ],
+      "status": "passed",
+      "notes": "Archive DB integration contract validation."
+    }
+  ],
+  "contract_checks": [
+    {
+      "row_type": "contract_check",
+      "check_id": "db_disabled",
+      "status": "passed",
+      "notes": "Contract forbids actual DB runtime."
+    },
+    {
+      "row_type": "contract_check",
+      "check_id": "raw_snapshot_blocked",
+      "status": "passed",
+      "notes": "Raw snapshot domain cannot directly feed public projection."
+    },
+    {
+      "row_type": "contract_check",
+      "check_id": "sold_overclaim_guard",
+      "status": "passed",
+      "notes": "Sold overclaim guard is required."
+    },
+    {
+      "row_type": "contract_check",
+      "check_id": "lineage_dedup_required",
+      "status": "passed",
+      "notes": "Duplicate/relist dedup is required."
+    },
+    {
+      "row_type": "contract_check",
+      "check_id": "price_guide_guard_required",
+      "status": "passed",
+      "notes": "Price guide projection guard is required."
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page preview-to-DB readiness",
+    "previous_progress_pct": 83,
+    "expected_after_completion_pct": 87,
+    "delta_pct": 4,
+    "completed_milestones": [
+      "Model Market Page contract",
+      "Expired/Sold Archive contract",
+      "Price Guide contract",
+      "Model Market Page Data Adapter contract",
+      "Model Market Page Data Adapter local preview implementation",
+      "Model Market Page Frontend contract",
+      "Model Market Page Frontend local preview implementation",
+      "Expired/Sold Listing Archive local preview implementation",
+      "Price Guide / Market Intelligence local preview implementation",
+      "Model Market Page Data Adapter DB Integration Contract"
+    ],
+    "current_milestone": "Expired/Sold Listing Archive DB Integration Contract",
+    "remaining_milestones": [
+      "Model Market Page Public Route Contract",
+      "Dealer Lead Signal Contract",
+      "Private Beta Market Page Readiness Checklist",
+      "Market Page DB Read Adapter Implementation",
+      "production/beta hardening"
+    ],
+    "notes": "DB integration readiness only, not production launch progress."
+  },
+  "modified_files": [
+    "expired_sold_listing_archive_db_integration_contract.py",
+    "scripts/run_p3_expired_sold_listing_archive_db_integration_contract.py",
+    "tests/test_expired_sold_listing_archive_db_integration_contract.py",
+    "data/admin/p3_expired_sold_listing_archive_db_integration_contract_v0.md",
+    "data/admin/p3_expired_sold_listing_archive_db_integration_contract_v0.jsonl",
+    "data/admin/expired_sold_listing_archive_db_integration_contract_v0.json"
+  ]
+}

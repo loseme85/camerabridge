@@ -1,0 +1,76 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_vario_elmarit_r_28_90",
+  "family_name": "Vario-Elmarit-R 28-90mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "R"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "rom",
+    "cam_version",
+    "filter_thread",
+    "version_marker",
+    "asph"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_vario_elmarit_r_28_90_f2_8_4_5_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "R",
+      "system": "R System",
+      "label": "R Lens",
+      "model_raw": "Vario-Elmarit-R",
+      "model_canonical": "Vario-Elmarit-R",
+      "focal_length": "28-90",
+      "canonical_name": "Leica Vario-Elmarit-R 28-90mm f/2.8-4.5 ASPH",
+      "aliases": [
+        "vario-elmarit-r 28-90",
+        "vario elmarit r 28-90",
+        "28-90 vario-elmarit-r",
+        "28-90mm f2.8-4.5 vario-elmarit-r",
+        "28-90mm f/2.8-4.5 vario-elmarit-r",
+        "r 28-90/2.8-4.5 vario elmarit",
+        "leica r 28-90mm f2.8-4.5",
+        "leica r 28-90mm f/2.8-4.5",
+        "28-90mm asph vario-elmarit-r",
+        "leica vario-elmarit-r 28-90mm asph",
+        "vario-elmarit-r 28-90 asph"
+      ],
+      "key_discriminators": [
+        "vario-elmarit-r",
+        "28-90",
+        "28-90mm",
+        "f2.8-4.5",
+        "28-90mm f2.8-4.5",
+        "r 28-90/2.8-4.5",
+        "asph",
+        "leica r"
+      ],
+      "variant": [
+        "f/2.8-4.5",
+        "ASPH",
+        "Vario-Elmarit-R"
+      ],
+      "price_group": "vario_elmarit_r_28_90_f2_8_4_5_asph",
+      "notes": "Round-1 conservative core seed for the Leica R-side 28-90 standard zoom family. ROM, cam markers, ASPH wording, filter-thread markers, and hood or case bundle wording remain below row level, and bare 28-90 or other broad standard-zoom shorthand is intentionally excluded to avoid SL 24-90, SL 90-280, LTM 28-90, or third-party zoom contamination.",
+      "status": "core"
+    }
+  ]
+}

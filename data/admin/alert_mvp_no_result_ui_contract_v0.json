@@ -1,0 +1,2147 @@
+{
+  "schema_version": "alert_mvp_no_result_ui_contract.v0",
+  "generated_at": "2026-05-27T00:00:00Z",
+  "no_result_ui_policy": {
+    "locale": "ko-KR",
+    "fake_result_policy": [
+      "never_create_fake_result",
+      "do_not_backfill_with_adjacent_family",
+      "do_not_substitute_other_brand_or_range",
+      "show_empty_state_instead"
+    ],
+    "policy_version": "p3_alert_mvp_no_result_ui_contract_v0"
+  },
+  "ui_render_previews": [
+    {
+      "render_preview_id": "preview::c9dec7c0f5052a22",
+      "query": "sigma 14-24 l",
+      "normalized_query": "sigma 14-24 l",
+      "no_result_state": "source_gap_alertable",
+      "ui_pattern": "no_result_alert_signup",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "can_open_source_gap_signup",
+      "cta_type": "notify_when_source_gap_resolved",
+      "title": "아직 잡힌 매물이 없어요",
+      "body": "이 항목은 현재 수집된 매물이 없지만, 수집망에 잡히면 알려드릴 수 있어요.",
+      "cta_label": "매물 나오면 알림 받기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {
+        "mount": [
+          "SL/L"
+        ],
+        "focal": [
+          "14-24mm"
+        ],
+        "brand": [
+          "3rd Party"
+        ]
+      },
+      "source_gap_related": true,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_gap_alert_signup",
+      "linked_watchlist_id": "third_party_l_mount_sigma_14_24_dg_dn_art",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_14_24_dg_dn_art::sigma_14-24_l",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "다른 제품으로 대체해서 보여주지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::b91e38f5af44cc62",
+      "query": "sigma 14-24 dg dn",
+      "normalized_query": "sigma 14-24 dg dn",
+      "no_result_state": "source_gap_alertable",
+      "ui_pattern": "no_result_alert_signup",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "can_open_source_gap_signup",
+      "cta_type": "notify_when_source_gap_resolved",
+      "title": "아직 잡힌 매물이 없어요",
+      "body": "이 항목은 현재 수집된 매물이 없지만, 수집망에 잡히면 알려드릴 수 있어요.",
+      "cta_label": "매물 나오면 알림 받기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {
+        "mount": [
+          "SL/L"
+        ],
+        "focal": [
+          "14-24mm"
+        ],
+        "brand": [
+          "3rd Party"
+        ]
+      },
+      "source_gap_related": true,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_gap_alert_signup",
+      "linked_watchlist_id": "third_party_l_mount_sigma_14_24_dg_dn_art",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_14_24_dg_dn_art::sigma_14-24_dg_dn",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "다른 제품으로 대체해서 보여주지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::19fa3e6cc059dda5",
+      "query": "시그마 14-24 아트",
+      "normalized_query": "시그마 14-24 아트",
+      "no_result_state": "source_gap_alertable",
+      "ui_pattern": "no_result_alert_signup",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "can_open_source_gap_signup",
+      "cta_type": "notify_when_source_gap_resolved",
+      "title": "아직 잡힌 매물이 없어요",
+      "body": "이 항목은 현재 수집된 매물이 없지만, 수집망에 잡히면 알려드릴 수 있어요.",
+      "cta_label": "매물 나오면 알림 받기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {
+        "mount": [
+          "SL/L"
+        ],
+        "focal": [
+          "14-24mm"
+        ],
+        "brand": [
+          "3rd Party"
+        ]
+      },
+      "source_gap_related": true,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_gap_alert_signup",
+      "linked_watchlist_id": "third_party_l_mount_sigma_14_24_dg_dn_art",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_14_24_dg_dn_art::sigma_14-24_art",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "다른 제품으로 대체해서 보여주지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::c4463d65556efbf9",
+      "query": "sigma 28-70 dg dn l",
+      "normalized_query": "sigma 28-70 dg dn l",
+      "no_result_state": "source_expansion_needed",
+      "ui_pattern": "source_expansion_waitlist",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "can_open_waitlist_signup",
+      "cta_type": "join_source_expansion_waitlist",
+      "title": "아직 수집원이 부족한 항목이에요",
+      "body": "관심 등록을 남겨주시면 이 제품군의 수집원 확장 우선순위에 반영됩니다.",
+      "cta_label": "관심 등록하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {
+        "mount": [
+          "SL/L"
+        ],
+        "brand": [
+          "3rd Party"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": true,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_expansion_waitlist",
+      "linked_watchlist_id": "third_party_l_mount_sigma_28_70_dg_dn",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_28_70_dg_dn::sigma_28-70_dg_dn_l",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "매물 발견으로 단정하지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::8898d45c9801ab36",
+      "query": "sigma 28-105 dg dn l",
+      "normalized_query": "sigma 28-105 dg dn l",
+      "no_result_state": "source_expansion_needed",
+      "ui_pattern": "source_expansion_waitlist",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "can_open_waitlist_signup",
+      "cta_type": "join_source_expansion_waitlist",
+      "title": "아직 수집원이 부족한 항목이에요",
+      "body": "관심 등록을 남겨주시면 이 제품군의 수집원 확장 우선순위에 반영됩니다.",
+      "cta_label": "관심 등록하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {
+        "mount": [
+          "SL/L"
+        ],
+        "brand": [
+          "3rd Party"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": true,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_expansion_waitlist",
+      "linked_watchlist_id": "third_party_l_mount_sigma_28_105_dg_dn",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_28_105_dg_dn::sigma_28-105_dg_dn_l",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "매물 발견으로 단정하지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::c374eea599bb3c50",
+      "query": "cron",
+      "normalized_query": "cron",
+      "no_result_state": "broad_query_refinement_required",
+      "ui_pattern": "refinement_chips",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "must_refine_before_signup",
+      "cta_type": "refine_query",
+      "title": "검색어가 넓어요",
+      "body": "알림을 정확하게 만들려면 제품군이나 마운트를 먼저 선택해 주세요.",
+      "cta_label": "조건 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "35 cron",
+        "50 cron",
+        "90 cron"
+      ],
+      "suggested_filters": {
+        "family": [
+          "Summicron"
+        ],
+        "focal": [
+          "35mm",
+          "50mm",
+          "90mm"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "chip 선택 후 다시 signup policy를 통과해야 합니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 3
+    },
+    {
+      "render_preview_id": "preview::cdb983afc7d0d9a3",
+      "query": "lux",
+      "normalized_query": "lux",
+      "no_result_state": "broad_query_refinement_required",
+      "ui_pattern": "refinement_chips",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "must_refine_before_signup",
+      "cta_type": "refine_query",
+      "title": "검색어가 넓어요",
+      "body": "알림을 정확하게 만들려면 제품군이나 마운트를 먼저 선택해 주세요.",
+      "cta_label": "조건 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "35 lux",
+        "50 lux",
+        "75 lux"
+      ],
+      "suggested_filters": {
+        "family": [
+          "Summilux"
+        ],
+        "focal": [
+          "35mm",
+          "50mm",
+          "75mm"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "chip 선택 후 다시 signup policy를 통과해야 합니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 3
+    },
+    {
+      "render_preview_id": "preview::1055da3d33da4284",
+      "query": "50 cron",
+      "normalized_query": "50 cron",
+      "no_result_state": "broad_query_refinement_required",
+      "ui_pattern": "mount_selector",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "must_refine_before_signup",
+      "cta_type": "choose_mount_or_family",
+      "title": "검색어가 넓어요",
+      "body": "알림을 정확하게 만들려면 제품군이나 마운트를 먼저 선택해 주세요.",
+      "cta_label": "조건 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "M 50 Summicron",
+        "R 50 Summicron",
+        "SL 50 Summicron"
+      ],
+      "suggested_filters": {
+        "mount": [
+          "M",
+          "R",
+          "SL"
+        ],
+        "focal": [
+          "50mm"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "chip 선택 후 다시 signup policy를 통과해야 합니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 3
+    },
+    {
+      "render_preview_id": "preview::f446f7d48d7de4ef",
+      "query": "35 lux",
+      "normalized_query": "35 lux",
+      "no_result_state": "broad_query_refinement_required",
+      "ui_pattern": "mount_selector",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "must_refine_before_signup",
+      "cta_type": "choose_mount_or_family",
+      "title": "검색어가 넓어요",
+      "body": "알림을 정확하게 만들려면 제품군이나 마운트를 먼저 선택해 주세요.",
+      "cta_label": "조건 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "M 35 Summilux",
+        "35 lux aa",
+        "Summilux-M 35 ASPH"
+      ],
+      "suggested_filters": {
+        "mount": [
+          "M"
+        ],
+        "focal": [
+          "35mm"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "chip 선택 후 다시 signup policy를 통과해야 합니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 3
+    },
+    {
+      "render_preview_id": "preview::f5b828e99eba645f",
+      "query": "leica r",
+      "normalized_query": "leica r",
+      "no_result_state": "broad_query_refinement_required",
+      "ui_pattern": "family_selector",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "must_refine_before_signup",
+      "cta_type": "choose_mount_or_family",
+      "title": "검색어가 넓어요",
+      "body": "알림을 정확하게 만들려면 제품군이나 마운트를 먼저 선택해 주세요.",
+      "cta_label": "조건 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "R 50 Summicron",
+        "R 80 Summilux",
+        "R 180 APO-Telyt",
+        "R zooms"
+      ],
+      "suggested_filters": {
+        "mount": [
+          "R"
+        ],
+        "family": [
+          "Summicron-R",
+          "Summilux-R",
+          "APO-Telyt-R"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "chip 선택 후 다시 signup policy를 통과해야 합니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 4
+    },
+    {
+      "render_preview_id": "preview::714cee3e57df11ac",
+      "query": "leica cap",
+      "normalized_query": "leica cap",
+      "no_result_state": "broad_query_refinement_required",
+      "ui_pattern": "refinement_chips",
+      "ui_severity": "helpful",
+      "signup_bridge_status": "must_refine_before_signup",
+      "cta_type": "refine_query",
+      "title": "검색어가 넓어요",
+      "body": "알림을 정확하게 만들려면 제품군이나 마운트를 먼저 선택해 주세요.",
+      "cta_label": "조건 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "lens cap",
+        "body cap",
+        "hood",
+        "battery",
+        "strap"
+      ],
+      "suggested_filters": {
+        "accessory_type": [
+          "lens cap",
+          "body cap",
+          "hood",
+          "battery",
+          "strap"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "chip 선택 후 다시 signup policy를 통과해야 합니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 5
+    },
+    {
+      "render_preview_id": "preview::96faa4ced997530c",
+      "query": "summicron",
+      "normalized_query": "summicron",
+      "no_result_state": "broad_query_excluded",
+      "ui_pattern": "family_selector",
+      "ui_severity": "caution",
+      "signup_bridge_status": "blocked_too_broad",
+      "cta_type": "choose_mount_or_family",
+      "title": "그대로는 알림이 너무 넓어요",
+      "body": "예: Summicron 35, Summilux-M 50처럼 조금 더 구체적으로 선택해 주세요.",
+      "cta_label": "제품군 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "Summicron-M 35",
+        "Summicron-M 50",
+        "Summicron-M 28",
+        "APO-Summicron-M 90"
+      ],
+      "suggested_filters": {
+        "family": [
+          "Summicron-M",
+          "Summicron-R",
+          "APO-Summicron-SL"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "direct alert signup을 열지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 4
+    },
+    {
+      "render_preview_id": "preview::9e6c79c364d0d534",
+      "query": "summilux",
+      "normalized_query": "summilux",
+      "no_result_state": "broad_query_excluded",
+      "ui_pattern": "family_selector",
+      "ui_severity": "caution",
+      "signup_bridge_status": "blocked_too_broad",
+      "cta_type": "choose_mount_or_family",
+      "title": "그대로는 알림이 너무 넓어요",
+      "body": "예: Summicron 35, Summilux-M 50처럼 조금 더 구체적으로 선택해 주세요.",
+      "cta_label": "제품군 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "Summilux-M 35",
+        "Summilux-M 50",
+        "Summilux-M 28",
+        "Summilux-M 24"
+      ],
+      "suggested_filters": {
+        "family": [
+          "Summilux-M",
+          "Summilux-R",
+          "Summilux-SL"
+        ]
+      },
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "direct alert signup을 열지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 4
+    },
+    {
+      "render_preview_id": "preview::d0bf723ae30370fa",
+      "query": "leica lens",
+      "normalized_query": "leica lens",
+      "no_result_state": "broad_query_excluded",
+      "ui_pattern": "empty_state_generic",
+      "ui_severity": "caution",
+      "signup_bridge_status": "blocked_too_broad",
+      "cta_type": "choose_mount_or_family",
+      "title": "그대로는 알림이 너무 넓어요",
+      "body": "예: Summicron 35, Summilux-M 50처럼 조금 더 구체적으로 선택해 주세요.",
+      "cta_label": "제품군 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "M lens",
+        "R lens",
+        "SL lens",
+        "Summilux-M 50"
+      ],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "direct alert signup을 열지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 4
+    },
+    {
+      "render_preview_id": "preview::097152b58042edd6",
+      "query": "leica m",
+      "normalized_query": "leica m",
+      "no_result_state": "broad_query_excluded",
+      "ui_pattern": "empty_state_generic",
+      "ui_severity": "caution",
+      "signup_bridge_status": "blocked_too_broad",
+      "cta_type": "choose_mount_or_family",
+      "title": "그대로는 알림이 너무 넓어요",
+      "body": "예: Summicron 35, Summilux-M 50처럼 조금 더 구체적으로 선택해 주세요.",
+      "cta_label": "제품군 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "M body",
+        "M lens",
+        "M6",
+        "MP",
+        "Summilux-M"
+      ],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "direct alert signup을 열지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 5
+    },
+    {
+      "render_preview_id": "preview::1c500e9b9c7009b6",
+      "query": "leica sl",
+      "normalized_query": "leica sl",
+      "no_result_state": "broad_query_excluded",
+      "ui_pattern": "empty_state_generic",
+      "ui_severity": "caution",
+      "signup_bridge_status": "blocked_too_broad",
+      "cta_type": "choose_mount_or_family",
+      "title": "그대로는 알림이 너무 넓어요",
+      "body": "예: Summicron 35, Summilux-M 50처럼 조금 더 구체적으로 선택해 주세요.",
+      "cta_label": "제품군 선택하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [
+        "SL body",
+        "SL lens",
+        "SL zoom",
+        "APO-Summicron-SL"
+      ],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "direct alert signup을 열지 않습니다.",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 4
+    },
+    {
+      "render_preview_id": "preview::e9c349b4cf8f941c",
+      "query": "leica m-a",
+      "normalized_query": "leica m a",
+      "no_result_state": "manual_review_required",
+      "ui_pattern": "manual_review_notice",
+      "ui_severity": "blocked",
+      "signup_bridge_status": "blocked_manual_review",
+      "cta_type": "contact_or_feedback",
+      "title": "이 검색어는 현재 검토가 필요해요",
+      "body": "모델 구분 안정성이 아직 충분하지 않아 바로 알림을 만들 수 없습니다.",
+      "cta_label": "검색어 의견 보내기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": true,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "body intent not launch-safe",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::4ce5d5aaff613e2d",
+      "query": "leica m10 monochrom",
+      "normalized_query": "leica m10 monochrom",
+      "no_result_state": "manual_review_required",
+      "ui_pattern": "manual_review_notice",
+      "ui_severity": "blocked",
+      "signup_bridge_status": "blocked_manual_review",
+      "cta_type": "contact_or_feedback",
+      "title": "이 검색어는 현재 검토가 필요해요",
+      "body": "모델 구분 안정성이 아직 충분하지 않아 바로 알림을 만들 수 없습니다.",
+      "cta_label": "검색어 의견 보내기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": true,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "body intent not launch-safe",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::8cd4452c948777f2",
+      "query": "leica m10-r",
+      "normalized_query": "leica m10 r",
+      "no_result_state": "manual_review_required",
+      "ui_pattern": "manual_review_notice",
+      "ui_severity": "blocked",
+      "signup_bridge_status": "blocked_manual_review",
+      "cta_type": "contact_or_feedback",
+      "title": "이 검색어는 현재 검토가 필요해요",
+      "body": "모델 구분 안정성이 아직 충분하지 않아 바로 알림을 만들 수 없습니다.",
+      "cta_label": "검색어 의견 보내기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": true,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "body intent not launch-safe",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::d8a739f3adb54d97",
+      "query": "leica m11 monochrom",
+      "normalized_query": "leica m11 monochrom",
+      "no_result_state": "manual_review_required",
+      "ui_pattern": "manual_review_notice",
+      "ui_severity": "blocked",
+      "signup_bridge_status": "blocked_manual_review",
+      "cta_type": "contact_or_feedback",
+      "title": "이 검색어는 현재 검토가 필요해요",
+      "body": "모델 구분 안정성이 아직 충분하지 않아 바로 알림을 만들 수 없습니다.",
+      "cta_label": "검색어 의견 보내기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": true,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "body intent not launch-safe",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::969355f8069991f3",
+      "query": "unknown 12345 lens",
+      "normalized_query": "unknown 12345 lens",
+      "no_result_state": "true_no_result",
+      "ui_pattern": "empty_state_generic",
+      "ui_severity": "neutral",
+      "signup_bridge_status": "no_signup_available",
+      "cta_type": "view_related_searches",
+      "title": "검색 결과가 없어요",
+      "body": "검색어를 조금 더 구체적으로 바꾸거나, 브랜드/마운트를 확인해 주세요.",
+      "cta_label": "검색어 수정하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "future feedback/wishlist possible, but not in MVP signup",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    },
+    {
+      "render_preview_id": "preview::930ab67411aa0a40",
+      "query": "random unsupported query xyz",
+      "normalized_query": "random unsupported query xyz",
+      "no_result_state": "true_no_result",
+      "ui_pattern": "empty_state_generic",
+      "ui_severity": "neutral",
+      "signup_bridge_status": "no_signup_available",
+      "cta_type": "view_related_searches",
+      "title": "검색 결과가 없어요",
+      "body": "검색어를 조금 더 구체적으로 바꾸거나, 브랜드/마운트를 확인해 주세요.",
+      "cta_label": "검색어 수정하기",
+      "secondary_cta_label": "",
+      "recommended_chips": [],
+      "suggested_filters": {},
+      "source_gap_related": false,
+      "source_expansion_related": false,
+      "manual_review_required": false,
+      "fake_result_policy": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "policy_version": "p3_alert_mvp_no_result_ui_contract_v0",
+      "schema_version": "alert_no_result_ui_render_preview.v0",
+      "status": "pass",
+      "notes": "future feedback/wishlist possible, but not in MVP signup",
+      "row_type": "ui_render_preview",
+      "recommended_chips_count": 0
+    }
+  ],
+  "recommended_chip_previews": [
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "cron",
+      "chip": "35 cron",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "cron",
+      "chip": "50 cron",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "cron",
+      "chip": "90 cron",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "lux",
+      "chip": "35 lux",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "lux",
+      "chip": "50 lux",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "lux",
+      "chip": "75 lux",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "50 cron",
+      "chip": "M 50 Summicron",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "50 cron",
+      "chip": "R 50 Summicron",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "50 cron",
+      "chip": "SL 50 Summicron",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "35 lux",
+      "chip": "M 35 Summilux",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "35 lux",
+      "chip": "35 lux aa",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "35 lux",
+      "chip": "Summilux-M 35 ASPH",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica r",
+      "chip": "R 50 Summicron",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica r",
+      "chip": "R 80 Summilux",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica r",
+      "chip": "R 180 APO-Telyt",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica r",
+      "chip": "R zooms",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica cap",
+      "chip": "lens cap",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica cap",
+      "chip": "body cap",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica cap",
+      "chip": "hood",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica cap",
+      "chip": "battery",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica cap",
+      "chip": "strap",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summicron",
+      "chip": "Summicron-M 35",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summicron",
+      "chip": "Summicron-M 50",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summicron",
+      "chip": "Summicron-M 28",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summicron",
+      "chip": "APO-Summicron-M 90",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summilux",
+      "chip": "Summilux-M 35",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summilux",
+      "chip": "Summilux-M 50",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summilux",
+      "chip": "Summilux-M 28",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "summilux",
+      "chip": "Summilux-M 24",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica lens",
+      "chip": "M lens",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica lens",
+      "chip": "R lens",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica lens",
+      "chip": "SL lens",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica lens",
+      "chip": "Summilux-M 50",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica m",
+      "chip": "M body",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica m",
+      "chip": "M lens",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica m",
+      "chip": "M6",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica m",
+      "chip": "MP",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica m",
+      "chip": "Summilux-M",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica sl",
+      "chip": "SL body",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica sl",
+      "chip": "SL lens",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica sl",
+      "chip": "SL zoom",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    },
+    {
+      "row_type": "recommended_chip_preview",
+      "query": "leica sl",
+      "chip": "APO-Summicron-SL",
+      "status": "pass",
+      "notes": "refinement candidate only"
+    }
+  ],
+  "signup_bridge_previews": [
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "sigma 14-24 l",
+      "signup_bridge_status": "can_open_source_gap_signup",
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_gap_alert_signup",
+      "linked_watchlist_id": "third_party_l_mount_sigma_14_24_dg_dn_art",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_14_24_dg_dn_art::sigma_14-24_l",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "sigma 14-24 dg dn",
+      "signup_bridge_status": "can_open_source_gap_signup",
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_gap_alert_signup",
+      "linked_watchlist_id": "third_party_l_mount_sigma_14_24_dg_dn_art",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_14_24_dg_dn_art::sigma_14-24_dg_dn",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "시그마 14-24 아트",
+      "signup_bridge_status": "can_open_source_gap_signup",
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_gap_alert_signup",
+      "linked_watchlist_id": "third_party_l_mount_sigma_14_24_dg_dn_art",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_14_24_dg_dn_art::sigma_14-24_art",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "sigma 28-70 dg dn l",
+      "signup_bridge_status": "can_open_waitlist_signup",
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_expansion_waitlist",
+      "linked_watchlist_id": "third_party_l_mount_sigma_28_70_dg_dn",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_28_70_dg_dn::sigma_28-70_dg_dn_l",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "sigma 28-105 dg dn l",
+      "signup_bridge_status": "can_open_waitlist_signup",
+      "signup_payload_allowed": true,
+      "signup_payload_type": "source_expansion_waitlist",
+      "linked_watchlist_id": "third_party_l_mount_sigma_28_105_dg_dn",
+      "linked_signup_flow_id": "preview::third_party_l_mount_sigma_28_105_dg_dn::sigma_28-105_dg_dn_l",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "cron",
+      "signup_bridge_status": "must_refine_before_signup",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "lux",
+      "signup_bridge_status": "must_refine_before_signup",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "50 cron",
+      "signup_bridge_status": "must_refine_before_signup",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "35 lux",
+      "signup_bridge_status": "must_refine_before_signup",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica r",
+      "signup_bridge_status": "must_refine_before_signup",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica cap",
+      "signup_bridge_status": "must_refine_before_signup",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "summicron",
+      "signup_bridge_status": "blocked_too_broad",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "summilux",
+      "signup_bridge_status": "blocked_too_broad",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica lens",
+      "signup_bridge_status": "blocked_too_broad",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica m",
+      "signup_bridge_status": "blocked_too_broad",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica sl",
+      "signup_bridge_status": "blocked_too_broad",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica m-a",
+      "signup_bridge_status": "blocked_manual_review",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica m10 monochrom",
+      "signup_bridge_status": "blocked_manual_review",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica m10-r",
+      "signup_bridge_status": "blocked_manual_review",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "leica m11 monochrom",
+      "signup_bridge_status": "blocked_manual_review",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "unknown 12345 lens",
+      "signup_bridge_status": "no_signup_available",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "signup_bridge_preview",
+      "query": "random unsupported query xyz",
+      "signup_bridge_status": "no_signup_available",
+      "signup_payload_allowed": false,
+      "signup_payload_type": "",
+      "linked_watchlist_id": "",
+      "linked_signup_flow_id": "",
+      "status": "pass",
+      "notes": ""
+    }
+  ],
+  "fake_result_guard_rows": [
+    {
+      "row_type": "fake_result_guard",
+      "query": "sigma 14-24 l",
+      "adjacent_candidate": "Leica SL 14-24",
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "status": "pass",
+      "notes": "do not substitute adjacent Leica family"
+    },
+    {
+      "row_type": "fake_result_guard",
+      "query": "sigma 14-24 l",
+      "adjacent_candidate": "Sigma 24-70",
+      "fake_result_created": false,
+      "adjacent_family_substituted": false,
+      "status": "pass",
+      "notes": "do not substitute adjacent Sigma range"
+    }
+  ],
+  "scenario_validation_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_gap_alert_ui",
+      "query": "sigma 14-24 l",
+      "expected_no_result_state": "source_gap_alertable",
+      "actual_no_result_state": "source_gap_alertable",
+      "expected_cta_type": "notify_when_source_gap_resolved",
+      "actual_cta_type": "notify_when_source_gap_resolved",
+      "expected_signup_payload_allowed": true,
+      "actual_signup_payload_allowed": true,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_gap_alert_ui",
+      "query": "sigma 14-24 dg dn",
+      "expected_no_result_state": "source_gap_alertable",
+      "actual_no_result_state": "source_gap_alertable",
+      "expected_cta_type": "notify_when_source_gap_resolved",
+      "actual_cta_type": "notify_when_source_gap_resolved",
+      "expected_signup_payload_allowed": true,
+      "actual_signup_payload_allowed": true,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_gap_alert_ui",
+      "query": "시그마 14-24 아트",
+      "expected_no_result_state": "source_gap_alertable",
+      "actual_no_result_state": "source_gap_alertable",
+      "expected_cta_type": "notify_when_source_gap_resolved",
+      "actual_cta_type": "notify_when_source_gap_resolved",
+      "expected_signup_payload_allowed": true,
+      "actual_signup_payload_allowed": true,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_expansion_waitlist_ui",
+      "query": "sigma 28-70 dg dn l",
+      "expected_no_result_state": "source_expansion_needed",
+      "actual_no_result_state": "source_expansion_needed",
+      "expected_cta_type": "join_source_expansion_waitlist",
+      "actual_cta_type": "join_source_expansion_waitlist",
+      "expected_signup_payload_allowed": true,
+      "actual_signup_payload_allowed": true,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_expansion_waitlist_ui",
+      "query": "sigma 28-105 dg dn l",
+      "expected_no_result_state": "source_expansion_needed",
+      "actual_no_result_state": "source_expansion_needed",
+      "expected_cta_type": "join_source_expansion_waitlist",
+      "actual_cta_type": "join_source_expansion_waitlist",
+      "expected_signup_payload_allowed": true,
+      "actual_signup_payload_allowed": true,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_refinement_ui",
+      "query": "cron",
+      "expected_no_result_state": "broad_query_refinement_required",
+      "actual_no_result_state": "broad_query_refinement_required",
+      "expected_cta_type": "refine_query",
+      "actual_cta_type": "refine_query",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_refinement_ui",
+      "query": "lux",
+      "expected_no_result_state": "broad_query_refinement_required",
+      "actual_no_result_state": "broad_query_refinement_required",
+      "expected_cta_type": "refine_query",
+      "actual_cta_type": "refine_query",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_refinement_ui",
+      "query": "50 cron",
+      "expected_no_result_state": "broad_query_refinement_required",
+      "actual_no_result_state": "broad_query_refinement_required",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_refinement_ui",
+      "query": "35 lux",
+      "expected_no_result_state": "broad_query_refinement_required",
+      "actual_no_result_state": "broad_query_refinement_required",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_refinement_ui",
+      "query": "leica r",
+      "expected_no_result_state": "broad_query_refinement_required",
+      "actual_no_result_state": "broad_query_refinement_required",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_refinement_ui",
+      "query": "leica cap",
+      "expected_no_result_state": "broad_query_refinement_required",
+      "actual_no_result_state": "broad_query_refinement_required",
+      "expected_cta_type": "refine_query",
+      "actual_cta_type": "refine_query",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_excluded_ui",
+      "query": "summicron",
+      "expected_no_result_state": "broad_query_excluded",
+      "actual_no_result_state": "broad_query_excluded",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_excluded_ui",
+      "query": "summilux",
+      "expected_no_result_state": "broad_query_excluded",
+      "actual_no_result_state": "broad_query_excluded",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_excluded_ui",
+      "query": "leica lens",
+      "expected_no_result_state": "broad_query_excluded",
+      "actual_no_result_state": "broad_query_excluded",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_excluded_ui",
+      "query": "leica m",
+      "expected_no_result_state": "broad_query_excluded",
+      "actual_no_result_state": "broad_query_excluded",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_excluded_ui",
+      "query": "leica sl",
+      "expected_no_result_state": "broad_query_excluded",
+      "actual_no_result_state": "broad_query_excluded",
+      "expected_cta_type": "choose_mount_or_family",
+      "actual_cta_type": "choose_mount_or_family",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "manual_review_ui",
+      "query": "leica m-a",
+      "expected_no_result_state": "manual_review_required",
+      "actual_no_result_state": "manual_review_required",
+      "expected_cta_type": "contact_or_feedback",
+      "actual_cta_type": "contact_or_feedback",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "manual_review_ui",
+      "query": "leica m10 monochrom",
+      "expected_no_result_state": "manual_review_required",
+      "actual_no_result_state": "manual_review_required",
+      "expected_cta_type": "contact_or_feedback",
+      "actual_cta_type": "contact_or_feedback",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "manual_review_ui",
+      "query": "leica m10-r",
+      "expected_no_result_state": "manual_review_required",
+      "actual_no_result_state": "manual_review_required",
+      "expected_cta_type": "contact_or_feedback",
+      "actual_cta_type": "contact_or_feedback",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "manual_review_ui",
+      "query": "leica m11 monochrom",
+      "expected_no_result_state": "manual_review_required",
+      "actual_no_result_state": "manual_review_required",
+      "expected_cta_type": "contact_or_feedback",
+      "actual_cta_type": "contact_or_feedback",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "true_no_result_ui",
+      "query": "unknown 12345 lens",
+      "expected_no_result_state": "true_no_result",
+      "actual_no_result_state": "true_no_result",
+      "expected_cta_type": "view_related_searches",
+      "actual_cta_type": "view_related_searches",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "true_no_result_ui",
+      "query": "random unsupported query xyz",
+      "expected_no_result_state": "true_no_result",
+      "actual_no_result_state": "true_no_result",
+      "expected_cta_type": "view_related_searches",
+      "actual_cta_type": "view_related_searches",
+      "expected_signup_payload_allowed": false,
+      "actual_signup_payload_allowed": false,
+      "expected_fake_result_created": false,
+      "actual_fake_result_created": false,
+      "expected_adjacent_family_substituted": false,
+      "actual_adjacent_family_substituted": false,
+      "behavior_match": true,
+      "status": "pass",
+      "notes": ""
+    }
+  ],
+  "copy_check_rows": [
+    {
+      "row_type": "copy_check",
+      "query": "sigma 14-24 l",
+      "check_name": "source_gap_does_not_claim_actual_listing",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "copy_check",
+      "query": "sigma 14-24 dg dn",
+      "check_name": "source_gap_does_not_claim_actual_listing",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "copy_check",
+      "query": "시그마 14-24 아트",
+      "check_name": "source_gap_does_not_claim_actual_listing",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "copy_check",
+      "query": "sigma 28-70 dg dn l",
+      "check_name": "source_expansion_does_not_claim_actual_listing",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "notes": ""
+    },
+    {
+      "row_type": "copy_check",
+      "query": "sigma 28-105 dg dn l",
+      "check_name": "source_expansion_does_not_claim_actual_listing",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "notes": ""
+    }
+  ],
+  "contract_check_rows": [
+    {
+      "row_type": "contract_check",
+      "check_name": "no_result_states_enum",
+      "expected": [
+        "source_gap_alertable",
+        "source_expansion_needed",
+        "broad_query_refinement_required",
+        "broad_query_excluded",
+        "manual_review_required",
+        "true_no_result",
+        "unsupported_query",
+        "search_error_safe_fallback"
+      ],
+      "actual": [
+        "broad_query_excluded",
+        "broad_query_refinement_required",
+        "manual_review_required",
+        "source_expansion_needed",
+        "source_gap_alertable",
+        "true_no_result"
+      ],
+      "status": "pass",
+      "notes": "preview uses subset"
+    },
+    {
+      "row_type": "contract_check",
+      "check_name": "ui_cta_types_enum",
+      "expected": [
+        "alert_me_when_found",
+        "notify_when_source_gap_resolved",
+        "join_source_expansion_waitlist",
+        "refine_query",
+        "choose_mount_or_family",
+        "view_related_searches",
+        "contact_or_feedback",
+        "no_cta"
+      ],
+      "actual": [
+        "choose_mount_or_family",
+        "contact_or_feedback",
+        "join_source_expansion_waitlist",
+        "notify_when_source_gap_resolved",
+        "refine_query",
+        "view_related_searches"
+      ],
+      "status": "pass",
+      "notes": "preview uses subset"
+    },
+    {
+      "row_type": "contract_check",
+      "check_name": "ui_patterns_enum",
+      "expected": [
+        "no_result_alert_signup",
+        "source_gap_status_card",
+        "refinement_chips",
+        "family_selector",
+        "mount_selector",
+        "source_expansion_waitlist",
+        "manual_review_notice",
+        "empty_state_generic",
+        "safe_error_empty_state"
+      ],
+      "actual": [
+        "empty_state_generic",
+        "family_selector",
+        "manual_review_notice",
+        "mount_selector",
+        "no_result_alert_signup",
+        "refinement_chips",
+        "source_expansion_waitlist"
+      ],
+      "status": "pass",
+      "notes": "preview uses subset"
+    },
+    {
+      "row_type": "contract_check",
+      "check_name": "signup_bridge_status_enum",
+      "expected": [
+        "can_open_alert_signup",
+        "can_open_source_gap_signup",
+        "can_open_waitlist_signup",
+        "must_refine_before_signup",
+        "blocked_manual_review",
+        "blocked_too_broad",
+        "no_signup_available"
+      ],
+      "actual": [
+        "blocked_manual_review",
+        "blocked_too_broad",
+        "can_open_source_gap_signup",
+        "can_open_waitlist_signup",
+        "must_refine_before_signup",
+        "no_signup_available"
+      ],
+      "status": "pass",
+      "notes": "preview uses subset"
+    },
+    {
+      "row_type": "contract_check",
+      "check_name": "ui_severity_enum",
+      "expected": [
+        "neutral",
+        "helpful",
+        "caution",
+        "blocked"
+      ],
+      "actual": [
+        "blocked",
+        "caution",
+        "helpful",
+        "neutral"
+      ],
+      "status": "pass",
+      "notes": "preview uses subset"
+    },
+    {
+      "row_type": "contract_check",
+      "check_name": "fake_result_policy_enum",
+      "expected": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "actual": [
+        "never_create_fake_result",
+        "do_not_backfill_with_adjacent_family",
+        "do_not_substitute_other_brand_or_range",
+        "show_empty_state_instead"
+      ],
+      "status": "pass",
+      "notes": ""
+    }
+  ],
+  "summary_rows": [
+    {
+      "row_type": "summary",
+      "metric": "ui_render_preview_count",
+      "value": 22
+    },
+    {
+      "row_type": "summary",
+      "metric": "recommended_chip_preview_count",
+      "value": 42
+    },
+    {
+      "row_type": "summary",
+      "metric": "scenario_validation_count",
+      "value": 22
+    }
+  ]
+}

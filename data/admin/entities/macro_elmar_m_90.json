@@ -1,0 +1,56 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_macro_elmar_m_90",
+  "family_name": "Macro-Elmar-M 90mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "macro_adapter_included",
+    "set",
+    "finish",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_macro_elmar_m_90_f4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Macro-Elmar-M",
+      "model_canonical": "Macro-Elmar-M",
+      "focal_length": "90",
+      "canonical_name": "Leica Macro-Elmar-M 90mm f/4",
+      "aliases": [
+        "macro-elmar-m 90",
+        "macro elmar m 90",
+        "90 macro-elmar-m",
+        "90mm f4 macro-elmar-m",
+        "90/4 macro-elmar-m",
+        "macro elmar 90"
+      ],
+      "key_discriminators": [
+        "90",
+        "f4",
+        "macro-elmar-m",
+        "macro elmar m",
+        "m macro"
+      ],
+      "variant": [
+        "f/4",
+        "Macro-Elmar-M"
+      ],
+      "price_group": "macro_elmar_m_90_f4",
+      "notes": "Round-1 conservative core seed for the modern Macro-Elmar-M 90 line. Macro-Adapter-M included, set-complete wording, finish, 6bit, and 2014 big-top revision remain overlay/hold-level distinctions.",
+      "status": "core"
+    }
+  ]
+}

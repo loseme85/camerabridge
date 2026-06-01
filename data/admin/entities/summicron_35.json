@@ -1,0 +1,35 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "summicron_35",
+  "family_name": "Summicron-M 35",
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summicron_35_goggles",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summicron",
+      "model_canonical": "Summicron-M",
+      "focal_length": "35",
+      "canonical_name": "Leica Summicron-M 35mm f/2 Goggles",
+      "aliases": [
+        "35 cron eyes",
+        "35 summicron eyes",
+        "35 cron goggles"
+      ],
+      "key_discriminators": [
+        "35",
+        "f2",
+        "goggles",
+        "eyes"
+      ],
+      "variant": [
+        "Goggles"
+      ],
+      "status": "core"
+    }
+  ]
+}

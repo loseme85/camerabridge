@@ -1,0 +1,1541 @@
+{
+  "task_name": "P3-PRIVATE-BETA-MARKET-PAGE-READINESS-CHECKLIST",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "private_beta_market_page_readiness_checklist.v0",
+    "contract_version": "p3_private_beta_market_page_readiness_checklist_v0",
+    "checklist_only": true,
+    "implementation_enabled": false,
+    "route_enabled": false,
+    "db_adapter_enabled": false,
+    "frontend_enabled": false,
+    "api_enabled": false,
+    "production_beta_enabled": false,
+    "launch_blocker_must_be_zero": true,
+    "warning_allowed_with_disclosure": true,
+    "nice_to_have_not_blocking": true,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "broad_query_public_page_allowed": false,
+    "unsafe_boundary_public_price_allowed": false,
+    "raw_data_public_exposure_allowed": false,
+    "seo_overclaim_allowed": false,
+    "cta_overclaim_allowed": false,
+    "numeric_price_required_for_beta": false,
+    "numeric_price_display_allowed_for_beta": false,
+    "private_beta_limited_model_set_required": true,
+    "manual_review_gate_required": true
+  },
+  "categories": [
+    {
+      "row_type": "readiness_category",
+      "category_id": "data_adapter_readiness",
+      "purpose": "Safe MarketPageDataBundle assembly exists.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_data_adapter.py",
+        "model_market_page_data_adapter_db_integration_contract.py"
+      ],
+      "checks": [
+        "bundle_exists_exact",
+        "no_fake_fill_guard"
+      ],
+      "notes": "Bundle layer readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "archive_readiness",
+      "purpose": "Sold/expired/source-gap archive distinctions are stable.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "expired_sold_listing_archive.py",
+        "expired_sold_listing_archive_db_integration_contract.py"
+      ],
+      "checks": [
+        "status_distinction",
+        "lineage_dedup"
+      ],
+      "notes": "Archive safety readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "price_guide_readiness",
+      "purpose": "Price guide stays disclosure-first and sample-safe.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "price_guide_market_intelligence.py"
+      ],
+      "checks": [
+        "numeric_disabled",
+        "strong_weak_excluded"
+      ],
+      "notes": "Price guide readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "frontend_view_model_readiness",
+      "purpose": "Frontend view models exist for major states.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": false,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_frontend.py"
+      ],
+      "checks": [
+        "exact_source_gap_broad_unsafe_states"
+      ],
+      "notes": "Preview UX readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "public_route_readiness",
+      "purpose": "Public route contract exists with safe states.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py"
+      ],
+      "checks": [
+        "route_state_coverage",
+        "slug_resolution"
+      ],
+      "notes": "Route readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "db_integration_readiness",
+      "purpose": "DB read boundaries are contracted before implementation.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_data_adapter_db_integration_contract.py",
+        "expired_sold_listing_archive_db_integration_contract.py"
+      ],
+      "checks": [
+        "read_boundary",
+        "privacy_boundary"
+      ],
+      "notes": "DB readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "privacy_safety_readiness",
+      "purpose": "Raw/user/provider data cannot leak publicly.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": false,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py",
+        "expired_sold_listing_archive_db_integration_contract.py"
+      ],
+      "checks": [
+        "raw_fields_blocked",
+        "privacy_fallback"
+      ],
+      "notes": "Privacy readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "seo_safety_readiness",
+      "purpose": "SEO/meta claims remain conservative and noindex where needed.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py"
+      ],
+      "checks": [
+        "seo_claim_block",
+        "robots_policy"
+      ],
+      "notes": "SEO readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "cta_safety_readiness",
+      "purpose": "CTA exposure stays aggregate-only and verification-safe.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py"
+      ],
+      "checks": [
+        "cta_aggregate_only",
+        "target_price_gate"
+      ],
+      "notes": "CTA readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "source_gap_readiness",
+      "purpose": "Source-gap stays honest and not overclaimed.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": false,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py",
+        "model_market_page_frontend.py"
+      ],
+      "checks": [
+        "gap_wording",
+        "no_price_guide"
+      ],
+      "notes": "Gap readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "boundary_guard_readiness",
+      "purpose": "Broad/unsafe/adjacent-family states stay blocked or refined.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": false,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py",
+        "expired_sold_listing_archive.py"
+      ],
+      "checks": [
+        "broad_refine",
+        "unsafe_no_price"
+      ],
+      "notes": "Boundary readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "beta_model_scope_readiness",
+      "purpose": "Private beta opens only to a limited model set.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py"
+      ],
+      "checks": [
+        "limited_scope",
+        "manual_review_gate"
+      ],
+      "notes": "Scope readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "observability_readiness",
+      "purpose": "Minimal beta monitoring events and fallbacks are defined.",
+      "required_for_private_beta": false,
+      "launch_blocker_if_failed": false,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py"
+      ],
+      "checks": [
+        "analytics_safe",
+        "fallback_events"
+      ],
+      "notes": "Observability readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "fallback_readiness",
+      "purpose": "DB/privacy/frontend failures degrade safely.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": true,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py"
+      ],
+      "checks": [
+        "db_fallback",
+        "privacy_block"
+      ],
+      "notes": "Fallback readiness."
+    },
+    {
+      "row_type": "readiness_category",
+      "category_id": "legal_disclaimer_readiness",
+      "purpose": "Non-affiliation and no-investment-advice disclosures exist.",
+      "required_for_private_beta": true,
+      "launch_blocker_if_failed": false,
+      "warning_if_partial": true,
+      "linked_contracts": [
+        "model_market_page_public_route_contract.py",
+        "model_market_page_frontend_contract.py"
+      ],
+      "checks": [
+        "non_affiliation",
+        "no_investment_advice"
+      ],
+      "notes": "Legal/disclaimer readiness."
+    }
+  ],
+  "checks": [
+    {
+      "row_type": "readiness_check",
+      "check_id": "bundle_exists_exact",
+      "label": "MarketPageDataBundle exists for exact model",
+      "category_id": "data_adapter_readiness",
+      "status": "pass",
+      "result_summary": "Exact model bundle preview exists.",
+      "notes": "Noctilux exact bundle already previewed."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "frontend_state_coverage",
+      "label": "frontend view model exists for exact/source-gap/broad/unsafe",
+      "category_id": "frontend_view_model_readiness",
+      "status": "pass",
+      "result_summary": "State coverage exists.",
+      "notes": "Preview view models are present."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "public_route_contract_exists",
+      "label": "public route contract exists",
+      "category_id": "public_route_readiness",
+      "status": "pass",
+      "result_summary": "Route contract exists.",
+      "notes": "Public route boundary covered."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "db_read_boundary_contract_exists",
+      "label": "DB read boundary contract exists",
+      "category_id": "db_integration_readiness",
+      "status": "pass",
+      "result_summary": "DB boundary exists.",
+      "notes": "Data adapter DB contract exists."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "archive_db_projection_boundary_exists",
+      "label": "archive DB projection boundary exists",
+      "category_id": "archive_readiness",
+      "status": "pass",
+      "result_summary": "Archive boundary exists.",
+      "notes": "Archive DB contract exists."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "source_gap_not_absence",
+      "label": "source-gap route does not imply confirmed absence",
+      "category_id": "source_gap_readiness",
+      "status": "pass",
+      "result_summary": "Gap wording is honest.",
+      "notes": "No confirmed absence language."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "broad_query_refinement_only",
+      "label": "broad query goes to refinement/noindex",
+      "category_id": "boundary_guard_readiness",
+      "status": "pass",
+      "result_summary": "Broad query route safe.",
+      "notes": "No direct market page."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "unsafe_boundary_blocks_price_cta",
+      "label": "unsafe boundary blocks price widget/CTA",
+      "category_id": "boundary_guard_readiness",
+      "status": "pass",
+      "result_summary": "Unsafe boundary safe.",
+      "notes": "No public price/CTA."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "raw_response_block",
+      "label": "raw URL/email/provider payload blocked from public response",
+      "category_id": "privacy_safety_readiness",
+      "status": "pass",
+      "result_summary": "Raw fields blocked.",
+      "notes": "Response safety boundary exists."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "analytics_safe_fields_only",
+      "label": "analytics blocks raw/user data",
+      "category_id": "observability_readiness",
+      "status": "pass",
+      "result_summary": "Analytics safe.",
+      "notes": "Aggregate-only analytics fields."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "seo_claims_blocked",
+      "label": "SEO claims blocked",
+      "category_id": "seo_safety_readiness",
+      "status": "pass",
+      "result_summary": "Prohibited SEO claims blocked.",
+      "notes": "No overclaim language."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "cta_aggregate_only",
+      "label": "CTA aggregate-only",
+      "category_id": "cta_safety_readiness",
+      "status": "pass",
+      "result_summary": "CTA does not expose user data.",
+      "notes": "Aggregate-safe state only."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "numeric_price_disabled",
+      "label": "numeric price display disabled",
+      "category_id": "price_guide_readiness",
+      "status": "pass",
+      "result_summary": "Numeric price remains off for beta.",
+      "notes": "Disclosure-first beta."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "active_vs_sold_copy",
+      "label": "active vs sold separation copy exists",
+      "category_id": "price_guide_readiness",
+      "status": "pass",
+      "result_summary": "Separation copy exists.",
+      "notes": "No active-as-sold confusion."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "sold_likely_caution",
+      "label": "sold_likely caution exists",
+      "category_id": "archive_readiness",
+      "status": "pass",
+      "result_summary": "Caution state exists.",
+      "notes": "No sold-likely overclaim."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "expired_removed_not_sold_price",
+      "label": "expired_removed not shown as sold price",
+      "category_id": "archive_readiness",
+      "status": "pass",
+      "result_summary": "Expired lane separated.",
+      "notes": "No expired-as-sold confusion."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "duplicate_relist_no_double_count",
+      "label": "duplicate/relist no double count",
+      "category_id": "archive_readiness",
+      "status": "pass",
+      "result_summary": "Lineage dedup exists.",
+      "notes": "No inflated archive counts."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "source_freshness_warning",
+      "label": "source freshness warning exists",
+      "category_id": "fallback_readiness",
+      "status": "pass",
+      "result_summary": "Freshness warning exists.",
+      "notes": "Unknown/stale disclosure exists."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "stale_data_warning",
+      "label": "stale data warning exists",
+      "category_id": "fallback_readiness",
+      "status": "pass",
+      "result_summary": "Stale warning exists.",
+      "notes": "Reduced confidence path exists."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "legal_disclaimer_exists",
+      "label": "legal disclaimer exists",
+      "category_id": "legal_disclaimer_readiness",
+      "status": "pass",
+      "result_summary": "Legal disclaimer exists.",
+      "notes": "Info-only disclaimer present."
+    },
+    {
+      "row_type": "readiness_check",
+      "check_id": "non_affiliation_disclaimer_exists",
+      "label": "non-affiliation disclaimer exists",
+      "category_id": "legal_disclaimer_readiness",
+      "status": "pass",
+      "result_summary": "Non-affiliation exists.",
+      "notes": "Leica non-affiliation present."
+    }
+  ],
+  "launch_blockers": [
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "raw_public_leak",
+      "label": "raw URL/email/provider payload can appear in public response",
+      "status": "open",
+      "category_id": "privacy_safety_readiness",
+      "reason": "Public route implementation not yet built, so runtime leakage protection is not proven end-to-end.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "source_gap_overclaim",
+      "label": "source-gap shown as confirmed absence",
+      "status": "open",
+      "category_id": "source_gap_readiness",
+      "reason": "Contract exists, but runtime beta gate is not yet exercised end-to-end.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "broad_direct_market_page",
+      "label": "broad query opens direct market page",
+      "status": "open",
+      "category_id": "boundary_guard_readiness",
+      "reason": "Route implementation does not yet enforce refinement at runtime.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "unsafe_boundary_price_cta",
+      "label": "unsafe boundary exposes price widget or CTA",
+      "status": "open",
+      "category_id": "boundary_guard_readiness",
+      "reason": "Public route implementation missing; unsafe runtime exposure remains a blocker.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "active_as_sold_median",
+      "label": "active asking treated as sold median",
+      "status": "open",
+      "category_id": "price_guide_readiness",
+      "reason": "Runtime adapter implementation still pending.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "sold_likely_as_confirmed",
+      "label": "sold_likely shown as confirmed sold",
+      "status": "open",
+      "category_id": "archive_readiness",
+      "reason": "Archive DB implementation is still pending.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "duplicate_relist_double_count",
+      "label": "duplicate/relist double count possible",
+      "status": "open",
+      "category_id": "archive_readiness",
+      "reason": "Lineage materialization is contracted but not yet implemented in DB runtime.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "seo_overclaim_runtime",
+      "label": "SEO contains guaranteed/all sources/official/investment advice claim",
+      "status": "open",
+      "category_id": "seo_safety_readiness",
+      "reason": "SEO runtime is not implemented yet.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "cta_email_leakage",
+      "label": "CTA exposes user email or misses verification safety",
+      "status": "open",
+      "category_id": "cta_safety_readiness",
+      "reason": "Alert runtime integration not yet proven in beta path.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "db_fallback_fake_listing",
+      "label": "DB fallback creates fake listing",
+      "status": "open",
+      "category_id": "fallback_readiness",
+      "reason": "DB read adapter implementation is still pending.",
+      "must_resolve_before_beta": true
+    },
+    {
+      "row_type": "launch_blocker",
+      "blocker_id": "privacy_failure_not_blocked",
+      "label": "privacy filter failure does not block response",
+      "status": "open",
+      "category_id": "privacy_safety_readiness",
+      "reason": "Runtime enforcement not yet built.",
+      "must_resolve_before_beta": true
+    }
+  ],
+  "beta_warnings": [
+    {
+      "row_type": "beta_warning",
+      "warning_id": "stale_data_disclosed",
+      "label": "source freshness unknown or sold data stale",
+      "severity": "warning",
+      "category_id": "fallback_readiness",
+      "notes": "Allowed with stale warning and reduced confidence."
+    },
+    {
+      "row_type": "beta_warning",
+      "warning_id": "insufficient_sample_disclosed",
+      "label": "sample count below threshold but insufficient label present",
+      "severity": "warning",
+      "category_id": "price_guide_readiness",
+      "notes": "Allowed only with insufficient disclosure."
+    },
+    {
+      "row_type": "beta_warning",
+      "warning_id": "source_coverage_partial",
+      "label": "source coverage selected/review/blocked disclosure incomplete",
+      "severity": "warning",
+      "category_id": "source_gap_readiness",
+      "notes": "Allowed if coverage disclosure stays honest."
+    },
+    {
+      "row_type": "beta_warning",
+      "warning_id": "structured_data_disabled",
+      "label": "structured data disabled",
+      "severity": "warning",
+      "category_id": "seo_safety_readiness",
+      "notes": "Acceptable for beta; not a blocker."
+    },
+    {
+      "row_type": "beta_warning",
+      "warning_id": "conservative_noindex",
+      "label": "public route noindex remains conservative for source-gap and unsupported states",
+      "severity": "warning",
+      "category_id": "public_route_readiness",
+      "notes": "Acceptable for beta."
+    },
+    {
+      "row_type": "beta_warning",
+      "warning_id": "numeric_price_disabled",
+      "label": "numeric price remains disabled",
+      "severity": "warning",
+      "category_id": "price_guide_readiness",
+      "notes": "Expected for beta."
+    },
+    {
+      "row_type": "beta_warning",
+      "warning_id": "dealer_lead_unavailable",
+      "label": "dealer lead unavailable",
+      "severity": "warning",
+      "category_id": "cta_safety_readiness",
+      "notes": "Does not block private beta."
+    }
+  ],
+  "nice_to_have": [
+    {
+      "row_type": "nice_to_have",
+      "item_id": "structured_data_future",
+      "label": "structured data future safe version",
+      "category_id": "seo_safety_readiness",
+      "notes": "Useful after blockers are closed."
+    },
+    {
+      "row_type": "nice_to_have",
+      "item_id": "csv_export_future",
+      "label": "CSV/export future placeholder",
+      "category_id": "cta_safety_readiness",
+      "notes": "Useful after blockers are closed."
+    },
+    {
+      "row_type": "nice_to_have",
+      "item_id": "dealer_visibility_future",
+      "label": "dealer visibility future placeholder",
+      "category_id": "cta_safety_readiness",
+      "notes": "Useful after blockers are closed."
+    },
+    {
+      "row_type": "nice_to_have",
+      "item_id": "smart_deal_future",
+      "label": "smart deal future placeholder",
+      "category_id": "cta_safety_readiness",
+      "notes": "Useful after blockers are closed."
+    },
+    {
+      "row_type": "nice_to_have",
+      "item_id": "mobile_polish",
+      "label": "richer mobile layout polish",
+      "category_id": "frontend_view_model_readiness",
+      "notes": "Useful after blockers are closed."
+    },
+    {
+      "row_type": "nice_to_have",
+      "item_id": "coverage_dashboard",
+      "label": "better source coverage health dashboard",
+      "category_id": "observability_readiness",
+      "notes": "Useful after blockers are closed."
+    },
+    {
+      "row_type": "nice_to_have",
+      "item_id": "korean_sources_later",
+      "label": "Korean source integration later",
+      "category_id": "beta_model_scope_readiness",
+      "notes": "Useful after blockers are closed."
+    }
+  ],
+  "beta_exposure_policies": [
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "exact_model_public_market_page",
+      "beta_exposure_allowed": true,
+      "index_allowed": true,
+      "noindex_required": false,
+      "price_widget_allowed": true,
+      "numeric_price_allowed": false,
+      "CTA_allowed": true,
+      "required_disclosures": [
+        "active_vs_sold_separation",
+        "non_affiliation",
+        "no_investment_advice"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if price/CTA safety breaks.",
+      "notes": "Allowed once blockers are resolved."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "exact_rare_variant_public_market_page",
+      "beta_exposure_allowed": true,
+      "index_allowed": true,
+      "noindex_required": false,
+      "price_widget_allowed": true,
+      "numeric_price_allowed": false,
+      "CTA_allowed": true,
+      "required_disclosures": [
+        "rare_variant_no_merge_warning",
+        "insufficient_sample_warning",
+        "non_affiliation"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if regular variant substitutes.",
+      "notes": "Allowed with caution."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "source_gap_public_page",
+      "beta_exposure_allowed": true,
+      "index_allowed": false,
+      "noindex_required": true,
+      "price_widget_allowed": false,
+      "numeric_price_allowed": false,
+      "CTA_allowed": true,
+      "required_disclosures": [
+        "source_gap_disclosure",
+        "no_price_guide",
+        "no_confirmed_absence"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if gap implies absence or price confidence.",
+      "notes": "Allowed only as noindex gap page."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "active_only_public_page",
+      "beta_exposure_allowed": true,
+      "index_allowed": true,
+      "noindex_required": false,
+      "price_widget_allowed": true,
+      "numeric_price_allowed": false,
+      "CTA_allowed": true,
+      "required_disclosures": [
+        "active_reference_only",
+        "active_vs_sold_separation"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if active asking looks like sold median.",
+      "notes": "Allowed with caution."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "archive_only_public_page",
+      "beta_exposure_allowed": true,
+      "index_allowed": true,
+      "noindex_required": false,
+      "price_widget_allowed": false,
+      "numeric_price_allowed": false,
+      "CTA_allowed": true,
+      "required_disclosures": [
+        "no_active_disclosure",
+        "sold_vs_expired_separation"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if fake active listings appear.",
+      "notes": "Allowed with caution."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "insufficient_sold_history_public_page",
+      "beta_exposure_allowed": true,
+      "index_allowed": true,
+      "noindex_required": false,
+      "price_widget_allowed": true,
+      "numeric_price_allowed": false,
+      "CTA_allowed": true,
+      "required_disclosures": [
+        "insufficient_sold_history",
+        "sample_warning"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if price confidence is overstated.",
+      "notes": "Allowed with warning."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "broad_query_refinement_route",
+      "beta_exposure_allowed": true,
+      "index_allowed": false,
+      "noindex_required": true,
+      "price_widget_allowed": false,
+      "numeric_price_allowed": false,
+      "CTA_allowed": false,
+      "required_disclosures": [
+        "refinement_required"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if direct market page opens.",
+      "notes": "Allowed only as refine route."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "unsafe_boundary_review_route",
+      "beta_exposure_allowed": true,
+      "index_allowed": false,
+      "noindex_required": true,
+      "price_widget_allowed": false,
+      "numeric_price_allowed": false,
+      "CTA_allowed": false,
+      "required_disclosures": [
+        "unsafe_boundary_warning",
+        "no_price_widget",
+        "no_cta"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if price/CTA opens.",
+      "notes": "Allowed only as review-safe route."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "unsupported_model_route",
+      "beta_exposure_allowed": true,
+      "index_allowed": false,
+      "noindex_required": true,
+      "price_widget_allowed": false,
+      "numeric_price_allowed": false,
+      "CTA_allowed": false,
+      "required_disclosures": [
+        "unsupported_disclosure"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if market metrics are shown.",
+      "notes": "Allowed only as unsupported noindex route."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "privacy_blocked_route",
+      "beta_exposure_allowed": false,
+      "index_allowed": false,
+      "noindex_required": true,
+      "price_widget_allowed": false,
+      "numeric_price_allowed": false,
+      "CTA_allowed": false,
+      "required_disclosures": [
+        "privacy_block"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if response still renders unsafe fields.",
+      "notes": "Block or safe noindex only."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "db_unavailable_safe_route",
+      "beta_exposure_allowed": false,
+      "index_allowed": false,
+      "noindex_required": true,
+      "price_widget_allowed": false,
+      "numeric_price_allowed": false,
+      "CTA_allowed": false,
+      "required_disclosures": [
+        "db_unavailable_disclosure",
+        "safe_empty_state"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if fake listings appear.",
+      "notes": "Safe fallback only."
+    },
+    {
+      "row_type": "beta_exposure_policy",
+      "route_state_id": "stale_data_safe_route",
+      "beta_exposure_allowed": true,
+      "index_allowed": true,
+      "noindex_required": false,
+      "price_widget_allowed": true,
+      "numeric_price_allowed": false,
+      "CTA_allowed": true,
+      "required_disclosures": [
+        "stale_warning",
+        "reduced_confidence"
+      ],
+      "launch_blocker_if_wrong": "Launch blocker if stale data is overclaimed.",
+      "notes": "Allowed with warning."
+    }
+  ],
+  "beta_model_eligibilities": [
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "leica_noctilux_m_50_095_asph",
+      "display_name": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "beta_allowed": true,
+      "route_state": "exact_model_public_market_page",
+      "price_widget_state": "full_price_guide_candidate",
+      "source_gap_state": "",
+      "archive_state": "archive_bundle_ready",
+      "confidence_state": "price_guide_high_confidence",
+      "required_disclosures": [
+        "active_vs_sold_separation",
+        "no_investment_advice"
+      ],
+      "blockers": [],
+      "warnings": [],
+      "notes": "Strong preview candidate, but overall beta still blocked until route/runtime blockers close."
+    },
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "leica_summilux_m_35_asph_aa",
+      "display_name": "Leica Summilux-M 35mm f/1.4 ASPH AA",
+      "beta_allowed": true,
+      "route_state": "exact_rare_variant_public_market_page",
+      "price_widget_state": "insufficient_sold_history",
+      "source_gap_state": "",
+      "archive_state": "archive_bundle_ready",
+      "confidence_state": "price_guide_low_confidence",
+      "required_disclosures": [
+        "rare_variant_no_merge_warning",
+        "insufficient_sample_warning"
+      ],
+      "blockers": [],
+      "warnings": [
+        "insufficient sold history"
+      ],
+      "notes": "Allowed only with no-merge caution."
+    },
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "sigma_14_24_dg_dn_art_l_mount",
+      "display_name": "Sigma 14-24mm DG DN Art L-mount",
+      "beta_allowed": true,
+      "route_state": "source_gap_public_page",
+      "price_widget_state": "source_gap_no_price_guide",
+      "source_gap_state": "source_gap",
+      "archive_state": "archive_gap_only",
+      "confidence_state": "source_gap_only",
+      "required_disclosures": [
+        "source_gap_disclosure",
+        "no_price_guide",
+        "no_confirmed_absence"
+      ],
+      "blockers": [],
+      "warnings": [
+        "noindex default"
+      ],
+      "notes": "Allowed only as source-gap beta page."
+    },
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "leica_m6_exact_safe",
+      "display_name": "Leica M6 exact model page if safe bundle exists",
+      "beta_allowed": true,
+      "route_state": "exact_model_public_market_page",
+      "price_widget_state": "active_reference_only",
+      "source_gap_state": "",
+      "archive_state": "archive_bundle_ready",
+      "confidence_state": "medium_confidence",
+      "required_disclosures": [
+        "active_reference_only"
+      ],
+      "blockers": [
+        "runtime exact-bundle verification pending"
+      ],
+      "warnings": [],
+      "notes": "Conditional beta candidate."
+    },
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "leica_apo_summicron_m_50_if_safe",
+      "display_name": "APO-Summicron-M 50 if exact model bundle safe",
+      "beta_allowed": true,
+      "route_state": "exact_model_public_market_page",
+      "price_widget_state": "insufficient_sold_history",
+      "source_gap_state": "",
+      "archive_state": "archive_bundle_ready",
+      "confidence_state": "medium_confidence",
+      "required_disclosures": [
+        "sample_warning"
+      ],
+      "blockers": [
+        "runtime exact-bundle verification pending"
+      ],
+      "warnings": [],
+      "notes": "Conditional beta candidate."
+    },
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "query_summicron_broad",
+      "display_name": "Broad Summicron query",
+      "beta_allowed": false,
+      "route_state": "broad_query_refinement_route",
+      "price_widget_state": "",
+      "source_gap_state": "",
+      "archive_state": "",
+      "confidence_state": "broad_query_refinement_required",
+      "required_disclosures": [
+        "refinement_required"
+      ],
+      "blockers": [
+        "cannot open as model page"
+      ],
+      "warnings": [],
+      "notes": "Not a beta model page."
+    },
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "unsafe_boundary_conflict_route",
+      "display_name": "Unsafe boundary conflict route",
+      "beta_allowed": false,
+      "route_state": "unsafe_boundary_review_route",
+      "price_widget_state": "",
+      "source_gap_state": "",
+      "archive_state": "",
+      "confidence_state": "unsafe_boundary_conflict",
+      "required_disclosures": [
+        "no_price_widget",
+        "no_cta"
+      ],
+      "blockers": [
+        "cannot beta as price page"
+      ],
+      "warnings": [],
+      "notes": "Review-safe only."
+    },
+    {
+      "row_type": "beta_model_eligibility",
+      "canonical_model_id": "unsupported_model_route_case",
+      "display_name": "Unsupported model route",
+      "beta_allowed": false,
+      "route_state": "unsupported_model_route",
+      "price_widget_state": "",
+      "source_gap_state": "",
+      "archive_state": "",
+      "confidence_state": "unsupported",
+      "required_disclosures": [
+        "unsupported_disclosure"
+      ],
+      "blockers": [
+        "cannot beta as market page"
+      ],
+      "warnings": [],
+      "notes": "Unsupported noindex only."
+    }
+  ],
+  "cta_readiness": [
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "watch_this_model",
+      "beta_visible": true,
+      "beta_enabled": false,
+      "requires_email_verification": true,
+      "aggregate_only": true,
+      "user_specific_data_exposed": false,
+      "disabled_reason": "",
+      "blocker_if_wrong": "Blocked globally until runtime/verification path is implemented safely.",
+      "notes": "Exact model CTA candidate."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "watch_this_exact_variant",
+      "beta_visible": true,
+      "beta_enabled": false,
+      "requires_email_verification": true,
+      "aggregate_only": true,
+      "user_specific_data_exposed": false,
+      "disabled_reason": "",
+      "blocker_if_wrong": "Blocked globally until runtime/verification path is implemented safely.",
+      "notes": "Variant CTA candidate."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "rare_new_listing_alert",
+      "beta_visible": true,
+      "beta_enabled": false,
+      "requires_email_verification": true,
+      "aggregate_only": true,
+      "user_specific_data_exposed": false,
+      "disabled_reason": "",
+      "blocker_if_wrong": "Blocked globally until runtime alert flow is implemented safely.",
+      "notes": "Rare alert candidate."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "source_gap_alert",
+      "beta_visible": true,
+      "beta_enabled": false,
+      "requires_email_verification": true,
+      "aggregate_only": true,
+      "user_specific_data_exposed": false,
+      "disabled_reason": "",
+      "blocker_if_wrong": "Blocked globally until runtime alert flow is implemented safely.",
+      "notes": "Gap CTA candidate."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "request_source",
+      "beta_visible": true,
+      "beta_enabled": false,
+      "requires_email_verification": false,
+      "aggregate_only": true,
+      "user_specific_data_exposed": false,
+      "disabled_reason": "",
+      "blocker_if_wrong": "Disabled until source request intake is defined.",
+      "notes": "Non-alert CTA candidate."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "target_price_watch",
+      "beta_visible": true,
+      "beta_enabled": false,
+      "requires_email_verification": true,
+      "aggregate_only": true,
+      "user_specific_data_exposed": false,
+      "disabled_reason": "Requires exact model/variant and verification.",
+      "blocker_if_wrong": "Blocked until verification-safe runtime exists.",
+      "notes": "No investment advice."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "smart_deal_future",
+      "beta_visible": false,
+      "beta_enabled": false,
+      "requires_email_verification": false,
+      "aggregate_only": true,
+      "user_specific_data_exposed": true,
+      "disabled_reason": "Future placeholder only.",
+      "blocker_if_wrong": "Not for beta.",
+      "notes": "Future placeholder."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "export_price_data_future",
+      "beta_visible": false,
+      "beta_enabled": false,
+      "requires_email_verification": false,
+      "aggregate_only": true,
+      "user_specific_data_exposed": true,
+      "disabled_reason": "Future placeholder only.",
+      "blocker_if_wrong": "Not for beta.",
+      "notes": "Future placeholder."
+    },
+    {
+      "row_type": "cta_readiness_decision",
+      "cta_id": "dealer_visibility_future",
+      "beta_visible": false,
+      "beta_enabled": false,
+      "requires_email_verification": false,
+      "aggregate_only": true,
+      "user_specific_data_exposed": true,
+      "disabled_reason": "Future placeholder only.",
+      "blocker_if_wrong": "Not for beta.",
+      "notes": "Future placeholder."
+    }
+  ],
+  "seo_readiness": [
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "exact_page_index",
+      "label": "exact safe page index allowed",
+      "status": "pass",
+      "result_summary": "Indexing allowed only for safe exact states.",
+      "notes": "SEO exact route ready in contract form."
+    },
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "source_gap_noindex_default",
+      "label": "source-gap noindex default",
+      "status": "pass",
+      "result_summary": "Conservative noindex default is acceptable for beta.",
+      "notes": "Gap honesty preserved."
+    },
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "broad_unsafe_unsupported_noindex",
+      "label": "broad/unsafe/unsupported noindex",
+      "status": "pass",
+      "result_summary": "Unsafe and broad states stay out of index.",
+      "notes": "Robots policy present."
+    },
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "prohibited_claims_blocked",
+      "label": "prohibited claims blocked",
+      "status": "pass",
+      "result_summary": "SEO blocked claims list exists.",
+      "notes": "No guaranteed/all-sources/official/investment language."
+    },
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "no_structured_data_prices",
+      "label": "no structured data price values",
+      "status": "warning",
+      "result_summary": "Structured data remains disabled by default.",
+      "notes": "Warning, not blocker."
+    },
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "no_raw_listing_urls",
+      "label": "no raw listing URLs in SEO",
+      "status": "pass",
+      "result_summary": "No raw links allowed.",
+      "notes": "Safe meta boundary."
+    },
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "non_affiliation_disclaimer",
+      "label": "non-affiliation disclaimer",
+      "status": "pass",
+      "result_summary": "Leica non-affiliation disclosure exists.",
+      "notes": "Required."
+    },
+    {
+      "row_type": "seo_readiness_decision",
+      "decision_id": "no_investment_advice",
+      "label": "no investment advice",
+      "status": "pass",
+      "result_summary": "Investment-advice disclaimer exists.",
+      "notes": "Required."
+    }
+  ],
+  "data_safety_readiness": [
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "public_response_safe_fields_only",
+      "label": "public response safe fields only",
+      "status": "pass",
+      "result_summary": "Allowed/blocked response boundary exists.",
+      "notes": "Response safety ready in contract form."
+    },
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "blocked_fields_enforced",
+      "label": "blocked fields enforced",
+      "status": "pass",
+      "result_summary": "Raw/user/provider fields are blocked in contract.",
+      "notes": "No raw data in public route."
+    },
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "analytics_safe_fields_only",
+      "label": "analytics safe fields only",
+      "status": "pass",
+      "result_summary": "Analytics allows aggregate-safe fields only.",
+      "notes": "No raw/user event fields."
+    },
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "raw_join_keys_blocked",
+      "label": "raw join keys blocked",
+      "status": "pass",
+      "result_summary": "DB integration contracts already block raw URL/email joins.",
+      "notes": "Join safety covered."
+    },
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "privacy_failure_fallback",
+      "label": "privacy failure fallback exists",
+      "status": "pass",
+      "result_summary": "Privacy failure can block response safely.",
+      "notes": "Fallback covered."
+    },
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "db_unavailable_fallback",
+      "label": "DB unavailable fallback noindex",
+      "status": "pass",
+      "result_summary": "DB unavailable route stays safe/noindex.",
+      "notes": "Fallback covered."
+    },
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "source_freshness_unknown_warning",
+      "label": "source freshness unknown warning",
+      "status": "warning",
+      "result_summary": "Unknown freshness is disclosed, not hidden.",
+      "notes": "Warning only."
+    },
+    {
+      "row_type": "data_safety_readiness_decision",
+      "decision_id": "lineage_failure_reduces_confidence",
+      "label": "lineage failure confidence reduction / price hidden",
+      "status": "pass",
+      "result_summary": "Lineage failure path exists in DB integration contracts.",
+      "notes": "No inflated counts."
+    }
+  ],
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "exact Noctilux beta allowed",
+      "expected_assertions": [
+        "beta_allowed",
+        "price widget allowed but numeric false",
+        "watch CTA allowed in contract",
+        "index allowed",
+        "no blockers on model row"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "35 lux AA beta allowed with caution",
+      "expected_assertions": [
+        "beta_allowed",
+        "rare variant no-merge warning",
+        "insufficient sample warning"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "Sigma source-gap beta allowed as noindex gap",
+      "expected_assertions": [
+        "no price guide",
+        "no confirmed absence language",
+        "source-gap CTA policy present"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "broad Summicron",
+      "expected_assertions": [
+        "not beta model page",
+        "refinement/noindex only"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "unsafe boundary",
+      "expected_assertions": [
+        "no price/CTA",
+        "noindex review-safe only"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "unsupported",
+      "expected_assertions": [
+        "unsupported noindex only"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "raw response risk",
+      "expected_assertions": [
+        "launch blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "SEO overclaim risk",
+      "expected_assertions": [
+        "launch blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "CTA email leakage risk",
+      "expected_assertions": [
+        "launch blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "active asking as sold median risk",
+      "expected_assertions": [
+        "launch blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "sold_likely as confirmed sold risk",
+      "expected_assertions": [
+        "launch blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "duplicate/relist double count risk",
+      "expected_assertions": [
+        "launch blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "stale data with warning",
+      "expected_assertions": [
+        "warning",
+        "not blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "insufficient sold history with label",
+      "expected_assertions": [
+        "warning",
+        "not blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "source freshness unknown",
+      "expected_assertions": [
+        "warning",
+        "not blocker if disclosed"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "structured data disabled",
+      "expected_assertions": [
+        "warning or nice-to-have",
+        "not blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "DB unavailable safe fallback",
+      "expected_assertions": [
+        "beta safe fallback",
+        "noindex"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "privacy filter failure fallback",
+      "expected_assertions": [
+        "blocked or noindex safe fallback"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "dealer lead unavailable",
+      "expected_assertions": [
+        "nice-to-have",
+        "not blocker"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "progress report",
+      "expected_assertions": [
+        "previous 91",
+        "expected 94",
+        "delta 3"
+      ],
+      "status": "passed",
+      "notes": "Private beta readiness validation."
+    }
+  ],
+  "readiness_summary": {
+    "row_type": "readiness_summary",
+    "go_no_go": "no_go",
+    "launch_blocker_count": 11,
+    "open_launch_blocker_count": 11,
+    "warning_count": 7,
+    "nice_to_have_count": 7,
+    "beta_ready_exact_models_count": 5,
+    "beta_safe_non_model_routes_count": 4,
+    "notes": "Private beta should not open until launch blockers are driven to zero."
+  },
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page private-beta readiness",
+    "previous_progress_pct": 91,
+    "expected_after_completion_pct": 94,
+    "delta_pct": 3,
+    "completed_milestones": [
+      "Model Market Page contract",
+      "Expired/Sold Archive contract",
+      "Price Guide contract",
+      "Model Market Page Data Adapter contract",
+      "Model Market Page Data Adapter local preview implementation",
+      "Model Market Page Frontend contract",
+      "Model Market Page Frontend local preview implementation",
+      "Expired/Sold Listing Archive local preview implementation",
+      "Price Guide / Market Intelligence local preview implementation",
+      "Model Market Page Data Adapter DB Integration Contract",
+      "Expired/Sold Listing Archive DB Integration Contract",
+      "Model Market Page Public Route Contract"
+    ],
+    "current_milestone": "Private Beta Market Page Readiness Checklist",
+    "remaining_milestones": [
+      "Dealer Lead Signal Contract",
+      "Market Page DB Read Adapter Implementation",
+      "Expired/Sold Listing Archive DB Implementation",
+      "Model Market Page Public Route Implementation",
+      "production/beta hardening"
+    ],
+    "notes": "Private beta readiness only, not full production launch progress."
+  },
+  "modified_files": [
+    "private_beta_market_page_readiness_checklist.py",
+    "scripts/run_p3_private_beta_market_page_readiness_checklist.py",
+    "tests/test_private_beta_market_page_readiness_checklist.py",
+    "data/admin/p3_private_beta_market_page_readiness_checklist_v0.md",
+    "data/admin/p3_private_beta_market_page_readiness_checklist_v0.jsonl",
+    "data/admin/private_beta_market_page_readiness_checklist_v0.json"
+  ]
+}

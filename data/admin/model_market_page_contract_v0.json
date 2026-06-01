@@ -1,0 +1,254 @@
+{
+  "task_name": "P3-MODEL-MARKET-PAGE-CONTRACT",
+  "modified_files": [
+    "model_market_page_contract.py",
+    "scripts/run_p3_model_market_page_contract.py",
+    "tests/test_model_market_page_contract.py",
+    "data/admin/p3_model_market_page_contract_v0.md",
+    "data/admin/p3_model_market_page_contract_v0.jsonl",
+    "data/admin/model_market_page_contract_v0.json"
+  ],
+  "policy": {
+    "generated_at": "2026-05-29T00:00:00Z",
+    "schema_version": "model_market_page_contract.v0",
+    "contract_version": "p3_model_market_page_contract_v0",
+    "contract_only": true,
+    "frontend_enabled": false,
+    "api_enabled": false,
+    "db_enabled": false,
+    "live_crawl_enabled": false,
+    "price_guide_calculation_enabled": false,
+    "sold_archive_enabled": false,
+    "no_fake_fill_required": true,
+    "adjacent_family_substitution_allowed": false,
+    "broad_query_market_page_auto_route_allowed": false,
+    "source_gap_disclosure_required": true,
+    "confidence_score_required": true,
+    "source_coverage_required": true,
+    "alert_cta_allowed": true,
+    "dealer_lead_placeholder_allowed": true,
+    "paid_data_export_placeholder_allowed": true,
+    "raw_url_storage_allowed": false,
+    "raw_email_storage_allowed": false,
+    "price_guide_requires_archive_disclosure": true,
+    "expired_archive_placeholder_only": true,
+    "preview_only": true
+  },
+  "benchmark_mapping": [
+    {
+      "benchmark": "CLASSIC.COM",
+      "applied_to": [
+        "market_status",
+        "market_alert_cta",
+        "dealer_source_visibility"
+      ],
+      "notes": "Model page + alert + dealer visibility structure."
+    },
+    {
+      "benchmark": "WatchCharts",
+      "applied_to": [
+        "price_guide_summary",
+        "price_trend",
+        "csv_export_placeholder"
+      ],
+      "notes": "Price guide/subscription/export direction without implementation."
+    },
+    {
+      "benchmark": "HiFi Shark",
+      "applied_to": [
+        "active_listings",
+        "source_coverage",
+        "sold_expired_history"
+      ],
+      "notes": "Multi-source listing and archive direction."
+    },
+    {
+      "benchmark": "Keepa",
+      "applied_to": [
+        "market_status",
+        "price_trend"
+      ],
+      "notes": "Change-tracking UX inspiration only."
+    },
+    {
+      "benchmark": "PriceCharting / WorthPoint / Reverb",
+      "applied_to": [
+        "sold_expired_history",
+        "price_guide_summary"
+      ],
+      "notes": "Sold/expired history as future price-guide dependency."
+    },
+    {
+      "benchmark": "PCPartPicker",
+      "applied_to": [
+        "compatibility_or_accessory_notes",
+        "variant_and_boundary_notes"
+      ],
+      "notes": "Compatibility warnings and accessory separation."
+    },
+    {
+      "benchmark": "ILS / Automa / Radwell",
+      "applied_to": [
+        "dealer_source_visibility",
+        "WTB_RFQ_placeholder"
+      ],
+      "notes": "Long-term B2B demand intelligence placeholder."
+    },
+    {
+      "benchmark": "StockX",
+      "applied_to": [
+        "target_price_watch_cta",
+        "demand_watch_signal"
+      ],
+      "notes": "Buyer-intent / target-price signal only, not exchange mechanics."
+    }
+  ],
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "exact_leica_lens_market_page",
+      "expected_status": "high_confidence_market_page",
+      "actual_status": "high_confidence_market_page",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "35_lux_aa_rare_variant",
+      "expected_status": "exact_variant_required",
+      "actual_status": "exact_variant_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "broad_summicron_query",
+      "expected_status": "broad_query_refinement_required",
+      "actual_status": "broad_query_refinement_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_gap_sigma_14_24_l",
+      "expected_status": "source_gap",
+      "actual_status": "source_gap",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "accessory_compatibility",
+      "expected_status": "accessory_lane_only",
+      "actual_status": "accessory_lane_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "sold_only_history",
+      "expected_status": "sold_expired_lane_visible",
+      "actual_status": "sold_expired_lane_visible",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "active_only_no_sold_data",
+      "expected_status": "active_only_caution",
+      "actual_status": "active_only_caution",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "adjacent_family_conflict",
+      "expected_status": "boundary_warning",
+      "actual_status": "boundary_warning",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_coverage_limited",
+      "expected_status": "selected_sources_disclosed",
+      "actual_status": "selected_sources_disclosed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "target_price_watch",
+      "expected_status": "conditional_alert_cta",
+      "actual_status": "conditional_alert_cta",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "dealer_visibility_placeholder",
+      "expected_status": "future_placeholder",
+      "actual_status": "future_placeholder",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "paid_price_data_placeholder",
+      "expected_status": "future_placeholder",
+      "actual_status": "future_placeholder",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "confidence_insufficient",
+      "expected_status": "insufficient_data",
+      "actual_status": "insufficient_data",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "model_not_seeded",
+      "expected_status": "review_required",
+      "actual_status": "review_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "expired_listing_archive_placeholder",
+      "expected_status": "archive_placeholder_only",
+      "actual_status": "archive_placeholder_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "price_guide_future_dependency",
+      "expected_status": "calculator_not_enabled",
+      "actual_status": "calculator_not_enabled",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "contract scenario validation"
+    }
+  ],
+  "raw_url_present": false,
+  "raw_email_present": false
+}

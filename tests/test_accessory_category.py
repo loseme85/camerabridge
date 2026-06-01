@@ -87,6 +87,30 @@ def test_lens_with_included_filter_stays_lens() -> None:
         assert result["category"] == "Lens", title
 
 
+def test_sl_lens_titles_do_not_fall_into_accessory_lane() -> None:
+    expected_mounts = {
+        "Used Leica Summicron-SL 35mm f/2 ASPH": "SL",
+        "Used Leica APO-Summicron-SL 50mm f/2 ASPH": "SL",
+    }
+
+    for title, mount in expected_mounts.items():
+        result = _classify(title)
+        assert result["category"] == "Lens", title
+        assert result["label"] != "Accessory", title
+        assert result["mount"] == mount, title
+
+
+def test_sold_sl_lens_titles_stay_in_lens_lane() -> None:
+    sold_items = [
+        "Leica 35mm F2 AsphSummicron SL",
+    ]
+
+    for title in sold_items:
+        result = classify_listing_v2({"상품명": title, "가격": "500,000", "품절": True})
+        assert result["category"] == "Lens", title
+        assert result["label"] != "Accessory", title
+
+
 def test_standalone_adapter_and_adaptor_titles_stay_accessory() -> None:
     titles = [
         "Leica M Adapter L",
@@ -152,14 +176,31 @@ def test_lens_or_body_with_included_finder_keeps_primary_category() -> None:
     assert low_foreign_price_body["category"] == "Body"
 
 
+def test_explicit_sl_accessories_stay_accessory() -> None:
+    expected = {
+        "Used Leica SL3 - Extra Battery": "battery",
+        "Used Leica Multifunctional Handgrip HG-SCL7 for SL3": "grip",
+        "Leica 12549 Hood Silver [for M 50mm f2.8 Elmar]": "hood",
+    }
+
+    for title, accessory_type in expected.items():
+        result = _classify(title)
+        assert result["category"] == "Accessory", title
+        assert result["label"] == "Accessory", title
+        assert result["accessory_type"] == accessory_type, title
+
+
 if __name__ == "__main__":
     test_standalone_hood_with_lens_compatibility_stays_accessory()
     test_lens_with_included_hood_stays_lens()
     test_existing_accessory_classes_remain_accessory()
     test_filter_primary_titles_stay_accessory()
     test_lens_with_included_filter_stays_lens()
+    test_sl_lens_titles_do_not_fall_into_accessory_lane()
+    test_sold_sl_lens_titles_stay_in_lens_lane()
     test_standalone_adapter_and_adaptor_titles_stay_accessory()
     test_lens_or_body_with_included_adapter_keeps_primary_category()
     test_standalone_finder_titles_stay_accessory()
     test_lens_or_body_with_included_finder_keeps_primary_category()
+    test_explicit_sl_accessories_stay_accessory()
     print("test_accessory_category: ok")

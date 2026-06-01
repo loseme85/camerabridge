@@ -1,0 +1,207 @@
+{
+  "task_name": "P3-MODEL-MARKET-PAGE-FRONTEND-CONTRACT",
+  "modified_files": [
+    "model_market_page_frontend_contract.py",
+    "scripts/run_p3_model_market_page_frontend_contract.py",
+    "tests/test_model_market_page_frontend_contract.py",
+    "data/admin/p3_model_market_page_frontend_contract_v0.md",
+    "data/admin/p3_model_market_page_frontend_contract_v0.jsonl",
+    "data/admin/model_market_page_frontend_contract_v0.json"
+  ],
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "model_market_page_frontend_contract.v0",
+    "contract_version": "p3_model_market_page_frontend_contract_v0",
+    "contract_only": true,
+    "frontend_implementation_enabled": false,
+    "react_component_enabled": false,
+    "api_route_enabled": false,
+    "db_query_enabled": false,
+    "price_calculation_enabled": false,
+    "archive_builder_enabled": false,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "broad_query_refinement_required": true,
+    "adjacent_family_substitution_allowed": false,
+    "active_vs_sold_price_disclosure_required": true,
+    "confidence_disclosure_required": true,
+    "source_mix_disclosure_required": true,
+    "beta_status_disclosure_required": true,
+    "no_affiliation_disclaimer_required": true,
+    "future_placeholder_disclosure_required": true
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "Noctilux exact full page",
+      "expected_result": "hero, guide candidate, active lane, sold lane, source coverage, CTA visible, active/sold separation visible",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "35 lux AA limited rare variant page",
+      "expected_result": "variant warning visible, regular 35 lux stays related-not-substitute, insufficient sold history visible",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "Sigma 14-24 L source-gap page",
+      "expected_result": "source gap notice visible, no market-price card, request source CTA visible",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "broad Summicron refinement page",
+      "expected_result": "refinement empty state, no market metrics, no fast alert CTA",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "unsafe boundary conflict page",
+      "expected_result": "boundary warning visible, price guide hidden, CTA disabled/review only",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "active-only no sold history",
+      "expected_result": "active listings visible, active reference only, no sold median",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "archive-only no active",
+      "expected_result": "sold/expired history visible, watch CTA allowed if exact",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "sold_likely lane",
+      "expected_result": "caution badge visible and not confirmed sold",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "expired_removed lane",
+      "expected_result": "expired label visible and not sold price",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "accessory lane",
+      "expected_result": "accessory compatibility copy visible and not mixed into model listing",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "related-not-substitute lane",
+      "expected_result": "visible separation with no fake-fill",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "source coverage limited",
+      "expected_result": "selected/review/blocked sources visible and all-source claim absent",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "confidence disclosure",
+      "expected_result": "badge and explanation visible for each state",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "target price watch CTA",
+      "expected_result": "exact-only with caution and no investment-advice language",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "future placeholders",
+      "expected_result": "smart deal/export/dealer visibility are future-only",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "mobile layout priority",
+      "expected_result": "hero/status/price-or-gap/CTA/listings/source/confidence order exists",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "desktop layout priority",
+      "expected_result": "main/sticky column contract exists",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "copy safety",
+      "expected_result": "prohibited claims blocked",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "legal disclaimer",
+      "expected_result": "Leica non-affiliation and price/info disclaimers present",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "source-gap not absence",
+      "expected_result": "wording frames source-gap as coverage gap, not absence",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "U",
+      "scenario_group": "raw data display guard",
+      "expected_result": "raw URL/email/HTML not displayed and safe external link placeholder only",
+      "status": "passed"
+    }
+  ],
+  "contract_checks": [
+    {
+      "row_type": "contract_check",
+      "check_id": "policy_blocks_frontend_runtime",
+      "status": "passed",
+      "notes": "Runtime surfaces remain disabled."
+    },
+    {
+      "row_type": "contract_check",
+      "check_id": "required_sections_present",
+      "status": "passed",
+      "notes": "Required section map."
+    },
+    {
+      "row_type": "contract_check",
+      "check_id": "claim_safety_rows_present",
+      "status": "passed",
+      "notes": "Prohibited claim list loaded."
+    }
+  ],
+  "raw_url_present": false,
+  "raw_html_present": false,
+  "raw_email_present": false,
+  "provider_payload_present": false,
+  "raw_webhook_body_present": false
+}

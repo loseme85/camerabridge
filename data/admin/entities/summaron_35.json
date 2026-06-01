@@ -1,0 +1,84 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "summaron_35",
+  "family_name": "Summaron 35mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M",
+    "LTM"
+  ],
+  "overlay_allowed": [
+    "mount",
+    "goggles",
+    "finish",
+    "boxed",
+    "hood_included",
+    "condition",
+    "engraving",
+    "special_edition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summaron_35_f3_5",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "Mixed",
+      "system": "Rangefinder",
+      "label": "Rangefinder Lens",
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "focal_length": "35",
+      "canonical_name": "Leica Summaron 35mm f/3.5",
+      "aliases": [
+        "35 summaron 3.5",
+        "35/3.5 summaron",
+        "summaron 35 3.5",
+        "ltm summaron 35",
+        "35 summaron ltm"
+      ],
+      "key_discriminators": [
+        "35",
+        "f3.5",
+        "3.5",
+        "summaron"
+      ],
+      "variant": [
+        "f/3.5"
+      ],
+      "price_group": "summaron35_f3_5",
+      "notes": "Round-1 conservative core seed. Mount and goggles remain overlay axes, not separate core entities.",
+      "status": "core"
+    },
+    {
+      "id": "seed_summaron_35_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "Mixed",
+      "system": "Rangefinder",
+      "label": "Rangefinder Lens",
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "focal_length": "35",
+      "canonical_name": "Leica Summaron 35mm f/2.8",
+      "aliases": [
+        "35 summaron 2.8",
+        "35/2.8 summaron",
+        "summaron 35 2.8"
+      ],
+      "key_discriminators": [
+        "35",
+        "f2.8",
+        "2.8",
+        "summaron"
+      ],
+      "variant": [
+        "f/2.8"
+      ],
+      "price_group": "summaron35_f2_8",
+      "notes": "Round-1 conservative core seed. Dual-mount and goggles remain overlay/hold axes, not separate core entities.",
+      "status": "core"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "summicron_50",
+  "family_name": "Summicron-M 50",
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summicron_50_dr",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summicron",
+      "model_canonical": "Summicron-M",
+      "focal_length": "50",
+      "canonical_name": "Leica Summicron-M 50mm f/2 Dual Range",
+      "aliases": [
+        "50 cron dr",
+        "50 summicron dr",
+        "50 cron dual range"
+      ],
+      "key_discriminators": [
+        "50",
+        "f2",
+        "dr",
+        "dual range"
+      ],
+      "variant": [
+        "DR"
+      ],
+      "status": "core"
+    }
+  ]
+}

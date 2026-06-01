@@ -1,0 +1,72 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summilux_r_50",
+  "family_name": "Summilux-R 50mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "R"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "rom",
+    "cam_version",
+    "filter_thread",
+    "version_marker",
+    "special_edition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summilux_r_50_f1_4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "R",
+      "system": "R System",
+      "label": "R Lens",
+      "model_raw": "Summilux-R",
+      "model_canonical": "Summilux-R",
+      "focal_length": "50",
+      "canonical_name": "Leica Summilux-R 50mm f/1.4",
+      "aliases": [
+        "summilux-r 50",
+        "summilux r 50",
+        "r 50 summilux",
+        "50 summilux-r",
+        "50mm f1.4 summilux-r",
+        "50mm f/1.4 summilux-r",
+        "r 50/1.4 summilux",
+        "leica r 50mm f1.4",
+        "leica r 50mm f/1.4",
+        "50mm f1.4 summilux r"
+      ],
+      "key_discriminators": [
+        "summilux-r",
+        "50",
+        "f1.4",
+        "50mm f1.4",
+        "r 50/1.4",
+        "leica r"
+      ],
+      "variant": [
+        "f/1.4",
+        "Summilux-R"
+      ],
+      "price_group": "summilux_r_50_f1_4",
+      "notes": "Round-1 conservative core seed for the Leica R-side Summilux 50 family. Summilux-R I/II, ROM, cam markers, Safari, and E55/E60 remain below row level, and broad summilux 50 or 50 lux shorthand is intentionally excluded to avoid M-side, SL-side, and third-party contamination.",
+      "status": "core"
+    }
+  ]
+}

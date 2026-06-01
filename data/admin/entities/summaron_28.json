@@ -1,0 +1,99 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summaron_28",
+  "family_name": "Summaron 28mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M",
+    "LTM"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "finder_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "packaging",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summaron_m_28_f5_6",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summaron-M",
+      "model_canonical": "Summaron-M",
+      "focal_length": "28",
+      "canonical_name": "Leica Summaron-M 28mm f/5.6",
+      "aliases": [
+        "summaron-m 28",
+        "28mm f5.6 summaron-m",
+        "28mm f/5.6 summaron-m",
+        "m 28/5.6 summaron",
+        "summaron 28 6bit",
+        "summaron 28 복각",
+        "summaron 28 신형"
+      ],
+      "key_discriminators": [
+        "summaron-m",
+        "m 28/5.6",
+        "6bit",
+        "복각",
+        "신형"
+      ],
+      "variant": [
+        "f/5.6"
+      ],
+      "price_group": "summaron_m_28_f5_6",
+      "notes": "Round-2 conservative hold seed for the modern Summaron-M 28 reissue line. Generic Summaron 28 queries remain intentionally ambiguous.",
+      "status": "hold"
+    },
+    {
+      "id": "seed_summaron_28_f5_6_original_ltm",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "LTM",
+      "system": "Barnack / LTM",
+      "label": "LTM Lens",
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "focal_length": "28",
+      "canonical_name": "Leica Summaron 28mm f/5.6 original screw-thread / LTM",
+      "aliases": [
+        "summaron 28 ltm",
+        "summaron 28 original",
+        "summaron 28 오리지날",
+        "summaron 28 vintage",
+        "l 28/5.6 summaron",
+        "ltm 28/5.6 summaron",
+        "28mm f5.6 ltm summaron",
+        "28mm f/5.6 ltm summaron"
+      ],
+      "key_discriminators": [
+        "ltm",
+        "l 28/5.6",
+        "screw-thread",
+        "screw mount",
+        "original",
+        "오리지날",
+        "vintage"
+      ],
+      "variant": [
+        "f/5.6"
+      ],
+      "price_group": "summaron_28_f5_6_original_ltm",
+      "notes": "Round-2 conservative hold seed for the original screw-thread / LTM Summaron 28 line. Generic Summaron 28 queries remain intentionally ambiguous.",
+      "status": "hold"
+    }
+  ]
+}

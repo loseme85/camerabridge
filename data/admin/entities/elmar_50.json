@@ -1,0 +1,154 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_elmar_50",
+  "family_name": "Elmar 50mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M",
+    "LTM"
+  ],
+  "overlay_allowed": [
+    "mount",
+    "finish",
+    "scale",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmar_50_f3_5_early_5e",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "Mixed",
+      "system": "Rangefinder",
+      "label": "Rangefinder Lens",
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "focal_length": "50",
+      "canonical_name": "Leica Elmar 50mm f/3.5 early 5-element collapsible",
+      "aliases": [
+        "50 elmar 3.5 early",
+        "50 elmar 5 element",
+        "50 elmar 5e",
+        "nickel elmar",
+        "early collapsible elmar"
+      ],
+      "key_discriminators": [
+        "50",
+        "f3.5",
+        "3.5",
+        "5 element",
+        "5e",
+        "early collapsible"
+      ],
+      "variant": [
+        "f/3.5",
+        "early 5-element collapsible"
+      ],
+      "price_group": "elmar50_f3_5_early_5e",
+      "notes": "Round-1 conservative core seed. Nickel Elmar is treated as a strong alias, not a standalone canonical core row.",
+      "status": "core"
+    },
+    {
+      "id": "seed_elmar_50_f3_5_late_4e",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "Mixed",
+      "system": "Rangefinder",
+      "label": "Rangefinder Lens",
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "focal_length": "50",
+      "canonical_name": "Leica Elmar 50mm f/3.5 late 4-element collapsible",
+      "aliases": [
+        "50 elmar 3.5 late",
+        "50 elmar 4 element",
+        "50 elmar 4e",
+        "red elmar",
+        "late collapsible elmar"
+      ],
+      "key_discriminators": [
+        "50",
+        "f3.5",
+        "3.5",
+        "4 element",
+        "4e",
+        "late collapsible"
+      ],
+      "variant": [
+        "f/3.5",
+        "late 4-element collapsible"
+      ],
+      "price_group": "elmar50_f3_5_late_4e",
+      "notes": "Round-1 conservative core seed. Red Elmar is treated as a strong alias, not a standalone canonical core row.",
+      "status": "core"
+    },
+    {
+      "id": "seed_elmar_50_f2_8_collapsible",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "Mixed",
+      "system": "Rangefinder",
+      "label": "Rangefinder Lens",
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "focal_length": "50",
+      "canonical_name": "Leica Elmar 50mm f/2.8 collapsible",
+      "aliases": [
+        "50 elmar 2.8 collapsible",
+        "50 elmar collapsible 2.8",
+        "vintage elmar 50 2.8"
+      ],
+      "key_discriminators": [
+        "50",
+        "f2.8",
+        "2.8",
+        "collapsible",
+        "vintage"
+      ],
+      "variant": [
+        "f/2.8",
+        "collapsible"
+      ],
+      "price_group": "elmar50_f2_8_collapsible",
+      "notes": "Round-1 conservative core seed for the vintage f/2.8 collapsible line. LTM/M remains overlay metadata.",
+      "status": "core"
+    },
+    {
+      "id": "seed_elmar_m_50_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Elmar-M",
+      "model_canonical": "Elmar",
+      "focal_length": "50",
+      "canonical_name": "Leica Elmar-M 50mm f/2.8",
+      "aliases": [
+        "50 elmar m 2.8",
+        "elmar-m 50 2.8",
+        "50mm f/2.8 elmar-m"
+      ],
+      "key_discriminators": [
+        "50",
+        "f2.8",
+        "elmar-m",
+        "modern",
+        "m only"
+      ],
+      "variant": [
+        "f/2.8",
+        "Elmar-M"
+      ],
+      "price_group": "elmar_m_50_f2_8",
+      "notes": "Modern Elmar-M product line. Finish-only and 6bit differences stay below canonical core level.",
+      "status": "core"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_tri_elmar_16_18_21",
+  "family_name": "Tri-Elmar 16-18-21mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "finder_included",
+    "frankenfinder_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_tri_elmar_m_16_18_21_f4_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Tri-Elmar-M",
+      "model_canonical": "Tri-Elmar-M",
+      "focal_length": "16-18-21",
+      "canonical_name": "Leica Tri-Elmar-M 16-18-21mm f/4 ASPH",
+      "aliases": [
+        "tri-elmar 16-18-21",
+        "16-18-21 tri-elmar",
+        "tri-elmar-m 16-18-21",
+        "16 18 21 tri-elmar",
+        "16-18-21mm f4 tri-elmar",
+        "16-18-21mm f/4 tri-elmar",
+        "16-18-21mm f4 asph tri-elmar",
+        "m 16-18-21/4 tri-elmar",
+        "m 16-18-21 f4 tri-elmar"
+      ],
+      "key_discriminators": [
+        "tri-elmar-m",
+        "tri-elmar",
+        "16-18-21",
+        "16 18 21",
+        "f4",
+        "asph",
+        "m 16-18-21/4"
+      ],
+      "variant": [
+        "16-18-21mm",
+        "f/4",
+        "ASPH"
+      ],
+      "price_group": "tri_elmar_m_16_18_21_f4_asph",
+      "notes": "Round-1 conservative core seed for the Leica M wide-angle Tri-Elmar line. WATE shorthand and finder or Frankenfinder bundle wording remain below row level for the initial seed pass.",
+      "status": "core"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_thambar_90",
+  "family_name": "Thambar 90mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "center_spot_filter_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_thambar_m_90_f2_2",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Thambar-M",
+      "model_canonical": "Thambar",
+      "focal_length": "90",
+      "canonical_name": "Leica Thambar-M 90mm f/2.2",
+      "aliases": [
+        "thambar-m 90",
+        "90 thambar-m",
+        "90mm f2.2 thambar-m",
+        "90mm f/2.2 thambar-m",
+        "thambar-m 1:2.2/90"
+      ],
+      "key_discriminators": [
+        "thambar-m",
+        "90",
+        "f2.2",
+        "1:2.2/90"
+      ],
+      "variant": [
+        "Thambar-M",
+        "f/2.2"
+      ],
+      "price_group": "thambar_m_90_f2_2",
+      "notes": "Explicit hold row for the modern Leica M reissue. Broad Thambar 90 and original vintage Thambar remain outside seeded rows in this round.",
+      "status": "hold"
+    }
+  ]
+}

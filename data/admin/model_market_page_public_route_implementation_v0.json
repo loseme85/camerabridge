@@ -1,0 +1,247 @@
+{
+  "task_name": "P3-MODEL-MARKET-PAGE-PUBLIC-ROUTE-IMPLEMENTATION",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "model_market_page_public_route_implementation.v0",
+    "contract_version": "p3_model_market_page_public_route_implementation_v0",
+    "implementation_mode": "local_public_route_preview",
+    "actual_nextjs_route_enabled": false,
+    "actual_api_route_enabled": false,
+    "server_handler_enabled": false,
+    "frontend_page_enabled": false,
+    "db_query_enabled": false,
+    "production_route_enabled": false,
+    "seo_runtime_deployment_enabled": false,
+    "public_response_safe_fields_only": true,
+    "raw_url_response_allowed": false,
+    "listing_url_response_allowed": false,
+    "source_url_response_allowed": false,
+    "raw_html_response_allowed": false,
+    "raw_email_response_allowed": false,
+    "user_email_response_allowed": false,
+    "provider_payload_response_allowed": false,
+    "webhook_body_response_allowed": false,
+    "raw_fetch_response_allowed": false,
+    "raw_selector_output_allowed": false,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "source_gap_confirmed_absence_language_allowed": false,
+    "broad_query_public_page_allowed": false,
+    "unsafe_boundary_public_price_allowed": false,
+    "unsafe_boundary_cta_allowed": false,
+    "active_vs_sold_separation_required": true,
+    "numeric_price_display_allowed": false,
+    "structured_data_enabled": false,
+    "structured_data_price_values_allowed": false,
+    "seo_claim_safety_required": true,
+    "no_affiliation_disclaimer_required": true,
+    "no_investment_advice_required": true,
+    "progress_previous_pct": 96,
+    "progress_after_pct": 98,
+    "progress_delta_pct": 2
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "exact Noctilux public route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "35 lux AA rare variant route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "Sigma source-gap route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "broad Summicron query",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "unsafe boundary route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "unsupported model route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "active-only route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "archive-only route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "stale data route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "privacy blocked route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "DB unavailable route",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "slug mismatch",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "slug conflict",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "injected raw URL response",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "injected email/user response",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "injected provider payload response",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "injected prohibited SEO claim",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "structured data disabled",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "CTA aggregate-only",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "analytics safety",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "U",
+      "scenario_group": "robots decision by route state",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "V",
+      "scenario_group": "public response safe field set",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "W",
+      "scenario_group": "runtime blocker evaluation",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "X",
+      "scenario_group": "progress report",
+      "status": "passed",
+      "notes": "Local public route runtime preview validation."
+    }
+  ],
+  "implementation_checks": [
+    {
+      "row_type": "implementation_check",
+      "check_id": "no_actual_nextjs_route",
+      "status": "passed",
+      "notes": "No actual Next.js route or server handler was created."
+    },
+    {
+      "row_type": "implementation_check",
+      "check_id": "seo_runtime_blocker_closed_in_preview_only",
+      "status": "passed",
+      "notes": "Runtime preview evidence only; beta go is still separate."
+    },
+    {
+      "row_type": "implementation_check",
+      "check_id": "structured_data_disabled_for_beta_safety",
+      "status": "passed",
+      "notes": "Structured data remains disabled for beta safety."
+    }
+  ],
+  "progress_report": {
+    "branch_name": "P3 Market Intelligence / Model Market Page private-beta runtime-readiness",
+    "previous_progress_pct": 96,
+    "expected_after_completion_pct": 98,
+    "delta_pct": 2
+  },
+  "modified_files": [
+    "model_market_page_public_route.py",
+    "scripts/run_p3_model_market_page_public_route_implementation.py",
+    "tests/test_model_market_page_public_route_implementation.py",
+    "data/admin/p3_model_market_page_public_route_implementation_v0.md",
+    "data/admin/p3_model_market_page_public_route_implementation_v0.jsonl",
+    "data/admin/model_market_page_public_route_implementation_v0.json"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summicron_28",
+  "family_name": "Summicron 28mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summicron_m_28_f2_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summicron-M",
+      "model_canonical": "Summicron-M",
+      "focal_length": "28",
+      "canonical_name": "Leica Summicron-M 28mm f/2 ASPH",
+      "aliases": [
+        "summicron 28",
+        "28 summicron",
+        "summicron-m 28",
+        "28mm f2 summicron",
+        "28mm f/2 summicron",
+        "28mm f2 asph summicron",
+        "28mm f/2 asph summicron",
+        "summicron 28 asph",
+        "28 cron",
+        "m 28/2 summicron",
+        "m 28/2 summicron asph"
+      ],
+      "key_discriminators": [
+        "28",
+        "f2",
+        "summicron-m",
+        "summicron",
+        "asph",
+        "m 28/2"
+      ],
+      "variant": [
+        "f/2",
+        "ASPH"
+      ],
+      "price_group": "summicron_m_28_f2_asph",
+      "notes": "Round-1 conservative core seed for the broad Summicron 28 family. Current close-focus / ASPH II / NEW / 신형 remains intentionally below row level for now.",
+      "status": "core"
+    }
+  ]
+}

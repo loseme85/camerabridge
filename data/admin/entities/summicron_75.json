@@ -1,0 +1,59 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summicron_75",
+  "family_name": "Summicron 75mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_apo_summicron_m_75_f2_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "APO-Summicron-M",
+      "model_canonical": "APO-Summicron-M",
+      "focal_length": "75",
+      "canonical_name": "Leica APO-Summicron-M 75mm f/2 ASPH",
+      "aliases": [
+        "apo-summicron-m 75",
+        "apo summicron 75",
+        "75 apo summicron",
+        "75mm f2 apo-summicron-m",
+        "m 75/2 apo summicron",
+        "75/2 apo summicron"
+      ],
+      "key_discriminators": [
+        "75",
+        "f2",
+        "apo",
+        "asph",
+        "apo-summicron-m",
+        "m 75/2"
+      ],
+      "variant": [
+        "f/2",
+        "APO",
+        "ASPH"
+      ],
+      "price_group": "apo_summicron_m_75_f2_asph",
+      "notes": "Round-1 conservative core seed for the Leica M 75 Summicron line. 6bit, finish, special-edition wording, and SL contamination remain below or outside the family row level.",
+      "status": "core"
+    }
+  ]
+}

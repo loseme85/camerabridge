@@ -1,0 +1,272 @@
+{
+  "task_name": "P3-EXPIRED-SOLD-LISTING-ARCHIVE-CONTRACT",
+  "modified_files": [
+    "expired_sold_listing_archive_contract.py",
+    "scripts/run_p3_expired_sold_listing_archive_contract.py",
+    "tests/test_expired_sold_listing_archive_contract.py",
+    "data/admin/p3_expired_sold_listing_archive_contract_v0.md",
+    "data/admin/p3_expired_sold_listing_archive_contract_v0.jsonl",
+    "data/admin/expired_sold_listing_archive_contract_v0.json"
+  ],
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "expired_sold_listing_archive_contract.v0",
+    "contract_version": "p3_expired_sold_listing_archive_contract_v0",
+    "contract_only": true,
+    "archive_builder_enabled": false,
+    "db_enabled": false,
+    "api_enabled": false,
+    "frontend_enabled": false,
+    "price_guide_calculation_enabled": false,
+    "sold_detection_runtime_enabled": false,
+    "no_fake_fill_required": true,
+    "adjacent_family_substitution_allowed": false,
+    "raw_url_storage_allowed": false,
+    "raw_html_storage_allowed": false,
+    "screenshot_storage_allowed": false,
+    "raw_email_storage_allowed": false,
+    "raw_provider_payload_storage_allowed": false,
+    "raw_webhook_body_storage_allowed": false,
+    "listing_url_fingerprint_required": true,
+    "source_listing_id_preferred": true,
+    "price_snapshot_required": true,
+    "source_status_signal_required": true,
+    "confidence_status_required": true,
+    "model_market_page_integration_required": true,
+    "active_only_median_allowed": false,
+    "anti_bot_as_sold_allowed": false,
+    "removed_as_sold_confirmed_allowed": false
+  },
+  "benchmark_mapping": [
+    {
+      "benchmark": "HiFi Shark",
+      "applied_to": [
+        "sold_expired_history",
+        "multi_source_archive_search",
+        "source_coverage_context"
+      ],
+      "notes": "Historical multi-source archive direction and expired-listing precedent."
+    },
+    {
+      "benchmark": "CLASSIC.COM",
+      "applied_to": [
+        "model_market_page_history",
+        "sold_record_visibility"
+      ],
+      "notes": "Model-level historical record framing."
+    },
+    {
+      "benchmark": "WatchCharts",
+      "applied_to": [
+        "price_history_confidence",
+        "paid_data_placeholder"
+      ],
+      "notes": "Trend confidence and Pro data direction."
+    },
+    {
+      "benchmark": "Reverb / PriceCharting / WorthPoint",
+      "applied_to": [
+        "sold_price_history",
+        "expired_archive_dependency",
+        "price_guide_dependency"
+      ],
+      "notes": "Sold/expired records as price-guide substrate."
+    },
+    {
+      "benchmark": "Keepa",
+      "applied_to": [
+        "price_changed",
+        "availability_tracking",
+        "disappearance_signal"
+      ],
+      "notes": "Price/availability change tracking inspiration only."
+    }
+  ],
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "explicit_sold_badge",
+      "scenario_letter": "A",
+      "expected_status": "sold_confirmed",
+      "actual_status": "sold_confirmed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "reserved_or_hold_item",
+      "scenario_letter": "B",
+      "expected_status": "sold_likely_or_manual_review_required",
+      "actual_status": "sold_likely_or_manual_review_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "404_disappeared_listing",
+      "scenario_letter": "C",
+      "expected_status": "expired_removed_or_removed_unknown",
+      "actual_status": "expired_removed_or_removed_unknown",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "anti_bot_blocked_source",
+      "scenario_letter": "D",
+      "expected_status": "source_gap_or_fetch_issue",
+      "actual_status": "source_gap_or_fetch_issue",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "source_selector_gap",
+      "scenario_letter": "E",
+      "expected_status": "source_gap_unobserved",
+      "actual_status": "source_gap_unobserved",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "active_price_changed",
+      "scenario_letter": "F",
+      "expected_status": "price_changed",
+      "actual_status": "price_changed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "active_only_no_sold_history",
+      "scenario_letter": "G",
+      "expected_status": "active_reference_only",
+      "actual_status": "active_reference_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "sold_confirmed_low_model_confidence",
+      "scenario_letter": "H",
+      "expected_status": "archive_manual_review_required",
+      "actual_status": "archive_manual_review_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "adjacent_family_conflict",
+      "scenario_letter": "I",
+      "expected_status": "unsafe_boundary_conflict",
+      "actual_status": "unsafe_boundary_conflict",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "accessory_listing_removed",
+      "scenario_letter": "J",
+      "expected_status": "accessory_lane_only",
+      "actual_status": "accessory_lane_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "duplicate_listing_same_source_id",
+      "scenario_letter": "K",
+      "expected_status": "duplicate_merged",
+      "actual_status": "duplicate_merged",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "relisted_same_item",
+      "scenario_letter": "L",
+      "expected_status": "relisted_lineage",
+      "actual_status": "relisted_lineage",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "sold_likely_with_price",
+      "scenario_letter": "M",
+      "expected_status": "weak_price_input_with_caution",
+      "actual_status": "weak_price_input_with_caution",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "removed_unknown",
+      "scenario_letter": "N",
+      "expected_status": "not_price_guide_eligible",
+      "actual_status": "not_price_guide_eligible",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "raw_url_html_violation",
+      "scenario_letter": "O",
+      "expected_status": "blocked_policy_violation",
+      "actual_status": "blocked_policy_violation",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "model_market_page_integration",
+      "scenario_letter": "P",
+      "expected_status": "correct_lane_mapping",
+      "actual_status": "correct_lane_mapping",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "price_guide_sample_threshold",
+      "scenario_letter": "Q",
+      "expected_status": "insufficient_data",
+      "actual_status": "insufficient_data",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_group": "paid_export_placeholder",
+      "scenario_letter": "R",
+      "expected_status": "future_placeholder_only",
+      "actual_status": "future_placeholder_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "archive contract scenario validation"
+    }
+  ],
+  "raw_url_present": false,
+  "raw_html_present": false,
+  "raw_email_present": false,
+  "raw_provider_payload_present": false,
+  "raw_webhook_body_present": false
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_elmarit_24",
+  "family_name": "Elmarit 24mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding",
+    "finder_bundle"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmarit_m_24_f2_8_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Elmarit-M",
+      "model_canonical": "Elmarit-M",
+      "focal_length": "24",
+      "canonical_name": "Leica Elmarit-M 24mm f/2.8 ASPH",
+      "aliases": [
+        "elmarit 24 asph",
+        "24 elmarit asph",
+        "24mm f2.8 asph elmarit-m",
+        "m 24/2.8 elmarit asph",
+        "24/2.8 elmarit asph"
+      ],
+      "key_discriminators": [
+        "24",
+        "f2.8",
+        "elmarit-m",
+        "asph",
+        "m 24/2.8",
+        "e55"
+      ],
+      "variant": [
+        "f/2.8",
+        "ASPH"
+      ],
+      "price_group": "elmarit_m_24_f2_8_asph",
+      "notes": "Round-1 conservative core seed for the practical Leica M-side Elmarit 24 family. Broad unlabeled titles and finder bundle wording remain intentionally below seed-row level.",
+      "status": "core"
+    }
+  ]
+}

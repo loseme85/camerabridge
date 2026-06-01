@@ -1,0 +1,1317 @@
+{
+  "task_name": "P3-MODEL-MARKET-PAGE-BETA-SMOKE-TEST",
+  "smoke_test_policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "model_market_page_beta_smoke_test.v0",
+    "artifact_version": "p3_model_market_page_beta_smoke_test_v0",
+    "smoke_test_only": true,
+    "actual_deployment_enabled": false,
+    "actual_route_enabled": false,
+    "actual_api_enabled": false,
+    "actual_frontend_enabled": false,
+    "actual_db_enabled": false,
+    "actual_cta_send_enabled": false,
+    "production_launch_enabled": false,
+    "limited_private_beta_only": true,
+    "runbook_required": true,
+    "readiness_recheck_required": true,
+    "all_blocker_tests_must_pass": true,
+    "warning_tests_may_pass_with_disclosure": true,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "CTA_send_enabled": false,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "raw_data_leak_zero_tolerance": true,
+    "seo_overclaim_zero_tolerance": true,
+    "rollback_trigger_required": true,
+    "progress_previous_pct": 99.5,
+    "progress_after_pct": 99.8,
+    "progress_delta_pct": 0.3
+  },
+  "runbook_smoke_plan_baseline": {
+    "row_type": "runbook_smoke_plan_baseline",
+    "baseline_count": 16,
+    "smoke_steps": [
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "exact_noctilux_route_loads",
+        "route_or_case": "exact Noctilux route",
+        "expected_result": "200 + index,follow + numeric price disabled",
+        "blocker_if_failed": true,
+        "owner_role": "QA_operator",
+        "evidence_to_capture": "route screenshot + robots + response summary",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "rare_variant_route_loads",
+        "route_or_case": "35 lux AA route",
+        "expected_result": "rare variant caution present + no merge",
+        "blocker_if_failed": true,
+        "owner_role": "QA_operator",
+        "evidence_to_capture": "route screenshot + warning text",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "source_gap_route_loads",
+        "route_or_case": "Sigma source-gap route",
+        "expected_result": "noindex + no price + source-gap disclosure",
+        "blocker_if_failed": true,
+        "owner_role": "QA_operator",
+        "evidence_to_capture": "robots + page state + disclosure",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "broad_query_refines",
+        "route_or_case": "broad Summicron query",
+        "expected_result": "refinement only + noindex",
+        "blocker_if_failed": true,
+        "owner_role": "QA_operator",
+        "evidence_to_capture": "redirect/route state evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "unsafe_boundary_hidden",
+        "route_or_case": "unsafe boundary route",
+        "expected_result": "no price + CTA disabled + noindex",
+        "blocker_if_failed": true,
+        "owner_role": "QA_operator",
+        "evidence_to_capture": "route state + CTA state",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "unsupported_fallback",
+        "route_or_case": "unsupported route",
+        "expected_result": "fallback only + noindex",
+        "blocker_if_failed": true,
+        "owner_role": "QA_operator",
+        "evidence_to_capture": "status preview + robots",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "privacy_fail_close",
+        "route_or_case": "privacy blocked route",
+        "expected_result": "fail-close + no raw field",
+        "blocker_if_failed": true,
+        "owner_role": "data_safety_reviewer",
+        "evidence_to_capture": "blocked response evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "db_unavailable_safe_fallback",
+        "route_or_case": "DB unavailable route",
+        "expected_result": "safe empty fallback + no fake listing",
+        "blocker_if_failed": true,
+        "owner_role": "data_safety_reviewer",
+        "evidence_to_capture": "fallback evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "seo_claim_scanner",
+        "route_or_case": "SEO prohibited claim scanner",
+        "expected_result": "all safe metadata passes",
+        "blocker_if_failed": true,
+        "owner_role": "SEO_safety_reviewer",
+        "evidence_to_capture": "scanner output",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "raw_field_injection_block",
+        "route_or_case": "injected raw field block",
+        "expected_result": "blocked_policy_violation triggered",
+        "blocker_if_failed": true,
+        "owner_role": "data_safety_reviewer",
+        "evidence_to_capture": "policy violation evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "cta_aggregate_only",
+        "route_or_case": "CTA aggregate-only/no send",
+        "expected_result": "visible candidate only + no send",
+        "blocker_if_failed": true,
+        "owner_role": "data_safety_reviewer",
+        "evidence_to_capture": "CTA payload evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "robots_by_route_state",
+        "route_or_case": "robots policy by route state",
+        "expected_result": "matches runbook matrix",
+        "blocker_if_failed": true,
+        "owner_role": "SEO_safety_reviewer",
+        "evidence_to_capture": "route-state robot matrix evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "structured_data_disabled",
+        "route_or_case": "structured data disabled",
+        "expected_result": "disabled or safe placeholder only",
+        "blocker_if_failed": true,
+        "owner_role": "SEO_safety_reviewer",
+        "evidence_to_capture": "structured data evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "analytics_safe_fields",
+        "route_or_case": "analytics safe fields only",
+        "expected_result": "no raw/user/provider fields",
+        "blocker_if_failed": true,
+        "owner_role": "data_safety_reviewer",
+        "evidence_to_capture": "analytics payload evidence",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "rollback_trigger_simulation",
+        "route_or_case": "rollback trigger simulation",
+        "expected_result": "operator can trigger rollback on P0/P1 case",
+        "blocker_if_failed": true,
+        "owner_role": "rollback_owner",
+        "evidence_to_capture": "drill log",
+        "notes": "Required pre-open smoke test coverage."
+      },
+      {
+        "row_type": "smoke_test_step",
+        "smoke_test_id": "feedback_capture_ready",
+        "route_or_case": "feedback capture ready",
+        "expected_result": "intake channel and triage template ready",
+        "blocker_if_failed": false,
+        "owner_role": "user_feedback_owner",
+        "evidence_to_capture": "feedback channel evidence",
+        "notes": "Operational readiness support check."
+      }
+    ],
+    "fallback_used": false,
+    "notes": "Loaded from private beta runbook smoke test plan."
+  },
+  "smoke_test_cases": [
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "A",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph",
+      "request_id": "request::exact_noctilux",
+      "expected": {
+        "route_state": "exact_model_public_market_page",
+        "status_code_preview": 200,
+        "robots_hint": "index,follow",
+        "CTA_policy": "visible_candidate_send_disabled",
+        "numeric_price_display_enabled": false,
+        "raw_fields_absent": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "QA_operator"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "B",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-summilux-m-35mm-f14-asph-aa",
+      "request_id": "request::rare_35lux_aa",
+      "expected": {
+        "route_state": "exact_rare_variant_public_market_page",
+        "robots_hint": "index,follow",
+        "rare_variant_caution": true,
+        "substitution": "none"
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "QA_operator"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "C",
+      "category": "route",
+      "route_or_case": "/camera-bridge/source-gap/sigma-14-24mm-dg-dn-art-l-mount",
+      "request_id": "request::sigma_source_gap",
+      "expected": {
+        "route_state": "source_gap_public_page",
+        "robots_hint": "noindex,follow",
+        "price_widget_hidden": true,
+        "copy_contains": "coverage gap",
+        "forbidden_copy": [
+          "confirmed absence",
+          "매물 없음 확정"
+        ],
+        "CTA_policy": "source_gap_candidate_send_disabled"
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "QA_operator"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "D",
+      "category": "route",
+      "route_or_case": "/camera-bridge/search/summicron",
+      "request_id": "request::broad_summicron",
+      "expected": {
+        "route_state": "broad_query_refinement_route",
+        "status_code_preview": 302,
+        "robots_hint": "noindex,follow",
+        "forbidden_market_page": true,
+        "forbidden_fast_alert_cta": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "QA_operator"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "E",
+      "category": "route",
+      "route_or_case": "/camera-bridge/market/sl-14-24-vs-sigma-14-24-boundary",
+      "request_id": "request::unsafe_boundary",
+      "expected": {
+        "route_state": "unsafe_boundary_review_route",
+        "robots_hint": "noindex,follow",
+        "price_widget_hidden": true,
+        "cta_disabled": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "QA_operator"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "F",
+      "category": "route",
+      "route_or_case": "/camera-bridge/unsupported/unknown-rare-lens",
+      "request_id": "request::unsupported",
+      "expected": {
+        "route_state": "unsupported_model_route",
+        "robots_hint": "noindex,follow",
+        "market_metrics_hidden": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "QA_operator"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "G",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-privacy-blocked",
+      "request_id": "request::privacy_blocked",
+      "expected": {
+        "route_state": "privacy_blocked_route",
+        "status_code_preview": 403,
+        "robots_hint": "noindex,nofollow",
+        "fail_close": true,
+        "raw_fields_absent": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "H",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-db-unavailable",
+      "request_id": "request::db_unavailable",
+      "expected": {
+        "route_state": "db_unavailable_safe_route",
+        "status_code_preview": 503,
+        "robots_hint": "noindex,nofollow",
+        "forbidden_fake_listing": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "data_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "I",
+      "category": "route",
+      "route_or_case": "stale + active-only + archive-only route checks",
+      "request_ids": [
+        "request::stale_data",
+        "request::active_only",
+        "request::archive_only"
+      ],
+      "expected": {
+        "stale_warning_present": true,
+        "active_reference_only_disclosure": true,
+        "no_sold_median_on_active_only": true,
+        "no_active_disclosure_on_archive_only": true,
+        "no_fake_active_listing": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "QA_operator"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "J",
+      "category": "response_safety",
+      "route_or_case": "raw/email/provider injection block",
+      "expected": {
+        "response_status": "blocked_policy_violation",
+        "raw_value_present": false
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "K",
+      "category": "seo",
+      "route_or_case": "SEO prohibited claim injection",
+      "expected": {
+        "seo_status": "blocked_policy_violation"
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "SEO_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "L",
+      "category": "robots",
+      "route_or_case": "robots matrix check",
+      "expected": {
+        "matrix_match": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "M",
+      "category": "cta",
+      "route_or_case": "CTA aggregate-only check",
+      "expected": {
+        "aggregate_only": true,
+        "send_disabled": true,
+        "email_user_fields_absent": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "N",
+      "category": "structured_data",
+      "route_or_case": "structured data disabled",
+      "expected": {
+        "structured_data_enabled": false,
+        "price_values_present": false,
+        "raw_links_present": false
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "O",
+      "category": "analytics",
+      "route_or_case": "analytics safe fields",
+      "expected": {
+        "allowed_only": [
+          "event_name",
+          "route_state",
+          "canonical_model_id",
+          "model_slug"
+        ],
+        "forbidden_absent": [
+          "raw URL",
+          "email",
+          "session id",
+          "provider payload"
+        ]
+      },
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "P",
+      "category": "rollback",
+      "route_or_case": "rollback trigger simulation",
+      "expected": {
+        "simulations": [
+          "raw_field_leak_simulation",
+          "source_gap_overclaim_simulation",
+          "seo_prohibited_claim_simulation",
+          "cta_send_attempt_simulation",
+          "fake_fill_route_simulation",
+          "unsafe_boundary_price_cta_simulation"
+        ],
+        "action_generated": true
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "rollback_owner"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "Q",
+      "category": "feedback",
+      "route_or_case": "feedback capture ready",
+      "expected": {
+        "categories_present": [
+          "wrong_model_match",
+          "missing_source",
+          "source_gap_confusing",
+          "price_confidence_confusing",
+          "alert_cta_confusing",
+          "page_copy_unclear",
+          "route_seo_issue",
+          "mobile_layout_issue",
+          "trust_disclaimer_issue"
+        ]
+      },
+      "blocker_if_failed": false,
+      "failure_action": "hold_for_fix",
+      "owner_role": "user_feedback_owner"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "R",
+      "category": "recommendation",
+      "route_or_case": "final recommendation target",
+      "expected": {
+        "recommendation": "limited_private_beta_open_recommended",
+        "production_launch_go": false
+      },
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner"
+    },
+    {
+      "row_type": "smoke_test_case",
+      "smoke_test_id": "S",
+      "category": "progress",
+      "route_or_case": "progress report",
+      "expected": {
+        "previous": 99.5,
+        "after": 99.8,
+        "delta": 0.3
+      },
+      "blocker_if_failed": false,
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner"
+    }
+  ],
+  "smoke_results": [
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "A",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph",
+      "expected": {
+        "route_state": "exact_model_public_market_page",
+        "status_code_preview": 200,
+        "robots_hint": "index,follow",
+        "CTA_policy": "visible_candidate_send_disabled",
+        "numeric_price_display_enabled": false,
+        "raw_fields_absent": true
+      },
+      "actual": {
+        "route_state": "exact_model_public_market_page",
+        "status_code_preview": 200,
+        "robots_hint": "index,follow",
+        "page_status": "exact_model_bundle_ready",
+        "visible_cta_ids": [
+          "watch_this_model",
+          "rare_new_listing_alert",
+          "target_price_watch"
+        ],
+        "price_widget_state": "full_price_guide_candidate"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "QA_operator",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "B",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-summilux-m-35mm-f14-asph-aa",
+      "expected": {
+        "route_state": "exact_rare_variant_public_market_page",
+        "robots_hint": "index,follow",
+        "rare_variant_caution": true,
+        "substitution": "none"
+      },
+      "actual": {
+        "route_state": "exact_rare_variant_public_market_page",
+        "status_code_preview": 200,
+        "robots_hint": "index,follow",
+        "page_status": "rare_variant_limited",
+        "visible_cta_ids": [
+          "watch_this_exact_variant",
+          "rare_new_listing_alert",
+          "target_price_watch"
+        ],
+        "price_widget_state": "insufficient_sold_history"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "QA_operator",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "C",
+      "category": "route",
+      "route_or_case": "/camera-bridge/source-gap/sigma-14-24mm-dg-dn-art-l-mount",
+      "expected": {
+        "route_state": "source_gap_public_page",
+        "robots_hint": "noindex,follow",
+        "price_widget_hidden": true,
+        "copy_contains": "coverage gap",
+        "forbidden_copy": [
+          "confirmed absence",
+          "매물 없음 확정"
+        ],
+        "CTA_policy": "source_gap_candidate_send_disabled"
+      },
+      "actual": {
+        "route_state": "source_gap_public_page",
+        "status_code_preview": 200,
+        "robots_hint": "noindex,follow",
+        "page_status": "source_gap",
+        "visible_cta_ids": [
+          "source_gap_alert",
+          "request_source"
+        ],
+        "price_widget_state": "source_gap_no_price_guide"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "QA_operator",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "D",
+      "category": "route",
+      "route_or_case": "/camera-bridge/search/summicron",
+      "expected": {
+        "route_state": "broad_query_refinement_route",
+        "status_code_preview": 302,
+        "robots_hint": "noindex,follow",
+        "forbidden_market_page": true,
+        "forbidden_fast_alert_cta": true
+      },
+      "actual": {
+        "route_state": "broad_query_refinement_route",
+        "status_code_preview": 302,
+        "robots_hint": "noindex,follow",
+        "page_status": "refinement_required",
+        "visible_cta_ids": [],
+        "price_widget_state": "refinement_required"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "QA_operator",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "E",
+      "category": "route",
+      "route_or_case": "/camera-bridge/market/sl-14-24-vs-sigma-14-24-boundary",
+      "expected": {
+        "route_state": "unsafe_boundary_review_route",
+        "robots_hint": "noindex,follow",
+        "price_widget_hidden": true,
+        "cta_disabled": true
+      },
+      "actual": {
+        "route_state": "unsafe_boundary_review_route",
+        "status_code_preview": 200,
+        "robots_hint": "noindex,follow",
+        "page_status": "unsafe_boundary",
+        "visible_cta_ids": [],
+        "price_widget_state": "unsafe_boundary_no_price_guide"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "QA_operator",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "F",
+      "category": "route",
+      "route_or_case": "/camera-bridge/unsupported/unknown-rare-lens",
+      "expected": {
+        "route_state": "unsupported_model_route",
+        "robots_hint": "noindex,follow",
+        "market_metrics_hidden": true
+      },
+      "actual": {
+        "route_state": "unsupported_model_route",
+        "status_code_preview": 404,
+        "robots_hint": "noindex,follow",
+        "page_status": "unsupported",
+        "visible_cta_ids": [],
+        "price_widget_state": "model_not_supported_no_price_guide"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "QA_operator",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "G",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-privacy-blocked",
+      "expected": {
+        "route_state": "privacy_blocked_route",
+        "status_code_preview": 403,
+        "robots_hint": "noindex,nofollow",
+        "fail_close": true,
+        "raw_fields_absent": true
+      },
+      "actual": {
+        "route_state": "privacy_blocked_route",
+        "status_code_preview": 403,
+        "robots_hint": "noindex,nofollow",
+        "page_status": "privacy_blocked",
+        "visible_cta_ids": [],
+        "price_widget_state": "model_not_supported_no_price_guide"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "data_safety_reviewer",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "H",
+      "category": "route",
+      "route_or_case": "/camera-bridge/models/leica-noctilux-m-50mm-f095-asph-db-unavailable",
+      "expected": {
+        "route_state": "db_unavailable_safe_route",
+        "status_code_preview": 503,
+        "robots_hint": "noindex,nofollow",
+        "forbidden_fake_listing": true
+      },
+      "actual": {
+        "route_state": "db_unavailable_safe_route",
+        "status_code_preview": 503,
+        "robots_hint": "noindex,nofollow",
+        "page_status": "db_unavailable",
+        "visible_cta_ids": [],
+        "price_widget_state": "model_not_supported_no_price_guide"
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "data_safety_reviewer",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Route smoke preview result."
+    },
+    {
+      "row_type": "route_smoke_result",
+      "smoke_test_id": "I",
+      "category": "route",
+      "route_or_case": "stale + active-only + archive-only route checks",
+      "expected": {
+        "stale_warning_present": true,
+        "active_reference_only_disclosure": true,
+        "no_sold_median_on_active_only": true,
+        "no_active_disclosure_on_archive_only": true,
+        "no_fake_active_listing": true
+      },
+      "actual": {
+        "stale_warning": true,
+        "active_only_numeric_price": false,
+        "archive_only_active_count": 0
+      },
+      "status": "warning",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "QA_operator",
+      "evidence_summary": "Validated against local public route preview output.",
+      "raw_value_present": false,
+      "notes": "Warning status is acceptable only when disclosure exists."
+    },
+    {
+      "row_type": "response_safety_smoke_result",
+      "smoke_test_id": "J",
+      "category": "response_safety",
+      "route_or_case": "raw/email/provider injection block",
+      "expected": {
+        "response_status": "blocked_policy_violation",
+        "raw_value_present": false
+      },
+      "actual": {
+        "first_blocked_fields": [
+          "listing_url",
+          "raw_html",
+          "raw_url"
+        ],
+        "second_blocked_fields": [
+          "provider_payload",
+          "user_email",
+          "webhook_body"
+        ],
+        "fail_closed": true
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "data_safety_reviewer",
+      "evidence_summary": "Raw/email/provider injections blocked without storing injected values.",
+      "raw_value_present": false,
+      "notes": "Injected values are never persisted into the artifact."
+    },
+    {
+      "row_type": "seo_smoke_result",
+      "smoke_test_id": "K",
+      "category": "seo",
+      "route_or_case": "SEO prohibited claim injection",
+      "expected": {
+        "seo_status": "blocked_policy_violation"
+      },
+      "actual": {
+        "seo_status": "blocked_policy_violation",
+        "blocked_claims": [
+          "all sources",
+          "guaranteed price",
+          "investment advice",
+          "official leica"
+        ]
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_summary": "SEO prohibited-claim scanner blocks injected overclaim phrases.",
+      "raw_value_present": false,
+      "notes": "Source-gap confirmed-absence language is treated as blocked."
+    },
+    {
+      "row_type": "robots_smoke_result",
+      "smoke_test_id": "L",
+      "category": "robots",
+      "route_or_case": "robots matrix check",
+      "expected": {
+        "matrix_match": true
+      },
+      "actual": {
+        "matrix_match": true,
+        "compared_routes": {
+          "exact_model_public_market_page": {
+            "expected": "index,follow",
+            "actual": "index,follow"
+          },
+          "exact_rare_variant_public_market_page": {
+            "expected": "index,follow",
+            "actual": "index,follow"
+          },
+          "source_gap_public_page": {
+            "expected": "noindex,follow",
+            "actual": "noindex,follow"
+          },
+          "broad_query_refinement_route": {
+            "expected": "noindex,follow",
+            "actual": "noindex,follow"
+          },
+          "unsafe_boundary_review_route": {
+            "expected": "noindex,follow",
+            "actual": "noindex,follow"
+          },
+          "unsupported_model_route": {
+            "expected": "noindex,follow",
+            "actual": "noindex,follow"
+          },
+          "active_only_public_page": {
+            "expected": "index,follow",
+            "actual": "index,follow"
+          },
+          "archive_only_public_page": {
+            "expected": "index,follow",
+            "actual": "index,follow"
+          },
+          "stale_data_safe_route": {
+            "expected": "index,follow",
+            "actual": "index,follow"
+          },
+          "privacy_blocked_route": {
+            "expected": "noindex,nofollow",
+            "actual": "noindex,nofollow"
+          },
+          "db_unavailable_safe_route": {
+            "expected": "noindex,nofollow",
+            "actual": "noindex,nofollow"
+          },
+          "error_safe_fallback_route": {
+            "expected": "noindex,nofollow",
+            "actual": "noindex,nofollow"
+          }
+        }
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_summary": "Public route robots decisions align with runbook matrix.",
+      "raw_value_present": false,
+      "notes": "All route-state robots hints checked against the runbook baseline."
+    },
+    {
+      "row_type": "cta_smoke_result",
+      "smoke_test_id": "M",
+      "category": "cta",
+      "route_or_case": "CTA aggregate-only check",
+      "expected": {
+        "aggregate_only": true,
+        "send_disabled": true,
+        "email_user_fields_absent": true
+      },
+      "actual": {
+        "aggregate_only": true,
+        "visible_cta_ids": [
+          "watch_this_model",
+          "rare_new_listing_alert",
+          "target_price_watch"
+        ],
+        "send_disabled": true,
+        "raw_email_present": false,
+        "user_email_present": false
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "data_safety_reviewer",
+      "evidence_summary": "CTA remains aggregate-only and global send runtime stays disabled.",
+      "raw_value_present": false,
+      "notes": "Visible candidate is allowed; actual send is not enabled."
+    },
+    {
+      "row_type": "structured_data_smoke_result",
+      "smoke_test_id": "N",
+      "category": "structured_data",
+      "route_or_case": "structured data disabled",
+      "expected": {
+        "structured_data_enabled": false,
+        "price_values_present": false,
+        "raw_links_present": false
+      },
+      "actual": {
+        "structured_data_enabled": false,
+        "structured_data_status": "blocked_policy_violation",
+        "price_values_present": false,
+        "raw_links_present": false,
+        "seller_info_present": false
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_summary": "Structured data remains disabled for beta safety.",
+      "raw_value_present": false,
+      "notes": "No price values or raw links appear in structured data preview."
+    },
+    {
+      "row_type": "analytics_smoke_result",
+      "smoke_test_id": "O",
+      "category": "analytics",
+      "route_or_case": "analytics safe fields",
+      "expected": {
+        "allowed_only": [
+          "event_name",
+          "route_state",
+          "canonical_model_id",
+          "model_slug"
+        ],
+        "forbidden_absent": [
+          "raw URL",
+          "email",
+          "session id",
+          "provider payload"
+        ]
+      },
+      "actual": {
+        "event_name": "model_page_view",
+        "route_state": "exact_model_public_market_page",
+        "canonical_model_id": "leica_noctilux_m_50_095_asph",
+        "model_slug": "leica-noctilux-m-50mm-f095-asph",
+        "raw_url_present": false,
+        "raw_email_present": false,
+        "provider_payload_present": false,
+        "session_id_present": false
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "rollback",
+      "rollback_triggered": false,
+      "owner_role": "data_safety_reviewer",
+      "evidence_summary": "Analytics preview keeps only aggregate-safe fields.",
+      "raw_value_present": false,
+      "notes": "No raw/user/provider/session fields present."
+    },
+    {
+      "row_type": "rollback_simulation_result",
+      "smoke_test_id": "P",
+      "category": "rollback",
+      "route_or_case": "rollback trigger simulation",
+      "expected": {
+        "simulations": [
+          "raw_field_leak_simulation",
+          "source_gap_overclaim_simulation",
+          "seo_prohibited_claim_simulation",
+          "cta_send_attempt_simulation",
+          "fake_fill_route_simulation",
+          "unsafe_boundary_price_cta_simulation"
+        ],
+        "action_generated": true
+      },
+      "actual": {
+        "simulations": [
+          {
+            "simulation_id": "raw_field_leak_simulation",
+            "rollback_condition_id": "raw_field_leak",
+            "severity": "P0",
+            "expected_action": "rollback",
+            "actual_action": "rollback",
+            "route_action": "hide affected route"
+          },
+          {
+            "simulation_id": "source_gap_overclaim_simulation",
+            "rollback_condition_id": "source_gap_overclaim",
+            "severity": "P1",
+            "expected_action": "rollback",
+            "actual_action": "rollback",
+            "route_action": "noindex/hide affected route"
+          },
+          {
+            "simulation_id": "seo_prohibited_claim_simulation",
+            "rollback_condition_id": "seo_prohibited_claim",
+            "severity": "P1",
+            "expected_action": "rollback",
+            "actual_action": "rollback",
+            "route_action": "keep route hidden or noindex until fixed"
+          },
+          {
+            "simulation_id": "cta_send_attempt_simulation",
+            "rollback_condition_id": "cta_email_exposure",
+            "severity": "P0",
+            "expected_action": "rollback",
+            "actual_action": "rollback",
+            "route_action": "keep routes up only if CTA fully hidden"
+          },
+          {
+            "simulation_id": "fake_fill_route_simulation",
+            "rollback_condition_id": "fake_fill_route",
+            "severity": "P1",
+            "expected_action": "rollback",
+            "actual_action": "rollback",
+            "route_action": "remove route from beta scope"
+          },
+          {
+            "simulation_id": "unsafe_boundary_price_cta_simulation",
+            "rollback_condition_id": "unsafe_boundary_price_cta_exposure",
+            "severity": "P1",
+            "expected_action": "rollback",
+            "actual_action": "rollback",
+            "route_action": "noindex/hide route"
+          }
+        ],
+        "action_generated": true
+      },
+      "status": "pass",
+      "blocker_if_failed": true,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "rollback_owner",
+      "evidence_summary": "Rollback actions generated for all simulated P0/P1 cases.",
+      "raw_value_present": false,
+      "notes": "Simulation does not change any live or production state."
+    },
+    {
+      "row_type": "feedback_capture_check",
+      "smoke_test_id": "Q",
+      "category": "feedback",
+      "route_or_case": "feedback capture ready",
+      "expected": {
+        "categories_present": [
+          "wrong_model_match",
+          "missing_source",
+          "source_gap_confusing",
+          "price_confidence_confusing",
+          "alert_cta_confusing",
+          "page_copy_unclear",
+          "route_seo_issue",
+          "mobile_layout_issue",
+          "trust_disclaimer_issue"
+        ]
+      },
+      "actual": {
+        "category_ids": [
+          "alert_cta_confusing",
+          "missing_source",
+          "mobile_layout_issue",
+          "page_copy_unclear",
+          "price_confidence_confusing",
+          "route_seo_issue",
+          "source_gap_confusing",
+          "trust_disclaimer_issue",
+          "wrong_model_match"
+        ],
+        "feedback_ready": true
+      },
+      "status": "pass",
+      "blocker_if_failed": false,
+      "failure_action": "hold_for_fix",
+      "rollback_triggered": false,
+      "owner_role": "user_feedback_owner",
+      "evidence_summary": "Feedback capture categories present in runbook feedback plan.",
+      "raw_value_present": false,
+      "notes": "Feedback capture is an operational readiness check, not a deployment step."
+    }
+  ],
+  "smoke_test_summary": {
+    "row_type": "smoke_test_summary",
+    "total_tests": 17,
+    "pass_count": 16,
+    "warning_count": 1,
+    "fail_count": 0,
+    "blocked_count": 0,
+    "blocker_fail_count": 0,
+    "rollback_trigger_count": 0,
+    "recommendation": "limited_private_beta_open_recommended",
+    "limited_beta_open_allowed": true,
+    "production_launch_go": false,
+    "required_before_open": [
+      "operator signoff",
+      "smoke evidence attached",
+      "CTA send remains disabled",
+      "numeric price remains disabled",
+      "structured data remains disabled"
+    ],
+    "notes": "Smoke test pass supports limited beta recommendation only; not production launch."
+  },
+  "recommendation": {
+    "row_type": "recommendation",
+    "recommendation": "limited_private_beta_open_recommended",
+    "limited_beta_open_allowed": true,
+    "production_launch_go": false,
+    "actual_cta_send_enabled": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "notes": "Recommendation is limited-beta operational only."
+  },
+  "scenario_validation": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy forbids actual deployment",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "runbook smoke plan loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "exact Noctilux smoke pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "35 lux AA smoke pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "Sigma source-gap smoke pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "broad Summicron smoke pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "unsafe boundary smoke pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "unsupported/privacy/db fallback smoke pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "active/archive/stale smoke pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "raw/email/provider injection blocked",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "SEO prohibited claim injection blocked",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "robots matrix pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "CTA aggregate-only pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "structured data disabled pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "analytics safety pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "rollback simulation pass",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "feedback capture ready",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "final recommendation",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "progress report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page limited private beta operational-readiness",
+    "previous_progress_pct": 99.5,
+    "expected_after_completion_pct": 99.8,
+    "delta_pct": 0.3,
+    "completed_milestones": [
+      "Model Market Page contract",
+      "Expired/Sold Archive contract",
+      "Price Guide contract",
+      "Model Market Page Data Adapter contract",
+      "Model Market Page Data Adapter local preview implementation",
+      "Model Market Page Frontend contract",
+      "Model Market Page Frontend local preview implementation",
+      "Expired/Sold Listing Archive local preview implementation",
+      "Price Guide / Market Intelligence local preview implementation",
+      "Model Market Page Data Adapter DB Integration Contract",
+      "Expired/Sold Listing Archive DB Integration Contract",
+      "Model Market Page Public Route Contract",
+      "Private Beta Market Page Readiness Checklist",
+      "Market Page DB Read Adapter Implementation",
+      "Model Market Page Public Route Implementation",
+      "Private Beta Market Page Readiness Recheck",
+      "Private Beta Market Page Runbook"
+    ],
+    "current_milestone": "Model Market Page Beta Smoke Test",
+    "remaining_milestones": [
+      "Expired/Sold Listing Archive DB Implementation",
+      "Dealer Lead Signal Contract",
+      "CTA Email Verification Runtime Check",
+      "Private Beta Feedback Triage Contract",
+      "production/beta hardening"
+    ],
+    "notes": "Smoke test pass supports limited beta open recommendation only; not production launch."
+  },
+  "modified_files": [
+    "model_market_page_beta_smoke_test.py",
+    "scripts/run_p3_model_market_page_beta_smoke_test.py",
+    "tests/test_model_market_page_beta_smoke_test.py",
+    "data/admin/p3_model_market_page_beta_smoke_test_v0.md",
+    "data/admin/p3_model_market_page_beta_smoke_test_v0.jsonl",
+    "data/admin/model_market_page_beta_smoke_test_v0.json"
+  ]
+}

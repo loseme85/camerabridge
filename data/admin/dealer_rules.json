@@ -1,0 +1,33 @@
+{
+  "schema_version": "normalization_admin.dealer_rules.v1",
+  "rules": [
+    {
+      "dealer_id": "라이카스토어 충무로",
+      "rule_type": "token",
+      "pattern": "[위탁]",
+      "meaning": "D-LUX 8",
+      "note": "",
+      "created_from_title": "[위탁] D-lux 8 (Black)",
+      "created_from_review_id": "review_94c75eb2cb42a1",
+      "created_from_listing_id": "https://leica-storebando.co.kr/product/위탁-d-lux-8-black/21321/category/442/display/1/",
+      "canonical_entity_id": "entity_dc0739a802dc3a",
+      "field_overrides": {
+        "category": "Body",
+        "brand": "Leica",
+        "mount": "Compact",
+        "label": "Leica Body",
+        "model_raw": "D-LUX 8",
+        "model_canonical": "D-LUX 8",
+        "variant": [
+          "Black Paint",
+          "Black"
+        ]
+      },
+      "id": "rule_508b14b033dfce",
+      "status": "active",
+      "created_at": "2026-04-23T12:02:43.221987+00:00",
+      "updated_at": "2026-04-23T12:02:43.222002+00:00"
+    }
+  ],
+  "updated_at": "2026-04-23T12:02:43.222015+00:00"
+}

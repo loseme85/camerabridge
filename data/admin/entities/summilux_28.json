@@ -1,0 +1,64 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summilux_28",
+  "family_name": "Summilux 28mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding",
+    "packaging"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summilux_m_28_f1_4_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summilux-M",
+      "model_canonical": "Summilux-M",
+      "focal_length": "28",
+      "canonical_name": "Leica Summilux-M 28mm f/1.4 ASPH",
+      "aliases": [
+        "summilux 28",
+        "28 summilux",
+        "summilux-m 28",
+        "28mm f1.4 summilux",
+        "28mm f/1.4 summilux",
+        "28mm f1.4 asph summilux",
+        "28mm f/1.4 asph summilux",
+        "summilux 28 asph",
+        "28 lux",
+        "m 28/1.4 summilux",
+        "m 28/1.4 summilux asph"
+      ],
+      "key_discriminators": [
+        "28",
+        "f1.4",
+        "summilux-m",
+        "summilux",
+        "asph",
+        "m 28/1.4"
+      ],
+      "variant": [
+        "f/1.4",
+        "ASPH"
+      ],
+      "price_group": "summilux_m_28_f1_4_asph",
+      "notes": "Round-1 conservative core seed for the clean single-line Summilux 28 family. 6bit, finish, country, hood, boxed, packaging, and special-edition axes remain below row level.",
+      "status": "core"
+    }
+  ]
+}

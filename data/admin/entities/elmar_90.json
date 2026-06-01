@@ -1,0 +1,64 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_elmar_90",
+  "family_name": "Elmar 90mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "filter_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "packaging",
+    "adapter_included",
+    "pouch_included"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmar_c_90_f4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "CL / M System",
+      "label": "M Lens",
+      "model_raw": "Elmar-C",
+      "model_canonical": "Elmar",
+      "focal_length": "90",
+      "canonical_name": "Leica Elmar-C 90mm f/4",
+      "aliases": [
+        "elmar-c 90",
+        "90 elmar-c",
+        "90mm f4 elmar-c",
+        "90mm f/4 elmar-c",
+        "90mm f4 c elmar",
+        "c elmar 90",
+        "cl elmar 90"
+      ],
+      "key_discriminators": [
+        "elmar-c",
+        "c elmar",
+        "cl",
+        "90",
+        "f4"
+      ],
+      "variant": [
+        "Elmar-C",
+        "f/4"
+      ],
+      "price_group": "elmar_c_90_f4",
+      "notes": "Explicit hold row added before any broader Elmar 90 family seeding. Elmar (III), collapsible, and rigid remain in taxonomy-audit state.",
+      "status": "hold"
+    }
+  ]
+}

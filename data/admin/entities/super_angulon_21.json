@@ -1,0 +1,91 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_super_angulon_21",
+  "family_name": "Super-Angulon 21mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding",
+    "finder_bundle"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_super_angulon_21_f3_4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Super-Angulon",
+      "model_canonical": "Super-Angulon",
+      "focal_length": "21",
+      "canonical_name": "Leica Super-Angulon 21mm f/3.4",
+      "aliases": [
+        "super-angulon 21",
+        "super angulon 21",
+        "21 super angulon",
+        "21mm f3.4 super-angulon",
+        "m 21/3.4 super angulon",
+        "21/3.4 super angulon"
+      ],
+      "key_discriminators": [
+        "21",
+        "f3.4",
+        "super-angulon",
+        "super angulon",
+        "m 21/3.4"
+      ],
+      "variant": [
+        "f/3.4",
+        "Super-Angulon"
+      ],
+      "price_group": "super_angulon_21_f3_4",
+      "notes": "Round-1 conservative core seed for the M-side Super-Angulon 21 family. The f/4 line remains a future hold candidate, and finder/hood/bundle signals remain below row level.",
+      "status": "core"
+    },
+    {
+      "id": "seed_super_angulon_21_f4",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Super-Angulon",
+      "model_canonical": "Super-Angulon",
+      "focal_length": "21",
+      "canonical_name": "Leica Super-Angulon 21mm f/4",
+      "aliases": [
+        "super-angulon 21 f4",
+        "super angulon 21 f4",
+        "21/4 super angulon",
+        "21mm f4 super-angulon",
+        "m 21/4 super angulon"
+      ],
+      "key_discriminators": [
+        "21",
+        "f4",
+        "super-angulon",
+        "super angulon",
+        "m 21/4"
+      ],
+      "variant": [
+        "f/4",
+        "Super-Angulon"
+      ],
+      "price_group": "super_angulon_21_f4",
+      "notes": "Round-2 cautious hold seed for the earlier Super-Angulon 21mm f/4 subtype. Finder, hood, bundle, and finish signals remain below row level.",
+      "status": "hold"
+    }
+  ]
+}

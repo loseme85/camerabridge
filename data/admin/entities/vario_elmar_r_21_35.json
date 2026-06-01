@@ -1,0 +1,76 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_vario_elmar_r_21_35",
+  "family_name": "Vario-Elmar-R 21-35mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "R"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "rom",
+    "cam_version",
+    "filter_thread",
+    "version_marker",
+    "asph"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_vario_elmar_r_21_35_f3_5_4_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "R",
+      "system": "R System",
+      "label": "R Lens",
+      "model_raw": "Vario-Elmar-R",
+      "model_canonical": "Vario-Elmar-R",
+      "focal_length": "21-35",
+      "canonical_name": "Leica Vario-Elmar-R 21-35mm f/3.5-4 ASPH",
+      "aliases": [
+        "vario-elmar-r 21-35",
+        "vario elmar r 21-35",
+        "21-35 vario-elmar-r",
+        "21-35mm f3.5-4 vario-elmar-r",
+        "21-35mm f/3.5-4 vario-elmar-r",
+        "21-35mm asph vario-elmar-r",
+        "r 21-35/3.5-4 vario elmar",
+        "leica r 21-35mm f3.5-4",
+        "leica r 21-35mm f/3.5-4",
+        "leica r 21-35 asph",
+        "vario elmar 21-35"
+      ],
+      "key_discriminators": [
+        "vario-elmar-r",
+        "21-35",
+        "21-35mm",
+        "f3.5-4",
+        "21-35mm f3.5-4",
+        "r 21-35/3.5-4",
+        "asph",
+        "leica r"
+      ],
+      "variant": [
+        "f/3.5-4",
+        "ASPH",
+        "Vario-Elmar-R"
+      ],
+      "price_group": "vario_elmar_r_21_35_f3_5_4_asph",
+      "notes": "Round-1 conservative core seed for the Leica R-side 21-35 wide zoom family. ROM, cam markers, ASPH wording, E67 or filter-thread markers, and hood or case bundle wording remain below row level, and bare 21-35 or other broad wide-zoom shorthand is intentionally excluded to avoid R prime, Tri-Elmar, SL/L, or third-party wide zoom contamination.",
+      "status": "core"
+    }
+  ]
+}

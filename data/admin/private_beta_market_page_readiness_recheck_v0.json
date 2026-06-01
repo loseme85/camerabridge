@@ -1,0 +1,490 @@
+{
+  "task_name": "P3-PRIVATE-BETA-MARKET-PAGE-READINESS-RECHECK",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "private_beta_market_page_readiness_recheck.v0",
+    "contract_version": "p3_private_beta_market_page_readiness_recheck_v0",
+    "recheck_only": true,
+    "implementation_enabled": false,
+    "route_enabled": false,
+    "db_adapter_enabled": false,
+    "frontend_enabled": false,
+    "api_enabled": false,
+    "production_beta_enabled": false,
+    "production_launch_enabled": false,
+    "go_allowed_if_open_blockers_zero": true,
+    "conditional_go_allowed": true,
+    "warning_allowed_with_disclosure": true,
+    "numeric_price_display_allowed_for_beta": false,
+    "structured_data_enabled_for_beta": false,
+    "CTA_send_enabled_for_beta": false,
+    "CTA_visible_candidate_allowed": true,
+    "noindex_source_gap_required": true,
+    "noindex_broad_required": true,
+    "noindex_unsafe_required": true,
+    "private_beta_limited_model_set_required": true,
+    "progress_previous_pct": 98,
+    "progress_after_pct": 99,
+    "progress_delta_pct": 1
+  },
+  "go_no_go": {
+    "row_type": "go_no_go_decision",
+    "decision_status": "conditional_go_limited_private_beta",
+    "open_launch_blocker_count": 0,
+    "warning_count": 10,
+    "production_launch_go": false,
+    "private_beta_scope": "limited",
+    "numeric_price_display_allowed": false,
+    "structured_data_enabled": false,
+    "cta_send_enabled": false,
+    "notes": "Conditional-go here does not mean production launch go."
+  },
+  "launch_blocker_recheck": [
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "raw_public_leak",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter + public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "raw URL/email/provider payload can appear in public response"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "source_gap_overclaim",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter + public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "source-gap shown as confirmed absence"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "broad_direct_market_page",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter + public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "broad query opens direct market page"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "unsafe_boundary_price_cta",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter + public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "unsafe boundary exposes price widget or CTA"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "active_as_sold_median",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "active asking treated as sold median"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "sold_likely_as_confirmed",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "sold_likely shown as confirmed sold"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "duplicate_relist_double_count",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "duplicate/relist double count possible"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "seo_overclaim_runtime",
+      "previous_status": "open",
+      "runtime_evidence_source": "public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "SEO contains guaranteed/all sources/official/investment advice claim"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "cta_email_leakage",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter + public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "CTA exposes user email or misses verification safety"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "db_fallback_fake_listing",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter + public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "DB fallback creates fake listing"
+    },
+    {
+      "row_type": "launch_blocker_recheck",
+      "blocker_id": "privacy_failure_not_blocked",
+      "previous_status": "open",
+      "runtime_evidence_source": "db_read_adapter + public_route",
+      "recheck_status": "closed",
+      "closed_reason": "Runtime preview evidence closes this blocker for local limited beta readiness.",
+      "residual_risk": "Closed for local runtime preview only; actual production runtime and real DB environment still require re-validation.",
+      "beta_condition": "limited_private_beta_only",
+      "notes": "privacy filter failure does not block response"
+    }
+  ],
+  "beta_warning_recheck": [
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "stale_data_disclosed",
+      "previous_status": "warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Allowed with stale warning and reduced confidence.",
+      "owner_next_step": "price_guide + route runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "insufficient_sample_disclosed",
+      "previous_status": "warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Allowed only with insufficient disclosure.",
+      "owner_next_step": "price_guide + frontend disclosure",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "source_coverage_partial",
+      "previous_status": "warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Allowed if coverage disclosure stays honest.",
+      "owner_next_step": "source coverage disclosure",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "structured_data_disabled",
+      "previous_status": "warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Acceptable for beta; not a blocker.",
+      "owner_next_step": "public route runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "conservative_noindex",
+      "previous_status": "warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Acceptable for beta.",
+      "owner_next_step": "public route runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "numeric_price_disabled",
+      "previous_status": "warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Expected for beta.",
+      "owner_next_step": "price guide runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "dealer_lead_unavailable",
+      "previous_status": "warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Does not block private beta.",
+      "owner_next_step": "dealer lead backlog",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "actual_production_db_not_connected",
+      "previous_status": "new_warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Local runtime preview is ready, but actual production DB connectivity is not in scope yet.",
+      "owner_next_step": "archive DB implementation + smoke test",
+      "notes": "Acceptable for local limited beta preview; would be a blocker for external-user beta until actual DB-backed runtime is rechecked."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "cta_send_disabled",
+      "previous_status": "new_warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "CTA may be visible as a candidate but actual send remains disabled.",
+      "owner_next_step": "CTA email verification runtime check",
+      "notes": "Visible candidate is okay; actual send remains off."
+    },
+    {
+      "row_type": "beta_warning_recheck",
+      "warning_id": "archive_db_implementation_pending",
+      "previous_status": "new_warning",
+      "current_status": "warning",
+      "acceptable_for_limited_beta": true,
+      "required_disclosure": "Archive DB implementation is still pending beyond local preview runtime evidence.",
+      "owner_next_step": "expired/sold archive DB implementation",
+      "notes": "Current archive evidence is preview-safe but not production-backed."
+    }
+  ],
+  "limited_beta_release_plan": {
+    "row_type": "limited_beta_release_plan",
+    "release_scope": "limited_private_beta_preview",
+    "allowed_models": [
+      "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "Leica Summilux-M 35mm f/1.4 ASPH AA",
+      "Sigma 14-24mm DG DN Art L-mount source-gap page only",
+      "Active-only Noctilux route",
+      "Archive-only Noctilux route",
+      "Stale Noctilux route with warning"
+    ],
+    "allowed_routes": [
+      "exact_model_public_market_page",
+      "exact_rare_variant_public_market_page",
+      "source_gap_public_page",
+      "active_only_public_page",
+      "archive_only_public_page",
+      "insufficient_sold_history_public_page",
+      "stale_data_safe_route"
+    ],
+    "disabled_features": [
+      "numeric_price_display",
+      "structured_data",
+      "smart_deal",
+      "csv_export",
+      "dealer_visibility",
+      "actual_cta_email_send",
+      "unsupported_broad_market_page",
+      "unsafe_boundary_price_page"
+    ],
+    "required_disclosures": [
+      "active_vs_sold_separation",
+      "source_gap_disclosure",
+      "rare_variant_no_merge_warning",
+      "stale_warning",
+      "insufficient_sample_warning",
+      "non_affiliation",
+      "not_investment_advice"
+    ],
+    "noindex_routes": [
+      "source_gap_public_page",
+      "broad_query_refinement_route",
+      "unsafe_boundary_review_route",
+      "unsupported_model_route",
+      "privacy_blocked_route",
+      "db_unavailable_safe_route",
+      "error_safe_fallback_route"
+    ],
+    "CTA_policy": "visible_candidate_only_send_disabled",
+    "monitoring_requirements": [
+      "route preview spot checks",
+      "privacy fail-close verification",
+      "SEO claim scanner verification",
+      "source-gap wording verification",
+      "db fallback verification"
+    ],
+    "rollback_conditions": [
+      "raw field leak",
+      "source-gap overclaim",
+      "SEO prohibited claim",
+      "CTA email exposure",
+      "fake-fill route",
+      "price overclaim",
+      "duplicate sample inflation",
+      "DB fallback fake listing"
+    ],
+    "smoke_test_required": true,
+    "owner_next_steps": [
+      "private beta runbook",
+      "model market page beta smoke test",
+      "archive DB implementation",
+      "CTA email verification runtime check"
+    ]
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "previous blocker baseline loaded",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "DB adapter evidence loaded",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "public route evidence loaded",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "all previous blockers rechecked",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "warnings rechecked",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "exact Noctilux beta decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "35 lux AA beta decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "Sigma source-gap beta decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "broad Summicron route decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "unsafe boundary decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "unsupported decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "CTA beta decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "SEO beta decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "data safety decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "numeric price decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "structured data decision",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "final go/no-go",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "limited beta release plan",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "progress report",
+      "status": "passed",
+      "notes": "Private beta readiness recheck validation."
+    }
+  ],
+  "progress_report": {
+    "branch_name": "P3 Market Intelligence / Model Market Page private-beta readiness",
+    "previous_progress_pct": 98,
+    "expected_after_completion_pct": 99,
+    "delta_pct": 1
+  },
+  "modified_files": [
+    "private_beta_market_page_readiness_recheck.py",
+    "scripts/run_p3_private_beta_market_page_readiness_recheck.py",
+    "tests/test_private_beta_market_page_readiness_recheck.py",
+    "data/admin/p3_private_beta_market_page_readiness_recheck_v0.md",
+    "data/admin/p3_private_beta_market_page_readiness_recheck_v0.jsonl",
+    "data/admin/private_beta_market_page_readiness_recheck_v0.json"
+  ]
+}

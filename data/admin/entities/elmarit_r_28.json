@@ -1,0 +1,71 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_elmarit_r_28",
+  "family_name": "Elmarit-R 28mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "R"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "rom",
+    "cam_version",
+    "filter_thread",
+    "version_marker"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmarit_r_28_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "R",
+      "system": "R System",
+      "label": "R Lens",
+      "model_raw": "Elmarit-R",
+      "model_canonical": "Elmarit-R",
+      "focal_length": "28",
+      "canonical_name": "Leica Elmarit-R 28mm f/2.8",
+      "aliases": [
+        "elmarit-r 28",
+        "elmarit r 28",
+        "r 28 elmarit",
+        "28 elmarit-r",
+        "28mm f2.8 elmarit-r",
+        "28mm f/2.8 elmarit-r",
+        "r 28/2.8 elmarit",
+        "leica r 28mm f2.8",
+        "leica r 28mm f/2.8",
+        "28mm f2.8 elmarit r"
+      ],
+      "key_discriminators": [
+        "elmarit-r",
+        "28",
+        "f2.8",
+        "28mm f2.8",
+        "r 28/2.8",
+        "leica r"
+      ],
+      "variant": [
+        "f/2.8",
+        "Elmarit-R"
+      ],
+      "price_group": "elmarit_r_28_f2_8",
+      "notes": "Round-1 conservative core seed for the Leica R-side Elmarit 28 family. I/II, ROM, cam markers, and E55/E48/Series 7 remain below row level, and broad elmarit 28 shorthand is intentionally excluded to avoid M-side, Q-side, and SL contamination.",
+      "status": "core"
+    }
+  ]
+}

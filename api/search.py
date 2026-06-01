@@ -37,6 +37,7 @@ from search_service import (  # noqa: E402
     load_and_search,
     search_records,
 )
+from search_ui_hints import build_query_ui_hints  # noqa: E402
 
 
 ERROR_SCHEMA_VERSION = "search_service.error.v1"
@@ -248,7 +249,7 @@ def search_from_params(
 ) -> dict[str, Any]:
     parsed = parse_search_params(params)
     if records is not None:
-        return search_records(
+        response = search_records(
             query=parsed["query"],
             records=records,
             limit=parsed["limit"],
@@ -259,8 +260,10 @@ def search_from_params(
             strong_only=parsed["strong_only"],
             **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
         )
+        response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
+        return response
 
-    return load_and_search(
+    response = load_and_search(
         query=parsed["query"],
         path=path,
         limit=parsed["limit"],
@@ -271,6 +274,8 @@ def search_from_params(
         strong_only=parsed["strong_only"],
         **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
     )
+    response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
+    return response
 
 
 def endpoint_response(

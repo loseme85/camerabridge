@@ -1,0 +1,286 @@
+{
+  "task_name": "P3-MODEL-MARKET-PAGE-DATA-ADAPTER-DB-INTEGRATION-CONTRACT",
+  "modified_files": [
+    "model_market_page_data_adapter_db_integration_contract.py",
+    "scripts/run_p3_model_market_page_data_adapter_db_integration_contract.py",
+    "tests/test_model_market_page_data_adapter_db_integration_contract.py",
+    "data/admin/p3_model_market_page_data_adapter_db_integration_contract_v0.md",
+    "data/admin/p3_model_market_page_data_adapter_db_integration_contract_v0.jsonl",
+    "data/admin/model_market_page_data_adapter_db_integration_contract_v0.json"
+  ],
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "model_market_page_data_adapter_db_integration_contract.v0",
+    "contract_version": "p3_model_market_page_data_adapter_db_integration_contract_v0",
+    "contract_only": true,
+    "actual_db_enabled": false,
+    "db_connection_enabled": false,
+    "db_query_enabled": false,
+    "db_migration_enabled": false,
+    "orm_model_enabled": false,
+    "api_enabled": false,
+    "frontend_enabled": false,
+    "production_adapter_enabled": false,
+    "read_only_contract": true,
+    "write_path_enabled": false,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "broad_query_refinement_required": true,
+    "adjacent_family_substitution_allowed": false,
+    "active_vs_sold_separation_required": true,
+    "raw_url_read_allowed": false,
+    "raw_html_read_allowed": false,
+    "raw_email_read_allowed": false,
+    "provider_payload_read_allowed": false,
+    "webhook_body_read_allowed": false,
+    "public_page_safe_fields_only": true,
+    "lineage_dedup_required": true,
+    "source_freshness_required": true,
+    "confidence_state_required": true
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "exact Noctilux DB-backed read plan",
+      "expected_status": "safe_page_bundle_allowed",
+      "actual_status": "safe_page_bundle_allowed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "35 lux AA rare variant DB plan",
+      "expected_status": "exact_variant_filter_required",
+      "actual_status": "exact_variant_filter_required",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "Sigma source-gap DB plan",
+      "expected_status": "source_gap_projection_no_substitution",
+      "actual_status": "source_gap_projection_no_substitution",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "broad Summicron DB plan",
+      "expected_status": "refinement_only_no_fast_alert",
+      "actual_status": "refinement_only_no_fast_alert",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "unsafe boundary DB plan",
+      "expected_status": "boundary_projection_blocks_price_guide",
+      "actual_status": "boundary_projection_blocks_price_guide",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "raw URL field attempted",
+      "expected_status": "blocked_field_violation",
+      "actual_status": "blocked_field_violation",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "raw email/user field attempted",
+      "expected_status": "blocked_field_violation",
+      "actual_status": "blocked_field_violation",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "lineage join missing",
+      "expected_status": "reduce_confidence_or_hide_guide",
+      "actual_status": "reduce_confidence_or_hide_guide",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "source freshness missing",
+      "expected_status": "stale_or_unknown_warning",
+      "actual_status": "stale_or_unknown_warning",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "duplicate/relist records",
+      "expected_status": "lineage_exclusion_no_inflation",
+      "actual_status": "lineage_exclusion_no_inflation",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "active asking projection",
+      "expected_status": "active_reference_only",
+      "actual_status": "active_reference_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "sold likely projection",
+      "expected_status": "weak_input_only",
+      "actual_status": "weak_input_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "expired removed projection",
+      "expected_status": "archive_depth_only",
+      "actual_status": "archive_depth_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "source gap projection",
+      "expected_status": "source_gap_ui_state",
+      "actual_status": "source_gap_ui_state",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "CTA aggregate projection",
+      "expected_status": "safe_aggregate_only",
+      "actual_status": "safe_aggregate_only",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "privacy filter failure",
+      "expected_status": "safe_fallback_or_blocked_state",
+      "actual_status": "safe_fallback_or_blocked_state",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "stale price guide projection",
+      "expected_status": "stale_warning_reduces_confidence",
+      "actual_status": "stale_warning_reduces_confidence",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "source coverage selected/review/blocked",
+      "expected_status": "coverage_disclosed_no_all_source_claim",
+      "actual_status": "coverage_disclosed_no_all_source_claim",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "frontend state read",
+      "expected_status": "frontend_state_drift_check_exists",
+      "actual_status": "frontend_state_drift_check_exists",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "DB unavailable fallback",
+      "expected_status": "safe_empty_state_no_fake_fill",
+      "actual_status": "safe_empty_state_no_fake_fill",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "U",
+      "scenario_group": "progress report",
+      "expected_status": "78_to_83_delta_5",
+      "actual_status": "78_to_83_delta_5",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "DB integration contract scenario validation"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page preview stack",
+    "previous_progress_pct": 78,
+    "current_contract_progress_pct": 83,
+    "expected_after_completion_pct": 83,
+    "delta_pct": 5,
+    "completed_milestones": [
+      "Model Market Page contract",
+      "Expired/Sold Archive contract",
+      "Price Guide contract",
+      "Model Market Page Data Adapter contract",
+      "Model Market Page Data Adapter local preview implementation",
+      "Model Market Page Frontend contract",
+      "Model Market Page Frontend local preview implementation",
+      "Expired/Sold Listing Archive local preview implementation",
+      "Price Guide / Market Intelligence local preview implementation"
+    ],
+    "current_milestone": "Model Market Page Data Adapter DB Integration Contract",
+    "remaining_milestones": [
+      "Expired/Sold Archive DB Integration Contract",
+      "Model Market Page Public Route Contract",
+      "Dealer Lead Signal Contract",
+      "Private Beta Market Page Readiness Checklist",
+      "production/beta hardening"
+    ],
+    "notes": "Preview-to-DB-integration readiness only, not production launch progress."
+  },
+  "raw_url_present": false,
+  "raw_html_present": false,
+  "raw_email_present": false,
+  "raw_provider_payload_present": false,
+  "raw_webhook_body_present": false
+}

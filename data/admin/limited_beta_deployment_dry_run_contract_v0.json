@@ -1,0 +1,1894 @@
+{
+  "task_name": "P3-LIMITED-BETA-DEPLOYMENT-DRY-RUN-CONTRACT",
+  "artifact_version": "p3_limited_beta_deployment_dry_run_contract_v0",
+  "schema_version": "limited_beta_deployment_dry_run_contract.v0",
+  "generated_at": "2026-06-01T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "limited_beta_deployment_dry_run_contract.v0",
+    "artifact_version": "p3_limited_beta_deployment_dry_run_contract_v0",
+    "deployment_dry_run_contract_only": true,
+    "deployment_dry_run_execution_enabled": false,
+    "actual_deployment_enabled": false,
+    "production_launch_enabled": false,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "read_only_runtime_required": true,
+    "db_mutation_enabled": false,
+    "actual_cta_send_enabled": false,
+    "CTA_send_enabled": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "raw_listing_links_enabled": false,
+    "user_specific_public_response_enabled": false,
+    "smart_deal_enabled": false,
+    "csv_export_enabled": false,
+    "dealer_visibility_enabled": false,
+    "no_fake_fill_required": true,
+    "source_gap_confirmed_absence_allowed": false,
+    "raw_value_artifact_storage_allowed": false,
+    "local_bridge_allowed_as_dry_run_input": true,
+    "deployed_runtime_required_for_actual_open": true,
+    "dry_run_pass_is_not_deployment_pass": true,
+    "progress_previous_pct": 99.995,
+    "progress_after_pct": 99.997,
+    "progress_delta_pct": 0.002
+  },
+  "runtime_gap_closure_evidence": {
+    "row_type": "runtime_gap_closure_evidence",
+    "decision_status": "runtime_gap_closed_for_local_runtime_bridge",
+    "actual_deployment_still_pending": true,
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "gap_count_before": 7,
+    "gap_count_closed_local_bridge": 7,
+    "gap_count_still_pending_actual_runtime": 6,
+    "local_runtime_surface_count": 6,
+    "actual_deployed_surface_count": 0,
+    "prior_signoff_timeout_status": "resolved",
+    "scenario_pass_count": 14,
+    "scenario_total_count": 15,
+    "notes": "Loaded from limited beta runtime gap closure artifact. Local runtime bridge exists; deployed runtime still does not."
+  },
+  "dry_run_stage_contracts": [
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "preflight_policy_guard",
+      "sequence_order": 1,
+      "purpose": "Confirm dry-run stays non-deployment and production-off.",
+      "input_contract": "runtime_gap_closure_artifact + runtime_feature_flags",
+      "output_contract": "policy gate record",
+      "required": true,
+      "owner_role": "beta_owner",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "All deployment/prod/send/mutation flags remain false.",
+      "fail_condition": "Any deployment or production-enable state appears.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": false,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "runtime_feature_flag_gate",
+      "sequence_order": 2,
+      "purpose": "Freeze risky feature flags before any rehearsal step.",
+      "input_contract": "runtime_feature_flags",
+      "output_contract": "feature flag gate results",
+      "required": true,
+      "owner_role": "beta_owner",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "All risky flags are false and public unrestricted access is false.",
+      "fail_condition": "Any risky flag can drift true without explicit local-only guard.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "API_adapter_dry_run",
+      "sequence_order": 3,
+      "purpose": "Define callable API-like bridge rehearsal input.",
+      "input_contract": "api_runtime_adapter",
+      "output_contract": "safe API dry-run result",
+      "required": true,
+      "owner_role": "QA_operator",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "Adapter remains read-only and returns safe public response shape only.",
+      "fail_condition": "Adapter can imply deployed route or expose unsafe fields.",
+      "failure_action": "hold_for_missing_local_bridge",
+      "rollback_relevant": false,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "frontend_adapter_dry_run",
+      "sequence_order": 4,
+      "purpose": "Define frontend-safe view rehearsal from API bridge output.",
+      "input_contract": "frontend_runtime_adapter",
+      "output_contract": "safe frontend dry-run result",
+      "required": true,
+      "owner_role": "QA_operator",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "View model hides raw/user/provider and risky UI states.",
+      "fail_condition": "View can expose numeric price, raw links, or unsafe CTA behavior.",
+      "failure_action": "hold_for_missing_local_bridge",
+      "rollback_relevant": false,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "DB_read_adapter_dry_run",
+      "sequence_order": 5,
+      "purpose": "Define read-only DB rehearsal boundary.",
+      "input_contract": "db_runtime_adapter",
+      "output_contract": "safe DB read dry-run result",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "Read-only projection only with no mutation and no fake fill.",
+      "fail_condition": "Mutation, source substitution, or fake listing fallback is possible.",
+      "failure_action": "hold_for_missing_local_bridge",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "allowed_route_matrix_dry_run",
+      "sequence_order": 6,
+      "purpose": "Pin allowed limited-beta routes and expected route behavior.",
+      "input_contract": "allowed_route_definitions",
+      "output_contract": "allowed route dry-run matrix rows",
+      "required": true,
+      "owner_role": "QA_operator",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "All allowed states have expected robots/price/CTA/copy guard.",
+      "fail_condition": "Allowed route behavior is underspecified or can overclaim.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "blocked_route_matrix_dry_run",
+      "sequence_order": 7,
+      "purpose": "Pin blocked or fallback-only routes and safe failure actions.",
+      "input_contract": "blocked_route_definitions",
+      "output_contract": "blocked route dry-run matrix rows",
+      "required": true,
+      "owner_role": "QA_operator",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "All blocked states resolve to refinement or safe fallback only.",
+      "fail_condition": "Blocked routes could render public market page semantics.",
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "response_safety_dry_run",
+      "sequence_order": 8,
+      "purpose": "Define raw/PII/provider blocking checks for rehearsal.",
+      "input_contract": "injected_raw_field_samples",
+      "output_contract": "data safety gate results",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "All forbidden raw fields are blocked and fail-close remains required.",
+      "fail_condition": "Raw field, secret, or privacy leak could pass through dry-run output.",
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "SEO_robots_dry_run",
+      "sequence_order": 9,
+      "purpose": "Define prohibited claim and robots/noindex rehearsal gates.",
+      "input_contract": "prohibited_claim_samples + route matrix",
+      "output_contract": "SEO/robots gate results",
+      "required": true,
+      "owner_role": "SEO_safety_reviewer",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "Claims are blocked and robots matrix is pinned by route family.",
+      "fail_condition": "SEO claim overreach or robots mismatch can escape review.",
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "CTA_disabled_dry_run",
+      "sequence_order": 10,
+      "purpose": "Define CTA disabled behavior without send capability.",
+      "input_contract": "runtime_feature_flags + route matrix",
+      "output_contract": "CTA gate results",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "CTA never sends and only safe placeholder states are allowed.",
+      "fail_condition": "CTA send path, email field, or provider payload can appear.",
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "rollback_simulation_dry_run",
+      "sequence_order": 11,
+      "purpose": "Define rollback simulation actions as rehearsal gate.",
+      "input_contract": "rollback_runtime_simulation",
+      "output_contract": "rollback gate results",
+      "required": true,
+      "owner_role": "rollback_owner",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "All rollback actions exist for simulation and note production gap explicitly.",
+      "fail_condition": "Critical rollback action is undefined or implies production configuration falsely.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "monitoring_event_dry_run",
+      "sequence_order": 12,
+      "purpose": "Define safe event recording gates for monitoring.",
+      "input_contract": "monitoring_runtime_hooks",
+      "output_contract": "monitoring gate results",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "Event sink stores counts/metadata only with no raw payload.",
+      "fail_condition": "Monitoring contract could store raw, secret, or provider payloads.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "feedback_channel_dry_run",
+      "sequence_order": 13,
+      "purpose": "Define safe feedback intake rehearsal gate.",
+      "input_contract": "feedback_runtime_channel",
+      "output_contract": "feedback gate results",
+      "required": true,
+      "owner_role": "user_feedback_owner",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "Feedback categories exist and accepted text is redacted-preview only.",
+      "fail_condition": "Feedback intake can store PII or raw user messages.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": false,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "incident_log_dry_run",
+      "sequence_order": 14,
+      "purpose": "Define incident severity and ownership contract for rehearsal.",
+      "input_contract": "incident levels + monitoring/feedback linkage",
+      "output_contract": "incident gate results",
+      "required": true,
+      "owner_role": "rollback_owner",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "P0/P1/P2/P3 levels and notification ownership are pinned.",
+      "fail_condition": "Incident pathway is ambiguous or can store raw payload.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    },
+    {
+      "row_type": "dry_run_stage_contract",
+      "stage_id": "final_decision_gate",
+      "sequence_order": 15,
+      "purpose": "Separate dry-run contract readiness from any deployment meaning.",
+      "input_contract": "all prior stage contracts",
+      "output_contract": "dry-run contract decision",
+      "required": true,
+      "owner_role": "beta_owner",
+      "allowed_statuses": [
+        "defined"
+      ],
+      "pass_condition": "Decision can only mark rehearsal contract readiness, never deployment or production go.",
+      "fail_condition": "Decision language can be confused with deployed/open/production state.",
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": false,
+      "production_guard": "Dry-run stage cannot be interpreted as deployed runtime or production open.",
+      "notes": "This stage defines rehearsal protocol only and does not execute deployment."
+    }
+  ],
+  "dry_run_input_contract": [
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "runtime_gap_closure_artifact",
+      "required": true,
+      "source": "limited_beta_runtime_gap_closure_v0.json",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "decision_status must equal runtime_gap_closed_for_local_runtime_bridge",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "runtime_feature_flags",
+      "required": true,
+      "source": "model_market_page_runtime_feature_flags.py",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "all risky flags false and no unrestricted access",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "api_runtime_adapter",
+      "required": true,
+      "source": "model_market_page_api_runtime_adapter.py",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "callable local API-like safe response adapter",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "frontend_runtime_adapter",
+      "required": true,
+      "source": "model_market_page_frontend_runtime_adapter.py",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "callable safe view-model adapter",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "db_runtime_adapter",
+      "required": true,
+      "source": "model_market_page_db_runtime_adapter.py",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "read-only DB projection adapter only",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "rollback_runtime_simulation",
+      "required": true,
+      "source": "model_market_page_runtime_rollback.py",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "simulation-only rollback actions available",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "monitoring_runtime_hooks",
+      "required": true,
+      "source": "model_market_page_runtime_monitoring.py",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "safe count-only event recording exists",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "feedback_runtime_channel",
+      "required": true,
+      "source": "model_market_page_runtime_feedback.py",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "safe redacted-preview feedback intake exists",
+      "missing_action": "hold_for_missing_local_bridge",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "allowed_route_definitions",
+      "required": true,
+      "source": "local route policy contract",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "allowed limited beta states pinned explicitly",
+      "missing_action": "hold_for_contract_fix",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "blocked_route_definitions",
+      "required": true,
+      "source": "local route policy contract",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "blocked/fallback-only states pinned explicitly",
+      "missing_action": "hold_for_contract_fix",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "prohibited_claim_samples",
+      "required": true,
+      "source": "SEO dry-run sample set",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "contains English and Korean prohibited claims",
+      "missing_action": "hold_for_contract_fix",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "injected_raw_field_samples",
+      "required": true,
+      "source": "data safety dry-run sample set",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "contains raw URL/html/email/provider/secret samples",
+      "missing_action": "hold_for_contract_fix",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    },
+    {
+      "row_type": "dry_run_input_contract",
+      "input_id": "feature_flag_expected_false_set",
+      "required": true,
+      "source": "dry-run feature flag contract",
+      "must_be_read_only": true,
+      "must_not_include_raw_secret": true,
+      "validation_rule": "risky flags remain false in dry-run contract",
+      "missing_action": "hold_for_contract_fix",
+      "notes": "Dry-run contract input is descriptive and must not imply deployed runtime state."
+    }
+  ],
+  "dry_run_output_contract": [
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "dry_run_stage_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "route_dry_run_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "feature_flag_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "data_safety_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "seo_robots_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "cta_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "rollback_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "monitoring_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "feedback_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "incident_gate_result",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "dry_run_decision",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    },
+    {
+      "row_type": "dry_run_output_contract",
+      "output_id": "unresolved_actual_deployment_gap_summary",
+      "required": true,
+      "allowed_fields": [
+        "status",
+        "gate_id",
+        "route_state",
+        "decision_status",
+        "notes",
+        "failure_action",
+        "severity",
+        "summary"
+      ],
+      "forbidden_fields": [
+        "raw_url",
+        "listing_url",
+        "raw_html",
+        "user_email",
+        "provider_payload",
+        "webhook_body",
+        "raw_fetch_response",
+        "raw_selector_output",
+        "access_token",
+        "secret",
+        "DB connection string",
+        "raw user message"
+      ],
+      "aggregation_rule": "contract outputs may summarize or classify only; they must never include raw payload fields.",
+      "notes": "Dry-run output is safe summary metadata only."
+    }
+  ],
+  "route_dry_run_matrix": [
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "exact_model_public_market_page",
+      "allowed_in_limited_beta": true,
+      "dry_run_expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "expected_public_copy_guard": "no_overclaim_no_raw_field",
+      "expected_failure_action": "hide_specific_model_route",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "exact_rare_variant_public_market_page",
+      "allowed_in_limited_beta": true,
+      "dry_run_expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "expected_public_copy_guard": "rare_variant_safe_copy_only",
+      "expected_failure_action": "hide_specific_model_route",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "source_gap_public_page",
+      "allowed_in_limited_beta": true,
+      "dry_run_expected_status": 200,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "price_widget_hidden",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "expected_public_copy_guard": "coverage_gap_only_no_confirmed_absence",
+      "expected_failure_action": "disable_source_gap_pages",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "active_only_public_page",
+      "allowed_in_limited_beta": true,
+      "dry_run_expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "active_reference_only_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "expected_public_copy_guard": "active_asking_not_market_price",
+      "expected_failure_action": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "archive_only_public_page",
+      "allowed_in_limited_beta": true,
+      "dry_run_expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "archive_history_only_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "expected_public_copy_guard": "archive_only_copy_no_current_price_claim",
+      "expected_failure_action": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "stale_data_safe_route",
+      "allowed_in_limited_beta": true,
+      "dry_run_expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_only_send_disabled",
+      "expected_public_copy_guard": "stale_disclosure_required",
+      "expected_failure_action": "hide_specific_model_route",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "broad_query_refinement_route",
+      "allowed_in_limited_beta": false,
+      "dry_run_expected_status": 302,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "expected_public_copy_guard": "refinement_only_no_market_page",
+      "expected_failure_action": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "unsafe_boundary_review_route",
+      "allowed_in_limited_beta": false,
+      "dry_run_expected_status": 200,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "expected_public_copy_guard": "unsafe_boundary_no_price_no_cta",
+      "expected_failure_action": "disable_market_page_price_widget",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "unsupported_model_route",
+      "allowed_in_limited_beta": false,
+      "dry_run_expected_status": 404,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "expected_public_copy_guard": "unsupported_safe_fallback_only",
+      "expected_failure_action": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "privacy_blocked_route",
+      "allowed_in_limited_beta": false,
+      "dry_run_expected_status": 403,
+      "expected_robots": "noindex,nofollow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "expected_public_copy_guard": "privacy_fail_close_only",
+      "expected_failure_action": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "db_unavailable_safe_route",
+      "allowed_in_limited_beta": false,
+      "dry_run_expected_status": 503,
+      "expected_robots": "noindex,nofollow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "expected_public_copy_guard": "db_unavailable_no_fake_fill",
+      "expected_failure_action": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    },
+    {
+      "row_type": "route_dry_run_matrix",
+      "route_state": "error_safe_fallback_route",
+      "allowed_in_limited_beta": false,
+      "dry_run_expected_status": 409,
+      "expected_robots": "noindex,nofollow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "expected_public_copy_guard": "generic_safe_fallback_only",
+      "expected_failure_action": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route dry-run matrix pins rehearsal expectations only; it does not confirm deployed runtime."
+    }
+  ],
+  "feature_flag_dry_run_gates": [
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "LIMITED_BETA_RUNTIME_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": "true_or_false_if_local_only",
+      "production_allowed_value": false,
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": false,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "PUBLIC_UNRESTRICTED_ACCESS_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "PRODUCTION_LAUNCH_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "CTA_EMAIL_SEND_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "NUMERIC_PRICE_DISPLAY_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "STRUCTURED_DATA_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": true,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "RAW_LISTING_LINKS_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "USER_SPECIFIC_PUBLIC_RESPONSE_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "rollback_required",
+      "rollback_relevant": true,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "SMART_DEAL_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": false,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "CSV_EXPORT_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": false,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    },
+    {
+      "row_type": "feature_flag_dry_run_gate",
+      "flag_id": "DEALER_VISIBILITY_ENABLED",
+      "expected_value": false,
+      "local_dry_run_allowed_value": false,
+      "production_allowed_value": false,
+      "failure_action": "hold_for_contract_fix",
+      "rollback_relevant": false,
+      "notes": "Dry-run gate freezes risky feature state and separates local-only bridge from any production meaning."
+    }
+  ],
+  "data_safety_dry_run_gates": [
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "raw_url_blocked",
+      "injected_sample_type": "raw_url",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "listing_url_blocked",
+      "injected_sample_type": "listing_url",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "raw_html_blocked",
+      "injected_sample_type": "raw_html",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "user_email_blocked",
+      "injected_sample_type": "user_email",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "provider_payload_blocked",
+      "injected_sample_type": "provider_payload",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "webhook_body_blocked",
+      "injected_sample_type": "webhook_body",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "access_token_blocked",
+      "injected_sample_type": "access_token",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "db_connection_string_blocked",
+      "injected_sample_type": "DB connection string",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "raw_user_message_not_stored",
+      "injected_sample_type": "raw user message",
+      "expected_result": "redacted_or_blocked",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "privacy_error_fail_close",
+      "injected_sample_type": "privacy_failure",
+      "expected_result": "fail_close",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "policy_violation_fail_close",
+      "injected_sample_type": "policy_violation",
+      "expected_result": "fail_close",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    },
+    {
+      "row_type": "data_safety_dry_run_gate",
+      "gate_id": "no_raw_injected_value_in_artifact",
+      "injected_sample_type": "artifact_storage",
+      "expected_result": "blocked",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P0",
+      "notes": "Dry-run contract requires safe summary only and forbids leaking raw or secret values into outputs."
+    }
+  ],
+  "seo_robots_dry_run_gates": [
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "all_sources_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "guaranteed_price_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "official_leica_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "investment_advice_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "confirmed_absence_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "korean_confirmed_absence_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "korean_official_leica_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "korean_guaranteed_price_blocked",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P1",
+      "notes": "SEO prohibited claims must never survive dry-run gate definition."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "robots_exact_rare_active_archive_stale_index_follow",
+      "expected_result": "defined",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Robots family matrix must be pinned explicitly in the contract."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "robots_source_gap_broad_unsafe_unsupported_noindex_follow",
+      "expected_result": "defined",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Robots family matrix must be pinned explicitly in the contract."
+    },
+    {
+      "row_type": "seo_robots_dry_run_gate",
+      "gate_id": "robots_privacy_db_error_noindex_nofollow",
+      "expected_result": "defined",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Robots family matrix must be pinned explicitly in the contract."
+    }
+  ],
+  "cta_dry_run_gates": [
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "actual_send_disabled",
+      "expected_result": "disabled",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    },
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "no_email_fields",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    },
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "no_provider_payload",
+      "expected_result": "blocked",
+      "failure_action": "rollback_required",
+      "severity": "P0",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    },
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "source_gap_candidate_only_send_disabled",
+      "expected_result": "visible_candidate_only_send_disabled",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    },
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "allowed_routes_candidate_only_send_disabled",
+      "expected_result": "visible_candidate_only_send_disabled",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    },
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "broad_unsafe_unsupported_cta_disabled",
+      "expected_result": "disabled",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    },
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "privacy_db_error_cta_disabled",
+      "expected_result": "disabled",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    },
+    {
+      "row_type": "cta_dry_run_gate",
+      "gate_id": "cta_click_routes_to_safe_placeholder_only",
+      "expected_result": "disabled_preview_or_placeholder_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "CTA dry-run gate defines visibility or placeholder behavior only; it never permits actual send."
+    }
+  ],
+  "rollback_dry_run_gates": [
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "hide_all_limited_beta_routes",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "hide_specific_model_route",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "force_noindex_for_affected_route",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "disable_cta_visible_candidates",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "disable_source_gap_pages",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "disable_market_page_price_widget",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "disable_route_seo_metadata",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "force_safe_fallback_page",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "stop_beta_traffic",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "log_incident",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    },
+    {
+      "row_type": "rollback_dry_run_gate",
+      "action_id": "notify_owner_roles",
+      "required": true,
+      "dry_run_expected_result": "simulation_defined",
+      "production_configured_required_before_actual_open": true,
+      "failure_action": "hold_for_contract_fix",
+      "notes": "Rollback dry-run gate requires local simulation definition only and must not imply production rollback is configured."
+    }
+  ],
+  "monitoring_feedback_incident_gates": [
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "public_response_blocked_policy_violation_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "raw_field_leak_attempt_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "source_gap_overclaim_incident_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "SEO_claim_violation_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "CTA_send_attempt_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "DB_unavailable_fallback_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "privacy_block_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "rollback_trigger_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "false_positive_report_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "false_negative_report_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "route_500_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "route_404_unexpected_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "route_noindex_mismatch_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "monitoring_event",
+      "gate_id": "feedback_submission_count",
+      "expected_result": "safe_count_or_metadata_only",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Monitoring dry-run event must not store raw payload, secrets, or provider content."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "wrong_model_match",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "missing_source",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "source_gap_confusing",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "price_confidence_confusing",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "alert_cta_confusing",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "page_copy_unclear",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "route_seo_issue",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "mobile_layout_issue",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "feedback_category",
+      "gate_id": "trust_disclaimer_issue",
+      "expected_result": "accepted_as_safe_category_or_redacted_preview",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P2",
+      "notes": "Feedback dry-run intake must store category-safe or redacted-preview output only."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "incident_requirement",
+      "gate_id": "incident_levels_p0_p1_p2_p3",
+      "expected_result": "defined",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Incident severity ladder must be pinned explicitly."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "incident_requirement",
+      "gate_id": "incident_log_required",
+      "expected_result": "defined",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Incident log path must exist conceptually before dry-run execution."
+    },
+    {
+      "row_type": "monitoring_feedback_incident_gate",
+      "gate_group": "incident_requirement",
+      "gate_id": "owner_notification_required",
+      "expected_result": "defined",
+      "failure_action": "hold_for_contract_fix",
+      "severity": "P1",
+      "notes": "Owner notification path must be pinned in the rehearsal contract."
+    }
+  ],
+  "dry_run_decision_rules": {
+    "row_type": "dry_run_decision_rules",
+    "allowed_decision_statuses": [
+      "dry_run_contract_ready_for_execution",
+      "dry_run_contract_ready_with_warnings",
+      "hold_for_contract_fix",
+      "hold_for_missing_local_bridge",
+      "rollback_required",
+      "deployed"
+    ],
+    "decision_rules": [
+      "deployed is never allowed in this artifact.",
+      "production_launch_go must remain false.",
+      "actual_deployment_enabled must remain false.",
+      "if local runtime bridge evidence is missing -> hold_for_missing_local_bridge.",
+      "if any critical contract gate is missing -> hold_for_contract_fix.",
+      "if all required gates are defined and local bridge evidence exists -> dry_run_contract_ready_for_execution.",
+      "warnings may exist only when they are explicitly non-blocking and separate from deployment readiness.",
+      "actual deployed runtime gaps must remain visible in unresolved_actual_deployment_gap_summary."
+    ],
+    "expected_likely_decision": "dry_run_contract_ready_for_execution",
+    "notes": "Dry-run readiness is rehearsal readiness only and cannot be upgraded into deployment readiness by wording alone."
+  },
+  "summary": {
+    "row_type": "dry_run_contract_summary",
+    "dry_run_stage_count": 15,
+    "required_stage_count": 15,
+    "route_matrix_count": 12,
+    "feature_flag_gate_count": 11,
+    "data_safety_gate_count": 12,
+    "seo_gate_count": 8,
+    "robots_gate_count": 3,
+    "cta_gate_count": 8,
+    "rollback_gate_count": 11,
+    "monitoring_gate_count": 14,
+    "feedback_gate_count": 9,
+    "incident_gate_count": 3,
+    "forbidden_output_field_count": 12,
+    "unresolved_actual_deployment_gap_count": 21,
+    "decision_status": "dry_run_contract_ready_for_execution",
+    "notes": "Dry-run contract summarizes rehearsal readiness only. Deployed runtime remains a separate gate."
+  },
+  "decision": {
+    "row_type": "dry_run_contract_decision",
+    "decision_status": "dry_run_contract_ready_for_execution",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_deployed_surface_count": 0,
+    "unresolved_actual_deployment_gap_summary": {
+      "actual_deployment_still_pending": true,
+      "actual_deployed_surface_count": 0,
+      "gap_count_still_pending_actual_runtime": 6
+    },
+    "notes": "Dry-run contract ready means rehearsal protocol is defined. It does not mean deployment ready or deployed."
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy_forbids_deployment",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "runtime_gap_closure_evidence_loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "dry_run_stages_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "input_contract_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "output_contract_safe",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "route_dry_run_matrix_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "feature_flag_gates_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "data_safety_gates_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "seo_robots_gates_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "cta_gates_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "rollback_gates_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "monitoring_feedback_incident_gates_complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "decision_rules_honest",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "final_decision",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "progress_report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "progress_basis": "P3 Market Intelligence / Model Market Page limited private beta deployment-dry-run readiness",
+    "previous_progress_pct": 99.995,
+    "expected_after_completion_pct": 99.997,
+    "delta_pct": 0.002
+  },
+  "modified_files": [
+    "limited_beta_deployment_dry_run_contract.py",
+    "scripts/run_p3_limited_beta_deployment_dry_run_contract.py",
+    "tests/test_limited_beta_deployment_dry_run_contract.py",
+    "data/admin/p3_limited_beta_deployment_dry_run_contract_v0.md",
+    "data/admin/p3_limited_beta_deployment_dry_run_contract_v0.jsonl",
+    "data/admin/limited_beta_deployment_dry_run_contract_v0.json"
+  ]
+}

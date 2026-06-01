@@ -1,0 +1,5044 @@
+{
+  "total": 7860,
+  "mount_nonac_total": 6147,
+  "mount_nonac_match": 4995,
+  "mount_nonac_mismatch": 1152,
+  "mount_match_pct_nonac": 81.3,
+  "category_match": 7250,
+  "category_mismatch": 610,
+  "category_match_pct": 92.2,
+  "category_match_adjusted": 7711,
+  "category_mismatch_adjusted": 149,
+  "category_match_pct_adjusted": 98.1,
+  "brand_match": 6151,
+  "brand_mismatch": 1709,
+  "brand_match_pct": 78.3,
+  "mount_match_pct_all": 64.0,
+  "label_match_pct": 0.8,
+  "v2_unknown_mount": 1845,
+  "v2_unknown_mount_pct": 23.5,
+  "v2_unknown_category": 0,
+  "v2_unknown_cat_pct": 0.0,
+  "v1_unknown_label": 1707,
+  "accessory_count": 1713,
+  "accessory_pct": 21.8,
+  "accessory_legacy_mount": 1650,
+  "accessory_with_mount_hint": 567,
+  "accessory_with_system_hint": 325,
+  "system_items": 531,
+  "system_mount_consistent": 307,
+  "system_consistency_pct": 57.8,
+  "canonical_corrections": 1396,
+  "canonical_correction_pct": 17.8,
+  "v2_likely_correct_mismatches": 839,
+  "v2_likely_correct_cat_mismatches": 461,
+  "v2_likely_correct_mount_mismatches": 517,
+  "mismatch_type_counts": {
+    "MT_ONLY": 993,
+    "ACC_LEGACY": 1650,
+    "CAT_ONLY": 362,
+    "MT+CAT": 189
+  },
+  "mismatches": [
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_m_lens",
+      "title": "Leica M 90mm f2.5 Summarit 6bit Black",
+      "v1_mount": "L",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "90mm Summarit",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Summarit",
+      "model_canonical": "Summarit-M",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Barton1972 Leather Neck Strap Whip Black Gray",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:neck strap"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "LM to L 헬리코이드 어댑터 (L 마운트용)",
+      "v1_mount": "Accessory",
+      "v2_mount": "SL",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "SL_l_mount_explicit:L mount"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:어댑터"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Artisan & Artist M8, M9 Case Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M9",
+      "model_canonical": "M9",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M-L adapter Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Correction Lens II M -1.5 dpt",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:correction lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M-L adapter Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "Leica 12538 Hood Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M11 Protector Cognac",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:protector"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "Jnk SL2 Case [Black / Battery Door Type]",
+      "v1_mount": "Accessory",
+      "v2_mount": "SL",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "SL_explicit:SL2"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "SL2",
+      "model_canonical": "SL2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "ilmare CL Case Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M-A",
+      "model_canonical": "M-A",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "Jnk SL2 Case [Black / Battery Door Type]",
+      "v1_mount": "Accessory",
+      "v2_mount": "SL",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "SL_explicit:SL2"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "SL2",
+      "model_canonical": "SL2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "Leica CL handgrip Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "SL",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "SL_explicit:LEICA CL"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "CL",
+      "model_canonical": "CL",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica R-M Adapter",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica BE@RBRICK Royal Selangor 400%",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Accessory",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "acc_kw:be@rbrick"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Extender-R 2x Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:extender"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "Leica 12549 Hood Silver [for M 50mm f2.8 Elmar]",
+      "v1_mount": "M",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "50mm Elmar f2.8",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_for_m:for M"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_for_lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Artisan & Artist ACAM-316G [Black & Red]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "price_low:120000.0"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica 12585 Hood for M-50mm, 35mm",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_for_m:for M"
+      ],
+      "v2_category_reason": [
+        "acc_code:12585"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica 50~135mm Elmar Hood",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:hood"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Motor Winder R + RC Remote Control",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:motor winder"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica E82 UVa II Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:e_uv_filter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q3 Round Hood Aluminum Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:hood"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M10 Handgrip Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica XOOIM Hood For M-50mm",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_for_m:for M"
+      ],
+      "v2_category_reason": [
+        "acc_code:xooim"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "Overgaard Ventilated Lens Hood Black for 35mm, 28mm [e39]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:lens_hood_primary"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Zegna Protector Black for Leica Q2",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:protector"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q2 Case Red",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q3 Round Hood Aluminum Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:hood"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M10 Handgrip Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M10 Handgrip Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Fotodiox FD Lens - GFX Camera Adapter",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "신품 Leica E46 UVa II Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:e_uv_filter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica 85mm Tele Finder C. K. S. Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:finder"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "RRS M240 L-Plate Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:l-plate"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M240",
+      "model_canonical": "M240",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica R Angle Finder Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:finder"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Extender-R 2x Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:extender"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Gitzo GH1781QR Ball Head",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "acc_kw:ball head"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q",
+      "model_canonical": "Q",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "신품 호환 Leica 14043 Hood Cover for M 35mm f2 Summicron, M 28mm f2.8 Elmarit",
+      "v1_mount": "M",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "40mm Summicron-C",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:SUMMICRON"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_for_lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Summicron",
+      "model_canonical": "Summicron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Serie8 UV Filter (M 50/1.2(B)",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_shorthand:M NN/F"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:filter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica UV 60mm Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uv"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica 77mm UV Filter",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:filter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Serie8 YellowGreen Filter",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:filter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "신품 Light Lens LAB Hood Silver for 50mm, 35mm",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:LIGHT LENS LAB"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_for_lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "신품 Light Lens LAB Hood Black for 50mm, 35mm",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:LIGHT LENS LAB"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_for_lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_m_lens",
+      "title": "Leica M 75mm f2.4 Summarit 6bit Silver",
+      "v1_mount": "L",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "75mm Summarit",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Summarit",
+      "model_canonical": "Summarit-M",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Leica M 50mm f1.4 Summilux ASPH 6bit Black chrome finish e43",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_m_lens",
+      "title": "Leica M 75mm F2.5 Summarit 6bit Black",
+      "v1_mount": "L",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "75mm Summarit",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Summarit",
+      "model_canonical": "Summarit-M",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": null,
+      "title": "Leica Barnack IIIg Silver",
+      "v1_mount": "L",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Barnack",
+      "v2_label": "L Body",
+      "v2_mount_reason": [
+        "L_explicit:BARNACK"
+      ],
+      "v2_category_reason": [
+        "barnack_body_kw:barnack"
+      ],
+      "v2_label_reason": [
+        "L+Body"
+      ],
+      "model_raw": "IIIg",
+      "model_canonical": "IIIg",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_m_body",
+      "title": "Leica M6 TTL Silver 0.72x",
+      "v1_mount": "SL",
+      "v2_mount": "M",
+      "v1_category": "Body",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica M6 TTL",
+      "v2_label": "M Body",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "body_kw:leica m6"
+      ],
+      "v2_label_reason": [
+        "M+Body"
+      ],
+      "model_raw": "M6 TTL",
+      "model_canonical": "M6",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Visoflex Type 020 Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Compact",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Compact_kw:X TYP"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:visoflex"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Artisan & Artist LMB-M3 Case Green [For M3, M4, M6, MP]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_for_m_body:for M body"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M6",
+      "model_canonical": "M6",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Keyring Silver [100 Years Of Leica]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "price_low:200000.0"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Sekonic L-308B",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:sekonic_meter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Jnk Q Case Black [Battery door type]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q",
+      "model_canonical": "Q",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M-L adapter Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Light Lens Lab 12504 Hood Black for M-35mm [Aluminium]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:LIGHT LENS LAB"
+      ],
+      "v2_category_reason": [
+        "acc_code:12504"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "JNK M11 Case [Black / Advanced Batter Door]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "JNK M10 Case Grey",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": null,
+      "title": "Voigtlander VM-E Close Focus Adapter",
+      "v1_mount": "M",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "Leica CL",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_voigtlander:voigtlander"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M-E",
+      "model_canonical": "M-E",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Visoflex2 Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:visoflex"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "X2",
+      "model_canonical": "X2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "JNK M11 Case [Brown / Advanced Batter Door]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "LM to L 헬리코이드 어댑터 (L 마운트용)",
+      "v1_mount": "Accessory",
+      "v2_mount": "SL",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "SL_l_mount_explicit:L mount"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:어댑터"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M11 Battery Silver [BP-SCL7]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:battery_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica 35-135mm VIOOH Finder Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "acc_code:viooh"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "RRS Leica SL2 Plate L-Componentll",
+      "v1_mount": "Accessory",
+      "v2_mount": "SL",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "SL_explicit:SL2"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:plate"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "MP",
+      "model_canonical": "MP",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Oberwerth Bayreuth Vintage Rusty Bag Brown",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "3rd Party",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:bag"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Chuncraft M11 Case Green",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "ilmare Film Case For 35mm",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M-A",
+      "model_canonical": "M-A",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q3 Round Hood Brass",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:hood"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M11 Handgrip Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Novoflex Hassel V - Hassel XCD Adapter Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "RRS M10 Plates L-Component Grip",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:grip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "신품 Leica E49 UVa II Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:e_uv_filter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "신품 Leica Paracord Strap Black / Red 126cm created by COOPH",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:strap"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q2 Thumb Support Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:thumb support"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "신품 Leica E46 UVa II Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:e_uv_filter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "신품 Light Lens Lab 35mm Viewfinder Black (SBLOO Re-issue)",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:LIGHT LENS LAB"
+      ],
+      "v2_category_reason": [
+        "acc_code:sbloo"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": null,
+      "title": "Leica Barnack IIIF Silver",
+      "v1_mount": "L",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Barnack",
+      "v2_label": "L Body",
+      "v2_mount_reason": [
+        "L_explicit:BARNACK"
+      ],
+      "v2_category_reason": [
+        "barnack_body_kw:barnack"
+      ],
+      "v2_label_reason": [
+        "L+Body"
+      ],
+      "model_raw": "IIIf",
+      "model_canonical": "IIIf",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M-L adapter Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica SF-40 Flash",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:flash"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Sekonic L-508 Zoom Master Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:sekonic_meter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M-A",
+      "model_canonical": "M-A",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Visoflex 2 Leather Case Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q3, SL3 Battery [BP-SCL6]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:battery_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Artisan & Artist M8, M9 Case Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M9",
+      "model_canonical": "M9",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M Handgrip Black [For M240, M-P]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M240",
+      "model_canonical": "M240",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "JNK M240 Case Dark Brown [Battery Door Type]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M240",
+      "model_canonical": "M240",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M11 Battery Silver [BP-SCL7]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:battery_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M11 Battery Black [BP-SCL7]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:battery_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Artisan & Artist LMB-M3 Case Brown [For M3, M4, M6, MP]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_for_m_body:for M body"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M6",
+      "model_canonical": "M6",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q2, SL Battery [BP-SCL4]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:battery_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Artisan & Artist ACAM-306A Red",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "price_low:120000.0"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Voigtlander 28-35mm Finder Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "3rd Party",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:finder"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "TL",
+      "model_canonical": "TL",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M10, M11 Thumbs Support Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:thumbs support"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M11 Protector Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:protector"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M10 Leather Pouch Black Small front",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:pouch"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Finger Loop Medium",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "price_low:90000.0"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica D-Lux Type109 Black",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica D-LUX Typ 109",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:D-LUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "D-LUX",
+      "model_canonical": "D-LUX",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Visoflex Type 020 Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Compact",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Compact_kw:X TYP"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:visoflex"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Leica L 90mm f4 Elmar Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "L",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_leica_l_prefix:LEICA L NN"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Leica M 28-35-50mm f4 Tri-Elmar e49 신형 Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Tri-Elmar",
+      "model_canonical": "Tri-Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_s_signal",
+      "title": "Leica S 30mm f2.8 Elmarit ASPH CS Black",
+      "v1_mount": "M",
+      "v2_mount": "S",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "30mm Elmarit",
+      "v2_label": "S Lens",
+      "v2_mount_reason": [
+        "S_kw:LEICA S "
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "S+Lens"
+      ],
+      "model_raw": "Elmarit",
+      "model_canonical": "Elmarit",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica X1 Steel Gray",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica X1",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:LEICA X1"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "X1",
+      "model_canonical": "X1",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica FOOKH Hood Black For Summaron-Elmar 35mm",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:SUMMARON"
+      ],
+      "v2_category_reason": [
+        "acc_code:fookh"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_r_signal",
+      "title": "Leica R 180mm f3.4 APO-Telyt Black",
+      "v1_mount": "M",
+      "v2_mount": "R",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "180mm APO-Telyt",
+      "v2_label": "R Lens",
+      "v2_mount_reason": [
+        "R_leica_r_prefix:LEICA R NN"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "R+Lens"
+      ],
+      "model_raw": "APO-Telyt",
+      "model_canonical": "APO-Telyt-R",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Leica M 16-18-21mm f4 Tri-elmar ASPH 6bit Black + Finder set",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Tri-Elmar",
+      "model_canonical": "Tri-Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica Q2 007 Edition",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Q2",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Leica+Q+Body"
+      ],
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica D-Lux7 Vans X Ray Barbee Edition",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica D-LUX 7",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:D-LUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "D-LUX",
+      "model_canonical": "D-LUX",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica Sofort2 Burton Edition",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Sofort",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:SOFORT"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "Sofort",
+      "model_canonical": "Sofort",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica Minilux Black",
+      "v1_mount": "M",
+      "v2_mount": "PNS",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Minilux",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "PNS_kw:MINILUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:PNS"
+      ],
+      "v2_label_reason": [
+        "Leica+PNS+Body"
+      ],
+      "model_raw": "Minilux",
+      "model_canonical": "Minilux",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Luigi's Leather Bag Large (A.ged Brown)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "3rd Party",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:bag"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_body_signals",
+      "title": "Leicaflex SL2 Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "R",
+      "v1_category": "Accessory",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "R Body",
+      "v2_mount_reason": [
+        "R_suffix:LEICAFLEX"
+      ],
+      "v2_category_reason": [
+        "body_kw:leicaflex"
+      ],
+      "v2_label_reason": [
+        "R+Body"
+      ],
+      "model_raw": "Leicaflex SL2",
+      "model_canonical": "Leicaflex",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "Leica 12587 Hood Black For M 35/1.4 Double ASpherical [두매 용]",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_shorthand:M NN/F"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_for_lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "DJI RS 3 Combo",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:rig"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "Leica 35mm Hood Silver for MP Hermes, M-P Safari",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_for_lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M-P",
+      "model_canonical": "M-P",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "Leica Q3 Round Hood, Thumbs-up Grip Silver Set",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:grip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica VIDOM 35-135mm Universal Finder Nikel",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:finder"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Leica M 135mm f4 Tele-Elmar Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Tele-Elmar",
+      "model_canonical": "Tele-Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Leica M 50mm f1.4 Summilux ASPH 6bit Black chrome finish e43",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux-M",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_body_signals",
+      "title": "Leica Sofort2 White",
+      "v1_mount": "Accessory",
+      "v2_mount": "Compact",
+      "v1_category": "Accessory",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:SOFORT"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "Sofort",
+      "model_canonical": "Sofort",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_r_signal",
+      "title": "Leica R 180mm f3.4 APO-Telyt Black",
+      "v1_mount": "M",
+      "v2_mount": "R",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "180mm APO-Telyt",
+      "v2_label": "R Lens",
+      "v2_mount_reason": [
+        "R_leica_r_prefix:LEICA R NN"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "R+Lens"
+      ],
+      "model_raw": "APO-Telyt",
+      "model_canonical": "APO-Telyt-R",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "Leica 12475 Hood Black for M 50mm F1.2 Noctilux ASPH",
+      "v1_mount": "M",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "75mm Noctilux f1.25",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:NOCTILUX"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:hood_for_lens"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Noctilux",
+      "model_canonical": "Noctilux",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_body_signals",
+      "title": "Leica C2 Zoom Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "PNS",
+      "v1_category": "Accessory",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "PNS_kw:LEICA C2 "
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:PNS"
+      ],
+      "v2_label_reason": [
+        "Leica+PNS+Body"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_cy_mount",
+      "title": "Carlzeiss C/Y 18mm f4 Distagon Black",
+      "v1_mount": "Unknown",
+      "v2_mount": "C/Y",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "3rd Party",
+      "v2_label": "3rd Party Lens",
+      "v2_mount_reason": [
+        "CY_mount_explicit:C/Y"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "3rd_party+Lens+no_mount"
+      ],
+      "model_raw": "Distagon",
+      "model_canonical": "Distagon",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": null,
+      "title": "Leica Barnack IIIc Silver",
+      "v1_mount": "L",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Barnack",
+      "v2_label": "L Body",
+      "v2_mount_reason": [
+        "L_explicit:BARNACK"
+      ],
+      "v2_category_reason": [
+        "barnack_body_kw:barnack"
+      ],
+      "v2_label_reason": [
+        "L+Body"
+      ],
+      "model_raw": "IIIc",
+      "model_canonical": "IIIc",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Laowa M 14mm f4 FF II Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "3rd Party M Lens",
+      "v2_mount_reason": [
+        "M_lens_kw:LAOWA"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "3rd_party+M+Lens"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Zeiss Ikon 40.5mm UV Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_zeiss_zm:zeiss"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uv"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_lens_signals",
+      "title": "Carl Zeiss C 50mm F2 Sonnar Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "L",
+      "v1_category": "Accessory",
+      "v2_category": "Lens",
+      "v1_brand": "3rd Party",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_zeiss_c_model:carl_zeiss_C_model"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Sonnar",
+      "model_canonical": "Sonnar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": null,
+      "title": "Leica Barnack IIIg \b+ Vit Silver",
+      "v1_mount": "L",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Barnack",
+      "v2_label": "L Body",
+      "v2_mount_reason": [
+        "L_explicit:BARNACK"
+      ],
+      "v2_category_reason": [
+        "barnack_body_kw:barnack"
+      ],
+      "v2_label_reason": [
+        "L+Body"
+      ],
+      "model_raw": "IIIg",
+      "model_canonical": "IIIg",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Ollux / 12522H Hood Black for M 35mm Summilux 1st",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:SUMMILUX"
+      ],
+      "v2_category_reason": [
+        "acc_code:12522"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Summilux",
+      "model_canonical": "Summilux",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_body_signals",
+      "title": "Leica R6 Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "R",
+      "v1_category": "Accessory",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "R Body",
+      "v2_mount_reason": [
+        "R_body_leica:LEICA R3-9"
+      ],
+      "v2_category_reason": [
+        "body_kw:r6 "
+      ],
+      "v2_label_reason": [
+        "R+Body"
+      ],
+      "model_raw": "R6",
+      "model_canonical": "R6",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:v1_accessory_but_body_signals",
+      "title": "Leica Mini Zoom Data Back Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "PNS",
+      "v1_category": "Accessory",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "PNS_kw:LEICA MINI "
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:PNS"
+      ],
+      "v2_label_reason": [
+        "Leica+PNS+Body"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica M10 Handgrip Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_number:M3-M11"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Winder M Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_trailing:trailing M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:winder"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica D-Lux8 [100 YEARS OF LEICA]",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica D-LUX 8",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:D-LUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "D-LUX",
+      "model_canonical": "D-LUX",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "신품 Leica Q3 43",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Q3",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Q_body_shorthand:Q focal shorthand"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Leica+Q+Body"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_m_lens",
+      "title": "Leica M-Monochrom CCD Black [신형센서 교체]",
+      "v1_mount": "R",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica M Monochrom",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "default_lens"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica EVF2 Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:evf"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica Q2 Black",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Q2",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Leica+Q+Body"
+      ],
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica Q3 Black",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Q3",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Leica+Q+Body"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Monopan 50 Film Set [4개]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "price_low:130000.0"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Books [100 Leica Stories]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:book"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica X Vario Black",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica X Vario",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:LEICA X "
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "X Vario",
+      "model_canonical": "X Vario",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica Q3 Black",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Q3",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Leica+Q+Body"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica Q Black",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Q",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Leica+Q+Body"
+      ],
+      "model_raw": "Q",
+      "model_canonical": "Q",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": null,
+      "title": "Leica Barnack IIIf Silver",
+      "v1_mount": "L",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Barnack",
+      "v2_label": "L Body",
+      "v2_mount_reason": [
+        "L_explicit:BARNACK"
+      ],
+      "v2_category_reason": [
+        "barnack_body_kw:barnack"
+      ],
+      "v2_label_reason": [
+        "L+Body"
+      ],
+      "model_raw": "IIIf",
+      "model_canonical": "IIIf",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Leica Books [M The First 70 Years & 100 Leica Stories]",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:book"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "Novoflex Leica M - Hassel XCD Adapter Black",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica X Vario Silver",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica X Vario",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:LEICA X "
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "X Vario",
+      "model_canonical": "X Vario",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica X2 Silver",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica X2",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:LEICA X2"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "X2",
+      "model_canonical": "X2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "Leica X1 Black",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica X1",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:LEICA X1"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "X1",
+      "model_canonical": "X1",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_m_body",
+      "title": "Leica MDa Silver",
+      "v1_mount": "M",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica MDa",
+      "v2_label": "M Body",
+      "v2_mount_reason": [
+        "M_body_shorthand:MDA"
+      ],
+      "v2_category_reason": [
+        "body_kw:mda"
+      ],
+      "v2_label_reason": [
+        "M+Body"
+      ],
+      "model_raw": "MDa",
+      "model_canonical": "MDa",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": null,
+      "title": "Leica Barnack IIIF Silver",
+      "v1_mount": "L",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Barnack",
+      "v2_label": "L Body",
+      "v2_mount_reason": [
+        "L_explicit:BARNACK"
+      ],
+      "v2_category_reason": [
+        "barnack_body_kw:barnack"
+      ],
+      "v2_label_reason": [
+        "L+Body"
+      ],
+      "model_raw": "IIIf",
+      "model_canonical": "IIIf",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] M11 Handgrip",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_explicit:M-body"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:handgrip"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "[위탁] D-lux 8 (Black)",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Unknown",
+      "v1_label": "Leica D-LUX 8",
+      "v2_label": "Body",
+      "v2_mount_reason": [
+        "Compact_kw:D-LUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Compact+Body_no_mount_label"
+      ],
+      "model_raw": "D-LUX 8",
+      "model_canonical": "D-LUX 8",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] UVa E46 (Black) & Cap E46 & Yellow E46 & Red E46",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uva"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_m_lens",
+      "title": "[위탁] M 50/2.5 Summarit (Black)",
+      "v1_mount": "L",
+      "v2_mount": "M",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "50mm Summarit",
+      "v2_label": "M Lens",
+      "v2_mount_reason": [
+        "M_lens_shorthand:M NN/F"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "M+Lens"
+      ],
+      "model_raw": "Summarit",
+      "model_canonical": "Summarit-M",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] M Adapter L (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] APO-EXTENDER-R 2x",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:extender"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "[중고] Q3 28mm",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "Leica Q3",
+      "v2_label": "Body",
+      "v2_mount_reason": [
+        "Q_body_shorthand:Q focal shorthand"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Q+Body_no_mount_label"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "[중고] SL APO Vario Elmarit 90-280 f/2.8-4",
+      "v1_mount": "M",
+      "v2_mount": "SL",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Elmarit",
+      "v2_label": "SL Lens",
+      "v2_mount_reason": [
+        "SL_lens_shorthand:SL lens shorthand"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "SL+Lens"
+      ],
+      "model_raw": "Elmarit",
+      "model_canonical": "Elmarit-SL",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "[중고] D-Lux109 (Black)",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Unknown",
+      "v1_label": "Leica D-LUX Typ 109",
+      "v2_label": "Body",
+      "v2_mount_reason": [
+        "Compact_kw:D-LUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Compact+Body_no_mount_label"
+      ],
+      "model_raw": "D-LUX",
+      "model_canonical": "D-LUX",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] BP-SCL4",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:battery_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "CL",
+      "model_canonical": "CL",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "[위탁] Leica D-Lux 8, black paint finish",
+      "v1_mount": "Compact",
+      "v2_mount": "Compact",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica D-LUX 8",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "Compact_kw:D-LUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Compact"
+      ],
+      "v2_label_reason": [
+        "Leica+Compact+Body"
+      ],
+      "model_raw": "D-LUX 8",
+      "model_canonical": "D-LUX 8",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leica M adapter L",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_leica_m_prefix:LEICA M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:adapter"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[중고] Leica Soft Release Button (Silver)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:soft release"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[중고] L 28/5.6 Summaron (Silver)",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "28mm Summaron",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:explicit_q_signal",
+      "title": "[위탁] Leica Multifunctional Protector Q3",
+      "v1_mount": "Accessory",
+      "v2_mount": "Q",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "Q_kw:Q/Q2/Q3"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:protector"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "If",
+      "model_canonical": "If",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "CAT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "[위탁] Q3 28mm",
+      "v1_mount": "Q",
+      "v2_mount": "Q",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "Leica Q3",
+      "v2_label": "Body",
+      "v2_mount_reason": [
+        "Q_body_shorthand:Q focal shorthand"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:Q"
+      ],
+      "v2_label_reason": [
+        "Q+Body_no_mount_label"
+      ],
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "[중고] SL 28-70/2.8 Vario-Elmarit",
+      "v1_mount": "M",
+      "v2_mount": "SL",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "70mm Elmarit",
+      "v2_label": "SL Lens",
+      "v2_mount_reason": [
+        "SL_lens_shorthand:SL lens shorthand"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "SL+Lens"
+      ],
+      "model_raw": "Vario-Elmarit",
+      "model_canonical": "Vario-Elmarit-SL",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[중고] L 28/5.6 Summaron (Silver)",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "28mm Summaron",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leicavit M (Black Paint)",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:LEICAVIT"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:leicavit"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leicavit (Silver)",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_kw:LEICAVIT"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:leicavit"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leica UVa E48 (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uva"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leica UVa E60 (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uva"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Novoflex LET/LEM",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "acc_kw:novoflex"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Novoflex LEM/LER II",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "acc_kw:novoflex"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Novoflex NIKZ/LEM",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "acc_kw:novoflex"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Novoflex NIKZ/LER",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "3rd Party",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "acc_kw:novoflex"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leica UVa II E67 (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uva"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[중고] Leica UVa II E49 (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uva"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "[중고] Lens Hood Q, Silver",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:lens_hood_primary"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q",
+      "model_canonical": "Q",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[중고] Leica UVa E49 (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:uva"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[중고] L 50/3.5 Nickel Elmar",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "50mm Elmar f3.5",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Elmar",
+      "model_canonical": "Elmar",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leica Motor M",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_trailing:trailing M"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:motor_winder"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Leica Carrying Strap (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:strap"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[위탁] L 28/5.6 Summaron (Silver)",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "28mm Summaron",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Soft Release Button, aluminium, black anodized finish",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:soft release"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": "v2_likely_correct:accessory_primary_signal",
+      "title": "[위탁] Lens Hood, round, Aluminium, black anodized finish",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "primary_acc_rx:lens_hood_primary"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT+CAT",
+      "qa_note": "v2_likely_correct:explicit_compact_pns_body",
+      "title": "[중고] Leica Minilux Zoom",
+      "v1_mount": "M",
+      "v2_mount": "PNS",
+      "v1_category": "Lens",
+      "v2_category": "Body",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "Leica Minilux Zoom",
+      "v2_label": "Leica Body",
+      "v2_mount_reason": [
+        "PNS_kw:MINILUX"
+      ],
+      "v2_category_reason": [
+        "mount_compact_pns_q:PNS"
+      ],
+      "v2_label_reason": [
+        "Leica+PNS+Body"
+      ],
+      "model_raw": "Minilux Zoom",
+      "model_canonical": "Minilux",
+      "canonical_corrected": true
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] R용 스크린 Set",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "price_low:150000.0"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] BP-SCL5",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_rx:battery_code"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "CL",
+      "model_canonical": "CL",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[중고] L 28/5.6 Summaron (Silver)",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "28mm Summaron",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:explicit_sl_signal",
+      "title": "[중고] SL 28/2 APO Summicron ASPH (Black)",
+      "v1_mount": "M",
+      "v2_mount": "SL",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "28mm APO-Summicron",
+      "v2_label": "SL Lens",
+      "v2_mount_reason": [
+        "SL_lens_shorthand:SL lens shorthand"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "SL+Lens"
+      ],
+      "model_raw": "APO-Summicron",
+      "model_canonical": "APO-Summicron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[중고] L 28/5.6 Summaron (Silver)",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "28mm Summaron",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[위탁] L 50/2 Summicron 침동 (Silver)",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "50mm Summicron (침동)",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Summicron",
+      "model_canonical": "Summicron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[중고] M10 핸드 그립 (Black)",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_body_explicit:M-body"
+      ],
+      "v2_category_reason": [
+        "acc_kw:그립"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "MT_ONLY",
+      "qa_note": "v2_likely_correct:legacy_l_screw_shorthand",
+      "title": "[위탁] L 28/5.6 Summaron (Silver)",
+      "v1_mount": "M",
+      "v2_mount": "L",
+      "v1_category": "Lens",
+      "v2_category": "Lens",
+      "v1_brand": "Leica",
+      "v2_brand": "Leica",
+      "v1_label": "28mm Summaron",
+      "v2_label": "L Lens",
+      "v2_mount_reason": [
+        "L_chungmuro:L NN/"
+      ],
+      "v2_category_reason": [
+        "lens_protected"
+      ],
+      "v2_label_reason": [
+        "L+Lens"
+      ],
+      "model_raw": "Summaron",
+      "model_canonical": "Summaron",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] Q2 Case & Strap (Brown)",
+      "v1_mount": "Accessory",
+      "v2_mount": "Unknown",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "no_mount_match"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:case"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_corrected": false
+    },
+    {
+      "mismatch_type": "ACC_LEGACY",
+      "qa_note": null,
+      "title": "[위탁] M 28/1.4용 후드",
+      "v1_mount": "Accessory",
+      "v2_mount": "M",
+      "v1_category": "Accessory",
+      "v2_category": "Accessory",
+      "v1_brand": "Other",
+      "v2_brand": "Unknown",
+      "v1_label": "",
+      "v2_label": "Accessory",
+      "v2_mount_reason": [
+        "M_lens_shorthand:M NN/F"
+      ],
+      "v2_category_reason": [
+        "hard_acc_kw:후드"
+      ],
+      "v2_label_reason": [
+        "category=Accessory"
+      ],
+      "model_raw": null,
+      "model_canonical": null,
+      "canonical_corrected": false
+    }
+  ]
+}

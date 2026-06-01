@@ -105,6 +105,7 @@ THIRD_PARTY_BRANDS = [
     "cosina",
     "sigma",
     "panasonic", "lumix",
+    "파나소닉", "루믹스",
     # 기타
     "novoflex",
     "rollei",
@@ -335,6 +336,53 @@ def _detect_l_family_mount(n: str) -> Optional[tuple[str, float, str, str]]:
     return None
 
 
+def _detect_sl_summicron_string_drift(n: str, raw: str) -> Optional[tuple[str, float, str, str]]:
+    """
+    Narrow recovery for dealer titles like:
+      "Leica 35mm F2 AsphSummicron SL"
+
+    We only treat it as SL when:
+    - trailing SL token is present
+    - Summicron wording exists
+    - 35mm / f2 lens structure exists
+    - explicit M-side boundary tokens are absent
+
+    This is intentionally narrower than a general "Summicron 35" rule.
+    """
+    if not re.search(r"\bSL\b\s*$", raw):
+        return None
+
+    if "SUMMICRON" not in n or "APO-SUMMICRON" in n or "SUMMICRON-SL" in n:
+        return None
+
+    has_35 = bool(re.search(r"\b35\s*MM\b|\b35\s*/\s*2\b", n))
+    has_f2 = bool(re.search(r"\bF\s*/?\s*2\b|\b1\s*:\s*2\b", n))
+    if not (has_35 and has_f2):
+        return None
+
+    m_boundaries = [
+        "SUMMICRON-M",
+        "LEICA M",
+        " M ",
+        " VM ",
+        " ZM ",
+        "LTM",
+        "L39",
+        "M39",
+        "8-ELEMENT",
+        "8 ELEMENT",
+        "8매",
+        "FOR M",
+        "M MOUNT",
+        "M-MOUNT",
+        "MOUNT M",
+    ]
+    if any(token in n for token in m_boundaries):
+        return None
+
+    return ("SL", 0.90, "SL_trailing_summicron", "trailing SL after 35mm f2 Summicron")
+
+
 def detect_mount(
     normalized_name: str,
     normalized_description: Optional[str] = None,
@@ -478,6 +526,12 @@ def detect_mount(
         if kw in n:
             hit("SL_explicit", kw)
             return {"mount": "SL", "mount_confidence": 0.96, "mount_reason": reasons}
+
+    sl_summicron_drift = _detect_sl_summicron_string_drift(n, raw)
+    if sl_summicron_drift:
+        mount_value, confidence, reason_label, reason_kw = sl_summicron_drift
+        hit(reason_label, reason_kw)
+        return {"mount": mount_value, "mount_confidence": confidence, "mount_reason": reasons}
 
     # Sigma / Panasonic / Lumix L-mount
     if any(x in n for x in ["SIGMA", "PANASONIC", "LUMIX"]):
@@ -932,6 +986,8 @@ _BODY_KW = [
     "leica if", "leica iif", "leica iiif", "leica iiig", "leica iiic",
     "leica iiia", "leica iiib", "leica standard",
     "barnack",
+    # SL digital body — exact body model names only
+    "leica sl2", "leica sl3",
     # SL/Q 바디 — "leica sl"은 렌즈에도 등장하므로 body_kw에서 제외,
     # mount=SL + category 판단은 mount 신호로만 처리
     "leica q ", "leica q2", "leica q3",
@@ -991,7 +1047,10 @@ def detect_category(
     # ── 렌즈 보호 판단 (mount 신호는 포함하지 않음) ──────────────
     # 핵심: mount=M이라도 "Leica M Adapter L"은 Accessory여야 한다.
     # → is_protected_by_mount 제거. mount 신호는 category 판단에 영향 없음.
-    has_aperture = bool(re.search(r'f\s*\d+[\./]\d+|f\d+[\./]\d+|1:\d+[\./]\d+', combined))
+    # Dealer titles often compress common Leica lens specs as "f2" / "f4"
+    # without a decimal point. We still want those to count as lens-positive
+    # so bundle suffixes like "with hood" do not demote the whole listing.
+    has_aperture = bool(re.search(r'f\s*\d+(?:[\./]\d+)?|f\d+(?:[\./]\d+)?|1:\d+(?:[\./]\d+)?', combined))
     has_lens_kw  = any(kw in combined for kw in _LENS_PROTECT_KW)
     has_focal    = bool(re.search(r'\d{2,3}\s*mm', combined))
 

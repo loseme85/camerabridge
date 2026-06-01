@@ -1,0 +1,1655 @@
+{
+  "task_name": "P3-PRIVATE-BETA-MARKET-PAGE-RUNBOOK",
+  "runbook_policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "private_beta_market_page_runbook.v0",
+    "artifact_version": "p3_private_beta_market_page_runbook_v0",
+    "runbook_only": true,
+    "actual_deployment_enabled": false,
+    "actual_route_enabled": false,
+    "actual_api_enabled": false,
+    "actual_frontend_enabled": false,
+    "actual_db_enabled": false,
+    "production_launch_enabled": false,
+    "production_beta_enabled": false,
+    "CTA_send_enabled": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "smart_deal_enabled": false,
+    "csv_export_enabled": false,
+    "dealer_visibility_enabled": false,
+    "limited_private_beta_only": true,
+    "smoke_test_required_before_open": true,
+    "rollback_plan_required": true,
+    "incident_response_required": true,
+    "monitoring_required": true,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "raw_data_leak_zero_tolerance": true,
+    "seo_overclaim_zero_tolerance": true,
+    "progress_previous_pct": 99,
+    "progress_after_pct": 99.5,
+    "progress_delta_pct": 0.5
+  },
+  "beta_operator_roles": [
+    {
+      "row_type": "beta_operator_role",
+      "role_id": "beta_owner",
+      "responsibility": "Final limited private beta open decision and scope confirmation.",
+      "required_before_open": true,
+      "can_approve_go": true,
+      "can_trigger_rollback": false,
+      "required_checks": [
+        "preflight_complete",
+        "smoke_test_complete",
+        "warning_acknowledged"
+      ],
+      "notes": "Only beta_owner can approve limited private beta open."
+    },
+    {
+      "row_type": "beta_operator_role",
+      "role_id": "release_operator",
+      "responsibility": "Coordinates preflight, route scope enforcement, and release timing.",
+      "required_before_open": true,
+      "can_approve_go": false,
+      "can_trigger_rollback": false,
+      "required_checks": [
+        "allowed_route_matrix_confirmed",
+        "disabled_feature_matrix_confirmed"
+      ],
+      "notes": "Owns release handoff sequence but not final go."
+    },
+    {
+      "row_type": "beta_operator_role",
+      "role_id": "QA_operator",
+      "responsibility": "Runs smoke tests and records evidence before opening beta.",
+      "required_before_open": true,
+      "can_approve_go": false,
+      "can_trigger_rollback": false,
+      "required_checks": [
+        "smoke_test_plan_executed",
+        "incident_log_ready"
+      ],
+      "notes": "Smoke test evidence must exist before open."
+    },
+    {
+      "row_type": "beta_operator_role",
+      "role_id": "data_safety_reviewer",
+      "responsibility": "Confirms no raw/user/provider field leakage and fail-close behavior.",
+      "required_before_open": true,
+      "can_approve_go": false,
+      "can_trigger_rollback": true,
+      "required_checks": [
+        "raw_response_field_check_passed",
+        "privacy_fail_close_passed",
+        "db_unavailable_safe_fallback_passed"
+      ],
+      "notes": "Can trigger rollback on leak or fail-close miss."
+    },
+    {
+      "row_type": "beta_operator_role",
+      "role_id": "SEO_safety_reviewer",
+      "responsibility": "Checks noindex/index behavior and prohibited-claim safety.",
+      "required_before_open": true,
+      "can_approve_go": false,
+      "can_trigger_rollback": true,
+      "required_checks": [
+        "seo_claim_check_passed",
+        "robots_policy_check_passed",
+        "source_gap_noindex_confirmed"
+      ],
+      "notes": "Required for public route safety before open."
+    },
+    {
+      "row_type": "beta_operator_role",
+      "role_id": "rollback_owner",
+      "responsibility": "Executes immediate rollback when zero-tolerance conditions trigger.",
+      "required_before_open": true,
+      "can_approve_go": false,
+      "can_trigger_rollback": true,
+      "required_checks": [
+        "rollback_plan_acknowledged",
+        "rollback_contact_path_ready"
+      ],
+      "notes": "Must be explicitly assigned before open."
+    },
+    {
+      "row_type": "beta_operator_role",
+      "role_id": "user_feedback_owner",
+      "responsibility": "Collects beta feedback, triages reports, and closes the loop on trust issues.",
+      "required_before_open": true,
+      "can_approve_go": false,
+      "can_trigger_rollback": false,
+      "required_checks": [
+        "feedback_channel_ready",
+        "feedback_triage_template_ready"
+      ],
+      "notes": "Owns post-open user feedback handling."
+    }
+  ],
+  "beta_release_scope": [
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "leica_noctilux_m_50_095_asph",
+      "allowed": true,
+      "route_state": "exact_model_public_market_page",
+      "robots_policy": "index,follow",
+      "price_policy": "price_widget_visible_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "active_vs_sold_separation",
+      "manual_review_required": false,
+      "notes": "Primary exact-model limited beta page."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "leica_summilux_m_35_asph_aa",
+      "allowed": true,
+      "route_state": "exact_rare_variant_public_market_page",
+      "robots_policy": "index,follow",
+      "price_policy": "price_widget_visible_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "rare_variant_no_merge_warning",
+      "manual_review_required": false,
+      "notes": "Rare-variant route allowed with caution."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "sigma_14_24_dg_dn_art_l_mount_source_gap",
+      "allowed": true,
+      "route_state": "source_gap_public_page",
+      "robots_policy": "noindex,follow",
+      "price_policy": "price_widget_hidden",
+      "CTA_policy": "source_gap_candidate_only_send_disabled",
+      "required_disclosure": "source_gap_coverage_disclosure",
+      "manual_review_required": false,
+      "notes": "Source-gap page only; not a substitute market page."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "active_only_noctilux_route",
+      "allowed": true,
+      "route_state": "active_only_public_page",
+      "robots_policy": "index,follow",
+      "price_policy": "active_reference_only",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "active_reference_only_disclosure",
+      "manual_review_required": false,
+      "notes": "Allowed without sold median claims."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "archive_only_noctilux_route",
+      "allowed": true,
+      "route_state": "archive_only_public_page",
+      "robots_policy": "index,follow",
+      "price_policy": "archive_history_only_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "no_active_lane_disclosure",
+      "manual_review_required": false,
+      "notes": "Archive-only route stays honest about no active lane."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "stale_noctilux_route",
+      "allowed": true,
+      "route_state": "stale_data_safe_route",
+      "robots_policy": "index,follow",
+      "price_policy": "price_widget_visible_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "stale_warning_required",
+      "manual_review_required": false,
+      "notes": "Allowed only with explicit freshness warning."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "leica_m6_future_candidate",
+      "allowed": false,
+      "route_state": "exact_model_public_market_page",
+      "robots_policy": "hold_until_safe_bundle",
+      "price_policy": "hold_until_safe_bundle",
+      "CTA_policy": "hold_until_safe_bundle",
+      "required_disclosure": "safe_bundle_required",
+      "manual_review_required": true,
+      "notes": "Conditional future candidate only if exact safe bundle exists."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "apo_summicron_m_50_future_candidate",
+      "allowed": false,
+      "route_state": "exact_model_public_market_page",
+      "robots_policy": "hold_until_safe_bundle",
+      "price_policy": "hold_until_safe_bundle",
+      "CTA_policy": "hold_until_safe_bundle",
+      "required_disclosure": "safe_bundle_required",
+      "manual_review_required": true,
+      "notes": "Conditional future candidate only if exact safe bundle exists."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "broad_summicron_market_page",
+      "allowed": false,
+      "route_state": "broad_query_refinement_route",
+      "robots_policy": "noindex,follow",
+      "price_policy": "hidden",
+      "CTA_policy": "no_fast_alert",
+      "required_disclosure": "refinement_only",
+      "manual_review_required": false,
+      "notes": "Not allowed as market page; refinement only."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "unsafe_boundary_price_page",
+      "allowed": false,
+      "route_state": "unsafe_boundary_review_route",
+      "robots_policy": "noindex,follow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "required_disclosure": "review_safe_only",
+      "manual_review_required": true,
+      "notes": "Unsafe boundary cannot open as price page."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "unsupported_model_market_page",
+      "allowed": false,
+      "route_state": "unsupported_model_route",
+      "robots_policy": "noindex,follow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "required_disclosure": "unsupported_notice",
+      "manual_review_required": false,
+      "notes": "Fallback only; never beta market page."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "privacy_blocked_market_page",
+      "allowed": false,
+      "route_state": "privacy_blocked_route",
+      "robots_policy": "noindex,nofollow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "required_disclosure": "fail_close_notice",
+      "manual_review_required": false,
+      "notes": "Blocked route, not a beta market page."
+    },
+    {
+      "row_type": "beta_release_scope",
+      "scope_id": "db_unavailable_market_page",
+      "allowed": false,
+      "route_state": "db_unavailable_safe_route",
+      "robots_policy": "noindex,nofollow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "required_disclosure": "safe_empty_fallback_notice",
+      "manual_review_required": false,
+      "notes": "DB unavailable state stays fallback only."
+    }
+  ],
+  "preflight_checklist": [
+    {
+      "row_type": "preflight_check",
+      "check_id": "readiness_recheck_decision",
+      "description": "Readiness recheck decision is conditional_go_limited_private_beta.",
+      "required": true,
+      "pass_condition": "decision_status == conditional_go_limited_private_beta",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "evidence_source": "private_beta_market_page_readiness_recheck_v0.json",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "open_launch_blockers_zero",
+      "description": "Open launch blockers = 0.",
+      "required": true,
+      "pass_condition": "open_launch_blocker_count == 0",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "evidence_source": "private_beta_market_page_readiness_recheck_v0.json",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "warning_list_acknowledged",
+      "description": "Warning list acknowledged by operator set.",
+      "required": true,
+      "pass_condition": "warning_ack_logged",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "evidence_source": "operator signoff",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "allowed_model_list_confirmed",
+      "description": "Allowed model list confirmed against release scope.",
+      "required": true,
+      "pass_condition": "allowed_scope_matches_runbook",
+      "failure_action": "hold_for_fix",
+      "owner_role": "release_operator",
+      "evidence_source": "runbook scope",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "blocked_route_list_confirmed",
+      "description": "Blocked route list confirmed.",
+      "required": true,
+      "pass_condition": "blocked_routes_confirmed",
+      "failure_action": "hold_for_fix",
+      "owner_role": "release_operator",
+      "evidence_source": "runbook route matrix",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "cta_send_disabled",
+      "description": "CTA send remains disabled.",
+      "required": true,
+      "pass_condition": "CTA_send_enabled == false",
+      "failure_action": "hold_for_fix",
+      "owner_role": "data_safety_reviewer",
+      "evidence_source": "runbook policy",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "numeric_price_disabled",
+      "description": "Numeric price display remains disabled.",
+      "required": true,
+      "pass_condition": "numeric_price_display_enabled == false",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "evidence_source": "runbook policy",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "structured_data_disabled",
+      "description": "Structured data remains disabled.",
+      "required": true,
+      "pass_condition": "structured_data_enabled == false",
+      "failure_action": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_source": "runbook policy",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "source_gap_noindex",
+      "description": "Source-gap page remains noindex.",
+      "required": true,
+      "pass_condition": "source_gap_robots == noindex,follow",
+      "failure_action": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_source": "public route runtime evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "broad_refinement_only",
+      "description": "Broad route remains refinement-only and noindex.",
+      "required": true,
+      "pass_condition": "broad_route_refinement_only",
+      "failure_action": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_source": "public route runtime evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "unsafe_boundary_hidden",
+      "description": "Unsafe boundary keeps price widget and CTA hidden.",
+      "required": true,
+      "pass_condition": "unsafe_boundary_price_cta_hidden",
+      "failure_action": "hold_for_fix",
+      "owner_role": "data_safety_reviewer",
+      "evidence_source": "public route runtime evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "raw_response_check_passed",
+      "description": "Raw response field check passed.",
+      "required": true,
+      "pass_condition": "public_response_blocked_policy_violation_count == 0",
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer",
+      "evidence_source": "smoke test evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "seo_claim_check_passed",
+      "description": "SEO prohibited claim check passed.",
+      "required": true,
+      "pass_condition": "seo_claim_violation_count == 0",
+      "failure_action": "rollback",
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_source": "smoke test evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "robots_policy_check_passed",
+      "description": "Robots/noindex check passed.",
+      "required": true,
+      "pass_condition": "robots_policy_matches_route_state",
+      "failure_action": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_source": "smoke test evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "privacy_fail_close_passed",
+      "description": "Privacy fail-close check passed.",
+      "required": true,
+      "pass_condition": "privacy_fail_close_ok",
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer",
+      "evidence_source": "smoke test evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "db_unavailable_safe_fallback_passed",
+      "description": "DB unavailable safe fallback check passed.",
+      "required": true,
+      "pass_condition": "db_unavailable_safe_fallback_ok",
+      "failure_action": "hold_for_fix",
+      "owner_role": "data_safety_reviewer",
+      "evidence_source": "smoke test evidence",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "rollback_owner_assigned",
+      "description": "Rollback owner assigned.",
+      "required": true,
+      "pass_condition": "rollback_owner_assigned",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "evidence_source": "operator roster",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "smoke_test_scheduled",
+      "description": "Smoke test scheduled and owner assigned.",
+      "required": true,
+      "pass_condition": "smoke_test_window_confirmed",
+      "failure_action": "hold_for_smoke_test",
+      "owner_role": "QA_operator",
+      "evidence_source": "release calendar",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "feedback_channel_ready",
+      "description": "Feedback channel ready.",
+      "required": true,
+      "pass_condition": "feedback_channel_ready",
+      "failure_action": "hold_for_fix",
+      "owner_role": "user_feedback_owner",
+      "evidence_source": "feedback intake doc",
+      "notes": "Required before limited private beta open."
+    },
+    {
+      "row_type": "preflight_check",
+      "check_id": "incident_log_ready",
+      "description": "Incident log ready.",
+      "required": true,
+      "pass_condition": "incident_log_ready",
+      "failure_action": "hold_for_fix",
+      "owner_role": "QA_operator",
+      "evidence_source": "incident tracker",
+      "notes": "Required before limited private beta open."
+    }
+  ],
+  "allowed_route_matrix": [
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "exact_model_public_market_page",
+      "beta_allowed": true,
+      "market_page_allowed": true,
+      "robots_policy": "index,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "visible",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "active_vs_sold_separation",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "exact_rare_variant_public_market_page",
+      "beta_allowed": true,
+      "market_page_allowed": true,
+      "robots_policy": "index,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "visible",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "rare_variant_no_merge_warning",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "source_gap_public_page",
+      "beta_allowed": true,
+      "market_page_allowed": false,
+      "robots_policy": "noindex,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "hidden",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "source_gap_candidate_only_send_disabled",
+      "required_disclosure": "source_gap_coverage_disclosure",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "active_only_public_page",
+      "beta_allowed": true,
+      "market_page_allowed": true,
+      "robots_policy": "index,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "active_reference_only",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "active_reference_only_disclosure",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "archive_only_public_page",
+      "beta_allowed": true,
+      "market_page_allowed": true,
+      "robots_policy": "index,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "archive_history_only",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "no_active_lane_disclosure",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "insufficient_sold_history_public_page",
+      "beta_allowed": true,
+      "market_page_allowed": true,
+      "robots_policy": "index,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "limited_no_confident_price",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "insufficient_sample_warning",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "stale_data_safe_route",
+      "beta_allowed": true,
+      "market_page_allowed": true,
+      "robots_policy": "index,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "visible_with_stale_warning",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "stale_warning_required",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "broad_query_refinement_route",
+      "beta_allowed": false,
+      "market_page_allowed": false,
+      "robots_policy": "noindex,follow",
+      "status_code_expected": 302,
+      "price_widget_policy": "hidden",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "no_fast_alert",
+      "required_disclosure": "refinement_only",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "unsafe_boundary_review_route",
+      "beta_allowed": false,
+      "market_page_allowed": false,
+      "robots_policy": "noindex,follow",
+      "status_code_expected": 200,
+      "price_widget_policy": "hidden",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "disabled",
+      "required_disclosure": "review_safe_only",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "unsupported_model_route",
+      "beta_allowed": false,
+      "market_page_allowed": false,
+      "robots_policy": "noindex,follow",
+      "status_code_expected": 404,
+      "price_widget_policy": "hidden",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "disabled",
+      "required_disclosure": "unsupported_notice",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "privacy_blocked_route",
+      "beta_allowed": false,
+      "market_page_allowed": false,
+      "robots_policy": "noindex,nofollow",
+      "status_code_expected": 403,
+      "price_widget_policy": "hidden",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "disabled",
+      "required_disclosure": "fail_close_notice",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "db_unavailable_safe_route",
+      "beta_allowed": false,
+      "market_page_allowed": false,
+      "robots_policy": "noindex,nofollow",
+      "status_code_expected": 503,
+      "price_widget_policy": "hidden",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "disabled",
+      "required_disclosure": "safe_empty_fallback_notice",
+      "rollback_if_violated": "rollback"
+    },
+    {
+      "row_type": "allowed_route_matrix",
+      "route_state": "error_safe_fallback_route",
+      "beta_allowed": false,
+      "market_page_allowed": false,
+      "robots_policy": "noindex,nofollow",
+      "status_code_expected": 409,
+      "price_widget_policy": "hidden",
+      "numeric_price_policy": "disabled",
+      "CTA_policy": "disabled",
+      "required_disclosure": "safe_fallback_notice",
+      "rollback_if_violated": "rollback"
+    }
+  ],
+  "disabled_feature_matrix": [
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "numeric_price_display",
+      "disabled_for_beta": true,
+      "reason": "Price certainty is not ready for beta display.",
+      "risk_if_enabled": "price overclaim",
+      "future_enable_condition": "separate price runtime verification",
+      "owner_role": "beta_owner",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "structured_data",
+      "disabled_for_beta": true,
+      "reason": "Structured data stays off for beta safety.",
+      "risk_if_enabled": "price/SEO leak",
+      "future_enable_condition": "safe structured data contract and smoke test",
+      "owner_role": "SEO_safety_reviewer",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "CTA_email_send",
+      "disabled_for_beta": true,
+      "reason": "CTA send remains disabled until verification/send runtime recheck.",
+      "risk_if_enabled": "email exposure",
+      "future_enable_condition": "CTA email verification runtime check",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "smart_deal",
+      "disabled_for_beta": true,
+      "reason": "Future placeholder only.",
+      "risk_if_enabled": "feature overclaim",
+      "future_enable_condition": "smart-deal policy and runtime",
+      "owner_role": "beta_owner",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "CSV_export",
+      "disabled_for_beta": true,
+      "reason": "Future placeholder only.",
+      "risk_if_enabled": "unsafe export surface",
+      "future_enable_condition": "export safety review",
+      "owner_role": "beta_owner",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "dealer_visibility",
+      "disabled_for_beta": true,
+      "reason": "Future placeholder only.",
+      "risk_if_enabled": "dealer data overclaim",
+      "future_enable_condition": "dealer lead/runtime contract",
+      "owner_role": "beta_owner",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "unsupported_market_page",
+      "disabled_for_beta": true,
+      "reason": "Unsupported routes stay fallback only.",
+      "risk_if_enabled": "fake-fill",
+      "future_enable_condition": "supported-model expansion review",
+      "owner_role": "release_operator",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "broad_query_market_page",
+      "disabled_for_beta": true,
+      "reason": "Broad query stays refinement only.",
+      "risk_if_enabled": "wrong-market-page exposure",
+      "future_enable_condition": "query narrowing workflow",
+      "owner_role": "release_operator",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "unsafe_boundary_price_page",
+      "disabled_for_beta": true,
+      "reason": "Unsafe boundary never opens as price page.",
+      "risk_if_enabled": "boundary overclaim",
+      "future_enable_condition": "manual review boundary workflow",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "raw_listing_links",
+      "disabled_for_beta": true,
+      "reason": "Raw source URLs stay blocked.",
+      "risk_if_enabled": "source/raw leak",
+      "future_enable_condition": "safe outbound reference design",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Disabled for limited beta by runbook policy."
+    },
+    {
+      "row_type": "disabled_feature_matrix",
+      "feature_id": "user_specific_public_response",
+      "disabled_for_beta": true,
+      "reason": "User-specific fields stay out of public response.",
+      "risk_if_enabled": "privacy leak",
+      "future_enable_condition": "verified private user surface only",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Disabled for limited beta by runbook policy."
+    }
+  ],
+  "smoke_test_plan": [
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "exact_noctilux_route_loads",
+      "route_or_case": "exact Noctilux route",
+      "expected_result": "200 + index,follow + numeric price disabled",
+      "blocker_if_failed": true,
+      "owner_role": "QA_operator",
+      "evidence_to_capture": "route screenshot + robots + response summary",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "rare_variant_route_loads",
+      "route_or_case": "35 lux AA route",
+      "expected_result": "rare variant caution present + no merge",
+      "blocker_if_failed": true,
+      "owner_role": "QA_operator",
+      "evidence_to_capture": "route screenshot + warning text",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "source_gap_route_loads",
+      "route_or_case": "Sigma source-gap route",
+      "expected_result": "noindex + no price + source-gap disclosure",
+      "blocker_if_failed": true,
+      "owner_role": "QA_operator",
+      "evidence_to_capture": "robots + page state + disclosure",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "broad_query_refines",
+      "route_or_case": "broad Summicron query",
+      "expected_result": "refinement only + noindex",
+      "blocker_if_failed": true,
+      "owner_role": "QA_operator",
+      "evidence_to_capture": "redirect/route state evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "unsafe_boundary_hidden",
+      "route_or_case": "unsafe boundary route",
+      "expected_result": "no price + CTA disabled + noindex",
+      "blocker_if_failed": true,
+      "owner_role": "QA_operator",
+      "evidence_to_capture": "route state + CTA state",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "unsupported_fallback",
+      "route_or_case": "unsupported route",
+      "expected_result": "fallback only + noindex",
+      "blocker_if_failed": true,
+      "owner_role": "QA_operator",
+      "evidence_to_capture": "status preview + robots",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "privacy_fail_close",
+      "route_or_case": "privacy blocked route",
+      "expected_result": "fail-close + no raw field",
+      "blocker_if_failed": true,
+      "owner_role": "data_safety_reviewer",
+      "evidence_to_capture": "blocked response evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "db_unavailable_safe_fallback",
+      "route_or_case": "DB unavailable route",
+      "expected_result": "safe empty fallback + no fake listing",
+      "blocker_if_failed": true,
+      "owner_role": "data_safety_reviewer",
+      "evidence_to_capture": "fallback evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "seo_claim_scanner",
+      "route_or_case": "SEO prohibited claim scanner",
+      "expected_result": "all safe metadata passes",
+      "blocker_if_failed": true,
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_to_capture": "scanner output",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "raw_field_injection_block",
+      "route_or_case": "injected raw field block",
+      "expected_result": "blocked_policy_violation triggered",
+      "blocker_if_failed": true,
+      "owner_role": "data_safety_reviewer",
+      "evidence_to_capture": "policy violation evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "cta_aggregate_only",
+      "route_or_case": "CTA aggregate-only/no send",
+      "expected_result": "visible candidate only + no send",
+      "blocker_if_failed": true,
+      "owner_role": "data_safety_reviewer",
+      "evidence_to_capture": "CTA payload evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "robots_by_route_state",
+      "route_or_case": "robots policy by route state",
+      "expected_result": "matches runbook matrix",
+      "blocker_if_failed": true,
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_to_capture": "route-state robot matrix evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "structured_data_disabled",
+      "route_or_case": "structured data disabled",
+      "expected_result": "disabled or safe placeholder only",
+      "blocker_if_failed": true,
+      "owner_role": "SEO_safety_reviewer",
+      "evidence_to_capture": "structured data evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "analytics_safe_fields",
+      "route_or_case": "analytics safe fields only",
+      "expected_result": "no raw/user/provider fields",
+      "blocker_if_failed": true,
+      "owner_role": "data_safety_reviewer",
+      "evidence_to_capture": "analytics payload evidence",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "rollback_trigger_simulation",
+      "route_or_case": "rollback trigger simulation",
+      "expected_result": "operator can trigger rollback on P0/P1 case",
+      "blocker_if_failed": true,
+      "owner_role": "rollback_owner",
+      "evidence_to_capture": "drill log",
+      "notes": "Required pre-open smoke test coverage."
+    },
+    {
+      "row_type": "smoke_test_step",
+      "smoke_test_id": "feedback_capture_ready",
+      "route_or_case": "feedback capture ready",
+      "expected_result": "intake channel and triage template ready",
+      "blocker_if_failed": false,
+      "owner_role": "user_feedback_owner",
+      "evidence_to_capture": "feedback channel evidence",
+      "notes": "Operational readiness support check."
+    }
+  ],
+  "monitoring_plan": [
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "public_response_blocked_policy_violation_count",
+      "why_it_matters": "Detects route response policy breaches.",
+      "acceptable_range": "0",
+      "alert_threshold": ">=1",
+      "owner_role": "data_safety_reviewer",
+      "action_if_triggered": "pause open and inspect response surface",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "raw_field_leak_attempt_count",
+      "why_it_matters": "Detects raw field leakage attempts.",
+      "acceptable_range": "0",
+      "alert_threshold": ">=1",
+      "owner_role": "rollback_owner",
+      "action_if_triggered": "immediate rollback investigation",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "source_gap_page_view_count",
+      "why_it_matters": "Shows source-gap route usage volume.",
+      "acceptable_range": "informational",
+      "alert_threshold": "trend spike",
+      "owner_role": "beta_owner",
+      "action_if_triggered": "review source-gap comprehension",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "source_gap_overclaim_incident_count",
+      "why_it_matters": "Tracks source-gap wording failures.",
+      "acceptable_range": "0",
+      "alert_threshold": ">=1",
+      "owner_role": "rollback_owner",
+      "action_if_triggered": "hide affected source-gap route",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "broad_refinement_route_count",
+      "why_it_matters": "Monitors broad-query routing health.",
+      "acceptable_range": "informational",
+      "alert_threshold": "unexpected drop",
+      "owner_role": "release_operator",
+      "action_if_triggered": "audit routing behavior",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "unsafe_boundary_route_count",
+      "why_it_matters": "Monitors unsafe boundary containment.",
+      "acceptable_range": "informational",
+      "alert_threshold": "unexpected spike",
+      "owner_role": "release_operator",
+      "action_if_triggered": "review boundary traffic",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "SEO_claim_violation_count",
+      "why_it_matters": "Tracks prohibited claim incidents.",
+      "acceptable_range": "0",
+      "alert_threshold": ">=1",
+      "owner_role": "SEO_safety_reviewer",
+      "action_if_triggered": "noindex and patch metadata",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "CTA_click_visible_candidate_count",
+      "why_it_matters": "Measures candidate CTA interest without send.",
+      "acceptable_range": "informational",
+      "alert_threshold": "trend spike",
+      "owner_role": "user_feedback_owner",
+      "action_if_triggered": "review clarity and confusion",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "CTA_send_attempt_count",
+      "why_it_matters": "Confirms CTA send remains off.",
+      "acceptable_range": "0",
+      "alert_threshold": ">=1",
+      "owner_role": "rollback_owner",
+      "action_if_triggered": "disable CTA surface and investigate",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "DB_unavailable_fallback_count",
+      "why_it_matters": "Tracks safe fallback frequency.",
+      "acceptable_range": "low",
+      "alert_threshold": "sustained increase",
+      "owner_role": "release_operator",
+      "action_if_triggered": "investigate runtime dependency",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "privacy_block_count",
+      "why_it_matters": "Tracks privacy fail-close usage.",
+      "acceptable_range": "low",
+      "alert_threshold": "unexpected spike",
+      "owner_role": "data_safety_reviewer",
+      "action_if_triggered": "investigate privacy filter path",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "rollback_trigger_count",
+      "why_it_matters": "Tracks rollback drills/incidents.",
+      "acceptable_range": "0 after drill",
+      "alert_threshold": ">=1 live incident",
+      "owner_role": "rollback_owner",
+      "action_if_triggered": "follow rollback procedure",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "user_feedback_count",
+      "why_it_matters": "Measures feedback intake volume.",
+      "acceptable_range": "informational",
+      "alert_threshold": "spike",
+      "owner_role": "user_feedback_owner",
+      "action_if_triggered": "triage for common trust issues",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "false_positive_report_count",
+      "why_it_matters": "Market intelligence quality signal.",
+      "acceptable_range": "low",
+      "alert_threshold": ">=1 severe report",
+      "owner_role": "beta_owner",
+      "action_if_triggered": "audit model/route confidence",
+      "notes": "Monitor during limited private beta operations."
+    },
+    {
+      "row_type": "monitoring_signal",
+      "metric_id": "false_negative_report_count",
+      "why_it_matters": "Coverage quality signal.",
+      "acceptable_range": "low",
+      "alert_threshold": ">=1 severe report",
+      "owner_role": "beta_owner",
+      "action_if_triggered": "audit missing source or scope gap",
+      "notes": "Monitor during limited private beta operations."
+    }
+  ],
+  "rollback_plan": [
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "raw_field_leak",
+      "severity": "P0",
+      "immediate_action": "immediately disable affected route surface",
+      "route_action": "hide affected route",
+      "feature_action": "maintain CTA off",
+      "communication_action": "notify beta_owner + data_safety_reviewer",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm no raw field visible in rerun",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "source_gap_overclaim",
+      "severity": "P1",
+      "immediate_action": "remove source-gap route from beta exposure",
+      "route_action": "noindex/hide affected route",
+      "feature_action": "leave CTA send off",
+      "communication_action": "notify beta_owner + SEO_safety_reviewer",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm wording changed to coverage gap",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "seo_prohibited_claim",
+      "severity": "P1",
+      "immediate_action": "replace metadata and noindex affected route",
+      "route_action": "keep route hidden or noindex until fixed",
+      "feature_action": "no CTA change",
+      "communication_action": "notify beta_owner + SEO_safety_reviewer",
+      "owner_role": "rollback_owner",
+      "recovery_check": "rerun SEO claim scanner",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "cta_email_exposure",
+      "severity": "P0",
+      "immediate_action": "immediately force CTA surface off",
+      "route_action": "keep routes up only if CTA fully hidden",
+      "feature_action": "disable all CTA candidates",
+      "communication_action": "notify beta_owner + data_safety_reviewer",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm no email/user fields remain",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "fake_fill_route",
+      "severity": "P1",
+      "immediate_action": "hide affected page and audit adapter/route",
+      "route_action": "remove route from beta scope",
+      "feature_action": "no CTA on affected route",
+      "communication_action": "notify beta_owner + release_operator",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm route returns safe fallback",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "price_overclaim",
+      "severity": "P1",
+      "immediate_action": "hide price widget on affected route",
+      "route_action": "keep route only if disclosure is safe",
+      "feature_action": "no CTA change",
+      "communication_action": "notify beta_owner + QA_operator",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm numeric price remains disabled",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "duplicate_sample_inflation",
+      "severity": "P1",
+      "immediate_action": "hide affected archive/price summary",
+      "route_action": "remove affected route if needed",
+      "feature_action": "no CTA change",
+      "communication_action": "notify beta_owner + data_safety_reviewer",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm duplicate count normalized",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "db_fallback_fake_listing",
+      "severity": "P1",
+      "immediate_action": "switch to safe empty fallback",
+      "route_action": "hide affected route if fallback unsafe",
+      "feature_action": "CTA disabled",
+      "communication_action": "notify beta_owner + release_operator",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm no fake listing rendered",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "privacy_failure_not_blocked",
+      "severity": "P0",
+      "immediate_action": "force fail-close path immediately",
+      "route_action": "hide affected route",
+      "feature_action": "CTA disabled",
+      "communication_action": "notify beta_owner + data_safety_reviewer",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm privacy-block route noindex,nofollow",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "unsafe_boundary_price_cta_exposure",
+      "severity": "P1",
+      "immediate_action": "remove unsafe route from beta surface",
+      "route_action": "noindex/hide route",
+      "feature_action": "CTA disabled",
+      "communication_action": "notify beta_owner + data_safety_reviewer",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm price/CTA hidden again",
+      "notes": "Immediate rollback path defined in runbook."
+    },
+    {
+      "row_type": "rollback_condition",
+      "rollback_condition_id": "broad_query_direct_market_page_exposure",
+      "severity": "P1",
+      "immediate_action": "restore refinement-only routing",
+      "route_action": "remove direct market page exposure",
+      "feature_action": "disable fast alert candidate",
+      "communication_action": "notify beta_owner + release_operator",
+      "owner_role": "rollback_owner",
+      "recovery_check": "confirm broad route returns refinement",
+      "notes": "Immediate rollback path defined in runbook."
+    }
+  ],
+  "incident_response_plan": [
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P0",
+      "examples": "raw data leak",
+      "response_time_target": "15m",
+      "first_action": "remove route exposure and freeze release changes",
+      "escalation_owner": "rollback_owner",
+      "rollback_required": true,
+      "postmortem_required": true,
+      "notes": "Incident classification for limited beta operations."
+    },
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P0",
+      "examples": "CTA/user email leak",
+      "response_time_target": "15m",
+      "first_action": "disable CTA surfaces immediately",
+      "escalation_owner": "rollback_owner",
+      "rollback_required": true,
+      "postmortem_required": true,
+      "notes": "Incident classification for limited beta operations."
+    },
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P1",
+      "examples": "fake-fill / source-gap overclaim",
+      "response_time_target": "30m",
+      "first_action": "hide affected route and audit route state",
+      "escalation_owner": "beta_owner",
+      "rollback_required": true,
+      "postmortem_required": true,
+      "notes": "Incident classification for limited beta operations."
+    },
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P1",
+      "examples": "SEO prohibited claim indexed",
+      "response_time_target": "30m",
+      "first_action": "noindex affected route and patch metadata",
+      "escalation_owner": "SEO_safety_reviewer",
+      "rollback_required": true,
+      "postmortem_required": true,
+      "notes": "Incident classification for limited beta operations."
+    },
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P1",
+      "examples": "unsafe boundary price/CTA exposed",
+      "response_time_target": "30m",
+      "first_action": "remove unsafe route from beta exposure",
+      "escalation_owner": "rollback_owner",
+      "rollback_required": true,
+      "postmortem_required": true,
+      "notes": "Incident classification for limited beta operations."
+    },
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P2",
+      "examples": "stale/freshness warning missing",
+      "response_time_target": "4h",
+      "first_action": "restore warning copy and verify route state",
+      "escalation_owner": "QA_operator",
+      "rollback_required": false,
+      "postmortem_required": true,
+      "notes": "Incident classification for limited beta operations."
+    },
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P2",
+      "examples": "route fallback mismatch",
+      "response_time_target": "4h",
+      "first_action": "force safe fallback and inspect route mapping",
+      "escalation_owner": "release_operator",
+      "rollback_required": false,
+      "postmortem_required": true,
+      "notes": "Incident classification for limited beta operations."
+    },
+    {
+      "row_type": "incident_response_step",
+      "incident_level": "P3",
+      "examples": "copy/UI issue",
+      "response_time_target": "1d",
+      "first_action": "log issue and batch for fix review",
+      "escalation_owner": "user_feedback_owner",
+      "rollback_required": false,
+      "postmortem_required": false,
+      "notes": "Incident classification for limited beta operations."
+    }
+  ],
+  "beta_feedback_plan": [
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "wrong_model_match",
+      "feedback_prompt": "Did this page point to the wrong model or variant?",
+      "triage_owner": "user_feedback_owner",
+      "severity_mapping": "P1_if_repeatable",
+      "expected_follow_up": "route/model audit",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "missing_source",
+      "feedback_prompt": "Is a known source missing from this page?",
+      "triage_owner": "user_feedback_owner",
+      "severity_mapping": "P2_or_P1_if_material",
+      "expected_follow_up": "source coverage review",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "source_gap_confusing",
+      "feedback_prompt": "Was the source-gap explanation confusing or misleading?",
+      "triage_owner": "user_feedback_owner",
+      "severity_mapping": "P1_if_overclaim",
+      "expected_follow_up": "copy clarification",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "price_confidence_confusing",
+      "feedback_prompt": "Was the active-vs-sold or sample-confidence explanation confusing?",
+      "triage_owner": "user_feedback_owner",
+      "severity_mapping": "P2",
+      "expected_follow_up": "disclosure review",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "alert_cta_confusing",
+      "feedback_prompt": "Was the CTA visible state confusing because send is disabled?",
+      "triage_owner": "user_feedback_owner",
+      "severity_mapping": "P2",
+      "expected_follow_up": "CTA wording review",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "page_copy_unclear",
+      "feedback_prompt": "Was any page copy unclear or trust-reducing?",
+      "triage_owner": "user_feedback_owner",
+      "severity_mapping": "P3",
+      "expected_follow_up": "copy refinement",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "route_seo_issue",
+      "feedback_prompt": "Did routing or SEO behavior feel wrong?",
+      "triage_owner": "SEO_safety_reviewer",
+      "severity_mapping": "P1_if_policy_break",
+      "expected_follow_up": "route/SEO audit",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "mobile_layout_issue",
+      "feedback_prompt": "Did the page feel broken or hard to use on mobile?",
+      "triage_owner": "QA_operator",
+      "severity_mapping": "P3",
+      "expected_follow_up": "UI follow-up backlog",
+      "notes": "Use during limited private beta feedback triage."
+    },
+    {
+      "row_type": "beta_feedback_plan",
+      "category_id": "trust_disclaimer_issue",
+      "feedback_prompt": "Did disclaimers or safety notes reduce trust or create confusion?",
+      "triage_owner": "beta_owner",
+      "severity_mapping": "P2",
+      "expected_follow_up": "trust/disclaimer review",
+      "notes": "Use during limited private beta feedback triage."
+    }
+  ],
+  "post_beta_review_criteria": {
+    "row_type": "post_beta_review_criteria",
+    "promotion_criteria": [
+      "zero P0 incidents",
+      "zero unresolved P1 incidents",
+      "no raw data leak",
+      "no fake-fill incidents",
+      "no source-gap overclaim",
+      "no SEO prohibited claim",
+      "smoke tests pass repeatedly",
+      "feedback triage complete",
+      "CTA send runtime separately verified before enabling",
+      "archive DB implementation decision made",
+      "production DB wiring smoke-tested"
+    ],
+    "hold_criteria": [
+      "any raw leak",
+      "any fake-fill route",
+      "any broad query market page exposure",
+      "source-gap confirmed absence wording",
+      "unsafe boundary price/CTA exposure",
+      "CTA email leakage",
+      "production DB wiring not validated for external users"
+    ],
+    "notes": "Criteria for moving from limited beta to wider beta; not production launch criteria."
+  },
+  "operator_go_no_go_checklist": {
+    "row_type": "operator_go_no_go_checklist",
+    "decision_options": [
+      "limited_private_beta_open",
+      "hold_for_smoke_test",
+      "hold_for_fix",
+      "rollback"
+    ],
+    "rules": [
+      "all preflight required checks pass -> limited_private_beta_open",
+      "smoke test not run -> hold_for_smoke_test",
+      "any rollback condition active -> rollback",
+      "any blocker open -> hold_for_fix",
+      "warnings alone do not block if disclosures exist"
+    ],
+    "notes": "Operator checklist governs limited beta only."
+  },
+  "scenario_validation": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy forbids actual deployment",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "operator roles exist",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "release scope matches recheck",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "blocked routes remain blocked",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "preflight checklist complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "disabled features complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "smoke test plan complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "monitoring plan complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "rollback plan complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "incident response levels complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "feedback plan complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "post-beta criteria complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "operator go/no-go checklist works",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "production launch guard",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "progress report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page private-beta operational-readiness",
+    "previous_progress_pct": 99,
+    "expected_after_completion_pct": 99.5,
+    "delta_pct": 0.5,
+    "completed_milestones": [
+      "Model Market Page contract",
+      "Expired/Sold Archive contract",
+      "Price Guide contract",
+      "Model Market Page Data Adapter contract",
+      "Model Market Page Data Adapter local preview implementation",
+      "Model Market Page Frontend contract",
+      "Model Market Page Frontend local preview implementation",
+      "Expired/Sold Listing Archive local preview implementation",
+      "Price Guide / Market Intelligence local preview implementation",
+      "Model Market Page Data Adapter DB Integration Contract",
+      "Expired/Sold Listing Archive DB Integration Contract",
+      "Model Market Page Public Route Contract",
+      "Private Beta Market Page Readiness Checklist",
+      "Market Page DB Read Adapter Implementation",
+      "Model Market Page Public Route Implementation",
+      "Private Beta Market Page Readiness Recheck"
+    ],
+    "current_milestone": "Private Beta Market Page Runbook",
+    "remaining_milestones": [
+      "Model Market Page Beta Smoke Test",
+      "Expired/Sold Listing Archive DB Implementation",
+      "Dealer Lead Signal Contract",
+      "CTA Email Verification Runtime Check",
+      "production/beta hardening"
+    ],
+    "notes": "Runbook defines operating procedure for limited private beta only; not production launch approval."
+  },
+  "validation_summary": {
+    "row_type": "summary",
+    "policy": {
+      "generated_at": "2026-06-01T00:00:00Z",
+      "schema_version": "private_beta_market_page_runbook.v0",
+      "artifact_version": "p3_private_beta_market_page_runbook_v0",
+      "runbook_only": true,
+      "actual_deployment_enabled": false,
+      "actual_route_enabled": false,
+      "actual_api_enabled": false,
+      "actual_frontend_enabled": false,
+      "actual_db_enabled": false,
+      "production_launch_enabled": false,
+      "production_beta_enabled": false,
+      "CTA_send_enabled": false,
+      "numeric_price_display_enabled": false,
+      "structured_data_enabled": false,
+      "smart_deal_enabled": false,
+      "csv_export_enabled": false,
+      "dealer_visibility_enabled": false,
+      "limited_private_beta_only": true,
+      "smoke_test_required_before_open": true,
+      "rollback_plan_required": true,
+      "incident_response_required": true,
+      "monitoring_required": true,
+      "no_fake_fill_required": true,
+      "source_gap_disclosure_required": true,
+      "raw_data_leak_zero_tolerance": true,
+      "seo_overclaim_zero_tolerance": true,
+      "progress_previous_pct": 99,
+      "progress_after_pct": 99.5,
+      "progress_delta_pct": 0.5
+    },
+    "role_count": 7,
+    "scope_count": 13,
+    "preflight_count": 20,
+    "route_matrix_count": 13,
+    "disabled_feature_count": 11,
+    "smoke_test_count": 16,
+    "monitoring_count": 15,
+    "rollback_count": 11,
+    "incident_count": 8,
+    "feedback_count": 9,
+    "post_beta_promotion_count": 11,
+    "post_beta_hold_count": 7,
+    "operator_decision_options": [
+      "limited_private_beta_open",
+      "hold_for_smoke_test",
+      "hold_for_fix",
+      "rollback"
+    ]
+  },
+  "readiness_recheck_reference": {
+    "row_type": "go_no_go_decision",
+    "decision_status": "conditional_go_limited_private_beta",
+    "open_launch_blocker_count": 0,
+    "warning_count": 10,
+    "production_launch_go": false,
+    "private_beta_scope": "limited",
+    "numeric_price_display_allowed": false,
+    "structured_data_enabled": false,
+    "cta_send_enabled": false,
+    "notes": "Conditional-go here does not mean production launch go."
+  },
+  "modified_files": [
+    "private_beta_market_page_runbook.py",
+    "scripts/run_p3_private_beta_market_page_runbook.py",
+    "tests/test_private_beta_market_page_runbook.py",
+    "data/admin/p3_private_beta_market_page_runbook_v0.md",
+    "data/admin/p3_private_beta_market_page_runbook_v0.jsonl",
+    "data/admin/private_beta_market_page_runbook_v0.json"
+  ]
+}

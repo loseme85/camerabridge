@@ -1,0 +1,190 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "noctilux_50",
+  "family_name": "Noctilux-M 50",
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_noctilux_50_f12_original",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Noctilux",
+      "model_canonical": "Noctilux",
+      "focal_length": "50",
+      "canonical_name": "Leica Noctilux-M 50mm f/1.2 original",
+      "aliases": [
+        "50 noctilux original",
+        "50 nocti original",
+        "50 nocti 1.2 original"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.2",
+        "original"
+      ],
+      "variant": [
+        "f1.2",
+        "original"
+      ],
+      "price_group": "noctilux50_1_2_original",
+      "notes": "Original 50mm f/1.2 Noctilux generation.",
+      "status": "core"
+    },
+    {
+      "id": "seed_noctilux_50_f12_reissue",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Noctilux",
+      "model_canonical": "Noctilux",
+      "focal_length": "50",
+      "canonical_name": "Leica Noctilux-M 50mm f/1.2 reissue",
+      "aliases": [
+        "50 nocti 1.2 reissue",
+        "50 noctilux 1.2 reissue",
+        "50 nocti reissue"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.2",
+        "reissue"
+      ],
+      "variant": [
+        "f1.2",
+        "reissue"
+      ],
+      "price_group": "noctilux50_1_2_reissue",
+      "notes": "Modern reissue of the 50mm f/1.2 Noctilux.",
+      "status": "core"
+    },
+    {
+      "id": "seed_noctilux_50_f10_e58",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Noctilux",
+      "model_canonical": "Noctilux",
+      "focal_length": "50",
+      "canonical_name": "Leica Noctilux-M 50mm f/1.0 E58",
+      "aliases": [
+        "50 nocti e58",
+        "noctilux e58",
+        "50 nocti 1.0 e58",
+        "50 noctilux e58",
+        "noctilux 50 e58"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.0",
+        "e58",
+        "early 1.0 generation"
+      ],
+      "variant": [
+        "f1.0",
+        "E58"
+      ],
+      "price_group": "noctilux50_1_0_e58",
+      "notes": "Early 50mm f/1.0 Noctilux generation.",
+      "status": "hold"
+    },
+    {
+      "id": "seed_noctilux_50_f10_e60",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Noctilux",
+      "model_canonical": "Noctilux",
+      "focal_length": "50",
+      "canonical_name": "Leica Noctilux-M 50mm f/1.0 E60",
+      "aliases": [
+        "50 nocti e60",
+        "noctilux e60",
+        "50 nocti 1.0 e60"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.0",
+        "e60",
+        "middle 1.0 generation"
+      ],
+      "variant": [
+        "f1.0",
+        "E60"
+      ],
+      "price_group": "noctilux50_1_0_e60",
+      "notes": "Middle 50mm f/1.0 Noctilux generation.",
+      "status": "hold"
+    },
+    {
+      "id": "seed_noctilux_50_f10_v3",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Noctilux",
+      "model_canonical": "Noctilux",
+      "focal_length": "50",
+      "canonical_name": "Leica Noctilux-M 50mm f/1.0 V3 built-in hood",
+      "aliases": [
+        "50 nocti built in hood",
+        "50 nocti v3",
+        "50 nocti 1.0 built in hood",
+        "noctilux 1.0 last generation"
+      ],
+      "key_discriminators": [
+        "50",
+        "f1.0",
+        "built-in hood",
+        "v3",
+        "late 1.0 generation"
+      ],
+      "variant": [
+        "f1.0",
+        "V3",
+        "built-in hood"
+      ],
+      "price_group": "noctilux50_1_0_v3",
+      "notes": "Late 50mm f/1.0 Noctilux generation with built-in hood.",
+      "status": "hold"
+    },
+    {
+      "id": "seed_noctilux_50_f095_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Noctilux",
+      "model_canonical": "Noctilux",
+      "focal_length": "50",
+      "canonical_name": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "aliases": [
+        "50 nocti 0.95",
+        "50 noctilux 0.95",
+        "noctilux 0.95"
+      ],
+      "key_discriminators": [
+        "50",
+        "f0.95",
+        "asph"
+      ],
+      "variant": [
+        "f0.95",
+        "ASPH"
+      ],
+      "price_group": "noctilux50_0_95_asph",
+      "notes": "Modern 50mm f/0.95 ASPH Noctilux.",
+      "status": "core"
+    }
+  ]
+}

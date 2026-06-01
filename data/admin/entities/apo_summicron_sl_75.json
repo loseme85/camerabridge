@@ -1,0 +1,77 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_apo_summicron_sl_75",
+  "family_name": "APO-Summicron-SL 75mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "L"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "filter_thread",
+    "version_marker",
+    "apo",
+    "asph"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_apo_summicron_sl_75_f2_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "L",
+      "system": "SL System",
+      "label": "SL Lens",
+      "model_raw": "APO-Summicron-SL",
+      "model_canonical": "APO-Summicron-SL",
+      "focal_length": "75",
+      "canonical_name": "Leica APO-Summicron-SL 75mm f/2 ASPH",
+      "aliases": [
+        "apo-summicron-sl 75",
+        "apo summicron sl 75",
+        "summicron-sl 75",
+        "summicron sl 75",
+        "75 apo-summicron-sl",
+        "75mm f2 apo-summicron-sl",
+        "75mm f/2 apo-summicron-sl",
+        "leica sl 75mm f2 apo summicron",
+        "leica sl 75mm f/2 apo summicron",
+        "leica apo-summicron-sl 75mm",
+        "apo summicron sl 75 asph",
+        "sl 75 apo summicron"
+      ],
+      "key_discriminators": [
+        "apo-summicron-sl",
+        "75",
+        "75mm",
+        "f2",
+        "75mm f2",
+        "leica sl",
+        "apo",
+        "asph"
+      ],
+      "variant": [
+        "f/2",
+        "APO",
+        "ASPH",
+        "APO-Summicron-SL"
+      ],
+      "price_group": "apo_summicron_sl_75_f2_asph",
+      "notes": "Round-1 conservative core seed for the Leica SL-side 75mm APO short-tele prime family. APO, ASPH, E67 or filter-thread markers, and hood or case bundle wording remain below row level, and broad 75mm Summicron shorthand is intentionally excluded to avoid M-side 75mm contamination, neighboring SL 50 or 90 primes, APO-Vario-Elmarit-SL 90-280, Summilux-R 80, or Sigma/Panasonic/Lumix short-tele contamination.",
+      "status": "core"
+    }
+  ]
+}

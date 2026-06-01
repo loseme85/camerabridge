@@ -1,0 +1,59 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_super_elmar_21",
+  "family_name": "Super-Elmar 21mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_super_elmar_m_21_f3_4_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Super-Elmar",
+      "model_canonical": "Super-Elmar",
+      "focal_length": "21",
+      "canonical_name": "Leica Super-Elmar-M 21mm f/3.4 ASPH",
+      "aliases": [
+        "super-elmar-m 21",
+        "super elmar 21",
+        "21 super elmar",
+        "21mm f3.4 super-elmar-m",
+        "m 21/3.4 super elmar",
+        "21/3.4 super elmar"
+      ],
+      "key_discriminators": [
+        "21",
+        "f3.4",
+        "super-elmar-m",
+        "asph",
+        "m 21/3.4",
+        "e46"
+      ],
+      "variant": [
+        "f/3.4",
+        "ASPH",
+        "Super-Elmar-M"
+      ],
+      "price_group": "super_elmar_m_21_f3_4_asph",
+      "notes": "Round-1 conservative core seed for the clean single-line Super-Elmar 21 family. 6bit, finish, and special-edition axes remain below row level, and Elmarit/Super-Angulon/Tri-Elmar boundary families stay out of family.",
+      "status": "core"
+    }
+  ]
+}

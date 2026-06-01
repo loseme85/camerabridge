@@ -105,6 +105,17 @@ _COMPACT_BODY_PATTERNS: tuple[tuple[str, str], ...] = (
     (r"\bsofort\s*([0-9]{1,2})?\b", "Sofort"),
 )
 
+_BODY_QUERY_ACCESSORY_BLOCKERS = {
+    "battery", "handgrip", "grip", "case", "plate", "strap", "hood",
+    "cap", "cover", "adapter", "filter", "finder", "charger", "thumb",
+    "protector", "holster", "pouch", "door", "thumbs", "support",
+}
+
+_BODY_QUERY_LENS_BLOCKERS = {
+    "summicron", "summilux", "noctilux", "elmarit", "elmar", "summarit",
+    "summaron", "telyt", "vario", "apo",
+}
+
 
 def _set_body_intent(
     intent: QueryIntent,
@@ -132,6 +143,52 @@ def _parse_compact_body_intent(intent: QueryIntent, normalized: str) -> None:
         value = f"{family} {suffix}" if suffix else family
         _set_body_intent(intent, value, match.group(0), system="Compact")
         break
+
+
+def _parse_explicit_body_model_intent(intent: QueryIntent, normalized: str) -> None:
+    """
+    Narrow body-query recovery for common user queries that should clearly
+    resolve to camera bodies instead of broad Leica lens fallbacks.
+
+    Keep this strict:
+    - allow `leica sl2`, `sl2`, `leica sl3`, `sl3` only when no accessory/lens
+      blocker tokens are present
+    - allow `m10` only when the query also says `body`
+    """
+    tokens = set(re.findall(r"[a-z0-9가-힣./-]+", normalized))
+    if tokens & _BODY_QUERY_LENS_BLOCKERS:
+        return
+
+    if tokens & _BODY_QUERY_ACCESSORY_BLOCKERS and "body" not in tokens:
+        return
+
+    explicit_patterns = (
+        (r"\bleica\s+sl2\b|\bsl2\b", "SL2", "SL", None),
+        (r"\bleica\s+sl3\b|\bsl3\b", "SL3", "SL", None),
+    )
+    for pattern, body_intent, mount, system in explicit_patterns:
+        if re.search(pattern, normalized):
+            _set_body_intent(intent, body_intent, body_intent.lower(), mount=mount, system=system)
+            return
+
+    if re.search(r"\bm10\b", normalized) and re.search(r"\bbody\b", normalized):
+        _set_body_intent(intent, "M10", "m10 body", mount="M", system=None)
+
+
+def _parse_accessory_compatibility_context(intent: QueryIntent, normalized: str) -> None:
+    """
+    Narrow query-side compatibility hint for accessory searches that mention a
+    specific body line, without turning them into body queries.
+
+    Current scope is intentionally small:
+    - `sl2` / `sl3` accessory queries imply SL compatibility
+    """
+    if not intent.accessory_intent or intent.mount:
+        return
+
+    if re.search(r"\bsl2\b|\bsl3\b", normalized):
+        intent.mount = "SL"
+        intent.tokens.append({"type": "mount", "raw": "sl accessory compatibility", "value": "SL"})
 
 
 def _body_intent_token_allowed(token: str, rough_tokens: list[str]) -> bool:
@@ -212,6 +269,194 @@ def _parse_compact_family_token(intent: QueryIntent, token: str) -> bool:
     return True
 
 
+_SL_ZOOM_RANGE_PATTERNS: tuple[tuple[str, str], ...] = (
+    (r"\b24[\s/-]?90\b", "24-90"),
+    (r"\b14[\s/-]?24\b", "14-24"),
+    (r"\b16[\s/-]?35\b", "16-35"),
+    (r"\b90[\s/-]?280\b", "90-280"),
+)
+
+_THIRD_PARTY_L_MOUNT_RANGE_PATTERNS: tuple[tuple[str, str], ...] = (
+    (r"\b24[\s/-]?70\b", "24-70"),
+    (r"\b14[\s/-]?24\b", "14-24"),
+    (r"\b24[\s/-]?105\b", "24-105"),
+)
+
+_R_HYPHENATED_FAMILY_ALIASES: dict[str, str] = {
+    "summicron-r": "Summicron-R",
+    "elmarit-r": "Elmarit-R",
+    "apo-telyt-r": "APO-Telyt-R",
+    "telyt-r": "Telyt-R",
+    "vario-elmarit-r": "Vario-Elmarit-R",
+    "vario-apo-elmarit-r": "Vario-APO-Elmarit-R",
+}
+
+
+def _parse_sl_zoom_range_hint(intent: QueryIntent, normalized: str) -> None:
+    """
+    Narrow query-side recovery for Leica SL zoom shorthand such as:
+    - sl 24-90
+    - sl 14-24
+    - sl 16-35
+    - sl 90-280
+
+    Keep this strict:
+    - require explicit SL token
+    - skip if accessory intent exists
+    - skip if body intent exists
+    - only recognize the four known Leica SL zoom ranges in current scope
+    """
+    if intent.accessory_intent or intent.body_intent:
+        return
+
+    if not re.search(r"\bsl\b", normalized):
+        return
+
+    if re.search(r"\b(?:summicron|summilux|noctilux|elmarit|elmar|summarit|summaron|telyt|cron|lux)\b", normalized):
+        return
+
+    for pattern, focal_range in _SL_ZOOM_RANGE_PATTERNS:
+        match = re.search(pattern, normalized)
+        if not match:
+            continue
+        intent.focal_length = focal_range
+        intent.tokens.append({"type": "focal_length", "raw": match.group(0), "value": focal_range})
+        if not intent.mount:
+            intent.mount = "SL"
+            intent.tokens.append({"type": "mount", "raw": "sl", "value": "SL"})
+        intent.tokens.append({"type": "zoom_range_hint", "raw": match.group(0), "value": focal_range})
+        return
+
+
+def _parse_third_party_l_mount_range_hint(intent: QueryIntent, normalized: str) -> None:
+    """
+    Narrow query-side recovery for third-party L-mount zoom shorthand such as:
+    - sigma 24-70 l
+    - sigma 14-24 l
+    - panasonic 24-105 l
+
+    Keep this strict:
+    - require explicit third-party brand token
+    - require exact supported range
+    - require L-mount signal for Sigma/Panasonic
+    - do not activate for accessory/body/lens-family queries
+    """
+    if intent.accessory_intent or intent.body_intent or intent.model_family:
+        return
+
+    has_sigma_token = bool(re.search(r"\b(?:sigma|시그마)\b", normalized))
+    has_panasonic_token = bool(re.search(r"\b(?:panasonic|파나소닉)\b", normalized))
+    has_lumix_token = bool(re.search(r"\b(?:lumix|루믹스)\b", normalized))
+
+    brand_token: Optional[str] = None
+    if has_sigma_token:
+        brand_token = "sigma"
+    elif has_panasonic_token and has_lumix_token:
+        # Treat the explicit Panasonic+Lumix pairing as a narrow Lumix-S/L-mount
+        # shorthand instead of requiring a separate `l` token.
+        brand_token = "lumix"
+    elif has_panasonic_token:
+        brand_token = "panasonic"
+    elif has_lumix_token:
+        brand_token = "lumix"
+
+    if not brand_token:
+        return
+
+    focal_range: Optional[str] = None
+    focal_raw: Optional[str] = None
+    for pattern, candidate_range in _THIRD_PARTY_L_MOUNT_RANGE_PATTERNS:
+        match = re.search(pattern, normalized)
+        if match:
+            focal_range = candidate_range
+            focal_raw = match.group(0)
+            break
+    if not focal_range or not focal_raw:
+        return
+
+    has_l_mount_signal = bool(
+        re.search(
+            r"\bl\s+mount\b|\bl-mount\b|\bl마운트\b|\bsl\s+mount\b|\bsl마운트\b|\bdg\s+dn\b|\blumix\s+s\b",
+            normalized,
+        )
+    ) or bool(re.search(r"\bl\b", normalized))
+
+    if brand_token in {"sigma", "panasonic"} and not has_l_mount_signal:
+        return
+
+    intent.brand = "3rd Party"
+    intent.tokens.append({"type": "brand", "raw": brand_token, "value": "3rd Party"})
+    intent.focal_length = focal_range
+    intent.tokens.append({"type": "focal_length", "raw": focal_raw, "value": focal_range})
+    if not intent.mount:
+        intent.mount = "SL"
+        intent.tokens.append({"type": "mount", "raw": "l-mount intent", "value": "SL"})
+    intent.tokens.append({"type": "third_party_l_mount_hint", "raw": f"{brand_token} {focal_raw}", "value": focal_range})
+
+
+def _set_model_family(intent: QueryIntent, family: str, source: str) -> None:
+    intent.model_family = family
+    intent.brand = intent.brand or DEFAULT_BRAND
+    intent.tokens.append({"type": "model_family", "raw": source, "value": family})
+
+
+def _set_mount(intent: QueryIntent, mount: str, source: str) -> None:
+    if intent.mount == mount:
+        return
+    intent.mount = mount
+    intent.tokens.append({"type": "mount", "raw": source, "value": mount})
+
+
+def _set_focal_length(intent: QueryIntent, focal: str, source: str) -> None:
+    intent.focal_length = focal
+    intent.tokens.append({"type": "focal_length", "raw": source, "value": focal})
+
+
+def _parse_r_lens_query_hint(intent: QueryIntent, normalized: str) -> None:
+    """
+    Narrow recovery for Leica R lens shorthand that is too compact for the
+    generic token parser.
+
+    Keep this strict:
+    - require explicit R-side context
+    - skip body/accessory queries
+    - only recover exact families/ranges already observed in search recall
+    """
+    if intent.accessory_intent or intent.body_intent:
+        return
+
+    has_r_context = bool(
+        re.search(
+            r"\bleica\s+r\b|\br\b|\b(?:summicron|elmarit|apo-telyt|telyt|vario-elmarit|vario-apo-elmarit)-r\b",
+            normalized,
+        )
+    )
+    if not has_r_context:
+        return
+
+    if re.search(r"\b(?:adapter|cap|hood|case|finder|battery|strap|filter)\b", normalized):
+        return
+
+    if (
+        re.search(r"\b180(?:mm)?\b|\b180/3\.4\b", normalized)
+        and re.search(r"\bapo\b", normalized)
+        and not re.search(r"\b(?:elmarit|summicron|summilux|vario)\b", normalized)
+    ):
+        _set_model_family(intent, "APO-Telyt-R", "apo telyt r hint")
+        _set_mount(intent, "R", "apo telyt r hint")
+        if not intent.focal_length:
+            _set_focal_length(intent, "180", "180")
+        return
+
+    if (
+        re.search(r"\b28[\s/-]?90\b", normalized)
+        and re.search(r"\bvario(?:-|\s+)elmarit(?:-|\s+)r\b|\br\b.*\bvario\b.*\belmarit\b|\bvario\b.*\belmarit\b.*\br\b", normalized)
+    ):
+        _set_model_family(intent, "Vario-Elmarit-R", "vario elmarit r hint")
+        _set_mount(intent, "R", "vario elmarit r hint")
+        _set_focal_length(intent, "28-90", "28-90")
+
+
 def _parse_optical_formula(intent: QueryIntent, normalized: str) -> None:
     for groups, elements in re.findall(r"(\d+)\s*군\s*(\d+)\s*매", normalized):
         value = f"{groups} groups / {elements} elements"
@@ -226,6 +471,57 @@ def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
         _set_accessory_intent(intent, "hood", "lens hood")
     elif re.search(r"\bhood\b", normalized) or "후드" in normalized:
         _set_accessory_intent(intent, "hood", "hood" if "hood" in normalized else "후드")
+
+    if not intent.accessory_intent:
+        if re.search(r"\blens\s+cap\b", normalized):
+            _set_accessory_intent(intent, "cap", "lens cap")
+        elif re.search(r"\bcap\b", normalized) or "캡" in normalized:
+            _set_accessory_intent(intent, "cap", "cap" if "cap" in normalized else "캡")
+
+    if not intent.accessory_intent:
+        battery_source: Optional[str] = None
+        battery_code_match = re.search(r"\bbp\s*-?\s*scl\s*([0-9]{1,2})\b", normalized)
+        if battery_code_match:
+            battery_source = battery_code_match.group(0)
+        elif re.search(r"\bbatter(?:y|ies)\b", normalized):
+            battery_source = "battery"
+        elif "배터리" in normalized:
+            battery_source = "배터리"
+
+        if battery_source:
+            _set_accessory_intent(intent, "battery", battery_source)
+            if battery_code_match:
+                _set_accessory_code(intent, f"BP-SCL{battery_code_match.group(1)}", battery_source)
+
+    if not intent.accessory_intent:
+        strap_source: Optional[str] = None
+        if re.search(r"\bhand\s+strap\b", normalized):
+            strap_source = "hand strap"
+        elif re.search(r"\bneck\s+strap\b", normalized):
+            strap_source = "neck strap"
+        elif re.search(r"\bshoulder\s+strap\b", normalized):
+            strap_source = "shoulder strap"
+        elif re.search(r"\bstrap\b", normalized) or "스트랩" in normalized:
+            strap_source = "strap" if re.search(r"\bstrap\b", normalized) else "스트랩"
+
+        if strap_source:
+            _set_accessory_intent(intent, "strap", strap_source)
+
+    if not intent.accessory_intent:
+        misc_accessory_intent: Optional[tuple[str, str]] = None
+        if re.search(r"\bhand\s*grip\b|\bhandgrip\b", normalized) or "핸드그립" in normalized:
+            misc_accessory_intent = ("grip", "handgrip" if "handgrip" in normalized else ("hand grip" if re.search(r"\bhand\s+grip\b", normalized) else "핸드그립"))
+        elif re.search(r"\bgrip\b", normalized):
+            misc_accessory_intent = ("grip", "grip")
+        elif re.search(r"\bcharger\b", normalized) or "충전기" in normalized:
+            misc_accessory_intent = ("charger", "charger" if re.search(r"\bcharger\b", normalized) else "충전기")
+        elif re.search(r"\bcase\b", normalized) or "케이스" in normalized:
+            misc_accessory_intent = ("case", "case" if re.search(r"\bcase\b", normalized) else "케이스")
+        elif re.search(r"\bpouch\b", normalized) or "파우치" in normalized:
+            misc_accessory_intent = ("pouch", "pouch" if re.search(r"\bpouch\b", normalized) else "파우치")
+
+        if misc_accessory_intent:
+            _set_accessory_intent(intent, misc_accessory_intent[0], misc_accessory_intent[1])
 
     if not intent.accessory_intent:
         finder_source: Optional[str] = None
@@ -407,6 +703,11 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
     _parse_optical_formula(intent, normalized)
     _parse_accessory_intent(intent, normalized)
     _parse_compact_body_intent(intent, normalized)
+    _parse_explicit_body_model_intent(intent, normalized)
+    _parse_accessory_compatibility_context(intent, normalized)
+    _parse_r_lens_query_hint(intent, normalized)
+    _parse_sl_zoom_range_hint(intent, normalized)
+    _parse_third_party_l_mount_range_hint(intent, normalized)
 
     rough_tokens = re.findall(r"[a-z0-9가-힣./-]+", normalized)
     for token in rough_tokens:
@@ -453,6 +754,12 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
         if focal_match:
             intent.focal_length = focal_match.group(1)
             intent.tokens.append({"type": "focal_length", "raw": token, "value": intent.focal_length})
+            continue
+
+        r_family = _R_HYPHENATED_FAMILY_ALIASES.get(token)
+        if r_family:
+            _set_model_family(intent, r_family, token)
+            _set_mount(intent, "R", token)
             continue
 
         family = MODEL_FAMILY_ALIASES.get(token)

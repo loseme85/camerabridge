@@ -1,0 +1,70 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_super_elmar_18",
+  "family_name": "Super-Elmar 18mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "finder_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "coding"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_super_elmar_m_18_f3_8_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Super-Elmar",
+      "model_canonical": "Super-Elmar",
+      "focal_length": "18",
+      "canonical_name": "Leica Super-Elmar-M 18mm f/3.8 ASPH",
+      "aliases": [
+        "super-elmar 18",
+        "super elmar 18",
+        "super-elmar-m 18",
+        "18 super-elmar",
+        "18mm f3.8 super-elmar",
+        "18mm f/3.8 super-elmar",
+        "18mm f3.8 asph super-elmar",
+        "18mm f/3.8 asph super-elmar",
+        "m 18/3.8 super-elmar",
+        "m 18/3.8 super elmar"
+      ],
+      "key_discriminators": [
+        "super-elmar-m",
+        "super-elmar",
+        "18",
+        "f3.8",
+        "asph",
+        "m 18/3.8"
+      ],
+      "variant": [
+        "f/3.8",
+        "ASPH",
+        "Super-Elmar-M"
+      ],
+      "price_group": "super_elmar_m_18_f3_8_asph",
+      "notes": "Round-1 conservative core seed for the clean single-line Super-Elmar 18 family. 18 elmar shorthand is intentionally excluded from the initial alias set, and 6bit, finder, hood, and bundle axes remain below row level.",
+      "status": "core"
+    }
+  ]
+}

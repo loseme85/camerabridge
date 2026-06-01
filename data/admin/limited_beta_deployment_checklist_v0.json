@@ -1,0 +1,1588 @@
+{
+  "task_name": "P3-LIMITED-BETA-DEPLOYMENT-CHECKLIST",
+  "artifact_version": "p3_limited_beta_deployment_checklist_v0",
+  "schema_version": "limited_beta_deployment_checklist.v0",
+  "generated_at": "2026-06-01T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "limited_beta_deployment_checklist.v0",
+    "artifact_version": "p3_limited_beta_deployment_checklist_v0",
+    "deployment_checklist_only": true,
+    "actual_deployment_enabled": false,
+    "actual_route_enabled": false,
+    "actual_api_enabled": false,
+    "actual_frontend_enabled": false,
+    "actual_db_enabled": false,
+    "actual_cta_send_enabled": false,
+    "production_launch_enabled": false,
+    "production_launch_go": false,
+    "limited_private_beta_candidate": true,
+    "operator_signoff_required": true,
+    "operator_signoff_present": true,
+    "runtime_revalidation_required": true,
+    "deployment_execution_allowed": false,
+    "CTA_send_enabled": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "smart_deal_enabled": false,
+    "csv_export_enabled": false,
+    "dealer_visibility_enabled": false,
+    "raw_listing_links_enabled": false,
+    "user_specific_public_response_enabled": false,
+    "rollback_switch_required": true,
+    "monitoring_hooks_required": true,
+    "feedback_channel_required": true,
+    "incident_log_required": true,
+    "progress_previous_pct": 99.95,
+    "progress_after_pct": 99.98,
+    "progress_delta_pct": 0.03
+  },
+  "operator_signoff_evidence": {
+    "row_type": "operator_signoff_evidence",
+    "decision_status": "signed_with_warnings_limited_beta_candidate",
+    "accepted_warning_count": 2,
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_cta_send_enabled": false,
+    "next_gate": "limited_beta_deployment_checklist_or_runtime_revalidation",
+    "scenario_pass_count": 14,
+    "scenario_total_count": 15,
+    "prior_direct_test_completion_observed": false,
+    "notes": "Loaded from operator signoff artifact. A prior direct test command did not return clean completion output in this environment, so a re-run check remains required before actual deployment."
+  },
+  "open_candidate_evidence": {
+    "row_type": "open_candidate_evidence",
+    "candidate_status": "limited_private_beta_open_candidate",
+    "recommendation": "limited_private_beta_open_recommended",
+    "limited_beta_open_allowed": true,
+    "operator_signoff_required": true,
+    "open_blockers": 0,
+    "smoke_warning_count": 1,
+    "readiness_warning_count": 10,
+    "allowed_scope": [
+      {
+        "row_type": "allowed_beta_scope",
+        "scope_id": "leica_noctilux_m_50_095_asph",
+        "display_name": "Leica Noctilux-M 50mm f/0.95 ASPH",
+        "route_state": "exact_model_public_market_page",
+        "robots_policy": "index,follow",
+        "price_policy": "price_widget_visible_numeric_disabled",
+        "CTA_policy": "visible_candidate_send_disabled",
+        "required_disclosure": "active_vs_sold_separation",
+        "warning": "",
+        "smoke_result": "pass",
+        "notes": "Allowed in limited beta scope only."
+      },
+      {
+        "row_type": "allowed_beta_scope",
+        "scope_id": "leica_summilux_m_35_asph_aa",
+        "display_name": "Leica Summilux-M 35mm f/1.4 ASPH AA",
+        "route_state": "exact_rare_variant_public_market_page",
+        "robots_policy": "index,follow",
+        "price_policy": "price_widget_visible_numeric_disabled",
+        "CTA_policy": "visible_candidate_send_disabled",
+        "required_disclosure": "rare_variant_no_merge_warning",
+        "warning": "rare_variant_caution",
+        "smoke_result": "pass",
+        "notes": "Allowed in limited beta scope only."
+      },
+      {
+        "row_type": "allowed_beta_scope",
+        "scope_id": "sigma_14_24_dg_dn_art_l_mount_source_gap",
+        "display_name": "Sigma 14-24mm DG DN Art L-mount source-gap page only",
+        "route_state": "source_gap_public_page",
+        "robots_policy": "noindex,follow",
+        "price_policy": "price_widget_hidden",
+        "CTA_policy": "source_gap_candidate_only_send_disabled",
+        "required_disclosure": "source_gap_coverage_disclosure",
+        "warning": "",
+        "smoke_result": "pass",
+        "notes": "Allowed in limited beta scope only."
+      },
+      {
+        "row_type": "allowed_beta_scope",
+        "scope_id": "active_only_noctilux_route",
+        "display_name": "Active-only Noctilux route",
+        "route_state": "active_only_public_page",
+        "robots_policy": "index,follow",
+        "price_policy": "active_reference_only",
+        "CTA_policy": "visible_candidate_send_disabled",
+        "required_disclosure": "active_reference_only_disclosure",
+        "warning": "",
+        "smoke_result": "warning",
+        "notes": "Allowed in limited beta scope only."
+      },
+      {
+        "row_type": "allowed_beta_scope",
+        "scope_id": "archive_only_noctilux_route",
+        "display_name": "Archive-only Noctilux route",
+        "route_state": "archive_only_public_page",
+        "robots_policy": "index,follow",
+        "price_policy": "archive_history_only_numeric_disabled",
+        "CTA_policy": "visible_candidate_send_disabled",
+        "required_disclosure": "no_active_lane_disclosure",
+        "warning": "",
+        "smoke_result": "warning",
+        "notes": "Allowed in limited beta scope only."
+      },
+      {
+        "row_type": "allowed_beta_scope",
+        "scope_id": "stale_noctilux_route",
+        "display_name": "Stale Noctilux route with warning",
+        "route_state": "stale_data_safe_route",
+        "robots_policy": "index,follow",
+        "price_policy": "price_widget_visible_numeric_disabled",
+        "CTA_policy": "visible_candidate_send_disabled",
+        "required_disclosure": "stale_warning_required",
+        "warning": "stale_disclosure_warning",
+        "smoke_result": "warning",
+        "notes": "Allowed in limited beta scope only."
+      }
+    ],
+    "blocked_scope": [
+      {
+        "row_type": "blocked_route_scope",
+        "blocked_scope_id": "broad_summicron_query",
+        "blocked_reason": "Broad query must stay refinement-only.",
+        "safe_fallback": "refinement_only",
+        "robots_policy": "noindex,follow",
+        "price_policy": "hidden",
+        "CTA_policy": "no_fast_alert",
+        "rollback_if_exposed": true,
+        "notes": "Blocked as market page in limited beta handoff."
+      },
+      {
+        "row_type": "blocked_route_scope",
+        "blocked_scope_id": "unsafe_boundary_conflict",
+        "blocked_reason": "Unsafe boundary cannot open price or CTA.",
+        "safe_fallback": "review_safe_only",
+        "robots_policy": "noindex,follow",
+        "price_policy": "hidden",
+        "CTA_policy": "disabled",
+        "rollback_if_exposed": true,
+        "notes": "Blocked as market page in limited beta handoff."
+      },
+      {
+        "row_type": "blocked_route_scope",
+        "blocked_scope_id": "unsupported_model",
+        "blocked_reason": "Unsupported model must stay fallback only.",
+        "safe_fallback": "unsupported_notice",
+        "robots_policy": "noindex,follow",
+        "price_policy": "hidden",
+        "CTA_policy": "disabled",
+        "rollback_if_exposed": true,
+        "notes": "Blocked as market page in limited beta handoff."
+      },
+      {
+        "row_type": "blocked_route_scope",
+        "blocked_scope_id": "privacy_blocked_state",
+        "blocked_reason": "Privacy-blocked state must fail-close.",
+        "safe_fallback": "blocked_response",
+        "robots_policy": "noindex,nofollow",
+        "price_policy": "hidden",
+        "CTA_policy": "disabled",
+        "rollback_if_exposed": true,
+        "notes": "Blocked as market page in limited beta handoff."
+      },
+      {
+        "row_type": "blocked_route_scope",
+        "blocked_scope_id": "db_unavailable_state",
+        "blocked_reason": "DB unavailable state must stay safe empty fallback.",
+        "safe_fallback": "safe_empty_fallback",
+        "robots_policy": "noindex,nofollow",
+        "price_policy": "hidden",
+        "CTA_policy": "disabled",
+        "rollback_if_exposed": true,
+        "notes": "Blocked as market page in limited beta handoff."
+      },
+      {
+        "row_type": "blocked_route_scope",
+        "blocked_scope_id": "slug_conflict_error_fallback",
+        "blocked_reason": "Slug conflict cannot fake-fill a market page.",
+        "safe_fallback": "error_safe_fallback",
+        "robots_policy": "noindex,nofollow",
+        "price_policy": "hidden",
+        "CTA_policy": "disabled",
+        "rollback_if_exposed": true,
+        "notes": "Blocked as market page in limited beta handoff."
+      },
+      {
+        "row_type": "blocked_route_scope",
+        "blocked_scope_id": "source_gap_confirmed_absence_page",
+        "blocked_reason": "Source-gap cannot be framed as confirmed absence.",
+        "safe_fallback": "source_gap_coverage_only",
+        "robots_policy": "noindex,follow",
+        "price_policy": "hidden",
+        "CTA_policy": "source_gap_candidate_only_send_disabled",
+        "rollback_if_exposed": true,
+        "notes": "Blocked as market page in limited beta handoff."
+      }
+    ],
+    "disabled_features": [
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "numeric_price_display",
+        "disabled_for_limited_beta": true,
+        "reason": "Price certainty not ready for public numeric display.",
+        "risk_if_enabled": "price overclaim",
+        "future_enable_condition": "separate price runtime verification",
+        "next_backlog": "P3-price-runtime-check",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "structured_data",
+        "disabled_for_limited_beta": true,
+        "reason": "Structured data stays off for beta safety.",
+        "risk_if_enabled": "price/SEO leak",
+        "future_enable_condition": "safe structured data verification",
+        "next_backlog": "P3-structured-data-safety-check",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "actual_CTA_email_send",
+        "disabled_for_limited_beta": true,
+        "reason": "CTA send remains disabled.",
+        "risk_if_enabled": "email exposure",
+        "future_enable_condition": "CTA verification runtime check",
+        "next_backlog": "P3-CTA-EMAIL-VERIFICATION-RUNTIME-CHECK",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "smart_deal",
+        "disabled_for_limited_beta": true,
+        "reason": "Future placeholder only.",
+        "risk_if_enabled": "feature overclaim",
+        "future_enable_condition": "smart-deal contract/runtime",
+        "next_backlog": "P3-smart-deal-backlog",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "CSV_export",
+        "disabled_for_limited_beta": true,
+        "reason": "Future placeholder only.",
+        "risk_if_enabled": "unsafe export surface",
+        "future_enable_condition": "export safety review",
+        "next_backlog": "P3-export-safety-review",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "dealer_visibility",
+        "disabled_for_limited_beta": true,
+        "reason": "Future placeholder only.",
+        "risk_if_enabled": "dealer data overclaim",
+        "future_enable_condition": "dealer visibility contract/runtime",
+        "next_backlog": "P3-DEALER-LEAD-SIGNAL-CONTRACT",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "unsupported_market_page",
+        "disabled_for_limited_beta": true,
+        "reason": "Unsupported routes stay fallback only.",
+        "risk_if_enabled": "fake-fill",
+        "future_enable_condition": "supported model expansion review",
+        "next_backlog": "P3-support-scope-review",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "broad_query_market_page",
+        "disabled_for_limited_beta": true,
+        "reason": "Broad query stays refinement only.",
+        "risk_if_enabled": "wrong market-page exposure",
+        "future_enable_condition": "query narrowing workflow",
+        "next_backlog": "P3-query-refinement-review",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "unsafe_boundary_price_page",
+        "disabled_for_limited_beta": true,
+        "reason": "Unsafe boundary never opens as price page.",
+        "risk_if_enabled": "boundary overclaim",
+        "future_enable_condition": "manual review boundary workflow",
+        "next_backlog": "P3-boundary-review-check",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "raw_listing_links",
+        "disabled_for_limited_beta": true,
+        "reason": "Raw source links stay blocked.",
+        "risk_if_enabled": "source/raw leak",
+        "future_enable_condition": "safe outbound reference design",
+        "next_backlog": "P3-safe-outbound-reference",
+        "notes": "Disabled in limited beta handoff state."
+      },
+      {
+        "row_type": "disabled_feature_summary",
+        "feature_id": "user_specific_public_response",
+        "disabled_for_limited_beta": true,
+        "reason": "User-specific fields stay out of public response.",
+        "risk_if_enabled": "privacy leak",
+        "future_enable_condition": "private-user surface review",
+        "next_backlog": "P3-private-user-surface-review",
+        "notes": "Disabled in limited beta handoff state."
+      }
+    ],
+    "warnings": [
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "stale_disclosure_warning",
+        "source": "beta_smoke_test",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Stale route must visibly disclose recency warning.",
+        "owner_next_step": "operator signoff acknowledgement",
+        "notes": "Smoke warning remains non-blocking because disclosure exists."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "stale_data_disclosed",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Allowed with stale warning and reduced confidence.",
+        "owner_next_step": "price_guide + route runtime",
+        "notes": "Warning remains but does not block limited beta when disclosure is present."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "insufficient_sample_disclosed",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Allowed only with insufficient disclosure.",
+        "owner_next_step": "price_guide + frontend disclosure",
+        "notes": "Warning remains but does not block limited beta when disclosure is present."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "source_coverage_partial",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Allowed if coverage disclosure stays honest.",
+        "owner_next_step": "source coverage disclosure",
+        "notes": "Warning remains but does not block limited beta when disclosure is present."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "structured_data_disabled",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Acceptable for beta; not a blocker.",
+        "owner_next_step": "public route runtime",
+        "notes": "Warning remains but does not block limited beta when disclosure is present."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "conservative_noindex",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Acceptable for beta.",
+        "owner_next_step": "public route runtime",
+        "notes": "Warning remains but does not block limited beta when disclosure is present."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "numeric_price_disabled",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Expected for beta.",
+        "owner_next_step": "price guide runtime",
+        "notes": "Warning remains but does not block limited beta when disclosure is present."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "dealer_lead_unavailable",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Does not block private beta.",
+        "owner_next_step": "dealer lead backlog",
+        "notes": "Warning remains but does not block limited beta when disclosure is present."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "actual_production_db_not_connected",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Local runtime preview is ready, but actual production DB connectivity is not in scope yet.",
+        "owner_next_step": "archive DB implementation + smoke test",
+        "notes": "Acceptable for local limited beta preview; would be a blocker for external-user beta until actual DB-backed runtime is rechecked."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "cta_send_disabled",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "CTA may be visible as a candidate but actual send remains disabled.",
+        "owner_next_step": "CTA email verification runtime check",
+        "notes": "Visible candidate is okay; actual send remains off."
+      },
+      {
+        "row_type": "remaining_warning_summary",
+        "warning_id": "archive_db_implementation_pending",
+        "source": "readiness_recheck",
+        "blocker": false,
+        "accepted_for_limited_beta": true,
+        "required_disclosure": "Archive DB implementation is still pending beyond local preview runtime evidence.",
+        "owner_next_step": "expired/sold archive DB implementation",
+        "notes": "Current archive evidence is preview-safe but not production-backed."
+      }
+    ],
+    "production_launch_go": false,
+    "notes": "Loaded from limited beta open candidate handoff artifact."
+  },
+  "smoke_evidence": {
+    "row_type": "smoke_evidence",
+    "recommendation": "limited_private_beta_open_recommended",
+    "total_tests": 17,
+    "pass_count": 16,
+    "warning_count": 1,
+    "fail_count": 0,
+    "blocker_fail_count": 0,
+    "rollback_trigger_count": 0,
+    "production_launch_go": false,
+    "notes": "Loaded from model market page beta smoke test artifact."
+  },
+  "runtime_revalidation_checklist": [
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "route_runtime_connection_state_verified",
+      "required": true,
+      "owner_role": "release_operator",
+      "expected_state": "limited beta routes resolve in actual runtime",
+      "current_state": "local_preview_only",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "api_runtime_state_verified",
+      "required": true,
+      "owner_role": "release_operator",
+      "expected_state": "actual API/runtime surface matches beta contract",
+      "current_state": "not_connected_in_this_artifact",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "frontend_runtime_state_verified",
+      "required": true,
+      "owner_role": "release_operator",
+      "expected_state": "actual frontend route state matches beta scope",
+      "current_state": "not_connected_in_this_artifact",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "db_runtime_state_verified",
+      "required": true,
+      "owner_role": "release_operator",
+      "expected_state": "actual DB wiring is validated for safe reads",
+      "current_state": "not_connected_in_this_artifact",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "public_response_safety_guard_revalidated",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "expected_state": "raw/user/provider fields blocked in actual runtime",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "seo_claim_scanner_revalidated",
+      "required": true,
+      "owner_role": "SEO_safety_reviewer",
+      "expected_state": "actual SEO path still blocks prohibited claims",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "robots_noindex_matrix_revalidated",
+      "required": true,
+      "owner_role": "SEO_safety_reviewer",
+      "expected_state": "actual route robots/noindex matches route policy",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "cta_send_disabled_revalidated",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "expected_state": "CTA send remains disabled in actual runtime",
+      "current_state": "policy_off_in_preview",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "numeric_price_disabled_revalidated",
+      "required": true,
+      "owner_role": "beta_owner",
+      "expected_state": "numeric price display remains disabled",
+      "current_state": "policy_off_in_preview",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "structured_data_disabled_revalidated",
+      "required": true,
+      "owner_role": "SEO_safety_reviewer",
+      "expected_state": "structured data remains disabled",
+      "current_state": "policy_off_in_preview",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "raw_listing_links_disabled_revalidated",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "expected_state": "raw listing links remain blocked",
+      "current_state": "policy_off_in_preview",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "user_specific_public_response_disabled_revalidated",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "expected_state": "user-specific public response remains blocked",
+      "current_state": "policy_off_in_preview",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "source_gap_wording_revalidated",
+      "required": true,
+      "owner_role": "SEO_safety_reviewer",
+      "expected_state": "source-gap uses coverage gap wording only",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "broad_query_refinement_route_revalidated",
+      "required": true,
+      "owner_role": "QA_operator",
+      "expected_state": "broad query remains refinement-only",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "unsafe_boundary_no_price_cta_revalidated",
+      "required": true,
+      "owner_role": "QA_operator",
+      "expected_state": "unsafe boundary keeps price and CTA closed",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "privacy_fail_close_revalidated",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "expected_state": "privacy failure still fail-closes",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "rollback",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "db_unavailable_safe_fallback_revalidated",
+      "required": true,
+      "owner_role": "data_safety_reviewer",
+      "expected_state": "DB unavailable state still safe-fallbacks without fake fill",
+      "current_state": "local_preview_passed",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "rollback_switch_dry_run_verified",
+      "required": true,
+      "owner_role": "rollback_owner",
+      "expected_state": "rollback controls are executable in actual runtime",
+      "current_state": "not_run",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "monitoring_hooks_configured",
+      "required": true,
+      "owner_role": "release_operator",
+      "expected_state": "required runtime monitoring hooks are configured",
+      "current_state": "not_configured_in_this_artifact",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "feedback_channel_configured",
+      "required": true,
+      "owner_role": "user_feedback_owner",
+      "expected_state": "beta feedback channel is reachable in runtime",
+      "current_state": "runbook_ready_candidate_only",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    },
+    {
+      "row_type": "runtime_revalidation_check",
+      "check_id": "incident_log_configured",
+      "required": true,
+      "owner_role": "rollback_owner",
+      "expected_state": "incident log path is available for deployment window",
+      "current_state": "runbook_ready_candidate_only",
+      "status": "required_before_deployment",
+      "failure_action": "hold_for_runtime_revalidation",
+      "notes": "Actual runtime revalidation remains required before any deployment attempt."
+    }
+  ],
+  "deployment_blocker_checklist": [
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "actual_production_db_wiring_not_validated",
+      "blocker_if_present": true,
+      "current_status": "required_before_deployment",
+      "required_resolution": "Validate actual DB wiring and safe read behavior before deployment.",
+      "owner_role": "release_operator",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "actual_route_api_frontend_runtime_not_validated",
+      "blocker_if_present": true,
+      "current_status": "required_before_deployment",
+      "required_resolution": "Validate route/API/frontend runtime state before deployment.",
+      "owner_role": "release_operator",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "cta_send_accidentally_enabled",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm CTA send remains off in actual runtime.",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "numeric_price_display_accidentally_enabled",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm numeric price remains off in actual runtime.",
+      "owner_role": "beta_owner",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "structured_data_accidentally_enabled",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm structured data remains off in actual runtime.",
+      "owner_role": "SEO_safety_reviewer",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "raw_listing_links_exposed",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm raw links are absent in actual runtime.",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "user_specific_public_response_exposed",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm user-specific response fields remain blocked.",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "source_gap_confirmed_absence_wording",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Revalidate source-gap wording in runtime metadata and page copy.",
+      "owner_role": "SEO_safety_reviewer",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "broad_query_opens_market_page",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm broad queries still route to refinement only.",
+      "owner_role": "QA_operator",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "unsafe_boundary_opens_price_cta",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm unsafe boundary keeps price and CTA closed.",
+      "owner_role": "QA_operator",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "privacy_fail_close_missing",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm privacy blocks fail-close in runtime.",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "db_unavailable_creates_fake_listing",
+      "blocker_if_present": true,
+      "current_status": "not_detected_in_preview_recheck_required",
+      "required_resolution": "Confirm DB unavailable state still safe-fallbacks.",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "rollback_switch_missing",
+      "blocker_if_present": true,
+      "current_status": "required_before_deployment",
+      "required_resolution": "Provision and dry-run rollback controls before deployment.",
+      "owner_role": "rollback_owner",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "monitoring_hooks_missing",
+      "blocker_if_present": true,
+      "current_status": "required_before_deployment",
+      "required_resolution": "Configure required monitoring hooks before deployment.",
+      "owner_role": "release_operator",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "incident_log_missing",
+      "blocker_if_present": true,
+      "current_status": "required_before_deployment",
+      "required_resolution": "Prepare incident log before deployment window.",
+      "owner_role": "rollback_owner",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "feedback_channel_missing",
+      "blocker_if_present": true,
+      "current_status": "required_before_deployment",
+      "required_resolution": "Prepare feedback intake before deployment window.",
+      "owner_role": "user_feedback_owner",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    },
+    {
+      "row_type": "deployment_blocker_check",
+      "blocker_id": "previous_signoff_test_timeout_unresolved",
+      "blocker_if_present": true,
+      "current_status": "recheck_required",
+      "required_resolution": "Re-run prior signoff test and observe clean completion output before deployment.",
+      "owner_role": "QA_operator",
+      "notes": "Candidate is not deployed; this remains a runtime deployment blocker checklist entry."
+    }
+  ],
+  "route_runtime_revalidation_matrix": [
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "exact_model_public_market_page",
+      "allowed_in_limited_beta": true,
+      "expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_send_disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "hide_specific_model_route",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "exact_rare_variant_public_market_page",
+      "allowed_in_limited_beta": true,
+      "expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_send_disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "hide_specific_model_route",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "source_gap_public_page",
+      "allowed_in_limited_beta": true,
+      "expected_status": 200,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "price_widget_hidden",
+      "expected_cta_policy": "source_gap_candidate_only_send_disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "disable_source_gap_pages",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "active_only_public_page",
+      "allowed_in_limited_beta": true,
+      "expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "active_reference_only",
+      "expected_cta_policy": "visible_candidate_send_disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "archive_only_public_page",
+      "allowed_in_limited_beta": true,
+      "expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "archive_history_only_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_send_disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "stale_data_safe_route",
+      "allowed_in_limited_beta": true,
+      "expected_status": 200,
+      "expected_robots": "index,follow",
+      "expected_price_policy": "price_widget_visible_numeric_disabled",
+      "expected_cta_policy": "visible_candidate_send_disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "hide_specific_model_route",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "broad_query_refinement_route",
+      "allowed_in_limited_beta": false,
+      "expected_status": 302,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "no_fast_alert",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "unsafe_boundary_review_route",
+      "allowed_in_limited_beta": false,
+      "expected_status": 200,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "disable_market_page_price_widget",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "unsupported_model_route",
+      "allowed_in_limited_beta": false,
+      "expected_status": 404,
+      "expected_robots": "noindex,follow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "privacy_blocked_route",
+      "allowed_in_limited_beta": false,
+      "expected_status": 403,
+      "expected_robots": "noindex,nofollow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "db_unavailable_safe_route",
+      "allowed_in_limited_beta": false,
+      "expected_status": 503,
+      "expected_robots": "noindex,nofollow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    },
+    {
+      "row_type": "route_runtime_revalidation_matrix",
+      "route_state": "error_safe_fallback_route",
+      "allowed_in_limited_beta": false,
+      "expected_status": 409,
+      "expected_robots": "noindex,nofollow",
+      "expected_price_policy": "hidden",
+      "expected_cta_policy": "disabled",
+      "runtime_revalidation_required": true,
+      "route_action_if_failed": "force_safe_fallback_page",
+      "rollback_if_exposed": true,
+      "notes": "Route state must be revalidated in actual runtime before deployment."
+    }
+  ],
+  "feature_flag_checklist": [
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "numeric_price_display",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "structured_data",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "owner_role": "SEO_safety_reviewer",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "CTA_email_send",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "smart_deal",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "CSV_export",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "dealer_visibility",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "owner_role": "beta_owner",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "unsupported_market_page",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "hold_for_fix",
+      "owner_role": "QA_operator",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "broad_query_market_page",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "rollback",
+      "owner_role": "QA_operator",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "unsafe_boundary_price_page",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "rollback",
+      "owner_role": "QA_operator",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "raw_listing_links",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    },
+    {
+      "row_type": "feature_flag_check",
+      "feature_id": "user_specific_public_response",
+      "expected_enabled": false,
+      "current_preview_state": false,
+      "actual_runtime_state": "unknown_required_before_deployment",
+      "failure_action": "rollback",
+      "owner_role": "data_safety_reviewer",
+      "notes": "Preview state is off; actual runtime state must be revalidated before deployment."
+    }
+  ],
+  "monitoring_hook_checklist": [
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "public_response_blocked_policy_violation_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "raw_field_leak_attempt_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "source_gap_overclaim_incident_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "SEO_claim_violation_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "CTA_send_attempt_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "DB_unavailable_fallback_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "privacy_block_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "rollback_trigger_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "false_positive_report_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "false_negative_report_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "route_500_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "route_404_unexpected_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "route_noindex_mismatch_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "release_operator",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    },
+    {
+      "row_type": "monitoring_hook_check",
+      "hook_id": "feedback_submission_count",
+      "required_for_open": true,
+      "current_status": "required_before_deployment",
+      "acceptable_for_candidate": true,
+      "required_before_deployment": true,
+      "owner_role": "user_feedback_owner",
+      "notes": "Candidate state can exist without configured runtime hook, but deployment cannot proceed until this is wired."
+    }
+  ],
+  "rollback_switch_checklist": [
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "hide_all_limited_beta_routes",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "hide_specific_model_route",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "force_noindex_for_affected_route",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "disable_cta_visible_candidates",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "disable_source_gap_pages",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "disable_market_page_price_widget",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "disable_route_seo_metadata",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "force_safe_fallback_page",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "stop_beta_traffic",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "log_incident",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    },
+    {
+      "row_type": "rollback_switch_check",
+      "rollback_control_id": "notify_owner_roles",
+      "required": true,
+      "current_status": "required_before_deployment",
+      "dry_run_required": true,
+      "owner_role": "rollback_owner",
+      "notes": "Rollback control must be dry-run verified before any deployment attempt."
+    }
+  ],
+  "previous_test_timeout_recheck": {
+    "row_type": "previous_test_timeout_recheck",
+    "prior_issue_id": "limited_beta_operator_signoff_test_completion_output_timeout",
+    "issue": "tests/test_limited_beta_operator_signoff_check.py previously did not return clean completion output in this environment.",
+    "severity": "warning_for_candidate_blocker_before_actual_deployment",
+    "blocker_for_candidate": false,
+    "blocker_for_actual_deployment": true,
+    "required_resolution": "Re-run the direct test command and observe clean completion output in the deployment-like environment before any actual deployment.",
+    "current_status": "recheck_required_unresolved",
+    "notes": "Do not claim the prior direct test passed until completion output is observed."
+  },
+  "deployment_candidate_decision": {
+    "row_type": "deployment_candidate_decision",
+    "decision_status": "deployment_candidate_ready_for_runtime_revalidation",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "actual_runtime_revalidation_required": true,
+    "notes": "This artifact prepares the next gate only. It does not execute deployment and does not approve production launch."
+  },
+  "deployment_readiness_packet": {
+    "row_type": "deployment_readiness_packet",
+    "decision_status": "deployment_candidate_ready_for_runtime_revalidation",
+    "production_launch_go": false,
+    "actual_deployment_enabled": false,
+    "operator_signoff_status": "signed_with_warnings_limited_beta_candidate",
+    "smoke_recommendation": "limited_private_beta_open_recommended",
+    "local_preview_evidence_status": "signed_and_recommended",
+    "actual_runtime_revalidation_status": "required_before_deployment",
+    "unresolved_before_actual_deployment": [
+      "route_runtime_connection_state_verified",
+      "api_runtime_state_verified",
+      "frontend_runtime_state_verified",
+      "db_runtime_state_verified",
+      "public_response_safety_guard_revalidated",
+      "seo_claim_scanner_revalidated",
+      "robots_noindex_matrix_revalidated",
+      "cta_send_disabled_revalidated",
+      "numeric_price_disabled_revalidated",
+      "structured_data_disabled_revalidated",
+      "raw_listing_links_disabled_revalidated",
+      "user_specific_public_response_disabled_revalidated",
+      "source_gap_wording_revalidated",
+      "broad_query_refinement_route_revalidated",
+      "unsafe_boundary_no_price_cta_revalidated",
+      "privacy_fail_close_revalidated",
+      "db_unavailable_safe_fallback_revalidated",
+      "rollback_switch_dry_run_verified",
+      "monitoring_hooks_configured",
+      "feedback_channel_configured",
+      "incident_log_configured",
+      "limited_beta_operator_signoff_test_completion_output_timeout"
+    ],
+    "feature_flags_expected_off": [
+      "numeric_price_display",
+      "structured_data",
+      "CTA_email_send",
+      "smart_deal",
+      "CSV_export",
+      "dealer_visibility",
+      "unsupported_market_page",
+      "broad_query_market_page",
+      "unsafe_boundary_price_page",
+      "raw_listing_links",
+      "user_specific_public_response"
+    ],
+    "route_revalidation_matrix_summary": {
+      "route_state_count": 12,
+      "allowed_route_count": 6,
+      "blocked_route_count": 6
+    },
+    "rollback_controls_required": true,
+    "monitoring_hooks_required": true,
+    "test_timeout_recheck": {
+      "row_type": "previous_test_timeout_recheck",
+      "prior_issue_id": "limited_beta_operator_signoff_test_completion_output_timeout",
+      "issue": "tests/test_limited_beta_operator_signoff_check.py previously did not return clean completion output in this environment.",
+      "severity": "warning_for_candidate_blocker_before_actual_deployment",
+      "blocker_for_candidate": false,
+      "blocker_for_actual_deployment": true,
+      "required_resolution": "Re-run the direct test command and observe clean completion output in the deployment-like environment before any actual deployment.",
+      "current_status": "recheck_required_unresolved",
+      "notes": "Do not claim the prior direct test passed until completion output is observed."
+    },
+    "allowed_scope_count": 6,
+    "blocked_scope_count": 7,
+    "next_gate": "runtime_revalidation_execution_or_feedback_triage_contract",
+    "notes": "Deployment checklist packet records what still needs runtime revalidation before any actual limited beta deployment attempt."
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy forbids actual deployment",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "operator signoff evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "open candidate evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "smoke evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "runtime revalidation checklist complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "deployment blockers identified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "route runtime matrix complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "feature flag checklist complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "monitoring hook checklist complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "rollback switch checklist complete",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "previous test timeout recheck present",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "deployment decision",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "production launch guard",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "next gate",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "progress report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page limited private beta deployment-readiness",
+    "previous_progress_pct": 99.95,
+    "expected_after_completion_pct": 99.98,
+    "delta_pct": 0.03,
+    "completed_milestones": [
+      "Model Market Page contract",
+      "Expired/Sold Archive contract",
+      "Price Guide contract",
+      "Model Market Page Data Adapter contract",
+      "Model Market Page Data Adapter local preview implementation",
+      "Model Market Page Frontend contract",
+      "Model Market Page Frontend local preview implementation",
+      "Expired/Sold Listing Archive local preview implementation",
+      "Price Guide / Market Intelligence local preview implementation",
+      "Model Market Page Data Adapter DB Integration Contract",
+      "Expired/Sold Listing Archive DB Integration Contract",
+      "Model Market Page Public Route Contract",
+      "Private Beta Market Page Readiness Checklist",
+      "Market Page DB Read Adapter Implementation",
+      "Model Market Page Public Route Implementation",
+      "Private Beta Market Page Readiness Recheck",
+      "Private Beta Market Page Runbook",
+      "Model Market Page Beta Smoke Test",
+      "Limited Beta Open Candidate Handoff",
+      "Limited Beta Operator Signoff Check"
+    ],
+    "current_milestone": "Limited Beta Deployment Checklist / Runtime Revalidation",
+    "remaining_milestones": [
+      "Private Beta Feedback Triage Contract",
+      "CTA Email Verification Runtime Check",
+      "Expired/Sold Listing Archive DB Implementation",
+      "Dealer Lead Signal Contract",
+      "production/beta hardening"
+    ],
+    "notes": "This milestone prepares the deployment gate. It does not execute deployment and does not approve production launch."
+  },
+  "modified_files": [
+    "limited_beta_deployment_checklist.py",
+    "scripts/run_p3_limited_beta_deployment_checklist.py",
+    "tests/test_limited_beta_deployment_checklist.py",
+    "data/admin/p3_limited_beta_deployment_checklist_v0.md",
+    "data/admin/p3_limited_beta_deployment_checklist_v0.jsonl",
+    "data/admin/limited_beta_deployment_checklist_v0.json"
+  ],
+  "checksum": "{\"decision_status\":\"deployment_candidate_ready_for_runtime_revalidation\",\"progress_report\":{\"branch_name\":\"P3 Market Intelligence / Model Market Page limited private beta deployment-readiness\",\"completed_milestones\":[\"Model Market Page contract\",\"Expired/Sold Archive contract\",\"Price Guide contract\",\"Model Market Page Data Adapter contract\",\"Model Market Page Data Adapter local preview implementation\",\"Model Market Page Frontend contract\",\"Model Market Page Frontend local preview implementation\",\"Expired/Sold Listing Archive local preview implementation\",\"Price Guide / Market Intelligence local preview implementation\",\"Model Market Page Data Adapter DB Integration Contract\",\"Expired/Sold Listing Archive DB Integration Contract\",\"Model Market Page Public Route Contract\",\"Private Beta Market Page Readiness Checklist\",\"Market Page DB Read Adapter Implementation\",\"Model Market Page Public Route Implementation\",\"Private Beta Market Page Readiness Recheck\",\"Private Beta Market Page Runbook\",\"Model Market Page Beta Smoke Test\",\"Limited Beta Open Candidate Handoff\",\"Limited Beta Operator Signoff Check\"],\"current_milestone\":\"Limited Beta Deployment Checklist / Runtime Revalidation\",\"delta_pct\":0.03,\"expected_after_completion_pct\":99.98,\"notes\":\"This milestone prepares the deployment gate. It does not execute deployment and does not approve production launch.\",\"previous_progress_pct\":99.95,\"remaining_milestones\":[\"Private Beta Feedback Triage Contract\",\"CTA Email Verification Runtime Check\",\"Expired/Sold Listing Archive DB Implementation\",\"Dealer Lead Signal Contract\",\"production/beta hardening\"],\"row_type\":\"progress_report\"},\"scenario_rows\":[{\"row_type\":\"scenario_validation\",\"scenario_group\":\"policy forbids actual deployment\",\"scenario_letter\":\"A\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"operator signoff evidence loaded\",\"scenario_letter\":\"B\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"open candidate evidence loaded\",\"scenario_letter\":\"C\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"smoke evidence loaded\",\"scenario_letter\":\"D\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"runtime revalidation checklist complete\",\"scenario_letter\":\"E\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"deployment blockers identified\",\"scenario_letter\":\"F\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"route runtime matrix complete\",\"scenario_letter\":\"G\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"feature flag checklist complete\",\"scenario_letter\":\"H\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"monitoring hook checklist complete\",\"scenario_letter\":\"I\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"rollback switch checklist complete\",\"scenario_letter\":\"J\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"previous test timeout recheck present\",\"scenario_letter\":\"K\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"deployment decision\",\"scenario_letter\":\"L\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"production launch guard\",\"scenario_letter\":\"M\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"next gate\",\"scenario_letter\":\"N\",\"status\":\"passed\"},{\"row_type\":\"scenario_validation\",\"scenario_group\":\"progress report\",\"scenario_letter\":\"O\",\"status\":\"passed\"}]}"
+}

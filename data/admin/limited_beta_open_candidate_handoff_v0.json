@@ -1,0 +1,812 @@
+{
+  "task_name": "P3-LIMITED-BETA-OPEN-CANDIDATE-HANDOFF",
+  "handoff_policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "limited_beta_open_candidate_handoff.v0",
+    "artifact_version": "p3_limited_beta_open_candidate_handoff_v0",
+    "handoff_only": true,
+    "actual_deployment_enabled": false,
+    "actual_route_enabled": false,
+    "actual_api_enabled": false,
+    "actual_frontend_enabled": false,
+    "actual_db_enabled": false,
+    "actual_cta_send_enabled": false,
+    "production_launch_enabled": false,
+    "limited_private_beta_open_candidate": true,
+    "production_launch_go": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "CTA_send_enabled": false,
+    "smart_deal_enabled": false,
+    "csv_export_enabled": false,
+    "dealer_visibility_enabled": false,
+    "smoke_test_required": true,
+    "smoke_test_passed": true,
+    "operator_signoff_required": true,
+    "rollback_plan_required": true,
+    "progress_previous_pct": 99.8,
+    "progress_after_pct": 99.9,
+    "progress_delta_pct": 0.1
+  },
+  "readiness_recheck_evidence": {
+    "row_type": "readiness_recheck_evidence",
+    "previous_open_blockers": 11,
+    "current_open_blockers": 0,
+    "closed_blockers": 11,
+    "decision_status": "conditional_go_limited_private_beta",
+    "warning_count": 10,
+    "production_launch_go": false,
+    "notes": "Readiness recheck evidence loaded from local recheck artifact."
+  },
+  "runbook_evidence": {
+    "row_type": "runbook_evidence",
+    "operator_role_count": 7,
+    "preflight_check_count": 20,
+    "smoke_step_count": 16,
+    "monitoring_signal_count": 15,
+    "rollback_condition_count": 11,
+    "decision_options": [
+      "limited_private_beta_open",
+      "hold_for_smoke_test",
+      "hold_for_fix",
+      "rollback"
+    ],
+    "notes": "Runbook evidence loaded from limited private beta runbook artifact."
+  },
+  "smoke_test_evidence": {
+    "row_type": "smoke_test_evidence",
+    "total_tests": 17,
+    "pass_count": 16,
+    "warning_count": 1,
+    "fail_count": 0,
+    "blocker_fail_count": 0,
+    "rollback_trigger_count": 0,
+    "recommendation": "limited_private_beta_open_recommended",
+    "limited_beta_open_allowed": true,
+    "production_launch_go": false,
+    "actual_cta_send_enabled": false,
+    "numeric_price_display_enabled": false,
+    "structured_data_enabled": false,
+    "smoke_warning_rows": [
+      {
+        "smoke_test_id": "I",
+        "status": "warning",
+        "notes": "Warning status is acceptable only when disclosure exists."
+      }
+    ],
+    "notes": "Smoke evidence loaded from local limited beta smoke test artifact."
+  },
+  "open_candidate_status": {
+    "row_type": "open_candidate_status",
+    "candidate_status": "limited_private_beta_open_candidate",
+    "recommendation": "limited_private_beta_open_recommended",
+    "production_launch_go": false,
+    "limited_beta_open_allowed": true,
+    "operator_signoff_required": true,
+    "smoke_test_passed": true,
+    "open_blockers": 0,
+    "smoke_warning_count": 1,
+    "readiness_warning_count": 10,
+    "disabled_feature_count": 11,
+    "allowed_scope_count": 6,
+    "blocked_scope_count": 7,
+    "notes": "Open candidate means operator signoff is still required and production launch remains false."
+  },
+  "allowed_beta_scope": [
+    {
+      "row_type": "allowed_beta_scope",
+      "scope_id": "leica_noctilux_m_50_095_asph",
+      "display_name": "Leica Noctilux-M 50mm f/0.95 ASPH",
+      "route_state": "exact_model_public_market_page",
+      "robots_policy": "index,follow",
+      "price_policy": "price_widget_visible_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "active_vs_sold_separation",
+      "warning": "",
+      "smoke_result": "pass",
+      "notes": "Allowed in limited beta scope only."
+    },
+    {
+      "row_type": "allowed_beta_scope",
+      "scope_id": "leica_summilux_m_35_asph_aa",
+      "display_name": "Leica Summilux-M 35mm f/1.4 ASPH AA",
+      "route_state": "exact_rare_variant_public_market_page",
+      "robots_policy": "index,follow",
+      "price_policy": "price_widget_visible_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "rare_variant_no_merge_warning",
+      "warning": "rare_variant_caution",
+      "smoke_result": "pass",
+      "notes": "Allowed in limited beta scope only."
+    },
+    {
+      "row_type": "allowed_beta_scope",
+      "scope_id": "sigma_14_24_dg_dn_art_l_mount_source_gap",
+      "display_name": "Sigma 14-24mm DG DN Art L-mount source-gap page only",
+      "route_state": "source_gap_public_page",
+      "robots_policy": "noindex,follow",
+      "price_policy": "price_widget_hidden",
+      "CTA_policy": "source_gap_candidate_only_send_disabled",
+      "required_disclosure": "source_gap_coverage_disclosure",
+      "warning": "",
+      "smoke_result": "pass",
+      "notes": "Allowed in limited beta scope only."
+    },
+    {
+      "row_type": "allowed_beta_scope",
+      "scope_id": "active_only_noctilux_route",
+      "display_name": "Active-only Noctilux route",
+      "route_state": "active_only_public_page",
+      "robots_policy": "index,follow",
+      "price_policy": "active_reference_only",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "active_reference_only_disclosure",
+      "warning": "",
+      "smoke_result": "warning",
+      "notes": "Allowed in limited beta scope only."
+    },
+    {
+      "row_type": "allowed_beta_scope",
+      "scope_id": "archive_only_noctilux_route",
+      "display_name": "Archive-only Noctilux route",
+      "route_state": "archive_only_public_page",
+      "robots_policy": "index,follow",
+      "price_policy": "archive_history_only_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "no_active_lane_disclosure",
+      "warning": "",
+      "smoke_result": "warning",
+      "notes": "Allowed in limited beta scope only."
+    },
+    {
+      "row_type": "allowed_beta_scope",
+      "scope_id": "stale_noctilux_route",
+      "display_name": "Stale Noctilux route with warning",
+      "route_state": "stale_data_safe_route",
+      "robots_policy": "index,follow",
+      "price_policy": "price_widget_visible_numeric_disabled",
+      "CTA_policy": "visible_candidate_send_disabled",
+      "required_disclosure": "stale_warning_required",
+      "warning": "stale_disclosure_warning",
+      "smoke_result": "warning",
+      "notes": "Allowed in limited beta scope only."
+    }
+  ],
+  "blocked_route_scope": [
+    {
+      "row_type": "blocked_route_scope",
+      "blocked_scope_id": "broad_summicron_query",
+      "blocked_reason": "Broad query must stay refinement-only.",
+      "safe_fallback": "refinement_only",
+      "robots_policy": "noindex,follow",
+      "price_policy": "hidden",
+      "CTA_policy": "no_fast_alert",
+      "rollback_if_exposed": true,
+      "notes": "Blocked as market page in limited beta handoff."
+    },
+    {
+      "row_type": "blocked_route_scope",
+      "blocked_scope_id": "unsafe_boundary_conflict",
+      "blocked_reason": "Unsafe boundary cannot open price or CTA.",
+      "safe_fallback": "review_safe_only",
+      "robots_policy": "noindex,follow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "rollback_if_exposed": true,
+      "notes": "Blocked as market page in limited beta handoff."
+    },
+    {
+      "row_type": "blocked_route_scope",
+      "blocked_scope_id": "unsupported_model",
+      "blocked_reason": "Unsupported model must stay fallback only.",
+      "safe_fallback": "unsupported_notice",
+      "robots_policy": "noindex,follow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "rollback_if_exposed": true,
+      "notes": "Blocked as market page in limited beta handoff."
+    },
+    {
+      "row_type": "blocked_route_scope",
+      "blocked_scope_id": "privacy_blocked_state",
+      "blocked_reason": "Privacy-blocked state must fail-close.",
+      "safe_fallback": "blocked_response",
+      "robots_policy": "noindex,nofollow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "rollback_if_exposed": true,
+      "notes": "Blocked as market page in limited beta handoff."
+    },
+    {
+      "row_type": "blocked_route_scope",
+      "blocked_scope_id": "db_unavailable_state",
+      "blocked_reason": "DB unavailable state must stay safe empty fallback.",
+      "safe_fallback": "safe_empty_fallback",
+      "robots_policy": "noindex,nofollow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "rollback_if_exposed": true,
+      "notes": "Blocked as market page in limited beta handoff."
+    },
+    {
+      "row_type": "blocked_route_scope",
+      "blocked_scope_id": "slug_conflict_error_fallback",
+      "blocked_reason": "Slug conflict cannot fake-fill a market page.",
+      "safe_fallback": "error_safe_fallback",
+      "robots_policy": "noindex,nofollow",
+      "price_policy": "hidden",
+      "CTA_policy": "disabled",
+      "rollback_if_exposed": true,
+      "notes": "Blocked as market page in limited beta handoff."
+    },
+    {
+      "row_type": "blocked_route_scope",
+      "blocked_scope_id": "source_gap_confirmed_absence_page",
+      "blocked_reason": "Source-gap cannot be framed as confirmed absence.",
+      "safe_fallback": "source_gap_coverage_only",
+      "robots_policy": "noindex,follow",
+      "price_policy": "hidden",
+      "CTA_policy": "source_gap_candidate_only_send_disabled",
+      "rollback_if_exposed": true,
+      "notes": "Blocked as market page in limited beta handoff."
+    }
+  ],
+  "disabled_feature_summary": [
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "numeric_price_display",
+      "disabled_for_limited_beta": true,
+      "reason": "Price certainty not ready for public numeric display.",
+      "risk_if_enabled": "price overclaim",
+      "future_enable_condition": "separate price runtime verification",
+      "next_backlog": "P3-price-runtime-check",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "structured_data",
+      "disabled_for_limited_beta": true,
+      "reason": "Structured data stays off for beta safety.",
+      "risk_if_enabled": "price/SEO leak",
+      "future_enable_condition": "safe structured data verification",
+      "next_backlog": "P3-structured-data-safety-check",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "actual_CTA_email_send",
+      "disabled_for_limited_beta": true,
+      "reason": "CTA send remains disabled.",
+      "risk_if_enabled": "email exposure",
+      "future_enable_condition": "CTA verification runtime check",
+      "next_backlog": "P3-CTA-EMAIL-VERIFICATION-RUNTIME-CHECK",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "smart_deal",
+      "disabled_for_limited_beta": true,
+      "reason": "Future placeholder only.",
+      "risk_if_enabled": "feature overclaim",
+      "future_enable_condition": "smart-deal contract/runtime",
+      "next_backlog": "P3-smart-deal-backlog",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "CSV_export",
+      "disabled_for_limited_beta": true,
+      "reason": "Future placeholder only.",
+      "risk_if_enabled": "unsafe export surface",
+      "future_enable_condition": "export safety review",
+      "next_backlog": "P3-export-safety-review",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "dealer_visibility",
+      "disabled_for_limited_beta": true,
+      "reason": "Future placeholder only.",
+      "risk_if_enabled": "dealer data overclaim",
+      "future_enable_condition": "dealer visibility contract/runtime",
+      "next_backlog": "P3-DEALER-LEAD-SIGNAL-CONTRACT",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "unsupported_market_page",
+      "disabled_for_limited_beta": true,
+      "reason": "Unsupported routes stay fallback only.",
+      "risk_if_enabled": "fake-fill",
+      "future_enable_condition": "supported model expansion review",
+      "next_backlog": "P3-support-scope-review",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "broad_query_market_page",
+      "disabled_for_limited_beta": true,
+      "reason": "Broad query stays refinement only.",
+      "risk_if_enabled": "wrong market-page exposure",
+      "future_enable_condition": "query narrowing workflow",
+      "next_backlog": "P3-query-refinement-review",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "unsafe_boundary_price_page",
+      "disabled_for_limited_beta": true,
+      "reason": "Unsafe boundary never opens as price page.",
+      "risk_if_enabled": "boundary overclaim",
+      "future_enable_condition": "manual review boundary workflow",
+      "next_backlog": "P3-boundary-review-check",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "raw_listing_links",
+      "disabled_for_limited_beta": true,
+      "reason": "Raw source links stay blocked.",
+      "risk_if_enabled": "source/raw leak",
+      "future_enable_condition": "safe outbound reference design",
+      "next_backlog": "P3-safe-outbound-reference",
+      "notes": "Disabled in limited beta handoff state."
+    },
+    {
+      "row_type": "disabled_feature_summary",
+      "feature_id": "user_specific_public_response",
+      "disabled_for_limited_beta": true,
+      "reason": "User-specific fields stay out of public response.",
+      "risk_if_enabled": "privacy leak",
+      "future_enable_condition": "private-user surface review",
+      "next_backlog": "P3-private-user-surface-review",
+      "notes": "Disabled in limited beta handoff state."
+    }
+  ],
+  "remaining_warning_summary": [
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "stale_disclosure_warning",
+      "source": "beta_smoke_test",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Stale route must visibly disclose recency warning.",
+      "owner_next_step": "operator signoff acknowledgement",
+      "notes": "Smoke warning remains non-blocking because disclosure exists."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "stale_data_disclosed",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Allowed with stale warning and reduced confidence.",
+      "owner_next_step": "price_guide + route runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "insufficient_sample_disclosed",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Allowed only with insufficient disclosure.",
+      "owner_next_step": "price_guide + frontend disclosure",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "source_coverage_partial",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Allowed if coverage disclosure stays honest.",
+      "owner_next_step": "source coverage disclosure",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "structured_data_disabled",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Acceptable for beta; not a blocker.",
+      "owner_next_step": "public route runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "conservative_noindex",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Acceptable for beta.",
+      "owner_next_step": "public route runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "numeric_price_disabled",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Expected for beta.",
+      "owner_next_step": "price guide runtime",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "dealer_lead_unavailable",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Does not block private beta.",
+      "owner_next_step": "dealer lead backlog",
+      "notes": "Warning remains but does not block limited beta when disclosure is present."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "actual_production_db_not_connected",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Local runtime preview is ready, but actual production DB connectivity is not in scope yet.",
+      "owner_next_step": "archive DB implementation + smoke test",
+      "notes": "Acceptable for local limited beta preview; would be a blocker for external-user beta until actual DB-backed runtime is rechecked."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "cta_send_disabled",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "CTA may be visible as a candidate but actual send remains disabled.",
+      "owner_next_step": "CTA email verification runtime check",
+      "notes": "Visible candidate is okay; actual send remains off."
+    },
+    {
+      "row_type": "remaining_warning_summary",
+      "warning_id": "archive_db_implementation_pending",
+      "source": "readiness_recheck",
+      "blocker": false,
+      "accepted_for_limited_beta": true,
+      "required_disclosure": "Archive DB implementation is still pending beyond local preview runtime evidence.",
+      "owner_next_step": "expired/sold archive DB implementation",
+      "notes": "Current archive evidence is preview-safe but not production-backed."
+    }
+  ],
+  "operator_signoff_packet": {
+    "row_type": "operator_signoff_packet",
+    "signoff_required": true,
+    "signoff_roles": [
+      "beta_owner",
+      "QA_operator",
+      "data_safety_reviewer",
+      "SEO_safety_reviewer",
+      "rollback_owner",
+      "user_feedback_owner"
+    ],
+    "preflight_required": true,
+    "smoke_test_passed": true,
+    "rollback_owner_assigned": true,
+    "feedback_channel_ready": true,
+    "incident_log_ready": true,
+    "release_decision_options": [
+      "limited_private_beta_open",
+      "hold_for_smoke_test",
+      "hold_for_fix",
+      "rollback"
+    ],
+    "cannot_call_production_launch": true,
+    "signoff_checklist": [
+      "smoke evidence reviewed",
+      "allowed scope confirmed",
+      "blocked route confirmed",
+      "disabled feature confirmed",
+      "rollback conditions reviewed",
+      "warning disclosure accepted",
+      "CTA send disabled confirmed",
+      "production launch false confirmed"
+    ],
+    "notes": "Operator signoff is still required before any limited beta open action."
+  },
+  "rollback_condition_summary": [
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "raw_field_leak",
+      "severity": "P0",
+      "immediate_action": "immediately disable affected route surface",
+      "affected_route_action": "hide affected route",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "J/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "cta_email_exposure",
+      "severity": "P0",
+      "immediate_action": "immediately force CTA surface off",
+      "affected_route_action": "keep routes up only if CTA fully hidden",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "privacy_failure_not_blocked",
+      "severity": "P0",
+      "immediate_action": "force fail-close immediately",
+      "affected_route_action": "hide affected route",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "G/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "source_gap_overclaim",
+      "severity": "P1",
+      "immediate_action": "remove source-gap route from beta exposure",
+      "affected_route_action": "noindex/hide affected route",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "C/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "seo_prohibited_claim",
+      "severity": "P1",
+      "immediate_action": "replace metadata and noindex affected route",
+      "affected_route_action": "keep route hidden or noindex until fixed",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "K/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "fake_fill_route",
+      "severity": "P1",
+      "immediate_action": "hide affected page and audit adapter/route",
+      "affected_route_action": "remove route from beta scope",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "H/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "price_overclaim",
+      "severity": "P1",
+      "immediate_action": "hide price widget on affected route",
+      "affected_route_action": "keep route only if disclosure stays safe",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "A/I/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "duplicate_sample_inflation",
+      "severity": "P1",
+      "immediate_action": "hide affected archive/price summary",
+      "affected_route_action": "remove affected route if needed",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "I/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "db_fallback_fake_listing",
+      "severity": "P1",
+      "immediate_action": "switch to safe empty fallback",
+      "affected_route_action": "hide affected route if fallback unsafe",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "H/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "unsafe_boundary_price_cta_exposure",
+      "severity": "P1",
+      "immediate_action": "remove unsafe route from beta surface",
+      "affected_route_action": "noindex/hide route",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "E/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    },
+    {
+      "row_type": "rollback_condition_summary",
+      "condition_id": "broad_query_direct_market_page_exposure",
+      "severity": "P1",
+      "immediate_action": "restore refinement-only routing",
+      "affected_route_action": "remove direct market-page exposure",
+      "owner_role": "rollback_owner",
+      "smoke_coverage": "D/P",
+      "notes": "Rollback summary for limited beta open candidate handoff."
+    }
+  ],
+  "next_step_matrix": [
+    {
+      "row_type": "next_step_matrix",
+      "backlog_id": "P3-LIMITED-BETA-OPERATOR-SIGNOFF-CHECK",
+      "why_next": "Operator signoff is the immediate gate before any limited beta open action.",
+      "urgency": "highest",
+      "dependency": "smoke evidence + runbook + signoff packet",
+      "unlocks": "limited beta open decision",
+      "risk_reduced": "reduces release ambiguity",
+      "recommended_order": 1,
+      "notes": "External-user beta expansion still requires production DB wiring, operator signoff, and deployment checklist revalidation."
+    },
+    {
+      "row_type": "next_step_matrix",
+      "backlog_id": "P3-PRIVATE-BETA-FEEDBACK-TRIAGE-CONTRACT",
+      "why_next": "Feedback handling should be fixed before widening beta exposure.",
+      "urgency": "high",
+      "dependency": "runbook feedback categories",
+      "unlocks": "cleaner beta intake loop",
+      "risk_reduced": "reduces trust/support risk",
+      "recommended_order": 2,
+      "notes": "External-user beta expansion still requires production DB wiring, operator signoff, and deployment checklist revalidation."
+    },
+    {
+      "row_type": "next_step_matrix",
+      "backlog_id": "P3-CTA-EMAIL-VERIFICATION-RUNTIME-CHECK",
+      "why_next": "CTA remains visible-candidate only until verification/send runtime is validated.",
+      "urgency": "high",
+      "dependency": "actual CTA send remains disabled",
+      "unlocks": "future CTA enablement",
+      "risk_reduced": "reduces email/privacy risk",
+      "recommended_order": 3,
+      "notes": "External-user beta expansion still requires production DB wiring, operator signoff, and deployment checklist revalidation."
+    },
+    {
+      "row_type": "next_step_matrix",
+      "backlog_id": "P3-EXPIRED-SOLD-LISTING-ARCHIVE-DB-IMPLEMENTATION",
+      "why_next": "Archive still depends on preview/runtime evidence rather than production-backed DB implementation.",
+      "urgency": "medium",
+      "dependency": "archive DB implementation pending warning",
+      "unlocks": "stronger market history runtime",
+      "risk_reduced": "reduces archive/runtime gap",
+      "recommended_order": 4,
+      "notes": "External-user beta expansion still requires production DB wiring, operator signoff, and deployment checklist revalidation."
+    },
+    {
+      "row_type": "next_step_matrix",
+      "backlog_id": "P3-DEALER-LEAD-SIGNAL-CONTRACT",
+      "why_next": "Dealer lead capability is still missing from beta and future private workflows.",
+      "urgency": "medium",
+      "dependency": "dealer lead unavailable warning",
+      "unlocks": "future dealer/lead surfaces",
+      "risk_reduced": "reduces product-scope uncertainty",
+      "recommended_order": 5,
+      "notes": "External-user beta expansion still requires production DB wiring, operator signoff, and deployment checklist revalidation."
+    }
+  ],
+  "scenario_validation": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "policy forbids actual deployment",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "smoke evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "readiness recheck loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "runbook loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "open candidate status",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "allowed scope summary",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "blocked route summary",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "disabled features summary",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "warning summary",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "operator signoff packet",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "rollback condition summary",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "next step matrix",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "final handoff summary",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "progress report",
+      "status": "passed"
+    }
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "branch_name": "P3 Market Intelligence / Model Market Page limited private beta open-candidate readiness",
+    "previous_progress_pct": 99.8,
+    "expected_after_completion_pct": 99.9,
+    "delta_pct": 0.1,
+    "completed_milestones": [
+      "Model Market Page contract",
+      "Expired/Sold Archive contract",
+      "Price Guide contract",
+      "Model Market Page Data Adapter contract",
+      "Model Market Page Data Adapter local preview implementation",
+      "Model Market Page Frontend contract",
+      "Model Market Page Frontend local preview implementation",
+      "Expired/Sold Listing Archive local preview implementation",
+      "Price Guide / Market Intelligence local preview implementation",
+      "Model Market Page Data Adapter DB Integration Contract",
+      "Expired/Sold Listing Archive DB Integration Contract",
+      "Model Market Page Public Route Contract",
+      "Private Beta Market Page Readiness Checklist",
+      "Market Page DB Read Adapter Implementation",
+      "Model Market Page Public Route Implementation",
+      "Private Beta Market Page Readiness Recheck",
+      "Private Beta Market Page Runbook",
+      "Model Market Page Beta Smoke Test"
+    ],
+    "current_milestone": "Limited Beta Open Candidate Handoff",
+    "remaining_milestones": [
+      "Expired/Sold Listing Archive DB Implementation",
+      "CTA Email Verification Runtime Check",
+      "Private Beta Feedback Triage Contract",
+      "Dealer Lead Signal Contract",
+      "production/beta hardening"
+    ],
+    "notes": "Handoff documents limited beta open candidate state only; not deployment or production launch approval."
+  },
+  "modified_files": [
+    "limited_beta_open_candidate_handoff.py",
+    "scripts/run_p3_limited_beta_open_candidate_handoff.py",
+    "tests/test_limited_beta_open_candidate_handoff.py",
+    "data/admin/p3_limited_beta_open_candidate_handoff_v0.md",
+    "data/admin/p3_limited_beta_open_candidate_handoff_v0.jsonl",
+    "data/admin/limited_beta_open_candidate_handoff_v0.json"
+  ]
+}

@@ -1,0 +1,374 @@
+{
+  "task_name": "P3-MARKET-PAGE-DB-READ-ADAPTER-IMPLEMENTATION",
+  "policy": {
+    "generated_at": "2026-06-01T00:00:00Z",
+    "schema_version": "market_page_db_read_adapter_implementation.v0",
+    "contract_version": "p3_market_page_db_read_adapter_implementation_v0",
+    "implementation_mode": "local_fixture_db_preview",
+    "actual_db_enabled": false,
+    "db_connection_enabled": false,
+    "db_query_enabled": false,
+    "db_migration_enabled": false,
+    "orm_model_enabled": false,
+    "production_adapter_enabled": false,
+    "api_enabled": false,
+    "frontend_enabled": false,
+    "safe_projection_only": true,
+    "public_response_safe_fields_only": true,
+    "raw_url_allowed": false,
+    "listing_url_allowed": false,
+    "raw_html_allowed": false,
+    "raw_email_allowed": false,
+    "provider_payload_allowed": false,
+    "webhook_body_allowed": false,
+    "raw_fetch_response_allowed": false,
+    "raw_selector_output_allowed": false,
+    "fail_closed_on_privacy_violation": true,
+    "no_fake_fill_required": true,
+    "source_gap_disclosure_required": true,
+    "broad_query_refinement_required": true,
+    "unsafe_boundary_blocks_price_and_cta": true,
+    "lineage_dedup_required": true,
+    "source_freshness_required": true,
+    "numeric_price_display_allowed": false,
+    "progress_previous_pct": 94,
+    "progress_after_pct": 96,
+    "progress_delta_pct": 2
+  },
+  "fixture_db_summary": [
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "canonical_models",
+      "row_count": 8,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "model_slugs",
+      "row_count": 13,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "listing_observations",
+      "row_count": 10,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "archive_records",
+      "row_count": 16,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "archive_price_snapshots",
+      "row_count": 16,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "archive_lineage",
+      "row_count": 16,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "price_guide_inputs",
+      "row_count": 9,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "source_coverage",
+      "row_count": 9,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "source_freshness",
+      "row_count": 9,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "manual_review_states",
+      "row_count": 2,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "cta_aggregates",
+      "row_count": 9,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "frontend_state_cache",
+      "row_count": 9,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "privacy_violation_rows",
+      "row_count": 1,
+      "contains_raw_fields": true,
+      "public_export_values_included": false
+    },
+    {
+      "row_type": "fixture_db_table",
+      "table_name": "db_failure_simulations",
+      "row_count": 4,
+      "contains_raw_fields": false,
+      "public_export_values_included": false
+    }
+  ],
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "A",
+      "scenario_group": "exact Noctilux DB read adapter",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "B",
+      "scenario_group": "35 lux AA rare variant",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "C",
+      "scenario_group": "Sigma source-gap",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "D",
+      "scenario_group": "broad Summicron",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "E",
+      "scenario_group": "unsafe boundary",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "F",
+      "scenario_group": "unsupported model",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "G",
+      "scenario_group": "active-only Noctilux",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "H",
+      "scenario_group": "archive-only model",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "I",
+      "scenario_group": "stale data model",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "J",
+      "scenario_group": "privacy violation row",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "K",
+      "scenario_group": "DB unavailable simulation",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "L",
+      "scenario_group": "source freshness missing",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "M",
+      "scenario_group": "lineage missing",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "N",
+      "scenario_group": "duplicate/relist lineage",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "O",
+      "scenario_group": "sold_likely projection",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "P",
+      "scenario_group": "expired_removed projection",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "Q",
+      "scenario_group": "CTA aggregate",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "R",
+      "scenario_group": "frontend view model shape",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "S",
+      "scenario_group": "runtime blocker evaluation",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_letter": "T",
+      "scenario_group": "progress report",
+      "expected_status": "passed",
+      "actual_status": "passed",
+      "behavior_match": true,
+      "status": "passed",
+      "notes": "market page DB read adapter local fixture runtime validation"
+    }
+  ],
+  "implementation_checks": [
+    {
+      "row_type": "implementation_check",
+      "check_id": "no_actual_db_runtime",
+      "status": "passed",
+      "notes": "Local fixture DB only; no DB connection or query."
+    },
+    {
+      "row_type": "implementation_check",
+      "check_id": "privacy_fail_closed_enabled",
+      "status": "passed",
+      "notes": "Privacy violation blocks bundle assembly path."
+    },
+    {
+      "row_type": "implementation_check",
+      "check_id": "numeric_price_stays_disabled",
+      "status": "passed",
+      "notes": "Numeric price display remains disabled."
+    }
+  ],
+  "progress_report": {
+    "branch_name": "P3 Market Intelligence / Model Market Page private-beta runtime-readiness",
+    "previous_progress_pct": 94,
+    "expected_after_completion_pct": 96,
+    "delta_pct": 2
+  },
+  "modified_files": [
+    "market_page_db_read_adapter.py",
+    "scripts/run_p3_market_page_db_read_adapter_implementation.py",
+    "tests/test_market_page_db_read_adapter_implementation.py",
+    "data/admin/p3_market_page_db_read_adapter_implementation_v0.md",
+    "data/admin/p3_market_page_db_read_adapter_implementation_v0.jsonl",
+    "data/admin/market_page_db_read_adapter_implementation_v0.json"
+  ]
+}

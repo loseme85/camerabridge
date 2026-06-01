@@ -26,6 +26,7 @@ from trusted_metadata import (
     load_trusted_metadata,
     resolve_listing,
 )
+from normalization_admin import apply_dealer_rules_to_listing, list_dealer_rules
 from search_index import DEFAULT_SEARCH_INDEX_PATH, write_search_index
 
 
@@ -88,6 +89,7 @@ def classify_and_resolve_items(
         trusted_entries = load_trusted_metadata()
     if curated_entries is None:
         curated_entries = load_curated_reference()
+    dealer_rules = list_dealer_rules(include_disabled=False)
 
     resolved_records = []
     for index, raw_item in enumerate(items):
@@ -98,6 +100,25 @@ def classify_and_resolve_items(
             trusted_entries=trusted_entries,
             curated_entries=curated_entries,
         )
+        dealer_resolution = apply_dealer_rules_to_listing(
+            raw_item=raw_item,
+            final_output=resolved["final_output"],
+            dealer_rules=dealer_rules,
+        )
+        if dealer_resolution["applied"]:
+            resolved["final_output"] = dealer_resolution["final_output"]
+            resolved["override_applied"] = True
+            resolved["override_source"] = "dealer_rule"
+            resolved["override_source_id"] = ",".join(
+                item.get("source_id", "")
+                for item in dealer_resolution["audit_trail"]
+                if item.get("source_id")
+            )
+            resolved["override_reason"] = "Dealer-specific normalization rule."
+            resolved["audit_trail"] = [
+                *resolved.get("audit_trail", []),
+                *dealer_resolution["audit_trail"],
+            ]
         resolved_records.append(
             {
                 "record_index": index,

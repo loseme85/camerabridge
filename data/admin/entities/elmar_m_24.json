@@ -1,0 +1,59 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_elmar_m_24",
+  "family_name": "Elmar-M 24mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding",
+    "finder_bundle"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmar_m_24_f3_8_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Elmar-M",
+      "model_canonical": "Elmar-M",
+      "focal_length": "24",
+      "canonical_name": "Leica Elmar-M 24mm f/3.8 ASPH",
+      "aliases": [
+        "elmar-m 24",
+        "elmar m 24",
+        "24 elmar-m",
+        "24mm f3.8 elmar-m",
+        "24mm f3.8 asph elmar-m",
+        "m 24/3.8 elmar"
+      ],
+      "key_discriminators": [
+        "24",
+        "f3.8",
+        "elmar-m",
+        "asph",
+        "m 24/3.8",
+        "e46"
+      ],
+      "variant": [
+        "f/3.8",
+        "ASPH"
+      ],
+      "price_group": "elmar_m_24_f3_8_asph",
+      "notes": "Round-1 conservative core seed for the correctly framed Leica Elmar-M 24mm f/3.8 ASPH line. 6bit, finish, hood bundle, country, and packaging remain intentionally below seed-row level.",
+      "status": "core"
+    }
+  ]
+}

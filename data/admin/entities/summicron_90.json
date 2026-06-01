@@ -1,0 +1,91 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_summicron_90",
+  "family_name": "Summicron 90mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "mount",
+    "finish",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "country_marking"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_summicron_m_90_f2",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Summicron-M",
+      "model_canonical": "Summicron-M",
+      "focal_length": "90",
+      "canonical_name": "Leica Summicron-M 90mm f/2",
+      "aliases": [
+        "summicron 90",
+        "90 summicron",
+        "m 90/2 summicron",
+        "90mm f2 summicron-m",
+        "90/2 summicron"
+      ],
+      "key_discriminators": [
+        "90",
+        "f2",
+        "summicron-m",
+        "classic",
+        "non-apo"
+      ],
+      "variant": [
+        "f/2",
+        "classic"
+      ],
+      "price_group": "summicron_m_90_f2",
+      "notes": "Round-1 conservative core seed for the classic M 90 Summicron line. Canada marking, E49/E55, and finish remain below core level.",
+      "status": "core"
+    },
+    {
+      "id": "seed_apo_summicron_m_90_f2_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "APO-Summicron-M",
+      "model_canonical": "APO-Summicron-M",
+      "focal_length": "90",
+      "canonical_name": "Leica APO-Summicron-M 90mm f/2 ASPH",
+      "aliases": [
+        "apo summicron 90",
+        "90 apo summicron",
+        "apo-summicron-m 90",
+        "90mm f2 apo summicron",
+        "90/2 summicron apo",
+        "90 summicron asph apo"
+      ],
+      "key_discriminators": [
+        "90",
+        "f2",
+        "apo",
+        "asph",
+        "apo-summicron-m"
+      ],
+      "variant": [
+        "f/2",
+        "APO",
+        "ASPH"
+      ],
+      "price_group": "apo_summicron_m_90_f2_asph",
+      "notes": "Round-1 conservative core seed for the APO-Summicron-M 90 ASPH line. 6bit, titanium, black paint, and silver remain below core level.",
+      "status": "core"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_vario_apo_elmarit_r_70_180",
+  "family_name": "Vario-APO-Elmarit-R 70-180mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "R"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "cap_included",
+    "case_included",
+    "condition",
+    "original_cap",
+    "original_hood",
+    "original_box",
+    "original_case",
+    "packaging",
+    "rom",
+    "cam_version",
+    "filter_thread",
+    "version_marker",
+    "tripod_collar_included",
+    "built_in_hood",
+    "apo_extender_r_included"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_vario_apo_elmarit_r_70_180_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "R",
+      "system": "R System",
+      "label": "R Lens",
+      "model_raw": "Vario-APO-Elmarit-R",
+      "model_canonical": "Vario-APO-Elmarit-R",
+      "focal_length": "70-180",
+      "canonical_name": "Leica Vario-APO-Elmarit-R 70-180mm f/2.8",
+      "aliases": [
+        "vario-apo-elmarit-r 70-180",
+        "vario apo elmarit r 70-180",
+        "70-180 vario apo elmarit-r",
+        "70-180mm f2.8 vario-apo-elmarit-r",
+        "70-180mm f/2.8 vario-apo-elmarit-r",
+        "r 70-180/2.8 apo elmarit",
+        "leica r 70-180mm f2.8",
+        "leica r 70-180mm f/2.8",
+        "leica r 70-180 apo",
+        "apo elmarit 70-180",
+        "vario apo 70-180"
+      ],
+      "key_discriminators": [
+        "vario-apo-elmarit-r",
+        "70-180",
+        "70-180mm",
+        "f2.8",
+        "70-180mm f2.8",
+        "r 70-180/2.8",
+        "leica r"
+      ],
+      "variant": [
+        "f/2.8",
+        "Vario-APO-Elmarit-R"
+      ],
+      "price_group": "vario_apo_elmarit_r_70_180_f2_8",
+      "notes": "Round-1 conservative core seed for the Leica R-side 70-180 APO zoom family. ROM, cam markers, E77, built-in hood, tripod-collar wording, and APO-EXTENDER-R remain below row level, and bare 70-180 or other broad zoom shorthand is intentionally excluded to avoid future SL or third-party telephoto zoom contamination.",
+      "status": "core"
+    }
+  ]
+}

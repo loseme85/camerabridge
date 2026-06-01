@@ -1,0 +1,90 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_elmarit_21",
+  "family_name": "Elmarit 21mm",
+  "brand": "Leica",
+  "kind": "Lens",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "country_marking",
+    "engraving",
+    "boxed",
+    "hood_included",
+    "condition",
+    "special_edition",
+    "coding",
+    "finder_bundle"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_elmarit_m_21_f2_8",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Elmarit-M",
+      "model_canonical": "Elmarit-M",
+      "focal_length": "21",
+      "canonical_name": "Leica Elmarit-M 21mm f/2.8",
+      "aliases": [
+        "elmarit 21",
+        "21 elmarit",
+        "21mm f2.8 elmarit-m",
+        "m 21/2.8 elmarit",
+        "21/2.8 elmarit"
+      ],
+      "key_discriminators": [
+        "21",
+        "f2.8",
+        "elmarit-m",
+        "m 21/2.8",
+        "non-asph"
+      ],
+      "variant": [
+        "f/2.8",
+        "non-ASPH"
+      ],
+      "price_group": "elmarit_m_21_f2_8",
+      "notes": "Round-1 conservative core seed for the pre-ASPH Leica Elmarit-M 21 line. Early non-RF and later RF-coupled internal splits remain intentionally unsplit.",
+      "status": "core"
+    },
+    {
+      "id": "seed_elmarit_m_21_f2_8_asph",
+      "kind": "Lens",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Lens",
+      "model_raw": "Elmarit-M",
+      "model_canonical": "Elmarit-M",
+      "focal_length": "21",
+      "canonical_name": "Leica Elmarit-M 21mm f/2.8 ASPH",
+      "aliases": [
+        "elmarit 21 asph",
+        "21 elmarit asph",
+        "21mm f2.8 asph elmarit-m",
+        "m 21/2.8 elmarit asph",
+        "21/2.8 elmarit asph"
+      ],
+      "key_discriminators": [
+        "21",
+        "f2.8",
+        "elmarit-m",
+        "asph",
+        "m 21/2.8"
+      ],
+      "variant": [
+        "f/2.8",
+        "ASPH"
+      ],
+      "price_group": "elmarit_m_21_f2_8_asph",
+      "notes": "Round-1 conservative core seed for the ASPH Leica Elmarit-M 21 line. Finish, coding, and finder bundle remain intentionally unsplit.",
+      "status": "core"
+    }
+  ]
+}

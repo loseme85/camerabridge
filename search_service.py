@@ -269,7 +269,21 @@ def _candidate_focal_match(anchor_query: dict[str, Any], record: dict[str, Any],
             return True
         if focal in re.findall(r"\d{2,3}", str(listing_focal)):
             return True
-    return bool(re.search(rf"\b{re.escape(focal)}\s*(mm|/)\b", text))
+    if re.search(rf"\b{re.escape(focal)}\s*(mm|/)\b", text):
+        return True
+
+    range_parts = re.findall(r"\d{2,3}", focal)
+    if len(range_parts) == 2:
+        start, end = range_parts
+        range_patterns = (
+            rf"\b{re.escape(start)}\s+{re.escape(end)}\b",
+            rf"\b{re.escape(start)}\s*(?:-|/)\s*{re.escape(end)}\b",
+            rf"\b{re.escape(start)}mm\s*(?:-|/|\s)\s*{re.escape(end)}(?:mm)?\b",
+        )
+        if any(re.search(pattern, text) for pattern in range_patterns):
+            return True
+
+    return False
 
 
 def _candidate_aperture_match(anchor_query: dict[str, Any], record: dict[str, Any], text: str) -> bool:
