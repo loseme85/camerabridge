@@ -1,0 +1,236 @@
+{
+  "task_name": "P3-BETA-SHARE-LINK-RUNTIME-SERVER-ERROR-FIXUP",
+  "artifact_version": "p3_beta_share_link_runtime_server_error_fixup_v0",
+  "schema_version": "beta_share_link_runtime_server_error_fixup.v0",
+  "generated_at": "2026-06-04T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-04T00:00:00Z",
+    "schema_version": "beta_share_link_runtime_server_error_fixup.v0",
+    "artifact_version": "p3_beta_share_link_runtime_server_error_fixup_v0",
+    "fixup_round": true,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "safe_candidate_record_created_count_delta": 0,
+    "access_activation_performed": false,
+    "main_direct_push_executed": false,
+    "production_promote_executed": false,
+    "public_launch_executed": false,
+    "tester_link_send_allowed": false,
+    "fake_fill_added": false,
+    "source_gap_to_confirmed_absence_changed": false
+  },
+  "previous_triage_summary": {
+    "row_type": "previous_triage_summary",
+    "triage_status": "beta_share_link_runtime_server_error_triage_completed_ready_for_fixup",
+    "preview_check_status": "beta_ui_preview_deployment_share_link_check_hold_runtime_server_error",
+    "search_route_issue": true,
+    "api_auth_gate_issue": true,
+    "api_runtime_500_issue": true
+  },
+  "modified_files_inspection": {
+    "row_type": "modified_files_inspection",
+    "modified_files": [
+      "vercel.json",
+      "api/search.py"
+    ],
+    "production_app_file_changed": false,
+    "search_ranking_related_files_changed": false
+  },
+  "search_route_fix": {
+    "row_type": "search_route_fix",
+    "search_rewrite_added": true,
+    "search_rewrite_destination": "/app/templates/index.html",
+    "search_route_fix_mode": "vercel_rewrite_to_same_surface_as_root"
+  },
+  "api_runtime_fix": {
+    "row_type": "api_runtime_fix",
+    "lazy_runtime_dependencies_added": true,
+    "resolved_index_path_helper_added": true,
+    "bootstrap_error_json_added": true,
+    "handler_last_boundary_added": true,
+    "fix_mode": "lazy_imports_and_runtime_path_resolution"
+  },
+  "data_index_path_check": {
+    "row_type": "data_index_path_check",
+    "index_path": "data/derived/results_search_index_v1.json",
+    "index_exists": true,
+    "index_size_bytes": 11811593,
+    "cwd_assumption_removed": true,
+    "candidate_path_resolution_added": true
+  },
+  "local_route_smoke": {
+    "row_type": "local_route_smoke",
+    "checks": [
+      {
+        "path": "/",
+        "status_code": 200,
+        "content_type": "text/html; charset=utf-8",
+        "result_count": null,
+        "total_ranked": null,
+        "needs_disambiguation": null,
+        "raw_server_error_present": false
+      },
+      {
+        "path": "/search",
+        "status_code": 200,
+        "content_type": "text/html; charset=utf-8",
+        "result_count": null,
+        "total_ranked": null,
+        "needs_disambiguation": null,
+        "raw_server_error_present": false
+      },
+      {
+        "path": "/api/search?q=summicron&limit=5",
+        "status_code": 200,
+        "content_type": "application/json",
+        "result_count": 5,
+        "total_ranked": 1232,
+        "needs_disambiguation": true,
+        "raw_server_error_present": false
+      },
+      {
+        "path": "/api/search?q=ltm%20summaron%2035&limit=5",
+        "status_code": 200,
+        "content_type": "application/json",
+        "result_count": 5,
+        "total_ranked": 197,
+        "needs_disambiguation": false,
+        "raw_server_error_present": false
+      },
+      {
+        "path": "/api/search?q=ricoh%20gr%20iiix&limit=5",
+        "status_code": 200,
+        "content_type": "application/json",
+        "result_count": 0,
+        "total_ranked": 0,
+        "needs_disambiguation": false,
+        "raw_server_error_present": false
+      },
+      {
+        "path": "/api/search?q=hasselblad%20xpan&limit=5",
+        "status_code": 200,
+        "content_type": "application/json",
+        "result_count": 0,
+        "total_ranked": 0,
+        "needs_disambiguation": false,
+        "raw_server_error_present": false
+      }
+    ],
+    "all_200": true,
+    "api_all_json_200": true
+  },
+  "raw_server_error_boundary_check": {
+    "row_type": "raw_server_error_boundary_check",
+    "raw_server_error_present_paths": [],
+    "raw_server_error_absent": true
+  },
+  "fake_fill_check": {
+    "row_type": "fake_fill_check",
+    "no_result_checks": {
+      "/api/search?q=ricoh%20gr%20iiix&limit=5": {
+        "result_count": 0,
+        "total_ranked": 0
+      },
+      "/api/search?q=hasselblad%20xpan&limit=5": {
+        "result_count": 0,
+        "total_ranked": 0
+      }
+    },
+    "fake_fill_detected": false,
+    "fake_fill_added": false
+  },
+  "forbidden_claim_check": {
+    "row_type": "forbidden_claim_check",
+    "forbidden_claims_present": [],
+    "forbidden_claims_absent": true
+  },
+  "validation_results": {
+    "row_type": "validation_results",
+    "commands": [
+      {
+        "command": "python3 tests/test_beta_share_link_runtime_server_error_fixup.py",
+        "status": "passed",
+        "summary": "ok (21 tests)"
+      },
+      {
+        "command": "python3 scripts/run_p3_beta_share_link_runtime_server_error_fixup.py",
+        "status": "passed",
+        "summary": "decision emitted"
+      },
+      {
+        "command": "python3 tests/test_beta_landing_search_ui_reference_redesign_implementation.py",
+        "status": "passed",
+        "summary": "ok (27 tests)"
+      },
+      {
+        "command": "python3 tests/test_beta_share_link_runtime_smoke_recheck.py",
+        "status": "passed",
+        "summary": "ok (22 tests)"
+      },
+      {
+        "command": "python3 tests/test_beta_ui_preview_deployment_and_share_link_check.py",
+        "status": "passed",
+        "summary": "ok (20 tests)"
+      },
+      {
+        "command": "python3 golden_set.py",
+        "status": "passed",
+        "summary": "132/132"
+      }
+    ],
+    "all_passed": true
+  },
+  "guard": {
+    "row_type": "production_public_access_guard",
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "safe_candidate_record_created_count_delta": 0,
+    "access_activation_performed": false,
+    "main_direct_push_executed": false,
+    "production_promote_executed": false,
+    "public_launch_executed": false,
+    "tester_link_send_allowed": false,
+    "fake_fill_added": false,
+    "source_gap_to_confirmed_absence_changed": false
+  },
+  "fixup_result": {
+    "row_type": "fixup_result",
+    "decision_status": "beta_share_link_runtime_server_error_fixup_ready_for_owner_approved_commit_push_preview_recheck",
+    "commit_push_deploy_required": true,
+    "next_round": "P3-BETA-SHARE-LINK-RUNTIME-SERVER-ERROR-FIXUP-COMMIT-PUSH-AND-PREVIEW-RECHECK"
+  },
+  "scenario_validation": {
+    "row_type": "scenario_validation_rollup",
+    "scenario_count": 15,
+    "pass_count": 15
+  },
+  "summary": {
+    "row_type": "summary",
+    "search_rewrite_added": true,
+    "lazy_runtime_dependencies_added": true,
+    "candidate_path_resolution_added": true,
+    "local_all_200": true,
+    "local_api_all_json_200": true,
+    "raw_server_error_absent": true,
+    "fake_fill_detected": false
+  },
+  "modified_files": [
+    "vercel.json",
+    "api/search.py",
+    "scripts/run_p3_beta_share_link_runtime_server_error_fixup.py",
+    "tests/test_beta_share_link_runtime_server_error_fixup.py",
+    "data/admin/p3_beta_share_link_runtime_server_error_fixup_v0.md",
+    "data/admin/p3_beta_share_link_runtime_server_error_fixup_v0.jsonl",
+    "data/admin/beta_share_link_runtime_server_error_fixup_v0.json"
+  ]
+}

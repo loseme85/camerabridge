@@ -22,7 +22,7 @@ import sys
 from http.server import BaseHTTPRequestHandler
 from json import JSONDecodeError
 from pathlib import Path
-from typing import Any, Mapping, Optional
+from typing import Any, Callable, Mapping, Optional
 from urllib.parse import parse_qs, urlparse
 
 
@@ -30,18 +30,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from search_index import DEFAULT_SEARCH_INDEX_PATH  # noqa: E402
-from search_service import (  # noqa: E402
-    MAX_LIMIT,
-    SUPPORTED_SORTS,
-    load_and_search,
-    search_records,
-)
-from search_ui_hints import build_query_ui_hints  # noqa: E402
-
 
 ERROR_SCHEMA_VERSION = "search_service.error.v1"
 ALLOWED_CATEGORIES = {"Lens", "Body", "Accessory"}
+DEFAULT_MAX_LIMIT = 100
+DEFAULT_SUPPORTED_SORTS = {
+    "relevance",
+    "price_asc",
+    "price_desc",
+    "title",
+    "source",
+    "condition",
+    "newest",
+}
 ALLOWED_SOLD_QUALITIES = {
     "asking",
     "sold",
@@ -50,6 +51,7 @@ ALLOWED_SOLD_QUALITIES = {
     "unknown",
     "ended_unsold",
 }
+_RUNTIME_CACHE: dict[str, Any] | None = None
 
 
 class SearchEndpointError(ValueError):
@@ -84,6 +86,62 @@ def error_payload(
     if details:
         payload["error"]["details"] = details
     return payload
+
+
+def _load_runtime_dependencies() -> dict[str, Any]:
+    global _RUNTIME_CACHE
+    if _RUNTIME_CACHE is not None:
+        return _RUNTIME_CACHE
+
+    from search_index import DEFAULT_SEARCH_INDEX_PATH  # noqa: WPS433
+    from search_service import MAX_LIMIT, SUPPORTED_SORTS, load_and_search, search_records  # noqa: WPS433
+    from search_ui_hints import build_query_ui_hints  # noqa: WPS433
+
+    _RUNTIME_CACHE = {
+        "default_search_index_path": DEFAULT_SEARCH_INDEX_PATH,
+        "max_limit": MAX_LIMIT,
+        "supported_sorts": SUPPORTED_SORTS,
+        "load_and_search": load_and_search,
+        "search_records": search_records,
+        "build_query_ui_hints": build_query_ui_hints,
+    }
+    return _RUNTIME_CACHE
+
+
+def _candidate_index_paths(default_path: str | Path) -> list[Path]:
+    default = Path(default_path)
+    candidates = [
+        default,
+        PROJECT_ROOT / "data/derived/results_search_index_v1.json",
+        Path.cwd() / "data/derived/results_search_index_v1.json",
+        Path(__file__).resolve().parent.parent / "data/derived/results_search_index_v1.json",
+    ]
+    output: list[Path] = []
+    seen: set[str] = set()
+    for candidate in candidates:
+        resolved = str(candidate.resolve())
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        output.append(candidate)
+    return output
+
+
+def _resolve_search_index_path(path: str | Path | None) -> Path:
+    runtime = _load_runtime_dependencies()
+    default_path = runtime["default_search_index_path"]
+    requested = Path(path) if path is not None else Path(default_path)
+    if requested.exists():
+        return requested
+
+    for candidate in _candidate_index_paths(default_path):
+        if candidate.exists():
+            return candidate
+
+    raise FileNotFoundError(
+        "No search index file found in runtime candidate paths: "
+        + ", ".join(str(candidate) for candidate in _candidate_index_paths(default_path))
+    )
 
 
 def _first(params: Mapping[str, Any], key: str) -> Optional[Any]:
@@ -154,14 +212,18 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
     if not query:
         raise SearchEndpointError("missing_query", "q query parameter is required")
 
-    limit = _parse_int(normalized.get("limit", 20), "limit", minimum=1, maximum=MAX_LIMIT)
+    runtime = _load_runtime_dependencies()
+    max_limit = int(runtime.get("max_limit") or DEFAULT_MAX_LIMIT)
+    supported_sorts = set(runtime.get("supported_sorts") or DEFAULT_SUPPORTED_SORTS)
+
+    limit = _parse_int(normalized.get("limit", 20), "limit", minimum=1, maximum=max_limit)
     offset = _parse_int(normalized.get("offset", 0), "offset", minimum=0)
     sort = str(normalized.get("sort") or "relevance").strip()
-    if sort not in SUPPORTED_SORTS:
+    if sort not in supported_sorts:
         raise SearchEndpointError(
             "invalid_sort",
             "sort is not supported",
-            details={"value": sort, "allowed": sorted(SUPPORTED_SORTS)},
+            details={"value": sort, "allowed": sorted(supported_sorts)},
         )
 
     include_debug = False
@@ -245,8 +307,12 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
 def search_from_params(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
-    path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
+    path: str | Path | None = None,
 ) -> dict[str, Any]:
+    runtime = _load_runtime_dependencies()
+    search_records: Callable[..., dict[str, Any]] = runtime["search_records"]
+    load_and_search: Callable[..., dict[str, Any]] = runtime["load_and_search"]
+    build_query_ui_hints: Callable[..., dict[str, Any]] = runtime["build_query_ui_hints"]
     parsed = parse_search_params(params)
     if records is not None:
         response = search_records(
@@ -263,9 +329,10 @@ def search_from_params(
         response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
         return response
 
+    resolved_path = _resolve_search_index_path(path)
     response = load_and_search(
         query=parsed["query"],
-        path=path,
+        path=resolved_path,
         limit=parsed["limit"],
         offset=parsed["offset"],
         filters=parsed["filters"],
@@ -281,7 +348,7 @@ def search_from_params(
 def endpoint_response(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
-    path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
+    path: str | Path | None = None,
 ) -> tuple[int, dict[str, Any]]:
     try:
         return 200, search_from_params(params, records=records, path=path)
@@ -298,6 +365,13 @@ def endpoint_response(
         return 503, error_payload(
             "search_data_load_failed",
             "search data file is not valid JSON",
+            503,
+            {"message": str(exc)},
+        )
+    except ImportError as exc:
+        return 503, error_payload(
+            "search_runtime_bootstrap_failed",
+            "search runtime dependencies could not be loaded",
             503,
             {"message": str(exc)},
         )
@@ -325,7 +399,16 @@ class handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self) -> None:
-        status, payload = endpoint_response(_query_params_from_path(self.path))
+        try:
+            status, payload = endpoint_response(_query_params_from_path(self.path))
+        except Exception as exc:  # pragma: no cover - ultra-last serverless boundary
+            status = 500
+            payload = error_payload(
+                "search_handler_failed",
+                "search handler failed",
+                500,
+                {"message": str(exc)},
+            )
         self._write_json(status, payload)
 
     def do_OPTIONS(self) -> None:
