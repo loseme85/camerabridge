@@ -1,0 +1,22 @@
+{
+  "task_name": "P3-BETA-SHARE-LINK-RUNTIME-SERVER-ERROR-FIXUP-FOLLOWUP",
+  "decision_status": "beta_share_link_runtime_server_error_fixup_followup_local_ready_for_commit_push_preview_recheck",
+  "branch": "beta-ui-redesign-controlled-preview",
+  "search_ui_hints_status": {
+    "present": true,
+    "tracked": true,
+    "ignored": false
+  },
+  "local_module_dependency_audit": {
+    "search_ui_hints_import_ok": true,
+    "search_index_import_ok": true,
+    "search_service_import_ok": true,
+    "api_search_py_compile_ok": true
+  },
+  "production_launch_go": false,
+  "public_unrestricted_access_enabled": false,
+  "external_tester_access_enabled": false,
+  "tester_link_send_allowed": false,
+  "fake_fill_added": false,
+  "source_gap_to_confirmed_absence_changed": false
+}
