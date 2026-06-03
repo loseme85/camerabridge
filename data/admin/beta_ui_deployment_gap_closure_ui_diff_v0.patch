@@ -1,0 +1,3629 @@
+diff --git a/app/app.py b/app/app.py
+index 5810246..5893756 100644
+--- a/app/app.py
++++ b/app/app.py
+@@ -1,10 +1,32 @@
+-from flask import Flask
++from __future__ import annotations
++
++import sys
++from pathlib import Path
++
++from flask import Flask, jsonify, render_template, request
++
++
++PROJECT_ROOT = Path(__file__).resolve().parents[1]
++if str(PROJECT_ROOT) not in sys.path:
++    sys.path.insert(0, str(PROJECT_ROOT))
++
++from api.search import endpoint_response  # noqa: E402
++
++
++app = Flask(__name__, template_folder="templates", static_folder="static")
+ 
+-app = Flask(__name__)
+ 
+ @app.route("/")
+-def index():
+-    return "CameraBridge Admin API OK"
++@app.route("/search")
++def index() -> str:
++    return render_template("index.html")
++
++
++@app.route("/api/search")
++def search_api():
++    status, payload = endpoint_response(request.args)
++    return jsonify(payload), status
++
+ 
+ if __name__ == "__main__":
+     app.run(debug=True)
+diff --git a/app/templates/index.html b/app/templates/index.html
+index 857432b..1fabbfc 100644
+--- a/app/templates/index.html
++++ b/app/templates/index.html
+@@ -6,23 +6,25 @@
+   <title>Camera Bridge</title>
+   <style>
+     :root{
+-      --bg:#f7f6f3;
++      --bg:#f6f4ef;
+       --surface:#ffffff;
+-      --surface-2:#f1efeb;
+-      --surface-3:#e8e3dc;
+-      --border:#ded9d1;
+-      --border-strong:#c8c1b7;
+-      --text:#191817;
+-      --dim:#68615a;
+-      --muted:#9a9288;
+-      --accent:#e11f26;
+-      --accent-soft:rgba(225,31,38,0.08);
+-      --blue:#125c8a;
+-      --green:#2f7140;
+-      --amber:#a45f00;
+-      --shadow:0 16px 40px rgba(27,24,20,0.08);
++      --surface-soft:#f1eee8;
++      --surface-muted:#ebe6de;
++      --border:#d9d2c8;
++      --border-strong:#c7beb2;
++      --text:#191715;
++      --text-soft:#655d55;
++      --text-muted:#91877c;
++      --accent:#b21d24;
++      --accent-soft:rgba(178,29,36,0.08);
++      --blue:#1f5473;
++      --green:#2e6d43;
++      --amber:#99611f;
++      --shadow:0 20px 48px rgba(27,23,19,0.07);
++      --radius:6px;
+     }
+     *{box-sizing:border-box}
++    html{scroll-behavior:smooth}
+     body{
+       margin:0;
+       min-height:100vh;
+@@ -31,20 +33,20 @@
+       font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased;
+     }
++    a{color:inherit}
+     button,input,select{font:inherit}
+     button{cursor:pointer}
+-    a{color:inherit}
+-    .shell{min-height:100vh;display:flex;flex-direction:column}
++    .shell{min-height:100vh}
+     .topbar{
+       position:sticky;
+       top:0;
+       z-index:20;
+-      height:64px;
+       display:flex;
+       align-items:center;
+-      gap:20px;
+-      padding:0 28px;
+-      background:rgba(247,246,243,0.94);
++      gap:18px;
++      justify-content:space-between;
++      padding:14px 24px;
++      background:rgba(246,244,239,0.95);
+       border-bottom:1px solid var(--border);
+       backdrop-filter:blur(14px);
+     }
+@@ -52,316 +54,625 @@
+       display:flex;
+       align-items:center;
+       gap:10px;
+-      min-width:188px;
++      text-decoration:none;
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:13px;
++      font-size:12px;
+       font-weight:800;
+       letter-spacing:2px;
+-      text-decoration:none;
+     }
+     .brand-mark{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+     .brand span{color:var(--accent)}
+-    .top-search{
+-      flex:1;
++    .topbar-meta{
+       display:flex;
+       align-items:center;
+       gap:8px;
++      flex-wrap:wrap;
++      justify-content:flex-end;
++    }
++    .meta-pill{
++      border:1px solid var(--border-strong);
++      background:var(--surface);
++      border-radius:999px;
++      padding:6px 10px;
++      color:var(--text-soft);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:0.4px;
++      white-space:nowrap;
++    }
++    .meta-pill.accent{
++      color:var(--accent);
++      border-color:rgba(178,29,36,0.28);
++      background:var(--accent-soft);
++    }
++    main{
++      width:min(1280px, calc(100% - 32px));
++      margin:0 auto;
++      padding:24px 0 48px;
++    }
++    .hero{
++      background:var(--surface);
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      box-shadow:var(--shadow);
++      overflow:hidden;
++      margin-bottom:18px;
++    }
++    .hero-grid{
++      display:grid;
++      grid-template-columns:minmax(0,1.35fr) minmax(280px,0.65fr);
++      gap:0;
++    }
++    .hero-copy{
++      padding:34px 34px 24px;
++      border-right:1px solid var(--border);
++      min-width:0;
++    }
++    .eyebrow{
++      margin:0 0 16px;
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:1.6px;
++      text-transform:uppercase;
++    }
++    .hero-title{
++      margin:0 0 12px;
++      font-size:46px;
++      line-height:1.02;
++      letter-spacing:0;
++      font-weight:800;
+       max-width:760px;
+     }
+-    .query-input{
++    .hero-subtitle{
++      margin:0 0 20px;
++      max-width:780px;
++      color:var(--text-soft);
++      font-size:16px;
++      line-height:1.65;
++    }
++    .hero-notices{
++      display:flex;
++      flex-wrap:wrap;
++      gap:8px;
++      margin-bottom:18px;
++    }
++    .notice-pill{
++      border:1px solid var(--border-strong);
++      background:var(--surface-soft);
++      color:var(--text-soft);
++      border-radius:999px;
++      padding:7px 12px;
++      font-size:12px;
++      line-height:1.3;
++    }
++    .search-panel{
++      border:1px solid var(--border);
++      background:linear-gradient(180deg, rgba(246,244,239,0.78), #fff 100%);
++      border-radius:var(--radius);
++      padding:16px;
++    }
++    .search-panel-label,
++    .section-label{
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:1.4px;
++      text-transform:uppercase;
++    }
++    .search-form-row{
++      display:flex;
++      gap:10px;
++      align-items:center;
++      margin-top:10px;
++    }
++    .search-field{
+       flex:1;
+       min-width:0;
+-      height:40px;
++      height:48px;
+       border:1px solid var(--border-strong);
+-      background:var(--surface);
++      background:#fff;
+       color:var(--text);
+-      border-radius:4px;
+-      padding:0 13px;
++      border-radius:var(--radius);
++      padding:0 16px;
++      font-size:15px;
+       outline:none;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:13px;
+-      letter-spacing:0;
+     }
+-    .query-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+-    .icon-button{
+-      width:40px;
+-      height:40px;
+-      border:1px solid var(--accent);
+-      border-radius:4px;
++    .search-field:focus,
++    select:focus{
++      border-color:var(--accent);
++      box-shadow:0 0 0 3px var(--accent-soft);
++    }
++    .search-button{
++      height:48px;
++      min-width:120px;
++      border:none;
+       background:var(--accent);
+       color:#fff;
++      border-radius:var(--radius);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:12px;
+       font-weight:800;
+-      line-height:1;
++      letter-spacing:0.6px;
++    }
++    .search-button:hover{filter:brightness(0.96)}
++    .query-chip-row{
++      display:flex;
++      flex-wrap:wrap;
++      gap:8px;
++      margin-top:14px;
+     }
+-    .icon-button:hover{filter:brightness(0.95)}
+-    .header-meta{
+-      margin-left:auto;
+-      color:var(--muted);
++    .query-chip{
++      min-height:32px;
++      border:1px solid var(--border-strong);
++      background:#fff;
++      color:var(--text-soft);
++      border-radius:999px;
++      padding:6px 12px;
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:10px;
+-      letter-spacing:1px;
+-      white-space:nowrap;
++      font-size:11px;
++      line-height:1.2;
+     }
+-    main{width:100%;max-width:1220px;margin:0 auto;padding:26px 24px 48px}
+-    .search-band{
+-      display:grid;
+-      grid-template-columns:minmax(0,1fr) auto;
+-      gap:18px;
+-      align-items:end;
+-      padding:22px 0 18px;
+-      border-bottom:1px solid var(--border);
++    .query-chip:hover{
++      color:var(--accent);
++      border-color:rgba(178,29,36,0.34);
+     }
+-    .page-title{
+-      margin:0 0 14px;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:34px;
+-      line-height:1.05;
+-      letter-spacing:0;
+-      font-weight:800;
++    .hero-sidebar{
++      padding:28px 28px 24px;
++      display:flex;
++      flex-direction:column;
++      gap:14px;
++      background:linear-gradient(180deg, rgba(235,230,222,0.52), rgba(255,255,255,0.96));
++    }
++    .sidebar-card{
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      background:rgba(255,255,255,0.84);
++      padding:16px;
++    }
++    .sidebar-card h2,
++    .workspace-card h2,
++    .workspace-card h3,
++    .state-card h3,
++    .market-entry-card h3,
++    .archive-card h3{
++      margin:0 0 10px;
++      font-size:16px;
++      line-height:1.3;
+     }
+-    .page-sub{
++    .sidebar-card p,
++    .workspace-card p,
++    .state-card p,
++    .market-entry-card p,
++    .archive-card p{
+       margin:0;
+-      max-width:720px;
+-      color:var(--dim);
++      color:var(--text-soft);
+       font-size:13px;
+       line-height:1.6;
+     }
+-    .quick-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+-    .quick-chip{
+-      height:30px;
+-      border:1px solid var(--border-strong);
++    .plain-list{
++      margin:10px 0 0;
++      padding-left:18px;
++      color:var(--text-soft);
++      font-size:13px;
++      line-height:1.7;
++    }
++    .overview-grid{
++      display:grid;
++      grid-template-columns:repeat(3, minmax(0,1fr));
++      gap:12px;
++      margin-bottom:18px;
++    }
++    .workspace-card{
+       background:var(--surface);
+-      color:var(--dim);
+-      border-radius:4px;
+-      padding:0 10px;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:11px;
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      padding:18px;
++      box-shadow:0 6px 18px rgba(27,23,19,0.03);
++    }
++    .workspace{
++      background:var(--surface);
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      box-shadow:var(--shadow);
++      overflow:hidden;
+     }
+-    .quick-chip:hover{border-color:var(--accent);color:var(--accent)}
+-    .controls{
++    .toolbar{
+       display:grid;
+-      grid-template-columns:repeat(5,minmax(140px,1fr));
++      grid-template-columns:repeat(5,minmax(0,1fr));
+       gap:10px;
+-      padding:18px 0;
++      padding:18px 20px;
++      border-bottom:1px solid var(--border);
++      background:rgba(255,255,255,0.92);
+     }
+     .control{
+       display:flex;
+       flex-direction:column;
+-      gap:6px;
++      gap:7px;
+     }
+     .control label{
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      color:var(--muted);
+-      font-size:9px;
+-      letter-spacing:1.5px;
++      font-size:10px;
++      letter-spacing:1.4px;
+       text-transform:uppercase;
+     }
+     .control select{
+-      height:38px;
++      height:40px;
+       border:1px solid var(--border-strong);
+-      background:var(--surface);
++      background:#fff;
++      border-radius:var(--radius);
++      padding:0 12px;
+       color:var(--text);
+-      border-radius:4px;
+-      padding:0 10px;
+       outline:none;
+-      font-size:13px;
+     }
+-    .control select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+     .status-strip{
+-      min-height:48px;
+       display:flex;
+-      align-items:center;
++      align-items:flex-end;
+       justify-content:space-between;
+-      gap:14px;
+-      border-top:1px solid var(--border);
++      gap:18px;
++      padding:18px 20px;
+       border-bottom:1px solid var(--border);
+-      padding:12px 0;
+-      margin-bottom:16px;
++      background:linear-gradient(180deg, rgba(241,238,232,0.5), rgba(255,255,255,0.9));
+     }
+-    .result-summary{
++    .summary-copy{min-width:0}
++    .summary-value{
+       display:flex;
+       align-items:baseline;
+-      gap:10px;
+-      min-width:0;
++      gap:12px;
++      margin-bottom:6px;
+     }
+-    .result-summary strong{
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:28px;
++    .summary-value strong{
+       color:var(--accent);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:34px;
+       letter-spacing:0;
+     }
+-    .result-summary span{
+-      color:var(--dim);
+-      font-size:13px;
+-      overflow:hidden;
+-      text-overflow:ellipsis;
+-      white-space:nowrap;
++    .summary-caption{
++      color:var(--text-soft);
++      font-size:14px;
++      line-height:1.5;
++    }
++    .summary-meta{
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:1px;
++      text-transform:uppercase;
++    }
++    .page-controls{
++      display:flex;
++      align-items:center;
++      gap:8px;
++      flex-wrap:wrap;
++      justify-content:flex-end;
+     }
+-    .page-controls{display:flex;align-items:center;gap:8px}
+     .page-button{
+-      height:34px;
+-      min-width:78px;
++      height:36px;
++      min-width:84px;
+       border:1px solid var(--border-strong);
+-      background:var(--surface);
++      background:#fff;
+       color:var(--text);
+-      border-radius:4px;
++      border-radius:var(--radius);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:11px;
+     }
+-    .page-button:disabled{opacity:0.38;cursor:not-allowed}
+-    .page-button:not(:disabled):hover{border-color:var(--accent);color:var(--accent)}
++    .page-button:disabled{opacity:0.42;cursor:not-allowed}
+     .page-indicator{
+-      min-width:108px;
++      min-width:110px;
+       text-align:center;
+-      color:var(--muted);
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:10px;
+     }
+-    .state{
++    .workspace-grid{
++      display:grid;
++      grid-template-columns:minmax(0,1fr) 300px;
++      gap:0;
++    }
++    .workspace-main{
++      padding:18px 20px 24px;
++      border-right:1px solid var(--border);
++    }
++    .workspace-side{
++      padding:18px;
++      display:flex;
++      flex-direction:column;
++      gap:12px;
++      background:rgba(246,244,239,0.54);
++    }
++    .state-card,
++    .market-entry-card,
++    .archive-card,
++    .side-panel{
+       border:1px solid var(--border);
+-      background:var(--surface);
+-      border-radius:6px;
+-      padding:34px 22px;
+-      color:var(--dim);
+-      text-align:center;
++      background:#fff;
++      border-radius:var(--radius);
++      padding:18px;
++      margin-bottom:12px;
++    }
++    .state-card.error{
++      border-color:rgba(178,29,36,0.28);
++      background:rgba(178,29,36,0.05);
++    }
++    .state-card.subtle{
++      background:var(--surface-soft);
++    }
++    .state-actions{
++      display:flex;
++      gap:8px;
++      flex-wrap:wrap;
++      margin-top:14px;
++    }
++    .ghost-button,
++    .action-button{
++      min-height:34px;
++      border-radius:999px;
++      padding:7px 12px;
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:12px;
+-      box-shadow:var(--shadow);
++      font-size:10px;
++      line-height:1.2;
++      border:1px solid var(--border-strong);
++      background:#fff;
++      color:var(--text-soft);
++      text-decoration:none;
++      display:inline-flex;
++      align-items:center;
++      justify-content:center;
++    }
++    .action-button{
++      border-color:var(--accent);
++      background:var(--accent);
++      color:#fff;
++    }
++    .ghost-button:hover{border-color:rgba(178,29,36,0.3);color:var(--accent)}
++    .action-button[aria-disabled="true"],
++    .ghost-button[aria-disabled="true"]{
++      opacity:0.45;
++      pointer-events:none;
++    }
++    .market-topline{
++      display:flex;
++      align-items:flex-start;
++      justify-content:space-between;
++      gap:12px;
++      margin-bottom:12px;
++    }
++    .market-topline p{max-width:720px}
++    .market-badges,
++    .micro-pills{
++      display:flex;
++      flex-wrap:wrap;
++      gap:6px;
++    }
++    .micro-pill{
++      border-radius:999px;
++      padding:5px 9px;
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      border:1px solid var(--border);
++      background:var(--surface-soft);
++      color:var(--text-soft);
++    }
++    .micro-pill.accent{border-color:rgba(178,29,36,0.28);background:var(--accent-soft);color:var(--accent)}
++    .micro-pill.blue{border-color:rgba(31,84,115,0.24);background:rgba(31,84,115,0.08);color:var(--blue)}
++    .micro-pill.green{border-color:rgba(46,109,67,0.22);background:rgba(46,109,67,0.08);color:var(--green)}
++    .micro-pill.amber{border-color:rgba(153,97,31,0.24);background:rgba(153,97,31,0.08);color:var(--amber)}
++    .metric-grid{
++      display:grid;
++      grid-template-columns:repeat(4,minmax(0,1fr));
++      gap:10px;
++      margin-top:14px;
++    }
++    .metric-card{
++      border:1px solid var(--border);
++      background:var(--surface-soft);
++      border-radius:var(--radius);
++      padding:12px;
++    }
++    .metric-card b{
++      display:block;
++      margin-bottom:5px;
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:9px;
++      letter-spacing:1.2px;
++      text-transform:uppercase;
++    }
++    .metric-card span{
++      display:block;
++      color:var(--text);
++      font-size:14px;
++      font-weight:700;
++      line-height:1.3;
+     }
+-    .state.error{border-color:rgba(225,31,38,0.32);background:rgba(225,31,38,0.04);color:var(--accent)}
+     .results-grid{
+       display:grid;
+       grid-template-columns:repeat(2,minmax(0,1fr));
+       gap:12px;
+     }
+     .result-card{
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      background:#fff;
++      box-shadow:0 6px 18px rgba(27,23,19,0.04);
++      overflow:hidden;
++      display:flex;
++      flex-direction:column;
++      min-width:0;
++    }
++    .result-head{
+       display:grid;
+-      grid-template-columns:96px minmax(0,1fr);
++      grid-template-columns:88px minmax(0,1fr);
+       gap:14px;
+-      min-height:162px;
+-      border:1px solid var(--border);
+-      border-radius:6px;
+-      background:var(--surface);
+-      padding:12px;
+-      box-shadow:0 4px 16px rgba(27,24,20,0.04);
++      padding:14px;
++      border-bottom:1px solid var(--border);
+     }
+     .thumb{
+-      width:96px;
++      width:88px;
+       aspect-ratio:1;
+-      border:1px solid var(--border);
+-      border-radius:4px;
++      border-radius:var(--radius);
+       overflow:hidden;
+-      background:linear-gradient(135deg,var(--surface-2),var(--surface-3));
++      border:1px solid var(--border);
++      background:linear-gradient(145deg, var(--surface-soft), var(--surface-muted));
+       display:flex;
+       align-items:center;
+       justify-content:center;
+-      color:var(--muted);
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:18px;
+       font-weight:800;
++      font-size:18px;
+     }
+     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+-    .card-body{min-width:0;display:flex;flex-direction:column;gap:9px}
+-    .card-title{
++    .card-copy{min-width:0}
++    .result-title{
++      margin:0 0 8px;
++      font-size:15px;
++      line-height:1.45;
++      font-weight:700;
++      text-decoration:none;
++      color:var(--text);
+       display:-webkit-box;
+       -webkit-line-clamp:2;
+       -webkit-box-orient:vertical;
+       overflow:hidden;
+-      min-height:39px;
+-      color:var(--text);
+-      text-decoration:none;
+-      font-size:14px;
+-      line-height:1.4;
+-      font-weight:700;
+     }
+-    .card-title:hover{color:var(--accent)}
+-    .price-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+-    .price{
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
++    .result-title:hover{color:var(--accent)}
++    .result-price-row{
++      display:flex;
++      align-items:baseline;
++      justify-content:space-between;
++      gap:10px;
++      margin-bottom:8px;
++    }
++    .result-price{
+       color:var(--accent);
+-      font-size:14px;
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:16px;
+       font-weight:800;
+     }
+-    .source{
+-      color:var(--dim);
++    .result-source{
++      text-align:right;
++      color:var(--text-soft);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:10px;
+-      text-align:right;
+-      overflow:hidden;
+-      text-overflow:ellipsis;
+-      white-space:nowrap;
++      line-height:1.4;
++    }
++    .result-status-row{
++      display:flex;
++      flex-wrap:wrap;
++      gap:6px;
+     }
+-    .field-grid{
++    .data-grid{
+       display:grid;
+       grid-template-columns:repeat(4,minmax(0,1fr));
+-      gap:5px;
++      gap:8px;
++      padding:14px;
++      border-bottom:1px solid var(--border);
+     }
+-    .field{
++    .data-point{
+       min-width:0;
+       border:1px solid var(--border);
+-      background:var(--surface-2);
+-      border-radius:4px;
+-      padding:5px 6px;
++      background:var(--surface-soft);
++      border-radius:var(--radius);
++      padding:8px 9px;
+     }
+-    .field b{
++    .data-point b{
+       display:block;
+-      color:var(--muted);
++      margin-bottom:4px;
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:8px;
+       letter-spacing:1px;
+       text-transform:uppercase;
+-      margin-bottom:3px;
+     }
+-    .field span{
++    .data-point span{
+       display:block;
+-      min-height:15px;
++      min-height:16px;
+       color:var(--text);
+       font-size:11px;
++      line-height:1.45;
+       overflow:hidden;
+       text-overflow:ellipsis;
+-      white-space:nowrap;
+     }
+-    .pill-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+-    .pill{
++    .result-actions{
++      display:flex;
++      align-items:center;
++      justify-content:space-between;
++      gap:10px;
++      padding:12px 14px 14px;
++      margin-top:auto;
++    }
++    .result-actions .action-group{
++      display:flex;
++      gap:8px;
++      flex-wrap:wrap;
++    }
++    .archive-list{
++      display:grid;
++      gap:10px;
++      margin-top:12px;
++    }
++    .archive-item{
+       border:1px solid var(--border);
+-      border-radius:3px;
+-      background:#fff;
+-      color:var(--dim);
+-      padding:2px 6px;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:9px;
+-      white-space:nowrap;
++      background:var(--surface-soft);
++      border-radius:var(--radius);
++      padding:12px;
++    }
++    .archive-item strong{
++      display:block;
++      margin-bottom:6px;
++      font-size:13px;
++      line-height:1.45;
++    }
++    .archive-meta{
++      display:flex;
++      flex-wrap:wrap;
++      gap:8px;
++      margin-top:8px;
+     }
+-    .pill.match{border-color:rgba(18,92,138,0.24);background:rgba(18,92,138,0.07);color:var(--blue)}
+-    .pill.override{border-color:rgba(47,113,64,0.28);background:rgba(47,113,64,0.08);color:var(--green)}
+-    .pill.warn{border-color:rgba(164,95,0,0.28);background:rgba(164,95,0,0.08);color:var(--amber)}
++    .side-panel .plain-list{margin-top:8px}
+     .footer-note{
+-      color:var(--muted);
++      margin-top:16px;
++      padding:0 2px;
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:10px;
+-      margin-top:18px;
+-      line-height:1.6;
++      line-height:1.7;
+     }
+-    @media(max-width:900px){
+-      .topbar{height:auto;align-items:flex-start;flex-direction:column;padding:14px 16px}
+-      .brand{min-width:0}
+-      .top-search{width:100%;max-width:none}
+-      .header-meta{display:none}
+-      main{padding:18px 14px 36px}
+-      .search-band{grid-template-columns:1fr;align-items:start}
+-      .quick-row{justify-content:flex-start}
+-      .controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+-      .status-strip{align-items:flex-start;flex-direction:column}
+-      .page-controls{width:100%;justify-content:space-between}
++    @media(max-width:1080px){
++      .hero-grid,
++      .workspace-grid,
++      .overview-grid{
++        grid-template-columns:1fr;
++      }
++      .hero-copy{border-right:none;border-bottom:1px solid var(--border)}
++      .workspace-main{border-right:none;border-bottom:1px solid var(--border)}
++      .toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
+       .results-grid{grid-template-columns:1fr}
++      .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+     }
+-    @media(max-width:560px){
+-      .page-title{font-size:28px}
+-      .controls{grid-template-columns:1fr}
+-      .result-card{grid-template-columns:72px minmax(0,1fr)}
+-      .thumb{width:72px}
+-      .field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+-      .icon-button{width:42px;flex-shrink:0}
++    @media(max-width:720px){
++      .topbar{
++        padding:12px 14px;
++        flex-direction:column;
++        align-items:flex-start;
++      }
++      main{width:min(100% - 20px, 1280px)}
++      .hero-copy,
++      .hero-sidebar,
++      .workspace-main,
++      .workspace-side{padding-left:16px;padding-right:16px}
++      .hero-title{font-size:34px}
++      .search-form-row{flex-direction:column;align-items:stretch}
++      .search-button{width:100%}
++      .toolbar{grid-template-columns:1fr}
++      .status-strip{flex-direction:column;align-items:flex-start}
++      .page-controls{width:100%;justify-content:space-between}
++      .metric-grid,
++      .data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
++      .result-head{grid-template-columns:74px minmax(0,1fr)}
++      .thumb{width:74px}
+     }
+   </style>
+ </head>
+@@ -372,99 +683,214 @@
+         <span class="brand-mark"></span>
+         CAMERA <span>BRIDGE</span>
+       </a>
+-      <form class="top-search" id="search-form">
+-        <input id="query-input" class="query-input" type="search" autocomplete="off" placeholder="35lux aa, q3 28, ltm summaron 35">
+-        <button class="icon-button" type="submit" aria-label="Search">Go</button>
+-      </form>
+-      <div class="header-meta">MARKET DESK</div>
++      <div class="topbar-meta">
++        <span class="meta-pill accent">Private beta</span>
++        <span class="meta-pill">Independent market intelligence</span>
++        <span class="meta-pill">No fake fill</span>
++      </div>
+     </header>
+ 
+     <main>
+-      <section class="search-band">
+-        <div>
+-          <h1 class="page-title">Find rare camera gear</h1>
+-          <p class="page-sub">Rare bodies, collectible lenses, and hard-to-find dealer listings.</p>
+-        </div>
+-        <div class="quick-row" aria-label="Quick searches">
+-          <button class="quick-chip" type="button" data-query="mp3 silver">mp3 silver</button>
+-          <button class="quick-chip" type="button" data-query="q3 28">q3 28</button>
+-          <button class="quick-chip" type="button" data-query="ltm summaron 35">ltm summaron 35</button>
+-          <button class="quick-chip" type="button" data-query="35lux aa">35lux aa</button>
++      <section class="hero">
++        <div class="hero-grid">
++          <div class="hero-copy">
++            <p class="eyebrow">Global used camera search and market intelligence</p>
++            <h1 class="hero-title">Global used camera search &amp; market intelligence</h1>
++            <p class="hero-subtitle">
++              Track rare Leica, premium camera gear, active listings, sold references, source coverage, and market signals across global used markets.
++            </p>
++            <div class="hero-notices">
++              <span class="notice-pill">Independent project. Not affiliated with Leica, dealers, or marketplaces.</span>
++              <span class="notice-pill">Private beta. Results may be incomplete. Prices are references, not guaranteed valuations.</span>
++              <span class="notice-pill">No personal information or private listing details are needed for testing.</span>
++            </div>
++            <section class="search-panel" aria-label="Search home">
++              <div class="search-panel-label">Search home</div>
++              <form id="search-form" class="search-form-row">
++                <input id="query-input" class="search-field" type="search" autocomplete="off" placeholder="Leica M6, Summicron-M 35 ASPH, q3 28, ltm summaron 35">
++                <button class="search-button" type="submit" aria-label="Search">Search</button>
++              </form>
++              <div class="query-chip-row" aria-label="Example searches">
++                <button class="query-chip" type="button" data-query="Leica M6">Leica M6</button>
++                <button class="query-chip" type="button" data-query="Summicron-M 35 ASPH">Summicron-M 35 ASPH</button>
++                <button class="query-chip" type="button" data-query="35 lux aa">35 lux aa</button>
++                <button class="query-chip" type="button" data-query="Leica MP silver">Leica MP silver</button>
++                <button class="query-chip" type="button" data-query="Ricoh GR IIIx">Ricoh GR IIIx</button>
++                <button class="query-chip" type="button" data-query="Hasselblad XPan">Hasselblad XPan</button>
++                <button class="query-chip" type="button" data-query="mp3 silver">mp3 silver</button>
++                <button class="query-chip" type="button" data-query="q3 28">q3 28</button>
++                <button class="query-chip" type="button" data-query="ltm summaron 35">ltm summaron 35</button>
++                <button class="query-chip" type="button" data-query="35lux aa">35lux aa</button>
++              </div>
++            </section>
++          </div>
++          <aside class="hero-sidebar">
++            <div class="sidebar-card">
++              <p class="section-label">What Camera Bridge tracks</p>
++              <h2>Built for rare Leica, premium camera gear, and collector-grade market tracking.</h2>
++              <ul class="plain-list">
++                <li>Global active listings</li>
++                <li>Sold references and archive context</li>
++                <li>Source coverage and source-gap cues</li>
++                <li>Match confidence and price reference framing</li>
++              </ul>
++            </div>
++            <div class="sidebar-card">
++              <p class="section-label">Feedback scope</p>
++              <h2>Simple feedback is enough.</h2>
++              <ul class="plain-list">
++                <li>Wrong match</li>
++                <li>Confusing price</li>
++                <li>Unclear source</li>
++                <li>Missing item</li>
++                <li>UI confusing</li>
++              </ul>
++            </div>
++          </aside>
+         </div>
+       </section>
+ 
+-      <section class="controls" aria-label="Search filters">
+-        <div class="control">
+-          <label for="category-filter">Category</label>
+-          <select id="category-filter">
+-            <option value="">Any</option>
+-            <option value="Lens">Lens</option>
+-            <option value="Body">Body</option>
+-            <option value="Accessory">Accessory</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="brand-filter">Brand</label>
+-          <select id="brand-filter">
+-            <option value="">Any</option>
+-            <option value="Leica">Leica</option>
+-            <option value="Voigtlander">Voigtlander</option>
+-            <option value="Zeiss">Zeiss</option>
+-            <option value="Hasselblad">Hasselblad</option>
+-            <option value="Sigma">Sigma</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="mount-filter">Mount</label>
+-          <select id="mount-filter">
+-            <option value="">Any</option>
+-            <option value="M">M</option>
+-            <option value="L">L</option>
+-            <option value="R">R</option>
+-            <option value="SL">SL</option>
+-            <option value="Q">Q</option>
+-            <option value="S">S</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="sold-filter">Sold quality</label>
+-          <select id="sold-filter">
+-            <option value="">Any</option>
+-            <option value="asking">Asking</option>
+-            <option value="sold">Sold</option>
+-            <option value="unknown">Unknown</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="sort-select">Sort</label>
+-          <select id="sort-select">
+-            <option value="relevance">Relevance</option>
+-            <option value="price_asc">Price low</option>
+-            <option value="price_desc">Price high</option>
+-          </select>
+-        </div>
++      <section class="overview-grid">
++        <article class="workspace-card">
++          <p class="section-label">Search home</p>
++          <h2>No fake fill</h2>
++          <p>If we cannot verify a result, we say so. No nearby model is promoted as a fake replacement for a missing match.</p>
++        </article>
++        <article class="workspace-card">
++          <p class="section-label">Source coverage</p>
++          <h2>Source-gap is not confirmed absence</h2>
++          <p>Coverage gaps are shown as limited source visibility, not as proof that an item does not exist.</p>
++        </article>
++        <article class="workspace-card">
++          <p class="section-label">Private beta CTA</p>
++          <h2>Quiet alert actions only</h2>
++          <p>Alerts can be suggested, but broad-query pressure and loud marketplace urgency are intentionally avoided.</p>
++        </article>
+       </section>
+ 
+-      <section class="status-strip">
+-        <div class="result-summary">
+-          <strong id="result-count">0</strong>
+-          <span id="result-caption">Ready</span>
++      <section class="workspace">
++        <div class="toolbar" aria-label="Search filters">
++          <div class="control">
++            <label for="category-filter">Category</label>
++            <select id="category-filter">
++              <option value="">Any</option>
++              <option value="Lens">Lens</option>
++              <option value="Body">Body</option>
++              <option value="Accessory">Accessory</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="brand-filter">Brand</label>
++            <select id="brand-filter">
++              <option value="">Any</option>
++              <option value="Leica">Leica</option>
++              <option value="Voigtlander">Voigtlander</option>
++              <option value="Zeiss">Zeiss</option>
++              <option value="Hasselblad">Hasselblad</option>
++              <option value="Sigma">Sigma</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="mount-filter">Mount</label>
++            <select id="mount-filter">
++              <option value="">Any</option>
++              <option value="M">M</option>
++              <option value="L">L</option>
++              <option value="R">R</option>
++              <option value="SL">SL</option>
++              <option value="Q">Q</option>
++              <option value="S">S</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="sold-filter">Sold quality</label>
++            <select id="sold-filter">
++              <option value="">Any</option>
++              <option value="asking">Asking</option>
++              <option value="sold">Sold</option>
++              <option value="sold_confirmed">Sold confirmed</option>
++              <option value="sold_likely">Sold likely</option>
++              <option value="unknown">Unknown</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="sort-select">Sort</label>
++            <select id="sort-select">
++              <option value="relevance">Relevance</option>
++              <option value="price_asc">Price low</option>
++              <option value="price_desc">Price high</option>
++              <option value="newest">Newest</option>
++            </select>
++          </div>
+         </div>
+-        <div class="page-controls">
+-          <button id="prev-button" class="page-button" type="button">Prev</button>
+-          <span id="page-indicator" class="page-indicator">0-0</span>
+-          <button id="next-button" class="page-button" type="button">Next</button>
++
++        <section class="status-strip">
++          <div class="summary-copy">
++            <div class="summary-value">
++              <strong id="result-count">0</strong>
++              <span id="result-caption" class="summary-caption">Ready for search</span>
++            </div>
++            <div id="summary-meta" class="summary-meta">Private beta search home</div>
++          </div>
++          <div class="page-controls">
++            <button id="prev-button" class="page-button" type="button">Prev</button>
++            <span id="page-indicator" class="page-indicator">0-0</span>
++            <button id="next-button" class="page-button" type="button">Next</button>
++          </div>
++        </section>
++
++        <div class="workspace-grid">
++          <div class="workspace-main">
++            <section id="state-region" aria-live="polite"></section>
++            <section id="market-entry-region" aria-live="polite"></section>
++            <section id="refinement-region" aria-live="polite"></section>
++            <section id="results-grid" class="results-grid" aria-live="polite"></section>
++            <section id="archive-region" aria-live="polite"></section>
++            <div class="footer-note" id="warning-region"></div>
++          </div>
++          <aside class="workspace-side">
++            <div class="side-panel">
++              <p class="section-label">External tester first-use</p>
++              <h2>Before you rely on a result</h2>
++              <ul class="plain-list">
++                <li>Private beta</li>
++                <li>Incomplete data is possible</li>
++                <li>No guaranteed valuation</li>
++                <li>No personal data needed</li>
++                <li>Do not paste private listing or contact details</li>
++              </ul>
++            </div>
++            <div class="side-panel">
++              <p class="section-label">Alert CTA</p>
++              <h2>Track market changes quietly</h2>
++              <div class="state-actions">
++                <button type="button" class="ghost-button">Create alert for this exact model</button>
++                <button type="button" class="ghost-button">Notify me if verified listings appear</button>
++                <button type="button" class="ghost-button">Track market changes</button>
++              </div>
++            </div>
++            <div class="side-panel">
++              <p class="section-label">Trust and safety</p>
++              <p>Independent project. Not affiliated with Leica, dealers, or marketplaces. Prices are references, not guaranteed valuations.</p>
++            </div>
++          </aside>
+         </div>
+       </section>
+-
+-      <section id="state-region" aria-live="polite"></section>
+-      <section id="results-grid" class="results-grid" aria-live="polite"></section>
+-      <div class="footer-note" id="warning-region"></div>
+     </main>
+   </div>
+ 
+   <script>
+     const PAGE_SIZE = 12;
++    const FALLBACK_COPY = 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.';
++    const BROAD_QUERY_FALLBACK_CHIPS = ['M lenses', 'R lenses', 'SL lenses', '35mm', '50mm', '90mm'];
++    const LOCAL_BROAD_QUERY_HINTS = {
++      'summicron': '"Summicron" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
++      'summilux': '"Summilux" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
++      'leica lens': 'This query is still broad. Choose a family, mount, or focal length to refine your search.',
++      'leica m': 'This query can refer to multiple M-system bodies and lenses. Refine by body model or lens family.',
++      '50 cron': 'Collector shorthand can match multiple Summicron variants. Choose a mount or full model name to refine your search.'
++    };
++
+     const state = {
+       query: '',
+       offset: 0,
+@@ -475,28 +901,47 @@
+ 
+     const els = {};
+ 
+-    function $(id){return document.getElementById(id);}
++    function $(id){ return document.getElementById(id); }
+ 
+     function cacheElements(){
+       [
+-        'search-form','query-input','category-filter','brand-filter','mount-filter',
+-        'sold-filter','sort-select','result-count','result-caption','page-indicator',
+-        'prev-button','next-button','state-region','results-grid','warning-region'
+-      ].forEach(id => els[id] = $(id));
++        'search-form','query-input','category-filter','brand-filter','mount-filter','sold-filter',
++        'sort-select','result-count','result-caption','summary-meta','page-indicator',
++        'prev-button','next-button','state-region','market-entry-region','refinement-region',
++        'results-grid','archive-region','warning-region'
++      ].forEach(id => {
++        els[id] = $(id);
++      });
+     }
+ 
+     function escapeHtml(value){
+       return String(value ?? '').replace(/[&<>"']/g, ch => ({
+-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
++        '&':'&amp;',
++        '<':'&lt;',
++        '>':'&gt;',
++        '"':'&quot;',
++        "'":'&#39;'
+       }[ch]));
+     }
+ 
+-    function displayValue(value){
+-      if(Array.isArray(value)) return value.length ? value.join(', ') : 'Any';
+-      if(value === null || value === undefined || value === '') return 'Any';
++    function displayValue(value, fallback = 'Unknown'){
++      if(Array.isArray(value)){
++        return value.length ? value.join(', ') : fallback;
++      }
++      if(value === null || value === undefined || value === ''){
++        return fallback;
++      }
+       return String(value);
+     }
+ 
++    function titleCase(value){
++      return String(value || '').replace(/\s+/g, ' ').trim().replace(/\b\w/g, char => char.toUpperCase());
++    }
++
++    function normalizeSearchQuerySafe(value){
++      return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
++    }
++
+     function finalField(result, key){
+       return (result.final_output || {})[key];
+     }
+@@ -508,32 +953,29 @@
+       params.set('offset', String(offset));
+       params.set('sort', els['sort-select'].value || 'relevance');
+ 
+-      const filters = [
++      [
+         ['category', els['category-filter'].value],
+         ['brand', els['brand-filter'].value],
+         ['mount', els['mount-filter'].value],
+         ['sold_quality', els['sold-filter'].value]
+-      ];
+-      filters.forEach(([key, value]) => {
++      ].forEach(([key, value]) => {
+         if(value) params.set(key, value);
+       });
+ 
+-      const pageParams = new URLSearchParams(window.location.search);
+-      if(pageParams.get('debug') === '1') params.set('include_debug', 'true');
+       return params;
+     }
+ 
+     function syncUrl(){
+       const params = buildParams(state.offset);
+-      const pageParams = new URLSearchParams(params);
+-      pageParams.delete('limit');
+-      if(pageParams.get('offset') === '0') pageParams.delete('offset');
+-      history.replaceState(null, '', '?' + pageParams.toString());
++      params.delete('limit');
++      if(params.get('offset') === '0') params.delete('offset');
++      history.replaceState(null, '', '?' + params.toString());
+     }
+ 
+     async function runSearch(offset = 0){
+       const nextQuery = els['query-input'].value.trim();
+       if(!nextQuery) return;
++
+       state.query = nextQuery;
+       state.offset = Math.max(0, offset);
+       state.loading = true;
+@@ -543,122 +985,415 @@
+       try{
+         const params = buildParams(state.offset);
+         const response = await fetch('/api/search?' + params.toString(), {
+-          headers: {'Accept':'application/json'},
++          headers: { 'Accept': 'application/json' },
+           cache: 'no-store'
+         });
+         const payload = await response.json();
+         if(!response.ok){
+-          const message = payload && payload.error ? payload.error.message : 'Search failed';
+-          throw new Error(message);
++          throw new Error((payload && payload.error && payload.error.message) || 'search_request_failed');
+         }
+         state.response = payload;
+         state.error = null;
+         syncUrl();
+       }catch(error){
++        console.error('Camera Bridge search UI fallback', error);
+         state.response = null;
+-        state.error = error.message || 'Search failed';
++        state.error = 'runtime_error_fallback';
+       }finally{
+         state.loading = false;
+         render();
+       }
+     }
+ 
+-    function render(){
+-      renderSummary();
+-      renderResults();
+-      renderWarnings();
++    function statusMeta(result){
++      const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
++      if(soldQuality === 'asking') return { label: 'Active asking', tone: 'accent' };
++      if(soldQuality === 'sold_confirmed') return { label: 'Sold confirmed', tone: 'green' };
++      if(soldQuality === 'sold_likely') return { label: 'Sold likely', tone: 'amber' };
++      if(soldQuality === 'expired' || soldQuality === 'ended_unsold') return { label: 'Expired', tone: 'amber' };
++      if(soldQuality === 'removed') return { label: 'Removed', tone: 'amber' };
++      if(soldQuality === 'sold') return { label: 'Sold status', tone: 'green' };
++      return { label: 'Unknown', tone: 'blue' };
++    }
++
++    function getLocalBroadQueryHint(){
++      const query = normalizeSearchQuerySafe(state.query);
++      if(!LOCAL_BROAD_QUERY_HINTS[query]) return null;
++      return {
++        needs_disambiguation: true,
++        ambiguity_type: 'broad_query_frontend_fallback',
++        recommended_ui_pattern: 'refinement_chips',
++        recommended_chips: BROAD_QUERY_FALLBACK_CHIPS,
++        suggested_filters: {},
++        hard_pin_allowed: false,
++        recommended_message: LOCAL_BROAD_QUERY_HINTS[query]
++      };
++    }
++
++    function getUiHints(){
++      const apiHints = state.response && state.response.ui_hints ? state.response.ui_hints : {};
++      if(apiHints.needs_disambiguation){
++        return apiHints;
++      }
++      return getLocalBroadQueryHint() || apiHints;
++    }
++
++    function getQualitySummary(){
++      return state.response && state.response.result_quality_summary ? state.response.result_quality_summary : {};
++    }
++
++    function getResults(){
++      return state.response && Array.isArray(state.response.results) ? state.response.results : [];
++    }
++
++    function getCoverageLabel(){
++      const uiHints = getUiHints();
++      const total = state.response ? Number(state.response.total_ranked || 0) : 0;
++      if(uiHints.ambiguity_type === 'source_coverage_gap') return 'Coverage limited';
++      if(total >= 10) return 'Observed across multiple results';
++      if(total > 0) return 'Observed in current results';
++      return 'Not enough data';
+     }
+ 
+     function renderSummary(){
+-      const pagination = state.response ? state.response.pagination || {} : {};
+-      const total = state.response ? state.response.total_ranked || 0 : 0;
+-      const resultCount = state.response ? state.response.result_count || 0 : 0;
+-      const start = total && resultCount ? (pagination.offset || 0) + 1 : 0;
+-      const end = total && resultCount ? (pagination.offset || 0) + resultCount : 0;
+-
+-      els['result-count'].textContent = total;
+-      els['result-caption'].textContent = state.loading
+-        ? 'Searching'
+-        : state.query
+-          ? `${resultCount} shown for "${state.query}"`
+-          : 'Ready';
++      const pagination = state.response ? (state.response.pagination || {}) : {};
++      const total = state.response ? Number(state.response.total_ranked || 0) : 0;
++      const resultCount = state.response ? Number(state.response.result_count || 0) : 0;
++      const start = total && resultCount ? (Number(pagination.offset || 0) + 1) : 0;
++      const end = total && resultCount ? (Number(pagination.offset || 0) + resultCount) : 0;
++      const quality = getQualitySummary();
++
++      els['result-count'].textContent = String(total);
++      if(state.loading){
++        els['result-caption'].textContent = 'Searching global used camera listings...';
++        els['summary-meta'].textContent = 'Private beta search in progress';
++      }else if(state.error){
++        els['result-caption'].textContent = 'Runtime fallback active';
++        els['summary-meta'].textContent = 'Safe UI fallback shown instead of raw server error';
++      }else if(state.query){
++        els['result-caption'].textContent = `${resultCount} shown for "${state.query}"`;
++        els['summary-meta'].textContent = quality.display_message || 'Prices are references, not guaranteed valuations.';
++      }else{
++        els['result-caption'].textContent = 'Ready for search';
++        els['summary-meta'].textContent = 'Private beta. No fake fill. Source-gap is not confirmed absence.';
++      }
++
+       els['page-indicator'].textContent = `${start}-${end}`;
+-      els['prev-button'].disabled = state.loading || !state.response || (pagination.offset || 0) <= 0;
++      els['prev-button'].disabled = state.loading || !state.response || Number(pagination.offset || 0) <= 0;
+       els['next-button'].disabled = state.loading || !state.response || !pagination.has_more;
+     }
+ 
+-    function renderResults(){
+-      els['results-grid'].innerHTML = '';
++    function render(){
++      renderSummary();
++      renderContent();
++      renderWarnings();
++    }
++
++    function renderContent(){
+       els['state-region'].innerHTML = '';
++      els['market-entry-region'].innerHTML = '';
++      els['refinement-region'].innerHTML = '';
++      els['results-grid'].innerHTML = '';
++      els['archive-region'].innerHTML = '';
+ 
+       if(state.loading){
+-        els['state-region'].innerHTML = '<div class="state">Loading results...</div>';
++        els['state-region'].innerHTML = renderStateCard('Loading search', 'Gathering listing matches, source cues, and market context.', [], 'subtle');
+         return;
+       }
+ 
+       if(state.error){
+-        els['state-region'].innerHTML = `<div class="state error">${escapeHtml(state.error)}</div>`;
++        els['state-region'].innerHTML = renderStateCard(
++          'Something went wrong while loading this search.',
++          'No data was changed. Please try again or refine the query.',
++          ['Try a narrower model name', 'Try a mount or focal length', 'Search again in a moment'],
++          'error'
++        );
+         return;
+       }
+ 
+       if(!state.response){
+-        els['state-region'].innerHTML = '<div class="state">Enter a query to start.</div>';
++        els['state-region'].innerHTML = renderStateCard(
++          'Search global used camera listings with honest market context.',
++          'Use the search box above to explore active listings, sold references, source coverage, and market signals without fake fill.',
++          ['Source-gap means limited coverage, not confirmed absence', 'Broad queries will ask for refinement first', 'Unsafe boundary results do not expose price or CTA'],
++          'subtle'
++        );
+         return;
+       }
+ 
+-      const results = state.response.results || [];
++      const results = getResults();
++      const uiHints = getUiHints();
++
++      if(uiHints.needs_disambiguation){
++        els['refinement-region'].innerHTML = renderRefinementCard(uiHints);
++      }
++
+       if(!results.length){
+-        els['state-region'].innerHTML = '<div class="state">No results.</div>';
++        els['state-region'].innerHTML = renderEmptyState(uiHints);
+         return;
+       }
+ 
++      els['state-region'].innerHTML = renderStateCard(
++        'Search results',
++        'Camera Bridge shows verified matches first, keeps broader results honest, and does not convert uncertainty into fake certainty.',
++        ['Independent project', 'No guaranteed valuation', 'Source-gap is not confirmed absence'],
++        'subtle'
++      );
++      els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
+       els['results-grid'].innerHTML = results.map(renderCard).join('');
++      els['archive-region'].innerHTML = renderArchiveSection(results);
++    }
++
++    function renderStateCard(title, body, bullets, tone){
++      const bulletHtml = Array.isArray(bullets) && bullets.length
++        ? `<ul class="plain-list">${bullets.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
++        : '';
++      return `
++        <article class="state-card ${escapeHtml(tone || '')}">
++          <h3>${escapeHtml(title)}</h3>
++          <p>${escapeHtml(body)}</p>
++          ${bulletHtml}
++        </article>
++      `;
++    }
++
++    function renderEmptyState(uiHints){
++      const ambiguityType = uiHints.ambiguity_type || 'none';
++      const recommendedMessage = uiHints.recommended_message || '';
++      if(ambiguityType === 'source_coverage_gap'){
++        return `
++          <article class="state-card">
++            <h3>We could not verify enough source coverage for this query yet.</h3>
++            <p>This does not mean the item does not exist.</p>
++            <div class="state-actions">
++              <button type="button" class="ghost-button">Get notified if matching listings appear later</button>
++              <button type="button" class="ghost-button">Track market changes</button>
++            </div>
++          </article>
++        `;
++      }
++
++      if(uiHints.needs_disambiguation){
++        return `
++          <article class="state-card">
++            <h3>No exact result is shown yet because this query is still broad.</h3>
++            <p>${escapeHtml(recommendedMessage || 'Choose a mount or focal length to refine your search.')}</p>
++            <div class="state-actions">
++              ${(uiHints.recommended_chips || BROAD_QUERY_FALLBACK_CHIPS).slice(0, 6).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
++            </div>
++          </article>
++        `;
++      }
++
++      return `
++        <article class="state-card">
++          <h3>No verified matches found for this search.</h3>
++          <p>Try a more specific model name, add a mount or focal length, or come back later if coverage improves.</p>
++          <div class="state-actions">
++            <button type="button" class="ghost-button">Get notified if matching listings appear later</button>
++          </div>
++        </article>
++      `;
++    }
++
++    function renderRefinementCard(uiHints){
++      const chips = (uiHints.recommended_chips || []).length ? uiHints.recommended_chips : BROAD_QUERY_FALLBACK_CHIPS;
++      const message = uiHints.recommended_message || `"${titleCase(state.query)}" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.`;
++      return `
++        <article class="state-card">
++          <h3>Broad query refinement</h3>
++          <p>${escapeHtml(message)}</p>
++          <div class="state-actions">
++            ${chips.slice(0, 9).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
++          </div>
++        </article>
++      `;
++    }
++
++    function parseNumericPrice(result){
++      const raw = String(result.price || '');
++      const digits = raw.replace(/[^0-9.]/g, '');
++      if(!digits) return null;
++      const value = Number.parseFloat(digits);
++      return Number.isFinite(value) ? value : null;
++    }
++
++    function formatPriceBand(results){
++      const priced = results
++        .map(result => ({ value: parseNumericPrice(result), currency: result.currency || '' }))
++        .filter(item => item.value !== null);
++      if(!priced.length) return 'Not enough data';
++      const currencies = Array.from(new Set(priced.map(item => item.currency || 'Unknown')));
++      if(currencies.length !== 1) return 'Mixed currencies';
++      const values = priced.map(item => item.value);
++      const min = Math.min(...values);
++      const max = Math.max(...values);
++      const currency = currencies[0] || '';
++      const formatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
++      return `${currency} ${formatter.format(min)} - ${formatter.format(max)}`;
++    }
++
++    function buildMarketCounts(results){
++      const counts = {
++        asking: 0,
++        soldConfirmed: 0,
++        soldLikely: 0,
++        expiredRemoved: 0,
++        archive: 0
++      };
++      results.forEach(result => {
++        const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
++        if(soldQuality === 'asking') counts.asking += 1;
++        else if(soldQuality === 'sold_confirmed') counts.soldConfirmed += 1;
++        else if(soldQuality === 'sold_likely') counts.soldLikely += 1;
++        else if(['expired', 'removed', 'ended_unsold'].includes(soldQuality)) counts.expiredRemoved += 1;
++        if(soldQuality && soldQuality !== 'asking') counts.archive += 1;
++      });
++      return counts;
++    }
++
++    function renderMarketEntry(results, uiHints){
++      const lead = results[0];
++      const counts = buildMarketCounts(results);
++      const modelTitle = displayValue(finalField(lead, 'model_canonical') || lead.title, 'Unknown model');
++      const aliases = displayValue(finalField(lead, 'variant'), 'No alias details');
++      const quality = getQualitySummary();
++      const adjacentWarning = uiHints.needs_disambiguation
++        ? 'Adjacent models may also be relevant for this broad family query.'
++        : 'No adjacent model warning in current query state.';
++      return `
++        <article class="market-entry-card">
++          <div class="market-topline">
++            <div>
++              <p class="section-label">Model market entry</p>
++              <h3>${escapeHtml(modelTitle)}</h3>
++              <p>Aliases: ${escapeHtml(aliases)}. Market summary is query-level and remains reference-only while coverage is still beta-limited.</p>
++            </div>
++            <div class="market-badges">
++              <span class="micro-pill accent">Match Confidence</span>
++              <span class="micro-pill blue">Source Coverage</span>
++              <span class="micro-pill green">Price Confidence</span>
++            </div>
++          </div>
++          <div class="metric-grid">
++            <div class="metric-card"><b>Active listings</b><span>${counts.asking}</span></div>
++            <div class="metric-card"><b>Sold confirmed</b><span>${counts.soldConfirmed}</span></div>
++            <div class="metric-card"><b>Sold likely</b><span>${counts.soldLikely}</span></div>
++            <div class="metric-card"><b>Expired or removed archive</b><span>${counts.expiredRemoved}</span></div>
++            <div class="metric-card"><b>Indicative price band</b><span>${escapeHtml(formatPriceBand(results))}</span></div>
++            <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
++            <div class="metric-card"><b>Price confidence</b><span>${escapeHtml(quality.display_message || 'Not enough data')}</span></div>
++            <div class="metric-card"><b>Adjacent models warning</b><span>${escapeHtml(adjacentWarning)}</span></div>
++          </div>
++          <div class="state-actions">
++            <button type="button" class="action-button"${uiHints.needs_disambiguation ? ' aria-disabled="true"' : ''}>Create alert for this exact model</button>
++            <button type="button" class="ghost-button">Notify me if verified listings appear</button>
++          </div>
++        </article>
++      `;
+     }
+ 
+     function renderCard(result){
+       const title = result.title || 'Untitled listing';
+       const url = result.source_url || '#';
+       const imageUrl = result.image_url;
+-      const matched = (result.matched_fields || []).slice(0, 5);
+-      const warnings = (result.warnings || []).slice(0, 2);
+-      const variant = finalField(result, 'variant');
+       const safeUrl = escapeHtml(url);
+-      const target = url && url !== '#' ? ' target="_blank" rel="noopener noreferrer"' : '';
+-      const thumb = imageUrl
+-        ? `<img src="${escapeHtml(imageUrl)}" alt="">`
+-        : '<span>CB</span>';
++      const canViewSource = Boolean(url && url !== '#');
++      const target = canViewSource ? ' target="_blank" rel="noopener noreferrer"' : '';
++      const status = statusMeta(result);
++      const matchConfidence = displayValue(result.match_quality, 'Unknown');
++      const model = displayValue(finalField(result, 'model_canonical'), 'Unknown');
++      const family = displayValue(finalField(result, 'label'), 'Unknown');
++      const currency = displayValue(result.currency, 'Unknown');
++      const source = displayValue(result.source, 'Unknown source');
++      const priceConfidence = result.price ? 'Reference only' : 'Not enough data';
++      const sourceCoverage = getCoverageLabel();
++      const firstSeen = 'Unknown';
++      const lastSeen = 'Unknown';
++      const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
+ 
+       return `
+         <article class="result-card">
+-          <div class="thumb">${thumb}</div>
+-          <div class="card-body">
+-            <a class="card-title" href="${safeUrl}"${target}>${escapeHtml(title)}</a>
+-            <div class="price-row">
+-              <div class="price">${escapeHtml(result.price || 'Ask')}</div>
+-              <div class="source">${escapeHtml(result.source || 'Unknown source')}</div>
++          <div class="result-head">
++            <div class="thumb">${thumb}</div>
++            <div class="card-copy">
++              <a class="result-title" href="${safeUrl}"${target}>${escapeHtml(title)}</a>
++              <div class="result-price-row">
++                <div class="result-price">${escapeHtml(displayValue(result.price, 'Not enough data'))}</div>
++                <div class="result-source">${escapeHtml(source)}<br>${escapeHtml(currency)}</div>
++              </div>
++              <div class="result-status-row">
++                <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(status.label)}</span>
++                <span class="micro-pill blue">Match ${escapeHtml(matchConfidence)}</span>
++                ${result.used_override ? '<span class="micro-pill green">Trusted override</span>' : ''}
++              </div>
+             </div>
+-            <div class="field-grid">
+-              ${renderField('brand', finalField(result, 'brand'))}
+-              ${renderField('mount', finalField(result, 'mount'))}
+-              ${renderField('category', finalField(result, 'category'))}
+-              ${renderField('label', finalField(result, 'label'))}
+-              ${renderField('model', finalField(result, 'model_canonical'))}
+-              ${renderField('variant', variant)}
+-              ${renderField('focal', finalField(result, 'focal_length'))}
+-              ${renderField('sold', finalField(result, 'sold_quality'))}
++          </div>
++          <div class="data-grid">
++            ${renderDataPoint('Detected model', model)}
++            ${renderDataPoint('Family', family)}
++            ${renderDataPoint('Price confidence', priceConfidence)}
++            ${renderDataPoint('Source coverage', sourceCoverage)}
++            ${renderDataPoint('First seen', firstSeen)}
++            ${renderDataPoint('Last seen', lastSeen)}
++            ${renderDataPoint('Mount', displayValue(finalField(result, 'mount'), 'Unknown'))}
++            ${renderDataPoint('Category', displayValue(finalField(result, 'category'), 'Unknown'))}
++          </div>
++          <div class="result-actions">
++            <div class="action-group">
++              <button type="button" class="ghost-button">Track market changes</button>
++              <button type="button" class="ghost-button">Create alert for this exact model</button>
+             </div>
+-            <div class="pill-row">
+-              ${result.used_override ? '<span class="pill override">trusted</span>' : ''}
+-              ${matched.map(field => `<span class="pill match">${escapeHtml(field)}</span>`).join('')}
+-              ${warnings.map(warning => `<span class="pill warn">${escapeHtml(warning)}</span>`).join('')}
++            <div class="action-group">
++              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>View source</a>` : '<button type="button" class="action-button" aria-disabled="true">View source</button>'}
+             </div>
+           </div>
+         </article>
+       `;
+     }
+ 
+-    function renderField(label, value){
+-      return `<div class="field"><b>${escapeHtml(label)}</b><span title="${escapeHtml(displayValue(value))}">${escapeHtml(displayValue(value))}</span></div>`;
++    function renderDataPoint(label, value){
++      return `<div class="data-point"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
++    }
++
++    function renderArchiveSection(results){
++      const archiveCandidates = results.filter(result => {
++        const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
++        return soldQuality && soldQuality !== 'asking';
++      }).slice(0, 4);
++
++      const items = archiveCandidates.length
++        ? archiveCandidates.map(result => {
++            const status = statusMeta(result);
++            const caution = status.label === 'Sold confirmed'
++              ? 'Sold status still depends on source quality and should be read as a reference.'
++              : 'Sold status may be uncertain. Do not treat archive state as a guaranteed completed sale.';
++            return `
++              <div class="archive-item">
++                <strong>${escapeHtml(result.title || 'Archived listing')}</strong>
++                <p>Observed price: ${escapeHtml(displayValue(result.price, 'Not enough data'))}. Status: ${escapeHtml(status.label)}. Source: ${escapeHtml(displayValue(result.source, 'Unknown source'))}.</p>
++                <div class="archive-meta">
++                  <span class="micro-pill blue">Model match ${escapeHtml(displayValue(finalField(result, 'model_canonical'), 'Unknown'))}</span>
++                  <span class="micro-pill">${escapeHtml(caution)}</span>
++                </div>
++              </div>
++            `;
++          }).join('')
++        : `
++          <div class="archive-item">
++            <strong>No archive or sold reference entry is visible in this search yet.</strong>
++            <p>Archive reference is shown only when the current result set exposes a sold-like, expired, removed, or otherwise historical status. Nothing is invented here.</p>
++          </div>
++        `;
++
++      return `
++        <article class="archive-card">
++          <p class="section-label">Listing archive / sold reference entry</p>
++          <h3>Archived listing and sold-reference context</h3>
++          <p>Archive references are useful when present, but removed or uncertain states must never be overstated as confirmed sales.</p>
++          <div class="archive-list">${items}</div>
++        </article>
++      `;
+     }
+ 
+     function renderWarnings(){
+@@ -666,15 +1401,15 @@
+         els['warning-region'].textContent = '';
+         return;
+       }
+-      const warnings = state.response.warnings || [];
+       const filters = state.response.applied_filters || {};
+-      const quality = state.response.result_quality_summary || {};
+-      const filterText = Object.keys(filters).length
+-        ? `filters: ${Object.entries(filters).map(([key,value]) => `${key}=${value}`).join(', ')}`
+-        : 'filters: none';
+-      const parts = [filterText];
++      const warnings = state.response.warnings || [];
++      const quality = getQualitySummary();
++      const parts = [];
++      parts.push(Object.keys(filters).length ? `filters: ${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join(', ')}` : 'filters: none');
+       if(quality.display_message) parts.push(quality.display_message);
++      if(getUiHints().recommended_message) parts.push(getUiHints().recommended_message);
+       if(warnings.length) parts.push(warnings.join(', '));
++      parts.push('No fake fill. Source-gap is not confirmed absence.');
+       els['warning-region'].textContent = parts.join(' | ');
+     }
+ 
+@@ -705,13 +1440,13 @@
+       });
+ 
+       els['prev-button'].addEventListener('click', () => {
+-        const current = state.response ? state.response.pagination || {} : {};
+-        runSearch(Math.max(0, (current.offset || 0) - PAGE_SIZE));
++        const current = state.response ? (state.response.pagination || {}) : {};
++        runSearch(Math.max(0, Number(current.offset || 0) - PAGE_SIZE));
+       });
+ 
+       els['next-button'].addEventListener('click', () => {
+-        const current = state.response ? state.response.pagination || {} : {};
+-        if(current.has_more) runSearch(current.next_offset || ((current.offset || 0) + PAGE_SIZE));
++        const current = state.response ? (state.response.pagination || {}) : {};
++        if(current.has_more) runSearch(Number(current.next_offset || (Number(current.offset || 0) + PAGE_SIZE)));
+       });
+ 
+       document.querySelectorAll('[data-query]').forEach(button => {
+@@ -720,6 +1455,15 @@
+           runSearch(0);
+         });
+       });
++
++      document.addEventListener('click', event => {
++        const target = event.target;
++        if(target && target.matches('[data-refine]')){
++          const refine = target.getAttribute('data-refine') || '';
++          els['query-input'].value = `${state.query} ${refine}`.trim();
++          runSearch(0);
++        }
++      });
+     }
+ 
+     cacheElements();
+diff --git a/index.html b/index.html
+index 857432b..1fabbfc 100644
+--- a/index.html
++++ b/index.html
+@@ -6,23 +6,25 @@
+   <title>Camera Bridge</title>
+   <style>
+     :root{
+-      --bg:#f7f6f3;
++      --bg:#f6f4ef;
+       --surface:#ffffff;
+-      --surface-2:#f1efeb;
+-      --surface-3:#e8e3dc;
+-      --border:#ded9d1;
+-      --border-strong:#c8c1b7;
+-      --text:#191817;
+-      --dim:#68615a;
+-      --muted:#9a9288;
+-      --accent:#e11f26;
+-      --accent-soft:rgba(225,31,38,0.08);
+-      --blue:#125c8a;
+-      --green:#2f7140;
+-      --amber:#a45f00;
+-      --shadow:0 16px 40px rgba(27,24,20,0.08);
++      --surface-soft:#f1eee8;
++      --surface-muted:#ebe6de;
++      --border:#d9d2c8;
++      --border-strong:#c7beb2;
++      --text:#191715;
++      --text-soft:#655d55;
++      --text-muted:#91877c;
++      --accent:#b21d24;
++      --accent-soft:rgba(178,29,36,0.08);
++      --blue:#1f5473;
++      --green:#2e6d43;
++      --amber:#99611f;
++      --shadow:0 20px 48px rgba(27,23,19,0.07);
++      --radius:6px;
+     }
+     *{box-sizing:border-box}
++    html{scroll-behavior:smooth}
+     body{
+       margin:0;
+       min-height:100vh;
+@@ -31,20 +33,20 @@
+       font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased;
+     }
++    a{color:inherit}
+     button,input,select{font:inherit}
+     button{cursor:pointer}
+-    a{color:inherit}
+-    .shell{min-height:100vh;display:flex;flex-direction:column}
++    .shell{min-height:100vh}
+     .topbar{
+       position:sticky;
+       top:0;
+       z-index:20;
+-      height:64px;
+       display:flex;
+       align-items:center;
+-      gap:20px;
+-      padding:0 28px;
+-      background:rgba(247,246,243,0.94);
++      gap:18px;
++      justify-content:space-between;
++      padding:14px 24px;
++      background:rgba(246,244,239,0.95);
+       border-bottom:1px solid var(--border);
+       backdrop-filter:blur(14px);
+     }
+@@ -52,316 +54,625 @@
+       display:flex;
+       align-items:center;
+       gap:10px;
+-      min-width:188px;
++      text-decoration:none;
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:13px;
++      font-size:12px;
+       font-weight:800;
+       letter-spacing:2px;
+-      text-decoration:none;
+     }
+     .brand-mark{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+     .brand span{color:var(--accent)}
+-    .top-search{
+-      flex:1;
++    .topbar-meta{
+       display:flex;
+       align-items:center;
+       gap:8px;
++      flex-wrap:wrap;
++      justify-content:flex-end;
++    }
++    .meta-pill{
++      border:1px solid var(--border-strong);
++      background:var(--surface);
++      border-radius:999px;
++      padding:6px 10px;
++      color:var(--text-soft);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:0.4px;
++      white-space:nowrap;
++    }
++    .meta-pill.accent{
++      color:var(--accent);
++      border-color:rgba(178,29,36,0.28);
++      background:var(--accent-soft);
++    }
++    main{
++      width:min(1280px, calc(100% - 32px));
++      margin:0 auto;
++      padding:24px 0 48px;
++    }
++    .hero{
++      background:var(--surface);
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      box-shadow:var(--shadow);
++      overflow:hidden;
++      margin-bottom:18px;
++    }
++    .hero-grid{
++      display:grid;
++      grid-template-columns:minmax(0,1.35fr) minmax(280px,0.65fr);
++      gap:0;
++    }
++    .hero-copy{
++      padding:34px 34px 24px;
++      border-right:1px solid var(--border);
++      min-width:0;
++    }
++    .eyebrow{
++      margin:0 0 16px;
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:1.6px;
++      text-transform:uppercase;
++    }
++    .hero-title{
++      margin:0 0 12px;
++      font-size:46px;
++      line-height:1.02;
++      letter-spacing:0;
++      font-weight:800;
+       max-width:760px;
+     }
+-    .query-input{
++    .hero-subtitle{
++      margin:0 0 20px;
++      max-width:780px;
++      color:var(--text-soft);
++      font-size:16px;
++      line-height:1.65;
++    }
++    .hero-notices{
++      display:flex;
++      flex-wrap:wrap;
++      gap:8px;
++      margin-bottom:18px;
++    }
++    .notice-pill{
++      border:1px solid var(--border-strong);
++      background:var(--surface-soft);
++      color:var(--text-soft);
++      border-radius:999px;
++      padding:7px 12px;
++      font-size:12px;
++      line-height:1.3;
++    }
++    .search-panel{
++      border:1px solid var(--border);
++      background:linear-gradient(180deg, rgba(246,244,239,0.78), #fff 100%);
++      border-radius:var(--radius);
++      padding:16px;
++    }
++    .search-panel-label,
++    .section-label{
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:1.4px;
++      text-transform:uppercase;
++    }
++    .search-form-row{
++      display:flex;
++      gap:10px;
++      align-items:center;
++      margin-top:10px;
++    }
++    .search-field{
+       flex:1;
+       min-width:0;
+-      height:40px;
++      height:48px;
+       border:1px solid var(--border-strong);
+-      background:var(--surface);
++      background:#fff;
+       color:var(--text);
+-      border-radius:4px;
+-      padding:0 13px;
++      border-radius:var(--radius);
++      padding:0 16px;
++      font-size:15px;
+       outline:none;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:13px;
+-      letter-spacing:0;
+     }
+-    .query-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+-    .icon-button{
+-      width:40px;
+-      height:40px;
+-      border:1px solid var(--accent);
+-      border-radius:4px;
++    .search-field:focus,
++    select:focus{
++      border-color:var(--accent);
++      box-shadow:0 0 0 3px var(--accent-soft);
++    }
++    .search-button{
++      height:48px;
++      min-width:120px;
++      border:none;
+       background:var(--accent);
+       color:#fff;
++      border-radius:var(--radius);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:12px;
+       font-weight:800;
+-      line-height:1;
++      letter-spacing:0.6px;
++    }
++    .search-button:hover{filter:brightness(0.96)}
++    .query-chip-row{
++      display:flex;
++      flex-wrap:wrap;
++      gap:8px;
++      margin-top:14px;
+     }
+-    .icon-button:hover{filter:brightness(0.95)}
+-    .header-meta{
+-      margin-left:auto;
+-      color:var(--muted);
++    .query-chip{
++      min-height:32px;
++      border:1px solid var(--border-strong);
++      background:#fff;
++      color:var(--text-soft);
++      border-radius:999px;
++      padding:6px 12px;
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:10px;
+-      letter-spacing:1px;
+-      white-space:nowrap;
++      font-size:11px;
++      line-height:1.2;
+     }
+-    main{width:100%;max-width:1220px;margin:0 auto;padding:26px 24px 48px}
+-    .search-band{
+-      display:grid;
+-      grid-template-columns:minmax(0,1fr) auto;
+-      gap:18px;
+-      align-items:end;
+-      padding:22px 0 18px;
+-      border-bottom:1px solid var(--border);
++    .query-chip:hover{
++      color:var(--accent);
++      border-color:rgba(178,29,36,0.34);
+     }
+-    .page-title{
+-      margin:0 0 14px;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:34px;
+-      line-height:1.05;
+-      letter-spacing:0;
+-      font-weight:800;
++    .hero-sidebar{
++      padding:28px 28px 24px;
++      display:flex;
++      flex-direction:column;
++      gap:14px;
++      background:linear-gradient(180deg, rgba(235,230,222,0.52), rgba(255,255,255,0.96));
++    }
++    .sidebar-card{
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      background:rgba(255,255,255,0.84);
++      padding:16px;
++    }
++    .sidebar-card h2,
++    .workspace-card h2,
++    .workspace-card h3,
++    .state-card h3,
++    .market-entry-card h3,
++    .archive-card h3{
++      margin:0 0 10px;
++      font-size:16px;
++      line-height:1.3;
+     }
+-    .page-sub{
++    .sidebar-card p,
++    .workspace-card p,
++    .state-card p,
++    .market-entry-card p,
++    .archive-card p{
+       margin:0;
+-      max-width:720px;
+-      color:var(--dim);
++      color:var(--text-soft);
+       font-size:13px;
+       line-height:1.6;
+     }
+-    .quick-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+-    .quick-chip{
+-      height:30px;
+-      border:1px solid var(--border-strong);
++    .plain-list{
++      margin:10px 0 0;
++      padding-left:18px;
++      color:var(--text-soft);
++      font-size:13px;
++      line-height:1.7;
++    }
++    .overview-grid{
++      display:grid;
++      grid-template-columns:repeat(3, minmax(0,1fr));
++      gap:12px;
++      margin-bottom:18px;
++    }
++    .workspace-card{
+       background:var(--surface);
+-      color:var(--dim);
+-      border-radius:4px;
+-      padding:0 10px;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:11px;
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      padding:18px;
++      box-shadow:0 6px 18px rgba(27,23,19,0.03);
++    }
++    .workspace{
++      background:var(--surface);
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      box-shadow:var(--shadow);
++      overflow:hidden;
+     }
+-    .quick-chip:hover{border-color:var(--accent);color:var(--accent)}
+-    .controls{
++    .toolbar{
+       display:grid;
+-      grid-template-columns:repeat(5,minmax(140px,1fr));
++      grid-template-columns:repeat(5,minmax(0,1fr));
+       gap:10px;
+-      padding:18px 0;
++      padding:18px 20px;
++      border-bottom:1px solid var(--border);
++      background:rgba(255,255,255,0.92);
+     }
+     .control{
+       display:flex;
+       flex-direction:column;
+-      gap:6px;
++      gap:7px;
+     }
+     .control label{
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      color:var(--muted);
+-      font-size:9px;
+-      letter-spacing:1.5px;
++      font-size:10px;
++      letter-spacing:1.4px;
+       text-transform:uppercase;
+     }
+     .control select{
+-      height:38px;
++      height:40px;
+       border:1px solid var(--border-strong);
+-      background:var(--surface);
++      background:#fff;
++      border-radius:var(--radius);
++      padding:0 12px;
+       color:var(--text);
+-      border-radius:4px;
+-      padding:0 10px;
+       outline:none;
+-      font-size:13px;
+     }
+-    .control select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+     .status-strip{
+-      min-height:48px;
+       display:flex;
+-      align-items:center;
++      align-items:flex-end;
+       justify-content:space-between;
+-      gap:14px;
+-      border-top:1px solid var(--border);
++      gap:18px;
++      padding:18px 20px;
+       border-bottom:1px solid var(--border);
+-      padding:12px 0;
+-      margin-bottom:16px;
++      background:linear-gradient(180deg, rgba(241,238,232,0.5), rgba(255,255,255,0.9));
+     }
+-    .result-summary{
++    .summary-copy{min-width:0}
++    .summary-value{
+       display:flex;
+       align-items:baseline;
+-      gap:10px;
+-      min-width:0;
++      gap:12px;
++      margin-bottom:6px;
+     }
+-    .result-summary strong{
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:28px;
++    .summary-value strong{
+       color:var(--accent);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:34px;
+       letter-spacing:0;
+     }
+-    .result-summary span{
+-      color:var(--dim);
+-      font-size:13px;
+-      overflow:hidden;
+-      text-overflow:ellipsis;
+-      white-space:nowrap;
++    .summary-caption{
++      color:var(--text-soft);
++      font-size:14px;
++      line-height:1.5;
++    }
++    .summary-meta{
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      letter-spacing:1px;
++      text-transform:uppercase;
++    }
++    .page-controls{
++      display:flex;
++      align-items:center;
++      gap:8px;
++      flex-wrap:wrap;
++      justify-content:flex-end;
+     }
+-    .page-controls{display:flex;align-items:center;gap:8px}
+     .page-button{
+-      height:34px;
+-      min-width:78px;
++      height:36px;
++      min-width:84px;
+       border:1px solid var(--border-strong);
+-      background:var(--surface);
++      background:#fff;
+       color:var(--text);
+-      border-radius:4px;
++      border-radius:var(--radius);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:11px;
+     }
+-    .page-button:disabled{opacity:0.38;cursor:not-allowed}
+-    .page-button:not(:disabled):hover{border-color:var(--accent);color:var(--accent)}
++    .page-button:disabled{opacity:0.42;cursor:not-allowed}
+     .page-indicator{
+-      min-width:108px;
++      min-width:110px;
+       text-align:center;
+-      color:var(--muted);
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:10px;
+     }
+-    .state{
++    .workspace-grid{
++      display:grid;
++      grid-template-columns:minmax(0,1fr) 300px;
++      gap:0;
++    }
++    .workspace-main{
++      padding:18px 20px 24px;
++      border-right:1px solid var(--border);
++    }
++    .workspace-side{
++      padding:18px;
++      display:flex;
++      flex-direction:column;
++      gap:12px;
++      background:rgba(246,244,239,0.54);
++    }
++    .state-card,
++    .market-entry-card,
++    .archive-card,
++    .side-panel{
+       border:1px solid var(--border);
+-      background:var(--surface);
+-      border-radius:6px;
+-      padding:34px 22px;
+-      color:var(--dim);
+-      text-align:center;
++      background:#fff;
++      border-radius:var(--radius);
++      padding:18px;
++      margin-bottom:12px;
++    }
++    .state-card.error{
++      border-color:rgba(178,29,36,0.28);
++      background:rgba(178,29,36,0.05);
++    }
++    .state-card.subtle{
++      background:var(--surface-soft);
++    }
++    .state-actions{
++      display:flex;
++      gap:8px;
++      flex-wrap:wrap;
++      margin-top:14px;
++    }
++    .ghost-button,
++    .action-button{
++      min-height:34px;
++      border-radius:999px;
++      padding:7px 12px;
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:12px;
+-      box-shadow:var(--shadow);
++      font-size:10px;
++      line-height:1.2;
++      border:1px solid var(--border-strong);
++      background:#fff;
++      color:var(--text-soft);
++      text-decoration:none;
++      display:inline-flex;
++      align-items:center;
++      justify-content:center;
++    }
++    .action-button{
++      border-color:var(--accent);
++      background:var(--accent);
++      color:#fff;
++    }
++    .ghost-button:hover{border-color:rgba(178,29,36,0.3);color:var(--accent)}
++    .action-button[aria-disabled="true"],
++    .ghost-button[aria-disabled="true"]{
++      opacity:0.45;
++      pointer-events:none;
++    }
++    .market-topline{
++      display:flex;
++      align-items:flex-start;
++      justify-content:space-between;
++      gap:12px;
++      margin-bottom:12px;
++    }
++    .market-topline p{max-width:720px}
++    .market-badges,
++    .micro-pills{
++      display:flex;
++      flex-wrap:wrap;
++      gap:6px;
++    }
++    .micro-pill{
++      border-radius:999px;
++      padding:5px 9px;
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:10px;
++      border:1px solid var(--border);
++      background:var(--surface-soft);
++      color:var(--text-soft);
++    }
++    .micro-pill.accent{border-color:rgba(178,29,36,0.28);background:var(--accent-soft);color:var(--accent)}
++    .micro-pill.blue{border-color:rgba(31,84,115,0.24);background:rgba(31,84,115,0.08);color:var(--blue)}
++    .micro-pill.green{border-color:rgba(46,109,67,0.22);background:rgba(46,109,67,0.08);color:var(--green)}
++    .micro-pill.amber{border-color:rgba(153,97,31,0.24);background:rgba(153,97,31,0.08);color:var(--amber)}
++    .metric-grid{
++      display:grid;
++      grid-template-columns:repeat(4,minmax(0,1fr));
++      gap:10px;
++      margin-top:14px;
++    }
++    .metric-card{
++      border:1px solid var(--border);
++      background:var(--surface-soft);
++      border-radius:var(--radius);
++      padding:12px;
++    }
++    .metric-card b{
++      display:block;
++      margin-bottom:5px;
++      color:var(--text-muted);
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:9px;
++      letter-spacing:1.2px;
++      text-transform:uppercase;
++    }
++    .metric-card span{
++      display:block;
++      color:var(--text);
++      font-size:14px;
++      font-weight:700;
++      line-height:1.3;
+     }
+-    .state.error{border-color:rgba(225,31,38,0.32);background:rgba(225,31,38,0.04);color:var(--accent)}
+     .results-grid{
+       display:grid;
+       grid-template-columns:repeat(2,minmax(0,1fr));
+       gap:12px;
+     }
+     .result-card{
++      border:1px solid var(--border);
++      border-radius:var(--radius);
++      background:#fff;
++      box-shadow:0 6px 18px rgba(27,23,19,0.04);
++      overflow:hidden;
++      display:flex;
++      flex-direction:column;
++      min-width:0;
++    }
++    .result-head{
+       display:grid;
+-      grid-template-columns:96px minmax(0,1fr);
++      grid-template-columns:88px minmax(0,1fr);
+       gap:14px;
+-      min-height:162px;
+-      border:1px solid var(--border);
+-      border-radius:6px;
+-      background:var(--surface);
+-      padding:12px;
+-      box-shadow:0 4px 16px rgba(27,24,20,0.04);
++      padding:14px;
++      border-bottom:1px solid var(--border);
+     }
+     .thumb{
+-      width:96px;
++      width:88px;
+       aspect-ratio:1;
+-      border:1px solid var(--border);
+-      border-radius:4px;
++      border-radius:var(--radius);
+       overflow:hidden;
+-      background:linear-gradient(135deg,var(--surface-2),var(--surface-3));
++      border:1px solid var(--border);
++      background:linear-gradient(145deg, var(--surface-soft), var(--surface-muted));
+       display:flex;
+       align-items:center;
+       justify-content:center;
+-      color:var(--muted);
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:18px;
+       font-weight:800;
++      font-size:18px;
+     }
+     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+-    .card-body{min-width:0;display:flex;flex-direction:column;gap:9px}
+-    .card-title{
++    .card-copy{min-width:0}
++    .result-title{
++      margin:0 0 8px;
++      font-size:15px;
++      line-height:1.45;
++      font-weight:700;
++      text-decoration:none;
++      color:var(--text);
+       display:-webkit-box;
+       -webkit-line-clamp:2;
+       -webkit-box-orient:vertical;
+       overflow:hidden;
+-      min-height:39px;
+-      color:var(--text);
+-      text-decoration:none;
+-      font-size:14px;
+-      line-height:1.4;
+-      font-weight:700;
+     }
+-    .card-title:hover{color:var(--accent)}
+-    .price-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+-    .price{
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
++    .result-title:hover{color:var(--accent)}
++    .result-price-row{
++      display:flex;
++      align-items:baseline;
++      justify-content:space-between;
++      gap:10px;
++      margin-bottom:8px;
++    }
++    .result-price{
+       color:var(--accent);
+-      font-size:14px;
++      font-family:"SFMono-Regular","Roboto Mono",monospace;
++      font-size:16px;
+       font-weight:800;
+     }
+-    .source{
+-      color:var(--dim);
++    .result-source{
++      text-align:right;
++      color:var(--text-soft);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:10px;
+-      text-align:right;
+-      overflow:hidden;
+-      text-overflow:ellipsis;
+-      white-space:nowrap;
++      line-height:1.4;
++    }
++    .result-status-row{
++      display:flex;
++      flex-wrap:wrap;
++      gap:6px;
+     }
+-    .field-grid{
++    .data-grid{
+       display:grid;
+       grid-template-columns:repeat(4,minmax(0,1fr));
+-      gap:5px;
++      gap:8px;
++      padding:14px;
++      border-bottom:1px solid var(--border);
+     }
+-    .field{
++    .data-point{
+       min-width:0;
+       border:1px solid var(--border);
+-      background:var(--surface-2);
+-      border-radius:4px;
+-      padding:5px 6px;
++      background:var(--surface-soft);
++      border-radius:var(--radius);
++      padding:8px 9px;
+     }
+-    .field b{
++    .data-point b{
+       display:block;
+-      color:var(--muted);
++      margin-bottom:4px;
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:8px;
+       letter-spacing:1px;
+       text-transform:uppercase;
+-      margin-bottom:3px;
+     }
+-    .field span{
++    .data-point span{
+       display:block;
+-      min-height:15px;
++      min-height:16px;
+       color:var(--text);
+       font-size:11px;
++      line-height:1.45;
+       overflow:hidden;
+       text-overflow:ellipsis;
+-      white-space:nowrap;
+     }
+-    .pill-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+-    .pill{
++    .result-actions{
++      display:flex;
++      align-items:center;
++      justify-content:space-between;
++      gap:10px;
++      padding:12px 14px 14px;
++      margin-top:auto;
++    }
++    .result-actions .action-group{
++      display:flex;
++      gap:8px;
++      flex-wrap:wrap;
++    }
++    .archive-list{
++      display:grid;
++      gap:10px;
++      margin-top:12px;
++    }
++    .archive-item{
+       border:1px solid var(--border);
+-      border-radius:3px;
+-      background:#fff;
+-      color:var(--dim);
+-      padding:2px 6px;
+-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+-      font-size:9px;
+-      white-space:nowrap;
++      background:var(--surface-soft);
++      border-radius:var(--radius);
++      padding:12px;
++    }
++    .archive-item strong{
++      display:block;
++      margin-bottom:6px;
++      font-size:13px;
++      line-height:1.45;
++    }
++    .archive-meta{
++      display:flex;
++      flex-wrap:wrap;
++      gap:8px;
++      margin-top:8px;
+     }
+-    .pill.match{border-color:rgba(18,92,138,0.24);background:rgba(18,92,138,0.07);color:var(--blue)}
+-    .pill.override{border-color:rgba(47,113,64,0.28);background:rgba(47,113,64,0.08);color:var(--green)}
+-    .pill.warn{border-color:rgba(164,95,0,0.28);background:rgba(164,95,0,0.08);color:var(--amber)}
++    .side-panel .plain-list{margin-top:8px}
+     .footer-note{
+-      color:var(--muted);
++      margin-top:16px;
++      padding:0 2px;
++      color:var(--text-muted);
+       font-family:"SFMono-Regular","Roboto Mono",monospace;
+       font-size:10px;
+-      margin-top:18px;
+-      line-height:1.6;
++      line-height:1.7;
+     }
+-    @media(max-width:900px){
+-      .topbar{height:auto;align-items:flex-start;flex-direction:column;padding:14px 16px}
+-      .brand{min-width:0}
+-      .top-search{width:100%;max-width:none}
+-      .header-meta{display:none}
+-      main{padding:18px 14px 36px}
+-      .search-band{grid-template-columns:1fr;align-items:start}
+-      .quick-row{justify-content:flex-start}
+-      .controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+-      .status-strip{align-items:flex-start;flex-direction:column}
+-      .page-controls{width:100%;justify-content:space-between}
++    @media(max-width:1080px){
++      .hero-grid,
++      .workspace-grid,
++      .overview-grid{
++        grid-template-columns:1fr;
++      }
++      .hero-copy{border-right:none;border-bottom:1px solid var(--border)}
++      .workspace-main{border-right:none;border-bottom:1px solid var(--border)}
++      .toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
+       .results-grid{grid-template-columns:1fr}
++      .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+     }
+-    @media(max-width:560px){
+-      .page-title{font-size:28px}
+-      .controls{grid-template-columns:1fr}
+-      .result-card{grid-template-columns:72px minmax(0,1fr)}
+-      .thumb{width:72px}
+-      .field-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+-      .icon-button{width:42px;flex-shrink:0}
++    @media(max-width:720px){
++      .topbar{
++        padding:12px 14px;
++        flex-direction:column;
++        align-items:flex-start;
++      }
++      main{width:min(100% - 20px, 1280px)}
++      .hero-copy,
++      .hero-sidebar,
++      .workspace-main,
++      .workspace-side{padding-left:16px;padding-right:16px}
++      .hero-title{font-size:34px}
++      .search-form-row{flex-direction:column;align-items:stretch}
++      .search-button{width:100%}
++      .toolbar{grid-template-columns:1fr}
++      .status-strip{flex-direction:column;align-items:flex-start}
++      .page-controls{width:100%;justify-content:space-between}
++      .metric-grid,
++      .data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
++      .result-head{grid-template-columns:74px minmax(0,1fr)}
++      .thumb{width:74px}
+     }
+   </style>
+ </head>
+@@ -372,99 +683,214 @@
+         <span class="brand-mark"></span>
+         CAMERA <span>BRIDGE</span>
+       </a>
+-      <form class="top-search" id="search-form">
+-        <input id="query-input" class="query-input" type="search" autocomplete="off" placeholder="35lux aa, q3 28, ltm summaron 35">
+-        <button class="icon-button" type="submit" aria-label="Search">Go</button>
+-      </form>
+-      <div class="header-meta">MARKET DESK</div>
++      <div class="topbar-meta">
++        <span class="meta-pill accent">Private beta</span>
++        <span class="meta-pill">Independent market intelligence</span>
++        <span class="meta-pill">No fake fill</span>
++      </div>
+     </header>
+ 
+     <main>
+-      <section class="search-band">
+-        <div>
+-          <h1 class="page-title">Find rare camera gear</h1>
+-          <p class="page-sub">Rare bodies, collectible lenses, and hard-to-find dealer listings.</p>
+-        </div>
+-        <div class="quick-row" aria-label="Quick searches">
+-          <button class="quick-chip" type="button" data-query="mp3 silver">mp3 silver</button>
+-          <button class="quick-chip" type="button" data-query="q3 28">q3 28</button>
+-          <button class="quick-chip" type="button" data-query="ltm summaron 35">ltm summaron 35</button>
+-          <button class="quick-chip" type="button" data-query="35lux aa">35lux aa</button>
++      <section class="hero">
++        <div class="hero-grid">
++          <div class="hero-copy">
++            <p class="eyebrow">Global used camera search and market intelligence</p>
++            <h1 class="hero-title">Global used camera search &amp; market intelligence</h1>
++            <p class="hero-subtitle">
++              Track rare Leica, premium camera gear, active listings, sold references, source coverage, and market signals across global used markets.
++            </p>
++            <div class="hero-notices">
++              <span class="notice-pill">Independent project. Not affiliated with Leica, dealers, or marketplaces.</span>
++              <span class="notice-pill">Private beta. Results may be incomplete. Prices are references, not guaranteed valuations.</span>
++              <span class="notice-pill">No personal information or private listing details are needed for testing.</span>
++            </div>
++            <section class="search-panel" aria-label="Search home">
++              <div class="search-panel-label">Search home</div>
++              <form id="search-form" class="search-form-row">
++                <input id="query-input" class="search-field" type="search" autocomplete="off" placeholder="Leica M6, Summicron-M 35 ASPH, q3 28, ltm summaron 35">
++                <button class="search-button" type="submit" aria-label="Search">Search</button>
++              </form>
++              <div class="query-chip-row" aria-label="Example searches">
++                <button class="query-chip" type="button" data-query="Leica M6">Leica M6</button>
++                <button class="query-chip" type="button" data-query="Summicron-M 35 ASPH">Summicron-M 35 ASPH</button>
++                <button class="query-chip" type="button" data-query="35 lux aa">35 lux aa</button>
++                <button class="query-chip" type="button" data-query="Leica MP silver">Leica MP silver</button>
++                <button class="query-chip" type="button" data-query="Ricoh GR IIIx">Ricoh GR IIIx</button>
++                <button class="query-chip" type="button" data-query="Hasselblad XPan">Hasselblad XPan</button>
++                <button class="query-chip" type="button" data-query="mp3 silver">mp3 silver</button>
++                <button class="query-chip" type="button" data-query="q3 28">q3 28</button>
++                <button class="query-chip" type="button" data-query="ltm summaron 35">ltm summaron 35</button>
++                <button class="query-chip" type="button" data-query="35lux aa">35lux aa</button>
++              </div>
++            </section>
++          </div>
++          <aside class="hero-sidebar">
++            <div class="sidebar-card">
++              <p class="section-label">What Camera Bridge tracks</p>
++              <h2>Built for rare Leica, premium camera gear, and collector-grade market tracking.</h2>
++              <ul class="plain-list">
++                <li>Global active listings</li>
++                <li>Sold references and archive context</li>
++                <li>Source coverage and source-gap cues</li>
++                <li>Match confidence and price reference framing</li>
++              </ul>
++            </div>
++            <div class="sidebar-card">
++              <p class="section-label">Feedback scope</p>
++              <h2>Simple feedback is enough.</h2>
++              <ul class="plain-list">
++                <li>Wrong match</li>
++                <li>Confusing price</li>
++                <li>Unclear source</li>
++                <li>Missing item</li>
++                <li>UI confusing</li>
++              </ul>
++            </div>
++          </aside>
+         </div>
+       </section>
+ 
+-      <section class="controls" aria-label="Search filters">
+-        <div class="control">
+-          <label for="category-filter">Category</label>
+-          <select id="category-filter">
+-            <option value="">Any</option>
+-            <option value="Lens">Lens</option>
+-            <option value="Body">Body</option>
+-            <option value="Accessory">Accessory</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="brand-filter">Brand</label>
+-          <select id="brand-filter">
+-            <option value="">Any</option>
+-            <option value="Leica">Leica</option>
+-            <option value="Voigtlander">Voigtlander</option>
+-            <option value="Zeiss">Zeiss</option>
+-            <option value="Hasselblad">Hasselblad</option>
+-            <option value="Sigma">Sigma</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="mount-filter">Mount</label>
+-          <select id="mount-filter">
+-            <option value="">Any</option>
+-            <option value="M">M</option>
+-            <option value="L">L</option>
+-            <option value="R">R</option>
+-            <option value="SL">SL</option>
+-            <option value="Q">Q</option>
+-            <option value="S">S</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="sold-filter">Sold quality</label>
+-          <select id="sold-filter">
+-            <option value="">Any</option>
+-            <option value="asking">Asking</option>
+-            <option value="sold">Sold</option>
+-            <option value="unknown">Unknown</option>
+-          </select>
+-        </div>
+-        <div class="control">
+-          <label for="sort-select">Sort</label>
+-          <select id="sort-select">
+-            <option value="relevance">Relevance</option>
+-            <option value="price_asc">Price low</option>
+-            <option value="price_desc">Price high</option>
+-          </select>
+-        </div>
++      <section class="overview-grid">
++        <article class="workspace-card">
++          <p class="section-label">Search home</p>
++          <h2>No fake fill</h2>
++          <p>If we cannot verify a result, we say so. No nearby model is promoted as a fake replacement for a missing match.</p>
++        </article>
++        <article class="workspace-card">
++          <p class="section-label">Source coverage</p>
++          <h2>Source-gap is not confirmed absence</h2>
++          <p>Coverage gaps are shown as limited source visibility, not as proof that an item does not exist.</p>
++        </article>
++        <article class="workspace-card">
++          <p class="section-label">Private beta CTA</p>
++          <h2>Quiet alert actions only</h2>
++          <p>Alerts can be suggested, but broad-query pressure and loud marketplace urgency are intentionally avoided.</p>
++        </article>
+       </section>
+ 
+-      <section class="status-strip">
+-        <div class="result-summary">
+-          <strong id="result-count">0</strong>
+-          <span id="result-caption">Ready</span>
++      <section class="workspace">
++        <div class="toolbar" aria-label="Search filters">
++          <div class="control">
++            <label for="category-filter">Category</label>
++            <select id="category-filter">
++              <option value="">Any</option>
++              <option value="Lens">Lens</option>
++              <option value="Body">Body</option>
++              <option value="Accessory">Accessory</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="brand-filter">Brand</label>
++            <select id="brand-filter">
++              <option value="">Any</option>
++              <option value="Leica">Leica</option>
++              <option value="Voigtlander">Voigtlander</option>
++              <option value="Zeiss">Zeiss</option>
++              <option value="Hasselblad">Hasselblad</option>
++              <option value="Sigma">Sigma</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="mount-filter">Mount</label>
++            <select id="mount-filter">
++              <option value="">Any</option>
++              <option value="M">M</option>
++              <option value="L">L</option>
++              <option value="R">R</option>
++              <option value="SL">SL</option>
++              <option value="Q">Q</option>
++              <option value="S">S</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="sold-filter">Sold quality</label>
++            <select id="sold-filter">
++              <option value="">Any</option>
++              <option value="asking">Asking</option>
++              <option value="sold">Sold</option>
++              <option value="sold_confirmed">Sold confirmed</option>
++              <option value="sold_likely">Sold likely</option>
++              <option value="unknown">Unknown</option>
++            </select>
++          </div>
++          <div class="control">
++            <label for="sort-select">Sort</label>
++            <select id="sort-select">
++              <option value="relevance">Relevance</option>
++              <option value="price_asc">Price low</option>
++              <option value="price_desc">Price high</option>
++              <option value="newest">Newest</option>
++            </select>
++          </div>
+         </div>
+-        <div class="page-controls">
+-          <button id="prev-button" class="page-button" type="button">Prev</button>
+-          <span id="page-indicator" class="page-indicator">0-0</span>
+-          <button id="next-button" class="page-button" type="button">Next</button>
++
++        <section class="status-strip">
++          <div class="summary-copy">
++            <div class="summary-value">
++              <strong id="result-count">0</strong>
++              <span id="result-caption" class="summary-caption">Ready for search</span>
++            </div>
++            <div id="summary-meta" class="summary-meta">Private beta search home</div>
++          </div>
++          <div class="page-controls">
++            <button id="prev-button" class="page-button" type="button">Prev</button>
++            <span id="page-indicator" class="page-indicator">0-0</span>
++            <button id="next-button" class="page-button" type="button">Next</button>
++          </div>
++        </section>
++
++        <div class="workspace-grid">
++          <div class="workspace-main">
++            <section id="state-region" aria-live="polite"></section>
++            <section id="market-entry-region" aria-live="polite"></section>
++            <section id="refinement-region" aria-live="polite"></section>
++            <section id="results-grid" class="results-grid" aria-live="polite"></section>
++            <section id="archive-region" aria-live="polite"></section>
++            <div class="footer-note" id="warning-region"></div>
++          </div>
++          <aside class="workspace-side">
++            <div class="side-panel">
++              <p class="section-label">External tester first-use</p>
++              <h2>Before you rely on a result</h2>
++              <ul class="plain-list">
++                <li>Private beta</li>
++                <li>Incomplete data is possible</li>
++                <li>No guaranteed valuation</li>
++                <li>No personal data needed</li>
++                <li>Do not paste private listing or contact details</li>
++              </ul>
++            </div>
++            <div class="side-panel">
++              <p class="section-label">Alert CTA</p>
++              <h2>Track market changes quietly</h2>
++              <div class="state-actions">
++                <button type="button" class="ghost-button">Create alert for this exact model</button>
++                <button type="button" class="ghost-button">Notify me if verified listings appear</button>
++                <button type="button" class="ghost-button">Track market changes</button>
++              </div>
++            </div>
++            <div class="side-panel">
++              <p class="section-label">Trust and safety</p>
++              <p>Independent project. Not affiliated with Leica, dealers, or marketplaces. Prices are references, not guaranteed valuations.</p>
++            </div>
++          </aside>
+         </div>
+       </section>
+-
+-      <section id="state-region" aria-live="polite"></section>
+-      <section id="results-grid" class="results-grid" aria-live="polite"></section>
+-      <div class="footer-note" id="warning-region"></div>
+     </main>
+   </div>
+ 
+   <script>
+     const PAGE_SIZE = 12;
++    const FALLBACK_COPY = 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.';
++    const BROAD_QUERY_FALLBACK_CHIPS = ['M lenses', 'R lenses', 'SL lenses', '35mm', '50mm', '90mm'];
++    const LOCAL_BROAD_QUERY_HINTS = {
++      'summicron': '"Summicron" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
++      'summilux': '"Summilux" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
++      'leica lens': 'This query is still broad. Choose a family, mount, or focal length to refine your search.',
++      'leica m': 'This query can refer to multiple M-system bodies and lenses. Refine by body model or lens family.',
++      '50 cron': 'Collector shorthand can match multiple Summicron variants. Choose a mount or full model name to refine your search.'
++    };
++
+     const state = {
+       query: '',
+       offset: 0,
+@@ -475,28 +901,47 @@
+ 
+     const els = {};
+ 
+-    function $(id){return document.getElementById(id);}
++    function $(id){ return document.getElementById(id); }
+ 
+     function cacheElements(){
+       [
+-        'search-form','query-input','category-filter','brand-filter','mount-filter',
+-        'sold-filter','sort-select','result-count','result-caption','page-indicator',
+-        'prev-button','next-button','state-region','results-grid','warning-region'
+-      ].forEach(id => els[id] = $(id));
++        'search-form','query-input','category-filter','brand-filter','mount-filter','sold-filter',
++        'sort-select','result-count','result-caption','summary-meta','page-indicator',
++        'prev-button','next-button','state-region','market-entry-region','refinement-region',
++        'results-grid','archive-region','warning-region'
++      ].forEach(id => {
++        els[id] = $(id);
++      });
+     }
+ 
+     function escapeHtml(value){
+       return String(value ?? '').replace(/[&<>"']/g, ch => ({
+-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
++        '&':'&amp;',
++        '<':'&lt;',
++        '>':'&gt;',
++        '"':'&quot;',
++        "'":'&#39;'
+       }[ch]));
+     }
+ 
+-    function displayValue(value){
+-      if(Array.isArray(value)) return value.length ? value.join(', ') : 'Any';
+-      if(value === null || value === undefined || value === '') return 'Any';
++    function displayValue(value, fallback = 'Unknown'){
++      if(Array.isArray(value)){
++        return value.length ? value.join(', ') : fallback;
++      }
++      if(value === null || value === undefined || value === ''){
++        return fallback;
++      }
+       return String(value);
+     }
+ 
++    function titleCase(value){
++      return String(value || '').replace(/\s+/g, ' ').trim().replace(/\b\w/g, char => char.toUpperCase());
++    }
++
++    function normalizeSearchQuerySafe(value){
++      return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
++    }
++
+     function finalField(result, key){
+       return (result.final_output || {})[key];
+     }
+@@ -508,32 +953,29 @@
+       params.set('offset', String(offset));
+       params.set('sort', els['sort-select'].value || 'relevance');
+ 
+-      const filters = [
++      [
+         ['category', els['category-filter'].value],
+         ['brand', els['brand-filter'].value],
+         ['mount', els['mount-filter'].value],
+         ['sold_quality', els['sold-filter'].value]
+-      ];
+-      filters.forEach(([key, value]) => {
++      ].forEach(([key, value]) => {
+         if(value) params.set(key, value);
+       });
+ 
+-      const pageParams = new URLSearchParams(window.location.search);
+-      if(pageParams.get('debug') === '1') params.set('include_debug', 'true');
+       return params;
+     }
+ 
+     function syncUrl(){
+       const params = buildParams(state.offset);
+-      const pageParams = new URLSearchParams(params);
+-      pageParams.delete('limit');
+-      if(pageParams.get('offset') === '0') pageParams.delete('offset');
+-      history.replaceState(null, '', '?' + pageParams.toString());
++      params.delete('limit');
++      if(params.get('offset') === '0') params.delete('offset');
++      history.replaceState(null, '', '?' + params.toString());
+     }
+ 
+     async function runSearch(offset = 0){
+       const nextQuery = els['query-input'].value.trim();
+       if(!nextQuery) return;
++
+       state.query = nextQuery;
+       state.offset = Math.max(0, offset);
+       state.loading = true;
+@@ -543,122 +985,415 @@
+       try{
+         const params = buildParams(state.offset);
+         const response = await fetch('/api/search?' + params.toString(), {
+-          headers: {'Accept':'application/json'},
++          headers: { 'Accept': 'application/json' },
+           cache: 'no-store'
+         });
+         const payload = await response.json();
+         if(!response.ok){
+-          const message = payload && payload.error ? payload.error.message : 'Search failed';
+-          throw new Error(message);
++          throw new Error((payload && payload.error && payload.error.message) || 'search_request_failed');
+         }
+         state.response = payload;
+         state.error = null;
+         syncUrl();
+       }catch(error){
++        console.error('Camera Bridge search UI fallback', error);
+         state.response = null;
+-        state.error = error.message || 'Search failed';
++        state.error = 'runtime_error_fallback';
+       }finally{
+         state.loading = false;
+         render();
+       }
+     }
+ 
+-    function render(){
+-      renderSummary();
+-      renderResults();
+-      renderWarnings();
++    function statusMeta(result){
++      const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
++      if(soldQuality === 'asking') return { label: 'Active asking', tone: 'accent' };
++      if(soldQuality === 'sold_confirmed') return { label: 'Sold confirmed', tone: 'green' };
++      if(soldQuality === 'sold_likely') return { label: 'Sold likely', tone: 'amber' };
++      if(soldQuality === 'expired' || soldQuality === 'ended_unsold') return { label: 'Expired', tone: 'amber' };
++      if(soldQuality === 'removed') return { label: 'Removed', tone: 'amber' };
++      if(soldQuality === 'sold') return { label: 'Sold status', tone: 'green' };
++      return { label: 'Unknown', tone: 'blue' };
++    }
++
++    function getLocalBroadQueryHint(){
++      const query = normalizeSearchQuerySafe(state.query);
++      if(!LOCAL_BROAD_QUERY_HINTS[query]) return null;
++      return {
++        needs_disambiguation: true,
++        ambiguity_type: 'broad_query_frontend_fallback',
++        recommended_ui_pattern: 'refinement_chips',
++        recommended_chips: BROAD_QUERY_FALLBACK_CHIPS,
++        suggested_filters: {},
++        hard_pin_allowed: false,
++        recommended_message: LOCAL_BROAD_QUERY_HINTS[query]
++      };
++    }
++
++    function getUiHints(){
++      const apiHints = state.response && state.response.ui_hints ? state.response.ui_hints : {};
++      if(apiHints.needs_disambiguation){
++        return apiHints;
++      }
++      return getLocalBroadQueryHint() || apiHints;
++    }
++
++    function getQualitySummary(){
++      return state.response && state.response.result_quality_summary ? state.response.result_quality_summary : {};
++    }
++
++    function getResults(){
++      return state.response && Array.isArray(state.response.results) ? state.response.results : [];
++    }
++
++    function getCoverageLabel(){
++      const uiHints = getUiHints();
++      const total = state.response ? Number(state.response.total_ranked || 0) : 0;
++      if(uiHints.ambiguity_type === 'source_coverage_gap') return 'Coverage limited';
++      if(total >= 10) return 'Observed across multiple results';
++      if(total > 0) return 'Observed in current results';
++      return 'Not enough data';
+     }
+ 
+     function renderSummary(){
+-      const pagination = state.response ? state.response.pagination || {} : {};
+-      const total = state.response ? state.response.total_ranked || 0 : 0;
+-      const resultCount = state.response ? state.response.result_count || 0 : 0;
+-      const start = total && resultCount ? (pagination.offset || 0) + 1 : 0;
+-      const end = total && resultCount ? (pagination.offset || 0) + resultCount : 0;
+-
+-      els['result-count'].textContent = total;
+-      els['result-caption'].textContent = state.loading
+-        ? 'Searching'
+-        : state.query
+-          ? `${resultCount} shown for "${state.query}"`
+-          : 'Ready';
++      const pagination = state.response ? (state.response.pagination || {}) : {};
++      const total = state.response ? Number(state.response.total_ranked || 0) : 0;
++      const resultCount = state.response ? Number(state.response.result_count || 0) : 0;
++      const start = total && resultCount ? (Number(pagination.offset || 0) + 1) : 0;
++      const end = total && resultCount ? (Number(pagination.offset || 0) + resultCount) : 0;
++      const quality = getQualitySummary();
++
++      els['result-count'].textContent = String(total);
++      if(state.loading){
++        els['result-caption'].textContent = 'Searching global used camera listings...';
++        els['summary-meta'].textContent = 'Private beta search in progress';
++      }else if(state.error){
++        els['result-caption'].textContent = 'Runtime fallback active';
++        els['summary-meta'].textContent = 'Safe UI fallback shown instead of raw server error';
++      }else if(state.query){
++        els['result-caption'].textContent = `${resultCount} shown for "${state.query}"`;
++        els['summary-meta'].textContent = quality.display_message || 'Prices are references, not guaranteed valuations.';
++      }else{
++        els['result-caption'].textContent = 'Ready for search';
++        els['summary-meta'].textContent = 'Private beta. No fake fill. Source-gap is not confirmed absence.';
++      }
++
+       els['page-indicator'].textContent = `${start}-${end}`;
+-      els['prev-button'].disabled = state.loading || !state.response || (pagination.offset || 0) <= 0;
++      els['prev-button'].disabled = state.loading || !state.response || Number(pagination.offset || 0) <= 0;
+       els['next-button'].disabled = state.loading || !state.response || !pagination.has_more;
+     }
+ 
+-    function renderResults(){
+-      els['results-grid'].innerHTML = '';
++    function render(){
++      renderSummary();
++      renderContent();
++      renderWarnings();
++    }
++
++    function renderContent(){
+       els['state-region'].innerHTML = '';
++      els['market-entry-region'].innerHTML = '';
++      els['refinement-region'].innerHTML = '';
++      els['results-grid'].innerHTML = '';
++      els['archive-region'].innerHTML = '';
+ 
+       if(state.loading){
+-        els['state-region'].innerHTML = '<div class="state">Loading results...</div>';
++        els['state-region'].innerHTML = renderStateCard('Loading search', 'Gathering listing matches, source cues, and market context.', [], 'subtle');
+         return;
+       }
+ 
+       if(state.error){
+-        els['state-region'].innerHTML = `<div class="state error">${escapeHtml(state.error)}</div>`;
++        els['state-region'].innerHTML = renderStateCard(
++          'Something went wrong while loading this search.',
++          'No data was changed. Please try again or refine the query.',
++          ['Try a narrower model name', 'Try a mount or focal length', 'Search again in a moment'],
++          'error'
++        );
+         return;
+       }
+ 
+       if(!state.response){
+-        els['state-region'].innerHTML = '<div class="state">Enter a query to start.</div>';
++        els['state-region'].innerHTML = renderStateCard(
++          'Search global used camera listings with honest market context.',
++          'Use the search box above to explore active listings, sold references, source coverage, and market signals without fake fill.',
++          ['Source-gap means limited coverage, not confirmed absence', 'Broad queries will ask for refinement first', 'Unsafe boundary results do not expose price or CTA'],
++          'subtle'
++        );
+         return;
+       }
+ 
+-      const results = state.response.results || [];
++      const results = getResults();
++      const uiHints = getUiHints();
++
++      if(uiHints.needs_disambiguation){
++        els['refinement-region'].innerHTML = renderRefinementCard(uiHints);
++      }
++
+       if(!results.length){
+-        els['state-region'].innerHTML = '<div class="state">No results.</div>';
++        els['state-region'].innerHTML = renderEmptyState(uiHints);
+         return;
+       }
+ 
++      els['state-region'].innerHTML = renderStateCard(
++        'Search results',
++        'Camera Bridge shows verified matches first, keeps broader results honest, and does not convert uncertainty into fake certainty.',
++        ['Independent project', 'No guaranteed valuation', 'Source-gap is not confirmed absence'],
++        'subtle'
++      );
++      els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
+       els['results-grid'].innerHTML = results.map(renderCard).join('');
++      els['archive-region'].innerHTML = renderArchiveSection(results);
++    }
++
++    function renderStateCard(title, body, bullets, tone){
++      const bulletHtml = Array.isArray(bullets) && bullets.length
++        ? `<ul class="plain-list">${bullets.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
++        : '';
++      return `
++        <article class="state-card ${escapeHtml(tone || '')}">
++          <h3>${escapeHtml(title)}</h3>
++          <p>${escapeHtml(body)}</p>
++          ${bulletHtml}
++        </article>
++      `;
++    }
++
++    function renderEmptyState(uiHints){
++      const ambiguityType = uiHints.ambiguity_type || 'none';
++      const recommendedMessage = uiHints.recommended_message || '';
++      if(ambiguityType === 'source_coverage_gap'){
++        return `
++          <article class="state-card">
++            <h3>We could not verify enough source coverage for this query yet.</h3>
++            <p>This does not mean the item does not exist.</p>
++            <div class="state-actions">
++              <button type="button" class="ghost-button">Get notified if matching listings appear later</button>
++              <button type="button" class="ghost-button">Track market changes</button>
++            </div>
++          </article>
++        `;
++      }
++
++      if(uiHints.needs_disambiguation){
++        return `
++          <article class="state-card">
++            <h3>No exact result is shown yet because this query is still broad.</h3>
++            <p>${escapeHtml(recommendedMessage || 'Choose a mount or focal length to refine your search.')}</p>
++            <div class="state-actions">
++              ${(uiHints.recommended_chips || BROAD_QUERY_FALLBACK_CHIPS).slice(0, 6).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
++            </div>
++          </article>
++        `;
++      }
++
++      return `
++        <article class="state-card">
++          <h3>No verified matches found for this search.</h3>
++          <p>Try a more specific model name, add a mount or focal length, or come back later if coverage improves.</p>
++          <div class="state-actions">
++            <button type="button" class="ghost-button">Get notified if matching listings appear later</button>
++          </div>
++        </article>
++      `;
++    }
++
++    function renderRefinementCard(uiHints){
++      const chips = (uiHints.recommended_chips || []).length ? uiHints.recommended_chips : BROAD_QUERY_FALLBACK_CHIPS;
++      const message = uiHints.recommended_message || `"${titleCase(state.query)}" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.`;
++      return `
++        <article class="state-card">
++          <h3>Broad query refinement</h3>
++          <p>${escapeHtml(message)}</p>
++          <div class="state-actions">
++            ${chips.slice(0, 9).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
++          </div>
++        </article>
++      `;
++    }
++
++    function parseNumericPrice(result){
++      const raw = String(result.price || '');
++      const digits = raw.replace(/[^0-9.]/g, '');
++      if(!digits) return null;
++      const value = Number.parseFloat(digits);
++      return Number.isFinite(value) ? value : null;
++    }
++
++    function formatPriceBand(results){
++      const priced = results
++        .map(result => ({ value: parseNumericPrice(result), currency: result.currency || '' }))
++        .filter(item => item.value !== null);
++      if(!priced.length) return 'Not enough data';
++      const currencies = Array.from(new Set(priced.map(item => item.currency || 'Unknown')));
++      if(currencies.length !== 1) return 'Mixed currencies';
++      const values = priced.map(item => item.value);
++      const min = Math.min(...values);
++      const max = Math.max(...values);
++      const currency = currencies[0] || '';
++      const formatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
++      return `${currency} ${formatter.format(min)} - ${formatter.format(max)}`;
++    }
++
++    function buildMarketCounts(results){
++      const counts = {
++        asking: 0,
++        soldConfirmed: 0,
++        soldLikely: 0,
++        expiredRemoved: 0,
++        archive: 0
++      };
++      results.forEach(result => {
++        const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
++        if(soldQuality === 'asking') counts.asking += 1;
++        else if(soldQuality === 'sold_confirmed') counts.soldConfirmed += 1;
++        else if(soldQuality === 'sold_likely') counts.soldLikely += 1;
++        else if(['expired', 'removed', 'ended_unsold'].includes(soldQuality)) counts.expiredRemoved += 1;
++        if(soldQuality && soldQuality !== 'asking') counts.archive += 1;
++      });
++      return counts;
++    }
++
++    function renderMarketEntry(results, uiHints){
++      const lead = results[0];
++      const counts = buildMarketCounts(results);
++      const modelTitle = displayValue(finalField(lead, 'model_canonical') || lead.title, 'Unknown model');
++      const aliases = displayValue(finalField(lead, 'variant'), 'No alias details');
++      const quality = getQualitySummary();
++      const adjacentWarning = uiHints.needs_disambiguation
++        ? 'Adjacent models may also be relevant for this broad family query.'
++        : 'No adjacent model warning in current query state.';
++      return `
++        <article class="market-entry-card">
++          <div class="market-topline">
++            <div>
++              <p class="section-label">Model market entry</p>
++              <h3>${escapeHtml(modelTitle)}</h3>
++              <p>Aliases: ${escapeHtml(aliases)}. Market summary is query-level and remains reference-only while coverage is still beta-limited.</p>
++            </div>
++            <div class="market-badges">
++              <span class="micro-pill accent">Match Confidence</span>
++              <span class="micro-pill blue">Source Coverage</span>
++              <span class="micro-pill green">Price Confidence</span>
++            </div>
++          </div>
++          <div class="metric-grid">
++            <div class="metric-card"><b>Active listings</b><span>${counts.asking}</span></div>
++            <div class="metric-card"><b>Sold confirmed</b><span>${counts.soldConfirmed}</span></div>
++            <div class="metric-card"><b>Sold likely</b><span>${counts.soldLikely}</span></div>
++            <div class="metric-card"><b>Expired or removed archive</b><span>${counts.expiredRemoved}</span></div>
++            <div class="metric-card"><b>Indicative price band</b><span>${escapeHtml(formatPriceBand(results))}</span></div>
++            <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
++            <div class="metric-card"><b>Price confidence</b><span>${escapeHtml(quality.display_message || 'Not enough data')}</span></div>
++            <div class="metric-card"><b>Adjacent models warning</b><span>${escapeHtml(adjacentWarning)}</span></div>
++          </div>
++          <div class="state-actions">
++            <button type="button" class="action-button"${uiHints.needs_disambiguation ? ' aria-disabled="true"' : ''}>Create alert for this exact model</button>
++            <button type="button" class="ghost-button">Notify me if verified listings appear</button>
++          </div>
++        </article>
++      `;
+     }
+ 
+     function renderCard(result){
+       const title = result.title || 'Untitled listing';
+       const url = result.source_url || '#';
+       const imageUrl = result.image_url;
+-      const matched = (result.matched_fields || []).slice(0, 5);
+-      const warnings = (result.warnings || []).slice(0, 2);
+-      const variant = finalField(result, 'variant');
+       const safeUrl = escapeHtml(url);
+-      const target = url && url !== '#' ? ' target="_blank" rel="noopener noreferrer"' : '';
+-      const thumb = imageUrl
+-        ? `<img src="${escapeHtml(imageUrl)}" alt="">`
+-        : '<span>CB</span>';
++      const canViewSource = Boolean(url && url !== '#');
++      const target = canViewSource ? ' target="_blank" rel="noopener noreferrer"' : '';
++      const status = statusMeta(result);
++      const matchConfidence = displayValue(result.match_quality, 'Unknown');
++      const model = displayValue(finalField(result, 'model_canonical'), 'Unknown');
++      const family = displayValue(finalField(result, 'label'), 'Unknown');
++      const currency = displayValue(result.currency, 'Unknown');
++      const source = displayValue(result.source, 'Unknown source');
++      const priceConfidence = result.price ? 'Reference only' : 'Not enough data';
++      const sourceCoverage = getCoverageLabel();
++      const firstSeen = 'Unknown';
++      const lastSeen = 'Unknown';
++      const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
+ 
+       return `
+         <article class="result-card">
+-          <div class="thumb">${thumb}</div>
+-          <div class="card-body">
+-            <a class="card-title" href="${safeUrl}"${target}>${escapeHtml(title)}</a>
+-            <div class="price-row">
+-              <div class="price">${escapeHtml(result.price || 'Ask')}</div>
+-              <div class="source">${escapeHtml(result.source || 'Unknown source')}</div>
++          <div class="result-head">
++            <div class="thumb">${thumb}</div>
++            <div class="card-copy">
++              <a class="result-title" href="${safeUrl}"${target}>${escapeHtml(title)}</a>
++              <div class="result-price-row">
++                <div class="result-price">${escapeHtml(displayValue(result.price, 'Not enough data'))}</div>
++                <div class="result-source">${escapeHtml(source)}<br>${escapeHtml(currency)}</div>
++              </div>
++              <div class="result-status-row">
++                <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(status.label)}</span>
++                <span class="micro-pill blue">Match ${escapeHtml(matchConfidence)}</span>
++                ${result.used_override ? '<span class="micro-pill green">Trusted override</span>' : ''}
++              </div>
+             </div>
+-            <div class="field-grid">
+-              ${renderField('brand', finalField(result, 'brand'))}
+-              ${renderField('mount', finalField(result, 'mount'))}
+-              ${renderField('category', finalField(result, 'category'))}
+-              ${renderField('label', finalField(result, 'label'))}
+-              ${renderField('model', finalField(result, 'model_canonical'))}
+-              ${renderField('variant', variant)}
+-              ${renderField('focal', finalField(result, 'focal_length'))}
+-              ${renderField('sold', finalField(result, 'sold_quality'))}
++          </div>
++          <div class="data-grid">
++            ${renderDataPoint('Detected model', model)}
++            ${renderDataPoint('Family', family)}
++            ${renderDataPoint('Price confidence', priceConfidence)}
++            ${renderDataPoint('Source coverage', sourceCoverage)}
++            ${renderDataPoint('First seen', firstSeen)}
++            ${renderDataPoint('Last seen', lastSeen)}
++            ${renderDataPoint('Mount', displayValue(finalField(result, 'mount'), 'Unknown'))}
++            ${renderDataPoint('Category', displayValue(finalField(result, 'category'), 'Unknown'))}
++          </div>
++          <div class="result-actions">
++            <div class="action-group">
++              <button type="button" class="ghost-button">Track market changes</button>
++              <button type="button" class="ghost-button">Create alert for this exact model</button>
+             </div>
+-            <div class="pill-row">
+-              ${result.used_override ? '<span class="pill override">trusted</span>' : ''}
+-              ${matched.map(field => `<span class="pill match">${escapeHtml(field)}</span>`).join('')}
+-              ${warnings.map(warning => `<span class="pill warn">${escapeHtml(warning)}</span>`).join('')}
++            <div class="action-group">
++              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>View source</a>` : '<button type="button" class="action-button" aria-disabled="true">View source</button>'}
+             </div>
+           </div>
+         </article>
+       `;
+     }
+ 
+-    function renderField(label, value){
+-      return `<div class="field"><b>${escapeHtml(label)}</b><span title="${escapeHtml(displayValue(value))}">${escapeHtml(displayValue(value))}</span></div>`;
++    function renderDataPoint(label, value){
++      return `<div class="data-point"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
++    }
++
++    function renderArchiveSection(results){
++      const archiveCandidates = results.filter(result => {
++        const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
++        return soldQuality && soldQuality !== 'asking';
++      }).slice(0, 4);
++
++      const items = archiveCandidates.length
++        ? archiveCandidates.map(result => {
++            const status = statusMeta(result);
++            const caution = status.label === 'Sold confirmed'
++              ? 'Sold status still depends on source quality and should be read as a reference.'
++              : 'Sold status may be uncertain. Do not treat archive state as a guaranteed completed sale.';
++            return `
++              <div class="archive-item">
++                <strong>${escapeHtml(result.title || 'Archived listing')}</strong>
++                <p>Observed price: ${escapeHtml(displayValue(result.price, 'Not enough data'))}. Status: ${escapeHtml(status.label)}. Source: ${escapeHtml(displayValue(result.source, 'Unknown source'))}.</p>
++                <div class="archive-meta">
++                  <span class="micro-pill blue">Model match ${escapeHtml(displayValue(finalField(result, 'model_canonical'), 'Unknown'))}</span>
++                  <span class="micro-pill">${escapeHtml(caution)}</span>
++                </div>
++              </div>
++            `;
++          }).join('')
++        : `
++          <div class="archive-item">
++            <strong>No archive or sold reference entry is visible in this search yet.</strong>
++            <p>Archive reference is shown only when the current result set exposes a sold-like, expired, removed, or otherwise historical status. Nothing is invented here.</p>
++          </div>
++        `;
++
++      return `
++        <article class="archive-card">
++          <p class="section-label">Listing archive / sold reference entry</p>
++          <h3>Archived listing and sold-reference context</h3>
++          <p>Archive references are useful when present, but removed or uncertain states must never be overstated as confirmed sales.</p>
++          <div class="archive-list">${items}</div>
++        </article>
++      `;
+     }
+ 
+     function renderWarnings(){
+@@ -666,15 +1401,15 @@
+         els['warning-region'].textContent = '';
+         return;
+       }
+-      const warnings = state.response.warnings || [];
+       const filters = state.response.applied_filters || {};
+-      const quality = state.response.result_quality_summary || {};
+-      const filterText = Object.keys(filters).length
+-        ? `filters: ${Object.entries(filters).map(([key,value]) => `${key}=${value}`).join(', ')}`
+-        : 'filters: none';
+-      const parts = [filterText];
++      const warnings = state.response.warnings || [];
++      const quality = getQualitySummary();
++      const parts = [];
++      parts.push(Object.keys(filters).length ? `filters: ${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join(', ')}` : 'filters: none');
+       if(quality.display_message) parts.push(quality.display_message);
++      if(getUiHints().recommended_message) parts.push(getUiHints().recommended_message);
+       if(warnings.length) parts.push(warnings.join(', '));
++      parts.push('No fake fill. Source-gap is not confirmed absence.');
+       els['warning-region'].textContent = parts.join(' | ');
+     }
+ 
+@@ -705,13 +1440,13 @@
+       });
+ 
+       els['prev-button'].addEventListener('click', () => {
+-        const current = state.response ? state.response.pagination || {} : {};
+-        runSearch(Math.max(0, (current.offset || 0) - PAGE_SIZE));
++        const current = state.response ? (state.response.pagination || {}) : {};
++        runSearch(Math.max(0, Number(current.offset || 0) - PAGE_SIZE));
+       });
+ 
+       els['next-button'].addEventListener('click', () => {
+-        const current = state.response ? state.response.pagination || {} : {};
+-        if(current.has_more) runSearch(current.next_offset || ((current.offset || 0) + PAGE_SIZE));
++        const current = state.response ? (state.response.pagination || {}) : {};
++        if(current.has_more) runSearch(Number(current.next_offset || (Number(current.offset || 0) + PAGE_SIZE)));
+       });
+ 
+       document.querySelectorAll('[data-query]').forEach(button => {
+@@ -720,6 +1455,15 @@
+           runSearch(0);
+         });
+       });
++
++      document.addEventListener('click', event => {
++        const target = event.target;
++        if(target && target.matches('[data-refine]')){
++          const refine = target.getAttribute('data-refine') || '';
++          els['query-input'].value = `${state.query} ${refine}`.trim();
++          runSearch(0);
++        }
++      });
+     }
+ 
+     cacheElements();

@@ -1,0 +1,409 @@
+{
+  "task_name": "P3-BETA-UI-LIVE-DEPLOYMENT-PARITY-AND-SHARE-LINK-VERIFICATION",
+  "artifact_version": "p3_beta_ui_live_deployment_parity_and_share_link_verification_v0",
+  "schema_version": "beta_ui_live_deployment_parity_and_share_link_verification.v0",
+  "generated_at": "2026-06-03T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-03T00:00:00Z",
+    "schema_version": "beta_ui_live_deployment_parity_and_share_link_verification.v0",
+    "artifact_version": "p3_beta_ui_live_deployment_parity_and_share_link_verification_v0",
+    "beta_ui_live_deployment_parity_and_share_link_verification_round": true,
+    "verification_only_round": true,
+    "production_code_modified": false,
+    "automatic_deployment_execution": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "safe_candidate_record_created_count_delta": 0,
+    "access_activation_performed": false,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "limited_external_beta_progress_percentage_estimate": 86
+  },
+  "prior_ui_implementation_evidence": {
+    "row_type": "prior_ui_implementation_evidence",
+    "implementation_status": "beta_landing_search_ui_reference_redesign_implementation_ready_for_runtime_triage_or_smoke",
+    "ready_for_runtime_triage_or_smoke": true,
+    "modified_frontend_files": [
+      "app/app.py",
+      "app/templates/index.html",
+      "index.html"
+    ],
+    "implementation_query_smoke_count": 10,
+    "evidence_source": "artifact_based_ui_implementation"
+  },
+  "prior_runtime_smoke_evidence": {
+    "row_type": "prior_runtime_smoke_evidence",
+    "prior_smoke_status": "beta_share_link_runtime_smoke_recheck_hold_live_share_link_not_verified",
+    "prior_live_share_link_status": "live_share_link_not_verified_due_network_or_resolution_limit",
+    "prior_landing_rendered": true,
+    "prior_search_api_status_code": 200,
+    "prior_query_smoke_count": 10,
+    "evidence_source": "artifact_based_prior_runtime_smoke"
+  },
+  "local_git_and_deployment_metadata": {
+    "row_type": "local_git_and_deployment_metadata",
+    "local_git_head": "590193f24303f5919949fd93defd288b8f38e8dc",
+    "local_git_branch": "main",
+    "local_git_latest_log": "590193f24303f5919949fd93defd288b8f38e8dc\nfix: restore playwright import\n2026-06-02 01:42:36 +0900",
+    "git_remote_names": [
+      "origin"
+    ],
+    "latest_remote_main_accessible": false,
+    "latest_remote_main_commit": null,
+    "latest_remote_main_message": null,
+    "vercel_deployment_metadata_available": false,
+    "vercel_deployment_commit_sha": null,
+    "vercel_deployment_commit_message": null,
+    "vercel_deployment_target": null,
+    "vercel_deployment_state": null,
+    "vercel_branch_alias": null,
+    "metadata_limitations": [
+      "No Vercel metadata inspection tool was available in this environment.",
+      "Remote branch parity could not be proven from deployment metadata."
+    ]
+  },
+  "ui_implementation_deployment_parity": {
+    "row_type": "ui_implementation_deployment_parity",
+    "local_app_template_hash": "7aa89e4a609ffe72319bb6b3bca155da98baccd17d1f106be37187bcf78de0b8",
+    "local_root_index_hash": "7aa89e4a609ffe72319bb6b3bca155da98baccd17d1f106be37187bcf78de0b8",
+    "local_frontend_files_match": true,
+    "live_html_hash": null,
+    "live_matches_local_hash": null,
+    "ui_implementation_deployed_to_live": "unknown_not_verified",
+    "parity_basis": "local implementation hashes were computed, but live deployment HTML parity could not be proven without reliable live fetch plus deployment metadata"
+  },
+  "live_share_landing_verification": {
+    "row_type": "live_share_landing_verification",
+    "live_share_url": "https://camerabridge.vercel.app/",
+    "head_status_observed": false,
+    "html_fetch_return_code": 6,
+    "landing_live_verified": false,
+    "landing_live_status": "not_verified_due_resolution_or_network_limit",
+    "required_copy_present_map": {
+      "Global used camera search & market intelligence": false,
+      "Independent project": false,
+      "Not affiliated with Leica, dealers, or marketplaces": false,
+      "Prices are references, not guaranteed valuations": false,
+      "No personal information or private listing details are needed for testing": false
+    },
+    "required_copy_present_count": 0,
+    "forbidden_copy_present": [],
+    "raw_server_error_absent": true,
+    "html_preview_hash": null,
+    "notes": "Live landing verification requires successful HTML fetch plus required copy presence."
+  },
+  "live_share_api_verification": {
+    "row_type": "live_share_api_verification",
+    "live_api_verified_count": 0,
+    "live_api_total_probe_count": 4,
+    "live_api_verified": false,
+    "probe_results": [
+      {
+        "query": "summicron",
+        "status": "network_or_resolution_limit",
+        "error": "curl: (6) Could not resolve host: camerabridge.vercel.app"
+      },
+      {
+        "query": "ltm summaron 35",
+        "status": "fetch_failed",
+        "error": "curl: (3) URL rejected: Malformed input to a URL function"
+      },
+      {
+        "query": "ricoh gr iiix",
+        "status": "fetch_failed",
+        "error": "curl: (3) URL rejected: Malformed input to a URL function"
+      },
+      {
+        "query": "hasselblad xpan",
+        "status": "fetch_failed",
+        "error": "curl: (3) URL rejected: Malformed input to a URL function"
+      }
+    ]
+  },
+  "live_query_smoke_results": [
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "ltm summaron 35",
+      "live_probe_status": "fetch_failed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "search_results_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 197,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "search_results_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "summaron 35",
+      "live_probe_status": "not_probed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "search_results_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 175,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "search_results_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "35 summaron",
+      "live_probe_status": "not_probed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "search_results_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 175,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "search_results_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "35 lux aa",
+      "live_probe_status": "not_probed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "search_results_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 447,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "search_results_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "mp silver",
+      "live_probe_status": "not_probed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "search_results_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 194,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "search_results_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "q3 28",
+      "live_probe_status": "not_probed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "search_results_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 71,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "search_results_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "summicron",
+      "live_probe_status": "network_or_resolution_limit",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "broad_query_refinement_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 1232,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "broad_query_refinement_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "leica lens",
+      "live_probe_status": "not_probed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "broad_query_refinement_rendered",
+      "local_reference_result_count": 5,
+      "local_reference_total_ranked": 6005,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "broad_query_refinement_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "ricoh gr iiix",
+      "live_probe_status": "fetch_failed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "no_result_card_rendered",
+      "local_reference_result_count": 0,
+      "local_reference_total_ranked": 0,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "no_result_card_rendered"
+    },
+    {
+      "row_type": "live_query_smoke_result",
+      "query": "hasselblad xpan",
+      "live_probe_status": "fetch_failed",
+      "local_reference_status_code": 200,
+      "local_reference_ui_state": "no_result_card_rendered",
+      "local_reference_result_count": 0,
+      "local_reference_total_ranked": 0,
+      "live_verified_for_query": false,
+      "expected_live_safe_state": "no_result_card_rendered"
+    }
+  ],
+  "required_copy_presence": {
+    "row_type": "required_copy_presence",
+    "live_verified": false,
+    "required_copy_present_map": {
+      "Global used camera search & market intelligence": false,
+      "Independent project": false,
+      "Not affiliated with Leica, dealers, or marketplaces": false,
+      "Prices are references, not guaranteed valuations": false,
+      "No personal information or private listing details are needed for testing": false
+    },
+    "required_copy_present_count": 0
+  },
+  "forbidden_copy_absence": {
+    "row_type": "forbidden_copy_absence",
+    "live_verified": false,
+    "forbidden_copy_absent": true,
+    "forbidden_copy_present": []
+  },
+  "raw_server_error_exposure": {
+    "row_type": "raw_server_error_exposure",
+    "landing_raw_server_error_absent": true,
+    "live_api_all_verified": false,
+    "live_api_non_verified_queries": [
+      "summicron",
+      "ltm summaron 35",
+      "ricoh gr iiix",
+      "hasselblad xpan"
+    ],
+    "raw_server_error_visible_on_live": false
+  },
+  "fake_fill_absence": {
+    "row_type": "fake_fill_absence",
+    "fake_fill_absent": true,
+    "target_queries": [
+      "ricoh gr iiix",
+      "hasselblad xpan"
+    ],
+    "target_expected_states": {
+      "ricoh gr iiix": "no_result_card_rendered",
+      "hasselblad xpan": "no_result_card_rendered"
+    }
+  },
+  "guard": {
+    "row_type": "production_public_access_guard",
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "safe_candidate_record_created_count_delta": 0,
+    "access_activation_performed": false
+  },
+  "tester_send_decision": {
+    "row_type": "tester_send_decision",
+    "decision_status": "beta_ui_live_deployment_parity_hold_live_share_link_not_verified",
+    "tester_link_send_allowed": false,
+    "tester_link_send_scope": "hold",
+    "live_landing_verified": false,
+    "live_api_verified": false,
+    "live_parity_state": "unknown_not_verified"
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "A",
+      "scenario": "prior UI implementation evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "B",
+      "scenario": "prior runtime smoke evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "C",
+      "scenario": "local git/deployment parity evaluated",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "D",
+      "scenario": "latest deployment metadata evaluated if available",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "E",
+      "scenario": "live/share landing verification attempted",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "F",
+      "scenario": "live/share API verification attempted",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "G",
+      "scenario": "UI implementation presence checked on live HTML",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "H",
+      "scenario": "required copy present if live verified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "I",
+      "scenario": "forbidden claims absent if live verified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "J",
+      "scenario": "representative query smoke evaluated if live verified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "K",
+      "scenario": "raw server error absent if live verified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "L",
+      "scenario": "fake fill absent if live verified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "M",
+      "scenario": "production/public/access guard remains false",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "N",
+      "scenario": "no production code modified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "O",
+      "scenario": "tester send decision honest",
+      "status": "passed"
+    }
+  ],
+  "modified_files": [
+    "scripts/run_p3_beta_ui_live_deployment_parity_and_share_link_verification.py",
+    "tests/test_beta_ui_live_deployment_parity_and_share_link_verification.py",
+    "data/admin/p3_beta_ui_live_deployment_parity_and_share_link_verification_v0.md",
+    "data/admin/p3_beta_ui_live_deployment_parity_and_share_link_verification_v0.jsonl",
+    "data/admin/beta_ui_live_deployment_parity_and_share_link_verification_v0.json"
+  ],
+  "summary": {
+    "row_type": "summary",
+    "decision_status": "beta_ui_live_deployment_parity_hold_live_share_link_not_verified",
+    "live_landing_status": "not_verified_due_resolution_or_network_limit",
+    "live_api_verified": false,
+    "tester_link_send_allowed": false,
+    "scenario_pass_count": 15,
+    "scenario_item_count": 15
+  }
+}

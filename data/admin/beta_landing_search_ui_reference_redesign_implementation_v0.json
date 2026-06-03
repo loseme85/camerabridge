@@ -1,0 +1,512 @@
+{
+  "task_name": "P3-BETA-LANDING-AND-SEARCH-UI-REFERENCE-REDESIGN-IMPLEMENTATION",
+  "artifact_version": "p3_beta_landing_search_ui_reference_redesign_implementation_v0",
+  "schema_version": "beta_landing_search_ui_reference_redesign_implementation.v0",
+  "generated_at": "2026-06-03T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-03T00:00:00Z",
+    "schema_version": "beta_landing_search_ui_reference_redesign_implementation.v0",
+    "artifact_version": "p3_beta_landing_search_ui_reference_redesign_implementation_v0",
+    "beta_landing_search_ui_reference_redesign_implementation_round": true,
+    "ui_implementation_in_this_round": true,
+    "contract_required": true,
+    "contract_ready_required": true,
+    "search_api_connection_must_be_preserved": true,
+    "raw_runtime_error_copy_allowed": false,
+    "fake_fill_allowed": false,
+    "source_gap_confirmed_absence_allowed": false,
+    "active_asking_as_sold_allowed": false,
+    "sold_likely_as_sold_confirmed_allowed": false,
+    "expired_removed_as_sold_allowed": false,
+    "broad_query_direct_market_page_route_allowed": false,
+    "unsafe_boundary_price_cta_allowed": false,
+    "candidate_access_code_modification_allowed": false,
+    "search_ranking_code_modification_allowed": false,
+    "classifier_taxonomy_modification_allowed": false,
+    "runtime_root_cause_triage_in_this_round": false,
+    "real_candidate_count": 0,
+    "safe_candidate_record_created_count": 0,
+    "ready_for_activation_handoff_count": 0,
+    "external_tester_access_enabled": false,
+    "external_tester_count": 0,
+    "access_enabled_count": 0,
+    "invite_send_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_enabled": false,
+    "provider_send_count": 0,
+    "webhook_runtime_enabled": false,
+    "webhook_call_count": 0,
+    "production_db_write_enabled": false,
+    "production_DB_write_count": 0,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "progress_limited_external_beta_progress_percentage_estimate": 80,
+    "progress_current_stage": "beta_landing_and_search_ui_reference_redesign_implementation",
+    "progress_contract_status": "ready_for_implementation",
+    "progress_note": "이번은 beta-facing landing/search UI 실제 구현 단계이며 external tester outreach나 access activation이 아니다"
+  },
+  "evidence": {
+    "row_type": "beta_landing_search_ui_reference_redesign_implementation_evidence",
+    "contract_status": "beta_landing_search_ui_reference_redesign_contract_ready_for_implementation",
+    "contract_ready_for_implementation": true,
+    "candidate_intake_execution_status": "limited_external_tester_candidate_intake_execution_rerun_ready_pending_real_candidate_inputs",
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "ui_reference_mix_total_percent": 100,
+    "contract_scenario_pass_count": 16,
+    "contract_scenario_item_count": 16,
+    "evidence_source": "artifact_based_beta_ui_redesign_implementation"
+  },
+  "frontend_files": {
+    "row_type": "frontend_files",
+    "modified_frontend_files": [
+      "app/app.py",
+      "app/templates/index.html",
+      "index.html"
+    ],
+    "app_template_exists": true,
+    "root_index_exists": true,
+    "local_preview_server_exists": true,
+    "app_and_root_index_identical": true,
+    "search_route_present": true,
+    "api_route_present": true,
+    "existing_search_api_connection_preserved": true,
+    "raw_server_error_copy_absent": true,
+    "safe_runtime_fallback_copy_present": true
+  },
+  "ui_reference_mix_applied": {
+    "row_type": "ui_reference_mix_applied",
+    "references": [
+      {
+        "reference_name": "Classic.com",
+        "mix_percent": 60,
+        "borrowed_patterns": [
+          "model market page structure",
+          "market summary",
+          "model-based browsing",
+          "price trend and market signal layout"
+        ]
+      },
+      {
+        "reference_name": "WatchCharts",
+        "mix_percent": 25,
+        "borrowed_patterns": [
+          "clean data cards",
+          "price confidence",
+          "chart summary clarity",
+          "alert and watchlist feeling"
+        ]
+      },
+      {
+        "reference_name": "HifiShark",
+        "mix_percent": 10,
+        "borrowed_patterns": [
+          "multi-source listing search",
+          "active listing and archived listing exploration",
+          "practical search utility"
+        ]
+      },
+      {
+        "reference_name": "Chrono24",
+        "mix_percent": 5,
+        "borrowed_patterns": [
+          "trust and safety wording",
+          "seller and source caution",
+          "independent marketplace-like confidence language without claiming verification"
+        ]
+      }
+    ],
+    "implementation_translation": [
+      "Classic.com style market-summary structure in hero and market entry sections",
+      "WatchCharts style confidence and summary cards in results workspace",
+      "HifiShark style multi-source listing utility preserved in result cards",
+      "Chrono24 style trust wording used without dealer-verification claims"
+    ],
+    "mix_total_percent": 100
+  },
+  "landing_page_implementation": {
+    "row_type": "landing_page_implementation",
+    "hero_headline_present": true,
+    "subheadline_present": true,
+    "trust_notice_present": true,
+    "beta_notice_present": true,
+    "no_personal_data_notice_present": true,
+    "feedback_notice_present": true,
+    "hero_search_box_connected_to_existing_route": true
+  },
+  "search_home_implementation": {
+    "row_type": "search_home_implementation",
+    "large_search_box_present": true,
+    "example_query_chip_count": 6,
+    "no_fake_fill_principle_present": true,
+    "source_coverage_notice_present": true,
+    "quiet_alert_cta_present": true,
+    "example_query_chips": [
+      "Leica M6",
+      "Summicron-M 35 ASPH",
+      "35 lux aa",
+      "Leica MP silver",
+      "Ricoh GR IIIx",
+      "Hasselblad XPan"
+    ]
+  },
+  "search_results_implementation": {
+    "row_type": "search_results_implementation",
+    "listing_title_present": true,
+    "price_present": true,
+    "source_present": true,
+    "status_badges_present": true,
+    "confidence_fields_present": true,
+    "source_coverage_present": true,
+    "first_seen_last_seen_safe_placeholders_present": true,
+    "alert_action_present": true,
+    "safe_view_source_action_present": true
+  },
+  "search_state_implementation": {
+    "row_type": "search_state_implementation",
+    "no_result_copy_present": true,
+    "source_gap_copy_present": true,
+    "source_gap_not_absence_copy_present": true,
+    "broad_query_refinement_present": true,
+    "runtime_error_fallback_present": true,
+    "unsafe_boundary_fake_fill_block_present": true
+  },
+  "model_market_entry_implementation": {
+    "row_type": "model_market_entry_implementation",
+    "section_present": true,
+    "market_summary_present": true,
+    "active_listings_present": true,
+    "sold_confirmed_present": true,
+    "sold_likely_present": true,
+    "expired_removed_archive_present": true,
+    "indicative_price_band_present": true,
+    "adjacent_models_warning_present": true
+  },
+  "archive_sold_reference_implementation": {
+    "row_type": "archive_sold_reference_implementation",
+    "section_present": true,
+    "observed_price_present": true,
+    "status_present": true,
+    "source_present": true,
+    "confidence_caution_present": true,
+    "no_overstatement_copy_present": true
+  },
+  "alert_cta_implementation": {
+    "row_type": "alert_cta_implementation",
+    "exact_model_alert_present": true,
+    "verified_listing_alert_present": true,
+    "market_change_alert_present": true,
+    "broad_query_alert_requires_refinement": true
+  },
+  "runtime_error_fallback_implementation": {
+    "row_type": "runtime_error_fallback_implementation",
+    "safe_fallback_copy_present": true,
+    "raw_server_error_copy_absent": true,
+    "frontend_logs_error_to_console": true,
+    "user_facing_copy_is_safe": true
+  },
+  "external_tester_first_use_notice_implementation": {
+    "row_type": "external_tester_first_use_notice_implementation",
+    "section_present": true,
+    "private_beta_notice_present": true,
+    "incomplete_data_notice_present": true,
+    "no_guaranteed_valuation_present": true,
+    "no_personal_data_needed_present": true,
+    "do_not_paste_private_details_present": true
+  },
+  "forbidden_claims_check": {
+    "row_type": "forbidden_claims_check",
+    "forbidden_claim_count": 11,
+    "forbidden_claims_absent_count": 11,
+    "present_forbidden_claims": [],
+    "all_forbidden_claims_absent": true
+  },
+  "query_smoke": {
+    "row_type": "query_smoke",
+    "query_count": 10,
+    "queries": [
+      {
+        "query": "ltm summaron 35",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 197,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "results_rendered"
+      },
+      {
+        "query": "summaron 35",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 175,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "results_rendered"
+      },
+      {
+        "query": "35 summaron",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 175,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "results_rendered"
+      },
+      {
+        "query": "35 lux aa",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 447,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "results_rendered"
+      },
+      {
+        "query": "mp silver",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 194,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "results_rendered"
+      },
+      {
+        "query": "q3 28",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 71,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "results_rendered"
+      },
+      {
+        "query": "summicron",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 1232,
+        "ui_hint_ambiguity_type": "broad_family_alias",
+        "ui_hint_needs_disambiguation": true,
+        "ui_state": "broad_query_refinement"
+      },
+      {
+        "query": "leica lens",
+        "status_code": 200,
+        "result_count": 5,
+        "total_ranked": 6005,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "broad_query_refinement"
+      },
+      {
+        "query": "ricoh gr iiix",
+        "status_code": 200,
+        "result_count": 0,
+        "total_ranked": 0,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "no_result"
+      },
+      {
+        "query": "hasselblad xpan",
+        "status_code": 200,
+        "result_count": 0,
+        "total_ranked": 0,
+        "ui_hint_ambiguity_type": "none",
+        "ui_hint_needs_disambiguation": false,
+        "ui_state": "no_result"
+      }
+    ],
+    "all_status_ok": true,
+    "raw_server_error_copy_seen": false
+  },
+  "implementation_handoff": {
+    "row_type": "implementation_handoff",
+    "implementation_ready_for_runtime_triage_or_smoke": true,
+    "external_tester_outreach_not_done": true,
+    "access_activation_not_done": true,
+    "required_next_rounds": [
+      "P3-BETA-SHARE-LINK-RUNTIME-SERVER-ERROR-TRIAGE",
+      "P3-BETA-SHARE-LINK-RUNTIME-SMOKE-RECHECK"
+    ],
+    "optional_next_rounds": [
+      "P3-LIMITED-EXTERNAL-TESTER-STEALTH-POSITIONING-AND-OUTREACH-POLICY",
+      "P3-LIMITED-EXTERNAL-TESTER-CANDIDATE-INPUT-MANUAL-PREP",
+      "P3-LIMITED-EXTERNAL-TESTER-ACCESS-ACTIVATION-WITH-SAFE-CANDIDATES"
+    ]
+  },
+  "scenario_rows": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "A",
+      "scenario": "implementation is UI-facing only",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "B",
+      "scenario": "contract evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "C",
+      "scenario": "landing page hero implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "D",
+      "scenario": "trust beta no personal data notices implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "E",
+      "scenario": "search home implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "F",
+      "scenario": "example query chips implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "G",
+      "scenario": "result cards support confidence source status fields",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "H",
+      "scenario": "no-result source-gap cards implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "I",
+      "scenario": "broad query refinement card implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "J",
+      "scenario": "model market entry implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "K",
+      "scenario": "listing archive sold reference entry implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "L",
+      "scenario": "alert CTA implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "M",
+      "scenario": "runtime error fallback prevents raw server error display",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "N",
+      "scenario": "external tester first-use notice implemented",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "O",
+      "scenario": "forbidden claims absent",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "P",
+      "scenario": "production public access guard remains false",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "Q",
+      "scenario": "classifier search ranking taxonomy canonical index not modified",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "R",
+      "scenario": "no fake fill behavior preserved",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "S",
+      "scenario": "query smoke recorded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "T",
+      "scenario": "implementation handoff defined",
+      "status": "passed"
+    }
+  ],
+  "decision": {
+    "row_type": "implementation_result",
+    "decision_status": "beta_landing_search_ui_reference_redesign_implementation_ready_for_runtime_triage_or_smoke",
+    "ready_for_runtime_triage_or_smoke": true,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false
+  },
+  "modified_files": [
+    "app/app.py",
+    "app/templates/index.html",
+    "index.html",
+    "beta_landing_search_ui_reference_redesign_implementation.py",
+    "scripts/run_p3_beta_landing_search_ui_reference_redesign_implementation.py",
+    "tests/test_beta_landing_search_ui_reference_redesign_implementation.py",
+    "data/admin/p3_beta_landing_search_ui_reference_redesign_implementation_v0.md",
+    "data/admin/p3_beta_landing_search_ui_reference_redesign_implementation_v0.jsonl",
+    "data/admin/beta_landing_search_ui_reference_redesign_implementation_v0.json"
+  ],
+  "guard_not_modified_paths": [
+    "classifier_v2.py",
+    "model_detector.py",
+    "query_parser.py",
+    "query_resolver.py",
+    "search_service.py",
+    "search_ui_hints.py"
+  ],
+  "progress_report": {
+    "row_type": "progress_report",
+    "limited_external_beta_progress_percentage_estimate": 80,
+    "owner_only_beta_open": "completed",
+    "first_24h_monitoring": "completed",
+    "first_7d_review": "completed",
+    "candidate_intake_execution_workflow": "completed",
+    "safe_candidate_input_owner_pack": "completed",
+    "beta_landing_search_ui_reference_redesign_contract": "completed",
+    "current_stage": "beta_landing_and_search_ui_reference_redesign_implementation",
+    "external_tester_access_enabled": false,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false
+  },
+  "summary": {
+    "row_type": "summary",
+    "decision_status": "beta_landing_search_ui_reference_redesign_implementation_ready_for_runtime_triage_or_smoke",
+    "modified_frontend_file_count": 3,
+    "query_smoke_count": 10,
+    "query_smoke_all_status_ok": true,
+    "forbidden_claims_absent": true,
+    "raw_runtime_error_copy_absent": true
+  }
+}

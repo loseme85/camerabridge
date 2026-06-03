@@ -1,0 +1,356 @@
+{
+  "task_name": "P3-BETA-UI-MANUAL-COMMIT-PUSH-AND-DEPLOY-HANDOFF",
+  "artifact_version": "p3_beta_ui_manual_commit_push_and_deploy_handoff_v0",
+  "schema_version": "beta_ui_manual_commit_push_and_deploy_handoff.v0",
+  "generated_at": "2026-06-03T00:00:00Z",
+  "policy": {
+    "generated_at": "2026-06-03T00:00:00Z",
+    "schema_version": "beta_ui_manual_commit_push_and_deploy_handoff.v0",
+    "artifact_version": "p3_beta_ui_manual_commit_push_and_deploy_handoff_v0",
+    "manual_handoff_round": true,
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "safe_candidate_record_created_count_delta": 0,
+    "access_activation_performed": false,
+    "deployment_executed": false,
+    "git_push_executed": false,
+    "git_commit_executed": false,
+    "destructive_git_operation_executed": false,
+    "tester_link_send_allowed": false
+  },
+  "previous_evidence_summary": {
+    "row_type": "previous_evidence_summary",
+    "gap_closure_status": "beta_ui_deployment_gap_closure_ready_for_manual_commit_push_deploy_handoff",
+    "patch_path": "data/admin/beta_ui_deployment_gap_closure_ui_diff_v0.patch",
+    "patch_created": true,
+    "patch_line_count": 3629,
+    "prep_status": "beta_ui_deployment_prep_hold_ui_changes_uncommitted_or_unpushed",
+    "implementation_status": "beta_landing_search_ui_reference_redesign_implementation_ready_for_runtime_triage_or_smoke",
+    "runtime_smoke_status": "beta_share_link_runtime_smoke_recheck_hold_live_share_link_not_verified",
+    "live_parity_status": "beta_ui_live_deployment_parity_hold_live_share_link_not_verified",
+    "evidence_loaded": true
+  },
+  "git_baseline": {
+    "row_type": "git_baseline",
+    "branch": "main",
+    "local_head": "590193f24303f5919949fd93defd288b8f38e8dc",
+    "origin_main_head": "c6fb78971e78b69044d369d6ba96b40b44609fd9",
+    "ahead_behind_counts": "0\t6",
+    "origin_main_commits_ahead": [
+      "c6fb789 🤖 Auto crawl 2026-06-03 20:17 KST",
+      "97086b7 🤖 Auto crawl 2026-06-03 16:39 KST",
+      "12c7c39 🤖 Auto crawl 2026-06-02 21:58 KST",
+      "b4ab4a5 🤖 Auto crawl 2026-06-02 19:54 KST",
+      "485c8df 🤖 Auto crawl 2026-06-02 16:24 KST",
+      "ab4cc22 🤖 Auto crawl 2026-06-02 01:53 KST"
+    ],
+    "ui_core_status": [
+      "M app/app.py",
+      " M app/templates/index.html",
+      " M index.html"
+    ]
+  },
+  "commit_inclusion_plan": {
+    "row_type": "commit_inclusion_plan",
+    "required_include_files": [
+      "app/app.py",
+      "app/templates/index.html",
+      "index.html",
+      "beta_landing_search_ui_reference_redesign_implementation.py",
+      "scripts/run_p3_beta_landing_search_ui_reference_redesign_implementation.py",
+      "tests/test_beta_landing_search_ui_reference_redesign_implementation.py",
+      "data/admin/p3_beta_landing_search_ui_reference_redesign_implementation_v0.md",
+      "data/admin/p3_beta_landing_search_ui_reference_redesign_implementation_v0.jsonl",
+      "data/admin/beta_landing_search_ui_reference_redesign_implementation_v0.json",
+      "data/admin/p3_beta_ui_deployment_prep_and_safe_redeploy_check_v0.md",
+      "data/admin/p3_beta_ui_deployment_prep_and_safe_redeploy_check_v0.jsonl",
+      "data/admin/beta_ui_deployment_prep_and_safe_redeploy_check_v0.json",
+      "data/admin/p3_beta_ui_deployment_gap_closure_v0.md",
+      "data/admin/p3_beta_ui_deployment_gap_closure_v0.jsonl",
+      "data/admin/beta_ui_deployment_gap_closure_v0.json",
+      "data/admin/beta_ui_deployment_gap_closure_ui_diff_v0.patch"
+    ],
+    "optional_include_files": [
+      "data/admin/p3_beta_share_link_runtime_smoke_recheck_v0.md",
+      "data/admin/p3_beta_share_link_runtime_smoke_recheck_v0.jsonl",
+      "data/admin/beta_share_link_runtime_smoke_recheck_v0.json",
+      "data/admin/p3_beta_ui_live_deployment_parity_and_share_link_verification_v0.md",
+      "data/admin/p3_beta_ui_live_deployment_parity_and_share_link_verification_v0.jsonl",
+      "data/admin/beta_ui_live_deployment_parity_and_share_link_verification_v0.json"
+    ],
+    "missing_required_files": [],
+    "commit_scope_clear": true
+  },
+  "commit_exclusion_plan": {
+    "row_type": "commit_exclusion_plan",
+    "exclude_files_or_patterns": [
+      "data/private/*",
+      ".env",
+      "raw identity files",
+      "private email/contact/token/provider payload",
+      "temporary cache files",
+      "browser screenshots unless explicitly needed",
+      "accidental large crawl output not intended for this UI commit",
+      "unrelated untracked files",
+      "any local secret/config file"
+    ],
+    "exclude_unrelated_untracked_files": true,
+    "exclude_private_and_secret_files": true
+  },
+  "private_secret_risk_check": {
+    "row_type": "private_secret_risk_check",
+    "private_secret_risk_level": "low",
+    "risky_files": [],
+    "risk_summary": "Commit candidate set does not include data/private, env, raw identity, or provider payload files."
+  },
+  "manual_command_sequence": {
+    "row_type": "manual_command_sequence",
+    "recommended_option": "option_b_feature_branch_commit_then_rebase",
+    "commands": [
+      "git status --short",
+      "git branch --show-current",
+      "git rev-parse HEAD",
+      "git rev-parse origin/main",
+      "test -f data/admin/beta_ui_deployment_gap_closure_ui_diff_v0.patch",
+      "git diff -- app/app.py app/templates/index.html index.html > data/admin/manual_pre_commit_ui_diff_check.patch",
+      "git checkout -b beta-ui-redesign-controlled-preview",
+      "git add app/app.py app/templates/index.html index.html",
+      "git add beta_landing_search_ui_reference_redesign_implementation.py",
+      "git add scripts/run_p3_beta_landing_search_ui_reference_redesign_implementation.py",
+      "git add tests/test_beta_landing_search_ui_reference_redesign_implementation.py",
+      "git add data/admin/p3_beta_landing_search_ui_reference_redesign_implementation_v0.md",
+      "git add data/admin/p3_beta_landing_search_ui_reference_redesign_implementation_v0.jsonl",
+      "git add data/admin/beta_landing_search_ui_reference_redesign_implementation_v0.json",
+      "git add data/admin/p3_beta_ui_deployment_prep_and_safe_redeploy_check_v0.md",
+      "git add data/admin/p3_beta_ui_deployment_prep_and_safe_redeploy_check_v0.jsonl",
+      "git add data/admin/beta_ui_deployment_prep_and_safe_redeploy_check_v0.json",
+      "git add data/admin/p3_beta_ui_deployment_gap_closure_v0.md",
+      "git add data/admin/p3_beta_ui_deployment_gap_closure_v0.jsonl",
+      "git add data/admin/beta_ui_deployment_gap_closure_v0.json",
+      "git add data/admin/beta_ui_deployment_gap_closure_ui_diff_v0.patch",
+      "git status --short",
+      "python3 tests/test_beta_landing_search_ui_reference_redesign_implementation.py",
+      "python3 tests/test_beta_share_link_runtime_smoke_recheck.py",
+      "python3 tests/test_beta_ui_live_deployment_parity_and_share_link_verification.py",
+      "python3 tests/test_beta_ui_deployment_prep_and_safe_redeploy_check.py",
+      "python3 tests/test_beta_ui_deployment_gap_closure.py",
+      "python3 golden_set.py",
+      "git commit -m \"feat: apply beta landing and search UI redesign for controlled preview\"",
+      "git fetch origin",
+      "git rebase origin/main",
+      "python3 tests/test_beta_landing_search_ui_reference_redesign_implementation.py",
+      "python3 golden_set.py",
+      "git status --short",
+      "git push origin beta-ui-redesign-controlled-preview"
+    ],
+    "commands_executed_in_this_round": false
+  },
+  "recommended_branch_strategy": {
+    "row_type": "recommended_branch_strategy",
+    "recommended_branch_name": "beta-ui-redesign-controlled-preview",
+    "recommended_strategy": "feature_branch_then_rebase_onto_origin_main",
+    "reason": "auto crawl commits가 main을 계속 업데이트하므로 feature branch에서 먼저 UI scope를 고정한 뒤 rebase하는 방식이 가장 명확하다."
+  },
+  "owner_approval_gate": {
+    "row_type": "owner_approval_gate",
+    "approval_required_before_git_commit": true,
+    "approval_required_before_git_push": true,
+    "approval_required_before_vercel_deploy": true,
+    "approval_checkpoints": [
+      "patch backup 존재 확인",
+      "commit include/exclude 범위 최종 확인",
+      "tests + golden 재통과 확인",
+      "branch/deploy strategy 선택 확인"
+    ]
+  },
+  "deploy_strategy_options": {
+    "row_type": "deploy_strategy_options",
+    "options": [
+      {
+        "option_id": "deploy_strategy_pr_merge",
+        "label": "PR/merge 방식",
+        "recommended": true,
+        "reason": "auto crawl commits가 main을 계속 전진시키므로 reviewable branch와 merge 지점이 명확한 방식이 가장 안전하다."
+      },
+      {
+        "option_id": "deploy_strategy_main_direct_push",
+        "label": "main 직접 push",
+        "recommended": false,
+        "reason": "UI 변경 범위를 빠르게 올릴 수 있지만 auto crawl 흐름과 섞일 때 추적성과 review 안정성이 떨어진다."
+      },
+      {
+        "option_id": "deploy_strategy_preview_then_promote",
+        "label": "preview deployment 확인 후 production 반영",
+        "recommended": true,
+        "reason": "새 landing/search UI와 runtime fallback을 live와 최대한 비슷한 조건에서 먼저 검증할 수 있다."
+      }
+    ],
+    "recommended_primary_option": "deploy_strategy_pr_merge",
+    "recommended_secondary_option": "deploy_strategy_preview_then_promote"
+  },
+  "post_deploy_smoke_checklist": {
+    "row_type": "post_deploy_smoke_checklist",
+    "items": [
+      "Vercel deployment state = READY",
+      "최신 deployment commit이 UI commit 포함",
+      "share/access link 유효",
+      "/ landing 200",
+      "/search 200",
+      "/api/search?q=summicron&limit=5 200",
+      "/api/search?q=ltm%20summaron%2035&limit=5 200",
+      "/api/search?q=ricoh%20gr%20iiix&limit=5 200",
+      "/api/search?q=hasselblad%20xpan&limit=5 200",
+      "Global used camera search & market intelligence 존재",
+      "Independent project 존재",
+      "Not affiliated with Leica, dealers, or marketplaces 존재",
+      "Prices are references, not guaranteed valuations 존재",
+      "A server error has occurred 부재",
+      "official Leica service 부재",
+      "guaranteed valuation 부재",
+      "guaranteed lowest price 부재",
+      "complete global coverage 부재",
+      "confirmed absence 부재",
+      "all listings real-time 부재",
+      "dealer verified 부재",
+      "public launch ready 부재",
+      "ltm summaron 35",
+      "summaron 35",
+      "35 summaron",
+      "35 lux aa",
+      "mp silver",
+      "q3 28",
+      "summicron",
+      "leica lens",
+      "ricoh gr iiix",
+      "hasselblad xpan"
+    ],
+    "item_count": 32
+  },
+  "production_public_access_guard": {
+    "row_type": "production_public_access_guard",
+    "production_launch_go": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "safe_candidate_record_created_count_delta": 0,
+    "access_activation_performed": false,
+    "deployment_executed": false,
+    "git_push_executed": false,
+    "git_commit_executed": false,
+    "destructive_git_operation_executed": false,
+    "tester_link_send_allowed": false
+  },
+  "manual_handoff_result": {
+    "row_type": "manual_handoff_result",
+    "decision_status": "beta_ui_manual_commit_push_deploy_handoff_ready_for_owner_approved_execution",
+    "tester_link_send_allowed": false,
+    "next_execution_round": "P3-BETA-UI-OWNER-APPROVED-COMMIT-PUSH-DEPLOY-EXECUTION"
+  },
+  "scenario_validation": [
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "A",
+      "scenario": "deployment gap closure evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "B",
+      "scenario": "patch backup evidence loaded",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "C",
+      "scenario": "commit inclusion plan finalized",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "D",
+      "scenario": "commit exclusion plan finalized",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "E",
+      "scenario": "private/secret risk checked",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "F",
+      "scenario": "manual command sequence produced",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "G",
+      "scenario": "owner approval gate defined",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "H",
+      "scenario": "deploy strategy options defined",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "I",
+      "scenario": "post-deploy smoke checklist produced",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "J",
+      "scenario": "no git commit executed",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "K",
+      "scenario": "no git push executed",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "L",
+      "scenario": "no Vercel deploy executed",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "M",
+      "scenario": "production/public/access guard remains false",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "N",
+      "scenario": "tester link send remains false",
+      "status": "passed"
+    },
+    {
+      "row_type": "scenario_validation",
+      "scenario_id": "O",
+      "scenario": "next execution round defined",
+      "status": "passed"
+    }
+  ],
+  "modified_files": [
+    "scripts/run_p3_beta_ui_manual_commit_push_and_deploy_handoff.py",
+    "tests/test_beta_ui_manual_commit_push_and_deploy_handoff.py",
+    "data/admin/p3_beta_ui_manual_commit_push_and_deploy_handoff_v0.md",
+    "data/admin/p3_beta_ui_manual_commit_push_and_deploy_handoff_v0.jsonl",
+    "data/admin/beta_ui_manual_commit_push_and_deploy_handoff_v0.json"
+  ]
+}
