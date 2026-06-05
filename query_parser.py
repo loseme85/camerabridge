@@ -122,6 +122,13 @@ _BODY_QUERY_LENS_BLOCKERS = {
     "summaron", "telyt", "vario", "apo",
 }
 
+_COMPACT_LENS_MOUNT_ALIASES = {
+    "m": "M",
+    "r": "R",
+    "sl": "SL",
+    "l": "L",
+}
+
 
 def _set_body_intent(
     intent: QueryIntent,
@@ -179,6 +186,43 @@ def _parse_explicit_body_model_intent(intent: QueryIntent, normalized: str) -> N
 
     if re.search(r"\bm10\b", normalized) and re.search(r"\bbody\b", normalized):
         _set_body_intent(intent, "M10", "m10 body", mount="M", system=None)
+
+
+def _set_compact_lens_notation(
+    intent: QueryIntent,
+    mount: str,
+    focal: str,
+    aperture: str,
+    source: str,
+) -> None:
+    if not intent.mount:
+        intent.mount = mount
+        intent.tokens.append({"type": "mount", "raw": source, "value": mount})
+    if not intent.focal_length:
+        intent.focal_length = focal
+        intent.tokens.append({"type": "focal_length", "raw": source, "value": focal})
+    if not intent.aperture:
+        _set_aperture(intent, aperture, source, token_type="aperture_hint")
+    intent.tokens.append({"type": "compact_lens_notation", "raw": source, "value": f"{mount} {focal}/{aperture}"})
+
+
+def _parse_compact_mount_lens_notation(intent: QueryIntent, normalized: str) -> None:
+    if intent.accessory_intent or intent.body_intent:
+        return
+
+    match = re.search(
+        r"\b(sl|m|r|l)\s*(\d{2,3})(?:mm)?\s*(?:/\s*|f/?\s*)(\d+(?:\.\d+)?)\b",
+        normalized,
+    )
+    if not match:
+        return
+
+    mount_raw, focal, aperture = match.groups()
+    mount = _COMPACT_LENS_MOUNT_ALIASES.get(mount_raw)
+    if not mount:
+        return
+
+    _set_compact_lens_notation(intent, mount, focal, aperture, match.group(0))
 
 
 def _parse_accessory_compatibility_context(intent: QueryIntent, normalized: str) -> None:
@@ -662,6 +706,14 @@ def _compact_body_intent_token_consumed(intent: QueryIntent, token: str, normali
     return False
 
 
+def _compact_lens_notation_token_consumed(intent: QueryIntent, token: str) -> bool:
+    if not any(item.get("type") == "compact_lens_notation" for item in intent.tokens):
+        return False
+    if re.fullmatch(r"(?:sl|m|r|l)\d{2,3}(?:mm)?(?:/\d+(?:\.\d+)?)?", token):
+        return True
+    return False
+
+
 def _parsed_body_intent_token_consumed(intent: QueryIntent, token: str) -> bool:
     body_intent = _normalize_query(intent.body_intent or "")
     if not body_intent:
@@ -727,6 +779,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
     _parse_r_lens_query_hint(intent, normalized)
     _parse_sl_zoom_range_hint(intent, normalized)
     _parse_third_party_l_mount_range_hint(intent, normalized)
+    _parse_compact_mount_lens_notation(intent, normalized)
 
     rough_tokens = re.findall(r"[a-z0-9가-힣./-]+", normalized)
     for token in rough_tokens:
@@ -742,6 +795,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             continue
 
         if _compact_body_intent_token_consumed(intent, token, normalized):
+            continue
+
+        if _compact_lens_notation_token_consumed(intent, token):
             continue
 
         if _parsed_body_intent_token_consumed(intent, token):

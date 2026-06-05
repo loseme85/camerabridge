@@ -1000,6 +1000,30 @@ _BARNACK_BODY_KW = [
     "leica iif", "leica if",
 ]
 
+_COMPACT_LENS_FAMILY_KW = [
+    "noctilux", "summicron", "summilux", "elmarit", "summaron",
+    "summarit", "elmar", "telyt", "super-angulon",
+]
+
+
+def _detect_compact_lens_notation(text: str) -> dict[str, str] | None:
+    match = re.search(
+        r"\b(sl|m|r|l)\s*(\d{2,3})(?:mm)?\s*(?:/\s*|f/?\s*)(\d+(?:\.\d+)?)\b",
+        text.lower(),
+    )
+    if not match:
+        return None
+    mount_raw, focal, aperture = match.groups()
+    mount = {"m": "M", "r": "R", "sl": "SL", "l": "L"}.get(mount_raw)
+    if not mount:
+        return None
+    return {
+        "raw": match.group(0),
+        "mount": mount,
+        "focal_length": focal,
+        "aperture": aperture,
+    }
+
 
 def detect_category(
     normalized_name: str,
@@ -1050,9 +1074,10 @@ def detect_category(
     # Dealer titles often compress common Leica lens specs as "f2" / "f4"
     # without a decimal point. We still want those to count as lens-positive
     # so bundle suffixes like "with hood" do not demote the whole listing.
-    has_aperture = bool(re.search(r'f\s*\d+(?:[\./]\d+)?|f\d+(?:[\./]\d+)?|1:\d+(?:[\./]\d+)?', combined))
+    compact_lens_notation = _detect_compact_lens_notation(combined)
+    has_aperture = bool(re.search(r'f\s*\d+(?:[\./]\d+)?|f\d+(?:[\./]\d+)?|1:\d+(?:[\./]\d+)?', combined)) or bool(compact_lens_notation)
     has_lens_kw  = any(kw in combined for kw in _LENS_PROTECT_KW)
-    has_focal    = bool(re.search(r'\d{2,3}\s*mm', combined))
+    has_focal    = bool(re.search(r'\d{2,3}\s*mm', combined)) or bool(compact_lens_notation)
 
     # 강한 렌즈 보호: (조리개 + 초점거리) 또는 렌즈 패밀리 키워드
     is_lens_protected_strong = (has_aperture and has_focal) or has_lens_kw
@@ -1135,6 +1160,10 @@ def detect_category(
                     return {"category": "Accessory", "category_confidence": 0.75, "category_reason": reasons}
         except Exception:
             pass
+
+    if compact_lens_notation:
+        reasons.append(f"compact_lens_notation:{compact_lens_notation['raw']}")
+        return {"category": "Lens", "category_confidence": 0.93, "category_reason": reasons}
 
     # ── 5순위: Body 키워드 ──
     for kw in _BODY_KW:
@@ -1462,6 +1491,16 @@ def classify_listing_v2(raw_item: dict) -> dict:
     if cat["category"] == "Accessory":
         acc = classify_accessory(nn, nd, mount=mt["mount"])
 
+    compact_lens_notation = _detect_compact_lens_notation(f"{nn} {nd}".strip())
+    classification_conflict_detected = False
+    body_lens_boundary_conflict_detected = False
+    body_alias_boundary_blocked = False
+    if compact_lens_notation:
+        body_alias_boundary_blocked = True
+        if cat["category"] == "Body":
+            classification_conflict_detected = True
+            body_lens_boundary_conflict_detected = True
+
     return {
         # 원본
         "source":           source,
@@ -1492,6 +1531,11 @@ def classify_listing_v2(raw_item: dict) -> dict:
         "model_canonical":mdl["model_canonical"],
         "variant":        mdl["variant"],
         "focal_length":   mdl["focal_length"],
+        "compact_lens_notation_detected": bool(compact_lens_notation),
+        "compact_lens_notation_raw": compact_lens_notation["raw"] if compact_lens_notation else None,
+        "body_alias_boundary_blocked": body_alias_boundary_blocked,
+        "classification_conflict_detected": classification_conflict_detected,
+        "body_lens_boundary_conflict_detected": body_lens_boundary_conflict_detected,
         # Accessory 전용 (category=Accessory일 때만 값 있음)
         "accessory_type":     acc["accessory_type"]     if acc else None,
         "compatible_mounts":  acc["compatible_mounts"]  if acc else [],

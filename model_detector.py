@@ -297,6 +297,12 @@ _VARIANT_WORD_BOUNDARY: set[str] = {"rom", "ds", "ss", "ttl", "zoom"}
 
 def extract_focal_length(text: str) -> Optional[str]:
     n = text.lower()
+    compact_lens = re.search(
+        r"\b(?:sl|m|r|l)\s*(\d{2,3})(?:mm)?\s*(?:/\s*|f/?\s*)(\d+(?:\.\d+)?)\b",
+        n,
+    )
+    if compact_lens:
+        return compact_lens.group(1)
     # 충무로식 SL zoom shorthand: "24-90/2.8-4", "16-35/3.5-4.5"
     zoom_shorthand = re.search(r'(\d{1,3}(?:-\d{1,3})+)\s*/\s*\d', n)
     if zoom_shorthand:
@@ -322,6 +328,14 @@ def extract_focal_length(text: str) -> Optional[str]:
     if alt:
         return alt.group(1)
     return None
+
+
+def _body_pattern_hit(text: str, pattern: str) -> bool:
+    if not pattern:
+        return False
+    if re.fullmatch(r"m\d+(?:\.\d+)?(?:-[a-z0-9.]+)?", pattern):
+        return bool(re.search(rf"(?<![a-z0-9]){re.escape(pattern)}(?![0-9/.\-])", text))
+    return pattern in text
 
 
 # ─────────────────────────────────────────────
@@ -458,7 +472,7 @@ def detect_model(
     # ── model_raw: 상품명 패턴 매칭 ──
     if cat == "body":
         for kw, canon in _BODY_MODEL_PATTERNS:
-            if kw in n:
+            if _body_pattern_hit(n, kw):
                 model_raw = canon
                 break
     elif cat == "lens":
@@ -476,7 +490,7 @@ def detect_model(
                 break
         if not model_raw:
             for kw, canon in _BODY_MODEL_PATTERNS:
-                if kw in n:
+                if _body_pattern_hit(n, kw):
                     model_raw = canon
                     break
 

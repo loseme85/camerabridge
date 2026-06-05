@@ -318,6 +318,14 @@ def _result_variant_conflict(intent: Mapping[str, Any], top_result: Mapping[str,
     return not all(str(item).lower() in top_variants for item in expected_variants)
 
 
+def _result_classification_conflict(top_result: Mapping[str, Any]) -> bool:
+    final = top_result.get("final_output") or {}
+    return bool(
+        final.get("classification_conflict_detected")
+        or final.get("body_lens_boundary_conflict_detected")
+    )
+
+
 def _exact_model_like_match(intent: Mapping[str, Any], top_result: Mapping[str, Any], expected_mount: str | None) -> bool:
     matched = set(top_result.get("matched_fields") or [])
     if intent.get("body_intent"):
@@ -431,6 +439,8 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         boundary_reasons.append("category_conflict")
     if _result_variant_conflict(intent, top_result):
         boundary_reasons.append("variant_conflict")
+    if _result_classification_conflict(top_result):
+        boundary_reasons.append("classification_conflict")
 
     boundary_conflict_detected = bool(boundary_reasons)
     confidence = float(intent.get("confidence") or 0.0)

@@ -212,6 +212,18 @@ _STALE_THIRD_PARTY_BRAND_PATTERNS = (
     r"\b(?:laowa)\b",
 )
 
+_COMPACT_LENS_FAMILY_MARKERS = (
+    "noctilux",
+    "summicron",
+    "summilux",
+    "elmarit",
+    "summaron",
+    "summarit",
+    "elmar",
+    "telyt",
+    "super angulon",
+)
+
 
 def _range_text_patterns(focal_range: str) -> list[str]:
     parts = re.findall(r"\d{2,3}", focal_range)
@@ -226,6 +238,35 @@ def _range_text_patterns(focal_range: str) -> list[str]:
         rf"\b{re.escape(start)}mm\s+{re.escape(end)}\b",
         rf"\b{re.escape(start)}mm\s*-\s*{re.escape(end)}mm\b",
     ]
+
+
+def _detect_compact_lens_notation(text: str) -> dict[str, str] | None:
+    match = re.search(
+        r"\b(sl|m|r|l)\s*(\d{2,3})(?:mm)?\s*(?:/\s*|f/?\s*)(\d+(?:\.\d+)?)\b",
+        text,
+    )
+    if not match:
+        return None
+    mount_raw, focal, aperture = match.groups()
+    mount = {"m": "M", "r": "R", "sl": "SL", "l": "L"}.get(mount_raw)
+    if not mount:
+        return None
+    return {
+        "raw": match.group(0),
+        "mount": mount,
+        "focal_length": focal,
+        "aperture": aperture,
+    }
+
+
+def _looks_like_lens_boundary_conflict(text: str) -> bool:
+    compact = _detect_compact_lens_notation(text)
+    if compact:
+        return True
+    has_focal = bool(re.search(r"\b\d{2,3}\s*mm\b|\b\d{2,3}/\d", text))
+    has_aperture = bool(re.search(r"\bf\s*/?\s*\d+(?:\.\d+)?\b|\b1:\d+(?:\.\d+)?\b", text))
+    has_family = any(marker in text for marker in _COMPACT_LENS_FAMILY_MARKERS)
+    return has_family and (has_focal or has_aperture)
 
 
 def _text_has_focal_range(focal_range: str, text: str) -> bool:
@@ -282,6 +323,57 @@ def _project_sl_zoom_like_final_output(intent: dict[str, Any], record: dict[str,
     projected["label"] = "SL Lens"
     projected["model_canonical"] = expected_model
     projected["focal_length"] = focal_range
+    return projected
+
+
+def _project_compact_lens_body_alias_conflict_final_output(record: dict[str, Any], final: dict[str, Any]) -> dict[str, Any]:
+    """
+    Search-time only cleanup for stale compact-index rows where dealer-style
+    compact lens shorthand such as `M50/1.2` was serialized as an M-body.
+
+    Keep this narrow:
+    - compact lens notation or strong lens-family signal must be present
+    - only rewrite obvious Body rows or fill missing lens hints on Lens rows
+    - do not invent a canonical model family when the title does not say one
+    """
+    raw = _raw_item(record)
+    title_norm = _normalize(final.get("title_raw") or raw.get("상품명"))
+    if not title_norm:
+        return final
+
+    compact = _detect_compact_lens_notation(title_norm)
+    lens_boundary_conflict = _looks_like_lens_boundary_conflict(title_norm)
+    if not compact and not lens_boundary_conflict:
+        return final
+
+    projected = dict(final)
+    projected["compact_lens_notation_detected"] = bool(compact)
+    projected["compact_lens_notation_raw"] = compact["raw"] if compact else None
+    projected["body_alias_boundary_blocked"] = True
+
+    if compact and not projected.get("mount"):
+        projected["mount"] = compact["mount"]
+    if compact and not projected.get("focal_length"):
+        projected["focal_length"] = compact["focal_length"]
+
+    if _normalize(final.get("category")) != "body":
+        projected.setdefault("classification_conflict_detected", False)
+        projected.setdefault("body_lens_boundary_conflict_detected", False)
+        return projected
+
+    projected["classification_conflict_detected"] = True
+    projected["body_lens_boundary_conflict_detected"] = True
+    projected["category"] = "Lens"
+    mount = projected.get("mount") or (compact["mount"] if compact else "")
+    if mount:
+        projected["label"] = f"{mount} Lens"
+        projected["mount"] = mount
+    else:
+        projected["label"] = "Leica Lens"
+    if compact:
+        projected["focal_length"] = compact["focal_length"]
+    projected["model_raw"] = None
+    projected["model_canonical"] = None
     return projected
 
 
@@ -490,6 +582,31 @@ def _suppress_non_body_weak_brand_fallback_for_body_query(
 
     warnings.append("body_query_non_body_weak_brand_fallback_suppressed")
     return min(score, 20.0), "weak", MATCH_QUALITY_RANKS["weak"]
+
+
+def _suppress_non_lens_results_for_compact_lens_query(
+    score: float,
+    match_quality: str,
+    match_quality_rank: int,
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    warnings: list[str],
+) -> tuple[float, str, int]:
+    """
+    Keep compact Leica mount shorthand such as `M50/1.2` from letting
+    body/accessory rows outrank compatible lens results.
+
+    This is intentionally narrow:
+    - only applies when query parsing explicitly detected compact lens notation
+    - only demotes non-lens rows
+    """
+    if not any(token.get("type") == "compact_lens_notation" for token in intent.get("tokens", [])):
+        return score, match_quality, match_quality_rank
+    if _normalize(final.get("category")) == "lens":
+        return score, match_quality, match_quality_rank
+
+    warnings.append("compact_lens_query_non_lens_result_suppressed")
+    return min(score, 24.0), "weak", MATCH_QUALITY_RANKS["weak"]
 
 
 _BODY_QUERY_PROJECTION_MODELS = {
@@ -1384,10 +1501,13 @@ def _suppress_broad_essential_fallback(
 def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, Any]:
     final = _project_stale_third_party_brand_final_output(
         record,
-        _project_sl_zoom_like_final_output(
-            intent,
+        _project_compact_lens_body_alias_conflict_final_output(
             record,
-            _project_body_like_final_output(intent, record, _final_output(record)),
+            _project_sl_zoom_like_final_output(
+                intent,
+                record,
+                _project_body_like_final_output(intent, record, _final_output(record)),
+            ),
         ),
     )
     text = _source_text(record, final)
@@ -1473,6 +1593,14 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         intent,
         final,
         matched,
+        warnings,
+    )
+    score, match_quality, match_quality_rank = _suppress_non_lens_results_for_compact_lens_query(
+        score,
+        match_quality,
+        match_quality_rank,
+        intent,
+        final,
         warnings,
     )
     implicit_preference_score, implicit_preference_reasons = _implicit_brand_preference(
