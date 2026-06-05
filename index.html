@@ -1046,6 +1046,29 @@
       return state.response && Array.isArray(state.response.results) ? state.response.results : [];
     }
 
+    function getMarketEntryPolicy(){
+      if(!state.response){
+        return {
+          market_entry_allowed: false,
+          price_summary_allowed: false,
+          market_entry_block_reason: [],
+          price_summary_block_reason: [],
+          model_entry_confidence_state: 'no_response',
+          market_entry_metrics: null,
+          price_summary_band: 'Not enough exact confidence for price summary'
+        };
+      }
+      return state.response.market_entry_policy || {
+        market_entry_allowed: Boolean(state.response.market_entry_allowed),
+        price_summary_allowed: Boolean(state.response.price_summary_allowed),
+        market_entry_block_reason: state.response.market_entry_block_reason || [],
+        price_summary_block_reason: state.response.price_summary_block_reason || [],
+        model_entry_confidence_state: state.response.model_entry_confidence_state || 'unknown',
+        market_entry_metrics: state.response.market_entry_metrics || null,
+        price_summary_band: state.response.price_summary_band || 'Not enough exact confidence for price summary'
+      };
+    }
+
     function getCoverageLabel(){
       const uiHints = getUiHints();
       const total = state.response ? Number(state.response.total_ranked || 0) : 0;
@@ -1253,14 +1276,59 @@
     }
 
     function renderMarketEntry(results, uiHints){
+      const policy = getMarketEntryPolicy();
       const lead = results[0];
-      const counts = buildMarketCounts(results);
-      const modelTitle = displayValue(finalField(lead, 'model_canonical') || lead.title, 'Unknown model');
-      const aliases = displayValue(finalField(lead, 'variant'), 'No alias details');
+      const counts = policy.market_entry_metrics || buildMarketCounts(results);
       const quality = getQualitySummary();
+      const blockedReasons = Array.isArray(policy.market_entry_block_reason) ? policy.market_entry_block_reason : [];
+      const refinePrompt = uiHints.needs_disambiguation
+        ? 'Refine by mount, focal length, APO/non-APO, or generation before we lock a model-level summary.'
+        : 'Search results are shown below, but this query is not safe for a model-level summary yet.';
+
+      if(!policy.market_entry_allowed){
+        return `
+          <article class="market-entry-card">
+            <div class="market-topline">
+              <div>
+                <p class="section-label">Model market entry</p>
+                <h3>Exact model summary is locked until confidence is high enough.</h3>
+                <p>${escapeHtml(refinePrompt)}</p>
+              </div>
+              <div class="market-badges">
+                <span class="micro-pill amber">Confidence gate active</span>
+                <span class="micro-pill blue">Results still visible</span>
+              </div>
+            </div>
+            <div class="metric-grid">
+              <div class="metric-card"><b>Active listings</b><span>Locked</span></div>
+              <div class="metric-card"><b>Sold confirmed</b><span>Locked</span></div>
+              <div class="metric-card"><b>Sold likely</b><span>Locked</span></div>
+              <div class="metric-card"><b>Expired or removed archive</b><span>Locked</span></div>
+              <div class="metric-card"><b>Indicative price band</b><span>Not enough exact confidence for price summary</span></div>
+              <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
+              <div class="metric-card"><b>Price confidence</b><span>Model-level summary is gated</span></div>
+              <div class="metric-card"><b>Why locked</b><span>${escapeHtml(blockedReasons.slice(0, 2).join(', ') || policy.model_entry_confidence_state || 'confidence gate active')}</span></div>
+            </div>
+            <div class="state-actions">
+              <button type="button" class="ghost-button"${uiHints.needs_disambiguation ? '' : ''}>Refine this search</button>
+              <button type="button" class="ghost-button">Notify me if verified listings appear</button>
+            </div>
+          </article>
+        `;
+      }
+
+      const modelTitle = displayValue(policy.market_entry_title || finalField(lead, 'model_canonical') || lead.title, 'Unknown model');
+      const aliases = displayValue(finalField(lead, 'variant'), 'No alias details');
       const adjacentWarning = uiHints.needs_disambiguation
         ? 'Adjacent models may also be relevant for this broad family query.'
         : 'No adjacent model warning in current query state.';
+      const priceBand = policy.price_summary_allowed
+        ? escapeHtml(policy.price_summary_band || formatPriceBand(results))
+        : 'Not enough exact confidence for price summary';
+      const priceConfidence = policy.price_summary_allowed
+        ? escapeHtml(quality.display_message || 'Reference only')
+        : 'Exact model confidence not high enough yet';
+      const primaryCta = policy.price_summary_allowed ? 'Create alert for this exact model' : 'Refine this search';
       return `
         <article class="market-entry-card">
           <div class="market-topline">
@@ -1280,13 +1348,13 @@
             <div class="metric-card"><b>Sold confirmed</b><span>${counts.soldConfirmed}</span></div>
             <div class="metric-card"><b>Sold likely</b><span>${counts.soldLikely}</span></div>
             <div class="metric-card"><b>Expired or removed archive</b><span>${counts.expiredRemoved}</span></div>
-            <div class="metric-card"><b>Indicative price band</b><span>${escapeHtml(formatPriceBand(results))}</span></div>
+            <div class="metric-card"><b>Indicative price band</b><span>${priceBand}</span></div>
             <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
-            <div class="metric-card"><b>Price confidence</b><span>${escapeHtml(quality.display_message || 'Not enough data')}</span></div>
+            <div class="metric-card"><b>Price confidence</b><span>${priceConfidence}</span></div>
             <div class="metric-card"><b>Adjacent models warning</b><span>${escapeHtml(adjacentWarning)}</span></div>
           </div>
           <div class="state-actions">
-            <button type="button" class="action-button"${uiHints.needs_disambiguation ? ' aria-disabled="true"' : ''}>Create alert for this exact model</button>
+            <button type="button" class="action-button"${uiHints.needs_disambiguation || !policy.price_summary_allowed ? ' aria-disabled="true"' : ''}>${primaryCta}</button>
             <button type="button" class="ghost-button">Notify me if verified listings appear</button>
           </div>
         </article>

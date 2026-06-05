@@ -142,6 +142,11 @@ BROAD_ACCESSORY_QUERIES = {
     "front cap",
 }
 
+BROAD_GENERIC_LENS_QUERIES = {
+    "leica lens",
+    "leica lenses",
+}
+
 SOURCE_COVERAGE_GAP_QUERIES = {
     "sigma 14-24 l",
     "sigma 14-24 l mount",
@@ -234,6 +239,20 @@ def build_query_ui_hints(query: str, results: list[dict[str, Any]] | None = None
             suggested_filters=policy["filters"],
             hard_pin_allowed=False,
             recommended_message="This is a broad Leica lens family query. Refine by mount, focal length, or variant.",
+        )
+
+    if norm in BROAD_GENERIC_LENS_QUERIES:
+        return _hints(
+            needs_disambiguation=True,
+            ambiguity_type="broad_generic_lens_query",
+            recommended_ui_pattern="refinement_chips",
+            recommended_chips=["M Lens", "R Lens", "SL Lens", "35mm", "50mm", "90mm", "Summicron", "Summilux"],
+            suggested_filters={
+                "category": ["Lens"],
+                "mount": ["M", "R", "SL", "L"],
+            },
+            hard_pin_allowed=False,
+            recommended_message="This query is too broad for a model-level summary. Refine by family, mount, or focal length first.",
         )
 
     if norm in BARE_SHORT_ALIASES:

@@ -1,0 +1,908 @@
+{
+  "task_name": "P3-BETA-MVP-MARKET-ENTRY-CONFIDENCE-GATE-FIXUP",
+  "decision_status": "beta_mvp_market_entry_confidence_gate_fixup_passed_ready_for_owner_approved_push",
+  "previous_audit_summary": {
+    "decision_status": "beta_mvp_lens_family_boundary_market_entry_anchor_audit_completed_fixup_required",
+    "production_alias_connect_allowed": false,
+    "problem_summary": "query parser unknown token + weak-only fallback + first-result market entry anchoring"
+  },
+  "current_problem_summary": {
+    "representative_failures": [
+      "Summicron-M 35 ASPH -> APO-Summicron first result",
+      "Leica M 35mm f2 Summicron ASPH -> APO-Summicron first result",
+      "APO-Summicron-SL 50 -> Elmar first result",
+      "Summicron-M 50 -> Elmar first result",
+      "summicron / leica lens broad queries need market entry and price summary block"
+    ]
+  },
+  "implemented_gate_fields": [
+    "market_entry_allowed",
+    "market_entry_block_reason",
+    "price_summary_allowed",
+    "price_summary_block_reason",
+    "model_entry_confidence_state",
+    "boundary_conflict_detected",
+    "dangerous_unknown_family_token_detected",
+    "weak_only_fallback_detected"
+  ],
+  "market_entry_allowed_rules": [
+    "strong_result_count > 0",
+    "not weak-only fallback",
+    "no dangerous unknown family token",
+    "not broad query refinement state",
+    "query intent confidence >= 0.60",
+    "no family/mount/category/variant boundary conflict",
+    "top result must be strong",
+    "exact-model-like match must exist"
+  ],
+  "price_summary_allowed_rules": [
+    "market_entry_allowed = true",
+    "exact-model-like match exists",
+    "query-compatible results exist",
+    "query-compatible priced results exist",
+    "weak-only fallback prices are excluded"
+  ],
+  "query_regression_results": [
+    {
+      "query": "Summicron-M 35 ASPH",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing"
+      ],
+      "model_entry_confidence_state": "locked_dangerous_unknown_family_token",
+      "boundary_conflict_detected": true,
+      "dangerous_unknown_family_token_detected": true,
+      "dangerous_unknown_family_tokens": [
+        "summicron-m"
+      ],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 696,
+      "top_result_model": "APO-Summicron",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "focal_length",
+        "variant"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "Summicron-M",
+      "expected_query_mount": "M"
+    },
+    {
+      "query": "Leica M 35mm f2 Summicron ASPH",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "family_conflict"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed"
+      ],
+      "model_entry_confidence_state": "locked_boundary_conflict",
+      "boundary_conflict_detected": true,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": false,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 900,
+      "top_result_model": "APO-Summicron",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "model_family",
+        "focal_length",
+        "mount",
+        "variant",
+        "aperture_hint"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "Summicron-M",
+      "expected_query_mount": "M"
+    },
+    {
+      "query": "35 Summicron-M ASPH",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing"
+      ],
+      "model_entry_confidence_state": "locked_dangerous_unknown_family_token",
+      "boundary_conflict_detected": true,
+      "dangerous_unknown_family_token_detected": true,
+      "dangerous_unknown_family_tokens": [
+        "summicron-m"
+      ],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 696,
+      "top_result_model": "APO-Summicron",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "focal_length",
+        "variant"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "Summicron-M",
+      "expected_query_mount": "M"
+    },
+    {
+      "query": "APO-Summicron-M 35 ASPH",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing"
+      ],
+      "model_entry_confidence_state": "locked_dangerous_unknown_family_token",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": true,
+      "dangerous_unknown_family_tokens": [
+        "apo-summicron-m"
+      ],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 696,
+      "top_result_model": "APO-Summicron",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "focal_length",
+        "variant"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "APO-Summicron",
+      "expected_query_mount": "M"
+    },
+    {
+      "query": "apo 35 summicron",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed"
+      ],
+      "model_entry_confidence_state": "locked_dangerous_unknown_family_token",
+      "boundary_conflict_detected": true,
+      "dangerous_unknown_family_token_detected": true,
+      "dangerous_unknown_family_tokens": [
+        "apo"
+      ],
+      "weak_only_fallback_detected": false,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 566,
+      "top_result_model": "Summicron",
+      "top_result_mount": "L",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "medium",
+      "top_result_matched_fields": [
+        "model_family",
+        "focal_length"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "APO-Summicron",
+      "expected_query_mount": null
+    },
+    {
+      "query": "APO-Summicron-SL 50",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "mount_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_dangerous_unknown_family_token",
+      "boundary_conflict_detected": true,
+      "dangerous_unknown_family_token_detected": true,
+      "dangerous_unknown_family_tokens": [
+        "apo-summicron-sl"
+      ],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 1570,
+      "top_result_model": "Elmar",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "focal_length"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "APO-Summicron",
+      "expected_query_mount": "SL"
+    },
+    {
+      "query": "APO-Summicron-SL 90",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "mount_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_dangerous_unknown_family_token",
+      "boundary_conflict_detected": true,
+      "dangerous_unknown_family_token_detected": true,
+      "dangerous_unknown_family_tokens": [
+        "apo-summicron-sl"
+      ],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 259,
+      "top_result_model": "Summarit-M",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "focal_length"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "APO-Summicron",
+      "expected_query_mount": "SL"
+    },
+    {
+      "query": "Summicron-M 50",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_dangerous_unknown_family_token",
+      "boundary_conflict_detected": true,
+      "dangerous_unknown_family_token_detected": true,
+      "dangerous_unknown_family_tokens": [
+        "summicron-m"
+      ],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 1570,
+      "top_result_model": "Elmar",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "focal_length"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "Summicron-M",
+      "expected_query_mount": "M"
+    },
+    {
+      "query": "summicron",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "broad_query_refinement_required",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing"
+      ],
+      "model_entry_confidence_state": "locked_weak_only_fallback",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "broad_query_refinement_rendered",
+      "total_ranked": 1232,
+      "top_result_model": "Summicron",
+      "top_result_mount": "L",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "model_family"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": true,
+      "ambiguity_type": "broad_family_alias",
+      "expected_query_family": "Summicron",
+      "expected_query_mount": null
+    },
+    {
+      "query": "leica lens",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "broad_query_refinement_required",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing"
+      ],
+      "model_entry_confidence_state": "locked_weak_only_fallback",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": true,
+      "status": 200,
+      "ui_state": "broad_query_refinement_rendered",
+      "total_ranked": 6005,
+      "top_result_model": "Elmar",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "brand"
+      ],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": true,
+      "ambiguity_type": "broad_generic_lens_query",
+      "expected_query_family": null,
+      "expected_query_mount": null
+    },
+    {
+      "query": "ltm summaron 35",
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": false,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 197,
+      "top_result_model": "Summaron",
+      "top_result_mount": "L",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "model_family",
+        "focal_length",
+        "mount"
+      ],
+      "market_entry_title": "Summaron",
+      "price_summary_band": "KRW 1,000,000 - 1,300,000",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "Summaron",
+      "expected_query_mount": "L"
+    },
+    {
+      "query": "35 lux aa",
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "exact_model_confident",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": false,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 447,
+      "top_result_model": "Summilux-M",
+      "top_result_mount": "M",
+      "top_result_category": "Lens",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "model_family",
+        "focal_length",
+        "variant"
+      ],
+      "market_entry_title": "Summilux-M",
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": "Summilux",
+      "expected_query_mount": null
+    },
+    {
+      "query": "q3 28",
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": false,
+      "status": 200,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 71,
+      "top_result_model": "Q3",
+      "top_result_mount": "Q",
+      "top_result_category": "Body",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "body_intent",
+        "focal_length",
+        "system"
+      ],
+      "market_entry_title": "Q3",
+      "price_summary_band": "KRW 7,580,000 - 8,300,000",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": null,
+      "expected_query_mount": null
+    },
+    {
+      "query": "ricoh gr iiix",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_results",
+        "no_strong_results",
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_low_query_intent_confidence",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": false,
+      "status": 200,
+      "ui_state": "no_result_card_rendered",
+      "total_ranked": 0,
+      "top_result_model": null,
+      "top_result_mount": null,
+      "top_result_category": null,
+      "top_result_match_quality": null,
+      "top_result_matched_fields": [],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": null,
+      "expected_query_mount": null
+    },
+    {
+      "query": "hasselblad xpan",
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_results",
+        "no_strong_results",
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_low_query_intent_confidence",
+      "boundary_conflict_detected": false,
+      "dangerous_unknown_family_token_detected": false,
+      "dangerous_unknown_family_tokens": [],
+      "weak_only_fallback_detected": false,
+      "status": 200,
+      "ui_state": "no_result_card_rendered",
+      "total_ranked": 0,
+      "top_result_model": null,
+      "top_result_mount": null,
+      "top_result_category": null,
+      "top_result_match_quality": null,
+      "top_result_matched_fields": [],
+      "market_entry_title": null,
+      "price_summary_band": "Not enough exact confidence for price summary",
+      "needs_disambiguation": false,
+      "ambiguity_type": "none",
+      "expected_query_family": null,
+      "expected_query_mount": null
+    }
+  ],
+  "blocking_query_safe_handling": [
+    {
+      "query": "Summicron-M 35 ASPH",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    },
+    {
+      "query": "Leica M 35mm f2 Summicron ASPH",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "family_conflict"
+      ]
+    },
+    {
+      "query": "35 Summicron-M ASPH",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    },
+    {
+      "query": "APO-Summicron-M 35 ASPH",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    },
+    {
+      "query": "apo 35 summicron",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong"
+      ]
+    },
+    {
+      "query": "APO-Summicron-SL 50",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "mount_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    },
+    {
+      "query": "APO-Summicron-SL 90",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "mount_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    },
+    {
+      "query": "Summicron-M 50",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "dangerous_unknown_family_token",
+        "family_conflict",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    },
+    {
+      "query": "summicron",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "broad_query_refinement_required",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    },
+    {
+      "query": "leica lens",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "broad_query_refinement_required",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ]
+    }
+  ],
+  "safe_hold_query_regression_results": [
+    {
+      "query": "ltm summaron 35",
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 197
+    },
+    {
+      "query": "35 lux aa",
+      "market_entry_allowed": true,
+      "price_summary_allowed": false,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 447
+    },
+    {
+      "query": "q3 28",
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "ui_state": "search_results_rendered",
+      "total_ranked": 71
+    },
+    {
+      "query": "ricoh gr iiix",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "ui_state": "no_result_card_rendered",
+      "total_ranked": 0
+    },
+    {
+      "query": "hasselblad xpan",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "ui_state": "no_result_card_rendered",
+      "total_ranked": 0
+    }
+  ],
+  "ui_copy_changes": [
+    {
+      "change": "locked_market_entry_copy",
+      "copy": "Exact model summary is locked until confidence is high enough.",
+      "present_in_app_template": "true",
+      "present_in_root_html": "true"
+    },
+    {
+      "change": "locked_price_summary_copy",
+      "copy": "Not enough exact confidence for price summary",
+      "present_in_app_template": "true",
+      "present_in_root_html": "true"
+    },
+    {
+      "change": "refine_cta_copy",
+      "copy": "Refine this search",
+      "present_in_app_template": "true",
+      "present_in_root_html": "true"
+    },
+    {
+      "change": "confidence_gate_badge",
+      "copy": "Confidence gate active",
+      "present_in_app_template": "true",
+      "present_in_root_html": "true"
+    }
+  ],
+  "git_diff_summary": {
+    "branch": "beta-ui-redesign-controlled-preview",
+    "head_commit": "9481b8906935a3765e1e442be9045a2035734c29",
+    "head_subject": "fix: include search UI hints module in beta preview runtime",
+    "working_diff_stat": "api/search.py            | 358 +++++++++++++++++++++++++++++++++++++++++++++++\n app/templates/index.html |  80 ++++++++++-\n index.html               |  80 ++++++++++-\n search_ui_hints.py       |  19 +++\n 4 files changed, 525 insertions(+), 12 deletions(-)",
+    "working_diff_files": [
+      "api/search.py",
+      "app/templates/index.html",
+      "index.html",
+      "search_ui_hints.py"
+    ],
+    "head_commit_stat": "9481b89 fix: include search UI hints module in beta preview runtime\n search_ui_hints.py | 362 +++++++++++++++++++++++++++++++++++++++++++++++++++++\n 1 file changed, 362 insertions(+)"
+  },
+  "commit_push_status": {
+    "commit_executed": false,
+    "push_executed": false,
+    "push_succeeded": false,
+    "preview_deployment_url": null,
+    "preview_deployment_id": null,
+    "preview_deployment_state": null,
+    "preview_branch": null,
+    "preview_commit": null,
+    "head_commit": "9481b8906935a3765e1e442be9045a2035734c29",
+    "head_subject": "fix: include search UI hints module in beta preview runtime"
+  },
+  "preview_deployment": {
+    "url": null,
+    "deployment_id": null,
+    "state": null,
+    "branch": null,
+    "commit": null
+  },
+  "guards": {
+    "production_launch_go": false,
+    "production_alias_connect_allowed": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "access_activation_performed": false,
+    "main_direct_push_executed": false,
+    "production_promote_executed": false,
+    "tester_link_send_allowed": false,
+    "raw_identity_recorded": false,
+    "raw_contact_recorded": false,
+    "external_link_sent": false,
+    "fake_fill_added": false
+  },
+  "production_alias_connect_allowed": false,
+  "test_verdict": {
+    "market_failures": [],
+    "price_failures": [],
+    "regression_failures": []
+  },
+  "scenario_validation": [
+    {
+      "check": "previous audit evidence loaded",
+      "status": "passed"
+    },
+    {
+      "check": "gate fields populated in response",
+      "status": "passed"
+    },
+    {
+      "check": "blocking queries do not allow unsafe market entry",
+      "status": "passed"
+    },
+    {
+      "check": "blocking queries do not allow unsafe price summary",
+      "status": "passed"
+    },
+    {
+      "check": "broad query guidance preserved",
+      "status": "passed"
+    },
+    {
+      "check": "safe query regression path preserved",
+      "status": "passed"
+    },
+    {
+      "check": "no-result queries stay locked without fake fill",
+      "status": "passed"
+    },
+    {
+      "check": "decision status recorded",
+      "status": "passed"
+    }
+  ],
+  "next_backlog_candidates": [
+    "P3-BETA-MVP-MARKET-ENTRY-CONFIDENCE-GATE-OWNER-RECHECK",
+    "P3-BETA-MVP-QUERY-PARSER-UNKNOWN-TOKEN-COVERAGE-FIXUP",
+    "P3-BETA-MVP-MARKET-ENTRY-CONFIDENCE-GATE-PUSH-FOLLOWUP"
+  ]
+}
