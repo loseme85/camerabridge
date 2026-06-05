@@ -1,0 +1,67 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_q_bodies",
+  "family_name": "Leica Q bodies",
+  "brand": "Leica",
+  "kind": "Body",
+  "mount_family": [
+    "Q"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "special_edition",
+    "boxed",
+    "case_included",
+    "strap_included",
+    "packaging",
+    "condition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_leica_q2_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "Q",
+      "system": "Q",
+      "label": "Leica Body",
+      "model_raw": "Q2",
+      "model_canonical": "Q2",
+      "canonical_name": "Leica Q2 body",
+      "aliases": [
+        "leica q2",
+        "q2",
+        "q2 body"
+      ],
+      "key_discriminators": [
+        "q2",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_q3_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "Q",
+      "system": "Q",
+      "label": "Leica Body",
+      "model_raw": "Q3",
+      "model_canonical": "Q3",
+      "canonical_name": "Leica Q3 body",
+      "aliases": [
+        "leica q3",
+        "q3",
+        "q3 28",
+        "q3 body"
+      ],
+      "key_discriminators": [
+        "q3",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    }
+  ]
+}

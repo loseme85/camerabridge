@@ -1,0 +1,161 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_m_film_bodies",
+  "family_name": "Leica M film bodies",
+  "brand": "Leica",
+  "kind": "Body",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "special_edition",
+    "finder_magnification",
+    "repaint",
+    "boxed",
+    "case_included",
+    "strap_included",
+    "packaging",
+    "condition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_leica_m3_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M3",
+      "model_canonical": "M3",
+      "canonical_name": "Leica M3 body",
+      "aliases": [
+        "leica m3",
+        "m3",
+        "m3 body"
+      ],
+      "key_discriminators": [
+        "m3",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m4_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M4",
+      "model_canonical": "M4",
+      "canonical_name": "Leica M4 body",
+      "aliases": [
+        "leica m4",
+        "m4",
+        "m4 body"
+      ],
+      "key_discriminators": [
+        "m4",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m5_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M5",
+      "model_canonical": "M5",
+      "canonical_name": "Leica M5 body",
+      "aliases": [
+        "leica m5",
+        "m5",
+        "m5 body"
+      ],
+      "key_discriminators": [
+        "m5",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m6_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M6",
+      "model_canonical": "M6",
+      "canonical_name": "Leica M6 body",
+      "aliases": [
+        "leica m6",
+        "m6",
+        "m6 body",
+        "leica m6 classic"
+      ],
+      "key_discriminators": [
+        "m6",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m6_ttl_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M6 TTL",
+      "model_canonical": "M6",
+      "canonical_name": "Leica M6 TTL body",
+      "aliases": [
+        "leica m6 ttl",
+        "m6 ttl",
+        "m6 ttl body"
+      ],
+      "key_discriminators": [
+        "m6",
+        "ttl",
+        "body"
+      ],
+      "variant": [
+        "TTL"
+      ],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_mp_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "MP",
+      "model_canonical": "MP",
+      "canonical_name": "Leica MP body",
+      "aliases": [
+        "leica mp",
+        "mp",
+        "mp body",
+        "mp silver"
+      ],
+      "key_discriminators": [
+        "mp",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    }
+  ]
+}

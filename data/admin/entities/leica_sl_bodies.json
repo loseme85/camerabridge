@@ -1,0 +1,66 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_sl_bodies",
+  "family_name": "Leica SL bodies",
+  "brand": "Leica",
+  "kind": "Body",
+  "mount_family": [
+    "SL"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "special_edition",
+    "boxed",
+    "case_included",
+    "strap_included",
+    "packaging",
+    "condition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_leica_sl2_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "SL",
+      "system": "SL System",
+      "label": "SL Body",
+      "model_raw": "SL2",
+      "model_canonical": "SL2",
+      "canonical_name": "Leica SL2 body",
+      "aliases": [
+        "leica sl2",
+        "sl2",
+        "sl2 body"
+      ],
+      "key_discriminators": [
+        "sl2",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_sl3_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "SL",
+      "system": "SL System",
+      "label": "SL Body",
+      "model_raw": "SL3",
+      "model_canonical": "SL3",
+      "canonical_name": "Leica SL3 body",
+      "aliases": [
+        "leica sl3",
+        "sl3",
+        "sl3 body"
+      ],
+      "key_discriminators": [
+        "sl3",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    }
+  ]
+}

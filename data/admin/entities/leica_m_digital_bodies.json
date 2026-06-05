@@ -1,0 +1,139 @@
+{
+  "schema_version": "normalization_admin.canonical_seed_family.v1",
+  "family_id": "leica_m_digital_bodies",
+  "family_name": "Leica M digital bodies",
+  "brand": "Leica",
+  "kind": "Body",
+  "mount_family": [
+    "M"
+  ],
+  "overlay_allowed": [
+    "finish",
+    "special_edition",
+    "sensor_replaced",
+    "boxed",
+    "case_included",
+    "strap_included",
+    "packaging",
+    "condition"
+  ],
+  "status": "active",
+  "entities": [
+    {
+      "id": "seed_leica_m9_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M9",
+      "model_canonical": "M9",
+      "canonical_name": "Leica M9 body",
+      "aliases": [
+        "leica m9",
+        "m9",
+        "m9 body"
+      ],
+      "key_discriminators": [
+        "m9",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m9_p_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M9-P",
+      "model_canonical": "M9-P",
+      "canonical_name": "Leica M9-P body",
+      "aliases": [
+        "leica m9-p",
+        "m9-p",
+        "m9 p",
+        "m9-p body"
+      ],
+      "key_discriminators": [
+        "m9-p",
+        "body"
+      ],
+      "variant": [
+        "P"
+      ],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m10_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M10",
+      "model_canonical": "M10",
+      "canonical_name": "Leica M10 body",
+      "aliases": [
+        "leica m10",
+        "m10",
+        "m10 body"
+      ],
+      "key_discriminators": [
+        "m10",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m10_r_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M10-R",
+      "model_canonical": "M10-R",
+      "canonical_name": "Leica M10-R body",
+      "aliases": [
+        "leica m10-r",
+        "m10-r",
+        "m10 r",
+        "m10-r body"
+      ],
+      "key_discriminators": [
+        "m10-r",
+        "body"
+      ],
+      "variant": [
+        "R"
+      ],
+      "status": "core"
+    },
+    {
+      "id": "seed_leica_m11_body",
+      "kind": "Body",
+      "brand": "Leica",
+      "mount": "M",
+      "system": "M System",
+      "label": "M Body",
+      "model_raw": "M11",
+      "model_canonical": "M11",
+      "canonical_name": "Leica M11 body",
+      "aliases": [
+        "leica m11",
+        "m11",
+        "m11 body"
+      ],
+      "key_discriminators": [
+        "m11",
+        "body"
+      ],
+      "variant": [],
+      "status": "core"
+    }
+  ]
+}
