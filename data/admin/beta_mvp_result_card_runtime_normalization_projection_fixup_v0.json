@@ -1,0 +1,899 @@
+{
+  "task_name": "P3-BETA-MVP-RESULT-CARD-RUNTIME-NORMALIZATION-PROJECTION-FIXUP",
+  "decision_status": "beta_mvp_result_card_runtime_projection_fixup_pushed_ready_for_owner_recheck",
+  "owner_recheck_failure_summary": "Owner preview still showed [중고]Leica M50/1.2 1세대 as Detected model=M5 / Family=M Body / Category=Body after the compact-lens boundary fix.",
+  "screenshot_issue_summary": "The result card was still reading stale normalized Body metadata even though title-level compact lens notation indicates an M-mount 50mm f/1.2 lens.",
+  "root_cause_hypothesis": [
+    "stale final_output rows in the existing search index still contain Body/M5 metadata",
+    "runtime compact-lens projection previously missed slash notation when it read normalized title text only",
+    "result card UI was reading raw final_output fields directly instead of a safer display projection layer"
+  ],
+  "safe_display_projection_design": [
+    "add display_output to each API result",
+    "prefer display_category/display_model/display_family/display_mount/display_focal_length/display_aperture for UI",
+    "when compact lens notation conflicts with stale Body output, project the card to Lens and blank unsafe body model claims"
+  ],
+  "stale_final_output_conflict_guard": [
+    "compact_lens_notation_detected",
+    "body_alias_boundary_blocked",
+    "classification_conflict_detected",
+    "stale_body_normalization_detected",
+    "result_card_confidence_state"
+  ],
+  "result_card_ui_changes": [
+    "result cards now read display_output instead of raw final_output for Detected model / Family / Mount / Category",
+    "compact lens conflicts show Runtime projection and Lens notation detected badges",
+    "focal length and aperture are shown on the card when compact notation can safely provide them"
+  ],
+  "market_entry_price_summary_gate_link": [
+    "classification or stale-normalization conflict now contributes to market entry blocking",
+    "summary-scope checks now honor display-safe category/mount/focal fields",
+    "the stale M50/1.2 row cannot be used as Body evidence for M5 market entry or price summary"
+  ],
+  "query_regression_results": [
+    {
+      "query": "[중고]Leica M50/1.2 1세대",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": "M",
+        "system": null,
+        "focal_length": "50",
+        "aperture": "1.2",
+        "model_family": null,
+        "confidence": 0.68
+      },
+      "top_result": {
+        "title": "Leica M 50mm f1.2 Noctilux 1st Black",
+        "final_category": "Lens",
+        "final_model": "Noctilux",
+        "display_category": "Lens",
+        "display_model": "Noctilux",
+        "display_family": "M Lens",
+        "display_mount": "M",
+        "display_focal_length": "50",
+        "display_aperture": "f1.2",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": 32,
+      "title_result": {
+        "title": "[중고]Leica M50/1.2 1세대",
+        "match_quality": "strong",
+        "matched_fields": [
+          "brand",
+          "focal_length",
+          "mount",
+          "aperture_hint"
+        ],
+        "warnings": [
+          "unparsed_tokens:중고"
+        ],
+        "final_output": {
+          "category": "Lens",
+          "label": "M Lens",
+          "model_canonical": null,
+          "mount": "M",
+          "focal_length": "50",
+          "compact_lens_notation_detected": true,
+          "body_alias_boundary_blocked": true,
+          "classification_conflict_detected": true,
+          "body_lens_boundary_conflict_detected": true,
+          "stale_body_normalization_detected": true
+        },
+        "display_output": {
+          "display_category": "Lens",
+          "display_model": null,
+          "display_family": "M Lens",
+          "display_mount": "M",
+          "display_focal_length": "50",
+          "display_aperture": "f1.2",
+          "result_card_confidence_state": "corrected_runtime_projection",
+          "stale_normalization_detected": true,
+          "classification_conflict_detected": true,
+          "body_alias_boundary_blocked": true,
+          "compact_lens_notation_detected": true
+        }
+      },
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 882
+    },
+    {
+      "query": "M50/1.2",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": "M",
+        "system": null,
+        "focal_length": "50",
+        "aperture": "1.2",
+        "model_family": null,
+        "confidence": 0.58
+      },
+      "top_result": {
+        "title": "Leica M 50mm f1.2 Noctilux 1st Black",
+        "final_category": "Lens",
+        "final_model": "Noctilux",
+        "display_category": "Lens",
+        "display_model": "Noctilux",
+        "display_family": "M Lens",
+        "display_mount": "M",
+        "display_focal_length": "50",
+        "display_aperture": "f1.2",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": 59,
+      "title_result": {
+        "title": "[중고]Leica M50/1.2 1세대",
+        "match_quality": "strong",
+        "matched_fields": [
+          "focal_length",
+          "mount",
+          "aperture_hint"
+        ],
+        "warnings": [],
+        "final_output": {
+          "category": "Lens",
+          "label": "M Lens",
+          "model_canonical": null,
+          "mount": "M",
+          "focal_length": "50",
+          "compact_lens_notation_detected": true,
+          "body_alias_boundary_blocked": true,
+          "classification_conflict_detected": true,
+          "body_lens_boundary_conflict_detected": true,
+          "stale_body_normalization_detected": true
+        },
+        "display_output": {
+          "display_category": "Lens",
+          "display_model": null,
+          "display_family": "M Lens",
+          "display_mount": "M",
+          "display_focal_length": "50",
+          "display_aperture": "f1.2",
+          "result_card_confidence_state": "corrected_runtime_projection",
+          "stale_normalization_detected": true,
+          "classification_conflict_detected": true,
+          "body_alias_boundary_blocked": true,
+          "compact_lens_notation_detected": true
+        }
+      },
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 884
+    },
+    {
+      "query": "Leica M50/1.2 1세대",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": "M",
+        "system": null,
+        "focal_length": "50",
+        "aperture": "1.2",
+        "model_family": null,
+        "confidence": 0.68
+      },
+      "top_result": {
+        "title": "Leica M 50mm f1.2 Noctilux 1st Black",
+        "final_category": "Lens",
+        "final_model": "Noctilux",
+        "display_category": "Lens",
+        "display_model": "Noctilux",
+        "display_family": "M Lens",
+        "display_mount": "M",
+        "display_focal_length": "50",
+        "display_aperture": "f1.2",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": 32,
+      "title_result": {
+        "title": "[중고]Leica M50/1.2 1세대",
+        "match_quality": "strong",
+        "matched_fields": [
+          "brand",
+          "focal_length",
+          "mount",
+          "aperture_hint"
+        ],
+        "warnings": [],
+        "final_output": {
+          "category": "Lens",
+          "label": "M Lens",
+          "model_canonical": null,
+          "mount": "M",
+          "focal_length": "50",
+          "compact_lens_notation_detected": true,
+          "body_alias_boundary_blocked": true,
+          "classification_conflict_detected": true,
+          "body_lens_boundary_conflict_detected": true,
+          "stale_body_normalization_detected": true
+        },
+        "display_output": {
+          "display_category": "Lens",
+          "display_model": null,
+          "display_family": "M Lens",
+          "display_mount": "M",
+          "display_focal_length": "50",
+          "display_aperture": "f1.2",
+          "result_card_confidence_state": "corrected_runtime_projection",
+          "stale_normalization_detected": true,
+          "classification_conflict_detected": true,
+          "body_alias_boundary_blocked": true,
+          "compact_lens_notation_detected": true
+        }
+      },
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 882
+    },
+    {
+      "query": "M35/2",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": "M",
+        "system": null,
+        "focal_length": "35",
+        "aperture": "2",
+        "model_family": null,
+        "confidence": 0.58
+      },
+      "top_result": {
+        "title": "Leica M 35mm f2 APO-Summicron ASPH 6bit Black",
+        "final_category": "Lens",
+        "final_model": "APO-Summicron",
+        "display_category": "Lens",
+        "display_model": "APO-Summicron",
+        "display_family": "M Lens",
+        "display_mount": "M",
+        "display_focal_length": "35",
+        "display_aperture": "f2",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 883
+    },
+    {
+      "query": "M28/2.8",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": "M",
+        "system": null,
+        "focal_length": "28",
+        "aperture": "2.8",
+        "model_family": null,
+        "confidence": 0.58
+      },
+      "top_result": {
+        "title": "Leica M 28mm f2.8 Elmarit ASPH 5th 6bit Black",
+        "final_category": "Lens",
+        "final_model": "Elmarit-M",
+        "display_category": "Lens",
+        "display_model": "Elmarit-M",
+        "display_family": "M Lens",
+        "display_mount": "M",
+        "display_focal_length": "28",
+        "display_aperture": "f2.8",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 475
+    },
+    {
+      "query": "Leica M5",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": "M5",
+        "mount": "M",
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.55
+      },
+      "top_result": {
+        "title": "Leica M5 Black",
+        "final_category": "Body",
+        "final_model": "M5",
+        "display_category": "Body",
+        "display_model": "M5",
+        "display_family": "M Body",
+        "display_mount": "M",
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "title_result_index": 66,
+      "title_result": {
+        "title": "[중고]Leica M50/1.2 1세대",
+        "match_quality": "weak",
+        "matched_fields": [
+          "brand",
+          "mount"
+        ],
+        "warnings": [
+          "body_intent_non_body_listing",
+          "weak_match"
+        ],
+        "final_output": {
+          "category": "Lens",
+          "label": "M Lens",
+          "model_canonical": null,
+          "mount": "M",
+          "focal_length": "50",
+          "compact_lens_notation_detected": true,
+          "body_alias_boundary_blocked": true,
+          "classification_conflict_detected": true,
+          "body_lens_boundary_conflict_detected": true,
+          "stale_body_normalization_detected": true
+        },
+        "display_output": {
+          "display_category": "Lens",
+          "display_model": null,
+          "display_family": "M Lens",
+          "display_mount": "M",
+          "display_focal_length": "50",
+          "display_aperture": "f1.2",
+          "result_card_confidence_state": "corrected_runtime_projection",
+          "stale_normalization_detected": true,
+          "classification_conflict_detected": true,
+          "body_alias_boundary_blocked": true,
+          "compact_lens_notation_detected": true
+        }
+      },
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 100
+    },
+    {
+      "query": "M5 body",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": "M5",
+        "mount": "M",
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.55
+      },
+      "top_result": {
+        "title": "Leica M5 Black",
+        "final_category": "Body",
+        "final_model": "M5",
+        "display_category": "Body",
+        "display_model": "M5",
+        "display_family": "M Body",
+        "display_mount": "M",
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "title_result_index": 100,
+      "title_result": {
+        "title": "[중고]Leica M50/1.2 1세대",
+        "match_quality": "weak",
+        "matched_fields": [
+          "mount"
+        ],
+        "warnings": [
+          "unparsed_tokens:body",
+          "body_intent_non_body_listing",
+          "weak_match"
+        ],
+        "final_output": {
+          "category": "Lens",
+          "label": "M Lens",
+          "model_canonical": null,
+          "mount": "M",
+          "focal_length": "50",
+          "compact_lens_notation_detected": true,
+          "body_alias_boundary_blocked": true,
+          "classification_conflict_detected": true,
+          "body_lens_boundary_conflict_detected": true,
+          "stale_body_normalization_detected": true
+        },
+        "display_output": {
+          "display_category": "Lens",
+          "display_model": null,
+          "display_family": "M Lens",
+          "display_mount": "M",
+          "display_focal_length": "50",
+          "display_aperture": "f1.2",
+          "result_card_confidence_state": "corrected_runtime_projection",
+          "stale_normalization_detected": true,
+          "classification_conflict_detected": true,
+          "body_alias_boundary_blocked": true,
+          "compact_lens_notation_detected": true
+        }
+      },
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 100
+    },
+    {
+      "query": "Leica M9",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": "M9",
+        "mount": "M",
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.55
+      },
+      "top_result": {
+        "title": "Leica M9 SteelGray [신형 센서 교체]",
+        "final_category": "Body",
+        "final_model": "M9",
+        "display_category": "Body",
+        "display_model": "M9",
+        "display_family": "M Body",
+        "display_mount": "M",
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 152
+    },
+    {
+      "query": "Leica M10",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": "M10",
+        "mount": "M",
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.55
+      },
+      "top_result": {
+        "title": "[위탁] M10 Monochrom 'Leitz Wetzlar' Edition",
+        "final_category": "Body",
+        "final_model": "M10",
+        "display_category": "Body",
+        "display_model": "M10",
+        "display_family": "M Body",
+        "display_mount": "M",
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 260
+    },
+    {
+      "query": "Leica M11",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": "M11",
+        "mount": "M",
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.55
+      },
+      "top_result": {
+        "title": "Leica M11 Glossy Black Paint Finish",
+        "final_category": "Body",
+        "final_model": "M11",
+        "display_category": "Body",
+        "display_model": "M11",
+        "display_family": "M Body",
+        "display_mount": "M",
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 246
+    },
+    {
+      "query": "q3 28",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": "Q3",
+        "mount": null,
+        "system": "Q",
+        "focal_length": "28",
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.75
+      },
+      "top_result": {
+        "title": "[중고] Q3 28mm",
+        "final_category": "Body",
+        "final_model": "Q3",
+        "display_category": "Body",
+        "display_model": "Q3",
+        "display_family": "Body",
+        "display_mount": "Q",
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 101
+    }
+  ],
+  "lens_accessory_no_result_regression_results": [
+    {
+      "query": "ltm summaron 35",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": "L",
+        "system": null,
+        "focal_length": "35",
+        "aperture": null,
+        "model_family": "Summaron",
+        "confidence": 0.78
+      },
+      "top_result": {
+        "title": "Leica L 35mm f3.5 Summaron Silver",
+        "final_category": "Lens",
+        "final_model": "Summaron",
+        "display_category": "Lens",
+        "display_model": "Summaron",
+        "display_family": "L Lens",
+        "display_mount": "L",
+        "display_focal_length": "35",
+        "display_aperture": "f3.5",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 234
+    },
+    {
+      "query": "35 lux aa",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": null,
+        "system": null,
+        "focal_length": "35",
+        "aperture": null,
+        "model_family": "Summilux",
+        "confidence": 0.82
+      },
+      "top_result": {
+        "title": "[위탁] M 35/1.4 Summilux 3세대 (2매) (Black)",
+        "final_category": "Lens",
+        "final_model": "Summilux-M",
+        "display_category": "Lens",
+        "display_model": "Summilux-M",
+        "display_family": "M Lens",
+        "display_mount": "M",
+        "display_focal_length": "35",
+        "display_aperture": "f1.4",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_allowed": true,
+      "total_ranked": 477
+    },
+    {
+      "query": "summicron",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": null,
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": "Summicron",
+        "confidence": 0.5
+      },
+      "top_result": {
+        "title": "Leica L 50mm f2 Summicron Silver",
+        "final_category": "Lens",
+        "final_model": "Summicron",
+        "display_category": "Lens",
+        "display_model": "Summicron",
+        "display_family": "L Lens",
+        "display_mount": "L",
+        "display_focal_length": "50",
+        "display_aperture": "f2",
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "broad_query_refinement_required",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 1232
+    },
+    {
+      "query": "leica hood 12585",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": null,
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.43
+      },
+      "top_result": {
+        "title": "Leica 12585 Hood for M-50mm, 35mm",
+        "final_category": "Accessory",
+        "final_model": null,
+        "display_category": "Accessory",
+        "display_model": null,
+        "display_family": "Accessory",
+        "display_mount": "M",
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": "normal"
+      },
+      "top_three_categories": [
+        "Accessory",
+        "Accessory",
+        "Accessory"
+      ],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 108
+    },
+    {
+      "query": "ricoh gr iiix",
+      "intent": {
+        "brand": "Leica",
+        "body_intent": null,
+        "mount": null,
+        "system": null,
+        "focal_length": null,
+        "aperture": null,
+        "model_family": null,
+        "confidence": 0.25
+      },
+      "top_result": {
+        "title": null,
+        "final_category": null,
+        "final_model": null,
+        "display_category": null,
+        "display_model": null,
+        "display_family": null,
+        "display_mount": null,
+        "display_focal_length": null,
+        "display_aperture": null,
+        "result_card_confidence_state": null
+      },
+      "top_three_categories": [],
+      "title_result_index": null,
+      "title_result": null,
+      "market_entry_allowed": false,
+      "market_entry_block_reason": [
+        "no_results",
+        "no_strong_results",
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_allowed": false,
+      "total_ranked": 0
+    }
+  ],
+  "true_body_alias_maintained": [
+    {
+      "query": "Leica M5",
+      "body_intent": "M5",
+      "top_display_category": "Body",
+      "top_display_model": "M5"
+    },
+    {
+      "query": "M5 body",
+      "body_intent": "M5",
+      "top_display_category": "Body",
+      "top_display_model": "M5"
+    },
+    {
+      "query": "Leica M9",
+      "body_intent": "M9",
+      "top_display_category": "Body",
+      "top_display_model": "M9"
+    },
+    {
+      "query": "Leica M10",
+      "body_intent": "M10",
+      "top_display_category": "Body",
+      "top_display_model": "M10"
+    },
+    {
+      "query": "Leica M11",
+      "body_intent": "M11",
+      "top_display_category": "Body",
+      "top_display_model": "M11"
+    },
+    {
+      "query": "q3 28",
+      "body_intent": "Q3",
+      "top_display_category": "Body",
+      "top_display_model": "Q3"
+    }
+  ],
+  "git_diff_summary": {
+    "branch": "beta-ui-redesign-controlled-preview",
+    "head_commit": "d4658fe11b2a85f83c0332c0e38d7a57c15f8cef",
+    "head_subject": "d4658fe fix: project safe result card metadata for compact lens conflicts",
+    "working_diff_stat": "...ult_card_runtime_normalization_projection_fixup_v0.json |  6 +++---\n ...lt_card_runtime_normalization_projection_fixup_v0.jsonl |  2 +-\n ...esult_card_runtime_normalization_projection_fixup_v0.md | 14 ++++++--------\n 3 files changed, 10 insertions(+), 12 deletions(-)"
+  },
+  "commit_push_status": {
+    "commit_executed": true,
+    "push_executed": true,
+    "push_succeeded": true,
+    "preview_deployment_url": "https://camerabridge-baxmyvlzh-camerabridge.vercel.app",
+    "preview_deployment_id": "dpl_4Lfud8rxfoy3sxrTM4kV7gas3Kh1",
+    "preview_deployment_state": "READY",
+    "preview_branch": "beta-ui-redesign-controlled-preview",
+    "preview_commit": "d4658fe11b2a85f83c0332c0e38d7a57c15f8cef"
+  },
+  "production_public_access_guard": {
+    "production_launch_go": false,
+    "production_alias_connect_allowed": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "access_activation_performed": false,
+    "main_direct_push_executed": false,
+    "production_promote_executed": false,
+    "tester_link_send_allowed": false,
+    "raw_identity_recorded": false,
+    "raw_contact_recorded": false,
+    "external_link_sent": false,
+    "fake_fill_added": false
+  },
+  "production_alias_connect_allowed": false,
+  "test_verdict": {
+    "stale_display_failures": [],
+    "true_body_alias_regressions": [],
+    "stale_display_truth_failures": [],
+    "regression_failures": []
+  },
+  "next_backlog_candidates": [
+    "P3-BETA-MVP-RESULT-CARD-RUNTIME-PROJECTION-OWNER-RECHECK",
+    "P3-BETA-MVP-GLOBAL-MATCH-PRIORITY-RANKING-FIXUP",
+    "P3-BETA-MVP-QUERY-PARSER-UNKNOWN-TOKEN-COVERAGE-FIXUP"
+  ]
+}

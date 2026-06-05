@@ -277,6 +277,18 @@ def _is_weak_only_fallback(quality: Mapping[str, Any]) -> bool:
 
 
 def _result_field(result: Mapping[str, Any], name: str) -> Any:
+    display = result.get("display_output") or {}
+    display_map = {
+        "category": "display_category",
+        "label": "display_family",
+        "model_canonical": "display_model",
+        "model_raw": "display_model",
+        "mount": "display_mount",
+        "focal_length": "display_focal_length",
+    }
+    display_name = display_map.get(name)
+    if display_name and display.get(display_name) not in {None, ""}:
+        return display.get(display_name)
     return (result.get("final_output") or {}).get(name)
 
 
@@ -319,10 +331,15 @@ def _result_variant_conflict(intent: Mapping[str, Any], top_result: Mapping[str,
 
 
 def _result_classification_conflict(top_result: Mapping[str, Any]) -> bool:
+    display = top_result.get("display_output") or {}
     final = top_result.get("final_output") or {}
     return bool(
+        display.get("classification_conflict_detected")
+        or display.get("stale_normalization_detected")
+        or
         final.get("classification_conflict_detected")
         or final.get("body_lens_boundary_conflict_detected")
+        or final.get("stale_body_normalization_detected")
     )
 
 
@@ -352,21 +369,22 @@ def _result_matches_query_summary_scope(
     expected_family: str,
     expected_mount: str | None,
 ) -> bool:
-    final = result.get("final_output") or {}
     if intent.get("body_intent"):
         expected_body = _normalize_text(intent.get("body_intent"))
-        result_body = _normalize_text(final.get("model_canonical") or final.get("model_raw") or final.get("label"))
+        result_body = _normalize_text(
+            _result_field(result, "model_canonical") or _result_field(result, "model_raw") or _result_field(result, "label")
+        )
         if expected_body and expected_body not in result_body:
             return False
     else:
-        if str(final.get("category") or "") != "Lens":
+        if str(_result_field(result, "category") or "") != "Lens":
             return False
         if expected_family and _result_family_conflict(expected_family, result):
             return False
-        if expected_mount and str(final.get("mount") or "") != expected_mount:
+        if expected_mount and str(_result_field(result, "mount") or "") != expected_mount:
             return False
         expected_focal = str(intent.get("focal_length") or "")
-        if expected_focal and str(final.get("focal_length") or "") != expected_focal:
+        if expected_focal and str(_result_field(result, "focal_length") or "") != expected_focal:
             return False
         if _result_variant_conflict(intent, result):
             return False

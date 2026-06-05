@@ -946,6 +946,10 @@
       return (result.final_output || {})[key];
     }
 
+    function displayField(result, key){
+      return (result.display_output || {})[key];
+    }
+
     function buildParams(offset){
       const params = new URLSearchParams();
       params.set('q', state.query);
@@ -1370,14 +1374,21 @@
       const target = canViewSource ? ' target="_blank" rel="noopener noreferrer"' : '';
       const status = statusMeta(result);
       const matchConfidence = displayValue(result.match_quality, 'Unknown');
-      const model = displayValue(finalField(result, 'model_canonical'), 'Unknown');
-      const family = displayValue(finalField(result, 'label'), 'Unknown');
+      const confidenceState = displayField(result, 'result_card_confidence_state');
+      const modelFallback = confidenceState === 'locked_classification_conflict' ? 'Review needed' : 'Unknown';
+      const familyFallback = confidenceState === 'locked_classification_conflict' ? 'Classification confidence pending' : 'Unknown';
+      const model = displayValue(displayField(result, 'display_model'), modelFallback);
+      const family = displayValue(displayField(result, 'display_family'), familyFallback);
       const currency = displayValue(result.currency, 'Unknown');
       const source = displayValue(result.source, 'Unknown source');
       const priceConfidence = result.price ? 'Reference only' : 'Not enough data';
       const sourceCoverage = getCoverageLabel();
-      const firstSeen = 'Unknown';
-      const lastSeen = 'Unknown';
+      const focalLength = displayValue(displayField(result, 'display_focal_length'), 'Unknown');
+      const aperture = displayValue(displayField(result, 'display_aperture'), 'Unknown');
+      const displayCategory = displayValue(displayField(result, 'display_category'), 'Unknown');
+      const displayMount = displayValue(displayField(result, 'display_mount'), 'Unknown');
+      const projected = Boolean(displayField(result, 'stale_normalization_detected'));
+      const compactNotation = Boolean(displayField(result, 'compact_lens_notation_detected'));
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
@@ -1393,6 +1404,8 @@
               <div class="result-status-row">
                 <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(status.label)}</span>
                 <span class="micro-pill blue">Match ${escapeHtml(matchConfidence)}</span>
+                ${projected ? '<span class="micro-pill amber">Runtime projection</span>' : ''}
+                ${compactNotation ? '<span class="micro-pill green">Lens notation detected</span>' : ''}
                 ${result.used_override ? '<span class="micro-pill green">Trusted override</span>' : ''}
               </div>
             </div>
@@ -1402,10 +1415,10 @@
             ${renderDataPoint('Family', family)}
             ${renderDataPoint('Price confidence', priceConfidence)}
             ${renderDataPoint('Source coverage', sourceCoverage)}
-            ${renderDataPoint('First seen', firstSeen)}
-            ${renderDataPoint('Last seen', lastSeen)}
-            ${renderDataPoint('Mount', displayValue(finalField(result, 'mount'), 'Unknown'))}
-            ${renderDataPoint('Category', displayValue(finalField(result, 'category'), 'Unknown'))}
+            ${renderDataPoint('Focal length', focalLength)}
+            ${renderDataPoint('Aperture', aperture)}
+            ${renderDataPoint('Mount', displayMount)}
+            ${renderDataPoint('Category', displayCategory)}
           </div>
           <div class="result-actions">
             <div class="action-group">
@@ -1441,7 +1454,7 @@
                 <strong>${escapeHtml(result.title || 'Archived listing')}</strong>
                 <p>Observed price: ${escapeHtml(displayValue(result.price, 'Not enough data'))}. Status: ${escapeHtml(status.label)}. Source: ${escapeHtml(displayValue(result.source, 'Unknown source'))}.</p>
                 <div class="archive-meta">
-                  <span class="micro-pill blue">Model match ${escapeHtml(displayValue(finalField(result, 'model_canonical'), 'Unknown'))}</span>
+                  <span class="micro-pill blue">Model match ${escapeHtml(displayValue(displayField(result, 'display_model'), displayValue(finalField(result, 'model_canonical'), 'Unknown')))}</span>
                   <span class="micro-pill">${escapeHtml(caution)}</span>
                 </div>
               </div>

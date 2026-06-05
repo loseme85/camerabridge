@@ -337,12 +337,14 @@ def _project_compact_lens_body_alias_conflict_final_output(record: dict[str, Any
     - do not invent a canonical model family when the title does not say one
     """
     raw = _raw_item(record)
-    title_norm = _normalize(final.get("title_raw") or raw.get("상품명"))
-    if not title_norm:
+    title_raw = str(final.get("title_raw") or raw.get("상품명") or "")
+    title_norm = _normalize(title_raw)
+    title_detect = title_raw.lower()
+    if not title_norm and not title_detect:
         return final
 
-    compact = _detect_compact_lens_notation(title_norm)
-    lens_boundary_conflict = _looks_like_lens_boundary_conflict(title_norm)
+    compact = _detect_compact_lens_notation(title_detect) or _detect_compact_lens_notation(title_norm)
+    lens_boundary_conflict = _looks_like_lens_boundary_conflict(title_detect) or _looks_like_lens_boundary_conflict(title_norm)
     if not compact and not lens_boundary_conflict:
         return final
 
@@ -359,10 +361,12 @@ def _project_compact_lens_body_alias_conflict_final_output(record: dict[str, Any
     if _normalize(final.get("category")) != "body":
         projected.setdefault("classification_conflict_detected", False)
         projected.setdefault("body_lens_boundary_conflict_detected", False)
+        projected.setdefault("stale_body_normalization_detected", False)
         return projected
 
     projected["classification_conflict_detected"] = True
     projected["body_lens_boundary_conflict_detected"] = True
+    projected["stale_body_normalization_detected"] = True
     projected["category"] = "Lens"
     mount = projected.get("mount") or (compact["mount"] if compact else "")
     if mount:
