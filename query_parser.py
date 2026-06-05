@@ -80,21 +80,27 @@ def _set_accessory_code(intent: QueryIntent, value: str, source: str) -> None:
 
 
 _BODY_INTENT_ALIASES = {
-    "m2": ("M2", "M", None),
-    "m3": ("M3", "M", None),
-    "m4": ("M4", "M", None),
-    "m5": ("M5", "M", None),
-    "m6": ("M6", "M", None),
-    "mp": ("MP", "M", None),
-    "q2": ("Q2", None, "Q"),
-    "q3": ("Q3", None, "Q"),
-    "r6": ("R6", "R", None),
-    "r7": ("R7", "R", None),
-    "r8": ("R8", "R", None),
-    "barnack": ("Barnack", "L", None),
-    "iiic": ("IIIc", "L", None),
-    "iiif": ("IIIf", "L", None),
-    "iiig": ("IIIg", "L", None),
+    "m2": ("M2", "M", None, ()),
+    "m3": ("M3", "M", None, ()),
+    "m4": ("M4", "M", None, ()),
+    "m5": ("M5", "M", None, ()),
+    "m6": ("M6", "M", None, ()),
+    "m9": ("M9", "M", None, ()),
+    "m9-p": ("M9-P", "M", None, ("P",)),
+    "m10": ("M10", "M", None, ()),
+    "m10-r": ("M10-R", "M", None, ("R",)),
+    "m11": ("M11", "M", None, ()),
+    "mp": ("MP", "M", None, ()),
+    "q2": ("Q2", None, "Q", ()),
+    "q3": ("Q3", None, "Q", ()),
+    "sl2": ("SL2", "SL", None, ()),
+    "r6": ("R6", "R", None, ()),
+    "r7": ("R7", "R", None, ()),
+    "r8": ("R8", "R", None, ()),
+    "barnack": ("Barnack", "L", None, ()),
+    "iiic": ("IIIc", "L", None, ()),
+    "iiif": ("IIIf", "L", None, ()),
+    "iiig": ("IIIg", "L", None, ()),
 }
 
 
@@ -656,6 +662,19 @@ def _compact_body_intent_token_consumed(intent: QueryIntent, token: str, normali
     return False
 
 
+def _parsed_body_intent_token_consumed(intent: QueryIntent, token: str) -> bool:
+    body_intent = _normalize_query(intent.body_intent or "")
+    if not body_intent:
+        return False
+    token_norm = _normalize_query(token)
+    return token_norm in {
+        body_intent,
+        body_intent.replace(" ", ""),
+        body_intent.replace(" ", "-"),
+        body_intent.replace("-", ""),
+    }
+
+
 def _score_confidence(intent: QueryIntent) -> float:
     score = 0.20
     if intent.model_family:
@@ -725,10 +744,15 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
         if _compact_body_intent_token_consumed(intent, token, normalized):
             continue
 
+        if _parsed_body_intent_token_consumed(intent, token):
+            continue
+
         body_alias = _BODY_INTENT_ALIASES.get(token)
-        if body_alias and _body_intent_token_allowed(token, rough_tokens):
-            body_intent, body_mount, body_system = body_alias
+        if body_alias and not intent.accessory_intent and not intent.model_family and _body_intent_token_allowed(token, rough_tokens):
+            body_intent, body_mount, body_system, body_variants = body_alias
             _set_body_intent(intent, body_intent, token, mount=body_mount, system=body_system)
+            for variant in body_variants:
+                _add_variant(intent, variant, token)
             continue
 
         filter_match = re.fullmatch(r"e\s*([0-9]{2,3})|e([0-9]{2,3})", token)

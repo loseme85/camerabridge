@@ -464,6 +464,34 @@ def _apply_third_party_l_mount_control(
     return score, match_quality, match_quality_rank
 
 
+def _suppress_non_body_weak_brand_fallback_for_body_query(
+    score: float,
+    match_quality: str,
+    match_quality_rank: int,
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    matched_fields: list[str],
+    warnings: list[str],
+) -> tuple[float, str, int]:
+    """
+    Keep specific body queries from collapsing back into broad Leica weak hits.
+
+    This is intentionally narrow: only suppress non-body weak brand-only
+    fallback rows when the query already resolved to an explicit body intent.
+    """
+    if not intent.get("body_intent"):
+        return score, match_quality, match_quality_rank
+    if _normalize(final.get("category")) == "body":
+        return score, match_quality, match_quality_rank
+    if match_quality != "weak":
+        return score, match_quality, match_quality_rank
+    if list(matched_fields) != ["brand"]:
+        return score, match_quality, match_quality_rank
+
+    warnings.append("body_query_non_body_weak_brand_fallback_suppressed")
+    return min(score, 20.0), "weak", MATCH_QUALITY_RANKS["weak"]
+
+
 _BODY_QUERY_PROJECTION_MODELS = {
     "SL2": "SL",
     "SL3": "SL",
@@ -1436,6 +1464,15 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         intent,
         final,
         text,
+        warnings,
+    )
+    score, match_quality, match_quality_rank = _suppress_non_body_weak_brand_fallback_for_body_query(
+        score,
+        match_quality,
+        match_quality_rank,
+        intent,
+        final,
+        matched,
         warnings,
     )
     implicit_preference_score, implicit_preference_reasons = _implicit_brand_preference(

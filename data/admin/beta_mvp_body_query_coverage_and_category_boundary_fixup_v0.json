@@ -1,0 +1,1827 @@
+{
+  "task_name": "P3-BETA-MVP-BODY-QUERY-COVERAGE-AND-CATEGORY-BOUNDARY-FIXUP",
+  "decision_status": "beta_mvp_body_query_coverage_category_boundary_fixup_passed_ready_for_owner_approved_push",
+  "previous_audit_summary": {
+    "decision_status": null,
+    "top_priority_fixup": "P3-BETA-MVP-BODY-QUERY-COVERAGE-AND-CATEGORY-BOUNDARY-FIXUP",
+    "production_alias_connect_allowed": null
+  },
+  "current_body_query_problem_summary": {
+    "core_problem": "Specific Leica body queries were not parsed as body intent and collapsed into broad Leica weak lens fallback.",
+    "current_fix_scope": "Add body parser coverage and suppress non-body weak brand-only fallback for explicit body queries."
+  },
+  "body_parser_alias_changes": {
+    "new_aliases": [
+      "m9",
+      "m9-p",
+      "m10",
+      "m10-r",
+      "m11",
+      "sl2"
+    ],
+    "variant_carry_over": {
+      "m9-p": [
+        "P"
+      ],
+      "m10-r": [
+        "R"
+      ]
+    },
+    "token_consumption_rule": "parsed body tokens are not left behind as unknown tokens",
+    "body_alias_skip_rule": "body alias does not fire for accessory-intent or lens-family queries"
+  },
+  "category_boundary_rule": [
+    "specific body_intent implies Body category priority",
+    "top-three weak brand-only Lens fallback is suppressed for body queries",
+    "non-body top-three results count as category boundary conflict"
+  ],
+  "body_query_ranking_rule": [
+    "exact body model match > strong body-compatible match > adjacent body results > weak brand-only fallback",
+    "non-body weak brand-only fallback can be demoted below min_score for explicit body queries",
+    "recency is only meaningful inside exact/strong body-compatible groups"
+  ],
+  "market_entry_price_summary_gate_link": [
+    "body queries can satisfy exact-model-like match without focal_length when focal is not part of the query",
+    "body queries use a lower required confidence floor of 0.55 instead of 0.60",
+    "non-body results are not used as body market-entry or price-summary evidence"
+  ],
+  "query_regression_results": [
+    {
+      "query": "Leica M9",
+      "intent": {
+        "original_query": "Leica M9",
+        "normalized_query": "leica m9",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "M9",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.55,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "m9",
+            "value": "M9"
+          },
+          {
+            "type": "mount",
+            "raw": "m9",
+            "value": "M"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.55,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 42,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 152,
+      "top_result_category": "Body",
+      "top_result_model": "M9",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "leica m9",
+      "intent": {
+        "original_query": "leica m9",
+        "normalized_query": "leica m9",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "M9",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.55,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "m9",
+            "value": "M9"
+          },
+          {
+            "type": "mount",
+            "raw": "m9",
+            "value": "M"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.55,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 42,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 152,
+      "top_result_category": "Body",
+      "top_result_model": "M9",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "m9",
+      "intent": {
+        "original_query": "m9",
+        "normalized_query": "m9",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "M9",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.55,
+        "tokens": [
+          {
+            "type": "body_intent",
+            "raw": "m9",
+            "value": "M9"
+          },
+          {
+            "type": "mount",
+            "raw": "m9",
+            "value": "M"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.55,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 42,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 152,
+      "top_result_category": "Body",
+      "top_result_model": "M9",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "body_intent",
+        "mount"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "Leica M9-P",
+      "intent": {
+        "original_query": "Leica M9-P",
+        "normalized_query": "leica m9-p",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "M9-P",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [
+          "P"
+        ],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.67,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "m9-p",
+            "value": "M9-P"
+          },
+          {
+            "type": "mount",
+            "raw": "m9-p",
+            "value": "M"
+          },
+          {
+            "type": "variant",
+            "raw": "m9-p",
+            "value": "P"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.67,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 16,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 226,
+      "top_result_category": "Body",
+      "top_result_model": "M9-P",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount",
+        "variant"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "Leica M10",
+      "intent": {
+        "original_query": "Leica M10",
+        "normalized_query": "leica m10",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "M10",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.55,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "m10",
+            "value": "M10"
+          },
+          {
+            "type": "mount",
+            "raw": "m10",
+            "value": "M"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.55,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 10,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 260,
+      "top_result_category": "Body",
+      "top_result_model": "M10",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "Leica M10-R",
+      "intent": {
+        "original_query": "Leica M10-R",
+        "normalized_query": "leica m10-r",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "M10-R",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [
+          "R"
+        ],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.67,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "m10-r",
+            "value": "M10-R"
+          },
+          {
+            "type": "mount",
+            "raw": "m10-r",
+            "value": "M"
+          },
+          {
+            "type": "variant",
+            "raw": "m10-r",
+            "value": "R"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.67,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 21,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 106,
+      "top_result_category": "Body",
+      "top_result_model": "M10-R",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount",
+        "variant"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "Leica M11",
+      "intent": {
+        "original_query": "Leica M11",
+        "normalized_query": "leica m11",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "M11",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.55,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "m11",
+            "value": "M11"
+          },
+          {
+            "type": "mount",
+            "raw": "m11",
+            "value": "M"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.55,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 11,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 246,
+      "top_result_category": "Body",
+      "top_result_model": "M11",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "Leica Q3 28",
+      "intent": {
+        "original_query": "Leica Q3 28",
+        "normalized_query": "leica q3 28",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "Q3",
+        "focal_length": "28",
+        "aperture": null,
+        "mount": null,
+        "system": "Q",
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.75,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "q3",
+            "value": "Q3"
+          },
+          {
+            "type": "system",
+            "raw": "q3",
+            "value": "Q"
+          },
+          {
+            "type": "focal_length",
+            "raw": "28",
+            "value": "28"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.75,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 9,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing"
+      ],
+      "model_entry_confidence_state": "locked_market_entry_confidence",
+      "applied_sort": "relevance",
+      "total_ranked": 79,
+      "top_result_category": "Body",
+      "top_result_model": "Q3",
+      "top_result_mount": "Q",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "system"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "q3 28",
+      "intent": {
+        "original_query": "q3 28",
+        "normalized_query": "q3 28",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "Q3",
+        "focal_length": "28",
+        "aperture": null,
+        "mount": null,
+        "system": "Q",
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.75,
+        "tokens": [
+          {
+            "type": "body_intent",
+            "raw": "q3",
+            "value": "Q3"
+          },
+          {
+            "type": "system",
+            "raw": "q3",
+            "value": "Q"
+          },
+          {
+            "type": "focal_length",
+            "raw": "28",
+            "value": "28"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.75,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 31,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 71,
+      "top_result_category": "Body",
+      "top_result_model": "Q3",
+      "top_result_mount": "Q",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "body_intent",
+        "focal_length",
+        "system"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "Leica SL2",
+      "intent": {
+        "original_query": "Leica SL2",
+        "normalized_query": "leica sl2",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "SL2",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "SL",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.55,
+        "tokens": [
+          {
+            "type": "body_intent",
+            "raw": "sl2",
+            "value": "SL2"
+          },
+          {
+            "type": "mount",
+            "raw": "sl2",
+            "value": "SL"
+          },
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.55,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 29,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 213,
+      "top_result_category": "Body",
+      "top_result_model": "SL2",
+      "top_result_mount": "SL",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": true,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "Leica MP silver",
+      "intent": {
+        "original_query": "Leica MP silver",
+        "normalized_query": "leica mp silver",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": "MP",
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [
+          "Silver"
+        ],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.67,
+        "tokens": [
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          },
+          {
+            "type": "body_intent",
+            "raw": "mp",
+            "value": "MP"
+          },
+          {
+            "type": "mount",
+            "raw": "mp",
+            "value": "M"
+          },
+          {
+            "type": "variant",
+            "raw": "silver",
+            "value": "Silver"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": true,
+      "body_intent_confidence": 0.67,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": true,
+      "body_query_result_state": "exact_or_strong_body_results",
+      "body_exact_or_strong_result_count": 13,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 232,
+      "top_result_category": "Body",
+      "top_result_model": "MP",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "body_intent",
+        "mount",
+        "variant"
+      ],
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "summicron",
+      "intent": {
+        "original_query": "summicron",
+        "normalized_query": "summicron",
+        "brand": "Leica",
+        "model_family": "Summicron",
+        "body_intent": null,
+        "focal_length": null,
+        "aperture": null,
+        "mount": null,
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.5,
+        "tokens": [
+          {
+            "type": "model_family",
+            "raw": "summicron",
+            "value": "Summicron"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": false,
+      "body_intent_confidence": 0.0,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": false,
+      "body_query_result_state": "not_body_query",
+      "body_exact_or_strong_result_count": 0,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_strong_results",
+        "weak_only_fallback",
+        "low_query_intent_confidence",
+        "broad_query_refinement_required",
+        "top_result_not_strong",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing"
+      ],
+      "model_entry_confidence_state": "locked_weak_only_fallback",
+      "applied_sort": "relevance",
+      "total_ranked": 1232,
+      "top_result_category": "Lens",
+      "top_result_model": "Summicron",
+      "top_result_mount": "L",
+      "top_result_match_quality": "weak",
+      "top_result_matched_fields": [
+        "model_family"
+      ],
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "top_three_lens_domination_count": 3,
+      "ui_hints": {
+        "needs_disambiguation": true,
+        "ambiguity_type": "broad_family_alias",
+        "recommended_ui_pattern": "refinement_chips",
+        "recommended_chips": [
+          "M Lens",
+          "R Lens",
+          "SL Lens",
+          "LTM / L Lens",
+          "35mm",
+          "50mm",
+          "90mm",
+          "APO",
+          "ASPH"
+        ],
+        "suggested_filters": {
+          "category": [
+            "Lens"
+          ],
+          "mount": [
+            "M",
+            "R",
+            "SL",
+            "L"
+          ],
+          "family": [
+            "Summicron",
+            "Summicron-M",
+            "Summicron-R",
+            "Summicron-SL",
+            "APO-Summicron-SL"
+          ]
+        },
+        "hard_pin_allowed": false,
+        "recommended_message": "This is a broad Leica lens family query. Refine by mount, focal length, or variant.",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "ltm summaron 35",
+      "intent": {
+        "original_query": "ltm summaron 35",
+        "normalized_query": "ltm summaron 35",
+        "brand": "Leica",
+        "model_family": "Summaron",
+        "body_intent": null,
+        "focal_length": "35",
+        "aperture": null,
+        "mount": "L",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.78,
+        "tokens": [
+          {
+            "type": "mount",
+            "raw": "ltm",
+            "value": "L"
+          },
+          {
+            "type": "model_family",
+            "raw": "summaron",
+            "value": "Summaron"
+          },
+          {
+            "type": "focal_length",
+            "raw": "35",
+            "value": "35"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": false,
+      "body_intent_confidence": 0.0,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": false,
+      "body_query_result_state": "not_body_query",
+      "body_exact_or_strong_result_count": 0,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 197,
+      "top_result_category": "Lens",
+      "top_result_model": "Summaron",
+      "top_result_mount": "L",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "model_family",
+        "focal_length",
+        "mount"
+      ],
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "top_three_lens_domination_count": 3,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "35 lux aa",
+      "intent": {
+        "original_query": "35 lux aa",
+        "normalized_query": "35 lux aa",
+        "brand": "Leica",
+        "model_family": "Summilux",
+        "body_intent": null,
+        "focal_length": "35",
+        "aperture": null,
+        "mount": null,
+        "system": null,
+        "variant": [
+          "AA"
+        ],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.82,
+        "tokens": [
+          {
+            "type": "focal_length",
+            "raw": "35",
+            "value": "35"
+          },
+          {
+            "type": "model_family",
+            "raw": "lux",
+            "value": "Summilux"
+          },
+          {
+            "type": "variant",
+            "raw": "aa",
+            "value": "AA"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": false,
+      "body_intent_confidence": 0.0,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": false,
+      "body_query_result_state": "not_body_query",
+      "body_exact_or_strong_result_count": 0,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": true,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [],
+      "price_summary_block_reason": [
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "exact_model_confident",
+      "applied_sort": "relevance",
+      "total_ranked": 447,
+      "top_result_category": "Lens",
+      "top_result_model": "Summilux-M",
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "model_family",
+        "focal_length",
+        "variant"
+      ],
+      "top_three_categories": [
+        "Lens",
+        "Lens",
+        "Lens"
+      ],
+      "top_three_lens_domination_count": 3,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "leica hood 12585",
+      "intent": {
+        "original_query": "leica hood 12585",
+        "normalized_query": "leica hood 12585",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": null,
+        "focal_length": null,
+        "aperture": null,
+        "mount": null,
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": "hood",
+        "accessory_code": "12585",
+        "confidence": 0.43,
+        "tokens": [
+          {
+            "type": "accessory_intent",
+            "raw": "hood",
+            "value": "hood"
+          },
+          {
+            "type": "accessory_code",
+            "raw": "12585",
+            "value": "12585"
+          },
+          {
+            "type": "brand",
+            "raw": "leica",
+            "value": "Leica"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": false,
+      "body_intent_confidence": 0.0,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": false,
+      "body_query_result_state": "not_body_query",
+      "body_exact_or_strong_result_count": 0,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_low_query_intent_confidence",
+      "applied_sort": "relevance",
+      "total_ranked": 108,
+      "top_result_category": "Accessory",
+      "top_result_model": null,
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "brand",
+        "accessory_intent",
+        "accessory_code"
+      ],
+      "top_three_categories": [
+        "Accessory",
+        "Accessory",
+        "Accessory"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "m adapter l",
+      "intent": {
+        "original_query": "m adapter l",
+        "normalized_query": "m adapter l",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": null,
+        "focal_length": null,
+        "aperture": null,
+        "mount": "M",
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": "adapter",
+        "accessory_code": null,
+        "confidence": 0.43,
+        "tokens": [
+          {
+            "type": "accessory_intent",
+            "raw": "adapter",
+            "value": "adapter"
+          },
+          {
+            "type": "mount",
+            "raw": "m",
+            "value": "M"
+          },
+          {
+            "type": "unknown",
+            "raw": "l",
+            "value": "l"
+          }
+        ],
+        "warnings": []
+      },
+      "body_query_detected": false,
+      "body_intent_confidence": 0.0,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": false,
+      "body_query_result_state": "not_body_query",
+      "body_exact_or_strong_result_count": 0,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_low_query_intent_confidence",
+      "applied_sort": "relevance",
+      "total_ranked": 165,
+      "top_result_category": "Accessory",
+      "top_result_model": null,
+      "top_result_mount": "M",
+      "top_result_match_quality": "strong",
+      "top_result_matched_fields": [
+        "mount",
+        "accessory_intent"
+      ],
+      "top_three_categories": [
+        "Accessory",
+        "Accessory",
+        "Accessory"
+      ],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "ricoh gr iiix",
+      "intent": {
+        "original_query": "ricoh gr iiix",
+        "normalized_query": "ricoh gr iiix",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": null,
+        "focal_length": null,
+        "aperture": null,
+        "mount": null,
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.25,
+        "tokens": [
+          {
+            "type": "unknown",
+            "raw": "ricoh",
+            "value": "ricoh"
+          },
+          {
+            "type": "unknown",
+            "raw": "gr",
+            "value": "gr"
+          },
+          {
+            "type": "unknown",
+            "raw": "iiix",
+            "value": "iiix"
+          }
+        ],
+        "warnings": [
+          "no_structured_search_intent"
+        ]
+      },
+      "body_query_detected": false,
+      "body_intent_confidence": 0.0,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": false,
+      "body_query_result_state": "not_body_query",
+      "body_exact_or_strong_result_count": 0,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_results",
+        "no_strong_results",
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_low_query_intent_confidence",
+      "applied_sort": "relevance",
+      "total_ranked": 0,
+      "top_result_category": null,
+      "top_result_model": null,
+      "top_result_mount": null,
+      "top_result_match_quality": null,
+      "top_result_matched_fields": [],
+      "top_three_categories": [],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    },
+    {
+      "query": "hasselblad xpan",
+      "intent": {
+        "original_query": "hasselblad xpan",
+        "normalized_query": "hasselblad xpan",
+        "brand": "Leica",
+        "model_family": null,
+        "body_intent": null,
+        "focal_length": null,
+        "aperture": null,
+        "mount": null,
+        "system": null,
+        "variant": [],
+        "generation": null,
+        "filter_size": null,
+        "optical_formula": null,
+        "accessory_intent": null,
+        "accessory_code": null,
+        "confidence": 0.25,
+        "tokens": [
+          {
+            "type": "unknown",
+            "raw": "hasselblad",
+            "value": "hasselblad"
+          },
+          {
+            "type": "unknown",
+            "raw": "xpan",
+            "value": "xpan"
+          }
+        ],
+        "warnings": [
+          "no_structured_search_intent"
+        ]
+      },
+      "body_query_detected": false,
+      "body_intent_confidence": 0.0,
+      "category_boundary_conflict_detected": false,
+      "weak_brand_lens_fallback_suppressed": false,
+      "body_query_result_state": "not_body_query",
+      "body_exact_or_strong_result_count": 0,
+      "top_three_boundary_conflict_count": 0,
+      "top_three_weak_brand_lens_count": 0,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "market_entry_block_reason": [
+        "no_results",
+        "no_strong_results",
+        "low_query_intent_confidence",
+        "exact_model_like_match_missing"
+      ],
+      "price_summary_block_reason": [
+        "market_entry_not_allowed",
+        "exact_model_like_match_missing",
+        "no_query_compatible_results",
+        "no_query_compatible_priced_results"
+      ],
+      "model_entry_confidence_state": "locked_low_query_intent_confidence",
+      "applied_sort": "relevance",
+      "total_ranked": 0,
+      "top_result_category": null,
+      "top_result_model": null,
+      "top_result_mount": null,
+      "top_result_match_quality": null,
+      "top_result_matched_fields": [],
+      "top_three_categories": [],
+      "top_three_lens_domination_count": 0,
+      "ui_hints": {
+        "needs_disambiguation": false,
+        "ambiguity_type": "none",
+        "recommended_ui_pattern": "no_disambiguation_needed",
+        "recommended_chips": [],
+        "suggested_filters": {},
+        "hard_pin_allowed": false,
+        "recommended_message": "",
+        "policy_version": "p3_broad_query_ambiguity_ui_v0"
+      }
+    }
+  ],
+  "body_query_safe_handling": [
+    {
+      "query": "Leica M9",
+      "body_intent": "M9",
+      "top_result_category": "Body",
+      "top_result_model": "M9",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "leica m9",
+      "body_intent": "M9",
+      "top_result_category": "Body",
+      "top_result_model": "M9",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "m9",
+      "body_intent": "M9",
+      "top_result_category": "Body",
+      "top_result_model": "M9",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "Leica M9-P",
+      "body_intent": "M9-P",
+      "top_result_category": "Body",
+      "top_result_model": "M9-P",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "Leica M10",
+      "body_intent": "M10",
+      "top_result_category": "Body",
+      "top_result_model": "M10",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "Leica M10-R",
+      "body_intent": "M10-R",
+      "top_result_category": "Body",
+      "top_result_model": "M10-R",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "Leica M11",
+      "body_intent": "M11",
+      "top_result_category": "Body",
+      "top_result_model": "M11",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "Leica Q3 28",
+      "body_intent": "Q3",
+      "top_result_category": "Body",
+      "top_result_model": "Q3",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "q3 28",
+      "body_intent": "Q3",
+      "top_result_category": "Body",
+      "top_result_model": "Q3",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "Leica SL2",
+      "body_intent": "SL2",
+      "top_result_category": "Body",
+      "top_result_model": "SL2",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    },
+    {
+      "query": "Leica MP silver",
+      "body_intent": "MP",
+      "top_result_category": "Body",
+      "top_result_model": "MP",
+      "top_three_categories": [
+        "Body",
+        "Body",
+        "Body"
+      ],
+      "body_query_result_state": "exact_or_strong_body_results",
+      "weak_brand_lens_fallback_suppressed": true
+    }
+  ],
+  "lens_accessory_no_result_regression_results": [
+    {
+      "query": "summicron",
+      "top_result_category": "Lens",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "total_ranked": 1232
+    },
+    {
+      "query": "ltm summaron 35",
+      "top_result_category": "Lens",
+      "market_entry_allowed": true,
+      "price_summary_allowed": true,
+      "total_ranked": 197
+    },
+    {
+      "query": "35 lux aa",
+      "top_result_category": "Lens",
+      "market_entry_allowed": true,
+      "price_summary_allowed": false,
+      "total_ranked": 447
+    },
+    {
+      "query": "leica hood 12585",
+      "top_result_category": "Accessory",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "total_ranked": 108
+    },
+    {
+      "query": "m adapter l",
+      "top_result_category": "Accessory",
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "total_ranked": 165
+    },
+    {
+      "query": "ricoh gr iiix",
+      "top_result_category": null,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "total_ranked": 0
+    },
+    {
+      "query": "hasselblad xpan",
+      "top_result_category": null,
+      "market_entry_allowed": false,
+      "price_summary_allowed": false,
+      "total_ranked": 0
+    }
+  ],
+  "git_diff_summary": {
+    "branch": "beta-ui-redesign-controlled-preview",
+    "head_commit": "d0d14905657a96c977d8b4a1119813fa07711748",
+    "head_subject": "fix: prioritize body intent and category boundaries for Leica body queries",
+    "working_diff_stat": "",
+    "working_diff_files": [],
+    "head_commit_stat": "d0d1490 fix: prioritize body intent and category boundaries for Leica body queries\n api/search.py                                      |   12 +-\n ...ry_coverage_and_category_boundary_fixup_v0.json | 1832 ++++++++++++++++++++\n ...y_coverage_and_category_boundary_fixup_v0.jsonl |   19 +\n ...uery_coverage_and_category_boundary_fixup_v0.md |   58 +\n query_parser.py                                    |   58 +-\n query_resolver.py                                  |   37 +\n ...y_query_coverage_and_category_boundary_fixup.py |  404 +++++\n search_service.py                                  |   63 +\n ...y_query_coverage_and_category_boundary_fixup.py |  128 ++\n 9 files changed, 2592 insertions(+), 19 deletions(-)"
+  },
+  "commit_push_status": {
+    "commit_executed": false,
+    "push_executed": false,
+    "push_succeeded": false,
+    "preview_deployment_url": null,
+    "preview_deployment_id": null,
+    "preview_deployment_state": null,
+    "preview_branch": null,
+    "preview_commit": null,
+    "head_commit": "d0d14905657a96c977d8b4a1119813fa07711748",
+    "head_subject": "fix: prioritize body intent and category boundaries for Leica body queries"
+  },
+  "preview_deployment": {
+    "url": null,
+    "deployment_id": null,
+    "state": null,
+    "branch": null,
+    "commit": null
+  },
+  "guards": {
+    "production_launch_go": false,
+    "production_alias_connect_allowed": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "access_activation_performed": false,
+    "main_direct_push_executed": false,
+    "production_promote_executed": false,
+    "tester_link_send_allowed": false,
+    "raw_identity_recorded": false,
+    "raw_contact_recorded": false,
+    "external_link_sent": false,
+    "fake_fill_added": false
+  },
+  "production_alias_connect_allowed": false,
+  "test_verdict": {
+    "parser_failures": [],
+    "lens_domination_failures": [],
+    "category_failures": [],
+    "regression_failures": []
+  },
+  "scenario_validation": [
+    {
+      "check": "previous audit evidence loaded",
+      "status": "passed"
+    },
+    {
+      "check": "body parser aliases added and consumed",
+      "status": "passed"
+    },
+    {
+      "check": "body queries no longer let lens dominate top results",
+      "status": "passed"
+    },
+    {
+      "check": "market entry gate remains connected",
+      "status": "passed"
+    },
+    {
+      "check": "non-body regressions remain stable",
+      "status": "passed"
+    },
+    {
+      "check": "production/public/access guard remains false",
+      "status": "passed"
+    }
+  ],
+  "next_backlog_candidates": [
+    "P3-BETA-MVP-BODY-QUERY-CATEGORY-BOUNDARY-OWNER-RECHECK",
+    "P3-BETA-MVP-GLOBAL-MATCH-PRIORITY-RANKING-FIXUP",
+    "P3-BETA-MVP-QUERY-PARSER-UNKNOWN-TOKEN-COVERAGE-FIXUP",
+    "P3-BETA-MVP-BODY-QUERY-CATEGORY-BOUNDARY-PUSH-FOLLOWUP"
+  ]
+}

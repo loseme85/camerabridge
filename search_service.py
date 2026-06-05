@@ -726,6 +726,68 @@ def _sort_key_newest(result: dict[str, Any]) -> str:
     return str(final.get("crawl_time") or final.get("first_seen") or "")
 
 
+def _body_query_response_summary(intent: dict[str, Any], ranked_results: list[dict[str, Any]]) -> dict[str, Any]:
+    body_intent = str(intent.get("body_intent") or "")
+    body_query_detected = bool(body_intent)
+    if not body_query_detected:
+        return {
+            "body_query_detected": False,
+            "body_intent_confidence": 0.0,
+            "category_boundary_conflict_detected": False,
+            "weak_brand_lens_fallback_suppressed": False,
+            "body_query_result_state": "not_body_query",
+        }
+
+    top_three = ranked_results[:3]
+    exact_or_strong_body_count = 0
+    top_three_boundary_conflicts = 0
+    top_three_weak_brand_lens_count = 0
+
+    body_norm = _normalize_text(body_intent)
+    for result in ranked_results:
+        final = result.get("final_output") or {}
+        matched = set(result.get("matched_fields") or [])
+        model_norm = _normalize_text(final.get("model_canonical") or final.get("model_raw") or final.get("label"))
+        if (
+            _normalize_text(final.get("category")) == "body"
+            and result.get("match_quality") == "strong"
+            and "body_intent" in matched
+            and body_norm
+            and body_norm in model_norm
+        ):
+            exact_or_strong_body_count += 1
+
+    for result in top_three:
+        final = result.get("final_output") or {}
+        matched = list(result.get("matched_fields") or [])
+        if _normalize_text(final.get("category")) != "body":
+            top_three_boundary_conflicts += 1
+        if (
+            _normalize_text(final.get("category")) == "lens"
+            and result.get("match_quality") == "weak"
+            and matched == ["brand"]
+        ):
+            top_three_weak_brand_lens_count += 1
+
+    if exact_or_strong_body_count > 0:
+        body_query_result_state = "exact_or_strong_body_results"
+    elif ranked_results:
+        body_query_result_state = "limited_body_results"
+    else:
+        body_query_result_state = "no_safe_body_results"
+
+    return {
+        "body_query_detected": True,
+        "body_intent_confidence": float(intent.get("confidence") or 0.0),
+        "category_boundary_conflict_detected": top_three_boundary_conflicts > 0,
+        "weak_brand_lens_fallback_suppressed": top_three_weak_brand_lens_count == 0,
+        "body_query_result_state": body_query_result_state,
+        "body_exact_or_strong_result_count": exact_or_strong_body_count,
+        "top_three_boundary_conflict_count": top_three_boundary_conflicts,
+        "top_three_weak_brand_lens_count": top_three_weak_brand_lens_count,
+    }
+
+
 def apply_sort(
     ranked_results: list[dict[str, Any]],
     sort: str = "relevance",
@@ -889,6 +951,7 @@ def search_records(
         sorted_results,
         strong_only=strong_only,
     )
+    response.update(_body_query_response_summary(intent, sorted_results))
     response["warnings"] = list(response.get("warnings") or []) + sort_warnings + pagination_warnings
     return response
 

@@ -321,7 +321,13 @@ def _result_variant_conflict(intent: Mapping[str, Any], top_result: Mapping[str,
 def _exact_model_like_match(intent: Mapping[str, Any], top_result: Mapping[str, Any], expected_mount: str | None) -> bool:
     matched = set(top_result.get("matched_fields") or [])
     if intent.get("body_intent"):
-        return "body_intent" in matched and "focal_length" in matched
+        if "body_intent" not in matched:
+            return False
+        if intent.get("focal_length") and "focal_length" not in matched:
+            return False
+        if expected_mount and "mount" not in matched and "system" not in matched:
+            return False
+        return True
     if "model_family" not in matched or "focal_length" not in matched:
         return False
     if expected_mount and "mount" not in matched:
@@ -428,6 +434,7 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
 
     boundary_conflict_detected = bool(boundary_reasons)
     confidence = float(intent.get("confidence") or 0.0)
+    required_confidence = 0.55 if intent.get("body_intent") else 0.60
     exact_model_like_match = _exact_model_like_match(intent, top_result, expected_mount)
 
     market_entry_block_reason: list[str] = []
@@ -437,7 +444,7 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         market_entry_block_reason.append("no_strong_results")
     if weak_only_fallback:
         market_entry_block_reason.append("weak_only_fallback")
-    if confidence < 0.60:
+    if confidence < required_confidence:
         market_entry_block_reason.append("low_query_intent_confidence")
     if dangerous_unknown:
         market_entry_block_reason.append("dangerous_unknown_family_token")
@@ -506,6 +513,7 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         "price_summary_band": _format_price_band(compatible_results) if price_summary_allowed else "Not enough exact confidence for price summary",
         "expected_query_family": expected_family or None,
         "expected_query_mount": expected_mount,
+        "required_query_confidence": required_confidence,
     }
 
 
