@@ -624,16 +624,35 @@ PRICE_ACCESSORY_KEYWORDS = {
     "hood",
     "cap",
     "case",
+    "half case",
     "box",
     "filter",
     "finder",
     "adapter",
     "strap",
     "pouch",
+    "holster",
+    "grip",
+    "thumb rest",
+    "battery",
+    "charger",
+    "cover",
     "protector",
     "handgrip",
     "thumb support",
     "base plate",
+    "홀스터",
+    "케이스",
+    "하프케이스",
+    "하프 케이스",
+    "파우치",
+    "스트랩",
+    "배터리",
+    "충전기",
+    "그립",
+    "핸드그립",
+    "프로텍터",
+    "커버",
 }
 PRICE_REPAIR_KEYWORDS = {
     "repair",
@@ -682,6 +701,57 @@ def _result_currency(result: Mapping[str, Any]) -> str:
 def _contains_keyword(text: str, keywords: set[str]) -> bool:
     lowered = f" {_normalize_text(text)} "
     return any(f" {keyword} " in lowered for keyword in keywords)
+
+
+def _body_variant_tokens(body_intent: str) -> set[str]:
+    body = _normalize_text(body_intent)
+    tokens: set[str] = set()
+    if body == "m6":
+        tokens.update({"ttl"})
+    if body in {"m9", "m10", "m11"}:
+        base = body
+        tokens.update(
+            {
+                f"{base}-p",
+                f"{base} p",
+                f"{base}-r",
+                f"{base} r",
+                f"{base}-d",
+                f"{base} d",
+                "monochrom",
+                "reporter",
+                "safari",
+                "leitz wetzlar",
+                "edition",
+                "limited edition",
+            }
+        )
+    return tokens
+
+
+def _body_price_variant_boundary(
+    result: Mapping[str, Any],
+    query: str,
+    intent: Mapping[str, Any],
+) -> bool:
+    body_intent = str(intent.get("body_intent") or "").strip()
+    if not body_intent:
+        return False
+    query_text = f" {_normalize_text(query)} "
+    result_text = f" {_result_text_blob(result)} "
+    result_variants = {_normalize_text(item) for item in _as_list(_result_field(result, "variant")) if item}
+
+    for token in _body_variant_tokens(body_intent):
+        normalized = _normalize_text(token)
+        if not normalized:
+            continue
+        if normalized in result_variants:
+            if f" {normalized} " not in query_text:
+                return True
+            continue
+        if f" {normalized} " in result_text and f" {normalized} " not in query_text:
+            return True
+    return False
 
 
 def _query_aperture_value(intent: Mapping[str, Any], query: str) -> float | None:
@@ -871,6 +941,7 @@ def _humanize_excluded_reason(reason: str) -> str:
         "focal_mismatch": "Wrong focal length",
         "aperture_mismatch": "Wrong aperture",
         "variant_mismatch": "Wrong variant",
+        "variant_boundary": "Variant boundary",
         "body_lens_boundary_conflict": "Not compatible with this query",
         "duplicate": "Duplicate listing",
         "outlier": "Price outlier",
@@ -948,7 +1019,11 @@ def _build_price_status_message(
     market_entry_allowed: bool,
 ) -> str:
     if expected_category == "Body":
-        return "Body market summary is available." if market_entry_allowed else "Body market summary is limited."
+        if price_summary_allowed:
+            return "Body market summary is available."
+        if broader_reference_allowed:
+            return "Reference price only."
+        return "Price summary is locked."
     if price_summary_allowed:
         if price_scope == "exact_variant":
             return "Exact price is available."
@@ -1107,6 +1182,8 @@ def _build_price_evidence_pool(
 
         if category == "Accessory" or _contains_keyword(title, PRICE_ACCESSORY_KEYWORDS):
             reasons.append("accessory")
+        if intent.get("body_intent") and _body_price_variant_boundary(result, query, intent):
+            reasons.append("variant_boundary")
         if _contains_keyword(title, PRICE_REPAIR_KEYWORDS):
             reasons.append("repair_or_parts")
         if _contains_keyword(title, PRICE_RENTAL_KEYWORDS):
@@ -1488,6 +1565,8 @@ def build_market_entry_policy(
             price_summary_block_reason.append("no_query_compatible_results")
         if not exact_base_model_priced:
             price_summary_block_reason.append("no_query_compatible_priced_results")
+        if exact_base_model_priced and exact_base_model_pool["price_band_quality_state"] != "clean_exact_base_model_band":
+            price_summary_block_reason.append(exact_base_model_pool["price_band_quality_state"])
         price_summary_allowed = not price_summary_block_reason
         if price_summary_allowed:
             price_scope = "exact_base_model"
@@ -1706,6 +1785,8 @@ def build_market_entry_policy(
         unlock_requirements.append("Need cleaned price band within an acceptable width.")
     if boundary_conflict_detected:
         unlock_requirements.append("Need no boundary conflict between family, mount, and variant.")
+    if price_summary_allowed:
+        unlock_requirements = []
 
     exact_variant_signatures = {_result_signature(result) for result in exact_variant_pool["cleaned_results"]}
     exact_base_signatures = {_result_signature(result) for result in exact_base_model_pool["cleaned_results"]}
