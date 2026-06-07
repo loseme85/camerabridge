@@ -619,6 +619,386 @@ def _format_price_band(results: list[Mapping[str, Any]]) -> str:
     return f"{currency} {formatter(min(values))} - {formatter(max(values))}"
 
 
+PRICE_ACCESSORY_KEYWORDS = {
+    "hood",
+    "cap",
+    "case",
+    "box",
+    "filter",
+    "finder",
+    "adapter",
+    "strap",
+    "pouch",
+    "protector",
+    "handgrip",
+    "thumb support",
+    "base plate",
+}
+PRICE_REPAIR_KEYWORDS = {
+    "repair",
+    "parts",
+    "for parts",
+    "junk",
+    "고장",
+    "부품",
+    "수리",
+}
+PRICE_RENTAL_KEYWORDS = {
+    "deposit",
+    "예약금",
+    "rental",
+    "렌탈",
+}
+THIRD_PARTY_PRICE_KEYWORDS = {
+    "voigtlander",
+    "nokton",
+    "zeiss",
+    "ttartisan",
+    "7artisans",
+    "light lens lab",
+    "canon",
+    "nikon",
+    "sigma",
+    "panasonic",
+    "lumix",
+    "leeworks",
+    "thypoch",
+    "laowa",
+    "konica",
+    "cooke",
+}
+PRICE_ALLOWED_SOLD_QUALITIES = {"asking", "sold_confirmed", "sold_likely", "sold", "unknown"}
+
+
+def _result_title(result: Mapping[str, Any]) -> str:
+    return str(result.get("title") or "")
+
+
+def _result_currency(result: Mapping[str, Any]) -> str:
+    return str(result.get("currency") or "")
+
+
+def _contains_keyword(text: str, keywords: set[str]) -> bool:
+    lowered = f" {_normalize_text(text)} "
+    return any(f" {keyword} " in lowered for keyword in keywords)
+
+
+def _query_aperture_value(intent: Mapping[str, Any], query: str) -> float | None:
+    raw = str(intent.get("aperture") or _query_aperture_hint(query) or "").strip()
+    if not raw:
+        return None
+    try:
+        return float(raw)
+    except ValueError:
+        return None
+
+
+def _extract_aperture_values(text: str) -> list[float]:
+    values: list[float] = []
+    for match in re.findall(r"(?:f\s*/?\s*|/)(0?\.\d+|\d+(?:\.\d+)?)\b", text.lower()):
+        try:
+            values.append(float(match))
+        except ValueError:
+            continue
+    return values
+
+
+def _result_matches_aperture_value(result: Mapping[str, Any], query_aperture: float | None) -> bool:
+    if query_aperture is None:
+        return True
+    text = _result_text_blob(result)
+    candidates = _extract_aperture_values(text)
+    if not candidates:
+        return False
+    return any(abs(candidate - query_aperture) <= 0.11 for candidate in candidates)
+
+
+def _normalize_dedupe_title(text: str) -> str:
+    normalized = _normalize_text(text)
+    normalized = re.sub(r"\bsn\.?\s*\d+\b", "", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return normalized
+
+
+def _percentile(values: list[float], percentile: float) -> float:
+    if not values:
+        return 0.0
+    ordered = sorted(values)
+    if len(ordered) == 1:
+        return ordered[0]
+    index = (len(ordered) - 1) * percentile
+    lower = int(index)
+    upper = min(lower + 1, len(ordered) - 1)
+    weight = index - lower
+    return ordered[lower] * (1 - weight) + ordered[upper] * weight
+
+
+def _pool_width_ratio(results: list[Mapping[str, Any]]) -> float | None:
+    values = sorted(
+        numeric
+        for numeric in (_parse_price_number(result.get("price")) for result in results)
+        if numeric is not None and numeric > 0
+    )
+    if not values:
+        return None
+    low = min(values)
+    high = max(values)
+    if low <= 0:
+        return None
+    return high / low
+
+
+def _price_band_from_cleaned_results(results: list[Mapping[str, Any]]) -> dict[str, Any]:
+    priced: list[tuple[float, str]] = []
+    for result in results:
+        numeric = _parse_price_number(result.get("price"))
+        if numeric is None:
+            continue
+        priced.append((numeric, _result_currency(result)))
+    if not priced:
+        return {
+            "band": "Not enough exact confidence for price summary",
+            "raw_price_min": None,
+            "raw_price_max": None,
+            "currency": None,
+        }
+    currencies = sorted({currency or "Unknown" for _, currency in priced})
+    values = [value for value, _ in priced]
+    if len(currencies) != 1:
+        return {
+            "band": "Mixed currencies",
+            "raw_price_min": min(values),
+            "raw_price_max": max(values),
+            "currency": None,
+        }
+    currency = currencies[0]
+    formatter = lambda num: f"{num:,.0f}"
+    return {
+        "band": f"{currency} {formatter(min(values))} - {formatter(max(values))}",
+        "raw_price_min": min(values),
+        "raw_price_max": max(values),
+        "currency": currency,
+    }
+
+
+def _result_matches_price_base_model_scope(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    query_aperture: float | None,
+) -> bool:
+    if not _result_matches_base_model_scope(result, intent, expected_family, expected_mount):
+        return False
+    return _result_matches_aperture_value(result, query_aperture)
+
+
+def _result_matches_price_exact_variant_scope(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    signals: list[dict[str, str]],
+    query_aperture: float | None,
+) -> bool:
+    if not _result_matches_price_base_model_scope(result, intent, expected_family, expected_mount, query_aperture):
+        return False
+    return all(_result_matches_signal(result, signal) for signal in signals)
+
+
+def _result_matches_price_broader_family_scope(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    query_aperture: float | None,
+) -> bool:
+    if not _result_matches_broader_family_scope(result, intent, expected_family, expected_mount):
+        return False
+    return _result_matches_aperture_value(result, query_aperture)
+
+
+def _build_price_evidence_pool(
+    results: list[Mapping[str, Any]],
+    *,
+    pool_scope: str,
+    query: str,
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    variant_signals: list[dict[str, str]],
+    query_aperture: float | None,
+) -> dict[str, Any]:
+    query_brand = _normalize_text(intent.get("brand"))
+    raw_pool = list(results)
+    raw_priced = [result for result in raw_pool if _parse_price_number(result.get("price")) is not None]
+
+    kept: list[Mapping[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+    excluded_reason_counts: dict[str, int] = {}
+
+    for result in raw_priced:
+        reasons: list[str] = []
+        title = _result_title(result)
+        title_blob = _normalize_text(title)
+        category = str(_result_field(result, "category") or "")
+        sold_quality = _normalize_text(_result_field(result, "sold_quality"))
+
+        if category == "Accessory" or _contains_keyword(title, PRICE_ACCESSORY_KEYWORDS):
+            reasons.append("accessory")
+        if _contains_keyword(title, PRICE_REPAIR_KEYWORDS):
+            reasons.append("repair_or_parts")
+        if _contains_keyword(title, PRICE_RENTAL_KEYWORDS):
+            reasons.append("deposit_or_rental")
+        if query_brand == "leica" and _contains_keyword(title, THIRD_PARTY_PRICE_KEYWORDS):
+            reasons.append("third_party")
+        if sold_quality and sold_quality not in PRICE_ALLOWED_SOLD_QUALITIES:
+            reasons.append("sold_status_incompatible")
+        if category not in {"Lens", "Body"}:
+            reasons.append("category_mismatch")
+        if _result_classification_conflict(result):
+            reasons.append("classification_conflict")
+
+        scope_match = True
+        if pool_scope == "exact_variant":
+            scope_match = _result_matches_price_exact_variant_scope(
+                result,
+                intent,
+                expected_family,
+                expected_mount,
+                variant_signals,
+                query_aperture,
+            )
+        elif pool_scope == "exact_base_model":
+            scope_match = _result_matches_price_base_model_scope(
+                result,
+                intent,
+                expected_family,
+                expected_mount,
+                query_aperture,
+            )
+        elif pool_scope == "broader_model_family":
+            scope_match = _result_matches_price_broader_family_scope(
+                result,
+                intent,
+                expected_family,
+                expected_mount,
+                query_aperture,
+            )
+        if not scope_match:
+            reasons.append("wrong_model")
+
+        if reasons:
+            for reason in reasons:
+                excluded_reason_counts[reason] = excluded_reason_counts.get(reason, 0) + 1
+            excluded.append({"result": result, "reasons": reasons})
+            continue
+        kept.append(result)
+
+    deduped: list[Mapping[str, Any]] = []
+    seen_keys: set[tuple[str, str, str]] = set()
+    duplicate_removed_count = 0
+    for result in kept:
+        key = (
+            _normalize_dedupe_title(_result_title(result)),
+            str(_parse_price_number(result.get("price")) or ""),
+            _result_currency(result),
+        )
+        if key in seen_keys:
+            duplicate_removed_count += 1
+            excluded_reason_counts["duplicate"] = excluded_reason_counts.get("duplicate", 0) + 1
+            excluded.append({"result": result, "reasons": ["duplicate"]})
+            continue
+        seen_keys.add(key)
+        deduped.append(result)
+
+    outlier_removed_count = 0
+    cleaned = list(deduped)
+    values = sorted(
+        numeric
+        for numeric in (_parse_price_number(result.get("price")) for result in deduped)
+        if numeric is not None
+    )
+    if len(values) >= 4:
+        q1 = _percentile(values, 0.25)
+        q3 = _percentile(values, 0.75)
+        iqr = q3 - q1
+        lower = max(0.0, q1 - 1.5 * iqr)
+        upper = q3 + 1.5 * iqr
+        trimmed: list[Mapping[str, Any]] = []
+        for result in cleaned:
+            numeric = _parse_price_number(result.get("price"))
+            if numeric is None:
+                continue
+            if numeric < lower or numeric > upper:
+                outlier_removed_count += 1
+                excluded_reason_counts["outlier"] = excluded_reason_counts.get("outlier", 0) + 1
+                excluded.append({"result": result, "reasons": ["outlier"]})
+                continue
+            trimmed.append(result)
+        cleaned = trimmed
+
+    raw_band = _price_band_from_cleaned_results(raw_priced)
+    cleaned_band = _price_band_from_cleaned_results(cleaned)
+    width_ratio = _pool_width_ratio(cleaned)
+
+    thresholds = {
+        "exact_variant": {"min_count": 2, "max_ratio": 3.0, "clean_state": "clean_exact_variant_band"},
+        "exact_base_model": {"min_count": 2, "max_ratio": 4.0, "clean_state": "clean_exact_base_model_band"},
+        "broader_model_family": {"min_count": 3, "max_ratio": 2.0, "clean_state": "clean_broader_reference_band"},
+    }
+    threshold = thresholds[pool_scope]
+
+    quality_reasons: list[str] = []
+    if not cleaned:
+        if excluded_reason_counts.get("accessory"):
+            quality_state = "accessory_contaminated"
+        elif excluded_reason_counts.get("third_party"):
+            quality_state = "third_party_contaminated"
+        elif excluded_reason_counts.get("wrong_model"):
+            quality_state = "wrong_model_contaminated"
+        else:
+            quality_state = "insufficient_priced_evidence"
+        quality_reasons.append("no_clean_priced_evidence")
+    elif len(cleaned) < threshold["min_count"]:
+        quality_state = "insufficient_priced_evidence"
+        quality_reasons.append("not_enough_clean_priced_evidence")
+    elif width_ratio is not None and width_ratio > threshold["max_ratio"]:
+        quality_state = "too_noisy_broader_reference" if pool_scope == "broader_model_family" else "too_wide_price_band"
+        quality_reasons.append("cleaned_price_band_too_wide")
+    else:
+        quality_state = threshold["clean_state"]
+        if outlier_removed_count:
+            quality_reasons.append("outliers_removed")
+        if duplicate_removed_count:
+            quality_reasons.append("duplicates_removed")
+
+    return {
+        "pool_scope": pool_scope,
+        "raw_results": raw_pool,
+        "raw_priced_results": raw_priced,
+        "cleaned_results": cleaned,
+        "raw_pool_count": len(raw_pool),
+        "priced_count": len(raw_priced),
+        "cleaned_pool_count": len(cleaned),
+        "excluded_pool_count": len(excluded),
+        "excluded_reason_counts": excluded_reason_counts,
+        "raw_price_min": raw_band["raw_price_min"],
+        "raw_price_max": raw_band["raw_price_max"],
+        "cleaned_price_min": cleaned_band["raw_price_min"],
+        "cleaned_price_max": cleaned_band["raw_price_max"],
+        "cleaned_band": cleaned_band["band"],
+        "price_band_width_ratio": width_ratio,
+        "price_band_quality_state": quality_state,
+        "price_band_quality_reason": quality_reasons,
+        "outlier_removed_count": outlier_removed_count,
+        "duplicate_removed_count": duplicate_removed_count,
+        "accessory_price_excluded_count": excluded_reason_counts.get("accessory", 0),
+        "third_party_price_excluded_count": excluded_reason_counts.get("third_party", 0),
+        "wrong_model_price_excluded_count": excluded_reason_counts.get("wrong_model", 0),
+    }
+
+
 def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints: Mapping[str, Any]) -> dict[str, Any]:
     intent = response.get("intent") or {}
     results = list(response.get("results") or [])
@@ -686,15 +1066,47 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         if _result_matches_broader_family_scope(result, intent, expected_family, expected_mount)
     ]
     variant_signals = _query_variant_signals(intent)
+    query_aperture = _query_aperture_value(intent, query)
     exact_variant_results = [
         result
         for result in results
         if variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals)
     ]
 
-    exact_variant_priced = _priced_results(exact_variant_results)
-    exact_base_model_priced = _priced_results(exact_base_model_results)
-    broader_family_priced = _priced_results(broader_family_results)
+    exact_variant_pool = _build_price_evidence_pool(
+        exact_variant_results,
+        pool_scope="exact_variant",
+        query=query,
+        intent=intent,
+        expected_family=expected_family,
+        expected_mount=expected_mount,
+        variant_signals=variant_signals,
+        query_aperture=query_aperture,
+    )
+    exact_base_model_pool = _build_price_evidence_pool(
+        exact_base_model_results,
+        pool_scope="exact_base_model",
+        query=query,
+        intent=intent,
+        expected_family=expected_family,
+        expected_mount=expected_mount,
+        variant_signals=variant_signals,
+        query_aperture=query_aperture,
+    )
+    broader_family_pool = _build_price_evidence_pool(
+        broader_family_results,
+        pool_scope="broader_model_family",
+        query=query,
+        intent=intent,
+        expected_family=expected_family,
+        expected_mount=expected_mount,
+        variant_signals=variant_signals,
+        query_aperture=query_aperture,
+    )
+
+    exact_variant_priced = list(exact_variant_pool["cleaned_results"])
+    exact_base_model_priced = list(exact_base_model_pool["cleaned_results"])
+    broader_family_priced = list(broader_family_pool["cleaned_results"])
     exact_variant_strong_visible = _strong_results(exact_variant_results)
     exact_base_model_strong_visible = _strong_results(exact_base_model_results)
     aperture_hint = _query_aperture_hint(query)
@@ -757,10 +1169,26 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
     broader_reference_allowed = False
     broader_reference_label = None
     broader_reference_band = None
+    broader_reference_locked_reason: str | None = None
     entry_scope = "parent_model" if market_entry_allowed else "hold_conflict"
     price_scope = "insufficient_exact_data"
     price_scope_label = "Price summary locked"
     price_scope_confidence_state = "price_scope_locked"
+    price_evidence_scope = "insufficient_exact_data"
+    price_band_quality_state = "insufficient_priced_evidence"
+    price_band_quality_reason: list[str] = []
+    raw_price_min = None
+    raw_price_max = None
+    cleaned_price_min = None
+    cleaned_price_max = None
+    price_band_width_ratio = None
+    excluded_pool_count = 0
+    excluded_reason_counts: dict[str, int] = {}
+    outlier_removed_count = 0
+    accessory_price_excluded_count = 0
+    third_party_price_excluded_count = 0
+    wrong_model_price_excluded_count = 0
+    unlock_requirements: list[str] = []
 
     if intent.get("body_intent"):
         if not market_entry_allowed:
@@ -776,27 +1204,41 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
             price_scope = "exact_base_model"
             price_scope_label = "Exact base model price"
             price_scope_confidence_state = "exact_base_model_ready"
+            price_evidence_scope = "exact_base_model"
+            price_band_quality_state = "clean_exact_base_model_band"
         elif boundary_conflict_detected:
             price_scope = "blocked_boundary_conflict"
             price_scope_label = "Price summary locked"
             price_scope_confidence_state = "boundary_conflict_locked"
+            price_evidence_scope = "blocked_boundary_conflict"
+            price_band_quality_state = "locked_boundary_conflict"
         elif weak_only_fallback:
             price_scope = "blocked_weak_only"
             price_scope_label = "Price summary locked"
             price_scope_confidence_state = "weak_only_locked"
+            price_evidence_scope = "blocked_weak_only"
+            price_band_quality_state = "locked_weak_only"
         else:
             price_scope = "insufficient_exact_data"
             price_scope_label = "Price summary locked"
             price_scope_confidence_state = "body_price_scope_locked"
+            price_evidence_scope = "insufficient_exact_data"
     elif boundary_conflict_detected:
         price_summary_allowed = False
         price_summary_block_reason.append("boundary_conflict")
         price_scope = "blocked_boundary_conflict"
         price_scope_label = "Price summary locked"
         price_scope_confidence_state = "boundary_conflict_locked"
+        price_evidence_scope = "blocked_boundary_conflict"
+        price_band_quality_state = "locked_boundary_conflict"
     elif variant_signals:
         entry_scope = "exact_variant" if market_entry_allowed else entry_scope
-        if len(exact_variant_priced) >= 2 and price_scope_search_aligned:
+        price_evidence_scope = "exact_variant"
+        if (
+            len(exact_variant_priced) >= 2
+            and price_scope_search_aligned
+            and exact_variant_pool["price_band_quality_state"] == "clean_exact_variant_band"
+        ):
             price_summary_allowed = True
             price_scope = "exact_variant"
             price_scope_label = "Exact variant price"
@@ -817,51 +1259,77 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
                 price_scope_confidence_state = "exact_variant_data_limited"
             if len(exact_variant_priced) < 2:
                 price_summary_block_reason.append("insufficient_exact_variant_priced_results")
+            if exact_variant_pool["price_band_quality_state"] not in {"clean_exact_variant_band", "insufficient_priced_evidence"}:
+                price_summary_block_reason.append(exact_variant_pool["price_band_quality_state"])
             price_summary_block_reason.extend(
                 reason
                 for reason in price_scope_search_alignment_reason
                 if reason not in price_summary_block_reason
             )
-            reference_source = exact_base_model_priced or broader_family_priced
-            if reference_source:
-                broader_reference_allowed = True
-                broader_reference_label = "Broader family reference"
-                broader_reference_band = _format_price_band(reference_source)
+            reference_pool = exact_base_model_pool if exact_base_model_priced else broader_family_pool
+            if reference_pool["cleaned_results"]:
+                if reference_pool["price_band_quality_state"] == "clean_broader_reference_band":
+                    broader_reference_allowed = True
+                    broader_reference_label = "Broader family reference"
+                    broader_reference_band = reference_pool["cleaned_band"]
+                elif reference_pool["price_band_quality_state"] == "clean_exact_base_model_band":
+                    broader_reference_allowed = True
+                    broader_reference_label = "Broader family reference"
+                    broader_reference_band = reference_pool["cleaned_band"]
+                else:
+                    broader_reference_allowed = False
+                    broader_reference_locked_reason = reference_pool["price_band_quality_state"]
     elif weak_only_fallback:
         price_summary_allowed = False
         price_summary_block_reason.append("weak_only_fallback")
         price_scope = "blocked_weak_only"
         price_scope_label = "Price summary locked"
         price_scope_confidence_state = "weak_only_locked"
+        price_evidence_scope = "blocked_weak_only"
+        price_band_quality_state = "locked_weak_only"
     elif aperture_only_variant:
         price_summary_allowed = False
         price_scope = "broader_model_family"
         price_scope_label = "Broader family reference"
         price_scope_confidence_state = "broader_family_reference_only"
         price_summary_block_reason.append("aperture_only_scope_requires_broader_reference")
-        if broader_family_priced:
+        price_evidence_scope = "broader_model_family"
+        if broader_family_priced and broader_family_pool["price_band_quality_state"] == "clean_broader_reference_band":
             broader_reference_allowed = True
             broader_reference_label = "Broader family reference"
-            broader_reference_band = _format_price_band(broader_family_priced)
+            broader_reference_band = broader_family_pool["cleaned_band"]
+        elif broader_family_pool["cleaned_results"]:
+            broader_reference_locked_reason = broader_family_pool["price_band_quality_state"]
     else:
+        price_evidence_scope = "exact_base_model"
         if not market_entry_allowed:
             price_summary_block_reason.append("market_entry_not_allowed")
         if not exact_base_model_results:
             price_summary_block_reason.append("no_query_compatible_results")
         if not exact_base_model_priced:
             price_summary_block_reason.append("no_query_compatible_priced_results")
+        if (
+            exact_base_model_priced
+            and exact_base_model_pool["price_band_quality_state"] != "clean_exact_base_model_band"
+        ):
+            price_summary_block_reason.append(exact_base_model_pool["price_band_quality_state"])
         price_summary_allowed = not price_summary_block_reason
         if price_summary_allowed:
             price_scope = "exact_base_model"
             price_scope_label = "Exact base model price"
             price_scope_confidence_state = "exact_base_model_ready"
-        elif broader_family_priced:
+        elif broader_family_priced and broader_family_pool["price_band_quality_state"] == "clean_broader_reference_band":
             price_scope = "broader_model_family"
             price_scope_label = "Broader family reference"
             price_scope_confidence_state = "broader_family_reference_only"
             broader_reference_allowed = True
             broader_reference_label = "Broader family reference"
-            broader_reference_band = _format_price_band(broader_family_priced)
+            broader_reference_band = broader_family_pool["cleaned_band"]
+        elif broader_family_pool["cleaned_results"]:
+            price_scope = "insufficient_exact_data"
+            price_scope_label = "Price summary locked"
+            price_scope_confidence_state = "price_scope_locked"
+            broader_reference_locked_reason = broader_family_pool["price_band_quality_state"]
         else:
             price_scope = "insufficient_exact_data"
             price_scope_label = "Price summary locked"
@@ -891,6 +1359,41 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         or (not price_summary_allowed and price_scope_label in {"Exact variant price data limited", "Broader family reference", "Price summary locked"})
     )
 
+    selected_pool = exact_variant_pool
+    if price_evidence_scope == "exact_base_model":
+        selected_pool = exact_base_model_pool
+    elif price_evidence_scope == "broader_model_family":
+        selected_pool = broader_family_pool
+    elif price_scope == "broader_model_family" and broader_family_pool["cleaned_results"]:
+        selected_pool = broader_family_pool
+
+    price_band_quality_state = str(selected_pool["price_band_quality_state"])
+    price_band_quality_reason = list(selected_pool["price_band_quality_reason"])
+    raw_price_min = selected_pool["raw_price_min"]
+    raw_price_max = selected_pool["raw_price_max"]
+    cleaned_price_min = selected_pool["cleaned_price_min"]
+    cleaned_price_max = selected_pool["cleaned_price_max"]
+    price_band_width_ratio = selected_pool["price_band_width_ratio"]
+    excluded_pool_count = int(selected_pool["excluded_pool_count"])
+    excluded_reason_counts = dict(selected_pool["excluded_reason_counts"])
+    outlier_removed_count = int(selected_pool["outlier_removed_count"])
+    accessory_price_excluded_count = int(selected_pool["accessory_price_excluded_count"])
+    third_party_price_excluded_count = int(selected_pool["third_party_price_excluded_count"])
+    wrong_model_price_excluded_count = int(selected_pool["wrong_model_price_excluded_count"])
+
+    if variant_signals and len(exact_variant_priced) < 2:
+        unlock_requirements.append("Need 2+ exact variant priced listings.")
+    if variant_signals and not exact_or_strong_visible_result_count:
+        unlock_requirements.append("Need exact or strong compatible visible Leica results.")
+    if excluded_reason_counts.get("accessory"):
+        unlock_requirements.append("Need no accessory contamination in the selected price pool.")
+    if excluded_reason_counts.get("third_party"):
+        unlock_requirements.append("Need no third-party contamination in the selected price pool.")
+    if price_band_quality_state in {"too_wide_price_band", "too_noisy_broader_reference"}:
+        unlock_requirements.append("Need cleaned price band within an acceptable width.")
+    if boundary_conflict_detected:
+        unlock_requirements.append("Need no boundary conflict between family, mount, and variant.")
+
     return {
         "market_entry_allowed": market_entry_allowed,
         "market_entry_block_reason": market_entry_block_reason,
@@ -906,6 +1409,7 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         "compatible_result_count": len(compatible_results),
         "market_entry_metrics": compatible_counts,
         "entry_scope": entry_scope,
+        "price_evidence_scope": price_evidence_scope,
         "price_scope": price_scope,
         "price_scope_label": price_scope_label,
         "price_scope_confidence_state": price_scope_confidence_state,
@@ -917,19 +1421,42 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         "price_scope_search_alignment_reason": price_scope_search_alignment_reason,
         "variant_tokens_detected": [signal["value"] for signal in variant_signals],
         "exact_variant_result_count": len(exact_variant_results),
+        "exact_variant_pool_count": int(exact_variant_pool["cleaned_pool_count"]),
         "exact_variant_priced_count": len(exact_variant_priced),
         "exact_base_model_result_count": len(exact_base_model_results),
+        "exact_base_model_pool_count": int(exact_base_model_pool["cleaned_pool_count"]),
         "exact_base_model_priced_count": len(exact_base_model_priced),
         "broader_family_result_count": len(broader_family_results),
+        "broader_family_pool_count": int(broader_family_pool["cleaned_pool_count"]),
         "broader_family_priced_count": len(broader_family_priced),
+        "excluded_pool_count": excluded_pool_count,
+        "excluded_reason_counts": excluded_reason_counts,
+        "raw_price_min": raw_price_min,
+        "raw_price_max": raw_price_max,
+        "cleaned_price_min": cleaned_price_min,
+        "cleaned_price_max": cleaned_price_max,
+        "price_band_width_ratio": price_band_width_ratio,
+        "price_band_quality_state": price_band_quality_state,
+        "price_band_quality_reason": price_band_quality_reason,
+        "outlier_removed_count": outlier_removed_count,
+        "accessory_price_excluded_count": accessory_price_excluded_count,
+        "third_party_price_excluded_count": third_party_price_excluded_count,
+        "wrong_model_price_excluded_count": wrong_model_price_excluded_count,
         "broader_reference_allowed": broader_reference_allowed,
         "broader_reference_label": broader_reference_label,
         "broader_reference_band": broader_reference_band,
+        "broader_reference_locked_reason": broader_reference_locked_reason,
+        "broader_reference_quality_state": broader_family_pool["price_band_quality_state"],
+        "broader_reference_quality_reason": broader_family_pool["price_band_quality_reason"],
+        "broader_reference_pool_count": int(broader_family_pool["cleaned_pool_count"]),
+        "broader_reference_excluded_pool_count": int(broader_family_pool["excluded_pool_count"]),
+        "broader_reference_outlier_removed_count": int(broader_family_pool["outlier_removed_count"]),
+        "unlock_requirements": unlock_requirements,
         "current_ui_label_safe": current_ui_label_safe,
         "price_summary_band": (
-            _format_price_band(exact_variant_results)
+            exact_variant_pool["cleaned_band"]
             if price_summary_allowed and price_scope == "exact_variant"
-            else _format_price_band(exact_base_model_results)
+            else exact_base_model_pool["cleaned_band"]
             if price_summary_allowed
             else "Exact variant price data limited"
             if price_scope == "insufficient_exact_data"
