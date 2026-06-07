@@ -431,6 +431,36 @@
       opacity:0.45;
       pointer-events:none;
     }
+    .query-review-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:8px;
+    }
+    .query-review-copy{
+      min-width:124px;
+      padding:8px 14px;
+      border-color:rgba(178,29,36,0.28);
+      background:var(--accent-soft);
+      color:var(--accent);
+      font-weight:700;
+      box-shadow:inset 0 0 0 1px rgba(178,29,36,0.04);
+    }
+    .query-review-copy:hover{
+      border-color:rgba(178,29,36,0.38);
+      background:rgba(178,29,36,0.12);
+      color:var(--accent);
+    }
+    .query-review-unlock-list{
+      margin:0;
+      padding-left:18px;
+      display:grid;
+      gap:6px;
+      color:var(--text-soft);
+    }
+    .query-review-unlock-list li{margin:0}
     .market-topline{
       display:flex;
       align-items:flex-start;
@@ -1184,9 +1214,9 @@
       `).join('') : '';
       return `
         <article class="state-card">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div class="query-review-header">
             <h3 style="margin:0;">Query review</h3>
-            <button type="button" class="ghost-button" data-copy-query-review="true">${escapeHtml(review.copy_button_label || 'Copy summary')}</button>
+            <button type="button" class="ghost-button query-review-copy" data-copy-query-review="true">${escapeHtml(review.copy_button_label || 'Copy summary')}</button>
           </div>
           <p>You searched: “${escapeHtml(review.query || state.query || '')}”</p>
           <div class="metric-grid">
@@ -1194,7 +1224,7 @@
             <div class="metric-card"><b>Price status</b><span>${escapeHtml(review.price_status || policy.display_price_scope_label || 'Price summary locked')}</span></div>
             <div class="metric-card"><b>Why</b><span>${escapeHtml(review.why || policy.display_match_state_message || review.match_state || 'Price summary locked')}</span></div>
             <div class="metric-card"><b>Evidence</b><span>${escapeHtml(review.evidence_summary || summary.summary_line || 'Evidence is still limited')}</span></div>
-            ${unlock.length ? `<div class="metric-card"><b>Price unlock condition</b><span>${escapeHtml(unlock.join(' / '))}</span></div>` : ''}
+            ${unlock.length ? `<div class="metric-card"><b>Price unlock condition</b><ul class="query-review-unlock-list">${unlock.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></div>` : ''}
             <div class="metric-card"><b>Category</b><span>${escapeHtml(review.category || 'Unknown')}</span></div>
           </div>
           ${evidenceCardHtml ? `<div class="metric-grid">${evidenceCardHtml}</div>` : ''}

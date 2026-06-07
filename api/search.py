@@ -1894,8 +1894,9 @@ def build_market_entry_policy(
         f"Evidence: {display_query_review['evidence_summary']}",
     ]
     if display_query_review["needed_to_unlock"]:
-        copy_summary_lines.append(
-            "Price unlock condition: " + " / ".join(display_query_review["needed_to_unlock"])
+        copy_summary_lines.append("Price stays locked until:")
+        copy_summary_lines.extend(
+            f"- {item}" for item in display_query_review["needed_to_unlock"]
         )
     if top_summary_lines:
         copy_summary_lines.append("Top visible evidence:")
