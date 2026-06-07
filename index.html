@@ -1063,6 +1063,12 @@
           price_scope: 'insufficient_exact_data',
           price_scope_label: 'Price summary locked',
           price_scope_confidence_state: 'price_scope_locked',
+          search_confidence_state: 'no_response',
+          top_result_compatibility: 'no_response',
+          exact_or_strong_visible_result_count: 0,
+          third_party_top_domination_detected: false,
+          price_scope_search_aligned: false,
+          price_scope_search_alignment_reason: [],
           broader_reference_allowed: false,
           broader_reference_label: null,
           broader_reference_band: null,
@@ -1080,6 +1086,12 @@
         price_scope: state.response.price_scope || 'insufficient_exact_data',
         price_scope_label: state.response.price_scope_label || 'Price summary locked',
         price_scope_confidence_state: state.response.price_scope_confidence_state || 'price_scope_locked',
+        search_confidence_state: state.response.search_confidence_state || 'unknown',
+        top_result_compatibility: state.response.top_result_compatibility || 'unknown',
+        exact_or_strong_visible_result_count: Number(state.response.exact_or_strong_visible_result_count || 0),
+        third_party_top_domination_detected: Boolean(state.response.third_party_top_domination_detected),
+        price_scope_search_aligned: Boolean(state.response.price_scope_search_aligned),
+        price_scope_search_alignment_reason: state.response.price_scope_search_alignment_reason || [],
         broader_reference_allowed: Boolean(state.response.broader_reference_allowed),
         broader_reference_label: state.response.broader_reference_label || null,
         broader_reference_band: state.response.broader_reference_band || null,
@@ -1299,6 +1311,7 @@
       const counts = policy.market_entry_metrics || buildMarketCounts(results);
       const quality = getQualitySummary();
       const blockedReasons = Array.isArray(policy.market_entry_block_reason) ? policy.market_entry_block_reason : [];
+      const alignmentReasons = Array.isArray(policy.price_scope_search_alignment_reason) ? policy.price_scope_search_alignment_reason : [];
       const priceScopeLabel = escapeHtml(policy.price_scope_label || 'Price summary locked');
       const exactPriceBand = policy.price_summary_allowed
         ? escapeHtml(policy.price_summary_band || formatPriceBand(results))
@@ -1332,8 +1345,8 @@
               <div class="metric-card"><b>${priceScopeLabel}</b><span>${exactPriceBand}</span></div>
               ${broaderReferenceHtml}
               <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
-              <div class="metric-card"><b>Price confidence</b><span>${escapeHtml(policy.price_scope === 'insufficient_exact_data' ? 'Exact variant data limited' : policy.price_scope_confidence_state || 'Model-level summary is gated')}</span></div>
-              <div class="metric-card"><b>Why locked</b><span>${escapeHtml(blockedReasons.slice(0, 2).join(', ') || policy.model_entry_confidence_state || 'confidence gate active')}</span></div>
+              <div class="metric-card"><b>Price confidence</b><span>${escapeHtml(policy.price_scope === 'insufficient_exact_data' ? 'Exact variant data limited' : policy.search_confidence_state || policy.price_scope_confidence_state || 'Model-level summary is gated')}</span></div>
+              <div class="metric-card"><b>Why locked</b><span>${escapeHtml(alignmentReasons.slice(0, 2).join(', ') || blockedReasons.slice(0, 2).join(', ') || policy.model_entry_confidence_state || 'confidence gate active')}</span></div>
             </div>
             <div class="state-actions">
               <button type="button" class="ghost-button"${uiHints.needs_disambiguation ? '' : ''}>Refine this search</button>
@@ -1351,7 +1364,7 @@
       const priceBand = exactPriceBand;
       const priceConfidence = policy.price_summary_allowed
         ? escapeHtml(quality.display_message || 'Reference only')
-        : escapeHtml(policy.price_scope === 'insufficient_exact_data' ? 'Exact variant price data limited' : 'Price summary locked');
+        : escapeHtml(policy.price_scope === 'insufficient_exact_data' ? 'Exact variant price data limited' : policy.search_confidence_state || 'Price summary locked');
       const primaryCta = policy.price_summary_allowed ? 'Create alert for this exact model' : 'Refine this search';
       return `
         <article class="market-entry-card">

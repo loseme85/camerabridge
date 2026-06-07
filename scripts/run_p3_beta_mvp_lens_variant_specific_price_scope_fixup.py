@@ -41,9 +41,12 @@ SCOPED_FILES = [
 ]
 
 EXACT_VARIANT_READY = [
-    "Summilux-M 50 ASPH",
     "Summicron 35 8-element",
     "Summicron 50 rigid",
+]
+
+SEARCH_CONFIDENCE_MISMATCH = [
+    "Summilux-M 50 ASPH",
 ]
 
 VARIANT_DATA_LIMITED = [
@@ -73,7 +76,7 @@ REGRESSION_QUERIES = [
     "Leica M11",
 ]
 
-ALL_QUERIES = EXACT_VARIANT_READY + VARIANT_DATA_LIMITED + BROADER_FAMILY_ONLY + BOUNDARY_LOCKED + REGRESSION_QUERIES
+ALL_QUERIES = SEARCH_CONFIDENCE_MISMATCH + EXACT_VARIANT_READY + VARIANT_DATA_LIMITED + BROADER_FAMILY_ONLY + BOUNDARY_LOCKED + REGRESSION_QUERIES
 
 
 def run_git(*args: str) -> str:
@@ -150,11 +153,18 @@ def classify_failures(rows: dict[str, dict[str, Any]]) -> tuple[list[str], list[
         if row["price_scope_label"] != "Exact variant price":
             ready_regressions.append(query)
 
+    for query in SEARCH_CONFIDENCE_MISMATCH:
+        row = rows[query]
+        if row["price_summary_allowed"]:
+            unsafe.append(query)
+        if row["price_scope_label"] != "Price summary locked":
+            unsafe.append(query)
+
     for query in VARIANT_DATA_LIMITED:
         row = rows[query]
         if row["price_summary_allowed"]:
             unsafe.append(query)
-        if row["price_scope_label"] != "Exact variant price data limited":
+        if row["price_scope_label"] not in {"Exact variant price data limited", "Price summary locked"}:
             unsafe.append(query)
         if not row["current_ui_label_safe"]:
             unsafe.append(query)
@@ -256,6 +266,7 @@ def build_payload(push_context: dict[str, Any] | None = None) -> dict[str, Any]:
         "previous_audit_summary": {
             "decision_status": "lens_variant_specific_price_scope_policy_audit_completed_ready_for_fixup",
             "exact_variant_ready_queries": EXACT_VARIANT_READY,
+            "search_confidence_mismatch_queries": SEARCH_CONFIDENCE_MISMATCH,
             "exact_variant_data_limited_queries": VARIANT_DATA_LIMITED,
             "broader_family_only_queries": BROADER_FAMILY_ONLY,
             "blocked_boundary_conflict_queries": BOUNDARY_LOCKED,

@@ -50,7 +50,7 @@ class LensVariantSpecificPriceScopeFixupTests(unittest.TestCase):
             with self.subTest(query=query):
                 row = self.rows[query]
                 self.assertFalse(row["price_summary_allowed"])
-                self.assertEqual(row["price_scope_label"], "Exact variant price data limited")
+                self.assertIn(row["price_scope_label"], {"Exact variant price data limited", "Price summary locked"})
                 self.assertTrue(row["current_ui_label_safe"])
 
     def test_limited_queries_can_offer_broader_reference_only(self) -> None:
@@ -61,12 +61,18 @@ class LensVariantSpecificPriceScopeFixupTests(unittest.TestCase):
                 self.assertEqual(row["broader_reference_label"], "Broader family reference")
 
     def test_exact_variant_ready_queries_stay_open(self) -> None:
-        for query in ["Summilux-M 50 ASPH", "Summicron 35 8-element", "Summicron 50 rigid"]:
+        for query in ["Summicron 35 8-element", "Summicron 50 rigid"]:
             with self.subTest(query=query):
                 row = self.rows[query]
                 self.assertTrue(row["price_summary_allowed"])
                 self.assertEqual(row["price_scope"], "exact_variant")
                 self.assertEqual(row["price_scope_label"], "Exact variant price")
+
+    def test_summilux_m_50_asph_locks_when_search_confidence_is_weak(self) -> None:
+        row = self.rows["Summilux-M 50 ASPH"]
+        self.assertFalse(row["price_summary_allowed"])
+        self.assertEqual(row["price_scope_label"], "Price summary locked")
+        self.assertTrue(row["broader_reference_allowed"])
 
     def test_broader_family_only_queries_do_not_look_exact(self) -> None:
         for query in ["Noctilux 50 0.95", "Summaron 35 2.8"]:

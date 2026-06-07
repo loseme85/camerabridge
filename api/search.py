@@ -382,6 +382,10 @@ def _result_text_blob(result: Mapping[str, Any]) -> str:
     return _normalize_text(" ".join(str(item) for item in parts if item))
 
 
+def _result_brand(result: Mapping[str, Any]) -> str:
+    return str((result.get("final_output") or {}).get("brand") or "")
+
+
 def _query_aperture_hint(query: str) -> str | None:
     lowered = _normalize_text(query)
     match = re.search(r"(?:f\s*|/)(0?\.\d+|\d+(?:\.\d+)?)\b", lowered)
@@ -530,6 +534,10 @@ def _result_matches_broader_family_scope(
 
 def _priced_results(results: list[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
     return [result for result in results if _parse_price_number(result.get("price")) is not None]
+
+
+def _strong_results(results: list[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    return [result for result in results if str(result.get("match_quality") or "") == "strong"]
 
 
 def _exact_model_like_match(intent: Mapping[str, Any], top_result: Mapping[str, Any], expected_mount: str | None) -> bool:
@@ -687,6 +695,8 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
     exact_variant_priced = _priced_results(exact_variant_results)
     exact_base_model_priced = _priced_results(exact_base_model_results)
     broader_family_priced = _priced_results(broader_family_results)
+    exact_variant_strong_visible = _strong_results(exact_variant_results)
+    exact_base_model_strong_visible = _strong_results(exact_base_model_results)
     aperture_hint = _query_aperture_hint(query)
     aperture_only_variant = (
         not intent.get("body_intent")
@@ -695,6 +705,53 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         and bool(expected_family)
         and bool(intent.get("focal_length"))
     )
+    exact_or_strong_visible_result_count = len(exact_variant_strong_visible if variant_signals else exact_base_model_strong_visible)
+    third_party_top_domination_detected = bool(
+        expected_category == "Lens"
+        and str(intent.get("brand") or "").lower() == "leica"
+        and top_result
+        and _result_brand(top_result)
+        and _result_brand(top_result).lower() != "leica"
+    )
+
+    if not top_result:
+        top_result_compatibility = "no_results"
+    elif boundary_conflict_detected:
+        top_result_compatibility = "boundary_conflict"
+    elif third_party_top_domination_detected:
+        top_result_compatibility = "third_party_top_domination"
+    elif variant_signals and _result_matches_exact_variant_scope(top_result, intent, expected_family, expected_mount, variant_signals):
+        top_result_compatibility = "exact_variant_strong" if str(top_result.get("match_quality") or "") == "strong" else "exact_variant_weak"
+    elif _result_matches_base_model_scope(top_result, intent, expected_family, expected_mount):
+        top_result_compatibility = "exact_base_model_strong" if str(top_result.get("match_quality") or "") == "strong" else "exact_base_model_weak"
+    elif _result_matches_broader_family_scope(top_result, intent, expected_family, expected_mount):
+        top_result_compatibility = "broader_family_only"
+    else:
+        top_result_compatibility = "query_incompatible"
+
+    price_scope_search_alignment_reason: list[str] = []
+    if weak_only_fallback:
+        price_scope_search_alignment_reason.append("weak_only_fallback")
+    if boundary_conflict_detected:
+        price_scope_search_alignment_reason.append("boundary_conflict")
+    if third_party_top_domination_detected:
+        price_scope_search_alignment_reason.append("third_party_top_domination")
+    if exact_or_strong_visible_result_count <= 0:
+        price_scope_search_alignment_reason.append("no_exact_or_strong_visible_results")
+
+    price_scope_search_aligned = not price_scope_search_alignment_reason
+    if not results:
+        search_confidence_state = "no_results"
+    elif boundary_conflict_detected:
+        search_confidence_state = "boundary_conflict"
+    elif weak_only_fallback:
+        search_confidence_state = "weak_only_fallback"
+    elif third_party_top_domination_detected:
+        search_confidence_state = "third_party_top_domination"
+    elif exact_or_strong_visible_result_count <= 0:
+        search_confidence_state = "no_exact_or_strong_visible_results"
+    else:
+        search_confidence_state = "search_aligned_exact_or_strong_visible"
 
     price_summary_block_reason: list[str] = []
     broader_reference_allowed = False
@@ -739,24 +796,37 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         price_scope_confidence_state = "boundary_conflict_locked"
     elif variant_signals:
         entry_scope = "exact_variant" if market_entry_allowed else entry_scope
-        if len(exact_variant_priced) >= 2:
+        if len(exact_variant_priced) >= 2 and price_scope_search_aligned:
             price_summary_allowed = True
             price_scope = "exact_variant"
             price_scope_label = "Exact variant price"
-            price_scope_confidence_state = "exact_variant_ready"
+            price_scope_confidence_state = "exact_variant_ready_search_aligned"
         else:
             price_summary_allowed = False
-            price_scope = "insufficient_exact_data"
-            price_scope_label = "Exact variant price data limited"
-            price_scope_confidence_state = "exact_variant_data_limited"
-            price_summary_block_reason.append("insufficient_exact_variant_priced_results")
+            if weak_only_fallback:
+                price_scope = "blocked_weak_only"
+                price_scope_label = "Price summary locked"
+                price_scope_confidence_state = "exact_variant_search_mismatch"
+            elif third_party_top_domination_detected or exact_or_strong_visible_result_count <= 0:
+                price_scope = "blocked_weak_only"
+                price_scope_label = "Price summary locked"
+                price_scope_confidence_state = "exact_variant_search_mismatch"
+            else:
+                price_scope = "insufficient_exact_data"
+                price_scope_label = "Exact variant price data limited"
+                price_scope_confidence_state = "exact_variant_data_limited"
+            if len(exact_variant_priced) < 2:
+                price_summary_block_reason.append("insufficient_exact_variant_priced_results")
+            price_summary_block_reason.extend(
+                reason
+                for reason in price_scope_search_alignment_reason
+                if reason not in price_summary_block_reason
+            )
             reference_source = exact_base_model_priced or broader_family_priced
             if reference_source:
                 broader_reference_allowed = True
                 broader_reference_label = "Broader family reference"
                 broader_reference_band = _format_price_band(reference_source)
-            elif weak_only_fallback:
-                price_summary_block_reason.append("weak_only_fallback")
     elif weak_only_fallback:
         price_summary_allowed = False
         price_summary_block_reason.append("weak_only_fallback")
@@ -839,6 +909,12 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         "price_scope": price_scope,
         "price_scope_label": price_scope_label,
         "price_scope_confidence_state": price_scope_confidence_state,
+        "search_confidence_state": search_confidence_state,
+        "top_result_compatibility": top_result_compatibility,
+        "exact_or_strong_visible_result_count": exact_or_strong_visible_result_count,
+        "third_party_top_domination_detected": third_party_top_domination_detected,
+        "price_scope_search_aligned": price_scope_search_aligned,
+        "price_scope_search_alignment_reason": price_scope_search_alignment_reason,
         "variant_tokens_detected": [signal["value"] for signal in variant_signals],
         "exact_variant_result_count": len(exact_variant_results),
         "exact_variant_priced_count": len(exact_variant_priced),
