@@ -1,0 +1,2660 @@
+{
+  "task_name": "P3-BETA-MVP-QUERY-REVIEW-EVIDENCE-UI-POLISH-FOLLOWUP",
+  "decision_status": "query_review_evidence_ui_polish_followup_passed_ready_for_owner_approved_push",
+  "owner_recheck_result_summary": "Logic stayed conservative, but Query review still exposed too many internal/debug terms for external tester review.",
+  "ui_polish_goal": "Translate evidence pools, unlock reasons, and top result roles into tester-facing language without loosening any pricing or routing guard.",
+  "files_changed_scope": [
+    "api/search.py",
+    "app/templates/index.html",
+    "index.html",
+    "scripts/run_p3_beta_mvp_query_review_evidence_ui_polish_followup.py",
+    "tests/test_beta_mvp_query_review_evidence_ui_polish_followup.py",
+    "data/admin/p3_beta_mvp_query_review_evidence_ui_polish_followup_v0.md",
+    "data/admin/p3_beta_mvp_query_review_evidence_ui_polish_followup_v0.jsonl",
+    "data/admin/query_review_evidence_ui_polish_followup_v0.json"
+  ],
+  "query_results": [
+    {
+      "query": "35 lux aa",
+      "display_query_review": {
+        "query": "35 lux aa",
+        "interpreted_target": "Leica Summilux 35 AA candidate",
+        "category": "Lens",
+        "match_state": "No exact strong visible listings yet.",
+        "price_status": "Reference price only.",
+        "why": "AA-specific price evidence is not enough yet.",
+        "evidence_summary": "Price evidence found: 0 exact AA listings, 39 same-base listings, 39 broader references. Excluded from price: 0 listings.",
+        "evidence_cards": [
+          "Exact AA evidence: 0",
+          "Same base model evidence: 39",
+          "Reference evidence: 39",
+          "Excluded from price: 0"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked until at least 2 exact variant listings have reliable prices.",
+          "Price stays locked until the visible search results strongly match this Leica item."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: 35 lux aa\nInterpreted as: Leica Summilux 35 AA candidate\nCategory: Lens\nMatch status: No exact strong visible listings yet.\nPrice status: Reference price only.\nWhy: AA-specific price evidence is not enough yet.\nEvidence: Price evidence found: 0 exact AA listings, 39 same-base listings, 39 broader references. Excluded from price: 0 listings.\nPrice unlock condition: Price stays locked until at least 2 exact variant listings have reliable prices. / Price stays locked until the visible search results strongly match this Leica item.\nTop visible evidence:\n1. [위탁] M 35/1.4 Summilux 3세대 (2매) (Black) — Same base model — Not used — Price outlier\n2. [중고] M 35/1.4 Summilux 3세대 (2매) (Black) — Same base model — Not used — Price outlier\n3. [중고] M35/1.4 Summilux 2매 (Black) — Same base model — Not used — Price outlier"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "[위탁] M 35/1.4 Summilux 3세대 (2매) (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "25,300,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Price outlier",
+          "excluded_reason": [
+            "Price outlier"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "[중고] M 35/1.4 Summilux 3세대 (2매) (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "33,800,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Price outlier",
+          "excluded_reason": [
+            "Price outlier"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "[중고] M35/1.4 Summilux 2매 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "28,800,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Price outlier",
+          "excluded_reason": [
+            "Price outlier"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 35mm F1.4 ASPHERICAL SUMMILUX-M sn.3460",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 35mm F1.4 ASPHERICAL SUMMILUX-M sn.3461",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Price summary locked",
+      "display_price_band": "Price summary locked",
+      "display_broader_reference_allowed": true,
+      "display_broader_reference_label": "Exact base model reference",
+      "display_broader_reference_band": "KRW 3,380,000 - 8,200,000",
+      "display_match_state_message": "No exact strong visible listings yet.",
+      "display_unlock_requirements": [
+        "Price stays locked until at least 2 exact variant listings have reliable prices.",
+        "Price stays locked until the visible search results strongly match this Leica item."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 39,
+        "broader_family_pool_count": 39,
+        "excluded_pool_count": 0,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": true,
+        "price_band_quality_state": "Exact variant price data is limited",
+        "summary_line": "Price evidence found: 0 exact AA listings, 39 same-base listings, 39 broader references. Excluded from price: 0 listings.",
+        "exact_variant_label": "Exact AA evidence: 0",
+        "same_model_label": "Same base model evidence: 39",
+        "reference_label": "Reference evidence: 39",
+        "excluded_label": "Excluded from price: 0"
+      },
+      "price_summary_band": "Price summary locked",
+      "broader_reference_band": "KRW 3,380,000 - 8,200,000",
+      "top_display_category": "Lens",
+      "top_display_model": "Summilux-M",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": true
+      }
+    },
+    {
+      "query": "Noctilux 50 f1 E60",
+      "display_query_review": {
+        "query": "Noctilux 50 f1 E60",
+        "interpreted_target": "Leica Noctilux 50 f1 E60 candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Reference price only.",
+        "why": "E60-specific price evidence is not enough yet.",
+        "evidence_summary": "Price evidence found: 1 exact E60 listing, 9 same-base listings, 9 broader references. Excluded from price: 0 listings.",
+        "evidence_cards": [
+          "Exact E60 evidence: 1",
+          "Same base model evidence: 9",
+          "Reference evidence: 9",
+          "Excluded from price: 0"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked until at least 2 exact variant listings have reliable prices."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Noctilux 50 f1 E60\nInterpreted as: Leica Noctilux 50 f1 E60 candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Reference price only.\nWhy: E60-specific price evidence is not enough yet.\nEvidence: Price evidence found: 1 exact E60 listing, 9 same-base listings, 9 broader references. Excluded from price: 0 listings.\nPrice unlock condition: Price stays locked until at least 2 exact variant listings have reliable prices.\nTop visible evidence:\n1. [중고] M 50/1.0 Noctilux 3세대 E60 (Black) — Exact variant — Exact match visible, but not enough to unlock price yet\n2. Leica 12475 Hood Black for M 50mm F1.2 Noctilux ASPH — Not compatible with this query — Not used — not compatible with this query\n3. Leeworks M 50mm f1.1 Noctilux M Silver — Same base model — Not used — Third-party item"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "[중고] M 50/1.0 Noctilux 3세대 E60 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,380,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": false,
+          "price_usage_label": "Exact match visible, but not enough to unlock price yet",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "Leica 12475 Hood Black for M 50mm F1.2 Noctilux ASPH",
+          "source": "사진집",
+          "price": "300,000원",
+          "compatibility_label": "Query incompatible",
+          "result_role_label": "Not compatible with this query",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Accessory",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "Leeworks M 50mm f1.1 Noctilux M Silver",
+          "source": "사진집",
+          "price": "990,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Third-party item",
+          "excluded_reason": [
+            "Third-party item"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "Leica M 50mm f1.2 Noctilux 1st Black",
+          "source": "사진집",
+          "price": "53,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Different model",
+          "excluded_reason": [
+            "Different model"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,580,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Different model",
+          "excluded_reason": [
+            "Different model"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Exact variant price data limited",
+      "display_price_band": "Exact variant price data limited",
+      "display_broader_reference_allowed": true,
+      "display_broader_reference_label": "Exact base model reference",
+      "display_broader_reference_band": "KRW 5,900,000 - 8,880,000",
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [
+        "Price stays locked until at least 2 exact variant listings have reliable prices."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 1,
+        "exact_base_model_pool_count": 9,
+        "broader_family_pool_count": 9,
+        "excluded_pool_count": 0,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": true,
+        "price_band_quality_state": "Exact variant price data is limited",
+        "summary_line": "Price evidence found: 1 exact E60 listing, 9 same-base listings, 9 broader references. Excluded from price: 0 listings.",
+        "exact_variant_label": "Exact E60 evidence: 1",
+        "same_model_label": "Same base model evidence: 9",
+        "reference_label": "Reference evidence: 9",
+        "excluded_label": "Excluded from price: 0"
+      },
+      "price_summary_band": "Exact variant price data limited",
+      "broader_reference_band": "KRW 5,900,000 - 8,880,000",
+      "top_display_category": "Lens",
+      "top_display_model": "Noctilux",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": true
+      }
+    },
+    {
+      "query": "Summicron 50 rigid",
+      "display_query_review": {
+        "query": "Summicron 50 rigid",
+        "interpreted_target": "Leica Summicron 50 Rigid candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Exact price is available.",
+        "why": "Clean exact variant price evidence",
+        "evidence_summary": "Price evidence found: 10 exact Rigid listings, 21 same-base listings, 21 broader references. Excluded from price: 4 listings.",
+        "evidence_cards": [
+          "Exact Rigid evidence: 10",
+          "Same base model evidence: 21",
+          "Reference evidence: 21",
+          "Excluded from price: 4"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Summicron 50 rigid\nInterpreted as: Leica Summicron 50 Rigid candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Exact price is available.\nWhy: Clean exact variant price evidence\nEvidence: Price evidence found: 10 exact Rigid listings, 21 same-base listings, 21 broader references. Excluded from price: 4 listings.\nTop visible evidence:\n1. Leica L 50mm f2 Summicron Rigid Silver — Exact variant — Used for exact price\n2. [중고] L 50/2 Summicron Rigid 전기형 (Silver) — Exact variant — Not used — Duplicate listing\n3. [중고] L 50/2 Summicron Rigid 전기형 (Silver) — Exact variant — Not used — Duplicate listing"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica L 50mm f2 Summicron Rigid Silver",
+          "source": "사진집",
+          "price": "3,500,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron"
+        },
+        {
+          "title": "[중고] L 50/2 Summicron Rigid 전기형 (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "4,230,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summicron"
+        },
+        {
+          "title": "[중고] L 50/2 Summicron Rigid 전기형 (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "4,230,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summicron"
+        },
+        {
+          "title": "Leica M 50mm f2 Summicron Rigid Silver",
+          "source": "사진집",
+          "price": "2,500,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron-M"
+        },
+        {
+          "title": "Leica M 50mm f 2 Summicron Rigid BlackRepaint",
+          "source": "사진집",
+          "price": "3,500,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron-M"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact variant price",
+      "display_price_band": "KRW 2,400,000 - 3,500,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 10,
+        "exact_base_model_pool_count": 21,
+        "broader_family_pool_count": 21,
+        "excluded_pool_count": 4,
+        "outlier_removed_count": 2,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean exact variant price evidence",
+        "summary_line": "Price evidence found: 10 exact Rigid listings, 21 same-base listings, 21 broader references. Excluded from price: 4 listings.",
+        "exact_variant_label": "Exact Rigid evidence: 10",
+        "same_model_label": "Same base model evidence: 21",
+        "reference_label": "Reference evidence: 21",
+        "excluded_label": "Excluded from price: 4"
+      },
+      "price_summary_band": "KRW 2,400,000 - 3,500,000",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Summicron",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Summicron 35 8-element",
+      "display_query_review": {
+        "query": "Summicron 35 8-element",
+        "interpreted_target": "Leica Summicron 35 8-element candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Exact price is available.",
+        "why": "Clean exact variant price evidence",
+        "evidence_summary": "Price evidence found: 29 exact 8-element listings, 31 same-base listings, 31 broader references. Excluded from price: 3 listings.",
+        "evidence_cards": [
+          "Exact 8-element evidence: 29",
+          "Same base model evidence: 31",
+          "Reference evidence: 31",
+          "Excluded from price: 3"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Summicron 35 8-element\nInterpreted as: Leica Summicron 35 8-element candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Exact price is available.\nWhy: Clean exact variant price evidence\nEvidence: Price evidence found: 29 exact 8-element listings, 31 same-base listings, 31 broader references. Excluded from price: 3 listings.\nTop visible evidence:\n1. [위탁] L 35/2 Summicron 6군8매 (Black repaint) — Exact variant — Used for exact price\n2. [중고] L 35/2 Summicron 6군8매 (Black repaint) — Exact variant — Used for exact price\n3. [중고] L 35/2 Summicron 6군 8매 (Silver) — Exact variant — Used for exact price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "[위탁] L 35/2 Summicron 6군8매 (Black repaint)",
+          "source": "라이카스토어 충무로",
+          "price": "6,200,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron"
+        },
+        {
+          "title": "[중고] L 35/2 Summicron 6군8매 (Black repaint)",
+          "source": "라이카스토어 충무로",
+          "price": "6,280,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron"
+        },
+        {
+          "title": "[중고] L 35/2 Summicron 6군 8매 (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "6,880,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron"
+        },
+        {
+          "title": "[중고] M 35/2 Summicron 6군8매 (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "7,580,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron-M"
+        },
+        {
+          "title": "[위탁] M 35/2 Summicron 6군8매 Canada (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "6,050,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summicron-M"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact variant price",
+      "display_price_band": "KRW 2,970,000 - 8,600,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 29,
+        "exact_base_model_pool_count": 31,
+        "broader_family_pool_count": 31,
+        "excluded_pool_count": 3,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean exact variant price evidence",
+        "summary_line": "Price evidence found: 29 exact 8-element listings, 31 same-base listings, 31 broader references. Excluded from price: 3 listings.",
+        "exact_variant_label": "Exact 8-element evidence: 29",
+        "same_model_label": "Same base model evidence: 31",
+        "reference_label": "Reference evidence: 31",
+        "excluded_label": "Excluded from price: 3"
+      },
+      "price_summary_band": "KRW 2,970,000 - 8,600,000",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Summicron",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Leica Summilux-M 50mm f1.4 3세대",
+      "display_query_review": {
+        "query": "Leica Summilux-M 50mm f1.4 3세대",
+        "interpreted_target": "Leica Summilux-M 50 f1.4 3rd candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Reference price only.",
+        "why": "3rd-specific price evidence is not enough yet.",
+        "evidence_summary": "Price evidence found: 1 exact 3rd listing, 33 same-base listings, 33 broader references. Excluded from price: 0 listings.",
+        "evidence_cards": [
+          "Exact 3rd evidence: 1",
+          "Same base model evidence: 33",
+          "Reference evidence: 33",
+          "Excluded from price: 0"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked until at least 2 exact variant listings have reliable prices."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Leica Summilux-M 50mm f1.4 3세대\nInterpreted as: Leica Summilux-M 50 f1.4 3rd candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Reference price only.\nWhy: 3rd-specific price evidence is not enough yet.\nEvidence: Price evidence found: 1 exact 3rd listing, 33 same-base listings, 33 broader references. Excluded from price: 0 listings.\nPrice unlock condition: Price stays locked until at least 2 exact variant listings have reliable prices.\nTop visible evidence:\n1. LEICA 50mm F1.4 (3rd) SUMMILUX sn.3446 — Exact variant — Exact match visible, but not enough to unlock price yet\n2. LEICA 50mm F1.4 (3rd) SUMMILUX sn.2345 — Exact variant — Not used — not compatible with this query\n3. LEICA 50mm F1.4 (3rd) SUMMILUX sn.2629 — Exact variant — Not used — not compatible with this query"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.3446",
+          "source": "장씨카메라",
+          "price": "2,700,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": false,
+          "price_usage_label": "Exact match visible, but not enough to unlock price yet",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.2345",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.2629",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.3076",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "Leica M 50mm f1.4 Summilux Classic Silver",
+          "source": "사진집",
+          "price": "5,500,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Exact variant price data limited",
+      "display_price_band": "Exact variant price data limited",
+      "display_broader_reference_allowed": true,
+      "display_broader_reference_label": "Exact base model reference",
+      "display_broader_reference_band": "KRW 2,500,000 - 6,150,000",
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [
+        "Price stays locked until at least 2 exact variant listings have reliable prices."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 1,
+        "exact_base_model_pool_count": 33,
+        "broader_family_pool_count": 33,
+        "excluded_pool_count": 0,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": true,
+        "price_band_quality_state": "Exact variant price data is limited",
+        "summary_line": "Price evidence found: 1 exact 3rd listing, 33 same-base listings, 33 broader references. Excluded from price: 0 listings.",
+        "exact_variant_label": "Exact 3rd evidence: 1",
+        "same_model_label": "Same base model evidence: 33",
+        "reference_label": "Reference evidence: 33",
+        "excluded_label": "Excluded from price: 0"
+      },
+      "price_summary_band": "Exact variant price data limited",
+      "broader_reference_band": "KRW 2,500,000 - 6,150,000",
+      "top_display_category": "Lens",
+      "top_display_model": "Summilux-M",
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": true
+      }
+    },
+    {
+      "query": "Summilux 50 3rd generation",
+      "display_query_review": {
+        "query": "Summilux 50 3rd generation",
+        "interpreted_target": "Leica Summilux 50 3rd candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Exact price is available.",
+        "why": "Clean exact variant price evidence",
+        "evidence_summary": "Price evidence found: 4 exact 3rd listings, 40 same-base listings, 40 broader references. Excluded from price: 1 listing.",
+        "evidence_cards": [
+          "Exact 3rd evidence: 4",
+          "Same base model evidence: 40",
+          "Reference evidence: 40",
+          "Excluded from price: 1"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Summilux 50 3rd generation\nInterpreted as: Leica Summilux 50 3rd candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Exact price is available.\nWhy: Clean exact variant price evidence\nEvidence: Price evidence found: 4 exact 3rd listings, 40 same-base listings, 40 broader references. Excluded from price: 1 listing.\nTop visible evidence:\n1. LEICA 50mm F1.4 (3rd) SUMMILUX sn.3446 — Exact variant — Used for exact price\n2. LEICA 50mm F1.4 (3rd) SUMMILUX sn.2345 — Exact variant — Not used — not compatible with this query\n3. LEICA 50mm F1.4 (3rd) SUMMILUX sn.2629 — Exact variant — Not used — not compatible with this query"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.3446",
+          "source": "장씨카메라",
+          "price": "2,700,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": true,
+          "price_usage_label": "Used for exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.2345",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.2629",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "LEICA 50mm F1.4 (3rd) SUMMILUX sn.3076",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "[중고] L 50/1.4 Summilux 4세대 (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "3,880,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact variant price",
+      "display_price_band": "KRW 2,600,000 - 2,940,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 4,
+        "exact_base_model_pool_count": 40,
+        "broader_family_pool_count": 40,
+        "excluded_pool_count": 1,
+        "outlier_removed_count": 1,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean exact variant price evidence",
+        "summary_line": "Price evidence found: 4 exact 3rd listings, 40 same-base listings, 40 broader references. Excluded from price: 1 listing.",
+        "exact_variant_label": "Exact 3rd evidence: 4",
+        "same_model_label": "Same base model evidence: 40",
+        "reference_label": "Reference evidence: 40",
+        "excluded_label": "Excluded from price: 1"
+      },
+      "price_summary_band": "KRW 2,600,000 - 2,940,000",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Summilux-M",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Summilux-M 50 ASPH",
+      "display_query_review": {
+        "query": "Summilux-M 50 ASPH",
+        "interpreted_target": "Leica Summilux-M 50 ASPH candidate",
+        "category": "Lens",
+        "match_state": "Results are visible, but not strong enough for model-level pricing.",
+        "price_status": "Reference price only.",
+        "why": "Top visible results include third-party or adjacent items.",
+        "evidence_summary": "Price evidence found: 24 exact ASPH listings, 24 same-base listings, 24 broader references. Excluded from price: 6 listings.",
+        "evidence_cards": [
+          "Exact ASPH evidence: 24",
+          "Same base model evidence: 24",
+          "Reference evidence: 24",
+          "Excluded from price: 6"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked until the visible search results strongly match this Leica item."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Summilux-M 50 ASPH\nInterpreted as: Leica Summilux-M 50 ASPH candidate\nCategory: Lens\nMatch status: Results are visible, but not strong enough for model-level pricing.\nPrice status: Reference price only.\nWhy: Top visible results include third-party or adjacent items.\nEvidence: Price evidence found: 24 exact ASPH listings, 24 same-base listings, 24 broader references. Excluded from price: 6 listings.\nPrice unlock condition: Price stays locked until the visible search results strongly match this Leica item.\nTop visible evidence:\n1. Voigtlander M 50mm f1.5 II Nokton Aspherical Vintage Line Silver — Third-party or adjacent result — Not used — Third-party item\n2. Voigtlander M 50mm f1.5 II Nokton Aspherical Vintage Line Nikel — Broader reference — Not used — Third-party item\n3. Leica M 50mm f1.4 Summilux ASPH 6bit Silver — Exact variant — Exact match visible, but not enough to unlock price yet"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Voigtlander M 50mm f1.5 II Nokton Aspherical Vintage Line Silver",
+          "source": "사진집",
+          "price": "700,000원",
+          "compatibility_label": "Third-party top result",
+          "result_role_label": "Third-party or adjacent result",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Third-party item",
+          "excluded_reason": [
+            "Third-party item"
+          ],
+          "display_category": "Lens",
+          "display_model": "Nokton"
+        },
+        {
+          "title": "Voigtlander M 50mm f1.5 II Nokton Aspherical Vintage Line Nikel",
+          "source": "사진집",
+          "price": "750,000원",
+          "compatibility_label": "Broader family",
+          "result_role_label": "Broader reference",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Third-party item",
+          "excluded_reason": [
+            "Third-party item"
+          ],
+          "display_category": "Lens",
+          "display_model": "Nokton"
+        },
+        {
+          "title": "Leica M 50mm f1.4 Summilux ASPH 6bit Silver",
+          "source": "사진집",
+          "price": "3,650,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": false,
+          "price_usage_label": "Exact match visible, but not enough to unlock price yet",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "Leica M 50mm f1.4 Summilux ASPH 6bit Black chrome finish e43",
+          "source": "사진집",
+          "price": "5,000,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "exact_variant_pool",
+          "evidence_pool_label": "Used for exact price",
+          "used_for_price": false,
+          "price_usage_label": "Exact match visible, but not enough to unlock price yet",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summilux-M"
+        },
+        {
+          "title": "Leica SL 50mm f2 APO-Summicron ASPH Black",
+          "source": "사진집",
+          "price": "3,900,000원",
+          "compatibility_label": "Query incompatible",
+          "result_role_label": "Not compatible with this query",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "APO-Summicron"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Price summary locked",
+      "display_price_band": "Price summary locked",
+      "display_broader_reference_allowed": true,
+      "display_broader_reference_label": "Exact base model reference",
+      "display_broader_reference_band": "KRW 3,150,000 - 6,900,000",
+      "display_match_state_message": "Results are visible, but not strong enough for model-level pricing.",
+      "display_unlock_requirements": [
+        "Price stays locked until the visible search results strongly match this Leica item."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 24,
+        "exact_base_model_pool_count": 24,
+        "broader_family_pool_count": 24,
+        "excluded_pool_count": 6,
+        "outlier_removed_count": 2,
+        "broader_reference_allowed": true,
+        "price_band_quality_state": "Clean exact variant price evidence",
+        "summary_line": "Price evidence found: 24 exact ASPH listings, 24 same-base listings, 24 broader references. Excluded from price: 6 listings.",
+        "exact_variant_label": "Exact ASPH evidence: 24",
+        "same_model_label": "Same base model evidence: 24",
+        "reference_label": "Reference evidence: 24",
+        "excluded_label": "Excluded from price: 6"
+      },
+      "price_summary_band": "Price summary locked",
+      "broader_reference_band": "KRW 3,150,000 - 6,900,000",
+      "top_display_category": "Lens",
+      "top_display_model": "Nokton",
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": true
+      }
+    },
+    {
+      "query": "Noctilux 50 0.95",
+      "display_query_review": {
+        "query": "Noctilux 50 0.95",
+        "interpreted_target": "Leica Noctilux 50 f0.95 candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Exact variant price data is limited.",
+        "why": "Exact or strong compatible listings are visible.",
+        "evidence_summary": "Price evidence found: 20 same-base listings, 20 broader references. Excluded from price: 17 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 20",
+          "Reference evidence: 20",
+          "Excluded from price: 17"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked because the selected evidence still includes third-party or adjacent items.",
+          "Price stays locked until the remaining price range is narrow enough to show safely."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Noctilux 50 0.95\nInterpreted as: Leica Noctilux 50 f0.95 candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Exact variant price data is limited.\nWhy: Exact or strong compatible listings are visible.\nEvidence: Price evidence found: 20 same-base listings, 20 broader references. Excluded from price: 17 listings.\nPrice unlock condition: Price stays locked because the selected evidence still includes third-party or adjacent items. / Price stays locked until the remaining price range is narrow enough to show safely.\nTop visible evidence:\n1. Leica M 50mm f0.95 Noctilux ASPH 6bit Black — Same base model — Same base model result is visible, but not used as exact price\n2. Leeworks M 50mm f1.1 Noctilux M Silver — Same base model — Not used — Third-party item\n3. Leica M 50mm f0.95 Noctilux ASPH 6bit Black — Same base model — Same base model result is visible, but not used as exact price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M 50mm f0.95 Noctilux ASPH 6bit Black",
+          "source": "사진집",
+          "price": "9,200,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "Leeworks M 50mm f1.1 Noctilux M Silver",
+          "source": "사진집",
+          "price": "990,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Third-party item",
+          "excluded_reason": [
+            "Third-party item",
+            "Different model"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "Leica M 50mm f0.95 Noctilux ASPH 6bit Black",
+          "source": "사진집",
+          "price": "10,500,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[위탁] M 50/0.95 Noctilux ASPH 6bit (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "14,300,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/0.95 Noctilux ASPH 6bit (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "9,780,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Broader family reference",
+      "display_price_band": "Price summary locked",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [
+        "Price stays locked because the selected evidence still includes third-party or adjacent items.",
+        "Price stays locked until the remaining price range is narrow enough to show safely."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 20,
+        "broader_family_pool_count": 20,
+        "excluded_pool_count": 17,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Broader family reference is too noisy",
+        "summary_line": "Price evidence found: 20 same-base listings, 20 broader references. Excluded from price: 17 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 20",
+        "reference_label": "Reference evidence: 20",
+        "excluded_label": "Excluded from price: 17"
+      },
+      "price_summary_band": "Price summary locked",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Noctilux",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Summaron 35 2.8",
+      "display_query_review": {
+        "query": "Summaron 35 2.8",
+        "interpreted_target": "Leica Summaron 35 f2.8 candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Reference price only.",
+        "why": "Only broader reference pricing is safe for this query right now.",
+        "evidence_summary": "Price evidence found: 8 same-base listings, 8 broader references. Excluded from price: 23 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 8",
+          "Reference evidence: 8",
+          "Excluded from price: 23"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Summaron 35 2.8\nInterpreted as: Leica Summaron 35 f2.8 candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Reference price only.\nWhy: Only broader reference pricing is safe for this query right now.\nEvidence: Price evidence found: 8 same-base listings, 8 broader references. Excluded from price: 23 listings.\nTop visible evidence:\n1. Leica M 35mm f2.8 Summaron EYE Silver — Same base model — Same base model result is visible, but not used as exact price\n2. LEICA 35mm F2.8 SUMMARON sn.2102 — Same base model — Not used — Duplicate listing\n3. LEICA 35mm F2.8 SUMMARON sn.1663 — Same base model — Not used — Duplicate listing"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M 35mm f2.8 Summaron EYE Silver",
+          "source": "사진집",
+          "price": "1,450,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "LEICA 35mm F2.8 SUMMARON sn.2102",
+          "source": "장씨카메라",
+          "price": "2,200,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "LEICA 35mm F2.8 SUMMARON sn.1663",
+          "source": "장씨카메라",
+          "price": "2,200,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "LEICA 35mm F2.8 SUMMARON sn.2050",
+          "source": "장씨카메라",
+          "price": "2,100,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "LEICA 35mm F2.8 eye SUMMARON sn.1814",
+          "source": "장씨카메라",
+          "price": "1,800,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Broader family reference",
+      "display_price_band": "Price summary locked",
+      "display_broader_reference_allowed": true,
+      "display_broader_reference_label": "Broader family reference",
+      "display_broader_reference_band": "KRW 1,450,000 - 2,680,000",
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 8,
+        "broader_family_pool_count": 8,
+        "excluded_pool_count": 23,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": true,
+        "price_band_quality_state": "Clean reference price evidence",
+        "summary_line": "Price evidence found: 8 same-base listings, 8 broader references. Excluded from price: 23 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 8",
+        "reference_label": "Reference evidence: 8",
+        "excluded_label": "Excluded from price: 23"
+      },
+      "price_summary_band": "Price summary locked",
+      "broader_reference_band": "KRW 1,450,000 - 2,680,000",
+      "top_display_category": "Lens",
+      "top_display_model": "Summaron",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": true
+      }
+    },
+    {
+      "query": "APO-Summicron-SL 90",
+      "display_query_review": {
+        "query": "APO-Summicron-SL 90",
+        "interpreted_target": "Leica APO-Summicron-SL 90 candidate",
+        "category": "Lens",
+        "match_state": "Results are visible, but not strong enough for model-level pricing.",
+        "price_status": "Price summary is locked.",
+        "why": "Results are visible, but not strong enough for model-level pricing.",
+        "evidence_summary": "Price evidence found: 4 same-base listings, 4 broader references. Excluded from price: 0 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 4",
+          "Reference evidence: 4",
+          "Excluded from price: 0"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked until no boundary conflict between family, mount, and variant."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: APO-Summicron-SL 90\nInterpreted as: Leica APO-Summicron-SL 90 candidate\nCategory: Lens\nMatch status: Results are visible, but not strong enough for model-level pricing.\nPrice status: Price summary is locked.\nWhy: Results are visible, but not strong enough for model-level pricing.\nEvidence: Price evidence found: 4 same-base listings, 4 broader references. Excluded from price: 0 listings.\nPrice unlock condition: Price stays locked until no boundary conflict between family, mount, and variant.\nTop visible evidence:\n1. Leica M 90mm f2.5 Summarit 6bit Black — Boundary conflict — Not used — not compatible with this query\n2. Leica M 90mm f2 APO-Summicron ASPH Black — Boundary conflict — Not used — not compatible with this query\n3. Leica M 90mm f2.8 Elmarit Black — Boundary conflict — Not used — not compatible with this query"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M 90mm f2.5 Summarit 6bit Black",
+          "source": "사진집",
+          "price": "1,050,000원",
+          "compatibility_label": "Boundary conflict",
+          "result_role_label": "Boundary conflict",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summarit-M"
+        },
+        {
+          "title": "Leica M 90mm f2 APO-Summicron ASPH Black",
+          "source": "사진집",
+          "price": "3,300,000원",
+          "compatibility_label": "Boundary conflict",
+          "result_role_label": "Boundary conflict",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "APO-Summicron"
+        },
+        {
+          "title": "Leica M 90mm f2.8 Elmarit Black",
+          "source": "사진집",
+          "price": "1,200,000원",
+          "compatibility_label": "Boundary conflict",
+          "result_role_label": "Boundary conflict",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Elmarit-M"
+        },
+        {
+          "title": "Leica L 90mm f4 Elmar Silver",
+          "source": "사진집",
+          "price": "350,000원",
+          "compatibility_label": "Boundary conflict",
+          "result_role_label": "Boundary conflict",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Elmar"
+        },
+        {
+          "title": "TTArtisan L 90mm f1.25 DJ-Optical Black",
+          "source": "사진집",
+          "price": "400,000원",
+          "compatibility_label": "Boundary conflict",
+          "result_role_label": "Boundary conflict",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Third-party item",
+          "excluded_reason": [
+            "Third-party item"
+          ],
+          "display_category": "Lens",
+          "display_model": ""
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Price summary locked",
+      "display_price_band": "Price summary locked",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Results are visible, but not strong enough for model-level pricing.",
+      "display_unlock_requirements": [
+        "Price stays locked until no boundary conflict between family, mount, and variant."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 4,
+        "broader_family_pool_count": 4,
+        "excluded_pool_count": 0,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Exact variant price data is limited",
+        "summary_line": "Price evidence found: 4 same-base listings, 4 broader references. Excluded from price: 0 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 4",
+        "reference_label": "Reference evidence: 4",
+        "excluded_label": "Excluded from price: 0"
+      },
+      "price_summary_band": "Price summary locked",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Summarit-M",
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "M50/1.2",
+      "display_query_review": {
+        "query": "M50/1.2",
+        "interpreted_target": "Leica M-mount lens 50 f1.2 candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Reference price only.",
+        "why": "Only broader reference pricing is safe for this query right now.",
+        "evidence_summary": "Price evidence found: 29 same-base listings, 29 broader references. Excluded from price: 19 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 29",
+          "Reference evidence: 29",
+          "Excluded from price: 19"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked because the selected evidence still includes third-party or adjacent items."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: M50/1.2\nInterpreted as: Leica M-mount lens 50 f1.2 candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Reference price only.\nWhy: Only broader reference pricing is safe for this query right now.\nEvidence: Price evidence found: 29 same-base listings, 29 broader references. Excluded from price: 19 listings.\nPrice unlock condition: Price stays locked because the selected evidence still includes third-party or adjacent items.\nTop visible evidence:\n1. Leica M 50mm f1.2 Noctilux 1st Black — Same base model — Not used — Price outlier\n2. [중고] M 50/1.2 Noctilux 복각 (Black) — Same base model — Not used — Duplicate listing\n3. [위탁] M 50/1.2 Noctilux 복각 (Black) — Same base model — Same base model result is visible, but not used as exact price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M 50mm f1.2 Noctilux 1st Black",
+          "source": "사진집",
+          "price": "53,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Price outlier",
+          "excluded_reason": [
+            "Price outlier"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,580,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[위탁] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,700,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[위탁] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "9,900,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "8,700,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Broader family reference",
+      "display_price_band": "Price summary locked",
+      "display_broader_reference_allowed": true,
+      "display_broader_reference_label": "Broader family reference",
+      "display_broader_reference_band": "KRW 5,600,000 - 11,000,000",
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [
+        "Price stays locked because the selected evidence still includes third-party or adjacent items."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 29,
+        "broader_family_pool_count": 29,
+        "excluded_pool_count": 19,
+        "outlier_removed_count": 3,
+        "broader_reference_allowed": true,
+        "price_band_quality_state": "Clean same-model price evidence",
+        "summary_line": "Price evidence found: 29 same-base listings, 29 broader references. Excluded from price: 19 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 29",
+        "reference_label": "Reference evidence: 29",
+        "excluded_label": "Excluded from price: 19"
+      },
+      "price_summary_band": "Price summary locked",
+      "broader_reference_band": "KRW 5,600,000 - 11,000,000",
+      "top_display_category": "Lens",
+      "top_display_model": "Noctilux",
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": true
+      }
+    },
+    {
+      "query": "Leica M50/1.2 1세대",
+      "display_query_review": {
+        "query": "Leica M50/1.2 1세대",
+        "interpreted_target": "Leica M-mount lens 50 f1.2 1st candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Exact price is available.",
+        "why": "Clean exact variant price evidence",
+        "evidence_summary": "Price evidence found: 2 exact 1st listings, 29 same-base listings, 29 broader references. Excluded from price: 0 listings.",
+        "evidence_cards": [
+          "Exact 1st evidence: 2",
+          "Same base model evidence: 29",
+          "Reference evidence: 29",
+          "Excluded from price: 0"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Leica M50/1.2 1세대\nInterpreted as: Leica M-mount lens 50 f1.2 1st candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Exact price is available.\nWhy: Clean exact variant price evidence\nEvidence: Price evidence found: 2 exact 1st listings, 29 same-base listings, 29 broader references. Excluded from price: 0 listings.\nTop visible evidence:\n1. Leica M 50mm f1.2 Noctilux 1st Black — Exact variant — Not used — Price outlier\n2. [중고] M 50/1.2 Noctilux 복각 (Black) — Same base model — Not used — Duplicate listing\n3. [위탁] M 50/1.2 Noctilux 복각 (Black) — Same base model — Same base model result is visible, but not used as exact price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M 50mm f1.2 Noctilux 1st Black",
+          "source": "사진집",
+          "price": "53,000,000원",
+          "compatibility_label": "Exact variant",
+          "result_role_label": "Exact variant",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Price outlier",
+          "excluded_reason": [
+            "Price outlier"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,580,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[위탁] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,700,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[위탁] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "9,900,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "8,700,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact variant price",
+      "display_price_band": "KRW 43,000,000 - 53,000,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 2,
+        "exact_base_model_pool_count": 29,
+        "broader_family_pool_count": 29,
+        "excluded_pool_count": 0,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean exact variant price evidence",
+        "summary_line": "Price evidence found: 2 exact 1st listings, 29 same-base listings, 29 broader references. Excluded from price: 0 listings.",
+        "exact_variant_label": "Exact 1st evidence: 2",
+        "same_model_label": "Same base model evidence: 29",
+        "reference_label": "Reference evidence: 29",
+        "excluded_label": "Excluded from price: 0"
+      },
+      "price_summary_band": "KRW 43,000,000 - 53,000,000",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Noctilux",
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "leica m5",
+      "display_query_review": {
+        "query": "leica m5",
+        "interpreted_target": "Leica M5 body",
+        "category": "Body",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Body market summary is available.",
+        "why": "Clean same-model price evidence",
+        "evidence_summary": "Price evidence found: 3 same-base listings, 22 broader references. Excluded from price: 1 listing.",
+        "evidence_cards": [
+          "Same base model evidence: 3",
+          "Reference evidence: 22",
+          "Excluded from price: 1"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: leica m5\nInterpreted as: Leica M5 body\nCategory: Body\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Body market summary is available.\nWhy: Clean same-model price evidence\nEvidence: Price evidence found: 3 same-base listings, 22 broader references. Excluded from price: 1 listing.\nTop visible evidence:\n1. Leica M5 Black — Same base model — Used for same base model price\n2. LEICA M5 sn.1297 — Same base model — Used for same base model price\n3. LEICA M5 sn.1288 — Same base model — Not used — Duplicate listing"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M5 Black",
+          "source": "사진집",
+          "price": "1,600,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M5"
+        },
+        {
+          "title": "LEICA M5 sn.1297",
+          "source": "장씨카메라",
+          "price": "2,300,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M5"
+        },
+        {
+          "title": "LEICA M5 sn.1288",
+          "source": "장씨카메라",
+          "price": "2,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Body",
+          "display_model": "M5"
+        },
+        {
+          "title": "LEICA M5 sn.1290",
+          "source": "장씨카메라",
+          "price": "2,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Body",
+          "display_model": "M5"
+        },
+        {
+          "title": "LEICA M5 sn.1346",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M5"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact base model price",
+      "display_price_band": "KRW 1,600,000 - 2,300,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 3,
+        "broader_family_pool_count": 22,
+        "excluded_pool_count": 1,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean same-model price evidence",
+        "summary_line": "Price evidence found: 3 same-base listings, 22 broader references. Excluded from price: 1 listing.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 3",
+        "reference_label": "Reference evidence: 22",
+        "excluded_label": "Excluded from price: 1"
+      },
+      "price_summary_band": "KRW 1,600,000 - 2,300,000",
+      "broader_reference_band": null,
+      "top_display_category": "Body",
+      "top_display_model": "M5",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Leica M9",
+      "display_query_review": {
+        "query": "Leica M9",
+        "interpreted_target": "Leica M9 body",
+        "category": "Body",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Body market summary is available.",
+        "why": "Clean same-model price evidence",
+        "evidence_summary": "Price evidence found: 5 same-base listings, 5 broader references. Excluded from price: 1 listing.",
+        "evidence_cards": [
+          "Same base model evidence: 5",
+          "Reference evidence: 5",
+          "Excluded from price: 1"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Leica M9\nInterpreted as: Leica M9 body\nCategory: Body\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Body market summary is available.\nWhy: Clean same-model price evidence\nEvidence: Price evidence found: 5 same-base listings, 5 broader references. Excluded from price: 1 listing.\nTop visible evidence:\n1. Leica M9 SteelGray [신형 센서 교체] — Same base model — Used for same base model price\n2. LEICA M9 sn.3903 — Same base model — Used for same base model price\n3. LEICA M9 sn.3834 — Same base model — Used for same base model price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M9 SteelGray [신형 센서 교체]",
+          "source": "사진집",
+          "price": "4,500,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M9"
+        },
+        {
+          "title": "LEICA M9 sn.3903",
+          "source": "장씨카메라",
+          "price": "4,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M9"
+        },
+        {
+          "title": "LEICA M9 sn.3834",
+          "source": "장씨카메라",
+          "price": "3,800,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M9"
+        },
+        {
+          "title": "LEICA M9 sn.3803",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M9"
+        },
+        {
+          "title": "LEICA M9 sn.3803",
+          "source": "장씨카메라",
+          "price": "문의요망",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "visible_only",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — not compatible with this query",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M9"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact base model price",
+      "display_price_band": "KRW 3,800,000 - 4,500,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 5,
+        "broader_family_pool_count": 5,
+        "excluded_pool_count": 1,
+        "outlier_removed_count": 1,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean same-model price evidence",
+        "summary_line": "Price evidence found: 5 same-base listings, 5 broader references. Excluded from price: 1 listing.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 5",
+        "reference_label": "Reference evidence: 5",
+        "excluded_label": "Excluded from price: 1"
+      },
+      "price_summary_band": "KRW 3,800,000 - 4,500,000",
+      "broader_reference_band": null,
+      "top_display_category": "Body",
+      "top_display_model": "M9",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Leica M10",
+      "display_query_review": {
+        "query": "Leica M10",
+        "interpreted_target": "Leica M10 body",
+        "category": "Body",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Body market summary is available.",
+        "why": "Reference prices are too spread out to show safely",
+        "evidence_summary": "Price evidence found: 9 same-base listings, 21 broader references. Excluded from price: 1 listing.",
+        "evidence_cards": [
+          "Same base model evidence: 9",
+          "Reference evidence: 21",
+          "Excluded from price: 1"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked until the remaining price range is narrow enough to show safely."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Leica M10\nInterpreted as: Leica M10 body\nCategory: Body\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Body market summary is available.\nWhy: Reference prices are too spread out to show safely\nEvidence: Price evidence found: 9 same-base listings, 21 broader references. Excluded from price: 1 listing.\nPrice unlock condition: Price stays locked until the remaining price range is narrow enough to show safely.\nTop visible evidence:\n1. [위탁] M10 Monochrom 'Leitz Wetzlar' Edition — Same base model — Used for same base model price\n2. [중고] Leica M10 홀스터 — Same base model — Used for same base model price\n3. [중고] Leica M10 하프케이스 (Brown) — Same base model — Not used — Duplicate listing"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "[위탁] M10 Monochrom 'Leitz Wetzlar' Edition",
+          "source": "라이카스토어 충무로",
+          "price": "7,200,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M10"
+        },
+        {
+          "title": "[중고] Leica M10 홀스터",
+          "source": "라이카스토어 충무로",
+          "price": "280,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M10"
+        },
+        {
+          "title": "[중고] Leica M10 하프케이스 (Brown)",
+          "source": "라이카스토어 충무로",
+          "price": "80,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Body",
+          "display_model": "M10"
+        },
+        {
+          "title": "[중고] Leica M10 하프케이스 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "150,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M10"
+        },
+        {
+          "title": "[위탁] Leica M10 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "6,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M10"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact base model price",
+      "display_price_band": "KRW 80,000 - 7,200,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [
+        "Price stays locked until the remaining price range is narrow enough to show safely."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 9,
+        "broader_family_pool_count": 21,
+        "excluded_pool_count": 1,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Reference prices are too spread out to show safely",
+        "summary_line": "Price evidence found: 9 same-base listings, 21 broader references. Excluded from price: 1 listing.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 9",
+        "reference_label": "Reference evidence: 21",
+        "excluded_label": "Excluded from price: 1"
+      },
+      "price_summary_band": "KRW 80,000 - 7,200,000",
+      "broader_reference_band": null,
+      "top_display_category": "Body",
+      "top_display_model": "M10",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Leica M11",
+      "display_query_review": {
+        "query": "Leica M11",
+        "interpreted_target": "Leica M11 body",
+        "category": "Body",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Body market summary is available.",
+        "why": "Clean same-model price evidence",
+        "evidence_summary": "Price evidence found: 8 same-base listings, 10 broader references. Excluded from price: 2 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 8",
+          "Reference evidence: 10",
+          "Excluded from price: 2"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Leica M11\nInterpreted as: Leica M11 body\nCategory: Body\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Body market summary is available.\nWhy: Clean same-model price evidence\nEvidence: Price evidence found: 8 same-base listings, 10 broader references. Excluded from price: 2 listings.\nTop visible evidence:\n1. Leica M11 Glossy Black Paint Finish — Same base model — Used for same base model price\n2. Leica M11 Silver — Same base model — Used for same base model price\n3. Leica M11 Monochrome Black — Same base model — Used for same base model price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M11 Glossy Black Paint Finish",
+          "source": "사진집",
+          "price": "12,500,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M11"
+        },
+        {
+          "title": "Leica M11 Silver",
+          "source": "사진집",
+          "price": "9,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M11"
+        },
+        {
+          "title": "Leica M11 Monochrome Black",
+          "source": "사진집",
+          "price": "12,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M11"
+        },
+        {
+          "title": "Leica M11 Glossy Black Paint Finish",
+          "source": "사진집",
+          "price": "11,800,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M11"
+        },
+        {
+          "title": "LEICA M11 sn.5591",
+          "source": "장씨카메라",
+          "price": "8,700,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Body",
+          "display_model": "M11"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact base model price",
+      "display_price_band": "KRW 8,700,000 - 12,500,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 8,
+        "broader_family_pool_count": 10,
+        "excluded_pool_count": 2,
+        "outlier_removed_count": 1,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean same-model price evidence",
+        "summary_line": "Price evidence found: 8 same-base listings, 10 broader references. Excluded from price: 2 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 8",
+        "reference_label": "Reference evidence: 10",
+        "excluded_label": "Excluded from price: 2"
+      },
+      "price_summary_band": "KRW 8,700,000 - 12,500,000",
+      "broader_reference_band": null,
+      "top_display_category": "Body",
+      "top_display_model": "M11",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "ltm summaron 35",
+      "display_query_review": {
+        "query": "ltm summaron 35",
+        "interpreted_target": "Leica Summaron-L 35 candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Same-model price is available.",
+        "why": "Clean same-model price evidence",
+        "evidence_summary": "Price evidence found: 14 same-base listings, 14 broader references. Excluded from price: 7 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 14",
+          "Reference evidence: 14",
+          "Excluded from price: 7"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: ltm summaron 35\nInterpreted as: Leica Summaron-L 35 candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Same-model price is available.\nWhy: Clean same-model price evidence\nEvidence: Price evidence found: 14 same-base listings, 14 broader references. Excluded from price: 7 listings.\nTop visible evidence:\n1. Leica L 35mm f3.5 Summaron Silver — Same base model — Used for same base model price\n2. Leica L 35mm f3.5 Summaron Silver — Same base model — Used for same base model price\n3. Leica L 35mm f3.5 Summaron Silver — Same base model — Used for same base model price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica L 35mm f3.5 Summaron Silver",
+          "source": "사진집",
+          "price": "1,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "Leica L 35mm f3.5 Summaron Silver",
+          "source": "사진집",
+          "price": "1,200,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "Leica L 35mm f3.5 Summaron Silver",
+          "source": "사진집",
+          "price": "1,300,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "[위탁] L 35/2.8 Summaron (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "1,870,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Price outlier",
+          "excluded_reason": [
+            "Price outlier"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        },
+        {
+          "title": "[중고] L 35/3.5 Summaron (Silver)",
+          "source": "라이카스토어 충무로",
+          "price": "780,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Summaron"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact base model price",
+      "display_price_band": "KRW 730,000 - 1,580,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 14,
+        "broader_family_pool_count": 14,
+        "excluded_pool_count": 7,
+        "outlier_removed_count": 2,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean same-model price evidence",
+        "summary_line": "Price evidence found: 14 same-base listings, 14 broader references. Excluded from price: 7 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 14",
+        "reference_label": "Reference evidence: 14",
+        "excluded_label": "Excluded from price: 7"
+      },
+      "price_summary_band": "KRW 730,000 - 1,580,000",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Summaron",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "Elmarit-R 28",
+      "display_query_review": {
+        "query": "Elmarit-R 28",
+        "interpreted_target": "Leica Elmarit-R 28 candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Same-model price is available.",
+        "why": "Clean same-model price evidence",
+        "evidence_summary": "Price evidence found: 4 same-base listings, 9 broader references. Excluded from price: 1 listing.",
+        "evidence_cards": [
+          "Same base model evidence: 4",
+          "Reference evidence: 9",
+          "Excluded from price: 1"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: Elmarit-R 28\nInterpreted as: Leica Elmarit-R 28 candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Same-model price is available.\nWhy: Clean same-model price evidence\nEvidence: Price evidence found: 4 same-base listings, 9 broader references. Excluded from price: 1 listing.\nTop visible evidence:\n1. Leica R 28mm f2.8 Elmarit Rom Black — Same base model — Used for same base model price\n2. [위탁] R 28/2.8 Elmarit (Black) — Same base model — Not used — Duplicate listing\n3. [위탁] R 28/2.8 Elmarit (Black) — Same base model — Not used — Duplicate listing"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica R 28mm f2.8 Elmarit Rom Black",
+          "source": "사진집",
+          "price": "2,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Elmarit-R"
+        },
+        {
+          "title": "[위탁] R 28/2.8 Elmarit (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "850,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Elmarit-R"
+        },
+        {
+          "title": "[위탁] R 28/2.8 Elmarit (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "850,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Elmarit-R"
+        },
+        {
+          "title": "[중고] R 28/2.8 Elmarit",
+          "source": "라이카스토어 충무로",
+          "price": "580,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Elmarit-R"
+        },
+        {
+          "title": "LEICA 28mm F2.8 ELMARIT-R sn.3624",
+          "source": "장씨카메라",
+          "price": "1,800,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": true,
+          "price_usage_label": "Used for same base model price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Elmarit-R"
+        }
+      ],
+      "display_price_summary_allowed": true,
+      "display_price_scope_label": "Exact base model price",
+      "display_price_band": "KRW 580,000 - 2,000,000",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 4,
+        "broader_family_pool_count": 9,
+        "excluded_pool_count": 1,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Clean same-model price evidence",
+        "summary_line": "Price evidence found: 4 same-base listings, 9 broader references. Excluded from price: 1 listing.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 4",
+        "reference_label": "Reference evidence: 9",
+        "excluded_label": "Excluded from price: 1"
+      },
+      "price_summary_band": "KRW 580,000 - 2,000,000",
+      "broader_reference_band": null,
+      "top_display_category": "Lens",
+      "top_display_model": "Elmarit-R",
+      "policy_preview": {
+        "market_entry_allowed": true,
+        "price_summary_allowed": true,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "ricoh gr iiix",
+      "display_query_review": {
+        "query": "ricoh gr iiix",
+        "interpreted_target": "Leica lens candidate",
+        "category": "Lens",
+        "match_state": "No exact strong visible listings yet.",
+        "price_status": "Price summary is locked.",
+        "why": "No exact strong visible listings yet.",
+        "evidence_summary": "Price evidence found: 0 same-base listings. Excluded from price: 0 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 0",
+          "Reference evidence: 0",
+          "Excluded from price: 0"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: ricoh gr iiix\nInterpreted as: Leica lens candidate\nCategory: Lens\nMatch status: No exact strong visible listings yet.\nPrice status: Price summary is locked.\nWhy: No exact strong visible listings yet.\nEvidence: Price evidence found: 0 same-base listings. Excluded from price: 0 listings."
+      },
+      "display_top_result_evidence": [],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Price summary locked",
+      "display_price_band": "Exact variant price data limited",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "No exact strong visible listings yet.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 0,
+        "broader_family_pool_count": 0,
+        "excluded_pool_count": 0,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Exact variant price data is limited",
+        "summary_line": "Price evidence found: 0 same-base listings. Excluded from price: 0 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 0",
+        "reference_label": "Reference evidence: 0",
+        "excluded_label": "Excluded from price: 0"
+      },
+      "price_summary_band": "Exact variant price data limited",
+      "broader_reference_band": null,
+      "top_display_category": null,
+      "top_display_model": null,
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": false
+      }
+    },
+    {
+      "query": "hasselblad xpan",
+      "display_query_review": {
+        "query": "hasselblad xpan",
+        "interpreted_target": "Leica lens candidate",
+        "category": "Lens",
+        "match_state": "No exact strong visible listings yet.",
+        "price_status": "Price summary is locked.",
+        "why": "No exact strong visible listings yet.",
+        "evidence_summary": "Price evidence found: 0 same-base listings. Excluded from price: 0 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 0",
+          "Reference evidence: 0",
+          "Excluded from price: 0"
+        ],
+        "needed_to_unlock": [],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: hasselblad xpan\nInterpreted as: Leica lens candidate\nCategory: Lens\nMatch status: No exact strong visible listings yet.\nPrice status: Price summary is locked.\nWhy: No exact strong visible listings yet.\nEvidence: Price evidence found: 0 same-base listings. Excluded from price: 0 listings."
+      },
+      "display_top_result_evidence": [],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Price summary locked",
+      "display_price_band": "Exact variant price data limited",
+      "display_broader_reference_allowed": false,
+      "display_broader_reference_label": null,
+      "display_broader_reference_band": null,
+      "display_match_state_message": "No exact strong visible listings yet.",
+      "display_unlock_requirements": [],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 0,
+        "broader_family_pool_count": 0,
+        "excluded_pool_count": 0,
+        "outlier_removed_count": 0,
+        "broader_reference_allowed": false,
+        "price_band_quality_state": "Exact variant price data is limited",
+        "summary_line": "Price evidence found: 0 same-base listings. Excluded from price: 0 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 0",
+        "reference_label": "Reference evidence: 0",
+        "excluded_label": "Excluded from price: 0"
+      },
+      "price_summary_band": "Exact variant price data limited",
+      "broader_reference_band": null,
+      "top_display_category": null,
+      "top_display_model": null,
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": false
+      }
+    }
+  ],
+  "ui_still_too_technical_rows": [],
+  "price_projection_regressed_rows": [],
+  "body_lens_regression_rows": [],
+  "git_diff_summary": {
+    "branch": "beta-ui-redesign-controlled-preview",
+    "head_commit": "f6fcf81bd83d9c2ec60f411e3c3387559946033a",
+    "head_subject": "polish: simplify query review evidence UI",
+    "working_diff_stat": "api/search.py            | 118 ++++++++++++++++++++++++++++++++++++-----------\n app/templates/index.html |  31 ++++++++++++-\n index.html               |  31 ++++++++++++-\n 3 files changed, 149 insertions(+), 31 deletions(-)",
+    "working_diff_files": [
+      "api/search.py",
+      "app/templates/index.html",
+      "index.html"
+    ]
+  },
+  "commit_push_context": {
+    "commit_executed": false,
+    "push_executed": false,
+    "push_succeeded": false,
+    "preview_deployment_url": null,
+    "preview_deployment_id": null,
+    "preview_deployment_state": null,
+    "preview_branch": null,
+    "preview_commit": null
+  },
+  "production_public_access_guard": {
+    "production_launch_go": false,
+    "production_alias_connect_allowed": false,
+    "public_unrestricted_access_enabled": false,
+    "external_tester_access_enabled": false,
+    "invite_sent_count": 0,
+    "provider_send_count": 0,
+    "webhook_call_count": 0,
+    "production_DB_write_count": 0,
+    "access_activation_performed": false,
+    "main_direct_push_executed": false,
+    "production_promote_executed": false,
+    "tester_link_send_allowed": false,
+    "raw_identity_recorded": false,
+    "raw_contact_recorded": false,
+    "external_link_sent": false,
+    "fake_fill_added": false
+  },
+  "m50_12_investigation": {
+    "query": "M50/1.2",
+    "result": {
+      "query": "M50/1.2",
+      "display_query_review": {
+        "query": "M50/1.2",
+        "interpreted_target": "Leica M-mount lens 50 f1.2 candidate",
+        "category": "Lens",
+        "match_state": "Exact or strong compatible listings are visible.",
+        "price_status": "Reference price only.",
+        "why": "Only broader reference pricing is safe for this query right now.",
+        "evidence_summary": "Price evidence found: 29 same-base listings, 29 broader references. Excluded from price: 19 listings.",
+        "evidence_cards": [
+          "Same base model evidence: 29",
+          "Reference evidence: 29",
+          "Excluded from price: 19"
+        ],
+        "needed_to_unlock": [
+          "Price stays locked because the selected evidence still includes third-party or adjacent items."
+        ],
+        "details_toggle_label": "Show evidence details",
+        "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
+        "copy_summary_text": "Query review\nYou searched: M50/1.2\nInterpreted as: Leica M-mount lens 50 f1.2 candidate\nCategory: Lens\nMatch status: Exact or strong compatible listings are visible.\nPrice status: Reference price only.\nWhy: Only broader reference pricing is safe for this query right now.\nEvidence: Price evidence found: 29 same-base listings, 29 broader references. Excluded from price: 19 listings.\nPrice unlock condition: Price stays locked because the selected evidence still includes third-party or adjacent items.\nTop visible evidence:\n1. Leica M 50mm f1.2 Noctilux 1st Black — Same base model — Not used — Price outlier\n2. [중고] M 50/1.2 Noctilux 복각 (Black) — Same base model — Not used — Duplicate listing\n3. [위탁] M 50/1.2 Noctilux 복각 (Black) — Same base model — Same base model result is visible, but not used as exact price"
+      },
+      "display_top_result_evidence": [
+        {
+          "title": "Leica M 50mm f1.2 Noctilux 1st Black",
+          "source": "사진집",
+          "price": "53,000,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Price outlier",
+          "excluded_reason": [
+            "Price outlier"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,580,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "excluded_pool",
+          "evidence_pool_label": "Not used for price",
+          "used_for_price": false,
+          "price_usage_label": "Not used — Duplicate listing",
+          "excluded_reason": [
+            "Duplicate listing"
+          ],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[위탁] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "7,700,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[위탁] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "9,900,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        },
+        {
+          "title": "[중고] M 50/1.2 Noctilux 복각 (Black)",
+          "source": "라이카스토어 충무로",
+          "price": "8,700,000원",
+          "compatibility_label": "Exact base model",
+          "result_role_label": "Same base model",
+          "evidence_pool": "exact_base_model_pool",
+          "evidence_pool_label": "Same base model evidence",
+          "used_for_price": false,
+          "price_usage_label": "Same base model result is visible, but not used as exact price",
+          "excluded_reason": [],
+          "display_category": "Lens",
+          "display_model": "Noctilux"
+        }
+      ],
+      "display_price_summary_allowed": false,
+      "display_price_scope_label": "Broader family reference",
+      "display_price_band": "Price summary locked",
+      "display_broader_reference_allowed": true,
+      "display_broader_reference_label": "Broader family reference",
+      "display_broader_reference_band": "KRW 5,600,000 - 11,000,000",
+      "display_match_state_message": "Exact or strong compatible listings are visible.",
+      "display_unlock_requirements": [
+        "Price stays locked because the selected evidence still includes third-party or adjacent items."
+      ],
+      "display_evidence_pool_summary": {
+        "exact_variant_pool_count": 0,
+        "exact_base_model_pool_count": 29,
+        "broader_family_pool_count": 29,
+        "excluded_pool_count": 19,
+        "outlier_removed_count": 3,
+        "broader_reference_allowed": true,
+        "price_band_quality_state": "Clean same-model price evidence",
+        "summary_line": "Price evidence found: 29 same-base listings, 29 broader references. Excluded from price: 19 listings.",
+        "exact_variant_label": null,
+        "same_model_label": "Same base model evidence: 29",
+        "reference_label": "Reference evidence: 29",
+        "excluded_label": "Excluded from price: 19"
+      },
+      "price_summary_band": "Price summary locked",
+      "broader_reference_band": "KRW 5,600,000 - 11,000,000",
+      "top_display_category": "Lens",
+      "top_display_model": "Noctilux",
+      "policy_preview": {
+        "market_entry_allowed": false,
+        "price_summary_allowed": false,
+        "broader_reference_allowed": true
+      }
+    },
+    "summary": "The query stays on the Lens path, does not regress to Leica M5 Body, and only exposes broader reference pricing. It does not present an exact 1st-generation Noctilux price unless the stronger variant query is used."
+  },
+  "next_backlog_candidates": [
+    "P3-BETA-MVP-QUERY-REVIEW-EVIDENCE-UI-POLISH-OWNER-RECHECK",
+    "P3-BETA-MVP-LOCKED-ENTRY-AND-PRICE-UNLOCK-AUDIT",
+    "P3-BETA-MVP-LENS-VARIANT-TOKEN-PARSER-COVERAGE-FIXUP",
+    "P3-BETA-MVP-LENS-BOUNDARY-CONFLICT-RESOLUTION-FIXUP"
+  ]
+}

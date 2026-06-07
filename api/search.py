@@ -836,10 +836,10 @@ def _humanize_quality_state(state: str) -> str:
 
 def _humanize_result_role(label: str) -> str:
     mapping = {
-        "Exact variant": "Exact variant match",
+        "Exact variant": "Exact variant",
         "Exact base model": "Same base model",
-        "Broader family": "Broader family reference",
-        "Third-party top result": "Third-party result",
+        "Broader family": "Broader reference",
+        "Third-party top result": "Third-party or adjacent result",
         "Boundary conflict": "Boundary conflict",
         "Query incompatible": "Not compatible with this query",
     }
@@ -848,25 +848,25 @@ def _humanize_result_role(label: str) -> str:
 
 def _humanize_evidence_pool(pool_name: str) -> str:
     mapping = {
-        "exact_variant_pool": "Exact variant evidence",
+        "exact_variant_pool": "Used for exact price",
         "exact_base_model_pool": "Same base model evidence",
-        "broader_family_pool": "Reference evidence",
-        "excluded_pool": "Excluded from price",
-        "visible_only": "Visible result only",
+        "broader_family_pool": "Broader reference only",
+        "excluded_pool": "Not used for price",
+        "visible_only": "Not used for price",
     }
     return mapping.get(pool_name, pool_name.replace("_", " ").capitalize())
 
 
 def _humanize_excluded_reason(reason: str) -> str:
     mapping = {
-        "accessory": "Accessory or part",
-        "repair_or_parts": "Accessory or part",
+        "accessory": "Accessory, not camera/lens",
+        "repair_or_parts": "Accessory, not camera/lens",
         "deposit_or_rental": "Deposit or rental listing",
         "third_party": "Third-party item",
-        "sold_status_incompatible": "Status not used for this price view",
+        "sold_status_incompatible": "Current sale status is not used for this price view",
         "category_mismatch": "Not compatible with this query",
         "classification_conflict": "Classification needs review",
-        "wrong_model": "Wrong model",
+        "wrong_model": "Different model",
         "mount_mismatch": "Wrong mount",
         "focal_mismatch": "Wrong focal length",
         "aperture_mismatch": "Wrong aperture",
@@ -874,6 +874,7 @@ def _humanize_excluded_reason(reason: str) -> str:
         "body_lens_boundary_conflict": "Not compatible with this query",
         "duplicate": "Duplicate listing",
         "outlier": "Price outlier",
+        "source_gap": "Current source coverage is not enough yet",
     }
     return mapping.get(reason, _humanize_policy_reason(reason))
 
@@ -887,11 +888,36 @@ def _build_price_usage_label(
         if evidence_pool == "exact_variant_pool":
             return "Used for exact price"
         if evidence_pool == "exact_base_model_pool":
-            return "Used for same-model price"
-        return "Used as reference"
+            return "Used for same base model price"
+        return "Used as broader reference"
     if excluded_reasons:
         return f"Not used — {excluded_reasons[0]}"
+    if evidence_pool == "exact_variant_pool":
+        return "Exact match visible, but not enough to unlock price yet"
+    if evidence_pool == "exact_base_model_pool":
+        return "Same base model result is visible, but not used as exact price"
+    if evidence_pool == "broader_family_pool":
+        return "Shown as broader reference only"
+    if evidence_pool == "visible_only":
+        return "Not used — not compatible with this query"
     return "Visible, but not used for pricing"
+
+
+def _humanize_unlock_requirement(requirement: str) -> str:
+    mapping = {
+        "Need 2+ exact variant priced listings.": "Price stays locked until at least 2 exact variant listings have reliable prices.",
+        "Need exact or strong compatible visible Leica results.": "Price stays locked until the visible search results strongly match this Leica item.",
+        "Need no third-party contamination in the selected price pool.": "Price stays locked because the selected evidence still includes third-party or adjacent items.",
+        "Need cleaned price band within an acceptable width.": "Price stays locked until the remaining price range is narrow enough to show safely.",
+        "Need no accessory contamination in the selected price pool.": "Price stays locked because accessory or part listings are still mixed into the evidence.",
+        "Need no wrong-model contamination in the selected price pool.": "Price stays locked because different models are still mixed into the evidence.",
+        "Need 1+ sold confirmed or sold likely record.": "Price stays limited until at least one sold-like reference is available.",
+    }
+    if requirement in mapping:
+        return mapping[requirement]
+    if requirement.startswith("Need "):
+        return f"Price stays locked until {requirement[5:].rstrip('.').lower()}."
+    return requirement
 
 
 def _summarize_evidence_pool_counts(
@@ -902,19 +928,15 @@ def _summarize_evidence_pool_counts(
     broader_count: int,
     excluded_count: int,
 ) -> str:
-    if variant_label and exact_variant_count >= 0:
-        parts = [
-            f"{exact_variant_count} exact {variant_label} listing{'s' if exact_variant_count != 1 else ''}",
-            f"{exact_base_count} same-model listing{'s' if exact_base_count != 1 else ''}",
-        ]
-    else:
-        parts = [
-            f"{exact_base_count} same-model listing{'s' if exact_base_count != 1 else ''}",
-        ]
+    pieces: list[str] = []
+    if variant_label:
+        pieces.append(f"{exact_variant_count} exact {variant_label} listing{'s' if exact_variant_count != 1 else ''}")
+    pieces.append(f"{exact_base_count} same-base listing{'s' if exact_base_count != 1 else ''}")
     if broader_count:
-        parts.append(f"{broader_count} reference listing{'s' if broader_count != 1 else ''}")
-    parts.append(f"{excluded_count} excluded")
-    return " / ".join(parts)
+        pieces.append(f"{broader_count} broader reference{'s' if broader_count != 1 else ''}")
+    sentence = "Price evidence found: " + ", ".join(pieces) + "."
+    sentence += f" Excluded from price: {excluded_count} listing{'s' if excluded_count != 1 else ''}."
+    return sentence
 
 
 def _build_price_status_message(
@@ -961,6 +983,10 @@ def _build_query_review_why(
         return "Top visible results include third-party or adjacent items."
     if search_confidence_state == "weak_only_fallback":
         return "Results are visible, but not strong enough for model-level pricing."
+    if broader_reference_allowed and price_scope == "broader_model_family":
+        return "Only broader reference pricing is safe for this query right now."
+    if broader_reference_allowed and price_scope == "exact_base_model":
+        return "Same base model listings are visible, but exact variant pricing is still locked."
     if broader_reference_allowed:
         return display_match_state_message or "Reference prices are shown separately."
     return display_match_state_message or "Price summary is locked."
@@ -1768,7 +1794,7 @@ def build_market_entry_policy(
         _humanize_policy_reason(broader_reference_locked_reason) if broader_reference_locked_reason else None
     )
     display_price_band_quality_state = _humanize_quality_state(price_band_quality_state)
-    display_unlock_requirements = unlock_requirements
+    display_unlock_requirements = [_humanize_unlock_requirement(item) for item in unlock_requirements]
     variant_label = "variant"
     if variant_signals:
         variant_values = [str(signal.get("value") or "").strip() for signal in variant_signals if signal.get("value")]
@@ -1792,7 +1818,7 @@ def build_market_entry_policy(
         "exact_variant_label": (
             f"Exact {variant_label} evidence: {int(exact_variant_pool['cleaned_pool_count'])}"
             if variant_signals
-            else f"Exact same-model evidence: {int(exact_base_model_pool['cleaned_pool_count'])}"
+            else None
         ),
         "same_model_label": f"Same base model evidence: {int(exact_base_model_pool['cleaned_pool_count'])}",
         "reference_label": f"Reference evidence: {int(broader_family_pool['cleaned_pool_count'])}",
@@ -1833,10 +1859,48 @@ def build_market_entry_policy(
         "price_status": review_price_status,
         "why": review_why,
         "evidence_summary": display_evidence_pool_summary["summary_line"],
+        "evidence_cards": [
+            item
+            for item in [
+                display_evidence_pool_summary["exact_variant_label"],
+                display_evidence_pool_summary["same_model_label"],
+                display_evidence_pool_summary["reference_label"],
+                display_evidence_pool_summary["excluded_label"],
+            ]
+            if item
+        ],
         "needed_to_unlock": list(display_unlock_requirements),
         "details_toggle_label": "Show evidence details",
         "details_toggle_hide_label": "Hide evidence details",
+        "copy_button_label": "Copy summary",
     }
+
+    top_summary_lines = []
+    for index, item in enumerate(top_result_evidence[:3], start=1):
+        parts = [f"{index}. {item['title']}"]
+        if item.get("result_role_label"):
+            parts.append(item["result_role_label"])
+        if item.get("price_usage_label"):
+            parts.append(item["price_usage_label"])
+        top_summary_lines.append(" — ".join(parts))
+    copy_summary_lines = [
+        "Query review",
+        f"You searched: {query}",
+        f"Interpreted as: {display_query_review['interpreted_target']}",
+        f"Category: {display_query_review['category']}",
+        f"Match status: {display_query_review['match_state']}",
+        f"Price status: {display_query_review['price_status']}",
+        f"Why: {display_query_review['why']}",
+        f"Evidence: {display_query_review['evidence_summary']}",
+    ]
+    if display_query_review["needed_to_unlock"]:
+        copy_summary_lines.append(
+            "Price unlock condition: " + " / ".join(display_query_review["needed_to_unlock"])
+        )
+    if top_summary_lines:
+        copy_summary_lines.append("Top visible evidence:")
+        copy_summary_lines.extend(top_summary_lines)
+    display_query_review["copy_summary_text"] = "\n".join(copy_summary_lines)
 
     return {
         "market_entry_allowed": market_entry_allowed,

@@ -1158,6 +1158,7 @@
       const evidence = Array.isArray(policy.display_top_result_evidence) ? policy.display_top_result_evidence : [];
       const summary = policy.display_evidence_pool_summary || {};
       const unlock = Array.isArray(policy.display_unlock_requirements) ? policy.display_unlock_requirements : [];
+      const evidenceCards = Array.isArray(review.evidence_cards) ? review.evidence_cards : [];
       const compactRows = evidence.slice(0, 3).map((item, index) => `
         <div class="metric-card">
           <b>${index + 1}. ${escapeHtml(item.result_role_label || item.compatibility_label || 'Visible result')}</b>
@@ -1175,18 +1176,29 @@
           ${item.excluded_reason && item.excluded_reason.length ? `<span>${escapeHtml(item.excluded_reason.join(' / '))}</span>` : ''}
         </div>
       `).join('');
+      const evidenceCardHtml = evidenceCards.length ? evidenceCards.map(item => `
+        <div class="metric-card">
+          <b>Evidence</b>
+          <span>${escapeHtml(item)}</span>
+        </div>
+      `).join('') : '';
       return `
         <article class="state-card">
-          <h3>Query review</h3>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+            <h3 style="margin:0;">Query review</h3>
+            <button type="button" class="ghost-button" data-copy-query-review="true">${escapeHtml(review.copy_button_label || 'Copy summary')}</button>
+          </div>
           <p>You searched: “${escapeHtml(review.query || state.query || '')}”</p>
           <div class="metric-grid">
             <div class="metric-card"><b>Interpreted as</b><span>${escapeHtml(review.interpreted_target || 'Needs verification')}</span></div>
             <div class="metric-card"><b>Price status</b><span>${escapeHtml(review.price_status || policy.display_price_scope_label || 'Price summary locked')}</span></div>
             <div class="metric-card"><b>Why</b><span>${escapeHtml(review.why || policy.display_match_state_message || review.match_state || 'Price summary locked')}</span></div>
             <div class="metric-card"><b>Evidence</b><span>${escapeHtml(review.evidence_summary || summary.summary_line || 'Evidence is still limited')}</span></div>
-            ${unlock.length ? `<div class="metric-card"><b>Needed to unlock</b><span>${escapeHtml(unlock.join(' / '))}</span></div>` : ''}
+            ${unlock.length ? `<div class="metric-card"><b>Price unlock condition</b><span>${escapeHtml(unlock.join(' / '))}</span></div>` : ''}
             <div class="metric-card"><b>Category</b><span>${escapeHtml(review.category || 'Unknown')}</span></div>
           </div>
+          ${evidenceCardHtml ? `<div class="metric-grid">${evidenceCardHtml}</div>` : ''}
+          ${compactRows ? '<p style="margin:14px 0 8px;"><strong>Top visible evidence</strong></p>' : ''}
           ${compactRows ? `<div class="metric-grid">${compactRows}</div>` : ''}
           ${detailRows ? `
             <details class="state-card subtle" style="margin-top:12px;">
@@ -1687,6 +1699,21 @@
           const refine = target.getAttribute('data-refine') || '';
           els['query-input'].value = `${state.query} ${refine}`.trim();
           runSearch(0);
+          return;
+        }
+        if(target && target.matches('[data-copy-query-review]')){
+          const policy = getMarketEntryPolicy();
+          const review = policy.display_query_review || {};
+          const text = review.copy_summary_text || '';
+          if(!text) return;
+          const original = target.textContent;
+          const done = () => {
+            target.textContent = 'Copied';
+            window.setTimeout(() => { target.textContent = original; }, 1400);
+          };
+          if(navigator.clipboard && navigator.clipboard.writeText){
+            navigator.clipboard.writeText(text).then(done).catch(() => {});
+          }
         }
       });
     }
