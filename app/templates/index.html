@@ -1448,6 +1448,39 @@
       return counts;
     }
 
+    function getMarketEntryPriceHeadline(policy){
+      const review = policy.display_query_review || {};
+      const category = String(review.category || '').toLowerCase();
+      if(category === 'body'){
+        return 'Body market summary';
+      }
+      if(policy.display_price_summary_allowed){
+        if(policy.display_price_band_source === 'exact_variant') return 'Exact price';
+        if(policy.display_price_band_source === 'exact_base_model') return 'Same model price';
+      }
+      if(policy.display_broader_reference_allowed){
+        return 'Reference price only';
+      }
+      return 'Price locked';
+    }
+
+    function getMarketEntryPriceValue(policy){
+      if(policy.display_price_summary_allowed){
+        return policy.display_price_band || 'Not enough evidence yet.';
+      }
+      if(policy.display_broader_reference_allowed){
+        return policy.display_broader_reference_band || 'Not enough evidence yet.';
+      }
+      return 'Not enough evidence yet.';
+    }
+
+    function renderMarketEntryUnlockCard(unlockRequirements){
+      if(Array.isArray(unlockRequirements) && unlockRequirements.length){
+        return `<div class="metric-card"><b>Price unlock condition</b><ul class="query-review-unlock-list">${unlockRequirements.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></div>`;
+      }
+      return '<div class="metric-card"><b>Price unlock condition</b><span>Current evidence already supports this summary.</span></div>';
+    }
+
     function renderMarketEntry(results, uiHints){
       const policy = getMarketEntryPolicy();
       const lead = results[0];
@@ -1456,14 +1489,16 @@
       const blockedReasons = Array.isArray(policy.market_entry_block_reason) ? policy.market_entry_block_reason : [];
       const alignmentReasons = Array.isArray(policy.price_scope_search_alignment_reason) ? policy.price_scope_search_alignment_reason : [];
       const unlockRequirements = Array.isArray(policy.display_unlock_requirements) ? policy.display_unlock_requirements : [];
-      const priceScopeLabel = escapeHtml(policy.display_price_scope_label || 'Price summary locked');
-      const exactPriceBand = escapeHtml(policy.display_price_band || 'Price summary locked');
-      const broaderReferenceLabel = escapeHtml(policy.display_broader_reference_label || 'Broader family reference');
-      const broaderReferenceHtml = policy.display_broader_reference_allowed
+      const marketPriceHeadline = escapeHtml(getMarketEntryPriceHeadline(policy));
+      const marketPriceValue = escapeHtml(getMarketEntryPriceValue(policy));
+      const exactPriceBand = escapeHtml(policy.display_price_band || 'Price locked');
+      const broaderReferenceLabel = escapeHtml(policy.display_broader_reference_label || 'Reference price only');
+      const broaderReferenceHtml = policy.display_broader_reference_allowed && policy.display_price_summary_allowed
         ? `<div class="metric-card"><b>${broaderReferenceLabel}</b><span>${escapeHtml(policy.display_broader_reference_band || 'Not enough data')}</span></div>`
         : policy.display_broader_reference_locked_reason
         ? `<div class="metric-card"><b>${broaderReferenceLabel}</b><span>${escapeHtml(policy.display_broader_reference_locked_reason)}</span></div>`
         : '';
+      const evidenceSummary = escapeHtml((policy.display_evidence_pool_summary && policy.display_evidence_pool_summary.summary_line) || 'Evidence is still limited.');
       const refinePrompt = uiHints.needs_disambiguation
         ? 'Refine by mount, focal length, APO/non-APO, or generation before we lock a model-level summary.'
         : 'Search results are shown below, but this query is not safe for a model-level summary yet.';
@@ -1488,13 +1523,13 @@
               <div class="metric-card"><b>Sold confirmed</b><span>Locked</span></div>
               <div class="metric-card"><b>Sold likely</b><span>Locked</span></div>
               <div class="metric-card"><b>Expired or removed archive</b><span>Locked</span></div>
-              <div class="metric-card"><b>${priceScopeLabel}</b><span>${exactPriceBand}</span></div>
+              <div class="metric-card"><b>${marketPriceHeadline}</b><span>${marketPriceValue}</span></div>
               ${broaderReferenceHtml}
               <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
               <div class="metric-card"><b>Price confidence</b><span>${escapeHtml((policy.display_query_review && policy.display_query_review.price_status) || policy.display_price_band_quality_state || policy.display_match_state_message || 'Model-level summary is gated')}</span></div>
               <div class="metric-card"><b>Why locked</b><span>${escapeHtml((policy.display_query_review && policy.display_query_review.why) || policy.display_match_state_message || alignmentReasons.slice(0, 2).join(', ') || blockedReasons.slice(0, 2).join(', ') || policy.model_entry_confidence_state || 'confidence gate active')}</span></div>
-              <div class="metric-card"><b>Evidence pool</b><span>${escapeHtml(`${policy.display_price_band_source || 'locked'} / excluded ${(policy.display_evidence_pool_summary && policy.display_evidence_pool_summary.excluded_pool_count) || policy.excluded_pool_count || 0}`)}</span></div>
-              <div class="metric-card"><b>Unlock requirements</b><span>${escapeHtml(unlockRequirements.slice(0, 2).join(' / ') || 'Need cleaner exact evidence')}</span></div>
+              <div class="metric-card"><b>Price evidence</b><span>${evidenceSummary}</span></div>
+              ${renderMarketEntryUnlockCard(unlockRequirements)}
             </div>
             ${queryEvidencePanel}
             <div class="state-actions">
@@ -1510,10 +1545,10 @@
       const adjacentWarning = uiHints.needs_disambiguation
         ? 'Adjacent models may also be relevant for this broad family query.'
         : 'No adjacent model warning in current query state.';
-      const priceBand = exactPriceBand;
+      const priceBand = policy.display_price_summary_allowed ? exactPriceBand : marketPriceValue;
       const priceConfidence = policy.display_price_summary_allowed
         ? escapeHtml(policy.display_price_band_quality_state || quality.display_message || 'Reference only')
-        : escapeHtml((policy.display_query_review && policy.display_query_review.why) || policy.display_match_state_message || 'Price summary locked');
+        : escapeHtml((policy.display_query_review && policy.display_query_review.why) || policy.display_match_state_message || 'Price locked.');
       const primaryCta = policy.display_price_summary_allowed ? 'Create alert for this exact model' : 'Refine this search';
       return `
         <article class="market-entry-card">
@@ -1534,12 +1569,12 @@
             <div class="metric-card"><b>Sold confirmed</b><span>${counts.soldConfirmed}</span></div>
             <div class="metric-card"><b>Sold likely</b><span>${counts.soldLikely}</span></div>
             <div class="metric-card"><b>Expired or removed archive</b><span>${counts.expiredRemoved}</span></div>
-            <div class="metric-card"><b>${priceScopeLabel}</b><span>${priceBand}</span></div>
+            <div class="metric-card"><b>${marketPriceHeadline}</b><span>${priceBand}</span></div>
             ${broaderReferenceHtml}
             <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
             <div class="metric-card"><b>Price confidence</b><span>${priceConfidence}</span></div>
             <div class="metric-card"><b>Adjacent models warning</b><span>${escapeHtml(adjacentWarning)}</span></div>
-            <div class="metric-card"><b>Evidence pool</b><span>${escapeHtml(`${policy.display_price_band_source || 'locked'} / cleaned ${(policy.display_evidence_pool_summary && (policy.display_evidence_pool_summary.exact_variant_pool_count || policy.display_evidence_pool_summary.exact_base_model_pool_count)) || 0}`)}</span></div>
+            <div class="metric-card"><b>Price evidence</b><span>${evidenceSummary}</span></div>
             <div class="metric-card"><b>Noisy prices excluded</b><span>${escapeHtml(`${(policy.display_evidence_pool_summary && policy.display_evidence_pool_summary.excluded_pool_count) || policy.excluded_pool_count || 0} excluded, ${policy.outlier_removed_count || 0} outliers removed`)}</span></div>
           </div>
           ${queryEvidencePanel}
