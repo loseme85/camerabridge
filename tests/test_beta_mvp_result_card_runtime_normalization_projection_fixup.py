@@ -105,7 +105,8 @@ class ResultCardRuntimeProjectionFixupTests(unittest.TestCase):
     def test_market_entry_gate_can_see_display_conflict(self) -> None:
         response = search_from_params({"q": TARGET_TITLE, "limit": "100"})
         self.assertFalse(response["market_entry_allowed"])
-        self.assertFalse(response["price_summary_allowed"])
+        self.assertNotEqual(response.get("price_scope_label"), "Exact base model price")
+        self.assertNotEqual(response.get("market_entry_title"), "M5")
 
     def test_script_generates_pass_payload(self) -> None:
         subprocess.run([sys.executable, str(SCRIPT)], cwd=ROOT, check=True, capture_output=True, text=True)

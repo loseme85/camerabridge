@@ -1059,7 +1059,14 @@
           price_summary_block_reason: [],
           model_entry_confidence_state: 'no_response',
           market_entry_metrics: null,
-          price_summary_band: 'Not enough exact confidence for price summary'
+          price_summary_band: 'Price summary locked',
+          price_scope: 'insufficient_exact_data',
+          price_scope_label: 'Price summary locked',
+          price_scope_confidence_state: 'price_scope_locked',
+          broader_reference_allowed: false,
+          broader_reference_label: null,
+          broader_reference_band: null,
+          current_ui_label_safe: true
         };
       }
       return state.response.market_entry_policy || {
@@ -1069,7 +1076,14 @@
         price_summary_block_reason: state.response.price_summary_block_reason || [],
         model_entry_confidence_state: state.response.model_entry_confidence_state || 'unknown',
         market_entry_metrics: state.response.market_entry_metrics || null,
-        price_summary_band: state.response.price_summary_band || 'Not enough exact confidence for price summary'
+        price_summary_band: state.response.price_summary_band || 'Price summary locked',
+        price_scope: state.response.price_scope || 'insufficient_exact_data',
+        price_scope_label: state.response.price_scope_label || 'Price summary locked',
+        price_scope_confidence_state: state.response.price_scope_confidence_state || 'price_scope_locked',
+        broader_reference_allowed: Boolean(state.response.broader_reference_allowed),
+        broader_reference_label: state.response.broader_reference_label || null,
+        broader_reference_band: state.response.broader_reference_band || null,
+        current_ui_label_safe: state.response.current_ui_label_safe !== false
       };
     }
 
@@ -1285,6 +1299,13 @@
       const counts = policy.market_entry_metrics || buildMarketCounts(results);
       const quality = getQualitySummary();
       const blockedReasons = Array.isArray(policy.market_entry_block_reason) ? policy.market_entry_block_reason : [];
+      const priceScopeLabel = escapeHtml(policy.price_scope_label || 'Price summary locked');
+      const exactPriceBand = policy.price_summary_allowed
+        ? escapeHtml(policy.price_summary_band || formatPriceBand(results))
+        : escapeHtml(policy.price_scope === 'insufficient_exact_data' ? 'Exact variant price data limited' : 'Price summary locked');
+      const broaderReferenceHtml = policy.broader_reference_allowed
+        ? `<div class="metric-card"><b>${escapeHtml(policy.broader_reference_label || 'Broader family reference')}</b><span>${escapeHtml(policy.broader_reference_band || 'Not enough data')}</span></div>`
+        : '';
       const refinePrompt = uiHints.needs_disambiguation
         ? 'Refine by mount, focal length, APO/non-APO, or generation before we lock a model-level summary.'
         : 'Search results are shown below, but this query is not safe for a model-level summary yet.';
@@ -1308,9 +1329,10 @@
               <div class="metric-card"><b>Sold confirmed</b><span>Locked</span></div>
               <div class="metric-card"><b>Sold likely</b><span>Locked</span></div>
               <div class="metric-card"><b>Expired or removed archive</b><span>Locked</span></div>
-              <div class="metric-card"><b>Indicative price band</b><span>Not enough exact confidence for price summary</span></div>
+              <div class="metric-card"><b>${priceScopeLabel}</b><span>${exactPriceBand}</span></div>
+              ${broaderReferenceHtml}
               <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
-              <div class="metric-card"><b>Price confidence</b><span>Model-level summary is gated</span></div>
+              <div class="metric-card"><b>Price confidence</b><span>${escapeHtml(policy.price_scope === 'insufficient_exact_data' ? 'Exact variant data limited' : policy.price_scope_confidence_state || 'Model-level summary is gated')}</span></div>
               <div class="metric-card"><b>Why locked</b><span>${escapeHtml(blockedReasons.slice(0, 2).join(', ') || policy.model_entry_confidence_state || 'confidence gate active')}</span></div>
             </div>
             <div class="state-actions">
@@ -1326,12 +1348,10 @@
       const adjacentWarning = uiHints.needs_disambiguation
         ? 'Adjacent models may also be relevant for this broad family query.'
         : 'No adjacent model warning in current query state.';
-      const priceBand = policy.price_summary_allowed
-        ? escapeHtml(policy.price_summary_band || formatPriceBand(results))
-        : 'Not enough exact confidence for price summary';
+      const priceBand = exactPriceBand;
       const priceConfidence = policy.price_summary_allowed
         ? escapeHtml(quality.display_message || 'Reference only')
-        : 'Exact model confidence not high enough yet';
+        : escapeHtml(policy.price_scope === 'insufficient_exact_data' ? 'Exact variant price data limited' : 'Price summary locked');
       const primaryCta = policy.price_summary_allowed ? 'Create alert for this exact model' : 'Refine this search';
       return `
         <article class="market-entry-card">
@@ -1339,7 +1359,7 @@
             <div>
               <p class="section-label">Model market entry</p>
               <h3>${escapeHtml(modelTitle)}</h3>
-              <p>Aliases: ${escapeHtml(aliases)}. Market summary is query-level and remains reference-only while coverage is still beta-limited.</p>
+              <p>Aliases: ${escapeHtml(aliases)}. Entry scope and price scope are shown separately so broader family reference does not read like an exact variant valuation.</p>
             </div>
             <div class="market-badges">
               <span class="micro-pill accent">Match Confidence</span>
@@ -1352,7 +1372,8 @@
             <div class="metric-card"><b>Sold confirmed</b><span>${counts.soldConfirmed}</span></div>
             <div class="metric-card"><b>Sold likely</b><span>${counts.soldLikely}</span></div>
             <div class="metric-card"><b>Expired or removed archive</b><span>${counts.expiredRemoved}</span></div>
-            <div class="metric-card"><b>Indicative price band</b><span>${priceBand}</span></div>
+            <div class="metric-card"><b>${priceScopeLabel}</b><span>${priceBand}</span></div>
+            ${broaderReferenceHtml}
             <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
             <div class="metric-card"><b>Price confidence</b><span>${priceConfidence}</span></div>
             <div class="metric-card"><b>Adjacent models warning</b><span>${escapeHtml(adjacentWarning)}</span></div>

@@ -292,6 +292,14 @@ def _result_field(result: Mapping[str, Any], name: str) -> Any:
     return (result.get("final_output") or {}).get(name)
 
 
+def _as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
 def _result_family_conflict(expected_family: str, top_result: Mapping[str, Any]) -> bool:
     if not expected_family:
         return False
@@ -305,6 +313,24 @@ def _result_family_conflict(expected_family: str, top_result: Mapping[str, Any])
     if expected_root and top_root and expected_root != top_root:
         return True
     return False
+
+
+def _result_matches_expected_family(expected_family: str, result: Mapping[str, Any]) -> bool:
+    if not expected_family:
+        return True
+    expected_root = _family_root(expected_family)
+    candidate_text = _normalize_text(
+        _result_field(result, "model_canonical")
+        or _result_field(result, "model_raw")
+        or _result_field(result, "label")
+        or result.get("title")
+    )
+    result_root = _family_root(candidate_text)
+    if expected_root:
+        if result_root:
+            return result_root == expected_root
+        return expected_root.lower() in candidate_text
+    return _normalize_text(expected_family) in candidate_text
 
 
 def _result_mount_conflict(expected_mount: str | None, top_result: Mapping[str, Any]) -> bool:
@@ -343,6 +369,169 @@ def _result_classification_conflict(top_result: Mapping[str, Any]) -> bool:
     )
 
 
+def _result_text_blob(result: Mapping[str, Any]) -> str:
+    parts = [
+        result.get("title"),
+        _result_field(result, "model_canonical"),
+        _result_field(result, "model_raw"),
+        _result_field(result, "label"),
+        " ".join(str(item) for item in _as_list(_result_field(result, "variant")) if item),
+        _result_field(result, "mount"),
+        _result_field(result, "focal_length"),
+    ]
+    return _normalize_text(" ".join(str(item) for item in parts if item))
+
+
+def _query_aperture_hint(query: str) -> str | None:
+    lowered = _normalize_text(query)
+    match = re.search(r"(?:f\s*|/)(0?\.\d+|\d+(?:\.\d+)?)\b", lowered)
+    if match:
+        return match.group(1)
+    trailing = re.search(r"\b\d{2,3}\s+(0?\.\d+)\b", lowered)
+    if trailing:
+        return trailing.group(1)
+    return None
+
+
+def _query_variant_signals(intent: Mapping[str, Any]) -> list[dict[str, str]]:
+    signals: list[dict[str, str]] = []
+    for variant in intent.get("variant") or []:
+        value = str(variant or "").strip()
+        if value:
+            signals.append({"kind": "variant", "value": value})
+    generation = str(intent.get("generation") or "").strip()
+    if generation:
+        signals.append({"kind": "generation", "value": generation})
+    filter_size = str(intent.get("filter_size") or "").strip()
+    if filter_size:
+        signals.append({"kind": "filter_size", "value": filter_size})
+    optical_formula = str(intent.get("optical_formula") or "").strip()
+    if optical_formula:
+        signals.append({"kind": "optical_formula", "value": optical_formula})
+    return signals
+
+
+def _signal_patterns(kind: str, value: str) -> list[str]:
+    lowered = _normalize_text(value)
+    if kind == "generation":
+        mapping = {
+            "1st": ["1st", "first generation", "1세대", "v1", "version 1"],
+            "2nd": ["2nd", "second generation", "2세대", "v2", "version 2"],
+            "3rd": ["3rd", "third generation", "3세대", "v3", "version 3"],
+            "4th": ["4th", "fourth generation", "4세대", "v4", "version 4"],
+        }
+        return mapping.get(lowered, [lowered])
+    if kind == "filter_size":
+        return [lowered]
+    if kind == "optical_formula":
+        if lowered == "8-element":
+            return ["8-element", "8 element", "6군8매", "8매"]
+        if lowered == "6-element":
+            return ["6-element", "6 element", "6매"]
+        return [lowered]
+    variant_map = {
+        "asph": ["asph", "aspherical"],
+        "pre-asph": ["pre-asph", "pre asph", "preasph"],
+        "apo": ["apo"],
+        "aa": [" aa ", "double aspherical"],
+        "8-element": ["8-element", "8 element", "6군8매", "8매"],
+        "6-element": ["6-element", "6 element", "6매"],
+        "rigid": ["rigid"],
+        "dr": [" dr ", "dual range"],
+        "collapsible": ["collapsible"],
+        "steel rim": ["steel rim"],
+        "reissue": ["reissue", "복각"],
+        "close focus": ["close focus"],
+        "floating element": ["floating element", "fle"],
+    }
+    patterns = variant_map.get(lowered)
+    if patterns:
+        return patterns
+    return [lowered]
+
+
+def _result_matches_signal(result: Mapping[str, Any], signal: Mapping[str, str]) -> bool:
+    text = f" {_result_text_blob(result)} "
+    value = str(signal.get("value") or "")
+    kind = str(signal.get("kind") or "")
+    if kind == "filter_size":
+        return value.lower() in text
+    for pattern in _signal_patterns(kind, value):
+        normalized = _normalize_text(pattern)
+        if normalized and normalized in text:
+            return True
+    return False
+
+
+def _result_matches_base_model_scope(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+) -> bool:
+    if _result_classification_conflict(result):
+        return False
+    if intent.get("body_intent"):
+        expected_body = _normalize_text(intent.get("body_intent"))
+        result_body = _normalize_text(
+            _result_field(result, "model_canonical") or _result_field(result, "model_raw") or _result_field(result, "label")
+        )
+        if str(_result_field(result, "category") or "") != "Body":
+            return False
+        if expected_body and expected_body not in result_body:
+            return False
+        return True
+
+    if str(_result_field(result, "category") or "") != "Lens":
+        return False
+    if not _result_matches_expected_family(expected_family, result):
+        return False
+    if expected_mount and str(_result_field(result, "mount") or "") != expected_mount:
+        return False
+    expected_focal = str(intent.get("focal_length") or "")
+    if expected_focal and str(_result_field(result, "focal_length") or "") != expected_focal:
+        return False
+    return True
+
+
+def _result_matches_exact_variant_scope(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    signals: list[dict[str, str]],
+) -> bool:
+    if not _result_matches_base_model_scope(result, intent, expected_family, expected_mount):
+        return False
+    return all(_result_matches_signal(result, signal) for signal in signals)
+
+
+def _result_matches_broader_family_scope(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+) -> bool:
+    if str(_result_field(result, "category") or "") != "Lens":
+        return False
+    if _result_classification_conflict(result):
+        return False
+    if expected_mount and str(_result_field(result, "mount") or "") != expected_mount:
+        return False
+    expected_root = _family_root(expected_family or intent.get("model_family") or "")
+    result_root = _family_root(_result_field(result, "model_canonical") or _result_field(result, "model_raw") or "")
+    if expected_root and result_root and expected_root != result_root:
+        return False
+    expected_focal = str(intent.get("focal_length") or "")
+    if expected_focal and str(_result_field(result, "focal_length") or "") != expected_focal:
+        return False
+    return True
+
+
+def _priced_results(results: list[Mapping[str, Any]]) -> list[Mapping[str, Any]]:
+    return [result for result in results if _parse_price_number(result.get("price")) is not None]
+
+
 def _exact_model_like_match(intent: Mapping[str, Any], top_result: Mapping[str, Any], expected_mount: str | None) -> bool:
     matched = set(top_result.get("matched_fields") or [])
     if intent.get("body_intent"):
@@ -369,25 +558,10 @@ def _result_matches_query_summary_scope(
     expected_family: str,
     expected_mount: str | None,
 ) -> bool:
-    if intent.get("body_intent"):
-        expected_body = _normalize_text(intent.get("body_intent"))
-        result_body = _normalize_text(
-            _result_field(result, "model_canonical") or _result_field(result, "model_raw") or _result_field(result, "label")
-        )
-        if expected_body and expected_body not in result_body:
-            return False
-    else:
-        if str(_result_field(result, "category") or "") != "Lens":
-            return False
-        if expected_family and _result_family_conflict(expected_family, result):
-            return False
-        if expected_mount and str(_result_field(result, "mount") or "") != expected_mount:
-            return False
-        expected_focal = str(intent.get("focal_length") or "")
-        if expected_focal and str(_result_field(result, "focal_length") or "") != expected_focal:
-            return False
-        if _result_variant_conflict(intent, result):
-            return False
+    if not _result_matches_base_model_scope(result, intent, expected_family, expected_mount):
+        return False
+    if not intent.get("body_intent") and _result_variant_conflict(intent, result):
+        return False
     return True
 
 
@@ -493,17 +667,135 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         if _result_matches_query_summary_scope(result, intent, query, expected_family, expected_mount)
     ]
     compatible_counts = _build_market_counts(compatible_results)
-    price_summary_block_reason: list[str] = []
-    if not market_entry_allowed:
-        price_summary_block_reason.append("market_entry_not_allowed")
-    if not exact_model_like_match:
-        price_summary_block_reason.append("exact_model_like_match_missing")
-    if not compatible_results:
-        price_summary_block_reason.append("no_query_compatible_results")
-    if not any(_parse_price_number(result.get("price")) is not None for result in compatible_results):
-        price_summary_block_reason.append("no_query_compatible_priced_results")
+    exact_base_model_results = [
+        result
+        for result in results
+        if _result_matches_base_model_scope(result, intent, expected_family, expected_mount)
+    ]
+    broader_family_results = [
+        result
+        for result in results
+        if _result_matches_broader_family_scope(result, intent, expected_family, expected_mount)
+    ]
+    variant_signals = _query_variant_signals(intent)
+    exact_variant_results = [
+        result
+        for result in results
+        if variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals)
+    ]
 
-    price_summary_allowed = not price_summary_block_reason
+    exact_variant_priced = _priced_results(exact_variant_results)
+    exact_base_model_priced = _priced_results(exact_base_model_results)
+    broader_family_priced = _priced_results(broader_family_results)
+    aperture_hint = _query_aperture_hint(query)
+    aperture_only_variant = (
+        not intent.get("body_intent")
+        and not variant_signals
+        and bool(intent.get("aperture") or aperture_hint)
+        and bool(expected_family)
+        and bool(intent.get("focal_length"))
+    )
+
+    price_summary_block_reason: list[str] = []
+    broader_reference_allowed = False
+    broader_reference_label = None
+    broader_reference_band = None
+    entry_scope = "parent_model" if market_entry_allowed else "hold_conflict"
+    price_scope = "insufficient_exact_data"
+    price_scope_label = "Price summary locked"
+    price_scope_confidence_state = "price_scope_locked"
+
+    if intent.get("body_intent"):
+        if not market_entry_allowed:
+            price_summary_block_reason.append("market_entry_not_allowed")
+        if not exact_model_like_match:
+            price_summary_block_reason.append("exact_model_like_match_missing")
+        if not compatible_results:
+            price_summary_block_reason.append("no_query_compatible_results")
+        if not exact_base_model_priced:
+            price_summary_block_reason.append("no_query_compatible_priced_results")
+        price_summary_allowed = not price_summary_block_reason
+        if price_summary_allowed:
+            price_scope = "exact_base_model"
+            price_scope_label = "Exact base model price"
+            price_scope_confidence_state = "exact_base_model_ready"
+        elif boundary_conflict_detected:
+            price_scope = "blocked_boundary_conflict"
+            price_scope_label = "Price summary locked"
+            price_scope_confidence_state = "boundary_conflict_locked"
+        elif weak_only_fallback:
+            price_scope = "blocked_weak_only"
+            price_scope_label = "Price summary locked"
+            price_scope_confidence_state = "weak_only_locked"
+        else:
+            price_scope = "insufficient_exact_data"
+            price_scope_label = "Price summary locked"
+            price_scope_confidence_state = "body_price_scope_locked"
+    elif boundary_conflict_detected:
+        price_summary_allowed = False
+        price_summary_block_reason.append("boundary_conflict")
+        price_scope = "blocked_boundary_conflict"
+        price_scope_label = "Price summary locked"
+        price_scope_confidence_state = "boundary_conflict_locked"
+    elif variant_signals:
+        entry_scope = "exact_variant" if market_entry_allowed else entry_scope
+        if len(exact_variant_priced) >= 2:
+            price_summary_allowed = True
+            price_scope = "exact_variant"
+            price_scope_label = "Exact variant price"
+            price_scope_confidence_state = "exact_variant_ready"
+        else:
+            price_summary_allowed = False
+            price_scope = "insufficient_exact_data"
+            price_scope_label = "Exact variant price data limited"
+            price_scope_confidence_state = "exact_variant_data_limited"
+            price_summary_block_reason.append("insufficient_exact_variant_priced_results")
+            reference_source = exact_base_model_priced or broader_family_priced
+            if reference_source:
+                broader_reference_allowed = True
+                broader_reference_label = "Broader family reference"
+                broader_reference_band = _format_price_band(reference_source)
+            elif weak_only_fallback:
+                price_summary_block_reason.append("weak_only_fallback")
+    elif weak_only_fallback:
+        price_summary_allowed = False
+        price_summary_block_reason.append("weak_only_fallback")
+        price_scope = "blocked_weak_only"
+        price_scope_label = "Price summary locked"
+        price_scope_confidence_state = "weak_only_locked"
+    elif aperture_only_variant:
+        price_summary_allowed = False
+        price_scope = "broader_model_family"
+        price_scope_label = "Broader family reference"
+        price_scope_confidence_state = "broader_family_reference_only"
+        price_summary_block_reason.append("aperture_only_scope_requires_broader_reference")
+        if broader_family_priced:
+            broader_reference_allowed = True
+            broader_reference_label = "Broader family reference"
+            broader_reference_band = _format_price_band(broader_family_priced)
+    else:
+        if not market_entry_allowed:
+            price_summary_block_reason.append("market_entry_not_allowed")
+        if not exact_base_model_results:
+            price_summary_block_reason.append("no_query_compatible_results")
+        if not exact_base_model_priced:
+            price_summary_block_reason.append("no_query_compatible_priced_results")
+        price_summary_allowed = not price_summary_block_reason
+        if price_summary_allowed:
+            price_scope = "exact_base_model"
+            price_scope_label = "Exact base model price"
+            price_scope_confidence_state = "exact_base_model_ready"
+        elif broader_family_priced:
+            price_scope = "broader_model_family"
+            price_scope_label = "Broader family reference"
+            price_scope_confidence_state = "broader_family_reference_only"
+            broader_reference_allowed = True
+            broader_reference_label = "Broader family reference"
+            broader_reference_band = _format_price_band(broader_family_priced)
+        else:
+            price_scope = "insufficient_exact_data"
+            price_scope_label = "Price summary locked"
+            price_scope_confidence_state = "price_scope_locked"
 
     if market_entry_allowed:
         confidence_state = "exact_model_confident"
@@ -524,6 +816,11 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
     if market_entry_allowed and top_result:
         market_entry_title = _result_field(top_result, "model_canonical") or top_result.get("title")
 
+    current_ui_label_safe = bool(
+        (price_summary_allowed and price_scope_label in {"Exact variant price", "Exact base model price"})
+        or (not price_summary_allowed and price_scope_label in {"Exact variant price data limited", "Broader family reference", "Price summary locked"})
+    )
+
     return {
         "market_entry_allowed": market_entry_allowed,
         "market_entry_block_reason": market_entry_block_reason,
@@ -538,7 +835,30 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         "market_entry_title": market_entry_title,
         "compatible_result_count": len(compatible_results),
         "market_entry_metrics": compatible_counts,
-        "price_summary_band": _format_price_band(compatible_results) if price_summary_allowed else "Not enough exact confidence for price summary",
+        "entry_scope": entry_scope,
+        "price_scope": price_scope,
+        "price_scope_label": price_scope_label,
+        "price_scope_confidence_state": price_scope_confidence_state,
+        "variant_tokens_detected": [signal["value"] for signal in variant_signals],
+        "exact_variant_result_count": len(exact_variant_results),
+        "exact_variant_priced_count": len(exact_variant_priced),
+        "exact_base_model_result_count": len(exact_base_model_results),
+        "exact_base_model_priced_count": len(exact_base_model_priced),
+        "broader_family_result_count": len(broader_family_results),
+        "broader_family_priced_count": len(broader_family_priced),
+        "broader_reference_allowed": broader_reference_allowed,
+        "broader_reference_label": broader_reference_label,
+        "broader_reference_band": broader_reference_band,
+        "current_ui_label_safe": current_ui_label_safe,
+        "price_summary_band": (
+            _format_price_band(exact_variant_results)
+            if price_summary_allowed and price_scope == "exact_variant"
+            else _format_price_band(exact_base_model_results)
+            if price_summary_allowed
+            else "Exact variant price data limited"
+            if price_scope == "insufficient_exact_data"
+            else "Price summary locked"
+        ),
         "expected_query_family": expected_family or None,
         "expected_query_mount": expected_mount,
         "required_query_confidence": required_confidence,
