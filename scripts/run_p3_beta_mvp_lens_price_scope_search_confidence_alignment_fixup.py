@@ -45,13 +45,13 @@ SEARCH_CONFIDENCE_MISMATCH = ["Summilux-M 50 ASPH"]
 EXACT_VARIANT_READY = ["Summicron 35 8-element", "Summicron 50 rigid"]
 VARIANT_DATA_LIMITED = [
     "Leica Summilux-M 50mm f1.4 3세대",
-    "Summilux 50 3rd generation",
     "35 lux aa",
     "Noctilux 50 f1 E60",
 ]
+PROMOTED_EXACT_VARIANT = ["Summilux 50 3rd generation"]
 BOUNDARY_LOCKED = ["APO-Summicron-SL 90"]
 REGRESSIONS = ["M50/1.2", "Leica M9", "Leica M10", "Leica M11", "ltm summaron 35"]
-ALL_QUERIES = SEARCH_CONFIDENCE_MISMATCH + EXACT_VARIANT_READY + VARIANT_DATA_LIMITED + BOUNDARY_LOCKED + REGRESSIONS
+ALL_QUERIES = SEARCH_CONFIDENCE_MISMATCH + EXACT_VARIANT_READY + PROMOTED_EXACT_VARIANT + VARIANT_DATA_LIMITED + BOUNDARY_LOCKED + REGRESSIONS
 
 
 def run_git(*args: str) -> str:
@@ -134,6 +134,10 @@ def classify_failures(rows: dict[str, dict[str, Any]]) -> tuple[list[str], list[
             ready_regressions.append(query)
         if item["top_result_compatibility"] != "exact_variant_strong":
             ready_regressions.append(query)
+
+    promoted = rows["Summilux 50 3rd generation"]
+    if not promoted["price_summary_allowed"] or promoted["price_scope"] != "exact_variant":
+        ready_regressions.append("Summilux 50 3rd generation")
 
     for query in BOUNDARY_LOCKED:
         item = rows[query]

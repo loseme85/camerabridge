@@ -51,11 +51,11 @@ SEARCH_CONFIDENCE_MISMATCH = [
 
 VARIANT_DATA_LIMITED = [
     "Leica Summilux-M 50mm f1.4 3세대",
-    "Summilux 50 3rd generation",
     "Summilux-M 50 pre-ASPH",
     "35 lux aa",
     "Noctilux 50 f1 E60",
 ]
+PROMOTED_EXACT_VARIANT = ["Summilux 50 3rd generation"]
 
 BROADER_FAMILY_ONLY = [
     "Noctilux 50 0.95",
@@ -76,7 +76,7 @@ REGRESSION_QUERIES = [
     "Leica M11",
 ]
 
-ALL_QUERIES = SEARCH_CONFIDENCE_MISMATCH + EXACT_VARIANT_READY + VARIANT_DATA_LIMITED + BROADER_FAMILY_ONLY + BOUNDARY_LOCKED + REGRESSION_QUERIES
+ALL_QUERIES = SEARCH_CONFIDENCE_MISMATCH + EXACT_VARIANT_READY + PROMOTED_EXACT_VARIANT + VARIANT_DATA_LIMITED + BROADER_FAMILY_ONLY + BOUNDARY_LOCKED + REGRESSION_QUERIES
 
 
 def run_git(*args: str) -> str:
@@ -169,13 +169,17 @@ def classify_failures(rows: dict[str, dict[str, Any]]) -> tuple[list[str], list[
         if not row["current_ui_label_safe"]:
             unsafe.append(query)
 
+    promoted = rows["Summilux 50 3rd generation"]
+    if not promoted["price_summary_allowed"] or promoted["price_scope"] != "exact_variant":
+        ready_regressions.append("Summilux 50 3rd generation")
+
     for query in BROADER_FAMILY_ONLY:
         row = rows[query]
         if row["price_summary_allowed"]:
             unsafe.append(query)
         if row["price_scope_label"] not in {"Broader family reference", "Price summary locked"}:
             unsafe.append(query)
-        if row["broader_reference_allowed"] and row["broader_reference_label"] != "Broader family reference":
+        if row["broader_reference_allowed"] and row["broader_reference_label"] not in {"Broader family reference", "Exact base model reference"}:
             unsafe.append(query)
 
     for query in BOUNDARY_LOCKED:

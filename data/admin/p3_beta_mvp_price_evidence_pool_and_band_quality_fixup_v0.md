@@ -10,22 +10,22 @@
 ## Noctilux E60
 - `price_summary_allowed`: `False`
 - `price_scope_label`: `Exact variant price data limited`
-- `broader_reference_band`: `KRW 6,900,000 - 8,280,000`
-- `broader_reference_quality_state`: `clean_broader_reference_band`
+- `broader_reference_band`: `KRW 5,900,000 - 8,880,000`
+- `broader_reference_quality_state`: `clean_exact_base_model_band`
 - `unlock_requirements`: `Need 2+ exact variant priced listings.`
 
 ## Summilux 50 3rd Generation
 - `price_summary_allowed`: `False`
 - `price_scope_label`: `Exact variant price data limited`
-- `broader_reference_band`: `KRW 2,700,000 - 5,500,000`
+- `broader_reference_band`: `KRW 2,500,000 - 6,150,000`
 
 ## 35 lux aa
 - `price_summary_allowed`: `False`
-- `broader_reference_allowed`: `False`
-- `broader_reference_locked_reason`: `too_wide_price_band`
+- `broader_reference_allowed`: `True`
+- `broader_reference_locked_reason`: `None`
 
 ## Exact Variant Stable
-- `Summicron 35 8-element` -> allowed=True / band=KRW 4,900,000 - 8,600,000 / excluded=3
+- `Summicron 35 8-element` -> allowed=True / band=KRW 2,970,000 - 8,600,000 / excluded=3
 - `Summicron 50 rigid` -> allowed=True / band=KRW 2,400,000 - 3,500,000 / excluded=4
 - `Leica M50/1.2 1세대` -> allowed=True / band=KRW 43,000,000 - 53,000,000 / excluded=0
 

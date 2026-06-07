@@ -60,7 +60,6 @@ class LensPriceScopeSearchConfidenceAlignmentFixupTests(unittest.TestCase):
     def test_exact_variant_data_limited_queries_stay_limited(self) -> None:
         for query in [
             "Leica Summilux-M 50mm f1.4 3세대",
-            "Summilux 50 3rd generation",
             "Noctilux 50 f1 E60",
         ]:
             with self.subTest(query=query):
@@ -69,6 +68,13 @@ class LensPriceScopeSearchConfidenceAlignmentFixupTests(unittest.TestCase):
                 self.assertEqual(row["price_scope"], "insufficient_exact_data")
                 self.assertEqual(row["price_scope_label"], "Exact variant price data limited")
                 self.assertTrue(row["broader_reference_allowed"])
+
+    def test_summilux_50_3rd_generation_can_open_when_exact_evidence_and_search_align(self) -> None:
+        row = self.rows["Summilux 50 3rd generation"]
+        self.assertTrue(row["price_summary_allowed"])
+        self.assertEqual(row["price_scope"], "exact_variant")
+        self.assertEqual(row["price_scope_label"], "Exact variant price")
+        self.assertTrue(row["price_scope_search_aligned"])
 
     def test_35_lux_aa_stays_locked_when_no_exact_strong_visible_results(self) -> None:
         row = self.rows["35 lux aa"]

@@ -35,6 +35,7 @@ if str(PROJECT_ROOT) not in sys.path:
 ERROR_SCHEMA_VERSION = "search_service.error.v1"
 ALLOWED_CATEGORIES = {"Lens", "Body", "Accessory"}
 DEFAULT_MAX_LIMIT = 100
+PRICE_EVIDENCE_SCAN_LIMIT = 60
 DEFAULT_SUPPORTED_SORTS = {
     "relevance",
     "price_asc",
@@ -781,6 +782,98 @@ def _price_band_from_cleaned_results(results: list[Mapping[str, Any]]) -> dict[s
     }
 
 
+def _humanize_policy_reason(reason: str) -> str:
+    mapping = {
+        "no_exact_or_strong_visible_results": "No exact strong visible listings yet.",
+        "weak_only_fallback": "Results are visible, but not strong enough for model-level pricing.",
+        "third_party_top_domination": "Top visible results are third-party or adjacent items.",
+        "too_wide_price_band": "Reference prices are too spread out to show safely.",
+        "too_noisy_broader_reference": "Broader family reference is too noisy to show safely.",
+        "exact_model_like_match_missing": "Exact model evidence is missing from visible results.",
+        "dangerous_unknown_family_token": "Query includes a model-like token that needs verification.",
+        "boundary_conflict": "This query still conflicts across family, mount, or variant boundaries.",
+        "search_aligned_exact_or_strong_visible": "Exact or strong compatible listings are visible.",
+        "no_results": "No visible results are available yet.",
+        "family_conflict": "Visible results do not stay inside the requested lens family.",
+        "mount_conflict": "Visible results do not stay inside the requested mount.",
+        "category_conflict": "Visible results do not stay inside the requested category.",
+        "variant_conflict": "Visible results do not stay inside the requested variant.",
+        "classification_conflict": "A listing-level classification conflict needs review first.",
+        "market_entry_not_allowed": "Model-level summary is still locked for this query.",
+        "insufficient_exact_variant_priced_results": "Exact variant price data is still limited.",
+        "no_query_compatible_results": "No compatible visible results are ready for pricing.",
+        "no_query_compatible_priced_results": "No compatible priced results are ready for pricing.",
+        "aperture_only_scope_requires_broader_reference": "This query is only safe for broader family reference right now.",
+        "not_enough_clean_priced_evidence": "Not enough clean priced listings are available yet.",
+        "no_clean_priced_evidence": "Clean priced evidence is not available yet.",
+        "accessory_contaminated": "Accessory prices are contaminating this reference pool.",
+        "third_party_contaminated": "Third-party prices are contaminating this reference pool.",
+        "wrong_model_contaminated": "Wrong-model prices are contaminating this reference pool.",
+        "outlier_contaminated": "Outlier prices are contaminating this reference pool.",
+        "locked_boundary_conflict": "Price summary is locked until boundary conflicts are resolved.",
+        "locked_weak_only": "Price summary is locked until stronger visible results appear.",
+    }
+    return mapping.get(reason, reason.replace("_", " ").capitalize())
+
+
+def _humanize_quality_state(state: str) -> str:
+    mapping = {
+        "clean_exact_variant_band": "Clean exact variant band",
+        "clean_exact_base_model_band": "Clean exact base model band",
+        "clean_broader_reference_band": "Clean broader family reference",
+        "insufficient_priced_evidence": "Exact price data limited",
+        "too_noisy_broader_reference": "Broader family reference is too noisy",
+        "too_wide_price_band": "Reference prices are too spread out to show safely",
+        "outlier_contaminated": "Outlier contamination detected",
+        "accessory_contaminated": "Accessory contamination detected",
+        "third_party_contaminated": "Third-party contamination detected",
+        "wrong_model_contaminated": "Wrong-model contamination detected",
+        "locked_boundary_conflict": "Price summary locked by boundary conflict",
+        "locked_weak_only": "Price summary locked by weak fallback",
+    }
+    return mapping.get(state, state.replace("_", " ").capitalize())
+
+
+def _result_signature(result: Mapping[str, Any]) -> tuple[str, str, str, str]:
+    return (
+        _normalize_dedupe_title(_result_title(result)),
+        str(_parse_price_number(result.get("price")) or ""),
+        _result_currency(result),
+        _normalize_text(result.get("source")),
+    )
+
+
+def _build_interpreted_target(
+    query: str,
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    variant_signals: list[dict[str, str]],
+    price_scope_label: str,
+) -> str:
+    if intent.get("body_intent"):
+        parts = [str(intent.get("body_intent"))]
+        if str(intent.get("brand") or ""):
+            parts.insert(0, str(intent.get("brand")))
+        return " ".join(part for part in parts if part)
+
+    family = expected_family or str(intent.get("model_family") or "Lens candidate")
+    focal = str(intent.get("focal_length") or "").strip()
+    aperture = str(intent.get("aperture") or _query_aperture_hint(query) or "").strip()
+    variant_text = ", ".join(str(signal.get("value") or "") for signal in variant_signals if signal.get("value"))
+    parts = [family]
+    if expected_mount:
+        parts.append(expected_mount)
+    if focal:
+        parts.append(f"{focal}mm")
+    if aperture:
+        parts.append(f"f{aperture}")
+    if variant_text:
+        parts.append(variant_text)
+    parts.append(f"candidate ({price_scope_label})")
+    return " / ".join(part for part in parts if part)
+
+
 def _result_matches_price_base_model_scope(
     result: Mapping[str, Any],
     intent: Mapping[str, Any],
@@ -978,6 +1071,7 @@ def _build_price_evidence_pool(
         "raw_results": raw_pool,
         "raw_priced_results": raw_priced,
         "cleaned_results": cleaned,
+        "excluded": excluded,
         "raw_pool_count": len(raw_pool),
         "priced_count": len(raw_priced),
         "cleaned_pool_count": len(cleaned),
@@ -999,9 +1093,15 @@ def _build_price_evidence_pool(
     }
 
 
-def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints: Mapping[str, Any]) -> dict[str, Any]:
+def build_market_entry_policy(
+    query: str,
+    response: Mapping[str, Any],
+    ui_hints: Mapping[str, Any],
+    evidence_response: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
     intent = response.get("intent") or {}
     results = list(response.get("results") or [])
+    evidence_results = list((evidence_response or response).get("results") or results)
     quality = response.get("result_quality_summary") or {}
     top_result = results[0] if results else {}
     expected_mount = _explicit_query_mount(query, intent)
@@ -1055,21 +1155,36 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         if _result_matches_query_summary_scope(result, intent, query, expected_family, expected_mount)
     ]
     compatible_counts = _build_market_counts(compatible_results)
-    exact_base_model_results = [
+    variant_signals = _query_variant_signals(intent)
+    query_aperture = _query_aperture_value(intent, query)
+    visible_exact_base_model_results = [
         result
         for result in results
         if _result_matches_base_model_scope(result, intent, expected_family, expected_mount)
     ]
-    broader_family_results = [
+    visible_broader_family_results = [
         result
         for result in results
         if _result_matches_broader_family_scope(result, intent, expected_family, expected_mount)
     ]
-    variant_signals = _query_variant_signals(intent)
-    query_aperture = _query_aperture_value(intent, query)
-    exact_variant_results = [
+    visible_exact_variant_results = [
         result
         for result in results
+        if variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals)
+    ]
+    exact_base_model_results = [
+        result
+        for result in evidence_results
+        if _result_matches_base_model_scope(result, intent, expected_family, expected_mount)
+    ]
+    broader_family_results = [
+        result
+        for result in evidence_results
+        if _result_matches_broader_family_scope(result, intent, expected_family, expected_mount)
+    ]
+    exact_variant_results = [
+        result
+        for result in evidence_results
         if variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals)
     ]
 
@@ -1107,8 +1222,8 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
     exact_variant_priced = list(exact_variant_pool["cleaned_results"])
     exact_base_model_priced = list(exact_base_model_pool["cleaned_results"])
     broader_family_priced = list(broader_family_pool["cleaned_results"])
-    exact_variant_strong_visible = _strong_results(exact_variant_results)
-    exact_base_model_strong_visible = _strong_results(exact_base_model_results)
+    exact_variant_strong_visible = _strong_results(visible_exact_variant_results)
+    exact_base_model_strong_visible = _strong_results(visible_exact_base_model_results)
     aperture_hint = _query_aperture_hint(query)
     aperture_only_variant = (
         not intent.get("body_intent")
@@ -1170,6 +1285,12 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
     broader_reference_label = None
     broader_reference_band = None
     broader_reference_locked_reason: str | None = None
+    broader_reference_quality_state = None
+    broader_reference_quality_reason: list[str] = []
+    broader_reference_source_scope: str | None = None
+    broader_reference_pool_count = 0
+    broader_reference_excluded_pool_count = 0
+    broader_reference_outlier_removed_count = 0
     entry_scope = "parent_model" if market_entry_allowed else "hold_conflict"
     price_scope = "insufficient_exact_data"
     price_scope_label = "Price summary locked"
@@ -1268,13 +1389,19 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
             )
             reference_pool = exact_base_model_pool if exact_base_model_priced else broader_family_pool
             if reference_pool["cleaned_results"]:
+                broader_reference_quality_state = str(reference_pool["price_band_quality_state"] or "")
+                broader_reference_quality_reason = list(reference_pool["price_band_quality_reason"] or [])
+                broader_reference_source_scope = "exact_base_model_pool" if reference_pool is exact_base_model_pool else "broader_family_pool"
+                broader_reference_pool_count = int(reference_pool["cleaned_pool_count"])
+                broader_reference_excluded_pool_count = int(reference_pool["excluded_pool_count"])
+                broader_reference_outlier_removed_count = int(reference_pool["outlier_removed_count"])
                 if reference_pool["price_band_quality_state"] == "clean_broader_reference_band":
                     broader_reference_allowed = True
                     broader_reference_label = "Broader family reference"
                     broader_reference_band = reference_pool["cleaned_band"]
                 elif reference_pool["price_band_quality_state"] == "clean_exact_base_model_band":
                     broader_reference_allowed = True
-                    broader_reference_label = "Broader family reference"
+                    broader_reference_label = "Exact base model reference"
                     broader_reference_band = reference_pool["cleaned_band"]
                 else:
                     broader_reference_allowed = False
@@ -1294,6 +1421,12 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         price_scope_confidence_state = "broader_family_reference_only"
         price_summary_block_reason.append("aperture_only_scope_requires_broader_reference")
         price_evidence_scope = "broader_model_family"
+        broader_reference_quality_state = str(broader_family_pool["price_band_quality_state"] or "")
+        broader_reference_quality_reason = list(broader_family_pool["price_band_quality_reason"] or [])
+        broader_reference_source_scope = "broader_family_pool"
+        broader_reference_pool_count = int(broader_family_pool["cleaned_pool_count"])
+        broader_reference_excluded_pool_count = int(broader_family_pool["excluded_pool_count"])
+        broader_reference_outlier_removed_count = int(broader_family_pool["outlier_removed_count"])
         if broader_family_priced and broader_family_pool["price_band_quality_state"] == "clean_broader_reference_band":
             broader_reference_allowed = True
             broader_reference_label = "Broader family reference"
@@ -1304,7 +1437,7 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         price_evidence_scope = "exact_base_model"
         if not market_entry_allowed:
             price_summary_block_reason.append("market_entry_not_allowed")
-        if not exact_base_model_results:
+        if not visible_exact_base_model_results:
             price_summary_block_reason.append("no_query_compatible_results")
         if not exact_base_model_priced:
             price_summary_block_reason.append("no_query_compatible_priced_results")
@@ -1322,6 +1455,12 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
             price_scope = "broader_model_family"
             price_scope_label = "Broader family reference"
             price_scope_confidence_state = "broader_family_reference_only"
+            broader_reference_quality_state = str(broader_family_pool["price_band_quality_state"] or "")
+            broader_reference_quality_reason = list(broader_family_pool["price_band_quality_reason"] or [])
+            broader_reference_source_scope = "broader_family_pool"
+            broader_reference_pool_count = int(broader_family_pool["cleaned_pool_count"])
+            broader_reference_excluded_pool_count = int(broader_family_pool["excluded_pool_count"])
+            broader_reference_outlier_removed_count = int(broader_family_pool["outlier_removed_count"])
             broader_reference_allowed = True
             broader_reference_label = "Broader family reference"
             broader_reference_band = broader_family_pool["cleaned_band"]
@@ -1329,6 +1468,12 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
             price_scope = "insufficient_exact_data"
             price_scope_label = "Price summary locked"
             price_scope_confidence_state = "price_scope_locked"
+            broader_reference_quality_state = str(broader_family_pool["price_band_quality_state"] or "")
+            broader_reference_quality_reason = list(broader_family_pool["price_band_quality_reason"] or [])
+            broader_reference_source_scope = "broader_family_pool"
+            broader_reference_pool_count = int(broader_family_pool["cleaned_pool_count"])
+            broader_reference_excluded_pool_count = int(broader_family_pool["excluded_pool_count"])
+            broader_reference_outlier_removed_count = int(broader_family_pool["outlier_removed_count"])
             broader_reference_locked_reason = broader_family_pool["price_band_quality_state"]
         else:
             price_scope = "insufficient_exact_data"
@@ -1394,6 +1539,107 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
     if boundary_conflict_detected:
         unlock_requirements.append("Need no boundary conflict between family, mount, and variant.")
 
+    exact_variant_signatures = {_result_signature(result) for result in exact_variant_pool["cleaned_results"]}
+    exact_base_signatures = {_result_signature(result) for result in exact_base_model_pool["cleaned_results"]}
+    broader_signatures = {_result_signature(result) for result in broader_family_pool["cleaned_results"]}
+
+    excluded_reason_by_signature: dict[tuple[str, str, str, str], list[str]] = {}
+    for pool in (exact_variant_pool, exact_base_model_pool, broader_family_pool):
+        for excluded_item in pool.get("excluded", []) if isinstance(pool.get("excluded"), list) else []:
+            result = excluded_item.get("result") or {}
+            excluded_reason_by_signature[_result_signature(result)] = list(excluded_item.get("reasons") or [])
+
+    top_result_evidence = []
+    for result in results[:5]:
+        signature = _result_signature(result)
+        excluded_reasons = excluded_reason_by_signature.get(signature, [])
+        if signature in exact_variant_signatures:
+            evidence_pool = "exact_variant_pool"
+            used_for_price = price_summary_allowed and price_scope == "exact_variant"
+        elif signature in exact_base_signatures:
+            evidence_pool = "exact_base_model_pool"
+            used_for_price = price_summary_allowed and price_scope == "exact_base_model"
+        elif signature in broader_signatures:
+            evidence_pool = "broader_family_pool"
+            used_for_price = bool(broader_reference_allowed)
+        else:
+            evidence_pool = "excluded_pool" if excluded_reasons else "visible_only"
+            used_for_price = False
+
+        if boundary_conflict_detected:
+            compatibility_label = "Boundary conflict"
+        elif third_party_top_domination_detected and result is top_result:
+            compatibility_label = "Third-party top result"
+        elif variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals):
+            compatibility_label = "Exact variant"
+        elif _result_matches_base_model_scope(result, intent, expected_family, expected_mount):
+            compatibility_label = "Exact base model"
+        elif _result_matches_broader_family_scope(result, intent, expected_family, expected_mount):
+            compatibility_label = "Broader family"
+        else:
+            compatibility_label = "Query incompatible"
+
+        top_result_evidence.append(
+            {
+                "title": _result_title(result),
+                "source": str(result.get("source") or ""),
+                "price": str(result.get("price") or ""),
+                "compatibility_label": compatibility_label,
+                "evidence_pool": evidence_pool,
+                "used_for_price": used_for_price,
+                "excluded_reason": [_humanize_policy_reason(reason) for reason in excluded_reasons],
+                "display_category": str(_result_field(result, "category") or ""),
+                "display_model": str(_result_field(result, "model_canonical") or _result_field(result, "model_raw") or ""),
+            }
+        )
+
+    display_price_summary_allowed = bool(price_summary_allowed)
+    display_price_scope_label = price_scope_label
+    display_price_band = price_summary_band = (
+        exact_variant_pool["cleaned_band"]
+        if price_summary_allowed and price_scope == "exact_variant"
+        else exact_base_model_pool["cleaned_band"]
+        if price_summary_allowed
+        else "Exact variant price data limited"
+        if price_scope == "insufficient_exact_data"
+        else "Price summary locked"
+    )
+    display_price_band_source = price_evidence_scope
+    display_broader_reference_allowed = bool(broader_reference_allowed)
+    display_broader_reference_label = broader_reference_label
+    display_broader_reference_band = broader_reference_band if broader_reference_allowed else None
+    display_broader_reference_locked_reason = (
+        _humanize_policy_reason(broader_reference_locked_reason) if broader_reference_locked_reason else None
+    )
+    display_price_band_quality_state = _humanize_quality_state(price_band_quality_state)
+    display_unlock_requirements = unlock_requirements
+    display_evidence_pool_summary = {
+        "exact_variant_pool_count": int(exact_variant_pool["cleaned_pool_count"]),
+        "exact_base_model_pool_count": int(exact_base_model_pool["cleaned_pool_count"]),
+        "broader_family_pool_count": int(broader_family_pool["cleaned_pool_count"]),
+        "excluded_pool_count": excluded_pool_count,
+        "outlier_removed_count": outlier_removed_count,
+        "broader_reference_allowed": broader_reference_allowed,
+        "price_band_quality_state": display_price_band_quality_state,
+    }
+    display_match_state_message = _humanize_policy_reason(
+        alignmentReasons[0] if (alignmentReasons := price_scope_search_alignment_reason) else search_confidence_state
+    )
+    display_query_review = {
+        "query": query,
+        "interpreted_target": _build_interpreted_target(
+            query,
+            intent,
+            expected_family,
+            expected_mount,
+            variant_signals,
+            price_scope_label,
+        ),
+        "category": expected_category or ("Body" if intent.get("body_intent") else "Lens"),
+        "match_state": display_match_state_message,
+        "price_status": price_scope_label,
+    }
+
     return {
         "market_entry_allowed": market_entry_allowed,
         "market_entry_block_reason": market_entry_block_reason,
@@ -1446,22 +1692,29 @@ def build_market_entry_policy(query: str, response: Mapping[str, Any], ui_hints:
         "broader_reference_label": broader_reference_label,
         "broader_reference_band": broader_reference_band,
         "broader_reference_locked_reason": broader_reference_locked_reason,
-        "broader_reference_quality_state": broader_family_pool["price_band_quality_state"],
-        "broader_reference_quality_reason": broader_family_pool["price_band_quality_reason"],
-        "broader_reference_pool_count": int(broader_family_pool["cleaned_pool_count"]),
-        "broader_reference_excluded_pool_count": int(broader_family_pool["excluded_pool_count"]),
-        "broader_reference_outlier_removed_count": int(broader_family_pool["outlier_removed_count"]),
+        "broader_reference_quality_state": broader_reference_quality_state,
+        "broader_reference_quality_reason": broader_reference_quality_reason,
+        "broader_reference_source_scope": broader_reference_source_scope,
+        "broader_reference_pool_count": broader_reference_pool_count,
+        "broader_reference_excluded_pool_count": broader_reference_excluded_pool_count,
+        "broader_reference_outlier_removed_count": broader_reference_outlier_removed_count,
         "unlock_requirements": unlock_requirements,
+        "display_price_summary_allowed": display_price_summary_allowed,
+        "display_price_scope_label": display_price_scope_label,
+        "display_price_band": display_price_band,
+        "display_price_band_source": display_price_band_source,
+        "display_broader_reference_allowed": display_broader_reference_allowed,
+        "display_broader_reference_label": display_broader_reference_label,
+        "display_broader_reference_band": display_broader_reference_band,
+        "display_broader_reference_locked_reason": display_broader_reference_locked_reason,
+        "display_price_band_quality_state": display_price_band_quality_state,
+        "display_unlock_requirements": display_unlock_requirements,
+        "display_evidence_pool_summary": display_evidence_pool_summary,
+        "display_top_result_evidence": top_result_evidence,
+        "display_match_state_message": display_match_state_message,
+        "display_query_review": display_query_review,
         "current_ui_label_safe": current_ui_label_safe,
-        "price_summary_band": (
-            exact_variant_pool["cleaned_band"]
-            if price_summary_allowed and price_scope == "exact_variant"
-            else exact_base_model_pool["cleaned_band"]
-            if price_summary_allowed
-            else "Exact variant price data limited"
-            if price_scope == "insufficient_exact_data"
-            else "Price summary locked"
-        ),
+        "price_summary_band": price_summary_band,
         "expected_query_family": expected_family or None,
         "expected_query_mount": expected_mount,
         "required_query_confidence": required_confidence,
@@ -1627,6 +1880,26 @@ def search_from_params(
     load_and_search: Callable[..., dict[str, Any]] = runtime["load_and_search"]
     build_query_ui_hints: Callable[..., dict[str, Any]] = runtime["build_query_ui_hints"]
     parsed = parse_search_params(params)
+    evidence_limit = min(int(runtime.get("max_limit") or DEFAULT_MAX_LIMIT), max(parsed["limit"], PRICE_EVIDENCE_SCAN_LIMIT))
+
+    def build_evidence_response() -> dict[str, Any] | None:
+        if evidence_limit <= parsed["limit"] and parsed["offset"] == 0:
+            return None
+        kwargs = dict(
+            query=parsed["query"],
+            limit=evidence_limit,
+            offset=0,
+            filters=parsed["filters"],
+            sort=parsed["sort"],
+            include_debug=parsed["include_debug"],
+            strong_only=parsed["strong_only"],
+        )
+        if parsed["min_score"] is not None:
+            kwargs["min_score"] = parsed["min_score"]
+        if records is not None:
+            return search_records(records=records, **kwargs)
+        return load_and_search(path=_resolve_search_index_path(path), **kwargs)
+
     if records is not None:
         response = search_records(
             query=parsed["query"],
@@ -1640,7 +1913,13 @@ def search_from_params(
             **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
         )
         response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
-        response["market_entry_policy"] = build_market_entry_policy(parsed["query"], response, response["ui_hints"])
+        evidence_response = build_evidence_response()
+        response["market_entry_policy"] = build_market_entry_policy(
+            parsed["query"],
+            response,
+            response["ui_hints"],
+            evidence_response=evidence_response,
+        )
         response.update(response["market_entry_policy"])
         return response
 
@@ -1657,7 +1936,13 @@ def search_from_params(
         **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
     )
     response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
-    response["market_entry_policy"] = build_market_entry_policy(parsed["query"], response, response["ui_hints"])
+    evidence_response = build_evidence_response()
+    response["market_entry_policy"] = build_market_entry_policy(
+        parsed["query"],
+        response,
+        response["ui_hints"],
+        evidence_response=evidence_response,
+    )
     response.update(response["market_entry_policy"])
     return response
 

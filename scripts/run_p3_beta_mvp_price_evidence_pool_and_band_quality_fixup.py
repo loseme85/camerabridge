@@ -168,10 +168,14 @@ def classify_failures(rows: dict[str, dict[str, Any]]) -> tuple[list[str], list[
     if e60["broader_reference_allowed"] and e60["broader_reference_quality_state"] not in {"clean_broader_reference_band", "clean_exact_base_model_band"}:
         noisy_band.append("Noctilux 50 f1 E60")
 
-    for query in ["Leica Summilux-M 50mm f1.4 3세대", "Summilux 50 3rd generation", "35 lux aa"]:
+    for query in ["Leica Summilux-M 50mm f1.4 3세대", "35 lux aa"]:
         row = rows[query]
         if row["price_summary_allowed"] and row["price_scope"] == "exact_variant":
             noisy_band.append(query)
+
+    promoted = rows["Summilux 50 3rd generation"]
+    if not promoted["price_summary_allowed"] or promoted["price_scope"] != "exact_variant":
+        exact_variant_regressions.append("Summilux 50 3rd generation")
 
     for query in ["Noctilux 50 f1 E60", "Summilux-M 50 ASPH"]:
         row = rows[query]

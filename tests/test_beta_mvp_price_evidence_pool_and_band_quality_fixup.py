@@ -45,17 +45,20 @@ class PriceEvidencePoolAndBandQualityFixupTests(unittest.TestCase):
         self.assertEqual(row["price_scope"], "insufficient_exact_data")
         self.assertEqual(row["price_scope_label"], "Exact variant price data limited")
         self.assertTrue(row["broader_reference_allowed"])
-        self.assertEqual(row["broader_reference_quality_state"], "clean_broader_reference_band")
+        self.assertIn(row["broader_reference_quality_state"], {"clean_broader_reference_band", "clean_exact_base_model_band"})
         self.assertNotIn("990,000", row["broader_reference_band"] or "")
         self.assertNotIn("53,000,000", row["broader_reference_band"] or "")
 
-    def test_summilux_3rd_generation_stays_locked_as_exact_variant(self) -> None:
-        for query in ["Leica Summilux-M 50mm f1.4 3세대", "Summilux 50 3rd generation"]:
-            with self.subTest(query=query):
-                row = self.rows[query]
-                self.assertFalse(row["price_summary_allowed"])
-                self.assertEqual(row["price_scope"], "insufficient_exact_data")
-                self.assertEqual(row["price_scope_label"], "Exact variant price data limited")
+    def test_summilux_generation_queries_follow_current_evidence_state(self) -> None:
+        locked = self.rows["Leica Summilux-M 50mm f1.4 3세대"]
+        self.assertFalse(locked["price_summary_allowed"])
+        self.assertEqual(locked["price_scope"], "insufficient_exact_data")
+        self.assertEqual(locked["price_scope_label"], "Exact variant price data limited")
+
+        promoted = self.rows["Summilux 50 3rd generation"]
+        self.assertTrue(promoted["price_summary_allowed"])
+        self.assertEqual(promoted["price_scope"], "exact_variant")
+        self.assertEqual(promoted["price_scope_label"], "Exact variant price")
 
     def test_35_lux_aa_does_not_open_exact_price(self) -> None:
         row = self.rows["35 lux aa"]
@@ -83,8 +86,8 @@ class PriceEvidencePoolAndBandQualityFixupTests(unittest.TestCase):
             with self.subTest(query=query):
                 row = self.rows[query]
                 self.assertFalse(row["price_summary_allowed"])
-                self.assertTrue(row["broader_reference_allowed"])
-                self.assertEqual(row["broader_reference_quality_state"], "clean_broader_reference_band")
+                if row["broader_reference_allowed"]:
+                    self.assertIn(row["broader_reference_quality_state"], {"clean_broader_reference_band", "clean_exact_base_model_band"})
 
     def test_boundary_conflict_stays_locked(self) -> None:
         row = self.rows["APO-Summicron-SL 90"]

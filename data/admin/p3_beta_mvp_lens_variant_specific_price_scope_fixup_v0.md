@@ -7,19 +7,17 @@
 - preview_commit: `None`
 
 ## Exact Variant Ready
-- `Summilux-M 50 ASPH` -> `Exact variant price` / allowed=True / band=KRW 3,650,000 - 5,000,000
-- `Summicron 35 8-element` -> `Exact variant price` / allowed=True / band=KRW 2,970,000 - 7,580,000
-- `Summicron 50 rigid` -> `Exact variant price` / allowed=True / band=KRW 1,500,000 - 4,230,000
+- `Summicron 35 8-element` -> `Exact variant price` / allowed=True / band=KRW 2,970,000 - 8,600,000
+- `Summicron 50 rigid` -> `Exact variant price` / allowed=True / band=KRW 2,400,000 - 3,500,000
 
 ## Exact Variant Data Limited
-- `Leica Summilux-M 50mm f1.4 3세대` -> `Exact variant price data limited` / broader_reference=True / band=KRW 2,700,000 - 5,500,000
-- `Summilux 50 3rd generation` -> `Exact variant price data limited` / broader_reference=True / band=KRW 2,700,000 - 5,500,000
-- `Summilux-M 50 pre-ASPH` -> `Exact variant price data limited` / broader_reference=True / band=KRW 2,200,000 - 5,500,000
-- `35 lux aa` -> `Exact variant price data limited` / broader_reference=True / band=KRW 25,300,000 - 33,800,000
-- `Noctilux 50 f1 E60` -> `Exact variant price data limited` / broader_reference=True / band=KRW 990,000 - 53,000,000
+- `Leica Summilux-M 50mm f1.4 3세대` -> `Exact variant price data limited` / broader_reference=True / band=KRW 2,500,000 - 6,150,000
+- `Summilux-M 50 pre-ASPH` -> `Price summary locked` / broader_reference=True / band=KRW 2,200,000 - 5,000,000
+- `35 lux aa` -> `Price summary locked` / broader_reference=True / band=KRW 3,380,000 - 8,200,000
+- `Noctilux 50 f1 E60` -> `Exact variant price data limited` / broader_reference=True / band=KRW 5,900,000 - 8,880,000
 
 ## Broader Family Reference
-- `Noctilux 50 0.95` -> `Broader family reference` / broader_reference=True
+- `Noctilux 50 0.95` -> `Broader family reference` / broader_reference=False
 - `Summaron 35 2.8` -> `Broader family reference` / broader_reference=True
 
 ## Boundary Conflict

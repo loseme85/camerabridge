@@ -13,6 +13,5 @@
 
 ## Exact Variant Data Limited
 - `Leica Summilux-M 50mm f1.4 3세대` -> label=Exact variant price data limited / broader_reference=True
-- `Summilux 50 3rd generation` -> label=Exact variant price data limited / broader_reference=True
 - `35 lux aa` -> label=Price summary locked / broader_reference=True
 - `Noctilux 50 f1 E60` -> label=Exact variant price data limited / broader_reference=True

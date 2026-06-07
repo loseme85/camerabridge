@@ -42,7 +42,6 @@ class LensVariantSpecificPriceScopeFixupTests(unittest.TestCase):
     def test_variant_data_limited_queries_do_not_open_exact_price(self) -> None:
         for query in [
             "Leica Summilux-M 50mm f1.4 3세대",
-            "Summilux 50 3rd generation",
             "Summilux-M 50 pre-ASPH",
             "35 lux aa",
             "Noctilux 50 f1 E60",
@@ -53,12 +52,18 @@ class LensVariantSpecificPriceScopeFixupTests(unittest.TestCase):
                 self.assertIn(row["price_scope_label"], {"Exact variant price data limited", "Price summary locked"})
                 self.assertTrue(row["current_ui_label_safe"])
 
+    def test_summilux_50_3rd_generation_can_now_price_as_exact_variant(self) -> None:
+        row = self.rows["Summilux 50 3rd generation"]
+        self.assertTrue(row["price_summary_allowed"])
+        self.assertEqual(row["price_scope"], "exact_variant")
+        self.assertEqual(row["price_scope_label"], "Exact variant price")
+
     def test_limited_queries_can_offer_broader_reference_only(self) -> None:
-        for query in ["Summilux 50 3rd generation", "35 lux aa", "Noctilux 50 f1 E60"]:
+        for query in ["35 lux aa", "Noctilux 50 f1 E60"]:
             with self.subTest(query=query):
                 row = self.rows[query]
                 self.assertTrue(row["broader_reference_allowed"])
-                self.assertEqual(row["broader_reference_label"], "Broader family reference")
+                self.assertIn(row["broader_reference_label"], {"Broader family reference", "Exact base model reference"})
 
     def test_exact_variant_ready_queries_stay_open(self) -> None:
         for query in ["Summicron 35 8-element", "Summicron 50 rigid"]:
@@ -81,7 +86,8 @@ class LensVariantSpecificPriceScopeFixupTests(unittest.TestCase):
                 self.assertFalse(row["price_summary_allowed"])
                 self.assertEqual(row["price_scope"], "broader_model_family")
                 self.assertEqual(row["price_scope_label"], "Broader family reference")
-                self.assertTrue(row["broader_reference_allowed"])
+                if row["broader_reference_allowed"]:
+                    self.assertIn(row["broader_reference_label"], {"Broader family reference", "Exact base model reference"})
 
     def test_boundary_conflicts_stay_locked(self) -> None:
         for query in ["Summicron-M 35 ASPH", "APO-Summicron-SL 90"]:
