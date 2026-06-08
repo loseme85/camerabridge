@@ -1147,6 +1147,34 @@
       return evidence.find(item => buildResultEvidenceKey(item.title, item.source, item.price) === key) || null;
     }
 
+    function getResultReason(evidence, matchConfidence){
+      if(!evidence) return '';
+      const excluded = Array.isArray(evidence.excluded_reason) ? evidence.excluded_reason.filter(Boolean) : [];
+      if(excluded.length) return excluded[0];
+
+      const compatibility = String(evidence.compatibility_label || '').trim();
+      const role = String(evidence.result_role_label || '').trim();
+      const usage = String(evidence.price_usage_label || '').trim().toLowerCase();
+      const roleText = compatibility || role;
+
+      if(usage.includes('used for exact price')){
+        if(roleText === 'Exact variant') return 'Exact variant evidence';
+        if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Exact price evidence';
+        return 'Exact price evidence';
+      }
+      if(roleText === 'Exact variant') return 'Model / focal / variant matched';
+      if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Same base model, not exact variant';
+      if(roleText === 'Broader family' || roleText === 'Broader reference') return 'Broader family reference';
+      if(roleText === 'Boundary conflict') return 'Boundary conflict';
+      if(roleText === 'Query incompatible' || roleText === 'Not compatible with this query') return 'Not compatible with this query';
+      if(usage.includes('same base model result is visible')) return 'Same base model, not exact variant';
+      if(usage.includes('broader reference')) return 'Broader family reference';
+      if(usage.includes('not compatible with this query')) return 'Not compatible with this query';
+      if(usage.includes('exact match visible')) return 'Exact variant evidence';
+      if(matchConfidence && matchConfidence !== 'Unknown') return `Match ${matchConfidence}`;
+      return '';
+    }
+
     function getMarketEntryPolicy(){
       if(!state.response){
         return {
@@ -1708,6 +1736,7 @@
         evidence ? evidence.price_usage_label : '',
         result.price ? 'Reference / not exact' : 'Not enough data'
       );
+      const reason = getResultReason(evidence, matchConfidence);
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
@@ -1738,6 +1767,7 @@
             ${renderDataPoint('Aperture', aperture)}
             ${renderDataPoint('Mount', displayMount)}
             ${renderDataPoint('Category', displayCategory)}
+            ${reason ? renderDataPoint('Reason', reason) : ''}
           </div>
           <div class="result-actions">
             <div class="action-group">
