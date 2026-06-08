@@ -518,8 +518,22 @@
     }
     .results-grid{
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
+      grid-template-columns:1fr;
       gap:12px;
+    }
+    .load-more-region{
+      display:flex;
+      justify-content:center;
+      margin-top:16px;
+    }
+    .load-more-button{
+      min-width:160px;
+    }
+    .load-more-note{
+      color:var(--text-muted);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:11px;
+      line-height:1.5;
     }
     .result-card{
       border:1px solid var(--border);
@@ -679,8 +693,16 @@
       .hero-copy{border-right:none;border-bottom:1px solid var(--border)}
       .workspace-main{border-right:none;border-bottom:1px solid var(--border)}
       .toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .results-grid{grid-template-columns:1fr}
       .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(min-width:760px){
+      .results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(min-width:1180px){
+      .results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    @media(min-width:1500px){
+      .results-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
     }
     @media(max-width:720px){
       .topbar{
@@ -875,6 +897,7 @@
             <section id="market-entry-region" aria-live="polite"></section>
             <section id="refinement-region" aria-live="polite"></section>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
+            <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
             <section id="archive-region" aria-live="polite"></section>
             <div class="footer-note" id="warning-region"></div>
           </div>
@@ -925,6 +948,7 @@
       query: '',
       offset: 0,
       loading: false,
+      appending: false,
       response: null,
       error: null
     };
@@ -938,7 +962,7 @@
         'search-form','query-input','category-filter','brand-filter','mount-filter','sold-filter',
         'sort-select','result-count','result-caption','summary-meta','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
-        'results-grid','archive-region','warning-region'
+        'results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
         els[id] = $(id);
       });
@@ -1006,18 +1030,23 @@
       history.replaceState(null, '', '?' + params.toString());
     }
 
-    async function runSearch(offset = 0){
+    async function runSearch(offset = 0, options = {}){
       const nextQuery = els['query-input'].value.trim();
       if(!nextQuery) return;
+      const append = Boolean(options.append);
 
       state.query = nextQuery;
-      state.offset = Math.max(0, offset);
-      state.loading = true;
-      state.error = null;
+      if(!append){
+        state.offset = Math.max(0, offset);
+        state.loading = true;
+        state.error = null;
+      }else{
+        state.appending = true;
+      }
       render();
 
       try{
-        const params = buildParams(state.offset);
+        const params = buildParams(Math.max(0, offset));
         const response = await fetch('/api/search?' + params.toString(), {
           headers: { 'Accept': 'application/json' },
           cache: 'no-store'
@@ -1026,15 +1055,40 @@
         if(!response.ok){
           throw new Error((payload && payload.error && payload.error.message) || 'search_request_failed');
         }
-        state.response = payload;
-        state.error = null;
+        if(append && state.response){
+          const currentResults = Array.isArray(state.response.results) ? state.response.results : [];
+          const nextResults = Array.isArray(payload.results) ? payload.results : [];
+          const mergedResults = currentResults.concat(nextResults);
+          const currentPagination = state.response.pagination || {};
+          const nextPagination = payload.pagination || {};
+          state.response = {
+            ...state.response,
+            ...payload,
+            results: mergedResults,
+            result_count: mergedResults.length,
+            pagination: {
+              ...currentPagination,
+              ...nextPagination,
+              offset: 0,
+              previous_offset: 0
+            }
+          };
+          state.offset = 0;
+        }else{
+          state.response = payload;
+          state.offset = Math.max(0, offset);
+        }
+        if(!append) state.error = null;
         syncUrl();
       }catch(error){
         console.error('Camera Bridge search UI fallback', error);
-        state.response = null;
-        state.error = 'runtime_error_fallback';
+        if(!append){
+          state.response = null;
+          state.error = 'runtime_error_fallback';
+        }
       }finally{
         state.loading = false;
+        state.appending = false;
         render();
       }
     }
@@ -1263,6 +1317,9 @@
       if(state.loading){
         els['result-caption'].textContent = 'Searching global used camera listings...';
         els['summary-meta'].textContent = 'Private beta search in progress';
+      }else if(state.appending && state.query){
+        els['result-caption'].textContent = `${resultCount} shown for "${state.query}"`;
+        els['summary-meta'].textContent = 'Loading more results...';
       }else if(state.error){
         els['result-caption'].textContent = 'Runtime fallback active';
         els['summary-meta'].textContent = 'Safe UI fallback shown instead of raw server error';
@@ -1289,8 +1346,11 @@
       els['state-region'].innerHTML = '';
       els['market-entry-region'].innerHTML = '';
       els['refinement-region'].innerHTML = '';
-      els['results-grid'].innerHTML = '';
-      els['archive-region'].innerHTML = '';
+      if(!state.appending){
+        els['results-grid'].innerHTML = '';
+        els['archive-region'].innerHTML = '';
+      }
+      els['results-load-more-region'].innerHTML = '';
 
       if(state.loading){
         els['state-region'].innerHTML = renderStateCard('Loading search', 'Gathering listing matches, source cues, and market context.', [], 'subtle');
@@ -1337,7 +1397,25 @@
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
       els['results-grid'].innerHTML = results.map(renderCard).join('');
+      els['results-load-more-region'].innerHTML = renderLoadMore();
       els['archive-region'].innerHTML = renderArchiveSection(results);
+    }
+
+    function renderLoadMore(){
+      const pagination = state.response ? (state.response.pagination || {}) : {};
+      if(!state.response || !getResults().length || !pagination.has_more){
+        return '';
+      }
+      return `
+        <button
+          type="button"
+          class="ghost-button load-more-button"
+          data-load-more="true"
+          ${state.appending ? 'disabled' : ''}
+        >
+          ${state.appending ? 'Loading more...' : 'Load more'}
+        </button>
+      `;
     }
 
     function renderStateCard(title, body, bullets, tone){
@@ -1451,10 +1529,10 @@
     function getMarketEntryPriceHeadline(policy){
       const review = policy.display_query_review || {};
       const category = String(review.category || '').toLowerCase();
-      if(category === 'body'){
-        return 'Body market summary';
-      }
       if(policy.display_price_summary_allowed){
+        if(category === 'body'){
+          return 'Body market summary';
+        }
         if(policy.display_price_band_source === 'exact_variant') return 'Exact price';
         if(policy.display_price_band_source === 'exact_base_model') return 'Same model price';
       }
@@ -1778,6 +1856,13 @@
           };
           if(navigator.clipboard && navigator.clipboard.writeText){
             navigator.clipboard.writeText(text).then(done).catch(() => {});
+          }
+          return;
+        }
+        if(target && target.matches('[data-load-more]')){
+          const current = state.response ? (state.response.pagination || {}) : {};
+          if(current.has_more && !state.appending){
+            runSearch(Number(current.next_offset || (getResults().length || PAGE_SIZE)), { append: true });
           }
         }
       });
