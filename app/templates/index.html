@@ -1131,6 +1131,22 @@
       return state.response && Array.isArray(state.response.results) ? state.response.results : [];
     }
 
+    function buildResultEvidenceKey(title, source, price){
+      return [
+        String(title || '').trim().toLowerCase(),
+        String(source || '').trim().toLowerCase(),
+        String(price || '').trim()
+      ].join('||');
+    }
+
+    function getResultEvidence(result){
+      const evidence = state.response && Array.isArray(state.response.display_top_result_evidence)
+        ? state.response.display_top_result_evidence
+        : [];
+      const key = buildResultEvidenceKey(result.title, result.source, result.price);
+      return evidence.find(item => buildResultEvidenceKey(item.title, item.source, item.price) === key) || null;
+    }
+
     function getMarketEntryPolicy(){
       if(!state.response){
         return {
@@ -1677,14 +1693,21 @@
       const family = displayValue(displayField(result, 'display_family'), familyFallback);
       const currency = displayValue(result.currency, 'Unknown');
       const source = displayValue(result.source, 'Unknown source');
-      const priceConfidence = result.price ? 'Reference only' : 'Not enough data';
-      const sourceCoverage = getCoverageLabel();
       const focalLength = displayValue(displayField(result, 'display_focal_length'), 'Unknown');
       const aperture = displayValue(displayField(result, 'display_aperture'), 'Unknown');
       const displayCategory = displayValue(displayField(result, 'display_category'), 'Unknown');
       const displayMount = displayValue(displayField(result, 'display_mount'), 'Unknown');
       const projected = Boolean(displayField(result, 'stale_normalization_detected'));
       const compactNotation = Boolean(displayField(result, 'compact_lens_notation_detected'));
+      const evidence = getResultEvidence(result);
+      const matchRole = displayValue(
+        evidence ? (evidence.result_role_label || evidence.compatibility_label) : '',
+        `Match ${matchConfidence}`
+      );
+      const priceRole = displayValue(
+        evidence ? evidence.price_usage_label : '',
+        result.price ? 'Reference / not exact' : 'Not enough data'
+      );
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
@@ -1709,8 +1732,8 @@
           <div class="data-grid">
             ${renderDataPoint('Detected model', model)}
             ${renderDataPoint('Family', family)}
-            ${renderDataPoint('Price confidence', priceConfidence)}
-            ${renderDataPoint('Source coverage', sourceCoverage)}
+            ${renderDataPoint('Match role', matchRole)}
+            ${renderDataPoint('Price role', priceRole)}
             ${renderDataPoint('Focal length', focalLength)}
             ${renderDataPoint('Aperture', aperture)}
             ${renderDataPoint('Mount', displayMount)}
