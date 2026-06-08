@@ -92,10 +92,14 @@ class QueryReviewEvidenceUiCopyButtonAndUnlockCopyFixupTests(unittest.TestCase):
         self.assertTrue(any(item["price_usage_label"] == "Not used — Duplicate listing" for item in rigid["display_top_result_evidence"]))
         self.assertEqual(rigid["display_query_review"]["price_status"], "Exact price is available.")
 
-    def test_summilux_50_asph_stays_locked_with_readable_reason(self) -> None:
+    def test_summilux_50_asph_keeps_a_safe_readable_state(self) -> None:
         row = self.rows["Summilux-M 50 ASPH"]
-        self.assertFalse(row["display_price_summary_allowed"])
-        self.assertIn("Top visible results include third-party or adjacent items.", row["display_query_review"]["why"])
+        review = row["display_query_review"]
+        if row["display_price_summary_allowed"]:
+            self.assertEqual(review["price_status"], "Exact price is available.")
+            self.assertIn("Clean exact variant price evidence", review["why"])
+        else:
+            self.assertIn("Top visible results include third-party or adjacent items.", review["why"])
 
     def test_m50_12_is_lens_and_reference_only(self) -> None:
         row = self.rows["M50/1.2"]

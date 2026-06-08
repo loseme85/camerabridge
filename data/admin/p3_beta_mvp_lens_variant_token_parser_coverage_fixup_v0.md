@@ -1,0 +1,188 @@
+1. Task name
+- `P3-BETA-MVP-LENS-VARIANT-TOKEN-PARSER-COVERAGE-FIXUP`
+
+2. Exact token/alias changes
+- Normalize split `pre asph` into `pre-ASPH` before generic ASPH parsing.
+- Normalize spaced `8 element` / `8 elements` into `8-element`.
+- Normalize spaced `tri elmar` into `tri-elmar` for shorthand recovery.
+- Add search-layer hyphenated Leica family aliases without broad `-m/-r/-sl` hard-pins.
+- Recognize `FLE` only inside strong Summilux 35 context.
+- Recognize `WATE` and `MATE` as narrow Tri-Elmar shorthand.
+- Recover Tri-Elmar focal ranges `16-18-21` and `28-35-50` only with Tri-Elmar/WATE/MATE context.
+
+3. Price unlock changes
+- `35 cron 8 element`
+- `summicron 35 8 element`
+- `summilux-m 50 asph`
+- `fle summilux 35`
+- `35 lux fle`
+
+4. Unsafe broad alias guard status
+- regressions = []
+
+5. Regressions
+- pre_asph_regressions = []
+- tri_elmar_regressions = []
+- body_lens_regressions = []
+
+6. Query snapshots
+- `pre asph summilux 35`
+  - before: Interpreted as Leica Summilux 35 ASPH candidate because split `pre asph` dropped the negative prefix.
+  - interpreted_target: `Leica Summilux 35 pre-ASPH candidate`
+  - parser: family=`Summilux` focal=`35` mount=`None` variant=`pre-ASPH` generation=`None` filter=`None`
+  - status: `Reference price only.` / `Price summary locked`
+- `summilux 35 pre-asph`
+  - before: n/a
+  - interpreted_target: `Leica Summilux 35 pre-ASPH candidate`
+  - parser: family=`Summilux` focal=`35` mount=`None` variant=`pre-ASPH` generation=`None` filter=`None`
+  - status: `Reference price only.` / `Price summary locked`
+- `35 cron 8 element`
+  - before: Interpreted as Leica Summicron 35 candidate because spaced `8 element` was not recognized.
+  - interpreted_target: `Leica Summicron 35 8-element candidate`
+  - parser: family=`Summicron` focal=`35` mount=`None` variant=`8-element` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `summicron 35 8 element`
+  - before: Interpreted as Leica Summicron 35 candidate because spaced `8 element` was not recognized.
+  - interpreted_target: `Leica Summicron 35 8-element candidate`
+  - parser: family=`Summicron` focal=`35` mount=`None` variant=`8-element` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `summilux-m 50 asph`
+  - before: Missed `summilux-m` as an unknown token and did not preserve the hyphenated family form cleanly.
+  - interpreted_target: `Leica Summilux 50 ASPH candidate`
+  - parser: family=`Summilux` focal=`50` mount=`None` variant=`ASPH` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `fle summilux 35`
+  - before: Missed `fle` and fell back to Leica Summilux 35 candidate without the FLE variant.
+  - interpreted_target: `Leica Summilux 35 FLE candidate`
+  - parser: family=`Summilux` focal=`35` mount=`None` variant=`FLE` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `35 lux fle`
+  - before: Missed `fle` and fell back to Leica Summilux 35 candidate without the FLE variant.
+  - interpreted_target: `Leica Summilux 35 FLE candidate`
+  - parser: family=`Summilux` focal=`35` mount=`None` variant=`FLE` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `fle`
+  - before: n/a
+  - interpreted_target: `Leica lens candidate`
+  - parser: family=`None` focal=`None` mount=`None` variant=`` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `wate`
+  - before: Stayed unknown and did not resolve to Leica Tri-Elmar 16-18-21 / WATE.
+  - interpreted_target: `Leica Tri-Elmar-M 16-18-21 WATE candidate`
+  - parser: family=`Tri-Elmar` focal=`16-18-21` mount=`M` variant=`WATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `mate`
+  - before: Stayed unknown and did not resolve to Leica Tri-Elmar 28-35-50 / MATE.
+  - interpreted_target: `Leica Tri-Elmar-M 28-35-50 MATE candidate`
+  - parser: family=`Tri-Elmar` focal=`28-35-50` mount=`M` variant=`MATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `tri-elmar 16-18-21`
+  - before: Recognized Tri-Elmar but missed the 16-18-21 range and WATE shorthand.
+  - interpreted_target: `Leica Tri-Elmar-M 16-18-21 WATE candidate`
+  - parser: family=`Tri-Elmar` focal=`16-18-21` mount=`M` variant=`WATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `tri-elmar 28-35-50`
+  - before: Recognized Tri-Elmar but missed the 28-35-50 range and MATE shorthand.
+  - interpreted_target: `Leica Tri-Elmar-M 28-35-50 MATE candidate`
+  - parser: family=`Tri-Elmar` focal=`28-35-50` mount=`M` variant=`MATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `16 18 21 tri elmar`
+  - before: n/a
+  - interpreted_target: `Leica Tri-Elmar-M 16-18-21 WATE candidate`
+  - parser: family=`Tri-Elmar` focal=`16-18-21` mount=`M` variant=`WATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `28 35 50 tri elmar`
+  - before: n/a
+  - interpreted_target: `Leica Tri-Elmar-M 28-35-50 MATE candidate`
+  - parser: family=`Tri-Elmar` focal=`28-35-50` mount=`M` variant=`MATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `16-18-21 wate`
+  - before: n/a
+  - interpreted_target: `Leica Tri-Elmar-M 16-18-21 WATE candidate`
+  - parser: family=`Tri-Elmar` focal=`16-18-21` mount=`M` variant=`WATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `28-35-50 mate`
+  - before: n/a
+  - interpreted_target: `Leica Tri-Elmar-M 28-35-50 MATE candidate`
+  - parser: family=`Tri-Elmar` focal=`28-35-50` mount=`M` variant=`MATE` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `lux`
+  - before: n/a
+  - interpreted_target: `Leica Summilux candidate`
+  - parser: family=`Summilux` focal=`None` mount=`None` variant=`` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `cron`
+  - before: n/a
+  - interpreted_target: `Leica Summicron candidate`
+  - parser: family=`Summicron` focal=`None` mount=`None` variant=`` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `nocti`
+  - before: n/a
+  - interpreted_target: `Leica Noctilux candidate`
+  - parser: family=`Noctilux` focal=`None` mount=`None` variant=`` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `E60`
+  - before: n/a
+  - interpreted_target: `Leica lens E60 candidate`
+  - parser: family=`None` focal=`None` mount=`None` variant=`` generation=`None` filter=`E60`
+  - status: `Reference price only.` / `Price summary locked`
+- `1세대`
+  - before: n/a
+  - interpreted_target: `Leica lens 1st candidate`
+  - parser: family=`None` focal=`None` mount=`None` variant=`` generation=`1st` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `BP`
+  - before: n/a
+  - interpreted_target: `Leica lens candidate`
+  - parser: family=`None` focal=`None` mount=`None` variant=`` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `35 lux aa`
+  - before: n/a
+  - interpreted_target: `Leica Summilux 35 AA candidate`
+  - parser: family=`Summilux` focal=`35` mount=`None` variant=`AA` generation=`None` filter=`None`
+  - status: `Reference price only.` / `Price summary locked`
+- `noctilux 50 f1 e60`
+  - before: n/a
+  - interpreted_target: `Leica Noctilux 50 f1 E60 candidate`
+  - parser: family=`Noctilux` focal=`50` mount=`None` variant=`` generation=`None` filter=`E60`
+  - status: `Reference price only.` / `Exact variant price data limited`
+- `50 cron rigid`
+  - before: n/a
+  - interpreted_target: `Leica Summicron 50 Rigid candidate`
+  - parser: family=`Summicron` focal=`50` mount=`None` variant=`Rigid` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `50 cron dr`
+  - before: n/a
+  - interpreted_target: `Leica Summicron 50 Dual Range candidate`
+  - parser: family=`Summicron` focal=`50` mount=`None` variant=`Dual Range` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `summicron 35 8매`
+  - before: n/a
+  - interpreted_target: `Leica Summicron 35 8-element candidate`
+  - parser: family=`Summicron` focal=`35` mount=`None` variant=`8-element` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `50 nocti 1세대`
+  - before: n/a
+  - interpreted_target: `Leica Noctilux 50 1st candidate`
+  - parser: family=`Noctilux` focal=`50` mount=`None` variant=`` generation=`1st` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `M50/1.2 1세대`
+  - before: n/a
+  - interpreted_target: `Leica M-mount lens 50 f1.2 1st candidate`
+  - parser: family=`None` focal=`50` mount=`M` variant=`` generation=`1st` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `Summilux-M 50 ASPH`
+  - before: n/a
+  - interpreted_target: `Leica Summilux 50 ASPH candidate`
+  - parser: family=`Summilux` focal=`50` mount=`None` variant=`ASPH` generation=`None` filter=`None`
+  - status: `Exact price is available.` / `Exact variant price`
+- `APO-Summicron-SL 90`
+  - before: n/a
+  - interpreted_target: `Leica APO-Summicron-SL 90 candidate`
+  - parser: family=`APO-Summicron-SL` focal=`90` mount=`None` variant=`` generation=`None` filter=`None`
+  - status: `Price summary is locked.` / `Price summary locked`
+- `Leica M10`
+  - before: n/a
+  - interpreted_target: `Leica M10 body`
+  - parser: family=`None` focal=`None` mount=`M` variant=`` generation=`None` filter=`None`
+  - status: `Body market summary is available.` / `Exact base model price`

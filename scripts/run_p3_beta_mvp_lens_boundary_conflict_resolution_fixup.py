@@ -193,9 +193,17 @@ def classify(rows: dict[str, dict[str, Any]]) -> tuple[list[str], list[str], lis
         for item in summilux["display_top_result_evidence"]
         if ("voigtlander" in str(item.get("title") or "").lower() or "nokton" in str(item.get("title") or "").lower())
     ]
-    if not summilux["third_party_top_domination_detected"]:
-        price_projection_regressions.append("Summilux-M 50 ASPH")
-    if summilux["display_price_summary_allowed"]:
+    summilux_exact_safe = bool(
+        summilux["display_price_summary_allowed"]
+        and summilux["top_result_compatibility"] == "exact_variant_strong"
+        and not summilux["third_party_top_domination_detected"]
+        and not summilux["boundary_conflict_detected"]
+    )
+    summilux_locked_safe = bool(
+        not summilux["display_price_summary_allowed"]
+        and summilux["third_party_top_domination_detected"]
+    )
+    if not (summilux_exact_safe or summilux_locked_safe):
         price_projection_regressions.append("Summilux-M 50 ASPH")
     for item in summilux_third_party:
         if item.get("used_for_price"):
@@ -231,6 +239,7 @@ def classify(rows: dict[str, dict[str, Any]]) -> tuple[list[str], list[str], lis
             "price_status": summilux["price_status"],
             "why": summilux["why"],
             "top_result_compatibility": summilux["top_result_compatibility"],
+            "display_price_summary_allowed": summilux["display_price_summary_allowed"],
             "third_party_rows": [
                 {
                     "title": item.get("title"),

@@ -201,26 +201,37 @@ def _explicit_query_mount(query: str, intent: Mapping[str, Any]) -> str | None:
     if intent.get("mount"):
         return str(intent.get("mount"))
     lowered = _normalize_text(query)
+    lowered = re.sub(r"\b(?:summilux|summicron|noctilux|elmarit)-m\b", lambda m: m.group(0).split("-")[0], lowered)
     token_set = set(re.findall(r"[a-z0-9./-]+", lowered))
     if any(token in {"ltm", "l39", "m39", "screw"} for token in token_set):
         return "L"
-    if any(token == "sl" or token.endswith("-sl") for token in token_set):
+    if "sl" in token_set:
         return "SL"
-    if any(token == "r" or token.endswith("-r") for token in token_set):
+    if "r" in token_set:
         return "R"
-    if any(token == "m" or token.endswith("-m") for token in token_set):
+    if "m" in token_set:
         return "M"
     return None
 
 
 def _explicit_query_family(query: str, intent: Mapping[str, Any]) -> str:
     lowered = _normalize_text(query)
+    lowered = re.sub(r"\b(?:summilux|summicron|noctilux|elmarit)-m\b", lambda m: m.group(0).split("-")[0], lowered)
     query_mount = _explicit_query_mount(query, intent)
+    parsed_family = str(intent.get("model_family") or "")
+
+    if parsed_family in {
+        "APO-Summicron-SL",
+        "APO-Summicron-M",
+        "Vario-Elmarit-SL",
+        "Vario-Elmar-R",
+        "Vario-Elmarit-R",
+    }:
+        return parsed_family
 
     if "apo-summicron" in lowered or re.search(r"\bapo\s+\d{2,3}\s+summicron\b|\bapo\s+summicron\b", lowered):
         return "APO-Summicron"
 
-    parsed_family = str(intent.get("model_family") or "")
     if parsed_family:
         if parsed_family == "Summicron" and query_mount == "M":
             return "Summicron-M"

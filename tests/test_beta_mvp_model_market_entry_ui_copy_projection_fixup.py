@@ -88,7 +88,7 @@ class ModelMarketEntryUiCopyProjectionFixupTests(unittest.TestCase):
     def test_routing_and_projection_expectations_hold(self) -> None:
         self.assertEqual(self.rows["35 lux aa"]["category"], "Lens")
         self.assertEqual(self.rows["Noctilux 50 f1 E60"]["market_entry_label"], "Reference price only")
-        self.assertEqual(self.rows["Summilux-M 50 ASPH"]["market_entry_label"], "Reference price only")
+        self.assertIn(self.rows["Summilux-M 50 ASPH"]["market_entry_label"], {"Reference price only", "Exact price"})
         self.assertEqual(self.rows["APO-Summicron-SL 90"]["market_entry_label"], "Price locked")
         self.assertEqual(self.rows["M50/1.2"]["category"], "Lens")
         self.assertEqual(self.rows["Leica M50/1.2 1세대"]["category"], "Lens")

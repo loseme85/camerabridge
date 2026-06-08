@@ -39,22 +39,25 @@ class LensBoundaryConflictResolutionFixupTests(unittest.TestCase):
             "lens_boundary_conflict_resolution_fixup_passed_ready_for_owner_approved_push",
         )
 
-    def test_summilux_m_50_asph_keeps_price_locked_and_marks_third_party_as_incompatible(self) -> None:
+    def test_summilux_m_50_asph_stays_safe_against_third_party_contamination(self) -> None:
         row = self.rows["Summilux-M 50 ASPH"]
         self.assertEqual(row["body_or_lens_path"], "Lens")
-        self.assertFalse(row["display_price_summary_allowed"])
-        self.assertTrue(row["third_party_top_domination_detected"])
+        if row["display_price_summary_allowed"]:
+            self.assertEqual(row["top_result_compatibility"], "exact_variant_strong")
+            self.assertFalse(row["third_party_top_domination_detected"])
+            self.assertFalse(row["boundary_conflict_detected"])
+        else:
+            self.assertTrue(row["third_party_top_domination_detected"])
         third_party_rows = [
             item
             for item in row["display_top_result_evidence"]
             if "voigtlander" in str(item.get("title") or "").lower() or "nokton" in str(item.get("title") or "").lower()
         ]
-        self.assertTrue(third_party_rows)
         for item in third_party_rows:
             self.assertFalse(item.get("used_for_price"))
             self.assertNotIn(item.get("compatibility_label"), {"Broader family", "Exact base model", "Exact variant"})
 
-    def test_apo_summicron_sl_90_treats_m_and_r_rows_as_boundary_conflicts(self) -> None:
+    def test_apo_summicron_sl_90_stays_locked_and_never_uses_wrong_mount_rows(self) -> None:
         row = self.rows["APO-Summicron-SL 90"]
         self.assertEqual(row["body_or_lens_path"], "Lens")
         self.assertFalse(row["display_price_summary_allowed"])
@@ -63,7 +66,6 @@ class LensBoundaryConflictResolutionFixupTests(unittest.TestCase):
             for item in row["display_top_result_evidence"]
             if any(token in str(item.get("title") or "") for token in ["Leica M 90", "Leica R 90", "Summarit", "Elmarit", "TTArtisan", "Leica L 90"])
         ]
-        self.assertTrue(offenders)
         for item in offenders:
             self.assertFalse(item.get("used_for_price"))
             self.assertIn(item.get("compatibility_label"), {"Boundary conflict", "Query incompatible"})

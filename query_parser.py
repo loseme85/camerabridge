@@ -57,6 +57,9 @@ def _normalize_query(query: str) -> str:
     q = (query or "").strip().lower()
     q = q.replace("㎜", "mm")
     q = q.replace("ｍｍ", "mm")
+    q = re.sub(r"\bpre\s+asph\b", "pre-asph", q)
+    q = re.sub(r"\b8(?:\s*-\s*|\s+)elements?\b", "8-element", q)
+    q = re.sub(r"\btri\s+elmar\b", "tri-elmar", q)
     q = re.sub(r"(?<=\d)\s*mm\b", "mm", q)
     q = re.sub(r"\s+", " ", q)
     return q
@@ -341,6 +344,16 @@ _R_HYPHENATED_FAMILY_ALIASES: dict[str, str] = {
     "vario-apo-elmarit-r": "Vario-APO-Elmarit-R",
 }
 
+_TRI_ELMAR_SHORTHANDS: dict[str, tuple[str, str]] = {
+    "wate": ("16-18-21", "WATE"),
+    "mate": ("28-35-50", "MATE"),
+}
+
+_TRI_ELMAR_RANGE_VARIANTS: dict[str, str] = {
+    "16-18-21": "WATE",
+    "28-35-50": "MATE",
+}
+
 
 def _parse_sl_zoom_range_hint(intent: QueryIntent, normalized: str) -> None:
     """
@@ -514,6 +527,71 @@ def _parse_optical_formula(intent: QueryIntent, normalized: str) -> None:
         intent.tokens.append({"type": "optical_formula", "raw": f"{groups}군{elements}매", "value": value})
         if elements == "8":
             _add_variant(intent, "8-element", f"{groups}군{elements}매")
+
+
+def _has_summilux_35_context(normalized: str, intent: QueryIntent) -> bool:
+    if intent.focal_length != "35":
+        return False
+    family = str(intent.model_family or "")
+    if family in {"Summilux", "Summilux-M"}:
+        return True
+    return bool(re.search(r"\b(?:summilux|summilux-m|lux)\b", normalized))
+
+
+def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) -> None:
+    if "fle" in normalized and _has_summilux_35_context(normalized, intent) and "FLE" not in intent.variant:
+        _add_variant(intent, "FLE", "fle")
+
+    tri_elmar_context = bool(re.search(r"\b(?:tri-elmar|trielmar|wate|mate)\b", normalized))
+    if not tri_elmar_context:
+        return
+
+    if "wate" in normalized:
+        if not (
+            intent.model_family == "Tri-Elmar"
+            and intent.mount == "M"
+            and intent.focal_length == "16-18-21"
+            and "WATE" in intent.variant
+        ):
+            _set_model_family(intent, "Tri-Elmar", "wate")
+            _set_mount(intent, "M", "wate")
+            _set_focal_length(intent, "16-18-21", "wate")
+            _add_variant(intent, "WATE", "wate")
+        return
+
+    if "mate" in normalized:
+        if not (
+            intent.model_family == "Tri-Elmar"
+            and intent.mount == "M"
+            and intent.focal_length == "28-35-50"
+            and "MATE" in intent.variant
+        ):
+            _set_model_family(intent, "Tri-Elmar", "mate")
+            _set_mount(intent, "M", "mate")
+            _set_focal_length(intent, "28-35-50", "mate")
+            _add_variant(intent, "MATE", "mate")
+        return
+
+    for pattern, focal_range in (
+        (r"\b16(?:[\s/-]+)18(?:[\s/-]+)21\b", "16-18-21"),
+        (r"\b28(?:[\s/-]+)35(?:[\s/-]+)50\b", "28-35-50"),
+    ):
+        match = re.search(pattern, normalized)
+        if not match:
+            continue
+        variant = _TRI_ELMAR_RANGE_VARIANTS[focal_range]
+        if (
+            intent.model_family == "Tri-Elmar"
+            and intent.mount == "M"
+            and intent.focal_length == focal_range
+            and variant in intent.variant
+        ):
+            return
+        _set_model_family(intent, "Tri-Elmar", "tri-elmar range")
+        _set_mount(intent, "M", "tri-elmar range")
+        _set_focal_length(intent, focal_range, match.group(0))
+        _add_variant(intent, variant, match.group(0))
+        return
 
 
 def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
@@ -811,6 +889,15 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
                 _add_variant(intent, variant, token)
             continue
 
+        tri_elmar_shorthand = _TRI_ELMAR_SHORTHANDS.get(token)
+        if tri_elmar_shorthand:
+            focal_range, shorthand = tri_elmar_shorthand
+            _set_model_family(intent, "Tri-Elmar", token)
+            _set_mount(intent, "M", token)
+            _set_focal_length(intent, focal_range, token)
+            _add_variant(intent, shorthand, token)
+            continue
+
         filter_match = re.fullmatch(r"e\s*([0-9]{2,3})|e([0-9]{2,3})", token)
         if filter_match:
             size = filter_match.group(1) or filter_match.group(2)
@@ -855,6 +942,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
 
         variant = VARIANT_ALIASES.get(token)
         if variant:
+            if variant == "FLE" and not _has_summilux_35_context(normalized, intent):
+                intent.tokens.append({"type": "unknown", "raw": token, "value": token})
+                continue
             _add_variant(intent, variant, token)
             continue
 
@@ -901,6 +991,8 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             intent.tokens.append({"type": "unknown", "raw": token, "value": token})
             if re.fullmatch(r"f/?\d+(?:\.\d+)?|\d+\.\d+", token):
                 intent.warnings.append(f"possible_unparsed_aperture:{token}")
+
+    _apply_context_bound_variant_recovery(intent, normalized)
 
     if not any([
         intent.model_family,
