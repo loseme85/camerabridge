@@ -163,6 +163,8 @@ def _normalize_text(value: Any) -> str:
 
 def _family_root(value: Any) -> str:
     text = _normalize_text(value)
+    if "tri-elmar" in text or "trielmar" in text:
+        return "Tri-Elmar"
     if "apo-summicron" in text or ("apo" in text and "summicron" in text):
         return "APO-Summicron"
     if "summicron" in text:
@@ -361,6 +363,13 @@ def _result_variant_conflict(intent: Mapping[str, Any], top_result: Mapping[str,
     expected_variants = [str(item) for item in intent.get("variant") or [] if item]
     if not expected_variants:
         return False
+    if _tri_elmar_range_matches_query(intent, top_result):
+        return False
+    expected_family = _explicit_query_family(str(intent.get("original_query") or ""), intent)
+    expected_mount = _explicit_query_mount(str(intent.get("original_query") or ""), intent)
+    signals = _query_variant_signals(intent)
+    if signals and _result_matches_exact_variant_scope(top_result, intent, expected_family, expected_mount, signals):
+        return False
     matched = set(top_result.get("matched_fields") or [])
     if "variant" in matched:
         return False
@@ -466,6 +475,26 @@ def _signal_patterns(kind: str, value: str) -> list[str]:
     return [lowered]
 
 
+def _tri_elmar_mount_compatible_from_text(result: Mapping[str, Any], expected_mount: str | None, expected_family: str) -> bool:
+    if expected_mount != "M" or _family_root(expected_family) != "Tri-Elmar":
+        return False
+    text = _result_text_blob(result)
+    return "tri-elmar-m" in text or " tri-elmar m " in f" {text} "
+
+
+def _tri_elmar_range_matches_query(intent: Mapping[str, Any], result: Mapping[str, Any]) -> bool:
+    if _family_root(intent.get("model_family") or "") != "Tri-Elmar":
+        return False
+    expected_focal = str(intent.get("focal_length") or "")
+    if expected_focal not in {"16-18-21", "28-35-50"}:
+        return False
+    result_focal = str(_result_field(result, "focal_length") or "")
+    if result_focal == expected_focal:
+        return True
+    text = f" {_result_text_blob(result)} "
+    return expected_focal in text or expected_focal.replace("-", " ") in text
+
+
 def _result_matches_signal(result: Mapping[str, Any], signal: Mapping[str, str]) -> bool:
     text = f" {_result_text_blob(result)} "
     value = str(signal.get("value") or "")
@@ -502,8 +531,12 @@ def _result_matches_base_model_scope(
         return False
     if not _result_matches_expected_family(expected_family, result):
         return False
-    if expected_mount and str(_result_field(result, "mount") or "") != expected_mount:
-        return False
+    if expected_mount:
+        result_mount = str(_result_field(result, "mount") or "")
+        if result_mount != expected_mount and not (
+            result_mount in {"", "Unknown"} and _tri_elmar_mount_compatible_from_text(result, expected_mount, expected_family)
+        ):
+            return False
     expected_focal = str(intent.get("focal_length") or "")
     if expected_focal and str(_result_field(result, "focal_length") or "") != expected_focal:
         return False
@@ -532,8 +565,12 @@ def _result_matches_broader_family_scope(
         return False
     if _result_classification_conflict(result):
         return False
-    if expected_mount and str(_result_field(result, "mount") or "") != expected_mount:
-        return False
+    if expected_mount:
+        result_mount = str(_result_field(result, "mount") or "")
+        if result_mount != expected_mount and not (
+            result_mount in {"", "Unknown"} and _tri_elmar_mount_compatible_from_text(result, expected_mount, expected_family)
+        ):
+            return False
     expected_root = _family_root(expected_family or intent.get("model_family") or "")
     candidate_text = _normalize_text(
         _result_field(result, "model_canonical")
@@ -1818,19 +1855,23 @@ def build_market_entry_policy(
             excluded_reason_by_signature[_result_signature(result)] = list(excluded_item.get("reasons") or [])
 
     top_result_evidence = []
+    seen_top_result_signatures: set[tuple[str, str, str, str]] = set()
     for result in results[:5]:
         signature = _result_signature(result)
-        excluded_reasons = excluded_reason_by_signature.get(signature, [])
         if signature in exact_variant_signatures:
             evidence_pool = "exact_variant_pool"
             used_for_price = price_summary_allowed and price_scope == "exact_variant"
+            excluded_reasons = []
         elif signature in exact_base_signatures:
             evidence_pool = "exact_base_model_pool"
             used_for_price = price_summary_allowed and price_scope == "exact_base_model"
+            excluded_reasons = []
         elif signature in broader_signatures:
             evidence_pool = "broader_family_pool"
             used_for_price = bool(broader_reference_allowed)
+            excluded_reasons = []
         else:
+            excluded_reasons = excluded_reason_by_signature.get(signature, [])
             evidence_pool = "excluded_pool" if excluded_reasons else "visible_only"
             used_for_price = False
         if excluded_reasons:
@@ -1849,6 +1890,20 @@ def build_market_entry_policy(
             compatibility_label = "Broader family"
         else:
             compatibility_label = "Query incompatible"
+
+        if evidence_pool == "visible_only" and not excluded_reasons:
+            if compatibility_label == "Exact variant":
+                evidence_pool = "exact_variant_pool"
+            elif compatibility_label == "Exact base model":
+                evidence_pool = "exact_base_model_pool"
+            elif compatibility_label == "Broader family":
+                evidence_pool = "broader_family_pool"
+
+        if signature in seen_top_result_signatures and evidence_pool != "excluded_pool":
+            excluded_reasons = ["duplicate"]
+            used_for_price = False
+            evidence_pool = "excluded_pool"
+        seen_top_result_signatures.add(signature)
 
         display_role = _humanize_result_role(compatibility_label)
         display_excluded_reason = [_humanize_excluded_reason(reason) for reason in excluded_reasons]
