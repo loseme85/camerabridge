@@ -524,8 +524,16 @@ def _result_matches_broader_family_scope(
     if expected_mount and str(_result_field(result, "mount") or "") != expected_mount:
         return False
     expected_root = _family_root(expected_family or intent.get("model_family") or "")
-    result_root = _family_root(_result_field(result, "model_canonical") or _result_field(result, "model_raw") or "")
+    candidate_text = _normalize_text(
+        _result_field(result, "model_canonical")
+        or _result_field(result, "model_raw")
+        or _result_field(result, "label")
+        or result.get("title")
+    )
+    result_root = _family_root(candidate_text)
     if expected_root and result_root and expected_root != result_root:
+        return False
+    if expected_root and not result_root and expected_root.lower() not in candidate_text:
         return False
     expected_focal = str(intent.get("focal_length") or "")
     if expected_focal and str(_result_field(result, "focal_length") or "") != expected_focal:
