@@ -604,6 +604,34 @@ def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) 
         return
 
 
+def _apply_apo_summicron_family_recovery(intent: QueryIntent, normalized: str) -> None:
+    if not re.search(r"\bapo\b", normalized):
+        return
+
+    family = str(intent.model_family or "")
+    mount = str(intent.mount or "")
+    if family != "Summicron":
+        return
+
+    upgraded_family = None
+    if mount == "M":
+        upgraded_family = "APO-Summicron-M"
+    elif mount == "SL":
+        upgraded_family = "APO-Summicron-SL"
+
+    if not upgraded_family:
+        return
+
+    intent.model_family = upgraded_family
+    intent.brand = intent.brand or DEFAULT_BRAND
+    intent.tokens = [
+        token
+        for token in intent.tokens
+        if not (token.get("type") == "unknown" and token.get("raw") == "apo" and token.get("value") == "apo")
+    ]
+    intent.tokens.append({"type": "model_family", "raw": "apo summicron context", "value": upgraded_family})
+
+
 def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
     if re.search(r"\blens\s+hood\b", normalized):
         _set_accessory_intent(intent, "hood", "lens hood")
@@ -1006,6 +1034,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
                 intent.warnings.append(f"possible_unparsed_aperture:{token}")
 
     _apply_context_bound_variant_recovery(intent, normalized)
+    _apply_apo_summicron_family_recovery(intent, normalized)
 
     if not any([
         intent.model_family,
