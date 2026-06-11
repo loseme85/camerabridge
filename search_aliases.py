@@ -21,6 +21,7 @@ MODEL_FAMILY_ALIASES: dict[str, str] = {
     "cron": "Summicron",
     "summicron": "Summicron",
     "summicron-m": "Summicron",
+    "summicron-sl": "Summicron",
     "nocti": "Noctilux",
     "noct": "Noctilux",
     "noctilux": "Noctilux",

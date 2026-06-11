@@ -344,6 +344,16 @@ _R_HYPHENATED_FAMILY_ALIASES: dict[str, str] = {
     "vario-apo-elmarit-r": "Vario-APO-Elmarit-R",
 }
 
+_LEICA_HYPHENATED_FAMILY_MOUNTS: dict[str, str] = {
+    "summicron-m": "M",
+    "summilux-m": "M",
+    "noctilux-m": "M",
+    "elmarit-m": "M",
+    "apo-summicron-m": "M",
+    "summicron-sl": "SL",
+    "apo-summicron-sl": "SL",
+}
+
 _TRI_ELMAR_SHORTHANDS: dict[str, tuple[str, str]] = {
     "wate": ("16-18-21", "WATE"),
     "mate": ("28-35-50", "MATE"),
@@ -934,6 +944,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             intent.model_family = family
             intent.brand = intent.brand or DEFAULT_BRAND
             intent.tokens.append({"type": "model_family", "raw": token, "value": family})
+            hyphen_mount = _LEICA_HYPHENATED_FAMILY_MOUNTS.get(token)
+            if hyphen_mount and not intent.mount:
+                _set_mount(intent, hyphen_mount, token)
             family_system = MODEL_SYSTEM_ALIASES.get(token)
             if family_system and not intent.system:
                 intent.system = family_system
