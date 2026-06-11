@@ -428,7 +428,7 @@ def _query_variant_signals(intent: Mapping[str, Any]) -> list[dict[str, str]]:
         family = str(intent.get("model_family") or "").strip()
         mount = str(intent.get("mount") or "").strip()
         focal = str(intent.get("focal_length") or "").strip()
-        if family == "APO-Summicron-SL" and mount == "SL" and focal in {"35", "75", "90"}:
+        if family == "APO-Summicron-SL" and mount == "SL" and focal in {"35", "50", "75", "90"}:
             signals.append({"kind": "variant", "value": "ASPH"})
     generation = str(intent.get("generation") or "").strip()
     if generation:
