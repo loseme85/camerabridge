@@ -558,6 +558,20 @@ def _result_matches_exact_variant_scope(
 ) -> bool:
     if not _result_matches_base_model_scope(result, intent, expected_family, expected_mount):
         return False
+    variant_values = {
+        str(signal.get("value") or "").strip().upper()
+        for signal in signals
+        if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
+    }
+    if (
+        _family_root(expected_family or intent.get("model_family") or "") == "Summilux"
+        and str(intent.get("focal_length") or "") == "35"
+        and expected_mount in {None, "M"}
+        and "ASPH" in variant_values
+        and "FLE" not in variant_values
+        and _result_matches_signal(result, {"kind": "variant", "value": "FLE"})
+    ):
+        return False
     return all(_result_matches_signal(result, signal) for signal in signals)
 
 
