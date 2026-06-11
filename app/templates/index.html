@@ -639,6 +639,35 @@
       overflow:hidden;
       text-overflow:ellipsis;
     }
+    .result-role-rows{
+      display:grid;
+      gap:8px;
+      padding:0 14px 14px;
+      border-bottom:1px solid var(--border);
+    }
+    .result-role-row{
+      min-width:0;
+      border:1px solid var(--border);
+      background:var(--surface-soft);
+      border-radius:var(--radius);
+      padding:9px 10px;
+    }
+    .result-role-row b{
+      display:block;
+      margin-bottom:4px;
+      color:var(--text-muted);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:8px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .result-role-row span{
+      display:block;
+      color:var(--text);
+      font-size:12px;
+      line-height:1.45;
+      overflow-wrap:anywhere;
+    }
     .result-actions{
       display:flex;
       align-items:center;
@@ -1757,14 +1786,18 @@
           <div class="data-grid">
             ${renderDataPoint('Detected model', model)}
             ${renderDataPoint('Family', family)}
-            ${evidenceRole ? renderDataPoint('Evidence role', evidenceRole) : ''}
-            ${renderDataPoint('Price role', priceRole)}
             ${renderDataPoint('Focal length', focalLength)}
             ${renderDataPoint('Aperture', aperture)}
             ${renderDataPoint('Mount', displayMount)}
             ${renderDataPoint('Category', displayCategory)}
-            ${reason ? renderDataPoint('Reason', reason) : ''}
           </div>
+          ${(evidenceRole || priceRole || reason) ? `
+            <div class="result-role-rows">
+              ${evidenceRole ? renderRoleRow('Evidence role', evidenceRole) : ''}
+              ${priceRole ? renderRoleRow('Price role', priceRole) : ''}
+              ${reason ? renderRoleRow('Reason', reason) : ''}
+            </div>
+          ` : ''}
           <div class="result-actions">
             <div class="action-group">
               <button type="button" class="ghost-button">Track market changes</button>
@@ -1780,6 +1813,10 @@
 
     function renderDataPoint(label, value){
       return `<div class="data-point"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
+    }
+
+    function renderRoleRow(label, value){
+      return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
     }
 
     function renderArchiveSection(results){
