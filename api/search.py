@@ -1854,81 +1854,92 @@ def build_market_entry_policy(
             result = excluded_item.get("result") or {}
             excluded_reason_by_signature[_result_signature(result)] = list(excluded_item.get("reasons") or [])
 
-    top_result_evidence = []
-    seen_top_result_signatures: set[tuple[str, str, str, str]] = set()
-    for result in results[:5]:
-        signature = _result_signature(result)
-        if signature in exact_variant_signatures:
-            evidence_pool = "exact_variant_pool"
-            used_for_price = price_summary_allowed and price_scope == "exact_variant"
-            excluded_reasons = []
-        elif signature in exact_base_signatures:
-            evidence_pool = "exact_base_model_pool"
-            used_for_price = price_summary_allowed and price_scope == "exact_base_model"
-            excluded_reasons = []
-        elif signature in broader_signatures:
-            evidence_pool = "broader_family_pool"
-            used_for_price = bool(broader_reference_allowed)
-            excluded_reasons = []
-        else:
-            excluded_reasons = excluded_reason_by_signature.get(signature, [])
-            evidence_pool = "excluded_pool" if excluded_reasons else "visible_only"
-            used_for_price = False
-        if excluded_reasons:
-            used_for_price = False
-            evidence_pool = "excluded_pool"
-
-        if boundary_conflict_detected:
-            compatibility_label = "Boundary conflict"
-        elif third_party_top_domination_detected and result is top_result:
-            compatibility_label = "Third-party top result"
-        elif variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals):
-            compatibility_label = "Exact variant"
-        elif _result_matches_base_model_scope(result, intent, expected_family, expected_mount):
-            compatibility_label = "Exact base model"
-        elif _result_matches_broader_family_scope(result, intent, expected_family, expected_mount):
-            compatibility_label = "Broader family"
-        else:
-            compatibility_label = "Query incompatible"
-
-        if evidence_pool == "visible_only" and not excluded_reasons:
-            if compatibility_label == "Exact variant":
+    def _build_visible_result_evidence(projection_results: list[Mapping[str, Any]]) -> list[dict[str, Any]]:
+        evidence_items = []
+        seen_projection_signatures: set[tuple[str, str, str, str]] = set()
+        for index, result in enumerate(projection_results):
+            signature = _result_signature(result)
+            if signature in exact_variant_signatures:
                 evidence_pool = "exact_variant_pool"
-            elif compatibility_label == "Exact base model":
+                used_for_price = price_summary_allowed and price_scope == "exact_variant"
+                excluded_reasons = []
+            elif signature in exact_base_signatures:
                 evidence_pool = "exact_base_model_pool"
-            elif compatibility_label == "Broader family":
+                used_for_price = price_summary_allowed and price_scope == "exact_base_model"
+                excluded_reasons = []
+            elif signature in broader_signatures:
                 evidence_pool = "broader_family_pool"
+                used_for_price = bool(broader_reference_allowed)
+                excluded_reasons = []
+            else:
+                excluded_reasons = excluded_reason_by_signature.get(signature, [])
+                evidence_pool = "excluded_pool" if excluded_reasons else "visible_only"
+                used_for_price = False
+            if excluded_reasons:
+                used_for_price = False
+                evidence_pool = "excluded_pool"
 
-        if signature in seen_top_result_signatures and evidence_pool != "excluded_pool":
-            excluded_reasons = ["duplicate"]
-            used_for_price = False
-            evidence_pool = "excluded_pool"
-        seen_top_result_signatures.add(signature)
+            if boundary_conflict_detected:
+                compatibility_label = "Boundary conflict"
+            elif third_party_top_domination_detected and result is top_result:
+                compatibility_label = "Third-party top result"
+            elif variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals):
+                compatibility_label = "Exact variant"
+            elif _result_matches_base_model_scope(result, intent, expected_family, expected_mount):
+                compatibility_label = "Exact base model"
+            elif _result_matches_broader_family_scope(result, intent, expected_family, expected_mount):
+                compatibility_label = "Broader family"
+            else:
+                compatibility_label = "Query incompatible"
 
-        display_role = _humanize_result_role(compatibility_label)
-        display_excluded_reason = [_humanize_excluded_reason(reason) for reason in excluded_reasons]
-        display_price_usage = _build_price_usage_label(
-            used_for_price,
-            evidence_pool,
-            display_excluded_reason,
-        )
+            if evidence_pool == "visible_only" and not excluded_reasons:
+                if compatibility_label == "Exact variant":
+                    evidence_pool = "exact_variant_pool"
+                elif compatibility_label == "Exact base model":
+                    evidence_pool = "exact_base_model_pool"
+                elif compatibility_label == "Broader family":
+                    evidence_pool = "broader_family_pool"
 
-        top_result_evidence.append(
-            {
-                "title": _result_title(result),
-                "source": str(result.get("source") or ""),
-                "price": str(result.get("price") or ""),
-                "compatibility_label": compatibility_label,
-                "result_role_label": display_role,
-                "evidence_pool": evidence_pool,
-                "evidence_pool_label": _humanize_evidence_pool(evidence_pool),
-                "used_for_price": used_for_price,
-                "price_usage_label": display_price_usage,
-                "excluded_reason": display_excluded_reason,
-                "display_category": str(_result_field(result, "category") or ""),
-                "display_model": str(_result_field(result, "model_canonical") or _result_field(result, "model_raw") or ""),
-            }
-        )
+            if signature in seen_projection_signatures and evidence_pool != "excluded_pool":
+                excluded_reasons = ["duplicate"]
+                used_for_price = False
+                evidence_pool = "excluded_pool"
+            seen_projection_signatures.add(signature)
+
+            display_role = _humanize_result_role(compatibility_label)
+            display_excluded_reason = [_humanize_excluded_reason(reason) for reason in excluded_reasons]
+            display_price_usage = _build_price_usage_label(
+                used_for_price,
+                evidence_pool,
+                display_excluded_reason,
+            )
+            if _parse_price_number(result.get("price")) is None:
+                used_for_price = False
+                display_price_usage = "No usable price"
+
+            evidence_items.append(
+                {
+                    "result_index": index,
+                    "evidence_signature": "||".join(signature),
+                    "title": _result_title(result),
+                    "source": str(result.get("source") or ""),
+                    "price": str(result.get("price") or ""),
+                    "currency": _result_currency(result),
+                    "compatibility_label": compatibility_label,
+                    "result_role_label": display_role,
+                    "evidence_pool": evidence_pool,
+                    "evidence_pool_label": _humanize_evidence_pool(evidence_pool),
+                    "used_for_price": used_for_price,
+                    "price_usage_label": display_price_usage,
+                    "excluded_reason": display_excluded_reason,
+                    "display_category": str(_result_field(result, "category") or ""),
+                    "display_model": str(_result_field(result, "model_canonical") or _result_field(result, "model_raw") or ""),
+                }
+            )
+        return evidence_items
+
+    visible_result_evidence = _build_visible_result_evidence(results)
+    top_result_evidence = list(visible_result_evidence[:5])
 
     display_price_summary_allowed = bool(price_summary_allowed)
     display_price_scope_label = price_scope_label
@@ -2129,6 +2140,7 @@ def build_market_entry_policy(
         "display_unlock_requirements": display_unlock_requirements,
         "display_evidence_pool_summary": display_evidence_pool_summary,
         "display_top_result_evidence": top_result_evidence,
+        "display_visible_result_evidence": visible_result_evidence,
         "display_match_state_message": display_match_state_message,
         "display_query_review": display_query_review,
         "current_ui_label_safe": current_ui_label_safe,

@@ -1160,20 +1160,25 @@
       return state.response && Array.isArray(state.response.results) ? state.response.results : [];
     }
 
-    function buildResultEvidenceKey(title, source, price){
+    function buildResultEvidenceKey(title, source, price, currency){
       return [
         String(title || '').trim().toLowerCase(),
         String(source || '').trim().toLowerCase(),
-        String(price || '').trim()
+        String(price || '').trim(),
+        String(currency || '').trim().toUpperCase()
       ].join('||');
     }
 
-    function getResultEvidence(result){
-      const evidence = state.response && Array.isArray(state.response.display_top_result_evidence)
+    function getResultEvidence(result, index){
+      const evidence = state.response && Array.isArray(state.response.display_visible_result_evidence)
+        ? state.response.display_visible_result_evidence
+        : state.response && Array.isArray(state.response.display_top_result_evidence)
         ? state.response.display_top_result_evidence
         : [];
-      const key = buildResultEvidenceKey(result.title, result.source, result.price);
-      return evidence.find(item => buildResultEvidenceKey(item.title, item.source, item.price) === key) || null;
+      const byIndex = evidence.find(item => Number(item.result_index) === Number(index));
+      if(byIndex) return byIndex;
+      const key = buildResultEvidenceKey(result.title, result.source, result.price, result.currency);
+      return evidence.find(item => buildResultEvidenceKey(item.title, item.source, item.price, item.currency) === key) || null;
     }
 
     function getResultReason(evidence){
@@ -1465,7 +1470,7 @@
         'subtle'
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
-      els['results-grid'].innerHTML = results.map(renderCard).join('');
+      els['results-grid'].innerHTML = results.map((result, index) => renderCard(result, index)).join('');
       els['results-load-more-region'].innerHTML = renderLoadMore();
       els['archive-region'].innerHTML = renderArchiveSection(results);
     }
@@ -1745,7 +1750,7 @@
       `;
     }
 
-    function renderCard(result){
+    function renderCard(result, index){
       const title = result.title || 'Untitled listing';
       const url = result.source_url || '#';
       const imageUrl = result.image_url;
@@ -1767,13 +1772,18 @@
       const displayMount = displayValue(displayField(result, 'display_mount'), 'Unknown');
       const projected = Boolean(displayField(result, 'stale_normalization_detected'));
       const compactNotation = Boolean(displayField(result, 'compact_lens_notation_detected'));
-      const evidence = getResultEvidence(result);
+      const evidence = getResultEvidence(result, index);
       const evidenceRole = String(evidence ? (evidence.result_role_label || evidence.compatibility_label || '') : '').trim();
+      const hasPrice = Boolean(String(result.price || '').trim());
       const priceRole = displayValue(
         evidence ? evidence.price_usage_label : '',
-        result.price ? 'Reference / not exact' : 'Not enough data'
+        hasPrice ? 'Visible result, not classified for pricing yet' : 'No usable price'
       );
-      const reason = getResultReason(evidence);
+      const reason = getResultReason(evidence) || (!hasPrice
+        ? 'Not used for market estimate'
+        : !evidence
+        ? 'Detailed price role not available for this visible result'
+        : '');
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
