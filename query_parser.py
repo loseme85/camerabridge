@@ -549,6 +549,27 @@ def _has_summilux_35_context(normalized: str, intent: QueryIntent) -> bool:
 
 
 def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) -> None:
+    if (
+        "aspherical" in normalized
+        and _has_summilux_35_context(normalized, intent)
+        and "ASPH" in intent.variant
+        and "FLE" not in intent.variant
+        and "pre-ASPH" not in intent.variant
+        and "AA" not in intent.variant
+        and "asph" not in re.findall(r"[a-z0-9가-힣./-]+", normalized)
+    ):
+        intent.variant = [variant for variant in intent.variant if variant != "ASPH"]
+        intent.tokens = [
+            token
+            for token in intent.tokens
+            if not (
+                token.get("type") == "variant"
+                and token.get("raw") == "aspherical"
+                and token.get("value") == "ASPH"
+            )
+        ]
+        _add_variant(intent, "AA", "aspherical")
+
     if "fle" in normalized and _has_summilux_35_context(normalized, intent) and "FLE" not in intent.variant:
         _add_variant(intent, "FLE", "fle")
 
