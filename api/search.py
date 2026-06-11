@@ -1885,7 +1885,15 @@ def build_market_entry_policy(
                 used_for_price = False
                 evidence_pool = "excluded_pool"
 
-            if boundary_conflict_detected:
+            row_boundary_conflict = (
+                _result_family_conflict(expected_family, result)
+                or _result_mount_conflict(expected_mount, result)
+                or _result_category_conflict(expected_category, result)
+                or _result_variant_conflict(intent, result)
+                or _result_classification_conflict(result)
+            )
+
+            if row_boundary_conflict:
                 compatibility_label = "Boundary conflict"
             elif third_party_top_domination_detected and result is top_result:
                 compatibility_label = "Third-party top result"
