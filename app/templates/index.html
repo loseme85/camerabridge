@@ -521,6 +521,50 @@
       grid-template-columns:1fr;
       gap:12px;
     }
+    .query-summary-bar{
+      display:grid;
+      gap:8px;
+      margin:0 0 12px;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:#fff;
+      box-shadow:0 6px 18px rgba(27,23,19,0.04);
+    }
+    .query-summary-topline{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px 12px;
+    }
+    .query-summary-label{
+      color:var(--text-muted);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:10px;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+    .query-summary-query{
+      color:var(--text);
+      font-size:15px;
+      font-weight:700;
+      line-height:1.35;
+      overflow-wrap:anywhere;
+    }
+    .query-summary-count{
+      color:var(--text-soft);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:11px;
+      line-height:1.4;
+      white-space:nowrap;
+    }
+    .query-summary-detected{
+      color:var(--text-soft);
+      font-size:12px;
+      line-height:1.45;
+      overflow-wrap:anywhere;
+    }
     .load-more-region{
       display:flex;
       justify-content:center;
@@ -922,6 +966,7 @@
             <section id="state-region" aria-live="polite"></section>
             <section id="market-entry-region" aria-live="polite"></section>
             <section id="refinement-region" aria-live="polite"></section>
+            <section id="query-summary-region" aria-live="polite"></section>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
             <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
             <section id="archive-region" aria-live="polite"></section>
@@ -988,7 +1033,7 @@
         'search-form','query-input','category-filter','brand-filter','mount-filter','sold-filter',
         'sort-select','result-count','result-caption','summary-meta','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
-        'results-grid','results-load-more-region','archive-region','warning-region'
+        'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
         els[id] = $(id);
       });
@@ -1420,6 +1465,7 @@
       els['state-region'].innerHTML = '';
       els['market-entry-region'].innerHTML = '';
       els['refinement-region'].innerHTML = '';
+      els['query-summary-region'].innerHTML = '';
       if(!state.appending){
         els['results-grid'].innerHTML = '';
         els['archive-region'].innerHTML = '';
@@ -1470,9 +1516,40 @@
         'subtle'
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
+      els['query-summary-region'].innerHTML = renderQuerySummaryBar(results);
       els['results-grid'].innerHTML = results.map((result, index) => renderCard(result, index)).join('');
       els['results-load-more-region'].innerHTML = renderLoadMore();
       els['archive-region'].innerHTML = renderArchiveSection(results);
+    }
+
+    function renderQuerySummaryBar(results){
+      if(!state.query || !Array.isArray(results) || !results.length){
+        return '';
+      }
+      const review = state.response && state.response.display_query_review ? state.response.display_query_review : {};
+      const intent = state.response && state.response.intent ? state.response.intent : {};
+      const resultCount = Number(state.response && state.response.result_count || results.length || 0);
+      const family = String(intent.model_family || '').trim();
+      const mount = String(intent.mount || '').trim();
+      const focal = String(intent.focal_length || '').trim();
+      const aperture = Array.isArray(intent.aperture) ? String(intent.aperture[0] || '').trim() : String(intent.aperture || '').trim();
+      const interpretedTarget = String(review.interpreted_target || '').trim();
+      const detectedParts = interpretedTarget
+        ? [interpretedTarget]
+        : [family, mount, focal ? `${focal}mm` : '', aperture].filter(Boolean);
+      const detectedLine = detectedParts.length ? detectedParts.join(' · ') : '';
+      return `
+        <article class="query-summary-bar">
+          <div class="query-summary-topline">
+            <div>
+              <div class="query-summary-label">Search query</div>
+              <div class="query-summary-query">${escapeHtml(state.query)}</div>
+            </div>
+            <div class="query-summary-count">${escapeHtml(`${resultCount} visible`)}</div>
+          </div>
+          ${detectedLine ? `<div class="query-summary-detected"><strong>Detected:</strong> ${escapeHtml(detectedLine)}</div>` : ''}
+        </article>
+      `;
     }
 
     function renderLoadMore(){
