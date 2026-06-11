@@ -1147,7 +1147,7 @@
       return evidence.find(item => buildResultEvidenceKey(item.title, item.source, item.price) === key) || null;
     }
 
-    function getResultReason(evidence, matchConfidence){
+    function getResultReason(evidence){
       if(!evidence) return '';
       const excluded = Array.isArray(evidence.excluded_reason) ? evidence.excluded_reason.filter(Boolean) : [];
       if(excluded.length) return excluded[0];
@@ -1171,7 +1171,6 @@
       if(usage.includes('broader reference')) return 'Broader family reference';
       if(usage.includes('not compatible with this query')) return 'Not compatible with this query';
       if(usage.includes('exact match visible')) return 'Exact variant evidence';
-      if(matchConfidence && matchConfidence !== 'Unknown') return `Match ${matchConfidence}`;
       return '';
     }
 
@@ -1728,15 +1727,12 @@
       const projected = Boolean(displayField(result, 'stale_normalization_detected'));
       const compactNotation = Boolean(displayField(result, 'compact_lens_notation_detected'));
       const evidence = getResultEvidence(result);
-      const matchRole = displayValue(
-        evidence ? (evidence.result_role_label || evidence.compatibility_label) : '',
-        `Match ${matchConfidence}`
-      );
+      const evidenceRole = String(evidence ? (evidence.result_role_label || evidence.compatibility_label || '') : '').trim();
       const priceRole = displayValue(
         evidence ? evidence.price_usage_label : '',
         result.price ? 'Reference / not exact' : 'Not enough data'
       );
-      const reason = getResultReason(evidence, matchConfidence);
+      const reason = getResultReason(evidence);
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
@@ -1761,7 +1757,7 @@
           <div class="data-grid">
             ${renderDataPoint('Detected model', model)}
             ${renderDataPoint('Family', family)}
-            ${renderDataPoint('Match role', matchRole)}
+            ${evidenceRole ? renderDataPoint('Evidence role', evidenceRole) : ''}
             ${renderDataPoint('Price role', priceRole)}
             ${renderDataPoint('Focal length', focalLength)}
             ${renderDataPoint('Aperture', aperture)}
