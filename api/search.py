@@ -430,6 +430,33 @@ def _result_is_summilux_35_context(result: Mapping[str, Any]) -> bool:
     return True
 
 
+def _result_is_summicron_50_context(result: Mapping[str, Any]) -> bool:
+    if str(_result_field(result, "category") or "") != "Lens":
+        return False
+    candidate_family = (
+        _result_field(result, "model_canonical")
+        or _result_field(result, "model_raw")
+        or _result_field(result, "label")
+        or result.get("title")
+    )
+    if _family_root(candidate_family) != "Summicron":
+        return False
+    focal = str(_result_field(result, "focal_length") or "").strip()
+    if focal != "50":
+        return False
+    mount = str(_result_field(result, "mount") or "").strip()
+    if mount and mount not in {"M", "Unknown"}:
+        return False
+    return True
+
+
+def _result_has_summicron_50_dr_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summicron_50_context(result):
+        return False
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" dr ", " dual range ", " dual-range ", " dualrange "))
+
+
 def _result_has_fle_signal(result: Mapping[str, Any]) -> bool:
     text = f" {_result_text_blob(result)} "
     return _result_has_fle2_signal(result) or any(pattern in text for pattern in (" fle ", " floating element "))
@@ -523,6 +550,7 @@ def _signal_patterns(kind: str, value: str) -> list[str]:
         "apo": ["apo"],
         "aa": [" aa ", "double aspherical"],
         "fle2": ["fle2", "fle ii", "fle 2", "close focus", "close-focus"],
+        "dual range": [" dr ", " dual range ", " dual-range ", " dualrange "],
         "8-element": ["8-element", "8 element", "6군8매", "8매"],
         "6-element": ["6-element", "6 element", "6매"],
         "rigid": ["rigid"],
@@ -565,6 +593,8 @@ def _result_matches_signal(result: Mapping[str, Any], signal: Mapping[str, str])
     kind = str(signal.get("kind") or "")
     if kind == "variant" and _normalize_text(value) == "aa" and _result_has_summilux_35_aa_signal(result):
         return True
+    if kind == "variant" and _normalize_text(value) == "dual range":
+        return _result_has_summicron_50_dr_signal(result)
     if kind == "variant" and _normalize_text(value) == "fle2":
         return _result_has_fle2_signal(result)
     if kind == "variant" and _normalize_text(value) == "fle":

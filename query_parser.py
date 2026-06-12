@@ -557,6 +557,15 @@ def _has_summilux_35_context(normalized: str, intent: QueryIntent) -> bool:
     return bool(re.search(r"\b(?:summilux|summilux-m|lux)\b", normalized))
 
 
+def _has_summicron_50_context(normalized: str, intent: QueryIntent) -> bool:
+    if intent.focal_length != "50":
+        return False
+    family = str(intent.model_family or "")
+    if family in {"Summicron", "Summicron-M"}:
+        return True
+    return bool(re.search(r"\b(?:summicron|summicron-m|cron)\b", normalized))
+
+
 def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) -> None:
     if (
         "aspherical" in normalized
@@ -588,6 +597,13 @@ def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) 
                 _add_variant(intent, "FLE2", fle2_match.group(0))
         elif "fle" in normalized and "FLE" not in intent.variant:
             _add_variant(intent, "FLE", "fle")
+
+    if (
+        _has_summicron_50_context(normalized, intent)
+        and "Dual Range" not in intent.variant
+        and re.search(r"\bdr\b|\bdual(?:-|\s*)range\b", normalized)
+    ):
+        _add_variant(intent, "Dual Range", "dual range")
 
     tri_elmar_context = bool(re.search(r"\b(?:tri-elmar|trielmar|wate|mate)\b", normalized))
     if not tri_elmar_context:
