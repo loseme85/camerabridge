@@ -430,7 +430,7 @@ def _result_is_summilux_35_context(result: Mapping[str, Any]) -> bool:
     return True
 
 
-def _result_is_summicron_50_context(result: Mapping[str, Any]) -> bool:
+def _result_is_summicron_50_family_context(result: Mapping[str, Any]) -> bool:
     if str(_result_field(result, "category") or "") != "Lens":
         return False
     candidate_family = (
@@ -443,6 +443,12 @@ def _result_is_summicron_50_context(result: Mapping[str, Any]) -> bool:
         return False
     focal = str(_result_field(result, "focal_length") or "").strip()
     if focal != "50":
+        return False
+    return True
+
+
+def _result_is_summicron_50_context(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summicron_50_family_context(result):
         return False
     mount = str(_result_field(result, "mount") or "").strip()
     if mount and mount not in {"M", "Unknown"}:
@@ -485,6 +491,28 @@ def _result_has_summicron_50_apo_signal(result: Mapping[str, Any]) -> bool:
 def _result_has_summicron_50_ltm_signal(result: Mapping[str, Any]) -> bool:
     text = f" {_result_text_blob(result)} "
     return any(pattern in text for pattern in (" ltm ", " m39 ", " screw mount "))
+
+
+def _result_has_summicron_50_m_side_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summicron_50_family_context(result):
+        return False
+    row_mount = str(_result_field(result, "mount") or "").strip()
+    if row_mount == "M":
+        return True
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" leica m 50", " m 50/2 ", " m 50mm ", " m50/2 "))
+
+
+def _result_has_summicron_50_l_side_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summicron_50_family_context(result):
+        return False
+    row_mount = str(_result_field(result, "mount") or "").strip()
+    if row_mount == "L":
+        return True
+    if _result_has_summicron_50_ltm_signal(result):
+        return True
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" leica l 50", " l 50/2 ", " l 50mm ", " l50/2 "))
 
 
 def _result_has_fle_signal(result: Mapping[str, Any]) -> bool:
@@ -567,6 +595,21 @@ def _is_explicit_summicron_50_dr_query(intent: Mapping[str, Any]) -> bool:
         if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
     }
     return "DUAL RANGE" in variant_values
+
+
+def _is_mount_unspecified_summicron_50_rigid_query(intent: Mapping[str, Any], expected_mount: str | None) -> bool:
+    if expected_mount is not None:
+        return False
+    if _family_root(intent.get("model_family") or "") != "Summicron":
+        return False
+    if str(intent.get("focal_length") or "").strip() != "50":
+        return False
+    variant_values = {
+        str(signal.get("value") or "").strip().upper()
+        for signal in _query_variant_signals(intent)
+        if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
+    }
+    return "RIGID" in variant_values
 
 
 def _signal_patterns(kind: str, value: str) -> list[str]:
@@ -1184,6 +1227,7 @@ def _humanize_policy_reason(reason: str) -> str:
         "third_party_contaminated": "Third-party prices are contaminating this reference pool.",
         "wrong_model_contaminated": "Wrong-model prices are contaminating this reference pool.",
         "mixed_fle_generation": "FLE and FLE II / FLE2 listings are mixed, so exact price stays locked.",
+        "mixed_rigid_mounts": "M-side and LTM/M39-side rigid listings are mixed, so exact price stays locked.",
         "outlier_contaminated": "Outlier prices are contaminating this reference pool.",
         "locked_boundary_conflict": "Price summary is locked until boundary conflicts are resolved.",
         "locked_weak_only": "Price summary is locked until stronger visible results appear.",
@@ -1204,6 +1248,7 @@ def _humanize_quality_state(state: str) -> str:
         "third_party_contaminated": "Third-party contamination detected",
         "wrong_model_contaminated": "Wrong-model contamination detected",
         "mixed_fle_generation_locked": "Mixed FLE / FLE2 exact evidence",
+        "mixed_rigid_mounts_locked": "Mixed M / LTM-M39 rigid exact evidence",
         "locked_boundary_conflict": "Price summary locked by boundary conflict",
         "locked_weak_only": "Price summary locked by weak fallback",
     }
@@ -1765,6 +1810,11 @@ def build_market_entry_policy(
         and any(_result_has_fle1_only_signal(result) for result in exact_variant_results)
         and any(_result_has_fle2_signal(result) for result in exact_variant_results)
     )
+    mixed_summicron_50_rigid_mounts_detected = bool(
+        _is_mount_unspecified_summicron_50_rigid_query(intent, expected_mount)
+        and any(_result_has_summicron_50_m_side_signal(result) for result in exact_variant_results)
+        and any(_result_has_summicron_50_l_side_signal(result) for result in exact_variant_results)
+    )
 
     exact_variant_pool = _build_price_evidence_pool(
         exact_variant_results,
@@ -1940,6 +1990,7 @@ def build_market_entry_policy(
             and price_scope_search_aligned
             and exact_variant_pool["price_band_quality_state"] == "clean_exact_variant_band"
             and not mixed_summilux_35_fle_generations_detected
+            and not mixed_summicron_50_rigid_mounts_detected
         ):
             price_summary_allowed = True
             price_scope = "exact_variant"
@@ -1961,6 +2012,8 @@ def build_market_entry_policy(
                 price_scope_confidence_state = "exact_variant_data_limited"
             if mixed_summilux_35_fle_generations_detected:
                 price_summary_block_reason.append("mixed_fle_generation")
+            if mixed_summicron_50_rigid_mounts_detected:
+                price_summary_block_reason.append("mixed_rigid_mounts")
             if len(exact_variant_priced) < 2:
                 price_summary_block_reason.append("insufficient_exact_variant_priced_results")
             if exact_variant_pool["price_band_quality_state"] not in {"clean_exact_variant_band", "insufficient_priced_evidence"}:
@@ -2111,6 +2164,9 @@ def build_market_entry_policy(
     if mixed_summilux_35_fle_generations_detected and not price_summary_allowed:
         price_band_quality_state = "mixed_fle_generation_locked"
         price_band_quality_reason = ["mixed_fle_generation"]
+    if mixed_summicron_50_rigid_mounts_detected and not price_summary_allowed:
+        price_band_quality_state = "mixed_rigid_mounts_locked"
+        price_band_quality_reason = ["mixed_rigid_mounts"]
 
     if variant_signals and len(exact_variant_priced) < 2:
         unlock_requirements.append("Need 2+ exact variant priced listings.")
@@ -2124,6 +2180,8 @@ def build_market_entry_policy(
         unlock_requirements.append("Need cleaned price band within an acceptable width.")
     if mixed_summilux_35_fle_generations_detected:
         unlock_requirements.append("Need no mixed FLE and FLE2 listings in the exact price pool.")
+    if mixed_summicron_50_rigid_mounts_detected:
+        unlock_requirements.append("Need no mixed M-side and LTM/M39-side rigid listings in the exact price pool.")
     if boundary_conflict_detected:
         unlock_requirements.append("Need no boundary conflict between family, mount, and variant.")
     if price_summary_allowed:
