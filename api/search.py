@@ -457,6 +457,36 @@ def _result_has_summicron_50_dr_signal(result: Mapping[str, Any]) -> bool:
     return any(pattern in text for pattern in (" dr ", " dual range ", " dual-range ", " dualrange "))
 
 
+def _result_has_summicron_50_rigid_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summicron_50_context(result):
+        return False
+    return _result_matches_signal(result, {"kind": "variant", "value": "Rigid"})
+
+
+def _result_has_summicron_50_collapsible_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summicron_50_context(result):
+        return False
+    return _result_matches_signal(result, {"kind": "variant", "value": "Collapsible"})
+
+
+def _result_has_summicron_50_apo_signal(result: Mapping[str, Any]) -> bool:
+    candidate_family = (
+        _result_field(result, "model_canonical")
+        or _result_field(result, "model_raw")
+        or _result_field(result, "label")
+        or result.get("title")
+    )
+    if _family_root(candidate_family) == "APO-Summicron":
+        return True
+    text = f" {_result_text_blob(result)} "
+    return " apo " in text
+
+
+def _result_has_summicron_50_ltm_signal(result: Mapping[str, Any]) -> bool:
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" ltm ", " m39 ", " screw mount "))
+
+
 def _result_has_fle_signal(result: Mapping[str, Any]) -> bool:
     text = f" {_result_text_blob(result)} "
     return _result_has_fle2_signal(result) or any(pattern in text for pattern in (" fle ", " floating element "))
@@ -524,6 +554,19 @@ def _query_variant_signals(intent: Mapping[str, Any]) -> list[dict[str, str]]:
     if optical_formula:
         signals.append({"kind": "optical_formula", "value": optical_formula})
     return signals
+
+
+def _is_explicit_summicron_50_dr_query(intent: Mapping[str, Any]) -> bool:
+    if _family_root(intent.get("model_family") or "") != "Summicron":
+        return False
+    if str(intent.get("focal_length") or "").strip() != "50":
+        return False
+    variant_values = {
+        str(signal.get("value") or "").strip().upper()
+        for signal in _query_variant_signals(intent)
+        if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
+    }
+    return "DUAL RANGE" in variant_values
 
 
 def _signal_patterns(kind: str, value: str) -> list[str]:
@@ -931,6 +974,88 @@ def _body_price_variant_boundary(
         if f" {normalized} " in result_text and f" {normalized} " not in query_text:
             return True
     return False
+
+
+def _summicron_50_dr_ranking_bucket(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    signals: list[dict[str, str]],
+) -> int:
+    row_mount = str(_result_field(result, "mount") or "").strip()
+    row_boundary_conflict = (
+        _result_family_conflict(expected_family, result)
+        or _result_mount_conflict(expected_mount, result)
+        or _result_category_conflict(_parsed_category(intent), result)
+        or _result_variant_conflict(intent, result)
+        or _result_classification_conflict(result)
+    )
+    dr_signal = _result_has_summicron_50_dr_signal(result)
+    rigid_signal = _result_has_summicron_50_rigid_signal(result)
+    collapsible_signal = _result_has_summicron_50_collapsible_signal(result)
+    apo_signal = _result_has_summicron_50_apo_signal(result)
+    ltm_signal = _result_has_summicron_50_ltm_signal(result)
+    exact_variant = _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, signals)
+    exact_base = _result_matches_base_model_scope(result, intent, expected_family, expected_mount)
+
+    if exact_variant and dr_signal and row_mount in {"", "Unknown", "M"} and not ltm_signal:
+        return 0
+    if dr_signal and row_mount in {"", "Unknown", "M"} and not ltm_signal and not row_boundary_conflict:
+        return 1
+    if exact_base and row_mount in {"", "Unknown", "M"} and not dr_signal and not rigid_signal and not apo_signal and not collapsible_signal and not ltm_signal:
+        return 2
+    if exact_base and row_mount in {"", "Unknown", "M"} and not ltm_signal:
+        return 3
+    if ltm_signal or row_mount in {"L", "R", "SL"}:
+        return 5
+    if row_boundary_conflict or apo_signal or rigid_signal or collapsible_signal:
+        return 4
+    return 6
+
+
+def _rerank_results_for_query_context(query: str, response: Mapping[str, Any], sort: str) -> list[dict[str, Any]]:
+    results = list(response.get("results") or [])
+    if sort != "relevance" or not results:
+        return results
+    intent = response.get("intent") or {}
+    if not _is_explicit_summicron_50_dr_query(intent):
+        return results
+    expected_family = _explicit_query_family(query, intent)
+    expected_mount = _explicit_query_mount(query, intent)
+    signals = _query_variant_signals(intent)
+    ranked = sorted(
+        enumerate(results),
+        key=lambda pair: (
+            _summicron_50_dr_ranking_bucket(pair[1], intent, expected_family, expected_mount, signals),
+            pair[0],
+        ),
+    )
+    return [result for _, result in ranked]
+
+
+def _promote_expanded_results_for_query_context(
+    query: str,
+    response: dict[str, Any],
+    evidence_response: Mapping[str, Any] | None,
+    *,
+    sort: str,
+    limit: int,
+    offset: int,
+) -> None:
+    if sort != "relevance" or not evidence_response:
+        return
+    intent = response.get("intent") or {}
+    if not _is_explicit_summicron_50_dr_query(intent):
+        return
+    expanded_results = list(evidence_response.get("results") or [])
+    if not expanded_results:
+        return
+    promoted_results = expanded_results[offset : offset + limit]
+    if not promoted_results:
+        return
+    response["results"] = promoted_results
+    response["result_count"] = len(promoted_results)
 
 
 def _query_aperture_value(intent: Mapping[str, Any], query: str) -> float | None:
@@ -2495,8 +2620,11 @@ def search_from_params(
         if parsed["min_score"] is not None:
             kwargs["min_score"] = parsed["min_score"]
         if records is not None:
-            return search_records(records=records, **kwargs)
-        return load_and_search(path=_resolve_search_index_path(path), **kwargs)
+            evidence_response = search_records(records=records, **kwargs)
+        else:
+            evidence_response = load_and_search(path=_resolve_search_index_path(path), **kwargs)
+        evidence_response["results"] = _rerank_results_for_query_context(parsed["query"], evidence_response, parsed["sort"])
+        return evidence_response
 
     if records is not None:
         response = search_records(
@@ -2510,8 +2638,17 @@ def search_from_params(
             strong_only=parsed["strong_only"],
             **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
         )
-        response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
+        response["results"] = _rerank_results_for_query_context(parsed["query"], response, parsed["sort"])
         evidence_response = build_evidence_response()
+        _promote_expanded_results_for_query_context(
+            parsed["query"],
+            response,
+            evidence_response,
+            sort=parsed["sort"],
+            limit=parsed["limit"],
+            offset=parsed["offset"],
+        )
+        response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
         response["market_entry_policy"] = build_market_entry_policy(
             parsed["query"],
             response,
@@ -2533,8 +2670,17 @@ def search_from_params(
         strong_only=parsed["strong_only"],
         **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
     )
-    response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
+    response["results"] = _rerank_results_for_query_context(parsed["query"], response, parsed["sort"])
     evidence_response = build_evidence_response()
+    _promote_expanded_results_for_query_context(
+        parsed["query"],
+        response,
+        evidence_response,
+        sort=parsed["sort"],
+        limit=parsed["limit"],
+        offset=parsed["offset"],
+    )
+    response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
     response["market_entry_policy"] = build_market_entry_policy(
         parsed["query"],
         response,
