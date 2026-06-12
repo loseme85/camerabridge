@@ -1060,6 +1060,7 @@
     };
 
     const els = {};
+    let pendingResultsAnchorScroll = false;
 
     function $(id){ return document.getElementById(id); }
 
@@ -1094,6 +1095,33 @@
       if(!els['sticky-search-region']) return;
       const hasActiveSearch = Boolean(state.query || state.loading || state.response || state.error);
       els['sticky-search-region'].hidden = !hasActiveSearch;
+    }
+
+    function getResultsAnchorElement(){
+      if(els['query-summary-region'] && els['query-summary-region'].firstElementChild){
+        return els['query-summary-region'];
+      }
+      if(els['results-grid']) return els['results-grid'];
+      return els['state-region'] || null;
+    }
+
+    function getStickyAnchorOffset(){
+      const stickyRegion = els['sticky-search-region'];
+      const stickyBar = stickyRegion ? stickyRegion.querySelector('.sticky-search-bar') : null;
+      const topbar = document.querySelector('.topbar');
+      const stickyHeight = stickyBar ? stickyBar.getBoundingClientRect().height : 0;
+      const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 0;
+      return topbarHeight + stickyHeight + 18;
+    }
+
+    function scrollResultsIntoView(){
+      const anchor = getResultsAnchorElement();
+      if(!anchor) return;
+      const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - getStickyAnchorOffset());
+      window.scrollTo({
+        top: targetTop,
+        behavior: 'auto'
+      });
     }
 
     function escapeHtml(value){
@@ -1162,7 +1190,11 @@
       const nextQuery = getSearchQueryValue(Boolean(options.preferSticky));
       if(!nextQuery) return;
       const append = Boolean(options.append);
+      const preserveResultsAnchor = Boolean(options.preserveResultsAnchor) && !append;
       syncSearchInputs(nextQuery);
+      if(preserveResultsAnchor){
+        pendingResultsAnchorScroll = true;
+      }
 
       state.query = nextQuery;
       if(!append){
@@ -1219,6 +1251,14 @@
         state.loading = false;
         state.appending = false;
         render();
+        if(pendingResultsAnchorScroll){
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              scrollResultsIntoView();
+              pendingResultsAnchorScroll = false;
+            });
+          });
+        }
       }
     }
 
@@ -2057,7 +2097,7 @@
       els['sticky-search-form'].addEventListener('submit', event => {
         event.preventDefault();
         syncSearchInputs(els['sticky-query-input'].value);
-        runSearch(0, { preferSticky: true });
+        runSearch(0, { preferSticky: true, preserveResultsAnchor: true });
       });
       ['query-input', 'sticky-query-input'].forEach(id => {
         els[id].addEventListener('input', event => {
