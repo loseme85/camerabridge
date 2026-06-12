@@ -363,6 +363,13 @@ def _result_variant_conflict(intent: Mapping[str, Any], top_result: Mapping[str,
     expected_variants = [str(item) for item in intent.get("variant") or [] if item]
     if not expected_variants:
         return False
+    expected_variant_values = {item.strip().upper() for item in expected_variants if item}
+    if (
+        _result_is_summilux_35_context(top_result)
+        and "FLE2" in expected_variant_values
+        and _result_has_fle1_only_signal(top_result)
+    ):
+        return False
     if _tri_elmar_range_matches_query(intent, top_result):
         return False
     expected_family = _explicit_query_family(str(intent.get("original_query") or ""), intent)
@@ -425,7 +432,16 @@ def _result_is_summilux_35_context(result: Mapping[str, Any]) -> bool:
 
 def _result_has_fle_signal(result: Mapping[str, Any]) -> bool:
     text = f" {_result_text_blob(result)} "
-    return any(pattern in text for pattern in (" fle ", " fle ii ", " fle2 ", " floating element ", " close focus "))
+    return _result_has_fle2_signal(result) or any(pattern in text for pattern in (" fle ", " floating element "))
+
+
+def _result_has_fle2_signal(result: Mapping[str, Any]) -> bool:
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" fle ii ", " fle2 ", " fle 2 ", " close focus ", " close-focus "))
+
+
+def _result_has_fle1_only_signal(result: Mapping[str, Any]) -> bool:
+    return _result_has_fle_signal(result) and not _result_has_fle2_signal(result)
 
 
 def _result_has_summilux_35_aa_signal(result: Mapping[str, Any]) -> bool:
@@ -506,6 +522,7 @@ def _signal_patterns(kind: str, value: str) -> list[str]:
         "pre-asph": ["pre-asph", "pre asph", "preasph"],
         "apo": ["apo"],
         "aa": [" aa ", "double aspherical"],
+        "fle2": ["fle2", "fle ii", "fle 2", "close focus", "close-focus"],
         "8-element": ["8-element", "8 element", "6군8매", "8매"],
         "6-element": ["6-element", "6 element", "6매"],
         "rigid": ["rigid"],
@@ -548,6 +565,10 @@ def _result_matches_signal(result: Mapping[str, Any], signal: Mapping[str, str])
     kind = str(signal.get("kind") or "")
     if kind == "variant" and _normalize_text(value) == "aa" and _result_has_summilux_35_aa_signal(result):
         return True
+    if kind == "variant" and _normalize_text(value) == "fle2":
+        return _result_has_fle2_signal(result)
+    if kind == "variant" and _normalize_text(value) == "fle":
+        return _result_has_fle_signal(result)
     if kind == "filter_size":
         return value.lower() in text
     for pattern in _signal_patterns(kind, value):
@@ -1007,6 +1028,7 @@ def _humanize_policy_reason(reason: str) -> str:
         "accessory_contaminated": "Accessory prices are contaminating this reference pool.",
         "third_party_contaminated": "Third-party prices are contaminating this reference pool.",
         "wrong_model_contaminated": "Wrong-model prices are contaminating this reference pool.",
+        "mixed_fle_generation": "FLE and FLE II / FLE2 listings are mixed, so exact price stays locked.",
         "outlier_contaminated": "Outlier prices are contaminating this reference pool.",
         "locked_boundary_conflict": "Price summary is locked until boundary conflicts are resolved.",
         "locked_weak_only": "Price summary is locked until stronger visible results appear.",
@@ -1026,6 +1048,7 @@ def _humanize_quality_state(state: str) -> str:
         "accessory_contaminated": "Accessory contamination detected",
         "third_party_contaminated": "Third-party contamination detected",
         "wrong_model_contaminated": "Wrong-model contamination detected",
+        "mixed_fle_generation_locked": "Mixed FLE / FLE2 exact evidence",
         "locked_boundary_conflict": "Price summary locked by boundary conflict",
         "locked_weak_only": "Price summary locked by weak fallback",
     }
@@ -1110,6 +1133,7 @@ def _humanize_unlock_requirement(requirement: str) -> str:
         "Need cleaned price band within an acceptable width.": "Price stays locked until the remaining price range is narrow enough to show safely.",
         "Need no accessory contamination in the selected price pool.": "Price stays locked because accessory or part listings are still mixed into the evidence.",
         "Need no wrong-model contamination in the selected price pool.": "Price stays locked because different models are still mixed into the evidence.",
+        "Need no mixed FLE and FLE2 listings in the exact price pool.": "Price stays locked because FLE and FLE II / FLE2 evidence are still mixed together.",
         "Need 1+ sold confirmed or sold likely record.": "Price stays limited until at least one sold-like reference is available.",
     }
     if requirement in mapping:
@@ -1541,6 +1565,11 @@ def build_market_entry_policy(
     ]
     compatible_counts = _build_market_counts(compatible_results)
     variant_signals = _query_variant_signals(intent)
+    variant_values = {
+        str(signal.get("value") or "").strip().upper()
+        for signal in variant_signals
+        if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
+    }
     query_aperture = _query_aperture_value(intent, query)
     visible_exact_base_model_results = [
         result
@@ -1572,6 +1601,15 @@ def build_market_entry_policy(
         for result in evidence_results
         if variant_signals and _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, variant_signals)
     ]
+    mixed_summilux_35_fle_generations_detected = bool(
+        _family_root(expected_family or intent.get("model_family") or "") == "Summilux"
+        and str(intent.get("focal_length") or "") == "35"
+        and expected_mount in {None, "M"}
+        and "FLE" in variant_values
+        and "FLE2" not in variant_values
+        and any(_result_has_fle1_only_signal(result) for result in exact_variant_results)
+        and any(_result_has_fle2_signal(result) for result in exact_variant_results)
+    )
 
     exact_variant_pool = _build_price_evidence_pool(
         exact_variant_results,
@@ -1746,6 +1784,7 @@ def build_market_entry_policy(
             len(exact_variant_priced) >= 2
             and price_scope_search_aligned
             and exact_variant_pool["price_band_quality_state"] == "clean_exact_variant_band"
+            and not mixed_summilux_35_fle_generations_detected
         ):
             price_summary_allowed = True
             price_scope = "exact_variant"
@@ -1765,6 +1804,8 @@ def build_market_entry_policy(
                 price_scope = "insufficient_exact_data"
                 price_scope_label = "Exact variant price data limited"
                 price_scope_confidence_state = "exact_variant_data_limited"
+            if mixed_summilux_35_fle_generations_detected:
+                price_summary_block_reason.append("mixed_fle_generation")
             if len(exact_variant_priced) < 2:
                 price_summary_block_reason.append("insufficient_exact_variant_priced_results")
             if exact_variant_pool["price_band_quality_state"] not in {"clean_exact_variant_band", "insufficient_priced_evidence"}:
@@ -1912,6 +1953,9 @@ def build_market_entry_policy(
     accessory_price_excluded_count = int(selected_pool["accessory_price_excluded_count"])
     third_party_price_excluded_count = int(selected_pool["third_party_price_excluded_count"])
     wrong_model_price_excluded_count = int(selected_pool["wrong_model_price_excluded_count"])
+    if mixed_summilux_35_fle_generations_detected and not price_summary_allowed:
+        price_band_quality_state = "mixed_fle_generation_locked"
+        price_band_quality_reason = ["mixed_fle_generation"]
 
     if variant_signals and len(exact_variant_priced) < 2:
         unlock_requirements.append("Need 2+ exact variant priced listings.")
@@ -1923,6 +1967,8 @@ def build_market_entry_policy(
         unlock_requirements.append("Need no third-party contamination in the selected price pool.")
     if price_band_quality_state in {"too_wide_price_band", "too_noisy_broader_reference"}:
         unlock_requirements.append("Need cleaned price band within an acceptable width.")
+    if mixed_summilux_35_fle_generations_detected:
+        unlock_requirements.append("Need no mixed FLE and FLE2 listings in the exact price pool.")
     if boundary_conflict_detected:
         unlock_requirements.append("Need no boundary conflict between family, mount, and variant.")
     if price_summary_allowed:

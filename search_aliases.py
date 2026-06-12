@@ -55,6 +55,8 @@ VARIANT_ALIASES: dict[str, str] = {
     "pre-asph": "pre-ASPH",
     "preasph": "pre-ASPH",
     "fle": "FLE",
+    "fle2": "FLE2",
+    "close-focus": "FLE2",
     "rigid": "Rigid",
     "dr": "Dual Range",
     "dualrange": "Dual Range",

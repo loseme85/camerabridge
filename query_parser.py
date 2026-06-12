@@ -71,6 +71,15 @@ def _add_variant(intent: QueryIntent, value: str, source: str) -> None:
     intent.tokens.append({"type": "variant", "raw": source, "value": value})
 
 
+def _remove_variant(intent: QueryIntent, value: str) -> None:
+    intent.variant = [variant for variant in intent.variant if variant != value]
+    intent.tokens = [
+        token
+        for token in intent.tokens
+        if not (token.get("type") == "variant" and token.get("value") == value)
+    ]
+
+
 def _set_accessory_intent(intent: QueryIntent, value: str, source: str) -> None:
     intent.accessory_intent = value
     if not any(token.get("type") == "accessory_intent" and token.get("value") == value for token in intent.tokens):
@@ -570,8 +579,15 @@ def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) 
         ]
         _add_variant(intent, "AA", "aspherical")
 
-    if "fle" in normalized and _has_summilux_35_context(normalized, intent) and "FLE" not in intent.variant:
-        _add_variant(intent, "FLE", "fle")
+    if _has_summilux_35_context(normalized, intent):
+        fle2_match = re.search(r"\bfle(?:\s*-\s*|\s+)?(?:ii|2)\b|\bfle2\b|\bclose(?:-|\s+)focus\b", normalized)
+        if fle2_match:
+            if "FLE" in intent.variant:
+                _remove_variant(intent, "FLE")
+            if "FLE2" not in intent.variant:
+                _add_variant(intent, "FLE2", fle2_match.group(0))
+        elif "fle" in normalized and "FLE" not in intent.variant:
+            _add_variant(intent, "FLE", "fle")
 
     tri_elmar_context = bool(re.search(r"\b(?:tri-elmar|trielmar|wate|mate)\b", normalized))
     if not tri_elmar_context:
