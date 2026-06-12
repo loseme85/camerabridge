@@ -403,6 +403,40 @@ def _result_text_blob(result: Mapping[str, Any]) -> str:
     return _normalize_text(" ".join(str(item) for item in parts if item))
 
 
+def _result_is_summilux_35_context(result: Mapping[str, Any]) -> bool:
+    if str(_result_field(result, "category") or "") != "Lens":
+        return False
+    candidate_family = (
+        _result_field(result, "model_canonical")
+        or _result_field(result, "model_raw")
+        or _result_field(result, "label")
+        or result.get("title")
+    )
+    if _family_root(candidate_family) != "Summilux":
+        return False
+    focal = str(_result_field(result, "focal_length") or "").strip()
+    if focal != "35":
+        return False
+    mount = str(_result_field(result, "mount") or "").strip()
+    if mount and mount not in {"M", "Unknown"}:
+        return False
+    return True
+
+
+def _result_has_fle_signal(result: Mapping[str, Any]) -> bool:
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" fle ", " fle ii ", " fle2 ", " floating element ", " close focus "))
+
+
+def _result_has_summilux_35_aa_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summilux_35_context(result):
+        return False
+    if _result_has_fle_signal(result):
+        return False
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" aa ", " double aspherical ", " aspherical ", " 2매 "))
+
+
 def _result_brand(result: Mapping[str, Any]) -> str:
     return str((result.get("final_output") or {}).get("brand") or "")
 
@@ -505,6 +539,8 @@ def _result_matches_signal(result: Mapping[str, Any], signal: Mapping[str, str])
     text = f" {_result_text_blob(result)} "
     value = str(signal.get("value") or "")
     kind = str(signal.get("kind") or "")
+    if kind == "variant" and _normalize_text(value) == "aa" and _result_has_summilux_35_aa_signal(result):
+        return True
     if kind == "filter_size":
         return value.lower() in text
     for pattern in _signal_patterns(kind, value):
@@ -568,8 +604,17 @@ def _result_matches_exact_variant_scope(
         and str(intent.get("focal_length") or "") == "35"
         and expected_mount in {None, "M"}
         and "ASPH" in variant_values
+        and "AA" not in variant_values
+        and _result_has_summilux_35_aa_signal(result)
+    ):
+        return False
+    if (
+        _family_root(expected_family or intent.get("model_family") or "") == "Summilux"
+        and str(intent.get("focal_length") or "") == "35"
+        and expected_mount in {None, "M"}
+        and "ASPH" in variant_values
         and "FLE" not in variant_values
-        and _result_matches_signal(result, {"kind": "variant", "value": "FLE"})
+        and _result_has_fle_signal(result)
     ):
         return False
     return all(_result_matches_signal(result, signal) for signal in signals)
