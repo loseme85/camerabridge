@@ -22,6 +22,7 @@
       --amber:#99611f;
       --shadow:0 20px 48px rgba(27,23,19,0.07);
       --radius:6px;
+      --sticky-search-offset:76px;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -196,6 +197,28 @@
       letter-spacing:0.6px;
     }
     .search-button:hover{filter:brightness(0.96)}
+    .sticky-search-region{
+      position:sticky;
+      top:var(--sticky-search-offset);
+      z-index:16;
+      margin:0 0 14px;
+      padding-top:4px;
+    }
+    .sticky-search-region[hidden]{display:none}
+    .sticky-search-bar{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.94);
+      border-radius:var(--radius);
+      padding:12px;
+      box-shadow:0 10px 24px rgba(27,23,19,0.08);
+      backdrop-filter:blur(14px);
+    }
+    .sticky-search-form{margin-top:0}
+    .sticky-search-field{height:44px}
+    .sticky-search-button{
+      height:44px;
+      min-width:108px;
+    }
     .query-chip-row{
       display:flex;
       flex-wrap:wrap;
@@ -275,7 +298,7 @@
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      overflow:hidden;
+      overflow:visible;
     }
     .toolbar{
       display:grid;
@@ -775,6 +798,10 @@
       .results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
     }
     @media(max-width:720px){
+      .sticky-search-region{
+        top:108px;
+        padding-top:0;
+      }
       .topbar{
         padding:12px 14px;
         flex-direction:column;
@@ -966,6 +993,14 @@
             <section id="state-region" aria-live="polite"></section>
             <section id="market-entry-region" aria-live="polite"></section>
             <section id="refinement-region" aria-live="polite"></section>
+            <section id="sticky-search-region" class="sticky-search-region" aria-label="Sticky search" hidden>
+              <div class="sticky-search-bar">
+                <form id="sticky-search-form" class="search-form-row sticky-search-form">
+                  <input id="sticky-query-input" class="search-field sticky-search-field" type="search" autocomplete="off" placeholder="Run the next search without scrolling to the top">
+                  <button class="search-button sticky-search-button" type="submit" aria-label="Search from sticky bar">Search</button>
+                </form>
+              </div>
+            </section>
             <section id="query-summary-region" aria-live="polite"></section>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
             <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
@@ -1030,13 +1065,35 @@
 
     function cacheElements(){
       [
-        'search-form','query-input','category-filter','brand-filter','mount-filter','sold-filter',
+        'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region',
+        'category-filter','brand-filter','mount-filter','sold-filter',
         'sort-select','result-count','result-caption','summary-meta','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
         'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
         els[id] = $(id);
       });
+    }
+
+    function syncSearchInputs(value){
+      const nextValue = String(value || '');
+      ['query-input', 'sticky-query-input'].forEach(id => {
+        if(els[id] && els[id].value !== nextValue){
+          els[id].value = nextValue;
+        }
+      });
+    }
+
+    function getSearchQueryValue(preferSticky = false){
+      const primaryValue = els['query-input'] ? els['query-input'].value.trim() : '';
+      const stickyValue = els['sticky-query-input'] ? els['sticky-query-input'].value.trim() : '';
+      return preferSticky ? (stickyValue || primaryValue) : (primaryValue || stickyValue);
+    }
+
+    function updateStickySearchVisibility(){
+      if(!els['sticky-search-region']) return;
+      const hasActiveSearch = Boolean(state.query || state.loading || state.response || state.error);
+      els['sticky-search-region'].hidden = !hasActiveSearch;
     }
 
     function escapeHtml(value){
@@ -1102,9 +1159,10 @@
     }
 
     async function runSearch(offset = 0, options = {}){
-      const nextQuery = els['query-input'].value.trim();
+      const nextQuery = getSearchQueryValue(Boolean(options.preferSticky));
       if(!nextQuery) return;
       const append = Boolean(options.append);
+      syncSearchInputs(nextQuery);
 
       state.query = nextQuery;
       if(!append){
@@ -1459,6 +1517,7 @@
       renderSummary();
       renderContent();
       renderWarnings();
+      updateStickySearchVisibility();
     }
 
     function renderContent(){
@@ -1978,7 +2037,7 @@
     function hydrateFromUrl(){
       const params = new URLSearchParams(window.location.search);
       const q = params.get('q') || '';
-      els['query-input'].value = q;
+      syncSearchInputs(q);
       els['category-filter'].value = params.get('category') || '';
       els['brand-filter'].value = params.get('brand') || '';
       els['mount-filter'].value = params.get('mount') || '';
@@ -1992,7 +2051,18 @@
     function bindEvents(){
       els['search-form'].addEventListener('submit', event => {
         event.preventDefault();
+        syncSearchInputs(els['query-input'].value);
         runSearch(0);
+      });
+      els['sticky-search-form'].addEventListener('submit', event => {
+        event.preventDefault();
+        syncSearchInputs(els['sticky-query-input'].value);
+        runSearch(0, { preferSticky: true });
+      });
+      ['query-input', 'sticky-query-input'].forEach(id => {
+        els[id].addEventListener('input', event => {
+          syncSearchInputs(event.target.value);
+        });
       });
 
       ['category-filter','brand-filter','mount-filter','sold-filter','sort-select'].forEach(id => {
@@ -2013,7 +2083,7 @@
 
       document.querySelectorAll('[data-query]').forEach(button => {
         button.addEventListener('click', () => {
-          els['query-input'].value = button.dataset.query || '';
+          syncSearchInputs(button.dataset.query || '');
           runSearch(0);
         });
       });
@@ -2022,7 +2092,7 @@
         const target = event.target;
         if(target && target.matches('[data-refine]')){
           const refine = target.getAttribute('data-refine') || '';
-          els['query-input'].value = `${state.query} ${refine}`.trim();
+          syncSearchInputs(`${state.query} ${refine}`.trim());
           runSearch(0);
           return;
         }
