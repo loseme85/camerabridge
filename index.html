@@ -621,7 +621,7 @@
       text-decoration:none;
       color:var(--text);
       display:-webkit-box;
-      -webkit-line-clamp:2;
+      -webkit-line-clamp:4;
       -webkit-box-orient:vertical;
       overflow:hidden;
     }
@@ -1868,7 +1868,7 @@
           <div class="result-head">
             <div class="thumb">${thumb}</div>
             <div class="card-copy">
-              <a class="result-title" href="${safeUrl}"${target}>${escapeHtml(title)}</a>
+              <a class="result-title" href="${safeUrl}"${target} title="${escapeHtml(title)}">${escapeHtml(title)}</a>
               <div class="result-price-row">
                 <div class="result-price">${escapeHtml(displayValue(result.price, 'Not enough data'))}</div>
                 <div class="result-source">${escapeHtml(source)}<br>${escapeHtml(currency)}</div>
