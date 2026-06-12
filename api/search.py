@@ -434,7 +434,14 @@ def _result_has_summilux_35_aa_signal(result: Mapping[str, Any]) -> bool:
     if _result_has_fle_signal(result):
         return False
     text = f" {_result_text_blob(result)} "
-    return any(pattern in text for pattern in (" aa ", " double aspherical ", " aspherical ", " 2매 "))
+    return any(pattern in text for pattern in (" aa ", " double aspherical ", " aspherical ", "2매"))
+
+
+def _result_has_summilux_35_aa_third_gen_2mae_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_has_summilux_35_aa_signal(result):
+        return False
+    text = f" {_result_text_blob(result)} "
+    return "2매" in text and (" 3세대 " in text or " v3 " in text or " version 3 " in text)
 
 
 def _result_brand(result: Mapping[str, Any]) -> str:
@@ -1287,6 +1294,11 @@ def _build_price_evidence_pool(
     query_aperture: float | None,
 ) -> dict[str, Any]:
     query_brand = _normalize_text(intent.get("brand"))
+    variant_values = {
+        str(signal.get("value") or "").strip().upper()
+        for signal in variant_signals
+        if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
+    }
     raw_pool = list(results)
     raw_priced = [result for result in raw_pool if _parse_price_number(result.get("price")) is not None]
 
@@ -1346,6 +1358,13 @@ def _build_price_evidence_pool(
             )
         if not scope_match:
             reasons.append("wrong_model")
+        if (
+            pool_scope == "exact_variant"
+            and "AA" in variant_values
+            and _result_has_summilux_35_aa_third_gen_2mae_signal(result)
+            and sold_quality == "asking"
+        ):
+            reasons.append("outlier")
 
         if reasons:
             for reason in reasons:
