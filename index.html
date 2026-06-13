@@ -1668,6 +1668,44 @@
       `;
     }
 
+    function getResultMatchBadge(result, evidenceRole, priceRole, reason){
+      const quality = String(result && result.match_quality || 'unknown').trim().toLowerCase();
+      const qualityTitle = quality ? `${quality.charAt(0).toUpperCase()}${quality.slice(1)}` : 'Unknown';
+      const evidence = String(evidenceRole || '').trim().toLowerCase();
+      const price = String(priceRole || '').trim().toLowerCase();
+      const why = String(reason || '').trim().toLowerCase();
+      const notExactPrice =
+        price.includes('not used as exact price')
+        || price.includes('not enough to unlock')
+        || price.includes('not used')
+        || why.includes('boundary conflict')
+        || why.includes('same base model')
+        || why.includes('not exact variant');
+
+      if(evidence === 'exact variant'){
+        if(quality === 'strong') return { tone: 'green', label: 'Exact variant match' };
+        if(quality === 'medium') return { tone: 'green', label: 'Exact variant candidate' };
+        return { tone: 'green', label: `Variant ${qualityTitle}` };
+      }
+
+      if(evidence === 'boundary conflict'){
+        if(quality === 'strong' || quality === 'medium') return { tone: 'amber', label: 'Related match' };
+        return { tone: 'amber', label: 'Variant conflict' };
+      }
+
+      if(evidence === 'same base model'){
+        if(quality === 'strong') return { tone: 'blue', label: 'Family match strong' };
+        if(quality === 'medium') return { tone: 'blue', label: 'Family match' };
+        return { tone: 'blue', label: 'Same-base only' };
+      }
+
+      if(notExactPrice && (quality === 'strong' || quality === 'medium')){
+        return { tone: 'amber', label: 'Related match' };
+      }
+
+      return { tone: 'blue', label: `Match ${qualityTitle}` };
+    }
+
     function renderStateCard(title, body, bullets, tone){
       const bulletHtml = Array.isArray(bullets) && bullets.length
         ? `<ul class="plain-list">${bullets.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
@@ -1934,7 +1972,6 @@
       const canViewSource = Boolean(url && url !== '#');
       const target = canViewSource ? ' target="_blank" rel="noopener noreferrer"' : '';
       const status = statusMeta(result);
-      const matchConfidence = displayValue(result.match_quality, 'Unknown');
       const confidenceState = displayField(result, 'result_card_confidence_state');
       const modelFallback = confidenceState === 'locked_classification_conflict' ? 'Review needed' : 'Unknown';
       const familyFallback = confidenceState === 'locked_classification_conflict' ? 'Classification confidence pending' : 'Unknown';
@@ -1960,6 +1997,7 @@
         : !evidence
         ? 'Detailed price role not available for this visible result'
         : '');
+      const matchBadge = getResultMatchBadge(result, evidenceRole, priceRole, reason);
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
@@ -1974,7 +2012,7 @@
               </div>
               <div class="result-status-row">
                 <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(status.label)}</span>
-                <span class="micro-pill blue">Match ${escapeHtml(matchConfidence)}</span>
+                <span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
                 ${projected ? '<span class="micro-pill amber">Runtime projection</span>' : ''}
                 ${compactNotation ? '<span class="micro-pill green">Lens notation detected</span>' : ''}
                 ${result.used_override ? '<span class="micro-pill green">Trusted override</span>' : ''}
