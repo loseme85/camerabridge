@@ -545,6 +545,34 @@ def _result_has_summilux_35_aa_third_gen_2mae_signal(result: Mapping[str, Any]) 
     return "2매" in text and (" 3세대 " in text or " v3 " in text or " version 3 " in text)
 
 
+def _result_has_summilux_35_second_or_pre_asph_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summilux_35_context(result):
+        return False
+    if (
+        _result_has_fle_signal(result)
+        or _result_has_summilux_35_aa_signal(result)
+        or _result_has_steel_rim_signal(result)
+        or _result_has_reissue_signal(result)
+    ):
+        return False
+    text = f" {_result_text_blob(result)} "
+    return any(pattern in text for pattern in (" 2nd ", " second generation ", " 2세대 ", " v2 ", " version 2 ", " pre-asph ", " pre asph ", " preasph "))
+
+
+def _result_has_summilux_35_asph_family_signal(result: Mapping[str, Any]) -> bool:
+    if not _result_is_summilux_35_context(result):
+        return False
+    if (
+        _result_has_fle_signal(result)
+        or _result_has_summilux_35_aa_signal(result)
+        or _result_has_steel_rim_signal(result)
+        or _result_has_reissue_signal(result)
+    ):
+        return False
+    text = f" {_result_text_blob(result)} "
+    return " asph " in text
+
+
 def _result_brand(result: Mapping[str, Any]) -> str:
     return str((result.get("final_output") or {}).get("brand") or "")
 
@@ -636,6 +664,43 @@ def _is_mount_unspecified_summicron_50_rigid_query(intent: Mapping[str, Any], ex
         if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
     }
     return "RIGID" in variant_values
+
+
+def _is_broad_summilux_m_35_query(intent: Mapping[str, Any], expected_mount: str | None) -> bool:
+    if _family_root(intent.get("model_family") or "") != "Summilux":
+        return False
+    if str(intent.get("focal_length") or "").strip() != "35":
+        return False
+    mount = str(expected_mount or intent.get("mount") or "").strip()
+    if mount != "M":
+        return False
+    if _query_variant_values(intent):
+        return False
+    if str(intent.get("generation") or "").strip():
+        return False
+    if str(intent.get("filter_size") or "").strip():
+        return False
+    if str(intent.get("optical_formula") or "").strip():
+        return False
+    return True
+
+
+def _summilux_35_variant_family_key(result: Mapping[str, Any]) -> str | None:
+    if not _result_is_summilux_35_context(result):
+        return None
+    if _result_has_summilux_35_aa_signal(result):
+        return "aa"
+    if _result_has_steel_rim_signal(result) or _result_has_reissue_signal(result):
+        return "steel_rim_family"
+    if _result_has_fle2_signal(result):
+        return "fle2"
+    if _result_has_fle1_only_signal(result):
+        return "fle"
+    if _result_has_summilux_35_asph_family_signal(result):
+        return "asph"
+    if _result_has_summilux_35_second_or_pre_asph_signal(result):
+        return "second_or_pre_asph"
+    return None
 
 
 def _signal_patterns(kind: str, value: str) -> list[str]:
@@ -1430,6 +1495,7 @@ def _humanize_policy_reason(reason: str) -> str:
         "wrong_model_contaminated": "Wrong-model prices are contaminating this reference pool.",
         "mixed_fle_generation": "FLE and FLE II / FLE2 listings are mixed, so exact price stays locked.",
         "mixed_rigid_mounts": "M-side and LTM/M39-side rigid listings are mixed, so exact price stays locked.",
+        "mixed_broad_summilux_35_variants": "Summilux-M 35 broad results mix materially different variants, so exact price stays locked.",
         "outlier_contaminated": "Outlier prices are contaminating this reference pool.",
         "locked_boundary_conflict": "Price summary is locked until boundary conflicts are resolved.",
         "locked_weak_only": "Price summary is locked until stronger visible results appear.",
@@ -1451,6 +1517,7 @@ def _humanize_quality_state(state: str) -> str:
         "wrong_model_contaminated": "Wrong-model contamination detected",
         "mixed_fle_generation_locked": "Mixed FLE / FLE2 exact evidence",
         "mixed_rigid_mounts_locked": "Mixed M / LTM-M39 rigid exact evidence",
+        "mixed_summilux_35_variants_locked": "Mixed Summilux-M 35 exact evidence",
         "locked_boundary_conflict": "Price summary locked by boundary conflict",
         "locked_weak_only": "Price summary locked by weak fallback",
     }
@@ -1536,6 +1603,7 @@ def _humanize_unlock_requirement(requirement: str) -> str:
         "Need no accessory contamination in the selected price pool.": "Price stays locked because accessory or part listings are still mixed into the evidence.",
         "Need no wrong-model contamination in the selected price pool.": "Price stays locked because different models are still mixed into the evidence.",
         "Need no mixed FLE and FLE2 listings in the exact price pool.": "Price stays locked because FLE and FLE II / FLE2 evidence are still mixed together.",
+        "Need no mixed Summilux-M 35 variant families in the exact price pool.": "Price stays locked because broad Summilux-M 35 evidence still mixes materially different variants.",
         "Need 1+ sold confirmed or sold likely record.": "Price stays limited until at least one sold-like reference is available.",
     }
     if requirement in mapping:
@@ -2052,6 +2120,17 @@ def build_market_entry_policy(
     exact_variant_priced = list(exact_variant_pool["cleaned_results"])
     exact_base_model_priced = list(exact_base_model_pool["cleaned_results"])
     broader_family_priced = list(broader_family_pool["cleaned_results"])
+    mixed_broad_summilux_35_variants_detected = bool(
+        _is_broad_summilux_m_35_query(intent, expected_mount)
+        and len(
+            {
+                family_key
+                for family_key in (_summilux_35_variant_family_key(result) for result in exact_base_model_priced)
+                if family_key
+            }
+        )
+        >= 2
+    )
     exact_variant_strong_visible = _strong_results(visible_exact_variant_results)
     exact_base_model_strong_visible = _strong_results(visible_exact_base_model_results)
     aperture_hint = _query_aperture_hint(query)
@@ -2282,6 +2361,8 @@ def build_market_entry_policy(
             price_summary_block_reason.append("no_query_compatible_results")
         if not exact_base_model_priced:
             price_summary_block_reason.append("no_query_compatible_priced_results")
+        if mixed_broad_summilux_35_variants_detected:
+            price_summary_block_reason.append("mixed_broad_summilux_35_variants")
         if (
             exact_base_model_priced
             and exact_base_model_pool["price_band_quality_state"] != "clean_exact_base_model_band"
@@ -2372,6 +2453,9 @@ def build_market_entry_policy(
     if mixed_summicron_50_rigid_mounts_detected and not price_summary_allowed:
         price_band_quality_state = "mixed_rigid_mounts_locked"
         price_band_quality_reason = ["mixed_rigid_mounts"]
+    if mixed_broad_summilux_35_variants_detected and not price_summary_allowed:
+        price_band_quality_state = "mixed_summilux_35_variants_locked"
+        price_band_quality_reason = ["mixed_broad_summilux_35_variants"]
 
     if variant_signals and len(exact_variant_priced) < 2:
         unlock_requirements.append("Need 2+ exact variant priced listings.")
@@ -2387,6 +2471,8 @@ def build_market_entry_policy(
         unlock_requirements.append("Need no mixed FLE and FLE2 listings in the exact price pool.")
     if mixed_summicron_50_rigid_mounts_detected:
         unlock_requirements.append("Need no mixed M-side and LTM/M39-side rigid listings in the exact price pool.")
+    if mixed_broad_summilux_35_variants_detected:
+        unlock_requirements.append("Need no mixed Summilux-M 35 variant families in the exact price pool.")
     if boundary_conflict_detected:
         unlock_requirements.append("Need no boundary conflict between family, mount, and variant.")
     if price_summary_allowed:
