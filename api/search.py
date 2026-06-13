@@ -1034,6 +1034,31 @@ def _body_variant_tokens(body_intent: str) -> set[str]:
     return tokens
 
 
+def _body_query_has_explicit_bundle_signal(query: str, intent: Mapping[str, Any]) -> bool:
+    if not intent.get("body_intent"):
+        return False
+    normalized = f" {_normalize_text(query)} "
+    if not normalized.strip():
+        return False
+    if any(pattern in normalized for pattern in (" lens kit ", " body lens kit ", " bundle ", " body+lens ")):
+        return True
+    if " body + lens " in normalized or " body+lens " in normalized:
+        return True
+    if " kit " in normalized:
+        return True
+    lens_or_accessory_context = bool(
+        re.search(
+            r"\b(lens|accessories|accessory|hood|adapter|summicron|summilux|noctilux|elmarit|elmar|summaron|apo-summicron)\b",
+            normalized,
+        )
+    )
+    if " with " in normalized and lens_or_accessory_context:
+        return True
+    if " set " in normalized and lens_or_accessory_context:
+        return True
+    return False
+
+
 def _body_price_variant_boundary(
     result: Mapping[str, Any],
     query: str,
@@ -2115,8 +2140,11 @@ def build_market_entry_policy(
     third_party_price_excluded_count = 0
     wrong_model_price_excluded_count = 0
     unlock_requirements: list[str] = []
+    explicit_body_bundle_query = _body_query_has_explicit_bundle_signal(query, intent)
 
     if intent.get("body_intent"):
+        if explicit_body_bundle_query:
+            price_summary_block_reason.append("explicit_body_bundle_query")
         if not market_entry_allowed:
             price_summary_block_reason.append("market_entry_not_allowed")
         if not exact_model_like_match:
