@@ -196,6 +196,10 @@ def _parse_explicit_body_model_intent(intent: QueryIntent, normalized: str) -> N
             _set_body_intent(intent, body_intent, body_intent.lower(), mount=mount, system=system)
             return
 
+    if re.search(r"\b(?:leica\s+)?m\s+(?:body|camera)(?:\s+body)?\b", normalized):
+        _set_body_intent(intent, "M", "m body", mount="M", system=None)
+        return
+
     if re.search(r"\bm10\b", normalized) and re.search(r"\bbody\b", normalized):
         _set_body_intent(intent, "M10", "m10 body", mount="M", system=None)
 

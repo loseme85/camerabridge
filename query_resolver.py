@@ -844,6 +844,13 @@ def _body_intent_text_hit(body_intent: str, text: str) -> bool:
     intent_norm = _normalize(body_intent)
     if not intent_norm:
         return False
+    if intent_norm == "m":
+        return bool(
+            re.search(
+                r"\bm(?:2|3|4|5|6|7|8|9|10|11|12|240|246|262)\b|\bmp\b|\bma\b|\bm(?:10|11)[ -]?(?:p|r|d)\b",
+                text,
+            )
+        )
     if intent_norm.startswith(("d lux", "v lux", "c lux", "sofort")):
         compact_intent = intent_norm.replace(" ", "")
         compact_text = text.replace(" ", "")

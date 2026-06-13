@@ -1057,24 +1057,61 @@ def _summicron_50_dr_ranking_bucket(
     return 6
 
 
+def _is_explicit_generic_lens_query(query: str, intent: Mapping[str, Any]) -> bool:
+    if intent.get("accessory_intent") or intent.get("body_intent"):
+        return False
+    normalized_query = f" {_normalize_text(query)} "
+    if " lens " not in normalized_query:
+        return False
+    if re.search(r"\b(?:hood|cap|filter|adapter|finder|case|battery|charger|strap)\b", normalized_query):
+        return False
+    return True
+
+
+def _generic_lens_query_ranking_bucket(result: Mapping[str, Any], intent: Mapping[str, Any]) -> tuple[int, int]:
+    category = str(_result_field(result, "category") or "").strip()
+    title = _normalize_text(result.get("title") or "")
+    row_focal = str(_result_field(result, "focal_length") or "").strip()
+    query_focal = str(intent.get("focal_length") or "").strip()
+    accessory_like = category == "Accessory" or _contains_keyword(title, PRICE_ACCESSORY_KEYWORDS)
+    focal_bucket = 0 if (not query_focal or row_focal == query_focal) else 1
+
+    if category == "Lens" and not accessory_like:
+        return (0, focal_bucket)
+    if category == "Lens":
+        return (1, focal_bucket)
+    if accessory_like:
+        return (3, focal_bucket)
+    return (2, focal_bucket)
+
+
 def _rerank_results_for_query_context(query: str, response: Mapping[str, Any], sort: str) -> list[dict[str, Any]]:
     results = list(response.get("results") or [])
     if sort != "relevance" or not results:
         return results
     intent = response.get("intent") or {}
-    if not _is_explicit_summicron_50_dr_query(intent):
-        return results
-    expected_family = _explicit_query_family(query, intent)
-    expected_mount = _explicit_query_mount(query, intent)
-    signals = _query_variant_signals(intent)
-    ranked = sorted(
-        enumerate(results),
-        key=lambda pair: (
-            _summicron_50_dr_ranking_bucket(pair[1], intent, expected_family, expected_mount, signals),
-            pair[0],
-        ),
-    )
-    return [result for _, result in ranked]
+    if _is_explicit_summicron_50_dr_query(intent):
+        expected_family = _explicit_query_family(query, intent)
+        expected_mount = _explicit_query_mount(query, intent)
+        signals = _query_variant_signals(intent)
+        ranked = sorted(
+            enumerate(results),
+            key=lambda pair: (
+                _summicron_50_dr_ranking_bucket(pair[1], intent, expected_family, expected_mount, signals),
+                pair[0],
+            ),
+        )
+        return [result for _, result in ranked]
+    if _is_explicit_generic_lens_query(query, intent):
+        ranked = sorted(
+            enumerate(results),
+            key=lambda pair: (
+                *_generic_lens_query_ranking_bucket(pair[1], intent),
+                pair[0],
+            ),
+        )
+        return [result for _, result in ranked]
+    return results
 
 
 def _promote_expanded_results_for_query_context(

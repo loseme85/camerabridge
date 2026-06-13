@@ -354,6 +354,13 @@ def _candidate_body_intent_text_hit(body_intent: str, text: str) -> bool:
     body_norm = _normalize_search_text(body_intent)
     if not body_norm:
         return False
+    if body_norm == "m":
+        return bool(
+            re.search(
+                r"\bm(?:2|3|4|5|6|7|8|9|10|11|12|240|246|262)\b|\bmp\b|\bma\b|\bm(?:10|11)[ -]?(?:p|r|d)\b",
+                text,
+            )
+        )
     if body_norm == "barnack":
         return bool(
             re.search(
