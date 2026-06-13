@@ -567,6 +567,19 @@ def _has_summicron_50_context(normalized: str, intent: QueryIntent) -> bool:
 
 
 def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) -> None:
+    summilux_35_aa_shorthand_match = re.search(r"(?<!\d)2매(?!\d)|\b2(?:\s*-\s*|\s+)mae\b|\b2mae\b", normalized)
+    if (
+        summilux_35_aa_shorthand_match
+        and not intent.model_family
+        and re.search(r"\bm35(?:mm)?(?:\s*/\s*|\s+f?\s*|\s+)1\.4\b|\bm\s*35(?:mm)?(?:\s*/\s*|\s+f?\s*|\s+)1\.4\b", normalized)
+    ):
+        _set_model_family(intent, "Summilux-M", "m35 1.4 2mae shorthand")
+        _set_mount(intent, "M", "m35 1.4 2mae shorthand")
+        if not intent.focal_length:
+            _set_focal_length(intent, "35", "m35 1.4 2mae shorthand")
+        if not intent.aperture:
+            _set_aperture(intent, "1.4", "m35 1.4 2mae shorthand", token_type="aperture_hint")
+
     if (
         "aspherical" in normalized
         and _has_summilux_35_context(normalized, intent)
@@ -589,6 +602,16 @@ def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) 
         _add_variant(intent, "AA", "aspherical")
 
     if _has_summilux_35_context(normalized, intent):
+        if (
+            summilux_35_aa_shorthand_match
+            and "AA" not in intent.variant
+            and "ASPH" not in intent.variant
+            and "FLE" not in intent.variant
+            and "FLE2" not in intent.variant
+            and "pre-ASPH" not in intent.variant
+        ):
+            _add_variant(intent, "AA", summilux_35_aa_shorthand_match.group(0))
+
         fle2_match = re.search(r"\bfle(?:\s*-\s*|\s+)?(?:ii|2)\b|\bfle2\b|\bclose(?:-|\s+)focus\b", normalized)
         if fle2_match:
             if "FLE" in intent.variant:
