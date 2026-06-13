@@ -621,6 +621,16 @@ def _is_explicit_summicron_50_dr_query(intent: Mapping[str, Any]) -> bool:
     return "DUAL RANGE" in variant_values
 
 
+def _is_explicit_summicron_50_hood_query(intent: Mapping[str, Any]) -> bool:
+    if _normalize_text(intent.get("accessory_intent")) != "hood":
+        return False
+    if _family_root(intent.get("model_family") or "") != "Summicron":
+        return False
+    if str(intent.get("focal_length") or "").strip() != "50":
+        return False
+    return True
+
+
 def _query_variant_values(intent: Mapping[str, Any]) -> set[str]:
     return {
         str(signal.get("value") or "").strip().upper()
@@ -1400,6 +1410,42 @@ def _rerank_results_for_query_context(query: str, response: Mapping[str, Any], s
         )
         return [result for _, result in ranked]
     return results
+
+
+def _build_summicron_50_hood_supplement_query(intent: Mapping[str, Any]) -> str:
+    mount = _normalize_text(intent.get("mount"))
+    if mount == "m":
+        return "Leica M 50mm hood"
+    return "Leica 50mm hood"
+
+
+def _hood_like_supplement_results(results: list[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    filtered: list[dict[str, Any]] = []
+    for result in results:
+        category = str(_result_field(result, "category") or "").strip()
+        accessory_type = _normalize_text((result.get("final_output") or {}).get("accessory_type"))
+        text = _result_text_blob(result)
+        if category == "Accessory" and (accessory_type == "hood" or re.search(r"\bhood\b|후드", text)):
+            filtered.append(dict(result))
+            continue
+        if re.search(r"\bhood\b|후드|\bshade\b|lens shade|vented hood|round hood", text):
+            filtered.append(dict(result))
+    return filtered
+
+
+def _merge_unique_results(
+    base_results: list[Mapping[str, Any]],
+    supplemental_results: list[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    merged: list[dict[str, Any]] = [dict(result) for result in base_results]
+    seen = {_result_signature(result) for result in base_results}
+    for result in supplemental_results:
+        signature = _result_signature(result)
+        if signature in seen:
+            continue
+        merged.append(dict(result))
+        seen.add(signature)
+    return merged
 
 
 def _promote_expanded_results_for_query_context(
@@ -3061,6 +3107,53 @@ def search_from_params(
     parsed = parse_search_params(params)
     evidence_limit = min(int(runtime.get("max_limit") or DEFAULT_MAX_LIMIT), max(parsed["limit"], PRICE_EVIDENCE_SCAN_LIMIT))
 
+    def maybe_supplement_summicron_50_hood_results(
+        response: dict[str, Any],
+        evidence_response: dict[str, Any] | None,
+    ) -> None:
+        if parsed["sort"] != "relevance" or parsed["offset"] != 0:
+            return
+        intent = response.get("intent") or {}
+        if not _is_explicit_summicron_50_hood_query(intent):
+            return
+        supplement_query = _build_summicron_50_hood_supplement_query(intent)
+        kwargs = dict(
+            query=supplement_query,
+            limit=evidence_limit,
+            offset=0,
+            filters=parsed["filters"],
+            sort=parsed["sort"],
+            include_debug=parsed["include_debug"],
+            strong_only=parsed["strong_only"],
+        )
+        if parsed["min_score"] is not None:
+            kwargs["min_score"] = parsed["min_score"]
+        if records is not None:
+            supplemental_response = search_records(records=records, **kwargs)
+        else:
+            supplemental_response = load_and_search(path=_resolve_search_index_path(path), **kwargs)
+        supplemental_rows = _hood_like_supplement_results(list(supplemental_response.get("results") or []))
+        if not supplemental_rows:
+            return
+
+        response_merged = _merge_unique_results(list(response.get("results") or []), supplemental_rows)
+        reranked_response = _rerank_results_for_query_context(
+            parsed["query"],
+            {**response, "results": response_merged},
+            parsed["sort"],
+        )
+        response["results"] = reranked_response[: parsed["limit"]]
+        response["result_count"] = len(response["results"])
+
+        if evidence_response is not None:
+            evidence_merged = _merge_unique_results(list(evidence_response.get("results") or []), supplemental_rows)
+            evidence_response["results"] = _rerank_results_for_query_context(
+                parsed["query"],
+                {**evidence_response, "results": evidence_merged},
+                parsed["sort"],
+            )[:evidence_limit]
+            evidence_response["result_count"] = len(evidence_response["results"])
+
     def build_evidence_response() -> dict[str, Any] | None:
         if evidence_limit <= parsed["limit"] and parsed["offset"] == 0:
             return None
@@ -3096,6 +3189,7 @@ def search_from_params(
         )
         response["results"] = _rerank_results_for_query_context(parsed["query"], response, parsed["sort"])
         evidence_response = build_evidence_response()
+        maybe_supplement_summicron_50_hood_results(response, evidence_response)
         _promote_expanded_results_for_query_context(
             parsed["query"],
             response,
@@ -3128,6 +3222,7 @@ def search_from_params(
     )
     response["results"] = _rerank_results_for_query_context(parsed["query"], response, parsed["sort"])
     evidence_response = build_evidence_response()
+    maybe_supplement_summicron_50_hood_results(response, evidence_response)
     _promote_expanded_results_for_query_context(
         parsed["query"],
         response,
