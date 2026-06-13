@@ -2576,6 +2576,7 @@ def build_market_entry_policy(
     def _build_visible_result_evidence(projection_results: list[Mapping[str, Any]]) -> list[dict[str, Any]]:
         evidence_items = []
         seen_projection_signatures: set[tuple[str, str, str, str]] = set()
+        explicit_fle2_projection_query = "FLE2" in variant_values
         for index, result in enumerate(projection_results):
             signature = _result_signature(result)
             if signature in exact_variant_signatures:
@@ -2640,7 +2641,17 @@ def build_market_entry_policy(
                 evidence_pool,
                 display_excluded_reason,
             )
-            if _parse_price_number(result.get("price")) is None:
+            price_number = _parse_price_number(result.get("price"))
+            if (
+                explicit_fle2_projection_query
+                and compatibility_label == "Exact variant"
+                and evidence_pool == "exact_base_model_pool"
+                and not used_for_price
+                and not display_excluded_reason
+                and price_number is not None
+            ):
+                display_price_usage = "Exact variant match visible, but not selected for exact price"
+            if price_number is None:
                 used_for_price = False
                 display_price_usage = "No usable price"
 
