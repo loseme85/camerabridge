@@ -589,12 +589,38 @@ def _is_explicit_summicron_50_dr_query(intent: Mapping[str, Any]) -> bool:
         return False
     if str(intent.get("focal_length") or "").strip() != "50":
         return False
+    variant_values = _query_variant_values(intent)
+    return "DUAL RANGE" in variant_values
+
+
+def _query_variant_values(intent: Mapping[str, Any]) -> set[str]:
+    return {
+        str(signal.get("value") or "").strip().upper()
+        for signal in _query_variant_signals(intent)
+        if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
+    }
+
+
+def _is_explicit_summilux_35_fle_query(intent: Mapping[str, Any]) -> bool:
+    if _family_root(intent.get("model_family") or "") != "Summilux":
+        return False
+    if str(intent.get("focal_length") or "").strip() != "35":
+        return False
+    variant_values = _query_variant_values(intent)
+    return "FLE" in variant_values and "FLE2" not in variant_values
+
+
+def _is_explicit_summilux_35_fle2_query(intent: Mapping[str, Any]) -> bool:
+    if _family_root(intent.get("model_family") or "") != "Summilux":
+        return False
+    if str(intent.get("focal_length") or "").strip() != "35":
+        return False
     variant_values = {
         str(signal.get("value") or "").strip().upper()
         for signal in _query_variant_signals(intent)
         if str(signal.get("kind") or "") == "variant" and str(signal.get("value") or "").strip()
     }
-    return "DUAL RANGE" in variant_values
+    return "FLE2" in variant_values
 
 
 def _is_mount_unspecified_summicron_50_rigid_query(intent: Mapping[str, Any], expected_mount: str | None) -> bool:
@@ -1099,6 +1125,82 @@ def _generic_lens_query_ranking_bucket(result: Mapping[str, Any], intent: Mappin
     return (2, focal_bucket)
 
 
+def _summilux_35_fle_ranking_bucket(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    signals: list[dict[str, str]],
+) -> int:
+    row_boundary_conflict = (
+        _result_family_conflict(expected_family, result)
+        or _result_mount_conflict(expected_mount, result)
+        or _result_category_conflict(_parsed_category(intent), result)
+        or _result_classification_conflict(result)
+    )
+    exact_variant = _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, signals)
+    exact_base = _result_matches_base_model_scope(result, intent, expected_family, expected_mount)
+    fle1_signal = _result_has_fle1_only_signal(result)
+    fle2_signal = _result_has_fle2_signal(result)
+    aa_signal = _result_has_summilux_35_aa_signal(result)
+    steel_rim_signal = _result_has_steel_rim_signal(result)
+    reissue_signal = _result_has_reissue_signal(result)
+
+    if exact_variant and fle1_signal:
+        return 0
+    if fle1_signal and not row_boundary_conflict:
+        return 1
+    if exact_variant and fle2_signal:
+        return 2
+    if fle2_signal and not row_boundary_conflict:
+        return 3
+    if exact_base and not fle1_signal and not fle2_signal and not aa_signal and not steel_rim_signal and not reissue_signal:
+        return 4
+    if aa_signal or steel_rim_signal or reissue_signal:
+        return 5
+    if row_boundary_conflict:
+        return 6
+    return 7
+
+
+def _summilux_35_fle2_ranking_bucket(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+    expected_mount: str | None,
+    signals: list[dict[str, str]],
+) -> int:
+    row_boundary_conflict = (
+        _result_family_conflict(expected_family, result)
+        or _result_mount_conflict(expected_mount, result)
+        or _result_category_conflict(_parsed_category(intent), result)
+        or _result_classification_conflict(result)
+    )
+    exact_variant = _result_matches_exact_variant_scope(result, intent, expected_family, expected_mount, signals)
+    exact_base = _result_matches_base_model_scope(result, intent, expected_family, expected_mount)
+    fle1_signal = _result_has_fle1_only_signal(result)
+    fle2_signal = _result_has_fle2_signal(result)
+    aa_signal = _result_has_summilux_35_aa_signal(result)
+    steel_rim_signal = _result_has_steel_rim_signal(result)
+    reissue_signal = _result_has_reissue_signal(result)
+
+    if exact_variant and fle2_signal:
+        return 0
+    if fle2_signal and not row_boundary_conflict:
+        return 1
+    if exact_variant and fle1_signal:
+        return 2
+    if fle1_signal and not row_boundary_conflict:
+        return 3
+    if aa_signal or steel_rim_signal or reissue_signal:
+        return 5
+    if exact_base and not fle1_signal and not fle2_signal:
+        return 4
+    if row_boundary_conflict:
+        return 6
+    return 7
+
+
 def _rerank_results_for_query_context(query: str, response: Mapping[str, Any], sort: str) -> list[dict[str, Any]]:
     results = list(response.get("results") or [])
     if sort != "relevance" or not results:
@@ -1112,6 +1214,30 @@ def _rerank_results_for_query_context(query: str, response: Mapping[str, Any], s
             enumerate(results),
             key=lambda pair: (
                 _summicron_50_dr_ranking_bucket(pair[1], intent, expected_family, expected_mount, signals),
+                pair[0],
+            ),
+        )
+        return [result for _, result in ranked]
+    if _is_explicit_summilux_35_fle_query(intent):
+        expected_family = _explicit_query_family(query, intent)
+        expected_mount = _explicit_query_mount(query, intent)
+        signals = _query_variant_signals(intent)
+        ranked = sorted(
+            enumerate(results),
+            key=lambda pair: (
+                _summilux_35_fle_ranking_bucket(pair[1], intent, expected_family, expected_mount, signals),
+                pair[0],
+            ),
+        )
+        return [result for _, result in ranked]
+    if _is_explicit_summilux_35_fle2_query(intent):
+        expected_family = _explicit_query_family(query, intent)
+        expected_mount = _explicit_query_mount(query, intent)
+        signals = _query_variant_signals(intent)
+        ranked = sorted(
+            enumerate(results),
+            key=lambda pair: (
+                _summilux_35_fle2_ranking_bucket(pair[1], intent, expected_family, expected_mount, signals),
                 pair[0],
             ),
         )
