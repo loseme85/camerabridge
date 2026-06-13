@@ -257,6 +257,24 @@ def _parse_accessory_compatibility_context(intent: QueryIntent, normalized: str)
         intent.tokens.append({"type": "mount", "raw": "sl accessory compatibility", "value": "SL"})
 
 
+def _parse_summilux_35_steel_rim_reissue_hints(intent: QueryIntent, normalized: str) -> None:
+    if intent.accessory_intent or intent.body_intent:
+        return
+
+    strong_summilux_35_context = bool(
+        ("summilux" in normalized or re.search(r"\blux\b", normalized))
+        and (re.search(r"\b35(?:mm)?\b", normalized) or re.search(r"\bm35\b", normalized))
+    )
+    if not strong_summilux_35_context:
+        return
+
+    if re.search(r"\bsteel\s+rim\b|\bsteel-rim\b|스틸림", normalized):
+        _add_variant(intent, "Steel Rim", "steel rim")
+
+    if re.search(r"\breissue\b|복각", normalized):
+        _add_variant(intent, "Reissue", "reissue")
+
+
 def _body_intent_token_allowed(token: str, rough_tokens: list[str]) -> bool:
     try:
         index = rough_tokens.index(token)
@@ -976,6 +994,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
     _parse_sl_zoom_range_hint(intent, normalized)
     _parse_third_party_l_mount_range_hint(intent, normalized)
     _parse_compact_mount_lens_notation(intent, normalized)
+    _parse_summilux_35_steel_rim_reissue_hints(intent, normalized)
 
     rough_tokens = re.findall(r"[a-z0-9가-힣./-]+", normalized)
     for token in rough_tokens:

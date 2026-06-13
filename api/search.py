@@ -653,6 +653,16 @@ def _signal_patterns(kind: str, value: str) -> list[str]:
     return [lowered]
 
 
+def _result_has_steel_rim_signal(result: Mapping[str, Any]) -> bool:
+    text = f" {_result_text_blob(result)} "
+    return bool(re.search(r"\bsteel\s+rim\b|\bsteel-rim\b|스틸림", text))
+
+
+def _result_has_reissue_signal(result: Mapping[str, Any]) -> bool:
+    text = f" {_result_text_blob(result)} "
+    return bool(re.search(r"\breissue\b|복각", text))
+
+
 def _tri_elmar_mount_compatible_from_text(result: Mapping[str, Any], expected_mount: str | None, expected_family: str) -> bool:
     if expected_mount != "M" or _family_root(expected_family) != "Tri-Elmar":
         return False
@@ -679,6 +689,10 @@ def _result_matches_signal(result: Mapping[str, Any], signal: Mapping[str, str])
     kind = str(signal.get("kind") or "")
     if kind == "variant" and _normalize_text(value) == "aa" and _result_has_summilux_35_aa_signal(result):
         return True
+    if kind == "variant" and _normalize_text(value) == "steel rim":
+        return _result_has_steel_rim_signal(result) and not _result_has_reissue_signal(result)
+    if kind == "variant" and _normalize_text(value) == "reissue":
+        return _result_has_reissue_signal(result)
     if kind == "variant" and _normalize_text(value) == "dual range":
         return _result_has_summicron_50_dr_signal(result)
     if kind == "variant" and _normalize_text(value) == "fle2":
