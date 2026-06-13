@@ -1073,6 +1073,14 @@ def _contains_keyword(text: str, keywords: set[str]) -> bool:
     return any(f" {keyword} " in lowered for keyword in keywords)
 
 
+def _contains_normalized_word(text: str, needle: str) -> bool:
+    haystack = f" {_normalize_text(text)} "
+    target = _normalize_text(needle)
+    if not target:
+        return False
+    return f" {target} " in haystack
+
+
 def _body_variant_tokens(body_intent: str) -> set[str]:
     body = _normalize_text(body_intent)
     tokens: set[str] = set()
@@ -1215,6 +1223,46 @@ def _generic_lens_query_ranking_bucket(result: Mapping[str, Any], intent: Mappin
     return (2, focal_bucket)
 
 
+def _hood_query_ranking_bucket(
+    result: Mapping[str, Any],
+    intent: Mapping[str, Any],
+    expected_family: str,
+) -> tuple[int, int, int, int]:
+    category = str(_result_field(result, "category") or "").strip()
+    accessory_type = _normalize_text((result.get("final_output") or {}).get("accessory_type"))
+    text = _result_text_blob(result)
+    accessory_code = _normalize_text(intent.get("accessory_code"))
+    family_root = _family_root(expected_family)
+    focal = _normalize_text(intent.get("focal_length"))
+    aperture = _normalize_text(intent.get("aperture"))
+
+    is_accessory = category == "Accessory"
+    has_hood_text = bool(re.search(r"\bhood\b|후드", text))
+    exact_code_hit = bool(accessory_code and _contains_normalized_word(text, accessory_code))
+    family_hit = bool(family_root and family_root.lower() in text)
+    focal_hit = bool(focal and _contains_normalized_word(text, focal))
+    aperture_hit = bool(aperture and (_contains_normalized_word(text, aperture) or _contains_normalized_word(text, f"f{aperture}")))
+    compatibility_hits = int(family_hit) + int(focal_hit) + int(aperture_hit)
+
+    if exact_code_hit and is_accessory and (accessory_type == "hood" or has_hood_text):
+        return (0, 0, -compatibility_hits, 0)
+    if is_accessory and (accessory_type == "hood" or has_hood_text) and compatibility_hits:
+        return (1, 0, -compatibility_hits, 0)
+    if is_accessory and (accessory_type == "hood" or has_hood_text):
+        return (2, 0, -compatibility_hits, 0)
+    if exact_code_hit and has_hood_text:
+        return (3, 0, -compatibility_hits, 0)
+    if has_hood_text and compatibility_hits:
+        return (4, 0, -compatibility_hits, 0)
+    if has_hood_text:
+        return (5, 0, -compatibility_hits, 0)
+    if is_accessory:
+        return (6, 0, -compatibility_hits, 0)
+    if category == "Lens":
+        return (8, 0, -compatibility_hits, 0)
+    return (7, 0, -compatibility_hits, 0)
+
+
 def _summilux_35_fle_ranking_bucket(
     result: Mapping[str, Any],
     intent: Mapping[str, Any],
@@ -1328,6 +1376,16 @@ def _rerank_results_for_query_context(query: str, response: Mapping[str, Any], s
             enumerate(results),
             key=lambda pair: (
                 _summilux_35_fle2_ranking_bucket(pair[1], intent, expected_family, expected_mount, signals),
+                pair[0],
+            ),
+        )
+        return [result for _, result in ranked]
+    if str(intent.get("accessory_intent") or "") == "hood":
+        expected_family = _explicit_query_family(query, intent)
+        ranked = sorted(
+            enumerate(results),
+            key=lambda pair: (
+                *_hood_query_ranking_bucket(pair[1], intent, expected_family),
                 pair[0],
             ),
         )
@@ -1708,6 +1766,33 @@ def _build_interpreted_target(
     if intent.get("body_intent"):
         parts = [str(intent.get("brand") or "").strip(), str(intent.get("body_intent") or "").strip(), "body"]
         return " ".join(part for part in parts if part)
+
+    accessory_intent = str(intent.get("accessory_intent") or "").strip()
+    if accessory_intent:
+        brand = str(intent.get("brand") or "").strip()
+        accessory_code = str(intent.get("accessory_code") or "").strip().upper()
+        family = expected_family or str(intent.get("model_family") or "").strip()
+        focal = str(intent.get("focal_length") or "").strip()
+        aperture = str(intent.get("aperture") or _query_aperture_hint(query) or "").strip()
+        parts: list[str] = [brand] if brand else []
+        if accessory_code:
+            parts.append(accessory_code)
+        else:
+            family_text = family.strip()
+            if family_text and family_text.lower() != "lens":
+                if expected_mount and expected_mount not in family_text:
+                    family_text = f"{family_text}-{expected_mount}"
+                if brand and brand.lower() in family_text.lower():
+                    parts = []
+                parts.append(family_text)
+                if focal:
+                    parts.append(focal)
+            elif focal:
+                parts.append(focal)
+            if aperture:
+                parts.append(f"f{aperture}")
+        parts.append(accessory_intent)
+        return " ".join(part for part in parts if part).strip() + " candidate"
 
     family = expected_family or str(intent.get("model_family") or "Lens")
     brand = str(intent.get("brand") or "").strip()

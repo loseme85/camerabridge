@@ -91,6 +91,12 @@ def _set_accessory_code(intent: QueryIntent, value: str, source: str) -> None:
     intent.tokens.append({"type": "accessory_code", "raw": source, "value": intent.accessory_code})
 
 
+_KNOWN_HOOD_ACCESSORY_CODES = {
+    "12585": "hood",
+    "12504": "hood",
+}
+
+
 _BODY_INTENT_ALIASES = {
     "m2": ("M2", "M", None, ()),
     "m3": ("M3", "M", None, ()),
@@ -856,8 +862,16 @@ def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
             if "b+w" in filter_source:
                 intent.tokens.append({"type": "filter_brand", "raw": "b+w", "value": "B+W"})
 
+    if not intent.accessory_intent:
+        for code, accessory_type in _KNOWN_HOOD_ACCESSORY_CODES.items():
+            if re.search(rf"\b{re.escape(code)}\b", normalized):
+                _set_accessory_intent(intent, accessory_type, code)
+                _set_accessory_code(intent, code, code)
+                break
+
     # Leica accessory codes are intentionally parsed only inside an explicit
-    # accessory-intent query. A standalone 5-digit number remains unparsed.
+    # accessory-intent query, except for a very small allowlist of known hood
+    # catalog numbers above.
     if intent.accessory_intent:
         for code in re.findall(r"\b\d{5}[a-z]?\b", normalized):
             _set_accessory_code(intent, code, code)
