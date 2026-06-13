@@ -2620,6 +2620,17 @@ def build_market_entry_policy(
             else:
                 compatibility_label = "Query incompatible"
 
+            if (
+                explicit_fle2_projection_query
+                and compatibility_label == "Exact base model"
+                and _result_has_fle2_signal(result)
+                and not excluded_reasons
+            ):
+                compatibility_label = "Exact variant"
+                if evidence_pool == "exact_base_model_pool":
+                    evidence_pool = "exact_variant_pool"
+                    used_for_price = False
+
             if evidence_pool == "visible_only" and not excluded_reasons:
                 if compatibility_label == "Exact variant":
                     evidence_pool = "exact_variant_pool"
