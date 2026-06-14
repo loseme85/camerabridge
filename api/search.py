@@ -1142,6 +1142,47 @@ def _body_query_has_explicit_bundle_signal(query: str, intent: Mapping[str, Any]
     return False
 
 
+def _body_query_has_explicit_accessory_signal(query: str, intent: Mapping[str, Any]) -> bool:
+    if not intent.get("body_intent"):
+        return False
+    normalized = f" {_normalize_text(query)} "
+    if not normalized.strip():
+        return False
+    accessory_patterns = (
+        " screen protector ",
+        " protector ",
+        " half case ",
+        " handgrip ",
+        " thumb grip ",
+        " thumb support ",
+        " grip ",
+        " holster ",
+        " strap ",
+        " cover ",
+        " charger ",
+        " battery ",
+        " case ",
+    )
+    return any(pattern in normalized for pattern in accessory_patterns)
+
+
+def _body_query_has_monochrom_signal(query: str, intent: Mapping[str, Any]) -> bool:
+    if not intent.get("body_intent"):
+        return False
+    normalized = f" {_normalize_text(query)} "
+    if not normalized.strip():
+        return False
+    return " monochrom " in normalized or " m10m " in normalized
+
+
+def _result_has_monochrom_signal(result: Mapping[str, Any]) -> bool:
+    text = _result_text_blob(result)
+    if " monochrom " in text or " m10m " in text:
+        return True
+    result_variants = {_normalize_text(item) for item in _as_list(_result_field(result, "variant")) if item}
+    return "monochrom" in result_variants or "m10m" in result_variants
+
+
 def _body_price_variant_boundary(
     result: Mapping[str, Any],
     query: str,
@@ -2351,10 +2392,35 @@ def build_market_entry_policy(
     wrong_model_price_excluded_count = 0
     unlock_requirements: list[str] = []
     explicit_body_bundle_query = _body_query_has_explicit_bundle_signal(query, intent)
+    explicit_body_accessory_query = _body_query_has_explicit_accessory_signal(query, intent)
+    monochrom_body_query = _body_query_has_monochrom_signal(query, intent)
+
+    if monochrom_body_query:
+        visible_exact_base_model_results = [
+            result for result in visible_exact_base_model_results if _result_has_monochrom_signal(result)
+        ]
+        exact_base_model_results = [
+            result for result in exact_base_model_results if _result_has_monochrom_signal(result)
+        ]
+        exact_base_model_pool = _build_price_evidence_pool(
+            exact_base_model_results,
+            pool_scope="exact_base_model",
+            query=query,
+            intent=intent,
+            expected_family=expected_family,
+            expected_mount=expected_mount,
+            variant_signals=variant_signals,
+            query_aperture=query_aperture,
+        )
+        exact_base_model_priced = list(exact_base_model_pool["cleaned_results"])
+        exact_base_model_strong_visible = _strong_results(visible_exact_base_model_results)
+        exact_or_strong_visible_result_count = len(exact_variant_strong_visible if variant_signals else exact_base_model_strong_visible)
 
     if intent.get("body_intent"):
         if explicit_body_bundle_query:
             price_summary_block_reason.append("explicit_body_bundle_query")
+        if explicit_body_accessory_query:
+            price_summary_block_reason.append("explicit_body_accessory_query")
         if not market_entry_allowed:
             price_summary_block_reason.append("market_entry_not_allowed")
         if not exact_model_like_match:
