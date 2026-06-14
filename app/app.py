@@ -22,6 +22,16 @@ def index() -> str:
     return render_template("index.html")
 
 
+@app.route("/qa")
+def qa_index() -> str:
+    return render_template("index.html")
+
+
+@app.route("/beta")
+def beta_index() -> str:
+    return render_template("beta.html")
+
+
 @app.route("/api/search")
 def search_api():
     status, payload = endpoint_response(request.args)
