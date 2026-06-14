@@ -1056,11 +1056,15 @@
       loading: false,
       appending: false,
       response: null,
-      error: null
+      error: null,
+      historyReady: false,
+      currentHistoryKey: ''
     };
 
     const els = {};
     let pendingResultsAnchorScroll = false;
+    let pendingHistoryScrollY = null;
+    let historyScrollSyncFrame = 0;
 
     function $(id){ return document.getElementById(id); }
 
@@ -1160,10 +1164,11 @@
       return (result.display_output || {})[key];
     }
 
-    function buildParams(offset){
+    function buildParams(offset, options = {}){
+      const limitValue = Math.max(PAGE_SIZE, Number(options.limit || PAGE_SIZE));
       const params = new URLSearchParams();
       params.set('q', state.query);
-      params.set('limit', String(PAGE_SIZE));
+      params.set('limit', String(limitValue));
       params.set('offset', String(offset));
       params.set('sort', els['sort-select'].value || 'relevance');
 
@@ -1179,22 +1184,142 @@
       return params;
     }
 
-    function syncUrl(){
-      const params = buildParams(state.offset);
-      params.delete('limit');
-      if(params.get('offset') === '0') params.delete('offset');
-      history.replaceState(null, '', '?' + params.toString());
+    function getVisibleCount(){
+      const results = getResults();
+      return Math.max(PAGE_SIZE, results.length || PAGE_SIZE);
+    }
+
+    function normalizeHistoryState(raw = {}){
+      const query = String(raw.query || '').trim();
+      const sort = String(raw.sort || 'relevance').trim() || 'relevance';
+      const offset = Math.max(0, Number.parseInt(raw.offset || '0', 10) || 0);
+      const visibleCount = Math.max(PAGE_SIZE, Number.parseInt(raw.visibleCount || raw.shown || PAGE_SIZE, 10) || PAGE_SIZE);
+      return {
+        query,
+        sort,
+        category: String(raw.category || '').trim(),
+        brand: String(raw.brand || '').trim(),
+        mount: String(raw.mount || '').trim(),
+        sold_quality: String(raw.sold_quality || '').trim(),
+        offset,
+        visibleCount,
+        scrollY: Number.isFinite(Number(raw.scrollY)) ? Math.max(0, Number(raw.scrollY)) : null,
+        preserveResultsAnchor: Boolean(raw.preserveResultsAnchor)
+      };
+    }
+
+    function buildSearchState(overrides = {}){
+      return normalizeHistoryState({
+        query: overrides.query !== undefined ? overrides.query : state.query,
+        sort: overrides.sort !== undefined ? overrides.sort : (els['sort-select'].value || 'relevance'),
+        category: overrides.category !== undefined ? overrides.category : els['category-filter'].value,
+        brand: overrides.brand !== undefined ? overrides.brand : els['brand-filter'].value,
+        mount: overrides.mount !== undefined ? overrides.mount : els['mount-filter'].value,
+        sold_quality: overrides.sold_quality !== undefined ? overrides.sold_quality : els['sold-filter'].value,
+        offset: overrides.offset !== undefined ? overrides.offset : state.offset,
+        visibleCount: overrides.visibleCount !== undefined ? overrides.visibleCount : getVisibleCount(),
+        scrollY: overrides.scrollY !== undefined ? overrides.scrollY : window.scrollY,
+        preserveResultsAnchor: overrides.preserveResultsAnchor !== undefined ? overrides.preserveResultsAnchor : false
+      });
+    }
+
+    function buildHistoryParamsFromState(searchState){
+      const next = normalizeHistoryState(searchState);
+      const params = new URLSearchParams();
+      if(next.query) params.set('q', next.query);
+      if(next.sort && next.sort !== 'relevance') params.set('sort', next.sort);
+      if(next.category) params.set('category', next.category);
+      if(next.brand) params.set('brand', next.brand);
+      if(next.mount) params.set('mount', next.mount);
+      if(next.sold_quality) params.set('sold_quality', next.sold_quality);
+      if(next.offset > 0) params.set('offset', String(next.offset));
+      if(next.visibleCount > PAGE_SIZE && next.offset === 0) params.set('shown', String(next.visibleCount));
+      return params;
+    }
+
+    function buildHistoryKey(searchState){
+      return buildHistoryParamsFromState(searchState).toString();
+    }
+
+    function buildHistoryUrl(searchState){
+      const queryString = buildHistoryKey(searchState);
+      return queryString ? `?${queryString}` : window.location.pathname;
+    }
+
+    function applySearchStateToControls(searchState){
+      const next = normalizeHistoryState(searchState);
+      syncSearchInputs(next.query);
+      els['category-filter'].value = next.category;
+      els['brand-filter'].value = next.brand;
+      els['mount-filter'].value = next.mount;
+      els['sold-filter'].value = next.sold_quality;
+      els['sort-select'].value = next.sort || 'relevance';
+    }
+
+    function commitHistoryState(mode, searchState){
+      const next = normalizeHistoryState(searchState);
+      const historyKey = buildHistoryKey(next);
+      const historyState = { ...next, historyKey };
+      const url = buildHistoryUrl(next);
+      if(mode === 'push'){
+        if(historyKey === state.currentHistoryKey){
+          history.replaceState(historyState, '', url);
+        }else{
+          history.pushState(historyState, '', url);
+        }
+      }else{
+        history.replaceState(historyState, '', url);
+      }
+      state.historyReady = true;
+      state.currentHistoryKey = historyKey;
+    }
+
+    function syncCurrentHistoryScroll(){
+      if(!state.historyReady) return;
+      const current = normalizeHistoryState(history.state || buildSearchState());
+      const next = {
+        ...current,
+        scrollY: Math.max(0, window.scrollY)
+      };
+      history.replaceState({ ...next, historyKey: buildHistoryKey(next) }, '', buildHistoryUrl(next));
+    }
+
+    function scheduleHistoryScrollSync(){
+      if(!state.historyReady || state.loading || state.appending) return;
+      if(historyScrollSyncFrame) return;
+      historyScrollSyncFrame = window.requestAnimationFrame(() => {
+        historyScrollSyncFrame = 0;
+        syncCurrentHistoryScroll();
+      });
+    }
+
+    function parseSearchStateFromUrl(){
+      const params = new URLSearchParams(window.location.search);
+      return normalizeHistoryState({
+        query: params.get('q') || '',
+        sort: params.get('sort') || 'relevance',
+        category: params.get('category') || '',
+        brand: params.get('brand') || '',
+        mount: params.get('mount') || '',
+        sold_quality: params.get('sold_quality') || '',
+        offset: Number.parseInt(params.get('offset') || '0', 10),
+        visibleCount: Number.parseInt(params.get('shown') || String(PAGE_SIZE), 10),
+        scrollY: history.state && Number.isFinite(Number(history.state.scrollY)) ? Number(history.state.scrollY) : null
+      });
     }
 
     async function runSearch(offset = 0, options = {}){
-      const nextQuery = getSearchQueryValue(Boolean(options.preferSticky));
+      const nextQuery = String(options.queryOverride || getSearchQueryValue(Boolean(options.preferSticky))).trim();
       if(!nextQuery) return;
       const append = Boolean(options.append);
       const preserveResultsAnchor = Boolean(options.preserveResultsAnchor) && !append;
+      const historyMode = String(options.historyMode || 'push');
+      const limitOverride = Math.max(PAGE_SIZE, Number(options.visibleCount || PAGE_SIZE));
       syncSearchInputs(nextQuery);
       if(preserveResultsAnchor){
         pendingResultsAnchorScroll = true;
       }
+      pendingHistoryScrollY = Number.isFinite(Number(options.historyScrollY)) ? Math.max(0, Number(options.historyScrollY)) : null;
 
       state.query = nextQuery;
       if(!append){
@@ -1207,7 +1332,9 @@
       render();
 
       try{
-        const params = buildParams(Math.max(0, offset));
+        const params = buildParams(Math.max(0, offset), {
+          limit: append ? PAGE_SIZE : limitOverride
+        });
         const response = await fetch('/api/search?' + params.toString(), {
           headers: { 'Accept': 'application/json' },
           cache: 'no-store'
@@ -1240,7 +1367,17 @@
           state.offset = Math.max(0, offset);
         }
         if(!append) state.error = null;
-        syncUrl();
+        if(historyMode !== 'none'){
+          const visibleCount = append
+            ? Math.max(PAGE_SIZE, (state.response && Array.isArray(state.response.results) ? state.response.results.length : PAGE_SIZE))
+            : limitOverride;
+          commitHistoryState(historyMode, buildSearchState({
+            query: state.query,
+            offset: state.offset,
+            visibleCount,
+            preserveResultsAnchor
+          }));
+        }
       }catch(error){
         console.error('Camera Bridge search UI fallback', error);
         if(!append){
@@ -1256,8 +1393,21 @@
             requestAnimationFrame(() => {
               scrollResultsIntoView();
               pendingResultsAnchorScroll = false;
+              if(pendingHistoryScrollY !== null){
+                window.scrollTo({ top: pendingHistoryScrollY, behavior: 'auto' });
+              }
+              pendingHistoryScrollY = null;
+              scheduleHistoryScrollSync();
             });
           });
+        }else if(pendingHistoryScrollY !== null){
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: pendingHistoryScrollY, behavior: 'auto' });
+            pendingHistoryScrollY = null;
+            scheduleHistoryScrollSync();
+          });
+        }else{
+          scheduleHistoryScrollSync();
         }
       }
     }
@@ -2113,29 +2263,31 @@
     }
 
     function hydrateFromUrl(){
-      const params = new URLSearchParams(window.location.search);
-      const q = params.get('q') || '';
-      syncSearchInputs(q);
-      els['category-filter'].value = params.get('category') || '';
-      els['brand-filter'].value = params.get('brand') || '';
-      els['mount-filter'].value = params.get('mount') || '';
-      els['sold-filter'].value = params.get('sold_quality') || '';
-      els['sort-select'].value = params.get('sort') || 'relevance';
-      const offset = Number.parseInt(params.get('offset') || '0', 10);
-      if(q) runSearch(Number.isFinite(offset) ? offset : 0);
-      else render();
+      const initialState = parseSearchStateFromUrl();
+      applySearchStateToControls(initialState);
+      commitHistoryState('replace', initialState);
+      if(initialState.query){
+        runSearch(initialState.offset, {
+          queryOverride: initialState.query,
+          historyMode: 'replace',
+          visibleCount: initialState.visibleCount,
+          historyScrollY: initialState.scrollY
+        });
+      }else{
+        render();
+      }
     }
 
     function bindEvents(){
       els['search-form'].addEventListener('submit', event => {
         event.preventDefault();
         syncSearchInputs(els['query-input'].value);
-        runSearch(0);
+        runSearch(0, { historyMode: 'push' });
       });
       els['sticky-search-form'].addEventListener('submit', event => {
         event.preventDefault();
         syncSearchInputs(els['sticky-query-input'].value);
-        runSearch(0, { preferSticky: true, preserveResultsAnchor: true });
+        runSearch(0, { preferSticky: true, preserveResultsAnchor: true, historyMode: 'push' });
       });
       ['query-input', 'sticky-query-input'].forEach(id => {
         els[id].addEventListener('input', event => {
@@ -2145,24 +2297,24 @@
 
       ['category-filter','brand-filter','mount-filter','sold-filter','sort-select'].forEach(id => {
         els[id].addEventListener('change', () => {
-          if(state.query || els['query-input'].value.trim()) runSearch(0);
+          if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
         });
       });
 
       els['prev-button'].addEventListener('click', () => {
         const current = state.response ? (state.response.pagination || {}) : {};
-        runSearch(Math.max(0, Number(current.offset || 0) - PAGE_SIZE));
+        runSearch(Math.max(0, Number(current.offset || 0) - PAGE_SIZE), { historyMode: 'push' });
       });
 
       els['next-button'].addEventListener('click', () => {
         const current = state.response ? (state.response.pagination || {}) : {};
-        if(current.has_more) runSearch(Number(current.next_offset || (Number(current.offset || 0) + PAGE_SIZE)));
+        if(current.has_more) runSearch(Number(current.next_offset || (Number(current.offset || 0) + PAGE_SIZE)), { historyMode: 'push' });
       });
 
       document.querySelectorAll('[data-query]').forEach(button => {
         button.addEventListener('click', () => {
           syncSearchInputs(button.dataset.query || '');
-          runSearch(0);
+          runSearch(0, { historyMode: 'push' });
         });
       });
 
@@ -2171,7 +2323,7 @@
         if(target && target.matches('[data-refine]')){
           const refine = target.getAttribute('data-refine') || '';
           syncSearchInputs(`${state.query} ${refine}`.trim());
-          runSearch(0);
+          runSearch(0, { historyMode: 'push' });
           return;
         }
         if(target && target.matches('[data-copy-query-review]')){
@@ -2192,9 +2344,33 @@
         if(target && target.matches('[data-load-more]')){
           const current = state.response ? (state.response.pagination || {}) : {};
           if(current.has_more && !state.appending){
-            runSearch(Number(current.next_offset || (getResults().length || PAGE_SIZE)), { append: true });
+            runSearch(Number(current.next_offset || (getResults().length || PAGE_SIZE)), { append: true, historyMode: 'push' });
           }
         }
+      });
+
+      window.addEventListener('scroll', scheduleHistoryScrollSync, { passive: true });
+      window.addEventListener('popstate', event => {
+        const nextState = normalizeHistoryState(event.state || parseSearchStateFromUrl());
+        applySearchStateToControls(nextState);
+        if(!nextState.query){
+          state.query = '';
+          state.offset = 0;
+          state.response = null;
+          state.error = null;
+          render();
+          if(nextState.scrollY !== null){
+            requestAnimationFrame(() => window.scrollTo({ top: nextState.scrollY, behavior: 'auto' }));
+          }
+          return;
+        }
+        runSearch(nextState.offset, {
+          queryOverride: nextState.query,
+          historyMode: 'none',
+          visibleCount: nextState.visibleCount,
+          preserveResultsAnchor: nextState.scrollY === null,
+          historyScrollY: nextState.scrollY
+        });
       });
     }
 
