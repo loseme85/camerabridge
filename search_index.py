@@ -247,6 +247,32 @@ def search_index_cache_info(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dic
     }
 
 
+def load_search_index_metadata(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dict[str, Any]:
+    index_path = Path(path)
+    with index_path.open(encoding="utf-8") as f:
+        payload = json.load(f)
+
+    if isinstance(payload, list):
+        return {
+            "schema_version": SEARCH_INDEX_SCHEMA_VERSION,
+            "generated_at": None,
+            "source_path": str(index_path),
+            "record_count": len(payload),
+        }
+    if isinstance(payload, dict):
+        records = payload.get("records")
+        record_count = payload.get("record_count")
+        if not isinstance(record_count, int):
+            record_count = len(records) if isinstance(records, list) else 0
+        return {
+            "schema_version": str(payload.get("schema_version") or SEARCH_INDEX_SCHEMA_VERSION),
+            "generated_at": payload.get("generated_at"),
+            "source_path": str(payload.get("source_path") or index_path),
+            "record_count": record_count,
+        }
+    raise ValueError(f"{path} must contain a search index object or record list")
+
+
 def load_search_index(
     path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
     use_cache: bool = True,

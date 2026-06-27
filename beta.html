@@ -363,6 +363,15 @@
       letter-spacing:1px;
       text-transform:uppercase;
     }
+    .index-debug-line{
+      margin-top:6px;
+      color:var(--text-muted);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:10px;
+      letter-spacing:0.2px;
+      text-transform:none;
+      opacity:0.78;
+    }
     .page-controls{
       display:flex;
       align-items:center;
@@ -974,6 +983,8 @@
               <span id="result-caption" class="summary-caption">검색 준비 완료</span>
             </div>
             <div id="summary-meta" class="summary-meta">Leica 중심 제한 베타</div>
+            <!-- Temporary QA/debug line for runtime index verification; safe to remove after preview validation. -->
+            <div id="index-debug-line" class="index-debug-line"></div>
           </div>
           <div class="page-controls">
             <button id="prev-button" class="page-button" type="button">이전</button>
@@ -1065,7 +1076,7 @@
       [
         'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region',
         'category-filter','brand-filter','mount-filter','sold-filter',
-        'sort-select','result-count','result-caption','summary-meta','page-indicator',
+        'sort-select','result-count','result-caption','summary-meta','index-debug-line','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
         'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
@@ -1738,6 +1749,7 @@
       const start = total && resultCount ? (Number(pagination.offset || 0) + 1) : 0;
       const end = total && resultCount ? (Number(pagination.offset || 0) + resultCount) : 0;
       const quality = getQualitySummary();
+      const meta = state.response && state.response.meta ? state.response.meta : null;
 
       els['result-count'].textContent = String(total);
       if(state.loading){
@@ -1755,6 +1767,15 @@
       }else{
         els['result-caption'].textContent = '검색 준비 완료';
         els['summary-meta'].textContent = '가격은 참고용이며 원문 확인이 필요합니다';
+      }
+
+      if(els['index-debug-line']){
+        if(meta && meta.index_record_count != null){
+          const generatedAt = meta.index_generated_at || 'unknown';
+          els['index-debug-line'].textContent = `Index: ${meta.index_record_count} records / generated_at ${generatedAt}`;
+        }else{
+          els['index-debug-line'].textContent = '';
+        }
       }
 
       els['page-indicator'].textContent = `${start}-${end}`;

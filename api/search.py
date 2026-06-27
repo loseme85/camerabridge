@@ -18,6 +18,7 @@ Non-responsibilities:
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from http.server import BaseHTTPRequestHandler
@@ -95,12 +96,13 @@ def _load_runtime_dependencies() -> dict[str, Any]:
     if _RUNTIME_CACHE is not None:
         return _RUNTIME_CACHE
 
-    from search_index import DEFAULT_SEARCH_INDEX_PATH  # noqa: WPS433
+    from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index_metadata  # noqa: WPS433
     from search_service import MAX_LIMIT, SUPPORTED_SORTS, load_and_search, search_records  # noqa: WPS433
     from search_ui_hints import build_query_ui_hints  # noqa: WPS433
 
     _RUNTIME_CACHE = {
         "default_search_index_path": DEFAULT_SEARCH_INDEX_PATH,
+        "load_search_index_metadata": load_search_index_metadata,
         "max_limit": MAX_LIMIT,
         "supported_sorts": SUPPORTED_SORTS,
         "load_and_search": load_and_search,
@@ -144,6 +146,30 @@ def _resolve_search_index_path(path: str | Path | None) -> Path:
         "No search index file found in runtime candidate paths: "
         + ", ".join(str(candidate) for candidate in _candidate_index_paths(default_path))
     )
+
+
+# Read-only runtime index metadata for QA/preview verification.
+def _build_index_meta(index_path: Path | None, request_query: str) -> dict[str, Any]:
+    meta = {
+        "index_path": str(index_path.resolve()) if index_path is not None else None,
+        "index_generated_at": None,
+        "index_record_count": None,
+        "index_source_path": None,
+        "deployment_commit": os.environ.get("VERCEL_GIT_COMMIT_SHA") or os.environ.get("GITHUB_SHA"),
+        "api_runtime": "python-search-endpoint",
+        "request_query": request_query,
+    }
+    if index_path is None:
+        return meta
+
+    runtime = _load_runtime_dependencies()
+    index_metadata = runtime["load_search_index_metadata"](index_path)
+    meta.update({
+        "index_generated_at": index_metadata.get("generated_at"),
+        "index_record_count": index_metadata.get("record_count"),
+        "index_source_path": index_metadata.get("source_path"),
+    })
+    return meta
 
 
 def _first(params: Mapping[str, Any], key: str) -> Optional[Any]:
@@ -3172,6 +3198,8 @@ def search_from_params(
     build_query_ui_hints: Callable[..., dict[str, Any]] = runtime["build_query_ui_hints"]
     parsed = parse_search_params(params)
     evidence_limit = min(int(runtime.get("max_limit") or DEFAULT_MAX_LIMIT), max(parsed["limit"], PRICE_EVIDENCE_SCAN_LIMIT))
+    resolved_path = _resolve_search_index_path(path) if (records is None or path is not None) else None
+    response_meta = _build_index_meta(resolved_path, parsed["query"])
 
     def maybe_supplement_summicron_50_hood_results(
         response: dict[str, Any],
@@ -3197,7 +3225,7 @@ def search_from_params(
         if records is not None:
             supplemental_response = search_records(records=records, **kwargs)
         else:
-            supplemental_response = load_and_search(path=_resolve_search_index_path(path), **kwargs)
+            supplemental_response = load_and_search(path=resolved_path, **kwargs)
         supplemental_rows = _hood_like_supplement_results(list(supplemental_response.get("results") or []))
         if not supplemental_rows:
             return
@@ -3237,7 +3265,7 @@ def search_from_params(
         if records is not None:
             evidence_response = search_records(records=records, **kwargs)
         else:
-            evidence_response = load_and_search(path=_resolve_search_index_path(path), **kwargs)
+            evidence_response = load_and_search(path=resolved_path, **kwargs)
         evidence_response["results"] = _rerank_results_for_query_context(parsed["query"], evidence_response, parsed["sort"])
         return evidence_response
 
@@ -3272,9 +3300,9 @@ def search_from_params(
             evidence_response=evidence_response,
         )
         response.update(response["market_entry_policy"])
+        response["meta"] = response_meta
         return response
 
-    resolved_path = _resolve_search_index_path(path)
     response = load_and_search(
         query=parsed["query"],
         path=resolved_path,
@@ -3305,6 +3333,7 @@ def search_from_params(
         evidence_response=evidence_response,
     )
     response.update(response["market_entry_policy"])
+    response["meta"] = response_meta
     return response
 
 

@@ -26,7 +26,34 @@ from trusted_metadata import (
     load_trusted_metadata,
     resolve_listing,
 )
-from normalization_admin import apply_dealer_rules_to_listing, list_dealer_rules
+try:
+    from normalization_admin import apply_dealer_rules_to_listing, list_dealer_rules
+except ModuleNotFoundError as exc:
+    # The repo no longer carries normalization_admin source in some branches,
+    # but rebuilds should still run safely without dealer-rule enrichment.
+    if exc.name not in {"normalization_admin", "normalization_persistence"}:
+        raise
+
+    def list_dealer_rules(
+        dealer_id: Optional[str] = None,
+        include_disabled: bool = False,
+        paths: Any = None,
+    ) -> list[dict[str, Any]]:
+        _ = (dealer_id, include_disabled, paths)
+        return []
+
+    def apply_dealer_rules_to_listing(
+        raw_item: dict[str, Any],
+        final_output: dict[str, Any],
+        paths: Any = None,
+        dealer_rules: Any = None,
+    ) -> dict[str, Any]:
+        _ = (raw_item, paths, dealer_rules)
+        return {
+            "final_output": final_output,
+            "applied": False,
+            "audit_trail": [],
+        }
 from search_index import DEFAULT_SEARCH_INDEX_PATH, write_search_index
 
 
