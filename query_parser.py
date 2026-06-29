@@ -108,6 +108,10 @@ _BODY_INTENT_ALIASES = {
     "m10": ("M10", "M", None, ()),
     "m10-r": ("M10-R", "M", None, ("R",)),
     "m11": ("M11", "M", None, ()),
+    "m11-p": ("M11-P", "M", None, ("P",)),
+    "m11p": ("M11-P", "M", None, ("P",)),
+    "m11-d": ("M11-D", "M", None, ("D",)),
+    "m11d": ("M11-D", "M", None, ("D",)),
     "mp": ("MP", "M", None, ()),
     "q2": ("Q2", None, "Q", ()),
     "q3": ("Q3", None, "Q", ()),
@@ -205,6 +209,19 @@ def _parse_explicit_body_model_intent(intent: QueryIntent, normalized: str) -> N
     if re.search(r"\b(?:leica\s+)?m\s+(?:body|camera)(?:\s+body)?\b", normalized):
         _set_body_intent(intent, "M", "m body", mount="M", system=None)
         return
+
+    explicit_m_body_variants = (
+        (r"\b(?:leica|라이카)\s+m11\s*-\s*p\b|\b(?:leica|라이카)\s+m11p\b|\b(?:leica|라이카)\s+m11\s+p\b|\bm11\s*-\s*p\b|\bm11p\b|\bm11\s+p\b", "M11-P"),
+        (r"\b(?:leica|라이카)\s+m11\s*-\s*d\b|\b(?:leica|라이카)\s+m11d\b|\b(?:leica|라이카)\s+m11\s+d\b|\bm11\s*-\s*d\b|\bm11d\b|\bm11\s+d\b", "M11-D"),
+        (r"\b(?:leica|라이카)\s+m11\s+monochrom(?:e)?\b|\bm11\s+monochrom(?:e)?\b", "M11 Monochrom"),
+        (r"\b(?:leica|라이카)\s+m11\s+p\s+safari\b|\b(?:leica|라이카)\s+m11\s*-\s*p\s+safari\b|\bm11\s+p\s+safari\b|\bm11\s*-\s*p\s+safari\b", "M11-P Safari"),
+        (r"\b(?:leica|라이카)\s+m10\s+monochrom\b|\bm10\s+monochrom\b", "M10 Monochrom"),
+    )
+    for pattern, body_intent in explicit_m_body_variants:
+        match = re.search(pattern, normalized)
+        if match:
+            _set_body_intent(intent, body_intent, match.group(0), mount="M", system=None)
+            return
 
     if re.search(r"\bm10\b", normalized) and re.search(r"\bbody\b", normalized):
         _set_body_intent(intent, "M10", "m10 body", mount="M", system=None)
@@ -1033,7 +1050,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             continue
 
         body_alias = _BODY_INTENT_ALIASES.get(token)
-        if body_alias and not intent.accessory_intent and not intent.model_family and _body_intent_token_allowed(token, rough_tokens):
+        if body_alias and not intent.body_intent and not intent.accessory_intent and not intent.model_family and _body_intent_token_allowed(token, rough_tokens):
             body_intent, body_mount, body_system, body_variants = body_alias
             _set_body_intent(intent, body_intent, token, mount=body_mount, system=body_system)
             for variant in body_variants:

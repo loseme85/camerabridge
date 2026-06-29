@@ -617,6 +617,12 @@ _BODY_QUERY_PROJECTION_MODELS = {
     "SL2": "SL",
     "SL3": "SL",
     "M10": "M",
+    "M10 Monochrom": "M",
+    "M11": "M",
+    "M11-P": "M",
+    "M11-D": "M",
+    "M11 Monochrom": "M",
+    "M11-P Safari": "M",
 }
 
 _BODY_QUERY_PROJECTION_ACCESSORY_BLOCKERS = {
