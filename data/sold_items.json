@@ -1,120 +1,5 @@
 [
   {
-    "site": "라이카스토어 충무로",
-    "label": "Accessory",
-    "상품명": "[위탁] Visoflex",
-    "세대": "세대미상",
-    "컨디션": "92%",
-    "가격": "450,000원",
-    "통화": "KRW",
-    "이미지": "https://leica-storebando.co.kr/web/product/medium/202601/fc44c1f6ea661f2c0499b641ff839da1.jpg",
-    "링크": "https://leica-storebando.co.kr/product/위탁-visoflex/20698/category/442/display/1/",
-    "품절": false,
-    "예약중": false,
-    "category": "Accessory",
-    "system": "Other",
-    "mount": "Unknown",
-    "brand": "Unknown",
-    "crawl_time": "2026-04-12 19:43:43",
-    "first_seen": "2026-04-01 21:46:00",
-    "is_sold": true,
-    "sold_at": "2026-04-13 14:41:34",
-    "hours_to_sell": 19.0,
-    "brand_confidence": 0.4,
-    "brand_reason": [
-      "no_brand_match"
-    ],
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:visoflex"
-    ],
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "FLE"
-    ],
-    "focal_length": null,
-    "normalized_name": "visoflex",
-    "normalized_description": "",
-    "accessory_type": "visoflex",
-    "compatible_mounts": [
-      "M"
-    ],
-    "compatible_systems": [
-      "M"
-    ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ]
-  },
-  {
-    "site": "Ffordes (영국)",
-    "label": "3rd Party M Lens",
-    "상품명": "Voigtlander 35mm F1.4 VM Nokton MC II",
-    "세대": "",
-    "컨디션": "Used",
-    "가격": "£449.00",
-    "통화": "GBP",
-    "이미지": "https://d1ea30dbll17d8.cloudfront.net/12/1/images/catalog/i/l_321063-P3190105.JPG.Ffordesphoto.jpg",
-    "링크": "https://www.ffordes.com/p/SH-132-088293/leica-m/35mm-f14-vm-nokton-mc-ii",
-    "품절": false,
-    "예약중": false,
-    "mount": "M",
-    "brand": "3rd Party",
-    "category": "Lens",
-    "crawl_time": "2026-04-12 19:43:43",
-    "first_seen": "2026-04-10 14:25:03",
-    "is_sold": true,
-    "sold_at": "2026-04-13 14:41:34",
-    "hours_to_sell": 19.0,
-    "brand_confidence": 0.93,
-    "brand_reason": [
-      "3rd_party_first_token:voigtlander"
-    ],
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:VM "
-    ],
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label_confidence": 0.95,
-    "label_reason": [
-      "3rd_party+M+Lens"
-    ],
-    "model_raw": "Nokton",
-    "model_canonical": "Nokton",
-    "variant": [],
-    "focal_length": "35",
-    "normalized_name": "voigtlander 35mm f1.4 vm nokton mc ii",
-    "normalized_description": "",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ]
-  },
-  {
     "site": "Ffordes (영국)",
     "label": "3rd Party M Lens",
     "상품명": "Voigtlander 40mm F1.2 VM Nokton Asph",
@@ -14328,5 +14213,49 @@
     "is_sold": true,
     "sold_at": "2026-06-30 15:52:06",
     "hours_to_sell": 17.5
+  },
+  {
+    "site": "사진집",
+    "label": "3rd Party",
+    "상품명": "Peace M 50mm f1.4 Silver",
+    "세대": "세대미상",
+    "컨디션": "98%",
+    "가격": "1,300,000원",
+    "통화": "KRW",
+    "이미지": "https://www.sazinzibb.com/web/product/medium/202603/e9043bf4547997f26a1c50ee734c3f5c.jpg",
+    "링크": "https://www.sazinzibb.com/product/peace-m-50mm-f14-silver/15204/category/28/display/1/",
+    "품절": false,
+    "예약중": false,
+    "category": "Lens",
+    "system": "Other",
+    "mount": "M",
+    "brand": "Other",
+    "crawl_time": "2026-06-30 15:52:05",
+    "first_seen": "2026-04-01 21:46:00",
+    "is_sold": true,
+    "sold_at": "2026-06-30 18:51:21",
+    "hours_to_sell": 3.0
+  },
+  {
+    "site": "사진집",
+    "label": "Leica R8",
+    "상품명": "Leica R8 Silver",
+    "세대": "세대미상",
+    "컨디션": "93%",
+    "가격": "700,000원",
+    "통화": "KRW",
+    "이미지": "https://www.sazinzibb.com/web/product/medium/202308/fcdad971312188b9c3e736d46322e503.jpg",
+    "링크": "https://www.sazinzibb.com/product/leica-r8-silver/9177/category/28/display/1/",
+    "품절": false,
+    "예약중": false,
+    "category": "Body",
+    "system": "R System",
+    "mount": "R",
+    "brand": "Leica",
+    "crawl_time": "2026-06-30 15:52:05",
+    "first_seen": "2026-04-01 21:46:00",
+    "is_sold": true,
+    "sold_at": "2026-06-30 18:51:21",
+    "hours_to_sell": 3.0
   }
 ]
