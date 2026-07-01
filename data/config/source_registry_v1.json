@@ -1,0 +1,515 @@
+{
+  "schema_version": "source_registry.v1",
+  "generated_at": "2026-06-30",
+  "owner_intent": "stage global source expansion without changing ranking, parser, price logic, or connecting full crawler execution",
+  "status_definitions": [
+    "candidate",
+    "audited",
+    "limited_crawl",
+    "active_source",
+    "discovery_only",
+    "hold"
+  ],
+  "price_evidence_policy_definitions": [
+    "allowed",
+    "blocked_initially",
+    "allowed_after_validation",
+    "sold_reference_only"
+  ],
+  "pagination_type_definitions": [
+    "page_param",
+    "offset",
+    "next_link",
+    "total_pages",
+    "json_api",
+    "cursor_api",
+    "unknown"
+  ],
+  "promotion_rules": {
+    "candidate_to_audited": [
+      "seed_url and source identity confirmed",
+      "pagination strategy documented",
+      "anti_bot_risk assigned",
+      "source_type, category_scope, and price_evidence_policy drafted"
+    ],
+    "audited_to_limited_crawl": [
+      "page-2 rule or equivalent pagination path confirmed",
+      "expected item schema mapped to current raw fields",
+      "recommended_max_pages_beta and delay policy defined",
+      "manual policy review says no aggressive crawling or bot bypass is needed"
+    ],
+    "limited_crawl_to_active_source": [
+      "limited crawl succeeds repeatedly without breaking current sources",
+      "raw to normalized flow is stable",
+      "dedupe and sold/active status fields are usable",
+      "source inclusion improves coverage without major contamination"
+    ],
+    "active_source_to_price_eligible": [
+      "price parsing quality is acceptable",
+      "status quality is acceptable for asking vs sold separation",
+      "link survival sampling does not show unacceptable dead-link risk",
+      "row-level evidence can be safely included without exact-price contamination"
+    ]
+  },
+  "recommended_next_source": {
+    "source_id": "kamerastore",
+    "reason": "best first limited-crawl candidate because the audit found a reusable Shopify-like collection pattern with lower anti-bot risk than other global candidates"
+  },
+  "sources": [
+    {
+      "source_id": "leica_store_chungmuro",
+      "source_name": "라이카스토어 충무로",
+      "country": "South Korea",
+      "region": "KR",
+      "seed_url": "https://leica-storebando.co.kr/product/list.html?cate_no=442",
+      "source_type": "dealer",
+      "status": "active_source",
+      "pagination_type": "page_param",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 20,
+      "requires_js": false,
+      "anti_bot_risk": "low",
+      "price_evidence_policy": "allowed",
+      "brand_scope": [
+        "Leica",
+        "selected third-party L-mount"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "KRW",
+      "crawl_priority": 1,
+      "next_step": "current-source maintenance only",
+      "notes": "Primary category-loop source in app/test.py. Additional category seed URL exists for the Daechi branch."
+    },
+    {
+      "source_id": "sazinzib",
+      "source_name": "사진집",
+      "country": "South Korea",
+      "region": "KR",
+      "seed_url": "https://www.sazinzibb.com/category/%EC%A4%91%EA%B3%A0%EC%83%81%ED%92%88/27/",
+      "source_type": "dealer",
+      "status": "active_source",
+      "pagination_type": "page_param",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 12,
+      "requires_js": false,
+      "anti_bot_risk": "low",
+      "price_evidence_policy": "allowed",
+      "brand_scope": [
+        "Leica",
+        "mixed used-camera brands"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory",
+        "consignment"
+      ],
+      "currency": "KRW",
+      "crawl_priority": 2,
+      "next_step": "current-source maintenance only",
+      "notes": "Active category-loop source. Used and consignment categories are both present."
+    },
+    {
+      "source_id": "j_camera",
+      "source_name": "장씨카메라",
+      "country": "South Korea",
+      "region": "KR",
+      "seed_url": "https://j-camera.com/product/list.html?cate_no=358",
+      "source_type": "dealer",
+      "status": "active_source",
+      "pagination_type": "page_param",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 20,
+      "requires_js": false,
+      "anti_bot_risk": "low",
+      "price_evidence_policy": "allowed",
+      "brand_scope": [
+        "Leica",
+        "mixed used-camera brands"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "KRW",
+      "crawl_priority": 1,
+      "next_step": "current-source maintenance only",
+      "notes": "Active category-loop source. Separate accessory category is already included in current crawler config."
+    },
+    {
+      "source_id": "ffordes",
+      "source_name": "Ffordes",
+      "country": "United Kingdom",
+      "region": "UK",
+      "seed_url": "https://www.ffordes.com/c/194/leica-m",
+      "source_type": "dealer",
+      "status": "active_source",
+      "pagination_type": "total_pages",
+      "page_param_name": "p",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 8,
+      "requires_js": false,
+      "anti_bot_risk": "low",
+      "price_evidence_policy": "allowed",
+      "brand_scope": [
+        "Leica",
+        "selected L-mount third-party"
+      ],
+      "category_scope": [
+        "body",
+        "lens"
+      ],
+      "currency": "GBP",
+      "crawl_priority": 2,
+      "next_step": "current-source maintenance only",
+      "notes": "Current implementation uses multiple Leica/L-mount category seeds and reads total page count from the DOM."
+    },
+    {
+      "source_id": "leica_store_miami",
+      "source_name": "Leica Store Miami",
+      "country": "United States",
+      "region": "US",
+      "seed_url": "https://leicastoremiami.com/collections/used/products.json?limit=250",
+      "source_type": "dealer",
+      "status": "active_source",
+      "pagination_type": "json_api",
+      "page_param_name": null,
+      "offset_param_name": null,
+      "page_size": 250,
+      "recommended_max_pages_beta": 1,
+      "requires_js": false,
+      "anti_bot_risk": "low",
+      "price_evidence_policy": "allowed",
+      "brand_scope": [
+        "Leica"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "USD",
+      "crawl_priority": 3,
+      "next_step": "current-source maintenance only",
+      "notes": "Shopify JSON API pattern. Current implementation is one-shot ingest rather than paginated browsing."
+    },
+    {
+      "source_id": "kitamura_used",
+      "source_name": "기타무라",
+      "country": "Japan",
+      "region": "JP",
+      "seed_url": "https://www.kitamuracamera.jp/buy/item-list/?type=u&narrow1=%E3%83%A9%E3%82%A4%E3%82%AB(LEICA)",
+      "source_type": "retailer_used",
+      "status": "active_source",
+      "pagination_type": "next_link",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 5,
+      "requires_js": true,
+      "anti_bot_risk": "medium",
+      "price_evidence_policy": "allowed",
+      "brand_scope": [
+        "Leica"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "JPY",
+      "crawl_priority": 3,
+      "next_step": "current-source maintenance only",
+      "notes": "Current implementation uses Playwright, Japanese-to-English title normalization, and next-link detection."
+    },
+    {
+      "source_id": "kamerastore",
+      "source_name": "Kamerastore",
+      "country": "Finland",
+      "region": "EU",
+      "seed_url": "https://kamerastore.com/en-int/search?q=leica&options%5Bprefix%5D=last",
+      "source_type": "dealer",
+      "status": "limited_crawl",
+      "pagination_type": "page_param",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 5,
+      "requires_js": false,
+      "anti_bot_risk": "low",
+      "price_evidence_policy": "allowed_after_validation",
+      "brand_scope": [
+        "Leica",
+        "vintage camera ecosystem"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "EUR",
+      "crawl_priority": 1,
+      "next_step": "collect branch-local pilot results and validate raw-to-index flow before active_source promotion",
+      "notes": "Best first global limited-crawl candidate. Pilot uses the search route with page-param pagination and keeps price evidence blocked initially."
+    },
+    {
+      "source_id": "ebay",
+      "source_name": "eBay",
+      "country": "Global",
+      "region": "Global",
+      "seed_url": "https://www.ebay.com/sch/i.html?_nkw=Leica",
+      "source_type": "marketplace",
+      "status": "audited",
+      "pagination_type": "page_param",
+      "page_param_name": "_pgn",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 2,
+      "requires_js": false,
+      "anti_bot_risk": "medium",
+      "price_evidence_policy": "sold_reference_only",
+      "brand_scope": [
+        "Leica",
+        "mixed camera brands",
+        "third-party accessories"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory",
+        "bundle"
+      ],
+      "currency": "mixed",
+      "crawl_priority": 2,
+      "next_step": "discovery_only_pilot",
+      "notes": "Recommended as discovery-only first. Marketplace noise, duplicate listings, and sold/asking ambiguity make initial price evidence unsafe."
+    },
+    {
+      "source_id": "yahoo_auctions_japan",
+      "source_name": "Yahoo Auctions Japan",
+      "country": "Japan",
+      "region": "JP",
+      "seed_url": "https://auctions.yahoo.co.jp/search/search?p=Leica",
+      "source_type": "auction",
+      "status": "audited",
+      "pagination_type": "offset",
+      "page_param_name": null,
+      "offset_param_name": "b",
+      "page_size": 50,
+      "recommended_max_pages_beta": 2,
+      "requires_js": false,
+      "anti_bot_risk": "medium",
+      "price_evidence_policy": "sold_reference_only",
+      "brand_scope": [
+        "Leica",
+        "mixed camera brands",
+        "parts and accessories"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory",
+        "bundle",
+        "parts"
+      ],
+      "currency": "JPY",
+      "crawl_priority": 2,
+      "next_step": "discovery_only_pilot",
+      "notes": "Offset-style auction search looks feasible for controlled discovery, but auction price interpretation should remain sold/reference-only at first."
+    },
+    {
+      "source_id": "mercari_japan",
+      "source_name": "Mercari Japan",
+      "country": "Japan",
+      "region": "JP",
+      "seed_url": "https://jp.mercari.com/search?keyword=Leica",
+      "source_type": "marketplace",
+      "status": "hold",
+      "pagination_type": "cursor_api",
+      "page_param_name": null,
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 1,
+      "requires_js": true,
+      "anti_bot_risk": "high",
+      "price_evidence_policy": "blocked_initially",
+      "brand_scope": [
+        "Leica",
+        "mixed consumer marketplace"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory",
+        "bundle",
+        "parts"
+      ],
+      "currency": "JPY",
+      "crawl_priority": 4,
+      "next_step": "feasibility_check_then_discovery_only",
+      "notes": "Likely infinite-scroll or cursor-driven flow with higher marketplace noise and stronger anti-bot risk than current active sources."
+    },
+    {
+      "source_id": "mpb",
+      "source_name": "MPB",
+      "country": "United States",
+      "region": "US/EU",
+      "seed_url": "https://www.mpb.com/en-us/search?q=Leica",
+      "source_type": "retailer_used",
+      "status": "hold",
+      "pagination_type": "page_param",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 0,
+      "requires_js": false,
+      "anti_bot_risk": "high",
+      "price_evidence_policy": "blocked_initially",
+      "brand_scope": [
+        "Leica",
+        "mixed used-camera brands"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "USD",
+      "crawl_priority": 3,
+      "next_step": "feasibility_check",
+      "notes": "Read-only audit hit Cloudflare challenge. Do not promote beyond hold until route stability and crawl policy are confirmed."
+    },
+    {
+      "source_id": "keh",
+      "source_name": "KEH",
+      "country": "United States",
+      "region": "US",
+      "seed_url": "https://www.keh.com/shop/search?q=Leica",
+      "source_type": "retailer_used",
+      "status": "hold",
+      "pagination_type": "page_param",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 0,
+      "requires_js": false,
+      "anti_bot_risk": "high",
+      "price_evidence_policy": "blocked_initially",
+      "brand_scope": [
+        "Leica",
+        "mixed used-camera brands"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "USD",
+      "crawl_priority": 3,
+      "next_step": "feasibility_check",
+      "notes": "Read-only audit hit Cloudflare challenge on both search and category-style routes."
+    },
+    {
+      "source_id": "map_camera",
+      "source_name": "Map Camera",
+      "country": "Japan",
+      "region": "JP",
+      "seed_url": "https://www.mapcamera.com/search?keyword=Leica",
+      "source_type": "retailer_used",
+      "status": "hold",
+      "pagination_type": "page_param",
+      "page_param_name": "page",
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 0,
+      "requires_js": false,
+      "anti_bot_risk": "high",
+      "price_evidence_policy": "blocked_initially",
+      "brand_scope": [
+        "Leica",
+        "mixed premium camera brands"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "JPY",
+      "crawl_priority": 3,
+      "next_step": "feasibility_check",
+      "notes": "Read-only audit hit Akamai/403. Treat as hold until route behavior and policy are understood."
+    },
+    {
+      "source_id": "bh_used",
+      "source_name": "B&H Used",
+      "country": "United States",
+      "region": "US",
+      "seed_url": "https://www.bhphotovideo.com/c/search?q=Leica",
+      "source_type": "retailer_used",
+      "status": "hold",
+      "pagination_type": "unknown",
+      "page_param_name": null,
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 0,
+      "requires_js": false,
+      "anti_bot_risk": "high",
+      "price_evidence_policy": "blocked_initially",
+      "brand_scope": [
+        "Leica",
+        "mixed camera brands"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "USD",
+      "crawl_priority": 4,
+      "next_step": "feasibility_check",
+      "notes": "Read-only audit hit Cloudflare challenge before pagination details could be confirmed."
+    },
+    {
+      "source_id": "adorama_used",
+      "source_name": "Adorama Used",
+      "country": "United States",
+      "region": "US",
+      "seed_url": "https://www.adorama.com/l/Used",
+      "source_type": "retailer_used",
+      "status": "hold",
+      "pagination_type": "unknown",
+      "page_param_name": null,
+      "offset_param_name": null,
+      "page_size": null,
+      "recommended_max_pages_beta": 0,
+      "requires_js": false,
+      "anti_bot_risk": "high",
+      "price_evidence_policy": "blocked_initially",
+      "brand_scope": [
+        "Leica",
+        "mixed camera brands"
+      ],
+      "category_scope": [
+        "body",
+        "lens",
+        "accessory"
+      ],
+      "currency": "USD",
+      "crawl_priority": 4,
+      "next_step": "feasibility_check",
+      "notes": "Read-only audit hit anti-bot barrier before a stable page-2 rule could be documented."
+    }
+  ]
+}

@@ -5,6 +5,8 @@ import re
 import argparse
 import random
 import os
+from pathlib import Path
+from urllib.parse import urljoin
 
 # ── 실행 모드 파싱 ──
 parser = argparse.ArgumentParser(description='Camera Bridge Crawler')
@@ -15,6 +17,8 @@ args, _ = parser.parse_known_args()
 MOCK_MODE = args.mock
 SITE_FILTER = args.site
 FFORDES_ONLY = SITE_FILTER and 'ffordes' in SITE_FILTER.lower()
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SOURCE_REGISTRY_PATH = PROJECT_ROOT / "data/config/source_registry_v1.json"
 
 # ── User-Agent 풀 ──
 USER_AGENTS = [
@@ -24,6 +28,57 @@ USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
 ]
+
+
+def load_source_registry():
+    try:
+        with open(SOURCE_REGISTRY_PATH, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except Exception:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def get_source_registry_entry(*, source_id=None, source_name=None):
+    payload = load_source_registry()
+    sources = payload.get("sources") if isinstance(payload, dict) else None
+    if not isinstance(sources, list):
+        return {}
+
+    wanted_id = (source_id or "").strip().lower()
+    wanted_name = (source_name or "").strip().lower()
+    for item in sources:
+        if not isinstance(item, dict):
+            continue
+        if wanted_id and str(item.get("source_id") or "").strip().lower() == wanted_id:
+            return item
+        if wanted_name and str(item.get("source_name") or "").strip().lower() == wanted_name:
+            return item
+    return {}
+
+
+def site_filter_matches(source_name):
+    if not SITE_FILTER:
+        return True
+    return SITE_FILTER.lower() in source_name.lower()
+
+
+def infer_currency_code(price_text, fallback=""):
+    text = str(price_text or "")
+    upper = text.upper()
+    if " AED" in upper:
+        return "AED"
+    if " EUR" in upper or "€" in text:
+        return "EUR"
+    if " USD" in upper or "$" in text:
+        return "USD"
+    if " GBP" in upper or "£" in text:
+        return "GBP"
+    if " JPY" in upper or "¥" in text or "円" in text:
+        return "JPY"
+    if " KRW" in upper or "원" in text:
+        return "KRW"
+    return fallback
 
 # ══════════════════════════════════════════════════════
 # 검색 아이템 정의
@@ -2427,6 +2482,153 @@ def crawl_leicamiami():
     return results
 
 
+def crawl_kamerastore(page, site_entry=None, max_pages=3):
+    """Kamerastore limited crawl pilot - search results only."""
+    site_entry = site_entry or {}
+    results = []
+    base = "https://kamerastore.com"
+    seed_url = (
+        site_entry.get("seed_url")
+        or "https://kamerastore.com/en-int/search?q=leica&options%5Bprefix%5D=last"
+    )
+    max_pages = max(1, min(int(max_pages or 3), 5))
+    seen_links = set()
+
+    print(f"\n  📂 Kamerastore limited crawl: {seed_url}")
+    print(f"    └─ max_pages={max_pages}")
+
+    for page_num in range(1, max_pages + 1):
+        url = seed_url if page_num == 1 else (
+            f"{seed_url}&page={page_num}" if "?" in seed_url else f"{seed_url}?page={page_num}"
+        )
+        print(f"    └─ {page_num}페이지 수집 중...")
+
+        try:
+            page.goto(url, wait_until="domcontentloaded", timeout=30_000)
+            page.wait_for_selector("product-card, .product-grid__item", timeout=12_000)
+        except Exception as e:
+            print(f"    ❌ Kamerastore 로드 실패: {e}")
+            break
+
+        try:
+            items = page.evaluate("""() => {
+                const cards = Array.from(document.querySelectorAll('product-card'));
+                return cards.map((card) => {
+                    const linkEl = card.querySelector('a.product-card__link[href*="/products/"]') ||
+                                   card.querySelector('a[href*="/products/"]');
+                    const href = linkEl ? (linkEl.getAttribute('href') || '') : '';
+                    const title =
+                        card.querySelector('h3')?.innerText?.trim() ||
+                        linkEl?.getAttribute('aria-label') ||
+                        card.querySelector('.visually-hidden')?.innerText?.trim() ||
+                        '';
+                    const price =
+                        card.querySelector('product-price .price')?.innerText?.trim() ||
+                        card.querySelector('.price')?.innerText?.trim() ||
+                        '';
+                    const imgEl = card.querySelector('img');
+                    const img = imgEl ? (
+                        imgEl.getAttribute('src') ||
+                        imgEl.getAttribute('data-src') ||
+                        imgEl.getAttribute('data_max_resolution') ||
+                        ''
+                    ) : '';
+                    const conditionParts = Array.from(
+                        card.querySelectorAll('.text-block p, .product-badges span, .product-badges p, .product-badges div')
+                    )
+                        .map((node) => (node.innerText || '').trim())
+                        .filter((text) => {
+                            if (!text) return false;
+                            if (text.length > 32) return false;
+                            if (/^used\\b/i.test(text)) return false;
+                            if (/^leica\\b/i.test(text)) return false;
+                            if (/camera|rangefinder|digital|lens/i.test(text)) return false;
+                            return true;
+                        });
+                    const condition = conditionParts.join(' | ');
+                    const addButton = card.querySelector('button[name="add"]');
+                    const addText = addButton ? (addButton.innerText || '').trim() : '';
+                    const sold = /sold out|sold/i.test(addText) || Boolean(addButton && addButton.disabled);
+                    return { title, href, price, img, condition, sold };
+                }).filter((item) => item.title && item.href);
+            }""")
+        except Exception as e:
+            print(f"    ❌ Kamerastore 파싱 오류: {e}")
+            break
+
+        if not items:
+            print("    마지막 페이지 도달")
+            break
+
+        print(f"    └─ {len(items)}개 상품 발견")
+        found_any = False
+
+        for item in items:
+            try:
+                name = " ".join(str(item.get("title") or "").split())
+                href = urljoin(base, str(item.get("href") or ""))
+                href = href.split("#")[0]
+                href = href.split("?variant=")[0]
+                if not name or not href or href in seen_links:
+                    continue
+                seen_links.add(href)
+
+                price = normalize_price(item.get("price"))
+                currency = infer_currency_code(price, site_entry.get("currency", ""))
+                img_url = fix_img_url(item.get("img"), "https://kamerastore.com")
+                condition = item.get("condition") or "정보없음"
+                is_sold = bool(item.get("sold"))
+
+                label = auto_label(name)
+                mount = detect_mount(name)
+                gen = detect_generation(name)
+                brand = detect_brand(name)
+                cat = detect_category(name, price)
+                if cat == "Accessory":
+                    mount = "Accessory"
+
+                results.append({
+                    "site": "Kamerastore",
+                    "label": label,
+                    "상품명": name,
+                    "세대": gen,
+                    "컨디션": condition,
+                    "가격": price,
+                    "통화": currency,
+                    "이미지": img_url,
+                    "링크": href,
+                    "품절": is_sold,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": brand,
+                })
+                found_any = True
+                status = "🚫품절" if is_sold else "✔ "
+                print(f"    {status} {name[:60]} | {price}")
+            except Exception as e:
+                print(f"    ⚠️  Kamerastore item 파싱 오류: {e}")
+                continue
+
+        if not found_any:
+            break
+
+        try:
+            has_next = page.evaluate("""() => {
+                const nextLink = document.querySelector('a.pagination__link[aria-label="Next"]');
+                return Boolean(nextLink && nextLink.getAttribute('href'));
+            }""")
+        except Exception:
+            has_next = False
+
+        if not has_next:
+            print("    마지막 페이지 도달")
+            break
+
+    print(f"  ✅ Kamerastore 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura(page):
     """기타무라 크롤러 - 라이카 중고 카테고리 전체"""
     import re as _re
@@ -2796,9 +2998,25 @@ def crawl_all():
         parallel_sites = active_sites
         godo_sites = []
 
+    run_ffordes = site_filter_matches("Ffordes")
+    run_miami = site_filter_matches("Leica Store Miami")
+    run_kitamura = site_filter_matches("기타무라")
+    run_kamerastore = site_filter_matches("Kamerastore")
+    kamerastore_registry_entry = get_source_registry_entry(source_id="kamerastore", source_name="Kamerastore")
+    targeted_site_names = {site["name"] for site in parallel_sites}
+    if run_ffordes:
+        targeted_site_names.add("Ffordes (영국)")
+    if run_miami:
+        targeted_site_names.add("Leica Store Miami")
+    if run_kitamura:
+        targeted_site_names.add("기타무라 (일본)")
+    if run_kamerastore:
+        targeted_site_names.add("Kamerastore")
+
     print(f"🚀 병렬 크롤링 시작 ({len(parallel_sites)}개 사이트 동시 처리)")
 
-    total_sites = len(parallel_sites) + 1  # +1 for Ffordes
+    total_sites = len(parallel_sites) + int(run_ffordes) + int(run_miami) + int(run_kitamura) + int(run_kamerastore)
+    total_sites = max(total_sites, 1)
     done_sites = 0
 
     # 병렬 처리
@@ -2825,44 +3043,74 @@ def crawl_all():
         write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, 0)
 
     # Ffordes 크롤링
-    print(f"\n🇬🇧 Ffordes 크롤링 시작")
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.set_extra_http_headers({"Accept-Language": "en-GB,en;q=0.9"})
-        try:
-            ffordes_results = crawl_ffordes(page)
-            all_results.extend(ffordes_results)
-        except Exception as e:
-            print(f"❌ Ffordes 오류: {e}")
-        finally:
-            browser.close()
-    done_sites += 1
-    write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
+    if run_ffordes:
+        print(f"\n🇬🇧 Ffordes 크롤링 시작")
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            page.set_extra_http_headers({"Accept-Language": "en-GB,en;q=0.9"})
+            try:
+                ffordes_results = crawl_ffordes(page)
+                all_results.extend(ffordes_results)
+            except Exception as e:
+                print(f"❌ Ffordes 오류: {e}")
+            finally:
+                browser.close()
+        done_sites += 1
+        write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
 
     # ── Leica Store Miami 크롤링 ──
-    print('\n' + '='*50)
-    print('Leica Store Miami 크롤링 시작')
-    try:
-        miami_results = crawl_leicamiami()
-        all_results.extend(miami_results)
-        print(f"  ✅ Leica Store Miami: {len(miami_results)}개")
-    except Exception as e:
-        print(f"❌ Leica Store Miami 오류: {e}")
+    if run_miami:
+        print('\n' + '='*50)
+        print('Leica Store Miami 크롤링 시작')
+        try:
+            miami_results = crawl_leicamiami()
+            all_results.extend(miami_results)
+            print(f"  ✅ Leica Store Miami: {len(miami_results)}개")
+        except Exception as e:
+            print(f"❌ Leica Store Miami 오류: {e}")
+        done_sites += 1
+        write_status(int(done_sites/total_sites*100), "Leica Store Miami", len(all_results), done_sites, 0)
 
     # ── 기타무라 크롤링 ──
-    print('\n' + '='*50)
-    print('기타무라 크롤링 시작')
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        try:
-            kitamura_results = crawl_kitamura(page)
-            all_results.extend(kitamura_results)
-        except Exception as e:
-            print(f"❌ 기타무라 오류: {e}")
-        finally:
-            browser.close()
+    if run_kitamura:
+        print('\n' + '='*50)
+        print('기타무라 크롤링 시작')
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            try:
+                kitamura_results = crawl_kitamura(page)
+                all_results.extend(kitamura_results)
+            except Exception as e:
+                print(f"❌ 기타무라 오류: {e}")
+            finally:
+                browser.close()
+        done_sites += 1
+        write_status(int(done_sites/total_sites*100), "기타무라", len(all_results), done_sites, 0)
+
+    # ── Kamerastore limited crawl ──
+    if run_kamerastore:
+        print('\n' + '='*50)
+        print('Kamerastore limited crawl 시작')
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            ctx = browser.new_context(
+                user_agent=random.choice(USER_AGENTS),
+                viewport={"width": 1280, "height": 800},
+                locale="en-US",
+            )
+            page = ctx.new_page()
+            try:
+                kamerastore_results = crawl_kamerastore(page, kamerastore_registry_entry, max_pages=3)
+                all_results.extend(kamerastore_results)
+            except Exception as e:
+                print(f"❌ Kamerastore 오류: {e}")
+            finally:
+                ctx.close()
+                browser.close()
+        done_sites += 1
+        write_status(int(done_sites/total_sites*100), "Kamerastore", len(all_results), done_sites, 0)
 
     # 전체 중복 제거
     seen = set()
@@ -2871,6 +3119,29 @@ def crawl_all():
         if r["링크"] not in seen:
             seen.add(r["링크"])
             unique_results.append(r)
+
+    if SITE_FILTER:
+        preserved_results = []
+        try:
+            with open("data/raw/results.json", "r", encoding="utf-8") as f:
+                prev_results = json.load(f)
+            preserved_results = [
+                row for row in prev_results
+                if str(row.get("site") or "") not in targeted_site_names
+            ]
+        except Exception:
+            preserved_results = []
+        if preserved_results:
+            merged_seen = set()
+            merged_results = []
+            for row in unique_results + preserved_results:
+                link = str(row.get("링크") or "")
+                if not link or link in merged_seen:
+                    continue
+                merged_seen.add(link)
+                merged_results.append(row)
+            print(f"📎 site-filter merge 적용: 신규 {len(unique_results)}개 + 보존 {len(preserved_results)}개")
+            unique_results = merged_results
 
     elapsed = time.time() - start_time
     # ── raw 스냅샷 저장 (label 보정 전 원본) ──

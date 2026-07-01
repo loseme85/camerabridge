@@ -17,6 +17,7 @@ Non-responsibilities:
 
 from __future__ import annotations
 
+from collections import Counter, defaultdict
 import json
 import os
 import re
@@ -55,6 +56,59 @@ ALLOWED_SOLD_QUALITIES = {
     "ended_unsold",
 }
 _RUNTIME_CACHE: dict[str, Any] | None = None
+_SOURCE_REGISTRY_CACHE: dict[str, Any] | None = None
+KAMERASTORE_SOURCE_NAME = "kamerastore"
+KAMERASTORE_SHADOW_ACCESSORY_KEYWORDS = (
+    "hood",
+    "adapter",
+    "grip",
+    "handgrip",
+    "thumb",
+    "case",
+    "strap",
+    "filter",
+    "cap",
+    "battery",
+    "charger",
+    "meter",
+)
+KAMERASTORE_SHADOW_BUNDLE_KEYWORDS = (
+    " + ",
+    " kit ",
+    " bundle ",
+    " set ",
+    " with ",
+)
+KAMERASTORE_SHADOW_BODY_LIKE_KEYWORDS = (
+    " monochrom",
+    " typ 240",
+    " typ 262",
+    " typ 220",
+    " q2",
+    " q (",
+    " m4",
+    " m5",
+    " m7",
+    " m8",
+    " m9",
+    " m10",
+    " m11",
+    " mda",
+    " m-p",
+    " m-e",
+    " leicaflex",
+    " standard (model",
+    " iiig",
+    " iiia",
+)
+KAMERASTORE_SHADOW_CONDITION_RANK = {
+    "certified": 3,
+    "restored": 2,
+    "not passed": 1,
+}
+KAMERASTORE_REPRESENTATIVE_STRATEGY = (
+    "prefer shadow-clean rows, then stronger condition, then latest crawl_time, then stable source_url"
+)
 
 
 class SearchEndpointError(ValueError):
@@ -96,12 +150,13 @@ def _load_runtime_dependencies() -> dict[str, Any]:
     if _RUNTIME_CACHE is not None:
         return _RUNTIME_CACHE
 
-    from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index_metadata  # noqa: WPS433
+    from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index, load_search_index_metadata  # noqa: WPS433
     from search_service import MAX_LIMIT, SUPPORTED_SORTS, load_and_search, search_records  # noqa: WPS433
     from search_ui_hints import build_query_ui_hints  # noqa: WPS433
 
     _RUNTIME_CACHE = {
         "default_search_index_path": DEFAULT_SEARCH_INDEX_PATH,
+        "load_search_index": load_search_index,
         "load_search_index_metadata": load_search_index_metadata,
         "max_limit": MAX_LIMIT,
         "supported_sorts": SUPPORTED_SORTS,
@@ -172,6 +227,24 @@ def _build_index_meta(index_path: Path | None, request_query: str) -> dict[str, 
     return meta
 
 
+def _load_source_registry() -> dict[str, Any]:
+    global _SOURCE_REGISTRY_CACHE
+    if _SOURCE_REGISTRY_CACHE is not None:
+        return _SOURCE_REGISTRY_CACHE
+
+    path = PROJECT_ROOT / "data/config/source_registry_v1.json"
+    try:
+        with path.open(encoding="utf-8") as f:
+            payload = json.load(f)
+    except (OSError, JSONDecodeError):
+        payload = {}
+
+    if not isinstance(payload, dict):
+        payload = {}
+    _SOURCE_REGISTRY_CACHE = payload
+    return payload
+
+
 def _first(params: Mapping[str, Any], key: str) -> Optional[Any]:
     value = params.get(key)
     if isinstance(value, list):
@@ -185,6 +258,35 @@ def _normalize_params(params: Mapping[str, Any]) -> dict[str, Any]:
 
 def _normalize_text(value: Any) -> str:
     return " ".join(str(value or "").strip().lower().split())
+
+
+def _source_price_evidence_policy(source_name: Any) -> str:
+    normalized_name = _normalize_text(source_name)
+    if not normalized_name:
+        return "allowed"
+
+    source_entry = _source_registry_entry(source_name)
+    if source_entry:
+        return str(source_entry.get("price_evidence_policy") or "allowed")
+    return "allowed"
+
+
+def _source_registry_entry(source_name: Any) -> dict[str, Any] | None:
+    normalized_name = _normalize_text(source_name)
+    if not normalized_name:
+        return None
+
+    registry = _load_source_registry()
+    sources = registry.get("sources")
+    if not isinstance(sources, list):
+        return None
+
+    for source in sources:
+        if not isinstance(source, dict):
+            continue
+        if _normalize_text(source.get("source_name")) == normalized_name:
+            return source
+    return None
 
 
 def _family_root(value: Any) -> str:
@@ -1721,12 +1823,14 @@ def _humanize_evidence_pool(pool_name: str) -> str:
 def _humanize_excluded_reason(reason: str) -> str:
     mapping = {
         "accessory": "Accessory, not camera/lens",
+        "bundle": "Bundle or multi-item listing",
         "repair_or_parts": "Accessory, not camera/lens",
         "deposit_or_rental": "Deposit or rental listing",
         "third_party": "Third-party item",
         "sold_status_incompatible": "Current sale status is not used for this price view",
         "category_mismatch": "Not compatible with this query",
         "classification_conflict": "Classification needs review",
+        "classification_drift": "Classification needs review",
         "wrong_model": "Different model",
         "mount_mismatch": "Wrong mount",
         "focal_mismatch": "Wrong focal length",
@@ -1735,7 +1839,10 @@ def _humanize_excluded_reason(reason: str) -> str:
         "variant_boundary": "Variant boundary",
         "body_lens_boundary_conflict": "Not compatible with this query",
         "duplicate": "Duplicate listing",
+        "missing_canonical": "Canonical model is missing",
+        "suspicious_price": "Price could not be trusted",
         "outlier": "Price outlier",
+        "source_policy_blocked": "Current source is not price-eligible yet",
         "source_gap": "Current source coverage is not enough yet",
     }
     return mapping.get(reason, _humanize_policy_reason(reason))
@@ -1869,6 +1976,438 @@ def _result_signature(result: Mapping[str, Any]) -> tuple[str, str, str, str]:
     )
 
 
+def _result_source_name(result: Mapping[str, Any]) -> str:
+    return str(_result_field(result, "source") or result.get("source") or "")
+
+
+def _result_effective_title(result: Mapping[str, Any]) -> str:
+    return str((result.get("final_output") or {}).get("title_raw") or result.get("title") or "")
+
+
+def _result_source_url(result: Mapping[str, Any]) -> str:
+    return str((result.get("final_output") or {}).get("source_url") or result.get("source_url") or "")
+
+
+def _result_condition_raw(result: Mapping[str, Any]) -> str:
+    return str((result.get("final_output") or {}).get("condition_raw") or result.get("condition") or "")
+
+
+def _result_parsed_price(result: Mapping[str, Any]) -> float | None:
+    direct_price = _parse_price_number(result.get("price"))
+    if direct_price is not None:
+        return direct_price
+    final_output = result.get("final_output") or {}
+    parsed_value = final_output.get("parsed_price_numeric")
+    if isinstance(parsed_value, (int, float)):
+        return float(parsed_value)
+    return _parse_price_number(final_output.get("price_raw"))
+
+
+def _kamerastore_shadow_source_applies(source_name: Any) -> bool:
+    return _kamerastore_source_matches(source_name) and _source_price_evidence_policy(source_name) == "blocked_initially"
+
+
+def _kamerastore_live_source_applies(source_name: Any) -> bool:
+    return _kamerastore_source_matches(source_name) and _source_price_evidence_policy(source_name) == "allowed_after_validation"
+
+
+def _kamerastore_source_matches(source_name: Any) -> bool:
+    return _normalize_text(source_name) == KAMERASTORE_SOURCE_NAME
+
+
+def _kamerastore_shadow_result_key(result: Mapping[str, Any]) -> str:
+    source_url = _result_source_url(result)
+    if source_url:
+        return source_url
+    return "||".join(
+        [
+            _normalize_text(_result_source_name(result)),
+            _normalize_text(_result_effective_title(result)),
+            str(_result_parsed_price(result) or ""),
+            _normalize_text(_result_condition_raw(result)),
+        ]
+    )
+
+
+def _kamerastore_shadow_duplicate_key(result: Mapping[str, Any]) -> tuple[str, str, str]:
+    projection = _kamerastore_shadow_effective_projection(result)
+    return (
+        _normalize_text(projection.get("title")),
+        _normalize_text(projection.get("model_canonical")),
+        _normalize_text(_result_condition_raw(result)),
+    )
+
+
+def _kamerastore_shadow_body_like_title(title: str) -> bool:
+    lowered = f" {str(title or '').lower()} "
+    return any(keyword in lowered for keyword in KAMERASTORE_SHADOW_BODY_LIKE_KEYWORDS)
+
+
+def _kamerastore_shadow_condition_rank(condition_raw: Any) -> int:
+    return int(KAMERASTORE_SHADOW_CONDITION_RANK.get(_normalize_text(condition_raw), 0))
+
+
+def _kamerastore_shadow_effective_projection(result: Mapping[str, Any]) -> dict[str, Any]:
+    title = _result_effective_title(result)
+    lowered = f" {str(title or '').lower()} "
+    category = str(_result_field(result, "category") or "")
+    model_canonical = _result_field(result, "model_canonical")
+    mount = str(_result_field(result, "mount") or "")
+
+    if " leica m monochrom " in lowered:
+        category = "Body"
+        model_canonical = "M Monochrom"
+        mount = "M"
+    elif " leica m-e " in lowered:
+        category = "Body"
+        model_canonical = "M-E"
+        mount = "M"
+    elif " leica mda " in lowered:
+        category = "Body"
+        model_canonical = "MDa"
+        mount = "M"
+    elif " leica m (typ 262) " in lowered:
+        category = "Body"
+        model_canonical = "M (Typ 262)"
+        mount = "M"
+    elif " leica m (typ 240) " in lowered:
+        category = "Body"
+        model_canonical = "M (Typ 240)"
+        mount = "M"
+    elif " leica m-p (typ 240) " in lowered:
+        category = "Body"
+        model_canonical = "M-P"
+        mount = "M"
+    elif " leica q2 monochrom " in lowered:
+        category = "Body"
+        model_canonical = "Q2 Monochrom"
+        mount = "Q"
+    elif " leica q2 " in lowered:
+        category = "Body"
+        model_canonical = str(model_canonical or "Q2")
+        mount = "Q"
+    elif " leica t (typ 701) " in lowered:
+        category = "Body"
+        model_canonical = "T (Typ 701)"
+    elif " leica s (typ 007) " in lowered:
+        category = "Body"
+        model_canonical = "S (Typ 007)"
+
+    return {
+        "title": title,
+        "category": category,
+        "model_canonical": model_canonical,
+        "mount": mount,
+    }
+
+
+def _kamerastore_guard_projected_result(result: Mapping[str, Any]) -> Mapping[str, Any]:
+    projection = _kamerastore_shadow_effective_projection(result)
+    projected_result = dict(result)
+    projected_result["title"] = projection.get("title") or result.get("title")
+    final_output = dict(result.get("final_output") or {})
+    final_output["category"] = projection.get("category")
+    final_output["model_canonical"] = projection.get("model_canonical")
+    final_output["mount"] = projection.get("mount")
+    if projection.get("title") and not final_output.get("title_raw"):
+        final_output["title_raw"] = projection.get("title")
+    projected_result["final_output"] = final_output
+    return projected_result
+
+
+def _kamerastore_shadow_base_exclusion_reasons(result: Mapping[str, Any]) -> list[str]:
+    projection = _kamerastore_shadow_effective_projection(result)
+    title = f" {str(projection.get('title') or '').lower()} "
+    category = str(projection.get("category") or "")
+    model_canonical = projection.get("model_canonical")
+    reasons: list[str] = []
+
+    if any(keyword in title for keyword in KAMERASTORE_SHADOW_BUNDLE_KEYWORDS):
+        reasons.append("bundle")
+
+    if category == "Accessory" or any(keyword in title for keyword in KAMERASTORE_SHADOW_ACCESSORY_KEYWORDS):
+        reasons.append("accessory")
+
+    if (
+        _kamerastore_shadow_body_like_title(title)
+        and category != "Body"
+        and " + " not in title
+        and " meter" not in title
+        and "handgrip" not in title
+    ):
+        reasons.append("classification_drift")
+
+    if not model_canonical:
+        reasons.append("missing_canonical")
+
+    price_value = _result_parsed_price(result)
+    if price_value is None or price_value <= 0:
+        reasons.append("suspicious_price")
+
+    return sorted(set(reasons))
+
+
+def _kamerastore_guard_result_key(result: Mapping[str, Any]) -> str:
+    return _kamerastore_shadow_result_key(result)
+
+
+def _kamerastore_guard_duplicate_key(result: Mapping[str, Any]) -> tuple[str, str, str]:
+    return _kamerastore_shadow_duplicate_key(result)
+
+
+def _kamerastore_guard_representative_sort_key(result: Mapping[str, Any]) -> tuple[int, int, float, str]:
+    base_reasons = _kamerastore_shadow_base_exclusion_reasons(result)
+    condition_rank = _kamerastore_shadow_condition_rank(_result_condition_raw(result))
+    crawl_time_text = str((result.get("final_output") or {}).get("crawl_time") or "")
+    crawl_time_score = 0.0
+    if crawl_time_text:
+        try:
+            crawl_time_score = float(crawl_time_text.replace("-", "").replace(":", "").replace(" ", ""))
+        except ValueError:
+            crawl_time_score = 0.0
+    return (
+        1 if not base_reasons else 0,
+        condition_rank,
+        crawl_time_score,
+        _result_source_url(result),
+    )
+
+
+def _build_kamerastore_guard_core_snapshot(
+    results: list[Mapping[str, Any]],
+    *,
+    source_policy: str,
+    duplicate_mode: str,
+) -> dict[str, Any]:
+    kamerastore_rows = [
+        result
+        for result in results
+        if _kamerastore_source_matches(_result_source_name(result))
+        and _source_price_evidence_policy(_result_source_name(result)) == source_policy
+    ]
+    if not kamerastore_rows:
+        return {
+            "enabled": False,
+            "source": "Kamerastore",
+            "source_policy": source_policy,
+            "live_price_evidence_applied": duplicate_mode == "representative",
+            "row_count": 0,
+            "allowed_candidate_count": 0,
+            "excluded_candidate_count": 0,
+            "exclusion_reason_counts": {},
+            "duplicate_cluster_count": 0,
+            "duplicate_cluster_row_count": 0,
+            "duplicate_cluster_representative_count": 0,
+            "rows_by_key": {},
+            "representative_strategy": KAMERASTORE_REPRESENTATIVE_STRATEGY,
+        }
+
+    duplicate_clusters: dict[tuple[str, str, str], list[Mapping[str, Any]]] = defaultdict(list)
+    for result in kamerastore_rows:
+        duplicate_clusters[_kamerastore_guard_duplicate_key(result)].append(result)
+
+    rows_by_key: dict[str, dict[str, Any]] = {}
+    exclusion_reason_counts: Counter[str] = Counter()
+    allowed_candidate_count = 0
+    excluded_candidate_count = 0
+    duplicate_cluster_count = 0
+    duplicate_cluster_row_count = 0
+    duplicate_cluster_representative_count = 0
+
+    for cluster_rows in duplicate_clusters.values():
+        cluster_size = len(cluster_rows)
+        cluster_has_duplicates = cluster_size > 1
+        representative_key = None
+        representative_base_clean = False
+
+        if cluster_has_duplicates:
+            duplicate_cluster_count += 1
+            duplicate_cluster_row_count += cluster_size
+            representative_row = sorted(cluster_rows, key=_kamerastore_guard_representative_sort_key, reverse=True)[0]
+            representative_base_clean = not _kamerastore_shadow_base_exclusion_reasons(representative_row)
+            representative_key = _kamerastore_guard_result_key(representative_row)
+            if representative_base_clean:
+                duplicate_cluster_representative_count += 1
+
+        for result in cluster_rows:
+            key = _kamerastore_guard_result_key(result)
+            base_reasons = _kamerastore_shadow_base_exclusion_reasons(result)
+            projection = _kamerastore_shadow_effective_projection(result)
+            strict_reasons = list(base_reasons)
+            if cluster_has_duplicates and (duplicate_mode == "strict" or representative_key != key):
+                strict_reasons.append("duplicate")
+            strict_reasons = sorted(set(strict_reasons))
+            is_excluded = bool(strict_reasons)
+
+            if is_excluded:
+                excluded_candidate_count += 1
+                exclusion_reason_counts.update(strict_reasons)
+            else:
+                allowed_candidate_count += 1
+
+            rows_by_key[key] = {
+                "source": "Kamerastore",
+                "source_policy": source_policy,
+                "guard_status": "excluded_candidate" if is_excluded else "allowed_candidate",
+                "effective_category": projection.get("category"),
+                "effective_model_canonical": projection.get("model_canonical"),
+                "effective_mount": projection.get("mount"),
+                "exclusion_reasons": strict_reasons,
+                "exclusion_reason_labels": [_humanize_excluded_reason(reason) for reason in strict_reasons],
+                "base_reasons": base_reasons,
+                "base_reason_labels": [_humanize_excluded_reason(reason) for reason in base_reasons],
+                "duplicate_cluster_key": "||".join(_kamerastore_guard_duplicate_key(result)),
+                "duplicate_cluster_size": cluster_size,
+                "duplicate_cluster_representative": bool(representative_key and representative_key == key),
+                "duplicate_cluster_representative_eligible": bool(
+                    representative_key and representative_key == key and representative_base_clean
+                ),
+                "duplicate_representative_strategy": KAMERASTORE_REPRESENTATIVE_STRATEGY,
+            }
+
+    return {
+        "enabled": True,
+        "source": "Kamerastore",
+        "source_policy": source_policy,
+        "live_price_evidence_applied": duplicate_mode == "representative",
+        "row_count": len(kamerastore_rows),
+        "allowed_candidate_count": allowed_candidate_count,
+        "excluded_candidate_count": excluded_candidate_count,
+        "exclusion_reason_counts": dict(exclusion_reason_counts),
+        "duplicate_cluster_count": duplicate_cluster_count,
+        "duplicate_cluster_row_count": duplicate_cluster_row_count,
+        "duplicate_cluster_representative_count": duplicate_cluster_representative_count,
+        "rows_by_key": rows_by_key,
+        "representative_strategy": KAMERASTORE_REPRESENTATIVE_STRATEGY,
+    }
+
+
+def _build_kamerastore_shadow_price_guard_snapshot(results: list[Mapping[str, Any]]) -> dict[str, Any]:
+    core = _build_kamerastore_guard_core_snapshot(
+        results,
+        source_policy="blocked_initially",
+        duplicate_mode="strict",
+    )
+    rows_by_key = {}
+    for key, meta in (core.get("rows_by_key") or {}).items():
+        rows_by_key[key] = {
+            "source": meta.get("source"),
+            "source_policy": meta.get("source_policy"),
+            "shadow_price_guard_status": meta.get("guard_status"),
+            "shadow_effective_category": meta.get("effective_category"),
+            "shadow_effective_model_canonical": meta.get("effective_model_canonical"),
+            "shadow_effective_mount": meta.get("effective_mount"),
+            "shadow_exclusion_reasons": list(meta.get("exclusion_reasons") or []),
+            "shadow_exclusion_reason_labels": list(meta.get("exclusion_reason_labels") or []),
+            "shadow_base_reasons": list(meta.get("base_reasons") or []),
+            "shadow_base_reason_labels": list(meta.get("base_reason_labels") or []),
+            "shadow_duplicate_cluster_key": meta.get("duplicate_cluster_key"),
+            "shadow_duplicate_cluster_size": meta.get("duplicate_cluster_size"),
+            "shadow_duplicate_cluster_representative": meta.get("duplicate_cluster_representative"),
+            "shadow_duplicate_cluster_representative_eligible": meta.get("duplicate_cluster_representative_eligible"),
+            "shadow_duplicate_representative_strategy": meta.get("duplicate_representative_strategy"),
+            "shadow_price_evidence_live_applied": False,
+        }
+    core["rows_by_key"] = rows_by_key
+    core["live_price_evidence_applied"] = False
+    return core
+
+
+def _build_kamerastore_live_price_guard_snapshot(results: list[Mapping[str, Any]]) -> dict[str, Any]:
+    return _build_kamerastore_guard_core_snapshot(
+        results,
+        source_policy="allowed_after_validation",
+        duplicate_mode="representative",
+    )
+
+
+def _public_kamerastore_shadow_summary(snapshot: Mapping[str, Any]) -> dict[str, Any]:
+    return {
+        "enabled": bool(snapshot.get("enabled")),
+        "source": snapshot.get("source"),
+        "source_policy": snapshot.get("source_policy"),
+        "live_price_evidence_applied": False,
+        "representative_strategy": KAMERASTORE_REPRESENTATIVE_STRATEGY,
+        "row_count": int(snapshot.get("row_count") or 0),
+        "allowed_candidate_count": int(snapshot.get("allowed_candidate_count") or 0),
+        "excluded_candidate_count": int(snapshot.get("excluded_candidate_count") or 0),
+        "exclusion_reason_counts": dict(snapshot.get("exclusion_reason_counts") or {}),
+        "duplicate_cluster_count": int(snapshot.get("duplicate_cluster_count") or 0),
+        "duplicate_cluster_row_count": int(snapshot.get("duplicate_cluster_row_count") or 0),
+        "duplicate_cluster_representative_count": int(snapshot.get("duplicate_cluster_representative_count") or 0),
+    }
+
+
+def _public_kamerastore_live_summary(snapshot: Mapping[str, Any]) -> dict[str, Any]:
+    return {
+        "enabled": bool(snapshot.get("enabled")),
+        "source": snapshot.get("source"),
+        "source_policy": snapshot.get("source_policy"),
+        "live_price_evidence_applied": True,
+        "representative_strategy": str(snapshot.get("representative_strategy") or KAMERASTORE_REPRESENTATIVE_STRATEGY),
+        "row_count": int(snapshot.get("row_count") or 0),
+        "allowed_candidate_count": int(snapshot.get("allowed_candidate_count") or 0),
+        "excluded_candidate_count": int(snapshot.get("excluded_candidate_count") or 0),
+        "exclusion_reason_counts": dict(snapshot.get("exclusion_reason_counts") or {}),
+        "duplicate_cluster_count": int(snapshot.get("duplicate_cluster_count") or 0),
+        "duplicate_cluster_row_count": int(snapshot.get("duplicate_cluster_row_count") or 0),
+        "duplicate_cluster_representative_count": int(snapshot.get("duplicate_cluster_representative_count") or 0),
+    }
+
+
+def _apply_kamerastore_shadow_price_guard(
+    response: dict[str, Any],
+    full_records: list[Mapping[str, Any]],
+) -> None:
+    snapshot = _build_kamerastore_shadow_price_guard_snapshot(full_records)
+    response["shadow_price_guard"] = {"kamerastore": _public_kamerastore_shadow_summary(snapshot)}
+    rows_by_key = snapshot.get("rows_by_key") or {}
+    for result in response.get("results") or []:
+        if not _kamerastore_shadow_source_applies(_result_source_name(result)):
+            continue
+        row_meta = rows_by_key.get(_kamerastore_shadow_result_key(result))
+        if row_meta:
+            result["shadow_price_guard"] = dict(row_meta)
+
+
+def _apply_kamerastore_live_price_guard(
+    response: dict[str, Any],
+    full_records: list[Mapping[str, Any]],
+) -> None:
+    snapshot = _build_kamerastore_live_price_guard_snapshot(full_records)
+    response["live_price_guard"] = {"kamerastore": _public_kamerastore_live_summary(snapshot)}
+    rows_by_key = snapshot.get("rows_by_key") or {}
+    visible_evidence = response.get("display_visible_result_evidence") or []
+    top_evidence = response.get("display_top_result_evidence") or []
+    for index, result in enumerate(response.get("results") or []):
+        if not _kamerastore_live_source_applies(_result_source_name(result)):
+            continue
+        row_meta = rows_by_key.get(_kamerastore_guard_result_key(result))
+        if not row_meta:
+            continue
+        public_meta = {
+            "source": row_meta.get("source"),
+            "source_policy": row_meta.get("source_policy"),
+            "live_price_guard_status": row_meta.get("guard_status"),
+            "live_effective_category": row_meta.get("effective_category"),
+            "live_effective_model_canonical": row_meta.get("effective_model_canonical"),
+            "live_effective_mount": row_meta.get("effective_mount"),
+            "live_exclusion_reasons": list(row_meta.get("exclusion_reasons") or []),
+            "live_exclusion_reason_labels": list(row_meta.get("exclusion_reason_labels") or []),
+            "live_duplicate_cluster_key": row_meta.get("duplicate_cluster_key"),
+            "live_duplicate_cluster_size": row_meta.get("duplicate_cluster_size"),
+            "live_duplicate_cluster_representative": bool(row_meta.get("duplicate_cluster_representative")),
+            "live_duplicate_cluster_representative_eligible": bool(row_meta.get("duplicate_cluster_representative_eligible")),
+            "live_duplicate_representative_strategy": row_meta.get("duplicate_representative_strategy"),
+            "live_price_evidence_live_applied": True,
+        }
+        result["live_price_guard"] = public_meta
+        if index < len(visible_evidence):
+            visible_evidence[index]["source_live_guard"] = public_meta
+        if index < len(top_evidence):
+            top_evidence[index]["source_live_guard"] = public_meta
+
+
 def _build_interpreted_target(
     query: str,
     intent: Mapping[str, Any],
@@ -1993,6 +2532,7 @@ def _build_price_evidence_pool(
     }
     raw_pool = list(results)
     raw_priced = [result for result in raw_pool if _parse_price_number(result.get("price")) is not None]
+    kamerastore_live_snapshot = _build_kamerastore_live_price_guard_snapshot(raw_priced)
 
     kept: list[Mapping[str, Any]] = []
     excluded: list[dict[str, Any]] = []
@@ -2000,14 +2540,33 @@ def _build_price_evidence_pool(
 
     for result in raw_priced:
         reasons: list[str] = []
-        title = _result_title(result)
+        source_name = str(_result_field(result, "source") or result.get("source") or "")
+        source_price_policy = _source_price_evidence_policy(source_name)
+        evaluation_result = (
+            _kamerastore_guard_projected_result(result)
+            if _kamerastore_source_matches(source_name)
+            else result
+        )
+        title = _result_title(evaluation_result)
         title_blob = _normalize_text(title)
-        category = str(_result_field(result, "category") or "")
-        sold_quality = _normalize_text(_result_field(result, "sold_quality"))
+        category = str(_result_field(evaluation_result, "category") or "")
+        sold_quality = _normalize_text(_result_field(evaluation_result, "sold_quality"))
+        kamerastore_live_meta = None
+        if _kamerastore_live_source_applies(source_name):
+            kamerastore_live_meta = (kamerastore_live_snapshot.get("rows_by_key") or {}).get(
+                _kamerastore_guard_result_key(result)
+            )
 
         if category == "Accessory" or _contains_keyword(title, PRICE_ACCESSORY_KEYWORDS):
             reasons.append("accessory")
-        if intent.get("body_intent") and _body_price_variant_boundary(result, query, intent):
+        if source_price_policy in {"blocked_initially", "sold_reference_only"}:
+            reasons.append("source_policy_blocked")
+        elif _kamerastore_live_source_applies(source_name):
+            if not kamerastore_live_meta:
+                reasons.append("source_gap")
+            else:
+                reasons.extend(list(kamerastore_live_meta.get("exclusion_reasons") or []))
+        if intent.get("body_intent") and _body_price_variant_boundary(evaluation_result, query, intent):
             reasons.append("variant_boundary")
         if _contains_keyword(title, PRICE_REPAIR_KEYWORDS):
             reasons.append("repair_or_parts")
@@ -2019,13 +2578,13 @@ def _build_price_evidence_pool(
             reasons.append("sold_status_incompatible")
         if category not in {"Lens", "Body"}:
             reasons.append("category_mismatch")
-        if _result_classification_conflict(result):
+        if _result_classification_conflict(evaluation_result):
             reasons.append("classification_conflict")
 
         scope_match = True
         if pool_scope == "exact_variant":
             scope_match = _result_matches_price_exact_variant_scope(
-                result,
+                evaluation_result,
                 intent,
                 expected_family,
                 expected_mount,
@@ -2034,7 +2593,7 @@ def _build_price_evidence_pool(
             )
         elif pool_scope == "exact_base_model":
             scope_match = _result_matches_price_base_model_scope(
-                result,
+                evaluation_result,
                 intent,
                 expected_family,
                 expected_mount,
@@ -2042,7 +2601,7 @@ def _build_price_evidence_pool(
             )
         elif pool_scope == "broader_model_family":
             scope_match = _result_matches_price_broader_family_scope(
-                result,
+                evaluation_result,
                 intent,
                 expected_family,
                 expected_mount,
@@ -2058,6 +2617,7 @@ def _build_price_evidence_pool(
         ):
             reasons.append("outlier")
 
+        reasons = sorted(set(reasons))
         if reasons:
             for reason in reasons:
                 excluded_reason_counts[reason] = excluded_reason_counts.get(reason, 0) + 1
@@ -2167,6 +2727,9 @@ def _build_price_evidence_pool(
         "accessory_price_excluded_count": excluded_reason_counts.get("accessory", 0),
         "third_party_price_excluded_count": excluded_reason_counts.get("third_party", 0),
         "wrong_model_price_excluded_count": excluded_reason_counts.get("wrong_model", 0),
+        "source_specific_guard_summary": {
+            "kamerastore": _public_kamerastore_live_summary(kamerastore_live_snapshot),
+        },
     }
 
 
@@ -3193,6 +3756,7 @@ def search_from_params(
     path: str | Path | None = None,
 ) -> dict[str, Any]:
     runtime = _load_runtime_dependencies()
+    load_search_index: Callable[..., list[dict[str, Any]]] = runtime["load_search_index"]
     search_records: Callable[..., dict[str, Any]] = runtime["search_records"]
     load_and_search: Callable[..., dict[str, Any]] = runtime["load_and_search"]
     build_query_ui_hints: Callable[..., dict[str, Any]] = runtime["build_query_ui_hints"]
@@ -3200,6 +3764,7 @@ def search_from_params(
     evidence_limit = min(int(runtime.get("max_limit") or DEFAULT_MAX_LIMIT), max(parsed["limit"], PRICE_EVIDENCE_SCAN_LIMIT))
     resolved_path = _resolve_search_index_path(path) if (records is None or path is not None) else None
     response_meta = _build_index_meta(resolved_path, parsed["query"])
+    full_shadow_records = records if records is not None else load_search_index(resolved_path)
 
     def maybe_supplement_summicron_50_hood_results(
         response: dict[str, Any],
@@ -3300,6 +3865,8 @@ def search_from_params(
             evidence_response=evidence_response,
         )
         response.update(response["market_entry_policy"])
+        _apply_kamerastore_shadow_price_guard(response, full_shadow_records)
+        _apply_kamerastore_live_price_guard(response, full_shadow_records)
         response["meta"] = response_meta
         return response
 
@@ -3333,6 +3900,8 @@ def search_from_params(
         evidence_response=evidence_response,
     )
     response.update(response["market_entry_policy"])
+    _apply_kamerastore_shadow_price_guard(response, full_shadow_records)
+    _apply_kamerastore_live_price_guard(response, full_shadow_records)
     response["meta"] = response_meta
     return response
 
