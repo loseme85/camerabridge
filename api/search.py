@@ -18,6 +18,7 @@ Non-responsibilities:
 from __future__ import annotations
 
 import json
+import os
 import sys
 from http.server import BaseHTTPRequestHandler
 from json import JSONDecodeError
@@ -31,6 +32,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from search_index import DEFAULT_SEARCH_INDEX_PATH  # noqa: E402
+from search_index import load_search_index_metadata  # noqa: E402
 from search_service import (  # noqa: E402
     MAX_LIMIT,
     SUPPORTED_SORTS,
@@ -242,6 +244,32 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def _build_index_meta(index_path: str | Path, request_query: str) -> dict[str, Any]:
+    path = Path(index_path)
+    meta = {
+        "index_path": str(path),
+        "index_generated_at": None,
+        "index_record_count": None,
+        "index_source_path": None,
+        "api_runtime": "vercel-python",
+        "deployment_commit": os.environ.get("VERCEL_GIT_COMMIT_SHA") or os.environ.get("GITHUB_SHA"),
+        "request_query": request_query,
+    }
+    try:
+        index_metadata = load_search_index_metadata(path)
+    except (OSError, JSONDecodeError, ValueError):
+        return meta
+
+    meta.update(
+        {
+            "index_generated_at": index_metadata.get("generated_at"),
+            "index_record_count": index_metadata.get("record_count"),
+            "index_source_path": index_metadata.get("source_path"),
+        }
+    )
+    return meta
+
+
 def search_from_params(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
@@ -261,6 +289,7 @@ def search_from_params(
             **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
         )
         response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
+        response["meta"] = _build_index_meta(path, parsed["query"])
         return response
 
     response = load_and_search(
@@ -275,6 +304,7 @@ def search_from_params(
         **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
     )
     response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
+    response["meta"] = _build_index_meta(path, parsed["query"])
     return response
 
 

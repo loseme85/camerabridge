@@ -1,6 +1,9 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/app/templates/index.html" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/search", "destination": "/index.html" },
+    { "source": "/qa", "destination": "/index.html" },
+    { "source": "/beta", "destination": "/beta.html" },
     { "source": "/admin.html", "destination": "/app/templates/admin.html" },
     { "source": "/admin/normalization", "destination": "/api/normalization_admin_page.py" },
     { "source": "/qa.html", "destination": "/app/templates/qa.html" },

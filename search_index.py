@@ -118,6 +118,14 @@ def _compact_dict(source: dict[str, Any], fields: list[str]) -> dict[str, Any]:
     }
 
 
+def _metadata_path(value: str | Path) -> str:
+    path = Path(value)
+    try:
+        return str(path.resolve().relative_to(PROJECT_ROOT.resolve()))
+    except ValueError:
+        return str(path)
+
+
 def build_search_fields(compact_final: dict[str, Any], raw_item: dict[str, Any]) -> dict[str, Any]:
     variant_values = [str(item) for item in _as_list(compact_final.get("variant")) if item]
     model_values = [
@@ -205,7 +213,7 @@ def write_search_index(
     payload = {
         "schema_version": SEARCH_INDEX_SCHEMA_VERSION,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "source_path": str(resolved_path),
+        "source_path": _metadata_path(resolved_path),
         "record_count": len(records),
         "records": records,
     }
@@ -216,7 +224,7 @@ def write_search_index(
         json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
     return {
         "schema_version": SEARCH_INDEX_SCHEMA_VERSION,
-        "source_path": str(resolved_path),
+        "source_path": _metadata_path(resolved_path),
         "output_path": str(output),
         "record_count": len(records),
     }
@@ -244,6 +252,35 @@ def search_index_cache_info(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dic
         "record_count": len(entry["records"]),
         "mtime_ns": entry["mtime_ns"],
         "size": entry["size"],
+    }
+
+
+def load_search_index_metadata(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dict[str, Any]:
+    index_path = Path(path)
+    with index_path.open(encoding="utf-8") as f:
+        payload = json.load(f)
+
+    if isinstance(payload, list):
+        return {
+            "schema_version": SEARCH_INDEX_SCHEMA_VERSION,
+            "generated_at": None,
+            "source_path": str(index_path),
+            "record_count": len(payload),
+        }
+
+    if not isinstance(payload, dict):
+        raise ValueError(f"{path} must contain a search index object or record list")
+
+    records = payload.get("records")
+    return {
+        "schema_version": payload.get("schema_version") or SEARCH_INDEX_SCHEMA_VERSION,
+        "generated_at": payload.get("generated_at"),
+        "source_path": payload.get("source_path") or str(index_path),
+        "record_count": (
+            payload.get("record_count")
+            if payload.get("record_count") is not None
+            else len(records) if isinstance(records, list) else 0
+        ),
     }
 
 
