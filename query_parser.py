@@ -57,6 +57,9 @@ def _normalize_query(query: str) -> str:
     q = (query or "").strip().lower()
     q = q.replace("㎜", "mm")
     q = q.replace("ｍｍ", "mm")
+    q = re.sub(r"\bpre\s+asph\b", "pre-asph", q)
+    q = re.sub(r"\b8(?:\s*-\s*|\s+)elements?\b", "8-element", q)
+    q = re.sub(r"\btri\s+elmar\b", "tri-elmar", q)
     q = re.sub(r"(?<=\d)\s*mm\b", "mm", q)
     q = re.sub(r"\s+", " ", q)
     return q
@@ -66,6 +69,15 @@ def _add_variant(intent: QueryIntent, value: str, source: str) -> None:
     if value not in intent.variant:
         intent.variant.append(value)
     intent.tokens.append({"type": "variant", "raw": source, "value": value})
+
+
+def _remove_variant(intent: QueryIntent, value: str) -> None:
+    intent.variant = [variant for variant in intent.variant if variant != value]
+    intent.tokens = [
+        token
+        for token in intent.tokens
+        if not (token.get("type") == "variant" and token.get("value") == value)
+    ]
 
 
 def _set_accessory_intent(intent: QueryIntent, value: str, source: str) -> None:
@@ -79,22 +91,38 @@ def _set_accessory_code(intent: QueryIntent, value: str, source: str) -> None:
     intent.tokens.append({"type": "accessory_code", "raw": source, "value": intent.accessory_code})
 
 
+_KNOWN_HOOD_ACCESSORY_CODES = {
+    "12585": "hood",
+    "12504": "hood",
+}
+
+
 _BODY_INTENT_ALIASES = {
-    "m2": ("M2", "M", None),
-    "m3": ("M3", "M", None),
-    "m4": ("M4", "M", None),
-    "m5": ("M5", "M", None),
-    "m6": ("M6", "M", None),
-    "mp": ("MP", "M", None),
-    "q2": ("Q2", None, "Q"),
-    "q3": ("Q3", None, "Q"),
-    "r6": ("R6", "R", None),
-    "r7": ("R7", "R", None),
-    "r8": ("R8", "R", None),
-    "barnack": ("Barnack", "L", None),
-    "iiic": ("IIIc", "L", None),
-    "iiif": ("IIIf", "L", None),
-    "iiig": ("IIIg", "L", None),
+    "m2": ("M2", "M", None, ()),
+    "m3": ("M3", "M", None, ()),
+    "m4": ("M4", "M", None, ()),
+    "m5": ("M5", "M", None, ()),
+    "m6": ("M6", "M", None, ()),
+    "m9": ("M9", "M", None, ()),
+    "m9-p": ("M9-P", "M", None, ("P",)),
+    "m10": ("M10", "M", None, ()),
+    "m10-r": ("M10-R", "M", None, ("R",)),
+    "m11": ("M11", "M", None, ()),
+    "m11-p": ("M11-P", "M", None, ("P",)),
+    "m11p": ("M11-P", "M", None, ("P",)),
+    "m11-d": ("M11-D", "M", None, ("D",)),
+    "m11d": ("M11-D", "M", None, ("D",)),
+    "mp": ("MP", "M", None, ()),
+    "q2": ("Q2", None, "Q", ()),
+    "q3": ("Q3", None, "Q", ()),
+    "sl2": ("SL2", "SL", None, ()),
+    "r6": ("R6", "R", None, ()),
+    "r7": ("R7", "R", None, ()),
+    "r8": ("R8", "R", None, ()),
+    "barnack": ("Barnack", "L", None, ()),
+    "iiic": ("IIIc", "L", None, ()),
+    "iiif": ("IIIf", "L", None, ()),
+    "iiig": ("IIIg", "L", None, ()),
 }
 
 
@@ -114,6 +142,13 @@ _BODY_QUERY_ACCESSORY_BLOCKERS = {
 _BODY_QUERY_LENS_BLOCKERS = {
     "summicron", "summilux", "noctilux", "elmarit", "elmar", "summarit",
     "summaron", "telyt", "vario", "apo",
+}
+
+_COMPACT_LENS_MOUNT_ALIASES = {
+    "m": "M",
+    "r": "R",
+    "sl": "SL",
+    "l": "L",
 }
 
 
@@ -171,8 +206,62 @@ def _parse_explicit_body_model_intent(intent: QueryIntent, normalized: str) -> N
             _set_body_intent(intent, body_intent, body_intent.lower(), mount=mount, system=system)
             return
 
+    if re.search(r"\b(?:leica\s+)?m\s+(?:body|camera)(?:\s+body)?\b", normalized):
+        _set_body_intent(intent, "M", "m body", mount="M", system=None)
+        return
+
+    explicit_m_body_variants = (
+        (r"\b(?:leica|라이카)\s+m11\s*-\s*p\b|\b(?:leica|라이카)\s+m11p\b|\b(?:leica|라이카)\s+m11\s+p\b|\bm11\s*-\s*p\b|\bm11p\b|\bm11\s+p\b", "M11-P"),
+        (r"\b(?:leica|라이카)\s+m11\s*-\s*d\b|\b(?:leica|라이카)\s+m11d\b|\b(?:leica|라이카)\s+m11\s+d\b|\bm11\s*-\s*d\b|\bm11d\b|\bm11\s+d\b", "M11-D"),
+        (r"\b(?:leica|라이카)\s+m11\s+monochrom(?:e)?\b|\bm11\s+monochrom(?:e)?\b", "M11 Monochrom"),
+        (r"\b(?:leica|라이카)\s+m11\s+p\s+safari\b|\b(?:leica|라이카)\s+m11\s*-\s*p\s+safari\b|\bm11\s+p\s+safari\b|\bm11\s*-\s*p\s+safari\b", "M11-P Safari"),
+        (r"\b(?:leica|라이카)\s+m10\s+monochrom\b|\bm10\s+monochrom\b", "M10 Monochrom"),
+    )
+    for pattern, body_intent in explicit_m_body_variants:
+        match = re.search(pattern, normalized)
+        if match:
+            _set_body_intent(intent, body_intent, match.group(0), mount="M", system=None)
+            return
+
     if re.search(r"\bm10\b", normalized) and re.search(r"\bbody\b", normalized):
         _set_body_intent(intent, "M10", "m10 body", mount="M", system=None)
+
+
+def _set_compact_lens_notation(
+    intent: QueryIntent,
+    mount: str,
+    focal: str,
+    aperture: str,
+    source: str,
+) -> None:
+    if not intent.mount:
+        intent.mount = mount
+        intent.tokens.append({"type": "mount", "raw": source, "value": mount})
+    if not intent.focal_length:
+        intent.focal_length = focal
+        intent.tokens.append({"type": "focal_length", "raw": source, "value": focal})
+    if not intent.aperture:
+        _set_aperture(intent, aperture, source, token_type="aperture_hint")
+    intent.tokens.append({"type": "compact_lens_notation", "raw": source, "value": f"{mount} {focal}/{aperture}"})
+
+
+def _parse_compact_mount_lens_notation(intent: QueryIntent, normalized: str) -> None:
+    if intent.accessory_intent or intent.body_intent:
+        return
+
+    match = re.search(
+        r"\b(sl|m|r|l)\s*(\d{2,3})(?:mm)?\s*(?:/\s*|f/?\s*)(\d+(?:\.\d+)?)\b",
+        normalized,
+    )
+    if not match:
+        return
+
+    mount_raw, focal, aperture = match.groups()
+    mount = _COMPACT_LENS_MOUNT_ALIASES.get(mount_raw)
+    if not mount:
+        return
+
+    _set_compact_lens_notation(intent, mount, focal, aperture, match.group(0))
 
 
 def _parse_accessory_compatibility_context(intent: QueryIntent, normalized: str) -> None:
@@ -189,6 +278,24 @@ def _parse_accessory_compatibility_context(intent: QueryIntent, normalized: str)
     if re.search(r"\bsl2\b|\bsl3\b", normalized):
         intent.mount = "SL"
         intent.tokens.append({"type": "mount", "raw": "sl accessory compatibility", "value": "SL"})
+
+
+def _parse_summilux_35_steel_rim_reissue_hints(intent: QueryIntent, normalized: str) -> None:
+    if intent.accessory_intent or intent.body_intent:
+        return
+
+    strong_summilux_35_context = bool(
+        ("summilux" in normalized or re.search(r"\blux\b", normalized))
+        and (re.search(r"\b35(?:mm)?\b", normalized) or re.search(r"\bm35\b", normalized))
+    )
+    if not strong_summilux_35_context:
+        return
+
+    if re.search(r"\bsteel\s+rim\b|\bsteel-rim\b|스틸림", normalized):
+        _add_variant(intent, "Steel Rim", "steel rim")
+
+    if re.search(r"\breissue\b|복각", normalized):
+        _add_variant(intent, "Reissue", "reissue")
 
 
 def _body_intent_token_allowed(token: str, rough_tokens: list[str]) -> bool:
@@ -289,6 +396,26 @@ _R_HYPHENATED_FAMILY_ALIASES: dict[str, str] = {
     "telyt-r": "Telyt-R",
     "vario-elmarit-r": "Vario-Elmarit-R",
     "vario-apo-elmarit-r": "Vario-APO-Elmarit-R",
+}
+
+_LEICA_HYPHENATED_FAMILY_MOUNTS: dict[str, str] = {
+    "summicron-m": "M",
+    "summilux-m": "M",
+    "noctilux-m": "M",
+    "elmarit-m": "M",
+    "apo-summicron-m": "M",
+    "summicron-sl": "SL",
+    "apo-summicron-sl": "SL",
+}
+
+_TRI_ELMAR_SHORTHANDS: dict[str, tuple[str, str]] = {
+    "wate": ("16-18-21", "WATE"),
+    "mate": ("28-35-50", "MATE"),
+}
+
+_TRI_ELMAR_RANGE_VARIANTS: dict[str, str] = {
+    "16-18-21": "WATE",
+    "28-35-50": "MATE",
 }
 
 
@@ -466,6 +593,166 @@ def _parse_optical_formula(intent: QueryIntent, normalized: str) -> None:
             _add_variant(intent, "8-element", f"{groups}군{elements}매")
 
 
+def _has_summilux_35_context(normalized: str, intent: QueryIntent) -> bool:
+    if intent.focal_length != "35":
+        return False
+    family = str(intent.model_family or "")
+    if family in {"Summilux", "Summilux-M"}:
+        return True
+    return bool(re.search(r"\b(?:summilux|summilux-m|lux)\b", normalized))
+
+
+def _has_summicron_50_context(normalized: str, intent: QueryIntent) -> bool:
+    if intent.focal_length != "50":
+        return False
+    family = str(intent.model_family or "")
+    if family in {"Summicron", "Summicron-M"}:
+        return True
+    return bool(re.search(r"\b(?:summicron|summicron-m|cron)\b", normalized))
+
+
+def _apply_context_bound_variant_recovery(intent: QueryIntent, normalized: str) -> None:
+    summilux_35_aa_shorthand_match = re.search(r"(?<!\d)2매(?!\d)|\b2(?:\s*-\s*|\s+)mae\b|\b2mae\b", normalized)
+    if (
+        summilux_35_aa_shorthand_match
+        and not intent.model_family
+        and re.search(r"\bm35(?:mm)?(?:\s*/\s*|\s+f?\s*|\s+)1\.4\b|\bm\s*35(?:mm)?(?:\s*/\s*|\s+f?\s*|\s+)1\.4\b", normalized)
+    ):
+        _set_model_family(intent, "Summilux-M", "m35 1.4 2mae shorthand")
+        _set_mount(intent, "M", "m35 1.4 2mae shorthand")
+        if not intent.focal_length:
+            _set_focal_length(intent, "35", "m35 1.4 2mae shorthand")
+        if not intent.aperture:
+            _set_aperture(intent, "1.4", "m35 1.4 2mae shorthand", token_type="aperture_hint")
+
+    if (
+        "aspherical" in normalized
+        and _has_summilux_35_context(normalized, intent)
+        and "ASPH" in intent.variant
+        and "FLE" not in intent.variant
+        and "pre-ASPH" not in intent.variant
+        and "AA" not in intent.variant
+        and "asph" not in re.findall(r"[a-z0-9가-힣./-]+", normalized)
+    ):
+        intent.variant = [variant for variant in intent.variant if variant != "ASPH"]
+        intent.tokens = [
+            token
+            for token in intent.tokens
+            if not (
+                token.get("type") == "variant"
+                and token.get("raw") == "aspherical"
+                and token.get("value") == "ASPH"
+            )
+        ]
+        _add_variant(intent, "AA", "aspherical")
+
+    if _has_summilux_35_context(normalized, intent):
+        if (
+            summilux_35_aa_shorthand_match
+            and "AA" not in intent.variant
+            and "ASPH" not in intent.variant
+            and "FLE" not in intent.variant
+            and "FLE2" not in intent.variant
+            and "pre-ASPH" not in intent.variant
+        ):
+            _add_variant(intent, "AA", summilux_35_aa_shorthand_match.group(0))
+
+        fle2_match = re.search(r"\bfle(?:\s*-\s*|\s+)?(?:ii|2)\b|\bfle2\b|\bclose(?:-|\s+)focus\b", normalized)
+        if fle2_match:
+            if "FLE" in intent.variant:
+                _remove_variant(intent, "FLE")
+            if "FLE2" not in intent.variant:
+                _add_variant(intent, "FLE2", fle2_match.group(0))
+        elif "fle" in normalized and "FLE" not in intent.variant:
+            _add_variant(intent, "FLE", "fle")
+
+    if (
+        _has_summicron_50_context(normalized, intent)
+        and "Dual Range" not in intent.variant
+        and re.search(r"\bdr\b|\bdual(?:-|\s*)range\b", normalized)
+    ):
+        _add_variant(intent, "Dual Range", "dual range")
+
+    tri_elmar_context = bool(re.search(r"\b(?:tri-elmar|trielmar|wate|mate)\b", normalized))
+    if not tri_elmar_context:
+        return
+
+    if "wate" in normalized:
+        if not (
+            intent.model_family == "Tri-Elmar"
+            and intent.mount == "M"
+            and intent.focal_length == "16-18-21"
+            and "WATE" in intent.variant
+        ):
+            _set_model_family(intent, "Tri-Elmar", "wate")
+            _set_mount(intent, "M", "wate")
+            _set_focal_length(intent, "16-18-21", "wate")
+            _add_variant(intent, "WATE", "wate")
+        return
+
+    if "mate" in normalized:
+        if not (
+            intent.model_family == "Tri-Elmar"
+            and intent.mount == "M"
+            and intent.focal_length == "28-35-50"
+            and "MATE" in intent.variant
+        ):
+            _set_model_family(intent, "Tri-Elmar", "mate")
+            _set_mount(intent, "M", "mate")
+            _set_focal_length(intent, "28-35-50", "mate")
+            _add_variant(intent, "MATE", "mate")
+        return
+
+    for pattern, focal_range in (
+        (r"\b16(?:[\s/-]+)18(?:[\s/-]+)21\b", "16-18-21"),
+        (r"\b28(?:[\s/-]+)35(?:[\s/-]+)50\b", "28-35-50"),
+    ):
+        match = re.search(pattern, normalized)
+        if not match:
+            continue
+        variant = _TRI_ELMAR_RANGE_VARIANTS[focal_range]
+        if (
+            intent.model_family == "Tri-Elmar"
+            and intent.mount == "M"
+            and intent.focal_length == focal_range
+            and variant in intent.variant
+        ):
+            return
+        _set_model_family(intent, "Tri-Elmar", "tri-elmar range")
+        _set_mount(intent, "M", "tri-elmar range")
+        _set_focal_length(intent, focal_range, match.group(0))
+        _add_variant(intent, variant, match.group(0))
+        return
+
+
+def _apply_apo_summicron_family_recovery(intent: QueryIntent, normalized: str) -> None:
+    if not re.search(r"\bapo\b", normalized):
+        return
+
+    family = str(intent.model_family or "")
+    mount = str(intent.mount or "")
+    if family != "Summicron":
+        return
+
+    upgraded_family = None
+    if mount == "M":
+        upgraded_family = "APO-Summicron-M"
+    elif mount == "SL":
+        upgraded_family = "APO-Summicron-SL"
+
+    if not upgraded_family:
+        return
+
+    intent.model_family = upgraded_family
+    intent.brand = intent.brand or DEFAULT_BRAND
+    intent.tokens = [
+        token
+        for token in intent.tokens
+        if not (token.get("type") == "unknown" and token.get("raw") == "apo" and token.get("value") == "apo")
+    ]
+    intent.tokens.append({"type": "model_family", "raw": "apo summicron context", "value": upgraded_family})
+
+
 def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
     if re.search(r"\blens\s+hood\b", normalized):
         _set_accessory_intent(intent, "hood", "lens hood")
@@ -592,8 +879,16 @@ def _parse_accessory_intent(intent: QueryIntent, normalized: str) -> None:
             if "b+w" in filter_source:
                 intent.tokens.append({"type": "filter_brand", "raw": "b+w", "value": "B+W"})
 
+    if not intent.accessory_intent:
+        for code, accessory_type in _KNOWN_HOOD_ACCESSORY_CODES.items():
+            if re.search(rf"\b{re.escape(code)}\b", normalized):
+                _set_accessory_intent(intent, accessory_type, code)
+                _set_accessory_code(intent, code, code)
+                break
+
     # Leica accessory codes are intentionally parsed only inside an explicit
-    # accessory-intent query. A standalone 5-digit number remains unparsed.
+    # accessory-intent query, except for a very small allowlist of known hood
+    # catalog numbers above.
     if intent.accessory_intent:
         for code in re.findall(r"\b\d{5}[a-z]?\b", normalized):
             _set_accessory_code(intent, code, code)
@@ -656,6 +951,27 @@ def _compact_body_intent_token_consumed(intent: QueryIntent, token: str, normali
     return False
 
 
+def _compact_lens_notation_token_consumed(intent: QueryIntent, token: str) -> bool:
+    if not any(item.get("type") == "compact_lens_notation" for item in intent.tokens):
+        return False
+    if re.fullmatch(r"(?:sl|m|r|l)\d{2,3}(?:mm)?(?:/\d+(?:\.\d+)?)?", token):
+        return True
+    return False
+
+
+def _parsed_body_intent_token_consumed(intent: QueryIntent, token: str) -> bool:
+    body_intent = _normalize_query(intent.body_intent or "")
+    if not body_intent:
+        return False
+    token_norm = _normalize_query(token)
+    return token_norm in {
+        body_intent,
+        body_intent.replace(" ", ""),
+        body_intent.replace(" ", "-"),
+        body_intent.replace("-", ""),
+    }
+
+
 def _score_confidence(intent: QueryIntent) -> float:
     score = 0.20
     if intent.model_family:
@@ -708,6 +1024,8 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
     _parse_r_lens_query_hint(intent, normalized)
     _parse_sl_zoom_range_hint(intent, normalized)
     _parse_third_party_l_mount_range_hint(intent, normalized)
+    _parse_compact_mount_lens_notation(intent, normalized)
+    _parse_summilux_35_steel_rim_reissue_hints(intent, normalized)
 
     rough_tokens = re.findall(r"[a-z0-9가-힣./-]+", normalized)
     for token in rough_tokens:
@@ -725,10 +1043,27 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
         if _compact_body_intent_token_consumed(intent, token, normalized):
             continue
 
+        if _compact_lens_notation_token_consumed(intent, token):
+            continue
+
+        if _parsed_body_intent_token_consumed(intent, token):
+            continue
+
         body_alias = _BODY_INTENT_ALIASES.get(token)
-        if body_alias and _body_intent_token_allowed(token, rough_tokens):
-            body_intent, body_mount, body_system = body_alias
+        if body_alias and not intent.body_intent and not intent.accessory_intent and not intent.model_family and _body_intent_token_allowed(token, rough_tokens):
+            body_intent, body_mount, body_system, body_variants = body_alias
             _set_body_intent(intent, body_intent, token, mount=body_mount, system=body_system)
+            for variant in body_variants:
+                _add_variant(intent, variant, token)
+            continue
+
+        tri_elmar_shorthand = _TRI_ELMAR_SHORTHANDS.get(token)
+        if tri_elmar_shorthand:
+            focal_range, shorthand = tri_elmar_shorthand
+            _set_model_family(intent, "Tri-Elmar", token)
+            _set_mount(intent, "M", token)
+            _set_focal_length(intent, focal_range, token)
+            _add_variant(intent, shorthand, token)
             continue
 
         filter_match = re.fullmatch(r"e\s*([0-9]{2,3})|e([0-9]{2,3})", token)
@@ -767,6 +1102,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             intent.model_family = family
             intent.brand = intent.brand or DEFAULT_BRAND
             intent.tokens.append({"type": "model_family", "raw": token, "value": family})
+            hyphen_mount = _LEICA_HYPHENATED_FAMILY_MOUNTS.get(token)
+            if hyphen_mount and not intent.mount:
+                _set_mount(intent, hyphen_mount, token)
             family_system = MODEL_SYSTEM_ALIASES.get(token)
             if family_system and not intent.system:
                 intent.system = family_system
@@ -775,6 +1113,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
 
         variant = VARIANT_ALIASES.get(token)
         if variant:
+            if variant == "FLE" and not _has_summilux_35_context(normalized, intent):
+                intent.tokens.append({"type": "unknown", "raw": token, "value": token})
+                continue
             _add_variant(intent, variant, token)
             continue
 
@@ -821,6 +1162,9 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
             intent.tokens.append({"type": "unknown", "raw": token, "value": token})
             if re.fullmatch(r"f/?\d+(?:\.\d+)?|\d+\.\d+", token):
                 intent.warnings.append(f"possible_unparsed_aperture:{token}")
+
+    _apply_context_bound_variant_recovery(intent, normalized)
+    _apply_apo_summicron_family_recovery(intent, normalized)
 
     if not any([
         intent.model_family,

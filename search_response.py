@@ -44,6 +44,12 @@ FINAL_OUTPUT_FIELDS = [
     "compatible_mounts",
     "compatible_systems",
     "sold_quality",
+    "compact_lens_notation_detected",
+    "compact_lens_notation_raw",
+    "body_alias_boundary_blocked",
+    "classification_conflict_detected",
+    "body_lens_boundary_conflict_detected",
+    "stale_body_normalization_detected",
 ]
 
 
@@ -108,6 +114,109 @@ def _compact_final_output(final_output: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _normalize_text(value: Any) -> str:
+    return " ".join(str(value or "").strip().lower().split())
+
+
+def _detect_compact_lens_notation(text: str) -> dict[str, str] | None:
+    import re
+
+    match = re.search(
+        r"\b(sl|m|r|l)\s*(\d{2,3})(?:mm)?\s*(?:/\s*|f/?\s*)(\d+(?:\.\d+)?)\b",
+        text,
+    )
+    if not match:
+        return None
+    mount_raw, focal, aperture = match.groups()
+    mount = {"m": "M", "r": "R", "sl": "SL", "l": "L"}.get(mount_raw)
+    if not mount:
+        return None
+    return {
+        "raw": match.group(0),
+        "mount": mount,
+        "focal_length": focal,
+        "aperture": aperture,
+    }
+
+
+def _looks_like_body_alias_model(value: Any) -> bool:
+    import re
+
+    return bool(re.fullmatch(r"(m\d+(?:-[a-z])?|mp|sl2|sl3|q3)", _normalize_text(value)))
+
+
+def _build_safe_display_output(ranked_result: dict[str, Any]) -> dict[str, Any]:
+    final_output = ranked_result.get("final_output") or {}
+    title = str(ranked_result.get("title_raw") or final_output.get("title_raw") or "")
+    compact = _detect_compact_lens_notation(title.lower()) or _detect_compact_lens_notation(_normalize_text(title))
+
+    raw_category = str(final_output.get("category") or "")
+    raw_model = final_output.get("model_canonical") or final_output.get("model_raw")
+    raw_label = final_output.get("label")
+    raw_mount = final_output.get("mount")
+    raw_focal = final_output.get("focal_length")
+
+    classification_conflict = bool(
+        final_output.get("classification_conflict_detected")
+        or final_output.get("body_lens_boundary_conflict_detected")
+    )
+    stale_body = bool(final_output.get("stale_body_normalization_detected"))
+    body_alias_blocked = bool(final_output.get("body_alias_boundary_blocked"))
+    compact_detected = bool(compact or final_output.get("compact_lens_notation_detected"))
+
+    if compact_detected and (
+        _normalize_text(raw_category) == "body"
+        or stale_body
+        or classification_conflict
+        or _looks_like_body_alias_model(raw_model)
+    ):
+        mount = raw_mount or (compact["mount"] if compact else None)
+        focal = raw_focal or (compact["focal_length"] if compact else None)
+        aperture = f"f{compact['aperture']}" if compact else None
+        return {
+            "display_category": "Lens",
+            "display_model": None,
+            "display_family": f"{mount} Lens" if mount else "Lens confidence pending",
+            "display_mount": mount,
+            "display_focal_length": focal,
+            "display_aperture": aperture,
+            "result_card_confidence_state": "corrected_runtime_projection",
+            "stale_normalization_detected": True,
+            "classification_conflict_detected": True,
+            "body_alias_boundary_blocked": True,
+            "compact_lens_notation_detected": True,
+        }
+
+    if classification_conflict:
+        return {
+            "display_category": raw_category or "Conflict locked",
+            "display_model": None,
+            "display_family": "Classification confidence pending",
+            "display_mount": raw_mount,
+            "display_focal_length": raw_focal,
+            "display_aperture": None,
+            "result_card_confidence_state": "locked_classification_conflict",
+            "stale_normalization_detected": stale_body,
+            "classification_conflict_detected": True,
+            "body_alias_boundary_blocked": body_alias_blocked,
+            "compact_lens_notation_detected": compact_detected,
+        }
+
+    return {
+        "display_category": raw_category,
+        "display_model": None if compact_detected and _looks_like_body_alias_model(raw_model) else raw_model,
+        "display_family": raw_label,
+        "display_mount": raw_mount or (compact["mount"] if compact else None),
+        "display_focal_length": raw_focal or (compact["focal_length"] if compact else None),
+        "display_aperture": f"f{compact['aperture']}" if compact else None,
+        "result_card_confidence_state": "normal",
+        "stale_normalization_detected": stale_body,
+        "classification_conflict_detected": classification_conflict,
+        "body_alias_boundary_blocked": body_alias_blocked,
+        "compact_lens_notation_detected": compact_detected,
+    }
+
+
 def _record_by_index(records: list[dict[str, Any]]) -> dict[int, dict[str, Any]]:
     indexed = {}
     for record in records:
@@ -139,6 +248,7 @@ def format_search_result(
         "image_url": final_output.get("image_url"),
         "condition": final_output.get("condition_raw"),
         "final_output": _compact_final_output(final_output),
+        "display_output": _build_safe_display_output(ranked_result),
         "used_override": bool(ranked_result.get("used_override")),
         "match_quality": ranked_result.get("match_quality"),
         "matched_fields": list(ranked_result.get("matched_fields") or []),
