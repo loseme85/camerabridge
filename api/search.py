@@ -3893,6 +3893,7 @@ def _apply_entry_generation_narrowing(
 
     broad_query_blocked = broad_parent_query and bool(generation_labels)
     exact_generation_ready = exact_generation_query and len(exact_generation_candidates) >= 2
+    exact_generation_band = _format_price_band(exact_generation_candidates) if exact_generation_ready else None
 
     if broad_query_blocked:
         response["price_summary_allowed"] = False
@@ -3901,8 +3902,19 @@ def _apply_entry_generation_narrowing(
         response["display_price_summary_allowed"] = False
         response["display_price_scope_label"] = "Generation selection needed"
         response["display_price_band"] = "Generation selection needed"
+        response["price_summary_band"] = "Generation selection needed"
+        response["display_price_band_source"] = "generation_disambiguation_required"
         response["display_price_band_quality_state"] = "Generation selection needed"
+        response["broader_reference_allowed"] = False
+        response["broader_reference_label"] = None
+        response["broader_reference_band"] = None
+        response["broader_reference_locked_reason"] = None
+        response["display_broader_reference_allowed"] = False
+        response["display_broader_reference_label"] = None
+        response["display_broader_reference_band"] = None
+        response["display_broader_reference_locked_reason"] = None
         response["entry_scope"] = "generation_disambiguation_required"
+        response["market_entry_title"] = str(query_entry.get("display_entry_label") or query)
         reasons = list(response.get("price_summary_block_reason") or [])
         if "generation_disambiguation_required" not in reasons:
             reasons.append("generation_disambiguation_required")
@@ -3911,18 +3923,35 @@ def _apply_entry_generation_narrowing(
         response["entry_scope"] = "exact_generation"
         response["price_evidence_scope"] = "exact_generation"
         response["query_entry_key"] = query_entry.get("price_entry_key")
+        response["market_entry_title"] = str(query_entry.get("display_entry_label") or query)
+        response["broader_reference_allowed"] = False
+        response["broader_reference_label"] = None
+        response["broader_reference_band"] = None
+        response["broader_reference_locked_reason"] = None
+        response["display_broader_reference_allowed"] = False
+        response["display_broader_reference_label"] = None
+        response["display_broader_reference_band"] = None
+        response["display_broader_reference_locked_reason"] = None
         if exact_generation_ready:
             response["price_summary_allowed"] = True
             response["price_scope"] = "exact_generation"
             response["price_scope_label"] = "Exact generation price"
             response["display_price_summary_allowed"] = True
             response["display_price_scope_label"] = "Exact generation price"
+            response["price_summary_band"] = exact_generation_band
+            response["display_price_band"] = exact_generation_band
+            response["display_price_band_source"] = "exact_generation"
+            response["display_price_band_quality_state"] = "Exact generation price"
         else:
             response["price_summary_allowed"] = False
             response["price_scope"] = "insufficient_exact_generation_data"
             response["price_scope_label"] = "Exact generation price data limited"
             response["display_price_summary_allowed"] = False
             response["display_price_scope_label"] = "Exact generation price data limited"
+            response["price_summary_band"] = "Exact generation price data limited"
+            response["display_price_band"] = "Exact generation price data limited"
+            response["display_price_band_source"] = "exact_generation"
+            response["display_price_band_quality_state"] = "Exact generation price data limited"
 
     query_match_distribution: Counter[str] = Counter()
     result_entry_labels: list[str] = []
@@ -4024,8 +4053,49 @@ def _apply_entry_generation_narrowing(
         ui_hints["ambiguity_type"] = "generation_selection"
         ui_hints["recommended_ui_pattern"] = "generation_chooser"
         ui_hints["recommended_chips"] = generation_labels
-        ui_hints["recommended_message"] = "You searched a broad parent model. Prices vary strongly by generation."
+        ui_hints["recommended_message"] = "Prices vary strongly by generation. Choose a generation before using price evidence."
     response["ui_hints"] = ui_hints
+
+    policy = dict(response.get("market_entry_policy") or {})
+    synced_keys = [
+        "market_entry_allowed",
+        "market_entry_title",
+        "market_entry_block_reason",
+        "price_summary_allowed",
+        "price_summary_block_reason",
+        "entry_scope",
+        "price_evidence_scope",
+        "price_scope",
+        "price_scope_label",
+        "price_scope_confidence_state",
+        "price_summary_band",
+        "broader_reference_allowed",
+        "broader_reference_label",
+        "broader_reference_band",
+        "broader_reference_locked_reason",
+        "display_price_summary_allowed",
+        "display_price_scope_label",
+        "display_price_band",
+        "display_price_band_source",
+        "display_broader_reference_allowed",
+        "display_broader_reference_label",
+        "display_broader_reference_band",
+        "display_broader_reference_locked_reason",
+        "display_price_band_quality_state",
+        "display_unlock_requirements",
+        "display_evidence_pool_summary",
+        "display_top_result_evidence",
+        "display_visible_result_evidence",
+        "display_match_state_message",
+        "display_query_review",
+        "query_entry_key",
+        "query_entry_label",
+        "entry_generation_suggestions",
+    ]
+    for key in synced_keys:
+        if key in response:
+            policy[key] = response.get(key)
+    response["market_entry_policy"] = policy
 
 
 def search_from_params(

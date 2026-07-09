@@ -1,22 +1,31 @@
 # P4 Entry Generation Narrowing Beta v1
 
 - Branch: `p4-entry-generation-narrowing-beta`
-- Beta preview URL: `https://camerabridge-f8g3e3hi6-camerabridge.vercel.app`
+- Previous preview URL: `https://camerabridge-f8g3e3hi6-camerabridge.vercel.app`
 - Branch alias URL: `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app`
-- Deployment commit: `808f10ef15a97d2f7aa5abccbd1f5ac6f7515175`
+- Previous deployment commit: `808f10ef15a97d2f7aa5abccbd1f5ac6f7515175`
 - Production untouched: confirmed
 
 ## Executive Summary
 
 This beta-only round moved the search layer from broad parent-model pricing toward generation/version-level pricing for priority Leica body and lens families.
 
-Deployment status for this round:
+Owner authenticated smoke on preview exposed one real HOLD gap:
 
-- scoped beta branch commit pushed successfully
-- Vercel preview deployment reached `READY`
+- backend top-level generation override was correct locally
+- preview UI still preferred stale nested `market_entry_policy` fields for market summary rendering
+- this let broad parent queries like `Leica M6` and `Leica M10` keep showing old parent/base-model price state in the card shell even though top-level response policy had already been narrowed
+- exact-generation labels such as `Leica 50mm Summicron-M Type IV` and `Leica 50mm Summicron-M Dual Range` also stayed broader than intended in the market-entry header
+
+Fixup status for this follow-up:
+
+- local fix applied
 - production remains untouched
-- local smoke is PASS
-- preview smoke is still `PENDING` because this preview deployment is currently protected by Vercel login/SSO, so direct unauthenticated API/UI verification redirects to the Vercel login gate instead of the app payload
+- new preview deployment: pending push for this fixup
+- previous preview remains useful as the reproduced HOLD reference
+- production remains untouched
+- local recheck after fix is PASS
+- preview smoke after this fixup: pending new deployment + owner recheck
 
 The core change is:
 
@@ -28,25 +37,125 @@ The core change is:
 ## Changed Files
 
 - `api/search.py`
-- `query_parser.py`
-- `query_resolver.py`
-- `search_index.py`
-- `entry_generation.py`
-- `data/config/entry_generation_registry_v1.json`
 - `index.html`
 - `app/templates/index.html`
 - `beta.html`
 - `app/templates/beta.html`
+- `tests/test_search_endpoint.py`
+- `tests/test_search_ui.py`
+- `data/admin/p4_entry_generation_narrowing_beta_v1.md`
 
 ## Preview Deployment
 
 - Branch: `p4-entry-generation-narrowing-beta`
-- Deployment URL: `https://camerabridge-f8g3e3hi6-camerabridge.vercel.app`
-- Branch alias: `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app`
-- Deployment state: `READY`
-- Deployment commit: `808f10ef15a97d2f7aa5abccbd1f5ac6f7515175`
-- Commit message: `P4 entry generation narrowing beta`
+- Previous deployment URL: `https://camerabridge-f8g3e3hi6-camerabridge.vercel.app`
+- Previous branch alias: `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app`
+- Previous deployment state: `READY`
+- Previous deployment commit: `808f10ef15a97d2f7aa5abccbd1f5ac6f7515175`
+- New deployment for this fixup: pending push
 - Production untouched: confirmed
+
+## Owner HOLD Root Cause
+
+Owner smoke HOLD was caused by two coupled issues:
+
+1. UI policy precedence bug
+   - `getMarketEntryPolicy()` preferred `state.response.market_entry_policy` as a frozen object
+   - generation narrowing later updated top-level response fields such as:
+     - `price_summary_allowed`
+     - `price_scope`
+     - `display_price_summary_allowed`
+     - `display_price_band`
+     - `display_query_review`
+   - the preview card shell still rendered stale nested policy values
+
+2. Generation projection sync gap
+   - exact-generation overrides did not fully synchronize:
+     - `market_entry_title`
+     - `display_price_band`
+     - `display_broader_reference_allowed`
+   - this made `Type IV` and `Dual Range` still look broader than intended in preview
+
+## Current Fixup
+
+This follow-up added:
+
+- API-side synchronization from generation-narrowed top-level response fields back into `market_entry_policy`
+- broad parent hard override for:
+  - `price_summary_allowed = false`
+  - `display_price_summary_allowed = false`
+  - `price_scope = generation_disambiguation_required`
+  - `display_price_band = Generation selection needed`
+  - `display_broader_reference_allowed = false`
+- exact-generation market-entry title sync:
+  - `Leica M6 TTL`
+  - `Leica M10-P`
+  - `Leica 50mm Summicron-M Type IV`
+  - `Leica 50mm Summicron-M Dual Range`
+- exact-generation band sync so exact-generation rows no longer inherit broad base-model display band
+- frontend merge logic so top-level runtime overrides take precedence over nested stale policy fields
+
+## Local Recheck After Owner HOLD
+
+### Leica M6
+
+- Before owner smoke:
+  - preview showed body market summary and used price evidence
+- After local fix:
+  - `price_summary_allowed = false`
+  - `price_scope = generation_disambiguation_required`
+  - `display_price_band = Generation selection needed`
+  - `used_for_price = 0`
+  - suggestions:
+    - `Leica M6 Classic`
+    - `Leica M6 TTL`
+    - `Leica M6 Reissue`
+    - `Leica M6 Millennium / Limited`
+
+### Leica M10
+
+- Before owner smoke:
+  - preview showed broad M10 body market summary
+- After local fix:
+  - `price_summary_allowed = false`
+  - `price_scope = generation_disambiguation_required`
+  - `display_price_band = Generation selection needed`
+  - `used_for_price = 0`
+
+### Leica M10-P
+
+- After local fix:
+  - `market_entry_title = Leica M10-P`
+  - `price_scope = exact_generation`
+  - `display_price_summary_allowed = true`
+  - `display_broader_reference_allowed = false`
+
+### Leica 50mm Summicron-M Type IV
+
+- Before owner smoke:
+  - market entry still read too broadly as `Summicron-M`
+- After local fix:
+  - `market_entry_title = Leica 50mm Summicron-M Type IV`
+  - `price_scope = exact_generation`
+  - `display_price_band_source = exact_generation`
+  - `display_broader_reference_allowed = false`
+
+### Leica 50mm Dual Range
+
+- Before owner smoke:
+  - market entry still looked broad / generic
+- After local fix:
+  - `market_entry_title = Leica 50mm Summicron-M Dual Range`
+  - `price_scope = exact_generation`
+  - no broad reference fallback is displayed
+  - `display_broader_reference_allowed = false`
+
+### Leica 35mm Summicron pre-ASPH
+
+- After local fix:
+  - remains locked
+  - `price_scope = insufficient_exact_generation_data`
+  - `display_price_summary_allowed = false`
 
 ## Preview Smoke Status
 

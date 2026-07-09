@@ -57,6 +57,12 @@ def test_quality_summary_message_is_consumed_from_api() -> None:
         assert "match_quality ===" not in html
 
 
+def test_market_entry_policy_merges_top_level_runtime_overrides() -> None:
+    for html in _html_files():
+        assert "const apiPolicy = state.response.market_entry_policy || {};" in html
+        assert "...apiPolicy," in html
+
+
 if __name__ == "__main__":
     test_index_calls_search_endpoint()
     test_index_does_not_reimplement_legacy_search()

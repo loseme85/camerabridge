@@ -119,6 +119,92 @@ Q3_BODY = _record(
 
 RECORDS = [SUMMILUX_35, SUMMILUX_LOW, MP3_SILVER, Q3_BODY]
 
+M6_CLASSIC = _record(
+    5,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/m6-classic",
+        "title_raw": "Leica M6 Classic Silver x0.72 [Big Logo]",
+        "price_raw": "4,100,000원",
+        "currency": "KRW",
+        "condition_raw": "92%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M6",
+        "model_canonical": "M6",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+M6_TTL = _record(
+    6,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/m6-ttl",
+        "title_raw": "Leica M6 TTL Silver 0.72x",
+        "price_raw": "4,900,000원",
+        "currency": "KRW",
+        "condition_raw": "93%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M6",
+        "model_canonical": "M6",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+TYPE_IV_A = _record(
+    7,
+    {
+        "source": "Lens dealer",
+        "source_url": "https://example.invalid/type-iv-a",
+        "title_raw": "Leica 50mm f2 Summicron-M (Type IV) (Black, 11819)",
+        "price_raw": "2,900,000원",
+        "currency": "KRW",
+        "condition_raw": "94%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Summicron",
+        "model_canonical": "Summicron-M",
+        "variant": [],
+        "focal_length": "50",
+        "sold_quality": "asking",
+    },
+)
+
+TYPE_IV_B = _record(
+    8,
+    {
+        "source": "Lens dealer",
+        "source_url": "https://example.invalid/type-iv-b",
+        "title_raw": "Leica 50mm Summicron-M Type IV Black",
+        "price_raw": "3,100,000원",
+        "currency": "KRW",
+        "condition_raw": "95%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Lens",
+        "label": "M Lens",
+        "model_raw": "Summicron",
+        "model_canonical": "Summicron-M",
+        "variant": [],
+        "focal_length": "50",
+        "sold_quality": "asking",
+    },
+)
+
+GENERATION_RECORDS = RECORDS + [M6_CLASSIC, M6_TTL, TYPE_IV_A, TYPE_IV_B]
+
 
 def test_parse_required_and_optional_params() -> None:
     parsed = parse_search_params({
@@ -233,6 +319,35 @@ def test_data_file_missing_returns_503() -> None:
     status, response = endpoint_response({"q": "q3 28"}, path=missing)
     assert status == 503
     assert response["error"]["code"] == "data_file_missing"
+
+
+def test_broad_parent_generation_gate_syncs_top_level_and_market_entry_policy() -> None:
+    status, response = endpoint_response({"q": "Leica M6", "limit": "12"}, records=GENERATION_RECORDS)
+    assert status == 200
+    assert response["price_summary_allowed"] is False
+    assert response["price_scope"] == "generation_disambiguation_required"
+    assert response["display_price_summary_allowed"] is False
+    assert response["display_price_band"] == "Generation selection needed"
+    assert response["market_entry_policy"]["price_summary_allowed"] is False
+    assert response["market_entry_policy"]["price_scope"] == "generation_disambiguation_required"
+    assert response["market_entry_policy"]["display_price_summary_allowed"] is False
+    assert response["market_entry_policy"]["display_price_band"] == "Generation selection needed"
+    assert response["market_entry_policy"]["display_query_review"]["interpreted_target"] == "Leica M6"
+    assert sum(1 for item in response["results"] if item.get("used_for_price")) == 0
+
+
+def test_exact_generation_syncs_generation_label_and_band_without_broad_reference_fallback() -> None:
+    status, response = endpoint_response({"q": "Leica 50mm Summicron-M Type IV", "limit": "12"}, records=GENERATION_RECORDS)
+    assert status == 200
+    assert response["price_scope"] == "exact_generation"
+    assert response["display_price_summary_allowed"] is True
+    assert response["query_entry_label"] == "Leica 50mm Summicron-M Type IV"
+    assert response["market_entry_title"] == "Leica 50mm Summicron-M Type IV"
+    assert response["market_entry_policy"]["market_entry_title"] == "Leica 50mm Summicron-M Type IV"
+    assert response["display_broader_reference_allowed"] is False
+    assert response["market_entry_policy"]["display_broader_reference_allowed"] is False
+    assert response["display_price_band_source"] == "exact_generation"
+    assert response["display_price_band"].startswith("KRW ")
 
 
 if __name__ == "__main__":
