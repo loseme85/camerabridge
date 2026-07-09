@@ -106,6 +106,8 @@ _BODY_INTENT_ALIASES = {
     "m9": ("M9", "M", None, ()),
     "m9-p": ("M9-P", "M", None, ("P",)),
     "m10": ("M10", "M", None, ()),
+    "m10-p": ("M10-P", "M", None, ("P",)),
+    "m10p": ("M10-P", "M", None, ("P",)),
     "m10-r": ("M10-R", "M", None, ("R",)),
     "m11": ("M11", "M", None, ()),
     "m11-p": ("M11-P", "M", None, ("P",)),
@@ -296,6 +298,84 @@ def _parse_summilux_35_steel_rim_reissue_hints(intent: QueryIntent, normalized: 
 
     if re.search(r"\breissue\b|복각", normalized):
         _add_variant(intent, "Reissue", "reissue")
+
+
+def _set_generation(intent: QueryIntent, value: str, source: str) -> None:
+    intent.generation = value
+    if not any(token.get("type") == "generation" and token.get("value") == value for token in intent.tokens):
+        intent.tokens.append({"type": "generation", "raw": source, "value": value})
+
+
+def _parse_entry_generation_hints(intent: QueryIntent, normalized: str) -> None:
+    if intent.accessory_intent:
+        return
+
+    if re.search(r"\bm6\b", normalized):
+        _set_body_intent(intent, "M6", "m6", mount="M", system=None)
+        if re.search(r"\bttl\b", normalized):
+            _set_generation(intent, "M6 TTL", "ttl")
+        elif re.search(r"\bre[\s-]?issue\b|복각", normalized):
+            _set_generation(intent, "M6 Reissue", "reissue")
+        elif re.search(r"\bclassic\b", normalized):
+            _set_generation(intent, "M6 Classic", "classic")
+        elif re.search(r"\bmillennium\b|\bdragon\b|\blhsa\b|\bkanto\b|\blimited\b", normalized):
+            _set_generation(intent, "M6 Millennium / Limited", "limited")
+
+    if re.search(r"\b(?:leica|라이카)\s+m10\s*-\s*p\b|\b(?:leica|라이카)\s+m10p\b|\b(?:leica|라이카)\s+m10\s+p\b|\bm10\s*-\s*p\b|\bm10p\b|\bm10\s+p\b", normalized):
+        _set_body_intent(intent, "M10-P", "m10-p", mount="M", system=None)
+        _set_generation(intent, "M10-P", "m10-p")
+    if re.search(r"\b(?:leica|라이카)\s+m10\s*-\s*r\b|\b(?:leica|라이카)\s+m10r\b|\b(?:leica|라이카)\s+m10\s+r\b|\bm10\s*-\s*r\b|\bm10r\b|\bm10\s+r\b", normalized):
+        _set_body_intent(intent, "M10-R", "m10-r", mount="M", system=None)
+        _set_generation(intent, "M10-R", "m10-r")
+    if re.search(r"\b(?:leica|라이카)\s+m10\s+monochrom\b|\bm10\s+monochrom\b", normalized):
+        _set_body_intent(intent, "M10 Monochrom", "m10 monochrom", mount="M", system=None)
+        _set_generation(intent, "M10 Monochrom", "m10 monochrom")
+
+    if re.search(r"\b(?:leica|라이카)\s+q2\s+monochrom(?:e)?\b|\bq2\s+monochrom(?:e)?\b", normalized):
+        _set_body_intent(intent, "Q2 Monochrom", "q2 monochrom", mount=None, system="Q")
+        _set_generation(intent, "Q2 Monochrom", "q2 monochrom")
+    if re.search(r"\b(?:leica|라이카)\s+q3\s+43\b|\bq3\s+43\b", normalized):
+        _set_body_intent(intent, "Q3 43", "q3 43", mount=None, system="Q")
+        _set_generation(intent, "Q3 43", "q3 43")
+
+    summicron_50_context = (
+        str(intent.model_family or "") in {"Summicron", "Summicron-M"}
+        or bool(re.search(r"\b(?:summicron|summicron-m|cron)\b", normalized))
+    ) and bool(re.search(r"\b50(?:mm)?\b", normalized))
+    if (
+        not summicron_50_context
+        and bool(re.search(r"\b50(?:mm)?\b", normalized))
+        and bool(re.search(r"\bdr\b|\bdual(?:-|\s*)range\b|\brigid\b|리짓", normalized))
+    ):
+        _set_model_family(intent, "Summicron", "50mm summicron generation recovery")
+        if not intent.mount:
+            _set_mount(intent, "M", "50mm summicron generation recovery")
+        summicron_50_context = True
+    if summicron_50_context:
+        if re.search(r"\btype\s*iv\b|\bversion\s*iv\b|\bkob\b|\bking\s+of\s+bokeh\b", normalized):
+            _set_generation(intent, "Type IV", "type iv")
+        elif re.search(r"\btype\s*v\b|\bversion\s*v\b", normalized):
+            _set_generation(intent, "Version V", "type v")
+        elif re.search(r"\brigid\b|리짓", normalized):
+            _add_variant(intent, "Rigid", "rigid")
+            _set_generation(intent, "Rigid", "rigid")
+        elif re.search(r"\bdr\b|\bdual(?:-|\s*)range\b", normalized):
+            _add_variant(intent, "Dual Range", "dual range")
+            _set_generation(intent, "Dual Range", "dual range")
+
+    noctilux_50_context = (
+        str(intent.model_family or "") == "Noctilux"
+        or bool(re.search(r"\bnoctilux\b|\bnocti\b|\bnoct\b", normalized))
+    ) and bool(re.search(r"\b50(?:mm)?\b", normalized))
+    if noctilux_50_context:
+        if re.search(r"\b0\.95\b", normalized):
+            _set_generation(intent, "0.95", "0.95")
+        elif re.search(r"\b1\.2\b", normalized) and re.search(r"\breissue\b|복각", normalized):
+            _set_generation(intent, "1.2 reissue", "1.2 reissue")
+        elif re.search(r"\be60\b|\b3세대\b|\b4세대\b", normalized):
+            _set_generation(intent, "1.0 E60", "e60")
+        elif re.search(r"\be58\b|\b2세대\b", normalized):
+            _set_generation(intent, "1.0 E58", "e58")
 
 
 def _body_intent_token_allowed(token: str, rough_tokens: list[str]) -> bool:
@@ -1026,6 +1106,7 @@ def parse_query(query: str, default_brand: Optional[str] = DEFAULT_BRAND) -> dic
     _parse_third_party_l_mount_range_hint(intent, normalized)
     _parse_compact_mount_lens_notation(intent, normalized)
     _parse_summilux_35_steel_rim_reissue_hints(intent, normalized)
+    _parse_entry_generation_hints(intent, normalized)
 
     rough_tokens = re.findall(r"[a-z0-9가-힣./-]+", normalized)
     for token in rough_tokens:

@@ -1167,9 +1167,16 @@
       const normalized = String(value || '').trim();
       if(!normalized) return '';
       if(normalized === 'Used for exact price') return '가격 계산에 사용됨';
+      if(normalized === 'Used for exact-generation price') return '세대 기준 가격 계산에 사용됨';
+      if(normalized === 'Used for same generation candidate price') return '세대 후보 가격 계산에 사용됨';
       if(normalized === 'Used for same base model price') return '가격 계산에 사용됨';
       if(normalized === 'Exact variant match visible, but not selected for exact price') return '정확히 맞지만 가격 계산에서는 제외';
+      if(normalized === 'Exact generation match visible, but not enough to unlock price yet') return '정확히 맞지만 가격 계산에서는 제외';
       if(normalized === 'Exact match visible, but not enough to unlock price yet') return '정확히 맞지만 가격 계산에서는 제외';
+      if(normalized === 'Reference only — not used for this entry price') return '해당 세대 가격에는 사용되지 않음';
+      if(normalized === 'Reference only — generation selection needed') return '세대 선택 전 참고 결과만 표시';
+      if(normalized === 'Generation candidate visible — select a generation to price') return '세대 선택 전에는 가격 계산을 보류';
+      if(normalized === 'Not used for price — generation selection needed') return '세대 선택 전에는 가격 계산을 보류';
       if(normalized === 'Same base model result is visible, but not used as exact price') return '참고 결과로만 표시';
       if(normalized === 'Broader family reference used for price context') return '같은 계열 참고 결과';
       if(normalized === 'Not used — Duplicate listing') return '중복 가능성으로 제외';
@@ -1185,7 +1192,9 @@
       const normalized = String(value || '').trim();
       if(!normalized) return '';
       if(normalized === 'Exact variant evidence') return '검색어와 모델명이 잘 맞습니다.';
+      if(normalized === 'Exact generation evidence') return '검색어와 세대/버전이 잘 맞습니다.';
       if(normalized === 'Model / focal / variant matched') return '검색어와 모델명이 잘 맞습니다.';
+      if(normalized === 'Same base model, different generation') return '같은 기본 모델이지만 세대가 달라 참고로만 보여줍니다.';
       if(normalized === 'Same base model, not exact variant') return '같은 계열이지만 조건이 달라 참고로만 표시합니다.';
       if(normalized === 'Broader family reference') return '같은 계열 참고 결과입니다.';
       if(normalized === 'Boundary conflict') return '같은 계열이지만 조건이 달라 참고로만 표시합니다.';
@@ -1578,16 +1587,21 @@
       const usage = String(evidence.price_usage_label || '').trim().toLowerCase();
       const roleText = compatibility || role;
 
+      if(usage.includes('used for exact-generation price')){
+        return 'Exact generation evidence';
+      }
       if(usage.includes('used for exact price')){
         if(roleText === 'Exact variant') return 'Exact variant evidence';
         if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Exact price evidence';
         return 'Exact price evidence';
       }
       if(roleText === 'Exact variant') return 'Model / focal / variant matched';
+      if(roleText === 'Same base model, different generation') return 'Same base model, different generation';
       if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Same base model, not exact variant';
       if(roleText === 'Broader family' || roleText === 'Broader reference') return 'Broader family reference';
       if(roleText === 'Boundary conflict') return 'Boundary conflict';
       if(roleText === 'Query incompatible' || roleText === 'Not compatible with this query') return 'Not compatible with this query';
+      if(usage.includes('generation selection needed')) return 'Same base model, different generation';
       if(usage.includes('same base model result is visible')) return 'Same base model, not exact variant';
       if(usage.includes('broader reference')) return 'Broader family reference';
       if(usage.includes('not compatible with this query')) return 'Not compatible with this query';
@@ -2143,6 +2157,14 @@
         ? '이 결과가 왜 보이는지 간단히 설명합니다.'
         : '');
       const matchBadge = getResultMatchBadge(result, rawEvidenceRole, priceRole, reason);
+      const detectedEntry = displayValue(displayField(result, 'display_entry_label'), model);
+      const searchMatch = displayValue(result.query_match_label, evidenceRole || '정보 없음');
+      const usedForPrice = result.used_for_price ? 'true' : 'false';
+      const exclusionReason = displayValue((evidence && Array.isArray(evidence.excluded_reason) && evidence.excluded_reason.length ? evidence.excluded_reason[0] : '') || reason, '—');
+      const generationConfidence = displayField(result, 'generation_confidence');
+      const generationConfidenceValue = generationConfidence === null || generationConfidence === undefined || generationConfidence === ''
+        ? '—'
+        : `${Math.round(Number(generationConfidence) * 100)}%`;
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
       const explanation = getBetaCardExplanation(evidenceRole, priceRole, reason);
 
@@ -2166,6 +2188,11 @@
           </div>
           <div class="data-grid">
             ${renderDataPoint('모델', model)}
+            ${renderDataPoint('Detected entry', detectedEntry)}
+            ${renderDataPoint('Search match', searchMatch)}
+            ${renderDataPoint('Used for price', usedForPrice)}
+            ${renderDataPoint('Exclusion reason', exclusionReason)}
+            ${renderDataPoint('Generation confidence', generationConfidenceValue)}
             ${renderDataPoint('마운트', displayMount)}
             ${renderDataPoint('상태', status.label)}
             ${renderDataPoint('가격 계산', priceRole)}

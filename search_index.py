@@ -24,6 +24,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from entry_generation import classify_entry
+
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 SEARCH_INDEX_SCHEMA_VERSION = "search_index.v1"
@@ -64,6 +66,24 @@ FINAL_OUTPUT_FIELDS = [
     "condition_raw",
     "crawl_time",
     "first_seen",
+    "entry_base_model",
+    "entry_generation",
+    "entry_variant",
+    "price_entry_key",
+    "generation_confidence",
+    "generation_confidence_reason",
+    "generation_boundary_conflict",
+    "ordinary_price_eligible",
+    "exact_generation_price_eligible",
+    "display_entry_label",
+    "family",
+    "base_model",
+    "generation",
+    "version",
+    "edition",
+    "optical_version",
+    "body_generation",
+    "group_key",
 ]
 
 
@@ -172,6 +192,7 @@ def compact_resolved_record(record: dict[str, Any]) -> dict[str, Any]:
     compact_final["source_url"] = source_url
     compact_final["parsed_price_numeric"] = parse_price_numeric(compact_final.get("price_raw"))
     compact_final["normalized_title"] = normalize_title(title)
+    compact_final.update(classify_entry(compact_final))
     search_fields = build_search_fields(compact_final, raw_item)
 
     return {

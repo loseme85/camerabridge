@@ -1,0 +1,282 @@
+{
+  "schema_version": "entry_generation_registry.v1",
+  "updated_at": "2026-07-09T00:00:00+09:00",
+  "groups": [
+    {
+      "group_key": "leica:m_body:m6",
+      "brand": "Leica",
+      "category": "Body",
+      "family": "M Body",
+      "base_model": "M6",
+      "broad_query_labels": [
+        "Leica M6 Classic",
+        "Leica M6 TTL",
+        "Leica M6 Reissue",
+        "Leica M6 Millennium / Limited"
+      ]
+    },
+    {
+      "group_key": "leica:m_body:m10",
+      "brand": "Leica",
+      "category": "Body",
+      "family": "M Body",
+      "base_model": "M10",
+      "broad_query_labels": [
+        "Leica M10",
+        "Leica M10-P",
+        "Leica M10-R",
+        "Leica M10 Monochrom"
+      ]
+    },
+    {
+      "group_key": "leica:m_body:m11",
+      "brand": "Leica",
+      "category": "Body",
+      "family": "M Body",
+      "base_model": "M11",
+      "broad_query_labels": [
+        "Leica M11",
+        "Leica M11-P",
+        "Leica M11 Monochrom",
+        "Leica M11-D"
+      ]
+    },
+    {
+      "group_key": "leica:q_body:q2",
+      "brand": "Leica",
+      "category": "Body",
+      "family": "Q Body",
+      "base_model": "Q2",
+      "broad_query_labels": [
+        "Leica Q2",
+        "Leica Q2 Monochrom",
+        "Leica Q2 Reporter"
+      ]
+    },
+    {
+      "group_key": "leica:q_body:q3",
+      "brand": "Leica",
+      "category": "Body",
+      "family": "Q Body",
+      "base_model": "Q3",
+      "broad_query_labels": [
+        "Leica Q3",
+        "Leica Q3 43"
+      ]
+    },
+    {
+      "group_key": "leica:m_lens:50_summicron_m",
+      "brand": "Leica",
+      "category": "Lens",
+      "family": "Summicron-M",
+      "base_model": "50mm Summicron-M",
+      "broad_query_labels": [
+        "Leica 50mm Summicron-M Rigid",
+        "Leica 50mm Summicron-M Dual Range",
+        "Leica 50mm Summicron-M Type IV",
+        "Leica 50mm Summicron-M Version V",
+        "Leica 50mm APO-Summicron-M"
+      ]
+    },
+    {
+      "group_key": "leica:m_lens:35_summicron_m",
+      "brand": "Leica",
+      "category": "Lens",
+      "family": "Summicron-M",
+      "base_model": "35mm Summicron-M",
+      "broad_query_labels": [
+        "Leica 35mm Summicron-M 8-element",
+        "Leica 35mm Summicron-M pre-ASPH",
+        "Leica 35mm Summicron-M ASPH",
+        "Leica 35mm Summicron-M ASPH II"
+      ]
+    },
+    {
+      "group_key": "leica:m_lens:35_summilux_m",
+      "brand": "Leica",
+      "category": "Lens",
+      "family": "Summilux-M",
+      "base_model": "35mm Summilux-M",
+      "broad_query_labels": [
+        "Leica 35mm Summilux-M pre-ASPH",
+        "Leica 35mm Summilux-M ASPH",
+        "Leica 35mm Summilux-M FLE"
+      ]
+    },
+    {
+      "group_key": "leica:m_lens:50_noctilux_m",
+      "brand": "Leica",
+      "category": "Lens",
+      "family": "Noctilux-M",
+      "base_model": "50mm Noctilux-M",
+      "broad_query_labels": [
+        "Leica 50mm Noctilux-M 1.0 E58",
+        "Leica 50mm Noctilux-M 1.0 E60",
+        "Leica 50mm Noctilux-M 0.95",
+        "Leica 50mm Noctilux-M 1.2 reissue"
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "price_entry_key": "leica:m_body:m6:classic",
+      "display_entry_label": "Leica M6 Classic",
+      "group_key": "leica:m_body:m6"
+    },
+    {
+      "price_entry_key": "leica:m_body:m6:ttl",
+      "display_entry_label": "Leica M6 TTL",
+      "group_key": "leica:m_body:m6"
+    },
+    {
+      "price_entry_key": "leica:m_body:m6:reissue",
+      "display_entry_label": "Leica M6 Reissue",
+      "group_key": "leica:m_body:m6"
+    },
+    {
+      "price_entry_key": "leica:m_body:m6:limited",
+      "display_entry_label": "Leica M6 Millennium / Limited",
+      "group_key": "leica:m_body:m6"
+    },
+    {
+      "price_entry_key": "leica:m_body:m10:base",
+      "display_entry_label": "Leica M10",
+      "group_key": "leica:m_body:m10"
+    },
+    {
+      "price_entry_key": "leica:m_body:m10:p",
+      "display_entry_label": "Leica M10-P",
+      "group_key": "leica:m_body:m10"
+    },
+    {
+      "price_entry_key": "leica:m_body:m10:r",
+      "display_entry_label": "Leica M10-R",
+      "group_key": "leica:m_body:m10"
+    },
+    {
+      "price_entry_key": "leica:m_body:m10:monochrom",
+      "display_entry_label": "Leica M10 Monochrom",
+      "group_key": "leica:m_body:m10"
+    },
+    {
+      "price_entry_key": "leica:m_body:m11:base",
+      "display_entry_label": "Leica M11",
+      "group_key": "leica:m_body:m11"
+    },
+    {
+      "price_entry_key": "leica:m_body:m11:p",
+      "display_entry_label": "Leica M11-P",
+      "group_key": "leica:m_body:m11"
+    },
+    {
+      "price_entry_key": "leica:m_body:m11:monochrom",
+      "display_entry_label": "Leica M11 Monochrom",
+      "group_key": "leica:m_body:m11"
+    },
+    {
+      "price_entry_key": "leica:m_body:m11:d",
+      "display_entry_label": "Leica M11-D",
+      "group_key": "leica:m_body:m11"
+    },
+    {
+      "price_entry_key": "leica:q_body:q2:base",
+      "display_entry_label": "Leica Q2",
+      "group_key": "leica:q_body:q2"
+    },
+    {
+      "price_entry_key": "leica:q_body:q2:monochrom",
+      "display_entry_label": "Leica Q2 Monochrom",
+      "group_key": "leica:q_body:q2"
+    },
+    {
+      "price_entry_key": "leica:q_body:q3:base",
+      "display_entry_label": "Leica Q3",
+      "group_key": "leica:q_body:q3"
+    },
+    {
+      "price_entry_key": "leica:q_body:q3:43",
+      "display_entry_label": "Leica Q3 43",
+      "group_key": "leica:q_body:q3"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_summicron_m:rigid",
+      "display_entry_label": "Leica 50mm Summicron-M Rigid",
+      "group_key": "leica:m_lens:50_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_summicron_m:dual_range",
+      "display_entry_label": "Leica 50mm Summicron-M Dual Range",
+      "group_key": "leica:m_lens:50_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_summicron_m:type_iv",
+      "display_entry_label": "Leica 50mm Summicron-M Type IV",
+      "group_key": "leica:m_lens:50_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_summicron_m:version_v",
+      "display_entry_label": "Leica 50mm Summicron-M Version V",
+      "group_key": "leica:m_lens:50_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_apo_summicron_m:base",
+      "display_entry_label": "Leica 50mm APO-Summicron-M",
+      "group_key": "leica:m_lens:50_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:35_summicron_m:8_element",
+      "display_entry_label": "Leica 35mm Summicron-M 8-element",
+      "group_key": "leica:m_lens:35_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:35_summicron_m:pre_asph",
+      "display_entry_label": "Leica 35mm Summicron-M pre-ASPH",
+      "group_key": "leica:m_lens:35_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:35_summicron_m:asph",
+      "display_entry_label": "Leica 35mm Summicron-M ASPH",
+      "group_key": "leica:m_lens:35_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:35_summicron_m:asph_ii",
+      "display_entry_label": "Leica 35mm Summicron-M ASPH II",
+      "group_key": "leica:m_lens:35_summicron_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:35_summilux_m:pre_asph",
+      "display_entry_label": "Leica 35mm Summilux-M pre-ASPH",
+      "group_key": "leica:m_lens:35_summilux_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:35_summilux_m:asph",
+      "display_entry_label": "Leica 35mm Summilux-M ASPH",
+      "group_key": "leica:m_lens:35_summilux_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:35_summilux_m:fle",
+      "display_entry_label": "Leica 35mm Summilux-M FLE",
+      "group_key": "leica:m_lens:35_summilux_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_noctilux_m:e58",
+      "display_entry_label": "Leica 50mm Noctilux-M 1.0 E58",
+      "group_key": "leica:m_lens:50_noctilux_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_noctilux_m:e60",
+      "display_entry_label": "Leica 50mm Noctilux-M 1.0 E60",
+      "group_key": "leica:m_lens:50_noctilux_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_noctilux_m:095",
+      "display_entry_label": "Leica 50mm Noctilux-M 0.95",
+      "group_key": "leica:m_lens:50_noctilux_m"
+    },
+    {
+      "price_entry_key": "leica:m_lens:50_noctilux_m:12_reissue",
+      "display_entry_label": "Leica 50mm Noctilux-M 1.2 reissue",
+      "group_key": "leica:m_lens:50_noctilux_m"
+    }
+  ]
+}

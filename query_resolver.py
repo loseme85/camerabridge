@@ -1063,7 +1063,16 @@ def _score_generation(intent: dict[str, Any], final: dict[str, Any], text: str, 
     possible = WEIGHTS["generation"]
     gen_norm = _normalize(generation)
     raw_generation = _raw_item(final).get("세대") if isinstance(final, dict) else None
-    listing_values = " ".join(str(item) for item in _as_list(final.get("variant")) + [final.get("model_canonical"), raw_generation])
+    listing_values = " ".join(
+        str(item)
+        for item in _as_list(final.get("variant"))
+        + [
+            final.get("model_canonical"),
+            final.get("entry_generation"),
+            final.get("display_entry_label"),
+            raw_generation,
+        ]
+    )
     listing_norm = _normalize(listing_values)
 
     if gen_norm and (re.search(rf"\b{re.escape(gen_norm)}\b", listing_norm) or re.search(rf"\b{re.escape(gen_norm)}\b", text)):

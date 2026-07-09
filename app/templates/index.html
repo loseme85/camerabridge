@@ -70,6 +70,30 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
+    .locale-control{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-left:4px;
+    }
+    .locale-label{
+      color:var(--text-muted);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:10px;
+      letter-spacing:0.4px;
+      white-space:nowrap;
+    }
+    .locale-select{
+      min-width:112px;
+      height:32px;
+      border:1px solid var(--border-strong);
+      border-radius:999px;
+      background:var(--surface);
+      color:var(--text-soft);
+      padding:0 12px;
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:11px;
+    }
     .meta-pill{
       border:1px solid var(--border-strong);
       background:var(--surface);
@@ -362,6 +386,15 @@
       font-size:10px;
       letter-spacing:1px;
       text-transform:uppercase;
+    }
+    .index-debug-line{
+      margin-top:6px;
+      color:var(--text-muted);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:10px;
+      letter-spacing:0.2px;
+      text-transform:none;
+      opacity:0.78;
     }
     .page-controls{
       display:flex;
@@ -665,9 +698,38 @@
     .result-source{
       text-align:right;
       color:var(--text-soft);
+      min-width:148px;
+    }
+    .result-source-name{
       font-family:"SFMono-Regular","Roboto Mono",monospace;
       font-size:10px;
       line-height:1.4;
+    }
+    .result-source-meta{
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:10px;
+      line-height:1.4;
+    }
+    .result-condition-summary{
+      margin-top:4px;
+      color:var(--text);
+      font-size:11px;
+      line-height:1.45;
+      overflow-wrap:anywhere;
+    }
+    .result-condition-tags{
+      display:flex;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      gap:5px;
+      margin-top:6px;
+    }
+    .result-evidence-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      padding:0 14px 14px;
+      border-bottom:1px solid var(--border);
     }
     .result-status-row{
       display:flex;
@@ -833,9 +895,13 @@
         CAMERA <span>BRIDGE</span>
       </a>
       <div class="topbar-meta">
-        <span class="meta-pill accent">Private beta</span>
-        <span class="meta-pill">Independent market intelligence</span>
-        <span class="meta-pill">No fake fill</span>
+        <span class="meta-pill accent" data-i18n="topbar.private_beta">Private beta</span>
+        <span class="meta-pill" data-i18n="topbar.market_intelligence">Independent market intelligence</span>
+        <span class="meta-pill" data-i18n="topbar.no_fake_fill">No fake fill</span>
+        <div class="locale-control">
+          <label class="locale-label" for="locale-select" data-i18n="topbar.language">Language</label>
+          <select id="locale-select" class="locale-select" aria-label="Language"></select>
+        </div>
       </div>
     </header>
 
@@ -843,23 +909,23 @@
       <section class="hero">
         <div class="hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">Global used camera search and market intelligence</p>
-            <h1 class="hero-title">Global used camera search &amp; market intelligence</h1>
-            <p class="hero-subtitle">
+            <p class="eyebrow" data-i18n="hero.eyebrow">Global used camera search and market intelligence</p>
+            <h1 class="hero-title" data-i18n="hero.title">Global used camera search &amp; market intelligence</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
               Track rare Leica, premium camera gear, active listings, sold references, source coverage, and market signals across global used markets.
             </p>
             <div class="hero-notices">
-              <span class="notice-pill">Independent project. Not affiliated with Leica, dealers, or marketplaces.</span>
-              <span class="notice-pill">Private beta. Results may be incomplete. Prices are references, not guaranteed valuations.</span>
-              <span class="notice-pill">No personal information or private listing details are needed for testing.</span>
+              <span class="notice-pill" data-i18n="hero.notice_project">Independent project. Not affiliated with Leica, dealers, or marketplaces.</span>
+              <span class="notice-pill" data-i18n="hero.notice_beta">Private beta. Results may be incomplete. Prices are references, not guaranteed valuations.</span>
+              <span class="notice-pill" data-i18n="hero.notice_privacy">No personal information or private listing details are needed for testing.</span>
             </div>
             <section class="search-panel" aria-label="Search home">
-              <div class="search-panel-label">Search home</div>
+              <div class="search-panel-label" data-i18n="search.home_label">Search home</div>
               <form id="search-form" class="search-form-row">
-                <input id="query-input" class="search-field" type="search" autocomplete="off" placeholder="Leica M6, Summicron-M 35 ASPH, q3 28, ltm summaron 35">
-                <button class="search-button" type="submit" aria-label="Search">Search</button>
+                <input id="query-input" class="search-field" type="search" autocomplete="off" placeholder="Leica M6, Summicron-M 35 ASPH, q3 28, ltm summaron 35" data-i18n-placeholder="search.placeholder">
+                <button class="search-button" type="submit" aria-label="Search" data-i18n="search.submit" data-i18n-aria-label="search.submit">Search</button>
               </form>
-              <div class="query-chip-row" aria-label="Example searches">
+              <div class="query-chip-row" aria-label="Example searches" data-i18n-aria-label="search.examples_aria">
                 <button class="query-chip" type="button" data-query="Leica M6">Leica M6</button>
                 <button class="query-chip" type="button" data-query="Summicron-M 35 ASPH">Summicron-M 35 ASPH</button>
                 <button class="query-chip" type="button" data-query="35 lux aa">35 lux aa</button>
@@ -875,7 +941,7 @@
           </div>
           <aside class="hero-sidebar">
             <div class="sidebar-card">
-              <p class="section-label">What Camera Bridge tracks</p>
+              <p class="section-label" data-i18n="sidebar.tracks_label">What Camera Bridge tracks</p>
               <h2>Built for rare Leica, premium camera gear, and collector-grade market tracking.</h2>
               <ul class="plain-list">
                 <li>Global active listings</li>
@@ -885,7 +951,7 @@
               </ul>
             </div>
             <div class="sidebar-card">
-              <p class="section-label">Feedback scope</p>
+              <p class="section-label" data-i18n="sidebar.feedback_label">Feedback scope</p>
               <h2>Simple feedback is enough.</h2>
               <ul class="plain-list">
                 <li>Wrong match</li>
@@ -980,6 +1046,8 @@
               <span id="result-caption" class="summary-caption">Ready for search</span>
             </div>
             <div id="summary-meta" class="summary-meta">Private beta search home</div>
+            <!-- Temporary QA/debug line for runtime index verification; safe to remove after preview validation. -->
+            <div id="index-debug-line" class="index-debug-line"></div>
           </div>
           <div class="page-controls">
             <button id="prev-button" class="page-button" type="button">Prev</button>
@@ -1049,6 +1117,127 @@
       'leica m': 'This query can refer to multiple M-system bodies and lenses. Refine by body model or lens family.',
       '50 cron': 'Collector shorthand can match multiple Summicron variants. Choose a mount or full model name to refine your search.'
     };
+    const SUPPORTED_LOCALES = ['ko', 'en', 'ja', 'zh-Hans', 'zh-Hant', 'pt', 'es', 'de', 'it'];
+    const LOCALE_LABELS = {
+      ko: '한국어',
+      en: 'English',
+      ja: '日本語',
+      'zh-Hans': '简体中文',
+      'zh-Hant': '繁體中文',
+      pt: 'Português',
+      es: 'Español',
+      de: 'Deutsch',
+      it: 'Italiano'
+    };
+    const I18N = {
+      en: {
+        topbar: {
+          private_beta: 'Private beta',
+          market_intelligence: 'Independent market intelligence',
+          no_fake_fill: 'No fake fill',
+          language: 'Language'
+        },
+        hero: {
+          eyebrow: 'Global used camera search and market intelligence',
+          title: 'Global used camera search & market intelligence',
+          subtitle: 'Track rare Leica, premium camera gear, active listings, sold references, source coverage, and market signals across global used markets.',
+          notice_project: 'Independent project. Not affiliated with Leica, dealers, or marketplaces.',
+          notice_beta: 'Private beta. Results may be incomplete. Prices are references, not guaranteed valuations.',
+          notice_privacy: 'No personal information or private listing details are needed for testing.'
+        },
+        search: {
+          home_label: 'Search home',
+          placeholder: 'Leica M6, Summicron-M 35 ASPH, q3 28, ltm summaron 35',
+          submit: 'Search',
+          examples_aria: 'Example searches'
+        },
+        sidebar: {
+          tracks_label: 'What Camera Bridge tracks',
+          feedback_label: 'Feedback scope'
+        },
+        result: {
+          detected_model: 'Detected model',
+          family: 'Family',
+          focal_length: 'Focal length',
+          aperture: 'Aperture',
+          mount: 'Mount',
+          category: 'Category',
+          evidence_role: 'Evidence role',
+          price_role: 'Price role',
+          reason: 'Reason',
+          source_unknown: 'Unknown source',
+          condition_unknown: 'Condition unknown',
+          no_usable_price: 'No usable price',
+          visible_not_classified: 'Visible result, not classified for pricing yet',
+          not_used_for_market_estimate: 'Not used for market estimate',
+          price_role_unavailable: 'Detailed price role not available for this visible result',
+          view_source: 'View source',
+          track_market_changes: 'Track market changes',
+          create_alert_exact_model: 'Create alert for this exact model',
+          compact_lens_notation: 'Detected compact lens notation',
+          runtime_projection: 'Runtime projection',
+          trusted_override: 'Trusted override',
+          why_visible: 'Why this result is visible'
+        },
+        status: {
+          active_asking: 'Active asking',
+          sold_confirmed: 'Sold confirmed',
+          sold_likely: 'Sold likely',
+          expired: 'Expired',
+          removed: 'Removed',
+          sold_status: 'Sold status',
+          unknown: 'Unknown'
+        },
+        badge: {
+          price_used: 'Used for price',
+          price_excluded: 'Excluded from price',
+          sold_comp: 'Sold evidence',
+          active_reference: 'Active reference',
+          condition_gap: 'Excluded: condition gap',
+          bundle: 'Excluded: bundle/set',
+          wrong_model: 'Excluded: wrong model',
+          wrong_mount: 'Excluded: wrong mount',
+          accessory_only: 'Excluded: accessory only',
+          duplicate: 'Excluded: possible duplicate',
+          outlier: 'Excluded: price outlier',
+          reference_only: 'Reference only',
+          unknown: 'Price role unknown',
+          condition_raw: 'Condition raw'
+        },
+        match: {
+          exact_variant_match: 'Exact variant match',
+          exact_variant_candidate: 'Exact variant candidate',
+          related_match: 'Related match',
+          variant_conflict: 'Variant conflict',
+          family_match_strong: 'Family match strong',
+          family_match: 'Family match',
+          same_base_only: 'Same-base only',
+          match_unknown: 'Match unknown',
+          match_none: 'Match none',
+          match_weak: 'Match weak',
+          match_medium: 'Match medium',
+          match_strong: 'Match strong'
+        }
+      }
+    };
+    const LOCALE_FALLBACK_MAP = {
+      ko: 'en',
+      ja: 'en',
+      'zh-Hans': 'en',
+      'zh-Hant': 'en',
+      pt: 'en',
+      es: 'en',
+      de: 'en',
+      it: 'en'
+    };
+    Object.keys(LOCALE_FALLBACK_MAP).forEach(locale => {
+      I18N[locale] = I18N.en;
+    });
+
+    const LENS_MARKER_COPY = {
+      qa: 'result.compact_lens_notation',
+      public: 'Detected lens markers'
+    };
 
     const state = {
       query: '',
@@ -1060,6 +1249,9 @@
       historyReady: false,
       currentHistoryKey: ''
     };
+    const uiState = {
+      locale: 'en'
+    };
 
     const els = {};
     let pendingResultsAnchorScroll = false;
@@ -1068,11 +1260,89 @@
 
     function $(id){ return document.getElementById(id); }
 
+    function localeDictionary(locale){
+      return I18N[locale] || I18N[LOCALE_FALLBACK_MAP[locale]] || I18N.en;
+    }
+
+    function getDictionaryValue(dictionary, key){
+      return String(key || '').split('.').reduce((current, part) => {
+        if(current && typeof current === 'object' && part in current){
+          return current[part];
+        }
+        return undefined;
+      }, dictionary);
+    }
+
+    function t(key, fallback = ''){
+      const active = getDictionaryValue(localeDictionary(uiState.locale), key);
+      if(active !== undefined) return String(active);
+      const english = getDictionaryValue(I18N.en, key);
+      if(english !== undefined) return String(english);
+      return fallback || key;
+    }
+
+    function normalizeLocale(locale){
+      const value = String(locale || '').trim();
+      if(SUPPORTED_LOCALES.includes(value)) return value;
+      const lower = value.toLowerCase();
+      if(lower.startsWith('ko')) return 'ko';
+      if(lower.startsWith('ja')) return 'ja';
+      if(lower === 'zh-cn' || lower === 'zh-sg' || lower.startsWith('zh-hans')) return 'zh-Hans';
+      if(lower === 'zh-tw' || lower === 'zh-hk' || lower.startsWith('zh-hant')) return 'zh-Hant';
+      if(lower.startsWith('pt')) return 'pt';
+      if(lower.startsWith('es')) return 'es';
+      if(lower.startsWith('de')) return 'de';
+      if(lower.startsWith('it')) return 'it';
+      return 'en';
+    }
+
+    function detectInitialLocale(){
+      const stored = window.localStorage ? window.localStorage.getItem('cb.locale') : '';
+      if(stored) return normalizeLocale(stored);
+      const browserLocales = Array.isArray(navigator.languages) && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || 'en'];
+      return normalizeLocale(browserLocales[0]);
+    }
+
+    function applyStaticTranslations(){
+      document.documentElement.lang = uiState.locale;
+      document.querySelectorAll('[data-i18n]').forEach(node => {
+        node.textContent = t(node.getAttribute('data-i18n'), node.textContent);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(node => {
+        node.setAttribute('placeholder', t(node.getAttribute('data-i18n-placeholder'), node.getAttribute('placeholder') || ''));
+      });
+      document.querySelectorAll('[data-i18n-aria-label]').forEach(node => {
+        node.setAttribute('aria-label', t(node.getAttribute('data-i18n-aria-label'), node.getAttribute('aria-label') || ''));
+      });
+    }
+
+    function populateLocaleOptions(){
+      if(!els['locale-select']) return;
+      els['locale-select'].innerHTML = SUPPORTED_LOCALES.map(locale => (
+        `<option value="${escapeHtml(locale)}">${escapeHtml(LOCALE_LABELS[locale] || locale)}</option>`
+      )).join('');
+      els['locale-select'].value = uiState.locale;
+    }
+
+    function setLocale(locale){
+      uiState.locale = normalizeLocale(locale);
+      if(window.localStorage){
+        window.localStorage.setItem('cb.locale', uiState.locale);
+      }
+      if(els['locale-select'] && els['locale-select'].value !== uiState.locale){
+        els['locale-select'].value = uiState.locale;
+      }
+      applyStaticTranslations();
+      render();
+    }
+
     function cacheElements(){
       [
-        'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region',
+        'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
         'category-filter','brand-filter','mount-filter','sold-filter',
-        'sort-select','result-count','result-caption','summary-meta','page-indicator',
+        'sort-select','result-count','result-caption','summary-meta','index-debug-line','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
         'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
@@ -1146,6 +1416,137 @@
         return fallback;
       }
       return String(value);
+    }
+
+    function localizedFallback(key, englishFallback){
+      return t(key, englishFallback);
+    }
+
+    function localizeStatusLabel(label){
+      const normalized = String(label || '').trim().toLowerCase();
+      if(normalized === 'active asking') return t('status.active_asking');
+      if(normalized === 'sold confirmed') return t('status.sold_confirmed');
+      if(normalized === 'sold likely') return t('status.sold_likely');
+      if(normalized === 'expired') return t('status.expired');
+      if(normalized === 'removed') return t('status.removed');
+      if(normalized === 'sold status') return t('status.sold_status');
+      if(normalized === 'unknown') return t('status.unknown');
+      return label || t('status.unknown');
+    }
+
+    function localizeMatchBadgeLabel(label){
+      const normalized = String(label || '').trim().toLowerCase();
+      if(normalized === 'exact variant match') return t('match.exact_variant_match');
+      if(normalized === 'exact variant candidate') return t('match.exact_variant_candidate');
+      if(normalized === 'related match') return t('match.related_match');
+      if(normalized === 'variant conflict') return t('match.variant_conflict');
+      if(normalized === 'family match strong') return t('match.family_match_strong');
+      if(normalized === 'family match') return t('match.family_match');
+      if(normalized === 'same-base only') return t('match.same_base_only');
+      if(normalized === 'match strong') return t('match.match_strong');
+      if(normalized === 'match medium') return t('match.match_medium');
+      if(normalized === 'match weak') return t('match.match_weak');
+      if(normalized === 'match none') return t('match.match_none');
+      if(normalized === 'match unknown') return t('match.match_unknown');
+      return label || t('match.match_unknown');
+    }
+
+    function localizeRoleValue(label){
+      const normalized = String(label || '').trim().toLowerCase();
+      const mapping = {
+        'exact variant': '정확히 맞는 결과',
+        'same base model': '같은 계열 참고 결과',
+        'exact base model': '기본 모델 일치',
+        'broader family': '같은 계열 참고 결과',
+        'boundary conflict': '조건이 달라 가격 계산 제외',
+        'used for exact price': '가격 계산에 사용됨',
+        'used for exact-generation price': '세대 기준 가격 계산에 사용됨',
+        'used for same generation candidate price': '세대 후보 가격 계산에 사용됨',
+        'exact variant match visible, but not selected for exact price': '정확히 맞지만 가격 계산에서는 제외',
+        'exact generation match visible, but not enough to unlock price yet': '정확히 맞지만 가격 계산에서는 제외',
+        'reference only — not used for this entry price': '해당 세대 가격에는 사용되지 않음',
+        'reference only — generation selection needed': '세대 선택 전 참고 결과만 표시',
+        'generation candidate visible — select a generation to price': '세대 후보가 보여도 선택 전에는 가격 계산을 보류',
+        'not used for price — generation selection needed': '세대 선택 전에는 가격 계산을 보류',
+        'same base model result is visible, but not used as exact price': '참고 결과로만 표시',
+        'not used — duplicate listing': '중복 가능성으로 제외',
+        'not used — price outlier': '가격 범위 이상으로 제외',
+        'no usable price': '가격 계산 불가',
+        'exact variant price data limited': '정확 가격 데이터 부족',
+        'price summary locked': '정확한 가격 계산은 보류했어요.',
+        'broader family reference': '같은 계열 참고 결과'
+      };
+      if(uiState.locale !== 'ko'){
+        return label || '';
+      }
+      return mapping[normalized] || label || '';
+    }
+
+    function localizeReasonValue(label){
+      const normalized = String(label || '').trim().toLowerCase();
+      const mapping = {
+        'boundary conflict': '조건 충돌',
+        'same base model, not exact variant': '같은 기본 모델이지만 정확 변형은 아님',
+        'same base model, different generation': '같은 기본 모델이지만 세대가 다름',
+        'broader family reference': '같은 계열 참고 결과',
+        'not compatible with this query': '이 검색 조건과 호환되지 않음',
+        'exact variant evidence': '정확 변형 근거',
+        'exact generation evidence': '정확 세대 근거',
+        'exact price evidence': '정확 가격 근거',
+        'no usable price': '사용 가능한 가격 없음',
+        'duplicate listing': '중복 가능성',
+        'price outlier': '이상 가격 가능성'
+      };
+      if(uiState.locale !== 'ko'){
+        return label || '';
+      }
+      return mapping[normalized] || label || '';
+    }
+
+    function derivePriceEvidenceMeta(result, evidence){
+      const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
+      if(!evidence){
+        return { tone: 'blue', label: t('badge.unknown'), reason: 'unknown' };
+      }
+      if(evidence.used_for_price){
+        if(soldQuality && soldQuality !== 'asking' && soldQuality !== 'unknown'){
+          return { tone: 'green', label: t('badge.sold_comp'), reason: 'sold_comp' };
+        }
+        return { tone: 'green', label: t('badge.price_used'), reason: 'used' };
+      }
+      const excluded = Array.isArray(evidence.excluded_reason) ? evidence.excluded_reason.map(item => String(item || '').toLowerCase()) : [];
+      if(excluded.some(item => item.includes('bundle'))) return { tone: 'amber', label: t('badge.bundle'), reason: 'bundle' };
+      if(excluded.some(item => item.includes('wrong model'))) return { tone: 'amber', label: t('badge.wrong_model'), reason: 'wrong_model' };
+      if(excluded.some(item => item.includes('wrong mount'))) return { tone: 'amber', label: t('badge.wrong_mount'), reason: 'wrong_mount' };
+      if(excluded.some(item => item.includes('condition'))) return { tone: 'amber', label: t('badge.condition_gap'), reason: 'condition_gap' };
+      if(excluded.some(item => item.includes('accessory'))) return { tone: 'amber', label: t('badge.accessory_only'), reason: 'accessory_only' };
+      if(excluded.some(item => item.includes('duplicate'))) return { tone: 'amber', label: t('badge.duplicate'), reason: 'duplicate' };
+      if(excluded.some(item => item.includes('outlier'))) return { tone: 'amber', label: t('badge.outlier'), reason: 'outlier' };
+      const role = String(evidence.price_usage_label || '').toLowerCase();
+      if(role.includes('same base model result is visible')) return { tone: 'blue', label: t('badge.active_reference'), reason: 'active_reference' };
+      if(role.includes('exact variant match visible')) return { tone: 'blue', label: t('badge.reference_only'), reason: 'reference_only' };
+      if(role.includes('no usable price')) return { tone: 'amber', label: t('badge.price_excluded'), reason: 'unknown' };
+      return { tone: 'blue', label: t('badge.price_excluded'), reason: 'excluded' };
+    }
+
+    function buildConditionSummary(result, status){
+      const rawCondition = String(result.condition || '').trim();
+      const statusLabel = localizeStatusLabel(status.label);
+      const tags = [];
+      const text = rawCondition.toLowerCase();
+      if (/\b\d{2,3}%\b/.test(rawCondition)) tags.push(rawCondition.match(/\b\d{2,3}%\b/)[0]);
+      if (/\b(?:mint|near mint|excellent|exc\+|exc|a\+|a\/b|ab|b\+)\b/i.test(rawCondition)) tags.push(rawCondition.match(/\b(?:mint|near mint|excellent|exc\+|exc|a\+|a\/b|ab|b\+)\b/i)[0]);
+      if (/(fungus|곰팡이)/i.test(rawCondition)) tags.push((rawCondition.match(/(fungus|곰팡이)/i) || [''])[0]);
+      if (/(haze|헤이즈)/i.test(rawCondition)) tags.push((rawCondition.match(/(haze|헤이즈)/i) || [''])[0]);
+      if (/(dust|먼지)/i.test(rawCondition)) tags.push((rawCondition.match(/(dust|먼지)/i) || [''])[0]);
+      if (/(scratch|스크래치|기스)/i.test(rawCondition)) tags.push((rawCondition.match(/(scratch|스크래치|기스)/i) || [''])[0]);
+      if (/(repair|service|cla|수리|점검|오버홀)/i.test(rawCondition)) tags.push((rawCondition.match(/(repair|service|cla|수리|점검|오버홀)/i) || [''])[0]);
+      if (/(box|papers|박스|보증서|풀박)/i.test(rawCondition)) tags.push((rawCondition.match(/(box|papers|박스|보증서|풀박)/i) || [''])[0]);
+      return {
+        primary: rawCondition ? `${rawCondition} · ${statusLabel}` : `${t('result.condition_unknown')} · ${statusLabel}`,
+        tags: Array.from(new Set(tags)).filter(Boolean),
+        raw: rawCondition
+      };
     }
 
     function titleCase(value){
@@ -1484,16 +1885,21 @@
       const usage = String(evidence.price_usage_label || '').trim().toLowerCase();
       const roleText = compatibility || role;
 
+      if(usage.includes('used for exact-generation price')){
+        return 'Exact generation evidence';
+      }
       if(usage.includes('used for exact price')){
         if(roleText === 'Exact variant') return 'Exact variant evidence';
         if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Exact price evidence';
         return 'Exact price evidence';
       }
       if(roleText === 'Exact variant') return 'Model / focal / variant matched';
+      if(roleText === 'Same base model, different generation') return 'Same base model, different generation';
       if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Same base model, not exact variant';
       if(roleText === 'Broader family' || roleText === 'Broader reference') return 'Broader family reference';
       if(roleText === 'Boundary conflict') return 'Boundary conflict';
       if(roleText === 'Query incompatible' || roleText === 'Not compatible with this query') return 'Not compatible with this query';
+      if(usage.includes('generation selection needed')) return 'Same base model, different generation';
       if(usage.includes('same base model result is visible')) return 'Same base model, not exact variant';
       if(usage.includes('broader reference')) return 'Broader family reference';
       if(usage.includes('not compatible with this query')) return 'Not compatible with this query';
@@ -1679,6 +2085,7 @@
       const start = total && resultCount ? (Number(pagination.offset || 0) + 1) : 0;
       const end = total && resultCount ? (Number(pagination.offset || 0) + resultCount) : 0;
       const quality = getQualitySummary();
+      const meta = state.response && state.response.meta ? state.response.meta : null;
 
       els['result-count'].textContent = String(total);
       if(state.loading){
@@ -1696,6 +2103,15 @@
       }else{
         els['result-caption'].textContent = 'Ready for search';
         els['summary-meta'].textContent = 'Private beta. No fake fill. Source-gap is not confirmed absence.';
+      }
+
+      if(els['index-debug-line']){
+        if(meta && meta.index_record_count != null){
+          const generatedAt = meta.index_generated_at || 'unknown';
+          els['index-debug-line'].textContent = `Index: ${meta.index_record_count} records / generated_at ${generatedAt}`;
+        }else{
+          els['index-debug-line'].textContent = '';
+        }
       }
 
       els['page-indicator'].textContent = `${start}-${end}`;
@@ -1833,27 +2249,27 @@
         || why.includes('not exact variant');
 
       if(evidence === 'exact variant'){
-        if(quality === 'strong') return { tone: 'green', label: 'Exact variant match' };
-        if(quality === 'medium') return { tone: 'green', label: 'Exact variant candidate' };
-        return { tone: 'green', label: `Variant ${qualityTitle}` };
+        if(quality === 'strong') return { tone: 'green', label: t('match.exact_variant_match') };
+        if(quality === 'medium') return { tone: 'green', label: t('match.exact_variant_candidate') };
+        return { tone: 'green', label: `${t('match.exact_variant_candidate')} (${qualityTitle})` };
       }
 
       if(evidence === 'boundary conflict'){
-        if(quality === 'strong' || quality === 'medium') return { tone: 'amber', label: 'Related match' };
-        return { tone: 'amber', label: 'Variant conflict' };
+        if(quality === 'strong' || quality === 'medium') return { tone: 'amber', label: t('match.related_match') };
+        return { tone: 'amber', label: t('match.variant_conflict') };
       }
 
       if(evidence === 'same base model'){
-        if(quality === 'strong') return { tone: 'blue', label: 'Family match strong' };
-        if(quality === 'medium') return { tone: 'blue', label: 'Family match' };
-        return { tone: 'blue', label: 'Same-base only' };
+        if(quality === 'strong') return { tone: 'blue', label: t('match.family_match_strong') };
+        if(quality === 'medium') return { tone: 'blue', label: t('match.family_match') };
+        return { tone: 'blue', label: t('match.same_base_only') };
       }
 
       if(notExactPrice && (quality === 'strong' || quality === 'medium')){
-        return { tone: 'amber', label: 'Related match' };
+        return { tone: 'amber', label: t('match.related_match') };
       }
 
-      return { tone: 'blue', label: `Match ${qualityTitle}` };
+      return { tone: 'blue', label: localizeMatchBadgeLabel(`Match ${qualityTitle}`) };
     }
 
     function renderStateCard(title, body, bullets, tone){
@@ -2123,31 +2539,44 @@
       const target = canViewSource ? ' target="_blank" rel="noopener noreferrer"' : '';
       const status = statusMeta(result);
       const confidenceState = displayField(result, 'result_card_confidence_state');
-      const modelFallback = confidenceState === 'locked_classification_conflict' ? 'Review needed' : 'Unknown';
-      const familyFallback = confidenceState === 'locked_classification_conflict' ? 'Classification confidence pending' : 'Unknown';
+      const modelFallback = confidenceState === 'locked_classification_conflict' ? 'Review needed' : t('status.unknown');
+      const familyFallback = confidenceState === 'locked_classification_conflict' ? 'Classification confidence pending' : t('status.unknown');
       const model = displayValue(displayField(result, 'display_model'), modelFallback);
       const family = displayValue(displayField(result, 'display_family'), familyFallback);
-      const currency = displayValue(result.currency, 'Unknown');
-      const source = displayValue(result.source, 'Unknown source');
-      const focalLength = displayValue(displayField(result, 'display_focal_length'), 'Unknown');
-      const aperture = displayValue(displayField(result, 'display_aperture'), 'Unknown');
-      const displayCategory = displayValue(displayField(result, 'display_category'), 'Unknown');
-      const displayMount = displayValue(displayField(result, 'display_mount'), 'Unknown');
+      const currency = displayValue(result.currency, t('status.unknown'));
+      const source = displayValue(result.source, t('result.source_unknown'));
+      const focalLength = displayValue(displayField(result, 'display_focal_length'), t('status.unknown'));
+      const aperture = displayValue(displayField(result, 'display_aperture'), t('status.unknown'));
+      const displayCategory = displayValue(displayField(result, 'display_category'), t('status.unknown'));
+      const displayMount = displayValue(displayField(result, 'display_mount'), t('status.unknown'));
       const projected = Boolean(displayField(result, 'stale_normalization_detected'));
       const compactNotation = Boolean(displayField(result, 'compact_lens_notation_detected'));
       const evidence = getResultEvidence(result, index);
       const evidenceRole = String(evidence ? (evidence.result_role_label || evidence.compatibility_label || '') : '').trim();
+      const localizedEvidenceRole = localizeRoleValue(evidenceRole);
       const hasPrice = Boolean(String(result.price || '').trim());
       const priceRole = displayValue(
         evidence ? evidence.price_usage_label : '',
-        hasPrice ? 'Visible result, not classified for pricing yet' : 'No usable price'
+        hasPrice ? t('result.visible_not_classified') : t('result.no_usable_price')
       );
+      const localizedPriceRole = localizeRoleValue(priceRole);
       const reason = getResultReason(evidence) || (!hasPrice
-        ? 'Not used for market estimate'
+        ? t('result.not_used_for_market_estimate')
         : !evidence
-        ? 'Detailed price role not available for this visible result'
+        ? t('result.price_role_unavailable')
         : '');
+      const localizedReason = localizeReasonValue(reason);
       const matchBadge = getResultMatchBadge(result, evidenceRole, priceRole, reason);
+      const priceEvidenceMeta = derivePriceEvidenceMeta(result, evidence);
+      const conditionSummary = buildConditionSummary(result, status);
+      const detectedEntry = displayValue(displayField(result, 'display_entry_label'), displayField(result, 'display_model'));
+      const searchMatch = displayValue(result.query_match_label, evidenceRole || t('status.unknown'));
+      const usedForPrice = result.used_for_price ? 'true' : 'false';
+      const exclusionReason = displayValue((evidence && Array.isArray(evidence.excluded_reason) && evidence.excluded_reason.length ? evidence.excluded_reason[0] : '') || localizedReason, '—');
+      const generationConfidence = displayField(result, 'generation_confidence');
+      const generationConfidenceValue = generationConfidence === null || generationConfidence === undefined || generationConfidence === ''
+        ? '—'
+        : `${Math.round(Number(generationConfidence) * 100)}%`;
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
@@ -2157,40 +2586,58 @@
             <div class="card-copy">
               <a class="result-title" href="${safeUrl}"${target} title="${escapeHtml(title)}">${escapeHtml(title)}</a>
               <div class="result-price-row">
-                <div class="result-price">${escapeHtml(displayValue(result.price, 'Not enough data'))}</div>
-                <div class="result-source">${escapeHtml(source)}<br>${escapeHtml(currency)}</div>
+                <div class="result-price">${escapeHtml(displayValue(result.price, t('result.no_usable_price')))}</div>
+                <div class="result-source">
+                  <div class="result-source-name">${escapeHtml(source)}</div>
+                  <div class="result-source-meta">${escapeHtml(currency)}</div>
+                  <div class="result-condition-summary">${escapeHtml(conditionSummary.primary)}</div>
+                  ${conditionSummary.tags.length ? `<div class="result-condition-tags">${conditionSummary.tags.map(tag => `<span class="micro-pill">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+                </div>
               </div>
               <div class="result-status-row">
-                <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(status.label)}</span>
+                <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(localizeStatusLabel(status.label))}</span>
                 <span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
-                ${projected ? '<span class="micro-pill amber">Runtime projection</span>' : ''}
-                ${compactNotation ? '<span class="micro-pill green">Lens notation detected</span>' : ''}
-                ${result.used_override ? '<span class="micro-pill green">Trusted override</span>' : ''}
+                ${projected ? `<span class="micro-pill amber">${escapeHtml(t('result.runtime_projection'))}</span>` : ''}
+                ${compactNotation ? `<span class="micro-pill green">${escapeHtml(t(LENS_MARKER_COPY.qa))}</span>` : ''}
+                ${result.used_override ? `<span class="micro-pill green">${escapeHtml(t('result.trusted_override'))}</span>` : ''}
               </div>
             </div>
           </div>
-          <div class="data-grid">
-            ${renderDataPoint('Detected model', model)}
-            ${renderDataPoint('Family', family)}
-            ${renderDataPoint('Focal length', focalLength)}
-            ${renderDataPoint('Aperture', aperture)}
-            ${renderDataPoint('Mount', displayMount)}
-            ${renderDataPoint('Category', displayCategory)}
+          <div class="result-evidence-badges">
+            <span class="micro-pill ${escapeHtml(priceEvidenceMeta.tone)}">${escapeHtml(priceEvidenceMeta.label)}</span>
+            ${conditionSummary.raw ? `<span class="micro-pill blue">${escapeHtml(t('badge.condition_raw'))}</span>` : `<span class="micro-pill amber">${escapeHtml(t('result.condition_unknown'))}</span>`}
           </div>
-          ${(evidenceRole || priceRole || reason) ? `
+          <div class="data-grid">
+            ${renderDataPoint(t('result.detected_model'), model)}
+            ${renderDataPoint('Detected entry', detectedEntry)}
+            ${renderDataPoint('Search match', searchMatch)}
+            ${renderDataPoint('Used for price', usedForPrice)}
+            ${renderDataPoint('Exclusion reason', exclusionReason)}
+            ${renderDataPoint('Generation confidence', generationConfidenceValue)}
+            ${renderDataPoint(t('result.family'), family)}
+            ${renderDataPoint(t('result.focal_length'), focalLength)}
+            ${renderDataPoint(t('result.aperture'), aperture)}
+            ${renderDataPoint(t('result.mount'), displayMount)}
+            ${renderDataPoint(t('result.category'), displayCategory)}
+          </div>
+          ${(localizedEvidenceRole || localizedPriceRole || localizedReason) ? `
             <div class="result-role-rows">
-              ${evidenceRole ? renderRoleRow('Evidence role', evidenceRole) : ''}
-              ${priceRole ? renderRoleRow('Price role', priceRole) : ''}
-              ${reason ? renderRoleRow('Reason', reason) : ''}
+              ${localizedEvidenceRole ? renderRoleRow(t('result.evidence_role'), localizedEvidenceRole) : ''}
+              ${localizedPriceRole ? renderRoleRow(t('result.price_role'), localizedPriceRole) : ''}
+              ${localizedReason ? renderRoleRow(t('result.reason'), localizedReason) : ''}
+              <details class="result-role-row">
+                <summary><b>${escapeHtml(t('result.why_visible'))}</b></summary>
+                <span>${escapeHtml(localizedReason || localizedPriceRole || localizedEvidenceRole || t('result.price_role_unavailable'))}</span>
+              </details>
             </div>
           ` : ''}
           <div class="result-actions">
             <div class="action-group">
-              <button type="button" class="ghost-button">Track market changes</button>
-              <button type="button" class="ghost-button">Create alert for this exact model</button>
+              <button type="button" class="ghost-button">${escapeHtml(t('result.track_market_changes'))}</button>
+              <button type="button" class="ghost-button">${escapeHtml(t('result.create_alert_exact_model'))}</button>
             </div>
             <div class="action-group">
-              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>View source</a>` : '<button type="button" class="action-button" aria-disabled="true">View source</button>'}
+              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>${escapeHtml(t('result.view_source'))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(t('result.view_source'))}</button>`}
             </div>
           </div>
         </article>
@@ -2300,6 +2747,11 @@
           if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
         });
       });
+      if(els['locale-select']){
+        els['locale-select'].addEventListener('change', event => {
+          setLocale(event.target.value);
+        });
+      }
 
       els['prev-button'].addEventListener('click', () => {
         const current = state.response ? (state.response.pagination || {}) : {};
@@ -2375,6 +2827,9 @@
     }
 
     cacheElements();
+    uiState.locale = detectInitialLocale();
+    populateLocaleOptions();
+    applyStaticTranslations();
     bindEvents();
     hydrateFromUrl();
   </script>

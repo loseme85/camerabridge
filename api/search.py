@@ -28,6 +28,12 @@ from pathlib import Path
 from typing import Any, Callable, Mapping, Optional
 from urllib.parse import parse_qs, urlparse
 
+from entry_generation import (
+    classify_entry,
+    classify_query_entry,
+    compare_query_to_result,
+    suggested_generation_labels,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -109,6 +115,17 @@ KAMERASTORE_SHADOW_CONDITION_RANK = {
 KAMERASTORE_REPRESENTATIVE_STRATEGY = (
     "prefer shadow-clean rows, then stronger condition, then latest crawl_time, then stable source_url"
 )
+GENERATION_AWARE_GROUPS = {
+    "leica:m_body:m6",
+    "leica:m_body:m10",
+    "leica:m_body:m11",
+    "leica:q_body:q2",
+    "leica:q_body:q3",
+    "leica:m_lens:50_summicron_m",
+    "leica:m_lens:35_summicron_m",
+    "leica:m_lens:35_summilux_m",
+    "leica:m_lens:50_noctilux_m",
+}
 
 
 class SearchEndpointError(ValueError):
@@ -3750,6 +3767,267 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def _entry_result_signature(result: Mapping[str, Any]) -> tuple[str, str, str]:
+    return (
+        _normalize_text(result.get("title")),
+        str(_parse_price_number(result.get("price")) or ""),
+        _normalize_text(result.get("source")),
+    )
+
+
+def _attach_entry_generation_fields(result: dict[str, Any]) -> dict[str, Any]:
+    final = result.get("final_output") or {}
+    entry = classify_entry(result)
+    if isinstance(final, dict):
+        final.update({
+            "entry_base_model": entry.get("entry_base_model"),
+            "entry_generation": entry.get("entry_generation"),
+            "entry_variant": entry.get("entry_variant"),
+            "price_entry_key": entry.get("price_entry_key"),
+            "generation_confidence": entry.get("generation_confidence"),
+            "generation_confidence_reason": entry.get("generation_confidence_reason"),
+            "generation_boundary_conflict": entry.get("generation_boundary_conflict"),
+            "ordinary_price_eligible": entry.get("ordinary_price_eligible"),
+            "exact_generation_price_eligible": entry.get("exact_generation_price_eligible"),
+            "display_entry_label": entry.get("display_entry_label"),
+            "family": entry.get("family"),
+            "base_model": entry.get("base_model"),
+            "generation": entry.get("generation"),
+            "version": entry.get("version"),
+            "edition": entry.get("edition"),
+            "optical_version": entry.get("optical_version"),
+            "body_generation": entry.get("body_generation"),
+            "group_key": entry.get("group_key"),
+        })
+        result["final_output"] = final
+    result["_entry_generation"] = entry
+    return entry
+
+
+def _generation_price_usage_label(
+    *,
+    query_entry: Mapping[str, Any],
+    match_level: str,
+    used_for_price: bool,
+    price_present: bool,
+    exact_generation_query: bool,
+    broad_query_blocked: bool,
+) -> str:
+    query_label = str(query_entry.get("display_entry_label") or query_entry.get("base_model") or "this entry")
+    if used_for_price and exact_generation_query:
+        return "Used for exact-generation price"
+    if used_for_price:
+        return "Used for same generation candidate price"
+    if not price_present:
+        return "No usable price"
+    if broad_query_blocked:
+        if match_level == "exact_base_model":
+            return "Reference only — generation selection needed"
+        if match_level == "exact_generation":
+            return "Generation candidate visible — select a generation to price"
+        if match_level == "same_family_reference":
+            return "Reference only — same family"
+        return "Not used for price — generation selection needed"
+    if exact_generation_query:
+        if match_level == "exact_generation":
+            return "Exact generation match visible, but not enough to unlock price yet"
+        if match_level == "exact_base_model":
+            return f"Reference only — not used for {query_label} price"
+        if match_level == "same_family_reference":
+            return "Reference only — same family"
+        if match_level == "accessory_compatible":
+            return "Accessory / compatible item"
+        if match_level == "boundary_conflict":
+            return "Not used for price — boundary conflict"
+    return "Visible, but not used for pricing"
+
+
+def _apply_entry_generation_narrowing(
+    query: str,
+    response: dict[str, Any],
+    evidence_response: dict[str, Any] | None = None,
+) -> None:
+    intent = response.get("intent") or {}
+    query_entry = classify_query_entry(query, intent)
+
+    visible_results = list(response.get("results") or [])
+    evidence_results = list((evidence_response or response).get("results") or visible_results)
+
+    visible_entries: list[dict[str, Any]] = []
+    evidence_entries: list[dict[str, Any]] = []
+
+    for result in visible_results:
+        visible_entries.append(_attach_entry_generation_fields(result))
+    for result in evidence_results:
+        evidence_entries.append(_attach_entry_generation_fields(result))
+
+    exact_generation_query = bool(query_entry.get("is_generation_specific"))
+    broad_parent_query = bool(query_entry.get("is_broad_parent_query")) and str(query_entry.get("group_key") or "") in GENERATION_AWARE_GROUPS
+    generation_labels = suggested_generation_labels(query_entry, evidence_entries, limit=4)
+
+    if exact_generation_query or broad_parent_query:
+        visible_results.sort(
+            key=lambda item: (
+                -(compare_query_to_result(query_entry, item.get("_entry_generation") or {}).get("query_match_score") or 0),
+                -float(item.get("score") or 0),
+            )
+        )
+        response["results"] = visible_results
+
+    exact_generation_candidates: list[dict[str, Any]] = []
+    seen_exact_generation: set[tuple[str, str, str]] = set()
+    for result in evidence_results:
+        entry = result.get("_entry_generation") or {}
+        match = compare_query_to_result(query_entry, entry)
+        if match.get("query_match_level") != "exact_generation":
+            continue
+        if not entry.get("exact_generation_price_eligible"):
+            continue
+        if _parse_price_number(result.get("price")) is None:
+            continue
+        signature = _entry_result_signature(result)
+        if signature in seen_exact_generation:
+            continue
+        seen_exact_generation.add(signature)
+        exact_generation_candidates.append(result)
+
+    broad_query_blocked = broad_parent_query and bool(generation_labels)
+    exact_generation_ready = exact_generation_query and len(exact_generation_candidates) >= 2
+
+    if broad_query_blocked:
+        response["price_summary_allowed"] = False
+        response["price_scope"] = "generation_disambiguation_required"
+        response["price_scope_label"] = "Generation selection needed"
+        response["display_price_summary_allowed"] = False
+        response["display_price_scope_label"] = "Generation selection needed"
+        response["display_price_band"] = "Generation selection needed"
+        response["display_price_band_quality_state"] = "Generation selection needed"
+        response["entry_scope"] = "generation_disambiguation_required"
+        reasons = list(response.get("price_summary_block_reason") or [])
+        if "generation_disambiguation_required" not in reasons:
+            reasons.append("generation_disambiguation_required")
+        response["price_summary_block_reason"] = reasons
+    elif exact_generation_query:
+        response["entry_scope"] = "exact_generation"
+        response["price_evidence_scope"] = "exact_generation"
+        response["query_entry_key"] = query_entry.get("price_entry_key")
+        if exact_generation_ready:
+            response["price_summary_allowed"] = True
+            response["price_scope"] = "exact_generation"
+            response["price_scope_label"] = "Exact generation price"
+            response["display_price_summary_allowed"] = True
+            response["display_price_scope_label"] = "Exact generation price"
+        else:
+            response["price_summary_allowed"] = False
+            response["price_scope"] = "insufficient_exact_generation_data"
+            response["price_scope_label"] = "Exact generation price data limited"
+            response["display_price_summary_allowed"] = False
+            response["display_price_scope_label"] = "Exact generation price data limited"
+
+    query_match_distribution: Counter[str] = Counter()
+    result_entry_labels: list[str] = []
+    for result in response.get("results") or []:
+        entry = result.get("_entry_generation") or {}
+        match = compare_query_to_result(query_entry, entry)
+        query_match_distribution[str(match.get("query_match_level") or "unknown")] += 1
+        result["query_match_level"] = match.get("query_match_level")
+        result["query_match_score"] = match.get("query_match_score")
+        result["query_match_label"] = match.get("query_match_label")
+        result["query_entry_key"] = match.get("query_entry_key")
+        result["result_entry_key"] = match.get("result_entry_key")
+        result["matched_tokens"] = list(match.get("matched_tokens") or [])
+        result["missing_tokens"] = list(match.get("missing_tokens") or [])
+        result["conflicting_tokens"] = list(match.get("conflicting_tokens") or [])
+        result["price_usage_role"] = "used" if result.get("used_for_price") else "excluded"
+        label = str(entry.get("display_entry_label") or "")
+        if label:
+            result_entry_labels.append(label)
+
+    evidence_by_signature = {
+        item.get("evidence_signature"): item
+        for item in (response.get("display_visible_result_evidence") or [])
+        if isinstance(item, dict)
+    }
+    for index, result in enumerate(response.get("results") or []):
+        entry = result.get("_entry_generation") or {}
+        match = compare_query_to_result(query_entry, entry)
+        price_present = _parse_price_number(result.get("price")) is not None
+        should_use = False
+        if exact_generation_ready and match.get("query_match_level") == "exact_generation":
+            should_use = price_present and bool(entry.get("exact_generation_price_eligible"))
+        elif broad_query_blocked:
+            should_use = False
+        evidence_signature = "||".join(_entry_result_signature(result))
+        evidence_item = evidence_by_signature.get(evidence_signature)
+        if evidence_item is not None:
+            evidence_item["used_for_price"] = should_use
+            evidence_item["compatibility_label"] = match.get("query_match_label") or evidence_item.get("compatibility_label")
+            evidence_item["result_role_label"] = match.get("query_match_label") or evidence_item.get("result_role_label")
+            evidence_item["price_usage_label"] = _generation_price_usage_label(
+                query_entry=query_entry,
+                match_level=str(match.get("query_match_level") or ""),
+                used_for_price=should_use,
+                price_present=price_present,
+                exact_generation_query=exact_generation_query,
+                broad_query_blocked=broad_query_blocked,
+            )
+        result["used_for_price"] = should_use
+        result["price_usage_label"] = _generation_price_usage_label(
+            query_entry=query_entry,
+            match_level=str(match.get("query_match_level") or ""),
+            used_for_price=should_use,
+            price_present=price_present,
+            exact_generation_query=exact_generation_query,
+            broad_query_blocked=broad_query_blocked,
+        )
+
+    response["display_top_result_evidence"] = list((response.get("display_visible_result_evidence") or [])[:5])
+    response["query_match_distribution"] = dict(query_match_distribution)
+    response["query_entry_key"] = query_entry.get("price_entry_key")
+    response["query_entry_label"] = query_entry.get("display_entry_label")
+    response["entry_generation_suggestions"] = generation_labels
+
+    review = dict(response.get("display_query_review") or {})
+    if broad_query_blocked:
+        review["interpreted_target"] = str(query_entry.get("display_entry_label") or query)
+        review["match_state"] = "Generation selection is needed before pricing."
+        review["price_status"] = "Broad query price is blocked until a generation is selected."
+        review["why"] = "Prices vary strongly by generation."
+        review["needed_to_unlock"] = generation_labels
+        review["evidence_cards"] = [f"Choose generation: {label}" for label in generation_labels]
+        review["evidence_summary"] = "Broad parent-model pricing is blocked. Select a generation or version."
+        review["copy_summary_text"] = "\n".join([
+            "Query review",
+            f"You searched: {query}",
+            f"Interpreted as: {review['interpreted_target']}",
+            f"Category: {review.get('category') or query_entry.get('category') or ''}",
+            f"Match status: {review['match_state']}",
+            f"Price status: {review['price_status']}",
+            f"Why: {review['why']}",
+            f"Choose one generation: {', '.join(generation_labels)}",
+        ])
+    elif exact_generation_query:
+        review["interpreted_target"] = str(query_entry.get("display_entry_label") or query)
+        review["category"] = str(query_entry.get("category") or review.get("category") or "")
+        review["match_state"] = "Exact generation listings are ranked first."
+        review["price_status"] = "Exact generation price is available." if exact_generation_ready else "Exact generation price data is still limited."
+        review["why"] = "Price bands now follow the detected generation / version."
+        review["evidence_summary"] = (
+            f"Exact generation priced listings: {len(exact_generation_candidates)}. "
+            f"Visible same-base but different-generation rows stay reference only."
+        )
+    response["display_query_review"] = review
+
+    ui_hints = dict(response.get("ui_hints") or {})
+    if broad_query_blocked:
+        ui_hints["needs_disambiguation"] = True
+        ui_hints["ambiguity_type"] = "generation_selection"
+        ui_hints["recommended_ui_pattern"] = "generation_chooser"
+        ui_hints["recommended_chips"] = generation_labels
+        ui_hints["recommended_message"] = "You searched a broad parent model. Prices vary strongly by generation."
+    response["ui_hints"] = ui_hints
+
+
 def search_from_params(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
@@ -3867,6 +4145,7 @@ def search_from_params(
         response.update(response["market_entry_policy"])
         _apply_kamerastore_shadow_price_guard(response, full_shadow_records)
         _apply_kamerastore_live_price_guard(response, full_shadow_records)
+        _apply_entry_generation_narrowing(parsed["query"], response, evidence_response=evidence_response)
         response["meta"] = response_meta
         return response
 
@@ -3902,6 +4181,7 @@ def search_from_params(
     response.update(response["market_entry_policy"])
     _apply_kamerastore_shadow_price_guard(response, full_shadow_records)
     _apply_kamerastore_live_price_guard(response, full_shadow_records)
+    _apply_entry_generation_narrowing(parsed["query"], response, evidence_response=evidence_response)
     response["meta"] = response_meta
     return response
 
