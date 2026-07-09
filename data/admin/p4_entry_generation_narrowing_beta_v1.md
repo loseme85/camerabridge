@@ -1,12 +1,22 @@
 # P4 Entry Generation Narrowing Beta v1
 
 - Branch: `p4-entry-generation-narrowing-beta`
-- Beta preview URL: pending local-only round, not deployed yet
+- Beta preview URL: `https://camerabridge-f8g3e3hi6-camerabridge.vercel.app`
+- Branch alias URL: `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app`
+- Deployment commit: `808f10ef15a97d2f7aa5abccbd1f5ac6f7515175`
 - Production untouched: confirmed
 
 ## Executive Summary
 
 This beta-only round moved the search layer from broad parent-model pricing toward generation/version-level pricing for priority Leica body and lens families.
+
+Deployment status for this round:
+
+- scoped beta branch commit pushed successfully
+- Vercel preview deployment reached `READY`
+- production remains untouched
+- local smoke is PASS
+- preview smoke is still `PENDING` because this preview deployment is currently protected by Vercel login/SSO, so direct unauthenticated API/UI verification redirects to the Vercel login gate instead of the app payload
 
 The core change is:
 
@@ -27,6 +37,50 @@ The core change is:
 - `app/templates/index.html`
 - `beta.html`
 - `app/templates/beta.html`
+
+## Preview Deployment
+
+- Branch: `p4-entry-generation-narrowing-beta`
+- Deployment URL: `https://camerabridge-f8g3e3hi6-camerabridge.vercel.app`
+- Branch alias: `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app`
+- Deployment state: `READY`
+- Deployment commit: `808f10ef15a97d2f7aa5abccbd1f5ac6f7515175`
+- Commit message: `P4 entry generation narrowing beta`
+- Production untouched: confirmed
+
+## Preview Smoke Status
+
+Preview verification attempt summary:
+
+- Direct preview API fetch attempted for:
+  - `Leica M10`
+  - `Leica M10-P`
+  - `Leica 50mm Summicron-M Type IV`
+- Direct preview page fetch attempted for:
+  - `/?q=Leica+M10`
+- Result:
+  - preview requests redirect to the Vercel login / SSO gate
+  - path-specific `_vercel_share` access links were generated successfully
+  - however, this deployment still resolved to the Vercel login flow during automated verification
+
+Current decision:
+
+- Local logic/card exposure: `PASS`
+- Preview deployment creation: `PASS`
+- Preview smoke: `PENDING (access-gated)`
+- Owner smoke: `PENDING`
+
+## Local vs Preview Difference
+
+- Local:
+  - full API and card-level behavior verified
+  - broad parent queries lock to `generation_disambiguation_required`
+  - exact generation queries promote clean same-generation rows only
+- Preview:
+  - deployed commit matches local code commit
+  - deployment is `READY`
+  - automated smoke could not reach app payload because the preview is still protected behind Vercel login/SSO
+  - no backend/runtime regression was directly observed, but app-response parity is still pending owner-visible or authenticated verification
 
 ## Entry Generation Registry Summary
 
@@ -435,4 +489,3 @@ python3 -c "from app.app import app; app.run(host='127.0.0.1', port=5001, debug=
 - no production alias change
 - no production deployment
 - no main data overwrite
-
