@@ -3767,10 +3767,11 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def _entry_result_signature(result: Mapping[str, Any]) -> tuple[str, str, str]:
+def _entry_result_signature(result: Mapping[str, Any]) -> tuple[str, str, str, str]:
     return (
-        _normalize_text(result.get("title")),
+        _normalize_dedupe_title(_result_title(result)),
         str(_parse_price_number(result.get("price")) or ""),
+        _result_currency(result),
         _normalize_text(result.get("source")),
     )
 
@@ -3975,11 +3976,10 @@ def _apply_entry_generation_narrowing(
         if label:
             result_entry_labels.append(label)
 
-    evidence_by_signature = {
-        item.get("evidence_signature"): item
-        for item in (response.get("display_visible_result_evidence") or [])
-        if isinstance(item, dict)
-    }
+    evidence_by_signature: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for item in (response.get("display_visible_result_evidence") or []):
+        if isinstance(item, dict) and item.get("evidence_signature"):
+            evidence_by_signature[str(item.get("evidence_signature"))].append(item)
     for index, result in enumerate(response.get("results") or []):
         entry = result.get("_entry_generation") or {}
         match = compare_query_to_result(query_entry, entry)
@@ -3990,22 +3990,23 @@ def _apply_entry_generation_narrowing(
         elif broad_query_blocked:
             should_use = False
         evidence_signature = "||".join(_entry_result_signature(result))
-        evidence_item = evidence_by_signature.get(evidence_signature)
-        if evidence_item is not None:
-            evidence_excluded_reasons = list(evidence_item.get("excluded_reason") or [])
-            evidence_item["used_for_price"] = should_use
-            evidence_item["compatibility_label"] = match.get("query_match_label") or evidence_item.get("compatibility_label")
-            evidence_item["result_role_label"] = match.get("query_match_label") or evidence_item.get("result_role_label")
-            evidence_item["price_usage_label"] = _generation_price_usage_label(
-                query_entry=query_entry,
-                match_level=str(match.get("query_match_level") or ""),
-                used_for_price=should_use,
-                price_present=price_present,
-                exact_generation_query=exact_generation_query,
-                broad_query_blocked=broad_query_blocked,
-                exact_generation_ready=exact_generation_ready,
-                excluded_reasons=evidence_excluded_reasons,
-            )
+        evidence_items = evidence_by_signature.get(evidence_signature) or []
+        if evidence_items:
+            evidence_excluded_reasons = list((evidence_items[0].get("excluded_reason") or []))
+            for evidence_item in evidence_items:
+                evidence_item["used_for_price"] = should_use
+                evidence_item["compatibility_label"] = match.get("query_match_label") or evidence_item.get("compatibility_label")
+                evidence_item["result_role_label"] = match.get("query_match_label") or evidence_item.get("result_role_label")
+                evidence_item["price_usage_label"] = _generation_price_usage_label(
+                    query_entry=query_entry,
+                    match_level=str(match.get("query_match_level") or ""),
+                    used_for_price=should_use,
+                    price_present=price_present,
+                    exact_generation_query=exact_generation_query,
+                    broad_query_blocked=broad_query_blocked,
+                    exact_generation_ready=exact_generation_ready,
+                    excluded_reasons=list(evidence_item.get("excluded_reason") or evidence_excluded_reasons),
+                )
             result["excluded_reason"] = evidence_excluded_reasons
         result["used_for_price"] = should_use
         result["price_usage_label"] = _generation_price_usage_label(

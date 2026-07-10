@@ -17,6 +17,32 @@ Second preview follow-up:
 - this narrow follow-up fixes contradictory row-level labels so visible evidence now agrees with the top-level generation policy
 - production remains untouched
 
+Third preview follow-up:
+
+- owner authenticated smoke confirmed:
+  - `Type IV` label fix: PASS
+  - `Leica M10` broad query: mostly PASS
+  - remaining HOLD was specifically the `Top visible evidence` projection
+- root cause:
+  - generation-aware row updates were applied to result cards
+  - but `display_top_result_evidence` still contained stale labels when its evidence-signature mapping diverged from the result-row signature format
+  - duplicate-signature clusters such as `Leica M10-P` could also leave the first visible evidence item stale while later siblings were already corrected
+- this follow-up aligns the evidence signature format and updates all visible evidence siblings sharing the same signature so the panel now matches the final generation-aware labels
+
+Local recheck after the top-visible-evidence projection fix:
+
+- `Leica M6`
+  - top visible evidence rows now show:
+    - `Reference only — generation selection needed`
+    - or an explicit exclusion such as `Not used — Variant boundary`
+  - no top visible evidence row shows:
+    - `Used for same base model price`
+- `Leica M10-P`
+  - top visible evidence clean row now shows:
+    - `Used for exact-generation price`
+  - duplicate sibling shows:
+    - `Not used — Duplicate listing`
+
 Owner authenticated smoke on preview exposed one real HOLD gap:
 
 - backend top-level generation override was correct locally

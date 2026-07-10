@@ -452,6 +452,9 @@ def test_broad_generation_query_projects_reference_only_labels() -> None:
     labels = [str(item.get("price_usage_label") or "") for item in response["results"]]
     assert "Used for same base model price" not in labels
     assert "Reference only — generation selection needed" in labels
+    top_evidence_labels = [str(item.get("price_usage_label") or "") for item in response["display_top_result_evidence"]]
+    assert "Used for same base model price" not in top_evidence_labels
+    assert "Reference only — generation selection needed" in top_evidence_labels
 
 
 def test_broad_m10_generation_query_keeps_accessories_out_of_price_use() -> None:
@@ -485,6 +488,24 @@ def test_exact_m10_p_rows_use_exact_generation_labels_when_summary_is_available(
         for item in exact_rows
         if item.get("used_for_price")
     )
+    top_evidence = [item for item in response["display_top_result_evidence"] if "M10-P" in str(item.get("title", ""))]
+    assert top_evidence
+    assert any(str(item.get("price_usage_label") or "") == "Used for exact-generation price" for item in top_evidence)
+    assert all(
+        str(item.get("price_usage_label") or "") != "Exact generation match visible, but not enough to unlock price yet"
+        for item in top_evidence
+        if item.get("used_for_price")
+    )
+
+
+def test_type_iv_top_visible_evidence_keeps_exact_generation_pass_behavior() -> None:
+    status, response = endpoint_response({"q": "Leica 50mm Summicron-M Type IV", "limit": "12"}, records=GENERATION_RECORDS)
+    assert status == 200
+    assert response["market_entry_title"] == "Leica 50mm Summicron-M Type IV"
+    assert response["display_price_summary_allowed"] is True
+    top_evidence = response["display_top_result_evidence"]
+    assert top_evidence
+    assert any(str(item.get("price_usage_label") or "") == "Used for exact-generation price" for item in top_evidence)
 
 
 if __name__ == "__main__":
