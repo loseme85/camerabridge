@@ -3812,8 +3812,13 @@ def _generation_price_usage_label(
     price_present: bool,
     exact_generation_query: bool,
     broad_query_blocked: bool,
+    exact_generation_ready: bool,
+    excluded_reasons: list[str] | None = None,
 ) -> str:
+    excluded_reasons = list(excluded_reasons or [])
     query_label = str(query_entry.get("display_entry_label") or query_entry.get("base_model") or "this entry")
+    if excluded_reasons:
+        return f"Not used — {excluded_reasons[0]}"
     if used_for_price and exact_generation_query:
         return "Used for exact-generation price"
     if used_for_price:
@@ -3821,15 +3826,13 @@ def _generation_price_usage_label(
     if not price_present:
         return "No usable price"
     if broad_query_blocked:
-        if match_level == "exact_base_model":
+        if match_level in {"exact_base_model", "exact_generation", "same_family_reference"}:
             return "Reference only — generation selection needed"
-        if match_level == "exact_generation":
-            return "Generation candidate visible — select a generation to price"
-        if match_level == "same_family_reference":
-            return "Reference only — same family"
         return "Not used for price — generation selection needed"
     if exact_generation_query:
         if match_level == "exact_generation":
+            if exact_generation_ready:
+                return "Exact generation match visible, but not selected for exact price"
             return "Exact generation match visible, but not enough to unlock price yet"
         if match_level == "exact_base_model":
             return f"Reference only — not used for {query_label} price"
@@ -3989,6 +3992,7 @@ def _apply_entry_generation_narrowing(
         evidence_signature = "||".join(_entry_result_signature(result))
         evidence_item = evidence_by_signature.get(evidence_signature)
         if evidence_item is not None:
+            evidence_excluded_reasons = list(evidence_item.get("excluded_reason") or [])
             evidence_item["used_for_price"] = should_use
             evidence_item["compatibility_label"] = match.get("query_match_label") or evidence_item.get("compatibility_label")
             evidence_item["result_role_label"] = match.get("query_match_label") or evidence_item.get("result_role_label")
@@ -3999,7 +4003,10 @@ def _apply_entry_generation_narrowing(
                 price_present=price_present,
                 exact_generation_query=exact_generation_query,
                 broad_query_blocked=broad_query_blocked,
+                exact_generation_ready=exact_generation_ready,
+                excluded_reasons=evidence_excluded_reasons,
             )
+            result["excluded_reason"] = evidence_excluded_reasons
         result["used_for_price"] = should_use
         result["price_usage_label"] = _generation_price_usage_label(
             query_entry=query_entry,
@@ -4008,6 +4015,8 @@ def _apply_entry_generation_narrowing(
             price_present=price_present,
             exact_generation_query=exact_generation_query,
             broad_query_blocked=broad_query_blocked,
+            exact_generation_ready=exact_generation_ready,
+            excluded_reasons=result.get("excluded_reason") or [],
         )
 
     response["display_top_result_evidence"] = list((response.get("display_visible_result_evidence") or [])[:5])

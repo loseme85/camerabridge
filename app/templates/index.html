@@ -1463,6 +1463,7 @@
         'used for exact-generation price': '세대 기준 가격 계산에 사용됨',
         'used for same generation candidate price': '세대 후보 가격 계산에 사용됨',
         'exact variant match visible, but not selected for exact price': '정확히 맞지만 가격 계산에서는 제외',
+        'exact generation match visible, but not selected for exact price': '정확히 맞지만 가격 계산에서는 제외',
         'exact generation match visible, but not enough to unlock price yet': '정확히 맞지만 가격 계산에서는 제외',
         'reference only — not used for this entry price': '해당 세대 가격에는 사용되지 않음',
         'reference only — generation selection needed': '세대 선택 전 참고 결과만 표시',
@@ -2387,6 +2388,9 @@
       const review = policy.display_query_review || {};
       const category = String(review.category || '').toLowerCase();
       if(policy.display_price_summary_allowed){
+        if(policy.display_price_band_source === 'exact_generation' || policy.price_scope === 'exact_generation'){
+          return 'Exact generation price';
+        }
         if(category === 'body'){
           return 'Body market summary';
         }

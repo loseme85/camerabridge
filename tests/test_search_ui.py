@@ -63,6 +63,12 @@ def test_market_entry_policy_merges_top_level_runtime_overrides() -> None:
         assert "...apiPolicy," in html
 
 
+def test_exact_generation_headline_and_label_mappings_exist() -> None:
+    for html in _html_files():
+        assert "Exact generation price" in html
+        assert "exact generation match visible, but not selected for exact price" in html.lower()
+
+
 if __name__ == "__main__":
     test_index_calls_search_endpoint()
     test_index_does_not_reimplement_legacy_search()

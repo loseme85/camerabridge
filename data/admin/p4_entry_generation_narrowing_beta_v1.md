@@ -10,6 +10,13 @@
 
 This beta-only round moved the search layer from broad parent-model pricing toward generation/version-level pricing for priority Leica body and lens families.
 
+Second preview follow-up:
+
+- owner authenticated smoke confirmed that broad parent blocking and exact generation narrowing were now mostly correct
+- remaining mismatch was UI/evidence label consistency
+- this narrow follow-up fixes contradictory row-level labels so visible evidence now agrees with the top-level generation policy
+- production remains untouched
+
 Owner authenticated smoke on preview exposed one real HOLD gap:
 
 - backend top-level generation override was correct locally
@@ -49,10 +56,11 @@ The core change is:
 
 - Branch: `p4-entry-generation-narrowing-beta`
 - Previous deployment URL: `https://camerabridge-f8g3e3hi6-camerabridge.vercel.app`
-- Previous branch alias: `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app`
-- Previous deployment state: `READY`
+- Branch alias URL: `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app`
+- New deployment inspect URL: `https://vercel.com/camerabridge/camerabridge/8KS24twSYYEVjMenUhqfXEsRZi4z`
 - Previous deployment commit: `808f10ef15a97d2f7aa5abccbd1f5ac6f7515175`
-- New deployment for this fixup: pending push
+- New deployment commit: `3876e721154f6593e332cfa1a762f8f7fdcbf0e2`
+- New deployment state: `READY`
 - Production untouched: confirmed
 
 ## Owner HOLD Root Cause
@@ -94,6 +102,47 @@ This follow-up added:
   - `Leica 50mm Summicron-M Dual Range`
 - exact-generation band sync so exact-generation rows no longer inherit broad base-model display band
 - frontend merge logic so top-level runtime overrides take precedence over nested stale policy fields
+
+## UI / Evidence Label Consistency Follow-up
+
+Owner recheck after the previous preview showed one remaining narrow issue:
+
+- broad parent queries such as `Leica M6` and `Leica M10` were correctly blocked at the summary layer
+- but some visible rows still projected stale pricing language such as:
+  - `Used for same base model price`
+- exact generation summaries such as `Leica M10-P` could still show:
+  - `Exact generation match visible, but not enough to unlock price yet`
+  even when the exact generation band was already open
+- exact generation market-entry cards such as `Leica 50mm Summicron-M Type IV` could still render a locked-looking headline because the UI headline helper did not recognize `display_price_band_source = exact_generation`
+
+This follow-up fixes that projection layer only:
+
+- broad parent generation-blocked rows now consistently show:
+  - `Reference only — generation selection needed`
+  - or an explicit non-price exclusion reason
+- exact generation summaries now project:
+  - `Used for exact-generation price`
+  for clean rows that actually support the open summary
+- duplicate / outlier / excluded rows keep their exclusion reason instead of being overwritten by a generic generation message
+- exact generation market-entry cards now show an `Exact generation price` headline instead of falling through to `Price locked`
+
+Local recheck after this label-consistency follow-up:
+
+- `Leica M6`
+  - visible top rows: `Reference only — generation selection needed`
+  - no visible `Used for same base model price`
+- `Leica M10`
+  - visible top rows: `Reference only — generation selection needed`
+  - M10 accessory rows remain excluded / not used
+- `Leica M10-P`
+  - top clean rows: `Used for exact-generation price`
+  - no clean exact row says `not enough to unlock price yet`
+- `Leica 50mm Summicron-M Type IV`
+  - exact generation summary remains open
+  - visible clean exact rows: `Used for exact-generation price`
+  - market-entry headline now resolves as exact-generation price rather than a locked fallback
+- `Leica 35mm Summicron pre-ASPH`
+  - remains locked, which is still correct
 
 ## Local Recheck After Owner HOLD
 
@@ -159,25 +208,24 @@ This follow-up added:
 
 ## Preview Smoke Status
 
-Preview verification attempt summary:
+Preview verification summary for deployment commit `3876e721154f6593e332cfa1a762f8f7fdcbf0e2`:
 
-- Direct preview API fetch attempted for:
-  - `Leica M10`
-  - `Leica M10-P`
-  - `Leica 50mm Summicron-M Type IV`
-- Direct preview page fetch attempted for:
-  - `/?q=Leica+M10`
+- GitHub/Vercel deployment status:
+  - `success`
+  - description: `Deployment has completed`
+- Preview API probe attempted against branch alias:
+  - `https://camerabridge-git-p4-entry-generation-narrow-88fc63-camerabridge.vercel.app/api/search?q=Leica%20M10&limit=1`
 - Result:
-  - preview requests redirect to the Vercel login / SSO gate
-  - path-specific `_vercel_share` access links were generated successfully
-  - however, this deployment still resolved to the Vercel login flow during automated verification
+  - deployment is `READY`
+  - unauthenticated preview probe returns `302` to Vercel SSO
+  - automated smoke cannot inspect payload without authenticated/share-gated access
 
 Current decision:
 
 - Local logic/card exposure: `PASS`
 - Preview deployment creation: `PASS`
-- Preview smoke: `PENDING (access-gated)`
-- Owner smoke: `PENDING`
+- Preview smoke: `PENDING (SSO-gated unauthenticated probe)`
+- Owner authenticated smoke: `PENDING`
 
 ## Local vs Preview Difference
 
@@ -186,7 +234,7 @@ Current decision:
   - broad parent queries lock to `generation_disambiguation_required`
   - exact generation queries promote clean same-generation rows only
 - Preview:
-  - deployed commit matches local code commit
+  - deployed commit matches local code commit: `3876e721154f6593e332cfa1a762f8f7fdcbf0e2`
   - deployment is `READY`
   - automated smoke could not reach app payload because the preview is still protected behind Vercel login/SSO
   - no backend/runtime regression was directly observed, but app-response parity is still pending owner-visible or authenticated verification

@@ -203,7 +203,100 @@ TYPE_IV_B = _record(
     },
 )
 
-GENERATION_RECORDS = RECORDS + [M6_CLASSIC, M6_TTL, TYPE_IV_A, TYPE_IV_B]
+M10_BODY = _record(
+    9,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/m10",
+        "title_raw": "Leica M10 Silver",
+        "price_raw": "5,800,000원",
+        "currency": "KRW",
+        "condition_raw": "93%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10",
+        "model_canonical": "M10",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+M10_P_A = _record(
+    10,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/m10p-a",
+        "title_raw": "LEICA M10-P sn.5506",
+        "price_raw": "6,000,000원",
+        "currency": "KRW",
+        "condition_raw": "95%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10-P",
+        "model_canonical": "M10-P",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+M10_P_B = _record(
+    11,
+    {
+        "source": "Body dealer",
+        "source_url": "https://example.invalid/m10p-b",
+        "title_raw": "LEICA M10-P sn.5488",
+        "price_raw": "7,200,000원",
+        "currency": "KRW",
+        "condition_raw": "94%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10-P",
+        "model_canonical": "M10-P",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+M10_ACCESSORY = _record(
+    12,
+    {
+        "source": "Accessory dealer",
+        "source_url": "https://example.invalid/m10-holster",
+        "title_raw": "[중고] Leica M10 홀스터",
+        "price_raw": "120,000원",
+        "currency": "KRW",
+        "condition_raw": "used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": "M10",
+        "model_canonical": "M10",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
+)
+
+GENERATION_RECORDS = RECORDS + [
+    M6_CLASSIC,
+    M6_TTL,
+    TYPE_IV_A,
+    TYPE_IV_B,
+    M10_BODY,
+    M10_P_A,
+    M10_P_B,
+    M10_ACCESSORY,
+]
 
 
 def test_parse_required_and_optional_params() -> None:
@@ -348,6 +441,50 @@ def test_exact_generation_syncs_generation_label_and_band_without_broad_referenc
     assert response["market_entry_policy"]["display_broader_reference_allowed"] is False
     assert response["display_price_band_source"] == "exact_generation"
     assert response["display_price_band"].startswith("KRW ")
+
+
+def test_broad_generation_query_projects_reference_only_labels() -> None:
+    status, response = endpoint_response({"q": "Leica M6", "limit": "12"}, records=GENERATION_RECORDS)
+    assert status == 200
+    assert response["price_summary_allowed"] is False
+    assert response["price_scope"] == "generation_disambiguation_required"
+    assert sum(1 for item in response["results"] if item.get("used_for_price")) == 0
+    labels = [str(item.get("price_usage_label") or "") for item in response["results"]]
+    assert "Used for same base model price" not in labels
+    assert "Reference only — generation selection needed" in labels
+
+
+def test_broad_m10_generation_query_keeps_accessories_out_of_price_use() -> None:
+    status, response = endpoint_response({"q": "Leica M10", "limit": "12"}, records=GENERATION_RECORDS)
+    assert status == 200
+    assert response["price_summary_allowed"] is False
+    assert response["price_scope"] == "generation_disambiguation_required"
+    assert sum(1 for item in response["results"] if item.get("used_for_price")) == 0
+    accessory_rows = [item for item in response["results"] if "홀스터" in str(item.get("title", ""))]
+    assert accessory_rows
+    assert all(item.get("used_for_price") is False for item in accessory_rows)
+    assert all(
+        str(item.get("price_usage_label") or "") in {
+            "Not used for price — generation selection needed",
+            "Not used — Accessory, not camera/lens",
+        }
+        for item in accessory_rows
+    )
+
+
+def test_exact_m10_p_rows_use_exact_generation_labels_when_summary_is_available() -> None:
+    status, response = endpoint_response({"q": "Leica M10-P", "limit": "12"}, records=GENERATION_RECORDS)
+    assert status == 200
+    assert response["price_scope"] == "exact_generation"
+    assert response["display_price_summary_allowed"] is True
+    exact_rows = [item for item in response["results"] if "M10-P" in str(item.get("title", ""))]
+    assert exact_rows
+    assert any(str(item.get("price_usage_label") or "") == "Used for exact-generation price" for item in exact_rows)
+    assert all(
+        str(item.get("price_usage_label") or "") != "Exact generation match visible, but not enough to unlock price yet"
+        for item in exact_rows
+        if item.get("used_for_price")
+    )
 
 
 if __name__ == "__main__":
