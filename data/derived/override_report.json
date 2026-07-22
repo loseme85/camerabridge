@@ -1,83 +1,15 @@
 {
-  "generated_at": "2026-07-21T11:21:46.741331+00:00",
-  "total_records": 7751,
-  "override_applied_count": 7,
-  "trusted_metadata_applied_count": 1,
+  "generated_at": "2026-07-22T05:46:54.483159+00:00",
+  "total_records": 5258,
+  "override_applied_count": 6,
+  "trusted_metadata_applied_count": 0,
   "curated_reference_applied_count": 6,
   "changed_fields": {
-    "brand": 1,
-    "category": 1,
-    "label": 1,
-    "model_canonical": 1,
-    "mount": 1,
-    "variant": 7
+    "variant": 6
   },
   "examples": [
     {
-      "record_index": 1351,
-      "title_raw": "[중고] MP3 (Black Paint)",
-      "source": "라이카스토어 충무로",
-      "source_url": "https://leica-storebando.co.kr/product/중고-mp3-black-paint/17883/category/442/display/1/",
-      "override_source": "trusted_metadata",
-      "override_source_id": "trusted_listing_mp3_blackpaint_chungmuro_17883",
-      "override_reason": "Trusted dealer exact listing identifies this as Leica MP3 body.",
-      "changed_fields": {
-        "brand": {
-          "before": "Unknown",
-          "after": "Leica"
-        },
-        "mount": {
-          "before": "Unknown",
-          "after": "M"
-        },
-        "category": {
-          "before": "Lens",
-          "after": "Body"
-        },
-        "label": {
-          "before": "Lens",
-          "after": "M Body"
-        },
-        "model_canonical": {
-          "before": null,
-          "after": "MP3"
-        },
-        "variant": {
-          "before": [
-            "Black Paint",
-            "Black"
-          ],
-          "after": [
-            "Black Paint"
-          ]
-        }
-      },
-      "classifier_output": {
-        "brand": "Unknown",
-        "mount": "Unknown",
-        "category": "Lens",
-        "label": "Lens",
-        "model_canonical": null,
-        "variant": [
-          "Black Paint",
-          "Black"
-        ],
-        "focal_length": null
-      },
-      "final_output": {
-        "brand": "Leica",
-        "mount": "M",
-        "category": "Body",
-        "label": "M Body",
-        "model_canonical": "MP3",
-        "variant": [
-          "Black Paint"
-        ],
-        "focal_length": null
-      }
-    },
-    {
-      "record_index": 3527,
+      "record_index": 1028,
       "title_raw": "LEICA MP3 + Vit LHSA Special Edition 251/1000",
       "source": "장씨카메라",
       "source_url": "https://j-camera.com/product/detail.html?product_no=9534&cate_no=358&display_group=1",
@@ -114,7 +46,7 @@
       }
     },
     {
-      "record_index": 4360,
+      "record_index": 1861,
       "title_raw": "LEICA MP3 LHSA Special Edition 789/1000",
       "source": "장씨카메라",
       "source_url": "https://j-camera.com/product/detail.html?product_no=8511&cate_no=358&display_group=1",
@@ -151,7 +83,7 @@
       }
     },
     {
-      "record_index": 4431,
+      "record_index": 1932,
       "title_raw": "LEICA MP3 + Vit LHSA Special Edition 251/1000",
       "source": "장씨카메라",
       "source_url": "https://j-camera.com/product/detail.html?product_no=8660&cate_no=358&display_group=1",
@@ -188,7 +120,7 @@
       }
     },
     {
-      "record_index": 4999,
+      "record_index": 2500,
       "title_raw": "LEICA MP3 SET LHSA Special Edition sn.3026",
       "source": "장씨카메라",
       "source_url": "https://j-camera.com/product/detail.html?product_no=7152&cate_no=358&display_group=1",
@@ -225,7 +157,7 @@
       }
     },
     {
-      "record_index": 6097,
+      "record_index": 3598,
       "title_raw": "LEICA MP3-set LHSA special Edition sn.3026",
       "source": "장씨카메라",
       "source_url": "https://j-camera.com/product/detail.html?product_no=4234&cate_no=358&display_group=1",
@@ -262,7 +194,7 @@
       }
     },
     {
-      "record_index": 6133,
+      "record_index": 3634,
       "title_raw": "LEICA MP3-set LHSA special Edition sn.3026",
       "source": "장씨카메라",
       "source_url": "https://j-camera.com/product/detail.html?product_no=4142&cate_no=358&display_group=1",
