@@ -837,14 +837,14 @@
 <body>
   <div class="shell">
     <header class="topbar">
-      <a href="/beta" class="brand" aria-label="Camera Bridge Beta">
+      <a href="/beta" class="brand" data-i18n-aria-label="topbar.brand_aria" aria-label="Camera Bridge Beta">
         <span class="brand-mark"></span>
         CAMERA <span>BRIDGE</span>
       </a>
       <div class="topbar-meta">
-        <span class="meta-pill accent">Limited Beta</span>
-        <span class="meta-pill">Leica 중심 테스트</span>
-        <span class="meta-pill">동일 검색 로직</span>
+        <span class="meta-pill accent" data-i18n="topbar.beta_badge">Limited Beta</span>
+        <span class="meta-pill" data-i18n="topbar.leica_focus">Leica 중심 테스트</span>
+        <span class="meta-pill" data-i18n="topbar.same_logic">동일 검색 로직</span>
       </div>
     </header>
 
@@ -852,23 +852,23 @@
       <section class="hero">
         <div class="hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow">Limited beta for Leica market search</p>
-            <h1 class="hero-title">프리미엄 카메라 중고 시세와 매물을 한 곳에서 확인하세요.</h1>
-            <p class="hero-subtitle">
+            <p class="eyebrow" data-i18n="hero.eyebrow">Limited beta for Leica market search</p>
+            <h1 class="hero-title" data-i18n="hero.title">프리미엄 카메라 중고 시세와 매물을 한 곳에서 확인하세요.</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
               현재 Leica 중심의 제한 베타입니다. 가격은 참고용이며, 구매 전 원문 매물 확인이 필요합니다.
             </p>
             <div class="hero-notices">
-              <span class="notice-pill">Limited Beta</span>
-              <span class="notice-pill">현재 Leica 중심으로 테스트 중입니다.</span>
-              <span class="notice-pill">일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.</span>
+              <span class="notice-pill" data-i18n="hero.notice_beta">Limited Beta</span>
+              <span class="notice-pill" data-i18n="hero.notice_focus">현재 Leica 중심으로 테스트 중입니다.</span>
+              <span class="notice-pill" data-i18n="hero.notice_rare">일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.</span>
             </div>
-            <section class="search-panel" aria-label="Search home">
-              <div class="search-panel-label">Beta search</div>
+            <section class="search-panel" data-i18n-aria-label="search.home_aria" aria-label="Search home">
+              <div class="search-panel-label" data-i18n="search.panel_label">Beta search</div>
               <form id="search-form" class="search-form-row">
-                <input id="query-input" class="search-field" type="search" autocomplete="off" placeholder="예: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585">
-                <button class="search-button" type="submit" aria-label="Search">검색</button>
+                <input id="query-input" class="search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="예: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585">
+                <button class="search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.button_aria" aria-label="Search">검색</button>
               </form>
-              <div class="query-chip-row" aria-label="Example searches">
+              <div class="query-chip-row" data-i18n-aria-label="search.examples_aria" aria-label="Example searches">
                 <button class="query-chip" type="button" data-query="Summilux-M 35 FLE2">Summilux-M 35 FLE2</button>
                 <button class="query-chip" type="button" data-query="50 cron dr">50 cron dr</button>
                 <button class="query-chip" type="button" data-query="Leica M10">Leica M10</button>
@@ -879,23 +879,23 @@
           </div>
           <aside class="hero-sidebar">
             <div class="sidebar-card">
-              <p class="section-label">Beta notice</p>
-              <h2>검색 결과는 같은 데이터로 보여드리되, 안내 문구만 더 쉽게 정리했습니다.</h2>
+              <p class="section-label" data-i18n="sidebar.beta_notice.label">Beta notice</p>
+              <h2 data-i18n="sidebar.beta_notice.title">검색 결과는 같은 데이터로 보여드리되, 안내 문구만 더 쉽게 정리했습니다.</h2>
               <ul class="plain-list">
-                <li>원문 매물 기준으로 다시 확인하세요</li>
-                <li>가격은 자동 집계 참고값입니다</li>
-                <li>조건이 섞이면 가격 계산을 잠급니다</li>
-                <li>액세서리 검색은 본체/렌즈 가격에 쓰지 않습니다</li>
+                <li data-i18n="sidebar.beta_notice.item_1">원문 매물 기준으로 다시 확인하세요</li>
+                <li data-i18n="sidebar.beta_notice.item_2">가격은 자동 집계 참고값입니다</li>
+                <li data-i18n="sidebar.beta_notice.item_3">조건이 섞이면 가격 계산을 잠급니다</li>
+                <li data-i18n="sidebar.beta_notice.item_4">액세서리 검색은 본체/렌즈 가격에 쓰지 않습니다</li>
               </ul>
             </div>
             <div class="sidebar-card">
-              <p class="section-label">What to check</p>
-              <h2>이런 점을 보면 충분합니다.</h2>
+              <p class="section-label" data-i18n="sidebar.what_to_check.label">What to check</p>
+              <h2 data-i18n="sidebar.what_to_check.title">이런 점을 보면 충분합니다.</h2>
               <ul class="plain-list">
-                <li>검색 결과가 의도와 맞는지</li>
-                <li>가격 상태 설명이 이해되는지</li>
-                <li>원문 보기 흐름이 자연스러운지</li>
-                <li>모바일 카드가 읽기 쉬운지</li>
+                <li data-i18n="sidebar.what_to_check.item_1">검색 결과가 의도와 맞는지</li>
+                <li data-i18n="sidebar.what_to_check.item_2">가격 상태 설명이 이해되는지</li>
+                <li data-i18n="sidebar.what_to_check.item_3">원문 보기 흐름이 자연스러운지</li>
+                <li data-i18n="sidebar.what_to_check.item_4">모바일 카드가 읽기 쉬운지</li>
               </ul>
             </div>
           </aside>
@@ -904,26 +904,26 @@
 
       <section class="overview-grid">
         <article class="workspace-card">
-          <p class="section-label">Price policy</p>
-          <h2>확실하지 않으면 가격을 잠급니다</h2>
-          <p>비슷한 모델이 보여도 조건이 섞이면 정확 가격 계산은 보류합니다.</p>
+          <p class="section-label" data-i18n="overview.price_policy.label">Price policy</p>
+          <h2 data-i18n="overview.price_policy.title">확실하지 않으면 가격을 잠급니다</h2>
+          <p data-i18n="overview.price_policy.body">비슷한 모델이 보여도 조건이 섞이면 정확 가격 계산은 보류합니다.</p>
         </article>
         <article class="workspace-card">
-          <p class="section-label">Source coverage</p>
-          <h2>데이터 부족은 부재 의미가 아닙니다</h2>
-          <p>원문 수집이 적을 때는 가격 계산을 생략하고 참고 결과만 보여줍니다.</p>
+          <p class="section-label" data-i18n="overview.source_coverage.label">Source coverage</p>
+          <h2 data-i18n="overview.source_coverage.title">데이터 부족은 부재 의미가 아닙니다</h2>
+          <p data-i18n="overview.source_coverage.body">원문 수집이 적을 때는 가격 계산을 생략하고 참고 결과만 보여줍니다.</p>
         </article>
         <article class="workspace-card">
-          <p class="section-label">Limited beta</p>
-          <h2>현재는 Leica 중심 제한 베타입니다</h2>
-          <p>이 문서는 공개 출시 승인이나 외부 테스터 오픈을 의미하지 않습니다.</p>
+          <p class="section-label" data-i18n="overview.limited_beta.label">Limited beta</p>
+          <h2 data-i18n="overview.limited_beta.title">현재는 Leica 중심 제한 베타입니다</h2>
+          <p data-i18n="overview.limited_beta.body">이 문서는 공개 출시 승인이나 외부 테스터 오픈을 의미하지 않습니다.</p>
         </article>
       </section>
 
       <section class="workspace">
-        <div class="toolbar" aria-label="Search filters">
+        <div class="toolbar" data-i18n-aria-label="filters.toolbar_aria" aria-label="Search filters">
           <div class="control">
-            <label for="category-filter">Category</label>
+            <label for="category-filter" data-i18n="filters.category.label">Category</label>
             <select id="category-filter">
               <option value="">Any</option>
               <option value="Lens">Lens</option>
@@ -932,7 +932,7 @@
             </select>
           </div>
           <div class="control">
-            <label for="brand-filter">Brand</label>
+            <label for="brand-filter" data-i18n="filters.brand.label">Brand</label>
             <select id="brand-filter">
               <option value="">Any</option>
               <option value="Leica">Leica</option>
@@ -943,7 +943,7 @@
             </select>
           </div>
           <div class="control">
-            <label for="mount-filter">Mount</label>
+            <label for="mount-filter" data-i18n="filters.mount.label">Mount</label>
             <select id="mount-filter">
               <option value="">Any</option>
               <option value="M">M</option>
@@ -955,7 +955,7 @@
             </select>
           </div>
           <div class="control">
-            <label for="sold-filter">Sold quality</label>
+            <label for="sold-filter" data-i18n="filters.sold_quality.label">Sold quality</label>
             <select id="sold-filter">
               <option value="">Any</option>
               <option value="asking">Asking</option>
@@ -966,13 +966,17 @@
             </select>
           </div>
           <div class="control">
-            <label for="sort-select">Sort</label>
+            <label for="sort-select" data-i18n="filters.sort.label">Sort</label>
             <select id="sort-select">
-              <option value="relevance">Relevance</option>
-              <option value="price_asc">Price low</option>
-              <option value="price_desc">Price high</option>
+              <option value="relevance">Recommended</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
               <option value="newest">Newest</option>
             </select>
+          </div>
+          <div class="control">
+            <label for="locale-select" data-locale-label="true">Language</label>
+            <select id="locale-select"></select>
           </div>
         </div>
 
@@ -987,9 +991,9 @@
             <div id="index-debug-line" class="index-debug-line"></div>
           </div>
           <div class="page-controls">
-            <button id="prev-button" class="page-button" type="button">이전</button>
+            <button id="prev-button" class="page-button" type="button" data-i18n="pagination.prev">이전</button>
             <span id="page-indicator" class="page-indicator">0-0</span>
-            <button id="next-button" class="page-button" type="button">다음</button>
+            <button id="next-button" class="page-button" type="button" data-i18n="pagination.next">다음</button>
           </div>
         </section>
 
@@ -998,11 +1002,11 @@
             <section id="state-region" aria-live="polite"></section>
             <section id="market-entry-region" aria-live="polite"></section>
             <section id="refinement-region" aria-live="polite"></section>
-            <section id="sticky-search-region" class="sticky-search-region" aria-label="Sticky search" hidden>
+            <section id="sticky-search-region" class="sticky-search-region" data-i18n-aria-label="search.sticky_aria" aria-label="Sticky search" hidden>
               <div class="sticky-search-bar">
                 <form id="sticky-search-form" class="search-form-row sticky-search-form">
-                  <input id="sticky-query-input" class="search-field sticky-search-field" type="search" autocomplete="off" placeholder="결과를 보면서 다음 검색어를 입력하세요">
-                  <button class="search-button sticky-search-button" type="submit" aria-label="Search from sticky bar">검색</button>
+                  <input id="sticky-query-input" class="search-field sticky-search-field" type="search" autocomplete="off" data-i18n-placeholder="search.sticky_placeholder" placeholder="결과를 보면서 다음 검색어를 입력하세요">
+                  <button class="search-button sticky-search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.sticky_button_aria" aria-label="Search from sticky bar">검색</button>
                 </form>
               </div>
             </section>
@@ -1014,27 +1018,27 @@
           </div>
           <aside class="workspace-side">
             <div class="side-panel">
-              <p class="section-label">Limited Beta</p>
-              <h2>결과를 믿기 전 이 점을 확인하세요</h2>
+              <p class="section-label" data-i18n="workspace_sidebar.beta.label">Limited Beta</p>
+              <h2 data-i18n="workspace_sidebar.beta.title">결과를 믿기 전 이 점을 확인하세요</h2>
               <ul class="plain-list">
-                <li>가격은 참고값입니다</li>
-                <li>희귀 모델은 가격이 잠길 수 있습니다</li>
-                <li>원문 매물 확인이 필요합니다</li>
-                <li>개인 연락처나 비공개 정보는 다루지 않습니다</li>
+                <li data-i18n="workspace_sidebar.beta.item_1">가격은 참고값입니다</li>
+                <li data-i18n="workspace_sidebar.beta.item_2">희귀 모델은 가격이 잠길 수 있습니다</li>
+                <li data-i18n="workspace_sidebar.beta.item_3">원문 매물 확인이 필요합니다</li>
+                <li data-i18n="workspace_sidebar.beta.item_4">개인 연락처나 비공개 정보는 다루지 않습니다</li>
               </ul>
             </div>
             <div class="side-panel">
-              <p class="section-label">How to read results</p>
-              <h2>같은 데이터라도 안내 문구는 더 단순하게 보여줍니다</h2>
+              <p class="section-label" data-i18n="workspace_sidebar.how_to_read.label">How to read results</p>
+              <h2 data-i18n="workspace_sidebar.how_to_read.title">같은 데이터라도 안내 문구는 더 단순하게 보여줍니다</h2>
               <div class="state-actions">
-                <button type="button" class="ghost-button">정확 조건 기준 가격을 계산했어요.</button>
-                <button type="button" class="ghost-button">같은 계열 참고 가격만 확인할 수 있어요.</button>
-                <button type="button" class="ghost-button">정확한 가격 계산은 보류했어요.</button>
+                <button type="button" class="ghost-button" data-i18n="workspace_sidebar.how_to_read.item_1">정확 조건 기준 가격을 계산했어요.</button>
+                <button type="button" class="ghost-button" data-i18n="workspace_sidebar.how_to_read.item_2">같은 계열 참고 가격만 확인할 수 있어요.</button>
+                <button type="button" class="ghost-button" data-i18n="workspace_sidebar.how_to_read.item_3">정확한 가격 계산은 보류했어요.</button>
               </div>
             </div>
             <div class="side-panel">
-              <p class="section-label">Safety note</p>
-              <p>액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않으며, 조건이 섞이면 잠금 상태로 표시합니다.</p>
+              <p class="section-label" data-i18n="workspace_sidebar.safety.label">Safety note</p>
+              <p data-i18n="workspace_sidebar.safety.body">액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않으며, 조건이 섞이면 잠금 상태로 표시합니다.</p>
             </div>
           </aside>
         </div>
@@ -1044,14 +1048,373 @@
 
   <script>
     const PAGE_SIZE = 12;
-    const FALLBACK_COPY = 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.';
+    const FALLBACK_COPY = {
+      ko: '검색을 불러오는 중 문제가 발생했습니다. 데이터는 변경되지 않았습니다. 검색어를 더 구체적으로 입력하거나 잠시 후 다시 시도해 주세요.',
+      en: 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.'
+    };
     const BROAD_QUERY_FALLBACK_CHIPS = ['M lenses', 'R lenses', 'SL lenses', '35mm', '50mm', '90mm'];
+    const SUPPORTED_LOCALES = ['ko', 'en', 'ja', 'zh-Hans', 'zh-Hant', 'pt', 'es', 'de', 'it'];
+    const LOCALE_LABELS = {
+      ko: '한국어',
+      en: 'English',
+      ja: '日本語',
+      'zh-Hans': '简体中文',
+      'zh-Hant': '繁體中文',
+      pt: 'Português',
+      es: 'Español',
+      de: 'Deutsch',
+      it: 'Italiano'
+    };
     const LOCAL_BROAD_QUERY_HINTS = {
-      'summicron': '"Summicron" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
-      'summilux': '"Summilux" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
-      'leica lens': 'This query is still broad. Choose a family, mount, or focal length to refine your search.',
-      'leica m': 'This query can refer to multiple M-system bodies and lenses. Refine by body model or lens family.',
-      '50 cron': 'Collector shorthand can match multiple Summicron variants. Choose a mount or full model name to refine your search.'
+      'summicron': {
+        ko: '"Summicron"은 여러 Leica 렌즈 계열을 가리킬 수 있습니다. 마운트나 초점거리를 함께 입력해 보세요.',
+        en: '"Summicron" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.'
+      },
+      'summilux': {
+        ko: '"Summilux"는 여러 Leica 렌즈 계열을 가리킬 수 있습니다. 마운트나 초점거리를 함께 입력해 보세요.',
+        en: '"Summilux" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.'
+      },
+      'leica lens': {
+        ko: '이 검색어는 아직 범위가 넓습니다. 계열, 마운트, 초점거리를 추가해 보세요.',
+        en: 'This query is still broad. Choose a family, mount, or focal length to refine your search.'
+      },
+      'leica m': {
+        ko: '이 검색어는 여러 M 시스템 바디와 렌즈를 함께 가리킬 수 있습니다. 바디 모델이나 렌즈 계열을 더 구체적으로 입력해 보세요.',
+        en: 'This query can refer to multiple M-system bodies and lenses. Refine by body model or lens family.'
+      },
+      '50 cron': {
+        ko: '수집가 약칭은 여러 Summicron 변형과 겹칠 수 있습니다. 마운트나 전체 모델명을 함께 입력해 보세요.',
+        en: 'Collector shorthand can match multiple Summicron variants. Choose a mount or full model name to refine your search.'
+      }
+    };
+    const UX_LOCALE_COPY = {
+      topbar: {
+        brand_aria: { ko: 'Camera Bridge 제한적 베타', en: 'Camera Bridge Beta' },
+        beta_badge: { ko: '제한적 베타', en: 'Limited Beta' },
+        leica_focus: { ko: 'Leica 중심 테스트', en: 'Leica-focused test' },
+        same_logic: { ko: '동일 검색 로직', en: 'Same search logic' },
+      },
+      hero: {
+        eyebrow: { ko: 'Leica 중고 시장 검색 제한 베타', en: 'Limited beta for Leica market search' },
+        title: { ko: '프리미엄 카메라 중고 시세와 매물을 한 곳에서 확인하세요.', en: 'Browse premium camera listings and market prices in one place.' },
+        subtitle: { ko: '현재 Leica 중심의 제한 베타입니다. 가격은 참고용이며, 구매 전 원문 매물 확인이 필요합니다.', en: 'This is a limited Leica-focused beta. Prices are for reference only, and the original listing should be checked before purchase.' },
+        notice_beta: { ko: '제한적 베타', en: 'Limited Beta' },
+        notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.' },
+        notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.' },
+      },
+      language: {
+        label: { ko: '언어', en: 'Language', ja: '言語', 'zh-Hans': '语言', 'zh-Hant': '語言', pt: 'Idioma', es: 'Idioma', de: 'Sprache', it: 'Lingua' },
+      },
+      search: {
+        home_aria: { ko: '홈 검색', en: 'Search home' },
+        panel_label: { ko: '베타 검색', en: 'Beta search' },
+        placeholder: { ko: '예: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', en: 'e.g. Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585' },
+        button: { ko: '검색', en: 'Search' },
+        button_aria: { ko: '검색', en: 'Search' },
+        examples_aria: { ko: '예시 검색어', en: 'Example searches' },
+        sticky_aria: { ko: '고정 검색', en: 'Sticky search' },
+        sticky_placeholder: { ko: '결과를 보면서 다음 검색어를 입력하세요', en: 'Search again while keeping the current results in view' },
+        sticky_button_aria: { ko: '고정 검색창에서 검색', en: 'Search from sticky bar' },
+      },
+      sidebar: {
+        beta_notice: {
+          label: { ko: '베타 안내', en: 'Beta notice' },
+          title: { ko: '검색 결과는 같은 데이터로 보여드리되, 안내 문구만 더 쉽게 정리했습니다.', en: 'The same results are shown, with simpler guidance for beta testing.' },
+          item_1: { ko: '원문 매물 기준으로 다시 확인하세요', en: 'Double-check the original listing before making a decision.' },
+          item_2: { ko: '가격은 자동 집계 참고값입니다', en: 'Prices are automatically summarized reference values.' },
+          item_3: { ko: '조건이 섞이면 가격 계산을 잠급니다', en: 'If listings mix different conditions, price calculation stays locked.' },
+          item_4: { ko: '액세서리 검색은 본체/렌즈 가격에 쓰지 않습니다', en: 'Accessory searches are not used for body or lens price calculations.' },
+        },
+        what_to_check: {
+          label: { ko: '확인 포인트', en: 'What to check' },
+          title: { ko: '이런 점을 보면 충분합니다.', en: 'These are the main things to check.' },
+          item_1: { ko: '검색 결과가 의도와 맞는지', en: 'Whether the results match your search intent' },
+          item_2: { ko: '가격 상태 설명이 이해되는지', en: 'Whether the price-state explanation is easy to understand' },
+          item_3: { ko: '원문 보기 흐름이 자연스러운지', en: 'Whether opening the source listing feels natural' },
+          item_4: { ko: '모바일 카드가 읽기 쉬운지', en: 'Whether the mobile cards are easy to read' },
+        },
+      },
+      overview: {
+        price_policy: {
+          label: { ko: '가격 정책', en: 'Price policy' },
+          title: { ko: '확실하지 않으면 가격을 잠급니다', en: 'When the match is uncertain, the price stays locked' },
+          body: { ko: '비슷한 모델이 보여도 조건이 섞이면 정확 가격 계산은 보류합니다.', en: 'Even if related models appear, exact price calculation is held back when conditions are mixed.' },
+        },
+        source_coverage: {
+          label: { ko: '데이터 범위', en: 'Source coverage' },
+          title: { ko: '데이터 부족은 부재 의미가 아닙니다', en: 'Low coverage does not mean the item does not exist' },
+          body: { ko: '원문 수집이 적을 때는 가격 계산을 생략하고 참고 결과만 보여줍니다.', en: 'When source coverage is thin, price calculation is skipped and only reference results are shown.' },
+        },
+        limited_beta: {
+          label: { ko: '제한적 베타', en: 'Limited beta' },
+          title: { ko: '현재는 Leica 중심 제한 베타입니다', en: 'This is currently a Leica-focused limited beta' },
+          body: { ko: '이 문서는 공개 출시 승인이나 외부 테스터 오픈을 의미하지 않습니다.', en: 'This does not mean public release approval or external tester rollout.' },
+        },
+      },
+      filters: {
+        toolbar_aria: { ko: '검색 필터', en: 'Search filters' },
+        category: {
+          label: { ko: '분류', en: 'Category' },
+          any: { ko: '전체', en: 'Any' },
+          lens: { ko: '렌즈', en: 'Lens' },
+          body: { ko: '바디', en: 'Body' },
+          accessory: { ko: '액세서리', en: 'Accessory' },
+        },
+        brand: {
+          label: { ko: '브랜드', en: 'Brand' },
+          any: { ko: '전체', en: 'Any' },
+        },
+        mount: {
+          label: { ko: '마운트', en: 'Mount' },
+          any: { ko: '전체', en: 'Any' },
+        },
+        sold_quality: {
+          label: { ko: '판매 상태', en: 'Listing status' },
+        },
+        sort: {
+          label: { ko: '정렬', en: 'Sort' },
+        },
+      },
+      sort: {
+        relevance: { ko: '추천순', en: 'Recommended', ja: 'おすすめ順', 'zh-Hans': '推荐', 'zh-Hant': '推薦', pt: 'Recomendado', es: 'Recomendado', de: 'Empfohlen', it: 'Consigliati' },
+        newest: { ko: '최신순', en: 'Newest', ja: '新着順', 'zh-Hans': '最新', 'zh-Hant': '最新', pt: 'Mais recentes', es: 'Más recientes', de: 'Neueste', it: 'Più recenti' },
+        price_asc: { ko: '낮은 가격순', en: 'Price: Low to High', ja: '価格の安い順', 'zh-Hans': '价格从低到高', 'zh-Hant': '價格從低到高', pt: 'Preço: menor para maior', es: 'Precio: de menor a mayor', de: 'Preis: aufsteigend', it: 'Prezzo: crescente' },
+        price_desc: { ko: '높은 가격순', en: 'Price: High to Low', ja: '価格の高い順', 'zh-Hans': '价格从高到低', 'zh-Hant': '價格從高到低', pt: 'Preço: maior para menor', es: 'Precio: de mayor a menor', de: 'Preis: absteigend', it: 'Prezzo: decrescente' },
+      },
+      sold_filter: {
+        any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
+        asking: { ko: '판매 중', en: 'Active', ja: '販売中', 'zh-Hans': '在售', 'zh-Hant': '在售', pt: 'À venda', es: 'En venta', de: 'Aktiv', it: 'In vendita' },
+        sold: { ko: '판매 완료', en: 'Sold', ja: '販売完了', 'zh-Hans': '已售', 'zh-Hant': '已售', pt: 'Vendido', es: 'Vendido', de: 'Verkauft', it: 'Venduto' },
+        sold_confirmed: { ko: '판매완료 확인', en: 'Sold confirmed', ja: '売却確認', 'zh-Hans': '已确认售出', 'zh-Hant': '已確認售出', pt: 'Vendido confirmado', es: 'Venta confirmada', de: 'Verkauf bestätigt', it: 'Venduto confermato' },
+        sold_likely: { ko: '판매 추정', en: 'Sold likely', ja: '売却推定', 'zh-Hans': '疑似售出', 'zh-Hant': '疑似售出', pt: 'Provavelmente vendido', es: 'Probablemente vendido', de: 'Wahrscheinlich verkauft', it: 'Probabilmente venduto' },
+        unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
+      },
+      section: {
+        active_listings: { ko: '현재 판매 중', en: 'Active listings', ja: '現在販売中', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'Anúncios ativos', es: 'Anuncios activos', de: 'Aktive Angebote', it: 'Annunci attivi' },
+        market_history: { ko: '과거 거래 / 가격 기록', en: 'Market history', ja: '過去の取引・価格記録', 'zh-Hans': '历史成交 / 价格记录', 'zh-Hant': '歷史成交 / 價格紀錄', pt: 'Histórico de mercado', es: 'Historial de mercado', de: 'Markthistorie', it: 'Storico di mercato' },
+        archive: { ko: '과거 기록', en: 'Archive', ja: 'アーカイブ', 'zh-Hans': '历史记录', 'zh-Hant': '歷史記錄', pt: 'Arquivo', es: 'Archivo', de: 'Archiv', it: 'Archivio' },
+        active_subtitle: { ko: '현재 살아 있는 판매 매물을 먼저 보여줍니다.', en: 'Listings that still appear available are shown first.', ja: '現在も購入可能に見える出品を先に表示します。', 'zh-Hans': '优先显示看起来仍可购买的在售记录。', 'zh-Hant': '優先顯示看起來仍可購買的在售記錄。', pt: 'Listagens que ainda parecem disponíveis são mostradas primeiro.', es: 'Primero se muestran los anuncios que aún parecen disponibles.', de: 'Angebote, die noch verfügbar erscheinen, werden zuerst gezeigt.', it: 'Per primi vengono mostrati gli annunci che sembrano ancora disponibili.' },
+        history_subtitle: { ko: '과거 거래와 보관 기록은 별도로 분리해 보여줍니다.', en: 'Historical sold, removed, and archive records are shown separately.', ja: '過去の売却・削除・アーカイブ記録は別枠で表示します。', 'zh-Hans': '历史售出、下架和归档记录会单独展示。', 'zh-Hant': '歷史售出、下架和歸檔記錄會單獨展示。', pt: 'Registros históricos de venda, remoção e arquivo são mostrados separadamente.', es: 'Los registros históricos de venta, eliminación y archivo se muestran por separado.', de: 'Historische Verkaufs-, Entfernt- und Archivdatensätze werden separat angezeigt.', it: 'I record storici di vendita, rimozione e archivio vengono mostrati separatamente.' },
+        no_active: { ko: '현재 판매 중인 매물이 아직 보이지 않습니다.', en: 'No active listings are visible in this result window yet.', ja: 'この結果範囲では現在販売中の出品がまだ見つかりません。', 'zh-Hans': '当前结果窗口中还没有可见的在售记录。', 'zh-Hant': '目前結果視窗中尚未看到在售記錄。', pt: 'Ainda não há anúncios ativos visíveis nesta janela de resultados.', es: 'Aún no hay anuncios activos visibles en esta ventana de resultados.', de: 'In diesem Ergebnisfenster sind noch keine aktiven Angebote sichtbar.', it: 'In questa finestra dei risultati non sono ancora visibili annunci attivi.' },
+        no_history: { ko: '이 검색에는 아직 과거 거래 기록이 보이지 않습니다.', en: 'No market-history records are visible for this search yet.', ja: 'この検索では過去の市場記録がまだ表示されていません。', 'zh-Hans': '此搜索目前还没有可见的历史市场记录。', 'zh-Hant': '此搜尋目前尚未看到歷史市場記錄。', pt: 'Ainda não há registros de histórico de mercado visíveis para esta pesquisa.', es: 'Todavía no hay registros de historial de mercado visibles para esta búsqueda.', de: 'Für diese Suche sind noch keine Markthistorie-Einträge sichtbar.', it: 'Per questa ricerca non sono ancora visibili record di storico di mercato.' },
+      },
+      cta: {
+        view_listing: { ko: '매물 보기', en: 'View listing', ja: '掲載を見る', 'zh-Hans': '查看条目', 'zh-Hant': '查看條目', pt: 'Ver anúncio', es: 'Ver anuncio', de: 'Angebot ansehen', it: 'Vedi annuncio' },
+      },
+      query: {
+        search_query: { ko: '검색어', en: 'Search query', ja: '検索語', 'zh-Hans': '搜索词', 'zh-Hant': '搜尋詞', pt: 'Busca', es: 'Búsqueda', de: 'Suchanfrage', it: 'Ricerca' },
+        detected: { ko: '검색한 모델', en: 'Interpreted as', ja: '検索解釈', 'zh-Hans': '搜索解读', 'zh-Hant': '搜尋解讀', pt: 'Interpretado como', es: 'Interpretado como', de: 'Interpretiert als', it: 'Interpretato come' },
+      },
+      status: {
+        active_asking: { ko: '판매 중', en: 'Active', ja: '現在販売', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'À venda', es: 'En venta', de: 'Aktiv', it: 'In vendita' },
+        uncertain_asking: { ko: '판매 중(확인 필요)', en: 'Active, needs verification', ja: '販売中（要確認）', 'zh-Hans': '在售（需核实）', 'zh-Hant': '在售（需核實）', pt: 'À venda, verificar', es: 'Activo, verificar', de: 'Aktiv, prüfen', it: 'Attivo, da verificare' },
+        sold_confirmed: { ko: '판매완료 확인', en: 'Sold confirmed', ja: '売却確認', 'zh-Hans': '已确认售出', 'zh-Hant': '已確認售出', pt: 'Vendido confirmado', es: 'Venta confirmada', de: 'Verkauf bestätigt', it: 'Venduto confermato' },
+        sold_likely: { ko: '판매 추정', en: 'Sold likely', ja: '売却推定', 'zh-Hans': '疑似售出', 'zh-Hant': '疑似售出', pt: 'Provavelmente vendido', es: 'Probablemente vendido', de: 'Wahrscheinlich verkauft', it: 'Probabilmente venduto' },
+        sold: { ko: '판매 완료', en: 'Sold', ja: '販売完了', 'zh-Hans': '已售', 'zh-Hant': '已售', pt: 'Vendido', es: 'Vendido', de: 'Verkauft', it: 'Venduto' },
+        expired: { ko: '판매 종료', en: 'Expired', ja: '期限切れ', 'zh-Hans': '已过期', 'zh-Hant': '已過期', pt: 'Expirado', es: 'Caducado', de: 'Abgelaufen', it: 'Scaduto' },
+        removed: { ko: '판매 종료', en: 'Removed', ja: '削除済み', 'zh-Hans': '已移除', 'zh-Hant': '已移除', pt: 'Removido', es: 'Eliminado', de: 'Entfernt', it: 'Rimosso' },
+        unknown: { ko: '상태 미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
+      },
+      workspace_sidebar: {
+        beta: {
+          label: { ko: '제한적 베타', en: 'Limited Beta' },
+          title: { ko: '결과를 믿기 전 이 점을 확인하세요', en: 'Check these before trusting the result' },
+          item_1: { ko: '가격은 참고값입니다', en: 'Prices are reference values' },
+          item_2: { ko: '희귀 모델은 가격이 잠길 수 있습니다', en: 'Rare models may remain price-locked' },
+          item_3: { ko: '원문 매물 확인이 필요합니다', en: 'You should verify the original listing' },
+          item_4: { ko: '개인 연락처나 비공개 정보는 다루지 않습니다', en: 'Private contact details and hidden information are not shown' },
+        },
+        how_to_read: {
+          label: { ko: '검색 결과 안내', en: 'How to read results' },
+          title: { ko: '같은 데이터라도 안내 문구는 더 단순하게 보여줍니다', en: 'The same data is shown with simpler guidance here' },
+          item_1: { ko: '정확 조건 기준 가격을 계산했어요.', en: 'An exact-condition price was calculated.' },
+          item_2: { ko: '같은 계열 참고 가격만 확인할 수 있어요.', en: 'Only related reference prices are available.' },
+          item_3: { ko: '정확한 가격 계산은 보류했어요.', en: 'Exact price calculation is currently on hold.' },
+        },
+        safety: {
+          label: { ko: '안전 안내', en: 'Safety note' },
+          body: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않으며, 조건이 섞이면 잠금 상태로 표시합니다.', en: 'Accessory searches are not used for body or lens pricing, and mixed conditions stay locked.' },
+        },
+      },
+      summary: {
+        loading_caption: { ko: '검색 중', en: 'Searching' },
+        loading_meta: { ko: '매물과 가격 근거를 불러오고 있습니다', en: 'Loading listings and price evidence' },
+        appending_meta: { ko: '결과를 더 불러오는 중입니다', en: 'Loading more results' },
+        error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again' },
+        error_meta: { ko: '데이터는 변경되지 않았습니다', en: 'No data was changed' },
+        ready_caption: { ko: '검색 준비 완료', en: 'Ready to search' },
+        ready_meta: { ko: '가격은 참고용이며 원문 확인이 필요합니다', en: 'Prices are for reference only, and the original listing should be checked' },
+        index_prefix: { ko: '인덱스', en: 'Index' },
+        index_records: { ko: '건', en: 'records' },
+        index_generated_at: { ko: '생성 시각', en: 'generated_at' },
+      },
+      pagination: {
+        prev: { ko: '이전', en: 'Prev' },
+        next: { ko: '다음', en: 'Next' },
+      },
+      common: {
+        unknown: { ko: '미확인', en: 'Unknown' },
+        no_data: { ko: '정보 없음', en: 'Not enough data' },
+        unknown_source: { ko: '출처 미확인', en: 'Unknown source' },
+        copied: { ko: '복사됨', en: 'Copied' },
+        yes: { ko: '사용됨', en: 'Used' },
+        no: { ko: '제외됨', en: 'Not used' },
+        mount: { ko: '마운트', en: 'Mount' },
+        status: { ko: '상태', en: 'Status' },
+        model: { ko: '모델', en: 'Model' },
+        category: { ko: '분류', en: 'Category' },
+        details_why: { ko: '왜 이 결과가 보이나요?', en: 'Why is this result shown?' },
+      },
+      match_badge: {
+        exact_match: { ko: '정확히 맞는 결과', en: 'Exact match' },
+        exact_candidate: { ko: '정확 후보', en: 'Exact candidate' },
+        related: { ko: '관련 결과', en: 'Related result' },
+        conflict: { ko: '조건 충돌', en: 'Variant conflict' },
+        same_family: { ko: '같은 계열 참고 결과', en: 'Similar model' },
+        base_model: { ko: '기본 모델 일치', en: 'Base model match' },
+        close_result: { ko: '가까운 결과', en: 'Close result' },
+      },
+      quality: {
+        strong: { ko: '높음', en: 'Strong' },
+        medium: { ko: '보통', en: 'Medium' },
+        weak: { ko: '낮음', en: 'Weak' },
+        unknown: { ko: '미확인', en: 'Unknown' },
+      },
+      result_role: {
+        exact_variant: { ko: '정확히 맞는 결과', en: 'Exact match' },
+        exact_base_model: { ko: '기본 모델 일치', en: 'Base model match' },
+        same_base_model: { ko: '같은 계열 참고 결과', en: 'Similar model' },
+        broader_family: { ko: '관련 결과', en: 'Related result' },
+        boundary_conflict: { ko: '조건이 달라 가격 계산 제외', en: 'Different model boundary' },
+        incompatible: { ko: '조건이 맞지 않는 결과', en: 'Not compatible with this query' },
+        reference_only: { ko: '참고 결과', en: 'Reference only' },
+      },
+      price_role: {
+        used_for_price: { ko: '가격 계산에 사용됨', en: 'Used for price calculation' },
+        used_for_exact_generation: { ko: '정확 세대 가격 계산에 사용됨', en: 'Used for exact-generation price' },
+        used_for_generation_candidate: { ko: '세대 후보 가격 계산에 사용됨', en: 'Used for generation-candidate pricing' },
+        exact_visible_excluded: { ko: '정확히 맞지만 가격 계산에서는 제외', en: 'Exact match visible, but excluded from price calculation' },
+        reference_for_entry_only: { ko: '해당 세대 가격에는 사용되지 않음', en: 'Reference only for this entry' },
+        generation_selection_needed: { ko: '세대 선택 전 참고 결과만 표시', en: 'Reference only — generation selection needed' },
+        generation_selection_locked: { ko: '세대 선택 전에는 가격 계산을 보류', en: 'Price stays locked until a generation is selected' },
+        same_base_reference: { ko: '참고 결과로만 표시', en: 'Reference only' },
+        broader_reference: { ko: '같은 계열 참고 결과', en: 'Broader family reference' },
+        duplicate: { ko: '중복 가능성으로 제외', en: 'Not used — Duplicate listing' },
+        outlier: { ko: '가격 범위 이상으로 제외', en: 'Not used — Price outlier' },
+        no_usable_price: { ko: '가격 계산 불가', en: 'No usable price' },
+        accessory_excluded: { ko: '액세서리라 가격 계산에서 제외', en: 'Not used — Accessory listing' },
+        boundary_excluded: { ko: '조건이 달라 가격 계산에서 제외', en: 'Not used — Different model boundary' },
+        not_compatible: { ko: '조건이 달라 가격 계산에서 제외', en: 'Not used — Not compatible with this query' },
+      },
+      reason: {
+        exact_variant: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model and variant match the query closely.' },
+        exact_generation: { ko: '검색어와 세대/버전이 잘 맞습니다.', en: 'The model and generation match the query closely.' },
+        exact_model: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model matches the query closely.' },
+        same_generation_reference: { ko: '같은 기본 모델이지만 세대가 달라 참고로만 보여줍니다.', en: 'This is the same base model, but a different generation, so it is shown for reference only.' },
+        same_base_reference: { ko: '같은 계열이지만 조건이 달라 참고로만 표시합니다.', en: 'This is a related listing, but the conditions differ, so it is shown for reference only.' },
+        broader_family: { ko: '같은 계열 참고 결과입니다.', en: 'This is shown as a broader family reference.' },
+        boundary_conflict: { ko: '여러 모델이 함께 검색되어 정확한 가격 비교를 표시하지 않았습니다.', en: 'Several different models were found, so an exact price comparison is not shown.' },
+        incompatible: { ko: '조건이 달라 참고로만 표시합니다.', en: 'This listing is shown for context, but it does not match this query closely enough for pricing.' },
+        duplicate: { ko: '중복 가능성이 있어 가격 계산에서 제외했습니다.', en: 'This listing was excluded because it may be a duplicate.' },
+        outlier: { ko: '이상 가격 가능성이 있어 가격 계산에서 제외했습니다.', en: 'This listing was excluded because the price may be an outlier.' },
+        accessory: { ko: '액세서리/구성품이 섞여 가격 계산에서는 제외했습니다.', en: 'This listing looks like an accessory or bundled item, so it is excluded from price calculation.' },
+        variant_boundary: { ko: '조건이 달라 가격 계산에서는 제외했습니다.', en: 'This listing crosses a model or variant boundary, so it is excluded from price calculation.' },
+        no_price: { ko: '가격 정보가 충분하지 않아 계산하지 않았습니다.', en: 'There is not enough usable price information to calculate a price.' },
+        default: { ko: '검색어와 얼마나 맞는지, 가격 계산에 쓰였는지를 함께 보여줍니다.', en: 'This explains how well the listing matches the query and whether it was used for pricing.' },
+        guide_default: { ko: '조건이 맞는 결과부터 보여주고, 불확실하면 가격 계산을 보류합니다.', en: 'Results that fit best are shown first, and pricing stays locked when certainty is low.' },
+      },
+      price_state: {
+        accessory: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않아요.', en: 'Accessory searches are not used for body or lens price calculations.' },
+        exact: { ko: '정확 조건 기준 가격을 계산했어요.', en: 'An exact-condition price was calculated.' },
+        reference: { ko: '같은 계열 참고 가격만 확인할 수 있어요.', en: 'Only related reference prices are available.' },
+        boundary_locked: { ko: '조건이 섞여 정확 가격 계산을 보류했습니다. 아래 결과는 참고용입니다.', en: 'Different model conditions are mixed, so exact price calculation is on hold. The results below are for reference only.' },
+        weak_locked: { ko: '신뢰도 부족으로 가격 계산을 보류했어요.', en: 'Price calculation is on hold because the evidence is not strong enough yet.' },
+        locked: { ko: '정확한 가격 계산은 보류했어요.', en: 'Exact price calculation is currently on hold.' },
+      },
+      price_caption: {
+        accessory: { ko: '액세서리 검색', en: 'Accessory search' },
+        exact: { ko: '정확 가격', en: 'Exact price' },
+        reference: { ko: '참고 가격', en: 'Reference price' },
+        locked: { ko: '가격 상태', en: 'Price status' },
+      },
+      query_review: {
+        heading: { ko: '검색 요약', en: 'Search summary' },
+        copy: { ko: '요약 복사', en: 'Copy summary' },
+        interpreted_as: { ko: '검색한 모델', en: 'Interpreted as' },
+        price_state: { ko: '가격 상태', en: 'Price state' },
+        guidance: { ko: '안내', en: 'Guidance' },
+        category: { ko: '분류', en: 'Category' },
+        needs_review: { ko: '해석 확인 필요', en: 'Needs interpretation review' },
+        explain_visible: { ko: '보이는 결과를 간단히 설명할게요', en: 'Why these visible results are shown' },
+      },
+      coverage: {
+        limited: { ko: '데이터 제한', en: 'Limited coverage' },
+        multiple_sources: { ko: '여러 결과에서 확인됨', en: 'Seen across multiple results' },
+        visible_results: { ko: '현재 결과에서 확인됨', en: 'Seen in current results' },
+        low_data: { ko: '데이터 부족', en: 'Low coverage' },
+      },
+      state_card: {
+        loading_title: { ko: '검색 중입니다', en: 'Searching now' },
+        loading_body: { ko: '매물, 가격, 출처 정보를 정리하고 있습니다.', en: 'Listings, prices, and source details are being prepared.' },
+        error_title: { ko: '검색 중 문제가 발생했습니다.', en: 'Something went wrong while searching.' },
+        error_body: { ko: '데이터는 변경되지 않았습니다. 검색어를 조금 더 구체적으로 입력해 보세요.', en: 'No data was changed. Try a more specific query.' },
+        error_tip_1: { ko: '모델명을 더 구체적으로 입력해 보세요', en: 'Try entering a more specific model name' },
+        error_tip_2: { ko: '마운트나 초점거리를 함께 입력해 보세요', en: 'Add a mount or focal length to narrow the search' },
+        error_tip_3: { ko: '잠시 후 다시 시도해 보세요', en: 'Try again in a moment' },
+        intro_title: { ko: 'Leica 중심 중고 매물과 참고 가격을 확인해 보세요.', en: 'Explore Leica-focused listings and reference pricing.' },
+        intro_body: { ko: '동일한 검색 결과를 더 읽기 쉬운 베타 화면으로 보여줍니다. 조건이 불확실하면 가격은 잠금 상태로 남습니다.', en: 'The same search results are shown in a simpler beta layout. When conditions are uncertain, pricing stays locked.' },
+        intro_tip_1: { ko: '조건이 섞이면 정확 가격 계산을 보류합니다', en: 'Exact pricing stays locked when conditions are mixed' },
+        intro_tip_2: { ko: '데이터가 부족하면 참고 결과만 보여줍니다', en: 'When data is limited, only reference results are shown' },
+        intro_tip_3: { ko: '원문 매물 확인 후 판단해 주세요', en: 'Check the original listing before making a decision' },
+        results_title: { ko: '검색 결과', en: 'Search results' },
+        results_body: { ko: '같은 검색 데이터와 결과 순서를 유지하면서, 베타 화면에서는 안내 문구만 더 단순하게 보여줍니다.', en: 'The same data and result order are kept, while the beta shell simplifies the guidance text.' },
+        results_tip_1: { ko: '가격은 참고용입니다', en: 'Prices are for reference' },
+        results_tip_2: { ko: '조건이 섞이면 계산을 보류합니다', en: 'Pricing stays locked when conditions are mixed' },
+        results_tip_3: { ko: '원문 확인이 필요합니다', en: 'The original listing should be checked' },
+        empty_source_gap_title: { ko: '현재 데이터가 부족해 가격을 계산하지 않았어요.', en: 'There is not enough current data to calculate a price.' },
+        empty_source_gap_body: { ko: '이 결과는 존재하지 않는다는 뜻이 아니라, 지금은 확인 가능한 근거가 적다는 의미입니다.', en: 'This does not mean the item does not exist. It means there is not enough verifiable evidence right now.' },
+        empty_broad_title: { ko: '검색 범위가 넓어 정확 결과를 바로 계산하지 않았어요.', en: 'This query is broad, so exact pricing was not opened yet.' },
+        empty_broad_default: { ko: '마운트나 초점거리를 추가하면 더 정확해집니다.', en: 'Add a mount or focal length to make the search more specific.' },
+        empty_none_title: { ko: '확인 가능한 결과를 충분히 찾지 못했어요.', en: 'Not enough verifiable matches were found.' },
+        empty_none_body: { ko: '모델명, 마운트, 초점거리처럼 조건을 더 구체적으로 입력해 보세요.', en: 'Try adding details such as the model, mount, or focal length.' },
+      },
+      refinement: {
+        title: { ko: '검색어를 조금 더 구체적으로 입력해 보세요', en: 'Try a more specific search' },
+        default_message: { ko: '마운트나 초점거리를 함께 입력하면 더 정확해집니다.', en: 'Add a mount or focal length to make the search more specific.' },
+      },
+      market_entry: {
+        summary_label: { ko: '결과 요약', en: 'Result summary' },
+        model_missing: { ko: '모델 정보 없음', en: 'Model information unavailable' },
+        status_label: { ko: '가격 상태', en: 'Price state' },
+        source_check_label: { ko: '원문 확인', en: 'Check source listing' },
+        source_check_body: { ko: '구매 전 원문 매물 확인이 필요합니다.', en: 'Please verify the original listing before purchase.' },
+        beta_note_label: { ko: '참고', en: 'Note' },
+        beta_note_body: { ko: '동일 API 결과를 베타용 문구로만 정리했습니다.', en: 'The same API result is shown here with beta-friendly wording only.' },
+      },
+      card: {
+        projected: { ko: '참고 투영', en: 'Projected reference' },
+        notation_detected: { ko: '표기 인식', en: 'Marker detected' },
+        title_missing: { ko: '제목 미확인 매물', en: 'Untitled listing' },
+        detected_entry: { ko: '검색한 모델', en: 'Interpreted entry' },
+        search_match: { ko: '검색 일치', en: 'Search match' },
+        used_for_price: { ko: '가격 계산 반영', en: 'Used for price' },
+        exclusion_reason: { ko: '제외 이유', en: 'Exclusion reason' },
+        generation_confidence: { ko: '세대 판별 신뢰도', en: 'Generation confidence' },
+        price_usage: { ko: '가격 반영 방식', en: 'Price role' },
+        explanation: { ko: '설명', en: 'Why it appears' },
+        result_type: { ko: '결과 성격', en: 'Match state' },
+      },
+      load_more: {
+        idle: { ko: '결과 더 보기', en: 'Load more' },
+        loading: { ko: '불러오는 중...', en: 'Loading…' },
+      },
+      warnings: {
+        filters_none: { ko: '필터 없음', en: 'No filters applied' },
+        filters_prefix: { ko: '적용 필터', en: 'Filters' },
+        disambiguation: { ko: '조건을 더 구체적으로 입력하면 결과를 더 정확히 좁힐 수 있습니다.', en: 'Add more model details to narrow this search.' },
+        accessory: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않습니다.', en: 'Accessory searches are not used for body or lens pricing.' },
+        coverage: { ko: '데이터 부족은 부재 의미가 아닙니다.', en: 'Low coverage does not mean the item does not exist.' },
+      },
     };
 
     const state = {
@@ -1064,6 +1427,9 @@
       historyReady: false,
       currentHistoryKey: ''
     };
+    const uiState = {
+      locale: 'en'
+    };
 
     const els = {};
     let pendingResultsAnchorScroll = false;
@@ -1072,9 +1438,132 @@
 
     function $(id){ return document.getElementById(id); }
 
+    function ux(path, fallback = ''){
+      const groups = String(path || '').split('.');
+      let current = UX_LOCALE_COPY;
+      for(const part of groups){
+        if(!current || typeof current !== 'object' || !(part in current)) return fallback || path;
+        current = current[part];
+      }
+      if(current && typeof current === 'object'){
+        return String(current[uiState.locale] || current.en || fallback || path);
+      }
+      return String(current || fallback || path);
+    }
+
+    function normalizeLocale(locale){
+      const value = String(locale || '').trim();
+      if(SUPPORTED_LOCALES.includes(value)) return value;
+      const lower = value.toLowerCase();
+      if(lower.startsWith('ko')) return 'ko';
+      if(lower.startsWith('ja')) return 'ja';
+      if(lower === 'zh-cn' || lower === 'zh-sg' || lower.startsWith('zh-hans')) return 'zh-Hans';
+      if(lower === 'zh-tw' || lower === 'zh-hk' || lower.startsWith('zh-hant')) return 'zh-Hant';
+      if(lower.startsWith('pt')) return 'pt';
+      if(lower.startsWith('es')) return 'es';
+      if(lower.startsWith('de')) return 'de';
+      if(lower.startsWith('it')) return 'it';
+      return 'en';
+    }
+
+    function detectInitialLocale(){
+      const stored = window.localStorage ? window.localStorage.getItem('cb.beta.locale') : '';
+      if(stored) return normalizeLocale(stored);
+      const browserLocales = Array.isArray(navigator.languages) && navigator.languages.length
+        ? navigator.languages
+        : [navigator.language || 'en'];
+      return normalizeLocale(browserLocales[0]);
+    }
+
+    function applyLocaleAttributes(attributeName, targetAttribute){
+      document.querySelectorAll(`[${attributeName}]`).forEach(node => {
+        const key = node.getAttribute(attributeName);
+        if(!key) return;
+        node.setAttribute(targetAttribute, ux(key, node.getAttribute(targetAttribute) || ''));
+      });
+    }
+
+    function applyStaticTranslations(){
+      document.documentElement.lang = uiState.locale;
+      document.querySelectorAll('[data-i18n]').forEach(node => {
+        const key = node.getAttribute('data-i18n');
+        if(!key) return;
+        node.textContent = ux(key, node.textContent.trim());
+      });
+      document.querySelectorAll('[data-locale-label]').forEach(node => {
+        node.textContent = ux('language.label', 'Language');
+      });
+      applyLocaleAttributes('data-i18n-placeholder', 'placeholder');
+      applyLocaleAttributes('data-i18n-aria-label', 'aria-label');
+      applyDynamicSelectOptionLabels();
+    }
+
+    function applyDynamicSelectOptionLabels(){
+      if(els['category-filter']){
+        Array.from(els['category-filter'].options).forEach(option => {
+          if(option.value === '') option.textContent = ux('filters.category.any', 'Any');
+          if(option.value === 'Lens') option.textContent = ux('filters.category.lens', 'Lens');
+          if(option.value === 'Body') option.textContent = ux('filters.category.body', 'Body');
+          if(option.value === 'Accessory') option.textContent = ux('filters.category.accessory', 'Accessory');
+        });
+      }
+      if(els['brand-filter']){
+        Array.from(els['brand-filter'].options).forEach(option => {
+          if(option.value === '') option.textContent = ux('filters.brand.any', 'Any');
+        });
+      }
+      if(els['mount-filter']){
+        Array.from(els['mount-filter'].options).forEach(option => {
+          if(option.value === '') option.textContent = ux('filters.mount.any', 'Any');
+        });
+      }
+      if(els['sort-select']){
+        Array.from(els['sort-select'].options).forEach(option => {
+          if(option.value === 'relevance') option.textContent = ux('sort.relevance', 'Recommended');
+          if(option.value === 'newest') option.textContent = ux('sort.newest', 'Newest');
+          if(option.value === 'price_asc') option.textContent = ux('sort.price_asc', 'Price: Low to High');
+          if(option.value === 'price_desc') option.textContent = ux('sort.price_desc', 'Price: High to Low');
+        });
+      }
+      if(els['sold-filter']){
+        Array.from(els['sold-filter'].options).forEach(option => {
+          if(option.value === '') option.textContent = ux('sold_filter.any', 'Any');
+          if(option.value === 'asking') option.textContent = ux('sold_filter.asking', 'Active');
+          if(option.value === 'sold') option.textContent = ux('sold_filter.sold', 'Sold');
+          if(option.value === 'sold_confirmed') option.textContent = ux('sold_filter.sold_confirmed', 'Sold confirmed');
+          if(option.value === 'sold_likely') option.textContent = ux('sold_filter.sold_likely', 'Sold likely');
+          if(option.value === 'unknown') option.textContent = ux('sold_filter.unknown', 'Unknown');
+        });
+      }
+    }
+
+    function populateLocaleOptions(){
+      if(!els['locale-select']) return;
+      els['locale-select'].innerHTML = SUPPORTED_LOCALES.map(locale => (
+        `<option value="${escapeHtml(locale)}">${escapeHtml(LOCALE_LABELS[locale] || locale)}</option>`
+      )).join('');
+      els['locale-select'].value = uiState.locale;
+    }
+
+    function setLocale(locale){
+      const currentScrollY = window.scrollY;
+      uiState.locale = normalizeLocale(locale);
+      if(window.localStorage){
+        window.localStorage.setItem('cb.beta.locale', uiState.locale);
+      }
+      if(els['locale-select'] && els['locale-select'].value !== uiState.locale){
+        els['locale-select'].value = uiState.locale;
+      }
+      applyStaticTranslations();
+      render();
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: currentScrollY, behavior: 'auto' });
+      });
+    }
+
     function cacheElements(){
       [
-        'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region',
+        'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
         'category-filter','brand-filter','mount-filter','sold-filter',
         'sort-select','result-count','result-caption','summary-meta','index-debug-line','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
@@ -1142,7 +1631,7 @@
       }[ch]));
     }
 
-    function displayValue(value, fallback = '정보 없음'){
+    function displayValue(value, fallback = ux('common.no_data', 'Not enough data')){
       if(Array.isArray(value)){
         return value.length ? value.join(', ') : fallback;
       }
@@ -1152,94 +1641,136 @@
       return String(value);
     }
 
+    function localizeCategoryLabel(value){
+      const normalized = String(value || '').trim().toLowerCase();
+      if(normalized === 'body') return ux('filters.category.body', 'Body');
+      if(normalized === 'lens') return ux('filters.category.lens', 'Lens');
+      if(normalized === 'accessory') return ux('filters.category.accessory', 'Accessory');
+      if(!normalized || normalized === 'unknown') return ux('common.unknown', 'Unknown');
+      return String(value || '');
+    }
+
+    function formatUsedForPriceValue(value){
+      return value ? ux('common.yes', 'Used') : ux('common.no', 'Not used');
+    }
+
+    function qualityLabel(value){
+      const normalized = String(value || '').trim().toLowerCase();
+      if(normalized === 'strong') return ux('quality.strong', 'Strong');
+      if(normalized === 'medium') return ux('quality.medium', 'Medium');
+      if(normalized === 'weak') return ux('quality.weak', 'Weak');
+      return ux('quality.unknown', 'Unknown');
+    }
+
+    function localizeQueryMatchLabel(value){
+      const normalized = String(value || '').trim().toLowerCase();
+      if(!normalized) return '';
+      if(['exact generation', 'exact_generation', 'exact variant', 'exact_variant'].includes(normalized)) return ux('result_role.exact_variant', 'Exact match');
+      if(['exact base model', 'exact_base_model'].includes(normalized)) return ux('result_role.exact_base_model', 'Base model match');
+      if(['same family reference', 'same_family_reference'].includes(normalized)) return ux('result_role.same_base_model', 'Similar model');
+      if(['boundary conflict', 'boundary_conflict'].includes(normalized)) return ux('result_role.boundary_conflict', 'Different model boundary');
+      if(['accessory compatible', 'accessory_compatible'].includes(normalized)) return ux('price_role.accessory_excluded', 'Not used — Accessory listing');
+      return String(value || '');
+    }
+
     function mapBetaResultRole(value){
       const normalized = String(value || '').trim();
-      if(normalized === 'Exact variant') return '정확히 맞는 결과';
-      if(normalized === 'Exact base model') return '기본 모델 일치';
-      if(normalized === 'Same base model') return '같은 계열 참고 결과';
-      if(normalized === 'Broader family' || normalized === 'Broader reference') return '관련 결과';
-      if(normalized === 'Boundary conflict') return '조건이 달라 가격 계산 제외';
-      if(normalized === 'Query incompatible' || normalized === 'Not compatible with this query') return '조건이 맞지 않는 결과';
-      return normalized || '참고 결과';
+      if(normalized === 'Exact variant') return ux('result_role.exact_variant', 'Exact match');
+      if(normalized === 'Exact base model') return ux('result_role.exact_base_model', 'Base model match');
+      if(normalized === 'Same base model') return ux('result_role.same_base_model', 'Similar model');
+      if(normalized === 'Broader family' || normalized === 'Broader reference') return ux('result_role.broader_family', 'Related result');
+      if(normalized === 'Boundary conflict') return ux('result_role.boundary_conflict', 'Different model boundary');
+      if(normalized === 'Query incompatible' || normalized === 'Not compatible with this query') return ux('result_role.incompatible', 'Not compatible with this query');
+      return normalized || ux('result_role.reference_only', 'Reference only');
     }
 
     function mapBetaPriceRole(value){
       const normalized = String(value || '').trim();
       if(!normalized) return '';
-      if(normalized === 'Used for exact price') return '가격 계산에 사용됨';
-      if(normalized === 'Used for same base model price') return '가격 계산에 사용됨';
-      if(normalized === 'Exact variant match visible, but not selected for exact price') return '정확히 맞지만 가격 계산에서는 제외';
-      if(normalized === 'Exact match visible, but not enough to unlock price yet') return '정확히 맞지만 가격 계산에서는 제외';
-      if(normalized === 'Same base model result is visible, but not used as exact price') return '참고 결과로만 표시';
-      if(normalized === 'Broader family reference used for price context') return '같은 계열 참고 결과';
-      if(normalized === 'Not used — Duplicate listing') return '중복 가능성으로 제외';
-      if(normalized === 'Not used — Price outlier') return '가격 범위 이상으로 제외';
-      if(normalized === 'No usable price') return '가격 계산 불가';
-      if(normalized === 'Not used — Accessory, not camera/lens') return '액세서리라 가격 계산에서 제외';
-      if(normalized === 'Not used — not compatible with this query') return '조건이 달라 가격 계산에서 제외';
-      if(normalized === 'Not used — Variant boundary') return '조건이 달라 가격 계산에서 제외';
+      if(normalized === 'Used for exact price') return ux('price_role.used_for_price', 'Used for price calculation');
+      if(normalized === 'Used for exact-generation price') return ux('price_role.used_for_exact_generation', 'Used for exact-generation price');
+      if(normalized === 'Used for same generation candidate price') return ux('price_role.used_for_generation_candidate', 'Used for generation-candidate pricing');
+      if(normalized === 'Used for same base model price') return ux('price_role.used_for_price', 'Used for price calculation');
+      if(normalized === 'Exact variant match visible, but not selected for exact price') return ux('price_role.exact_visible_excluded', 'Exact match visible, but excluded from price calculation');
+      if(normalized === 'Exact generation match visible, but not selected for exact price') return ux('price_role.exact_visible_excluded', 'Exact match visible, but excluded from price calculation');
+      if(normalized === 'Exact generation match visible, but not enough to unlock price yet') return ux('price_role.exact_visible_excluded', 'Exact match visible, but excluded from price calculation');
+      if(normalized === 'Exact match visible, but not enough to unlock price yet') return ux('price_role.exact_visible_excluded', 'Exact match visible, but excluded from price calculation');
+      if(normalized === 'Reference only — not used for this entry price') return ux('price_role.reference_for_entry_only', 'Reference only for this entry');
+      if(normalized === 'Reference only — generation selection needed') return ux('price_role.generation_selection_needed', 'Reference only — generation selection needed');
+      if(normalized === 'Generation candidate visible — select a generation to price') return ux('price_role.generation_selection_locked', 'Price stays locked until a generation is selected');
+      if(normalized === 'Not used for price — generation selection needed') return ux('price_role.generation_selection_locked', 'Price stays locked until a generation is selected');
+      if(normalized === 'Same base model result is visible, but not used as exact price') return ux('price_role.same_base_reference', 'Reference only');
+      if(normalized === 'Broader family reference used for price context') return ux('price_role.broader_reference', 'Broader family reference');
+      if(normalized === 'Not used — Duplicate listing') return ux('price_role.duplicate', 'Not used — Duplicate listing');
+      if(normalized === 'Not used — Price outlier') return ux('price_role.outlier', 'Not used — Price outlier');
+      if(normalized === 'No usable price') return ux('price_role.no_usable_price', 'No usable price');
+      if(normalized === 'Not used — Accessory, not camera/lens') return ux('price_role.accessory_excluded', 'Not used — Accessory listing');
+      if(normalized === 'Not used — not compatible with this query') return ux('price_role.not_compatible', 'Not used — Not compatible with this query');
+      if(normalized === 'Not used — Variant boundary') return ux('price_role.boundary_excluded', 'Not used — Different model boundary');
       return normalized;
     }
 
     function mapBetaReason(value){
       const normalized = String(value || '').trim();
       if(!normalized) return '';
-      if(normalized === 'Exact variant evidence') return '검색어와 모델명이 잘 맞습니다.';
-      if(normalized === 'Model / focal / variant matched') return '검색어와 모델명이 잘 맞습니다.';
-      if(normalized === 'Same base model, not exact variant') return '같은 계열이지만 조건이 달라 참고로만 표시합니다.';
-      if(normalized === 'Broader family reference') return '같은 계열 참고 결과입니다.';
-      if(normalized === 'Boundary conflict') return '같은 계열이지만 조건이 달라 참고로만 표시합니다.';
-      if(normalized === 'Not compatible with this query') return '조건이 달라 참고로만 표시합니다.';
-      if(normalized === 'Duplicate listing') return '중복 가능성이 있어 가격 계산에서 제외했습니다.';
-      if(normalized === 'Price outlier') return '이상 가격 가능성이 있어 가격 계산에서 제외했습니다.';
-      if(normalized === 'Accessory, not camera/lens') return '액세서리/구성품이 섞여 가격 계산에서는 제외했습니다.';
-      if(normalized === 'Variant boundary') return '조건이 달라 가격 계산에서는 제외했습니다.';
+      if(normalized === 'Exact variant evidence') return ux('reason.exact_variant', 'The model and variant match the query closely.');
+      if(normalized === 'Exact generation evidence') return ux('reason.exact_generation', 'The model and generation match the query closely.');
+      if(normalized === 'Model / focal / variant matched') return ux('reason.exact_model', 'The model matches the query closely.');
+      if(normalized === 'Same base model, different generation') return ux('reason.same_generation_reference', 'This is the same base model, but a different generation, so it is shown for reference only.');
+      if(normalized === 'Same base model, not exact variant') return ux('reason.same_base_reference', 'This is a related listing, but the conditions differ, so it is shown for reference only.');
+      if(normalized === 'Broader family reference') return ux('reason.broader_family', 'This is shown as a broader family reference.');
+      if(normalized === 'Boundary conflict') return ux('reason.boundary_conflict', 'Several different models were found, so an exact price comparison is not shown.');
+      if(normalized === 'Not compatible with this query') return ux('reason.incompatible', 'This listing is shown for context, but it does not match this query closely enough for pricing.');
+      if(normalized === 'Duplicate listing') return ux('reason.duplicate', 'This listing was excluded because it may be a duplicate.');
+      if(normalized === 'Price outlier') return ux('reason.outlier', 'This listing was excluded because the price may be an outlier.');
+      if(normalized === 'Accessory, not camera/lens') return ux('reason.accessory', 'This listing looks like an accessory or bundled item, so it is excluded from price calculation.');
+      if(normalized === 'Variant boundary') return ux('reason.variant_boundary', 'This listing crosses a model or variant boundary, so it is excluded from price calculation.');
       return normalized;
     }
 
     function getBetaPriceState(policy){
       const intent = state.response && state.response.intent ? state.response.intent : {};
       if(intent.accessory_intent){
-        return '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않아요.';
+        return ux('price_state.accessory', 'Accessory searches are not used for body or lens price calculations.');
       }
       if(policy.display_price_summary_allowed){
-        return '정확 조건 기준 가격을 계산했어요.';
+        return ux('price_state.exact', 'An exact-condition price was calculated.');
       }
       if(policy.display_broader_reference_allowed){
-        return '같은 계열 참고 가격만 확인할 수 있어요.';
+        return ux('price_state.reference', 'Only related reference prices are available.');
       }
       if(policy.price_scope === 'blocked_boundary_conflict'){
-        return '조건이 섞여 정확 가격 계산을 보류했습니다. 아래 결과는 참고용입니다.';
+        return ux('price_state.boundary_locked', 'Different model conditions are mixed, so exact price calculation is on hold. The results below are for reference only.');
       }
       if(policy.price_scope === 'blocked_weak_only'){
-        return '신뢰도 부족으로 가격 계산을 보류했어요.';
+        return ux('price_state.weak_locked', 'Price calculation is on hold because the evidence is not strong enough yet.');
       }
-      return '정확한 가격 계산은 보류했어요.';
+      return ux('price_state.locked', 'Exact price calculation is currently on hold.');
     }
 
     function getBetaPriceBandCaption(policy){
       const intent = state.response && state.response.intent ? state.response.intent : {};
       if(intent.accessory_intent){
-        return '액세서리 검색';
+        return ux('price_caption.accessory', 'Accessory search');
       }
       if(policy.display_price_summary_allowed){
-        return '정확 가격';
+        return ux('price_caption.exact', 'Exact price');
       }
       if(policy.display_broader_reference_allowed){
-        return '참고 가격';
+        return ux('price_caption.reference', 'Reference price');
       }
-      return '가격 상태';
+      return ux('price_caption.locked', 'Price status');
     }
 
     function getBetaCardExplanation(evidenceRole, priceRole, reason){
-      if(String(priceRole || '').includes('액세서리')) return '액세서리/구성품이 섞여 가격 계산에서는 제외했습니다.';
-      if(String(priceRole || '').includes('중복')) return '중복 또는 이상 가격 가능성이 있어 가격 계산에서 제외했습니다.';
-      if(String(priceRole || '').includes('이상')) return '중복 또는 이상 가격 가능성이 있어 가격 계산에서 제외했습니다.';
-      if(String(priceRole || '').includes('가격 계산 불가')) return '가격 정보가 충분하지 않아 계산하지 않았습니다.';
-      if(String(evidenceRole || '').includes('정확히 맞는 결과')) return '검색어와 모델명이 잘 맞습니다.';
-      if(String(evidenceRole || '').includes('기본 모델 일치')) return '기본 모델은 같지만 세부 조건은 다시 확인해 주세요.';
-      if(String(evidenceRole || '').includes('관련 결과') || String(evidenceRole || '').includes('조건이 달라')) return '같은 계열이지만 조건이 달라 참고로만 표시합니다.';
-      return mapBetaReason(reason) || '검색어와 얼마나 맞는지, 가격 계산에 쓰였는지를 함께 보여줍니다.';
+      if(String(priceRole || '').includes(ux('price_role.accessory_excluded', 'Not used — Accessory listing'))) return ux('reason.accessory', 'This listing looks like an accessory or bundled item, so it is excluded from price calculation.');
+      if(String(priceRole || '').includes(ux('price_role.duplicate', 'Not used — Duplicate listing'))) return ux('reason.duplicate', 'This listing was excluded because it may be a duplicate.');
+      if(String(priceRole || '').includes(ux('price_role.outlier', 'Not used — Price outlier'))) return ux('reason.outlier', 'This listing was excluded because the price may be an outlier.');
+      if(String(priceRole || '').includes(ux('price_role.no_usable_price', 'No usable price'))) return ux('reason.no_price', 'There is not enough usable price information to calculate a price.');
+      if(String(evidenceRole || '').includes(ux('result_role.exact_variant', 'Exact match'))) return ux('reason.exact_variant', 'The model and variant match the query closely.');
+      if(String(evidenceRole || '').includes(ux('result_role.exact_base_model', 'Base model match'))) return uiState.locale === 'ko' ? '기본 모델은 같지만 세부 조건은 다시 확인해 주세요.' : 'The base model matches, but the finer details should still be checked.';
+      if(String(evidenceRole || '').includes(ux('result_role.broader_family', 'Related result')) || String(evidenceRole || '').includes(ux('result_role.boundary_conflict', 'Different model boundary'))) return ux('reason.same_base_reference', 'This is a related listing, but the conditions differ, so it is shown for reference only.');
+      return mapBetaReason(reason) || ux('reason.default', 'This explains how well the listing matches the query and whether it was used for pricing.');
     }
 
     function titleCase(value){
@@ -1264,8 +1795,6 @@
       params.set('q', state.query);
       params.set('limit', String(limitValue));
       params.set('offset', String(offset));
-      params.set('sort', els['sort-select'].value || 'relevance');
-
       [
         ['category', els['category-filter'].value],
         ['brand', els['brand-filter'].value],
@@ -1507,19 +2036,22 @@
     }
 
     function statusMeta(result){
+      const marketInfo = getMarketActivityInfo(result);
       const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
-      if(soldQuality === 'asking') return { label: '판매중', tone: 'accent' };
-      if(soldQuality === 'sold_confirmed') return { label: '판매완료 확인', tone: 'green' };
-      if(soldQuality === 'sold_likely') return { label: '판매완료 추정', tone: 'amber' };
-      if(soldQuality === 'expired' || soldQuality === 'ended_unsold') return { label: '만료', tone: 'amber' };
-      if(soldQuality === 'removed') return { label: '삭제됨', tone: 'amber' };
-      if(soldQuality === 'sold') return { label: '판매 이력', tone: 'green' };
-      return { label: '상태 미확인', tone: 'blue' };
+      if(soldQuality === 'asking' && marketInfo.bucket === 'uncertain_asking') return { label: 'Active, needs verification', tone: 'amber' };
+      if(soldQuality === 'asking') return { label: 'Active asking', tone: 'accent' };
+      if(soldQuality === 'sold_confirmed') return { label: 'Sold confirmed', tone: 'green' };
+      if(soldQuality === 'sold_likely') return { label: 'Sold likely', tone: 'amber' };
+      if(soldQuality === 'expired' || soldQuality === 'ended_unsold') return { label: 'Expired', tone: 'amber' };
+      if(soldQuality === 'removed') return { label: 'Removed', tone: 'amber' };
+      if(soldQuality === 'sold') return { label: 'Sold', tone: 'green' };
+      return { label: 'Unknown', tone: 'blue' };
     }
 
     function getLocalBroadQueryHint(){
       const query = normalizeSearchQuerySafe(state.query);
       if(!LOCAL_BROAD_QUERY_HINTS[query]) return null;
+      const message = LOCAL_BROAD_QUERY_HINTS[query];
       return {
         needs_disambiguation: true,
         ambiguity_type: 'broad_query_frontend_fallback',
@@ -1527,7 +2059,7 @@
         recommended_chips: BROAD_QUERY_FALLBACK_CHIPS,
         suggested_filters: {},
         hard_pin_allowed: false,
-        recommended_message: LOCAL_BROAD_QUERY_HINTS[query]
+        recommended_message: String(message[uiState.locale] || message.en || '')
       };
     }
 
@@ -1545,6 +2077,225 @@
 
     function getResults(){
       return state.response && Array.isArray(state.response.results) ? state.response.results : [];
+    }
+
+    function localizeStatusLabel(label){
+      const normalized = String(label || '').trim().toLowerCase();
+      if(normalized === 'active asking') return ux('status.active_asking', 'Active asking');
+      if(normalized === 'active, needs verification') return ux('status.uncertain_asking', 'Active, needs verification');
+      if(normalized === 'sold confirmed') return ux('status.sold_confirmed', 'Sold confirmed');
+      if(normalized === 'sold likely') return ux('status.sold_likely', 'Sold likely');
+      if(normalized === 'sold') return ux('status.sold', 'Sold');
+      if(normalized === 'expired') return ux('status.expired', 'Expired');
+      if(normalized === 'removed') return ux('status.removed', 'Removed');
+      return ux('status.unknown', 'Unknown');
+    }
+
+    function formatListingCount(count){
+      const value = Math.max(0, Number(count || 0));
+      if(uiState.locale === 'ko') return `${value}개`;
+      if(uiState.locale === 'ja') return `${value}件`;
+      if(uiState.locale === 'zh-Hans' || uiState.locale === 'zh-Hant') return `${value}条`;
+      if(uiState.locale === 'pt') return `${value} anúncios`;
+      if(uiState.locale === 'es') return `${value} anuncios`;
+      if(uiState.locale === 'de') return `${value} Angebote`;
+      if(uiState.locale === 'it') return `${value} annunci`;
+      return `${value} ${value === 1 ? 'listing' : 'listings'}`;
+    }
+
+    function formatShownForQuery(count, query){
+      const quantity = formatListingCount(count);
+      if(uiState.locale === 'ko') return `"${query}" 검색 결과 ${quantity}`;
+      if(uiState.locale === 'ja') return `「${query}」の結果 ${quantity}`;
+      if(uiState.locale === 'zh-Hans') return `“${query}”结果 ${quantity}`;
+      if(uiState.locale === 'zh-Hant') return `「${query}」結果 ${quantity}`;
+      if(uiState.locale === 'pt') return `${quantity} para "${query}"`;
+      if(uiState.locale === 'es') return `${quantity} para "${query}"`;
+      if(uiState.locale === 'de') return `${quantity} für "${query}"`;
+      if(uiState.locale === 'it') return `${quantity} per "${query}"`;
+      return `${quantity} for "${query}"`;
+    }
+
+    function getSortMode(){
+      return els['sort-select'] ? String(els['sort-select'].value || 'relevance') : 'relevance';
+    }
+
+    function parseTimestampScore(rawValue){
+      const raw = String(rawValue || '').trim();
+      if(!raw) return 0;
+      const parsed = Date.parse(raw);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function getResultFreshnessScore(result){
+      return (
+        parseTimestampScore(finalField(result, 'last_seen'))
+        || parseTimestampScore(finalField(result, 'crawl_time'))
+      );
+    }
+
+    function getResultFirstSeenScore(result){
+      return parseTimestampScore(finalField(result, 'first_seen'));
+    }
+
+    function getResultRecencyScore(result){
+      return getResultFreshnessScore(result);
+    }
+
+    function getResultCompatibilityScore(result){
+      const queryMatchLevel = String(result.query_match_level || '').trim().toLowerCase();
+      if(queryMatchLevel === 'exact_generation') return 1000;
+      if(queryMatchLevel === 'exact_variant') return 980;
+      if(queryMatchLevel === 'exact_base_model') return 920;
+      if(queryMatchLevel === 'same_family_reference') return 840;
+      if(queryMatchLevel === 'accessory_compatible') return 240;
+      if(queryMatchLevel === 'boundary_conflict') return 120;
+      const quality = String(result.match_quality || '').trim().toLowerCase();
+      if(quality === 'strong') return 300;
+      if(quality === 'medium') return 200;
+      if(quality === 'weak') return 100;
+      return 0;
+    }
+
+    function getMarketActivityInfo(result){
+      const soldQuality = String(finalField(result, 'sold_quality') || '').trim().toLowerCase();
+      const hasRecency = Boolean(finalField(result, 'last_seen') || finalField(result, 'crawl_time'));
+      const projected = Boolean(displayField(result, 'stale_normalization_detected'));
+      if(soldQuality === 'asking'){
+        if(projected || !hasRecency){
+          return { bucket: 'uncertain_asking', section: 'active', activeConfidence: 0 };
+        }
+        return { bucket: 'active_asking', section: 'active', activeConfidence: 1 };
+      }
+      if(soldQuality === 'sold_confirmed'){
+        return { bucket: 'sold_confirmed', section: 'history', activeConfidence: 0 };
+      }
+      if(['sold_likely', 'removed', 'expired', 'ended_unsold'].includes(soldQuality)){
+        return { bucket: 'sold_likely_removed', section: 'history', activeConfidence: 0 };
+      }
+      return { bucket: 'historical_archive', section: 'history', activeConfidence: 0 };
+    }
+
+    function getActiveCompatibilityTier(result, originalIndex){
+      const evidence = getResultEvidence(result, originalIndex);
+      const queryMatchLevel = String(result.query_match_level || '').trim().toLowerCase();
+      const priceUsage = String((evidence && evidence.price_usage_label) || '').trim().toLowerCase();
+      const excluded = Array.isArray(evidence && evidence.excluded_reason)
+        ? evidence.excluded_reason.map(item => String(item || '').toLowerCase())
+        : [];
+      const title = String(result.title || '').toLowerCase();
+      const blockedBySafety = excluded.some(item =>
+        item.includes('accessory')
+        || item.includes('bundle')
+        || item.includes('wrong model')
+        || item.includes('wrong mount')
+        || item.includes('duplicate')
+        || item.includes('outlier')
+        || item.includes('condition')
+        || item.includes('variant boundary')
+      ) || priceUsage.includes('not used')
+        || priceUsage.includes('not compatible')
+        || priceUsage.includes('accessory')
+        || priceUsage.includes('duplicate')
+        || priceUsage.includes('outlier')
+        || /(repaint|repainted|modified|custom|改造)/i.test(title);
+
+      if(blockedBySafety || ['boundary_conflict', 'accessory_compatible'].includes(queryMatchLevel)){
+        return 2;
+      }
+      if(['exact_generation', 'exact_variant', 'exact_base_model'].includes(queryMatchLevel)){
+        return 0;
+      }
+      return 1;
+    }
+
+    function sortMarketBucket(items, sortMode){
+      const sorted = [...items];
+      sorted.sort((left, right) => {
+        const leftPrice = left.priceValue;
+        const rightPrice = right.priceValue;
+        if(left.compatibilityTier !== right.compatibilityTier) return left.compatibilityTier - right.compatibilityTier;
+        if(sortMode === 'newest'){
+          if(right.recency !== left.recency) return right.recency - left.recency;
+          if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+          if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+          return left.originalIndex - right.originalIndex;
+        }
+        if(sortMode === 'price_asc'){
+          const leftMissing = leftPrice === null ? 1 : 0;
+          const rightMissing = rightPrice === null ? 1 : 0;
+          if(leftMissing !== rightMissing) return leftMissing - rightMissing;
+          if(leftPrice !== null && rightPrice !== null && leftPrice !== rightPrice) return leftPrice - rightPrice;
+          if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+          if(right.recency !== left.recency) return right.recency - left.recency;
+          if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+          return left.originalIndex - right.originalIndex;
+        }
+        if(sortMode === 'price_desc'){
+          const leftMissing = leftPrice === null ? 1 : 0;
+          const rightMissing = rightPrice === null ? 1 : 0;
+          if(leftMissing !== rightMissing) return leftMissing - rightMissing;
+          if(leftPrice !== null && rightPrice !== null && leftPrice !== rightPrice) return rightPrice - leftPrice;
+          if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+          if(right.recency !== left.recency) return right.recency - left.recency;
+          if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+          return left.originalIndex - right.originalIndex;
+        }
+        if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+        if(right.recency !== left.recency) return right.recency - left.recency;
+        if(right.marketInfo.activeConfidence !== left.marketInfo.activeConfidence) return right.marketInfo.activeConfidence - left.marketInfo.activeConfidence;
+        if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+        return left.originalIndex - right.originalIndex;
+      });
+      return sorted.map(item => item.result);
+    }
+
+    function buildDisplaySections(results, sortMode){
+      const wrapped = results.map((result, originalIndex) => ({
+        result,
+        originalIndex,
+        recency: getResultRecencyScore(result),
+        firstSeen: getResultFirstSeenScore(result),
+        compatibility: getResultCompatibilityScore(result),
+        compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
+        priceValue: parseNumericPrice(result),
+        marketInfo: getMarketActivityInfo(result),
+      }));
+      wrapped.forEach(item => {
+        item.result.__ui_original_index = item.originalIndex;
+      });
+      const buckets = {
+        active_asking: [],
+        uncertain_asking: [],
+        sold_confirmed: [],
+        sold_likely_removed: [],
+        historical_archive: [],
+      };
+      wrapped.forEach(item => {
+        buckets[item.marketInfo.bucket].push(item);
+      });
+      const active = [
+        ...sortMarketBucket(buckets.active_asking, sortMode),
+        ...sortMarketBucket(buckets.uncertain_asking, sortMode),
+      ];
+      const history = [
+        ...sortMarketBucket(buckets.sold_confirmed, sortMode),
+        ...sortMarketBucket(buckets.sold_likely_removed, sortMode),
+        ...sortMarketBucket(buckets.historical_archive, sortMode),
+      ];
+      return {
+        active,
+        history,
+        counts: {
+          active: active.length,
+          history: history.length,
+          active_asking: buckets.active_asking.length,
+          uncertain_asking: buckets.uncertain_asking.length,
+          sold_confirmed: buckets.sold_confirmed.length,
+          sold_likely_removed: buckets.sold_likely_removed.length,
+          historical_archive: buckets.historical_archive.length,
+        },
+      };
     }
 
     function buildResultEvidenceKey(title, source, price, currency){
@@ -1578,16 +2329,21 @@
       const usage = String(evidence.price_usage_label || '').trim().toLowerCase();
       const roleText = compatibility || role;
 
+      if(usage.includes('used for exact-generation price')){
+        return 'Exact generation evidence';
+      }
       if(usage.includes('used for exact price')){
         if(roleText === 'Exact variant') return 'Exact variant evidence';
         if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Exact price evidence';
         return 'Exact price evidence';
       }
       if(roleText === 'Exact variant') return 'Model / focal / variant matched';
+      if(roleText === 'Same base model, different generation') return 'Same base model, different generation';
       if(roleText === 'Exact base model' || roleText === 'Same base model') return 'Same base model, not exact variant';
       if(roleText === 'Broader family' || roleText === 'Broader reference') return 'Broader family reference';
       if(roleText === 'Boundary conflict') return 'Boundary conflict';
       if(roleText === 'Query incompatible' || roleText === 'Not compatible with this query') return 'Not compatible with this query';
+      if(usage.includes('generation selection needed')) return 'Same base model, different generation';
       if(usage.includes('same base model result is visible')) return 'Same base model, not exact variant';
       if(usage.includes('broader reference')) return 'Broader family reference';
       if(usage.includes('not compatible with this query')) return 'Not compatible with this query';
@@ -1647,54 +2403,57 @@
           current_ui_label_safe: true
         };
       }
-      return state.response.market_entry_policy || {
-        market_entry_allowed: Boolean(state.response.market_entry_allowed),
-        price_summary_allowed: Boolean(state.response.price_summary_allowed),
-        market_entry_block_reason: state.response.market_entry_block_reason || [],
-        price_summary_block_reason: state.response.price_summary_block_reason || [],
-        model_entry_confidence_state: state.response.model_entry_confidence_state || 'unknown',
-        market_entry_metrics: state.response.market_entry_metrics || null,
-        price_summary_band: state.response.price_summary_band || 'Price summary locked',
-        price_scope: state.response.price_scope || 'insufficient_exact_data',
-        price_scope_label: state.response.price_scope_label || 'Price summary locked',
-        price_scope_confidence_state: state.response.price_scope_confidence_state || 'price_scope_locked',
-        search_confidence_state: state.response.search_confidence_state || 'unknown',
-        top_result_compatibility: state.response.top_result_compatibility || 'unknown',
-        exact_or_strong_visible_result_count: Number(state.response.exact_or_strong_visible_result_count || 0),
-        third_party_top_domination_detected: Boolean(state.response.third_party_top_domination_detected),
-        price_scope_search_aligned: Boolean(state.response.price_scope_search_aligned),
-        price_scope_search_alignment_reason: state.response.price_scope_search_alignment_reason || [],
-        price_evidence_scope: state.response.price_evidence_scope || 'insufficient_exact_data',
-        price_band_quality_state: state.response.price_band_quality_state || 'insufficient_priced_evidence',
-        price_band_quality_reason: state.response.price_band_quality_reason || [],
-        exact_variant_pool_count: Number(state.response.exact_variant_pool_count || 0),
-        exact_base_model_pool_count: Number(state.response.exact_base_model_pool_count || 0),
-        broader_family_pool_count: Number(state.response.broader_family_pool_count || 0),
-        excluded_pool_count: Number(state.response.excluded_pool_count || 0),
-        outlier_removed_count: Number(state.response.outlier_removed_count || 0),
-        accessory_price_excluded_count: Number(state.response.accessory_price_excluded_count || 0),
-        third_party_price_excluded_count: Number(state.response.third_party_price_excluded_count || 0),
-        wrong_model_price_excluded_count: Number(state.response.wrong_model_price_excluded_count || 0),
-        broader_reference_allowed: Boolean(state.response.broader_reference_allowed),
-        broader_reference_label: state.response.broader_reference_label || null,
-        broader_reference_band: state.response.broader_reference_band || null,
-        broader_reference_locked_reason: state.response.broader_reference_locked_reason || null,
-        unlock_requirements: state.response.unlock_requirements || [],
-        display_price_summary_allowed: Boolean(state.response.display_price_summary_allowed),
-        display_price_scope_label: state.response.display_price_scope_label || (state.response.price_scope_label || 'Price summary locked'),
-        display_price_band: state.response.display_price_band || (state.response.price_summary_band || 'Price summary locked'),
-        display_price_band_source: state.response.display_price_band_source || (state.response.price_evidence_scope || 'insufficient_exact_data'),
-        display_broader_reference_allowed: Boolean(state.response.display_broader_reference_allowed),
-        display_broader_reference_label: state.response.display_broader_reference_label || state.response.broader_reference_label || null,
-        display_broader_reference_band: state.response.display_broader_reference_band || null,
-        display_broader_reference_locked_reason: state.response.display_broader_reference_locked_reason || null,
-        display_price_band_quality_state: state.response.display_price_band_quality_state || 'Exact price data limited',
-        display_unlock_requirements: state.response.display_unlock_requirements || [],
-        display_evidence_pool_summary: state.response.display_evidence_pool_summary || null,
-        display_top_result_evidence: state.response.display_top_result_evidence || [],
-        display_match_state_message: state.response.display_match_state_message || 'Price summary locked',
-        display_query_review: state.response.display_query_review || null,
-        current_ui_label_safe: state.response.current_ui_label_safe !== false
+      const apiPolicy = state.response.market_entry_policy || {};
+      return {
+        ...apiPolicy,
+        market_entry_allowed: Boolean(state.response.market_entry_allowed ?? apiPolicy.market_entry_allowed),
+        price_summary_allowed: Boolean(state.response.price_summary_allowed ?? apiPolicy.price_summary_allowed),
+        market_entry_block_reason: state.response.market_entry_block_reason || apiPolicy.market_entry_block_reason || [],
+        price_summary_block_reason: state.response.price_summary_block_reason || apiPolicy.price_summary_block_reason || [],
+        model_entry_confidence_state: state.response.model_entry_confidence_state || apiPolicy.model_entry_confidence_state || 'unknown',
+        market_entry_metrics: state.response.market_entry_metrics || apiPolicy.market_entry_metrics || null,
+        market_entry_title: state.response.market_entry_title || apiPolicy.market_entry_title || null,
+        price_summary_band: state.response.price_summary_band || apiPolicy.price_summary_band || 'Price summary locked',
+        price_scope: state.response.price_scope || apiPolicy.price_scope || 'insufficient_exact_data',
+        price_scope_label: state.response.price_scope_label || apiPolicy.price_scope_label || 'Price summary locked',
+        price_scope_confidence_state: state.response.price_scope_confidence_state || apiPolicy.price_scope_confidence_state || 'price_scope_locked',
+        search_confidence_state: state.response.search_confidence_state || apiPolicy.search_confidence_state || 'unknown',
+        top_result_compatibility: state.response.top_result_compatibility || apiPolicy.top_result_compatibility || 'unknown',
+        exact_or_strong_visible_result_count: Number(state.response.exact_or_strong_visible_result_count ?? apiPolicy.exact_or_strong_visible_result_count ?? 0),
+        third_party_top_domination_detected: Boolean(state.response.third_party_top_domination_detected ?? apiPolicy.third_party_top_domination_detected),
+        price_scope_search_aligned: Boolean(state.response.price_scope_search_aligned ?? apiPolicy.price_scope_search_aligned),
+        price_scope_search_alignment_reason: state.response.price_scope_search_alignment_reason || apiPolicy.price_scope_search_alignment_reason || [],
+        price_evidence_scope: state.response.price_evidence_scope || apiPolicy.price_evidence_scope || 'insufficient_exact_data',
+        price_band_quality_state: state.response.price_band_quality_state || apiPolicy.price_band_quality_state || 'insufficient_priced_evidence',
+        price_band_quality_reason: state.response.price_band_quality_reason || apiPolicy.price_band_quality_reason || [],
+        exact_variant_pool_count: Number(state.response.exact_variant_pool_count ?? apiPolicy.exact_variant_pool_count ?? 0),
+        exact_base_model_pool_count: Number(state.response.exact_base_model_pool_count ?? apiPolicy.exact_base_model_pool_count ?? 0),
+        broader_family_pool_count: Number(state.response.broader_family_pool_count ?? apiPolicy.broader_family_pool_count ?? 0),
+        excluded_pool_count: Number(state.response.excluded_pool_count ?? apiPolicy.excluded_pool_count ?? 0),
+        outlier_removed_count: Number(state.response.outlier_removed_count ?? apiPolicy.outlier_removed_count ?? 0),
+        accessory_price_excluded_count: Number(state.response.accessory_price_excluded_count ?? apiPolicy.accessory_price_excluded_count ?? 0),
+        third_party_price_excluded_count: Number(state.response.third_party_price_excluded_count ?? apiPolicy.third_party_price_excluded_count ?? 0),
+        wrong_model_price_excluded_count: Number(state.response.wrong_model_price_excluded_count ?? apiPolicy.wrong_model_price_excluded_count ?? 0),
+        broader_reference_allowed: Boolean(state.response.broader_reference_allowed ?? apiPolicy.broader_reference_allowed),
+        broader_reference_label: state.response.broader_reference_label || apiPolicy.broader_reference_label || null,
+        broader_reference_band: state.response.broader_reference_band || apiPolicy.broader_reference_band || null,
+        broader_reference_locked_reason: state.response.broader_reference_locked_reason || apiPolicy.broader_reference_locked_reason || null,
+        unlock_requirements: state.response.unlock_requirements || apiPolicy.unlock_requirements || [],
+        display_price_summary_allowed: Boolean(state.response.display_price_summary_allowed ?? apiPolicy.display_price_summary_allowed),
+        display_price_scope_label: state.response.display_price_scope_label || apiPolicy.display_price_scope_label || state.response.price_scope_label || 'Price summary locked',
+        display_price_band: state.response.display_price_band || apiPolicy.display_price_band || state.response.price_summary_band || 'Price summary locked',
+        display_price_band_source: state.response.display_price_band_source || apiPolicy.display_price_band_source || state.response.price_evidence_scope || 'insufficient_exact_data',
+        display_broader_reference_allowed: Boolean(state.response.display_broader_reference_allowed ?? apiPolicy.display_broader_reference_allowed),
+        display_broader_reference_label: state.response.display_broader_reference_label || apiPolicy.display_broader_reference_label || state.response.broader_reference_label || null,
+        display_broader_reference_band: state.response.display_broader_reference_band || apiPolicy.display_broader_reference_band || null,
+        display_broader_reference_locked_reason: state.response.display_broader_reference_locked_reason || apiPolicy.display_broader_reference_locked_reason || null,
+        display_price_band_quality_state: state.response.display_price_band_quality_state || apiPolicy.display_price_band_quality_state || 'Exact price data limited',
+        display_unlock_requirements: state.response.display_unlock_requirements || apiPolicy.display_unlock_requirements || [],
+        display_evidence_pool_summary: state.response.display_evidence_pool_summary || apiPolicy.display_evidence_pool_summary || null,
+        display_top_result_evidence: state.response.display_top_result_evidence || apiPolicy.display_top_result_evidence || [],
+        display_match_state_message: state.response.display_match_state_message || apiPolicy.display_match_state_message || 'Price summary locked',
+        display_query_review: state.response.display_query_review || apiPolicy.display_query_review || null,
+        current_ui_label_safe: (state.response.current_ui_label_safe ?? apiPolicy.current_ui_label_safe) !== false
       };
     }
 
@@ -1703,27 +2462,27 @@
       const evidence = Array.isArray(policy.display_top_result_evidence) ? policy.display_top_result_evidence : [];
       const detailRows = evidence.slice(0, 5).map((item, index) => `
         <div class="metric-card">
-          <b>${index + 1}. ${escapeHtml(item.title || 'Untitled')}</b>
-          <span>${escapeHtml(mapBetaResultRole(item.result_role_label || item.compatibility_label || '참고 결과'))}</span>
-          <span>${escapeHtml(mapBetaPriceRole(item.price_usage_label || '참고 결과로만 표시'))}</span>
+          <b>${index + 1}. ${escapeHtml(item.title || ux('card.title_missing', 'Untitled listing'))}</b>
+          <span>${escapeHtml(mapBetaResultRole(item.result_role_label || item.compatibility_label || ux('result_role.reference_only', 'Reference only')))}</span>
+          <span>${escapeHtml(mapBetaPriceRole(item.price_usage_label || ux('price_role.same_base_reference', 'Reference only')))}</span>
         </div>
       `).join('');
       return `
         <article class="state-card">
           <div class="query-review-header">
-            <h3 style="margin:0;">검색 요약</h3>
-            <button type="button" class="ghost-button query-review-copy" data-copy-query-review="true">요약 복사</button>
+            <h3 style="margin:0;">${escapeHtml(ux('query_review.heading', 'Search summary'))}</h3>
+            <button type="button" class="ghost-button query-review-copy" data-copy-query-review="true">${escapeHtml(ux('query_review.copy', 'Copy summary'))}</button>
           </div>
-          <p>검색어: “${escapeHtml(review.query || state.query || '')}”</p>
+          <p>${escapeHtml(ux('query.search_query', 'Search query'))}: “${escapeHtml(review.query || state.query || '')}”</p>
           <div class="metric-grid">
-            <div class="metric-card"><b>Interpreted as</b><span>${escapeHtml(review.interpreted_target || '해석 확인 필요')}</span></div>
-            <div class="metric-card"><b>가격 상태</b><span>${escapeHtml(getBetaPriceState(policy))}</span></div>
-            <div class="metric-card"><b>안내</b><span>${escapeHtml(mapBetaReason(review.why || '') || '조건이 맞는 결과부터 보여주고, 불확실하면 가격 계산을 보류합니다.')}</span></div>
-            <div class="metric-card"><b>범주</b><span>${escapeHtml(review.category || '정보 없음')}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('query_review.interpreted_as', 'Interpreted as'))}</b><span>${escapeHtml(review.interpreted_target || ux('query_review.needs_review', 'Needs interpretation review'))}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('query_review.price_state', 'Price state'))}</b><span>${escapeHtml(getBetaPriceState(policy))}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('query_review.guidance', 'Guidance'))}</b><span>${escapeHtml(mapBetaReason(review.why || '') || ux('reason.guide_default', 'Results that fit best are shown first, and pricing stays locked when certainty is low.'))}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('query_review.category', 'Category'))}</b><span>${escapeHtml(localizeCategoryLabel(review.category || ''))}</span></div>
           </div>
           ${detailRows ? `
             <details class="state-card subtle" style="margin-top:12px;">
-              <summary>보이는 결과를 간단히 설명할게요</summary>
+              <summary>${escapeHtml(ux('query_review.explain_visible', 'Why these visible results are shown'))}</summary>
               <div class="metric-grid" style="margin-top:12px;">
                 ${detailRows}
               </div>
@@ -1736,10 +2495,10 @@
     function getCoverageLabel(){
       const uiHints = getUiHints();
       const total = state.response ? Number(state.response.total_ranked || 0) : 0;
-      if(uiHints.ambiguity_type === 'source_coverage_gap') return '데이터 제한';
-      if(total >= 10) return '여러 결과에서 확인됨';
-      if(total > 0) return '현재 결과에서 확인됨';
-      return '데이터 부족';
+      if(uiHints.ambiguity_type === 'source_coverage_gap') return ux('coverage.limited', 'Limited coverage');
+      if(total >= 10) return ux('coverage.multiple_sources', 'Seen across multiple results');
+      if(total > 0) return ux('coverage.visible_results', 'Seen in current results');
+      return ux('coverage.low_data', 'Low coverage');
     }
 
     function renderSummary(){
@@ -1753,26 +2512,26 @@
 
       els['result-count'].textContent = String(total);
       if(state.loading){
-        els['result-caption'].textContent = '검색 중';
-        els['summary-meta'].textContent = '매물과 가격 근거를 불러오고 있습니다';
+        els['result-caption'].textContent = ux('summary.loading_caption', 'Searching');
+        els['summary-meta'].textContent = ux('summary.loading_meta', 'Loading listings and price evidence');
       }else if(state.appending && state.query){
-        els['result-caption'].textContent = `"${state.query}" 결과 ${resultCount}개 표시 중`;
-        els['summary-meta'].textContent = '결과를 더 불러오는 중입니다';
+        els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
+        els['summary-meta'].textContent = ux('summary.appending_meta', 'Loading more results');
       }else if(state.error){
-        els['result-caption'].textContent = '검색을 다시 시도해 주세요';
-        els['summary-meta'].textContent = '데이터는 변경되지 않았습니다';
+        els['result-caption'].textContent = ux('summary.error_caption', 'Please try this search again');
+        els['summary-meta'].textContent = ux('summary.error_meta', 'No data was changed');
       }else if(state.query){
-        els['result-caption'].textContent = `"${state.query}" 결과 ${resultCount}개`;
+        els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
         els['summary-meta'].textContent = getBetaPriceState(getMarketEntryPolicy());
       }else{
-        els['result-caption'].textContent = '검색 준비 완료';
-        els['summary-meta'].textContent = '가격은 참고용이며 원문 확인이 필요합니다';
+        els['result-caption'].textContent = ux('summary.ready_caption', 'Ready to search');
+        els['summary-meta'].textContent = ux('summary.ready_meta', 'Prices are for reference only, and the original listing should be checked');
       }
 
       if(els['index-debug-line']){
         if(meta && meta.index_record_count != null){
           const generatedAt = meta.index_generated_at || 'unknown';
-          els['index-debug-line'].textContent = `Index: ${meta.index_record_count} records / generated_at ${generatedAt}`;
+          els['index-debug-line'].textContent = `${ux('summary.index_prefix', 'Index')}: ${meta.index_record_count} ${ux('summary.index_records', 'records')} / ${ux('summary.index_generated_at', 'generated_at')} ${generatedAt}`;
         }else{
           els['index-debug-line'].textContent = '';
         }
@@ -1802,15 +2561,24 @@
       els['results-load-more-region'].innerHTML = '';
 
       if(state.loading){
-        els['state-region'].innerHTML = renderStateCard('검색 중입니다', '매물, 가격, 출처 정보를 정리하고 있습니다.', [], 'subtle');
+        els['state-region'].innerHTML = renderStateCard(
+          ux('state_card.loading_title', 'Searching now'),
+          ux('state_card.loading_body', 'Listings, prices, and source details are being prepared.'),
+          [],
+          'subtle'
+        );
         return;
       }
 
       if(state.error){
         els['state-region'].innerHTML = renderStateCard(
-          '검색 중 문제가 발생했습니다.',
-          '데이터는 변경되지 않았습니다. 검색어를 조금 더 구체적으로 입력해 보세요.',
-          ['모델명을 더 구체적으로 입력해 보세요', '마운트나 초점거리를 함께 입력해 보세요', '잠시 후 다시 시도해 보세요'],
+          ux('state_card.error_title', 'Something went wrong while searching.'),
+          ux('state_card.error_body', 'No data was changed. Try a more specific query.'),
+          [
+            ux('state_card.error_tip_1', 'Try entering a more specific model name'),
+            ux('state_card.error_tip_2', 'Add a mount or focal length to narrow the search'),
+            ux('state_card.error_tip_3', 'Try again in a moment')
+          ],
           'error'
         );
         return;
@@ -1818,15 +2586,20 @@
 
       if(!state.response){
         els['state-region'].innerHTML = renderStateCard(
-          'Leica 중심 중고 매물과 참고 가격을 확인해 보세요.',
-          '동일한 검색 결과를 더 읽기 쉬운 베타 화면으로 보여줍니다. 조건이 불확실하면 가격은 잠금 상태로 남습니다.',
-          ['조건이 섞이면 정확 가격 계산을 보류합니다', '데이터가 부족하면 참고 결과만 보여줍니다', '원문 매물 확인 후 판단해 주세요'],
+          ux('state_card.intro_title', 'Explore Leica-focused listings and reference pricing.'),
+          ux('state_card.intro_body', 'The same search results are shown in a simpler beta layout. When conditions are uncertain, pricing stays locked.'),
+          [
+            ux('state_card.intro_tip_1', 'Exact pricing stays locked when conditions are mixed'),
+            ux('state_card.intro_tip_2', 'When data is limited, only reference results are shown'),
+            ux('state_card.intro_tip_3', 'Check the original listing before making a decision')
+          ],
           'subtle'
         );
         return;
       }
 
       const results = getResults();
+      const displaySections = buildDisplaySections(results, getSortMode());
       const uiHints = getUiHints();
 
       if(uiHints.needs_disambiguation){
@@ -1839,16 +2612,20 @@
       }
 
       els['state-region'].innerHTML = renderStateCard(
-        '검색 결과',
-        '같은 검색 데이터와 결과 순서를 유지하면서, 베타 화면에서는 안내 문구만 더 단순하게 보여줍니다.',
-        ['가격은 참고용입니다', '조건이 섞이면 계산을 보류합니다', '원문 확인이 필요합니다'],
+        ux('state_card.results_title', 'Search results'),
+        ux('state_card.results_body', 'The same data and result order are kept, while the beta shell simplifies the guidance text.'),
+        [
+          ux('state_card.results_tip_1', 'Prices are for reference'),
+          ux('state_card.results_tip_2', 'Pricing stays locked when conditions are mixed'),
+          ux('state_card.results_tip_3', 'The original listing should be checked')
+        ],
         'subtle'
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
       els['query-summary-region'].innerHTML = renderQuerySummaryBar(results);
-      els['results-grid'].innerHTML = results.map((result, index) => renderCard(result, index)).join('');
+      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active);
       els['results-load-more-region'].innerHTML = renderLoadMore();
-      els['archive-region'].innerHTML = renderArchiveSection(results);
+      els['archive-region'].innerHTML = renderArchiveSection(displaySections.history);
     }
 
     function renderQuerySummaryBar(results){
@@ -1871,12 +2648,12 @@
         <article class="query-summary-bar">
           <div class="query-summary-topline">
             <div>
-              <div class="query-summary-label">검색어</div>
+              <div class="query-summary-label">${escapeHtml(ux('query.search_query', 'Search query'))}</div>
               <div class="query-summary-query">${escapeHtml(state.query)}</div>
             </div>
-            <div class="query-summary-count">${escapeHtml(`${resultCount}개 표시`)}</div>
+            <div class="query-summary-count">${escapeHtml(formatListingCount(resultCount))}</div>
           </div>
-          ${detectedLine ? `<div class="query-summary-detected"><strong>Detected:</strong> ${escapeHtml(detectedLine)}</div>` : ''}
+          ${detectedLine ? `<div class="query-summary-detected"><strong>${escapeHtml(ux('query.detected', 'Detected'))}:</strong> ${escapeHtml(detectedLine)}</div>` : ''}
         </article>
       `;
     }
@@ -1893,14 +2670,14 @@
           data-load-more="true"
           ${state.appending ? 'disabled' : ''}
         >
-          ${state.appending ? '불러오는 중...' : '결과 더 보기'}
+          ${state.appending ? escapeHtml(ux('load_more.loading', 'Loading…')) : escapeHtml(ux('load_more.idle', 'Load more'))}
         </button>
       `;
     }
 
     function getResultMatchBadge(result, evidenceRole, priceRole, reason){
       const quality = String(result && result.match_quality || 'unknown').trim().toLowerCase();
-      const qualityTitle = quality ? `${quality.charAt(0).toUpperCase()}${quality.slice(1)}` : 'Unknown';
+      const qualityTitle = qualityLabel(quality);
       const evidence = String(evidenceRole || '').trim().toLowerCase();
       const price = String(priceRole || '').trim().toLowerCase();
       const why = String(reason || '').trim().toLowerCase();
@@ -1913,27 +2690,27 @@
         || why.includes('not exact variant');
 
       if(evidence === 'exact variant'){
-        if(quality === 'strong') return { tone: 'green', label: '정확히 맞는 결과' };
-        if(quality === 'medium') return { tone: 'green', label: '정확 후보' };
-        return { tone: 'green', label: '정확히 맞는 결과' };
+        if(quality === 'strong') return { tone: 'green', label: ux('match_badge.exact_match', 'Exact match') };
+        if(quality === 'medium') return { tone: 'green', label: ux('match_badge.exact_candidate', 'Exact candidate') };
+        return { tone: 'green', label: ux('match_badge.exact_match', 'Exact match') };
       }
 
       if(evidence === 'boundary conflict'){
-        if(quality === 'strong' || quality === 'medium') return { tone: 'amber', label: '관련 결과' };
-        return { tone: 'amber', label: '조건 충돌' };
+        if(quality === 'strong' || quality === 'medium') return { tone: 'amber', label: ux('match_badge.related', 'Related result') };
+        return { tone: 'amber', label: ux('match_badge.conflict', 'Variant conflict') };
       }
 
       if(evidence === 'same base model'){
-        if(quality === 'strong') return { tone: 'blue', label: '같은 계열 참고 결과' };
-        if(quality === 'medium') return { tone: 'blue', label: '같은 계열 참고 결과' };
-        return { tone: 'blue', label: '기본 모델 일치' };
+        if(quality === 'strong') return { tone: 'blue', label: ux('match_badge.same_family', 'Similar model') };
+        if(quality === 'medium') return { tone: 'blue', label: ux('match_badge.same_family', 'Similar model') };
+        return { tone: 'blue', label: ux('match_badge.base_model', 'Base model match') };
       }
 
       if(notExactPrice && (quality === 'strong' || quality === 'medium')){
-        return { tone: 'amber', label: '관련 결과' };
+        return { tone: 'amber', label: ux('match_badge.related', 'Related result') };
       }
 
-      return { tone: 'blue', label: quality === 'strong' ? '가까운 결과' : `관련도 ${qualityTitle}` };
+      return { tone: 'blue', label: quality === 'strong' ? ux('match_badge.close_result', 'Close result') : `${ux('card.search_match', 'Search match')} ${qualityTitle}` };
     }
 
     function renderStateCard(title, body, bullets, tone){
@@ -1955,8 +2732,8 @@
       if(ambiguityType === 'source_coverage_gap'){
         return `
           <article class="state-card">
-            <h3>현재 데이터가 부족해 가격을 계산하지 않았어요.</h3>
-            <p>이 결과는 존재하지 않는다는 뜻이 아니라, 지금은 확인 가능한 근거가 적다는 의미입니다.</p>
+            <h3>${escapeHtml(ux('state_card.empty_source_gap_title', 'There is not enough current data to calculate a price.'))}</h3>
+            <p>${escapeHtml(ux('state_card.empty_source_gap_body', 'This does not mean the item does not exist. It means there is not enough verifiable evidence right now.'))}</p>
           </article>
         `;
       }
@@ -1964,8 +2741,8 @@
       if(uiHints.needs_disambiguation){
         return `
           <article class="state-card">
-            <h3>검색 범위가 넓어 정확 결과를 바로 계산하지 않았어요.</h3>
-            <p>${escapeHtml(recommendedMessage || '마운트나 초점거리를 추가하면 더 정확해집니다.')}</p>
+            <h3>${escapeHtml(ux('state_card.empty_broad_title', 'This query is broad, so exact pricing was not opened yet.'))}</h3>
+            <p>${escapeHtml(recommendedMessage || ux('state_card.empty_broad_default', 'Add a mount or focal length to make the search more specific.'))}</p>
             <div class="state-actions">
               ${(uiHints.recommended_chips || BROAD_QUERY_FALLBACK_CHIPS).slice(0, 6).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
             </div>
@@ -1975,18 +2752,18 @@
 
       return `
         <article class="state-card">
-          <h3>확인 가능한 결과를 충분히 찾지 못했어요.</h3>
-          <p>모델명, 마운트, 초점거리처럼 조건을 더 구체적으로 입력해 보세요.</p>
+          <h3>${escapeHtml(ux('state_card.empty_none_title', 'Not enough verifiable matches were found.'))}</h3>
+          <p>${escapeHtml(ux('state_card.empty_none_body', 'Try adding details such as the model, mount, or focal length.'))}</p>
         </article>
       `;
     }
 
     function renderRefinementCard(uiHints){
       const chips = (uiHints.recommended_chips || []).length ? uiHints.recommended_chips : BROAD_QUERY_FALLBACK_CHIPS;
-      const message = uiHints.recommended_message || `"${titleCase(state.query)}" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.`;
+      const message = uiHints.recommended_message || ux('refinement.default_message', 'Add a mount or focal length to make the search more specific.');
       return `
         <article class="state-card">
-          <h3>검색어를 조금 더 구체적으로 입력해 보세요</h3>
+          <h3>${escapeHtml(ux('refinement.title', 'Try a more specific search'))}</h3>
           <p>${escapeHtml(message)}</p>
           <div class="state-actions">
             ${chips.slice(0, 9).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
@@ -2007,9 +2784,9 @@
       const priced = results
         .map(result => ({ value: parseNumericPrice(result), currency: result.currency || '' }))
         .filter(item => item.value !== null);
-      if(!priced.length) return 'Not enough data';
+      if(!priced.length) return ux('common.no_data', 'Not enough data');
       const currencies = Array.from(new Set(priced.map(item => item.currency || 'Unknown')));
-      if(currencies.length !== 1) return 'Mixed currencies';
+      if(currencies.length !== 1) return uiState.locale === 'ko' ? '통화가 섞여 있습니다' : 'Mixed currencies';
       const values = priced.map(item => item.value);
       const min = Math.min(...values);
       const max = Math.max(...values);
@@ -2041,6 +2818,9 @@
       const review = policy.display_query_review || {};
       const category = String(review.category || '').toLowerCase();
       if(policy.display_price_summary_allowed){
+        if(policy.display_price_band_source === 'exact_generation' || policy.price_scope === 'exact_generation'){
+          return 'Exact generation price';
+        }
         if(category === 'body'){
           return 'Body market summary';
         }
@@ -2077,10 +2857,10 @@
       const priceHeadline = escapeHtml(getBetaPriceBandCaption(policy));
       const priceValue = escapeHtml(
         policy.display_price_summary_allowed
-          ? (policy.display_price_band || '가격 계산 불가')
+          ? (policy.display_price_band || ux('price_role.no_usable_price', 'No usable price'))
           : policy.display_broader_reference_allowed
-          ? (policy.display_broader_reference_band || '참고 가격만 확인 가능')
-          : '가격 계산 보류'
+          ? (policy.display_broader_reference_band || ux('price_state.reference', 'Only related reference prices are available.'))
+          : ux('price_state.locked', 'Exact price calculation is currently on hold.')
       );
       const summaryLine = escapeHtml(getBetaPriceState(policy));
 
@@ -2088,8 +2868,8 @@
         <article class="market-entry-card">
           <div class="market-topline">
             <div>
-              <p class="section-label">결과 요약</p>
-              <h3>${escapeHtml(displayValue(policy.market_entry_title || finalField(lead, 'model_canonical') || lead.title, '모델 정보 없음'))}</h3>
+              <p class="section-label">${escapeHtml(ux('market_entry.summary_label', 'Result summary'))}</p>
+              <h3>${escapeHtml(displayValue(policy.market_entry_title || finalField(lead, 'model_canonical') || lead.title, ux('market_entry.model_missing', 'Model information unavailable')))}</h3>
               <p>${summaryLine}</p>
             </div>
             <div class="market-badges">
@@ -2099,9 +2879,9 @@
           </div>
           <div class="metric-grid">
             <div class="metric-card"><b>${priceHeadline}</b><span>${priceValue}</span></div>
-            <div class="metric-card"><b>가격 상태</b><span>${summaryLine}</span></div>
-            <div class="metric-card"><b>원문 확인</b><span>구매 전 원문 매물 확인이 필요합니다.</span></div>
-            <div class="metric-card"><b>참고</b><span>동일 API 결과를 베타용 문구로만 정리했습니다.</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('market_entry.status_label', 'Price state'))}</b><span>${summaryLine}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('market_entry.source_check_label', 'Check source listing'))}</b><span>${escapeHtml(ux('market_entry.source_check_body', 'Please verify the original listing before purchase.'))}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('market_entry.beta_note_label', 'Note'))}</b><span>${escapeHtml(ux('market_entry.beta_note_body', 'The same API result is shown here with beta-friendly wording only.'))}</span></div>
           </div>
           ${queryEvidencePanel}
         </article>
@@ -2109,7 +2889,7 @@
     }
 
     function renderCard(result, index){
-      const title = result.title || 'Untitled listing';
+      const title = result.title || ux('card.title_missing', 'Untitled listing');
       const url = result.source_url || '#';
       const imageUrl = result.image_url;
       const safeUrl = escapeHtml(url);
@@ -2117,16 +2897,20 @@
       const target = canViewSource ? ' target="_blank" rel="noopener noreferrer"' : '';
       const status = statusMeta(result);
       const confidenceState = displayField(result, 'result_card_confidence_state');
-      const modelFallback = confidenceState === 'locked_classification_conflict' ? 'Review needed' : 'Unknown';
-      const familyFallback = confidenceState === 'locked_classification_conflict' ? 'Classification confidence pending' : 'Unknown';
+      const modelFallback = confidenceState === 'locked_classification_conflict'
+        ? (uiState.locale === 'ko' ? '검토 필요' : 'Review needed')
+        : ux('common.unknown', 'Unknown');
+      const familyFallback = confidenceState === 'locked_classification_conflict'
+        ? (uiState.locale === 'ko' ? '분류 신뢰도 확인 필요' : 'Classification confidence pending')
+        : ux('common.unknown', 'Unknown');
       const model = displayValue(displayField(result, 'display_model'), modelFallback);
       const family = displayValue(displayField(result, 'display_family'), familyFallback);
-      const currency = displayValue(result.currency, 'Unknown');
-      const source = displayValue(result.source, 'Unknown source');
-      const focalLength = displayValue(displayField(result, 'display_focal_length'), 'Unknown');
-      const aperture = displayValue(displayField(result, 'display_aperture'), 'Unknown');
-      const displayCategory = displayValue(displayField(result, 'display_category'), 'Unknown');
-      const displayMount = displayValue(displayField(result, 'display_mount'), 'Unknown');
+      const currency = displayValue(result.currency, ux('common.unknown', 'Unknown'));
+      const source = displayValue(result.source, ux('common.unknown_source', 'Unknown source'));
+      const focalLength = displayValue(displayField(result, 'display_focal_length'), ux('common.unknown', 'Unknown'));
+      const aperture = displayValue(displayField(result, 'display_aperture'), ux('common.unknown', 'Unknown'));
+      const displayCategory = localizeCategoryLabel(displayField(result, 'display_category'));
+      const displayMount = displayValue(displayField(result, 'display_mount'), ux('common.unknown', 'Unknown'));
       const projected = Boolean(displayField(result, 'stale_normalization_detected'));
       const compactNotation = Boolean(displayField(result, 'compact_lens_notation_detected'));
       const evidence = getResultEvidence(result, index);
@@ -2135,14 +2919,22 @@
       const hasPrice = Boolean(String(result.price || '').trim());
       const priceRole = displayValue(
         mapBetaPriceRole(evidence ? evidence.price_usage_label : ''),
-        hasPrice ? '참고 결과로 표시' : '가격 계산 불가'
+        hasPrice ? ux('price_role.same_base_reference', 'Reference only') : ux('price_role.no_usable_price', 'No usable price')
       );
       const reason = mapBetaReason(getResultReason(evidence)) || (!hasPrice
-        ? '가격 정보가 충분하지 않아 계산하지 않았습니다.'
+        ? ux('reason.no_price', 'There is not enough usable price information to calculate a price.')
         : !evidence
-        ? '이 결과가 왜 보이는지 간단히 설명합니다.'
+        ? ux('reason.default', 'This explains how well the listing matches the query and whether it was used for pricing.')
         : '');
       const matchBadge = getResultMatchBadge(result, rawEvidenceRole, priceRole, reason);
+      const detectedEntry = displayValue(displayField(result, 'display_entry_label'), model);
+      const searchMatch = displayValue(localizeQueryMatchLabel(result.query_match_label) || matchBadge.label, evidenceRole || ux('common.no_data', 'Not enough data'));
+      const usedForPrice = formatUsedForPriceValue(Boolean(result.used_for_price));
+      const exclusionReason = displayValue((evidence && Array.isArray(evidence.excluded_reason) && evidence.excluded_reason.length ? mapBetaReason(evidence.excluded_reason[0]) : '') || reason, '—');
+      const generationConfidence = displayField(result, 'generation_confidence');
+      const generationConfidenceValue = generationConfidence === null || generationConfidence === undefined || generationConfidence === ''
+        ? '—'
+        : `${Math.round(Number(generationConfidence) * 100)}%`;
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
       const explanation = getBetaCardExplanation(evidenceRole, priceRole, reason);
 
@@ -2153,36 +2945,41 @@
             <div class="card-copy">
               <a class="result-title" href="${safeUrl}"${target} title="${escapeHtml(title)}">${escapeHtml(title)}</a>
               <div class="result-price-row">
-                <div class="result-price">${escapeHtml(displayValue(result.price, 'Not enough data'))}</div>
+                <div class="result-price">${escapeHtml(displayValue(result.price, ux('common.no_data', 'Not enough data')))}</div>
                 <div class="result-source">${escapeHtml(source)}<br>${escapeHtml(currency)}</div>
               </div>
               <div class="result-status-row">
-                <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(status.label)}</span>
+                <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(localizeStatusLabel(status.label))}</span>
                 <span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
-                ${projected ? '<span class="micro-pill amber">참고 투영</span>' : ''}
-                ${compactNotation ? '<span class="micro-pill green">표기 인식</span>' : ''}
+                ${projected ? `<span class="micro-pill amber">${escapeHtml(ux('card.projected', 'Projected reference'))}</span>` : ''}
+                ${compactNotation ? `<span class="micro-pill green">${escapeHtml(ux('card.notation_detected', 'Marker detected'))}</span>` : ''}
               </div>
             </div>
           </div>
           <div class="data-grid">
-            ${renderDataPoint('모델', model)}
-            ${renderDataPoint('마운트', displayMount)}
-            ${renderDataPoint('상태', status.label)}
-            ${renderDataPoint('가격 계산', priceRole)}
+            ${renderDataPoint(ux('common.model', 'Model'), model)}
+            ${renderDataPoint(ux('card.detected_entry', 'Interpreted entry'), detectedEntry)}
+            ${renderDataPoint(ux('card.search_match', 'Search match'), searchMatch)}
+            ${renderDataPoint(ux('card.used_for_price', 'Used for price'), usedForPrice)}
+            ${renderDataPoint(ux('card.exclusion_reason', 'Exclusion reason'), exclusionReason)}
+            ${renderDataPoint(ux('card.generation_confidence', 'Generation confidence'), generationConfidenceValue)}
+            ${renderDataPoint(ux('common.mount', 'Mount'), displayMount)}
+            ${renderDataPoint(ux('common.status', 'Status'), localizeStatusLabel(status.label))}
+            ${renderDataPoint(ux('card.price_usage', 'Price role'), priceRole)}
           </div>
           ${(evidenceRole || priceRole || reason) ? `
             <details class="state-card subtle" style="margin-top:12px;">
-              <summary>왜 이 결과가 보이나요?</summary>
+              <summary>${escapeHtml(ux('common.details_why', 'Why is this result shown?'))}</summary>
               <div class="result-role-rows" style="margin-top:12px;">
-                ${renderRoleRow('설명', explanation)}
-                ${evidenceRole ? renderRoleRow('결과 성격', evidenceRole) : ''}
-                ${priceRole ? renderRoleRow('가격 반영 여부', priceRole) : ''}
+                ${renderRoleRow(ux('card.explanation', 'Why it appears'), explanation)}
+                ${evidenceRole ? renderRoleRow(ux('card.result_type', 'Match state'), evidenceRole) : ''}
+                ${priceRole ? renderRoleRow(ux('card.price_usage', 'Price role'), priceRole) : ''}
               </div>
             </details>
           ` : ''}
           <div class="result-actions">
             <div class="action-group">
-              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>원문 보기</a>` : '<button type="button" class="action-button" aria-disabled="true">원문 보기</button>'}
+              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>${escapeHtml(ux('cta.view_listing', 'View listing'))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(ux('cta.view_listing', 'View listing'))}</button>`}
             </div>
           </div>
         </article>
@@ -2190,51 +2987,39 @@
     }
 
     function renderDataPoint(label, value){
-      return `<div class="data-point"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
+      return `<div class="data-point"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, ux('common.no_data', 'Not enough data')))}</span></div>`;
     }
 
     function renderRoleRow(label, value){
-      return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
+      return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, ux('common.no_data', 'Not enough data')))}</span></div>`;
     }
 
-    function renderArchiveSection(results){
-      const archiveCandidates = results.filter(result => {
-        const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
-        return soldQuality && soldQuality !== 'asking';
-      }).slice(0, 4);
-
-      const items = archiveCandidates.length
-        ? archiveCandidates.map(result => {
-            const status = statusMeta(result);
-            const caution = status.label === 'Sold confirmed'
-              ? 'Sold status still depends on source quality and should be read as a reference.'
-              : 'Sold status may be uncertain. Do not treat archive state as a guaranteed completed sale.';
-            return `
-              <div class="archive-item">
-                <strong>${escapeHtml(result.title || 'Archived listing')}</strong>
-                <p>Observed price: ${escapeHtml(displayValue(result.price, 'Not enough data'))}. Status: ${escapeHtml(status.label)}. Source: ${escapeHtml(displayValue(result.source, 'Unknown source'))}.</p>
-                <div class="archive-meta">
-                  <span class="micro-pill blue">Model match ${escapeHtml(displayValue(displayField(result, 'display_model'), displayValue(finalField(result, 'model_canonical'), 'Unknown')))}</span>
-                  <span class="micro-pill">${escapeHtml(caution)}</span>
-                </div>
-              </div>
-            `;
-          }).join('')
-        : `
-          <div class="archive-item">
-            <strong>No archive or sold reference entry is visible in this search yet.</strong>
-            <p>Archive reference is shown only when the current result set exposes a sold-like, expired, removed, or otherwise historical status. Nothing is invented here.</p>
-          </div>
-        `;
+    function renderResultSection(sectionName, results){
+      const isActive = sectionName === 'active';
+      const title = isActive ? ux('section.active_listings', 'Active listings') : ux('section.market_history', 'Market history');
+      const subtitle = isActive
+        ? ux('section.active_subtitle', 'Listings that still appear available are shown first.')
+        : ux('section.history_subtitle', 'Historical sold, removed, and archive records are shown separately.');
+      const emptyMessage = isActive
+        ? ux('section.no_active', 'No active listings are visible in this result window yet.')
+        : ux('section.no_history', 'No market-history records are visible for this search yet.');
 
       return `
         <article class="archive-card">
-          <p class="section-label">판매 이력 참고</p>
-          <h3>판매 완료/만료 이력도 함께 참고할 수 있어요</h3>
-          <p>다만 판매 상태는 원문 기준으로 다시 확인해 주세요.</p>
-          <div class="archive-list">${items}</div>
+          <p class="section-label">${escapeHtml(title)}</p>
+          <h3>${escapeHtml(`${title} (${formatListingCount(results.length)})`)}</h3>
+          <p>${escapeHtml(subtitle)}</p>
+          ${
+            results.length
+              ? `<div class="archive-list">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index))).join('')}</div>`
+              : `<div class="archive-item"><strong>${escapeHtml(emptyMessage)}</strong></div>`
+          }
         </article>
       `;
+    }
+
+    function renderArchiveSection(results){
+      return renderResultSection('history', results);
     }
 
     function renderWarnings(){
@@ -2243,14 +3028,17 @@
         return;
       }
       const filters = state.response.applied_filters || {};
-      const warnings = state.response.warnings || [];
-      const quality = getQualitySummary();
+      const intent = state.response.intent || {};
+      const uiHints = getUiHints();
       const parts = [];
-      parts.push(Object.keys(filters).length ? `filters: ${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join(', ')}` : 'filters: none');
-      if(quality.display_message) parts.push(quality.display_message);
-      if(getUiHints().recommended_message) parts.push(getUiHints().recommended_message);
-      if(warnings.length) parts.push(warnings.join(', '));
-      parts.push('데이터 부족은 부재 의미가 아닙니다.');
+      parts.push(
+        Object.keys(filters).length
+          ? `${ux('warnings.filters_prefix', 'Filters')}: ${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join(', ')}`
+          : ux('warnings.filters_none', 'No filters applied')
+      );
+      if(uiHints.needs_disambiguation) parts.push(ux('warnings.disambiguation', 'Add more model details to narrow this search.'));
+      if(intent.accessory_intent) parts.push(ux('warnings.accessory', 'Accessory searches are not used for body or lens pricing.'));
+      parts.push(ux('warnings.coverage', 'Low coverage does not mean the item does not exist.'));
       els['warning-region'].textContent = parts.join(' | ');
     }
 
@@ -2287,11 +3075,28 @@
         });
       });
 
-      ['category-filter','brand-filter','mount-filter','sold-filter','sort-select'].forEach(id => {
+      ['category-filter','brand-filter','mount-filter','sold-filter'].forEach(id => {
         els[id].addEventListener('change', () => {
           if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
         });
       });
+      if(els['sort-select']){
+        els['sort-select'].addEventListener('change', () => {
+          render();
+          if(state.query || els['query-input'].value.trim()){
+            commitHistoryState('push', buildSearchState({
+              query: state.query || els['query-input'].value.trim(),
+              offset: state.offset,
+              visibleCount: getVisibleCount()
+            }));
+          }
+        });
+      }
+      if(els['locale-select']){
+        els['locale-select'].addEventListener('change', event => {
+          setLocale(event.target.value);
+        });
+      }
 
       els['prev-button'].addEventListener('click', () => {
         const current = state.response ? (state.response.pagination || {}) : {};
@@ -2325,7 +3130,7 @@
           if(!text) return;
           const original = target.textContent;
           const done = () => {
-            target.textContent = 'Copied';
+            target.textContent = ux('common.copied', 'Copied');
             window.setTimeout(() => { target.textContent = original; }, 1400);
           };
           if(navigator.clipboard && navigator.clipboard.writeText){
@@ -2367,6 +3172,9 @@
     }
 
     cacheElements();
+    uiState.locale = detectInitialLocale();
+    populateLocaleOptions();
+    applyStaticTranslations();
     bindEvents();
     hydrateFromUrl();
   </script>

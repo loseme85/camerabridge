@@ -49,6 +49,8 @@ SUMMILUX_35 = _record(
         "variant": ["ASPH", "AA"],
         "focal_length": "35",
         "sold_quality": "asking",
+        "crawl_time": "2026-07-30T10:00:00+09:00",
+        "first_seen": "2026-07-28T09:00:00+09:00",
     }
 )
 
@@ -73,6 +75,28 @@ MP3_SILVER = _record(
         "sold_quality": "asking",
     },
     override_applied=True,
+)
+
+
+NO_TIMESTAMP_RECORD = _record(
+    {
+        "source": "test",
+        "source_url": "https://example.invalid/no-timestamp",
+        "title_raw": "Leica M6 body",
+        "price_raw": "4,500,000원",
+        "currency": "KRW",
+        "image_url": "https://example.invalid/m6.jpg",
+        "condition_raw": "90%",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M6",
+        "model_canonical": "M6",
+        "variant": [],
+        "focal_length": None,
+        "sold_quality": "asking",
+    }
 )
 
 
@@ -105,7 +129,32 @@ def test_result_has_required_public_fields() -> None:
     ]:
         assert field_name in result
     assert result["final_output"]["model_canonical"] == "Summilux-M"
+    assert result["final_output"]["crawl_time"] == "2026-07-30T10:00:00+09:00"
+    assert result["final_output"]["first_seen"] == "2026-07-28T09:00:00+09:00"
     assert result["match_quality"] == "strong"
+
+
+def test_additive_projection_does_not_require_timestamp_fields() -> None:
+    response = build_search_response("m6 body", [NO_TIMESTAMP_RECORD], limit=1)
+    result = response["results"][0]
+    for field_name in [
+        "score",
+        "title",
+        "price",
+        "source",
+        "source_url",
+        "final_output",
+        "display_output",
+        "used_override",
+        "match_quality",
+        "matched_fields",
+        "score_breakdown",
+        "warnings",
+    ]:
+        assert field_name in result
+    assert "crawl_time" not in result["final_output"]
+    assert "first_seen" not in result["final_output"]
+    assert result["final_output"]["model_canonical"] == "M6"
 
 
 def test_used_override_is_visible() -> None:
@@ -148,6 +197,7 @@ def test_debug_mode_can_expose_classifier_and_audit() -> None:
 if __name__ == "__main__":
     test_response_has_required_top_level_fields()
     test_result_has_required_public_fields()
+    test_additive_projection_does_not_require_timestamp_fields()
     test_used_override_is_visible()
     test_matched_fields_and_score_breakdown_are_included()
     test_empty_results_add_response_warning()
