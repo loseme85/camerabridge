@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow,noarchive">
   <title>Camera Bridge</title>
   <style>
     :root{
@@ -109,6 +110,53 @@
       color:var(--accent);
       border-color:rgba(178,29,36,0.28);
       background:var(--accent-soft);
+    }
+    .qa-banner{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin:0 0 18px;
+      padding:18px 20px;
+      border:1px solid rgba(178,29,36,0.24);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(178,29,36,0.12), rgba(153,97,31,0.08));
+      box-shadow:var(--shadow);
+    }
+    .qa-banner-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .qa-banner-eyebrow{
+      margin:0 0 8px;
+      color:var(--accent);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .qa-banner-title{
+      margin:0;
+      font-size:24px;
+      line-height:1.25;
+    }
+    .qa-banner-copy{
+      margin:8px 0 0;
+      color:var(--text-soft);
+      font-size:14px;
+      line-height:1.6;
+    }
+    .qa-banner-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .qa-public-link{
+      flex-shrink:0;
+      text-decoration:none;
     }
     main{
       width:min(1280px, calc(100% - 32px));
@@ -874,6 +922,8 @@
       .hero-sidebar,
       .workspace-main,
       .workspace-side{padding-left:16px;padding-right:16px}
+      .qa-banner-head{flex-direction:column}
+      .qa-public-link{width:100%;text-align:center}
       .hero-title{font-size:34px}
       .search-form-row{flex-direction:column;align-items:stretch}
       .search-button{width:100%}
@@ -962,6 +1012,21 @@
               </ul>
             </div>
           </aside>
+        </div>
+      </section>
+
+      <section class="qa-banner" aria-label="Internal QA banner">
+        <div class="qa-banner-head">
+          <div>
+            <p class="qa-banner-eyebrow">INTERNAL QA</p>
+            <h2 class="qa-banner-title">Owner diagnostics — not a public shopping interface</h2>
+            <p class="qa-banner-copy">내부 QA / 운영자 검수 화면 — 일반 이용자용 화면이 아닙니다</p>
+          </div>
+          <a id="public-view-link" class="ghost-button qa-public-link" href="/">Public View</a>
+        </div>
+        <div class="qa-banner-meta">
+          <span id="qa-snapshot-line" class="meta-pill accent">Snapshot pending</span>
+          <span id="qa-commit-line" class="meta-pill">Commit pending</span>
         </div>
       </section>
 
@@ -1431,6 +1496,7 @@
         'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
         'category-filter','brand-filter','mount-filter','sold-filter',
         'sort-select','result-count','result-caption','summary-meta','index-debug-line','page-indicator',
+        'public-view-link','qa-snapshot-line','qa-commit-line',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
         'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
@@ -1723,6 +1789,29 @@
     function buildHistoryUrl(searchState){
       const queryString = buildHistoryKey(searchState);
       return queryString ? `?${queryString}` : window.location.pathname;
+    }
+
+    function updatePublicViewLink(){
+      if(!els['public-view-link']) return;
+      const historyState = state.historyReady ? (history.state || buildSearchState()) : parseSearchStateFromUrl();
+      const next = normalizeHistoryState(historyState);
+      const queryString = buildHistoryParamsFromState(next).toString();
+      els['public-view-link'].href = queryString ? `/?${queryString}` : '/';
+    }
+
+    function updateQaBannerMeta(meta){
+      if(els['qa-snapshot-line']){
+        if(meta && meta.index_record_count != null){
+          const generatedAt = meta.index_generated_at || 'unknown';
+          els['qa-snapshot-line'].textContent = `Snapshot: ${meta.index_record_count} records / generated_at ${generatedAt}`;
+        }else{
+          els['qa-snapshot-line'].textContent = 'Snapshot: waiting for search metadata';
+        }
+      }
+      if(els['qa-commit-line']){
+        const deploymentCommit = meta && meta.deployment_commit ? String(meta.deployment_commit) : 'unknown';
+        els['qa-commit-line'].textContent = `Deployment commit: ${deploymentCommit}`;
+      }
     }
 
     function applySearchStateToControls(searchState){
@@ -2372,19 +2461,19 @@
       els['result-count'].textContent = String(total);
       if(state.loading){
         els['result-caption'].textContent = 'Searching global used camera listings...';
-        els['summary-meta'].textContent = 'Private beta search in progress';
+        els['summary-meta'].textContent = 'INTERNAL QA is checking the shared public search data.';
       }else if(state.appending && state.query){
         els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
-        els['summary-meta'].textContent = 'Loading more results...';
+        els['summary-meta'].textContent = 'INTERNAL QA is loading more shared results.';
       }else if(state.error){
         els['result-caption'].textContent = 'Runtime fallback active';
-        els['summary-meta'].textContent = 'Safe UI fallback shown instead of raw server error';
+        els['summary-meta'].textContent = 'INTERNAL QA fallback shown instead of a raw server error.';
       }else if(state.query){
         els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
-        els['summary-meta'].textContent = quality.display_message || 'Prices are references, not guaranteed valuations.';
+        els['summary-meta'].textContent = quality.display_message || 'INTERNAL QA view of the shared price summary.';
       }else{
         els['result-caption'].textContent = 'Ready for search';
-        els['summary-meta'].textContent = 'Private beta. No fake fill. Source-gap is not confirmed absence.';
+        els['summary-meta'].textContent = 'INTERNAL QA view. Shared data, shared results, extra diagnostics only.';
       }
 
       if(els['index-debug-line']){
@@ -2395,6 +2484,9 @@
           els['index-debug-line'].textContent = '';
         }
       }
+
+      updateQaBannerMeta(meta);
+      updatePublicViewLink();
 
       els['page-indicator'].textContent = `${start}-${end}`;
       els['prev-button'].disabled = state.loading || !state.response || Number(pagination.offset || 0) <= 0;

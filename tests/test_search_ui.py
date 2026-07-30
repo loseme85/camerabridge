@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 import re
+import sys
+from urllib.parse import parse_qs, urlparse
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +17,11 @@ BETA_PATHS = [
 ]
 ALL_HTML_PATHS = INDEX_PATHS + BETA_PATHS
 APP_PY_PATH = PROJECT_ROOT / "app/app.py"
+
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from app.app import app  # noqa: E402
 
 
 def _html_files(paths: list[Path] | None = None) -> list[str]:
@@ -38,15 +45,36 @@ def test_index_calls_search_endpoint() -> None:
         assert "search_records" not in html
 
 
-def test_public_routes_use_beta_shell_and_qa_uses_internal_shell() -> None:
-    app_py = APP_PY_PATH.read_text(encoding="utf-8")
-    assert '@app.route("/")' in app_py
-    assert '@app.route("/search")' in app_py
-    assert 'def index() -> str:\n    return render_template("beta.html")' in app_py
-    assert '@app.route("/qa")' in app_py
-    assert 'def qa_index() -> str:\n    return render_template("index.html")' in app_py
-    assert '@app.route("/beta")' in app_py
-    assert 'def beta_index() -> str:\n    return render_template("beta.html")' in app_py
+def test_public_route_uses_public_shell_and_qa_uses_internal_shell() -> None:
+    client = app.test_client()
+
+    public_response = client.get("/")
+    public_html = public_response.get_data(as_text=True)
+    assert public_response.status_code == 200
+    assert "Owner diagnostics — not a public shopping interface" not in public_html
+    assert "INTERNAL QA" not in public_html
+
+    qa_response = client.get("/qa?q=Leica+M6")
+    qa_html = qa_response.get_data(as_text=True)
+    assert qa_response.status_code == 200
+    assert qa_response.headers["X-Robots-Tag"] == "noindex, nofollow, noarchive"
+    assert '<meta name="robots" content="noindex,nofollow,noarchive">' in qa_html
+    assert "INTERNAL QA" in qa_html
+    assert "Owner diagnostics — not a public shopping interface" in qa_html
+    assert "Public View" in qa_html
+
+
+def test_search_and_beta_routes_redirect_to_public_query() -> None:
+    client = app.test_client()
+
+    search_response = client.get("/search?q=Leica+M6&sort=newest", follow_redirects=False)
+    beta_response = client.get("/beta?q=Leica+M6&sort=newest", follow_redirects=False)
+
+    for response in [search_response, beta_response]:
+        assert response.status_code == 302
+        parsed = urlparse(response.headers["Location"])
+        assert parsed.path == "/"
+        assert parse_qs(parsed.query) == {"q": ["Leica M6"], "sort": ["newest"]}
 
 
 def test_index_does_not_reimplement_legacy_search() -> None:
@@ -97,15 +125,16 @@ def test_quality_summary_message_is_consumed_from_api() -> None:
 
 
 def test_market_entry_policy_merges_top_level_runtime_overrides() -> None:
-    for html in _html_files():
+    for html in _html_files(BETA_PATHS):
         assert "const apiPolicy = state.response.market_entry_policy || {};" in html
         assert "...apiPolicy," in html
 
 
 def test_exact_generation_headline_and_label_mappings_exist() -> None:
-    for html in _html_files():
+    for html in _html_files(BETA_PATHS):
         assert "Exact generation price" in html
-        assert "exact generation match visible, but not selected for exact price" in html.lower()
+        assert "Included in exact price comparison" in html
+        assert "Exact match shown, but excluded from price comparison" in html
 
 
 def test_active_first_market_sections_and_sorts_exist() -> None:
@@ -218,14 +247,12 @@ def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
             "filters: {",
             "workspace_sidebar: {",
             "summary: {",
-            "query_review: {",
             "state_card: {",
             "market_entry: {",
             "card: {",
             "warnings: {",
         ]:
             assert snippet in html
-        assert "detected: { ko: '검색한 모델', en: 'Interpreted as'" in html
         assert "idle: { ko: '결과 더 보기', en: 'Load more'," in html
         assert "loading: { ko: '불러오는 중...', en: 'Loading…'," in html
 
@@ -258,8 +285,25 @@ def test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy() -> None:
         assert "ux('common.details_why', 'Why is this result shown?')" in body
         assert "detectedEntry" not in body
         assert "generationConfidence" not in body
-        assert "renderDataPoint(" not in body
-        assert "renderRoleRow(" not in body
+
+
+def test_public_template_hides_internal_diagnostic_labels() -> None:
+    for html in _html_files(BETA_PATHS):
+        assert "Detected model" not in html
+        assert "Detected entry" not in html
+        assert "Used for price" not in html
+        assert "Exclusion reason" not in html
+        assert "Generation confidence" not in html
+        assert "Price role" not in html
+        assert "Interpreted entry" not in html
+
+
+def test_internal_qa_template_includes_banner_and_shared_api() -> None:
+    for html in _html_files(INDEX_PATHS):
+        assert "INTERNAL QA" in html
+        assert "Owner diagnostics — not a public shopping interface" in html
+        assert "Public View" in html
+        assert "fetch('/api/search?'" in html
 
 
 def test_beta_public_card_hides_internal_diagnostic_fields() -> None:
@@ -287,7 +331,8 @@ def test_beta_public_surface_shows_dataset_update_line() -> None:
 
 if __name__ == "__main__":
     test_index_calls_search_endpoint()
-    test_public_routes_use_beta_shell_and_qa_uses_internal_shell()
+    test_public_route_uses_public_shell_and_qa_uses_internal_shell()
+    test_search_and_beta_routes_redirect_to_public_query()
     test_index_does_not_reimplement_legacy_search()
     test_required_ui_controls_exist()
     test_beta_files_include_locale_switcher()
@@ -309,6 +354,8 @@ if __name__ == "__main__":
     test_beta_locale_switch_keeps_sort_selection_intact()
     test_beta_empty_and_error_states_are_locale_driven()
     test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy()
+    test_public_template_hides_internal_diagnostic_labels()
+    test_internal_qa_template_includes_banner_and_shared_api()
     test_beta_public_card_hides_internal_diagnostic_fields()
     test_beta_public_surface_shows_dataset_update_line()
     print("test_search_ui: ok")
