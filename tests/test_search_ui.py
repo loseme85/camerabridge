@@ -179,8 +179,8 @@ def test_active_and_history_sections_are_sorted_independently() -> None:
         assert "const history = [" in html
         assert "sortMarketBucket(buckets.active_asking, sortMode)" in html
         assert "sortMarketBucket(buckets.sold_confirmed, sortMode)" in html
-        assert "renderResultSection('active', displaySections.active)" in html
-        assert "renderArchiveSection(displaySections.history)" in html
+        assert "renderResultSection('active', displaySections.active" in html
+        assert "renderArchiveSection(" in html
 
 
 def test_language_switch_preserves_results_without_research() -> None:
@@ -255,6 +255,8 @@ def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
             assert snippet in html
         assert "idle: { ko: '결과 더 보기', en: 'Load more'," in html
         assert "loading: { ko: '불러오는 중...', en: 'Loading…'," in html
+        assert "active_idle: { ko: '현재 판매 중인 매물 더 보기', en: 'Load more active listings'," in html
+        assert "active_loading: { ko: '현재 판매 중인 매물 불러오는 중...', en: 'Loading more active listings…'," in html
 
 
 def test_beta_locale_switch_keeps_sort_selection_intact() -> None:
@@ -278,6 +280,7 @@ def test_beta_empty_and_error_states_are_locale_driven() -> None:
 def test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy() -> None:
     for html in _html_files(BETA_PATHS):
         body = _function_body(html, "renderCard")
+        assert "const title = result.title || ux('card.title_missing', 'Untitled listing');" in body
         assert "ux('public_card.source', 'Seller / source')" in body
         assert "ux('public_card.location', 'Location')" in body
         assert "getObservedMeta(result)" in body
@@ -329,6 +332,98 @@ def test_beta_public_surface_shows_dataset_update_line() -> None:
         assert "ux('summary.dataset_updated_prefix', 'Listing data updated')" in html
 
 
+def test_public_locale_completion_covers_sidebar_and_status_copy() -> None:
+    for html in _html_files(BETA_PATHS):
+        required_snippets = [
+            "sidebar: {",
+            "workspace_sidebar: {",
+            "match_badge: {",
+            "price_role: {",
+            "reason: {",
+            "refinement: {",
+            "ja:",
+            "'zh-Hans':",
+            "'zh-Hant':",
+            "pt:",
+            "es:",
+            "de:",
+            "it:",
+        ]
+        for snippet in required_snippets:
+            assert snippet in html
+
+
+def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
+    for html in _html_files(BETA_PATHS):
+        for snippet in [
+            'data-i18n="hero.eyebrow"',
+            'data-i18n="hero.title"',
+            'data-i18n="hero.subtitle"',
+            'data-i18n="hero.notice_beta"',
+            'data-i18n="hero.notice_focus"',
+            'data-i18n="hero.notice_rare"',
+            'data-i18n="search.panel_label"',
+            'data-i18n="search.button"',
+            "ux('section.active_listings', 'Active listings')",
+            "ux('section.market_history', 'Market history')",
+            "ux('load_more.active_idle', 'Load more active listings')",
+        ]:
+            assert snippet in html
+
+
+def test_locale_switch_keeps_rendered_results_without_refetch() -> None:
+    for html in _html_files(BETA_PATHS):
+        body = _function_body(html, "setLocale")
+        assert "applyStaticTranslations();" in body
+        assert "render();" in body
+        assert "window.scrollTo({ top: currentScrollY, behavior: 'auto' });" in body
+        assert "runSearch(" not in body
+        assert "fetch(" not in body
+
+
+def test_load_more_is_scoped_to_active_section_and_history_stays_separate() -> None:
+    for html in _html_files(BETA_PATHS):
+        render_content = _function_body(html, "renderContent")
+        render_section = _function_body(html, "renderResultSection")
+        render_load_more = _function_body(html, "renderLoadMore")
+        assert "state.historyVisibleCount" in render_content
+        assert "renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length))" in render_content
+        assert "els['results-load-more-region'].innerHTML = '';" in render_content
+        assert "renderArchiveSection(historyResults)" in render_content
+        assert "${footerHtml}" in render_section
+        assert "!pagination.has_more" in render_load_more
+        assert "ux('load_more.active_idle', 'Load more active listings')" in render_load_more
+        assert "ux('load_more.active_loading', 'Loading more active listings…')" in render_load_more
+
+
+def test_public_listing_titles_remain_source_authored_text() -> None:
+    for html in _html_files(BETA_PATHS):
+        render_card = _function_body(html, "renderCard")
+        assert "const title = result.title || ux('card.title_missing', 'Untitled listing');" in render_card
+        assert "escapeHtml(title)" in render_card
+
+
+def test_load_more_hides_when_active_pagination_is_complete() -> None:
+    for html in _html_files(BETA_PATHS):
+        render_load_more = _function_body(html, "renderLoadMore")
+        assert "if(!state.response || !getResults().length || !pagination.has_more){" in render_load_more
+        assert "return '';" in render_load_more
+
+
+def test_load_more_progress_and_market_history_order_have_locale_support() -> None:
+    for html in _html_files(BETA_PATHS):
+        assert "function formatLoadMoreProgress(shownCount, totalCount)" in html
+        assert "return `${shown} / ${total} shown`;" in html
+        assert "return `${shown} / ${total} 표시 중`;" in html
+        assert "return `${shown} / ${total} 件を表示`;" in html
+
+
+def test_public_workspace_main_can_shrink_on_mobile() -> None:
+    for html in _html_files(BETA_PATHS):
+        assert ".workspace-main{" in html
+        assert "min-width:0;" in html
+
+
 if __name__ == "__main__":
     test_index_calls_search_endpoint()
     test_public_route_uses_public_shell_and_qa_uses_internal_shell()
@@ -358,4 +453,12 @@ if __name__ == "__main__":
     test_internal_qa_template_includes_banner_and_shared_api()
     test_beta_public_card_hides_internal_diagnostic_fields()
     test_beta_public_surface_shows_dataset_update_line()
+    test_public_locale_completion_covers_sidebar_and_status_copy()
+    test_public_locale_surface_covers_hero_notice_search_and_sections()
+    test_locale_switch_keeps_rendered_results_without_refetch()
+    test_load_more_is_scoped_to_active_section_and_history_stays_separate()
+    test_public_listing_titles_remain_source_authored_text()
+    test_load_more_hides_when_active_pagination_is_complete()
+    test_load_more_progress_and_market_history_order_have_locale_support()
+    test_public_workspace_main_can_shrink_on_mobile()
     print("test_search_ui: ok")

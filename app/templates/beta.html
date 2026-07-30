@@ -403,6 +403,7 @@
       gap:0;
     }
     .workspace-main{
+      min-width:0;
       padding:18px 20px 24px;
       border-right:none;
     }
@@ -595,7 +596,10 @@
     }
     .load-more-region{
       display:flex;
+      flex-direction:column;
+      align-items:center;
       justify-content:center;
+      gap:8px;
       margin-top:16px;
     }
     .load-more-button{
@@ -1108,37 +1112,37 @@
       },
       sidebar: {
         beta_notice: {
-          label: { ko: '베타 안내', en: 'Beta notice' },
-          title: { ko: '검색 결과는 같은 데이터로 보여드리되, 안내 문구만 더 쉽게 정리했습니다.', en: 'The same results are shown, with simpler guidance for beta testing.' },
-          item_1: { ko: '원문 매물 기준으로 다시 확인하세요', en: 'Double-check the original listing before making a decision.' },
-          item_2: { ko: '가격은 자동 집계 참고값입니다', en: 'Prices are automatically summarized reference values.' },
-          item_3: { ko: '조건이 섞이면 가격 계산을 잠급니다', en: 'If listings mix different conditions, price calculation stays locked.' },
-          item_4: { ko: '액세서리 검색은 본체/렌즈 가격에 쓰지 않습니다', en: 'Accessory searches are not used for body or lens price calculations.' },
+          label: { ko: '베타 안내', en: 'Beta notice', ja: 'ベータ案内', 'zh-Hans': '测试说明', 'zh-Hant': '測試說明', pt: 'Aviso beta', es: 'Aviso beta', de: 'Beta-Hinweis', it: 'Avviso beta' },
+          title: { ko: '검색 결과는 같은 데이터로 보여드리되, 안내 문구만 더 쉽게 정리했습니다.', en: 'The same results are shown, with simpler guidance for beta testing.', ja: '検索結果は同じまま、ベータ向けに案内文だけをわかりやすく整理しました。', 'zh-Hans': '搜索结果保持不变，只将测试版提示文案简化得更易理解。', 'zh-Hant': '搜尋結果維持不變，只把測試版提示文案整理得更容易理解。', pt: 'Os mesmos resultados são mostrados, mas com orientações mais simples para a beta.', es: 'Se muestran los mismos resultados, pero con indicaciones más simples para la beta.', de: 'Es werden dieselben Ergebnisse gezeigt, aber mit einfacheren Hinweisen für die Beta.', it: 'Vengono mostrati gli stessi risultati, ma con indicazioni più semplici per la beta.' },
+          item_1: { ko: '원문 매물 기준으로 다시 확인하세요', en: 'Double-check the original listing before making a decision.', ja: '判断前に元の掲載を必ず確認してください。', 'zh-Hans': '在做决定前请再次核对原始条目。', 'zh-Hant': '在做決定前請再次核對原始條目。', pt: 'Confirme o anúncio original antes de tomar uma decisão.', es: 'Revisa el anuncio original antes de tomar una decisión.', de: 'Bitte vor einer Entscheidung das Originalangebot prüfen.', it: 'Controlla l’annuncio originale prima di decidere.' },
+          item_2: { ko: '가격은 자동 집계 참고값입니다', en: 'Prices are automatically summarized reference values.', ja: '価格は自動集計された参考値です。', 'zh-Hans': '价格是自动汇总的参考值。', 'zh-Hant': '價格是自動彙整的參考值。', pt: 'Os preços são valores de referência resumidos automaticamente.', es: 'Los precios son valores de referencia resumidos automáticamente.', de: 'Preise sind automatisch zusammengefasste Referenzwerte.', it: 'I prezzi sono valori di riferimento riassunti automaticamente.' },
+          item_3: { ko: '조건이 섞이면 가격 계산을 잠급니다', en: 'If listings mix different conditions, price calculation stays locked.', ja: '条件が混在すると価格計算はロックされたままです。', 'zh-Hans': '如果条目混入不同条件，价格计算将保持锁定。', 'zh-Hant': '如果條目混入不同條件，價格計算會維持鎖定。', pt: 'Se os anúncios misturam condições diferentes, o cálculo de preço permanece bloqueado.', es: 'Si los anuncios mezclan condiciones distintas, el cálculo del precio permanece bloqueado.', de: 'Wenn Angebote unterschiedliche Zustände mischen, bleibt die Preisberechnung gesperrt.', it: 'Se gli annunci mescolano condizioni diverse, il calcolo del prezzo resta bloccato.' },
+          item_4: { ko: '액세서리 검색은 본체/렌즈 가격에 쓰지 않습니다', en: 'Accessory searches are not used for body or lens price calculations.', ja: 'アクセサリー検索はボディやレンズの価格計算に使いません。', 'zh-Hans': '配件搜索不会用于机身或镜头价格计算。', 'zh-Hant': '配件搜尋不會用於機身或鏡頭價格計算。', pt: 'Buscas de acessórios não são usadas no cálculo de preço de corpos ou lentes.', es: 'Las búsquedas de accesorios no se usan para calcular precios de cuerpos o lentes.', de: 'Zubehörsuchen werden nicht für die Preisbildung von Kameras oder Objektiven verwendet.', it: 'Le ricerche di accessori non vengono usate per il prezzo di corpi o obiettivi.' },
         },
         what_to_check: {
-          label: { ko: '확인 포인트', en: 'What to check' },
-          title: { ko: '이런 점을 보면 충분합니다.', en: 'These are the main things to check.' },
-          item_1: { ko: '검색 결과가 의도와 맞는지', en: 'Whether the results match your search intent' },
-          item_2: { ko: '가격 상태 설명이 이해되는지', en: 'Whether the price-state explanation is easy to understand' },
-          item_3: { ko: '원문 보기 흐름이 자연스러운지', en: 'Whether opening the source listing feels natural' },
-          item_4: { ko: '모바일 카드가 읽기 쉬운지', en: 'Whether the mobile cards are easy to read' },
+          label: { ko: '확인 포인트', en: 'What to check', ja: '確認ポイント', 'zh-Hans': '检查要点', 'zh-Hant': '檢查要點', pt: 'O que verificar', es: 'Qué comprobar', de: 'Worauf achten', it: 'Cosa controllare' },
+          title: { ko: '이런 점을 보면 충분합니다.', en: 'These are the main things to check.', ja: 'まずはこの点を見れば十分です。', 'zh-Hans': '先看这些重点就足够了。', 'zh-Hant': '先看這些重點就足夠了。', pt: 'Estes são os principais pontos para verificar.', es: 'Estos son los puntos principales que conviene revisar.', de: 'Das sind die wichtigsten Punkte zum Prüfen.', it: 'Questi sono i punti principali da controllare.' },
+          item_1: { ko: '검색 결과가 의도와 맞는지', en: 'Whether the results match your search intent', ja: '結果が検索意図に合っているか', 'zh-Hans': '结果是否符合你的搜索意图', 'zh-Hant': '結果是否符合你的搜尋意圖', pt: 'Se os resultados correspondem à sua intenção de busca', es: 'Si los resultados coinciden con tu intención de búsqueda', de: 'Ob die Ergebnisse deiner Suchabsicht entsprechen', it: 'Se i risultati corrispondono alla tua intenzione di ricerca' },
+          item_2: { ko: '가격 상태 설명이 이해되는지', en: 'Whether the price-state explanation is easy to understand', ja: '価格状態の説明がわかりやすいか', 'zh-Hans': '价格状态说明是否容易理解', 'zh-Hant': '價格狀態說明是否容易理解', pt: 'Se a explicação do estado do preço é fácil de entender', es: 'Si la explicación del estado del precio es fácil de entender', de: 'Ob die Erklärung zum Preisstatus leicht verständlich ist', it: 'Se la spiegazione dello stato del prezzo è facile da capire' },
+          item_3: { ko: '원문 보기 흐름이 자연스러운지', en: 'Whether opening the source listing feels natural', ja: '元の掲載を開く流れが自然か', 'zh-Hans': '打开原始条目的流程是否自然', 'zh-Hant': '開啟原始條目的流程是否自然', pt: 'Se o fluxo para abrir o anúncio original parece natural', es: 'Si el flujo para abrir el anuncio original se siente natural', de: 'Ob sich das Öffnen des Originalangebots natürlich anfühlt', it: 'Se il flusso per aprire l’annuncio originale risulta naturale' },
+          item_4: { ko: '모바일 카드가 읽기 쉬운지', en: 'Whether the mobile cards are easy to read', ja: 'モバイルカードが読みやすいか', 'zh-Hans': '移动端卡片是否易读', 'zh-Hant': '行動版卡片是否易讀', pt: 'Se os cartões no celular são fáceis de ler', es: 'Si las tarjetas móviles son fáciles de leer', de: 'Ob die mobilen Karten gut lesbar sind', it: 'Se le schede su mobile sono facili da leggere' },
         },
       },
       overview: {
         price_policy: {
-          label: { ko: '가격 정책', en: 'Price policy' },
-          title: { ko: '확실하지 않으면 가격을 잠급니다', en: 'When the match is uncertain, the price stays locked' },
-          body: { ko: '비슷한 모델이 보여도 조건이 섞이면 정확 가격 계산은 보류합니다.', en: 'Even if related models appear, exact price calculation is held back when conditions are mixed.' },
+          label: { ko: '가격 정책', en: 'Price policy', ja: '価格方針', 'zh-Hans': '价格政策', 'zh-Hant': '價格政策', pt: 'Política de preço', es: 'Política de precios', de: 'Preisrichtlinie', it: 'Politica dei prezzi' },
+          title: { ko: '확실하지 않으면 가격을 잠급니다', en: 'When the match is uncertain, the price stays locked', ja: '確信が持てない場合は価格をロックします', 'zh-Hans': '当匹配不确定时，价格会保持锁定', 'zh-Hant': '當匹配不確定時，價格會維持鎖定', pt: 'Quando a correspondência é incerta, o preço permanece bloqueado', es: 'Cuando la coincidencia es incierta, el precio permanece bloqueado', de: 'Wenn die Zuordnung unsicher ist, bleibt der Preis gesperrt', it: 'Quando la corrispondenza è incerta, il prezzo resta bloccato' },
+          body: { ko: '비슷한 모델이 보여도 조건이 섞이면 정확 가격 계산은 보류합니다.', en: 'Even if related models appear, exact price calculation is held back when conditions are mixed.', ja: '関連モデルが表示されても、条件が混在していれば正確価格の計算は保留します。', 'zh-Hans': '即使出现相关型号，只要条件混杂，精确价格计算也会暂缓。', 'zh-Hant': '即使出現相關型號，只要條件混雜，精確價格計算也會暫緩。', pt: 'Mesmo que modelos relacionados apareçam, o cálculo exato do preço é retido quando as condições estão misturadas.', es: 'Aunque aparezcan modelos relacionados, el cálculo exacto del precio se retiene cuando se mezclan condiciones.', de: 'Auch wenn verwandte Modelle erscheinen, bleibt die exakte Preisberechnung gesperrt, wenn Bedingungen gemischt sind.', it: 'Anche se compaiono modelli correlati, il calcolo esatto del prezzo viene trattenuto quando le condizioni sono miste.' },
         },
         source_coverage: {
-          label: { ko: '데이터 범위', en: 'Source coverage' },
-          title: { ko: '데이터 부족은 부재 의미가 아닙니다', en: 'Low coverage does not mean the item does not exist' },
-          body: { ko: '원문 수집이 적을 때는 가격 계산을 생략하고 참고 결과만 보여줍니다.', en: 'When source coverage is thin, price calculation is skipped and only reference results are shown.' },
+          label: { ko: '데이터 범위', en: 'Source coverage', ja: 'データ範囲', 'zh-Hans': '数据覆盖', 'zh-Hant': '資料覆蓋', pt: 'Cobertura de fontes', es: 'Cobertura de fuentes', de: 'Quellenabdeckung', it: 'Copertura delle fonti' },
+          title: { ko: '데이터 부족은 부재 의미가 아닙니다', en: 'Low coverage does not mean the item does not exist', ja: 'データが少ないことは、その製品が存在しないことを意味しません', 'zh-Hans': '数据不足并不意味着该物品不存在', 'zh-Hant': '資料不足不代表該物品不存在', pt: 'Cobertura limitada não significa que o item não exista', es: 'Una cobertura limitada no significa que el artículo no exista', de: 'Geringe Abdeckung bedeutet nicht, dass das Produkt nicht existiert', it: 'Una copertura limitata non significa che l’articolo non esista' },
+          body: { ko: '원문 수집이 적을 때는 가격 계산을 생략하고 참고 결과만 보여줍니다.', en: 'When source coverage is thin, price calculation is skipped and only reference results are shown.', ja: '参照元の収集が少ない場合は価格計算を省略し、参考結果のみ表示します。', 'zh-Hans': '当来源覆盖较薄时，会跳过价格计算，仅显示参考结果。', 'zh-Hant': '當來源覆蓋較薄時，會跳過價格計算，只顯示參考結果。', pt: 'Quando a cobertura das fontes é limitada, o cálculo de preço é omitido e apenas resultados de referência são mostrados.', es: 'Cuando la cobertura de fuentes es limitada, se omite el cálculo del precio y solo se muestran resultados de referencia.', de: 'Bei geringer Quellenabdeckung wird die Preisberechnung ausgelassen und nur Referenzergebnisse werden gezeigt.', it: 'Quando la copertura delle fonti è limitata, il calcolo del prezzo viene saltato e vengono mostrati solo risultati di riferimento.' },
         },
         limited_beta: {
-          label: { ko: '제한적 베타', en: 'Limited beta' },
-          title: { ko: '현재는 Leica 중심 제한 베타입니다', en: 'This is currently a Leica-focused limited beta' },
-          body: { ko: '이 문서는 공개 출시 승인이나 외부 테스터 오픈을 의미하지 않습니다.', en: 'This does not mean public release approval or external tester rollout.' },
+          label: { ko: '제한적 베타', en: 'Limited beta', ja: '限定ベータ', 'zh-Hans': '限量测试', 'zh-Hant': '限量測試', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
+          title: { ko: '현재는 Leica 중심 제한 베타입니다', en: 'This is currently a Leica-focused limited beta', ja: '現在はLeica中心の限定ベータです', 'zh-Hans': '当前是以 Leica 为中心的限量测试', 'zh-Hant': '目前是以 Leica 為中心的限量測試', pt: 'Esta é atualmente uma beta limitada com foco em Leica', es: 'Actualmente es una beta limitada centrada en Leica', de: 'Dies ist derzeit eine begrenzte Leica-fokussierte Beta', it: 'Questa è attualmente una beta limitata focalizzata su Leica' },
+          body: { ko: '이 문서는 공개 출시 승인이나 외부 테스터 오픈을 의미하지 않습니다.', en: 'This does not mean public release approval or external tester rollout.', ja: 'これは公開リリース承認や外部テスター公開を意味するものではありません。', 'zh-Hans': '这并不意味着已经获准公开发布或向外部测试者开放。', 'zh-Hant': '這並不表示已獲准公開發布或對外部測試者開放。', pt: 'Isso não significa aprovação para lançamento público nem abertura para testadores externos.', es: 'Esto no significa aprobación para lanzamiento público ni apertura a testers externos.', de: 'Dies bedeutet weder eine Freigabe für den öffentlichen Release noch eine Öffnung für externe Tester.', it: 'Questo non significa approvazione al rilascio pubblico né apertura a tester esterni.' },
         },
       },
       filters: {
@@ -1206,23 +1210,23 @@
       },
       workspace_sidebar: {
         beta: {
-          label: { ko: '제한적 베타', en: 'Limited Beta' },
-          title: { ko: '결과를 믿기 전 이 점을 확인하세요', en: 'Check these before trusting the result' },
-          item_1: { ko: '가격은 참고값입니다', en: 'Prices are reference values' },
-          item_2: { ko: '희귀 모델은 가격이 잠길 수 있습니다', en: 'Rare models may remain price-locked' },
-          item_3: { ko: '원문 매물 확인이 필요합니다', en: 'You should verify the original listing' },
-          item_4: { ko: '개인 연락처나 비공개 정보는 다루지 않습니다', en: 'Private contact details and hidden information are not shown' },
+          label: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '限量测试', 'zh-Hant': '限量測試', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
+          title: { ko: '결과를 믿기 전 이 점을 확인하세요', en: 'Check these before trusting the result', ja: '結果を信頼する前にこちらを確認してください', 'zh-Hans': '在相信结果之前，请先确认这些事项', 'zh-Hant': '在相信結果之前，請先確認這些事項', pt: 'Verifique isto antes de confiar no resultado', es: 'Comprueba esto antes de confiar en el resultado', de: 'Bitte dies prüfen, bevor du dem Ergebnis vertraust', it: 'Controlla questi punti prima di fidarti del risultato' },
+          item_1: { ko: '가격은 참고값입니다', en: 'Prices are reference values', ja: '価格は参考値です', 'zh-Hans': '价格仅供参考', 'zh-Hant': '價格僅供參考', pt: 'Os preços são valores de referência', es: 'Los precios son valores de referencia', de: 'Preise sind Referenzwerte', it: 'I prezzi sono valori di riferimento' },
+          item_2: { ko: '희귀 모델은 가격이 잠길 수 있습니다', en: 'Rare models may remain price-locked', ja: '希少モデルは価格がロックされたままの場合があります', 'zh-Hans': '稀有型号可能会保持价格锁定', 'zh-Hant': '稀有型號可能會維持價格鎖定', pt: 'Modelos raros podem permanecer com o preço bloqueado', es: 'Los modelos raros pueden permanecer con el precio bloqueado', de: 'Seltene Modelle können preisgesperrt bleiben', it: 'I modelli rari possono restare con il prezzo bloccato' },
+          item_3: { ko: '원문 매물 확인이 필요합니다', en: 'You should verify the original listing', ja: '元の掲載確認が必要です', 'zh-Hans': '需要核对原始条目', 'zh-Hant': '需要核對原始條目', pt: 'Você deve verificar o anúncio original', es: 'Debes verificar el anuncio original', de: 'Das Originalangebot sollte geprüft werden', it: 'È necessario verificare l’annuncio originale' },
+          item_4: { ko: '개인 연락처나 비공개 정보는 다루지 않습니다', en: 'Private contact details and hidden information are not shown', ja: '個人の連絡先や非公開情報は表示しません', 'zh-Hans': '不会显示私人联系方式或隐藏信息', 'zh-Hant': '不會顯示私人聯絡方式或隱藏資訊', pt: 'Dados de contato privados e informações ocultas não são mostrados', es: 'No se muestran datos de contacto privados ni información oculta', de: 'Private Kontaktdaten und verborgene Informationen werden nicht angezeigt', it: 'I contatti privati e le informazioni nascoste non vengono mostrati' },
         },
         how_to_read: {
-          label: { ko: '검색 결과 안내', en: 'How to read results' },
-          title: { ko: '같은 데이터라도 안내 문구는 더 단순하게 보여줍니다', en: 'The same data is shown with simpler guidance here' },
-          item_1: { ko: '정확 조건 기준 가격을 계산했어요.', en: 'An exact-condition price was calculated.' },
-          item_2: { ko: '같은 계열 참고 가격만 확인할 수 있어요.', en: 'Only related reference prices are available.' },
-          item_3: { ko: '정확한 가격 계산은 보류했어요.', en: 'Exact price calculation is currently on hold.' },
+          label: { ko: '검색 결과 안내', en: 'How to read results', ja: '結果の見方', 'zh-Hans': '结果阅读方式', 'zh-Hant': '結果閱讀方式', pt: 'Como ler os resultados', es: 'Cómo leer los resultados', de: 'So liest du die Ergebnisse', it: 'Come leggere i risultati' },
+          title: { ko: '같은 데이터라도 안내 문구는 더 단순하게 보여줍니다', en: 'The same data is shown with simpler guidance here', ja: '同じデータでも、ここでは案内文をよりシンプルに表示します', 'zh-Hans': '相同数据会在这里以更简单的说明方式展示', 'zh-Hant': '相同資料會在這裡以更簡單的說明方式呈現', pt: 'Os mesmos dados aparecem aqui com orientações mais simples', es: 'Aquí se muestran los mismos datos con indicaciones más simples', de: 'Dieselben Daten werden hier mit einfacheren Hinweisen gezeigt', it: 'Gli stessi dati vengono mostrati qui con indicazioni più semplici' },
+          item_1: { ko: '정확 조건 기준 가격을 계산했어요.', en: 'An exact-condition price was calculated.', ja: '正確な条件に基づく価格が計算されました。', 'zh-Hans': '已按精确条件计算价格。', 'zh-Hant': '已按精確條件計算價格。', pt: 'Foi calculado um preço para a condição exata.', es: 'Se calculó un precio para la condición exacta.', de: 'Es wurde ein Preis für die exakte Bedingung berechnet.', it: 'È stato calcolato un prezzo per la condizione esatta.' },
+          item_2: { ko: '같은 계열 참고 가격만 확인할 수 있어요.', en: 'Only related reference prices are available.', ja: '関連する参考価格のみ確認できます。', 'zh-Hans': '目前只能查看相关参考价格。', 'zh-Hant': '目前只能查看相關參考價格。', pt: 'Apenas preços de referência relacionados estão disponíveis.', es: 'Solo hay precios de referencia relacionados disponibles.', de: 'Es sind nur verwandte Referenzpreise verfügbar.', it: 'Sono disponibili solo prezzi di riferimento correlati.' },
+          item_3: { ko: '정확한 가격 계산은 보류했어요.', en: 'Exact price calculation is currently on hold.', ja: '正確な価格計算は現在保留中です。', 'zh-Hans': '精确价格计算目前已暂停。', 'zh-Hant': '精確價格計算目前已暫停。', pt: 'O cálculo exato do preço está em espera no momento.', es: 'El cálculo exacto del precio está en espera por ahora.', de: 'Die exakte Preisberechnung ist derzeit ausgesetzt.', it: 'Il calcolo esatto del prezzo è attualmente sospeso.' },
         },
         safety: {
-          label: { ko: '안전 안내', en: 'Safety note' },
-          body: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않으며, 조건이 섞이면 잠금 상태로 표시합니다.', en: 'Accessory searches are not used for body or lens pricing, and mixed conditions stay locked.' },
+          label: { ko: '안전 안내', en: 'Safety note', ja: '安全に関する注意', 'zh-Hans': '安全提示', 'zh-Hant': '安全提示', pt: 'Nota de segurança', es: 'Nota de seguridad', de: 'Sicherheitshinweis', it: 'Nota di sicurezza' },
+          body: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않으며, 조건이 섞이면 잠금 상태로 표시합니다.', en: 'Accessory searches are not used for body or lens pricing, and mixed conditions stay locked.', ja: 'アクセサリー検索はボディやレンズの価格計算に使われず、条件が混在するとロック状態で表示されます。', 'zh-Hans': '配件搜索不会用于机身或镜头定价，条件混杂时会保持锁定。', 'zh-Hant': '配件搜尋不會用於機身或鏡頭定價，條件混雜時會維持鎖定。', pt: 'Buscas de acessórios não são usadas para precificar corpos ou lentes, e condições misturadas permanecem bloqueadas.', es: 'Las búsquedas de accesorios no se usan para fijar precios de cuerpos o lentes, y las condiciones mezcladas permanecen bloqueadas.', de: 'Zubehörsuchen werden nicht für die Preisbildung von Kameras oder Objektiven verwendet; gemischte Bedingungen bleiben gesperrt.', it: 'Le ricerche di accessori non vengono usate per il prezzo di corpi o obiettivi e le condizioni miste restano bloccate.' },
         },
       },
       summary: {
@@ -1256,63 +1260,63 @@
         details_why: { ko: '왜 이 결과가 보이나요?', en: 'Why is this result shown?', ja: 'なぜこの結果が表示されるのですか？', 'zh-Hans': '为什么会显示此结果？', 'zh-Hant': '為什麼會顯示這個結果？', pt: 'Por que este resultado aparece?', es: '¿Por qué aparece este resultado?', de: 'Warum wird dieses Ergebnis angezeigt?', it: 'Perché viene mostrato questo risultato?' },
       },
       match_badge: {
-        exact_match: { ko: '정확히 맞는 결과', en: 'Exact match' },
-        exact_candidate: { ko: '정확 후보', en: 'Exact candidate' },
-        related: { ko: '관련 결과', en: 'Related result' },
-        conflict: { ko: '조건 충돌', en: 'Variant conflict' },
-        same_family: { ko: '같은 계열 참고 결과', en: 'Similar model' },
-        base_model: { ko: '기본 모델 일치', en: 'Base model match' },
-        close_result: { ko: '가까운 결과', en: 'Close result' },
+        exact_match: { ko: '정확히 맞는 결과', en: 'Exact match', ja: '完全一致', 'zh-Hans': '精确匹配', 'zh-Hant': '精確匹配', pt: 'Correspondência exata', es: 'Coincidencia exacta', de: 'Exakte Übereinstimmung', it: 'Corrispondenza esatta' },
+        exact_candidate: { ko: '정확 후보', en: 'Exact candidate', ja: '有力候補', 'zh-Hans': '精确候选', 'zh-Hant': '精確候選', pt: 'Candidato exato', es: 'Candidato exacto', de: 'Exakter Kandidat', it: 'Candidato esatto' },
+        related: { ko: '관련 결과', en: 'Related result', ja: '関連結果', 'zh-Hans': '相关结果', 'zh-Hant': '相關結果', pt: 'Resultado relacionado', es: 'Resultado relacionado', de: 'Verwandtes Ergebnis', it: 'Risultato correlato' },
+        conflict: { ko: '조건 충돌', en: 'Variant conflict', ja: '条件の衝突', 'zh-Hans': '条件冲突', 'zh-Hant': '條件衝突', pt: 'Conflito de variante', es: 'Conflicto de variante', de: 'Variantenkonflikt', it: 'Conflitto di variante' },
+        same_family: { ko: '같은 계열 참고 결과', en: 'Similar model', ja: '近いモデル', 'zh-Hans': '相近型号', 'zh-Hant': '相近型號', pt: 'Modelo semelhante', es: 'Modelo similar', de: 'Ähnliches Modell', it: 'Modello simile' },
+        base_model: { ko: '기본 모델 일치', en: 'Base model match', ja: '基本モデル一致', 'zh-Hans': '基础型号匹配', 'zh-Hant': '基礎型號匹配', pt: 'Modelo base correspondente', es: 'Coincidencia del modelo base', de: 'Basismodell passt', it: 'Corrispondenza del modello base' },
+        close_result: { ko: '가까운 결과', en: 'Close result', ja: '近い結果', 'zh-Hans': '接近结果', 'zh-Hant': '接近結果', pt: 'Resultado próximo', es: 'Resultado cercano', de: 'Nahes Ergebnis', it: 'Risultato vicino' },
       },
       quality: {
-        strong: { ko: '높음', en: 'Strong' },
-        medium: { ko: '보통', en: 'Medium' },
-        weak: { ko: '낮음', en: 'Weak' },
-        unknown: { ko: '미확인', en: 'Unknown' },
+        strong: { ko: '높음', en: 'Strong', ja: '高い', 'zh-Hans': '高', 'zh-Hant': '高', pt: 'Alto', es: 'Alto', de: 'Hoch', it: 'Alta' },
+        medium: { ko: '보통', en: 'Medium', ja: '中程度', 'zh-Hans': '中', 'zh-Hant': '中', pt: 'Médio', es: 'Medio', de: 'Mittel', it: 'Media' },
+        weak: { ko: '낮음', en: 'Weak', ja: '低い', 'zh-Hans': '低', 'zh-Hant': '低', pt: 'Baixo', es: 'Bajo', de: 'Niedrig', it: 'Bassa' },
+        unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuta' },
       },
       result_role: {
-        exact_variant: { ko: '정확히 맞는 결과', en: 'Exact match' },
-        exact_base_model: { ko: '기본 모델 일치', en: 'Base model match' },
-        same_base_model: { ko: '같은 계열 참고 결과', en: 'Similar model' },
-        broader_family: { ko: '관련 결과', en: 'Related result' },
-        boundary_conflict: { ko: '조건이 달라 가격 계산 제외', en: 'Different model boundary' },
-        incompatible: { ko: '조건이 맞지 않는 결과', en: 'Not compatible with this query' },
-        reference_only: { ko: '참고 결과', en: 'Reference only' },
+        exact_variant: { ko: '정확히 맞는 결과', en: 'Exact match', ja: '完全一致', 'zh-Hans': '精确匹配', 'zh-Hant': '精確匹配', pt: 'Correspondência exata', es: 'Coincidencia exacta', de: 'Exakte Übereinstimmung', it: 'Corrispondenza esatta' },
+        exact_base_model: { ko: '기본 모델 일치', en: 'Base model match', ja: '基本モデル一致', 'zh-Hans': '基础型号匹配', 'zh-Hant': '基礎型號匹配', pt: 'Modelo base correspondente', es: 'Coincidencia del modelo base', de: 'Basismodell passt', it: 'Corrispondenza del modello base' },
+        same_base_model: { ko: '같은 계열 참고 결과', en: 'Similar model', ja: '近いモデル', 'zh-Hans': '相近型号', 'zh-Hant': '相近型號', pt: 'Modelo semelhante', es: 'Modelo similar', de: 'Ähnliches Modell', it: 'Modello simile' },
+        broader_family: { ko: '관련 결과', en: 'Related result', ja: '関連結果', 'zh-Hans': '相关结果', 'zh-Hant': '相關結果', pt: 'Resultado relacionado', es: 'Resultado relacionado', de: 'Verwandtes Ergebnis', it: 'Risultato correlato' },
+        boundary_conflict: { ko: '조건이 달라 가격 계산 제외', en: 'Different model boundary', ja: '別モデルの境界', 'zh-Hans': '不同型号边界', 'zh-Hant': '不同型號邊界', pt: 'Limite de modelo diferente', es: 'Límite de modelo distinto', de: 'Abweichende Modellgrenze', it: 'Confine di modello diverso' },
+        incompatible: { ko: '조건이 맞지 않는 결과', en: 'Not compatible with this query', ja: 'この検索とは非互換', 'zh-Hans': '与此搜索不兼容', 'zh-Hant': '與此搜尋不相容', pt: 'Não compatível com esta busca', es: 'No compatible con esta búsqueda', de: 'Nicht mit dieser Suche kompatibel', it: 'Non compatibile con questa ricerca' },
+        reference_only: { ko: '참고 결과', en: 'Reference only', ja: '参考のみ', 'zh-Hans': '仅供参考', 'zh-Hant': '僅供參考', pt: 'Somente referência', es: 'Solo referencia', de: 'Nur Referenz', it: 'Solo riferimento' },
       },
       price_role: {
-        used_for_price: { ko: '가격 비교에 반영됨', en: 'Included in price comparison' },
-        used_for_exact_generation: { ko: '정확 가격 비교에 반영됨', en: 'Included in exact price comparison' },
-        used_for_generation_candidate: { ko: '같은 세대 비교에 반영됨', en: 'Included in same-generation comparison' },
-        exact_visible_excluded: { ko: '정확히 맞지만 가격 비교에서는 제외', en: 'Exact match shown, but excluded from price comparison' },
-        reference_for_entry_only: { ko: '이 모델의 참고 결과', en: 'Reference only for this model' },
-        generation_selection_needed: { ko: '세대 선택 전 참고 결과만 표시', en: 'Reference only — generation selection needed' },
-        generation_selection_locked: { ko: '세대 선택 전에는 가격 계산을 보류', en: 'Price stays locked until a generation is selected' },
-        same_base_reference: { ko: '참고 결과로만 표시', en: 'Reference only' },
-        broader_reference: { ko: '같은 계열 참고 결과', en: 'Related reference' },
-        duplicate: { ko: '중복 가능성으로 제외', en: 'Not used — Duplicate listing' },
-        outlier: { ko: '가격 범위 이상으로 제외', en: 'Not used — Price outlier' },
-        no_usable_price: { ko: '가격 계산 불가', en: 'No usable price' },
-        accessory_excluded: { ko: '액세서리라 가격 비교에서 제외', en: 'Excluded from price comparison' },
-        boundary_excluded: { ko: '조건이 달라 정확 비교에서 제외', en: 'Excluded from exact comparison' },
-        not_compatible: { ko: '현재 검색과 맞지 않아 참고로만 표시', en: 'Shown for context only' },
+        used_for_price: { ko: '가격 비교에 반영됨', en: 'Included in price comparison', ja: '価格比較に反映', 'zh-Hans': '已纳入价格比较', 'zh-Hant': '已納入價格比較', pt: 'Incluído na comparação de preço', es: 'Incluido en la comparación de precio', de: 'Im Preisvergleich enthalten', it: 'Incluso nel confronto prezzi' },
+        used_for_exact_generation: { ko: '정확 가격 비교에 반영됨', en: 'Included in exact price comparison', ja: '正確価格比較に反映', 'zh-Hans': '已纳入精确价格比较', 'zh-Hant': '已納入精確價格比較', pt: 'Incluído na comparação de preço exato', es: 'Incluido en la comparación de precio exacto', de: 'Im exakten Preisvergleich enthalten', it: 'Incluso nel confronto prezzo esatto' },
+        used_for_generation_candidate: { ko: '같은 세대 비교에 반영됨', en: 'Included in same-generation comparison', ja: '同世代比較に反映', 'zh-Hans': '已纳入同世代比较', 'zh-Hant': '已納入同世代比較', pt: 'Incluído na comparação da mesma geração', es: 'Incluido en la comparación de la misma generación', de: 'Im Vergleich derselben Generation enthalten', it: 'Incluso nel confronto della stessa generazione' },
+        exact_visible_excluded: { ko: '정확히 맞지만 가격 비교에서는 제외', en: 'Exact match shown, but excluded from price comparison', ja: '一致していますが価格比較からは除外', 'zh-Hans': '匹配精确，但已排除在价格比较之外', 'zh-Hant': '匹配精確，但已排除在價格比較之外', pt: 'Correspondência exata mostrada, mas excluída da comparação de preço', es: 'Coincidencia exacta mostrada, pero excluida de la comparación de precio', de: 'Exakte Übereinstimmung angezeigt, aber vom Preisvergleich ausgeschlossen', it: 'Corrispondenza esatta mostrata, ma esclusa dal confronto prezzi' },
+        reference_for_entry_only: { ko: '이 모델의 참고 결과', en: 'Reference only for this model', ja: 'このモデルの参考結果', 'zh-Hans': '仅作此型号参考', 'zh-Hant': '僅作此型號參考', pt: 'Somente referência para este modelo', es: 'Solo referencia para este modelo', de: 'Nur Referenz für dieses Modell', it: 'Solo riferimento per questo modello' },
+        generation_selection_needed: { ko: '세대 선택 전 참고 결과만 표시', en: 'Reference only — generation selection needed', ja: '世代選択が必要なため参考表示のみ', 'zh-Hans': '仅供参考，需先选择世代', 'zh-Hant': '僅供參考，需先選擇世代', pt: 'Somente referência — é necessário escolher a geração', es: 'Solo referencia — es necesario elegir la generación', de: 'Nur Referenz — Generation muss gewählt werden', it: 'Solo riferimento — è necessario scegliere la generazione' },
+        generation_selection_locked: { ko: '세대 선택 전에는 가격 계산을 보류', en: 'Price stays locked until a generation is selected', ja: '世代を選ぶまで価格はロックされます', 'zh-Hans': '在选择世代之前价格保持锁定', 'zh-Hant': '在選擇世代之前價格維持鎖定', pt: 'O preço permanece bloqueado até que uma geração seja escolhida', es: 'El precio permanece bloqueado hasta elegir una generación', de: 'Der Preis bleibt gesperrt, bis eine Generation gewählt ist', it: 'Il prezzo resta bloccato finché non viene scelta una generazione' },
+        same_base_reference: { ko: '참고 결과로만 표시', en: 'Reference only', ja: '参考表示のみ', 'zh-Hans': '仅供参考', 'zh-Hant': '僅供參考', pt: 'Somente referência', es: 'Solo referencia', de: 'Nur Referenz', it: 'Solo riferimento' },
+        broader_reference: { ko: '같은 계열 참고 결과', en: 'Related reference', ja: '関連する参考結果', 'zh-Hans': '相关参考结果', 'zh-Hant': '相關參考結果', pt: 'Referência relacionada', es: 'Referencia relacionada', de: 'Verwandte Referenz', it: 'Riferimento correlato' },
+        duplicate: { ko: '중복 가능성으로 제외', en: 'Not used — Duplicate listing', ja: '未使用 — 重複の可能性', 'zh-Hans': '未使用 — 可能重复', 'zh-Hant': '未使用 — 可能重複', pt: 'Não usado — anúncio duplicado', es: 'No usado — anuncio duplicado', de: 'Nicht verwendet — mögliches Duplikat', it: 'Non usato — annuncio duplicato' },
+        outlier: { ko: '가격 범위 이상으로 제외', en: 'Not used — Price outlier', ja: '未使用 — 価格外れ値', 'zh-Hans': '未使用 — 价格离群值', 'zh-Hant': '未使用 — 價格離群值', pt: 'Não usado — preço fora da faixa', es: 'No usado — precio atípico', de: 'Nicht verwendet — Preis-Ausreißer', it: 'Non usato — prezzo anomalo' },
+        no_usable_price: { ko: '가격 계산 불가', en: 'No usable price', ja: '使用可能な価格なし', 'zh-Hans': '无可用价格', 'zh-Hant': '無可用價格', pt: 'Sem preço utilizável', es: 'Sin precio utilizable', de: 'Kein verwendbarer Preis', it: 'Nessun prezzo utilizzabile' },
+        accessory_excluded: { ko: '액세서리라 가격 비교에서 제외', en: 'Excluded from price comparison', ja: 'アクセサリーのため価格比較から除外', 'zh-Hans': '因属配件，已排除在价格比较之外', 'zh-Hant': '因屬配件，已排除在價格比較之外', pt: 'Excluído da comparação de preço por ser acessório', es: 'Excluido de la comparación de precio por ser accesorio', de: 'Vom Preisvergleich ausgeschlossen, da Zubehör', it: 'Escluso dal confronto prezzi perché accessorio' },
+        boundary_excluded: { ko: '조건이 달라 정확 비교에서 제외', en: 'Excluded from exact comparison', ja: '条件差により正確比較から除外', 'zh-Hans': '因条件不同，已排除在精确比较之外', 'zh-Hant': '因條件不同，已排除在精確比較之外', pt: 'Excluído da comparação exata por diferença de condição', es: 'Excluido de la comparación exacta por diferencia de condición', de: 'Wegen unterschiedlicher Bedingungen vom exakten Vergleich ausgeschlossen', it: 'Escluso dal confronto esatto per differenza di condizione' },
+        not_compatible: { ko: '현재 검색과 맞지 않아 참고로만 표시', en: 'Shown for context only', ja: 'この検索とは合わないため参考表示のみ', 'zh-Hans': '与当前搜索不符，仅作参考展示', 'zh-Hant': '與目前搜尋不符，僅作參考顯示', pt: 'Mostrado apenas como contexto', es: 'Mostrado solo como contexto', de: 'Nur zur Einordnung angezeigt', it: 'Mostrato solo come contesto' },
       },
       reason: {
-        exact_variant: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model and variant match the query closely.' },
-        exact_generation: { ko: '검색어와 세대/버전이 잘 맞습니다.', en: 'The model and generation match the query closely.' },
-        exact_model: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model matches the query closely.' },
+        exact_variant: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model and variant match the query closely.', ja: 'モデル名とバリアントが検索語によく合っています。', 'zh-Hans': '型号与版本和搜索词高度匹配。', 'zh-Hant': '型號與版本和搜尋詞高度匹配。', pt: 'O modelo e a variante correspondem bem à busca.', es: 'El modelo y la variante coinciden bien con la búsqueda.', de: 'Modell und Variante passen sehr gut zur Suche.', it: 'Il modello e la variante corrispondono bene alla ricerca.' },
+        exact_generation: { ko: '검색어와 세대/버전이 잘 맞습니다.', en: 'The model and generation match the query closely.', ja: 'モデルと世代が検索語によく合っています。', 'zh-Hans': '型号与世代和搜索词高度匹配。', 'zh-Hant': '型號與世代和搜尋詞高度匹配。', pt: 'O modelo e a geração correspondem bem à busca.', es: 'El modelo y la generación coinciden bien con la búsqueda.', de: 'Modell und Generation passen sehr gut zur Suche.', it: 'Il modello e la generazione corrispondono bene alla ricerca.' },
+        exact_model: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model matches the query closely.', ja: 'モデルが検索語によく合っています。', 'zh-Hans': '型号与搜索词高度匹配。', 'zh-Hant': '型號與搜尋詞高度匹配。', pt: 'O modelo corresponde bem à busca.', es: 'El modelo coincide bien con la búsqueda.', de: 'Das Modell passt gut zur Suche.', it: 'Il modello corrisponde bene alla ricerca.' },
         base_model_check: { ko: '기본 모델은 같지만 세부 조건은 다시 확인해 주세요.', en: 'The base model matches, but the finer details should still be checked.', ja: '基本モデルは一致しますが、細かな条件は再確認してください。', 'zh-Hans': '基础型号匹配，但仍需再次确认细节条件。', 'zh-Hant': '基礎型號一致，但仍需再次確認細節條件。', pt: 'O modelo base corresponde, mas os detalhes finos ainda devem ser verificados.', es: 'El modelo base coincide, pero aún conviene revisar los detalles.', de: 'Das Basismodell stimmt überein, die Details sollten aber noch geprüft werden.', it: 'Il modello base coincide, ma i dettagli vanno comunque verificati.' },
-        same_generation_reference: { ko: '같은 기본 모델이지만 세대가 달라 참고로만 보여줍니다.', en: 'This is the same base model, but a different generation, so it is shown for reference only.' },
-        same_base_reference: { ko: '같은 계열이지만 조건이 달라 참고로만 표시합니다.', en: 'This is a related listing, but the conditions differ, so it is shown for reference only.' },
-        broader_family: { ko: '같은 계열 참고 결과입니다.', en: 'This is shown as a broader family reference.' },
-        boundary_conflict: { ko: '여러 모델이 함께 검색되어 정확한 가격 비교를 표시하지 않았습니다.', en: 'Several different models were found, so an exact price comparison is not shown.' },
-        incompatible: { ko: '조건이 달라 참고로만 표시합니다.', en: 'This listing is shown for context, but it does not match this query closely enough for pricing.' },
-        duplicate: { ko: '중복 가능성이 있어 가격 계산에서 제외했습니다.', en: 'This listing was excluded because it may be a duplicate.' },
-        outlier: { ko: '이상 가격 가능성이 있어 가격 계산에서 제외했습니다.', en: 'This listing was excluded because the price may be an outlier.' },
-        accessory: { ko: '액세서리/구성품이 섞여 가격 계산에서는 제외했습니다.', en: 'This listing looks like an accessory or bundled item, so it is excluded from price calculation.' },
-        variant_boundary: { ko: '조건이 달라 가격 계산에서는 제외했습니다.', en: 'This listing crosses a model or variant boundary, so it is excluded from price calculation.' },
-        no_price: { ko: '가격 정보가 충분하지 않아 계산하지 않았습니다.', en: 'There is not enough usable price information to calculate a price.' },
-        default: { ko: '이 결과가 왜 보이는지와 가격 비교에서 어떻게 다뤄지는지를 함께 설명합니다.', en: 'This explains why the listing is shown and how it is handled in price comparison.' },
-        guide_default: { ko: '조건이 맞는 결과부터 보여주고, 불확실하면 가격 계산을 보류합니다.', en: 'Results that fit best are shown first, and pricing stays locked when certainty is low.' },
+        same_generation_reference: { ko: '같은 기본 모델이지만 세대가 달라 참고로만 보여줍니다.', en: 'This is the same base model, but a different generation, so it is shown for reference only.', ja: '基本モデルは同じですが世代が異なるため、参考表示のみです。', 'zh-Hans': '基础型号相同，但世代不同，因此仅作参考显示。', 'zh-Hant': '基礎型號相同，但世代不同，因此僅作參考顯示。', pt: 'É o mesmo modelo base, mas de outra geração, por isso aparece apenas como referência.', es: 'Es el mismo modelo base, pero de otra generación, por eso se muestra solo como referencia.', de: 'Es ist dasselbe Basismodell, aber eine andere Generation, daher wird es nur als Referenz gezeigt.', it: 'È lo stesso modello base, ma di una generazione diversa, quindi viene mostrato solo come riferimento.' },
+        same_base_reference: { ko: '같은 계열이지만 조건이 달라 참고로만 표시합니다.', en: 'This is a related listing, but the conditions differ, so it is shown for reference only.', ja: '同系統ですが条件が異なるため、参考表示のみです。', 'zh-Hans': '属于相关条目，但条件不同，因此仅作参考显示。', 'zh-Hant': '屬於相關條目，但條件不同，因此僅作參考顯示。', pt: 'É um anúncio relacionado, mas com condições diferentes, por isso aparece apenas como referência.', es: 'Es un anuncio relacionado, pero con condiciones distintas, por eso se muestra solo como referencia.', de: 'Dies ist ein verwandtes Angebot mit abweichenden Bedingungen und wird daher nur als Referenz gezeigt.', it: 'È un annuncio correlato ma con condizioni diverse, quindi viene mostrato solo come riferimento.' },
+        broader_family: { ko: '같은 계열 참고 결과입니다.', en: 'This is shown as a broader family reference.', ja: 'より広い系統の参考結果として表示しています。', 'zh-Hans': '此结果作为更宽泛系列的参考展示。', 'zh-Hant': '此結果作為較廣系列的參考顯示。', pt: 'Este resultado é mostrado como referência de uma família mais ampla.', es: 'Este resultado se muestra como referencia de una familia más amplia.', de: 'Dieses Ergebnis wird als Referenz für eine breitere Familie gezeigt.', it: 'Questo risultato è mostrato come riferimento per una famiglia più ampia.' },
+        boundary_conflict: { ko: '여러 모델이 함께 검색되어 정확한 가격 비교를 표시하지 않았습니다.', en: 'Several different models were found, so an exact price comparison is not shown.', ja: '複数の異なるモデルが混在したため、正確な価格比較は表示していません。', 'zh-Hans': '检测到多个不同型号，因此未显示精确价格比较。', 'zh-Hant': '偵測到多個不同型號，因此未顯示精確價格比較。', pt: 'Foram encontrados vários modelos diferentes, então a comparação exata de preço não é mostrada.', es: 'Se encontraron varios modelos distintos, así que no se muestra una comparación exacta de precio.', de: 'Es wurden mehrere unterschiedliche Modelle gefunden, daher wird kein exakter Preisvergleich angezeigt.', it: 'Sono stati trovati più modelli diversi, quindi non viene mostrato un confronto di prezzo esatto.' },
+        incompatible: { ko: '조건이 달라 참고로만 표시합니다.', en: 'This listing is shown for context, but it does not match this query closely enough for pricing.', ja: '条件が異なるため参考表示のみで、価格計算には使いません。', 'zh-Hans': '由于条件不同，此条目仅用于上下文展示，不用于定价。', 'zh-Hant': '由於條件不同，此條目僅供脈絡參考，不用於定價。', pt: 'Este anúncio aparece apenas como contexto e não corresponde o suficiente para precificação.', es: 'Este anuncio se muestra solo como contexto y no coincide lo suficiente para fijar precio.', de: 'Dieses Angebot wird nur zur Einordnung gezeigt und passt nicht genau genug für die Preisbildung.', it: 'Questo annuncio è mostrato solo come contesto e non corrisponde abbastanza per il calcolo del prezzo.' },
+        duplicate: { ko: '중복 가능성이 있어 가격 계산에서 제외했습니다.', en: 'This listing was excluded because it may be a duplicate.', ja: '重複の可能性があるため価格計算から除外しました。', 'zh-Hans': '该条目可能重复，因此已从价格计算中排除。', 'zh-Hant': '此條目可能重複，因此已從價格計算中排除。', pt: 'Este anúncio foi excluído porque pode ser duplicado.', es: 'Este anuncio se excluyó porque puede estar duplicado.', de: 'Dieses Angebot wurde ausgeschlossen, weil es ein Duplikat sein könnte.', it: 'Questo annuncio è stato escluso perché potrebbe essere duplicato.' },
+        outlier: { ko: '이상 가격 가능성이 있어 가격 계산에서 제외했습니다.', en: 'This listing was excluded because the price may be an outlier.', ja: '価格が外れ値の可能性があるため除外しました。', 'zh-Hans': '该条目价格可能是离群值，因此已排除。', 'zh-Hant': '此條目價格可能是離群值，因此已排除。', pt: 'Este anúncio foi excluído porque o preço pode ser atípico.', es: 'Este anuncio se excluyó porque el precio puede ser atípico.', de: 'Dieses Angebot wurde ausgeschlossen, weil der Preis ein Ausreißer sein könnte.', it: 'Questo annuncio è stato escluso perché il prezzo potrebbe essere anomalo.' },
+        accessory: { ko: '액세서리/구성품이 섞여 가격 계산에서는 제외했습니다.', en: 'This listing looks like an accessory or bundled item, so it is excluded from price calculation.', ja: 'アクセサリーや同梱品の可能性があるため、価格計算から除外しました。', 'zh-Hans': '该条目看起来像配件或套装，因此已从价格计算中排除。', 'zh-Hant': '此條目看起來像配件或套裝，因此已從價格計算中排除。', pt: 'Este anúncio parece ser acessório ou item em conjunto, por isso foi excluído do cálculo de preço.', es: 'Este anuncio parece ser un accesorio o un artículo en conjunto, por eso se excluyó del cálculo de precio.', de: 'Dieses Angebot wirkt wie Zubehör oder ein Bundle und wurde daher aus der Preisberechnung ausgeschlossen.', it: 'Questo annuncio sembra essere un accessorio o un bundle, quindi è escluso dal calcolo del prezzo.' },
+        variant_boundary: { ko: '조건이 달라 가격 계산에서는 제외했습니다.', en: 'This listing crosses a model or variant boundary, so it is excluded from price calculation.', ja: 'モデルやバリアントの境界をまたぐため、価格計算から除外しました。', 'zh-Hans': '该条目跨越了型号或版本边界，因此已从价格计算中排除。', 'zh-Hant': '此條目跨越了型號或版本邊界，因此已從價格計算中排除。', pt: 'Este anúncio cruza um limite de modelo ou variante, por isso foi excluído do cálculo de preço.', es: 'Este anuncio cruza un límite de modelo o variante, por eso se excluyó del cálculo de precio.', de: 'Dieses Angebot überschreitet eine Modell- oder Variantengrenze und wurde daher aus der Preisberechnung ausgeschlossen.', it: 'Questo annuncio supera un confine di modello o variante, quindi è escluso dal calcolo del prezzo.' },
+        no_price: { ko: '가격 정보가 충분하지 않아 계산하지 않았습니다.', en: 'There is not enough usable price information to calculate a price.', ja: '使用できる価格情報が不足しているため計算しませんでした。', 'zh-Hans': '由于可用价格信息不足，未进行计算。', 'zh-Hant': '由於可用價格資訊不足，因此未進行計算。', pt: 'Não há informação de preço utilizável suficiente para calcular um preço.', es: 'No hay información de precio utilizable suficiente para calcular un precio.', de: 'Es gibt nicht genug verwendbare Preisinformationen, um einen Preis zu berechnen.', it: 'Non ci sono informazioni di prezzo utilizzabili sufficienti per calcolare un prezzo.' },
+        default: { ko: '이 결과가 왜 보이는지와 가격 비교에서 어떻게 다뤄지는지를 함께 설명합니다.', en: 'This explains why the listing is shown and how it is handled in price comparison.', ja: 'この掲載が表示される理由と、価格比較での扱いを説明します。', 'zh-Hans': '这里会说明为什么显示此条目，以及它如何参与价格比较。', 'zh-Hant': '這裡會說明為何顯示此條目，以及它如何參與價格比較。', pt: 'Isto explica por que o anúncio aparece e como ele é tratado na comparação de preços.', es: 'Esto explica por qué aparece el anuncio y cómo se trata en la comparación de precios.', de: 'Dies erklärt, warum das Angebot angezeigt wird und wie es im Preisvergleich behandelt wird.', it: 'Qui si spiega perché l’annuncio appare e come viene trattato nel confronto prezzi.' },
+        guide_default: { ko: '조건이 맞는 결과부터 보여주고, 불확실하면 가격 계산을 보류합니다.', en: 'Results that fit best are shown first, and pricing stays locked when certainty is low.', ja: '条件に合う結果を先に表示し、不確実な場合は価格計算を保留します。', 'zh-Hans': '先显示最匹配的结果，确定性不足时价格保持锁定。', 'zh-Hant': '先顯示最匹配的結果，確定性不足時價格維持鎖定。', pt: 'Os resultados mais compatíveis aparecem primeiro e o preço permanece bloqueado quando a certeza é baixa.', es: 'Los resultados que mejor encajan se muestran primero y el precio permanece bloqueado cuando la certeza es baja.', de: 'Passende Ergebnisse werden zuerst gezeigt; bei geringer Sicherheit bleibt der Preis gesperrt.', it: 'I risultati più adatti vengono mostrati per primi e il prezzo resta bloccato quando la certezza è bassa.' },
       },
       price_state: {
         accessory: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않아요.', en: 'Accessory searches are not used for body or lens price calculations.', ja: 'アクセサリー検索はボディやレンズの価格計算に使いません。', 'zh-Hans': '配件搜索不会用于机身或镜头价格计算。', 'zh-Hant': '配件搜尋不會用於機身或鏡頭價格計算。', pt: 'Buscas de acessórios não são usadas para precificação de corpos ou lentes.', es: 'Las búsquedas de accesorios no se usan para calcular precios de cuerpos o lentes.', de: 'Zubehörsuchen werden nicht für die Preisbildung von Kameras oder Objektiven verwendet.', it: 'Le ricerche di accessori non vengono usate per il prezzo di corpi o obiettivi.' },
@@ -1329,10 +1333,10 @@
         locked: { ko: '가격 상태', en: 'Price status', ja: '価格状態', 'zh-Hans': '价格状态', 'zh-Hant': '價格狀態', pt: 'Estado do preço', es: 'Estado del precio', de: 'Preisstatus', it: 'Stato del prezzo' },
       },
       coverage: {
-        limited: { ko: '데이터 제한', en: 'Limited coverage' },
-        multiple_sources: { ko: '여러 결과에서 확인됨', en: 'Seen across multiple results' },
-        visible_results: { ko: '현재 결과에서 확인됨', en: 'Seen in current results' },
-        low_data: { ko: '데이터 부족', en: 'Low coverage' },
+        limited: { ko: '데이터 제한', en: 'Limited coverage', ja: 'データ制限', 'zh-Hans': '数据有限', 'zh-Hant': '資料有限', pt: 'Cobertura limitada', es: 'Cobertura limitada', de: 'Begrenzte Abdeckung', it: 'Copertura limitata' },
+        multiple_sources: { ko: '여러 결과에서 확인됨', en: 'Seen across multiple results', ja: '複数結果で確認', 'zh-Hans': '在多个结果中可见', 'zh-Hant': '在多個結果中可見', pt: 'Visto em vários resultados', es: 'Visible en varios resultados', de: 'In mehreren Ergebnissen gesehen', it: 'Visibile in più risultati' },
+        visible_results: { ko: '현재 결과에서 확인됨', en: 'Seen in current results', ja: '現在の結果で確認', 'zh-Hans': '可见于当前结果', 'zh-Hant': '可見於目前結果', pt: 'Visto nos resultados atuais', es: 'Visible en los resultados actuales', de: 'In aktuellen Ergebnissen gesehen', it: 'Visibile nei risultati attuali' },
+        low_data: { ko: '데이터 부족', en: 'Low coverage', ja: 'データ不足', 'zh-Hans': '数据不足', 'zh-Hant': '資料不足', pt: 'Poucos dados', es: 'Pocos datos', de: 'Wenig Daten', it: 'Dati limitati' },
       },
       state_card: {
         loading_title: { ko: '검색 중입니다', en: 'Searching now', ja: '検索中です', 'zh-Hans': '正在搜索', 'zh-Hant': '正在搜尋', pt: 'Buscando agora', es: 'Buscando ahora', de: 'Suche läuft', it: 'Ricerca in corso' },
@@ -1360,8 +1364,8 @@
         empty_none_body: { ko: '모델명, 마운트, 초점거리처럼 조건을 더 구체적으로 입력해 보세요.', en: 'Try adding details such as the model, mount, or focal length.', ja: 'モデル名、マウント、焦点距離などの条件を追加してください。', 'zh-Hans': '请尝试补充型号、卡口或焦距等细节。', 'zh-Hant': '請嘗試補充型號、卡口或焦距等細節。', pt: 'Tente adicionar detalhes como modelo, montagem ou distância focal.', es: 'Prueba a añadir detalles como el modelo, la montura o la distancia focal.', de: 'Versuche Details wie Modell, Anschluss oder Brennweite hinzuzufügen.', it: 'Prova ad aggiungere dettagli come modello, attacco o focale.' },
       },
       refinement: {
-        title: { ko: '검색어를 조금 더 구체적으로 입력해 보세요', en: 'Try a more specific search' },
-        default_message: { ko: '마운트나 초점거리를 함께 입력하면 더 정확해집니다.', en: 'Add a mount or focal length to make the search more specific.' },
+        title: { ko: '검색어를 조금 더 구체적으로 입력해 보세요', en: 'Try a more specific search', ja: 'もう少し具体的に検索してください', 'zh-Hans': '请尝试更具体的搜索词', 'zh-Hant': '請嘗試更具體的搜尋詞', pt: 'Tente uma busca mais específica', es: 'Prueba una búsqueda más específica', de: 'Versuche eine genauere Suche', it: 'Prova una ricerca più specifica' },
+        default_message: { ko: '마운트나 초점거리를 함께 입력하면 더 정확해집니다.', en: 'Add a mount or focal length to make the search more specific.', ja: 'マウントや焦点距離を追加すると、より正確になります。', 'zh-Hans': '加入卡口或焦距会让搜索更精确。', 'zh-Hant': '加入卡口或焦距會讓搜尋更精確。', pt: 'Adicione uma montagem ou distância focal para tornar a busca mais específica.', es: 'Añade una montura o distancia focal para hacer la búsqueda más específica.', de: 'Füge Anschluss oder Brennweite hinzu, um die Suche genauer zu machen.', it: 'Aggiungi un attacco o una focale per rendere la ricerca più specifica.' },
       },
       market_entry: {
         summary_label: { ko: '결과 요약', en: 'Result summary', ja: '結果概要', 'zh-Hans': '结果摘要', 'zh-Hant': '結果摘要', pt: 'Resumo do resultado', es: 'Resumen del resultado', de: 'Ergebnisübersicht', it: 'Riepilogo del risultato' },
@@ -1391,16 +1395,18 @@
         location_finland: { ko: '핀란드', en: 'Finland', ja: 'フィンランド', 'zh-Hans': '芬兰', 'zh-Hant': '芬蘭', pt: 'Finlândia', es: 'Finlandia', de: 'Finnland', it: 'Finlandia' },
       },
       card: {
-        projected: { ko: '참고 투영', en: 'Projected reference' },
-        notation_detected: { ko: '표기 인식', en: 'Marker detected' },
-        title_missing: { ko: '제목 미확인 매물', en: 'Untitled listing' },
-        search_match: { ko: '결과 적합도', en: 'Result fit' },
-        explanation: { ko: '설명', en: 'Why it appears' },
-        result_type: { ko: '결과 성격', en: 'Match state' },
+        projected: { ko: '참고 투영', en: 'Projected reference', ja: '参考投影', 'zh-Hans': '参考投影', 'zh-Hant': '參考投影', pt: 'Referência projetada', es: 'Referencia proyectada', de: 'Projizierte Referenz', it: 'Riferimento proiettato' },
+        notation_detected: { ko: '표기 인식', en: 'Marker detected', ja: '表記検出', 'zh-Hans': '已识别标记', 'zh-Hant': '已識別標記', pt: 'Marcador detectado', es: 'Marcador detectado', de: 'Markierung erkannt', it: 'Indicatore rilevato' },
+        title_missing: { ko: '제목 미확인 매물', en: 'Untitled listing', ja: '無題の掲載', 'zh-Hans': '无标题条目', 'zh-Hant': '無標題條目', pt: 'Anúncio sem título', es: 'Anuncio sin título', de: 'Angebot ohne Titel', it: 'Annuncio senza titolo' },
+        search_match: { ko: '결과 적합도', en: 'Result fit', ja: '結果適合度', 'zh-Hans': '结果匹配度', 'zh-Hant': '結果匹配度', pt: 'Adequação do resultado', es: 'Ajuste del resultado', de: 'Ergebnis-Passung', it: 'Aderenza del risultato' },
+        explanation: { ko: '설명', en: 'Why it appears', ja: '説明', 'zh-Hans': '说明', 'zh-Hant': '說明', pt: 'Explicação', es: 'Explicación', de: 'Erläuterung', it: 'Spiegazione' },
+        result_type: { ko: '결과 성격', en: 'Match state', ja: '結果の性格', 'zh-Hans': '结果状态', 'zh-Hant': '結果狀態', pt: 'Estado do resultado', es: 'Estado del resultado', de: 'Trefferstatus', it: 'Stato del risultato' },
       },
       load_more: {
         idle: { ko: '결과 더 보기', en: 'Load more', ja: 'さらに表示', 'zh-Hans': '加载更多', 'zh-Hant': '載入更多', pt: 'Carregar mais', es: 'Cargar más', de: 'Mehr laden', it: 'Carica altro' },
         loading: { ko: '불러오는 중...', en: 'Loading…', ja: '読み込み中…', 'zh-Hans': '加载中…', 'zh-Hant': '載入中…', pt: 'Carregando…', es: 'Cargando…', de: 'Wird geladen…', it: 'Caricamento…' },
+        active_idle: { ko: '현재 판매 중인 매물 더 보기', en: 'Load more active listings', ja: '販売中の商品をさらに表示', 'zh-Hans': '加载更多在售条目', 'zh-Hant': '載入更多在售條目', pt: 'Carregar mais anúncios ativos', es: 'Cargar más anuncios activos', de: 'Mehr aktive Angebote laden', it: 'Carica altri annunci attivi' },
+        active_loading: { ko: '현재 판매 중인 매물 불러오는 중...', en: 'Loading more active listings…', ja: '販売中の商品を読み込み中…', 'zh-Hans': '正在加载更多在售条目…', 'zh-Hant': '正在載入更多在售條目…', pt: 'Carregando mais anúncios ativos…', es: 'Cargando más anuncios activos…', de: 'Weitere aktive Angebote werden geladen…', it: 'Caricamento di altri annunci attivi…' },
       },
       warnings: {
         filters_none: { ko: '필터 없음', en: 'No filters applied', ja: 'フィルターなし', 'zh-Hans': '未应用筛选器', 'zh-Hant': '未套用篩選器', pt: 'Sem filtros aplicados', es: 'Sin filtros aplicados', de: 'Keine Filter aktiv', it: 'Nessun filtro applicato' },
@@ -1418,6 +1424,7 @@
       appending: false,
       response: null,
       error: null,
+      historyVisibleCount: null,
       historyReady: false,
       currentHistoryKey: ''
     };
@@ -1805,6 +1812,9 @@
         sold_quality: String(raw.sold_quality || '').trim(),
         offset,
         visibleCount,
+        historyVisibleCount: Number.isFinite(Number(raw.historyVisibleCount))
+          ? Math.max(0, Number.parseInt(raw.historyVisibleCount, 10) || 0)
+          : null,
         scrollY: Number.isFinite(Number(raw.scrollY)) ? Math.max(0, Number(raw.scrollY)) : null,
         preserveResultsAnchor: Boolean(raw.preserveResultsAnchor)
       };
@@ -1820,6 +1830,7 @@
         sold_quality: overrides.sold_quality !== undefined ? overrides.sold_quality : els['sold-filter'].value,
         offset: overrides.offset !== undefined ? overrides.offset : state.offset,
         visibleCount: overrides.visibleCount !== undefined ? overrides.visibleCount : getVisibleCount(),
+        historyVisibleCount: overrides.historyVisibleCount !== undefined ? overrides.historyVisibleCount : state.historyVisibleCount,
         scrollY: overrides.scrollY !== undefined ? overrides.scrollY : window.scrollY,
         preserveResultsAnchor: overrides.preserveResultsAnchor !== undefined ? overrides.preserveResultsAnchor : false
       });
@@ -1906,6 +1917,9 @@
         sold_quality: params.get('sold_quality') || '',
         offset: Number.parseInt(params.get('offset') || '0', 10),
         visibleCount: Number.parseInt(params.get('shown') || String(PAGE_SIZE), 10),
+        historyVisibleCount: history.state && Number.isFinite(Number(history.state.historyVisibleCount))
+          ? Number(history.state.historyVisibleCount)
+          : null,
         scrollY: history.state && Number.isFinite(Number(history.state.scrollY)) ? Number(history.state.scrollY) : null
       });
     }
@@ -1928,6 +1942,7 @@
         state.offset = Math.max(0, offset);
         state.loading = true;
         state.error = null;
+        state.historyVisibleCount = null;
       }else{
         state.appending = true;
       }
@@ -1967,6 +1982,13 @@
         }else{
           state.response = payload;
           state.offset = Math.max(0, offset);
+          const initialSections = buildDisplaySections(getResults(), getSortMode());
+          const requestedHistoryVisibleCount = Number.isFinite(Number(options.historyVisibleCount))
+            ? Math.max(0, Number(options.historyVisibleCount))
+            : null;
+          state.historyVisibleCount = requestedHistoryVisibleCount === null
+            ? initialSections.history.length
+            : Math.min(initialSections.history.length, requestedHistoryVisibleCount);
         }
         if(!append) state.error = null;
         if(historyMode !== 'none'){
@@ -1977,6 +1999,7 @@
             query: state.query,
             offset: state.offset,
             visibleCount,
+            historyVisibleCount: state.historyVisibleCount,
             preserveResultsAnchor
           }));
         }
@@ -2623,6 +2646,10 @@
       const results = getResults();
       const displaySections = buildDisplaySections(results, getSortMode());
       const uiHints = getUiHints();
+      const frozenHistoryCount = Number.isFinite(Number(state.historyVisibleCount))
+        ? Math.max(0, Math.min(displaySections.history.length, Number(state.historyVisibleCount)))
+        : displaySections.history.length;
+      const historyResults = displaySections.history.slice(0, frozenHistoryCount);
 
       if(uiHints.needs_disambiguation){
         els['refinement-region'].innerHTML = renderRefinementCard(uiHints);
@@ -2645,9 +2672,9 @@
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
       els['query-summary-region'].innerHTML = renderQuerySummaryBar(results);
-      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active);
-      els['results-load-more-region'].innerHTML = renderLoadMore();
-      els['archive-region'].innerHTML = renderArchiveSection(displaySections.history);
+      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
+      els['results-load-more-region'].innerHTML = '';
+      els['archive-region'].innerHTML = renderArchiveSection(historyResults);
     }
 
     function renderQuerySummaryBar(results){
@@ -2668,20 +2695,39 @@
       `;
     }
 
-    function renderLoadMore(){
+    function formatLoadMoreProgress(shownCount, totalCount){
+      const shown = Math.max(0, Number(shownCount || 0));
+      const total = Math.max(shown, Number(totalCount || 0));
+      if(uiState.locale === 'ko') return `${shown} / ${total} 표시 중`;
+      if(uiState.locale === 'ja') return `${shown} / ${total} 件を表示`;
+      if(uiState.locale === 'zh-Hans') return `已显示 ${shown} / ${total}`;
+      if(uiState.locale === 'zh-Hant') return `已顯示 ${shown} / ${total}`;
+      if(uiState.locale === 'pt') return `${shown} / ${total} exibidos`;
+      if(uiState.locale === 'es') return `${shown} / ${total} mostrados`;
+      if(uiState.locale === 'de') return `${shown} / ${total} angezeigt`;
+      if(uiState.locale === 'it') return `${shown} / ${total} mostrati`;
+      return `${shown} / ${total} shown`;
+    }
+
+    function renderLoadMore(activeShownCount){
       const pagination = state.response ? (state.response.pagination || {}) : {};
       if(!state.response || !getResults().length || !pagination.has_more){
         return '';
       }
+      const shownCount = Math.max(0, Number(activeShownCount || 0));
+      const totalCount = Math.max(shownCount, Number(state.response.total_ranked || shownCount));
       return `
-        <button
-          type="button"
-          class="ghost-button load-more-button"
-          data-load-more="true"
-          ${state.appending ? 'disabled' : ''}
-        >
-          ${state.appending ? escapeHtml(ux('load_more.loading', 'Loading…')) : escapeHtml(ux('load_more.idle', 'Load more'))}
-        </button>
+        <div class="load-more-region">
+          <button
+            type="button"
+            class="ghost-button load-more-button"
+            data-load-more="true"
+            ${state.appending ? 'disabled' : ''}
+          >
+            ${state.appending ? escapeHtml(ux('load_more.active_loading', 'Loading more active listings…')) : escapeHtml(ux('load_more.active_idle', 'Load more active listings'))}
+          </button>
+          <div class="load-more-note">${escapeHtml(formatLoadMoreProgress(shownCount, totalCount))}</div>
+        </div>
       `;
     }
 
@@ -2978,7 +3024,7 @@
       return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, ux('common.no_data', 'Not enough data')))}</span></div>`;
     }
 
-    function renderResultSection(sectionName, results){
+    function renderResultSection(sectionName, results, footerHtml = ''){
       const isActive = sectionName === 'active';
       const title = isActive ? ux('section.active_listings', 'Active listings') : ux('section.market_history', 'Market history');
       const subtitle = isActive
@@ -2998,6 +3044,7 @@
               ? `<div class="archive-list">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index))).join('')}</div>`
               : `<div class="archive-item"><strong>${escapeHtml(emptyMessage)}</strong></div>`
           }
+          ${footerHtml}
         </article>
       `;
     }
@@ -3124,6 +3171,7 @@
           state.offset = 0;
           state.response = null;
           state.error = null;
+          state.historyVisibleCount = null;
           render();
           if(nextState.scrollY !== null){
             requestAnimationFrame(() => window.scrollTo({ top: nextState.scrollY, behavior: 'auto' }));
@@ -3134,6 +3182,7 @@
           queryOverride: nextState.query,
           historyMode: 'none',
           visibleCount: nextState.visibleCount,
+          historyVisibleCount: nextState.historyVisibleCount,
           preserveResultsAnchor: nextState.scrollY === null,
           historyScrollY: nextState.scrollY
         });
