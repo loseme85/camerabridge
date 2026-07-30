@@ -399,19 +399,15 @@
     }
     .workspace-grid{
       display:grid;
-      grid-template-columns:minmax(0,1fr) 300px;
+      grid-template-columns:minmax(0,1fr);
       gap:0;
     }
     .workspace-main{
       padding:18px 20px 24px;
-      border-right:1px solid var(--border);
+      border-right:none;
     }
     .workspace-side{
-      padding:18px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      background:rgba(246,244,239,0.54);
+      display:none;
     }
     .state-card,
     .market-entry-card,
@@ -550,8 +546,8 @@
     }
     .results-grid{
       display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:14px;
     }
     .query-summary-bar{
       display:grid;
@@ -623,13 +619,13 @@
     }
     .result-head{
       display:grid;
-      grid-template-columns:88px minmax(0,1fr);
+      grid-template-columns:96px minmax(0,1fr);
       gap:14px;
       padding:14px;
       border-bottom:1px solid var(--border);
     }
     .thumb{
-      width:88px;
+      width:96px;
       aspect-ratio:1;
       border-radius:var(--radius);
       overflow:hidden;
@@ -653,16 +649,17 @@
       text-decoration:none;
       color:var(--text);
       display:-webkit-box;
-      -webkit-line-clamp:4;
+      -webkit-line-clamp:3;
       -webkit-box-orient:vertical;
       overflow:hidden;
     }
     .result-title:hover{color:var(--accent)}
     .result-price-row{
       display:flex;
-      align-items:baseline;
+      align-items:flex-start;
       justify-content:space-between;
-      gap:10px;
+      gap:10px 16px;
+      flex-wrap:wrap;
       margin-bottom:8px;
     }
     .result-price{
@@ -670,79 +667,78 @@
       font-family:"SFMono-Regular","Roboto Mono",monospace;
       font-size:16px;
       font-weight:800;
+      line-height:1.4;
+      overflow-wrap:anywhere;
     }
     .result-source{
-      text-align:right;
+      text-align:left;
       color:var(--text-soft);
       font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:10px;
+      font-size:11px;
       line-height:1.4;
+      overflow-wrap:anywhere;
     }
     .result-status-row{
       display:flex;
       flex-wrap:wrap;
       gap:6px;
     }
-    .data-grid{
+    .result-facts{
       display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:8px;
+      gap:9px;
       padding:14px;
       border-bottom:1px solid var(--border);
     }
-    .data-point{
+    .fact-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:baseline;
       min-width:0;
-      border:1px solid var(--border);
-      background:var(--surface-soft);
-      border-radius:var(--radius);
-      padding:8px 9px;
     }
-    .data-point b{
-      display:block;
-      margin-bottom:4px;
+    .fact-label{
       color:var(--text-muted);
       font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:8px;
+      font-size:9px;
       letter-spacing:1px;
       text-transform:uppercase;
+      flex:0 0 auto;
     }
-    .data-point span{
-      display:block;
-      min-height:16px;
+    .fact-value{
       color:var(--text);
-      font-size:11px;
-      line-height:1.45;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      font-size:12px;
+      line-height:1.5;
+      overflow-wrap:anywhere;
+      min-width:0;
+      flex:1 1 180px;
     }
-    .result-role-rows{
-      display:grid;
-      gap:8px;
+    .card-note{
+      color:var(--text-soft);
+      font-size:12px;
+      line-height:1.55;
+      overflow-wrap:anywhere;
+    }
+    .result-details{
       padding:0 14px 14px;
       border-bottom:1px solid var(--border);
     }
-    .result-role-row{
-      min-width:0;
-      border:1px solid var(--border);
-      background:var(--surface-soft);
-      border-radius:var(--radius);
-      padding:9px 10px;
-    }
-    .result-role-row b{
-      display:block;
-      margin-bottom:4px;
-      color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:8px;
-      letter-spacing:1px;
-      text-transform:uppercase;
-    }
-    .result-role-row span{
-      display:block;
-      color:var(--text);
+    .result-details summary{
+      cursor:pointer;
+      color:var(--text-soft);
       font-size:12px;
       line-height:1.45;
-      overflow-wrap:anywhere;
+      list-style:none;
+    }
+    .result-details summary::-webkit-details-marker{display:none}
+    .result-details-body{
+      margin-top:10px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--surface-soft);
+      color:var(--text);
+      font-size:12px;
+      line-height:1.55;
     }
     .result-actions{
       display:flex;
@@ -759,7 +755,8 @@
     }
     .archive-list{
       display:grid;
-      gap:10px;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:12px;
       margin-top:12px;
     }
     .archive-item{
@@ -796,15 +793,9 @@
         grid-template-columns:1fr;
       }
       .hero-copy{border-right:none;border-bottom:1px solid var(--border)}
-      .workspace-main{border-right:none;border-bottom:1px solid var(--border)}
+      .workspace-main{border-right:none;border-bottom:none}
       .toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
       .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media(min-width:760px){
-      .results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media(min-width:1180px){
-      .results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
     }
     @media(max-width:720px){
       .sticky-search-region{
@@ -827,8 +818,7 @@
       .toolbar{grid-template-columns:1fr}
       .status-strip{flex-direction:column;align-items:flex-start}
       .page-controls{width:100%;justify-content:space-between}
-      .metric-grid,
-      .data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .metric-grid{grid-template-columns:1fr}
       .result-head{grid-template-columns:74px minmax(0,1fr)}
       .thumb{width:74px}
     }
@@ -837,7 +827,7 @@
 <body>
   <div class="shell">
     <header class="topbar">
-      <a href="/beta" class="brand" data-i18n-aria-label="topbar.brand_aria" aria-label="Camera Bridge Beta">
+      <a href="/" class="brand" data-i18n-aria-label="topbar.brand_aria" aria-label="Camera Bridge Beta">
         <span class="brand-mark"></span>
         CAMERA <span>BRIDGE</span>
       </a>
@@ -902,7 +892,7 @@
         </div>
       </section>
 
-      <section class="overview-grid">
+      <section class="overview-grid" hidden>
         <article class="workspace-card">
           <p class="section-label" data-i18n="overview.price_policy.label">Price policy</p>
           <h2 data-i18n="overview.price_policy.title">확실하지 않으면 가격을 잠급니다</h2>
@@ -1016,7 +1006,7 @@
             <section id="archive-region" aria-live="polite"></section>
             <div class="footer-note" id="warning-region"></div>
           </div>
-          <aside class="workspace-side">
+          <aside class="workspace-side" hidden>
             <div class="side-panel">
               <p class="section-label" data-i18n="workspace_sidebar.beta.label">Limited Beta</p>
               <h2 data-i18n="workspace_sidebar.beta.title">결과를 믿기 전 이 점을 확인하세요</h2>
@@ -1089,32 +1079,32 @@
     };
     const UX_LOCALE_COPY = {
       topbar: {
-        brand_aria: { ko: 'Camera Bridge 제한적 베타', en: 'Camera Bridge Beta' },
-        beta_badge: { ko: '제한적 베타', en: 'Limited Beta' },
-        leica_focus: { ko: 'Leica 중심 테스트', en: 'Leica-focused test' },
-        same_logic: { ko: '동일 검색 로직', en: 'Same search logic' },
+        brand_aria: { ko: 'Camera Bridge 제한 베타', en: 'Camera Bridge Beta', ja: 'Camera Bridge ベータ', 'zh-Hans': 'Camera Bridge 测试版', 'zh-Hant': 'Camera Bridge 測試版', pt: 'Camera Bridge Beta', es: 'Camera Bridge Beta', de: 'Camera Bridge Beta', it: 'Camera Bridge Beta' },
+        beta_badge: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '限量测试', 'zh-Hant': '限量測試', pt: 'Beta limitado', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
+        leica_focus: { ko: 'Leica 중심 테스트', en: 'Leica-focused test', ja: 'Leica中心テスト', 'zh-Hans': 'Leica 重点测试', 'zh-Hant': 'Leica 重點測試', pt: 'Teste com foco em Leica', es: 'Prueba centrada en Leica', de: 'Leica-Fokustest', it: 'Test incentrato su Leica' },
+        same_logic: { ko: '동일 검색 로직', en: 'Same search logic', ja: '同じ検索ロジック', 'zh-Hans': '相同搜索逻辑', 'zh-Hant': '相同搜尋邏輯', pt: 'Mesma lógica de busca', es: 'Misma lógica de búsqueda', de: 'Gleiche Suchlogik', it: 'Stessa logica di ricerca' },
       },
       hero: {
-        eyebrow: { ko: 'Leica 중고 시장 검색 제한 베타', en: 'Limited beta for Leica market search' },
-        title: { ko: '프리미엄 카메라 중고 시세와 매물을 한 곳에서 확인하세요.', en: 'Browse premium camera listings and market prices in one place.' },
-        subtitle: { ko: '현재 Leica 중심의 제한 베타입니다. 가격은 참고용이며, 구매 전 원문 매물 확인이 필요합니다.', en: 'This is a limited Leica-focused beta. Prices are for reference only, and the original listing should be checked before purchase.' },
-        notice_beta: { ko: '제한적 베타', en: 'Limited Beta' },
-        notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.' },
-        notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.' },
+        eyebrow: { ko: 'Leica 중고 시장 검색 제한 베타', en: 'Limited beta for Leica market search', ja: 'Leica中古市場検索の限定ベータ', 'zh-Hans': 'Leica 二手市场搜索限量测试', 'zh-Hant': 'Leica 二手市場搜尋限量測試', pt: 'Beta limitado para busca no mercado Leica', es: 'Beta limitada para búsqueda del mercado Leica', de: 'Begrenzte Beta für die Leica-Marktsuche', it: 'Beta limitata per la ricerca nel mercato Leica' },
+        title: { ko: '프리미엄 카메라 중고 시세와 매물을 한 곳에서 확인하세요.', en: 'Browse premium camera listings and market prices in one place.', ja: 'プレミアムカメラの中古相場と掲載を一か所で確認できます。', 'zh-Hans': '在一处查看高端相机的二手行情与在售记录。', 'zh-Hant': '在同一處查看高端相機的二手行情與在售記錄。', pt: 'Veja anúncios e preços de mercado de câmeras premium em um só lugar.', es: 'Consulta anuncios y precios de mercado de cámaras premium en un solo lugar.', de: 'Angebote und Marktpreise für Premiumkameras an einem Ort ansehen.', it: 'Consulta annunci e prezzi di mercato di fotocamere premium in un unico posto.' },
+        subtitle: { ko: '현재 Leica 중심의 제한 베타입니다. 가격은 참고용이며, 구매 전 원문 매물 확인이 필요합니다.', en: 'This is a limited Leica-focused beta. Prices are for reference only, and the original listing should be checked before purchase.', ja: '現在はLeica中心の限定ベータです。価格は参考用であり、購入前に元の掲載を確認してください。', 'zh-Hans': '当前为 Leica 重点限量测试。价格仅供参考，购买前请核对原始条目。', 'zh-Hant': '目前為 Leica 重點限量測試。價格僅供參考，購買前請核對原始條目。', pt: 'Esta é uma beta limitada com foco em Leica. Os preços são apenas de referência e o anúncio original deve ser verificado antes da compra.', es: 'Esta es una beta limitada centrada en Leica. Los precios son solo de referencia y conviene revisar el anuncio original antes de comprar.', de: 'Dies ist eine begrenzte Leica-fokussierte Beta. Preise dienen nur als Referenz; bitte vor dem Kauf das Originalangebot prüfen.', it: 'Questa è una beta limitata focalizzata su Leica. I prezzi sono solo di riferimento e l’annuncio originale va verificato prima dell’acquisto.' },
+        notice_beta: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '限量测试', 'zh-Hant': '限量測試', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
+        notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.', ja: '現在はLeica中心のカバレッジでテスト中です。', 'zh-Hans': '当前正在以 Leica 为中心进行测试。', 'zh-Hant': '目前正以 Leica 為中心進行測試。', pt: 'No momento, o teste está focado em cobertura Leica.', es: 'Actualmente la prueba se centra en cobertura Leica.', de: 'Der Test konzentriert sich derzeit auf Leica-Abdeckung.', it: 'Il test è attualmente focalizzato sulla copertura Leica.' },
+        notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.', ja: '一部の希少モデルはデータ不足により価格がロックされたままになることがあります。', 'zh-Hans': '部分稀有型号可能因证据不足而保持价格锁定。', 'zh-Hant': '部分稀有型號可能因證據不足而維持價格鎖定。', pt: 'Alguns modelos raros podem permanecer com o preço bloqueado quando a evidência for limitada.', es: 'Algunos modelos raros pueden mantener el precio bloqueado cuando la evidencia es limitada.', de: 'Einige seltene Modelle bleiben bei geringer Datenlage preisgesperrt.', it: 'Alcuni modelli rari possono restare con il prezzo bloccato quando i dati sono limitati.' },
       },
       language: {
         label: { ko: '언어', en: 'Language', ja: '言語', 'zh-Hans': '语言', 'zh-Hant': '語言', pt: 'Idioma', es: 'Idioma', de: 'Sprache', it: 'Lingua' },
       },
       search: {
-        home_aria: { ko: '홈 검색', en: 'Search home' },
-        panel_label: { ko: '베타 검색', en: 'Beta search' },
-        placeholder: { ko: '예: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', en: 'e.g. Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585' },
-        button: { ko: '검색', en: 'Search' },
-        button_aria: { ko: '검색', en: 'Search' },
-        examples_aria: { ko: '예시 검색어', en: 'Example searches' },
-        sticky_aria: { ko: '고정 검색', en: 'Sticky search' },
-        sticky_placeholder: { ko: '결과를 보면서 다음 검색어를 입력하세요', en: 'Search again while keeping the current results in view' },
-        sticky_button_aria: { ko: '고정 검색창에서 검색', en: 'Search from sticky bar' },
+        home_aria: { ko: '홈 검색', en: 'Search home', ja: '検索ホーム', 'zh-Hans': '搜索首页', 'zh-Hant': '搜尋首頁', pt: 'Página inicial da busca', es: 'Inicio de búsqueda', de: 'Such-Startseite', it: 'Home della ricerca' },
+        panel_label: { ko: '베타 검색', en: 'Beta search', ja: 'ベータ検索', 'zh-Hans': '测试搜索', 'zh-Hant': '測試搜尋', pt: 'Busca beta', es: 'Búsqueda beta', de: 'Beta-Suche', it: 'Ricerca beta' },
+        placeholder: { ko: '예: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', en: 'e.g. Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', ja: '例: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', 'zh-Hans': '例如：Summilux-M 35 FLE2、50 cron dr、Leica M10、Leica 12585', 'zh-Hant': '例如：Summilux-M 35 FLE2、50 cron dr、Leica M10、Leica 12585', pt: 'ex.: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', es: 'p. ej.: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', de: 'z. B. Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', it: 'es.: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585' },
+        button: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
+        button_aria: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
+        examples_aria: { ko: '예시 검색어', en: 'Example searches', ja: '検索例', 'zh-Hans': '示例搜索', 'zh-Hant': '範例搜尋', pt: 'Exemplos de busca', es: 'Búsquedas de ejemplo', de: 'Beispiel-Suchen', it: 'Ricerche di esempio' },
+        sticky_aria: { ko: '고정 검색', en: 'Sticky search', ja: '固定検索', 'zh-Hans': '固定搜索', 'zh-Hant': '固定搜尋', pt: 'Busca fixa', es: 'Búsqueda fija', de: 'Angeheftete Suche', it: 'Ricerca fissa' },
+        sticky_placeholder: { ko: '결과를 보면서 다음 검색어를 입력하세요', en: 'Search again while keeping the current results in view', ja: '結果を見ながら次の検索語を入力してください', 'zh-Hans': '在查看结果的同时输入下一个搜索词', 'zh-Hant': '在查看結果時輸入下一個搜尋詞', pt: 'Pesquise novamente mantendo os resultados atuais à vista', es: 'Busca de nuevo manteniendo los resultados actuales a la vista', de: 'Erneut suchen, während die aktuellen Ergebnisse sichtbar bleiben', it: 'Cerca di nuovo mantenendo i risultati attuali in vista' },
+        sticky_button_aria: { ko: '고정 검색창에서 검색', en: 'Search from sticky bar', ja: '固定検索バーから検索', 'zh-Hans': '从固定搜索栏搜索', 'zh-Hant': '從固定搜尋列搜尋', pt: 'Buscar pela barra fixa', es: 'Buscar desde la barra fija', de: 'Über die fixe Leiste suchen', it: 'Cerca dalla barra fissa' },
       },
       sidebar: {
         beta_notice: {
@@ -1152,27 +1142,27 @@
         },
       },
       filters: {
-        toolbar_aria: { ko: '검색 필터', en: 'Search filters' },
+        toolbar_aria: { ko: '검색 필터', en: 'Search filters', ja: '検索フィルター', 'zh-Hans': '搜索筛选器', 'zh-Hant': '搜尋篩選器', pt: 'Filtros de busca', es: 'Filtros de búsqueda', de: 'Suchfilter', it: 'Filtri di ricerca' },
         category: {
-          label: { ko: '분류', en: 'Category' },
-          any: { ko: '전체', en: 'Any' },
-          lens: { ko: '렌즈', en: 'Lens' },
-          body: { ko: '바디', en: 'Body' },
-          accessory: { ko: '액세서리', en: 'Accessory' },
+          label: { ko: '분류', en: 'Category', ja: 'カテゴリー', 'zh-Hans': '类别', 'zh-Hant': '類別', pt: 'Categoria', es: 'Categoría', de: 'Kategorie', it: 'Categoria' },
+          any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
+          lens: { ko: '렌즈', en: 'Lens', ja: 'レンズ', 'zh-Hans': '镜头', 'zh-Hant': '鏡頭', pt: 'Lente', es: 'Lente', de: 'Objektiv', it: 'Obiettivo' },
+          body: { ko: '바디', en: 'Body', ja: 'ボディ', 'zh-Hans': '机身', 'zh-Hant': '機身', pt: 'Corpo', es: 'Cuerpo', de: 'Kamera', it: 'Corpo' },
+          accessory: { ko: '액세서리', en: 'Accessory', ja: 'アクセサリー', 'zh-Hans': '配件', 'zh-Hant': '配件', pt: 'Acessório', es: 'Accesorio', de: 'Zubehör', it: 'Accessorio' },
         },
         brand: {
-          label: { ko: '브랜드', en: 'Brand' },
-          any: { ko: '전체', en: 'Any' },
+          label: { ko: '브랜드', en: 'Brand', ja: 'ブランド', 'zh-Hans': '品牌', 'zh-Hant': '品牌', pt: 'Marca', es: 'Marca', de: 'Marke', it: 'Marchio' },
+          any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
         },
         mount: {
-          label: { ko: '마운트', en: 'Mount' },
-          any: { ko: '전체', en: 'Any' },
+          label: { ko: '마운트', en: 'Mount', ja: 'マウント', 'zh-Hans': '卡口', 'zh-Hant': '卡口', pt: 'Montagem', es: 'Montura', de: 'Anschluss', it: 'Attacco' },
+          any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
         },
         sold_quality: {
-          label: { ko: '판매 상태', en: 'Listing status' },
+          label: { ko: '판매 상태', en: 'Listing status', ja: '掲載状態', 'zh-Hans': '条目状态', 'zh-Hant': '條目狀態', pt: 'Status do anúncio', es: 'Estado del anuncio', de: 'Angebotsstatus', it: 'Stato dell’annuncio' },
         },
         sort: {
-          label: { ko: '정렬', en: 'Sort' },
+          label: { ko: '정렬', en: 'Sort', ja: '並び替え', 'zh-Hans': '排序', 'zh-Hant': '排序', pt: 'Ordenar', es: 'Ordenar', de: 'Sortieren', it: 'Ordina' },
         },
       },
       sort: {
@@ -1237,33 +1227,34 @@
         },
       },
       summary: {
-        loading_caption: { ko: '검색 중', en: 'Searching' },
-        loading_meta: { ko: '매물과 가격 근거를 불러오고 있습니다', en: 'Loading listings and price evidence' },
-        appending_meta: { ko: '결과를 더 불러오는 중입니다', en: 'Loading more results' },
-        error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again' },
-        error_meta: { ko: '데이터는 변경되지 않았습니다', en: 'No data was changed' },
-        ready_caption: { ko: '검색 준비 완료', en: 'Ready to search' },
-        ready_meta: { ko: '가격은 참고용이며 원문 확인이 필요합니다', en: 'Prices are for reference only, and the original listing should be checked' },
-        index_prefix: { ko: '인덱스', en: 'Index' },
-        index_records: { ko: '건', en: 'records' },
-        index_generated_at: { ko: '생성 시각', en: 'generated_at' },
+        loading_caption: { ko: '검색 중', en: 'Searching', ja: '検索中', 'zh-Hans': '搜索中', 'zh-Hant': '搜尋中', pt: 'Buscando', es: 'Buscando', de: 'Suche läuft', it: 'Ricerca in corso' },
+        loading_meta: { ko: '매물과 가격 근거를 불러오고 있습니다', en: 'Loading listings and price evidence', ja: '掲載と価格根拠を読み込んでいます', 'zh-Hans': '正在加载条目与价格依据', 'zh-Hant': '正在載入條目與價格依據', pt: 'Carregando anúncios e evidências de preço', es: 'Cargando anuncios y evidencia de precio', de: 'Angebote und Preisnachweise werden geladen', it: 'Caricamento annunci ed evidenze di prezzo' },
+        appending_meta: { ko: '결과를 더 불러오는 중입니다', en: 'Loading more results', ja: 'さらに結果を読み込んでいます', 'zh-Hans': '正在加载更多结果', 'zh-Hant': '正在載入更多結果', pt: 'Carregando mais resultados', es: 'Cargando más resultados', de: 'Weitere Ergebnisse werden geladen', it: 'Caricamento di altri risultati' },
+        error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again', ja: 'もう一度検索してください', 'zh-Hans': '请再次尝试此搜索', 'zh-Hant': '請再次嘗試此搜尋', pt: 'Tente esta busca novamente', es: 'Intenta esta búsqueda de nuevo', de: 'Bitte versuche diese Suche erneut', it: 'Prova di nuovo questa ricerca' },
+        error_meta: { ko: '데이터는 변경되지 않았습니다', en: 'No data was changed', ja: 'データは変更されていません', 'zh-Hans': '数据未被更改', 'zh-Hant': '資料未被更改', pt: 'Nenhum dado foi alterado', es: 'No se cambiaron los datos', de: 'Es wurden keine Daten geändert', it: 'Nessun dato è stato modificato' },
+        ready_caption: { ko: '검색 준비 완료', en: 'Ready to search', ja: '検索準備完了', 'zh-Hans': '准备搜索', 'zh-Hant': '準備搜尋', pt: 'Pronto para buscar', es: 'Listo para buscar', de: 'Bereit zur Suche', it: 'Pronto per cercare' },
+        ready_meta: { ko: '가격은 참고용이며 원문 확인이 필요합니다', en: 'Prices are for reference only, and the original listing should be checked', ja: '価格は参考用であり、元の掲載を確認してください', 'zh-Hans': '价格仅供参考，请核对原始条目', 'zh-Hant': '價格僅供參考，請核對原始條目', pt: 'Os preços são apenas de referência e o anúncio original deve ser verificado', es: 'Los precios son solo de referencia y conviene revisar el anuncio original', de: 'Preise dienen nur als Referenz; bitte das Originalangebot prüfen', it: 'I prezzi sono solo di riferimento e va verificato l’annuncio originale' },
+        index_prefix: { ko: '인덱스', en: 'Index', ja: 'インデックス', 'zh-Hans': '索引', 'zh-Hant': '索引', pt: 'Índice', es: 'Índice', de: 'Index', it: 'Indice' },
+        index_records: { ko: '건', en: 'records', ja: '件', 'zh-Hans': '条', 'zh-Hant': '條', pt: 'registros', es: 'registros', de: 'Einträge', it: 'record' },
+        index_generated_at: { ko: '생성 시각', en: 'generated_at', ja: '生成日時', 'zh-Hans': '生成时间', 'zh-Hant': '生成時間', pt: 'gerado em', es: 'generado el', de: 'erstellt am', it: 'generato il' },
+        dataset_updated_prefix: { ko: '매물 데이터 업데이트', en: 'Listing data updated', ja: '掲載データ更新', 'zh-Hans': '条目数据更新于', 'zh-Hant': '條目資料更新於', pt: 'Dados atualizados em', es: 'Datos actualizados', de: 'Angebotsdaten aktualisiert', it: 'Dati aggiornati' },
       },
       pagination: {
-        prev: { ko: '이전', en: 'Prev' },
-        next: { ko: '다음', en: 'Next' },
+        prev: { ko: '이전', en: 'Prev', ja: '前へ', 'zh-Hans': '上一页', 'zh-Hant': '上一頁', pt: 'Anterior', es: 'Anterior', de: 'Zurück', it: 'Precedente' },
+        next: { ko: '다음', en: 'Next', ja: '次へ', 'zh-Hans': '下一页', 'zh-Hant': '下一頁', pt: 'Próximo', es: 'Siguiente', de: 'Weiter', it: 'Successivo' },
       },
       common: {
-        unknown: { ko: '미확인', en: 'Unknown' },
-        no_data: { ko: '정보 없음', en: 'Not enough data' },
-        unknown_source: { ko: '출처 미확인', en: 'Unknown source' },
-        copied: { ko: '복사됨', en: 'Copied' },
-        yes: { ko: '사용됨', en: 'Used' },
-        no: { ko: '제외됨', en: 'Not used' },
-        mount: { ko: '마운트', en: 'Mount' },
-        status: { ko: '상태', en: 'Status' },
-        model: { ko: '모델', en: 'Model' },
-        category: { ko: '분류', en: 'Category' },
-        details_why: { ko: '왜 이 결과가 보이나요?', en: 'Why is this result shown?' },
+        unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
+        no_data: { ko: '정보 없음', en: 'Not enough data', ja: '情報不足', 'zh-Hans': '数据不足', 'zh-Hant': '資料不足', pt: 'Dados insuficientes', es: 'Datos insuficientes', de: 'Nicht genug Daten', it: 'Dati insufficienti' },
+        unknown_source: { ko: '출처 미확인', en: 'Unknown source', ja: '出典不明', 'zh-Hans': '来源未知', 'zh-Hant': '來源未知', pt: 'Fonte desconhecida', es: 'Fuente desconocida', de: 'Unbekannte Quelle', it: 'Fonte sconosciuta' },
+        copied: { ko: '복사됨', en: 'Copied', ja: 'コピーしました', 'zh-Hans': '已复制', 'zh-Hant': '已複製', pt: 'Copiado', es: 'Copiado', de: 'Kopiert', it: 'Copiato' },
+        yes: { ko: '사용됨', en: 'Used', ja: '使用', 'zh-Hans': '已使用', 'zh-Hant': '已使用', pt: 'Usado', es: 'Usado', de: 'Verwendet', it: 'Usato' },
+        no: { ko: '제외됨', en: 'Not used', ja: '未使用', 'zh-Hans': '未使用', 'zh-Hant': '未使用', pt: 'Não usado', es: 'No usado', de: 'Nicht verwendet', it: 'Non usato' },
+        mount: { ko: '마운트', en: 'Mount', ja: 'マウント', 'zh-Hans': '卡口', 'zh-Hant': '卡口', pt: 'Montagem', es: 'Montura', de: 'Anschluss', it: 'Attacco' },
+        status: { ko: '상태', en: 'Status', ja: '状態', 'zh-Hans': '状态', 'zh-Hant': '狀態', pt: 'Status', es: 'Estado', de: 'Status', it: 'Stato' },
+        model: { ko: '모델', en: 'Model', ja: 'モデル', 'zh-Hans': '型号', 'zh-Hant': '型號', pt: 'Modelo', es: 'Modelo', de: 'Modell', it: 'Modello' },
+        category: { ko: '분류', en: 'Category', ja: 'カテゴリー', 'zh-Hans': '类别', 'zh-Hant': '類別', pt: 'Categoria', es: 'Categoría', de: 'Kategorie', it: 'Categoria' },
+        details_why: { ko: '왜 이 결과가 보이나요?', en: 'Why is this result shown?', ja: 'なぜこの結果が表示されるのですか？', 'zh-Hans': '为什么会显示此结果？', 'zh-Hant': '為什麼會顯示這個結果？', pt: 'Por que este resultado aparece?', es: '¿Por qué aparece este resultado?', de: 'Warum wird dieses Ergebnis angezeigt?', it: 'Perché viene mostrato questo risultato?' },
       },
       match_badge: {
         exact_match: { ko: '정확히 맞는 결과', en: 'Exact match' },
@@ -1310,6 +1301,7 @@
         exact_variant: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model and variant match the query closely.' },
         exact_generation: { ko: '검색어와 세대/버전이 잘 맞습니다.', en: 'The model and generation match the query closely.' },
         exact_model: { ko: '검색어와 모델명이 잘 맞습니다.', en: 'The model matches the query closely.' },
+        base_model_check: { ko: '기본 모델은 같지만 세부 조건은 다시 확인해 주세요.', en: 'The base model matches, but the finer details should still be checked.', ja: '基本モデルは一致しますが、細かな条件は再確認してください。', 'zh-Hans': '基础型号匹配，但仍需再次确认细节条件。', 'zh-Hant': '基礎型號一致，但仍需再次確認細節條件。', pt: 'O modelo base corresponde, mas os detalhes finos ainda devem ser verificados.', es: 'El modelo base coincide, pero aún conviene revisar los detalles.', de: 'Das Basismodell stimmt überein, die Details sollten aber noch geprüft werden.', it: 'Il modello base coincide, ma i dettagli vanno comunque verificati.' },
         same_generation_reference: { ko: '같은 기본 모델이지만 세대가 달라 참고로만 보여줍니다.', en: 'This is the same base model, but a different generation, so it is shown for reference only.' },
         same_base_reference: { ko: '같은 계열이지만 조건이 달라 참고로만 표시합니다.', en: 'This is a related listing, but the conditions differ, so it is shown for reference only.' },
         broader_family: { ko: '같은 계열 참고 결과입니다.', en: 'This is shown as a broader family reference.' },
@@ -1324,18 +1316,18 @@
         guide_default: { ko: '조건이 맞는 결과부터 보여주고, 불확실하면 가격 계산을 보류합니다.', en: 'Results that fit best are shown first, and pricing stays locked when certainty is low.' },
       },
       price_state: {
-        accessory: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않아요.', en: 'Accessory searches are not used for body or lens price calculations.' },
-        exact: { ko: '정확 조건 기준 가격을 계산했어요.', en: 'An exact-condition price was calculated.' },
-        reference: { ko: '같은 계열 참고 가격만 확인할 수 있어요.', en: 'Only related reference prices are available.' },
-        boundary_locked: { ko: '조건이 섞여 정확 가격 계산을 보류했습니다. 아래 결과는 참고용입니다.', en: 'Different model conditions are mixed, so exact price calculation is on hold. The results below are for reference only.' },
-        weak_locked: { ko: '신뢰도 부족으로 가격 계산을 보류했어요.', en: 'Price calculation is on hold because the evidence is not strong enough yet.' },
-        locked: { ko: '정확한 가격 계산은 보류했어요.', en: 'Exact price calculation is currently on hold.' },
+        accessory: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않아요.', en: 'Accessory searches are not used for body or lens price calculations.', ja: 'アクセサリー検索はボディやレンズの価格計算に使いません。', 'zh-Hans': '配件搜索不会用于机身或镜头价格计算。', 'zh-Hant': '配件搜尋不會用於機身或鏡頭價格計算。', pt: 'Buscas de acessórios não são usadas para precificação de corpos ou lentes.', es: 'Las búsquedas de accesorios no se usan para calcular precios de cuerpos o lentes.', de: 'Zubehörsuchen werden nicht für die Preisbildung von Kameras oder Objektiven verwendet.', it: 'Le ricerche di accessori non vengono usate per il prezzo di corpi o obiettivi.' },
+        exact: { ko: '정확 조건 기준 가격을 계산했어요.', en: 'An exact-condition price was calculated.', ja: '一致条件に基づく価格を計算しました。', 'zh-Hans': '已按精确条件计算价格。', 'zh-Hant': '已按精確條件計算價格。', pt: 'Foi calculado um preço com condições exatas.', es: 'Se calculó un precio con condiciones exactas.', de: 'Ein Preis auf Basis exakter Bedingungen wurde berechnet.', it: 'È stato calcolato un prezzo con condizioni esatte.' },
+        reference: { ko: '같은 계열 참고 가격만 확인할 수 있어요.', en: 'Only related reference prices are available.', ja: '関連する参考価格のみ確認できます。', 'zh-Hans': '目前只能查看相关参考价格。', 'zh-Hant': '目前只能查看相關參考價格。', pt: 'Apenas preços de referência relacionados estão disponíveis.', es: 'Solo hay precios de referencia relacionados.', de: 'Es sind nur verwandte Referenzpreise verfügbar.', it: 'Sono disponibili solo prezzi di riferimento correlati.' },
+        boundary_locked: { ko: '조건이 섞여 정확 가격 계산을 보류했습니다. 아래 결과는 참고용입니다.', en: 'Different model conditions are mixed, so exact price calculation is on hold. The results below are for reference only.', ja: '条件が混在しているため、正確な価格計算は保留です。以下の結果は参考用です。', 'zh-Hans': '由于条件混杂，精确价格计算已暂停。以下结果仅供参考。', 'zh-Hant': '由於條件混雜，精確價格計算已暫停。以下結果僅供參考。', pt: 'Como diferentes condições do modelo estão misturadas, o cálculo exato do preço foi retido. Os resultados abaixo são apenas de referência.', es: 'Como se mezclan distintas condiciones de modelo, el cálculo exacto del precio queda en espera. Los resultados de abajo son solo de referencia.', de: 'Da unterschiedliche Modellbedingungen gemischt sind, bleibt die exakte Preisberechnung gesperrt. Die folgenden Ergebnisse dienen nur als Referenz.', it: 'Poiché sono mescolate condizioni diverse del modello, il calcolo esatto del prezzo resta sospeso. I risultati sotto sono solo di riferimento.' },
+        weak_locked: { ko: '신뢰도 부족으로 가격 계산을 보류했어요.', en: 'Price calculation is on hold because the evidence is not strong enough yet.', ja: '根拠が十分でないため価格計算は保留です。', 'zh-Hans': '由于证据仍不足，价格计算已暂停。', 'zh-Hant': '由於證據仍不足，價格計算已暫停。', pt: 'O cálculo do preço está em espera porque a evidência ainda não é forte o suficiente.', es: 'El cálculo del precio está en espera porque la evidencia aún no es lo bastante sólida.', de: 'Die Preisberechnung ist ausgesetzt, weil die Evidenz noch nicht stark genug ist.', it: 'Il calcolo del prezzo è sospeso perché le evidenze non sono ancora abbastanza solide.' },
+        locked: { ko: '정확한 가격 계산은 보류했어요.', en: 'Exact price calculation is currently on hold.', ja: '正確な価格計算は現在保留中です。', 'zh-Hans': '精确价格计算目前已暂停。', 'zh-Hant': '精確價格計算目前已暫停。', pt: 'O cálculo exato do preço está atualmente em espera.', es: 'El cálculo exacto del precio está actualmente en espera.', de: 'Die exakte Preisberechnung ist derzeit ausgesetzt.', it: 'Il calcolo esatto del prezzo è attualmente sospeso.' },
       },
       price_caption: {
-        accessory: { ko: '액세서리 검색', en: 'Accessory search' },
-        exact: { ko: '정확 가격', en: 'Exact price' },
-        reference: { ko: '참고 가격', en: 'Reference price' },
-        locked: { ko: '가격 상태', en: 'Price status' },
+        accessory: { ko: '액세서리 검색', en: 'Accessory search', ja: 'アクセサリー検索', 'zh-Hans': '配件搜索', 'zh-Hant': '配件搜尋', pt: 'Busca de acessório', es: 'Búsqueda de accesorio', de: 'Zubehörsuche', it: 'Ricerca accessorio' },
+        exact: { ko: '정확 가격', en: 'Exact price', ja: '正確価格', 'zh-Hans': '精确价格', 'zh-Hant': '精確價格', pt: 'Preço exato', es: 'Precio exacto', de: 'Exakter Preis', it: 'Prezzo esatto' },
+        reference: { ko: '참고 가격', en: 'Reference price', ja: '参考価格', 'zh-Hans': '参考价格', 'zh-Hant': '參考價格', pt: 'Preço de referência', es: 'Precio de referencia', de: 'Referenzpreis', it: 'Prezzo di riferimento' },
+        locked: { ko: '가격 상태', en: 'Price status', ja: '価格状態', 'zh-Hans': '价格状态', 'zh-Hant': '價格狀態', pt: 'Estado do preço', es: 'Estado del precio', de: 'Preisstatus', it: 'Stato del prezzo' },
       },
       query_review: {
         heading: { ko: '검색 요약', en: 'Search summary' },
@@ -1354,42 +1346,60 @@
         low_data: { ko: '데이터 부족', en: 'Low coverage' },
       },
       state_card: {
-        loading_title: { ko: '검색 중입니다', en: 'Searching now' },
-        loading_body: { ko: '매물, 가격, 출처 정보를 정리하고 있습니다.', en: 'Listings, prices, and source details are being prepared.' },
-        error_title: { ko: '검색 중 문제가 발생했습니다.', en: 'Something went wrong while searching.' },
-        error_body: { ko: '데이터는 변경되지 않았습니다. 검색어를 조금 더 구체적으로 입력해 보세요.', en: 'No data was changed. Try a more specific query.' },
-        error_tip_1: { ko: '모델명을 더 구체적으로 입력해 보세요', en: 'Try entering a more specific model name' },
-        error_tip_2: { ko: '마운트나 초점거리를 함께 입력해 보세요', en: 'Add a mount or focal length to narrow the search' },
-        error_tip_3: { ko: '잠시 후 다시 시도해 보세요', en: 'Try again in a moment' },
-        intro_title: { ko: 'Leica 중심 중고 매물과 참고 가격을 확인해 보세요.', en: 'Explore Leica-focused listings and reference pricing.' },
-        intro_body: { ko: '동일한 검색 결과를 더 읽기 쉬운 베타 화면으로 보여줍니다. 조건이 불확실하면 가격은 잠금 상태로 남습니다.', en: 'The same search results are shown in a simpler beta layout. When conditions are uncertain, pricing stays locked.' },
-        intro_tip_1: { ko: '조건이 섞이면 정확 가격 계산을 보류합니다', en: 'Exact pricing stays locked when conditions are mixed' },
-        intro_tip_2: { ko: '데이터가 부족하면 참고 결과만 보여줍니다', en: 'When data is limited, only reference results are shown' },
-        intro_tip_3: { ko: '원문 매물 확인 후 판단해 주세요', en: 'Check the original listing before making a decision' },
-        results_title: { ko: '검색 결과', en: 'Search results' },
-        results_body: { ko: '같은 검색 데이터와 결과 순서를 유지하면서, 베타 화면에서는 안내 문구만 더 단순하게 보여줍니다.', en: 'The same data and result order are kept, while the beta shell simplifies the guidance text.' },
-        results_tip_1: { ko: '가격은 참고용입니다', en: 'Prices are for reference' },
-        results_tip_2: { ko: '조건이 섞이면 계산을 보류합니다', en: 'Pricing stays locked when conditions are mixed' },
-        results_tip_3: { ko: '원문 확인이 필요합니다', en: 'The original listing should be checked' },
-        empty_source_gap_title: { ko: '현재 데이터가 부족해 가격을 계산하지 않았어요.', en: 'There is not enough current data to calculate a price.' },
-        empty_source_gap_body: { ko: '이 결과는 존재하지 않는다는 뜻이 아니라, 지금은 확인 가능한 근거가 적다는 의미입니다.', en: 'This does not mean the item does not exist. It means there is not enough verifiable evidence right now.' },
-        empty_broad_title: { ko: '검색 범위가 넓어 정확 결과를 바로 계산하지 않았어요.', en: 'This query is broad, so exact pricing was not opened yet.' },
-        empty_broad_default: { ko: '마운트나 초점거리를 추가하면 더 정확해집니다.', en: 'Add a mount or focal length to make the search more specific.' },
-        empty_none_title: { ko: '확인 가능한 결과를 충분히 찾지 못했어요.', en: 'Not enough verifiable matches were found.' },
-        empty_none_body: { ko: '모델명, 마운트, 초점거리처럼 조건을 더 구체적으로 입력해 보세요.', en: 'Try adding details such as the model, mount, or focal length.' },
+        loading_title: { ko: '검색 중입니다', en: 'Searching now', ja: '検索中です', 'zh-Hans': '正在搜索', 'zh-Hant': '正在搜尋', pt: 'Buscando agora', es: 'Buscando ahora', de: 'Suche läuft', it: 'Ricerca in corso' },
+        loading_body: { ko: '매물, 가격, 출처 정보를 정리하고 있습니다.', en: 'Listings, prices, and source details are being prepared.', ja: '掲載、価格、出典情報を準備しています。', 'zh-Hans': '正在整理条目、价格与来源信息。', 'zh-Hant': '正在整理條目、價格與來源資訊。', pt: 'Anúncios, preços e detalhes da fonte estão sendo preparados.', es: 'Se están preparando anuncios, precios y detalles de la fuente.', de: 'Angebote, Preise und Quelldetails werden vorbereitet.', it: 'Si stanno preparando annunci, prezzi e dettagli della fonte.' },
+        error_title: { ko: '검색 중 문제가 발생했습니다.', en: 'Something went wrong while searching.', ja: '検索中に問題が発生しました。', 'zh-Hans': '搜索时发生问题。', 'zh-Hant': '搜尋時發生問題。', pt: 'Algo deu errado durante a busca.', es: 'Ocurrió un problema durante la búsqueda.', de: 'Bei der Suche ist ein Problem aufgetreten.', it: 'Si è verificato un problema durante la ricerca.' },
+        error_body: { ko: '데이터는 변경되지 않았습니다. 검색어를 조금 더 구체적으로 입력해 보세요.', en: 'No data was changed. Try a more specific query.', ja: 'データは変更されていません。より具体的な検索語を試してください。', 'zh-Hans': '数据未被更改。请尝试更具体的搜索词。', 'zh-Hant': '資料未被更改。請嘗試更具體的搜尋詞。', pt: 'Nenhum dado foi alterado. Tente uma busca mais específica.', es: 'No se cambiaron los datos. Prueba una búsqueda más específica.', de: 'Es wurden keine Daten geändert. Versuche eine spezifischere Suche.', it: 'Nessun dato è stato modificato. Prova una ricerca più specifica.' },
+        error_tip_1: { ko: '모델명을 더 구체적으로 입력해 보세요', en: 'Try entering a more specific model name', ja: 'より具体的なモデル名を入力してください', 'zh-Hans': '请尝试输入更具体的型号名称', 'zh-Hant': '請嘗試輸入更具體的型號名稱', pt: 'Tente inserir um nome de modelo mais específico', es: 'Intenta introducir un nombre de modelo más específico', de: 'Gib einen spezifischeren Modellnamen ein', it: 'Prova a inserire un nome di modello più specifico' },
+        error_tip_2: { ko: '마운트나 초점거리를 함께 입력해 보세요', en: 'Add a mount or focal length to narrow the search', ja: 'マウントや焦点距離を追加してください', 'zh-Hans': '可添加卡口或焦距来缩小搜索范围', 'zh-Hant': '可加入卡口或焦距來縮小搜尋範圍', pt: 'Adicione uma montagem ou distância focal para refinar a busca', es: 'Añade una montura o distancia focal para acotar la búsqueda', de: 'Füge Anschluss oder Brennweite hinzu, um die Suche einzugrenzen', it: 'Aggiungi un attacco o una focale per restringere la ricerca' },
+        error_tip_3: { ko: '잠시 후 다시 시도해 보세요', en: 'Try again in a moment', ja: '少し待ってから再試行してください', 'zh-Hans': '请稍后再试', 'zh-Hant': '請稍後再試', pt: 'Tente novamente em instantes', es: 'Vuelve a intentarlo en un momento', de: 'Versuche es in einem Moment erneut', it: 'Riprova tra poco' },
+        intro_title: { ko: 'Leica 중심 중고 매물과 참고 가격을 확인해 보세요.', en: 'Explore Leica-focused listings and reference pricing.', ja: 'Leica中心の掲載と参考価格を確認してください。', 'zh-Hans': '查看以 Leica 为中心的条目与参考价格。', 'zh-Hant': '查看以 Leica 為中心的條目與參考價格。', pt: 'Explore anúncios e preços de referência com foco em Leica.', es: 'Explora anuncios y precios de referencia centrados en Leica.', de: 'Entdecke Leica-fokussierte Angebote und Referenzpreise.', it: 'Esplora annunci e prezzi di riferimento con focus Leica.' },
+        intro_body: { ko: '동일한 검색 결과를 더 읽기 쉬운 베타 화면으로 보여줍니다. 조건이 불확실하면 가격은 잠금 상태로 남습니다.', en: 'The same search results are shown in a simpler beta layout. When conditions are uncertain, pricing stays locked.', ja: '同じ検索結果をより読みやすいベータ画面で表示します。条件が不確かな場合、価格はロックされたままです。', 'zh-Hans': '相同的搜索结果会以更易读的测试版布局显示。条件不明确时，价格会保持锁定。', 'zh-Hant': '相同的搜尋結果會以更易讀的測試版版面顯示。條件不明確時，價格會維持鎖定。', pt: 'Os mesmos resultados de busca são mostrados em um layout beta mais simples. Quando as condições são incertas, o preço permanece bloqueado.', es: 'Los mismos resultados se muestran en un diseño beta más simple. Cuando las condiciones son inciertas, el precio permanece bloqueado.', de: 'Dieselben Suchergebnisse werden in einem einfacheren Beta-Layout gezeigt. Bei unsicheren Bedingungen bleibt der Preis gesperrt.', it: 'Gli stessi risultati di ricerca vengono mostrati in un layout beta più semplice. Quando le condizioni sono incerte, il prezzo resta bloccato.' },
+        intro_tip_1: { ko: '조건이 섞이면 정확 가격 계산을 보류합니다', en: 'Exact pricing stays locked when conditions are mixed', ja: '条件が混在すると正確価格はロックされます', 'zh-Hans': '条件混杂时，精确价格会保持锁定', 'zh-Hant': '條件混雜時，精確價格會維持鎖定', pt: 'O preço exato permanece bloqueado quando as condições estão misturadas', es: 'El precio exacto permanece bloqueado cuando se mezclan condiciones', de: 'Exakte Preise bleiben gesperrt, wenn Bedingungen gemischt sind', it: 'Il prezzo esatto resta bloccato quando le condizioni sono miste' },
+        intro_tip_2: { ko: '데이터가 부족하면 참고 결과만 보여줍니다', en: 'When data is limited, only reference results are shown', ja: 'データが少ない場合は参考結果のみ表示します', 'zh-Hans': '数据不足时仅显示参考结果', 'zh-Hant': '資料不足時僅顯示參考結果', pt: 'Quando os dados são limitados, apenas resultados de referência são mostrados', es: 'Cuando los datos son limitados, solo se muestran resultados de referencia', de: 'Bei knappen Daten werden nur Referenzergebnisse gezeigt', it: 'Quando i dati sono limitati vengono mostrati solo risultati di riferimento' },
+        intro_tip_3: { ko: '원문 매물 확인 후 판단해 주세요', en: 'Check the original listing before making a decision', ja: '判断前に元の掲載を確認してください', 'zh-Hans': '请在决定前查看原始条目', 'zh-Hant': '請在決定前查看原始條目', pt: 'Verifique o anúncio original antes de decidir', es: 'Revisa el anuncio original antes de decidir', de: 'Bitte vor einer Entscheidung das Originalangebot prüfen', it: 'Controlla l’annuncio originale prima di decidere' },
+        results_title: { ko: '검색 결과', en: 'Search results', ja: '検索結果', 'zh-Hans': '搜索结果', 'zh-Hant': '搜尋結果', pt: 'Resultados da busca', es: 'Resultados de búsqueda', de: 'Suchergebnisse', it: 'Risultati di ricerca' },
+        results_body: { ko: '같은 검색 데이터와 결과 순서를 유지하면서, 베타 화면에서는 안내 문구만 더 단순하게 보여줍니다.', en: 'The same data and result order are kept, while the beta shell simplifies the guidance text.', ja: '同じデータと結果順を保ちながら、ベータ画面では案内文だけを簡潔にしています。', 'zh-Hans': '在保持相同数据与结果顺序的同时，测试版只简化了说明文案。', 'zh-Hant': '在維持相同資料與結果順序的同時，測試版只簡化了說明文案。', pt: 'Os mesmos dados e a mesma ordem são mantidos, enquanto a interface beta simplifica apenas o texto de orientação.', es: 'Se conservan los mismos datos y orden, mientras que la interfaz beta simplifica solo el texto de guía.', de: 'Dieselben Daten und dieselbe Reihenfolge bleiben erhalten; die Beta vereinfacht nur die Hinweistexte.', it: 'Gli stessi dati e lo stesso ordine vengono mantenuti, mentre la shell beta semplifica solo il testo guida.' },
+        results_tip_1: { ko: '가격은 참고용입니다', en: 'Prices are for reference', ja: '価格は参考用です', 'zh-Hans': '价格仅供参考', 'zh-Hant': '價格僅供參考', pt: 'Os preços são de referência', es: 'Los precios son de referencia', de: 'Preise dienen als Referenz', it: 'I prezzi sono di riferimento' },
+        results_tip_2: { ko: '조건이 섞이면 계산을 보류합니다', en: 'Pricing stays locked when conditions are mixed', ja: '条件が混在すると価格計算は保留されます', 'zh-Hans': '条件混杂时价格计算会保持锁定', 'zh-Hant': '條件混雜時價格計算會維持鎖定', pt: 'O preço permanece bloqueado quando as condições estão misturadas', es: 'El precio permanece bloqueado cuando se mezclan condiciones', de: 'Die Preisberechnung bleibt bei gemischten Bedingungen gesperrt', it: 'Il prezzo resta bloccato quando le condizioni sono miste' },
+        results_tip_3: { ko: '원문 확인이 필요합니다', en: 'The original listing should be checked', ja: '元の掲載確認が必要です', 'zh-Hans': '需要核对原始条目', 'zh-Hant': '需要核對原始條目', pt: 'O anúncio original deve ser verificado', es: 'Debe revisarse el anuncio original', de: 'Das Originalangebot sollte geprüft werden', it: 'L’annuncio originale deve essere verificato' },
+        empty_source_gap_title: { ko: '현재 데이터가 부족해 가격을 계산하지 않았어요.', en: 'There is not enough current data to calculate a price.', ja: '現在のデータが不足しているため価格を計算しませんでした。', 'zh-Hans': '由于当前数据不足，未计算价格。', 'zh-Hant': '由於目前資料不足，未計算價格。', pt: 'Não há dados atuais suficientes para calcular um preço.', es: 'No hay suficientes datos actuales para calcular un precio.', de: 'Es gibt derzeit nicht genug Daten, um einen Preis zu berechnen.', it: 'Non ci sono abbastanza dati attuali per calcolare un prezzo.' },
+        empty_source_gap_body: { ko: '이 결과는 존재하지 않는다는 뜻이 아니라, 지금은 확인 가능한 근거가 적다는 의미입니다.', en: 'This does not mean the item does not exist. It means there is not enough verifiable evidence right now.', ja: 'これは存在しないことを意味するのではなく、今は確認可能な根拠が少ないという意味です。', 'zh-Hans': '这并不表示该物品不存在，而是目前可核实的证据不足。', 'zh-Hant': '這並不表示該物品不存在，而是目前可核實的證據不足。', pt: 'Isso não significa que o item não exista; significa que não há evidência verificável suficiente no momento.', es: 'Esto no significa que el artículo no exista; significa que ahora no hay suficiente evidencia verificable.', de: 'Das bedeutet nicht, dass das Produkt nicht existiert, sondern dass derzeit nicht genug überprüfbare Evidenz vorliegt.', it: 'Questo non significa che l’articolo non esista; significa che al momento non ci sono abbastanza evidenze verificabili.' },
+        empty_broad_title: { ko: '검색 범위가 넓어 정확 결과를 바로 계산하지 않았어요.', en: 'This query is broad, so exact pricing was not opened yet.', ja: 'この検索は範囲が広いため、正確価格はまだ開いていません。', 'zh-Hans': '此搜索范围较广，因此尚未开启精确价格。', 'zh-Hant': '此搜尋範圍較廣，因此尚未開啟精確價格。', pt: 'Esta busca é ampla, por isso o preço exato ainda não foi aberto.', es: 'Esta búsqueda es amplia, por lo que el precio exacto aún no se abrió.', de: 'Diese Suche ist breit gefasst, daher wurde der exakte Preis noch nicht freigegeben.', it: 'Questa ricerca è ampia, quindi il prezzo esatto non è ancora stato aperto.' },
+        empty_broad_default: { ko: '마운트나 초점거리를 추가하면 더 정확해집니다.', en: 'Add a mount or focal length to make the search more specific.', ja: 'マウントや焦点距離を追加するとより正確になります。', 'zh-Hans': '添加卡口或焦距会让搜索更精确。', 'zh-Hant': '加入卡口或焦距會讓搜尋更精確。', pt: 'Adicione uma montagem ou distância focal para tornar a busca mais específica.', es: 'Añade una montura o distancia focal para que la búsqueda sea más específica.', de: 'Füge Anschluss oder Brennweite hinzu, um die Suche genauer zu machen.', it: 'Aggiungi un attacco o una focale per rendere la ricerca più specifica.' },
+        empty_none_title: { ko: '확인 가능한 결과를 충분히 찾지 못했어요.', en: 'Not enough verifiable matches were found.', ja: '確認できる一致結果が十分に見つかりませんでした。', 'zh-Hans': '没有找到足够可核实的匹配结果。', 'zh-Hant': '沒有找到足夠可核實的匹配結果。', pt: 'Não foram encontrados resultados verificáveis suficientes.', es: 'No se encontraron coincidencias verificables suficientes.', de: 'Es wurden nicht genug überprüfbare Treffer gefunden.', it: 'Non sono state trovate corrispondenze verificabili sufficienti.' },
+        empty_none_body: { ko: '모델명, 마운트, 초점거리처럼 조건을 더 구체적으로 입력해 보세요.', en: 'Try adding details such as the model, mount, or focal length.', ja: 'モデル名、マウント、焦点距離などの条件を追加してください。', 'zh-Hans': '请尝试补充型号、卡口或焦距等细节。', 'zh-Hant': '請嘗試補充型號、卡口或焦距等細節。', pt: 'Tente adicionar detalhes como modelo, montagem ou distância focal.', es: 'Prueba a añadir detalles como el modelo, la montura o la distancia focal.', de: 'Versuche Details wie Modell, Anschluss oder Brennweite hinzuzufügen.', it: 'Prova ad aggiungere dettagli come modello, attacco o focale.' },
       },
       refinement: {
         title: { ko: '검색어를 조금 더 구체적으로 입력해 보세요', en: 'Try a more specific search' },
         default_message: { ko: '마운트나 초점거리를 함께 입력하면 더 정확해집니다.', en: 'Add a mount or focal length to make the search more specific.' },
       },
       market_entry: {
-        summary_label: { ko: '결과 요약', en: 'Result summary' },
-        model_missing: { ko: '모델 정보 없음', en: 'Model information unavailable' },
-        status_label: { ko: '가격 상태', en: 'Price state' },
-        source_check_label: { ko: '원문 확인', en: 'Check source listing' },
-        source_check_body: { ko: '구매 전 원문 매물 확인이 필요합니다.', en: 'Please verify the original listing before purchase.' },
-        beta_note_label: { ko: '참고', en: 'Note' },
-        beta_note_body: { ko: '동일 API 결과를 베타용 문구로만 정리했습니다.', en: 'The same API result is shown here with beta-friendly wording only.' },
+        summary_label: { ko: '결과 요약', en: 'Result summary', ja: '結果概要', 'zh-Hans': '结果摘要', 'zh-Hant': '結果摘要', pt: 'Resumo do resultado', es: 'Resumen del resultado', de: 'Ergebnisübersicht', it: 'Riepilogo del risultato' },
+        model_missing: { ko: '모델 정보 없음', en: 'Model information unavailable', ja: 'モデル情報なし', 'zh-Hans': '没有型号信息', 'zh-Hant': '沒有型號資訊', pt: 'Informação do modelo indisponível', es: 'Información del modelo no disponible', de: 'Modellinformationen nicht verfügbar', it: 'Informazioni sul modello non disponibili' },
+        status_label: { ko: '가격 상태', en: 'Price state', ja: '価格状態', 'zh-Hans': '价格状态', 'zh-Hant': '價格狀態', pt: 'Estado do preço', es: 'Estado del precio', de: 'Preisstatus', it: 'Stato del prezzo' },
+        source_check_label: { ko: '원문 확인', en: 'Check source listing', ja: '元の掲載を確認', 'zh-Hans': '查看原始条目', 'zh-Hant': '查看原始條目', pt: 'Verificar anúncio original', es: 'Verificar anuncio original', de: 'Originalangebot prüfen', it: 'Verifica annuncio originale' },
+        source_check_body: { ko: '구매 전 원문 매물 확인이 필요합니다.', en: 'Please verify the original listing before purchase.', ja: '購入前に元の掲載を確認してください。', 'zh-Hans': '购买前请核对原始条目。', 'zh-Hant': '購買前請核對原始條目。', pt: 'Verifique o anúncio original antes da compra.', es: 'Verifica el anuncio original antes de comprar.', de: 'Bitte vor dem Kauf das Originalangebot prüfen.', it: 'Verifica l’annuncio originale prima dell’acquisto.' },
+        beta_note_label: { ko: '참고', en: 'Note', ja: '補足', 'zh-Hans': '说明', 'zh-Hant': '說明', pt: 'Observação', es: 'Nota', de: 'Hinweis', it: 'Nota' },
+        beta_note_body: { ko: '동일 API 결과를 베타용 문구로만 정리했습니다.', en: 'The same API result is shown here with beta-friendly wording only.', ja: '同じAPI結果を、ベータ向けのわかりやすい文言で表示しています。', 'zh-Hans': '这里展示的是同一 API 结果，只是换成了更适合测试版的文案。', 'zh-Hant': '這裡顯示的是相同 API 結果，只是換成了更適合測試版的文案。', pt: 'O mesmo resultado da API é mostrado aqui apenas com uma redação mais amigável para a beta.', es: 'Aquí se muestra el mismo resultado de la API, solo con una redacción más clara para la beta.', de: 'Hier wird dasselbe API-Ergebnis nur mit beta-freundlicherer Formulierung gezeigt.', it: 'Qui viene mostrato lo stesso risultato API con un testo più adatto alla beta.' },
+      },
+      public_card: {
+        source: { ko: '판매처 / 출처', en: 'Seller / source', ja: '販売元 / 出典', 'zh-Hans': '卖家 / 来源', 'zh-Hant': '賣家 / 來源', pt: 'Vendedor / fonte', es: 'Vendedor / fuente', de: 'Verkäufer / Quelle', it: 'Venditore / fonte' },
+        location: { ko: '위치', en: 'Location', ja: '場所', 'zh-Hans': '位置', 'zh-Hant': '位置', pt: 'Localização', es: 'Ubicación', de: 'Standort', it: 'Posizione' },
+        observed: { ko: '관측 시작', en: 'Observed', ja: '初回確認', 'zh-Hans': '首次记录', 'zh-Hant': '首次記錄', pt: 'Observado', es: 'Observado', de: 'Beobachtet', it: 'Osservato' },
+        last_verified: { ko: '최근 확인', en: 'Last verified', ja: '最終確認', 'zh-Hans': '最近核验', 'zh-Hant': '最近核驗', pt: 'Última verificação', es: 'Última verificación', de: 'Zuletzt bestätigt', it: 'Ultima verifica' },
+        date_unknown: { ko: '날짜 미확인', en: 'Date unavailable', ja: '日付不明', 'zh-Hans': '日期未知', 'zh-Hant': '日期未知', pt: 'Data indisponível', es: 'Fecha no disponible', de: 'Datum unbekannt', it: 'Data non disponibile' },
+        included_price: { ko: '가격 비교에 반영됨', en: 'Included in price comparison', ja: '価格比較に反映', 'zh-Hans': '已纳入价格比较', 'zh-Hant': '已納入價格比較', pt: 'Incluído na comparação de preço', es: 'Incluido en la comparación de precio', de: 'Im Preisvergleich enthalten', it: 'Incluso nel confronto prezzi' },
+        excluded_price: { ko: '가격 비교에서 제외됨', en: 'Excluded from price comparison', ja: '価格比較から除外', 'zh-Hans': '已排除在价格比较之外', 'zh-Hant': '已排除在價格比較之外', pt: 'Excluído da comparação de preço', es: 'Excluido de la comparación de precio', de: 'Vom Preisvergleich ausgeschlossen', it: 'Escluso dal confronto prezzi' },
+        reference_only: { ko: '참고 결과', en: 'Reference only', ja: '参考のみ', 'zh-Hans': '仅供参考', 'zh-Hant': '僅供參考', pt: 'Somente referência', es: 'Solo referencia', de: 'Nur Referenz', it: 'Solo riferimento' },
+        reference_note: { ko: '구매 전에는 원문 매물을 꼭 확인해 주세요.', en: 'Check the source listing before making a decision.', ja: '判断する前に元の掲載を確認してください。', 'zh-Hans': '在做决定前请查看原始条目。', 'zh-Hant': '在做決定前請查看原始條目。', pt: 'Verifique o anúncio original antes de decidir.', es: 'Revisa el anuncio original antes de decidir.', de: 'Bitte vor einer Entscheidung das Originalangebot prüfen.', it: 'Controlla l’annuncio originale prima di decidere.' },
+        location_unknown: { ko: '위치 미확인', en: 'Location unavailable', ja: '場所不明', 'zh-Hans': '位置未知', 'zh-Hant': '位置未知', pt: 'Localização indisponível', es: 'Ubicación no disponible', de: 'Standort unbekannt', it: 'Posizione non disponibile' },
+        location_seoul_korea: { ko: '서울, 대한민국', en: 'Seoul, South Korea', ja: 'ソウル, 韓国', 'zh-Hans': '韩国首尔', 'zh-Hant': '韓國首爾', pt: 'Seul, Coreia do Sul', es: 'Seúl, Corea del Sur', de: 'Seoul, Südkorea', it: 'Seul, Corea del Sud' },
+        location_korea: { ko: '대한민국', en: 'South Korea', ja: '韓国', 'zh-Hans': '韩国', 'zh-Hant': '韓國', pt: 'Coreia do Sul', es: 'Corea del Sur', de: 'Südkorea', it: 'Corea del Sud' },
+        location_uk: { ko: '영국', en: 'United Kingdom', ja: 'イギリス', 'zh-Hans': '英国', 'zh-Hant': '英國', pt: 'Reino Unido', es: 'Reino Unido', de: 'Vereinigtes Königreich', it: 'Regno Unito' },
+        location_japan: { ko: '일본', en: 'Japan', ja: '日本', 'zh-Hans': '日本', 'zh-Hant': '日本', pt: 'Japão', es: 'Japón', de: 'Japan', it: 'Giappone' },
+        location_miami_us: { ko: '마이애미, 미국', en: 'Miami, United States', ja: 'マイアミ, アメリカ', 'zh-Hans': '美国迈阿密', 'zh-Hant': '美國邁阿密', pt: 'Miami, Estados Unidos', es: 'Miami, Estados Unidos', de: 'Miami, Vereinigte Staaten', it: 'Miami, Stati Uniti' },
+        location_finland: { ko: '핀란드', en: 'Finland', ja: 'フィンランド', 'zh-Hans': '芬兰', 'zh-Hant': '芬蘭', pt: 'Finlândia', es: 'Finlandia', de: 'Finnland', it: 'Finlandia' },
       },
       card: {
         projected: { ko: '참고 투영', en: 'Projected reference' },
@@ -1405,15 +1415,15 @@
         result_type: { ko: '결과 성격', en: 'Match state' },
       },
       load_more: {
-        idle: { ko: '결과 더 보기', en: 'Load more' },
-        loading: { ko: '불러오는 중...', en: 'Loading…' },
+        idle: { ko: '결과 더 보기', en: 'Load more', ja: 'さらに表示', 'zh-Hans': '加载更多', 'zh-Hant': '載入更多', pt: 'Carregar mais', es: 'Cargar más', de: 'Mehr laden', it: 'Carica altro' },
+        loading: { ko: '불러오는 중...', en: 'Loading…', ja: '読み込み中…', 'zh-Hans': '加载中…', 'zh-Hant': '載入中…', pt: 'Carregando…', es: 'Cargando…', de: 'Wird geladen…', it: 'Caricamento…' },
       },
       warnings: {
-        filters_none: { ko: '필터 없음', en: 'No filters applied' },
-        filters_prefix: { ko: '적용 필터', en: 'Filters' },
-        disambiguation: { ko: '조건을 더 구체적으로 입력하면 결과를 더 정확히 좁힐 수 있습니다.', en: 'Add more model details to narrow this search.' },
-        accessory: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않습니다.', en: 'Accessory searches are not used for body or lens pricing.' },
-        coverage: { ko: '데이터 부족은 부재 의미가 아닙니다.', en: 'Low coverage does not mean the item does not exist.' },
+        filters_none: { ko: '필터 없음', en: 'No filters applied', ja: 'フィルターなし', 'zh-Hans': '未应用筛选器', 'zh-Hant': '未套用篩選器', pt: 'Sem filtros aplicados', es: 'Sin filtros aplicados', de: 'Keine Filter aktiv', it: 'Nessun filtro applicato' },
+        filters_prefix: { ko: '적용 필터', en: 'Filters', ja: 'フィルター', 'zh-Hans': '筛选器', 'zh-Hant': '篩選器', pt: 'Filtros', es: 'Filtros', de: 'Filter', it: 'Filtri' },
+        disambiguation: { ko: '조건을 더 구체적으로 입력하면 결과를 더 정확히 좁힐 수 있습니다.', en: 'Add more model details to narrow this search.', ja: '条件を追加すると結果をさらに絞り込めます。', 'zh-Hans': '添加更多型号细节可进一步缩小结果范围。', 'zh-Hant': '加入更多型號細節可進一步縮小結果範圍。', pt: 'Adicione mais detalhes do modelo para refinar esta busca.', es: 'Añade más detalles del modelo para acotar esta búsqueda.', de: 'Füge weitere Modelldetails hinzu, um die Suche einzugrenzen.', it: 'Aggiungi più dettagli del modello per restringere questa ricerca.' },
+        accessory: { ko: '액세서리 검색은 본체/렌즈 가격 계산에 사용하지 않습니다.', en: 'Accessory searches are not used for body or lens pricing.', ja: 'アクセサリー検索はボディやレンズの価格計算に使いません。', 'zh-Hans': '配件搜索不会用于机身或镜头价格计算。', 'zh-Hant': '配件搜尋不會用於機身或鏡頭價格計算。', pt: 'Buscas de acessórios não são usadas para precificação de corpos ou lentes.', es: 'Las búsquedas de accesorios no se usan para calcular precios de cuerpos o lentes.', de: 'Zubehörsuchen werden nicht für die Preisbildung von Kameras oder Objektiven verwendet.', it: 'Le ricerche di accessori non vengono usate per il prezzo di corpi o obiettivi.' },
+        coverage: { ko: '데이터 부족은 부재 의미가 아닙니다.', en: 'Low coverage does not mean the item does not exist.', ja: 'データが少ないことは、その製品が存在しないことを意味しません。', 'zh-Hans': '数据覆盖不足并不表示该物品不存在。', 'zh-Hant': '資料覆蓋不足不表示該物品不存在。', pt: 'Cobertura limitada não significa que o item não exista.', es: 'Una cobertura limitada no significa que el artículo no exista.', de: 'Geringe Abdeckung bedeutet nicht, dass das Produkt nicht existiert.', it: 'Una copertura limitata non significa che l’articolo non esista.' },
       },
     };
 
@@ -1768,7 +1778,7 @@
       if(String(priceRole || '').includes(ux('price_role.outlier', 'Not used — Price outlier'))) return ux('reason.outlier', 'This listing was excluded because the price may be an outlier.');
       if(String(priceRole || '').includes(ux('price_role.no_usable_price', 'No usable price'))) return ux('reason.no_price', 'There is not enough usable price information to calculate a price.');
       if(String(evidenceRole || '').includes(ux('result_role.exact_variant', 'Exact match'))) return ux('reason.exact_variant', 'The model and variant match the query closely.');
-      if(String(evidenceRole || '').includes(ux('result_role.exact_base_model', 'Base model match'))) return uiState.locale === 'ko' ? '기본 모델은 같지만 세부 조건은 다시 확인해 주세요.' : 'The base model matches, but the finer details should still be checked.';
+      if(String(evidenceRole || '').includes(ux('result_role.exact_base_model', 'Base model match'))) return ux('reason.base_model_check', 'The base model matches, but the finer details should still be checked.');
       if(String(evidenceRole || '').includes(ux('result_role.broader_family', 'Related result')) || String(evidenceRole || '').includes(ux('result_role.boundary_conflict', 'Different model boundary'))) return ux('reason.same_base_reference', 'This is a related listing, but the conditions differ, so it is shown for reference only.');
       return mapBetaReason(reason) || ux('reason.default', 'This explains how well the listing matches the query and whether it was used for pricing.');
     }
@@ -2114,6 +2124,85 @@
       if(uiState.locale === 'de') return `${quantity} für "${query}"`;
       if(uiState.locale === 'it') return `${quantity} per "${query}"`;
       return `${quantity} for "${query}"`;
+    }
+
+    function formatUiDate(rawValue){
+      const raw = String(rawValue || '').trim();
+      if(!raw) return '';
+      const parsed = Date.parse(raw);
+      if(!Number.isFinite(parsed)) return raw;
+      return new Intl.DateTimeFormat(uiState.locale, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }).format(new Date(parsed));
+    }
+
+    function formatDatasetUpdateLine(meta){
+      if(!meta || meta.index_record_count == null) return '';
+      const generated = formatUiDate(meta.index_generated_at);
+      if(generated){
+        return `${ux('summary.dataset_updated_prefix', 'Listing data updated')}: ${generated} · ${formatListingCount(meta.index_record_count)}`;
+      }
+      return `${ux('summary.index_prefix', 'Index')}: ${meta.index_record_count} ${ux('summary.index_records', 'records')}`;
+    }
+
+    function inferSourceLocation(source){
+      const normalized = String(source || '').trim().toLowerCase();
+      if(!normalized) return ux('public_card.location_unknown', 'Location unavailable');
+      if(normalized.includes('충무로')) return ux('public_card.location_seoul_korea', 'Seoul, South Korea');
+      if(normalized.includes('사진집') || normalized.includes('장씨카메라')) return ux('public_card.location_korea', 'South Korea');
+      if(normalized.includes('영국') || normalized.includes('ffordes')) return ux('public_card.location_uk', 'United Kingdom');
+      if(normalized.includes('일본') || normalized.includes('기타무라')) return ux('public_card.location_japan', 'Japan');
+      if(normalized.includes('miami')) return ux('public_card.location_miami_us', 'Miami, United States');
+      if(normalized.includes('kamerastore')) return ux('public_card.location_finland', 'Finland');
+      return ux('public_card.location_unknown', 'Location unavailable');
+    }
+
+    function getObservedMeta(result){
+      const lastSeen = finalField(result, 'last_seen');
+      const crawlTime = finalField(result, 'crawl_time');
+      const firstSeen = finalField(result, 'first_seen');
+      if(lastSeen){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(lastSeen) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      if(crawlTime){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(crawlTime) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      if(firstSeen){
+        return {
+          label: ux('public_card.observed', 'Observed'),
+          value: formatUiDate(firstSeen) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      return {
+        label: ux('public_card.last_verified', 'Last verified'),
+        value: ux('public_card.date_unknown', 'Date unavailable')
+      };
+    }
+
+    function getPublicPriceBadge(result, priceRole, reason){
+      if(Boolean(result.used_for_price)){
+        return { tone: 'green', label: ux('public_card.included_price', 'Included in price comparison') };
+      }
+      const normalizedPriceRole = String(priceRole || '').trim().toLowerCase();
+      const normalizedReason = String(reason || '').trim().toLowerCase();
+      if(
+        normalizedPriceRole.includes('not used')
+        || normalizedPriceRole.includes('reference')
+        || normalizedPriceRole.includes('generation selection')
+        || normalizedPriceRole.includes('no usable price')
+        || normalizedReason
+      ){
+        return { tone: 'amber', label: ux('public_card.excluded_price', 'Excluded from price comparison') };
+      }
+      return { tone: 'blue', label: ux('public_card.reference_only', 'Reference only') };
     }
 
     function getSortMode(){
@@ -2530,8 +2619,7 @@
 
       if(els['index-debug-line']){
         if(meta && meta.index_record_count != null){
-          const generatedAt = meta.index_generated_at || 'unknown';
-          els['index-debug-line'].textContent = `${ux('summary.index_prefix', 'Index')}: ${meta.index_record_count} ${ux('summary.index_records', 'records')} / ${ux('summary.index_generated_at', 'generated_at')} ${generatedAt}`;
+          els['index-debug-line'].textContent = formatDatasetUpdateLine(meta);
         }else{
           els['index-debug-line'].textContent = '';
         }
@@ -2853,7 +2941,6 @@
     function renderMarketEntry(results, uiHints){
       const policy = getMarketEntryPolicy();
       const lead = results[0];
-      const queryEvidencePanel = renderQueryEvidencePanel(policy);
       const priceHeadline = escapeHtml(getBetaPriceBandCaption(policy));
       const priceValue = escapeHtml(
         policy.display_price_summary_allowed
@@ -2883,7 +2970,6 @@
             <div class="metric-card"><b>${escapeHtml(ux('market_entry.source_check_label', 'Check source listing'))}</b><span>${escapeHtml(ux('market_entry.source_check_body', 'Please verify the original listing before purchase.'))}</span></div>
             <div class="metric-card"><b>${escapeHtml(ux('market_entry.beta_note_label', 'Note'))}</b><span>${escapeHtml(ux('market_entry.beta_note_body', 'The same API result is shown here with beta-friendly wording only.'))}</span></div>
           </div>
-          ${queryEvidencePanel}
         </article>
       `;
     }
@@ -2896,23 +2982,8 @@
       const canViewSource = Boolean(url && url !== '#');
       const target = canViewSource ? ' target="_blank" rel="noopener noreferrer"' : '';
       const status = statusMeta(result);
-      const confidenceState = displayField(result, 'result_card_confidence_state');
-      const modelFallback = confidenceState === 'locked_classification_conflict'
-        ? (uiState.locale === 'ko' ? '검토 필요' : 'Review needed')
-        : ux('common.unknown', 'Unknown');
-      const familyFallback = confidenceState === 'locked_classification_conflict'
-        ? (uiState.locale === 'ko' ? '분류 신뢰도 확인 필요' : 'Classification confidence pending')
-        : ux('common.unknown', 'Unknown');
-      const model = displayValue(displayField(result, 'display_model'), modelFallback);
-      const family = displayValue(displayField(result, 'display_family'), familyFallback);
       const currency = displayValue(result.currency, ux('common.unknown', 'Unknown'));
       const source = displayValue(result.source, ux('common.unknown_source', 'Unknown source'));
-      const focalLength = displayValue(displayField(result, 'display_focal_length'), ux('common.unknown', 'Unknown'));
-      const aperture = displayValue(displayField(result, 'display_aperture'), ux('common.unknown', 'Unknown'));
-      const displayCategory = localizeCategoryLabel(displayField(result, 'display_category'));
-      const displayMount = displayValue(displayField(result, 'display_mount'), ux('common.unknown', 'Unknown'));
-      const projected = Boolean(displayField(result, 'stale_normalization_detected'));
-      const compactNotation = Boolean(displayField(result, 'compact_lens_notation_detected'));
       const evidence = getResultEvidence(result, index);
       const rawEvidenceRole = String(evidence ? (evidence.result_role_label || evidence.compatibility_label || '') : '').trim();
       const evidenceRole = mapBetaResultRole(rawEvidenceRole);
@@ -2927,14 +2998,9 @@
         ? ux('reason.default', 'This explains how well the listing matches the query and whether it was used for pricing.')
         : '');
       const matchBadge = getResultMatchBadge(result, rawEvidenceRole, priceRole, reason);
-      const detectedEntry = displayValue(displayField(result, 'display_entry_label'), model);
-      const searchMatch = displayValue(localizeQueryMatchLabel(result.query_match_label) || matchBadge.label, evidenceRole || ux('common.no_data', 'Not enough data'));
-      const usedForPrice = formatUsedForPriceValue(Boolean(result.used_for_price));
-      const exclusionReason = displayValue((evidence && Array.isArray(evidence.excluded_reason) && evidence.excluded_reason.length ? mapBetaReason(evidence.excluded_reason[0]) : '') || reason, '—');
-      const generationConfidence = displayField(result, 'generation_confidence');
-      const generationConfidenceValue = generationConfidence === null || generationConfidence === undefined || generationConfidence === ''
-        ? '—'
-        : `${Math.round(Number(generationConfidence) * 100)}%`;
+      const priceBadge = getPublicPriceBadge(result, priceRole, reason);
+      const location = inferSourceLocation(source);
+      const observedMeta = getObservedMeta(result);
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
       const explanation = getBetaCardExplanation(evidenceRole, priceRole, reason);
 
@@ -2951,29 +3017,21 @@
               <div class="result-status-row">
                 <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(localizeStatusLabel(status.label))}</span>
                 <span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
-                ${projected ? `<span class="micro-pill amber">${escapeHtml(ux('card.projected', 'Projected reference'))}</span>` : ''}
-                ${compactNotation ? `<span class="micro-pill green">${escapeHtml(ux('card.notation_detected', 'Marker detected'))}</span>` : ''}
+                <span class="micro-pill ${escapeHtml(priceBadge.tone)}">${escapeHtml(priceBadge.label)}</span>
               </div>
             </div>
           </div>
-          <div class="data-grid">
-            ${renderDataPoint(ux('common.model', 'Model'), model)}
-            ${renderDataPoint(ux('card.detected_entry', 'Interpreted entry'), detectedEntry)}
-            ${renderDataPoint(ux('card.search_match', 'Search match'), searchMatch)}
-            ${renderDataPoint(ux('card.used_for_price', 'Used for price'), usedForPrice)}
-            ${renderDataPoint(ux('card.exclusion_reason', 'Exclusion reason'), exclusionReason)}
-            ${renderDataPoint(ux('card.generation_confidence', 'Generation confidence'), generationConfidenceValue)}
-            ${renderDataPoint(ux('common.mount', 'Mount'), displayMount)}
-            ${renderDataPoint(ux('common.status', 'Status'), localizeStatusLabel(status.label))}
-            ${renderDataPoint(ux('card.price_usage', 'Price role'), priceRole)}
+          <div class="result-facts">
+            ${renderFactRow(ux('public_card.source', 'Seller / source'), source)}
+            ${renderFactRow(ux('public_card.location', 'Location'), location)}
+            ${renderFactRow(observedMeta.label, observedMeta.value)}
+            <div class="card-note">${escapeHtml(reason || ux('public_card.reference_note', 'Check the source listing before making a decision.'))}</div>
           </div>
-          ${(evidenceRole || priceRole || reason) ? `
-            <details class="state-card subtle" style="margin-top:12px;">
+          ${explanation ? `
+            <details class="result-details">
               <summary>${escapeHtml(ux('common.details_why', 'Why is this result shown?'))}</summary>
-              <div class="result-role-rows" style="margin-top:12px;">
-                ${renderRoleRow(ux('card.explanation', 'Why it appears'), explanation)}
-                ${evidenceRole ? renderRoleRow(ux('card.result_type', 'Match state'), evidenceRole) : ''}
-                ${priceRole ? renderRoleRow(ux('card.price_usage', 'Price role'), priceRole) : ''}
+              <div class="result-details-body">
+                ${escapeHtml(explanation)}
               </div>
             </details>
           ` : ''}
@@ -2988,6 +3046,10 @@
 
     function renderDataPoint(label, value){
       return `<div class="data-point"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, ux('common.no_data', 'Not enough data')))}</span></div>`;
+    }
+
+    function renderFactRow(label, value){
+      return `<div class="fact-row"><span class="fact-label">${escapeHtml(label)}</span><span class="fact-value">${escapeHtml(displayValue(value, ux('common.no_data', 'Not enough data')))}</span></div>`;
     }
 
     function renderRoleRow(label, value){

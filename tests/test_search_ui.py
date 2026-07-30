@@ -14,6 +14,7 @@ BETA_PATHS = [
     PROJECT_ROOT / "beta.html",
 ]
 ALL_HTML_PATHS = INDEX_PATHS + BETA_PATHS
+APP_PY_PATH = PROJECT_ROOT / "app/app.py"
 
 
 def _html_files(paths: list[Path] | None = None) -> list[str]:
@@ -35,6 +36,17 @@ def test_index_calls_search_endpoint() -> None:
     for html in _html_files():
         assert "fetch('/api/search?'" in html
         assert "search_records" not in html
+
+
+def test_public_routes_use_beta_shell_and_qa_uses_internal_shell() -> None:
+    app_py = APP_PY_PATH.read_text(encoding="utf-8")
+    assert '@app.route("/")' in app_py
+    assert '@app.route("/search")' in app_py
+    assert 'def index() -> str:\n    return render_template("beta.html")' in app_py
+    assert '@app.route("/qa")' in app_py
+    assert 'def qa_index() -> str:\n    return render_template("index.html")' in app_py
+    assert '@app.route("/beta")' in app_py
+    assert 'def beta_index() -> str:\n    return render_template("beta.html")' in app_py
 
 
 def test_index_does_not_reimplement_legacy_search() -> None:
@@ -214,8 +226,8 @@ def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
         ]:
             assert snippet in html
         assert "detected: { ko: '검색한 모델', en: 'Interpreted as'" in html
-        assert "idle: { ko: '결과 더 보기', en: 'Load more' }" in html
-        assert "loading: { ko: '불러오는 중...', en: 'Loading…' }" in html
+        assert "idle: { ko: '결과 더 보기', en: 'Load more'," in html
+        assert "loading: { ko: '불러오는 중...', en: 'Loading…'," in html
 
 
 def test_beta_locale_switch_keeps_sort_selection_intact() -> None:
@@ -238,16 +250,44 @@ def test_beta_empty_and_error_states_are_locale_driven() -> None:
 
 def test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy() -> None:
     for html in _html_files(BETA_PATHS):
-        assert "ux('card.detected_entry', 'Interpreted entry')" in html
-        assert "ux('card.search_match', 'Search match')" in html
-        assert "ux('card.used_for_price', 'Used for price')" in html
-        assert "ux('card.exclusion_reason', 'Exclusion reason')" in html
-        assert "ux('card.generation_confidence', 'Generation confidence')" in html
-        assert "ux('common.details_why', 'Why is this result shown?')" in html
+        body = _function_body(html, "renderCard")
+        assert "ux('public_card.source', 'Seller / source')" in body
+        assert "ux('public_card.location', 'Location')" in body
+        assert "getObservedMeta(result)" in body
+        assert "getPublicPriceBadge(result, priceRole, reason)" in body
+        assert "ux('common.details_why', 'Why is this result shown?')" in body
+        assert "detectedEntry" not in body
+        assert "generationConfidence" not in body
+        assert "renderDataPoint(" not in body
+        assert "renderRoleRow(" not in body
+
+
+def test_beta_public_card_hides_internal_diagnostic_fields() -> None:
+    for html in _html_files(BETA_PATHS):
+        body = _function_body(html, "renderCard")
+        forbidden = [
+            "Interpreted entry",
+            "Search match",
+            "Used for price",
+            "Exclusion reason",
+            "Generation confidence",
+            "Price role",
+            "Marker detected",
+            "Projected reference",
+        ]
+        for text in forbidden:
+            assert text not in body
+
+
+def test_beta_public_surface_shows_dataset_update_line() -> None:
+    for html in _html_files(BETA_PATHS):
+        assert "function formatDatasetUpdateLine(meta)" in html
+        assert "ux('summary.dataset_updated_prefix', 'Listing data updated')" in html
 
 
 if __name__ == "__main__":
     test_index_calls_search_endpoint()
+    test_public_routes_use_beta_shell_and_qa_uses_internal_shell()
     test_index_does_not_reimplement_legacy_search()
     test_required_ui_controls_exist()
     test_beta_files_include_locale_switcher()
@@ -269,4 +309,6 @@ if __name__ == "__main__":
     test_beta_locale_switch_keeps_sort_selection_intact()
     test_beta_empty_and_error_states_are_locale_driven()
     test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy()
+    test_beta_public_card_hides_internal_diagnostic_fields()
+    test_beta_public_surface_shows_dataset_update_line()
     print("test_search_ui: ok")

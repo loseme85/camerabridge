@@ -19,7 +19,7 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 @app.route("/")
 @app.route("/search")
 def index() -> str:
-    return render_template("index.html")
+    return render_template("beta.html")
 
 
 @app.route("/qa")
