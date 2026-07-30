@@ -153,6 +153,15 @@
       flex-wrap:wrap;
       gap:8px;
       align-items:center;
+      min-width:0;
+    }
+    .qa-banner-meta .meta-pill{
+      white-space:normal;
+      overflow-wrap:anywhere;
+    }
+    .qa-banner-meta span{
+      min-width:0;
+      overflow-wrap:anywhere;
     }
     .qa-public-link{
       flex-shrink:0;
@@ -587,6 +596,8 @@
       border:1px solid var(--border);
       background:var(--surface-soft);
       color:var(--text-soft);
+      max-width:100%;
+      overflow-wrap:anywhere;
     }
     .micro-pill.accent{border-color:rgba(178,29,36,0.28);background:var(--accent-soft);color:var(--accent)}
     .micro-pill.blue{border-color:rgba(31,84,115,0.24);background:rgba(31,84,115,0.08);color:var(--blue)}
@@ -621,9 +632,7 @@
       line-height:1.3;
     }
     .results-grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
+      display:block;
     }
     .query-summary-bar{
       display:grid;
@@ -671,7 +680,10 @@
     }
     .load-more-region{
       display:flex;
+      flex-direction:column;
+      align-items:center;
       justify-content:center;
+      gap:8px;
       margin-top:16px;
     }
     .load-more-button{
@@ -732,9 +744,10 @@
     .result-title:hover{color:var(--accent)}
     .result-price-row{
       display:flex;
-      align-items:baseline;
+      align-items:flex-start;
       justify-content:space-between;
-      gap:10px;
+      gap:10px 16px;
+      flex-wrap:wrap;
       margin-bottom:8px;
     }
     .result-price{
@@ -744,19 +757,25 @@
       font-weight:800;
     }
     .result-source{
-      text-align:right;
+      display:grid;
+      gap:4px;
+      text-align:left;
       color:var(--text-soft);
-      min-width:148px;
+      min-width:0;
+      flex:1 1 220px;
     }
     .result-source-name{
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:10px;
-      line-height:1.4;
+      color:var(--text);
+      font-size:12px;
+      font-weight:700;
+      line-height:1.45;
+      overflow-wrap:anywhere;
     }
     .result-source-meta{
       font-family:"SFMono-Regular","Roboto Mono",monospace;
       font-size:10px;
-      line-height:1.4;
+      line-height:1.45;
+      overflow-wrap:anywhere;
     }
     .result-condition-summary{
       margin-top:4px;
@@ -767,7 +786,7 @@
     }
     .result-condition-tags{
       display:flex;
-      justify-content:flex-end;
+      justify-content:flex-start;
       flex-wrap:wrap;
       gap:5px;
       margin-top:6px;
@@ -863,6 +882,13 @@
       gap:10px;
       margin-top:12px;
     }
+    .archive-list.active-list,
+    .archive-list.history-list{
+      grid-template-columns:1fr;
+    }
+    .result-card[data-append-anchor="true"]{
+      scroll-margin-top:160px;
+    }
     .archive-item{
       border:1px solid var(--border);
       background:var(--surface-soft);
@@ -901,11 +927,8 @@
       .toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
       .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-    @media(min-width:760px){
-      .results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
     @media(min-width:1180px){
-      .results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .archive-list.active-list{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media(max-width:720px){
       .sticky-search-region{
@@ -1329,7 +1352,21 @@
         no_history: { ko: '이 검색에는 아직 과거 거래 기록이 보이지 않습니다.', en: 'No market-history records are visible for this search yet.', ja: 'この検索では過去の市場記録がまだ表示されていません。', 'zh-Hans': '此搜索目前还没有可见的历史市场记录。', 'zh-Hant': '此搜尋目前尚未看到歷史市場記錄。', pt: 'Ainda não há registros de histórico de mercado visíveis para esta pesquisa.', es: 'Todavía no hay registros de historial de mercado visibles para esta búsqueda.', de: 'Für diese Suche sind noch keine Markthistorie-Einträge sichtbar.', it: 'Per questa ricerca non sono ancora visibili record di storico di mercato.' },
       },
       cta: {
-        view_listing: { ko: '매물 보기', en: 'View listing', ja: '掲載を見る', 'zh-Hans': '查看条目', 'zh-Hant': '查看條目', pt: 'Ver anúncio', es: 'Ver anuncio', de: 'Angebot ansehen', it: 'Vedi annuncio' },
+        view_listing: { ko: '판매처에서 보기', en: 'View at seller', ja: '販売元で見る', 'zh-Hans': '前往卖家页面', 'zh-Hant': '前往賣家頁面', pt: 'Ver no vendedor', es: 'Ver en vendedor', de: 'Beim Anbieter ansehen', it: 'Vedi dal venditore' },
+      },
+      public_card: {
+        seller_label: { ko: '판매처', en: 'Seller', ja: '販売元', 'zh-Hans': '卖家', 'zh-Hant': '賣家', pt: 'Vendedor', es: 'Vendedor', de: 'Anbieter', it: 'Venditore' },
+        location_unknown: { ko: '위치 미확인', en: 'Location unavailable', ja: '場所不明', 'zh-Hans': '位置未知', 'zh-Hant': '位置未知', pt: 'Localização indisponível', es: 'Ubicación no disponible', de: 'Standort unbekannt', it: 'Posizione non disponibile' },
+        location_seoul_korea: { ko: '서울, 대한민국', en: 'Seoul, South Korea', ja: 'ソウル, 韓国', 'zh-Hans': '韩国首尔', 'zh-Hant': '韓國首爾', pt: 'Seul, Coreia do Sul', es: 'Seúl, Corea del Sur', de: 'Seoul, Südkorea', it: 'Seul, Corea del Sud' },
+        location_korea: { ko: '대한민국', en: 'South Korea', ja: '韓国', 'zh-Hans': '韩国', 'zh-Hant': '韓國', pt: 'Coreia do Sul', es: 'Corea del Sur', de: 'Südkorea', it: 'Corea del Sud' },
+        location_uk: { ko: '영국', en: 'United Kingdom', ja: 'イギリス', 'zh-Hans': '英国', 'zh-Hant': '英國', pt: 'Reino Unido', es: 'Reino Unido', de: 'Vereinigtes Königreich', it: 'Regno Unito' },
+        location_japan: { ko: '일본', en: 'Japan', ja: '日本', 'zh-Hans': '日本', 'zh-Hant': '日本', pt: 'Japão', es: 'Japón', de: 'Japan', it: 'Giappone' },
+        location_miami_us: { ko: '마이애미, 미국', en: 'Miami, United States', ja: 'マイアミ, アメリカ', 'zh-Hans': '美国迈阿密', 'zh-Hant': '美國邁阿密', pt: 'Miami, Estados Unidos', es: 'Miami, Estados Unidos', de: 'Miami, Vereinigte Staaten', it: 'Miami, Stati Uniti' },
+        location_finland: { ko: '핀란드', en: 'Finland', ja: 'フィンランド', 'zh-Hans': '芬兰', 'zh-Hant': '芬蘭', pt: 'Finlândia', es: 'Finlandia', de: 'Finnland', it: 'Finlandia' },
+        active_confirmed: { ko: '현재 판매 확인', en: 'Currently available', ja: '現在販売確認', 'zh-Hans': '确认当前在售', 'zh-Hant': '確認目前在售', pt: 'Disponível no momento', es: 'Disponible actualmente', de: 'Aktuell verfügbar', it: 'Attualmente disponibile' },
+        verification_needed: { ko: '판매 여부 재확인 필요', en: 'Availability needs verification', ja: '販売状況の再確認が必要', 'zh-Hans': '需要重新确认在售状态', 'zh-Hant': '需要重新確認在售狀態', pt: 'Disponibilidade precisa de verificação', es: 'La disponibilidad necesita verificación', de: 'Verfügbarkeit muss geprüft werden', it: 'La disponibilità richiede verifica' },
+        last_verified: { ko: '최근 확인', en: 'Last verified', ja: '最終確認', 'zh-Hans': '最近核验', 'zh-Hant': '最近核驗', pt: 'Última verificação', es: 'Última verificación', de: 'Zuletzt bestätigt', it: 'Ultima verifica' },
+        date_unknown: { ko: '날짜 미확인', en: 'Date unavailable', ja: '日付不明', 'zh-Hans': '日期未知', 'zh-Hant': '日期未知', pt: 'Data indisponível', es: 'Fecha no disponible', de: 'Datum unbekannt', it: 'Data non disponibile' },
       },
       empty: {
         source_gap_title: { ko: '아직 확인 가능한 출처 근거가 충분하지 않습니다.', en: 'We could not verify enough source coverage for this query yet.', ja: 'この検索では十分な出典カバレッジをまだ確認できていません。', 'zh-Hans': '目前还无法为此查询确认足够的来源覆盖。', 'zh-Hant': '目前尚無法為此查詢確認足夠的來源覆蓋。', pt: 'Ainda não conseguimos verificar cobertura de fonte suficiente para esta pesquisa.', es: 'Todavía no pudimos verificar suficiente cobertura de fuentes para esta búsqueda.', de: 'Für diese Suche konnte noch keine ausreichende Quellenabdeckung bestätigt werden.', it: 'Non siamo ancora riusciti a verificare una copertura delle fonti sufficiente per questa ricerca.' },
@@ -1370,6 +1407,7 @@
     const els = {};
     let pendingResultsAnchorScroll = false;
     let pendingHistoryScrollY = null;
+    let pendingAppendScrollTargetKey = '';
     let historyScrollSyncFrame = 0;
 
     function $(id){ return document.getElementById(id); }
@@ -1552,6 +1590,18 @@
       });
     }
 
+    function scrollAppendAnchorIntoView(){
+      if(!pendingAppendScrollTargetKey) return;
+      const anchor = document.querySelector('[data-append-anchor="true"]');
+      pendingAppendScrollTargetKey = '';
+      if(!anchor) return;
+      const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - getStickyAnchorOffset() - 8);
+      window.scrollTo({
+        top: targetTop,
+        behavior: 'auto'
+      });
+    }
+
     function escapeHtml(value){
       return String(value ?? '').replace(/[&<>"']/g, ch => ({
         '&':'&amp;',
@@ -1587,6 +1637,59 @@
       if(normalized === 'sold status') return ux('status.sold_status', t('status.sold_status'));
       if(normalized === 'unknown') return ux('status.unknown', t('status.unknown'));
       return label || ux('status.unknown', t('status.unknown'));
+    }
+
+    function inferSourceLocation(source){
+      const normalized = String(source || '').trim().toLowerCase();
+      if(!normalized) return ux('public_card.location_unknown', 'Location unavailable');
+      if(normalized.includes('충무로')) return ux('public_card.location_seoul_korea', 'Seoul, South Korea');
+      if(normalized.includes('사진집') || normalized.includes('장씨카메라')) return ux('public_card.location_korea', 'South Korea');
+      if(normalized.includes('영국') || normalized.includes('ffordes')) return ux('public_card.location_uk', 'United Kingdom');
+      if(normalized.includes('일본') || normalized.includes('기타무라')) return ux('public_card.location_japan', 'Japan');
+      if(normalized.includes('miami')) return ux('public_card.location_miami_us', 'Miami, United States');
+      if(normalized.includes('kamerastore')) return ux('public_card.location_finland', 'Finland');
+      return ux('public_card.location_unknown', 'Location unavailable');
+    }
+
+    function getObservedMeta(result){
+      const lastSeen = finalField(result, 'last_seen');
+      const crawlTime = finalField(result, 'crawl_time');
+      const firstSeen = finalField(result, 'first_seen');
+      if(lastSeen){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(lastSeen) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      if(crawlTime){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(crawlTime) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      if(firstSeen){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(firstSeen) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      return {
+        label: ux('public_card.last_verified', 'Last verified'),
+        value: ux('public_card.date_unknown', 'Date unavailable')
+      };
+    }
+
+    function getPublicSourceStatusText(status){
+      const normalized = String(status && status.label || '').trim().toLowerCase();
+      if(normalized === 'active asking') return ux('public_card.active_confirmed', 'Currently available');
+      if(normalized === 'active, needs verification') return ux('public_card.verification_needed', 'Availability needs verification');
+      return localizeStatusLabel(status && status.label);
+    }
+
+    function formatSourceHeading(source, location){
+      const locationUnknown = ux('public_card.location_unknown', 'Location unavailable');
+      const locationText = location && location !== locationUnknown ? ` · ${location}` : '';
+      return `${ux('public_card.seller_label', 'Seller')}: ${source}${locationText}`;
     }
 
     function localizeMatchBadgeLabel(label){
@@ -1880,6 +1983,7 @@
       const nextQuery = String(options.queryOverride || getSearchQueryValue(Boolean(options.preferSticky))).trim();
       if(!nextQuery) return;
       const append = Boolean(options.append);
+      const appendContext = append && state.response ? captureAppendContext() : null;
       const preserveResultsAnchor = Boolean(options.preserveResultsAnchor) && !append;
       const historyMode = String(options.historyMode || 'push');
       const limitOverride = Math.max(PAGE_SIZE, Number(options.visibleCount || PAGE_SIZE));
@@ -1914,9 +2018,13 @@
         if(append && state.response){
           const currentResults = Array.isArray(state.response.results) ? state.response.results : [];
           const nextResults = Array.isArray(payload.results) ? payload.results : [];
-          const mergedResults = currentResults.concat(nextResults);
+          const mergedResults = mergeUniqueResults(currentResults, nextResults);
           const currentPagination = state.response.pagination || {};
           const nextPagination = payload.pagination || {};
+          const mergedSections = buildDisplaySections(mergedResults, getSortMode());
+          pendingAppendScrollTargetKey = appendContext
+            ? resolveFirstNewActiveKey(mergedSections.active, appendContext.activeKeys)
+            : '';
           state.response = {
             ...state.response,
             ...payload,
@@ -1931,6 +2039,7 @@
           };
           state.offset = 0;
         }else{
+          pendingAppendScrollTargetKey = '';
           state.response = payload;
           state.offset = Math.max(0, offset);
         }
@@ -1956,7 +2065,14 @@
         state.loading = false;
         state.appending = false;
         render();
-        if(pendingResultsAnchorScroll){
+        if(pendingAppendScrollTargetKey){
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              scrollAppendAnchorIntoView();
+              scheduleHistoryScrollSync();
+            });
+          });
+        }else if(pendingResultsAnchorScroll){
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               scrollResultsIntoView();
@@ -2046,6 +2162,18 @@
       if(uiState.locale === 'de') return `${quantity} für "${query}"`;
       if(uiState.locale === 'it') return `${quantity} per "${query}"`;
       return `${quantity} for "${query}"`;
+    }
+
+    function formatUiDate(rawValue){
+      const raw = String(rawValue || '').trim();
+      if(!raw) return '';
+      const parsed = Date.parse(raw);
+      if(!Number.isFinite(parsed)) return raw;
+      return new Intl.DateTimeFormat(uiState.locale, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }).format(new Date(parsed));
     }
 
     function getSortMode(){
@@ -2230,6 +2358,26 @@
       };
     }
 
+    function captureAppendContext(){
+      const sections = buildDisplaySections(getResults(), getSortMode());
+      return {
+        activeCount: sections.active.length,
+        activeKeys: buildListingIdentitySet(sections.active),
+        scrollY: window.scrollY
+      };
+    }
+
+    function resolveFirstNewActiveKey(activeResults, existingActiveKeys){
+      const seen = existingActiveKeys instanceof Set ? existingActiveKeys : new Set();
+      for(const result of Array.isArray(activeResults) ? activeResults : []){
+        const key = buildListingIdentityKey(result);
+        if(!seen.has(key)){
+          return key;
+        }
+      }
+      return '';
+    }
+
     function buildResultEvidenceKey(title, source, price, currency){
       return [
         String(title || '').trim().toLowerCase(),
@@ -2237,6 +2385,34 @@
         String(price || '').trim(),
         String(currency || '').trim().toUpperCase()
       ].join('||');
+    }
+
+    function buildListingIdentityKey(result){
+      const sourceUrl = String(result && result.source_url || '').trim();
+      if(sourceUrl){
+        return `url::${sourceUrl}`;
+      }
+      return `fallback::${buildResultEvidenceKey(result && result.title, result && result.source, result && result.price, result && result.currency)}`;
+    }
+
+    function buildListingIdentitySet(results){
+      const keys = new Set();
+      (Array.isArray(results) ? results : []).forEach(result => {
+        keys.add(buildListingIdentityKey(result));
+      });
+      return keys;
+    }
+
+    function mergeUniqueResults(currentResults, nextResults){
+      const merged = Array.isArray(currentResults) ? [...currentResults] : [];
+      const seen = buildListingIdentitySet(merged);
+      (Array.isArray(nextResults) ? nextResults : []).forEach(result => {
+        const key = buildListingIdentityKey(result);
+        if(seen.has(key)) return;
+        seen.add(key);
+        merged.push(result);
+      });
+      return merged;
     }
 
     function getResultEvidence(result, index){
@@ -2557,8 +2733,8 @@
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
       els['query-summary-region'].innerHTML = renderQuerySummaryBar(results);
-      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active);
-      els['results-load-more-region'].innerHTML = renderLoadMore();
+      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
+      els['results-load-more-region'].innerHTML = '';
       els['archive-region'].innerHTML = renderArchiveSection(displaySections.history);
     }
 
@@ -2592,20 +2768,39 @@
       `;
     }
 
-    function renderLoadMore(){
+    function formatLoadMoreProgress(shownCount, totalCount){
+      const shown = Math.max(0, Number(shownCount || 0));
+      const total = Math.max(shown, Number(totalCount || 0));
+      if(uiState.locale === 'ko') return `${shown} / ${total} 표시 중`;
+      if(uiState.locale === 'ja') return `${shown} / ${total} 件を表示`;
+      if(uiState.locale === 'zh-Hans') return `已显示 ${shown} / ${total}`;
+      if(uiState.locale === 'zh-Hant') return `已顯示 ${shown} / ${total}`;
+      if(uiState.locale === 'pt') return `${shown} / ${total} exibidos`;
+      if(uiState.locale === 'es') return `${shown} / ${total} mostrados`;
+      if(uiState.locale === 'de') return `${shown} / ${total} angezeigt`;
+      if(uiState.locale === 'it') return `${shown} / ${total} mostrati`;
+      return `${shown} / ${total} shown`;
+    }
+
+    function renderLoadMore(activeShownCount){
       const pagination = state.response ? (state.response.pagination || {}) : {};
       if(!state.response || !getResults().length || !pagination.has_more){
         return '';
       }
+      const shownCount = Math.max(0, Number(activeShownCount || 0));
+      const totalCount = Math.max(shownCount, Number(state.response.total_ranked || shownCount));
       return `
-        <button
-          type="button"
-          class="ghost-button load-more-button"
-          data-load-more="true"
-          ${state.appending ? 'disabled' : ''}
-        >
-          ${state.appending ? 'Loading more...' : 'Load more'}
-        </button>
+        <div class="load-more-region">
+          <button
+            type="button"
+            class="ghost-button load-more-button"
+            data-load-more="true"
+            ${state.appending ? 'disabled' : ''}
+          >
+            ${state.appending ? ux('load_more.active_loading', 'Loading more active listings…') : ux('load_more.active_idle', 'Load more active listings')}
+          </button>
+          <div class="load-more-note">${escapeHtml(formatLoadMoreProgress(shownCount, totalCount))}</div>
+        </div>
       `;
     }
 
@@ -2944,10 +3139,19 @@
       const matchBadge = getResultMatchBadge(result, evidenceRole, priceRole, reason);
       const priceEvidenceMeta = derivePriceEvidenceMeta(result, evidence);
       const conditionSummary = buildConditionSummary(result, status);
+      const location = inferSourceLocation(source);
+      const observedMeta = getObservedMeta(result);
+      const sourceHeading = formatSourceHeading(source, location);
+      const sourceStatusText = getPublicSourceStatusText(status);
+      const observedLine = `${observedMeta.label}: ${observedMeta.value}`;
+      const listingKey = buildListingIdentityKey(result);
+      const appendAnchorAttr = pendingAppendScrollTargetKey && listingKey === pendingAppendScrollTargetKey
+        ? ' data-append-anchor="true"'
+        : '';
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
-        <article class="result-card">
+        <article class="result-card" data-listing-key="${escapeHtml(listingKey)}"${appendAnchorAttr}>
           <div class="result-head">
             <div class="thumb">${thumb}</div>
             <div class="card-copy">
@@ -2955,8 +3159,9 @@
               <div class="result-price-row">
                 <div class="result-price">${escapeHtml(displayValue(result.price, t('result.no_usable_price')))}</div>
                 <div class="result-source">
-                  <div class="result-source-name">${escapeHtml(source)}</div>
-                  <div class="result-source-meta">${escapeHtml(currency)}</div>
+                  <div class="result-source-name">${escapeHtml(sourceHeading)}</div>
+                  <div class="result-source-meta">${escapeHtml(sourceStatusText)}</div>
+                  <div class="result-source-meta">${escapeHtml(observedLine)}</div>
                   <div class="result-condition-summary">${escapeHtml(conditionSummary.primary)}</div>
                   ${conditionSummary.tags.length ? `<div class="result-condition-tags">${conditionSummary.tags.map(tag => `<span class="micro-pill">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
                 </div>
@@ -2999,7 +3204,7 @@
               <button type="button" class="ghost-button">${escapeHtml(t('result.create_alert_exact_model'))}</button>
             </div>
             <div class="action-group">
-              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>${escapeHtml(ux('cta.view_listing', t('result.view_source')))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(ux('cta.view_listing', t('result.view_source')))}</button>`}
+              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>${escapeHtml(ux('cta.view_listing', 'View at seller'))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(ux('cta.view_listing', 'View at seller'))}</button>`}
             </div>
           </div>
         </article>
@@ -3014,7 +3219,7 @@
       return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
     }
 
-    function renderResultSection(sectionName, results){
+    function renderResultSection(sectionName, results, footerHtml = ''){
       const isActive = sectionName === 'active';
       const title = isActive ? ux('section.active_listings', 'Active listings') : ux('section.market_history', 'Market history');
       const subtitle = isActive
@@ -3023,6 +3228,7 @@
       const emptyMessage = isActive
         ? ux('section.no_active', 'No active listings are visible in this result window yet.')
         : ux('section.no_history', 'No market-history records are visible for this search yet.');
+      const listClass = isActive ? 'archive-list active-list' : 'archive-list history-list';
 
       return `
         <article class="archive-card">
@@ -3031,9 +3237,10 @@
           <p>${escapeHtml(subtitle)}</p>
           ${
             results.length
-              ? `<div class="archive-list">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index))).join('')}</div>`
+              ? `<div class="${listClass}">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index))).join('')}</div>`
               : `<div class="archive-item"><strong>${escapeHtml(emptyMessage)}</strong></div>`
           }
+          ${footerHtml}
         </article>
       `;
     }

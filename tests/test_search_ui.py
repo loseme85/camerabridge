@@ -217,12 +217,12 @@ def test_locale_strings_cover_active_first_surface() -> None:
         assert "판매 완료" in html
         assert "판매 종료" in html
         assert "과거 기록" in html
-        assert "매물 보기" in html
+        assert "판매처에서 보기" in html
 
 
 def test_beta_uses_localized_view_listing_cta() -> None:
     for html in _html_files(BETA_PATHS):
-        assert "ux('cta.view_listing', 'View listing')" in html
+        assert "ux('cta.view_listing', 'View at seller')" in html
 
 
 def test_beta_has_locale_translation_hooks_for_static_shell() -> None:
@@ -281,8 +281,8 @@ def test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy() -> None:
     for html in _html_files(BETA_PATHS):
         body = _function_body(html, "renderCard")
         assert "const title = result.title || ux('card.title_missing', 'Untitled listing');" in body
-        assert "ux('public_card.source', 'Seller / source')" in body
-        assert "ux('public_card.location', 'Location')" in body
+        assert "formatSourceHeading(source, location)" in body
+        assert "getPublicSourceStatusText(status)" in body
         assert "getObservedMeta(result)" in body
         assert "getPublicPriceBadge(result, priceRole, reason)" in body
         assert "ux('common.details_why', 'Why is this result shown?')" in body
@@ -396,6 +396,61 @@ def test_load_more_is_scoped_to_active_section_and_history_stays_separate() -> N
         assert "ux('load_more.active_loading', 'Loading more active listings…')" in render_load_more
 
 
+def test_qa_load_more_is_scoped_to_active_section_and_history_stays_separate() -> None:
+    for html in _html_files(INDEX_PATHS):
+        render_content = _function_body(html, "renderContent")
+        render_section = _function_body(html, "renderResultSection")
+        render_load_more = _function_body(html, "renderLoadMore")
+        assert "renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length))" in render_content
+        assert "els['results-load-more-region'].innerHTML = '';" in render_content
+        assert "renderArchiveSection(displaySections.history)" in render_content
+        assert "${footerHtml}" in render_section
+        assert "!pagination.has_more" in render_load_more
+        assert "ux('load_more.active_idle', 'Load more active listings')" in render_load_more
+
+
+def test_append_flow_dedupes_by_source_url_and_marks_first_new_active_card() -> None:
+    for html in _html_files():
+        assert "captureAppendContext()" in html
+        assert "mergeUniqueResults(currentResults, nextResults)" in html
+        assert "buildListingIdentityKey(result)" in html
+        assert 'data-append-anchor="true"' in html
+        assert "scrollAppendAnchorIntoView();" in html
+
+
+def test_public_active_grid_uses_three_two_one_columns() -> None:
+    for html in _html_files(BETA_PATHS):
+        assert ".archive-list.active-list," in html
+        assert "grid-template-columns:1fr;" in html
+        assert "@media(min-width:720px){" in html
+        assert "grid-template-columns:repeat(2,minmax(0,1fr));" in html
+        assert "@media(min-width:1200px){" in html
+        assert "grid-template-columns:repeat(3,minmax(0,1fr));" in html
+
+
+def test_qa_active_grid_stays_two_columns_and_history_one_column() -> None:
+    for html in _html_files(INDEX_PATHS):
+        assert ".archive-list.active-list," in html
+        assert ".archive-list.history-list{" in html
+        assert "@media(min-width:1180px){" in html
+        assert ".archive-list.active-list{grid-template-columns:repeat(2,minmax(0,1fr))}" in html
+
+
+def test_qa_snapshot_meta_wraps_on_mobile_instead_of_overflowing() -> None:
+    for html in _html_files(INDEX_PATHS):
+        assert ".qa-banner-meta .meta-pill{" in html
+        assert "white-space:normal;" in html
+        assert "overflow-wrap:anywhere;" in html
+
+
+def test_source_visibility_emphasizes_seller_without_translating_titles_or_prices() -> None:
+    for html in _html_files():
+        assert "formatSourceHeading(source, location)" in html
+        assert "ux('public_card.seller_label', 'Seller')" in html
+        assert "escapeHtml(title)" in html
+        assert "result.price" in html
+
+
 def test_public_listing_titles_remain_source_authored_text() -> None:
     for html in _html_files(BETA_PATHS):
         render_card = _function_body(html, "renderCard")
@@ -457,6 +512,12 @@ if __name__ == "__main__":
     test_public_locale_surface_covers_hero_notice_search_and_sections()
     test_locale_switch_keeps_rendered_results_without_refetch()
     test_load_more_is_scoped_to_active_section_and_history_stays_separate()
+    test_qa_load_more_is_scoped_to_active_section_and_history_stays_separate()
+    test_append_flow_dedupes_by_source_url_and_marks_first_new_active_card()
+    test_public_active_grid_uses_three_two_one_columns()
+    test_qa_active_grid_stays_two_columns_and_history_one_column()
+    test_qa_snapshot_meta_wraps_on_mobile_instead_of_overflowing()
+    test_source_visibility_emphasizes_seller_without_translating_titles_or_prices()
     test_public_listing_titles_remain_source_authored_text()
     test_load_more_hides_when_active_pagination_is_complete()
     test_load_more_progress_and_market_history_order_have_locale_support()
