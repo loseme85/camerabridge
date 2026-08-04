@@ -1078,9 +1078,41 @@
     const PAGE_SIZE = 12;
     const FALLBACK_COPY = {
       ko: '검색을 불러오는 중 문제가 발생했습니다. 데이터는 변경되지 않았습니다. 검색어를 더 구체적으로 입력하거나 잠시 후 다시 시도해 주세요.',
-      en: 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.'
+      en: 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.',
+      ja: '検索の読み込み中に問題が発生しました。データは変更されていません。しばらくしてから再試行するか、検索語をより具体的にしてください。',
+      'zh-Hans': '加载搜索结果时发生问题。数据未被更改。请稍后重试，或使用更具体的搜索词。',
+      'zh-Hant': '載入搜尋結果時發生問題。資料未被更改。請稍後再試，或使用更具體的搜尋詞。',
+      pt: 'Ocorreu um problema ao carregar esta busca. Nenhum dado foi alterado. Tente novamente ou refine a consulta.',
+      es: 'Se produjo un problema al cargar esta búsqueda. No se modificó ningún dato. Inténtalo de nuevo o precisa mejor la consulta.',
+      de: 'Beim Laden dieser Suche ist ein Problem aufgetreten. Es wurden keine Daten geändert. Bitte versuche es erneut oder präzisiere die Suche.',
+      it: 'Si è verificato un problema durante il caricamento di questa ricerca. Nessun dato è stato modificato. Riprova oppure rendi la query più specifica.'
     };
-    const BROAD_QUERY_FALLBACK_CHIPS = ['M lenses', 'R lenses', 'SL lenses', '35mm', '50mm', '90mm'];
+    const BROAD_QUERY_FALLBACK_CHIPS = [
+      {
+        query: 'M lenses',
+        labels: { ko: 'M 렌즈', en: 'M lenses', ja: 'Mレンズ', 'zh-Hans': 'M 镜头', 'zh-Hant': 'M 鏡頭', pt: 'Lentes M', es: 'Objetivos M', de: 'M-Objektive', it: 'Obiettivi M' }
+      },
+      {
+        query: 'R lenses',
+        labels: { ko: 'R 렌즈', en: 'R lenses', ja: 'Rレンズ', 'zh-Hans': 'R 镜头', 'zh-Hant': 'R 鏡頭', pt: 'Lentes R', es: 'Objetivos R', de: 'R-Objektive', it: 'Obiettivi R' }
+      },
+      {
+        query: 'SL lenses',
+        labels: { ko: 'SL 렌즈', en: 'SL lenses', ja: 'SLレンズ', 'zh-Hans': 'SL 镜头', 'zh-Hant': 'SL 鏡頭', pt: 'Lentes SL', es: 'Objetivos SL', de: 'SL-Objektive', it: 'Obiettivi SL' }
+      },
+      {
+        query: '35mm',
+        labels: { ko: '35mm', en: '35mm', ja: '35mm', 'zh-Hans': '35mm', 'zh-Hant': '35mm', pt: '35mm', es: '35mm', de: '35mm', it: '35mm' }
+      },
+      {
+        query: '50mm',
+        labels: { ko: '50mm', en: '50mm', ja: '50mm', 'zh-Hans': '50mm', 'zh-Hant': '50mm', pt: '50mm', es: '50mm', de: '50mm', it: '50mm' }
+      },
+      {
+        query: '90mm',
+        labels: { ko: '90mm', en: '90mm', ja: '90mm', 'zh-Hans': '90mm', 'zh-Hant': '90mm', pt: '90mm', es: '90mm', de: '90mm', it: '90mm' }
+      }
+    ];
     const SUPPORTED_LOCALES = ['ko', 'en', 'ja', 'zh-Hans', 'zh-Hant', 'pt', 'es', 'de', 'it'];
     const LOCALE_LABELS = {
       ko: '한국어',
@@ -1096,26 +1128,64 @@
     const LOCAL_BROAD_QUERY_HINTS = {
       'summicron': {
         ko: '"Summicron"은 여러 Leica 렌즈 계열을 가리킬 수 있습니다. 마운트나 초점거리를 함께 입력해 보세요.',
-        en: '"Summicron" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.'
+        en: '"Summicron" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
+        ja: '"Summicron" は複数の Leica レンズ系統を指すことがあります。マウントや焦点距離を追加して絞り込んでください。',
+        'zh-Hans': '"Summicron" 可能对应多个 Leica 镜头系列。请加入卡口或焦距来缩小范围。',
+        'zh-Hant': '"Summicron" 可能對應多個 Leica 鏡頭系列。請加入卡口或焦距來縮小範圍。',
+        pt: '"Summicron" pode se referir a várias famílias de lentes Leica. Escolha uma montagem ou distância focal para refinar a busca.',
+        es: '"Summicron" puede referirse a varias familias de objetivos Leica. Elige una montura o una distancia focal para acotar la búsqueda.',
+        de: '"Summicron" kann mehrere Leica-Objektivfamilien meinen. Wähle Anschluss oder Brennweite, um die Suche einzugrenzen.',
+        it: '"Summicron" può riferirsi a più famiglie di obiettivi Leica. Scegli un attacco o una focale per restringere la ricerca.'
       },
       'summilux': {
         ko: '"Summilux"는 여러 Leica 렌즈 계열을 가리킬 수 있습니다. 마운트나 초점거리를 함께 입력해 보세요.',
-        en: '"Summilux" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.'
+        en: '"Summilux" can refer to multiple Leica lens families. Choose a mount or focal length to refine your search.',
+        ja: '"Summilux" は複数の Leica レンズ系統を指すことがあります。マウントや焦点距離を追加して絞り込んでください。',
+        'zh-Hans': '"Summilux" 可能对应多个 Leica 镜头系列。请加入卡口或焦距来缩小范围。',
+        'zh-Hant': '"Summilux" 可能對應多個 Leica 鏡頭系列。請加入卡口或焦距來縮小範圍。',
+        pt: '"Summilux" pode se referir a várias famílias de lentes Leica. Escolha uma montagem ou distância focal para refinar a busca.',
+        es: '"Summilux" puede referirse a varias familias de objetivos Leica. Elige una montura o una distancia focal para acotar la búsqueda.',
+        de: '"Summilux" kann mehrere Leica-Objektivfamilien meinen. Wähle Anschluss oder Brennweite, um die Suche einzugrenzen.',
+        it: '"Summilux" può riferirsi a più famiglie di obiettivi Leica. Scegli un attacco o una focale per restringere la ricerca.'
       },
       'leica lens': {
         ko: '이 검색어는 아직 범위가 넓습니다. 계열, 마운트, 초점거리를 추가해 보세요.',
-        en: 'This query is still broad. Choose a family, mount, or focal length to refine your search.'
+        en: 'This query is still broad. Choose a family, mount, or focal length to refine your search.',
+        ja: 'この検索語はまだ範囲が広めです。系統、マウント、焦点距離を追加して絞り込んでください。',
+        'zh-Hans': '这个搜索词仍然较宽泛。请加入系列、卡口或焦距来缩小范围。',
+        'zh-Hant': '這個搜尋詞仍然較寬泛。請加入系列、卡口或焦距來縮小範圍。',
+        pt: 'Esta busca ainda é ampla. Escolha uma família, montagem ou distância focal para refinar.',
+        es: 'Esta búsqueda sigue siendo amplia. Elige una familia, montura o distancia focal para afinarla.',
+        de: 'Diese Suche ist noch zu breit. Wähle Familie, Anschluss oder Brennweite, um sie genauer zu machen.',
+        it: 'Questa ricerca è ancora ampia. Scegli una famiglia, un attacco o una focale per renderla più precisa.'
       },
       'leica m': {
         ko: '이 검색어는 여러 M 시스템 바디와 렌즈를 함께 가리킬 수 있습니다. 바디 모델이나 렌즈 계열을 더 구체적으로 입력해 보세요.',
-        en: 'This query can refer to multiple M-system bodies and lenses. Refine by body model or lens family.'
+        en: 'This query can refer to multiple M-system bodies and lenses. Refine by body model or lens family.',
+        ja: 'この検索語は複数の M システムボディやレンズを指す可能性があります。ボディ名やレンズ系統を追加してください。',
+        'zh-Hans': '这个搜索词可能同时指向多个 M 系统机身和镜头。请加入机身型号或镜头系列。',
+        'zh-Hant': '這個搜尋詞可能同時指向多個 M 系統機身與鏡頭。請加入機身型號或鏡頭系列。',
+        pt: 'Esta busca pode se referir a vários corpos e lentes do sistema M. Refine pelo corpo ou pela família da lente.',
+        es: 'Esta búsqueda puede referirse a varios cuerpos y lentes del sistema M. Acótala por cuerpo o familia de lente.',
+        de: 'Diese Suche kann mehrere M-System-Gehäuse und -Objektive meinen. Verfeinere nach Gehäusemodell oder Objektivfamilie.',
+        it: 'Questa ricerca può riferirsi a più corpi e obiettivi del sistema M. Restringila per corpo o famiglia di obiettivi.'
       },
       '50 cron': {
         ko: '수집가 약칭은 여러 Summicron 변형과 겹칠 수 있습니다. 마운트나 전체 모델명을 함께 입력해 보세요.',
-        en: 'Collector shorthand can match multiple Summicron variants. Choose a mount or full model name to refine your search.'
+        en: 'Collector shorthand can match multiple Summicron variants. Choose a mount or full model name to refine your search.',
+        ja: 'コレクター略称は複数の Summicron バリエーションに重なることがあります。マウントや正式名称を追加してください。',
+        'zh-Hans': '收藏圈简称可能对应多个 Summicron 版本。请加入卡口或完整型号名称。',
+        'zh-Hant': '收藏圈簡稱可能對應多個 Summicron 版本。請加入卡口或完整型號名稱。',
+        pt: 'Abreviações de colecionadores podem corresponder a várias variantes Summicron. Escolha uma montagem ou o nome completo do modelo.',
+        es: 'La abreviatura de coleccionista puede coincidir con varias variantes Summicron. Elige una montura o el nombre completo del modelo.',
+        de: 'Sammler-Kürzel können auf mehrere Summicron-Varianten passen. Wähle Anschluss oder den vollständigen Modellnamen.',
+        it: 'Le abbreviazioni da collezionista possono corrispondere a più varianti Summicron. Scegli un attacco o il nome completo del modello.'
       }
     };
     const UX_LOCALE_COPY = {
+      site: {
+        title: { ko: 'Camera Bridge | Leica 중고 검색', en: 'Camera Bridge | Leica Market Search', ja: 'Camera Bridge | Leica中古検索', 'zh-Hans': 'Camera Bridge | Leica 二手搜索', 'zh-Hant': 'Camera Bridge | Leica 二手搜尋', pt: 'Camera Bridge | Busca de mercado Leica', es: 'Camera Bridge | Búsqueda de mercado Leica', de: 'Camera Bridge | Leica-Markt-Suche', it: 'Camera Bridge | Ricerca mercato Leica' },
+      },
       topbar: {
         brand_aria: { ko: 'Camera Bridge 제한 베타', en: 'Camera Bridge Beta', ja: 'Camera Bridge ベータ', 'zh-Hans': 'Camera Bridge 测试版', 'zh-Hant': 'Camera Bridge 測試版', pt: 'Camera Bridge Beta', es: 'Camera Bridge Beta', de: 'Camera Bridge Beta', it: 'Camera Bridge Beta' },
         beta_badge: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '限量测试', 'zh-Hant': '限量測試', pt: 'Beta limitado', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
@@ -1283,6 +1353,7 @@
       common: {
         unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
         no_data: { ko: '정보 없음', en: 'Not enough data', ja: '情報不足', 'zh-Hans': '数据不足', 'zh-Hant': '資料不足', pt: 'Dados insuficientes', es: 'Datos insuficientes', de: 'Nicht genug Daten', it: 'Dati insufficienti' },
+        mixed_currencies: { ko: '통화가 섞여 있습니다', en: 'Mixed currencies', ja: '通貨が混在しています', 'zh-Hans': '币种混杂', 'zh-Hant': '幣別混雜', pt: 'Moedas misturadas', es: 'Monedas mezcladas', de: 'Gemischte Währungen', it: 'Valute miste' },
         unknown_source: { ko: '출처 미확인', en: 'Unknown source', ja: '出典不明', 'zh-Hans': '来源未知', 'zh-Hant': '來源未知', pt: 'Fonte desconhecida', es: 'Fuente desconocida', de: 'Unbekannte Quelle', it: 'Fonte sconosciuta' },
         copied: { ko: '복사됨', en: 'Copied', ja: 'コピーしました', 'zh-Hans': '已复制', 'zh-Hant': '已複製', pt: 'Copiado', es: 'Copiado', de: 'Kopiert', it: 'Copiato' },
         yes: { ko: '사용됨', en: 'Used', ja: '使用', 'zh-Hans': '已使用', 'zh-Hant': '已使用', pt: 'Usado', es: 'Usado', de: 'Verwendet', it: 'Usato' },
@@ -1404,11 +1475,20 @@
       market_entry: {
         summary_label: { ko: '결과 요약', en: 'Result summary', ja: '結果概要', 'zh-Hans': '结果摘要', 'zh-Hant': '結果摘要', pt: 'Resumo do resultado', es: 'Resumen del resultado', de: 'Ergebnisübersicht', it: 'Riepilogo del risultato' },
         model_missing: { ko: '모델 정보 없음', en: 'Model information unavailable', ja: 'モデル情報なし', 'zh-Hans': '没有型号信息', 'zh-Hant': '沒有型號資訊', pt: 'Informação do modelo indisponível', es: 'Información del modelo no disponible', de: 'Modellinformationen nicht verfügbar', it: 'Informazioni sul modello non disponibili' },
+        exact_generation_price: { ko: '정확 세대 가격', en: 'Exact generation price', ja: '正確な世代価格', 'zh-Hans': '精确世代价格', 'zh-Hant': '精確世代價格', pt: 'Preço exato da geração', es: 'Precio exacto de la generación', de: 'Exakter Generationspreis', it: 'Prezzo esatto della generazione' },
+        body_market_summary: { ko: '바디 시세 요약', en: 'Body market summary', ja: 'ボディ相場の要約', 'zh-Hans': '机身市场摘要', 'zh-Hant': '機身市場摘要', pt: 'Resumo de mercado do corpo', es: 'Resumen de mercado del cuerpo', de: 'Marktübersicht Kamera', it: 'Riepilogo di mercato del corpo' },
+        exact_price: { ko: '정확 가격', en: 'Exact price', ja: '正確価格', 'zh-Hans': '精确价格', 'zh-Hant': '精確價格', pt: 'Preço exato', es: 'Precio exacto', de: 'Exakter Preis', it: 'Prezzo esatto' },
+        same_model_price: { ko: '같은 모델 가격', en: 'Same model price', ja: '同一モデル価格', 'zh-Hans': '同型号价格', 'zh-Hant': '同型號價格', pt: 'Preço do mesmo modelo', es: 'Precio del mismo modelo', de: 'Preis desselben Modells', it: 'Prezzo dello stesso modello' },
+        reference_price_only: { ko: '참고 가격만', en: 'Reference price only', ja: '参考価格のみ', 'zh-Hans': '仅参考价格', 'zh-Hant': '僅參考價格', pt: 'Somente preço de referência', es: 'Solo precio de referencia', de: 'Nur Referenzpreis', it: 'Solo prezzo di riferimento' },
+        price_locked: { ko: '가격 잠금', en: 'Price locked', ja: '価格ロック', 'zh-Hans': '价格锁定', 'zh-Hant': '價格鎖定', pt: 'Preço bloqueado', es: 'Precio bloqueado', de: 'Preis gesperrt', it: 'Prezzo bloccato' },
+        not_enough_evidence: { ko: '아직 근거가 충분하지 않습니다.', en: 'Not enough evidence yet.', ja: 'まだ根拠が十分ではありません。', 'zh-Hans': '目前证据仍不足。', 'zh-Hant': '目前證據仍不足。', pt: 'Ainda não há evidência suficiente.', es: 'Aún no hay evidencia suficiente.', de: 'Noch nicht genug Evidenz.', it: 'Non ci sono ancora prove sufficienti.' },
         status_label: { ko: '가격 상태', en: 'Price state', ja: '価格状態', 'zh-Hans': '价格状态', 'zh-Hant': '價格狀態', pt: 'Estado do preço', es: 'Estado del precio', de: 'Preisstatus', it: 'Stato del prezzo' },
         source_check_label: { ko: '원문 확인', en: 'Check source listing', ja: '元の掲載を確認', 'zh-Hans': '查看原始条目', 'zh-Hant': '查看原始條目', pt: 'Verificar anúncio original', es: 'Verificar anuncio original', de: 'Originalangebot prüfen', it: 'Verifica annuncio originale' },
         source_check_body: { ko: '구매 전 원문 매물 확인이 필요합니다.', en: 'Please verify the original listing before purchase.', ja: '購入前に元の掲載を確認してください。', 'zh-Hans': '购买前请核对原始条目。', 'zh-Hant': '購買前請核對原始條目。', pt: 'Verifique o anúncio original antes da compra.', es: 'Verifica el anuncio original antes de comprar.', de: 'Bitte vor dem Kauf das Originalangebot prüfen.', it: 'Verifica l’annuncio originale prima dell’acquisto.' },
         beta_note_label: { ko: '참고', en: 'Note', ja: '補足', 'zh-Hans': '说明', 'zh-Hant': '說明', pt: 'Observação', es: 'Nota', de: 'Hinweis', it: 'Nota' },
         beta_note_body: { ko: '동일 API 결과를 베타용 문구로만 정리했습니다.', en: 'The same API result is shown here with beta-friendly wording only.', ja: '同じAPI結果を、ベータ向けのわかりやすい文言で表示しています。', 'zh-Hans': '这里展示的是同一 API 结果，只是换成了更适合测试版的文案。', 'zh-Hant': '這裡顯示的是相同 API 結果，只是換成了更適合測試版的文案。', pt: 'O mesmo resultado da API é mostrado aqui apenas com uma redação mais amigável para a beta.', es: 'Aquí se muestra el mismo resultado de la API, solo con una redacción más clara para la beta.', de: 'Hier wird dasselbe API-Ergebnis nur mit beta-freundlicherer Formulierung gezeigt.', it: 'Qui viene mostrato lo stesso risultato API con un testo più adatto alla beta.' },
+        unlock_condition_label: { ko: '가격 계산 조건', en: 'Price unlock condition', ja: '価格計算の条件', 'zh-Hans': '价格开启条件', 'zh-Hant': '價格開啟條件', pt: 'Condição para liberar o preço', es: 'Condición para abrir el precio', de: 'Bedingung für Preisfreigabe', it: 'Condizione per sbloccare il prezzo' },
+        unlock_condition_met: { ko: '현재 근거로 이미 이 요약을 표시할 수 있습니다.', en: 'Current evidence already supports this summary.', ja: '現在の根拠でこの要約はすでに表示可能です。', 'zh-Hans': '当前证据已经足以支持此摘要。', 'zh-Hant': '目前證據已足以支撐此摘要。', pt: 'A evidência atual já sustenta este resumo.', es: 'La evidencia actual ya respalda este resumen.', de: 'Die aktuelle Evidenz stützt diese Zusammenfassung bereits.', it: 'Le evidenze attuali supportano già questo riepilogo.' },
       },
       public_card: {
         source: { ko: '판매처 / 출처', en: 'Seller / source', ja: '販売元 / 出典', 'zh-Hans': '卖家 / 来源', 'zh-Hant': '賣家 / 來源', pt: 'Vendedor / fonte', es: 'Vendedor / fuente', de: 'Verkäufer / Quelle', it: 'Venditore / fonte' },
@@ -1522,8 +1602,14 @@
       });
     }
 
+    function updateDocumentTitle(){
+      const baseTitle = ux('site.title', 'Camera Bridge | Leica Market Search');
+      document.title = state.query ? `${state.query} | ${baseTitle}` : baseTitle;
+    }
+
     function applyStaticTranslations(){
       document.documentElement.lang = uiState.locale;
+      updateDocumentTitle();
       document.querySelectorAll('[data-i18n]').forEach(node => {
         const key = node.getAttribute('data-i18n');
         if(!key) return;
@@ -1699,6 +1785,74 @@
       if(normalized === 'accessory') return ux('filters.category.accessory', 'Accessory');
       if(!normalized || normalized === 'unknown') return ux('common.unknown', 'Unknown');
       return String(value || '');
+    }
+
+    function localizeSoldQualityFilterValue(value){
+      const normalized = String(value || '').trim().toLowerCase();
+      if(normalized === 'asking') return ux('sold_filter.asking', 'Active');
+      if(normalized === 'sold') return ux('sold_filter.sold', 'Sold');
+      if(normalized === 'sold_confirmed') return ux('sold_filter.sold_confirmed', 'Sold confirmed');
+      if(normalized === 'sold_likely') return ux('sold_filter.sold_likely', 'Sold likely');
+      if(normalized === 'unknown') return ux('sold_filter.unknown', 'Unknown');
+      return String(value || '');
+    }
+
+    function localizeAppliedFilterLabel(key){
+      if(key === 'category') return ux('filters.category.label', 'Category');
+      if(key === 'brand') return ux('filters.brand.label', 'Brand');
+      if(key === 'mount') return ux('filters.mount.label', 'Mount');
+      if(key === 'sold_quality') return ux('filters.sold_quality.label', 'Listing status');
+      return titleCase(String(key || '').replace(/_/g, ' '));
+    }
+
+    function localizeAppliedFilterValue(key, value){
+      if(Array.isArray(value)){
+        return value.map(item => localizeAppliedFilterValue(key, item)).filter(Boolean).join(', ');
+      }
+      if(key === 'category') return localizeCategoryLabel(value);
+      if(key === 'sold_quality') return localizeSoldQualityFilterValue(value);
+      return String(value || '').trim();
+    }
+
+    function formatAppliedFiltersNotice(filters){
+      const entries = Object.entries(filters || {})
+        .map(([key, value]) => {
+          const localizedValue = localizeAppliedFilterValue(key, value);
+          if(!localizedValue) return '';
+          return `${localizeAppliedFilterLabel(key)}: ${localizedValue}`;
+        })
+        .filter(Boolean);
+      if(!entries.length) return ux('warnings.filters_none', 'No filters applied');
+      return `${ux('warnings.filters_prefix', 'Filters')}: ${entries.join(', ')}`;
+    }
+
+    function getBroadQueryFallbackChips(){
+      return BROAD_QUERY_FALLBACK_CHIPS.map(chip => ({
+        query: String(chip.query || ''),
+        label: String((chip.labels && (chip.labels[uiState.locale] || chip.labels.en)) || chip.query || '')
+      }));
+    }
+
+    function normalizeRefinementChip(chip){
+      if(chip && typeof chip === 'object'){
+        return {
+          query: String(chip.query || chip.value || chip.label || '').trim(),
+          label: String(chip.label || (chip.labels && (chip.labels[uiState.locale] || chip.labels.en)) || chip.query || chip.value || '').trim()
+        };
+      }
+      return {
+        query: String(chip || '').trim(),
+        label: String(chip || '').trim()
+      };
+    }
+
+    function renderRefinementButtons(chips, limit){
+      return (Array.isArray(chips) ? chips : [])
+        .slice(0, limit)
+        .map(chip => normalizeRefinementChip(chip))
+        .filter(chip => chip.query && chip.label)
+        .map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip.query)}">${escapeHtml(chip.label)}</button>`)
+        .join('');
     }
 
     function qualityLabel(value){
@@ -2122,7 +2276,7 @@
         needs_disambiguation: true,
         ambiguity_type: 'broad_query_frontend_fallback',
         recommended_ui_pattern: 'refinement_chips',
-        recommended_chips: BROAD_QUERY_FALLBACK_CHIPS,
+        recommended_chips: getBroadQueryFallbackChips(),
         suggested_filters: {},
         hard_pin_allowed: false,
         recommended_message: String(message[uiState.locale] || message.en || '')
@@ -2157,16 +2311,22 @@
       return ux('status.unknown', 'Unknown');
     }
 
+    function formatLocaleNumber(value){
+      return new Intl.NumberFormat(uiState.locale || 'en').format(Math.max(0, Number(value || 0)));
+    }
+
     function formatListingCount(count){
       const value = Math.max(0, Number(count || 0));
-      if(uiState.locale === 'ko') return `${value}개`;
-      if(uiState.locale === 'ja') return `${value}件`;
-      if(uiState.locale === 'zh-Hans' || uiState.locale === 'zh-Hant') return `${value}条`;
-      if(uiState.locale === 'pt') return `${value} anúncios`;
-      if(uiState.locale === 'es') return `${value} anuncios`;
-      if(uiState.locale === 'de') return `${value} Angebote`;
-      if(uiState.locale === 'it') return `${value} annunci`;
-      return `${value} ${value === 1 ? 'listing' : 'listings'}`;
+      const formatted = formatLocaleNumber(value);
+      if(uiState.locale === 'ko') return `${formatted}개`;
+      if(uiState.locale === 'ja') return `${formatted}件`;
+      if(uiState.locale === 'zh-Hans') return `${formatted}条`;
+      if(uiState.locale === 'zh-Hant') return `${formatted}條`;
+      if(uiState.locale === 'pt') return `${formatted} ${value === 1 ? 'anúncio' : 'anúncios'}`;
+      if(uiState.locale === 'es') return `${formatted} ${value === 1 ? 'anuncio' : 'anuncios'}`;
+      if(uiState.locale === 'de') return `${formatted} ${value === 1 ? 'Angebot' : 'Angebote'}`;
+      if(uiState.locale === 'it') return `${formatted} ${value === 1 ? 'annuncio' : 'annunci'}`;
+      return `${formatted} ${value === 1 ? 'listing' : 'listings'}`;
     }
 
     function formatShownForQuery(count, query){
@@ -2570,9 +2730,9 @@
           price_summary_block_reason: [],
           model_entry_confidence_state: 'no_response',
           market_entry_metrics: null,
-          price_summary_band: 'Price summary locked',
+          price_summary_band: ux('market_entry.price_locked', 'Price locked'),
           price_scope: 'insufficient_exact_data',
-          price_scope_label: 'Price summary locked',
+          price_scope_label: ux('market_entry.price_locked', 'Price locked'),
           price_scope_confidence_state: 'price_scope_locked',
           search_confidence_state: 'no_response',
           top_result_compatibility: 'no_response',
@@ -2597,18 +2757,18 @@
           broader_reference_locked_reason: null,
           unlock_requirements: [],
           display_price_summary_allowed: false,
-          display_price_scope_label: 'Price summary locked',
-          display_price_band: 'Price summary locked',
+          display_price_scope_label: ux('market_entry.price_locked', 'Price locked'),
+          display_price_band: ux('market_entry.price_locked', 'Price locked'),
           display_price_band_source: 'insufficient_exact_data',
           display_broader_reference_allowed: false,
           display_broader_reference_label: null,
           display_broader_reference_band: null,
           display_broader_reference_locked_reason: null,
-          display_price_band_quality_state: 'Exact price data limited',
+          display_price_band_quality_state: ux('market_entry.not_enough_evidence', 'Not enough evidence yet.'),
           display_unlock_requirements: [],
           display_evidence_pool_summary: null,
           display_top_result_evidence: [],
-          display_match_state_message: 'No visible results are available yet.',
+          display_match_state_message: ux('state_card.empty_none_title', 'Not enough verifiable matches were found.'),
           display_query_review: null,
           current_ui_label_safe: true
         };
@@ -2623,9 +2783,9 @@
         model_entry_confidence_state: state.response.model_entry_confidence_state || apiPolicy.model_entry_confidence_state || 'unknown',
         market_entry_metrics: state.response.market_entry_metrics || apiPolicy.market_entry_metrics || null,
         market_entry_title: state.response.market_entry_title || apiPolicy.market_entry_title || null,
-        price_summary_band: state.response.price_summary_band || apiPolicy.price_summary_band || 'Price summary locked',
+        price_summary_band: state.response.price_summary_band || apiPolicy.price_summary_band || ux('market_entry.price_locked', 'Price locked'),
         price_scope: state.response.price_scope || apiPolicy.price_scope || 'insufficient_exact_data',
-        price_scope_label: state.response.price_scope_label || apiPolicy.price_scope_label || 'Price summary locked',
+        price_scope_label: state.response.price_scope_label || apiPolicy.price_scope_label || ux('market_entry.price_locked', 'Price locked'),
         price_scope_confidence_state: state.response.price_scope_confidence_state || apiPolicy.price_scope_confidence_state || 'price_scope_locked',
         search_confidence_state: state.response.search_confidence_state || apiPolicy.search_confidence_state || 'unknown',
         top_result_compatibility: state.response.top_result_compatibility || apiPolicy.top_result_compatibility || 'unknown',
@@ -2650,18 +2810,18 @@
         broader_reference_locked_reason: state.response.broader_reference_locked_reason || apiPolicy.broader_reference_locked_reason || null,
         unlock_requirements: state.response.unlock_requirements || apiPolicy.unlock_requirements || [],
         display_price_summary_allowed: Boolean(state.response.display_price_summary_allowed ?? apiPolicy.display_price_summary_allowed),
-        display_price_scope_label: state.response.display_price_scope_label || apiPolicy.display_price_scope_label || state.response.price_scope_label || 'Price summary locked',
-        display_price_band: state.response.display_price_band || apiPolicy.display_price_band || state.response.price_summary_band || 'Price summary locked',
+        display_price_scope_label: state.response.display_price_scope_label || apiPolicy.display_price_scope_label || state.response.price_scope_label || ux('market_entry.price_locked', 'Price locked'),
+        display_price_band: state.response.display_price_band || apiPolicy.display_price_band || state.response.price_summary_band || ux('market_entry.price_locked', 'Price locked'),
         display_price_band_source: state.response.display_price_band_source || apiPolicy.display_price_band_source || state.response.price_evidence_scope || 'insufficient_exact_data',
         display_broader_reference_allowed: Boolean(state.response.display_broader_reference_allowed ?? apiPolicy.display_broader_reference_allowed),
         display_broader_reference_label: state.response.display_broader_reference_label || apiPolicy.display_broader_reference_label || state.response.broader_reference_label || null,
         display_broader_reference_band: state.response.display_broader_reference_band || apiPolicy.display_broader_reference_band || null,
         display_broader_reference_locked_reason: state.response.display_broader_reference_locked_reason || apiPolicy.display_broader_reference_locked_reason || null,
-        display_price_band_quality_state: state.response.display_price_band_quality_state || apiPolicy.display_price_band_quality_state || 'Exact price data limited',
+        display_price_band_quality_state: state.response.display_price_band_quality_state || apiPolicy.display_price_band_quality_state || ux('market_entry.not_enough_evidence', 'Not enough evidence yet.'),
         display_unlock_requirements: state.response.display_unlock_requirements || apiPolicy.display_unlock_requirements || [],
         display_evidence_pool_summary: state.response.display_evidence_pool_summary || apiPolicy.display_evidence_pool_summary || null,
         display_top_result_evidence: state.response.display_top_result_evidence || apiPolicy.display_top_result_evidence || [],
-        display_match_state_message: state.response.display_match_state_message || apiPolicy.display_match_state_message || 'Price summary locked',
+        display_match_state_message: state.response.display_match_state_message || apiPolicy.display_match_state_message || ux('market_entry.price_locked', 'Price locked'),
         display_query_review: state.response.display_query_review || apiPolicy.display_query_review || null,
         current_ui_label_safe: (state.response.current_ui_label_safe ?? apiPolicy.current_ui_label_safe) !== false
       };
@@ -2684,6 +2844,8 @@
       const end = total && resultCount ? (Number(pagination.offset || 0) + resultCount) : 0;
       const quality = getQualitySummary();
       const meta = state.response && state.response.meta ? state.response.meta : null;
+
+      updateDocumentTitle();
 
       els['result-count'].textContent = String(total);
       if(state.loading){
@@ -2827,15 +2989,17 @@
     function formatLoadMoreProgress(shownCount, totalCount){
       const shown = Math.max(0, Number(shownCount || 0));
       const total = Math.max(shown, Number(totalCount || 0));
-      if(uiState.locale === 'ko') return `${shown} / ${total} 표시 중`;
-      if(uiState.locale === 'ja') return `${shown} / ${total} 件を表示`;
-      if(uiState.locale === 'zh-Hans') return `已显示 ${shown} / ${total}`;
-      if(uiState.locale === 'zh-Hant') return `已顯示 ${shown} / ${total}`;
-      if(uiState.locale === 'pt') return `${shown} / ${total} exibidos`;
-      if(uiState.locale === 'es') return `${shown} / ${total} mostrados`;
-      if(uiState.locale === 'de') return `${shown} / ${total} angezeigt`;
-      if(uiState.locale === 'it') return `${shown} / ${total} mostrati`;
-      return `${shown} / ${total} shown`;
+      const shownLabel = formatLocaleNumber(shown);
+      const totalLabel = formatLocaleNumber(total);
+      if(uiState.locale === 'ko') return `${shownLabel} / ${totalLabel} 표시 중`;
+      if(uiState.locale === 'ja') return `${shownLabel} / ${totalLabel} 件を表示`;
+      if(uiState.locale === 'zh-Hans') return `已显示 ${shownLabel} / ${totalLabel}`;
+      if(uiState.locale === 'zh-Hant') return `已顯示 ${shownLabel} / ${totalLabel}`;
+      if(uiState.locale === 'pt') return `${shownLabel} / ${totalLabel} exibidos`;
+      if(uiState.locale === 'es') return `${shownLabel} / ${totalLabel} mostrados`;
+      if(uiState.locale === 'de') return `${shownLabel} / ${totalLabel} angezeigt`;
+      if(uiState.locale === 'it') return `${shownLabel} / ${totalLabel} mostrati`;
+      return `${shownLabel} / ${totalLabel} shown`;
     }
 
     function renderLoadMore(activeShownCount){
@@ -2924,12 +3088,13 @@
       }
 
       if(uiHints.needs_disambiguation){
+        const chips = (uiHints.recommended_chips || []).length ? uiHints.recommended_chips : getBroadQueryFallbackChips();
         return `
           <article class="state-card">
             <h3>${escapeHtml(ux('state_card.empty_broad_title', 'This query is broad, so exact pricing was not opened yet.'))}</h3>
             <p>${escapeHtml(recommendedMessage || ux('state_card.empty_broad_default', 'Add a mount or focal length to make the search more specific.'))}</p>
             <div class="state-actions">
-              ${(uiHints.recommended_chips || BROAD_QUERY_FALLBACK_CHIPS).slice(0, 6).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
+              ${renderRefinementButtons(chips, 6)}
             </div>
           </article>
         `;
@@ -2944,14 +3109,14 @@
     }
 
     function renderRefinementCard(uiHints){
-      const chips = (uiHints.recommended_chips || []).length ? uiHints.recommended_chips : BROAD_QUERY_FALLBACK_CHIPS;
+      const chips = (uiHints.recommended_chips || []).length ? uiHints.recommended_chips : getBroadQueryFallbackChips();
       const message = uiHints.recommended_message || ux('refinement.default_message', 'Add a mount or focal length to make the search more specific.');
       return `
         <article class="state-card">
           <h3>${escapeHtml(ux('refinement.title', 'Try a more specific search'))}</h3>
           <p>${escapeHtml(message)}</p>
           <div class="state-actions">
-            ${chips.slice(0, 9).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
+            ${renderRefinementButtons(chips, 9)}
           </div>
         </article>
       `;
@@ -2971,12 +3136,12 @@
         .filter(item => item.value !== null);
       if(!priced.length) return ux('common.no_data', 'Not enough data');
       const currencies = Array.from(new Set(priced.map(item => item.currency || 'Unknown')));
-      if(currencies.length !== 1) return uiState.locale === 'ko' ? '통화가 섞여 있습니다' : 'Mixed currencies';
+      if(currencies.length !== 1) return ux('common.mixed_currencies', 'Mixed currencies');
       const values = priced.map(item => item.value);
       const min = Math.min(...values);
       const max = Math.max(...values);
       const currency = currencies[0] || '';
-      const formatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+      const formatter = new Intl.NumberFormat(uiState.locale || 'en', { maximumFractionDigits: 0 });
       return `${currency} ${formatter.format(min)} - ${formatter.format(max)}`;
     }
 
@@ -3004,35 +3169,35 @@
       const category = String(review.category || '').toLowerCase();
       if(policy.display_price_summary_allowed){
         if(policy.display_price_band_source === 'exact_generation' || policy.price_scope === 'exact_generation'){
-          return 'Exact generation price';
+          return ux('market_entry.exact_generation_price', 'Exact generation price');
         }
         if(category === 'body'){
-          return 'Body market summary';
+          return ux('market_entry.body_market_summary', 'Body market summary');
         }
-        if(policy.display_price_band_source === 'exact_variant') return 'Exact price';
-        if(policy.display_price_band_source === 'exact_base_model') return 'Same model price';
+        if(policy.display_price_band_source === 'exact_variant') return ux('market_entry.exact_price', 'Exact price');
+        if(policy.display_price_band_source === 'exact_base_model') return ux('market_entry.same_model_price', 'Same model price');
       }
       if(policy.display_broader_reference_allowed){
-        return 'Reference price only';
+        return ux('market_entry.reference_price_only', 'Reference price only');
       }
-      return 'Price locked';
+      return ux('market_entry.price_locked', 'Price locked');
     }
 
     function getMarketEntryPriceValue(policy){
       if(policy.display_price_summary_allowed){
-        return policy.display_price_band || 'Not enough evidence yet.';
+        return policy.display_price_band || ux('market_entry.not_enough_evidence', 'Not enough evidence yet.');
       }
       if(policy.display_broader_reference_allowed){
-        return policy.display_broader_reference_band || 'Not enough evidence yet.';
+        return policy.display_broader_reference_band || ux('market_entry.not_enough_evidence', 'Not enough evidence yet.');
       }
-      return 'Not enough evidence yet.';
+      return ux('market_entry.not_enough_evidence', 'Not enough evidence yet.');
     }
 
     function renderMarketEntryUnlockCard(unlockRequirements){
       if(Array.isArray(unlockRequirements) && unlockRequirements.length){
-        return `<div class="metric-card"><b>Price unlock condition</b><ul class="query-review-unlock-list">${unlockRequirements.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></div>`;
+        return `<div class="metric-card"><b>${escapeHtml(ux('market_entry.unlock_condition_label', 'Price unlock condition'))}</b><ul class="query-review-unlock-list">${unlockRequirements.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul></div>`;
       }
-      return '<div class="metric-card"><b>Price unlock condition</b><span>Current evidence already supports this summary.</span></div>';
+      return `<div class="metric-card"><b>${escapeHtml(ux('market_entry.unlock_condition_label', 'Price unlock condition'))}</b><span>${escapeHtml(ux('market_entry.unlock_condition_met', 'Current evidence already supports this summary.'))}</span></div>`;
     }
 
     function renderMarketEntry(results, uiHints){
@@ -3200,11 +3365,7 @@
       const intent = state.response.intent || {};
       const uiHints = getUiHints();
       const parts = [];
-      parts.push(
-        Object.keys(filters).length
-          ? `${ux('warnings.filters_prefix', 'Filters')}: ${Object.entries(filters).map(([key, value]) => `${key}=${value}`).join(', ')}`
-          : ux('warnings.filters_none', 'No filters applied')
-      );
+      parts.push(formatAppliedFiltersNotice(filters));
       if(uiHints.needs_disambiguation) parts.push(ux('warnings.disambiguation', 'Add more model details to narrow this search.'));
       if(intent.accessory_intent) parts.push(ux('warnings.accessory', 'Accessory searches are not used for body or lens pricing.'));
       parts.push(ux('warnings.coverage', 'Low coverage does not mean the item does not exist.'));

@@ -257,6 +257,7 @@ def test_beta_has_locale_translation_hooks_for_static_shell() -> None:
 def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
     for html in _html_files(BETA_PATHS):
         for snippet in [
+            "site: {",
             "topbar: {",
             "hero: {",
             "search: {",
@@ -275,6 +276,17 @@ def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
         assert "loading: { ko: '불러오는 중...', en: 'Loading…'," in html
         assert "active_idle: { ko: '현재 판매 중인 매물 더 보기', en: 'Load more active listings'," in html
         assert "active_loading: { ko: '현재 판매 중인 매물 불러오는 중...', en: 'Loading more active listings…'," in html
+
+
+def test_public_document_title_and_lang_update_with_locale_only() -> None:
+    for html in _html_files(BETA_PATHS):
+        apply_static = _function_body(html, "applyStaticTranslations")
+        render_summary = _function_body(html, "renderSummary")
+        assert "document.documentElement.lang = uiState.locale;" in apply_static
+        assert "updateDocumentTitle();" in apply_static
+        assert "updateDocumentTitle();" in render_summary
+        assert "const baseTitle = ux('site.title', 'Camera Bridge | Leica Market Search');" in html
+        assert "document.title = state.query ? `${state.query} | ${baseTitle}` : baseTitle;" in html
 
 
 def test_beta_locale_switch_keeps_sort_selection_intact() -> None:
@@ -389,6 +401,28 @@ def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
             assert snippet in html
 
 
+def test_public_broad_query_hints_and_fallback_copy_cover_all_locales() -> None:
+    for html in _html_files(BETA_PATHS):
+        assert "const FALLBACK_COPY = {" in html
+        assert "'zh-Hans': '加载搜索结果时发生问题。" in html
+        assert "'zh-Hant': '載入搜尋結果時發生問題。" in html
+        assert "pt: 'Ocorreu um problema ao carregar esta busca." in html
+        assert "es: 'Se produjo un problema al cargar esta búsqueda." in html
+        assert "de: 'Beim Laden dieser Suche ist ein Problem aufgetreten." in html
+        assert "it: 'Si è verificato un problema durante il caricamento di questa ricerca." in html
+        assert "const BROAD_QUERY_FALLBACK_CHIPS = [" in html
+        assert "query: 'M lenses'" in html
+        assert "labels: { ko: 'M 렌즈', en: 'M lenses', ja: 'Mレンズ'" in html
+        assert "'zh-Hans': 'M 镜头'" in html
+        assert "'zh-Hant': 'M 鏡頭'" in html
+        assert "pt: 'Lentes M'" in html
+        assert "es: 'Objetivos M'" in html
+        assert "de: 'M-Objektive'" in html
+        assert "it: 'Obiettivi M'" in html
+        assert "getBroadQueryFallbackChips()" in html
+        assert "recommended_message: String(message[uiState.locale] || message.en || '')" in html
+
+
 def test_locale_switch_keeps_rendered_results_without_refetch() -> None:
     for html in _html_files(BETA_PATHS):
         body = _function_body(html, "setLocale")
@@ -485,10 +519,59 @@ def test_load_more_hides_when_active_pagination_is_complete() -> None:
 
 def test_load_more_progress_and_market_history_order_have_locale_support() -> None:
     for html in _html_files(BETA_PATHS):
+        assert "function formatLocaleNumber(value)" in html
+        assert "new Intl.NumberFormat(uiState.locale || 'en')" in html
+        assert "const formatted = formatLocaleNumber(value);" in html
+        assert "if(uiState.locale === 'zh-Hans') return `${formatted}条`;" in html
+        assert "if(uiState.locale === 'zh-Hant') return `${formatted}條`;" in html
+        assert "if(uiState.locale === 'pt') return `${formatted} ${value === 1 ? 'anúncio' : 'anúncios'}`;" in html
+        assert "if(uiState.locale === 'es') return `${formatted} ${value === 1 ? 'anuncio' : 'anuncios'}`;" in html
         assert "function formatLoadMoreProgress(shownCount, totalCount)" in html
-        assert "return `${shown} / ${total} shown`;" in html
-        assert "return `${shown} / ${total} 표시 중`;" in html
-        assert "return `${shown} / ${total} 件を表示`;" in html
+        assert "const shownLabel = formatLocaleNumber(shown);" in html
+        assert "const totalLabel = formatLocaleNumber(total);" in html
+        assert "return `${shownLabel} / ${totalLabel} shown`;" in html
+        assert "return `${shownLabel} / ${totalLabel} 표시 중`;" in html
+        assert "return `${shownLabel} / ${totalLabel} 件を表示`;" in html
+
+
+def test_public_dynamic_market_summary_and_warning_copy_is_locale_driven() -> None:
+    for html in _html_files(BETA_PATHS):
+        market_policy = _function_body(html, "getMarketEntryPolicy")
+        price_band = _function_body(html, "formatPriceBand")
+        price_headline = _function_body(html, "getMarketEntryPriceHeadline")
+        price_value = _function_body(html, "getMarketEntryPriceValue")
+        unlock_card = _function_body(html, "renderMarketEntryUnlockCard")
+        warnings_body = _function_body(html, "renderWarnings")
+        refinement_body = _function_body(html, "renderRefinementCard")
+        empty_state_body = _function_body(html, "renderEmptyState")
+
+        assert "ux('common.mixed_currencies', 'Mixed currencies')" in price_band
+        assert "new Intl.NumberFormat(uiState.locale || 'en'" in price_band
+        assert "ux('market_entry.price_locked', 'Price locked')" in market_policy
+        assert "ux('market_entry.not_enough_evidence', 'Not enough evidence yet.')" in market_policy
+        assert "ux('state_card.empty_none_title', 'Not enough verifiable matches were found.')" in market_policy
+        assert "ux('market_entry.exact_generation_price', 'Exact generation price')" in price_headline
+        assert "ux('market_entry.body_market_summary', 'Body market summary')" in price_headline
+        assert "ux('market_entry.reference_price_only', 'Reference price only')" in price_headline
+        assert "ux('market_entry.price_locked', 'Price locked')" in price_headline
+        assert "ux('market_entry.not_enough_evidence', 'Not enough evidence yet.')" in price_value
+        assert "ux('market_entry.unlock_condition_label', 'Price unlock condition')" in unlock_card
+        assert "ux('market_entry.unlock_condition_met', 'Current evidence already supports this summary.')" in unlock_card
+        assert "formatAppliedFiltersNotice(filters)" in warnings_body
+        assert "`${key}=${value}`" not in warnings_body
+        assert "renderRefinementButtons(chips, 9)" in refinement_body
+        assert "renderRefinementButtons(chips, 6)" in empty_state_body
+
+
+def test_public_warning_filter_labels_and_values_are_localized() -> None:
+    for html in _html_files(BETA_PATHS):
+        assert "function localizeSoldQualityFilterValue(value)" in html
+        assert "ux('filters.category.label', 'Category')" in html
+        assert "ux('filters.brand.label', 'Brand')" in html
+        assert "ux('filters.mount.label', 'Mount')" in html
+        assert "ux('filters.sold_quality.label', 'Listing status')" in html
+        assert "ux('sold_filter.asking', 'Active')" in html
+        assert "ux('sold_filter.sold_confirmed', 'Sold confirmed')" in html
 
 
 def test_public_workspace_main_can_shrink_on_mobile() -> None:
@@ -519,6 +602,7 @@ if __name__ == "__main__":
     test_beta_uses_localized_view_listing_cta()
     test_beta_has_locale_translation_hooks_for_static_shell()
     test_beta_locale_dictionary_covers_shell_completion_keys()
+    test_public_document_title_and_lang_update_with_locale_only()
     test_beta_locale_switch_keeps_sort_selection_intact()
     test_beta_empty_and_error_states_are_locale_driven()
     test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy()
@@ -528,6 +612,7 @@ if __name__ == "__main__":
     test_beta_public_surface_shows_dataset_update_line()
     test_public_locale_completion_covers_sidebar_and_status_copy()
     test_public_locale_surface_covers_hero_notice_search_and_sections()
+    test_public_broad_query_hints_and_fallback_copy_cover_all_locales()
     test_locale_switch_keeps_rendered_results_without_refetch()
     test_load_more_is_scoped_to_active_section_and_history_stays_separate()
     test_qa_load_more_is_scoped_to_active_section_and_history_stays_separate()
@@ -539,5 +624,7 @@ if __name__ == "__main__":
     test_public_listing_titles_remain_source_authored_text()
     test_load_more_hides_when_active_pagination_is_complete()
     test_load_more_progress_and_market_history_order_have_locale_support()
+    test_public_dynamic_market_summary_and_warning_copy_is_locale_driven()
+    test_public_warning_filter_labels_and_values_are_localized()
     test_public_workspace_main_can_shrink_on_mobile()
     print("test_search_ui: ok")
