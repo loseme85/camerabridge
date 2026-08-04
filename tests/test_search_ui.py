@@ -8,17 +8,18 @@ from urllib.parse import parse_qs, urlparse
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-INDEX_PATHS = [
+QA_PATHS = [
     PROJECT_ROOT / "app/templates/index.html",
-    PROJECT_ROOT / "index.html",
+    PROJECT_ROOT / "owner-qa.html",
 ]
 BETA_PATHS = [
     PROJECT_ROOT / "app/templates/beta.html",
     PROJECT_ROOT / "beta.html",
 ]
-ALL_HTML_PATHS = INDEX_PATHS + BETA_PATHS
+ALL_HTML_PATHS = QA_PATHS + BETA_PATHS
 APP_PY_PATH = PROJECT_ROOT / "app/app.py"
 VERCEL_JSON_PATH = PROJECT_ROOT / "vercel.json"
+ROOT_INDEX_PATH = PROJECT_ROOT / "index.html"
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -76,8 +77,9 @@ def test_vercel_public_and_qa_route_mappings_match_flask_shell_roles() -> None:
     assert rewrites["/"] == "/beta.html"
     assert rewrites["/search"] == "/beta.html"
     assert rewrites["/beta"] == "/beta.html"
-    assert rewrites["/qa"] == "/index.html"
+    assert rewrites["/qa"] == "/owner-qa.html"
     assert rewrites["/"] != rewrites["/qa"]
+    assert not ROOT_INDEX_PATH.exists()
 
 
 def test_search_and_beta_routes_redirect_to_public_query() -> None:
@@ -124,13 +126,13 @@ def test_beta_files_include_locale_switcher() -> None:
 
 
 def test_demo_queries_are_available() -> None:
-    for html in _html_files(INDEX_PATHS):
+    for html in _html_files(QA_PATHS):
         for query in ["mp3 silver", "q3 28", "ltm summaron 35", "35lux aa"]:
             assert f'data-query="{query}"' in html
 
 
 def test_quality_summary_message_is_consumed_from_api() -> None:
-    for html in _html_files(INDEX_PATHS):
+    for html in _html_files(QA_PATHS):
         assert "result_quality_summary" in html
         assert "quality.display_message" in html
         assert "match_quality ===" not in html
@@ -166,7 +168,7 @@ def test_active_first_market_sections_and_sorts_exist() -> None:
 
 
 def test_template_mirrors_stay_in_sync() -> None:
-    assert INDEX_PATHS[0].read_text(encoding="utf-8") == INDEX_PATHS[1].read_text(encoding="utf-8")
+    assert QA_PATHS[0].read_text(encoding="utf-8") == QA_PATHS[1].read_text(encoding="utf-8")
     assert BETA_PATHS[0].read_text(encoding="utf-8") == BETA_PATHS[1].read_text(encoding="utf-8")
 
 
@@ -318,7 +320,7 @@ def test_public_template_hides_internal_diagnostic_labels() -> None:
 
 
 def test_internal_qa_template_includes_banner_and_shared_api() -> None:
-    for html in _html_files(INDEX_PATHS):
+    for html in _html_files(QA_PATHS):
         assert "INTERNAL QA" in html
         assert "Owner diagnostics — not a public shopping interface" in html
         assert "Public View" in html
@@ -413,7 +415,7 @@ def test_load_more_is_scoped_to_active_section_and_history_stays_separate() -> N
 
 
 def test_qa_load_more_is_scoped_to_active_section_and_history_stays_separate() -> None:
-    for html in _html_files(INDEX_PATHS):
+    for html in _html_files(QA_PATHS):
         render_content = _function_body(html, "renderContent")
         render_section = _function_body(html, "renderResultSection")
         render_load_more = _function_body(html, "renderLoadMore")
@@ -445,7 +447,7 @@ def test_public_active_grid_uses_three_two_one_columns() -> None:
 
 
 def test_qa_active_grid_stays_two_columns_and_history_one_column() -> None:
-    for html in _html_files(INDEX_PATHS):
+    for html in _html_files(QA_PATHS):
         assert ".archive-list.active-list," in html
         assert ".archive-list.history-list{" in html
         assert "@media(min-width:1180px){" in html
@@ -453,7 +455,7 @@ def test_qa_active_grid_stays_two_columns_and_history_one_column() -> None:
 
 
 def test_qa_snapshot_meta_wraps_on_mobile_instead_of_overflowing() -> None:
-    for html in _html_files(INDEX_PATHS):
+    for html in _html_files(QA_PATHS):
         assert ".qa-banner-meta .meta-pill{" in html
         assert "white-space:normal;" in html
         assert "overflow-wrap:anywhere;" in html
