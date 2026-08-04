@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 import re
 import sys
@@ -17,6 +18,7 @@ BETA_PATHS = [
 ]
 ALL_HTML_PATHS = INDEX_PATHS + BETA_PATHS
 APP_PY_PATH = PROJECT_ROOT / "app/app.py"
+VERCEL_JSON_PATH = PROJECT_ROOT / "vercel.json"
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
@@ -62,6 +64,20 @@ def test_public_route_uses_public_shell_and_qa_uses_internal_shell() -> None:
     assert "INTERNAL QA" in qa_html
     assert "Owner diagnostics — not a public shopping interface" in qa_html
     assert "Public View" in qa_html
+
+
+def test_vercel_public_and_qa_route_mappings_match_flask_shell_roles() -> None:
+    vercel_config = json.loads(VERCEL_JSON_PATH.read_text(encoding="utf-8"))
+    rewrites = {
+        rewrite["source"]: rewrite["destination"]
+        for rewrite in vercel_config["rewrites"]
+    }
+
+    assert rewrites["/"] == "/beta.html"
+    assert rewrites["/search"] == "/beta.html"
+    assert rewrites["/beta"] == "/beta.html"
+    assert rewrites["/qa"] == "/index.html"
+    assert rewrites["/"] != rewrites["/qa"]
 
 
 def test_search_and_beta_routes_redirect_to_public_query() -> None:
