@@ -274,6 +274,11 @@ def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
             assert snippet in html
         assert "idle: { ko: '결과 더 보기', en: 'Load more'," in html
         assert "loading: { ko: '불러오는 중...', en: 'Loading…'," in html
+        assert "query_label: { ko: '기준 모델', en: 'Market entry'," in html
+        assert "search_results_label: { ko: '검색 결과', en: 'Total results'," in html
+        assert "active_listings_label: { ko: '현재 판매 중', en: 'Active listings'," in html
+        assert "market_price_label: { ko: '시세', en: 'Market price'," in html
+        assert "market_price_pending: { ko: '시세 산정 보류', en: 'Market price on hold'," in html
         assert "active_idle: { ko: '현재 판매 중인 매물 더 보기', en: 'Load more active listings'," in html
         assert "active_loading: { ko: '현재 판매 중인 매물 불러오는 중...', en: 'Loading more active listings…'," in html
 
@@ -394,6 +399,9 @@ def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
             'data-i18n="hero.notice_rare"',
             'data-i18n="search.panel_label"',
             'data-i18n="search.button"',
+            'id="summary-query-title"',
+            'id="active-count"',
+            'id="market-price-value"',
             "ux('section.active_listings', 'Active listings')",
             "ux('section.market_history', 'Market history')",
             "ux('load_more.active_idle', 'Load more active listings')",
@@ -443,7 +451,7 @@ def test_load_more_is_scoped_to_active_section_and_history_stays_separate() -> N
         assert "els['results-load-more-region'].innerHTML = '';" in render_content
         assert "renderArchiveSection(historyResults)" in render_content
         assert "${footerHtml}" in render_section
-        assert "!pagination.has_more" in render_load_more
+        assert "Number(activeShownCount || 0) <= 0" in render_load_more
         assert "ux('load_more.active_idle', 'Load more active listings')" in render_load_more
         assert "ux('load_more.active_loading', 'Loading more active listings…')" in render_load_more
 
@@ -513,12 +521,14 @@ def test_public_listing_titles_remain_source_authored_text() -> None:
 def test_load_more_hides_when_active_pagination_is_complete() -> None:
     for html in _html_files(BETA_PATHS):
         render_load_more = _function_body(html, "renderLoadMore")
-        assert "if(!state.response || !getResults().length || !pagination.has_more){" in render_load_more
+        assert "if(!state.response || !getResults().length || !pagination.has_more || Number(activeShownCount || 0) <= 0){" in render_load_more
         assert "return '';" in render_load_more
 
 
-def test_load_more_progress_and_market_history_order_have_locale_support() -> None:
+def test_public_summary_and_load_more_remove_internal_pool_progress_copy() -> None:
     for html in _html_files(BETA_PATHS):
+        render_summary = _function_body(html, "renderSummary")
+        render_load_more = _function_body(html, "renderLoadMore")
         assert "function formatLocaleNumber(value)" in html
         assert "new Intl.NumberFormat(uiState.locale || 'en')" in html
         assert "const formatted = formatLocaleNumber(value);" in html
@@ -526,12 +536,41 @@ def test_load_more_progress_and_market_history_order_have_locale_support() -> No
         assert "if(uiState.locale === 'zh-Hant') return `${formatted}條`;" in html
         assert "if(uiState.locale === 'pt') return `${formatted} ${value === 1 ? 'anúncio' : 'anúncios'}`;" in html
         assert "if(uiState.locale === 'es') return `${formatted} ${value === 1 ? 'anuncio' : 'anuncios'}`;" in html
-        assert "function formatLoadMoreProgress(shownCount, totalCount)" in html
-        assert "const shownLabel = formatLocaleNumber(shown);" in html
-        assert "const totalLabel = formatLocaleNumber(total);" in html
-        assert "return `${shownLabel} / ${totalLabel} shown`;" in html
-        assert "return `${shownLabel} / ${totalLabel} 표시 중`;" in html
-        assert "return `${shownLabel} / ${totalLabel} 件を表示`;" in html
+        assert "function formatLoadMoreProgress(shownCount, totalCount)" not in html
+        assert "id=\"active-count\"" in html
+        assert "id=\"market-price-value\"" in html
+        assert "ux('summary.search_results_label', 'Total results')" in render_summary
+        assert "ux('summary.active_listings_label', 'Active listings')" in render_summary
+        assert "ux('summary.market_price_label', 'Market price')" in render_summary
+        assert "getPublicSummaryMarketPrice(policy)" in render_summary
+        assert "load-more-note" not in html
+        assert "표시 중" not in render_load_more
+        assert "shownLabel" not in render_load_more
+
+
+def test_load_more_stays_after_active_cards_and_before_market_history() -> None:
+    for html in _html_files(BETA_PATHS):
+        render_section = _function_body(html, "renderResultSection")
+        render_content = _function_body(html, "renderContent")
+        assert "results.length\n              ? `<div class=\"${listClass}\">" in render_section
+        assert "${footerHtml}" in render_section
+        assert "els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));" in render_content
+        assert "els['archive-region'].innerHTML = renderArchiveSection(historyResults);" in render_content
+
+
+def test_public_summary_uses_total_results_active_count_and_market_price_without_refetch() -> None:
+    for html in _html_files(BETA_PATHS):
+        render_summary = _function_body(html, "renderSummary")
+        set_locale = _function_body(html, "setLocale")
+        assert "const total = state.response ? Number(state.response.total_ranked || 0) : 0;" in render_summary
+        assert "const displaySections = buildDisplaySections(results, getSortMode());" in render_summary
+        assert "const activeCount = Number(displaySections.counts && displaySections.counts.active || 0);" in render_summary
+        assert "els['result-count'].textContent = formatListingCount(total);" in render_summary
+        assert "els['active-count'].textContent = formatListingCount(activeCount);" in render_summary
+        assert "els['market-price-value'].textContent = getPublicSummaryMarketPrice(policy);" in render_summary
+        assert "render();" in set_locale
+        assert "runSearch(" not in set_locale
+        assert "fetch(" not in set_locale
 
 
 def test_public_dynamic_market_summary_and_warning_copy_is_locale_driven() -> None:
@@ -623,7 +662,9 @@ if __name__ == "__main__":
     test_source_visibility_emphasizes_seller_without_translating_titles_or_prices()
     test_public_listing_titles_remain_source_authored_text()
     test_load_more_hides_when_active_pagination_is_complete()
-    test_load_more_progress_and_market_history_order_have_locale_support()
+    test_public_summary_and_load_more_remove_internal_pool_progress_copy()
+    test_load_more_stays_after_active_cards_and_before_market_history()
+    test_public_summary_uses_total_results_active_count_and_market_price_without_refetch()
     test_public_dynamic_market_summary_and_warning_copy_is_locale_driven()
     test_public_warning_filter_labels_and_values_are_localized()
     test_public_workspace_main_can_shrink_on_mobile()

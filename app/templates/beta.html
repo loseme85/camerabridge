@@ -331,37 +331,76 @@
     }
     .status-strip{
       display:flex;
-      align-items:flex-end;
+      align-items:flex-start;
       justify-content:space-between;
       gap:18px;
       padding:18px 20px;
       border-bottom:1px solid var(--border);
       background:linear-gradient(180deg, rgba(241,238,232,0.5), rgba(255,255,255,0.9));
     }
-    .summary-copy{min-width:0}
-    .summary-value{
-      display:flex;
-      align-items:baseline;
-      gap:12px;
-      margin-bottom:6px;
+    .summary-copy{
+      min-width:0;
+      flex:1;
     }
-    .summary-value strong{
-      color:var(--accent);
+    .summary-kicker{
+      color:var(--text-muted);
       font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:34px;
-      letter-spacing:0;
+      font-size:10px;
+      letter-spacing:1.1px;
+      text-transform:uppercase;
+    }
+    .summary-title{
+      margin-top:4px;
+      color:var(--text);
+      font-size:26px;
+      font-weight:700;
+      line-height:1.2;
+      overflow-wrap:anywhere;
+    }
+    .summary-subtitle{
+      margin-top:6px;
+      color:var(--text-soft);
+      font-size:13px;
+      line-height:1.5;
+      overflow-wrap:anywhere;
+    }
+    .summary-metrics{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+      margin-top:14px;
+    }
+    .summary-metric{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:var(--radius);
+      padding:12px;
+      min-width:0;
     }
     .summary-caption{
-      color:var(--text-soft);
-      font-size:14px;
-      line-height:1.5;
-    }
-    .summary-meta{
+      display:block;
       color:var(--text-muted);
       font-family:"SFMono-Regular","Roboto Mono",monospace;
       font-size:10px;
       letter-spacing:1px;
       text-transform:uppercase;
+      line-height:1.4;
+    }
+    .summary-value{
+      display:block;
+      margin-top:6px;
+      color:var(--accent);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:24px;
+      letter-spacing:0;
+      line-height:1.25;
+      overflow-wrap:anywhere;
+    }
+    .summary-meta{
+      margin-top:12px;
+      color:var(--text-muted);
+      font-size:13px;
+      line-height:1.5;
     }
     .index-debug-line{
       margin-top:6px;
@@ -378,6 +417,7 @@
       gap:8px;
       flex-wrap:wrap;
       justify-content:flex-end;
+      align-self:flex-end;
     }
     .page-button{
       height:36px;
@@ -390,13 +430,7 @@
       font-size:11px;
     }
     .page-button:disabled{opacity:0.42;cursor:not-allowed}
-    .page-indicator{
-      min-width:110px;
-      text-align:center;
-      color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:10px;
-    }
+    .page-indicator{display:none}
     .workspace-grid{
       display:grid;
       grid-template-columns:minmax(0,1fr);
@@ -548,50 +582,6 @@
     .results-grid{
       display:block;
     }
-    .query-summary-bar{
-      display:grid;
-      gap:8px;
-      margin:0 0 12px;
-      padding:12px 14px;
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      background:#fff;
-      box-shadow:0 6px 18px rgba(27,23,19,0.04);
-    }
-    .query-summary-topline{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px 12px;
-    }
-    .query-summary-label{
-      color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:10px;
-      letter-spacing:1px;
-      text-transform:uppercase;
-    }
-    .query-summary-query{
-      color:var(--text);
-      font-size:15px;
-      font-weight:700;
-      line-height:1.35;
-      overflow-wrap:anywhere;
-    }
-    .query-summary-count{
-      color:var(--text-soft);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:11px;
-      line-height:1.4;
-      white-space:nowrap;
-    }
-    .query-summary-detected{
-      color:var(--text-soft);
-      font-size:12px;
-      line-height:1.45;
-      overflow-wrap:anywhere;
-    }
     .load-more-region{
       display:flex;
       flex-direction:column;
@@ -602,12 +592,6 @@
     }
     .load-more-button{
       min-width:160px;
-    }
-    .load-more-note{
-      color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:11px;
-      line-height:1.5;
     }
     .result-card{
       border:1px solid var(--border);
@@ -855,7 +839,8 @@
       .search-button{width:100%}
       .toolbar{grid-template-columns:1fr}
       .status-strip{flex-direction:column;align-items:flex-start}
-      .page-controls{width:100%;justify-content:space-between}
+      .summary-metrics{grid-template-columns:1fr}
+      .page-controls{width:100%;justify-content:flex-start}
       .metric-grid{grid-template-columns:1fr}
       .result-head{grid-template-columns:74px minmax(0,1fr)}
       .thumb{width:74px}
@@ -1010,9 +995,22 @@
 
         <section class="status-strip">
           <div class="summary-copy">
-            <div class="summary-value">
-              <strong id="result-count">0</strong>
-              <span id="result-caption" class="summary-caption">검색 준비 완료</span>
+            <div id="summary-query-kicker" class="summary-kicker">Market entry</div>
+            <div id="summary-query-title" class="summary-title">Search Leica listings</div>
+            <div id="summary-query-subtitle" class="summary-subtitle">Search results, active listings, and market price appear here.</div>
+            <div class="summary-metrics">
+              <article class="summary-metric">
+                <span id="result-caption" class="summary-caption">Search results</span>
+                <strong id="result-count" class="summary-value">0</strong>
+              </article>
+              <article class="summary-metric">
+                <span id="active-count-caption" class="summary-caption">Active listings</span>
+                <strong id="active-count" class="summary-value">0</strong>
+              </article>
+              <article class="summary-metric">
+                <span id="market-price-caption" class="summary-caption">Market price</span>
+                <strong id="market-price-value" class="summary-value">Market price on hold</strong>
+              </article>
             </div>
             <div id="summary-meta" class="summary-meta">Leica 중심 제한 베타</div>
             <!-- Temporary QA/debug line for runtime index verification; safe to remove after preview validation. -->
@@ -1020,7 +1018,7 @@
           </div>
           <div class="page-controls">
             <button id="prev-button" class="page-button" type="button" data-i18n="pagination.prev">이전</button>
-            <span id="page-indicator" class="page-indicator">0-0</span>
+            <span id="page-indicator" class="page-indicator" hidden></span>
             <button id="next-button" class="page-button" type="button" data-i18n="pagination.next">다음</button>
           </div>
         </section>
@@ -1293,7 +1291,7 @@
         archive: { ko: '과거 기록', en: 'Archive', ja: 'アーカイブ', 'zh-Hans': '历史记录', 'zh-Hant': '歷史記錄', pt: 'Arquivo', es: 'Archivo', de: 'Archiv', it: 'Archivio' },
         active_subtitle: { ko: '현재 살아 있는 판매 매물을 먼저 보여줍니다.', en: 'Listings that still appear available are shown first.', ja: '現在も購入可能に見える出品を先に表示します。', 'zh-Hans': '优先显示看起来仍可购买的在售记录。', 'zh-Hant': '優先顯示看起來仍可購買的在售記錄。', pt: 'Listagens que ainda parecem disponíveis são mostradas primeiro.', es: 'Primero se muestran los anuncios que aún parecen disponibles.', de: 'Angebote, die noch verfügbar erscheinen, werden zuerst gezeigt.', it: 'Per primi vengono mostrati gli annunci che sembrano ancora disponibili.' },
         history_subtitle: { ko: '과거 거래와 보관 기록은 별도로 분리해 보여줍니다.', en: 'Historical sold, removed, and archive records are shown separately.', ja: '過去の売却・削除・アーカイブ記録は別枠で表示します。', 'zh-Hans': '历史售出、下架和归档记录会单独展示。', 'zh-Hant': '歷史售出、下架和歸檔記錄會單獨展示。', pt: 'Registros históricos de venda, remoção e arquivo são mostrados separadamente.', es: 'Los registros históricos de venta, eliminación y archivo se muestran por separado.', de: 'Historische Verkaufs-, Entfernt- und Archivdatensätze werden separat angezeigt.', it: 'I record storici di vendita, rimozione e archivio vengono mostrati separatamente.' },
-        no_active: { ko: '현재 판매 중인 매물이 아직 보이지 않습니다.', en: 'No active listings are visible in this result window yet.', ja: 'この結果範囲では現在販売中の出品がまだ見つかりません。', 'zh-Hans': '当前结果窗口中还没有可见的在售记录。', 'zh-Hant': '目前結果視窗中尚未看到在售記錄。', pt: 'Ainda não há anúncios ativos visíveis nesta janela de resultados.', es: 'Aún no hay anuncios activos visibles en esta ventana de resultados.', de: 'In diesem Ergebnisfenster sind noch keine aktiven Angebote sichtbar.', it: 'In questa finestra dei risultati non sono ancora visibili annunci attivi.' },
+        no_active: { ko: '현재 확인되는 판매 매물이 없습니다.', en: 'No active listings are currently visible.', ja: '現在確認できる販売中の出品はありません。', 'zh-Hans': '当前没有可见的在售记录。', 'zh-Hant': '目前沒有可見的在售記錄。', pt: 'No momento não há anúncios ativos visíveis.', es: 'Actualmente no hay anuncios activos visibles.', de: 'Derzeit sind keine aktiven Angebote sichtbar.', it: 'Al momento non ci sono annunci attivi visibili.' },
         no_history: { ko: '이 검색에는 아직 과거 거래 기록이 보이지 않습니다.', en: 'No market-history records are visible for this search yet.', ja: 'この検索では過去の市場記録がまだ表示されていません。', 'zh-Hans': '此搜索目前还没有可见的历史市场记录。', 'zh-Hant': '此搜尋目前尚未看到歷史市場記錄。', pt: 'Ainda não há registros de histórico de mercado visíveis para esta pesquisa.', es: 'Todavía no hay registros de historial de mercado visibles para esta búsqueda.', de: 'Für diese Suche sind noch keine Markthistorie-Einträge sichtbar.', it: 'Per questa ricerca non sono ancora visibili record di storico di mercato.' },
       },
       cta: {
@@ -1334,6 +1332,14 @@
         },
       },
       summary: {
+        query_label: { ko: '기준 모델', en: 'Market entry', ja: '基準モデル', 'zh-Hans': '基准条目', 'zh-Hant': '基準條目', pt: 'Entrada de mercado', es: 'Entrada de mercado', de: 'Markteintrag', it: 'Voce di mercato' },
+        query_ready_title: { ko: 'Leica 매물을 검색해 보세요', en: 'Search Leica listings', ja: 'Leicaの掲載を検索してみましょう', 'zh-Hans': '搜索 Leica 条目', 'zh-Hant': '搜尋 Leica 條目', pt: 'Pesquise anúncios Leica', es: 'Busca anuncios Leica', de: 'Suche nach Leica-Angeboten', it: 'Cerca annunci Leica' },
+        query_ready_subtitle: { ko: '검색 후 결과 수, 현재 판매 중인 매물, 시세를 한눈에 보여드립니다.', en: 'After a search, total results, active listings, and market price appear here.', ja: '検索後に結果数、販売中の件数、相場をここでまとめて確認できます。', 'zh-Hans': '搜索后，会在这里汇总显示结果数、在售数量和市场价格。', 'zh-Hant': '搜尋後，會在這裡彙整顯示結果數、在售數量與市場價格。', pt: 'Após a busca, o total de resultados, anúncios ativos e preço de mercado aparecem aqui.', es: 'Tras la búsqueda, aquí verás el total de resultados, anuncios activos y precio de mercado.', de: 'Nach der Suche erscheinen hier Gesamtzahl, aktive Angebote und Marktpreis.', it: 'Dopo la ricerca, qui compaiono totale risultati, annunci attivi e prezzo di mercato.' },
+        search_query_prefix: { ko: '검색어', en: 'Search query', ja: '検索語', 'zh-Hans': '搜索词', 'zh-Hant': '搜尋詞', pt: 'Busca', es: 'Búsqueda', de: 'Suchanfrage', it: 'Ricerca' },
+        search_results_label: { ko: '검색 결과', en: 'Total results', ja: '検索結果', 'zh-Hans': '搜索结果', 'zh-Hant': '搜尋結果', pt: 'Total de resultados', es: 'Resultados totales', de: 'Gesamtergebnisse', it: 'Risultati totali' },
+        active_listings_label: { ko: '현재 판매 중', en: 'Active listings', ja: '現在販売中', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'Anúncios ativos', es: 'Anuncios activos', de: 'Aktive Angebote', it: 'Annunci attivi' },
+        market_price_label: { ko: '시세', en: 'Market price', ja: '相場', 'zh-Hans': '市场价格', 'zh-Hant': '市場價格', pt: 'Preço de mercado', es: 'Precio de mercado', de: 'Marktpreis', it: 'Prezzo di mercato' },
+        market_price_pending: { ko: '시세 산정 보류', en: 'Market price on hold', ja: '相場算定保留', 'zh-Hans': '市场价格暂缓', 'zh-Hant': '市場價格暫緩', pt: 'Preço de mercado em espera', es: 'Precio de mercado en espera', de: 'Marktpreis ausgesetzt', it: 'Prezzo di mercato in sospeso' },
         loading_caption: { ko: '검색 중', en: 'Searching', ja: '検索中', 'zh-Hans': '搜索中', 'zh-Hant': '搜尋中', pt: 'Buscando', es: 'Buscando', de: 'Suche läuft', it: 'Ricerca in corso' },
         loading_meta: { ko: '매물과 가격 근거를 불러오고 있습니다', en: 'Loading listings and price evidence', ja: '掲載と価格根拠を読み込んでいます', 'zh-Hans': '正在加载条目与价格依据', 'zh-Hant': '正在載入條目與價格依據', pt: 'Carregando anúncios e evidências de preço', es: 'Cargando anuncios y evidencia de precio', de: 'Angebote und Preisnachweise werden geladen', it: 'Caricamento annunci ed evidenze di prezzo' },
         appending_meta: { ko: '결과를 더 불러오는 중입니다', en: 'Loading more results', ja: 'さらに結果を読み込んでいます', 'zh-Hans': '正在加载更多结果', 'zh-Hant': '正在載入更多結果', pt: 'Carregando mais resultados', es: 'Cargando más resultados', de: 'Weitere Ergebnisse werden geladen', it: 'Caricamento di altri risultati' },
@@ -1690,7 +1696,9 @@
       [
         'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
         'category-filter','brand-filter','mount-filter','sold-filter',
-        'sort-select','result-count','result-caption','summary-meta','index-debug-line','page-indicator',
+        'sort-select','summary-query-kicker','summary-query-title','summary-query-subtitle',
+        'result-count','result-caption','active-count','active-count-caption',
+        'market-price-value','market-price-caption','summary-meta','index-debug-line','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
         'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
@@ -2342,6 +2350,37 @@
       return `${quantity} for "${query}"`;
     }
 
+    function getPublicSummaryQueryTitle(policy){
+      if(state.query){
+        return String((policy && policy.market_entry_title) || state.query || '').trim() || state.query;
+      }
+      return ux('summary.query_ready_title', 'Search Leica listings');
+    }
+
+    function getPublicSummaryQuerySubtitle(policy){
+      if(!state.query){
+        return ux('summary.query_ready_subtitle', 'After a search, total results, active listings, and market price appear here.');
+      }
+      if(!state.response){
+        return `${ux('summary.search_query_prefix', 'Search query')}: ${state.query}`;
+      }
+      const title = getPublicSummaryQueryTitle(policy);
+      if(title && title !== state.query){
+        return `${ux('summary.search_query_prefix', 'Search query')}: ${state.query}`;
+      }
+      return getCoverageLabel();
+    }
+
+    function getPublicSummaryMarketPrice(policy){
+      if(policy.display_price_summary_allowed){
+        return policy.display_price_band || ux('summary.market_price_pending', 'Market price on hold');
+      }
+      if(policy.display_broader_reference_allowed){
+        return policy.display_broader_reference_band || ux('summary.market_price_pending', 'Market price on hold');
+      }
+      return ux('summary.market_price_pending', 'Market price on hold');
+    }
+
     function formatUiDate(rawValue){
       const raw = String(rawValue || '').trim();
       if(!raw) return '';
@@ -2839,29 +2878,33 @@
     function renderSummary(){
       const pagination = state.response ? (state.response.pagination || {}) : {};
       const total = state.response ? Number(state.response.total_ranked || 0) : 0;
-      const resultCount = state.response ? Number(state.response.result_count || 0) : 0;
-      const start = total && resultCount ? (Number(pagination.offset || 0) + 1) : 0;
-      const end = total && resultCount ? (Number(pagination.offset || 0) + resultCount) : 0;
-      const quality = getQualitySummary();
+      const results = getResults();
+      const displaySections = buildDisplaySections(results, getSortMode());
+      const activeCount = Number(displaySections.counts && displaySections.counts.active || 0);
+      const policy = getMarketEntryPolicy();
       const meta = state.response && state.response.meta ? state.response.meta : null;
 
       updateDocumentTitle();
 
-      els['result-count'].textContent = String(total);
+      els['summary-query-kicker'].textContent = ux('summary.query_label', 'Market entry');
+      els['summary-query-title'].textContent = getPublicSummaryQueryTitle(policy);
+      els['summary-query-subtitle'].textContent = getPublicSummaryQuerySubtitle(policy);
+      els['result-caption'].textContent = ux('summary.search_results_label', 'Total results');
+      els['result-count'].textContent = formatListingCount(total);
+      els['active-count-caption'].textContent = ux('summary.active_listings_label', 'Active listings');
+      els['active-count'].textContent = formatListingCount(activeCount);
+      els['market-price-caption'].textContent = ux('summary.market_price_label', 'Market price');
+      els['market-price-value'].textContent = getPublicSummaryMarketPrice(policy);
       if(state.loading){
-        els['result-caption'].textContent = ux('summary.loading_caption', 'Searching');
         els['summary-meta'].textContent = ux('summary.loading_meta', 'Loading listings and price evidence');
       }else if(state.appending && state.query){
-        els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
         els['summary-meta'].textContent = ux('summary.appending_meta', 'Loading more results');
       }else if(state.error){
-        els['result-caption'].textContent = ux('summary.error_caption', 'Please try this search again');
         els['summary-meta'].textContent = ux('summary.error_meta', 'No data was changed');
+        els['market-price-value'].textContent = ux('summary.market_price_pending', 'Market price on hold');
       }else if(state.query){
-        els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
-        els['summary-meta'].textContent = getBetaPriceState(getMarketEntryPolicy());
+        els['summary-meta'].textContent = getBetaPriceState(policy);
       }else{
-        els['result-caption'].textContent = ux('summary.ready_caption', 'Ready to search');
         els['summary-meta'].textContent = ux('summary.ready_meta', 'Prices are for reference only, and the original listing should be checked');
       }
 
@@ -2873,7 +2916,7 @@
         }
       }
 
-      els['page-indicator'].textContent = `${start}-${end}`;
+      els['page-indicator'].textContent = '';
       els['prev-button'].disabled = state.loading || !state.response || Number(pagination.offset || 0) <= 0;
       els['next-button'].disabled = state.loading || !state.response || !pagination.has_more;
     }
@@ -2962,53 +3005,21 @@
         'subtle'
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
-      els['query-summary-region'].innerHTML = renderQuerySummaryBar(results);
+      els['query-summary-region'].innerHTML = '';
       els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
       els['results-load-more-region'].innerHTML = '';
       els['archive-region'].innerHTML = renderArchiveSection(historyResults);
     }
 
     function renderQuerySummaryBar(results){
-      if(!state.query || !Array.isArray(results) || !results.length){
-        return '';
-      }
-      const resultCount = Number(state.response && state.response.result_count || results.length || 0);
-      return `
-        <article class="query-summary-bar">
-          <div class="query-summary-topline">
-            <div>
-              <div class="query-summary-label">${escapeHtml(ux('query.search_query', 'Search query'))}</div>
-              <div class="query-summary-query">${escapeHtml(state.query)}</div>
-            </div>
-            <div class="query-summary-count">${escapeHtml(formatListingCount(resultCount))}</div>
-          </div>
-        </article>
-      `;
-    }
-
-    function formatLoadMoreProgress(shownCount, totalCount){
-      const shown = Math.max(0, Number(shownCount || 0));
-      const total = Math.max(shown, Number(totalCount || 0));
-      const shownLabel = formatLocaleNumber(shown);
-      const totalLabel = formatLocaleNumber(total);
-      if(uiState.locale === 'ko') return `${shownLabel} / ${totalLabel} 표시 중`;
-      if(uiState.locale === 'ja') return `${shownLabel} / ${totalLabel} 件を表示`;
-      if(uiState.locale === 'zh-Hans') return `已显示 ${shownLabel} / ${totalLabel}`;
-      if(uiState.locale === 'zh-Hant') return `已顯示 ${shownLabel} / ${totalLabel}`;
-      if(uiState.locale === 'pt') return `${shownLabel} / ${totalLabel} exibidos`;
-      if(uiState.locale === 'es') return `${shownLabel} / ${totalLabel} mostrados`;
-      if(uiState.locale === 'de') return `${shownLabel} / ${totalLabel} angezeigt`;
-      if(uiState.locale === 'it') return `${shownLabel} / ${totalLabel} mostrati`;
-      return `${shownLabel} / ${totalLabel} shown`;
+      return '';
     }
 
     function renderLoadMore(activeShownCount){
       const pagination = state.response ? (state.response.pagination || {}) : {};
-      if(!state.response || !getResults().length || !pagination.has_more){
+      if(!state.response || !getResults().length || !pagination.has_more || Number(activeShownCount || 0) <= 0){
         return '';
       }
-      const shownCount = Math.max(0, Number(activeShownCount || 0));
-      const totalCount = Math.max(shownCount, Number(state.response.total_ranked || shownCount));
       return `
         <div class="load-more-region">
           <button
@@ -3019,7 +3030,6 @@
           >
             ${state.appending ? escapeHtml(ux('load_more.active_loading', 'Loading more active listings…')) : escapeHtml(ux('load_more.active_idle', 'Load more active listings'))}
           </button>
-          <div class="load-more-note">${escapeHtml(formatLoadMoreProgress(shownCount, totalCount))}</div>
         </div>
       `;
     }
