@@ -44,6 +44,8 @@ FINAL_OUTPUT_FIELDS = [
     "compatible_mounts",
     "compatible_systems",
     "sold_quality",
+    "crawl_time",
+    "first_seen",
     "compact_lens_notation_detected",
     "compact_lens_notation_raw",
     "body_alias_boundary_blocked",

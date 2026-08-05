@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow,noarchive">
   <title>Camera Bridge</title>
   <style>
     :root{
@@ -109,6 +110,62 @@
       color:var(--accent);
       border-color:rgba(178,29,36,0.28);
       background:var(--accent-soft);
+    }
+    .qa-banner{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin:0 0 18px;
+      padding:18px 20px;
+      border:1px solid rgba(178,29,36,0.24);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(178,29,36,0.12), rgba(153,97,31,0.08));
+      box-shadow:var(--shadow);
+    }
+    .qa-banner-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .qa-banner-eyebrow{
+      margin:0 0 8px;
+      color:var(--accent);
+      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:1.2px;
+      text-transform:uppercase;
+    }
+    .qa-banner-title{
+      margin:0;
+      font-size:24px;
+      line-height:1.25;
+    }
+    .qa-banner-copy{
+      margin:8px 0 0;
+      color:var(--text-soft);
+      font-size:14px;
+      line-height:1.6;
+    }
+    .qa-banner-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      min-width:0;
+    }
+    .qa-banner-meta .meta-pill{
+      white-space:normal;
+      overflow-wrap:anywhere;
+    }
+    .qa-banner-meta span{
+      min-width:0;
+      overflow-wrap:anywhere;
+    }
+    .qa-public-link{
+      flex-shrink:0;
+      text-decoration:none;
     }
     main{
       width:min(1280px, calc(100% - 32px));
@@ -539,6 +596,8 @@
       border:1px solid var(--border);
       background:var(--surface-soft);
       color:var(--text-soft);
+      max-width:100%;
+      overflow-wrap:anywhere;
     }
     .micro-pill.accent{border-color:rgba(178,29,36,0.28);background:var(--accent-soft);color:var(--accent)}
     .micro-pill.blue{border-color:rgba(31,84,115,0.24);background:rgba(31,84,115,0.08);color:var(--blue)}
@@ -573,9 +632,7 @@
       line-height:1.3;
     }
     .results-grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:12px;
+      display:block;
     }
     .query-summary-bar{
       display:grid;
@@ -623,7 +680,10 @@
     }
     .load-more-region{
       display:flex;
+      flex-direction:column;
+      align-items:center;
       justify-content:center;
+      gap:8px;
       margin-top:16px;
     }
     .load-more-button{
@@ -684,9 +744,10 @@
     .result-title:hover{color:var(--accent)}
     .result-price-row{
       display:flex;
-      align-items:baseline;
+      align-items:flex-start;
       justify-content:space-between;
-      gap:10px;
+      gap:10px 16px;
+      flex-wrap:wrap;
       margin-bottom:8px;
     }
     .result-price{
@@ -696,19 +757,25 @@
       font-weight:800;
     }
     .result-source{
-      text-align:right;
+      display:grid;
+      gap:4px;
+      text-align:left;
       color:var(--text-soft);
-      min-width:148px;
+      min-width:0;
+      flex:1 1 220px;
     }
     .result-source-name{
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:10px;
-      line-height:1.4;
+      color:var(--text);
+      font-size:12px;
+      font-weight:700;
+      line-height:1.45;
+      overflow-wrap:anywhere;
     }
     .result-source-meta{
       font-family:"SFMono-Regular","Roboto Mono",monospace;
       font-size:10px;
-      line-height:1.4;
+      line-height:1.45;
+      overflow-wrap:anywhere;
     }
     .result-condition-summary{
       margin-top:4px;
@@ -719,7 +786,7 @@
     }
     .result-condition-tags{
       display:flex;
-      justify-content:flex-end;
+      justify-content:flex-start;
       flex-wrap:wrap;
       gap:5px;
       margin-top:6px;
@@ -815,6 +882,13 @@
       gap:10px;
       margin-top:12px;
     }
+    .archive-list.active-list,
+    .archive-list.history-list{
+      grid-template-columns:1fr;
+    }
+    .result-card[data-append-anchor="true"]{
+      scroll-margin-top:160px;
+    }
     .archive-item{
       border:1px solid var(--border);
       background:var(--surface-soft);
@@ -853,11 +927,8 @@
       .toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}
       .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-    @media(min-width:760px){
-      .results-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
     @media(min-width:1180px){
-      .results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .archive-list.active-list{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media(max-width:720px){
       .sticky-search-region{
@@ -874,6 +945,8 @@
       .hero-sidebar,
       .workspace-main,
       .workspace-side{padding-left:16px;padding-right:16px}
+      .qa-banner-head{flex-direction:column}
+      .qa-public-link{width:100%;text-align:center}
       .hero-title{font-size:34px}
       .search-form-row{flex-direction:column;align-items:stretch}
       .search-button{width:100%}
@@ -965,6 +1038,21 @@
         </div>
       </section>
 
+      <section class="qa-banner" aria-label="Internal QA banner">
+        <div class="qa-banner-head">
+          <div>
+            <p class="qa-banner-eyebrow">INTERNAL QA</p>
+            <h2 class="qa-banner-title">Owner diagnostics — not a public shopping interface</h2>
+            <p class="qa-banner-copy">내부 QA / 운영자 검수 화면 — 일반 이용자용 화면이 아닙니다</p>
+          </div>
+          <a id="public-view-link" class="ghost-button qa-public-link" href="/">Public View</a>
+        </div>
+        <div class="qa-banner-meta">
+          <span id="qa-snapshot-line" class="meta-pill accent">Snapshot pending</span>
+          <span id="qa-commit-line" class="meta-pill">Commit pending</span>
+        </div>
+      </section>
+
       <section class="overview-grid">
         <article class="workspace-card">
           <p class="section-label">Search home</p>
@@ -1031,9 +1119,9 @@
           <div class="control">
             <label for="sort-select">Sort</label>
             <select id="sort-select">
-              <option value="relevance">Relevance</option>
-              <option value="price_asc">Price low</option>
-              <option value="price_desc">Price high</option>
+              <option value="relevance">Recommended</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
               <option value="newest">Newest</option>
             </select>
           </div>
@@ -1239,6 +1327,69 @@
       public: 'Detected lens markers'
     };
 
+    const UX_LOCALE_COPY = {
+      sort: {
+        relevance: { ko: '추천순', en: 'Recommended', ja: 'おすすめ順', 'zh-Hans': '推荐', 'zh-Hant': '推薦', pt: 'Recomendado', es: 'Recomendado', de: 'Empfohlen', it: 'Consigliati' },
+        newest: { ko: '최신순', en: 'Newest', ja: '新着順', 'zh-Hans': '最新', 'zh-Hant': '最新', pt: 'Mais recentes', es: 'Más recientes', de: 'Neueste', it: 'Più recenti' },
+        price_asc: { ko: '낮은 가격순', en: 'Price: Low to High', ja: '価格の安い順', 'zh-Hans': '价格从低到高', 'zh-Hant': '價格從低到高', pt: 'Preço: menor para maior', es: 'Precio: de menor a mayor', de: 'Preis: aufsteigend', it: 'Prezzo: crescente' },
+        price_desc: { ko: '높은 가격순', en: 'Price: High to Low', ja: '価格の高い順', 'zh-Hans': '价格从高到低', 'zh-Hant': '價格從高到低', pt: 'Preço: maior para menor', es: 'Precio: de mayor a menor', de: 'Preis: absteigend', it: 'Prezzo: decrescente' },
+      },
+      sold_filter: {
+        any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
+        asking: { ko: '판매 중', en: 'Asking', ja: '販売中', 'zh-Hans': '在售', 'zh-Hant': '在售', pt: 'À venda', es: 'En venta', de: 'Aktiv', it: 'In vendita' },
+        sold: { ko: '판매 완료', en: 'Sold', ja: '販売完了', 'zh-Hans': '已售', 'zh-Hant': '已售', pt: 'Vendido', es: 'Vendido', de: 'Verkauft', it: 'Venduto' },
+        sold_confirmed: { ko: '판매완료 확인', en: 'Sold confirmed', ja: '売却確認', 'zh-Hans': '已确认售出', 'zh-Hant': '已確認售出', pt: 'Vendido confirmado', es: 'Venta confirmada', de: 'Verkauf bestätigt', it: 'Venduto confermato' },
+        sold_likely: { ko: '판매 추정', en: 'Sold likely', ja: '売却推定', 'zh-Hans': '疑似售出', 'zh-Hant': '疑似售出', pt: 'Provavelmente vendido', es: 'Probablemente vendido', de: 'Wahrscheinlich verkauft', it: 'Probabilmente venduto' },
+        unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
+      },
+      section: {
+        active_listings: { ko: '현재 판매 중', en: 'Active listings', ja: '現在販売中', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'Anúncios ativos', es: 'Anuncios activos', de: 'Aktive Angebote', it: 'Annunci attivi' },
+        market_history: { ko: '과거 거래 / 가격 기록', en: 'Market history', ja: '過去の取引・価格記録', 'zh-Hans': '历史成交 / 价格记录', 'zh-Hant': '歷史成交 / 價格紀錄', pt: 'Histórico de mercado', es: 'Historial de mercado', de: 'Markthistorie', it: 'Storico di mercato' },
+        archive: { ko: '과거 기록', en: 'Archive', ja: 'アーカイブ', 'zh-Hans': '历史记录', 'zh-Hant': '歷史記錄', pt: 'Arquivo', es: 'Archivo', de: 'Archiv', it: 'Archivio' },
+        active_subtitle: { ko: '현재 살아 있는 판매 매물을 먼저 보여줍니다.', en: 'Listings that still appear available are shown first.', ja: '現在も購入可能に見える出品を先に表示します。', 'zh-Hans': '优先显示看起来仍可购买的在售记录。', 'zh-Hant': '優先顯示看起來仍可購買的在售記錄。', pt: 'Listagens que ainda parecem disponíveis são mostradas primeiro.', es: 'Primero se muestran los anuncios que aún parecen disponibles.', de: 'Angebote, die noch verfügbar erscheinen, werden zuerst gezeigt.', it: 'Per primi vengono mostrati gli annunci che sembrano ancora disponibili.' },
+        history_subtitle: { ko: '과거 거래와 보관 기록은 별도로 분리해 보여줍니다.', en: 'Historical sold, removed, and archive records are shown separately.', ja: '過去の売却・削除・アーカイブ記録は別枠で表示します。', 'zh-Hans': '历史售出、下架和归档记录会单独展示。', 'zh-Hant': '歷史售出、下架和歸檔記錄會單獨展示。', pt: 'Registros históricos de venda, remoção e arquivo são mostrados separadamente.', es: 'Los registros históricos de venta, eliminación y archivo se muestran por separado.', de: 'Historische Verkaufs-, Entfernt- und Archivdatensätze werden separat angezeigt.', it: 'I record storici di vendita, rimozione e archivio vengono mostrati separatamente.' },
+        no_active: { ko: '현재 판매 중인 매물이 아직 보이지 않습니다.', en: 'No active listings are visible in this result window yet.', ja: 'この結果範囲では現在販売中の出品がまだ見つかりません。', 'zh-Hans': '当前结果窗口中还没有可见的在售记录。', 'zh-Hant': '目前結果視窗中尚未看到在售記錄。', pt: 'Ainda não há anúncios ativos visíveis nesta janela de resultados.', es: 'Aún no hay anuncios activos visibles en esta ventana de resultados.', de: 'In diesem Ergebnisfenster sind noch keine aktiven Angebote sichtbar.', it: 'In questa finestra dei risultati non sono ancora visibili annunci attivi.' },
+        no_history: { ko: '이 검색에는 아직 과거 거래 기록이 보이지 않습니다.', en: 'No market-history records are visible for this search yet.', ja: 'この検索では過去の市場記録がまだ表示されていません。', 'zh-Hans': '此搜索目前还没有可见的历史市场记录。', 'zh-Hant': '此搜尋目前尚未看到歷史市場記錄。', pt: 'Ainda não há registros de histórico de mercado visíveis para esta pesquisa.', es: 'Todavía no hay registros de historial de mercado visibles para esta búsqueda.', de: 'Für diese Suche sind noch keine Markthistorie-Einträge sichtbar.', it: 'Per questa ricerca non sono ancora visibili record di storico di mercato.' },
+      },
+      cta: {
+        view_listing: { ko: '판매처에서 보기', en: 'View at seller', ja: '販売元で見る', 'zh-Hans': '前往卖家页面', 'zh-Hant': '前往賣家頁面', pt: 'Ver no vendedor', es: 'Ver en vendedor', de: 'Beim Anbieter ansehen', it: 'Vedi dal venditore' },
+      },
+      public_card: {
+        seller_label: { ko: '판매처', en: 'Seller', ja: '販売元', 'zh-Hans': '卖家', 'zh-Hant': '賣家', pt: 'Vendedor', es: 'Vendedor', de: 'Anbieter', it: 'Venditore' },
+        location_unknown: { ko: '위치 미확인', en: 'Location unavailable', ja: '場所不明', 'zh-Hans': '位置未知', 'zh-Hant': '位置未知', pt: 'Localização indisponível', es: 'Ubicación no disponible', de: 'Standort unbekannt', it: 'Posizione non disponibile' },
+        location_seoul_korea: { ko: '서울, 대한민국', en: 'Seoul, South Korea', ja: 'ソウル, 韓国', 'zh-Hans': '韩国首尔', 'zh-Hant': '韓國首爾', pt: 'Seul, Coreia do Sul', es: 'Seúl, Corea del Sur', de: 'Seoul, Südkorea', it: 'Seul, Corea del Sud' },
+        location_korea: { ko: '대한민국', en: 'South Korea', ja: '韓国', 'zh-Hans': '韩国', 'zh-Hant': '韓國', pt: 'Coreia do Sul', es: 'Corea del Sur', de: 'Südkorea', it: 'Corea del Sud' },
+        location_uk: { ko: '영국', en: 'United Kingdom', ja: 'イギリス', 'zh-Hans': '英国', 'zh-Hant': '英國', pt: 'Reino Unido', es: 'Reino Unido', de: 'Vereinigtes Königreich', it: 'Regno Unito' },
+        location_japan: { ko: '일본', en: 'Japan', ja: '日本', 'zh-Hans': '日本', 'zh-Hant': '日本', pt: 'Japão', es: 'Japón', de: 'Japan', it: 'Giappone' },
+        location_miami_us: { ko: '마이애미, 미국', en: 'Miami, United States', ja: 'マイアミ, アメリカ', 'zh-Hans': '美国迈阿密', 'zh-Hant': '美國邁阿密', pt: 'Miami, Estados Unidos', es: 'Miami, Estados Unidos', de: 'Miami, Vereinigte Staaten', it: 'Miami, Stati Uniti' },
+        location_finland: { ko: '핀란드', en: 'Finland', ja: 'フィンランド', 'zh-Hans': '芬兰', 'zh-Hant': '芬蘭', pt: 'Finlândia', es: 'Finlandia', de: 'Finnland', it: 'Finlandia' },
+        active_confirmed: { ko: '현재 판매 확인', en: 'Currently available', ja: '現在販売確認', 'zh-Hans': '确认当前在售', 'zh-Hant': '確認目前在售', pt: 'Disponível no momento', es: 'Disponible actualmente', de: 'Aktuell verfügbar', it: 'Attualmente disponibile' },
+        verification_needed: { ko: '판매 여부 재확인 필요', en: 'Availability needs verification', ja: '販売状況の再確認が必要', 'zh-Hans': '需要重新确认在售状态', 'zh-Hant': '需要重新確認在售狀態', pt: 'Disponibilidade precisa de verificação', es: 'La disponibilidad necesita verificación', de: 'Verfügbarkeit muss geprüft werden', it: 'La disponibilità richiede verifica' },
+        last_verified: { ko: '최근 확인', en: 'Last verified', ja: '最終確認', 'zh-Hans': '最近核验', 'zh-Hant': '最近核驗', pt: 'Última verificação', es: 'Última verificación', de: 'Zuletzt bestätigt', it: 'Ultima verifica' },
+        date_unknown: { ko: '날짜 미확인', en: 'Date unavailable', ja: '日付不明', 'zh-Hans': '日期未知', 'zh-Hant': '日期未知', pt: 'Data indisponível', es: 'Fecha no disponible', de: 'Datum unbekannt', it: 'Data non disponibile' },
+      },
+      empty: {
+        source_gap_title: { ko: '아직 확인 가능한 출처 근거가 충분하지 않습니다.', en: 'We could not verify enough source coverage for this query yet.', ja: 'この検索では十分な出典カバレッジをまだ確認できていません。', 'zh-Hans': '目前还无法为此查询确认足够的来源覆盖。', 'zh-Hant': '目前尚無法為此查詢確認足夠的來源覆蓋。', pt: 'Ainda não conseguimos verificar cobertura de fonte suficiente para esta pesquisa.', es: 'Todavía no pudimos verificar suficiente cobertura de fuentes para esta búsqueda.', de: 'Für diese Suche konnte noch keine ausreichende Quellenabdeckung bestätigt werden.', it: 'Non siamo ancora riusciti a verificare una copertura delle fonti sufficiente per questa ricerca.' },
+        source_gap_body: { ko: '이 결과는 존재하지 않는다는 뜻이 아니라, 지금은 확인 가능한 근거가 적다는 의미입니다.', en: 'This does not mean the item does not exist.', ja: 'これはその品が存在しないことを意味しません。', 'zh-Hans': '这并不表示该物品不存在。', 'zh-Hant': '這並不表示該物品不存在。', pt: 'Isso não significa que o item não exista.', es: 'Esto no significa que el artículo no exista.', de: 'Das bedeutet nicht, dass der Artikel nicht existiert.', it: 'Questo non significa che l’articolo non esista.' },
+        broad_title: { ko: '검색 범위가 넓어 아직 정확 결과를 바로 보여주지 않았습니다.', en: 'No exact result is shown yet because this query is still broad.', ja: 'この検索はまだ広いため、正確な結果はまだ表示されていません。', 'zh-Hans': '由于此查询仍然较宽泛，暂未显示精确结果。', 'zh-Hant': '由於此查詢仍然較寬泛，暫未顯示精確結果。', pt: 'Ainda não há resultado exato porque esta pesquisa continua ampla.', es: 'Todavía no se muestra un resultado exacto porque esta búsqueda sigue siendo amplia.', de: 'Es wird noch kein exaktes Ergebnis angezeigt, weil diese Suche noch zu breit ist.', it: 'Non viene ancora mostrato un risultato esatto perché questa ricerca è ancora troppo ampia.' },
+        broad_body_default: { ko: '마운트나 초점거리를 추가하면 더 정확해집니다.', en: 'Choose a mount or focal length to refine your search.', ja: 'マウントや焦点距離を追加すると、より正確になります。', 'zh-Hans': '添加卡口或焦距可进一步缩小搜索范围。', 'zh-Hant': '加入卡口或焦距可進一步縮小搜尋範圍。', pt: 'Escolha uma montagem ou distância focal para refinar sua busca.', es: 'Elige una montura o distancia focal para refinar la búsqueda.', de: 'Wähle ein Bajonett oder eine Brennweite, um die Suche zu verfeinern.', it: 'Scegli un attacco o una focale per affinare la ricerca.' },
+        no_results_title: { ko: '확인 가능한 결과를 충분히 찾지 못했습니다.', en: 'No verified matches found for this search.', ja: 'この検索では確認できる一致結果が見つかりませんでした。', 'zh-Hans': '此搜索未找到可验证的匹配结果。', 'zh-Hant': '此搜尋未找到可驗證的匹配結果。', pt: 'Nenhuma correspondência verificada foi encontrada para esta busca.', es: 'No se encontraron coincidencias verificadas para esta búsqueda.', de: 'Für diese Suche wurden keine verifizierten Treffer gefunden.', it: 'Nessuna corrispondenza verificata trovata per questa ricerca.' },
+        no_results_body: { ko: '모델명, 마운트, 초점거리처럼 조건을 더 구체적으로 입력해 보세요.', en: 'Try a more specific model name, add a mount or focal length, or come back later if coverage improves.', ja: 'より具体的なモデル名、マウント、焦点距離を追加するか、カバレッジ改善後に再度お試しください。', 'zh-Hans': '请尝试更具体的型号名，添加卡口或焦距，或在覆盖范围改善后再回来查看。', 'zh-Hant': '請嘗試更具體的型號名、加入卡口或焦距，或在覆蓋改善後再回來查看。', pt: 'Tente um nome de modelo mais específico, adicione uma montagem ou distância focal, ou volte mais tarde se a cobertura melhorar.', es: 'Prueba con un modelo más específico, añade una montura o distancia focal, o vuelve más tarde si mejora la cobertura.', de: 'Versuche einen genaueren Modellnamen, ergänze Bajonett oder Brennweite oder schau später noch einmal vorbei, wenn sich die Abdeckung verbessert.', it: 'Prova un nome di modello più specifico, aggiungi un attacco o una focale, oppure torna più tardi se la copertura migliora.' },
+        notify_later: { ko: '나중에 일치하는 매물이 나오면 알려주기', en: 'Get notified if matching listings appear later', ja: '一致する出品が後で見つかったら通知する', 'zh-Hans': '如果之后出现匹配条目则通知我', 'zh-Hant': '如果之後出現匹配條目則通知我', pt: 'Avise-me se anúncios correspondentes aparecerem depois', es: 'Avisarme si aparecen anuncios coincidentes más tarde', de: 'Benachrichtige mich, wenn später passende Angebote erscheinen', it: 'Avvisami se compaiono annunci corrispondenti più tardi' },
+        track_market_changes: { ko: '시장 변화를 추적하기', en: 'Track market changes', ja: '市場の変化を追跡する', 'zh-Hans': '跟踪市场变化', 'zh-Hant': '追蹤市場變化', pt: 'Acompanhar mudanças de mercado', es: 'Seguir cambios del mercado', de: 'Marktentwicklung verfolgen', it: 'Segui i cambiamenti del mercato' },
+      },
+      status: {
+        active_asking: { ko: '판매 중', en: 'Active asking', ja: '現在販売', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'À venda', es: 'En venta', de: 'Aktiv', it: 'In vendita' },
+        uncertain_asking: { ko: '판매중(확인 필요)', en: 'Active, needs verification', ja: '販売中（要確認）', 'zh-Hans': '在售（需核实）', 'zh-Hant': '在售（需核實）', pt: 'À venda, verificar', es: 'Activo, verificar', de: 'Aktiv, prüfen', it: 'Attivo, da verificare' },
+        sold_confirmed: { ko: '판매완료 확인', en: 'Sold confirmed', ja: '売却確認', 'zh-Hans': '已确认售出', 'zh-Hant': '已確認售出', pt: 'Vendido confirmado', es: 'Venta confirmada', de: 'Verkauf bestätigt', it: 'Venduto confermato' },
+        sold_likely: { ko: '판매 추정', en: 'Sold likely', ja: '売却推定', 'zh-Hans': '疑似售出', 'zh-Hant': '疑似售出', pt: 'Provavelmente vendido', es: 'Probablemente vendido', de: 'Wahrscheinlich verkauft', it: 'Probabilmente venduto' },
+        expired: { ko: '판매 종료', en: 'Expired', ja: '期限切れ', 'zh-Hans': '已过期', 'zh-Hant': '已過期', pt: 'Expirado', es: 'Caducado', de: 'Abgelaufen', it: 'Scaduto' },
+        removed: { ko: '판매 종료', en: 'Removed', ja: '削除済み', 'zh-Hans': '已移除', 'zh-Hant': '已移除', pt: 'Removido', es: 'Eliminado', de: 'Entfernt', it: 'Rimosso' },
+        sold_status: { ko: '판매 상태', en: 'Sold status', ja: '販売状態', 'zh-Hans': '售出状态', 'zh-Hant': '售出狀態', pt: 'Status de venda', es: 'Estado de venta', de: 'Verkaufsstatus', it: 'Stato di vendita' },
+        unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
+      },
+    };
+
     const state = {
       query: '',
       offset: 0,
@@ -1256,6 +1407,7 @@
     const els = {};
     let pendingResultsAnchorScroll = false;
     let pendingHistoryScrollY = null;
+    let pendingAppendScrollTargetKey = '';
     let historyScrollSyncFrame = 0;
 
     function $(id){ return document.getElementById(id); }
@@ -1279,6 +1431,19 @@
       const english = getDictionaryValue(I18N.en, key);
       if(english !== undefined) return String(english);
       return fallback || key;
+    }
+
+    function ux(path, fallback = ''){
+      const groups = String(path || '').split('.');
+      let current = UX_LOCALE_COPY;
+      for(const part of groups){
+        if(!current || typeof current !== 'object' || !(part in current)) return fallback || path;
+        current = current[part];
+      }
+      if(current && typeof current === 'object'){
+        return String(current[uiState.locale] || current.en || fallback || path);
+      }
+      return String(current || fallback || path);
     }
 
     function normalizeLocale(locale){
@@ -1316,6 +1481,28 @@
       document.querySelectorAll('[data-i18n-aria-label]').forEach(node => {
         node.setAttribute('aria-label', t(node.getAttribute('data-i18n-aria-label'), node.getAttribute('aria-label') || ''));
       });
+      applyDynamicSelectOptionLabels();
+    }
+
+    function applyDynamicSelectOptionLabels(){
+      if(els['sort-select']){
+        Array.from(els['sort-select'].options).forEach(option => {
+          if(option.value === 'relevance') option.textContent = ux('sort.relevance', 'Recommended');
+          if(option.value === 'newest') option.textContent = ux('sort.newest', 'Newest');
+          if(option.value === 'price_asc') option.textContent = ux('sort.price_asc', 'Price: Low to High');
+          if(option.value === 'price_desc') option.textContent = ux('sort.price_desc', 'Price: High to Low');
+        });
+      }
+      if(els['sold-filter']){
+        Array.from(els['sold-filter'].options).forEach(option => {
+          if(option.value === '') option.textContent = ux('sold_filter.any', 'Any');
+          if(option.value === 'asking') option.textContent = ux('sold_filter.asking', 'Asking');
+          if(option.value === 'sold') option.textContent = ux('sold_filter.sold', 'Sold');
+          if(option.value === 'sold_confirmed') option.textContent = ux('sold_filter.sold_confirmed', 'Sold confirmed');
+          if(option.value === 'sold_likely') option.textContent = ux('sold_filter.sold_likely', 'Sold likely');
+          if(option.value === 'unknown') option.textContent = ux('sold_filter.unknown', 'Unknown');
+        });
+      }
     }
 
     function populateLocaleOptions(){
@@ -1327,6 +1514,7 @@
     }
 
     function setLocale(locale){
+      const currentScrollY = window.scrollY;
       uiState.locale = normalizeLocale(locale);
       if(window.localStorage){
         window.localStorage.setItem('cb.locale', uiState.locale);
@@ -1336,6 +1524,9 @@
       }
       applyStaticTranslations();
       render();
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: currentScrollY, behavior: 'auto' });
+      });
     }
 
     function cacheElements(){
@@ -1343,6 +1534,7 @@
         'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
         'category-filter','brand-filter','mount-filter','sold-filter',
         'sort-select','result-count','result-caption','summary-meta','index-debug-line','page-indicator',
+        'public-view-link','qa-snapshot-line','qa-commit-line',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
         'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
       ].forEach(id => {
@@ -1398,6 +1590,18 @@
       });
     }
 
+    function scrollAppendAnchorIntoView(){
+      if(!pendingAppendScrollTargetKey) return;
+      const anchor = document.querySelector('[data-append-anchor="true"]');
+      pendingAppendScrollTargetKey = '';
+      if(!anchor) return;
+      const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - getStickyAnchorOffset() - 8);
+      window.scrollTo({
+        top: targetTop,
+        behavior: 'auto'
+      });
+    }
+
     function escapeHtml(value){
       return String(value ?? '').replace(/[&<>"']/g, ch => ({
         '&':'&amp;',
@@ -1424,14 +1628,68 @@
 
     function localizeStatusLabel(label){
       const normalized = String(label || '').trim().toLowerCase();
-      if(normalized === 'active asking') return t('status.active_asking');
-      if(normalized === 'sold confirmed') return t('status.sold_confirmed');
-      if(normalized === 'sold likely') return t('status.sold_likely');
-      if(normalized === 'expired') return t('status.expired');
-      if(normalized === 'removed') return t('status.removed');
-      if(normalized === 'sold status') return t('status.sold_status');
-      if(normalized === 'unknown') return t('status.unknown');
-      return label || t('status.unknown');
+      if(normalized === 'active asking') return ux('status.active_asking', t('status.active_asking'));
+      if(normalized === 'active, needs verification') return ux('status.uncertain_asking', 'Active, needs verification');
+      if(normalized === 'sold confirmed') return ux('status.sold_confirmed', t('status.sold_confirmed'));
+      if(normalized === 'sold likely') return ux('status.sold_likely', t('status.sold_likely'));
+      if(normalized === 'expired') return ux('status.expired', t('status.expired'));
+      if(normalized === 'removed') return ux('status.removed', t('status.removed'));
+      if(normalized === 'sold status') return ux('status.sold_status', t('status.sold_status'));
+      if(normalized === 'unknown') return ux('status.unknown', t('status.unknown'));
+      return label || ux('status.unknown', t('status.unknown'));
+    }
+
+    function inferSourceLocation(source){
+      const normalized = String(source || '').trim().toLowerCase();
+      if(!normalized) return ux('public_card.location_unknown', 'Location unavailable');
+      if(normalized.includes('충무로')) return ux('public_card.location_seoul_korea', 'Seoul, South Korea');
+      if(normalized.includes('사진집') || normalized.includes('장씨카메라')) return ux('public_card.location_korea', 'South Korea');
+      if(normalized.includes('영국') || normalized.includes('ffordes')) return ux('public_card.location_uk', 'United Kingdom');
+      if(normalized.includes('일본') || normalized.includes('기타무라')) return ux('public_card.location_japan', 'Japan');
+      if(normalized.includes('miami')) return ux('public_card.location_miami_us', 'Miami, United States');
+      if(normalized.includes('kamerastore')) return ux('public_card.location_finland', 'Finland');
+      return ux('public_card.location_unknown', 'Location unavailable');
+    }
+
+    function getObservedMeta(result){
+      const lastSeen = finalField(result, 'last_seen');
+      const crawlTime = finalField(result, 'crawl_time');
+      const firstSeen = finalField(result, 'first_seen');
+      if(lastSeen){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(lastSeen) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      if(crawlTime){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(crawlTime) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      if(firstSeen){
+        return {
+          label: ux('public_card.last_verified', 'Last verified'),
+          value: formatUiDate(firstSeen) || ux('public_card.date_unknown', 'Date unavailable')
+        };
+      }
+      return {
+        label: ux('public_card.last_verified', 'Last verified'),
+        value: ux('public_card.date_unknown', 'Date unavailable')
+      };
+    }
+
+    function getPublicSourceStatusText(status){
+      const normalized = String(status && status.label || '').trim().toLowerCase();
+      if(normalized === 'active asking') return ux('public_card.active_confirmed', 'Currently available');
+      if(normalized === 'active, needs verification') return ux('public_card.verification_needed', 'Availability needs verification');
+      return localizeStatusLabel(status && status.label);
+    }
+
+    function formatSourceHeading(source, location){
+      const locationUnknown = ux('public_card.location_unknown', 'Location unavailable');
+      const locationText = location && location !== locationUnknown ? ` · ${location}` : '';
+      return `${ux('public_card.seller_label', 'Seller')}: ${source}${locationText}`;
     }
 
     function localizeMatchBadgeLabel(label){
@@ -1562,8 +1820,6 @@
       params.set('q', state.query);
       params.set('limit', String(limitValue));
       params.set('offset', String(offset));
-      params.set('sort', els['sort-select'].value || 'relevance');
-
       [
         ['category', els['category-filter'].value],
         ['brand', els['brand-filter'].value],
@@ -1638,6 +1894,29 @@
       return queryString ? `?${queryString}` : window.location.pathname;
     }
 
+    function updatePublicViewLink(){
+      if(!els['public-view-link']) return;
+      const historyState = state.historyReady ? (history.state || buildSearchState()) : parseSearchStateFromUrl();
+      const next = normalizeHistoryState(historyState);
+      const queryString = buildHistoryParamsFromState(next).toString();
+      els['public-view-link'].href = queryString ? `/?${queryString}` : '/';
+    }
+
+    function updateQaBannerMeta(meta){
+      if(els['qa-snapshot-line']){
+        if(meta && meta.index_record_count != null){
+          const generatedAt = meta.index_generated_at || 'unknown';
+          els['qa-snapshot-line'].textContent = `Snapshot: ${meta.index_record_count} records / generated_at ${generatedAt}`;
+        }else{
+          els['qa-snapshot-line'].textContent = 'Snapshot: waiting for search metadata';
+        }
+      }
+      if(els['qa-commit-line']){
+        const deploymentCommit = meta && meta.deployment_commit ? String(meta.deployment_commit) : 'unknown';
+        els['qa-commit-line'].textContent = `Deployment commit: ${deploymentCommit}`;
+      }
+    }
+
     function applySearchStateToControls(searchState){
       const next = normalizeHistoryState(searchState);
       syncSearchInputs(next.query);
@@ -1704,6 +1983,7 @@
       const nextQuery = String(options.queryOverride || getSearchQueryValue(Boolean(options.preferSticky))).trim();
       if(!nextQuery) return;
       const append = Boolean(options.append);
+      const appendContext = append && state.response ? captureAppendContext() : null;
       const preserveResultsAnchor = Boolean(options.preserveResultsAnchor) && !append;
       const historyMode = String(options.historyMode || 'push');
       const limitOverride = Math.max(PAGE_SIZE, Number(options.visibleCount || PAGE_SIZE));
@@ -1738,9 +2018,13 @@
         if(append && state.response){
           const currentResults = Array.isArray(state.response.results) ? state.response.results : [];
           const nextResults = Array.isArray(payload.results) ? payload.results : [];
-          const mergedResults = currentResults.concat(nextResults);
+          const mergedResults = mergeUniqueResults(currentResults, nextResults);
           const currentPagination = state.response.pagination || {};
           const nextPagination = payload.pagination || {};
+          const mergedSections = buildDisplaySections(mergedResults, getSortMode());
+          pendingAppendScrollTargetKey = appendContext
+            ? resolveFirstNewActiveKey(mergedSections.active, appendContext.activeKeys)
+            : '';
           state.response = {
             ...state.response,
             ...payload,
@@ -1755,6 +2039,7 @@
           };
           state.offset = 0;
         }else{
+          pendingAppendScrollTargetKey = '';
           state.response = payload;
           state.offset = Math.max(0, offset);
         }
@@ -1780,7 +2065,14 @@
         state.loading = false;
         state.appending = false;
         render();
-        if(pendingResultsAnchorScroll){
+        if(pendingAppendScrollTargetKey){
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              scrollAppendAnchorIntoView();
+              scheduleHistoryScrollSync();
+            });
+          });
+        }else if(pendingResultsAnchorScroll){
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               scrollResultsIntoView();
@@ -1805,7 +2097,9 @@
     }
 
     function statusMeta(result){
+      const marketInfo = getMarketActivityInfo(result);
       const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
+      if(soldQuality === 'asking' && marketInfo.bucket === 'uncertain_asking') return { label: 'Active, needs verification', tone: 'amber' };
       if(soldQuality === 'asking') return { label: 'Active asking', tone: 'accent' };
       if(soldQuality === 'sold_confirmed') return { label: 'Sold confirmed', tone: 'green' };
       if(soldQuality === 'sold_likely') return { label: 'Sold likely', tone: 'amber' };
@@ -1845,6 +2139,245 @@
       return state.response && Array.isArray(state.response.results) ? state.response.results : [];
     }
 
+    function formatListingCount(count){
+      const value = Math.max(0, Number(count || 0));
+      if(uiState.locale === 'ko') return `${value}개`;
+      if(uiState.locale === 'ja') return `${value}件`;
+      if(uiState.locale === 'zh-Hans' || uiState.locale === 'zh-Hant') return `${value}条`;
+      if(uiState.locale === 'pt') return `${value} anúncios`;
+      if(uiState.locale === 'es') return `${value} anuncios`;
+      if(uiState.locale === 'de') return `${value} Angebote`;
+      if(uiState.locale === 'it') return `${value} annunci`;
+      return `${value} ${value === 1 ? 'listing' : 'listings'}`;
+    }
+
+    function formatShownForQuery(count, query){
+      const quantity = formatListingCount(count);
+      if(uiState.locale === 'ko') return `"${query}" 검색 결과 ${quantity}`;
+      if(uiState.locale === 'ja') return `「${query}」の結果 ${quantity}`;
+      if(uiState.locale === 'zh-Hans') return `“${query}”结果 ${quantity}`;
+      if(uiState.locale === 'zh-Hant') return `「${query}」結果 ${quantity}`;
+      if(uiState.locale === 'pt') return `${quantity} para "${query}"`;
+      if(uiState.locale === 'es') return `${quantity} para "${query}"`;
+      if(uiState.locale === 'de') return `${quantity} für "${query}"`;
+      if(uiState.locale === 'it') return `${quantity} per "${query}"`;
+      return `${quantity} for "${query}"`;
+    }
+
+    function formatUiDate(rawValue){
+      const raw = String(rawValue || '').trim();
+      if(!raw) return '';
+      const parsed = Date.parse(raw);
+      if(!Number.isFinite(parsed)) return raw;
+      return new Intl.DateTimeFormat(uiState.locale, {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }).format(new Date(parsed));
+    }
+
+    function getSortMode(){
+      return els['sort-select'] ? String(els['sort-select'].value || 'relevance') : 'relevance';
+    }
+
+    function parseTimestampScore(rawValue){
+      const raw = String(rawValue || '').trim();
+      if(!raw) return 0;
+      const parsed = Date.parse(raw);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function getResultFreshnessScore(result){
+      return (
+        parseTimestampScore(finalField(result, 'last_seen'))
+        || parseTimestampScore(finalField(result, 'crawl_time'))
+      );
+    }
+
+    function getResultFirstSeenScore(result){
+      return parseTimestampScore(finalField(result, 'first_seen'));
+    }
+
+    function getResultRecencyScore(result){
+      return getResultFreshnessScore(result);
+    }
+
+    function getResultCompatibilityScore(result){
+      const queryMatchLevel = String(result.query_match_level || '').trim().toLowerCase();
+      if(queryMatchLevel === 'exact_generation') return 1000;
+      if(queryMatchLevel === 'exact_variant') return 980;
+      if(queryMatchLevel === 'exact_base_model') return 920;
+      if(queryMatchLevel === 'same_family_reference') return 840;
+      if(queryMatchLevel === 'accessory_compatible') return 240;
+      if(queryMatchLevel === 'boundary_conflict') return 120;
+      const quality = String(result.match_quality || '').trim().toLowerCase();
+      if(quality === 'strong') return 300;
+      if(quality === 'medium') return 200;
+      if(quality === 'weak') return 100;
+      return 0;
+    }
+
+    function getMarketActivityInfo(result){
+      const soldQuality = String(finalField(result, 'sold_quality') || '').trim().toLowerCase();
+      const hasRecency = Boolean(finalField(result, 'last_seen') || finalField(result, 'crawl_time'));
+      const projected = Boolean(displayField(result, 'stale_normalization_detected'));
+      if(soldQuality === 'asking'){
+        if(projected || !hasRecency){
+          return { bucket: 'uncertain_asking', bucketRank: 1, section: 'active', activeConfidence: 0 };
+        }
+        return { bucket: 'active_asking', bucketRank: 0, section: 'active', activeConfidence: 1 };
+      }
+      if(soldQuality === 'sold_confirmed'){
+        return { bucket: 'sold_confirmed', bucketRank: 2, section: 'history', activeConfidence: 0 };
+      }
+      if(['sold_likely', 'removed', 'expired', 'ended_unsold'].includes(soldQuality)){
+        return { bucket: 'sold_likely_removed', bucketRank: 3, section: 'history', activeConfidence: 0 };
+      }
+      return { bucket: 'historical_archive', bucketRank: 4, section: 'history', activeConfidence: 0 };
+    }
+
+    function getActiveCompatibilityTier(result, originalIndex){
+      const evidence = getResultEvidence(result, originalIndex);
+      const queryMatchLevel = String(result.query_match_level || '').trim().toLowerCase();
+      const priceUsage = String((evidence && evidence.price_usage_label) || '').trim().toLowerCase();
+      const excluded = Array.isArray(evidence && evidence.excluded_reason)
+        ? evidence.excluded_reason.map(item => String(item || '').toLowerCase())
+        : [];
+      const title = String(result.title || '').toLowerCase();
+      const blockedBySafety = excluded.some(item =>
+        item.includes('accessory')
+        || item.includes('bundle')
+        || item.includes('wrong model')
+        || item.includes('wrong mount')
+        || item.includes('duplicate')
+        || item.includes('outlier')
+        || item.includes('condition')
+        || item.includes('variant boundary')
+      ) || priceUsage.includes('not used')
+        || priceUsage.includes('not compatible')
+        || priceUsage.includes('accessory')
+        || priceUsage.includes('duplicate')
+        || priceUsage.includes('outlier')
+        || /(repaint|repainted|modified|custom|改造)/i.test(title);
+
+      if(blockedBySafety || ['boundary_conflict', 'accessory_compatible'].includes(queryMatchLevel)){
+        return 2;
+      }
+      if(['exact_generation', 'exact_variant', 'exact_base_model'].includes(queryMatchLevel)){
+        return 0;
+      }
+      return 1;
+    }
+
+    function sortMarketBucket(items, sortMode){
+      const sorted = [...items];
+      sorted.sort((left, right) => {
+        const leftPrice = left.priceValue;
+        const rightPrice = right.priceValue;
+        if(left.compatibilityTier !== right.compatibilityTier) return left.compatibilityTier - right.compatibilityTier;
+        if(sortMode === 'newest'){
+          if(right.recency !== left.recency) return right.recency - left.recency;
+          if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+          if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+          return left.originalIndex - right.originalIndex;
+        }
+        if(sortMode === 'price_asc'){
+          const leftMissing = leftPrice === null ? 1 : 0;
+          const rightMissing = rightPrice === null ? 1 : 0;
+          if(leftMissing !== rightMissing) return leftMissing - rightMissing;
+          if(leftPrice !== null && rightPrice !== null && leftPrice !== rightPrice) return leftPrice - rightPrice;
+          if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+          if(right.recency !== left.recency) return right.recency - left.recency;
+          if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+          return left.originalIndex - right.originalIndex;
+        }
+        if(sortMode === 'price_desc'){
+          const leftMissing = leftPrice === null ? 1 : 0;
+          const rightMissing = rightPrice === null ? 1 : 0;
+          if(leftMissing !== rightMissing) return leftMissing - rightMissing;
+          if(leftPrice !== null && rightPrice !== null && leftPrice !== rightPrice) return rightPrice - leftPrice;
+          if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+          if(right.recency !== left.recency) return right.recency - left.recency;
+          if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+          return left.originalIndex - right.originalIndex;
+        }
+        if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
+        if(right.recency !== left.recency) return right.recency - left.recency;
+        if(right.marketInfo.activeConfidence !== left.marketInfo.activeConfidence) return right.marketInfo.activeConfidence - left.marketInfo.activeConfidence;
+        if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
+        return left.originalIndex - right.originalIndex;
+      });
+      return sorted.map(item => item.result);
+    }
+
+    function buildDisplaySections(results, sortMode){
+      const wrapped = results.map((result, originalIndex) => ({
+        result,
+        originalIndex,
+        recency: getResultRecencyScore(result),
+        firstSeen: getResultFirstSeenScore(result),
+        compatibility: getResultCompatibilityScore(result),
+        compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
+        priceValue: parseNumericPrice(result),
+        marketInfo: getMarketActivityInfo(result),
+      }));
+      wrapped.forEach(item => {
+        item.result.__ui_original_index = item.originalIndex;
+      });
+      const buckets = {
+        active_asking: [],
+        uncertain_asking: [],
+        sold_confirmed: [],
+        sold_likely_removed: [],
+        historical_archive: [],
+      };
+      wrapped.forEach(item => {
+        buckets[item.marketInfo.bucket].push(item);
+      });
+      const active = [
+        ...sortMarketBucket(buckets.active_asking, sortMode),
+        ...sortMarketBucket(buckets.uncertain_asking, sortMode),
+      ];
+      const history = [
+        ...sortMarketBucket(buckets.sold_confirmed, sortMode),
+        ...sortMarketBucket(buckets.sold_likely_removed, sortMode),
+        ...sortMarketBucket(buckets.historical_archive, sortMode),
+      ];
+      return {
+        active,
+        history,
+        counts: {
+          active: active.length,
+          history: history.length,
+          active_asking: buckets.active_asking.length,
+          uncertain_asking: buckets.uncertain_asking.length,
+          sold_confirmed: buckets.sold_confirmed.length,
+          sold_likely_removed: buckets.sold_likely_removed.length,
+          historical_archive: buckets.historical_archive.length,
+        },
+      };
+    }
+
+    function captureAppendContext(){
+      const sections = buildDisplaySections(getResults(), getSortMode());
+      return {
+        activeCount: sections.active.length,
+        activeKeys: buildListingIdentitySet(sections.active),
+        scrollY: window.scrollY
+      };
+    }
+
+    function resolveFirstNewActiveKey(activeResults, existingActiveKeys){
+      const seen = existingActiveKeys instanceof Set ? existingActiveKeys : new Set();
+      for(const result of Array.isArray(activeResults) ? activeResults : []){
+        const key = buildListingIdentityKey(result);
+        if(!seen.has(key)){
+          return key;
+        }
+      }
+      return '';
+    }
+
     function buildResultEvidenceKey(title, source, price, currency){
       return [
         String(title || '').trim().toLowerCase(),
@@ -1852,6 +2385,34 @@
         String(price || '').trim(),
         String(currency || '').trim().toUpperCase()
       ].join('||');
+    }
+
+    function buildListingIdentityKey(result){
+      const sourceUrl = String(result && result.source_url || '').trim();
+      if(sourceUrl){
+        return `url::${sourceUrl}`;
+      }
+      return `fallback::${buildResultEvidenceKey(result && result.title, result && result.source, result && result.price, result && result.currency)}`;
+    }
+
+    function buildListingIdentitySet(results){
+      const keys = new Set();
+      (Array.isArray(results) ? results : []).forEach(result => {
+        keys.add(buildListingIdentityKey(result));
+      });
+      return keys;
+    }
+
+    function mergeUniqueResults(currentResults, nextResults){
+      const merged = Array.isArray(currentResults) ? [...currentResults] : [];
+      const seen = buildListingIdentitySet(merged);
+      (Array.isArray(nextResults) ? nextResults : []).forEach(result => {
+        const key = buildListingIdentityKey(result);
+        if(seen.has(key)) return;
+        seen.add(key);
+        merged.push(result);
+      });
+      return merged;
     }
 
     function getResultEvidence(result, index){
@@ -2076,19 +2637,19 @@
       els['result-count'].textContent = String(total);
       if(state.loading){
         els['result-caption'].textContent = 'Searching global used camera listings...';
-        els['summary-meta'].textContent = 'Private beta search in progress';
+        els['summary-meta'].textContent = 'INTERNAL QA is checking the shared public search data.';
       }else if(state.appending && state.query){
-        els['result-caption'].textContent = `${resultCount} shown for "${state.query}"`;
-        els['summary-meta'].textContent = 'Loading more results...';
+        els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
+        els['summary-meta'].textContent = 'INTERNAL QA is loading more shared results.';
       }else if(state.error){
         els['result-caption'].textContent = 'Runtime fallback active';
-        els['summary-meta'].textContent = 'Safe UI fallback shown instead of raw server error';
+        els['summary-meta'].textContent = 'INTERNAL QA fallback shown instead of a raw server error.';
       }else if(state.query){
-        els['result-caption'].textContent = `${resultCount} shown for "${state.query}"`;
-        els['summary-meta'].textContent = quality.display_message || 'Prices are references, not guaranteed valuations.';
+        els['result-caption'].textContent = formatShownForQuery(resultCount, state.query);
+        els['summary-meta'].textContent = quality.display_message || 'INTERNAL QA view of the shared price summary.';
       }else{
         els['result-caption'].textContent = 'Ready for search';
-        els['summary-meta'].textContent = 'Private beta. No fake fill. Source-gap is not confirmed absence.';
+        els['summary-meta'].textContent = 'INTERNAL QA view. Shared data, shared results, extra diagnostics only.';
       }
 
       if(els['index-debug-line']){
@@ -2099,6 +2660,9 @@
           els['index-debug-line'].textContent = '';
         }
       }
+
+      updateQaBannerMeta(meta);
+      updatePublicViewLink();
 
       els['page-indicator'].textContent = `${start}-${end}`;
       els['prev-button'].disabled = state.loading || !state.response || Number(pagination.offset || 0) <= 0;
@@ -2149,6 +2713,7 @@
       }
 
       const results = getResults();
+      const displaySections = buildDisplaySections(results, getSortMode());
       const uiHints = getUiHints();
 
       if(uiHints.needs_disambiguation){
@@ -2168,9 +2733,9 @@
       );
       els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
       els['query-summary-region'].innerHTML = renderQuerySummaryBar(results);
-      els['results-grid'].innerHTML = results.map((result, index) => renderCard(result, index)).join('');
-      els['results-load-more-region'].innerHTML = renderLoadMore();
-      els['archive-region'].innerHTML = renderArchiveSection(results);
+      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
+      els['results-load-more-region'].innerHTML = '';
+      els['archive-region'].innerHTML = renderArchiveSection(displaySections.history);
     }
 
     function renderQuerySummaryBar(results){
@@ -2196,27 +2761,46 @@
               <div class="query-summary-label">Search query</div>
               <div class="query-summary-query">${escapeHtml(state.query)}</div>
             </div>
-            <div class="query-summary-count">${escapeHtml(`${resultCount} visible`)}</div>
+            <div class="query-summary-count">${escapeHtml(formatListingCount(resultCount))}</div>
           </div>
           ${detectedLine ? `<div class="query-summary-detected"><strong>Detected:</strong> ${escapeHtml(detectedLine)}</div>` : ''}
         </article>
       `;
     }
 
-    function renderLoadMore(){
+    function formatLoadMoreProgress(shownCount, totalCount){
+      const shown = Math.max(0, Number(shownCount || 0));
+      const total = Math.max(shown, Number(totalCount || 0));
+      if(uiState.locale === 'ko') return `${shown} / ${total} 표시 중`;
+      if(uiState.locale === 'ja') return `${shown} / ${total} 件を表示`;
+      if(uiState.locale === 'zh-Hans') return `已显示 ${shown} / ${total}`;
+      if(uiState.locale === 'zh-Hant') return `已顯示 ${shown} / ${total}`;
+      if(uiState.locale === 'pt') return `${shown} / ${total} exibidos`;
+      if(uiState.locale === 'es') return `${shown} / ${total} mostrados`;
+      if(uiState.locale === 'de') return `${shown} / ${total} angezeigt`;
+      if(uiState.locale === 'it') return `${shown} / ${total} mostrati`;
+      return `${shown} / ${total} shown`;
+    }
+
+    function renderLoadMore(activeShownCount){
       const pagination = state.response ? (state.response.pagination || {}) : {};
       if(!state.response || !getResults().length || !pagination.has_more){
         return '';
       }
+      const shownCount = Math.max(0, Number(activeShownCount || 0));
+      const totalCount = Math.max(shownCount, Number(state.response.total_ranked || shownCount));
       return `
-        <button
-          type="button"
-          class="ghost-button load-more-button"
-          data-load-more="true"
-          ${state.appending ? 'disabled' : ''}
-        >
-          ${state.appending ? 'Loading more...' : 'Load more'}
-        </button>
+        <div class="load-more-region">
+          <button
+            type="button"
+            class="ghost-button load-more-button"
+            data-load-more="true"
+            ${state.appending ? 'disabled' : ''}
+          >
+            ${state.appending ? ux('load_more.active_loading', 'Loading more active listings…') : ux('load_more.active_idle', 'Load more active listings')}
+          </button>
+          <div class="load-more-note">${escapeHtml(formatLoadMoreProgress(shownCount, totalCount))}</div>
+        </div>
       `;
     }
 
@@ -2277,11 +2861,11 @@
       if(ambiguityType === 'source_coverage_gap'){
         return `
           <article class="state-card">
-            <h3>We could not verify enough source coverage for this query yet.</h3>
-            <p>This does not mean the item does not exist.</p>
+            <h3>${escapeHtml(ux('empty.source_gap_title', 'We could not verify enough source coverage for this query yet.'))}</h3>
+            <p>${escapeHtml(ux('empty.source_gap_body', 'This does not mean the item does not exist.'))}</p>
             <div class="state-actions">
-              <button type="button" class="ghost-button">Get notified if matching listings appear later</button>
-              <button type="button" class="ghost-button">Track market changes</button>
+              <button type="button" class="ghost-button">${escapeHtml(ux('empty.notify_later', 'Get notified if matching listings appear later'))}</button>
+              <button type="button" class="ghost-button">${escapeHtml(ux('empty.track_market_changes', 'Track market changes'))}</button>
             </div>
           </article>
         `;
@@ -2290,8 +2874,8 @@
       if(uiHints.needs_disambiguation){
         return `
           <article class="state-card">
-            <h3>No exact result is shown yet because this query is still broad.</h3>
-            <p>${escapeHtml(recommendedMessage || 'Choose a mount or focal length to refine your search.')}</p>
+            <h3>${escapeHtml(ux('empty.broad_title', 'No exact result is shown yet because this query is still broad.'))}</h3>
+            <p>${escapeHtml(recommendedMessage || ux('empty.broad_body_default', 'Choose a mount or focal length to refine your search.'))}</p>
             <div class="state-actions">
               ${(uiHints.recommended_chips || BROAD_QUERY_FALLBACK_CHIPS).slice(0, 6).map(chip => `<button type="button" class="ghost-button" data-refine="${escapeHtml(chip)}">${escapeHtml(chip)}</button>`).join('')}
             </div>
@@ -2301,10 +2885,10 @@
 
       return `
         <article class="state-card">
-          <h3>No verified matches found for this search.</h3>
-          <p>Try a more specific model name, add a mount or focal length, or come back later if coverage improves.</p>
+          <h3>${escapeHtml(ux('empty.no_results_title', 'No verified matches found for this search.'))}</h3>
+          <p>${escapeHtml(ux('empty.no_results_body', 'Try a more specific model name, add a mount or focal length, or come back later if coverage improves.'))}</p>
           <div class="state-actions">
-            <button type="button" class="ghost-button">Get notified if matching listings appear later</button>
+            <button type="button" class="ghost-button">${escapeHtml(ux('empty.notify_later', 'Get notified if matching listings appear later'))}</button>
           </div>
         </article>
       `;
@@ -2449,10 +3033,10 @@
               </div>
             </div>
             <div class="metric-grid">
-              <div class="metric-card"><b>Active listings</b><span>Locked</span></div>
-              <div class="metric-card"><b>Sold confirmed</b><span>Locked</span></div>
-              <div class="metric-card"><b>Sold likely</b><span>Locked</span></div>
-              <div class="metric-card"><b>Expired or removed archive</b><span>Locked</span></div>
+              <div class="metric-card"><b>${escapeHtml(ux('section.active_listings', 'Active listings'))}</b><span>Locked</span></div>
+            <div class="metric-card"><b>${escapeHtml(localizeStatusLabel('Sold confirmed'))}</b><span>Locked</span></div>
+            <div class="metric-card"><b>${escapeHtml(localizeStatusLabel('Sold likely'))}</b><span>Locked</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('section.market_history', 'Market history'))}</b><span>Locked</span></div>
               <div class="metric-card"><b>${marketPriceHeadline}</b><span>${marketPriceValue}</span></div>
               ${broaderReferenceHtml}
               <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
@@ -2495,10 +3079,10 @@
             </div>
           </div>
           <div class="metric-grid">
-            <div class="metric-card"><b>Active listings</b><span>${counts.asking}</span></div>
-            <div class="metric-card"><b>Sold confirmed</b><span>${counts.soldConfirmed}</span></div>
-            <div class="metric-card"><b>Sold likely</b><span>${counts.soldLikely}</span></div>
-            <div class="metric-card"><b>Expired or removed archive</b><span>${counts.expiredRemoved}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('section.active_listings', 'Active listings'))}</b><span>${counts.asking}</span></div>
+            <div class="metric-card"><b>${escapeHtml(localizeStatusLabel('Sold confirmed'))}</b><span>${counts.soldConfirmed}</span></div>
+            <div class="metric-card"><b>${escapeHtml(localizeStatusLabel('Sold likely'))}</b><span>${counts.soldLikely + counts.expiredRemoved}</span></div>
+            <div class="metric-card"><b>${escapeHtml(ux('section.market_history', 'Market history'))}</b><span>${counts.archive}</span></div>
             <div class="metric-card"><b>${marketPriceHeadline}</b><span>${priceBand}</span></div>
             ${broaderReferenceHtml}
             <div class="metric-card"><b>Source coverage</b><span>${escapeHtml(getCoverageLabel())}</span></div>
@@ -2555,10 +3139,19 @@
       const matchBadge = getResultMatchBadge(result, evidenceRole, priceRole, reason);
       const priceEvidenceMeta = derivePriceEvidenceMeta(result, evidence);
       const conditionSummary = buildConditionSummary(result, status);
+      const location = inferSourceLocation(source);
+      const observedMeta = getObservedMeta(result);
+      const sourceHeading = formatSourceHeading(source, location);
+      const sourceStatusText = getPublicSourceStatusText(status);
+      const observedLine = `${observedMeta.label}: ${observedMeta.value}`;
+      const listingKey = buildListingIdentityKey(result);
+      const appendAnchorAttr = pendingAppendScrollTargetKey && listingKey === pendingAppendScrollTargetKey
+        ? ' data-append-anchor="true"'
+        : '';
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
 
       return `
-        <article class="result-card">
+        <article class="result-card" data-listing-key="${escapeHtml(listingKey)}"${appendAnchorAttr}>
           <div class="result-head">
             <div class="thumb">${thumb}</div>
             <div class="card-copy">
@@ -2566,8 +3159,9 @@
               <div class="result-price-row">
                 <div class="result-price">${escapeHtml(displayValue(result.price, t('result.no_usable_price')))}</div>
                 <div class="result-source">
-                  <div class="result-source-name">${escapeHtml(source)}</div>
-                  <div class="result-source-meta">${escapeHtml(currency)}</div>
+                  <div class="result-source-name">${escapeHtml(sourceHeading)}</div>
+                  <div class="result-source-meta">${escapeHtml(sourceStatusText)}</div>
+                  <div class="result-source-meta">${escapeHtml(observedLine)}</div>
                   <div class="result-condition-summary">${escapeHtml(conditionSummary.primary)}</div>
                   ${conditionSummary.tags.length ? `<div class="result-condition-tags">${conditionSummary.tags.map(tag => `<span class="micro-pill">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
                 </div>
@@ -2610,7 +3204,7 @@
               <button type="button" class="ghost-button">${escapeHtml(t('result.create_alert_exact_model'))}</button>
             </div>
             <div class="action-group">
-              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>${escapeHtml(t('result.view_source'))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(t('result.view_source'))}</button>`}
+              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>${escapeHtml(ux('cta.view_listing', 'View at seller'))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(ux('cta.view_listing', 'View at seller'))}</button>`}
             </div>
           </div>
         </article>
@@ -2625,44 +3219,34 @@
       return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, 'Not enough data'))}</span></div>`;
     }
 
-    function renderArchiveSection(results){
-      const archiveCandidates = results.filter(result => {
-        const soldQuality = String(finalField(result, 'sold_quality') || '').toLowerCase();
-        return soldQuality && soldQuality !== 'asking';
-      }).slice(0, 4);
-
-      const items = archiveCandidates.length
-        ? archiveCandidates.map(result => {
-            const status = statusMeta(result);
-            const caution = status.label === 'Sold confirmed'
-              ? 'Sold status still depends on source quality and should be read as a reference.'
-              : 'Sold status may be uncertain. Do not treat archive state as a guaranteed completed sale.';
-            return `
-              <div class="archive-item">
-                <strong>${escapeHtml(result.title || 'Archived listing')}</strong>
-                <p>Observed price: ${escapeHtml(displayValue(result.price, 'Not enough data'))}. Status: ${escapeHtml(status.label)}. Source: ${escapeHtml(displayValue(result.source, 'Unknown source'))}.</p>
-                <div class="archive-meta">
-                  <span class="micro-pill blue">Model match ${escapeHtml(displayValue(displayField(result, 'display_model'), displayValue(finalField(result, 'model_canonical'), 'Unknown')))}</span>
-                  <span class="micro-pill">${escapeHtml(caution)}</span>
-                </div>
-              </div>
-            `;
-          }).join('')
-        : `
-          <div class="archive-item">
-            <strong>No archive or sold reference entry is visible in this search yet.</strong>
-            <p>Archive reference is shown only when the current result set exposes a sold-like, expired, removed, or otherwise historical status. Nothing is invented here.</p>
-          </div>
-        `;
+    function renderResultSection(sectionName, results, footerHtml = ''){
+      const isActive = sectionName === 'active';
+      const title = isActive ? ux('section.active_listings', 'Active listings') : ux('section.market_history', 'Market history');
+      const subtitle = isActive
+        ? ux('section.active_subtitle', 'Listings that still appear available are shown first.')
+        : ux('section.history_subtitle', 'Historical sold, removed, and archive records are shown separately.');
+      const emptyMessage = isActive
+        ? ux('section.no_active', 'No active listings are visible in this result window yet.')
+        : ux('section.no_history', 'No market-history records are visible for this search yet.');
+      const listClass = isActive ? 'archive-list active-list' : 'archive-list history-list';
 
       return `
         <article class="archive-card">
-          <p class="section-label">Listing archive / sold reference entry</p>
-          <h3>Archived listing and sold-reference context</h3>
-          <p>Archive references are useful when present, but removed or uncertain states must never be overstated as confirmed sales.</p>
-          <div class="archive-list">${items}</div>
+          <p class="section-label">${escapeHtml(title)}</p>
+          <h3>${escapeHtml(`${title} (${formatListingCount(results.length)})`)}</h3>
+          <p>${escapeHtml(subtitle)}</p>
+          ${
+            results.length
+              ? `<div class="${listClass}">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index))).join('')}</div>`
+              : `<div class="archive-item"><strong>${escapeHtml(emptyMessage)}</strong></div>`
+          }
+          ${footerHtml}
         </article>
       `;
+    }
+
+    function renderArchiveSection(results){
+      return renderResultSection('history', results);
     }
 
     function renderWarnings(){
@@ -2715,11 +3299,23 @@
         });
       });
 
-      ['category-filter','brand-filter','mount-filter','sold-filter','sort-select'].forEach(id => {
+      ['category-filter','brand-filter','mount-filter','sold-filter'].forEach(id => {
         els[id].addEventListener('change', () => {
           if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
         });
       });
+      if(els['sort-select']){
+        els['sort-select'].addEventListener('change', () => {
+          render();
+          if(state.query || els['query-input'].value.trim()){
+            commitHistoryState('push', buildSearchState({
+              query: state.query || els['query-input'].value.trim(),
+              offset: state.offset,
+              visibleCount: getVisibleCount()
+            }));
+          }
+        });
+      }
       if(els['locale-select']){
         els['locale-select'].addEventListener('change', event => {
           setLocale(event.target.value);
