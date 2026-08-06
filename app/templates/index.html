@@ -1651,6 +1651,14 @@
       return ux('public_card.location_unknown', 'Location unavailable');
     }
 
+    function getResultLocation(result, source){
+      const city = String(result && (result.city || finalField(result, 'city')) || '').trim();
+      const country = String(result && (result.country || finalField(result, 'country')) || '').trim();
+      if(city && country) return `${city}, ${country}`;
+      if(country) return country;
+      return inferSourceLocation(source);
+    }
+
     function getObservedMeta(result){
       const lastSeen = finalField(result, 'last_seen');
       const crawlTime = finalField(result, 'crawl_time');
@@ -1686,10 +1694,12 @@
       return localizeStatusLabel(status && status.label);
     }
 
-    function formatSourceHeading(source, location){
+    function formatSourceHeading(source, location, seller){
       const locationUnknown = ux('public_card.location_unknown', 'Location unavailable');
       const locationText = location && location !== locationUnknown ? ` · ${location}` : '';
-      return `${ux('public_card.seller_label', 'Seller')}: ${source}${locationText}`;
+      const sellerText = String(seller || '').trim();
+      const sourceText = sellerText ? `${source} / ${sellerText}` : source;
+      return `${ux('public_card.seller_label', 'Seller')}: ${sourceText}${locationText}`;
     }
 
     function localizeMatchBadgeLabel(label){
@@ -3102,7 +3112,7 @@
 
     function renderCard(result, index){
       const title = result.title || 'Untitled listing';
-      const url = result.source_url || '#';
+      const url = result.affiliate_url || result.source_url || '#';
       const imageUrl = result.image_url;
       const safeUrl = escapeHtml(url);
       const canViewSource = Boolean(url && url !== '#');
@@ -3139,9 +3149,10 @@
       const matchBadge = getResultMatchBadge(result, evidenceRole, priceRole, reason);
       const priceEvidenceMeta = derivePriceEvidenceMeta(result, evidence);
       const conditionSummary = buildConditionSummary(result, status);
-      const location = inferSourceLocation(source);
+      const location = getResultLocation(result, source);
+      const seller = displayValue(result.seller || finalField(result, 'seller'), '');
       const observedMeta = getObservedMeta(result);
-      const sourceHeading = formatSourceHeading(source, location);
+      const sourceHeading = formatSourceHeading(source, location, seller);
       const sourceStatusText = getPublicSourceStatusText(status);
       const observedLine = `${observedMeta.label}: ${observedMeta.value}`;
       const listingKey = buildListingIdentityKey(result);

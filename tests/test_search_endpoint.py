@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from unittest.mock import patch
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from api.search import endpoint_response, parse_search_params
+from search_index import build_search_index
 
 
 def _record(index: int, final_output: dict, override_applied: bool = False) -> dict:
@@ -119,6 +121,40 @@ Q3_BODY = _record(
 
 RECORDS = [SUMMILUX_35, SUMMILUX_LOW, MP3_SILVER, Q3_BODY]
 
+EBAY_SUMMILUX = build_search_index(
+    [
+        _record(
+            90,
+            {
+                "source": "eBay",
+                "source_url": "https://www.ebay.com/itm/2001",
+                "affiliate_url": "https://www.ebay.com/itm/2001?mkcid=1",
+                "title_raw": "Leica M 35mm Summilux ASPH AA",
+                "price_raw": "USD 12,999",
+                "currency": "USD",
+                "condition_raw": "Used",
+                "brand": "Leica",
+                "mount": "M",
+                "category": "Lens",
+                "label": "M Lens",
+                "model_raw": "Summilux",
+                "model_canonical": "Summilux-M",
+                "variant": ["ASPH", "AA"],
+                "focal_length": "35",
+                "sold_quality": "asking",
+                "last_seen": "2026-08-05T00:00:00+00:00",
+                "seller": "rangefinder_store",
+                "source_marketplace": "EBAY_US",
+                "source_item_id": "v1|2001|0",
+                "legacy_item_id": "2001",
+                "buying_options": ["FIXED_PRICE"],
+                "evidence_role": "asking",
+                "price_role": "asking_only",
+            },
+        )
+    ]
+)[0]
+
 
 def test_parse_required_and_optional_params() -> None:
     parsed = parse_search_params({
@@ -196,6 +232,30 @@ def test_quality_options_are_connected() -> None:
     assert response["results"][0]["match_quality"] == "strong"
 
 
+def test_ebay_active_results_do_not_change_market_price_summary() -> None:
+    status, baseline = endpoint_response({"q": "35lux aa", "limit": "10"}, records=[SUMMILUX_35, SUMMILUX_LOW])
+    assert status == 200
+
+    diagnostics = {"ebay": {"enabled": True, "status": "ok", "accepted_count": 1, "returned_count": 1}}
+    with patch("search_service._load_external_active_records", return_value=([EBAY_SUMMILUX], diagnostics)):
+        status, response = endpoint_response({"q": "35lux aa", "limit": "10"}, records=[SUMMILUX_35, SUMMILUX_LOW])
+
+    assert status == 200
+    assert response["price_summary_band"] == baseline["price_summary_band"]
+    assert response["display_price_band"] == baseline["display_price_band"]
+    assert response["live_source_diagnostics"]["ebay"]["accepted_count"] == 1
+    assert any(result["source"] == "eBay" for result in response["results"])
+
+    ebay_evidence = [
+        item
+        for item in response.get("display_visible_result_evidence", [])
+        if item.get("source") == "eBay"
+    ]
+    assert ebay_evidence
+    assert all(item.get("used_for_price") is False for item in ebay_evidence)
+    assert all("price-eligible" in " ".join(item.get("excluded_reason") or []).lower() for item in ebay_evidence)
+
+
 def test_empty_result_is_success_with_no_results_warning() -> None:
     status, response = endpoint_response({"q": "nocti e60", "category": "Accessory"}, records=RECORDS)
     assert status == 200
@@ -241,6 +301,7 @@ if __name__ == "__main__":
     test_debug_toggle_hides_and_shows_classifier_output()
     test_pagination_filter_and_sort_are_connected()
     test_quality_options_are_connected()
+    test_ebay_active_results_do_not_change_market_price_summary()
     test_empty_result_is_success_with_no_results_warning()
     test_missing_query_returns_400()
     test_invalid_params_return_400()

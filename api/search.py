@@ -193,6 +193,9 @@ def _resolve_search_index_path(path: str | Path | None) -> Path:
     if requested.exists():
         return requested
 
+    if path is not None:
+        raise FileNotFoundError(str(requested))
+
     for candidate in _candidate_index_paths(default_path):
         if candidate.exists():
             return candidate

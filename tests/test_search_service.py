@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from unittest.mock import patch
 import sys
 import tempfile
 from pathlib import Path
@@ -118,6 +119,94 @@ MP3_SILVER = _record(
         "sold_quality": "asking",
     },
     override_applied=True,
+)
+
+EBAY_M10_BODY_RECORD = _record(
+    901,
+    {
+        "source": "eBay",
+        "source_url": "https://www.ebay.com/itm/1001",
+        "affiliate_url": "https://www.ebay.com/itm/1001?mkcid=1",
+        "title_raw": "Leica M10 Silver Body",
+        "price_raw": "USD 3,499",
+        "currency": "USD",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10",
+        "model_canonical": "M10",
+        "variant": ["Silver"],
+        "focal_length": None,
+        "sold_quality": "asking",
+        "last_seen": "2026-08-05T00:00:00+00:00",
+        "seller": "rangefinder_store",
+        "country": "US",
+        "city": "Miami",
+        "source_marketplace": "EBAY_US",
+        "source_item_id": "v1|1001|0",
+        "legacy_item_id": "1001",
+        "buying_options": ["FIXED_PRICE"],
+        "evidence_role": "asking",
+        "price_role": "asking_only",
+    },
+)
+
+EBAY_M10_CASE_RECORD = _record(
+    902,
+    {
+        "source": "eBay",
+        "source_url": "https://www.ebay.com/itm/1004",
+        "title_raw": "Leica M10 Half Case Protector",
+        "price_raw": "USD 99",
+        "currency": "USD",
+        "condition_raw": "New",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Accessory",
+        "label": "Accessory",
+        "model_raw": None,
+        "model_canonical": None,
+        "variant": [],
+        "focal_length": None,
+        "accessory_type": "case",
+        "sold_quality": "asking",
+        "last_seen": "2026-08-05T00:00:00+00:00",
+        "seller": "accessoryonly",
+        "country": "US",
+        "city": "Austin",
+        "source_marketplace": "EBAY_US",
+        "source_item_id": "v1|1004|0",
+        "legacy_item_id": "1004",
+        "buying_options": ["FIXED_PRICE"],
+        "evidence_role": "asking",
+        "price_role": "asking_only",
+    },
+)
+
+EBAY_M10_BODY = build_search_index([EBAY_M10_BODY_RECORD])[0]
+EBAY_M10_CASE = build_search_index([EBAY_M10_CASE_RECORD])[0]
+
+LOCAL_M10_BODY = _record(
+    903,
+    {
+        "source": "Local dealer",
+        "source_url": "https://example.invalid/local-m10",
+        "title_raw": "Leica M10 Black Body",
+        "price_raw": "4,800,000원",
+        "currency": "KRW",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10",
+        "model_canonical": "M10",
+        "variant": ["Black"],
+        "focal_length": None,
+        "sold_quality": "asking",
+    },
 )
 
 SUMMARON_L_35 = _record(
@@ -504,6 +593,40 @@ def test_pagination_fields_and_next_offset() -> None:
     assert response["pagination"]["has_more"] is True
     assert response["pagination"]["next_offset"] == 1
     assert response["result_count"] == 1
+
+
+def test_ebay_active_results_can_merge_into_search_results_without_breaking_response() -> None:
+    diagnostics = {"ebay": {"enabled": True, "status": "ok", "accepted_count": 1, "returned_count": 1}}
+    with patch("search_service._load_external_active_records", return_value=([EBAY_M10_BODY], diagnostics)):
+        response = search_records("Leica M10", [], limit=10, min_score=1)
+
+    assert any(result["source"] == "eBay" for result in response["results"])
+    ebay_result = next(result for result in response["results"] if result["source"] == "eBay")
+    assert ebay_result["seller"] == "rangefinder_store"
+    assert ebay_result["final_output"]["sold_quality"] == "asking"
+    assert response["live_source_diagnostics"]["ebay"]["accepted_count"] == 1
+    assert response["live_external_record_count"] == 1
+
+
+def test_ebay_accessory_false_positive_does_not_outrank_clean_body_match() -> None:
+    diagnostics = {"ebay": {"enabled": True, "status": "ok", "accepted_count": 1, "returned_count": 1}}
+    with patch("search_service._load_external_active_records", return_value=([EBAY_M10_CASE], diagnostics)):
+        response = search_records("Leica M10", [LOCAL_M10_BODY], limit=10, min_score=1)
+
+    assert response["results"][0]["source"] == "Local dealer"
+    assert response["results"][0]["final_output"]["category"] == "Body"
+    ebay_rows = [result for result in response["results"] if result["source"] == "eBay"]
+    assert all(result["final_output"]["category"] != "Accessory" or result["match_quality"] != "strong" for result in ebay_rows)
+
+
+def test_external_source_error_does_not_break_existing_search_results() -> None:
+    diagnostics = {"ebay": {"enabled": True, "status": "timeout", "accepted_count": 0, "returned_count": 0}}
+    with patch("search_service._load_external_active_records", return_value=([], diagnostics)):
+        response = search_records("35lux aa", [SUMMILUX_HIGH], limit=1)
+
+    assert response["result_count"] == 1
+    assert response["results"][0]["source_url"] == "https://example.invalid/high"
+    assert response["live_source_diagnostics"]["ebay"]["status"] == "timeout"
 
 
 def test_offset_pagination_returns_second_page() -> None:
@@ -975,6 +1098,9 @@ def test_body_intent_candidate_narrowing_keeps_accessory_and_lens_visible() -> N
 
 if __name__ == "__main__":
     test_pagination_fields_and_next_offset()
+    test_ebay_active_results_can_merge_into_search_results_without_breaking_response()
+    test_ebay_accessory_false_positive_does_not_outrank_clean_body_match()
+    test_external_source_error_does_not_break_existing_search_results()
     test_offset_pagination_returns_second_page()
     test_sold_quality_category_brand_filters()
     test_relevance_default_sort_is_preserved()
