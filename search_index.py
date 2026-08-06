@@ -64,6 +64,21 @@ FINAL_OUTPUT_FIELDS = [
     "condition_raw",
     "crawl_time",
     "first_seen",
+    "last_seen",
+    "source_marketplace",
+    "source_item_id",
+    "legacy_item_id",
+    "affiliate_url",
+    "buying_options",
+    "seller",
+    "seller_feedback_score",
+    "seller_feedback_percentage",
+    "country",
+    "city",
+    "item_created_at",
+    "item_end_at",
+    "evidence_role",
+    "price_role",
 ]
 
 

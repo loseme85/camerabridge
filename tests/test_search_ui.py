@@ -316,7 +316,8 @@ def test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy() -> None:
     for html in _html_files(BETA_PATHS):
         body = _function_body(html, "renderCard")
         assert "const title = result.title || ux('card.title_missing', 'Untitled listing');" in body
-        assert "formatSourceHeading(source, location)" in body
+        assert "getResultLocation(result, source)" in body
+        assert "formatSourceHeading(source, location, seller)" in body
         assert "getPublicSourceStatusText(status)" in body
         assert "getObservedMeta(result)" in body
         assert "getPublicPriceBadge(result, priceRole, reason)" in body
@@ -505,8 +506,9 @@ def test_qa_snapshot_meta_wraps_on_mobile_instead_of_overflowing() -> None:
 
 def test_source_visibility_emphasizes_seller_without_translating_titles_or_prices() -> None:
     for html in _html_files():
-        assert "formatSourceHeading(source, location)" in html
+        assert "formatSourceHeading(source, location, seller)" in html
         assert "ux('public_card.seller_label', 'Seller')" in html
+        assert "result.affiliate_url || result.source_url || '#'" in html
         assert "escapeHtml(title)" in html
         assert "result.price" in html
 

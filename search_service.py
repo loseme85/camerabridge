@@ -42,6 +42,8 @@ FINDER_DETAIL_CANDIDATE_MAX_RECORDS = 90
 FINDER_DETAIL_CANDIDATE_BROAD_RECORDS = 35
 BODY_CANDIDATE_MAX_RECORDS = 260
 BODY_CANDIDATE_BROAD_RECORDS = 80
+EXTERNAL_ACTIVE_LIMIT_BUFFER = 20
+MAX_EXTERNAL_ACTIVE_LIMIT = 60
 SUPPORTED_SORTS = {
     "relevance",
     "price_asc",
@@ -125,6 +127,70 @@ def _listing_system(result: dict[str, Any], source_record: Optional[dict[str, An
         raw = source_record.get("raw_item") or {}
         return raw.get("system")
     return None
+
+
+def _filter_values_include(actual: Any, expected: str) -> bool:
+    expected_norm = _normalize_text(expected)
+    if not expected_norm:
+        return True
+    return any(_normalize_text(item) == expected_norm for item in _as_list(actual))
+
+
+def _should_fetch_external_active_records(filters: Optional[dict[str, Any]] = None) -> bool:
+    filters = filters or {}
+    if "source" in filters and not _filter_values_include(filters.get("source"), "eBay"):
+        return False
+
+    if "sold_quality" in filters:
+        sold_filters = {_normalize_text(item) for item in _as_list(filters.get("sold_quality"))}
+        if sold_filters and "asking" not in sold_filters and "unknown" not in sold_filters:
+            return False
+
+    return True
+
+
+def _external_active_limit(limit: int, offset: int) -> int:
+    requested = max(int(limit or DEFAULT_LIMIT) + int(offset or 0), DEFAULT_LIMIT)
+    return min(MAX_EXTERNAL_ACTIVE_LIMIT, requested + EXTERNAL_ACTIVE_LIMIT_BUFFER)
+
+
+def _load_external_active_records(
+    query: str,
+    *,
+    limit: int,
+    offset: int,
+    filters: Optional[dict[str, Any]] = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    diagnostics: dict[str, Any] = {
+        "ebay": {
+            "source": "eBay",
+            "enabled": False,
+            "status": "disabled",
+            "accepted_count": 0,
+            "returned_count": 0,
+            "rejected_count": 0,
+            "duplicate_count": 0,
+            "cache": "none",
+        }
+    }
+    if not _should_fetch_external_active_records(filters):
+        diagnostics["ebay"]["status"] = "skipped_filters"
+        return [], diagnostics
+
+    try:
+        from sources.ebay import search_active_listings
+    except Exception as exc:  # pragma: no cover - import failure should never crash search
+        diagnostics["ebay"]["status"] = "import_error"
+        diagnostics["ebay"]["error_code"] = "adapter_import_error"
+        diagnostics["ebay"]["message"] = str(exc)
+        return [], diagnostics
+
+    ebay_result = search_active_listings(
+        query=query,
+        limit=_external_active_limit(limit, offset),
+    )
+    diagnostics["ebay"] = dict(ebay_result.get("diagnostics") or diagnostics["ebay"])
+    return list(ebay_result.get("records") or []), diagnostics
 
 
 def _price_value(final: dict[str, Any]) -> Optional[float]:
@@ -551,6 +617,7 @@ def narrow_candidate_records(
         "strong_candidate_count": 0,
         "broad_candidate_count": 0,
         "precomputed_field_record_count": 0,
+        "live_external_record_count": 0,
         "accessory_intent_applied": False,
         "accessory_code_applied": False,
         "filter_intent_applied": False,
@@ -902,20 +969,28 @@ def search_records(
     strong_only: bool = False,
     use_candidate_narrowing: bool = True,
 ) -> dict[str, Any]:
+    live_source_records, live_source_diagnostics = _load_external_active_records(
+        query,
+        limit=limit,
+        offset=offset,
+        filters=filters,
+    )
+    all_records = list(records) + list(live_source_records)
     intent = parse_query(query)
     candidate_records, candidate_stats = (
-        narrow_candidate_records(intent, records)
+        narrow_candidate_records(intent, all_records)
         if use_candidate_narrowing
         else (
-            records,
+            all_records,
             {
                 "applied": False,
-                "input_record_count": len(records),
-                "scored_record_count": len(records),
+                "input_record_count": len(all_records),
+                "scored_record_count": len(all_records),
                 "anchor_fields": sorted(_candidate_anchor_fields(intent)),
                 "strong_candidate_count": 0,
                 "broad_candidate_count": 0,
                 "precomputed_field_record_count": 0,
+                "live_external_record_count": len(live_source_records),
             },
         )
     )
@@ -925,6 +1000,7 @@ def search_records(
         limit=len(candidate_records),
         min_score=min_score,
     )
+    candidate_stats["live_external_record_count"] = len(live_source_records)
     ranked_results = ranked_payload["results"]
     total_before_filters = len(ranked_results)
     quality_filtered_results = apply_quality_filter(ranked_results, strong_only=strong_only)
@@ -942,7 +1018,7 @@ def search_records(
             "results": paginated_results,
             "total_ranked": len(sorted_results),
         },
-        records=candidate_records,
+        records=all_records,
         include_debug=include_debug,
     )
     response["schema_version"] = SEARCH_SERVICE_SCHEMA_VERSION
@@ -954,6 +1030,8 @@ def search_records(
     response["applied_sort"] = applied_sort
     response["applied_quality_filter"] = {"min_score": min_score, "strong_only": strong_only}
     response["candidate_narrowing"] = candidate_stats
+    response["live_source_diagnostics"] = live_source_diagnostics
+    response["live_external_record_count"] = len(live_source_records)
     response["result_quality_summary"] = summarize_result_quality(
         sorted_results,
         strong_only=strong_only,
