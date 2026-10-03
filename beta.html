@@ -2962,7 +2962,8 @@
 
     function getResultLocation(result, source){
       const city = String(result && (result.city || finalField(result, 'city')) || '').trim();
-      const country = String(result && (result.country || finalField(result, 'country')) || '').trim();
+      const rawCountry = String(result && (result.country || finalField(result, 'country')) || '').trim();
+      const country = /^[A-Z]{2}$/.test(rawCountry) ? displayNameOf('region', rawCountry) : rawCountry;
       if(city && country) return `${city}, ${country}`;
       if(country) return country;
       return inferSourceLocation(source);
