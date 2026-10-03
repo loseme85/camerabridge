@@ -42,6 +42,8 @@ FINDER_DETAIL_CANDIDATE_MAX_RECORDS = 90
 FINDER_DETAIL_CANDIDATE_BROAD_RECORDS = 35
 BODY_CANDIDATE_MAX_RECORDS = 260
 BODY_CANDIDATE_BROAD_RECORDS = 80
+EXTERNAL_ACTIVE_LIMIT_BUFFER = 20
+MAX_EXTERNAL_ACTIVE_LIMIT = 60
 SUPPORTED_SORTS = {
     "relevance",
     "price_asc",
@@ -125,6 +127,111 @@ def _listing_system(result: dict[str, Any], source_record: Optional[dict[str, An
         raw = source_record.get("raw_item") or {}
         return raw.get("system")
     return None
+
+
+def _filter_values_include(actual: Any, expected: str) -> bool:
+    expected_norm = _normalize_text(expected)
+    if not expected_norm:
+        return True
+    return any(_normalize_text(item) == expected_norm for item in _as_list(actual))
+
+
+def _should_fetch_external_active_records(filters: Optional[dict[str, Any]] = None) -> bool:
+    filters = filters or {}
+    if "source" in filters and not _filter_values_include(filters.get("source"), "eBay"):
+        return False
+
+    if "sold_quality" in filters:
+        sold_filters = {_normalize_text(item) for item in _as_list(filters.get("sold_quality"))}
+        if sold_filters and "asking" not in sold_filters and "unknown" not in sold_filters:
+            return False
+
+    return True
+
+
+def _external_active_limit(limit: int, offset: int) -> int:
+    requested = max(int(limit or DEFAULT_LIMIT) + int(offset or 0), DEFAULT_LIMIT)
+    return min(MAX_EXTERNAL_ACTIVE_LIMIT, requested + EXTERNAL_ACTIVE_LIMIT_BUFFER)
+
+
+def _load_external_active_records(
+    query: str,
+    *,
+    limit: int,
+    offset: int,
+    filters: Optional[dict[str, Any]] = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    diagnostics: dict[str, Any] = {
+        "ebay": {
+            "source": "eBay",
+            "enabled": False,
+            "status": "disabled",
+            "accepted_count": 0,
+            "returned_count": 0,
+            "rejected_count": 0,
+            "duplicate_count": 0,
+            "cache": "none",
+        }
+    }
+    if not _should_fetch_external_active_records(filters):
+        diagnostics["ebay"]["status"] = "skipped_filters"
+        return [], diagnostics
+
+    try:
+        from sources.ebay import search_active_listings
+    except Exception as exc:  # pragma: no cover - import failure should never crash search
+        diagnostics["ebay"]["status"] = "import_error"
+        diagnostics["ebay"]["error_code"] = "adapter_import_error"
+        diagnostics["ebay"]["message"] = str(exc)
+        return [], diagnostics
+
+    ebay_result = search_active_listings(
+        query=query,
+        limit=_external_active_limit(limit, offset),
+    )
+    diagnostics["ebay"] = dict(ebay_result.get("diagnostics") or diagnostics["ebay"])
+    return list(ebay_result.get("records") or []), diagnostics
+
+
+EXTERNAL_LIVE_SOURCES = {"ebay"}
+EXTERNAL_MAX_PER_BLOCK = 1
+EXTERNAL_BLOCK_SIZE = 3
+
+
+def _is_external_live_result(result: dict[str, Any]) -> bool:
+    final = result.get("final_output") or {}
+    source = result.get("source") or final.get("source") or ""
+    return _normalize_text(source) in EXTERNAL_LIVE_SOURCES
+
+
+def balance_external_sources(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """국내 매물 우선: 결과 3칸마다 eBay 같은 실시간 외부 매물은 최대 1개.
+
+    순서는 뒤로 미루기만 하고 앞당기지 않는다. 국내 매물이 떨어지면 남은 외부 매물로 채운다.
+    """
+    local = [index for index, result in enumerate(results) if not _is_external_live_result(result)]
+    external = [index for index, result in enumerate(results) if _is_external_live_result(result)]
+    if not local or not external:
+        return list(results)
+
+    ordered: list[int] = []
+    local_pos = external_pos = 0
+    block_external = 0
+    while local_pos < len(local) or external_pos < len(external):
+        if len(ordered) % EXTERNAL_BLOCK_SIZE == 0:
+            block_external = 0
+        take_external = external_pos < len(external) and (
+            local_pos >= len(local)
+            or (external[external_pos] < local[local_pos] and block_external < EXTERNAL_MAX_PER_BLOCK)
+        )
+        if take_external:
+            ordered.append(external[external_pos])
+            external_pos += 1
+            block_external += 1
+        else:
+            ordered.append(local[local_pos])
+            local_pos += 1
+    return [results[index] for index in ordered]
 
 
 def _price_value(final: dict[str, Any]) -> Optional[float]:
@@ -551,6 +658,7 @@ def narrow_candidate_records(
         "strong_candidate_count": 0,
         "broad_candidate_count": 0,
         "precomputed_field_record_count": 0,
+        "live_external_record_count": 0,
         "accessory_intent_applied": False,
         "accessory_code_applied": False,
         "filter_intent_applied": False,
@@ -902,20 +1010,37 @@ def search_records(
     strong_only: bool = False,
     use_candidate_narrowing: bool = True,
 ) -> dict[str, Any]:
+    live_source_records, live_source_diagnostics = _load_external_active_records(
+        query,
+        limit=limit,
+        offset=offset,
+        filters=filters,
+    )
+    entity_id = (filters or {}).get("entity")
+    if entity_id:
+        # 엔티티 모드: 그 엔티티에 연결된 매물만 (실시간 eBay 매물은 카탈로그 규칙으로 판정)
+        from entity_catalog import match_entities  # noqa: WPS433
+
+        records = [record for record in records if entity_id in (record.get("entity_ids") or [])]
+        live_source_records = [record for record in live_source_records if entity_id in match_entities(record)]
+    all_records = list(records) + list(live_source_records)
+    if entity_id:
+        use_candidate_narrowing = False  # 이미 그 모델 매물만 남았으므로 더 좁히지 않음
     intent = parse_query(query)
     candidate_records, candidate_stats = (
-        narrow_candidate_records(intent, records)
+        narrow_candidate_records(intent, all_records)
         if use_candidate_narrowing
         else (
-            records,
+            all_records,
             {
                 "applied": False,
-                "input_record_count": len(records),
-                "scored_record_count": len(records),
+                "input_record_count": len(all_records),
+                "scored_record_count": len(all_records),
                 "anchor_fields": sorted(_candidate_anchor_fields(intent)),
                 "strong_candidate_count": 0,
                 "broad_candidate_count": 0,
                 "precomputed_field_record_count": 0,
+                "live_external_record_count": len(live_source_records),
             },
         )
     )
@@ -925,11 +1050,20 @@ def search_records(
         limit=len(candidate_records),
         min_score=min_score,
     )
+    candidate_stats["live_external_record_count"] = len(live_source_records)
     ranked_results = ranked_payload["results"]
     total_before_filters = len(ranked_results)
     quality_filtered_results = apply_quality_filter(ranked_results, strong_only=strong_only)
     filtered_results = apply_filters(quality_filtered_results, filters=filters, records=candidate_records)
     sorted_results, applied_sort, sort_warnings = apply_sort(filtered_results, sort=sort)
+    if applied_sort == "relevance":
+        sorted_results = balance_external_sources(sorted_results)
+        if entity_id:
+            # 엔티티 모드: 지금 살 수 있는 매물이 먼저
+            sorted_results = sorted(
+                sorted_results,
+                key=lambda result: (result.get("final_output") or {}).get("sold_quality") != "asking",
+            )
     paginated_results, pagination, pagination_warnings = paginate_results(
         sorted_results,
         limit=limit,
@@ -942,7 +1076,7 @@ def search_records(
             "results": paginated_results,
             "total_ranked": len(sorted_results),
         },
-        records=candidate_records,
+        records=all_records,
         include_debug=include_debug,
     )
     response["schema_version"] = SEARCH_SERVICE_SCHEMA_VERSION
@@ -954,6 +1088,8 @@ def search_records(
     response["applied_sort"] = applied_sort
     response["applied_quality_filter"] = {"min_score": min_score, "strong_only": strong_only}
     response["candidate_narrowing"] = candidate_stats
+    response["live_source_diagnostics"] = live_source_diagnostics
+    response["live_external_record_count"] = len(live_source_records)
     response["result_quality_summary"] = summarize_result_quality(
         sorted_results,
         strong_only=strong_only,

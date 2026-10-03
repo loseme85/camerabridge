@@ -64,6 +64,21 @@ FINAL_OUTPUT_FIELDS = [
     "condition_raw",
     "crawl_time",
     "first_seen",
+    "last_seen",
+    "source_marketplace",
+    "source_item_id",
+    "legacy_item_id",
+    "affiliate_url",
+    "buying_options",
+    "seller",
+    "seller_feedback_score",
+    "seller_feedback_percentage",
+    "country",
+    "city",
+    "item_created_at",
+    "item_end_at",
+    "evidence_role",
+    "price_role",
 ]
 
 
@@ -307,6 +322,15 @@ def load_search_index(
         records = payload["records"]
     else:
         raise ValueError(f"{path} must contain a search index object or record list")
+
+    if records and "entity_ids" not in records[0]:
+        # 엔티티 연결 전 색인(예: 워크플로 단계 추가 전 데이터)이면 불러올 때 연결
+        try:
+            from entity_catalog import annotate_records  # noqa: WPS433
+
+            annotate_records(records)
+        except Exception:  # pragma: no cover - 카탈로그가 없어도 일반 검색은 동작
+            pass
 
     if use_cache:
         _SEARCH_INDEX_CACHE[cache_key] = {

@@ -42,6 +42,10 @@ def parse_price_krw(price_str: str, currency: str = "KRW") -> float:
             val *= 1750  # 대략적인 환율
         elif currency == "JPY":
             val *= 9.5
+        elif currency == "USD":
+            val *= 1350
+        elif currency == "EUR":
+            val *= 1500
         return val
     except:
         return 0

@@ -100,6 +100,43 @@ NO_TIMESTAMP_RECORD = _record(
 )
 
 
+EBAY_M10 = _record(
+    {
+        "source": "eBay",
+        "source_url": "https://www.ebay.com/itm/1001",
+        "affiliate_url": "https://www.ebay.com/itm/1001?mkcid=1",
+        "title_raw": "Leica M10 Silver Body",
+        "price_raw": "USD 3,499",
+        "currency": "USD",
+        "image_url": "https://i.ebayimg.com/images/g/m10.jpg",
+        "condition_raw": "Used",
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_raw": "M10",
+        "model_canonical": "M10",
+        "variant": ["Silver"],
+        "focal_length": None,
+        "sold_quality": "asking",
+        "last_seen": "2026-08-05T00:00:00+00:00",
+        "seller": "rangefinder_store",
+        "seller_feedback_score": 1840,
+        "seller_feedback_percentage": "99.8",
+        "source_marketplace": "EBAY_US",
+        "source_item_id": "v1|1001|0",
+        "legacy_item_id": "1001",
+        "buying_options": ["FIXED_PRICE"],
+        "country": "US",
+        "city": "Miami",
+        "item_created_at": "2026-08-01T10:00:00+00:00",
+        "item_end_at": "2026-08-20T10:00:00+00:00",
+        "evidence_role": "asking",
+        "price_role": "asking_only",
+    }
+)
+
+
 def test_response_has_required_top_level_fields() -> None:
     response = build_search_response("35lux aa", [SUMMILUX_35], limit=1)
     assert response["schema_version"] == "search_response.v1"
@@ -164,6 +201,22 @@ def test_used_override_is_visible() -> None:
     assert result["final_output"]["model_canonical"] == "MP3"
 
 
+def test_live_source_fields_are_preserved_when_available() -> None:
+    response = build_search_response("m10", [EBAY_M10], limit=1)
+    result = response["results"][0]
+    assert result["source"] == "eBay"
+    assert result["affiliate_url"] == "https://www.ebay.com/itm/1001?mkcid=1"
+    assert result["seller"] == "rangefinder_store"
+    assert result["source_marketplace"] == "EBAY_US"
+    assert result["source_item_id"] == "v1|1001|0"
+    assert result["buying_options"] == ["FIXED_PRICE"]
+    assert result["country"] == "US"
+    assert result["city"] == "Miami"
+    assert result["evidence_role"] == "asking"
+    assert result["price_role"] == "asking_only"
+    assert result["final_output"]["last_seen"] == "2026-08-05T00:00:00+00:00"
+
+
 def test_matched_fields_and_score_breakdown_are_included() -> None:
     response = build_search_response("35lux aa", [SUMMILUX_35], limit=1)
     result = response["results"][0]
@@ -199,6 +252,7 @@ if __name__ == "__main__":
     test_result_has_required_public_fields()
     test_additive_projection_does_not_require_timestamp_fields()
     test_used_override_is_visible()
+    test_live_source_fields_are_preserved_when_available()
     test_matched_fields_and_score_breakdown_are_included()
     test_empty_results_add_response_warning()
     test_ambiguous_query_preserves_parser_warning()
