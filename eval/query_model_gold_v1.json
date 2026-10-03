@@ -1,0 +1,2493 @@
+{
+ "schema_version": "query_model_gold_v1",
+ "updated_at": "2026-10-03",
+ "models": {
+  "leica:body:m3": {
+   "model_key": "leica:body:m3",
+   "display_name": "Leica M3",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?3\\b"
+   ],
+   "title_must_not": [
+    "M3J",
+    "MP3"
+   ]
+  },
+  "leica:body:m2": {
+   "model_key": "leica:body:m2",
+   "display_name": "Leica M2",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?2\\b"
+   ],
+   "title_must_not": [
+    "M2-?R",
+    "\\bM ?24\\d"
+   ]
+  },
+  "leica:body:m4": {
+   "model_key": "leica:body:m4",
+   "display_name": "Leica M4",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?4\\b"
+   ],
+   "title_must_not": [
+    "M4-?P",
+    "M4-?2"
+   ]
+  },
+  "leica:body:m4-p": {
+   "model_key": "leica:body:m4-p",
+   "display_name": "Leica M4-P",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?4-?P\\b"
+   ],
+   "title_must_not": []
+  },
+  "leica:body:m4-2": {
+   "model_key": "leica:body:m4-2",
+   "display_name": "Leica M4-2",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?4-2\\b"
+   ],
+   "title_must_not": []
+  },
+  "leica:body:m5": {
+   "model_key": "leica:body:m5",
+   "display_name": "Leica M5",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?5\\b"
+   ],
+   "title_must_not": []
+  },
+  "leica:body:m6:classic": {
+   "model_key": "leica:body:m6:classic",
+   "display_name": "Leica M6 (Classic)",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?6\\b"
+   ],
+   "title_must_not": [
+    "TTL",
+    "re-?issue",
+    "리이슈",
+    "2022",
+    "M6 ?J\\b"
+   ]
+  },
+  "leica:body:m6:ttl": {
+   "model_key": "leica:body:m6:ttl",
+   "display_name": "Leica M6 TTL",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?6\\b",
+    "TTL"
+   ],
+   "title_must_not": []
+  },
+  "leica:body:m6:reissue": {
+   "model_key": "leica:body:m6:reissue",
+   "display_name": "Leica M6 (2022 Reissue)",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?6\\b",
+    "(re-?issue|리이슈|2022|복각)"
+   ],
+   "title_must_not": [
+    "TTL"
+   ]
+  },
+  "leica:body:m7": {
+   "model_key": "leica:body:m7",
+   "display_name": "Leica M7",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?7\\b"
+   ],
+   "title_must_not": []
+  },
+  "leica:body:mp-film": {
+   "model_key": "leica:body:mp-film",
+   "display_name": "Leica MP (film)",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bMP\\b"
+   ],
+   "title_must_not": [
+    "M-?P\\b ?(240|typ)",
+    "M10-?P",
+    "M11-?P",
+    "MP3",
+    "MP6"
+   ]
+  },
+  "leica:body:m-a": {
+   "model_key": "leica:body:m-a",
+   "display_name": "Leica M-A (Typ 127)",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM-?A\\b"
+   ],
+   "title_must_not": []
+  },
+  "leica:body:m8": {
+   "model_key": "leica:body:m8",
+   "display_name": "Leica M8",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?8\\b"
+   ],
+   "title_must_not": [
+    "M8\\.2"
+   ]
+  },
+  "leica:body:m9": {
+   "model_key": "leica:body:m9",
+   "display_name": "Leica M9",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?9\\b"
+   ],
+   "title_must_not": [
+    "M9-?P",
+    "monochrom"
+   ]
+  },
+  "leica:body:m240": {
+   "model_key": "leica:body:m240",
+   "display_name": "Leica M (Typ 240)",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "(\\bM ?240\\b|typ ?240)"
+   ],
+   "title_must_not": [
+    "M-?P"
+   ]
+  },
+  "leica:body:m10": {
+   "model_key": "leica:body:m10",
+   "display_name": "Leica M10",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?10\\b"
+   ],
+   "title_must_not": [
+    "M10-?(P|R|D|E)\\b",
+    "monochrom",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:m10-p": {
+   "model_key": "leica:body:m10-p",
+   "display_name": "Leica M10-P",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?10-?P\\b"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:m10-r": {
+   "model_key": "leica:body:m10-r",
+   "display_name": "Leica M10-R",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?10-?R\\b"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:m10-monochrom": {
+   "model_key": "leica:body:m10-monochrom",
+   "display_name": "Leica M10 Monochrom",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?10\\b",
+    "monochrom"
+   ],
+   "title_must_not": [
+    "M10-?P",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:m11": {
+   "model_key": "leica:body:m11",
+   "display_name": "Leica M11",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?11\\b"
+   ],
+   "title_must_not": [
+    "M11-?(P|D|V)\\b",
+    "monochrom",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:m11-p": {
+   "model_key": "leica:body:m11-p",
+   "display_name": "Leica M11-P",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?11-?P\\b"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:m11-monochrom": {
+   "model_key": "leica:body:m11-monochrom",
+   "display_name": "Leica M11 Monochrom",
+   "category": "Body",
+   "mount": "M",
+   "title_must": [
+    "\\bM ?11\\b",
+    "monochrom"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:q": {
+   "model_key": "leica:body:q",
+   "display_name": "Leica Q (Typ 116)",
+   "category": "Body",
+   "mount": null,
+   "title_must": [
+    "\\bQ\\b"
+   ],
+   "title_must_not": [
+    "\\bQ ?[23]\\b",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:q2": {
+   "model_key": "leica:body:q2",
+   "display_name": "Leica Q2",
+   "category": "Body",
+   "mount": null,
+   "title_must": [
+    "\\bQ ?2\\b"
+   ],
+   "title_must_not": [
+    "monochrom",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:q2-monochrom": {
+   "model_key": "leica:body:q2-monochrom",
+   "display_name": "Leica Q2 Monochrom",
+   "category": "Body",
+   "mount": null,
+   "title_must": [
+    "\\bQ ?2\\b",
+    "monochrom"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:q3": {
+   "model_key": "leica:body:q3",
+   "display_name": "Leica Q3",
+   "category": "Body",
+   "mount": null,
+   "title_must": [
+    "\\bQ ?3\\b"
+   ],
+   "title_must_not": [
+    "\\b43\\b",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:sl2": {
+   "model_key": "leica:body:sl2",
+   "display_name": "Leica SL2",
+   "category": "Body",
+   "mount": "SL",
+   "title_must": [
+    "\\bSL ?2\\b"
+   ],
+   "title_must_not": [
+    "SL2-?S",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:sl2-s": {
+   "model_key": "leica:body:sl2-s",
+   "display_name": "Leica SL2-S",
+   "category": "Body",
+   "mount": "SL",
+   "title_must": [
+    "\\bSL ?2-?S\\b"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:sl3": {
+   "model_key": "leica:body:sl3",
+   "display_name": "Leica SL3",
+   "category": "Body",
+   "mount": "SL",
+   "title_must": [
+    "\\bSL ?3\\b"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:body:iiif": {
+   "model_key": "leica:body:iiif",
+   "display_name": "Leica IIIf",
+   "category": "Body",
+   "mount": null,
+   "title_must": [
+    "\\bIII ?f\\b"
+   ],
+   "title_must_not": []
+  },
+  "leica:body:iiig": {
+   "model_key": "leica:body:iiig",
+   "display_name": "Leica IIIg",
+   "category": "Body",
+   "mount": null,
+   "title_must": [
+    "\\bIII ?g\\b"
+   ],
+   "title_must_not": []
+  },
+  "leica:lens:summilux-m:35:asph-fle": {
+   "model_key": "leica:lens:summilux-m:35:asph-fle",
+   "display_name": "Summilux-M 35mm f/1.4 ASPH FLE",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "(summilux|lux)",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)",
+    "FLE"
+   ],
+   "title_must_not": [
+    "FLE ?(II|2)\\b",
+    "steel",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summilux-m:35:asph-fle2": {
+   "model_key": "leica:lens:summilux-m:35:asph-fle2",
+   "display_name": "Summilux-M 35mm f/1.4 ASPH FLE II",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "(summilux|lux)",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)",
+    "FLE ?(II|2)\\b"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summilux-m:35:steel-rim-reissue": {
+   "model_key": "leica:lens:summilux-m:35:steel-rim-reissue",
+   "display_name": "Summilux-M 35mm f/1.4 Steel Rim (2021 reissue)",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "(summilux|lux)",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)",
+    "(steel ?rim|스틸 ?림)",
+    "(re-?issue|복각|2021)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron-m:35:asph": {
+   "model_key": "leica:lens:summicron-m:35:asph",
+   "display_name": "Summicron-M 35mm f/2 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)",
+    "ASPH"
+   ],
+   "title_must_not": [
+    "\\bAPO\\b",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron-m:35:v1-8element": {
+   "model_key": "leica:lens:summicron-m:35:v1-8element",
+   "display_name": "Summicron 35mm f/2 1st (8 elements)",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)",
+    "(8 ?el|8매|eight|1st|1세대)"
+   ],
+   "title_must_not": [
+    "ASPH",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron-m:35:v4": {
+   "model_key": "leica:lens:summicron-m:35:v4",
+   "display_name": "Summicron 35mm f/2 4th (pre-ASPH)",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)",
+    "(4th|v4|4세대|6매|6 ?el|IV\\b)"
+   ],
+   "title_must_not": [
+    "ASPH",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:apo-summicron-m:35": {
+   "model_key": "leica:lens:apo-summicron-m:35",
+   "display_name": "APO-Summicron-M 35mm f/2 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "APO",
+    "summicron|cron",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summilux-m:50:asph": {
+   "model_key": "leica:lens:summilux-m:50:asph",
+   "display_name": "Summilux-M 50mm f/1.4 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "(summilux|lux)",
+    "(?<![\\d.])50(?:\\s?mm|/|\\b)",
+    "ASPH"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron-m:50:current": {
+   "model_key": "leica:lens:summicron-m:50:current",
+   "display_name": "Summicron-M 50mm f/2 (4th/5th)",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])50(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bAPO\\b",
+    "rigid|리짓",
+    "\\bDR\\b|dual ?range",
+    "collaps|침동",
+    "\\bR\\b ?50|-R\\b",
+    "\\bSL\\b",
+    "\\bL ?50|LTM|M39",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron:50:rigid": {
+   "model_key": "leica:lens:summicron:50:rigid",
+   "display_name": "Summicron 50mm f/2 Rigid",
+   "category": "Lens",
+   "mount": null,
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])50(?:\\s?mm|/|\\b)",
+    "rigid|리짓|고정"
+   ],
+   "title_must_not": [
+    "\\bDR\\b|dual ?range",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron:50:dr": {
+   "model_key": "leica:lens:summicron:50:dr",
+   "display_name": "Summicron 50mm f/2 Dual Range",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])50(?:\\s?mm|/|\\b)",
+    "\\bDR\\b|dual ?range"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:apo-summicron-m:50": {
+   "model_key": "leica:lens:apo-summicron-m:50",
+   "display_name": "APO-Summicron-M 50mm f/2 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "APO",
+    "summicron|cron",
+    "(?<![\\d.])50(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bSL\\b",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:noctilux-m:50:f0.95": {
+   "model_key": "leica:lens:noctilux-m:50:f0.95",
+   "display_name": "Noctilux-M 50mm f/0.95 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "nocti",
+    "0\\.95"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:noctilux-m:50:f1.0": {
+   "model_key": "leica:lens:noctilux-m:50:f1.0",
+   "display_name": "Noctilux-M 50mm f/1.0",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "nocti",
+    "(\\b1\\.0\\b|/1\\b|f1\\b|E60|E58)"
+   ],
+   "title_must_not": [
+    "0\\.95",
+    "1\\.2",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:elmarit-m:28:asph": {
+   "model_key": "leica:lens:elmarit-m:28:asph",
+   "display_name": "Elmarit-M 28mm f/2.8 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "elmarit",
+    "(?<![\\d.])28(?:\\s?mm|/|\\b)",
+    "ASPH"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron-m:28:asph": {
+   "model_key": "leica:lens:summicron-m:28:asph",
+   "display_name": "Summicron-M 28mm f/2 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])28(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bAPO\\b",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summaron:35": {
+   "model_key": "leica:lens:summaron:35",
+   "display_name": "Summaron 35mm (f/3.5 · f/2.8)",
+   "category": "Lens",
+   "mount": null,
+   "title_must": [
+    "summaron",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summaron-m:28:f5.6": {
+   "model_key": "leica:lens:summaron-m:28:f5.6",
+   "display_name": "Summaron-M 28mm f/5.6",
+   "category": "Lens",
+   "mount": null,
+   "title_must": [
+    "summaron",
+    "(?<![\\d.])28(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:elmar-m:50:f2.8": {
+   "model_key": "leica:lens:elmar-m:50:f2.8",
+   "display_name": "Elmar-M 50mm f/2.8",
+   "category": "Lens",
+   "mount": null,
+   "title_must": [
+    "elmar\\b|elmar-m",
+    "(?<![\\d.])50(?:\\s?mm|/|\\b)",
+    "2\\.8"
+   ],
+   "title_must_not": [
+    "elmarit",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron-m:90": {
+   "model_key": "leica:lens:summicron-m:90",
+   "display_name": "Summicron-M 90mm f/2",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "summicron|cron",
+    "(?<![\\d.])90(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bAPO\\b",
+    "-R\\b|\\bR ?90",
+    "\\bSL\\b",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summilux-m:75": {
+   "model_key": "leica:lens:summilux-m:75",
+   "display_name": "Summilux-M 75mm f/1.4",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "(summilux|lux)",
+    "(?<![\\d.])75(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bSL\\b",
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:tri-elmar-m:16-18-21": {
+   "model_key": "leica:lens:tri-elmar-m:16-18-21",
+   "display_name": "Tri-Elmar-M 16-18-21mm f/4 (WATE)",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "(tri-?elmar|WATE)",
+    "16"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:super-elmar-m:21": {
+   "model_key": "leica:lens:super-elmar-m:21",
+   "display_name": "Super-Elmar-M 21mm f/3.4 ASPH",
+   "category": "Lens",
+   "mount": "M",
+   "title_must": [
+    "super-? ?elmar",
+    "(?<![\\d.])21(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:vario-elmarit-sl:24-90": {
+   "model_key": "leica:lens:vario-elmarit-sl:24-90",
+   "display_name": "Vario-Elmarit-SL 24-90mm f/2.8-4 ASPH",
+   "category": "Lens",
+   "mount": "SL",
+   "title_must": [
+    "24-90"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:apo-summicron-sl:35": {
+   "model_key": "leica:lens:apo-summicron-sl:35",
+   "display_name": "APO-Summicron-SL 35mm f/2 ASPH",
+   "category": "Lens",
+   "mount": "SL",
+   "title_must": [
+    "APO",
+    "summicron",
+    "(?<![\\d.])35(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summicron-r:50": {
+   "model_key": "leica:lens:summicron-r:50",
+   "display_name": "Summicron-R 50mm f/2",
+   "category": "Lens",
+   "mount": "R",
+   "title_must": [
+    "summicron",
+    "(?<![\\d.])50(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:apo-telyt-r:180": {
+   "model_key": "leica:lens:apo-telyt-r:180",
+   "display_name": "APO-Telyt-R 180mm f/3.4",
+   "category": "Lens",
+   "mount": "R",
+   "title_must": [
+    "telyt",
+    "(?<![\\d.])180(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  },
+  "leica:lens:summilux-r:80": {
+   "model_key": "leica:lens:summilux-r:80",
+   "display_name": "Summilux-R 80mm f/1.4",
+   "category": "Lens",
+   "mount": "R",
+   "title_must": [
+    "summilux",
+    "(?<![\\d.])80(?:\\s?mm|/|\\b)"
+   ],
+   "title_must_not": [
+    "\\bhood\\b",
+    "후드",
+    "\\bcap\\b",
+    "캡",
+    "case",
+    "케이스",
+    "strap",
+    "스트랩",
+    "holster",
+    "홀스터",
+    "grip",
+    "그립",
+    "battery",
+    "배터리",
+    "charger",
+    "충전기",
+    "protector",
+    "cover\\b",
+    "부속품"
+   ]
+  }
+ },
+ "cases": [
+  {
+   "id": "QMG-001",
+   "query": "Leica M3",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-002",
+   "query": "라이카 M3",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-003",
+   "query": "Leica M2",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-004",
+   "query": "Leica M4",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m4"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-005",
+   "query": "M4-P",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m4-p"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-006",
+   "query": "M4-2",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m4-2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-007",
+   "query": "Leica M5",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m5"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-008",
+   "query": "Leica M6",
+   "lang": "en",
+   "intent": "parent",
+   "expected_models": [
+    "leica:body:m6:classic",
+    "leica:body:m6:ttl",
+    "leica:body:m6:reissue"
+   ],
+   "note": "클래식·TTL·리이슈 중 무엇이든 맞음. 어느 것인지 되묻는 것도 맞음"
+  },
+  {
+   "id": "QMG-009",
+   "query": "라이카 M6",
+   "lang": "ko",
+   "intent": "parent",
+   "expected_models": [
+    "leica:body:m6:classic",
+    "leica:body:m6:ttl",
+    "leica:body:m6:reissue"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-010",
+   "query": "M6 classic",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m6:classic"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-011",
+   "query": "M6 TTL",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m6:ttl"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-012",
+   "query": "M6 TTL 0.72",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m6:ttl"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-013",
+   "query": "M6 reissue",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m6:reissue"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-014",
+   "query": "M6 리이슈",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m6:reissue"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-015",
+   "query": "Leica M7",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m7"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-016",
+   "query": "Leica MP",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:mp-film"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-017",
+   "query": "Leica M-A",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m-a"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-018",
+   "query": "Leica M8",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m8"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-019",
+   "query": "Leica M9",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m9"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-020",
+   "query": "Leica M240",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m240"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-021",
+   "query": "Leica M10",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m10"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-022",
+   "query": "M10 body",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m10"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-023",
+   "query": "라이카 M10",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m10"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-024",
+   "query": "M10-P",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m10-p"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-025",
+   "query": "M10-R",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m10-r"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-026",
+   "query": "M10 Monochrom",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m10-monochrom"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-027",
+   "query": "Leica M11",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m11"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-028",
+   "query": "M11-P",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m11-p"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-029",
+   "query": "M11 Monochrom",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:m11-monochrom"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-030",
+   "query": "Leica Q",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:q"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-031",
+   "query": "Leica Q2",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:q2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-032",
+   "query": "라이카 Q2",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:q2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-033",
+   "query": "Q2 Monochrom",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:q2-monochrom"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-034",
+   "query": "Leica Q3",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:q3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-035",
+   "query": "Leica SL2",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:sl2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-036",
+   "query": "SL2-S",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:sl2-s"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-037",
+   "query": "Leica SL3",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:sl3"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-038",
+   "query": "Leica IIIf",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:iiif"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-039",
+   "query": "Leica IIIg",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:body:iiig"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-040",
+   "query": "Summilux 35 FLE",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:35:asph-fle"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-041",
+   "query": "35 lux FLE",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:35:asph-fle"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-042",
+   "query": "Summilux 35 FLE II",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:35:asph-fle2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-043",
+   "query": "35 lux fle2",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:35:asph-fle2"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-044",
+   "query": "주미룩스 35 FLE",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:35:asph-fle"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-045",
+   "query": "Summilux 35 steel rim reissue",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:35:steel-rim-reissue"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-046",
+   "query": "스틸림 복각",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:35:steel-rim-reissue"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-047",
+   "query": "35 lux",
+   "lang": "en",
+   "intent": "ambiguous",
+   "expected_models": [
+    "leica:lens:summilux-m:35:asph-fle",
+    "leica:lens:summilux-m:35:asph-fle2",
+    "leica:lens:summilux-m:35:steel-rim-reissue"
+   ],
+   "note": "35mm Summilux는 세대가 많음 → 되묻거나 35 Summilux만 보여야 함"
+  },
+  {
+   "id": "QMG-048",
+   "query": "Summicron 35 ASPH",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:35:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-049",
+   "query": "35 cron asph",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:35:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-050",
+   "query": "주미크론 35 ASPH",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:35:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-051",
+   "query": "Summicron 35 8 element",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:35:v1-8element"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-052",
+   "query": "8매",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:35:v1-8element"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-053",
+   "query": "Summicron 35 4th",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:35:v4"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-054",
+   "query": "6매",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:35:v4"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-055",
+   "query": "APO Summicron 35",
+   "lang": "en",
+   "intent": "ambiguous",
+   "expected_models": [
+    "leica:lens:apo-summicron-m:35",
+    "leica:lens:apo-summicron-sl:35"
+   ],
+   "note": "M과 SL에 둘 다 있음"
+  },
+  {
+   "id": "QMG-056",
+   "query": "Summilux 50 ASPH",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:50:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-057",
+   "query": "50 lux asph",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:50:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-058",
+   "query": "주미룩스 50 ASPH",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:50:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-059",
+   "query": "50 cron",
+   "lang": "en",
+   "intent": "ambiguous",
+   "expected_models": [
+    "leica:lens:summicron-m:50:current",
+    "leica:lens:summicron-r:50",
+    "leica:lens:summicron:50:rigid",
+    "leica:lens:summicron:50:dr"
+   ],
+   "note": "M·R·SL, 세대(리짓·DR) 여럿 → 되묻거나 50 Summicron만"
+  },
+  {
+   "id": "QMG-060",
+   "query": "Summicron M 50",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:50:current"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-061",
+   "query": "주미크론 50",
+   "lang": "ko",
+   "intent": "ambiguous",
+   "expected_models": [
+    "leica:lens:summicron-m:50:current",
+    "leica:lens:summicron-r:50",
+    "leica:lens:summicron:50:rigid",
+    "leica:lens:summicron:50:dr"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-062",
+   "query": "50 cron rigid",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron:50:rigid"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-063",
+   "query": "리짓",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron:50:rigid"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-064",
+   "query": "50 cron DR",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron:50:dr"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-065",
+   "query": "APO Summicron M 50",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:apo-summicron-m:50"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-066",
+   "query": "APO 50 cron",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:apo-summicron-m:50"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-067",
+   "query": "Noctilux 0.95",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:noctilux-m:50:f0.95"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-068",
+   "query": "녹티룩스 0.95",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:noctilux-m:50:f0.95"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-069",
+   "query": "Noctilux 1.0",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:noctilux-m:50:f1.0"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-070",
+   "query": "nocti e60",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:noctilux-m:50:f1.0"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-071",
+   "query": "Noctilux",
+   "lang": "en",
+   "intent": "ambiguous",
+   "expected_models": [
+    "leica:lens:noctilux-m:50:f0.95",
+    "leica:lens:noctilux-m:50:f1.0"
+   ],
+   "note": "f/0.95·f/1.0·f/1.2 → 되묻거나 Noctilux만"
+  },
+  {
+   "id": "QMG-072",
+   "query": "녹티룩스",
+   "lang": "ko",
+   "intent": "ambiguous",
+   "expected_models": [
+    "leica:lens:noctilux-m:50:f0.95",
+    "leica:lens:noctilux-m:50:f1.0"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-073",
+   "query": "Elmarit 28 ASPH",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:elmarit-m:28:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-074",
+   "query": "엘마리트 28",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:elmarit-m:28:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-075",
+   "query": "Summicron 28 ASPH",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:28:asph"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-076",
+   "query": "Summaron 35",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summaron:35"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-077",
+   "query": "즈마론 35",
+   "lang": "ko",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summaron:35"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-078",
+   "query": "Summaron 28 5.6",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summaron-m:28:f5.6"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-079",
+   "query": "Elmar 50 2.8",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:elmar-m:50:f2.8"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-080",
+   "query": "Summicron 90",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-m:90"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-081",
+   "query": "Summilux 75",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-m:75"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-082",
+   "query": "WATE",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:tri-elmar-m:16-18-21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-083",
+   "query": "Tri-Elmar 16-18-21",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:tri-elmar-m:16-18-21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-084",
+   "query": "Super Elmar 21",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:super-elmar-m:21"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-085",
+   "query": "SL 24-90",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:vario-elmarit-sl:24-90"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-086",
+   "query": "24-90 vario elmarit",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:vario-elmarit-sl:24-90"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-087",
+   "query": "APO Summicron SL 35",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:apo-summicron-sl:35"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-088",
+   "query": "Summicron R 50",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summicron-r:50"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-089",
+   "query": "APO Telyt R 180",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:apo-telyt-r:180"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-090",
+   "query": "Summilux R 80",
+   "lang": "en",
+   "intent": "exact",
+   "expected_models": [
+    "leica:lens:summilux-r:80"
+   ],
+   "note": ""
+  },
+  {
+   "id": "QMG-091",
+   "query": "Summicron SL 24",
+   "lang": "en",
+   "intent": "nonexistent",
+   "expected_models": [],
+   "note": "SL 24mm Summicron은 없음"
+  },
+  {
+   "id": "QMG-092",
+   "query": "24 cron",
+   "lang": "en",
+   "intent": "nonexistent",
+   "expected_models": [],
+   "note": "Leica 24mm Summicron은 없음"
+  },
+  {
+   "id": "QMG-093",
+   "query": "Summilux 135",
+   "lang": "en",
+   "intent": "nonexistent",
+   "expected_models": [],
+   "note": "135mm Summilux는 없음"
+  },
+  {
+   "id": "QMG-094",
+   "query": "M8 Monochrom",
+   "lang": "en",
+   "intent": "nonexistent",
+   "expected_models": [],
+   "note": "M8 Monochrom은 없음"
+  }
+ ]
+}
