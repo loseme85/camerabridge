@@ -240,7 +240,7 @@ class Suggester:
             return 0
         return 700 + 10 * len(known) - 5 * ignored + union + 3 * max(0, len(self.tokens[eid]) - len(known))
 
-    def suggest(self, query: str, limit: int = 8) -> list[dict]:
+    def suggest(self, query: str, limit: int = 12) -> list[dict]:
         import math
 
         q = normalize_text(query)
@@ -280,5 +280,5 @@ def group_children(ordered: list[dict]) -> list[dict]:
     return out
 
 
-def suggest(query: str, summary_entities: list[dict], limit: int = 8) -> list[dict]:
+def suggest(query: str, summary_entities: list[dict], limit: int = 12) -> list[dict]:
     return Suggester(summary_entities).suggest(query, limit)

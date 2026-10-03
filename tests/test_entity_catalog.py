@@ -91,3 +91,11 @@ def test_catalog_entities_have_aliases_and_rules() -> None:
     for entity in catalog["entities"].values():
         assert entity["aliases"], entity["id"]
         assert entity["match"] or entity["children"], entity["id"]
+
+
+def test_summilux_35_korean_generation_numbers() -> None:
+    sl = "leica:lens:summilux-m:35"
+    assert f"{sl}:aa" in match_entities(_record("[중고] M 35/1.4 Summilux 3세대 (2매) (Black)"))
+    assert f"{sl}:asph-1994" in match_entities(_record("[위탁] M 35/1.4 Summilux 4세대 (Black)"))
+    ids = match_entities(_record("[중고] M 35/1.4 Summilux 4세대 (Titan)"))
+    assert f"{sl}:titan" in ids and f"{sl}:asph-1994" not in ids

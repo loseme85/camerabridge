@@ -142,10 +142,11 @@ for slug, name, ko, marker, extra_not, sfx in [
     ("v1-steel-rim", "Summilux 35mm f/1.4 1st Steel Rim (original)", "주미룩스 35 1세대 스틸림 (오리지널)", r"steel ?rim|스틸 ?림", [r"복각|re-?issue|2021"], ["steel rim", "스틸림", "1st steel rim"]),
     ("v1", "Summilux 35mm f/1.4 1st", "주미룩스 35 1세대", GEN1, [r"steel ?rim|스틸 ?림"], ["1st", "1세대"]),
     ("v2", "Summilux 35mm f/1.4 2nd (pre-ASPH)", "주미룩스 35 2세대", GEN2 + r"|pre-?asph", [], ["2nd", "2세대", "pre asph"]),
-    ("aa", "Summilux-M 35mm f/1.4 Aspherical (AA, 1990)", "주미룩스 35 AA", r"aspherical|\bAA\b|더블 ?어스", [], ["aa", "aspherical", "double aspherical"]),
-    ("asph-1994", "Summilux-M 35mm f/1.4 ASPH (1994, pre-FLE)", "주미룩스 35 ASPH (1994, FLE 이전)", r"ASPH.{0,40}(4세대|4th|non-?fle|11874|11883)|(4세대|4th|non-?fle).{0,40}ASPH", [r"FLE"], ["asph 1994", "asph 4세대", "asph non fle"]),
+    # 국내 표기: 1세대 스틸림·1st, 2세대 pre-ASPH, 3세대 Aspherical(AA, 비구면 2매), 4세대 ASPH(1994), 그 뒤 FLE·FLE II
+    ("aa", "Summilux-M 35mm f/1.4 Aspherical (AA, 3rd gen, 1990)", "주미룩스 35 3세대 AA (Aspherical, 비구면 2매)", r"aspherical|\bAA\b|더블 ?어스|3세대|\b3rd\b|2매", [r"4세대|\b4th\b"], ["aa", "aspherical", "double aspherical", "3세대", "3rd", "3세대 aa", "2매"]),
+    ("asph-1994", "Summilux-M 35mm f/1.4 ASPH (4th gen, 1994, pre-FLE)", "주미룩스 35 4세대 ASPH (1994, FLE 이전)", r"4세대|\b4th\b|non-?fle|11874|11883", [r"FLE", r"3세대|\b3rd\b"], ["asph 1994", "4세대", "4th", "asph 4세대", "asph non fle"]),
     ("asph-unspecified", "Summilux-M 35mm f/1.4 ASPH (version not stated)", "주미룩스 35 ASPH (버전 미표기)", r"ASPH", [r"FLE", r"aspherical|\bAA\b", r"4세대|4th|non-?fle", r"\bnew\b"], ["asph"]),
-    ("pre-asph-unspecified", "Summilux 35mm f/1.4 pre-ASPH (generation not stated)", "주미룩스 35 구형 (세대 미표기)", r"^(?!.*(ASPH|aspherical|\bAA\b|FLE|1st|1th|2nd|1세대|2세대|steel|스틸|복각|reissue|titan|티탄|classic|클래식)).*$", [], ["pre asph"]),
+    ("pre-asph-unspecified", "Summilux 35mm f/1.4 pre-ASPH (generation not stated)", "주미룩스 35 구형 (세대 미표기)", r"^(?!.*(ASPH|aspherical|\bAA\b|FLE|1st|1th|2nd|3rd|4th|1세대|2세대|3세대|4세대|2매|steel|스틸|복각|reissue|titan|티탄|classic|클래식)).*$", [], ["pre asph"]),
     ("titan", "Summilux-M 35mm f/1.4 Titan", "주미룩스 35 티탄", r"titan|티탄", [], ["titan", "티탄"]),
     ("classic", "Summilux-M 35mm f/1.4 'Classic'", "주미룩스 35 클래식", r"classic|클래식", [], ["classic", "클래식"]),  # 확인 필요
     ("leitz-wetzlar", "Summilux-M 35mm f/1.4 ASPH 'Leitz Wetzlar'", "주미룩스 35 라이츠 베츨라", r"leitz ?wetzlar", [], ["leitz wetzlar"]),
@@ -391,3 +392,11 @@ _add(f"{NX10}:unspecified", "Noctilux-M 50mm f/1.0 (generation not stated)", "�
 PARENTS[NX10] = ("Noctilux-M 50mm f/1.0 (all)", "Lens", "M", _nx_kids + [f"{NX10}:unspecified"],
                  ["noctilux-m 50 1.0", "noctilux 1.0", "nocti 1.0", "nocti e60", "noctilux e60", "녹티 e60", "noctilux 50 1.0", "녹티룩스 1.0", "녹티 1.0", "녹티룩스 50 1.0"],
                  "녹티룩스 50 f/1.0 (전체)")
+
+# ───────────── 자식 순서: 세대순 → 미표기 → 에디션 (검색창 후보가 이 순서로 뜸) ─────────────
+CHILD_ORDER = {
+    SL35: ["v1-steel-rim", "v1", "v2", "aa", "asph-1994", "asph-fle", "asph-fle2", "asph-unspecified", "pre-asph-unspecified",
+           "steel-rim-reissue", "titan", "classic", "leitz-wetzlar", "10-jahre", "korea-70"],
+    SC35: ["v1-8element", "v1-eyes", "v2", "v3", "v4", "asph", "leica:lens:apo-summicron-m:35", "unspecified", "millennium", "ara-guler", "your-mark", "titan"],
+    "leica:lens:summilux-m:50": ["v1", "v2", "v3", "v4", "asph", "unspecified", "classic", "titan", "millennium", "asph-lhsa", "asph-kravitz", "korea-70"],
+}

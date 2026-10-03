@@ -169,6 +169,10 @@ def build() -> dict:
     for parent, children in lenses.EXTEND_PARENTS.items():
         name, kind, mount, kids, als, ko = PARENTS[parent]
         PARENTS[parent] = (name, kind, mount, kids + [c for c in children if c not in kids], als, ko)
+    for parent, order in lenses.CHILD_ORDER.items():  # 적힌 순서가 먼저, 나머지(APO 등)는 뒤에 그대로
+        name, kind, mount, kids, als, ko = PARENTS[parent]
+        rank = {(slug if ":" in slug else f"{parent}:{slug}"): i for i, slug in enumerate(order)}
+        PARENTS[parent] = (name, kind, mount, sorted(kids, key=lambda k: rank.get(k, len(rank))), als, ko)
     for key, extra in lenses.TIGHTEN.items():
         MODELS[key]["title_must_not"] = MODELS[key]["title_must_not"] + extra
     for key, must in lenses.OVERRIDE_MUST.items():

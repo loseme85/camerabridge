@@ -2353,7 +2353,7 @@
       return 700 + 10 * known.length - 5 * ignored + union + 3 * Math.max(0, entity._tokens.size - known.length);
     }
 
-    function suggestEntities(rawQuery, limit = 8){
+    function suggestEntities(rawQuery, limit = 12){
       const query = normalizeEntityText(rawQuery);
       if(!query || !entityState.summary) return [];
       const scored = (entityState.summary.entities || [])
