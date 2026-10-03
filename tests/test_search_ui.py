@@ -317,7 +317,8 @@ def test_beta_card_labels_use_locale_keys_instead_of_raw_shell_copy() -> None:
         body = _function_body(html, "renderCard")
         assert "const title = result.title || ux('card.title_missing', 'Untitled listing');" in body
         assert "getResultLocation(result, source)" in body
-        assert "formatSourceHeading(source, location, seller)" in body
+        assert "formatSourceHeading(localizeSourceName(source), location, seller)" in body
+        assert "renderPriceBlock(result)" in body
         assert "getPublicSourceStatusText(status)" in body
         assert "getObservedMeta(result)" in body
         assert "getPublicPriceBadge(result, priceRole, reason)" in body

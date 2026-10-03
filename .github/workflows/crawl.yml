@@ -48,6 +48,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Update exchange rates
+        run: python3 scripts/update_fx_rates.py
+
       - name: Rebuild resolved outputs and search index
         run: python3 final_resolution_pipeline.py
 
