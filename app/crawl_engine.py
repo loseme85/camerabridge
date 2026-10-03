@@ -197,6 +197,25 @@ def update_freshness(freshness: dict[str, dict], stat: dict, now: str) -> None:
     freshness[stat["site"]] = entry
 
 
+# ── HTTP: 해외(GitHub 미국 서버) 접속을 막는 사이트는 중계 서버로 ─────────────
+
+BROWSER_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/124.0 Safari/537.36")
+
+
+def http_get(url: str, headers: dict | None = None, via_relay: bool = False, timeout: int = 30):
+    """via_relay=True이고 RELAY_URL·RELAY_KEY가 있으면 Vercel 도쿄 중계 서버(relay/)를 거쳐 받는다.
+    로컬처럼 중계 설정이 없으면 직접 받는다."""
+    import requests
+
+    headers = {"User-Agent": BROWSER_UA, **(headers or {})}
+    relay_url, relay_key = os.environ.get("RELAY_URL"), os.environ.get("RELAY_KEY")
+    if via_relay and relay_url and relay_key:
+        return requests.get(relay_url, params={"url": url}, timeout=timeout + 10,
+                            headers={"x-relay-key": relay_key, "x-relay-headers": json.dumps(headers)})
+    return requests.get(url, headers=headers, timeout=timeout)
+
+
 # ── 수집기: cafe24 (HTTP, 브라우저 없이) ──────────────────────
 
 CAFE24_SOLD_MARKERS = {

@@ -2499,7 +2499,7 @@ def crawl_kamerastore():
     return results
 
 
-def crawl_kitamura(page):
+def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
     2026-09 사이트 개편으로 중고 재고가 shop.kitamura.jp 로 옮겨감.
@@ -2592,19 +2592,15 @@ def crawl_kitamura(page):
 
     print(f"\n  📂 기타무라 크롤링 시작")
 
-    # 목록 페이지를 열어 사이트가 쓰는 검색 요청(주소·헤더)을 잡는다
-    try:
-        with page.expect_response(lambda r: "used_sell_search" in r.url, timeout=45_000) as resp_info:
-            page.goto(base_url, wait_until="domcontentloaded", timeout=45_000)
-        first = resp_info.value
-    except Exception as e:
-        print(f"    ❌ 로드 실패: {e}")
-        return results
-
-    search_url = first.url
-    headers = {k: v for k, v in first.request.headers.items()
-               if k.lower().startswith("x-kitamura") or k.lower() in ("referer", "accept")}
-    search_url = _re.sub(r'size=\d+', f'size={page_size}', search_url)
+    # 목록 페이지가 부르는 검색 API를 바로 부름 (브라우저 불필요).
+    # 기타무라는 미국 서버 접속을 막아서 GitHub에선 Vercel 도쿄 중계 서버(relay/)를 거침.
+    # x-kitamura-api-key는 사이트 화면 코드에 들어 있는 공개 값 — 바뀌면 브라우저 개발자도구에서 새 값 확인.
+    import crawl_engine as _ce
+    search_url = (f"{base}/ec/api/cache/s/v1/used_sell_search?maker=%E3%83%A9%E3%82%A4%E3%82%AB&sort=default"
+                  f"&size={page_size}&offset=1&ref_id=used_sell_search&func=srch"
+                  "&extra_fields=sales_status,is_maintenance,sale_start_at,sale_end_at&site=ns&is_logged_in=0&aggs=default")
+    headers = {"x-kitamura-api-key": "AA4n2cEkYz", "x-kitamura-app-id": "1",
+               "accept": "application/json, text/plain, */*", "referer": base_url}
 
     offset = 1  # 1부터 시작하는 상품 순번
     total = None
@@ -2612,9 +2608,13 @@ def crawl_kitamura(page):
         url = _re.sub(r'offset=\d+', f'offset={offset}', search_url)
         print(f"    └─ {offset}번째부터 수집 중...")
         try:
-            data = page.request.get(url, headers=headers, timeout=30_000).json()["search"]
+            resp = _ce.http_get(url, headers, via_relay=True)
+            resp.raise_for_status()
+            data = resp.json()["search"]
         except Exception as e:
             print(f"    ❌ 목록 오류: {e}")
+            if offset == 1:
+                raise  # 첫 페이지부터 못 받으면 실패로 (병합 단계에서 이전 데이터 유지)
             break
 
         hits = data.get("hits") or []
@@ -2678,7 +2678,7 @@ def crawl_kitamura(page):
         offset += len(hits)
         if offset > total:
             break
-        time.sleep(random.uniform(1.0, 2.0))
+        time.sleep(random.uniform(0.3, 0.8))
 
     print(f"  ✅ 기타무라 완료: {len(results)}개")
     return results
@@ -2893,7 +2893,7 @@ def crawl_all():
         ("Ffordes (영국)", lambda: ce.wrap_full_run("Ffordes (영국)", lambda: _with_browser(crawl_ffordes, {"Accept-Language": "en-GB,en;q=0.9"}))),
         ("Leica Store Miami", lambda: ce.wrap_full_run("Leica Store Miami", crawl_leicamiami)),
         ("Kamerastore (핀란드)", lambda: ce.wrap_full_run("Kamerastore (핀란드)", crawl_kamerastore)),
-        ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", lambda: _with_browser(crawl_kitamura))),
+        ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:
