@@ -73,12 +73,10 @@ model("leica:lens:noctilux-m:75", "Noctilux-M 75mm f/1.25 ASPH", "Lens", "M", [r
 model("leica:lens:noctilux-m:35", "Noctilux-M 35mm f/1.2 ASPH", "Lens", "M", [r"nocti", f("35")], ACC_NOT)
 model("leica:lens:elmarit-m:28:asph", "Elmarit-M 28mm f/2.8 ASPH", "Lens", "M", [r"elmarit", f("28"), r"ASPH"], ACC_NOT)
 model("leica:lens:summicron-m:28:asph", "Summicron-M 28mm f/2 ASPH", "Lens", "M", [r"summicron|cron", f("28")], [r"\bAPO\b"] + ACC_NOT)
-model("leica:lens:summaron:35", "Summaron 35mm (f/3.5 · f/2.8)", "Lens", None, [r"summaron", f("35")], ACC_NOT)
-model("leica:lens:summaron-m:28:f5.6", "Summaron-M 28mm f/5.6", "Lens", None, [r"summaron", f("28")], ACC_NOT)
 model("leica:lens:elmar-m:50:f2.8", "Elmar-M 50mm f/2.8", "Lens", None, [r"elmar\b|elmar-m", f("50"), r"2\.8"], [r"elmarit"] + ACC_NOT)
 model("leica:lens:summicron-m:90", "Summicron-M 90mm f/2", "Lens", "M", [r"summicron|cron", f("90")], [r"\bAPO\b", r"-R\b|\bR ?90", r"\bSL\b"] + ACC_NOT)
 model("leica:lens:summilux-m:75", "Summilux-M 75mm f/1.4", "Lens", "M", [r"(summilux|\blux\b)", f("75")], [r"\bSL\b"] + ACC_NOT)
-model("leica:lens:tri-elmar-m:16-18-21", "Tri-Elmar-M 16-18-21mm f/4 (WATE)", "Lens", "M", [r"(tri-?elmar|WATE)", r"16"], ACC_NOT)
+model("leica:lens:tri-elmar-m:16-18-21", "Tri-Elmar-M 16-18-21mm f/4 (WATE)", "Lens", "M", [r"(tri.?elmar|WATE)", r"16"], ACC_NOT)
 model("leica:lens:super-elmar-m:21", "Super-Elmar-M 21mm f/3.4 ASPH", "Lens", "M", [r"super-? ?elmar", f("21")], ACC_NOT)
 # ── SL · R 렌즈 ──
 model("leica:lens:vario-elmarit-sl:24-90", "Vario-Elmarit-SL 24-90mm f/2.8-4 ASPH", "Lens", "SL", [r"24-90"], ACC_NOT)
@@ -110,8 +108,6 @@ ALIASES: dict[str, list[str]] = {
     "leica:lens:noctilux-m:35": ["noctilux-m 35", "noctilux 35", "nocti 35", "녹티룩스 35"],
     "leica:lens:elmarit-m:28:asph": ["elmarit-m 28 asph", "elmarit 28 asph", "28 elmarit", "엘마리트 28", "엘마리트 28 asph"],
     "leica:lens:summicron-m:28:asph": ["summicron-m 28 asph", "summicron 28 asph", "28 cron", "주미크론 28"],
-    "leica:lens:summaron:35": ["summaron 35", "35 summaron", "즈마론 35", "주마론 35"],
-    "leica:lens:summaron-m:28:f5.6": ["summaron-m 28 5.6", "summaron 28 5.6", "summaron 28", "즈마론 28", "주마론 28"],
     "leica:lens:elmar-m:50:f2.8": ["elmar-m 50 2.8", "elmar 50 2.8", "50 elmar 2.8", "엘마 50 2.8"],
     "leica:lens:summicron-m:90": ["summicron-m 90", "summicron 90", "90 cron", "주미크론 90"],
     "leica:lens:summilux-m:75": ["summilux-m 75", "summilux 75", "75 lux", "주미룩스 75"],
@@ -136,7 +132,7 @@ NAME_KO = {
     "leica:lens:noctilux:50:f1.2-original": "녹티룩스 50 f/1.2 오리지널", "leica:lens:noctilux-m:50:f1.2-asph": "녹티룩스 50 f/1.2 ASPH (복각)",
     "leica:lens:noctilux-m:75": "녹티룩스 75", "leica:lens:noctilux-m:35": "녹티룩스 35",
     "leica:lens:elmarit-m:28:asph": "엘마리트 28 ASPH", "leica:lens:summicron-m:28:asph": "주미크론 28 ASPH",
-    "leica:lens:summaron:35": "즈마론 35", "leica:lens:summaron-m:28:f5.6": "즈마론 28 f/5.6", "leica:lens:elmar-m:50:f2.8": "엘마 50 f/2.8",
+    "leica:lens:elmar-m:50:f2.8": "엘마 50 f/2.8",
     "leica:lens:summicron-m:90": "주미크론 90", "leica:lens:summilux-m:75": "주미룩스 75", "leica:lens:tri-elmar-m:16-18-21": "트라이엘마 16-18-21",
     "leica:lens:super-elmar-m:21": "수퍼엘마 21", "leica:lens:summicron-r:50": "주미크론 R 50", "leica:lens:apo-telyt-r:180": "아포 텔리트 R 180",
     "leica:lens:summilux-r:80": "주미룩스 R 80", "leica:lens:apo-summicron-sl:35": "아포 주미크론 SL 35",
@@ -160,13 +156,24 @@ PARENTS = {
 
 def build() -> dict:
     import bodies
+    import lenses
 
-    for key, spec in bodies.MODELS.items():
-        assert key not in MODELS, key
-        MODELS[key] = spec
-    ALIASES.update(bodies.ALIASES)
-    NAME_KO.update(bodies.NAME_KO)
-    PARENTS.update(bodies.PARENTS)
+    for module in (bodies, lenses):
+        for key, spec in module.MODELS.items():
+            assert key not in MODELS, key
+            MODELS[key] = spec
+        ALIASES.update(module.ALIASES)
+        NAME_KO.update(module.NAME_KO)
+        for key, value in module.PARENTS.items():
+            assert key not in PARENTS, key
+            PARENTS[key] = value
+    for parent, children in lenses.EXTEND_PARENTS.items():
+        name, kind, mount, kids, als, ko = PARENTS[parent]
+        PARENTS[parent] = (name, kind, mount, kids + [c for c in children if c not in kids], als, ko)
+    for key, extra in lenses.TIGHTEN.items():
+        MODELS[key]["title_must_not"] = MODELS[key]["title_must_not"] + extra
+    for key, must in lenses.OVERRIDE_MUST.items():
+        MODELS[key]["title_must"] = must
     entities = []
     for key, spec in MODELS.items():
         assert key in ALIASES, f"aliases missing: {key}"

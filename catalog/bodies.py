@@ -99,14 +99,14 @@ fam("leica:body:m5", "Leica M5", "라이카 M5", "M", [r"\bM ?5\b"], [], ["엠5"
 fam("leica:body:cl-film", "Leica CL (1973, film)", "라이카 CL (필름)", "M",
     [r"\bCL\b", r"(leitz|minolta|50 ?jahre|summicron-?c|40\s?mm|film|필름|1973)"], [r"\bTL\b|\bSL\b"], ["leitz cl", "minolta cl", "cl film", "cl 필름"])
 # M6: 클래식·TTL·리이슈 + 기념판 (모두 M6 부모의 자식)
-M6_MARKERS = [r"TTL", r"re-?issue|리이슈|복각|2022", r"M6 ?J\b", r"titan|티탄", r"platin|플래티넘", r"LHSA", r"royal|로얄",
+M6_MARKERS = [r"(?<!non )(?<!non-)(?<!non)TTL", r"re-?issue|리이슈|복각|2022", r"M6 ?J\b", r"titan|티탄", r"platin|플래티넘", r"LHSA", r"royal|로얄",
               r"jaguar|재규어", r"millenn?ium|밀레니엄"]
 MODELS["leica:body:m6:classic"] = {"model_key": "leica:body:m6:classic", "display_name": "Leica M6 (Classic)", "category": "Body", "mount": "M",
                                    "title_must": [r"\bM ?6\b"], "title_must_not": M6_MARKERS}
 ALIASES["leica:body:m6:classic"] = ["leica m6 classic", "m6 classic", "m6 클래식", "라이카 m6 클래식", "엠6 클래식"]
 NAME_KO["leica:body:m6:classic"] = "라이카 M6 클래식"
 MODELS["leica:body:m6:ttl"] = {"model_key": "leica:body:m6:ttl", "display_name": "Leica M6 TTL", "category": "Body", "mount": "M",
-                               "title_must": [r"\bM ?6\b", r"TTL"], "title_must_not": [r"millenn?ium|밀레니엄", r"LHSA"]}
+                               "title_must": [r"\bM ?6\b", r"TTL"], "title_must_not": [r"millenn?ium|밀레니엄", r"LHSA", r"non.?ttl"]}
 ALIASES["leica:body:m6:ttl"] = ["leica m6 ttl", "m6 ttl", "m6ttl", "라이카 m6 ttl", "엠6 ttl"]
 NAME_KO["leica:body:m6:ttl"] = "라이카 M6 TTL"
 MODELS["leica:body:m6:reissue"] = {"model_key": "leica:body:m6:reissue", "display_name": "Leica M6 (2022 Reissue)", "category": "Body", "mount": "M",
@@ -136,7 +136,7 @@ fam("leica:body:m7", "Leica M7", "라이카 M7", "M", [r"\bM ?7\b"], [], ["엠7"
     v("a-la-carte", "Leica M7 à la carte", "M7 알라카르테", r"[aà] ?la ?carte|알라카르트|알라카르테", ["m7 a la carte", "m7 alacarte"]),
 ])
 fam("leica:body:mp-film", "Leica MP (film)", "라이카 MP", "M", [r"\bMP\b"],
-    [r"M-?P\b ?(240|typ)", r"M10-?P", r"M11-?P", r"\bMP ?[36]\b", r"\bQ-?P\b", r"M9-?P"], ["mp film", "엠피"], [
+    [r"M-?P\b ?(240|typ)", r"M10-?P", r"M11-?P", r"\bMP ?[36]\b", r"\bQ-?P\b", r"M9-?P"], ["mp film", "엠피", "mp", "leica mp", "라이카 mp"], [
     v("hermes", "Leica MP Hermès", "MP 에르메스", r"herm[eè]s|에르메스", ["mp hermes", "mp 에르메스"]),
     v("lhsa", "Leica MP LHSA (Grey Hammertone)", "MP LHSA", r"LHSA|hammertone|해머톤", ["mp lhsa", "mp hammertone"]),
     v("a-la-carte", "Leica MP à la carte", "MP 알라카르테", r"[aà] ?la ?carte|알라카르트|알라카르테", ["mp a la carte"]),
@@ -163,9 +163,10 @@ fam("leica:body:m9-p", "Leica M9-P", "라이카 M9-P", "M", [r"\bM ?9-?P\b"], []
     v("hermes", "Leica M9-P Hermès", "M9-P 에르메스", r"herm[eè]s|에르메스", ["m9-p hermes"]),
 ])
 fam("leica:body:m-monochrom-ccd", "Leica M Monochrom (2012, CCD)", "라이카 M 모노크롬 (CCD)", "M",
-    [r"(\bM\b|M9) ?monochrom"], [r"M ?1[01]", r"246", r"240", r"M-?P"], ["m monochrom ccd", "m9 monochrom", "mm ccd", "m 모노크롬"])
-fam("leica:body:m-e", "Leica M-E (Typ 220)", "라이카 M-E", "M", [r"\bM-?E\b|typ ?220"], [r"M10-?E"], ["m-e 220", "me typ 220"])
-fam("leica:body:m240", "Leica M (Typ 240)", "라이카 M240", "M", [r"(\bM ?240\b|typ ?240)"], [r"M-?P", r"monochrom"], ["m typ 240", "m240", "엠240"], [
+    [r"(\bM\b|M9)[ -]?monochrom"], [r"M ?1[01]", r"246", r"240", r"M-?P"], ["m monochrom ccd", "m9 monochrom", "mm ccd", "m 모노크롬"])
+fam("leica:body:m-e", "Leica M-E (Typ 220)", "라이카 M-E (220)", "M", [r"\bM-?E\b|typ ?220"], [r"M10-?E", r"240"], ["m-e 220", "me typ 220"])
+fam("leica:body:m-e240", "Leica M-E (Typ 240)", "라이카 M-E (240)", "M", [r"\bM-?E\b", r"240"], [], ["m-e 240", "me typ 240"])
+fam("leica:body:m240", "Leica M (Typ 240)", "라이카 M240", "M", [r"(\bM ?240\b|typ ?240)"], [r"M-?P", r"monochrom", r"\bM-?E\b"], ["m typ 240", "m240", "엠240"], [
     v("edition-60", "Leica M Edition 60", "M 에디션 60", r"edition ?60|에디션 ?60", ["m edition 60"]),
     v("ara-guler", "Leica M (240) Ara Güler", "M240 아라 귈러", r"ara ?g[uü]ler", ["m240 ara guler"]),
 ])
@@ -175,7 +176,7 @@ fam("leica:body:m-p240", "Leica M-P (Typ 240)", "라이카 M-P 240", "M", [r"\bM
     v("korea-70", "Leica M-P 70th Independence Anniversary (Korea)", "M-P 광복 70주년", r"광복|independence", ["m-p 광복 70주년"]),
     v("grip", "Leica M-P Grip (Ralph Gibson)", "M-P 그립", r"\bgrip\b|gibson", ["m-p grip"]),  # 확인 필요
 ])
-fam("leica:body:m-monochrom-246", "Leica M Monochrom (Typ 246)", "라이카 M 모노크롬 246", "M", [r"246|(M ?240|typ ?240).*monochrom|monochrom.*240"], [], ["m246", "mm 246", "m monochrom 246"], [
+fam("leica:body:m-monochrom-246", "Leica M Monochrom (Typ 246)", "라이카 M 모노크롬 246", "M", [r"typ ?246|\bM ?246\b|monochrom.{0,20}\b246\b|\b246\b.{0,20}monochrom|(M ?240|typ ?240).*monochrom|monochrom.*240"], [], ["m246", "mm 246", "m monochrom 246"], [
     v("drifter", "Leica M Monochrom Drifter (Lenny Kravitz)", "M 모노크롬 드리프터", r"drifter|kravitz", ["monochrom drifter"]),
     v("your-mark", "Leica M Monochrom 'Your Mark'", "M 모노크롬 유어마크", r"your ?mark", ["monochrom your mark"]),  # 확인 필요
 ])
@@ -210,7 +211,7 @@ fam("leica:body:m11-d", "Leica M11-D", "라이카 M11-D", "M", [r"\bM ?11-?D\b"]
 fam("leica:body:m-ev1", "Leica M EV1", "라이카 M EV1", "M", [r"\bEV ?1\b"], [], ["m ev1", "ev1"])
 
 # ── Q ──
-fam("leica:body:q", "Leica Q (Typ 116)", "라이카 Q", None, [r"\bQ\b(?!-?P)"], [r"\bQ ?[23]\b"], ["q typ 116", "q116", "큐"], [
+fam("leica:body:q", "Leica Q (Typ 116)", "라이카 Q", None, [r"\bQ\b(?!-?P)"], [r"\bQ ?[23]\b"], ["q typ 116", "q116", "큐", "q", "leica q", "라이카 q"], [
     v("snow", "Leica Q Snow (Iouri Podladtchikov)", "Q 스노우", r"snow|스노우", ["q snow"]),
     v("safari", "Leica Q Safari", "Q 사파리", r"safari|사파리", ["q safari"]),
     v("khaki", "Leica Q Khaki", "Q 카키", r"khaki|카키", ["q khaki"]),  # 확인 필요

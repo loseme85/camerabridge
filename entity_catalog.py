@@ -15,7 +15,28 @@ CATALOG_PATH = Path(__file__).resolve().parent / "data" / "config" / "entity_cat
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)
 LENS_IN_TITLE = re.compile(r"(\d{2,3}\s?mm\b|\b\d{2,3}/\d(\.\d)?\b|\bf/?\s?\d\.\d)", re.I)
 # 제목 앞쪽에 적힌 마운트 (예: "[중고] M 135/3.4", "Leica SL 50mm")
-TITLE_MOUNT = re.compile(r"^(?:\[[^\]]+\]\s*|신품\s+|중고\s+)*(?:leica\s+)?(M|SL|R|L|TL|S)\s+\d", re.I)
+TITLE_MOUNT = re.compile(r"^(?:\[[^\]]+\]\s*|신품\s+|중고\s+)*(?:leica\s+)?(M|SL|R|L|TL|S)\s*(?:apo\s+)?\d", re.I)
+# 한국 매장식 제목("[중고] M 50/2 Rigid")은 계열 이름을 생략함 → 초점거리/조리개로 라이카 계열 추론
+SHOP_LENS = re.compile(r"^(?:\[[^\]]+\]\s*|신품\s+|중고\s+)*(?:leica\s+)?(M|L|R|SL|TL)\s*(?:apo\s+)?(\d{2,3}(?:-\d{2,3})?)\s*(?:/\s*(\d+(?:\.\d+)?))?", re.I)
+IMPLIED_FAMILY = {("21", "1.4"): "Summilux", ("24", "1.4"): "Summilux", ("28", "1.4"): "Summilux", ("35", "1.4"): "Summilux",
+                  ("50", "1.4"): "Summilux", ("75", "1.4"): "Summilux", ("90", "1.5"): "Summilux", ("28", "2"): "Summicron",
+                  ("35", "2"): "Summicron", ("50", "2"): "Summicron", ("75", "2"): "APO Summicron", ("90", "2"): "Summicron",
+                  ("21", "2.8"): "Elmarit", ("24", "2.8"): "Elmarit", ("28", "2.8"): "Elmarit", ("90", "2.8"): "Elmarit",
+                  ("135", "2.8"): "Elmarit", ("28", "5.6"): "Summaron", ("35", "2.8"): "Summaron", ("50", "2.8"): "Elmar",
+                  ("35", "2.5"): "Summarit", ("50", "2.5"): "Summarit", ("75", "2.5"): "Summarit", ("90", "2.5"): "Summarit",
+                  ("35", "2.4"): "Summarit", ("50", "2.4"): "Summarit", ("75", "2.4"): "Summarit", ("90", "2.4"): "Summarit",
+                  ("18", "3.8"): "Super-Elmar", ("24", "3.8"): "Elmar", ("135", "3.4"): "APO-Telyt", ("135", "4"): "Tele-Elmar",
+                  ("50", "1.2"): "Noctilux", ("50", "0.95"): "Noctilux", ("50", "1"): "Noctilux", ("75", "1.25"): "Noctilux", ("35", "1.2"): "Noctilux"}
+# R·SL·TL 매장식 제목
+IMPLIED_BY_MOUNT = {"R": {("19", "2.8"): "Elmarit", ("24", "2.8"): "Elmarit", ("28", "2.8"): "Elmarit", ("35", "2.8"): "Elmarit",
+                          ("35", "2"): "Summicron", ("50", "2"): "Summicron", ("90", "2"): "Summicron", ("35", "1.4"): "Summilux",
+                          ("50", "1.4"): "Summilux", ("80", "1.4"): "Summilux", ("90", "2.8"): "Elmarit", ("135", "2.8"): "Elmarit",
+                          ("180", "2.8"): "Elmarit", ("100", "2.8"): "APO Macro Elmarit", ("60", "2.8"): "Macro Elmarit"},
+                    "SL": {("50", "1.4"): "Summilux", ("21", "2"): "APO Summicron", ("28", "2"): "APO Summicron", ("35", "2"): "APO Summicron",
+                           ("50", "2"): "APO Summicron", ("75", "2"): "APO Summicron", ("90", "2"): "APO Summicron"},
+                    "TL": {("35", "1.4"): "Summilux", ("23", "2"): "Summicron", ("18", "2.8"): "Elmarit", ("60", "2.8"): "APO Macro Elmarit"}}
+ZOOM_FAMILY = {"R": "Vario Elmar", "SL": "Vario Elmarit", "TL": "Vario Elmar"}
+FAMILY_WORD = re.compile(r"summi|elmar|nocti|hektor|telyt|angulon|summar|xenon|thambar|lux\b|cron\b|ultron|nokton|heliar|skopar|planar|biogon|sonnar", re.I)
 # 모델명에 붙은 마운트 (예: Noctilux-M, Summicron-R, APO-Summicron-SL)
 NAME_MOUNT = re.compile(r"[a-z]-(M|SL|R|TL)\b", re.I)
 
@@ -41,7 +62,23 @@ def record_title(record: dict[str, Any]) -> str:
     raw = record.get("raw_item") or {}
     title = str(final.get("title_raw") or raw.get("상품명") or record.get("title") or final.get("title") or "")
     # 로마 숫자 특수문자 (Ⅲ → III)
-    return title.replace("Ⅲ", "III").replace("Ⅱ", "II").replace("Ⅰ", "I").replace("Ⅳ", "IV")
+    title = title.replace("Ⅲ", "III").replace("Ⅱ", "II").replace("Ⅰ", "I").replace("Ⅳ", "IV")
+    shop = SHOP_LENS.match(title)
+    if shop and not FAMILY_WORD.search(title):
+        mount, focal, aperture = shop.group(1).upper(), shop.group(2), shop.group(3) or ""
+        if "." in aperture:
+            aperture = aperture.rstrip("0").rstrip(".")
+        if "-" in focal:
+            family = ZOOM_FAMILY.get(mount)
+        elif mount in ("M", "L"):
+            family = IMPLIED_FAMILY.get((focal, aperture))
+        else:
+            family = IMPLIED_BY_MOUNT.get(mount, {}).get((focal, aperture))
+            if not family and mount == "SL" and re.search(r"\bapo\b", title, re.I):
+                family = "Summicron"
+        if family:
+            title = f"{title} {family}"
+    return title
 
 
 def _category_ok(rule: dict, final: dict, title: str) -> bool:
@@ -148,12 +185,12 @@ class Suggester:
             if alias == query:
                 return 1000
             if alias.startswith(query):
-                best = max(best, 900 - (len(alias) - len(query)))
+                best = max(best, 900 - 0.3 * (len(alias) - len(query)))
             ac = alias.replace(" ", "")
             if ac == qc:
                 best = max(best, 950)
             elif ac.startswith(qc):
-                best = max(best, 850 - (len(ac) - len(qc)))
+                best = max(best, 880 - 0.3 * (len(ac) - len(qc)))
         if best:
             return best
         raw = [t for t in query.split(" ") if t and t not in STOP_TOKENS]
@@ -161,24 +198,47 @@ class Suggester:
         known = [t for t in tokens if t]
         if not known:
             return 0
-        etokens = self.tokens[eid]
-        bonus = 0
-        for t in known:
-            if APERTURE.match(t) and "." in t:
-                bare = t.lstrip("f")
-                if bare in etokens:
-                    bonus += 60  # 적은 조리개가 모델과 정확히 맞음 (예: 0.95)
-                    continue
-                if any(APERTURE.match(x) and "." in x for x in etokens):
-                    return 0  # 이 모델엔 다른 조리개가 지정돼 있음
-                continue  # 조리개가 모델을 가르지 않으면 무시
-            if re.fullmatch(r"\d+", t):
-                if t not in etokens:
-                    return 0
-            elif not any(x.startswith(t) for x in etokens):
-                return 0
+        is_ap = lambda t: APERTURE.match(t) is not None and "." in t  # noqa: E731
+
+        def token_score(etokens: set[str]) -> float | None:
+            bonus = 0.0
+            used = 0
+            for t in known:
+                if is_ap(t):
+                    bare = t.lstrip("f")
+                    if bare in etokens:
+                        bonus += 60
+                        used += 1
+                        continue
+                    if any(is_ap(x) for x in etokens):
+                        return None  # 이 모델엔 다른 조리개가 지정돼 있음
+                    continue  # 조리개가 모델을 가르지 않으면 무시
+                if re.fullmatch(r"\d+", t):
+                    if t not in etokens:
+                        return None
+                    used += 1
+                elif t in etokens:
+                    used += 1
+                elif any(x.startswith(t) for x in etokens):
+                    used += 1
+                    bonus -= 2  # 앞부분만 같음
+                else:
+                    return None
+            return bonus - 3 * max(0, len(etokens) - used)
+
+        best_alias = None
+        for alias in self.aliases[eid]:
+            atoks = {t for t in alias.split(" ") if t and t not in STOP_TOKENS}
+            got = token_score(atoks)
+            if got is not None:
+                best_alias = max(best_alias if best_alias is not None else -1e9, got)
         ignored = len(raw) - len(known)
-        return 700 + 10 * len(known) - 5 * ignored + bonus
+        if best_alias is not None:
+            return 760 + 10 * len(known) - 5 * ignored + best_alias
+        union = token_score(self.tokens[eid])  # 여러 별칭을 합쳐서 (예: wate + 16 18 21)
+        if union is None:
+            return 0
+        return 700 + 10 * len(known) - 5 * ignored + union + 3 * max(0, len(self.tokens[eid]) - len(known))
 
     def suggest(self, query: str, limit: int = 8) -> list[dict]:
         import math
@@ -191,8 +251,11 @@ class Suggester:
         for entity in self.entities:
             score = max(self._score(q, entity["id"]), self._score(bare, entity["id"]) if bare != q else 0)
             if score >= 700:
-                scored.append((score + math.log10(1 + (entity.get("active_count") or 0)), entity))
-        scored.sort(key=lambda item: (-(item[0] // 50), -(item[1].get("active_count") or 0), -(item[1].get("listing_count") or 0)))
+                active = math.log10(1 + (entity.get("active_count") or 0))
+                # 앞부분만 맞는 후보끼리는 판매 중 매물이 많은 모델을 먼저
+                weight = 8 if 850 <= score < 950 else 2
+                scored.append((score + weight * active, entity))
+        scored.sort(key=lambda item: (-item[0], -(item[1].get("listing_count") or 0)))
         return [entity for _, entity in scored[:limit]]
 
 

@@ -2310,29 +2310,43 @@
       const qc = query.replace(/ /g, '');
       for(const alias of entity._aliases){
         if(alias === query) return 1000;
-        if(alias.startsWith(query)) best = Math.max(best, 900 - (alias.length - query.length));
+        if(alias.startsWith(query)) best = Math.max(best, 900 - 0.3 * (alias.length - query.length));
         const ac = alias.replace(/ /g, '');
         if(ac === qc) best = Math.max(best, 950);
-        else if(ac.startsWith(qc)) best = Math.max(best, 850 - (ac.length - qc.length));
+        else if(ac.startsWith(qc)) best = Math.max(best, 880 - 0.3 * (ac.length - qc.length));
       }
       if(best) return best;
       const raw = query.split(' ').filter(t => t && !ENTITY_STOP_TOKENS.has(t));
       const known = raw.map(fixEntityToken).filter(Boolean);
       if(!known.length) return 0;
-      const tokens = entity._tokens;
       const isAperture = t => /^f?\d+(\.\d+)?$/.test(t) && t.includes('.');
-      let bonus = 0;
-      for(const t of known){
-        if(isAperture(t)){
-          const bare = t.replace(/^f/, '');
-          if(tokens.has(bare)){ bonus += 60; continue; }
-          if([...tokens].some(isAperture)) return 0;
-          continue;
+      const tokenScore = etokens => {
+        let bonus = 0; let used = 0;
+        for(const t of known){
+          if(isAperture(t)){
+            const bare = t.replace(/^f/, '');
+            if(etokens.has(bare)){ bonus += 60; used += 1; continue; }
+            if([...etokens].some(isAperture)) return null;
+            continue;
+          }
+          if(/^\d+$/.test(t)){ if(!etokens.has(t)) return null; used += 1; }
+          else if(etokens.has(t)){ used += 1; }
+          else if([...etokens].some(x => x.startsWith(t))){ used += 1; bonus -= 2; }
+          else return null;
         }
-        if(/^\d+$/.test(t)){ if(!tokens.has(t)) return 0; }
-        else if(![...tokens].some(x => x.startsWith(t))) return 0;
+        return bonus - 3 * Math.max(0, etokens.size - used);
+      };
+      let bestAlias = null;
+      for(const alias of entity._aliases){
+        const atoks = new Set(alias.split(' ').filter(t => t && !ENTITY_STOP_TOKENS.has(t)));
+        const got = tokenScore(atoks);
+        if(got !== null) bestAlias = bestAlias === null ? got : Math.max(bestAlias, got);
       }
-      return 700 + 10 * known.length - 5 * (raw.length - known.length) + bonus;
+      const ignored = raw.length - known.length;
+      if(bestAlias !== null) return 760 + 10 * known.length - 5 * ignored + bestAlias;
+      const union = tokenScore(entity._tokens);
+      if(union === null) return 0;
+      return 700 + 10 * known.length - 5 * ignored + union + 3 * Math.max(0, entity._tokens.size - known.length);
     }
 
     function suggestEntities(rawQuery, limit = 8){
@@ -2342,12 +2356,11 @@
         .map(entity => {
           const bare = query.replace(/^(leica|라이카|ライカ|徕卡|徠卡)\s+/, '');
           const best = Math.max(scoreEntity(query, entity), bare !== query ? scoreEntity(bare, entity) : 0);
-          return { entity, score: best + Math.log10(1 + (entity.active_count || 0)) };
+          const weight = best >= 850 && best < 950 ? 8 : 2;
+          return { entity, score: best + weight * Math.log10(1 + (entity.active_count || 0)), base: best };
         })
-        .filter(item => item.score >= 700)
-        .sort((a, b) => Math.floor(b.score / 50) - Math.floor(a.score / 50)
-          || (b.entity.active_count || 0) - (a.entity.active_count || 0)
-          || (b.entity.listing_count || 0) - (a.entity.listing_count || 0))
+        .filter(item => item.base >= 700)
+        .sort((a, b) => b.score - a.score || (b.entity.listing_count || 0) - (a.entity.listing_count || 0))
         .slice(0, limit);
     }
 

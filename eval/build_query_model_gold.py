@@ -81,7 +81,7 @@ case("Noctilux 0.95", E, ["leica:lens:noctilux-m:50:f0.95"]); case("녹티룩스
 case("Noctilux 1.0", E, ["leica:lens:noctilux-m:50:f1.0"]); case("nocti e60", E, ["leica:lens:noctilux-m:50:f1.0"])
 case("Noctilux", A, ["leica:lens:noctilux-m:50:f0.95", "leica:lens:noctilux-m:50:f1.0"], note="f/0.95·f/1.0·f/1.2 → 되묻거나 Noctilux만")
 case("녹티룩스", A, ["leica:lens:noctilux-m:50:f0.95", "leica:lens:noctilux-m:50:f1.0"], "ko")
-case("Elmarit 28 ASPH", E, ["leica:lens:elmarit-m:28:asph"]); case("엘마리트 28", E, ["leica:lens:elmarit-m:28:asph"], "ko")
+case("Elmarit 28 ASPH", E, ["leica:lens:elmarit-m:28:asph"]); case("엘마리트 28", P, ["leica:lens:elmarit-m:28"], "ko", note="세대(1~4세대·ASPH) 여럿 → 전체 또는 되묻기")
 case("Summicron 28 ASPH", E, ["leica:lens:summicron-m:28:asph"])
 case("Summaron 35", E, ["leica:lens:summaron:35"]); case("즈마론 35", E, ["leica:lens:summaron:35"], "ko")
 case("Summaron 28 5.6", E, ["leica:lens:summaron-m:28:f5.6"])
