@@ -882,6 +882,9 @@ ACCESSORY_CODES = [
     '12564', '12575', '12595', '14100', '14101', '14269', '14358',
 ]
 
+# 분류용 대략 환율 (가격 문자열 기호 → 원화)
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, '$': 1350}
+
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
     n = name.lower()
@@ -938,8 +941,11 @@ def detect_category(name, price_str=""):
             nums = re.findall(r"[\d,]+", price_str.replace('£', ''))
             if nums:
                 p = float(nums[0].replace(',', ''))
-                if '¥' in price_str:
-                    p *= 9  # 엔화는 원화로 대략 바꿔서 50만원 기준 적용
+                # 외화는 원화로 대략 바꿔서 50만원 기준 적용
+                for sym, rate in PRICE_SYMBOL_TO_KRW.items():
+                    if sym in price_str:
+                        p *= rate
+                        break
                 if 0 < p <= 500000:
                     return "Accessory"
         except:
@@ -2431,6 +2437,63 @@ def crawl_leicamiami():
     return results
 
 
+def crawl_kamerastore():
+    """Kamerastore (핀란드) - Shopify JSON API, 라이카 컬렉션 전체"""
+    import requests
+    results = []
+    base = "https://kamerastore.com"
+    page_num = 1
+    print(f"\n  📂 Kamerastore 크롤링 시작")
+    while True:
+        url = f"{base}/collections/leica/products.json?limit=250&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=20)
+            resp.raise_for_status()
+            products = resp.json().get("products", [])
+        except Exception as e:
+            print(f"    ❌ {page_num}페이지 오류: {e}")
+            break
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            name = (p.get("title") or "").strip()
+            if not name:
+                continue
+            variant = p["variants"][0] if p.get("variants") else {}
+            available = variant.get("available", True)
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not available or link in globals().get('SOLD_LINKS', ()):
+                continue
+            try:
+                price = f"€{float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Kamerastore (핀란드)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        page_num += 1
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Kamerastore 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura(page):
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -2855,6 +2918,15 @@ def crawl_all():
         print(f"  ✅ Leica Store Miami: {len(miami_results)}개")
     except Exception as e:
         print(f"❌ Leica Store Miami 오류: {e}")
+
+    # ── Kamerastore 크롤링 ──
+    print('\n' + '='*50)
+    print('Kamerastore 크롤링 시작')
+    try:
+        kamerastore_results = crawl_kamerastore()
+        all_results.extend(kamerastore_results)
+    except Exception as e:
+        print(f"❌ Kamerastore 오류: {e}")
 
     # ── 기타무라 크롤링 ──
     print('\n' + '='*50)
