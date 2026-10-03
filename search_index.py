@@ -323,6 +323,15 @@ def load_search_index(
     else:
         raise ValueError(f"{path} must contain a search index object or record list")
 
+    if records and "entity_ids" not in records[0]:
+        # 엔티티 연결 전 색인(예: 워크플로 단계 추가 전 데이터)이면 불러올 때 연결
+        try:
+            from entity_catalog import annotate_records  # noqa: WPS433
+
+            annotate_records(records)
+        except Exception:  # pragma: no cover - 카탈로그가 없어도 일반 검색은 동작
+            pass
+
     if use_cache:
         _SEARCH_INDEX_CACHE[cache_key] = {
             "mtime_ns": stat.st_mtime_ns,
