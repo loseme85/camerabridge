@@ -45,6 +45,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CRAWL_FULL: ${{ inputs.full && '1' || '0' }}
+          RELAY_URL: ${{ secrets.RELAY_URL }}   # 해외 접속을 막는 일본 사이트용 Vercel 도쿄 중계 (relay/)
+          RELAY_KEY: ${{ secrets.RELAY_KEY }}
 
       - name: Keep snapshot (Actions storage, not the repo)
         uses: actions/upload-artifact@v4
