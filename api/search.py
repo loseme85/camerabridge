@@ -1521,6 +1521,15 @@ def _summilux_35_fle2_ranking_bucket(
     return 7
 
 
+def _balance_external_results(response: dict[str, Any], sort: str) -> None:
+    """검색어별 재정렬 뒤에도 국내 우선·eBay 3칸에 1개를 유지한다."""
+    if sort != "relevance" or not response.get("results"):
+        return
+    from search_service import balance_external_sources  # noqa: WPS433
+
+    response["results"] = balance_external_sources(list(response["results"]))
+
+
 def _rerank_results_for_query_context(query: str, response: Mapping[str, Any], sort: str) -> list[dict[str, Any]]:
     results = list(response.get("results") or [])
     if sort != "relevance" or not results:
@@ -3860,6 +3869,7 @@ def search_from_params(
             limit=parsed["limit"],
             offset=parsed["offset"],
         )
+        _balance_external_results(response, parsed["sort"])
         response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
         response["market_entry_policy"] = build_market_entry_policy(
             parsed["query"],
@@ -3895,6 +3905,7 @@ def search_from_params(
         limit=parsed["limit"],
         offset=parsed["offset"],
     )
+    _balance_external_results(response, parsed["sort"])
     response["ui_hints"] = build_query_ui_hints(parsed["query"], response.get("results"))
     response["market_entry_policy"] = build_market_entry_policy(
         parsed["query"],

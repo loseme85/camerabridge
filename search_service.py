@@ -193,6 +193,47 @@ def _load_external_active_records(
     return list(ebay_result.get("records") or []), diagnostics
 
 
+EXTERNAL_LIVE_SOURCES = {"ebay"}
+EXTERNAL_MAX_PER_BLOCK = 1
+EXTERNAL_BLOCK_SIZE = 3
+
+
+def _is_external_live_result(result: dict[str, Any]) -> bool:
+    final = result.get("final_output") or {}
+    source = result.get("source") or final.get("source") or ""
+    return _normalize_text(source) in EXTERNAL_LIVE_SOURCES
+
+
+def balance_external_sources(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """국내 매물 우선: 결과 3칸마다 eBay 같은 실시간 외부 매물은 최대 1개.
+
+    순서는 뒤로 미루기만 하고 앞당기지 않는다. 국내 매물이 떨어지면 남은 외부 매물로 채운다.
+    """
+    local = [index for index, result in enumerate(results) if not _is_external_live_result(result)]
+    external = [index for index, result in enumerate(results) if _is_external_live_result(result)]
+    if not local or not external:
+        return list(results)
+
+    ordered: list[int] = []
+    local_pos = external_pos = 0
+    block_external = 0
+    while local_pos < len(local) or external_pos < len(external):
+        if len(ordered) % EXTERNAL_BLOCK_SIZE == 0:
+            block_external = 0
+        take_external = external_pos < len(external) and (
+            local_pos >= len(local)
+            or (external[external_pos] < local[local_pos] and block_external < EXTERNAL_MAX_PER_BLOCK)
+        )
+        if take_external:
+            ordered.append(external[external_pos])
+            external_pos += 1
+            block_external += 1
+        else:
+            ordered.append(local[local_pos])
+            local_pos += 1
+    return [results[index] for index in ordered]
+
+
 def _price_value(final: dict[str, Any]) -> Optional[float]:
     numeric = final.get("parsed_price_numeric")
     if isinstance(numeric, (int, float)):
@@ -1006,6 +1047,8 @@ def search_records(
     quality_filtered_results = apply_quality_filter(ranked_results, strong_only=strong_only)
     filtered_results = apply_filters(quality_filtered_results, filters=filters, records=candidate_records)
     sorted_results, applied_sort, sort_warnings = apply_sort(filtered_results, sort=sort)
+    if applied_sort == "relevance":
+        sorted_results = balance_external_sources(sorted_results)
     paginated_results, pagination, pagination_warnings = paginate_results(
         sorted_results,
         limit=limit,
