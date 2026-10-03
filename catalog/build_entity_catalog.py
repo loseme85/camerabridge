@@ -14,6 +14,9 @@ import json
 from pathlib import Path
 
 OUT = Path(__file__).resolve().parents[1] / "data" / "config" / "entity_catalog_v1.json"
+import sys as _sys  # noqa: E402
+
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 def f(n: str) -> str:
     """초점거리: 35mm, 35/1.4, 'M 35 ' 등. 135의 35 같은 오인 방지."""
@@ -36,41 +39,8 @@ ACC_NOT = [r"\bhood\b", r"후드", r"\bcap\b", r"캡", r"case", r"케이스", r"
 THIRD_PARTY = [r"leeworks", r"light ?lens ?lab", r"\bLLL\b", r"7 ?artisans", r"ttartisan", r"voigtl", r"zeiss",
                r"sigma", r"ms-?optics", r"kipon", r"호환", r"\bcopy\b", r"카피"]
 
-# ── M 필름 바디 ──
-model("leica:body:m3", "Leica M3", "Body", "M", [r"\bM ?3\b"], [r"M3J", r"MP3"])
-model("leica:body:m2", "Leica M2", "Body", "M", [r"\bM ?2\b"], [r"M2-?R", r"\bM ?24\d"])
-model("leica:body:m4", "Leica M4", "Body", "M", [r"\bM ?4\b"], [r"M4-?P", r"M4-?2"])
-model("leica:body:m4-p", "Leica M4-P", "Body", "M", [r"\bM ?4-?P\b"])
-model("leica:body:m4-2", "Leica M4-2", "Body", "M", [r"\bM ?4-2\b"])
-model("leica:body:m5", "Leica M5", "Body", "M", [r"\bM ?5\b"])
-model("leica:body:m6:classic", "Leica M6 (Classic)", "Body", "M", [r"\bM ?6\b"],
-      [r"TTL", r"re-?issue", r"리이슈", r"복각", r"2022", r"M6 ?J\b"])
-model("leica:body:m6:ttl", "Leica M6 TTL", "Body", "M", [r"\bM ?6\b", r"TTL"])
-model("leica:body:m6:reissue", "Leica M6 (2022 Reissue)", "Body", "M", [r"\bM ?6\b", r"(re-?issue|리이슈|2022|복각)"], [r"TTL"])
-model("leica:body:m7", "Leica M7", "Body", "M", [r"\bM ?7\b"])
-model("leica:body:mp-film", "Leica MP (film)", "Body", "M", [r"\bMP\b"], [r"M-?P\b ?(240|typ)", r"M10-?P", r"M11-?P", r"MP3", r"MP6"])
-model("leica:body:m-a", "Leica M-A (Typ 127)", "Body", "M", [r"\bM-?A\b"])
-# ── M 디지털 바디 ──
-model("leica:body:m8", "Leica M8", "Body", "M", [r"\bM ?8\b"], [r"M8\.2"])
-model("leica:body:m9", "Leica M9", "Body", "M", [r"\bM ?9\b"], [r"M9-?P", r"monochrom"])
-model("leica:body:m240", "Leica M (Typ 240)", "Body", "M", [r"(\bM ?240\b|typ ?240)"], [r"M-?P", r"monochrom"])
-model("leica:body:m10", "Leica M10", "Body", "M", [r"\bM ?10\b"], [r"M10-?(P|R|D|E)\b", r"monochrom"] + ACC_NOT)
-model("leica:body:m10-p", "Leica M10-P", "Body", "M", [r"\bM ?10-?P\b"], ACC_NOT)
-model("leica:body:m10-r", "Leica M10-R", "Body", "M", [r"\bM ?10-?R\b"], ACC_NOT)
-model("leica:body:m10-monochrom", "Leica M10 Monochrom", "Body", "M", [r"\bM ?10\b", r"monochrom"], [r"M10-?P"] + ACC_NOT)
-model("leica:body:m11", "Leica M11", "Body", "M", [r"\bM ?11\b"], [r"M11-?(P|D|V)\b", r"monochrom"] + ACC_NOT)
-model("leica:body:m11-p", "Leica M11-P", "Body", "M", [r"\bM ?11-?P\b"], ACC_NOT)
-model("leica:body:m11-monochrom", "Leica M11 Monochrom", "Body", "M", [r"\bM ?11\b", r"monochrom"], ACC_NOT)
-# ── Q · SL · 기타 바디 ──
-model("leica:body:q", "Leica Q (Typ 116)", "Body", None, [r"\bQ\b"], [r"\bQ ?[23]\b"] + ACC_NOT)
-model("leica:body:q2", "Leica Q2", "Body", None, [r"\bQ ?2\b"], [r"monochrom"] + ACC_NOT)
-model("leica:body:q2-monochrom", "Leica Q2 Monochrom", "Body", None, [r"\bQ ?2\b", r"monochrom"], ACC_NOT)
-model("leica:body:q3", "Leica Q3", "Body", None, [r"\bQ ?3\b"], [r"\b43\b", r"43\s?mm"] + ACC_NOT)
-model("leica:body:sl2", "Leica SL2", "Body", "SL", [r"\bSL ?2\b"], [r"SL2-?S"] + ACC_NOT)
-model("leica:body:sl2-s", "Leica SL2-S", "Body", "SL", [r"\bSL ?2-?S\b"], ACC_NOT)
-model("leica:body:sl3", "Leica SL3", "Body", "SL", [r"\bSL ?3\b"], ACC_NOT)
-model("leica:body:iiif", "Leica IIIf", "Body", None, [r"\bIII ?f\b"])
-model("leica:body:iiig", "Leica IIIg", "Body", None, [r"\bIII ?g\b"])
+# ── 바디는 catalog/bodies.py ──
+
 # ── M 렌즈 ──
 model("leica:lens:summilux-m:35:asph-fle", "Summilux-M 35mm f/1.4 ASPH FLE", "Lens", "M",
       [r"(summilux|\blux\b)", f("35"), r"FLE"], [r"FLE ?(II|2)\b", r"steel"] + ACC_NOT)
@@ -120,37 +90,6 @@ model("leica:lens:summilux-r:80", "Summilux-R 80mm f/1.4", "Lens", "R", [r"summi
 
 # ── 검색 별칭 (소문자, 띄어쓰기 자유: 검색창이 하이픈·슬래시·공백을 같게 본다) ──
 ALIASES: dict[str, list[str]] = {
-    "leica:body:m3": ["leica m3", "m3", "라이카 m3", "엠3"],
-    "leica:body:m2": ["leica m2", "m2", "라이카 m2", "엠2"],
-    "leica:body:m4": ["leica m4", "m4", "라이카 m4", "엠4"],
-    "leica:body:m4-p": ["leica m4-p", "m4-p", "m4p", "라이카 m4-p"],
-    "leica:body:m4-2": ["leica m4-2", "m4-2", "라이카 m4-2"],
-    "leica:body:m5": ["leica m5", "m5", "라이카 m5", "엠5"],
-    "leica:body:m6:classic": ["leica m6 classic", "m6 classic", "m6 클래식", "라이카 m6 클래식"],
-    "leica:body:m6:ttl": ["leica m6 ttl", "m6 ttl", "m6ttl", "라이카 m6 ttl", "엠6 ttl"],
-    "leica:body:m6:reissue": ["leica m6 reissue", "m6 reissue", "m6 2022", "m6 리이슈", "m6 복각", "라이카 m6 리이슈"],
-    "leica:body:m7": ["leica m7", "m7", "라이카 m7", "엠7"],
-    "leica:body:mp-film": ["leica mp", "mp", "mp film", "라이카 mp"],
-    "leica:body:m-a": ["leica m-a", "m-a", "ma typ 127", "라이카 m-a", "엠에이"],
-    "leica:body:m8": ["leica m8", "m8", "라이카 m8"],
-    "leica:body:m9": ["leica m9", "m9", "라이카 m9"],
-    "leica:body:m240": ["leica m240", "m240", "m typ 240", "라이카 m240"],
-    "leica:body:m10": ["leica m10", "m10", "m10 body", "라이카 m10", "엠10"],
-    "leica:body:m10-p": ["leica m10-p", "m10-p", "m10p", "라이카 m10-p"],
-    "leica:body:m10-r": ["leica m10-r", "m10-r", "m10r", "라이카 m10-r"],
-    "leica:body:m10-monochrom": ["leica m10 monochrom", "m10 monochrom", "m10 mono", "m10 모노크롬", "m10 모노"],
-    "leica:body:m11": ["leica m11", "m11", "라이카 m11", "엠11"],
-    "leica:body:m11-p": ["leica m11-p", "m11-p", "m11p", "라이카 m11-p"],
-    "leica:body:m11-monochrom": ["leica m11 monochrom", "m11 monochrom", "m11 mono", "m11 모노크롬", "m11 모노"],
-    "leica:body:q": ["leica q", "q", "q typ 116", "q116", "라이카 q", "큐"],
-    "leica:body:q2": ["leica q2", "q2", "라이카 q2", "큐2"],
-    "leica:body:q2-monochrom": ["leica q2 monochrom", "q2 monochrom", "q2 mono", "q2 모노크롬", "큐2 모노"],
-    "leica:body:q3": ["leica q3", "q3", "라이카 q3", "큐3"],
-    "leica:body:sl2": ["leica sl2", "sl2", "라이카 sl2"],
-    "leica:body:sl2-s": ["leica sl2-s", "sl2-s", "sl2s", "라이카 sl2-s"],
-    "leica:body:sl3": ["leica sl3", "sl3", "라이카 sl3"],
-    "leica:body:iiif": ["leica iiif", "iiif", "barnack iiif", "바르낙 iiif", "라이카 iiif"],
-    "leica:body:iiig": ["leica iiig", "iiig", "barnack iiig", "바르낙 iiig", "라이카 iiig"],
     "leica:lens:summilux-m:35:asph-fle": ["summilux-m 35 asph fle", "summilux 35 fle", "35 lux fle", "35lux fle", "주미룩스 35 fle", "35 룩스 fle"],
     "leica:lens:summilux-m:35:asph-fle2": ["summilux-m 35 asph fle ii", "summilux 35 fle ii", "summilux 35 fle2", "35 lux fle2", "35 lux fle ii", "주미룩스 35 fle2", "35 룩스 fle2"],
     "leica:lens:summilux-m:35:steel-rim-reissue": ["summilux 35 steel rim reissue", "35 lux steel rim", "steel rim reissue", "스틸림 복각", "주미룩스 35 스틸림"],
@@ -205,8 +144,6 @@ NAME_KO = {
 
 # ── 부모 엔티티: 세대·버전이 여럿인 이름. 자식 매물을 모두 포함하고, 고르면 자식으로 좁힐 수 있다 ──
 PARENTS = {
-    "leica:body:m6": ("Leica M6 (all)", "Body", "M", ["leica:body:m6:classic", "leica:body:m6:ttl", "leica:body:m6:reissue"],
-                      ["leica m6", "m6", "라이카 m6", "엠6"], "라이카 M6 (전체)"),
     "leica:lens:noctilux-m:50": ("Noctilux-M 50mm (all)", "Lens", "M", ["leica:lens:noctilux-m:50:f0.95", "leica:lens:noctilux-m:50:f1.0", "leica:lens:noctilux:50:f1.2-original", "leica:lens:noctilux-m:50:f1.2-asph"],
                                  ["noctilux", "nocti", "noctilux 50", "녹티룩스", "녹티", "녹티룩스 50"], "녹티룩스 50 (전체)"),
     "leica:lens:summilux-m:35": ("Summilux-M 35mm (all)", "Lens", "M",
@@ -222,6 +159,14 @@ PARENTS = {
 
 
 def build() -> dict:
+    import bodies
+
+    for key, spec in bodies.MODELS.items():
+        assert key not in MODELS, key
+        MODELS[key] = spec
+    ALIASES.update(bodies.ALIASES)
+    NAME_KO.update(bodies.NAME_KO)
+    PARENTS.update(bodies.PARENTS)
     entities = []
     for key, spec in MODELS.items():
         assert key in ALIASES, f"aliases missing: {key}"
@@ -235,8 +180,9 @@ def build() -> dict:
         })
     for key, (name, kind, mount, children, aliases, name_ko) in PARENTS.items():
         for child in children:
-            assert child in MODELS, child
-        entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": kind, "mount": mount, "parent": None,
+            assert child in MODELS or child in PARENTS, child
+        grand = next((p for p, v in PARENTS.items() if key in v[3]), None)
+        entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": kind, "mount": mount, "parent": grand,
                          "children": children, "aliases": sorted(set(a.lower() for a in aliases)), "match": None})
     return {"schema_version": "entity_catalog_v1", "updated_at": "2026-10-03", "entities": entities}
 

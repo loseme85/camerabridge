@@ -2244,7 +2244,7 @@
     function normalizeEntityText(text){
       return String(text || '').toLowerCase()
         .replace(/엠(?=\d)/g, 'm').replace(/큐(?=\d)/g, 'q')
-        .replace(/[‐‑–—\-_/·・,]+/g, ' ')
+        .replace(/[‐‑–—\-_/·・,()\[\]'"“”‘’]+/g, ' ')
         .replace(/(\d)\s?mm\b/g, '$1')
         .replace(/\b0(\d\d)\b/g, '0.$1')
         .replace(/\s+/g, ' ').trim();
@@ -2339,10 +2339,11 @@
       const query = normalizeEntityText(rawQuery);
       if(!query || !entityState.summary) return [];
       return (entityState.summary.entities || [])
-        .map(entity => ({
-          entity,
-          score: scoreEntity(query, entity) + Math.log10(1 + (entity.active_count || 0))
-        }))
+        .map(entity => {
+          const bare = query.replace(/^(leica|라이카|ライカ|徕卡|徠卡)\s+/, '');
+          const best = Math.max(scoreEntity(query, entity), bare !== query ? scoreEntity(bare, entity) : 0);
+          return { entity, score: best + Math.log10(1 + (entity.active_count || 0)) };
+        })
         .filter(item => item.score >= 700)
         .sort((a, b) => Math.floor(b.score / 50) - Math.floor(a.score / 50)
           || (b.entity.active_count || 0) - (a.entity.active_count || 0)

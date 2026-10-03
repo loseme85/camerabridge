@@ -39,7 +39,9 @@ def load_catalog(path: str | None = None) -> dict[str, Any]:
 def record_title(record: dict[str, Any]) -> str:
     final = record.get("final_output") or {}
     raw = record.get("raw_item") or {}
-    return str(final.get("title_raw") or raw.get("상품명") or record.get("title") or final.get("title") or "")
+    title = str(final.get("title_raw") or raw.get("상품명") or record.get("title") or final.get("title") or "")
+    # 로마 숫자 특수문자 (Ⅲ → III)
+    return title.replace("Ⅲ", "III").replace("Ⅱ", "II").replace("Ⅰ", "I").replace("Ⅳ", "IV")
 
 
 def _category_ok(rule: dict, final: dict, title: str) -> bool:
@@ -54,8 +56,8 @@ def _category_ok(rule: dict, final: dict, title: str) -> bool:
 
 def _mount_ok(rule: dict, final: dict, title: str) -> bool:
     want = rule.get("mount")
-    if not want:
-        return True
+    if not want or rule.get("category") == "Body":
+        return True  # 바디는 모델 이름이 마운트를 정함 (분류 데이터의 마운트는 믿지 않음)
     explicit = TITLE_MOUNT.match(title) or NAME_MOUNT.search(title)
     if explicit:
         return explicit.group(1).upper() == want
@@ -74,7 +76,11 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
             continue
         if all(p.search(title) for p in must) and not any(p.search(title) for p in must_not):
             hits.append(entity_id)
-    parents = {catalog["entities"][h].get("parent") for h in hits} - {None}
+    parents: set[str] = set()
+    frontier = {catalog["entities"][h].get("parent") for h in hits} - {None}
+    while frontier:  # 부모의 부모까지 (예: D-Lux 7 BAPE → D-Lux 7 → D-Lux 전체)
+        parents |= frontier
+        frontier = {catalog["entities"][p].get("parent") for p in frontier} - {None} - parents
     return hits + sorted(parents)
 
 
@@ -95,7 +101,7 @@ def normalize_text(text: str) -> str:
     text = str(text or "").lower()
     text = re.sub(r"엠(?=\d)", "m", text)
     text = re.sub(r"큐(?=\d)", "q", text)
-    text = re.sub(r"[‐‑–—\-_/·・,]+", " ", text)
+    text = re.sub(r"[‐‑–—\-_/·・,()\[\]'\"“”‘’]+", " ", text)
     text = re.sub(r"(\d)\s?mm\b", r"\1", text)
     text = re.sub(r"\b0(\d\d)\b", r"0.\1", text)
     return re.sub(r"\s+", " ", text).strip()
@@ -180,9 +186,10 @@ class Suggester:
         q = normalize_text(query)
         if not q:
             return []
+        bare = re.sub(r"^(leica|라이카|ライカ|徕卡|徠卡)\s+", "", q)
         scored = []
         for entity in self.entities:
-            score = self._score(q, entity["id"])
+            score = max(self._score(q, entity["id"]), self._score(bare, entity["id"]) if bare != q else 0)
             if score >= 700:
                 scored.append((score + math.log10(1 + (entity.get("active_count") or 0)), entity))
         scored.sort(key=lambda item: (-(item[0] // 50), -(item[1].get("active_count") or 0), -(item[1].get("listing_count") or 0)))

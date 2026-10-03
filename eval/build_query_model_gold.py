@@ -17,18 +17,20 @@ from pathlib import Path
 OUT = Path(__file__).resolve().parent / "query_model_gold_v1.json"
 
 
-# 모델 정의는 엔티티 카탈로그 원본 하나만 쓴다 (catalog/build_entity_catalog.py)
-import sys as _sys  # noqa: E402
-
-_sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "catalog"))
-from build_entity_catalog import MODELS  # noqa: E402
+# 모델 정의는 생성된 엔티티 카탈로그 하나만 쓴다 (catalog/build_entity_catalog.py → data/config/entity_catalog_v1.json)
+_CATALOG = json.loads((Path(__file__).resolve().parents[1] / "data" / "config" / "entity_catalog_v1.json").read_text(encoding="utf-8"))
+_ENTITIES = {e["id"]: e for e in _CATALOG["entities"]}
+MODELS = {e["id"]: {"model_key": e["id"], "display_name": e["name"], "category": e["match"]["category"], "mount": e["match"]["mount"],
+                    "title_must": e["match"]["title_must"], "title_must_not": e["match"]["title_must_not"]}
+          for e in _CATALOG["entities"] if e.get("match")}
+PARENT_CHILDREN = {e["id"]: e["children"] for e in _CATALOG["entities"] if e.get("children")}
 
 CASES: list[dict] = []
 
 
 def case(query, intent, models, lang="en", note=""):
     for key in models:
-        assert key in MODELS, key
+        assert key in _ENTITIES, key
     CASES.append({"id": f"QMG-{len(CASES) + 1:03d}", "query": query, "lang": lang, "intent": intent,
                   "expected_models": list(models), "note": note})
 
@@ -99,5 +101,5 @@ case("Summilux 135", N, [], note="135mm Summilux는 없음")
 case("M8 Monochrom", N, [], note="M8 Monochrom은 없음")
 
 OUT.write_text(json.dumps({"schema_version": "query_model_gold_v1", "updated_at": "2026-10-03",
-                           "models": MODELS, "cases": CASES}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+                           "models": MODELS, "parents": PARENT_CHILDREN, "cases": CASES}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 print(f"models {len(MODELS)}, cases {len(CASES)}")

@@ -45,16 +45,27 @@ def listing_matches(result: dict, spec: dict) -> bool:
     return not any(re.search(p, title, re.I) for p in spec["title_must_not"])
 
 
+PARENTS: dict = {}
+
+
+def expand(keys: list[str]) -> list[str]:
+    """부모 엔티티는 자식 모델(손자까지)로 풀어서 채점한다."""
+    out: list[str] = []
+    for key in keys:
+        out.extend(expand(PARENTS[key]) if key in PARENTS else [key])
+    return out
+
+
 def score_case(base: str, case: dict, models: dict, in_data: dict) -> dict:
     data = requests.get(f"{base}/api/search?limit=10&q={urllib.parse.quote(case['query'])}", timeout=90).json()
     results = data.get("results") or []
     asked = bool((data.get("ui_hints") or {}).get("needs_disambiguation"))
-    specs = [models[key] for key in case["expected_models"]]
+    specs = [models[key] for key in expand(case["expected_models"])]
     good = [any(listing_matches(r, s) for s in specs) for r in results[:5]]
     top1 = bool(good and good[0])
     share = sum(good) / 5 if results else 0.0
     intent = case["intent"]
-    available = sum(in_data.get(key, 1) for key in case["expected_models"])
+    available = sum(in_data.get(key, 1) for key in expand(case["expected_models"]))
     if intent in ("exact", "parent") and in_data and available == 0:
         intent = "absent_in_data"  # 정답 모델 매물이 아예 없음 → 다른 모델로 채우지 않아야 정답
     if intent == "absent_in_data":
@@ -78,6 +89,7 @@ def main() -> None:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     base = (args[0] if args else "https://camerabridge.vercel.app").rstrip("/")
     gold = json.loads(GOLD.read_text(encoding="utf-8"))
+    PARENTS.update(gold.get("parents") or {})
     in_data = models_in_data(gold["models"])
     with cf.ThreadPoolExecutor(6) as pool:
         rows = list(pool.map(lambda c: score_case(base, c, gold["models"], in_data), gold["cases"]))
