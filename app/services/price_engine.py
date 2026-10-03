@@ -57,8 +57,6 @@ def compute_market_prices(sold_quality_path: str = "data/derived/sold_quality_la
 
     # results.json의 label을 최신 코드로 재계산해서 매핑
     try:
-        import sys, os
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         with open("data/raw/results.json", "r", encoding="utf-8") as f:
             results = json.load(f)
         # 링크 → 최신 label 매핑
