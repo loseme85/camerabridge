@@ -29,6 +29,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 SEARCH_INDEX_SCHEMA_VERSION = "search_index.v1"
 DEFAULT_RESOLVED_PATH = PROJECT_ROOT / "data/derived/results_resolved_v2.json"
 DEFAULT_SEARCH_INDEX_PATH = PROJECT_ROOT / "data/derived/results_search_index_v1.json"
+DEFAULT_FRESHNESS_PATH = PROJECT_ROOT / "data/status/source_freshness.json"
 _SEARCH_INDEX_CACHE: dict[str, dict[str, Any]] = {}
 
 RAW_ITEM_FIELDS = [
@@ -299,6 +300,23 @@ def load_search_index_metadata(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> 
     }
 
 
+def apply_source_freshness(records: list[dict[str, Any]], path: str | Path = DEFAULT_FRESHNESS_PATH) -> None:
+    """매물마다 수집 시각을 저장하지 않고, 사이트별 마지막 확인 시각을 불러올 때 채운다 ('마지막 확인' 표시용)."""
+    try:
+        with Path(path).open(encoding="utf-8") as f:
+            freshness = json.load(f)
+    except (OSError, ValueError):
+        return
+    seen_at = {site: (entry or {}).get("last_success") for site, entry in freshness.items()}
+    for record in records:
+        final = record.get("final_output")
+        if not isinstance(final, dict) or final.get("crawl_time"):
+            continue
+        site = (record.get("raw_item") or {}).get("site") or final.get("source")
+        if seen_at.get(site):
+            final["crawl_time"] = seen_at[site]
+
+
 def load_search_index(
     path: str | Path = DEFAULT_SEARCH_INDEX_PATH,
     use_cache: bool = True,
@@ -331,6 +349,8 @@ def load_search_index(
             annotate_records(records)
         except Exception:  # pragma: no cover - 카탈로그가 없어도 일반 검색은 동작
             pass
+
+    apply_source_freshness(records)
 
     if use_cache:
         _SEARCH_INDEX_CACHE[cache_key] = {

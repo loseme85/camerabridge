@@ -5,3 +5,8 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+
+# 크롤 스냅샷: 저장소 대신 Actions 보관함 (crawl.yml)
+data/snapshots/
+data/raw/raw_*.json
+data/normalized/normalized_2*.json

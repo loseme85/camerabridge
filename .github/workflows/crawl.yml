@@ -2,10 +2,14 @@ name: Camera Bridge Auto Crawl
 
 on:
   schedule:
-    - cron: '0 3 * * *'   # 오후 12시 KST
-    - cron: '0 6 * * *'   # 오후 3시 KST
-    - cron: '0 9 * * *'   # 오후 6시 KST
+    # 09:17 ~ 23:17 KST 2시간마다 (하루 8번). 정각은 GitHub 예약이 몇 시간씩 밀려서 17분에.
+    - cron: '17 0-14/2 * * *'
   workflow_dispatch:
+    inputs:
+      full:
+        description: '판매완료 기록까지 전체 다시 읽기 (평소엔 하루 1번 자동)'
+        type: boolean
+        default: false
 
 concurrency:
   group: crawl
@@ -36,17 +40,19 @@ jobs:
           playwright install chromium
           playwright install-deps chromium
 
-      - name: Notify start
-        run: |
-          KST=$(date '+%Y-%m-%d %H:%M' -d '+9 hours')
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-            -d text="🤖 Camera Bridge 크롤링 시작%0A📅 ${KST} KST"
-
       - name: Run crawler
         run: python3 app/test.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CRAWL_FULL: ${{ inputs.full && '1' || '0' }}
+
+      - name: Keep snapshot (Actions storage, not the repo)
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl-snapshot-${{ github.run_id }}
+          path: data/snapshots/
+          retention-days: 14
+          if-no-files-found: ignore
 
       - name: Update exchange rates
         run: python3 scripts/update_fx_rates.py
@@ -61,12 +67,12 @@ jobs:
         run: |
           git config user.name "Camera Bridge Bot"
           git config user.email "bot@camerabridge.app"
-          git add -f data/ crawler/sessions/
+          git add -A data/ crawler/sessions/
           git diff --staged --quiet && echo "No changes" && exit 0
           git stash
           git pull --rebase origin main
           git stash pop
-          git add -f data/ crawler/sessions/
+          git add -A data/ crawler/sessions/
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
           git pull --rebase origin main
           git push
@@ -76,11 +82,22 @@ jobs:
       - name: Notify success
         if: success()
         run: |
-          KST=$(date '+%Y-%m-%d %H:%M' -d '+9 hours')
-          COUNT=$(python3 -c "import json; data=json.load(open('data/raw/results.json')); print(len(data))" 2>/dev/null || echo "?")
+          # 새 매물이 있거나 사이트에 문제가 있을 때만 알림 (하루 8번 실행이라 매번 보내면 너무 많음)
+          MSG=$(python3 - <<'EOF'
+          import json
+          s = json.load(open("crawler/sessions/crawl_sessions.json"))[-1]
+          bad = [f"⚠️ {x['site']}: {x['status']} ({x.get('reason','')})" for x in s.get("sources", []) if x.get("status") != "ok"]
+          if s.get("new_items") or bad:
+              lines = [f"✅ 크롤링 완료 · 신규 {s.get('new_items', 0)} · 총 {s.get('total_items')}개 · {s.get('seconds')}초"]
+              lines += [f"🆕 {n['상품명'][:40]} ({n['site']})" for n in s.get("new_listings", [])[:10]]
+              lines += bad
+              print("\n".join(lines))
+          EOF
+          )
+          [ -z "$MSG" ] && echo "알릴 것 없음" && exit 0
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
-            -d text="✅ 크롤링 완료!%0A📦 총 ${COUNT}개 상품%0A📅 ${KST} KST"
+            --data-urlencode text="$MSG"
 
       - name: Notify failure
         if: failure()

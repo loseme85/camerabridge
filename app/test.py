@@ -809,7 +809,7 @@ def detect_generation(name):
             if re.search(pattern, name_upper, re.IGNORECASE):
                 found_tags.append(tag["gen"])
                 break
-    return " | ".join(list(set(found_tags))) if found_tags else "세대미상"
+    return " | ".join(dict.fromkeys(found_tags)) if found_tags else "세대미상"  # 순서 고정 (set은 실행마다 순서가 달라짐)
 
 def detect_system(name):
     """상품명에서 시스템 분류"""
@@ -1121,6 +1121,7 @@ def is_ffordes_used(href):
 SITES = [
     {
         "name": "라이카스토어 충무로",
+        "active_first": True,  # 판매 중이 목록 앞 → 증분 수집 가능
         "base": "https://leica-storebando.co.kr",
         "categories": [
             "https://leica-storebando.co.kr/product/list.html?cate_no=442",  # 충무로
@@ -1130,6 +1131,7 @@ SITES = [
     },
     {
         "name": "사진집",
+        "active_first": True,  # 판매 중이 목록 앞 → 증분 수집 가능
         "base": "https://www.sazinzibb.com",
         "categories": [
             "https://www.sazinzibb.com/category/%EC%A4%91%EA%B3%A0%EC%83%81%ED%92%88/27/",
@@ -1139,6 +1141,7 @@ SITES = [
     },
     {
         "name": "장씨카메라",
+        "active_first": True,  # 판매 중이 목록 앞 → 증분 수집 가능
         "base": "https://j-camera.com",
         "categories": [
             "https://j-camera.com/product/list.html?cate_no=358",
@@ -2389,8 +2392,10 @@ def crawl_leicamiami():
     url = f"{base}/collections/used/products.json?limit=250"
     print(f"\n  📂 Leica Store Miami: {url}")
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        data = json.loads(urllib.request.urlopen(req, timeout=15).read())
+        import requests
+        resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=20)
+        resp.raise_for_status()
+        data = resp.json()
         products = data.get("products", [])
         print(f"    └─ {len(products)}개 상품 발견")
         for p in products:
@@ -2815,168 +2820,131 @@ def crawl_ffordes(page):
     return results
 
 
+# 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
+SOURCE_MIN_INTERVAL_HOURS = {
+    "Ffordes (영국)": 6,
+}
+
+
+def _with_browser(fn, headers=None):
+    """Playwright 페이지 하나로 기존 수집 함수 실행"""
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        try:
+            page = browser.new_page()
+            if headers:
+                page.set_extra_http_headers(headers)
+            return fn(page)
+        finally:
+            browser.close()
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
+    import crawl_engine as ce
 
     start_time = time.time()
-    all_results = []
     write_status(0, "Starting...", 0, 0)
+    crawl_time = ce.now_kst()
+    force_full = os.environ.get("CRAWL_FULL") == "1"
 
-    # 기존 results.json 로드 (first_seen 보존 + 조기종료용)
-    existing_links = set()
-    existing_first_seen = {}  # 링크 → first_seen 맵
+    # 이전 결과 → 사이트별 병합 기준
     try:
         with open("data/raw/results.json", "r", encoding="utf-8") as f:
-            existing = json.load(f)
-            for r in existing:
-                existing_links.add(r["링크"])
-                if r.get("first_seen"):
-                    existing_first_seen[r["링크"]] = r["first_seen"]
-        print(f"📋 기존 매물 {len(existing_links)}개 로드 (first_seen {len(existing_first_seen)}개 보존)")
-    except:
-        pass
+            prev_all = json.load(f)
+    except (OSError, ValueError):
+        prev_all = []
+    prev_by_site = {}
+    for r in prev_all:
+        prev_by_site.setdefault(r.get("site"), []).append(r)
+    print(f"📋 기존 매물 {len(prev_all)}개 로드")
 
-    # sold_items.json 로드 → 이미 품절된 링크는 크롤링 스킵
-    sold_links = set()
+    # 이미 판매 완료로 기록된 링크 (Kamerastore 등에서 건너뜀)
     try:
         with open("data/sold_items.json", "r", encoding="utf-8") as f:
-            sold = json.load(f)
-            for r in sold:
-                sold_links.add(r["링크"])
-        print(f"🚫 품절 링크 {len(sold_links)}개 로드 → 크롤링 스킵")
-    except:
-        pass
-    globals()['SOLD_LINKS'] = sold_links
+            globals()['SOLD_LINKS'] = {r["링크"] for r in json.load(f)}
+    except (OSError, ValueError):
+        globals()['SOLD_LINKS'] = set()
 
-    # 억불카메라(godo)는 별도 순차 처리 (headless=False 필요)
-    # 특정 사이트만 크롤링 (--site 옵션)
-    active_sites = SITES
-    if FFORDES_ONLY:
-        # Ffordes만 실행
-        parallel_sites = []
-        godo_sites = []
-        print(f"🎯 Ffordes 전용 모드")
-    elif SITE_FILTER:
-        active_sites = [s for s in SITES if SITE_FILTER in s["name"]]
-        print(f"🎯 사이트 필터: {SITE_FILTER} ({len(active_sites)}개)")
-        parallel_sites = active_sites
-        godo_sites = []
-    else:
-        parallel_sites = active_sites
-        godo_sites = []
+    freshness = ce.load_freshness()
 
-    print(f"🚀 병렬 크롤링 시작 ({len(parallel_sites)}개 사이트 동시 처리)")
+    def keep_name(name):
+        if re.search(r'^\d+[-\s]*판매완료|^\d+[-\s]*보류', name):
+            return False
+        return not any(b in name.lower() for b in NON_LEICA_BRANDS)
 
-    total_sites = len(parallel_sites) + 1  # +1 for Ffordes
-    done_sites = 0
+    def run_cafe24(site):
+        full = ce.needs_full_sweep(site["name"], freshness, crawl_time, force_full)
+        known = {r["링크"] for r in prev_by_site.get(site["name"], [])}
+        run = ce.crawl_cafe24_http(site, known, full, keep_name, fix_img_url, normalize_price)
+        if not run["ok"] and not run["rows"]:
+            # HTML 구조가 바뀌어 HTTP로 못 읽으면 예전 브라우저 방식으로 전체 수집
+            print(f"  ↪ {site['name']}: HTTP 수집 실패({run.get('error')}) → 브라우저로 전체 수집")
+            run = ce.wrap_full_run(site["name"], lambda: crawl_site(site))
+        return run
 
-    # 병렬 처리
-    if parallel_sites:
-        with ThreadPoolExecutor(max_workers=min(len(parallel_sites), 4)) as executor:
-            futures = {executor.submit(crawl_site, site): site for site in parallel_sites}
-            for future in as_completed(futures):
-                site = futures[future]
-                try:
-                    results = future.result()
-                    all_results.extend(results)
-                except Exception as e:
-                    print(f"❌ {site['name']} 오류: {e}")
-                done_sites += 1
-                elapsed = time.time() - start_time
-                eta = int(elapsed / done_sites * (total_sites - done_sites)) if done_sites else 0
-                write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, eta)
+    # 예전 크롤에서 남은 '1234 - 판매완료/보류' 자리표시 행은 매물이 아님 → 병합 전에 정리
+    for _name in [s["name"] for s in SITES]:
+        if _name in prev_by_site:
+            prev_by_site[_name] = [r for r in prev_by_site[_name] if keep_name(r.get("상품명", ""))]
 
-    # 억불카메라 순차 처리
-    for site in godo_sites:
-        results = crawl_site(site)
-        all_results.extend(results)
-        done_sites += 1
-        write_status(int(done_sites/total_sites*100), site['name'], len(all_results), done_sites, 0)
+    sources = [(s["name"], (lambda s=s: run_cafe24(s))) for s in SITES]
+    sources += [
+        ("Ffordes (영국)", lambda: ce.wrap_full_run("Ffordes (영국)", lambda: _with_browser(crawl_ffordes, {"Accept-Language": "en-GB,en;q=0.9"}))),
+        ("Leica Store Miami", lambda: ce.wrap_full_run("Leica Store Miami", crawl_leicamiami)),
+        ("Kamerastore (핀란드)", lambda: ce.wrap_full_run("Kamerastore (핀란드)", crawl_kamerastore)),
+        ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", lambda: _with_browser(crawl_kitamura))),
+    ]
+    # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
+    if not force_full and not SITE_FILTER:
+        skipped = []
+        for _name, _hours in SOURCE_MIN_INTERVAL_HOURS.items():
+            _since = ce.hours_between((freshness.get(_name) or {}).get("last_attempt"), crawl_time)
+            if _since is not None and _since < _hours:
+                skipped.append(_name)
+        if skipped:
+            sources = [x for x in sources if x[0] not in skipped]
+            print(f"⏭️ 간격 전이라 건너뜀: {', '.join(skipped)}")
+    if SITE_FILTER:
+        sources = [x for x in sources if SITE_FILTER.lower() in x[0].lower()]
+        print(f"🎯 사이트 필터: {SITE_FILTER} ({len(sources)}개, 나머지 사이트는 이전 데이터 유지)")
 
-    # Ffordes 크롤링
-    print(f"\n🇬🇧 Ffordes 크롤링 시작")
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        page.set_extra_http_headers({"Accept-Language": "en-GB,en;q=0.9"})
-        try:
-            ffordes_results = crawl_ffordes(page)
-            all_results.extend(ffordes_results)
-        except Exception as e:
-            print(f"❌ Ffordes 오류: {e}")
-        finally:
-            browser.close()
-    done_sites += 1
-    write_status(int(done_sites/total_sites*100), "Ffordes", len(all_results), done_sites, 0)
+    print(f"🚀 수집 시작 ({len(sources)}개 사이트, 동시 4개)")
+    runs = {}
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = {executor.submit(fn): name for name, fn in sources}
+        for future in as_completed(futures):
+            name = futures[future]
+            try:
+                runs[name] = future.result()
+            except Exception as e:
+                runs[name] = {"site": name, "ok": False, "rows": [], "coverage": "full", "error": str(e)[:200]}
+            run = runs[name]
+            print(f"  {'✅' if run['ok'] else '❌'} {name}: {len(run['rows'])}개 ({run.get('coverage')}, "
+                  f"{run.get('pages') or '-'}페이지, {run.get('seconds') or 0}초){' ' + run['error'] if run.get('error') else ''}")
+            write_status(int(len(runs) / len(sources) * 100) - 1, name, sum(len(x["rows"]) for x in runs.values()), len(runs))
 
-    # ── Leica Store Miami 크롤링 ──
-    print('\n' + '='*50)
-    print('Leica Store Miami 크롤링 시작')
-    try:
-        miami_results = crawl_leicamiami()
-        all_results.extend(miami_results)
-        print(f"  ✅ Leica Store Miami: {len(miami_results)}개")
-    except Exception as e:
-        print(f"❌ Leica Store Miami 오류: {e}")
-
-    # ── Kamerastore 크롤링 ──
-    print('\n' + '='*50)
-    print('Kamerastore 크롤링 시작')
-    try:
-        kamerastore_results = crawl_kamerastore()
-        all_results.extend(kamerastore_results)
-    except Exception as e:
-        print(f"❌ Kamerastore 오류: {e}")
-
-    # ── 기타무라 크롤링 ──
-    print('\n' + '='*50)
-    print('기타무라 크롤링 시작')
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        try:
-            kitamura_results = crawl_kitamura(page)
-            all_results.extend(kitamura_results)
-        except Exception as e:
-            print(f"❌ 기타무라 오류: {e}")
-        finally:
-            browser.close()
-
-    # 전체 중복 제거
-    seen = set()
-    unique_results = []
-    for r in all_results:
-        if r["링크"] not in seen:
-            seen.add(r["링크"])
-            unique_results.append(r)
-
+    # 사이트별 병합: 바뀐 것만 이벤트로, 실패·의심 사이트는 이전 데이터 유지
+    unique_results, all_events, site_stats = [], [], []
+    site_order = list(dict.fromkeys([r.get("site") for r in prev_all] + [name for name, _ in sources]))
+    for name in site_order:
+        prev_rows = prev_by_site.get(name, [])
+        if name not in runs:
+            unique_results.extend(prev_rows)
+            continue
+        merged, events, stat = ce.merge_source(prev_rows, runs[name], crawl_time)
+        unique_results.extend(merged)
+        all_events.extend(events)
+        site_stats.append(stat)
+        ce.update_freshness(freshness, stat, crawl_time)
+        if stat["status"] == "ok":
+            print(f"  🔀 {name}: {stat['rows']}개 (판매 중 {stat['active']}) · 신규 {stat['new']} · 변경 {stat['changed']} · 유지 {stat['carried']}")
+        else:
+            print(f"  ⚠️ {name}: {stat['status']} ({stat['reason']}) → 이전 데이터 {stat['kept']}개 유지")
+    for e in all_events:
+        if e["type"] == "new":
+            print(f"  🆕 신규: {str(e.get('title'))[:40]}")
     elapsed = time.time() - start_time
-    # ── raw 스냅샷 저장 (label 보정 전 원본) ──
-    import os as _os_raw
-    _os_raw.makedirs("data/raw", exist_ok=True)
-    import datetime as _dt_raw2
-    _KST_raw2 = _dt_raw2.timezone(_dt_raw2.timedelta(hours=9))
-    _raw_ts2 = _dt_raw2.datetime.now(_KST_raw2).strftime("%Y%m%d_%H%M%S")
-    _raw_path2 = f"data/raw/raw_{_raw_ts2}.json"
-    _raw_snapshot = [{
-        "site": r["site"],
-        "상품명": r["상품명"],
-        "가격": r["가격"],
-        "통화": r.get("통화",""),
-        "이미지": r.get("이미지",""),
-        "링크": r["링크"],
-        "컨디션": r.get("컨디션",""),
-        "품절": r.get("품절", False),
-        "label_raw": r.get("label",""),
-        "mount_raw": r.get("mount",""),
-    } for r in unique_results]
-    import json as _json_raw
-    with open(_raw_path2, "w", encoding="utf-8") as _f_raw:
-        _json_raw.dump(_raw_snapshot, _f_raw, ensure_ascii=False, indent=2)
-    print(f"  📦 raw 스냅샷 저장 → {_raw_path2} ({len(_raw_snapshot)}개)")
-    _raw_files2 = sorted([x for x in _os_raw.listdir("data/raw") if x.startswith("raw_") and x.endswith(".json")])
-    for _old_f2 in _raw_files2[:-30]:
-        _os_raw.remove(f"data/raw/{_old_f2}")
 
     # label 자동 보정 + 상품명 정리 + system/category 분류
     import datetime
@@ -3004,16 +2972,11 @@ def crawl_all():
         # brand 필드: 없으면 상품명에서 자동 감지
         if not r.get('brand'):
             r['brand'] = detect_brand(r['상품명'])
-        # crawl_time은 항상 최신으로
-        r['crawl_time'] = crawl_time
-        # first_seen: 기존 데이터면 보존, 신규면 현재 시간
-        link = r.get('링크', '')
-        if link in existing_first_seen:
-            r['first_seen'] = existing_first_seen[link]  # 기존 날짜 유지
-        else:
-            r['first_seen'] = crawl_time  # 신규 매물!
-            if 'first_seen' not in r or r.get('first_seen') == crawl_time:
-                print(f"  🆕 신규: {r['상품명'][:40]}")
+        # 세대·system: HTTP 수집 행에도 같은 값 (first_seen은 병합 단계에서, 수집 시각은 사이트별 source_freshness.json)
+        r['세대'] = detect_generation(r['상품명'])
+        if 'system' not in r:
+            r['system'] = detect_system(r['상품명'])
+        r.pop('crawl_time', None)
         # Noctilux label 조리개별 보정 + generation 필드
         if 'noctilux' in name_lower:
             nocti_gen = detect_noctilux_gen(name)
@@ -3054,78 +3017,50 @@ def crawl_all():
         except Exception:
             pass
 
-    # ── 판매 완료 추적 (sold_items.json) ──
-    import datetime as dt
-    _KST2 = dt.timezone(dt.timedelta(hours=9))
-    now_str = dt.datetime.now(_KST2).strftime("%Y-%m-%d %H:%M:%S")
-    new_links = {r["링크"] for r in unique_results}
-
-    # 기존 sold_items 로드
-    sold_items = []
+    # ── 판매 완료 추적 (sold_items.json): 병합 단계의 sold/gone 이벤트만 ──
     try:
         with open("data/sold_items.json", "r", encoding="utf-8") as f:
             sold_items = json.load(f)
-    except:
-        # 없으면 빈 파일 생성
-        with open("data/sold_items.json", "w", encoding="utf-8") as f:
-            import json as _j; _j.dump([], f)
-
+    except (OSError, ValueError):
+        sold_items = []
     sold_links = {r["링크"] for r in sold_items}
-
-    # 이전에 있었으나 지금 없는 매물 → 판매 완료
+    by_link = {r["링크"]: r for r in unique_results}
+    prev_by_link = {r["링크"]: r for r in prev_all}
     newly_sold = []
-    try:
-        with open("data/raw/results.json", "r", encoding="utf-8") as f:
-            prev_results = json.load(f)
-        for r in prev_results:
-            if r["링크"] not in new_links and r["링크"] not in sold_links and not r.get("품절"):
-                sold_r = dict(r)
-                sold_r["is_sold"] = True
-                sold_r["sold_at"] = now_str
-                # 판매 소요 시간 계산
-                if r.get("crawl_time"):
-                    try:
-                        t0 = dt.datetime.strptime(r["crawl_time"], "%Y-%m-%d %H:%M:%S")
-                        t1 = dt.datetime.strptime(now_str, "%Y-%m-%d %H:%M:%S")
-                        hours = round((t1 - t0).total_seconds() / 3600, 1)
-                        sold_r["hours_to_sell"] = hours
-                    except:
-                        sold_r["hours_to_sell"] = None
-                newly_sold.append(sold_r)
-                print(f"  💸 판매 완료: {r['상품명'][:40]}")
-    except:
-        pass
-
+    for e in all_events:
+        if e["type"] not in ("sold", "gone") or e["link"] in sold_links:
+            continue
+        sold_r = dict(by_link.get(e["link"]) or prev_by_link.get(e["link"]) or {})
+        sold_r.pop("missing_runs", None)
+        sold_r.pop("crawl_time", None)
+        sold_r.update({"is_sold": True, "sold_at": e["t"], "hours_to_sell": e.get("hours_to_sell"), "sold_reason": e["type"]})
+        newly_sold.append(sold_r)
+        sold_links.add(e["link"])
+        print(f"  💸 판매 완료: {str(e.get('title'))[:40]} ({e.get('hours_to_sell')}시간)")
     if newly_sold:
-        sold_items.extend(newly_sold)
-        # 최근 500개만 유지
-        sold_items = sold_items[-500:]
+        sold_items = (sold_items + newly_sold)[-3000:]
         with open("data/sold_items.json", "w", encoding="utf-8") as f:
             json.dump(sold_items, f, ensure_ascii=False, indent=2)
         print(f"  💸 총 {len(newly_sold)}개 판매 완료 추가 → sold_items.json")
 
-    # ── raw 데이터 저장 (원본 보존) ──
+    # ── 변경 기록 · 사이트 확인 시각 (저장소에는 바뀐 것만 남김) ──
+    _events_path = ce.append_events(all_events, crawl_time)
+    if _events_path:
+        print(f"  🧾 변경 {len(all_events)}건 → {_events_path}")
+    ce.save_freshness(freshness)
+
+    # ── 스냅샷: 저장소 대신 data/snapshots/ (gitignore, 워크플로가 Actions 보관함에 올림) ──
     import os as _os
-    _os.makedirs("data/raw", exist_ok=True)
-    import datetime as _dt_raw
-    _KST_raw = _dt_raw.timezone(_dt_raw.timedelta(hours=9))
-    _raw_ts = _dt_raw.datetime.now(_KST_raw).strftime("%Y%m%d_%H%M%S")
-    _raw_path = f"data/raw/raw_{_raw_ts}.json"
-    with open(_raw_path, "w", encoding="utf-8") as f:
-        json.dump(unique_results, f, ensure_ascii=False, indent=2)
-    print(f"  📦 raw 저장 → {_raw_path}")
-    # raw 파일은 최근 30개만 유지
-    _raw_files = sorted([x for x in _os.listdir("data/raw") if x.startswith("raw_") and x.endswith(".json")])
-    for _old_f in _raw_files[:-30]:
-        _os.remove(f"data/raw/{_old_f}")
+    _os.makedirs("data/snapshots", exist_ok=True)
+    _snap_path = f"data/snapshots/raw_{crawl_time.replace('-', '').replace(':', '').replace(' ', '_')}.json"
+    with open(_snap_path, "w", encoding="utf-8") as f:
+        json.dump(unique_results, f, ensure_ascii=False)
+    for _old_f in sorted(x for x in _os.listdir("data/snapshots") if x.startswith("raw_"))[:-30]:
+        _os.remove(f"data/snapshots/{_old_f}")
+    # 키 순서를 고정해 바뀐 매물만 diff에 나오게
     with open("data/raw/results.json", "w", encoding="utf-8") as f:
-        json.dump(unique_results, f, ensure_ascii=False, indent=2)
+        json.dump(unique_results, f, ensure_ascii=False, indent=2, sort_keys=True)
     # ── normalized 저장 ──
-    import os as _os_norm
-    _os_norm.makedirs("data/normalized", exist_ok=True)
-    import datetime as _dt_norm
-    _KST_norm = _dt_norm.timezone(_dt_norm.timedelta(hours=9))
-    _norm_ts = _dt_norm.datetime.now(_KST_norm).strftime("%Y%m%d_%H%M%S")
     _normalized = []
     for r in unique_results:
         _normalized.append({
@@ -3143,16 +3078,10 @@ def crawl_all():
             "is_sold": r.get("품절", False),
             "image": r.get("이미지",""),
             "first_seen": r.get("first_seen",""),
-            "crawl_time": r.get("crawl_time",""),
         })
+    _os.makedirs("data/normalized", exist_ok=True)
     with open("data/normalized/normalized_latest.json", "w", encoding="utf-8") as f:
         json.dump(_normalized, f, ensure_ascii=False, indent=2)
-    with open(f"data/normalized/normalized_{_norm_ts}.json", "w", encoding="utf-8") as f:
-        json.dump(_normalized, f, ensure_ascii=False, indent=2)
-    # normalized 파일은 최근 10개만 유지
-    _norm_files = sorted([x for x in _os_norm.listdir("data/normalized") if x.startswith("normalized_2") and x.endswith(".json")])
-    for _old_nf in _norm_files[:-10]:
-        _os_norm.remove(f"data/normalized/{_old_nf}")
     print(f"  📋 normalized 저장 → data/normalized/normalized_latest.json ({len(_normalized)}개)")
     # ── 상태 플래그 추출 ──
     import os as _os_flags
@@ -3183,7 +3112,7 @@ def crawl_all():
                 "source": r.get("site",""),
                 "title": r.get("상품명",""),
                 "flags": _flags,
-                "crawl_time": r.get("crawl_time",""),
+                "first_seen": r.get("first_seen",""),
             })
     import json as _json_flags
     with open("data/derived/flags_latest.json", "w", encoding="utf-8") as f:
@@ -3197,7 +3126,7 @@ def crawl_all():
             _sold_base = _json_sold.load(_f_base)
         _sold_base_links = {s.get("링크","") for s in _sold_base}
         _inline_sold = [
-            {**r, "hours_to_sell": 1, "sold_at": r.get("crawl_time","")}
+            {**r, "hours_to_sell": 1, "sold_at": r.get("sold_at") or r.get("first_seen","")}
             for r in unique_results
             if r.get("품절") and r.get("가격") and r.get("가격")!="문의요망" and r.get("label")
             and r.get("링크","") not in _sold_base_links
@@ -3313,74 +3242,51 @@ def crawl_all():
     except Exception as _e:
         print(f"  ⚠️ QA 리포트 실패: {_e}")
     # ── 시세 엔진 실행 ──
+    # python3 app/test.py 로 실행하면 app/ 가 sys.path 첫 칸이라 'import app'이 app/app.py(flask)로 잡힌다 → 파일 경로로 불러옴
     try:
-        import sys as _sys_pe
-        _sys_pe.path.insert(0, ".")
-        from app.services.price_engine import save_market_prices
-        save_market_prices("data/derived/market_prices.json")
+        import importlib.util as _ilu
+        _spec = _ilu.spec_from_file_location("price_engine", os.path.join(os.path.dirname(os.path.abspath(__file__)), "services", "price_engine.py"))
+        _pe = _ilu.module_from_spec(_spec)
+        _spec.loader.exec_module(_pe)
+        _pe.save_market_prices("data/derived/market_prices.json")
     except Exception as _e_pe:
         print(f"  ⚠️ 시세 엔진 실패: {_e_pe}")
-    # ── 시세 엔진 실행 ──
-    try:
-        import sys as _sys_pe
-        _sys_pe.path.insert(0, ".")
-        from app.services.price_engine import save_market_prices
-        save_market_prices()
-    except Exception as _e_pe:
-        print(f"  ⚠️ 시세 엔진 실패: {_e_pe}")
-
-    # ── 시세 엔진 실행 ──
-    try:
-        import sys as _sys
-        _sys.path.insert(0, ".")
-        from app.services.price_engine import save_market_prices
-        save_market_prices("data/derived/market_prices.json")
-    except Exception as _e:
-        print(f"  ⚠️ 시세 엔진 실패: {_e}")
     # ── crawl_sessions.json 누적 저장 ──
-    import datetime as _dt3
-    _KST3 = _dt3.timezone(_dt3.timedelta(hours=9))
-    end_time = _dt3.datetime.now(_KST3).strftime("%Y-%m-%d %H:%M:%S")
-    new_count = sum(1 for r in unique_results if r.get('first_seen') == crawl_time)
+    end_time = ce.now_kst()
     new_listings = [
-        {"상품명": r['상품명'], "site": r['site'], "가격": r['가격'], "통화": r.get('통화',''), "링크": r['링크']}
-        for r in unique_results if r.get('first_seen') == crawl_time
+        {"상품명": e.get("title"), "site": e.get("site"), "가격": e.get("price"), "통화": e.get("currency", ""), "링크": e.get("link")}
+        for e in all_events if e["type"] == "new"
     ]
-    site_counts = {}
-    for r in unique_results:
-        site_counts[r['site']] = site_counts.get(r['site'], 0) + 1
+    from collections import Counter as _Counter2
     session_entry = {
         "start_time": crawl_time,
         "end_time": end_time,
-        "new_items": new_count,
+        "seconds": round(elapsed, 1),
+        "new_items": len(new_listings),
         "total_items": len(unique_results),
-        "site_counts": site_counts,
+        "site_counts": dict(_Counter2(r['site'] for r in unique_results)),
+        "events": dict(_Counter2(e["type"] for e in all_events)),
+        "sources": site_stats,
         "new_listings": new_listings,
     }
     try:
         with open("crawler/sessions/crawl_sessions.json", "r", encoding="utf-8") as f:
             sessions_log = json.load(f)
-    except:
+    except (OSError, ValueError):
         sessions_log = []
-    sessions_log = [s for s in sessions_log if s.get("start_time") != crawl_time]
+    sessions_log = [x for x in sessions_log if x.get("start_time") != crawl_time]
     sessions_log.append(session_entry)
     sessions_log = sessions_log[-100:]
     with open("crawler/sessions/crawl_sessions.json", "w", encoding="utf-8") as f:
         json.dump(sessions_log, f, ensure_ascii=False, indent=2)
 
-    # 신규 매물 통계
-    new_count = sum(1 for r in unique_results if r.get('first_seen') == crawl_time)
-    write_status(100, "완료", len(unique_results), len(SITES), 0)
+    write_status(100, "완료", len(unique_results), len(sources), 0)
     print(f"\n{'='*50}")
     print(f"✅ 최종 {len(unique_results)}개 → results.json 저장 완료")
-    print(f"🆕 신규 매물: {new_count}개 추가됨")
-    print(f"⏱️  총 소요 시간: {elapsed:.1f}초 ({elapsed/60:.1f}분)")
+    print(f"🆕 신규 {len(new_listings)} · 변경 {len(all_events)}건 · 수집 {elapsed:.1f}초")
+    for st in site_stats:
+        print(f"   {st['site']}: {st['status']} · {st.get('coverage')} · {st.get('pages') or '-'}페이지 · {st.get('seconds') or 0}초")
     print(f"{'='*50}")
-    for r in unique_results:
-        print(f"\n  📷 [{r['세대']}] {r['상품명']}")
-        print(f"     💰 {r['가격']} {r['통화']} | 컨디션: {r['컨디션']}")
-        print(f"     🖼  {r['이미지'] or '이미지 없음'}")
-        print(f"     🔗 {r['링크']}")
 
 # ══════════════════════════════════════════════════════
 # GitHub 자동 Push
