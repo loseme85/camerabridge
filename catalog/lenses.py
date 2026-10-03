@@ -363,3 +363,31 @@ _add("leica:lens:noctilux-m:50:f0.95-korea-70", "Noctilux-M 50mm f/0.95 70th Ind
      [r"nocti", r"0\.95", r"independence|광복"], [], ["noctilux 0.95 광복 70주년", "녹티룩스 0.95 광복"])
 EXTEND_PARENTS.setdefault("leica:lens:noctilux-m:50", []).append("leica:lens:noctilux-m:50:f0.95-korea-70")
 TIGHTEN["leica:lens:noctilux-m:50:f0.95"] = [r"independence|광복"]
+
+# ───────────── M: Noctilux 50 f/1.0 (세대 부모) ─────────────
+# 국내 표기: 1세대 = f/1.2 오리지널(1966), 2세대 = f/1.0 E58(1976–), 3세대 = f/1.0 E60 분리 후드(1982–), 4세대 = f/1.0 E60 후드 내장(1993–2008, 말기 6bit).
+# 시리얼(sn.xxxx = 앞 네 자리): E58은 ~2,92만대까지, 후드 내장은 ~3,60만대부터 → 경계 구간(300만~370만)은 세대 미표기로 둔다.
+NX10 = "leica:lens:noctilux-m:50:f1.0"
+NX10_BASE = [r"nocti", r"((?<![\d.])1\.0\b|/1\b(?!\.\d)|f/?1\b(?!\.[1-9])|E60|E58)"]
+NX10_NOT = [r"0\.95", r"1\.2", r"1\.25", r"\b75\b", f("35")]
+SN = r"(?:sn|s/n|no|#)\.?\s?#?"
+NX10_GEN = {
+    "v2-e58": ("Noctilux 50mm f/1.0 E58 (2nd gen, 1976)", "녹티룩스 50 f/1.0 2세대 (E58)",
+               rf"E58|2세대|\b(1st|v\.?1|version ?1)\b|{SN}2[,.]?\d{{3}}\b", ["e58", "2세대", "2nd gen", "v1"]),
+    "v3-e60": ("Noctilux-M 50mm f/1.0 E60 separate hood (3rd gen, 1982)", "녹티룩스 50 f/1.0 3세대 (E60 분리 후드)",
+               r"3세대", ["3세대", "3rd gen", "e60 3세대", "e60 분리 후드"]),
+    "v4-builtin-hood": ("Noctilux-M 50mm f/1.0 E60 built-in hood (4th gen, 1993–2008)", "녹티룩스 50 f/1.0 4세대 (후드 내장)",
+                        rf"4세대|6 ?[bp]it|{SN}3[,.]?[7-9]\d{{2}}\b", ["4세대", "4th gen", "6bit", "후드 내장", "built in hood", "e60 4세대", "e60 후드 내장"]),
+}
+_nx_kids = []
+for slug, (name, ko, marker, sfx) in NX10_GEN.items():
+    others = [m for s2, (_, _, m, _) in NX10_GEN.items() if s2 != slug]
+    key = f"{NX10}:{slug}"
+    als = [f"{n} {s}" for n in ("noctilux 1.0", "nocti 1.0", "녹티룩스 1.0", "녹티 1.0") for s in sfx]
+    _add(key, name, ko, "M", NX10_BASE + [marker], NX10_NOT + others, als)
+    _nx_kids.append(key)
+_add(f"{NX10}:unspecified", "Noctilux-M 50mm f/1.0 (generation not stated)", "녹티룩스 50 f/1.0 (세대 미표기)", "M",
+     NX10_BASE, NX10_NOT + [m for (_, _, m, _) in NX10_GEN.values()], ["noctilux 1.0 세대 미표기", "녹티룩스 1.0 세대 미표기"])
+PARENTS[NX10] = ("Noctilux-M 50mm f/1.0 (all)", "Lens", "M", _nx_kids + [f"{NX10}:unspecified"],
+                 ["noctilux-m 50 1.0", "noctilux 1.0", "nocti 1.0", "nocti e60", "noctilux e60", "녹티 e60", "noctilux 50 1.0", "녹티룩스 1.0", "녹티 1.0", "녹티룩스 50 1.0"],
+                 "녹티룩스 50 f/1.0 (전체)")

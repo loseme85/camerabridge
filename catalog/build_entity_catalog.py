@@ -64,7 +64,7 @@ model("leica:lens:summicron:50:rigid", "Summicron 50mm f/2 Rigid", "Lens", None,
 model("leica:lens:summicron:50:dr", "Summicron 50mm f/2 Dual Range", "Lens", "M", [r"summicron|cron", f("50"), r"\bDR\b|dual ?range"], ACC_NOT)
 model("leica:lens:apo-summicron-m:50", "APO-Summicron-M 50mm f/2 ASPH", "Lens", "M", [r"APO", r"summicron|cron", f("50")], [r"\bSL\b"] + ACC_NOT)
 model("leica:lens:noctilux-m:50:f0.95", "Noctilux-M 50mm f/0.95 ASPH", "Lens", "M", [r"nocti", r"0\.95"], [r"\b75\b", f("35")] + ACC_NOT)
-model("leica:lens:noctilux-m:50:f1.0", "Noctilux-M 50mm f/1.0", "Lens", "M", [r"nocti", r"((?<![\d.])1\.0\b|/1\b(?!\.\d)|f/?1\b(?!\.[1-9])|E60|E58)"], [r"0\.95", r"1\.2", r"1\.25", r"\b75\b", f("35")] + ACC_NOT)
+# Noctilux-M 50 f/1.0 은 세대 부모 → catalog/lenses.py
 model("leica:lens:noctilux:50:f1.2-original", "Noctilux 50mm f/1.2 (original, 1966)", "Lens", "M",
       [r"nocti", r"1\.2\b"], [r"복각", r"re-?issue", r"ASPH", r"6 ?bit", r"신품", r"\b75\b", f("35")] + ACC_NOT)
 model("leica:lens:noctilux-m:50:f1.2-asph", "Noctilux-M 50mm f/1.2 ASPH (2021 reissue)", "Lens", "M",
@@ -101,7 +101,6 @@ ALIASES: dict[str, list[str]] = {
     "leica:lens:summicron:50:dr": ["summicron 50 dual range", "summicron 50 dr", "50 cron dr", "dual range", "주미크론 50 dr"],
     "leica:lens:apo-summicron-m:50": ["apo-summicron-m 50", "apo summicron m 50", "apo summicron 50", "apo 50 cron", "아포 주미크론 50"],
     "leica:lens:noctilux-m:50:f0.95": ["noctilux-m 50 0.95", "noctilux 0.95", "nocti 0.95", "녹티룩스 0.95", "녹티 0.95"],
-    "leica:lens:noctilux-m:50:f1.0": ["noctilux-m 50 1.0", "noctilux 1.0", "nocti 1.0", "nocti e60", "nocti e58", "녹티룩스 1.0", "녹티 1.0"],
     "leica:lens:noctilux:50:f1.2-original": ["noctilux 1.2 original", "noctilux 50 1.2 original", "nocti 1.2 original", "녹티룩스 1.2 오리지널", "녹티 1.2 오리지널"],
     "leica:lens:noctilux-m:50:f1.2-asph": ["noctilux-m 50 1.2 asph", "noctilux 1.2 asph", "noctilux 1.2 reissue", "nocti 1.2", "녹티룩스 1.2 복각", "녹티 1.2 복각", "noctilux 1.2"],
     "leica:lens:noctilux-m:75": ["noctilux-m 75", "noctilux 75", "nocti 75", "녹티룩스 75"],
@@ -128,7 +127,7 @@ NAME_KO = {
     "leica:lens:apo-summicron-m:35": "아포 주미크론 M 35", "leica:lens:summilux-m:50:asph": "주미룩스 50 ASPH",
     "leica:lens:summicron-m:50:current": "주미크론 M 50 (4·5세대)", "leica:lens:summicron:50:rigid": "주미크론 50 리짓",
     "leica:lens:summicron:50:dr": "주미크론 50 DR", "leica:lens:apo-summicron-m:50": "아포 주미크론 M 50",
-    "leica:lens:noctilux-m:50:f0.95": "녹티룩스 50 f/0.95", "leica:lens:noctilux-m:50:f1.0": "녹티룩스 50 f/1.0",
+    "leica:lens:noctilux-m:50:f0.95": "녹티룩스 50 f/0.95",
     "leica:lens:noctilux:50:f1.2-original": "녹티룩스 50 f/1.2 오리지널", "leica:lens:noctilux-m:50:f1.2-asph": "녹티룩스 50 f/1.2 ASPH (복각)",
     "leica:lens:noctilux-m:75": "녹티룩스 75", "leica:lens:noctilux-m:35": "녹티룩스 35",
     "leica:lens:elmarit-m:28:asph": "엘마리트 28 ASPH", "leica:lens:summicron-m:28:asph": "주미크론 28 ASPH",

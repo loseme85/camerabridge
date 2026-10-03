@@ -25,6 +25,34 @@ def test_noctilux_is_not_summilux_and_copies_are_excluded() -> None:
     assert "leica:lens:noctilux-m:50:f1.0" in match_entities(_record("LEICA 50mm F1.0 NOCTILUX-M sn.3220"))
 
 
+def test_noctilux_f1_generations() -> None:
+    nx = "leica:lens:noctilux-m:50:f1.0"
+    cases = {
+        "[중고] M 50/1.0 Noctilux 2세대 E58 (Black)": "v2-e58",
+        "LEICA 50mm F1 NOCTILUX E58 sn.2854": "v2-e58",
+        "[중고] M 50/1.0 Noctilux 3세대 E60 (Black)": "v3-e60",
+        "[중고] M 50/1.0 Noctilux 4세대 6bit (Black)": "v4-builtin-hood",
+        "LEICA 50mm F1.0 NOCTILUX-M sn.3928": "v4-builtin-hood",
+        "LEICA 50mm F1.0 NOCTILUX-M sn.3442": "unspecified",  # 3세대·4세대 경계 시리얼은 미표기
+        "[중고] M50/1 Noctilux (Black)": "unspecified",
+    }
+    for title, gen in cases.items():
+        ids = match_entities(_record(title))
+        assert f"{nx}:{gen}" in ids and nx in ids, title
+        assert len([i for i in ids if i.startswith(nx + ":")]) == 1, title
+
+
+def test_generation_candidates_listed_under_parent_in_order() -> None:
+    import json
+    from pathlib import Path
+
+    from entity_catalog import Suggester
+
+    catalog = json.loads((Path(__file__).resolve().parents[1] / "data/config/entity_catalog_v1.json").read_text(encoding="utf-8"))
+    names = [e["id"].rsplit(":", 1)[-1] for e in Suggester(catalog["entities"]).suggest("nocti 1.0")[:5]]
+    assert names == ["f1.0", "v2-e58", "v3-e60", "v4-builtin-hood", "unspecified"]
+
+
 def test_korean_shop_body_misfiled_as_lens_still_links_but_accessories_do_not() -> None:
     assert "leica:body:m7" in match_entities(_record("[중고] M7 0.72 (Black)", category="Lens"))
     assert match_entities(_record("[중고] JNK M7 케이스 (Brown)", category="Accessory")) == []

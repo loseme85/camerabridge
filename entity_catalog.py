@@ -256,7 +256,28 @@ class Suggester:
                 weight = 8 if 850 <= score < 950 else 2
                 scored.append((score + weight * active, entity))
         scored.sort(key=lambda item: (-item[0], -(item[1].get("listing_count") or 0)))
-        return [entity for _, entity in scored[:limit]]
+        return group_children([entity for _, entity in scored])[:limit]
+
+
+def group_children(ordered: list[dict]) -> list[dict]:
+    """부모가 후보에 있으면 그 자식(세대·에디션) 후보를 부모 바로 아래, 카탈로그 순서(세대순)로 붙인다. 한 단계만."""
+    by_id = {e["id"]: e for e in ordered}
+    out: list[dict] = []
+    seen: set[str] = set()
+
+    def put(entity: dict) -> bool:
+        if entity["id"] in seen:
+            return False
+        seen.add(entity["id"])
+        out.append(entity)
+        return True
+
+    for entity in ordered:
+        if put(entity):  # 한 단계만: 손자(세대 안의 세대)는 자기 점수 자리에
+            for child in entity.get("children") or []:
+                if child in by_id:
+                    put(by_id[child])
+    return out
 
 
 def suggest(query: str, summary_entities: list[dict], limit: int = 8) -> list[dict]:
