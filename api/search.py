@@ -3667,6 +3667,16 @@ def _parse_float(value: Any, key: str) -> float:
 def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
     normalized = _normalize_params(params)
     query = str(normalized.get("q") or "").strip()
+    entity_id = str(normalized.get("entity") or "").strip()
+    entity = None
+    if entity_id:
+        from entity_catalog import load_catalog  # noqa: WPS433
+
+        entity = load_catalog()["entities"].get(entity_id)
+        if entity is None:
+            raise SearchEndpointError("unknown_entity", "entity is not in the catalog", details={"value": entity_id})
+        # 화면에 보이는 이름(한국어 등)이 아니라 표준 모델명으로 검색
+        query = entity["name"].replace(" (all)", "")
     if not query:
         raise SearchEndpointError("missing_query", "q query parameter is required")
 
@@ -3703,6 +3713,11 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
             )
 
     filters: dict[str, Any] = {}
+    if entity is not None:
+        # 엔티티를 고르면 그 엔티티 매물만, 점수 기준 없이 모두
+        filters["entity"] = entity["id"]
+        if min_score is None:
+            min_score = 0.0
     category = normalized.get("category")
     if category is not None:
         category_text = str(category).strip()

@@ -307,3 +307,19 @@ if __name__ == "__main__":
     test_invalid_params_return_400()
     test_data_file_missing_returns_503()
     print("test_search_endpoint: ok")
+
+
+def test_entity_mode_returns_only_that_models_listings() -> None:
+    from api.search import endpoint_response
+
+    status, payload = endpoint_response({"entity": ["leica:body:m6:ttl"], "limit": ["50"]})
+    assert status == 200
+    assert payload["total_ranked"] > 0
+    assert all("TTL" in result["title"].upper() for result in payload["results"])
+
+
+def test_entity_mode_rejects_unknown_entity() -> None:
+    from api.search import endpoint_response
+
+    status, payload = endpoint_response({"entity": ["leica:body:does-not-exist"]})
+    assert status == 400

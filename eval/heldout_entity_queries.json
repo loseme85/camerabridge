@@ -1,0 +1,17 @@
+{"note": "별칭 작성 때 보지 않은 검색어. 엔티티 후보 규칙이 처음 보는 표현에도 통하는지 확인용. expected=null이면 후보가 안 떠야 함",
+ "cases": [
+ ["leica m6 ttl black","leica:body:m6:ttl"],["m6ttl 0.85","leica:body:m6:ttl"],["엠6 클래식","leica:body:m6:classic"],
+ ["M3 double stroke","leica:body:m3"],["m4p","leica:body:m4-p"],["m42","leica:body:m4-2"],["ma 127","leica:body:m-a"],
+ ["iii f","leica:body:iiif"],["IIIg body","leica:body:iiig"],["라이카 큐3","leica:body:q3"],["q2 mono","leica:body:q2-monochrom"],
+ ["sl2 s","leica:body:sl2-s"],["m10 블랙","leica:body:m10"],["m11 실버","leica:body:m11"],["m10r","leica:body:m10-r"],
+ ["summilux 35mm f1.4 fle","leica:lens:summilux-m:35:asph-fle"],["35mm summilux asph fle","leica:lens:summilux-m:35:asph-fle"],
+ ["summilux 1.4/35 fle2","leica:lens:summilux-m:35:asph-fle2"],["주미룩스50 asph","leica:lens:summilux-m:50:asph"],
+ ["50룩스 asph","leica:lens:summilux-m:50:asph"],["35크론 asph","leica:lens:summicron-m:35:asph"],["8매 주미크론","leica:lens:summicron-m:35:v1-8element"],
+ ["noctilux 50 0.95 black","leica:lens:noctilux-m:50:f0.95"],["녹티 095","leica:lens:noctilux-m:50:f0.95"],["notilux 0.95","leica:lens:noctilux-m:50:f0.95"],
+ ["apo summicron 50mm","leica:lens:apo-summicron-m:50"],["summicron 28mm asph","leica:lens:summicron-m:28:asph"],["elmarit 28","leica:lens:elmarit-m:28:asph"],
+ ["28 elmarit asph","leica:lens:elmarit-m:28:asph"],["wate 16-18-21","leica:lens:tri-elmar-m:16-18-21"],["tri elmar","leica:lens:tri-elmar-m:16-18-21"],
+ ["super elmar m 21","leica:lens:super-elmar-m:21"],["vario elmarit sl 24-90","leica:lens:vario-elmarit-sl:24-90"],["summaron 35mm 2.8","leica:lens:summaron:35"],
+ ["summicron 90mm","leica:lens:summicron-m:90"],["75 lux","leica:lens:summilux-m:75"],["apo telyt 180","leica:lens:apo-telyt-r:180"],
+ ["summilux-r 80mm","leica:lens:summilux-r:80"],["리지드","leica:lens:summicron:50:rigid"],["dual range summicron","leica:lens:summicron:50:dr"],
+ ["summicron 24",null],["noctilux 21",null],["m9 monochrom 50",null],["summilux 135mm",null]
+ ]}

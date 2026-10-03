@@ -81,6 +81,26 @@
       letter-spacing:0.4px;
       white-space:nowrap;
     }
+    .entity-suggest-wrap{position:relative;flex:1 1 auto;min-width:0;display:flex}
+    .entity-suggest-wrap > .search-field{width:100%}
+    .entity-menu{
+      position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:45;margin:0;padding:6px;list-style:none;max-height:360px;overflow:auto;
+      background:var(--surface);border:1px solid var(--border-strong);border-radius:8px;box-shadow:var(--shadow);
+    }
+    .entity-option{display:grid;gap:2px;padding:8px 10px;border-radius:6px;cursor:pointer}
+    .entity-option[aria-selected="true"],.entity-option:hover{background:var(--surface-soft)}
+    .entity-option-name{font-size:14px;font-weight:700;color:var(--text)}
+    .entity-option-meta{font-size:11.5px;color:var(--text-soft)}
+    .entity-option-free{font-size:12.5px;color:var(--text-soft);border-top:1px solid var(--border);border-radius:0 0 6px 6px;margin-top:4px}
+    .entity-bar{display:grid;gap:8px;padding:12px 16px;margin-bottom:12px;border:1px solid var(--border-strong);border-radius:8px;background:var(--surface)}
+    .entity-bar-main{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+    .entity-bar-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px}
+    .entity-bar-meta{font-size:12px;color:var(--text-soft)}
+    .entity-clear{margin-left:auto;border:1px solid var(--border-strong);background:var(--surface);border-radius:999px;width:28px;height:28px;cursor:pointer;color:var(--text-soft)}
+    .entity-clear:hover{color:var(--accent);border-color:var(--accent)}
+    .entity-bar-chips{display:flex;flex-wrap:wrap;gap:6px}
+    .entity-chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:700}
+    .entity-chip-count{opacity:.7;font-size:11px}
     .lang-switch{position:relative}
     .lang-button{
       display:inline-flex;align-items:center;gap:6px;min-height:32px;
@@ -1039,6 +1059,7 @@
           </div>
         </div>
 
+        <div id="entity-bar" class="entity-bar" hidden aria-live="polite"></div>
         <section class="status-strip">
           <div class="summary-copy">
             <div id="summary-query-kicker" class="summary-kicker">Market entry</div>
@@ -1588,6 +1609,7 @@
 
     const state = {
       query: '',
+      entity: '',
       offset: 0,
       loading: false,
       appending: false,
@@ -2195,6 +2217,338 @@
       });
     }
 
+    // ── 엔티티(모델) 검색: 검색창 후보 → 그 모델 매물만 ──
+    const ENTITY_COPY = {
+      model: { ko: '모델', en: 'Model', ja: 'モデル', 'zh-Hans': '型号', 'zh-Hant': '型號', pt: 'Modelo', es: 'Modelo', de: 'Modell', it: 'Modello' },
+      clear: { ko: '모델 선택 해제', en: 'Clear model', ja: 'モデル選択を解除', 'zh-Hans': '取消选择型号', 'zh-Hant': '取消選擇型號', pt: 'Limpar modelo', es: 'Quitar modelo', de: 'Modell entfernen', it: 'Rimuovi modello' },
+      on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} en venta', de: '{n} verfügbar', it: '{n} in vendita' },
+      none_on_sale: { ko: '지금 판매 중 없음', en: 'None for sale now', ja: '現在販売中なし', 'zh-Hans': '目前无在售', 'zh-Hant': '目前無在售', pt: 'Nenhum à venda agora', es: 'Ninguno en venta ahora', de: 'Derzeit nicht verfügbar', it: 'Nessuno in vendita ora' },
+      body: { ko: '바디', en: 'Body', ja: 'ボディ', 'zh-Hans': '机身', 'zh-Hant': '機身', pt: 'Corpo', es: 'Cuerpo', de: 'Gehäuse', it: 'Corpo' },
+      lens: { ko: '렌즈', en: 'Lens', ja: 'レンズ', 'zh-Hans': '镜头', 'zh-Hant': '鏡頭', pt: 'Lente', es: 'Objetivo', de: 'Objektiv', it: 'Obiettivo' },
+      all_versions: { ko: '모든 버전', en: 'All versions', ja: 'すべてのバージョン', 'zh-Hans': '全部版本', 'zh-Hant': '全部版本', pt: 'Todas as versões', es: 'Todas las versiones', de: 'Alle Versionen', it: 'Tutte le versioni' },
+      narrow: { ko: '버전으로 좁히기', en: 'Narrow by version', ja: 'バージョンで絞り込む', 'zh-Hans': '按版本筛选', 'zh-Hant': '依版本篩選', pt: 'Filtrar por versão', es: 'Filtrar por versión', de: 'Nach Version eingrenzen', it: 'Filtra per versione' },
+      free_text: { ko: '“{q}” 그대로 검색', en: 'Search “{q}” as typed', ja: '「{q}」をそのまま検索', 'zh-Hans': '直接搜索“{q}”', 'zh-Hant': '直接搜尋「{q}」', pt: 'Buscar “{q}” como digitado', es: 'Buscar “{q}” tal cual', de: '„{q}“ wörtlich suchen', it: 'Cerca “{q}” così com’è' },
+      suggestions: { ko: '모델 후보', en: 'Model suggestions', ja: 'モデル候補', 'zh-Hans': '型号候选', 'zh-Hant': '型號候選', pt: 'Sugestões de modelo', es: 'Sugerencias de modelo', de: 'Modellvorschläge', it: 'Suggerimenti di modello' }
+    };
+    const ENTITY_STOP_TOKENS = new Set(['leica', '라이카', 'ライカ', '徕卡', '徠卡', 'lens', '렌즈', 'body', '바디',
+      '0.58', '0.72', '0.85', '0.68', 'black', 'silver', 'chrome', '블랙', '실버', '크롬', 'used', '중고', '신품', 'new', 'paint', '블랙페인트']);
+    const entityState = { summary: null, byId: {}, suggestions: {}, active: {} };
+
+    function ec(key, vars = {}){
+      const entry = ENTITY_COPY[key] || {};
+      let text = entry[uiState.locale] || entry.en || key;
+      Object.entries(vars).forEach(([k, v]) => { text = text.replace(`{${k}}`, v); });
+      return text;
+    }
+
+    function normalizeEntityText(text){
+      return String(text || '').toLowerCase()
+        .replace(/엠(?=\d)/g, 'm').replace(/큐(?=\d)/g, 'q')
+        .replace(/[‐‑–—\-_/·・,]+/g, ' ')
+        .replace(/(\d)\s?mm\b/g, '$1')
+        .replace(/\b0(\d\d)\b/g, '0.$1')
+        .replace(/\s+/g, ' ').trim();
+    }
+
+    function entityEditDistance(a, b){
+      if(Math.abs(a.length - b.length) > 3) return 3;
+      let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+      for(let i = 1; i <= a.length; i++){
+        const cur = [i];
+        for(let j = 1; j <= b.length; j++){
+          cur.push(Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)));
+        }
+        prev = cur;
+      }
+      return prev[b.length];
+    }
+
+    async function loadEntitySummary(){
+      try{
+        const response = await fetch('/data/derived/entity_summary_v1.json', { cache: 'no-cache' });
+        if(!response.ok) return;
+        const data = await response.json();
+        entityState.summary = data;
+        entityState.byId = {};
+        const vocab = new Set();
+        (data.entities || []).forEach(entity => {
+          entity._aliases = (entity.aliases || []).map(normalizeEntityText);
+          entity._tokens = new Set(entity._aliases.flatMap(alias => alias.split(' ')).filter(t => t && !ENTITY_STOP_TOKENS.has(t)));
+          entity._tokens.forEach(t => vocab.add(t));
+          entityState.byId[entity.id] = entity;
+        });
+        entityState.vocab = [...vocab];
+        if(state.entity) render();
+      }catch(error){
+        entityState.summary = null;
+      }
+    }
+
+    function entityDisplayName(entity){
+      if(!entity) return '';
+      if(uiState.locale === 'ko' && entity.name_ko) return entity.name_ko;
+      const allLabel = ec('all_versions');
+      return String(entity.name || '').replace(/\(all\)/, `(${allLabel})`);
+    }
+
+    // 알려진 단어로 맞추기: 그대로/접두어/오타. 모르는 단어는 null(무시). 숫자는 무시하지 않음
+    function fixEntityToken(token){
+      const vocab = entityState.vocab || [];
+      if(/^\d+$/.test(token)) return token;
+      if(vocab.some(v => v.startsWith(token))) return token;
+      if(token.length >= 5){
+        const limit = token.length <= 6 ? 1 : 2;
+        let best = null; let bestDist = 99;
+        vocab.forEach(v => { const d = entityEditDistance(token, v); if(d < bestDist){ bestDist = d; best = v; } });
+        if(best && bestDist <= limit) return best;
+      }
+      return null;
+    }
+
+    function scoreEntity(query, entity){
+      let best = 0;
+      const qc = query.replace(/ /g, '');
+      for(const alias of entity._aliases){
+        if(alias === query) return 1000;
+        if(alias.startsWith(query)) best = Math.max(best, 900 - (alias.length - query.length));
+        const ac = alias.replace(/ /g, '');
+        if(ac === qc) best = Math.max(best, 950);
+        else if(ac.startsWith(qc)) best = Math.max(best, 850 - (ac.length - qc.length));
+      }
+      if(best) return best;
+      const raw = query.split(' ').filter(t => t && !ENTITY_STOP_TOKENS.has(t));
+      const known = raw.map(fixEntityToken).filter(Boolean);
+      if(!known.length) return 0;
+      const tokens = entity._tokens;
+      const isAperture = t => /^f?\d+(\.\d+)?$/.test(t) && t.includes('.');
+      let bonus = 0;
+      for(const t of known){
+        if(isAperture(t)){
+          const bare = t.replace(/^f/, '');
+          if(tokens.has(bare)){ bonus += 60; continue; }
+          if([...tokens].some(isAperture)) return 0;
+          continue;
+        }
+        if(/^\d+$/.test(t)){ if(!tokens.has(t)) return 0; }
+        else if(![...tokens].some(x => x.startsWith(t))) return 0;
+      }
+      return 700 + 10 * known.length - 5 * (raw.length - known.length) + bonus;
+    }
+
+    function suggestEntities(rawQuery, limit = 8){
+      const query = normalizeEntityText(rawQuery);
+      if(!query || !entityState.summary) return [];
+      return (entityState.summary.entities || [])
+        .map(entity => ({
+          entity,
+          score: scoreEntity(query, entity) + Math.log10(1 + (entity.active_count || 0))
+        }))
+        .filter(item => item.score >= 700)
+        .sort((a, b) => Math.floor(b.score / 50) - Math.floor(a.score / 50)
+          || (b.entity.active_count || 0) - (a.entity.active_count || 0)
+          || (b.entity.listing_count || 0) - (a.entity.listing_count || 0))
+        .slice(0, limit);
+    }
+
+    function entityMetaLine(entity){
+      const kind = entity.kind === 'Body' ? ec('body') : ec('lens');
+      const parts = [entity.mount ? `${kind} · ${entity.mount}` : kind];
+      if(entity.active_count){
+        let sale = ec('on_sale', { n: String(entity.active_count) });
+        const range = entity.active_price_krw;
+        if(range && fxRate('KRW') && fxRate(uiState.currency)){
+          const low = roundEstimate(convertAmount(range[0], 'KRW', uiState.currency), uiState.currency);
+          const high = roundEstimate(convertAmount(range[1], 'KRW', uiState.currency), uiState.currency);
+          sale += ` · ${formatMoney(low, uiState.currency)}${high > low ? ' – ' + formatMoney(high, uiState.currency) : ''}`;
+        }
+        parts.push(sale);
+      }else{
+        parts.push(ec('none_on_sale'));
+      }
+      return parts.join(' · ');
+    }
+
+    function entityMenuId(inputId){ return `${inputId}-entity-menu`; }
+
+    function ensureEntityMenu(inputId){
+      const input = els[inputId];
+      if(!input) return null;
+      let menu = document.getElementById(entityMenuId(inputId));
+      if(!menu){
+        const wrap = document.createElement('div');
+        wrap.className = 'entity-suggest-wrap';
+        input.parentNode.insertBefore(wrap, input);
+        wrap.appendChild(input);
+        menu = document.createElement('ul');
+        menu.id = entityMenuId(inputId);
+        menu.className = 'entity-menu';
+        menu.setAttribute('role', 'listbox');
+        menu.hidden = true;
+        wrap.appendChild(menu);
+        input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-autocomplete', 'list');
+        input.setAttribute('aria-controls', menu.id);
+        input.setAttribute('aria-expanded', 'false');
+      }
+      menu.setAttribute('aria-label', ec('suggestions'));
+      return menu;
+    }
+
+    function closeEntityMenu(inputId){
+      const menu = document.getElementById(entityMenuId(inputId));
+      if(menu) menu.hidden = true;
+      if(els[inputId]){
+        els[inputId].setAttribute('aria-expanded', 'false');
+        els[inputId].removeAttribute('aria-activedescendant');
+      }
+      entityState.active[inputId] = -1;
+    }
+
+    function renderEntityMenu(inputId){
+      const input = els[inputId];
+      const menu = ensureEntityMenu(inputId);
+      if(!input || !menu) return;
+      const raw = input.value.trim();
+      const suggestions = suggestEntities(raw);
+      entityState.suggestions[inputId] = suggestions;
+      entityState.active[inputId] = -1;
+      if(!raw || !suggestions.length){
+        closeEntityMenu(inputId);
+        return;
+      }
+      const items = suggestions.map((item, index) => `
+        <li id="${inputId}-opt-${index}" role="option" class="entity-option" data-index="${index}" aria-selected="false">
+          <span class="entity-option-name">${escapeHtml(entityDisplayName(item.entity))}</span>
+          <span class="entity-option-meta">${escapeHtml(entityMetaLine(item.entity))}</span>
+        </li>`).join('');
+      const free = `<li id="${inputId}-opt-free" role="option" class="entity-option entity-option-free" data-index="free" aria-selected="false">${escapeHtml(ec('free_text', { q: raw }))}</li>`;
+      menu.innerHTML = items + free;
+      menu.hidden = false;
+      input.setAttribute('aria-expanded', 'true');
+    }
+
+    function highlightEntityOption(inputId, index){
+      const menu = document.getElementById(entityMenuId(inputId));
+      if(!menu) return;
+      const options = [...menu.querySelectorAll('.entity-option')];
+      if(!options.length) return;
+      const next = (index + options.length) % options.length;
+      options.forEach((option, i) => option.setAttribute('aria-selected', String(i === next)));
+      entityState.active[inputId] = next;
+      els[inputId].setAttribute('aria-activedescendant', options[next].id);
+      options[next].scrollIntoView({ block: 'nearest' });
+    }
+
+    function selectEntity(entityId, inputId, options = {}){
+      const entity = entityState.byId[entityId];
+      if(!entity) return;
+      state.entity = entity.id;
+      closeEntityMenu(inputId);
+      const label = entityDisplayName(entity);
+      syncSearchInputs(label);
+      runSearch(0, { queryOverride: label, historyMode: 'push', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) });
+    }
+
+    function runFreeTextSearch(inputId, options = {}){
+      state.entity = '';
+      closeEntityMenu(inputId);
+      syncSearchInputs(els[inputId].value);
+      runSearch(0, { historyMode: 'push', preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) });
+    }
+
+    // Enter: 고른 후보 → 그 모델 / 고른 게 없으면 1순위 후보 / 후보가 없으면 그대로 검색
+    function submitEntitySearch(inputId, options = {}){
+      const input = els[inputId];
+      const raw = input ? input.value.trim() : '';
+      if(!raw) return;
+      const menu = document.getElementById(entityMenuId(inputId));
+      const index = entityState.active[inputId];
+      if(menu && !menu.hidden && index >= 0){
+        const option = menu.querySelectorAll('.entity-option')[index];
+        if(option && option.dataset.index === 'free') return runFreeTextSearch(inputId, options);
+        const item = (entityState.suggestions[inputId] || [])[Number(option.dataset.index)];
+        if(item) return selectEntity(item.entity.id, inputId, options);
+      }
+      if(state.entity && entityDisplayName(entityState.byId[state.entity]) === raw){
+        return selectEntity(state.entity, inputId, options);
+      }
+      const top = suggestEntities(raw, 1)[0];
+      if(top) return selectEntity(top.entity.id, inputId, options);
+      return runFreeTextSearch(inputId, options);
+    }
+
+    function bindEntitySuggest(inputId, options = {}){
+      const input = els[inputId];
+      if(!input) return;
+      ensureEntityMenu(inputId);
+      input.addEventListener('input', () => {
+        state.entity = '';
+        renderEntityMenu(inputId);
+      });
+      input.addEventListener('focus', () => { if(input.value.trim() && !state.entity) renderEntityMenu(inputId); });
+      input.addEventListener('keydown', event => {
+        const menu = document.getElementById(entityMenuId(inputId));
+        const open = menu && !menu.hidden;
+        if(event.key === 'ArrowDown'){ event.preventDefault(); if(!open) renderEntityMenu(inputId); highlightEntityOption(inputId, (entityState.active[inputId] ?? -1) + 1); }
+        else if(event.key === 'ArrowUp' && open){ event.preventDefault(); highlightEntityOption(inputId, (entityState.active[inputId] ?? 0) - 1); }
+        else if(event.key === 'Escape' && open){ event.preventDefault(); closeEntityMenu(inputId); }
+      });
+      const menu = document.getElementById(entityMenuId(inputId));
+      menu.addEventListener('mousedown', event => event.preventDefault());
+      menu.addEventListener('click', event => {
+        const option = event.target.closest('.entity-option');
+        if(!option) return;
+        if(option.dataset.index === 'free') return runFreeTextSearch(inputId, options);
+        const item = (entityState.suggestions[inputId] || [])[Number(option.dataset.index)];
+        if(item) selectEntity(item.entity.id, inputId, options);
+      });
+      input.addEventListener('blur', () => setTimeout(() => closeEntityMenu(inputId), 120));
+    }
+
+    function renderEntityBar(){
+      const bar = document.getElementById('entity-bar');
+      if(!bar) return;
+      const entity = state.entity ? entityState.byId[state.entity] : null;
+      if(!entity){
+        bar.hidden = true;
+        bar.innerHTML = '';
+        return;
+      }
+      const parent = entity.parent ? entityState.byId[entity.parent] : null;
+      const family = entity.children && entity.children.length ? entity : parent;
+      const chips = family ? [family.id, ...family.children].map(id => {
+        const item = entityState.byId[id];
+        if(!item) return '';
+        const label = id === family.id ? ec('all_versions') : entityDisplayName(item);
+        return `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(id)}" aria-pressed="${id === entity.id}">${escapeHtml(label)} <span class="entity-chip-count">${item.active_count || 0}</span></button>`;
+      }).join('') : '';
+      bar.innerHTML = `
+        <div class="entity-bar-main">
+          <span class="entity-bar-label">${escapeHtml(ec('model'))}</span>
+          <strong>${escapeHtml(entityDisplayName(entity))}</strong>
+          <span class="entity-bar-meta">${escapeHtml(entityMetaLine(entity))}</span>
+          <button type="button" class="entity-clear" data-entity-clear="1" aria-label="${escapeHtml(ec('clear'))}">✕</button>
+        </div>
+        ${chips ? `<div class="entity-bar-chips" role="group" aria-label="${escapeHtml(ec('narrow'))}">${chips}</div>` : ''}`;
+      bar.hidden = false;
+    }
+
+    function bindEntityBar(){
+      const bar = document.getElementById('entity-bar');
+      if(!bar) return;
+      bar.addEventListener('click', event => {
+        if(event.target.closest('[data-entity-clear]')){
+          state.entity = '';
+          const raw = els['query-input'].value.trim();
+          if(raw) runSearch(0, { queryOverride: raw, historyMode: 'push' });
+          else render();
+          return;
+        }
+        const chip = event.target.closest('[data-entity]');
+        if(chip) selectEntity(chip.dataset.entity, 'query-input', { preserveResultsAnchor: true });
+      });
+    }
+
     function ux(path, fallback = ''){
       const groups = String(path || '').split('.');
       let current = UX_LOCALE_COPY;
@@ -2625,6 +2979,7 @@
       const limitValue = Math.max(PAGE_SIZE, Number(options.limit || PAGE_SIZE));
       const params = new URLSearchParams();
       params.set('q', state.query);
+      if(state.entity) params.set('entity', state.entity);
       params.set('limit', String(limitValue));
       params.set('offset', String(offset));
       [
@@ -2651,6 +3006,7 @@
       const visibleCount = Math.max(PAGE_SIZE, Number.parseInt(raw.visibleCount || raw.shown || PAGE_SIZE, 10) || PAGE_SIZE);
       return {
         query,
+        entity: String(raw.entity || '').trim(),
         sort,
         category: String(raw.category || '').trim(),
         brand: String(raw.brand || '').trim(),
@@ -2669,6 +3025,7 @@
     function buildSearchState(overrides = {}){
       return normalizeHistoryState({
         query: overrides.query !== undefined ? overrides.query : state.query,
+        entity: overrides.entity !== undefined ? overrides.entity : state.entity,
         sort: overrides.sort !== undefined ? overrides.sort : (els['sort-select'].value || 'relevance'),
         category: overrides.category !== undefined ? overrides.category : els['category-filter'].value,
         brand: overrides.brand !== undefined ? overrides.brand : els['brand-filter'].value,
@@ -2686,6 +3043,7 @@
       const next = normalizeHistoryState(searchState);
       const params = new URLSearchParams();
       if(next.query) params.set('q', next.query);
+      if(next.entity) params.set('entity', next.entity);
       if(next.sort && next.sort !== 'relevance') params.set('sort', next.sort);
       if(next.category) params.set('category', next.category);
       if(next.brand) params.set('brand', next.brand);
@@ -2708,6 +3066,7 @@
     function applySearchStateToControls(searchState){
       const next = normalizeHistoryState(searchState);
       syncSearchInputs(next.query);
+      state.entity = next.entity;
       els['category-filter'].value = next.category;
       els['brand-filter'].value = next.brand;
       els['mount-filter'].value = next.mount;
@@ -2756,6 +3115,7 @@
       const params = new URLSearchParams(window.location.search);
       return normalizeHistoryState({
         query: params.get('q') || '',
+        entity: params.get('entity') || '',
         sort: params.get('sort') || 'relevance',
         category: params.get('category') || '',
         brand: params.get('brand') || '',
@@ -3567,6 +3927,7 @@
     }
 
     function render(){
+      renderEntityBar();
       renderSummary();
       renderContent();
       renderWarnings();
@@ -4047,13 +4408,11 @@
     function bindEvents(){
       els['search-form'].addEventListener('submit', event => {
         event.preventDefault();
-        syncSearchInputs(els['query-input'].value);
-        runSearch(0, { historyMode: 'push' });
+        submitEntitySearch('query-input');
       });
       els['sticky-search-form'].addEventListener('submit', event => {
         event.preventDefault();
-        syncSearchInputs(els['sticky-query-input'].value);
-        runSearch(0, { preferSticky: true, preserveResultsAnchor: true, historyMode: 'push' });
+        submitEntitySearch('sticky-query-input', { preserveResultsAnchor: true });
       });
       ['query-input', 'sticky-query-input'].forEach(id => {
         els[id].addEventListener('input', event => {
@@ -4113,7 +4472,7 @@
       document.querySelectorAll('[data-query]').forEach(button => {
         button.addEventListener('click', () => {
           syncSearchInputs(button.dataset.query || '');
-          runSearch(0, { historyMode: 'push' });
+          submitEntitySearch('query-input');
         });
       });
 
@@ -4121,6 +4480,7 @@
         const target = event.target;
         if(target && target.matches('[data-refine]')){
           const refine = target.getAttribute('data-refine') || '';
+          state.entity = '';
           syncSearchInputs(`${state.query} ${refine}`.trim());
           runSearch(0, { historyMode: 'push' });
           return;
@@ -4170,6 +4530,10 @@
     loadLandedData();
     applyStaticTranslations();
     bindEvents();
+    bindEntitySuggest('query-input');
+    bindEntitySuggest('sticky-query-input', { preserveResultsAnchor: true });
+    bindEntityBar();
+    loadEntitySummary();
     hydrateFromUrl();
   </script>
 </body>

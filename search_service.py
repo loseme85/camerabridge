@@ -1016,7 +1016,16 @@ def search_records(
         offset=offset,
         filters=filters,
     )
+    entity_id = (filters or {}).get("entity")
+    if entity_id:
+        # 엔티티 모드: 그 엔티티에 연결된 매물만 (실시간 eBay 매물은 카탈로그 규칙으로 판정)
+        from entity_catalog import match_entities  # noqa: WPS433
+
+        records = [record for record in records if entity_id in (record.get("entity_ids") or [])]
+        live_source_records = [record for record in live_source_records if entity_id in match_entities(record)]
     all_records = list(records) + list(live_source_records)
+    if entity_id:
+        use_candidate_narrowing = False  # 이미 그 모델 매물만 남았으므로 더 좁히지 않음
     intent = parse_query(query)
     candidate_records, candidate_stats = (
         narrow_candidate_records(intent, all_records)
@@ -1049,6 +1058,12 @@ def search_records(
     sorted_results, applied_sort, sort_warnings = apply_sort(filtered_results, sort=sort)
     if applied_sort == "relevance":
         sorted_results = balance_external_sources(sorted_results)
+        if entity_id:
+            # 엔티티 모드: 지금 살 수 있는 매물이 먼저
+            sorted_results = sorted(
+                sorted_results,
+                key=lambda result: (result.get("final_output") or {}).get("sold_quality") != "asking",
+            )
     paginated_results, pagination, pagination_warnings = paginate_results(
         sorted_results,
         limit=limit,
