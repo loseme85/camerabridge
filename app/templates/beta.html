@@ -3370,7 +3370,7 @@
         return localizePriceBand(policy.display_price_band) || ux('summary.market_price_pending', 'Market price on hold');
       }
       if(policy.display_broader_reference_allowed){
-        return policy.display_broader_reference_band || ux('summary.market_price_pending', 'Market price on hold');
+        return localizePriceBand(policy.display_broader_reference_band) || ux('summary.market_price_pending', 'Market price on hold');
       }
       return ux('summary.market_price_pending', 'Market price on hold');
     }
@@ -4204,7 +4204,7 @@
         return localizePriceBand(policy.display_price_band) || ux('market_entry.not_enough_evidence', 'Not enough evidence yet.');
       }
       if(policy.display_broader_reference_allowed){
-        return policy.display_broader_reference_band || ux('market_entry.not_enough_evidence', 'Not enough evidence yet.');
+        return localizePriceBand(policy.display_broader_reference_band) || ux('market_entry.not_enough_evidence', 'Not enough evidence yet.');
       }
       return ux('market_entry.not_enough_evidence', 'Not enough evidence yet.');
     }
@@ -4224,7 +4224,7 @@
         policy.display_price_summary_allowed
           ? (localizePriceBand(policy.display_price_band) || ux('price_role.no_usable_price', 'No usable price'))
           : policy.display_broader_reference_allowed
-          ? (policy.display_broader_reference_band || ux('price_state.reference', 'Only related reference prices are available.'))
+          ? (localizePriceBand(policy.display_broader_reference_band) || ux('price_state.reference', 'Only related reference prices are available.'))
           : ux('price_state.locked', 'Exact price calculation is currently on hold.')
       );
       const summaryLine = escapeHtml(getBetaPriceState(policy));
