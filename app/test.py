@@ -889,12 +889,14 @@ def detect_category(name, price_str=""):
 
     # ── 0순위: 판매완료/보류 → Accessory ──
     if '판매완료' in name or '보류' in name: return "Accessory"
-    # ── 0순위: 악세사리 코드네임 → 무조건 Accessory ──
-    if any(code in n for code in ACCESSORY_CODES):
-        return "Accessory"
-
     # ── 렌즈 보호 체크 (조리개값 또는 렌즈 키워드 있으면 보호) ──
     is_lens = any(kw in n for kw in LENS_PROTECT_KW) or _has_aperture(name)
+
+    # ── 0순위: 악세사리 코드네임 → 무조건 Accessory ──
+    # 단, E39~E49 필터 구경은 렌즈 이름에도 붙으므로 (예: Summilux-M 50mm F1.4 E43) 렌즈면 건너뜀
+    filter_codes = ('e39', 'e43', 'e46', 'e49')
+    if any(code in n for code in ACCESSORY_CODES if not (is_lens and code in filter_codes)):
+        return "Accessory"
 
     # ── 1순위: Accessory 키워드 (단, 렌즈 보호 키워드 없을 때만) ──
     # 단독 악세사리 키워드 (렌즈 이름 없이 단독으로 있는 경우)
@@ -936,6 +938,8 @@ def detect_category(name, price_str=""):
             nums = re.findall(r"[\d,]+", price_str.replace('£', ''))
             if nums:
                 p = float(nums[0].replace(',', ''))
+                if '¥' in price_str:
+                    p *= 9  # 엔화는 원화로 대략 바꿔서 50만원 기준 적용
                 if 0 < p <= 500000:
                     return "Accessory"
         except:
@@ -2428,11 +2432,18 @@ def crawl_leicamiami():
 
 
 def crawl_kitamura(page):
-    """기타무라 크롤러 - 라이카 중고 카테고리 전체"""
+    """기타무라 크롤러 - 라이카 중고 전체
+
+    2026-09 사이트 개편으로 중고 재고가 shop.kitamura.jp 로 옮겨감.
+    목록 페이지가 부르는 used_sell_search JSON을 그대로 받아 100개씩 끝까지 넘긴다.
+    """
     import re as _re
     results = []
-    base = "https://www.kitamuracamera.jp"
-    base_url = f"{base}/buy/item-list/?type=u&narrow1=%E3%83%A9%E3%82%A4%E3%82%AB(LEICA)"
+    base = "https://shop.kitamura.jp"
+    base_url = f"{base}/ec/list?type=u&narrow1=%E3%83%A9%E3%82%A4%E3%82%AB(LEICA)"
+    page_size = 100
+    # used_sell_search rank → 상태 등급 (사이트 집계값으로 확인)
+    RANK_TO_COND = {5: 'AA', 4: 'A', 3: 'AB', 2: 'B', 1: 'C'}
 
     # 일본어 → 영어 변환 매핑
     JA_TO_EN = {
@@ -2480,81 +2491,91 @@ def crawl_kitamura(page):
         'ミリ': 'mm', 'レンズ': 'Lens',
     }
 
+    # 사전보다 먼저 바꿔야 하는 표기 (긴 말이 짧은 말에 먹히지 않게)
+    JA_PRE = {
+        'モノクローム': 'Monochrom', 'ノクチルックス': 'Noctilux',
+        'アンギュロン': 'Angulon', '沈胴': 'Collapsible', '固定': 'Rigid',
+        'アポ-': 'APO-', 'バリオ-': 'Vario-', 'スーパー-': 'Super-',
+        'トリ-': 'Tri-', 'テレ-': 'Tele-',
+        'ライカビット': 'Leicavit', 'ワインダー': 'Winder',
+        'ヘクトール': 'Hektor', 'ヘクト': 'Hektor',
+    }
+    LENS_NAMES = ('APO-Summicron|Vario-Elmarit|Vario-Elmar|Super-Elmar|Tri-Elmar|Tele-Elmarit|'
+                  'Tele-Elmar|Super-Angulon|Summicron|Summilux|Summarit|Summaron|Elmarit|Elmar|'
+                  'Noctilux|Hektor|Thambar')
+
     def ja_to_en(text):
+        text = text.replace('・', '-')
+        for ja, en in JA_PRE.items():
+            text = text.replace(ja, en)
         for ja, en in JA_TO_EN.items():
             text = text.replace(ja, en)
-        return text.strip()
+        # 3代目 → 3rd
+        text = _re.sub(r'(\d)代目', lambda m: m.group(1) + {'1': 'st', '2': 'nd', '3': 'rd'}.get(m.group(1), 'th'), text)
+        # SummicronM → Summicron-M (렌즈 보호 키워드와 맞춤)
+        text = _re.sub(rf'({LENS_NAMES})(SL|TL|M|R|L|S)\b', r'\1-\2', text)
+        # F2 → F2.0 (조리개 인식용)
+        text = _re.sub(r'\bF(\d+)(?![\d.])', r'F\1.0', text)
+        # LeicaDII → Leica DII, 'Leica Leica' 중복 제거
+        text = _re.sub(r'Leica(?=[A-Z0-9])', 'Leica ', text)
+        text = _re.sub(r'\bLeica\s+Leica', 'Leica', text)
+        text = text.replace('Leica Vit', 'Leicavit')
+        return _re.sub(r'\s+', ' ', text).strip()
 
     print(f"\n  📂 기타무라 크롤링 시작")
-    page_num = 1
 
+    # 목록 페이지를 열어 사이트가 쓰는 검색 요청(주소·헤더)을 잡는다
+    try:
+        with page.expect_response(lambda r: "used_sell_search" in r.url, timeout=45_000) as resp_info:
+            page.goto(base_url, wait_until="domcontentloaded", timeout=45_000)
+        first = resp_info.value
+    except Exception as e:
+        print(f"    ❌ 로드 실패: {e}")
+        return results
+
+    search_url = first.url
+    headers = {k: v for k, v in first.request.headers.items()
+               if k.lower().startswith("x-kitamura") or k.lower() in ("referer", "accept")}
+    search_url = _re.sub(r'size=\d+', f'size={page_size}', search_url)
+
+    offset = 1  # 1부터 시작하는 상품 순번
+    total = None
     while True:
-        url = base_url if page_num == 1 else f"{base_url}&page={page_num}"
-        print(f"    └─ {page_num}페이지 수집 중...")
-
+        url = _re.sub(r'offset=\d+', f'offset={offset}', search_url)
+        print(f"    └─ {offset}번째부터 수집 중...")
         try:
-            page.goto(url, wait_until="networkidle", timeout=30_000)
-            page.wait_for_selector('a[href*="/buy/item/"] h3', timeout=15_000)
+            data = page.request.get(url, headers=headers, timeout=30_000).json()["search"]
         except Exception as e:
-            print(f"    ❌ 로드 실패: {e}")
+            print(f"    ❌ 목록 오류: {e}")
             break
 
-        # 상품 카드 수집
-        try:
-            items = page.evaluate("""() => {
-                const results = [];
-                const cards = document.querySelectorAll('a[href*="/buy/item/"]');
-                for (const card of cards) {
-                    const href = card.getAttribute('href') || '';
-                    if (!href.includes('/buy/item/')) continue;
-                    const nameEl = card.querySelector('h3');
-                    const name = nameEl ? nameEl.innerText.trim() : '';
-                    if (!name) continue;
-                    const allText = card.innerText;
-                    const priceMatch = allText.match(/[\d,]+円/);
-                    const price = priceMatch ? priceMatch[0] : '';
-                    const imgEl = card.querySelector('img');
-                    const img = imgEl ? (imgEl.getAttribute('src') || '') : '';
-                    const condEl = card.querySelector('[class*="rank"], [class*="cond"], [class*="grade"]');
-                    const cond = condEl ? condEl.innerText.trim() : '';
-                    results.push({name, href, price, img, cond});
-                }
-                return results;
-            }""")
-        except Exception as e:
-            print(f"    ❌ 파싱 오류: {e}")
+        hits = data.get("hits") or []
+        if total is None:
+            total = data.get("total_hits", 0)
+            print(f"    └─ 전체 {total}개")
+        if not hits:
             break
 
-        if not items:
-            print(f"    마지막 페이지 도달")
-            break
-
-        print(f"    └─ {len(items)}개 상품 발견")
-        found_any = False
-
-        for item in items:
+        for item in hits:
             try:
-                name_ja = item.get('name', '').strip()
+                if item.get("sales_status") not in (None, 1):
+                    continue  # 판매중이 아님
+                name_ja = (item.get("title") or "").strip()
                 if not name_ja:
                     continue
 
                 # 일본어 → 영어 변환
                 name_en = ja_to_en(name_ja)
 
-                href = item.get('href', '')
-                if href and not href.startswith('http'):
-                    href = base + href
+                href = f"{base}/ec/used/{item['id']}"
+                if href in globals().get('SOLD_LINKS', ()):
+                    continue
 
-                # 가격 파싱 (엔화)
-                price_raw = item.get('price', '')
-                price_clean = _re.sub(r'[^\d]', '', price_raw)
-                price = f"¥{int(price_clean):,}" if price_clean else "문의요망"
+                price_num = item.get("price")
+                price = f"¥{int(price_num):,}" if price_num else "문의요망"
 
-                img = item.get('img', '')
-                if img and not img.startswith('http'):
-                    img = base + img
-
-                cond = item.get('cond', '정보없음') or '정보없음'
+                img = item.get("image_link") or ""
+                cond = RANK_TO_COND.get(item.get("rank"), "정보없음")
 
                 label = auto_label(name_en)
                 mount = detect_mount(name_en)
@@ -2581,30 +2602,15 @@ def crawl_kitamura(page):
                     "category": cat,
                     "brand": brand,
                 })
-                found_any = True
-                print(f"    ✔  {name_en[:45]} | {price}")
 
             except Exception as e:
                 print(f"    ⚠️  파싱 오류: {e}")
                 continue
 
-        if not found_any:
+        offset += len(hits)
+        if offset > total:
             break
-
-        # 다음 페이지 있는지 확인
-        has_next = page.evaluate("""() => {
-            const links = document.querySelectorAll('a');
-            for (const l of links) {
-                if (l.innerText.includes('次') || l.getAttribute('aria-label') === 'Next') return true;
-            }
-            return false;
-        }""")
-
-        if not has_next:
-            print(f"    마지막 페이지 도달")
-            break
-
-        page_num += 1
+        time.sleep(random.uniform(1.0, 2.0))
 
     print(f"  ✅ 기타무라 완료: {len(results)}개")
     return results
