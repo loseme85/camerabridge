@@ -718,6 +718,10 @@
       overflow-wrap:anywhere;
       flex:1 1 220px;
     }
+    .source-flag{
+      display:inline-block;width:16px;height:12px;margin-right:6px;vertical-align:-1px;
+      border-radius:2px;box-shadow:0 0 0 1px var(--border);object-fit:cover;
+    }
     .result-source-label{
       color:var(--text);
       font-weight:700;
@@ -3446,6 +3450,14 @@
       return ux('public_card.location_unknown', 'Location unavailable');
     }
 
+    // 판매처 나라 국기 (이모지 국기는 Windows에서 글자로 보여서 작은 SVG 사용)
+    function countryFlagHtml(code){
+      const cc = String(code || '').trim().toUpperCase();
+      if(!/^[A-Z]{2}$/.test(cc)) return '';
+      const name = displayNameOf('region', cc) || cc;
+      return `<img class="source-flag" src="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/flags/4x3/${cc.toLowerCase()}.svg" alt="${escapeHtml(name)}" title="${escapeHtml(name)}" width="16" height="12" loading="lazy">`;
+    }
+
     function getResultLocation(result, source){
       const city = String(result && (result.city || finalField(result, 'city')) || '').trim();
       const rawCountry = String(result && (result.country || finalField(result, 'country')) || '').trim();
@@ -4337,7 +4349,7 @@
               <div class="result-price-row">
                 ${renderPriceBlock(result)}
                 <div class="result-source">
-                  <div class="result-source-label">${escapeHtml(sourceHeading)}</div>
+                  <div class="result-source-label">${countryFlagHtml(resultOriginCountry(result, landedSourceRule(result)))}${escapeHtml(sourceHeading)}</div>
                   <div class="result-source-meta">${escapeHtml(sourceStatusText)}</div>
                   <div class="result-source-meta">${escapeHtml(observedLine)}</div>
                 </div>
