@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/owner/usage",
+      "destination": "/api/owner_usage.py"
+    },
+    {
       "source": "/",
       "destination": "/beta.html"
     },
