@@ -66,6 +66,7 @@ def main() -> None:
             "aliases": entity["aliases"], "listing_count": s["total"], "active_count": s["active"],
             "active_price_krw": [round(ap[0]), round(ap[-1])] if ap else None,
             "sold_median_krw": round(statistics.median(sp)) if len(sp) >= 3 else None,
+            "sold_price_count": len(sp),
         })
     SUMMARY.write_text(json.dumps({"schema_version": "entity_summary_v1",
                                    "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),

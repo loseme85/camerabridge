@@ -2242,6 +2242,10 @@
 
     // ── 엔티티(모델) 검색: 검색창 후보 → 그 모델 매물만 ──
     const ENTITY_COPY = {
+      price_basis: { ko: '판매 완료 {n}건 기준', en: 'Based on {n} sold listings', ja: '販売済み {n} 件の中央値', 'zh-Hans': '基于 {n} 件已售商品', 'zh-Hant': '依據 {n} 件已售商品', pt: 'Com base em {n} anúncios vendidos', es: 'Según {n} anuncios vendidos', de: 'Basierend auf {n} verkauften Angeboten', it: 'Basato su {n} annunci venduti' },
+      price_range_label: { ko: '판매 중 가격대', en: 'Asking price range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa de preço à venda', es: 'Rango de precios en venta', de: 'Preisspanne der Angebote', it: 'Fascia di prezzo in vendita' },
+      choose_version: { ko: '버전을 고르면 시세가 나와요', en: 'Pick a version to see its market price', ja: 'バージョンを選ぶと相場が表示されます', 'zh-Hans': '选择具体版本即可查看行情', 'zh-Hant': '選擇具體版本即可查看行情', pt: 'Escolha uma versão para ver o preço de mercado', es: 'Elige una versión para ver su precio de mercado', de: 'Wähle eine Version, um den Marktpreis zu sehen', it: 'Scegli una versione per vedere il prezzo di mercato' },
+      few_sold: { ko: '판매 완료 기록이 적어 판매 중 가격대를 보여 드려요', en: 'Not enough sales yet, so this shows the asking range', ja: '販売済みの記録が少ないため、販売中の価格帯を表示しています', 'zh-Hans': '成交记录较少，暂显示在售价格区间', 'zh-Hant': '成交紀錄較少，暫顯示在售價格區間', pt: 'Poucas vendas registradas, por isso mostramos a faixa de preços à venda', es: 'Aún hay pocas ventas, así que mostramos el rango de precios en venta', de: 'Noch zu wenige Verkäufe – daher die Preisspanne der Angebote', it: 'Ancora poche vendite, quindi mostriamo la fascia di prezzo in vendita' },
       model: { ko: '모델', en: 'Model', ja: 'モデル', 'zh-Hans': '型号', 'zh-Hant': '型號', pt: 'Modelo', es: 'Modelo', de: 'Modell', it: 'Modello' },
       clear: { ko: '모델 선택 해제', en: 'Clear model', ja: 'モデル選択を解除', 'zh-Hans': '取消选择型号', 'zh-Hant': '取消選擇型號', pt: 'Limpar modelo', es: 'Quitar modelo', de: 'Modell entfernen', it: 'Rimuovi modello' },
       on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} en venta', de: '{n} verfügbar', it: '{n} in vendita' },
@@ -2405,6 +2409,30 @@
         }
       }
       return out;
+    }
+
+    function krwToDisplay(krw){
+      if(!krw || !fxRate('KRW') || !fxRate(uiState.currency)) return null;
+      return formatMoney(roundEstimate(convertAmount(krw, 'KRW', uiState.currency), uiState.currency), uiState.currency);
+    }
+
+    // 모델을 골랐을 때 시세 칸: 정확한 버전이면 판매 완료 중앙값, '전체'나 판매 기록이 적으면 판매 중 가격대
+    function entityPriceSummary(entity){
+      const range = entity.active_price_krw;
+      const low = range ? krwToDisplay(range[0]) : null;
+      const high = range ? krwToDisplay(range[1]) : null;
+      const rangeText = low ? (high && high !== low ? `${low} – ${high}` : low) : '';
+      const isParent = (entity.children || []).length > 0;
+      const median = !isParent ? krwToDisplay(entity.sold_median_krw) : null;
+      if(median){
+        const basis = entity.sold_price_count ? ec('price_basis', { n: String(entity.sold_price_count) }) : '';
+        return { caption: ux('summary.market_price_label', 'Market price'), value: median,
+                 meta: [basis, rangeText ? `${ec('on_sale', { n: String(entity.active_count || 0) })} ${rangeText}` : ''].filter(Boolean).join(' · ') };
+      }
+      if(rangeText){
+        return { caption: ec('price_range_label'), value: rangeText, meta: isParent ? ec('choose_version') : ec('few_sold') };
+      }
+      return { caption: ux('summary.market_price_label', 'Market price'), value: '—', meta: ec('none_on_sale') };
     }
 
     function entityMetaLine(entity){
@@ -3987,6 +4015,14 @@
         els['summary-meta'].textContent = getBetaPriceState(policy);
       }else{
         els['summary-meta'].textContent = ux('summary.ready_meta', 'Prices are for reference only, and the original listing should be checked');
+      }
+
+      const pickedEntity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
+      if(pickedEntity && !state.loading && !state.error){
+        const price = entityPriceSummary(pickedEntity);
+        els['market-price-caption'].textContent = price.caption;
+        els['market-price-value'].textContent = price.value;
+        els['summary-meta'].textContent = price.meta;
       }
 
       if(els['index-debug-line']){
