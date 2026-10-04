@@ -729,6 +729,14 @@
       overflow-wrap:anywhere;
       flex:1 1 220px;
     }
+    .result-grade-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 2px}
+    .grade-chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;line-height:1.5;
+      border:1px solid var(--border-strong);color:var(--text);background:var(--surface)}
+    .grade-chip.grade-N,.grade-chip.grade-S{border-color:#2f7d4f;color:#2f7d4f}
+    .grade-chip.grade-D,.grade-chip.grade-X{border-color:#b26a00;color:#b26a00}
+    .grade-compare{font-size:12px;font-weight:600}
+    .grade-compare.is-cheaper{color:#2f7d4f}
+    .grade-compare.is-pricier{color:var(--text-soft)}
     .source-flag{
       display:inline-block;width:16px;height:12px;margin-right:6px;vertical-align:-1px;
       border-radius:2px;box-shadow:0 0 0 1px var(--border);object-fit:cover;
@@ -1968,7 +1976,7 @@
     function renderPriceBlock(result){
       const fallback = escapeHtml(displayValue(localizeRawPrice(result.price), ux('common.no_data', 'Not enough data')));
       const cost = computeLandedCost(result);
-      if(!cost) return `<div class="result-price">${fallback}</div>`;
+      if(!cost) return `<div class="result-price">${fallback}</div>${renderGradeRow(result, null)}`;
       const sameCurrency = cost.currency === cost.target;
       const main = sameCurrency ? formatMoney(cost.listed, cost.currency) : `≈ ${formatMoney(roundEstimate(cost.converted, cost.target), cost.target)}`;
       const original = sameCurrency ? '' : `<div class="result-price-original">${escapeHtml(ux('landed.original', 'Listed at {price}').replace('{price}', formatMoney(cost.listed, cost.currency)))}</div>`;
@@ -1998,7 +2006,8 @@
           </div>
         `;
       }
-      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${original}${landed}</div>`;
+      const gradeRow = renderGradeRow(result, cost);
+      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${original}${gradeRow}${landed}</div>`;
     }
 
     function localizePriceBand(text){
@@ -2242,6 +2251,14 @@
 
     // ── 엔티티(모델) 검색: 검색창 후보 → 그 모델 매물만 ──
     const ENTITY_COPY = {
+      grade_label: { ko: '{g}급', en: 'Grade {g}', ja: '{g}ランク', 'zh-Hans': '{g}级', 'zh-Hant': '{g}級', pt: 'Grau {g}', es: 'Grado {g}', de: 'Zustand {g}', it: 'Grado {g}' },
+      grade_new: { ko: '신품·미사용', en: 'New / unused', ja: '新品・未使用', 'zh-Hans': '全新/未使用', 'zh-Hant': '全新/未使用', pt: 'Novo / sem uso', es: 'Nuevo / sin usar', de: 'Neu / unbenutzt', it: 'Nuovo / inutilizzato' },
+      grade_parts: { ko: '고장·부품용', en: 'For parts', ja: 'ジャンク', 'zh-Hans': '故障/零件', 'zh-Hant': '故障/零件', pt: 'Para peças', es: 'Para piezas', de: 'Defekt / Teile', it: 'Per ricambi' },
+      grade_basis_text: { ko: '설명 글 기준', en: 'From the description', ja: '説明文から判定', 'zh-Hans': '根据描述判断', 'zh-Hant': '根據描述判斷', pt: 'Pela descrição', es: 'Según la descripción', de: 'Laut Beschreibung', it: 'Dalla descrizione' },
+      grade_basis_image: { ko: '사진으로 추정', en: 'Estimated from photos', ja: '写真から推定', 'zh-Hans': '根据照片估计', 'zh-Hant': '根據照片估計', pt: 'Estimado pelas fotos', es: 'Estimado por las fotos', de: 'Anhand der Fotos geschätzt', it: 'Stimato dalle foto' },
+      grade_market: { ko: '시세 ({grade} 기준)', en: 'Market price ({grade})', ja: '相場（{grade}基準）', 'zh-Hans': '行情（{grade}）', 'zh-Hant': '行情（{grade}）', pt: 'Preço de mercado ({grade})', es: 'Precio de mercado ({grade})', de: 'Marktpreis ({grade})', it: 'Prezzo di mercato ({grade})' },
+      vs_grade_cheaper: { ko: '같은 등급 시세보다 {p}% 쌈', en: '{p}% below the market price for this grade', ja: '同ランク相場より{p}%安い', 'zh-Hans': '比同级行情低 {p}%', 'zh-Hant': '比同級行情低 {p}%', pt: '{p}% abaixo do preço de mercado deste grau', es: '{p}% por debajo del precio de mercado de este grado', de: '{p} % unter dem Marktpreis für diesen Zustand', it: '{p}% sotto il prezzo di mercato di questo grado' },
+      vs_grade_pricier: { ko: '같은 등급 시세보다 {p}% 비쌈', en: '{p}% above the market price for this grade', ja: '同ランク相場より{p}%高い', 'zh-Hans': '比同级行情高 {p}%', 'zh-Hant': '比同級行情高 {p}%', pt: '{p}% acima do preço de mercado deste grau', es: '{p}% por encima del precio de mercado de este grado', de: '{p} % über dem Marktpreis für diesen Zustand', it: '{p}% sopra il prezzo di mercato di questo grado' },
       price_basis: { ko: '판매 완료 {n}건 기준', en: 'Based on {n} sold listings', ja: '販売済み {n} 件の中央値', 'zh-Hans': '基于 {n} 件已售商品', 'zh-Hant': '依據 {n} 件已售商品', pt: 'Com base em {n} anúncios vendidos', es: 'Según {n} anuncios vendidos', de: 'Basierend auf {n} verkauften Angeboten', it: 'Basato su {n} annunci venduti' },
       price_range_label: { ko: '판매 중 가격대', en: 'Asking price range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa de preço à venda', es: 'Rango de precios en venta', de: 'Preisspanne der Angebote', it: 'Fascia di prezzo in vendita' },
       choose_version: { ko: '버전을 고르면 시세가 나와요', en: 'Pick a version to see its market price', ja: 'バージョンを選ぶと相場が表示されます', 'zh-Hans': '选择具体版本即可查看行情', 'zh-Hant': '選擇具體版本即可查看行情', pt: 'Escolha uma versão para ver o preço de mercado', es: 'Elige una versión para ver su precio de mercado', de: 'Wähle eine Version, um den Marktpreis zu sehen', it: 'Scegli una versione per vedere il prezzo di mercato' },
@@ -2411,6 +2428,35 @@
       return out;
     }
 
+    function gradeLabel(grade){
+      if(grade === 'N') return ec('grade_new');
+      if(grade === 'X') return ec('grade_parts');
+      return ec('grade_label', { g: grade });
+    }
+
+    function gradeFactor(entity, grade){
+      const table = ((entityState.summary || {}).grade_factors || {})[entity && entity.kind === 'Body' ? 'Body' : 'Lens'] || {};
+      return Number(table[grade] || 0);
+    }
+
+    // 카드: 공통 등급 + (모델을 골랐으면) 같은 등급 시세와 비교
+    function renderGradeRow(result, cost){
+      const grade = result.grade;
+      if(!grade) return '';
+      const title = result.grade_basis === 'text' ? ec('grade_basis_text') : result.grade_basis === 'image' ? ec('grade_basis_image') : String(result.condition || '');
+      let compare = '';
+      const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
+      const factor = entity && !(entity.children || []).length ? gradeFactor(entity, grade) : 0;
+      if(entity && entity.b_price_krw && factor && grade !== 'X' && cost && cost.listed && fxRate(cost.currency) && fxRate('KRW')){
+        const listedKrw = convertAmount(cost.listed, cost.currency, 'KRW');
+        const diff = Math.round((listedKrw / (entity.b_price_krw * factor) - 1) * 100);
+        if(Math.abs(diff) >= 3){
+          compare = `<span class="grade-compare ${diff < 0 ? 'is-cheaper' : 'is-pricier'}">${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}</span>`;
+        }
+      }
+      return `<div class="result-grade-row"><span class="grade-chip grade-${escapeHtml(grade)}" title="${escapeHtml(title)}">${escapeHtml(gradeLabel(grade))}</span>${compare}</div>`;
+    }
+
     function krwToDisplay(krw){
       if(!krw || !fxRate('KRW') || !fxRate(uiState.currency)) return null;
       return formatMoney(roundEstimate(convertAmount(krw, 'KRW', uiState.currency), uiState.currency), uiState.currency);
@@ -2423,6 +2469,14 @@
       const high = range ? krwToDisplay(range[1]) : null;
       const rangeText = low ? (high && high !== low ? `${low} – ${high}` : low) : '';
       const isParent = (entity.children || []).length > 0;
+      if(!isParent && entity.b_price_krw){
+        const b = krwToDisplay(entity.b_price_krw);
+        const others = ['S', 'A', 'C', 'D']
+          .map(g => { const f = gradeFactor(entity, g); return f ? `${gradeLabel(g)} ${krwToDisplay(entity.b_price_krw * f)}` : ''; })
+          .filter(Boolean).join(' · ');
+        const basis = entity.b_price_basis === 'sold' ? ec('price_basis', { n: String(entity.b_price_n) }) : '';
+        return { caption: ec('grade_market', { grade: gradeLabel('B') }), value: b, meta: [others, basis].filter(Boolean).join(' · ') };
+      }
       const median = !isParent ? krwToDisplay(entity.sold_median_krw) : null;
       if(median){
         const basis = entity.sold_price_count ? ec('price_basis', { n: String(entity.sold_price_count) }) : '';

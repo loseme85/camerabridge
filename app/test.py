@@ -5,6 +5,8 @@ import re
 import argparse
 import random
 import os
+import sys as _sys_root
+_sys_root.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # 저장소 루트 모듈 (condition_grade)
 
 # ── 실행 모드 파싱 ──
 parser = argparse.ArgumentParser(description='Camera Bridge Crawler')
@@ -2410,6 +2412,8 @@ def crawl_leicamiami():
                 price = "문의요망"
             available = variant.get("available", True)
             handle = p.get("handle", "")
+            from condition_grade import describe_text
+            cond_text = describe_text(p.get("body_html") or "") or "정보없음"
             link = f"{base}/products/{handle}" if handle else ""
             img = ""
             if p.get("images"):
@@ -2424,7 +2428,7 @@ def crawl_leicamiami():
                 "label": label,
                 "상품명": name,
                 "세대": gen,
-                "컨디션": "정보없음",
+                "컨디션": cond_text,
                 "가격": price,
                 "통화": "USD",
                 "이미지": img,
@@ -2477,12 +2481,14 @@ def crawl_kamerastore():
             img = p["images"][0].get("src", "") if p.get("images") else ""
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            from condition_grade import describe_text
+            cond_text = describe_text(p.get("body_html") or "") or "정보없음"
             results.append({
                 "site": "Kamerastore (핀란드)",
                 "label": auto_label(name),
                 "상품명": name,
                 "세대": detect_generation(name),
-                "컨디션": "정보없음",
+                "컨디션": cond_text,
                 "가격": price,
                 "통화": "EUR",
                 "이미지": img,
@@ -2746,9 +2752,10 @@ def crawl_ffordes(page):
                     const priceMatch = priceRaw.match(/£[\d,\.]+/);
                     const price = priceMatch ? priceMatch[0] : '';
                     const isUsed = a.classList.contains('Used');
+                    const grade = (a.querySelector('.sortkey2')?.getAttribute('rel') || '').trim();  // Mint-, E++, E+ …
                     const isSold = a.querySelector('.soldout, .out-of-stock') !== null ||
                                    a.innerText.toLowerCase().includes('sold out');
-                    results.push({name, href, img, price, isUsed, isSold});
+                    results.push({name, href, img, price, isUsed, isSold, grade});
                 }
                 return results;
             }""")
@@ -2794,7 +2801,7 @@ def crawl_ffordes(page):
                         mount = mount_hint
 
                 status = "🚫sold" if is_sold else "✔ "
-                cond = "Used" if is_used else "New"
+                cond = item.get('grade') or ("Used" if is_used else "New")  # Ffordes 등급 (E++ 등)
                 print(f"    {status} {name[:45]} | {price} | {cond}")
 
                 results.append({
@@ -2819,6 +2826,11 @@ def crawl_ffordes(page):
     print(f"\n  ✅ Ffordes 완료: {len(results)}개")
     return results
 
+
+# 목록엔 컨디션이 없고 상세 페이지에만 있는 사이트 → 상세 페이지에서 찾을 글귀 (숫자 하나 = %)
+DETAIL_CONDITION = {
+    "장씨카메라": r"상태\s*:?\s*(\d{2,3})\s*%",
+}
 
 # 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
 SOURCE_MIN_INTERVAL_HOURS = {
@@ -2944,6 +2956,13 @@ def crawl_all():
     for e in all_events:
         if e["type"] == "new":
             print(f"  🆕 신규: {str(e.get('title'))[:40]}")
+    # 목록엔 컨디션이 없고 상세 페이지에만 있는 사이트 (장씨카메라: '상태 95%')
+    for _site, _pattern in DETAIL_CONDITION.items():
+        if SITE_FILTER and SITE_FILTER.lower() not in _site.lower():
+            continue
+        _n = ce.enrich_detail_condition(unique_results, _site, _pattern, crawl_time)
+        if _n:
+            print(f"  🔎 {_site}: 상세 페이지에서 컨디션 {_n}건 채움")
     elapsed = time.time() - start_time
 
     # label 자동 보정 + 상품명 정리 + system/category 분류
