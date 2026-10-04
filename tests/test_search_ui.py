@@ -274,7 +274,7 @@ def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
             assert snippet in html
         assert "idle: { ko: '결과 더 보기', en: 'Load more'," in html
         assert "loading: { ko: '불러오는 중...', en: 'Loading…'," in html
-        assert "query_label: { ko: '기준 모델', en: 'Market entry'," in html
+        assert "query_label: { ko: '기준 모델', en: 'Model'," in html
         assert "search_results_label: { ko: '검색 결과', en: 'Total results'," in html
         assert "active_listings_label: { ko: '현재 판매 중', en: 'Active listings'," in html
         assert "market_price_label: { ko: '시세', en: 'Market price'," in html
@@ -393,12 +393,10 @@ def test_public_locale_completion_covers_sidebar_and_status_copy() -> None:
 def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
     for html in _html_files(BETA_PATHS):
         for snippet in [
-            'data-i18n="hero.eyebrow"',
             'data-i18n="hero.title"',
             'data-i18n="hero.subtitle"',
-            'data-i18n="hero.notice_beta"',
-            'data-i18n="hero.notice_focus"',
-            'data-i18n="hero.notice_rare"',
+            'id="hero-trust"',
+            'data-i18n="footer.disclaimer"',
             'data-i18n="search.panel_label"',
             'data-i18n="search.button"',
             'id="summary-query-title"',
@@ -409,6 +407,9 @@ def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
             "ux('load_more.active_idle', 'Load more active listings')",
         ]:
             assert snippet in html
+        # 2026-10 공개 전 정리: 테스터용 안내·내부 정책 문구는 화면에 없어야 함
+        for removed in ['data-i18n="sidebar.what_to_check.title"', 'data-i18n="overview.limited_beta.body"', 'data-i18n="topbar.same_logic"']:
+            assert removed not in html
 
 
 def test_public_broad_query_hints_and_fallback_copy_cover_all_locales() -> None:

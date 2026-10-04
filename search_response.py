@@ -73,6 +73,18 @@ FINAL_OUTPUT_FIELDS = [
 QUALITY_LEVELS = ["strong", "medium", "weak", "none"]
 
 
+def _grade_fields(ranked_result: dict, final_output: dict) -> dict:
+    """공통 컨디션 등급 (condition_grade.py): N·S·A·B·C·D·X, 근거 label·title·text·image."""
+    from condition_grade import grade_of  # noqa: WPS433
+
+    image_grade = final_output.get("image_grade") or (ranked_result.get("raw_item") or {}).get("image_grade")
+    grade, basis = grade_of(final_output.get("source"), final_output.get("condition_raw"),
+                            ranked_result.get("title_raw") or final_output.get("title_raw"))
+    if not grade and image_grade:
+        grade, basis = image_grade, "image"
+    return {"grade": grade, "grade_basis": basis}
+
+
 def summarize_result_quality(
     results: list[dict[str, Any]],
     strong_only: bool = False,
@@ -265,6 +277,7 @@ def format_search_result(
         "affiliate_url": final_output.get("affiliate_url"),
         "image_url": final_output.get("image_url"),
         "condition": final_output.get("condition_raw"),
+        **_grade_fields(ranked_result, final_output),
         "seller": final_output.get("seller"),
         "seller_feedback_score": final_output.get("seller_feedback_score"),
         "seller_feedback_percentage": final_output.get("seller_feedback_percentage"),

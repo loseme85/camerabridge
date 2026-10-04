@@ -1,0 +1,88 @@
+"""컨디션 공통 등급 — 사이트마다 다른 표기를 한 기준으로.
+
+등급표 원본: '카메라브릿지 컨디션 등급표' 문서 (2026-10-04 초안).
+  N 신품·미사용 · S 최상(99%↑) · A 상(97~98%) · B 중상(94~96%, 기준) · C 중(90~93%) · D 하(89%↓) · X 고장·부품용
+반환: (등급 또는 None, 근거)  근거 = label(매장 등급 표기) | title(제목) | text(설명 글) | image(사진 평가)
+"""
+from __future__ import annotations
+
+import re
+
+GRADES = ["N", "S", "A", "B", "C", "D", "X"]
+
+_BROKEN = re.compile(r"고장|부품용|작동\s?불량|ジャンク|\bjunk\b|for parts|spares|as-?is\b|not working", re.I)
+_NEW = re.compile(r"신품|미사용|未使用|新品|\bbrand new\b|\bunused\b|\bnew\b(?! ?(old|york|elmar|summicron|summilux|version|ver))", re.I)
+
+# 일본 매장 (기타무라 등)
+_JP = {"AA": "S", "A": "A", "AB": "B", "B": "C", "C": "D"}
+# 영국 Ffordes
+_FFORDES = {"NEW": "N", "MINT": "N", "MINT-": "S", "E++": "A", "E+": "B", "E": "C", "VG": "D", "G": "D", "F": "X"}
+# 영어권 설명·표기 (긴 표현 먼저)
+_EN = [
+    (r"like[\s-]?new|(?<!near\s)(?<!near-)\bmint\b(?!-)", "S"),
+    (r"near[\s-]?mint|exc(?:ellent)?\s?\+{5}", "A"),
+    (r"exc(?:ellent)?\s?\+{3,4}|excellent\s?\+|excellent plus", "B"),
+    (r"\bexcellent\b|very good|\bvg\b", "C"),
+    (r"\bgood\b|\bfair\b|\buser\b|heavy wear|well[\s-]used", "D"),
+]
+
+
+# 설명 글(Kamerastore·Miami)의 말투: 'good condition'은 보통 사용감이라 등급 표기의 Good(D)보다 후하게
+_DESC = [
+    (r"like[\s-]?new|(?<!near\s)(?<!near-)\bmint\b|as new", "S"),
+    (r"near[\s-]?mint|\bexcellent\b|minimal (signs of )?(use|wear)", "B"),
+    (r"very good|\bgood\b|minor (cosmetic )?wear|light wear", "C"),
+    (r"\bfair\b|heavy wear|well[\s-]used|signs of heavy|brassing", "D"),
+]
+DESC_PREFIX = "설명: "
+
+
+def from_percent(value: int) -> str:
+    if value >= 99:
+        return "S"
+    if value >= 97:
+        return "A"
+    if value >= 94:
+        return "B"
+    if value >= 90:
+        return "C"
+    return "D"
+
+
+def grade_of(site: str | None, condition: str | None, title: str | None = "") -> tuple[str | None, str | None]:
+    cond = (condition or "").strip()
+    title = title or ""
+    if _BROKEN.search(title) or _BROKEN.search(cond):
+        return "X", "title" if _BROKEN.search(title) else "label"
+    if _NEW.search(title):
+        return "N", "title"
+    pct = re.fullmatch(r"(\d{2,3})\s?%", cond)
+    if pct:
+        return from_percent(int(pct.group(1))), "label"
+    up = cond.upper()
+    if site and ("기타무라" in site or "일본" in site) and up in _JP:
+        return _JP[up], "label"
+    if site and "ffordes" in site.lower() and up in _FFORDES:
+        return _FFORDES[up], "label"
+    if cond.startswith(DESC_PREFIX):
+        for pattern, grade in _DESC:
+            if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
+                return grade, "text"
+        return None, None
+    if cond and cond.lower() not in ("정보없음", "used", "new", ""):
+        for pattern, grade in _EN:
+            if re.search(pattern, cond, re.I):
+                return grade, "text"
+    if up == "NEW":
+        return "N", "label"
+    return None, None
+
+
+def describe_text(text: str) -> str | None:
+    """설명 글에서 컨디션 표현을 뽑아 '컨디션' 칸에 넣을 말로 ('설명: Good condition' 꼴)."""
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text or ""))
+    for pattern, _ in _DESC:
+        m = re.search(rf"({pattern})(?: condition)?", t, re.I)
+        if m:
+            return DESC_PREFIX + m.group(0).strip()
+    return None

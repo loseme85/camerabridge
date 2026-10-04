@@ -129,3 +129,11 @@ def test_order_is_stable_when_site_reorders():
     cur = [_row(i, site="Kitamura") for i in reversed(range(15))] + [_row(99, site="Kitamura")]
     merged, _, _ = ce.merge_source(prev, _run(cur, "full", site="Kitamura"), T1)
     assert [r["링크"] for r in merged] == ["https://x/99"] + [r["링크"] for r in prev]
+
+
+def test_enriched_condition_survives_next_crawl():
+    prev = [_row(i, first_seen=T0, 컨디션="95%", condition_checked="2026-10-04") for i in range(12)]
+    cur = [_row(i, 컨디션="정보없음") for i in range(12)]
+    merged, events, _ = ce.merge_source(prev, _run(cur), T1)
+    assert all(r["컨디션"] == "95%" and r["condition_checked"] == "2026-10-04" for r in merged)
+    assert events == []

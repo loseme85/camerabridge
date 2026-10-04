@@ -29,6 +29,7 @@ HEALTH_RATIO = 0.7          # 판매 중(또는 전체)이 이전의 70% 미만�
 FULL_SWEEP_HOURS = 24       # active_first 사이트의 판매완료 기록 전체 재확인 주기
 STOP_AFTER_QUIET_PAGES = 2  # 판매 중 0개 + 전부 아는 매물인 페이지가 연속 이만큼이면 멈춤
 MISSING_GRACE_RUNS = 2      # 전체 수집에서 이만큼 연속 안 보여야 '사라짐'
+CARRY_FIELDS = ("condition_checked", "image_grade", "image_grade_note", "image_checked")  # 목록 밖에서 채운 값
 
 
 def now_kst() -> str:
@@ -137,6 +138,12 @@ def merge_source(prev_rows: list[dict], run: dict, now: str) -> tuple[list[dict]
                 events.append(_event("new", row, now))
         else:
             row["first_seen"] = p.get("first_seen") or now
+            # 상세 페이지·사진에서 채운 값은 목록에 없으니 이전 값을 이어감
+            for key in CARRY_FIELDS:
+                if key in p and key not in row:
+                    row[key] = p[key]
+            if row.get("컨디션") in (None, "", "정보없음") and p.get("컨디션") not in (None, "", "정보없음"):
+                row["컨디션"] = p["컨디션"]
             if p.get("가격") != row.get("가격") and row.get("가격"):
                 events.append(_event("price", row, now, prev_price=p.get("가격")))
             if not p.get("품절") and row.get("품절"):
@@ -350,3 +357,39 @@ def wrap_full_run(site_name: str, collect: Callable[[], list[dict]]) -> dict:
     except Exception as e:  # noqa: BLE001
         return {"site": site_name, "ok": False, "rows": [], "coverage": "full", "error": str(e)[:200],
                 "seconds": round(time.time() - started, 1)}
+
+
+# ── 상세 페이지에서 컨디션 채우기 (목록에 없고 상세에만 있는 사이트) ──────────────
+
+def enrich_detail_condition(rows: list[dict], site: str, pattern: str, now: str, cap: int = 400, workers: int = 4,
+                            session=None) -> int:
+    """'컨디션'이 비어 있는 매물의 상세 페이지를 읽어 채운다. 판매 중 먼저, 한 번 읽은 매물은 다시 안 읽음.
+    판매완료 기록은 실행마다 cap개씩 나눠서 채운다 (예: 장씨카메라 4천 건 → 하루 이틀)."""
+    import requests
+
+    todo = [r for r in rows if r.get("site") == site and (r.get("컨디션") in (None, "", "정보없음"))
+            and not r.get("condition_checked")]
+    todo.sort(key=lambda r: bool(r.get("품절")))
+    todo = todo[:cap]
+    if not todo:
+        return 0
+    sess = session or requests.Session()
+    sess.headers["User-Agent"] = BROWSER_UA
+    rx = re.compile(pattern)
+
+    def one(row):
+        try:
+            html = sess.get(row["링크"], timeout=20).text
+            m = rx.search(re.sub(r"<[^>]+>", " ", html))
+            return row, (m.group(1) + "%") if m else None
+        except Exception:  # noqa: BLE001
+            return row, None
+
+    filled = 0
+    with ThreadPoolExecutor(workers) as ex:
+        for row, cond in ex.map(one, todo):
+            row["condition_checked"] = now[:10]
+            if cond:
+                row["컨디션"] = cond
+                filled += 1
+    return filled
