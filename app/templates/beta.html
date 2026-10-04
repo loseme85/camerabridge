@@ -147,6 +147,25 @@
     body:not(.cb-searched) .workspace{display:none}
     .hero-trust{margin:14px 0 20px;color:var(--text-soft);font-size:13px;line-height:1.6;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
     .hero-trust .source-flag{margin-right:0}
+    .feedback-fab{position:fixed;right:16px;bottom:16px;z-index:50;padding:10px 16px;border-radius:999px;border:1px solid var(--border-strong);
+      background:var(--surface);color:var(--text);font-size:13px;font-weight:700;box-shadow:var(--shadow);cursor:pointer}
+    .feedback-fab::before{content:"💬 "}
+    .feedback-fab:hover{border-color:var(--accent)}
+    .feedback-dialog{width:min(520px, calc(100% - 32px));border:1px solid var(--border-strong);border-radius:12px;padding:20px;
+      background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+    .feedback-dialog::backdrop{background:rgba(0,0,0,0.35)}
+    .feedback-dialog h2{margin:0 0 8px;font-size:18px}
+    .feedback-intro{margin:0 0 12px;color:var(--text-soft);font-size:13px;line-height:1.55}
+    .feedback-dialog textarea,.feedback-dialog input[type=email]{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border-strong);
+      border-radius:8px;font:inherit;font-size:14px;background:var(--surface);color:var(--text)}
+    .feedback-email-label{display:block;margin:12px 0 6px;font-size:12px;color:var(--text-soft)}
+    .feedback-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+    .feedback-status{min-height:1.4em;margin:10px 0 0;font-size:13px}
+    .feedback-status.is-ok{color:#2f7d4f}
+    .feedback-status.is-error{color:#b42318}
+    .feedback-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+    .feedback-actions button{width:auto;white-space:nowrap;flex:0 0 auto;padding-left:18px;padding-right:18px}
+    @media(max-width:720px){.feedback-fab{right:12px;bottom:12px;padding:9px 14px}}
     .site-disclaimer{margin:28px 0 8px;color:var(--text-soft);font-size:12px;line-height:1.5;text-align:center}
     .prefs{position:relative}
     .prefs > summary{list-style:none;cursor:pointer}
@@ -1120,6 +1139,22 @@
           </aside>
         </div>
       </section>
+      <button type="button" id="feedback-open" class="feedback-fab" data-i18n="feedback.button">Send feedback</button>
+      <dialog id="feedback-dialog" class="feedback-dialog">
+        <form id="feedback-form" method="dialog" novalidate>
+          <h2 data-i18n="feedback.title">What would make Camera Bridge better?</h2>
+          <p class="feedback-intro" data-i18n="feedback.intro">Features you want, things that bugged you, shops we should add — anything.</p>
+          <textarea id="feedback-message" rows="5" maxlength="2000" required data-i18n-placeholder="feedback.placeholder" placeholder="e.g. Alert me when a model I follow is listed below market price"></textarea>
+          <label class="feedback-email-label" for="feedback-email" data-i18n="feedback.email">Email (optional, only used to reply)</label>
+          <input id="feedback-email" type="email" autocomplete="email" maxlength="254">
+          <input id="feedback-website" type="text" tabindex="-1" autocomplete="off" class="feedback-hp" aria-hidden="true">
+          <p id="feedback-status" class="feedback-status" role="status"></p>
+          <div class="feedback-actions">
+            <button type="button" id="feedback-close" class="ghost-button" data-i18n="feedback.close">Close</button>
+            <button type="submit" id="feedback-submit" class="search-button" data-i18n="feedback.submit">Send</button>
+          </div>
+        </form>
+      </dialog>
       <p class="site-disclaimer" data-i18n="footer.disclaimer">Prices and totals are estimates. Always check the original listing before you buy.</p>
     </main>
   </div>
@@ -1233,6 +1268,20 @@
       }
     };
     const UX_LOCALE_COPY = {
+      feedback: {
+        button: { ko: '의견 보내기', en: 'Send feedback', ja: 'ご意見を送る', 'zh-Hans': '提交反馈', 'zh-Hant': '提交意見', pt: 'Enviar sugestão', es: 'Enviar comentarios', de: 'Feedback senden', it: 'Invia un suggerimento' },
+        title: { ko: '이런 기능이 있으면 좋겠어요', en: 'What would make Camera Bridge better?', ja: 'こんな機能があったらいいな', 'zh-Hans': '你希望有什么功能？', 'zh-Hant': '你希望有什麼功能？', pt: 'O que tornaria o Camera Bridge melhor?', es: '¿Qué haría mejor a Camera Bridge?', de: 'Was würde Camera Bridge besser machen?', it: 'Cosa renderebbe Camera Bridge migliore?' },
+        intro: { ko: '원하는 기능, 불편한 점, 추가했으면 하는 판매처 무엇이든 남겨 주세요. 많이 모이면 공개 목록으로 보여 드릴게요.', en: 'Features you want, things that bugged you, shops we should add — anything. Once enough ideas come in, we’ll share them in a public list.', ja: '欲しい機能、使いにくい点、追加してほしいお店など、何でもどうぞ。集まったら公開リストでお知らせします。', 'zh-Hans': '想要的功能、不好用的地方、希望加入的店铺，都欢迎留言。收集到一定数量后会公开列表。', 'zh-Hant': '想要的功能、不好用的地方、希望加入的店家，都歡迎留言。收集到一定數量後會公開清單。', pt: 'Recursos que você quer, algo que incomodou, lojas que devemos incluir — qualquer coisa. Quando juntarmos ideias suficientes, publicaremos uma lista.', es: 'Funciones que quieras, cosas que te molestaron, tiendas que deberíamos añadir: lo que sea. Cuando reunamos suficientes ideas, publicaremos una lista.', de: 'Gewünschte Funktionen, Ärgernisse, Händler, die wir aufnehmen sollten – alles ist willkommen. Sobald genug Ideen da sind, veröffentlichen wir eine Liste.', it: 'Funzioni che vorresti, cose che ti hanno infastidito, negozi da aggiungere: qualsiasi cosa. Quando avremo abbastanza idee, pubblicheremo un elenco.' },
+        placeholder: { ko: '예: 관심 모델이 시세보다 싸게 올라오면 알림 받고 싶어요', en: 'e.g. Alert me when a model I follow is listed below market price', ja: '例：気になるモデルが相場より安く出たら通知してほしい', 'zh-Hans': '例如：关注的型号低于行情上架时提醒我', 'zh-Hant': '例如：關注的型號低於行情上架時提醒我', pt: 'ex.: Avise-me quando um modelo que sigo aparecer abaixo do preço de mercado', es: 'p. ej.: Avísame cuando un modelo que sigo se publique por debajo del precio de mercado', de: 'z. B. Benachrichtige mich, wenn ein Modell unter Marktpreis angeboten wird', it: 'es. Avvisami quando un modello che seguo è in vendita sotto il prezzo di mercato' },
+        email: { ko: '이메일 (선택 · 답장이 필요할 때만 사용)', en: 'Email (optional, only used to reply)', ja: 'メール（任意・返信にのみ使用）', 'zh-Hans': '邮箱（选填，仅用于回复）', 'zh-Hant': '電子郵件（選填，僅用於回覆）', pt: 'E-mail (opcional, só para responder)', es: 'Correo (opcional, solo para responderte)', de: 'E-Mail (optional, nur für Rückfragen)', it: 'Email (facoltativa, solo per risponderti)' },
+        submit: { ko: '보내기', en: 'Send', ja: '送信', 'zh-Hans': '发送', 'zh-Hant': '送出', pt: 'Enviar', es: 'Enviar', de: 'Senden', it: 'Invia' },
+        close: { ko: '닫기', en: 'Close', ja: '閉じる', 'zh-Hans': '关闭', 'zh-Hant': '關閉', pt: 'Fechar', es: 'Cerrar', de: 'Schließen', it: 'Chiudi' },
+        thanks: { ko: '고맙습니다! 잘 받았어요.', en: 'Thanks! We got it.', ja: 'ありがとうございます！受け取りました。', 'zh-Hans': '谢谢！我们已收到。', 'zh-Hant': '謝謝！我們已收到。', pt: 'Obrigado! Recebemos.', es: '¡Gracias! Lo hemos recibido.', de: 'Danke! Ist angekommen.', it: 'Grazie! Ricevuto.' },
+        error: { ko: '보내지 못했어요. 잠시 뒤 다시 시도해 주세요.', en: 'Couldn’t send it. Please try again in a moment.', ja: '送信できませんでした。しばらくしてからもう一度お試しください。', 'zh-Hans': '发送失败，请稍后再试。', 'zh-Hant': '傳送失敗，請稍後再試。', pt: 'Não foi possível enviar. Tente novamente em instantes.', es: 'No se pudo enviar. Inténtalo de nuevo en un momento.', de: 'Senden fehlgeschlagen. Bitte versuche es gleich noch einmal.', it: 'Invio non riuscito. Riprova tra poco.' },
+        too_short: { ko: '조금만 더 자세히 적어 주세요.', en: 'Please add a little more detail.', ja: 'もう少し詳しく書いてください。', 'zh-Hans': '请再写详细一点。', 'zh-Hant': '請再寫詳細一點。', pt: 'Escreva um pouco mais de detalhes.', es: 'Añade un poco más de detalle.', de: 'Bitte etwas ausführlicher schreiben.', it: 'Aggiungi qualche dettaglio in più.' },
+        bad_email: { ko: '이메일 형식을 확인해 주세요.', en: 'Please check the email address.', ja: 'メールアドレスをご確認ください。', 'zh-Hans': '请检查邮箱格式。', 'zh-Hant': '請檢查電子郵件格式。', pt: 'Verifique o e-mail.', es: 'Revisa el correo electrónico.', de: 'Bitte E-Mail-Adresse prüfen.', it: 'Controlla l’indirizzo email.' },
+        limit: { ko: '오늘은 더 보낼 수 없어요. 내일 다시 남겨 주세요.', en: 'You’ve reached today’s limit. Please try again tomorrow.', ja: '本日の送信上限に達しました。明日またお送りください。', 'zh-Hans': '今天已达发送上限，请明天再试。', 'zh-Hant': '今天已達傳送上限，請明天再試。', pt: 'Você atingiu o limite de hoje. Tente amanhã.', es: 'Has alcanzado el límite de hoy. Inténtalo mañana.', de: 'Tageslimit erreicht. Bitte morgen erneut versuchen.', it: 'Hai raggiunto il limite di oggi. Riprova domani.' },
+      },
       footer: {
         disclaimer: { ko: '가격과 예상 총액은 참고용입니다. 구매 전에 판매처 원문을 꼭 확인하세요.', en: 'Prices and totals are estimates. Always check the original listing before you buy.', ja: '価格と到着時の目安は参考値です。購入前に必ず販売元のページをご確認ください。', 'zh-Hans': '价格与到手价仅供参考，购买前请务必查看卖家原页面。', 'zh-Hant': '價格與到手價僅供參考，購買前請務必查看賣家原頁面。', pt: 'Preços e totais são estimativas. Confira sempre o anúncio original antes de comprar.', es: 'Los precios y totales son estimaciones. Revisa siempre el anuncio original antes de comprar.', de: 'Preise und Gesamtkosten sind Schätzungen. Prüfe vor dem Kauf immer das Originalangebot.', it: 'Prezzi e totali sono stime. Controlla sempre l’annuncio originale prima di acquistare.' },
       },
@@ -1701,6 +1750,51 @@
       }catch(error){
         return code;
       }
+    }
+
+    // 의견 보내기: /api/feedback → 비공개 저장 + 텔레그램 알림
+    function bindFeedback(){
+      const dialog = document.getElementById('feedback-dialog');
+      const open = document.getElementById('feedback-open');
+      if(!dialog || !open || typeof dialog.showModal !== 'function'){ if(open) open.hidden = true; return; }
+      const form = document.getElementById('feedback-form');
+      const message = document.getElementById('feedback-message');
+      const email = document.getElementById('feedback-email');
+      const status = document.getElementById('feedback-status');
+      const submit = document.getElementById('feedback-submit');
+      let openedAt = 0;
+      const setStatus = (text, kind) => { status.textContent = text; status.className = `feedback-status${kind ? ' is-' + kind : ''}`; };
+      open.addEventListener('click', () => { openedAt = Date.now(); setStatus('', ''); dialog.showModal(); message.focus(); });
+      document.getElementById('feedback-close').addEventListener('click', () => dialog.close());
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        const text = message.value.trim();
+        if(text.length < 5){ setStatus(ux('feedback.too_short', 'Please add a little more detail.'), 'error'); return; }
+        if(email.value.trim() && !email.checkValidity()){ setStatus(ux('feedback.bad_email', 'Please check the email address.'), 'error'); return; }
+        submit.disabled = true;
+        try{
+          const response = await fetch('/api/feedback', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              message: text, email: email.value.trim(), locale: uiState.locale, page: location.href,
+              entity: state.entity || '', website: document.getElementById('feedback-website').value, elapsed_ms: Date.now() - openedAt
+            })
+          });
+          const data = await response.json().catch(() => ({}));
+          if(response.ok && data.ok){
+            setStatus(ux('feedback.thanks', 'Thanks! We got it.'), 'ok');
+            message.value = '';
+            setTimeout(() => { if(dialog.open) dialog.close(); }, 1600);
+          }else{
+            setStatus(data.error === 'limit' ? ux('feedback.limit', 'You’ve reached today’s limit.') : ux('feedback.error', 'Couldn’t send it.'), 'error');
+          }
+        }catch(error){
+          setStatus(ux('feedback.error', 'Couldn’t send it.'), 'error');
+        }finally{
+          submit.disabled = false;
+        }
+      });
     }
 
     // 위쪽 통화·배송 설정 버튼에 지금 값 (예: 'USD · 🇺🇸')
@@ -4693,6 +4787,7 @@
     bindEntitySuggest('sticky-query-input', { preserveResultsAnchor: true });
     bindEntityBar();
     loadEntitySummary();
+    bindFeedback();
     hydrateFromUrl();
   </script>
 </body>
