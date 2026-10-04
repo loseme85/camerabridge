@@ -88,6 +88,8 @@ def ja_to_en(text: str) -> str:
     text = text.replace('Super--', 'Super-').replace('Tri--', 'Tri-').replace('Vario--', 'Vario-')
     # 3代目 → 3rd
     text = _re.sub(r'(\d)代目', lambda m: m.group(1) + {'1': 'st', '2': 'nd', '3': 'rd'}.get(m.group(1), 'th'), text)
+    # APOSummicron·DRSummicron 처럼 붙어 쓴 앞말
+    text = _re.sub(rf'\b(APO|DR)(?={LENS_NAMES})', lambda m: 'APO-' if m.group(1) == 'APO' else 'DR ', text)
     # SummicronT / AngulonR / ElmarM28-35-50 → Summicron-T, Angulon-R, Elmar-M 28-35-50
     text = _re.sub(rf'({LENS_NAMES})(SL|TL|M|R|L|S|T)(?=\b|\d)', r'\1-\2 ', text)
     # T 시스템 렌즈는 2016년에 TL로 이름이 바뀜 (Summicron-T 23 = Summicron-TL 23)

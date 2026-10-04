@@ -99,3 +99,22 @@ def test_summilux_35_korean_generation_numbers() -> None:
     assert f"{sl}:asph-1994" in match_entities(_record("[위탁] M 35/1.4 Summilux 4세대 (Black)"))
     ids = match_entities(_record("[중고] M 35/1.4 Summilux 4세대 (Titan)"))
     assert f"{sl}:titan" in ids and f"{sl}:asph-1994" not in ids
+
+
+def test_price_relevant_variants_are_separate_models():
+    def leaf(title, category="Body"):
+        return {i for i in match_entities(_record(title, category=category, mount=None))}
+    q3m = leaf("Leica Q3 Monochrom")
+    assert "leica:body:q3-monochrom" in q3m and "leica:body:q3" not in q3m
+    ttl_ti = leaf("LEICA M6 TTL Titan sn.2754", "Body")
+    assert "leica:body:m6:ttl-titan" in ttl_ti and "leica:body:m6:ttl" not in ttl_ti and "leica:body:m6:titan" not in ttl_ti
+    assert "leica:body:m6:titan" in leaf("[중고] M6 non ttl (Titan)")
+    mp_bp = leaf("신품 Leica MP Blackpaint x0.72")
+    assert "leica:body:mp-film:black-paint" in mp_bp and "leica:body:mp-film:standard" not in mp_bp
+    assert "leica:body:sl3:reporter" in leaf("Leica SL3 Reporter Body [10662]")
+    lux = match_entities(_record("Leica Summilux-M 50mm f1.4 ASPH. Safari [11736]"))
+    assert "leica:lens:summilux-m:50:asph-safari" in lux and "leica:lens:summilux-m:50:asph" not in lux
+    cron = match_entities(_record("LEICA 35mm F2 ASPH SUMMICRON-M Black paint sn.4000"))
+    assert "leica:lens:summicron-m:35:asph-black-paint" in cron and "leica:lens:summicron-m:35:asph" not in cron
+    apo = match_entities(_record("Leica APO-Summicron M 50mm F2.0 ASPH.LHSA Silver"))
+    assert "leica:lens:apo-summicron-m:50:lhsa" in apo and "leica:lens:summicron-m:50:current" not in apo
