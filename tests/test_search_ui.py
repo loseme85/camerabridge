@@ -274,7 +274,7 @@ def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
             assert snippet in html
         assert "idle: { ko: '결과 더 보기', en: 'Load more'," in html
         assert "loading: { ko: '불러오는 중...', en: 'Loading…'," in html
-        assert "query_label: { ko: '기준 모델', en: 'Market entry'," in html
+        assert "query_label: { ko: '기준 모델', en: 'Model'," in html
         assert "search_results_label: { ko: '검색 결과', en: 'Total results'," in html
         assert "active_listings_label: { ko: '현재 판매 중', en: 'Active listings'," in html
         assert "market_price_label: { ko: '시세', en: 'Market price'," in html

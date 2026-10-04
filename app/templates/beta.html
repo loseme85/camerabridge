@@ -1038,7 +1038,7 @@
         <div id="entity-bar" class="entity-bar" hidden aria-live="polite"></div>
         <section class="status-strip">
           <div class="summary-copy">
-            <div id="summary-query-kicker" class="summary-kicker">Market entry</div>
+            <div id="summary-query-kicker" class="summary-kicker">Model</div>
             <div id="summary-query-title" class="summary-title">Search Leica listings</div>
             <div id="summary-query-subtitle" class="summary-subtitle">Search results, active listings, and market price appear here.</div>
             <div class="summary-metrics">
@@ -1383,7 +1383,7 @@
         },
       },
       summary: {
-        query_label: { ko: '기준 모델', en: 'Market entry', ja: '基準モデル', 'zh-Hans': '基准型号', 'zh-Hant': '基準型號', pt: 'Modelo de referência', es: 'Modelo de referencia', de: 'Referenzmodell', it: 'Modello di riferimento' },
+        query_label: { ko: '기준 모델', en: 'Model', ja: '基準モデル', 'zh-Hans': '基准型号', 'zh-Hant': '基準型號', pt: 'Modelo de referência', es: 'Modelo de referencia', de: 'Referenzmodell', it: 'Modello di riferimento' },
         query_ready_title: { ko: 'Leica 매물을 검색해 보세요', en: 'Search Leica listings', ja: 'Leicaの中古商品を検索', 'zh-Hans': '搜索 Leica 商品', 'zh-Hant': '搜尋 Leica 商品', pt: 'Pesquise anúncios Leica', es: 'Busca anuncios Leica', de: 'Suche nach Leica-Angeboten', it: 'Cerca annunci Leica' },
         query_ready_subtitle: { ko: '검색 후 결과 수, 현재 판매 중인 매물, 시세를 한눈에 보여드립니다.', en: 'After a search, total results, active listings, and market price appear here.', ja: '検索後に結果数、販売中の件数、相場をここでまとめて確認できます。', 'zh-Hans': '搜索后，会在这里汇总显示结果数、在售数量和市场价格。', 'zh-Hant': '搜尋後，會在這裡彙整顯示結果數、在售數量與市場價格。', pt: 'Após a busca, o total de resultados, anúncios ativos e preço de mercado aparecem aqui.', es: 'Tras la búsqueda, aquí verás el total de resultados, anuncios activos y precio de mercado.', de: 'Nach der Suche erscheinen hier Gesamtzahl, aktive Angebote und Marktpreis.', it: 'Dopo la ricerca, qui compaiono totale risultati, annunci attivi e prezzo di mercato.' },
         search_query_prefix: { ko: '검색어', en: 'Search query', ja: '検索語', 'zh-Hans': '搜索词', 'zh-Hant': '搜尋詞', pt: 'Busca', es: 'Búsqueda', de: 'Suchanfrage', it: 'Ricerca' },
@@ -3410,6 +3410,9 @@
     }
 
     function getPublicSummaryQueryTitle(policy){
+      // 모델(엔티티)을 골랐으면 그 모델 이름. market_entry_title은 옛 분류기의 계열 이름(예: 'Summilux-M')이라 세대·버전을 모름
+      const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
+      if(entity) return entityDisplayName(entity);
       if(state.query){
         return String((policy && policy.market_entry_title) || state.query || '').trim() || state.query;
       }
@@ -3964,7 +3967,7 @@
 
       updateDocumentTitle();
 
-      els['summary-query-kicker'].textContent = ux('summary.query_label', 'Market entry');
+      els['summary-query-kicker'].textContent = ux('summary.query_label', 'Model');
       els['summary-query-title'].textContent = getPublicSummaryQueryTitle(policy);
       els['summary-query-subtitle'].textContent = getPublicSummaryQuerySubtitle(policy);
       els['result-caption'].textContent = ux('summary.search_results_label', 'Total results');
