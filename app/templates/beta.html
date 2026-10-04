@@ -142,9 +142,20 @@
     }
     /* 검색 후보 목록이 hero 밖(아래 카드 위)까지 보이도록: 잘라내지 않고, 입력 중엔 위로 올림 */
     .hero:focus-within{z-index:30}
+    [hidden]{display:none !important}
+    /* 검색 전에는 필터·요약을 숨김 */
+    body:not(.cb-searched) .workspace{display:none}
+    .hero-trust{margin:14px 0 20px;color:var(--text-soft);font-size:13px;line-height:1.6;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
+    .hero-trust .source-flag{margin-right:0}
+    .site-disclaimer{margin:28px 0 8px;color:var(--text-soft);font-size:12px;line-height:1.5;text-align:center}
+    .prefs{position:relative}
+    .prefs > summary{list-style:none;cursor:pointer}
+    .prefs > summary::-webkit-details-marker{display:none}
+    .prefs-panel{position:absolute;right:0;top:calc(100% + 6px);z-index:40;display:grid;gap:10px;min-width:240px;padding:12px;
+      background:var(--surface);border:1px solid var(--border-strong);border-radius:8px;box-shadow:var(--shadow)}
     .hero-grid{
       display:grid;
-      grid-template-columns:minmax(0,1.35fr) minmax(280px,0.65fr);
+      grid-template-columns:minmax(0,1fr);
       gap:0;
     }
     .hero-copy{
@@ -887,6 +898,7 @@
       }
       .topbar-meta{justify-content:flex-start}
       .lang-menu{right:auto;left:0}
+      .prefs-panel{right:auto;left:0}
       main{width:min(100% - 20px, 1280px)}
       .hero-copy,
       .hero-sidebar,
@@ -913,9 +925,23 @@
         CAMERA <span>BRIDGE</span>
       </a>
       <div class="topbar-meta">
-        <span class="meta-pill accent" data-i18n="topbar.beta_badge">Limited Beta</span>
-        <span class="meta-pill" data-i18n="topbar.leica_focus">Leica-focused test</span>
-        <span class="meta-pill" data-i18n="topbar.same_logic">Same search logic</span>
+        <span class="meta-pill accent" data-i18n="topbar.beta_badge">Beta</span>
+        <details class="prefs" id="prefs">
+          <summary class="lang-button prefs-button" data-i18n-aria-label="prefs.label" aria-label="Currency and shipping">
+            <span id="prefs-summary">USD</span>
+            <svg class="lang-caret" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 10l5 5 5-5"/></svg>
+          </summary>
+          <div class="prefs-panel">
+            <div class="control">
+              <label for="currency-select" data-i18n="filters.currency.label">Currency</label>
+              <select id="currency-select"></select>
+            </div>
+            <div class="control">
+              <label for="destination-select" data-i18n="filters.destination.label">Ship to</label>
+              <select id="destination-select"></select>
+            </div>
+          </div>
+        </details>
         <div class="lang-switch">
           <button type="button" id="lang-button" class="lang-button" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu">
             <svg class="lang-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
@@ -931,72 +957,25 @@
       <section class="hero">
         <div class="hero-grid">
           <div class="hero-copy">
-            <p class="eyebrow" data-i18n="hero.eyebrow">Limited beta for Leica market search</p>
-            <h1 class="hero-title" data-i18n="hero.title">Browse premium camera listings and market prices in one place.</h1>
-            <p class="hero-subtitle" data-i18n="hero.subtitle">
-              This is a limited Leica-focused beta. Prices are for reference only, and the original listing should be checked before purchase.
-            </p>
-            <div class="hero-notices">
-              <span class="notice-pill" data-i18n="hero.notice_beta">Limited Beta</span>
-              <span class="notice-pill" data-i18n="hero.notice_focus">Currently testing with Leica-focused coverage.</span>
-              <span class="notice-pill" data-i18n="hero.notice_rare">Some rare models may stay price-locked when evidence is limited.</span>
-            </div>
+            <h1 class="hero-title" data-i18n="hero.title">Find used Leica gear across Korea, Japan, the UK, the US and Europe.</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">Prices are converted to your currency, with shipping and import taxes estimated to your door.</p>
+            <p id="hero-trust" class="hero-trust" hidden></p>
             <section class="search-panel" data-i18n-aria-label="search.home_aria" aria-label="Search home">
-              <div class="search-panel-label" data-i18n="search.panel_label">Beta search</div>
+              <div class="search-panel-label" data-i18n="search.panel_label">Search</div>
               <form id="search-form" class="search-form-row">
-                <input id="query-input" class="search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="e.g. Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585">
+                <input id="query-input" class="search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="e.g. M6, Summilux 35, Noctilux 50, Q3">
                 <button class="search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.button_aria" aria-label="Search">Search</button>
               </form>
               <div class="query-chip-row" data-i18n-aria-label="search.examples_aria" aria-label="Example searches">
-                <button class="query-chip" type="button" data-query="Summilux-M 35 FLE2">Summilux-M 35 FLE2</button>
-                <button class="query-chip" type="button" data-query="50 cron dr">50 cron dr</button>
-                <button class="query-chip" type="button" data-query="Leica M10">Leica M10</button>
-                <button class="query-chip" type="button" data-query="Leica 12585">Leica 12585</button>
-                <button class="query-chip" type="button" data-query="Summicron 50 hood">Summicron 50 hood</button>
+                <button class="query-chip" type="button" data-query="Leica M6">M6</button>
+                <button class="query-chip" type="button" data-query="Leica Q3">Q3</button>
+                <button class="query-chip" type="button" data-query="Summilux 35">Summilux 35</button>
+                <button class="query-chip" type="button" data-query="Noctilux 50">Noctilux 50</button>
+                <button class="query-chip" type="button" data-query="Leica M10">M10</button>
               </div>
             </section>
           </div>
-          <aside class="hero-sidebar">
-            <div class="sidebar-card">
-              <p class="section-label" data-i18n="sidebar.beta_notice.label">Beta notice</p>
-              <h2 data-i18n="sidebar.beta_notice.title">The same results are shown, with simpler guidance for beta testing.</h2>
-              <ul class="plain-list">
-                <li data-i18n="sidebar.beta_notice.item_1">Double-check the original listing before making a decision.</li>
-                <li data-i18n="sidebar.beta_notice.item_2">Prices are automatically summarized reference values.</li>
-                <li data-i18n="sidebar.beta_notice.item_3">If listings mix different conditions, price calculation stays locked.</li>
-                <li data-i18n="sidebar.beta_notice.item_4">Accessory searches are not used for body or lens price calculations.</li>
-              </ul>
-            </div>
-            <div class="sidebar-card">
-              <p class="section-label" data-i18n="sidebar.what_to_check.label">What to check</p>
-              <h2 data-i18n="sidebar.what_to_check.title">These are the main things to check.</h2>
-              <ul class="plain-list">
-                <li data-i18n="sidebar.what_to_check.item_1">Whether the results match your search intent</li>
-                <li data-i18n="sidebar.what_to_check.item_2">Whether the price-state explanation is easy to understand</li>
-                <li data-i18n="sidebar.what_to_check.item_3">Whether opening the source listing feels natural</li>
-                <li data-i18n="sidebar.what_to_check.item_4">Whether the mobile cards are easy to read</li>
-              </ul>
-            </div>
-          </aside>
         </div>
-      </section>
-
-      <section class="overview-grid" hidden>
-        <article class="workspace-card">
-          <p class="section-label" data-i18n="overview.price_policy.label">Price policy</p>
-          <h2 data-i18n="overview.price_policy.title">When the match is uncertain, the price stays locked</h2>
-          <p data-i18n="overview.price_policy.body">Even if related models appear, exact price calculation is held back when conditions are mixed.</p>
-        </article>
-        <article class="workspace-card">
-          <p class="section-label" data-i18n="overview.source_coverage.label">Source coverage</p>
-          <h2 data-i18n="overview.source_coverage.title">Low coverage does not mean the item does not exist</h2>
-          <p data-i18n="overview.source_coverage.body">When source coverage is thin, price calculation is skipped and only reference results are shown.</p>
-        </article>
-        <article class="workspace-card">
-          <p class="section-label" data-i18n="overview.limited_beta.label">Limited beta</p>
-          <h2 data-i18n="overview.limited_beta.title">This is currently a Leica-focused limited beta</h2>
-          <p data-i18n="overview.limited_beta.body">This does not mean public release approval or external tester rollout.</p>
-        </article>
       </section>
 
       <section class="workspace">
@@ -1010,7 +989,7 @@
               <option value="Accessory">Accessory</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden><!-- 지금은 라이카만 수집 → 브랜드를 늘리면 다시 보이기 -->
             <label for="brand-filter" data-i18n="filters.brand.label">Brand</label>
             <select id="brand-filter">
               <option value="">Any</option>
@@ -1039,9 +1018,6 @@
               <option value="">Any</option>
               <option value="asking">Asking</option>
               <option value="sold">Sold</option>
-              <option value="sold_confirmed">Sold confirmed</option>
-              <option value="sold_likely">Sold likely</option>
-              <option value="unknown">Unknown</option>
             </select>
           </div>
           <div class="control">
@@ -1053,17 +1029,9 @@
               <option value="newest">Newest</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden><!-- 언어는 위쪽 언어 버튼으로 -->
             <label for="locale-select" data-locale-label="true">Language</label>
             <select id="locale-select"></select>
-          </div>
-          <div class="control">
-            <label for="currency-select" data-i18n="filters.currency.label">Currency</label>
-            <select id="currency-select"></select>
-          </div>
-          <div class="control">
-            <label for="destination-select" data-i18n="filters.destination.label">Ship to</label>
-            <select id="destination-select"></select>
           </div>
         </div>
 
@@ -1144,6 +1112,7 @@
           </aside>
         </div>
       </section>
+      <p class="site-disclaimer" data-i18n="footer.disclaimer">Prices and totals are estimates. Always check the original listing before you buy.</p>
     </main>
   </div>
 
@@ -1256,30 +1225,37 @@
       }
     };
     const UX_LOCALE_COPY = {
+      footer: {
+        disclaimer: { ko: '가격과 예상 총액은 참고용입니다. 구매 전에 판매처 원문을 꼭 확인하세요.', en: 'Prices and totals are estimates. Always check the original listing before you buy.', ja: '価格と到着時の目安は参考値です。購入前に必ず販売元のページをご確認ください。', 'zh-Hans': '价格与到手价仅供参考，购买前请务必查看卖家原页面。', 'zh-Hant': '價格與到手價僅供參考，購買前請務必查看賣家原頁面。', pt: 'Preços e totais são estimativas. Confira sempre o anúncio original antes de comprar.', es: 'Los precios y totales son estimaciones. Revisa siempre el anuncio original antes de comprar.', de: 'Preise und Gesamtkosten sind Schätzungen. Prüfe vor dem Kauf immer das Originalangebot.', it: 'Prezzi e totali sono stime. Controlla sempre l’annuncio originale prima di acquistare.' },
+      },
+      prefs: {
+        label: { ko: '통화·배송 국가', en: 'Currency and shipping', ja: '通貨・配送先', 'zh-Hans': '货币与收货地', 'zh-Hant': '貨幣與收貨地', pt: 'Moeda e envio', es: 'Moneda y envío', de: 'Währung und Lieferland', it: 'Valuta e spedizione' },
+      },
       site: {
         title: { ko: 'Camera Bridge | Leica 중고 검색', en: 'Camera Bridge | Leica Market Search', ja: 'Camera Bridge | Leica中古検索', 'zh-Hans': 'Camera Bridge | Leica 二手搜索', 'zh-Hant': 'Camera Bridge | Leica 二手搜尋', pt: 'Camera Bridge | Busca de mercado Leica', es: 'Camera Bridge | Búsqueda de mercado Leica', de: 'Camera Bridge | Leica-Markt-Suche', it: 'Camera Bridge | Ricerca mercato Leica' },
       },
       topbar: {
         brand_aria: { ko: 'Camera Bridge 제한 베타', en: 'Camera Bridge Beta', ja: 'Camera Bridge ベータ', 'zh-Hans': 'Camera Bridge 测试版', 'zh-Hant': 'Camera Bridge 測試版', pt: 'Camera Bridge Beta', es: 'Camera Bridge Beta', de: 'Camera Bridge Beta', it: 'Camera Bridge Beta' },
-        beta_badge: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '小范围测试版', 'zh-Hant': '小規模測試版', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
+        beta_badge: { ko: '베타', en: 'Beta', ja: 'ベータ', 'zh-Hans': '测试版', 'zh-Hant': '測試版', pt: 'Beta', es: 'Beta', de: 'Beta', it: 'Beta' },
         leica_focus: { ko: 'Leica 중심 테스트', en: 'Leica-focused test', ja: 'Leica中心テスト', 'zh-Hans': 'Leica 重点测试', 'zh-Hant': 'Leica 重點測試', pt: 'Teste com foco em Leica', es: 'Prueba centrada en Leica', de: 'Test mit Leica-Schwerpunkt', it: 'Test incentrato su Leica' },
         same_logic: { ko: '동일 검색 로직', en: 'Same search logic', ja: '同じ検索ロジック', 'zh-Hans': '相同搜索逻辑', 'zh-Hant': '相同搜尋邏輯', pt: 'Mesma lógica de busca', es: 'Misma lógica de búsqueda', de: 'Gleiche Suchlogik', it: 'Stessa logica di ricerca' },
       },
       hero: {
         eyebrow: { ko: 'Leica 중고 시장 검색 제한 베타', en: 'Limited beta for Leica market search', ja: 'Leica中古市場検索の限定ベータ', 'zh-Hans': 'Leica 二手市场搜索小范围测试版', 'zh-Hant': 'Leica 二手市場搜尋小規模測試版', pt: 'Beta limitada para busca no mercado Leica', es: 'Beta limitada para búsqueda del mercado Leica', de: 'Begrenzte Beta für die Leica-Marktsuche', it: 'Beta limitata per la ricerca nel mercato Leica' },
-        title: { ko: '프리미엄 카메라 중고 시세와 매물을 한 곳에서 확인하세요.', en: 'Browse premium camera listings and market prices in one place.', ja: 'プレミアムカメラの中古相場と出品を一か所で確認できます。', 'zh-Hans': '在一处查看高端相机的二手行情与在售商品。', 'zh-Hant': '在同一處查看高端相機的二手行情與在售商品。', pt: 'Veja anúncios e preços de mercado de câmeras premium em um só lugar.', es: 'Consulta anuncios y precios de mercado de cámaras premium en un solo lugar.', de: 'Angebote und Marktpreise für Premiumkameras an einem Ort ansehen.', it: 'Consulta annunci e prezzi di mercato di fotocamere premium in un unico posto.' },
-        subtitle: { ko: '현재 Leica 중심의 제한 베타입니다. 가격은 참고용이며, 구매 전 원문 매물 확인이 필요합니다.', en: 'This is a limited Leica-focused beta. Prices are for reference only, and the original listing should be checked before purchase.', ja: '現在はLeica中心の限定ベータです。価格は参考用であり、購入前に販売元の商品ページを確認してください。', 'zh-Hans': '当前为 Leica 重点小范围测试版。价格仅供参考，购买前请核对原商品页面。', 'zh-Hant': '目前為 Leica 重點小規模測試版。價格僅供參考，購買前請核對原商品頁面。', pt: 'Esta é uma beta limitada com foco em Leica. Os preços são apenas de referência e o anúncio original deve ser verificado antes da compra.', es: 'Esta es una beta limitada centrada en Leica. Los precios son solo de referencia y conviene revisar el anuncio original antes de comprar.', de: 'Dies ist eine begrenzte Leica-fokussierte Beta. Preise dienen nur als Referenz; bitte vor dem Kauf das Originalangebot prüfen.', it: 'Questa è una beta limitata focalizzata su Leica. I prezzi sono solo di riferimento e l’annuncio originale va verificato prima dell’acquisto.' },
+        title: { ko: '한국·일본·영국·미국·유럽의 Leica 중고 매물을 한 번에 찾아보세요.', en: 'Find used Leica gear across Korea, Japan, the UK, the US and Europe.', ja: '韓国・日本・英国・米国・欧州のLeica中古品をまとめて探せます。', 'zh-Hans': '一次搜索韩国、日本、英国、美国和欧洲的 Leica 二手器材。', 'zh-Hant': '一次搜尋韓國、日本、英國、美國與歐洲的 Leica 二手器材。', pt: 'Encontre equipamentos Leica usados na Coreia, no Japão, no Reino Unido, nos EUA e na Europa.', es: 'Encuentra equipo Leica usado en Corea, Japón, Reino Unido, EE. UU. y Europa.', de: 'Gebrauchte Leica-Ausrüstung aus Korea, Japan, Großbritannien, den USA und Europa an einem Ort finden.', it: 'Trova attrezzatura Leica usata in Corea, Giappone, Regno Unito, Stati Uniti ed Europa.' },
+        subtitle: { ko: '가격은 내 통화로 바꿔 보여 주고, 배송비와 관부가세까지 받을 때 기준으로 계산해 드립니다.', en: 'Prices are converted to your currency, with shipping and import taxes estimated to your door.', ja: '価格はお使いの通貨に換算し、送料と輸入税を含めた到着時の目安も表示します。', 'zh-Hans': '价格会换算成你的货币，并估算运费和进口税，显示到手价。', 'zh-Hant': '價格會換算成你的貨幣，並估算運費與進口稅，顯示到手價。', pt: 'Os preços aparecem na sua moeda, com frete e impostos de importação estimados até a sua casa.', es: 'Los precios se muestran en tu moneda, con envío e impuestos de importación estimados hasta tu puerta.', de: 'Preise werden in deine Währung umgerechnet – mit geschätzten Versandkosten und Einfuhrabgaben bis zu dir nach Hause.', it: 'I prezzi sono convertiti nella tua valuta, con spedizione e tasse d’importazione stimate fino a casa tua.' },
         notice_beta: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '小范围测试版', 'zh-Hant': '小規模測試版', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
         notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.', ja: '現在はLeica中心のカバレッジでテスト中です。', 'zh-Hans': '当前正在以 Leica 为中心进行测试。', 'zh-Hant': '目前正以 Leica 為中心進行測試。', pt: 'No momento, o teste está focado em cobertura Leica.', es: 'Actualmente la prueba se centra en cobertura Leica.', de: 'Der Test konzentriert sich derzeit auf Leica-Abdeckung.', it: 'Il test è attualmente focalizzato sulla copertura Leica.' },
         notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.', ja: '一部の希少モデルはデータ不足により価格が保留されたままになることがあります。', 'zh-Hans': '部分稀有型号可能因依据不足而暂不估算价格。', 'zh-Hant': '部分稀有型號可能因依據不足而暫不估算價格。', pt: 'Alguns modelos raros podem permanecer com o preço bloqueado quando a evidência for limitada.', es: 'Algunos modelos raros pueden mantener el precio bloqueado cuando la evidencia es limitada.', de: 'Einige seltene Modelle bleiben bei geringer Datenlage preisgesperrt.', it: 'Alcuni modelli rari possono restare con il prezzo bloccato quando i dati sono limitati.' },
+        trust: { ko: '판매처 {shops}곳 · {countries}개국 · 판매 중 {listings}개 · {ago} 갱신', en: '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}', ja: '{countries}か国・{shops}店舗 · 販売中 {listings}点 · {ago}更新', 'zh-Hans': '{countries} 个国家 {shops} 家店铺 · 在售 {listings} 件 · {ago}更新', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪 · 在售 {listings} 件 · {ago}更新', pt: '{shops} lojas em {countries} países · {listings} anúncios à venda · atualizado {ago}', es: '{shops} tiendas en {countries} países · {listings} anuncios a la venta · actualizado {ago}', de: '{shops} Händler in {countries} Ländern · {listings} Angebote · aktualisiert {ago}', it: '{shops} negozi in {countries} paesi · {listings} annunci in vendita · aggiornato {ago}' },
       },
       language: {
         label: { ko: '언어', en: 'Language', ja: '言語', 'zh-Hans': '语言', 'zh-Hant': '語言', pt: 'Idioma', es: 'Idioma', de: 'Sprache', it: 'Lingua' },
       },
       search: {
         home_aria: { ko: '홈 검색', en: 'Search home', ja: '検索ホーム', 'zh-Hans': '搜索首页', 'zh-Hant': '搜尋首頁', pt: 'Página inicial da busca', es: 'Inicio de búsqueda', de: 'Such-Startseite', it: 'Home della ricerca' },
-        panel_label: { ko: '베타 검색', en: 'Beta search', ja: 'ベータ検索', 'zh-Hans': '测试搜索', 'zh-Hant': '測試搜尋', pt: 'Busca beta', es: 'Búsqueda beta', de: 'Beta-Suche', it: 'Ricerca beta' },
-        placeholder: { ko: '예: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', en: 'e.g. Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', ja: '例: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', 'zh-Hans': '例如：Summilux-M 35 FLE2、50 cron dr、Leica M10、Leica 12585', 'zh-Hant': '例如：Summilux-M 35 FLE2、50 cron dr、Leica M10、Leica 12585', pt: 'ex.: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', es: 'p. ej.: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', de: 'z. B. Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585', it: 'es.: Summilux-M 35 FLE2, 50 cron dr, Leica M10, Leica 12585' },
+        panel_label: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suche', it: 'Cerca' },
+        placeholder: { ko: '예: M6, 주미룩스 35, 녹티룩스 50, Q3', en: 'e.g. M6, Summilux 35, Noctilux 50, Q3', ja: '例: M6、Summilux 35、Noctilux 50、Q3', 'zh-Hans': '例如：M6、Summilux 35、Noctilux 50、Q3', 'zh-Hant': '例如：M6、Summilux 35、Noctilux 50、Q3', pt: 'ex.: M6, Summilux 35, Noctilux 50, Q3', es: 'p. ej.: M6, Summilux 35, Noctilux 50, Q3', de: 'z. B. M6, Summilux 35, Noctilux 50, Q3', it: 'es. M6, Summilux 35, Noctilux 50, Q3' },
         button: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
         button_aria: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
         examples_aria: { ko: '예시 검색어', en: 'Example searches', ja: '検索例', 'zh-Hans': '示例搜索', 'zh-Hant': '範例搜尋', pt: 'Exemplos de busca', es: 'Búsquedas de ejemplo', de: 'Beispiel-Suchen', it: 'Ricerche di esempio' },
@@ -1719,6 +1695,43 @@
       }
     }
 
+    // 위쪽 통화·배송 설정 버튼에 지금 값 (예: 'USD · 🇺🇸')
+    function updatePrefsSummary(){
+      const label = document.getElementById('prefs-summary');
+      if(!label) return;
+      label.innerHTML = `${escapeHtml(uiState.currency || '')}${countryFlagHtml(uiState.destination) ? ' ' + countryFlagHtml(uiState.destination) : ''}`;
+    }
+
+    // 제목 아래 한 줄: 판매처 수 · 나라 · 판매 중 매물 · 마지막 갱신 (data/status/source_freshness.json)
+    async function loadTrustLine(){
+      const el = document.getElementById('hero-trust');
+      if(!el) return;
+      try{
+        const fresh = await fetch('/data/status/source_freshness.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
+        if(!fresh) return;
+        const rules = (landedState.rules && landedState.rules.sources) || {};
+        const sites = Object.keys(fresh);
+        const countries = [...new Set(sites.map(site => (rules[site] || {}).country).filter(Boolean))];
+        const listings = sites.reduce((sum, site) => sum + Number((fresh[site] || {}).active || 0), 0);
+        const latest = sites.map(site => Date.parse(String((fresh[site] || {}).last_success || '').replace(' ', 'T') + '+09:00')).filter(Number.isFinite);
+        const minutes = latest.length ? Math.max(1, Math.round((Date.now() - Math.max(...latest)) / 60000)) : null;
+        let ago = '';
+        if(minutes !== null){
+          const rtf = new Intl.RelativeTimeFormat(uiState.locale, { numeric: 'auto' });
+          ago = minutes < 60 ? rtf.format(-minutes, 'minute') : rtf.format(-Math.round(minutes / 60), 'hour');
+        }
+        const text = ux('hero.trust', '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}')
+          .replace('{shops}', String(sites.length))
+          .replace('{countries}', String(countries.length))
+          .replace('{listings}', new Intl.NumberFormat(uiState.locale).format(listings))
+          .replace('{ago}', ago);
+        el.innerHTML = `${countries.map(countryFlagHtml).join('')}<span>${escapeHtml(text)}</span>`;
+        el.hidden = false;
+      }catch(error){
+        el.hidden = true;
+      }
+    }
+
     function populateLandedOptions(){
       if(els['currency-select']){
         els['currency-select'].innerHTML = LANDED_CURRENCIES.map(code => (
@@ -1736,6 +1749,7 @@
         )).join('');
         els['destination-select'].value = uiState.destination;
       }
+      updatePrefsSummary();
     }
 
     async function loadLandedData(){
@@ -1751,6 +1765,7 @@
       }
       followLocaleLandedDefaults();
       populateLandedOptions();
+      loadTrustLine();
       if(state.response) render();
     }
 
@@ -2488,14 +2503,14 @@
       closeEntityMenu(inputId);
       const label = entityDisplayName(entity);
       syncSearchInputs(label);
-      runSearch(0, { queryOverride: label, historyMode: 'push', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) });
+      runSearch(0, { queryOverride: label, historyMode: 'push', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
     }
 
     function runFreeTextSearch(inputId, options = {}){
       state.entity = '';
       closeEntityMenu(inputId);
       syncSearchInputs(els[inputId].value);
-      runSearch(0, { historyMode: 'push', preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) });
+      runSearch(0, { historyMode: 'push', preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
     }
 
     // Enter: 고른 후보 → 그 모델 / 고른 게 없으면 1순위 후보 / 후보가 없으면 그대로 검색
@@ -2719,6 +2734,7 @@
       requestAnimationFrame(() => {
         window.scrollTo({ top: currentScrollY, behavior: 'auto' });
       });
+      loadTrustLine();
     }
 
     function cacheElements(){
@@ -2774,8 +2790,15 @@
       return topbarHeight + stickyHeight + 18;
     }
 
+    // 휴대폰에선 검색 뒤 결과가 제목·검색창 아래에 가려지므로 결과로 내려감
+    function isNarrowScreen(){
+      return window.matchMedia ? window.matchMedia('(max-width: 720px)').matches : false;
+    }
+
     function scrollResultsIntoView(){
-      const anchor = getResultsAnchorElement();
+      const entityBar = els['entity-bar'] || document.getElementById('entity-bar');
+      // 휴대폰: 모델(세대) 버튼이 있으면 거기서부터 보이게
+      const anchor = isNarrowScreen() && entityBar && !entityBar.hidden ? entityBar : getResultsAnchorElement();
       if(!anchor) return;
       const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - getStickyAnchorOffset());
       window.scrollTo({
@@ -3977,6 +4000,8 @@
     }
 
     function render(){
+      document.body.classList.toggle('cb-searched', Boolean(state.response || state.loading || state.error));
+      updatePrefsSummary();
       renderEntityBar();
       renderSummary();
       renderContent();
@@ -4020,16 +4045,7 @@
       }
 
       if(!state.response){
-        els['state-region'].innerHTML = renderStateCard(
-          ux('state_card.intro_title', 'Explore Leica-focused listings and reference pricing.'),
-          ux('state_card.intro_body', 'The same search results are shown in a simpler beta layout. When conditions are uncertain, pricing stays locked.'),
-          [
-            ux('state_card.intro_tip_1', 'Exact pricing stays locked when conditions are mixed'),
-            ux('state_card.intro_tip_2', 'When data is limited, only reference results are shown'),
-            ux('state_card.intro_tip_3', 'Check the original listing before making a decision')
-          ],
-          'subtle'
-        );
+        els['state-region'].innerHTML = '';  // 검색 전: 위의 제목·검색창만
         return;
       }
 
