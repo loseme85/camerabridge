@@ -65,7 +65,7 @@ FAM = {  # 계열 → (제목 패턴, 별칭 이름들)
     "elmar-c": (r"elmar.?c\b", ["elmar c", "엘마 c"]),
 }
 MOUNT_NOT = {  # M 렌즈에서 다른 마운트 제외
-    "M": [r"\bSL\b|-SL\b", r"\bTL\b|-TL\b", r"-R\b|\bR ?\d{2}|\bR\b ?\d", r"-S\b", r"\bL ?\d{2}/|LTM|M39|screw"],
+    "M": [r"\bSL\b|-SL\b", r"\bTL\b|-TL?\b", r"-R\b|\bR ?\d{2}|\bR\b ?\d", r"-S\b", r"\bL ?\d{2}/|LTM|M39|screw"],
     "SL": [r"\bTL\b|-TL\b", r"-R\b", r"-M\b"], "TL": [r"\bSL\b|-SL\b", r"-M\b", r"-R\b"], "R": [r"-M\b", r"\bSL\b|-SL\b", r"\bTL\b"],
     "S": [r"\bSL\b", r"-M\b", r"-R\b"], None: [],
 }
@@ -87,7 +87,8 @@ def aliases(fam, focal, suffixes=("",), mount=None):
 
 
 COMPOUND_ELMAR = r"vario.?elmar|tri.?elmar|super.?elmar|tele.?elmar|macro.?elmar|apo.?elmar|elmar.?c\b"
-MOUNT_EVIDENCE = {"R": r"-R\b|\bR\s?\d|\bR\b|\bROM\b", "SL": r"-SL\b|\bSL\b", "TL": r"-TL\b|\bTL\b", "S": r"-S\b|\bS\s?\d|\bS\b"}
+MOUNT_EVIDENCE = {"R": r"-R\b|\bR\s?\d|\bR\b|\bROM\b", "SL": r"-SL\b|\bSL\b", "TL": r"-TL?\b|\bTL\b",  # 2016 전 T 시스템 이름 (Summicron-T 23)
+    "S": r"-S\b|\bS\s?\d|\bS\b"}
 
 
 def _add(key, name, ko, mount, must, must_not, als):
@@ -400,3 +401,18 @@ CHILD_ORDER = {
     SC35: ["v1-8element", "v1-eyes", "v2", "v3", "v4", "asph", "leica:lens:apo-summicron-m:35", "unspecified", "millennium", "ara-guler", "your-mark", "titan"],
     "leica:lens:summilux-m:50": ["v1", "v2", "v3", "v4", "asph", "unspecified", "classic", "titan", "millennium", "asph-lhsa", "asph-kravitz", "korea-70"],
 }
+
+
+# ───────────── 2026-10-04 기타무라 매물에서 찾은 빠진 모델 ─────────────
+lens("leica:lens:elmar:105", "Elmar 105mm f/6.3 'Mountain Elmar' (1932)", "엘마 105 (마운틴 엘마)", None, "elmar", "105",
+     extra_aliases=["mountain elmar", "마운틴 엘마", "elmar 105 6.3"])
+lens("leica:lens:summicron-l:90", "Summicron 90mm f/2 (screw mount, 1957)", "주미크론 90 스크류(L)", None, "summicron", "90",
+     [r"\bL\b|-L\b|LTM|L39|M39|screw|스크류"], [r"\bAPO\b|apo-", r"-R\b|\bR ?90", r"\bSL\b"], suffixes=("l", "ltm"))
+TIGHTEN["leica:lens:summicron-m:90"] = TIGHTEN.get("leica:lens:summicron-m:90", []) + [r"\bL\b(?!\s?\d{2,3}mm)|LTM|L39|M39|screw|스크류"]
+_add("leica:lens:summicron:50:ltm-limited", "Summicron 50mm f/2 screw mount (L) Limited", "주미크론 50 스크류(L) 한정판", None,  # 확인 필요
+     [FAM["summicron"][0], f("50"), r"\bL\b|-L\b|LTM|L39|screw|스크류", r"limited|限定|한정"], [r"collaps|침동"], ["summicron 50 l limited", "주미크론 50 l 한정"])
+EXTEND_PARENTS.setdefault("leica:lens:summicron:50", []).append("leica:lens:summicron:50:ltm-limited")
+lens("leica:lens:vario-elmarit-sl:28-70", "Vario-Elmarit-SL 28-70mm f/2.8 ASPH", "SL 28-70", "SL", "vario-elmarit", "28-70",
+     extra_aliases=["sl 28-70", "28-70 sl"])
+lens("leica:lens:vario-elmarit-sl:70-200", "Vario-Elmarit-SL 70-200mm f/2.8 ASPH", "SL 70-200", "SL", "vario-elmarit", "70-200",
+     extra_aliases=["sl 70-200", "70-200 sl"])

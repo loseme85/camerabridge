@@ -89,6 +89,7 @@ fam("leica:body:m4", "Leica M4", "라이카 M4", "M", [r"\bM ?4\b(?!-)"], [], ["
 fam("leica:body:m4-2", "Leica M4-2", "라이카 M4-2", "M", [r"\bM ?4-2\b"], [], ["m42"], [
     v("gold", "Leica M4-2 Gold (Oskar Barnack 100 Jahre)", "M4-2 골드", r"gold|골드", ["m4-2 gold"]),  # 확인 필요
 ])
+fam("leica:body:m4-mot", "Leica M4-MOT (M4-M)", "라이카 M4-MOT", "M", [r"\bM ?4-?MOT\b|\bM ?4-M\b"], [], ["m4-m", "m4 mot", "m4mot"], [])
 fam("leica:body:m4-p", "Leica M4-P", "라이카 M4-P", "M", [r"\bM ?4-?P\b"], [], ["m4p"], [
     v("70-jahre", "Leica M4-P 70 Jahre (1913–1983)", "M4-P 70주년", r"70 ?jahre|1913|70th", ["m4-p 70 jahre"]),
     v("everest", "Leica M4-P Everest '82", "M4-P 에베레스트", r"everest|에베레스트", ["m4-p everest"]),
