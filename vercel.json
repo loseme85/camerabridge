@@ -51,6 +51,28 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.camerabridge.io"
+        }
+      ],
+      "destination": "https://camerabridge.io/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "camerabridge.vercel.app"
+        }
+      ],
+      "destination": "https://camerabridge.io/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
