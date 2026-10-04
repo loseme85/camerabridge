@@ -65,6 +65,9 @@ jobs:
       - name: Link listings to model entities
         run: python3 scripts/build_entity_index.py
 
+      - name: Audit entities (missing-model candidates)
+        run: python3 scripts/entity_audit.py
+
       - name: Commit and push results
         run: |
           git config user.name "Camera Bridge Bot"
@@ -89,6 +92,11 @@ jobs:
           import json
           s = json.load(open("crawler/sessions/crawl_sessions.json"))[-1]
           bad = [f"⚠️ {x['site']}: {x['status']} ({x.get('reason','')})" for x in s.get("sources", []) if x.get("status") != "ok"]
+          try:
+              audit_new = json.load(open("data/derived/entity_audit.json")).get("new", [])
+          except Exception:
+              audit_new = []
+          bad += [f"🔍 빠진 모델 후보: {x.get('entity') or x.get('a')} ← {x.get('word') or x.get('b')} {x['count']}건 · {x['example'][:40]}" for x in audit_new[:5]]
           if s.get("new_items") or bad:
               lines = [f"✅ 크롤링 완료 · 신규 {s.get('new_items', 0)} · 총 {s.get('total_items')}개 · {s.get('seconds')}초"]
               lines += [f"🆕 {n['상품명'][:40]} ({n['site']})" for n in s.get("new_listings", [])[:10]]

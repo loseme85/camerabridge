@@ -133,8 +133,9 @@ def c(slug, name, ko, marker, cnot=(), sfx=("",)):
     return (slug, name, ko, marker, list(cnot), list(sfx))
 
 
-GEN1, GEN2, GEN3, GEN4 = (r"\b1st\b|\b1th\b|1세대|\bv\.?1\b|first", r"\b2nd\b|2세대|\bv\.?2\b|second", r"\b3rd\b|\b3th\b|3세대|\bv\.?3\b|third",
-                          r"\b4th\b|4세대|\bv\.?4\b|fourth")
+# Kamerastore 등은 '(Type I)'~'(Type IV)'로 세대를 적음
+GEN1, GEN2, GEN3, GEN4 = (r"\b1st\b|\b1th\b|1세대|\bv\.?1\b|first|\btype ?i\b", r"\b2nd\b|2세대|\bv\.?2\b|second|\btype ?ii\b", r"\b3rd\b|\b3th\b|3세대|\bv\.?3\b|third|\btype ?iii\b",
+                          r"\b4th\b|4세대|\bv\.?4\b|fourth|\btype ?iv\b")
 
 # ───────────── M: Summilux 35 (기존 부모에 세대·에디션 추가) ─────────────
 SL35 = "leica:lens:summilux-m:35"
@@ -207,7 +208,7 @@ for slug, name, ko, marker, mount, extra_not, sfx in [
     ("rigid-early", "Summicron 50mm f/2 Rigid 1st (early)", "주미크론 50 리짓 전기형", r"(rigid|리짓|리지드).{0,20}(전기|early|1st)|(전기|early).{0,20}(rigid|리짓)", None, [], ["rigid early", "리짓 전기형"]),
     ("rigid-late", "Summicron 50mm f/2 Rigid 2nd (late)", "주미크론 50 리짓 후기형", r"(rigid|리짓|리지드).{0,20}(후기|late|2nd)|(후기|late).{0,20}(rigid|리짓)", None, [], ["rigid late", "리짓 후기형"]),
     ("v3", "Summicron-M 50mm f/2 3rd", "주미크론 50 3세대", GEN3, "M", [], ["3rd", "3세대"]),
-    ("50-jahre", "Summicron-M 50mm f/2 '50 Jahre'", "주미크론 50 50주년", r"50 ?jahre", "M", [], ["50 jahre"]),
+    ("50-jahre", "Summicron-M 50mm f/2 '50 Jahre'", "주미크론 50 50주년", r"50 ?jahre|50주년|50th anniv", "M", [], ["50 jahre", "50주년"]),
 ]:
     key = f"{SC50}:{slug}"
     _add(key, name, ko, mount, [FAM["summicron"][0], f("50"), marker], [r"\bAPO\b", r"\bSL\b|-SL\b", r"-R\b|\bR ?50"] + list(extra_not), aliases("summicron", "50", sfx, None))
@@ -416,3 +417,85 @@ lens("leica:lens:vario-elmarit-sl:28-70", "Vario-Elmarit-SL 28-70mm f/2.8 ASPH",
      extra_aliases=["sl 28-70", "28-70 sl"])
 lens("leica:lens:vario-elmarit-sl:70-200", "Vario-Elmarit-SL 70-200mm f/2.8 ASPH", "SL 70-200", "SL", "vario-elmarit", "70-200",
      extra_aliases=["sl 70-200", "70-200 sl"])
+
+
+# ───────────── 2026-10-04 시세가 다른 버전 (블랙 페인트·사파리·LHSA·기념판) ─────────────
+BP_L = r"black ?paint|블랙 ?페인트|블페|ブラックペイント"
+SAFARI = r"safari|사파리|サファリ"
+LHSA = r"LHSA"
+KOREA_60 = r"광복 ?60|60th jubilee|60th.{0,20}independence"
+REPAINT_L = r"re-?paint|리페인트|재도색"
+LUX, CRON = FAM["summilux"][0], FAM["summicron"][0]
+
+# Summilux 50: ASPH 사파리(11736) · ASPH 블랙페인트 · 구형 블랙페인트
+SL50 = "leica:lens:summilux-m:50"
+for slug, name, ko, must, nots, als in [
+    ("asph-safari", "Summilux-M 50mm f/1.4 ASPH Safari", "주미룩스 50 ASPH 사파리", [SAFARI], [], ["safari", "사파리"]),
+    ("asph-black-paint", "Summilux-M 50mm f/1.4 ASPH Black Paint", "주미룩스 50 ASPH 블랙페인트", [r"ASPH", BP_L], [LHSA, r"kravitz|lenny", REPAINT_L], ["asph black paint", "asph 블랙페인트"]),
+    ("black-paint", "Summilux 50mm f/1.4 Black Paint (pre-ASPH)", "주미룩스 50 블랙페인트 (구형)", [BP_L], [r"ASPH", r"classic|클래식", r"millenn?ium|밀레니엄", r"titan|티탄", REPAINT_L], ["black paint", "블랙페인트"]),
+]:
+    key = f"{SL50}:{slug}"
+    _add(key, name, ko, "M", [LUX, f("50")] + must, [r"\bSL\b", r"\bTL\b"] + nots, aliases("summilux", "50", als, "M"))
+    EXTEND_PARENTS.setdefault(SL50, []).append(key)
+for k in ("asph", "unspecified", "v1", "v2", "v3", "v4", "classic"):
+    TIGHTEN[f"{SL50}:{k}"] = TIGHTEN.get(f"{SL50}:{k}", []) + [SAFARI] + ([BP_L] if k != "classic" else [])
+
+# Summilux 35: 사파리 (FLE, 2015)
+_add(f"{SL35}:safari", "Summilux-M 35mm f/1.4 ASPH Safari", "주미룩스 35 사파리", "M", [LUX, f("35"), SAFARI], [], aliases("summilux", "35", ["safari", "사파리"], "M"))
+EXTEND_PARENTS.setdefault(SL35, []).append(f"{SL35}:safari")
+for k in ("asph-fle", "asph-fle2", "asph-unspecified", "pre-asph-unspecified", "steel-rim-reissue"):
+    TIGHTEN[f"{SL35}:{k}"] = TIGHTEN.get(f"{SL35}:{k}", []) + [SAFARI]
+TIGHTEN[f"{SL35}:asph-unspecified"] += [r"11874|11883", r"\btype ?ii\b"]
+TIGHTEN[f"{SL35}:pre-asph-unspecified"] += [r"\btype ?i{1,3}v?\b"]
+for k in ("v1", "v2", "v3", "v4"):  # Summilux 50 구형 세대에 'ASPH (Type I)' 같은 신형 표기가 걸리지 않게
+    TIGHTEN[f"{SL50}:{k}"] = TIGHTEN.get(f"{SL50}:{k}", []) + [r"ASPH"]
+for k in ("v1", "v2"):  # 구형 세대에 'ASPH (Type II)' 같은 신형 표기가 걸리지 않게
+    TIGHTEN[f"{SL35}:{k}"] = TIGHTEN.get(f"{SL35}:{k}", []) + [r"ASPH"]
+
+# Summicron 35: ASPH 블랙페인트 · ASPH LHSA · ASPH 광복 60주년 · 구형 블랙페인트
+for slug, name, ko, must, nots, als in [
+    ("asph-black-paint", "Summicron-M 35mm f/2 ASPH Black Paint", "주미크론 35 ASPH 블랙페인트", [r"ASPH", BP_L], [LHSA, r"millenn?ium|밀레니엄", r"your ?mark", r"ara ?g[uü]ler", r"titan|티탄", KOREA_60, REPAINT_L], ["asph black paint", "asph 블랙페인트"]),
+    ("asph-50-jahre", "Summicron-M 35mm f/2 ASPH 50th Anniversary", "주미크론 35 ASPH 50주년", [r"ASPH", r"50th anniv|50 ?jahre|50주년"], [], ["asph 50 jahre", "asph 50주년"]),  # 확인 필요
+    ("asph-lhsa", "Summicron-M 35mm f/2 ASPH LHSA (1968–2003)", "주미크론 35 ASPH LHSA", [LHSA], [], ["lhsa"]),
+    ("asph-korea-60", "Summicron-M 35mm f/2 ASPH 60th Independence Anniversary (Korea, 2005)", "주미크론 35 ASPH 광복 60주년", [KOREA_60], [], ["광복 60주년"]),  # 확인 필요
+    ("black-paint", "Summicron 35mm f/2 Black Paint (pre-ASPH)", "주미크론 35 블랙페인트 (구형)", [BP_L], [r"ASPH", r"millenn?ium|밀레니엄", r"your ?mark", REPAINT_L], ["black paint", "블랙페인트"]),
+]:
+    key = f"{SC35}:{slug}"
+    _add(key, name, ko, "M", [CRON, f("35")] + must, [r"\bAPO\b"] + nots, aliases("summicron", "35", als, "M"))
+    EXTEND_PARENTS.setdefault(SC35, []).append(key)
+TIGHTEN[f"{SC35}:asph"] = TIGHTEN.get(f"{SC35}:asph", []) + [BP_L, LHSA, KOREA_60, r"jubilee", r"50th anniv|50 ?jahre|50주년"]
+TIGHTEN[f"{SC35}:unspecified"] = TIGHTEN.get(f"{SC35}:unspecified", []) + [BP_L, r"\btype ?i{1,3}v?\b"]
+TIGHTEN[f"{SC35}:v1-eyes"] = TIGHTEN.get(f"{SC35}:v1-eyes", []) + [BP_L]
+
+# Summicron 50: 사파리 · 블랙페인트(현행·MP 클래식) · 리짓 블랙페인트, APO 50 LHSA
+for slug, name, ko, must, nots, als in [
+    ("safari", "Summicron-M 50mm f/2 Safari", "주미크론 50 사파리", [SAFARI], [], ["safari", "사파리"]),
+    ("black-paint", "Summicron-M 50mm f/2 Black Paint (MP Classic etc.)", "주미크론 50 블랙페인트", [BP_L], [r"rigid|리짓|리지드|\bDR\b|dual|collaps|침동", REPAINT_L], ["black paint", "블랙페인트", "mp classic"]),
+    ("rigid-black-paint", "Summicron 50mm f/2 Rigid Black Paint", "주미크론 50 리짓 블랙페인트", [r"rigid|리짓|리지드", BP_L], [REPAINT_L], ["rigid black paint", "리짓 블랙페인트"]),
+]:
+    key = f"{SC50}:{slug}"
+    _add(key, name, ko, "M", [CRON, f("50")] + must, [r"\bAPO\b", r"\bSL\b|-SL\b", r"-R\b|\bR ?50"] + nots, aliases("summicron", "50", als, None))
+    EXTEND_PARENTS.setdefault(SC50, []).append(key)
+TIGHTEN["leica:lens:summicron-m:50:current"] = TIGHTEN.get("leica:lens:summicron-m:50:current", []) + [SAFARI, BP_L, r"50주년|50th anniv"]
+for k in ("leica:lens:summicron:50:rigid", "leica:lens:summicron:50:rigid-early", "leica:lens:summicron:50:rigid-late"):
+    TIGHTEN[k] = TIGHTEN.get(k, []) + [BP_L]
+_add("leica:lens:apo-summicron-m:50:lhsa", "APO-Summicron-M 50mm f/2 ASPH LHSA Edition", "아포 주미크론 50 LHSA", "M",
+     [r"APO", CRON, f("50"), LHSA], [r"\bSL\b"], ["apo summicron 50 lhsa", "아포 주미크론 50 lhsa"])
+EXTEND_PARENTS.setdefault(SC50, []).append("leica:lens:apo-summicron-m:50:lhsa")
+TIGHTEN["leica:lens:apo-summicron-m:50"] = TIGHTEN.get("leica:lens:apo-summicron-m:50", []) + [LHSA]
+
+# Summicron 28 ASPH 사파리, Summicron 90 블랙페인트
+_add("leica:lens:summicron-m:28:safari", "Summicron-M 28mm f/2 ASPH Safari", "주미크론 28 사파리", "M", [CRON, f("28"), SAFARI], [r"\bAPO\b"],
+     ["summicron 28 safari", "주미크론 28 사파리", "28 cron safari"])
+TIGHTEN["leica:lens:summicron-m:28:asph"] = TIGHTEN.get("leica:lens:summicron-m:28:asph", []) + [SAFARI]
+_add("leica:lens:summicron-m:90:black-paint", "Summicron-M 90mm f/2 Black Paint", "주미크론 90 블랙페인트", "M", [CRON, f("90"), BP_L], [r"\bAPO\b", REPAINT_L],
+     ["summicron 90 black paint", "주미크론 90 블랙페인트"])
+TIGHTEN["leica:lens:summicron-m:90"] = TIGHTEN.get("leica:lens:summicron-m:90", []) + [BP_L]
+
+# APO-Summicron 90: 블랙페인트 · 사파리
+for slug, name, ko, marker, als in [
+    ("black-paint", "APO-Summicron-M 90mm f/2 ASPH Black Paint", "아포 주미크론 90 블랙페인트", BP_L, ["apo summicron 90 black paint", "아포 주미크론 90 블랙페인트"]),
+    ("safari", "APO-Summicron-M 90mm f/2 ASPH Safari", "아포 주미크론 90 사파리", SAFARI, ["apo summicron 90 safari", "아포 주미크론 90 사파리"]),
+]:
+    _add(f"leica:lens:apo-summicron-m:90:{slug}", name, ko, "M", [r"\bAPO\b|apo-", CRON, f("90"), marker], [REPAINT_L], als)
+TIGHTEN["leica:lens:apo-summicron-m:90"] = TIGHTEN.get("leica:lens:apo-summicron-m:90", []) + [BP_L, SAFARI]
