@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-10-03T15:14:30.886319+00:00",
-  "total_records": 8421,
-  "override_applied_count": 7,
+  "generated_at": "2026-10-04T00:42:57.219724+00:00",
+  "total_records": 9205,
+  "override_applied_count": 10,
   "trusted_metadata_applied_count": 1,
-  "curated_reference_applied_count": 6,
+  "curated_reference_applied_count": 9,
   "changed_fields": {
     "brand": 1,
     "category": 1,
     "label": 1,
     "model_canonical": 1,
     "mount": 1,
-    "variant": 7
+    "variant": 10
   },
   "examples": [
     {
@@ -284,6 +284,49 @@
         "label": "M Body",
         "model_canonical": "MP3",
         "variant": [],
+        "focal_length": null
+      },
+      "final_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "LHSA"
+        ],
+        "focal_length": null
+      }
+    },
+    {
+      "record_index": 8877,
+      "title_raw": "Leica MP3 (0.72) LHSA スペシャル-エディション Set Silver",
+      "source": "기타무라 (일본)",
+      "source_url": "https://shop.kitamura.jp/ec/used/2147025869828",
+      "override_source": "curated_reference",
+      "override_source_id": "curated_model_leica_mp3_lhsa",
+      "override_reason": "Curated model reference: Leica MP3 LHSA is an M-mount body.",
+      "changed_fields": {
+        "variant": {
+          "before": [
+            "Silver",
+            "0.72"
+          ],
+          "after": [
+            "LHSA"
+          ]
+        }
+      },
+      "classifier_output": {
+        "brand": "Leica",
+        "mount": "M",
+        "category": "Body",
+        "label": "M Body",
+        "model_canonical": "MP3",
+        "variant": [
+          "Silver",
+          "0.72"
+        ],
         "focal_length": null
       },
       "final_output": {
