@@ -1,7 +1,7 @@
 """정답 세트로 검색 정확도 채점.
 
 사용: python3 eval/score_query_model.py [API 주소] [--json 결과.json]
-  기본 주소 https://camerabridge.vercel.app
+  기본 주소 https://camerabridge.io
 
 점수(검색어마다 0~1):
   exact/parent  : 1위 맞음 0.5 + 상위 5개 중 맞는 비율 0.5
@@ -87,7 +87,7 @@ def score_case(base: str, case: dict, models: dict, in_data: dict) -> dict:
 
 def main() -> None:
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    base = (args[0] if args else "https://camerabridge.vercel.app").rstrip("/")
+    base = (args[0] if args else "https://camerabridge.io").rstrip("/")
     gold = json.loads(GOLD.read_text(encoding="utf-8"))
     PARENTS.update(gold.get("parents") or {})
     in_data = models_in_data(gold["models"])
