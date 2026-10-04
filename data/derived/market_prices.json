@@ -78,10 +78,10 @@
   },
   "Leica M2": {
     "weighted_median": 3500000,
-    "sample_count": 20,
+    "sample_count": 21,
     "min": 300000,
     "max": 29260000,
-    "avg": 4669000
+    "avg": 4585880
   },
   "Leica Q2": {
     "weighted_median": 4950000,
@@ -378,11 +378,11 @@
     "avg": 930000
   },
   "35mm APO-Summicron": {
-    "weighted_median": 4780000,
-    "sample_count": 22,
+    "weighted_median": 4880000,
+    "sample_count": 23,
     "min": 3000000,
     "max": 11500000,
-    "avg": 5750829
+    "avg": 5924641
   },
   "50mm Summarit": {
     "weighted_median": 1200000,
@@ -463,10 +463,17 @@
   },
   "Leica CL": {
     "weighted_median": 2480000,
-    "sample_count": 12,
+    "sample_count": 13,
     "min": 650000,
-    "max": 4000000,
-    "avg": 2470833
+    "max": 5663250,
+    "avg": 2716403
+  },
+  "135mm APO-Telyt": {
+    "weighted_median": 3180000,
+    "sample_count": 9,
+    "min": 2300000,
+    "max": 4988250,
+    "avg": 3134250
   },
   "35mm Summilux Steel Rim": {
     "weighted_median": 880000,
@@ -635,13 +642,6 @@
     "min": 5380000,
     "max": 7280000,
     "avg": 6651666
-  },
-  "135mm APO-Telyt": {
-    "weighted_median": 3000000,
-    "sample_count": 8,
-    "min": 2300000,
-    "max": 3880000,
-    "avg": 2902500
   },
   "80mm R Lens": {
     "weighted_median": 4200000,
