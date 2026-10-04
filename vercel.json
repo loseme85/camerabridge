@@ -1,16 +1,76 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/beta.html" },
-    { "source": "/search", "destination": "/beta.html" },
-    { "source": "/qa", "destination": "/owner-qa.html" },
-    { "source": "/beta", "destination": "/beta.html" },
-    { "source": "/admin.html", "destination": "/app/templates/admin.html" },
-    { "source": "/admin/normalization", "destination": "/api/normalization_admin_page.py" },
-    { "source": "/qa.html", "destination": "/app/templates/qa.html" },
-    { "source": "/api/telegram", "destination": "/api/telegram.py" },
-    { "source": "/api/search", "destination": "/api/search.py" },
-    { "source": "/api/normalization-auth", "destination": "/api/normalization_auth.py" },
-    { "source": "/api/normalization-admin", "destination": "/api/normalization_admin.py" },
-    { "source": "/data/:path*", "destination": "/data/:path*" }
+    {
+      "source": "/",
+      "destination": "/beta.html"
+    },
+    {
+      "source": "/search",
+      "destination": "/beta.html"
+    },
+    {
+      "source": "/qa",
+      "destination": "/owner-qa.html"
+    },
+    {
+      "source": "/beta",
+      "destination": "/beta.html"
+    },
+    {
+      "source": "/admin.html",
+      "destination": "/app/templates/admin.html"
+    },
+    {
+      "source": "/admin/normalization",
+      "destination": "/api/normalization_admin_page.py"
+    },
+    {
+      "source": "/qa.html",
+      "destination": "/app/templates/qa.html"
+    },
+    {
+      "source": "/api/telegram",
+      "destination": "/api/telegram.py"
+    },
+    {
+      "source": "/api/search",
+      "destination": "/api/search.py"
+    },
+    {
+      "source": "/api/normalization-auth",
+      "destination": "/api/normalization_auth.py"
+    },
+    {
+      "source": "/api/normalization-admin",
+      "destination": "/api/normalization_admin.py"
+    },
+    {
+      "source": "/data/:path*",
+      "destination": "/data/:path*"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.camerabridge.io"
+        }
+      ],
+      "destination": "https://camerabridge.io/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "camerabridge.vercel.app"
+        }
+      ],
+      "destination": "https://camerabridge.io/:path*",
+      "permanent": true
+    }
   ]
 }
