@@ -1,20 +1,5 @@
 [
   {
-    "start_time": "2026-09-03 20:02:40",
-    "end_time": "2026-09-03 20:02:41",
-    "new_items": 0,
-    "total_items": 7709,
-    "site_counts": {
-      "사진집": 323,
-      "라이카스토어 충무로": 3131,
-      "장씨카메라": 4045,
-      "Ffordes (영국)": 124,
-      "Leica Store Miami": 46,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": []
-  },
-  {
     "start_time": "2026-09-03 22:33:20",
     "end_time": "2026-09-03 22:33:21",
     "new_items": 4,
@@ -20550,5 +20535,111 @@
         "링크": "https://shop.kitamura.jp/ec/used/2449050029179"
       }
     ]
+  },
+  {
+    "start_time": "2026-10-05 03:15:06",
+    "end_time": "2026-10-05 03:15:07",
+    "seconds": 113.1,
+    "new_items": 0,
+    "total_items": 9211,
+    "site_counts": {
+      "사진집": 389,
+      "라이카스토어 충무로": 3074,
+      "장씨카메라": 4068,
+      "Ffordes (영국)": 127,
+      "Leica Store Miami": 39,
+      "Kamerastore (핀란드)": 716,
+      "기타무라 (일본)": 798
+    },
+    "events": {
+      "gone": 4
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "full",
+        "pages": 13,
+        "seconds": 7.0,
+        "status": "ok",
+        "rows": 389,
+        "active": 331,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "full",
+        "pages": 32,
+        "seconds": 23.5,
+        "status": "ok",
+        "rows": 3074,
+        "active": 574,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "full",
+        "pages": 205,
+        "seconds": 70.1,
+        "status": "ok",
+        "rows": 4068,
+        "active": 38,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.5,
+        "status": "ok",
+        "rows": 39,
+        "active": 39,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.9,
+        "status": "ok",
+        "rows": 716,
+        "active": 716,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.6,
+        "status": "ok",
+        "rows": 798,
+        "active": 798,
+        "carried": 3,
+        "gone": 4,
+        "left_active": 0,
+        "new": 0,
+        "changed": 4
+      }
+    ],
+    "new_listings": []
   }
 ]
