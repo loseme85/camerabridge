@@ -32,3 +32,16 @@ def test_mk_kamera_description_grades() -> None:
     assert grade_of(site, "M&K: slightly used", "Leica M6")[0] == "B"
     assert grade_of(site, "M&K: normal signs of wear", "Leica M6")[0] == "C"
     assert grade_of(site, "M&K: not working", "Leica M6")[0] == "X"
+
+
+def test_kamerastore_staff_note_grades() -> None:
+    from condition_grade import ks_condition
+    site = "Kamerastore (핀란드)"
+    def g(note):
+        return grade_of(site, ks_condition(note) or "정보없음", "Leica M6")[0]
+    assert g("It is in great working condition!") == "B"
+    assert g("It has some wear from use but is in good working condition.") == "C"
+    assert g("It's quite worn externally, but works well.") == "D"
+    assert g("It has a lot of haze inside that will lower overall image quality.") == "D"
+    assert g("There are minor scratches on the lens elements that won't affect image quality.") == "B"
+    assert g("In German.") is None  # 설명서 등 컨디션 말이 없는 것

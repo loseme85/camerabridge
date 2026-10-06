@@ -688,6 +688,7 @@
       gap:8px;
       margin-top:16px;
     }
+    .load-more-status{color:var(--text-soft);font-size:13px}
     .load-more-button{
       min-width:160px;
     }
@@ -4401,6 +4402,7 @@
       renderContent();
       renderWarnings();
       updateStickySearchVisibility();
+      observeLoadMore();
     }
 
     function renderContent(){
@@ -4477,18 +4479,32 @@
       if(!state.response || !getResults().length || !pagination.has_more || Number(activeShownCount || 0) <= 0){
         return '';
       }
+      // 버튼 대신 목록 끝에 닿으면 자동으로 더 불러옴 (불러오는 동안만 문구 표시)
       return `
-        <div class="load-more-region">
-          <button
-            type="button"
-            class="ghost-button load-more-button"
-            data-load-more="true"
-            ${state.appending ? 'disabled' : ''}
-          >
-            ${state.appending ? escapeHtml(ux('load_more.active_loading', 'Loading more active listings…')) : escapeHtml(ux('load_more.active_idle', 'Load more active listings'))}
-          </button>
+        <div class="load-more-region" data-load-more-sentinel="true">
+          ${state.appending ? `<span class="load-more-status">${escapeHtml(ux('load_more.active_loading', 'Loading more active listings…'))}</span>` : ''}
         </div>
       `;
+    }
+
+    function loadMoreActive(){
+      const current = state.response ? (state.response.pagination || {}) : {};
+      if(current.has_more && !state.appending && !state.loading){
+        runSearch(Number(current.next_offset || (getResults().length || PAGE_SIZE)), { append: true, historyMode: 'push' });
+      }
+    }
+
+    let loadMoreObserver = null;
+    function observeLoadMore(){
+      if(!('IntersectionObserver' in window)) return;
+      if(!loadMoreObserver){
+        loadMoreObserver = new IntersectionObserver(entries => {
+          if(entries.some(entry => entry.isIntersecting)) loadMoreActive();
+        }, { rootMargin: '600px 0px' });
+      }
+      loadMoreObserver.disconnect();
+      const sentinel = document.querySelector('[data-load-more-sentinel]');
+      if(sentinel) loadMoreObserver.observe(sentinel);
     }
 
     function getResultMatchBadge(result, evidenceRole, priceRole, reason){
@@ -4936,12 +4952,7 @@
           runSearch(0, { historyMode: 'push' });
           return;
         }
-        if(target && target.matches('[data-load-more]')){
-          const current = state.response ? (state.response.pagination || {}) : {};
-          if(current.has_more && !state.appending){
-            runSearch(Number(current.next_offset || (getResults().length || PAGE_SIZE)), { append: true, historyMode: 'push' });
-          }
-        }
+        if(target && target.matches('[data-load-more]')) loadMoreActive();
       });
 
       window.addEventListener('scroll', scheduleHistoryScrollSync, { passive: true });
