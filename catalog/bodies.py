@@ -15,6 +15,10 @@ ALIASES: dict[str, list[str]] = {}
 NAME_KO: dict[str, str] = {}
 
 REPAINT = r"re-?paint|리페인트|재도색|custom|커스텀"
+# 군납·특수 모델: 같은 모델이라도 값이 몇 배라 따로 본다
+MILITARY = r"luftwaffe|\bheer\b|wehrmacht|kriegsmarine|eigentum|\bW\.?\s?H\.?(?=\s|$)|\bFl\.?\s?\d{5}|military|군용|군납|III ?c ?K\b"
+SWEDISH = r"swed|sweden|three ?crowns?|tre ?kronor|스웨덴|military|군용|군납"
+OLIVE_MILITARY = r"olive|military|\barmy\b|bundeswehr|올리브|군용|군납"
 BLACK_PAINT = (r"black ?paint|블랙 ?페인트|블페", [REPAINT])
 
 
@@ -77,11 +81,17 @@ fam("leica:body:m3j", "Leica M3J", "라이카 M3J", "M", [r"M3 ?J\b"])
 fam("leica:body:m2", "Leica M2", "라이카 M2", "M", [r"\bM ?2\b"], [r"M2-?R", r"\bM ?24\d", r"M ?2 ?\d{2}"], ["엠2"], [
     BP("M2"),
     v("button-rewind", "Leica M2 Button Rewind", "M2 버튼 리와인드", r"button|버튼", ["m2 button rewind"]),
+    v("military", "Leica M2 Military (Olive · Grey)", "M2 군용 (올리브·그레이)", OLIVE_MILITARY, ["m2 military", "m2 olive", "m2 군용"], [REPAINT]),
 ])
 fam("leica:body:m2-r", "Leica M2-R", "라이카 M2-R", "M", [r"M2-?R\b"])
-fam("leica:body:m1", "Leica M1", "라이카 M1", "M", [r"\bM1\b(?![\d.:])"], [r"M1[0-9]"])
-fam("leica:body:md", "Leica MD · MDa · MD-2", "라이카 MD", "M", [r"\bMD(a|-?2)?\b"], [r"M-D"], ["mda", "md-2", "md2"])
-fam("leica:body:m4", "Leica M4", "라이카 M4", "M", [r"\bM ?4\b(?!-)"], [], ["엠4"], [
+fam("leica:body:m1", "Leica M1", "라이카 M1", "M", [r"\bM1\b(?![\d.:])"], [r"M1[0-9]"], [], [
+    v("military", "Leica M1 Military (Olive Green)", "M1 군용 (올리브 그린)", OLIVE_MILITARY, ["m1 military", "m1 olive", "m1 군용"], [REPAINT]),
+])
+fam("leica:body:md", "Leica MD · MDa · MD-2", "라이카 MD", "M", [r"\bMD(a|-?2)?\b"], [r"M-D", r"\bpost", r"\bNASA\b"], ["mda", "md-2", "md2"])
+fam("leica:body:md-post", "Leica Post MD · MDa (24×27, Post Office)", "라이카 포스트 MD", "M", [r"\bMDa?\b|postkamera", r"\bpost|24 ?x ?27"], [], ["post md", "post mda", "postkamera", "포스트 md"])
+fam("leica:body:nasa", "Leica NASA (MDa · Leicaflex SL MOT for space use)", "라이카 NASA", None, [r"\bNASA\b"], [], ["nasa", "leica nasa", "나사"])
+fam("leica:body:ke-7a", "Leica KE-7A (US Army M4)", "라이카 KE-7A (미군 M4)", "M", [r"KE-? ?7A?\b"], [], ["ke7a", "ke-7a", "ke 7a", "leica ke-7a"])
+fam("leica:body:m4", "Leica M4", "라이카 M4", "M", [r"\bM ?4\b(?!-)"], [r"KE-? ?7A?\b"], ["엠4"], [
     BP("M4"),
     v("50-jahre", "Leica M4 50 Jahre (Black Chrome)", "M4 50주년", r"50 ?jahre|50 ?years|50th|anniversary|black ?chrome", ["m4 50 jahre", "m4 50th anniversary"]),
     v("olive", "Leica M4 Olive", "M4 올리브", r"olive|올리브", [], [REPAINT]),
@@ -281,7 +291,7 @@ fam("leica:body:x113", "Leica X (Typ 113)", "라이카 X (113)", None, [r"\bX\b 
 fam("leica:body:x-u", "Leica X-U (Typ 113)", "라이카 X-U", None, [r"\bX-?U\b"], [], ["xu"])
 fam("leica:body:x-e", "Leica X-E (Typ 102)", "라이카 X-E", None, [r"\bX-E\b"], [], ["xe"])
 DLUX_GENS = []
-for gen in ("2", "3", "4", "5", "6"):
+for gen in ("1", "2", "3", "4", "5", "6"):
     fam(f"leica:body:d-lux-{gen}", f"Leica D-Lux {gen}", f"라이카 D-Lux {gen}", None, [rf"D-?Lux ?{gen}\b"], [], [f"dlux{gen}", f"d lux {gen}", f"디룩스 {gen}"])
     DLUX_GENS.append(f"leica:body:d-lux-{gen}")
 fam("leica:body:d-lux-109", "Leica D-Lux (Typ 109)", "라이카 D-Lux 109", None, [r"D-?Lux", r"109"], [], ["d-lux 109", "dlux 109", "d-lux typ 109", "디룩스 109"])
@@ -299,12 +309,24 @@ PARENTS["leica:body:d-lux"] = ("Leica D-Lux (all)", "Body", None, DLUX_GENS + ["
 fam("leica:body:c-lux", "Leica C-Lux (2018)", "라이카 C-Lux", None, [r"C-?Lux\b(?! ?[123]\b)"], [], ["clux", "씨룩스"])
 fam("leica:body:c-lux-old", "Leica C-Lux 1 · 2 · 3", "라이카 C-Lux 1·2·3", None, [r"C-?Lux ?[123]\b"], [], ["c-lux 1", "c-lux 2", "c-lux 3"])
 fam("leica:body:v-lux", "Leica V-Lux (1 · 2 · 3 · 4 · 5 · Typ 114)", "라이카 V-Lux", None, [r"V-?Lux"], [], ["vlux", "v-lux 5", "v-lux 114"])
-fam("leica:body:digilux", "Leica Digilux (1 · 2 · 3 · Zoom)", "라이카 디지룩스", None, [r"digilux"], [], ["digilux 2", "digilux 3", "디지룩스"])
+DIGILUX = [("1", "Leica Digilux 1", r"digilux ?1\b"), ("2", "Leica Digilux 2", r"digilux ?2\b"), ("3", "Leica Digilux 3", r"digilux ?3\b"),
+           ("4-3", "Leica Digilux 4.3", r"digilux ?4\.3"), ("zoom", "Leica Digilux Zoom", r"digilux ?zoom")]
+for slug, name, pat in DIGILUX:
+    fam(f"leica:body:digilux-{slug}", name, f"라이카 디지룩스 {_short(name).split('Digilux ')[1]}", None, [pat], [],
+        [_short(name).lower().replace(".", " "), f"디지룩스 {_short(name).split('Digilux ')[1].lower()}"])
+fam("leica:body:digilux-unspecified", "Leica Digilux (1998 original / generation not stated)", "라이카 디지룩스 (1998 · 세대 미표기)", None,
+    [r"digilux(?! ?(1|2|3|4\.3|zoom)\b)"], [], [])
+PARENTS["leica:body:digilux"] = ("Leica Digilux (all)", "Body", None, [f"leica:body:digilux-{s}" for s, _, _ in DIGILUX] + ["leica:body:digilux-unspecified"],
+                                ["leica digilux", "digilux", "라이카 디지룩스", "디지룩스"], "라이카 디지룩스 (전체)")
+fam("leica:body:s1", "Leica S1 (scanner camera, 1997 · Pro · Alpha · High Speed)", "라이카 S1 (스캐너 카메라)", None,
+    [r"\bS1\b", r"leica|alpha|high ?speed|scan"], [r"panasonic|lumix|\bS1[RHM]\b"], ["leica s1", "s1 pro", "s1 alpha", "s1 high speed"])
 fam("leica:body:minilux", "Leica Minilux", "라이카 미니룩스", None, [r"minilux"], [r"zoom|줌"], ["미니룩스"])
 fam("leica:body:minilux-zoom", "Leica Minilux Zoom", "라이카 미니룩스 줌", None, [r"minilux", r"zoom|줌"], [], ["minilux zoom", "미니룩스 줌"])
 fam("leica:body:cm", "Leica CM", "라이카 CM", None, [r"\bCM\b"], [r"zoom|줌"], [])
 fam("leica:body:cm-zoom", "Leica CM Zoom", "라이카 CM 줌", None, [r"\bCM\b", r"zoom|줌"], [], ["cm zoom"])
-fam("leica:body:c-series", "Leica C1 · C2 · C3 · C11", "라이카 C1·C2·C3", None, [r"\bC ?(1|2|3|11)\b(?! ?[0-9])"], [r"C-?Lux"], ["c1", "c2", "c3", "c2 zoom"])
+fam("leica:body:c-series", "Leica C1 · C2 · C3 · C11", "라이카 C1·C2·C3", None, [r"\bC ?(1|2|3|11)\b(?! ?[0-9])"], [r"C-?Lux", r"AF-?C ?1", r"C ?2-? ?zoom"], ["c1", "c2", "c3", "c11"])
+fam("leica:body:c2-zoom", "Leica C2-Zoom (1991)", "라이카 C2-Zoom", None, [r"C ?2-? ?zoom"], [], ["c2 zoom", "c2-zoom", "c2zoom"])
+fam("leica:body:af-c1", "Leica AF-C1", "라이카 AF-C1", None, [r"AF-? ?C ?1\b"], [], ["af-c1", "afc1", "af c1"])
 fam("leica:body:z2x", "Leica Z2X", "라이카 Z2X", None, [r"\bZ2X\b"], [], [])
 fam("leica:body:sofort", "Leica Sofort (2016)", "라이카 소포트", None, [r"sofort"], [r"sofort ?2"], ["소포트"])
 fam("leica:body:sofort-2", "Leica Sofort 2", "라이카 소포트 2", None, [r"sofort ?2"], [], ["sofort2", "소포트 2"], [
@@ -327,12 +349,25 @@ for slug, name, pattern in BARNACK:
         [short, f"barnack {short}", f"바르낙 {short}"])
 
 MODELS["leica:body:iii"]["title_must_not"].append(BLACK_PAINT[0])
+for slug in ("iii", "iiia", "iiib", "iiic"):
+    MODELS[f"leica:body:{slug}"]["title_must_not"].append(MILITARY)
+MODELS["leica:body:iiig"]["title_must_not"].append(SWEDISH)
+MODELS["leica:body:iiia"]["title_must_not"].append(r"mont[eé] ?en ?sarre|\bsaar")
+MODELS["leica:body:standard"]["title_must_not"].append(r"x-?ray|r[öo]ntgen")
+fam("leica:body:barnack-military", "Leica III · IIIa · IIIb · IIIc Military (Luftwaffe · Heer · K)", "라이카 III~IIIc 군용 (루프트바페·헤어)", None,
+    [r"\bIII ?[abc]?\b", MILITARY], [r"\bM ?\d"], ["luftwaffe", "luftwaffe leica", "heer leica", "iiic k", "iiic military", "루프트바페", "군용 라이카"])
+fam("leica:body:iiig-swedish", "Leica IIIg Swedish Armed Forces (Three Crowns)", "라이카 IIIg 스웨덴군", None,
+    [r"\bIII ?g\b", SWEDISH], [r"\bM ?\d"], ["iiig swedish", "iiig sweden", "swedish iiig", "three crowns", "iiig 스웨덴"])
+fam("leica:body:iiia-monte-en-sarre", "Leica IIIa 'Monté en Sarre'", "라이카 IIIa 몽테 앙 사르", None,
+    [r"mont[eé] ?en ?sarre|\bsaar"], [r"\bM ?\d"], ["monte en sarre", "monté en sarre", "iiia sarre", "몽테 앙 사르"])
+fam("leica:body:x-ray", "Leica X-Ray Camera (Standard body)", "라이카 X-Ray 카메라", None, [r"x-?ray|r[öo]ntgen"], [r"\bM ?\d"], ["x-ray", "xray leica", "엑스레이 라이카"])
+fam("leica:body:mifilmca", "Leica MIFILMCA (microscope camera)", "라이카 MIFILMCA (현미경용)", None, [r"mifilmca"], [], ["mifilmca"])
 fam("leica:body:iii-black-paint", "Leica III (Model F) Black Paint", "라이카 III 블랙페인트", None, [r"\bIII\b(?! ?[a-g]\b)", BLACK_PAINT[0]],
     [r"\bM ?\d", REPAINT], ["iii black paint", "barnack iii black paint", "바르낙 iii 블랙페인트"])
 
 # ── R · 라이카플렉스 ──
 fam("leica:body:leicaflex", "Leicaflex (standard)", "라이카플렉스", "R", [r"leicaflex"], [r"leicaflex ?sl"], ["leicaflex", "라이카플렉스"])
-fam("leica:body:leicaflex-sl", "Leicaflex SL", "라이카플렉스 SL", "R", [r"leicaflex ?sl\b(?! ?2)"], [], ["leicaflex sl"])
+fam("leica:body:leicaflex-sl", "Leicaflex SL", "라이카플렉스 SL", "R", [r"leicaflex ?sl\b(?! ?2)"], [r"\bNASA\b"], ["leicaflex sl"])
 fam("leica:body:leicaflex-sl2", "Leicaflex SL2", "라이카플렉스 SL2", "R", [r"leicaflex ?sl ?2"], [], ["leicaflex sl2"])
 for model_name in ("R3", "R4", "R4s", "R5", "R-E", "R6", "R6.2", "R7", "R8", "R9"):
     slug = model_name.lower().replace(".", "-")

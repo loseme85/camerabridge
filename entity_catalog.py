@@ -110,6 +110,8 @@ def _mount_ok(rule: dict, final: dict, title: str) -> bool:
 
 # 제목 속 라이카 제품 번호 (예: "Leica 50mm F2 M Black 6bit - 11826"). 앞뒤가 숫자·소수점이면 번호가 아님
 CODE_IN_TITLE = re.compile(r"(?<![\d.,/-])(1[01]\d{3}|19\d{3}|20\d{3})(?![\d.,%])")
+# 제목 속 라이츠 코드 이름 (예: "Leica 35mm f2 Summicron (Silver, SAWOM / 11308)"). 대문자로 적힌 것만
+CODE_WORD_IN_TITLE = re.compile(r"\b[A-Z]{5}(?:-[A-Z]{1,2})?\b")
 
 
 # 번호가 적혀 있어도 본품이 아닌 매물 (후드·캡·케이스·필터·어댑터, "for 11879" 같은 호환품, 타사)
@@ -122,7 +124,8 @@ def _code_hits(title: str, final: dict, catalog: dict) -> list[str]:
     if NOT_THE_ITEM.search(title):
         return []
     hits: list[str] = []
-    for number in CODE_IN_TITLE.findall(title):
+    found = CODE_IN_TITLE.findall(title) + [w.lower().replace("-", " ") for w in CODE_WORD_IN_TITLE.findall(title)]
+    for number in found:
         owners = catalog.get("codes", {}).get(number) or []
         if len(owners) != 1 or owners[0] in hits:
             continue  # 모르는 번호, 또는 여러 제품에 쓰인 번호는 제목만으로 정하지 않음

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from entity_catalog import Suggester, load_catalog, match_entities
@@ -145,7 +146,7 @@ def test_listing_with_only_product_code_links_to_model() -> None:
 def test_product_codes_point_to_existing_entities() -> None:
     catalog = load_catalog()
     for number, entity_ids in catalog["codes"].items():
-        assert len(number) == 5 and number.isdigit(), number
+        assert (len(number) == 5 and number.isdigit()) or re.fullmatch(r"[a-z]{5}( [a-z]{1,2})?", number), number
         assert all(entity_id in catalog["entities"] for entity_id in entity_ids), number
 
 
@@ -170,3 +171,26 @@ def test_feature_groups_follow_body_specs() -> None:
     assert "leica:feature:ttl-flash" not in ids("Leica MP 0.72 Black Paint")
     assert "leica:feature:mechanical" not in ids("Leica M7 0.72 Silver")
     assert "leica:feature:no-meter" in ids("Leica M-A Typ 127 Silver")
+
+
+def test_suggest_by_leitz_code_word() -> None:
+    s = _suggester()
+    assert s.suggest("SOOIC", 1)[0]["id"] == "leica:lens:summicron:50:collapsible"
+    assert s.suggest("sooic-m", 1)[0]["id"] == "leica:lens:summicron:50:collapsible"
+    assert s.suggest("SUMMITAR", 1)[0]["id"] == "leica:lens:summitar:50"  # 이름 검색은 그대로
+    assert s.suggest("SOORE", 1)[0]["id"] == "leica:lens:summitar:50"
+
+
+def test_military_and_special_bodies_are_separate() -> None:
+    def ids(title):
+        return match_entities(_record(title, category="Body", mount=None))
+    luft = ids("Leica IIIc Luftwaffen-Eigentum Fl.Nr 38079")
+    assert "leica:body:barnack-military" in luft and "leica:body:iiic" not in luft
+    assert "leica:body:iiic" in ids("Leica IIIc chrome")
+    assert "leica:body:iiig-swedish" in ids("Leica IIIg Swedish Army three crowns")
+    ke = ids("Leica KE-7A US Army")
+    assert "leica:body:ke-7a" in ke and "leica:body:m4:standard" not in ke
+    assert "leica:body:c2-zoom" in ids("Leica C2-Zoom")
+    assert "leica:body:c-series" not in ids("Leica C2-Zoom")
+    assert "leica:body:digilux-2" in ids("Leica Digilux 2")
+    assert "leica:body:d-lux-1" in ids("Leica D-Lux 1")

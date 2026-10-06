@@ -352,7 +352,8 @@
    ],
    "codes": [
     "11307",
-    "11308"
+    "11308",
+    "sawom"
    ],
    "match": {
     "category": "Lens",
@@ -751,7 +752,8 @@
    "codes": [
     "11117",
     "11118",
-    "11818"
+    "11818",
+    "somni"
    ],
    "match": {
     "category": "Lens",
@@ -828,7 +830,9 @@
    "codes": [
     "11918",
     "11318",
-    "11320"
+    "11320",
+    "sosic",
+    "sooic mn"
    ],
    "match": {
     "category": "Lens",
@@ -1507,7 +1511,9 @@
     "11112",
     "11612",
     "11012",
-    "11512"
+    "11512",
+    "elmoo",
+    "elmom"
    ],
    "match": {
     "category": "Lens",
@@ -1587,7 +1593,11 @@
     "11132",
     "11133",
     "11136",
-    "11137"
+    "11137",
+    "soozi m",
+    "seoom",
+    "oesbo",
+    "oerdo"
    ],
    "match": {
     "category": "Lens",
@@ -2674,6 +2684,7 @@
      "M ?2 ?\\d{2}",
      "black ?paint|블랙 ?페인트|블페",
      "button|버튼",
+     "olive|military|\\barmy\\b|bundeswehr|올리브|군용|군납",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -2806,7 +2817,9 @@
     "m2buttonrewind",
     "라이카 m2 button rewind"
    ],
-   "codes": [],
+   "codes": [
+    "koohe"
+   ],
    "match": {
     "category": "Body",
     "mount": "M",
@@ -2818,6 +2831,81 @@
      "M2-?R",
      "\\bM ?24\\d",
      "M ?2 ?\\d{2}",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:m2:military",
+   "name": "Leica M2 Military (Olive · Grey)",
+   "name_ko": "M2 군용 (올리브·그레이)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": "leica:body:m2",
+   "children": [],
+   "aliases": [
+    "leica m2 military (olive · grey)",
+    "m2 military",
+    "m2 military (olive · grey)",
+    "m2 olive",
+    "m2 군용",
+    "m2military(olive·grey)",
+    "라이카 m2 military (olive · grey)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bM ?2\\b",
+     "olive|military|\\barmy\\b|bundeswehr|올리브|군용|군납"
+    ],
+    "title_must_not": [
+     "M2-?R",
+     "\\bM ?24\\d",
+     "M ?2 ?\\d{2}",
+     "re-?paint|리페인트|재도색|custom|커스텀",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -2931,17 +3019,16 @@
    }
   },
   {
-   "id": "leica:body:m1",
-   "name": "Leica M1",
-   "name_ko": "라이카 M1",
+   "id": "leica:body:m1:standard",
+   "name": "Leica M1 (standard)",
+   "name_ko": "라이카 M1 기본형",
    "kind": "Body",
    "mount": "M",
-   "parent": null,
+   "parent": "leica:body:m1",
    "children": [],
    "aliases": [
-    "leica m1",
-    "m1",
-    "라이카 m1"
+    "m1 standard",
+    "m1 기본"
    ],
    "codes": [],
    "match": {
@@ -2952,6 +3039,80 @@
     ],
     "title_must_not": [
      "M1[0-9]",
+     "olive|military|\\barmy\\b|bundeswehr|올리브|군용|군납",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:m1:military",
+   "name": "Leica M1 Military (Olive Green)",
+   "name_ko": "M1 군용 (올리브 그린)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": "leica:body:m1",
+   "children": [],
+   "aliases": [
+    "leica m1 military (olive green)",
+    "m1 military",
+    "m1 military (olive green)",
+    "m1 olive",
+    "m1 군용",
+    "m1military(olivegreen)",
+    "라이카 m1 military (olive green)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bM1\\b(?![\\d.:])",
+     "olive|military|\\barmy\\b|bundeswehr|올리브|군용|군납"
+    ],
+    "title_must_not": [
+     "M1[0-9]",
+     "re-?paint|리페인트|재도색|custom|커스텀",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -3025,6 +3186,221 @@
     ],
     "title_must_not": [
      "M-D",
+     "\\bpost",
+     "\\bNASA\\b",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:md-post",
+   "name": "Leica Post MD · MDa (24×27, Post Office)",
+   "name_ko": "라이카 포스트 MD",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "leica post md · mda (24×27, post office)",
+    "post md",
+    "post md · mda (24×27, post office)",
+    "post mda",
+    "postkamera",
+    "postmd·mda(24×27,postoffice)",
+    "라이카 post md · mda (24×27, post office)",
+    "포스트 md"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bMDa?\\b|postkamera",
+     "\\bpost|24 ?x ?27"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:nasa",
+   "name": "Leica NASA (MDa · Leicaflex SL MOT for space use)",
+   "name_ko": "라이카 NASA",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "leica nasa",
+    "leica nasa (mda · leicaflex sl mot for space use)",
+    "nasa",
+    "nasa (mda · leicaflex sl mot for space use)",
+    "nasa(mda·leicaflexslmotforspaceuse)",
+    "나사",
+    "라이카 nasa (mda · leicaflex sl mot for space use)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "\\bNASA\\b"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:ke-7a",
+   "name": "Leica KE-7A (US Army M4)",
+   "name_ko": "라이카 KE-7A (미군 M4)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "ke 7a",
+    "ke-7a",
+    "ke-7a (us army m4)",
+    "ke7a",
+    "ke7a(usarmym4)",
+    "leica ke-7a",
+    "leica ke-7a (us army m4)",
+    "라이카 ke-7a (us army m4)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "KE-? ?7A?\\b"
+    ],
+    "title_must_not": [
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -3092,6 +3468,7 @@
      "\\bM ?4\\b(?!-)"
     ],
     "title_must_not": [
+     "KE-? ?7A?\\b",
      "black ?paint|블랙 ?페인트|블페",
      "50 ?jahre|50 ?years|50th|anniversary|black ?chrome",
      "olive|올리브",
@@ -3166,6 +3543,7 @@
      "black ?paint|블랙 ?페인트|블페"
     ],
     "title_must_not": [
+     "KE-? ?7A?\\b",
      "re-?paint|리페인트|재도색|custom|커스텀",
      "leeworks",
      "light ?lens ?lab",
@@ -3237,6 +3615,7 @@
      "50 ?jahre|50 ?years|50th|anniversary|black ?chrome"
     ],
     "title_must_not": [
+     "KE-? ?7A?\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -3305,6 +3684,7 @@
      "olive|올리브"
     ],
     "title_must_not": [
+     "KE-? ?7A?\\b",
      "re-?paint|리페인트|재도색|custom|커스텀",
      "leeworks",
      "light ?lens ?lab",
@@ -12455,6 +12835,75 @@
    }
   },
   {
+   "id": "leica:body:d-lux-1",
+   "name": "Leica D-Lux 1",
+   "name_ko": "라이카 D-Lux 1",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:d-lux",
+   "children": [],
+   "aliases": [
+    "d lux 1",
+    "d-lux 1",
+    "dlux1",
+    "leica d-lux 1",
+    "디룩스 1",
+    "라이카 d-lux 1"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "D-?Lux ?1\\b"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
    "id": "leica:body:d-lux-2",
    "name": "Leica D-Lux 2",
    "name_ko": "라이카 D-Lux 2",
@@ -13591,30 +14040,443 @@
    }
   },
   {
-   "id": "leica:body:digilux",
-   "name": "Leica Digilux (1 · 2 · 3 · Zoom)",
-   "name_ko": "라이카 디지룩스",
+   "id": "leica:body:digilux-1",
+   "name": "Leica Digilux 1",
+   "name_ko": "라이카 디지룩스 1",
    "kind": "Body",
    "mount": null,
-   "parent": null,
+   "parent": "leica:body:digilux",
    "children": [],
    "aliases": [
-    "digilux (1 · 2 · 3 · zoom)",
-    "digilux 2",
-    "digilux 3",
-    "digilux(1·2·3·zoom)",
-    "leica digilux (1 · 2 · 3 · zoom)",
-    "디지룩스",
-    "라이카 digilux (1 · 2 · 3 · zoom)"
+    "digilux 1",
+    "digilux1",
+    "leica digilux 1",
+    "디지룩스 1",
+    "라이카 digilux 1"
    ],
    "codes": [],
    "match": {
     "category": "Body",
     "mount": null,
     "title_must": [
-     "digilux"
+     "digilux ?1\\b"
     ],
     "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:digilux-2",
+   "name": "Leica Digilux 2",
+   "name_ko": "라이카 디지룩스 2",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:digilux",
+   "children": [],
+   "aliases": [
+    "digilux 2",
+    "digilux2",
+    "leica digilux 2",
+    "디지룩스 2",
+    "라이카 digilux 2"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "digilux ?2\\b"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:digilux-3",
+   "name": "Leica Digilux 3",
+   "name_ko": "라이카 디지룩스 3",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:digilux",
+   "children": [],
+   "aliases": [
+    "digilux 3",
+    "digilux3",
+    "leica digilux 3",
+    "디지룩스 3",
+    "라이카 digilux 3"
+   ],
+   "codes": [
+    "18628"
+   ],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "digilux ?3\\b"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:digilux-4-3",
+   "name": "Leica Digilux 4.3",
+   "name_ko": "라이카 디지룩스 4.3",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:digilux",
+   "children": [],
+   "aliases": [
+    "digilux 4 3",
+    "digilux 4.3",
+    "digilux4.3",
+    "leica digilux 4.3",
+    "디지룩스 4.3",
+    "라이카 digilux 4.3"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "digilux ?4\\.3"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:digilux-zoom",
+   "name": "Leica Digilux Zoom",
+   "name_ko": "라이카 디지룩스 Zoom",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:digilux",
+   "children": [],
+   "aliases": [
+    "digilux zoom",
+    "digiluxzoom",
+    "leica digilux zoom",
+    "디지룩스 zoom",
+    "라이카 digilux zoom"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "digilux ?zoom"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:digilux-unspecified",
+   "name": "Leica Digilux (1998 original / generation not stated)",
+   "name_ko": "라이카 디지룩스 (1998 · 세대 미표기)",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:digilux",
+   "children": [],
+   "aliases": [
+    "digilux (1998 original / generation not stated)",
+    "digilux(1998original/generationnotstated)",
+    "leica digilux (1998 original / generation not stated)",
+    "라이카 digilux (1998 original / generation not stated)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "digilux(?! ?(1|2|3|4\\.3|zoom)\\b)"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:s1",
+   "name": "Leica S1 (scanner camera, 1997 · Pro · Alpha · High Speed)",
+   "name_ko": "라이카 S1 (스캐너 카메라)",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "leica s1",
+    "leica s1 (scanner camera, 1997 · pro · alpha · high speed)",
+    "s1 (scanner camera, 1997 · pro · alpha · high speed)",
+    "s1 alpha",
+    "s1 high speed",
+    "s1 pro",
+    "s1(scannercamera,1997·pro·alpha·highspeed)",
+    "라이카 s1 (scanner camera, 1997 · pro · alpha · high speed)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "\\bS1\\b",
+     "leica|alpha|high ?speed|scan"
+    ],
+    "title_must_not": [
+     "panasonic|lumix|\\bS1[RHM]\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -13950,9 +14812,9 @@
    "aliases": [
     "c1",
     "c1 · c2 · c3 · c11",
+    "c11",
     "c1·c2·c3·c11",
     "c2",
-    "c2 zoom",
     "c3",
     "leica c1 · c2 · c3 · c11",
     "라이카 c1 · c2 · c3 · c11"
@@ -13966,6 +14828,146 @@
     ],
     "title_must_not": [
      "C-?Lux",
+     "AF-?C ?1",
+     "C ?2-? ?zoom",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:c2-zoom",
+   "name": "Leica C2-Zoom (1991)",
+   "name_ko": "라이카 C2-Zoom",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "c2 zoom",
+    "c2-zoom",
+    "c2-zoom (1991)",
+    "c2zoom",
+    "c2zoom(1991)",
+    "leica c2-zoom (1991)",
+    "라이카 c2-zoom (1991)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "C ?2-? ?zoom"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:af-c1",
+   "name": "Leica AF-C1",
+   "name_ko": "라이카 AF-C1",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "af c1",
+    "af-c1",
+    "afc1",
+    "leica af-c1",
+    "라이카 af-c1"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "AF-? ?C ?1\\b"
+    ],
+    "title_must_not": [
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -14895,6 +15897,7 @@
      "\\bQ ?\\d",
      "magnifier|data ?back|soft ?release|vit\\b",
      "black ?paint|블랙 ?페인트|블페",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -14964,6 +15967,8 @@
     ],
     "title_must_not": [
      "\\bM ?\\d",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
+     "mont[eé] ?en ?sarre|\\bsaar",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -15033,6 +16038,7 @@
     ],
     "title_must_not": [
      "\\bM ?\\d",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -15102,6 +16108,7 @@
     ],
     "title_must_not": [
      "\\bM ?\\d",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -15309,6 +16316,7 @@
     ],
     "title_must_not": [
      "\\bM ?\\d",
+     "swed|sweden|three ?crowns?|tre ?kronor|스웨덴|military|군용|군납",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -15526,6 +16534,368 @@
      "\\bS ?\\d",
      "\\bQ ?\\d",
      "magnifier|data ?back|soft ?release|vit\\b",
+     "x-?ray|r[öo]ntgen",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:barnack-military",
+   "name": "Leica III · IIIa · IIIb · IIIc Military (Luftwaffe · Heer · K)",
+   "name_ko": "라이카 III~IIIc 군용 (루프트바페·헤어)",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "heer leica",
+    "iii · iiia · iiib · iiic military (luftwaffe · heer · k)",
+    "iiic k",
+    "iiic military",
+    "iii·iiia·iiib·iiicmilitary(luftwaffe·heer·k)",
+    "leica iii · iiia · iiib · iiic military (luftwaffe · heer · k)",
+    "luftwaffe",
+    "luftwaffe leica",
+    "군용 라이카",
+    "라이카 iii · iiia · iiib · iiic military (luftwaffe · heer · k)",
+    "루프트바페"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "\\bIII ?[abc]?\\b",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b"
+    ],
+    "title_must_not": [
+     "\\bM ?\\d",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:iiig-swedish",
+   "name": "Leica IIIg Swedish Armed Forces (Three Crowns)",
+   "name_ko": "라이카 IIIg 스웨덴군",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "iiig sweden",
+    "iiig swedish",
+    "iiig swedish armed forces (three crowns)",
+    "iiig 스웨덴",
+    "iiigswedisharmedforces(threecrowns)",
+    "leica iiig swedish armed forces (three crowns)",
+    "swedish iiig",
+    "three crowns",
+    "라이카 iiig swedish armed forces (three crowns)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "\\bIII ?g\\b",
+     "swed|sweden|three ?crowns?|tre ?kronor|스웨덴|military|군용|군납"
+    ],
+    "title_must_not": [
+     "\\bM ?\\d",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:iiia-monte-en-sarre",
+   "name": "Leica IIIa 'Monté en Sarre'",
+   "name_ko": "라이카 IIIa 몽테 앙 사르",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "iiia 'monté en sarre'",
+    "iiia sarre",
+    "iiia'montéensarre'",
+    "leica iiia 'monté en sarre'",
+    "monte en sarre",
+    "monté en sarre",
+    "라이카 iiia 'monté en sarre'",
+    "몽테 앙 사르"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "mont[eé] ?en ?sarre|\\bsaar"
+    ],
+    "title_must_not": [
+     "\\bM ?\\d",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:x-ray",
+   "name": "Leica X-Ray Camera (Standard body)",
+   "name_ko": "라이카 X-Ray 카메라",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "leica x-ray camera (standard body)",
+    "x-ray",
+    "x-ray camera (standard body)",
+    "xray leica",
+    "xraycamera(standardbody)",
+    "라이카 x-ray camera (standard body)",
+    "엑스레이 라이카"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "x-?ray|r[öo]ntgen"
+    ],
+    "title_must_not": [
+     "\\bM ?\\d",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:mifilmca",
+   "name": "Leica MIFILMCA (microscope camera)",
+   "name_ko": "라이카 MIFILMCA (현미경용)",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "leica mifilmca (microscope camera)",
+    "mifilmca",
+    "mifilmca (microscope camera)",
+    "mifilmca(microscopecamera)",
+    "라이카 mifilmca (microscope camera)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "mifilmca"
+    ],
+    "title_must_not": [
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -15740,6 +17110,7 @@
      "leicaflex ?sl\\b(?! ?2)"
     ],
     "title_must_not": [
+     "\\bNASA\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -18730,7 +20101,8 @@
    ],
    "codes": [
     "11104",
-    "11108"
+    "11108",
+    "samwo"
    ],
    "match": {
     "category": "Lens",
@@ -19324,7 +20696,9 @@
    ],
    "codes": [
     "11016",
-    "11116"
+    "11116",
+    "sooic",
+    "sooic m"
    ],
    "match": {
     "category": "Lens",
@@ -20033,7 +21407,10 @@
    "codes": [
     "11129",
     "11029",
-    "11026"
+    "11026",
+    "elrim",
+    "elrit",
+    "elkoo"
    ],
    "match": {
     "category": "Lens",
@@ -21876,7 +23253,9 @@
    ],
    "codes": [
     "11020",
-    "11120"
+    "11120",
+    "sooia",
+    "sooia m"
    ],
    "match": {
     "category": "Lens",
@@ -21938,7 +23317,8 @@
    ],
    "codes": [
     "11001",
-    "11501"
+    "11501",
+    "snoox"
    ],
    "match": {
     "category": "Lens",
@@ -22126,7 +23506,10 @@
    "codes": [
     "11005",
     "11105",
-    "11305"
+    "11305",
+    "soonc",
+    "soonc m",
+    "soonc mt"
    ],
    "match": {
     "category": "Lens",
@@ -22188,7 +23571,9 @@
     "즈마론 35 3.5 eye"
    ],
    "codes": [
-    "11107"
+    "11107",
+    "soonc mw",
+    "somwo"
    ],
    "match": {
     "category": "Lens",
@@ -22250,7 +23635,9 @@
    ],
    "codes": [
     "11006",
-    "11306"
+    "11306",
+    "simoo",
+    "simom"
    ],
    "match": {
     "category": "Lens",
@@ -22312,7 +23699,8 @@
     "즈마론 35 2.8 eye"
    ],
    "codes": [
-    "11106"
+    "11106",
+    "simwo"
    ],
    "match": {
     "category": "Lens",
@@ -22689,7 +24077,9 @@
    ],
    "codes": [
     "11002",
-    "11102"
+    "11102",
+    "suoon",
+    "sumom"
    ],
    "match": {
     "category": "Lens",
@@ -23259,7 +24649,8 @@
    ],
    "codes": [
     "11131",
-    "11631"
+    "11631",
+    "ilnoo"
    ],
    "match": {
     "category": "Lens",
@@ -23438,7 +24829,8 @@
    ],
    "codes": [
     "11062",
-    "11162"
+    "11162",
+    "ocmor"
    ],
    "match": {
     "category": "Lens",
@@ -23762,7 +25154,10 @@
     "11902",
     "11904",
     "11912",
-    "11914"
+    "11914",
+    "otplo",
+    "teloo",
+    "tlcoo"
    ],
    "match": {
     "category": "Lens",
@@ -23822,7 +25217,9 @@
     "주미타 50",
     "즈미타 50"
    ],
-   "codes": [],
+   "codes": [
+    "soore"
+   ],
    "match": {
     "category": "Lens",
     "mount": null,
@@ -23878,7 +25275,10 @@
     "summar 50",
     "주마 50"
    ],
-   "codes": [],
+   "codes": [
+    "sumar",
+    "sumus"
+   ],
    "match": {
     "category": "Lens",
     "mount": null,
@@ -23934,7 +25334,9 @@
     "summarex 85",
     "주마렉스 85"
    ],
-   "codes": [],
+   "codes": [
+    "soocx"
+   ],
    "match": {
     "category": "Lens",
     "mount": null,
@@ -24047,7 +25449,8 @@
     "헥토르 28"
    ],
    "codes": [
-    "11000"
+    "11000",
+    "hoopy"
    ],
    "match": {
     "category": "Lens",
@@ -24218,7 +25621,8 @@
    ],
    "codes": [
     "11032",
-    "11532"
+    "11532",
+    "hikoo"
    ],
    "match": {
     "category": "Lens",
@@ -24279,7 +25683,13 @@
     "11035",
     "11040",
     "11135",
-    "11140"
+    "11140",
+    "hefar",
+    "hefam",
+    "hefar m",
+    "ohebo",
+    "ohebo m",
+    "hekoo"
    ],
    "match": {
     "category": "Lens",
@@ -29392,7 +30802,8 @@
     "크론 90 ltm"
    ],
    "codes": [
-    "11023"
+    "11023",
+    "seoof"
    ],
    "match": {
     "category": "Lens",
@@ -31049,7 +32460,8 @@
     "엠3"
    ],
    "codes": [
-    "10150"
+    "10150",
+    "igemo"
    ],
    "match": null
   },
@@ -31063,7 +32475,8 @@
    "children": [
     "leica:body:m2:standard",
     "leica:body:m2:black-paint",
-    "leica:body:m2:button-rewind"
+    "leica:body:m2:button-rewind",
+    "leica:body:m2:military"
    ],
    "aliases": [
     "leica m2",
@@ -31073,8 +32486,28 @@
    ],
    "codes": [
     "10300",
-    "10308"
+    "10308",
+    "koohw"
    ],
+   "match": null
+  },
+  {
+   "id": "leica:body:m1",
+   "name": "Leica M1 (all)",
+   "name_ko": "라이카 M1 (전체)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [
+    "leica:body:m1:standard",
+    "leica:body:m1:military"
+   ],
+   "aliases": [
+    "leica m1",
+    "m1",
+    "라이카 m1"
+   ],
+   "codes": [],
    "match": null
   },
   {
@@ -31758,6 +33191,7 @@
    "mount": null,
    "parent": null,
    "children": [
+    "leica:body:d-lux-1",
     "leica:body:d-lux-2",
     "leica:body:d-lux-3",
     "leica:body:d-lux-4",
@@ -31774,6 +33208,30 @@
     "leica d-lux",
     "디룩스",
     "라이카 d-lux"
+   ],
+   "codes": [],
+   "match": null
+  },
+  {
+   "id": "leica:body:digilux",
+   "name": "Leica Digilux (all)",
+   "name_ko": "라이카 디지룩스 (전체)",
+   "kind": "Body",
+   "mount": null,
+   "parent": null,
+   "children": [
+    "leica:body:digilux-1",
+    "leica:body:digilux-2",
+    "leica:body:digilux-3",
+    "leica:body:digilux-4-3",
+    "leica:body:digilux-zoom",
+    "leica:body:digilux-unspecified"
+   ],
+   "aliases": [
+    "digilux",
+    "leica digilux",
+    "디지룩스",
+    "라이카 디지룩스"
    ],
    "codes": [],
    "match": null
@@ -31855,7 +33313,8 @@
    ],
    "codes": [
     "11113",
-    "11114"
+    "11114",
+    "soome"
    ],
    "match": null
   },
@@ -32162,7 +33621,10 @@
     "11030",
     "11830",
     "11130",
-    "11128"
+    "11128",
+    "elang",
+    "elang m",
+    "elgam"
    ],
    "match": null
   },
