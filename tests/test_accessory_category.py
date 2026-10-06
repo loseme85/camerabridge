@@ -228,3 +228,10 @@ def test_macro_lens_is_not_m_a_body() -> None:
     # 'leica ma'(M-A) 키워드가 'Leica Macro-Elmar'에 걸리던 것
     assert classify_listing_v2({"상품명": "Leica Macro-Elmar-M 90mm/F4.0 Black", "가격": "HK$9,800", "통화": "HKD"})["category"] == "Lens"
     assert classify_listing_v2({"상품명": "Leica M-A (Typ 127) Silver", "가격": "HK$29,800", "통화": "HKD"})["category"] == "Body"
+
+
+def test_rangefinder_camera_is_not_viewfinder_accessory() -> None:
+    body = classify_listing_v2({"상품명": "Leica M7 0.72 Black Film Rangefinder Camera 10503", "가격": "HK$31,800", "통화": "HKD"})
+    assert body["category"] == "Body"
+    finder = classify_listing_v2({"상품명": "Leica 24mm Viewfinder Black 12019", "가격": "HK$2,800", "통화": "HKD"})
+    assert finder["category"] == "Accessory"

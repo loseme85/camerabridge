@@ -110,7 +110,7 @@ THIRD_PARTY_BRANDS = [
     "panasonic", "lumix",
     "파나소닉", "루믹스",
     # 기타
-    "novoflex",
+    "novoflex", "ballhead", "ball-head",
     "rollei",
     "minolta",
 ]
@@ -1000,6 +1000,7 @@ _BODY_KW = [
     "leica q ", "leica q2", "leica q3",
     # 디지털·컴팩트 바디 (해외 딜러 제목)
     "monochrom", "typ 220", "typ 112", "d-lux", "sofort", "ゾフォート", "z2x",
+    "rf camera",  # 'Film Rangefinder Camera' (위에서 rf로 바꿈)
 ]
 
 # Barnack 바디 강제 키워드 (렌즈 protect 무시하고 Body 우선)
@@ -1063,6 +1064,8 @@ def detect_category(
     n = normalized_name.lower()
     desc = (normalized_description or "").lower()
     combined = n + " " + desc
+    # 'Rangefinder Camera'(카메라 종류)의 finder가 뷰파인더 부속품 키워드에 걸리지 않게
+    combined = re.sub(r"(?<!for )range ?-?finder (?=(film |digital )?(camera|body))", "rf ", combined)
     reasons = []
 
     # ══════════════════════════════════════════════════════════════
