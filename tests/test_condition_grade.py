@@ -45,3 +45,13 @@ def test_kamerastore_staff_note_grades() -> None:
     assert g("It has a lot of haze inside that will lower overall image quality.") == "D"
     assert g("There are minor scratches on the lens elements that won't affect image quality.") == "B"
     assert g("In German.") is None  # 설명서 등 컨디션 말이 없는 것
+
+
+def test_leica_france_letter_grades() -> None:
+    from condition_grade import LCF_PREFIX
+    site = "Leica Store France (프랑스)"
+    assert grade_of(site, LCF_PREFIX + "A : Excellent", "LEICA M11")[0] == "A"
+    assert grade_of(site, LCF_PREFIX + "C : Good", "SUMMICRON-M 35 mm f/2")[0] == "C"
+    assert grade_of(site, LCF_PREFIX + "E : Not fully operational", "LEICA M6")[0] == "X"
+    # 'new (2021-ACTU)'는 새 버전이라는 뜻, 신품 아님
+    assert grade_of(site, LCF_PREFIX + "B : Very good", "NOCTILUX-M 50 mm f/1.2 new (2021-ACTU)")[0] == "B"

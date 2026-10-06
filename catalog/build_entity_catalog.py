@@ -52,7 +52,7 @@ model("leica:lens:summilux-m:35:steel-rim-reissue", "Summilux-M 35mm f/1.4 Steel
 model("leica:lens:summicron-m:35:asph", "Summicron-M 35mm f/2 ASPH", "Lens", "M",
       [r"summicron|cron", f("35"), r"ASPH"], [r"\bAPO\b"] + ACC_NOT)
 model("leica:lens:summicron-m:35:v1-8element", "Summicron 35mm f/2 1st (8 elements)", "Lens", "M",
-      [r"summicron|cron", f("35"), r"(8 ?el|8매|eight|1st|1세대)"], [r"ASPH"] + ACC_NOT)
+      [r"summicron|cron", f("35"), r"(8 ?el|8매|eight|1st|1세대|\bv\.? ?1\b)"], [r"ASPH"] + ACC_NOT)
 model("leica:lens:summicron-m:35:v4", "Summicron 35mm f/2 4th (pre-ASPH)", "Lens", "M",
       [r"summicron|cron", f("35"), r"(4th|v4|4세대|6매|6 ?el|IV\b)"], [r"ASPH"] + ACC_NOT)
 model("leica:lens:apo-summicron-m:35", "APO-Summicron-M 35mm f/2 ASPH", "Lens", "M",
