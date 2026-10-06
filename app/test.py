@@ -2619,7 +2619,8 @@ def crawl_leicafrance():
                 continue
             pm = re.search(r"([\d\s.,]+)\s*€", field("Price"))
             try:
-                price = f"€{float(re.sub(r'[^\d]', '', pm.group(1))):,.0f}" if pm else "문의요망"
+                digits = re.sub(r"[^\d]", "", pm.group(1)) if pm else ""
+                price = f"€{float(digits):,.0f}" if digits else "문의요망"
             except ValueError:
                 price = "문의요망"
             img = re.search(r'<img src="([^"]+)"', a)
