@@ -1,20 +1,5 @@
 [
   {
-    "start_time": "2026-09-06 16:30:07",
-    "end_time": "2026-09-06 16:30:08",
-    "new_items": 0,
-    "total_items": 7695,
-    "site_counts": {
-      "사진집": 329,
-      "라이카스토어 충무로": 3126,
-      "장씨카메라": 4048,
-      "Ffordes (영국)": 115,
-      "Leica Store Miami": 37,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": []
-  },
-  {
     "start_time": "2026-09-06 19:41:54",
     "end_time": "2026-09-06 19:41:55",
     "new_items": 12,
@@ -26823,6 +26808,179 @@
         "가격": "€1,424",
         "통화": "EUR",
         "링크": "https://kamerastore.com/products/leica-50mm-f2-summicron-type-ii-silver-sooic-ms-sosic-11118-11618-11818-leica-m-t155604"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-10-06 22:08:16",
+    "end_time": "2026-10-06 22:08:18",
+    "seconds": 69.1,
+    "new_items": 5,
+    "total_items": 10004,
+    "site_counts": {
+      "사진집": 399,
+      "라이카스토어 충무로": 3120,
+      "장씨카메라": 4072,
+      "Ffordes (영국)": 125,
+      "Leica Store Miami": 40,
+      "Kamerastore (핀란드)": 724,
+      "기타무라 (일본)": 797,
+      "M & K Kamera (홍콩)": 727
+    },
+    "events": {
+      "new": 5,
+      "gone": 1,
+      "price": 1
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 13,
+        "seconds": 6.3,
+        "status": "ok",
+        "rows": 399,
+        "active": 339,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 9.2,
+        "status": "ok",
+        "rows": 3120,
+        "active": 599,
+        "carried": 2036,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 7,
+        "seconds": 3.5,
+        "status": "ok",
+        "rows": 4072,
+        "active": 42,
+        "carried": 3933,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Ffordes (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 69.0,
+        "status": "ok",
+        "rows": 125,
+        "active": 125,
+        "carried": 1,
+        "gone": 1,
+        "left_active": 0,
+        "new": 1,
+        "changed": 2
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.7,
+        "status": "ok",
+        "rows": 40,
+        "active": 40,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.9,
+        "status": "ok",
+        "rows": 724,
+        "active": 724,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 2
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.1,
+        "status": "ok",
+        "rows": 797,
+        "active": 797,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 3,
+        "changed": 3
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.5,
+        "status": "ok",
+        "rows": 727,
+        "active": 727,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Leica 28mm F2 Asph M Black (11672)",
+        "site": "Ffordes (영국)",
+        "가격": "£2,449.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-091415/leica-m/28mm-f2-asph-m-black-11672"
+      },
+      {
+        "상품명": "Leica M11 (Glossy Black Paint, 20230)",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€5,942",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-m11-glossy-black-paint-20230-leica-m-t155623"
+      },
+      {
+        "상품명": "Leica Hood SOOFM (50Summicron)折り畳み",
+        "site": "기타무라 (일본)",
+        "가격": "¥5,600",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2473840017060"
+      },
+      {
+        "상품명": "Leica 卓上三脚 TOOUG",
+        "site": "기타무라 (일본)",
+        "가격": "¥13,800",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2415250489884"
+      },
+      {
+        "상품명": "Leica C-LUX ライトGold",
+        "site": "기타무라 (일본)",
+        "가격": "¥140,800",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2445230104032"
       }
     ]
   }
