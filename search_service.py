@@ -1057,13 +1057,14 @@ def search_records(
     filtered_results = apply_filters(quality_filtered_results, filters=filters, records=candidate_records)
     sorted_results, applied_sort, sort_warnings = apply_sort(filtered_results, sort=sort)
     if applied_sort == "relevance":
-        sorted_results = balance_external_sources(sorted_results)
         if entity_id:
-            # 엔티티 모드: 지금 살 수 있는 매물이 먼저
+            # 엔티티 모드: 지금 살 수 있는 매물이 먼저. eBay 섞기는 그다음에 해야 판매 중 매물 안에서 3칸마다 1개로 지켜짐
+            # (먼저 섞고 정렬하면 판매 완료 국내 매물이 빠지면서 판매 중 eBay가 맨 앞에 몰림)
             sorted_results = sorted(
                 sorted_results,
                 key=lambda result: (result.get("final_output") or {}).get("sold_quality") != "asking",
             )
+        sorted_results = balance_external_sources(sorted_results)
     paginated_results, pagination, pagination_warnings = paginate_results(
         sorted_results,
         limit=limit,

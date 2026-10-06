@@ -34,3 +34,15 @@ def test_source_from_final_output_is_recognized() -> None:
 def test_local_only_results_unchanged() -> None:
     rows = [_row("사진집", "l0"), _row("장씨카메라", "l1")]
     assert balance_external_sources(rows) == rows
+
+
+def test_active_listings_stay_balanced_after_sold_listings_drop_out() -> None:
+    # 엔티티 모드에서 판매 완료가 뒤로 빠져도, 판매 중 매물 맨 앞에 eBay가 몰리지 않아야 함
+    def rec(source, sold):
+        return {"source": source, "final_output": {"source": source, "sold_quality": "sold_confirmed" if sold else "asking"}}
+    results = [rec("장씨카메라", True), rec("eBay", False), rec("장씨카메라", True), rec("eBay", False),
+               rec("장씨카메라", True), rec("eBay", False), rec("사진집", False), rec("사진집", False), rec("사진집", False)]
+    active_first = sorted(results, key=lambda r: r["final_output"]["sold_quality"] != "asking")
+    balanced = balance_external_sources(active_first)
+    first_three = [r["source"] for r in balanced[:3]]
+    assert first_three.count("eBay") <= 1

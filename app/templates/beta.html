@@ -145,6 +145,29 @@
     [hidden]{display:none !important}
     /* 검색 전에는 필터·요약을 숨김 */
     body:not(.cb-searched) .workspace{display:none}
+    /* 첫 화면: 실제 매물·시세 (검색하면 숨김) */
+    body.cb-searched .home-feed{display:none}
+    .home-feed{display:grid;gap:28px;margin:8px 0 12px}
+    .home-heading{margin:0 0 12px;font-size:15px;font-weight:700;display:flex;align-items:baseline;gap:8px}
+    .home-heading small{color:var(--text-muted);font-weight:400;font-size:12px}
+    .home-latest{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+    .home-item{display:flex;flex-direction:column;min-width:0;padding:0;border:1px solid var(--border);border-radius:var(--radius);
+      background:var(--surface);color:inherit;text-align:left;cursor:pointer;overflow:hidden}
+    .home-item:hover,.home-item:focus-visible{border-color:var(--text-soft);outline:none}
+    .home-item > img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--surface-soft)}
+    .home-item-body{display:grid;gap:3px;padding:8px 10px 10px;font-size:12px;color:var(--text-soft)}
+    .home-item-name{color:var(--text);font-size:13px;font-weight:600;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+    .home-item-price{color:var(--text);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+    .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .home-popular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;border-top:1px solid var(--border)}
+    .home-model{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 2px;border:0;border-bottom:1px solid var(--border);
+      background:none;color:inherit;text-align:left;cursor:pointer;font-size:13px}
+    .home-model:hover .home-model-name,.home-model:focus-visible .home-model-name{text-decoration:underline;outline:none}
+    .home-model-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .home-model-price{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+    .home-model-meta{grid-column:1 / -1;color:var(--text-muted);font-size:12px}
+    @media(max-width:1100px){.home-latest{grid-template-columns:repeat(4,minmax(0,1fr))}}
+    @media(max-width:720px){.home-latest{grid-template-columns:repeat(2,minmax(0,1fr))}.home-popular{grid-template-columns:minmax(0,1fr)}}
     .hero-trust{margin:14px 0 20px;color:var(--text-soft);font-size:13px;line-height:1.6;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
     .hero-trust .source-flag{margin-right:0}
     .feedback-fab{position:fixed;right:16px;bottom:16px;z-index:50;padding:10px 16px;border-radius:999px;border:1px solid var(--border-strong);
@@ -178,7 +201,7 @@
       gap:0;
     }
     .hero-copy{
-      padding:34px 34px 24px;
+      padding:26px 28px 20px;
       border-right:1px solid var(--border);
       min-width:0;
     }
@@ -191,9 +214,9 @@
       text-transform:uppercase;
     }
     .hero-title{
-      margin:0 0 12px;
-      font-size:46px;
-      line-height:1.02;
+      margin:0 0 10px;
+      font-size:34px;
+      line-height:1.12;
       letter-spacing:0;
       font-weight:800;
       max-width:760px;
@@ -278,6 +301,7 @@
       padding-top:4px;
     }
     .sticky-search-region[hidden]{display:none}
+    body.cb-hero-search-visible .sticky-search-region{display:none}
     .sticky-search-bar{
       border:1px solid var(--border);
       background:rgba(255,255,255,0.94);
@@ -627,7 +651,7 @@
     .micro-pill.amber{border-color:rgba(153,97,31,0.24);background:rgba(153,97,31,0.08);color:var(--amber)}
     .metric-grid{
       display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
+      grid-template-columns:repeat(2,minmax(0,1fr));
       gap:10px;
       margin-top:14px;
     }
@@ -931,7 +955,7 @@
       .hero-sidebar,
       .workspace-main,
       .workspace-side{padding-left:16px;padding-right:16px}
-      .hero-title{font-size:34px}
+      .hero-title{font-size:26px}
       .search-form-row{flex-direction:column;align-items:stretch}
       .search-button{width:100%}
       .toolbar{grid-template-columns:1fr}
@@ -943,6 +967,9 @@
       .thumb{width:74px}
     }
   </style>
+  <!-- 방문 통계: Vercel Web Analytics (쿠키 없음). Vercel 프로젝트 화면에서 Analytics를 켜야 쌓임 -->
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <div class="shell">
@@ -1002,6 +1029,17 @@
               </div>
             </section>
           </div>
+        </div>
+      </section>
+
+      <section id="home-feed" class="home-feed" hidden>
+        <div>
+          <h2 class="home-heading"><span data-i18n="home.latest">Just listed</span> <small data-i18n="home.latest_note">one per model, newest first</small></h2>
+          <div id="home-latest" class="home-latest"></div>
+        </div>
+        <div>
+          <h2 class="home-heading"><span data-i18n="home.popular">Market prices for popular models</span> <small data-i18n="home.popular_note">B-grade median from sold listings</small></h2>
+          <div id="home-popular" class="home-popular"></div>
         </div>
       </section>
 
@@ -1305,6 +1343,13 @@
         notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.', ja: '現在はLeica中心のカバレッジでテスト中です。', 'zh-Hans': '当前正在以 Leica 为中心进行测试。', 'zh-Hant': '目前正以 Leica 為中心進行測試。', pt: 'No momento, o teste está focado em cobertura Leica.', es: 'Actualmente la prueba se centra en cobertura Leica.', de: 'Der Test konzentriert sich derzeit auf Leica-Abdeckung.', it: 'Il test è attualmente focalizzato sulla copertura Leica.' },
         notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.', ja: '一部の希少モデルはデータ不足により価格が保留されたままになることがあります。', 'zh-Hans': '部分稀有型号可能因依据不足而暂不估算价格。', 'zh-Hant': '部分稀有型號可能因依據不足而暫不估算價格。', pt: 'Alguns modelos raros podem permanecer com o preço bloqueado quando a evidência for limitada.', es: 'Algunos modelos raros pueden mantener el precio bloqueado cuando la evidencia es limitada.', de: 'Einige seltene Modelle bleiben bei geringer Datenlage preisgesperrt.', it: 'Alcuni modelli rari possono restare con il prezzo bloccato quando i dati sono limitati.' },
         trust: { ko: '판매처 {shops}곳 · {countries}개국 · 판매 중 {listings}개 · {ago} 갱신', en: '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}', ja: '{countries}か国・{shops}店舗 · 販売中 {listings}点 · {ago}更新', 'zh-Hans': '{countries} 个国家 {shops} 家店铺 · 在售 {listings} 件 · {ago}更新', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪 · 在售 {listings} 件 · {ago}更新', pt: '{shops} lojas em {countries} países · {listings} anúncios à venda · atualizado {ago}', es: '{shops} tiendas en {countries} países · {listings} anuncios a la venta · actualizado {ago}', de: '{shops} Händler in {countries} Ländern · {listings} Angebote · aktualisiert {ago}', it: '{shops} negozi in {countries} paesi · {listings} annunci in vendita · aggiornato {ago}' },
+      },
+      home: {
+        latest: { ko: '새로 올라온 매물', en: 'Just listed', ja: '新着の出品', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Recém-anunciados', es: 'Recién publicados', de: 'Neu eingestellt', it: 'Appena pubblicati' },
+        latest_note: { ko: '모델마다 한 건, 최근 순', en: 'one per model, newest first', ja: 'モデルごとに1件、新しい順', 'zh-Hans': '每个型号一件，按时间排序', 'zh-Hant': '每個型號一件，依時間排序', pt: 'um por modelo, mais recentes primeiro', es: 'uno por modelo, más recientes primero', de: 'eins pro Modell, neueste zuerst', it: 'uno per modello, dal più recente' },
+        popular: { ko: '많이 찾는 모델 시세', en: 'Market prices for popular models', ja: '人気モデルの相場', 'zh-Hans': '热门型号行情', 'zh-Hant': '熱門型號行情', pt: 'Preços de mercado dos modelos populares', es: 'Precios de mercado de modelos populares', de: 'Marktpreise beliebter Modelle', it: 'Prezzi di mercato dei modelli più cercati' },
+        popular_note: { ko: 'B급 기준, 판매 완료 매물 중앙값', en: 'B-grade median from sold listings', ja: 'Bランク基準・成約品の中央値', 'zh-Hans': 'B 级基准，已售中位数', 'zh-Hant': 'B 級基準，已售中位數', pt: 'mediana de vendidos, grau B', es: 'mediana de vendidos, grado B', de: 'Median verkaufter Angebote, Zustand B', it: 'mediana dei venduti, grado B' },
+        on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
       },
       language: {
         label: { ko: '언어', en: 'Language', ja: '言語', 'zh-Hans': '语言', 'zh-Hant': '語言', pt: 'Idioma', es: 'Idioma', de: 'Sprache', it: 'Lingua' },
@@ -1752,6 +1797,62 @@
       }
     }
 
+    // 사용 기록: 방문 한 번의 검색어·고른 모델·결과 수·판매처 클릭을 묶어 /api/usage 로 (IP·쿠키 없음)
+    // 사장님 테스트는 빼기: 주소 끝에 ?notrack=1 로 한 번 열면 그 브라우저는 기록 안 함 (?notrack=0 으로 해제)
+    const usageLog = (() => {
+      const MAX_SENDS = 3;
+      let off = false;
+      try{
+        const flag = new URLSearchParams(location.search).get('notrack');
+        if(flag === '1') localStorage.setItem('cb_notrack', '1');
+        if(flag === '0') localStorage.removeItem('cb_notrack');
+        off = localStorage.getItem('cb_notrack') === '1';
+      }catch(error){}
+      if(navigator.webdriver) off = true;
+      const startedAt = Date.now();
+      const sid = Math.random().toString(36).slice(2, 10) + startedAt.toString(36);
+      const seconds = () => Math.round((Date.now() - startedAt) / 1000);
+      let referrer = '';
+      try{ referrer = document.referrer ? new URL(document.referrer).host : ''; }catch(error){}
+      if(referrer === location.host) referrer = '';
+      const utm = [...new URLSearchParams(location.search)].filter(([key]) => key.startsWith('utm_')).map(([key, value]) => `${key}=${value}`).join('&');
+      const landing = location.pathname + (utm ? '?' + utm : '');
+      let searches = [], clicks = [], sends = 0, last = '';
+      function send(){
+        if(off || sends >= MAX_SENDS || (!searches.length && !clicks.length)) return;
+        sends += 1;
+        const body = JSON.stringify({
+          sid, part: sends, locale: uiState.locale, currency: uiState.currency, referrer, landing,
+          mobile: isNarrowScreen(), duration_s: seconds(), searches, clicks
+        });
+        searches = []; clicks = [];
+        try{
+          if(!(navigator.sendBeacon && navigator.sendBeacon('/api/usage', new Blob([body], { type: 'application/json' })))){
+            fetch('/api/usage', { method: 'POST', headers: { 'content-type': 'application/json' }, body, keepalive: true }).catch(() => {});
+          }
+        }catch(error){}
+      }
+      document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'hidden') send(); });
+      window.addEventListener('pagehide', send);
+      document.addEventListener('click', event => {
+        const link = event.target.closest && event.target.closest('a[href^="http"]');
+        if(!link || off) return;
+        let host = '';
+        try{ host = new URL(link.href).host; }catch(error){ return; }
+        if(!host || host === location.host) return;
+        clicks.push({ host, entity: state.entity || '', q: state.query || '', s: seconds() });
+      }, true);
+      return {
+        search(q, entity, results, active){
+          if(off) return;
+          const key = `${q}|${entity || ''}`;
+          if(key === last) return;  // 같은 검색 다시 그리기는 한 번만
+          last = key;
+          searches.push({ q, entity: entity || '', results, active, s: seconds() });
+        }
+      };
+    })();
+
     // 의견 보내기: /api/feedback → 비공개 저장 + 텔레그램 알림
     function bindFeedback(){
       const dialog = document.getElementById('feedback-dialog');
@@ -1834,6 +1935,89 @@
       }
     }
 
+    // 첫 화면: 새로 올라온 실제 매물 + 많이 찾는 모델 시세 (data/derived/home_feed.json, entity_summary_v1.json)
+    const homeState = { feed: null };
+
+    async function loadHomeFeed(){
+      try{
+        homeState.feed = await fetch('/data/derived/home_feed.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
+      }catch(error){
+        homeState.feed = null;
+      }
+      renderHome();
+    }
+
+    function homeAgo(firstSeen){
+      const at = Date.parse(String(firstSeen || '').replace(' ', 'T') + '+09:00');
+      if(!Number.isFinite(at)) return '';
+      const minutes = Math.max(1, Math.round((Date.now() - at) / 60000));
+      const rtf = new Intl.RelativeTimeFormat(uiState.locale, { numeric: 'auto' });
+      if(minutes < 60) return rtf.format(-minutes, 'minute');
+      if(minutes < 48 * 60) return rtf.format(-Math.round(minutes / 60), 'hour');
+      return rtf.format(-Math.round(minutes / 1440), 'day');
+    }
+
+    // Shopify 원본(2048px)은 첫 화면엔 너무 커서 작은 크기로
+    function homeThumb(url){
+      return /cdn\.shopify\.com/.test(url) ? url + (url.includes('?') ? '&' : '?') + 'width=400' : url;
+    }
+
+    // 첫 화면 카드에선 '(standard)'·'기본형' 같은 꼬리표를 뺀다
+    function homeName(entity){
+      return entityDisplayName(entity).replace(/\s*(\((standard|Standard)\)|기본형)\s*$/, '');
+    }
+
+    function renderHome(){
+      const section = document.getElementById('home-feed');
+      const latestEl = document.getElementById('home-latest');
+      const popularEl = document.getElementById('home-popular');
+      if(!section || !latestEl || !popularEl) return;
+      const rules = (landedState.rules && landedState.rules.sources) || {};
+      const latest = ((homeState.feed && homeState.feed.latest) || []).filter(item => entityState.byId[item.entity]);
+      latestEl.innerHTML = latest.map(item => {
+        const entity = entityState.byId[item.entity];
+        const converted = convertAmount(Number(item.price), item.currency, uiState.currency);
+        const price = converted !== null ? formatMoney(roundEstimate(converted, uiState.currency), uiState.currency) : formatMoney(Number(item.price), item.currency);
+        const country = (rules[item.source] || {}).country;
+        return `<button type="button" class="home-item" data-entity="${escapeHtml(entity.id)}" title="${escapeHtml(item.title || '')}">
+          <img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="lazy">
+          <span class="home-item-body">
+            <span class="home-item-name">${escapeHtml(homeName(entity))}</span>
+            <span class="home-item-price">${escapeHtml(price)}</span>
+            <span class="home-item-shop">${countryFlagHtml(country)}${escapeHtml(localizeSourceName(item.source))} · ${escapeHtml(homeAgo(item.first_seen))}</span>
+          </span>
+        </button>`;
+      }).join('');
+      const popular = ((entityState.summary && entityState.summary.entities) || [])
+        .filter(entity => !entity.feature && !(entity.children || []).length && !/unspecified/.test(entity.id) && entity.b_price_krw && entity.b_price_basis === 'sold')
+        .sort((a, b) => (b.active_count || 0) - (a.active_count || 0) || (b.listing_count || 0) - (a.listing_count || 0))
+        .slice(0, 10);
+      popularEl.innerHTML = popular.map(entity => `<button type="button" class="home-model" data-entity="${escapeHtml(entity.id)}">
+          <span class="home-model-name">${escapeHtml(homeName(entity))}</span>
+          <span class="home-model-price">${escapeHtml(krwToDisplay(entity.b_price_krw) || '—')}</span>
+          <span class="home-model-meta">${escapeHtml(ux('home.on_sale', '{n} for sale').replace('{n}', String(entity.active_count || 0)))}</span>
+        </button>`).join('');
+      section.hidden = !latest.length && !popular.length;
+    }
+
+    // 위 검색창이 화면에 보이는 동안엔 결과 사이의 두 번째 검색창을 숨김 (같은 검색창이 두 개로 보이던 문제)
+    function bindHeroSearchVisibility(){
+      const panel = document.querySelector('.search-panel');
+      if(!panel || !('IntersectionObserver' in window)) return;
+      new IntersectionObserver(entries => {
+        document.body.classList.toggle('cb-hero-search-visible', entries.some(entry => entry.isIntersecting));
+      }).observe(panel);
+    }
+
+    function bindHome(){
+      const section = document.getElementById('home-feed');
+      if(!section) return;
+      section.addEventListener('click', event => {
+        const target = event.target.closest('[data-entity]');
+        if(target) selectEntity(target.dataset.entity, 'query-input', { preserveResultsAnchor: false });
+      });
+    }
+
     function populateLandedOptions(){
       if(els['currency-select']){
         els['currency-select'].innerHTML = LANDED_CURRENCIES.map(code => (
@@ -1868,6 +2052,7 @@
       followLocaleLandedDefaults();
       populateLandedOptions();
       loadTrustLine();
+      renderHome();
       if(state.response) render();
     }
 
@@ -2355,6 +2540,9 @@
       vs_grade_pricier: { ko: '같은 등급 시세보다 {p}% 비쌈', en: '{p}% above the market price for this grade', ja: '同ランク相場より{p}%高い', 'zh-Hans': '比同级行情高 {p}%', 'zh-Hant': '比同級行情高 {p}%', pt: '{p}% acima do preço de mercado deste grau', es: '{p}% por encima del precio de mercado de este grado', de: '{p} % über dem Marktpreis für diesen Zustand', it: '{p}% sopra il prezzo di mercato di questo grado' },
       price_basis: { ko: '판매 완료 {n}건 기준', en: 'Based on {n} sold listings', ja: '販売済み {n} 件の中央値', 'zh-Hans': '基于 {n} 件已售商品', 'zh-Hant': '依據 {n} 件已售商品', pt: 'Com base em {n} anúncios vendidos', es: 'Según {n} anuncios vendidos', de: 'Basierend auf {n} verkauften Angeboten', it: 'Basato su {n} annunci venduti' },
       price_range_label: { ko: '판매 중 가격대', en: 'Asking price range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa de preço à venda', es: 'Rango de precios en venta', de: 'Preisspanne der Angebote', it: 'Fascia di prezzo in vendita' },
+      feature_models: { ko: '이 사양의 바디', en: 'Bodies with this spec', ja: 'この仕様のボディ', 'zh-Hans': '具备此规格的机身', 'zh-Hant': '具備此規格的機身', pt: 'Corpos com esta especificação', es: 'Cuerpos con esta especificación', de: 'Gehäuse mit dieser Ausstattung', it: 'Corpi con questa specifica' },
+      feature_model_count: { ko: '{n}개 모델', en: '{n} models', ja: '{n}モデル', 'zh-Hans': '{n} 个型号', 'zh-Hant': '{n} 個型號', pt: '{n} modelos', es: '{n} modelos', de: '{n} Modelle', it: '{n} modelli' },
+      feature_pick: { ko: '여러 모델이 섞여 있어요. 아래에서 모델을 고르면 시세가 나와요', en: 'Several models together — pick one below to see its market price', ja: '複数のモデルが混在しています。下でモデルを選ぶと相場が表示されます', 'zh-Hans': '包含多个型号，在下方选择型号即可查看行情', 'zh-Hant': '包含多個型號，在下方選擇型號即可查看行情', pt: 'Vários modelos juntos — escolha um abaixo para ver o preço de mercado', es: 'Varios modelos juntos: elige uno abajo para ver su precio de mercado', de: 'Mehrere Modelle zusammen – wähle unten eines, um den Marktpreis zu sehen', it: 'Più modelli insieme: scegline uno qui sotto per vedere il prezzo di mercato' },
       choose_version: { ko: '버전을 고르면 시세가 나와요', en: 'Pick a version to see its market price', ja: 'バージョンを選ぶと相場が表示されます', 'zh-Hans': '选择具体版本即可查看行情', 'zh-Hant': '選擇具體版本即可查看行情', pt: 'Escolha uma versão para ver o preço de mercado', es: 'Elige una versión para ver su precio de mercado', de: 'Wähle eine Version, um den Marktpreis zu sehen', it: 'Scegli una versione per vedere il prezzo di mercato' },
       few_sold: { ko: '판매 완료 기록이 적어 판매 중 가격대를 보여 드려요', en: 'Not enough sales yet, so this shows the asking range', ja: '販売済みの記録が少ないため、販売中の価格帯を表示しています', 'zh-Hans': '成交记录较少，暂显示在售价格区间', 'zh-Hant': '成交紀錄較少，暫顯示在售價格區間', pt: 'Poucas vendas registradas, por isso mostramos a faixa de preços à venda', es: 'Aún hay pocas ventas, así que mostramos el rango de precios en venta', de: 'Noch zu wenige Verkäufe – daher die Preisspanne der Angebote', it: 'Ancora poche vendite, quindi mostriamo la fascia di prezzo in vendita' },
       model: { ko: '모델', en: 'Model', ja: 'モデル', 'zh-Hans': '型号', 'zh-Hant': '型號', pt: 'Modelo', es: 'Modelo', de: 'Modell', it: 'Modello' },
@@ -2416,6 +2604,7 @@
           entityState.byId[entity.id] = entity;
         });
         entityState.vocab = [...vocab];
+        renderHome();
         if(state.entity) render();
       }catch(error){
         entityState.summary = null;
@@ -2444,6 +2633,8 @@
     }
 
     function scoreEntity(query, entity){
+      // 제품 번호 (예: 11873). 앞부분만 같은 번호는 후보로 내지 않음 ("100" → 10043 R4 방지)
+      if((entity.codes || []).includes(query)) return 1000;
       let best = 0;
       const qc = query.replace(/ /g, '');
       for(const alias of entity._aliases){
@@ -2563,6 +2754,10 @@
       const high = range ? krwToDisplay(range[1]) : null;
       const rangeText = low ? (high && high !== low ? `${low} – ${high}` : low) : '';
       const isParent = (entity.children || []).length > 0;
+      if(entity.feature){
+        const models = (entity.members || []).filter(id => (entityState.byId[id] || {}).active_count).length;
+        return { caption: ec('feature_models'), value: ec('feature_model_count', { n: String(models) }), meta: ec('feature_pick') };
+      }
       if(!isParent && entity.b_price_krw){
         const b = krwToDisplay(entity.b_price_krw);
         const others = ['S', 'A', 'C', 'D']
@@ -2652,7 +2847,7 @@
       const items = suggestions.map((item, index) => `
         <li id="${inputId}-opt-${index}" role="option" class="entity-option" data-index="${index}" aria-selected="false">
           <span class="entity-option-name">${escapeHtml(entityDisplayName(item.entity))}</span>
-          <span class="entity-option-meta">${escapeHtml(entityMetaLine(item.entity))}</span>
+          <span class="entity-option-meta">${escapeHtml(entityMetaLine(item.entity) + ((item.entity.codes || []).includes(normalizeEntityText(raw)) ? ` · #${normalizeEntityText(raw)}` : ''))}</span>
         </li>`).join('');
       const free = `<li id="${inputId}-opt-free" role="option" class="entity-option entity-option-free" data-index="free" aria-selected="false">${escapeHtml(ec('free_text', { q: raw }))}</li>`;
       menu.innerHTML = items + free;
@@ -2749,12 +2944,16 @@
       }
       const parent = entity.parent ? entityState.byId[entity.parent] : null;
       const family = entity.children && entity.children.length ? entity : parent;
-      const chips = family ? [family.id, ...family.children].map(id => {
+      // 사양 묶음 (예: 28mm 프레임라인 있는 M 바디): 판매 중인 모델을 많은 순서로 골라 좁히게
+      const members = entity.feature ? (entity.members || []).map(id => entityState.byId[id])
+        .filter(item => item && item.active_count).sort((a, b) => b.active_count - a.active_count) : [];
+      const memberChips = members.map(item => `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(item.id)}" aria-pressed="false">${escapeHtml(entityDisplayName(item))} <span class="entity-chip-count">${item.active_count}</span></button>`).join('');
+      const chips = memberChips || (family ? [family.id, ...family.children].map(id => {
         const item = entityState.byId[id];
         if(!item) return '';
         const label = id === family.id ? ec('all_versions') : entityDisplayName(item);
         return `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(id)}" aria-pressed="${id === entity.id}">${escapeHtml(label)} <span class="entity-chip-count">${item.active_count || 0}</span></button>`;
-      }).join('') : '';
+      }).join('') : '');
       bar.innerHTML = `
         <div class="entity-bar-main">
           <span class="entity-bar-label">${escapeHtml(ec('model'))}</span>
@@ -2911,6 +3110,7 @@
         window.scrollTo({ top: currentScrollY, behavior: 'auto' });
       });
       loadTrustLine();
+      renderHome();
     }
 
     function cacheElements(){
@@ -3443,6 +3643,7 @@
           state.historyVisibleCount = requestedHistoryVisibleCount === null
             ? initialSections.history.length
             : Math.min(initialSections.history.length, requestedHistoryVisibleCount);
+          if(historyMode !== 'none') usageLog.search(state.query, state.entity, getResults().length, initialSections.active.length);
         }
         if(!append) state.error = null;
         if(historyMode !== 'none'){
@@ -3859,6 +4060,8 @@
           if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
           return left.originalIndex - right.originalIndex;
         }
+        // 모델을 고른 추천순: 서버 순서(판매 중 먼저, eBay는 3칸마다 1개)를 그대로. 실시간 eBay는 확인 시각이 늘 '지금'이라 최신순으로 몰림
+        if(state.entity) return left.originalIndex - right.originalIndex;
         if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
         if(right.recency !== left.recency) return right.recency - left.recency;
         if(right.marketInfo.activeConfidence !== left.marketInfo.activeConfidence) return right.marketInfo.activeConfidence - left.marketInfo.activeConfidence;
@@ -4171,6 +4374,8 @@
         els['market-price-caption'].textContent = price.caption;
         els['market-price-value'].textContent = price.value;
         els['summary-meta'].textContent = price.meta;
+        // 지금 불러온 한 페이지가 아니라 그 모델(사양 묶음) 전체의 판매 중 매물 수
+        els['active-count'].textContent = formatListingCount(Number(pickedEntity.active_count || 0));
       }
 
       if(els['index-debug-line']){
@@ -4188,6 +4393,7 @@
 
     function render(){
       document.body.classList.toggle('cb-searched', Boolean(state.response || state.loading || state.error));
+      if(!document.body.classList.contains('cb-searched')) renderHome();  // 통화·언어를 바꾸면 첫 화면 가격도 다시
       updatePrefsSummary();
       renderEntityBar();
       renderSummary();
@@ -4253,17 +4459,8 @@
         return;
       }
 
-      els['state-region'].innerHTML = renderStateCard(
-        ux('state_card.results_title', 'Search results'),
-        ux('state_card.results_body', 'The same data and result order are kept, while the beta shell simplifies the guidance text.'),
-        [
-          ux('state_card.results_tip_1', 'Prices are for reference'),
-          ux('state_card.results_tip_2', 'Pricing stays locked when conditions are mixed'),
-          ux('state_card.results_tip_3', 'The original listing should be checked')
-        ],
-        'subtle'
-      );
-      els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
+      // 모델(사양 묶음)을 고르면 위 요약 칸이 이미 그 모델 기준이라 결과 요약 카드는 생략 (첫 매물 제목을 모델처럼 보여 주던 문제)
+      els['market-entry-region'].innerHTML = state.entity ? '' : renderMarketEntry(results, uiHints);
       els['query-summary-region'].innerHTML = '';
       els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
       els['results-load-more-region'].innerHTML = '';
@@ -4497,9 +4694,7 @@
           </div>
           <div class="metric-grid">
             <div class="metric-card"><b>${priceHeadline}</b><span>${priceValue}</span></div>
-            <div class="metric-card"><b>${escapeHtml(ux('market_entry.status_label', 'Price state'))}</b><span>${summaryLine}</span></div>
             <div class="metric-card"><b>${escapeHtml(ux('market_entry.source_check_label', 'Check source listing'))}</b><span>${escapeHtml(ux('market_entry.source_check_body', 'Please verify the original listing before purchase.'))}</span></div>
-            <div class="metric-card"><b>${escapeHtml(ux('market_entry.beta_note_label', 'Note'))}</b><span>${escapeHtml(ux('market_entry.beta_note_body', 'The same API result is shown here with beta-friendly wording only.'))}</span></div>
           </div>
         </article>
       `;
@@ -4541,6 +4736,8 @@
         ? ' data-append-anchor="true"'
         : '';
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
+      // 모델을 고르면 이미 그 모델 매물만 남았으므로 적합도·가격 비교 꼬리표와 설명 문구는 빼고 사진·가격·등급·판매처만
+      const simpleCard = Boolean(state.entity);
       const explanation = getBetaCardExplanation(evidenceRole, priceRole, reason);
 
       return `
@@ -4559,15 +4756,15 @@
               </div>
               <div class="result-status-row">
                 <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(localizeStatusLabel(status.label))}</span>
-                <span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
-                <span class="micro-pill ${escapeHtml(priceBadge.tone)}">${escapeHtml(priceBadge.label)}</span>
+                ${simpleCard ? '' : `<span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
+                <span class="micro-pill ${escapeHtml(priceBadge.tone)}">${escapeHtml(priceBadge.label)}</span>`}
               </div>
             </div>
           </div>
-          <div class="result-facts">
+          ${simpleCard ? '' : `<div class="result-facts">
             <div class="card-note">${escapeHtml(reason || ux('public_card.reference_note', 'Check the source listing before making a decision.'))}</div>
-          </div>
-          ${explanation ? `
+          </div>`}
+          ${explanation && !simpleCard ? `
             <details class="result-details">
               <summary>${escapeHtml(ux('common.details_why', 'Why is this result shown?'))}</summary>
               <div class="result-details-body">
@@ -4610,7 +4807,7 @@
       return `
         <article class="archive-card">
           <p class="section-label">${escapeHtml(title)}</p>
-          <h3>${escapeHtml(`${title} (${formatListingCount(results.length)})`)}</h3>
+          <h3>${escapeHtml(state.entity ? title : `${title} (${formatListingCount(results.length)})`)}</h3>
           <p>${escapeHtml(subtitle)}</p>
           ${
             results.length
@@ -4787,6 +4984,9 @@
     bindEntitySuggest('sticky-query-input', { preserveResultsAnchor: true });
     bindEntityBar();
     loadEntitySummary();
+    loadHomeFeed();
+    bindHome();
+    bindHeroSearchVisibility();
     bindFeedback();
     hydrateFromUrl();
   </script>

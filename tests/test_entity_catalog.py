@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from entity_catalog import Suggester, load_catalog, match_entities
@@ -90,7 +91,7 @@ def test_catalog_entities_have_aliases_and_rules() -> None:
     catalog = load_catalog()
     for entity in catalog["entities"].values():
         assert entity["aliases"], entity["id"]
-        assert entity["match"] or entity["children"], entity["id"]
+        assert entity["match"] or entity["children"] or entity.get("feature"), entity["id"]
 
 
 def test_summilux_35_korean_generation_numbers() -> None:
@@ -118,3 +119,78 @@ def test_price_relevant_variants_are_separate_models():
     assert "leica:lens:summicron-m:35:asph-black-paint" in cron and "leica:lens:summicron-m:35:asph" not in cron
     apo = match_entities(_record("Leica APO-Summicron M 50mm F2.0 ASPH.LHSA Silver"))
     assert "leica:lens:apo-summicron-m:50:lhsa" in apo and "leica:lens:summicron-m:50:current" not in apo
+
+
+def test_suggest_by_leica_product_code() -> None:
+    # 2026-10 레딧 피드백: "11873으로 검색하면 아무것도 안 나온다"
+    s = _suggester()
+    assert s.suggest("11873", 1)[0]["id"] == "leica:lens:summilux-m:35:aa"
+    assert s.suggest("leica 11874", 1)[0]["id"] == "leica:lens:summilux-m:35:asph-1994"
+    assert s.suggest("20200", 1)[0]["id"] == "leica:body:m11:standard"
+    # 앞부분만 같은 번호는 후보가 아님: 초점거리 검색이 바디 번호(10043 R4, 10502 M5)로 새지 않게
+    ids = {e["id"] for e in s.suggest("100", 12) + s.suggest("105", 12)}
+    assert not ids & {"leica:body:r4", "leica:body:m5:standard", "leica:body:m4-2:standard"}
+    assert s.suggest("1187", 3) == []
+    # 라이카가 다시 쓴 번호: 두 제품 모두 후보
+    ids = {e["id"] for e in s.suggest("11135", 5)}
+    assert {"leica:lens:elmarit-m:21:asph", "leica:lens:hektor:135"} <= ids
+
+
+def test_listing_with_only_product_code_links_to_model() -> None:
+    assert "leica:lens:summilux-m:35:asph-fle" in match_entities(_record("Leica 35mm F1.4 Asph M Black 6bit (11663)"))
+    assert "leica:body:m6:classic" in match_entities(_record("Leica M6 (0.72x) (Silver, 10414)", category="Body"))
+    # 후드·호환품 매물은 번호가 있어도 본품에 연결하지 않음
+    assert match_entities(_record("Leica Lens Hood for 11663 Black", category="Accessory")) == []
+
+
+def test_product_codes_point_to_existing_entities() -> None:
+    catalog = load_catalog()
+    for number, entity_ids in catalog["codes"].items():
+        assert (len(number) == 5 and number.isdigit()) or re.fullmatch(r"[a-z]{5}( [a-z]{1,2})?", number), number
+        assert all(entity_id in catalog["entities"] for entity_id in entity_ids), number
+
+
+def test_search_by_body_feature() -> None:
+    # 2026-10 레딧 피드백: "28mm 프레임라인, TTL 같은 사양으로 찾고 싶다"
+    s = _suggester()
+    assert s.suggest("28mm frameline", 1)[0]["id"] == "leica:feature:frameline-28"
+    assert s.suggest("28mm 프레임라인", 1)[0]["id"] == "leica:feature:frameline-28"
+    assert s.suggest("ttl", 1)[0]["id"] == "leica:feature:ttl-flash"
+    assert s.suggest("노출계 없는", 1)[0]["id"] == "leica:feature:no-meter"
+    assert s.suggest("28", 1)[0]["id"].startswith("leica:lens:")  # 숫자만 치면 여전히 28mm 렌즈가 먼저
+    assert s.suggest("m6 ttl 0.72", 1)[0]["id"] == "leica:body:m6:ttl"
+
+
+def test_feature_groups_follow_body_specs() -> None:
+    def ids(title):
+        return match_entities(_record(title, category="Body", mount="M"))
+    assert "leica:feature:frameline-28" in ids("Leica M6 0.72 Black")
+    assert "leica:feature:frameline-28" not in ids("Leica M6 TTL 0.85 Black")  # 0.85 파인더엔 28mm 프레임 없음
+    assert "leica:feature:frameline-28" not in ids("Leica M3 Double Stroke")
+    assert "leica:feature:ttl-flash" in ids("Leica M7 0.72 Silver")
+    assert "leica:feature:ttl-flash" not in ids("Leica MP 0.72 Black Paint")
+    assert "leica:feature:mechanical" not in ids("Leica M7 0.72 Silver")
+    assert "leica:feature:no-meter" in ids("Leica M-A Typ 127 Silver")
+
+
+def test_suggest_by_leitz_code_word() -> None:
+    s = _suggester()
+    assert s.suggest("SOOIC", 1)[0]["id"] == "leica:lens:summicron:50:collapsible"
+    assert s.suggest("sooic-m", 1)[0]["id"] == "leica:lens:summicron:50:collapsible"
+    assert s.suggest("SUMMITAR", 1)[0]["id"] == "leica:lens:summitar:50"  # 이름 검색은 그대로
+    assert s.suggest("SOORE", 1)[0]["id"] == "leica:lens:summitar:50"
+
+
+def test_military_and_special_bodies_are_separate() -> None:
+    def ids(title):
+        return match_entities(_record(title, category="Body", mount=None))
+    luft = ids("Leica IIIc Luftwaffen-Eigentum Fl.Nr 38079")
+    assert "leica:body:barnack-military" in luft and "leica:body:iiic" not in luft
+    assert "leica:body:iiic" in ids("Leica IIIc chrome")
+    assert "leica:body:iiig-swedish" in ids("Leica IIIg Swedish Army three crowns")
+    ke = ids("Leica KE-7A US Army")
+    assert "leica:body:ke-7a" in ke and "leica:body:m4:standard" not in ke
+    assert "leica:body:c2-zoom" in ids("Leica C2-Zoom")
+    assert "leica:body:c-series" not in ids("Leica C2-Zoom")
+    assert "leica:body:digilux-2" in ids("Leica Digilux 2")
+    assert "leica:body:d-lux-1" in ids("Leica D-Lux 1")

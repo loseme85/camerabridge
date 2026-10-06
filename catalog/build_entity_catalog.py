@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 OUT = Path(__file__).resolve().parents[1] / "data" / "config" / "entity_catalog_v1.json"
@@ -155,6 +156,8 @@ PARENTS = {
 
 def build() -> dict:
     import bodies
+    import codes
+    import features
     import lenses
 
     for module in (bodies, lenses):
@@ -177,13 +180,26 @@ def build() -> dict:
         MODELS[key]["title_must_not"] = MODELS[key]["title_must_not"] + extra
     for key, must in lenses.OVERRIDE_MUST.items():
         MODELS[key]["title_must"] = must
+    all_codes: dict[str, list[str]] = {}
+    for key, numbers in codes.CODES.items():
+        assert key in MODELS or key in PARENTS, f"codes: unknown entity {key}"
+        assert len(numbers) == len(set(numbers)), f"codes: duplicate on {key}"
+        for number in numbers:
+            assert re.fullmatch(r"\d{5}", number), number
+        all_codes[key] = list(numbers)
+    for key, words in codes.CODE_WORDS.items():
+        assert key in MODELS or key in PARENTS, f"code words: unknown entity {key}"
+        for word in words:
+            assert re.fullmatch(r"[A-Z]{5}(-[A-Z]{1,2})?", word), word
+        # 검색창과 같은 정규화 (소문자, 하이픈 → 띄어쓰기): "SOOIC-M" → "sooic m"
+        all_codes.setdefault(key, []).extend(w.lower().replace("-", " ") for w in words)
     entities = []
     for key, spec in MODELS.items():
         assert key in ALIASES, f"aliases missing: {key}"
         entities.append({
             "id": key, "name": spec["display_name"], "name_ko": NAME_KO.get(key), "kind": spec["category"],
             "mount": spec["mount"], "parent": next((p for p, v in PARENTS.items() if key in v[3]), None), "children": [],
-            "aliases": sorted(set(a.lower() for a in ALIASES[key])),
+            "aliases": sorted(set(a.lower() for a in ALIASES[key])), "codes": all_codes.get(key, []),
             "match": {"category": spec["category"], "mount": spec["mount"], "title_must": spec["title_must"],
                       "title_must_not": spec["title_must_not"] + THIRD_PARTY
                       + ([p for p in ACC_NOT if p not in spec["title_must_not"]] if spec["category"] == "Body" else [])},
@@ -193,7 +209,14 @@ def build() -> dict:
             assert child in MODELS or child in PARENTS, child
         grand = next((p for p, v in PARENTS.items() if key in v[3]), None)
         entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": kind, "mount": mount, "parent": grand,
-                         "children": children, "aliases": sorted(set(a.lower() for a in aliases)), "match": None})
+                         "children": children, "aliases": sorted(set(a.lower() for a in aliases)),
+                         "codes": all_codes.get(key, []), "match": None})
+    for key, (name, name_ko, members, aliases, exclude) in features.FEATURES.items():
+        for member in members:
+            assert member in MODELS or member in PARENTS, f"features: unknown member {member}"
+        entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": "Body", "mount": "M", "parent": None,
+                         "children": [], "aliases": sorted(set(a.lower() for a in aliases)), "codes": [], "match": None,
+                         "feature": {"members": members, "exclude": exclude}})
     return {"schema_version": "entity_catalog_v1", "updated_at": "2026-10-03", "entities": entities}
 
 
