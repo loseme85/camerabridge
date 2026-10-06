@@ -361,7 +361,7 @@
     "title_must": [
      "summicron|cron",
      "(?<![\\d./])35(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
-     "(8 ?el|8매|eight|1st|1세대)"
+     "(8 ?el|8매|eight|1st|1세대|\\bv\\.? ?1\\b)"
     ],
     "title_must_not": [
      "ASPH",
@@ -20630,7 +20630,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "^(?!.*(ASPH|APO|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|현행|millenn|titan|ara ?g|your ?mark)).*$"
+     "^(?!.*(ASPH|APO|\\bv\\.? ?[1-5]\\b|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|현행|millenn|titan|ara ?g|your ?mark)).*$"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -30406,7 +30406,10 @@
    "aliases": [
     "apo elmar s 180",
     "apo elmar-s 180",
-    "s 180 apo elmar"
+    "apo tele elmar s 180",
+    "apo tele elmar-s 180",
+    "s 180 apo elmar",
+    "s 180 apo tele elmar"
    ],
    "codes": [
     "11071",
@@ -30416,7 +30419,7 @@
     "category": "Lens",
     "mount": "S",
     "title_must": [
-     "apo.?elmar\\b",
+     "apo.?(tele.?)?elmar\\b",
      "(?<![\\d./\\-–])180(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
      "-S\\b|\\bS\\s?\\d|\\bS\\b"
     ],

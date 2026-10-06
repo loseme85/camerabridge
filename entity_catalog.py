@@ -48,7 +48,7 @@ IMPLIED_BY_MOUNT = {"R": {("19", "2.8"): "Elmarit", ("24", "2.8"): "Elmarit", ("
 ZOOM_FAMILY = {"R": "Vario Elmar", "SL": "Vario Elmarit", "TL": "Vario Elmar"}
 FAMILY_WORD = re.compile(r"summi|elmar|nocti|hektor|telyt|angulon|summar|xenon|thambar|lux\b|cron\b|ultron|nokton|heliar|skopar|planar|biogon|sonnar", re.I)
 # 모델명에 붙은 마운트 (예: Noctilux-M, Summicron-R, APO-Summicron-SL)
-NAME_MOUNT = re.compile(r"[a-z]-(M|SL|R|TL)\b", re.I)
+NAME_MOUNT = re.compile(r"[a-z]-(M|SL|R|TL|T)\b", re.I)  # -T = 2016 전 TL 이름 (Summicron-T 23)
 
 
 @lru_cache(maxsize=1)
@@ -134,7 +134,7 @@ def _mount_ok(rule: dict, final: dict, title: str) -> bool:
         return True  # 바디는 모델 이름이 마운트를 정함 (분류 데이터의 마운트는 믿지 않음)
     explicit = TITLE_MOUNT.match(title) or NAME_MOUNT.search(title)
     if explicit:
-        return explicit.group(1).upper() == want
+        return {"T": "TL"}.get(explicit.group(1).upper(), explicit.group(1).upper()) == want
     got = final.get("mount")
     return got in (want, None, "", "Unknown")
 

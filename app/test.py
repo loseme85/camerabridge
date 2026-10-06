@@ -2564,6 +2564,93 @@ def crawl_mkkamera():
     return results
 
 
+# 라이카 프랑스 제목의 프랑스어 → 기존 분류가 아는 영어 (부속품 이름)
+_LCF_WORDS = [(r"pare-?soleil", "hood"), (r"\bviseurs?\b", "viewfinder"), (r"[ée]tui", "case"), (r"\bloupe\b", "magnifier"),
+              (r"adapt(?:at)?eur", "adapter"), (r"\bfiltre\b", "filter"), (r"correction de dioptrie", "diopter correction"),
+              (r"t[ée]l[ée]m[èe]tre", "rangefinder"), (r"bo[iî]tier de transport", "carrying case"), (r"\bsac\b", "bag"),
+              (r"bouchon", "cap"), (r"courroie", "strap"), (r"poign[ée]e", "grip"), (r"\bavec\b", "with"), (r"\bmonture\b", "mount")]
+
+
+def _lcf_normalize(name: str) -> str:
+    name = re.sub(r"(\d),(\d)", r"\1.\2", name)  # 프랑스식 소수점 f/2,8 → f/2.8
+    # 조리개를 앞에 쓴 표기: 2.8/70mm-200mm → 70-200mm f/2.8, 2/35mm → 35mm f/2
+    name = re.sub(r"(?<![\w/.])(\d(?:\.\d+)?)/(\d{2,3})\s?mm\s?-\s?(\d{2,3})\s?mm", r"\2-\3mm f/\1", name)
+    name = re.sub(r"(?<![\w/.])(\d(?:\.\d+)?)/(\d{2,3})(?:\s?mm)?\b", r"\2mm f/\1", name)
+    for pattern, word in _LCF_WORDS:
+        name = re.sub(pattern, word, name, flags=re.I)
+    return name
+
+
+def crawl_leicafrance():
+    """Leica Store France (프랑스) - 라이카 프랑스 공식 중고 몰 (Drupal 정적 HTML, ?page=N 30개씩).
+    매장 5곳(파리 3·마르세유·릴) 재고. 온라인 결제 없이 매장 연락·방문 구매. 판매 완료(SOLD OUT)도 목록에 남음 → 품절로 담음"""
+    import html as _html
+    import requests
+    from condition_grade import LCF_PREFIX
+    results = []
+    base = "https://www.leica-camera-france-occasions.com"
+    print(f"\n  📂 Leica Store France 크롤링 시작")
+    for page_num in range(0, 60):
+        try:
+            resp = requests.get(f"{base}/en/occasions?page={page_num}", headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"    ❌ {page_num}페이지 오류: {e}")
+            break
+        articles = re.findall(r"<article .*?</article>", resp.text, re.S)
+        if not articles:
+            break
+        print(f"    └─ {page_num + 1}페이지 {len(articles)}개 상품 발견")
+        for a in articles:
+            def field(label):
+                m = re.search(label + r"\s*:\s*</div>\s*([^<]+)", a)
+                return _html.unescape(m.group(1)).strip() if m else ""
+            m = re.search(r"field--name-title[^>]*>([^<]+)", a)
+            path = re.search(r'about="([^"]+)"', a)
+            if not m or not path:
+                continue
+            name = re.sub(r"\s+", " ", _html.unescape(m.group(1))).strip()
+            name = _lcf_normalize(name)
+            if re.search(r"oberwerth|artisan|billingham|peak design|gitzo|sigma|zeiss|voigtl|panasonic|lumix", name, re.I) or field("System") == "Sport Optics":
+                continue  # 다른 브랜드 가방·쌍안경
+            link = base + path.group(1)
+            sold = "sold-out-lblTeaser" in a
+            if sold and link in globals().get('SOLD_LINKS', ()):
+                continue
+            pm = re.search(r"([\d\s.,]+)\s*€", field("Price"))
+            try:
+                price = f"€{float(re.sub(r'[^\d]', '', pm.group(1))):,.0f}" if pm else "문의요망"
+            except ValueError:
+                price = "문의요망"
+            img = re.search(r'<img src="([^"]+)"', a)
+            img = (base + img.group(1)) if img and img.group(1).startswith("/") else (img.group(1) if img else "")
+            if "materiel-expo" in a:
+                name += " (Ex-demo)"
+            cond = field("Condition")
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Leica Store France (프랑스)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": (LCF_PREFIX + cond) if cond else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link,
+                "품절": sold,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+                "매장": field("Location"),
+            })
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Leica Store France 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -2890,6 +2977,7 @@ def crawl_all():
         ("Leica Store Miami", lambda: ce.wrap_full_run("Leica Store Miami", crawl_leicamiami)),
         ("Kamerastore (핀란드)", lambda: ce.wrap_full_run("Kamerastore (핀란드)", crawl_kamerastore)),
         ("M & K Kamera (홍콩)", lambda: ce.wrap_full_run("M & K Kamera (홍콩)", crawl_mkkamera)),
+        ("Leica Store France (프랑스)", lambda: ce.wrap_full_run("Leica Store France (프랑스)", crawl_leicafrance)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)

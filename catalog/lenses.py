@@ -60,7 +60,7 @@ FAM = {  # 계열 → (제목 패턴, 별칭 이름들)
     "apo-vario-elmar": (r"apo.?vario.?elmar\b", ["apo vario elmar"]),
     "fisheye-elmarit": (r"fish.?eye", ["fisheye elmarit", "fisheye", "어안"]),
     "apo-macro-summarit": (r"apo.?macro.?summarit", ["apo macro summarit"]),
-    "apo-elmar": (r"apo.?elmar\b", ["apo elmar"]),
+    "apo-elmar": (r"apo.?(tele.?)?elmar\b", ["apo elmar", "apo tele elmar"]),  # APO-Tele-Elmar-S 180 (라이카 프랑스 표기)
     "summicron-c": (r"summicron.?c\b", ["summicron c", "주미크론 c"]),
     "elmar-c": (r"elmar.?c\b", ["elmar c", "엘마 c"]),
 }
@@ -192,7 +192,7 @@ for slug, name, ko, marker, extra_not, sfx in [
     ("your-mark", "Summicron-M 35mm f/2 'Your Mark'", "주미크론 35 유어마크", r"your ?mark", [], ["your mark"]),  # 확인 필요
     ("titan", "Summicron-M 35mm f/2 ASPH Titan", "주미크론 35 티탄", r"titan|티탄", [], ["titan"]),
     ("unspecified", "Summicron 35mm f/2 pre-ASPH (generation not stated)", "주미크론 35 구형 (세대 미표기)",
-     r"^(?!.*(ASPH|APO|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|현행|millenn|titan|ara ?g|your ?mark)).*$", [], [""]),
+     r"^(?!.*(ASPH|APO|\bv\.? ?[1-5]\b|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|현행|millenn|titan|ara ?g|your ?mark)).*$", [], [""]),
 ]:
     key = f"{SC35}:{slug}"
     _add(key, name, ko, "M", [FAM["summicron"][0], f("35"), marker], [r"\bAPO\b"] + list(extra_not), aliases("summicron", "35", sfx, "M"))

@@ -11,7 +11,7 @@ import re
 GRADES = ["N", "S", "A", "B", "C", "D", "X"]
 
 _BROKEN = re.compile(r"고장|부품용|작동\s?불량|ジャンク|\bjunk\b|for parts|spares|as-?is\b|not working", re.I)
-_NEW = re.compile(r"신품|미사용|未使用|新品|\bbrand new\b|\bunused\b|\bnew\b(?! ?(old|york|elmar|summicron|summilux|version|ver))", re.I)
+_NEW = re.compile(r"신품|미사용|未使用|新品|\bbrand new\b|\bunused\b|\bnew\b(?! ?(old|york|elmar|summicron|summilux|version|ver|\(\d{4}))", re.I)
 
 # 일본 매장 (기타무라 등)
 _JP = {"AA": "S", "A": "A", "AB": "B", "B": "C", "C": "D"}
@@ -66,6 +66,9 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FFORDES[up], "label"
     if cond.startswith(KS_PREFIX):
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
+    if cond.startswith(LCF_PREFIX):
+        letter = cond[len(LCF_PREFIX):].strip()[:1].upper()
+        return (_LCF[letter], "label") if letter in _LCF else (None, None)
     if cond.startswith(MK_PREFIX):
         if "not working" in cond:
             return "X", "label"
@@ -146,3 +149,10 @@ def ks_condition(html: str) -> str | None:
                 continue
             return KS_PREFIX + name
     return None
+
+
+# 라이카 프랑스 공식 중고 몰: 'A : Excellent'·'B : Very good'·'C : Good'·'D : Operational'·'E : Not fully operational'
+LCF_PREFIX = "LCF: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-06): 사진이 표기보다 평균 0.6등급 후함 → 기존 매장(0.8)과 비슷해 글자 그대로.
+# 정확 일치 8/24 · 한 등급 이내 21/24. D(Operational)는 사진은 깨끗해도 작동 문제를 뜻해 D로 둠.
+_LCF = {"A": "A", "B": "B", "C": "C", "D": "D", "E": "X"}
