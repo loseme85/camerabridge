@@ -118,3 +118,29 @@ def test_price_relevant_variants_are_separate_models():
     assert "leica:lens:summicron-m:35:asph-black-paint" in cron and "leica:lens:summicron-m:35:asph" not in cron
     apo = match_entities(_record("Leica APO-Summicron M 50mm F2.0 ASPH.LHSA Silver"))
     assert "leica:lens:apo-summicron-m:50:lhsa" in apo and "leica:lens:summicron-m:50:current" not in apo
+
+
+def test_suggest_by_leica_product_code() -> None:
+    # 2026-10 레딧 피드백: "11873으로 검색하면 아무것도 안 나온다"
+    s = _suggester()
+    assert s.suggest("11873", 1)[0]["id"] == "leica:lens:summilux-m:35:aa"
+    assert s.suggest("leica 11874", 1)[0]["id"] == "leica:lens:summilux-m:35:asph-1994"
+    assert s.suggest("20200", 1)[0]["id"] == "leica:body:m11:standard"
+    # 앞부분만 같은 번호는 후보가 아님: 초점거리 검색이 바디 번호(10043 R4, 10502 M5)로 새지 않게
+    ids = {e["id"] for e in s.suggest("100", 12) + s.suggest("105", 12)}
+    assert not ids & {"leica:body:r4", "leica:body:m5:standard", "leica:body:m4-2:standard"}
+    assert s.suggest("1187", 3) == []
+
+
+def test_listing_with_only_product_code_links_to_model() -> None:
+    assert "leica:lens:summilux-m:35:asph-fle" in match_entities(_record("Leica 35mm F1.4 Asph M Black 6bit (11663)"))
+    assert "leica:body:m6:classic" in match_entities(_record("Leica M6 (0.72x) (Silver, 10414)", category="Body"))
+    # 후드·호환품 매물은 번호가 있어도 본품에 연결하지 않음
+    assert match_entities(_record("Leica Lens Hood for 11663 Black", category="Accessory")) == []
+
+
+def test_product_codes_point_to_existing_entities() -> None:
+    catalog = load_catalog()
+    for number, entity_id in catalog["codes"].items():
+        assert len(number) == 5 and number.isdigit(), number
+        assert entity_id in catalog["entities"], entity_id

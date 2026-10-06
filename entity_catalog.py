@@ -54,7 +54,8 @@ def load_catalog(path: str | None = None) -> dict[str, Any]:
                 [re.compile(p, re.I) for p in rule["title_must"]],
                 [re.compile(p, re.I) for p in rule["title_must_not"]],
             )
-    return {"entities": entities, "compiled": compiled}
+    codes = {number: entity["id"] for entity in entities.values() for number in entity.get("codes") or []}
+    return {"entities": entities, "compiled": compiled, "codes": codes}
 
 
 def record_title(record: dict[str, Any]) -> str:
@@ -102,6 +103,32 @@ def _mount_ok(rule: dict, final: dict, title: str) -> bool:
     return got in (want, None, "", "Unknown")
 
 
+# 제목 속 라이카 제품 번호 (예: "Leica 50mm F2 M Black 6bit - 11826"). 앞뒤가 숫자·소수점이면 번호가 아님
+CODE_IN_TITLE = re.compile(r"(?<![\d.,/-])(1[01]\d{3}|19\d{3}|20\d{3})(?![\d.,%])")
+
+
+# 번호가 적혀 있어도 본품이 아닌 매물 (후드·캡·케이스·필터·어댑터, "for 11879" 같은 호환품, 타사)
+NOT_THE_ITEM = re.compile(r"\bhood|후드|フード|\bcap\b|캡|case|케이스|strap|스트랩|filter|필터|フィルター|adapter|어댑터|"
+                          r"\bfor\b|用|호환|\bcopy\b|카피|voigtl|zeiss|ttartisan|7 ?artisans|light ?lens ?lab|\bLLL\b|leeworks|box only|박스만", re.I)
+
+
+def _code_hits(title: str, final: dict, catalog: dict) -> list[str]:
+    """모델명 규칙에 안 걸린 매물: 제목에 적힌 제품 번호로 연결."""
+    if NOT_THE_ITEM.search(title):
+        return []
+    hits: list[str] = []
+    for number in CODE_IN_TITLE.findall(title):
+        entity_id = catalog.get("codes", {}).get(number)
+        if not entity_id or entity_id in hits:
+            continue
+        kind = catalog["entities"][entity_id].get("kind")
+        category = final.get("category")
+        if category not in (kind, None, "", "Unknown") and not (kind == "Body" and category == "Lens" and not LENS_IN_TITLE.search(title)):
+            continue
+        hits.append(entity_id)
+    return hits
+
+
 def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> list[str]:
     """매물이 해당하는 엔티티 ID들 (자식 + 그 부모)."""
     catalog = catalog or load_catalog()
@@ -113,6 +140,8 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
             continue
         if all(p.search(title) for p in must) and not any(p.search(title) for p in must_not):
             hits.append(entity_id)
+    if not hits:
+        hits = _code_hits(title, final, catalog)
     parents: set[str] = set()
     frontier = {catalog["entities"][h].get("parent") for h in hits} - {None}
     while frontier:  # 부모의 부모까지 (예: D-Lux 7 BAPE → D-Lux 7 → D-Lux 전체)
@@ -162,6 +191,7 @@ class Suggester:
     def __init__(self, entities: list[dict]):
         self.entities = entities
         self.aliases = {e["id"]: [normalize_text(a) for a in e.get("aliases") or []] for e in entities}
+        self.codes = {e["id"]: set(e.get("codes") or []) for e in entities}
         self.tokens = {eid: {t for a in al for t in a.split(" ") if t and t not in STOP_TOKENS} for eid, al in self.aliases.items()}
         self.vocab = set().union(*self.tokens.values()) if self.tokens else set()
 
@@ -179,6 +209,8 @@ class Suggester:
         return None
 
     def _score(self, query: str, eid: str) -> float:
+        if query in self.codes[eid]:
+            return 1000  # 제품 번호 (예: 11873). 앞부분만 같은 번호는 후보로 내지 않음 ("100" → 10043 R4 방지)
         best = 0.0
         qc = query.replace(" ", "")
         for alias in self.aliases[eid]:

@@ -111,7 +111,7 @@ def main() -> None:
         entities.append({
             "id": eid, "name": entity["name"], "name_ko": entity.get("name_ko"), "kind": entity["kind"],
             "mount": entity.get("mount"), "parent": entity.get("parent"), "children": entity.get("children") or [],
-            "aliases": entity["aliases"], "listing_count": s["total"], "active_count": s["active"],
+            "aliases": entity["aliases"], "codes": entity.get("codes") or [], "listing_count": s["total"], "active_count": s["active"],
             "active_price_krw": [round(ap[0]), round(ap[-1])] if ap else None,
             "sold_median_krw": round(statistics.median(sp)) if len(sp) >= 3 else None,
             "sold_price_count": len(sp),

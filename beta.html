@@ -2503,6 +2503,8 @@
     }
 
     function scoreEntity(query, entity){
+      // 제품 번호 (예: 11873). 앞부분만 같은 번호는 후보로 내지 않음 ("100" → 10043 R4 방지)
+      if((entity.codes || []).includes(query)) return 1000;
       let best = 0;
       const qc = query.replace(/ /g, '');
       for(const alias of entity._aliases){
@@ -2711,7 +2713,7 @@
       const items = suggestions.map((item, index) => `
         <li id="${inputId}-opt-${index}" role="option" class="entity-option" data-index="${index}" aria-selected="false">
           <span class="entity-option-name">${escapeHtml(entityDisplayName(item.entity))}</span>
-          <span class="entity-option-meta">${escapeHtml(entityMetaLine(item.entity))}</span>
+          <span class="entity-option-meta">${escapeHtml(entityMetaLine(item.entity) + ((item.entity.codes || []).includes(normalizeEntityText(raw)) ? ` · #${normalizeEntityText(raw)}` : ''))}</span>
         </li>`).join('');
       const free = `<li id="${inputId}-opt-free" role="option" class="entity-option entity-option-free" data-index="free" aria-selected="false">${escapeHtml(ec('free_text', { q: raw }))}</li>`;
       menu.innerHTML = items + free;
