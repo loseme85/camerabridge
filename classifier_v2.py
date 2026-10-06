@@ -981,7 +981,7 @@ _BODY_KW = [
     "body", "바디",
     # M 바디
     "leica m3", "leica m2", "leica m4", "leica m5", "leica m6",
-    "leica m7", "leica mp", "leica m-a", "leica ma",
+    "leica m7", "leica mp", "leica m-a", "leica ma ",  # "leica ma"만 쓰면 "Leica Macro-Elmar"가 바디로
     "leica m8", "leica m9", "leica m10", "leica m11", "leica m240",
     "mda", "leica mda",
     "typ 240",

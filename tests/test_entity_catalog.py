@@ -194,3 +194,16 @@ def test_military_and_special_bodies_are_separate() -> None:
     assert "leica:body:c-series" not in ids("Leica C2-Zoom")
     assert "leica:body:digilux-2" in ids("Leica Digilux 2")
     assert "leica:body:d-lux-1" in ids("Leica D-Lux 1")
+
+
+def test_lens_bundled_with_hood_still_links() -> None:
+    # 'with hood'는 렌즈 매물 (후드 단품은 그대로 제외)
+    assert "leica:lens:summarex:85" in match_entities(_record("Leica Summarex L39 85mm/F1.5 with hood", mount=None))
+    assert match_entities(_record("Leica 12585 Metal Hood for Summaron M 35 / 50mm", category="Accessory")) == []
+
+
+def test_r_lenses_from_hong_kong_titles() -> None:
+    assert "leica:lens:telyt-r:long" in match_entities(_record("LEITZ Leica Telyt-R 250mm/F4.0 Ver.II V2 Lens", mount="R"))
+    assert "leica:lens:mr-telyt-r:500" in match_entities(_record("LEITZ Leica MR-Telyt-R 500mm/F8.0 Lens Yr.1981", mount="R"))
+    assert "leica:lens:elmarit-r:100" in match_entities(_record("LEITZ Leica Macro-Elmar-R 100mm/F4.0 Lens Yr.1980", mount="R"))
+    assert "leica:lens:summicron:50:collapsible" in match_entities(_record("LEITZ Leica Summicron L39 50mm/F2.0 Silver Lens Yr.1955 LTM", mount=None))

@@ -32,7 +32,7 @@ def model(key, name, category, mount=None, must=(), must_not=()):
                    "title_must": list(must), "title_must_not": list(must_not)}
 
 
-ACC_NOT = [r"\bhood\b", r"후드", r"\bcap\b", r"캡", r"case", r"케이스", r"strap", r"스트랩", r"holster", r"홀스터",
+ACC_NOT = [r"^(?!.*\b(with|w/)\s.*\bhood).*\bhood\b", r"후드", r"\bcap\b", r"캡", r"^(?!.*\b(with|w/)\s.*case).*case", r"케이스", r"strap", r"스트랩", r"holster", r"홀스터",
            r"grip", r"그립", r"battery", r"배터리", r"charger", r"충전기", r"protector", r"cover\b", r"부속품",
            r"adapter", r"어댑터", r"plate", r"플레이트", r"thumb", r"썸", r"manual", r"설명서", r"box only", r"박스만"]
 
