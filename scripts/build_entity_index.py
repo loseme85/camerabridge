@@ -2,6 +2,7 @@
 
 입력·출력: data/derived/results_search_index_v1.json (records[].entity_ids 추가)
 요약:      data/derived/entity_summary_v1.json
+첫 화면:   data/derived/home_feed.json (새로 올라온 매물 — 모델마다 한 건)
 자동 수집 워크플로에서 final_resolution_pipeline.py 다음에 실행한다.
 """
 from __future__ import annotations
@@ -20,6 +21,8 @@ from entity_catalog import annotate_records, load_catalog  # noqa: E402
 
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
+HOME_FEED = ROOT / "data" / "derived" / "home_feed.json"
+HOME_FEED_SIZE = 12
 FX = ROOT / "data" / "fx_rates.json"
 
 
@@ -73,6 +76,30 @@ def _b_grade_price(graded: list, factors: dict) -> dict:
     return {"b_price_krw": round(statistics.median(pool)), "b_price_n": len(pool), "b_price_basis": basis}
 
 
+def _home_feed(records: list, catalog: dict) -> dict:
+    """첫 화면 '새로 올라온 매물': 판매 중·사진·가격이 있는 매물을 최근 순으로, 같은 모델은 한 건만.
+    (레딧 피드백 '흔한 AI 사이트 같다' → 첫 화면에 실제 매물이 먼저 보이게)"""
+    entities = catalog["entities"]
+    picked, seen = [], set()
+    candidates = [r for r in records if (r.get("final_output") or {}).get("sold_quality") == "asking"]
+    candidates.sort(key=lambda r: str((r.get("final_output") or {}).get("first_seen") or ""), reverse=True)
+    for record in candidates:
+        final = record["final_output"]
+        if not (final.get("image_url") and final.get("parsed_price_numeric") and final.get("source_url")):
+            continue
+        leaf = next((e for e in record.get("entity_ids") or []
+                     if not entities[e].get("children") and not entities[e].get("feature")), None)
+        if not leaf or leaf in seen:
+            continue
+        seen.add(leaf)
+        picked.append({"entity": leaf, "title": final.get("title_raw"), "price": final.get("parsed_price_numeric"),
+                       "currency": final.get("currency") or "KRW", "source": final.get("source"),
+                       "url": final.get("source_url"), "image": final.get("image_url"), "first_seen": final.get("first_seen")})
+        if len(picked) >= HOME_FEED_SIZE:
+            break
+    return {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "latest": picked}
+
+
 def main() -> None:
     payload = json.loads(INDEX.read_text(encoding="utf-8"))
     records = payload["records"]
@@ -124,6 +151,7 @@ def main() -> None:
                                    "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
                                    "grade_factors": factors,
                                    "entities": entities}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    HOME_FEED.write_text(json.dumps(_home_feed(records, catalog), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     linked = sum(1 for r in records if r.get("entity_ids"))
     print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약")
 
