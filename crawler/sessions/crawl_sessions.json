@@ -1,20 +1,5 @@
 [
   {
-    "start_time": "2026-09-05 21:38:22",
-    "end_time": "2026-09-05 21:38:24",
-    "new_items": 0,
-    "total_items": 7707,
-    "site_counts": {
-      "사진집": 329,
-      "라이카스토어 충무로": 3126,
-      "장씨카메라": 4048,
-      "Ffordes (영국)": 127,
-      "Leica Store Miami": 37,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": []
-  },
-  {
     "start_time": "2026-09-06 16:30:07",
     "end_time": "2026-09-06 16:30:08",
     "new_items": 0,
@@ -26711,5 +26696,134 @@
       }
     ],
     "new_listings": []
+  },
+  {
+    "start_time": "2026-10-06 17:50:17",
+    "end_time": "2026-10-06 17:50:19",
+    "seconds": 18.3,
+    "new_items": 1,
+    "total_items": 10000,
+    "site_counts": {
+      "사진집": 399,
+      "라이카스토어 충무로": 3120,
+      "장씨카메라": 4072,
+      "Ffordes (영국)": 125,
+      "Leica Store Miami": 40,
+      "Kamerastore (핀란드)": 723,
+      "기타무라 (일본)": 794,
+      "M & K Kamera (홍콩)": 727
+    },
+    "events": {
+      "new": 1
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 13,
+        "seconds": 9.1,
+        "status": "ok",
+        "rows": 399,
+        "active": 339,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 12.8,
+        "status": "ok",
+        "rows": 3120,
+        "active": 599,
+        "carried": 2036,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 7,
+        "seconds": 4.3,
+        "status": "ok",
+        "rows": 4072,
+        "active": 42,
+        "carried": 3933,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.5,
+        "status": "ok",
+        "rows": 40,
+        "active": 40,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.5,
+        "status": "ok",
+        "rows": 723,
+        "active": 723,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.9,
+        "status": "ok",
+        "rows": 794,
+        "active": 794,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 11.1,
+        "status": "ok",
+        "rows": 727,
+        "active": 727,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Leica 50mm f2 Summicron (Type II) (Silver, SOOIC-MS / SOSIC / 11118 / 11618 / 11818)",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€1,424",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-50mm-f2-summicron-type-ii-silver-sooic-ms-sosic-11118-11618-11818-leica-m-t155604"
+      }
+    ]
   }
 ]
