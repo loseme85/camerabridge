@@ -18,6 +18,8 @@ FX_PATH = Path(__file__).resolve().parent / "data" / "fx_rates.json"
 PRICE_SPLIT = {
     "leica:lens:noctilux:50:f1.2-original": ("leica:lens:noctilux-m:50:f1.2-asph", 20_000_000,
                                              re.compile(r"original|오리지널|1세대|\b1st\b", re.I)),
+    # 주미룩스 R 50: 세대 표기 없는 매물 중 250만 원 미만은 1세대 (1세대 약 90만~165만 원, 2세대 E60 약 400만 원)
+    "leica:lens:summilux-r:50:unspecified": ("leica:lens:summilux-r:50:v1", 2_500_000, re.compile(r"(?!)")),
 }
 
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)
