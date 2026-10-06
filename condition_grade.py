@@ -64,6 +64,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _JP[up], "label"
     if site and "ffordes" in site.lower() and up in _FFORDES:
         return _FFORDES[up], "label"
+    if cond.startswith(KS_PREFIX):
+        return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(MK_PREFIX):
         if "not working" in cond:
             return "X", "label"
@@ -117,4 +119,30 @@ def mk_condition(html: str) -> str | None:
         m = re.search(pattern, t, re.I)
         if m:
             return MK_PREFIX + m.group(0).lower()
+    return None
+
+
+# 핀란드 Kamerastore: 직원 메모(상품 설명) 말투로. 등급 표기가 없고, 사이트의 Restored·Certified·Rescue는 작동 상태 구분이라 외관 등급이 아님.
+# 사진 평가(말투 가리고 30점, 사진 3장씩, 2026-10-06)로 맞춤 — 사진이 표기보다 한 등급쯤 후한 것을 감안.
+KS_PREFIX = "Kamerastore: "
+NEG = r"(won'?t|will not|do(es)? not|doesn'?t|don'?t|without) (significantly )?affect"
+_KS = [  # (이름, 패턴) 위에서부터 먼저 걸리는 것
+    ("issue", r"fungus|(moderate|major|heavy|some) haze|sticky|not working|doesn'?t work|does not work|broken|separation|inaccurate|needs? (a )?(repair|service)|light leak|(affects?|affecting) (the )?image|lower (the )?(overall )?image quality|a lot of (haze|scratch|coating|fungus)|de-?silver|very hazy|haze layers|not accurate|in ?accurate|pinholes"),
+    ("heavy", r"quite worn|heavily worn|heavy (signs of )?(wear|use)|well[\s-]used|significant wear|brassing|very worn|lots of wear|a lot of (external )?wear|corrosion|paint is coming off"),
+    ("some", r"some (general |light )?(wear|marks|signs)|a bit worn|moderate(ly)? (wear|worn)|noticeable wear|signs of (wear|use)|shows wear|has wear|\bworn\b|\bdents?\b|general scratches|moderate cosmetic"),
+    ("minor", r"minor (external |cosmetic )?(wear|marks|scratch)|light (wear|marks)|small (marks|scratch)|slight(ly)? (wear|worn)|tiny (marks|scratch)"),
+    ("great", r"great (working )?(shape|condition)|excellent|like new|very good (working )?condition|very clean|clean and|mint"),
+    ("working", r"working well|works well|works (perfectly|great)|good working condition|in working condition|in (a )?good condition|cleaned, lubricated|tested working"),
+]
+_KS_GRADE = {"issue": "D", "heavy": "D", "some": "C", "minor": "B", "great": "B", "working": "B"}
+
+
+def ks_condition(html: str) -> str | None:
+    """Kamerastore 상품 설명(직원 메모)에서 말투 단계를 뽑아 'Kamerastore: minor' 꼴로."""
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html or ""))
+    for name, pattern in _KS:
+        for m in re.finditer(pattern, t, re.I):
+            if name == "issue" and re.search(NEG, t[max(0, m.start() - 60):m.end() + 40], re.I):
+                continue
+            return KS_PREFIX + name
     return None

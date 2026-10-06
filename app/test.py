@@ -2412,8 +2412,8 @@ def crawl_leicamiami():
                 price = "문의요망"
             available = variant.get("available", True)
             handle = p.get("handle", "")
-            from condition_grade import describe_text
-            cond_text = describe_text(p.get("body_html") or "") or "정보없음"
+            from condition_grade import ks_condition
+            cond_text = ks_condition(p.get("body_html") or "") or "정보없음"
             link = f"{base}/products/{handle}" if handle else ""
             img = ""
             if p.get("images"):
@@ -2481,8 +2481,8 @@ def crawl_kamerastore():
             img = p["images"][0].get("src", "") if p.get("images") else ""
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
-            from condition_grade import describe_text
-            cond_text = describe_text(p.get("body_html") or "") or "정보없음"
+            from condition_grade import ks_condition
+            cond_text = ks_condition(p.get("body_html") or "") or "정보없음"
             results.append({
                 "site": "Kamerastore (핀란드)",
                 "label": auto_label(name),

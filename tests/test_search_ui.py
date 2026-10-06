@@ -404,7 +404,6 @@ def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
             'id="market-price-value"',
             "ux('section.active_listings', 'Active listings')",
             "ux('section.market_history', 'Market history')",
-            "ux('load_more.active_idle', 'Load more active listings')",
         ]:
             assert snippet in html
         # 2026-10 공개 전 정리: 테스터용 안내·내부 정책 문구는 화면에 없어야 함
@@ -455,7 +454,7 @@ def test_load_more_is_scoped_to_active_section_and_history_stays_separate() -> N
         assert "renderArchiveSection(historyResults)" in render_content
         assert "${footerHtml}" in render_section
         assert "Number(activeShownCount || 0) <= 0" in render_load_more
-        assert "ux('load_more.active_idle', 'Load more active listings')" in render_load_more
+        assert "data-load-more-sentinel" in render_load_more  # 버튼 대신 목록 끝에서 자동으로 더 불러옴
         assert "ux('load_more.active_loading', 'Loading more active listings…')" in render_load_more
 
 
