@@ -55,3 +55,9 @@ def test_leica_france_letter_grades() -> None:
     assert grade_of(site, LCF_PREFIX + "E : Not fully operational", "LEICA M6")[0] == "X"
     # 'new (2021-ACTU)'는 새 버전이라는 뜻, 신품 아님
     assert grade_of(site, LCF_PREFIX + "B : Very good", "NOCTILUX-M 50 mm f/1.2 new (2021-ACTU)")[0] == "B"
+
+
+def test_new_version_words_are_not_brand_new() -> None:
+    assert grade_of("라이카스토어 충무로", "98%", "[위탁] M 28/2 Summicron ASPH NEW (Black)")[0] == "A"
+    assert grade_of("사진집", "97%", "Leica M 28mm f2 Summicron ASPH 6bit New Type Black")[0] == "A"
+    assert grade_of("M & K Kamera (홍콩)", None, "Brand New Leica Summicron-M 28mm/F2.0 ASPH 11618")[0] == "N"

@@ -496,7 +496,26 @@ TIGHTEN["leica:lens:apo-summicron-m:50"] = TIGHTEN.get("leica:lens:apo-summicron
 # Summicron 28 ASPH 사파리, Summicron 90 블랙페인트
 _add("leica:lens:summicron-m:28:safari", "Summicron-M 28mm f/2 ASPH Safari", "주미크론 28 사파리", "M", [CRON, f("28"), SAFARI], [r"\bAPO\b"],
      ["summicron 28 safari", "주미크론 28 사파리", "28 cron safari"])
-TIGHTEN["leica:lens:summicron-m:28:asph"] = TIGHTEN.get("leica:lens:summicron-m:28:asph", []) + [SAFARI]
+
+# ───────────── M: Summicron 28 ASPH (세대 부모, 사파리 포함) ─────────────
+# 1세대 2000–2016 (걸쇠식 후드, 11604 블랙·11661 실버), 2세대 2016–2023 (외관 변경·나사식 금속 후드, 11672),
+# 3세대 2023– (최단 0.4m 근접, 접이식 후드 내장, 11618). 국내 매장은 2세대를 'NEW·II·New Type'으로 적음.
+# 시리얼: 1세대는 475만대 이하(sn.3900~4698). 2016년 전후 경계는 세대 미표기로 둔다.
+SC28 = "leica:lens:summicron-m:28:asph"
+SC28_V3 = r"close ?focus|근접|0\.4 ?m\b|11618|3세대|\b(3rd|v\.? ?3|ver\.? ?III)\b|\b202[3-9]\b"
+SC28_V2 = r"\b(II|2nd|v\.? ?2|ver\.? ?II|type ?II|new ?type|(?<!brand )new)\b|2세대|신형|11672|\b2016\s?-"
+SC28_V1 = rf"\b(1st|v\.? ?1|ver\.? ?I|type ?I)\b|1세대|구형|11604|11661|\b200\d\b|yr\.? ?20(0\d|1[0-5])\b|{_SN}(3[,.]?9\d{{2}}|4[,.]?[0-6]\d{{2}}|4[,.]?7[0-5]\d)\b"
+group(SC28, "Summicron-M 28mm f/2 ASPH", "주미크론 28 ASPH", "M", "summicron", "28", [
+    c("v1", "Summicron-M 28mm f/2 ASPH 1st (2000–2016, clip-on hood)", "주미크론 28 ASPH 1세대 (구형)", SC28_V1, [SC28_V2, SC28_V3],
+      ["1st", "1세대", "구형", "v1", "asph 1st", "asph 구형", "asph v1"]),
+    c("v2", "Summicron-M 28mm f/2 ASPH 2nd (2016–2023, screw-on hood)", "주미크론 28 ASPH 2세대 (2016 신형)", SC28_V2, [SC28_V3],
+      ["2nd", "2세대", "신형", "new", "ii", "2016", "asph 2nd", "asph new", "asph ii", "asph 신형", "asph 2016"]),
+    c("v3", "Summicron-M 28mm f/2 ASPH 3rd Close Focus (2023–, 0.4m)", "주미크론 28 ASPH 3세대 (근접 0.4m)", SC28_V3, [],
+      ["3rd", "3세대", "close focus", "근접", "2023", "2024", "asph 3rd", "asph close focus", "asph 근접"]),
+], must_not=[r"\bAPO\b", r"\bSL\b", SAFARI],
+   parent_aliases=["summicron-m 28 asph", "summicron 28 asph", "28 cron", "주미크론 28", "주미크론 28 asph"],
+   existing=["leica:lens:summicron-m:28:safari"])
+CHILD_ORDER[SC28] = ["v1", "v2", "v3", "unspecified", "leica:lens:summicron-m:28:safari"]
 _add("leica:lens:summicron-m:90:black-paint", "Summicron-M 90mm f/2 Black Paint", "주미크론 90 블랙페인트", "M", [CRON, f("90"), BP_L], [r"\bAPO\b", REPAINT_L],
      ["summicron 90 black paint", "주미크론 90 블랙페인트"])
 TIGHTEN["leica:lens:summicron-m:90"] = TIGHTEN.get("leica:lens:summicron-m:90", []) + [BP_L]

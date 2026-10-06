@@ -20,6 +20,8 @@ PRICE_SPLIT = {
                                              re.compile(r"original|오리지널|1세대|\b1st\b", re.I)),
     # 주미룩스 R 50: 세대 표기 없는 매물 중 250만 원 미만은 1세대 (1세대 약 90만~165만 원, 2세대 E60 약 400만 원)
     "leica:lens:summilux-r:50:unspecified": ("leica:lens:summilux-r:50:v1", 2_500_000, re.compile(r"(?!)")),
+    # 주미크론 28 ASPH: 세대 표기 없는 매물 중 500만 원 미만은 1세대 (1세대 약 250만~485만, 2세대 약 550만~690만, 3세대 약 650만 원)
+    "leica:lens:summicron-m:28:asph:unspecified": ("leica:lens:summicron-m:28:asph:v1", 5_000_000, re.compile(r"(?!)")),
 }
 
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)

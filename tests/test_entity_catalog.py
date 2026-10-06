@@ -94,6 +94,26 @@ def test_summilux_r50_generations_do_not_overlap() -> None:
     assert f"{sx}:v1" in match_entities(cheap)
 
 
+def test_summicron_28_asph_three_versions() -> None:
+    sc = "leica:lens:summicron-m:28:asph"
+    cases = {
+        "Leica Summicron-M 28mm/F2.0 ASPH Black Lens Yr.2001 Germany 11604": "v1",
+        "LEICA 28mm F2 ASPH (6bit) SUMMICRON-M sn.4075": "v1",
+        "[위탁] M 28/2 Summicron ASPH NEW (Black)": "v2",
+        "LEICA 28mm F2 ASPH II SUMMICRON-M sn.4922": "v2",
+        "SUMMICRON-M 28 mm f/2 ASPH ( 2016-ACTU )": "v2",
+        "Leica 28mm F2 Asph M Black (11672)": "v2",
+        "SUMMICRON-M 28 mm f/2 ASPH. close focus (2024-ACTU)": "v3",
+        "Brand New Leica Summicron-M 28mm/F2.0 E46 Asph.11618 Black Lens Germany 11618": "v3",
+        "LEICA 28mm F2 ASPH SUMMICRON-M MATT BLACK PAINT FINISH sn.4792": "unspecified",
+    }
+    for title, gen in cases.items():
+        kids = [i for i in match_entities(_record(title)) if i.startswith(sc + ":")]
+        assert kids == [f"{sc}:{gen}"], (title, kids)
+    assert "leica:lens:summicron-m:28:safari" in match_entities(_record("[중고] M 28/2 Safari Summicron"))
+    assert not any(i.startswith(sc + ":") for i in match_entities(_record("[중고] M 28/2 Safari Summicron")))
+
+
 def test_generation_candidates_listed_under_parent_in_order() -> None:
     import json
     from pathlib import Path
