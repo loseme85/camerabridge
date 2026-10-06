@@ -50,7 +50,10 @@ CODES: dict[str, list[str]] = {
     L + "summilux-m:75": ["11814", "11815", "11810"],
     L + "summilux-m:90": ["11678"],
     # ── 주미크론 ──
-    L + "summicron-m:28:asph": ["11604", "11661", "11672", "11707", "11618"],
+    L + "summicron-m:28:asph:v1": ["11604", "11661"],
+    L + "summicron-m:28:asph:v2": ["11672"],
+    L + "summicron-m:28:asph:v3": ["11618"],
+    L + "summicron-m:28:asph": ["11707"],  # 세대 확인 필요
     L + "summicron-m:28:safari": ["11704", "11149"],
     L + "summicron-m:35:v1-8element": ["11307", "11308"],
     L + "summicron-m:35:v1-eyes": ["11104", "11108"],

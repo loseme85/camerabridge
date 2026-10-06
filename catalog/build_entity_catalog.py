@@ -74,7 +74,6 @@ model("leica:lens:noctilux-m:50:f1.2-asph", "Noctilux-M 50mm f/1.2 ASPH (2021 re
 model("leica:lens:noctilux-m:75", "Noctilux-M 75mm f/1.25 ASPH", "Lens", "M", [r"nocti", f("75")], ACC_NOT)
 model("leica:lens:noctilux-m:35", "Noctilux-M 35mm f/1.2 ASPH", "Lens", "M", [r"nocti", f("35")], ACC_NOT)
 model("leica:lens:elmarit-m:28:asph", "Elmarit-M 28mm f/2.8 ASPH", "Lens", "M", [r"elmarit", f("28"), r"ASPH"], ACC_NOT)
-model("leica:lens:summicron-m:28:asph", "Summicron-M 28mm f/2 ASPH", "Lens", "M", [r"summicron|cron", f("28")], [r"\bAPO\b"] + ACC_NOT)
 model("leica:lens:elmar-m:50:f2.8", "Elmar-M 50mm f/2.8", "Lens", None, [r"elmar\b|elmar-m", f("50"), r"2\.8"], [r"elmarit"] + ACC_NOT)
 model("leica:lens:summicron-m:90", "Summicron-M 90mm f/2", "Lens", "M", [r"summicron|cron", f("90")], [r"\bAPO\b", r"-R\b|\bR ?90", r"\bSL\b"] + ACC_NOT)
 model("leica:lens:summilux-m:75", "Summilux-M 75mm f/1.4", "Lens", "M", [r"(summilux|\blux\b)", f("75")], [r"\bSL\b"] + ACC_NOT)
@@ -110,7 +109,6 @@ ALIASES: dict[str, list[str]] = {
     "leica:lens:noctilux-m:75": ["noctilux-m 75", "noctilux 75", "nocti 75", "녹티룩스 75"],
     "leica:lens:noctilux-m:35": ["noctilux-m 35", "noctilux 35", "nocti 35", "녹티룩스 35"],
     "leica:lens:elmarit-m:28:asph": ["elmarit-m 28 asph", "elmarit 28 asph", "28 elmarit", "엘마리트 28", "엘마리트 28 asph"],
-    "leica:lens:summicron-m:28:asph": ["summicron-m 28 asph", "summicron 28 asph", "28 cron", "주미크론 28"],
     "leica:lens:elmar-m:50:f2.8": ["elmar-m 50 2.8", "elmar 50 2.8", "50 elmar 2.8", "엘마 50 2.8"],
     "leica:lens:summicron-m:90": ["summicron-m 90", "summicron 90", "90 cron", "주미크론 90"],
     "leica:lens:summilux-m:75": ["summilux-m 75", "summilux 75", "75 lux", "주미룩스 75"],
@@ -134,7 +132,7 @@ NAME_KO = {
     "leica:lens:noctilux-m:50:f0.95": "녹티룩스 50 f/0.95",
     "leica:lens:noctilux:50:f1.2-original": "녹티룩스 50 f/1.2 오리지널", "leica:lens:noctilux-m:50:f1.2-asph": "녹티룩스 50 f/1.2 ASPH (복각)",
     "leica:lens:noctilux-m:75": "녹티룩스 75", "leica:lens:noctilux-m:35": "녹티룩스 35",
-    "leica:lens:elmarit-m:28:asph": "엘마리트 28 ASPH", "leica:lens:summicron-m:28:asph": "주미크론 28 ASPH",
+    "leica:lens:elmarit-m:28:asph": "엘마리트 28 ASPH",
     "leica:lens:elmar-m:50:f2.8": "엘마 50 f/2.8",
     "leica:lens:summicron-m:90": "주미크론 90", "leica:lens:summilux-m:75": "주미룩스 75", "leica:lens:tri-elmar-m:16-18-21": "트라이엘마 16-18-21",
     "leica:lens:super-elmar-m:21": "수퍼엘마 21", "leica:lens:summicron-r:50": "주미크론 R 50", "leica:lens:apo-telyt-r:180": "아포 텔리트 R 180",
