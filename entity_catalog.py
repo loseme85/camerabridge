@@ -94,6 +94,10 @@ def _category_ok(rule: dict, final: dict, title: str) -> bool:
             return True
         # 한국 매장 바디가 Lens로 잘못 분류된 경우: 제목에 렌즈 표기가 없으면 바디로 본다
         return category == "Lens" and not LENS_IN_TITLE.search(title)
+    if rule["category"] == "Lens" and category == "Body":
+        # 한국 매장 렌즈가 Body로 잘못 분류된 경우 (예: "[중고]Leica M50/1.2 1세대 Noctilux"): 매장식 렌즈 표기면 렌즈로 본다
+        shop = SHOP_LENS.match(title)
+        return bool(shop and shop.group(3))
     return category == rule["category"]
 
 
