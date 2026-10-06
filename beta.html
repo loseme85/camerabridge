@@ -4060,6 +4060,8 @@
           if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
           return left.originalIndex - right.originalIndex;
         }
+        // 모델을 고른 추천순: 서버 순서(판매 중 먼저, eBay는 3칸마다 1개)를 그대로. 실시간 eBay는 확인 시각이 늘 '지금'이라 최신순으로 몰림
+        if(state.entity) return left.originalIndex - right.originalIndex;
         if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
         if(right.recency !== left.recency) return right.recency - left.recency;
         if(right.marketInfo.activeConfidence !== left.marketInfo.activeConfidence) return right.marketInfo.activeConfidence - left.marketInfo.activeConfidence;
