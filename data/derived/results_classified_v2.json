@@ -383677,6 +383677,62 @@
   },
   {
     "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/arte-di-mano-leica-q3-half-case-type-2-tr-snap-secured-tripod-mount-with-classic-full-lining-stitch-neck-strap-95cm-caviar-classic-black-with-white-stitching-open-box",
+    "title_raw": "Arte di Mano Leica Q3 Half Case (Type 2-TR, Snap Secured, Tripod Mount) with Classic Full-Lining Stitch Neck Strap (95cm) - Caviar Classic Black with White Stitching 'Open Box'",
+    "price_raw": "$795",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_842f27af-ebb9-4717-9cc8-0f37cb95574b.jpg?v=1791299148",
+    "condition_raw": "정보없음",
+    "normalized_name": "arte di mano leica q3 half case (type 2-tr, snap secured, tripod mount) with classic full-lining stitch neck strap (95cm) - caviar classic black with white stitching 'open box'",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M-A",
+    "model_canonical": "M-A",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q",
+      "Q3"
+    ],
+    "risk_flags": [],
+    "positive_flags": [
+      "cla",
+      "box"
+    ],
+    "flag_confidence": 0.9,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 00:17:46"
+  },
+  {
+    "source": "Leica Store Miami",
     "source_url": "https://leicastoremiami.com/products/used-leica-m10-monochrom-2-extra-batteries-thumbs-up-5",
     "title_raw": "Used Leica M10 Monochrom - 2 Extra Batteries & Thumbs Up",
     "price_raw": "$7,195",
@@ -503463,10 +503519,10 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-06 23:02:43"
