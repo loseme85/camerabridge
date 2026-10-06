@@ -2414,6 +2414,8 @@
       vs_grade_pricier: { ko: '같은 등급 시세보다 {p}% 비쌈', en: '{p}% above the market price for this grade', ja: '同ランク相場より{p}%高い', 'zh-Hans': '比同级行情高 {p}%', 'zh-Hant': '比同級行情高 {p}%', pt: '{p}% acima do preço de mercado deste grau', es: '{p}% por encima del precio de mercado de este grado', de: '{p} % über dem Marktpreis für diesen Zustand', it: '{p}% sopra il prezzo di mercato di questo grado' },
       price_basis: { ko: '판매 완료 {n}건 기준', en: 'Based on {n} sold listings', ja: '販売済み {n} 件の中央値', 'zh-Hans': '基于 {n} 件已售商品', 'zh-Hant': '依據 {n} 件已售商品', pt: 'Com base em {n} anúncios vendidos', es: 'Según {n} anuncios vendidos', de: 'Basierend auf {n} verkauften Angeboten', it: 'Basato su {n} annunci venduti' },
       price_range_label: { ko: '판매 중 가격대', en: 'Asking price range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa de preço à venda', es: 'Rango de precios en venta', de: 'Preisspanne der Angebote', it: 'Fascia di prezzo in vendita' },
+      feature_models: { ko: '이 사양의 바디', en: 'Bodies with this spec', ja: 'この仕様のボディ', 'zh-Hans': '具备此规格的机身', 'zh-Hant': '具備此規格的機身', pt: 'Corpos com esta especificação', es: 'Cuerpos con esta especificación', de: 'Gehäuse mit dieser Ausstattung', it: 'Corpi con questa specifica' },
+      feature_pick: { ko: '여러 모델이 섞여 있어요. 아래에서 모델을 고르면 시세가 나와요', en: 'Several models together — pick one below to see its market price', ja: '複数のモデルが混在しています。下でモデルを選ぶと相場が表示されます', 'zh-Hans': '包含多个型号，在下方选择型号即可查看行情', 'zh-Hant': '包含多個型號，在下方選擇型號即可查看行情', pt: 'Vários modelos juntos — escolha um abaixo para ver o preço de mercado', es: 'Varios modelos juntos: elige uno abajo para ver su precio de mercado', de: 'Mehrere Modelle zusammen – wähle unten eines, um den Marktpreis zu sehen', it: 'Più modelli insieme: scegline uno qui sotto per vedere il prezzo di mercato' },
       choose_version: { ko: '버전을 고르면 시세가 나와요', en: 'Pick a version to see its market price', ja: 'バージョンを選ぶと相場が表示されます', 'zh-Hans': '选择具体版本即可查看行情', 'zh-Hant': '選擇具體版本即可查看行情', pt: 'Escolha uma versão para ver o preço de mercado', es: 'Elige una versión para ver su precio de mercado', de: 'Wähle eine Version, um den Marktpreis zu sehen', it: 'Scegli una versione per vedere il prezzo di mercato' },
       few_sold: { ko: '판매 완료 기록이 적어 판매 중 가격대를 보여 드려요', en: 'Not enough sales yet, so this shows the asking range', ja: '販売済みの記録が少ないため、販売中の価格帯を表示しています', 'zh-Hans': '成交记录较少，暂显示在售价格区间', 'zh-Hant': '成交紀錄較少，暫顯示在售價格區間', pt: 'Poucas vendas registradas, por isso mostramos a faixa de preços à venda', es: 'Aún hay pocas ventas, así que mostramos el rango de precios en venta', de: 'Noch zu wenige Verkäufe – daher die Preisspanne der Angebote', it: 'Ancora poche vendite, quindi mostriamo la fascia di prezzo in vendita' },
       model: { ko: '모델', en: 'Model', ja: 'モデル', 'zh-Hans': '型号', 'zh-Hant': '型號', pt: 'Modelo', es: 'Modelo', de: 'Modell', it: 'Modello' },
@@ -2624,6 +2626,9 @@
       const high = range ? krwToDisplay(range[1]) : null;
       const rangeText = low ? (high && high !== low ? `${low} – ${high}` : low) : '';
       const isParent = (entity.children || []).length > 0;
+      if(entity.feature){
+        return { caption: ec('feature_models'), value: ec('on_sale', { n: String(entity.active_count || 0) }), meta: ec('feature_pick') };
+      }
       if(!isParent && entity.b_price_krw){
         const b = krwToDisplay(entity.b_price_krw);
         const others = ['S', 'A', 'C', 'D']
@@ -2810,12 +2815,16 @@
       }
       const parent = entity.parent ? entityState.byId[entity.parent] : null;
       const family = entity.children && entity.children.length ? entity : parent;
-      const chips = family ? [family.id, ...family.children].map(id => {
+      // 사양 묶음 (예: 28mm 프레임라인 있는 M 바디): 판매 중인 모델을 많은 순서로 골라 좁히게
+      const members = entity.feature ? (entity.members || []).map(id => entityState.byId[id])
+        .filter(item => item && item.active_count).sort((a, b) => b.active_count - a.active_count) : [];
+      const memberChips = members.map(item => `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(item.id)}" aria-pressed="false">${escapeHtml(entityDisplayName(item))} <span class="entity-chip-count">${item.active_count}</span></button>`).join('');
+      const chips = memberChips || (family ? [family.id, ...family.children].map(id => {
         const item = entityState.byId[id];
         if(!item) return '';
         const label = id === family.id ? ec('all_versions') : entityDisplayName(item);
         return `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(id)}" aria-pressed="${id === entity.id}">${escapeHtml(label)} <span class="entity-chip-count">${item.active_count || 0}</span></button>`;
-      }).join('') : '';
+      }).join('') : '');
       bar.innerHTML = `
         <div class="entity-bar-main">
           <span class="entity-bar-label">${escapeHtml(ec('model'))}</span>

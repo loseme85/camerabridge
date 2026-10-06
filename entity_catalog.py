@@ -55,7 +55,9 @@ def load_catalog(path: str | None = None) -> dict[str, Any]:
                 [re.compile(p, re.I) for p in rule["title_must_not"]],
             )
     codes = {number: entity["id"] for entity in entities.values() for number in entity.get("codes") or []}
-    return {"entities": entities, "compiled": compiled, "codes": codes}
+    features = [(entity["id"], set(entity["feature"]["members"]), [re.compile(p, re.I) for p in entity["feature"]["exclude"]])
+                for entity in entities.values() if entity.get("feature")]
+    return {"entities": entities, "compiled": compiled, "codes": codes, "features": features}
 
 
 def record_title(record: dict[str, Any]) -> str:
@@ -147,7 +149,11 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
     while frontier:  # 부모의 부모까지 (예: D-Lux 7 BAPE → D-Lux 7 → D-Lux 전체)
         parents |= frontier
         frontier = {catalog["entities"][p].get("parent") for p in frontier} - {None} - parents
-    return hits + sorted(parents)
+    linked = set(hits) | parents
+    # 사양 묶음 (예: 28mm 프레임라인 있는 M 바디): 그 바디 매물이면 묶음에도 넣는다
+    features = [fid for fid, members, exclude in catalog.get("features", [])
+                if linked & members and not any(p.search(title) for p in exclude)]
+    return hits + sorted(parents) + features
 
 
 def annotate_records(records: Iterable[dict[str, Any]]) -> None:

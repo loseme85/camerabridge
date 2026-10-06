@@ -117,6 +117,9 @@ def main() -> None:
             "sold_price_count": len(sp),
             **_b_grade_price(s["graded"], factors.get(entity["kind"], factors["Lens"])),
         })
+        if entity.get("feature"):  # 사양 묶음은 여러 모델이 섞여 시세를 내지 않음
+            entities[-1].update({"feature": True, "members": entity["feature"]["members"], "active_price_krw": None, "sold_median_krw": None, "sold_price_count": 0,
+                                 "b_price_krw": None, "b_price_n": 0, "b_price_basis": None})
     SUMMARY.write_text(json.dumps({"schema_version": "entity_summary_v1",
                                    "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
                                    "grade_factors": factors,

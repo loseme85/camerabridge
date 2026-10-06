@@ -31656,6 +31656,207 @@
     "11821"
    ],
    "match": null
+  },
+  {
+   "id": "leica:feature:frameline-28",
+   "name": "Leica M bodies with 28mm framelines",
+   "name_ko": "28mm 프레임라인 있는 M 바디",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "frame line 28",
+    "frameline 28",
+    "framelines 28",
+    "프레임 28",
+    "프레임라인 28"
+   ],
+   "codes": [],
+   "match": null,
+   "feature": {
+    "members": [
+     "leica:body:m4-p",
+     "leica:body:m7",
+     "leica:body:mp-film",
+     "leica:body:m-a",
+     "leica:body:m6:classic",
+     "leica:body:m6:ttl",
+     "leica:body:m6:reissue",
+     "leica:body:m6:titan",
+     "leica:body:m6:platinum",
+     "leica:body:m6:lhsa",
+     "leica:body:m6:royal",
+     "leica:body:m6:jaguar",
+     "leica:body:m6:ttl-millennium",
+     "leica:body:m6:ttl-titan",
+     "leica:body:m6:ttl-black-paint",
+     "leica:body:m8",
+     "leica:body:m8-2",
+     "leica:body:m9",
+     "leica:body:m9-p",
+     "leica:body:m-e",
+     "leica:body:m240",
+     "leica:body:m-p240",
+     "leica:body:m-e240",
+     "leica:body:m-monochrom-ccd",
+     "leica:body:m-monochrom-246",
+     "leica:body:m262",
+     "leica:body:m-d262",
+     "leica:body:m10",
+     "leica:body:m10-p",
+     "leica:body:m10-r",
+     "leica:body:m10-monochrom",
+     "leica:body:m10-d",
+     "leica:body:m10-e",
+     "leica:body:m11",
+     "leica:body:m11-p",
+     "leica:body:m11-monochrom",
+     "leica:body:m11-d"
+    ],
+    "exclude": [
+     "0\\.85",
+     "\\bM6 ?J\\b"
+    ]
+   }
+  },
+  {
+   "id": "leica:feature:ttl-flash",
+   "name": "Film M bodies with TTL flash metering (M6 TTL, M7)",
+   "name_ko": "TTL 플래시 측광 필름 M 바디 (M6 TTL·M7)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "ttl",
+    "ttl flash",
+    "ttl metering",
+    "ttl 측광",
+    "ttl 플래시",
+    "티티엘"
+   ],
+   "codes": [],
+   "match": null,
+   "feature": {
+    "members": [
+     "leica:body:m6:ttl",
+     "leica:body:m6:ttl-millennium",
+     "leica:body:m6:ttl-titan",
+     "leica:body:m6:ttl-black-paint",
+     "leica:body:m7"
+    ],
+    "exclude": []
+   }
+  },
+  {
+   "id": "leica:feature:meter",
+   "name": "Film M bodies with a built-in light meter",
+   "name_ko": "노출계 내장 필름 M 바디",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "built in meter",
+    "light meter",
+    "meter",
+    "metered",
+    "with meter",
+    "노출계",
+    "노출계 내장",
+    "노출계 있는"
+   ],
+   "codes": [],
+   "match": null,
+   "feature": {
+    "members": [
+     "leica:body:m5",
+     "leica:body:cl-film",
+     "leica:body:cl-film-50-jahre",
+     "leica:body:m6",
+     "leica:body:m7",
+     "leica:body:mp-film",
+     "leica:body:mp3"
+    ],
+    "exclude": []
+   }
+  },
+  {
+   "id": "leica:feature:no-meter",
+   "name": "Film M bodies without a light meter",
+   "name_ko": "노출계 없는 필름 M 바디",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "meterless",
+    "no meter",
+    "non metered",
+    "without meter",
+    "노출계 없는",
+    "노출계 없음",
+    "무노출계"
+   ],
+   "codes": [],
+   "match": null,
+   "feature": {
+    "members": [
+     "leica:body:m3",
+     "leica:body:m2",
+     "leica:body:m2-r",
+     "leica:body:m1",
+     "leica:body:md",
+     "leica:body:m4",
+     "leica:body:m4-2",
+     "leica:body:m4-p",
+     "leica:body:m-a"
+    ],
+    "exclude": []
+   }
+  },
+  {
+   "id": "leica:feature:mechanical",
+   "name": "Film M bodies that work without a battery (mechanical shutter)",
+   "name_ko": "배터리 없이 찍히는 필름 M 바디 (기계식 셔터)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "battery free",
+    "fully mechanical",
+    "mechanical",
+    "mechanical shutter",
+    "no battery",
+    "기계식",
+    "기계식 셔터",
+    "배터리 없이",
+    "완전 기계식"
+   ],
+   "codes": [],
+   "match": null,
+   "feature": {
+    "members": [
+     "leica:body:m3",
+     "leica:body:m2",
+     "leica:body:m2-r",
+     "leica:body:m1",
+     "leica:body:md",
+     "leica:body:m4",
+     "leica:body:m4-2",
+     "leica:body:m4-p",
+     "leica:body:m-a",
+     "leica:body:m5",
+     "leica:body:cl-film",
+     "leica:body:cl-film-50-jahre",
+     "leica:body:m6",
+     "leica:body:mp-film",
+     "leica:body:mp3"
+    ],
+    "exclude": []
+   }
   }
  ]
 }

@@ -157,6 +157,7 @@ PARENTS = {
 def build() -> dict:
     import bodies
     import codes
+    import features
     import lenses
 
     for module in (bodies, lenses):
@@ -204,6 +205,12 @@ def build() -> dict:
         entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": kind, "mount": mount, "parent": grand,
                          "children": children, "aliases": sorted(set(a.lower() for a in aliases)),
                          "codes": codes.CODES.get(key, []), "match": None})
+    for key, (name, name_ko, members, aliases, exclude) in features.FEATURES.items():
+        for member in members:
+            assert member in MODELS or member in PARENTS, f"features: unknown member {member}"
+        entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": "Body", "mount": "M", "parent": None,
+                         "children": [], "aliases": sorted(set(a.lower() for a in aliases)), "codes": [], "match": None,
+                         "feature": {"members": members, "exclude": exclude}})
     return {"schema_version": "entity_catalog_v1", "updated_at": "2026-10-03", "entities": entities}
 
 

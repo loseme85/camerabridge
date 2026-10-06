@@ -90,7 +90,7 @@ def test_catalog_entities_have_aliases_and_rules() -> None:
     catalog = load_catalog()
     for entity in catalog["entities"].values():
         assert entity["aliases"], entity["id"]
-        assert entity["match"] or entity["children"], entity["id"]
+        assert entity["match"] or entity["children"] or entity.get("feature"), entity["id"]
 
 
 def test_summilux_35_korean_generation_numbers() -> None:
@@ -144,3 +144,26 @@ def test_product_codes_point_to_existing_entities() -> None:
     for number, entity_id in catalog["codes"].items():
         assert len(number) == 5 and number.isdigit(), number
         assert entity_id in catalog["entities"], entity_id
+
+
+def test_search_by_body_feature() -> None:
+    # 2026-10 레딧 피드백: "28mm 프레임라인, TTL 같은 사양으로 찾고 싶다"
+    s = _suggester()
+    assert s.suggest("28mm frameline", 1)[0]["id"] == "leica:feature:frameline-28"
+    assert s.suggest("28mm 프레임라인", 1)[0]["id"] == "leica:feature:frameline-28"
+    assert s.suggest("ttl", 1)[0]["id"] == "leica:feature:ttl-flash"
+    assert s.suggest("노출계 없는", 1)[0]["id"] == "leica:feature:no-meter"
+    assert s.suggest("28", 1)[0]["id"].startswith("leica:lens:")  # 숫자만 치면 여전히 28mm 렌즈가 먼저
+    assert s.suggest("m6 ttl 0.72", 1)[0]["id"] == "leica:body:m6:ttl"
+
+
+def test_feature_groups_follow_body_specs() -> None:
+    def ids(title):
+        return match_entities(_record(title, category="Body", mount="M"))
+    assert "leica:feature:frameline-28" in ids("Leica M6 0.72 Black")
+    assert "leica:feature:frameline-28" not in ids("Leica M6 TTL 0.85 Black")  # 0.85 파인더엔 28mm 프레임 없음
+    assert "leica:feature:frameline-28" not in ids("Leica M3 Double Stroke")
+    assert "leica:feature:ttl-flash" in ids("Leica M7 0.72 Silver")
+    assert "leica:feature:ttl-flash" not in ids("Leica MP 0.72 Black Paint")
+    assert "leica:feature:mechanical" not in ids("Leica M7 0.72 Silver")
+    assert "leica:feature:no-meter" in ids("Leica M-A Typ 127 Silver")
