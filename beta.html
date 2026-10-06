@@ -301,6 +301,7 @@
       padding-top:4px;
     }
     .sticky-search-region[hidden]{display:none}
+    body.cb-hero-search-visible .sticky-search-region{display:none}
     .sticky-search-bar{
       border:1px solid var(--border);
       background:rgba(255,255,255,0.94);
@@ -650,7 +651,7 @@
     .micro-pill.amber{border-color:rgba(153,97,31,0.24);background:rgba(153,97,31,0.08);color:var(--amber)}
     .metric-grid{
       display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
+      grid-template-columns:repeat(2,minmax(0,1fr));
       gap:10px;
       margin-top:14px;
     }
@@ -1997,6 +1998,15 @@
           <span class="home-model-meta">${escapeHtml(ux('home.on_sale', '{n} for sale').replace('{n}', String(entity.active_count || 0)))}</span>
         </button>`).join('');
       section.hidden = !latest.length && !popular.length;
+    }
+
+    // 위 검색창이 화면에 보이는 동안엔 결과 사이의 두 번째 검색창을 숨김 (같은 검색창이 두 개로 보이던 문제)
+    function bindHeroSearchVisibility(){
+      const panel = document.querySelector('.search-panel');
+      if(!panel || !('IntersectionObserver' in window)) return;
+      new IntersectionObserver(entries => {
+        document.body.classList.toggle('cb-hero-search-visible', entries.some(entry => entry.isIntersecting));
+      }).observe(panel);
     }
 
     function bindHome(){
@@ -4360,6 +4370,8 @@
         els['market-price-caption'].textContent = price.caption;
         els['market-price-value'].textContent = price.value;
         els['summary-meta'].textContent = price.meta;
+        // 지금 불러온 한 페이지가 아니라 그 모델(사양 묶음) 전체의 판매 중 매물 수
+        els['active-count'].textContent = formatListingCount(Number(pickedEntity.active_count || 0));
       }
 
       if(els['index-debug-line']){
@@ -4443,17 +4455,8 @@
         return;
       }
 
-      els['state-region'].innerHTML = renderStateCard(
-        ux('state_card.results_title', 'Search results'),
-        ux('state_card.results_body', 'The same data and result order are kept, while the beta shell simplifies the guidance text.'),
-        [
-          ux('state_card.results_tip_1', 'Prices are for reference'),
-          ux('state_card.results_tip_2', 'Pricing stays locked when conditions are mixed'),
-          ux('state_card.results_tip_3', 'The original listing should be checked')
-        ],
-        'subtle'
-      );
-      els['market-entry-region'].innerHTML = renderMarketEntry(results, uiHints);
+      // 모델(사양 묶음)을 고르면 위 요약 칸이 이미 그 모델 기준이라 결과 요약 카드는 생략 (첫 매물 제목을 모델처럼 보여 주던 문제)
+      els['market-entry-region'].innerHTML = state.entity ? '' : renderMarketEntry(results, uiHints);
       els['query-summary-region'].innerHTML = '';
       els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
       els['results-load-more-region'].innerHTML = '';
@@ -4687,9 +4690,7 @@
           </div>
           <div class="metric-grid">
             <div class="metric-card"><b>${priceHeadline}</b><span>${priceValue}</span></div>
-            <div class="metric-card"><b>${escapeHtml(ux('market_entry.status_label', 'Price state'))}</b><span>${summaryLine}</span></div>
             <div class="metric-card"><b>${escapeHtml(ux('market_entry.source_check_label', 'Check source listing'))}</b><span>${escapeHtml(ux('market_entry.source_check_body', 'Please verify the original listing before purchase.'))}</span></div>
-            <div class="metric-card"><b>${escapeHtml(ux('market_entry.beta_note_label', 'Note'))}</b><span>${escapeHtml(ux('market_entry.beta_note_body', 'The same API result is shown here with beta-friendly wording only.'))}</span></div>
           </div>
         </article>
       `;
@@ -4979,6 +4980,7 @@
     loadEntitySummary();
     loadHomeFeed();
     bindHome();
+    bindHeroSearchVisibility();
     bindFeedback();
     hydrateFromUrl();
   </script>
