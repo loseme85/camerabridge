@@ -54,7 +54,10 @@ def load_catalog(path: str | None = None) -> dict[str, Any]:
                 [re.compile(p, re.I) for p in rule["title_must"]],
                 [re.compile(p, re.I) for p in rule["title_must_not"]],
             )
-    codes = {number: entity["id"] for entity in entities.values() for number in entity.get("codes") or []}
+    codes: dict[str, list[str]] = {}  # 번호 → 엔티티들 (라이카가 옛 번호를 다른 제품에 다시 쓴 경우 둘 이상)
+    for entity in entities.values():
+        for number in entity.get("codes") or []:
+            codes.setdefault(number, []).append(entity["id"])
     features = [(entity["id"], set(entity["feature"]["members"]), [re.compile(p, re.I) for p in entity["feature"]["exclude"]])
                 for entity in entities.values() if entity.get("feature")]
     return {"entities": entities, "compiled": compiled, "codes": codes, "features": features}
@@ -120,9 +123,10 @@ def _code_hits(title: str, final: dict, catalog: dict) -> list[str]:
         return []
     hits: list[str] = []
     for number in CODE_IN_TITLE.findall(title):
-        entity_id = catalog.get("codes", {}).get(number)
-        if not entity_id or entity_id in hits:
-            continue
+        owners = catalog.get("codes", {}).get(number) or []
+        if len(owners) != 1 or owners[0] in hits:
+            continue  # 모르는 번호, 또는 여러 제품에 쓰인 번호는 제목만으로 정하지 않음
+        entity_id = owners[0]
         kind = catalog["entities"][entity_id].get("kind")
         category = final.get("category")
         if category not in (kind, None, "", "Unknown") and not (kind == "Body" and category == "Lens" and not LENS_IN_TITLE.search(title)):

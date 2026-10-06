@@ -130,6 +130,9 @@ def test_suggest_by_leica_product_code() -> None:
     ids = {e["id"] for e in s.suggest("100", 12) + s.suggest("105", 12)}
     assert not ids & {"leica:body:r4", "leica:body:m5:standard", "leica:body:m4-2:standard"}
     assert s.suggest("1187", 3) == []
+    # 라이카가 다시 쓴 번호: 두 제품 모두 후보
+    ids = {e["id"] for e in s.suggest("11135", 5)}
+    assert {"leica:lens:elmarit-m:21:asph", "leica:lens:hektor:135"} <= ids
 
 
 def test_listing_with_only_product_code_links_to_model() -> None:
@@ -141,9 +144,9 @@ def test_listing_with_only_product_code_links_to_model() -> None:
 
 def test_product_codes_point_to_existing_entities() -> None:
     catalog = load_catalog()
-    for number, entity_id in catalog["codes"].items():
+    for number, entity_ids in catalog["codes"].items():
         assert len(number) == 5 and number.isdigit(), number
-        assert entity_id in catalog["entities"], entity_id
+        assert all(entity_id in catalog["entities"] for entity_id in entity_ids), number
 
 
 def test_search_by_body_feature() -> None:
