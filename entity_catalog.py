@@ -11,6 +11,14 @@ from pathlib import Path
 from typing import Any, Iterable
 
 CATALOG_PATH = Path(__file__).resolve().parent / "data" / "config" / "entity_catalog_v1.json"
+FX_PATH = Path(__file__).resolve().parent / "data" / "fx_rates.json"
+
+# 제목만으로 세대를 못 가르는 모델은 가격으로 가른다: {모델: (값싼 쪽 모델, 원화 기준가, 표기가 있으면 가격 무시)}
+# 녹티 f/1.2: 복각(ASPH) 중고·신품 약 550만~1,400만 원, 오리지널 약 3,300만 원 이상 (2026-10 수집분)
+PRICE_SPLIT = {
+    "leica:lens:noctilux:50:f1.2-original": ("leica:lens:noctilux-m:50:f1.2-asph", 20_000_000,
+                                             re.compile(r"original|오리지널|1세대|\b1st\b", re.I)),
+}
 
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)
 LENS_IN_TITLE = re.compile(r"(\d{2,3}\s?mm\b|\b\d{2,3}/\d(\.\d)?\b|\bf/?\s?\d\.\d)", re.I)
@@ -39,6 +47,23 @@ ZOOM_FAMILY = {"R": "Vario Elmar", "SL": "Vario Elmarit", "TL": "Vario Elmar"}
 FAMILY_WORD = re.compile(r"summi|elmar|nocti|hektor|telyt|angulon|summar|xenon|thambar|lux\b|cron\b|ultron|nokton|heliar|skopar|planar|biogon|sonnar", re.I)
 # 모델명에 붙은 마운트 (예: Noctilux-M, Summicron-R, APO-Summicron-SL)
 NAME_MOUNT = re.compile(r"[a-z]-(M|SL|R|TL)\b", re.I)
+
+
+@lru_cache(maxsize=1)
+def krw_rates() -> dict[str, float]:
+    """통화 → 원화 환율 (data/fx_rates.json, 없으면 대략값)."""
+    try:
+        rates = json.loads(FX_PATH.read_text(encoding="utf-8"))["rates"]
+        krw = rates["KRW"]
+        return {code: krw / value for code, value in rates.items()}
+    except Exception:
+        return {"KRW": 1, "JPY": 9, "USD": 1350, "GBP": 1780, "EUR": 1500}
+
+
+def price_krw(final: dict) -> float | None:
+    price = final.get("parsed_price_numeric")
+    rate = krw_rates().get(str(final.get("currency") or "KRW").upper())
+    return price * rate if price and rate else None
 
 
 @lru_cache(maxsize=1)
@@ -155,6 +180,13 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
             hits.append(entity_id)
     if not hits:
         hits = _code_hits(title, final, catalog)
+    for i, hit in enumerate(hits):
+        if hit in PRICE_SPLIT:
+            cheaper, limit, marked = PRICE_SPLIT[hit]
+            krw = price_krw(final)
+            if krw and krw < limit and not marked.search(title):
+                hits[i] = cheaper
+    hits = list(dict.fromkeys(hits))
     parents: set[str] = set()
     frontier = {catalog["entities"][h].get("parent") for h in hits} - {None}
     while frontier:  # 부모의 부모까지 (예: D-Lux 7 BAPE → D-Lux 7 → D-Lux 전체)

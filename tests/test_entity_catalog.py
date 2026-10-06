@@ -43,6 +43,37 @@ def test_noctilux_f1_generations() -> None:
         assert len([i for i in ids if i.startswith(nx + ":")]) == 1, title
 
 
+def test_noctilux_generation_markers_from_foreign_dealers() -> None:
+    nx = "leica:lens:noctilux-m:50:f1.0"
+    cases = {
+        "LEITZ Leica Noctilux-M 50mm/F1.0 E60 II Lens Yr.1982 Canada": "v3-e60",
+        "Leica 50mm f1 Noctilux-M (Type III) (11821)": "v3-e60",
+        "Leica Noctilux-M 50mm/F1.0 E60 V4 Ver.IV Lens Yr.1996 Canada 11822": "v4-builtin-hood",
+        "Leica Noctilux M 50mm/F1.0 E58 Ver.I V1 boxed": "v2-e58",
+    }
+    for title, gen in cases.items():
+        assert f"{nx}:{gen}" in match_entities(_record(title)), title
+
+
+def test_noctilux_f12_original_by_marker_and_price() -> None:
+    orig, asph = "leica:lens:noctilux:50:f1.2-original", "leica:lens:noctilux-m:50:f1.2-asph"
+
+    def rec(title, price=None, currency="KRW", category="Lens"):
+        r = _record(title, category)
+        r["final_output"].update({"parsed_price_numeric": price, "currency": currency})
+        return r
+
+    assert orig in match_entities(rec("[중고]Leica M50/1.2 1세대 Noctilux", 33_000_000, category="Body"))
+    assert orig in match_entities(rec("[중고] M 50/2 Noctilux Original (Black)"))
+    # 표기 없는 f/1.2: 2,000만 원 미만이면 복각, 이상이거나 가격 없으면 오리지널
+    ids = match_entities(rec("[중고] M50/1.2 Noctilux (Black)", 8_380_000))
+    assert asph in ids and orig not in ids
+    assert orig in match_entities(rec("Leica Noctilux-M 50mm F1.2", 3_916_000, "JPY"))
+    assert orig in match_entities(rec("LEICA 50mm F1.2 NOCTILUX sn.2556"))
+    # 표기가 있으면 가격과 상관없이 표기대로
+    assert orig in match_entities(rec("[위탁] M50/1.2 Noctilux 오리지널 1세대 (Black)", 15_000_000))
+
+
 def test_generation_candidates_listed_under_parent_in_order() -> None:
     import json
     from pathlib import Path
