@@ -22,3 +22,13 @@ def test_title_and_description_grades():
     assert grade_of("Kamerastore (핀란드)", describe_text("It is in good condition & works well."), "x") == ("C", "text")
     assert grade_of("Leica Store Miami", describe_text("in excellent condition with minimal signs of use"), "x") == ("B", "text")
     assert grade_of("Leica Store Miami", "정보없음", "Used Leica Summilux") == (None, None)
+
+
+def test_mk_kamera_description_grades() -> None:
+    site = "M & K Kamera (홍콩)"
+    assert grade_of(site, "M&K: brand new", "Leica M11")[0] == "N"
+    assert grade_of(site, "M&K: excellent condition", "Leica M6")[0] == "A"
+    assert grade_of(site, "M&K: only minor signs of use", "Leica M6")[0] == "B"
+    assert grade_of(site, "M&K: slightly used", "Leica M6")[0] == "B"
+    assert grade_of(site, "M&K: normal signs of wear", "Leica M6")[0] == "C"
+    assert grade_of(site, "M&K: not working", "Leica M6")[0] == "X"

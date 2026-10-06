@@ -2505,6 +2505,65 @@ def crawl_kamerastore():
     return results
 
 
+def crawl_mkkamera():
+    """M & K Kamera (홍콩) - Shopify JSON API. 라이카·라이츠만, 판매 중만"""
+    import requests
+    from condition_grade import mk_condition
+    results = []
+    base = "https://mkkcamera.com"
+    page_num = 1
+    print(f"\n  📂 M & K Kamera 크롤링 시작")
+    while True:
+        url = f"{base}/products.json?limit=250&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=20)
+            resp.raise_for_status()
+            products = resp.json().get("products", [])
+        except Exception as e:
+            print(f"    ❌ {page_num}페이지 오류: {e}")
+            break
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            name = (p.get("title") or "").strip()
+            if not name or not re.search(r"leica|leitz", f"{name} {p.get('vendor') or ''}", re.I):
+                continue
+            variant = p["variants"][0] if p.get("variants") else {}
+            available = variant.get("available", True)
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not available or link in globals().get('SOLD_LINKS', ()):
+                continue
+            try:
+                price = f"HK${float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            name = re.sub(r"\s*#\d+\s*$", "", name)  # 끝의 매장 관리 번호(#24041) 제거
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "M & K Kamera (홍콩)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": mk_condition(p.get("body_html") or "") or "정보없음",
+                "가격": price,
+                "통화": "HKD",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        page_num += 1
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ M & K Kamera 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -2830,6 +2889,7 @@ def crawl_all():
         ("Ffordes (영국)", lambda: ce.wrap_full_run("Ffordes (영국)", lambda: _with_browser(crawl_ffordes, {"Accept-Language": "en-GB,en;q=0.9"}))),
         ("Leica Store Miami", lambda: ce.wrap_full_run("Leica Store Miami", crawl_leicamiami)),
         ("Kamerastore (핀란드)", lambda: ce.wrap_full_run("Kamerastore (핀란드)", crawl_kamerastore)),
+        ("M & K Kamera (홍콩)", lambda: ce.wrap_full_run("M & K Kamera (홍콩)", crawl_mkkamera)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)

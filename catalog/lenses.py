@@ -17,7 +17,7 @@ EXTEND_PARENTS: dict[str, list[str]] = {}
 TIGHTEN: dict[str, list[str]] = {}
 OVERRIDE_MUST: dict[str, list[str]] = {}
 
-ACC = [r"\bhood\b", r"후드", r"\bcap\b", r"캡", r"case", r"케이스", r"부속품", r"filter\b", r"필터", r"adapter", r"어댑터",
+ACC = [r"^(?!.*\b(with|w/)\s.*\bhood).*\bhood\b", r"후드", r"\bcap\b", r"캡", r"^(?!.*\b(with|w/)\s.*case).*case", r"케이스", r"부속품", r"filter\b", r"필터", r"adapter", r"어댑터",
        r"finder", r"파인더", r"box only", r"박스만", r"manual", r"설명서"]
 
 
@@ -204,7 +204,7 @@ OVERRIDE_MUST[f"{SC35}:asph"] = [FAM["summicron"][0], f("35"), r"ASPH|5세대|�
 # ───────────── M: Summicron 50 (기존 부모에 추가) ─────────────
 SC50 = "leica:lens:summicron:50"
 for slug, name, ko, marker, mount, extra_not, sfx in [
-    ("collapsible", "Summicron 50mm f/2 Collapsible (L · M)", "주미크론 50 침동", r"collaps|침동|토륨|thorium|radioactive", None, [], ["collapsible", "침동", "토륨"]),
+    ("collapsible", "Summicron 50mm f/2 Collapsible (L · M)", "주미크론 50 침동", r"collaps|침동|토륨|thorium|radioactive|\bL39\b|\bLTM\b|\bM39\b", None, [r"rigid|리짓|리지드|limited|한정"], ["collapsible", "침동", "토륨"]),
     ("rigid-early", "Summicron 50mm f/2 Rigid 1st (early)", "주미크론 50 리짓 전기형", r"(rigid|리짓|리지드).{0,20}(전기|early|1st)|(전기|early).{0,20}(rigid|리짓)", None, [], ["rigid early", "리짓 전기형"]),
     ("rigid-late", "Summicron 50mm f/2 Rigid 2nd (late)", "주미크론 50 리짓 후기형", r"(rigid|리짓|리지드).{0,20}(후기|late|2nd)|(후기|late).{0,20}(rigid|리짓)", None, [], ["rigid late", "리짓 후기형"]),
     ("v3", "Summicron-M 50mm f/2 3rd", "주미크론 50 3세대", GEN3, "M", [], ["3rd", "3세대"]),
@@ -337,12 +337,15 @@ for focal in ("19", "24", "28", "35", "90", "135", "180"):
     lens(f"leica:lens:elmarit-r:{focal}", f"Elmarit-R {focal}mm", f"엘마리트 R {focal}", "R", "elmarit", focal, must_not=[r"apo|macro|vario|fish|tele"])
 lens("leica:lens:macro-elmarit-r:60", "Macro-Elmarit-R 60mm f/2.8", "매크로 엘마리트 R 60", "R", "macro-elmarit", "60", must_not=[r"\bapo\b"])
 lens("leica:lens:apo-macro-elmarit-r:100", "APO-Macro-Elmarit-R 100mm f/2.8", "아포 매크로 엘마리트 R 100", "R", "apo-macro-elmarit", "100")
-lens("leica:lens:elmarit-r:100", "Macro-Elmar-R 100mm f/4 · Elmar-R 100", "엘마 R 100", "R", "elmar", "100")
+lens("leica:lens:elmarit-r:100", "Macro-Elmar-R 100mm f/4 · Elmar-R 100", "매크로 엘마 R 100", "R", "macro-elmar", "100", extra_aliases=["elmar r 100", "elmar-r 100", "엘마 r 100"])
 lens("leica:lens:apo-summicron-r:180", "APO-Summicron-R 180mm f/2", "아포 주미크론 R 180", "R", "summicron", "180", [r"\bAPO\b|apo-"])
 lens("leica:lens:apo-elmarit-r:180", "APO-Elmarit-R 180mm f/2.8", "아포 엘마리트 R 180", "R", "apo-elmarit", "180")
 lens("leica:lens:apo-telyt-r:280", "APO-Telyt-R 280mm f/4 · f/2.8", "아포 텔리트 R 280", "R", "apo-telyt", "280")
-lens("leica:lens:telyt-r:long", "Telyt-R 250 · 350 · 400 · 560 · 800", "텔리트 R 장망원", "R", "telyt", "", [r"\b(250|350|400|560|800)\b"], must_not=[r"\bapo\b"])
-for zoom in ("21-35", "28-70", "35-70", "70-210", "80-200", "105-280"):
+lens("leica:lens:telyt-r:long", "Telyt-R 250 · 350 · 400 · 560 · 800", "텔리트 R 장망원", "R", "telyt", "", [r"\b(250|350|400|560|800)(?:\s?mm)?\b"], must_not=[r"\bapo\b", r"\bMR\b|mirror"])
+lens("leica:lens:mr-telyt-r:500", "MR-Telyt-R 500mm f/8 (mirror)", "MR 텔리트 R 500 (반사)", "R", "telyt", "500", [r"\bMR\b|mirror|reflex|반사"], extra_aliases=["mr telyt 500", "mr-telyt-r 500"])
+_add("leica:lens:pa-curtagon-r:35", "PA-Curtagon-R 35mm f/4 (shift)", "PA 쿠르타곤 R 35 (시프트)", "R", [r"curtagon", f("35")], [],
+     ["pa-curtagon-r 35", "pa curtagon 35", "curtagon 35", "쿠르타곤 35"])
+for zoom in ("21-35", "28-70", "35-70", "70-210", "75-200", "80-200", "105-280"):
     lens(f"leica:lens:vario-elmar-r:{zoom}", f"Vario-Elmar-R {zoom}mm", f"바리오 엘마 R {zoom}", "R", "vario-elmar", zoom, extra_aliases=[f"r {zoom}", f"{zoom} r"])
 for zoom in ("28-90", "35-70"):
     lens(f"leica:lens:vario-elmarit-r:{zoom}", f"Vario-Elmarit-R {zoom}mm", f"바리오 엘마리트 R {zoom}", "R", "vario-elmarit", zoom, must_not=[r"\bapo\b"], extra_aliases=[f"r {zoom} elmarit"])

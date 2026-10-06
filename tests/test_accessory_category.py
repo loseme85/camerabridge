@@ -222,3 +222,9 @@ def test_foreign_dealer_accessory_words() -> None:
     for title in ["Leica MRMeter Black", "Leica 8倍双眼鏡 ウルトラVit 8×20BR Black", "Leica Q3 for サムレスト Black",
                   "[중고] Leica MP Rewind crank (Silver)", "Leica ABLON Film Leader Cutter Silver"]:
         assert classify_listing_v2({"상품명": title, "가격": "¥40,000", "통화": "JPY"})["category"] == "Accessory", title
+
+
+def test_macro_lens_is_not_m_a_body() -> None:
+    # 'leica ma'(M-A) 키워드가 'Leica Macro-Elmar'에 걸리던 것
+    assert classify_listing_v2({"상품명": "Leica Macro-Elmar-M 90mm/F4.0 Black", "가격": "HK$9,800", "통화": "HKD"})["category"] == "Lens"
+    assert classify_listing_v2({"상품명": "Leica M-A (Typ 127) Silver", "가격": "HK$29,800", "통화": "HKD"})["category"] == "Body"

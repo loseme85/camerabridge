@@ -64,6 +64,13 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _JP[up], "label"
     if site and "ffordes" in site.lower() and up in _FFORDES:
         return _FFORDES[up], "label"
+    if cond.startswith(MK_PREFIX):
+        if "not working" in cond:
+            return "X", "label"
+        for pattern, grade in _MK:
+            if re.search(pattern, cond, re.I):
+                return grade, "text"
+        return None, None
     if cond.startswith(DESC_PREFIX):
         for pattern, grade in _DESC:
             if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
@@ -85,4 +92,29 @@ def describe_text(text: str) -> str | None:
         m = re.search(rf"({pattern})(?: condition)?", t, re.I)
         if m:
             return DESC_PREFIX + m.group(0).strip()
+    return None
+
+
+# 홍콩 M & K Kamera: 설명 첫 문장이 정해진 몇 가지 말투 (2026-10-06 판매 중 815점 기준)
+# 사진 평가(표기 가리고 28점, 사진 3장씩)로 맞춤: 'slightly used'와 'only minor signs of use'는 사진으로 갈리지 않아(각각 사진 A·B 중심)
+# 둘 다 B. 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 감안했다.
+MK_PREFIX = "M&K: "
+_MK = [
+    (r"brand new", "N"),
+    (r"excellent condition", "A"),
+    (r"excellent appearance|used preciously|only minor signs of use|slightly used", "B"),
+    (r"normal signs of wear", "C"),
+    (r"heavy (signs of )?(use|wear)|obvious signs", "D"),
+]
+
+
+def mk_condition(html: str) -> str | None:
+    """M & K Kamera 상품 설명에서 컨디션 말투를 뽑아 'M&K: only minor signs of use' 꼴로."""
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html or ""))
+    if re.search(r"not working|for parts|as-?is", t, re.I):
+        return MK_PREFIX + "not working"
+    for pattern, _ in _MK:
+        m = re.search(pattern, t, re.I)
+        if m:
+            return MK_PREFIX + m.group(0).lower()
     return None
