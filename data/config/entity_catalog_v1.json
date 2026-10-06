@@ -711,7 +711,7 @@
      "설명서",
      "box only",
      "박스만",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\btype ?iii\\b",
+     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b",
      "50 ?jahre",
      "토륨|thorium",
      "safari|사파리|サファリ",
@@ -1051,10 +1051,20 @@
    "children": [],
    "aliases": [
     "nocti 1.2 original",
+    "nocti 1st",
     "noctilux 1.2 original",
+    "noctilux 1st",
+    "noctilux 1st gen",
     "noctilux 50 1.2 original",
+    "noctilux original",
     "녹티 1.2 오리지널",
-    "녹티룩스 1.2 오리지널"
+    "녹티 1st",
+    "녹티 1세대",
+    "녹티 오리지널",
+    "녹티룩스 1.2 오리지널",
+    "녹티룩스 1st",
+    "녹티룩스 1세대",
+    "녹티룩스 오리지널"
    ],
    "codes": [
     "11820"
@@ -1064,7 +1074,7 @@
     "mount": "M",
     "title_must": [
      "nocti",
-     "1\\.2\\b"
+     "1\\.2\\b|original|오리지널|1세대|\\b1st\\b"
     ],
     "title_must_not": [
      "복각",
@@ -1074,6 +1084,8 @@
      "신품",
      "\\b75\\b",
      "(?<![\\d./])35(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
+     "0\\.95",
+     "(?<![\\d.])1\\.0\\b|/1\\b(?!\\.\\d)|f/?1\\b(?!\\.\\d)|E58|E60",
      "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
      "후드",
      "\\bcap\\b",
@@ -18333,7 +18345,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b"
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
     ],
     "title_must_not": [
      "steel ?rim|스틸 ?림",
@@ -18423,7 +18435,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b|pre-?asph"
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b|pre-?asph"
     ],
     "title_must_not": [
      "titan|티탄",
@@ -19247,7 +19259,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b"
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -19326,7 +19338,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b"
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -19405,7 +19417,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\btype ?iii\\b"
+     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -19495,7 +19507,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\btype ?iv\\b|E46"
+     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b|E46"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -20014,10 +20026,10 @@
     "title_must_not": [
      "\\bSL\\b",
      "\\bTL\\b",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\btype ?iii\\b",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\btype ?iv\\b|E46",
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b",
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b",
+     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b",
+     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b|E46",
      "classic|클래식",
      "titan|티탄",
      "millenn?ium|밀레니엄",
@@ -20186,10 +20198,11 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b"
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
     ],
     "title_must_not": [
      "\\bAPO\\b",
+     "ASPH",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -20277,10 +20290,11 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\btype ?iii\\b|7 ?el|7매"
+     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b|7 ?el|7매"
     ],
     "title_must_not": [
      "\\bAPO\\b",
+     "ASPH",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -20927,7 +20941,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\btype ?iii\\b"
+     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -21075,7 +21089,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b"
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -21143,7 +21157,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b"
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -21213,7 +21227,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\btype ?iii\\b"
+     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -21283,7 +21297,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\btype ?iv\\b"
+     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -21349,10 +21363,10 @@
     "title_must_not": [
      "\\bR\\b|-R\\b",
      "ASPH",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\btype ?iii\\b",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\btype ?iv\\b",
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b",
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b",
+     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b",
+     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -21419,7 +21433,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b"
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
     ],
     "title_must_not": [
      "tele",
@@ -21488,7 +21502,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b"
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
     ],
     "title_must_not": [
      "tele",
@@ -21558,8 +21572,8 @@
      "\\bR\\b|-R\\b",
      "APO",
      "macro",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b",
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b",
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -21619,7 +21633,7 @@
     "title_must": [
      "tele.?elmarit",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\bfat\\b|팻|뚱"
+     "\\bfat\\b|팻|뚱|\\b(1st|ver\\.? ?I|type ?I)\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -21681,7 +21695,7 @@
     "title_must": [
      "tele.?elmarit",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\bthin\\b|씬|슬림"
+     "\\bthin\\b|\\bslim\\b|씬|슬림|\\b(2nd|ver\\.? ?II|type ?II)\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -21743,8 +21757,8 @@
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)"
     ],
     "title_must_not": [
-     "\\bfat\\b|팻|뚱",
-     "\\bthin\\b|씬|슬림",
+     "\\bfat\\b|팻|뚱|\\b(1st|ver\\.? ?I|type ?I)\\b",
+     "\\bthin\\b|\\bslim\\b|씬|슬림|\\b(2nd|ver\\.? ?II|type ?II)\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -27658,7 +27672,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b|E55",
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b|E55",
      "-R\\b|\\bR\\s?\\d|\\bR\\b|\\bROM\\b"
     ],
     "title_must_not": [
@@ -27741,7 +27755,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b|E60",
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b|E60",
      "-R\\b|\\bR\\s?\\d|\\bR\\b|\\bROM\\b"
     ],
     "title_must_not": [
@@ -27803,8 +27817,8 @@
      "-R\\b|\\bR\\s?\\d|\\bR\\b|\\bROM\\b"
     ],
     "title_must_not": [
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\btype ?i\\b|E55",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\btype ?ii\\b|E60",
+     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b|E55",
+     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b|E60",
      "-M\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b",
@@ -30596,18 +30610,22 @@
    "parent": "leica:lens:noctilux-m:50:f1.0",
    "children": [],
    "aliases": [
+    "nocti 1.0 1st",
     "nocti 1.0 2nd gen",
     "nocti 1.0 2세대",
     "nocti 1.0 e58",
     "nocti 1.0 v1",
+    "noctilux 1.0 1st",
     "noctilux 1.0 2nd gen",
     "noctilux 1.0 2세대",
     "noctilux 1.0 e58",
     "noctilux 1.0 v1",
+    "녹티 1.0 1st",
     "녹티 1.0 2nd gen",
     "녹티 1.0 2세대",
     "녹티 1.0 e58",
     "녹티 1.0 v1",
+    "녹티룩스 1.0 1st",
     "녹티룩스 1.0 2nd gen",
     "녹티룩스 1.0 2세대",
     "녹티룩스 1.0 e58",
@@ -30620,7 +30638,7 @@
     "title_must": [
      "nocti",
      "((?<![\\d.])1\\.0\\b|/1\\b(?!\\.\\d)|f/?1\\b(?!\\.[1-9])|E60|E58)",
-     "E58|2세대|\\b(1st|v\\.?1|version ?1)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b"
+     "E58|2세대|\\b(1st|v\\.?1|version ?1|ver\\.? ?I|type ?I)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b"
     ],
     "title_must_not": [
      "0\\.95",
@@ -30628,8 +30646,8 @@
      "1\\.25",
      "\\b75\\b",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "3세대",
-     "4세대|6 ?[bp]it|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b",
+     "3세대|\\b(E60 ?(II|III)|ver\\.? ?(II|III)|type ?(II|III)|v\\.?[23])\\b",
+     "4세대|6 ?[bp]it|\\b(v\\.?4|ver\\.? ?IV|type ?IV)\\b|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -30701,7 +30719,7 @@
     "title_must": [
      "nocti",
      "((?<![\\d.])1\\.0\\b|/1\\b(?!\\.\\d)|f/?1\\b(?!\\.[1-9])|E60|E58)",
-     "3세대"
+     "3세대|\\b(E60 ?(II|III)|ver\\.? ?(II|III)|type ?(II|III)|v\\.?[23])\\b"
     ],
     "title_must_not": [
      "0\\.95",
@@ -30709,8 +30727,8 @@
      "1\\.25",
      "\\b75\\b",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "E58|2세대|\\b(1st|v\\.?1|version ?1)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b",
-     "4세대|6 ?[bp]it|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b",
+     "E58|2세대|\\b(1st|v\\.?1|version ?1|ver\\.? ?I|type ?I)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b",
+     "4세대|6 ?[bp]it|\\b(v\\.?4|ver\\.? ?IV|type ?IV)\\b|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -30797,7 +30815,7 @@
     "title_must": [
      "nocti",
      "((?<![\\d.])1\\.0\\b|/1\\b(?!\\.\\d)|f/?1\\b(?!\\.[1-9])|E60|E58)",
-     "4세대|6 ?[bp]it|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b"
+     "4세대|6 ?[bp]it|\\b(v\\.?4|ver\\.? ?IV|type ?IV)\\b|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b"
     ],
     "title_must_not": [
      "0\\.95",
@@ -30805,8 +30823,8 @@
      "1\\.25",
      "\\b75\\b",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "E58|2세대|\\b(1st|v\\.?1|version ?1)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b",
-     "3세대",
+     "E58|2세대|\\b(1st|v\\.?1|version ?1|ver\\.? ?I|type ?I)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b",
+     "3세대|\\b(E60 ?(II|III)|ver\\.? ?(II|III)|type ?(II|III)|v\\.?[23])\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -30871,9 +30889,9 @@
      "1\\.25",
      "\\b75\\b",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "E58|2세대|\\b(1st|v\\.?1|version ?1)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b",
-     "3세대",
-     "4세대|6 ?[bp]it|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b",
+     "E58|2세대|\\b(1st|v\\.?1|version ?1|ver\\.? ?I|type ?I)\\b|(?:sn|s/n|no|#)\\.?\\s?#?2[,.]?\\d{3}\\b",
+     "3세대|\\b(E60 ?(II|III)|ver\\.? ?(II|III)|type ?(II|III)|v\\.?[23])\\b",
+     "4세대|6 ?[bp]it|\\b(v\\.?4|ver\\.? ?IV|type ?IV)\\b|(?:sn|s/n|no|#)\\.?\\s?#?3[,.]?[7-9]\\d{2}\\b",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",

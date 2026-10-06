@@ -134,8 +134,8 @@ def c(slug, name, ko, marker, cnot=(), sfx=("",)):
 
 
 # Kamerastore 등은 '(Type I)'~'(Type IV)'로 세대를 적음
-GEN1, GEN2, GEN3, GEN4 = (r"\b1st\b|\b1th\b|1세대|\bv\.?1\b|first|\btype ?i\b", r"\b2nd\b|2세대|\bv\.?2\b|second|\btype ?ii\b", r"\b3rd\b|\b3th\b|3세대|\bv\.?3\b|third|\btype ?iii\b",
-                          r"\b4th\b|4세대|\bv\.?4\b|fourth|\btype ?iv\b")
+GEN1, GEN2, GEN3, GEN4 = (r"\b1st\b|\b1th\b|1세대|\bv\.?1\b|first|\b(type|ver\.?) ?i\b", r"\b2nd\b|2세대|\bv\.?2\b|second|\b(type|ver\.?) ?ii\b", r"\b3rd\b|\b3th\b|3세대|\bv\.?3\b|third|\b(type|ver\.?) ?iii\b",
+                          r"\b4th\b|4세대|\bv\.?4\b|fourth|\b(type|ver\.?) ?iv\b")
 
 # ───────────── M: Summilux 35 (기존 부모에 세대·에디션 추가) ─────────────
 SL35 = "leica:lens:summilux-m:35"
@@ -185,8 +185,8 @@ MODELS["leica:lens:summilux-m:50:unspecified"]["title_must_not"].append(r"ASPH")
 SC35 = "leica:lens:summicron-m:35"
 for slug, name, ko, marker, extra_not, sfx in [
     ("v1-eyes", "Summicron 35mm f/2 1st (8 elements) with eyes (M3)", "주미크론 35 8매 안경(고글)", r"\beyes?\b|고글|goggle|안경", [], ["eye", "고글", "8 element eye"]),
-    ("v2", "Summicron 35mm f/2 2nd", "주미크론 35 2세대", GEN2, [], ["2nd", "2세대"]),
-    ("v3", "Summicron 35mm f/2 3rd (7 elements)", "주미크론 35 3세대 (7매)", GEN3 + r"|7 ?el|7매", [], ["3rd", "3세대", "7 element", "7매"]),
+    ("v2", "Summicron 35mm f/2 2nd", "주미크론 35 2세대", GEN2, [r"ASPH"], ["2nd", "2세대"]),
+    ("v3", "Summicron 35mm f/2 3rd (7 elements)", "주미크론 35 3세대 (7매)", GEN3 + r"|7 ?el|7매", [r"ASPH"], ["3rd", "3세대", "7 element", "7매"]),
     ("millennium", "Summicron-M 35mm f/2 Millennium (Black Paint)", "주미크론 35 밀레니엄", r"millenn?ium|밀레니엄", [], ["millennium"]),
     ("ara-guler", "Summicron-M 35mm f/2 ASPH Ara Güler", "주미크론 35 아라 귈러", r"ara ?g[uü]ler", [], ["ara guler"]),
     ("your-mark", "Summicron-M 35mm f/2 'Your Mark'", "주미크론 35 유어마크", r"your ?mark", [], ["your mark"]),  # 확인 필요
@@ -229,8 +229,8 @@ group("leica:lens:elmarit-m:90", "Elmarit-M 90mm f/2.8", "엘마리트 90", "M",
     c("v2", "Elmarit-M 90mm f/2.8 2nd", "엘마리트 90 2세대", GEN2, [], ["2nd"]),
 ], must_not=[r"tele", r"\bR\b|-R\b", r"APO", r"macro"])
 group("leica:lens:tele-elmarit-m:90", "Tele-Elmarit 90mm f/2.8", "텔레엘마리트 90", "M", "tele-elmarit", "90", [
-    c("fat", "Tele-Elmarit 90mm f/2.8 (fat, 1964)", "텔레엘마리트 90 팻", r"\bfat\b|팻|뚱", [], ["fat"]),
-    c("thin", "Tele-Elmarit-M 90mm f/2.8 (thin, 1974)", "텔레엘마리트 90 씬", r"\bthin\b|씬|슬림", [], ["thin"]),
+    c("fat", "Tele-Elmarit 90mm f/2.8 (fat, 1964)", "텔레엘마리트 90 팻", r"\bfat\b|팻|뚱|\b(1st|ver\.? ?I|type ?I)\b", [], ["fat"]),
+    c("thin", "Tele-Elmarit-M 90mm f/2.8 (thin, 1974)", "텔레엘마리트 90 씬", r"\bthin\b|\bslim\b|씬|슬림|\b(2nd|ver\.? ?II|type ?II)\b", [], ["thin"]),
 ])
 # ───────────── M: 그 밖 (단일 모델) ─────────────
 lens("leica:lens:elmarit-m:21", "Elmarit-M 21mm f/2.8 (pre-ASPH)", "엘마리트 21", "M", "elmarit", "21", must_not=[r"ASPH"])
@@ -379,11 +379,11 @@ NX10_NOT = [r"0\.95", r"1\.2", r"1\.25", r"\b75\b", f("35")]
 SN = r"(?:sn|s/n|no|#)\.?\s?#?"
 NX10_GEN = {
     "v2-e58": ("Noctilux 50mm f/1.0 E58 (2nd gen, 1976)", "녹티룩스 50 f/1.0 2세대 (E58)",
-               rf"E58|2세대|\b(1st|v\.?1|version ?1)\b|{SN}2[,.]?\d{{3}}\b", ["e58", "2세대", "2nd gen", "v1"]),
+               rf"E58|2세대|\b(1st|v\.?1|version ?1|ver\.? ?I|type ?I)\b|{SN}2[,.]?\d{{3}}\b", ["e58", "2세대", "2nd gen", "v1", "1st"]),
     "v3-e60": ("Noctilux-M 50mm f/1.0 E60 separate hood (3rd gen, 1982)", "녹티룩스 50 f/1.0 3세대 (E60 분리 후드)",
-               r"3세대", ["3세대", "3rd gen", "e60 3세대", "e60 분리 후드"]),
+               r"3세대|\b(E60 ?(II|III)|ver\.? ?(II|III)|type ?(II|III)|v\.?[23])\b", ["3세대", "3rd gen", "e60 3세대", "e60 분리 후드"]),
     "v4-builtin-hood": ("Noctilux-M 50mm f/1.0 E60 built-in hood (4th gen, 1993–2008)", "녹티룩스 50 f/1.0 4세대 (후드 내장)",
-                        rf"4세대|6 ?[bp]it|{SN}3[,.]?[7-9]\d{{2}}\b", ["4세대", "4th gen", "6bit", "후드 내장", "built in hood", "e60 4세대", "e60 후드 내장"]),
+                        rf"4세대|6 ?[bp]it|\b(v\.?4|ver\.? ?IV|type ?IV)\b|{SN}3[,.]?[7-9]\d{{2}}\b", ["4세대", "4th gen", "6bit", "후드 내장", "built in hood", "e60 4세대", "e60 후드 내장"]),
 }
 _nx_kids = []
 for slug, (name, ko, marker, sfx) in NX10_GEN.items():

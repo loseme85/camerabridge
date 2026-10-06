@@ -67,7 +67,8 @@ model("leica:lens:apo-summicron-m:50", "APO-Summicron-M 50mm f/2 ASPH", "Lens", 
 model("leica:lens:noctilux-m:50:f0.95", "Noctilux-M 50mm f/0.95 ASPH", "Lens", "M", [r"nocti", r"0\.95"], [r"\b75\b", f("35")] + ACC_NOT)
 # Noctilux-M 50 f/1.0 은 세대 부모 → catalog/lenses.py
 model("leica:lens:noctilux:50:f1.2-original", "Noctilux 50mm f/1.2 (original, 1966)", "Lens", "M",
-      [r"nocti", r"1\.2\b"], [r"복각", r"re-?issue", r"ASPH", r"6 ?bit", r"신품", r"\b75\b", f("35")] + ACC_NOT)
+      [r"nocti", r"1\.2\b|original|오리지널|1세대|\b1st\b"],  # 국내 표기 1세대 = f/1.2 오리지널
+      [r"복각", r"re-?issue", r"ASPH", r"6 ?bit", r"신품", r"\b75\b", f("35"), r"0\.95", r"(?<![\d.])1\.0\b|/1\b(?!\.\d)|f/?1\b(?!\.\d)|E58|E60"] + ACC_NOT)
 model("leica:lens:noctilux-m:50:f1.2-asph", "Noctilux-M 50mm f/1.2 ASPH (2021 reissue)", "Lens", "M",
       [r"nocti", r"1\.2\b", r"(복각|re-?issue|ASPH|6 ?bit|신품)"], [r"오리지널|original", r"\b75\b", f("35")] + ACC_NOT)
 model("leica:lens:noctilux-m:75", "Noctilux-M 75mm f/1.25 ASPH", "Lens", "M", [r"nocti", f("75")], ACC_NOT)
@@ -102,7 +103,9 @@ ALIASES: dict[str, list[str]] = {
     "leica:lens:summicron:50:dr": ["summicron 50 dual range", "summicron 50 dr", "50 cron dr", "dual range", "주미크론 50 dr"],
     "leica:lens:apo-summicron-m:50": ["apo-summicron-m 50", "apo summicron m 50", "apo summicron 50", "apo 50 cron", "아포 주미크론 50"],
     "leica:lens:noctilux-m:50:f0.95": ["noctilux-m 50 0.95", "noctilux 0.95", "nocti 0.95", "녹티룩스 0.95", "녹티 0.95"],
-    "leica:lens:noctilux:50:f1.2-original": ["noctilux 1.2 original", "noctilux 50 1.2 original", "nocti 1.2 original", "녹티룩스 1.2 오리지널", "녹티 1.2 오리지널"],
+    "leica:lens:noctilux:50:f1.2-original": ["noctilux 1.2 original", "noctilux 50 1.2 original", "nocti 1.2 original", "녹티룩스 1.2 오리지널", "녹티 1.2 오리지널",
+                                             "noctilux original", "noctilux 1st", "nocti 1st", "noctilux 1st gen", "녹티룩스 오리지널", "녹티 오리지널",
+                                             "녹티룩스 1세대", "녹티 1세대", "녹티룩스 1st", "녹티 1st"],
     "leica:lens:noctilux-m:50:f1.2-asph": ["noctilux-m 50 1.2 asph", "noctilux 1.2 asph", "noctilux 1.2 reissue", "nocti 1.2", "녹티룩스 1.2 복각", "녹티 1.2 복각", "noctilux 1.2"],
     "leica:lens:noctilux-m:75": ["noctilux-m 75", "noctilux 75", "nocti 75", "녹티룩스 75"],
     "leica:lens:noctilux-m:35": ["noctilux-m 35", "noctilux 35", "nocti 35", "녹티룩스 35"],

@@ -17,22 +17,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from condition_grade import grade_of  # noqa: E402
-from entity_catalog import annotate_records, load_catalog  # noqa: E402
+from entity_catalog import annotate_records, krw_rates, load_catalog  # noqa: E402
 
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 HOME_FEED = ROOT / "data" / "derived" / "home_feed.json"
 HOME_FEED_SIZE = 12
-FX = ROOT / "data" / "fx_rates.json"
-
-
-def _krw_rates() -> dict[str, float]:
-    try:
-        rates = json.loads(FX.read_text(encoding="utf-8"))["rates"]
-        krw = rates["KRW"]
-        return {code: krw / value for code, value in rates.items()}
-    except Exception:
-        return {"KRW": 1, "JPY": 9, "USD": 1350, "GBP": 1780, "EUR": 1500}
 
 
 # 등급별 가격 비율 (B = 1). 데이터가 모자라면 이 기본값 (2026-10 수집분으로 계산한 등급표 초안)
@@ -107,7 +97,7 @@ def main() -> None:
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     catalog = load_catalog()
-    to_krw = _krw_rates()
+    to_krw = krw_rates()
     stats: dict[str, dict] = {eid: {"total": 0, "active": 0, "active_prices": [], "sold_prices": [], "graded": []}
                               for eid in catalog["entities"]}
     for record in records:
