@@ -74,6 +74,26 @@ def test_noctilux_f12_original_by_marker_and_price() -> None:
     assert orig in match_entities(rec("[위탁] M50/1.2 Noctilux 오리지널 1세대 (Black)", 15_000_000))
 
 
+def test_summilux_r50_generations_do_not_overlap() -> None:
+    sx = "leica:lens:summilux-r:50"
+    cases = {
+        "Leica Summilux-R 50mm/F1.4 E55 Ver.II V2 Safari 11776": "v1",  # 해외 Ver.II = 1세대 후기
+        "Leica 50mm f1.4 Summilux-R (Type I v2) (3-Cam) (11776)": "v1",
+        "Leica Summilux-R 50mm F1.4 N 3-CAM": "v1",
+        "LEICA 50mm F1.4 SUMMILUX-R sn.3290": "v1",
+        "LEICA 50mm F1.4 ROM SUMMILUX-R sn.3729": "v1",
+        "[중고] R 50/1.4 Summilux E60 ROM (Black)": "v2",
+        "LEICA 50mm F1.4 E60 ROM SUMMILUX-R sn.3798": "v2",
+        "LEICA 50mm F1.4 SUMMILUX-R sn.3775": "unspecified",
+    }
+    for title, gen in cases.items():
+        kids = [i for i in match_entities(_record(title, mount="R")) if i.startswith(sx + ":")]
+        assert kids == [f"{sx}:{gen}"], (title, kids)
+    cheap = _record("Leica R 50mm f1.4 Summilux Black", mount="R")
+    cheap["final_output"].update({"parsed_price_numeric": 1_000_000, "currency": "KRW"})
+    assert f"{sx}:v1" in match_entities(cheap)
+
+
 def test_generation_candidates_listed_under_parent_in_order() -> None:
     import json
     from pathlib import Path

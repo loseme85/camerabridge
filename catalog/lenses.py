@@ -327,9 +327,15 @@ lens("leica:lens:vario-elmar-tl:18-56", "Vario-Elmar-TL 18-56mm f/3.5-5.6 ASPH",
 lens("leica:lens:apo-vario-elmar-tl:55-135", "APO-Vario-Elmar-TL 55-135mm f/3.5-4.5", "TL 55-135", "TL", "vario-elmar", "55-135", extra_aliases=["tl 55-135"])
 # ───────────── R ─────────────
 lens("leica:lens:summilux-r:35", "Summilux-R 35mm f/1.4", "주미룩스 R 35", "R", "summilux", "35")
+# 국내 표기: 1세대 = Type I (1970–1997, E55·초기 E48, 3캠/R캠, 11875·11876·11776·11777), 2세대 = Type II (1998–2009, E60 후드 내장, R 전용, 11344).
+# 해외 딜러는 1세대 안의 전기·후기를 'Ver.I·Ver.II', 'Type I v1·v2'로 적음 → 'V2'만 보고 2세대로 보면 안 됨.
+# 시리얼: 2세대는 379만대부터(E60 sn.3798·3820·3821), 376만대 이하는 1세대. 그 사이는 세대 미표기.
+_SN = r"(?:sn|s/n|no|#)\.?\s?#?"
+SXR50_V1 = rf"E55|E48|1세대|\b1st\b|\btype ?(I|1)\b|\bver\.? ?(I|II)\b|\b[23][ -]?cam|\b3rd ?cam|1187[56]|1177[67]|{_SN}(2[,.]?\d{{3}}|3[,.]?[0-6]\d{{2}}|3[,.]?7[0-6]\d)\b"
+SXR50_V2 = rf"E60|2세대|\b2nd\b|\btype ?(II|2)\b|11344|{_SN}3[,.]?(79|[89]\d)\d\b"
 group("leica:lens:summilux-r:50", "Summilux-R 50mm f/1.4", "주미룩스 R 50", "R", "summilux", "50", [
-    c("v1", "Summilux-R 50mm f/1.4 1st (E55)", "주미룩스 R 50 1세대", GEN1 + r"|E55", [], ["1st", "e55"]),
-    c("v2", "Summilux-R 50mm f/1.4 2nd (E60)", "주미룩스 R 50 2세대", GEN2 + r"|E60", [], ["2nd", "e60"]),
+    c("v1", "Summilux-R 50mm f/1.4 1st (Type I, E55, 1970–1997)", "주미룩스 R 50 1세대 (E55)", SXR50_V1, [SXR50_V2], ["1st", "1세대", "e55", "type 1"]),
+    c("v2", "Summilux-R 50mm f/1.4 2nd (Type II, E60, 1998–2009)", "주미룩스 R 50 2세대 (E60)", SXR50_V2, [SXR50_V1], ["2nd", "2세대", "e60", "type 2"]),
 ])
 lens("leica:lens:summicron-r:35", "Summicron-R 35mm f/2", "주미크론 R 35", "R", "summicron", "35")
 lens("leica:lens:summicron-r:90", "Summicron-R 90mm f/2", "주미크론 R 90", "R", "summicron", "90", must_not=[r"APO"])
