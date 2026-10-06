@@ -4736,6 +4736,8 @@
         ? ' data-append-anchor="true"'
         : '';
       const thumb = imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : '<span>CB</span>';
+      // 모델을 고르면 이미 그 모델 매물만 남았으므로 적합도·가격 비교 꼬리표와 설명 문구는 빼고 사진·가격·등급·판매처만
+      const simpleCard = Boolean(state.entity);
       const explanation = getBetaCardExplanation(evidenceRole, priceRole, reason);
 
       return `
@@ -4754,15 +4756,15 @@
               </div>
               <div class="result-status-row">
                 <span class="micro-pill ${escapeHtml(status.tone)}">${escapeHtml(localizeStatusLabel(status.label))}</span>
-                <span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
-                <span class="micro-pill ${escapeHtml(priceBadge.tone)}">${escapeHtml(priceBadge.label)}</span>
+                ${simpleCard ? '' : `<span class="micro-pill ${escapeHtml(matchBadge.tone)}">${escapeHtml(matchBadge.label)}</span>
+                <span class="micro-pill ${escapeHtml(priceBadge.tone)}">${escapeHtml(priceBadge.label)}</span>`}
               </div>
             </div>
           </div>
-          <div class="result-facts">
+          ${simpleCard ? '' : `<div class="result-facts">
             <div class="card-note">${escapeHtml(reason || ux('public_card.reference_note', 'Check the source listing before making a decision.'))}</div>
-          </div>
-          ${explanation ? `
+          </div>`}
+          ${explanation && !simpleCard ? `
             <details class="result-details">
               <summary>${escapeHtml(ux('common.details_why', 'Why is this result shown?'))}</summary>
               <div class="result-details-body">
@@ -4805,7 +4807,7 @@
       return `
         <article class="archive-card">
           <p class="section-label">${escapeHtml(title)}</p>
-          <h3>${escapeHtml(`${title} (${formatListingCount(results.length)})`)}</h3>
+          <h3>${escapeHtml(state.entity ? title : `${title} (${formatListingCount(results.length)})`)}</h3>
           <p>${escapeHtml(subtitle)}</p>
           ${
             results.length
