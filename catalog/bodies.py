@@ -246,7 +246,7 @@ fam("leica:body:q3-monochrom", "Leica Q3 Monochrom", "라이카 Q3 모노크롬"
 fam("leica:body:q3-43", "Leica Q3 43", "라이카 Q3 43", None, [r"\bQ ?3\b", r"\b43(\s?mm)?\b"], [], ["q3 43", "q343", "큐3 43"])
 
 # ── SL · TL · CL · S ──
-fam("leica:body:sl601", "Leica SL (Typ 601)", "라이카 SL (601)", "SL", [r"\bSL\b(?! ?\d)|typ ?601"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\bSL ?[23]\b"], ["sl typ 601", "sl601", "sl 601"])
+fam("leica:body:sl601", "Leica SL (Typ 601)", "라이카 SL (601)", "SL", [r"\bSL\b(?! ?\d)|typ ?601"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\bSL ?[23]\b", r"leicaflex"], ["sl typ 601", "sl601", "sl 601"])
 fam("leica:body:sl2", "Leica SL2", "라이카 SL2", "SL", [r"\bSL ?2\b"], [r"SL2-?S"], [])
 fam("leica:body:sl2-s", "Leica SL2-S", "라이카 SL2-S", "SL", [r"\bSL ?2-?S\b"], [], ["sl2s"], [
     v("reporter", "Leica SL2-S Reporter", "SL2-S 리포터", r"reporter|리포터", ["sl2-s reporter"]),

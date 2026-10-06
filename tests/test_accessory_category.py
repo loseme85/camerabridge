@@ -204,3 +204,21 @@ if __name__ == "__main__":
     test_lens_or_body_with_included_finder_keeps_primary_category()
     test_explicit_sl_accessories_stay_accessory()
     print("test_accessory_category: ok")
+
+
+def test_foreign_currency_prices_are_not_read_as_won() -> None:
+    # 2026-10: £2,299 · €3,499 · ¥150,000 바디가 "20만 원 이하 = 액세서리" 규칙에 걸려 검색에서 빠지던 문제
+    body = classify_listing_v2({"상품명": "Leica M6 0.72x Black Body Only", "가격": "£2,299.00", "통화": "GBP"})
+    assert body["category"] == "Body"
+    body = classify_listing_v2({"상품명": "Leica M6 (0.72x) (Silver, 10414)", "가격": "€3,499", "통화": "EUR"})
+    assert body["category"] == "Body"
+    body = classify_listing_v2({"상품명": "Leica M3 Body", "가격": "¥150,000", "통화": "JPY"})
+    assert body["category"] == "Body"
+    cheap = classify_listing_v2({"상품명": "Leica M3 Body", "가격": "150,000"})
+    assert cheap["category"] == "Accessory"  # 원화 15만 원 바디는 그대로 의심
+
+
+def test_foreign_dealer_accessory_words() -> None:
+    for title in ["Leica MRMeter Black", "Leica 8倍双眼鏡 ウルトラVit 8×20BR Black", "Leica Q3 for サムレスト Black",
+                  "[중고] Leica MP Rewind crank (Silver)", "Leica ABLON Film Leader Cutter Silver"]:
+        assert classify_listing_v2({"상품명": title, "가격": "¥40,000", "통화": "JPY"})["category"] == "Accessory", title

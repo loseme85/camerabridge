@@ -21,7 +21,10 @@ Camera Bridge 분류 파이프라인 v2
 """
 
 from __future__ import annotations
+import json
 import re
+from functools import lru_cache
+from pathlib import Path
 from typing import Optional
 from model_detector import detect_model
 from accessory_classifier import classify_accessory
@@ -947,6 +950,10 @@ _ACCESSORY_KW = [
     "novoflex",
     # 코드네임 항목
     "televid",
+    # 해외 딜러 제목 (원화 가격 규칙이 걸러 주던 것): 노출계·쌍안경·익스텐더·필름 커터·썸레스트·리와인드 크랭크 등
+    "mrmeter", "mr meter", "mcmeter", "mc meter", "light meter",
+    "双眼鏡", "binocular", "エクステンダー", "extender", "ビゾフレックス",
+    "カッター", "cutter", "距離計", "helicoid", "rewind crank", "サムレスト", "thumb rest", "thumbrest", "品各種",
 ]
 
 _LENS_PROTECT_KW = [
@@ -991,6 +998,8 @@ _BODY_KW = [
     # SL/Q 바디 — "leica sl"은 렌즈에도 등장하므로 body_kw에서 제외,
     # mount=SL + category 판단은 mount 신호로만 처리
     "leica q ", "leica q2", "leica q3",
+    # 디지털·컴팩트 바디 (해외 딜러 제목)
+    "monochrom", "typ 220", "typ 112", "d-lux", "sofort", "ゾフォート", "z2x",
 ]
 
 # Barnack 바디 강제 키워드 (렌즈 protect 무시하고 Body 우선)
@@ -1001,12 +1010,44 @@ _BARNACK_BODY_KW = [
 ]
 
 
+_FX_FALLBACK_KRW = {"KRW": 1.0, "JPY": 9.0, "USD": 1350.0, "GBP": 1780.0, "EUR": 1500.0}
+_CURRENCY_SIGNS = (("£", "GBP"), ("€", "EUR"), ("US$", "USD"), ("$", "USD"), ("¥", "JPY"), ("円", "JPY"), ("원", "KRW"), ("₩", "KRW"))
+
+
+@lru_cache(maxsize=1)
+def _krw_per_unit() -> dict:
+    try:
+        path = Path(__file__).resolve().parent / "data" / "fx_rates.json"
+        rates = json.loads(path.read_text(encoding="utf-8"))["rates"]
+        return {code: rates["KRW"] / value for code, value in rates.items() if value}
+    except Exception:
+        return dict(_FX_FALLBACK_KRW)
+
+
+def _price_krw(price_str: str, currency: Optional[str] = None) -> Optional[float]:
+    """가격 문자열 → 원화. 해외 딜러(£·€·$·¥) 가격을 원화 기준 규칙에 그대로 넣지 않기 위해.
+    통화를 모르거나 환율이 없으면 None (가격으로 판단하지 않음)."""
+    nums = re.findall(r"\d[\d,]*(?:\.\d+)?", str(price_str))
+    if not nums:
+        return None
+    try:
+        value = float(nums[0].replace(",", ""))
+    except ValueError:
+        return None
+    code = (currency or "").strip().upper()
+    if not code:
+        code = next((c for sign, c in _CURRENCY_SIGNS if sign in str(price_str)), "KRW")
+    rate = _krw_per_unit().get(code) or _FX_FALLBACK_KRW.get(code)
+    return value * rate if rate else None
+
+
 def detect_category(
     normalized_name: str,
     normalized_description: Optional[str] = None,
     brand: Optional[str] = None,
     mount: Optional[str] = None,
     price_str: Optional[str] = None,
+    currency: Optional[str] = None,
 ) -> dict:
     """
     Lens / Body / Accessory / Unknown 판단.
@@ -1126,15 +1167,10 @@ def detect_category(
         and price_str
         and price_str not in ("문의요망", "")
     ):
-        try:
-            nums = re.findall(r"[\d,]+", price_str.replace("£", ""))
-            if nums:
-                price_val = float(nums[0].replace(",", ""))
-                if 0 < price_val <= 200000:
-                    reasons.append(f"price_low:{price_val}")
-                    return {"category": "Accessory", "category_confidence": 0.75, "category_reason": reasons}
-        except Exception:
-            pass
+        price_val = _price_krw(price_str, currency)
+        if price_val is not None and 0 < price_val <= 200000:
+            reasons.append(f"price_low:{price_val:.0f}")
+            return {"category": "Accessory", "category_confidence": 0.75, "category_reason": reasons}
 
     # ── 5순위: Body 키워드 ──
     for kw in _BODY_KW:
@@ -1446,7 +1482,7 @@ def classify_listing_v2(raw_item: dict) -> dict:
 
     br      = detect_brand(nn, nd)
     mt      = detect_mount(nn, nd, brand=br["brand"])
-    cat     = detect_category(nn, nd, brand=br["brand"], mount=mt["mount"], price_str=price_raw)
+    cat     = detect_category(nn, nd, brand=br["brand"], mount=mt["mount"], price_str=price_raw, currency=currency)
     lbl     = auto_label(nn, nd, brand=br["brand"], mount=mt["mount"], category=cat["category"])
     mdl     = detect_model(nn, nd, category=cat["category"], mount=mt["mount"])
     flags   = extract_flags(nn, nd)
