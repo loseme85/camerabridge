@@ -2564,6 +2564,76 @@ def crawl_mkkamera():
     return results
 
 
+def _lsg_normalize(name: str) -> str:
+    """라이카 싱가포르 제목 표기 → 모델 연결이 아는 표기"""
+    name = name.replace("–", "-").replace("—", "-")
+    name = re.sub(r"\bf/?(\d(?:\.\d+)?)/(\d{2,3})\s?mm", r"\2mm f/\1", name, flags=re.I)  # f2/35mm → 35mm f/2
+    name = re.sub(r"(?<![\w/.:])(\d(?:\.\d+)?)/(\d{2,3})\s?mm", r"\2mm f/\1", name)  # 1.4/75mm → 75mm f/1.4
+    name = re.sub(r"\bM-(\d{2,3})\s?mm", r"M \1mm", name)  # Summilux M-35mm → Summilux M 35mm
+    return name
+
+
+def crawl_leicasg():
+    """Leica Store Singapore (싱가포르) - 라이카 싱가포르 공식 몰 중고 컬렉션 (Shopify JSON, collections/pre-owned).
+    등급 표기 없음, 싱가포르 안에만 배송. 판매 중만"""
+    import requests
+    results = []
+    base = "https://leica-store.sg"
+    print(f"\n  📂 Leica Store Singapore 크롤링 시작")
+    for page_num in range(1, 20):
+        url = f"{base}/collections/pre-owned/products.json?limit=250&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=20)
+            resp.raise_for_status()
+            products = resp.json().get("products", [])
+        except Exception as e:
+            print(f"    ❌ {page_num}페이지 오류: {e}")
+            break
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            name = (p.get("title") or "").strip()
+            if not name:
+                continue
+            variant = p["variants"][0] if p.get("variants") else {}
+            available = any(v.get("available") for v in p.get("variants") or [variant])
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not available or link in globals().get('SOLD_LINKS', ()):
+                continue
+            try:
+                price = f"S${float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            name = re.sub(r"\s*\(pre-?owned\)\s*$", "", name, flags=re.I)  # 끝의 (Pre-Owned) 제거
+            name = re.sub(r"^Is\s+(?=Summi|Elma|Nocti)", "", name)  # 제목 앞 오타 'Is Summicron'
+            name = _lsg_normalize(name)
+            if not re.search(r"leica|leitz", f"{name} {p.get('vendor') or ''}", re.I):
+                continue
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Leica Store Singapore (싱가포르)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "SGD",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Leica Store Singapore 완료: {len(results)}개")
+    return results
+
+
 # 라이카 프랑스 제목의 프랑스어 → 기존 분류가 아는 영어 (부속품 이름)
 _LCF_WORDS = [(r"pare-?soleil", "hood"), (r"\bviseurs?\b", "viewfinder"), (r"[ée]tui", "case"), (r"\bloupe\b", "magnifier"),
               (r"adapt(?:at)?eur", "adapter"), (r"\bfiltre\b", "filter"), (r"correction de dioptrie", "diopter correction"),
@@ -2979,6 +3049,7 @@ def crawl_all():
         ("Kamerastore (핀란드)", lambda: ce.wrap_full_run("Kamerastore (핀란드)", crawl_kamerastore)),
         ("M & K Kamera (홍콩)", lambda: ce.wrap_full_run("M & K Kamera (홍콩)", crawl_mkkamera)),
         ("Leica Store France (프랑스)", lambda: ce.wrap_full_run("Leica Store France (프랑스)", crawl_leicafrance)),
+        ("Leica Store Singapore (싱가포르)", lambda: ce.wrap_full_run("Leica Store Singapore (싱가포르)", crawl_leicasg)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)

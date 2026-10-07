@@ -12,7 +12,7 @@ from pathlib import Path
 import requests
 
 OUT_PATH = Path(__file__).resolve().parents[1] / "data" / "fx_rates.json"
-CURRENCIES = ["USD", "KRW", "JPY", "EUR", "GBP", "CNY", "TWD", "HKD", "BRL"]
+CURRENCIES = ["USD", "KRW", "JPY", "EUR", "GBP", "CNY", "TWD", "HKD", "BRL", "SGD"]
 
 
 def _from_open_er_api() -> dict:
