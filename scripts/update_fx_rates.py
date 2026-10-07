@@ -11,6 +11,13 @@ from pathlib import Path
 
 import requests
 
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from fx_history import upsert_day  # noqa: E402
+
+KST = dt.timezone(dt.timedelta(hours=9))
+
 OUT_PATH = Path(__file__).resolve().parents[1] / "data" / "fx_rates.json"
 CURRENCIES = ["USD", "KRW", "JPY", "EUR", "GBP", "CNY", "TWD", "HKD", "BRL", "SGD"]
 
@@ -60,7 +67,8 @@ def main() -> None:
         "rates": rates,
     }
     OUT_PATH.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"✅ 환율 갱신: {len(rates)}개 통화 ({payload['provider']})")
+    upsert_day(dt.datetime.now(KST).strftime("%Y-%m-%d"), rates)  # 날짜별 기록 (판매 당시 환율 환산용)
+    print(f"✅ 환율 갱신: {len(rates)}개 통화 ({payload['provider']}) · 날짜별 기록에도 저장")
 
 
 if __name__ == "__main__":

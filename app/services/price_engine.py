@@ -1,6 +1,11 @@
 import json
 import math
+import os
+import sys
 from datetime import datetime, timezone
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from fx_history import krw_per_unit_on  # noqa: E402
 
 LAMBDA = 0.1  # 감쇠 상수 (1년 전 = 가중치 ~30%)
 MIN_SAMPLES = 3  # 최소 샘플 수
@@ -50,6 +55,26 @@ def parse_price_krw(price_str: str, currency: str = "KRW") -> float:
     except:
         return 0
 
+def _price_number(price_str: str) -> float:
+    try:
+        return float(''.join(c for c in str(price_str).replace(",", "") if c.isdigit() or c == '.') or 0)
+    except ValueError:
+        return 0
+
+
+def sold_price_krw(item: dict) -> float:
+    """판매완료가 → 원화. 팔린 순간 환율(sold_fx_krw) → 팔린 날 환율(fx_history) 순으로, 둘 다 없으면 예전 대략 환율."""
+    currency = str(item.get("currency") or "KRW").upper()
+    if currency == "KRW":
+        return parse_price_krw(item.get("price", ""), "KRW")
+    rate = item.get("sold_fx_krw") or krw_per_unit_on(currency, item.get("sold_at"))
+    if rate:
+        return _price_number(item.get("price", "")) * rate
+    if currency in ("GBP", "JPY", "USD", "EUR"):
+        return parse_price_krw(item.get("price", ""), currency)
+    return 0  # 환율을 모르는 통화는 시세에 넣지 않음 (원화로 잘못 읽지 않게)
+
+
 def compute_market_prices(sold_quality_path: str = "data/derived/sold_quality_latest.json") -> dict:
     """label별 시세 계산"""
     with open(sold_quality_path, "r", encoding="utf-8") as f:
@@ -87,7 +112,7 @@ def compute_market_prices(sold_quality_path: str = "data/derived/sold_quality_la
     for label, items in groups.items():
         prices, weights = [], []
         for item in items:
-            price = parse_price_krw(item.get("price",""), item.get("currency","KRW"))
+            price = sold_price_krw(item)
             if price <= 0:
                 continue
             w = calc_weight(item.get("sold_at",""), now)

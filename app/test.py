@@ -3198,6 +3198,10 @@ def crawl_all():
         sold_r.pop("missing_runs", None)
         sold_r.pop("crawl_time", None)
         sold_r.update({"is_sold": True, "sold_at": e["t"], "hours_to_sell": e.get("hours_to_sell"), "sold_reason": e["type"]})
+        if sold_r.get("sold_fx_krw") is None:  # 판매 순간 환율 (나중에 그날 시세를 다시 계산할 때)
+            _fx = ce.fx_krw_now(sold_r.get("통화") or e.get("currency"))
+            if _fx is not None:
+                sold_r["sold_fx_krw"] = _fx
         newly_sold.append(sold_r)
         sold_links.add(e["link"])
         print(f"  💸 판매 완료: {str(e.get('title'))[:40]} ({e.get('hours_to_sell')}시간)")
@@ -3331,6 +3335,8 @@ def crawl_all():
                 "hours_to_sell": _hrs,
                 "include_in_market": _include_in_market,
                 "sold_at": _s.get("sold_at",""),
+                "sold_fx_krw": _s.get("sold_fx_krw"),
+                "sold_at_unknown": bool(_s.get("sold_at_unknown")),
             })
         with open("data/derived/sold_quality_latest.json", "w", encoding="utf-8") as f:
             _json_sold.dump(_sold_quality, f, ensure_ascii=False, indent=2)

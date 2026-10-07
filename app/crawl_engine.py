@@ -30,6 +30,9 @@ FULL_SWEEP_HOURS = 24       # active_first 사이트의 판매완료 기록 전�
 STOP_AFTER_QUIET_PAGES = 2  # 판매 중 0개 + 전부 아는 매물인 페이지가 연속 이만큼이면 멈춤
 MISSING_GRACE_RUNS = 2      # 전체 수집에서 이만큼 연속 안 보여야 '사라짐'
 CARRY_FIELDS = ("condition_checked", "image_grade", "image_grade_note", "image_checked")  # 목록 밖에서 채운 값
+FX_PATH = "data/fx_rates.json"
+SOLD_KEEP_FIELDS = ("sold_at", "sold_fx_krw", "sold_at_unknown")  # 판매완료로 남는 동안 이어가는 값
+_FX_CACHE: dict[str, float] | None = None
 
 
 def now_kst() -> str:
@@ -86,6 +89,40 @@ def append_events(events: list[dict], now: str, history_dir: str = HISTORY_DIR) 
 
 # ── 병합 ────────────────────────────────────────────────
 
+def _fx_rates() -> dict[str, float]:
+    global _FX_CACHE
+    if _FX_CACHE is None:
+        try:
+            with open(FX_PATH, encoding="utf-8") as f:
+                _FX_CACHE = {k: float(v) for k, v in (json.load(f).get("rates") or {}).items() if v}
+        except Exception:
+            _FX_CACHE = {}
+    return _FX_CACHE
+
+
+def fx_krw_now(currency: str | None) -> float | None:
+    """지금 환율로 통화 1단위 = 몇 원 (판매 순간 환율을 기록에 남기기 위해)."""
+    code = str(currency or "KRW").strip().upper()
+    if code == "KRW":
+        return 1.0
+    rates = _fx_rates()
+    if not rates.get(code) or not rates.get("KRW"):
+        return None
+    return round(rates["KRW"] / rates[code], 6)
+
+
+def _mark_sold(row: dict, now: str, known: bool = True) -> None:
+    """판매완료 시각과 그 순간 환율을 남긴다. known=False: 처음 볼 때 이미 판매완료라 실제 판매일을 모름."""
+    row["sold_at"] = now
+    fx = fx_krw_now(row.get("통화"))
+    if fx is not None:
+        row["sold_fx_krw"] = fx
+    if known:
+        row.pop("sold_at_unknown", None)
+    else:
+        row["sold_at_unknown"] = True
+
+
 def _event(kind: str, row: dict, now: str, **extra: Any) -> dict:
     e = {"t": now, "type": kind, "site": row.get("site"), "link": row.get("링크"), "title": row.get("상품명"),
          "price": row.get("가격"), "currency": row.get("통화")}
@@ -132,8 +169,8 @@ def merge_source(prev_rows: list[dict], run: dict, now: str) -> tuple[list[dict]
         p = prev.get(link)
         if p is None:
             row["first_seen"] = now
-            if row.get("품절"):
-                row.setdefault("sold_at", now)  # 처음 볼 때 이미 판매완료 (기록 보관용, 이벤트 없음)
+            if row.get("품절") and not row.get("sold_at"):
+                _mark_sold(row, now, known=False)  # 처음 볼 때 이미 판매완료 (기록 보관용, 이벤트 없음, 실제 판매일 모름)
             else:
                 events.append(_event("new", row, now))
         else:
@@ -147,13 +184,16 @@ def merge_source(prev_rows: list[dict], run: dict, now: str) -> tuple[list[dict]
             if p.get("가격") != row.get("가격") and row.get("가격"):
                 events.append(_event("price", row, now, prev_price=p.get("가격")))
             if not p.get("품절") and row.get("품절"):
-                row["sold_at"] = now
+                _mark_sold(row, now)
                 events.append(_event("sold", row, now, first_seen=row["first_seen"], hours_to_sell=hours_between(row["first_seen"], now)))
             elif p.get("품절") and not row.get("품절"):
-                row.pop("sold_at", None)
+                for key in SOLD_KEEP_FIELDS:
+                    row.pop(key, None)
                 events.append(_event("relist", row, now))
             elif row.get("품절") and p.get("sold_at"):
-                row["sold_at"] = p["sold_at"]
+                for key in SOLD_KEEP_FIELDS:
+                    if key in p:
+                        row[key] = p[key]
         merged.append(row)
 
     carried = gone = left = 0
@@ -168,7 +208,7 @@ def merge_source(prev_rows: list[dict], run: dict, now: str) -> tuple[list[dict]
                 # 판매 중 구간을 끝까지 읽었는데 없음 → 판매완료(또는 삭제)로 넘어감
                 q = dict(p)
                 q["품절"] = True
-                q["sold_at"] = now
+                _mark_sold(q, now)
                 merged.append(q)
                 events.append(_event("sold", q, now, first_seen=q.get("first_seen"), hours_to_sell=hours_between(q.get("first_seen"), now)))
                 left += 1
