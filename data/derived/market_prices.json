@@ -64,10 +64,10 @@
   },
   "35mm Summilux ASPH FLE": {
     "weighted_median": 4580000,
-    "sample_count": 66,
+    "sample_count": 67,
     "min": 3600000,
     "max": 5280000,
-    "avg": 4492598
+    "avg": 4492708
   },
   "Leica M3": {
     "weighted_median": 2780000,
@@ -267,10 +267,10 @@
   },
   "50mm Summilux Black Paint": {
     "weighted_median": 13800000,
-    "sample_count": 3,
-    "min": 13800000,
+    "sample_count": 4,
+    "min": 7500000,
     "max": 47025000,
-    "avg": 24875000
+    "avg": 20531250
   },
   "35mm Summicron": {
     "weighted_median": 3400000,
@@ -489,6 +489,20 @@
     "max": 4988250,
     "avg": 3134250
   },
+  "Leica SL2": {
+    "weighted_median": 4380000,
+    "sample_count": 38,
+    "min": 2500000,
+    "max": 6600000,
+    "avg": 4416842
+  },
+  "Leica D-LUX": {
+    "weighted_median": 1280000,
+    "sample_count": 26,
+    "min": 14630,
+    "max": 2850000,
+    "avg": 1577870
+  },
   "35mm Summilux Steel Rim": {
     "weighted_median": 880000,
     "sample_count": 6,
@@ -510,13 +524,6 @@
     "max": 7480000,
     "avg": 6398181
   },
-  "Leica D-LUX": {
-    "weighted_median": 1280000,
-    "sample_count": 25,
-    "min": 680000,
-    "max": 2850000,
-    "avg": 1640400
-  },
   "35mm Summarit": {
     "weighted_median": 1330000,
     "sample_count": 7,
@@ -537,13 +544,6 @@
     "min": 1800000,
     "max": 2980000,
     "avg": 2390000
-  },
-  "Leica SL2": {
-    "weighted_median": 4380000,
-    "sample_count": 37,
-    "min": 2500000,
-    "max": 6600000,
-    "avg": 4436216
   },
   "Leica V-LUX": {
     "weighted_median": 1200000,
@@ -581,11 +581,11 @@
     "avg": 4705000
   },
   "Summicron": {
-    "weighted_median": 2085000,
-    "sample_count": 8,
+    "weighted_median": 2480000,
+    "sample_count": 7,
     "min": 1185000,
     "max": 3885000,
-    "avg": 2277500
+    "avg": 2305000
   },
   "50mm Summicron 6bit": {
     "weighted_median": 2580000,

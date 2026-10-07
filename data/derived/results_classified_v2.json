@@ -1,6 +1,109 @@
 [
   {
     "source": "사진집",
+    "source_url": "https://www.sazinzibb.com/product/voigtlander-range-finder-silver/17090/category/27/display/1/",
+    "title_raw": "Voigtlander Range Finder Silver",
+    "price_raw": "150,000원",
+    "currency": "KRW",
+    "image_url": "https://www.sazinzibb.com/web/product/medium/202610/2ead66d622f01dbc5f2bc018fef6d952.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "voigtlander range finder silver",
+    "normalized_description": "",
+    "brand": "3rd Party",
+    "brand_confidence": 0.93,
+    "brand_reason": [
+      "3rd_party_first_token:voigtlander"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:finder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "TL",
+    "model_canonical": "TL",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": "finder",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "사진집",
+    "source_url": "https://www.sazinzibb.com/product/leica-m11-protector-cognac/17089/category/27/display/1/",
+    "title_raw": "Leica M11 Protector Cognac",
+    "price_raw": "200,000원",
+    "currency": "KRW",
+    "image_url": "https://www.sazinzibb.com/web/product/medium/202610/9204a39f6b40f187b66f8e08b0420ada.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "leica m11 protector cognac",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:protector"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M11",
+    "model_canonical": "M11",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "protector",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M11",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "사진집",
     "source_url": "https://www.sazinzibb.com/product/barton1972-leather-neck-strap-whip-black-red/17081/category/27/display/1/",
     "title_raw": "Barton1972 Leather Neck Strap Whip Black Red",
     "price_raw": "100,000원",
@@ -297,10 +400,10 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-05 14:52:11"
@@ -1907,10 +2010,10 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-03 16:35:10"
@@ -11791,10 +11894,10 @@
       "cla"
     ],
     "flag_confidence": 0.9,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-07-23 14:51:59"
@@ -377440,6 +377543,107 @@
   },
   {
     "source": "Ffordes (영국)",
+    "source_url": "https://www.ffordes.com/p/SOR-24-092815/leica-m/50mm-f2-apo-lanthar-vm-asph-leica-m",
+    "title_raw": "Voigtlander 50mm F2 Apo Lanthar VM Asph - Leica M",
+    "price_raw": "£559.00",
+    "currency": "GBP",
+    "image_url": "https://d1ea30dbll17d8.cloudfront.net/12/1/images/catalog/i/l_333524-P9220217.JPG.Ffordesphoto.jpg",
+    "condition_raw": "E++",
+    "normalized_name": "voigtlander 50mm f2 apo lanthar vm asph - leica m",
+    "normalized_description": "",
+    "brand": "3rd Party",
+    "brand_confidence": 0.93,
+    "brand_reason": [
+      "3rd_party_first_token:voigtlander"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "M_leica_m_prefix:LEICA M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "3rd Party M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "3rd_party+M+Lens"
+    ],
+    "model_raw": "Lanthar",
+    "model_canonical": "Lanthar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Ffordes (영국)",
+    "source_url": "https://www.ffordes.com/p/SOR-24-090900/leica-m/m6-072x-black-body-only",
+    "title_raw": "Leica M6 0.72x Black Body Only",
+    "price_raw": "£2,499.00",
+    "currency": "GBP",
+    "image_url": "https://d1ea30dbll17d8.cloudfront.net/12/1/images/catalog/i/l_328290-P7070077.JPG.ffordesphoto.jpg",
+    "condition_raw": "E++",
+    "normalized_name": "leica m6 0.72x black body only",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:body"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M6",
+    "model_canonical": "M6",
+    "variant": [
+      "Black",
+      "0.72"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Ffordes (영국)",
     "source_url": "https://www.ffordes.com/p/SOR-24-091415/leica-m/28mm-f2-asph-m-black-11672",
     "title_raw": "Leica 28mm F2 Asph M Black (11672)",
     "price_raw": "£2,449.00",
@@ -379529,7 +379733,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:86976"
+      "price_low:87014"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -383433,54 +383637,6 @@
   },
   {
     "source": "Ffordes (영국)",
-    "source_url": "https://www.ffordes.com/p/SOR-24-088904/l-mount/50mm-f2-dg-dn-contemporary-l-mount",
-    "title_raw": "Sigma 50mm F2 DG DN Contemporary - L Mount",
-    "price_raw": "£449.00",
-    "currency": "GBP",
-    "image_url": "https://d1ea30dbll17d8.cloudfront.net/12/1/images/catalog/i/l_322746-P4140072.JPG.Ffordesphoto.jpg",
-    "condition_raw": "E++",
-    "normalized_name": "sigma 50mm f2 dg dn contemporary - l mount",
-    "normalized_description": "",
-    "brand": "3rd Party",
-    "brand_confidence": 0.93,
-    "brand_reason": [
-      "3rd_party_first_token:sigma"
-    ],
-    "mount": "SL",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "SL_explicit:L MOUNT"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "SL Lens",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "SL+Lens"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-03 23:21:41"
-  },
-  {
-    "source": "Ffordes (영국)",
     "source_url": "https://www.ffordes.com/p/SH-28-085903/l-mount/56mm-f14-dc-dn-contemporary-l-mount",
     "title_raw": "Sigma 56mm F1.4 DC DN Contemporary - L Mount",
     "price_raw": "£259.00",
@@ -383677,6 +383833,1353 @@
   },
   {
     "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-q-typ-116-black-recent-leica-cla-7",
+    "title_raw": "Used Leica Q (Typ 116), black - Recent Leica CLA",
+    "price_raw": "$2,695",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/v1Photos_DescriptionComingSoon_3fbf2c04-f64e-43e6-b53c-db2e0f826fa3.png?v=1791301848",
+    "condition_raw": "정보없음",
+    "normalized_name": "used leica q (typ 116), black - recent leica cla",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q",
+    "model_canonical": "Q",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [
+      "cla"
+    ],
+    "flag_confidence": 0.9,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-q2-reporter-with-extra-battery-recent-leica-cla",
+    "title_raw": "Used Leica Q2 Reporter with Extra Battery - Recent Leica CLA",
+    "price_raw": "$4,395",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_f4c76132-5c21-481f-80f2-54d6ade4c532.jpg?v=1791302333",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica q2 reporter with extra battery - recent leica cla",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.92,
+    "category_reason": [
+      "acc_kw:battery"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q2",
+    "model_canonical": "Q2",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q",
+      "Q2"
+    ],
+    "risk_flags": [],
+    "positive_flags": [
+      "cla"
+    ],
+    "flag_confidence": 0.9,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-21mm-viewfinder-black-with-lock-12009",
+    "title_raw": "Used Leica 21mm Viewfinder, black, with Lock (12008)",
+    "price_raw": "$395",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_457b04aa-c779-4b91-bafc-e45158592716.jpg?v=1791322067",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica 21mm viewfinder, black, with lock (12008)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:finder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "finder",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-cf-22-flash-3",
+    "title_raw": "Used Leica CF 22 Flash",
+    "price_raw": "$195",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_3452bf4e-a7f1-46a2-b581-caffb5607df8.jpg?v=1791321680",
+    "condition_raw": "Kamerastore: some",
+    "normalized_name": "used leica cf 22 flash",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:flash"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "flash",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-d-lux-6-with-evf-3-and-hand-grip",
+    "title_raw": "Used Leica D-Lux 6 with EVF 3 and Hand Grip",
+    "price_raw": "$795",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_b1189e68-3cf7-4a07-8b0d-d6d94ecedb5c.jpg?v=1791319181",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica d-lux 6 with evf 3 and hand grip",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:hand grip"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "D-LUX 6",
+    "model_canonical": "D-LUX 6",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "grip",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Compact",
+      "D-LUX"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-e39-uva-filter-black-2",
+    "title_raw": "Used Leica E39 UVa Filter - Black",
+    "price_raw": "$95",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_203a443b-63d4-46fe-87ea-9c95378b8f12.jpg?v=1791324187",
+    "condition_raw": "Kamerastore: some",
+    "normalized_name": "used leica e39 uva filter - black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:filter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "filter",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-fikus-lens-hood-for-35mm-50mm-90mm-135mm-ltm-lenses",
+    "title_raw": "Used Leica FIKUS Lens Hood for 35mm, 50mm, 90mm, 135mm LTM Lenses",
+    "price_raw": "$95",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_3b906acc-6170-4885-9cd5-a4105df1e4d2.jpg?v=1791326441",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica fikus lens hood for 35mm, 50mm, 90mm, 135mm ltm lenses",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "L_ltm_l39:LTM/L39/M39"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.98,
+    "category_reason": [
+      "primary_acc_rx:lens_hood_primary"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "hood",
+    "compatible_mounts": [
+      "L"
+    ],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-ever-ready-case-black-for-m6",
+    "title_raw": "Used Leica Ever Ready Case, black for M6",
+    "price_raw": "$95",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_b83f2458-f75e-48b3-b590-e5f53dff3e2d.jpg?v=1791324624",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica ever ready case, black for m6",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.86,
+    "mount_reason": [
+      "M_for_m_body:for M body"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M6",
+    "model_canonical": "M6",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M6",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-handgrip-m-black-chrome-for-m-monochrom-3",
+    "title_raw": "Used Leica Handgrip M, black chrome for M Monochrom",
+    "price_raw": "$75",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/v1Photos_DescriptionComingSoon_e1a45efd-8236-44dd-b991-19bb2711140e.png?v=1791321110",
+    "condition_raw": "정보없음",
+    "normalized_name": "used leica handgrip m, black chrome for m monochrom",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.88,
+    "mount_reason": [
+      "M_for_m:for M"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:handgrip"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M Monochrom",
+    "model_canonical": "M",
+    "variant": [
+      "Monochrom",
+      "Black Chrome",
+      "Chrome",
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "grip",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-handgrip-m-black-chrome-for-m8-m9",
+    "title_raw": "Used Leica Handgrip M, black chrome for M8, M9",
+    "price_raw": "$75",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/v1Photos_DescriptionComingSoon_925a95fb-6643-4c60-b0fa-aa94a3c4feab.png?v=1791321125",
+    "condition_raw": "정보없음",
+    "normalized_name": "used leica handgrip m, black chrome for m8, m9",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.86,
+    "mount_reason": [
+      "M_for_m_body:for M body"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:handgrip"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M9",
+    "model_canonical": "M9",
+    "variant": [
+      "Black Chrome",
+      "Chrome",
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "grip",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M9",
+      "M",
+      "M8"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-leitz-lens-cap-e55",
+    "title_raw": "Used Leica 'Leitz' Lens Cap E55",
+    "price_raw": "$30",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_44595f9b-8552-4998-838e-d16323784c37.jpg?v=1791323612",
+    "condition_raw": "정보없음",
+    "normalized_name": "used leica 'leitz' lens cap e55",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.92,
+    "category_reason": [
+      "acc_kw:lens cap"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "cap",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-leitz-e48-uva-filter-silver",
+    "title_raw": "Used Leica 'Leitz' E48 UVa Filter, silver",
+    "price_raw": "$95",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_604d2581-6c61-42a5-a19b-5a8d255de61c.jpg?v=1791324077",
+    "condition_raw": "Kamerastore: some",
+    "normalized_name": "used leica 'leitz' e48 uva filter, silver",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:filter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": "filter",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-m-handgrip-black-for-m4-m6-m7-mp-m-a",
+    "title_raw": "Used Leica M Handgrip, black for M4, M6, M7, MP, M-A",
+    "price_raw": "$95",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_4472b839-7ad2-4d72-a63c-82803bb73d50.jpg?v=1791325325",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica m handgrip, black for m4, m6, m7, mp, m-a",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.86,
+    "mount_reason": [
+      "M_for_m_body:for M body"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:handgrip"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M-A",
+    "model_canonical": "M-A",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "grip",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M6",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-m-handgrip-black-for-m4-m6-m7-mp-m-a-1",
+    "title_raw": "Used Leica M Handgrip, black for M4, M6, M7, MP, M-A",
+    "price_raw": "$75",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_8edee24a-c735-421d-98bd-3f296fc21815.jpg?v=1791325268",
+    "condition_raw": "정보없음",
+    "normalized_name": "used leica m handgrip, black for m4, m6, m7, mp, m-a",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.86,
+    "mount_reason": [
+      "M_for_m_body:for M body"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:handgrip"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M-A",
+    "model_canonical": "M-A",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "grip",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M6",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-minilux-with-case-1",
+    "title_raw": "Used Leica Minilux with Case",
+    "price_raw": "$1,495",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_f9d43d30-49ee-4b28-854a-2dcc84cd442f.jpg?v=1791317956",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica minilux with case",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "PNS",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "PNS_kw:MINILUX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Minilux",
+    "model_canonical": "Minilux",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "PNS"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-motor-m-14408-for-m6-m7-m-a-m4-2-m4-p-5",
+    "title_raw": "Used Leica Motor M 14408 for M6, M7, M-A, M4-2, M4-P",
+    "price_raw": "$395",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_53acadab-dc95-477f-981e-e78b361e58d6.jpg?v=1791322787",
+    "condition_raw": "Kamerastore: some",
+    "normalized_name": "used leica motor m 14408 for m6, m7, m-a, m4-2, m4-p",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.86,
+    "mount_reason": [
+      "M_for_m_body:for M body"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:motor_winder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M-A",
+    "model_canonical": "M-A",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M6",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-motor-m-14408-for-m6-m7-m-a-m4-2-m4-p-6",
+    "title_raw": "Used Leica Motor M 14408 for M6, M7, M-A, M4-2, M4-P",
+    "price_raw": "$395",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_724b4be8-64c3-4a70-87db-b34365ebd006.jpg?v=1791323269",
+    "condition_raw": "Kamerastore: some",
+    "normalized_name": "used leica motor m 14408 for m6, m7, m-a, m4-2, m4-p",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.86,
+    "mount_reason": [
+      "M_for_m_body:for M body"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:motor_winder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M-A",
+    "model_canonical": "M-A",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M6",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-mp-rapid-rewind-crank-silver-chrome",
+    "title_raw": "Used Leica MP Rapid Rewind Crank, silver chrome",
+    "price_raw": "$395",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_a628cb72-e70c-4642-8cdf-a17b5cda3bcd.jpg?v=1791320325",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica mp rapid rewind crank, silver chrome",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.92,
+    "category_reason": [
+      "acc_kw:rewind crank"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "MP",
+    "model_canonical": "MP",
+    "variant": [
+      "Chrome",
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-neoprene-carrying-strap-with-d-rings",
+    "title_raw": "Used Leica Neoprene Carrying Strap (with D-Rings)",
+    "price_raw": "$50",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_b1b501d2-7e2b-45b6-89f5-a95cb8111414.jpg?v=1791324430",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica neoprene carrying strap (with d-rings)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:strap"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "strap",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-pradovit-p150-projector-with-hektor-p2-85mm-f-2-8",
+    "title_raw": "Used Leica Pradovit P150 Projector with Hektor-P2 85mm f/2.8",
+    "price_raw": "$195",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_7d443d20-8d4f-45d7-847d-bcfb535c0ad4.jpg?v=1791326717",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica pradovit p150 projector with hektor-p2 85mm f/2.8",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Hektor",
+    "model_canonical": "Hektor",
+    "variant": [],
+    "focal_length": "85",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-rubber-lens-hood-with-cap-for-summicron-c-40mm",
+    "title_raw": "Used Leica Rubber Lens Hood with Cap for Summicron-C 40mm",
+    "price_raw": "$95",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_69c8c642-5641-4d00-bcc1-7b68624e113a.jpg?v=1791323858",
+    "condition_raw": "정보없음",
+    "normalized_name": "used leica rubber lens hood with cap for summicron-c 40mm",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "L_explicit:SUMMICRON-C"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.98,
+    "category_reason": [
+      "primary_acc_rx:lens_hood_primary"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Summicron-C",
+    "model_canonical": "Summicron-C",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "hood",
+    "compatible_mounts": [
+      "L"
+    ],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-winder-m-14403-for-m6-m4-p-m4-2-md-2",
+    "title_raw": "Used Leica Winder M 14403 for M6, M4-P, M4-2, MD-2",
+    "price_raw": "$150",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_7a3e9e77-a259-49de-bb8a-c6167454c586.jpg?v=1791324902",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica winder m 14403 for m6, m4-p, m4-2, md-2",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.86,
+    "mount_reason": [
+      "M_for_m_body:for M body"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:winder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M6",
+    "model_canonical": "M6",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M6",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-viooh-universal-viewfinder",
+    "title_raw": "Used Leica VIOOH Universal Viewfinder",
+    "price_raw": "$95",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_36290ab9-b8ff-4e97-854e-2d7d0182a2ce.jpg?v=1791325735",
+    "condition_raw": "정보없음",
+    "normalized_name": "used leica viooh universal viewfinder",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.99,
+    "category_reason": [
+      "acc_code:viooh"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "finder",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-universal-polarizing-filter-m-e39-e46-adapters-9",
+    "title_raw": "Used Leica Universal Polarizing Filter M - E39 & E46 Adapters",
+    "price_raw": "$195",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_f28ef725-a989-45a1-bdea-5da821948aec.jpg?v=1791324270",
+    "condition_raw": "Kamerastore: some",
+    "normalized_name": "used leica universal polarizing filter m - e39 & e46 adapters",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:POLAR"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:adapter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "adapter",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leicavit-m-black-chrome",
+    "title_raw": "Used Leicavit-M, black chrome",
+    "price_raw": "$895",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_bf3f9373-c8f9-404e-94c1-cfd66f1cc7e6.jpg?v=1791320917",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leicavit-m, black chrome",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:LEICAVIT"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:leicavit"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black Chrome",
+      "Chrome",
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "winder",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
+    "source_url": "https://leicastoremiami.com/products/used-leica-v-lux-1-uv-filter-bag",
+    "title_raw": "Used Leica V-Lux 1 - UV Filter & Bag",
+    "price_raw": "$395",
+    "currency": "USD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_cd890025-9de9-471d-be81-6dc8b9a4b915.jpg?v=1791319890",
+    "condition_raw": "Kamerastore: great",
+    "normalized_name": "used leica v-lux 1 - uv filter & bag",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:V-LUX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:bag"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "V-LUX",
+    "model_canonical": "V-LUX",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "filter",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Compact",
+      "V-LUX"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Miami",
     "source_url": "https://leicastoremiami.com/products/arte-di-mano-leica-q3-half-case-type-2-tr-snap-secured-tripod-mount-with-classic-full-lining-stitch-neck-strap-95cm-caviar-classic-black-with-white-stitching-open-box",
     "title_raw": "Arte di Mano Leica Q3 Half Case (Type 2-TR, Snap Secured, Tripod Mount) with Classic Full-Lining Stitch Neck Strap (95cm) - Caviar Classic Black with White Stitching 'Open Box'",
     "price_raw": "$795",
@@ -383737,7 +385240,7 @@
     "title_raw": "Used Leica M10 Monochrom - 2 Extra Batteries & Thumbs Up",
     "price_raw": "$7,195",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_5d7cc196-72d6-47e0-a2cd-d2f78f422f77.jpg?v=1791223601",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000570.jpg?v=1791318255",
     "condition_raw": "Kamerastore: some",
     "normalized_name": "used leica m10 monochrom - 2 extra batteries & thumbs up",
     "normalized_description": "",
@@ -384001,7 +385504,7 @@
     "title_raw": "Used Leica Summarit-M 75mm f/2.5",
     "price_raw": "$1,395",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_582f3f7d-95f8-4a95-bb99-b7410854cb31.jpg?v=1791062410",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000587.jpg?v=1791318305",
     "condition_raw": "Kamerastore: some",
     "normalized_name": "used leica summarit-m 75mm f/2.5",
     "normalized_description": "",
@@ -384049,7 +385552,7 @@
     "title_raw": "Used Leica Summilux-R 80mm f/1.4 ROM (1998) - UV Filter - Recent DAG CLA",
     "price_raw": "$3,395",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_c0cbd293-671d-4f42-8eb5-e6f5358deaba.jpg?v=1791054881",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000617.jpg?v=1791318473",
     "condition_raw": "Kamerastore: issue",
     "normalized_name": "used leica summilux-r 80mm f/1.4 rom (1998) - uv filter - recent dag cla",
     "normalized_description": "",
@@ -384099,7 +385602,7 @@
     "title_raw": "Used Leica Summilux-M 50mm f/1.4 ASPH, black chrome - Recent Leica CLA",
     "price_raw": "$3,995",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_32fec495-0e65-4128-af2b-58ecea9a862e.jpg?v=1791055957",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000600.jpg?v=1791318364",
     "condition_raw": "Kamerastore: great",
     "normalized_name": "used leica summilux-m 50mm f/1.4 asph, black chrome - recent leica cla",
     "normalized_description": "",
@@ -384154,7 +385657,7 @@
     "title_raw": "Used Leica Summilux-M 50mm f/1.4 ASPH, black chrome - Recent Leica CLA",
     "price_raw": "$3,995",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_8b4c7e61-7289-46b3-93bc-d07d3c31301b.jpg?v=1791056473",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000594.jpg?v=1791318328",
     "condition_raw": "Kamerastore: great",
     "normalized_name": "used leica summilux-m 50mm f/1.4 asph, black chrome - recent leica cla",
     "normalized_description": "",
@@ -384209,7 +385712,7 @@
     "title_raw": "Used Leica M Monochrom (Typ 246), black chrome - Extra Battery - Recent Leica CLA",
     "price_raw": "$4,295",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_8dc64910-0043-4dc1-9cc7-217296b1a966.jpg?v=1791061732",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000564.jpg?v=1791318219",
     "condition_raw": "Kamerastore: some",
     "normalized_name": "used leica m monochrom (typ 246), black chrome - extra battery - recent leica cla",
     "normalized_description": "",
@@ -384269,7 +385772,7 @@
     "title_raw": "Used Leica D-Lux 7 'A BATHING APE x STASH' Special Edition, Black - Recent Leica CLA",
     "price_raw": "$1,995",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_eb3065b3-e0ec-49e0-8bb3-9a4d77cf5843.jpg?v=1791061916",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000578.jpg?v=1791318278",
     "condition_raw": "Kamerastore: some",
     "normalized_name": "used leica d-lux 7 'a bathing ape x stash' special edition, black - recent leica cla",
     "normalized_description": "",
@@ -384321,7 +385824,7 @@
     "title_raw": "Used Leica SL2-S - Extra Battery",
     "price_raw": "$2,295",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_97b6622a-a8dd-4a69-9938-f50cc2982f75.jpg?v=1791062823",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000558.jpg?v=1791318185",
     "condition_raw": "Kamerastore: some",
     "normalized_name": "used leica sl2-s - extra battery",
     "normalized_description": "",
@@ -384375,7 +385878,7 @@
     "title_raw": "Used Arte di Mano Leica Q2 Half Case with Battery & SD Card Door - Black with Black Stitching",
     "price_raw": "$175",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/v1Photos_DescriptionComingSoon_614be40f-cb87-4fb2-9568-dd14ad0beab8.png?v=1790712310",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000622.jpg?v=1791318510",
     "condition_raw": "정보없음",
     "normalized_name": "used arte di mano leica q2 half case with battery & sd card door - black with black stitching",
     "normalized_description": "",
@@ -384480,7 +385983,7 @@
     "title_raw": "Used Leica Elmar-M 135mm f/4 (1960)",
     "price_raw": "$350",
     "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_eb3bfbc3-9277-45a7-9970-7f3c89cfc077.jpg?v=1790696704",
+    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000606.jpg?v=1791318386",
     "condition_raw": "Kamerastore: great",
     "normalized_name": "used leica elmar-m 135mm f/4 (1960)",
     "normalized_description": "",
@@ -387402,7 +388905,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -388831,7 +390334,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -393315,7 +394818,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:188146"
+      "price_low:188318"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -396466,7 +397969,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37629"
+      "price_low:37664"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -399290,7 +400793,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28598"
+      "price_low:28624"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -399345,7 +400848,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28598"
+      "price_low:28624"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -399400,7 +400903,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28598"
+      "price_low:28624"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -402185,7 +403688,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:25588"
+      "price_low:25611"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -402969,7 +404472,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:112887"
+      "price_low:112991"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -403017,7 +404520,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:112887"
+      "price_low:112991"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -403065,7 +404568,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:88805"
+      "price_low:88886"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -403113,7 +404616,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37629"
+      "price_low:37664"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -403509,7 +405012,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:82784"
+      "price_low:82860"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -405622,7 +407125,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37629"
+      "price_low:37664"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -406024,7 +407527,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:48165"
+      "price_low:48209"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -411055,7 +412558,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:106867"
+      "price_low:106964"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -412826,7 +414329,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:13546"
+      "price_low:13559"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -413221,7 +414724,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:15052"
+      "price_low:15065"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -413271,7 +414774,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:34619"
+      "price_low:34650"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -413419,7 +414922,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37629"
+      "price_low:37664"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -414544,7 +416047,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:82784"
+      "price_low:82860"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -414642,7 +416145,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37629"
+      "price_low:37664"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -414695,7 +416198,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:58701"
+      "price_low:58755"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -414843,7 +416346,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:115898"
+      "price_low:116004"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -414939,7 +416442,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37629"
+      "price_low:37664"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -415035,7 +416538,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:58701"
+      "price_low:58755"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -416654,7 +418157,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:52681"
+      "price_low:52729"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -416752,7 +418255,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73753"
+      "price_low:73820"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -416996,7 +418499,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:82784"
+      "price_low:82860"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418185,7 +419688,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:70743"
+      "price_low:70807"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418233,7 +419736,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:15052"
+      "price_low:15065"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418283,7 +419786,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:60207"
+      "price_low:60262"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418331,7 +419834,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:60207"
+      "price_low:60262"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418571,7 +420074,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:15052"
+      "price_low:15065"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418619,7 +420122,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:18062"
+      "price_low:18078"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418667,7 +420170,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:52681"
+      "price_low:52729"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418763,7 +420266,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418813,7 +420316,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:15052"
+      "price_low:15065"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419015,7 +420518,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:7526"
+      "price_low:7533"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419117,7 +420620,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419167,7 +420670,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419215,7 +420718,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419365,7 +420868,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:52681"
+      "price_low:52729"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419415,7 +420918,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419465,7 +420968,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:45155"
+      "price_low:45196"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419565,7 +421068,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:82784"
+      "price_low:82860"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419617,7 +421120,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419667,7 +421170,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419717,7 +421220,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:52681"
+      "price_low:52729"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419767,7 +421270,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28598"
+      "price_low:28624"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419819,7 +421322,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:18062"
+      "price_low:18078"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -419874,7 +421377,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:43650"
+      "price_low:43690"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -420020,7 +421523,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22577"
+      "price_low:22598"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -420122,7 +421625,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73753"
+      "price_low:73820"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -420218,7 +421721,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:7526"
+      "price_low:7533"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -420314,7 +421817,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:15052"
+      "price_low:15065"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -420866,7 +422369,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:15052"
+      "price_low:15065"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -420916,7 +422419,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73753"
+      "price_low:73820"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -420969,7 +422472,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67732"
+      "price_low:67794"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -421067,7 +422570,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:70743"
+      "price_low:70807"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -421173,7 +422676,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -421317,7 +422820,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -421515,7 +423018,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:117294"
+      "price_low:116837"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -424447,7 +425950,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -424987,7 +426490,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -425229,7 +426732,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -425277,7 +426780,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -427155,7 +428658,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -427203,7 +428706,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -427251,7 +428754,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -427299,7 +428802,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -427347,7 +428850,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -435083,7 +436586,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73096"
+      "price_low:72811"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -435914,7 +437417,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:53547"
+      "price_low:53338"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437589,7 +439092,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:84145"
+      "price_low:83817"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437637,7 +439140,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:186990"
+      "price_low:186261"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437685,7 +439188,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:121543"
+      "price_low:121070"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -448643,7 +450146,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:77346"
+      "price_low:77044"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -448693,7 +450196,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:77346"
+      "price_low:77044"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453169,7 +454672,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147892"
+      "price_low:147316"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453268,7 +454771,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:102844"
+      "price_low:102444"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454161,7 +455664,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:117294"
+      "price_low:116837"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454608,7 +456111,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:61197"
+      "price_low:60958"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -457260,7 +458763,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67996"
+      "price_low:67731"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -457308,7 +458811,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67996"
+      "price_low:67731"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -459878,7 +461381,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:41648"
+      "price_low:41485"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -467996,54 +469499,6 @@
   },
   {
     "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/brand-new-leica-d-lux-8-metal-gray-digital-camera-19213-19213",
-    "title_raw": "Brand New Leica D-Lux 8 Metal Gray Digital Camera 19213",
-    "price_raw": "HK$14,630",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/8dce612e01365b00cabe91ff66506258.jpg?v=1786342342",
-    "condition_raw": "M&K: brand new",
-    "normalized_name": "brand new leica d-lux 8 metal gray digital camera 19213",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Compact",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Compact_kw:D-LUX"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Compact"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Compact+Body"
-    ],
-    "model_raw": "D-LUX 8",
-    "model_canonical": "D-LUX 8",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 17:25:18"
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
     "source_url": "https://mkkcamera.com/products/leica-sf24d-flash-black-14444-for-m9-m11-m10-m7-m6-ttl-88754",
     "title_raw": "Leica SF24D Flash Black 14444 for M9, M11 M10 M7, M6 TTL",
     "price_raw": "HK$3,680",
@@ -472351,7 +473806,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:167695"
+      "price_low:167195"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -472963,7 +474418,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:184807"
+      "price_low:184255"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -473721,7 +475176,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:68447"
+      "price_low:68243"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -478840,7 +480295,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:99248"
+      "price_low:98952"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -482371,7 +483826,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:150583"
+      "price_low:150134"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -491719,7 +493174,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:167695"
+      "price_low:167195"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -493012,7 +494467,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:150583"
+      "price_low:150134"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -497196,6 +498651,1487 @@
   },
   {
     "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-m-p-typ-240",
+    "title_raw": "LEICA M-P (Typ 240)",
+    "price_raw": "€2,890",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-10/L1033689_0.JPG?itok=Sk6oIHY1",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "leica m-p (typ 240)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "M_leica_m_prefix:LEICA M"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:typ 240"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M-P",
+    "model_canonical": "M-P",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-q3-0",
+    "title_raw": "LEICA Q3",
+    "price_raw": "€5,290",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-10/L1033676.JPG?itok=dmu3dwsw",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica q3",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/d-lux-7-edition-speciale-007",
+    "title_raw": "D-LUX 7 EDITION SPECIALE \"007\"",
+    "price_raw": "€2,190",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1019974.jpg?itok=wuV0WsAf",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "d-lux 7 edition speciale \"007\"",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Body",
+    "label_confidence": 0.8,
+    "label_reason": [
+      "Compact+Body_no_mount_label"
+    ],
+    "model_raw": "D-LUX 7",
+    "model_canonical": "D-LUX 7",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-m-35-mm-f14-asph-2",
+    "title_raw": "SUMMILUX-M 35 mm f/1.4 ASPH.",
+    "price_raw": "€3,690",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1043055_0.jpg?itok=Ht-Yj3yL",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "summilux-m 35 mm f/1.4 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summilux"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux-M",
+    "model_canonical": "Summilux-M",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/adaptateur-secteur-multifonction-poignee-m240",
+    "title_raw": "adapter secteur multifonction grip M240",
+    "price_raw": "€30",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1033471.JPG?itok=R1s9jPe0",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "adapter secteur multifonction grip m240",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:adapter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M240",
+    "model_canonical": "M240",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "adapter",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/kit-microphonepour-mtyp240",
+    "title_raw": "Kit microphone pour Leica M(TYP240)",
+    "price_raw": "€85",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1033431.JPG?itok=qf54MOBP",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "kit microphone pour leica m(typ240)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "M_leica_m_prefix:LEICA M"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.75,
+    "category_reason": [
+      "price_low:128056"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-m10-p-0",
+    "title_raw": "LEICA M10-P",
+    "price_raw": "€4,300",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-08/L1002433.jpg?itok=beGf3dUj",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "leica m10-p",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica m10"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M10-P",
+    "model_canonical": "M10-P",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/demi-etui-cuir-rose-pour-leica-q-ou-leica-q2",
+    "title_raw": "Demi case cuir Rose pour Leica Q ou Leica Q2",
+    "price_raw": "€100",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-08/L1033367.JPG?itok=yTFAyc9x",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "demi case cuir rose pour leica q ou leica q2",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q2",
+    "model_canonical": "Q2",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q",
+      "Q2"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/demi-etui-cuir-jaune-pour-leica-q-116",
+    "title_raw": "Demi case cuir Jaune pour Leica Q 116",
+    "price_raw": "€75",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-08/L1033364.JPG?itok=uknSLKU5",
+    "condition_raw": "정보없음",
+    "normalized_name": "demi case cuir jaune pour leica q 116",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q",
+    "model_canonical": "Q",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-extender-x2-r",
+    "title_raw": "Leica Extender x2 R",
+    "price_raw": "€90",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042340.jpg?itok=F5RMr3Bk",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica extender x2 r",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:extender"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "X2",
+    "model_canonical": "X2",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "R",
+      "X"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
+    "sold_reason": [
+      "sold_confirmed:품절"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-extender-x14",
+    "title_raw": "Leica Extender x1.4 (Ex-demo)",
+    "price_raw": "€790",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042336.jpg?itok=f4KlHkrf",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica extender x1.4 (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:extender"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "X1",
+    "model_canonical": "X1",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "X"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-r-50mm-f2-ii-5",
+    "title_raw": "SUMMICRON-R 50mm f/2 (II)",
+    "price_raw": "€690",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042306.jpg?itok=uaDzMmh1",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "summicron-r 50mm f/2 (ii)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:SUMMICRON-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Summicron-R",
+    "model_canonical": "Summicron-R",
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-bague-leicaflex-mr-14127r",
+    "title_raw": "Leica bague Leicaflex M/R (14127R)",
+    "price_raw": "€55",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042301.jpg?itok=1rrmSPeB",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica bague leicaflex m/r (14127r)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:LEICAFLEX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:bag"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Leicaflex",
+    "model_canonical": "Leicaflex",
+    "variant": [
+      "FLE"
+    ],
+    "focal_length": null,
+    "accessory_type": "bag",
+    "compatible_mounts": [
+      "R"
+    ],
+    "compatible_systems": [
+      "M",
+      "R"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-sl3-5",
+    "title_raw": "Leica SL3 (Ex-demo)",
+    "price_raw": "€4,790",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042204.jpg?itok=pad98mjK",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica sl3 (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl3"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-sl-50mm-f14-asph-3",
+    "title_raw": "SUMMILUX-SL 50mm f/1.4 ASPH.",
+    "price_raw": "€3,490",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042197.jpg?itok=DULfpfGO",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "summilux-sl 50mm f/1.4 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summilux"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-SL",
+    "model_canonical": "Summilux-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-sl-50mm-f14-asph-1",
+    "title_raw": "SUMMILUX-SL 50mm f/1.4 ASPH. (Ex-demo)",
+    "price_raw": "€3,490",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042096.jpg?itok=NoDsDQ4s",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "summilux-sl 50mm f/1.4 asph. (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summilux"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-SL",
+    "model_canonical": "Summilux-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-50-mm-f2-nf-1956-1968-0",
+    "title_raw": "SUMMICRON-M 50 mm f/2 N.F. ( 1956-1968 )",
+    "price_raw": "€590",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1041989.jpg?itok=5VO87ad1",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "summicron-m 50 mm f/2 n.f. ( 1956-1968 )",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-35-mm-f2-1979-1996v4",
+    "title_raw": "SUMMICRON-M 35 mm f/2 (1979-1996/V4)",
+    "price_raw": "€1,490",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1041981.jpg?itok=UTFUxB0a",
+    "condition_raw": "LCF: E : Not fully operational",
+    "normalized_name": "summicron-m 35 mm f/2 (1979-1996/v4)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "v4"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-loupe-125x",
+    "title_raw": "Leica magnifier 1.25x",
+    "price_raw": "€170",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-06/L1041912.jpg?itok=zcLMxwca",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica magnifier 1.25x",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/viseur-mirroir-18mm",
+    "title_raw": "viewfinder à mirroir 18mm",
+    "price_raw": "€390",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-06/L1041304.jpg?itok=20dyiLJx",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "viewfinder à mirroir 18mm",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:finder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "finder",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
+    "sold_reason": [
+      "sold_confirmed:품절"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-r-80mm-f14-1",
+    "title_raw": "SUMMILUX-R 80mm f/1.4",
+    "price_raw": "€1,990",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-06/L1041128.jpg?itok=3eVJ_xlY",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "summilux-r 80mm f/1.4",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summilux"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:SUMMILUX-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Summilux-R",
+    "model_canonical": "Summilux-R",
+    "variant": [],
+    "focal_length": "80",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/vario-elmar-r-80-200mm-f4-1",
+    "title_raw": "VARIO-ELMAR-R 80-200mm f/4",
+    "price_raw": "€700",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-06/L1041120.jpg?itok=g6SxkGbq",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "vario-elmar-r 80-200mm f/4",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmar"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:ELMAR-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Vario-Elmar-R",
+    "model_canonical": "Vario-Elmar-R",
+    "variant": [],
+    "focal_length": "80-200",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-r-50mm-f2-ii-4",
+    "title_raw": "SUMMICRON-R 50mm f/2 (II)",
+    "price_raw": "€490",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-05/L1041064.jpg?itok=T66Q3Qqr",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "summicron-r 50mm f/2 (ii)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:SUMMICRON-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Summicron-R",
+    "model_canonical": "Summicron-R",
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/bague-16462-pour-tete-290-sur-visoflex",
+    "title_raw": "BAGUE 16462 POUR TETE 90mm f/2 SUR VISOFLEX",
+    "price_raw": "€50",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-05/L1610175.jpg?itok=nNmbGLEw",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "bague 16462 pour tete 90mm f/2 sur visoflex",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:bag"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "FLE"
+    ],
+    "focal_length": null,
+    "accessory_type": "bag",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-vario-elmar-t-18-56-mm-f35-56-asph",
+    "title_raw": "LEICA VARIO-ELMAR-T 18-56 mm f/3.5-5.6 Asph.",
+    "price_raw": "€790",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-03/L2330199.jpg?itok=vYNY4S7O",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica vario-elmar-t 18-56 mm f/3.5-5.6 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Vario-Elmar",
+    "model_canonical": "Vario-Elmar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "18-56",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-summilux-tl-35-mm-f14-asph",
+    "title_raw": "LEICA SUMMILUX-TL 35 mm f/1.4 Asph.",
+    "price_raw": "€1,290",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2024-10/L1006529.jpg?itok=DUhMzpBz",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica summilux-tl 35 mm f/1.4 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-TL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-TL",
+    "model_canonical": "Summilux-TL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/apo-macro-elmarit-tl-60-mm-f28-asph",
+    "title_raw": "APO-MACRO-ELMARIT-TL 60 mm f/2.8 ASPH",
+    "price_raw": "€1,390",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2024-10/L2320490.jpg?itok=51PuaFJF",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "apo-macro-elmarit-tl 60 mm f/2.8 asph",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmarit"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:ELMARIT-TL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "APO-Macro-Elmarit",
+    "model_canonical": "APO-Macro-Elmarit",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "60",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-iiic",
+    "title_raw": "LEICA IIIc Militaire + Moteur MOOLY-C",
+    "price_raw": "€4,190",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2023-08/L1023932.jpg?itok=YKspepSk",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "leica iiic militaire + moteur mooly-c",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "L_barnack_body:LEICA I/II/III"
+    ],
+    "category": "Body",
+    "category_confidence": 0.93,
+    "category_reason": [
+      "barnack_body_kw:leica iiic"
+    ],
+    "label": "L Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "L+Body"
+    ],
+    "model_raw": "IIIc",
+    "model_canonical": "IIIc",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-iiic-1",
+    "title_raw": "LEICA IIIc Rideau Rouge - Militaire",
+    "price_raw": "€2,290",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2023-05/L1005190_0.jpg?itok=63hhXVwv",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "leica iiic rideau rouge - militaire",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "L_barnack_body:LEICA I/II/III"
+    ],
+    "category": "Body",
+    "category_confidence": 0.93,
+    "category_reason": [
+      "barnack_body_kw:leica iiic"
+    ],
+    "label": "L Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "L+Body"
+    ],
+    "model_raw": "IIIc",
+    "model_canonical": "IIIc",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/mbroo-boitier-de-transport-etanche-leitz",
+    "title_raw": "MBROO carrying case ETANCHE LEITZ",
+    "price_raw": "€280",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2023-02/L1650844.jpg?itok=R9hbAIiY",
+    "condition_raw": "LCF: D : Operational",
+    "normalized_name": "mbroo carrying case etanche leitz",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leitz"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store France (프랑스)",
     "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-28-mm-f2-asph-close-focus-2024-actu",
     "title_raw": "SUMMICRON-M 28 mm f/2 ASPH. close focus (2024-ACTU)",
     "price_raw": "€3,990",
@@ -499637,10 +502573,10 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-06 23:02:43"
@@ -499831,54 +502767,6 @@
       "Silver"
     ],
     "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 23:02:43"
-  },
-  {
-    "source": "Leica Store France (프랑스)",
-    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-50-mm-f2-1979-1994-1",
-    "title_raw": "SUMMICRON-M 50 mm f/2 (1979-1994)",
-    "price_raw": "€1,390",
-    "currency": "EUR",
-    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1033528.JPG?itok=-PGhcjNY",
-    "condition_raw": "LCF: B : Very good",
-    "normalized_name": "summicron-m 50 mm f/2 (1979-1994)",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:summicron"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron-M",
-    "model_canonical": "Summicron-M",
-    "variant": [],
-    "focal_length": "50",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -500525,7 +503413,7 @@
     "source": "Leica Store France (프랑스)",
     "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-m-75-mm-f14-1980-2007",
     "title_raw": "SUMMILUX-M 75 mm f/1.4 (1980-2007)",
-    "price_raw": "€2,890",
+    "price_raw": "€2,490",
     "currency": "EUR",
     "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1042930.jpg?itok=mCrkEqt7",
     "condition_raw": "LCF: C : Good",
@@ -501468,7 +504356,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:127939"
+      "price_low:128056"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -503034,56 +505922,6 @@
   },
   {
     "source": "Leica Store France (프랑스)",
-    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/apo-summicron-m-75-mm-f2-asph-1",
-    "title_raw": "APO-SUMMICRON-M 75 mm f/2 ASPH.",
-    "price_raw": "€3,650",
-    "currency": "EUR",
-    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-08/L1033296.JPG?itok=yAAKexiX",
-    "condition_raw": "LCF: A : Excellent",
-    "normalized_name": "apo-summicron-m 75 mm f/2 asph.",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:summicron"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "APO-Summicron",
-    "model_canonical": "APO-Summicron",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": "75",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 23:02:43"
-  },
-  {
-    "source": "Leica Store France (프랑스)",
     "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/elmarit-m-21-mm-f28-1980-1997",
     "title_raw": "ELMARIT-M 21 mm f/2.8 (1980-1997)",
     "price_raw": "€1,990",
@@ -503852,7 +506690,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:173094"
+      "price_low:173252"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -503956,7 +506794,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:165568"
+      "price_low:165719"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -504006,7 +506844,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:120413"
+      "price_low:120523"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -504056,7 +506894,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:82784"
+      "price_low:82860"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -513087,7 +515925,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:135465"
+      "price_low:135589"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -513135,7 +515973,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:105362"
+      "price_low:105458"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -513209,5 +516047,1310 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-06 23:02:43"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/the-leica-m-edition-100-pre-owned",
+    "title_raw": "The Leica M Edition 100",
+    "price_raw": "S$125,000",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/CopyofLeica__8.jpg?v=1785129247",
+    "condition_raw": "정보없음",
+    "normalized_name": "the leica m edition 100",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "M_leica_m_prefix:LEICA M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leic-iii-g",
+    "title_raw": "LEICA III G",
+    "price_raw": "S$2,888",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/LEICAIIIG1.jpg?v=1787018226",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica iii g",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "L_barnack_body:LEICA I/II/III"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica ii"
+    ],
+    "label": "L Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "L+Body"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/summilux-m-1-4-35mm-aspherical-aa-8-element-v1-year-1959-pre-owned",
+    "title_raw": "Summicron-M 35mm f/2 8-element v1 year 1959",
+    "price_raw": "S$3,000",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/M-Summicronf235mm8-elementV1year19591.jpg?v=1790333013",
+    "condition_raw": "정보없음",
+    "normalized_name": "summicron-m 35mm f/2 8-element v1 year 1959",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "8-element",
+      "v1"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-noctilux-m-50mm-f1-e60-v3-vintage-lens",
+    "title_raw": "Leica Noctilux-M 50mm f1 E60 V3 Vintage Lens",
+    "price_raw": "S$11,000",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/LeicaNoctilux50mm1_75c7984a-2789-4f71-a53a-7798b5ccaccc.jpg?v=1790829877",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica noctilux-m 50mm f1 e60 v3 vintage lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:NOCTILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Noctilux",
+    "model_canonical": "Noctilux",
+    "variant": [
+      "v3"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-noctilux-m-50mm-f0-95-asph-black-anodized-finish-pre-owned",
+    "title_raw": "Leica Noctilux-m 50mm F0.95 ASPH. Black Anodized Finish",
+    "price_raw": "S$10,000",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/Noctilux-M50mmf0.95_2.jpg?v=1784859400",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica noctilux-m 50mm f0.95 asph. black anodized finish",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:NOCTILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Noctilux",
+    "model_canonical": "Noctilux",
+    "variant": [
+      "ASPH",
+      "f0.95",
+      "Black"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-m6-ttl-silver-pre-owned",
+    "title_raw": "Leica M6, Silver",
+    "price_raw": "S$5,200",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/LeicaM6SilverClassic.jpg?v=1787736985",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica m6, silver",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica m6"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M6",
+    "model_canonical": "M6",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-m-monochrom-typ-246-black-chrome-finish-pre-loved-001",
+    "title_raw": "LEICA M Monochrom (Typ 246)",
+    "price_raw": "S$5,600",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/M2462.jpg?v=1785305378",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica m monochrom (typ 246)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "M_leica_m_prefix:LEICA M"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:monochrom"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M Monochrom",
+    "model_canonical": "M",
+    "variant": [
+      "Monochrom"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-sl3-black-pre-owned",
+    "title_raw": "Leica SL3, Black",
+    "price_raw": "S$8,500",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/SL3Pre-Owned1.jpg?v=1776668112",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica sl3, black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl3"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-sl3-black-pre-owned-1",
+    "title_raw": "Leica SL3, Black",
+    "price_raw": "S$8,500",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/SL3preowned1.jpg?v=1780020069",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica sl3, black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl3"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-sl2-s-with-leica-vario-elmarit-sl-24-90-mm-f2-8-4-asph-pre-owned",
+    "title_raw": "Leica SL2-S with Leica Vario-Elmarit-SL 24-90 MM F2.8-4 ASPH.",
+    "price_raw": "S$8,700",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/LeicaSL2-SwithLeicaVario-Elmarit-SL24_90MMF2.8_4ASPH._Pre-Owned_1.jpg?v=1770192440",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica sl2-s with leica vario-elmarit-sl 24-90 mm f2.8-4 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl2"
+    ],
+    "label": "S Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Body"
+    ],
+    "model_raw": "M-A",
+    "model_canonical": "M-A",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-super-elmar-m-21mm-f-3-4-asph-fnf-demo-unit",
+    "title_raw": "Leica Super-Elmar-M 21mm F/3.4 ASPH.",
+    "price_raw": "S$3,500",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/LeicaSuper-Elmar-M21mmF_3.4ASPH.1.jpg?v=1791192551",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica super-elmar-m 21mm f/3.4 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Super-Elmar",
+    "model_canonical": "Super-Elmar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "21",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-elmarit-m-28mm-f-2-8-asph-black-pre-owned-copy",
+    "title_raw": "Leica Elmarit-M 28mm F/2.8 ASPH. Black",
+    "price_raw": "S$2,700",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/Elmarit-MASPH28mmf2.82.jpg?v=1787736771",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica elmarit-m 28mm f/2.8 asph. black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:ELMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Elmarit-M",
+    "model_canonical": "Elmarit-M",
+    "variant": [
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "28",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-summilux-m-35mm-double-aspherical-black",
+    "title_raw": "Leica Summilux M 35mm Double Aspherical, Black",
+    "price_raw": "S$31,500",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/M-Summiluxf1.435mmDoubleAspherical1.jpg?v=1790332779",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summilux m 35mm double aspherical, black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux",
+    "model_canonical": "Summilux-M",
+    "variant": [
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-summilux-m-35mm-f-1-4-asph-fle-silver-anodized-finish-pre-owned",
+    "title_raw": "Leica Summilux-M 35mm F/1.4 ASPH. FLE, Silver Anodized Finish",
+    "price_raw": "S$5,600",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/494_58e2b349-e0ea-4d7a-9052-1f0519cfa809.jpg?v=1767003507",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summilux-m 35mm f/1.4 asph. fle, silver anodized finish",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux-M",
+    "model_canonical": "Summilux-M",
+    "variant": [
+      "FLE",
+      "ASPH",
+      "Silver"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-summilux-m-35mm-f-1-4-asph-fle-black-anodized-finish-pre-owned",
+    "title_raw": "Leica Summilux-M 35mm F/1.4 ASPH. FLE, Black Anodized Finish",
+    "price_raw": "S$5,500",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/CONSIGNEDSUMMILUXM-35mmFLEI_09ec7aa7-fc08-4ec9-9d2c-7cb6ff5b8c5c.jpg?v=1766999626",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summilux-m 35mm f/1.4 asph. fle, black anodized finish",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux-M",
+    "model_canonical": "Summilux-M",
+    "variant": [
+      "FLE",
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-summicron-m-35mm-f-2-0-asph-black-anodized-pre-owned",
+    "title_raw": "Leica Summicron-M 35mm F/2.0 ASPH. Black Anodized",
+    "price_raw": "S$2,900",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/elmarit24-901.jpg?v=1790760968",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summicron-m 35mm f/2.0 asph. black anodized",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-summilux-m-11815-1-4-75mm",
+    "title_raw": "Leica Summilux-M 75mm f/1.4",
+    "price_raw": "S$6,350",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/M-Summiluxf1.475mm1.jpg?v=1790332542",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summilux-m 75mm f/1.4",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux-M",
+    "model_canonical": "Summilux-M",
+    "variant": [],
+    "focal_length": "75",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/summarit-m-35-f-2-4-asph-pre-owned",
+    "title_raw": "Summarit-M 35 f/2.4 ASPH.",
+    "price_raw": "S$2,100",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/Summarit-MASPH35mmf2.43.jpg?v=1787737211",
+    "condition_raw": "정보없음",
+    "normalized_name": "summarit-m 35 f/2.4 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summarit"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summarit-M",
+    "model_canonical": "Summarit-M",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-super-vario-elmar-sl-16-35mm-f-3-5-4-5-asph-pre-owned",
+    "title_raw": "Leica Super-Vario-Elmar-SL 16-35mm f/3.5-4.5 ASPH",
+    "price_raw": "S$7,050",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/VARIO-ELMARIT-SL3.5-4.5_16-35ASPH.jpg?v=1780018759",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica super-vario-elmar-sl 16-35mm f/3.5-4.5 asph",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:VARIO-ELMAR-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmar-S",
+    "model_canonical": "Vario-Elmar-S",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "16-35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-super-vario-elmar-sl-16-35mm-f-3-5-4-5-asph",
+    "title_raw": "Leica Super-Vario-Elmar-SL 16-35mm f/3.5-4.5 ASPH",
+    "price_raw": "S$7,050",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/SL-16-35mm3.jpg?v=1767000538",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica super-vario-elmar-sl 16-35mm f/3.5-4.5 asph",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:VARIO-ELMAR-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmar-S",
+    "model_canonical": "Vario-Elmar-S",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "16-35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-vario-elmarit-sl-24-70-f-2-8-asph-pre-owned",
+    "title_raw": "Leica Vario-Elmarit-SL 24-70 F/2.8 ASPH.",
+    "price_raw": "S$2,000",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/Elmarit24-701.jpg?v=1790758151",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica vario-elmarit-sl 24-70 f/2.8 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmarit-SL",
+    "model_canonical": "Vario-Elmarit-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "24-70",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/vario-elmarit-sl-1-2-8-28-70-asph-black-anodized-finish-pre-owned",
+    "title_raw": "Vario Elmarit-SL 1:2.8/28-70 ASPH., Black Anodized Finish",
+    "price_raw": "S$2,550",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/SL28-70_pre3.jpg?v=1786960803",
+    "condition_raw": "정보없음",
+    "normalized_name": "vario elmarit-sl 1:2.8/28-70 asph., black anodized finish",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmarit"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmarit-SL",
+    "model_canonical": "Vario-Elmarit-SL",
+    "variant": [
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "28",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-apo-summicron-sl-35mm-f-2-asph-black-anodized-finish-demo-unit-1",
+    "title_raw": "Leica APO-Summicron-SL 35mm F/2 ASPH. Black Anodized Finish",
+    "price_raw": "S$5,500",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/APOsummicron35SL-_5500_a292cd1d-4ed2-4af1-a660-f004730e8f5d.jpg?v=1753433487",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica apo-summicron-sl 35mm f/2 asph. black anodized finish",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMICRON-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-apo-summicron-sl-35mm-f-2-asph-black-anodized-finish-demo-unit",
+    "title_raw": "Leica Summicron-SL 35mm f/2 ASPH.",
+    "price_raw": "S$2,650",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/SL-SUMMICRON35mm5.jpg?v=1767001430",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summicron-sl 35mm f/2 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMICRON-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summicron",
+    "model_canonical": "Summicron-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/leica-apo-summicron-sl-90mm-f-2-asph-black-anodized-finish-demo-unit",
+    "title_raw": "Leica APO-Summicron-SL 90mm F/2 ASPH. Black Anodized Finish",
+    "price_raw": "S$6,150",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/SL-APO90mm16.jpg?v=1767001295",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica apo-summicron-sl 90mm f/2 asph. black anodized finish",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMICRON-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "90",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
+  },
+  {
+    "source": "Leica Store Singapore (싱가포르)",
+    "source_url": "https://leica-store.sg/products/cir-p-filter-with-holder-pre-owned",
+    "title_raw": "Cir-P Filter with holder",
+    "price_raw": "S$650",
+    "currency": "SGD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0278/3651/4404/files/13351_1.jpg?v=1781839898",
+    "condition_raw": "정보없음",
+    "normalized_name": "cir-p filter with holder",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:filter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "filter",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 11:02:59"
   }
 ]

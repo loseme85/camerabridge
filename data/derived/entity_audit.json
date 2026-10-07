@@ -3,26 +3,26 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 459,
+   "count": 461,
    "example": "Leica M6 Re-Issue Black"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 428,
+   "count": 430,
    "example": "Leica CL Film Camera Black"
+  },
+  {
+   "a": "leica:feature:frameline-28",
+   "b": "leica:feature:mechanical",
+   "count": 406,
+   "example": "Leica M6 Re-Issue Black"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
    "count": 406,
    "example": "Leica M2 BlackPaint"
-  },
-  {
-   "a": "leica:feature:frameline-28",
-   "b": "leica:feature:mechanical",
-   "count": 404,
-   "example": "Leica M6 Re-Issue Black"
   },
   {
    "a": "leica:feature:meter",
@@ -51,19 +51,19 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:meter",
-   "count": 142,
+   "count": 144,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:mechanical",
-   "count": 142,
+   "count": 144,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:frameline-28",
-   "count": 138,
+   "count": 140,
    "example": "[중고] M6 CLASSIC"
   },
   {
@@ -99,7 +99,7 @@
   {
    "a": "leica:body:m-p240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 64,
+   "count": 65,
    "example": "Leica M-P Black"
   },
   {
@@ -153,7 +153,7 @@
   {
    "a": "leica:body:m10-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 48,
+   "count": 49,
    "example": "[위탁] M10-P (Silver)"
   },
   {
@@ -313,6 +313,12 @@
    "example": "[위탁] M9-P (Silver)"
   },
   {
+   "a": "leica:body:m-monochrom-246:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 19,
+   "example": "[중고] M Monochrom Typ 246 (Black)"
+  },
+  {
    "a": "leica:body:m6:ttl-millennium",
    "b": "leica:feature:ttl-flash",
    "count": 18,
@@ -329,12 +335,6 @@
    "b": "leica:feature:mechanical",
    "count": 18,
    "example": "[중고] M6 밀레니엄 Blackpaint"
-  },
-  {
-   "a": "leica:body:m-monochrom-246:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 18,
-   "example": "[중고] M Monochrom Typ 246 (Black)"
   },
   {
    "a": "leica:body:m6:ttl-millennium",
@@ -803,7 +803,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 86,
+   "count": 87,
    "example": "Leica M11 Monochrome Black"
   },
   {
