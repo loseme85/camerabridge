@@ -13,16 +13,16 @@
    "example": "Leica CL Film Camera Black"
   },
   {
+   "a": "leica:feature:mechanical",
+   "b": "leica:feature:no-meter",
+   "count": 407,
+   "example": "Leica M1 Silver"
+  },
+  {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
    "count": 406,
    "example": "Leica M6 Re-Issue Black"
-  },
-  {
-   "a": "leica:feature:mechanical",
-   "b": "leica:feature:no-meter",
-   "count": 406,
-   "example": "Leica M2 BlackPaint"
   },
   {
    "a": "leica:feature:meter",
@@ -153,7 +153,7 @@
   {
    "a": "leica:body:m10-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 49,
+   "count": 48,
    "example": "[위탁] M10-P (Silver)"
   },
   {
@@ -219,7 +219,7 @@
   {
    "a": "leica:body:m10-r:standard",
    "b": "leica:feature:frameline-28",
-   "count": 38,
+   "count": 37,
    "example": "[중고] M10-R (Black)"
   },
   {
@@ -289,6 +289,12 @@
    "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
   },
   {
+   "a": "leica:body:m-monochrom-ccd",
+   "b": "leica:feature:frameline-28",
+   "count": 22,
+   "example": "Leica M-Monochrom CCD Silver [신형센서 교체]"
+  },
+  {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:meter",
    "count": 21,
@@ -299,12 +305,6 @@
    "b": "leica:feature:mechanical",
    "count": 21,
    "example": "Leica M5 Silver"
-  },
-  {
-   "a": "leica:body:m-monochrom-ccd",
-   "b": "leica:feature:frameline-28",
-   "count": 21,
-   "example": "[중고] M-Monochrom CCD (Black)"
   },
   {
    "a": "leica:body:m9-p:standard",
@@ -679,6 +679,18 @@
    "example": "LEICA 35mm F2 (4th) 7 element SUMMICRON-M sn.3554"
   },
   {
+   "a": "leica:body:m1:standard",
+   "b": "leica:feature:no-meter",
+   "count": 3,
+   "example": "Leica M1 Silver"
+  },
+  {
+   "a": "leica:body:m1:standard",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "Leica M1 Silver"
+  },
+  {
    "a": "leica:body:cl-film",
    "b": "leica:feature:meter",
    "count": 3,
@@ -803,8 +815,8 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 87,
-   "example": "Leica M11 Monochrome Black"
+   "count": 88,
+   "example": "Leica M-Monochrom CCD Silver [신형센서 교체]"
   },
   {
    "entity": "leica:feature:meter",
@@ -927,5 +939,18 @@
    "example": "신품 Leica M 50mm F1.2 Noctilux ASPH 6bit Glossy Black Paint Finish"
   }
  ],
- "new": []
+ "new": [
+  {
+   "a": "leica:body:m1:standard",
+   "b": "leica:feature:no-meter",
+   "count": 3,
+   "example": "Leica M1 Silver"
+  },
+  {
+   "a": "leica:body:m1:standard",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "Leica M1 Silver"
+  }
+ ]
 }
