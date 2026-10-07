@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT))
 
 from condition_grade import grade_of  # noqa: E402
 from entity_catalog import annotate_records, krw_rates, load_catalog  # noqa: E402
+from fx_history import krw_per_unit_on  # noqa: E402
 
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
@@ -103,10 +104,12 @@ def main() -> None:
     for record in records:
         final = record.get("final_output") or {}
         price = final.get("parsed_price_numeric")
-        rate = to_krw.get(str(final.get("currency") or "KRW").upper())
-        krw = price * rate if price and rate else None
         active = final.get("sold_quality") == "asking"
         sold = str(final.get("sold_quality") or "").startswith("sold")
+        rate = to_krw.get(str(final.get("currency") or "KRW").upper())
+        if sold:  # 판매완료는 팔린 날 환율로 (기록된 그 순간 환율 → 날짜별 환율 → 없으면 오늘 환율)
+            rate = final.get("sold_fx_krw") or krw_per_unit_on(final.get("currency"), final.get("sold_at")) or rate
+        krw = price * rate if price and rate else None
         grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
         for eid in record.get("entity_ids") or []:
             s = stats[eid]

@@ -1546,6 +1546,11 @@ def classify_listing_v2(raw_item: dict) -> dict:
         # 메타
         "crawl_time":   crawl_time,
         "first_seen":   first_seen,
+        # 판매 시각·그 순간 환율 (통화 1단위 = 원). 처음 볼 때 이미 판매완료면 sold_at_unknown
+        "sold_at":         raw_item.get("sold_at") or None,
+        "sold_fx_krw":     raw_item.get("sold_fx_krw"),
+        "sold_at_unknown": bool(is_sold) and (bool(raw_item.get("sold_at_unknown")) or not raw_item.get("sold_at")
+                                              or raw_item.get("sold_at") == raw_item.get("first_seen")),
     }
 
 
