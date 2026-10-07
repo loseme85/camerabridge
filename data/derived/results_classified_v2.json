@@ -7918,15 +7918,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-28 18:11:11",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-07 15:10:07",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -8563,15 +8563,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-17 17:11:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-07 15:10:07",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -31191,7 +31191,7 @@
     "source": "라이카스토어 충무로",
     "source_url": "https://leica-storebando.co.kr/product/위탁-m-5012-noctilux-복각/21993/category/442/display/1/",
     "title_raw": "[위탁] M 50/1.2 Noctilux 복각",
-    "price_raw": "7,000,000원",
+    "price_raw": "6,500,000원",
     "currency": "KRW",
     "image_url": "https://leica-storebando.co.kr/web/product/medium/202608/d8b115f08bb82cf746d2332096d00c00.jpg",
     "condition_raw": "95%",
@@ -189534,6 +189534,108 @@
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": true
+  },
+  {
+    "source": "장씨카메라",
+    "source_url": "https://j-camera.com/product/detail.html?product_no=12339&cate_no=358&display_group=1",
+    "title_raw": "LEICA I (model A) 50mm F3.5 Elmar XH-2 sn.3704",
+    "price_raw": "1,800,000원",
+    "currency": "KRW",
+    "image_url": "https://j-camera.com/web/product/medium/202610/3d95558e91c02714e2ff52574dd0b62d.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "leica i (model a) 50mm f3.5 elmar xh-2 sn.3704",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "L_barnack_body:LEICA I/II/III"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica i "
+    ],
+    "label": "L Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "L+Body"
+    ],
+    "model_raw": "M-A",
+    "model_canonical": "M-A",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 15:10:07",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "장씨카메라",
+    "source_url": "https://j-camera.com/product/detail.html?product_no=12338&cate_no=358&display_group=1",
+    "title_raw": "LEICA 50mm F2.8 ELMAR sn.2120",
+    "price_raw": "750,000원",
+    "currency": "KRW",
+    "image_url": "https://j-camera.com/web/product/medium/202610/9b2e14743f763f62dc83618c58e6ec20.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "leica 50mm f2.8 elmar sn.2120",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Elmar",
+    "model_canonical": "Elmar",
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-07 15:10:07",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
   },
   {
     "source": "장씨카메라",
@@ -412889,7 +412991,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -414405,7 +414507,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -448658,7 +448760,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -448811,7 +448913,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -452133,7 +452235,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -452706,7 +452808,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -452963,7 +453065,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453014,7 +453116,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455009,7 +455111,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455060,7 +455162,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455111,7 +455213,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455162,7 +455264,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455213,7 +455315,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -456736,59 +456838,6 @@
     "model_raw": "M-A",
     "model_canonical": "M-A",
     "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2443060235490",
-    "title_raw": "Leica X Vario Black",
-    "price_raw": "¥129,800",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2443060235490-1-1.jpg",
-    "condition_raw": "C",
-    "normalized_name": "leica x vario black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Compact",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Compact_kw:LEICA X "
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Compact"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Compact+Body"
-    ],
-    "model_raw": "X Vario",
-    "model_canonical": "X Vario",
-    "variant": [
-      "Black"
-    ],
     "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
@@ -459353,59 +459402,6 @@
     ],
     "focal_length": "18-56",
     "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2443890188614",
-    "title_raw": "Leica ビユーFinderM 21mm Black",
-    "price_raw": "¥90,900",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2443890188614-1-1.jpg",
-    "condition_raw": "A",
-    "normalized_name": "leica ビユーfinderm 21mm black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:finder"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": "finder",
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -492289,7 +492285,7 @@
     "source": "M & K Kamera (홍콩)",
     "source_url": "https://mkkcamera.com/products/brand-new-leicavit-m-glossy-black-paint-finish-14669",
     "title_raw": "Brand New Leicavit M Glossy Black Paint Finish",
-    "price_raw": "HK$12,800",
+    "price_raw": "HK$8,600",
     "currency": "HKD",
     "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/3fdce2e9c6e1b26259fc83bb1838f18c.jpg?v=1790582897",
     "condition_raw": "M&K: brand new",
@@ -493775,60 +493771,6 @@
       "M11",
       "M10"
     ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 17:25:18",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leica-elmarit-m-24mm-f2-8-asph-black-6-bit-coded-11878-24014",
-    "title_raw": "Leica Elmarit-M 24mm/F2.8 ASPH Black 6 bit coded 11878",
-    "price_raw": "HK$13,800",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/c368c023d5bfbdc790457b29885357b4.jpg?v=1789972447",
-    "condition_raw": "M&K: only minor signs of use",
-    "normalized_name": "leica elmarit-m 24mm/f2.8 asph black 6 bit coded 11878",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:ELMARIT-M"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Elmarit-M",
-    "model_canonical": "Elmarit-M",
-    "variant": [
-      "ASPH",
-      "Black"
-    ],
-    "focal_length": "24",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -497621,57 +497563,6 @@
     "compatible_mounts": [
       "M"
     ],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 17:25:18",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leitz-leica-summaron-m-35mm-f2-8-lens-yr-1958-germany-12083",
-    "title_raw": "LEITZ Leica Summaron M 35mm/F2.8 Lens Yr.1958 Germany",
-    "price_raw": "HK$13,800",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/361226c192db2aeb261d229376293b42.jpg?v=1787827404",
-    "condition_raw": "M&K: only minor signs of use",
-    "normalized_name": "leitz leica summaron m 35mm/f2.8 lens yr.1958 germany",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMARON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summaron",
-    "model_canonical": "Summaron",
-    "variant": [],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
@@ -515394,57 +515285,6 @@
   },
   {
     "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leica-irooa-12571-hood-for-m35-50mm-10281",
-    "title_raw": "Leica IROOA / 12571 Hood for M35, 50mm",
-    "price_raw": "HK$1,680",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/6af3acc21014e5f0b4ca28fc0d7b363b.jpg?v=1780901974",
-    "condition_raw": "M&K: slightly used",
-    "normalized_name": "leica irooa / 12571 hood for m35, 50mm",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.99,
-    "category_reason": [
-      "acc_code:irooa"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "M3",
-    "model_canonical": "M3",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "hood",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 17:25:18",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
     "source_url": "https://mkkcamera.com/products/leica-summilux-r-50mm-f1-4-e55-ver-ii-v2-safari-11776-10216",
     "title_raw": "Leica Summilux-R 50mm/F1.4 E55 Ver.II V2 Safari 11776",
     "price_raw": "HK$16,800",
@@ -533026,57 +532866,6 @@
     "crawl_time": "",
     "first_seen": "2026-10-06 23:02:43",
     "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store France (프랑스)",
-    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-r-35mm-f2-i",
-    "title_raw": "SUMMICRON-R 35mm f/2 (I)",
-    "price_raw": "€990",
-    "currency": "EUR",
-    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1043023_0.jpg?itok=EGmrXkY6",
-    "condition_raw": "LCF: A : Excellent",
-    "normalized_name": "summicron-r 35mm f/2 (i)",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:summicron"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:SUMMICRON-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Summicron-R",
-    "model_canonical": "Summicron-R",
-    "variant": [],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 23:02:43",
-    "sold_at": "2026-10-07 11:02:59",
     "sold_fx_krw": null,
     "sold_at_unknown": false
   },
