@@ -22,7 +22,7 @@
     "Leica Store Miami": { "country": "US", "ships_international": true },
     "Kamerastore (핀란드)": { "country": "FI", "ships_international": true, "ddp_outside_eu": true },
     "M & K Kamera (홍콩)": { "country": "HK", "ships_international": true },
-    "Leica Store France (프랑스)": { "country": "FR", "ships_international": false },
+    "Leica Store France (프랑스)": { "country": "FR", "ships_international": false, "online_purchase": false },
     "Leica Store Singapore (싱가포르)": { "country": "SG", "ships_international": false },
     "eBay": { "country": null, "ships_international": true }
   },
@@ -60,6 +60,11 @@
       "exempt_usd_from_origin": { "US": 200 },
       "duty": { "Body": 0.08, "Body_digital": 0.0, "Lens": 0.08, "Accessory": 0.08 },
       "vat": 0.10,
+      "eu_fta": {
+        "_note": "Korea-EU FTA: EU-made goods shipped from an EU seller pay 0% duty. Personal parcels up to USD 1,000 need no origin certificate (receipt + origin marking); above that the seller must declare origin on the invoice.",
+        "proof_waiver_usd": 1000,
+        "source": "https://zicgooexpress.com/board/notice/detail.asp?seqno=6"
+      },
       "source": "https://www.customs.go.kr"
     },
     "JP": {
@@ -124,6 +129,7 @@
     "handling_eur": 10,
     "source": "https://taxation-customs.ec.europa.eu"
   },
+  "non_eu_made_pattern": "Panasonic|Lumix|\\bDG\\b|D-?Lux|V-?Lux|C-?Lux|Digilux|Minolta|Sofort|Summicron-C|Elmar-C|\\bCL\\b(?!.*Typ)|Vario-Elmarit-SL\\s*24-70\\s*mm\\s*f/?2\\.8|Vario-Elmarit-SL\\s*28-70|Vario-Elmar-T|Summilux-TL|Elmarit-TL|APO-Macro-Elmarit-TL",
   "digital_body_pattern": "\\b(M8|M9|M10|M11|M-E|M-P|M-D|M240|M262|M246|Typ ?2[0-9]{2}|Q|Q2|Q3|SL|SL2|SL3|CL|TL2?|T|X1|X2|X-?U|X-?E|X Vario|D-?Lux|C-?Lux|V-?Lux|Digilux|Monochrom|S2|S3|S \\(Typ)\\b",
   "locale_defaults": {
     "ko": { "currency": "KRW", "destination": "KR" },
