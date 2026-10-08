@@ -230,6 +230,18 @@ def _build_index_meta(index_path: Path | None, request_query: str) -> dict[str, 
     return meta
 
 
+def _sources_in_country(country: str) -> list[str]:
+    """나라 코드(KR·JP 등)에 속한 판매처 이름. 판매처-나라는 배송비 규칙(landed_cost_rules.json)을 따른다."""
+    path = PROJECT_ROOT / "data/config/landed_cost_rules.json"
+    try:
+        with path.open(encoding="utf-8") as f:
+            sources = (json.load(f) or {}).get("sources") or {}
+    except (OSError, JSONDecodeError):
+        sources = {}
+    code = country.strip().upper()
+    return [name for name, rule in sources.items() if isinstance(rule, dict) and str(rule.get("country") or "").upper() == code]
+
+
 def _load_source_registry() -> dict[str, Any]:
     global _SOURCE_REGISTRY_CACHE
     if _SOURCE_REGISTRY_CACHE is not None:
@@ -3748,6 +3760,11 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
         value = normalized.get(key)
         if value is not None and str(value).strip():
             filters[key] = str(value).strip()
+
+    country = normalized.get("country")
+    if country is not None and str(country).strip() and "source" not in filters:
+        # 나라를 고르면 그 나라 판매처들만 (판매처가 없는 나라면 결과 없음)
+        filters["source"] = _sources_in_country(str(country)) or ["__no_source__"]
 
     for key in ["price_min", "price_max"]:
         value = normalized.get(key)

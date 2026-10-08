@@ -4,23 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Camera Bridge</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231f4a3a%22/%3E%3Cpath%20d%3D%22M15%2042a17%2017%200%200%201%2034%200%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.4%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2240%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20font-size%3D%2221%22%20letter-spacing%3D%221%22%20fill%3D%22%23fff%22%3ECB%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#fcfcfa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+KR:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <style>
     :root{
-      --bg:#f6f4ef;
+      --bg:#ffffff;
       --surface:#ffffff;
-      --surface-soft:#f1eee8;
-      --surface-muted:#ebe6de;
-      --border:#d9d2c8;
-      --border-strong:#c7beb2;
-      --text:#191715;
-      --text-soft:#655d55;
-      --text-muted:#91877c;
-      --accent:#b21d24;
-      --accent-soft:rgba(178,29,36,0.08);
+      --surface-soft:#f5f6f5;
+      --surface-muted:#eceeed;
+      --border:#e1e4e3;
+      --border-strong:#c9cecc;
+      --text:#16181a;
+      --text-soft:#5d6266;
+      --text-muted:#8a9094;
+      --accent:#1f4a3a;
+      --accent-soft:rgba(31,74,58,0.08);
       --blue:#1f5473;
       --green:#2e6d43;
       --amber:#99611f;
-      --shadow:0 20px 48px rgba(27,23,19,0.07);
+      --shadow:0 20px 48px rgba(22,24,26,0.06);
       --radius:6px;
       --sticky-search-offset:76px;
     }
@@ -47,22 +53,18 @@
       gap:18px;
       justify-content:space-between;
       padding:14px 24px;
-      background:rgba(246,244,239,0.95);
+      background:rgba(255,255,255,0.95);
       border-bottom:1px solid var(--border);
       backdrop-filter:blur(14px);
     }
     .brand{
       display:flex;
       align-items:center;
-      gap:10px;
+      color:var(--accent);
       text-decoration:none;
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:2px;
     }
-    .brand-mark{width:9px;height:9px;border-radius:50%;background:var(--accent)}
-    .brand span{color:var(--accent)}
+    .brand-logo{display:block;height:50px;width:auto;margin:-6px 0}
+    @media (max-width:560px){.brand-logo{height:40px;margin:-4px 0}}
     .topbar-meta{
       display:flex;
       align-items:center;
@@ -73,10 +75,10 @@
     .meta-pill{
       border:1px solid var(--border-strong);
       background:var(--surface);
-      border-radius:999px;
+      border-radius:var(--radius);
       padding:6px 10px;
       color:var(--text-soft);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       letter-spacing:0.4px;
       white-space:nowrap;
@@ -104,7 +106,7 @@
     .lang-switch{position:relative}
     .lang-button{
       display:inline-flex;align-items:center;gap:6px;min-height:32px;
-      padding:6px 10px 6px 9px;border:1px solid var(--border-strong);border-radius:999px;
+      padding:6px 10px 6px 9px;border:1px solid var(--border-strong);border-radius:var(--radius);
       background:var(--surface);color:var(--text);font:inherit;font-size:12px;font-weight:600;cursor:pointer;
     }
     .lang-button:hover,.lang-button[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
@@ -124,7 +126,7 @@
     .lang-menu button[aria-checked="true"]::after{content:"✓"}
     .meta-pill.accent{
       color:var(--accent);
-      border-color:rgba(178,29,36,0.28);
+      border-color:rgba(31,74,58,0.28);
       background:var(--accent-soft);
     }
     main{
@@ -157,20 +159,20 @@
     .home-item > img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--surface-soft)}
     .home-item-body{display:grid;gap:3px;padding:8px 10px 10px;font-size:12px;color:var(--text-soft)}
     .home-item-name{color:var(--text);font-size:13px;font-weight:600;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-    .home-item-price{color:var(--text);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+    .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .home-popular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;border-top:1px solid var(--border)}
     .home-model{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 2px;border:0;border-bottom:1px solid var(--border);
       background:none;color:inherit;text-align:left;cursor:pointer;font-size:13px}
     .home-model:hover .home-model-name,.home-model:focus-visible .home-model-name{text-decoration:underline;outline:none}
     .home-model-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .home-model-price{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+    .home-model-price{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
     .home-model-meta{grid-column:1 / -1;color:var(--text-muted);font-size:12px}
     @media(max-width:1100px){.home-latest{grid-template-columns:repeat(4,minmax(0,1fr))}}
     @media(max-width:720px){.home-latest{grid-template-columns:repeat(2,minmax(0,1fr))}.home-popular{grid-template-columns:minmax(0,1fr)}}
     .hero-trust{margin:14px 0 20px;color:var(--text-soft);font-size:13px;line-height:1.6;display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
     .hero-trust .source-flag{margin-right:0}
-    .feedback-fab{position:fixed;right:16px;bottom:16px;z-index:50;padding:10px 16px;border-radius:999px;border:1px solid var(--border-strong);
+    .feedback-fab{position:fixed;right:16px;bottom:16px;z-index:50;padding:10px 16px;border-radius:var(--radius);border:1px solid var(--border-strong);
       background:var(--surface);color:var(--text);font-size:13px;font-weight:700;box-shadow:var(--shadow);cursor:pointer}
     .feedback-fab::before{content:"💬 "}
     .feedback-fab:hover{border-color:var(--accent)}
@@ -208,7 +210,7 @@
     .eyebrow{
       margin:0 0 16px;
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       letter-spacing:1.6px;
       text-transform:uppercase;
@@ -238,21 +240,21 @@
       border:1px solid var(--border-strong);
       background:var(--surface-soft);
       color:var(--text-soft);
-      border-radius:999px;
+      border-radius:var(--radius);
       padding:7px 12px;
       font-size:12px;
       line-height:1.3;
     }
     .search-panel{
       border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(246,244,239,0.78), #fff 100%);
+      background:linear-gradient(180deg, rgba(255,255,255,0.78), #fff 100%);
       border-radius:var(--radius);
       padding:16px;
     }
     .search-panel-label,
     .section-label{
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       letter-spacing:1.4px;
       text-transform:uppercase;
@@ -287,7 +289,7 @@
       background:var(--accent);
       color:#fff;
       border-radius:var(--radius);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:12px;
       font-weight:800;
       letter-spacing:0.6px;
@@ -307,7 +309,7 @@
       background:rgba(255,255,255,0.94);
       border-radius:var(--radius);
       padding:12px;
-      box-shadow:0 10px 24px rgba(27,23,19,0.08);
+      box-shadow:0 10px 24px rgba(22,24,26,0.08);
       backdrop-filter:blur(14px);
     }
     .sticky-search-form{margin-top:0}
@@ -327,22 +329,22 @@
       border:1px solid var(--border-strong);
       background:#fff;
       color:var(--text-soft);
-      border-radius:999px;
+      border-radius:var(--radius);
       padding:6px 12px;
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:11px;
       line-height:1.2;
     }
     .query-chip:hover{
       color:var(--accent);
-      border-color:rgba(178,29,36,0.34);
+      border-color:rgba(31,74,58,0.34);
     }
     .hero-sidebar{
       padding:28px 28px 24px;
       display:flex;
       flex-direction:column;
       gap:14px;
-      background:linear-gradient(180deg, rgba(235,230,222,0.52), rgba(255,255,255,0.96));
+      background:linear-gradient(180deg, rgba(236,238,237,0.52), rgba(255,255,255,0.96));
       border-radius:0 var(--radius) var(--radius) 0;
     }
     .sidebar-card{
@@ -389,7 +391,7 @@
       border:1px solid var(--border);
       border-radius:var(--radius);
       padding:18px;
-      box-shadow:0 6px 18px rgba(27,23,19,0.03);
+      box-shadow:0 6px 18px rgba(22,24,26,0.03);
     }
     .workspace{
       background:var(--surface);
@@ -413,7 +415,7 @@
     }
     .control label{
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       letter-spacing:1.4px;
       text-transform:uppercase;
@@ -434,7 +436,7 @@
       gap:18px;
       padding:18px 20px;
       border-bottom:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(241,238,232,0.5), rgba(255,255,255,0.9));
+      background:linear-gradient(180deg, rgba(245,246,245,0.5), rgba(255,255,255,0.9));
     }
     .summary-copy{
       min-width:0;
@@ -442,7 +444,7 @@
     }
     .summary-kicker{
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       letter-spacing:1.1px;
       text-transform:uppercase;
@@ -478,7 +480,7 @@
     .summary-caption{
       display:block;
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       letter-spacing:1px;
       text-transform:uppercase;
@@ -487,9 +489,10 @@
     .summary-value{
       display:block;
       margin-top:6px;
-      color:var(--accent);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:24px;
+      color:var(--text);
+      font-family:inherit;font-variant-numeric:tabular-nums;
+      font-size:26px;
+      font-weight:800;
       letter-spacing:0;
       line-height:1.25;
       overflow-wrap:anywhere;
@@ -503,7 +506,7 @@
     .index-debug-line{
       margin-top:6px;
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       letter-spacing:0.2px;
       text-transform:none;
@@ -524,7 +527,7 @@
       background:#fff;
       color:var(--text);
       border-radius:var(--radius);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:11px;
     }
     .page-button:disabled{opacity:0.42;cursor:not-allowed}
@@ -553,8 +556,8 @@
       margin-bottom:12px;
     }
     .state-card.error{
-      border-color:rgba(178,29,36,0.28);
-      background:rgba(178,29,36,0.05);
+      border-color:rgba(31,74,58,0.28);
+      background:rgba(31,74,58,0.05);
     }
     .state-card.subtle{
       background:var(--surface-soft);
@@ -568,9 +571,9 @@
     .ghost-button,
     .action-button{
       min-height:34px;
-      border-radius:999px;
+      border-radius:var(--radius);
       padding:7px 12px;
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       line-height:1.2;
       border:1px solid var(--border-strong);
@@ -586,7 +589,7 @@
       background:var(--accent);
       color:#fff;
     }
-    .ghost-button:hover{border-color:rgba(178,29,36,0.3);color:var(--accent)}
+    .ghost-button:hover{border-color:rgba(31,74,58,0.3);color:var(--accent)}
     .action-button[aria-disabled="true"],
     .ghost-button[aria-disabled="true"]{
       opacity:0.45;
@@ -603,15 +606,15 @@
     .query-review-copy{
       min-width:124px;
       padding:8px 14px;
-      border-color:rgba(178,29,36,0.28);
+      border-color:rgba(31,74,58,0.28);
       background:var(--accent-soft);
       color:var(--accent);
       font-weight:700;
-      box-shadow:inset 0 0 0 1px rgba(178,29,36,0.04);
+      box-shadow:inset 0 0 0 1px rgba(31,74,58,0.04);
     }
     .query-review-copy:hover{
-      border-color:rgba(178,29,36,0.38);
-      background:rgba(178,29,36,0.12);
+      border-color:rgba(31,74,58,0.38);
+      background:rgba(31,74,58,0.12);
       color:var(--accent);
     }
     .query-review-unlock-list{
@@ -637,15 +640,15 @@
       gap:6px;
     }
     .micro-pill{
-      border-radius:999px;
+      border-radius:var(--radius);
       padding:5px 9px;
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       border:1px solid var(--border);
       background:var(--surface-soft);
       color:var(--text-soft);
     }
-    .micro-pill.accent{border-color:rgba(178,29,36,0.28);background:var(--accent-soft);color:var(--accent)}
+    .micro-pill.accent{border-color:rgba(31,74,58,0.28);background:var(--accent-soft);color:var(--accent)}
     .micro-pill.blue{border-color:rgba(31,84,115,0.24);background:rgba(31,84,115,0.08);color:var(--blue)}
     .micro-pill.green{border-color:rgba(46,109,67,0.22);background:rgba(46,109,67,0.08);color:var(--green)}
     .micro-pill.amber{border-color:rgba(153,97,31,0.24);background:rgba(153,97,31,0.08);color:var(--amber)}
@@ -665,7 +668,7 @@
       display:block;
       margin-bottom:5px;
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:9px;
       letter-spacing:1.2px;
       text-transform:uppercase;
@@ -696,7 +699,7 @@
       border:1px solid var(--border);
       border-radius:var(--radius);
       background:#fff;
-      box-shadow:0 6px 18px rgba(27,23,19,0.04);
+      box-shadow:0 6px 18px rgba(22,24,26,0.04);
       overflow:hidden;
       display:flex;
       flex-direction:column;
@@ -720,7 +723,7 @@
       align-items:center;
       justify-content:center;
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-weight:800;
       font-size:18px;
     }
@@ -748,9 +751,9 @@
       margin-bottom:8px;
     }
     .result-price{
-      color:var(--accent);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
-      font-size:16px;
+      color:var(--text);
+      font-family:inherit;font-variant-numeric:tabular-nums;
+      font-size:19px;
       font-weight:800;
       line-height:1.4;
       overflow-wrap:anywhere;
@@ -774,7 +777,7 @@
       flex:1 1 220px;
     }
     .result-grade-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 2px}
-    .grade-chip{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;line-height:1.5;
+    .grade-chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;line-height:1.5;
       border:1px solid var(--border-strong);color:var(--text);background:var(--surface)}
     .grade-chip.grade-N,.grade-chip.grade-S{border-color:#2f7d4f;color:#2f7d4f}
     .grade-chip.grade-D,.grade-chip.grade-X{border-color:#b26a00;color:#b26a00}
@@ -794,7 +797,7 @@
     }
     .result-source-meta{
       color:var(--text-soft);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:11px;
       line-height:1.45;
       overflow-wrap:anywhere;
@@ -819,7 +822,7 @@
     }
     .fact-label{
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:9px;
       letter-spacing:1px;
       text-transform:uppercase;
@@ -910,7 +913,7 @@
       margin-top:16px;
       padding:0 2px;
       color:var(--text-muted);
-      font-family:"SFMono-Regular","Roboto Mono",monospace;
+      font-family:inherit;font-variant-numeric:tabular-nums;
       font-size:10px;
       line-height:1.7;
     }
@@ -967,6 +970,193 @@
       .result-head{grid-template-columns:74px minmax(0,1fr)}
       .thumb{width:74px}
     }
+    /* ===== 브랜드 틀: 오래된 카메라 가게의 인쇄 카탈로그 =====
+       상자·그림자 대신 가는 줄로 나누고, 제목·모델명·가격은 세리프, 기능 글자는 산세리프.
+       초록은 로고·링크·눌리는 곳에만. 모든 구역은 같은 왼쪽 선에 맞춘다. */
+    :root{
+      --bg:#fcfcfa;
+      --surface:#fcfcfa;
+      --surface-soft:#f3f3ef;
+      --surface-muted:#e9e9e3;
+      --border:#e2e2dc;
+      --border-strong:#16181a;
+      --rule:#16181a;
+      --text:#16181a;
+      --text-soft:#55595c;
+      --text-muted:#878b8d;
+      --accent:#1f4a3a;
+      --accent-soft:rgba(31,74,58,0.07);
+      --shadow:none;
+      --radius:2px;
+      --serif:"Newsreader","Noto Serif KR",Georgia,serif;
+      --sans:"Inter","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
+      --sticky-search-offset:72px;
+    }
+    body{font-family:var(--sans);font-size:15px;background:var(--bg)}
+    ::selection{background:#d9e4de}
+    main{width:min(1200px, calc(100% - 48px));padding:0 0 64px}
+
+    /* 머리줄 */
+    .topbar{background:var(--bg);backdrop-filter:none;border-bottom:1px solid var(--rule);padding:12px max(24px, calc((100% - 1200px) / 2))}
+    .meta-pill,.lang-button{border:0;background:none;border-radius:0;padding:6px 4px;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0;color:var(--text)}
+    .lang-button:hover,.lang-button[aria-expanded="true"]{color:var(--accent);background:none}
+    .meta-pill.accent{background:none;border:0;color:var(--text-muted);font-family:var(--serif);font-style:italic;font-size:14px}
+    .topbar-meta{gap:14px}
+    .lang-menu,.prefs-panel,.entity-menu{border:1px solid var(--rule);border-radius:0;box-shadow:4px 4px 0 rgba(22,24,26,0.08)}
+
+    /* 첫 화면 머리: 상자 없이 큰 세리프 제목 */
+    .hero{background:none;border:0;border-radius:0;box-shadow:none;border-bottom:1px solid var(--rule)}
+    .hero-copy{padding:56px 0 40px;border:0}
+    .hero-title{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4.6vw,58px);line-height:1.05;letter-spacing:-0.015em;max-width:15em;margin:0 0 16px;text-wrap:balance}
+    .hero-subtitle{font-size:16px;color:var(--text-soft);max-width:38em;margin:0 0 32px}
+    .search-panel{background:none;border:0;padding:0;border-radius:0}
+    .search-panel-label{display:none}
+    .search-form-row{gap:0;margin:0;max-width:820px}
+    .search-field{height:56px;border:1px solid var(--rule);border-right:0;border-radius:0;background:#fff;font-size:17px;padding:0 18px}
+    .search-field:focus,select:focus{border-color:var(--rule);box-shadow:inset 0 -2px 0 var(--accent)}
+    .search-button{height:56px;min-width:128px;border-radius:0;background:var(--text);font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0}
+    .search-button:hover{background:var(--accent);filter:none}
+    .query-chip-row{gap:0 18px;margin-top:14px;align-items:baseline}
+    .query-chip-row::before{content:attr(aria-label);color:var(--text-muted);font-size:13px;margin-right:2px}
+    .query-chip{min-height:0;border:0;background:none;padding:2px 0;border-radius:0;font-family:var(--sans);font-size:14px;color:var(--text);
+      text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:4px}
+    .query-chip:hover{color:var(--accent);text-decoration-color:var(--accent)}
+    .hero-trust{margin:0 0 12px;font-family:var(--serif);font-style:italic;font-size:17px;color:var(--text-soft);gap:4px 8px}
+    .hero-trust .source-flag{width:18px;height:13px}
+
+    /* 구역 제목: 굵은 줄 위 세리프 */
+    .home-feed{gap:56px;margin:48px 0 0}
+    .home-heading{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-0.01em;margin:0 0 20px;align-items:baseline;gap:14px}
+    .home-heading small{font-family:var(--sans);font-size:13px;color:var(--text-muted)}
+    .home-latest{gap:28px 20px}
+    .home-item{border:0;border-radius:0;background:none;overflow:visible}
+    .home-item > img{aspect-ratio:4/3;background:var(--surface-soft)}
+    .home-item:hover > img{filter:brightness(0.94)}
+    .home-item:hover,.home-item:focus-visible{border:0}
+    .home-item:hover .home-item-name{text-decoration:underline;text-underline-offset:3px}
+    .home-item-body{padding:10px 0 0;gap:4px}
+    .home-item-name{font-size:13px;font-weight:500}
+    .home-item-price{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-0.01em}
+    .home-item-shop{font-size:12px;color:var(--text-muted)}
+    .home-popular{border-top:1px solid var(--rule);gap:0 48px}
+    .home-model{padding:14px 0;align-items:baseline}
+    .home-model-name{font-family:var(--serif);font-size:18px;font-weight:500}
+    .home-model-price{font-family:var(--serif);font-size:18px;font-weight:500}
+    .home-model-meta{font-size:12px}
+
+    /* 검색 결과 작업 구역: 상자 대신 줄 */
+    .workspace{background:none;border:0;border-radius:0;box-shadow:none;margin-top:0}
+    .toolbar{background:none;padding:16px 0;gap:16px;border-bottom:1px solid var(--border)}
+    .control{gap:6px}
+    .control label,.summary-caption,.summary-kicker,.section-label,.metric-card b,.fact-label,.eyebrow{
+      font-family:var(--sans);font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text-muted)}
+    .control select{height:42px;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:transparent;padding:0 24px 0 0;
+      font-family:var(--serif);font-size:18px;color:var(--text);-webkit-appearance:none;appearance:none;cursor:pointer;
+      background-image:linear-gradient(45deg,transparent 50%,var(--text) 50%),linear-gradient(135deg,var(--text) 50%,transparent 50%);
+      background-position:calc(100% - 10px) 52%,calc(100% - 5px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+    .control select:focus{box-shadow:inset 0 -2px 0 var(--accent)}
+    .toolbar{gap:28px}
+    .status-strip{background:none;padding:36px 0 28px;border-bottom:1px solid var(--rule)}
+    .summary-title{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,48px);letter-spacing:-0.015em;line-height:1.05}
+    .summary-subtitle{font-size:14px}
+    .summary-metrics{gap:0;margin-top:28px;border-top:1px solid var(--border)}
+    .summary-metric{border:0;border-right:1px solid var(--border);border-radius:0;background:none;padding:14px 20px 0 0;margin-right:20px}
+    .summary-metric:last-child{border-right:0;margin-right:0}
+    .summary-value{font-family:var(--serif);font-weight:500;font-size:30px;letter-spacing:-0.01em;margin-top:4px}
+    .summary-meta{font-size:13px}
+    .index-debug-line{font-size:11px}
+    .page-button{border:1px solid var(--border);border-radius:0;font-family:var(--sans);font-size:13px;background:#fff}
+    .workspace-main{padding:28px 0 0}
+    .sticky-search-bar{border:0;border-bottom:1px solid var(--rule);border-radius:0;background:rgba(252,252,250,0.97);box-shadow:none;padding:12px 0}
+    .sticky-search-field{height:46px}
+    .sticky-search-button{height:46px}
+
+    .state-card,.market-entry-card,.archive-card,.side-panel,.workspace-card,.sidebar-card{
+      background:none;border:0;border-top:1px solid var(--rule);border-radius:0;box-shadow:none;padding:20px 0 8px;margin-bottom:28px}
+    .state-card.subtle{background:none}
+    .state-card h3,.market-entry-card h3,.archive-card h3,.workspace-card h3{font-family:var(--serif);font-weight:500;font-size:24px;letter-spacing:-0.01em}
+    .metric-card{background:none;border:0;border-left:2px solid var(--accent);border-radius:0;padding:4px 0 4px 14px}
+    .metric-card span{font-family:var(--serif);font-size:20px;font-weight:500}
+    .micro-pill{border:0;background:none;border-radius:0;padding:0;font-family:var(--sans);font-size:12px;color:var(--text-muted)}
+    .micro-pill + .micro-pill::before{content:"·";margin-right:6px;color:var(--border-strong)}
+    .micro-pill.accent,.micro-pill.green{background:none;color:var(--accent)}
+    .micro-pill.blue{background:none;color:var(--blue)}
+    .micro-pill.amber{background:none;color:var(--amber)}
+    .micro-pills,.market-badges,.result-status-row{gap:6px}
+    .ghost-button,.action-button{border-radius:0;font-family:var(--sans);font-size:13px;font-weight:500;min-height:36px;padding:8px 14px}
+    .action-button{background:var(--text);border-color:var(--text)}
+    .action-button:hover{background:var(--accent);border-color:var(--accent)}
+    .ghost-button{background:none;border-color:var(--border)}
+    .query-review-copy{background:none;box-shadow:none}
+
+    /* 매물: 사진이 먼저인 카탈로그 칸 */
+    .archive-list{gap:40px 24px;margin-top:20px}
+    .result-card{border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+    .result-head{display:block;padding:0;border:0}
+    .thumb{width:100%;aspect-ratio:4/3;border:0;border-radius:0;background:var(--surface-soft);margin-bottom:14px;font-family:var(--serif);font-style:italic;font-weight:400}
+    .result-card:hover .thumb img{filter:brightness(0.94)}
+    .result-title{font-size:14px;font-weight:500;line-height:1.45;margin-bottom:6px;-webkit-line-clamp:2}
+    .result-title:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+    .result-price-row{display:grid;gap:8px;margin-bottom:10px}
+    .result-price{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-0.01em;line-height:1.15}
+    .result-price-original{font-size:12px}
+    .result-landed{font-size:12px}
+    .result-landed-total{font-size:13px;font-weight:600}
+    .result-source{gap:2px;font-size:12px}
+    .result-source-label{font-size:13px;font-weight:500}
+    .result-source-meta{font-family:var(--sans);font-size:12px;color:var(--text-muted)}
+    .grade-chip{border-radius:0;border-color:var(--text);font-family:var(--serif);font-size:13px;font-weight:600;padding:0 7px}
+    .result-facts{padding:12px 0;border-bottom:0;border-top:1px solid var(--border);margin-top:12px}
+    .card-note{font-size:13px}
+    .result-details{padding:0 0 10px;border:0}
+    .result-details summary{text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:3px}
+    .result-details-body{border:0;border-left:2px solid var(--border);border-radius:0;background:none;padding:4px 0 4px 12px}
+    .result-actions{padding:12px 0 0}
+    .archive-item{border:0;border-top:1px solid var(--border);border-radius:0;background:none;padding:12px 0}
+    .load-more-button{min-width:200px}
+
+    /* 의견 보내기·대화창 */
+    .feedback-fab{border-radius:0;border:1px solid var(--rule);background:var(--bg);box-shadow:none;font-weight:500}
+    .feedback-fab::before{content:none}
+    .feedback-fab:hover{background:var(--text);color:#fff;border-color:var(--text)}
+    .feedback-dialog{border:1px solid var(--rule);border-radius:0;box-shadow:6px 6px 0 rgba(22,24,26,0.1)}
+    .feedback-dialog h2{font-family:var(--serif);font-weight:500;font-size:24px}
+    .feedback-dialog textarea,.feedback-dialog input[type=email]{border-radius:0}
+    .site-disclaimer{text-align:left;margin:56px 0 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--text-muted)}
+    .footer-note{font-family:var(--sans);font-size:12px}
+
+    /* 나라별로 보기 */
+    .toolbar{display:block}
+    .country-chips{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
+    .country-chip{display:inline-flex;align-items:center;gap:7px;border:0;background:none;padding:6px 0;font-family:var(--serif);font-size:18px;color:var(--text-soft);
+      border-bottom:2px solid transparent;cursor:pointer}
+    .country-chip .source-flag{margin:0}
+    .country-chip:hover{color:var(--text)}
+    .country-chip[aria-pressed="true"]{color:var(--text);border-bottom-color:var(--accent)}
+    /* 곡선 없이: 모든 틀은 네모 */
+    *,*::before,*::after{border-radius:0 !important}
+    /* 줄이 두 겹으로 겹치지 않게 */
+    .status-strip{border-bottom:0}
+    .sticky-search-bar{border-bottom:0}
+    .query-review-header + *{border-top:0}
+    @media(max-width:720px){
+      main{width:calc(100% - 32px)}
+      .topbar{padding:10px 16px;flex-direction:row;align-items:center}
+      .topbar-meta{gap:6px}
+      .meta-pill.accent{display:none}
+      .sticky-search-region{top:64px}
+      .hero-copy{padding:36px 0 28px}
+      .hero-title{font-size:34px}
+      .search-form-row{flex-direction:row}
+      .search-field{height:50px;font-size:16px;min-width:0}
+      .search-button{width:auto;min-width:84px;height:50px}
+      .home-latest{gap:24px 14px}
+      .home-heading{font-size:22px;flex-wrap:wrap;gap:4px 10px}
+      .summary-metrics{grid-template-columns:1fr}
+      .summary-metric{border-right:0;border-bottom:1px solid var(--border);margin-right:0;padding:12px 0}
+      .result-head{grid-template-columns:none}
+      .thumb{width:100%}
+    }
   </style>
   <!-- 방문 통계: Vercel Web Analytics (쿠키 없음). Vercel 프로젝트 화면에서 Analytics를 켜야 쌓임 -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -976,8 +1166,7 @@
   <div class="shell">
     <header class="topbar">
       <a href="/" class="brand" data-i18n-aria-label="topbar.brand_aria" aria-label="Camera Bridge Beta">
-        <span class="brand-mark"></span>
-        CAMERA <span>BRIDGE</span>
+        <svg class="brand-logo" viewBox="-40 -747 4391 1205" aria-hidden="true" focusable="false"><path fill="currentColor" d="M69 -364Q122 -364 185 -381Q303 -516 436.5 -609.5Q570 -703 662 -703Q708 -703 708 -680Q708 -649 638.0 -591.0Q568 -533 456.0 -472.0Q344 -411 236 -375Q155 -281 105.0 -193.0Q55 -105 55 -48Q55 32 157 32Q214 32 283.0 -4.0Q352 -40 397 -75Q407 -82 414.5 -82.0Q422 -82 422 -74Q422 -69 418 -65Q371 -31 334.5 -9.0Q298 13 239.0 34.5Q180 56 126 56Q0 56 0 -41Q0 -158 162 -354Q114 -342 70 -339Q58 -341 58.0 -352.0Q58 -363 69 -364ZM631 -675Q572 -675 467.5 -596.5Q363 -518 261 -404Q354 -437 448.5 -490.5Q543 -544 600.0 -591.5Q657 -639 657 -661Q657 -675 631 -675ZM643 -120Q637 -120 637.0 -124.5Q637 -129 644 -135Q677 -162 677 -184Q677 -198 652 -200Q607 -199 544.5 -135.0Q482 -71 482 -39Q482 -28 494.5 -28.0Q507 -28 528 -45Q547 -57 599 -105Q611 -117 622 -117Q636 -117 636 -104Q636 -99 633.0 -96.0Q630 -93 622.0 -83.5Q614 -74 608 -66Q590 -40 590 -32Q590 -12 606 -12Q627 -12 685.0 -50.5Q743 -89 791 -128L839 -166Q846 -171 852.0 -171.0Q858 -171 858 -164V-162Q781 -97 695.5 -40.0Q610 17 583 17Q551 17 551 -17Q551 -25 554.0 -32.0Q557 -39 557.0 -42.0Q557 -45 555 -46Q552 -46 516.5 -19.0Q481 8 454.5 8.0Q428 8 428.0 -20.0Q428 -48 465.5 -95.5Q503 -143 566.0 -182.0Q629 -221 689 -221Q703 -221 712.5 -214.0Q722 -207 722.0 -192.5Q722 -178 693.0 -149.0Q664 -120 643 -120ZM845 -174 843 -185Q843 -190 864 -190Q876 -190 876.0 -175.0Q876 -160 841.5 -108.5Q807 -57 807.0 -55.0Q807 -53 811.0 -53.0Q815 -53 903.5 -123.0Q992 -193 1010.0 -193.0Q1028 -193 1028.0 -180.5Q1028 -168 1018.0 -152.5Q1008 -137 976.0 -96.5Q944 -56 942.0 -53.0Q940 -50 940.0 -46.0Q940 -42 946.5 -42.0Q953 -42 1045.0 -110.0Q1137 -178 1150.0 -178.0Q1163 -178 1163 -167Q1163 -147 1119.0 -97.0Q1075 -47 1075.0 -33.5Q1075 -20 1085.5 -20.0Q1096 -20 1138 -48Q1213 -98 1276 -149L1298 -167Q1306 -172 1311.5 -172.0Q1317 -172 1317 -166V-163Q1106 13 1056 13Q1027 13 1027 -11Q1027 -31 1056.0 -70.0Q1085 -109 1085.0 -112.5Q1085 -116 1082.5 -116.0Q1080 -116 1000.5 -59.0Q921 -2 906 -2Q899 -2 894.0 -7.5Q889 -13 889 -19Q889 -37 932 -92Q975 -146 975 -151Q975 -156 969 -156Q962 -156 827 -46L777 -6Q764 5 757.5 5.0Q751 5 745.0 1.5Q739 -2 739.0 -9.0Q739 -16 756.5 -43.0Q774 -70 802 -109Q845 -167 845 -174ZM1554 -166Q1561 -171 1567.0 -171.0Q1573 -171 1573 -164V-162Q1469 -76 1400.0 -33.0Q1331 10 1275 10Q1230 10 1230 -34Q1230 -99 1296.0 -167.5Q1362 -236 1407 -236Q1432 -236 1432 -208Q1427 -153 1274 -60V-50Q1274 -17 1308.5 -17.0Q1343 -17 1383 -40Q1461 -86 1529 -145ZM1381 -205Q1359 -205 1324.5 -168.0Q1290 -131 1278 -84Q1326 -113 1359.0 -145.5Q1392 -178 1392.0 -191.5Q1392 -205 1381 -205ZM1776 -166Q1783 -171 1789.0 -171.0Q1795 -171 1795 -164V-162Q1720 -102 1647.0 -49.5Q1574 3 1540 3Q1515 3 1515.0 -24.0Q1515 -51 1539.0 -78.0Q1563 -105 1586.5 -125.0Q1610 -145 1610.0 -151.5Q1610 -158 1602.5 -166.5Q1595 -175 1590 -178Q1573 -161 1516 -116L1512 -131Q1575 -181 1585 -198V-207Q1585 -232 1590.0 -241.0Q1595 -250 1614.0 -266.0Q1633 -282 1640.0 -282.0Q1647 -282 1652.5 -277.0Q1658 -272 1658.0 -267.0Q1658 -262 1654.5 -255.5Q1651 -249 1647.5 -244.5Q1644 -240 1638.0 -233.5Q1632 -227 1630.5 -224.5Q1629 -222 1627.5 -216.0Q1626 -210 1621.0 -206.0Q1616 -202 1616.0 -196.0Q1616 -190 1624.0 -169.5Q1632 -149 1632.0 -139.5Q1632 -130 1595.0 -94.5Q1558 -59 1558 -37Q1558 -25 1569 -25Q1583 -25 1621 -50L1633 -58Q1698 -103 1755 -149ZM1879 -120Q1873 -120 1873.0 -124.5Q1873 -129 1880 -135Q1913 -162 1913 -184Q1913 -198 1888 -200Q1843 -199 1780.5 -135.0Q1718 -71 1718 -39Q1718 -28 1730.5 -28.0Q1743 -28 1764 -45Q1783 -57 1835 -105Q1847 -117 1858 -117Q1872 -117 1872 -104Q1872 -99 1869.0 -96.0Q1866 -93 1858.0 -83.5Q1850 -74 1844 -66Q1826 -40 1826 -32Q1826 -12 1842 -12Q1863 -12 1921.0 -50.5Q1979 -89 2027 -128L2075 -166Q2082 -171 2088.0 -171.0Q2094 -171 2094 -164V-162Q2017 -97 1931.5 -40.0Q1846 17 1819 17Q1787 17 1787 -17Q1787 -25 1790.0 -32.0Q1793 -39 1793.0 -42.0Q1793 -45 1791 -46Q1788 -46 1752.5 -19.0Q1717 8 1690.5 8.0Q1664 8 1664.0 -20.0Q1664 -48 1701.5 -95.5Q1739 -143 1802.0 -182.0Q1865 -221 1925 -221Q1939 -221 1948.5 -214.0Q1958 -207 1958.0 -192.5Q1958 -178 1929.0 -149.0Q1900 -120 1879 -120ZM2752 -394Q2752 -394 2796 -397Q2867 -397 2901.5 -370.5Q2936 -344 2936.0 -295.5Q2936 -247 2892.0 -182.0Q2848 -117 2778 -64H2835Q2870 -64 2884.0 -67.0Q2898 -70 2900 -70Q2914 -70 2914.0 -55.0Q2914 -40 2894 -39Q2817 -39 2746 -41Q2634 30 2526 30Q2475 30 2445.0 11.0Q2415 -8 2415.0 -27.5Q2415 -47 2431.5 -58.0Q2448 -69 2478 -69Q2595 -69 2740 -64Q2800 -113 2836.0 -177.5Q2872 -242 2872 -294Q2872 -377 2783 -377Q2748 -377 2710.5 -366.0Q2673 -355 2665.5 -350.5Q2658 -346 2656 -346Q2650 -346 2650.0 -354.5Q2650 -363 2676 -375Q2790 -430 2899.0 -521.5Q3008 -613 3008 -652Q3008 -670 2980 -670Q2866 -669 2667 -499Q2627 -396 2535.5 -246.0Q2444 -96 2344.0 22.5Q2244 141 2195 141Q2165 141 2165 110Q2165 39 2299.5 -143.0Q2434 -325 2604 -478Q2634 -551 2634.0 -584.5Q2634 -618 2618.0 -637.5Q2602 -657 2571 -666Q2522 -679 2467.5 -679.0Q2413 -679 2384.0 -676.5Q2355 -674 2313.5 -666.5Q2272 -659 2246.0 -640.5Q2220 -622 2220.0 -593.5Q2220 -565 2248.0 -549.5Q2276 -534 2316.5 -528.0Q2357 -522 2397.0 -515.0Q2437 -508 2465.0 -487.5Q2493 -467 2493 -430Q2493 -420 2488.5 -420.0Q2484 -420 2481.5 -423.0Q2479 -426 2473 -435Q2464 -448 2446.5 -455.0Q2429 -462 2392.5 -468.5Q2356 -475 2323.5 -482.5Q2291 -490 2258.0 -502.0Q2225 -514 2205.0 -536.0Q2185 -558 2185.0 -587.5Q2185 -617 2210.0 -640.0Q2235 -663 2276 -676Q2360 -701 2451 -701Q2687 -701 2687 -577Q2687 -566 2682 -544Q2884 -707 3010 -707Q3066 -707 3066 -673Q3066 -624 2963.5 -534.0Q2861 -444 2752 -394ZM2220 112Q2249 112 2375.5 -73.5Q2502 -259 2578 -419Q2428 -276 2312.5 -121.5Q2197 33 2197 89Q2197 112 2220 112ZM2709 -42 2528 -46Q2451 -46 2451 -23Q2451 -10 2477.0 1.5Q2503 13 2537 13Q2626 13 2709 -42ZM3274 -166Q3281 -171 3287.0 -171.0Q3293 -171 3293 -164V-162Q3218 -102 3145.0 -49.5Q3072 3 3038 3Q3013 3 3013.0 -24.0Q3013 -51 3037.0 -78.0Q3061 -105 3084.5 -125.0Q3108 -145 3108.0 -151.5Q3108 -158 3100.5 -166.5Q3093 -175 3088 -178Q3071 -161 3014 -116L3010 -131Q3073 -181 3083 -198V-207Q3083 -232 3088.0 -241.0Q3093 -250 3112.0 -266.0Q3131 -282 3138.0 -282.0Q3145 -282 3150.5 -277.0Q3156 -272 3156.0 -267.0Q3156 -262 3152.5 -255.5Q3149 -249 3145.5 -244.5Q3142 -240 3136.0 -233.5Q3130 -227 3128.5 -224.5Q3127 -222 3125.5 -216.0Q3124 -210 3119.0 -206.0Q3114 -202 3114.0 -196.0Q3114 -190 3122.0 -169.5Q3130 -149 3130.0 -139.5Q3130 -130 3093.0 -94.5Q3056 -59 3056 -37Q3056 -25 3067 -25Q3081 -25 3119 -50L3131 -58Q3196 -103 3253 -149ZM3381.5 -302.0Q3391 -302 3396.5 -296.0Q3402 -290 3402.0 -279.0Q3402 -268 3387.0 -251.0Q3372 -234 3361.0 -234.0Q3350 -234 3345.0 -240.5Q3340 -247 3340.0 -255.5Q3340 -264 3356.0 -283.0Q3372 -302 3381.5 -302.0ZM3464 -167Q3472 -172 3476.5 -172.0Q3481 -172 3481 -166V-163Q3485 -163 3427.5 -119.0Q3370 -75 3304.5 -31.0Q3239 13 3222 13Q3193 13 3193 -11Q3193 -40 3243.0 -120.5Q3293 -201 3316 -201Q3333 -201 3333.0 -188.0Q3333 -175 3287.0 -117.0Q3241 -59 3241 -34Q3241 -20 3251.5 -20.0Q3262 -20 3304 -48Q3379 -98 3442 -149ZM3534 -143 3566 -192Q3563 -193 3560 -193Q3518 -193 3450.0 -129.0Q3382 -65 3382 -39Q3382 -32 3390 -32Q3415 -32 3466.0 -74.5Q3517 -117 3534 -143ZM3757 -162Q3549 6 3505 6Q3488 6 3488.0 -14.0Q3488 -34 3503 -81Q3503 -82 3501 -82Q3386 13 3348 13Q3322 13 3322 -6Q3322 -48 3412.5 -129.0Q3503 -210 3557 -210Q3564 -210 3572 -200Q3595 -234 3830 -569Q3855 -600 3870.5 -600.0Q3886 -600 3886 -590Q3886 -565 3714 -354Q3650 -274 3596.5 -187.5Q3543 -101 3543 -56Q3543 -37 3554 -37Q3567 -37 3600 -60Q3668 -109 3719 -150L3738 -166Q3745 -171 3751.0 -171.0Q3757 -171 3757 -164ZM4035 -166Q4042 -171 4048.0 -171.0Q4054 -171 4054 -164V-162Q3957 -82 3902 -46L3702 84L3640 171Q3496 368 3496 383Q3480 418 3465 418Q3446 418 3446.0 393.0Q3446 368 3470.5 326.0Q3495 284 3519 258L3614 158Q3626 139 3663.0 88.0Q3700 37 3712 20L3755 -44L3757 -48Q3757 -50 3755 -50Q3696 -1 3657.0 -1.0Q3618 -1 3618.0 -23.5Q3618 -46 3648.0 -83.0Q3678 -120 3720.5 -155.0Q3763 -190 3814.5 -215.5Q3866 -241 3905.5 -241.0Q3945 -241 3945 -213Q3945 -193 3907.5 -165.0Q3870 -137 3861.5 -137.0Q3853 -137 3853 -141Q3853 -147 3861 -152Q3895 -176 3895.0 -197.5Q3895 -219 3877 -219Q3833 -219 3754.5 -144.5Q3676 -70 3676 -39Q3676 -30 3690.5 -30.0Q3705 -30 3740.0 -53.5Q3775 -77 3793 -99L3820 -133Q3825 -140 3833.0 -140.0Q3841 -140 3847.0 -135.0Q3853 -130 3853 -125L3732 43L3880 -50Q3946 -90 4012 -146ZM4292 -166Q4299 -171 4305.0 -171.0Q4311 -171 4311 -164V-162Q4207 -76 4138.0 -33.0Q4069 10 4013 10Q3968 10 3968 -34Q3968 -99 4034.0 -167.5Q4100 -236 4145 -236Q4170 -236 4170 -208Q4165 -153 4012 -60V-50Q4012 -17 4046.5 -17.0Q4081 -17 4121 -40Q4199 -86 4267 -145ZM4119 -205Q4097 -205 4062.5 -168.0Q4028 -131 4016 -84Q4064 -113 4097.0 -145.5Q4130 -178 4130.0 -191.5Q4130 -205 4119 -205Z"/><path d="M172 140 C776 115 1552 105 2026 70" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
       </a>
       <div class="topbar-meta">
         <span class="meta-pill accent" data-i18n="topbar.beta_badge">Beta</span>
@@ -1034,19 +1223,22 @@
       </section>
 
       <section id="home-feed" class="home-feed" hidden>
+        <div id="home-picks-block" hidden>
+          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">lowest asking price for sale now</small></h2>
+          <div id="home-picks" class="home-popular"></div>
+        </div>
         <div>
           <h2 class="home-heading"><span data-i18n="home.latest">Just listed</span> <small data-i18n="home.latest_note">one per model, newest first</small></h2>
           <div id="home-latest" class="home-latest"></div>
-        </div>
-        <div>
-          <h2 class="home-heading"><span data-i18n="home.popular">Market prices for popular models</span> <small data-i18n="home.popular_note">B-grade median from sold listings</small></h2>
-          <div id="home-popular" class="home-popular"></div>
         </div>
       </section>
 
       <section class="workspace">
         <div class="toolbar" data-i18n-aria-label="filters.toolbar_aria" aria-label="Search filters">
-          <div class="control">
+          <!-- 나라별로 보기 (종류·마운트·판매 상태·정렬 선택칸은 숨김: 모델을 고르면 거의 안 씀) -->
+          <div id="country-chips" class="country-chips" role="group"></div>
+          <input type="hidden" id="country-filter" value="">
+          <div class="control" hidden>
             <label for="category-filter" data-i18n="filters.category.label">Category</label>
             <select id="category-filter">
               <option value="">Any</option>
@@ -1066,7 +1258,7 @@
               <option value="Sigma">Sigma</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden>
             <label for="mount-filter" data-i18n="filters.mount.label">Mount</label>
             <select id="mount-filter">
               <option value="">Any</option>
@@ -1078,7 +1270,7 @@
               <option value="S">S</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden>
             <label for="sold-filter" data-i18n="filters.sold_quality.label">Listing status</label>
             <select id="sold-filter">
               <option value="">Any</option>
@@ -1086,7 +1278,7 @@
               <option value="sold">Sold</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden>
             <label for="sort-select" data-i18n="filters.sort.label">Sort</label>
             <select id="sort-select">
               <option value="relevance">Recommended</option>
@@ -1348,8 +1540,9 @@
       home: {
         latest: { ko: '새로 올라온 매물', en: 'Just listed', ja: '新着の出品', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Recém-anunciados', es: 'Recién publicados', de: 'Neu eingestellt', it: 'Appena pubblicati' },
         latest_note: { ko: '모델마다 한 건, 최근 순', en: 'one per model, newest first', ja: 'モデルごとに1件、新しい順', 'zh-Hans': '每个型号一件，按时间排序', 'zh-Hant': '每個型號一件，依時間排序', pt: 'um por modelo, mais recentes primeiro', es: 'uno por modelo, más recientes primero', de: 'eins pro Modell, neueste zuerst', it: 'uno per modello, dal più recente' },
-        popular: { ko: '많이 찾는 모델 시세', en: 'Market prices for popular models', ja: '人気モデルの相場', 'zh-Hans': '热门型号行情', 'zh-Hant': '熱門型號行情', pt: 'Preços de mercado dos modelos populares', es: 'Precios de mercado de modelos populares', de: 'Marktpreise beliebter Modelle', it: 'Prezzi di mercato dei modelli più cercati' },
-        popular_note: { ko: 'B급 기준, 판매 완료 매물 중앙값', en: 'B-grade median from sold listings', ja: 'Bランク基準・成約品の中央値', 'zh-Hans': 'B 级基准，已售中位数', 'zh-Hant': 'B 級基準，已售中位數', pt: 'mediana de vendidos, grau B', es: 'mediana de vendidos, grado B', de: 'Median verkaufter Angebote, Zustand B', it: 'mediana dei venduti, grado B' },
+        picks: { ko: '수집가들이 찾는 모델', en: 'Collector favorites', ja: 'コレクターが探すモデル', 'zh-Hans': '藏家追捧的型号', 'zh-Hant': '藏家追捧的型號', pt: 'Favoritos dos colecionadores', es: 'Favoritos de coleccionistas', de: 'Sammlerstücke', it: 'I preferiti dei collezionisti' },
+        picks_note: { ko: '지금 판매 중인 매물의 최저 호가', en: 'lowest asking price for sale now', ja: '現在販売中の最安値', 'zh-Hans': '当前在售最低报价', 'zh-Hant': '目前在售最低報價', pt: 'menor preço pedido à venda agora', es: 'precio más bajo en venta ahora', de: 'niedrigster Angebotspreis aktuell', it: 'prezzo richiesto più basso ora in vendita' },
+        from_price: { ko: '{p}부터', en: 'from {p}', ja: '{p}〜', 'zh-Hans': '{p} 起', 'zh-Hant': '{p} 起', pt: 'a partir de {p}', es: 'desde {p}', de: 'ab {p}', it: 'da {p}' },
         on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
       },
       language: {
@@ -1403,6 +1596,10 @@
       },
       filters: {
         toolbar_aria: { ko: '검색 필터', en: 'Search filters', ja: '検索フィルター', 'zh-Hans': '搜索筛选器', 'zh-Hant': '搜尋篩選器', pt: 'Filtros de busca', es: 'Filtros de búsqueda', de: 'Suchfilter', it: 'Filtri di ricerca' },
+        country: {
+          label: { ko: '나라', en: 'Country', ja: '国', 'zh-Hans': '国家', 'zh-Hant': '國家', pt: 'País', es: 'País', de: 'Land', it: 'Paese' },
+          all: { ko: '전체', en: 'All countries', ja: 'すべての国', 'zh-Hans': '全部国家', 'zh-Hant': '全部國家', pt: 'Todos os países', es: 'Todos los países', de: 'Alle Länder', it: 'Tutti i paesi' }
+        },
         category: {
           label: { ko: '분류', en: 'Category', ja: 'カテゴリー', 'zh-Hans': '类别', 'zh-Hant': '類別', pt: 'Categoria', es: 'Categoría', de: 'Kategorie', it: 'Categoria' },
           any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
@@ -1940,14 +2137,13 @@
     }
 
     // 첫 화면: 새로 올라온 실제 매물 + 많이 찾는 모델 시세 (data/derived/home_feed.json, entity_summary_v1.json)
-    const homeState = { feed: null };
+    const homeState = { feed: null, picks: [] };
 
     async function loadHomeFeed(){
-      try{
-        homeState.feed = await fetch('/data/derived/home_feed.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
-      }catch(error){
-        homeState.feed = null;
-      }
+      const getJson = url => fetch(url, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
+      const [feed, picks] = await Promise.all([getJson('/data/derived/home_feed.json'), getJson('/data/config/home_picks.json')]);
+      homeState.feed = feed;
+      homeState.picks = (picks && Array.isArray(picks.picks)) ? picks.picks : [];
       renderHome();
     }
 
@@ -1971,11 +2167,37 @@
       return entityDisplayName(entity).replace(/\s*(\((standard|Standard)\)|기본형)\s*$/, '');
     }
 
+    // 나라별로 보기: 판매처가 있는 나라만 (배송비 규칙의 판매처-나라)
+    const COUNTRY_ORDER = ['KR', 'JP', 'HK', 'SG', 'GB', 'FR', 'IT', 'FI', 'US'];
+    function renderCountryChips(){
+      const box = els['country-chips'];
+      if(!box) return;
+      const sources = (landedState.rules && landedState.rules.sources) || {};
+      const present = new Set(Object.values(sources).map(rule => String((rule && rule.country) || '').toUpperCase()).filter(Boolean));
+      const codes = COUNTRY_ORDER.filter(code => present.has(code)).concat([...present].filter(code => !COUNTRY_ORDER.includes(code)).sort());
+      const current = String(els['country-filter'].value || '').toUpperCase();
+      box.setAttribute('aria-label', ux('filters.country.label', 'Country'));
+      box.innerHTML = [`<button type="button" class="country-chip" data-country="" aria-pressed="${current ? 'false' : 'true'}">${escapeHtml(ux('filters.country.all', 'All countries'))}</button>`]
+        .concat(codes.map(code => `<button type="button" class="country-chip" data-country="${code}" aria-pressed="${current === code ? 'true' : 'false'}">${countryFlagHtml(code)}${escapeHtml(displayNameOf('region', code))}</button>`))
+        .join('');
+    }
+
+    function bindCountryChips(){
+      const box = els['country-chips'];
+      if(!box) return;
+      box.addEventListener('click', event => {
+        const chip = event.target.closest('[data-country]');
+        if(!chip) return;
+        els['country-filter'].value = chip.dataset.country;
+        renderCountryChips();
+        if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
+      });
+    }
+
     function renderHome(){
       const section = document.getElementById('home-feed');
       const latestEl = document.getElementById('home-latest');
-      const popularEl = document.getElementById('home-popular');
-      if(!section || !latestEl || !popularEl) return;
+      if(!section || !latestEl) return;
       const rules = (landedState.rules && landedState.rules.sources) || {};
       const latest = ((homeState.feed && homeState.feed.latest) || []).filter(item => entityState.byId[item.entity]);
       latestEl.innerHTML = latest.map(item => {
@@ -1992,16 +2214,27 @@
           </span>
         </button>`;
       }).join('');
-      const popular = ((entityState.summary && entityState.summary.entities) || [])
-        .filter(entity => !entity.feature && !(entity.children || []).length && !/unspecified/.test(entity.id) && entity.b_price_krw && entity.b_price_basis === 'sold')
-        .sort((a, b) => (b.active_count || 0) - (a.active_count || 0) || (b.listing_count || 0) - (a.listing_count || 0))
-        .slice(0, 10);
-      popularEl.innerHTML = popular.map(entity => `<button type="button" class="home-model" data-entity="${escapeHtml(entity.id)}">
-          <span class="home-model-name">${escapeHtml(homeName(entity))}</span>
-          <span class="home-model-price">${escapeHtml(krwToDisplay(entity.b_price_krw) || '—')}</span>
-          <span class="home-model-meta">${escapeHtml(ux('home.on_sale', '{n} for sale').replace('{n}', String(entity.active_count || 0)))}</span>
-        </button>`).join('');
-      section.hidden = !latest.length && !popular.length;
+      // 수집가들이 찾는 모델: data/config/home_picks.json 순서대로, 지금 판매 중 최저 호가
+      const picksEl = document.getElementById('home-picks');
+      const picksBlock = document.getElementById('home-picks-block');
+      const summaryById = {};
+      ((entityState.summary && entityState.summary.entities) || []).forEach(entity => { summaryById[entity.id] = entity; });
+      const picks = homeState.picks.map(id => summaryById[id]).filter(entity => entity && entity.active_count);
+      if(picksEl && picksBlock){
+        picksEl.innerHTML = picks.map(entity => {
+          const active = entity.active_count || 0;
+          const low = (entity.active_price_krw || [])[0];
+          const price = low ? ux('home.from_price', 'from {p}').replace('{p}', krwToDisplay(low)) : '—';
+          const meta = ux('home.on_sale', '{n} for sale').replace('{n}', String(active));
+          return `<button type="button" class="home-model" data-entity="${escapeHtml(entity.id)}">
+            <span class="home-model-name">${escapeHtml(homeName(entity))}</span>
+            <span class="home-model-price">${escapeHtml(price)}</span>
+            <span class="home-model-meta">${escapeHtml(meta)}</span>
+          </button>`;
+        }).join('');
+        picksBlock.hidden = !picks.length;
+      }
+      section.hidden = !latest.length && !picks.length;
     }
 
     // 위 검색창이 화면에 보이는 동안엔 결과 사이의 두 번째 검색창을 숨김 (같은 검색창이 두 개로 보이던 문제)
@@ -2057,6 +2290,7 @@
       populateLandedOptions();
       loadTrustLine();
       renderHome();
+      renderCountryChips();
       if(state.response) render();
     }
 
@@ -3130,13 +3364,14 @@
       });
       loadTrustLine();
       renderHome();
+      renderCountryChips();
     }
 
     function cacheElements(){
       [
         'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
         'currency-select','destination-select',
-        'category-filter','brand-filter','mount-filter','sold-filter',
+        'category-filter','brand-filter','mount-filter','sold-filter','country-filter','country-chips',
         'sort-select','summary-query-kicker','summary-query-title','summary-query-subtitle',
         'result-count','result-caption','active-count','active-count-caption',
         'market-price-value','market-price-caption','summary-meta','index-debug-line','page-indicator',
@@ -3272,6 +3507,7 @@
 
     function formatAppliedFiltersNotice(filters){
       const entries = Object.entries(filters || {})
+        .filter(([key]) => !(key === 'source' && els['country-filter'] && els['country-filter'].value))
         .map(([key, value]) => {
           const localizedValue = localizeAppliedFilterValue(key, value);
           if(!localizedValue) return '';
@@ -3446,7 +3682,8 @@
         ['category', els['category-filter'].value],
         ['brand', els['brand-filter'].value],
         ['mount', els['mount-filter'].value],
-        ['sold_quality', els['sold-filter'].value]
+        ['sold_quality', els['sold-filter'].value],
+        ['country', els['country-filter'].value]
       ].forEach(([key, value]) => {
         if(value) params.set(key, value);
       });
@@ -3472,6 +3709,7 @@
         brand: String(raw.brand || '').trim(),
         mount: String(raw.mount || '').trim(),
         sold_quality: String(raw.sold_quality || '').trim(),
+        country: String(raw.country || '').trim().toUpperCase(),
         offset,
         visibleCount,
         historyVisibleCount: Number.isFinite(Number(raw.historyVisibleCount))
@@ -3491,6 +3729,7 @@
         brand: overrides.brand !== undefined ? overrides.brand : els['brand-filter'].value,
         mount: overrides.mount !== undefined ? overrides.mount : els['mount-filter'].value,
         sold_quality: overrides.sold_quality !== undefined ? overrides.sold_quality : els['sold-filter'].value,
+        country: overrides.country !== undefined ? overrides.country : els['country-filter'].value,
         offset: overrides.offset !== undefined ? overrides.offset : state.offset,
         visibleCount: overrides.visibleCount !== undefined ? overrides.visibleCount : getVisibleCount(),
         historyVisibleCount: overrides.historyVisibleCount !== undefined ? overrides.historyVisibleCount : state.historyVisibleCount,
@@ -3509,6 +3748,7 @@
       if(next.brand) params.set('brand', next.brand);
       if(next.mount) params.set('mount', next.mount);
       if(next.sold_quality) params.set('sold_quality', next.sold_quality);
+      if(next.country) params.set('country', next.country);
       if(next.offset > 0) params.set('offset', String(next.offset));
       if(next.visibleCount > PAGE_SIZE && next.offset === 0) params.set('shown', String(next.visibleCount));
       return params;
@@ -3531,6 +3771,8 @@
       els['brand-filter'].value = next.brand;
       els['mount-filter'].value = next.mount;
       els['sold-filter'].value = next.sold_quality;
+      els['country-filter'].value = next.country;
+      renderCountryChips();
       els['sort-select'].value = next.sort || 'relevance';
     }
 
@@ -3581,6 +3823,7 @@
         brand: params.get('brand') || '',
         mount: params.get('mount') || '',
         sold_quality: params.get('sold_quality') || '',
+        country: params.get('country') || '',
         offset: Number.parseInt(params.get('offset') || '0', 10),
         visibleCount: Number.parseInt(params.get('shown') || String(PAGE_SIZE), 10),
         historyVisibleCount: history.state && Number.isFinite(Number(history.state.historyVisibleCount))
@@ -4413,6 +4656,7 @@
     function render(){
       document.body.classList.toggle('cb-searched', Boolean(state.response || state.loading || state.error));
       if(!document.body.classList.contains('cb-searched')) renderHome();  // 통화·언어를 바꾸면 첫 화면 가격도 다시
+      renderCountryChips();
       updatePrefsSummary();
       renderEntityBar();
       renderSummary();
@@ -4904,6 +5148,7 @@
         });
       });
 
+      bindCountryChips();
       ['category-filter','brand-filter','mount-filter','sold-filter'].forEach(id => {
         els[id].addEventListener('change', () => {
           if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
