@@ -69,6 +69,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
     if cond.startswith(LCF_PREFIX):
         letter = cond[len(LCF_PREFIX):].strip()[:1].upper()
         return (_LCF[letter], "label") if letter in _LCF else (None, None)
+    if cond.startswith(NOC_PREFIX):
+        return _NOC.get(cond[len(NOC_PREFIX):].strip().upper().replace(" ", "")), "label"
     if cond.startswith(MK_PREFIX):
         if "not working" in cond:
             return "X", "label"
@@ -156,3 +158,10 @@ LCF_PREFIX = "LCF: "
 # 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-06): 사진이 표기보다 평균 0.6등급 후함 → 기존 매장(0.8)과 비슷해 글자 그대로.
 # 정확 일치 8/24 · 한 등급 이내 21/24. D(Operational)는 사진은 깨끗해도 작동 문제를 뜻해 D로 둠.
 _LCF = {"A": "A", "B": "B", "C": "C", "D": "D", "E": "X"}
+
+
+# 이탈리아 Newoldcamera: A-·AB·BA·B+·B+/B·B/B+·B·BC·C (A-가 가장 좋음)
+NOC_PREFIX = "NOC: "
+# 사진 평가(표기 가리고 23점, 사진 3장씩, 2026-10-08): 사진이 표기보다 평균 0.6등급 후함 → 기존 매장(0.6~0.8)과 비슷해 그대로.
+# 정확 일치 11/23 · 한 등급 이내 22/23. A-·AB는 상자까지 있는 새것 같은 매물이 많지만 사진 후함을 빼고 A.
+_NOC = {"A-": "A", "AB": "A", "BA": "B", "B+": "B", "B+/B": "C", "B/B+": "C", "B": "C", "BC": "D", "C": "D"}

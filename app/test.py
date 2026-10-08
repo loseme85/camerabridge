@@ -2722,6 +2722,104 @@ def crawl_leicafrance():
     return results
 
 
+# Newoldcamera 제목의 이탈리아어 → 기존 분류가 아는 영어 (부속품 이름·색)
+_NOC_WORDS = [(r"\bparaluce\b", "hood"), (r"\bmirino\b", "viewfinder"), (r"\bborsa(?: pronto)?\b", "case"), (r"\btracoll[ae]\b", "strap"),
+              (r"\bcinghi[ae]\b", "strap"), (r"\bimpugnatura\b", "grip"), (r"\badattatore\b", "adapter"), (r"\banello\b", "ring"),
+              (r"\blentina(?: di)? correzione(?: diottrica)?\b", "diopter correction lens"), (r"\bfiltro\b", "filter"),
+              (r"\btappo\b", "cap"), (r"\bscatola\b", "box"), (r"\bimballo\b", "box"), (r"\bistruzioni\b", "manual"),
+              (r"\bcustodia\b", "case"), (r"\bastuccio\b", "case"), (r"\bcalotta\b", "top cover"), (r"\bcaricabatterie\b", "charger"),
+              (r"\bbatteria\b", "battery"), (r"\bin pelle\b", "leather"), (r"\bcuoio\b", "leather"), (r"\bner[ao]\b", "black"),
+              (r"\bmarrone\b", "brown"), (r"\b2 ganci\b", "2 lugs"), (r"\bnew\b", "new version"), (r"\bCR\b", "chrome"), (r"\bRTN\b", "")]
+# 다른 브랜드 (라이카 마운트용 써드파티·가방 등) — 브랜드 칸 뒤에 붙거나 제목에 들어감
+_NOC_OTHER = re.compile(r"voigtl|zeiss|contax|7artisans|dj-optical|astrhori|\bnisi\b|novoflex|oberwerth|metabones|lockcircle|"
+                        r"ttartisan|kipon|canon|konica|rollei|schneider|light lens lab|wollensak|planar|biogon|sonnar|distagon", re.I)
+
+
+def _noc_normalize(name: str) -> str:
+    name = re.sub(r"\s+", " ", name).strip()
+    # 초점거리를 앞에 쓴 표기: 50/2 → 50mm f/2, 28-35-50/4 → 28-35-50mm f/4, 11-23/3.5-4.5 → 11-23mm f/3.5-4.5
+    name = re.sub(r"(?<![\w/.])(\d{2,3}(?:-\d{2,3})*)/(\d(?:\.\d+)?(?:-\d(?:\.\d+)?)?)(?![\w/])", r"\1mm f/\2", name)
+    for pattern, word in _NOC_WORDS:
+        name = re.sub(pattern, word, name, flags=re.I)
+    name = re.sub(r"\s+", " ", name).strip()
+    if not re.search(r"leica|leitz", name, re.I):
+        name = "Leica " + name
+    return name
+
+
+def crawl_newoldcamera():
+    """Newoldcamera (이탈리아) - 밀라노 중고 전문점. 화면은 ASP.NET + JSON API(noc-gateway, 브랜드·종류별 판매 중 목록).
+    라이카 브랜드 칸(LEICA, LEICA-M, LEICA-R, LEICA-V(스크루) …)만. 등급 표기 A-·AB·BA·B+·B+/B·B/B+·B·BC·C.
+    사진 경로가 없는 매물은 서명 주소가 1시간이면 만료돼 camerabridge.io/api/noc_image가 그때그때 받아 넘김"""
+    import requests
+    from condition_grade import NOC_PREFIX
+    results = []
+    base = "https://www.newoldcamera.com"
+    api = "https://noc-gateway-api.icyriver-4199ba13.northeurope.azurecontainerapps.io/api/v1/products"
+    headers = {"User-Agent": random.choice(USER_AGENTS)}
+    print(f"\n  📂 Newoldcamera 크롤링 시작")
+    # 종류: CO 바디 · OB 렌즈 · AC 부속품 · BO 가방 · Fl 플래시 · EP 노출계
+    combos, seen = [], set()
+    for tipo in ("CO", "OB", "AC", "BO", "Fl", "EP"):
+        try:
+            resp = requests.get(f"{base}/_Marche.aspx", params={"Tipo": tipo, "Bottega": "Usato"}, headers=headers, timeout=20)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"    ❌ 브랜드 목록({tipo}) 오류: {e}")
+            continue
+        for marca in sorted(set(re.findall(r"Marca=(LEICA[^\"&]*)&(?:amp;)?Tipo=" + tipo, resp.text))):
+            if not _NOC_OTHER.search(marca):
+                combos.append((marca, tipo))
+    for marca, tipo in combos:
+        try:
+            resp = requests.get(api, params={"Marca": marca, "Tipo": tipo, "Disponibile": "M", "Bottega": "Usato"}, headers=headers, timeout=30)
+            resp.raise_for_status()
+            items = resp.json()
+        except Exception as e:
+            print(f"    ❌ {marca}/{tipo} 오류: {e}")
+            continue
+        print(f"    └─ {marca}/{tipo} {len(items)}개 상품 발견")
+        for it in items:
+            code = it.get("codice")
+            if not code or code in seen:
+                continue
+            seen.add(code)
+            raw = (it.get("modello") or "").strip()
+            if not raw or _NOC_OTHER.search(raw) or any(b in raw.lower() for b in THIRD_PARTY_BRANDS):
+                continue
+            link = f"{base}/Scheda.aspx?Codice={code}"
+            if link in globals().get('SOLD_LINKS', ()):
+                continue
+            name = _noc_normalize(raw)
+            sale, promo = it.get("prezzoVendita") or 0, it.get("prezzoPromozione") or 0
+            value = promo if 0 < promo < sale else sale
+            price = f"€{float(value):,.0f}" if value else "문의요망"
+            vp = it.get("virtualPath") or ""
+            img = (base + vp) if vp.startswith("/") else f"https://camerabridge.io/api/noc_image?code={code}"
+            cond = (it.get("stato") or "").strip()
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Newoldcamera (이탈리아)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": (NOC_PREFIX + cond) if cond else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": bool(it.get("prenotato")),
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(random.uniform(0.5, 1.0))
+    print(f"  ✅ Newoldcamera 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3050,6 +3148,7 @@ def crawl_all():
         ("M & K Kamera (홍콩)", lambda: ce.wrap_full_run("M & K Kamera (홍콩)", crawl_mkkamera)),
         ("Leica Store France (프랑스)", lambda: ce.wrap_full_run("Leica Store France (프랑스)", crawl_leicafrance)),
         ("Leica Store Singapore (싱가포르)", lambda: ce.wrap_full_run("Leica Store Singapore (싱가포르)", crawl_leicasg)),
+        ("Newoldcamera (이탈리아)", lambda: ce.wrap_full_run("Newoldcamera (이탈리아)", crawl_newoldcamera)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
