@@ -73,7 +73,7 @@ BP = lambda base: v("black-paint", f"{base} Black Paint", f"{base} 블랙페인�
 # ── M 필름 바디 ──
 fam("leica:body:m3", "Leica M3", "라이카 M3", "M", [r"\bM ?3\b"], [r"M3 ?J", r"MP ?3"], ["엠3"], [
     v("double-stroke", "Leica M3 Double Stroke", "M3 더블스트로크", r"double ?stroke|더블 ?스트로크|\bDS\b", ["m3 ds", "m3 더블"]),
-    v("single-stroke", "Leica M3 Single Stroke", "M3 싱글스트로크", r"single ?stroke|싱글 ?스트로크|\bSS\b", ["m3 ss", "m3 싱글"]),
+    v("single-stroke", "Leica M3 Single Stroke", "M3 싱글스트로크", r"single ?stroke|싱글 ?스트로크|\bSS\b", ["m3 ss", "m3 싱글", "m3 싱글스트로크", "m3 싱글 스트로크", "싱글스트로크"]),
     BP("M3"),
     v("olive", "Leica M3 Olive", "M3 올리브", r"olive|올리브", ["m3 olive"], [REPAINT]),
 ])

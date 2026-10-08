@@ -54,7 +54,7 @@ model("leica:lens:summicron-m:35:asph", "Summicron-M 35mm f/2 ASPH", "Lens", "M"
 model("leica:lens:summicron-m:35:v1-8element", "Summicron 35mm f/2 1st (8 elements)", "Lens", "M",
       [r"summicron|cron", f("35"), r"(8 ?el|8매|eight|1st|1세대|\bv\.? ?1\b)"], [r"ASPH"] + ACC_NOT)
 model("leica:lens:summicron-m:35:v4", "Summicron 35mm f/2 4th (pre-ASPH)", "Lens", "M",
-      [r"summicron|cron", f("35"), r"(4th|v4|4세대|6매|6 ?el|IV\b)"], [r"ASPH"] + ACC_NOT)
+      [r"summicron|cron", f("35"), r"(4th|v4|4세대|6매|6 ?el|IV\b|king ?of ?bokeh|bokeh ?king|\bKOB\b)"], [r"ASPH"] + ACC_NOT)
 model("leica:lens:apo-summicron-m:35", "APO-Summicron-M 35mm f/2 ASPH", "Lens", "M",
       [r"APO", r"summicron|cron", f("35")], ACC_NOT)
 model("leica:lens:summilux-m:50:asph", "Summilux-M 50mm f/1.4 ASPH", "Lens", "M",
@@ -93,8 +93,9 @@ ALIASES: dict[str, list[str]] = {
     "leica:lens:summilux-m:35:asph-fle2": ["summilux-m 35 asph fle ii", "summilux 35 fle ii", "summilux 35 fle2", "35 lux fle2", "35 lux fle ii", "주미룩스 35 fle2", "35 룩스 fle2"],
     "leica:lens:summilux-m:35:steel-rim-reissue": ["summilux 35 steel rim reissue", "35 lux steel rim", "steel rim reissue", "스틸림 복각", "주미룩스 35 스틸림"],
     "leica:lens:summicron-m:35:asph": ["summicron-m 35 asph", "summicron 35 asph", "35 cron asph", "주미크론 35 asph", "35 크론 asph"],
-    "leica:lens:summicron-m:35:v1-8element": ["summicron 35 8 element", "summicron 35 1st", "35 cron 8 element", "8 element", "8매", "6군8매", "주미크론 35 8매"],
-    "leica:lens:summicron-m:35:v4": ["summicron 35 4th", "summicron 35 v4", "35 cron v4", "35 cron 4th", "6매", "주미크론 35 4세대", "칠공팔공 6매"],
+    "leica:lens:summicron-m:35:v1-8element": ["summicron 35 8 element", "summicron 35 1st", "summicron 35 v1", "35 cron 8 element", "35 cron v1", "35 cron 1st", "8 element", "8매", "6군8매", "주미크론 35 8매", "주미크론 35 1세대", "35 크론 1세대", "35 크론 8매"],
+    "leica:lens:summicron-m:35:v4": ["summicron 35 4th", "summicron 35 v4", "35 cron v4", "35 cron 4th", "6매", "주미크론 35 4세대", "35 크론 4세대", "35 크론 v4", "칠공팔공 6매",
+                                     "king of bokeh", "bokeh king", "kob", "35 cron kob", "킹 오브 보케", "보케 킹"],
     "leica:lens:apo-summicron-m:35": ["apo-summicron-m 35", "apo summicron m 35", "apo 35 cron", "아포 주미크론 35"],
     "leica:lens:summilux-m:50:asph": ["summilux-m 50 asph", "summilux 50 asph", "50 lux asph", "주미룩스 50 asph", "50 룩스 asph"],
     "leica:lens:summicron-m:50:current": ["summicron-m 50", "summicron m 50", "summicron 50 4th", "summicron 50 5th", "50 cron m", "주미크론 m 50"],

@@ -222,6 +222,7 @@ def normalize_text(text: str) -> str:
     text = re.sub(r"큐(?=\d)", "q", text)
     text = re.sub(r"[‐‑–—\-_/·・,()\[\]'\"“”‘’]+", " ", text)
     text = re.sub(r"(\d)\s?mm\b", r"\1", text)
+    text = re.sub(r"(\d)([a-z]{3,})\b", r"\1 \2", text)  # 붙여 쓴 '50lux'·'35cron' → '50 lux' (안 그러면 '35lux'로 잘못 고쳐 읽음)
     text = re.sub(r"\b0(\d\d)\b", r"0.\1", text)
     return re.sub(r"\s+", " ", text).strip()
 

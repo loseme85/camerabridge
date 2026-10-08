@@ -176,7 +176,8 @@ group("leica:lens:summilux-m:50", "Summilux-M 50mm f/1.4", "주미룩스 50", "M
     c("asph-lhsa", "Summilux-M 50mm f/1.4 ASPH LHSA", "주미룩스 50 ASPH LHSA", r"LHSA", [], ["asph lhsa", "lhsa"]),
     c("asph-kravitz", "Summilux-M 50mm f/1.4 ASPH Lenny Kravitz", "주미룩스 50 ASPH 레니 크라비츠", r"kravitz|lenny", [], ["lenny kravitz", "kravitz"]),
     c("korea-70", "Summilux-M 50mm f/1.4 70th Independence Anniversary (Korea)", "주미룩스 50 광복 70주년", r"independence|광복", [], ["광복 70주년"]),
-], must_not=[r"\bSL\b", r"\bTL\b"], existing=["leica:lens:summilux-m:50:asph"])
+], must_not=[r"\bSL\b", r"\bTL\b"], existing=["leica:lens:summilux-m:50:asph"],
+   parent_aliases=["summilux 50 pre asph", "50 lux pre asph", "주미룩스 50 pre asph", "주미룩스 50 구형", "50 룩스 pre asph", "50 룩스 구형"])
 TIGHTEN["leica:lens:summilux-m:50:asph"] = [r"LHSA", r"kravitz|lenny", r"titan|티탄", r"independence|광복", r"\bSL\b|-SL\b", r"\bTL\b|-TL\b", r"-R\b"]
 # 세대 미표기 = ASPH도 세대도 없는 구형
 MODELS["leica:lens:summilux-m:50:unspecified"]["title_must_not"].append(r"ASPH")
@@ -218,7 +219,7 @@ TIGHTEN["leica:lens:summicron-m:50:current"] = [GEN3, r"50 ?jahre", r"토륨|tho
 
 # ───────────── M: Elmarit 28 (새 부모, 기존 ASPH 포함) ─────────────
 group("leica:lens:elmarit-m:28", "Elmarit-M 28mm f/2.8", "엘마리트 28", "M", "elmarit", "28", [
-    c("v1", "Elmarit 28mm f/2.8 1st (Canada, 1965)", "엘마리트 28 1세대", GEN1, [], ["1st", "1세대"]),
+    c("v1", "Elmarit 28mm f/2.8 1st (Canada, 1965)", "엘마리트 28 1세대", GEN1, [], ["1st", "1세대", "v1", "9 element", "9매"]),
     c("v2", "Elmarit-M 28mm f/2.8 2nd", "엘마리트 28 2세대", GEN2, [], ["2nd", "2세대"]),
     c("v3", "Elmarit-M 28mm f/2.8 3rd", "엘마리트 28 3세대", GEN3, [], ["3rd", "3세대"]),
     c("v4", "Elmarit-M 28mm f/2.8 4th", "엘마리트 28 4세대", GEN4, [], ["4th", "4세대"]),
@@ -474,6 +475,7 @@ for slug, name, ko, must, nots, als in [
     EXTEND_PARENTS.setdefault(SC35, []).append(key)
 TIGHTEN[f"{SC35}:asph"] = TIGHTEN.get(f"{SC35}:asph", []) + [BP_L, LHSA, KOREA_60, r"jubilee", r"50th anniv|50 ?jahre|50주년"]
 TIGHTEN[f"{SC35}:unspecified"] = TIGHTEN.get(f"{SC35}:unspecified", []) + [BP_L, r"\btype ?i{1,3}v?\b"]
+TIGHTEN[f"{SC35}:unspecified"] += [r"king ?of ?bokeh|bokeh ?king|\bKOB\b"]  # 4세대 별명
 TIGHTEN[f"{SC35}:v1-eyes"] = TIGHTEN.get(f"{SC35}:v1-eyes", []) + [BP_L]
 
 # Summicron 50: 사파리 · 블랙페인트(현행·MP 클래식) · 리짓 블랙페인트, APO 50 LHSA

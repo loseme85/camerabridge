@@ -2591,6 +2591,7 @@
         .replace(/엠(?=\d)/g, 'm').replace(/큐(?=\d)/g, 'q')
         .replace(/[‐‑–—\-_/·・,()\[\]'"“”‘’]+/g, ' ')
         .replace(/(\d)\s?mm\b/g, '$1')
+        .replace(/(\d)([a-z]{3,})\b/g, '$1 $2')  // 붙여 쓴 '50lux'·'35cron' → '50 lux' (안 그러면 '35lux'로 잘못 고쳐 읽음)
         .replace(/\b0(\d\d)\b/g, '0.$1')
         .replace(/\s+/g, ' ').trim();
     }
