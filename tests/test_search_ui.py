@@ -567,7 +567,9 @@ def test_public_summary_uses_total_results_active_count_and_market_price_without
         set_locale = _function_body(html, "setLocale")
         assert "const total = state.response ? Number(state.response.total_ranked || 0) : 0;" in render_summary
         assert "const displaySections = buildDisplaySections(results, getSortMode());" in render_summary
-        assert "const activeCount = Number(displaySections.counts && displaySections.counts.active || 0);" in render_summary
+        # 판매 중 수는 서버가 센 검색 결과 전체 기준(active_total), 없을 때만 불러온 매물로
+        assert "const activeTotal = state.response ? Number(state.response.active_total) : NaN;" in render_summary
+        assert "const activeCount = Number.isFinite(activeTotal) ? activeTotal : Number(displaySections.counts && displaySections.counts.active || 0);" in render_summary
         assert "els['result-count'].textContent = formatListingCount(total);" in render_summary
         assert "els['active-count'].textContent = formatListingCount(activeCount);" in render_summary
         assert "els['market-price-value'].textContent = getPublicSummaryMarketPrice(policy);" in render_summary
@@ -672,3 +674,17 @@ if __name__ == "__main__":
     test_public_warning_filter_labels_and_values_are_localized()
     test_public_workspace_main_can_shrink_on_mobile()
     print("test_search_ui: ok")
+
+
+def test_stale_search_responses_do_not_overwrite_newer_ones() -> None:
+    for html in _html_files(BETA_PATHS):
+        run_search = _function_body(html, "runSearch")
+        assert "const seq = append ? searchSeq : ++searchSeq;" in run_search
+        assert "if(seq !== searchSeq) return;" in run_search
+
+
+def test_exact_model_name_query_uses_that_model() -> None:
+    for html in _html_files(BETA_PATHS):
+        run_search = _function_body(html, "runSearch")
+        assert "findEntityByExactName(nextQuery)" in run_search
+        assert "!options.freeText" in run_search

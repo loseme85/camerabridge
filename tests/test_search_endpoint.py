@@ -344,3 +344,11 @@ def test_entity_mode_rejects_unknown_entity() -> None:
 
     status, payload = endpoint_response({"entity": ["leica:body:does-not-exist"]})
     assert status == 400
+
+
+def test_active_total_counts_whole_result_not_page() -> None:
+    status, full = endpoint_response({"q": "35lux aa", "limit": "100"}, records=RECORDS)
+    status, page = endpoint_response({"q": "35lux aa", "limit": "1"}, records=RECORDS)
+    assert status == 200
+    expected = sum(1 for r in full["results"] if (r.get("final_output") or {}).get("sold_quality") == "asking")
+    assert page["active_total"] == full["active_total"] == expected

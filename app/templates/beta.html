@@ -1133,6 +1133,10 @@
     .country-chip .source-flag{margin:0}
     .country-chip:hover{color:var(--text)}
     .country-chip[aria-pressed="true"]{color:var(--text);border-bottom-color:var(--accent)}
+    /* 고른 모델 줄: 상자 대신 줄 */
+    .entity-bar{border:0;border-bottom:1px solid var(--border);background:none;padding:12px 0;margin:0}
+    .entity-bar-label{text-transform:none;letter-spacing:0;font-size:12px}
+    .entity-clear{border-color:var(--border)}
     /* 곡선 없이: 모든 틀은 네모 */
     *,*::before,*::after{border-radius:0 !important}
     /* 줄이 두 겹으로 겹치지 않게 */
@@ -2860,6 +2864,12 @@
         entityState.vocab = [...vocab];
         renderHome();
         if(state.entity) render();
+        // 모델 선택 없이 모델 이름만 있는 주소로 들어온 경우(공유 링크 등): 그 모델로 다시 검색
+        const exact = state.query && !state.entity ? findEntityByExactName(state.query) : null;
+        if(exact){
+          state.entity = exact.id;
+          runSearch(0, { queryOverride: state.query, historyMode: 'replace' });
+        }
       }catch(error){
         entityState.summary = null;
       }
@@ -3121,6 +3131,13 @@
       options[next].scrollIntoView({ block: 'nearest' });
     }
 
+    function findEntityByExactName(query){
+      const target = normalizeEntityText(query);
+      if(!target || !entityState.summary) return null;
+      return (entityState.summary.entities || []).find(entity => !entity.feature
+        && [entityDisplayName(entity), entity.name, entity.name_ko].some(name => name && normalizeEntityText(name) === target)) || null;
+    }
+
     function selectEntity(entityId, inputId, options = {}){
       const entity = entityState.byId[entityId];
       if(!entity) return;
@@ -3135,7 +3152,7 @@
       state.entity = '';
       closeEntityMenu(inputId);
       syncSearchInputs(els[inputId].value);
-      runSearch(0, { historyMode: 'push', preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
+      runSearch(0, { historyMode: 'push', freeText: true, preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
     }
 
     // Enter: 고른 후보 → 그 모델 / 고른 게 없으면 1순위 후보 / 후보가 없으면 그대로 검색
@@ -3226,7 +3243,7 @@
         if(event.target.closest('[data-entity-clear]')){
           state.entity = '';
           const raw = els['query-input'].value.trim();
-          if(raw) runSearch(0, { queryOverride: raw, historyMode: 'push' });
+          if(raw) runSearch(0, { queryOverride: raw, historyMode: 'push', freeText: true });
           else render();
           return;
         }
@@ -3508,14 +3525,14 @@
 
     function formatAppliedFiltersNotice(filters){
       const entries = Object.entries(filters || {})
-        .filter(([key]) => !(key === 'source' && els['country-filter'] && els['country-filter'].value))
+        .filter(([key]) => key !== 'entity' && !(key === 'source' && els['country-filter'] && els['country-filter'].value))
         .map(([key, value]) => {
           const localizedValue = localizeAppliedFilterValue(key, value);
           if(!localizedValue) return '';
           return `${localizeAppliedFilterLabel(key)}: ${localizedValue}`;
         })
         .filter(Boolean);
-      if(!entries.length) return ux('warnings.filters_none', 'No filters applied');
+      if(!entries.length) return '';
       return `${ux('warnings.filters_prefix', 'Filters')}: ${entries.join(', ')}`;
     }
 
@@ -3834,6 +3851,9 @@
       });
     }
 
+    // 검색 순서 번호: 늦게 도착한 옛 검색 응답이 새 결과를 덮어쓰지 않게
+    let searchSeq = 0;
+
     async function runSearch(offset = 0, options = {}){
       const nextQuery = String(options.queryOverride || getSearchQueryValue(Boolean(options.preferSticky))).trim();
       if(!nextQuery) return;
@@ -3849,6 +3869,10 @@
       pendingHistoryScrollY = Number.isFinite(Number(options.historyScrollY)) ? Math.max(0, Number(options.historyScrollY)) : null;
 
       state.query = nextQuery;
+      if(!append && !state.entity && !options.freeText){
+        const exact = findEntityByExactName(nextQuery);
+        if(exact) state.entity = exact.id;
+      }
       if(!append){
         state.offset = Math.max(0, offset);
         state.loading = true;
@@ -3857,6 +3881,7 @@
       }else{
         state.appending = true;
       }
+      const seq = append ? searchSeq : ++searchSeq;
       render();
 
       try{
@@ -3868,6 +3893,7 @@
           cache: 'no-store'
         });
         const payload = await response.json();
+        if(seq !== searchSeq) return;
         if(!response.ok){
           throw new Error((payload && payload.error && payload.error.message) || 'search_request_failed');
         }
@@ -3922,12 +3948,14 @@
           }));
         }
       }catch(error){
+        if(seq !== searchSeq) return;
         console.error('Camera Bridge search UI fallback', error);
         if(!append){
           state.response = null;
           state.error = 'runtime_error_fallback';
         }
       }finally{
+        if(seq !== searchSeq) return;  // eslint-disable-line no-unsafe-finally
         state.loading = false;
         state.appending = false;
         render();
@@ -4603,7 +4631,9 @@
       const total = state.response ? Number(state.response.total_ranked || 0) : 0;
       const results = getResults();
       const displaySections = buildDisplaySections(results, getSortMode());
-      const activeCount = Number(displaySections.counts && displaySections.counts.active || 0);
+      // 판매 중 수는 서버가 센 검색 결과 전체 기준 (불러온 매물만 세면 더 불러올 때마다 숫자가 바뀜)
+      const activeTotal = state.response ? Number(state.response.active_total) : NaN;
+      const activeCount = Number.isFinite(activeTotal) ? activeTotal : Number(displaySections.counts && displaySections.counts.active || 0);
       const policy = getMarketEntryPolicy();
       const meta = state.response && state.response.meta ? state.response.meta : null;
 
@@ -4637,8 +4667,8 @@
         els['market-price-caption'].textContent = price.caption;
         els['market-price-value'].textContent = price.value;
         els['summary-meta'].textContent = price.meta;
-        // 지금 불러온 한 페이지가 아니라 그 모델(사양 묶음) 전체의 판매 중 매물 수
-        els['active-count'].textContent = formatListingCount(Number(pickedEntity.active_count || 0));
+        // 서버가 센 수(나라 조건 포함)가 없을 때만 그 모델 전체의 판매 중 매물 수
+        if(!Number.isFinite(activeTotal)) els['active-count'].textContent = formatListingCount(Number(pickedEntity.active_count || 0));
       }
 
       if(els['index-debug-line']){
@@ -4725,7 +4755,7 @@
       }
 
       // 모델(사양 묶음)을 고르면 위 요약 칸이 이미 그 모델 기준이라 결과 요약 카드는 생략 (첫 매물 제목을 모델처럼 보여 주던 문제)
-      els['market-entry-region'].innerHTML = state.entity ? '' : renderMarketEntry(results, uiHints);
+      els['market-entry-region'].innerHTML = '';  // '결과 요약' 카드는 위 요약과 겹치고 짐작한 계열 이름이 제목과 달라 헷갈려서 뺌
       els['query-summary-region'].innerHTML = '';
       els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
       els['results-load-more-region'].innerHTML = '';
@@ -5115,7 +5145,7 @@
       if(uiHints.needs_disambiguation) parts.push(ux('warnings.disambiguation', 'Add more model details to narrow this search.'));
       if(intent.accessory_intent) parts.push(ux('warnings.accessory', 'Accessory searches are not used for body or lens pricing.'));
       parts.push(ux('warnings.coverage', 'Low coverage does not mean the item does not exist.'));
-      els['warning-region'].textContent = parts.join(' | ');
+      els['warning-region'].textContent = parts.filter(Boolean).join(' | ');
     }
 
     function hydrateFromUrl(){

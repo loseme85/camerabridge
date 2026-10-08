@@ -1083,6 +1083,8 @@ def search_records(
     response["schema_version"] = SEARCH_SERVICE_SCHEMA_VERSION
     response["total_before_filters"] = total_before_filters
     response["total_ranked"] = len(sorted_results)
+    # 판매 중 매물 수: 지금 불러온 한 페이지가 아니라 검색 결과 전체 기준 (화면 숫자가 더 불러올 때마다 바뀌지 않게)
+    response["active_total"] = sum(1 for result in sorted_results if (result.get("final_output") or {}).get("sold_quality") == "asking")
     response["result_count"] = len(response["results"])
     response["pagination"] = pagination
     response["applied_filters"] = filters or {}
