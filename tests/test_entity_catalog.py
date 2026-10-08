@@ -278,3 +278,26 @@ def test_r_lenses_from_hong_kong_titles() -> None:
     assert "leica:lens:mr-telyt-r:500" in match_entities(_record("LEITZ Leica MR-Telyt-R 500mm/F8.0 Lens Yr.1981", mount="R"))
     assert "leica:lens:elmarit-r:100" in match_entities(_record("LEITZ Leica Macro-Elmar-R 100mm/F4.0 Lens Yr.1980", mount="R"))
     assert "leica:lens:summicron:50:collapsible" in match_entities(_record("LEITZ Leica Summicron L39 50mm/F2.0 Silver Lens Yr.1955 LTM", mount=None))
+
+
+def test_top20_collector_terms_find_their_models() -> None:
+    """프리미엄 빈티지 수요 가설 TOP 20(2026-10-08)의 검색어가 맞는 모델로."""
+    catalog = json.loads((ROOT / "data/config/entity_catalog_v1.json").read_text(encoding="utf-8"))
+    s = Suggester(catalog["entities"])
+    top = lambda q: s.suggest(q, 1)[0]["id"]
+    for q in ("king of bokeh", "kob", "35 크론 v4", "35 cron v4"):
+        assert top(q) == "leica:lens:summicron-m:35:v4", q
+    for q in ("35 cron v1", "35 크론 1세대", "6군8매"):
+        assert top(q) == "leica:lens:summicron-m:35:v1-8element", q
+    assert top("elmarit 28 v1") == "leica:lens:elmarit-m:28:v1"
+    assert top("m3 싱글스트로크") == "leica:body:m3:single-stroke"
+    assert top("35lux aspherical") == "leica:lens:summilux-m:35:aa"
+    # 붙여 쓴 '50lux'를 '35lux'로 고쳐 읽지 않음
+    assert top("50lux pre asph") == "leica:lens:summilux-m:50"
+    assert all("summilux-m:35" not in e["id"] for e in s.suggest("50lux pre asph", 5))
+
+
+def test_king_of_bokeh_listing_is_summicron_35_v4() -> None:
+    ids = match_entities(_record('Leica 35mm f/2 SUMMICRON-M "KING OF BOKEH"'))
+    assert "leica:lens:summicron-m:35:v4" in ids
+    assert "leica:lens:summicron-m:35:unspecified" not in ids

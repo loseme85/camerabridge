@@ -342,12 +342,18 @@
    "parent": "leica:lens:summicron-m:35",
    "children": [],
    "aliases": [
+    "35 cron 1st",
     "35 cron 8 element",
+    "35 cron v1",
+    "35 크론 1세대",
+    "35 크론 8매",
     "6군8매",
     "8 element",
     "8매",
     "summicron 35 1st",
     "summicron 35 8 element",
+    "summicron 35 v1",
+    "주미크론 35 1세대",
     "주미크론 35 8매"
    ],
    "codes": [
@@ -421,12 +427,20 @@
    "children": [],
    "aliases": [
     "35 cron 4th",
+    "35 cron kob",
     "35 cron v4",
+    "35 크론 4세대",
+    "35 크론 v4",
     "6매",
+    "bokeh king",
+    "king of bokeh",
+    "kob",
     "summicron 35 4th",
     "summicron 35 v4",
+    "보케 킹",
     "주미크론 35 4세대",
-    "칠공팔공 6매"
+    "칠공팔공 6매",
+    "킹 오브 보케"
    ],
    "codes": [
     "11310",
@@ -438,7 +452,7 @@
     "title_must": [
      "summicron|cron",
      "(?<![\\d./])35(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
-     "(4th|v4|4세대|6매|6 ?el|IV\\b)"
+     "(4th|v4|4세대|6매|6 ?el|IV\\b|king ?of ?bokeh|bokeh ?king|\\bKOB\\b)"
     ],
     "title_must_not": [
      "ASPH",
@@ -2327,8 +2341,11 @@
     "m3 single stroke",
     "m3 ss",
     "m3 싱글",
+    "m3 싱글 스트로크",
+    "m3 싱글스트로크",
     "m3singlestroke",
-    "라이카 m3 single stroke"
+    "라이카 m3 single stroke",
+    "싱글스트로크"
    ],
    "codes": [],
    "match": {
@@ -20582,6 +20599,7 @@
      "설명서",
      "black ?paint|블랙 ?페인트|블페|ブラックペイント",
      "\\btype ?i{1,3}v?\\b",
+     "king ?of ?bokeh|bokeh ?king|\\bKOB\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -20999,12 +21017,24 @@
    "aliases": [
     "28 elmarit 1st",
     "28 elmarit 1세대",
+    "28 elmarit 9 element",
+    "28 elmarit 9매",
+    "28 elmarit v1",
     "28 엘마리트 1st",
     "28 엘마리트 1세대",
+    "28 엘마리트 9 element",
+    "28 엘마리트 9매",
+    "28 엘마리트 v1",
     "elmarit 28 1st",
     "elmarit 28 1세대",
+    "elmarit 28 9 element",
+    "elmarit 28 9매",
+    "elmarit 28 v1",
     "엘마리트 28 1st",
-    "엘마리트 28 1세대"
+    "엘마리트 28 1세대",
+    "엘마리트 28 9 element",
+    "엘마리트 28 9매",
+    "엘마리트 28 v1"
    ],
    "codes": [],
    "match": {
@@ -33969,13 +33999,19 @@
    ],
    "aliases": [
     "50 lux",
+    "50 lux pre asph",
     "50 summilux",
     "50 룩스",
+    "50 룩스 pre asph",
+    "50 룩스 구형",
     "50 주미룩스",
     "lux 50",
     "summilux 50",
+    "summilux 50 pre asph",
     "룩스 50",
-    "주미룩스 50"
+    "주미룩스 50",
+    "주미룩스 50 pre asph",
+    "주미룩스 50 구형"
    ],
    "codes": [
     "11113",
