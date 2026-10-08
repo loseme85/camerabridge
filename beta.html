@@ -1125,6 +1125,14 @@
     .site-disclaimer{text-align:left;margin:56px 0 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--text-muted)}
     .footer-note{font-family:var(--sans);font-size:12px}
 
+    /* 나라별로 보기 */
+    .toolbar{display:block}
+    .country-chips{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
+    .country-chip{display:inline-flex;align-items:center;gap:7px;border:0;background:none;padding:6px 0;font-family:var(--serif);font-size:18px;color:var(--text-soft);
+      border-bottom:2px solid transparent;cursor:pointer}
+    .country-chip .source-flag{margin:0}
+    .country-chip:hover{color:var(--text)}
+    .country-chip[aria-pressed="true"]{color:var(--text);border-bottom-color:var(--accent)}
     /* 곡선 없이: 모든 틀은 네모 */
     *,*::before,*::after{border-radius:0 !important}
     /* 줄이 두 겹으로 겹치지 않게 */
@@ -1227,7 +1235,10 @@
 
       <section class="workspace">
         <div class="toolbar" data-i18n-aria-label="filters.toolbar_aria" aria-label="Search filters">
-          <div class="control">
+          <!-- 나라별로 보기 (종류·마운트·판매 상태·정렬 선택칸은 숨김: 모델을 고르면 거의 안 씀) -->
+          <div id="country-chips" class="country-chips" role="group"></div>
+          <input type="hidden" id="country-filter" value="">
+          <div class="control" hidden>
             <label for="category-filter" data-i18n="filters.category.label">Category</label>
             <select id="category-filter">
               <option value="">Any</option>
@@ -1247,7 +1258,7 @@
               <option value="Sigma">Sigma</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden>
             <label for="mount-filter" data-i18n="filters.mount.label">Mount</label>
             <select id="mount-filter">
               <option value="">Any</option>
@@ -1259,7 +1270,7 @@
               <option value="S">S</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden>
             <label for="sold-filter" data-i18n="filters.sold_quality.label">Listing status</label>
             <select id="sold-filter">
               <option value="">Any</option>
@@ -1267,7 +1278,7 @@
               <option value="sold">Sold</option>
             </select>
           </div>
-          <div class="control">
+          <div class="control" hidden>
             <label for="sort-select" data-i18n="filters.sort.label">Sort</label>
             <select id="sort-select">
               <option value="relevance">Recommended</option>
@@ -1585,6 +1596,10 @@
       },
       filters: {
         toolbar_aria: { ko: '검색 필터', en: 'Search filters', ja: '検索フィルター', 'zh-Hans': '搜索筛选器', 'zh-Hant': '搜尋篩選器', pt: 'Filtros de busca', es: 'Filtros de búsqueda', de: 'Suchfilter', it: 'Filtri di ricerca' },
+        country: {
+          label: { ko: '나라', en: 'Country', ja: '国', 'zh-Hans': '国家', 'zh-Hant': '國家', pt: 'País', es: 'País', de: 'Land', it: 'Paese' },
+          all: { ko: '전체', en: 'All countries', ja: 'すべての国', 'zh-Hans': '全部国家', 'zh-Hant': '全部國家', pt: 'Todos os países', es: 'Todos los países', de: 'Alle Länder', it: 'Tutti i paesi' }
+        },
         category: {
           label: { ko: '분류', en: 'Category', ja: 'カテゴリー', 'zh-Hans': '类别', 'zh-Hant': '類別', pt: 'Categoria', es: 'Categoría', de: 'Kategorie', it: 'Categoria' },
           any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
@@ -2152,6 +2167,33 @@
       return entityDisplayName(entity).replace(/\s*(\((standard|Standard)\)|기본형)\s*$/, '');
     }
 
+    // 나라별로 보기: 판매처가 있는 나라만 (배송비 규칙의 판매처-나라)
+    const COUNTRY_ORDER = ['KR', 'JP', 'HK', 'SG', 'GB', 'FR', 'IT', 'FI', 'US'];
+    function renderCountryChips(){
+      const box = els['country-chips'];
+      if(!box) return;
+      const sources = (landedState.rules && landedState.rules.sources) || {};
+      const present = new Set(Object.values(sources).map(rule => String((rule && rule.country) || '').toUpperCase()).filter(Boolean));
+      const codes = COUNTRY_ORDER.filter(code => present.has(code)).concat([...present].filter(code => !COUNTRY_ORDER.includes(code)).sort());
+      const current = String(els['country-filter'].value || '').toUpperCase();
+      box.setAttribute('aria-label', ux('filters.country.label', 'Country'));
+      box.innerHTML = [`<button type="button" class="country-chip" data-country="" aria-pressed="${current ? 'false' : 'true'}">${escapeHtml(ux('filters.country.all', 'All countries'))}</button>`]
+        .concat(codes.map(code => `<button type="button" class="country-chip" data-country="${code}" aria-pressed="${current === code ? 'true' : 'false'}">${countryFlagHtml(code)}${escapeHtml(displayNameOf('region', code))}</button>`))
+        .join('');
+    }
+
+    function bindCountryChips(){
+      const box = els['country-chips'];
+      if(!box) return;
+      box.addEventListener('click', event => {
+        const chip = event.target.closest('[data-country]');
+        if(!chip) return;
+        els['country-filter'].value = chip.dataset.country;
+        renderCountryChips();
+        if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
+      });
+    }
+
     function renderHome(){
       const section = document.getElementById('home-feed');
       const latestEl = document.getElementById('home-latest');
@@ -2248,6 +2290,7 @@
       populateLandedOptions();
       loadTrustLine();
       renderHome();
+      renderCountryChips();
       if(state.response) render();
     }
 
@@ -3321,13 +3364,14 @@
       });
       loadTrustLine();
       renderHome();
+      renderCountryChips();
     }
 
     function cacheElements(){
       [
         'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
         'currency-select','destination-select',
-        'category-filter','brand-filter','mount-filter','sold-filter',
+        'category-filter','brand-filter','mount-filter','sold-filter','country-filter','country-chips',
         'sort-select','summary-query-kicker','summary-query-title','summary-query-subtitle',
         'result-count','result-caption','active-count','active-count-caption',
         'market-price-value','market-price-caption','summary-meta','index-debug-line','page-indicator',
@@ -3463,6 +3507,7 @@
 
     function formatAppliedFiltersNotice(filters){
       const entries = Object.entries(filters || {})
+        .filter(([key]) => !(key === 'source' && els['country-filter'] && els['country-filter'].value))
         .map(([key, value]) => {
           const localizedValue = localizeAppliedFilterValue(key, value);
           if(!localizedValue) return '';
@@ -3637,7 +3682,8 @@
         ['category', els['category-filter'].value],
         ['brand', els['brand-filter'].value],
         ['mount', els['mount-filter'].value],
-        ['sold_quality', els['sold-filter'].value]
+        ['sold_quality', els['sold-filter'].value],
+        ['country', els['country-filter'].value]
       ].forEach(([key, value]) => {
         if(value) params.set(key, value);
       });
@@ -3663,6 +3709,7 @@
         brand: String(raw.brand || '').trim(),
         mount: String(raw.mount || '').trim(),
         sold_quality: String(raw.sold_quality || '').trim(),
+        country: String(raw.country || '').trim().toUpperCase(),
         offset,
         visibleCount,
         historyVisibleCount: Number.isFinite(Number(raw.historyVisibleCount))
@@ -3682,6 +3729,7 @@
         brand: overrides.brand !== undefined ? overrides.brand : els['brand-filter'].value,
         mount: overrides.mount !== undefined ? overrides.mount : els['mount-filter'].value,
         sold_quality: overrides.sold_quality !== undefined ? overrides.sold_quality : els['sold-filter'].value,
+        country: overrides.country !== undefined ? overrides.country : els['country-filter'].value,
         offset: overrides.offset !== undefined ? overrides.offset : state.offset,
         visibleCount: overrides.visibleCount !== undefined ? overrides.visibleCount : getVisibleCount(),
         historyVisibleCount: overrides.historyVisibleCount !== undefined ? overrides.historyVisibleCount : state.historyVisibleCount,
@@ -3700,6 +3748,7 @@
       if(next.brand) params.set('brand', next.brand);
       if(next.mount) params.set('mount', next.mount);
       if(next.sold_quality) params.set('sold_quality', next.sold_quality);
+      if(next.country) params.set('country', next.country);
       if(next.offset > 0) params.set('offset', String(next.offset));
       if(next.visibleCount > PAGE_SIZE && next.offset === 0) params.set('shown', String(next.visibleCount));
       return params;
@@ -3722,6 +3771,8 @@
       els['brand-filter'].value = next.brand;
       els['mount-filter'].value = next.mount;
       els['sold-filter'].value = next.sold_quality;
+      els['country-filter'].value = next.country;
+      renderCountryChips();
       els['sort-select'].value = next.sort || 'relevance';
     }
 
@@ -3772,6 +3823,7 @@
         brand: params.get('brand') || '',
         mount: params.get('mount') || '',
         sold_quality: params.get('sold_quality') || '',
+        country: params.get('country') || '',
         offset: Number.parseInt(params.get('offset') || '0', 10),
         visibleCount: Number.parseInt(params.get('shown') || String(PAGE_SIZE), 10),
         historyVisibleCount: history.state && Number.isFinite(Number(history.state.historyVisibleCount))
@@ -4604,6 +4656,7 @@
     function render(){
       document.body.classList.toggle('cb-searched', Boolean(state.response || state.loading || state.error));
       if(!document.body.classList.contains('cb-searched')) renderHome();  // 통화·언어를 바꾸면 첫 화면 가격도 다시
+      renderCountryChips();
       updatePrefsSummary();
       renderEntityBar();
       renderSummary();
@@ -5095,6 +5148,7 @@
         });
       });
 
+      bindCountryChips();
       ['category-filter','brand-filter','mount-filter','sold-filter'].forEach(id => {
         els[id].addEventListener('change', () => {
           if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });

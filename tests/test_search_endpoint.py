@@ -219,6 +219,27 @@ def test_pagination_filter_and_sort_are_connected() -> None:
     assert response["results"][0]["price"] == "7,300,000원"
 
 
+def test_country_filter_keeps_only_sources_in_that_country() -> None:
+    rules = {"A dealer": "JP", "B dealer": "KR"}
+    with patch("api.search._sources_in_country", side_effect=lambda code: [name for name, cc in rules.items() if cc == code.upper()]):
+        status, response = endpoint_response({"q": "35lux aa", "limit": "10", "country": "jp"}, records=RECORDS)
+        assert status == 200
+        assert response["applied_filters"]["source"] == ["A dealer"]
+        assert {result["source"] for result in response["results"]} == {"A dealer"}
+
+        status, response = endpoint_response({"q": "35lux aa", "limit": "10", "country": "XX"}, records=RECORDS)
+        assert status == 200
+        assert response["results"] == []
+
+
+def test_country_filter_reads_source_countries_from_landed_rules() -> None:
+    from api.search import _sources_in_country
+
+    assert "기타무라 (일본)" in _sources_in_country("JP")
+    assert "Ffordes (영국)" in _sources_in_country("gb")
+    assert _sources_in_country("XX") == []
+
+
 def test_quality_options_are_connected() -> None:
     status, response = endpoint_response(
         {"q": "q3 28", "strong_only": "true", "min_score": "1"},
