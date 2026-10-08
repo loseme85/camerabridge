@@ -15,7 +15,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 409,
+   "count": 410,
    "example": "Leica M1 Silver"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 165,
+   "count": 166,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 165,
+   "count": 166,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
@@ -231,7 +231,7 @@
   {
    "a": "leica:body:m10-monochrom:standard",
    "b": "leica:feature:frameline-28",
-   "count": 35,
+   "count": 34,
    "example": "[중고] M10 Monochrom"
   },
   {
@@ -815,7 +815,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 92,
+   "count": 91,
    "example": "Leica M-Monochrom CCD Silver [신형센서 교체]"
   },
   {
@@ -945,12 +945,5 @@
    "example": "LEICA IID+50mm F3.5 Black paint sn.1480"
   }
  ],
- "new": [
-  {
-   "entity": "leica:body:ii",
-   "word": "black paint",
-   "count": 3,
-   "example": "LEICA IID+50mm F3.5 Black paint sn.1480"
-  }
- ]
+ "new": []
 }
