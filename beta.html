@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Camera Bridge</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231f4a3a%22/%3E%3Cpath%20d%3D%22M15%2042a17%2017%200%200%201%2034%200%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.4%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2240%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20font-size%3D%2221%22%20letter-spacing%3D%221%22%20fill%3D%22%23fff%22%3ECB%3C/text%3E%3C/svg%3E">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#fcfcfa">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+KR:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <style>
     :root{
       --bg:#ffffff;
@@ -966,6 +970,179 @@
       .result-head{grid-template-columns:74px minmax(0,1fr)}
       .thumb{width:74px}
     }
+    /* ===== 브랜드 틀: 오래된 카메라 가게의 인쇄 카탈로그 =====
+       상자·그림자 대신 가는 줄로 나누고, 제목·모델명·가격은 세리프, 기능 글자는 산세리프.
+       초록은 로고·링크·눌리는 곳에만. 모든 구역은 같은 왼쪽 선에 맞춘다. */
+    :root{
+      --bg:#fcfcfa;
+      --surface:#fcfcfa;
+      --surface-soft:#f3f3ef;
+      --surface-muted:#e9e9e3;
+      --border:#e2e2dc;
+      --border-strong:#16181a;
+      --rule:#16181a;
+      --text:#16181a;
+      --text-soft:#55595c;
+      --text-muted:#878b8d;
+      --accent:#1f4a3a;
+      --accent-soft:rgba(31,74,58,0.07);
+      --shadow:none;
+      --radius:2px;
+      --serif:"Newsreader","Noto Serif KR",Georgia,serif;
+      --sans:"Inter","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
+      --sticky-search-offset:72px;
+    }
+    body{font-family:var(--sans);font-size:15px;background:var(--bg)}
+    ::selection{background:#d9e4de}
+    main{width:min(1200px, calc(100% - 48px));padding:0 0 64px}
+
+    /* 머리줄 */
+    .topbar{background:var(--bg);backdrop-filter:none;border-bottom:1px solid var(--rule);padding:12px max(24px, calc((100% - 1200px) / 2))}
+    .meta-pill,.lang-button{border:0;background:none;border-radius:0;padding:6px 4px;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0;color:var(--text)}
+    .lang-button:hover,.lang-button[aria-expanded="true"]{color:var(--accent);background:none}
+    .meta-pill.accent{background:none;border:0;color:var(--text-muted);font-family:var(--serif);font-style:italic;font-size:14px}
+    .topbar-meta{gap:14px}
+    .lang-menu,.prefs-panel,.entity-menu{border:1px solid var(--rule);border-radius:0;box-shadow:4px 4px 0 rgba(22,24,26,0.08)}
+
+    /* 첫 화면 머리: 상자 없이 큰 세리프 제목 */
+    .hero{background:none;border:0;border-radius:0;box-shadow:none;border-bottom:1px solid var(--rule)}
+    .hero-copy{padding:56px 0 40px;border:0}
+    .hero-title{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4.6vw,58px);line-height:1.05;letter-spacing:-0.015em;max-width:15em;margin:0 0 16px;text-wrap:balance}
+    .hero-subtitle{font-size:16px;color:var(--text-soft);max-width:38em;margin:0 0 32px}
+    .search-panel{background:none;border:0;padding:0;border-radius:0}
+    .search-panel-label{display:none}
+    .search-form-row{gap:0;margin:0;max-width:820px}
+    .search-field{height:56px;border:1px solid var(--rule);border-right:0;border-radius:0;background:#fff;font-size:17px;padding:0 18px}
+    .search-field:focus,select:focus{border-color:var(--rule);box-shadow:inset 0 -2px 0 var(--accent)}
+    .search-button{height:56px;min-width:128px;border-radius:0;background:var(--text);font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:0}
+    .search-button:hover{background:var(--accent);filter:none}
+    .query-chip-row{gap:0 18px;margin-top:14px;align-items:baseline}
+    .query-chip-row::before{content:attr(aria-label);color:var(--text-muted);font-size:13px;margin-right:2px}
+    .query-chip{min-height:0;border:0;background:none;padding:2px 0;border-radius:0;font-family:var(--sans);font-size:14px;color:var(--text);
+      text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:4px}
+    .query-chip:hover{color:var(--accent);text-decoration-color:var(--accent)}
+    .hero-trust{margin:20px 0 0;font-size:13px}
+
+    /* 구역 제목: 굵은 줄 위 세리프 */
+    .home-feed{gap:56px;margin:48px 0 0}
+    .home-heading{font-family:var(--serif);font-weight:500;font-size:26px;letter-spacing:-0.01em;margin:0 0 20px;align-items:baseline;gap:14px}
+    .home-heading small{font-family:var(--sans);font-size:13px;color:var(--text-muted)}
+    .home-latest{gap:28px 20px}
+    .home-item{border:0;border-radius:0;background:none;overflow:visible}
+    .home-item > img{aspect-ratio:4/3;background:var(--surface-soft)}
+    .home-item:hover > img{filter:brightness(0.94)}
+    .home-item:hover,.home-item:focus-visible{border:0}
+    .home-item:hover .home-item-name{text-decoration:underline;text-underline-offset:3px}
+    .home-item-body{padding:10px 0 0;gap:4px}
+    .home-item-name{font-size:13px;font-weight:500}
+    .home-item-price{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-0.01em}
+    .home-item-shop{font-size:12px;color:var(--text-muted)}
+    .home-popular{border-top:1px solid var(--rule);gap:0 48px}
+    .home-model{padding:14px 0;align-items:baseline}
+    .home-model-name{font-family:var(--serif);font-size:18px;font-weight:500}
+    .home-model-price{font-family:var(--serif);font-size:18px;font-weight:500}
+    .home-model-meta{font-size:12px}
+
+    /* 검색 결과 작업 구역: 상자 대신 줄 */
+    .workspace{background:none;border:0;border-radius:0;box-shadow:none;margin-top:0}
+    .toolbar{background:none;padding:16px 0;gap:16px;border-bottom:1px solid var(--border)}
+    .control{gap:6px}
+    .control label,.summary-caption,.summary-kicker,.section-label,.metric-card b,.fact-label,.eyebrow{
+      font-family:var(--sans);font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text-muted)}
+    .control select{height:40px;border:1px solid var(--border);border-radius:0;background:#fff}
+    .status-strip{background:none;padding:36px 0 28px;border-bottom:1px solid var(--rule)}
+    .summary-title{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,48px);letter-spacing:-0.015em;line-height:1.05}
+    .summary-subtitle{font-size:14px}
+    .summary-metrics{gap:0;margin-top:28px;border-top:1px solid var(--border)}
+    .summary-metric{border:0;border-right:1px solid var(--border);border-radius:0;background:none;padding:14px 20px 0 0;margin-right:20px}
+    .summary-metric:last-child{border-right:0;margin-right:0}
+    .summary-value{font-family:var(--serif);font-weight:500;font-size:30px;letter-spacing:-0.01em;margin-top:4px}
+    .summary-meta{font-size:13px}
+    .index-debug-line{font-size:11px}
+    .page-button{border:1px solid var(--border);border-radius:0;font-family:var(--sans);font-size:13px;background:#fff}
+    .workspace-main{padding:28px 0 0}
+    .sticky-search-bar{border:0;border-bottom:1px solid var(--rule);border-radius:0;background:rgba(252,252,250,0.97);box-shadow:none;padding:12px 0}
+    .sticky-search-field{height:46px}
+    .sticky-search-button{height:46px}
+
+    .state-card,.market-entry-card,.archive-card,.side-panel,.workspace-card,.sidebar-card{
+      background:none;border:0;border-top:1px solid var(--rule);border-radius:0;box-shadow:none;padding:20px 0 8px;margin-bottom:28px}
+    .state-card.subtle{background:none}
+    .state-card h3,.market-entry-card h3,.archive-card h3,.workspace-card h3{font-family:var(--serif);font-weight:500;font-size:24px;letter-spacing:-0.01em}
+    .metric-card{background:none;border:0;border-left:2px solid var(--accent);border-radius:0;padding:4px 0 4px 14px}
+    .metric-card span{font-family:var(--serif);font-size:20px;font-weight:500}
+    .micro-pill{border:0;background:none;border-radius:0;padding:0;font-family:var(--sans);font-size:12px;color:var(--text-muted)}
+    .micro-pill + .micro-pill::before{content:"·";margin-right:6px;color:var(--border-strong)}
+    .micro-pill.accent,.micro-pill.green{background:none;color:var(--accent)}
+    .micro-pill.blue{background:none;color:var(--blue)}
+    .micro-pill.amber{background:none;color:var(--amber)}
+    .micro-pills,.market-badges,.result-status-row{gap:6px}
+    .ghost-button,.action-button{border-radius:0;font-family:var(--sans);font-size:13px;font-weight:500;min-height:36px;padding:8px 14px}
+    .action-button{background:var(--text);border-color:var(--text)}
+    .action-button:hover{background:var(--accent);border-color:var(--accent)}
+    .ghost-button{background:none;border-color:var(--border)}
+    .query-review-copy{background:none;box-shadow:none}
+
+    /* 매물: 사진이 먼저인 카탈로그 칸 */
+    .archive-list{gap:40px 24px;margin-top:20px}
+    .result-card{border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+    .result-head{display:block;padding:0;border:0}
+    .thumb{width:100%;aspect-ratio:4/3;border:0;border-radius:0;background:var(--surface-soft);margin-bottom:14px;font-family:var(--serif);font-style:italic;font-weight:400}
+    .result-card:hover .thumb img{filter:brightness(0.94)}
+    .result-title{font-size:14px;font-weight:500;line-height:1.45;margin-bottom:6px;-webkit-line-clamp:2}
+    .result-title:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+    .result-price-row{display:grid;gap:8px;margin-bottom:10px}
+    .result-price{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-0.01em;line-height:1.15}
+    .result-price-original{font-size:12px}
+    .result-landed{font-size:12px}
+    .result-landed-total{font-size:13px;font-weight:600}
+    .result-source{gap:2px;font-size:12px}
+    .result-source-label{font-size:13px;font-weight:500}
+    .result-source-meta{font-family:var(--sans);font-size:12px;color:var(--text-muted)}
+    .grade-chip{border-radius:0;border-color:var(--text);font-family:var(--serif);font-size:13px;font-weight:600;padding:0 7px}
+    .result-facts{padding:12px 0;border-bottom:0;border-top:1px solid var(--border);margin-top:12px}
+    .card-note{font-size:13px}
+    .result-details{padding:0 0 10px;border:0}
+    .result-details summary{text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:3px}
+    .result-details-body{border:0;border-left:2px solid var(--border);border-radius:0;background:none;padding:4px 0 4px 12px}
+    .result-actions{padding:12px 0 0}
+    .archive-item{border:0;border-top:1px solid var(--border);border-radius:0;background:none;padding:12px 0}
+    .load-more-button{min-width:200px}
+
+    /* 의견 보내기·대화창 */
+    .feedback-fab{border-radius:0;border:1px solid var(--rule);background:var(--bg);box-shadow:none;font-weight:500}
+    .feedback-fab::before{content:none}
+    .feedback-fab:hover{background:var(--text);color:#fff;border-color:var(--text)}
+    .feedback-dialog{border:1px solid var(--rule);border-radius:0;box-shadow:6px 6px 0 rgba(22,24,26,0.1)}
+    .feedback-dialog h2{font-family:var(--serif);font-weight:500;font-size:24px}
+    .feedback-dialog textarea,.feedback-dialog input[type=email]{border-radius:0}
+    .site-disclaimer{text-align:left;margin:56px 0 0;padding-top:16px;border-top:1px solid var(--rule);color:var(--text-muted)}
+    .footer-note{font-family:var(--sans);font-size:12px}
+
+    /* 곡선 없이: 모든 틀은 네모 */
+    *,*::before,*::after{border-radius:0 !important}
+    /* 줄이 두 겹으로 겹치지 않게 */
+    .status-strip{border-bottom:0}
+    .sticky-search-bar{border-bottom:0}
+    .query-review-header + *{border-top:0}
+    @media(max-width:720px){
+      main{width:calc(100% - 32px)}
+      .topbar{padding:10px 16px;flex-direction:row;align-items:center}
+      .topbar-meta{gap:6px}
+      .meta-pill.accent{display:none}
+      .sticky-search-region{top:64px}
+      .hero-copy{padding:36px 0 28px}
+      .hero-title{font-size:34px}
+      .search-form-row{flex-direction:row}
+      .search-field{height:50px;font-size:16px;min-width:0}
+      .search-button{width:auto;min-width:84px;height:50px}
+      .home-latest{gap:24px 14px}
+      .home-heading{font-size:22px;flex-wrap:wrap;gap:4px 10px}
+      .summary-metrics{grid-template-columns:1fr}
+      .summary-metric{border-right:0;border-bottom:1px solid var(--border);margin-right:0;padding:12px 0}
+      .result-head{grid-template-columns:none}
+      .thumb{width:100%}
+    }
   </style>
   <!-- 방문 통계: Vercel Web Analytics (쿠키 없음). Vercel 프로젝트 화면에서 Analytics를 켜야 쌓임 -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -1346,8 +1523,9 @@
       home: {
         latest: { ko: '새로 올라온 매물', en: 'Just listed', ja: '新着の出品', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Recém-anunciados', es: 'Recién publicados', de: 'Neu eingestellt', it: 'Appena pubblicati' },
         latest_note: { ko: '모델마다 한 건, 최근 순', en: 'one per model, newest first', ja: 'モデルごとに1件、新しい順', 'zh-Hans': '每个型号一件，按时间排序', 'zh-Hant': '每個型號一件，依時間排序', pt: 'um por modelo, mais recentes primeiro', es: 'uno por modelo, más recientes primero', de: 'eins pro Modell, neueste zuerst', it: 'uno per modello, dal più recente' },
-        popular: { ko: '많이 찾는 모델 시세', en: 'Market prices for popular models', ja: '人気モデルの相場', 'zh-Hans': '热门型号行情', 'zh-Hant': '熱門型號行情', pt: 'Preços de mercado dos modelos populares', es: 'Precios de mercado de modelos populares', de: 'Marktpreise beliebter Modelle', it: 'Prezzi di mercato dei modelli più cercati' },
-        popular_note: { ko: 'B급 기준, 판매 완료 매물 중앙값', en: 'B-grade median from sold listings', ja: 'Bランク基準・成約品の中央値', 'zh-Hans': 'B 级基准，已售中位数', 'zh-Hant': 'B 級基準，已售中位數', pt: 'mediana de vendidos, grau B', es: 'mediana de vendidos, grado B', de: 'Median verkaufter Angebote, Zustand B', it: 'mediana dei venduti, grado B' },
+        popular: { ko: '찾는 사람은 많은데 매물이 적은 모델', en: 'In demand, hard to find', ja: '人気なのに出物が少ないモデル', 'zh-Hans': '需求大、在售少的型号', 'zh-Hant': '需求大、在售少的型號', pt: 'Muito procurados, difíceis de achar', es: 'Muy buscados, difíciles de encontrar', de: 'Gefragt, aber selten im Angebot', it: 'Molto richiesti, difficili da trovare' },
+        popular_note: { ko: '팔린 수에 비해 지금 매물이 적은 순 · 시세는 B급 판매가 중앙값', en: 'most sold vs. fewest for sale now · price is B-grade sold median', ja: '成約数に対して現在の出品が少ない順・相場はBランク成約中央値', 'zh-Hans': '按成交多、在售少排序 · 价格为 B 级成交中位数', 'zh-Hant': '依成交多、在售少排序 · 價格為 B 級成交中位數', pt: 'mais vendidos vs. menos à venda · preço: mediana de vendidos grau B', es: 'más vendidos vs. menos en venta · precio: mediana de vendidos grado B', de: 'viel verkauft, wenig im Angebot · Preis: Median verkaufter B-Stücke', it: 'più venduti vs. meno in vendita · prezzo: mediana dei venduti grado B' },
+        sold_on_sale: { ko: '팔린 {s} · 판매 중 {n}', en: '{s} sold · {n} for sale', ja: '成約 {s}・販売中 {n}', 'zh-Hans': '已售 {s} · 在售 {n}', 'zh-Hant': '已售 {s} · 在售 {n}', pt: '{s} vendidos · {n} à venda', es: '{s} vendidos · {n} en venta', de: '{s} verkauft · {n} im Angebot', it: '{s} venduti · {n} in vendita' },
         on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
       },
       language: {
@@ -1991,13 +2169,17 @@
         </button>`;
       }).join('');
       const popular = ((entityState.summary && entityState.summary.entities) || [])
-        .filter(entity => !entity.feature && !(entity.children || []).length && !/unspecified/.test(entity.id) && entity.b_price_krw && entity.b_price_basis === 'sold')
-        .sort((a, b) => (b.active_count || 0) - (a.active_count || 0) || (b.listing_count || 0) - (a.listing_count || 0))
-        .slice(0, 10);
+        .filter(entity => !entity.feature && !(entity.children || []).length && !/unspecified/.test(entity.id) && entity.b_price_krw && entity.b_price_basis === 'sold'
+          && (entity.sold_price_count || 0) >= 10)
+        // 수요(팔린 수)에 비해 지금 매물이 적은 순 = 찾는 사람은 많은데 구하기 어려운 모델
+        .map(entity => ({ entity, scarcity: (entity.sold_price_count || 0) / ((entity.active_count || 0) + 1) }))
+        .sort((a, b) => b.scarcity - a.scarcity || (b.entity.b_price_krw || 0) - (a.entity.b_price_krw || 0))
+        .slice(0, 10)
+        .map(row => row.entity);
       popularEl.innerHTML = popular.map(entity => `<button type="button" class="home-model" data-entity="${escapeHtml(entity.id)}">
           <span class="home-model-name">${escapeHtml(homeName(entity))}</span>
           <span class="home-model-price">${escapeHtml(krwToDisplay(entity.b_price_krw) || '—')}</span>
-          <span class="home-model-meta">${escapeHtml(ux('home.on_sale', '{n} for sale').replace('{n}', String(entity.active_count || 0)))}</span>
+          <span class="home-model-meta">${escapeHtml(ux('home.sold_on_sale', '{s} sold · {n} for sale').replace('{s}', String(entity.sold_price_count || 0)).replace('{n}', String(entity.active_count || 0)))}</span>
         </button>`).join('');
       section.hidden = !latest.length && !popular.length;
     }
