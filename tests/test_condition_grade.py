@@ -57,6 +57,17 @@ def test_leica_france_letter_grades() -> None:
     assert grade_of(site, LCF_PREFIX + "B : Very good", "NOCTILUX-M 50 mm f/1.2 new (2021-ACTU)")[0] == "B"
 
 
+def test_newoldcamera_letter_grades() -> None:
+    from condition_grade import NOC_PREFIX
+    site = "Newoldcamera (이탈리아)"
+    assert grade_of(site, NOC_PREFIX + "A-", "Leica 50mm f/0.95 NOCTILUX-M ASPH. black")[0] == "A"
+    assert grade_of(site, NOC_PREFIX + "BA", "Leica 50mm f/2 SUMMICRON-M SAFARI")[0] == "B"
+    assert grade_of(site, NOC_PREFIX + "B+/B", "Leica 35mm f/3.5 SUMMARON chrome")[0] == "C"
+    assert grade_of(site, NOC_PREFIX + "BC", "Leica IIIC chrome")[0] == "D"
+    # 'NEW'는 새 버전(새 디자인)이라는 뜻 → 제목에서 'new version'으로 바꿔 신품으로 안 봄
+    assert grade_of(site, NOC_PREFIX + "BA", "Leica 90mm f/4 MACRO-ELMAR-M new version black")[0] == "B"
+
+
 def test_new_version_words_are_not_brand_new() -> None:
     assert grade_of("라이카스토어 충무로", "98%", "[위탁] M 28/2 Summicron ASPH NEW (Black)")[0] == "A"
     assert grade_of("사진집", "97%", "Leica M 28mm f2 Summicron ASPH 6bit New Type Black")[0] == "A"
