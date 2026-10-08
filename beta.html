@@ -1021,7 +1021,8 @@
     .query-chip{min-height:0;border:0;background:none;padding:2px 0;border-radius:0;font-family:var(--sans);font-size:14px;color:var(--text);
       text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:4px}
     .query-chip:hover{color:var(--accent);text-decoration-color:var(--accent)}
-    .hero-trust{margin:20px 0 0;font-size:13px}
+    .hero-trust{margin:0 0 12px;font-family:var(--serif);font-style:italic;font-size:17px;color:var(--text-soft);gap:4px 8px}
+    .hero-trust .source-flag{width:18px;height:13px}
 
     /* 구역 제목: 굵은 줄 위 세리프 */
     .home-feed{gap:56px;margin:48px 0 0}
@@ -1049,7 +1050,12 @@
     .control{gap:6px}
     .control label,.summary-caption,.summary-kicker,.section-label,.metric-card b,.fact-label,.eyebrow{
       font-family:var(--sans);font-size:12px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--text-muted)}
-    .control select{height:40px;border:1px solid var(--border);border-radius:0;background:#fff}
+    .control select{height:42px;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:transparent;padding:0 24px 0 0;
+      font-family:var(--serif);font-size:18px;color:var(--text);-webkit-appearance:none;appearance:none;cursor:pointer;
+      background-image:linear-gradient(45deg,transparent 50%,var(--text) 50%),linear-gradient(135deg,var(--text) 50%,transparent 50%);
+      background-position:calc(100% - 10px) 52%,calc(100% - 5px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+    .control select:focus{box-shadow:inset 0 -2px 0 var(--accent)}
+    .toolbar{gap:28px}
     .status-strip{background:none;padding:36px 0 28px;border-bottom:1px solid var(--rule)}
     .summary-title{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,48px);letter-spacing:-0.015em;line-height:1.05}
     .summary-subtitle{font-size:14px}
@@ -1209,13 +1215,13 @@
       </section>
 
       <section id="home-feed" class="home-feed" hidden>
+        <div id="home-picks-block" hidden>
+          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">lowest asking price for sale now</small></h2>
+          <div id="home-picks" class="home-popular"></div>
+        </div>
         <div>
           <h2 class="home-heading"><span data-i18n="home.latest">Just listed</span> <small data-i18n="home.latest_note">one per model, newest first</small></h2>
           <div id="home-latest" class="home-latest"></div>
-        </div>
-        <div>
-          <h2 class="home-heading"><span data-i18n="home.popular">Market prices for popular models</span> <small data-i18n="home.popular_note">B-grade median from sold listings</small></h2>
-          <div id="home-popular" class="home-popular"></div>
         </div>
       </section>
 
@@ -1523,9 +1529,9 @@
       home: {
         latest: { ko: '새로 올라온 매물', en: 'Just listed', ja: '新着の出品', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Recém-anunciados', es: 'Recién publicados', de: 'Neu eingestellt', it: 'Appena pubblicati' },
         latest_note: { ko: '모델마다 한 건, 최근 순', en: 'one per model, newest first', ja: 'モデルごとに1件、新しい順', 'zh-Hans': '每个型号一件，按时间排序', 'zh-Hant': '每個型號一件，依時間排序', pt: 'um por modelo, mais recentes primeiro', es: 'uno por modelo, más recientes primero', de: 'eins pro Modell, neueste zuerst', it: 'uno per modello, dal più recente' },
-        popular: { ko: '찾는 사람은 많은데 매물이 적은 모델', en: 'In demand, hard to find', ja: '人気なのに出物が少ないモデル', 'zh-Hans': '需求大、在售少的型号', 'zh-Hant': '需求大、在售少的型號', pt: 'Muito procurados, difíceis de achar', es: 'Muy buscados, difíciles de encontrar', de: 'Gefragt, aber selten im Angebot', it: 'Molto richiesti, difficili da trovare' },
-        popular_note: { ko: '팔린 수에 비해 지금 매물이 적은 순 · 시세는 B급 판매가 중앙값', en: 'most sold vs. fewest for sale now · price is B-grade sold median', ja: '成約数に対して現在の出品が少ない順・相場はBランク成約中央値', 'zh-Hans': '按成交多、在售少排序 · 价格为 B 级成交中位数', 'zh-Hant': '依成交多、在售少排序 · 價格為 B 級成交中位數', pt: 'mais vendidos vs. menos à venda · preço: mediana de vendidos grau B', es: 'más vendidos vs. menos en venta · precio: mediana de vendidos grado B', de: 'viel verkauft, wenig im Angebot · Preis: Median verkaufter B-Stücke', it: 'più venduti vs. meno in vendita · prezzo: mediana dei venduti grado B' },
-        sold_on_sale: { ko: '팔린 {s} · 판매 중 {n}', en: '{s} sold · {n} for sale', ja: '成約 {s}・販売中 {n}', 'zh-Hans': '已售 {s} · 在售 {n}', 'zh-Hant': '已售 {s} · 在售 {n}', pt: '{s} vendidos · {n} à venda', es: '{s} vendidos · {n} en venta', de: '{s} verkauft · {n} im Angebot', it: '{s} venduti · {n} in vendita' },
+        picks: { ko: '수집가들이 찾는 모델', en: 'Collector favorites', ja: 'コレクターが探すモデル', 'zh-Hans': '藏家追捧的型号', 'zh-Hant': '藏家追捧的型號', pt: 'Favoritos dos colecionadores', es: 'Favoritos de coleccionistas', de: 'Sammlerstücke', it: 'I preferiti dei collezionisti' },
+        picks_note: { ko: '지금 판매 중인 매물의 최저 호가', en: 'lowest asking price for sale now', ja: '現在販売中の最安値', 'zh-Hans': '当前在售最低报价', 'zh-Hant': '目前在售最低報價', pt: 'menor preço pedido à venda agora', es: 'precio más bajo en venta ahora', de: 'niedrigster Angebotspreis aktuell', it: 'prezzo richiesto più basso ora in vendita' },
+        from_price: { ko: '{p}부터', en: 'from {p}', ja: '{p}〜', 'zh-Hans': '{p} 起', 'zh-Hant': '{p} 起', pt: 'a partir de {p}', es: 'desde {p}', de: 'ab {p}', it: 'da {p}' },
         on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
       },
       language: {
@@ -2116,14 +2122,13 @@
     }
 
     // 첫 화면: 새로 올라온 실제 매물 + 많이 찾는 모델 시세 (data/derived/home_feed.json, entity_summary_v1.json)
-    const homeState = { feed: null };
+    const homeState = { feed: null, picks: [] };
 
     async function loadHomeFeed(){
-      try{
-        homeState.feed = await fetch('/data/derived/home_feed.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
-      }catch(error){
-        homeState.feed = null;
-      }
+      const getJson = url => fetch(url, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
+      const [feed, picks] = await Promise.all([getJson('/data/derived/home_feed.json'), getJson('/data/config/home_picks.json')]);
+      homeState.feed = feed;
+      homeState.picks = (picks && Array.isArray(picks.picks)) ? picks.picks : [];
       renderHome();
     }
 
@@ -2150,8 +2155,7 @@
     function renderHome(){
       const section = document.getElementById('home-feed');
       const latestEl = document.getElementById('home-latest');
-      const popularEl = document.getElementById('home-popular');
-      if(!section || !latestEl || !popularEl) return;
+      if(!section || !latestEl) return;
       const rules = (landedState.rules && landedState.rules.sources) || {};
       const latest = ((homeState.feed && homeState.feed.latest) || []).filter(item => entityState.byId[item.entity]);
       latestEl.innerHTML = latest.map(item => {
@@ -2168,20 +2172,27 @@
           </span>
         </button>`;
       }).join('');
-      const popular = ((entityState.summary && entityState.summary.entities) || [])
-        .filter(entity => !entity.feature && !(entity.children || []).length && !/unspecified/.test(entity.id) && entity.b_price_krw && entity.b_price_basis === 'sold'
-          && (entity.sold_price_count || 0) >= 10)
-        // 수요(팔린 수)에 비해 지금 매물이 적은 순 = 찾는 사람은 많은데 구하기 어려운 모델
-        .map(entity => ({ entity, scarcity: (entity.sold_price_count || 0) / ((entity.active_count || 0) + 1) }))
-        .sort((a, b) => b.scarcity - a.scarcity || (b.entity.b_price_krw || 0) - (a.entity.b_price_krw || 0))
-        .slice(0, 10)
-        .map(row => row.entity);
-      popularEl.innerHTML = popular.map(entity => `<button type="button" class="home-model" data-entity="${escapeHtml(entity.id)}">
-          <span class="home-model-name">${escapeHtml(homeName(entity))}</span>
-          <span class="home-model-price">${escapeHtml(krwToDisplay(entity.b_price_krw) || '—')}</span>
-          <span class="home-model-meta">${escapeHtml(ux('home.sold_on_sale', '{s} sold · {n} for sale').replace('{s}', String(entity.sold_price_count || 0)).replace('{n}', String(entity.active_count || 0)))}</span>
-        </button>`).join('');
-      section.hidden = !latest.length && !popular.length;
+      // 수집가들이 찾는 모델: data/config/home_picks.json 순서대로, 지금 판매 중 최저 호가
+      const picksEl = document.getElementById('home-picks');
+      const picksBlock = document.getElementById('home-picks-block');
+      const summaryById = {};
+      ((entityState.summary && entityState.summary.entities) || []).forEach(entity => { summaryById[entity.id] = entity; });
+      const picks = homeState.picks.map(id => summaryById[id]).filter(entity => entity && entity.active_count);
+      if(picksEl && picksBlock){
+        picksEl.innerHTML = picks.map(entity => {
+          const active = entity.active_count || 0;
+          const low = (entity.active_price_krw || [])[0];
+          const price = low ? ux('home.from_price', 'from {p}').replace('{p}', krwToDisplay(low)) : '—';
+          const meta = ux('home.on_sale', '{n} for sale').replace('{n}', String(active));
+          return `<button type="button" class="home-model" data-entity="${escapeHtml(entity.id)}">
+            <span class="home-model-name">${escapeHtml(homeName(entity))}</span>
+            <span class="home-model-price">${escapeHtml(price)}</span>
+            <span class="home-model-meta">${escapeHtml(meta)}</span>
+          </button>`;
+        }).join('');
+        picksBlock.hidden = !picks.length;
+      }
+      section.hidden = !latest.length && !picks.length;
     }
 
     // 위 검색창이 화면에 보이는 동안엔 결과 사이의 두 번째 검색창을 숨김 (같은 검색창이 두 개로 보이던 문제)
