@@ -1,20 +1,5 @@
 [
   {
-    "start_time": "2026-09-12 19:27:16",
-    "end_time": "2026-09-12 19:27:17",
-    "new_items": 0,
-    "total_items": 7698,
-    "site_counts": {
-      "사진집": 338,
-      "라이카스토어 충무로": 3115,
-      "장씨카메라": 4057,
-      "Ffordes (영국)": 117,
-      "Leica Store Miami": 31,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": []
-  },
-  {
     "start_time": "2026-09-12 21:53:19",
     "end_time": "2026-09-12 21:53:20",
     "new_items": 9,
@@ -36972,6 +36957,756 @@
         "가격": "€2,600",
         "통화": "EUR",
         "링크": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3451"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-10-11 03:43:32",
+    "end_time": "2026-10-11 03:43:34",
+    "seconds": 79.1,
+    "new_items": 81,
+    "total_items": 10847,
+    "site_counts": {
+      "사진집": 390,
+      "라이카스토어 충무로": 3072,
+      "장씨카메라": 4074,
+      "Ffordes (영국)": 135,
+      "Leica Store Miami": 54,
+      "Kamerastore (핀란드)": 725,
+      "기타무라 (일본)": 840,
+      "M & K Kamera (홍콩)": 719,
+      "Leica Store France (프랑스)": 372,
+      "Leica Store Singapore (싱가포르)": 26,
+      "Newoldcamera (이탈리아)": 440
+    },
+    "events": {
+      "sold": 3,
+      "new": 81,
+      "gone": 7
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "full",
+        "pages": 11,
+        "seconds": 7.8,
+        "status": "ok",
+        "rows": 390,
+        "active": 334,
+        "carried": 51,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "full",
+        "pages": 32,
+        "seconds": 27.1,
+        "status": "ok",
+        "rows": 3072,
+        "active": 593,
+        "carried": 4,
+        "gone": 3,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "full",
+        "pages": 205,
+        "seconds": 78.7,
+        "status": "ok",
+        "rows": 4074,
+        "active": 43,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Ffordes (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 61.8,
+        "status": "ok",
+        "rows": 135,
+        "active": 135,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.8,
+        "status": "ok",
+        "rows": 54,
+        "active": 54,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 12.3,
+        "status": "ok",
+        "rows": 725,
+        "active": 725,
+        "carried": 4,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.6,
+        "status": "ok",
+        "rows": 840,
+        "active": 840,
+        "carried": 0,
+        "gone": 6,
+        "left_active": 0,
+        "new": 0,
+        "changed": 6
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.9,
+        "status": "ok",
+        "rows": 719,
+        "active": 719,
+        "carried": 7,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 46.9,
+        "status": "ok",
+        "rows": 372,
+        "active": 345,
+        "carried": 84,
+        "gone": 3,
+        "left_active": 0,
+        "new": 80,
+        "changed": 82
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.4,
+        "status": "ok",
+        "rows": 26,
+        "active": 26,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 43.1,
+        "status": "ok",
+        "rows": 440,
+        "active": 440,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Used Leica SL2 with Extra Battery - Recent Leica CLA",
+        "site": "Leica Store Miami",
+        "가격": "$2,395",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-sl2-with-extra-battery-recent-leica-cla-2"
+      },
+      {
+        "상품명": "LEICA Q3",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-q3-2"
+      },
+      {
+        "상품명": "Leica Adapter M-L (18771)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€300",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-adapter-m-l-18771"
+      },
+      {
+        "상품명": "Leica Parasoleil Q3 en laiton",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€180",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-parasoleil-q3-en-laiton"
+      },
+      {
+        "상품명": "LEICA M (Typ 240)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-m-typ-240"
+      },
+      {
+        "상품명": "LEICA M11",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€6,100",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-m11-0"
+      },
+      {
+        "상품명": "VARIO-ELMARIT-SL 24-70 F/2.8 ASPH (11189) (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/vario-elmarit-sl-24-70-f28-asph-11189"
+      },
+      {
+        "상품명": "D-LUX 7 EDITION SPECIALE \"007\"",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/d-lux-7-edition-speciale-007"
+      },
+      {
+        "상품명": "VARIO-ELMARIT-SL 24-90mm f/2.8-4 ASPH.",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,090",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/vario-elmarit-sl-24-90mm-f28-4-asph-2"
+      },
+      {
+        "상품명": "Leica VARIO-ELMARIT-SL 70-200mm f/2.8 ASPH (11096)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-vario-elmarit-sl-2870mm-200mm-asph-11096"
+      },
+      {
+        "상품명": "VARIO-ELMARIT-SL 24-70 F/2.8 ASPH REF : 11189",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/vario-elmarit-sl-24-70-f28-asph-ref-11189-3"
+      },
+      {
+        "상품명": "LEICA SL-2",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,100",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-sl-2"
+      },
+      {
+        "상품명": "VARIO-ELMARIT-SL 24-90mm f/2.8-4 ASPH. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/vario-elmarit-sl-24-90mm-f28-4-asph"
+      },
+      {
+        "상품명": "APO-SUMMICRON-SL 90 mm f/2 ASPH (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/apo-summicron-sl-90-mm-f2-asph"
+      },
+      {
+        "상품명": "Leica LUX-GRIP noir pour iPhone (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€245",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-lux-grip-noir-pour-iphone"
+      },
+      {
+        "상품명": "Demi case cuir Rose pour Leica Q ou Leica Q2",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€100",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/demi-etui-cuir-rose-pour-leica-q-ou-leica-q2"
+      },
+      {
+        "상품명": "Demi case cuir Jaune pour Leica Q 116",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€75",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/demi-etui-cuir-jaune-pour-leica-q-116"
+      },
+      {
+        "상품명": "Leica VARIO-ELMARIT-SL 70-200mm f/2.8 ASPH (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-vario-elmarit-sl-2870mm-200mm-asph"
+      },
+      {
+        "상품명": "SUMMILUX-SL 50mm f/1.4 ASPH.",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,590",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-sl-50mm-f14-asph-4"
+      },
+      {
+        "상품명": "APO-SUMMICRON-SL 35 MM F/2 ASPH REF : 11184 (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/apo-summicron-sl-35-mm-f2-asph-ref-11184-0"
+      },
+      {
+        "상품명": "Leica Extender x1.4 (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€790",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-extender-x14"
+      },
+      {
+        "상품명": "Leica SL3 (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,790",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-sl3-5"
+      },
+      {
+        "상품명": "SUMMILUX-SL 50mm f/1.4 ASPH. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summilux-sl-50mm-f14-asph-1"
+      },
+      {
+        "상품명": "LEICA SL3-S (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,400",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-sl3-s-2"
+      },
+      {
+        "상품명": "LEICA SL3-S (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-sl3-s-0"
+      },
+      {
+        "상품명": "SUPER-VARIO-ELMAR-SL 16-35mm f/3.5-4.5 ASPH",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/super-vario-elmar-sl-16-35mm-f35-45-asph-6"
+      },
+      {
+        "상품명": "SUMMICRON-M 28 mm f/2 ASPH ( 2016-ACTU )",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,200",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-28-mm-f2-asph-2016-actu"
+      },
+      {
+        "상품명": "SUMMICRON-M 35 mm f/2 ASPH ( 2015-ACTU )",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-35-mm-f2-asph-2015-actu"
+      },
+      {
+        "상품명": "APO-SUMMICRON-SL 28 MM F/2 ASPH REF : 11183 (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/apo-summicron-sl-28-mm-f2-asph-ref-11183-1"
+      },
+      {
+        "상품명": "VARIO-ELMARIT-SL 24-70 F/2.8 ASPH REF : 11189",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/vario-elmarit-sl-24-70-f28-asph-ref-11189-0"
+      },
+      {
+        "상품명": "NOCTILUX-M 50 mm f/0.95 Asph. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€7,490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/noctilux-m-50-mm-f095-asph"
+      },
+      {
+        "상품명": "SUPER-VARIO-ELMAR-SL 16-35mm f/3.5-4.5 ASPH (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,590",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/super-vario-elmar-sl-16-35mm-f35-45-asph-4"
+      },
+      {
+        "상품명": "LEICA VARIO-ELMAR-T 18-56 mm f/3.5-5.6 Asph. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-vario-elmar-t-18-56-mm-f35-56-asph-1"
+      },
+      {
+        "상품명": "LEICA SUMMILUX-TL 35 mm f/1.4 Asph. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-summilux-tl-35-mm-f14-asph-0"
+      },
+      {
+        "상품명": "SUMMILUX-SL 50mm f/1.4 ASPH. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,090",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summilux-sl-50mm-f14-asph"
+      },
+      {
+        "상품명": "ELMARIT-S 30mm f/2.8 ASPH CS (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,290",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/elmarit-s-30mm-f28-asph-cs"
+      },
+      {
+        "상품명": "SUMMILUX-SL 50mm f/1.4 ASPH. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summilux-sl-50mm-f14-asph-2"
+      },
+      {
+        "상품명": "VISOFLEX III + SUMMICRON 90mm ET ELMAR 65mm Macro",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-90mm-et-elmar-65mm"
+      },
+      {
+        "상품명": "SUMMICRON-M 50 mm f/2 (1954-1956)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€450",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-50-mm-f2-1954-1956"
+      },
+      {
+        "상품명": "NOCTILUX-M 50 mm f/0.95 Asph.",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€19,500",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/noctilux-m-50-mm-f095-asph-3"
+      },
+      {
+        "상품명": "TELYT-VISO 280 MM F/4.8 1961-1984",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€250",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-viso-280-mm-f48-1961-1984"
+      },
+      {
+        "상품명": "APO-TELE-ELMAR-S 180mm f/3.5 (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/apo-tele-elmar-s-180mm-f35"
+      },
+      {
+        "상품명": "Leica viewfinder 200mm",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€145",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-viseur-200mm"
+      },
+      {
+        "상품명": "viewfinder 50mm \"sboiï\"",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€170",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/viseur-50mm-sboii-0"
+      },
+      {
+        "상품명": "APO-TELYT-R 180mm f/3.4",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/apo-telyt-r-180mm-f34-1"
+      },
+      {
+        "상품명": "SUMMICRON-R 35mm f/2 (II)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€850",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-r-35mm-f2-ii"
+      },
+      {
+        "상품명": "SUMMICRON-R 50mm f/2 (II)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€650",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-r-50mm-f2-ii"
+      },
+      {
+        "상품명": "SUPER-ANGULON-M 21 mm f/4 (1958-1963)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,290",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/super-angulon-m-21-mm-f4-1958-1963"
+      },
+      {
+        "상품명": "SUPER-VARIO-ELMAR-SL 16-35mm f/3.5-4.5 ASPH",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,090",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/super-vario-elmar-sl-16-35mm-f35-45-asph-1"
+      },
+      {
+        "상품명": "SUMMICRON-M 35 mm F/2 (1958-1974/V1)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-35-mm-f2-1958-1974v1-3"
+      },
+      {
+        "상품명": "BAGUE 16462 POUR TETE 90mm f/2 SUR VISOFLEX",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€50",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/bague-16462-pour-tete-290-sur-visoflex"
+      },
+      {
+        "상품명": "LEICAVIT MP CHROME ORIGINAL",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leicavit-mp-chrome-original"
+      },
+      {
+        "상품명": "PARASOLEIL PLIANT SOOFM POUR SUMMICRON 50mm A VIS",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€100",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/parasoleil-pliant-soofm-pour-summicron-50mm-vis"
+      },
+      {
+        "상품명": "LEICA 400mm f/5 TELYT pour Visoflex with BAGUE 16466M",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€450",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-5400-telyt-pour-visoflex-avec-bague-16466m"
+      },
+      {
+        "상품명": "LEICA IIIc",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-iiic-2"
+      },
+      {
+        "상품명": "SUPER-VARIO-ELMAR-T 11-23 mm f/3.5-4.5 Asph. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/super-vario-elmar-t-11-23-mm-f35-45-asph"
+      },
+      {
+        "상품명": "LEICA SUMMILUX-TL 35 mm f/1.4 Asph. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-summilux-tl-35-mm-f14-asph-1"
+      },
+      {
+        "상품명": "LEICA VARIO-ELMAR-T 18-56 mm f/3.5-5.6 Asph.",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€790",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-vario-elmar-t-18-56-mm-f35-56-asph"
+      },
+      {
+        "상품명": "SUMMICRON-M 90 mm f/2 (1957-1979)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,400",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/summicron-m-90-mm-f2-1957-1979-0"
+      },
+      {
+        "상품명": "APO-SUMMICRON-SL 28 MM F/2 ASPH REF : 11183",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,590",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/apo-summicron-sl-28-mm-f2-asph-ref-11183-3"
+      },
+      {
+        "상품명": "ELMARIT-R 180mm f/2.8 (I)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€400",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/elmarit-r-180mm-f28-i"
+      },
+      {
+        "상품명": "VARIO-ELMAR-R 70-210mm f/4",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€240",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/vario-elmar-r-70-210mm-f4-0"
+      },
+      {
+        "상품명": "SUMMILUX-R 80mm f/1.4",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,890",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-r-80mm-f14"
+      },
+      {
+        "상품명": "LEICA SUMMILUX-TL 35 mm f/1.4 Asph.",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,290",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-summilux-tl-35-mm-f14-asph"
+      },
+      {
+        "상품명": "SUPER-ANGULON-R 21mm f/4",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€890",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/super-angulon-r-21mm-f4"
+      },
+      {
+        "상품명": "SUMMICRON-R 50mm f/2 (II)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-r-50mm-f2-ii-2"
+      },
+      {
+        "상품명": "ELMARIT-R 19mm f/2.8 (II)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/elmarit-r-19mm-f28-ii"
+      },
+      {
+        "상품명": "LEICA filter P-Cir E82",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€230",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-filtre-p-cir-e82"
+      },
+      {
+        "상품명": "LEICA IIIc Militaire + Moteur MOOLY-C",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-iiic"
+      },
+      {
+        "상품명": "TELYT-R 250mm f/4 (I)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-r-250mm-f4-i"
+      },
+      {
+        "상품명": "MBROO carrying case ETANCHE LEITZ",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€280",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/mbroo-boitier-de-transport-etanche-leitz"
+      },
+      {
+        "상품명": "TELYT-VISO 400 MM F/6.8 1971-1984",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€430",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-viso-400-mm-f68-1971-1984"
+      },
+      {
+        "상품명": "TELYT-VISO 200 MM F/4 1959-1984",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-viso-200-mm-f4-leitz"
+      },
+      {
+        "상품명": "TELYT-VISO 200 MM F/4.5",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-viso-200-mm-f45"
+      },
+      {
+        "상품명": "viewfinder SPORTIF 200 MM LEITZ REF :SFTOO",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€100",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/viseur-sportif-200-mm-leitz-ref-sftoo"
+      },
+      {
+        "상품명": "SUMMICRON VISOFLEX 90 MM F/2 mount COURTE",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-visoflex-290-monture-courte-chrome"
+      },
+      {
+        "상품명": "TELYT-VISO 280 MM F/4.8 1961-1984",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€550",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-280-mm-f48-leitz-0"
+      },
+      {
+        "상품명": "TELYT-VISO 280 MM F/4.8 1961-1984",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€450",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-280-mm-f48-leitz"
+      },
+      {
+        "상품명": "TELYT-VISO 200 MM F/4.5 1935-1961",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€290",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-200-mm-f45-leitz"
+      },
+      {
+        "상품명": "viewfinder LEICA 135mm \"SHOOC\"",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€130",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/viseur-leica-135mm-shooc"
+      },
+      {
+        "상품명": "SUMMARIT-S 35mm f/2.5 ASPH CS",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/summarit-s-35mm-f25-asph-cs"
       }
     ]
   }
