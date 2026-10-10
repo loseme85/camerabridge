@@ -1329,15 +1329,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-06 15:31:53",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-10 21:42:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -1699,15 +1699,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-02 18:13:50",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-10 21:42:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -9958,15 +9958,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-09 16:46:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-10 21:42:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -12331,7 +12331,7 @@
     "source": "사진집",
     "source_url": "https://www.sazinzibb.com/product/leica-sl-black/16508/category/28/display/1/",
     "title_raw": "Leica SL Black",
-    "price_raw": "2,100,000원",
+    "price_raw": "1,900,000원",
     "currency": "KRW",
     "image_url": "https://www.sazinzibb.com/web/product/medium/202607/2e43c318993e34ce3d4381df0d948281.jpg",
     "condition_raw": "93%",
@@ -12548,7 +12548,7 @@
     "source": "사진집",
     "source_url": "https://www.sazinzibb.com/product/oberwerth-münchen-black-dark-brown-bag/16503/category/28/display/1/",
     "title_raw": "Oberwerth München Black - Dark brown Bag",
-    "price_raw": "550,000원",
+    "price_raw": "350,000원",
     "currency": "KRW",
     "image_url": "https://www.sazinzibb.com/web/product/medium/202607/b5c842fd80646c740454afeeb1313612.jpg",
     "condition_raw": "95%",
@@ -15811,15 +15811,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-05-11 15:36:51",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-10 21:42:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -20998,6 +20998,218 @@
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": true
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/중고-sl2-s-black/22364/category/442/display/1/",
+    "title_raw": "[중고] SL2-S (Black)",
+    "price_raw": "3,480,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202603/40ac946ae4c06d30e964893e8f08bce0.jpg",
+    "condition_raw": "91%",
+    "normalized_name": "sl2-s (black)",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/중고-sl2-silver/22363/category/442/display/1/",
+    "title_raw": "[중고] SL2 (Silver)",
+    "price_raw": "5,780,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202509/4ada53d1944a718b6f7c0017e1c0c2b0.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "sl2 (silver)",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/중고-sl2-s-black/22364/category/436/display/1/",
+    "title_raw": "[중고] SL2-S (Black)",
+    "price_raw": "3,480,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202603/40ac946ae4c06d30e964893e8f08bce0.jpg",
+    "condition_raw": "91%",
+    "normalized_name": "sl2-s (black)",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/중고-sl2-silver/22363/category/436/display/1/",
+    "title_raw": "[중고] SL2 (Silver)",
+    "price_raw": "5,780,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202509/4ada53d1944a718b6f7c0017e1c0c2b0.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "sl2 (silver)",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
   },
   {
     "source": "라이카스토어 충무로",
@@ -40277,15 +40489,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-04-09 04:32:15",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-10 21:42:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -44991,7 +45203,7 @@
     "price_raw": "7,680,000원",
     "currency": "KRW",
     "image_url": "https://leica-storebando.co.kr/web/product/medium/202412/b36c7e85bd789f4211eb2841d8e4e315.jpg",
-    "condition_raw": "95%",
+    "condition_raw": "93%",
     "normalized_name": "m 35/2 summicron 4세대 (silver)",
     "normalized_description": "",
     "brand": "Leica",
@@ -47749,15 +47961,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-04-09 04:32:15",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-10 21:42:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -154509,15 +154721,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-07-22 17:42:27",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-10 21:42:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -155384,7 +155596,7 @@
     "price_raw": "7,680,000원",
     "currency": "KRW",
     "image_url": "https://leica-storebando.co.kr/web/product/medium/202412/b36c7e85bd789f4211eb2841d8e4e315.jpg",
-    "condition_raw": "95%",
+    "condition_raw": "93%",
     "normalized_name": "m 35/2 summicron 4세대 (silver)",
     "normalized_description": "",
     "brand": "Leica",
@@ -397840,113 +398052,6 @@
   },
   {
     "source": "Ffordes (영국)",
-    "source_url": "https://www.ffordes.com/p/SOR-24-092267/leica-m/m6-072x-black-body-only",
-    "title_raw": "Leica M6 0.72x Black Body Only",
-    "price_raw": "£2,199.00",
-    "currency": "GBP",
-    "image_url": "https://d1ea30dbll17d8.cloudfront.net/12/1/images/catalog/i/l_331997-P9040189.JPG.Ffordesphoto.jpg",
-    "condition_raw": "E+",
-    "normalized_name": "leica m6 0.72x black body only",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "M_body_number:M3-M11"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:body"
-    ],
-    "label": "M Body",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Body"
-    ],
-    "model_raw": "M6",
-    "model_canonical": "M6",
-    "variant": [
-      "Black",
-      "0.72"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-10 00:22:15",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Ffordes (영국)",
-    "source_url": "https://www.ffordes.com/p/SH-24-093230/leica-screw/50mm-f15-nokton-silver",
-    "title_raw": "Voigtlander 50mm F1.5 Nokton - Silver",
-    "price_raw": "£279.00",
-    "currency": "GBP",
-    "image_url": "https://d1ea30dbll17d8.cloudfront.net/12/1/images/catalog/i/l_334541-PA070036.JPG.Ffordesphoto.jpg",
-    "condition_raw": "E++",
-    "normalized_name": "voigtlander 50mm f1.5 nokton - silver",
-    "normalized_description": "",
-    "brand": "3rd Party",
-    "brand_confidence": 0.93,
-    "brand_reason": [
-      "3rd_party_first_token:voigtlander"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.88,
-    "mount_reason": [
-      "M_voigtlander:voigtlander"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "3rd Party M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "3rd_party+M+Lens"
-    ],
-    "model_raw": "Nokton",
-    "model_canonical": "Nokton",
-    "variant": [
-      "Silver"
-    ],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 22:45:46",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Ffordes (영국)",
     "source_url": "https://www.ffordes.com/p/SOR-24-092815/leica-m/50mm-f2-apo-lanthar-vm-asph-leica-m",
     "title_raw": "Voigtlander 50mm F2 Apo Lanthar VM Asph - Leica M",
     "price_raw": "£559.00",
@@ -401991,59 +402096,6 @@
   },
   {
     "source": "Ffordes (영국)",
-    "source_url": "https://www.ffordes.com/p/SOR-24-090458/leica-r/28mm-f28-r-3cam",
-    "title_raw": "Leica 28mm F2.8 R 3cam",
-    "price_raw": "£329.00",
-    "currency": "GBP",
-    "image_url": "https://d1ea30dbll17d8.cloudfront.net/12/1/images/catalog/i/l_326982-P6160068.JPG.Ffordesphoto.jpg",
-    "condition_raw": "E+",
-    "normalized_name": "leica 28mm f2.8 r 3cam",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:3CAM"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "3CAM"
-    ],
-    "focal_length": "28",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-03 17:47:53",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Ffordes (영국)",
     "source_url": "https://www.ffordes.com/p/SH-28-079903/leica-r/28mm-f28-rom",
     "title_raw": "Leica 28mm F2.8 ROM",
     "price_raw": "£1,479.00",
@@ -404782,59 +404834,6 @@
   },
   {
     "source": "Leica Store Miami",
-    "source_url": "https://leicastoremiami.com/products/used-leica-21mm-viewfinder-black-with-lock-12009",
-    "title_raw": "Used Leica 21mm Viewfinder, black, with Lock (12008)",
-    "price_raw": "$395",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_457b04aa-c779-4b91-bafc-e45158592716.jpg?v=1791322067",
-    "condition_raw": "Kamerastore: great",
-    "normalized_name": "used leica 21mm viewfinder, black, with lock (12008)",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:finder"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": "finder",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-07 11:02:59",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store Miami",
     "source_url": "https://leicastoremiami.com/products/used-leica-cf-22-flash-3",
     "title_raw": "Used Leica CF 22 Flash",
     "price_raw": "$195",
@@ -405696,60 +405695,6 @@
     ],
     "compatible_systems": [
       "M"
-    ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-07 11:02:59",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store Miami",
-    "source_url": "https://leicastoremiami.com/products/used-leica-v-lux-1-uv-filter-bag",
-    "title_raw": "Used Leica V-Lux 1 - UV Filter & Bag",
-    "price_raw": "$395",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/ClickforMoreInfo_cd890025-9de9-471d-be81-6dc8b9a4b915.jpg?v=1791319890",
-    "condition_raw": "Kamerastore: great",
-    "normalized_name": "used leica v-lux 1 - uv filter & bag",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Compact",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Compact_kw:V-LUX"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:bag"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "V-LUX",
-    "model_canonical": "V-LUX",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [
-      "Compact",
-      "V-LUX"
     ],
     "risk_flags": [],
     "positive_flags": [],
@@ -445516,6 +445461,57 @@
   },
   {
     "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2445190117868",
+    "title_raw": "Leica Xシリーズ for ブライトラインFinder 36mm",
+    "price_raw": "¥29,400",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2445190117868-1-1.jpg",
+    "condition_raw": "AB",
+    "normalized_name": "leica xシリーズ for ブライトラインfinder 36mm",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:finder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "finder",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2448510003872",
     "title_raw": "Leica Summilux-M 50mm F1.4 E43 Black",
     "price_raw": "¥309,900",
@@ -448821,57 +448817,6 @@
   },
   {
     "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2442990299923",
-    "title_raw": "Leica D-LUX7",
-    "price_raw": "¥177,400",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2442990299923-1-1.jpg",
-    "condition_raw": "A",
-    "normalized_name": "leica d-lux7",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Compact",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Compact_kw:D-LUX"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Compact"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Compact+Body"
-    ],
-    "model_raw": "D-LUX",
-    "model_canonical": "D-LUX",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 14:35:14",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2449740065104",
     "title_raw": "Leica Summilux M 35mm f1.4 ASPH. Black [11726]",
     "price_raw": "¥771,900",
@@ -449748,57 +449693,6 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-04 13:14:36",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2443980043809",
-    "title_raw": "Leica D-LUX7",
-    "price_raw": "¥177,400",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2443980043809-1-1.jpg",
-    "condition_raw": "A",
-    "normalized_name": "leica d-lux7",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Compact",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Compact_kw:D-LUX"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Compact"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Compact+Body"
-    ],
-    "model_raw": "D-LUX",
-    "model_canonical": "D-LUX",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 11:20:46",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -460076,59 +459970,6 @@
   },
   {
     "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2119341229372",
-    "title_raw": "Leica Hood FISON ネジ付 Chrome",
-    "price_raw": "¥7,300",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2119341229372-1-1.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica hood fison ネジ付 chrome",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.99,
-    "category_reason": [
-      "acc_code:fison"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Chrome"
-    ],
-    "focal_length": null,
-    "accessory_type": "hood",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2449370101036",
     "title_raw": "Leica X Vario Black",
     "price_raw": "¥142,300",
@@ -463559,59 +463400,6 @@
     ],
     "focal_length": "50",
     "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2119341173255",
-    "title_raw": "Leica Hood FISON ネジ付 Chrome",
-    "price_raw": "¥7,200",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2119341173255-1-1.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica hood fison ネジ付 chrome",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.99,
-    "category_reason": [
-      "acc_code:fison"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Chrome"
-    ],
-    "focal_length": null,
-    "accessory_type": "hood",
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -490012,57 +489800,6 @@
   },
   {
     "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leica-vario-elmar-r-35-70mm-f3-5-e67-11248-lens-yr-1990-germany-11248-88770",
-    "title_raw": "Leica Vario-Elmar-R 35-70mm/F3.5 E67 11248 Lens Yr.1990 Germany 11248",
-    "price_raw": "HK$3,880",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/3f298dbd69c136dc980b21743ca7e53f.jpg?v=1791437991",
-    "condition_raw": "M&K: only minor signs of use",
-    "normalized_name": "leica vario-elmar-r 35-70mm/f3.5 e67 11248 lens yr.1990 germany 11248",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:ELMAR-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Vario-Elmar-R",
-    "model_canonical": "Vario-Elmar-R",
-    "variant": [],
-    "focal_length": "35-70",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 15:17:02",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
     "source_url": "https://mkkcamera.com/products/leitz-leica-super-angulon-r-21mm-f4-0-lens-yr-1983-germany-11813-88769",
     "title_raw": "LEITZ Leica Super-Angulon-R 21mm/F4.0 Lens Yr.1983 Germany 11813",
     "price_raw": "HK$3,880",
@@ -490199,111 +489936,6 @@
       "v2"
     ],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 15:17:02",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leica-r6-2-film-slr-camera-88766",
-    "title_raw": "Leica R6.2 Film SLR Camera",
-    "price_raw": "HK$6,280",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/4205c2b3e34f4e699901ba0565450bf2.jpg?v=1791437889",
-    "condition_raw": "M&K: slightly used",
-    "normalized_name": "leica r6.2 film slr camera",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_body_leica:LEICA R3-9"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.6,
-    "category_reason": [
-      "default_lens"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 15:17:02",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leica-summilux-m-35mm-f1-4-asph-11874-black-lens-yr-1995-germany-11874-24039",
-    "title_raw": "Leica Summilux-M 35mm/F1.4 ASPH 11874 Black Lens Yr.1995 Germany 11874",
-    "price_raw": "HK$21,800",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/b4eec56e5ce824cec3bf8b16d94b1238.jpg?v=1791437867",
-    "condition_raw": "M&K: only minor signs of use",
-    "normalized_name": "leica summilux-m 35mm/f1.4 asph 11874 black lens yr.1995 germany 11874",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux-M",
-    "model_canonical": "Summilux-M",
-    "variant": [
-      "ASPH",
-      "Black"
-    ],
-    "focal_length": "35",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -496166,59 +495798,6 @@
       "Silver"
     ],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 17:25:18",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leica-summicron-m-35mm-f2-0-ver-4-7-elements-black-lens-yr-1991-germany-11310-23894",
-    "title_raw": "Leica Summicron-M 35mm/F2.0 Ver.4 7 Elements Black Lens Yr.1991 Germany 11310",
-    "price_raw": "HK$25,800",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/a7db9fd2ee0d75f5de1bf7ac5f193e8c.jpg?v=1787816006",
-    "condition_raw": "M&K: only minor signs of use",
-    "normalized_name": "leica summicron-m 35mm/f2.0 ver.4 7 elements black lens yr.1991 germany 11310",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron-M",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "Black"
-    ],
-    "focal_length": "35",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -544899,6 +544478,167 @@
   },
   {
     "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1721",
+    "title_raw": "LEICAFLEX SL2",
+    "price_raw": "€550",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1721",
+    "condition_raw": "NOC: B+",
+    "normalized_name": "leicaflex sl2",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:LEICAFLEX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leicaflex"
+    ],
+    "label": "R Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Body"
+    ],
+    "model_raw": "Leicaflex SL2",
+    "model_canonical": "Leicaflex",
+    "variant": [
+      "SL2",
+      "FLE"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1717",
+    "title_raw": "Leica R3 MOT ELECTRONIC PEZZI DI RICAMBIO",
+    "price_raw": "€60",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1717",
+    "condition_raw": "NOC: B+",
+    "normalized_name": "leica r3 mot electronic pezzi di ricambio",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_body_leica:LEICA R3-9"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.75,
+    "category_reason": [
+      "price_low:90203"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "R3",
+    "model_canonical": "R3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "R"
+    ],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3451",
+    "title_raw": "Leica 35mm f/2 SUMMICRON-M ASPH. II BLACK",
+    "price_raw": "€2,600",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26U3451",
+    "condition_raw": "NOC: BA",
+    "normalized_name": "leica 35mm f/2 summicron-m asph. ii black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-10 21:42:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
     "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3424",
     "title_raw": "Leica M2 chrome",
     "price_raw": "€1,290",
@@ -549361,59 +549101,6 @@
     "model_canonical": "Summicron-M",
     "variant": [
       "Silver"
-    ],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 11:42:39",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Newoldcamera (이탈리아)",
-    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3147",
-    "title_raw": "Leica 50mm f/2 SUMMICRON-M BLACK",
-    "price_raw": "€890",
-    "currency": "EUR",
-    "image_url": "https://camerabridge.io/api/noc_image?code=26U3147",
-    "condition_raw": "NOC: B+/B",
-    "normalized_name": "leica 50mm f/2 summicron-m black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron-M",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "Black"
     ],
     "focal_length": "50",
     "accessory_type": null,
