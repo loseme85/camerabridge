@@ -1,20 +1,5 @@
 [
   {
-    "start_time": "2026-09-11 22:32:18",
-    "end_time": "2026-09-11 22:32:19",
-    "new_items": 0,
-    "total_items": 7708,
-    "site_counts": {
-      "사진집": 334,
-      "라이카스토어 충무로": 3119,
-      "장씨카메라": 4057,
-      "Ffordes (영국)": 123,
-      "Leica Store Miami": 35,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": []
-  },
-  {
     "start_time": "2026-09-12 16:33:43",
     "end_time": "2026-09-12 16:33:45",
     "new_items": 10,
@@ -36536,6 +36521,308 @@
         "가격": "€100",
         "통화": "EUR",
         "링크": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3398"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-10-10 15:02:58",
+    "end_time": "2026-10-10 15:03:00",
+    "seconds": 61.9,
+    "new_items": 17,
+    "total_items": 10780,
+    "site_counts": {
+      "사진집": 390,
+      "라이카스토어 충무로": 3071,
+      "장씨카메라": 4074,
+      "Ffordes (영국)": 138,
+      "Leica Store Miami": 55,
+      "Kamerastore (핀란드)": 725,
+      "기타무라 (일본)": 849,
+      "M & K Kamera (홍콩)": 724,
+      "Leica Store France (프랑스)": 290,
+      "Leica Store Singapore (싱가포르)": 26,
+      "Newoldcamera (이탈리아)": 438
+    },
+    "events": {
+      "new": 17,
+      "sold": 1,
+      "gone": 73
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 6.3,
+        "status": "ok",
+        "rows": 390,
+        "active": 339,
+        "carried": 50,
+        "gone": 0,
+        "left_active": 0,
+        "new": 5,
+        "changed": 5
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 8.7,
+        "status": "ok",
+        "rows": 3071,
+        "active": 592,
+        "carried": 1985,
+        "gone": 0,
+        "left_active": 1,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 8,
+        "seconds": 3.8,
+        "status": "ok",
+        "rows": 4074,
+        "active": 43,
+        "carried": 3917,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Ffordes (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 60.1,
+        "status": "ok",
+        "rows": 138,
+        "active": 138,
+        "carried": 20,
+        "gone": 1,
+        "left_active": 0,
+        "new": 12,
+        "changed": 13
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.7,
+        "status": "ok",
+        "rows": 55,
+        "active": 55,
+        "carried": 2,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.1,
+        "status": "ok",
+        "rows": 725,
+        "active": 725,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.5,
+        "status": "ok",
+        "rows": 849,
+        "active": 849,
+        "carried": 4,
+        "gone": 4,
+        "left_active": 0,
+        "new": 0,
+        "changed": 4
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.1,
+        "status": "ok",
+        "rows": 724,
+        "active": 724,
+        "carried": 4,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 24.0,
+        "status": "ok",
+        "rows": 290,
+        "active": 267,
+        "carried": 3,
+        "gone": 64,
+        "left_active": 0,
+        "new": 0,
+        "changed": 62
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.9,
+        "status": "ok",
+        "rows": 26,
+        "active": 26,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 46.3,
+        "status": "ok",
+        "rows": 438,
+        "active": 438,
+        "carried": 1,
+        "gone": 3,
+        "left_active": 0,
+        "new": 0,
+        "changed": 3
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Leica M 90mm f2.8 Elmarit Silver",
+        "site": "사진집",
+        "가격": "550,000원",
+        "통화": "KRW",
+        "링크": "https://www.sazinzibb.com/product/leica-m-90mm-f28-elmarit-silver/17113/category/27/display/1/"
+      },
+      {
+        "상품명": "LM to L 헬리코이드 어댑터 (L 마운트용)",
+        "site": "사진집",
+        "가격": "120,000원",
+        "통화": "KRW",
+        "링크": "https://www.sazinzibb.com/product/lm-to-l-헬리코이드-어댑터-l-마운트용/17111/category/27/display/1/"
+      },
+      {
+        "상품명": "Leica M11-P Black",
+        "site": "사진집",
+        "가격": "12,000,000원",
+        "통화": "KRW",
+        "링크": "https://www.sazinzibb.com/product/leica-m11-p-black/17115/category/28/display/1/"
+      },
+      {
+        "상품명": "Leica M8 Silver",
+        "site": "사진집",
+        "가격": "2,300,000원",
+        "통화": "KRW",
+        "링크": "https://www.sazinzibb.com/product/leica-m8-silver/17114/category/28/display/1/"
+      },
+      {
+        "상품명": "Samyang L AF 35-150mm f2-2.8 Black",
+        "site": "사진집",
+        "가격": "1,100,000원",
+        "통화": "KRW",
+        "링크": "https://www.sazinzibb.com/product/samyang-l-af-35-150mm-f2-28-black/17112/category/28/display/1/"
+      },
+      {
+        "상품명": "Leica 135mm F3.4 Apo M Black 6bit",
+        "site": "Ffordes (영국)",
+        "가격": "£1,549.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-091417/leica-m/135mm-f34-apo-m-black-6bit"
+      },
+      {
+        "상품명": "Leica 21mm F2.8 M Black + Finder",
+        "site": "Ffordes (영국)",
+        "가격": "£899.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092104/leica-m/21mm-f28-m-black-finder"
+      },
+      {
+        "상품명": "Leica 21mm F4 Chrome",
+        "site": "Ffordes (영국)",
+        "가격": "£649.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092112/leica-m/21mm-f4-chrome"
+      },
+      {
+        "상품명": "Leica 35mm F2 Asph M Chrome (11882)",
+        "site": "Ffordes (영국)",
+        "가격": "£1,499.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092296/leica-m/35mm-f2-asph-m-chrome-11882"
+      },
+      {
+        "상품명": "Leica 35mm F2.8 Chrome (M3)",
+        "site": "Ffordes (영국)",
+        "가격": "£599.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-091416/leica-m/35mm-f28-chrome-m3"
+      },
+      {
+        "상품명": "Leica 50mm F1.0 M Black",
+        "site": "Ffordes (영국)",
+        "가격": "£4,199.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-091409/leica-m/50mm-f10-m-black"
+      },
+      {
+        "상품명": "Leica 50mm F1.4 Asph Chrome 6 BIT",
+        "site": "Ffordes (영국)",
+        "가격": "£2,099.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092298/leica-m/50mm-f14-asph-chrome-6-bit"
+      },
+      {
+        "상품명": "Leica 50mm F1.4 M Black",
+        "site": "Ffordes (영국)",
+        "가격": "£1,499.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092269/leica-m/50mm-f14-m-black"
+      },
+      {
+        "상품명": "Leica 50mm F2 Chrome",
+        "site": "Ffordes (영국)",
+        "가격": "£699.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092110/leica-m/50mm-f2-chrome"
+      },
+      {
+        "상품명": "leica m2 chrome body",
+        "site": "Ffordes (영국)",
+        "가격": "£1,179.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092294/leica-m/leica-m2-chrome-body"
+      },
+      {
+        "상품명": "Leica 50mm F1.4 R 3cam",
+        "site": "Ffordes (영국)",
+        "가격": "£1,049.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-091410/leica-r/50mm-f14-r-3cam"
+      },
+      {
+        "상품명": "Leica 50mm F2.8 Chrome",
+        "site": "Ffordes (영국)",
+        "가격": "£579.00",
+        "통화": "GBP",
+        "링크": "https://www.ffordes.com/p/SOR-24-092295/leica-screw/50mm-f28-chrome"
       }
     ]
   }

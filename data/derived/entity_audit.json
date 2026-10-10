@@ -9,7 +9,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 435,
+   "count": 434,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -105,7 +105,7 @@
   {
    "a": "leica:body:m240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 61,
+   "count": 60,
    "example": "[위탁] M 240 (Black)"
   },
   {
@@ -171,7 +171,7 @@
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 45,
+   "count": 44,
    "example": "Leica M11 Black"
   },
   {
@@ -207,8 +207,14 @@
   {
    "a": "leica:body:m10-r:standard",
    "b": "leica:feature:frameline-28",
-   "count": 39,
+   "count": 38,
    "example": "[중고] M10-R (Black)"
+  },
+  {
+   "a": "leica:body:m8:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 37,
+   "example": "Leica M8 Silver"
   },
   {
    "a": "leica:body:m4:black-paint",
@@ -221,12 +227,6 @@
    "b": "leica:feature:mechanical",
    "count": 37,
    "example": "LEICA M4 Black paint sn.1266"
-  },
-  {
-   "a": "leica:body:m8:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 36,
-   "example": "[중고] M8 (Black)"
   },
   {
    "a": "leica:body:m10-monochrom:standard",
@@ -249,8 +249,8 @@
   {
    "a": "leica:body:m11-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 24,
-   "example": "신품 Leica M11-P Metal Gray Paint Finish"
+   "count": 25,
+   "example": "Leica M11-P Black"
   },
   {
    "a": "leica:body:m-a",
@@ -271,40 +271,40 @@
    "example": "[위탁] M-A (Silver)"
   },
   {
-   "a": "leica:body:m-monochrom-ccd",
+   "a": "leica:body:m6:titan",
    "b": "leica:feature:frameline-28",
    "count": 23,
+   "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
+  },
+  {
+   "a": "leica:body:m6:titan",
+   "b": "leica:feature:meter",
+   "count": 23,
+   "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
+  },
+  {
+   "a": "leica:body:m6:titan",
+   "b": "leica:feature:mechanical",
+   "count": 23,
+   "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
+  },
+  {
+   "a": "leica:body:m-monochrom-ccd",
+   "b": "leica:feature:frameline-28",
+   "count": 22,
    "example": "Leica M-Monochrom CCD Silver [신형센서 교체]"
   },
   {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:meter",
-   "count": 23,
+   "count": 22,
    "example": "Leica M5 Silver"
   },
   {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:mechanical",
-   "count": 23,
+   "count": 22,
    "example": "Leica M5 Silver"
-  },
-  {
-   "a": "leica:body:m6:titan",
-   "b": "leica:feature:frameline-28",
-   "count": 23,
-   "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
-  },
-  {
-   "a": "leica:body:m6:titan",
-   "b": "leica:feature:meter",
-   "count": 23,
-   "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
-  },
-  {
-   "a": "leica:body:m6:titan",
-   "b": "leica:feature:mechanical",
-   "count": 23,
-   "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
   },
   {
    "a": "leica:body:m-monochrom-246:standard",
@@ -547,12 +547,6 @@
    "example": "[중고] MDa (S)"
   },
   {
-   "a": "leica:body:m10-p:safari",
-   "b": "leica:feature:frameline-28",
-   "count": 6,
-   "example": "LEICA M10-P Edition 'Safari' sn.5492"
-  },
-  {
    "a": "leica:body:m10-d",
    "b": "leica:feature:frameline-28",
    "count": 5,
@@ -569,6 +563,12 @@
    "b": "leica:feature:mechanical",
    "count": 5,
    "example": "LEICA M4 Black chrome sn.1380"
+  },
+  {
+   "a": "leica:body:m10-p:safari",
+   "b": "leica:feature:frameline-28",
+   "count": 5,
+   "example": "LEICA M10-P Edition 'Safari' sn.5492"
   },
   {
    "a": "leica:body:m6:ttl-titan",
@@ -815,7 +815,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 88,
+   "count": 87,
    "example": "Leica M-Monochrom CCD Silver [신형센서 교체]"
   },
   {
@@ -887,7 +887,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "safari",
-   "count": 14,
+   "count": 13,
    "example": "[중고] M11-P (Safari)"
   },
   {
