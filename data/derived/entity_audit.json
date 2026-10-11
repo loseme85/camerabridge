@@ -99,13 +99,13 @@
   {
    "a": "leica:body:m-p240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 67,
+   "count": 66,
    "example": "Leica M-P Black"
   },
   {
    "a": "leica:body:m240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 61,
+   "count": 60,
    "example": "[위탁] M 240 (Black)"
   },
   {
@@ -147,7 +147,7 @@
   {
    "a": "leica:body:m10-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 49,
+   "count": 48,
    "example": "[위탁] M10-P (Silver)"
   },
   {
@@ -171,7 +171,7 @@
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 45,
+   "count": 44,
    "example": "Leica M11 Black"
   },
   {
@@ -207,7 +207,7 @@
   {
    "a": "leica:body:m10-r:standard",
    "b": "leica:feature:frameline-28",
-   "count": 39,
+   "count": 38,
    "example": "[중고] M10-R (Black)"
   },
   {
@@ -409,6 +409,12 @@
    "example": "[중고] M4-P (Black)"
   },
   {
+   "a": "leica:body:m11-d",
+   "b": "leica:feature:frameline-28",
+   "count": 14,
+   "example": "[중고] M11-D"
+  },
+  {
    "a": "leica:body:mp-film:a-la-carte",
    "b": "leica:feature:meter",
    "count": 14,
@@ -419,12 +425,6 @@
    "b": "leica:feature:mechanical",
    "count": 14,
    "example": "[중고] MP A la carte 0.72 (Silver)"
-  },
-  {
-   "a": "leica:body:m11-d",
-   "b": "leica:feature:frameline-28",
-   "count": 13,
-   "example": "[중고] M11-D"
   },
   {
    "a": "leica:body:mp-film:a-la-carte",
@@ -565,12 +565,6 @@
    "example": "LEICA M4 Black chrome sn.1380"
   },
   {
-   "a": "leica:body:m10-p:safari",
-   "b": "leica:feature:frameline-28",
-   "count": 5,
-   "example": "LEICA M10-P Edition 'Safari' sn.5492"
-  },
-  {
    "a": "leica:body:m6:ttl-titan",
    "b": "leica:feature:frameline-28",
    "count": 5,
@@ -677,6 +671,12 @@
    "b": "leica:feature:frameline-28",
    "count": 4,
    "example": "LEICA M 262 sn.4982"
+  },
+  {
+   "a": "leica:body:m10-p:safari",
+   "b": "leica:feature:frameline-28",
+   "count": 4,
+   "example": "LEICA M10-P Edition 'Safari' sn.5492"
   },
   {
    "a": "leica:body:m6:lhsa",
@@ -833,7 +833,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "titan",
-   "count": 35,
+   "count": 34,
    "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
   },
   {
@@ -887,7 +887,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "safari",
-   "count": 13,
+   "count": 12,
    "example": "[중고] M11-P (Safari)"
   },
   {
