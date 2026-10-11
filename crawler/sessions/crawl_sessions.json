@@ -1,28 +1,5 @@
 [
   {
-    "start_time": "2026-09-13 15:54:34",
-    "end_time": "2026-09-13 15:54:36",
-    "new_items": 1,
-    "total_items": 7703,
-    "site_counts": {
-      "사진집": 338,
-      "라이카스토어 충무로": 3115,
-      "장씨카메라": 4057,
-      "Ffordes (영국)": 123,
-      "Leica Store Miami": 30,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": [
-      {
-        "상품명": "Used Breakthrough Photography 82mm 10-Stop Dark Circular Polarizer",
-        "site": "Leica Store Miami",
-        "가격": "$165",
-        "통화": "USD",
-        "링크": "https://leicastoremiami.com/products/used-breakthrough-photography-82mm-10-stop-dark-circular-polarizer"
-      }
-    ]
-  },
-  {
     "start_time": "2026-09-13 16:51:51",
     "end_time": "2026-09-13 16:51:52",
     "new_items": 1,
@@ -37980,6 +37957,203 @@
         "가격": "C$145",
         "통화": "CAD",
         "링크": "https://www.camtecphoto.com/en/product/leica-flash-sync-cable-s-for-s-type-006-007-camera-6"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-10-11 15:00:14",
+    "end_time": "2026-10-11 15:00:16",
+    "seconds": 55.9,
+    "new_items": 2,
+    "total_items": 10764,
+    "site_counts": {
+      "사진집": 390,
+      "라이카스토어 충무로": 3072,
+      "장씨카메라": 4074,
+      "Ffordes (영국)": 134,
+      "Leica Store Miami": 50,
+      "Kamerastore (핀란드)": 721,
+      "기타무라 (일본)": 841,
+      "M & K Kamera (홍콩)": 712,
+      "Leica Store France (프랑스)": 286,
+      "Leica Store Singapore (싱가포르)": 26,
+      "Newoldcamera (이탈리아)": 437,
+      "Camtec Photo (캐나다)": 21
+    },
+    "events": {
+      "gone": 3,
+      "new": 2
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 7.4,
+        "status": "ok",
+        "rows": 390,
+        "active": 334,
+        "carried": 51,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 11.4,
+        "status": "ok",
+        "rows": 3072,
+        "active": 594,
+        "carried": 1987,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 8,
+        "seconds": 4.2,
+        "status": "ok",
+        "rows": 4074,
+        "active": 43,
+        "carried": 3917,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.5,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 0,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.1,
+        "status": "ok",
+        "rows": 721,
+        "active": 721,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.5,
+        "status": "ok",
+        "rows": 841,
+        "active": 841,
+        "carried": 4,
+        "gone": 1,
+        "left_active": 0,
+        "new": 2,
+        "changed": 3
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.7,
+        "status": "ok",
+        "rows": 712,
+        "active": 712,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 24.1,
+        "status": "ok",
+        "rows": 286,
+        "active": 266,
+        "carried": 0,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.3,
+        "status": "ok",
+        "rows": 26,
+        "active": 26,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 44.2,
+        "status": "ok",
+        "rows": 437,
+        "active": 437,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camtec Photo (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 21.6,
+        "status": "ok",
+        "rows": 21,
+        "active": 21,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Leica M4 Body Chrome",
+        "site": "기타무라 (일본)",
+        "가격": "¥239,300",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2444520111804"
+      },
+      {
+        "상품명": "Leica Summilux M 50mm f1.4 ASPH.B(6bit)",
+        "site": "기타무라 (일본)",
+        "가격": "¥409,000",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2447590094473"
       }
     ]
   }
