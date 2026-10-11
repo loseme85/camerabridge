@@ -2820,6 +2820,79 @@ def crawl_newoldcamera():
     return results
 
 
+def crawl_camtec():
+    """Camtec Photo (캐나다) - 토론토 라이카 딜러. 라이카 중고·데모 목록(collections/leica/demos-pre-owned-etc) 정적 HTML, ?page=N 20개씩.
+    등급은 제목 끝 표기(*A+*·*A*·*A-*·Open Box). robots.txt Crawl-delay 10초라 페이지 사이 10초 쉼. 판매 중만 목록에 나옴"""
+    import html as _html
+    import requests
+    from condition_grade import CAMTEC_PREFIX
+    results = []
+    base = "https://www.camtecphoto.com"
+    print(f"\n  📂 Camtec Photo 크롤링 시작")
+    for page_num in range(1, 20):
+        try:
+            resp = requests.get(f"{base}/en/collections/leica/demos-pre-owned-etc", params={"page": page_num},
+                                headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"    ❌ {page_num}페이지 오류: {e}")
+            break
+        entries = resp.text.split('class="product-list-entry"')[1:]
+        if not entries:
+            break
+        print(f"    └─ {page_num}페이지 {len(entries)}개 상품 발견")
+        for b in entries:
+            m = re.search(r'<h2><a href="([^"?]+)[^"]*"[^>]*>([^<]+)', b)
+            if not m:
+                continue
+            link, raw = m.group(1), re.sub(r"\s+", " ", _html.unescape(m.group(2))).strip()
+            if link in globals().get('SOLD_LINKS', ()):
+                continue
+            name, cond = _camtec_split(raw)
+            name = re.sub(r"\s+with .*\bEnsemble\b.*$", "", name)  # 'M11-D with Protector Leather Case Ensemble' → 바디로
+            if not re.match(r"(leica|leitz)\b", name, re.I) or re.search(r"a selection of", name, re.I) \
+                    or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue  # Voigtländer·Sigma·SmallRig 등 다른 브랜드('… for Leica Q3'), 여러 개 묶음
+            if re.search(r"televid|ultravid|noctivid|geovid|binocular|spotting", name, re.I):
+                continue  # 쌍안경·필드스코프
+            prices = re.findall(r'<span class="bold">\$([\d,]+(?:\.\d+)?)', b)
+            try:
+                price = f"C${float(prices[-1].replace(',', '')):,.0f}" if prices else "문의요망"
+            except ValueError:
+                price = "문의요망"
+            img = re.search(r'<img src="([^"]+)"', b)
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Camtec Photo (캐나다)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": (CAMTEC_PREFIX + cond) if cond else "정보없음",
+                "가격": price,
+                "통화": "CAD",
+                "이미지": img.group(1) if img else "",
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(10)
+    print(f"  ✅ Camtec Photo 완료: {len(results)}개")
+    return results
+
+
+def _camtec_split(raw: str):
+    """Camtec 제목 끝 등급 표기를 떼어 (상품명, 등급). '- *A+*'·'*A +*'·'*Open Box*'·'- Open box' 꼴"""
+    m = re.search(r"\s*-?\s*\*?\s*(A\s?\+|A-|A|B\s?\+|B-|B|C|Open\s?Box)\s*\*?\s*$", raw, re.I)
+    if not m or (m.group(1).upper() in ("A", "B", "C") and "*" not in raw[m.start():]):
+        return raw.strip(" -"), ""
+    cond = re.sub(r"\s", "", m.group(1)).upper().replace("OPENBOX", "Open Box")
+    return raw[:m.start()].strip(" -"), cond
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3149,6 +3222,7 @@ def crawl_all():
         ("Leica Store France (프랑스)", lambda: ce.wrap_full_run("Leica Store France (프랑스)", crawl_leicafrance)),
         ("Leica Store Singapore (싱가포르)", lambda: ce.wrap_full_run("Leica Store Singapore (싱가포르)", crawl_leicasg)),
         ("Newoldcamera (이탈리아)", lambda: ce.wrap_full_run("Newoldcamera (이탈리아)", crawl_newoldcamera)),
+        ("Camtec Photo (캐나다)", lambda: ce.wrap_full_run("Camtec Photo (캐나다)", crawl_camtec)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)

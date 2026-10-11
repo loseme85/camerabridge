@@ -2311,8 +2311,8 @@
       return value / from * to;
     }
 
-    // 대만·홍콩·싱가포르 달러는 어느 언어에서든 NT$·HK$·S$로 (현지 표기, 미국 달러와 구분)
-    const DOLLAR_SYMBOL_OVERRIDES = { TWD: 'NT$', HKD: 'HK$', SGD: 'S$' };
+    // 대만·홍콩·싱가포르·캐나다 달러는 어느 언어에서든 NT$·HK$·S$·C$로 (현지 표기, 미국 달러와 구분)
+    const DOLLAR_SYMBOL_OVERRIDES = { TWD: 'NT$', HKD: 'HK$', SGD: 'S$', CAD: 'C$' };
 
     function formatMoney(value, currency){
       try{
@@ -2710,6 +2710,7 @@
       'Leica Store France (프랑스)': { default: 'Leica Store France', ko: '라이카 스토어 프랑스', ja: 'ライカストア フランス', 'zh-Hans': '徕卡法国专卖店', 'zh-Hant': '徠卡法國專賣店' },
       'Leica Store Singapore (싱가포르)': { default: 'Leica Store Singapore', ko: '라이카 스토어 싱가포르', ja: 'ライカストア シンガポール', 'zh-Hans': '徕卡新加坡专卖店', 'zh-Hant': '徠卡新加坡專賣店' },
       'Newoldcamera (이탈리아)': { default: 'Newoldcamera', ko: '뉴올드카메라', ja: 'ニューオールドカメラ' },
+      'Camtec Photo (캐나다)': { default: 'Camtec Photo', ko: '캠텍 포토', ja: 'キャムテック フォト' },
       'Ffordes (영국)': { default: 'Ffordes Photographic' }
     };
 

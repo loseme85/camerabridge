@@ -19,7 +19,7 @@ from fx_history import upsert_day  # noqa: E402
 KST = dt.timezone(dt.timedelta(hours=9))
 
 OUT_PATH = Path(__file__).resolve().parents[1] / "data" / "fx_rates.json"
-CURRENCIES = ["USD", "KRW", "JPY", "EUR", "GBP", "CNY", "TWD", "HKD", "BRL", "SGD"]
+CURRENCIES = ["USD", "KRW", "JPY", "EUR", "GBP", "CNY", "TWD", "HKD", "BRL", "SGD", "CAD"]
 
 
 def _from_open_er_api() -> dict:

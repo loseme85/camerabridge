@@ -71,6 +71,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return (_LCF[letter], "label") if letter in _LCF else (None, None)
     if cond.startswith(NOC_PREFIX):
         return _NOC.get(cond[len(NOC_PREFIX):].strip().upper().replace(" ", "")), "label"
+    if cond.startswith(CAMTEC_PREFIX):
+        return _CAMTEC.get(cond[len(CAMTEC_PREFIX):].strip().upper()), "label"
     if cond.startswith(MK_PREFIX):
         if "not working" in cond:
             return "X", "label"
@@ -165,3 +167,11 @@ NOC_PREFIX = "NOC: "
 # 사진 평가(표기 가리고 23점, 사진 3장씩, 2026-10-08): 사진이 표기보다 평균 0.6등급 후함 → 기존 매장(0.6~0.8)과 비슷해 그대로.
 # 정확 일치 11/23 · 한 등급 이내 22/23. A-·AB는 상자까지 있는 새것 같은 매물이 많지만 사진 후함을 빼고 A.
 _NOC = {"A-": "A", "AB": "A", "BA": "B", "B+": "B", "B+/B": "C", "B/B+": "C", "B": "C", "BC": "D", "C": "D"}
+
+
+# 캐나다 Camtec Photo: 제목 끝 '*A+*'·'*A*'·'*A-*'·'Open Box' (Open Box는 미사용 데모·반품, 사진도 신품 견본)
+CAMTEC_PREFIX = "Camtec: "
+# 사진 평가(표기 가리고 20점, 사진 3장씩, 2026-10-11): 표기를 한 칸 위로 옮긴 등급과 사진이 거의 같음(평균 차이 0) →
+# 기존 매장은 사진이 표기보다 0.8등급 후했으니 Camtec 표기가 그만큼 후한 것. 한 칸 내려 A+→A, A→B, A-→C.
+# 내린 대응 기준 정확 일치 3/17 · 한 등급 이내 15/17 (Open Box 3점 제외, 사진이 평균 0.9등급 후함 — 기존 매장과 같음).
+_CAMTEC = {"OPEN BOX": "N", "A+": "A", "A": "B", "A-": "C", "B+": "C", "B": "D", "B-": "D", "C": "D"}
