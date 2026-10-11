@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 460,
+   "count": 458,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 432,
+   "count": 429,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 411,
-   "example": "Leica M1 Silver"
+   "count": 410,
+   "example": "Leica M2 BlackPaint"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 406,
+   "count": 404,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -51,19 +51,19 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:meter",
-   "count": 144,
+   "count": 143,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:mechanical",
-   "count": 144,
+   "count": 143,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:frameline-28",
-   "count": 140,
+   "count": 139,
    "example": "[중고] M6 CLASSIC"
   },
   {
@@ -249,7 +249,7 @@
   {
    "a": "leica:body:m11-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 25,
+   "count": 24,
    "example": "Leica M11-P Black"
   },
   {
@@ -289,12 +289,6 @@
    "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
   },
   {
-   "a": "leica:body:m-monochrom-ccd",
-   "b": "leica:feature:frameline-28",
-   "count": 22,
-   "example": "Leica M-Monochrom CCD Silver [신형센서 교체]"
-  },
-  {
    "a": "leica:body:m-monochrom-246:standard",
    "b": "leica:feature:frameline-28",
    "count": 22,
@@ -311,6 +305,12 @@
    "b": "leica:feature:mechanical",
    "count": 21,
    "example": "Leica M5 Silver"
+  },
+  {
+   "a": "leica:body:m-monochrom-ccd",
+   "b": "leica:feature:frameline-28",
+   "count": 21,
+   "example": "[중고] M-Monochrom CCD (Black)"
   },
   {
    "a": "leica:body:m9-p:standard",
@@ -493,24 +493,6 @@
    "example": "LEICA M3 Double stroke sn.8008"
   },
   {
-   "a": "leica:body:m6:reissue",
-   "b": "leica:feature:frameline-28",
-   "count": 7,
-   "example": "Leica M6 Re-Issue Black"
-  },
-  {
-   "a": "leica:body:m6:reissue",
-   "b": "leica:feature:meter",
-   "count": 7,
-   "example": "Leica M6 Re-Issue Black"
-  },
-  {
-   "a": "leica:body:m6:reissue",
-   "b": "leica:feature:mechanical",
-   "count": 7,
-   "example": "Leica M6 Re-Issue Black"
-  },
-  {
    "a": "leica:body:m-e",
    "b": "leica:feature:frameline-28",
    "count": 7,
@@ -545,6 +527,24 @@
    "b": "leica:feature:mechanical",
    "count": 6,
    "example": "[중고] MDa (S)"
+  },
+  {
+   "a": "leica:body:m6:reissue",
+   "b": "leica:feature:frameline-28",
+   "count": 6,
+   "example": "[중고] Leica M6 Classic Reissue"
+  },
+  {
+   "a": "leica:body:m6:reissue",
+   "b": "leica:feature:meter",
+   "count": 6,
+   "example": "[중고] Leica M6 Classic Reissue"
+  },
+  {
+   "a": "leica:body:m6:reissue",
+   "b": "leica:feature:mechanical",
+   "count": 6,
+   "example": "[중고] Leica M6 Classic Reissue"
   },
   {
    "a": "leica:body:m10-d",
@@ -697,30 +697,6 @@
    "example": "LEICA 35mm F2 (4th) 7 element SUMMICRON-M sn.3554"
   },
   {
-   "a": "leica:body:m1:standard",
-   "b": "leica:feature:no-meter",
-   "count": 3,
-   "example": "Leica M1 Silver"
-  },
-  {
-   "a": "leica:body:m1:standard",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "Leica M1 Silver"
-  },
-  {
-   "a": "leica:body:cl-film",
-   "b": "leica:feature:meter",
-   "count": 3,
-   "example": "Leica CL Film Camera Black"
-  },
-  {
-   "a": "leica:body:cl-film",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "Leica CL Film Camera Black"
-  },
-  {
    "a": "leica:body:m4-p:70-jahre",
    "b": "leica:feature:frameline-28",
    "count": 3,
@@ -815,8 +791,8 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 87,
-   "example": "Leica M-Monochrom CCD Silver [신형센서 교체]"
+   "count": 86,
+   "example": "[중고] M11 Monochrom"
   },
   {
    "entity": "leica:feature:meter",
