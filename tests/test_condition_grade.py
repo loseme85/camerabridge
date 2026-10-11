@@ -72,3 +72,12 @@ def test_new_version_words_are_not_brand_new() -> None:
     assert grade_of("라이카스토어 충무로", "98%", "[위탁] M 28/2 Summicron ASPH NEW (Black)")[0] == "A"
     assert grade_of("사진집", "97%", "Leica M 28mm f2 Summicron ASPH 6bit New Type Black")[0] == "A"
     assert grade_of("M & K Kamera (홍콩)", None, "Brand New Leica Summicron-M 28mm/F2.0 ASPH 11618")[0] == "N"
+
+
+def test_camtec_title_grades():
+    from condition_grade import CAMTEC_PREFIX
+    site = "Camtec Photo (캐나다)"
+    assert grade_of(site, CAMTEC_PREFIX + "A+", "Leica Summilux-M 90mm f/1.5 ASPH")[0] == "A"
+    assert grade_of(site, CAMTEC_PREFIX + "A", "Leica Summilux-M 50mm f/1.4 ASPH")[0] == "B"
+    assert grade_of(site, CAMTEC_PREFIX + "A-", "Leica D-Lux 4 Black")[0] == "C"
+    assert grade_of(site, CAMTEC_PREFIX + "Open Box", "Leica Summicron-M 35mm f/2 ASPH. Black (E39)")[0] == "N"
