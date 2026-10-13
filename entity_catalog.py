@@ -98,6 +98,10 @@ def record_title(record: dict[str, Any]) -> str:
     title = str(final.get("title_raw") or raw.get("상품명") or record.get("title") or final.get("title") or "")
     # 로마 숫자 특수문자 (Ⅲ → III)
     title = title.replace("Ⅲ", "III").replace("Ⅱ", "II").replace("Ⅰ", "I").replace("Ⅳ", "IV")
+    # 옛 렌즈의 cm 표기 (영국 딜러 '9cm f4 Elmar'·'13.5cm Hektor') → mm로 바꿔 초점거리 규칙에 걸리게.
+    # 제품 번호·코드 이름이 적힌 제목은 그대로 둔다 (번호로 세대가 정해지고, 'FIKUS … 13.5cm' 같은 후드·부품이 렌즈로 가지 않게)
+    if not (CODE_IN_TITLE.search(title) or CODE_WORD_IN_TITLE.search(title)):
+        title = re.sub(r"(?<![\d.])(\d{1,2}(?:\.\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * 10):d}mm", title)
     shop = SHOP_LENS.match(title)
     if shop and not FAMILY_WORD.search(title):
         mount, focal, aperture = shop.group(1).upper(), shop.group(2), shop.group(3) or ""

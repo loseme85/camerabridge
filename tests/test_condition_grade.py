@@ -81,3 +81,13 @@ def test_camtec_title_grades():
     assert grade_of(site, CAMTEC_PREFIX + "A", "Leica Summilux-M 50mm f/1.4 ASPH")[0] == "B"
     assert grade_of(site, CAMTEC_PREFIX + "A-", "Leica D-Lux 4 Black")[0] == "C"
     assert grade_of(site, CAMTEC_PREFIX + "Open Box", "Leica Summicron-M 35mm f/2 ASPH. Black (E39)")[0] == "N"
+
+
+def test_aperture_description_grades():
+    from condition_grade import APERTURE_PREFIX
+    site = "Aperture (영국)"
+    assert grade_of(site, APERTURE_PREFIX + "Mint", "Leica 28mm f5.6 Summaron-M Black")[0] == "A"
+    assert grade_of(site, APERTURE_PREFIX + "Exc++", "Leica M9-P Silver")[0] == "B"
+    assert grade_of(site, APERTURE_PREFIX + "Exc+", "Leica 50mm f2 Summicron-R 1 Cam")[0] == "C"
+    assert grade_of(site, APERTURE_PREFIX + "User", "Leica M2 Black Paint")[0] == "D"
+    assert grade_of(site, APERTURE_PREFIX + "New", "Leica 35mm f1.4 Summilux-TL ASPH Black Anodized")[0] == "N"

@@ -2893,6 +2893,82 @@ def _camtec_split(raw: str):
     return raw[:m.start()].strip(" -"), cond
 
 
+APERTURE_CATEGORIES = ["leica-digital", "leica-rangefinder-cameras", "leica-m-lenses",
+                       "leica-screw-mount", "leica-r-series", "leica-accessories"]
+
+
+def crawl_aperture():
+    """Aperture (영국) - 런던 라이카 중고 전문점. Lightspeed 쇼핑몰이라 분류 목록에 ?format=json을 붙이면 JSON.
+    Pre-Owned Leica 하위 분류 6개(보이그랜더 분류는 뺌)를 100개씩. 판매 중만 목록에 나옴.
+    등급은 설명 첫 줄(Mint·Mint-·Exc+++·Exc++·Exc+·Exc·User). robots.txt Crawl-delay 2초 지킴"""
+    import requests
+    from condition_grade import APERTURE_PREFIX, APERTURE_LABELS
+    results, seen = [], set()
+    base = "https://www.apertureuk.com"
+    print(f"\n  📂 Aperture 크롤링 시작")
+    s = requests.Session()
+    s.headers["User-Agent"] = random.choice(USER_AGENTS)
+    for cat_slug in APERTURE_CATEGORIES:
+        for page_num in range(1, 20):
+            try:
+                resp = s.get(f"{base}/pre-owned-leica/{cat_slug}/page{page_num}.html",
+                             params={"format": "json", "limit": 100}, timeout=30)
+                resp.raise_for_status()
+                col = resp.json().get("collection") or {}
+            except Exception as e:
+                print(f"    ❌ {cat_slug} {page_num}페이지 오류: {e}")
+                break
+            prods = col.get("products") or {}
+            items = list(prods.values()) if isinstance(prods, dict) else list(prods)
+            print(f"    └─ {cat_slug} {page_num}페이지 {len(items)}개 상품 발견")
+            for p in items:
+                link = f"{base}/{p.get('url', '')}"
+                if not p.get("url") or link in seen or link in globals().get('SOLD_LINKS', ()):
+                    continue
+                seen.add(link)
+                # 제목 끝 매장 재고 번호('   ALC176604'·'  110-84')는 뗀다
+                name = re.sub(r"\s{2,}([A-Z]{1,4}\d{3,}|\d{3}-\d{2})\s*$", "", (p.get("title") or "").rstrip())
+                name = re.sub(r"\s+", " ", name).strip()
+                brand_new = bool(re.match(r"brand new\s+", name, re.I))
+                name = re.sub(r"^brand new\s+", "", name, flags=re.I)
+                name = re.sub(r"\bSL-2(-?S)?\b", lambda m: "SL2" + ("-S" if m.group(1) else ""), name)  # 'SL-2S' → SL2-S
+                name = re.sub(r"\bApo-Macro-Elmar\b(?!it)", "Apo-Macro-Elmarit-R", name)  # 100mm f2.8 R 렌즈 오타
+                # 브랜드 칸은 'Leica'인데 제목이 Nikon·Schneider인 것, 브랜드 칸이 빈 라이카가 있어 제목으로 거른다
+                if not re.match(r"(leica|leitz)\b", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                    continue  # Aperture 자체 캡·Sigma·Zeiss 등 다른 브랜드
+                desc = (p.get("description") or "").strip()
+                first = desc.splitlines()[0].strip() if desc else ""
+                if brand_new or re.search(r"\bbrand new\b", first, re.I):
+                    first = "New"
+                cond = APERTURE_PREFIX + first if first in APERTURE_LABELS else "정보없음"
+                amount = ((p.get("price") or {}).get("price_incl")) or 0
+                price = f"£{float(amount):,.0f}" if amount else "문의요망"
+                img = f"https://cdn.webshopapp.com/shops/299238/files/{p['image']}/file.jpg" if p.get("image") else ""
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "Aperture (영국)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "GBP",
+                    "이미지": img,
+                    "링크": link,
+                    "품절": not p.get("available", True),
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            time.sleep(2)
+            if not col.get("page_next"):
+                break
+    print(f"  ✅ Aperture 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3223,6 +3299,7 @@ def crawl_all():
         ("Leica Store Singapore (싱가포르)", lambda: ce.wrap_full_run("Leica Store Singapore (싱가포르)", crawl_leicasg)),
         ("Newoldcamera (이탈리아)", lambda: ce.wrap_full_run("Newoldcamera (이탈리아)", crawl_newoldcamera)),
         ("Camtec Photo (캐나다)", lambda: ce.wrap_full_run("Camtec Photo (캐나다)", crawl_camtec)),
+        ("Aperture (영국)", lambda: ce.wrap_full_run("Aperture (영국)", crawl_aperture)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
