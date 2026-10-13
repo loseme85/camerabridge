@@ -3050,6 +3050,71 @@ def crawl_harrison():
             })
         time.sleep(random.uniform(4.0, 5.0))  # 250개씩 7쪽, 간격이 짧으면 429
     print(f"  ✅ Harrison Cameras 완료: {len(results)}개")
+WEX_ALGOLIA = {"app": "C1EVKDF8ZJ", "key": "07c4ecf5dcac1fc1f1ae3b98dd387d06", "index": "prod_CatalogFeed"}
+
+
+def crawl_wex():
+    """Wex Photo Video (영국) - 대형몰의 라이카 중고(leica-used 분류). 목록 화면이 쓰는 사이트 검색 중계
+    (/qkax/search-gateway, Algolia 형식)에 화면에 박힌 공개 검색 키로 한 번에 받는다. 판매 중만 나옴.
+    등급은 'Condition' 칸 (As new (10)·Mint (9+)·Excellent (9)·Very good (9-)·Good (8)…)"""
+    import requests
+    from condition_grade import WEX_PREFIX
+    results, seen = [], set()
+    base = "https://www.wexphotovideo.com"
+    print(f"\n  📂 Wex Photo Video 크롤링 시작")
+    headers = {"User-Agent": random.choice(USER_AGENTS), "Content-Type": "application/json",
+               "X-Algolia-Application-Id": WEX_ALGOLIA["app"], "X-Algolia-API-Key": WEX_ALGOLIA["key"],
+               "Referer": f"{base}/leica-used/", "Origin": base}
+    hits, page_num = [], 0
+    while True:
+        params = f"filters=categories%3A%22leica-used%22&hitsPerPage=200&page={page_num}&query="
+        resp = requests.post(f"{base}/qkax/search-gateway/1/indexes/*/queries", headers=headers, timeout=30,
+                             json={"requests": [{"indexName": WEX_ALGOLIA["index"], "params": params}]})
+        resp.raise_for_status()
+        res = (resp.json().get("results") or [{}])[0]
+        hits += res.get("hits") or []
+        print(f"    └─ {page_num + 1}페이지 {len(res.get('hits') or [])}개 상품 발견 (전체 {res.get('nbHits')})")
+        page_num += 1
+        if page_num >= (res.get("nbPages") or 1):
+            break
+        time.sleep(1)
+    for h in hits:
+        link = base + (h.get("productUrl") or "")
+        if not h.get("productUrl") or link in seen or link in globals().get('SOLD_LINKS', ()):
+            continue
+        seen.add(link)
+        name = re.sub(r"^used\s+", "", (h.get("title") or h.get("displayName") or "").strip(), flags=re.I)
+        # 옛 T 시스템 렌즈 이름 'Vario Elmar T' → 지금 이름 '-TL' (TL 마운트로 읽히게)
+        name = re.sub(r"\b(Elmar|Elmarit|Summicron|Summilux)[ -]T\b(?!L)", r"\1-TL", name, flags=re.I)
+        name = re.sub(r"\s+", " ", name).strip()
+        if "leica" not in (h.get("manufacturer") or "").lower() or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        amount = h.get("Price") or 0
+        price = f"£{float(amount):,.0f}" if amount else "문의요망"
+        cond_raw = (h.get("Condition") or "").strip()
+        cond = WEX_PREFIX + cond_raw if cond_raw else "정보없음"
+        img = ""
+        if h.get("imageUrl"):
+            img = base + re.sub(r"width=\d+", "width=600", h["imageUrl"][0])
+        cat = detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": "Wex Photo Video (영국)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "GBP",
+            "이미지": img,
+            "링크": link,
+            "품절": not h.get("availability", True),
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Wex Photo Video 완료: {len(results)}개")
     return results
 
 
@@ -3385,6 +3450,7 @@ def crawl_all():
         ("Camtec Photo (캐나다)", lambda: ce.wrap_full_run("Camtec Photo (캐나다)", crawl_camtec)),
         ("Aperture (영국)", lambda: ce.wrap_full_run("Aperture (영국)", crawl_aperture)),
         ("Harrison Cameras (영국)", lambda: ce.wrap_full_run("Harrison Cameras (영국)", crawl_harrison)),
+        ("Wex Photo Video (영국)", lambda: ce.wrap_full_run("Wex Photo Video (영국)", crawl_wex)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
