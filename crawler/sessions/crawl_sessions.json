@@ -1,20 +1,5 @@
 [
   {
-    "start_time": "2026-09-15 20:30:44",
-    "end_time": "2026-09-15 20:30:45",
-    "new_items": 0,
-    "total_items": 7718,
-    "site_counts": {
-      "사진집": 347,
-      "라이카스토어 충무로": 3112,
-      "장씨카메라": 4057,
-      "Ffordes (영국)": 122,
-      "Leica Store Miami": 40,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": []
-  },
-  {
     "start_time": "2026-09-15 23:23:38",
     "end_time": "2026-09-15 23:23:39",
     "new_items": 0,
@@ -41182,6 +41167,591 @@
         "가격": "£15",
         "통화": "GBP",
         "링크": "https://www.wexphotovideo.com/leica-bp-dc13-battery-used-3363162/"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-10-13 22:36:01",
+    "end_time": "2026-10-13 22:36:03",
+    "seconds": 64.2,
+    "new_items": 51,
+    "total_items": 10929,
+    "site_counts": {
+      "사진집": 350,
+      "라이카스토어 충무로": 3081,
+      "장씨카메라": 4076,
+      "Ffordes (영국)": 132,
+      "Leica Store Miami": 53,
+      "Kamerastore (핀란드)": 726,
+      "기타무라 (일본)": 830,
+      "M & K Kamera (홍콩)": 703,
+      "Leica Store France (프랑스)": 280,
+      "Leica Store Singapore (싱가포르)": 24,
+      "Newoldcamera (이탈리아)": 441,
+      "Camtec Photo (캐나다)": 21,
+      "Aperture (영국)": 89,
+      "Wex Photo Video (영국)": 70,
+      "Harrison Cameras (영국)": 53
+    },
+    "events": {
+      "gone": 45,
+      "new": 51
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 7.1,
+        "status": "ok",
+        "rows": 350,
+        "active": 329,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 10.0,
+        "status": "ok",
+        "rows": 3081,
+        "active": 591,
+        "carried": 1996,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 8,
+        "seconds": 4.4,
+        "status": "ok",
+        "rows": 4076,
+        "active": 45,
+        "carried": 3919,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.5,
+        "status": "ok",
+        "rows": 53,
+        "active": 53,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 11.3,
+        "status": "ok",
+        "rows": 726,
+        "active": 726,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.1,
+        "status": "ok",
+        "rows": 830,
+        "active": 830,
+        "carried": 1,
+        "gone": 4,
+        "left_active": 0,
+        "new": 0,
+        "changed": 4
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 7.9,
+        "status": "ok",
+        "rows": 703,
+        "active": 703,
+        "carried": 0,
+        "gone": 3,
+        "left_active": 0,
+        "new": 0,
+        "changed": 3
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 28.2,
+        "status": "ok",
+        "rows": 280,
+        "active": 261,
+        "carried": 1,
+        "gone": 34,
+        "left_active": 0,
+        "new": 0,
+        "changed": 32
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.6,
+        "status": "ok",
+        "rows": 24,
+        "active": 24,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 52.2,
+        "status": "ok",
+        "rows": 441,
+        "active": 441,
+        "carried": 0,
+        "gone": 4,
+        "left_active": 0,
+        "new": 0,
+        "changed": 4
+      },
+      {
+        "site": "Camtec Photo (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 22.0,
+        "status": "ok",
+        "rows": 21,
+        "active": 21,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Aperture (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 14.1,
+        "status": "ok",
+        "rows": 89,
+        "active": 89,
+        "carried": 0,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Wex Photo Video (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.0,
+        "status": "ok",
+        "rows": 70,
+        "active": 70,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Harrison Cameras (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 33.4,
+        "status": "ok",
+        "rows": 53,
+        "active": 51,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 51,
+        "changed": 51
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Leica 10X42 Ultravid BR Binoculars- Green",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£695",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-10x42-ultravid-br-binoculars-green-used-1559908"
+      },
+      {
+        "상품명": "Leica M 21mm F2.8 Elmarit 11135 Lens",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,395",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-21mm-f2-8-elmarit-11135-lens-used-4067819"
+      },
+      {
+        "상품명": "Leica 40x WW Eyepiece 41007 for Televid 77 & 62 Scopes",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£170",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-40x-ww-eyepiece-41007-for-televid-77-62-scopes-used-2208387"
+      },
+      {
+        "상품명": "Leica M6 Black .72 Body 10404",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,900",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m6-black-72-rangefinder-camera-body-10404-used-1705050"
+      },
+      {
+        "상품명": "Leica M 28mm F5.6 Summaron 11695 Lens",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,495",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-28mm-f5-6-summaron-11695-lens-used-4651593"
+      },
+      {
+        "상품명": "Leica R 180mm F4 Elmar-R Lens 11922",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£250",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-r-180mm-f4-elmar-r-lens-11922-used-3371915"
+      },
+      {
+        "상품명": "Leica Vario Elmar R 75-200MM F4.5 Lens",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£170",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-vario-elmar-r-75-200mm-f4-5-lens-used-3188122"
+      },
+      {
+        "상품명": "Leitz Leica Lens Case Leather - Approx 90mm x 80mm",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£22",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leitz-leica-lens-case-leather-approx-90mm-x-80mm-ebf-jz-291"
+      },
+      {
+        "상품명": "Leica M to Leica R Adapter 14167",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£70",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-to-leica-r-adapter-14167-used-14167-01"
+      },
+      {
+        "상품명": "Leica M7 0.72 Black Body 10503",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£2,250",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m7-0-72-black-rangefinder-camera-body-10503-used-2888357"
+      },
+      {
+        "상품명": "Leica Leather Case 18689 for Leica D-Lux 4",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£30",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-leather-case-18689-for-leica-d-lux-4-used-18689-04"
+      },
+      {
+        "상품명": "Leica R4 Silver Camera Body",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£125",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-r4-silver-camera-body-used-1575967"
+      },
+      {
+        "상품명": "Leica D-Lux 8 Camera 19191",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,250",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-d-lux-8-camera-19191-used-5920017"
+      },
+      {
+        "상품명": "Leica CM Zoom Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,500",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-cm-zoom-35mm-camera-leica-ever-ready-case-used-2968118"
+      },
+      {
+        "상품명": "Leica M6 TTL Silver .72 Body 10434",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£2,750",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m6-ttl-silver-72-rangefinder-camera-body-10434-used-2722575"
+      },
+      {
+        "상품명": "Leica Leitz 12585 lens hood for Leica Summicron-M 2.0/50",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£70",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-leitz-12585-lens-hood-for-leica-summicron-m-2-0-50-used-12585-01"
+      },
+      {
+        "상품명": "Leica Data Back 2 (14216)",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£50",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-data-back-2-14216-used-14216-01"
+      },
+      {
+        "상품명": "Leica C1 Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£210",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-c1-35mm-compact-camera-used-2760246"
+      },
+      {
+        "상품명": "Leica C11 Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£100",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-c11-aps-compact-camera-used-2651589"
+      },
+      {
+        "상품명": "Leica Z2X Jaguar Edition Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£250",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-z2x-jaguar-edition-35mm-compact-camera-used-2516790"
+      },
+      {
+        "상품명": "Leica Sofort White Instant Camera 19100",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£185",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-sofort-white-instant-camera-19100-used-2754-01"
+      },
+      {
+        "상품명": "Leica M1 Chrome Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£950",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m1-chrome-35mm-analog-camera-used-980325"
+      },
+      {
+        "상품명": "Leica D-Lux 1 Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£300",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-d-lux-camera-with-case-used-2901525"
+      },
+      {
+        "상품명": "Leica D-Lux 1 Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£300",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-d-lux-1-camera-with-case-used-2903726"
+      },
+      {
+        "상품명": "Leica Digilux Zoom Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£140",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-digilux-zoom-camera-used-2537449"
+      },
+      {
+        "상품명": "Leica Winder M4-2",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£50",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-winder-m4-2-used-14227-01"
+      },
+      {
+        "상품명": "Leica Photo Adapter 1:10.4/800 for Televid 77 & 62 Scopes 42301",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£100",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-photo-adapter-1-10-4-800-for-televid-77-62-scopes-42301-used-2084413"
+      },
+      {
+        "상품명": "Leica Leitz Din A6 Copy Stand",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£25",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-leitz-din-a6-copy-stand-used-dina6-01"
+      },
+      {
+        "상품명": "Leica M Adapter Converter Ring M2 21-35 M3 135",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£50",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-adapter-converter-ring-m2-21-35-m3-135-used-m3135-02"
+      },
+      {
+        "상품명": "Leica M Adapter Converter Ring M2 90 M3",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£40",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-adapter-converter-ring-m2-90-m3-used-m290-02"
+      },
+      {
+        "상품명": "Leica CF-D Flash - Silver",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£80",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-cf-d-flash-silver-used-cf-d-01"
+      },
+      {
+        "상품명": "Leica 18792 Alcantara Hand Strap",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£25",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-18792-alcantara-hand-strap-used-18792strap-01"
+      },
+      {
+        "상품명": "Leica M6 Black .72 Body 10404",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,900",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m6-black-72-rangefinder-camera-body-10404-used-1688644"
+      },
+      {
+        "상품명": "Leica M6 Leather Case - 14505",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£60",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m6-leather-case-14505-used-14505-01"
+      },
+      {
+        "상품명": "Leica 24mm Optical Viewfinder for D-Lux 4 18696",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£125",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-24mm-optical-viewfinder-for-d-lux-4-18696-used-18696-03"
+      },
+      {
+        "상품명": "Leica APO-TELEVID 65 with Leica 25x-50x WW ASPH",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,400",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-apo-televid-65-with-leica-25x-50x-ww-asph"
+      },
+      {
+        "상품명": "Leica M 90mm F2.8 Elmarit Black Lens 11807",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£675",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-90mm-f2-8-elmarit-black-lens-11807-used-3648890"
+      },
+      {
+        "상품명": "Leica Digiscoping Adapter for D-LUX 5 42332",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£50",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-digiscoping-adapter-for-d-lux-5-42332-used-42332-02"
+      },
+      {
+        "상품명": "Leitz 12585 lens hood for Leica Summicron-M 2.0/50",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£70",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leitz-12585-lens-hood-leica-summicron-m-2-0-50-used-ud-0550"
+      },
+      {
+        "상품명": "Leica SL 24-70mm F2.8 Asph Vario Elmarit Lens 11189",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,360",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-sl-24-70mm-f2-8-asph-vario-elmarit-lens-11189-used-4767316"
+      },
+      {
+        "상품명": "Leica M 35mm F2.8 Summaron Silver Lens",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£400",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-35mm-f2-8-summicron-silver-lens-fixed-focus-lens-for-md-and-mda-cameras-used-2311610"
+      },
+      {
+        "상품명": "Leica M Adapter Converter Ring M2 90 M3",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£40",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-adapter-converter-ring-m2-90-m3-used-m290-01"
+      },
+      {
+        "상품명": "Leica 18630 E69 UVa Filter",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£50",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-18630-e69-uva-filter-used-18630-01"
+      },
+      {
+        "상품명": "Leica M 35mm F2 Summicron ASPH Silver Lens 11674",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£1,700",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-m-35mm-f2-summicron-asph-silver-lens-11674-used-4757326"
+      },
+      {
+        "상품명": "Leitz Wetzlar UVa UV Filter Series 8 and Leitz Wetzlar 12523 Lens Hood Elmarit R 24mm f2.8 Genuine",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£66",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leitz-wetzlar-uva-uv-filter-series-8-and-leitz-wetzlar-12523-lens-hood-elmarit-r-24mm-f2-8-genuine-ebf-jz-153"
+      },
+      {
+        "상품명": "Leica Case for AF-C1 Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£36",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-case-for-af-c1-camera-ebf-jz-178"
+      },
+      {
+        "상품명": "Leica Z2X Jaguar Edition Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£250",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-z2x-jaguar-edition-35mm-compact-camera-used-2516579"
+      },
+      {
+        "상품명": "Leica Twist Case for Leica D-Lux Typ 109 - 18822",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£50",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-twist-case-for-leica-d-lux-typ-109-18822-used-18822-01"
+      },
+      {
+        "상품명": "Leica Leather Lens Case - aprox. 105x70mm",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£17",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-leather-lens-case-aprox-105x70mm-ebf-jz-298"
+      },
+      {
+        "상품명": "Leica LR-M4/3 LR Lens Adapter To Micro 4/3 Mount Olympus Panasonic",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£10",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/used-leica-lr-m4-3-lr-lens-adapter-to-micro-4-3-mount-olympus-panasonic-used-jz-04"
+      },
+      {
+        "상품명": "Leica Mini Grey Compact Camera",
+        "site": "Harrison Cameras (영국)",
+        "가격": "£180",
+        "통화": "GBP",
+        "링크": "https://harrisoncameras.co.uk/products/leica-mini-grey-compact-35mm-camera-used-1865163"
       }
     ]
   }
