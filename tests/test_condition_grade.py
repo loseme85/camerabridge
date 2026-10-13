@@ -104,3 +104,11 @@ def test_harrison_description_grades():
     assert grade_of(site, HARRISON_PREFIX + "Excellent", "Leica M6 TTL Silver .72 Rangefinder Camera Body 10434")[0] == "B"
     assert grade_of(site, HARRISON_PREFIX + "Very Good", "Leica M7 0.72 Black Rangefinder Camera Body 10503")[0] == "B"
     assert grade_of(site, HARRISON_PREFIX + "Good", "Leica R4 Silver Camera Body")[0] == "C"
+def test_wex_condition_grades():
+    from condition_grade import WEX_PREFIX
+    site = "Wex Photo Video (영국)"
+    assert grade_of(site, WEX_PREFIX + "As new (10)", "Leica D-Lux 8 Digital Camera")[0] == "S"
+    assert grade_of(site, WEX_PREFIX + "Mint (9+)", "Leica M11-D Digital Camera Body")[0] == "A"
+    assert grade_of(site, WEX_PREFIX + "Excellent (9)", "Leica Q3 43 Digital Camera")[0] == "B"
+    assert grade_of(site, WEX_PREFIX + "Very good (9-)", "Leica 50mm f0.95 Noctilux-M Asph Lens- Black")[0] == "B"
+    assert grade_of(site, WEX_PREFIX + "Good (8)", "Leica Summicron-M 35mm f2 ASPH Black Paint Millennium (11611)")[0] == "C"

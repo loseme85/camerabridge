@@ -75,6 +75,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _CAMTEC.get(cond[len(CAMTEC_PREFIX):].strip().upper()), "label"
     if cond.startswith(HARRISON_PREFIX):
         return _HARRISON.get(cond[len(HARRISON_PREFIX):].strip()), "label"
+    if cond.startswith(WEX_PREFIX):
+        return _WEX.get(re.sub(r"\s*\(.*\)\s*$", "", cond[len(WEX_PREFIX):]).strip().lower()), "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -209,3 +211,11 @@ def harrison_condition(body_html: str) -> str | None:
         return None
     return {"mint": "Mint", "excellent": "Excellent", "very good": "Very Good",
             "good": "Good", "fairly well used": "Fairly Well Used"}[re.sub(r"\s+", " ", m.group(1).lower())]
+# 영국 Wex Photo Video: 'Condition' 칸 'As new (10)'·'Mint (9+)'·'Excellent (9)'·'Very good (9-)'·'Good (8)' (괄호 숫자는 매장 점수)
+WEX_PREFIX = "Wex: "
+# 사진 평가(표기 가리고 26점, 사진 2~3장씩, 2026-10-13): 사진 평균 As new S~A · Mint A · Excellent A · Very good A · Good A~B.
+# 사진이 표기보다 후한 만큼(기존 0.8등급) 빼면 As new S, Mint A, Excellent B, Very good B, Good C.
+# 이 대응 기준 정확 일치 9/26 · 한 등급 이내 23/26 (사진이 평균 0.6등급 후함). Excellent·Very good은 사진 차이가 없어 같은 B.
+# 표본에 없던 아래 등급(Well used 등)은 Wex 등급표 순서대로 D.
+_WEX = {"as new": "S", "mint": "A", "excellent": "B", "very good": "B", "good": "C",
+        "well used": "D", "heavily used": "D", "poor": "D"}
