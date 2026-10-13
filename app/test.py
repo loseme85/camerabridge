@@ -3050,6 +3050,9 @@ def crawl_harrison():
             })
         time.sleep(random.uniform(4.0, 5.0))  # 250개씩 7쪽, 간격이 짧으면 429
     print(f"  ✅ Harrison Cameras 완료: {len(results)}개")
+    return results
+
+
 WEX_ALGOLIA = {"app": "C1EVKDF8ZJ", "key": "07c4ecf5dcac1fc1f1ae3b98dd387d06", "index": "prod_CatalogFeed"}
 
 
