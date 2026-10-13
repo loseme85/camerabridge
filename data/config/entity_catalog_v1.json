@@ -28004,6 +28004,77 @@
    }
   },
   {
+   "id": "leica:lens:apo-summicron-r:90",
+   "name": "APO-Summicron-R 90mm f/2 ASPH",
+   "name_ko": "아포 주미크론 R 90",
+   "kind": "Lens",
+   "mount": "R",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "cron r 90",
+    "cron-r 90",
+    "r 90 cron",
+    "r 90 summicron",
+    "r 90 주미크론",
+    "r 90 크론",
+    "summicron r 90",
+    "summicron-r 90",
+    "주미크론 r 90",
+    "주미크론-r 90",
+    "크론 r 90",
+    "크론-r 90"
+   ],
+   "codes": [
+    "11350"
+   ],
+   "match": {
+    "category": "Lens",
+    "mount": "R",
+    "title_must": [
+     "(summicron|\\bcron\\b)",
+     "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "\\bAPO\\b|apo-",
+     "-R\\b|\\bR\\s?\\d|\\bR\\b|\\bROM\\b"
+    ],
+    "title_must_not": [
+     "-M\\b",
+     "\\bSL\\b|-SL\\b",
+     "\\bTL\\b",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
    "id": "leica:lens:elmarit-r:19",
    "name": "Elmarit-R 19mm",
    "name_ko": "엘마리트 R 19",
@@ -29715,6 +29786,73 @@
     "title_must": [
      "apo.?vario.?elmarit",
      "70\\s?-\\s?180",
+     "-R\\b|\\bR\\s?\\d|\\bR\\b|\\bROM\\b"
+    ],
+    "title_must_not": [
+     "-M\\b",
+     "\\bSL\\b|-SL\\b",
+     "\\bTL\\b",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:super-elmar-r:15",
+   "name": "Super-Elmar-R 15mm f/3.5",
+   "name_ko": "수퍼엘마 R 15",
+   "kind": "Lens",
+   "mount": "R",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "r 15 super elmar",
+    "r 15 수퍼엘마",
+    "r 15 슈퍼엘마",
+    "super elmar r 15",
+    "super elmar-r 15",
+    "수퍼엘마 r 15",
+    "수퍼엘마-r 15",
+    "슈퍼엘마 r 15",
+    "슈퍼엘마-r 15"
+   ],
+   "codes": [
+    "11213"
+   ],
+   "match": {
+    "category": "Lens",
+    "mount": "R",
+    "title_must": [
+     "super.?elmar\\b",
+     "(?<![\\d./\\-–])15(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
      "-R\\b|\\bR\\s?\\d|\\bR\\b|\\bROM\\b"
     ],
     "title_must_not": [

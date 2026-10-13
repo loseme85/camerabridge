@@ -73,6 +73,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _NOC.get(cond[len(NOC_PREFIX):].strip().upper().replace(" ", "")), "label"
     if cond.startswith(CAMTEC_PREFIX):
         return _CAMTEC.get(cond[len(CAMTEC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(APERTURE_PREFIX):
+        return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
         if "not working" in cond:
             return "X", "label"
@@ -175,3 +177,13 @@ CAMTEC_PREFIX = "Camtec: "
 # 기존 매장은 사진이 표기보다 0.8등급 후했으니 Camtec 표기가 그만큼 후한 것. 한 칸 내려 A+→A, A→B, A-→C.
 # 내린 대응 기준 정확 일치 3/17 · 한 등급 이내 15/17 (Open Box 3점 제외, 사진이 평균 0.9등급 후함 — 기존 매장과 같음).
 _CAMTEC = {"OPEN BOX": "N", "A+": "A", "A": "B", "A-": "C", "B+": "C", "B": "D", "B-": "D", "C": "D"}
+
+
+# 영국 Aperture: 설명 첫 줄 'Mint'·'Mint-'·'Exc+++'·'Exc++'·'Exc+'·'Exc'·'User' (+ 'Brand New'은 New)
+APERTURE_PREFIX = "Aperture: "
+# 사진 평가(표기 가리고 26점, 사진 3장씩, 2026-10-13): 사진 평균 Mint S~A · Mint-·Exc+++·Exc++ A · Exc+·Exc B · User C~D.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 Mint A, Mint-·Exc+++·Exc++ B, Exc+·Exc C, User D.
+# 이 대응 기준 정확 일치 4/26 · 한 등급 이내 20/26 (사진이 평균 1.1등급 후함 — Camtec 0.9·기존 0.8과 비슷).
+# Mint-와 Exc++의 사진 차이가 없어 같은 B로 둔다 (Ffordes는 같은 글자를 더 후하게 쓰지만 이 매장 사진 기준).
+_APERTURE = {"New": "N", "Mint": "A", "Mint-": "B", "Exc+++": "B", "Exc++": "B", "Exc+": "C", "Exc": "C", "User": "D"}
+APERTURE_LABELS = set(_APERTURE)
