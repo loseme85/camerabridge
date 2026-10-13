@@ -907,15 +907,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-09 15:19:19",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -6977,15 +6977,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-01 18:39:59",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -10417,15 +10417,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-11 16:41:42",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -20572,15 +20572,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-06 15:31:53",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -29014,7 +29014,7 @@
     "source": "라이카스토어 충무로",
     "source_url": "https://leica-storebando.co.kr/product/위탁-mp-black-paint/21954/category/442/display/1/",
     "title_raw": "[위탁] MP Black Paint",
-    "price_raw": "5,900,000원",
+    "price_raw": "5,600,000원",
     "currency": "KRW",
     "image_url": "https://leica-storebando.co.kr/web/product/medium/202608/8bd811cf329ab13c8dc7ce521deeec9c.jpg",
     "condition_raw": "90%",
@@ -30019,15 +30019,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-07-16 14:38:11",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -30746,15 +30746,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-07-11 14:39:03",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -150766,7 +150766,7 @@
     "source": "라이카스토어 충무로",
     "source_url": "https://leica-storebando.co.kr/product/위탁-mp-black-paint/21954/category/436/display/1/",
     "title_raw": "[위탁] MP Black Paint",
-    "price_raw": "5,900,000원",
+    "price_raw": "5,600,000원",
     "currency": "KRW",
     "image_url": "https://leica-storebando.co.kr/web/product/medium/202608/8bd811cf329ab13c8dc7ce521deeec9c.jpg",
     "condition_raw": "90%",
@@ -405563,6 +405563,269 @@
   },
   {
     "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-cl-10700-leica-m-t156409",
+    "title_raw": "Leica CL (10700)",
+    "price_raw": "€624",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/12-10-26-36249.jpg?v=1791895351",
+    "condition_raw": "Kamerastore: issue",
+    "normalized_name": "leica cl (10700)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:LEICA CL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-50mm-f2-5-summarit-m-11644-leica-m-t156405",
+    "title_raw": "Leica 50mm f2.5 Summarit-M (11644) + Lens Hood (35/50mm f2.5) (12459)",
+    "price_raw": "€1,225",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/12-10-26-36235.jpg?v=1791894933",
+    "condition_raw": "Kamerastore: minor",
+    "normalized_name": "leica 50mm f2.5 summarit-m (11644) + lens hood (35/50mm f2.5) (12459)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMARIT-M"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.98,
+    "category_reason": [
+      "primary_acc_rx:lens_hood_primary"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Summarit-M",
+    "model_canonical": "Summarit-M",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "hood",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-35mm-f1-4-summilux-m-asph-fle-type-i-black-11663-leica-m-t156376",
+    "title_raw": "Leica 35mm f1.4 Summilux-M ASPH. FLE (Type I) (Black, 11663)",
+    "price_raw": "€3,199",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/12-10-26-36180.jpg?v=1791891353",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica 35mm f1.4 summilux-m asph. fle (type i) (black, 11663)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux-M",
+    "model_canonical": "Summilux-M",
+    "variant": [
+      "FLE",
+      "ASPH",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-v-lux-20-t156355",
+    "title_raw": "Leica V-Lux 20",
+    "price_raw": "€88",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/19_-_LC8950-1.jpg?v=1791889052",
+    "condition_raw": "Kamerastore: issue",
+    "normalized_name": "leica v-lux 20",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:V-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "V-LUX",
+    "model_canonical": "V-LUX",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-39mm-uv-filter-uva-hooiv-13131a-t156255",
+    "title_raw": "Leica 39mm UV Filter UVa (HOOIV / 13131A)",
+    "price_raw": "€65",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/12-10-26-35925.jpg?v=1791874748",
+    "condition_raw": "Kamerastore: working",
+    "normalized_name": "leica 39mm uv filter uva (hooiv / 13131a)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:filter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "filter",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
     "source_url": "https://kamerastore.com/products/leica-m8-m9-leather-half-case-leica-m-t156204",
     "title_raw": "Leica M8/M9 Leather Half Case",
     "price_raw": "€65",
@@ -408096,7 +408359,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -409344,7 +409607,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443005,7 +443268,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443158,7 +443421,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443347,6 +443610,60 @@
   },
   {
     "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2443060224531",
+    "title_raw": "Leica Summicron M 35mm f2 ASPH. Silver",
+    "price_raw": "¥366,200",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2443060224531-1-1.jpg",
+    "condition_raw": "AB",
+    "normalized_name": "leica summicron m 35mm f2 asph. silver",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "ASPH",
+      "Silver"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2119340138293",
     "title_raw": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
     "price_raw": "¥6,600",
@@ -443368,7 +443685,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444259,7 +444576,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -447633,59 +447950,6 @@
   },
   {
     "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2119341222267",
-    "title_raw": "Leica ゾフォート2 Black",
-    "price_raw": "¥41,000",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2119341222267-1-1.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica ゾフォート2 black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:ゾフォート"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Body+no_mount"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 15:02:32",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2448710181929",
     "title_raw": "Leica X Vario Black",
     "price_raw": "¥173,400",
@@ -450095,7 +450359,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -450615,7 +450879,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -450872,7 +451136,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -450923,7 +451187,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -452867,7 +453131,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -452918,7 +453182,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -452969,7 +453233,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453020,7 +453284,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453071,7 +453335,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -524492,6 +524756,1732 @@
   },
   {
     "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-repose-pouce-q3-laiton",
+    "title_raw": "Leica Repose pouce Q3 laiton",
+    "price_raw": "€180",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-10/L1033671.JPG?itok=AWCV2AjS",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "leica repose pouce q3 laiton",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/apo-summicron-sl-50-mm-f2-asph-11185",
+    "title_raw": "APO-SUMMICRON-SL 50 MM F/2 ASPH (11185) (Ex-demo)",
+    "price_raw": "€2,790",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-10/L1030060.jpg?itok=ba9Jxs__",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "apo-summicron-sl 50 mm f/2 asph (11185) (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMICRON-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-q2-ghost-hodinkee",
+    "title_raw": "LEICA Q2 \"GHOST\" BY HODINKEE",
+    "price_raw": "€4,490",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1019971.jpg?itok=YHjGUu7S",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica q2 \"ghost\" by hodinkee",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q2",
+    "model_canonical": "Q2",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-50-mm-f2-4",
+    "title_raw": "SUMMICRON-M 50 mm f/2",
+    "price_raw": "€1,290",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1003759_0.jpg?itok=RnVu6HXB",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "summicron-m 50 mm f/2",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-q3-43",
+    "title_raw": "Leica Q3 43",
+    "price_raw": "€5,790",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1033287.JPG?itok=4kLeg1pU",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica q3 43",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "Q_body_shorthand:Q focal shorthand"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
+    "sold_reason": [
+      "sold_confirmed:품절"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1489.957146,
+    "sold_at_unknown": true
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/demi-etui-cuir-rose-pour-leica-q-ou-leica-q2",
+    "title_raw": "Demi case cuir Rose pour Leica Q ou Leica Q2",
+    "price_raw": "€100",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-08/L1033367.JPG?itok=yTFAyc9x",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "demi case cuir rose pour leica q ou leica q2",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q2",
+    "model_canonical": "Q2",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q",
+      "Q2"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/demi-etui-cuir-jaune-pour-leica-q-116",
+    "title_raw": "Demi case cuir Jaune pour Leica Q 116",
+    "price_raw": "€75",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-08/L1033364.JPG?itok=uknSLKU5",
+    "condition_raw": "정보없음",
+    "normalized_name": "demi case cuir jaune pour leica q 116",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q",
+    "model_canonical": "Q",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-demi-etui-cuir-cemento-pour-q-116",
+    "title_raw": "Leica demi case cuir Cemento pour Q 116",
+    "price_raw": "€85",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-08/L1033361.JPG?itok=IPOimg5x",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica demi case cuir cemento pour q 116",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q",
+    "model_canonical": "Q",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-viseur-dangle",
+    "title_raw": "Leica angle viewfinder \"WINKO\" Black paint",
+    "price_raw": "€60",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042384.jpg?itok=b7dl-1hE",
+    "condition_raw": "LCF: D : Operational",
+    "normalized_name": "leica angle viewfinder \"winko\" black paint",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:finder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black Paint",
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "finder",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-extender-x14",
+    "title_raw": "Leica Extender x1.4 (Ex-demo)",
+    "price_raw": "€790",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-07/L1042336.jpg?itok=f4KlHkrf",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica extender x1.4 (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:extender"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "X1",
+    "model_canonical": "X1",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "X"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-demi-etui-marron-pour-m10-d",
+    "title_raw": "Leica demi case marron pour M10-D (Ex-demo)",
+    "price_raw": "€150",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-05/L1032886.JPG?itok=VuS7CREo",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "leica demi case marron pour m10-d (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M10-D",
+    "model_canonical": "M10-D",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M10",
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/apo-summicron-sl-28-mm-f2-asph-ref-11183-1",
+    "title_raw": "APO-SUMMICRON-SL 28 MM F/2 ASPH REF : 11183 (Ex-demo)",
+    "price_raw": "€4,190",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-05/L1040428.jpg?itok=lhlkgDSM",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "apo-summicron-sl 28 mm f/2 asph ref : 11183 (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMICRON-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "28",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/noctilux-m-50-mm-f095-asph",
+    "title_raw": "NOCTILUX-M 50 mm f/0.95 Asph. (Ex-demo)",
+    "price_raw": "€7,490",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-03/L1030545.jpg?itok=BE82Vo1O",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "noctilux-m 50 mm f/0.95 asph. (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:noctilux"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:NOCTILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Noctilux",
+    "model_canonical": "Noctilux",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/super-vario-elmar-sl-16-35mm-f35-45-asph-4",
+    "title_raw": "SUPER-VARIO-ELMAR-SL 16-35mm f/3.5-4.5 ASPH (Ex-demo)",
+    "price_raw": "€3,590",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-03/L1009201_0.jpg?itok=DWDOhUW8",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "super-vario-elmar-sl 16-35mm f/3.5-4.5 asph (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmar"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:VARIO-ELMAR-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmar-S",
+    "model_canonical": "Vario-Elmar-S",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "16-35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-vario-elmar-t-18-56-mm-f35-56-asph-1",
+    "title_raw": "LEICA VARIO-ELMAR-T 18-56 mm f/3.5-5.6 Asph. (Ex-demo)",
+    "price_raw": "€690",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-02/L1009019.jpg?itok=LwXE0taz",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "leica vario-elmar-t 18-56 mm f/3.5-5.6 asph. (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Vario-Elmar",
+    "model_canonical": "Vario-Elmar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "18-56",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-summilux-tl-35-mm-f14-asph-0",
+    "title_raw": "LEICA SUMMILUX-TL 35 mm f/1.4 Asph. (Ex-demo)",
+    "price_raw": "€1,390",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-02/L1009014.jpg?itok=3eVpvQu1",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "leica summilux-tl 35 mm f/1.4 asph. (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-TL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-TL",
+    "model_canonical": "Summilux-TL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-sl-50mm-f14-asph",
+    "title_raw": "SUMMILUX-SL 50mm f/1.4 ASPH. (Ex-demo)",
+    "price_raw": "€4,090",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-02/L1032220_0.JPG?itok=yRCA1FcS",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "summilux-sl 50mm f/1.4 asph. (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summilux"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-SL",
+    "model_canonical": "Summilux-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-sl3-3",
+    "title_raw": "Leica SL3",
+    "price_raw": "€3,990",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-02/L1029917.jpg?itok=8esDK8x6",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "leica sl3",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl3"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/elmarit-s-30mm-f28-asph-cs",
+    "title_raw": "ELMARIT-S 30mm f/2.8 ASPH CS (Ex-demo)",
+    "price_raw": "€2,290",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-02/L1008846.jpg?itok=mU6py9f5",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "elmarit-s 30mm f/2.8 asph cs (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmarit"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Elmarit",
+    "model_canonical": "Elmarit",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "30",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-sl-50mm-f14-asph-2",
+    "title_raw": "SUMMILUX-SL 50mm f/1.4 ASPH. (Ex-demo)",
+    "price_raw": "€3,190",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-01/L1029722.jpg?itok=xYFwC9gJ",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "summilux-sl 50mm f/1.4 asph. (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summilux"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-SL",
+    "model_canonical": "Summilux-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-sl3-s",
+    "title_raw": "LEICA SL3-S",
+    "price_raw": "€4,290",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-12/L1008567.jpg?itok=4yqhMpXG",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "leica sl3-s",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl3"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-sl2-s-5",
+    "title_raw": "LEICA SL2-S",
+    "price_raw": "€2,290",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-12/L1008534.jpg?itok=46zoF7eI",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "leica sl2-s",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl2"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL2-S",
+    "model_canonical": "SL2-S",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-sl2-s-0",
+    "title_raw": "LEICA SL2-S",
+    "price_raw": "€2,390",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-11/L1008387.jpg?itok=DhNALV_C",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "leica sl2-s",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl2"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL2-S",
+    "model_canonical": "SL2-S",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
+    "sold_reason": [
+      "sold_confirmed:품절"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1489.957146,
+    "sold_at_unknown": true
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summilux-sl-50mm-f14-asph-0",
+    "title_raw": "SUMMILUX-SL 50mm f/1.4 ASPH.",
+    "price_raw": "€3,690",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-10/L1008320.jpg?itok=rpWorsLJ",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "summilux-sl 50mm f/1.4 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summilux"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-SL",
+    "model_canonical": "Summilux-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/super-vario-elmar-sl-16-35mm-f35-45-asph-1",
+    "title_raw": "SUPER-VARIO-ELMAR-SL 16-35mm f/3.5-4.5 ASPH",
+    "price_raw": "€4,090",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-08/L1030018.jpg?itok=8CGCQbFd",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "super-vario-elmar-sl 16-35mm f/3.5-4.5 asph",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmar"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:VARIO-ELMAR-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmar-S",
+    "model_canonical": "Vario-Elmar-S",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "16-35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/apo-summicron-sl-50-mm-f2-asph-ref-11185",
+    "title_raw": "APO-SUMMICRON-SL 50 MM F/2 ASPH REF : 11185 (Ex-demo)",
+    "price_raw": "€4,190",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-06/L1040362.jpg?itok=gL-XfGNm",
+    "condition_raw": "LCF: A : Excellent",
+    "normalized_name": "apo-summicron-sl 50 mm f/2 asph ref : 11185 (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMICRON-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-iiic-2",
+    "title_raw": "LEICA IIIc",
+    "price_raw": "€690",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-05/L1610149.jpg?itok=8Xj1t2XL",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica iiic",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "L_barnack_body:LEICA I/II/III"
+    ],
+    "category": "Body",
+    "category_confidence": 0.93,
+    "category_reason": [
+      "barnack_body_kw:leica iiic"
+    ],
+    "label": "L Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "L+Body"
+    ],
+    "model_raw": "IIIc",
+    "model_canonical": "IIIc",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/super-vario-elmar-t-11-23-mm-f35-45-asph",
+    "title_raw": "SUPER-VARIO-ELMAR-T 11-23 mm f/3.5-4.5 Asph. (Ex-demo)",
+    "price_raw": "€1,190",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-04/L1600823.jpg?itok=mykuwyc2",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "super-vario-elmar-t 11-23 mm f/3.5-4.5 asph. (ex-demo)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmar"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Vario-Elmar",
+    "model_canonical": "Vario-Elmar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "11-23",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/elmarit-r-180mm-f28-i",
+    "title_raw": "ELMARIT-R 180mm f/2.8 (I)",
+    "price_raw": "€400",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2025-01/L1030118.JPG?itok=UjJ4fgTA",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "elmarit-r 180mm f/2.8 (i)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmarit"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:ELMARIT-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Elmarit-R",
+    "model_canonical": "Elmarit-R",
+    "variant": [],
+    "focal_length": "180",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/super-angulon-r-21mm-f4",
+    "title_raw": "SUPER-ANGULON-R 21mm f/4",
+    "price_raw": "€890",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2024-05/L2300749.jpg?itok=LsNUtmEa",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "super-angulon-r 21mm f/4",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:super-angulon"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUPER-ANGULON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Super-Angulon",
+    "model_canonical": "Super-Angulon",
+    "variant": [],
+    "focal_length": "21",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summicron-r-50mm-f2-ii-2",
+    "title_raw": "SUMMICRON-R 50mm f/2 (II)",
+    "price_raw": "€690",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2024-05/L2300763.jpg?itok=LHEKoXO3",
+    "condition_raw": "LCF: D : Operational",
+    "normalized_name": "summicron-r 50mm f/2 (ii)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:summicron"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:SUMMICRON-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Summicron-R",
+    "model_canonical": "Summicron-R",
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-iiic",
+    "title_raw": "LEICA IIIc Militaire + Moteur MOOLY-C",
+    "price_raw": "€4,190",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2023-08/L1023932.jpg?itok=YKspepSk",
+    "condition_raw": "LCF: C : Good",
+    "normalized_name": "leica iiic militaire + moteur mooly-c",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "L_barnack_body:LEICA I/II/III"
+    ],
+    "category": "Body",
+    "category_confidence": 0.93,
+    "category_reason": [
+      "barnack_body_kw:leica iiic"
+    ],
+    "label": "L Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "L+Body"
+    ],
+    "model_raw": "IIIc",
+    "model_canonical": "IIIc",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
+    "source_url": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/vario-elmar-r-80-200mm-f4",
+    "title_raw": "VARIO-ELMAR-R 80-200mm f/4",
+    "price_raw": "€590",
+    "currency": "EUR",
+    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2023-07/L1043200.JPG?itok=LlVV4Ltz",
+    "condition_raw": "LCF: B : Very good",
+    "normalized_name": "vario-elmar-r 80-200mm f/4",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:elmar"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:ELMAR-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Vario-Elmar-R",
+    "model_canonical": "Vario-Elmar-R",
+    "variant": [],
+    "focal_length": "80-200",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Leica Store France (프랑스)",
     "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-parasoleil-q3-en-laiton",
     "title_raw": "Leica Parasoleil Q3 en laiton",
     "price_raw": "€180",
@@ -529913,15 +531903,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-08 22:45:46",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-13 22:29:42",
+    "sold_fx_krw": 1489.957146,
     "sold_at_unknown": false
   },
   {
@@ -540407,6 +542397,430 @@
   },
   {
     "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1753",
+    "title_raw": "Leica X2 SILVER",
+    "price_raw": "€690",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1753",
+    "condition_raw": "NOC: B+/B",
+    "normalized_name": "leica x2 silver",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:LEICA X2"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "X2",
+    "model_canonical": "X2",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1719",
+    "title_raw": "LEICAFLEX SL chrome PEZZI DI RICAMBIO",
+    "price_raw": "€60",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1719",
+    "condition_raw": "NOC: B+/B",
+    "normalized_name": "leicaflex sl chrome pezzi di ricambio",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:LEICAFLEX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.75,
+    "category_reason": [
+      "price_low:89397"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Leicaflex SL",
+    "model_canonical": "Leicaflex",
+    "variant": [
+      "SL",
+      "FLE",
+      "Chrome"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "R"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1718",
+    "title_raw": "LEICAFLEX SL PEZZI DI RICAMBIO",
+    "price_raw": "€150",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1718",
+    "condition_raw": "NOC: B+/B",
+    "normalized_name": "leicaflex sl pezzi di ricambio",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:LEICAFLEX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leicaflex"
+    ],
+    "label": "R Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Body"
+    ],
+    "model_raw": "Leicaflex SL",
+    "model_canonical": "Leicaflex",
+    "variant": [
+      "SL",
+      "FLE"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1756",
+    "title_raw": "Leica 21mm f/2.8 ELMARIT-M ASPH. SILVER",
+    "price_raw": "€3,000",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1756",
+    "condition_raw": "NOC: BA",
+    "normalized_name": "leica 21mm f/2.8 elmarit-m asph. silver",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:ELMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Elmarit-M",
+    "model_canonical": "Elmarit-M",
+    "variant": [
+      "ASPH",
+      "Silver"
+    ],
+    "focal_length": "21",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3278",
+    "title_raw": "Leica 24mm f/2.8 ELMARIT-R",
+    "price_raw": "€300",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26U3278",
+    "condition_raw": "NOC: B+/B",
+    "normalized_name": "leica 24mm f/2.8 elmarit-r",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:ELMARIT-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Elmarit-R",
+    "model_canonical": "Elmarit-R",
+    "variant": [],
+    "focal_length": "24",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3465",
+    "title_raw": "Leica 50mm f/2 SUMMICRON-R",
+    "price_raw": "€400",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26U3465",
+    "condition_raw": "NOC: BA",
+    "normalized_name": "leica 50mm f/2 summicron-r",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:SUMMICRON-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Summicron-R",
+    "model_canonical": "Summicron-R",
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1742",
+    "title_raw": "Leica hood 90mm f/4 ROKKOR",
+    "price_raw": "€50",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1742",
+    "condition_raw": "NOC: BA",
+    "normalized_name": "leica hood 90mm f/4 rokkor",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:hood"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "hood",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3488",
+    "title_raw": "Leica 14414 SF-20",
+    "price_raw": "€100",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26U3488",
+    "condition_raw": "NOC: B+/B",
+    "normalized_name": "leica 14414 sf-20",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:flash_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
     "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1721",
     "title_raw": "LEICAFLEX SL2",
     "price_raw": "€550",
@@ -541994,7 +544408,7 @@
   {
     "source": "Newoldcamera (이탈리아)",
     "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U2250",
-    "title_raw": "LEICA M8 SILVER",
+    "title_raw": "Leica M8 SILVER",
     "price_raw": "€1,590",
     "currency": "EUR",
     "image_url": "https://camerabridge.io/api/noc_image?code=26U2250",
@@ -569327,6 +571741,3691 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-13 11:12:05",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-summicron-m-35mm-f2-asph-black-paint-millennium-11611-used-3330862/",
+    "title_raw": "Leica Summicron-M 35mm f2 ASPH Black Paint Millennium (11611)",
+    "price_raw": "£4,512",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3330000/3330862.jpg?ver=639143693400000000&width=600",
+    "condition_raw": "Wex: Good (8)",
+    "normalized_name": "leica summicron-m 35mm f2 asph black paint millennium (11611)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "ASPH",
+      "Black Paint",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-xl-wireless-charger-used-3312290/",
+    "title_raw": "Leica XL Wireless Charger",
+    "price_raw": "£71",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3312000/3312290.jpg?ver=639079625880000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica xl wireless charger",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.92,
+    "category_reason": [
+      "acc_kw:charger"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "charger",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-xl-wireless-charger-used-3336802/",
+    "title_raw": "Leica XL Wireless Charger",
+    "price_raw": "£81",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3336000/3336802.jpg?ver=639164355510000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica xl wireless charger",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.92,
+    "category_reason": [
+      "acc_kw:charger"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "charger",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-35mm-f2-summicron-sl-asph-lens-used-3334521/",
+    "title_raw": "Leica 35mm f2 Summicron-SL ASPH Lens",
+    "price_raw": "£1,111",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3334000/3334521.jpg?ver=639155807880000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica 35mm f2 summicron-sl asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMICRON-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summicron",
+    "model_canonical": "Summicron-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-50mm-f0-95-noctilux-m-asph-lens-black-used-3345522/",
+    "title_raw": "Leica 50mm f0.95 Noctilux-M Asph Lens- Black",
+    "price_raw": "£5,243",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3345000/3345522.jpg?ver=639195494080000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica 50mm f0.95 noctilux-m asph lens- black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:NOCTILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Noctilux",
+    "model_canonical": "Noctilux",
+    "variant": [
+      "ASPH",
+      "f0.95",
+      "Black"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-monochrom-digital-camera-used-3334872/",
+    "title_raw": "Leica Q3 Monochrom Digital Camera",
+    "price_raw": "£4,789",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3334000/3334872.jpg?ver=639156658860000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q3 monochrom digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [
+      "Monochrom"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-apo-summicron-m-35mm-f2-asph-lens-used-3344876/",
+    "title_raw": "Leica APO-SUMMICRON-M 35mm f2 ASPH Lens",
+    "price_raw": "£4,654",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3344000/3344876.jpg?ver=639190325510000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica apo-summicron-m 35mm f2 asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-90-280mm-f2-8-4-apo-vario-elmarit-sl-lens-used-3339606/",
+    "title_raw": "Leica 90-280mm f2.8-4 APO-Vario-Elmarit-SL Lens",
+    "price_raw": "£2,198",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3339000/3339606.jpg?ver=639172012440000000&width=600",
+    "condition_raw": "Wex: Good (8)",
+    "normalized_name": "leica 90-280mm f2.8-4 apo-vario-elmarit-sl lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "APO-Vario-Elmarit-SL",
+    "model_canonical": "APO-Vario-Elmarit-SL",
+    "variant": [],
+    "focal_length": "90-280",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-50mm-f1-4-summilux-sl-asph-lens-used-3345523/",
+    "title_raw": "Leica 50mm f1.4 Summilux-SL Asph Lens",
+    "price_raw": "£2,036",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3345000/3345523.jpg?ver=639195527630000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica 50mm f1.4 summilux-sl asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SUMMILUX-SL"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": "Summilux-SL",
+    "model_canonical": "Summilux-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-m-75mm-f2-4-summarit-lens-silver-11683-used-3350050/",
+    "title_raw": "Leica M 75mm f2.4 Summarit Lens Silver (11683)",
+    "price_raw": "£1,218",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3350000/3350050.jpg?ver=639210235810000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica m 75mm f2.4 summarit lens silver (11683)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "M_leica_m_prefix:LEICA M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summarit",
+    "model_canonical": "Summarit-M",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": "75",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-leather-protector-for-tl-cemento-used-3341704/",
+    "title_raw": "Leica Leather Protector for TL - Cemento",
+    "price_raw": "£70",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3341000/3341704.jpg?ver=639184194950000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica leather protector for tl - cemento",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:protector"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "TL",
+    "model_canonical": "TL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "protector",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "TL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3348864/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£59",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3348000/3348864.jpg?ver=639207631620000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3348862/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£59",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3348000/3348862.jpg?ver=639207631460000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3348861/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£59",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3348000/3348861.jpg?ver=639207631410000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-m11-d-digital-camera-body-used-3354734/",
+    "title_raw": "Leica M11-D Digital Camera Body",
+    "price_raw": "£6,249",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3354000/3354734.jpg?ver=639227322800000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica m11-d digital camera body",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:body"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M11",
+    "model_canonical": "M11",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-50mm-f1-2-noctilux-m-asph-lens-glossy-black-11731-used-3358238/",
+    "title_raw": "Leica 50mm f1.2 Noctilux-M ASPH Lens - Glossy Black (11731)",
+    "price_raw": "£5,350",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3358000/3358238.jpg?ver=639239601770000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica 50mm f1.2 noctilux-m asph lens - glossy black (11731)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:NOCTILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Noctilux",
+    "model_canonical": "Noctilux",
+    "variant": [
+      "ASPH",
+      "f1.2",
+      "Black"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-monochrom-digital-camera-used-3353282/",
+    "title_raw": "Leica Q3 Monochrom Digital Camera",
+    "price_raw": "£5,300",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3353000/3353282.jpg?ver=639221455030000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica q3 monochrom digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [
+      "Monochrom"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-apo-summicron-m-35mm-f2-asph-lens-used-3350048/",
+    "title_raw": "Leica APO-SUMMICRON-M 35mm f2 ASPH Lens",
+    "price_raw": "£5,149",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3350000/3350048.jpg?ver=639211081310000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica apo-summicron-m 35mm f2 asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-43-digital-camera-used-3365861/",
+    "title_raw": "Leica Q3 43 Digital Camera",
+    "price_raw": "£4,799",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3365000/3365861.jpg?ver=639264668210000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q3 43 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "Q_body_shorthand:Q focal shorthand"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q2-monochrom-reporter-digital-camera-used-3357565/",
+    "title_raw": "Leica Q2 Monochrom Reporter Digital Camera",
+    "price_raw": "£4,799",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3357000/3357565.jpg?ver=639235269460000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q2 monochrom reporter digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q2 Monochrom",
+    "model_canonical": "Q2",
+    "variant": [
+      "Monochrom"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-43-digital-camera-used-3347684/",
+    "title_raw": "Leica Q3 43 Digital Camera",
+    "price_raw": "£4,799",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3347000/3347684.jpg?ver=639202417030000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q3 43 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "Q_body_shorthand:Q focal shorthand"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-43-digital-camera-used-3361381/",
+    "title_raw": "Leica Q3 43 Digital Camera",
+    "price_raw": "£4,792",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3361000/3361381.jpg?ver=639250703610000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q3 43 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "Q_body_shorthand:Q focal shorthand"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-43-digital-camera-used-3358953/",
+    "title_raw": "Leica Q3 43 Digital Camera",
+    "price_raw": "£4,569",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3358000/3358953.jpg?ver=639243909290000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica q3 43 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "Q_body_shorthand:Q focal shorthand"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-43-digital-camera-used-3362720/",
+    "title_raw": "Leica Q3 43 Digital Camera",
+    "price_raw": "£4,562",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3362000/3362720.jpg?ver=639256001110000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica q3 43 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "Q_body_shorthand:Q focal shorthand"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-digital-camera-used-3363813/",
+    "title_raw": "Leica Q3 Digital Camera",
+    "price_raw": "£4,399",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3363000/3363813.jpg?ver=639257731510000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica q3 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-digital-camera-used-3367615/",
+    "title_raw": "Leica Q3 Digital Camera",
+    "price_raw": "£4,239",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3367000/3367615.jpg?ver=639271564440000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q3 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q3-digital-camera-used-3354653/",
+    "title_raw": "Leica Q3 Digital Camera",
+    "price_raw": "£3,749",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3354000/3354653.jpg?ver=639226661650000000&width=600",
+    "condition_raw": "Wex: Good (8)",
+    "normalized_name": "leica q3 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q2-reporter-digital-camera-used-3359125/",
+    "title_raw": "Leica Q2 Reporter Digital Camera",
+    "price_raw": "£3,687",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3359000/3359125.jpg?ver=639243907020000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q2 reporter digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q2",
+    "model_canonical": "Q2",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q2-reporter-digital-camera-used-3364015/",
+    "title_raw": "Leica Q2 Reporter Digital Camera",
+    "price_raw": "£3,514",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364015.jpg?ver=639257742210000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica q2 reporter digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q2",
+    "model_canonical": "Q2",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-90-280mm-f2-8-4-apo-vario-elmarit-sl-lens-used-3366957/",
+    "title_raw": "Leica 90-280mm f2.8-4 APO-Vario-Elmarit-SL Lens",
+    "price_raw": "£3,359",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3366000/3366957.jpg?ver=639270704560000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica 90-280mm f2.8-4 apo-vario-elmarit-sl lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "APO-Vario-Elmarit-SL",
+    "model_canonical": "APO-Vario-Elmarit-SL",
+    "variant": [],
+    "focal_length": "90-280",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-sl3-s-digital-camera-body-used-3359087/",
+    "title_raw": "Leica SL3-S Digital Camera Body",
+    "price_raw": "£2,799",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3359000/3359087.jpg?ver=639243906240000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica sl3-s digital camera body",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:body"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-sl3-s-digital-camera-body-used-3356577/",
+    "title_raw": "Leica SL3-S Digital Camera Body",
+    "price_raw": "£2,682",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3356000/3356577.jpg?ver=639232699480000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica sl3-s digital camera body",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:body"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-sl3-s-digital-camera-body-used-3356176/",
+    "title_raw": "Leica SL3-S Digital Camera Body",
+    "price_raw": "£2,682",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3356000/3356176.jpg?ver=639229902710000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica sl3-s digital camera body",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:body"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL3",
+    "model_canonical": "SL3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q-typ-116-black-used-3364850/",
+    "title_raw": "Leica Q (Typ 116) Black",
+    "price_raw": "£2,339",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364850.jpg?ver=639262075330000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica q (typ 116) black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q",
+    "model_canonical": "Q",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-q-typ-116-black-used-3356398/",
+    "title_raw": "Leica Q (Typ 116) Black",
+    "price_raw": "£2,199",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3356000/3356398.jpg?ver=639233333020000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica q (typ 116) black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q",
+    "model_canonical": "Q",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-75mm-f2-apo-summicron-m-asph-lens-used-3354735/",
+    "title_raw": "Leica 75mm f2 APO-Summicron-M Asph Lens",
+    "price_raw": "£2,110",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3354000/3354735.jpg?ver=639227322970000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica 75mm f2 apo-summicron-m asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "75",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-24-90mm-f2-8-4-vario-elmarit-sl-asph-lens-used-3365648/",
+    "title_raw": "Leica 24-90mm f2.8-4 Vario-Elmarit-SL Asph Lens",
+    "price_raw": "£2,039",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3365000/3365648.jpg?ver=639263811360000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica 24-90mm f2.8-4 vario-elmarit-sl asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmarit-SL",
+    "model_canonical": "Vario-Elmarit-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "24-90",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-24-90mm-f2-8-4-vario-elmarit-sl-asph-lens-used-3347091/",
+    "title_raw": "Leica 24-90mm f2.8-4 Vario-Elmarit-SL Asph Lens",
+    "price_raw": "£1,783",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3347000/3347091.jpg?ver=639201578200000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica 24-90mm f2.8-4 vario-elmarit-sl asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmarit-SL",
+    "model_canonical": "Vario-Elmarit-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "24-90",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3365588/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,345",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3365000/3365588.jpg?ver=639264653070000000&width=600",
+    "condition_raw": "Wex: As new (10)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3362857/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,339",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3362000/3362857.jpg?ver=639253435890000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3357218/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,339",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3357000/3357218.jpg?ver=639234430870000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3355400/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,339",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3355000/3355400.jpg?ver=639228144290000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3360638/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,279",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3360000/3360638.jpg?ver=639247384570000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3366610/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,219",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3366000/3366610.jpg?ver=639268129280000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3363465/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,219",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3363000/3363465.jpg?ver=639256880600000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-24-70mm-f2-8-vario-elmarit-sl-asph-lens-used-3359088/",
+    "title_raw": "Leica 24-70mm f2.8 Vario-Elmarit-SL Asph Lens",
+    "price_raw": "£1,219",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3359000/3359088.jpg?ver=639243906370000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica 24-70mm f2.8 vario-elmarit-sl asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "S",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "S_kw:ELMARIT-S"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "S Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "S+Lens"
+    ],
+    "model_raw": "Vario-Elmarit-SL",
+    "model_canonical": "Vario-Elmarit-SL",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "24-70",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-digital-camera-used-3364903/",
+    "title_raw": "Leica D-Lux 8 Digital Camera",
+    "price_raw": "£1,209",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364903.jpg?ver=639262049260000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica d-lux 8 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-apo-vario-elmar-t-55-135mm-f3-5-4-5-asph-lens-used-3362684/",
+    "title_raw": "Leica APO Vario Elmar-TL 55-135mm F3.5-4.5 ASPH lens",
+    "price_raw": "£949",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3362000/3362684.jpg?ver=639253416770000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica apo vario elmar-tl 55-135mm f3.5-4.5 asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Elmar",
+    "model_canonical": "Elmar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "55-135",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-v-lux-5-digital-camera-used-3359723/",
+    "title_raw": "Leica V-LUX 5 Digital Camera",
+    "price_raw": "£789",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3359000/3359723.jpg?ver=639246500280000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica v-lux 5 digital camera",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:V-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "V-LUX 5",
+    "model_canonical": "V-LUX 5",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-18-56mm-f3-5-5-6-vario-elmar-tl-asph-lens-used-3354544/",
+    "title_raw": "Leica 18-56mm f3.5-5.6 Vario-Elmar-TL Asph Lens",
+    "price_raw": "£355",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3354000/3354544.jpg?ver=639226654030000000&width=600",
+    "condition_raw": "Wex: Good (8)",
+    "normalized_name": "leica 18-56mm f3.5-5.6 vario-elmar-tl asph lens",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Vario-Elmar",
+    "model_canonical": "Vario-Elmar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "18-56",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-sf-40-flash-used-3364017/",
+    "title_raw": "Leica SF 40 Flash",
+    "price_raw": "£335",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364017.jpg?ver=639257722460000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica sf 40 flash",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:flash"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "flash",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-visoflex-typ-020-viewfinder-used-3360364/",
+    "title_raw": "Leica Visoflex (Typ 020) Viewfinder",
+    "price_raw": "£209",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3360000/3360364.jpg?ver=639245512100000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica visoflex (typ 020) viewfinder",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:finder"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "FLE"
+    ],
+    "focal_length": null,
+    "accessory_type": "finder",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-camera-case-cognac-used-3362889/",
+    "title_raw": "Leica D-Lux 8 Camera Case - Cognac",
+    "price_raw": "£131",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3362000/3362889.jpg?ver=639253437820000000&width=600",
+    "condition_raw": "Wex: As new (10)",
+    "normalized_name": "leica d-lux 8 camera case - cognac",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Compact",
+      "D-LUX"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl6-battery-black-used-3364951/",
+    "title_raw": "Leica BP-SCL6 Battery - Black",
+    "price_raw": "£115",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364951.jpg?ver=639262740900000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica bp-scl6 battery - black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "CL",
+    "model_canonical": "CL",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl6-battery-black-used-3366366/",
+    "title_raw": "Leica BP-SCL6 Battery - Black",
+    "price_raw": "£109",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3366000/3366366.jpg?ver=639265454090000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica bp-scl6 battery - black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "CL",
+    "model_canonical": "CL",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl6-battery-black-used-3364016/",
+    "title_raw": "Leica BP-SCL6 Battery - Black",
+    "price_raw": "£109",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364016.jpg?ver=639257742300000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica bp-scl6 battery - black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "CL",
+    "model_canonical": "CL",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl6-battery-black-used-3362121/",
+    "title_raw": "Leica BP-SCL6 Battery - Black",
+    "price_raw": "£109",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3362000/3362121.jpg?ver=639252368080000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica bp-scl6 battery - black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "CL",
+    "model_canonical": "CL",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl6-battery-black-used-3362120/",
+    "title_raw": "Leica BP-SCL6 Battery - Black",
+    "price_raw": "£109",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3362000/3362120.jpg?ver=639252368050000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica bp-scl6 battery - black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "CL",
+    "model_canonical": "CL",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-protector-q3-leather-green-used-3359934/",
+    "title_raw": "Leica Protector Q3 Leather - Green",
+    "price_raw": "£94",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3359000/3359934.jpg?ver=639246501920000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica protector q3 leather - green",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:protector"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "protector",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q",
+      "Q3"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-8-handgrip-black-used-3365929/",
+    "title_raw": "Leica D-Lux 8 Handgrip - Black",
+    "price_raw": "£79",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3365000/3365929.jpg?ver=639265539010000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica d-lux 8 handgrip - black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:handgrip"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "D-LUX 8",
+    "model_canonical": "D-LUX 8",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "grip",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Compact",
+      "D-LUX"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3363781/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£73",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3363000/3363781.jpg?ver=639257713140000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3363780/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£73",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3363000/3363780.jpg?ver=639257713060000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3364019/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£69",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364019.jpg?ver=639257722570000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3364018/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£69",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3364000/3364018.jpg?ver=639257722540000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-scl4-battery-for-sl-used-3359127/",
+    "title_raw": "Leica BP-SCL4 Battery for SL",
+    "price_raw": "£65",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3359000/3359127.jpg?ver=639241330680000000&width=600",
+    "condition_raw": "Wex: Very good (9-)",
+    "normalized_name": "leica bp-scl4 battery for sl",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_rx:battery_code"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "SL",
+    "model_canonical": "SL",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [
+      "SL"
+    ],
+    "compatible_systems": [
+      "SL"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-d-lux-7-hand-grip-used-3367386/",
+    "title_raw": "Leica D-Lux 7 Hand Grip",
+    "price_raw": "£52",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3367000/3367386.jpg?ver=639270733000000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica d-lux 7 hand grip",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:hand grip"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "D-LUX 7",
+    "model_canonical": "D-LUX 7",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "grip",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Compact",
+      "D-LUX"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-leather-case-for-lux-grip-used-3355780/",
+    "title_raw": "Leica Leather Case for Lux Grip",
+    "price_raw": "£49",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3355000/3355780.jpg?ver=639229245640000000&width=600",
+    "condition_raw": "Wex: Mint (9+)",
+    "normalized_name": "leica leather case for lux grip",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-protector-q2-leather-black-used-3359126/",
+    "title_raw": "Leica Protector Q2 Leather-Black",
+    "price_raw": "£40",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3359000/3359126.jpg?ver=639241330620000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica protector q2 leather-black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:protector"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "Q2",
+    "model_canonical": "Q2",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "protector",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Q",
+      "Q2"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-soft-release-button-silver-used-3366369/",
+    "title_raw": "Leica Soft Release Button - Silver",
+    "price_raw": "£36",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3366000/3366369.jpg?ver=639265454450000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica soft release button - silver",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:soft release"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Wex Photo Video (영국)",
+    "source_url": "https://www.wexphotovideo.com/leica-bp-dc13-battery-used-3363162/",
+    "title_raw": "Leica BP-DC13 Battery",
+    "price_raw": "£15",
+    "currency": "GBP",
+    "image_url": "https://www.wexphotovideo.com/globalassets/product-images/3363000/3363162.jpg?ver=639255999450000000&width=600",
+    "condition_raw": "Wex: Excellent (9)",
+    "normalized_name": "leica bp-dc13 battery",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.92,
+    "category_reason": [
+      "acc_kw:battery"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "C1",
+    "model_canonical": "C1",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "battery",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-13 22:29:42",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
