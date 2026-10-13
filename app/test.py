@@ -2969,6 +2969,90 @@ def crawl_aperture():
     return results
 
 
+def crawl_harrison():
+    """Harrison Cameras (영국, 셰필드) - Shopify JSON. 중고 컬렉션(used, 약 1,700개) 전체를 250개씩 훑어
+    브랜드 칸이 'Used Leica'이거나 제목이 Leica·Leitz로 시작하는 라이카만. 품절도 목록에 남아 있어 품절로 표시.
+    등급은 설명 끝 'Condition: Used - Excellent' (Mint·Excellent·Very Good·Good·Fairly Well Used)"""
+    import requests
+    from condition_grade import HARRISON_PREFIX, harrison_condition
+    results, seen = [], set()
+    base = "https://harrisoncameras.co.uk"
+    print(f"\n  📂 Harrison Cameras 크롤링 시작")
+    s = requests.Session()
+    s.headers["User-Agent"] = random.choice(USER_AGENTS)
+    for page_num in range(1, 30):
+        products = None
+        for attempt in range(4):  # Shopify가 연달아 부르면 429 — 기다렸다 다시
+            try:
+                resp = s.get(f"{base}/collections/used/products.json",
+                             params={"limit": 250, "page": page_num}, timeout=30)
+                if resp.status_code == 429:
+                    time.sleep(int(resp.headers.get("Retry-After") or 0) or 30 * (attempt + 1))
+                    continue
+                resp.raise_for_status()
+                products = resp.json().get("products", [])
+                break
+            except Exception as e:
+                print(f"    ⚠️ {page_num}페이지 오류: {e}")
+                time.sleep(5)
+        if products is None:
+            # 중간 페이지가 빠지면 나머지 라이카가 판매완료로 잘못 바뀌니 이번 실행은 실패로 (이전 데이터 유지)
+            raise RuntimeError(f"Harrison {page_num}페이지 못 읽음")
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            name = re.sub(r"^used\s+", "", (p.get("title") or "").strip(), flags=re.I)
+            # 다른 매장 제목처럼: '35mm Compact Camera'·'Rangefinder Camera Body'의 필름 크기·종류 말, 딸린 케이스, 괄호 설명을 뗀다
+            # (그대로 두면 '35mm'로 렌즈, 'case'·'finder'로 액세서리로 잘못 갈림)
+            name = re.sub(r"\s*\((?:fixed focus )?lens for [^)]*\)", "", name, flags=re.I)
+            name = re.sub(r"\b(?:35mm\s+)?(?:analog|compact|aps\s+compact)\s+camera\b", "Camera", name, flags=re.I)
+            name = re.sub(r"\b35mm\s+(?=camera\b)", "", name, flags=re.I)
+            name = re.sub(r"\brangefinder\s+camera\s+body\b", "Body", name, flags=re.I)
+            if not re.search(r"\bcase\s+for\b", name, re.I):
+                name = re.sub(r"\s*(?:with|&)\s+(?:leica\s+)?(?:ever ready\s+)?case\b.*$", "", name, flags=re.I)
+            name = re.sub(r"\s+", " ", name).strip()
+            vendor = (p.get("vendor") or "").lower()
+            # 브랜드 칸이 Panasonic·Voigtlander인 'Leica' 표기 렌즈·어댑터는 뺀다
+            if not ("leica" in vendor or (vendor in ("used miscellaneous", "") and re.match(r"(leica|leitz)\b", name, re.I))):
+                continue
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not link or link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            variant = p["variants"][0] if p.get("variants") else {}
+            try:
+                price = f"£{float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            label = harrison_condition(p.get("body_html") or "")
+            cond = HARRISON_PREFIX + label if label else "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Harrison Cameras (영국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "GBP",
+                "이미지": img,
+                "링크": link,
+                "품절": not variant.get("available", True),
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(random.uniform(4.0, 5.0))  # 250개씩 7쪽, 간격이 짧으면 429
+    print(f"  ✅ Harrison Cameras 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3300,6 +3384,7 @@ def crawl_all():
         ("Newoldcamera (이탈리아)", lambda: ce.wrap_full_run("Newoldcamera (이탈리아)", crawl_newoldcamera)),
         ("Camtec Photo (캐나다)", lambda: ce.wrap_full_run("Camtec Photo (캐나다)", crawl_camtec)),
         ("Aperture (영국)", lambda: ce.wrap_full_run("Aperture (영국)", crawl_aperture)),
+        ("Harrison Cameras (영국)", lambda: ce.wrap_full_run("Harrison Cameras (영국)", crawl_harrison)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)

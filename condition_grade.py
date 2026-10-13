@@ -73,6 +73,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _NOC.get(cond[len(NOC_PREFIX):].strip().upper().replace(" ", "")), "label"
     if cond.startswith(CAMTEC_PREFIX):
         return _CAMTEC.get(cond[len(CAMTEC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(HARRISON_PREFIX):
+        return _HARRISON.get(cond[len(HARRISON_PREFIX):].strip()), "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -187,3 +189,23 @@ APERTURE_PREFIX = "Aperture: "
 # Mint-와 Exc++의 사진 차이가 없어 같은 B로 둔다 (Ffordes는 같은 글자를 더 후하게 쓰지만 이 매장 사진 기준).
 _APERTURE = {"New": "N", "Mint": "A", "Mint-": "B", "Exc+++": "B", "Exc++": "B", "Exc+": "C", "Exc": "C", "User": "D"}
 APERTURE_LABELS = set(_APERTURE)
+
+
+# 영국 Harrison Cameras: 설명 끝 'Condition: Used - Very Good' (사이트 등급표 Mint·Excellent·Very Good·Good·Fairly Well Used)
+HARRISON_PREFIX = "Harrison: "
+# 사진 평가(표기 가리고 26점, 사진 3장씩, 2026-10-13): 사진 평균 Mint A · Excellent A · Very Good A~B · Good B.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 Mint A, Excellent B, Very Good B, Good C, Fairly Well Used D.
+# 이 대응 기준 정확 일치 8/26 · 한 등급 이내 25/26 (사진이 평균 0.7등급 후함 — 기존 0.8과 비슷).
+# Excellent와 Very Good의 사진 차이가 작아 같은 B로 둔다.
+_HARRISON = {"Mint": "A", "Excellent": "B", "Very Good": "B", "Good": "C", "Fairly Well Used": "D"}
+
+
+def harrison_condition(body_html: str) -> str | None:
+    """Harrison 설명에서 등급 글자. 'Condition: Used - Very good'·'Condition Very Good …'·'Used - Excellent' 모두."""
+    import html as _html
+    text = _html.unescape(re.sub(r"<[^>]+>", "\n", body_html or ""))
+    m = re.search(r"(?im)^\s*(?:condition\s*:?\s*)?(?:used\s*-\s*)?(mint|excellent|very good|good|fairly well used)\b", text)
+    if not m:
+        return None
+    return {"mint": "Mint", "excellent": "Excellent", "very good": "Very Good",
+            "good": "Good", "fairly well used": "Fairly Well Used"}[re.sub(r"\s+", " ", m.group(1).lower())]

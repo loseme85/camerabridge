@@ -29893,6 +29893,72 @@
    }
   },
   {
+   "id": "leica:lens:elmar-r:180",
+   "name": "Elmar-R 180mm f/4",
+   "name_ko": "엘마 R 180",
+   "kind": "Lens",
+   "mount": "R",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "elmar r 180",
+    "elmar-r 180",
+    "r 180 elmar",
+    "r 180 엘마",
+    "엘마 r 180",
+    "엘마-r 180"
+   ],
+   "codes": [
+    "11922"
+   ],
+   "match": {
+    "category": "Lens",
+    "mount": "R",
+    "title_must": [
+     "\\belmar\\b(?!it)|elmar-[mc]\\b",
+     "(?<![\\d./\\-–])180(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "-R\\b|\\bR\\s?\\d|\\bR\\b|\\bROM\\b"
+    ],
+    "title_must_not": [
+     "elmarit|apo|vario|macro|super|telyt",
+     "-M\\b",
+     "\\bSL\\b|-SL\\b",
+     "\\bTL\\b",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "vario.?elmar|tri.?elmar|super.?elmar|tele.?elmar|macro.?elmar|apo.?elmar|elmar.?c\\b",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
    "id": "leica:lens:super-angulon-r:21",
    "name": "Super-Angulon-R 21mm",
    "name_ko": "슈퍼앵귤론 R 21",
