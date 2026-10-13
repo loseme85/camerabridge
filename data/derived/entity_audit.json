@@ -231,7 +231,7 @@
   {
    "a": "leica:body:m10-monochrom:standard",
    "b": "leica:feature:frameline-28",
-   "count": 33,
+   "count": 34,
    "example": "[중고] M10 Monochrom"
   },
   {
@@ -821,8 +821,8 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 86,
-   "example": "[중고] M11 Monochrom"
+   "count": 87,
+   "example": "[중고] M10 Monochrom"
   },
   {
    "entity": "leica:feature:meter",
@@ -963,48 +963,5 @@
    "example": "Leica M (Typ 240) (Black Paint, 10770)"
   }
  ],
- "new": [
-  {
-   "entity": "leica:lens:elmar:90:unspecified",
-   "word": "black paint",
-   "count": 4,
-   "example": "LEITZ Leica Elmar L39 90mm/F4.0 Fat/ Rare Black Paint Lens LTM Germany Fat"
-  },
-  {
-   "entity": "leica:body:m240:standard",
-   "word": "black paint",
-   "count": 3,
-   "example": "Leica M (Typ 240) (Black Paint, 10770)"
-  },
-  {
-   "a": "leica:body:m6:royal",
-   "b": "leica:feature:frameline-28",
-   "count": 3,
-   "example": "LEICA M6 ROYAL CENTENARY 1994 043/100"
-  },
-  {
-   "a": "leica:body:m6:royal",
-   "b": "leica:feature:meter",
-   "count": 3,
-   "example": "LEICA M6 ROYAL CENTENARY 1994 043/100"
-  },
-  {
-   "a": "leica:body:m6:royal",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "LEICA M6 ROYAL CENTENARY 1994 043/100"
-  },
-  {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:no-meter",
-   "count": 3,
-   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
-  },
-  {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
-  }
- ]
+ "new": []
 }
