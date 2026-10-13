@@ -359,6 +359,7 @@ for zoom in ("28-90", "35-70"):
     lens(f"leica:lens:vario-elmarit-r:{zoom}", f"Vario-Elmarit-R {zoom}mm", f"바리오 엘마리트 R {zoom}", "R", "vario-elmarit", zoom, must_not=[r"\bapo\b"], extra_aliases=[f"r {zoom} elmarit"])
 lens("leica:lens:apo-vario-elmarit-r:70-180", "APO-Vario-Elmarit-R 70-180mm f/2.8", "아포 바리오 엘마리트 R 70-180", "R", "apo-vario-elmarit", "70-180", extra_aliases=["r 70-180"])
 lens("leica:lens:super-elmar-r:15", "Super-Elmar-R 15mm f/3.5", "수퍼엘마 R 15", "R", "super-elmar", "15")
+lens("leica:lens:elmar-r:180", "Elmar-R 180mm f/4", "엘마 R 180", "R", "elmar", "180", must_not=[r"elmarit|apo|vario|macro|super|telyt"])
 lens("leica:lens:super-angulon-r:21", "Super-Angulon-R 21mm", "슈퍼앵귤론 R 21", "R", "super-angulon", "21")
 lens("leica:lens:super-angulon-r:28", "PC-Super-Angulon-R 28mm f/2.8", "PC 슈퍼앵귤론 R 28", "R", "super-angulon", "28")
 lens("leica:lens:fisheye-elmarit-r:16", "Fisheye-Elmarit-R 16mm f/2.8", "어안 엘마리트 R 16", "R", "fisheye-elmarit", "16")

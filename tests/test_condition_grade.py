@@ -91,3 +91,16 @@ def test_aperture_description_grades():
     assert grade_of(site, APERTURE_PREFIX + "Exc+", "Leica 50mm f2 Summicron-R 1 Cam")[0] == "C"
     assert grade_of(site, APERTURE_PREFIX + "User", "Leica M2 Black Paint")[0] == "D"
     assert grade_of(site, APERTURE_PREFIX + "New", "Leica 35mm f1.4 Summilux-TL ASPH Black Anodized")[0] == "N"
+
+
+def test_harrison_description_grades():
+    from condition_grade import HARRISON_PREFIX, harrison_condition
+    site = "Harrison Cameras (영국)"
+    assert harrison_condition("<p>Lovely lens.</p>\n<p>Condition: Used - Very good<br>Includes caps</p>") == "Very Good"
+    assert harrison_condition("<p>Condition Very Good Marks around the camera</p>") == "Very Good"
+    assert harrison_condition("<p>In excellent condition, it's a cost-effective way</p><p>Used - Excellent</p>") == "Excellent"
+    assert harrison_condition("<p>No grade here.</p>") is None
+    assert grade_of(site, HARRISON_PREFIX + "Mint", "Leica D-Lux 8 Camera 19191")[0] == "A"
+    assert grade_of(site, HARRISON_PREFIX + "Excellent", "Leica M6 TTL Silver .72 Rangefinder Camera Body 10434")[0] == "B"
+    assert grade_of(site, HARRISON_PREFIX + "Very Good", "Leica M7 0.72 Black Rangefinder Camera Body 10503")[0] == "B"
+    assert grade_of(site, HARRISON_PREFIX + "Good", "Leica R4 Silver Camera Body")[0] == "C"

@@ -204,6 +204,7 @@ CODES: dict[str, list[str]] = {
     L + "apo-summicron-r:180": ["11271", "11354"],
     L + "apo-summicron-r:90": ["11350"],
     L + "super-elmar-r:15": ["11213"],
+    L + "elmar-r:180": ["11922"],
     L + "apo-telyt-r:180": ["11240", "11242"],
     L + "mr-telyt-r:500": ["11243"],
     L + "apo-telyt-r:280": ["11261", "11360", "11245", "11263", "11846"],
