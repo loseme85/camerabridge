@@ -3121,6 +3121,134 @@ def crawl_wex():
     return results
 
 
+def _shopify_all(sess, url, label):
+    """Shopify products.json을 250개씩 끝까지. 429면 기다렸다 다시, 중간 쪽을 못 읽으면 실패로 (이전 데이터 유지)"""
+    products = []
+    for page_num in range(1, 40):
+        page = None
+        for attempt in range(4):
+            try:
+                resp = sess.get(url, params={"limit": 250, "page": page_num}, timeout=30)
+                if resp.status_code == 429:
+                    time.sleep(int(resp.headers.get("Retry-After") or 0) or 20 * (attempt + 1))
+                    continue
+                resp.raise_for_status()
+                page = resp.json().get("products", [])
+                break
+            except Exception as e:
+                print(f"    ⚠️ {label} {page_num}페이지 오류: {e}")
+                time.sleep(5)
+        if page is None:
+            raise RuntimeError(f"{label} {page_num}페이지 못 읽음")
+        if not page:
+            break
+        print(f"    └─ {label} {page_num}페이지 {len(page)}개")
+        products += page
+        time.sleep(3)
+    return products
+
+
+def _camerawest_name(name):
+    """Camera West 제목 다듬기: 꼬리말(', Hood'·'(9+)'·'DAG serviced'·'Open Box'·'Certified Refurbished') 떼기,
+    렌즈 이름을 뺀 줄임말('50mm f1.4 Asph'·'35mm f2 Apo SL'·'16-35mm f3.5-4.5')에 이름 넣기, 흔한 오타"""
+    name = re.sub(r"\s*\((?:10|[5-9])[+\-]?\)", "", name)
+    name = re.sub(r",?\s*\b(?:no\s+)?(?:hood|shade)\b", "", name, flags=re.I)
+    name = re.sub(r",?\s*\b(?:DAG\s+(?:serviced|CLA|overhaul)|CLA'?d|certified refurbished|open box|N/A|late)\b", "", name, flags=re.I)
+    name = re.sub(r"\s*-\s*$", "", name)
+    name = re.sub(r"Summicrion|Summicon\b", "Summicron", name, flags=re.I)
+    name = re.sub(r"\bAnguron\b", "Angulon", name, flags=re.I)
+    name = re.sub(r"\bM EVI\b", "M EV1", name)
+    # 렌즈 이름 없이 초점거리만 쓴 것
+    name = re.sub(r"^(Leica 50mm f1\.4) Asph\b", r"\1 Summilux-M Asph", name, flags=re.I)
+    name = re.sub(r"^(Leica 90mm f2) Asph\b", r"\1 APO-Summicron-M Asph", name, flags=re.I)
+    name = re.sub(r"^(Leica (?:28|35|50|75|90)mm f2) Apo SL\b", r"\1 APO-Summicron-SL", name, flags=re.I)
+    name = re.sub(r"^Leica (?:SL )?16-35mm f3\.5-4\.5$", "Leica 16-35mm f3.5-4.5 Super-Vario-Elmar-SL", name, flags=re.I)
+    name = re.sub(r"^Leica 90-280mm f2\.8-4$", "Leica 90-280mm f2.8-4 APO-Vario-Elmarit-SL", name, flags=re.I)
+    return re.sub(r"\s+", " ", name).strip(" ,")
+
+
+def crawl_camerawest():
+    """Camera West (미국 캘리포니아) - Shopify JSON. 중고 컬렉션(pre-owned, 약 1,000개)에서 라이카만.
+    같은 그룹의 Leica Store San Francisco(leicastoresf.com) 중고도 함께 — 둘에 같은 기기가 많아(약 200개)
+    제목 끝 일련번호로 겹친 것은 Camera West 쪽만 남긴다. 품절도 목록에 남아 있어 품절로 표시.
+    등급은 설명의 'I rate it cosmetically a (9+)'·'rated at a (8+)' 점수 (10-·9+·9·8+·8·7+)"""
+    import requests
+    from condition_grade import CAMERAWEST_PREFIX, describe_text
+    results, serials, seen, cw_names = [], set(), set(), set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Camera West 크롤링 시작")
+    stores = [("https://www.camerawest.com", "/collections/pre-owned/products.json", "Camera West"),
+              ("https://leicastoresf.com", "/products.json", "Leica Store SF")]
+    for base, path, label in stores:
+        for p in _shopify_all(sess, base + path, label):
+            tags = [t.lower() for t in p.get("tags") or []]
+            if label == "Leica Store SF" and "used" not in tags:
+                continue  # SF는 새 상품과 섞여 있음
+            name = re.sub(r"\s+", " ", (p.get("title") or "")).strip()
+            vendor = (p.get("vendor") or "").lower()
+            ptype = (p.get("product_type") or "").lower()
+            if not re.match(r"(leica|leitz)", name, re.I):
+                continue  # 브랜드 칸이 Leica여도 제목이 'Nikon S3 …'인 것 등
+            if "book" in ptype or "sport optics" in ptype or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue  # 'Leica Store SF Books' 사진집, 쌍안경·조준경, 다른 브랜드
+            if re.search(r"noctivid|ultravid|trinovid|colorline|amplus|\bPRS\b|calonox|rangemaster|\b[CL]RF\b|"
+                         r"geovid|binocular|opera glass|\d+x\d+", name, re.I):
+                continue
+            m_serial = re.search(r"#?\b(\d{6,8})\s*$", name)
+            serial = m_serial.group(1) if m_serial else None
+            if serial and serial in serials:
+                continue  # Camera West에 이미 있는 같은 기기
+            # 제목 끝 일련번호·', Boxed'는 상품명에서 뗀다 (모델 연결에 방해)
+            name = re.sub(r",?\s*#?\b\d{6,8}\s*$", "", name)
+            name = re.sub(r",?\s*\bBoxed\b", "", name, flags=re.I).strip(" ,")
+            name = _camerawest_name(name)
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not link or link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            variant = p["variants"][0] if p.get("variants") else {}
+            try:
+                price = f"${float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            if label == "Leica Store SF" and (name.lower(), price) in cw_names:
+                continue  # 일련번호 없이 두 곳에 같이 올린 것
+            seen.add(link)
+            if serial:
+                serials.add(serial)
+            if label == "Camera West":
+                cw_names.add((name.lower(), price))
+            body = re.sub(r"<[^>]+>", " ", p.get("body_html") or "")
+            m_grade = re.search(r"\(\s*(10-?|[5-9][+\-]?)\s*\)", body)
+            if m_grade:
+                cond = CAMERAWEST_PREFIX + m_grade.group(1)
+            elif re.search(r"open box", p.get("title") or "", re.I):
+                cond = "New"
+            else:
+                cond = describe_text(body) or "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Camera West (미국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "USD",
+                "이미지": img,
+                "링크": link,
+                "품절": not any(v.get("available") for v in p.get("variants") or [{}]),
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+    print(f"  ✅ Camera West 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3455,6 +3583,7 @@ def crawl_all():
         ("Harrison Cameras (영국)", lambda: ce.wrap_full_run("Harrison Cameras (영국)", crawl_harrison)),
         ("Wex Photo Video (영국)", lambda: ce.wrap_full_run("Wex Photo Video (영국)", crawl_wex)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
+        ("Camera West (미국)", lambda: ce.wrap_full_run("Camera West (미국)", crawl_camerawest)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:

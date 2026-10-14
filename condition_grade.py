@@ -77,6 +77,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _HARRISON.get(cond[len(HARRISON_PREFIX):].strip()), "label"
     if cond.startswith(WEX_PREFIX):
         return _WEX.get(re.sub(r"\s*\(.*\)\s*$", "", cond[len(WEX_PREFIX):]).strip().lower()), "label"
+    if cond.startswith(CAMERAWEST_PREFIX):
+        return _CAMERAWEST.get(cond[len(CAMERAWEST_PREFIX):].strip()), "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -219,3 +221,10 @@ WEX_PREFIX = "Wex: "
 # 표본에 없던 아래 등급(Well used 등)은 Wex 등급표 순서대로 D.
 _WEX = {"as new": "S", "mint": "A", "excellent": "B", "very good": "B", "good": "C",
         "well used": "D", "heavily used": "D", "poor": "D"}
+# 미국 Camera West (+ Leica Store SF): 설명의 'I rate it cosmetically a (9+)' 점수 10-·9+·9·8+·8·7+
+CAMERAWEST_PREFIX = "CameraWest: "
+# 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-14): 사진 평균 10- A · 9+ A~B · 9 B · 8+ B · 8 B · 7+ C.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 10- A, 9+ B, 9 B, 8+ C, 8 C, 7+ D.
+# 이 대응 기준 정확 일치 7/25 · 한 등급 이내 23/25 (사진이 평균 0.72등급 후함 — 기존 0.8과 비슷). 표본 없는 10은 A, 7 이하는 D.
+_CAMERAWEST = {"10": "A", "10-": "A", "9+": "B", "9": "B", "9-": "B", "8+": "C", "8": "C", "8-": "C",
+               "7+": "D", "7": "D", "7-": "D", "6+": "D", "6": "D", "5": "D"}

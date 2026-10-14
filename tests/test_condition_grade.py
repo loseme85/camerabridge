@@ -112,3 +112,10 @@ def test_wex_condition_grades():
     assert grade_of(site, WEX_PREFIX + "Excellent (9)", "Leica Q3 43 Digital Camera")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Very good (9-)", "Leica 50mm f0.95 Noctilux-M Asph Lens- Black")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Good (8)", "Leica Summicron-M 35mm f2 ASPH Black Paint Millennium (11611)")[0] == "C"
+def test_camerawest_condition_grades():
+    from condition_grade import CAMERAWEST_PREFIX
+    site = "Camera West (미국)"
+    assert grade_of(site, CAMERAWEST_PREFIX + "10-", "Leica 90mm f2 APO-Summicron-M Asph")[0] == "A"
+    assert grade_of(site, CAMERAWEST_PREFIX + "9+", "Leica Q3")[0] == "B"
+    assert grade_of(site, CAMERAWEST_PREFIX + "8+", "Leica 50mm f2 Summicron-M")[0] == "C"
+    assert grade_of(site, CAMERAWEST_PREFIX + "7+", "Leica 180mm f2.8 Elmarit-R")[0] == "D"
