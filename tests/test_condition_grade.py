@@ -112,3 +112,10 @@ def test_wex_condition_grades():
     assert grade_of(site, WEX_PREFIX + "Excellent (9)", "Leica Q3 43 Digital Camera")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Very good (9-)", "Leica 50mm f0.95 Noctilux-M Asph Lens- Black")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Good (8)", "Leica Summicron-M 35mm f2 ASPH Black Paint Millennium (11611)")[0] == "C"
+def test_lucky_condition_grades():
+    from condition_grade import LUCKY_PREFIX
+    site = "Lucky Camera (일본)"
+    assert grade_of(site, LUCKY_PREFIX + "AA", "Leica M4 Chrome")[0] == "A"
+    assert grade_of(site, LUCKY_PREFIX + "AB", "Leica Summicron M 35mm f2")[0] == "B"
+    assert grade_of(site, LUCKY_PREFIX + "A", "Leica IIIf Body")[0] == "C"
+    assert grade_of(site, LUCKY_PREFIX + "B", "Leica Elmar 5cm f3.5")[0] == "D"

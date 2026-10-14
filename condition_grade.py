@@ -77,6 +77,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _HARRISON.get(cond[len(HARRISON_PREFIX):].strip()), "label"
     if cond.startswith(WEX_PREFIX):
         return _WEX.get(re.sub(r"\s*\(.*\)\s*$", "", cond[len(WEX_PREFIX):]).strip().lower()), "label"
+    if cond.startswith(LUCKY_PREFIX):
+        return _LUCKY.get(cond[len(LUCKY_PREFIX):].strip().upper()), "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -219,3 +221,10 @@ WEX_PREFIX = "Wex: "
 # 표본에 없던 아래 등급(Well used 등)은 Wex 등급표 순서대로 D.
 _WEX = {"as new": "S", "mint": "A", "excellent": "B", "very good": "B", "good": "C",
         "well used": "D", "heavily used": "D", "poor": "D"}
+# 일본 Lucky Camera: 상세 '程度' AAA(미사용·극상)·AA(꽤 좋음)·AB(꽤 좋지만 흠 1~2곳)·A(보통 중고)·B(외관 많이 씀)·N(새것)
+LUCKY_PREFIX = "Lucky: "
+# 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-14): 사진 평균 AA A · AB A~B · A B · B B~C.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 AAA S, AA A, AB B, A C, B D.
+# 이 대응 기준 정확 일치 10/25 · 한 등급 이내 20/25 (사진이 평균 0.84등급 후함 — 기존 0.8과 같음).
+# 같은 글자라도 기타무라·나니와(A=상)보다 이 매장의 A가 '보통 중고'라 한 칸 낮음.
+_LUCKY = {"N": "N", "AAA": "S", "AA": "A", "AB": "B", "A": "C", "B": "D"}
