@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 466,
+   "count": 469,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 434,
+   "count": 437,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 413,
+   "count": 415,
    "example": "Leica M4 Silver"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 409,
+   "count": 412,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 167,
+   "count": 168,
    "example": "Leica M3 Silver"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 167,
+   "count": 168,
    "example": "Leica M3 Silver"
   },
   {
@@ -51,19 +51,19 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:meter",
-   "count": 145,
+   "count": 147,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:mechanical",
-   "count": 145,
+   "count": 147,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:frameline-28",
-   "count": 141,
+   "count": 143,
    "example": "[중고] M6 CLASSIC"
   },
   {
@@ -111,19 +111,19 @@
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:frameline-28",
-   "count": 53,
+   "count": 54,
    "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:meter",
-   "count": 53,
+   "count": 54,
    "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:mechanical",
-   "count": 53,
+   "count": 54,
    "example": "Leica MP Silver x0.72"
   },
   {
@@ -165,7 +165,7 @@
   {
    "a": "leica:body:m10-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 48,
+   "count": 49,
    "example": "[위탁] M10-P (Silver)"
   },
   {
@@ -463,6 +463,12 @@
    "example": "LEICA M8.2 50mm F3.5 Elmar sn.3560"
   },
   {
+   "a": "leica:body:m-e",
+   "b": "leica:feature:frameline-28",
+   "count": 9,
+   "example": "[중고] M-E (CCD)"
+  },
+  {
    "a": "leica:body:m3:black-paint",
    "b": "leica:feature:no-meter",
    "count": 9,
@@ -473,12 +479,6 @@
    "b": "leica:feature:mechanical",
    "count": 9,
    "example": "LEICA M3 Vintage Black Paint Regid brass mount"
-  },
-  {
-   "a": "leica:body:m-e",
-   "b": "leica:feature:frameline-28",
-   "count": 8,
-   "example": "[중고] M-E (CCD)"
   },
   {
    "a": "leica:body:m3:double-stroke",
@@ -673,6 +673,12 @@
    "example": "LEICA M 262 sn.4982"
   },
   {
+   "a": "leica:body:m-p240:black-paint",
+   "b": "leica:feature:frameline-28",
+   "count": 4,
+   "example": "LEICA M-P black paint sn.4891"
+  },
+  {
    "a": "leica:body:m10-p:safari",
    "b": "leica:feature:frameline-28",
    "count": 4,
@@ -695,6 +701,18 @@
    "b": "leica:lens:summicron-m:35:v4",
    "count": 4,
    "example": "LEICA 35mm F2 (4th) 7 element SUMMICRON-M sn.3554"
+  },
+  {
+   "a": "leica:body:m2:button-rewind",
+   "b": "leica:feature:no-meter",
+   "count": 4,
+   "example": "Leica M2 (Button Rewind) (Silver, KOOHE / 10800 / 10300)"
+  },
+  {
+   "a": "leica:body:m2:button-rewind",
+   "b": "leica:feature:mechanical",
+   "count": 4,
+   "example": "Leica M2 (Button Rewind) (Silver, KOOHE / 10800 / 10300)"
   },
   {
    "a": "leica:body:m4-p:70-jahre",
@@ -739,12 +757,6 @@
    "example": "LEICA M-P 70th Independence Anniversary"
   },
   {
-   "a": "leica:body:m-p240:black-paint",
-   "b": "leica:feature:frameline-28",
-   "count": 3,
-   "example": "LEICA M-P black paint sn.4891"
-  },
-  {
    "a": "leica:body:m1:standard",
    "b": "leica:feature:no-meter",
    "count": 3,
@@ -803,18 +815,6 @@
    "b": "leica:feature:mechanical",
    "count": 3,
    "example": "LEICA M6 ROYAL CENTENARY 1994 043/100"
-  },
-  {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:no-meter",
-   "count": 3,
-   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
-  },
-  {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
   }
  ],
  "absorbed": [
@@ -827,7 +827,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 112,
+   "count": 113,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
