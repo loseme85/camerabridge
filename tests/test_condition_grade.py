@@ -112,3 +112,12 @@ def test_wex_condition_grades():
     assert grade_of(site, WEX_PREFIX + "Excellent (9)", "Leica Q3 43 Digital Camera")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Very good (9-)", "Leica 50mm f0.95 Noctilux-M Asph Lens- Black")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Good (8)", "Leica Summicron-M 35mm f2 ASPH Black Paint Millennium (11611)")[0] == "C"
+def test_naniwa_condition_grades():
+    site = "카메라노나니와 (일본)"
+    assert grade_of(site, "A", "Leica 19651 Q3 Protector Black")[0] == "A"
+    assert grade_of(site, "AB+", "Leica 20221 M11-D Black Paint")[0] == "A"
+    assert grade_of(site, "AB", "Leica Summicron M 50/2 (6BIT) 11826C")[0] == "B"
+    assert grade_of(site, "AB-", "Leica Elmarit M 28/2.8")[0] == "B"
+    assert grade_of(site, "B+", "Leica IIIf Red Synchro")[0] == "C"
+    assert grade_of(site, "B", "Leica M3 (SS)")[0] == "C"
+    assert grade_of(site, "C", "Leica Summicron M50/2 (3rd)")[0] == "D"
