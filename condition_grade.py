@@ -77,6 +77,14 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _HARRISON.get(cond[len(HARRISON_PREFIX):].strip()), "label"
     if cond.startswith(WEX_PREFIX):
         return _WEX.get(re.sub(r"\s*\(.*\)\s*$", "", cond[len(WEX_PREFIX):]).strip().lower()), "label"
+    if cond.startswith(PETERLOY_PREFIX):
+        cosmetic, _, working = cond[len(PETERLOY_PREFIX):].strip().partition("/")
+        if working == "J":
+            return "X", "label"
+        grade = _PETERLOY.get(cosmetic)
+        if grade and working in ("G", "H") and GRADES.index(grade) < GRADES.index("D"):
+            grade = "D"  # 결함 있음·미확인은 외관과 상관없이 D
+        return grade, "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -219,3 +227,10 @@ WEX_PREFIX = "Wex: "
 # 표본에 없던 아래 등급(Well used 등)은 Wex 등급표 순서대로 D.
 _WEX = {"as new": "S", "mint": "A", "excellent": "B", "very good": "B", "good": "C",
         "well used": "D", "heavily used": "D", "poor": "D"}
+# 영국 Peter Loy: 설명의 'Condition 4-5/E' — 외관 1(새것)·3(near mint)·4(Exc+)·5(Exc)·6(많이 씀), 작동 C·D·E(정상)·G(결함)·H(미확인)·J(사용 불가)
+PETERLOY_PREFIX = "PeterLoy: "
+# 사진 평가(표기 가리고 25점, 사진 1장씩 — 매장 사진이 대부분 1장, 2026-10-14): 사진 평균 3 A · 3-4 A~B · 4 A~B · 4-5 A~B · 5 B · 5-6 B.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 3 A, 3-4·4 B, 4-5·5 C, 5-6·6 D.
+# 이 대응 기준 정확 일치 10/25 · 한 등급 이내 20/25 (사진이 평균 0.8등급 후함 — 기존과 같음).
+_PETERLOY = {"1": "S", "1-2": "S", "2": "S", "2-3": "A", "3": "A", "3-4": "B", "4": "B", "4-5": "C", "5": "C",
+             "5-6": "D", "6": "D", "6-7": "D", "7": "D"}

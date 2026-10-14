@@ -3121,6 +3121,60 @@ def crawl_wex():
     return results
 
 
+def crawl_peterloy():
+    """Peter Loy (영국) - 빈티지 카메라 전문점. 재고표 한 화면(/stock-list/, 정적 HTML, 500개쯤)에 제목·설명·가격(£)이 다 있음.
+    판매 완료는 'Sold'로 남아 있어 건너뜀. 등급은 설명의 'Condition 4-5/E' (외관 1~6 · 작동 C·D·E 정상, G 결함, H 미확인, J 사용 불가)"""
+    import html as _html
+    import requests
+    from condition_grade import PETERLOY_PREFIX
+    results = []
+    base = "https://www.peterloy.com"
+    print(f"\n  📂 Peter Loy 크롤링 시작")
+    resp = requests.get(f"{base}/stock-list/", headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=60)
+    resp.raise_for_status()
+    items = resp.text.split('<div class="post-item">')[1:]
+    print(f"    └─ 재고표 {len(items)}개")
+    for b in items:
+        m_title = re.search(r'eg-stock-list-skin-element-0">(.*?)</div>', b, re.S)
+        m_price = re.search(r'st-price">\s*([\d,.]+)', b)
+        m_id = re.search(r'data-id="(\d+)"', b)
+        if not (m_title and m_price and m_id):
+            continue  # 'Sold'는 가격 자리에 Sold만 있음
+        name = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", m_title.group(1)))).strip(" ,.")
+        if not re.match(r"(leica|leitz)", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        m_ex = re.search(r'post-excerpt">(.*?)</div>', b, re.S)
+        excerpt = _html.unescape(re.sub(r"<[^>]+>", "", m_ex.group(1))) if m_ex else ""
+        m_cond = re.search(r"Condition:?\s*(?:body\s*)?(\d(?:-\d)?/[CDEGHJ])", excerpt)
+        link = f"{base}/?p={m_id.group(1)}"  # 상품 화면으로 넘어가는 고정 주소
+        if link in globals().get('SOLD_LINKS', ()):
+            continue
+        price = f"£{float(m_price.group(1).replace(',', '')):,.0f}"
+        m_img = re.search(r"background-image: url\('([^']+)'", b)
+        cat = detect_category(name, price)
+        if cat == "Accessory" and re.search(r"\bbody\b", name, re.I) and not re.search(r"body cap|case|cover", name, re.I):
+            cat = "Body"  # £300 아래 바르낙 바디가 가격 기준(50만원)으로 액세서리가 되던 것
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": "Peter Loy (영국)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": PETERLOY_PREFIX + m_cond.group(1) if m_cond else "정보없음",
+            "가격": price,
+            "통화": "GBP",
+            "이미지": m_img.group(1) if m_img else "",
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Peter Loy 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3455,6 +3509,7 @@ def crawl_all():
         ("Harrison Cameras (영국)", lambda: ce.wrap_full_run("Harrison Cameras (영국)", crawl_harrison)),
         ("Wex Photo Video (영국)", lambda: ce.wrap_full_run("Wex Photo Video (영국)", crawl_wex)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
+        ("Peter Loy (영국)", lambda: ce.wrap_full_run("Peter Loy (영국)", crawl_peterloy)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:

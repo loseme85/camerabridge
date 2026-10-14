@@ -112,3 +112,12 @@ def test_wex_condition_grades():
     assert grade_of(site, WEX_PREFIX + "Excellent (9)", "Leica Q3 43 Digital Camera")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Very good (9-)", "Leica 50mm f0.95 Noctilux-M Asph Lens- Black")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Good (8)", "Leica Summicron-M 35mm f2 ASPH Black Paint Millennium (11611)")[0] == "C"
+def test_peterloy_condition_grades():
+    from condition_grade import PETERLOY_PREFIX
+    site = "Peter Loy (영국)"
+    assert grade_of(site, PETERLOY_PREFIX + "3/D", "Leica Visoflex II")[0] == "A"
+    assert grade_of(site, PETERLOY_PREFIX + "4/D", "Leica 21mm f3.4 Super-Elmar-M Asph")[0] == "B"
+    assert grade_of(site, PETERLOY_PREFIX + "4-5/E", "Leica Standard body, chrome")[0] == "C"
+    assert grade_of(site, PETERLOY_PREFIX + "5-6/D", "Leica III body, chrome")[0] == "D"
+    assert grade_of(site, PETERLOY_PREFIX + "3/G", "Leica III body, chrome")[0] == "D"
+    assert grade_of(site, PETERLOY_PREFIX + "4/J", "Leica IIIa body")[0] == "X"
