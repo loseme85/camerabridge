@@ -3121,6 +3121,107 @@ def crawl_wex():
     return results
 
 
+CALUMET_CONDS = {"Wie neu": "wie-neu", "Sehr gut": "sehr-gut", "Gut": "gut", "Akzeptabel": "akzeptabel",
+                 "Stark gebraucht": "stark-gebraucht"}
+
+
+def _calumet_unit(html):
+    """Calumet 중고 상품 화면에서 지금 보이는 한 대의 (주소, 사진). 사진은 그 기기를 찍은 것(…_<번호>_1.jpg)"""
+    pl = re.search(r'product:product_link" content="([^"]+)"', html)
+    og = re.search(r'property="og:image" content="([^"?]+)', html)
+    return (pl.group(1) if pl else None), (og.group(1) if og else "")
+
+
+def crawl_calumet():
+    """Calumet Photo Video (독일) - 독일 13개 매장 체인 (뮌헨 Foto Video Sauter 포함, 같은 재고).
+    사이트 검색 'leica gebraucht'(정적 HTML, 48개씩 7쪽)로 중고 상품을 모으고, 상품 화면마다 등급별 선택지
+    ('Sehr gut (3x)'·가격, 재고 없는 등급은 '(Nx)'가 없음)를 읽어 등급 하나를 한 행으로. 상품 화면 120개쯤이라 4~5분 → 6시간마다.
+    등급: Wie neu·Sehr gut·Gut·Akzeptabel·Stark gebraucht"""
+    import html as _html
+    import requests
+    from condition_grade import CALUMET_PREFIX
+    results = []
+    base = "https://www.calumet.de"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Calumet 크롤링 시작")
+    tiles = {}
+    for page_num in range(1, 20):
+        try:
+            resp = sess.get(f"{base}/search", params={"search": "leica gebraucht", "p": page_num}, timeout=40)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"    ❌ 검색 {page_num}페이지 오류: {e}")
+            if page_num == 1:
+                raise
+            break
+        found = re.findall(r'class="\s*card\s*product-box.*?href="([^"]+)"\s*title="([^"]+)"', resp.text, re.S)
+        new = [(h, t) for h, t in found if h not in tiles]
+        if not new:
+            break  # 마지막 쪽 다음은 첫 쪽이 다시 나옴
+        for h, t in new:
+            tiles[h] = _html.unescape(t)
+        print(f"    └─ 검색 {page_num}페이지 {len(new)}개")
+        time.sleep(1)
+    # 'Panasonic LUMIX Leica DG'·'Voigtländer … für Leica M' 같은 다른 브랜드 제외
+    tiles = {h: t for h, t in tiles.items() if h.endswith("/gebraucht") and re.match(r"(leica|leitz)\b", t, re.I)}
+    print(f"    └─ 라이카 중고 상품 {len(tiles)}개")
+    for path, title in tiles.items():
+        try:
+            resp = sess.get(base + path, timeout=40)
+            resp.raise_for_status()
+        except Exception as e:
+            print(f"    ⚠️  {path}: {e}")
+            continue
+        page = resp.text
+        name = re.sub(r"\s+gebraucht\s*$", "", title, flags=re.I).strip()
+        name = re.sub(r"\s+", " ", name)
+        if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        shown_link, shown_img = _calumet_unit(page)
+        opts = re.findall(r'product-detail-configurator-option-label-text">\s*(.*?)</div>.*?c-Price-finalValue">\s*([\d.,]+)\s*€',
+                          page, re.S)
+        for label, amount in opts:
+            m = re.match(r"\s*(.*?)\s*\((\d+)x\)", re.sub(r"\s+", " ", label))
+            if not m or m.group(1) not in CALUMET_CONDS:
+                continue  # '(Nx)'가 없으면 그 등급 재고 없음
+            cond, slug = m.group(1), CALUMET_CONDS[m.group(1)]
+            link, img = shown_link, shown_img
+            if not (link and f"/gebraucht/{slug}/" in link):
+                # 화면에 안 보이는 등급은 그 등급 화면에서 한 대의 주소·사진
+                try:
+                    sub = sess.get(f"{base}{path}/{slug}", timeout=40)
+                    link, img = _calumet_unit(sub.text)
+                except Exception:
+                    link, img = None, shown_img
+                link = link or f"{base}{path}/{slug}"
+                time.sleep(0.5)
+            if link in globals().get('SOLD_LINKS', ()):
+                continue
+            price = f"€{float(amount.replace('.', '').replace(',', '.')):,.0f}"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Calumet (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": CALUMET_PREFIX + cond,
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(0.5)
+    print(f"  ✅ Calumet 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3376,6 +3477,7 @@ DETAIL_CONDITION = {
 # 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
 SOURCE_MIN_INTERVAL_HOURS = {
     "Ffordes (영국)": 6,
+    "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
 }
 
 
@@ -3455,6 +3557,7 @@ def crawl_all():
         ("Harrison Cameras (영국)", lambda: ce.wrap_full_run("Harrison Cameras (영국)", crawl_harrison)),
         ("Wex Photo Video (영국)", lambda: ce.wrap_full_run("Wex Photo Video (영국)", crawl_wex)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
+        ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:

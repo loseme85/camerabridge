@@ -112,3 +112,11 @@ def test_wex_condition_grades():
     assert grade_of(site, WEX_PREFIX + "Excellent (9)", "Leica Q3 43 Digital Camera")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Very good (9-)", "Leica 50mm f0.95 Noctilux-M Asph Lens- Black")[0] == "B"
     assert grade_of(site, WEX_PREFIX + "Good (8)", "Leica Summicron-M 35mm f2 ASPH Black Paint Millennium (11611)")[0] == "C"
+def test_calumet_condition_grades():
+    from condition_grade import CALUMET_PREFIX
+    site = "Calumet (독일)"
+    assert grade_of(site, CALUMET_PREFIX + "Wie neu", "Leica APO-SUMMICRON-SL 90mm F2 Asph.")[0] == "A"
+    assert grade_of(site, CALUMET_PREFIX + "Sehr gut", "Leica M10 Monochrom")[0] == "B"
+    assert grade_of(site, CALUMET_PREFIX + "Gut", "Leica M10-P silber verchromt")[0] == "C"
+    assert grade_of(site, CALUMET_PREFIX + "Akzeptabel", "Leica Summicron-M 90mm/2,0")[0] == "C"
+    assert grade_of(site, CALUMET_PREFIX + "Stark gebraucht", "Leica Minilux Zoom")[0] == "D"
