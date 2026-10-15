@@ -74,9 +74,17 @@ JA_PRE.update({
     'フォーカスリング': ' Focus Ring', 'バヨネット': ' Bayonet', 'リング': ' Ring',
     '用': ' for ',  # 'D-LUX7用' = D-LUX7용 (액세서리)
 })
+# 나니와(2026-10-14): 'トリ'·'テレ'가 먼저 먹지 않게 맨 앞에 ('トリウム' → 'Tri-ウム', 'ステレオ' → 'スTele-オ' 이었음)
+JA_PRE = {
+    'ズミタール': 'Summitar', 'トリウム': 'Thorium', 'トリノビット': 'Trinovid', 'ステレオ': 'Stereo',
+    'クセノン': 'Xenon', 'スタンダード': 'Standard', 'ビゾフレックス': 'Visoflex', 'ビゾ': 'Visoflex',
+    'カム': 'CAM',
+    'シーベルヘグナー': 'Siber Hegner ', 'ピストル': 'Pistol Grip',
+    **JA_PRE,
+}
 LENS_NAMES = ('APO-Summicron|Vario-Elmarit|Vario-Elmar|Super-Elmar|Tri-Elmar|Tele-Elmarit|'
-              'Tele-Elmar|Super-Angulon|Summicron|Summilux|Summarit|Summaron|Elmarit|Elmar|'
-              'Noctilux|Hektor|Thambar|Hologon|Angulon')
+              'Tele-Elmar|Super-Angulon|Summicron|Summilux|Summarit|Summaron|Summarex|Summitar|Summar|'
+              'Elmarit|Elmar|Noctilux|Hektor|Thambar|Hologon|Angulon|Xenon|Telyt')
 
 
 def ja_to_en(text: str) -> str:

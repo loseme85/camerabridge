@@ -3121,6 +3121,108 @@ def crawl_wex():
     return results
 
 
+def _naniwa_get(url):
+    """나니와 목록 한 쪽 (Shift_JIS). 직접 받다가 막히면(미국 서버 등) 도쿄 중계 서버로.
+    USER_AGENTS를 돌려 쓰지 않는다 — 'Chrome/120.0.0.0' 꼴 UA만 CloudFront 403이 남 (공용 BROWSER_UA는 정상)"""
+    import crawl_engine as _ce
+    try:
+        resp = _ce.http_get(url)
+        resp.raise_for_status()
+        if 'StyleT_Item_' not in resp.text and 'navipage_sum_' not in resp.text:
+            raise ValueError("목록 화면이 아님")
+    except Exception as e:
+        print(f"    ↪ 직접 접속 실패({e}) → 중계 서버")
+        resp = _ce.http_get(url, via_relay=True)
+        resp.raise_for_status()
+    return resp.content.decode("cp932", "ignore")
+
+
+def _naniwa_name(name_ja, ja_to_en):
+    """나니와 제목 다듬기. 'Elmarit-R 2.8/90'·'1:2.8/90'처럼 조리개가 앞에 오는 표기를 '90/2.8'로 (R 렌즈에 많음),
+    '5Cm' → '5cm'"""
+    name = re.sub(r"(?<=\d)Cm\b", "cm", name_ja)
+    name = re.sub(r"\b1:(?=\d)", "", name)
+    name = re.sub(r"(?<![\d.:/])(\d(?:\.\d{1,2})?)\s*/\s*(\d{2,3})(?![\d.])", r"\2/\1", name)
+    from ja_normalize import LENS_NAMES
+    name = ja_to_en(name)
+    name = re.sub(rf"({LENS_NAMES})(?=\d)", r"\1 ", name)  # 'Elmar50/3.5' → 'Elmar 50/3.5'
+    name = re.sub(r"\b([RLM])(\d{2,3})(?=/)", r"\1 \2", name)  # 'Super-Angulon R21/4' → 'R 21/4'
+    name = re.sub(r"\bM6TTL\b", "M6 TTL", name)
+    name = re.sub(r"\b(I{1,3}) ([a-g])\b", r"\1\2", name)  # 'III f' → 'IIIf' (III와 IIIf 둘 다에 걸리던 것)
+    return re.sub(r"\s+", " ", name).strip()
+
+
+def crawl_naniwa():
+    """카메라노나니와 (일본) - 나니와 그룹 온라인 (35개 매장 재고). 사이트 검색 화면(정적 HTML, Shift_JIS)을
+    중고(pb_salestype=2)·'Leica'로 100개씩 끝까지 넘긴다 (지금 13쪽 · 1분쯤). 판매 중만 목록에 나옴.
+    등급은 목록 아이콘 글자 A·AB＋·AB·AB-·B+·B·C (일본 매장 공통 대응)"""
+    import html as _html
+    from ja_normalize import ja_to_en
+    results, seen = [], set()
+    base = "https://cameranonaniwa.jp"
+    print(f"\n  📂 카메라노나니와 크롤링 시작")
+    for page_num in range(1, 40):
+        url = f"{base}/shop/goods/search.aspx?p={page_num}&ps=100&search=x&pb_salestype=2&pb_search=x&pb_keyword=Leica"
+        try:
+            html = _naniwa_get(url)
+        except Exception as e:
+            print(f"    ❌ {page_num}페이지 오류: {e}")
+            if page_num == 1:
+                raise  # 첫 페이지부터 못 받으면 실패로 (병합 단계에서 이전 데이터 유지)
+            break
+        items = html.split('<div class="StyleT_Item_')[1:]
+        if not items:
+            break
+        print(f"    └─ {page_num}페이지 {len(items)}개 상품 발견")
+        for b in items:
+            m_name = re.search(r'class="name1_">([^<]*)', b)
+            m_link = re.search(r'href="/shop/g/g(\d+)/"', b)
+            if not m_name or not m_link:
+                continue
+            raw = re.sub(r"\s+", " ", _html.unescape(m_name.group(1))).strip()
+            if "(ライカ)" not in raw or "SOLD OUT" in b:
+                continue  # 다른 브랜드의 'ライカM用' 렌즈·어댑터, 판매 끝
+            gid = m_link.group(1)
+            link = f"{base}/shop/g/g{gid}/"
+            if link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            # '（Leica） 【中古】(ライカ) Leica ズミクロン M50/2' → 'Leica ズミクロン M50/2'
+            name_ja = raw.split("(ライカ)", 1)[1].strip()
+            if not name_ja.lower().startswith(("leica", "leitz")):
+                name_ja = "Leica " + name_ja
+            name = _naniwa_name(name_ja, ja_to_en)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            m_price = re.search(r'class="tax_price">\s*￥\s*([\d,]+)', b)
+            price = f"¥{int(m_price.group(1).replace(',', '')):,}" if m_price else "문의요망"
+            m_cond = re.search(r'/img/filter/2/CND\d+\.png" alt="([^"]+)"', b)
+            cond = m_cond.group(1).replace("＋", "+").replace("－", "-").strip() if m_cond else "정보없음"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "카메라노나니와 (일본)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "JPY",
+                "이미지": f"{base}/img/goods/L/{gid}-01.jpg",
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(items) < 100:
+            break
+        time.sleep(random.uniform(1.5, 2.5))
+    print(f"  ✅ 카메라노나니와 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3455,6 +3557,7 @@ def crawl_all():
         ("Harrison Cameras (영국)", lambda: ce.wrap_full_run("Harrison Cameras (영국)", crawl_harrison)),
         ("Wex Photo Video (영국)", lambda: ce.wrap_full_run("Wex Photo Video (영국)", crawl_wex)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
+        ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:
