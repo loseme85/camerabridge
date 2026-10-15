@@ -166,3 +166,10 @@ def test_glazers_condition_grades():
     assert grade_of(site, GLAZERS_PREFIX + "VG", "Leica M6 Classic Silver Body")[0] == "B"
     assert grade_of(site, GLAZERS_PREFIX + "Good", "Leica Summilux-SL 50mm f1.4")[0] == "C"
     assert grade_of(site, GLAZERS_PREFIX + "Fair", "Leica Summicron-M 50mm f2 Rigid Haze")[0] == "D"
+def test_tamarkin_condition_grades():
+    from condition_grade import TAMARKIN_PREFIX
+    site = "Tamarkin Camera (미국)"
+    assert grade_of(site, TAMARKIN_PREFIX + "Near Mint", "Leica 21mm Super-Elmar-M f3.4 ASPH")[0] == "A"
+    assert grade_of(site, TAMARKIN_PREFIX + "Ex++", "Leica M3 Double Stroke Body")[0] == "B"
+    assert grade_of(site, TAMARKIN_PREFIX + "Ex+", "Leica 50mm Summilux f1.4 Silver Chrome")[0] == "B"
+    assert grade_of(site, TAMARKIN_PREFIX + "VG", "Leica 28mm Summilux-M f1.4 ASPH")[0] == "D"

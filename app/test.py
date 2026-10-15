@@ -3844,6 +3844,82 @@ def crawl_glazers():
             })
         time.sleep(4)
     print(f"  ✅ Glazer's Camera 완료: {len(results)}개")
+def crawl_tamarkin():
+    """Tamarkin Camera (미국, 시카고) - 라이카 딜러. 분류 화면 7곳(정적 HTML, 쪽 넘김 없음)의 카드에 이름·가격·사진,
+    중고 여부와 등급은 상세 화면 가격 아래 'Nr. 258xxxx, Ex++' 줄에만 있어 카드마다 상세를 읽는다 (약 170개 · 1분)
+    → 6시간마다. 이 줄이 없는 것은 새 제품이라 뺀다. 'SOLD OUT'·가격 $0은 건너뜀"""
+    import html as _html
+    import requests
+    from concurrent.futures import ThreadPoolExecutor
+    from condition_grade import TAMARKIN_PREFIX
+    base = "https://www.tamarkin.com/products/"
+    cats = ["m-series/cameras", "m-series/lenses", "m-series/accessories", "leica-screw-mount", "collectibles",
+            "sl-system", "compact-digital"]
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Tamarkin Camera 크롤링 시작")
+    cards, seen = [], set()
+    for cat in cats:
+        try:
+            resp = sess.get(base + cat, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Tamarkin {cat} 못 읽음: {e}")  # 빠진 분류가 판매완료로 바뀌지 않게
+        found = re.findall(r'<div class="prod-card[^"]*"[^>]*>\s*<a href="([^"]+)".*?<img data-src="([^"]+)".*?'
+                           r'product-card__title">(.*?)</div>\s*<div class="prod-card__price">\s*(.*?)\s*</div>', resp.text, re.S)
+        print(f"    └─ {cat} {len(found)}개")
+        for link, img, title, price in found:
+            if link not in seen:
+                seen.add(link)
+                cards.append((link, img, _html.unescape(re.sub(r"<[^>]+>", "", title)).strip(), price.strip(), cat))
+
+    def detail(card):
+        link, img, title, price, _cat = card
+        if "sold out" in title.lower() or not re.search(r"[1-9]", price):
+            return None
+        try:
+            h = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ 상세 오류 {link[-40:]}: {e}")
+            return None
+        text = _html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", "", h, flags=re.S))))
+        m = re.search(re.escape(price) + r"\s+(?:Nr\.\s*)?\d+x+,\s*([A-Za-z +]+?)\s+Interested\?", text)
+        return (card, m.group(1).strip()) if m else None
+
+    with ThreadPoolExecutor(4) as ex:
+        used = [x for x in ex.map(detail, cards) if x]
+    results = []
+    for (link, img, title, price, from_cat), grade in used:
+        name = title.replace("Summliux", "Summilux").replace("Elmarit-RF", "Elmarit-M")
+        name = re.sub(r"\bf(\d+),(\d+)", r"f\1.\2", name)  # 'f1,4' → 'f1.4'
+        name = re.sub(r"\s*-\s*DISCONTINUED\b", "", name, flags=re.I)
+        name = re.sub(r"^(\d{2,3}(?:-\d{2,3})*)\s+", r"\1mm ", name)  # '35 Summilux' → '35mm Summilux'
+        if not re.match(r"leica|leitz", name, re.I):
+            name = "Leica " + name
+        if from_cat in ("m-series/cameras", "compact-digital") and not re.search(r"\bbody\b", name, re.I):
+            name = re.sub(r"(\s+OPEN BOX)?$", lambda m: " Body" + (m.group(1) or ""), name, count=1)  # 'Leica Q3' → 'Leica Q3 Body'
+        name = re.sub(r"\s+", " ", name).strip()
+        if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        cat = detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": "Tamarkin Camera (미국)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": TAMARKIN_PREFIX + grade,
+            "가격": price.replace(" ", ""),
+            "통화": "USD",
+            "이미지": img,
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Tamarkin Camera 완료: {len(results)}개 (카드 {len(cards)}개 중 중고)")
     return results
 
 
@@ -4103,6 +4179,7 @@ DETAIL_CONDITION = {
 SOURCE_MIN_INTERVAL_HOURS = {
     "Ffordes (영국)": 6,
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
+    "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
 }
 
@@ -4188,6 +4265,7 @@ def crawl_all():
         ("Lucky Camera (일본)", lambda: ce.wrap_full_run("Lucky Camera (일본)", crawl_lucky)),
         ("Akasaka Camera (일본)", lambda: ce.wrap_full_run("Akasaka Camera (일본)", crawl_akasaka)),
         ("Glazers Camera (미국)", lambda: ce.wrap_full_run("Glazers Camera (미국)", crawl_glazers)),
+        ("Tamarkin Camera (미국)", lambda: ce.wrap_full_run("Tamarkin Camera (미국)", crawl_tamarkin)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
     ]

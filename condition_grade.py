@@ -96,6 +96,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _AKASAKA.get(cond[len(AKASAKA_PREFIX):].strip()), "label"
     if cond.startswith(GLAZERS_PREFIX):
         return _GLAZERS.get(cond[len(GLAZERS_PREFIX):].strip().upper()), "label"
+    if cond.startswith(TAMARKIN_PREFIX):
+        return _TAMARKIN.get(cond[len(TAMARKIN_PREFIX):].strip().upper()), "label"
     if cond.startswith(LUCKY_PREFIX):
         return _LUCKY.get(cond[len(LUCKY_PREFIX):].strip().upper()), "label"
     if cond.startswith(APERTURE_PREFIX):
@@ -279,3 +281,10 @@ GLAZERS_PREFIX = "Glazers: "
 # Fair는 모두 렌즈 안 흐림·접합 분리(Haze·Cement separation)라 사진엔 안 보여도 D.
 # 이 대응 기준 정확 일치 7/25 · 한 등급 이내 19/25 (사진이 평균 0.88등급 후함 — 기존 0.8과 비슷).
 _GLAZERS = {"M": "S", "EX": "A", "VG": "B", "G": "C", "GOOD": "C", "FAIR": "D", "POOR": "D"}
+# 미국 Tamarkin Camera: 상세 가격 아래 'Nr. 258xxxx, Ex++'. 매장 등급표: Mint(새것 같음)·Near Mint(흠 1~2곳)·
+# Ex++(아주 작은 흔적)·Ex+(평균보다 나음)·Ex(보통 사용감)·VG(많이 씀, 작동 정상)
+TAMARKIN_PREFIX = "Tamarkin: "
+# 사진 평가(표기 가리고 26점, 사진 3장씩, 2026-10-15): Mint S 1·A 1 · Near Mint A 4 · Ex++ A 6·B 2 · Ex+ A 4·B 4 ·
+# Ex A 2 · VG A 1·B 1. Ex++와 Ex+는 사진으로 차이가 거의 없어 둘 다 B, VG는 매장 설명('많이 씀')대로 D.
+# 이 대응 기준 정확 일치 10/26 · 한 등급 이내 22/26 (사진이 평균 0.7등급 후함 — 기존 0.8과 비슷).
+_TAMARKIN = {"MINT": "S", "NEAR MINT": "A", "EX++": "B", "EX+": "B", "EX": "C", "VG": "D"}
