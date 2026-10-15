@@ -3506,6 +3506,125 @@ def crawl_peterloy():
     return results
 
 
+LUCKY_JA = {"ノクティルクス": "Noctilux", "ビゾフレックス": "Visoflex ", "ビゾー": "Visoflex ", "ビゾ": "Visoflex ",
+            "トリウム": "Thorium", "スタンダード": "Standard", "カム": "CAM", "ボディー": "Body", "ボディ": "Body"}
+
+
+def _lucky_name(name_ja, ja_to_en):
+    """Lucky Camera 제목 다듬기: 'LSummaron 3.5cmF3.5'·'MElmar9cmF4'처럼 붙은 마운트 글자·F값, 'IIIGBody'·'ICBody'처럼
+    붙은 Body와 대문자 모델 글자, 'フレックスI'(=ライカフレックス) 등"""
+    name = re.sub(r"^フレックス", "Leicaflex ", name_ja)
+    for ja, en in LUCKY_JA.items():
+        name = name.replace(ja, en)
+    name = "Leica " + name if not name.startswith("Leicaflex") else name
+    name = ja_to_en(name)
+    name = re.sub(r"(?<=[A-Za-z0-9])(?=(?:Body|Black|Silver|Chrome)(?:\b|[A-Z]))", " ", name)
+    name = re.sub(r"\b([LMR])(?=(?:Summ|Elm|Hek|Noct|Tel|Macro|Super|Tri|Thambar|Xenon|Angulon))", r"\1 ", name)
+    name = re.sub(r"(Summ[a-z]*|Elmar[a-z]*|Hektor|Telyt|Noctilux|Summilux|Xenon)(?=\d)", r"\1 ", name)  # 'Elmar9cm' → 'Elmar 9cm'
+    name = name.replace("Leicaフレックス", "Leicaflex ")
+    name = re.sub(r"\bElmarC\s*(?=\d)", "Elmar-C ", name)  # CL용 'ElmarC90mm' → 'Elmar-C 90mm'
+    name = re.sub(r"(\d(?:cm|mm))F(\d)", r"\1 F\2", name)  # '9cmF4' → '9cm F4'
+    name = re.sub(r"\b(I{1,3}|D?II)([A-G])\b", lambda m: m.group(1) + m.group(2).lower(), name)  # 'IIIG' → 'IIIg'
+    name = re.sub(r"\bLeica DII\b", "Leica II (D)", name)
+    name = re.sub(r"[ー-]+(?=\s|$)", "", name)  # 'Bodyー'
+    return re.sub(r"\s+", " ", name).strip()
+
+
+def crawl_lucky():
+    """Lucky Camera (일본, 신주쿠) - 빈티지·라이카 중고점. 라이카 분류(/shop/LEICA/page/N/, 정적 HTML, 10개씩 30쪽쯤)에서
+    목록의 이름·가격·사진, 상세 화면의 '程度'(AAA·AA·AB·A·B·N) 등급. 상세는 처음 본 매물만 읽고 전에 읽은 등급은
+    이전 결과(data/raw/results.json)에서 다시 쓴다 (처음엔 5분쯤) → 12시간마다. 'soldout' 표시는 건너뜀"""
+    import html as _html
+    import unicodedata
+    import requests
+    from ja_normalize import ja_to_en
+    from urllib.parse import unquote
+    from condition_grade import LUCKY_PREFIX
+    results, seen = [], set()
+    base = "https://lucky-camera.com"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    known = {}
+    try:
+        with open("data/raw/results.json", encoding="utf-8") as f:
+            known = {r["링크"]: r.get("컨디션") for r in json.load(f) if r.get("site") == "Lucky Camera (일본)"}
+    except (OSError, ValueError):
+        pass
+    print(f"\n  📂 Lucky Camera 크롤링 시작 (이전 등급 {len(known)}개)")
+    last_page, page_num = 1, 1
+    while page_num <= last_page and page_num < 80:
+        url = f"{base}/shop/LEICA/" + (f"page/{page_num}/" if page_num > 1 else "")
+        html = None
+        for attempt in range(3):
+            try:
+                resp = sess.get(url, timeout=30)
+                resp.raise_for_status()
+                html = resp.text
+                break
+            except Exception as e:
+                print(f"    ⚠️ {page_num}페이지 오류: {e}")
+                time.sleep(5)
+        if html is None:
+            raise RuntimeError(f"Lucky Camera {page_num}페이지 못 읽음")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        last_page = max([last_page] + [int(n) for n in re.findall(r"/shop/LEICA/page/(\d+)/", html)])
+        articles = html.split('<article class="article')[1:]
+        print(f"    └─ {page_num}/{last_page}페이지 {len(articles)}개")
+        for a in articles:
+            if a.startswith(" soldout"):
+                continue
+            m = re.search(r'<h4><a href="([^"]+)">(.*?)</a></h4>', a, re.S)
+            if not m:
+                continue
+            link = m.group(1)
+            raw = unicodedata.normalize("NFKC", _html.unescape(re.sub(r"<[^>]+>", "", m.group(2)))).strip()
+            if not re.search(r"leica|leitz|ライカ|ライツ", raw, re.I) or link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            # 'LEICA(ライカ) Mエルマー 50mmF2.8(旧型) シルバー' → 'Leica Mエルマー …' → 영어 표기
+            name_ja = re.sub(r"^(?:LEICA|Leica|leica)?\s*[(]?ライカ[)]?\s*", "", raw)
+            name = _lucky_name(name_ja, ja_to_en)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            m_price = re.search(r'class="price"><a[^>]*>\s*¥\s*([\d,]+)', a)
+            amount = int(m_price.group(1).replace(",", "")) if m_price else 0
+            price = f"¥{amount:,}" if amount else "문의요망"
+            cond = known.get(link)
+            if not cond or cond == "정보없음":
+                cond = "정보없음"
+                try:
+                    detail = sess.get(link, timeout=30).text
+                    m_grade = re.search(r"程度\s*</(?:th|dt|td)>\s*<(?:td|dd)[^>]*>\s*([^<]+?)\s*<", detail)
+                    if m_grade:
+                        cond = LUCKY_PREFIX + unicodedata.normalize("NFKC", m_grade.group(1)).strip()
+                except Exception as e:
+                    print(f"    ⚠️ 상세 오류 {unquote(link)[-40:]}: {e}")
+                time.sleep(0.7)
+            m_img = re.search(r'<img[^>]*src="([^"]+)"', a)
+            img = re.sub(r"-\d+x\d+(?=\.jpg$)", "", m_img.group(1)) if m_img else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Lucky Camera (일본)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "JPY",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        page_num += 1
+        time.sleep(1)
+    print(f"  ✅ Lucky Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3762,6 +3881,7 @@ DETAIL_CONDITION = {
 SOURCE_MIN_INTERVAL_HOURS = {
     "Ffordes (영국)": 6,
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
+    "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
 }
 
 
@@ -3845,6 +3965,7 @@ def crawl_all():
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
         ("Camera West (미국)", lambda: ce.wrap_full_run("Camera West (미국)", crawl_camerawest)),
         ("Peter Loy (영국)", lambda: ce.wrap_full_run("Peter Loy (영국)", crawl_peterloy)),
+        ("Lucky Camera (일본)", lambda: ce.wrap_full_run("Lucky Camera (일본)", crawl_lucky)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:

@@ -145,3 +145,10 @@ def test_peterloy_condition_grades():
     assert grade_of(site, PETERLOY_PREFIX + "5-6/D", "Leica III body, chrome")[0] == "D"
     assert grade_of(site, PETERLOY_PREFIX + "3/G", "Leica III body, chrome")[0] == "D"
     assert grade_of(site, PETERLOY_PREFIX + "4/J", "Leica IIIa body")[0] == "X"
+def test_lucky_condition_grades():
+    from condition_grade import LUCKY_PREFIX
+    site = "Lucky Camera (일본)"
+    assert grade_of(site, LUCKY_PREFIX + "AA", "Leica M4 Chrome")[0] == "A"
+    assert grade_of(site, LUCKY_PREFIX + "AB", "Leica Summicron M 35mm f2")[0] == "B"
+    assert grade_of(site, LUCKY_PREFIX + "A", "Leica IIIf Body")[0] == "C"
+    assert grade_of(site, LUCKY_PREFIX + "B", "Leica Elmar 5cm f3.5")[0] == "D"

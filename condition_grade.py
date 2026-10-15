@@ -92,6 +92,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         if grade and working in ("G", "H") and GRADES.index(grade) < GRADES.index("D"):
             grade = "D"  # 결함 있음·미확인은 외관과 상관없이 D
         return grade, "label"
+    if cond.startswith(LUCKY_PREFIX):
+        return _LUCKY.get(cond[len(LUCKY_PREFIX):].strip().upper()), "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -254,3 +256,10 @@ PETERLOY_PREFIX = "PeterLoy: "
 # 이 대응 기준 정확 일치 10/25 · 한 등급 이내 20/25 (사진이 평균 0.8등급 후함 — 기존과 같음).
 _PETERLOY = {"1": "S", "1-2": "S", "2": "S", "2-3": "A", "3": "A", "3-4": "B", "4": "B", "4-5": "C", "5": "C",
              "5-6": "D", "6": "D", "6-7": "D", "7": "D"}
+# 일본 Lucky Camera: 상세 '程度' AAA(미사용·극상)·AA(꽤 좋음)·AB(꽤 좋지만 흠 1~2곳)·A(보통 중고)·B(외관 많이 씀)·N(새것)
+LUCKY_PREFIX = "Lucky: "
+# 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-14): 사진 평균 AA A · AB A~B · A B · B B~C.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 AAA S, AA A, AB B, A C, B D.
+# 이 대응 기준 정확 일치 10/25 · 한 등급 이내 20/25 (사진이 평균 0.84등급 후함 — 기존 0.8과 같음).
+# 같은 글자라도 기타무라·나니와(A=상)보다 이 매장의 A가 '보통 중고'라 한 칸 낮음.
+_LUCKY = {"N": "N", "AAA": "S", "AA": "A", "AB": "B", "A": "C", "B": "D"}
