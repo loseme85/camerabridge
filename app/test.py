@@ -3880,8 +3880,8 @@ DETAIL_CONDITION = {
 # 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
 SOURCE_MIN_INTERVAL_HOURS = {
     "Ffordes (영국)": 6,
-    "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
+    "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
 }
 
 
@@ -3961,11 +3961,11 @@ def crawl_all():
         ("Harrison Cameras (영국)", lambda: ce.wrap_full_run("Harrison Cameras (영국)", crawl_harrison)),
         ("Wex Photo Video (영국)", lambda: ce.wrap_full_run("Wex Photo Video (영국)", crawl_wex)),
         ("기타무라 (일본)", lambda: ce.wrap_full_run("기타무라 (일본)", crawl_kitamura)),
-        ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
-        ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
         ("Camera West (미국)", lambda: ce.wrap_full_run("Camera West (미국)", crawl_camerawest)),
         ("Peter Loy (영국)", lambda: ce.wrap_full_run("Peter Loy (영국)", crawl_peterloy)),
         ("Lucky Camera (일본)", lambda: ce.wrap_full_run("Lucky Camera (일본)", crawl_lucky)),
+        ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
+        ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
     ]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:
