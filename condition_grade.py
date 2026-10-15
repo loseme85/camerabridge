@@ -84,6 +84,14 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _CALUMET.get(cond[len(CALUMET_PREFIX):].strip()), "label"
     if cond.startswith(CAMERAWEST_PREFIX):
         return _CAMERAWEST.get(cond[len(CAMERAWEST_PREFIX):].strip()), "label"
+    if cond.startswith(PETERLOY_PREFIX):
+        cosmetic, _, working = cond[len(PETERLOY_PREFIX):].strip().partition("/")
+        if working == "J":
+            return "X", "label"
+        grade = _PETERLOY.get(cosmetic)
+        if grade and working in ("G", "H") and GRADES.index(grade) < GRADES.index("D"):
+            grade = "D"  # 결함 있음·미확인은 외관과 상관없이 D
+        return grade, "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -239,3 +247,10 @@ CAMERAWEST_PREFIX = "CameraWest: "
 # 이 대응 기준 정확 일치 7/25 · 한 등급 이내 23/25 (사진이 평균 0.72등급 후함 — 기존 0.8과 비슷). 표본 없는 10은 A, 7 이하는 D.
 _CAMERAWEST = {"10": "A", "10-": "A", "9+": "B", "9": "B", "9-": "B", "8+": "C", "8": "C", "8-": "C",
                "7+": "D", "7": "D", "7-": "D", "6+": "D", "6": "D", "5": "D"}
+# 영국 Peter Loy: 설명의 'Condition 4-5/E' — 외관 1(새것)·3(near mint)·4(Exc+)·5(Exc)·6(많이 씀), 작동 C·D·E(정상)·G(결함)·H(미확인)·J(사용 불가)
+PETERLOY_PREFIX = "PeterLoy: "
+# 사진 평가(표기 가리고 25점, 사진 1장씩 — 매장 사진이 대부분 1장, 2026-10-14): 사진 평균 3 A · 3-4 A~B · 4 A~B · 4-5 A~B · 5 B · 5-6 B.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 3 A, 3-4·4 B, 4-5·5 C, 5-6·6 D.
+# 이 대응 기준 정확 일치 10/25 · 한 등급 이내 20/25 (사진이 평균 0.8등급 후함 — 기존과 같음).
+_PETERLOY = {"1": "S", "1-2": "S", "2": "S", "2-3": "A", "3": "A", "3-4": "B", "4": "B", "4-5": "C", "5": "C",
+             "5-6": "D", "6": "D", "6-7": "D", "7": "D"}
