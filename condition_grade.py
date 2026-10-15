@@ -80,6 +80,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _HARRISON.get(cond[len(HARRISON_PREFIX):].strip()), "label"
     if cond.startswith(WEX_PREFIX):
         return _WEX.get(re.sub(r"\s*\(.*\)\s*$", "", cond[len(WEX_PREFIX):]).strip().lower()), "label"
+    if cond.startswith(CALUMET_PREFIX):
+        return _CALUMET.get(cond[len(CALUMET_PREFIX):].strip()), "label"
     if cond.startswith(APERTURE_PREFIX):
         return _APERTURE.get(cond[len(APERTURE_PREFIX):].strip()), "label"
     if cond.startswith(MK_PREFIX):
@@ -222,3 +224,9 @@ WEX_PREFIX = "Wex: "
 # 표본에 없던 아래 등급(Well used 등)은 Wex 등급표 순서대로 D.
 _WEX = {"as new": "S", "mint": "A", "excellent": "B", "very good": "B", "good": "C",
         "well used": "D", "heavily used": "D", "poor": "D"}
+# 독일 Calumet: 등급 선택지 'Wie neu (A)'·'Sehr gut (AB)'·'Gut (B)'·'Akzeptabel (BC)'·'Stark gebraucht (C)'
+CALUMET_PREFIX = "Calumet: "
+# 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-14): 사진 평균 Wie neu A · Sehr gut A · Gut B · Akzeptabel A~B · Stark gebraucht B~C.
+# 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 Wie neu A, Sehr gut B, Gut C, Akzeptabel C, Stark gebraucht D.
+# 이 대응 기준 정확 일치 8/25 · 한 등급 이내 21/25 (사진이 평균 0.84등급 후함 — 기존 0.8과 같음).
+_CALUMET = {"Wie neu": "A", "Sehr gut": "B", "Gut": "C", "Akzeptabel": "C", "Stark gebraucht": "D"}
