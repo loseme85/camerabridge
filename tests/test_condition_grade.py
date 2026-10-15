@@ -129,3 +129,10 @@ def test_calumet_condition_grades():
     assert grade_of(site, CALUMET_PREFIX + "Gut", "Leica M10-P silber verchromt")[0] == "C"
     assert grade_of(site, CALUMET_PREFIX + "Akzeptabel", "Leica Summicron-M 90mm/2,0")[0] == "C"
     assert grade_of(site, CALUMET_PREFIX + "Stark gebraucht", "Leica Minilux Zoom")[0] == "D"
+def test_camerawest_condition_grades():
+    from condition_grade import CAMERAWEST_PREFIX
+    site = "Camera West (미국)"
+    assert grade_of(site, CAMERAWEST_PREFIX + "10-", "Leica 90mm f2 APO-Summicron-M Asph")[0] == "A"
+    assert grade_of(site, CAMERAWEST_PREFIX + "9+", "Leica Q3")[0] == "B"
+    assert grade_of(site, CAMERAWEST_PREFIX + "8+", "Leica 50mm f2 Summicron-M")[0] == "C"
+    assert grade_of(site, CAMERAWEST_PREFIX + "7+", "Leica 180mm f2.8 Elmarit-R")[0] == "D"

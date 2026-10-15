@@ -529,6 +529,8 @@ TIGHTEN["leica:lens:summicron-m:90"] = TIGHTEN.get("leica:lens:summicron-m:90", 
 for slug, name, ko, marker, als in [
     ("black-paint", "APO-Summicron-M 90mm f/2 ASPH Black Paint", "아포 주미크론 90 블랙페인트", BP_L, ["apo summicron 90 black paint", "아포 주미크론 90 블랙페인트"]),
     ("safari", "APO-Summicron-M 90mm f/2 ASPH Safari", "아포 주미크론 90 사파리", SAFARI, ["apo summicron 90 safari", "아포 주미크론 90 사파리"]),
+    # 2026-10-14 Camera West 'Leica 90mm f2 Asph Titanium' (M6 티탄 짝 렌즈)
+    ("titan", "APO-Summicron-M 90mm f/2 ASPH Titanium", "아포 주미크론 90 티탄", r"titan|티탄|チタン", ["apo summicron 90 titanium", "아포 주미크론 90 티탄"]),
 ]:
     _add(f"leica:lens:apo-summicron-m:90:{slug}", name, ko, "M", [r"\bAPO\b|apo-", CRON, f("90"), marker], [REPAINT_L], als)
-TIGHTEN["leica:lens:apo-summicron-m:90"] = TIGHTEN.get("leica:lens:apo-summicron-m:90", []) + [BP_L, SAFARI]
+TIGHTEN["leica:lens:apo-summicron-m:90"] = TIGHTEN.get("leica:lens:apo-summicron-m:90", []) + [BP_L, SAFARI, r"titan|티탄|チタン"]
