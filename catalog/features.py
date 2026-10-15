@@ -18,7 +18,7 @@ from __future__ import annotations
 B = "leica:body:"
 
 _M6_WITH_28 = [B + s for s in ("m6:classic", "m6:ttl", "m6:reissue", "m6:titan", "m6:platinum", "m6:lhsa", "m6:royal",
-                               "m6:jaguar", "m6:ttl-millennium", "m6:ttl-titan", "m6:ttl-black-paint")]
+                               "m6:jaguar", "m6:ttl-millennium", "m6:ttl-titan", "m6:ttl-black-paint", "m6:siber-hegner")]
 _DIGITAL_M = [B + s for s in ("m8", "m8-2", "m9", "m9-p", "m-e", "m240", "m-p240", "m-e240", "m-monochrom-ccd",
                               "m-monochrom-246", "m262", "m-d262", "m10", "m10-p", "m10-r", "m10-monochrom", "m10-d",
                               "m10-e", "m11", "m11-p", "m11-monochrom", "m11-d")]
