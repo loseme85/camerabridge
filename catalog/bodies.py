@@ -112,7 +112,7 @@ fam("leica:body:cl-film", "Leica CL (1973, film)", "라이카 CL (필름)", "M",
 fam("leica:body:cl-film-50-jahre", "Leica CL 50 Jahre (1975)", "라이카 CL 50주년", "M", [r"\bCL\b", r"50 ?jahre|50주년"], [r"\bTL\b|\bSL\b"], ["cl 50 jahre", "cl 50주년"])
 # M6: 클래식·TTL·리이슈 + 기념판 (모두 M6 부모의 자식)
 M6_MARKERS = [r"(?<!non )(?<!non-)(?<!non)TTL", r"re-?issue|리이슈|복각|2022", r"M6 ?J\b", r"titan|티탄", r"platin|플래티넘", r"LHSA", r"royal|로얄",
-              r"jaguar|재규어", r"millenn?ium|밀레니엄"]
+              r"jaguar|재규어", r"millenn?ium|밀레니엄", r"siber|hegner|125 ?(th|jahre|周年|주년)"]
 MODELS["leica:body:m6:classic"] = {"model_key": "leica:body:m6:classic", "display_name": "Leica M6 (Classic)", "category": "Body", "mount": "M",
                                    "title_must": [r"\bM ?6\b"], "title_must_not": M6_MARKERS}
 ALIASES["leica:body:m6:classic"] = ["leica m6 classic", "m6 classic", "m6 클래식", "라이카 m6 클래식", "엠6 클래식"]
@@ -135,6 +135,9 @@ M6_EDITIONS = [
     ("ttl-millennium", "Leica M6 TTL Millennium (Black Paint)", "M6 TTL 밀레니엄", [r"\bM ?6\b", r"millenn?ium|밀레니엄"], ["m6 ttl millennium", "m6 millennium", "m6 밀레니엄"]),
     ("ttl-titan", "Leica M6 TTL Titan", "M6 TTL 티탄", [r"\bM ?6\b", r"(?<!non )(?<!non-)(?<!non)TTL", r"titan|티탄"], ["m6 ttl titan", "m6 ttl 티탄"]),
     ("ttl-black-paint", "Leica M6 TTL Black Paint", "M6 TTL 블랙페인트", [r"\bM ?6\b", r"(?<!non )(?<!non-)(?<!non)TTL", BLACK_PAINT[0]], ["m6 ttl black paint", "m6 ttl 블랙페인트"]),
+    # 2026-10-14 나니와 'M6 シーベルヘグナー125周年' (스위스 Siber Hegner 125주년 판다, 125대)
+    ("siber-hegner", "Leica M6 Siber Hegner 125 Jahre", "M6 시버헤그너 125주년", [r"\bM ?6\b", r"siber|hegner|125 ?(th|jahre|周年|주년)"],
+     ["m6 siber hegner", "m6 125th", "m6 시버헤그너"]),
 ]
 for slug, name, ko, must, aliases in M6_EDITIONS:
     key = f"leica:body:m6:{slug}"
