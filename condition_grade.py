@@ -98,6 +98,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _GLAZERS.get(cond[len(GLAZERS_PREFIX):].strip().upper()), "label"
     if cond.startswith(TAMARKIN_PREFIX):
         return _TAMARKIN.get(cond[len(TAMARKIN_PREFIX):].strip().upper()), "label"
+    if cond.startswith(LEICA_CLASSIC_PREFIX):
+        return _LEICA_CLASSIC.get(cond[len(LEICA_CLASSIC_PREFIX):].strip().upper()), "label"
     if cond.startswith(LUCKY_PREFIX):
         return _LUCKY.get(cond[len(LUCKY_PREFIX):].strip().upper()), "label"
     if cond.startswith(APERTURE_PREFIX):
@@ -288,3 +290,10 @@ TAMARKIN_PREFIX = "Tamarkin: "
 # Ex A 2 · VG A 1·B 1. Ex++와 Ex+는 사진으로 차이가 거의 없어 둘 다 B, VG는 매장 설명('많이 씀')대로 D.
 # 이 대응 기준 정확 일치 10/26 · 한 등급 이내 22/26 (사진이 평균 0.7등급 후함 — 기존 0.8과 비슷).
 _TAMARKIN = {"MINT": "S", "NEAR MINT": "A", "EX++": "B", "EX+": "B", "EX": "C", "VG": "D"}
+# Leica Classic (라이카 매장 통합 중고 몰): 상세 'Condition' A·A-·A/B·B/A·B+·B·B-·B/C·C+·C·C/B·C-
+LEICA_CLASSIC_PREFIX = "Leica Classic: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-15): A S 2 · A- S 1·A 2·B 1 · A/B S 1·A 2 · B/A A 2·B 1·C 1 ·
+# B+ A 1·B 1·C 2 · B A 3·B 1 · B- A 2 · B/C A 1. A/B·B/A·B+는 사진으로 갈리지 않아 셋 다 B.
+# 이 대응 기준 정확 일치 6/24 · 한 등급 이내 17/24 (사진이 평균 0.75등급 후함 — 기존 0.8과 비슷).
+_LEICA_CLASSIC = {"A+": "S", "A": "S", "A-": "A", "A/B": "B", "B/A": "B", "B+": "B", "B": "C", "B-": "C",
+                  "B/C": "D", "C/B": "D", "C+": "D", "C": "D", "C-": "D"}
