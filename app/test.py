@@ -925,6 +925,7 @@ def detect_category(name, price_str=""):
         'protector', 'holster', 'wrist strap', 'neck strap',
         'motor winder', 'trigger',
         'correction lens', 'diopter',
+        'close-up device',
     ]
     # 캡/필터는 렌즈 이름 없을 때만 악세사리
     cap_filter_kw = ['캡', 'cap', 'filter', '필터']
@@ -3706,7 +3707,7 @@ def crawl_akasaka():
                 grade = cell("程度")
                 m_img = re.search(r'<img src="([^"]+)"', card)
                 img = ("https:" + m_img.group(1) if m_img.group(1).startswith("//") else m_img.group(1)) if m_img else ""
-                cat = "Accessory" if cat_id == 9 else detect_category(name, price)  # 9 = 중고 액세서리 분류
+                cat = detect_category(name, price)
                 mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
                 results.append({
                     "site": "Akasaka Camera (일본)",
