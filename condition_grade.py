@@ -94,6 +94,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return grade, "label"
     if cond.startswith(AKASAKA_PREFIX):
         return _AKASAKA.get(cond[len(AKASAKA_PREFIX):].strip()), "label"
+    if cond.startswith(GLAZERS_PREFIX):
+        return _GLAZERS.get(cond[len(GLAZERS_PREFIX):].strip().upper()), "label"
     if cond.startswith(LUCKY_PREFIX):
         return _LUCKY.get(cond[len(LUCKY_PREFIX):].strip().upper()), "label"
     if cond.startswith(APERTURE_PREFIX):
@@ -271,3 +273,9 @@ AKASAKA_PREFIX = "Akasaka: "
 # 美品과 良品은 사진으로 차이가 거의 없어 둘 다 B, 中은 빈티지(니켈 엘마·헥토르·주마리트)는 C·나머지는 A로 갈려 C.
 # 이 대응 기준 정확 일치 9/25 · 한 등급 이내 21/25 (사진이 평균 0.8등급 후함 — 기존 0.8과 같음).
 _AKASAKA = {"新品": "N", "新同品": "S", "極美品": "A", "美品": "B", "良品": "B", "中": "C", "並品": "D", "並": "D"}
+# 미국 Glazer's Camera: 제목 괄호 (M) Mint · (EX) Excellent · (VG) Very Good · (G)/(Good) · (Fair)
+GLAZERS_PREFIX = "Glazers: "
+# 사진 평가(표기 가리고 25점, 사진 최대 3장, 2026-10-15): EX A 5·S 2 · VG A 7·B 1 · G A 3·B 2·C 1 · Fair B 3 · M A 1.
+# Fair는 모두 렌즈 안 흐림·접합 분리(Haze·Cement separation)라 사진엔 안 보여도 D.
+# 이 대응 기준 정확 일치 7/25 · 한 등급 이내 19/25 (사진이 평균 0.88등급 후함 — 기존 0.8과 비슷).
+_GLAZERS = {"M": "S", "EX": "A", "VG": "B", "G": "C", "GOOD": "C", "FAIR": "D", "POOR": "D"}
