@@ -1,28 +1,5 @@
 [
   {
-    "start_time": "2026-09-17 23:21:17",
-    "end_time": "2026-09-17 23:21:19",
-    "new_items": 1,
-    "total_items": 7714,
-    "site_counts": {
-      "사진집": 351,
-      "라이카스토어 충무로": 3107,
-      "장씨카메라": 4058,
-      "Ffordes (영국)": 121,
-      "Leica Store Miami": 37,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": [
-      {
-        "상품명": "Leica バヨネットリング(L→Mリング)",
-        "site": "기타무라 (일본)",
-        "가격": "¥6,300",
-        "통화": "JPY",
-        "링크": "https://www.kitamuracamera.jp/buy/item/2403280955912/"
-      }
-    ]
-  },
-  {
     "start_time": "2026-09-18 16:48:33",
     "end_time": "2026-09-18 16:48:34",
     "new_items": 10,
@@ -57211,6 +57188,402 @@
         "가격": "¥191,600",
         "통화": "JPY",
         "링크": "https://shop.kitamura.jp/ec/used/2484370076076"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-10-15 20:47:29",
+    "end_time": "2026-10-15 20:47:31",
+    "seconds": 352.2,
+    "new_items": 13,
+    "total_items": 13278,
+    "site_counts": {
+      "사진집": 359,
+      "라이카스토어 충무로": 3065,
+      "장씨카메라": 4079,
+      "Ffordes (영국)": 129,
+      "Leica Store Miami": 44,
+      "Kamerastore (핀란드)": 728,
+      "기타무라 (일본)": 828,
+      "M & K Kamera (홍콩)": 715,
+      "Leica Store France (프랑스)": 271,
+      "Leica Store Singapore (싱가포르)": 22,
+      "Newoldcamera (이탈리아)": 448,
+      "Camtec Photo (캐나다)": 19,
+      "Aperture (영국)": 88,
+      "Wex Photo Video (영국)": 68,
+      "Harrison Cameras (영국)": 53,
+      "Camera West (미국)": 580,
+      "Peter Loy (영국)": 248,
+      "Lucky Camera (일본)": 213,
+      "카메라노나니와 (일본)": 1173,
+      "Calumet (독일)": 148
+    },
+    "events": {
+      "sold": 6,
+      "price": 7,
+      "gone": 1,
+      "new": 13
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "full",
+        "pages": 12,
+        "seconds": 5.9,
+        "status": "ok",
+        "rows": 359,
+        "active": 335,
+        "carried": 4,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 4
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "full",
+        "pages": 32,
+        "seconds": 21.2,
+        "status": "ok",
+        "rows": 3065,
+        "active": 586,
+        "carried": 2,
+        "gone": 14,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "full",
+        "pages": 206,
+        "seconds": 70.0,
+        "status": "ok",
+        "rows": 4079,
+        "active": 48,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Ffordes (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 62.2,
+        "status": "ok",
+        "rows": 129,
+        "active": 129,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.4,
+        "status": "ok",
+        "rows": 44,
+        "active": 44,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.7,
+        "status": "ok",
+        "rows": 728,
+        "active": 728,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 2
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.7,
+        "status": "ok",
+        "rows": 828,
+        "active": 828,
+        "carried": 10,
+        "gone": 0,
+        "left_active": 0,
+        "new": 4,
+        "changed": 4
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.9,
+        "status": "ok",
+        "rows": 715,
+        "active": 715,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 56.7,
+        "status": "ok",
+        "rows": 271,
+        "active": 253,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.0,
+        "status": "ok",
+        "rows": 22,
+        "active": 22,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 49.2,
+        "status": "ok",
+        "rows": 448,
+        "active": 448,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 3,
+        "changed": 3
+      },
+      {
+        "site": "Camtec Photo (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 21.6,
+        "status": "ok",
+        "rows": 19,
+        "active": 19,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Aperture (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 14.1,
+        "status": "ok",
+        "rows": 88,
+        "active": 88,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Wex Photo Video (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.6,
+        "status": "ok",
+        "rows": 68,
+        "active": 68,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 3
+      },
+      {
+        "site": "Harrison Cameras (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 39.0,
+        "status": "ok",
+        "rows": 53,
+        "active": 51,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera West (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 60.9,
+        "status": "ok",
+        "rows": 580,
+        "active": 314,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Peter Loy (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.6,
+        "status": "ok",
+        "rows": 248,
+        "active": 248,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "카메라노나니와 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 62.2,
+        "status": "ok",
+        "rows": 1173,
+        "active": 1173,
+        "carried": 31,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Calumet (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 264.7,
+        "status": "ok",
+        "rows": 148,
+        "active": 148,
+        "carried": 13,
+        "gone": 0,
+        "left_active": 0,
+        "new": 5,
+        "changed": 5
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Leica M4-2 (10410)",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€2,249",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-m4-2-10410-leica-m-t156826"
+      },
+      {
+        "상품명": "Leica Q2",
+        "site": "기타무라 (일본)",
+        "가격": "¥619,700",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2449430087096"
+      },
+      {
+        "상품명": "Leica C-LUX ミッドナイトBlue",
+        "site": "기타무라 (일본)",
+        "가격": "¥185,300",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2448000092706"
+      },
+      {
+        "상품명": "Leica D-LUX8 [19191]",
+        "site": "기타무라 (일본)",
+        "가격": "¥276,200",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2442550060161"
+      },
+      {
+        "상품명": "Leica Filter各種",
+        "site": "기타무라 (일본)",
+        "가격": "¥35,400",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2445480190083"
+      },
+      {
+        "상품명": "Leica 60mm f/2.8 MACRO-ELMARIT-R + MACRO ADAPTER",
+        "site": "Newoldcamera (이탈리아)",
+        "가격": "€190",
+        "통화": "EUR",
+        "링크": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3280"
+      },
+      {
+        "상품명": "Leica 90mm f/2 SUMMICRON-R",
+        "site": "Newoldcamera (이탈리아)",
+        "가격": "€380",
+        "통화": "EUR",
+        "링크": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3279"
+      },
+      {
+        "상품명": "Leica 180mm f/4 ELMAR-R",
+        "site": "Newoldcamera (이탈리아)",
+        "가격": "€190",
+        "통화": "EUR",
+        "링크": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3284"
+      },
+      {
+        "상품명": "Leica Q3 schwarz",
+        "site": "Calumet (독일)",
+        "가격": "€5,099",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-q3-schwarz/gebraucht/gut/26NUE01428711"
+      },
+      {
+        "상품명": "Leica M (Typ 262)",
+        "site": "Calumet (독일)",
+        "가격": "€3,129",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-m-typ-262-gebraucht/gebraucht/gut/26HAM01430301"
+      },
+      {
+        "상품명": "Leica Extender 1,4x",
+        "site": "Calumet (독일)",
+        "가격": "€450",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-extender-1-4x/gebraucht/wie-neu/26MUC02427984"
+      },
+      {
+        "상품명": "Leica Akku BP-SCL7 für M11 schwarz",
+        "site": "Calumet (독일)",
+        "가격": "€100",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-akku-bp-scl7-fuer-m11-schwarz/gebraucht/sehr-gut/26BER01431074"
+      },
+      {
+        "상품명": "Leica Ladegerät BC-SCL7 für M11 Akku BC-SCL7",
+        "site": "Calumet (독일)",
+        "가격": "€100",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-ladegeraet-bc-scl7-fuer-m11-akku-bc-scl7/gebraucht/wie-neu/26BER01431073"
       }
     ]
   }

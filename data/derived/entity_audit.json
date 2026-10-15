@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 491,
+   "count": 492,
    "example": "Leica M4 Silver"
   },
   {
@@ -373,6 +373,18 @@
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
   },
   {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:no-meter",
+   "count": 17,
+   "example": "[위탁] M4-2 (Black)"
+  },
+  {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:mechanical",
+   "count": 17,
+   "example": "[위탁] M4-2 (Black)"
+  },
+  {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:no-meter",
    "count": 17,
@@ -407,18 +419,6 @@
    "b": "leica:feature:meter",
    "count": 16,
    "example": "[중고] M7 A La Carte - Black Paint"
-  },
-  {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:no-meter",
-   "count": 16,
-   "example": "[위탁] M4-2 (Black)"
-  },
-  {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:mechanical",
-   "count": 16,
-   "example": "[위탁] M4-2 (Black)"
   },
   {
    "a": "leica:body:m4-p:standard",
@@ -589,6 +589,12 @@
    "example": "LEICA M-E (Typ240) sn.5548"
   },
   {
+   "a": "leica:body:m262",
+   "b": "leica:feature:frameline-28",
+   "count": 6,
+   "example": "LEICA M 262 sn.4982"
+  },
+  {
    "a": "leica:body:mp-film:hermes",
    "b": "leica:feature:frameline-28",
    "count": 6,
@@ -617,12 +623,6 @@
    "b": "leica:feature:frameline-28",
    "count": 5,
    "example": "[중고] M11-P (Safari)"
-  },
-  {
-   "a": "leica:body:m262",
-   "b": "leica:feature:frameline-28",
-   "count": 5,
-   "example": "LEICA M 262 sn.4982"
   },
   {
    "a": "leica:body:m6:ttl-titan",
