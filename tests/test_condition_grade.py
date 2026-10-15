@@ -136,3 +136,12 @@ def test_camerawest_condition_grades():
     assert grade_of(site, CAMERAWEST_PREFIX + "9+", "Leica Q3")[0] == "B"
     assert grade_of(site, CAMERAWEST_PREFIX + "8+", "Leica 50mm f2 Summicron-M")[0] == "C"
     assert grade_of(site, CAMERAWEST_PREFIX + "7+", "Leica 180mm f2.8 Elmarit-R")[0] == "D"
+def test_peterloy_condition_grades():
+    from condition_grade import PETERLOY_PREFIX
+    site = "Peter Loy (영국)"
+    assert grade_of(site, PETERLOY_PREFIX + "3/D", "Leica Visoflex II")[0] == "A"
+    assert grade_of(site, PETERLOY_PREFIX + "4/D", "Leica 21mm f3.4 Super-Elmar-M Asph")[0] == "B"
+    assert grade_of(site, PETERLOY_PREFIX + "4-5/E", "Leica Standard body, chrome")[0] == "C"
+    assert grade_of(site, PETERLOY_PREFIX + "5-6/D", "Leica III body, chrome")[0] == "D"
+    assert grade_of(site, PETERLOY_PREFIX + "3/G", "Leica III body, chrome")[0] == "D"
+    assert grade_of(site, PETERLOY_PREFIX + "4/J", "Leica IIIa body")[0] == "X"
