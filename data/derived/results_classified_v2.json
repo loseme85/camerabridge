@@ -1,6 +1,59 @@
 [
   {
     "source": "사진집",
+    "source_url": "https://www.sazinzibb.com/product/신품-leica-m11-glossy-black-city-edition-seoul/17006/category/28/display/1/",
+    "title_raw": "신품 Leica M11 Glossy Black City Edition \"SEOUL\"",
+    "price_raw": "17,800,000원",
+    "currency": "KRW",
+    "image_url": "https://www.sazinzibb.com/web/product/medium/202609/a1f3116bb5c2dc74aba0f5b7f7939633.jpg",
+    "condition_raw": "정보없음",
+    "normalized_name": "신품 leica m11 glossy black city edition \"seoul\"",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica m11"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M11",
+    "model_canonical": "M11",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-15 13:51:38",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "사진집",
     "source_url": "https://www.sazinzibb.com/product/leica-m-35mm-f14-summilux-2nd-black/16890/category/27/display/1/",
     "title_raw": "Leica M 35mm f1.4 Summilux 2nd Black",
     "price_raw": "3,500,000원",
@@ -31498,15 +31551,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-07-02 15:37:19",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-15 13:51:38",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -403536,64 +403589,6 @@
   },
   {
     "source": "Leica Store Miami",
-    "source_url": "https://leicastoremiami.com/products/used-leica-sl2-with-extra-battery-recent-leica-cla-2",
-    "title_raw": "Used Leica SL2 with Extra Battery - Recent Leica CLA",
-    "price_raw": "$2,395",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0253/1179/files/TB-Photography-1000778.jpg?v=1791912601",
-    "condition_raw": "Kamerastore: great",
-    "normalized_name": "used leica sl2 with extra battery - recent leica cla",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "SL",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "SL_explicit:SL2"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.92,
-    "category_reason": [
-      "acc_kw:battery"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "SL2",
-    "model_canonical": "SL2",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "battery",
-    "compatible_mounts": [
-      "SL"
-    ],
-    "compatible_systems": [
-      "SL2",
-      "SL"
-    ],
-    "risk_flags": [],
-    "positive_flags": [
-      "cla"
-    ],
-    "flag_confidence": 0.9,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-11 03:42:13",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store Miami",
     "source_url": "https://leicastoremiami.com/products/used-leica-m10-monochrom-3",
     "title_raw": "Used Leica M10 Monochrom",
     "price_raw": "$6,895",
@@ -408566,7 +408561,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -409763,7 +409758,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443373,7 +443368,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443526,7 +443521,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443709,6 +443704,116 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-04 00:10:39",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2444050040889",
+    "title_raw": "Leica Visoflex 2",
+    "price_raw": "¥97,200",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2444050040889-1-1.jpg",
+    "condition_raw": "AB",
+    "normalized_name": "leica visoflex 2",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:visoflex"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "FLE"
+    ],
+    "focal_length": null,
+    "accessory_type": "visoflex",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-15 13:51:38",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2484370076076",
+    "title_raw": "Leica X2 Black",
+    "price_raw": "¥191,600",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2484370076076-1-1.jpg",
+    "condition_raw": "AB",
+    "normalized_name": "leica x2 black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:LEICA X2"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "X2",
+    "model_canonical": "X2",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-15 13:51:38",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -444001,7 +444106,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444892,7 +444997,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -445954,59 +446059,6 @@
     "model_canonical": "Summarit",
     "variant": [],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 22:45:46",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2403280963993",
-    "title_raw": "Leica D III Body Chrome",
-    "price_raw": "¥88,000",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2403280963993-1-1.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica d iii body chrome",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:body"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Body+no_mount"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Chrome"
-    ],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -450471,7 +450523,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -450991,7 +451043,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -451254,7 +451306,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -451305,7 +451357,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453249,7 +453301,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453300,7 +453352,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453351,7 +453403,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453402,7 +453454,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453453,7 +453505,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -478228,57 +478280,6 @@
   },
   {
     "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2219340024258",
-    "title_raw": "Leica 13420 Filter UV/lR Vlll",
-    "price_raw": "¥6,500",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2219340024258-1-1.jpg",
-    "condition_raw": "AA",
-    "normalized_name": "leica 13420 filter uv/lr vlll",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:filter"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2119340593191",
     "title_raw": "Leica M2 Body BlackPaint (シリアルナンバー948601~949100)",
     "price_raw": "¥10,230,000",
@@ -479534,64 +479535,6 @@
       "M"
     ],
     "compatible_systems": [
-      "M"
-    ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2444270074640",
-    "title_raw": "Leica M10 for ハンドGrip Black",
-    "price_raw": "¥27,600",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2444270074640-1-1.jpg",
-    "condition_raw": "AB",
-    "normalized_name": "leica m10 for ハンドgrip black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "M_body_number:M3-M11"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:grip"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "M10",
-    "model_canonical": "M10",
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": "grip",
-    "compatible_mounts": [
-      "M"
-    ],
-    "compatible_systems": [
-      "M10",
       "M"
     ],
     "risk_flags": [],
@@ -532579,57 +532522,6 @@
   },
   {
     "source": "Leica Store France (프랑스)",
-    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/leica-dlux7",
-    "title_raw": "Leica DLUX7",
-    "price_raw": "€890",
-    "currency": "EUR",
-    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-10/L1043350.jpg?itok=qpsneYqn",
-    "condition_raw": "LCF: B : Very good",
-    "normalized_name": "leica dlux7",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Compact",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Compact_kw:DLUX"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Compact"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Compact+Body"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 23:02:43",
-    "sold_at": "2026-10-15 02:20:11",
-    "sold_fx_krw": 1500.838257,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store France (프랑스)",
     "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/loupe-de-viseur-x125-0",
     "title_raw": "magnifier de viewfinder x1.25",
     "price_raw": "€150",
@@ -533147,59 +533039,6 @@
     "sold_at": "2026-10-06 23:02:43",
     "sold_fx_krw": null,
     "sold_at_unknown": true
-  },
-  {
-    "source": "Leica Store France (프랑스)",
-    "source_url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-35-mm-f2-asph-1996-2015",
-    "title_raw": "SUMMICRON-M 35 mm f/2 ASPH ( 1996-2015 )",
-    "price_raw": "€2,390",
-    "currency": "EUR",
-    "image_url": "https://www.leica-camera-france-occasions.com/sites/default/files/styles/ratio_3_2_teaser/public/2026-09/L1043152.jpg?itok=Hd6K_PqX",
-    "condition_raw": "LCF: A : Excellent",
-    "normalized_name": "summicron-m 35 mm f/2 asph ( 1996-2015 )",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:summicron"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron-M",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 23:02:43",
-    "sold_at": "2026-10-15 02:20:11",
-    "sold_fx_krw": 1500.838257,
-    "sold_at_unknown": false
   },
   {
     "source": "Leica Store France (프랑스)",
@@ -650257,7 +650096,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -650310,7 +650149,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -651983,7 +651822,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -681248,7 +681087,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -682780,7 +682619,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -686434,7 +686273,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:12575"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
