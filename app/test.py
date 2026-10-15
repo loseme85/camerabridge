@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300}
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -3925,6 +3925,98 @@ def crawl_tamarkin():
     return results
 
 
+def _cameraelectronic_name(title):
+    """Camera Electronic 제목 다듬기: 'Pre-Owned Leica M6 TTL .85 Silver Body Model 10466 With Box, Body, Cap, Strap SN: 2496525
+    (Second Hand)' → 'Leica M6 TTL .85 Silver Body Model 10466'. 딸린 물건 목록('With …'·'in Box'·'Boxed …')과 연도·일련번호는
+    떼고(그대로면 case·strap·charger 때문에 액세서리로 갈림), 'Digital Camera'·'Film Camera' 같은 말은 Body로"""
+    name = re.sub(r"^pre[\s-]?owned\s+", "", title.strip(), flags=re.I)
+    name = re.sub(r"\s*\(second hand\)\s*", " ", name, flags=re.I)
+    name = re.sub(r"\s+(?:with\b|w/|in box\b|boxed\b|year \d{4}\b|sn[:\s]|serviced\b|made in\b|-\s*3 cam|,\s*mint\b|mint\b|like new\b).*$",
+                  "", name, flags=re.I)
+    name = re.sub(r"\b(?:mirrorless\s+|compact\s+|slr\s+|film\s+|rangefinder\s+)*(?:digital\s+)?(?:compact\s+)?camera(?:\s+body)?\b",
+                  "Body", name, flags=re.I)
+    name = re.sub(r"\bBody\s+Body\b", "Body", name)
+    name = re.sub(r"\bSummalux\b", "Summilux", name)
+    name = re.sub(r"\b(APO)[ -](Summicron|Summilux|Elmarit|Telyt)[ -](SL|M|R|TL)\b", r"\1-\2-\3", name, flags=re.I)  # 'APO-Summicron SL'
+    name = re.sub(r"\b(Vario-Elmar|Super-Vario-Elmar|APO-Vario-Elmar)[ ](TL|SL|R)\b", r"\1-\2", name, flags=re.I)
+    name = re.sub(r"\b[fF]/\s?(\d)", r"f\1", name)  # 'f/4.5' → 'f4.5' (_has_aperture가 'f4.5' 꼴만 읽음)
+    name = re.sub(r"\bf(\d)(?![\d.])", r"f\1.0", name)  # 정수 조리개 'f2' → 'f2.0'
+    name = re.sub(r"\s*\.$", "", name)
+    return re.sub(r"\s+", " ", name).strip(" ,-")
+
+
+def crawl_cameraelectronic():
+    """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
+    브랜드 칸이 Leica인 것만
+    (Panasonic Leica DG·Voigtlander 등은 브랜드가 달라 빠짐). 등급 표기가 없어 제목·설명 글의 말투('Mint'·'excellent condition'·
+    'minimal signs of wear')로 (ce_condition). 전체 중고(second-hand)는 쪽이 많아 429(Retry-After 60)가 나서 이 컬렉션만"""
+    import requests
+    from condition_grade import ce_condition
+    results, seen = [], set()
+    base = "https://www.cameraelectronic.com.au"
+    print(f"\n  📂 Camera Electronic 크롤링 시작")
+    s = requests.Session()
+    s.headers["User-Agent"] = random.choice(USER_AGENTS)
+    s.headers["Accept"] = "application/json"
+    for page_num in range(1, 30):
+        products = None
+        for attempt in range(4):
+            try:
+                resp = s.get(f"{base}/collections/second-hand-leica-and-hasselblad/products.json",
+                             params={"limit": 250, "page": page_num}, timeout=30)
+                if resp.status_code == 429:
+                    time.sleep(int(resp.headers.get("Retry-After") or 0) or 20 * (attempt + 1))
+                    continue
+                resp.raise_for_status()
+                products = resp.json().get("products", [])
+                break
+            except Exception as e:
+                print(f"    ⚠️ {page_num}페이지 오류: {e}")
+                time.sleep(5)
+        if products is None:
+            raise RuntimeError(f"Camera Electronic {page_num}페이지 못 읽음")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            if (p.get("vendor") or "").strip().lower() != "leica":
+                continue
+            name = _cameraelectronic_name(p.get("title") or "")
+            if not re.match(r"leica|leitz", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not link or link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            variant = p["variants"][0] if p.get("variants") else {}
+            try:
+                price = f"A${float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Camera Electronic (호주)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": ce_condition((p.get("title") or "") + " " + (p.get("body_html") or "")) or "정보없음",
+                "가격": price,
+                "통화": "AUD",
+                "이미지": img,
+                "링크": link,
+                "품절": not any(v.get("available") for v in p.get("variants") or [{}]),
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(4)
+    print(f"  ✅ Camera Electronic 완료: {len(results)}개")
+    return results
+
+
 # Leica Classic (classic.leica-camera.com): 라이카 매장 수십 곳의 중고·빈티지가 한 몰에. 매장 나라마다 다른 사이트로 나눈다.
 # 프랑스 매장(파리·마르세유·릴)은 Leica Store France, 싱가포르는 Leica Store Singapore와 같은 재고라 뺀다.
 LEICA_CLASSIC_COUNTRIES = [  # (매장 이름에 든 말, 나라 코드, 사이트 이름)
@@ -4452,6 +4544,7 @@ def crawl_all():
         ("Tamarkin Camera (미국)", lambda: ce.wrap_full_run("Tamarkin Camera (미국)", crawl_tamarkin)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
+        ("Camera Electronic (호주)", lambda: ce.wrap_full_run("Camera Electronic (호주)", crawl_cameraelectronic)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

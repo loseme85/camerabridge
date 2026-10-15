@@ -100,6 +100,9 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _TAMARKIN.get(cond[len(TAMARKIN_PREFIX):].strip().upper()), "label"
     if cond.startswith(LEICA_CLASSIC_PREFIX):
         return _LEICA_CLASSIC.get(cond[len(LEICA_CLASSIC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(CE_PREFIX):
+        phrase = cond[len(CE_PREFIX):]
+        return next((g for pat, g in _CE if re.search(pat, phrase, re.I)), None), "text"
     if cond.startswith(LUCKY_PREFIX):
         return _LUCKY.get(cond[len(LUCKY_PREFIX):].strip().upper()), "label"
     if cond.startswith(APERTURE_PREFIX):
@@ -297,3 +300,24 @@ LEICA_CLASSIC_PREFIX = "Leica Classic: "
 # 이 대응 기준 정확 일치 6/24 · 한 등급 이내 17/24 (사진이 평균 0.75등급 후함 — 기존 0.8과 비슷).
 _LEICA_CLASSIC = {"A+": "S", "A": "S", "A-": "A", "A/B": "B", "B/A": "B", "B+": "B", "B": "C", "B-": "C",
                   "B/C": "D", "C/B": "D", "C+": "D", "C": "D", "C-": "D"}
+# 호주 Camera Electronic: 등급 표기 없이 제목·설명 글의 말투 ('Boxed As New'·'Mint in Box'·'excellent condition'·'well-used')
+CE_PREFIX = "CE: "
+# 사진 평가(표기 가리고 16점, 2026-10-15): 공용 설명 대응(_DESC)으로는 사진과 평균 -0.06등급 — 다른 매장(사진이 0.8 후함)보다
+# 이 매장 말투가 한 칸 후해서 한 칸씩 내림. 이 대응 기준 사진이 평균 0.5등급 후함, 한 등급 이내 13/16.
+_CE = [
+    (r"like[\s-]?new|as new", "S"),
+    (r"\bmint\b", "A"),
+    (r"excellent", "C"),
+    (r"very good|\bgood\b|minor (?:signs of )?(?:use|wear)|light wear|minimal signs", "D"),
+    (r"\bfair\b|well[\s-]used|heavy (?:signs of )?(?:use|wear)", "D"),
+]
+
+
+def ce_condition(text: str) -> str | None:
+    """Camera Electronic 제목+설명에서 첫 말투를 뽑아 'CE: Mint' 꼴로."""
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text or ""))
+    for pat, _ in _CE:
+        m = re.search(pat, t, re.I)
+        if m:
+            return CE_PREFIX + m.group(0)
+    return None

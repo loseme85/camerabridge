@@ -2312,7 +2312,7 @@
     }
 
     // 대만·홍콩·싱가포르·캐나다 달러는 어느 언어에서든 NT$·HK$·S$·C$로 (현지 표기, 미국 달러와 구분)
-    const DOLLAR_SYMBOL_OVERRIDES = { TWD: 'NT$', HKD: 'HK$', SGD: 'S$', CAD: 'C$' };
+    const DOLLAR_SYMBOL_OVERRIDES = { TWD: 'NT$', HKD: 'HK$', SGD: 'S$', CAD: 'C$', AUD: 'A$' };
 
     function formatMoney(value, currency){
       try{
@@ -2733,6 +2733,7 @@
       'Leica Classic (미국)': { default: 'Leica Classic USA', ko: '라이카 클래식 미국', ja: 'ライカクラシック アメリカ' },
       'Leica Classic (아랍에미리트)': { default: 'Leica Classic UAE', ko: '라이카 클래식 아랍에미리트', ja: 'ライカクラシック UAE' },
       'Leica Classic (말레이시아)': { default: 'Leica Classic Malaysia', ko: '라이카 클래식 말레이시아', ja: 'ライカクラシック マレーシア' },
+      'Camera Electronic (호주)': { default: 'Camera Electronic', ko: '카메라 일렉트로닉', ja: 'カメラエレクトロニック' },
       'Ffordes (영국)': { default: 'Ffordes Photographic' }
     };
 

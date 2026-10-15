@@ -181,3 +181,10 @@ def test_leica_classic_condition_grades():
     assert grade_of(site, LEICA_CLASSIC_PREFIX + "B/A", "Leica Summicron-M 50mm f/2")[0] == "B"
     assert grade_of(site, LEICA_CLASSIC_PREFIX + "B", "Leica Elmarit-M 90mm f/2.8")[0] == "C"
     assert grade_of(site, LEICA_CLASSIC_PREFIX + "B/C", "Leica M3")[0] == "D"
+def test_cameraelectronic_condition_grades():
+    from condition_grade import ce_condition
+    site = "Camera Electronic (호주)"
+    assert grade_of(site, ce_condition("Pre-Owned Leica SL3-S Body Boxed As New"), "Leica SL3-S Body")[0] == "S"
+    assert grade_of(site, ce_condition("Pre-Owned Leica Summilux-M 50mm f/1.4 ASPH Lens Mint in Box"), "Leica Summilux-M 50mm f1.4 ASPH Lens")[0] == "A"
+    assert grade_of(site, ce_condition("A classic rangefinder in excellent condition."), "Leica M6 TTL .85 Silver Body")[0] == "C"
+    assert grade_of(site, ce_condition("Shows minimal signs of wear."), "Leica Elmarit-R 135mm f2.8 Lens")[0] == "D"
