@@ -13,8 +13,11 @@ GRADES = ["N", "S", "A", "B", "C", "D", "X"]
 _BROKEN = re.compile(r"고장|부품용|작동\s?불량|ジャンク|\bjunk\b|for parts|spares|as-?is\b|not working", re.I)
 _NEW = re.compile(r"신품|미사용|未使用|新品|\bbrand new\b|\bunused\b|(?<!asph )(?<!asph\. )(?<!bit )\bnew\b(?! ?(old|york|elmar|summicron|summilux|version|ver|type|\(\d{4}))", re.I)
 
-# 일본 매장 (기타무라 등)
-_JP = {"AA": "S", "A": "A", "AB": "B", "B": "C", "C": "D"}
+# 일본 매장 (기타무라·나니와 등)
+# 나니와는 AB+·AB-·B+도 씀. 사진 평가(표기 가리고 23점, 사진 3장씩, 2026-10-14): 사진이 이 대응보다 평균 0.9등급 후함
+# (기존 매장 0.8과 비슷) → 공통 대응 그대로. AB+는 A, AB-는 B, B+는 사진이 B와 차이 없어 C.
+# 이 대응 기준 정확 일치 4/23 · 한 등급 이내 15/23.
+_JP = {"AA": "S", "A": "A", "AB+": "A", "AB": "B", "AB-": "B", "B+": "C", "B": "C", "C": "D"}
 # 영국 Ffordes
 _FFORDES = {"NEW": "N", "MINT": "N", "MINT-": "S", "E++": "A", "E+": "B", "E": "C", "VG": "D", "G": "D", "F": "X"}
 # 영어권 설명·표기 (긴 표현 먼저)
