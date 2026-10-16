@@ -159,3 +159,10 @@ def test_akasaka_condition_grades():
     assert grade_of(site, AKASAKA_PREFIX + "美品", "Leica Vario-Elmar-R 28-70mm f3.5-4.5 ROM")[0] == "B"
     assert grade_of(site, AKASAKA_PREFIX + "良品", "Leica Summicron 50mm f2.0 M")[0] == "B"
     assert grade_of(site, AKASAKA_PREFIX + "中", "Leica Nickel Hektor 50mm f2.5 L")[0] == "C"
+def test_glazers_condition_grades():
+    from condition_grade import GLAZERS_PREFIX
+    site = "Glazers Camera (미국)"
+    assert grade_of(site, GLAZERS_PREFIX + "EX", "Leica Elmarit-TL 18mm f2.8 ASPH")[0] == "A"
+    assert grade_of(site, GLAZERS_PREFIX + "VG", "Leica M6 Classic Silver Body")[0] == "B"
+    assert grade_of(site, GLAZERS_PREFIX + "Good", "Leica Summilux-SL 50mm f1.4")[0] == "C"
+    assert grade_of(site, GLAZERS_PREFIX + "Fair", "Leica Summicron-M 50mm f2 Rigid Haze")[0] == "D"

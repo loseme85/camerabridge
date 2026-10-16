@@ -3730,6 +3730,120 @@ def crawl_akasaka():
             page_num += 1
             time.sleep(1)
     print(f"  ✅ Akasaka Camera 완료: {len(results)}개")
+GLAZERS_EXTRA_FAMILY = {("M", "35", "3.5"): "Summaron", ("R", "180", "3.4"): "APO Telyt", ("SL", "100-400", ""): "Vario Elmar",
+                        ("TL", "60", "2.8"): "APO Macro Elmarit"}
+
+
+def _glazers_lens_name(name):
+    """'Leica M 50mm F1.4 ASPH' → 'Leica Summilux-M 50mm f1.4 ASPH'. 계열 이름 없이 마운트·초점거리·조리개만 쓴 제목에
+    entity_catalog의 매장식 계열 표(IMPLIED_FAMILY·IMPLIED_BY_MOUNT)로 이름을 넣는다"""
+    from entity_catalog import IMPLIED_FAMILY, IMPLIED_BY_MOUNT, ZOOM_FAMILY, FAMILY_WORD
+    name = re.sub(r"\bPC SUP(?:ER)? ANG\b", "PC-Super-Angulon-R", name, flags=re.I)
+    name = re.sub(r"\bSuper Angulon R\b", "Super-Angulon-R", name, flags=re.I)
+    m = re.match(r"^Leica (M|SL|R|TL)\s+(APO\s+)?(\d{2,3}(?:-\d{2,3})?)(?:mm)?\s*(?:F|f/?)?\s*(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)?\b(.*)$", name, re.I)
+    if not m or FAMILY_WORD.search(name):
+        return name
+    mount, apo, focal, ap, rest = m.group(1).upper(), m.group(2), m.group(3), m.group(4) or "", m.group(5)
+    ap1 = ap.split("-")[0]
+    fam = GLAZERS_EXTRA_FAMILY.get((mount, focal, ap1)) or GLAZERS_EXTRA_FAMILY.get((mount, focal, ""))
+    if not fam and "-" in focal:
+        fam = ZOOM_FAMILY.get(mount)
+    if not fam:
+        fam = (IMPLIED_FAMILY if mount == "M" else IMPLIED_BY_MOUNT.get(mount, {})).get((focal, ap1))
+    if not fam:
+        return name
+    if apo and not fam.upper().startswith("APO"):
+        fam = "APO " + fam
+    fam = fam.replace(" ", "-")
+    ap_txt = f" f{ap}" if ap else ""
+    return re.sub(r"\s+", " ", f"Leica {fam}-{mount} {focal}mm{ap_txt} {rest}").strip()
+
+
+def crawl_glazers():
+    """Glazer's Camera (미국, 시애틀) - Shopify JSON. 라이카 컬렉션(collections/leica, 약 300개)에서 'Used' 태그만.
+    등급은 제목 괄호 (M)·(EX)·(VG)·(G)·(Good)·(Fair). 'Mozilla/5.0'만 보내면 429라 브라우저 UA로, 쪽 사이 4초"""
+    import requests
+    from condition_grade import GLAZERS_PREFIX
+    results, seen = [], set()
+    base = "https://glazerscamera.com"
+    print(f"\n  📂 Glazer's Camera 크롤링 시작")
+    s = requests.Session()
+    s.headers["User-Agent"] = random.choice(USER_AGENTS)
+    s.headers["Accept"] = "application/json"
+    for page_num in range(1, 20):
+        products = None
+        for attempt in range(4):
+            try:
+                resp = s.get(f"{base}/collections/leica/products.json", params={"limit": 250, "page": page_num}, timeout=30)
+                if resp.status_code == 429:
+                    time.sleep(int(resp.headers.get("Retry-After") or 0) or 20 * (attempt + 1))
+                    continue
+                resp.raise_for_status()
+                products = resp.json().get("products", [])
+                break
+            except Exception as e:
+                print(f"    ⚠️ {page_num}페이지 오류: {e}")
+                time.sleep(5)
+        if products is None:
+            raise RuntimeError(f"Glazer's {page_num}페이지 못 읽음")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            if "Used" not in (p.get("tags") or []):
+                continue
+            title = re.sub(r"^used\s+", "", (p.get("title") or "").strip(), flags=re.I)
+            # 'Leica M 50mm F1.4 ASPH (G) Missing Hood' → 등급 G, 이름은 괄호 앞뒤를 잇는다
+            m_grade = re.search(r"\((M|EX|VG|G|Good|Fair|Poor)\)", title, re.I)
+            grade = m_grade.group(1) if m_grade else ""
+            name = re.sub(r"\s*\((?:M|EX|VG|G|Good|Fair|Poor)\)\s*", " ", title, flags=re.I)
+            name = re.sub(r"^LEICA\b", "Leica", name)
+            name = re.sub(r"\bW/\s*", "with ", name, flags=re.I)
+            # 덧붙인 메모 중 분류를 흔드는 말('No Box or case'·'Missing Hood')은 뗀다
+            name = re.sub(r"\s*\b(?:no box(?: or case)?|missing hood)\b", "", name, flags=re.I)
+            name = re.sub(r"\bHG-SCL(\d)", r"Handgrip HG-SCL\1", name)
+            name = re.sub(r"\bKIT\b", "Body Kit", name)
+            name = re.sub(r"(Kit with \d{2,3}-\d{2,3})\s?mm\b", r"\1 zoom", name, flags=re.I)  # 렌즈 표기 때문에 바디 연결이 막히지 않게
+            name = re.sub(r"\bEV-1\b", "EV1", name)
+            name = _glazers_lens_name(name)
+            # 카메라 분류 태그인데 이름에 Body·렌즈 표기가 없으면 Body ('Leica M EV-1'·'Leica X1'·'Leica R4s')
+            used_tag = " ".join(t for t in p.get("tags") or [] if t.startswith("Used:"))
+            if (re.search(r"Rangefinder Cameras?|SLR Cameras|Used Mirrorless$|Digital Compacts", used_tag)
+                    and not re.search(r"body|\d\s*mm|case|strap|grip|cap\b|\b\d{5}\b", name, re.I)):
+                name = re.sub(r"^(\S+\s+\S+(?:\s+(?:Typ|Type)\s+\d+)?)", r"\1 Body", name) if re.search(r"Typ|Type", name) else name + " Body"
+            name = re.sub(r"\s+", " ", name).strip()
+            if not re.match(r"leica|leitz", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not link or link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            variant = p["variants"][0] if p.get("variants") else {}
+            try:
+                price = f"${float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Glazers Camera (미국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": GLAZERS_PREFIX + grade if grade else "정보없음",
+                "가격": price,
+                "통화": "USD",
+                "이미지": img,
+                "링크": link,
+                "품절": not any(v.get("available") for v in p.get("variants") or [{}]),
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(4)
+    print(f"  ✅ Glazer's Camera 완료: {len(results)}개")
     return results
 
 
@@ -4073,6 +4187,7 @@ def crawl_all():
         ("Peter Loy (영국)", lambda: ce.wrap_full_run("Peter Loy (영국)", crawl_peterloy)),
         ("Lucky Camera (일본)", lambda: ce.wrap_full_run("Lucky Camera (일본)", crawl_lucky)),
         ("Akasaka Camera (일본)", lambda: ce.wrap_full_run("Akasaka Camera (일본)", crawl_akasaka)),
+        ("Glazers Camera (미국)", lambda: ce.wrap_full_run("Glazers Camera (미국)", crawl_glazers)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
     ]
