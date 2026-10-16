@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT))
 from fx_history import load_history, save_history  # noqa: E402
 
 KST = dt.timezone(dt.timedelta(hours=9))
-CURRENCIES = ["USD", "KRW", "JPY", "EUR", "GBP", "CNY", "TWD", "HKD", "BRL", "SGD", "CAD", "CHF", "DKK", "MYR"]
+CURRENCIES = ["USD", "KRW", "JPY", "EUR", "GBP", "CNY", "TWD", "HKD", "BRL", "SGD", "CAD", "CHF", "DKK", "MYR", "AUD"]
 START = "2026-04-01"  # 가장 오래된 수집 기록 무렵
 
 
