@@ -925,6 +925,7 @@ def detect_category(name, price_str=""):
         'protector', 'holster', 'wrist strap', 'neck strap',
         'motor winder', 'trigger',
         'correction lens', 'diopter',
+        'close-up device',
     ]
     # 캡/필터는 렌즈 이름 없을 때만 악세사리
     cap_filter_kw = ['캡', 'cap', 'filter', '필터']
@@ -3625,6 +3626,113 @@ def crawl_lucky():
     return results
 
 
+AKASAKA_JA = {"ライカビット": "Leicavit ", "ワインダー": "Winder ", "フード": " Hood", "ファインダー": " Finder",
+              "ケース": " Case", "フィルター": " Filter", "革張替え": "Re-leathered", "セルフ": "Self-timer",
+              "改造": "Modified", "全回転": "Full Rotation", "短鏡胴": "Short Mount", "メガネ": "Goggles"}
+
+
+def _akasaka_name(name_ja, ja_to_en):
+    """Akasaka Camera 제목 다듬기: '沈胴ズミクロン 50/2 L 104万台' → 'Leica Collapsible Summicron 50/2 L'.
+    일련번호대('104万台'·'327万代')와 '送料430円' 같은 배송비 표기는 뺀다"""
+    import unicodedata
+    name = unicodedata.normalize("NFKC", name_ja).replace("\u3000", " ")
+    name = re.sub(r"\s*\d+万[台代]", "", name)
+    name = re.sub(r"\s*送料\d+円", "", name)
+    name = re.sub(r"^(?:ライカ|ライツ|Leica|Leitz)\s*", "", name)
+    for ja, en in AKASAKA_JA.items():
+        name = name.replace(ja, en)
+    name = ja_to_en("Leica " + name)
+    name = re.sub(r"Collapsible(?=\S)", "Collapsible ", name)
+    # '50/2'·'28-70/3.5-4.5' → '50mm f2'·'28-70mm f3.5-4.5' (조리개로 읽혀야 렌즈로 분류됨)
+    # 정수 조리개는 'f4.0'처럼 (_has_aperture가 소수점 있는 값만 조리개로 봄)
+    name = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)/(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\b",
+                  lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"\b(I{1,3})([A-G])\b", lambda m: m.group(1) + m.group(2).lower(), name)  # 'IIIG' → 'IIIg'
+    return re.sub(r"\s+", " ", name).strip()
+
+
+def crawl_akasaka():
+    """Akasaka Camera (일본, 도쿄 아카사카) - 라이카·클래식 중고점. 분류 화면(/product/index/<번호>/page:N, 정적 HTML,
+    15개씩)의 카드에 이름·등급(程度)·가격·사진이 다 있다. 라이카 바디(36)·라이카 렌즈(37)·신착(25)·중고 액세서리(9)에서
+    메이커가 ライカ인 것만. 'sold_out' 카드는 건너뛰고, 가격 대신 '商談中'이면 예약중"""
+    import html as _html
+    import unicodedata
+    import requests
+    from ja_normalize import ja_to_en
+    from condition_grade import AKASAKA_PREFIX
+    results, seen = [], set()
+    base = "https://www.akasaka-camera.com"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Akasaka Camera 크롤링 시작")
+    for cat_id in (36, 37, 25, 9):
+        page_num = 1
+        while page_num < 40:
+            url = f"{base}/product/index/{cat_id}/page:{page_num}"
+            html = None
+            for attempt in range(3):
+                try:
+                    resp = sess.get(url, timeout=30)
+                    resp.raise_for_status()
+                    html = resp.text
+                    break
+                except Exception as e:
+                    print(f"    ⚠️ {cat_id}분류 {page_num}페이지 오류: {e}")
+                    time.sleep(5)
+            if html is None:
+                raise RuntimeError(f"Akasaka Camera {cat_id}분류 {page_num}페이지 못 읽음")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            cards = html.split('<figure class="product_figure')[1:]
+            print(f"    └─ {cat_id}분류 {page_num}페이지 {len(cards)}개")
+            for card in cards:
+                if card.startswith(" sold_out"):
+                    continue
+                def cell(label):
+                    m = re.search(label + r"</th>\s*<td>(.*?)</td>", card, re.S)
+                    return unicodedata.normalize("NFKC", _html.unescape(re.sub(r"<[^>]+>", "", m.group(1)))).strip() if m else ""
+                if not re.search(r"ライカ|ライツ|leica|leitz", cell("メーカー"), re.I) or cell("メーカー").startswith("N.Y."):
+                    continue
+                m_link = re.search(r'<a href="(https://www\.akasaka-camera\.com/product/view/\d+)"', card)
+                if not m_link or m_link.group(1) in seen:
+                    continue
+                link = m_link.group(1)
+                seen.add(link)
+                if "ロッコール" in cell("品名"):  # 미놀타 M-Rokkor (라이츠 제조라도 미놀타 상표)
+                    continue
+                name = _akasaka_name(cell("品名"), ja_to_en)
+                if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                    continue
+                m_price = re.search(r'class="price[^"]*">\s*([\d,]+)', card)
+                amount = int(m_price.group(1).replace(",", "")) if m_price else 0
+                price = f"¥{amount:,}" if amount else "문의요망"
+                grade = cell("程度")
+                m_img = re.search(r'<img src="([^"]+)"', card)
+                img = ("https:" + m_img.group(1) if m_img.group(1).startswith("//") else m_img.group(1)) if m_img else ""
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "Akasaka Camera (일본)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": AKASAKA_PREFIX + grade if grade and grade not in ("ー", "-") else "정보없음",
+                    "가격": price,
+                    "통화": "JPY",
+                    "이미지": img,
+                    "링크": link,
+                    "품절": False,
+                    "예약중": "商談中" in card,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if f"/product/index/{cat_id}/page:{page_num + 1}" not in html:
+                break
+            page_num += 1
+            time.sleep(1)
+    print(f"  ✅ Akasaka Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -3964,6 +4072,7 @@ def crawl_all():
         ("Camera West (미국)", lambda: ce.wrap_full_run("Camera West (미국)", crawl_camerawest)),
         ("Peter Loy (영국)", lambda: ce.wrap_full_run("Peter Loy (영국)", crawl_peterloy)),
         ("Lucky Camera (일본)", lambda: ce.wrap_full_run("Lucky Camera (일본)", crawl_lucky)),
+        ("Akasaka Camera (일본)", lambda: ce.wrap_full_run("Akasaka Camera (일본)", crawl_akasaka)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
     ]

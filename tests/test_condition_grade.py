@@ -152,3 +152,10 @@ def test_lucky_condition_grades():
     assert grade_of(site, LUCKY_PREFIX + "AB", "Leica Summicron M 35mm f2")[0] == "B"
     assert grade_of(site, LUCKY_PREFIX + "A", "Leica IIIf Body")[0] == "C"
     assert grade_of(site, LUCKY_PREFIX + "B", "Leica Elmar 5cm f3.5")[0] == "D"
+def test_akasaka_condition_grades():
+    from condition_grade import AKASAKA_PREFIX
+    site = "Akasaka Camera (일본)"
+    assert grade_of(site, AKASAKA_PREFIX + "新同品", "LeicavitM Silver")[0] == "S"
+    assert grade_of(site, AKASAKA_PREFIX + "美品", "Leica Vario-Elmar-R 28-70mm f3.5-4.5 ROM")[0] == "B"
+    assert grade_of(site, AKASAKA_PREFIX + "良品", "Leica Summicron 50mm f2.0 M")[0] == "B"
+    assert grade_of(site, AKASAKA_PREFIX + "中", "Leica Nickel Hektor 50mm f2.5 L")[0] == "C"

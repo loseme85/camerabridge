@@ -288,7 +288,7 @@ lens("leica:lens:elmar:135", "Elmar 135mm f/4", "엘마 135", None, "elmar", "13
 lens("leica:lens:macro-elmar-m:90", "Macro-Elmar-M 90mm f/4", "매크로 엘마 90", "M", "macro-elmar", "90")
 lens("leica:lens:apo-telyt-m:135", "APO-Telyt-M 135mm f/3.4", "아포 텔리트 135", "M", "apo-telyt", "135")
 lens("leica:lens:tele-elmar-m:135", "Tele-Elmar-M 135mm f/4", "텔레엘마 135", "M", "tele-elmar", "135")
-lens("leica:lens:telyt:visoflex", "Telyt (Visoflex) 200 · 280 · 400 · 560", "텔리트 (비조플렉스)", None, "telyt", "", [r"\b(200|280|400|560)\b"], must_not=[r"apo|-R\b|\bR\b"],
+lens("leica:lens:telyt:visoflex", "Telyt (Visoflex) 200 · 280 · 400 · 560", "텔리트 (비조플렉스)", None, "telyt", "", [r"\b(200|280|400|560)(?:\s?mm)?\b"], must_not=[r"apo|-R\b|\bR\b"],
      extra_aliases=["telyt 200", "telyt 280", "telyt 400", "telyt 560"])
 lens("leica:lens:summitar:50", "Summitar 50mm f/2", "즈미타 50", None, "summitar", "50")
 lens("leica:lens:summar:50", "Summar 50mm f/2", "주마 50", None, "summar", "50")

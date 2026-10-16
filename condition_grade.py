@@ -92,6 +92,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         if grade and working in ("G", "H") and GRADES.index(grade) < GRADES.index("D"):
             grade = "D"  # 결함 있음·미확인은 외관과 상관없이 D
         return grade, "label"
+    if cond.startswith(AKASAKA_PREFIX):
+        return _AKASAKA.get(cond[len(AKASAKA_PREFIX):].strip()), "label"
     if cond.startswith(LUCKY_PREFIX):
         return _LUCKY.get(cond[len(LUCKY_PREFIX):].strip().upper()), "label"
     if cond.startswith(APERTURE_PREFIX):
@@ -263,3 +265,9 @@ LUCKY_PREFIX = "Lucky: "
 # 이 대응 기준 정확 일치 10/25 · 한 등급 이내 20/25 (사진이 평균 0.84등급 후함 — 기존 0.8과 같음).
 # 같은 글자라도 기타무라·나니와(A=상)보다 이 매장의 A가 '보통 중고'라 한 칸 낮음.
 _LUCKY = {"N": "N", "AAA": "S", "AA": "A", "AB": "B", "A": "C", "B": "D"}
+# 일본 Akasaka Camera: 목록 카드의 '程度' 新同品(새것 같음)·美品·良品·中(보통 중고). 극미품·並品은 표본 없어 순서대로.
+AKASAKA_PREFIX = "Akasaka: "
+# 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-15): 美品 A 5 · 良品 A 6·B 3 · 中 A 4·B 1·C 5 · 新同品 S 1.
+# 美品과 良品은 사진으로 차이가 거의 없어 둘 다 B, 中은 빈티지(니켈 엘마·헥토르·주마리트)는 C·나머지는 A로 갈려 C.
+# 이 대응 기준 정확 일치 9/25 · 한 등급 이내 21/25 (사진이 평균 0.8등급 후함 — 기존 0.8과 같음).
+_AKASAKA = {"新品": "N", "新同品": "S", "極美品": "A", "美品": "B", "良品": "B", "中": "C", "並品": "D", "並": "D"}

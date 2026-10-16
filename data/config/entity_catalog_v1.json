@@ -25202,7 +25202,7 @@
     "mount": null,
     "title_must": [
      "telyt",
-     "\\b(200|280|400|560)\\b"
+     "\\b(200|280|400|560)(?:\\s?mm)?\\b"
     ],
     "title_must_not": [
      "apo|-R\\b|\\bR\\b",
