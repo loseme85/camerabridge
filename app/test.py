@@ -3732,6 +3732,9 @@ def crawl_akasaka():
             page_num += 1
             time.sleep(1)
     print(f"  ✅ Akasaka Camera 완료: {len(results)}개")
+    return results
+
+
 GLAZERS_EXTRA_FAMILY = {("M", "35", "3.5"): "Summaron", ("R", "180", "3.4"): "APO Telyt", ("SL", "100-400", ""): "Vario Elmar",
                         ("TL", "60", "2.8"): "APO Macro Elmarit"}
 
@@ -3846,6 +3849,9 @@ def crawl_glazers():
             })
         time.sleep(4)
     print(f"  ✅ Glazer's Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_tamarkin():
     """Tamarkin Camera (미국, 시카고) - 라이카 딜러. 분류 화면 7곳(정적 HTML, 쪽 넘김 없음)의 카드에 이름·가격·사진,
     중고 여부와 등급은 상세 화면 가격 아래 'Nr. 258xxxx, Ex++' 줄에만 있어 카드마다 상세를 읽는다 (약 170개 · 1분)
