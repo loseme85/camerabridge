@@ -3,13 +3,13 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 531,
+   "count": 533,
    "example": "Leica M4 Silver"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 513,
+   "count": 512,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -21,7 +21,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 464,
+   "count": 463,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 184,
+   "count": 185,
    "example": "Leica M3 Silver"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 184,
+   "count": 185,
    "example": "Leica M3 Silver"
   },
   {
@@ -105,7 +105,7 @@
   {
    "a": "leica:body:m-p240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 70,
+   "count": 71,
    "example": "Leica M-P Black"
   },
   {
@@ -139,33 +139,15 @@
    "example": "[위탁] M2 (Silver)"
   },
   {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 57,
-   "example": "Leica MP Silver x0.72"
-  },
-  {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:meter",
-   "count": 57,
-   "example": "Leica MP Silver x0.72"
-  },
-  {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:mechanical",
-   "count": 57,
-   "example": "Leica MP Silver x0.72"
-  },
-  {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:no-meter",
-   "count": 56,
+   "count": 57,
    "example": "Leica M4 Silver"
   },
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:mechanical",
-   "count": 56,
+   "count": 57,
    "example": "Leica M4 Silver"
   },
   {
@@ -173,6 +155,24 @@
    "b": "leica:feature:frameline-28",
    "count": 56,
    "example": "Leica M11 Silver"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 56,
+   "example": "Leica MP Silver x0.72"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:meter",
+   "count": 56,
+   "example": "Leica MP Silver x0.72"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:mechanical",
+   "count": 56,
+   "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:mp-film:black-paint",
@@ -237,13 +237,13 @@
   {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:meter",
-   "count": 38,
+   "count": 39,
    "example": "Leica M5 Silver"
   },
   {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:mechanical",
-   "count": 38,
+   "count": 39,
    "example": "Leica M5 Silver"
   },
   {
@@ -1041,66 +1041,5 @@
    "example": "Leica Summicron-M 50mm F2 titan/limitiert silber"
   }
  ],
- "new": [
-  {
-   "entity": "leica:lens:summicron-m:50:current",
-   "word": "titan",
-   "count": 3,
-   "example": "Leica Summicron-M 50mm F2 titan/limitiert silber"
-  },
-  {
-   "a": "leica:lens:summilux-m:35:pre-asph-unspecified",
-   "b": "leica:lens:summilux-m:35:v2",
-   "count": 6,
-   "example": "Leica Summilux-M 35mm f1.4 V2 11870"
-  },
-  {
-   "a": "leica:body:leicaflex-sl2",
-   "b": "leica:body:sl2",
-   "count": 4,
-   "example": "LEICAFLEX SL2"
-  },
-  {
-   "a": "leica:body:m10-monochrom:leitz-wetzlar",
-   "b": "leica:feature:frameline-28",
-   "count": 3,
-   "example": "[위탁] M10 Monochrom 'Leitz Wetzlar' Edition"
-  },
-  {
-   "a": "leica:body:m6:platinum",
-   "b": "leica:feature:frameline-28",
-   "count": 3,
-   "example": "LEICA M6 PLATINUM 150 JAHRE sn.1757"
-  },
-  {
-   "a": "leica:body:m6:platinum",
-   "b": "leica:feature:meter",
-   "count": 3,
-   "example": "LEICA M6 PLATINUM 150 JAHRE sn.1757"
-  },
-  {
-   "a": "leica:body:m6:platinum",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "LEICA M6 PLATINUM 150 JAHRE sn.1757"
-  },
-  {
-   "a": "leica:body:m-p240:safari",
-   "b": "leica:feature:frameline-28",
-   "count": 3,
-   "example": "LEICA M-P Safari SUMMICRON-M sn.4934 / sn.4236"
-  },
-  {
-   "a": "leica:body:cl-film",
-   "b": "leica:feature:meter",
-   "count": 3,
-   "example": "Leica CL Black Film Rangefinder Camera"
-  },
-  {
-   "a": "leica:body:cl-film",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "Leica CL Black Film Rangefinder Camera"
-  }
- ]
+ "new": []
 }
