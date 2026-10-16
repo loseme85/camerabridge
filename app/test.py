@@ -4012,6 +4012,8 @@ def crawl_cameraelectronic():
                 "category": cat,
                 "brand": detect_brand(name),
             })
+        if len(products) < 250:  # 마지막 쪽 — 빈 다음 쪽을 또 부르면 429가 나기 쉬움
+            break
         time.sleep(4)
     print(f"  ✅ Camera Electronic 완료: {len(results)}개")
     return results
