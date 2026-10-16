@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 import time
 import json
+import threading
 import re
 import argparse
 import random
@@ -885,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, '$': 1350}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300}
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -926,6 +927,7 @@ def detect_category(name, price_str=""):
         'motor winder', 'trigger',
         'correction lens', 'diopter',
         'close-up device',
+        'accessory',
     ]
     # 캡/필터는 렌즈 이름 없을 때만 악세사리
     cap_filter_kw = ['캡', 'cap', 'filter', '필터']
@@ -3923,6 +3925,187 @@ def crawl_tamarkin():
     return results
 
 
+# Leica Classic (classic.leica-camera.com): 라이카 매장 수십 곳의 중고·빈티지가 한 몰에. 매장 나라마다 다른 사이트로 나눈다.
+# 프랑스 매장(파리·마르세유·릴)은 Leica Store France, 싱가포르는 Leica Store Singapore와 같은 재고라 뺀다.
+LEICA_CLASSIC_COUNTRIES = [  # (매장 이름에 든 말, 나라 코드, 사이트 이름)
+    ("Vienna", "AT", "Leica Classic (오스트리아)"),
+    ("London", "GB", "Leica Classic (영국)"),
+    ("Munich|Stuttgart|Berlin|Nürnberg|Nuernberg|Wetzlar|Hamburg|Frankfurt|Düsseldorf|Dusseldorf", "DE", "Leica Classic (독일)"),
+    ("Geneva|Basel|Zurich|Zürich", "CH", "Leica Classic (스위스)"),
+    ("Madrid", "ES", "Leica Classic (스페인)"),
+    ("Porto|Lisbo", "PT", "Leica Classic (포르투갈)"),
+    ("Bologna|Milano|Firenze|Torino|Roma", "IT", "Leica Classic (이탈리아)"),
+    ("Copenhagen", "DK", "Leica Classic (덴마크)"),
+    (r"Los Angeles|Boston|Washington|U\.S\.|Bellevue|New York|Miami|San Francisco|Chicago", "US", "Leica Classic (미국)"),
+    ("Dubai", "AE", "Leica Classic (아랍에미리트)"),
+    ("Kuala Lumpur", "MY", "Leica Classic (말레이시아)"),
+]
+LEICA_CLASSIC_SKIP_STORES = re.compile(r"Paris|Marseille|Lille|Lyon|Singapore")
+# 분류 경로에 이 말이 있으면 카메라 장비가 아니라 뺀다 (시계·현미경·사진 작품·책·쌍안경·영사기·확대기·시네 카메라)
+LEICA_CLASSIC_SKIP_PATH = re.compile(r"Watches|ZM1|ZM2|Microscop|Photograph|Literature|Sport Optics|Binocular|Monocular|"
+                                     r"Projector|Enlarger|Leicina|Other Brands|Gallery|Picture of the Year|Photo Books")
+LEICA_CLASSIC_SLUG = re.compile(r"leica|leitz|summi|elmar|noctilux|hektor|telyt|angulon|summar|thambar|visoflex|leicina|ultravid|"
+                                r"trinovid|noctivid|leicaflex|hologon|xenon|geovid|d-lux|c-lux|v-lux|sofort", re.I)
+LEICA_CLASSIC_PRICE = {"EUR": "€{:,.0f}", "GBP": "£{:,.0f}", "USD": "${:,.0f}", "CHF": "CHF {:,.0f}", "DKK": "DKK {:,.0f}",
+                       "MYR": "MYR {:,.0f}", "SGD": "S${:,.0f}"}
+_LEICA_CLASSIC_CACHE = {}
+_LEICA_CLASSIC_LOCK = threading.Lock()
+
+
+def _leica_classic_name(name):
+    """Leica Classic 제목 다듬기: 독일식 '조리개/초점거리' 순서('Summicron-M 2.0/50mm'·'Elmar 3,5/5cm'·'1:1.4/35')를
+    '50mm f2.0'·'5cm f3.5'·'35mm f1.4'로, 긴 줄표 '–'는 '-'로 (그대로면 'R 3.5'가 R3 바디로 읽히는 등 연결이 안 됨)"""
+    name = re.sub(r"\s+", " ", name.replace("–", "-").replace("—", "-")).strip()
+    name = re.sub(r"\bf[:/](\d)", r"f\1", name).replace("Elamarit", "Elmarit")
+    name = re.sub(r"\b(APO)[ -](Summicron|Summilux|Elmarit|Telyt)[ -](SL|M|R|TL)\b", r"\1-\2-\3", name, flags=re.I)
+    name = re.sub(r"(?<![-\w])(Summicron|Summilux|Elmarit|Noctilux)[ ](SL|TL)\b", r"\1-\2", name, flags=re.I)
+
+    def flip(m):
+        ap, focal, unit = m.group(1).replace(",", "."), m.group(2).replace(",", "."), (m.group(3) or "mm").lower()
+        if "-" not in ap and "-" not in focal and float(ap) > 12 >= float(focal):  # '35/2'처럼 초점거리가 앞이면 그대로 뒤집기
+            ap, focal = focal, ap
+        if "." not in ap.split("-")[0]:
+            ap = ap.split("-")[0] + ".0" + ("-" + ap.split("-")[1] if "-" in ap else "")  # 정수 조리개는 'f2.0' (_has_aperture가 소수점만 읽음)
+        return f"{focal}{unit} f{ap}"
+    name = re.sub(r"(?<![\w.,/])(?:1\s?:\s?)?(\d{1,2}(?:[.,]\d{1,2})?(?:-\d{1,2}(?:[.,]\d{1,2})?)?)\s*/\s*"
+                  r"(\d{1,3}(?:[.,]\d)?(?:-\d{2,3})?)\s*(mm|cm)?(?![\w/\"])",
+                  flip, name, flags=re.I)
+    if not re.match(r"leica|leitz", name, re.I):
+        name = "Leica " + name
+    return name
+
+
+def _leica_classic_all():
+    """사이트맵(robots.txt 허용) → 상품 주소, 슬러그로 라이카만 → 처음 보는 상품만 상세 화면을 읽고(메타 태그의 매장·가격·통화·사진,
+    'Condition' 칸 등급) 전에 읽은 것은 이전 결과를 다시 쓴다. 목록 쪽 넘김(?p=)은 robots.txt가 막아(Disallow: */?) 안 씀.
+    사이트맵에서 빠진 상품 = 판매 완료. 상세는 한 번에 최대 1,500개(첫 실행 약 3분) + 이전 것 80개 다시 확인 (가격·매진 변화).
+    나라별 사이트 여럿이 같이 부르므로 한 실행에 한 번만 읽고 나라 코드 → 행 목록으로 돌려준다"""
+    with _LEICA_CLASSIC_LOCK:
+        if "rows" in _LEICA_CLASSIC_CACHE:
+            return _LEICA_CLASSIC_CACHE["rows"]
+        import gzip
+        import html as _html
+        import requests
+        from concurrent.futures import ThreadPoolExecutor
+        from condition_grade import LEICA_CLASSIC_PREFIX
+        base = "https://classic.leica-camera.com"
+        sess = requests.Session()
+        sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+        print("\n  📂 Leica Classic 크롤링 시작")
+        index = sess.get(f"{base}/en/sitemap.xml", timeout=30)
+        index.raise_for_status()
+        links = []
+        for gz in re.findall(r"<loc>([^<]+\.xml\.gz)</loc>", index.text):
+            resp = sess.get(gz, timeout=60)
+            resp.raise_for_status()
+            links += re.findall(r"<loc>(https://classic\.leica-camera\.com/en/[^/<]+/[^/<]+)</loc>", gzip.decompress(resp.content).decode("utf-8"))
+        links = [u for u in dict.fromkeys(links) if LEICA_CLASSIC_SLUG.search(u.split("/en/")[1].split("/")[0])]
+        if len(links) < 300:
+            raise RuntimeError(f"Leica Classic 사이트맵 상품 {len(links)}개뿐")  # 사이트맵이 덜 나오면 판매완료로 바뀌지 않게
+        known, skip = {}, {}
+        try:
+            with open("data/raw/results.json", encoding="utf-8") as f:
+                known = {r["링크"]: r for r in json.load(f) if str(r.get("site", "")).startswith("Leica Classic (")}
+        except (OSError, ValueError):
+            pass
+        try:
+            with open("data/raw/leica_classic_skip.json", encoding="utf-8") as f:
+                skip = json.load(f)
+        except (OSError, ValueError):
+            pass
+        todo = [u for u in links if u not in known and u not in skip][:1500]
+        seen_before = [u for u in links if u in known]
+        recheck = random.sample(seen_before, min(80, len(seen_before)))
+        print(f"    └─ 사이트맵 라이카 {len(links)}개 · 이전 {len(known)}개 · 새로 읽기 {len(todo)}개 · 다시 확인 {len(recheck)}개")
+
+        def meta(h, prop):
+            m = re.search(r'<meta\s+property="' + prop + r'"\s+content="([^"]*)"', h)
+            return _html.unescape(m.group(1)).strip() if m else ""
+
+        def detail(link):
+            try:
+                h = sess.get(link, timeout=40).text
+            except Exception as e:
+                print(f"    ⚠️ 상세 오류 {link[-40:]}: {e}")
+                return link, None
+            m_name = re.search(r'<h1[^>]*product-detail-name[^>]*>(.*?)</h1>', h, re.S)
+            path = " > ".join(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", li)).strip()
+                              for li in re.findall(r'<li[^>]*breadcrumb-item[^>]*>(.*?)</li>', h, re.S))
+            m_cond = re.search(r"<strong>Condition\s*</strong>.*?</a>\s*</div>\s*<div[^>]*>\s*([^<]+?)\s*<", h, re.S)
+            try:
+                amount = float(meta(h, "product:price:amount") or 0)
+            except ValueError:
+                amount = 0
+            return link, {"name": _html.unescape(re.sub(r"<[^>]+>", "", m_name.group(1))).strip() if m_name else "",
+                          "store": meta(h, "product:brand"), "amount": amount, "currency": meta(h, "product:price:currency"),
+                          "image": meta(h, "og:image"), "cond": m_cond.group(1).strip() if m_cond else "",
+                          "cart": "Add to shopping cart" in h, "path": _html.unescape(path)}
+
+        with ThreadPoolExecutor(6) as ex:
+            fetched = dict(ex.map(detail, todo + recheck))
+        rows_by_cc = {cc: [] for _, cc, _ in LEICA_CLASSIC_COUNTRIES}
+        for link in links:
+            info = fetched.get(link)
+            if info is None:
+                prev = known.get(link)
+                if prev:  # 이전에 읽은 것 그대로 (가격 바뀜은 다시 확인 차례에)
+                    cc = next((c for _, c, site in LEICA_CLASSIC_COUNTRIES if site == prev["site"]), None)
+                    if cc:
+                        row = dict(prev)
+                        row["상품명"] = _leica_classic_name(row["상품명"])
+                        rows_by_cc[cc].append(row)
+                continue
+            store = info["store"]
+            cc_site = next(((cc, site) for pat, cc, site in LEICA_CLASSIC_COUNTRIES if re.search(pat, store)), None)
+            if (not info["name"] or LEICA_CLASSIC_SKIP_STORES.search(store) or not cc_site
+                    or LEICA_CLASSIC_SKIP_PATH.search(info["path"])):
+                skip[link] = store or "?"
+                continue
+            if not info["cart"]:  # 장바구니 버튼이 없으면 판매 끝 (사이트맵엔 아직 남은 것)
+                continue
+            name = _leica_classic_name(info["name"])
+            # 'Leica Systems > M-System > Cameras'인데 이름에 Body가 없으면 붙인다 ('Leica SL (Typ 601)'·'Leica M EV1'이 렌즈로 갈리지 않게)
+            if re.search(r"> Cameras\b", info["path"]) and not re.search(r"\bbody\b|\bkit\b|\d\s?mm\b|\d\s?cm\b|dummy|not working", name, re.I):
+                name += " Body"
+            # 액세서리 분류인데 렌즈 표기('50mm f/2')가 없으면 'Accessory'를 붙인다 ('FLOTH plumb line'·'SCNOO'가 렌즈로 갈리지 않게)
+            elif re.search(r"Accessor|Copy Equipment|Focussing Stages|Close Up|Lens Hoods|Finder|Light-Meter|Filter|Caps|Bags",
+                           info["path"]) and not re.search(r"\d\s?(?:mm|cm) f\d|\baccessory\b", name, re.I):
+                name += " Accessory"
+            fmt = LEICA_CLASSIC_PRICE.get(info["currency"])
+            price = fmt.format(info["amount"]) if fmt and info["amount"] else "문의요망"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            rows_by_cc[cc_site[0]].append({
+                "site": cc_site[1],
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": LEICA_CLASSIC_PREFIX + info["cond"] if info["cond"] else "정보없음",
+                "가격": price,
+                "통화": info["currency"] or "EUR",
+                "이미지": info["image"],
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        try:
+            live = set(links)
+            with open("data/raw/leica_classic_skip.json", "w", encoding="utf-8") as f:
+                json.dump({u: v for u, v in skip.items() if u in live}, f, ensure_ascii=False, indent=0)
+        except OSError:
+            pass
+        print("  ✅ Leica Classic 완료: " + " · ".join(f"{cc} {len(v)}" for cc, v in rows_by_cc.items()))
+        _LEICA_CLASSIC_CACHE["rows"] = rows_by_cc
+        return rows_by_cc
+
+
+def crawl_leica_classic(cc):
+    return _leica_classic_all().get(cc, [])
+
+
 def crawl_kitamura():
     """기타무라 크롤러 - 라이카 중고 전체
 
@@ -4181,6 +4364,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
+    **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
 
 
@@ -4269,6 +4453,8 @@ def crawl_all():
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
     ]
+    sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
+                for _, cc, site in LEICA_CLASSIC_COUNTRIES]
     # 느리거나 자주 안 바뀌는 사이트는 최소 간격마다만 (그 사이엔 이전 데이터 유지)
     if not force_full and not SITE_FILTER:
         skipped = []

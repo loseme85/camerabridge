@@ -798,6 +798,7 @@ _HARD_ACC_PHRASES = (
     "soft button", "소프트버튼",
     "hot shoe", "cold shoe",
     "hand strap",
+    "accessory",  # Leica Classic: 액세서리 분류에서 온 매물 이름 끝 ('Leica FLOTH plumb line Accessory')
     "winder",
     "cable release",
     "remote",
@@ -928,6 +929,7 @@ _ACCESSORY_KW = [
     "adapter", "pouch", "charger", "battery", "cable",
     "case", "grip", "cover",
     "flash", "플래시",
+    "accessory",
     # 캡/필터
     "front cap", "rear cap", "리어캡", "프론트캡",
     "lens cap", "body cap", "eye cup",
