@@ -3931,6 +3931,107 @@ def crawl_tamarkin():
     return results
 
 
+def _nivo_name(title):
+    """Nivo Schweitzer 제목 다듬기: 'occasion LEICA 11604 Summicron-M 28mm/2.0 ASPH. • black • 6-bit coding [sn #4068634]'
+    → 'Leica 11604 Summicron-M 28mm f/2.0 ASPH. black 6-bit coding'. 일련번호·창고 기호(TB288·DOR172·E46·OT:518)는 떼고
+    네덜란드어 부속 이름은 영어로"""
+    name = re.sub(r"^\s*occasion\s+", "", title, flags=re.I)
+    name = re.sub(r"\[\s*(?:sn\b|#)[^\]]*\]|\bNo:\s*\d+|\b(?:TB|DOR:?|OT:)\s?\d+\b|\bE\d{2}\b", " ", name, flags=re.I)
+    name = re.sub(r"\[\s*typ\s*(\d+)\s*\]", r"(Typ \1)", name, flags=re.I)  # 'Q [typ 116]' → 'Q (Typ 116)'
+    name = re.sub(r"\[(Leica[^\]]*|Leicaflex[^\]]*)\]", r"for \1", name)  # '[Leica M10]' → 'for Leica M10'
+    name = re.sub(r"\[([\d,\s]+)[^\]]*\]", " ", name)
+    # 조리개는 'f2.0' 꼴로 (분류기의 렌즈 판별이 'f/2.0'은 못 읽음)
+    name = re.sub(r"(\d+(?:-\d+)?)mm/(\d+(?:\.\d+)?)", r"\1mm f\2", name)  # '28mm/2.0' → '28mm f2.0'
+    name = re.sub(r"\b(\d),(\d)/(\d+-\d+)mm", r"\3mm f\1.\2", name)  # '4,5/75-200mm' → '75-200mm f4.5'
+    name = re.sub(r"\b(?:Elmarit|Summicron|Summilux|Elmar)(?:-[MR])?\s+(\d\.\d)\s+(\d+)mm", lambda m: m.group(0).replace(f"{m.group(1)} {m.group(2)}mm", f"{m.group(2)}mm f{m.group(1)}"), name)  # 'Elmarit-M 2.8 90mm'
+    name = re.sub(r"(\d+mm)/(\d+(?:\.\d+)?)", r"\1 f\2", name)
+    for nl, en in ((r"opsteekzoeker", "Viewfinder"), (r"flitser", "Flash"), (r"tussenringen", "extension tubes"),
+                   (r"Universele Polarisatiefilter", "Universal Polarizing Filter"), (r"Combitas", "Combination Case"),
+                   (r"Ever ready case", "Ever Ready Case"), (r"\bdoos\b", "box"), (r"accu'?s?\b", "batteries"),
+                   (r"\bdop(?:pen)?\b", "cap"), (r"voor/achter", "front/rear"), (r"\bachter\b", "rear"), (r"\+ zk\b", "with hood")):
+        name = re.sub(nl, en, name, flags=re.I)
+    name = re.sub(r"\bincl\.?\s*", "with ", name, flags=re.I)
+    name = re.sub(r"^LEICA\s+LEITZ WETZLAR\b", "Leitz Wetzlar", name)
+    name = re.sub(r"^LEICA\b", "Leica", name)
+    name = re.sub(r"\s+-M\b", "-M", name)  # 'Noctilux -M' → 'Noctilux-M'
+    name = name.replace("•", " ")
+    name = re.sub(r"\s+", " ", name).strip(" ,")
+    # 바디·렌즈 뒤 부속 목록('with Visoflex'·'with 2 batteries'·'with box')은 분류를 흔들어 뗀다
+    if re.search(r"\bbody\b|\d+mm\b|\(Typ \d+\)", name, re.I) and not re.search(r"Viewfinder|Extender|Case|Flash", name):
+        name = re.split(r"\s+with\s+", name)[0]
+    # 카메라 이름 뒤에 Body ('Leica 19000 Q (Typ 116)' → '… Body', 'SL2 body' → 'SL2 Body')
+    name = re.sub(r"\bbody\b", "Body", name)
+    if re.match(r"Leica (?:\d{5} )?(?:Q\d?|SL\d?|M\d+(?:-\w+)?|CL|TL2?)(?: \(Typ \d+\))?(?: (?:black|silver)(?: chrome| paint)?)?$", name, re.I):
+        name += " Body"
+    return name
+
+
+def crawl_nivo():
+    """Nivo Schweitzer (네덜란드, 암스테르담) - 라이카 매장. 'Leica occasions' 분류 화면(정적 HTML, ?page=N 24개씩)에
+    이름·가격(부가세 포함)·재고 표시. 등급 표기는 목록·상세 어디에도 없어 등급 없이 담는다. 마지막 쪽을 넘기면
+    마지막 쪽이 다시 나오므로 첫 상품이 같으면 멈춤. 'Niet op voorraad'(재고 없음)는 품절"""
+    import html as _html
+    import requests
+    base = "https://www.nivo-schweitzer.nl"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Nivo Schweitzer 크롤링 시작")
+    results, seen, first_ids = [], set(), set()
+    for page_num in range(1, 30):
+        try:
+            resp = sess.get(f"{base}/leica-winkel/leica-occasions/c23442?page={page_num}", timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Nivo {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        boxes = re.findall(r"id='artikel_(\d+)'(.*?)priceExclBtw", resp.text, re.S)
+        if not boxes or boxes[0][0] in first_ids:
+            break
+        first_ids.add(boxes[0][0])
+        print(f"    └─ {page_num}페이지 {len(boxes)}개")
+        for _id, blk in boxes:
+            t = re.search(r'productboxLink" href="([^"]+)">([^<]+)', blk)
+            if not t:
+                continue
+            title = _html.unescape(t.group(2)).strip()
+            if not re.match(r"\s*occasion\s+leica\b", title, re.I):
+                continue  # Zeiss ZM·Voigtländer 등 다른 브랜드
+            link = base + t.group(1)
+            if link in seen:
+                continue
+            seen.add(link)
+            name = _nivo_name(title)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            pm = re.search(r'priceInclBtw">\s*(?:&euro;|€)(?:&nbsp;|\s)*([\d.]+),(\d{2})', blk)
+            price = f"€{int(pm.group(1).replace('.', '')):,}" if pm else "문의요망"
+            img = re.search(r'<img src="([^"]+)"[^>]*class="prodImage"', blk)
+            img = (base + img.group(1)) if img and img.group(1).startswith("/") else (img.group(1) if img else "")
+            sold = "Niet op voorraad" in blk
+            if sold and link in globals().get('SOLD_LINKS', ()):
+                continue
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Nivo Schweitzer (네덜란드)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link,
+                "품절": sold,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(2)
+    print(f"  ✅ Nivo Schweitzer 완료: {len(results)}개")
+    return results
+
+
 def _cameraelectronic_name(title):
     """Camera Electronic 제목 다듬기: 'Pre-Owned Leica M6 TTL .85 Silver Body Model 10466 With Box, Body, Cap, Strap SN: 2496525
     (Second Hand)' → 'Leica M6 TTL .85 Silver Body Model 10466'. 딸린 물건 목록('With …'·'in Box'·'Boxed …')과 연도·일련번호는
@@ -4553,6 +4654,7 @@ def crawl_all():
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
         ("Camera Electronic (호주)", lambda: ce.wrap_full_run("Camera Electronic (호주)", crawl_cameraelectronic)),
+        ("Nivo Schweitzer (네덜란드)", lambda: ce.wrap_full_run("Nivo Schweitzer (네덜란드)", crawl_nivo)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
