@@ -104,6 +104,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FOTOHANDEL.get(cond[len(FOTOHANDEL_PREFIX):].replace(" ", "").upper()), "label"
     if cond.startswith(SANPOU_PREFIX):
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
+    if cond.startswith(HEIDELBERG_PREFIX):
+        return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
     if cond.startswith(CE_PREFIX):
         phrase = cond[len(CE_PREFIX):]
         return next((g for pat, g in _CE if re.search(pat, phrase, re.I)), None), "text"
@@ -338,3 +340,12 @@ SANPOU_PREFIX = "Sanpou: "
 # 일본 공통 대응(AB B·B C)이면 사진이 평균 1.32등급 후해 기존(0.8)보다 크게 벗어나 한 칸 올림: AB A, B B.
 # 이 대응 기준 정확 일치 13/25 · 한 등급 이내 25/25 (사진이 평균 0.32등급 후함). 표본 없는 AA·A는 S·A, C는 D.
 _SANPOU = {"AAA": "S", "AA": "S", "A": "A", "AB": "A", "B": "B", "BC": "C", "C": "D"}
+
+# 독일 Leica Store Heidelberg: 설명의 'Bewertet … mit der Schulnote 1-2' (독일 학교 점수, 1 가장 좋음 ~ 3), 매장 진열품은 'Demo'
+HEIDELBERG_PREFIX = "Heidelberg: "
+# 사진 평가(표기 가리고 26점, 사진 3장씩 — 여백 잘라서, 2026-10-18): 1 S 3 · 1- S 3·A 3 · 1-2 S 1·A 5 · 2+ S 1·A 2 ·
+# 2 S 1·A 1·B 2 · 2- S 1·A 1 · 2-3 C 1 · 3 S 1. 매장 사진이 밝은 흰 배경이라 대부분 S~A로 보여 점수와 사진 차이가 작음.
+# 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 1·1-·1-2 A, 2+·2·2- B, 2-3 C, 3 D.
+# 이 대응 기준 정확 일치 11/26 · 한 등급 이내 22/26 (사진이 평균 0.81등급 후함 — 기존 0.8과 같음). Demo(진열품)는 S.
+_HEIDELBERG = {"1+": "S", "1": "A", "1-": "A", "1-2": "A", "2+": "B", "2": "B", "2-": "B", "2-3": "C", "3+": "C", "3": "D",
+               "3-": "D", "3-4": "D", "4": "D", "Demo": "S"}
