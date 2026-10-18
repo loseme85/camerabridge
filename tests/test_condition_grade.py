@@ -214,3 +214,9 @@ def test_vibe_condition_grades():
     assert grade_of(site, VIBE_PREFIX + "5", "Leica Summilux-M 50mm f1.4 Asph. 6-bit black (11891)")[0] == "A"
     assert grade_of(site, VIBE_PREFIX + "4", "Leica Elmarit-M 90mm f2.8 (11 807)")[0] == "B"
     assert grade_of(site, VIBE_PREFIX + "3", "Leica Summicron-M 50mm f2.0 Leitz Wetzlar")[0] == "C"
+def test_koester_condition_grades():
+    from condition_grade import KOESTER_PREFIX
+    site = "Foto Köster (독일)"
+    assert grade_of(site, KOESTER_PREFIX + "sehr gut", "Leica Tele-Elmarit-M 90mm f2.8")[0] == "A"
+    assert grade_of(site, KOESTER_PREFIX + "gut", "Leica Summicron-M 90mm f2.0")[0] == "B"
+    assert grade_of(site, KOESTER_PREFIX + "defekt", "Leica Elmar 90mm f4.0 L39 defekt")[0] in ("D", "X")

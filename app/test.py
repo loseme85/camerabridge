@@ -4401,6 +4401,126 @@ def crawl_sanpou():
             break
         time.sleep(2)
     print(f"  ✅ Vibe.pl 완료: {len(results)}개")
+def _koester_name(title):
+    """Foto Köster 제목 다듬기: 제조사 칸이 Leica인데 제목엔 'Leica'가 없어('Summicron M 90/2', 'I g Gehäuse') 앞에 붙이고,
+    '90/2'·'1:2,8/90' → '90mm f2.0'·'90mm f2.8', 'Gehäuse' → 'Body', 'III G' → 'IIIg', 'flex' → 'Leicaflex'"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"(\d),(\d)", r"\1.\2", name)
+    name = re.sub(r"\s*-\s*defekt\b", " defekt", name, flags=re.I)
+    name = re.sub(r"^flex\b", "Leicaflex", name, flags=re.I)
+    name = re.sub(r"\s+mit Sucher\b", "", name)
+    name = re.sub(r"-M(\d)", r"-M \1", name)  # 'Elmar-M50/2.8'
+    for de, en in (("Bereitschaftstasche", "Ever-Ready Case"), ("Gegenlichtblende", "Lens Hood"), ("Einstellschnecke", "Focusing Mount"),
+                   ("Sucher", "Viewfinder"), ("Kabel", "Cable"), ("braun", "brown")):
+        name = re.sub(rf"\b{de}\b", en, name)
+    name = re.sub(r"\bfür\b", "for", name)
+    name = re.sub(r"^DRP II m\.\s*", "II (D) Body with ", name)
+    name = re.sub(r"^Nah-Summicron-M\b", "Dual Range Summicron-M", name)
+    name = re.sub(r"^Elmar (65)/", r"Viso-Elmar \1/", name)
+    name = re.sub(r"\b1:(\d+(?:\.\d+)?)/(\d{2,3})\b", r"\2/\1", name)  # '1:2.8/90' → '90/2.8'
+    name = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)/(\d+(?:\.\d+)?)\b",
+                  lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"\bf/(\d)", r"f\1", name)
+    name = re.sub(r"\b(Summicron|Summilux|Elmarit|Elmar|Summaron) (M|R)\b", r"\1-\2", name)
+    name = re.sub(r"\b(I{1,3}) ([A-Ga-g])\b", lambda m: m.group(1) + m.group(2).lower(), name)
+    name = re.sub(r"\bI([FG])\b", lambda m: "I" + m.group(1).lower(), name)
+    name = re.sub(r"\bGehäuse\b", "Body", name)
+    name = re.sub(r"\bmit Sucher\b", "", name)
+    name = re.sub(r"\bmit Brille\b", "with Goggles", name)
+    name = re.sub(r",?\s*Version EU,?\s*US,?\s*CN", "", name)
+    name = re.sub(r"\bschwarz lackiert\b", "black paint", name)
+    name = re.sub(r"\bschwarz eloxiert\b", "black anodized", name)
+    name = re.sub(r"\bschwarz\b", "black", name)
+    name = re.sub(r"\bsilber\b", "silver", name)
+    name = re.sub(r"\bM-?39\b", "L39", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-")
+    return name if re.match(r"(?:Leica|Leitz)", name, re.I) else "Leica " + name
+
+
+def _koester_condition(desc):
+    """Foto Köster 설명 글의 상태 말투 → 등급 단계 (매장 등급표 없음). 'Lieferumfang und Zustand wie abgebildet'만 있으면 None"""
+    d = desc.lower()
+    if re.search(r"defekt|nebel|kratzer auf der frontlinse|pilz|fungus", d):
+        return "defekt"
+    if re.search(r"wie neu|top-zustand|sehr gut", d):
+        return "sehr gut"
+    if re.search(r"\bgut(?:e[nmr]?)?\b[^.]{0,40}zustand|zustand[^.]{0,20}\bgut", d):
+        return "gut"
+    return None
+
+
+def crawl_koester():
+    """Foto Köster (독일, 뮌스터) - 사진 매장(Shopware). '중고 기기'(Gebrauchtgeräte) 분류를 제조사 Leica로 거른 목록
+    (?manufacturer=…&p=N, 정적 HTML)에 이름·가격·사진. 등급표가 없고 상태는 상세 설명 글에만 있어('sehr guten Zustand mit kaum
+    erkennbaren Abnutzungen'·'guten Zustand'·'Nebel') 상세를 함께 읽음 — 40개쯤이라 6시간마다"""
+    import html as _html
+    import json as _json
+    import requests
+    from condition_grade import KOESTER_PREFIX
+    base = "https://www.foto-koester.de"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Foto Köster 크롤링 시작")
+    cards = []
+    for page_num in range(1, 20):
+        try:
+            resp = sess.get(f"{base}/gebrauchtgeraete/", params={"manufacturer": "006e484887ba4574a1e5903c2ad7fb04",
+                                                                 "limit": 48, "p": page_num}, timeout=40)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Foto Köster {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        boxes = resp.text.split('class="card product-box')[1:]
+        new = 0
+        for blk in boxes:
+            info = re.search(r'data-product-information="([^"]+)"', blk)
+            link = re.search(r'href="([^"]+)"[^>]*class="product-name', blk) or re.search(r'class="product-name[^"]*"[^>]*href="([^"]+)"', blk)
+            if not info or not link or any(c[0] == link.group(1) for c in cards):
+                continue
+            img = re.search(r'<img[^>]+src="([^"?]+)', blk)
+            cards.append((link.group(1), _json.loads(_html.unescape(info.group(1))), img.group(1) if img else ""))
+            new += 1
+        print(f"    └─ {page_num}페이지 {len(boxes)}개")
+        if new == 0 or f"p={page_num + 1}" not in resp.text:
+            break
+        time.sleep(2)
+    results = []
+    for link, d, img in cards:
+        price = float(d.get("price") or 0)
+        if price <= 0:
+            continue
+        name = _koester_name(d.get("name") or "")
+        if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS) or re.search(r"Elmaron|Colorplan|Hektor-P|Pradovit", name):
+            continue  # 영사기 렌즈는 카메라 매물이 아님
+        cond = "정보없음"
+        try:
+            page = sess.get(link, timeout=30).text
+            m = re.search(r'class="product-detail-description-text"[^>]*>(.*?)</div>', page, re.S)
+            grade = _koester_condition(_html.unescape(re.sub(r"<[^>]+>", " ", m.group(1))) if m else "")
+            if grade:
+                cond = KOESTER_PREFIX + grade
+        except Exception as e:
+            print(f"    ⚠️ 상세 못 읽음 ({link}): {e}")
+        time.sleep(1)
+        cat = detect_category(name, f"€{int(price):,}")
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": "Foto Köster (독일)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": f"€{int(round(price)):,}",
+            "통화": "EUR",
+            "이미지": img,
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Foto Köster 완료: {len(results)}개")
     return results
 
 
@@ -4936,6 +5056,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Ffordes (영국)": 6,
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
+    "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
@@ -5031,6 +5152,7 @@ def crawl_all():
         ("三宝カメラ (일본)", lambda: ce.wrap_full_run("三宝カメラ (일본)", crawl_sanpou)),
         ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
         ("Vibe.pl (폴란드)", lambda: ce.wrap_full_run("Vibe.pl (폴란드)", crawl_vibe)),
+        ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
