@@ -5177,7 +5177,7 @@ def crawl_all():
         ("fotohandel.de (독일)", lambda: ce.wrap_full_run("fotohandel.de (독일)", crawl_fotohandel)),
         ("三宝カメラ (일본)", lambda: ce.wrap_full_run("三宝カメラ (일본)", crawl_sanpou)),
         ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
-        ("Vibe.pl (폴란드)", lambda: ce.wrap_full_run("Vibe.pl (폴란드)", crawl_vibe)),
+        # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
