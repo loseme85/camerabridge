@@ -4209,6 +4209,86 @@ def crawl_heidelberg():
                 "가격": price,
                 "통화": "EUR",
                 "이미지": img,
+def _vibe_name(title):
+    """Vibe.pl 제목 다듬기: 'Leica 75/2.5 Summarit-M 6-Bit (11645)' → 'Leica Summarit-M 75mm f2.5 6-Bit (11645)'.
+    '초점/조리개 이름' 순서를 '이름 초점mm f조리개'로, 폴란드어 앞말(Obiektyw·Aparat cyfrowy)·'używany'·색 이름 정리"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"^(?:Obiektyw|Aparat(?: cyfrowy| analogowy)?)\s+", "", name, flags=re.I)
+    name = re.sub(r"\s*[–-]\s*(?:UŻYWANE|Aparat\b.*)$", "", name, flags=re.I)
+    name = re.sub(r"\s+(?:używany|Aparat Analogowy Dalmierz)\b.*$", "", name, flags=re.I)
+    name = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)/(\d+(?:\.\d+)?)\s+((?:APO-|Macro-|Vario-|Super-)*(?:Summilux|Summicron|Summarit|Summaron|Elmarit|Elmar|Noctilux|Tele-Elmarit|Tele-Elmar|Super-Angulon|Telyt)(?:-[A-Z]+)?)",
+                  lambda m: f"{m.group(3)} {m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"\b(\d{2,3})/(\d+(?:\.\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"\b(\d{2,3})mm f(\d+(?:\.\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"Macro-Elmarit-R (100mm f4\.0)", r"Macro-Elmar-R \1", name)  # 100/4는 Macro-Elmar (매장 오타)
+    name = re.sub(r"\s+ver\.?\s?(\d)\b", r" Version \1", name, flags=re.I)
+    name = re.sub(r"\bCzarn[ya]\b", "black", name, flags=re.I)
+    name = re.sub(r"\bSrebrn[ya]\b", "silver", name, flags=re.I)
+    name = re.sub(r"\s+", " ", name).strip(" ,-–")
+    if re.match(r"Leica (?:M\d*|MP|CL|Q\d?|SL\d?(?:-S)?|R\d)(?: \((?:Typ|TYP) \d+\))?(?: (?:black|silver|body))*$", name, re.I):
+        name = re.sub(r"\s+body$", "", name, flags=re.I) + " Body"
+    return name
+
+
+def crawl_vibe():
+    """Vibe.pl (폴란드, 크라쿠프 InterFoto 매장 온라인) - WooCommerce. 공개 상품 API(/wp-json/wc/store/v1/products?search=leica)
+    한 번에 100개씩. 신품·중고·대여(Rent-to-Own)가 섞여 있어 중고만: 설명에 'Stan zużycia: 5·4·3…'(매장 등급)이 있거나
+    중고 보증 'Gwarancja: 3'(3개월)이거나 제목에 'UŻYWANE'. Panasonic Leica DG·Sigma·Voigtländer 등은 뺌. 재고 있는 것만"""
+    import html as _html
+    import requests
+    from condition_grade import VIBE_PREFIX
+    base = "https://vibe.pl"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Vibe.pl 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(1, 20):
+        try:
+            resp = sess.get(f"{base}/wp-json/wc/store/v1/products",
+                            params={"search": "leica", "per_page": 100, "page": page_num}, timeout=60)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"Vibe.pl {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개")
+        for p in products:
+            title = _html.unescape(p.get("name") or "")
+            if not re.match(r"(?:Obiektyw |Aparat (?:cyfrowy |analogowy )?)?(?:Leica|Leitz)\b", title, re.I):
+                continue
+            link = p.get("permalink") or ""
+            if not p.get("is_in_stock") or link in seen:
+                continue
+            seen.add(link)
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
+            stan = re.search(r"Stan zużycia:\s*([0-9]|DEMO|NOWY)\b", text, re.I)
+            if stan and stan.group(1).upper() == "NOWY":
+                continue
+            if not (stan or re.search(r"Gwarancja:\s*3\b", text) or "UŻYWAN" in title.upper()):
+                continue  # 신품
+            name = _vibe_name(title)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            pr = p.get("prices") or {}
+            try:
+                amount = int(pr.get("price")) / 10 ** int(pr.get("currency_minor_unit") or 0)
+                price = f"{amount:,.0f} zł"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            imgs = p.get("images") or []
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Vibe.pl (폴란드)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": VIBE_PREFIX + stan.group(1).upper() if stan else "정보없음",
+                "가격": price,
+                "통화": "PLN",
+                "이미지": imgs[0].get("src", "") if imgs else "",
                 "링크": link,
                 "품절": False,
                 "예약중": False,
@@ -4314,6 +4394,13 @@ def crawl_sanpou():
             })
         time.sleep(random.uniform(1.0, 2.0))
     print(f"  ✅ Leica Store Heidelberg 완료: {len(results)}개")
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+        time.sleep(2)
+    print(f"  ✅ Vibe.pl 완료: {len(results)}개")
     return results
 
 
@@ -4943,6 +5030,7 @@ def crawl_all():
         ("fotohandel.de (독일)", lambda: ce.wrap_full_run("fotohandel.de (독일)", crawl_fotohandel)),
         ("三宝カメラ (일본)", lambda: ce.wrap_full_run("三宝カメラ (일본)", crawl_sanpou)),
         ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
+        ("Vibe.pl (폴란드)", lambda: ce.wrap_full_run("Vibe.pl (폴란드)", crawl_vibe)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
