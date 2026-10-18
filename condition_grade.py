@@ -100,6 +100,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _TAMARKIN.get(cond[len(TAMARKIN_PREFIX):].strip().upper()), "label"
     if cond.startswith(LEICA_CLASSIC_PREFIX):
         return _LEICA_CLASSIC.get(cond[len(LEICA_CLASSIC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTOHANDEL_PREFIX):
+        return _FOTOHANDEL.get(cond[len(FOTOHANDEL_PREFIX):].replace(" ", "").upper()), "label"
     if cond.startswith(CE_PREFIX):
         phrase = cond[len(CE_PREFIX):]
         return next((g for pat, g in _CE if re.search(pat, phrase, re.I)), None), "text"
@@ -321,3 +323,10 @@ def ce_condition(text: str) -> str | None:
         if m:
             return CE_PREFIX + m.group(0)
     return None
+# 독일 fotohandel.de: 카드·상세의 'Zustandsbeschreibung' A·A-·A-B·B·B-·B-C (A-B는 A와 B 사이)
+FOTOHANDEL_PREFIX = "fotohandel: "
+# 사진 평가(표기 가리고 27점, 사진 3장씩, 2026-10-18): A S 6·A 2 · A- A 5·B 1·C 1 · A-B A 3·B 2·C 1 · B B 1·C 2 ·
+# B- B 1 · B-C B 2. 기존 매장처럼 사진이 표기보다 한 등급쯤 후한 것을 빼면 A A, A-·A-B B, B·B- C, B-C D.
+# 이 대응 기준 정확 일치 7/27 · 한 등급 이내 25/27 (사진이 평균 0.67등급 후함 — 기존 0.8과 비슷).
+# A-와 A-B는 사진으로 갈리지 않아 둘 다 B. 표본 없는 A+는 S, C는 D.
+_FOTOHANDEL = {"A+": "S", "A": "A", "A-": "B", "A-B": "B", "B+": "C", "B": "C", "B-": "C", "B-C": "D", "C": "D"}
