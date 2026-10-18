@@ -106,6 +106,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
+    if cond.startswith(VIBE_PREFIX):
+        return _VIBE.get(cond[len(VIBE_PREFIX):].strip().upper()), "label"
     if cond.startswith(CE_PREFIX):
         phrase = cond[len(CE_PREFIX):]
         return next((g for pat, g in _CE if re.search(pat, phrase, re.I)), None), "text"
@@ -349,3 +351,10 @@ HEIDELBERG_PREFIX = "Heidelberg: "
 # 이 대응 기준 정확 일치 11/26 · 한 등급 이내 22/26 (사진이 평균 0.81등급 후함 — 기존 0.8과 같음). Demo(진열품)는 S.
 _HEIDELBERG = {"1+": "S", "1": "A", "1-": "A", "1-2": "A", "2+": "B", "2": "B", "2-": "B", "2-3": "C", "3+": "C", "3": "D",
                "3-": "D", "3-4": "D", "4": "D", "Demo": "S"}
+
+# 폴란드 Vibe.pl: 설명의 'Stan zużycia: 4' — NOWY(신품)·DEMO(진열품)·5(흔적 거의 없음)·4(작은 흔적)·3(보통 흔적)·2(많이 씀)·1
+VIBE_PREFIX = "Vibe: "
+# 사진 평가(표기 가리고 29점 — 판매 끝난 것 포함, 사진 3장씩, 2026-10-18): 5 S 3·A 4·B 1 · 4 S 2·A 14·B 3 · 3 B 1·C 1.
+# 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 5 A, 4 B, 3 C, 2·1 D.
+# 이 대응 기준 정확 일치 8/29 · 한 등급 이내 27/29 (사진이 평균 0.72등급 후함 — 기존 0.8과 비슷). DEMO는 S.
+_VIBE = {"DEMO": "S", "5": "A", "4": "B", "3": "C", "2": "D", "1": "D"}

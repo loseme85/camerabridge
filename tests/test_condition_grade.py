@@ -208,3 +208,9 @@ def test_heidelberg_condition_grades():
     assert grade_of(site, HEIDELBERG_PREFIX + "2", "Leica Elmarit-M 90mm f2.8 11807")[0] == "B"
     assert grade_of(site, HEIDELBERG_PREFIX + "2-3", "Leica Objektivdeckel Q Messing")[0] == "C"
     assert grade_of(site, HEIDELBERG_PREFIX + "Demo", "Leica M11 black gloss paint Body")[0] == "S"
+def test_vibe_condition_grades():
+    from condition_grade import VIBE_PREFIX
+    site = "Vibe.pl (폴란드)"
+    assert grade_of(site, VIBE_PREFIX + "5", "Leica Summilux-M 50mm f1.4 Asph. 6-bit black (11891)")[0] == "A"
+    assert grade_of(site, VIBE_PREFIX + "4", "Leica Elmarit-M 90mm f2.8 (11 807)")[0] == "B"
+    assert grade_of(site, VIBE_PREFIX + "3", "Leica Summicron-M 50mm f2.0 Leitz Wetzlar")[0] == "C"
