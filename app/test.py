@@ -4121,174 +4121,6 @@ def crawl_fotohandel():
                 "가격": f"€{int(round(price)):,}",
                 "통화": "EUR",
                 "이미지": img.group(1) if img else "",
-_HEIDELBERG_WORDS = [(r"schwarz(?:es)? glänzend(?: lackiert)?", "black gloss paint"), (r"schwarz(?:es)?", "black"),
-                     (r"silber", "silver"), (r"Metallgrau", "Metal Grey"), (r"olivgrün", "olive green"),
-                     (r"Gegenlichtblende", "Lens Hood"), (r"Objektivdeckel", "Lens Cap"), (r"Akku", "Battery"),
-                     (r"Daumenstütze", "Thumb Support"), (r"Handgriff", "Handgrip"), (r"Trageriemen", "Strap"),
-                     (r"Leder", "Leather"), (r"Messing", "Brass"), (r"Protektor", "Protector"), (r"für", "for"),
-                     (r"rund", "round"), (r"Polfilter", "Polarizing Filter"), (r"Kabelfernauslöser", "Cable Release"),
-                     (r"Elektrischer", "Electric")]
-
-
-def _heidelberg_name(title):
-    """Leica Store Heidelberg 제목 다듬기: 'Leica Summilux-M F1.4 50mm ASPH. 11728' → 'Leica Summilux-M 50mm f1.4 ASPH. 11728'.
-    조리개를 초점거리 앞에 쓴 표기를 뒤로 옮기고(분류기는 '50mm f1.4' 꼴을 읽음), 독일식 소수점(F3,5)·'1:1.4/35' 표기를 고치고,
-    렌즈·바디 뒤 'mit …'(딸린 필터·보호대 목록)는 떼고, 독일어 색·부속 이름은 영어로"""
-    import unicodedata
-    name = re.sub(r"\s+", " ", unicodedata.normalize("NFC", title)).strip()  # Shopify 제목의 ü가 나뉜 글자(NFD)라 합침
-    name = re.sub(r"(\d),(\d)", r"\1.\2", name)
-    name = name.replace("Power Set", "Charger Power Set")
-    name = re.sub(r"Vario-Elmarit-SL\s+100-400", "Vario-Elmar-SL 100-400", name)  # 매장 오타 (100-400은 Vario-Elmar)
-    name = re.sub(r"\s+-\s+(?:originale?s?\b.*)?", " ", name)
-    name = re.sub(r"\s+mit\s+(?:UV Filter|Brille|Protektor)\b.*$", "", name)
-    name = re.sub(r"\b1:(\d+(?:\.\d+)?)/(\d{2,3})\b", r"\2mm F\1", name)  # '1:1.4/35' → '35mm F1.4'
-    name = re.sub(r"\b[fF]/?(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\s+(\d{2,3}(?:-\d{2,3})?mm)\b", r"\2 F\1", name)
-    name = re.sub(r"\b[fF]/?(\d+(?:\.\d+)?)(?=[\s-]|$)", lambda m: "f" + m.group(1) + ("" if "." in m.group(1) else ".0"), name)
-    for de, en in _HEIDELBERG_WORDS:
-        name = re.sub(rf"\b{de}\b", en, name, flags=re.I)
-    name = re.sub(r"\bmit\b", "with", name)
-    name = re.sub(r"\s+", " ", name).strip(" ,-")
-    if re.match(r"Leica (?:M\d|MP|M-[AP]|CL|Q\d?|SL\d?|R\d)(?:[- ]\S+)?(?: (?:black|silver|Metal Grey|Monochrom|black gloss paint))*$", name):
-        name += " Body"  # 'Leica M6 black'처럼 바디 이름만 있으면 렌즈로 갈리지 않게
-    return name
-
-
-def crawl_heidelberg():
-    """Leica Store Heidelberg (독일) - 라이카 매장(Shopify)의 'Pre-Owned' 컬렉션 JSON (판매 중 70개쯤). 벤더가 모두
-    매장 이름이라 제목이 Leica·Leitz로 시작하는 것만 담음(Voigtländer·Zeiss·Sigma·Nikon 등은 뺌). 등급은 설명의
-    'Schulnote 1-2'(독일 학교 점수, 1이 가장 좋음), 매장 진열품은 'Demo'"""
-    import html as _html
-    import requests
-    from condition_grade import HEIDELBERG_PREFIX
-    results = []
-    base = "https://leica-store-heidelberg.de"
-    print(f"\n  📂 Leica Store Heidelberg 크롤링 시작")
-    for page_num in range(1, 20):
-        url = f"{base}/collections/pre-owned/products.json?limit=250&page={page_num}"
-        try:
-            resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=30)
-            resp.raise_for_status()
-            products = resp.json().get("products", [])
-        except Exception as e:
-            raise RuntimeError(f"Leica Store Heidelberg {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
-        if not products:
-            break
-        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
-        for p in products:
-            title = (p.get("title") or "").strip()
-            if not re.match(r"(?:leica|leitz)\b", title, re.I):
-                continue
-            variants = p.get("variants") or [{}]
-            if not any(v.get("available") for v in variants):
-                continue
-            link = f"{base}/products/{p['handle']}"
-            name = _heidelberg_name(title)
-            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
-                continue
-            try:
-                price = f"€{float(variants[0].get('price')):,.0f}"
-            except (TypeError, ValueError):
-                price = "문의요망"
-            text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or ""))
-            m = re.search(r"Schulnote\s*([1-6](?:\s*[-+]\s*[1-6]?)?)", text)
-            if m:
-                cond = HEIDELBERG_PREFIX + re.sub(r"\s+", "", m.group(1))
-            elif re.search(r"\bDemo", text):
-                cond = HEIDELBERG_PREFIX + "Demo"
-            else:
-                cond = "정보없음"
-            img = p["images"][0].get("src", "") if p.get("images") else ""
-            cat = detect_category(name, price)
-            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
-            results.append({
-                "site": "Leica Store Heidelberg (독일)",
-                "label": auto_label(name),
-                "상품명": name,
-                "세대": detect_generation(name),
-                "컨디션": cond,
-                "가격": price,
-                "통화": "EUR",
-                "이미지": img,
-def _vibe_name(title):
-    """Vibe.pl 제목 다듬기: 'Leica 75/2.5 Summarit-M 6-Bit (11645)' → 'Leica Summarit-M 75mm f2.5 6-Bit (11645)'.
-    '초점/조리개 이름' 순서를 '이름 초점mm f조리개'로, 폴란드어 앞말(Obiektyw·Aparat cyfrowy)·'używany'·색 이름 정리"""
-    import html as _html
-    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
-    name = re.sub(r"^(?:Obiektyw|Aparat(?: cyfrowy| analogowy)?)\s+", "", name, flags=re.I)
-    name = re.sub(r"\s*[–-]\s*(?:UŻYWANE|Aparat\b.*)$", "", name, flags=re.I)
-    name = re.sub(r"\s+(?:używany|Aparat Analogowy Dalmierz)\b.*$", "", name, flags=re.I)
-    name = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)/(\d+(?:\.\d+)?)\s+((?:APO-|Macro-|Vario-|Super-)*(?:Summilux|Summicron|Summarit|Summaron|Elmarit|Elmar|Noctilux|Tele-Elmarit|Tele-Elmar|Super-Angulon|Telyt)(?:-[A-Z]+)?)",
-                  lambda m: f"{m.group(3)} {m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
-    name = re.sub(r"\b(\d{2,3})/(\d+(?:\.\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
-    name = re.sub(r"\b(\d{2,3})mm f(\d+(?:\.\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
-    name = re.sub(r"Macro-Elmarit-R (100mm f4\.0)", r"Macro-Elmar-R \1", name)  # 100/4는 Macro-Elmar (매장 오타)
-    name = re.sub(r"\s+ver\.?\s?(\d)\b", r" Version \1", name, flags=re.I)
-    name = re.sub(r"\bCzarn[ya]\b", "black", name, flags=re.I)
-    name = re.sub(r"\bSrebrn[ya]\b", "silver", name, flags=re.I)
-    name = re.sub(r"\s+", " ", name).strip(" ,-–")
-    if re.match(r"Leica (?:M\d*|MP|CL|Q\d?|SL\d?(?:-S)?|R\d)(?: \((?:Typ|TYP) \d+\))?(?: (?:black|silver|body))*$", name, re.I):
-        name = re.sub(r"\s+body$", "", name, flags=re.I) + " Body"
-    return name
-
-
-def crawl_vibe():
-    """Vibe.pl (폴란드, 크라쿠프 InterFoto 매장 온라인) - WooCommerce. 공개 상품 API(/wp-json/wc/store/v1/products?search=leica)
-    한 번에 100개씩. 신품·중고·대여(Rent-to-Own)가 섞여 있어 중고만: 설명에 'Stan zużycia: 5·4·3…'(매장 등급)이 있거나
-    중고 보증 'Gwarancja: 3'(3개월)이거나 제목에 'UŻYWANE'. Panasonic Leica DG·Sigma·Voigtländer 등은 뺌. 재고 있는 것만"""
-    import html as _html
-    import requests
-    from condition_grade import VIBE_PREFIX
-    base = "https://vibe.pl"
-    sess = requests.Session()
-    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
-    print("\n  📂 Vibe.pl 크롤링 시작")
-    results, seen = [], set()
-    for page_num in range(1, 20):
-        try:
-            resp = sess.get(f"{base}/wp-json/wc/store/v1/products",
-                            params={"search": "leica", "per_page": 100, "page": page_num}, timeout=60)
-            resp.raise_for_status()
-            products = resp.json()
-        except Exception as e:
-            raise RuntimeError(f"Vibe.pl {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
-        if not products:
-            break
-        print(f"    └─ {page_num}페이지 {len(products)}개")
-        for p in products:
-            title = _html.unescape(p.get("name") or "")
-            if not re.match(r"(?:Obiektyw |Aparat (?:cyfrowy |analogowy )?)?(?:Leica|Leitz)\b", title, re.I):
-                continue
-            link = p.get("permalink") or ""
-            if not p.get("is_in_stock") or link in seen:
-                continue
-            seen.add(link)
-            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
-            stan = re.search(r"Stan zużycia:\s*([0-9]|DEMO|NOWY)\b", text, re.I)
-            if stan and stan.group(1).upper() == "NOWY":
-                continue
-            if not (stan or re.search(r"Gwarancja:\s*3\b", text) or "UŻYWAN" in title.upper()):
-                continue  # 신품
-            name = _vibe_name(title)
-            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
-                continue
-            pr = p.get("prices") or {}
-            try:
-                amount = int(pr.get("price")) / 10 ** int(pr.get("currency_minor_unit") or 0)
-                price = f"{amount:,.0f} zł"
-            except (TypeError, ValueError):
-                price = "문의요망"
-            imgs = p.get("images") or []
-            cat = detect_category(name, price)
-            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
-            results.append({
-                "site": "Vibe.pl (폴란드)",
-                "label": auto_label(name),
-                "상품명": name,
-                "세대": detect_generation(name),
-                "컨디션": VIBE_PREFIX + stan.group(1).upper() if stan else "정보없음",
-                "가격": price,
-                "통화": "PLN",
-                "이미지": imgs[0].get("src", "") if imgs else "",
                 "링크": link,
                 "품절": False,
                 "예약중": False,
@@ -4298,6 +4130,9 @@ def crawl_vibe():
             })
         time.sleep(2)
     print(f"  ✅ fotohandel.de 완료: {len(results)}개")
+    return results
+
+
 SANPOU_JA = {"ストローク": " Stroke", "セルフタイマー付": "Self-timer", "シャークスキン": "Sharkskin", "ヌーキー": "with NOOKY",
              "固定鏡筒": "Rigid", "6枚玉": "6-element", "8枚玉": "8-element", "ツノ無し": "", "逆ローレット": "",
              "(ヒョットコ)": "", "フラッシュ": "Flash", "直立": "Upright ", "型": "", "Lマウント": "L", "ドイツ": "Germany",
@@ -4389,11 +4224,193 @@ def crawl_sanpou():
             time.sleep(2)
         time.sleep(2)
     print(f"  ✅ 三宝カメラ 완료: {len(results)}개")
+    return results
+
+
+_HEIDELBERG_WORDS = [(r"schwarz(?:es)? glänzend(?: lackiert)?", "black gloss paint"), (r"schwarz(?:es)?", "black"),
+                     (r"silber", "silver"), (r"Metallgrau", "Metal Grey"), (r"olivgrün", "olive green"),
+                     (r"Gegenlichtblende", "Lens Hood"), (r"Objektivdeckel", "Lens Cap"), (r"Akku", "Battery"),
+                     (r"Daumenstütze", "Thumb Support"), (r"Handgriff", "Handgrip"), (r"Trageriemen", "Strap"),
+                     (r"Leder", "Leather"), (r"Messing", "Brass"), (r"Protektor", "Protector"), (r"für", "for"),
+                     (r"rund", "round"), (r"Polfilter", "Polarizing Filter"), (r"Kabelfernauslöser", "Cable Release"),
+                     (r"Elektrischer", "Electric")]
+
+
+def _heidelberg_name(title):
+    """Leica Store Heidelberg 제목 다듬기: 'Leica Summilux-M F1.4 50mm ASPH. 11728' → 'Leica Summilux-M 50mm f1.4 ASPH. 11728'.
+    조리개를 초점거리 앞에 쓴 표기를 뒤로 옮기고(분류기는 '50mm f1.4' 꼴을 읽음), 독일식 소수점(F3,5)·'1:1.4/35' 표기를 고치고,
+    렌즈·바디 뒤 'mit …'(딸린 필터·보호대 목록)는 떼고, 독일어 색·부속 이름은 영어로"""
+    import unicodedata
+    name = re.sub(r"\s+", " ", unicodedata.normalize("NFC", title)).strip()  # Shopify 제목의 ü가 나뉜 글자(NFD)라 합침
+    name = re.sub(r"(\d),(\d)", r"\1.\2", name)
+    name = name.replace("Power Set", "Charger Power Set")
+    name = re.sub(r"Vario-Elmarit-SL\s+100-400", "Vario-Elmar-SL 100-400", name)  # 매장 오타 (100-400은 Vario-Elmar)
+    name = re.sub(r"\s+-\s+(?:originale?s?\b.*)?", " ", name)
+    name = re.sub(r"\s+mit\s+(?:UV Filter|Brille|Protektor)\b.*$", "", name)
+    name = re.sub(r"\b1:(\d+(?:\.\d+)?)/(\d{2,3})\b", r"\2mm F\1", name)  # '1:1.4/35' → '35mm F1.4'
+    name = re.sub(r"\b[fF]/?(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\s+(\d{2,3}(?:-\d{2,3})?mm)\b", r"\2 F\1", name)
+    name = re.sub(r"\b[fF]/?(\d+(?:\.\d+)?)(?=[\s-]|$)", lambda m: "f" + m.group(1) + ("" if "." in m.group(1) else ".0"), name)
+    for de, en in _HEIDELBERG_WORDS:
+        name = re.sub(rf"\b{de}\b", en, name, flags=re.I)
+    name = re.sub(r"\bmit\b", "with", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-")
+    if re.match(r"Leica (?:M\d|MP|M-[AP]|CL|Q\d?|SL\d?|R\d)(?:[- ]\S+)?(?: (?:black|silver|Metal Grey|Monochrom|black gloss paint))*$", name):
+        name += " Body"  # 'Leica M6 black'처럼 바디 이름만 있으면 렌즈로 갈리지 않게
+    return name
+
+
+def crawl_heidelberg():
+    """Leica Store Heidelberg (독일) - 라이카 매장(Shopify)의 'Pre-Owned' 컬렉션 JSON (판매 중 70개쯤). 벤더가 모두
+    매장 이름이라 제목이 Leica·Leitz로 시작하는 것만 담음(Voigtländer·Zeiss·Sigma·Nikon 등은 뺌). 등급은 설명의
+    'Schulnote 1-2'(독일 학교 점수, 1이 가장 좋음), 매장 진열품은 'Demo'"""
+    import html as _html
+    import requests
+    from condition_grade import HEIDELBERG_PREFIX
+    results = []
+    base = "https://leica-store-heidelberg.de"
+    print(f"\n  📂 Leica Store Heidelberg 크롤링 시작")
+    for page_num in range(1, 20):
+        url = f"{base}/collections/pre-owned/products.json?limit=250&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=30)
+            resp.raise_for_status()
+            products = resp.json().get("products", [])
+        except Exception as e:
+            raise RuntimeError(f"Leica Store Heidelberg {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = (p.get("title") or "").strip()
+            if not re.match(r"(?:leica|leitz)\b", title, re.I):
+                continue
+            variants = p.get("variants") or [{}]
+            if not any(v.get("available") for v in variants):
+                continue
+            link = f"{base}/products/{p['handle']}"
+            name = _heidelberg_name(title)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            try:
+                price = f"€{float(variants[0].get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or ""))
+            m = re.search(r"Schulnote\s*([1-6](?:\s*[-+]\s*[1-6]?)?)", text)
+            if m:
+                cond = HEIDELBERG_PREFIX + re.sub(r"\s+", "", m.group(1))
+            elif re.search(r"\bDemo", text):
+                cond = HEIDELBERG_PREFIX + "Demo"
+            else:
+                cond = "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Leica Store Heidelberg (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
                 "category": cat,
                 "brand": detect_brand(name),
             })
         time.sleep(random.uniform(1.0, 2.0))
     print(f"  ✅ Leica Store Heidelberg 완료: {len(results)}개")
+    return results
+
+
+def _vibe_name(title):
+    """Vibe.pl 제목 다듬기: 'Leica 75/2.5 Summarit-M 6-Bit (11645)' → 'Leica Summarit-M 75mm f2.5 6-Bit (11645)'.
+    '초점/조리개 이름' 순서를 '이름 초점mm f조리개'로, 폴란드어 앞말(Obiektyw·Aparat cyfrowy)·'używany'·색 이름 정리"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"^(?:Obiektyw|Aparat(?: cyfrowy| analogowy)?)\s+", "", name, flags=re.I)
+    name = re.sub(r"\s*[–-]\s*(?:UŻYWANE|Aparat\b.*)$", "", name, flags=re.I)
+    name = re.sub(r"\s+(?:używany|Aparat Analogowy Dalmierz)\b.*$", "", name, flags=re.I)
+    name = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)/(\d+(?:\.\d+)?)\s+((?:APO-|Macro-|Vario-|Super-)*(?:Summilux|Summicron|Summarit|Summaron|Elmarit|Elmar|Noctilux|Tele-Elmarit|Tele-Elmar|Super-Angulon|Telyt)(?:-[A-Z]+)?)",
+                  lambda m: f"{m.group(3)} {m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"\b(\d{2,3})/(\d+(?:\.\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"\b(\d{2,3})mm f(\d+(?:\.\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2)}" + ("" if "." in m.group(2) else ".0"), name)
+    name = re.sub(r"Macro-Elmarit-R (100mm f4\.0)", r"Macro-Elmar-R \1", name)  # 100/4는 Macro-Elmar (매장 오타)
+    name = re.sub(r"\s+ver\.?\s?(\d)\b", r" Version \1", name, flags=re.I)
+    name = re.sub(r"\bCzarn[ya]\b", "black", name, flags=re.I)
+    name = re.sub(r"\bSrebrn[ya]\b", "silver", name, flags=re.I)
+    name = re.sub(r"\s+", " ", name).strip(" ,-–")
+    if re.match(r"Leica (?:M\d*|MP|CL|Q\d?|SL\d?(?:-S)?|R\d)(?: \((?:Typ|TYP) \d+\))?(?: (?:black|silver|body))*$", name, re.I):
+        name = re.sub(r"\s+body$", "", name, flags=re.I) + " Body"
+    return name
+
+
+def crawl_vibe():
+    """Vibe.pl (폴란드, 크라쿠프 InterFoto 매장 온라인) - WooCommerce. 공개 상품 API(/wp-json/wc/store/v1/products?search=leica)
+    한 번에 100개씩. 신품·중고·대여(Rent-to-Own)가 섞여 있어 중고만: 설명에 'Stan zużycia: 5·4·3…'(매장 등급)이 있거나
+    중고 보증 'Gwarancja: 3'(3개월)이거나 제목에 'UŻYWANE'. Panasonic Leica DG·Sigma·Voigtländer 등은 뺌. 재고 있는 것만"""
+    import html as _html
+    import requests
+    from condition_grade import VIBE_PREFIX
+    base = "https://vibe.pl"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Vibe.pl 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(1, 20):
+        try:
+            resp = sess.get(f"{base}/wp-json/wc/store/v1/products",
+                            params={"search": "leica", "per_page": 100, "page": page_num}, timeout=60)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"Vibe.pl {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개")
+        for p in products:
+            title = _html.unescape(p.get("name") or "")
+            if not re.match(r"(?:Obiektyw |Aparat (?:cyfrowy |analogowy )?)?(?:Leica|Leitz)\b", title, re.I):
+                continue
+            link = p.get("permalink") or ""
+            if not p.get("is_in_stock") or link in seen:
+                continue
+            seen.add(link)
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
+            stan = re.search(r"Stan zużycia:\s*([0-9]|DEMO|NOWY)\b", text, re.I)
+            if stan and stan.group(1).upper() == "NOWY":
+                continue
+            if not (stan or re.search(r"Gwarancja:\s*3\b", text) or "UŻYWAN" in title.upper()):
+                continue  # 신품
+            name = _vibe_name(title)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            pr = p.get("prices") or {}
+            try:
+                amount = int(pr.get("price")) / 10 ** int(pr.get("currency_minor_unit") or 0)
+                price = f"{amount:,.0f} zł"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            imgs = p.get("images") or []
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Vibe.pl (폴란드)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": VIBE_PREFIX + stan.group(1).upper() if stan else "정보없음",
+                "가격": price,
+                "통화": "PLN",
+                "이미지": imgs[0].get("src", "") if imgs else "",
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
                 "category": cat,
                 "brand": detect_brand(name),
             })
@@ -4401,6 +4418,9 @@ def crawl_sanpou():
             break
         time.sleep(2)
     print(f"  ✅ Vibe.pl 완료: {len(results)}개")
+    return results
+
+
 def _koester_name(title):
     """Foto Köster 제목 다듬기: 제조사 칸이 Leica인데 제목엔 'Leica'가 없어('Summicron M 90/2', 'I g Gehäuse') 앞에 붙이고,
     '90/2'·'1:2,8/90' → '90mm f2.0'·'90mm f2.8', 'Gehäuse' → 'Body', 'III G' → 'IIIg', 'flex' → 'Leicaflex'"""
