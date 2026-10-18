@@ -4130,6 +4130,97 @@ def crawl_fotohandel():
             })
         time.sleep(2)
     print(f"  ✅ fotohandel.de 완료: {len(results)}개")
+SANPOU_JA = {"ストローク": " Stroke", "セルフタイマー付": "Self-timer", "シャークスキン": "Sharkskin", "ヌーキー": "with NOOKY",
+             "固定鏡筒": "Rigid", "6枚玉": "6-element", "8枚玉": "8-element", "ツノ無し": "", "逆ローレット": "",
+             "(ヒョットコ)": "", "フラッシュ": "Flash", "直立": "Upright ", "型": "", "Lマウント": "L", "ドイツ": "Germany",
+             "ビゾ用": "", "前期": "", "後期": "", "初期": "", "キャップ": "Cap", "フード": "Hood"}
+
+
+def _sanpou_name(title, ja_to_en):
+    """三宝カメラ 제목 다듬기: 'Leica ズミクロンM35mm F2 (6枚玉) ツノ無し 【B】' → 'Leica Summicron-M 35mm f2.0 (6-element)'.
+    끝의 【등급】은 떼고(따로 읽음), 'Elmar90mm'처럼 붙은 초점거리는 띄우고, 'F2.8'은 'f2.8'로"""
+    import unicodedata
+    name = unicodedata.normalize("NFKC", title).replace("\u3000", " ")
+    name = re.sub(r"【[^】]*】", "", name)
+    for ja, en in SANPOU_JA.items():
+        name = name.replace(ja, en)
+    name = ja_to_en(name)
+    name = re.sub(r"\bBODY\b", "Body", name)
+    name = re.sub(r"([A-Za-z])(\d{2,3})(?=mm|\s+F\d)", r"\1 \2", name)  # 'Elmar90mm'·'Elmar35 F3.5'
+    name = re.sub(r"\b(\d{2,3})\s+F(\d)", r"\1mm F\2", name)  # 'Elmar 35 F3.5' → 'Elmar 35mm F3.5'
+    name = re.sub(r"\bF(\d+(?:\.\d+)?)", lambda m: "f" + m.group(1) + ("" if "." in m.group(1) else ".0"), name)
+    name = re.sub(r"\(\s*\)", "", name)
+    name = re.sub(r"\bElmar (65mm)", r"Viso-Elmar \1", name)  # 비조플렉스용 엘마 65
+    name = re.sub(r"\bD II\b", "II (D) Body", name)  # 'D II + 50mm' (바디+렌즈 세트) → 바디로
+    name = re.sub(r"\b(I{1,3})\s+([a-gA-G])\b", lambda m: m.group(1) + m.group(2).lower(), name)  # 'III f' → 'IIIf'
+    name = re.sub(r"\b(Summilux|Summicron|Summaron|Elmarit|Elmar|Macro-Elmar) (M|R) (?=\d)", r"\1-\2 ", name, flags=re.I)
+    return re.sub(r"\s+", " ", name).strip(" ,-")
+
+
+def crawl_sanpou():
+    """三宝カメラ (일본, 도쿄 신주쿠) - 클래식·라이카 중고점(MakeShop, EUC-JP). 라이카 카메라(ct316)·렌즈(ct330)·
+    액세서리(ct344) 분류 화면(정적 HTML, 한 쪽에 다 나옴 — page2/는 비어 있음)의 카드에 이름·가격·사진,
+    제목 끝 【AB】·【B】가 등급. robots.txt 없음. 품절 상품은 목록에서 빠짐"""
+    import html as _html
+    import requests
+    from ja_normalize import ja_to_en
+    from condition_grade import SANPOU_PREFIX
+    base = "https://www.sanpou.ne.jp"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 三宝カメラ 크롤링 시작")
+    results, seen = [], set()
+    for ct in (316, 330, 344):
+        for page_num in range(1, 10):
+            url = f"{base}/shopbrand/ct{ct}/" if page_num == 1 else f"{base}/shopbrand/ct{ct}/page{page_num}/order/"
+            try:
+                resp = sess.get(url, timeout=30)
+                resp.raise_for_status()
+            except Exception as e:
+                raise RuntimeError(f"三宝カメラ ct{ct} {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            text = resp.content.decode("euc-jp", "ignore")
+            cards = text.split('<div class="img-item-list">')[1:]
+            print(f"    └─ ct{ct} {page_num}페이지 {len(cards)}개")
+            if not cards:
+                break
+            for card in cards:
+                m = re.search(r'<p class="item-name"><a href="(/shopdetail/(\d+))[^"]*">([^<]+)</a>', card)
+                if not m or m.group(2) in seen:
+                    continue
+                seen.add(m.group(2))
+                title = _html.unescape(m.group(3)).strip()
+                if not re.match(r"\s*(?:leica|leitz|ライカ)", title, re.I):
+                    continue
+                name = _sanpou_name(title, ja_to_en)
+                if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                    continue
+                grade = re.findall(r"【([^】]+)】", title)
+                pm = re.search(r'<p class="price">(?:<!--[^>]*-->)?\s*([\d,]+)円', card)
+                price = f"¥{int(pm.group(1).replace(',', '')):,}" if pm else "문의요망"
+                img = re.search(r'<img[^>]+src="([^"]+)"', card)
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "三宝カメラ (일본)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": SANPOU_PREFIX + grade[-1].strip() if grade else "정보없음",
+                    "가격": price,
+                    "통화": "JPY",
+                    "이미지": img.group(1) if img else "",
+                    "링크": f"{base}{m.group(1)}/",
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if f"/shopbrand/ct{ct}/page{page_num + 1}/" not in text:
+                break
+            time.sleep(2)
+        time.sleep(2)
+    print(f"  ✅ 三宝カメラ 완료: {len(results)}개")
     return results
 
 
@@ -4757,6 +4848,7 @@ def crawl_all():
         ("Camera Electronic (호주)", lambda: ce.wrap_full_run("Camera Electronic (호주)", crawl_cameraelectronic)),
         ("Nivo Schweitzer (네덜란드)", lambda: ce.wrap_full_run("Nivo Schweitzer (네덜란드)", crawl_nivo)),
         ("fotohandel.de (독일)", lambda: ce.wrap_full_run("fotohandel.de (독일)", crawl_fotohandel)),
+        ("三宝カメラ (일본)", lambda: ce.wrap_full_run("三宝カメラ (일본)", crawl_sanpou)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

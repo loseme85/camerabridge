@@ -102,6 +102,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _LEICA_CLASSIC.get(cond[len(LEICA_CLASSIC_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTOHANDEL_PREFIX):
         return _FOTOHANDEL.get(cond[len(FOTOHANDEL_PREFIX):].replace(" ", "").upper()), "label"
+    if cond.startswith(SANPOU_PREFIX):
+        return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(CE_PREFIX):
         phrase = cond[len(CE_PREFIX):]
         return next((g for pat, g in _CE if re.search(pat, phrase, re.I)), None), "text"
@@ -330,3 +332,9 @@ FOTOHANDEL_PREFIX = "fotohandel: "
 # 이 대응 기준 정확 일치 7/27 · 한 등급 이내 25/27 (사진이 평균 0.67등급 후함 — 기존 0.8과 비슷).
 # A-와 A-B는 사진으로 갈리지 않아 둘 다 B. 표본 없는 A+는 S, C는 D.
 _FOTOHANDEL = {"A+": "S", "A": "A", "A-": "B", "A-B": "B", "B+": "C", "B": "C", "B-": "C", "B-C": "D", "C": "D"}
+# 일본 三宝カメラ (Sanpou): 제목 끝 【AB】·【B】 (라이카는 거의 B, 가끔 AB). 기타무라 등과 같은 글자지만 이 매장 B는 폭이 넓은 '보통 중고'
+SANPOU_PREFIX = "Sanpou: "
+# 사진 평가(표기 가리고 25점, 사진 2장씩 — 매장 사진이 흰 배경 2장, 2026-10-18): AB S 2·A 5 · B A 8·B 8·C 2.
+# 일본 공통 대응(AB B·B C)이면 사진이 평균 1.32등급 후해 기존(0.8)보다 크게 벗어나 한 칸 올림: AB A, B B.
+# 이 대응 기준 정확 일치 13/25 · 한 등급 이내 25/25 (사진이 평균 0.32등급 후함). 표본 없는 AA·A는 S·A, C는 D.
+_SANPOU = {"AAA": "S", "AA": "S", "A": "A", "AB": "A", "B": "B", "BC": "C", "C": "D"}
