@@ -4121,6 +4121,94 @@ def crawl_fotohandel():
                 "가격": f"€{int(round(price)):,}",
                 "통화": "EUR",
                 "이미지": img.group(1) if img else "",
+_HEIDELBERG_WORDS = [(r"schwarz(?:es)? glänzend(?: lackiert)?", "black gloss paint"), (r"schwarz(?:es)?", "black"),
+                     (r"silber", "silver"), (r"Metallgrau", "Metal Grey"), (r"olivgrün", "olive green"),
+                     (r"Gegenlichtblende", "Lens Hood"), (r"Objektivdeckel", "Lens Cap"), (r"Akku", "Battery"),
+                     (r"Daumenstütze", "Thumb Support"), (r"Handgriff", "Handgrip"), (r"Trageriemen", "Strap"),
+                     (r"Leder", "Leather"), (r"Messing", "Brass"), (r"Protektor", "Protector"), (r"für", "for"),
+                     (r"rund", "round"), (r"Polfilter", "Polarizing Filter"), (r"Kabelfernauslöser", "Cable Release"),
+                     (r"Elektrischer", "Electric")]
+
+
+def _heidelberg_name(title):
+    """Leica Store Heidelberg 제목 다듬기: 'Leica Summilux-M F1.4 50mm ASPH. 11728' → 'Leica Summilux-M 50mm f1.4 ASPH. 11728'.
+    조리개를 초점거리 앞에 쓴 표기를 뒤로 옮기고(분류기는 '50mm f1.4' 꼴을 읽음), 독일식 소수점(F3,5)·'1:1.4/35' 표기를 고치고,
+    렌즈·바디 뒤 'mit …'(딸린 필터·보호대 목록)는 떼고, 독일어 색·부속 이름은 영어로"""
+    import unicodedata
+    name = re.sub(r"\s+", " ", unicodedata.normalize("NFC", title)).strip()  # Shopify 제목의 ü가 나뉜 글자(NFD)라 합침
+    name = re.sub(r"(\d),(\d)", r"\1.\2", name)
+    name = name.replace("Power Set", "Charger Power Set")
+    name = re.sub(r"Vario-Elmarit-SL\s+100-400", "Vario-Elmar-SL 100-400", name)  # 매장 오타 (100-400은 Vario-Elmar)
+    name = re.sub(r"\s+-\s+(?:originale?s?\b.*)?", " ", name)
+    name = re.sub(r"\s+mit\s+(?:UV Filter|Brille|Protektor)\b.*$", "", name)
+    name = re.sub(r"\b1:(\d+(?:\.\d+)?)/(\d{2,3})\b", r"\2mm F\1", name)  # '1:1.4/35' → '35mm F1.4'
+    name = re.sub(r"\b[fF]/?(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\s+(\d{2,3}(?:-\d{2,3})?mm)\b", r"\2 F\1", name)
+    name = re.sub(r"\b[fF]/?(\d+(?:\.\d+)?)(?=[\s-]|$)", lambda m: "f" + m.group(1) + ("" if "." in m.group(1) else ".0"), name)
+    for de, en in _HEIDELBERG_WORDS:
+        name = re.sub(rf"\b{de}\b", en, name, flags=re.I)
+    name = re.sub(r"\bmit\b", "with", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-")
+    if re.match(r"Leica (?:M\d|MP|M-[AP]|CL|Q\d?|SL\d?|R\d)(?:[- ]\S+)?(?: (?:black|silver|Metal Grey|Monochrom|black gloss paint))*$", name):
+        name += " Body"  # 'Leica M6 black'처럼 바디 이름만 있으면 렌즈로 갈리지 않게
+    return name
+
+
+def crawl_heidelberg():
+    """Leica Store Heidelberg (독일) - 라이카 매장(Shopify)의 'Pre-Owned' 컬렉션 JSON (판매 중 70개쯤). 벤더가 모두
+    매장 이름이라 제목이 Leica·Leitz로 시작하는 것만 담음(Voigtländer·Zeiss·Sigma·Nikon 등은 뺌). 등급은 설명의
+    'Schulnote 1-2'(독일 학교 점수, 1이 가장 좋음), 매장 진열품은 'Demo'"""
+    import html as _html
+    import requests
+    from condition_grade import HEIDELBERG_PREFIX
+    results = []
+    base = "https://leica-store-heidelberg.de"
+    print(f"\n  📂 Leica Store Heidelberg 크롤링 시작")
+    for page_num in range(1, 20):
+        url = f"{base}/collections/pre-owned/products.json?limit=250&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=30)
+            resp.raise_for_status()
+            products = resp.json().get("products", [])
+        except Exception as e:
+            raise RuntimeError(f"Leica Store Heidelberg {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = (p.get("title") or "").strip()
+            if not re.match(r"(?:leica|leitz)\b", title, re.I):
+                continue
+            variants = p.get("variants") or [{}]
+            if not any(v.get("available") for v in variants):
+                continue
+            link = f"{base}/products/{p['handle']}"
+            name = _heidelberg_name(title)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            try:
+                price = f"€{float(variants[0].get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or ""))
+            m = re.search(r"Schulnote\s*([1-6](?:\s*[-+]\s*[1-6]?)?)", text)
+            if m:
+                cond = HEIDELBERG_PREFIX + re.sub(r"\s+", "", m.group(1))
+            elif re.search(r"\bDemo", text):
+                cond = HEIDELBERG_PREFIX + "Demo"
+            else:
+                cond = "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Leica Store Heidelberg (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
                 "링크": link,
                 "품절": False,
                 "예약중": False,
@@ -4221,6 +4309,11 @@ def crawl_sanpou():
             time.sleep(2)
         time.sleep(2)
     print(f"  ✅ 三宝カメラ 완료: {len(results)}개")
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Leica Store Heidelberg 완료: {len(results)}개")
     return results
 
 
@@ -4849,6 +4942,7 @@ def crawl_all():
         ("Nivo Schweitzer (네덜란드)", lambda: ce.wrap_full_run("Nivo Schweitzer (네덜란드)", crawl_nivo)),
         ("fotohandel.de (독일)", lambda: ce.wrap_full_run("fotohandel.de (독일)", crawl_fotohandel)),
         ("三宝カメラ (일본)", lambda: ce.wrap_full_run("三宝カメラ (일본)", crawl_sanpou)),
+        ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
