@@ -196,3 +196,8 @@ def test_fotohandel_condition_grades():
     assert grade_of(site, FOTOHANDEL_PREFIX + "A-B", "Leica Elmarit 28mm f2.8 Version II 11801")[0] == "B"
     assert grade_of(site, FOTOHANDEL_PREFIX + "B", "Leica Super-Angulon 21mm f3.4 11103")[0] == "C"
     assert grade_of(site, FOTOHANDEL_PREFIX + "B-C", "Leica Summicron-M 50mm f2.0 11819")[0] == "D"
+def test_sanpou_condition_grades():
+    from condition_grade import SANPOU_PREFIX
+    site = "三宝カメラ (일본)"
+    assert grade_of(site, SANPOU_PREFIX + "AB", "Leica Summilux-M 35mm f1.4 ASPH Titan")[0] == "A"
+    assert grade_of(site, SANPOU_PREFIX + "B", "Leica M3 Body (2 Stroke)")[0] == "B"
