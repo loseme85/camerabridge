@@ -188,3 +188,11 @@ def test_cameraelectronic_condition_grades():
     assert grade_of(site, ce_condition("Pre-Owned Leica Summilux-M 50mm f/1.4 ASPH Lens Mint in Box"), "Leica Summilux-M 50mm f1.4 ASPH Lens")[0] == "A"
     assert grade_of(site, ce_condition("A classic rangefinder in excellent condition."), "Leica M6 TTL .85 Silver Body")[0] == "C"
     assert grade_of(site, ce_condition("Shows minimal signs of wear."), "Leica Elmarit-R 135mm f2.8 Lens")[0] == "D"
+def test_fotohandel_condition_grades():
+    from condition_grade import FOTOHANDEL_PREFIX
+    site = "fotohandel.de (독일)"
+    assert grade_of(site, FOTOHANDEL_PREFIX + "A", "Leica Summilux-M 35mm f1.4 Asph. E46 11874")[0] == "A"
+    assert grade_of(site, FOTOHANDEL_PREFIX + "A-", "Leica M3 Double Stroke")[0] == "B"
+    assert grade_of(site, FOTOHANDEL_PREFIX + "A-B", "Leica Elmarit 28mm f2.8 Version II 11801")[0] == "B"
+    assert grade_of(site, FOTOHANDEL_PREFIX + "B", "Leica Super-Angulon 21mm f3.4 11103")[0] == "C"
+    assert grade_of(site, FOTOHANDEL_PREFIX + "B-C", "Leica Summicron-M 50mm f2.0 11819")[0] == "D"

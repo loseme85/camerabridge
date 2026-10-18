@@ -4032,6 +4032,107 @@ def crawl_nivo():
     return results
 
 
+def _fotohandel_name(title):
+    """fotohandel.de 제목 다듬기: 'Leica Elmarit 28mm 2.8 Version II - 11801' → 'Leica Elmarit 28mm f2.8 Version II 11801'.
+    가게 꼬리('| fotohandel.de …')·'werkstattüberholt'·'in OVP'·'Leica Service' 같은 정비·상자 말은 떼고, 조리개는 'f2.8' 꼴로
+    (분류기가 '28mm 2.8'은 렌즈로 못 읽음), 독일어 색·부속 이름은 영어로"""
+    name = re.sub(r"\s*\|\s*fotohandel\.de.*$", "", title.strip(), flags=re.I)
+    name = re.sub(r"\s*-?\s*\b(?:werkstatt(?:ü|ue)berholt|aktueller leica service|leica service|in OVP|Tauschsensor|neuwertig)\b",
+                  " ", name, flags=re.I)
+    name = re.sub(r"\s*-\s*Betriebsk\.?$", "", name)
+    name = re.sub(r"[„“\"]", "", name)
+    name = re.sub(r"Macro-Set M Macro\s*\|\s*Elmar-M", "Macro-Elmar-M", name)  # 매크로 세트 (렌즈+어댑터)
+    name = name.replace(" | ", " ")
+    name = re.sub(r"\bschwarz\s+eloxiert\b", "black anodized", name, flags=re.I)
+    name = re.sub(r"\bschwarz\s+lackiert\b", "black paint", name, flags=re.I)
+    name = re.sub(r"\bblack chrome\b", "black", name, flags=re.I)  # M4 검정 크롬은 보통 판 (50 Jahre 기념판과 갈리게)
+    name = re.sub(r"\bschwarz\b", "black", name, flags=re.I)
+    name = re.sub(r"\bchrom\b", "chrome", name, flags=re.I)
+    name = re.sub(r"\bsilber\b", "silver", name, flags=re.I)
+    name = re.sub(r"\bGegenlichtblende\b", "Lens Hood", name, flags=re.I)
+    name = re.sub(r"\bBetriebskamera\b", "Company Camera", name, flags=re.I)
+    name = re.sub(r"\bmit\b", "with", name)
+    name = re.sub(r"\b(\d{2,3}mm)\s+(\d(?:\.\d)?)(?=\s|$)", r"\1 f\2", name)  # '28mm 2.8' → '28mm f2.8'
+    name = re.sub(r"\bf(\d)(?![\d.])", r"f\1.0", name)  # 'f2' → 'f2.0'
+    name = re.sub(r"\s+-\s+", " ", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-*|")
+    if re.match(r"Leica (?:M\d|MP|M-[AP]|CL|Q\d?|SL\d?|Minilux|R\d)\b", name) and not re.search(
+            r"\d+mm|Hood|Book|Akku|Griff|Sucher|Visoflex|Kit\b", name, re.I):
+        name += " Body"  # 'Leica M1 chrome'처럼 바디 이름만 있으면 렌즈로 갈리지 않게
+    return name
+
+
+def crawl_fotohandel():
+    """fotohandel.de (독일, 쇼른도르프) - 라이카·핫셀 중고 전문점(Shopware). 라이카 분류 아래 하위 분류 6곳(정적 HTML, 모두 36개
+    이하라 쪽 넘김 없음 — robots.txt가 ?p= 쪽 넘김을 막음)의 카드에 이름·가격·사진·'Zustandsbeschreibung' 등급(A·A-·A-B·B·B-·B-C).
+    'Lieblingsstücke|Archiv' 표시나 가격 0은 판매 끝난 보관 글이라 뺌. 라이카가 아닌 것(KEKS·Sigma 등)도 뺌"""
+    import html as _html
+    import json as _json
+    import requests
+    from condition_grade import FOTOHANDEL_PREFIX
+    base = "https://www.fotohandel.de/Leica/"
+    cats = ["Leica-M-gebraucht/Leica-M-Kameras-analog/", "Leica-M-gebraucht/Leica-M-Kameras-digital/",
+            "Leica-M-gebraucht/Leica-M-Objektive/", "Leica-R-gebraucht/", "Leica-Sonstige-digital-gebraucht/",
+            "Leica-Minilux-Kompaktkameras-analog/", "Suchauftrag-Benachrichtigung/Leica-Neuzugaenge/"]
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 fotohandel.de 크롤링 시작")
+    results, seen = [], set()
+    for cat in cats:
+        try:
+            resp = sess.get(base + cat, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"fotohandel {cat} 못 읽음: {e}")  # 빠진 분류가 판매완료로 바뀌지 않게
+        boxes = resp.text.split('class="card product-box')[1:]
+        print(f"    └─ {cat} {len(boxes)}개")
+        for blk in boxes:
+            info = re.search(r'data-product-information="([^"]+)"', blk)
+            link = re.search(r'href="([^"]+)"[^>]*class="product-name', blk)
+            if not info or not link:
+                continue
+            link = link.group(1)
+            if link in seen or "Archiv" in blk:
+                continue
+            seen.add(link)
+            try:
+                d = _json.loads(_html.unescape(info.group(1)))
+            except ValueError:
+                continue
+            title = re.sub(r"\s+", " ", d.get("name") or "").strip()
+            if not title.lower().startswith("leica") or (d.get("brand") or "Leica").strip().lower() != "leica":
+                continue
+            price = float(d.get("price") or 0)
+            if price <= 0:
+                continue
+            name = _fotohandel_name(title)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            grade = "".join(re.findall(r'zustand_uebersicht">\s*([^<]*?)\s*<', blk))
+            img = re.search(r'<img src="([^"?]+)', blk)
+            cat_ = detect_category(name, f"€{int(price):,}")
+            mount = 'Accessory' if cat_ == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "fotohandel.de (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": FOTOHANDEL_PREFIX + grade if grade else "정보없음",
+                "가격": f"€{int(round(price)):,}",
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat_,
+                "brand": detect_brand(name),
+            })
+        time.sleep(2)
+    print(f"  ✅ fotohandel.de 완료: {len(results)}개")
+    return results
+
+
 def _cameraelectronic_name(title):
     """Camera Electronic 제목 다듬기: 'Pre-Owned Leica M6 TTL .85 Silver Body Model 10466 With Box, Body, Cap, Strap SN: 2496525
     (Second Hand)' → 'Leica M6 TTL .85 Silver Body Model 10466'. 딸린 물건 목록('With …'·'in Box'·'Boxed …')과 연도·일련번호는
@@ -4655,6 +4756,7 @@ def crawl_all():
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
         ("Camera Electronic (호주)", lambda: ce.wrap_full_run("Camera Electronic (호주)", crawl_cameraelectronic)),
         ("Nivo Schweitzer (네덜란드)", lambda: ce.wrap_full_run("Nivo Schweitzer (네덜란드)", crawl_nivo)),
+        ("fotohandel.de (독일)", lambda: ce.wrap_full_run("fotohandel.de (독일)", crawl_fotohandel)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
