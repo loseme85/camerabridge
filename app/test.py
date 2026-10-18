@@ -4362,10 +4362,16 @@ def crawl_vibe():
     print("\n  📂 Vibe.pl 크롤링 시작")
     results, seen = [], set()
     for page_num in range(1, 20):
+        url = f"{base}/wp-json/wc/store/v1/products?search=leica&per_page=100&page={page_num}"
         try:
-            resp = sess.get(f"{base}/wp-json/wc/store/v1/products",
-                            params={"search": "leica", "per_page": 100, "page": page_num}, timeout=60)
-            resp.raise_for_status()
+            try:
+                resp = sess.get(url, timeout=60)
+                resp.raise_for_status()
+            except Exception as e:  # 미국 서버(GitHub)에서는 403 → 도쿄 중계 서버
+                import crawl_engine as _ce
+                print(f"    ↪ 직접 접속 실패({e}) → 중계 서버")
+                resp = _ce.http_get(url, {"Accept": "application/json"}, via_relay=True, timeout=50)
+                resp.raise_for_status()
             products = resp.json()
         except Exception as e:
             raise RuntimeError(f"Vibe.pl {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
