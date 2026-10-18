@@ -15,7 +15,6 @@ from urllib.parse import parse_qs, urlparse
 ALLOWED_HOSTS = {
     "shop.kitamura.jp",  # 기타무라 (일본)
     "cameranonaniwa.jp",  # 카메라노나니와 (일본) — 수집기는 직접 받다가 막힐 때만 중계
-    "vibe.pl",  # Vibe.pl (폴란드) — 미국 서버에서 상품 API 403, 직접 받다가 막힐 때만 중계
 }
 DROP_HEADERS = {"host", "connection", "content-length", "transfer-encoding", "cookie", "x-relay-key", "x-relay-headers"}
 MAX_BYTES = 4_000_000  # Vercel 응답 한도(4.5MB) 안쪽
