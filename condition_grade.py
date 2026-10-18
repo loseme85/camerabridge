@@ -108,6 +108,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
     if cond.startswith(VIBE_PREFIX):
         return _VIBE.get(cond[len(VIBE_PREFIX):].strip().upper()), "label"
+    if cond.startswith(KOESTER_PREFIX):
+        return _KOESTER.get(cond[len(KOESTER_PREFIX):].strip()), "text"
     if cond.startswith(CE_PREFIX):
         phrase = cond[len(CE_PREFIX):]
         return next((g for pat, g in _CE if re.search(pat, phrase, re.I)), None), "text"
@@ -358,3 +360,11 @@ VIBE_PREFIX = "Vibe: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 5 A, 4 B, 3 C, 2·1 D.
 # 이 대응 기준 정확 일치 8/29 · 한 등급 이내 27/29 (사진이 평균 0.72등급 후함 — 기존 0.8과 비슷). DEMO는 S.
 _VIBE = {"DEMO": "S", "5": "A", "4": "B", "3": "C", "2": "D", "1": "D"}
+
+# 독일 Foto Köster: 등급표 없이 상세 설명 글의 말투 — 'sehr guten Zustand mit kaum erkennbaren Abnutzungen'·'wie neu'·'Top-Zustand'
+# (sehr gut) · 'guten Zustand mit normalen/minimalen kosmetischen Abnutzungen' (gut) · 'Nebel'·'defekt'·'Kratzer auf der Frontlinse' (defekt)
+KOESTER_PREFIX = "Koester: "
+# 사진 평가(표기 가리고 27점, 사진 3장씩, 2026-10-18): sehr gut S 3·A 3 · gut A 7·B 8·C 2 · defekt A 1·B 1·C 2.
+# 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 sehr gut A, gut B, defekt D (렌즈 안 흐림은 사진에 잘 안 보여도 D).
+# 이 대응 기준 정확 일치 11/27 · 한 등급 이내 25/27 (사진이 평균 0.56등급 후함).
+_KOESTER = {"sehr gut": "A", "gut": "B", "defekt": "D"}
