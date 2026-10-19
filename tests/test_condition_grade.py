@@ -220,3 +220,11 @@ def test_koester_condition_grades():
     assert grade_of(site, KOESTER_PREFIX + "sehr gut", "Leica Tele-Elmarit-M 90mm f2.8")[0] == "A"
     assert grade_of(site, KOESTER_PREFIX + "gut", "Leica Summicron-M 90mm f2.0")[0] == "B"
     assert grade_of(site, KOESTER_PREFIX + "defekt", "Leica Elmar 90mm f4.0 L39 defekt")[0] in ("D", "X")
+def test_jch_condition_grades():
+    from condition_grade import JCH_PREFIX
+    site = "Japan Camera Hunter (일본)"
+    assert grade_of(site, JCH_PREFIX + "mint", "Leica M4 Black With Box")[0] == "S"
+    assert grade_of(site, JCH_PREFIX + "mint minus", "Leica Elmarit-M 28mm f2.8 ASPH 6 bit")[0] == "A"
+    assert grade_of(site, JCH_PREFIX + "excellent plus", "Leica M2 Button rewind")[0] == "B"
+    assert grade_of(site, JCH_PREFIX + "excellent", "Leica Summilux 50mm f1.4 Type 1")[0] == "C"
+    assert grade_of(site, JCH_PREFIX + "good user", "Leica II Black with 50mm Elmar f3.5 Nickel")[0] == "D"
