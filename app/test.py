@@ -4570,6 +4570,80 @@ def _cameraelectronic_name(title):
     return re.sub(r"\s+", " ", name).strip(" ,-")
 
 
+_MF_GRADE_RE = re.compile(r"\b(Like New Minus|Like New|Open Box|Mint|Excellent Plus|Excellent|Very Good|Good)\b", re.I)
+
+
+def crawl_mfcamera():
+    """MF Camera (미국) - 캘리포니아 폴섬 중고점 Shopify products.json 전체(350개쯤)에서 라이카·라이츠 중고만.
+    신품이 섞여 있어 태그에 Used·Pre-Owned·As Is·CLA가 있거나 제목에 상태 말이 있는 것만 담고, 'New' 태그만 있거나
+    설명에 'Brand New'인 것은 뺌. 등급은 제목 끝 '– Excellent Plus' 또는 설명의 'Condition: Excellent'"""
+    import html as _html
+    import requests
+    from condition_grade import MFCAMERA_PREFIX
+    results = []
+    base = "https://www.mfcamera.com"
+    print(f"\n  📂 MF Camera 크롤링 시작")
+    for page_num in range(1, 20):
+        url = f"{base}/products.json?limit=250&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": USER_AGENTS[1]}, timeout=30)
+            resp.raise_for_status()
+            products = resp.json().get("products", [])
+        except Exception as e:
+            raise RuntimeError(f"MF Camera {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+            if not re.match(r"(?:leica|leitz)\b", title, re.I):
+                continue
+            variants = p.get("variants") or [{}]
+            if not any(v.get("available") for v in variants):
+                continue
+            tags = " ".join(p.get("tags") or []).lower()
+            text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or "")))
+            used = re.search(r"used|pre-owned|as is|\bcla\b", tags) or _MF_GRADE_RE.search(title)
+            if not used or re.search(r"brand new|\bsealed\b", text, re.I) or re.search(r"pre-? ?order", title, re.I):
+                continue
+            m = _MF_GRADE_RE.search(re.split(r"\s+[\u2013\u2014-]\s+", title, maxsplit=1)[-1]) if re.search(r"\s[\u2013\u2014-]\s", title) else None
+            m = m or re.search(r"(?:Condition|Cosmetic(?: Condition)?)\s*[:\-\u2013]\s*(Like New Minus|Like New|Open Box|Mint|Excellent Plus|Excellent|Very Good|Good)\b", text, re.I)
+            cond = MFCAMERA_PREFIX + m.group(1).title() if m else "정보없음"
+            name = re.split(r"\s+[\u2013\u2014|]\s+|\s+-\s+(?=[A-Z][a-z])", title, maxsplit=1)[0]
+            name = re.sub(r"\s+Used(?:\s+(?:Like New Minus|Like New|Excellent Plus|Excellent|Very Good|Good))?\b|\s*\(Used\)", "", name, flags=re.I)
+            name = re.sub(r"\s*(?:MFR|MFG|MPN)?\s*#\s?\d+\b|\s*\(\d{5}\)|\s+\d{5}$", "", name)
+            name = re.sub(r"\b(?:Digital |Film |Mirrorless |35mm )*(?:Rangefinder )?(?:Camera|Lens)\b(?: Body(?: Only)?)?|\s+Rangefinder\b|\s*\(\s*\)|\bManual Focus\b", "", name, flags=re.I)
+            name = re.sub(r"\bf/(\d)", r"f\1", name)
+            name = re.sub(r"\s+", " ", name).strip(" ,-")
+            link = f"{base}/products/{p['handle']}"
+            try:
+                price = f"${float(variants[0].get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "MF Camera (미국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "USD",
+                "이미지": img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ MF Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -5179,6 +5253,7 @@ def crawl_all():
         ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
         # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
+        ("MF Camera (미국)", lambda: ce.wrap_full_run("MF Camera (미국)", crawl_mfcamera)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
