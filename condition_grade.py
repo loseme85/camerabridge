@@ -106,6 +106,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
+    if cond.startswith(CLASSICCAMERA_PREFIX):
+        return _CLASSICCAMERA.get(cond[len(CLASSICCAMERA_PREFIX):].strip()), "label"
     if cond.startswith(VIBE_PREFIX):
         return _VIBE.get(cond[len(VIBE_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOESTER_PREFIX):
@@ -368,3 +370,11 @@ KOESTER_PREFIX = "Koester: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 sehr gut A, gut B, defekt D (렌즈 안 흐림은 사진에 잘 안 보여도 D).
 # 이 대응 기준 정확 일치 11/27 · 한 등급 이내 25/27 (사진이 평균 0.56등급 후함).
 _KOESTER = {"sehr gut": "A", "gut": "B", "defekt": "D"}
+
+# 영국 The Classic Camera: 설명의 'Condition EXC + +'·'Mint-'·'Near Mint' (Ffordes와 비슷한 영국식 표기)
+CLASSICCAMERA_PREFIX = "ClassicCamera: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-19): Mint S·Mint- A·EXC+++ A·EXC++ B·EXC C로 두면 사진과 평균 0.04등급
+# 차이뿐(기존 매장은 사진이 0.8 후함) — 매장 표기가 후한 편이라 한 칸 내림. 이 대응 기준 정확 일치 5/24 · 한 등급 이내
+# 19/24 (사진이 평균 0.96등급 후함). 개봉·데모품 'As New'는 S.
+_CLASSICCAMERA = {"As New": "S", "Mint": "A", "Mint-": "B", "Near Mint": "B", "EXC+++": "B", "EXC++": "C", "EXC+": "C",
+                  "EXC": "D", "Good": "D"}

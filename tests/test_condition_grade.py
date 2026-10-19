@@ -220,3 +220,11 @@ def test_koester_condition_grades():
     assert grade_of(site, KOESTER_PREFIX + "sehr gut", "Leica Tele-Elmarit-M 90mm f2.8")[0] == "A"
     assert grade_of(site, KOESTER_PREFIX + "gut", "Leica Summicron-M 90mm f2.0")[0] == "B"
     assert grade_of(site, KOESTER_PREFIX + "defekt", "Leica Elmar 90mm f4.0 L39 defekt")[0] in ("D", "X")
+def test_classiccamera_condition_grades():
+    from condition_grade import CLASSICCAMERA_PREFIX
+    site = "The Classic Camera (영국)"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "Mint", "Leica M11-D Black Boxed")[0] == "A"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "EXC+++", "Leica 90mm F2 Summicron-M Black")[0] == "B"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "EXC++", "Leica M2 Body Button Rewind Boxed")[0] == "C"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "EXC", "Leitz 13.5cm f4.5 Hektor L39")[0] == "D"
+
