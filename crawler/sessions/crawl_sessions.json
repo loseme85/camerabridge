@@ -1,20 +1,5 @@
 [
   {
-    "start_time": "2026-09-23 20:11:14",
-    "end_time": "2026-09-23 20:11:15",
-    "new_items": 0,
-    "total_items": 7737,
-    "site_counts": {
-      "사진집": 370,
-      "라이카스토어 충무로": 3111,
-      "장씨카메라": 4061,
-      "Ffordes (영국)": 117,
-      "Leica Store Miami": 38,
-      "기타무라 (일본)": 40
-    },
-    "new_listings": []
-  },
-  {
     "start_time": "2026-09-23 23:17:48",
     "end_time": "2026-09-23 23:17:49",
     "new_items": 0,
@@ -76676,6 +76661,947 @@
         "가격": "¥48,000",
         "통화": "JPY",
         "링크": "https://www.akasaka-camera.com/product/view/6248"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-10-19 22:40:46",
+    "end_time": "2026-10-19 22:40:49",
+    "seconds": 360.0,
+    "new_items": 48,
+    "total_items": 14916,
+    "site_counts": {
+      "사진집": 360,
+      "라이카스토어 충무로": 3085,
+      "장씨카메라": 4083,
+      "Ffordes (영국)": 128,
+      "Leica Store Miami": 42,
+      "Kamerastore (핀란드)": 727,
+      "기타무라 (일본)": 783,
+      "M & K Kamera (홍콩)": 704,
+      "Leica Store France (프랑스)": 285,
+      "Leica Store Singapore (싱가포르)": 21,
+      "Newoldcamera (이탈리아)": 447,
+      "Camtec Photo (캐나다)": 19,
+      "Aperture (영국)": 85,
+      "Wex Photo Video (영국)": 64,
+      "Harrison Cameras (영국)": 51,
+      "Camera West (미국)": 594,
+      "Peter Loy (영국)": 244,
+      "Lucky Camera (일본)": 213,
+      "카메라노나니와 (일본)": 1169,
+      "Calumet (독일)": 139,
+      "Tamarkin Camera (미국)": 35,
+      "Camera Electronic (호주)": 82,
+      "Leica Classic (오스트리아)": 341,
+      "Leica Classic (영국)": 170,
+      "Leica Classic (독일)": 353,
+      "Leica Classic (스위스)": 88,
+      "Leica Classic (스페인)": 54,
+      "Leica Classic (포르투갈)": 44,
+      "Leica Classic (이탈리아)": 86,
+      "Leica Classic (덴마크)": 18,
+      "Leica Classic (미국)": 58,
+      "Leica Classic (아랍에미리트)": 6,
+      "Leica Classic (말레이시아)": 6,
+      "Akasaka Camera (일본)": 66,
+      "Glazers Camera (미국)": 50,
+      "Nivo Schweitzer (네덜란드)": 33,
+      "fotohandel.de (독일)": 44,
+      "三宝カメラ (일본)": 49,
+      "Leica Store Heidelberg (독일)": 48,
+      "Foto Köster (독일)": 42
+    },
+    "events": {
+      "price": 6,
+      "sold": 9,
+      "new": 48,
+      "gone": 15
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 12,
+        "seconds": 8.1,
+        "status": "ok",
+        "rows": 360,
+        "active": 335,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 1,
+        "new": 0,
+        "changed": 3
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 11.8,
+        "status": "ok",
+        "rows": 3085,
+        "active": 608,
+        "carried": 1994,
+        "gone": 0,
+        "left_active": 5,
+        "new": 17,
+        "changed": 24
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 7,
+        "seconds": 4.3,
+        "status": "ok",
+        "rows": 4083,
+        "active": 42,
+        "carried": 3946,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Ffordes (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 59.1,
+        "status": "ok",
+        "rows": 128,
+        "active": 128,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.4,
+        "status": "ok",
+        "rows": 42,
+        "active": 42,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 11.9,
+        "status": "ok",
+        "rows": 727,
+        "active": 727,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 4,
+        "changed": 5
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.9,
+        "status": "ok",
+        "rows": 783,
+        "active": 783,
+        "carried": 4,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.1,
+        "status": "ok",
+        "rows": 704,
+        "active": 704,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 46.6,
+        "status": "ok",
+        "rows": 285,
+        "active": 266,
+        "carried": 20,
+        "gone": 0,
+        "left_active": 0,
+        "new": 17,
+        "changed": 17
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.3,
+        "status": "ok",
+        "rows": 21,
+        "active": 21,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 44.5,
+        "status": "ok",
+        "rows": 447,
+        "active": 447,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camtec Photo (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 21.7,
+        "status": "ok",
+        "rows": 19,
+        "active": 19,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Aperture (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 13.9,
+        "status": "ok",
+        "rows": 85,
+        "active": 85,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Wex Photo Video (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.5,
+        "status": "ok",
+        "rows": 64,
+        "active": 64,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 6
+      },
+      {
+        "site": "Harrison Cameras (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 42.4,
+        "status": "ok",
+        "rows": 51,
+        "active": 48,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera West (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 55.7,
+        "status": "ok",
+        "rows": 594,
+        "active": 327,
+        "carried": 1,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Peter Loy (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.3,
+        "status": "ok",
+        "rows": 244,
+        "active": 244,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "카메라노나니와 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 66.0,
+        "status": "ok",
+        "rows": 1169,
+        "active": 1169,
+        "carried": 4,
+        "gone": 3,
+        "left_active": 0,
+        "new": 0,
+        "changed": 3
+      },
+      {
+        "site": "Calumet (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 261.8,
+        "status": "ok",
+        "rows": 139,
+        "active": 139,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "Tamarkin Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 59.7,
+        "status": "ok",
+        "rows": 35,
+        "active": 35,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera Electronic (호주)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.7,
+        "status": "ok",
+        "rows": 82,
+        "active": 82,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (오스트리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 102.4,
+        "status": "ok",
+        "rows": 341,
+        "active": 341,
+        "carried": 1,
+        "gone": 5,
+        "left_active": 0,
+        "new": 4,
+        "changed": 9
+      },
+      {
+        "site": "Leica Classic (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 89.5,
+        "status": "ok",
+        "rows": 170,
+        "active": 170,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 28.4,
+        "status": "ok",
+        "rows": 353,
+        "active": 353,
+        "carried": 4,
+        "gone": 2,
+        "left_active": 0,
+        "new": 1,
+        "changed": 3
+      },
+      {
+        "site": "Leica Classic (스위스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 88,
+        "active": 88,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (스페인)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 54,
+        "active": 54,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (포르투갈)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 44,
+        "active": 44,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Leica Classic (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 86,
+        "active": 86,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 18,
+        "active": 18,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 58,
+        "active": 58,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (아랍에미리트)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 6,
+        "active": 6,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "Leica Classic (말레이시아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 6,
+        "active": 6,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Akasaka Camera (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 29.0,
+        "status": "ok",
+        "rows": 66,
+        "active": 66,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Glazers Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.5,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Nivo Schweitzer (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 6.4,
+        "status": "ok",
+        "rows": 33,
+        "active": 30,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "fotohandel.de (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 19.5,
+        "status": "ok",
+        "rows": 44,
+        "active": 44,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "三宝カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.0,
+        "status": "ok",
+        "rows": 49,
+        "active": 49,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "Leica Store Heidelberg (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.6,
+        "status": "ok",
+        "rows": 48,
+        "active": 48,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Köster (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 75.0,
+        "status": "ok",
+        "rows": 42,
+        "active": 42,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 2,
+        "changed": 2
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "[중고] M10 Monochrom",
+        "site": "라이카스토어 충무로",
+        "가격": "7,580,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/중고-m10-monochrom/22404/category/442/display/1/"
+      },
+      {
+        "상품명": "[중고] M 50/2 APO Black",
+        "site": "라이카스토어 충무로",
+        "가격": "8,580,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/중고-m-502-apo-black/22402/category/442/display/1/"
+      },
+      {
+        "상품명": "[중고] M 35/1.4 FLE II Black",
+        "site": "라이카스토어 충무로",
+        "가격": "7,480,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/중고-m-3514-fle-ii-black/22401/category/442/display/1/"
+      },
+      {
+        "상품명": "[위탁] M 16-18-21 Tri Elmar",
+        "site": "라이카스토어 충무로",
+        "가격": "4,500,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-m-16-18-21-tri-elmar/22400/category/442/display/1/"
+      },
+      {
+        "상품명": "[위탁] M 28-35-50 Tri Elmar",
+        "site": "라이카스토어 충무로",
+        "가격": "4,800,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-m-28-35-50-tri-elmar/22399/category/442/display/1/"
+      },
+      {
+        "상품명": "[위탁] M 75/2 APO",
+        "site": "라이카스토어 충무로",
+        "가격": "4,000,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-m-752-apo/22398/category/442/display/1/"
+      },
+      {
+        "상품명": "[위탁] Release Button \"Santa\" 12mm",
+        "site": "라이카스토어 충무로",
+        "가격": "250,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-release-button-santa-12mm/22397/category/442/display/1/"
+      },
+      {
+        "상품명": "[위탁] Leica TL 23mm Black",
+        "site": "라이카스토어 충무로",
+        "가격": "1,000,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-leica-tl-23mm-black/22396/category/442/display/1/"
+      },
+      {
+        "상품명": "[위탁] Leica TL 18mm Black",
+        "site": "라이카스토어 충무로",
+        "가격": "1,000,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-leica-tl-18mm-black/22395/category/442/display/1/"
+      },
+      {
+        "상품명": "[중고] M 50/2 APO Black",
+        "site": "라이카스토어 충무로",
+        "가격": "8,580,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/중고-m-502-apo-black/22402/category/436/display/1/"
+      },
+      {
+        "상품명": "[중고] M 35/1.4 FLE II Black",
+        "site": "라이카스토어 충무로",
+        "가격": "7,480,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/중고-m-3514-fle-ii-black/22401/category/436/display/1/"
+      },
+      {
+        "상품명": "[위탁] M 16-18-21 Tri Elmar",
+        "site": "라이카스토어 충무로",
+        "가격": "4,500,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-m-16-18-21-tri-elmar/22400/category/436/display/1/"
+      },
+      {
+        "상품명": "[위탁] M 28-35-50 Tri Elmar",
+        "site": "라이카스토어 충무로",
+        "가격": "4,800,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-m-28-35-50-tri-elmar/22399/category/436/display/1/"
+      },
+      {
+        "상품명": "[위탁] M 75/2 APO",
+        "site": "라이카스토어 충무로",
+        "가격": "4,000,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-m-752-apo/22398/category/436/display/1/"
+      },
+      {
+        "상품명": "[위탁] Release Button \"Santa\" 12mm",
+        "site": "라이카스토어 충무로",
+        "가격": "250,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-release-button-santa-12mm/22397/category/436/display/1/"
+      },
+      {
+        "상품명": "[위탁] Leica TL 23mm Black",
+        "site": "라이카스토어 충무로",
+        "가격": "1,000,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-leica-tl-23mm-black/22396/category/436/display/1/"
+      },
+      {
+        "상품명": "[위탁] Leica TL 18mm Black",
+        "site": "라이카스토어 충무로",
+        "가격": "1,000,000원",
+        "통화": "KRW",
+        "링크": "https://leica-storebando.co.kr/product/위탁-leica-tl-18mm-black/22395/category/436/display/1/"
+      },
+      {
+        "상품명": "Leica D-Lux 5",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€396",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-d-lux-5-t157286"
+      },
+      {
+        "상품명": "Leica Leather Pouch (14894)",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€119",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-leather-pouch-14894-leica-m-t157211"
+      },
+      {
+        "상품명": "Leica MP (0.72x) (Silver, 10301)",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€4,299",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-mp-0-72x-silver-10301-leica-m-t154007"
+      },
+      {
+        "상품명": "Leica 35mm f2 Summicron-M ASPH. (Type I) (Black, 11879) + Lens Hood (35mm f2 ASPH.) (A42) (12526)",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€2,599",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-35mm-f2-summicron-m-asph-type-i-black-11879-leica-m-t130143"
+      },
+      {
+        "상품명": "LEICA M5",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€790",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-m5"
+      },
+      {
+        "상품명": "case",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€150",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/etui"
+      },
+      {
+        "상품명": "LEICA M6 black paint",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€9,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-m6-black-paint"
+      },
+      {
+        "상품명": "Leica viewfinder TRI-FOCALE 21/24/28mm",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€250",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-viseur-tri-focale-212428mm"
+      },
+      {
+        "상품명": "LEICA M4",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€5,690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-m4"
+      },
+      {
+        "상품명": "Bague pour soufflet",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€70",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/bague-pour-soufflet"
+      },
+      {
+        "상품명": "SUMMICRON-M 90 mm f/2 (1957-1979)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,400",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/summicron-m-90-mm-f2-1957-1979-0"
+      },
+      {
+        "상품명": "APO-SUMMICRON-SL 28 MM F/2 ASPH REF : 11183",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€3,590",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/apo-summicron-sl-28-mm-f2-asph-ref-11183-3"
+      },
+      {
+        "상품명": "SUMMICRON-M 50mm f/2 \"50 JAHRE\"",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€5,390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/summicron-m-250-50-jahre"
+      },
+      {
+        "상품명": "MACRO-ELMAR-M 90 mm f/4 (2002-?)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€2,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/macro-elmar-m-90-mm-f4-2002"
+      },
+      {
+        "상품명": "SUMMILUX-M 35 mm f/1.4 ASPH.",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,390",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/summilux-m-35-mm-f14-asph-0"
+      },
+      {
+        "상품명": "TELYT-VISO 200 MM F/4.5",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€490",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-viso-200-mm-f45"
+      },
+      {
+        "상품명": "TELYT-R 250mm f/4 (II)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€590",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-r-250mm-f4-ii"
+      },
+      {
+        "상품명": "viewfinder LEICA 135mm \"SHOOC\"",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€130",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/viseur-leica-135mm-shooc"
+      },
+      {
+        "상품명": "TELYT-R 560mm f/6.8",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€590",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-r-560mm-f68"
+      },
+      {
+        "상품명": "SUPPORT PANORAMIQUE \"FIAMA\" LEITZ",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€90",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/support-panoramique-fiama-leitz"
+      },
+      {
+        "상품명": "BOBINE CHARGEMENT M5 LEITZ",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€70",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/bobine-chargement-m5-leitz"
+      },
+      {
+        "상품명": "Leica M EV1",
+        "site": "Calumet (독일)",
+        "가격": "€6,349",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-m-ev1/gebraucht/gut/26BER01431072"
+      },
+      {
+        "상품명": "Leica Summilux-M 11726 35mm f1.4 black ASPH. - with 2 years guarantee",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€4,700",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-Summilux-M-11726-1-4-35mm-black-ASPH.-with-2-years-guarantee/35930-7"
+      },
+      {
+        "상품명": "Leica M11-P 20071 metal gray paint finish - like new 2 years of guarantee Body",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€7,550",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-M11-P-20071-metal-gray-paint-finish-like-new-2-years-of-guarantee/35933-11"
+      },
+      {
+        "상품명": "Leica SL3-P 10664 - like new with 2 years guarantee Body",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€4,900",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-SL3-P-10664-like-new-with-2-years-guarantee/35937-21"
+      },
+      {
+        "상품명": "Leica Apo-Summicron-M 11699 35mm f2.0 Asph. 6-bit - like new with 2 years guarantee",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€6,750",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-Apo-Summicron-M-11699-2-35mm-Asph.-6-bit-like-new-with-2-years-guarantee/35931-9"
+      },
+      {
+        "상품명": "Leitz Elmarit-M 135mm f2.8 I",
+        "site": "Leica Classic (독일)",
+        "가격": "€579",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leitz-Elmarit-M-2.8-135mm-I/11829SH-2038164"
+      },
+      {
+        "상품명": "LEICA M11 Monochrom Body",
+        "site": "Leica Classic (아랍에미리트)",
+        "가격": "$8,050",
+        "통화": "USD",
+        "링크": "https://classic.leica-camera.com/en/LEICA-M11-Monochrom/20208-569607"
+      },
+      {
+        "상품명": "Leica Summicron 50mm f2.0 Collapsible (L39)",
+        "site": "三宝カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://www.sanpou.ne.jp/shopdetail/000000025380/"
+      },
+      {
+        "상품명": "Leica IIIa m.Summar 50mm f2.0",
+        "site": "Foto Köster (독일)",
+        "가격": "€499",
+        "통화": "EUR",
+        "링크": "https://www.foto-koester.de/iiia-m.summar-50-2.0/7700005115312"
+      },
+      {
+        "상품명": "Leica Minilux",
+        "site": "Foto Köster (독일)",
+        "가격": "€599",
+        "통화": "EUR",
+        "링크": "https://www.foto-koester.de/minilux/7700005116951"
       }
     ]
   }
