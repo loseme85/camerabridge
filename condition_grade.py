@@ -106,6 +106,11 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
+    if cond.startswith(RANGEFINDER_PREFIX):
+        value = cond[len(RANGEFINDER_PREFIX):].strip()
+        if value.upper() == "NEW":
+            return "N", "label"
+        return (rangefinder_grade(int(value)), "label") if value.isdigit() else (None, None)
     if cond.startswith(VIBE_PREFIX):
         return _VIBE.get(cond[len(VIBE_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOESTER_PREFIX):
@@ -368,3 +373,13 @@ KOESTER_PREFIX = "Koester: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 sehr gut A, gut B, defekt D (렌즈 안 흐림은 사진에 잘 안 보여도 D).
 # 이 대응 기준 정확 일치 11/27 · 한 등급 이내 25/27 (사진이 평균 0.56등급 후함).
 _KOESTER = {"sehr gut": "A", "gut": "B", "defekt": "D"}
+
+# 홍콩 Rangefinder: 설명의 'Cosmetic Condition: ~92-93% new' (범위면 낮은 쪽 숫자), 개봉품은 'New condition'
+RANGEFINDER_PREFIX = "Rangefinder: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-19): 국내 % 대응(from_percent) 그대로면 정확 일치 9/24 · 한 등급 이내 14/24,
+# 사진이 평균 1.17등급 후함 (기존 0.8과 비슷 — 한 칸 올리면 0.33으로 너무 후해져 그대로 둠). 90% 안팎은 설명에 사용감·브래싱을
+# 적은 것이라 매장 사진(흰 배경, 작은 크기)으로는 잘 안 보임.
+
+
+def rangefinder_grade(value: int) -> str:
+    return from_percent(value)
