@@ -4570,6 +4570,141 @@ def _cameraelectronic_name(title):
     return re.sub(r"\s+", " ", name).strip(" ,-")
 
 
+_CC_GRADE_ORDER = ["LN", "MINT", "MINT-", "NEAR MINT", "EX++", "EX+", "EX", "EX-", "VG", "G"]
+
+
+_CC_GRADE_RE = re.compile(r"(?<![\w/\-])((?:LN|Like New|Near Mint|Mint|M(?=[+\-/])|Ex|VG|Vg)[+\-]*(?:\s*/\s*(?:LN|Mint|M|Ex|VG|Vg)?[+\-]*)*)(?=[\s,.;)]|$)")
+
+
+def _classicconnection_grade(text):
+    """Classic Connection 제목·설명의 상태 표기(마지막 것) → 낮은 쪽 하나: 'Ex+/++' → 'EX+', 'Ex++/Mint-' → 'EX++',
+    'Mint/LN-' → 'MINT', 'Ex/Vg' → 'VG', 'M-' → 'MINT-'. 'Summicron-M'·'Leica M'의 M은 등급으로 보지 않음"""
+    found = _CC_GRADE_RE.findall(text)
+    if not found:
+        return None
+    grades = []
+    last = None
+    for part in re.split(r"\s*/\s*", found[-1]):
+        if not part.strip():
+            continue
+        word = re.match(r"(LN|Like New|Near Mint|Mint|M|Ex|VG|Vg)?([+\-]*)$", part.strip())
+        if not word:
+            continue
+        base = (word.group(1) or last or "").upper().replace("LIKE NEW", "LN")
+        base = "MINT" if base == "M" else base
+        if not base:
+            continue
+        last = word.group(1) or last
+        grade = base + word.group(2)
+        if base == "EX" and grade not in _CC_GRADE_ORDER:
+            grade = "EX++" if word.group(2).count("+") >= 2 else "EX"
+        if base == "MINT" and grade not in _CC_GRADE_ORDER:
+            grade = "MINT-" if "-" in word.group(2) else "MINT"
+        if base == "LN":
+            grade = "LN"
+        if grade in _CC_GRADE_ORDER:
+            grades.append(grade)
+    return max(grades, key=_CC_GRADE_ORDER.index) if grades else None
+
+
+def _classicconnection_name(title):
+    """Classic Connection 제목 다듬기: 등급·연도·'with …' 딸린 물건·'camera'·'lens' 말을 떼어 본품 이름만
+    ('Leica M3 Double Stroke Chrome camera with Leica 50mm,… Ex+' → 'Leica M3 Double Stroke Chrome')"""
+    name = re.sub(r"\s*/\s*(?:Free Shipping|On Hold|In Stock)\b.*$", "", title.replace("\u2011", "-"), flags=re.I)
+    name = _CC_GRADE_RE.sub("", name)
+    name = re.sub(r"\s*\((?:circa\s*)?\d{4}[^)]*\)", "", name)
+    name = re.sub(r"\bcirca \d{4}\b", "", name)
+    name = re.sub(r"\s*\(?Free Shipping\b.*$|\s*Cat\s?#\s?\d+", "", name, flags=re.I)
+    name = re.split(r"\s+(?:with|w/|sold with|in|including)\s+|\s+[\u2013\u2014+/-]\s+|,\s+", name, maxsplit=1, flags=re.I)[0]
+    if name.count("(") > name.count(")"):
+        name = name[:name.rindex("(")]  # 괄호 안에서 잘렸으면 괄호째 뗌
+    name = re.sub(r"\b(\d{2,3})/(\d(?:[.,]\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2).replace(',', '.')}", name)
+    name = re.sub(r"\bf/(\d)", r"f\1", name)
+    name = re.sub(r"\bf(\d),(\d)\b", r"f\1.\2", name)  # 'f1,5' → 'f1.5'
+    name = re.sub(r"\b(\d{1,2}(?:\.\d)?)cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", name)  # '9cm' → '90mm'
+    name = re.sub(r"\b(?:35mm )?(?:classic )?(?:camera|lens)\b", "", name, flags=re.I)
+    name = re.sub(r"[\u201c\u201d\"]", "", name)
+    return re.sub(r"\s+", " ", name).strip(" ,&+/")
+
+
+def crawl_classicconnection():
+    """Classic Connection (미국) - 라이카 중고 전문 딜러 WooCommerce 상품 API(Store API) JSON. 라이카 분류 아래 이름에
+    'Used'·'Demo'가 든 분류(M·스크루·SLR·SL·디지털 중고 등)만 골라 받고(400개쯤, 40초) 라이카·라이츠·판매 중만.
+    등급은 제목 끝(없으면 설명)의 'Ex++'·'Mint-'·'Ex+/++' 표기에서 낮은 쪽"""
+    import html as _html
+    import requests
+    from condition_grade import CLASSICCONNECTION_PREFIX
+    results = []
+    base = "https://classicconnection.com"
+    headers = {"User-Agent": USER_AGENTS[1]}
+    print(f"\n  📂 Classic Connection 크롤링 시작")
+    try:
+        resp = requests.get(f"{base}/wp-json/wc/store/v1/products/categories?per_page=100", headers=headers, timeout=60)
+        resp.raise_for_status()
+        cats = resp.json()
+    except Exception as e:
+        raise RuntimeError(f"Classic Connection 분류 못 읽음: {e}")
+    leica_ids = {c["id"] for c in cats if _html.unescape(c.get("name") or "").strip() == "Leica"}
+    used_ids = [str(c["id"]) for c in cats if c.get("parent") in leica_ids and re.search(r"used|demo", _html.unescape(c.get("name") or ""), re.I)]
+    if not used_ids:
+        raise RuntimeError("Classic Connection 라이카 중고 분류를 못 찾음")
+    seen = set()
+    for page_num in range(1, 30):
+        url = f"{base}/wp-json/wc/store/v1/products?category={','.join(used_ids)}&per_page=100&page={page_num}"
+        try:
+            resp = requests.get(url, headers=headers, timeout=60)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"Classic Connection {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = re.sub(r"\s+", " ", _html.unescape(p.get("name") or "")).strip()
+            if p.get("id") in seen or not re.match(r"(?:leica|leitz)\b", title, re.I) or not p.get("is_in_stock"):
+                continue
+            seen.add(p.get("id"))
+            if re.search(r"\bsold\b|on hold|(?<!like )\bnew\b(?!\s*(?:york|jersey))", title, re.I):
+                continue  # 판매됨·보류·새 상품(중고 분류에 섞임)
+            prices = p.get("prices") or {}
+            try:
+                value = int(prices.get("price")) / 10 ** int(prices.get("currency_minor_unit", 2))
+            except (TypeError, ValueError):
+                value = 0
+            if value <= 0:
+                continue  # 가격 없는 상품(문의)은 뺌
+            price = f"${value:,.0f}"
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
+            grade = _classicconnection_grade(title) or _classicconnection_grade(re.sub(r"\s+", " ", text)[:400])
+            cond = CLASSICCONNECTION_PREFIX + grade if grade else "정보없음"
+            name = _classicconnection_name(title)
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Classic Connection (미국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "USD",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Classic Connection 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -5179,6 +5314,7 @@ def crawl_all():
         ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
         # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
+        ("Classic Connection (미국)", lambda: ce.wrap_full_run("Classic Connection (미국)", crawl_classicconnection)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
