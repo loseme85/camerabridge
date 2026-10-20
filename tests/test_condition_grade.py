@@ -220,6 +220,14 @@ def test_koester_condition_grades():
     assert grade_of(site, KOESTER_PREFIX + "sehr gut", "Leica Tele-Elmarit-M 90mm f2.8")[0] == "A"
     assert grade_of(site, KOESTER_PREFIX + "gut", "Leica Summicron-M 90mm f2.0")[0] == "B"
     assert grade_of(site, KOESTER_PREFIX + "defekt", "Leica Elmar 90mm f4.0 L39 defekt")[0] in ("D", "X")
+def test_classicconnection_condition_grades():
+    from condition_grade import CLASSICCONNECTION_PREFIX
+    site = "Classic Connection (미국)"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "MINT", "Leica 90mm f2.8 Elmarit-M Late production")[0] == "S"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "MINT-", "Leica M5 50 Jahre Anniversary black")[0] == "A"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "EX++", "Leica 50mm f2 Summicron-M black Wetzlar")[0] == "B"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "EX+", "Leica M3 double stroke")[0] == "C"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "VG", "Leica IIIc converted to IIIf")[0] == "D"
 def test_classiccamera_condition_grades():
     from condition_grade import CLASSICCAMERA_PREFIX
     site = "The Classic Camera (영국)"

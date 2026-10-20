@@ -106,6 +106,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
+    if cond.startswith(CLASSICCONNECTION_PREFIX):
+        return _CLASSICCONNECTION.get(cond[len(CLASSICCONNECTION_PREFIX):].strip().upper()), "label"
     if cond.startswith(CLASSICCAMERA_PREFIX):
         return _CLASSICCAMERA.get(cond[len(CLASSICCAMERA_PREFIX):].strip()), "label"
     if cond.startswith(JCH_PREFIX):
@@ -377,6 +379,13 @@ KOESTER_PREFIX = "Koester: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 sehr gut A, gut B, defekt D (렌즈 안 흐림은 사진에 잘 안 보여도 D).
 # 이 대응 기준 정확 일치 11/27 · 한 등급 이내 25/27 (사진이 평균 0.56등급 후함).
 _KOESTER = {"sehr gut": "A", "gut": "B", "defekt": "D"}
+
+# 미국 Classic Connection: 제목 끝 'Ex++'·'Mint-'·'Ex+/++' (범위면 낮은 쪽), LN = Like New
+CLASSICCONNECTION_PREFIX = "ClassicConnection: "
+# 사진 평가(표기 가리고 24점 중 실물 사진이 있는 18점, 사진 3장씩, 2026-10-19 — 6점은 제조사 견본 사진이라 뺌): 아래 대응
+# 기준 정확 일치 6/18 · 한 등급 이내 18/18, 사진이 평균 0.56등급 후함 (기존 0.8과 비슷해 그대로)
+_CLASSICCONNECTION = {"LN": "S", "MINT": "S", "MINT-": "A", "NEAR MINT": "A", "EX++": "B", "EX+": "C", "EX": "C", "EX-": "D",
+                      "VG": "D", "G": "D"}
 
 # 영국 The Classic Camera: 설명의 'Condition EXC + +'·'Mint-'·'Near Mint' (Ffordes와 비슷한 영국식 표기)
 CLASSICCAMERA_PREFIX = "ClassicCamera: "
