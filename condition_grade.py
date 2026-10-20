@@ -108,6 +108,11 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
     if cond.startswith(JCH_PREFIX):
         return _JCH.get(cond[len(JCH_PREFIX):].strip().lower()), "label"
+    if cond.startswith(RANGEFINDER_PREFIX):
+        value = cond[len(RANGEFINDER_PREFIX):].strip()
+        if value.upper() == "NEW":
+            return "N", "label"
+        return (rangefinder_grade(int(value)), "label") if value.isdigit() else (None, None)
     if cond.startswith(VIBE_PREFIX):
         return _VIBE.get(cond[len(VIBE_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOESTER_PREFIX):
@@ -377,3 +382,13 @@ JCH_PREFIX = "JCH: "
 # 후함 (기존 0.8보다 덜 후함 — 한 칸 내리면 사진이 1.36등급 후해져 더 벌어져 그대로 둠). Mint minus는 사진상 A~S, Excellent plus는 A~B.
 _JCH = {"like new": "S", "mint": "S", "near mint": "A", "mint minus": "A", "excellent plus": "B", "excellent": "C",
         "very good": "C", "good": "D", "clean user": "D", "good user": "D", "user": "D"}
+
+# 홍콩 Rangefinder: 설명의 'Cosmetic Condition: ~92-93% new' (범위면 낮은 쪽 숫자), 개봉품은 'New condition'
+RANGEFINDER_PREFIX = "Rangefinder: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-19): 국내 % 대응(from_percent) 그대로면 정확 일치 9/24 · 한 등급 이내 14/24,
+# 사진이 평균 1.17등급 후함 (기존 0.8과 비슷 — 한 칸 올리면 0.33으로 너무 후해져 그대로 둠). 90% 안팎은 설명에 사용감·브래싱을
+# 적은 것이라 매장 사진(흰 배경, 작은 크기)으로는 잘 안 보임.
+
+
+def rangefinder_grade(value: int) -> str:
+    return from_percent(value)

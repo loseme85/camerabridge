@@ -4660,6 +4660,83 @@ def crawl_jch():
     return results
 
 
+def _rangefinder_name(title):
+    """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"\s*\((?:Used|Open Box)\)\s*$", "", name, flags=re.I)
+    name = re.sub(r"\s*[\u2013\u2014]\s*|\s+-\s+", " ", name)
+    name = re.sub(r"[\u201c\u201d\u2018\u2019\"]", "", name)
+    name = re.sub(r"\s+(?:Mirrorless |Compact |Film )?Camera\b(?! Body Cap)|\s+Lens\b", "", name)
+    name = re.sub(r"\bF(\d+(?:\.\d+)?)\b", lambda m: "f" + m.group(1) + ("" if "." in m.group(1) else ".0"), name)
+    return re.sub(r"\s+", " ", name).strip(" /")
+
+
+def crawl_rangefinder():
+    """Rangefinder (홍콩) - 라이카 전문점 WooCommerce 'Pre-owned Items' 분류(40개쯤)를 상품 API(Store API) JSON으로.
+    판매 중만, 라이카·라이츠만. 등급은 설명의 'Cosmetic Condition: ~92-93% new' (낮은 쪽 숫자), 개봉품은 'New condition'"""
+    import html as _html
+    import requests
+    from condition_grade import RANGEFINDER_PREFIX
+    results = []
+    base = "https://www.rangefinder.com.hk"
+    print(f"\n  📂 Rangefinder 크롤링 시작")
+    for page_num in range(1, 10):
+        url = f"{base}/wp-json/wc/store/v1/products?category=23&per_page=100&page={page_num}"
+        try:
+            # 서버가 Chrome 120 표기(목록 0·4번)는 403으로 막음 (2026-10-19) → Safari 표기로 고정
+            resp = requests.get(url, headers={"User-Agent": USER_AGENTS[1]}, timeout=30)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"Rangefinder {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = _html.unescape(p.get("name") or "")
+            if not re.match(r"(?:leica|leitz)\b", title, re.I) or not p.get("is_in_stock"):
+                continue
+            name = _rangefinder_name(title)
+            prices = p.get("prices") or {}
+            try:
+                price = f"HK${int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("description") or ""))
+            m = re.search(r"Cosmetic Condition:\s*~?\s*(\d{2,3})(?:\s*-\s*\d{2,3})?\s*%", text, re.I)
+            if m:
+                cond = RANGEFINDER_PREFIX + m.group(1)
+            elif re.search(r"Cosmetic Condition:\s*(?:Brand )?New\b", text, re.I):
+                cond = RANGEFINDER_PREFIX + "New"
+            else:
+                cond = "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Rangefinder (홍콩)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "HKD",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Rangefinder 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -5270,6 +5347,7 @@ def crawl_all():
         # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
         ("Japan Camera Hunter (일본)", lambda: ce.wrap_full_run("Japan Camera Hunter (일본)", crawl_jch)),
+        ("Rangefinder (홍콩)", lambda: ce.wrap_full_run("Rangefinder (홍콩)", crawl_rangefinder)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
