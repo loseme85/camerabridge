@@ -4705,6 +4705,255 @@ def crawl_classicconnection():
     return results
 
 
+def _classiccamera_condition(text):
+    """The Classic Camera 설명의 상태 글귀 → 'Mint-'·'EXC+++'·'Near Mint' 같은 짧은 표기 (설명 첫 줄 'Condition EXC + +', 'Used Product in EXC++ Condition' 등)"""
+    m = re.search(r"\b(as new|like new|near[\s-]?mint|mint\s*-?|exc(?:ellent)?\.?(?:\s*\+)*|good)(?![a-z])", text, re.I)
+    if not m:
+        return None
+    word = m.group(1).lower()
+    if word.startswith(("as new", "like new")):
+        return "As New"
+    if word.startswith("near"):
+        return "Near Mint"
+    if word.startswith("mint"):
+        return "Mint-" if "-" in word else "Mint"
+    if word.startswith("exc"):
+        return "EXC" + "+" * min(word.count("+"), 3)
+    return "Good"
+
+
+def crawl_classiccamera():
+    """The Classic Camera (영국) - 런던 라이카 전문점 WooCommerce 상품 API(Store API) JSON 전체(650개쯤)에서
+    'Used …' 분류에 든 라이카·라이츠만 (새 상품·다른 브랜드 제외). 등급은 설명의 'Condition EXC + +'·'Mint-' 글귀"""
+    import html as _html
+    import requests
+    from condition_grade import CLASSICCAMERA_PREFIX
+    results = []
+    base = "https://www.theclassiccamera.com"
+    print(f"\n  📂 The Classic Camera 크롤링 시작")
+    for page_num in range(1, 30):
+        url = f"{base}/wp-json/wc/store/v1/products?per_page=100&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": USER_AGENTS[1]}, timeout=60)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"The Classic Camera {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            name = re.sub(r"\s+", " ", _html.unescape(p.get("name") or "")).strip()
+            cats = [_html.unescape(c.get("name") or "") for c in p.get("categories") or []]
+            if not re.match(r"(?:leica|leitz)\b", name, re.I) or not any(c.startswith("Used") for c in cats) or not p.get("is_in_stock"):
+                continue
+            # 바르낙 모델명의 l(엘)을 I로: 'Leica lllF' → 'Leica IIIf', 'la Converted To IIl' → 'Ia Converted To III'
+            name = re.sub(r"(?<=Leica )([lI]{1,3})([a-gA-G])?\b", lambda m: m.group(1).replace("l", "I") + (m.group(2) or "").lower(), name)
+            name = re.sub(r"\b(?=[lI]*l)[lI]{2,3}\b", lambda m: m.group(0).replace("l", "I"), name)
+            name = re.sub(r"\bf/(\d)", r"f\1", name)
+            name = re.sub(r"\b(M6|M4-P)TTL\b", r"\1 TTL", name)
+            name = re.sub(r"\bVisoflex 111\b", "Visoflex III", name)
+            prices = p.get("prices") or {}
+            try:
+                price = f"£{int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
+            grade = _classiccamera_condition(re.sub(r"\s+", " ", text))
+            cond = CLASSICCAMERA_PREFIX + grade if grade else "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "The Classic Camera (영국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "GBP",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ The Classic Camera 완료: {len(results)}개")
+    return results
+
+
+def _jch_name(title):
+    """Japan Camera Hunter 제목 다듬기: '*rare* Leica Summilux-M 35mm f1.4 AA E46 【CLA’D】' → 'Leica Summilux-M 35mm f1.4 AA E46 CLA'D',
+    'Leica Elmarit M28/2.8 ASPH' → 'Leica Elmarit-M 28mm f2.8 ASPH', 'F/1.0' → 'f1.0'"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title).replace("\u202f", " ")).strip()
+    name = re.sub(r"^\*[^*]+\*\s*", "", name)
+    name = re.sub(r"[【】]", " ", name).replace("\u2019", "'")
+    name = re.sub(r"\s+(?:w/\s*|with\s+)?(?:\S+\s+)?hood\b", "", name, flags=re.I)  # 'W/12452 Hood'·'ITDOO Hood' (렌즈가 액세서리로 가지 않게)
+    name = re.sub(r"\s+&\s+\S+\s+Winder\b.*$", "", name, flags=re.I)
+    name = re.sub(r"\bHector\b", "Hektor", name)
+    name = re.sub(r"\b(\d(?:\.\d)?)cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", name)  # '3.5cm' → '35mm'
+    name = re.sub(r"\b(Summicron|Summilux|Elmarit|Elmar|Summaron|Summarit|Noctilux)[\s-]?M\s?(\d{2,3})/(\d+(?:\.\d+)?)",
+                  r"\1-M \2mm f\3", name)
+    name = re.sub(r"\b(\d(?:\.\d+)?)/(\d{2,3})(?:mm)?\b", r"\2mm f\1", name)  # '2.8/90mm'·'R 4/180' → '90mm f2.8'
+    name = re.sub(r"\b(\d{2,3})/(\d+(?:\.\d+)?)\b", r"\1mm f\2", name)
+    name = re.sub(r"\b(\d{2,3})mm (\d\.\d)\b", r"\1mm f\2", name)  # '35mm 2.8' → '35mm f2.8'
+    name = re.sub(r"\b[fF]/(\d+(?:\.\d+)?)", r"f\1", name)
+    name = re.sub(r"\bF(\d+(?:\.\d+)?)\b", r"f\1", name)
+    name = re.sub(r"\b(f\d+)(?![.\d])", r"\1.0", name)
+    name = re.sub(r"\s+w/\s+", " with ", name)
+    return re.sub(r"\s+", " ", name).strip()
+
+
+def crawl_jch():
+    """Japan Camera Hunter (일본) - 도쿄 필름 카메라 수출점 WooCommerce 상품 API(Store API)의 'leica' 검색 JSON (70개쯤).
+    매장 자체 상품(JCH shop 분류: 핫슈 커버·와인더)과 다른 브랜드(코와 + 어댑터 등)는 뺌. 가격은 USD, 해외 배송.
+    등급은 설명 첫 문장 'Mint minus condition.'"""
+    import html as _html
+    import requests
+    from condition_grade import JCH_PREFIX
+    results = []
+    base = "https://www.japancamerahunter.com"
+    print(f"\n  📂 Japan Camera Hunter 크롤링 시작")
+    for page_num in range(1, 20):
+        url = f"{base}/wp-json/wc/store/v1/products?search=leica&per_page=100&page={page_num}"
+        for attempt in range(3):  # 서버가 느려 가끔 30초 넘게 걸림
+            try:
+                resp = requests.get(url, headers={"User-Agent": USER_AGENTS[1]}, timeout=60)
+                resp.raise_for_status()
+                products = resp.json()
+                break
+            except Exception as e:
+                if attempt == 2:
+                    raise RuntimeError(f"Japan Camera Hunter {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+                time.sleep(10)
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            name = _jch_name(p.get("name") or "")
+            cats = {c.get("name") for c in p.get("categories") or []}
+            if not re.match(r"(?:leica|leitz)\b", name, re.I) or "JCH shop" in cats or not p.get("is_in_stock"):
+                continue
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            prices = p.get("prices") or {}
+            try:
+                price = f"${int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
+            text = re.sub(r"\s+", " ", text.replace("\u202f", " ")).strip()
+            m = re.match(r"((?:mint|near mint|like new|excellent|very good|good|clean|user)(?: (?:minus|plus|user))?) condition", text, re.I)
+            cond = JCH_PREFIX + m.group(1).lower() if m else "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Japan Camera Hunter (일본)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "USD",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Japan Camera Hunter 완료: {len(results)}개")
+    return results
+
+
+def _rangefinder_name(title):
+    """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"\s*\((?:Used|Open Box)\)\s*$", "", name, flags=re.I)
+    name = re.sub(r"\s*[\u2013\u2014]\s*|\s+-\s+", " ", name)
+    name = re.sub(r"[\u201c\u201d\u2018\u2019\"]", "", name)
+    name = re.sub(r"\s+(?:Mirrorless |Compact |Film )?Camera\b(?! Body Cap)|\s+Lens\b", "", name)
+    name = re.sub(r"\bF(\d+(?:\.\d+)?)\b", lambda m: "f" + m.group(1) + ("" if "." in m.group(1) else ".0"), name)
+    return re.sub(r"\s+", " ", name).strip(" /")
+
+
+def crawl_rangefinder():
+    """Rangefinder (홍콩) - 라이카 전문점 WooCommerce 'Pre-owned Items' 분류(40개쯤)를 상품 API(Store API) JSON으로.
+    판매 중만, 라이카·라이츠만. 등급은 설명의 'Cosmetic Condition: ~92-93% new' (낮은 쪽 숫자), 개봉품은 'New condition'"""
+    import html as _html
+    import requests
+    from condition_grade import RANGEFINDER_PREFIX
+    results = []
+    base = "https://www.rangefinder.com.hk"
+    print(f"\n  📂 Rangefinder 크롤링 시작")
+    for page_num in range(1, 10):
+        url = f"{base}/wp-json/wc/store/v1/products?category=23&per_page=100&page={page_num}"
+        try:
+            # 서버가 Chrome 120 표기(목록 0·4번)는 403으로 막음 (2026-10-19) → Safari 표기로 고정
+            resp = requests.get(url, headers={"User-Agent": USER_AGENTS[1]}, timeout=30)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"Rangefinder {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = _html.unescape(p.get("name") or "")
+            if not re.match(r"(?:leica|leitz)\b", title, re.I) or not p.get("is_in_stock"):
+                continue
+            name = _rangefinder_name(title)
+            prices = p.get("prices") or {}
+            try:
+                price = f"HK${int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("description") or ""))
+            m = re.search(r"Cosmetic Condition:\s*~?\s*(\d{2,3})(?:\s*-\s*\d{2,3})?\s*%", text, re.I)
+            if m:
+                cond = RANGEFINDER_PREFIX + m.group(1)
+            elif re.search(r"Cosmetic Condition:\s*(?:Brand )?New\b", text, re.I):
+                cond = RANGEFINDER_PREFIX + "New"
+            else:
+                cond = "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Rangefinder (홍콩)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "HKD",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Rangefinder 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -5315,6 +5564,9 @@ def crawl_all():
         # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
         ("Classic Connection (미국)", lambda: ce.wrap_full_run("Classic Connection (미국)", crawl_classicconnection)),
+        ("The Classic Camera (영국)", lambda: ce.wrap_full_run("The Classic Camera (영국)", crawl_classiccamera)),
+        ("Japan Camera Hunter (일본)", lambda: ce.wrap_full_run("Japan Camera Hunter (일본)", crawl_jch)),
+        ("Rangefinder (홍콩)", lambda: ce.wrap_full_run("Rangefinder (홍콩)", crawl_rangefinder)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
