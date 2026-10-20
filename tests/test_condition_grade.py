@@ -227,3 +227,36 @@ def test_mfcamera_condition_grades():
     assert grade_of(site, MFCAMERA_PREFIX + "Like New Minus", "Leica M10-R Black Paint")[0] == "A"
     assert grade_of(site, MFCAMERA_PREFIX + "Excellent Plus", "Leica M11 Black")[0] == "B"
     assert grade_of(site, MFCAMERA_PREFIX + "Excellent", "Leica M8 Silver Chrome")[0] == "C"
+def test_classicconnection_condition_grades():
+    from condition_grade import CLASSICCONNECTION_PREFIX
+    site = "Classic Connection (미국)"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "MINT", "Leica 90mm f2.8 Elmarit-M Late production")[0] == "S"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "MINT-", "Leica M5 50 Jahre Anniversary black")[0] == "A"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "EX++", "Leica 50mm f2 Summicron-M black Wetzlar")[0] == "B"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "EX+", "Leica M3 double stroke")[0] == "C"
+    assert grade_of(site, CLASSICCONNECTION_PREFIX + "VG", "Leica IIIc converted to IIIf")[0] == "D"
+def test_classiccamera_condition_grades():
+    from condition_grade import CLASSICCAMERA_PREFIX
+    site = "The Classic Camera (영국)"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "Mint", "Leica M11-D Black Boxed")[0] == "A"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "EXC+++", "Leica 90mm F2 Summicron-M Black")[0] == "B"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "EXC++", "Leica M2 Body Button Rewind Boxed")[0] == "C"
+    assert grade_of(site, CLASSICCAMERA_PREFIX + "EXC", "Leitz 13.5cm f4.5 Hektor L39")[0] == "D"
+
+def test_jch_condition_grades():
+    from condition_grade import JCH_PREFIX
+    site = "Japan Camera Hunter (일본)"
+    assert grade_of(site, JCH_PREFIX + "mint", "Leica M4 Black With Box")[0] == "S"
+    assert grade_of(site, JCH_PREFIX + "mint minus", "Leica Elmarit-M 28mm f2.8 ASPH 6 bit")[0] == "A"
+    assert grade_of(site, JCH_PREFIX + "excellent plus", "Leica M2 Button rewind")[0] == "B"
+    assert grade_of(site, JCH_PREFIX + "excellent", "Leica Summilux 50mm f1.4 Type 1")[0] == "C"
+    assert grade_of(site, JCH_PREFIX + "good user", "Leica II Black with 50mm Elmar f3.5 Nickel")[0] == "D"
+def test_rangefinder_condition_grades():
+    from condition_grade import RANGEFINDER_PREFIX
+    site = "Rangefinder (홍콩)"
+    assert grade_of(site, RANGEFINDER_PREFIX + "99", "Leica Tri-Elmar-M 16-18-21mm f4.0 ASPH")[0] == "S"
+    assert grade_of(site, RANGEFINDER_PREFIX + "97", "Leica Summicron-M 50mm f2.0 Black Anodized")[0] == "A"
+    assert grade_of(site, RANGEFINDER_PREFIX + "95", "Leica Summilux-M 24mm f1.4 ASPH")[0] == "B"
+    assert grade_of(site, RANGEFINDER_PREFIX + "90", "Leica Q3 43 Black")[0] == "C"
+    assert grade_of(site, RANGEFINDER_PREFIX + "88", "Leica M3J Black Paint")[0] == "D"
+    assert grade_of(site, RANGEFINDER_PREFIX + "New", "Leica M11 Monochrom")[0] == "N"
