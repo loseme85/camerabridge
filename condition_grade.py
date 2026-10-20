@@ -106,6 +106,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
+    if cond.startswith(MFCAMERA_PREFIX):
+        return _MFCAMERA.get(cond[len(MFCAMERA_PREFIX):].strip().title()), "label"
     if cond.startswith(CLASSICCONNECTION_PREFIX):
         return _CLASSICCONNECTION.get(cond[len(CLASSICCONNECTION_PREFIX):].strip().upper()), "label"
     if cond.startswith(CLASSICCAMERA_PREFIX):
@@ -379,6 +381,13 @@ KOESTER_PREFIX = "Koester: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 sehr gut A, gut B, defekt D (렌즈 안 흐림은 사진에 잘 안 보여도 D).
 # 이 대응 기준 정확 일치 11/27 · 한 등급 이내 25/27 (사진이 평균 0.56등급 후함).
 _KOESTER = {"sehr gut": "A", "gut": "B", "defekt": "D"}
+
+# 미국 MF Camera: 제목 끝 '– Excellent Plus' 또는 설명의 'Condition: Excellent' (미국 중고점 말투)
+MFCAMERA_PREFIX = "MFCamera: "
+# 사진 평가(표기 가리고 24점 중 실물 사진 23점, 사진 3장씩, 2026-10-19): 아래 대응 기준 정확 일치 5/23 · 한 등급 이내 16/23,
+# 사진이 평균 0.91등급 후함 (기존 0.8과 비슷해 그대로). Excellent는 사진상 A~B, Excellent Plus는 S~A로 보임
+_MFCAMERA = {"Like New": "S", "Open Box": "S", "Mint": "S", "Like New Minus": "A", "Excellent Plus": "B", "Excellent": "C",
+             "Very Good": "D", "Good": "D"}
 
 # 미국 Classic Connection: 제목 끝 'Ex++'·'Mint-'·'Ex+/++' (범위면 낮은 쪽), LN = Like New
 CLASSICCONNECTION_PREFIX = "ClassicConnection: "
