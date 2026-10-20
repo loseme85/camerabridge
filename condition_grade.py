@@ -106,6 +106,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
+    if cond.startswith(JCH_PREFIX):
+        return _JCH.get(cond[len(JCH_PREFIX):].strip().lower()), "label"
     if cond.startswith(RANGEFINDER_PREFIX):
         value = cond[len(RANGEFINDER_PREFIX):].strip()
         if value.upper() == "NEW":
@@ -373,6 +375,13 @@ KOESTER_PREFIX = "Koester: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 sehr gut A, gut B, defekt D (렌즈 안 흐림은 사진에 잘 안 보여도 D).
 # 이 대응 기준 정확 일치 11/27 · 한 등급 이내 25/27 (사진이 평균 0.56등급 후함).
 _KOESTER = {"sehr gut": "A", "gut": "B", "defekt": "D"}
+
+# 일본 Japan Camera Hunter: 설명 첫 문장 'Mint minus condition.' / 'Excellent plus condition.' (영어권 수출점 말투)
+JCH_PREFIX = "JCH: "
+# 사진 평가(표기 가리고 28점, 사진 3장씩, 2026-10-19): 아래 대응 기준 정확 일치 14/28 · 한 등급 이내 24/28, 사진이 평균 0.36등급
+# 후함 (기존 0.8보다 덜 후함 — 한 칸 내리면 사진이 1.36등급 후해져 더 벌어져 그대로 둠). Mint minus는 사진상 A~S, Excellent plus는 A~B.
+_JCH = {"like new": "S", "mint": "S", "near mint": "A", "mint minus": "A", "excellent plus": "B", "excellent": "C",
+        "very good": "C", "good": "D", "clean user": "D", "good user": "D", "user": "D"}
 
 # 홍콩 Rangefinder: 설명의 'Cosmetic Condition: ~92-93% new' (범위면 낮은 쪽 숫자), 개봉품은 'New condition'
 RANGEFINDER_PREFIX = "Rangefinder: "
