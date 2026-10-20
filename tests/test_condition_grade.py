@@ -220,3 +220,12 @@ def test_koester_condition_grades():
     assert grade_of(site, KOESTER_PREFIX + "sehr gut", "Leica Tele-Elmarit-M 90mm f2.8")[0] == "A"
     assert grade_of(site, KOESTER_PREFIX + "gut", "Leica Summicron-M 90mm f2.0")[0] == "B"
     assert grade_of(site, KOESTER_PREFIX + "defekt", "Leica Elmar 90mm f4.0 L39 defekt")[0] in ("D", "X")
+def test_rangefinder_condition_grades():
+    from condition_grade import RANGEFINDER_PREFIX
+    site = "Rangefinder (홍콩)"
+    assert grade_of(site, RANGEFINDER_PREFIX + "99", "Leica Tri-Elmar-M 16-18-21mm f4.0 ASPH")[0] == "S"
+    assert grade_of(site, RANGEFINDER_PREFIX + "97", "Leica Summicron-M 50mm f2.0 Black Anodized")[0] == "A"
+    assert grade_of(site, RANGEFINDER_PREFIX + "95", "Leica Summilux-M 24mm f1.4 ASPH")[0] == "B"
+    assert grade_of(site, RANGEFINDER_PREFIX + "90", "Leica Q3 43 Black")[0] == "C"
+    assert grade_of(site, RANGEFINDER_PREFIX + "88", "Leica M3J Black Paint")[0] == "D"
+    assert grade_of(site, RANGEFINDER_PREFIX + "New", "Leica M11 Monochrom")[0] == "N"
