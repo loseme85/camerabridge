@@ -229,6 +229,12 @@
    "example": "[중고] M10 Monochrom"
   },
   {
+   "a": "leica:body:m10-r:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 42,
+   "example": "[중고] M10-R (Black)"
+  },
+  {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:meter",
    "count": 41,
@@ -239,12 +245,6 @@
    "b": "leica:feature:mechanical",
    "count": 41,
    "example": "Leica M5 Silver"
-  },
-  {
-   "a": "leica:body:m10-r:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 41,
-   "example": "[중고] M10-R (Black)"
   },
   {
    "a": "leica:body:m11-p:standard",
@@ -385,6 +385,12 @@
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
   },
   {
+   "a": "leica:body:m11-d",
+   "b": "leica:feature:frameline-28",
+   "count": 18,
+   "example": "[중고] M11-D"
+  },
+  {
    "a": "leica:body:m11-monochrom",
    "b": "leica:feature:frameline-28",
    "count": 18,
@@ -419,12 +425,6 @@
    "b": "leica:feature:mechanical",
    "count": 18,
    "example": "[중고] M4-P (Black)"
-  },
-  {
-   "a": "leica:body:m11-d",
-   "b": "leica:feature:frameline-28",
-   "count": 17,
-   "example": "[중고] M11-D"
   },
   {
    "a": "leica:body:m7:a-la-carte",
@@ -899,7 +899,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 132,
+   "count": 133,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
