@@ -4840,6 +4840,104 @@ def crawl_ohnuki():
     print(f"  ✅ カメラの大貫 완료: {len(results)}개")
     return results
 
+
+_KASAN_OTHER = r"미야자키|miyazaki|ms-?optics|주비터|jupiter|linhof|린호프|user made|보이그|voigt|라이트\s|light\s?lens|코니카|konica|마이어|meyer|핸드크로스|handcross|캐논|canon|니콘|nikon|zeiss|자이스|미놀타|minolta|아티산|artisan|ttartisan|7artisans"
+
+
+def _kasan_name(title):
+    """가산카메라 제목 다듬기: '라이카 Leica SUMMILUX M50mm F1.4 블랙 (12586 후드포함)/95%' → 'Leica SUMMILUX M 50mm f1.4 black'.
+    끝의 상태 '/95%'·'[98%]'와 괄호 속 구성품·일련번호('no3498***')는 떼고, 앞의 한글 '라이카'·'라이카 필터' 같은 말은 뺌"""
+    name = re.sub(r"\s*/?\s*\[?\s*\d{2,3}\s?%\s*\]?\s*$", "", title.strip())
+    name = re.sub(r"\s*\[\s*\d{2,3}\s*\]\s*$", "", name)
+    name = re.sub(r"^\s*판매완료\s*", "", name)
+    name = re.sub(r"^(?:라이카|바르낙)(?:\s+(?:필터|후드|뷰파인더|바르낙))*\s+", "", name)
+    name = re.sub(r"\.?\s*(?:렌즈)?광학부?\s*상태\S*|\s*상태\s?좋음", "", name)
+    name = re.sub(r"\s*\([^)]*(?:포함|세트|셋트|케이스|정품|후드|필타|박스|캡|스트랩|스트렙)[^)]*\)", "", name)
+    name = re.sub(r"\s*(?:\.?\s*no\.?\s?\d{3,}\**|\.no\d+\**)", "", name, flags=re.I)
+    name = re.sub(r"[.+,]?\s*(?:UV)?(?:후드|필타|변환링|정품)\S*|\s*/\s*\(\d{4}년생산\)|\s*버전\s?\d", "", name)
+    name = re.sub(r"(?:f\s?=\s?)?(\d{1,2}(?:\.\d)?)\s?cm(?=\b|[A-Zf])", lambda m: f" {round(float(m.group(1)) * 10)}mm ", name)  # 'f=5cm' → '50mm'
+    name = re.sub(r"\s?[fF]\s?1\s?:\s?(\d(?:\.\d)?)", r" f\1", name)  # 'f1:2'·'F1:3.5' → 'f2'
+    name = re.sub(r"\s+-\s+(?=[A-Z]\b)", "-", name)  # 'SUMMICRON - L' → 'SUMMICRON-L'
+    name = re.sub(r"\bv\.(\d)\b", r"v\1", name)
+    name = re.sub(r"\b(M|R)(\d{2,3})mm", r"\1 \2mm", name)  # 'M50mm' → 'M 50mm'
+    name = re.sub(r"\bF\s?(\d(?:\.\d)?)\b", r"f\1", name)
+    name = re.sub(r"(?<=mm)\s?1\s?:\s?(\d(?:\.\d)?)\b|\s1\s?:\s?(\d(?:\.\d)?)\b", lambda m: " f" + (m.group(1) or m.group(2)), name)
+    name = re.sub(r"(?<=[A-Za-z])-\s+(?=[A-Z])", "-", name)  # 'Vario- Elmar' → 'Vario-Elmar'
+    if re.search(r"black paint", name, re.I):
+        name = name.replace("블랙페인트", "")
+    for ko, en in (("블랙페인트", "Black Paint"), ("블랙", "black"), ("실버", "silver"), ("박스세트|박스셋트|박스풀셋트", ""),
+                   ("미사용신품|미사용", "unused"), ("오버홀완료", "serviced"), ("호환후드", ""), ("마운트", " mount")):
+        name = re.sub(ko, en, name)
+    if not re.match(r"\s*(leica|leitz|ernst)", name, re.I):
+        name = "Leica " + name.strip()
+    return re.sub(r"\s+", " ", name).strip(" ,-./")
+
+
+def crawl_kasan():
+    """가산카메라 (한국) - 빈티지·필름 카메라점(고도몰). 라이카 '중고제품' 분류(cateCd=014004, 20개씩 page=N, 정적 HTML)에
+    이름·가격·사진, 품절은 <li class="item_soldout">. 상태는 제목 끝 '/95%' (국내 % 대응 그대로)"""
+    import html as _html
+    import requests
+    base = "https://www.kasancamera.co.kr"
+    site = "가산카메라"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 가산카메라 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(1, 40):
+        try:
+            resp = sess.get(f"{base}/goods/goods_list.php", params={"cateCd": "014004", "page": page_num}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"가산카메라 {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        items = re.findall(r'<li\s+(?:class="([^"]*)"\s+)?style="width:[^"]*">\s*<div class="item_cont">(.*?)<!-- //item_cont -->', resp.text, re.S)
+        new = 0
+        for cls, blk in items:
+            g = re.search(r"goodsNo=(\d+)", blk)
+            nm = re.search(r'class="item_name">([^<]*)<', blk)
+            if not g or not nm or g.group(1) in seen:
+                continue
+            seen.add(g.group(1))
+            new += 1
+            title = _html.unescape(nm.group(1)).strip()
+            if re.search(_KASAN_OTHER, title, re.I) or any(b2 in title.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            pm = re.search(r'class="item_price">(.*?)</strong>', blk, re.S)
+            ptxt = re.sub(r"<[^>]+>", "", pm.group(1)) if pm else ""
+            digits = re.sub(r"[^\d]", "", ptxt)
+            sold = "item_soldout" in (cls or "") or "판매완료" in ptxt or title.startswith("판매완료")
+            price = f"{int(digits):,}원" if digits else "문의요망"
+            pc = re.search(r"(\d{2,3})\s?%\s*\]?\s*$", title) or re.search(r"\[\s*(\d{2,3})\s*\]\s*$", title)
+            cond = f"{pc.group(1)}%" if pc else "정보없음"
+            name = _kasan_name(title)
+            img = re.search(r'<img\s+src="([^"]+)"', blk)
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "KRW",
+                "이미지": img.group(1) if img else "",
+                "링크": f"{base}/goods/goods_view.php?goodsNo={g.group(1)}",
+                "품절": sold,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 {len(items)}개")
+        if new == 0:
+            break
+        time.sleep(1.5)
+    if not results:
+        raise RuntimeError("가산카메라 목록이 비어 있음")
+    print(f"  ✅ 가산카메라 완료: {len(results)}개")
+    return results
+
 def _cameraelectronic_name(title):
     """Camera Electronic 제목 다듬기: 'Pre-Owned Leica M6 TTL .85 Silver Body Model 10466 With Box, Body, Cap, Strap SN: 2496525
     (Second Hand)' → 'Leica M6 TTL .85 Silver Body Model 10466'. 딸린 물건 목록('With …'·'in Box'·'Boxed …')과 연도·일련번호는
@@ -5930,6 +6028,7 @@ def crawl_all():
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
         ("Lecuit (룩셈부르크)", lambda: ce.wrap_full_run("Lecuit (룩셈부르크)", crawl_lecuit)),
         ("カメラの大貫 (일본)", lambda: ce.wrap_full_run("カメラの大貫 (일본)", crawl_ohnuki)),
+        ("가산카메라", lambda: ce.wrap_full_run("가산카메라", crawl_kasan)),
         ("MF Camera (미국)", lambda: ce.wrap_full_run("MF Camera (미국)", crawl_mfcamera)),
         ("Classic Connection (미국)", lambda: ce.wrap_full_run("Classic Connection (미국)", crawl_classicconnection)),
         ("The Classic Camera (영국)", lambda: ce.wrap_full_run("The Classic Camera (영국)", crawl_classiccamera)),
