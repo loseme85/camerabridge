@@ -1164,6 +1164,18 @@ SITES = [
         ],
         "통화": "KRW",
     },
+    {
+        "name": "무한카메라",
+        "active_first": False,  # 판매 중·판매완료가 섞여 있어 매번 전체 (50쪽 안팎)
+        "name_fix": lambda t: _muhan_name(t),
+        "base": "https://muhan8.co.kr",
+        "categories": [
+            "https://muhan8.co.kr/product/list.html?cate_no=105",  # BODY
+            "https://muhan8.co.kr/product/list.html?cate_no=106",  # LENS
+            "https://muhan8.co.kr/product/list.html?cate_no=107",  # Accessory (Hood, Filter, Etc..)
+        ],
+        "통화": "KRW",
+    },
 ]
 
 # 국민카메라 제목은 렌즈 이름 없이 '라이카 M 50mm f2'처럼 마운트·초점거리·조리개만 적는 일이 많아, 그 셋으로 라이카 렌즈가
@@ -1230,6 +1242,35 @@ def _kookmin_name(title):
     if not re.match(r"\s*(leica|leitz|ernst)", name, re.I):
         name = "Leica " + name.strip()
     return re.sub(r"\s+", " ", name).strip(" ,-")
+
+
+def _muhan_name(title):
+    """무한카메라 제목 다듬기: 여러 브랜드가 '[Leica] Elmar 50mm F2.8'처럼 앞에 브랜드를 달고 섞여 있어 [Leica]·[Leitz]만 남기고
+    (빈 이름은 목록에서 빠짐) 'Leica Elmar 50mm F2.8'로. 상태는 간략설명 'E95%,L93%'의 앞(외관) 숫자를 cafe24 파서가 읽음"""
+    m = re.match(r"\s*\[([^\]]+)\]\s*(.*)$", title)
+    if not m or not re.fullmatch(r"\s*(?:leica|leitz|ernst leitz)\s*", m.group(1), re.I):
+        return ""
+    name = m.group(2)
+    name = re.sub(r"\s*(?:외부|상태|내부)?\s*\d{2,3}\s?%.*$|\s*\[[^\]]*\].*$|\s*/\s*위탁제품.*$", "", name)  # 상태·구성품 꼬리
+    name = re.sub(r"\s*\((?:스틸림 복각|[^)]*포함)\)|\s*(?:미사용\s?신품|신동품|미사용).*$", "", name)
+    name = re.sub(r"\b[lI]{3}\s?([a-gA-G])\b", lambda m: "III" + m.group(1).lower(), name)  # 'lllf' → 'IIIf'
+    name = re.sub(r"\b[lI]{2}\s?([a-gA-G])\b", lambda m: "II" + m.group(1).lower(), name)
+    name = re.sub(r"\bll\b", "II", name)
+    name = re.sub(r"\b[sS]liver\b", "Silver", name)
+    name = re.sub(r"\bF/\s?(\d)", r"F\1", name)
+    name = re.sub(r"\bM 1\b", "M1", name)
+    name = re.sub(r"\s*\(NEW\)", "", name)  # 'Summilux II FLE (NEW)'는 새 버전이라는 뜻 (신품 아님)
+    name = name.replace("앞캡", "front cap").replace("뒷캡", "rear cap")
+    for ko, en in (("마이크", "Microphone adapter"), ("후드", "hood"), ("하판", "bottom plate"), ("케이스", "case"),
+                   ("그립", "grip"), ("필터", "filter"), ("스트랩", "strap")):
+        name = name.replace(ko, en)  # 액세서리가 '… M240 마이크'처럼 바디 이름으로 붙지 않게
+    name = re.sub(r"(\b(?:28mm f5\.6|35mm f2\.8)\b.*?)\bSUMMICRON\b", r"\1Summaron", name, flags=re.I)  # 매장 오기 (Summicron은 f2)
+    for ko, en in (("침동", "Collapsible"), ("토륨렌즈", "Thorium"), ("리지드", "Rigid"), ("복각", "Reissue"),
+                   ("블랙페인트", "Black Paint"), ("실버", "Silver"), ("블랙", "Black"), ("마운트", " mount")):
+        name = re.sub(ko, en, name)
+    name = re.sub(r"(\d{2,3})mm\s?F\s?(\d(?:\.\d)?)", r"\1mm f\2", name)
+    name = re.sub(r"\bF\s?(\d(?:\.\d)?)\b", r"f\1", name)
+    return ("Leica " + re.sub(r"\s+", " ", name)).strip(" ,-")
 
 
 # 카테고리 기반 크롤러 함수 추가
