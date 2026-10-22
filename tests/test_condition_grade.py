@@ -260,3 +260,14 @@ def test_rangefinder_condition_grades():
     assert grade_of(site, RANGEFINDER_PREFIX + "90", "Leica Q3 43 Black")[0] == "C"
     assert grade_of(site, RANGEFINDER_PREFIX + "88", "Leica M3J Black Paint")[0] == "D"
     assert grade_of(site, RANGEFINDER_PREFIX + "New", "Leica M11 Monochrom")[0] == "N"
+
+
+def test_lecuit_condition_grades():
+    from condition_grade import LECUIT_PREFIX
+    site = "Lecuit (룩셈부르크)"
+    assert grade_of(site, LECUIT_PREFIX + "A", "Leica Summicron-M 50mm f2.0 (11826)")[0] == "A"
+    assert grade_of(site, LECUIT_PREFIX + "B", "Leica Elmarit-M 90mm f2.8 (11807)")[0] == "B"
+    assert grade_of(site, LECUIT_PREFIX + "C", "Leica Tele-Elmar-M 135mm f4.0")[0] == "C"
+    assert grade_of(site, LECUIT_PREFIX + "D", "Leica M4-P silver")[0] == "D"
+    assert grade_of(site, LECUIT_PREFIX + "A+", "Leica M11 Monochrom")[0] == "S"
+    assert grade_of(site, LECUIT_PREFIX + "Ex-Display", "Leica APO-Summicron-SL 28mm f2.0 ASPH.")[0] == "S"

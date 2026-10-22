@@ -119,6 +119,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         if value.upper() == "NEW":
             return "N", "label"
         return (rangefinder_grade(int(value)), "label") if value.isdigit() else (None, None)
+    if cond.startswith(LECUIT_PREFIX):
+        return _LECUIT.get(cond[len(LECUIT_PREFIX):].strip().upper()), "label"
     if cond.startswith(VIBE_PREFIX):
         return _VIBE.get(cond[len(VIBE_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOESTER_PREFIX):
@@ -373,6 +375,13 @@ VIBE_PREFIX = "Vibe: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 5 A, 4 B, 3 C, 2·1 D.
 # 이 대응 기준 정확 일치 8/29 · 한 등급 이내 27/29 (사진이 평균 0.72등급 후함 — 기존 0.8과 비슷). DEMO는 S.
 _VIBE = {"DEMO": "S", "5": "A", "4": "B", "3": "C", "2": "D", "1": "D"}
+
+# 룩셈부르크 Lecuit: 상품 화면 'Etat' 칸 A++(전시품)·A+(새것, 흔적 없음)·A(새것에 가까움, 아주 작은 흔적)·B(아주 좋음, 흔적 조금)·
+# C(전체로 좋음, 흔적 많음)·D(많이 씀). 전시품('• Ex-Display')은 S.
+LECUIT_PREFIX = "Lecuit: "
+# 사진 평가(표기 가리고 22점, 사진 3장씩, 2026-10-22): 글자 그대로 A A·B B·C C·D D면 정확 일치 7/22 · 한 등급 이내 17/22,
+# 사진이 평균 0.59등급 후함 (기존 0.8과 비슷해 그대로). 한 칸씩 올리면 사진이 0.41등급 박해져 매장보다 후하게 봄.
+_LECUIT = {"EX-DISPLAY": "S", "A++": "S", "A+": "S", "A": "A", "B": "B", "C": "C", "D": "D"}
 
 # 독일 Foto Köster: 등급표 없이 상세 설명 글의 말투 — 'sehr guten Zustand mit kaum erkennbaren Abnutzungen'·'wie neu'·'Top-Zustand'
 # (sehr gut) · 'guten Zustand mit normalen/minimalen kosmetischen Abnutzungen' (gut) · 'Nebel'·'defekt'·'Kratzer auf der Frontlinse' (defekt)
