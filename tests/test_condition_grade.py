@@ -271,3 +271,14 @@ def test_lecuit_condition_grades():
     assert grade_of(site, LECUIT_PREFIX + "D", "Leica M4-P silver")[0] == "D"
     assert grade_of(site, LECUIT_PREFIX + "A+", "Leica M11 Monochrom")[0] == "S"
     assert grade_of(site, LECUIT_PREFIX + "Ex-Display", "Leica APO-Summicron-SL 28mm f2.0 ASPH.")[0] == "S"
+
+
+def test_ohnuki_condition_grades():
+    from condition_grade import OHNUKI_PREFIX
+    site = "カメラの大貫 (일본)"
+    assert grade_of(site, OHNUKI_PREFIX + "B", "Leica M6 0.85 TTL")[0] == "A"
+    assert grade_of(site, OHNUKI_PREFIX + "C+", "Leica MP 0.72 Black Paint 10302")[0] == "B"
+    assert grade_of(site, OHNUKI_PREFIX + "C", "Leica M2")[0] == "B"
+    assert grade_of(site, OHNUKI_PREFIX + "C-", "Leica IIIg")[0] == "C"
+    assert grade_of(site, OHNUKI_PREFIX + "D", "Leica M3 ELC")[0] == "C"
+    assert grade_of(site, OHNUKI_PREFIX + "E", "Leica IIIf")[0] in ("D", "X")

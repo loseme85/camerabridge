@@ -121,6 +121,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return (rangefinder_grade(int(value)), "label") if value.isdigit() else (None, None)
     if cond.startswith(LECUIT_PREFIX):
         return _LECUIT.get(cond[len(LECUIT_PREFIX):].strip().upper()), "label"
+    if cond.startswith(OHNUKI_PREFIX):
+        return _OHNUKI.get(cond[len(OHNUKI_PREFIX):].strip().upper()), "label"
     if cond.startswith(VIBE_PREFIX):
         return _VIBE.get(cond[len(VIBE_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOESTER_PREFIX):
@@ -382,6 +384,14 @@ LECUIT_PREFIX = "Lecuit: "
 # 사진 평가(표기 가리고 22점, 사진 3장씩, 2026-10-22): 글자 그대로 A A·B B·C C·D D면 정확 일치 7/22 · 한 등급 이내 17/22,
 # 사진이 평균 0.59등급 후함 (기존 0.8과 비슷해 그대로). 한 칸씩 올리면 사진이 0.41등급 박해져 매장보다 후하게 봄.
 _LECUIT = {"EX-DISPLAY": "S", "A++": "S", "A+": "S", "A": "A", "B": "B", "C": "C", "D": "D"}
+
+# 일본 カメラの大貫: 설명 표 '● ランク C+' (B~E와 +·-). 매장이 엄격해 판매 중 대부분이 C(보통 중고), 작동 문제는 D·E
+OHNUKI_PREFIX = "Ohnuki: "
+# 사진 평가(표기 가리고 25점, 사진 2~3장씩, 2026-10-22): 일본 공통처럼 글자 그대로(C C)면 사진이 1.24등급 후해 한 칸 올림.
+# B A·C+ B·C B·C- C·D C 기준 정확 일치 11/25 · 한 등급 이내 23/25, 사진이 평균 0.44등급 후함. D는 외관보다 작동 문제
+# (노출계 불량 등)가 많아 C, E는 고장·부품용으로 X. 지금은 없는 A·AB는 S·A로.
+_OHNUKI = {"A": "S", "AB": "A", "B+": "A", "B": "A", "B-": "A", "C+": "B", "C": "B", "C-": "C", "D+": "C", "D": "C",
+           "D-": "D", "E": "X"}
 
 # 독일 Foto Köster: 등급표 없이 상세 설명 글의 말투 — 'sehr guten Zustand mit kaum erkennbaren Abnutzungen'·'wie neu'·'Top-Zustand'
 # (sehr gut) · 'guten Zustand mit normalen/minimalen kosmetischen Abnutzungen' (gut) · 'Nebel'·'defekt'·'Kratzer auf der Frontlinse' (defekt)
