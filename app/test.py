@@ -4666,6 +4666,104 @@ def crawl_lecuit():
     print(f"  ✅ Lecuit 완료: {len(results)}개")
     return results
 
+
+_OHNUKI_JA = [  # ja_to_en 앞에 바꿀 말 (긴 것 먼저)
+    (r"トリプレット", "Triplet "), (r"ライツカナダ", "Leitz Canada "), (r"卓上三脚", "Table tripod "), (r"ベローズ", "Bellows "),
+    (r"レリーズ", "Release "), (r"ライカフレックス", "Leicaflex "), (r"ライツミノルタ", "Leitz Minolta "), (r"ミニルックス", "Minilux "),
+    (r"ゾフォート", "Sofort "), (r"シャークスキン", "Sharkskin"), (r"セルフ付", "with self-timer"),
+    (r"メガネ無し", ""), (r"メガネ付き?", "with goggles"), (r"レプリカ", "Replica"), (r"復刻版", "Replica"),
+    (r"(\d)枚玉", r"\1 elements"), (r"ドイツ", "Germany"), (r"0型", "0-Series"),
+]
+
+
+def _ohnuki_name(title):
+    """カメラの大貫 제목 다듬기: 'ライカ M6 0.85\u3000243万台' → 'Leica M6 0.85', 'DR ズミクロンM50/2 メガネ無し' → 'DR Summicron-M 50/2'.
+    일련번호 대역('243万台')·'[期間限定HP限定商品]'·'【訳あり…】'은 떼고, ja_to_en이 모르는 말(ライカフレックス·ミニルックス 등)은 먼저 바꿈"""
+    name = title.replace("\u3000", " ")
+    name = re.sub(r"\[[^\]]*限定[^\]]*\]|【[^】]*】|\d+(?:\.\d+)?万台|訳あり\S*", " ", name)
+    for ja, en in _OHNUKI_JA:
+        name = re.sub(ja, en, name)
+    from ja_normalize import ja_to_en
+    name = ja_to_en(name)
+    name = re.sub(r"\bSH/\d+/\d+\b", "", name)  # 'SH/210/400' 셔터 점검 기록
+    name = re.sub(r"(?<=[A-Za-z])-\s+(?=[A-Z])", "-", name)  # 'Super- Vario- Elmar' → 'Super-Vario-Elmar'
+    name = re.sub(r"(?<=[A-Za-z])(\d{2,3})/(\d(?:\.\d)?)\b", r" \1/\2", name)  # 'M50/2' → 'M 50/2'
+    if not re.match(r"\s*(leica|leitz)", name, re.I):
+        name = "Leica " + name.strip()
+    return re.sub(r"\s+", " ", name).strip(" ,-")
+
+
+def crawl_ohnuki():
+    """カメラの大貫 (일본, 도쿄 신주쿠) - 중고 카메라점 Shopify. 중고 라이카 컬렉션 4곳(필름 바디·디지털·렌즈·액세서리)의
+    products.json에서 판매 중만 (요청 사이 4~5초 — 빠르면 429). 등급은 설명 표의 '● ランク C+' (B~E, 매장이 엄격해 C가 보통 중고)"""
+    import html as _html
+    import requests
+    from condition_grade import OHNUKI_PREFIX
+    base = "https://www.camera-ohnuki.com"
+    site = "カメラの大貫 (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 カメラの大貫 크롤링 시작")
+    results, seen = [], set()
+    for col in ("used-leica", "used-leica-digital-camera", "used-leica-lenses", "used-leica-accessories"):
+        for page_num in range(1, 10):
+            try:
+                for wait in (20, 40, 0):  # 빠르게 읽으면 429
+                    resp = sess.get(f"{base}/collections/{col}/products.json", params={"limit": 250, "page": page_num}, timeout=30)
+                    if resp.status_code != 429 or not wait:
+                        break
+                    time.sleep(wait)
+                resp.raise_for_status()
+                products = resp.json().get("products", [])
+            except Exception as e:
+                raise RuntimeError(f"大貫 {col} {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            if not products:
+                break
+            print(f"    └─ {col} {page_num}페이지 {len(products)}개")
+            for p in products:
+                if p["id"] in seen:
+                    continue
+                seen.add(p["id"])
+                variants = p.get("variants") or [{}]
+                if not any(v.get("available") for v in variants):
+                    continue
+                title = _html.unescape(p.get("title") or "")
+                if re.search(r"フォクトレンダー|ノクトン|テーラーホブソン|ツァイス|キヤノン|ニコン|コシナ|七工匠|銘匠", title):
+                    continue  # 다른 회사 렌즈
+                text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or ""))
+                m = re.search(r"ランク\s*([A-E][+\-]?)", text)
+                cond = OHNUKI_PREFIX + m.group(1) if m else "정보없음"
+                name = _ohnuki_name(title)
+                try:
+                    price = f"¥{float(variants[0].get('price')):,.0f}"
+                except (TypeError, ValueError):
+                    continue
+                img = p["images"][0].get("src", "") if p.get("images") else ""
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": site,
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "JPY",
+                    "이미지": img,
+                    "링크": f"{base}/products/{p['handle']}",
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if len(products) < 250:
+                break
+            time.sleep(random.uniform(4.0, 5.0))
+        time.sleep(random.uniform(4.0, 5.0))
+    print(f"  ✅ カメラの大貫 완료: {len(results)}개")
+    return results
+
 def _cameraelectronic_name(title):
     """Camera Electronic 제목 다듬기: 'Pre-Owned Leica M6 TTL .85 Silver Body Model 10466 With Box, Body, Cap, Strap SN: 2496525
     (Second Hand)' → 'Leica M6 TTL .85 Silver Body Model 10466'. 딸린 물건 목록('With …'·'in Box'·'Boxed …')과 연도·일련번호는
@@ -5755,6 +5853,7 @@ def crawl_all():
         # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
         ("Lecuit (룩셈부르크)", lambda: ce.wrap_full_run("Lecuit (룩셈부르크)", crawl_lecuit)),
+        ("カメラの大貫 (일본)", lambda: ce.wrap_full_run("カメラの大貫 (일본)", crawl_ohnuki)),
         ("MF Camera (미국)", lambda: ce.wrap_full_run("MF Camera (미국)", crawl_mfcamera)),
         ("Classic Connection (미국)", lambda: ce.wrap_full_run("Classic Connection (미국)", crawl_classicconnection)),
         ("The Classic Camera (영국)", lambda: ce.wrap_full_run("The Classic Camera (영국)", crawl_classiccamera)),
