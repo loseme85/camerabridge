@@ -4550,6 +4550,122 @@ def crawl_koester():
     return results
 
 
+
+def _lecuit_name(title):
+    """Lecuit 제목 다듬기: 'Occasion • Leica Summicron-M 1:2/28mm ASPH. (2000-2016)' → 'Leica Summicron-M 28mm f2.0 ASPH.'.
+    앞의 'Occasion •'·뒤의 '• Ex-Display'와 연도 괄호는 떼고, '1:2.8/90'·'2/35mm'·'4/280' 꼴 조리개·초점거리는 '90mm f2.8'로
+    (분류기가 '1:2/28mm'를 렌즈로 못 읽음), 프랑스어 'noir'·'argent'·'viseur'는 영어로"""
+    name = re.sub(r"^\s*Occasion\s*•\s*", "", title.strip(), flags=re.I)
+    name = re.sub(r"\s*•\s*Ex-?Display\s*$", "", name, flags=re.I)
+    name = re.sub(r"\s*\((?:19|20)\d{2}\s*-\s*(?:19|20)\d{2}\)", "", name)
+    name = re.sub(r"\s*\*.*$", "", name)
+    name = name.replace("–", "-")
+
+    def _ap(ap):
+        ap = ap.replace(",", ".")
+        return ap if ("." in ap or "-" in ap) else ap + ".0"
+
+    def _fl(m):
+        return f" {m.group(2)}mm f{_ap(m.group(1))}"
+    name = re.sub(r"\s+f\s*1\s*:\s*(\d(?:[.,]\d)?)\s+(\d{2,3})\s*mm\b", r" \1/\2", name, flags=re.I)  # 'f1:2 35mm' → '2/35' (아래에서 '35mm f2.0'로)
+    name = re.sub(r"\s+(?:1\s*:\s*|f/?)?(\d(?:[.,]\d)?(?:-\d(?:[.,]\d)?)?)\s*/\s*(\d{2,3}(?:-\d{2,3})*)(?:\s*mm)?\b", _fl, name, flags=re.I)
+    name = re.sub(r"\bsac tout pr[êe]t\b", "Ever ready case", name, flags=re.I)
+    name = re.sub(r"\bEVF\s?2\b", "Visoflex EVF2", name)  # 'EVF 2 … for Leica M (Typ 240)'가 M240 바디로 붙지 않게
+    name = re.sub(r"\bM39\b", "LTM", name)
+    name = re.sub(r"\s+(\d{2,3})\s*mm\s+f\s*[/:]?\s*(\d(?:[.,]\d)?)\b", lambda m: f" {m.group(1)}mm f{_ap(m.group(2))}", name, flags=re.I)
+    for fr, en in (("pour", "for"), ("noir", "black"), ("argent", "silver"), ("chromé", "chrome"), ("viseur", "Viewfinder"), ("avec lunette", "with goggles")):
+        name = re.sub(rf"\b{fr}\b", en, name, flags=re.I)
+    return re.sub(r"\s+", " ", name).strip(" ,-")
+
+
+def crawl_lecuit():
+    """Lecuit (룩셈부르크) - 사진·광학 매장(ePages). 'SECONDE MAIN'(중고) 분류를 제조사 Leica Camera로 거른 화면
+    (ViewAction=ViewFaceted, 60개씩 ?Page=N, 정적 HTML)에 이름·가격·사진·재고, 등급(A++~D)은 상품 화면 'Etat' 칸에만 있어
+    새 매물만 상세를 읽고 아는 매물은 지난 등급을 씀. 전시품('• Ex-Display')도 같은 분류에 있음"""
+    import html as _html
+    import requests
+    from condition_grade import LECUIT_PREFIX
+    base = "https://www.lecuit.lu/epages/Lecuit.sf/fr_FR/"
+    site = "Lecuit (룩셈부르크)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    known = {}
+    try:
+        with open("data/raw/results.json", encoding="utf-8") as f:
+            known = {r["링크"]: r.get("컨디션") for r in json.load(f) if r.get("site") == site}
+    except (OSError, ValueError):
+        pass
+    print(f"\n  📂 Lecuit 크롤링 시작 (이전 등급 {len(known)}개)")
+    cards = []
+    for page_num in range(1, 15):
+        try:
+            resp = sess.get(base, params={"ViewAction": "ViewFaceted", "ObjectID": "3114990", "PageSize": "60",
+                                          "FacetValue_CategoryID": "3114990", "CurrencyID": "EUR",
+                                          "FacetValue_Manufacturer": "Leica Camera", "Page": page_num}, timeout=40)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Lecuit {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        boxes = resp.text.split('class="InfoArea"')[1:]
+        new = 0
+        for blk in boxes:
+            m = re.search(r'<h3[^>]*>\s*<a href="\?ObjectPath=([^"]+)"[^>]*>([^<]+)</a>', blk)
+            if not m or any(c[0] == m.group(1) for c in cards):
+                continue
+            pm = re.search(r"itemprop='price' content='([\d.]+)'", blk)
+            img = re.search(r'class="ProductSmallImage" src="([^"]+)"', blk)
+            cards.append((m.group(1), _html.unescape(m.group(2)).strip(), float(pm.group(1)) if pm else 0.0,
+                          img.group(1).replace("_m.jpg", "_ml.jpg") if img else "", "En stock" in blk))
+            new += 1
+        print(f"    └─ {page_num}페이지 {len(boxes)}개")
+        if new == 0 or f"Page={page_num + 1}" not in resp.text:
+            break
+        time.sleep(2)
+    if not cards:
+        raise RuntimeError("Lecuit 목록이 비어 있음")  # 화면이 바뀌었으면 전부 판매완료로 바뀌지 않게
+    results = []
+    for path, title, price, img, in_stock in cards:
+        if price <= 0:
+            continue
+        name = _lecuit_name(title)
+        if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS) or re.search(r"Pradovit|Colorplan|Hektor-P|matchTechnical", name, re.I):
+            continue  # 영사기 부품·다른 회사 액세서리
+        link = f"{base}?ObjectPath={path}"
+        if re.search(r"Ex-?Display", title, re.I):
+            cond = LECUIT_PREFIX + "Ex-Display"
+        elif known.get(link):
+            cond = known[link]
+        else:
+            cond = "정보없음"
+            try:
+                page = sess.get(base, params={"ObjectPath": path}, timeout=30).text
+                em = re.search(r'AttributeLabel[^>]*>\s*Etat\s*</td>\s*<td[^>]*>(.*?)</td>', page, re.S)
+                letter = re.match(r"\s*(A\+\+|A\+|A|B|C|D)\b", _html.unescape(re.sub(r"<[^>]+>", " ", em.group(1)))) if em else None
+                if letter:
+                    cond = LECUIT_PREFIX + letter.group(1)
+            except Exception as e:
+                print(f"    ⚠️ 상세 못 읽음 ({link}): {e}")
+            time.sleep(1)
+        cat = detect_category(name, f"€{int(price):,}")
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": f"€{int(round(price)):,}",
+            "통화": "EUR",
+            "이미지": ("https://www.lecuit.lu" + img) if img.startswith("/") else img,
+            "링크": link,
+            "품절": not in_stock,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Lecuit 완료: {len(results)}개")
+    return results
+
 def _cameraelectronic_name(title):
     """Camera Electronic 제목 다듬기: 'Pre-Owned Leica M6 TTL .85 Silver Body Model 10466 With Box, Body, Cap, Strap SN: 2496525
     (Second Hand)' → 'Leica M6 TTL .85 Silver Body Model 10466'. 딸린 물건 목록('With …'·'in Box'·'Boxed …')과 연도·일련번호는
@@ -5541,6 +5657,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
+    "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
@@ -5637,6 +5754,7 @@ def crawl_all():
         ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
         # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
+        ("Lecuit (룩셈부르크)", lambda: ce.wrap_full_run("Lecuit (룩셈부르크)", crawl_lecuit)),
         ("MF Camera (미국)", lambda: ce.wrap_full_run("MF Camera (미국)", crawl_mfcamera)),
         ("Classic Connection (미국)", lambda: ce.wrap_full_run("Classic Connection (미국)", crawl_classicconnection)),
         ("The Classic Camera (영국)", lambda: ce.wrap_full_run("The Classic Camera (영국)", crawl_classiccamera)),

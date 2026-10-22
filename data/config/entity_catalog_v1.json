@@ -31405,6 +31405,67 @@
    }
   },
   {
+   "id": "leica:lens:summicron:35:ltm-asph",
+   "name": "Summicron 35mm f/2 ASPH screw mount (L)",
+   "name_ko": "주미크론 35 ASPH 스크류(L)",
+   "kind": "Lens",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "summicron 35 asph l",
+    "summicron 35 asph ltm",
+    "주미크론 35 asph 스크류",
+    "주미크론 35 l39"
+   ],
+   "codes": [
+    "11608"
+   ],
+   "match": {
+    "category": "Lens",
+    "mount": null,
+    "title_must": [
+     "(summicron|\\bcron\\b)",
+     "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "ASPH",
+     "LTM|L39|M39|screw|스크류|11608"
+    ],
+    "title_must_not": [
+     "collaps|침동",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
    "id": "leica:lens:vario-elmarit-sl:28-70",
    "name": "Vario-Elmarit-SL 28-70mm f/2.8 ASPH",
    "name_ko": "SL 28-70",
