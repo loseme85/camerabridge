@@ -286,6 +286,8 @@ def parse_cafe24_cards(html: str, site: dict, keep: Callable[[str], bool], fix_i
             continue
         name = " ".join(name_el.get_text(" ", strip=True).split())
         name = re.sub(r"^상품명\s*:\s*", "", name)  # 화면에서 숨겨진 '상품명 :' 라벨
+        if site.get("name_fix"):
+            name = site["name_fix"](name)  # 사이트별 제목 다듬기 (국민카메라: 렌즈 이름 채우기)
         if not name:
             continue
         card_html = str(card)
