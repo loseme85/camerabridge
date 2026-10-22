@@ -1154,7 +1154,83 @@ SITES = [
         ],
         "통화": "KRW",
     },
+    {
+        "name": "국민카메라",
+        "active_first": False,  # 판매 중·위탁이 등록순으로 섞여 있어 매번 전체 (10쪽 안팎)
+        "name_fix": lambda t: _kookmin_name(t),
+        "base": "https://kookmincamera.co.kr",
+        "categories": [
+            "https://kookmincamera.co.kr/product/list.html?cate_no=530",  # 라이카 - USED(중고)
+        ],
+        "통화": "KRW",
+    },
 ]
+
+# 국민카메라 제목은 렌즈 이름 없이 '라이카 M 50mm f2'처럼 마운트·초점거리·조리개만 적는 일이 많아, 그 셋으로 라이카 렌즈가
+# 하나로 정해질 때만 이름을 채운다 (M 90/2.8은 Elmarit·Tele-Elmarit, R 180/2.8은 Elmarit·APO-Elmarit, L 50/2는 Summicron·
+# Summitar라 채우지 않음 — 틀린 모델에 붙이는 것보다 안 붙는 게 낫다)
+_KOOKMIN_FAMILY = {
+    "M": {(21, 2.8): "Elmarit-M", (21, 3.4): "Super-Angulon", (24, 2.8): "Elmarit-M", (24, 1.4): "Summilux-M",
+          (28, 2.8): "Elmarit-M", (28, 2.0): "Summicron-M", (28, 5.6): "Summaron", (28, 1.4): "Summilux-M",
+          (35, 1.4): "Summilux-M", (35, 2.0): "Summicron-M", (35, 2.8): "Summaron", (35, 3.5): "Summaron",
+          (35, 2.5): "Summarit-M", (50, 0.95): "Noctilux-M", (50, 1.0): "Noctilux-M", (50, 1.1): "Noctilux-M",
+          (50, 1.2): "Noctilux", (50, 1.4): "Summilux-M", (50, 1.5): "Summarit", (50, 2.0): "Summicron-M",
+          (50, 2.8): "Elmar-M", (50, 3.5): "Elmar", (75, 1.4): "Summilux-M", (75, 2.0): "APO-Summicron-M",
+          (75, 2.5): "Summarit-M", (90, 2.0): "Summicron-M", (135, 2.8): "Elmarit-M", (65, 3.5): "Elmar"},
+    "R": {(15, 2.8): "Elmarit-R", (16, 2.8): "Fisheye-Elmarit-R", (19, 2.8): "Elmarit-R", (21, 2.8): "Elmarit-R",
+          (21, 4.0): "Super-Angulon-R", (24, 2.8): "Elmarit-R", (28, 2.8): "Elmarit-R", (35, 1.4): "Summilux-R",
+          (35, 2.0): "Summicron-R", (35, 2.8): "Elmarit-R", (50, 1.4): "Summilux-R", (50, 2.0): "Summicron-R",
+          (60, 2.8): "Macro-Elmarit-R", (80, 1.4): "Summilux-R", (90, 2.0): "Summicron-R", (90, 2.8): "Elmarit-R",
+          (100, 2.8): "APO-Macro-Elmarit-R", (135, 2.8): "Elmarit-R", (180, 3.4): "APO-Telyt-R", (180, 2.0): "APO-Summicron-R",
+          (250, 4.0): "Telyt-R", (280, 2.8): "APO-Telyt-R", (350, 4.8): "Telyt-R"},
+    "R_ZOOM": {"21-35": "Vario-Elmar-R", "28-70": "Vario-Elmar-R", "35-70": "Vario-Elmar-R", "70-210": "Vario-Elmar-R",
+               "80-200": "Vario-Elmar-R", "70-180": "Vario-APO-Elmarit-R"},
+}
+_KOOKMIN_KO = [  # 한글 렌즈 이름·말 → 영어 (긴 것 먼저)
+    (r"레드\s?엘마", "Red Elmar"), (r"스마론|summiron", "Summaron"), (r"슈마리트", "Summarit"), (r"슈미타", "Summitar"),
+    (r"엘마리트|ELMMARIT", "Elmarit"), (r"엘마|ELMMAR\b", "Elmar"), (r"주미크론|즈미크론", "Summicron"),
+    (r"주미룩스|즈미룩스", "Summilux"), (r"녹티룩스", "Noctilux"), (r"비조렌즈", "Visoflex"), (r"바르낙", "Barnack"),
+    (r"리지드", "Rigid"), (r"침동", "Collapsible"), (r"블랙\s?크롬", "Black Chrome"), (r"블랙\s?페인트|페인팅", "Black Paint"),
+    (r"실버", "Silver"), (r"사파리", "Safari"), (r"티타늄|\bTi\b", "Titanium"), (r"토륨렌즈", "Thorium"),
+    (r"6군\s?8매", "8 elements"), (r"루끼(?:개조)?", "goggles"), (r"피니시", "finish"), (r"\(?신품\)?", "New"),
+    (r"Ⅲ\s?([a-gA-G])\b", lambda m: "III" + m.group(1).lower()), (r"Ⅲ", "III"), (r"Ⅱ", "II"),
+    (r"\bM\s?바디\s*\((\d{3})\)", r"M (Typ \1) Body"), (r"\bQ1\b", "Q (Typ 116)"), (r"\bRE\s+바디", "R-E Body"),
+    (r"바디", "Body"),
+    (r"(\d)세대", lambda m: m.group(1) + {"1": "st", "2": "nd", "3": "rd"}.get(m.group(1), "th")),
+]
+_KOOKMIN_FAMILY_WORDS = r"summ|elmar|noctilux|angulon|telyt|hektor|thambar|xenon|apo|visoflex|tri-elmar|wate|macro"
+
+
+def _kookmin_name(title):
+    """국민카메라 제목 다듬기: '1853 라이카 M 50mm f2 2세대' → 'Leica Summicron-M 50mm f2.0 2nd',
+    '[4433] LEICA 라이카 SUMMICRON 90mm F2 1세대 위탁' → 'Leica SUMMICRON 90mm f2.0 1st'. 앞의 재고 번호·'위탁'·'(BOX)'는 떼고,
+    'A.S'·'A S'·'A•S'는 ASPH"""
+    name = re.sub(r"^\s*(?:\[\d+\]|\(\d+\)|\d{3,4})\s*", "", title)
+    if re.search(r"아티산|artisan|라이트\s?렌즈|^라이트\b|코니카|미놀타|소련|동독|레뷰논|아베논|zenitar|voigt|보이그|캐논|니콘", name, re.I):
+        return ""  # 다른 회사 렌즈 (빈 이름은 목록에서 빠짐)
+    name = re.sub(r"\(?위탁(?:상품)?\)?|\(BOX\)|박스품?|\(\d+컷\)|\(NO \d+ 넘버\)", " ", name)
+    name = re.sub(r"\bA\s?[.•·]?\s?S\b\.?", "ASPH", name)
+    name = re.sub(r"^\s*(?:LEICA\s+)?라이카\s*", "Leica ", name)
+    for ko, en in _KOOKMIN_KO:
+        name = re.sub(ko, en, name, flags=re.I)
+    name = re.sub(r"\b(\d{2,3})mm\s*/\s*(\d(?:\.\d)?)\b", r"\1mm f\2", name)  # '50mm/2' → '50mm f2'
+    name = re.sub(r"\b[fF](\d)(?![\d.])", r"f\1.0", name)
+    name = re.sub(r"\bF(\d\.\d)", r"f\1", name)
+    if not re.search(_KOOKMIN_FAMILY_WORDS, name, re.I):
+        zm = re.search(r"(?:\bR\s+|Leica\s+)(\d{2,3}-\d{2,3})mm", name)  # 이 줌들은 R 렌즈뿐
+        pm = re.search(r"\b(M|R|L)?\s*(\d{2,3})mm\s+f(\d(?:\.\d+)?)", name)
+        fam = None
+        if zm:
+            fam = _KOOKMIN_FAMILY["R_ZOOM"].get(zm.group(1))
+        elif pm and (pm.group(1) or "M") in ("M", "R"):
+            fam = _KOOKMIN_FAMILY[pm.group(1) or "M"].get((int(pm.group(2)), float(pm.group(3))))
+        if fam:
+            name = re.sub(r"\b(?:M|R)\s+(?=\d{2,3}(?:-\d{2,3})?mm)", "", name, count=1)
+            name = re.sub(r"(?=\b\d{2,3}(?:-\d{2,3})?mm)", fam + " ", name, count=1)
+    if not re.match(r"\s*(leica|leitz|ernst)", name, re.I):
+        name = "Leica " + name.strip()
+    return re.sub(r"\s+", " ", name).strip(" ,-")
+
 
 # 카테고리 기반 크롤러 함수 추가
 
