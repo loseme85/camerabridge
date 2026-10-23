@@ -301,3 +301,16 @@ def test_king_of_bokeh_listing_is_summicron_35_v4() -> None:
     ids = match_entities(_record('Leica 35mm f/2 SUMMICRON-M "KING OF BOKEH"'))
     assert "leica:lens:summicron-m:35:v4" in ids
     assert "leica:lens:summicron-m:35:unspecified" not in ids
+
+
+def test_summicron_50_first_second_not_current_generation() -> None:
+    # 한국·일본 매장의 '2nd'는 1969년형(서양 3세대), 서양 매장의 2nd는 리지드 — 셈법이 달라 4·5세대(현행)에도, 특정 세대에도 붙이지 않음
+    cur = "leica:lens:summicron-m:50:current"
+    gen12 = "leica:lens:summicron:50:gen12-unspecified"
+    for title in ("LEICA 50mm F2 (2nd) SUMMICRON sn.2445", "[중고] M 50/2 Summicron 2세대 (Black)",
+                  "Leica Summicron M 50/2 (2nd)", "Leica Summicron-M 50mm f2.0 2nd"):
+        ids = match_entities(_record(title))
+        assert cur not in ids and gen12 in ids and "leica:lens:summicron:50" in ids
+    assert "leica:lens:summicron:50:rigid-late" in match_entities(_record("Leica Summicron 50mm f2 Rigid 2nd"))
+    assert gen12 not in match_entities(_record("Leica Summicron 50mm f2 Rigid 2nd"))
+    assert cur in match_entities(_record("Leica Summicron-M 50mm f2 4th Black"))
