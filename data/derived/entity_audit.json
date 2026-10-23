@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 608,
+   "count": 610,
    "example": "Leica M4 Silver"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 571,
+   "count": 573,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 568,
+   "count": 570,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 519,
+   "count": 521,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -51,19 +51,19 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:meter",
-   "count": 183,
+   "count": 184,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:mechanical",
-   "count": 183,
+   "count": 184,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:frameline-28",
-   "count": 175,
+   "count": 176,
    "example": "[중고] M6 CLASSIC"
   },
   {
@@ -141,19 +141,19 @@
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:frameline-28",
-   "count": 65,
+   "count": 66,
    "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:meter",
-   "count": 65,
+   "count": 66,
    "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:mechanical",
-   "count": 65,
+   "count": 66,
    "example": "Leica MP Silver x0.72"
   },
   {
@@ -277,22 +277,22 @@
    "example": "[위탁] M-A (Silver)"
   },
   {
-   "a": "leica:body:m9:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 33,
-   "example": "[중고] M9"
-  },
-  {
    "a": "leica:body:m3:double-stroke",
    "b": "leica:feature:no-meter",
-   "count": 33,
+   "count": 34,
    "example": "LEICA M3 Double stroke sn.8008"
   },
   {
    "a": "leica:body:m3:double-stroke",
    "b": "leica:feature:mechanical",
-   "count": 33,
+   "count": 34,
    "example": "LEICA M3 Double stroke sn.8008"
+  },
+  {
+   "a": "leica:body:m9:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 33,
+   "example": "[중고] M9"
   },
   {
    "a": "leica:body:m6:ttl-millennium",
@@ -415,6 +415,18 @@
    "example": "[중고] M11-D"
   },
   {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:no-meter",
+   "count": 19,
+   "example": "[위탁] M4-2 (Black)"
+  },
+  {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:mechanical",
+   "count": 19,
+   "example": "[위탁] M4-2 (Black)"
+  },
+  {
    "a": "leica:body:m7:a-la-carte",
    "b": "leica:feature:frameline-28",
    "count": 18,
@@ -431,18 +443,6 @@
    "b": "leica:feature:meter",
    "count": 18,
    "example": "[중고] M7 A La Carte - Black Paint"
-  },
-  {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:no-meter",
-   "count": 18,
-   "example": "[위탁] M4-2 (Black)"
-  },
-  {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:mechanical",
-   "count": 18,
-   "example": "[위탁] M4-2 (Black)"
   },
   {
    "a": "leica:body:m8-2:standard",
@@ -559,12 +559,6 @@
    "example": "LEICA M6 TTL Titan sn.2754"
   },
   {
-   "a": "leica:body:m-e",
-   "b": "leica:feature:frameline-28",
-   "count": 9,
-   "example": "[중고] M-E (CCD)"
-  },
-  {
    "a": "leica:body:m3:black-paint",
    "b": "leica:feature:no-meter",
    "count": 9,
@@ -587,6 +581,12 @@
    "b": "leica:feature:mechanical",
    "count": 9,
    "example": "LEICA M6 TTL 0.72 LHSA black paint sn.2548"
+  },
+  {
+   "a": "leica:body:m-e",
+   "b": "leica:feature:frameline-28",
+   "count": 8,
+   "example": "[중고] M-E (CCD)"
   },
   {
    "a": "leica:body:mp-film:lhsa",
