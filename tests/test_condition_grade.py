@@ -282,3 +282,15 @@ def test_ohnuki_condition_grades():
     assert grade_of(site, OHNUKI_PREFIX + "C-", "Leica IIIg")[0] == "C"
     assert grade_of(site, OHNUKI_PREFIX + "D", "Leica M3 ELC")[0] == "C"
     assert grade_of(site, OHNUKI_PREFIX + "E", "Leica IIIf")[0] in ("D", "X")
+
+
+def test_photografica_condition_grades():
+    from condition_grade import PHOTOGRAFICA_PREFIX
+    site = "Photografica (덴마크)"
+    assert grade_of(site, PHOTOGRAFICA_PREFIX + "mint", "Leica Elmar-M 24mm f3.8 ASPH (black)")[0] == "S"
+    assert grade_of(site, PHOTOGRAFICA_PREFIX + "excellent", "Leica Summilux-M 24mm f1.4 ASPH BLACK")[0] == "A"
+    assert grade_of(site, PHOTOGRAFICA_PREFIX + "very good", "Leica APO-Summicron-M 90mm f2.0 ASPH")[0] == "B"
+    assert grade_of(site, PHOTOGRAFICA_PREFIX + "good", "Leica Summilux-M 50mm f1.4 11114")[0] == "B"
+    assert grade_of(site, PHOTOGRAFICA_PREFIX + "fair", "Leica Tele-Elmarit-M 90mm f2.8 (Fat)")[0] == "C"
+    assert grade_of(site, PHOTOGRAFICA_PREFIX + "new", "Leica D-LUX 8 black")[0] == "N"
+
