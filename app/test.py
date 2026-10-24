@@ -4882,6 +4882,116 @@ def crawl_ohnuki():
     return results
 
 
+_KIKUYA_LENS = r"SUMMILUX|SUMMICRON|SUMMARIT|SUMMITAR|SUMMARON|SUMMAR|NOCTILUX|ELMARIT|ELMAR|HEKTOR|TELYT|ANGULON"
+_KIKUYA_FOCAL = r"(\d+(?:\.\d+)?)\s?(mm|cm)\s?f\s?(\d+(?:\.\d+)?)"
+
+
+def _kikuya_name(parts):
+    """喜久屋カメラ 제목 다듬기: 줄(<br>)마다 일본어·영어가 따로 있어 영어 줄만 이어 쓰고, 일본어 줄의 초점거리를 붙임.
+    ['ライカM', 'ズミルックス', '35mmf1.4', 'LEICA M SUMMILUX', '2nd'] → 'Leica SUMMILUX-M 35mm f1.4 2nd',
+    ['ライカL', '沈胴ズミクロン5cmf2.0', 'LEICA SUMMICRON'] → 'Leica SUMMICRON 50mm f2.0 collapsible L39'"""
+    import unicodedata
+    ja = [unicodedata.normalize("NFKC", p) for p in parts]
+    en = [p for p in ja if re.fullmatch(r"[\x20-\x7e]+", p) and re.search(r"[A-Za-z]", p)
+          and not re.fullmatch(_KIKUYA_FOCAL + r"|No\.\s?\d+", p, re.I)]  # '35mmf1.4'·'No.843414' 줄은 뺌
+    name = " ".join(en)
+    m = re.match(r"(.+?)\s+(LEICA|LEITZ)\b(.*)", name)
+    if m and not re.search(r"\b(?:LEICA|LEITZ)\b", m.group(1)):  # 'SLOOZ LEICA 28mm…' → 'LEICA SLOOZ 28mm…'
+        name = f"{m.group(2)} {m.group(1)}{m.group(3)}"
+    name = re.sub(r"\bVEIW\b", "VIEW", name)
+    name = re.sub(r"\b(I{1,3})([A-G])\b", lambda m: m.group(1) + m.group(2).lower(), name)  # 'IIIC' → 'IIIc'
+    name = re.sub(r"\bLEICA (?:M|L) (?=" + _KIKUYA_LENS + r")", "LEICA ", name)
+    m_mount = any(re.match(r"ライカM(?!用|\d|L)", p) for p in ja)
+    l_mount = any(re.match(r"ライカL(?!用)", p) for p in ja)
+    lens = re.search(r"\b(" + _KIKUYA_LENS + r")\b(-M)?", name)
+    fm = next((m for m in (re.search(_KIKUYA_FOCAL, p, re.I) for p in ja) if m), None)
+    if lens:
+        word = lens.group(1) + ("-M" if m_mount or lens.group(2) else "")
+        focal = ""
+        if fm and not re.search(r"\d\s?(?:mm|cm)\b", name, re.I):
+            mm = float(fm.group(1)) * (10 if fm.group(2).lower() == "cm" else 1)
+            focal = f" {mm:g}mm f{fm.group(3)}"
+        name = name[:lens.start()] + word + focal + name[lens.end():]
+        if any("沈胴" in p for p in ja):
+            name += " collapsible"
+        if l_mount and not m_mount:
+            name += " L39"
+    elif re.search(r"\b(?:M[1-7]|I{1,3}[a-g]?|MINOLTA CL)\b", name) and not re.search(r"ROKKOR|FINDER|HOOD|FILTER", name):
+        name += " Body"
+    name = re.sub(r"^LEICA\b", "Leica", name)
+    name = re.sub(r"^LEITZ\b", "Leitz", name)
+    name = re.sub(r"\bCL M-ROKKOR (\d+)mm\s?f", r"CL Body + M-ROKKOR \1mm f", name)  # 바디·렌즈 세트
+    name = re.sub(r"\b(\S{4,}) \1\b", r"\1", name)  # 'NOOKY-HESUM NOOKY-HESUM'
+    return re.sub(r"\s+", " ", name).strip(" /,-")
+
+
+def crawl_kikuya():
+    """喜久屋カメラ＆ウォッチ (일본, 도쿄) - 중고 카메라점(카라미숍 Color Me, EUC-JP). '中古ライカ販売' 분류(cbid=1729227)
+    정적 HTML 한 쪽에 다 나옴(63점 안팎). 이름은 줄마다 일본어·영어, 설명 끝 'AB'·'A-'가 등급.
+    다른 회사 렌즈(ライカL用 キャノン 등)·비순정 부품·책은 영어 줄에 LEICA/LEITZ가 없어 빠짐. 'SOLD OUT'은 뺌"""
+    import html as _html
+    import unicodedata
+    import requests
+    from condition_grade import KIKUYA_PREFIX
+    base = "https://kikuya-camera.shop-pro.jp"
+    site = "喜久屋カメラ (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 喜久屋カメラ 크롤링 시작")
+    try:
+        resp = sess.get(base + "/", params={"mode": "cate", "cbid": "1729227", "csid": "0", "sort": "n"}, timeout=30)
+        resp.raise_for_status()
+    except Exception as e:
+        raise RuntimeError(f"喜久屋カメラ 목록 못 읽음: {e}")  # 빈 목록이 판매완료로 바뀌지 않게
+    text = resp.content.decode("euc-jp", "ignore")
+    boxes = re.findall(r'<div class="item_box[^"]*">(.*?)</div>\s*</div>', text, re.S)
+    if not boxes:
+        raise RuntimeError("喜久屋カメラ 목록에 상품 없음 (화면 바뀜?)")
+    print(f"    └─ 목록 {len(boxes)}개")
+    results, seen = [], set()
+    for b in boxes:
+        pid = re.search(r"\?pid=(\d+)", b)
+        nm = re.search(r'class="item_name">\s*<a[^>]*>(.*?)</a>', b, re.S)
+        if not pid or not nm or pid.group(1) in seen or "SOLD OUT" in b:
+            continue
+        seen.add(pid.group(1))
+        parts = [_html.unescape(re.sub(r"<[^>]+>", "", p)).strip() for p in re.split(r"<br\s*/?>", nm.group(1))]
+        parts = [p for p in parts if p and not re.match(r"^\([^)]*\)", p) and "商談中" not in p and "様専用" not in p]
+        if "非純正" in " ".join(parts):
+            continue
+        name = _kikuya_name(parts)
+        if not re.search(r"\b(?:LEICA|LEITZ)\b", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        pm = re.search(r'class="item_price">\s*([\d,]+)円', b)
+        price = f"¥{int(pm.group(1).replace(',', '')):,}" if pm else "문의요망"
+        dm = re.search(r'class="item_description">(.*?)</p>', b, re.S)
+        desc = unicodedata.normalize("NFKC", re.sub(r"<[^>]+>", " ", dm.group(1))).replace("ー", "-").strip() if dm else ""
+        gm = re.search(r"\b(AA|AB|A\+|A-|A|B\+|B-|BC|B|C)$", desc)
+        img = re.search(r'<img src="([^"]+)"', b)
+        cat = detect_category(name, price)
+        if cat == "Lens" and not re.search(_KIKUYA_LENS + r"|ROKKOR", name):
+            cat = "Accessory"  # 'SHUTTER BUTTON' 등 비싼 부품이 렌즈로 잡히지 않게
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": KIKUYA_PREFIX + gm.group(1) if gm else "정보없음",
+            "가격": price,
+            "통화": "JPY",
+            "이미지": img.group(1).replace("_th.jpg", ".jpg") if img else "",
+            "링크": f"{base}/?pid={pid.group(1)}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ 喜久屋カメラ 완료: {len(results)}개")
+    return results
+
+
 _KASAN_OTHER = r"미야자키|miyazaki|ms-?optics|주비터|jupiter|linhof|린호프|user made|보이그|voigt|라이트\s|light\s?lens|코니카|konica|마이어|meyer|핸드크로스|handcross|캐논|canon|니콘|nikon|zeiss|자이스|미놀타|minolta|아티산|artisan|ttartisan|7artisans"
 
 
@@ -6069,6 +6179,7 @@ def crawl_all():
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
         ("Lecuit (룩셈부르크)", lambda: ce.wrap_full_run("Lecuit (룩셈부르크)", crawl_lecuit)),
         ("カメラの大貫 (일본)", lambda: ce.wrap_full_run("カメラの大貫 (일본)", crawl_ohnuki)),
+        ("喜久屋カメラ (일본)", lambda: ce.wrap_full_run("喜久屋カメラ (일본)", crawl_kikuya)),
         ("가산카메라", lambda: ce.wrap_full_run("가산카메라", crawl_kasan)),
         ("MF Camera (미국)", lambda: ce.wrap_full_run("MF Camera (미국)", crawl_mfcamera)),
         ("Classic Connection (미국)", lambda: ce.wrap_full_run("Classic Connection (미국)", crawl_classicconnection)),

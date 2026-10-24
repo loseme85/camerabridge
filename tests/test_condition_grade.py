@@ -201,6 +201,13 @@ def test_sanpou_condition_grades():
     site = "三宝カメラ (일본)"
     assert grade_of(site, SANPOU_PREFIX + "AB", "Leica Summilux-M 35mm f1.4 ASPH Titan")[0] == "A"
     assert grade_of(site, SANPOU_PREFIX + "B", "Leica M3 Body (2 Stroke)")[0] == "B"
+
+def test_kikuya_grades():
+    from condition_grade import KIKUYA_PREFIX
+    site = "喜久屋カメラ (일본)"
+    assert grade_of(site, KIKUYA_PREFIX + "A-", "Leica SUMMILUX-M 35mm f1.4 2nd")[0] == "B"
+    assert grade_of(site, KIKUYA_PREFIX + "AB", "Leica M3 Body")[0] == "B"
+    assert grade_of(site, KIKUYA_PREFIX + "B", "Leica FOOKH LENS HOOD")[0] == "C"
 def test_heidelberg_condition_grades():
     from condition_grade import HEIDELBERG_PREFIX
     site = "Leica Store Heidelberg (독일)"

@@ -104,6 +104,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FOTOHANDEL.get(cond[len(FOTOHANDEL_PREFIX):].replace(" ", "").upper()), "label"
     if cond.startswith(SANPOU_PREFIX):
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
+    if cond.startswith(KIKUYA_PREFIX):
+        return _KIKUYA.get(cond[len(KIKUYA_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
     if cond.startswith(MFCAMERA_PREFIX):
@@ -361,6 +363,12 @@ SANPOU_PREFIX = "Sanpou: "
 # 일본 공통 대응(AB B·B C)이면 사진이 평균 1.32등급 후해 기존(0.8)보다 크게 벗어나 한 칸 올림: AB A, B B.
 # 이 대응 기준 정확 일치 13/25 · 한 등급 이내 25/25 (사진이 평균 0.32등급 후함). 표본 없는 AA·A는 S·A, C는 D.
 _SANPOU = {"AAA": "S", "AA": "S", "A": "A", "AB": "A", "B": "B", "BC": "C", "C": "D"}
+# 일본 喜久屋カメラ (Kikuya): 목록 설명 끝 AB·A-·B ('現状・保証無'·'整備済 3ヶ月保証' 뒤)
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-24): AB A 7·B 2·C 3 · A- A 8·B 3 · B B 1.
+# 이 매장은 A-가 AB보다 위(일본 관례). 사진이 한 등급쯤 후한 것을 빼면 A-·AB B, B C.
+# 이 대응 기준 정확 일치 5/24 · 한 등급 이내 24/24 (사진이 평균 0.54등급 후함 — 기존 0.8과 비슷). 표본 없는 AA·A+는 S, A는 A, C는 D.
+KIKUYA_PREFIX = "Kikuya: "
+_KIKUYA = {"AA": "S", "A+": "S", "A": "A", "A-": "B", "AB": "B", "B": "C", "BC": "D", "C": "D"}
 
 # 독일 Leica Store Heidelberg: 설명의 'Bewertet … mit der Schulnote 1-2' (독일 학교 점수, 1 가장 좋음 ~ 3), 매장 진열품은 'Demo'
 HEIDELBERG_PREFIX = "Heidelberg: "
