@@ -3,13 +3,13 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 612,
+   "count": 614,
    "example": "Leica M4 Silver"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 573,
+   "count": 575,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 211,
+   "count": 212,
    "example": "Leica M3 Silver"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 211,
+   "count": 212,
    "example": "Leica M3 Silver"
   },
   {
@@ -117,25 +117,25 @@
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:no-meter",
-   "count": 69,
+   "count": 70,
    "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:mechanical",
-   "count": 69,
+   "count": 70,
    "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:no-meter",
-   "count": 68,
+   "count": 67,
    "example": "Leica M4 Silver"
   },
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:mechanical",
-   "count": 68,
+   "count": 67,
    "example": "Leica M4 Silver"
   },
   {
@@ -207,8 +207,26 @@
   {
    "a": "leica:body:m8:standard",
    "b": "leica:feature:frameline-28",
-   "count": 49,
+   "count": 48,
    "example": "Leica M8 Silver"
+  },
+  {
+   "a": "leica:body:m5:standard",
+   "b": "leica:feature:meter",
+   "count": 45,
+   "example": "Leica M5 Silver"
+  },
+  {
+   "a": "leica:body:m5:standard",
+   "b": "leica:feature:mechanical",
+   "count": 45,
+   "example": "Leica M5 Silver"
+  },
+  {
+   "a": "leica:body:m10-r:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 45,
+   "example": "[중고] M10-R (Black)"
   },
   {
    "a": "leica:body:m4:black-paint",
@@ -231,26 +249,8 @@
   {
    "a": "leica:body:m10-monochrom:standard",
    "b": "leica:feature:frameline-28",
-   "count": 44,
+   "count": 43,
    "example": "[중고] M10 Monochrom"
-  },
-  {
-   "a": "leica:body:m10-r:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 44,
-   "example": "[중고] M10-R (Black)"
-  },
-  {
-   "a": "leica:body:m5:standard",
-   "b": "leica:feature:meter",
-   "count": 43,
-   "example": "Leica M5 Silver"
-  },
-  {
-   "a": "leica:body:m5:standard",
-   "b": "leica:feature:mechanical",
-   "count": 43,
-   "example": "Leica M5 Silver"
   },
   {
    "a": "leica:body:m6:ttl",
@@ -361,34 +361,34 @@
    "example": "Leica M2 BlackPaint"
   },
   {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:frameline-28",
+   "count": 23,
+   "example": "[중고] M11 Monochrom"
+  },
+  {
    "a": "leica:body:m11:black-paint",
    "b": "leica:feature:frameline-28",
    "count": 22,
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
   },
   {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:frameline-28",
+   "a": "leica:body:m3:single-stroke",
+   "b": "leica:feature:no-meter",
    "count": 22,
-   "example": "[중고] M11 Monochrom"
+   "example": "LEICA M3 Single Stroke sn.1156"
+  },
+  {
+   "a": "leica:body:m3:single-stroke",
+   "b": "leica:feature:mechanical",
+   "count": 22,
+   "example": "LEICA M3 Single Stroke sn.1156"
   },
   {
    "a": "leica:body:m9-p:standard",
    "b": "leica:feature:frameline-28",
    "count": 21,
    "example": "[위탁] M9-P (Silver)"
-  },
-  {
-   "a": "leica:body:m3:single-stroke",
-   "b": "leica:feature:no-meter",
-   "count": 21,
-   "example": "LEICA M3 Single Stroke sn.1156"
-  },
-  {
-   "a": "leica:body:m3:single-stroke",
-   "b": "leica:feature:mechanical",
-   "count": 21,
-   "example": "LEICA M3 Single Stroke sn.1156"
   },
   {
    "a": "leica:body:m11-d",
@@ -823,12 +823,6 @@
    "example": "LEICA 35mm F2 (4th) 7 element SUMMICRON-M sn.3554"
   },
   {
-   "a": "leica:body:leicaflex-sl2",
-   "b": "leica:body:sl2",
-   "count": 4,
-   "example": "LEICAFLEX SL2 chrome 50 JAHRE"
-  },
-  {
    "a": "leica:body:m10-monochrom:leitz-wetzlar",
    "b": "leica:feature:frameline-28",
    "count": 3,
@@ -881,6 +875,12 @@
    "b": "leica:feature:frameline-28",
    "count": 3,
    "example": "LEICA M-P Safari SUMMICRON-M sn.4934 / sn.4236"
+  },
+  {
+   "a": "leica:body:leicaflex-sl2",
+   "b": "leica:body:sl2",
+   "count": 3,
+   "example": "LEICAFLEX SL2 chrome 50 JAHRE"
   },
   {
    "a": "leica:lens:summilux-m:50:titan",
