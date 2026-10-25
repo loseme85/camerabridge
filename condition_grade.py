@@ -118,6 +118,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _JCH.get(cond[len(JCH_PREFIX):].strip().lower()), "label"
     if cond.startswith(ROTERPUNKT_PREFIX):
         return _ROTERPUNKT.get(cond[len(ROTERPUNKT_PREFIX):].strip().upper()), "label"
+    if cond.startswith(PHOTOGRAFICA_PREFIX):
+        return _PHOTOGRAFICA.get(cond[len(PHOTOGRAFICA_PREFIX):].strip().lower()), "text"
     if cond.startswith(RANGEFINDER_PREFIX):
         value = cond[len(RANGEFINDER_PREFIX):].strip()
         if value.upper() == "NEW":
@@ -456,3 +458,13 @@ ROTERPUNKT_PREFIX = "RoterPunkt: "
 # 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 A+++ S, A++ A, A+ B, A·A-B B (A와 A+는 사진으로 갈리지 않아 같은 B).
 # 이 대응 기준 정확 일치 9/26 · 한 등급 이내 22/26 (사진이 평균 0.73등급 후함 — 기존 0.8과 비슷). 표본 없는 B·C는 C·D.
 _ROTERPUNKT = {"NEUWARE": "N", "DEMOWARE": "S", "A+++": "S", "A++": "A", "A+": "B", "A": "B", "A-B": "B", "B": "C", "C": "D"}
+
+# 덴마크 Photografica: 설명 첫 문장 'The lens is in very good condition' (mint·near mint·excellent·very good·good·decent·fair),
+# 새 상품은 'This is a new item'·'Nyt i original indpakning' (new)
+PHOTOGRAFICA_PREFIX = "Photografica: "
+# 사진 평가(표기 가리고 29점, 사진 3장씩, 2026-10-24): mint S 1 · near mint S 1 · excellent S 3·A 1 · very good A 6 ·
+# good S 1·A 5·B 2 · decent B 2·C 2 · fair A 2·B 2·C 1. fair·decent는 외관보다 렌즈 속 흐림(haze)을 적은 것이 많아 사진엔 덜 보임.
+# 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 mint S, near mint·excellent A, very good·good B, decent·fair C.
+# 이 대응 기준 정확 일치 7/29 · 한 등급 이내 26/29 (사진이 평균 0.86등급 후함 — 기존 0.8과 비슷).
+_PHOTOGRAFICA = {"new": "N", "mint": "S", "near mint": "A", "excellent": "A", "very good": "B", "good": "B", "decent": "C",
+                 "fair": "C"}

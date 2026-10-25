@@ -5686,6 +5686,130 @@ def crawl_roterpunkt():
     return results
 
 
+_PG_FAMILY = (r"(?:APO[\s-])?(?:SUPER[\s-])?(?:TELE[\s-]|MACRO[\s-]|VARIO[\s-]|TRI[\s-])?(?:SUMMILUX|SUMMICRON|ELMARIT|ELMAR|NOCTILUX|SUMMARON|"
+              r"SUMMARIT|SUPER[\s-]ANGULON|HEKTOR|TELYT|THAMBAR|SUMMAR|SUMMITAR|XENON)")
+
+
+def _photografica_name(title):
+    """Photografica 제목 다듬기: 'LEICA M 50/1,4 SUMMILUX ASPH BLACK' → 'Leica Summilux-M 50mm f1.4 ASPH black',
+    'LEICA SM 35/3,5 SUMMARON' → 'Leica Summaron 35mm f3.5 LTM', 'BRUGT LEICA M SØGER 24MM' → 'Leica M Viewfinder 24mm'.
+    'BRUGT'(중고)·'MINT BOXED'·'(Haze)' 같은 꼬리는 떼고 덴마크어 색·부속 이름은 영어로"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"^BRUGT[\s-]+", "", name, flags=re.I)
+    name = re.sub(r"\bSUPER-V\b", "SUPER VARIO ELMAR", name)
+    name = re.sub(rf"(?i)^(LEICA|LEITZ)\s+({_PG_FAMILY})[\s-](M|R)\s+(\d{{2,3}}/\d[\d,]*)", r"\1 \3 \4 \2", name)  # 'ELMARIT M 28/2,8' → 'M 28/2,8 ELMARIT'
+    name = re.sub(r"\s*[-–]?\s*\b(?:MINT BOXED|Mint Boxed|Mint boxed)\b|\s*\((?:Mild )?Haze\)|\s*\(Som ny\)|\s*\+\s*(?:MODLYSBLÆNDE|ÆSKE|BOX)\b",
+                  "", name, flags=re.I)
+    name = re.sub(r"(\d),(\d)", r"\1.\2", name)
+    m = re.match(r"(?i)(LEICA|LEITZ)\s+(M|R|SM|L|SL|TL|S)\s+(\d{2,3}(?:-\d{2,3})?)\s?/\s?(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\s*(.*)$", name)
+    if m:
+        brand, mount, fl, ap, rest = m.groups()
+        fam = re.search(_PG_FAMILY, rest, re.I)
+        ap = ap + ("" if "." in ap else ".0")
+        mount = mount.upper()
+        if fam:
+            rest = (rest[:fam.start()] + " " + rest[fam.end():]).strip()
+            family = "-".join(w.capitalize() if w.upper() != "APO" else "APO" for w in re.split(r"[\s-]", fam.group(0)))
+            suffix = {"M": "-M", "R": "-R", "SL": "-SL", "TL": "-TL", "S": "-S"}.get(mount, "")
+            name = f"Leica {family}{suffix} {fl}mm f{ap} {rest}" + (" LTM" if mount == "SM" else "")
+        else:
+            name = f"Leica {mount if mount != 'SM' else 'LTM'} {fl}mm f{ap} {rest}"
+    name = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)\s?/\s?(\d(?:\.\d+)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2)}", name)
+    name = re.sub(r"\b(\d{2,3})MM\b", r"\1mm", name)
+    name = re.sub(r"\b11817\b", "11817 3rd", name)  # 주미크론 50 3세대 번호 (번호만으론 이름이 이겨 현행으로 감)
+    for da, en in (("SØGERLUP", "Viewfinder Magnifier"), ("SØGER", "Viewfinder"), ("MODLYSBLÆNDE", "Lens Hood"),
+                   ("HÅNDLEDSREM", "Wrist Strap"), ("HÅNDGREB", "Handgrip"), ("LÆDERTASKE", "Leather Case"), ("TASKE", "Case"),
+                   ("DÆKSEL", "Cover"), ("AKKU", "Battery"), ("REM", "Strap"), ("UDLØSER", "Release"), ("LÆDER", "Leather"),
+                   ("SORT", "black"), ("SØLV", "silver"), ("KROM", "chrome"), ("RØD", "red"), ("BRAUN", "brown"), ("TIL", "for"),
+                   ("COLL\\.", "Collapsible"), ("FAT", "Fat"), ("GRIB", "Grip"), ("BÆLG", "Bellows"),
+                   ("SOOKY", "SOOKY Close-up Adapter"), ("LADER", "Charger"), ("KABEL", "Cable")):
+        name = re.sub(rf"\b{da}(?=\W|$)", en, name, flags=re.I)
+    name = re.sub(r"^(?:LEICA|LEITZ|Leica|Leitz)\b", "Leica", name)
+    name = re.sub(r"\bLEICA\b", "Leica", name)
+    name = re.sub(r"\s*\(\s*\)|\s+-\s*$", "", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-+")
+    if not re.match(r"(?:leica|leitz)\b", name, re.I):
+        name = "Leica " + name
+    if re.match(r"Leica (?:M\d{1,2}(?:-[PRD])?|MP|M-[AP]|CL|SL\d?|Q\d?|CM|M3|M2|M4(?:-P)?|M6|M7|M5)\b", name) and not re.search(
+            r"\d+mm|Hood|Case|Viewfinder|Filter|Release|Strap|Battery|Handgrip|Cover|Body|Cap|Adapter|Winder|Grip|\+", name, re.I):
+        name += " Body"
+    return name
+
+
+def crawl_photografica():
+    """Photografica (덴마크) - 코펜하겐 클래식·중고 카메라 딜러(Shopify)의 'Photografica Vintage' 라이카 컬렉션 3곳
+    (카메라·렌즈·액세서리, 판매 중 120개쯤) JSON. 제목이 Leica·Leitz인 것만 ('UORIGINAL' 호환 배터리 등은 뺌), 가격은 DKK.
+    등급은 설명 첫 문장 'The lens is in very good condition' (mint~fair), 새 상품은 'This is a new item'·'Nyt i original indpakning'"""
+    import html as _html
+    import requests
+    from condition_grade import PHOTOGRAFICA_PREFIX
+    results, seen = [], set()
+    base = "https://www.photografica.com"
+    print(f"\n  📂 Photografica 크롤링 시작")
+    for coll in ("photografica-vintage-leica-kamera", "photografica-vintage-leica-objektiver", "photografica-vintage-leica-tilbehor"):
+        for page_num in range(1, 10):
+            url = f"{base}/collections/{coll}/products.json?limit=250&page={page_num}"
+            try:
+                resp = requests.get(url, headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=30)
+                resp.raise_for_status()
+                products = resp.json().get("products", [])
+            except Exception as e:
+                raise RuntimeError(f"Photografica {coll} {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            if not products:
+                break
+            print(f"    └─ {coll} {page_num}페이지 {len(products)}개 상품 발견")
+            for p in products:
+                title = (p.get("title") or "").strip()
+                if p.get("id") in seen or not re.search(r"\b(?:leica|leitz)\b", title, re.I) or re.search(r"\bUORIGINAL\b", title, re.I):
+                    continue
+                variants = p.get("variants") or [{}]
+                if not any(v.get("available") for v in variants):
+                    continue
+                seen.add(p.get("id"))
+                name = _photografica_name(title)
+                if re.match(r"Leica CL\b", name) and any("analog" in t.lower() for t in p.get("tags") or []):
+                    name = name.replace("Leica CL", "Leica CL film", 1)  # 1973년 필름 CL (디지털 CL로 붙지 않게)
+                try:
+                    price = f"DKK {float(variants[0].get('price')):,.0f}"
+                except (TypeError, ValueError):
+                    price = "문의요망"
+                text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or "")))
+                m = re.search(r"\b(?:is|are both) in (mint|near mint|excellent|very good|good|decent|fair)\b", text, re.I)
+                if m:
+                    cond = PHOTOGRAFICA_PREFIX + m.group(1).lower()
+                elif re.search(r"\bnew (?:unused )?(?:item|camera)\b|\bunused item\b|\bny(?:t)? (?:vare|produkt)\b|"
+                               r"\bnyt? i original indpakning\b|\bubrugt\b", text, re.I):
+                    cond = PHOTOGRAFICA_PREFIX + "new"
+                else:
+                    cond = "정보없음"
+                img = p["images"][0].get("src", "") if p.get("images") else ""
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "Photografica (덴마크)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "DKK",
+                    "이미지": img,
+                    "링크": f"{base}/products/{p['handle']}",
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if len(products) < 250:
+                break
+            time.sleep(random.uniform(1.0, 2.0))
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Photografica 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -6306,6 +6430,7 @@ def crawl_all():
         ("Japan Camera Hunter (일본)", lambda: ce.wrap_full_run("Japan Camera Hunter (일본)", crawl_jch)),
         ("Rangefinder (홍콩)", lambda: ce.wrap_full_run("Rangefinder (홍콩)", crawl_rangefinder)),
         ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
+        ("Photografica (덴마크)", lambda: ce.wrap_full_run("Photografica (덴마크)", crawl_photografica)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
