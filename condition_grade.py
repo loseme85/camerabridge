@@ -116,6 +116,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _CLASSICCAMERA.get(cond[len(CLASSICCAMERA_PREFIX):].strip()), "label"
     if cond.startswith(JCH_PREFIX):
         return _JCH.get(cond[len(JCH_PREFIX):].strip().lower()), "label"
+    if cond.startswith(ROTERPUNKT_PREFIX):
+        return _ROTERPUNKT.get(cond[len(ROTERPUNKT_PREFIX):].strip().upper()), "label"
     if cond.startswith(RANGEFINDER_PREFIX):
         value = cond[len(RANGEFINDER_PREFIX):].strip()
         if value.upper() == "NEW":
@@ -447,3 +449,10 @@ RANGEFINDER_PREFIX = "Rangefinder: "
 
 def rangefinder_grade(value: int) -> str:
     return from_percent(value)
+
+# 독일 Roter Punkt: 설명의 'Qualität: A++ (private Einschätzung)' — A+++(새것 같음)·A++·A+·A·A-B, 새 액세서리는 Neuware·Demoware
+ROTERPUNKT_PREFIX = "RoterPunkt: "
+# 사진 평가(표기 가리고 26점, 사진 3장씩, 2026-10-24): A+++ S 6 · A++ S 6·B 1 · A+ S 3·A 2·B 1 · A A 4·B 2 · A-B S 1.
+# 기존 매장처럼 사진이 한 등급쯤 후한 것을 빼면 A+++ S, A++ A, A+ B, A·A-B B (A와 A+는 사진으로 갈리지 않아 같은 B).
+# 이 대응 기준 정확 일치 9/26 · 한 등급 이내 22/26 (사진이 평균 0.73등급 후함 — 기존 0.8과 비슷). 표본 없는 B·C는 C·D.
+_ROTERPUNKT = {"NEUWARE": "N", "DEMOWARE": "S", "A+++": "S", "A++": "A", "A+": "B", "A": "B", "A-B": "B", "B": "C", "C": "D"}

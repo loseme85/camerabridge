@@ -289,3 +289,14 @@ def test_ohnuki_condition_grades():
     assert grade_of(site, OHNUKI_PREFIX + "C-", "Leica IIIg")[0] == "C"
     assert grade_of(site, OHNUKI_PREFIX + "D", "Leica M3 ELC")[0] == "C"
     assert grade_of(site, OHNUKI_PREFIX + "E", "Leica IIIf")[0] in ("D", "X")
+
+
+def test_roterpunkt_condition_grades():
+    from condition_grade import ROTERPUNKT_PREFIX
+    site = "Roter Punkt (독일)"
+    assert grade_of(site, ROTERPUNKT_PREFIX + "A+++", "Leica SUMMICRON-M 28mm ASPH. 6-bit #11672")[0] == "S"
+    assert grade_of(site, ROTERPUNKT_PREFIX + "A++", "Leica M10-P silver Body")[0] == "A"
+    assert grade_of(site, ROTERPUNKT_PREFIX + "A+", "Leica SUMMARIT-M 75mm f2.5 black 6bit #11645")[0] == "B"
+    assert grade_of(site, ROTERPUNKT_PREFIX + "A", "Leica M2 silver Body")[0] == "B"
+    assert grade_of(site, ROTERPUNKT_PREFIX + "A-B", "Leica Summilux-M 35mm f1.4 ASPH. FLE 6bit #11663")[0] == "B"
+    assert grade_of(site, ROTERPUNKT_PREFIX + "Neuware", "Leica M11 #24030 Thumb Rest black")[0] == "N"

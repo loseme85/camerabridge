@@ -5567,6 +5567,125 @@ def crawl_rangefinder():
     return results
 
 
+def _roterpunkt_name(title):
+    """Roter Punkt 제목 다듬기: 'LEICA Objektiv Summilux-M 1.4/35 mm ASPH. FLE 6bit #11663 m. OVP' → 'Leica Summilux-M 35mm f1.4 ASPH.
+    FLE 6bit #11663', 'LEICA IIIf Kit Summaron 1:3,5/3,5cm mit OVP' → 'Leica IIIf Kit Summaron 35mm f3.5'. 상자('m. OVP'·'u. Box')·
+    정비·자랑 말('Top Sammlerstück'·'RARE sehr selten')은 떼고, 조리개/초점거리는 '35mm f1.4' 꼴로, 독일어 색은 영어로"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title).replace("\u0192", "f")).strip()
+    name = re.sub(r"[„“\"*]", "", name)
+    name = re.sub(r"\s+[–-]\s+(?:Top Sammlerstück|TOP Zustand|v\.\s.*|\(Service.*|MINT.*)$", "", name, flags=re.I)
+    name = re.sub(r"\b(?:m\.|mit|in|u\.)\s+OVP\b|\bOVP\b|\bu\.\s*Box\b|\bund Box\b|\bRARE\b|\bsehr selten\b|\bRAR\b\s*!?|"
+                  r"\b(?:frischer|neuer) Service\b(?:\s+\d+/\d+)?|\bwerkstatt\s?geprüft\b|\(Werkstatt geprüft\)|\bProduktion \d{4}\b|"
+                  r"\bfrühe Seriennummer\b|\b1A\b|\bKamera\b|\bObjektiv\b|\bvom \d+\.\d+\.\d{4}\b", " ", name, flags=re.I)
+    name = re.sub(r"^\s*(?:LEITZ\s*/\s*)?(?:LEICA\s+LEITZ|LEICA|Leica\s+LEITZ|Leica)\b\s*", "Leica ", name)
+    name = re.sub(r"(\d),(\d)", r"\1.\2", name)
+    name = re.sub(r"\s*\+\s*Hood(?:\s+(?:Geli|und Gegenlichtblende))?", "", name)
+    name = re.sub(r"\s+(?:&|mit)\s+(?:Freilaufknopf\s+)?neuer .*$|\s+(?:neuer )?Sensor (?:neu|CCD).*$|\s+und Sondernummer.*$", "", name)
+    name = re.sub(r"\b(\d(?:\.\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", name)  # '3.5 cm' → '35mm'
+    name = re.sub(r"(?<![\d.])(?:1:|f)?(\d+(?:\.\d+)?)\s?/\s?(\d{2,3}(?:-\d{2,3})?)\s?mm\b",
+                  lambda m: f"{m.group(2)}mm f{m.group(1)}" + ("" if "." in m.group(1) else ".0"), name)  # '1.4/35 mm'·'f1.4/28mm' → '35mm f1.4'
+    name = re.sub(r"^\s*Leica M39 (.+)$", r"Leica \1 M39", name)  # 나사 마운트 렌즈 ('M39 Summitar')
+    name = re.sub(r"\b(\d{2,3}(?:[-–]\d{2,3})?)\s+mm\b", lambda m: m.group(1).replace("–", "-") + "mm", name)  # '50 mm' → '50mm'
+    name = re.sub(r"\bF\s?/\s?(\d)", r"f\1", name)
+    name = re.sub(r"\bf\s?/\s?(\d)", r"f\1", name)
+    name = re.sub(r"\bf(\d)(?![\d.])", r"f\1.0", name)
+    name = re.sub(r"\b(\d{2,3}mm)\s+(?=(?:f\d|ASPH))", r"\1 ", name)
+    name = re.sub(r"\bTyp (\d{3})\b", r"(Typ \1)", name)
+    name = re.sub(r"\bM246 Monochrom\b", "M Monochrom (Typ 246)", name)
+    name = re.sub(r"\bM240\b", "M (Typ 240)", name)
+    name = re.sub(r"\bstahlgrau lackiert\b", "steel grey", name, flags=re.I)
+    name = re.sub(r"\bschwarz\s+chrom\b", "black chrome", name, flags=re.I)
+    name = re.sub(r"\bschwarz\s+lackiert\b|\bblack paint\b", "black paint", name, flags=re.I)
+    name = re.sub(r"\bschwarz\b|\(Schwarz\)", "black", name, flags=re.I)
+    name = re.sub(r"\bsilber\b", "silver", name, flags=re.I)
+    name = re.sub(r"\bchrom\b|\bcrom\b", "chrome", name, flags=re.I)
+    name = re.sub(r"\bGegenlichtblende\b|\bGeli\b", "Lens Hood", name, flags=re.I)
+    name = re.sub(r"\bBereitschaftstasche\b", "Ever-Ready Case", name)
+    name = re.sub(r"\bEntfernungsmesser\b", "Rangefinder", name)
+    name = re.sub(r"\bDaumenstütze\b", "Thumb Rest", name)
+    name = re.sub(r"\bBlitzschuh-?\s?Abdeckung\b", "Hot Shoe Cover", name, flags=re.I)
+    name = re.sub(r"(#11817\b)", r"\1 3rd", name)  # 주미크론 50 3세대 번호 (번호만으론 이름이 이겨 현행으로 감)
+    name = re.sub(r"\bAufstecksucher\b|\bFinder\b", "Viewfinder", name)
+    name = re.sub(r"\bFreilaufknopf\b", "", name)
+    name = re.sub(r"\bmit\b|&", "with", name)
+    name = re.sub(r"\bund\b", "and", name)
+    name = re.sub(r"\bSondermodell\b", "Special Edition", name)
+    name = re.sub(r"\bNeuware\b|\bneuwertig\b", "", name, flags=re.I)
+    name = re.sub(r"\s+\.\s+|\s+[–-]\s+", " ", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-+.!")
+    name = re.sub(r"\s+(?:with|and)$", "", name)
+    if not re.match(r"(?:leica|leitz)\b", name, re.I):
+        name = "Leica " + name
+    if re.match(r"Leica (?:M\d{1,2}(?:-[PRD])?|MP|M-[AP]|M \(Typ|M Monochrom|SL\d?|Q\d?)\b", name) and not re.search(
+            r"\d+mm|Hood|Thumb|Case|Viewfinder|Filter|Release|Body", name, re.I):
+        name += " Body"  # 바디 이름만 있으면 렌즈로 갈리지 않게
+    return name
+
+
+def crawl_roterpunkt():
+    """Roter Punkt (독일) - 베를린 라이카 중고 전문점 WooCommerce 상품 API(Store API) JSON 전체(90개쯤). 제목에 Leica·Leitz가
+    있는 것만 (Keks 노출계·가죽끈 같은 다른 회사 액세서리 제외), 설명에 'VERKAUFT'가 있으면 재고 표시가 남아도 뺌.
+    등급은 설명의 'Qualität: A++ (private Einschätzung)' (A+++·A++·A+·A·A-B, 새 액세서리는 Neuware·Demoware)"""
+    import html as _html
+    import requests
+    from condition_grade import ROTERPUNKT_PREFIX
+    results = []
+    base = "https://www.roter-punkt-kamera.de"
+    print(f"\n  📂 Roter Punkt 크롤링 시작")
+    for page_num in range(1, 10):
+        url = f"{base}/wp-json/wc/store/v1/products?per_page=100&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": USER_AGENTS[1]}, timeout=60)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"Roter Punkt {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = _html.unescape(p.get("name") or "")
+            text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " +
+                                                             (p.get("description") or ""))))
+            if (not re.search(r"\b(?:leica|leitz)\b", title, re.I) or not p.get("is_in_stock") or "VERKAUFT" in text
+                    or re.search(r"schild\b", title, re.I)):
+                continue
+            name = _roterpunkt_name(title)
+            prices = p.get("prices") or {}
+            try:
+                price = f"€{int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            m = (re.search(r"Qualität:\s*(Neuware|Demoware|[A-D](?:\s?-\s?[A-D]\b|\+{0,3}))", text) or
+                 re.search(r"Zustand:\s*(Neuware|Demoware|[A-D](?:\s?-\s?[A-D]\b|\+{0,3}))", text))
+            cond = ROTERPUNKT_PREFIX + m.group(1).replace(" ", "") if m else "정보없음"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Roter Punkt (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Roter Punkt 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -6186,6 +6305,7 @@ def crawl_all():
         ("The Classic Camera (영국)", lambda: ce.wrap_full_run("The Classic Camera (영국)", crawl_classiccamera)),
         ("Japan Camera Hunter (일본)", lambda: ce.wrap_full_run("Japan Camera Hunter (일본)", crawl_jch)),
         ("Rangefinder (홍콩)", lambda: ce.wrap_full_run("Rangefinder (홍콩)", crawl_rangefinder)),
+        ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
