@@ -5810,6 +5810,124 @@ def crawl_photografica():
     return results
 
 
+def _shphoto_name(title):
+    """SHphoto 제목 다듬기: 'Leitz Leica Elmar M39 3,5/5cm Red Scale' → 'Leica Elmar M39 50mm f3.5 Red Scale',
+    'LEICA Summicron M 1:2/35 mm 6 Elements' → 'Leica Summicron-M 35mm f2.0 6 Elements', 'Leitz Leica II f body' → 'Leica IIf Body'.
+    앞의 'Leitz Leica'·'Ernst Leitz Wetzlar' 같은 이름 겹침을 'Leica' 하나로, 독일어 부속 이름은 영어로"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"(?i)^(?:(?:Ernst|E\.)\s?Leitz(?: GmbH)?(?: Wetzlar| Wetzler| New York)?(?: Germany)?|Leitz(?: Wetzlar)?(?: Germany)?|"
+                  r"Leica|LEICA|Original Leica|Leizt|Letz)(?:\s+(?:Leica|Leitz|LEICA|LEITZ)(?: Wetzlar(?: Germany)?)?)*\b\s*", "Leica ", name)
+    name = re.sub(r"\b(?:nottested|notteated|not tested)\b", "", name, flags=re.I)
+    name = re.sub(r"(\d),(\d)", r"\1.\2", name)
+    name = re.sub(r"\b(\d+(?:\.\d+)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * (10 if float(m.group(1)) < 100 else 1))}mm",
+                  name)  # '13.5cm' → '135mm' ('135cm'는 매장 오기라 135mm)
+    fmt = lambda fl, ap: f"{fl}mm f{ap}" + ("" if "." in ap else ".0")
+    name = re.sub(r"(?<![\d.])(\d(?:\.\d+)?)\s?/\s?(\d{2,3}-\d{2,3})\s?mm\b", lambda m: fmt(m.group(2), m.group(1)), name)  # 줌 '4.5/80-200 mm'
+    name = re.sub(r"(?<![\d.])(?:1:)?(\d(?:\.\d+)?)\s?/\s?(\d{2,3})\s?mm\b", lambda m: fmt(m.group(2), m.group(1)), name)  # '1:2/35 mm'·'3.5/50mm'
+    name = re.sub(r"\b(\d{2,3})mm\s?/\s?(?:1:)?(\d(?:\.\d+)?)\b", lambda m: fmt(m.group(1), m.group(2)), name)  # '50mm/3.5'
+    name = re.sub(r"\b(\d{2,3})mm\s+f\s?/?(\d(?:\.\d+)?)\b", lambda m: fmt(m.group(1), m.group(2)), name)  # '135mm f4.5'
+    name = re.sub(r"(?<![\d.])(\d(?:\.\d+)?)\s?/\s?(\d{2,3})\b(?!\s?mm)", lambda m: fmt(m.group(2), m.group(1)), name)  # '2.8/90'
+    name = re.sub(r"\b(\d{2,3})\s?/\s?(\d(?:\.\d+)?)\b(?!\s?mm)", lambda m: fmt(m.group(1), m.group(2)), name)  # '135/4.5'
+    name = re.sub(r"\s+(?:analoge\s+)?Messsucherkamera\b.*$|\bWe[tz]{1,2}lar\b", "", name)
+    name = re.sub(r"\b(Summicron|Summilux|Elmarit|Elmar|Summaron|Summarit|Noctilux|Tele-Elmarit)\s(M|R)\b", r"\1-\2", name)
+    name = re.sub(r"\b(I{1,3}|1|2|3)\s?([a-gA-G])\b(?!-)", lambda m: {"1": "I", "2": "II", "3": "III"}.get(m.group(1), m.group(1)) + m.group(2).lower(), name)
+    name = re.sub(r"\b(?:body|Gehäuse)\b", "Body", name, flags=re.I)
+    name = re.sub(r"(?<=\S)\s+Leica\s+(?:Screw\s+)?(?=M39|L39)", " ", name)  # 'Hektor 135mm Leica M39' ('Leica M3'로 바디가 되지 않게)
+    name = re.sub(r"\bStandart\b", "Standard", name)
+    name = re.sub(r"\bmini Elmar\b", "Elmar", name, flags=re.I)
+    for de, en in (("Bodendeckel", "Bottom Cover"), ("Objektivfrontdeckel", "Lens Cap"), ("Objektiv Front Deckel", "Lens Cap"),
+                   ("Objektivdeckel", "Lens Cap"), ("Deckel", "Lens Cap"), ("Tischstativ", "Tabletop Tripod"),
+                   ("Kugelgelenkkopf", "Ball Head"), ("Universaltasche", "Universal Case"), ("Aufklappsucher", "Folding Viewfinder"),
+                   ("Wasserwaage", "Spirit Level"), ("Gegenlichtblende", "Lens Hood"), ("Sonnenblende", "Lens Hood"), ("Sucher", "Viewfinder"), ("Spiegelsucher", "Mirror Viewfinder"),
+                   ("Selbstauslöser", "Self Timer"), ("Balgengerät", "Bellows"), ("Gelbfilter", "Yellow Filter"), ("Blaufilter", "Blue Filter"),
+                   ("Polfilter", "Polarizing Filter"), ("Zwischenring", "Extension Ring"), ("Nahvorsatz", "Close-up Lens"), ("Nahlinse", "Close-up Lens"),
+                   ("Vorsatzlinse", "Close-up Lens"), ("Handgriff", "Handgrip"), ("Tragriemen", "Strap"), ("Kameragurt", "Strap"),
+                   ("Gehäusedeckel", "Body Cap"), ("Bereitschaftstasche", "Ever-Ready Case"), ("Beiretschaftstasche", "Ever-Ready Case"),
+                   ("Filmdose", "Film Canister"), ("Belichtungsmesser", "Light Meter"), ("schwarz", "black"), ("silber", "silver"),
+                   ("chrom", "chrome"), ("grau", "grey"), ("rot", "red"), ("gelb", "yellow"), ("für", "for"), ("mit", "with")):
+        name = re.sub(rf"\b{de}\b", en, name, flags=re.I)
+    name = re.sub(r"\s+", " ", name).strip(" ,-")
+    if not re.match(r"(?:leica|leitz)\b", name, re.I):
+        name = "Leica " + name
+    if re.fullmatch(r"Leica (?:M\d(?:-\d|-P)?|MP|CL|I{1,3}[a-g]?|I[a-g]|250|M[1-7])(?: (?:black|silver|chrome|black paint|Body|\d{4}))*", name):
+        name = re.sub(r"(?: Body)?$", " Body", name, count=1)  # 바디 이름만 있으면 렌즈로 갈리지 않게
+    return name
+
+
+_SH_LENS_FAMILY = (r"Summicron|Summilux|Elmarit|Elmar|Summaron|Summarit|Summitar|Summar|Noctilux|Hektor|Telyt|Angulon|Xenon|"
+                   r"Thambar|Tri-Elmar|Apo-|Macro-Elmar")
+_SH_ACCESSORY = (r"Close-up|Extension Ring|Macro Ring|Bellows|projekt|Projektor|Focusing Mount|Fokus|Adapter|Blende|Deckel|SDPOO|"
+                 r"Viewfinder|Lens Hood|Filter|Prado|Pradovit|Mikro|Focotar|Diamask|Stereo|Nahaufnahme|MIKAS|Micro Attachment|SOOKY|Near Focusing")
+
+
+def crawl_shphoto():
+    """SHphoto (독일) - 뉘른베르크 매장(Fotomax, Shopware) '/gebrauchtware/leica/' 분류 정적 HTML (24개씩 17쪽쯤, 390개 —
+    빈티지 필터·후드 같은 액세서리가 절반 넘음). 제목이 Leica·Leitz로 시작하는 것만 (FED·Jupiter·Novoflex 같은 다른 회사 M39
+    렌즈 제외). 'Für Sie bestellt'(LimitedAvailability)는 예약중으로. 목록·상세 모두 등급 표기가 없어 정보없음"""
+    import html as _html
+    import requests
+    results, seen = [], set()
+    base = "https://shphoto.de/gebrauchtware/leica/"
+    print(f"\n  📂 SHphoto 크롤링 시작")
+    for page_num in range(1, 60):
+        try:
+            resp = requests.get(f"{base}?p={page_num}", headers={"User-Agent": USER_AGENTS[1]}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"SHphoto {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        new = 0
+        for card in resp.text.split('class="card product-box')[1:]:
+            m = re.search(r'href="([^"]+)"\s+class="product-name"\s+title="([^"]+)"', card)
+            if not m or m.group(1) in seen:
+                continue
+            seen.add(m.group(1))
+            new += 1
+            title = re.sub(r"\s+", " ", _html.unescape(m.group(2))).strip()
+            if not re.match(r"(?:(?:Ernst|E\.)\s?Leitz|Leitz|Leica|Original Leica|Leizt|Letz)\b", title, re.I):
+                continue
+            name = _shphoto_name(title)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS) or re.search(
+                    r"Schneider|Novoflex|Tamron|Kenko|KMZ|Jupiter|\bFED\b|Industar|Russar|Meopta", name, re.I):
+                continue
+            pm = re.search(r'unit-price">\s*([\d.]+),(\d\d)\s*€', card) or re.search(r"([\d.]+),(\d\d)\s*€", card)
+            price = f"€{int(pm.group(1).replace('.', '')):,}" if pm else "문의요망"
+            img = re.search(r'<img src="([^"]+)"', card)
+            if re.search(r"projekt|Filmkamera|Leicina|Mikroskop|Nachtsicht|Stereo|Diamask|Schild", name, re.I):
+                continue  # 영사기·무비 카메라·현미경 부품 같은 사진기 아닌 물건
+            # 독일어 액세서리(접사링·초점 헬리코이드·렌즈캡 등)는 렌즈 이름이 섞여 있어 분류기가 렌즈로 보므로 'accessory'를 붙임
+            has_family = re.search(_SH_LENS_FAMILY, name, re.I) and re.search(r"\d{2,3}(?:-\d{2,3})?mm", name)
+            is_body = re.match(r"Leica (?:I{1,3}[a-g]?|I[a-g]|M\d|MP|CL|Standard|Leicaflex|R\d|X\d|X-|Q\d?|D-Lux|C-Lux|V-Lux|"
+                               r"Digilux|Minilux|Mini\b|CM|C\d|Z2X|AF-C|Sofort)\b", name, re.I)
+            has_focal = re.search(r"\d{2,3}(?:-\d{2,3})?mm\s+f\d", name)
+            if not re.search(r"\bBody\b", name) and (re.search(_SH_ACCESSORY, name, re.I) or not (has_family or has_focal or is_body)):
+                name += " accessory"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "SHphoto (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": m.group(1),
+                "품절": False,
+                "예약중": "schema.org/LimitedAvailability" in card,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if not new:
+            break
+        print(f"    └─ {page_num}페이지 {new}개 상품 발견")
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ SHphoto 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -6431,6 +6549,7 @@ def crawl_all():
         ("Rangefinder (홍콩)", lambda: ce.wrap_full_run("Rangefinder (홍콩)", crawl_rangefinder)),
         ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
         ("Photografica (덴마크)", lambda: ce.wrap_full_run("Photografica (덴마크)", crawl_photografica)),
+        ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
