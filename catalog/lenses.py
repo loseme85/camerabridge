@@ -215,7 +215,17 @@ for slug, name, ko, marker, mount, extra_not, sfx in [
     _add(key, name, ko, mount, [FAM["summicron"][0], f("50"), marker], [r"\bAPO\b", r"\bSL\b|-SL\b", r"-R\b|\bR ?50"] + list(extra_not), aliases("summicron", "50", sfx, None))
     EXTEND_PARENTS.setdefault(SC50, []).append(key)
 TIGHTEN["leica:lens:summicron:50:rigid"] = [r"전기|early|후기|late|1st|2nd"]
-TIGHTEN["leica:lens:summicron-m:50:current"] = [GEN3, r"50 ?jahre", r"토륨|thorium"]
+# 한국·일본 매장의 2nd는 1969년형(서양 3세대), 서양의 2nd는 리지드라 셈법이 달라 '1·2세대 표기'는 따로 받음 (2026-10-23, PR #67)
+GEN12_SC50 = r"\b(?:1st|2nd)\b|[12]세대|\bv\.?[12]\b|\bfirst\b|\bsecond\b|[12]代目"
+TIGHTEN["leica:lens:summicron-m:50:current"] = [GEN3, GEN12_SC50, r"50 ?jahre", r"토륨|thorium"]
+_add(f"{SC50}:gen12-unspecified", "Summicron 50mm f/2 '1st·2nd' (generation count differs by shop)",
+     "주미크론 50 1·2세대 표기 (매장마다 셈법이 달라 구분 안 함)", "M", [FAM["summicron"][0], f("50"), GEN12_SC50],
+     [r"\bAPO\b", r"rigid|리짓", r"\bDR\b|dual ?range", r"collaps|침동", r"\bR\b ?50|-R\b", r"\bSL\b", r"\bL ?50|LTM|M39"],
+     ["summicron 50 2nd", "summicron 50 1st", "주미크론 50 2세대", "주미크론 50 1세대"])
+EXTEND_PARENTS.setdefault(SC50, []).append(f"{SC50}:gen12-unspecified")
+TIGHTEN[f"{SC50}:gen12-unspecified"] = [GEN3, r"50 ?jahre", r"토륨|thorium", r"safari|사파리|サファリ", r"black ?paint|블랙 ?페인트|블페|ブラックペイント",
+                                     r"50주년|50th anniv", r"collaps|침동|토륨|thorium|\bL39\b|\bLTM\b|\bM39\b", r"rigid|리짓|리지드|고정",
+                                     r"v\.?2\s?/\s?v\.?3|transition"]
 
 # ───────────── M: Elmarit 28 (새 부모, 기존 ASPH 포함) ─────────────
 group("leica:lens:elmarit-m:28", "Elmarit-M 28mm f/2.8", "엘마리트 28", "M", "elmarit", "28", [
@@ -426,6 +436,9 @@ TIGHTEN["leica:lens:summicron-m:90"] = TIGHTEN.get("leica:lens:summicron-m:90", 
 _add("leica:lens:summicron:50:ltm-limited", "Summicron 50mm f/2 screw mount (L) Limited", "주미크론 50 스크류(L) 한정판", None,  # 확인 필요
      [FAM["summicron"][0], f("50"), r"\bL\b|-L\b|LTM|L39|screw|스크류", r"limited|限定|한정"], [r"collaps|침동"], ["summicron 50 l limited", "주미크론 50 l 한정"])
 EXTEND_PARENTS.setdefault("leica:lens:summicron:50", []).append("leica:lens:summicron:50:ltm-limited")
+lens("leica:lens:summicron:35:ltm-asph", "Summicron 35mm f/2 ASPH screw mount (L)", "주미크론 35 ASPH 스크류(L)", None, "summicron", "35",
+     [r"ASPH", r"LTM|L39|M39|screw|스크류|11608"], [r"collaps|침동"], suffixes=(),
+     extra_aliases=["summicron 35 asph l", "summicron 35 asph ltm", "주미크론 35 asph 스크류", "주미크론 35 l39"])
 lens("leica:lens:vario-elmarit-sl:28-70", "Vario-Elmarit-SL 28-70mm f/2.8 ASPH", "SL 28-70", "SL", "vario-elmarit", "28-70",
      extra_aliases=["sl 28-70", "28-70 sl"])
 lens("leica:lens:vario-elmarit-sl:70-200", "Vario-Elmarit-SL 70-200mm f/2.8 ASPH", "SL 70-200", "SL", "vario-elmarit", "70-200",
