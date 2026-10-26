@@ -5928,6 +5928,61 @@ def crawl_shphoto():
     return results
 
 
+def crawl_oneofmany():
+    """One Of Many Cameras (덴마크) - 코펜하겐 중고·렌탈점 Shopify products.json 전체(3,900개쯤, 16쪽)에서 브랜드 칸이 Leica이고
+    상품 종류가 'Used …'·'Brugt'(중고)인 것만 (Rental·New는 뺌). 가격은 DKK. 등급 표기는 없고 설명 말투('Mint condition')"""
+    import html as _html
+    import requests
+    from condition_grade import describe_text
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://oneofmanycameras.com"
+    print(f"\n  📂 One Of Many Cameras 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "One Of Many Cameras"):
+        ptype = (p.get("product_type") or "").strip().lower()
+        if (p.get("vendor") or "").strip().lower() != "leica" or not re.match(r"used|brugt", ptype):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if any(b2 in title.lower() for b2 in THIRD_PARTY_BRANDS) or re.search(r"cine ?mod|canon ef|sony e\b", title, re.I):
+            continue  # 다른 마운트로 개조한 렌즈
+        name = re.sub(r"\s+-\s+cl'?a\b.*$|\s*-\s*$", "", title, flags=re.I)  # '- cl'a October 2024' (정비 날짜)
+        name = re.sub(r"^Original\s+", "", name, flags=re.I)
+        name = re.sub(r"\b(\d{1,2}(?:\.\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * 10):d}mm", name)  # '5cm f2 Summicron III 11818'
+        if not re.match(r"(?:leica|leitz)\b", name, re.I):
+            name = "Leica " + name
+        try:
+            price = f"DKK {float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = "Lens" if "lens" in ptype else "Body" if "camera" in ptype else "Accessory" if "accessor" in ptype else detect_category(name, price)
+        if re.search(r"hektor-?p|elmaron|colorplan|projector|spool|\bcap\b", name, re.I):
+            cat = "Accessory"  # 영사기 렌즈(Hektor-P2·Elmaron)·필름 스풀·캡이 'Used lenses'에 섞여 있음
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "site": "One Of Many Cameras (덴마크)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": describe_text(p.get("body_html") or "") or "정보없음",
+            "가격": price,
+            "통화": "DKK",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ One Of Many Cameras 완료: {len(results)}개")
+    return results
+
+
 def _cavour_name(title):
     """Foto Ottica Cavour 제목 다듬기: 'Leica SUMMICRON-M 35mm f/2 ASPH. [I], black anodized' → 'Leica SUMMICRON-M 35mm f2 ASPH. v1 black anodized',
     'Leica Mirino 28mm' → 'Leica Viewfinder 28mm'. 대괄호 세대 [I]~[V]는 v1~v5로, 이탈리아어 부속 이름은 영어로"""
@@ -6596,6 +6651,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
+    "One Of Many Cameras (덴마크)": 6,  # 전체 16쪽 (중고 라이카는 200개쯤)
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
 
@@ -6703,6 +6759,7 @@ def crawl_all():
         ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
         ("Photografica (덴마크)", lambda: ce.wrap_full_run("Photografica (덴마크)", crawl_photografica)),
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
+        ("One Of Many Cameras (덴마크)", lambda: ce.wrap_full_run("One Of Many Cameras (덴마크)", crawl_oneofmany)),
         ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),
         ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
     ]
