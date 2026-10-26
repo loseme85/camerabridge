@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   crawl:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04  # ubuntu-latest가 26.04로 바뀌어 Playwright 1.58 크롬 설치 실패 (2026-10-26)
     timeout-minutes: 60
 
     steps:
