@@ -5928,6 +5928,90 @@ def crawl_shphoto():
     return results
 
 
+def _suffren_name(title):
+    """Photo Suffren 제목 다듬기: 'Leica Summicron-M 2/35 Asph. v.I révisée' → 'Leica Summicron-M 35mm f2 Asph. v1',
+    'Leica Elmarit-R 2,8/19 v.II à ROM + parasoleil' → 'Leica Elmarit-R 19mm f2.8 v2 ROM with hood'. 조리개/초점거리 순서를 바꾸고
+    프랑스어 색·부속 이름은 영어로, 'révisé'·'en boîte'·'(26700 clics)' 같은 꼬리는 뗀다"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    name = re.sub(r"^(Leitz|Leica)-", r"\1 ", name)
+    name = re.sub(r"-(R|M)-(?=\d)", r"-\1 ", name)
+    name = re.sub(r"\((?:\d[\d\s.]*)\s*clics?\)|\b(?:entièrement\s+)?révisée?s?\b|\b(?:neuf\s+)?en\s+bo[iî]te(?:\s+complète)?\b|"
+                  r"\bgarantie?\b.*$", "", name, flags=re.I)
+    name = re.sub(r"\b(\d(?:,\d{1,2})?)\s?/\s?(\d{2,3}(?:-\d{2,3})?)(?:\s?mm)?\b",
+                  lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", name)
+    roman = {"I": "1", "II": "2", "III": "3", "IV": "4", "V": "5"}
+    name = re.sub(r"\bv\.?\s?(IV|V|I{1,3})\b", lambda m: "v" + roman[m.group(1)], name)
+    for fr, en in (("laqué noir", "black paint"), ("laquée noire", "black paint"), ("chromée?", "chrome"), ("noire?", "black"),
+                   ("argent(?:ée?)?", "silver"), ("gris métal", "grey"), ("à ROM", "ROM"), ("3 cames", "3-cam"), ("2 cames", "2-cam"),
+                   ("R ONLY|ONLY R", "R-only"), (r"\+\s*parasoleil", "with hood"), ("parasoleil", "hood"),
+                   (r"\+\s*étui(?: cuir)?", "with case"), ("étui(?: cuir)?", "case"), ("lunettes", "eyes"), ("viseur", "Viewfinder"),
+                   ("boîtier", "Body"), ("bouchon", "cap"), ("filtre", "Filter"), ("codée?", "coded"), ("modifiée?", "modified"),
+                   ("avec", "with"), ("pour", "for"), ("plastique", "plastic")):
+        name = re.sub(rf"(?<![\w-]){fr}(?![\w-])", en, name, flags=re.I)
+    name = re.sub(r"\s*\+\s*$|\s*\(\s*\)", "", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-+")
+    if not re.match(r"(?:leica|leitz)\b", name, re.I):
+        name = "Leica " + name
+    return name
+
+
+def crawl_suffren():
+    """Photo Suffren (프랑스) - 파리 라이카 중고 전문점 Shopify products.json 전체(300개쯤, 2쪽)에서 브랜드 칸이 Leica이고
+    설명에 'Etat 8/10' 등급이 있는 중고만 (등급 없는 것은 새 상품·데모라 뺌). 가격은 EUR"""
+    import html as _html
+    import requests
+    from condition_grade import SUFFREN_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.photosuffren.com"
+    print(f"\n  📂 Photo Suffren 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Photo Suffren"):
+        if (p.get("vendor") or "").strip().lower() != "leica":
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or "")))
+        m = re.search(r"[EÉ]tat\s*:?\s*(\d{1,2}(?:[.,]5)?)\s*/\s*10", text, re.I)
+        if not m:
+            continue
+        title = re.sub(r"\s+", " ", (p.get("title") or "")).strip()
+        if any(b2 in title.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        name = _suffren_name(title)
+        try:
+            price = f"€{float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        # 매장 분류(Optique·Boitier·Accessoire)를 먼저 믿는다 ('Macro-Elmar-M … + lunettes'가 바디로, 'Motor M'이 렌즈로 가던 것)
+        cat = {"optique": "Lens", "boitier": "Body", "boîtier": "Body"}.get((p.get("product_type") or "").strip().lower()) \
+            or ("Accessory" if (p.get("product_type") or "").strip() else detect_category(name, price))
+        if re.search(r"viewfinder|filter\b|\bhood\b(?!.*\d+mm)", name, re.I) and not re.search(r"\d{2,3}mm f\d", name):
+            cat = "Accessory"  # 'Viseur Leica 24 mm'은 매장이 Optique로 둠
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": "Photo Suffren (프랑스)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": SUFFREN_PREFIX + m.group(1).replace(",", "."),
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Photo Suffren 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameraelectronic():
     """Camera Electronic (호주, 퍼스) - Shopify JSON. 라이카·핫셀 중고 컬렉션(second-hand-leica-and-hasselblad, 120개쯤 한 쪽)에서
     브랜드 칸이 Leica인 것만
@@ -6550,6 +6634,7 @@ def crawl_all():
         ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
         ("Photografica (덴마크)", lambda: ce.wrap_full_run("Photografica (덴마크)", crawl_photografica)),
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
+        ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

@@ -312,3 +312,13 @@ def test_photografica_condition_grades():
     assert grade_of(site, PHOTOGRAFICA_PREFIX + "fair", "Leica Tele-Elmarit-M 90mm f2.8 (Fat)")[0] == "C"
     assert grade_of(site, PHOTOGRAFICA_PREFIX + "new", "Leica D-LUX 8 black")[0] == "N"
 
+
+
+def test_suffren_etat_out_of_ten():
+    from condition_grade import SUFFREN_PREFIX
+    site = "Photo Suffren (프랑스)"
+    assert grade_of(site, SUFFREN_PREFIX + "10", "Leica Summicron-SL 35mm f2 Asph")[0] == "S"
+    assert grade_of(site, SUFFREN_PREFIX + "9.5", "Leica MP black paint 0,72")[0] == "A"
+    assert grade_of(site, SUFFREN_PREFIX + "9", "Leica Summicron-M 35mm f2 Asph.")[0] == "A"
+    assert grade_of(site, SUFFREN_PREFIX + "8", "Leica Elmarit-M 90mm f2.8")[0] == "B"
+    assert grade_of(site, SUFFREN_PREFIX + "7", "Leitz Elmarit 90mm f2.8 chrome")[0] == "C"
