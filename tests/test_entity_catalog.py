@@ -337,3 +337,12 @@ def test_cl_film_and_digital_by_marker_and_price() -> None:
     for title, price in (("[중고] CL (Silver)", 2_480_000), ("Leica CL black", 2_300_000), ("LEICA CL sn.5352", None)):
         ids = match_entities(rec(title, price))
         assert digital in ids and film not in ids, title
+
+
+def test_macro_elmar_100_bellows_head_is_its_own_model() -> None:
+    head, r_lens = "leica:lens:macro-elmar:100:bellows", "leica:lens:elmarit-r:100"
+    ids = match_entities(_record("Leica Leitz Macro-Elmar 100mm f4, lens head for bellows", mount=None))
+    assert head in ids and r_lens not in ids
+    ids = match_entities(_record("Leica Macro-Elmar 100/4(for bellows)", mount=None))
+    assert head in ids and r_lens not in ids
+    assert r_lens in match_entities(_record("Leica R Macro-Elmar 100mm F4 3CAM", mount="R"))

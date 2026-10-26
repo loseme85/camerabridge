@@ -5928,6 +5928,80 @@ def crawl_shphoto():
     return results
 
 
+def crawl_delfshaven():
+    """Fotohandel Delfshaven (네덜란드) - 로테르담 중고·빈티지점(WooCommerce)의 'leica' 분류 정적 HTML (22개씩 22쪽쯤, 470개).
+    상품 API(/wp-json/wc/store)는 500이라 목록 화면으로. 묶음(grouped) 상품은 같은 목록에 낱개(simple)로도 나와 낱개만 담고,
+    다른 브랜드(Voigtländer Bessa·MOM 등)는 뺌. 가격은 EUR. 등급(별 1~5개)은 상품 화면에만 있어 목록 설명 말투로 (describe_text)"""
+    import html as _html
+    import requests
+    from condition_grade import describe_text
+    results, seen = [], set()
+    base = "https://fotohandeldelfshaven.nl"
+    headers = {"User-Agent": random.choice(USER_AGENTS)}
+    print(f"\n  📂 Fotohandel Delfshaven 크롤링 시작")
+    pages = 1
+    page_num = 1
+    while page_num <= pages and page_num < 60:
+        url = f"{base}/product-categorie/leica/" + (f"page/{page_num}/" if page_num > 1 else "")
+        try:
+            resp = requests.get(url, headers=headers, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Fotohandel Delfshaven {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        html_text = resp.text
+        m_total = re.search(r"of\s+(\d+)\s+results", html_text)
+        items = re.findall(r'<li[^>]*class="([^"]*\bproduct\b[^"]*)"[^>]*>(.*?)</li>', html_text, re.S)
+        if m_total and items:
+            pages = -(-int(m_total.group(1)) // len(items)) if page_num == 1 else pages
+        print(f"    └─ {page_num}/{pages}페이지 {len(items)}개 상품 발견")
+        for cls, body in items:
+            if "product-type-simple" not in cls or "outofstock" in cls:
+                continue
+            m_link = re.search(r'href="(https://fotohandeldelfshaven\.nl/product/[^"]+)"', body)
+            m_name = re.search(r'loop-product__title">([^<]+)', body)
+            if not m_link or not m_name or m_link.group(1) in seen:
+                continue
+            name = re.sub(r"\s+", " ", _html.unescape(m_name.group(1))).strip()
+            if not re.match(r"(?:leica|leitz|ernst leitz)\b", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            seen.add(m_link.group(1))
+            m_price = re.search(r'amount"><bdi>.*?</span>([\d.,]+)</bdi>', body)
+            if m_price:
+                amount = float(m_price.group(1).replace(".", "").replace(",", "."))
+                price = f"€{amount:,.0f}"
+            else:
+                price = "문의요망"
+            name = re.sub(r"\bF/(\d)", r"f\1", name)
+            name = re.sub(r"\b(\d{1,2}(?:[.,]\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1).replace(',', '.')) * 10):d}mm", name)
+            name = re.sub(r"\s*\+\s*(?=(?:metal\s+)?(?:lens\s?)?hood\b)", " with ", name, flags=re.I)  # '+ Hood'가 후드 매물로 빠지지 않게
+            m_img = re.search(r'<img[^>]+src="([^"]+)"', body)
+            img = re.sub(r"-\d+x\d+(\.\w+)$", r"\1", m_img.group(1)) if m_img else ""
+            short = re.search(r'hongo-short-description">(.*?)</div>', body, re.S)
+            cond = describe_text(short.group(1) if short else "") or "정보없음"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Fotohandel Delfshaven (네덜란드)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": m_link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        page_num += 1
+        time.sleep(random.uniform(1.5, 2.5))
+    print(f"  ✅ Fotohandel Delfshaven 완료: {len(results)}개")
+    return results
+
+
 def crawl_cameratweedehands():
     """Camera Tweedehands (네덜란드) - 중고 전문점(Lightspeed)의 브랜드 Leica 목록 JSON('/brands/leica/pageN.html?format=json',
     24개씩 5쪽쯤, 110개쯤). 가게 전체가 중고라 새 상품 거르기는 없음. 가격은 EUR. 등급 표기 없음.
@@ -6711,6 +6785,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
+    "Fotohandel Delfshaven (네덜란드)": 6,  # 목록 22쪽 (1분쯤)
     "One Of Many Cameras (덴마크)": 6,  # 전체 16쪽 (중고 라이카는 200개쯤)
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
@@ -6819,6 +6894,7 @@ def crawl_all():
         ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
         ("Photografica (덴마크)", lambda: ce.wrap_full_run("Photografica (덴마크)", crawl_photografica)),
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
+        ("Fotohandel Delfshaven (네덜란드)", lambda: ce.wrap_full_run("Fotohandel Delfshaven (네덜란드)", crawl_delfshaven)),
         ("Camera Tweedehands (네덜란드)", lambda: ce.wrap_full_run("Camera Tweedehands (네덜란드)", crawl_cameratweedehands)),
         ("One Of Many Cameras (덴마크)", lambda: ce.wrap_full_run("One Of Many Cameras (덴마크)", crawl_oneofmany)),
         ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),

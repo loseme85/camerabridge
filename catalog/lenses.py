@@ -356,6 +356,10 @@ for focal in ("19", "24", "28", "35", "90", "135", "180"):
 lens("leica:lens:macro-elmarit-r:60", "Macro-Elmarit-R 60mm f/2.8", "매크로 엘마리트 R 60", "R", "macro-elmarit", "60", must_not=[r"\bapo\b"])
 lens("leica:lens:apo-macro-elmarit-r:100", "APO-Macro-Elmarit-R 100mm f/2.8", "아포 매크로 엘마리트 R 100", "R", "apo-macro-elmarit", "100")
 lens("leica:lens:elmarit-r:100", "Macro-Elmar-R 100mm f/4 · Elmar-R 100", "매크로 엘마 R 100", "R", "macro-elmar", "100", extra_aliases=["elmar r 100", "elmar-r 100", "엘마 r 100"])
+# 벨로즈(Bellows-R·Visoflex)용 렌즈 헤드: 초점 링 없이 벨로즈에 다는 것이라 R 렌즈보다 싸다 (2026-10-26 Fotohandel Delfshaven 매물 3점)
+lens("leica:lens:macro-elmar:100:bellows", "Macro-Elmar 100mm f/4 lens head for bellows", "매크로 엘마 100 벨로즈용 헤드", None, "macro-elmar", "100",
+     [r"bellows|balgen|벨로즈|lens ?head|objektivkopf"], extra_aliases=["macro elmar 100 bellows", "매크로 엘마 100 벨로즈"])
+TIGHTEN["leica:lens:elmarit-r:100"] = TIGHTEN.get("leica:lens:elmarit-r:100", []) + [r"bellows|balgen|벨로즈|lens ?head|objektivkopf"]
 lens("leica:lens:apo-summicron-r:180", "APO-Summicron-R 180mm f/2", "아포 주미크론 R 180", "R", "summicron", "180", [r"\bAPO\b|apo-"])
 lens("leica:lens:apo-elmarit-r:180", "APO-Elmarit-R 180mm f/2.8", "아포 엘마리트 R 180", "R", "apo-elmarit", "180")
 lens("leica:lens:apo-telyt-r:280", "APO-Telyt-R 280mm f/4 · f/2.8", "아포 텔리트 R 280", "R", "apo-telyt", "280")
