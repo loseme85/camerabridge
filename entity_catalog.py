@@ -22,6 +22,10 @@ PRICE_SPLIT = {
     "leica:lens:summilux-r:50:unspecified": ("leica:lens:summilux-r:50:v1", 2_500_000, re.compile(r"(?!)")),
     # 주미크론 28 ASPH: 세대 표기 없는 매물 중 500만 원 미만은 1세대 (1세대 약 250만~485만, 2세대 약 550만~690만, 3세대 약 650만 원)
     "leica:lens:summicron-m:28:asph:unspecified": ("leica:lens:summicron-m:28:asph:v1", 5_000_000, re.compile(r"(?!)")),
+    # CL: 필름(1973) 표기 없는 매물 중 170만 원 미만은 필름 CL (필름 약 60만~145만, 디지털 2017 약 190만~300만 원).
+    # 디지털 표기(TL 렌즈·킷·19301 번호 등)가 있으면 가격 무시. 가격이 없으면('문의요망') 디지털 그대로
+    "leica:body:cl-digital:standard": ("leica:body:cl-film", 1_700_000,
+                                       re.compile(r"\bTL\b|-TL\b|1930\d|kit|킷|digital|디지털|2017|18-5[06]|sigma|urban", re.I)),
 }
 
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)

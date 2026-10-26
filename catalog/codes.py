@@ -60,6 +60,7 @@ CODES: dict[str, list[str]] = {
     L + "summicron-m:35": ["11309"],  # 2·3세대가 같은 번호
     L + "summicron-m:35:v4": ["11310", "11311"],
     L + "summicron-m:35:asph": ["11879", "11882", "11673", "11674", "11708", "11709"],
+    L + "summicron:35:ltm-asph": ["11608"],  # 스크류(L) ASPH 한정판
     L + "summicron-m:35:asph-black-paint": ["11689"],
     L + "summicron-m:35:millennium": ["11611"],
     L + "summicron-m:35:titan": ["11609"],

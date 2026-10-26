@@ -314,3 +314,26 @@ def test_summicron_50_first_second_not_current_generation() -> None:
     assert "leica:lens:summicron:50:rigid-late" in match_entities(_record("Leica Summicron 50mm f2 Rigid 2nd"))
     assert gen12 not in match_entities(_record("Leica Summicron 50mm f2 Rigid 2nd"))
     assert cur in match_entities(_record("Leica Summicron-M 50mm f2 4th Black"))
+
+
+def test_cl_film_and_digital_by_marker_and_price() -> None:
+    film, digital, f50 = "leica:body:cl-film", "leica:body:cl-digital:standard", "leica:body:cl-film-50-jahre"
+
+    def rec(title, price=None, currency="KRW", category="Lens"):
+        r = _record(title, category, None)
+        r["final_output"].update({"parsed_price_numeric": price, "currency": currency})
+        return r
+
+    # 표기가 있으면 표기대로
+    assert film in match_entities(rec("Leitz MINOLTA CL Body", 121_000, "JPY", "Body"))
+    assert film in match_entities(rec("Leica CL film Body", 7_995, "DKK", "Body"))
+    assert match_entities(rec("Leica CL 50주년기념 serviced.노출계정상", 1_280_000))[:1] == [f50]
+    assert digital not in match_entities(rec("Leica CL 50주년기념 serviced.노출계정상", 1_280_000))
+    assert digital in match_entities(rec("Leica 19301 CL black Body", 1_800, "EUR", "Body"))
+    # 표기 없는 CL: 170만 원 미만은 필름, 이상이거나 가격 없으면 디지털
+    for title, price, cur in (("Leica CL Body", 108_600, "JPY"), ("Leica CL (10700)", 624, "EUR"), ("LEICA CL sn.1409", 1_000_000, "KRW")):
+        ids = match_entities(rec(title, price, cur))
+        assert film in ids and digital not in ids, title
+    for title, price in (("[중고] CL (Silver)", 2_480_000), ("Leica CL black", 2_300_000), ("LEICA CL sn.5352", None)):
+        ids = match_entities(rec(title, price))
+        assert digital in ids and film not in ids, title
