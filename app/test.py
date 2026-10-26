@@ -5928,6 +5928,66 @@ def crawl_shphoto():
     return results
 
 
+def crawl_cameratweedehands():
+    """Camera Tweedehands (네덜란드) - 중고 전문점(Lightspeed)의 브랜드 Leica 목록 JSON('/brands/leica/pageN.html?format=json',
+    24개씩 5쪽쯤, 110개쯤). 가게 전체가 중고라 새 상품 거르기는 없음. 가격은 EUR. 등급 표기 없음.
+    robots.txt의 Crawl-delay 2초를 지킨다"""
+    import requests
+    results, seen = [], set()
+    base = "https://www.camera-tweedehands.nl"
+    headers = {"User-Agent": random.choice(USER_AGENTS), "Accept": "application/json"}
+    print(f"\n  📂 Camera Tweedehands 크롤링 시작")
+    pages = 1
+    page_num = 1
+    while page_num <= pages and page_num < 40:
+        url = f"{base}/brands/leica/" + (f"page{page_num}.html" if page_num > 1 else "") + "?format=json"
+        try:
+            resp = requests.get(url, headers=headers, timeout=30)
+            resp.raise_for_status()
+            coll = resp.json().get("collection") or {}
+        except Exception as e:
+            raise RuntimeError(f"Camera Tweedehands {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        pages = int(coll.get("pages") or 1)
+        shop_id = (resp.json().get("shop") or {}).get("id")
+        products = coll.get("products") or {}
+        products = list(products.values()) if isinstance(products, dict) else products
+        print(f"    └─ {page_num}/{pages}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            if p.get("id") in seen or not p.get("available"):
+                continue
+            seen.add(p.get("id"))
+            name = re.sub(r"\s+", " ", p.get("title") or "").strip()
+            name = re.sub(r"\[(\d{5})\]", r"(\1)", name)
+            name = re.sub(r"\bf/(\d)", r"f\1", name)
+            if not re.match(r"(?:leica|leitz)\b", name, re.I):
+                name = "Leica " + name
+            amount = (p.get("price") or {}).get("price_incl") or (p.get("price") or {}).get("price")
+            price = f"€{float(amount):,.0f}" if amount else "문의요망"
+            img = f"https://cdn.webshopapp.com/shops/{shop_id}/files/{p['image']}/600x600x2/image.jpg" if p.get("image") and shop_id else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Camera Tweedehands (네덜란드)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": f"{base}/{p.get('url')}",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        page_num += 1
+        time.sleep(random.uniform(2.0, 3.0))
+    print(f"  ✅ Camera Tweedehands 완료: {len(results)}개")
+    return results
+
+
 def crawl_oneofmany():
     """One Of Many Cameras (덴마크) - 코펜하겐 중고·렌탈점 Shopify products.json 전체(3,900개쯤, 16쪽)에서 브랜드 칸이 Leica이고
     상품 종류가 'Used …'·'Brugt'(중고)인 것만 (Rental·New는 뺌). 가격은 DKK. 등급 표기는 없고 설명 말투('Mint condition')"""
@@ -6759,6 +6819,7 @@ def crawl_all():
         ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
         ("Photografica (덴마크)", lambda: ce.wrap_full_run("Photografica (덴마크)", crawl_photografica)),
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
+        ("Camera Tweedehands (네덜란드)", lambda: ce.wrap_full_run("Camera Tweedehands (네덜란드)", crawl_cameratweedehands)),
         ("One Of Many Cameras (덴마크)", lambda: ce.wrap_full_run("One Of Many Cameras (덴마크)", crawl_oneofmany)),
         ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),
         ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
