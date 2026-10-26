@@ -120,6 +120,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ROTERPUNKT.get(cond[len(ROTERPUNKT_PREFIX):].strip().upper()), "label"
     if cond.startswith(PHOTOGRAFICA_PREFIX):
         return _PHOTOGRAFICA.get(cond[len(PHOTOGRAFICA_PREFIX):].strip().lower()), "text"
+    if cond.startswith(SUFFREN_PREFIX):
+        return _SUFFREN.get(cond[len(SUFFREN_PREFIX):].strip()), "label"
     if cond.startswith(RANGEFINDER_PREFIX):
         value = cond[len(RANGEFINDER_PREFIX):].strip()
         if value.upper() == "NEW":
@@ -468,3 +470,10 @@ PHOTOGRAFICA_PREFIX = "Photografica: "
 # 이 대응 기준 정확 일치 7/29 · 한 등급 이내 26/29 (사진이 평균 0.86등급 후함 — 기존 0.8과 비슷).
 _PHOTOGRAFICA = {"new": "N", "mint": "S", "near mint": "A", "excellent": "A", "very good": "B", "good": "B", "decent": "C",
                  "fair": "C"}
+
+
+# 프랑스 Photo Suffren: 설명 끝 'Etat 8/10' (10점 만점, 9,5도 씀). 등급 없는 것은 새 상품이라 수집하지 않음
+SUFFREN_PREFIX = "Suffren: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-26): 10 S 3·A 1 · 9.5 S 1 · 9 S 2·A 2·B 1 · 8 A 6·B 3 · 7 A 2·B 2·C 1.
+# 아래 대응 기준 정확 일치 9/24 · 한 등급 이내 22/24 (사진이 평균 0.54등급 후함 — 기존 0.8보다 조금 덜해 그대로).
+_SUFFREN = {"10": "S", "9.5": "A", "9": "A", "8.5": "B", "8": "B", "7.5": "C", "7": "C", "6.5": "D", "6": "D", "5": "D"}
