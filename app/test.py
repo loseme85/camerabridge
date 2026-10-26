@@ -5928,6 +5928,75 @@ def crawl_shphoto():
     return results
 
 
+def _cavour_name(title):
+    """Foto Ottica Cavour 제목 다듬기: 'Leica SUMMICRON-M 35mm f/2 ASPH. [I], black anodized' → 'Leica SUMMICRON-M 35mm f2 ASPH. v1 black anodized',
+    'Leica Mirino 28mm' → 'Leica Viewfinder 28mm'. 대괄호 세대 [I]~[V]는 v1~v5로, 이탈리아어 부속 이름은 영어로"""
+    import html as _html
+    name = re.sub(r"\s+", " ", _html.unescape(title)).strip()
+    roman = {"I": "1", "II": "2", "III": "3", "IV": "4", "V": "5", "VI": "6"}
+    name = re.sub(r"\[(VI|IV|V|I{1,3})\]", lambda m: "v" + roman[m.group(1)], name)
+    name = re.sub(r"\bf/\s?(\d)", r"f\1", name)
+    for it, en in (("Mirino elettronico", "Electronic Viewfinder"), ("Mirino", "Viewfinder"), ("Custodia in pelle", "Leather Case"),
+                   ("Custodia", "Case"), ("Borsa", "Bag"), ("Cinghia", "Strap"), ("Paraluce", "Lens Hood"), ("Filtro", "Filter"),
+                   ("Impugnatura", "Handgrip"), ("Batteria", "Battery"), ("Caricabatterie", "Charger"), ("Tappo", "Cap"),
+                   ("Anello adattatore", "Adapter"), ("Adattatore", "Adapter"), ("nero", "black"), ("cromato", "chrome"),
+                   ("argento", "silver"), ("per", "for")):
+        name = re.sub(rf"(?<![\w-]){it}(?![\w-])", en, name, flags=re.I)
+    name = re.sub(r"\s*,\s*", " ", name)
+    name = re.sub(r"\s+", " ", name).strip(" ,-")
+    if not re.match(r"(?:leica|leitz)\b", name, re.I):
+        name = "Leica " + name
+    return name
+
+
+def crawl_cavour():
+    """Foto Ottica Cavour (이탈리아) - 밀라노 라이카 중고점 Shopify products.json 전체(1,200개쯤, 5쪽)에서 브랜드 칸이 Leica Camera AG·
+    Ernst Leitz Wetzlar·Leica Group이고 'Usato'(중고) 태그가 있는 것만 ('Nuovo' 새 상품은 뺌). 가격은 EUR.
+    등급 표기가 없어 컨디션은 정보없음"""
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.fotootticacavour.com"
+    print(f"\n  📂 Foto Ottica Cavour 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Foto Ottica Cavour"):
+        if not re.match(r"(?:leica|ernst leitz)", (p.get("vendor") or "").strip(), re.I) or "Usato" not in (p.get("tags") or []):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        title = re.sub(r"\s+", " ", (p.get("title") or "")).strip()
+        if any(b2 in title.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        name = _cavour_name(title)
+        try:
+            price = f"€{float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        ptype = (p.get("product_type") or "").strip().lower()
+        cat = "Lens" if ptype == "obiettivi" else "Body" if ptype.startswith("fotocamere") else "Accessory" if ptype else detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "site": "Foto Ottica Cavour (이탈리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Foto Ottica Cavour 완료: {len(results)}개")
+    return results
+
+
 def _suffren_name(title):
     """Photo Suffren 제목 다듬기: 'Leica Summicron-M 2/35 Asph. v.I révisée' → 'Leica Summicron-M 35mm f2 Asph. v1',
     'Leica Elmarit-R 2,8/19 v.II à ROM + parasoleil' → 'Leica Elmarit-R 19mm f2.8 v2 ROM with hood'. 조리개/초점거리 순서를 바꾸고
@@ -6634,6 +6703,7 @@ def crawl_all():
         ("Roter Punkt (독일)", lambda: ce.wrap_full_run("Roter Punkt (독일)", crawl_roterpunkt)),
         ("Photografica (덴마크)", lambda: ce.wrap_full_run("Photografica (덴마크)", crawl_photografica)),
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
+        ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),
         ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
