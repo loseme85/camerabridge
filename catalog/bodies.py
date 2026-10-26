@@ -108,7 +108,7 @@ fam("leica:body:m5", "Leica M5", "라이카 M5", "M", [r"\bM ?5\b"], [], ["엠5"
     v("50-jahre", "Leica M5 50 Jahre", "M5 50주년", r"50 ?jahre|50주년|50th anniv", ["m5 50 jahre", "m5 50주년"]),
 ])
 fam("leica:body:cl-film", "Leica CL (1973, film)", "라이카 CL (필름)", "M",
-    [r"\bCL\b", r"(leitz|minolta|50 ?jahre|summicron-?c|40\s?mm|film|필름|1973)"], [r"\bTL\b|\bSL\b", r"50 ?jahre|50주년"], ["leitz cl", "minolta cl", "cl film", "cl 필름"])
+    [r"\bCL\b", r"(leitz|minolta|50 ?jahre|summicron-?c|rokkor|40\s?mm|film|필름|1973)"], [r"\bTL\b|\bSL\b", r"50 ?jahre|50주년"], ["leitz cl", "minolta cl", "cl film", "cl 필름"])
 fam("leica:body:cl-film-50-jahre", "Leica CL 50 Jahre (1975)", "라이카 CL 50주년", "M", [r"\bCL\b", r"50 ?jahre|50주년"], [r"\bTL\b|\bSL\b"], ["cl 50 jahre", "cl 50주년"])
 # M6: 클래식·TTL·리이슈 + 기념판 (모두 M6 부모의 자식)
 M6_MARKERS = [r"(?<!non )(?<!non-)(?<!non)TTL", r"re-?issue|리이슈|복각|2022", r"M6 ?J\b", r"titan|티탄", r"platin|플래티넘", r"LHSA", r"royal|로얄",
@@ -272,7 +272,7 @@ fam("leica:body:t701", "Leica T (Typ 701)", "라이카 T", "TL", [r"\bT\b ?\(?ty
 fam("leica:body:tl", "Leica TL", "라이카 TL", "TL", [r"\bTL\b(?! ?2)"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\d{2}-\d{2}", r"elmar|summi|vario|apo"], [])
 fam("leica:body:tl2", "Leica TL2", "라이카 TL2", "TL", [r"\bTL ?2\b"], [], [])
 fam("leica:body:cl-digital", "Leica CL (2017)", "라이카 CL (디지털)", "TL", [r"\bCL\b"],
-    [r"(leitz|minolta|50 ?jahre|summicron-?c|40\s?mm|film|필름|1973)", r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)"], ["cl 2017", "cl digital", "cl 디지털"], [
+    [r"(leitz|minolta|50 ?jahre|50주년|summicron-?c|rokkor|40\s?mm|film|필름|1973)", r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)"], ["cl 2017", "cl digital", "cl 디지털"], [
     v("paul-smith", "Leica CL Paul Smith", "CL 폴 스미스", r"paul ?smith|폴 ?스미스", ["cl paul smith"]),
     v("bauhaus", "Leica CL '100 Jahre Bauhaus'", "CL 바우하우스", r"bauhaus|바우하우스", ["cl bauhaus"]),
 ])
