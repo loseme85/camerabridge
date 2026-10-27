@@ -1,4 +1,5 @@
 playwright==1.58.0
 requests==2.32.5
 beautifulsoup4==4.14.3
-vercel>=0.5.0
+# vercel 0.12부터 blob.put·get 등 함수 이름이 바뀌어 사용 기록·의견·딜러 계정 저장이 깨짐
+vercel>=0.5.0,<0.12

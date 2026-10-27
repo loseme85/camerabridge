@@ -346,3 +346,24 @@ def test_macro_elmar_100_bellows_head_is_its_own_model() -> None:
     ids = match_entities(_record("Leica Macro-Elmar 100/4(for bellows)", mount=None))
     assert head in ids and r_lens not in ids
     assert r_lens in match_entities(_record("Leica R Macro-Elmar 100mm F4 3CAM", mount="R"))
+
+
+def test_elmar_50_f28_old_and_elmar_m_split() -> None:
+    old, new, unspec = (f"leica:lens:elmar-m:50:f2.8:{k}" for k in ("v1", "elmar-m", "unspecified"))
+    for title in ("Leitz 5cm f2.8 Elmar, screw mount", "Leitz 50mm f2.8 Elmar, M", "LEICA 50mm F2.8 ELMAR sn.1625",
+                  "LEITZ Leica Elmar M 50mm/F2.8 Ver.I Silver Lens Yr.1959 Germany", "Leica Elmar-M 50mm F2.8 Old Collapsible"):
+        assert old in match_entities(_record(title, mount=None)), title
+    for title in ("Leica 50mm F2.8 M Black (11831)", "LEICA 50mm F2.8 ELMAR-M sn.3911", "ELMAR-M 50 mm f/2.8 (1994-2007)",
+                  "LEICA M-System MP + 50mmF2.8 ELMAR-M sn.2939"):  # sn.2939는 바디 번호
+        assert new in match_entities(_record(title, mount=None)), title
+    ids = match_entities(_record("Leica 50mm F2.8 Elmar", mount=None))
+    assert unspec in ids and "leica:lens:elmar-m:50:f2.8" in ids
+    assert not any("elmar-m:50" in i for i in match_entities(_record("Leitz 50mm f3.5 Elmar", mount=None)))
+
+
+def test_accessories_for_a_lens_are_not_the_lens() -> None:
+    for title in ("Leitz 'VTOOX' aperture setting ring for 50mm f2.8 Elmar", "Leitz 14071 short focusing mount for 135mm f4 Elmar",
+                  "Leica 12549 Elmar-M 50mm f2.8용)", "LEICA Visoflex EVF2 - Electronic Viewfinder for Leica M (Typ 240)"):
+        assert match_entities(_record(title, mount=None)) == [], title
+    # 렌즈에 부속품이 딸린 매물은 그대로 렌즈
+    assert "leica:lens:elmar:65" in match_entities(_record("Leitz 65mm f3.5 Elmar + 16464 universal focusing mount", mount=None))
