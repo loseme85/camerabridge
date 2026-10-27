@@ -1443,85 +1443,6 @@
    }
   },
   {
-   "id": "leica:lens:elmar-m:50:f2.8",
-   "name": "Elmar-M 50mm f/2.8",
-   "name_ko": "엘마 50 f/2.8",
-   "kind": "Lens",
-   "mount": null,
-   "parent": null,
-   "children": [],
-   "aliases": [
-    "50 elmar 2.8",
-    "elmar 50 2.8",
-    "elmar-m 50 2.8",
-    "엘마 50 2.8"
-   ],
-   "codes": [
-    "11831",
-    "11823",
-    "11112",
-    "11612",
-    "11012",
-    "11512",
-    "elmoo",
-    "elmom"
-   ],
-   "match": {
-    "category": "Lens",
-    "mount": null,
-    "title_must": [
-     "elmar\\b|elmar-m",
-     "(?<![\\d./])50(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
-     "2\\.8"
-    ],
-    "title_must_not": [
-     "elmarit",
-     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
-     "후드",
-     "\\bcap\\b",
-     "캡",
-     "^(?!.*\\b(with|w/)\\s.*case).*case",
-     "케이스",
-     "strap",
-     "스트랩",
-     "holster",
-     "홀스터",
-     "grip",
-     "그립",
-     "battery",
-     "배터리",
-     "charger",
-     "충전기",
-     "protector",
-     "cover\\b",
-     "부속품",
-     "adapter",
-     "어댑터",
-     "plate",
-     "플레이트",
-     "thumb",
-     "썸",
-     "manual",
-     "설명서",
-     "box only",
-     "박스만",
-     "leeworks",
-     "light ?lens ?lab",
-     "\\bLLL\\b",
-     "7 ?artisans",
-     "ttartisan",
-     "voigtl",
-     "zeiss",
-     "sigma",
-     "ms-?optics",
-     "kipon",
-     "호환",
-     "\\bcopy\\b",
-     "카피"
-    ]
-   }
-  },
-  {
    "id": "leica:lens:summicron-m:90",
    "name": "Summicron-M 90mm f/2",
    "name_ko": "주미크론 90",
@@ -24689,6 +24610,197 @@
    }
   },
   {
+   "id": "leica:lens:elmar-m:50:f2.8:v1",
+   "name": "Elmar 50mm f/2.8 (1957, screw/M)",
+   "name_ko": "엘마 50 f/2.8 옛 모델 (1957)",
+   "kind": "Lens",
+   "mount": null,
+   "parent": "leica:lens:elmar-m:50:f2.8",
+   "children": [],
+   "aliases": [
+    "5cm elmar 2.8",
+    "elmar 50 2.8 ltm",
+    "elmar 50 2.8 old",
+    "엘마 50 2.8 스크류",
+    "엘마 50 2.8 옛"
+   ],
+   "codes": [
+    "11112",
+    "11512",
+    "elmoo",
+    "elmom"
+   ],
+   "match": {
+    "category": "Lens",
+    "mount": null,
+    "title_must": [
+     "\\belmar\\b(?!it)|elmar-[mc]\\b",
+     "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "2\\.8",
+     "screw|스크류|\\bLTM\\b|\\bL ?39\\b|\\bM39\\b|elmar l\\b|\\bL ?elmar|\\bL ?5 ?cm|5 ?cm|leitz|라이츠|\\bold\\b|old ?型|旧|ver\\.?\\s?i\\b(?!i)|\\bv\\.?1\\b|1세대|最短\\s?1\\s?m|\\b1 ?m\\b|^(?!.*elmar-m).*sn\\.?\\s?[12]\\d{3}\\b|\\b19[5-7]\\d\\b|\\bELMO[OM]\\b|1[15]112|11512"
+    ],
+    "title_must_not": [
+     "elmarit",
+     "3\\.5",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "vario.?elmar|tri.?elmar|super.?elmar|tele.?elmar|macro.?elmar|apo.?elmar|elmar.?c\\b",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:elmar-m:50:f2.8:elmar-m",
+   "name": "Elmar-M 50mm f/2.8 (1994)",
+   "name_ko": "엘마-M 50 f/2.8 (1994)",
+   "kind": "Lens",
+   "mount": null,
+   "parent": "leica:lens:elmar-m:50:f2.8",
+   "children": [],
+   "aliases": [
+    "elmar-m 50 2.8 1994",
+    "엘마 m 50 2.8",
+    "엘마-m 50 2.8"
+   ],
+   "codes": [
+    "11831",
+    "11823"
+   ],
+   "match": {
+    "category": "Lens",
+    "mount": null,
+    "title_must": [
+     "\\belmar\\b(?!it)|elmar-[mc]\\b",
+     "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "2\\.8",
+     "elmar-m|11831|11823|6 ?bit|最短\\s?0\\.7|0\\.7 ?m|\\bE39\\b|modern|ver\\.?\\s?ii\\b|\\bv\\.?2\\b|\\b(199\\d|200\\d)\\b|sn\\.?\\s?[34]\\d{3}\\b|black|블랙|ブラック"
+    ],
+    "title_must_not": [
+     "elmarit",
+     "3\\.5",
+     "screw|스크류|\\bLTM\\b|\\bL ?39\\b|\\bM39\\b|elmar l\\b|\\bL ?elmar|\\bL ?5 ?cm|5 ?cm|leitz|라이츠|\\bold\\b|old ?型|旧|ver\\.?\\s?i\\b(?!i)|\\bv\\.?1\\b|1세대|最短\\s?1\\s?m|\\b1 ?m\\b|^(?!.*elmar-m).*sn\\.?\\s?[12]\\d{3}\\b|\\b19[5-7]\\d\\b|\\bELMO[OM]\\b|1[15]112|11512",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "vario.?elmar|tri.?elmar|super.?elmar|tele.?elmar|macro.?elmar|apo.?elmar|elmar.?c\\b",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:elmar-m:50:f2.8:unspecified",
+   "name": "Elmar 50mm f/2.8 (generation not stated)",
+   "name_ko": "엘마 50 f/2.8 (세대 미표기)",
+   "kind": "Lens",
+   "mount": null,
+   "parent": "leica:lens:elmar-m:50:f2.8",
+   "children": [],
+   "aliases": [
+    "elmar 50 2.8 세대 미표기",
+    "엘마 50 2.8 세대 미표기"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Lens",
+    "mount": null,
+    "title_must": [
+     "\\belmar\\b(?!it)|elmar-[mc]\\b",
+     "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "2\\.8"
+    ],
+    "title_must_not": [
+     "elmarit",
+     "3\\.5",
+     "screw|스크류|\\bLTM\\b|\\bL ?39\\b|\\bM39\\b|elmar l\\b|\\bL ?elmar|\\bL ?5 ?cm|5 ?cm|leitz|라이츠|\\bold\\b|old ?型|旧|ver\\.?\\s?i\\b(?!i)|\\bv\\.?1\\b|1세대|最短\\s?1\\s?m|\\b1 ?m\\b|^(?!.*elmar-m).*sn\\.?\\s?[12]\\d{3}\\b|\\b19[5-7]\\d\\b|\\bELMO[OM]\\b|1[15]112|11512",
+     "elmar-m|11831|11823|6 ?bit|最短\\s?0\\.7|0\\.7 ?m|\\bE39\\b|modern|ver\\.?\\s?ii\\b|\\bv\\.?2\\b|\\b(199\\d|200\\d)\\b|sn\\.?\\s?[34]\\d{3}\\b|black|블랙|ブラック",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "vario.?elmar|tri.?elmar|super.?elmar|tele.?elmar|macro.?elmar|apo.?elmar|elmar.?c\\b",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
    "id": "leica:lens:elmar:35",
    "name": "Elmar 35mm f/3.5",
    "name_ko": "엘마 35",
@@ -34834,6 +34946,30 @@
    "codes": [
     "11010",
     "11610"
+   ],
+   "match": null
+  },
+  {
+   "id": "leica:lens:elmar-m:50:f2.8",
+   "name": "Elmar 50mm f/2.8 (all)",
+   "name_ko": "엘마 50 f/2.8 (전체)",
+   "kind": "Lens",
+   "mount": null,
+   "parent": null,
+   "children": [
+    "leica:lens:elmar-m:50:f2.8:v1",
+    "leica:lens:elmar-m:50:f2.8:elmar-m",
+    "leica:lens:elmar-m:50:f2.8:unspecified"
+   ],
+   "aliases": [
+    "50 elmar 2.8",
+    "elmar 50 2.8",
+    "elmar-m 50 2.8",
+    "엘마 50 2.8"
+   ],
+   "codes": [
+    "11612",
+    "11012"
    ],
    "match": null
   },

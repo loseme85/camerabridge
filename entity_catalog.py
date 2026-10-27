@@ -179,11 +179,21 @@ def _code_hits(title: str, final: dict, catalog: dict) -> list[str]:
     return hits
 
 
+# 다른 물건에 끼우는 부속품 ("aperture setting ring for 50mm f2.8 Elmar", "focusing mount for 135mm f4 Elmar", "Elmar-M 50mm f2.8용")
+# → 렌즈·바디 시세에 섞이지 않게 어느 모델에도 연결하지 않음 (영국 딜러 화면에서 £23·£29 부속품이 렌즈 최저가로 보임, 2026-10-27)
+ACCESSORY_FOR = re.compile(
+    r"\b(rings?|mounts?|hoods?|shades?|caps?|adapters?|finders?|viewfinders?|filters?|cases?|collars?|bayonets?|tubes?)\s+for\s+(?:the\s+|a\s+)?"
+    r"(?:\d|[a-z-]*(?:elmar|summ|noct|lux|cron|angulon|telyt|hektor|leica|leitz))"
+    r"|(?:mm|f ?/?\d(?:\.\d+)?)\s*용(?![가-힣])", re.I)
+
+
 def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> list[str]:
     """매물이 해당하는 엔티티 ID들 (자식 + 그 부모)."""
     catalog = catalog or load_catalog()
     final = record.get("final_output") or {}
     title = record_title(record)
+    if ACCESSORY_FOR.search(title):
+        return []
     hits: list[str] = []
     for entity_id, (rule, must, must_not) in catalog["compiled"].items():
         if not _category_ok(rule, final, title) or not _mount_ok(rule, final, title):

@@ -54,7 +54,18 @@ def _grade_factors(stats: dict, entities: dict) -> dict:
         for grade, rs in ratios.items():
             if len(rs) >= 5:  # 모델 5개 이상에서 나온 비율만 믿음
                 factors[grade] = round(min(1.6, max(0.4, statistics.median(rs))), 3)
-        out[kind] = factors
+        out[kind] = _ordered(factors)
+    return out
+
+
+def _ordered(factors: dict) -> dict:
+    """등급이 낮은데 비율이 높으면 안 됨: N ≥ S ≥ A ≥ B(1) ≥ C ≥ D.
+    (2026-10-27 수집분 바디에서 S 1.6 > N 1.26. 그대로 두면 S 기준가가 신품보다 비싸짐)"""
+    out = dict(factors)
+    out["S"] = min(out["S"], out["N"])
+    out["A"] = min(max(out["A"], out["B"]), out["S"])
+    out["C"] = min(out["C"], out["B"])
+    out["D"] = min(out["D"], out["C"])
     return out
 
 

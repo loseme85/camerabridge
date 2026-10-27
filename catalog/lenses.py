@@ -288,6 +288,23 @@ group("leica:lens:elmar:50:f3.5", "Elmar 50mm f/3.5", "엘마 50 f/3.5", None, "
     c("red-scale", "Elmar 50mm f/3.5 Red Scale", "엘마 50 레드스케일", r"red|레드", [], ["red scale"]),
     c("m-mount", "Elmar 50mm f/3.5 (M mount)", "엘마 50 f/3.5 M", r"\bM ?50|elmar-?m|\bM\b ?마운트", [], ["m"]),
 ], extra_must=[r"3\.5"], must_not=[r"2\.8", r"\b65\b"])
+# Elmar 50 f/2.8: 1957년 옛 모델(스크류·M, 라이츠)과 1994년 Elmar-M이 한 모델에 섞여 시세가 흐려짐 (영국 딜러 화면에서 발견, 2026-10-27)
+# 장씨카메라 'sn.1~2xxx'는 제조번호 1~2백만대(1957~70년대), 'sn.3~4xxx'는 3~4백만대(1994~).
+# 'MP + 50mmF2.8 ELMAR-M sn.2939'처럼 바디 번호일 수 있어 Elmar-M 표기가 있으면 번호는 안 봄
+EL28_V1 = (r"screw|스크류|\bLTM\b|\bL ?39\b|\bM39\b|elmar l\b|\bL ?elmar|\bL ?5 ?cm|5 ?cm|leitz|라이츠|\bold\b|old ?型|旧|"
+           r"ver\.?\s?i\b(?!i)|\bv\.?1\b|1세대|最短\s?1\s?m|\b1 ?m\b|^(?!.*elmar-m).*sn\.?\s?[12]\d{3}\b|\b19[5-7]\d\b|\bELMO[OM]\b|1[15]112|11512")
+EL28_V2 = (r"elmar-m|11831|11823|6 ?bit|最短\s?0\.7|0\.7 ?m|\bE39\b|modern|ver\.?\s?ii\b|\bv\.?2\b|\b(199\d|200\d)\b|"
+           r"sn\.?\s?[34]\d{3}\b|black|블랙|ブラック")
+group("leica:lens:elmar-m:50:f2.8", "Elmar 50mm f/2.8", "엘마 50 f/2.8", None, "elmar", "50", [
+    c("v1", "Elmar 50mm f/2.8 (1957, screw/M)", "엘마 50 f/2.8 옛 모델 (1957)", EL28_V1, [], ["old", "1957", "ltm", "스크류"]),
+    c("elmar-m", "Elmar-M 50mm f/2.8 (1994)", "엘마-M 50 f/2.8 (1994)", EL28_V2, [EL28_V1], ["elmar-m", "1994"]),
+], extra_must=[r"2\.8"], must_not=[r"elmarit", r"3\.5"])
+# 'elmar 50'·'엘마 50'은 Elmar 50 f/3.5 쪽 별칭이라 2.8이 들어간 것만
+_EL28 = "leica:lens:elmar-m:50:f2.8"
+PARENTS[_EL28] = PARENTS[_EL28][:4] + (["elmar-m 50 2.8", "elmar 50 2.8", "50 elmar 2.8", "엘마 50 2.8"],) + PARENTS[_EL28][5:]
+ALIASES[_EL28 + ":unspecified"] = ["elmar 50 2.8 세대 미표기", "엘마 50 2.8 세대 미표기"]
+ALIASES[_EL28 + ":v1"] = ["elmar 50 2.8 old", "elmar 50 2.8 ltm", "엘마 50 2.8 옛", "엘마 50 2.8 스크류", "5cm elmar 2.8"]
+ALIASES[_EL28 + ":elmar-m"] = ["elmar-m 50 2.8 1994", "엘마-m 50 2.8", "엘마 m 50 2.8"]
 lens("leica:lens:elmar:35", "Elmar 35mm f/3.5", "엘마 35", None, "elmar", "35", must_not=[r"\bAPO\b"])
 group("leica:lens:elmar:90", "Elmar 90mm f/4", "엘마 90", None, "elmar", "90", [
     c("collapsible", "Elmar 90mm f/4 Collapsible", "엘마 90 침동", r"collaps|침동", [], ["collapsible", "침동"]),

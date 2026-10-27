@@ -134,3 +134,10 @@ def test_owner_create_shows_password_once(blob):
     assert "ffordes" in page and "pbkdf2" not in page
     _, error = owner_dealers.handle_post({"do": ["reset"], "id": ["nobody"]}, sites)
     assert error == owner_dealers.ERRORS["missing"]
+
+
+def test_grade_factors_keep_grade_order():
+    from scripts.build_entity_index import _ordered
+    got = _ordered({"N": 1.26, "S": 1.6, "A": 0.98, "B": 1.0, "C": 1.02, "D": 1.1})
+    assert got["S"] == 1.26 and got["A"] == 1.0 and got["C"] == 1.0 and got["D"] == 1.0
+    assert got["N"] >= got["S"] >= got["A"] >= got["B"] >= got["C"] >= got["D"]
