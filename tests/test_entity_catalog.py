@@ -363,7 +363,9 @@ def test_elmar_50_f28_old_and_elmar_m_split() -> None:
 
 def test_accessories_for_a_lens_are_not_the_lens() -> None:
     for title in ("Leitz 'VTOOX' aperture setting ring for 50mm f2.8 Elmar", "Leitz 14071 short focusing mount for 135mm f4 Elmar",
-                  "Leica 12549 Elmar-M 50mm f2.8용)", "LEICA Visoflex EVF2 - Electronic Viewfinder for Leica M (Typ 240)"):
+                  "Leica 12549 Elmar-M 50mm f2.8용)", "LEICA Visoflex EVF2 - Electronic Viewfinder for Leica M (Typ 240)",
+                  "Leica (14021) SVOOP Film Take-Up Spool for Barnack LTM I II IIIc IIIf",
+                  "Leitz HEBOO Slow Speed Shutter Release for Leica Standard and II"):
         assert match_entities(_record(title, mount=None)) == [], title
     # 렌즈에 부속품이 딸린 매물은 그대로 렌즈
     assert "leica:lens:elmar:65" in match_entities(_record("Leitz 65mm f3.5 Elmar + 16464 universal focusing mount", mount=None))
