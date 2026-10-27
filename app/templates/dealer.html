@@ -202,7 +202,7 @@ ko: {
   th_item: "매물", th_mine: "내 가격", th_ref: "기준가", th_pos: "위치", th_low: "{c} 최저", th_age: "올린 지", th_model: "모델", th_abroad_item: "해외 매물", th_local: "현지가", th_landed: "도착 총액", th_diff: "차이", th_time: "시각", th_change: "변동", th_price: "가격", th_sold_n: "판매완료", th_here: "{c} 판매 중", th_abroad: "해외 판매 중", th_turn: "팔리기까지", th_bref: "B 기준가",
   pos_high: "비쌈", pos_low: "쌈", pos_ok: "적정", pos_none: "시세 없음",
   basis_sold: "{c} 판매완료 {n}건", basis_ask: "{c} 판매 중 {n}건", basis_all: "전체 나라 판매완료 {n}건", days: "{n}일",
-  basis_new_sold: "{c} 신품 판매완료 {n}건", basis_new_ask: "{c} 신품 판매 중 {n}건", basis_new_est: "추정 (등급 비율)", new_note: "신품 기준가는 {c}의 신품 매물 가격을 씁니다. 신품 매물이 2건 미만이면 중고 기준가에 등급 비율을 곱한 추정값이라 현지 정가와 다를 수 있습니다.",
+  basis_new_msrp: "{c} 라이카 공식 정가", basis_new_msrp_eur: "독일 라이카 정가 (유로권)", basis_new_sold: "{c} 신품 판매완료 {n}건", basis_new_ask: "{c} 신품 판매 중 {n}건", basis_new_est: "추정 (등급 비율)", new_note: "신품 기준가는 {c} 라이카 공식 정가를, 단종된 모델은 {c}의 신품 매물 가격을 씁니다. 신품 매물이 2건 미만이면 중고 기준가에 등급 비율을 곱한 추정값이라 현지 정가와 다를 수 있습니다.",
   stock_title: "내 재고 점검", stock_lede: "{store}에 지금 올라와 있는 매물을 같은 모델·같은 등급의 {c} 기준가와 비교합니다. 줄을 누르면 그 모델의 매입 조회로 넘어갑니다.",
   f_all: "전체", f_old: "60일+",
   stock_note: "기준가 = {c} 판매완료가를 등급 비율로 B등급에 맞춘 중앙값 × 이 매물 등급 비율. {c} 판매완료가 2건 미만이면 {c} 다른 매장의 판매 중 가격(3건 이상), 그것도 없으면 전체 나라 판매완료 가격을 씁니다. 등급을 알 수 없는 매물은 B로 봅니다. '올린 지'는 카메라브릿지가 처음 본 날 기준입니다.",
@@ -240,7 +240,7 @@ en: {
   th_item: "Listing", th_mine: "My price", th_ref: "Reference", th_pos: "Position", th_low: "Lowest in {c}", th_age: "Listed", th_model: "Model", th_abroad_item: "Listing abroad", th_local: "Local price", th_landed: "Landed", th_diff: "Difference", th_time: "Time", th_change: "Change", th_price: "Price", th_sold_n: "Sold", th_here: "For sale in {c}", th_abroad: "For sale abroad", th_turn: "Time to sell", th_bref: "B reference",
   pos_high: "High", pos_low: "Low", pos_ok: "In range", pos_none: "No reference",
   basis_sold: "{n} sold in {c}", basis_ask: "{n} for sale in {c}", basis_all: "{n} sold, all countries", days: "{n} d",
-  basis_new_sold: "{n} sold new in {c}", basis_new_ask: "{n} new for sale in {c}", basis_new_est: "estimate (grade ratio)", new_note: "The new (N) reference uses prices of new items in {c}. With fewer than 2, it is an estimate from the used reference × grade ratio and may differ from the local retail price.",
+  basis_new_msrp: "Leica list price in {c}", basis_new_msrp_eur: "Leica list price in Germany (euro area)", basis_new_sold: "{n} sold new in {c}", basis_new_ask: "{n} new for sale in {c}", basis_new_est: "estimate (grade ratio)", new_note: "The new (N) reference uses the Leica list price in {c}, or prices of new items in {c} for discontinued models. With fewer than 2, it is an estimate from the used reference × grade ratio and may differ from the local retail price.",
   stock_title: "My stock", stock_lede: "Listings currently up at {store}, compared with the {c} reference for the same model and grade. Click a row to open the buy-in check for that model.",
   f_all: "All", f_old: "60 d+",
   stock_note: "Reference = median sold price in {c}, normalised to grade B, × this listing's grade factor. With fewer than 2 sales in {c} we use asking prices at other shops in {c} (3 or more), and otherwise sold prices from all countries. Listings without a grade count as B. 'Listed' is counted from when Camera Bridge first saw the listing.",
@@ -278,7 +278,7 @@ ja: {
   th_item: "商品", th_mine: "自店価格", th_ref: "基準価格", th_pos: "位置", th_low: "{c}最安", th_age: "掲載日数", th_model: "モデル", th_abroad_item: "海外の商品", th_local: "現地価格", th_landed: "到着総額", th_diff: "差額", th_time: "日時", th_change: "動き", th_price: "価格", th_sold_n: "販売済み", th_here: "{c}で販売中", th_abroad: "海外で販売中", th_turn: "売れるまで", th_bref: "B 基準価格",
   pos_high: "高い", pos_low: "安い", pos_ok: "適正", pos_none: "相場なし",
   basis_sold: "{c}販売済み {n}件", basis_ask: "{c}販売中 {n}件", basis_all: "全ての国の販売済み {n}件", days: "{n}日",
-  basis_new_sold: "{c}新品販売済み {n}件", basis_new_ask: "{c}新品販売中 {n}件", basis_new_est: "推定（ランク比率）", new_note: "新品の基準価格は{c}の新品の価格を使います。2件未満の場合は中古の基準価格 × ランク比率による推定で、現地の定価と異なる場合があります。",
+  basis_new_msrp: "{c}ライカ公式価格", basis_new_msrp_eur: "ドイツのライカ公式価格（ユーロ圏）", basis_new_sold: "{c}新品販売済み {n}件", basis_new_ask: "{c}新品販売中 {n}件", basis_new_est: "推定（ランク比率）", new_note: "新品の基準価格は{c}のライカ公式価格を、生産終了モデルは{c}の新品の価格を使います。2件未満の場合は中古の基準価格 × ランク比率による推定で、現地の定価と異なる場合があります。",
   stock_title: "在庫チェック", stock_lede: "{store}に今掲載中の商品を、同じモデル・同じランクの{c}基準価格と比べます。行を押すとそのモデルの買取照会に移ります。",
   f_all: "すべて", f_old: "60日+",
   stock_note: "基準価格 = {c}の販売済み価格をランク比率でBランクに揃えた中央値 × この商品のランク比率。{c}の販売済みが2件未満なら{c}の他店の販売中価格（3件以上）、それもなければ全ての国の販売済み価格を使います。ランク不明の商品はBとみなします。",
@@ -316,7 +316,7 @@ de: {
   th_item: "Angebot", th_mine: "Mein Preis", th_ref: "Referenz", th_pos: "Lage", th_low: "Günstigstes in {c}", th_age: "Online", th_model: "Modell", th_abroad_item: "Angebot im Ausland", th_local: "Preis vor Ort", th_landed: "Geliefert", th_diff: "Differenz", th_time: "Zeit", th_change: "Änderung", th_price: "Preis", th_sold_n: "Verkauft", th_here: "Angebote in {c}", th_abroad: "Angebote im Ausland", th_turn: "Bis zum Verkauf", th_bref: "Referenz B",
   pos_high: "Teuer", pos_low: "Günstig", pos_ok: "Im Rahmen", pos_none: "Keine Referenz",
   basis_sold: "{n} verkauft in {c}", basis_ask: "{n} Angebote in {c}", basis_all: "{n} verkauft, alle Länder", days: "{n} T",
-  basis_new_sold: "{n} neu verkauft in {c}", basis_new_ask: "{n} neu im Angebot in {c}", basis_new_est: "Schätzung (Zustandsfaktor)", new_note: "Die Referenz für Neuware nutzt Preise neuer Artikel in {c}. Bei weniger als 2 ist sie eine Schätzung aus Gebrauchtreferenz × Zustandsfaktor und kann vom örtlichen Listenpreis abweichen.",
+  basis_new_msrp: "Leica-Listenpreis in {c}", basis_new_msrp_eur: "Leica-Listenpreis Deutschland (Euroraum)", basis_new_sold: "{n} neu verkauft in {c}", basis_new_ask: "{n} neu im Angebot in {c}", basis_new_est: "Schätzung (Zustandsfaktor)", new_note: "Die Referenz für Neuware nutzt den Leica-Listenpreis in {c}, bei eingestellten Modellen Preise neuer Artikel in {c}. Bei weniger als 2 ist sie eine Schätzung aus Gebrauchtreferenz × Zustandsfaktor und kann vom örtlichen Listenpreis abweichen.",
   stock_title: "Mein Bestand", stock_lede: "Aktuelle Angebote von {store}, verglichen mit der Referenz für {c} bei gleichem Modell und Zustand. Ein Klick auf die Zeile öffnet die Ankaufsprüfung.",
   f_all: "Alle", f_old: "60 T+",
   stock_note: "Referenz = Median der Verkaufspreise in {c}, auf Zustand B umgerechnet, × Faktor des Zustands. Bei weniger als 2 Verkäufen in {c} nutzen wir Angebotspreise anderer Händler in {c} (mindestens 3), sonst Verkaufspreise aller Länder. Angebote ohne Zustand zählen als B.",
@@ -354,7 +354,7 @@ fr: {
   th_item: "Annonce", th_mine: "Mon prix", th_ref: "Référence", th_pos: "Position", th_low: "Le moins cher en {c}", th_age: "En ligne", th_model: "Modèle", th_abroad_item: "Annonce à l'étranger", th_local: "Prix local", th_landed: "Livré", th_diff: "Écart", th_time: "Heure", th_change: "Changement", th_price: "Prix", th_sold_n: "Vendus", th_here: "En vente en {c}", th_abroad: "En vente à l'étranger", th_turn: "Délai de vente", th_bref: "Référence B",
   pos_high: "Cher", pos_low: "Bas", pos_ok: "Dans la norme", pos_none: "Pas de référence",
   basis_sold: "{n} vendus en {c}", basis_ask: "{n} en vente en {c}", basis_all: "{n} vendus, tous pays", days: "{n} j",
-  basis_new_sold: "{n} neufs vendus en {c}", basis_new_ask: "{n} neufs en vente en {c}", basis_new_est: "estimation (facteur d'état)", new_note: "La référence neuf utilise les prix d'articles neufs en {c}. Avec moins de 2, c'est une estimation (référence occasion × facteur d'état) qui peut différer du prix public local.",
+  basis_new_msrp: "Prix public Leica en {c}", basis_new_msrp_eur: "Prix public Leica en Allemagne (zone euro)", basis_new_sold: "{n} neufs vendus en {c}", basis_new_ask: "{n} neufs en vente en {c}", basis_new_est: "estimation (facteur d'état)", new_note: "La référence neuf utilise le prix public Leica en {c}, ou les prix d'articles neufs en {c} pour les modèles arrêtés. Avec moins de 2, c'est une estimation (référence occasion × facteur d'état) qui peut différer du prix public local.",
   stock_title: "Mon stock", stock_lede: "Annonces en ligne de {store}, comparées à la référence en {c} pour le même modèle et le même état. Cliquez sur une ligne pour estimer un rachat.",
   f_all: "Tout", f_old: "60 j+",
   stock_note: "Référence = médiane des prix vendus en {c}, ramenée à l'état B, × facteur de l'état. Avec moins de 2 ventes en {c}, nous utilisons les prix affichés d'autres magasins en {c} (au moins 3), sinon les prix vendus de tous les pays. Sans état connu, l'annonce compte comme B.",
@@ -392,7 +392,7 @@ it: {
   th_item: "Annuncio", th_mine: "Il mio prezzo", th_ref: "Riferimento", th_pos: "Posizione", th_low: "Il più basso in {c}", th_age: "Online", th_model: "Modello", th_abroad_item: "Annuncio all'estero", th_local: "Prezzo locale", th_landed: "A destinazione", th_diff: "Differenza", th_time: "Ora", th_change: "Variazione", th_price: "Prezzo", th_sold_n: "Venduti", th_here: "In vendita in {c}", th_abroad: "In vendita all'estero", th_turn: "Tempo di vendita", th_bref: "Riferimento B",
   pos_high: "Alto", pos_low: "Basso", pos_ok: "In linea", pos_none: "Nessun riferimento",
   basis_sold: "{n} venduti in {c}", basis_ask: "{n} in vendita in {c}", basis_all: "{n} venduti, tutti i paesi", days: "{n} g",
-  basis_new_sold: "{n} nuovi venduti in {c}", basis_new_ask: "{n} nuovi in vendita in {c}", basis_new_est: "stima (fattore condizione)", new_note: "Il riferimento per il nuovo usa i prezzi di articoli nuovi in {c}. Con meno di 2 è una stima (riferimento usato × fattore condizione) e può differire dal listino locale.",
+  basis_new_msrp: "Prezzo di listino Leica in {c}", basis_new_msrp_eur: "Listino Leica in Germania (area euro)", basis_new_sold: "{n} nuovi venduti in {c}", basis_new_ask: "{n} nuovi in vendita in {c}", basis_new_est: "stima (fattore condizione)", new_note: "Il riferimento per il nuovo usa il listino Leica in {c}, o i prezzi di articoli nuovi in {c} per i modelli fuori produzione. Con meno di 2 è una stima (riferimento usato × fattore condizione) e può differire dal listino locale.",
   stock_title: "Il mio stock", stock_lede: "Annunci attuali di {store}, confrontati con il riferimento in {c} per lo stesso modello e la stessa condizione. Clicca una riga per valutare un ritiro.",
   f_all: "Tutti", f_old: "60 g+",
   stock_note: "Riferimento = mediana dei prezzi di vendita in {c}, riportata alla condizione B, × fattore della condizione. Con meno di 2 vendite in {c} usiamo i prezzi esposti da altri negozi in {c} (almeno 3), altrimenti i prezzi di vendita di tutti i paesi. Senza condizione l'annuncio conta come B.",
@@ -430,7 +430,7 @@ es: {
   th_item: "Anuncio", th_mine: "Mi precio", th_ref: "Referencia", th_pos: "Posición", th_low: "Más barato en {c}", th_age: "Publicado", th_model: "Modelo", th_abroad_item: "Anuncio en el extranjero", th_local: "Precio local", th_landed: "En destino", th_diff: "Diferencia", th_time: "Hora", th_change: "Cambio", th_price: "Precio", th_sold_n: "Vendidos", th_here: "En venta en {c}", th_abroad: "En venta fuera", th_turn: "Tiempo de venta", th_bref: "Referencia B",
   pos_high: "Caro", pos_low: "Barato", pos_ok: "En rango", pos_none: "Sin referencia",
   basis_sold: "{n} vendidos en {c}", basis_ask: "{n} en venta en {c}", basis_all: "{n} vendidos, todos los países", days: "{n} d",
-  basis_new_sold: "{n} nuevos vendidos en {c}", basis_new_ask: "{n} nuevos en venta en {c}", basis_new_est: "estimación (factor de estado)", new_note: "La referencia de nuevo usa precios de artículos nuevos en {c}. Con menos de 2 es una estimación (referencia de usado × factor de estado) y puede diferir del precio oficial local.",
+  basis_new_msrp: "Precio oficial Leica en {c}", basis_new_msrp_eur: "Precio oficial Leica en Alemania (zona euro)", basis_new_sold: "{n} nuevos vendidos en {c}", basis_new_ask: "{n} nuevos en venta en {c}", basis_new_est: "estimación (factor de estado)", new_note: "La referencia de nuevo usa el precio oficial Leica en {c}, o precios de artículos nuevos en {c} para modelos descatalogados. Con menos de 2 es una estimación (referencia de usado × factor de estado) y puede diferir del precio oficial local.",
   stock_title: "Mi stock", stock_lede: "Anuncios actuales de {store}, comparados con la referencia en {c} para el mismo modelo y estado. Pulsa una fila para tasar ese modelo.",
   f_all: "Todo", f_old: "60 d+",
   stock_note: "Referencia = mediana de precios vendidos en {c}, ajustada al estado B, × factor del estado. Con menos de 2 ventas en {c} usamos precios de venta de otras tiendas de {c} (3 o más) y, si no, precios vendidos de todos los países. Sin estado conocido, el anuncio cuenta como B.",
@@ -468,7 +468,7 @@ pt: {
   th_item: "Anúncio", th_mine: "Meu preço", th_ref: "Referência", th_pos: "Posição", th_low: "Mais barato em {c}", th_age: "Publicado", th_model: "Modelo", th_abroad_item: "Anúncio no exterior", th_local: "Preço local", th_landed: "No destino", th_diff: "Diferença", th_time: "Hora", th_change: "Mudança", th_price: "Preço", th_sold_n: "Vendidos", th_here: "À venda em {c}", th_abroad: "À venda no exterior", th_turn: "Tempo de venda", th_bref: "Referência B",
   pos_high: "Caro", pos_low: "Barato", pos_ok: "Na média", pos_none: "Sem referência",
   basis_sold: "{n} vendidos em {c}", basis_ask: "{n} à venda em {c}", basis_all: "{n} vendidos, todos os países", days: "{n} d",
-  basis_new_sold: "{n} novos vendidos em {c}", basis_new_ask: "{n} novos à venda em {c}", basis_new_est: "estimativa (fator de estado)", new_note: "A referência de novo usa preços de itens novos em {c}. Com menos de 2, é uma estimativa (referência de usado × fator de estado) e pode diferir do preço oficial local.",
+  basis_new_msrp: "Preço oficial Leica em {c}", basis_new_msrp_eur: "Preço oficial Leica na Alemanha (zona euro)", basis_new_sold: "{n} novos vendidos em {c}", basis_new_ask: "{n} novos à venda em {c}", basis_new_est: "estimativa (fator de estado)", new_note: "A referência de novo usa o preço oficial Leica em {c}, ou preços de itens novos em {c} para modelos descontinuados. Com menos de 2, é uma estimativa (referência de usado × fator de estado) e pode diferir do preço oficial local.",
   stock_title: "Meu estoque", stock_lede: "Anúncios atuais de {store}, comparados com a referência em {c} para o mesmo modelo e estado. Clique numa linha para avaliar esse modelo.",
   f_all: "Todos", f_old: "60 d+",
   stock_note: "Referência = mediana dos preços vendidos em {c}, ajustada ao estado B, × fator do estado. Com menos de 2 vendas em {c}, usamos preços anunciados por outras lojas de {c} (3 ou mais); senão, preços vendidos de todos os países. Sem estado conhecido, o anúncio conta como B.",
@@ -506,7 +506,7 @@ pt: {
   th_item: "商品", th_mine: "本店价", th_ref: "参考价", th_pos: "位置", th_low: "{c}最低", th_age: "上架", th_model: "型号", th_abroad_item: "海外商品", th_local: "当地价", th_landed: "到手价", th_diff: "差额", th_time: "时间", th_change: "变动", th_price: "价格", th_sold_n: "已售", th_here: "{c}在售", th_abroad: "海外在售", th_turn: "售出用时", th_bref: "B 参考价",
   pos_high: "偏贵", pos_low: "偏便宜", pos_ok: "合理", pos_none: "无参考价",
   basis_sold: "{c}已售 {n} 件", basis_ask: "{c}在售 {n} 件", basis_all: "所有国家已售 {n} 件", days: "{n} 天",
-  basis_new_sold: "{c}全新已售 {n} 件", basis_new_ask: "{c}全新在售 {n} 件", basis_new_est: "估算（成色系数）", new_note: "全新参考价使用{c}全新商品的价格。不足 2 件时为二手参考价 × 成色系数的估算，可能与当地官方售价不同。",
+  basis_new_msrp: "{c}徕卡官方售价", basis_new_msrp_eur: "德国徕卡官方售价（欧元区）", basis_new_sold: "{c}全新已售 {n} 件", basis_new_ask: "{c}全新在售 {n} 件", basis_new_est: "估算（成色系数）", new_note: "全新参考价使用{c}徕卡官方售价，已停产型号使用{c}全新商品的价格。不足 2 件时为二手参考价 × 成色系数的估算，可能与当地官方售价不同。",
   stock_title: "库存检查", stock_lede: "{store}当前在售商品，与同型号、同成色的{c}参考价比较。点击行可进入该型号的收购查询。",
   f_all: "全部", f_old: "60 天+",
   stock_note: "参考价 = {c}已售价格按成色折算为 B 级后的中位数 × 该商品成色系数。{c}已售不足 2 件时，使用{c}其他店铺的在售价格（3 件以上）；仍不足时使用所有国家的已售价格。成色不明按 B 计。",
@@ -544,7 +544,7 @@ pt: {
   th_item: "商品", th_mine: "本店價", th_ref: "參考價", th_pos: "位置", th_low: "{c}最低", th_age: "上架", th_model: "型號", th_abroad_item: "海外商品", th_local: "當地價", th_landed: "到手價", th_diff: "差額", th_time: "時間", th_change: "變動", th_price: "價格", th_sold_n: "已售", th_here: "{c}在售", th_abroad: "海外在售", th_turn: "售出天數", th_bref: "B 參考價",
   pos_high: "偏貴", pos_low: "偏便宜", pos_ok: "合理", pos_none: "無參考價",
   basis_sold: "{c}已售 {n} 件", basis_ask: "{c}在售 {n} 件", basis_all: "所有國家已售 {n} 件", days: "{n} 天",
-  basis_new_sold: "{c}全新已售 {n} 件", basis_new_ask: "{c}全新在售 {n} 件", basis_new_est: "估算（品相係數）", new_note: "全新參考價使用{c}全新商品的價格。不足 2 件時為二手參考價 × 品相係數的估算，可能與當地官方售價不同。",
+  basis_new_msrp: "{c}徠卡官方售價", basis_new_msrp_eur: "德國徠卡官方售價（歐元區）", basis_new_sold: "{c}全新已售 {n} 件", basis_new_ask: "{c}全新在售 {n} 件", basis_new_est: "估算（品相係數）", new_note: "全新參考價使用{c}徠卡官方售價，已停產型號使用{c}全新商品的價格。不足 2 件時為二手參考價 × 品相係數的估算，可能與當地官方售價不同。",
   stock_title: "庫存檢查", stock_lede: "{store}目前在售商品，與同型號、同品相的{c}參考價比較。點選該列可進入該型號的收購查詢。",
   f_all: "全部", f_old: "60 天+",
   stock_note: "參考價 = {c}已售價格依品相換算為 B 級後的中位數 × 該商品品相係數。{c}已售不足 2 件時，使用{c}其他店家的在售價格（3 件以上）；仍不足時使用所有國家的已售價格。品相不明以 B 計。",
@@ -672,6 +672,11 @@ function newIndex() {
 function refPrice(eid, g) {
   if (!g || g === "X") return null;
   if (g === "N") {
+    const official = ((ent(eid) || {}).msrp || {})[myCountry()];
+    if (official) return { krw: official, n: 0, kind: "new_msrp" };
+    // 라이카 판매 페이지가 없는 유로권 나라(네덜란드·핀란드 등)는 독일 정가
+    const de = ((ent(eid) || {}).msrp || {}).DE;
+    if (de && EU_EURO.includes(myCountry())) return { krw: de, n: 0, kind: "new_msrp_eur" };
     const nx = newIndex()[eid];
     if (nx && nx.sold.length >= 2) return { krw: median(nx.sold), n: nx.sold.length, kind: "new_sold" };
     if (nx && nx.ask.length >= 2) return { krw: median(nx.ask), n: nx.ask.length, kind: "new_ask" };

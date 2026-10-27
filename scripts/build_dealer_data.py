@@ -6,6 +6,7 @@
 주소로 직접 여는 것은 vercel.json에서 막는다.
 금액은 모두 원(KRW)으로 맞춰 두고, 매장 나라 통화로 바꾸는 것은 화면이 환율로 한다.
 나라별 기준가: 판매완료 가격을 등급 비율로 B등급에 맞춘 중앙값을 나라마다 따로 낸다 (sb). 판매 중 가격 기준은 화면이 계산한다.
+신품(N)은 라이카 공식 정가(msrp, 나라별)를 먼저 쓴다.
 """
 from __future__ import annotations
 
@@ -109,6 +110,20 @@ def build() -> dict:
             if a and b and b >= a:
                 turn[it["e"]].append((b - a).total_seconds() / 86400)
 
+    # ── 나라별 공식 신품 정가 (scripts/update_leica_msrp.py, 매일 조금씩) ──
+    # 같은 모델에 번호가 여럿이면(블랙·실버 등) 나라마다 가장 낮은 값
+    msrp = defaultdict(dict)
+    msrp_path = D / "config/leica_msrp.json"
+    msrp_data = json.loads(msrp_path.read_text()) if msrp_path.exists() else {"prices": {}}
+    catalog = json.loads((D / "config/entity_catalog_v1.json").read_text())
+    owner = {code: e["id"] for e in catalog["entities"] for code in (e.get("codes") or [])}
+    for code, by_country in msrp_data["prices"].items():
+        eid = owner.get(code)
+        for c, (price, cur, *_) in by_country.items():
+            if eid and cur in krw_per:
+                krw = round(price * krw_per[cur])
+                msrp[eid][c] = min(msrp[eid].get(c, krw), krw)
+
     # ── 모델 표 ──
     used = {it["e"] for it in listings if it["e"]}
     entities = {}
@@ -119,7 +134,7 @@ def build() -> dict:
             sb[c] = [round(statistics.median(vals)) if len(vals) >= 2 else None, len(vals)]
         entities[eid] = {
             "n": e["name"], "ko": e.get("name_ko"), "kind": e.get("kind"), "mount": e.get("mount"),
-            "parent": e.get("parent"), "al": e.get("aliases", [])[:8], "sb": sb,
+            "parent": e.get("parent"), "al": e.get("aliases", [])[:8], "sb": sb, "msrp": msrp.get(eid) or None,
             "turnD": round(statistics.median(turn[eid]), 1) if len(turn[eid]) >= 2 else None,
             "turnN": len(turn[eid]),
         }
@@ -158,6 +173,7 @@ def build() -> dict:
         "sold": sold[:3000],
         "feed": feed[:2000],
         "eventsFrom": min((e["t"] for e in events), default="")[:10],
+        "msrpAt": (msrp_data.get("updated_at") or "")[:10],
     }
 
 

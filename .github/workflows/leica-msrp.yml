@@ -1,0 +1,49 @@
+name: Leica list prices (daily)
+
+on:
+  schedule:
+    # 매일 04:23 KST. 라이카 공식 사이트 나라별 신품 정가 → data/config/leica_msrp.json (딜러 화면 신품 기준가)
+    # 하루 150페이지만 오래된 것부터 (한 번에 받으면 라이카가 429로 막음). 한 바퀴 약 열흘, 각 가격은 30일마다 새로
+    - cron: '23 19 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: crawl
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  msrp:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests==2.32.5
+
+      - name: Collect Leica list prices
+        run: python3 scripts/update_leica_msrp.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "Camera Bridge Bot"
+          git config user.email "bot@camerabridge.app"
+          git add data/config/leica_msrp.json
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "🤖 라이카 공식 정가 $(date '+%Y-%m-%d' -d '+9 hours')"
+          git pull --rebase origin main
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

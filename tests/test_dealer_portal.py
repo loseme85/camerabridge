@@ -141,3 +141,23 @@ def test_grade_factors_keep_grade_order():
     got = _ordered({"N": 1.26, "S": 1.6, "A": 0.98, "B": 1.0, "C": 1.02, "D": 1.1})
     assert got["S"] == 1.26 and got["A"] == 1.0 and got["C"] == 1.0 and got["D"] == 1.0
     assert got["N"] >= got["S"] >= got["A"] >= got["B"] >= got["C"] >= got["D"]
+
+
+def test_leica_list_price_parsing():
+    from scripts.update_leica_msrp import PRODUCT_PATH, price_of
+    page = ('{"event":"view_item","ecommerce":{"currency":"GBP","value":7800,"items":[{"item_id":"20200","item_name":"M11",'
+            '"item_variant":"Leica M11, black"}]}}')
+    assert price_of(page) == ("20200", 7800.0, "GBP")
+    assert price_of(page.replace("7800", "0")) is None and price_of(None) is None
+    assert PRODUCT_PATH.match("/en-GB/photography/cameras/m/m11-black")
+    assert not PRODUCT_PATH.match("/en-GB/photography/cameras/m")
+
+
+def test_leica_list_price_sanity_and_country():
+    from scripts.update_leica_msrp import country_of, plausible
+    krw_per = {"GBP": 1850.0, "EUR": 1600.0, "DKK": 215.0, "CHF": 1700.0}
+    gb = [7200, "GBP", "2026-10-27"]
+    assert plausible(7990, "EUR", gb, krw_per) and plausible(7990, "CHF", gb, krw_per)
+    assert not plausible(7990, "DKK", gb, krw_per)  # 덴마크 페이지: 유로 가격에 DKK가 붙어 있음
+    assert not plausible(7990, "XYZ", gb, krw_per)
+    assert country_of("en-DK") == "DK" and country_of("fr-CH") == "CH" and country_of("zh-Hant") == "zh-Hant"
