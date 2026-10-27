@@ -1,6 +1,38 @@
 {
   "rewrites": [
     {
+      "source": "/dealer",
+      "destination": "/api/dealer.py?r=app"
+    },
+    {
+      "source": "/dealer/",
+      "destination": "/api/dealer.py?r=app"
+    },
+    {
+      "source": "/dealer/login",
+      "destination": "/api/dealer.py?r=login"
+    },
+    {
+      "source": "/dealer/logout",
+      "destination": "/api/dealer.py?r=logout"
+    },
+    {
+      "source": "/dealer/data",
+      "destination": "/api/dealer.py?r=data"
+    },
+    {
+      "source": "/dealer/password",
+      "destination": "/api/dealer.py?r=password"
+    },
+    {
+      "source": "/owner/dealers",
+      "destination": "/api/owner_dealers.py"
+    },
+    {
+      "source": "/owner/dealers/",
+      "destination": "/api/owner_dealers.py"
+    },
+    {
       "source": "/owner/usage",
       "destination": "/api/owner_usage.py"
     },
@@ -86,6 +118,16 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/data/dealer/:path*",
+      "destination": "/dealer",
+      "permanent": false
+    },
+    {
+      "source": "/app/templates/dealer.html",
+      "destination": "/dealer",
+      "permanent": false
+    },
     {
       "source": "/",
       "has": [

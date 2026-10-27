@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Camera Bridge · Dealer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <style>
+    /* 딜러 화면: camerabridge.io 첫 화면과 같은 색·글꼴. 각진 틀과 가는 줄만 쓴다 */
+    :root{
+      --bg:#ffffff;
+      --surface:#ffffff;
+      --surface-soft:#f5f6f5;
+      --border:#e1e4e3;
+      --border-strong:#c9cecc;
+      --text:#16181a;
+      --text-soft:#5d6266;
+      --text-muted:#8a9094;
+      --accent:#1f4a3a;
+      --accent-soft:rgba(31,74,58,0.08);
+      --high:#9b2c22;
+      --high-soft:#f8ecea;
+      --low:#2e6d43;
+      --low-soft:#eaf3ed;
+      --amber:#99611f;
+      --amber-soft:#f7f0e4;
+      --serif:Newsreader,"Noto Serif KR",Georgia,serif;
+      --sans:Inter,"Pretendard Variable",Pretendard,ui-sans-serif,system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    button,input,select{font:inherit;color:inherit}
+    button{cursor:pointer}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+    [hidden]{display:none !important}
+    .num,td.r{font-variant-numeric:tabular-nums}
+
+    .topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--text)}
+    .topbar-in{max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px}
+    .brand{display:flex;align-items:center;gap:12px;color:var(--accent);text-decoration:none}
+    .brand-logo{display:block;height:44px;width:auto;margin:-6px 0}
+    .brand-tag{color:var(--text-soft);font-size:13px;border-left:1px solid var(--border-strong);padding-left:12px}
+    .top-meta{margin-left:auto;display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;font-size:13px}
+    .top-meta label{color:var(--text-soft)}
+    .top-meta .store-name{font-weight:600}
+    select,input[type=text],input[type=number],input[type=password]{background:var(--surface);border:1px solid var(--border-strong);border-radius:0;padding:5px 8px}
+    select:hover,input:hover{border-color:var(--text-soft)}
+    .asof{color:var(--text-muted);font-size:12px}
+    .linkbtn{background:none;border:0;padding:0;color:var(--text-soft);text-decoration:underline;text-underline-offset:2px}
+    .linkbtn:hover{color:var(--accent)}
+    @media (max-width:560px){.brand-logo{height:36px}.top-meta{margin-left:0;width:100%}}
+
+    .wrap{max-width:1280px;margin:0 auto;padding:0 16px 48px;display:grid;grid-template-columns:170px minmax(0,1fr);gap:0 32px}
+    nav.toc{position:sticky;top:66px;align-self:start;padding-top:20px}
+    nav.toc button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--border);padding:9px 0}
+    nav.toc button .n{color:var(--text-muted);font-size:12px;margin-right:8px;font-variant-numeric:tabular-nums}
+    nav.toc button[aria-current="true"]{font-weight:600;border-bottom-color:var(--text)}
+    nav.toc button:hover{color:var(--accent)}
+    main{min-width:0;padding-top:20px}
+    @media (max-width:760px){
+      .wrap{grid-template-columns:minmax(0,1fr)}
+      nav.toc{position:static;display:flex;overflow-x:auto;gap:16px;padding-top:6px;border-bottom:1px solid var(--border)}
+      nav.toc button{width:auto;white-space:nowrap;border:0;padding:8px 0}
+      nav.toc button[aria-current="true"]{border-bottom:2px solid var(--text)}
+    }
+
+    h1{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.2;margin:0 0 4px;text-wrap:balance}
+    h2{font-size:15px;font-weight:700;margin:28px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--text);display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+    h2 small{font-weight:400;color:var(--text-muted);font-size:12px}
+    .lede{color:var(--text-soft);max-width:72ch;margin:0 0 8px}
+
+    .figs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--text);border-bottom:1px solid var(--border);margin-top:16px}
+    .figs > div{padding:12px 14px 12px 0;border-right:1px solid var(--border);min-width:0}
+    .figs > div + div{padding-left:14px}
+    .figs > div:last-child{border-right:0}
+    .figs .v{font-family:var(--serif);font-size:34px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
+    .figs .l{color:var(--text-soft);font-size:13px}
+    .figs button{background:none;border:0;padding:0;color:var(--accent);font-size:13px}
+    .figs button:hover{text-decoration:underline}
+    @media (max-width:760px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.figs > div:nth-child(2){border-right:0}.figs > div:nth-child(3){padding-left:0}.figs > div:nth-child(n+3){border-top:1px solid var(--border)}}
+
+    .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
+    @media (max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}}
+
+    .tbl{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font-weight:500;color:var(--text-soft);font-size:12px;border-bottom:1px solid var(--border);padding:6px 8px 6px 0;white-space:nowrap}
+    td{border-bottom:1px solid var(--border);padding:7px 8px 7px 0;vertical-align:top}
+    td.r,th.r{text-align:right}
+    td.r{white-space:nowrap}
+    tr.click{cursor:pointer}
+    tr.click:hover td{background:var(--surface-soft)}
+    .t{max-width:46ch}
+    .t a{text-decoration:none}
+    .t a:hover{color:var(--accent);text-decoration:underline}
+    .sub{color:var(--text-soft);font-size:12px}
+
+    .mark{display:inline-block;padding:0 5px;font-size:12px;font-weight:500;border:1px solid currentColor;white-space:nowrap}
+    .mark.high{color:var(--high);background:var(--high-soft)}
+    .mark.low{color:var(--low);background:var(--low-soft)}
+    .mark.ok{color:var(--text-soft)}
+    .mark.warn{color:var(--amber);background:var(--amber-soft)}
+    .mark.acc{color:var(--accent);background:var(--accent-soft)}
+
+    .bar{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;margin:8px 0 4px}
+    .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--text)}
+    .seg button{background:var(--surface);border:0;border-right:1px solid var(--text);padding:4px 10px}
+    .seg button:last-child{border-right:0}
+    .seg button[aria-pressed="true"]{background:var(--text);color:var(--bg)}
+    .chk{display:inline-flex;gap:6px;align-items:center;color:var(--text-soft)}
+
+    .search{position:relative;max-width:540px}
+    .search input{width:100%;font-size:16px;padding:9px 10px;border:1px solid var(--text)}
+    .sugg{position:absolute;left:0;right:0;top:100%;background:var(--surface);border:1px solid var(--text);border-top:0;z-index:5;max-height:320px;overflow-y:auto}
+    .sugg button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--border);padding:7px 10px}
+    .sugg button:hover,.sugg button.on{background:var(--surface-soft)}
+
+    .model-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;align-items:baseline;margin-top:18px}
+    .model-head h1{font-size:28px}
+    .ref{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border:1px solid var(--text);margin-top:10px}
+    .ref > div{padding:8px 10px;border-right:1px solid var(--border)}
+    .ref > div:last-child{border-right:0}
+    .ref .g{font-weight:700}
+    .ref .g span{color:var(--text-soft);font-weight:400;font-size:12px;margin-left:4px}
+    .ref .p{font-family:var(--serif);font-size:18px;font-weight:600;font-variant-numeric:tabular-nums}
+    @media (max-width:640px){.ref{grid-template-columns:repeat(3,minmax(0,1fr))}.ref > div:nth-child(3){border-right:0}.ref > div:nth-child(n+4){border-top:1px solid var(--border)}}
+
+    .calc{border:1px solid var(--text);padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px 28px;margin-top:10px}
+    @media (max-width:760px){.calc{grid-template-columns:minmax(0,1fr)}}
+    .fields{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:center}
+    .fields label{color:var(--text-soft)}
+    .fields input,.fields select{width:100%;max-width:220px}
+    .calc .out{border-left:1px solid var(--border);padding-left:24px}
+    @media (max-width:760px){.calc .out{border-left:0;padding-left:0;border-top:1px solid var(--border);padding-top:12px}}
+    .calc .big{font-family:var(--serif);font-size:40px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
+    .calc .lines{font-size:13px;margin-top:8px;font-variant-numeric:tabular-nums}
+    .calc .lines div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted var(--border-strong);padding:2px 0}
+
+    .note{color:var(--text-soft);font-size:12.5px;max-width:84ch;margin:10px 0 0}
+    .basis{border-left:3px solid var(--amber);padding:4px 10px;background:var(--amber-soft);color:var(--text);font-size:13px;margin:8px 0 0;max-width:84ch}
+    .empty{color:var(--text-soft);padding:14px 0}
+    .more{margin-top:8px;background:none;border:1px solid var(--text);padding:5px 12px}
+    .more:hover{background:var(--surface-soft)}
+    .loading{padding:60px 16px;text-align:center;color:var(--text-soft)}
+    .form{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:center;max-width:520px;margin-top:10px}
+    .form label{color:var(--text-soft)}
+    .form input{width:100%;max-width:280px}
+    .btn{background:var(--accent);color:#fff;border:1px solid var(--accent);padding:6px 16px}
+    .msg{margin:10px 0 0;font-size:13px}
+    .msg.bad{color:var(--high)}
+    .msg.good{color:var(--low)}
+    footer{max-width:1280px;margin:0 auto;padding:16px 16px 32px;color:var(--text-muted);font-size:12px;border-top:1px solid var(--border)}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="/" aria-label="Camera Bridge"><svg class="brand-logo" viewBox="-40 -747 4391 1205" aria-hidden="true" focusable="false"><path fill="currentColor" d="M69 -364Q122 -364 185 -381Q303 -516 436.5 -609.5Q570 -703 662 -703Q708 -703 708 -680Q708 -649 638.0 -591.0Q568 -533 456.0 -472.0Q344 -411 236 -375Q155 -281 105.0 -193.0Q55 -105 55 -48Q55 32 157 32Q214 32 283.0 -4.0Q352 -40 397 -75Q407 -82 414.5 -82.0Q422 -82 422 -74Q422 -69 418 -65Q371 -31 334.5 -9.0Q298 13 239.0 34.5Q180 56 126 56Q0 56 0 -41Q0 -158 162 -354Q114 -342 70 -339Q58 -341 58.0 -352.0Q58 -363 69 -364ZM631 -675Q572 -675 467.5 -596.5Q363 -518 261 -404Q354 -437 448.5 -490.5Q543 -544 600.0 -591.5Q657 -639 657 -661Q657 -675 631 -675ZM643 -120Q637 -120 637.0 -124.5Q637 -129 644 -135Q677 -162 677 -184Q677 -198 652 -200Q607 -199 544.5 -135.0Q482 -71 482 -39Q482 -28 494.5 -28.0Q507 -28 528 -45Q547 -57 599 -105Q611 -117 622 -117Q636 -117 636 -104Q636 -99 633.0 -96.0Q630 -93 622.0 -83.5Q614 -74 608 -66Q590 -40 590 -32Q590 -12 606 -12Q627 -12 685.0 -50.5Q743 -89 791 -128L839 -166Q846 -171 852.0 -171.0Q858 -171 858 -164V-162Q781 -97 695.5 -40.0Q610 17 583 17Q551 17 551 -17Q551 -25 554.0 -32.0Q557 -39 557.0 -42.0Q557 -45 555 -46Q552 -46 516.5 -19.0Q481 8 454.5 8.0Q428 8 428.0 -20.0Q428 -48 465.5 -95.5Q503 -143 566.0 -182.0Q629 -221 689 -221Q703 -221 712.5 -214.0Q722 -207 722.0 -192.5Q722 -178 693.0 -149.0Q664 -120 643 -120ZM845 -174 843 -185Q843 -190 864 -190Q876 -190 876.0 -175.0Q876 -160 841.5 -108.5Q807 -57 807.0 -55.0Q807 -53 811.0 -53.0Q815 -53 903.5 -123.0Q992 -193 1010.0 -193.0Q1028 -193 1028.0 -180.5Q1028 -168 1018.0 -152.5Q1008 -137 976.0 -96.5Q944 -56 942.0 -53.0Q940 -50 940.0 -46.0Q940 -42 946.5 -42.0Q953 -42 1045.0 -110.0Q1137 -178 1150.0 -178.0Q1163 -178 1163 -167Q1163 -147 1119.0 -97.0Q1075 -47 1075.0 -33.5Q1075 -20 1085.5 -20.0Q1096 -20 1138 -48Q1213 -98 1276 -149L1298 -167Q1306 -172 1311.5 -172.0Q1317 -172 1317 -166V-163Q1106 13 1056 13Q1027 13 1027 -11Q1027 -31 1056.0 -70.0Q1085 -109 1085.0 -112.5Q1085 -116 1082.5 -116.0Q1080 -116 1000.5 -59.0Q921 -2 906 -2Q899 -2 894.0 -7.5Q889 -13 889 -19Q889 -37 932 -92Q975 -146 975 -151Q975 -156 969 -156Q962 -156 827 -46L777 -6Q764 5 757.5 5.0Q751 5 745.0 1.5Q739 -2 739.0 -9.0Q739 -16 756.5 -43.0Q774 -70 802 -109Q845 -167 845 -174ZM1554 -166Q1561 -171 1567.0 -171.0Q1573 -171 1573 -164V-162Q1469 -76 1400.0 -33.0Q1331 10 1275 10Q1230 10 1230 -34Q1230 -99 1296.0 -167.5Q1362 -236 1407 -236Q1432 -236 1432 -208Q1427 -153 1274 -60V-50Q1274 -17 1308.5 -17.0Q1343 -17 1383 -40Q1461 -86 1529 -145ZM1381 -205Q1359 -205 1324.5 -168.0Q1290 -131 1278 -84Q1326 -113 1359.0 -145.5Q1392 -178 1392.0 -191.5Q1392 -205 1381 -205ZM1776 -166Q1783 -171 1789.0 -171.0Q1795 -171 1795 -164V-162Q1720 -102 1647.0 -49.5Q1574 3 1540 3Q1515 3 1515.0 -24.0Q1515 -51 1539.0 -78.0Q1563 -105 1586.5 -125.0Q1610 -145 1610.0 -151.5Q1610 -158 1602.5 -166.5Q1595 -175 1590 -178Q1573 -161 1516 -116L1512 -131Q1575 -181 1585 -198V-207Q1585 -232 1590.0 -241.0Q1595 -250 1614.0 -266.0Q1633 -282 1640.0 -282.0Q1647 -282 1652.5 -277.0Q1658 -272 1658.0 -267.0Q1658 -262 1654.5 -255.5Q1651 -249 1647.5 -244.5Q1644 -240 1638.0 -233.5Q1632 -227 1630.5 -224.5Q1629 -222 1627.5 -216.0Q1626 -210 1621.0 -206.0Q1616 -202 1616.0 -196.0Q1616 -190 1624.0 -169.5Q1632 -149 1632.0 -139.5Q1632 -130 1595.0 -94.5Q1558 -59 1558 -37Q1558 -25 1569 -25Q1583 -25 1621 -50L1633 -58Q1698 -103 1755 -149ZM1879 -120Q1873 -120 1873.0 -124.5Q1873 -129 1880 -135Q1913 -162 1913 -184Q1913 -198 1888 -200Q1843 -199 1780.5 -135.0Q1718 -71 1718 -39Q1718 -28 1730.5 -28.0Q1743 -28 1764 -45Q1783 -57 1835 -105Q1847 -117 1858 -117Q1872 -117 1872 -104Q1872 -99 1869.0 -96.0Q1866 -93 1858.0 -83.5Q1850 -74 1844 -66Q1826 -40 1826 -32Q1826 -12 1842 -12Q1863 -12 1921.0 -50.5Q1979 -89 2027 -128L2075 -166Q2082 -171 2088.0 -171.0Q2094 -171 2094 -164V-162Q2017 -97 1931.5 -40.0Q1846 17 1819 17Q1787 17 1787 -17Q1787 -25 1790.0 -32.0Q1793 -39 1793.0 -42.0Q1793 -45 1791 -46Q1788 -46 1752.5 -19.0Q1717 8 1690.5 8.0Q1664 8 1664.0 -20.0Q1664 -48 1701.5 -95.5Q1739 -143 1802.0 -182.0Q1865 -221 1925 -221Q1939 -221 1948.5 -214.0Q1958 -207 1958.0 -192.5Q1958 -178 1929.0 -149.0Q1900 -120 1879 -120ZM2752 -394Q2752 -394 2796 -397Q2867 -397 2901.5 -370.5Q2936 -344 2936.0 -295.5Q2936 -247 2892.0 -182.0Q2848 -117 2778 -64H2835Q2870 -64 2884.0 -67.0Q2898 -70 2900 -70Q2914 -70 2914.0 -55.0Q2914 -40 2894 -39Q2817 -39 2746 -41Q2634 30 2526 30Q2475 30 2445.0 11.0Q2415 -8 2415.0 -27.5Q2415 -47 2431.5 -58.0Q2448 -69 2478 -69Q2595 -69 2740 -64Q2800 -113 2836.0 -177.5Q2872 -242 2872 -294Q2872 -377 2783 -377Q2748 -377 2710.5 -366.0Q2673 -355 2665.5 -350.5Q2658 -346 2656 -346Q2650 -346 2650.0 -354.5Q2650 -363 2676 -375Q2790 -430 2899.0 -521.5Q3008 -613 3008 -652Q3008 -670 2980 -670Q2866 -669 2667 -499Q2627 -396 2535.5 -246.0Q2444 -96 2344.0 22.5Q2244 141 2195 141Q2165 141 2165 110Q2165 39 2299.5 -143.0Q2434 -325 2604 -478Q2634 -551 2634.0 -584.5Q2634 -618 2618.0 -637.5Q2602 -657 2571 -666Q2522 -679 2467.5 -679.0Q2413 -679 2384.0 -676.5Q2355 -674 2313.5 -666.5Q2272 -659 2246.0 -640.5Q2220 -622 2220.0 -593.5Q2220 -565 2248.0 -549.5Q2276 -534 2316.5 -528.0Q2357 -522 2397.0 -515.0Q2437 -508 2465.0 -487.5Q2493 -467 2493 -430Q2493 -420 2488.5 -420.0Q2484 -420 2481.5 -423.0Q2479 -426 2473 -435Q2464 -448 2446.5 -455.0Q2429 -462 2392.5 -468.5Q2356 -475 2323.5 -482.5Q2291 -490 2258.0 -502.0Q2225 -514 2205.0 -536.0Q2185 -558 2185.0 -587.5Q2185 -617 2210.0 -640.0Q2235 -663 2276 -676Q2360 -701 2451 -701Q2687 -701 2687 -577Q2687 -566 2682 -544Q2884 -707 3010 -707Q3066 -707 3066 -673Q3066 -624 2963.5 -534.0Q2861 -444 2752 -394ZM2220 112Q2249 112 2375.5 -73.5Q2502 -259 2578 -419Q2428 -276 2312.5 -121.5Q2197 33 2197 89Q2197 112 2220 112ZM2709 -42 2528 -46Q2451 -46 2451 -23Q2451 -10 2477.0 1.5Q2503 13 2537 13Q2626 13 2709 -42ZM3274 -166Q3281 -171 3287.0 -171.0Q3293 -171 3293 -164V-162Q3218 -102 3145.0 -49.5Q3072 3 3038 3Q3013 3 3013.0 -24.0Q3013 -51 3037.0 -78.0Q3061 -105 3084.5 -125.0Q3108 -145 3108.0 -151.5Q3108 -158 3100.5 -166.5Q3093 -175 3088 -178Q3071 -161 3014 -116L3010 -131Q3073 -181 3083 -198V-207Q3083 -232 3088.0 -241.0Q3093 -250 3112.0 -266.0Q3131 -282 3138.0 -282.0Q3145 -282 3150.5 -277.0Q3156 -272 3156.0 -267.0Q3156 -262 3152.5 -255.5Q3149 -249 3145.5 -244.5Q3142 -240 3136.0 -233.5Q3130 -227 3128.5 -224.5Q3127 -222 3125.5 -216.0Q3124 -210 3119.0 -206.0Q3114 -202 3114.0 -196.0Q3114 -190 3122.0 -169.5Q3130 -149 3130.0 -139.5Q3130 -130 3093.0 -94.5Q3056 -59 3056 -37Q3056 -25 3067 -25Q3081 -25 3119 -50L3131 -58Q3196 -103 3253 -149ZM3381.5 -302.0Q3391 -302 3396.5 -296.0Q3402 -290 3402.0 -279.0Q3402 -268 3387.0 -251.0Q3372 -234 3361.0 -234.0Q3350 -234 3345.0 -240.5Q3340 -247 3340.0 -255.5Q3340 -264 3356.0 -283.0Q3372 -302 3381.5 -302.0ZM3464 -167Q3472 -172 3476.5 -172.0Q3481 -172 3481 -166V-163Q3485 -163 3427.5 -119.0Q3370 -75 3304.5 -31.0Q3239 13 3222 13Q3193 13 3193 -11Q3193 -40 3243.0 -120.5Q3293 -201 3316 -201Q3333 -201 3333.0 -188.0Q3333 -175 3287.0 -117.0Q3241 -59 3241 -34Q3241 -20 3251.5 -20.0Q3262 -20 3304 -48Q3379 -98 3442 -149ZM3534 -143 3566 -192Q3563 -193 3560 -193Q3518 -193 3450.0 -129.0Q3382 -65 3382 -39Q3382 -32 3390 -32Q3415 -32 3466.0 -74.5Q3517 -117 3534 -143ZM3757 -162Q3549 6 3505 6Q3488 6 3488.0 -14.0Q3488 -34 3503 -81Q3503 -82 3501 -82Q3386 13 3348 13Q3322 13 3322 -6Q3322 -48 3412.5 -129.0Q3503 -210 3557 -210Q3564 -210 3572 -200Q3595 -234 3830 -569Q3855 -600 3870.5 -600.0Q3886 -600 3886 -590Q3886 -565 3714 -354Q3650 -274 3596.5 -187.5Q3543 -101 3543 -56Q3543 -37 3554 -37Q3567 -37 3600 -60Q3668 -109 3719 -150L3738 -166Q3745 -171 3751.0 -171.0Q3757 -171 3757 -164ZM4035 -166Q4042 -171 4048.0 -171.0Q4054 -171 4054 -164V-162Q3957 -82 3902 -46L3702 84L3640 171Q3496 368 3496 383Q3480 418 3465 418Q3446 418 3446.0 393.0Q3446 368 3470.5 326.0Q3495 284 3519 258L3614 158Q3626 139 3663.0 88.0Q3700 37 3712 20L3755 -44L3757 -48Q3757 -50 3755 -50Q3696 -1 3657.0 -1.0Q3618 -1 3618.0 -23.5Q3618 -46 3648.0 -83.0Q3678 -120 3720.5 -155.0Q3763 -190 3814.5 -215.5Q3866 -241 3905.5 -241.0Q3945 -241 3945 -213Q3945 -193 3907.5 -165.0Q3870 -137 3861.5 -137.0Q3853 -137 3853 -141Q3853 -147 3861 -152Q3895 -176 3895.0 -197.5Q3895 -219 3877 -219Q3833 -219 3754.5 -144.5Q3676 -70 3676 -39Q3676 -30 3690.5 -30.0Q3705 -30 3740.0 -53.5Q3775 -77 3793 -99L3820 -133Q3825 -140 3833.0 -140.0Q3841 -140 3847.0 -135.0Q3853 -130 3853 -125L3732 43L3880 -50Q3946 -90 4012 -146ZM4292 -166Q4299 -171 4305.0 -171.0Q4311 -171 4311 -164V-162Q4207 -76 4138.0 -33.0Q4069 10 4013 10Q3968 10 3968 -34Q3968 -99 4034.0 -167.5Q4100 -236 4145 -236Q4170 -236 4170 -208Q4165 -153 4012 -60V-50Q4012 -17 4046.5 -17.0Q4081 -17 4121 -40Q4199 -86 4267 -145ZM4119 -205Q4097 -205 4062.5 -168.0Q4028 -131 4016 -84Q4064 -113 4097.0 -145.5Q4130 -178 4130.0 -191.5Q4130 -205 4119 -205Z"/><path d="M172 140 C776 115 1552 105 2026 70" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg><span class="brand-tag" id="tag"></span></a>
+    <div class="top-meta">
+      <span id="store-box"></span>
+      <span><label for="lang" id="lang-label"></label> <select id="lang"></select></span>
+      <span class="asof" id="asof"></span>
+      <form method="post" action="/dealer/logout" style="display:inline"><button class="linkbtn" id="logout"></button></form>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc" id="toc"></nav>
+  <main id="main"><div class="loading">…</div></main>
+</div>
+<footer id="foot"></footer>
+<!--ME-->
+
+<script>
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const GR = ["N", "S", "A", "B", "C", "D"];
+const GR_PCT = { N: "", S: "99%+", A: "97–98%", B: "94–96%", C: "90–93%", D: "≤89%" };
+const LANGS = { ko: "한국어", en: "English", ja: "日本語", "zh-Hans": "简体中文", "zh-Hant": "繁體中文", de: "Deutsch", fr: "Français", it: "Italiano", es: "Español", pt: "Português" };
+const COUNTRY_LANG = { KR: "ko", JP: "ja", CN: "zh-Hans", TW: "zh-Hant", HK: "zh-Hant", DE: "de", AT: "de", CH: "de", FR: "fr", LU: "fr", IT: "it", ES: "es", PT: "pt", BR: "pt" };
+const COUNTRY_CUR = { KR: "KRW", JP: "JPY", US: "USD", GB: "GBP", HK: "HKD", CA: "CAD", AU: "AUD", SG: "SGD", DK: "DKK", CH: "CHF", MY: "MYR", CN: "CNY", TW: "TWD", BR: "BRL" };
+const EU_EURO = ["AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "HR", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PT", "SI", "SK"];
+
+// ── 문구 (빠진 말은 영어로) ──
+const I = {
+ko: {
+  tag: "딜러", my_store: "내 매장", lang: "언어", logout: "로그아웃", load_fail: "데이터를 불러오지 못했습니다. 페이지를 새로 고쳐 주세요.", asof: "{t} 수집",
+  nav: ["오늘 브리핑", "매입 조회", "내 재고 점검", "경쟁 매장", "사입 기회", "잘 팔리는 모델", "계정"],
+  grade: { N: "신품", S: "최상", A: "상", B: "중상", C: "중", D: "하" },
+  brief_title: "{store} 오늘 브리핑", brief_lede: "{t} 수집 기준. 판매 중인 재고 {n}건 중 {m}건을 {c} 시세와 비교했습니다.",
+  fig_high: "시세보다 15% 넘게 비싼 재고", fig_old: "올린 지 60일 넘은 재고", fig_rivals: "{c} 다른 매장 변동 (7일)", fig_source: "들여오면 시세보다 10% 넘게 싼 해외 매물",
+  go_stock: "재고 점검 →", go_rivals: "경쟁 매장 →", go_source: "사입 기회 →",
+  sec_first: "먼저 볼 재고", sec_first_s: "비싼 순", sec_opp: "사입 후보", sec_opp_s: "기준가 − 도착 예상 총액", sec_recent: "{c} 다른 매장 최근 변동", sec_missing: "{c}에 매물이 없는 인기 모델", sec_missing_s: "매입하면 빨리 팔릴 후보",
+  none_recent: "최근 7일 변동이 없습니다.", empty: "해당하는 항목이 없습니다.",
+  th_item: "매물", th_mine: "내 가격", th_ref: "기준가", th_pos: "위치", th_low: "{c} 최저", th_age: "올린 지", th_model: "모델", th_abroad_item: "해외 매물", th_local: "현지가", th_landed: "도착 총액", th_diff: "차이", th_time: "시각", th_change: "변동", th_price: "가격", th_sold_n: "판매완료", th_here: "{c} 판매 중", th_abroad: "해외 판매 중", th_turn: "팔리기까지", th_bref: "B 기준가",
+  pos_high: "비쌈", pos_low: "쌈", pos_ok: "적정", pos_none: "시세 없음",
+  basis_sold: "{c} 판매완료 {n}건", basis_ask: "{c} 판매 중 {n}건", basis_all: "전체 나라 판매완료 {n}건", days: "{n}일",
+  stock_title: "내 재고 점검", stock_lede: "{store}에 지금 올라와 있는 매물을 같은 모델·같은 등급의 {c} 기준가와 비교합니다. 줄을 누르면 그 모델의 매입 조회로 넘어갑니다.",
+  f_all: "전체", f_old: "60일+",
+  stock_note: "기준가 = {c} 판매완료가를 등급 비율로 B등급에 맞춘 중앙값 × 이 매물 등급 비율. {c} 판매완료가 2건 미만이면 {c} 다른 매장의 판매 중 가격(3건 이상), 그것도 없으면 전체 나라 판매완료 가격을 씁니다. 등급을 알 수 없는 매물은 B로 봅니다. '올린 지'는 카메라브릿지가 처음 본 날 기준입니다.",
+  buy_title: "매입 조회", buy_lede: "손님이 가져온 물건의 모델을 고르면 {c} 기준가, 판매 중 가격, 최근 판매완료, 회전 속도를 한 장에서 봅니다.", buy_ph: "예: M6, 주미룩스 35 FLE, 녹티 0.95",
+  buy_meta: "판매완료 {sold}건 · 판매 중 {c} {here} / 해외 {abroad}", buy_turn: " · 팔리기까지 중간 {d}일 ({n}건)", sub_models: "세부 모델",
+  ref_title: "등급별 기준가", ref_none: "근거가 부족해 기준가를 내지 않습니다. 아래 판매 중 매물을 참고하세요.",
+  basis_note_ask: "{c} 판매완료 기록이 부족해 {c} 다른 매장의 판매 중 가격을 썼습니다. 팔린 가격이 아닙니다.", basis_note_all: "{c} 근거가 부족해 전체 나라 판매완료 가격을 썼습니다. {c} 시장과 다를 수 있습니다.",
+  calc_title: "매입가 계산", calc_grade: "들어온 물건 등급", calc_sale: "예상 판매가 ({cur})", calc_margin: "목표 마진 (%)", calc_repair: "수리·CLA 비용 ({cur})", calc_offer: "제안 매입가", calc_margin_l: "마진 {m}%", calc_repair_l: "수리·CLA",
+  calc_note: "예상 판매가는 고른 등급의 기준가로 채워 두었습니다. 매장 사정에 맞게 고치세요. 계산을 돕는 숫자일 뿐 확정 매입가가 아닙니다.",
+  here_selling: "{c} 판매 중", sorted_n: "{n}건 · 싼 순", none_here: "{c}에 판매 중인 매물이 없습니다.", abroad_selling: "해외 판매 중", abroad_s: "{c} 도착 예상 총액 · 싼 순", none_abroad: "해외에 판매 중인 매물이 없습니다.", listed: "판매가 {p}", day_n: "{n}일째",
+  sold_recent: "최근 판매완료", sold_recent_s: "'판매완료'로 바뀐 매물의 마지막 가격", none_sold: "판매완료 기록이 없습니다.", sold_note: "판매완료 가격은 매장이 마지막으로 걸어 둔 가격입니다. 실제 거래가는 다를 수 있습니다.",
+  kind_body: "바디", kind_lens: "렌즈", kind_acc: "액세서리", mount: "{m} 마운트",
+  src_title: "사입 기회", src_lede: "다른 나라 매장 매물을 {c}에서 받을 때의 예상 총액(배송·보험·배송대행·관세·부가세 포함)이 같은 등급 {c} 기준가보다 10% 넘게 싼 경우입니다. 차이가 큰 순서입니다.",
+  src_all: "전체", count: "{n}건", check_model: "모델 확인", src_norule: "{c}는 관세·배송 규칙이 아직 없어 도착 총액을 계산하지 못합니다.",
+  src_note: "배송비는 판매처 견적이 아니라 지역별 평균 국제특송 요금입니다. 해외 배송을 하지 않는 매장은 배송대행 수수료를 더했습니다. 기준가의 35% 넘게 싸면 다른 모델이 잘못 연결됐을 수 있어 '모델 확인'을 붙였고, 50% 넘게 싼 매물은 뺐습니다. 환율 {d} 기준.",
+  riv_title: "경쟁 매장", riv_lede: "수집 중인 다른 매장의 새 입고, 가격 변경, 사라진 매물을 최근 순으로 보여 줍니다. 사라진 매물은 판매됐을 가능성이 높지만 확정된 판매는 아닙니다.",
+  ft_all: "전체", ft_new: "신규 입고", ft_price: "가격 변경", ft_gone: "사라짐", only_country: "{c} 매장만", only_mine: "내 재고와 같은 모델만",
+  riv_note: "변동 기록은 {d}부터 쌓였고 최근 14일만 보여 줍니다.", mk_cut: "가격 인하 {p}%", mk_up: "가격 인상 {p}%", after: "올라온 지 {d} 만에", hours: "{n}시간",
+  dm_title: "잘 팔리는 모델", dm_lede: "판매완료가 많이 나왔는데 지금 {c}에 판매 중인 매물은 적은 모델입니다. 위에 있을수록 매입해 두면 빨리 팔릴 가능성이 높습니다.",
+  dm_note: "순서 = 판매완료 건수 ÷ ({c} 판매 중 + 1). '팔리기까지'는 올라온 뒤 사라지거나 판매완료로 바뀌기까지 걸린 날의 중간값입니다.", dm_note_all: "{c} 판매완료 기록이 적어 전체 나라 판매완료 건수로 셌습니다.",
+  acct_title: "계정", acct_id: "아이디", acct_store: "묶인 매장", acct_country: "기준 나라", acct_cur: "통화", all_stores: "모든 매장 (관리자)",
+  pw_title: "비밀번호 바꾸기", pw_cur: "지금 비밀번호", pw_new: "새 비밀번호 (10자 이상)", pw_go: "바꾸기", pw_ok: "비밀번호를 바꿨습니다.", pw_wrong: "지금 비밀번호가 맞지 않습니다.", pw_short: "새 비밀번호는 10자 이상이어야 합니다.", pw_err: "바꾸지 못했습니다. 잠시 뒤 다시 해 주세요.",
+  more: "{n}건 더 보기 (남은 {r}건)",
+  foot: "카메라브릿지 자동 수집 데이터({t})입니다. 판매자가 건 가격, 판매완료 직전 가격, 실제 거래가는 서로 다를 수 있습니다. 다른 나라 통화는 환율({d})로 바꾼 값입니다.",
+},
+en: {
+  tag: "Dealer", my_store: "My shop", lang: "Language", logout: "Sign out", load_fail: "Could not load the data. Please refresh the page.", asof: "Collected {t}",
+  nav: ["Today", "Buy-in check", "My stock", "Competitors", "Sourcing", "Fast sellers", "Account"],
+  grade: { N: "New", S: "Mint", A: "Exc+", B: "Exc", C: "VG", D: "Good" },
+  brief_title: "{store} today", brief_lede: "Data collected {t}. {m} of your {n} listings are compared with the {c} reference price.",
+  fig_high: "Listings priced over 15% above reference", fig_old: "Listings up for more than 60 days", fig_rivals: "Changes at other shops in {c} (7 days)", fig_source: "Listings abroad that land over 10% below reference",
+  go_stock: "Check stock →", go_rivals: "Competitors →", go_source: "Sourcing →",
+  sec_first: "Check these first", sec_first_s: "most overpriced first", sec_opp: "Sourcing candidates", sec_opp_s: "reference − est. landed total", sec_recent: "Recent changes at other shops in {c}", sec_missing: "Popular models with no listing in {c}", sec_missing_s: "likely to sell fast",
+  none_recent: "No changes in the last 7 days.", empty: "Nothing to show.",
+  th_item: "Listing", th_mine: "My price", th_ref: "Reference", th_pos: "Position", th_low: "Lowest in {c}", th_age: "Listed", th_model: "Model", th_abroad_item: "Listing abroad", th_local: "Local price", th_landed: "Landed", th_diff: "Difference", th_time: "Time", th_change: "Change", th_price: "Price", th_sold_n: "Sold", th_here: "For sale in {c}", th_abroad: "For sale abroad", th_turn: "Time to sell", th_bref: "B reference",
+  pos_high: "High", pos_low: "Low", pos_ok: "In range", pos_none: "No reference",
+  basis_sold: "{n} sold in {c}", basis_ask: "{n} for sale in {c}", basis_all: "{n} sold, all countries", days: "{n} d",
+  stock_title: "My stock", stock_lede: "Listings currently up at {store}, compared with the {c} reference for the same model and grade. Click a row to open the buy-in check for that model.",
+  f_all: "All", f_old: "60 d+",
+  stock_note: "Reference = median sold price in {c}, normalised to grade B, × this listing's grade factor. With fewer than 2 sales in {c} we use asking prices at other shops in {c} (3 or more), and otherwise sold prices from all countries. Listings without a grade count as B. 'Listed' is counted from when Camera Bridge first saw the listing.",
+  buy_title: "Buy-in check", buy_lede: "Pick the model a customer brought in to see the {c} reference, current asking prices, recent sales and how fast it sells.", buy_ph: "e.g. M6, Summilux 35 FLE, Noctilux 0.95",
+  buy_meta: "{sold} sold · for sale: {c} {here} / abroad {abroad}", buy_turn: " · median {d} days to sell ({n})", sub_models: "Variants",
+  ref_title: "Reference by grade", ref_none: "Not enough data for a reference price. See the listings below.",
+  basis_note_ask: "Not enough sales recorded in {c}, so this uses asking prices at other shops in {c}. These are not sold prices.", basis_note_all: "Not enough data in {c}, so this uses sold prices from all countries. The {c} market may differ.",
+  calc_title: "Offer calculator", calc_grade: "Grade of the item", calc_sale: "Expected sale price ({cur})", calc_margin: "Target margin (%)", calc_repair: "Repair / CLA ({cur})", calc_offer: "Suggested offer", calc_margin_l: "Margin {m}%", calc_repair_l: "Repair / CLA",
+  calc_note: "The expected sale price is pre-filled with the reference for the chosen grade. Adjust it to your shop. This is a guide, not a final offer.",
+  here_selling: "For sale in {c}", sorted_n: "{n} · cheapest first", none_here: "Nothing for sale in {c}.", abroad_selling: "For sale abroad", abroad_s: "est. landed in {c} · cheapest first", none_abroad: "Nothing for sale abroad.", listed: "Listed {p}", day_n: "day {n}",
+  sold_recent: "Recent sales", sold_recent_s: "last price before marked sold", none_sold: "No sales recorded.", sold_note: "Sold prices are the shop's last asking price. The actual transaction price may differ.",
+  kind_body: "Body", kind_lens: "Lens", kind_acc: "Accessory", mount: "{m} mount",
+  src_title: "Sourcing", src_lede: "Listings in other countries whose estimated landed total in {c} (shipping, insurance, forwarding, duty and VAT) is more than 10% below the {c} reference for the same grade. Largest gap first.",
+  src_all: "All", count: "{n}", check_model: "check model", src_norule: "There are no duty and shipping rules for {c} yet, so landed totals cannot be estimated.",
+  src_note: "Shipping uses average insured courier rates by region, not shop quotes. Shops that do not ship abroad include a forwarding fee. Gaps over 35% are marked 'check model' as the model may be mismatched; gaps over 50% are left out. Exchange rates as of {d}.",
+  riv_title: "Competitors", riv_lede: "New stock, price changes and removed listings at the other shops we collect, newest first. A removed listing has probably sold, but that is not confirmed.",
+  ft_all: "All", ft_new: "New", ft_price: "Price change", ft_gone: "Removed", only_country: "Only shops in {c}", only_mine: "Only models I stock",
+  riv_note: "Change history starts {d}; the last 14 days are shown.", mk_cut: "Price cut {p}%", mk_up: "Price up {p}%", after: "after {d}", hours: "{n} h",
+  dm_title: "Fast sellers", dm_lede: "Models with many sales but few listings for sale in {c} right now. The higher up, the faster it is likely to sell if you buy one in.",
+  dm_note: "Order = sales ÷ (for sale in {c} + 1). 'Time to sell' is the median days from listing to removal or sale.", dm_note_all: "Few sales recorded in {c}, so sales from all countries are counted.",
+  acct_title: "Account", acct_id: "Username", acct_store: "Linked shops", acct_country: "Reference country", acct_cur: "Currency", all_stores: "All shops (admin)",
+  pw_title: "Change password", pw_cur: "Current password", pw_new: "New password (10+ characters)", pw_go: "Change", pw_ok: "Password changed.", pw_wrong: "The current password is incorrect.", pw_short: "The new password must be at least 10 characters.", pw_err: "Could not change the password. Please try again shortly.",
+  more: "Show {n} more ({r} left)",
+  foot: "Collected automatically by Camera Bridge ({t}). Asking prices, last prices before sale and actual transaction prices can differ. Foreign currencies are converted at rates as of {d}.",
+},
+ja: {
+  tag: "販売店", my_store: "自店", lang: "言語", logout: "ログアウト", load_fail: "データを読み込めませんでした。ページを再読み込みしてください。", asof: "{t} 収集",
+  nav: ["本日のまとめ", "買取照会", "在庫チェック", "競合店", "仕入れ候補", "売れ筋モデル", "アカウント"],
+  grade: { N: "新品", S: "極上", A: "美品", B: "良品", C: "並品", D: "難あり" },
+  brief_title: "{store} 本日のまとめ", brief_lede: "{t} 収集分。販売中の在庫 {n} 点のうち {m} 点を{c}の基準価格と比べました。",
+  fig_high: "基準価格より15%以上高い在庫", fig_old: "掲載から60日を超えた在庫", fig_rivals: "{c}の他店の動き（7日）", fig_source: "取り寄せても基準価格より10%以上安い海外在庫",
+  go_stock: "在庫チェック →", go_rivals: "競合店 →", go_source: "仕入れ候補 →",
+  sec_first: "まず見る在庫", sec_first_s: "高い順", sec_opp: "仕入れ候補", sec_opp_s: "基準価格 − 到着見込み総額", sec_recent: "{c}の他店の最近の動き", sec_missing: "{c}に在庫がない人気モデル", sec_missing_s: "仕入れればすぐ売れる候補",
+  none_recent: "最近7日間の動きはありません。", empty: "該当するものがありません。",
+  th_item: "商品", th_mine: "自店価格", th_ref: "基準価格", th_pos: "位置", th_low: "{c}最安", th_age: "掲載日数", th_model: "モデル", th_abroad_item: "海外の商品", th_local: "現地価格", th_landed: "到着総額", th_diff: "差額", th_time: "日時", th_change: "動き", th_price: "価格", th_sold_n: "販売済み", th_here: "{c}で販売中", th_abroad: "海外で販売中", th_turn: "売れるまで", th_bref: "B 基準価格",
+  pos_high: "高い", pos_low: "安い", pos_ok: "適正", pos_none: "相場なし",
+  basis_sold: "{c}販売済み {n}件", basis_ask: "{c}販売中 {n}件", basis_all: "全ての国の販売済み {n}件", days: "{n}日",
+  stock_title: "在庫チェック", stock_lede: "{store}に今掲載中の商品を、同じモデル・同じランクの{c}基準価格と比べます。行を押すとそのモデルの買取照会に移ります。",
+  f_all: "すべて", f_old: "60日+",
+  stock_note: "基準価格 = {c}の販売済み価格をランク比率でBランクに揃えた中央値 × この商品のランク比率。{c}の販売済みが2件未満なら{c}の他店の販売中価格（3件以上）、それもなければ全ての国の販売済み価格を使います。ランク不明の商品はBとみなします。",
+  buy_title: "買取照会", buy_lede: "お客様が持ち込んだ商品のモデルを選ぶと、{c}の基準価格、販売中価格、最近の販売済み、回転の速さを一画面で見られます。", buy_ph: "例: M6, Summilux 35 FLE, Noctilux 0.95",
+  buy_meta: "販売済み {sold}件 · 販売中 {c} {here} / 海外 {abroad}", buy_turn: " · 売れるまで中央値 {d}日（{n}件）", sub_models: "詳細モデル",
+  ref_title: "ランク別基準価格", ref_none: "根拠が足りないため基準価格を出していません。下の販売中の商品を参考にしてください。",
+  basis_note_ask: "{c}の販売済み記録が少ないため、{c}の他店の販売中価格を使いました。売れた価格ではありません。", basis_note_all: "{c}の根拠が少ないため、全ての国の販売済み価格を使いました。{c}の相場とは異なる場合があります。",
+  calc_title: "買取価格の計算", calc_grade: "持ち込み品のランク", calc_sale: "想定販売価格（{cur}）", calc_margin: "目標粗利（%）", calc_repair: "修理・OH費用（{cur}）", calc_offer: "提案買取価格", calc_margin_l: "粗利 {m}%", calc_repair_l: "修理・OH",
+  calc_note: "想定販売価格には選んだランクの基準価格を入れてあります。お店の事情に合わせて直してください。計算の目安であり、確定した買取価格ではありません。",
+  here_selling: "{c}で販売中", sorted_n: "{n}件 · 安い順", none_here: "{c}で販売中の商品はありません。", abroad_selling: "海外で販売中", abroad_s: "{c}到着見込み総額 · 安い順", none_abroad: "海外で販売中の商品はありません。", listed: "販売価格 {p}", day_n: "{n}日目",
+  sold_recent: "最近の販売済み", sold_recent_s: "販売済みになる直前の価格", none_sold: "販売済みの記録はありません。", sold_note: "販売済み価格はお店が最後に付けていた価格です。実際の取引価格とは異なる場合があります。",
+  kind_body: "ボディ", kind_lens: "レンズ", kind_acc: "アクセサリー", mount: "{m}マウント",
+  src_title: "仕入れ候補", src_lede: "他の国のお店の商品を{c}で受け取る場合の見込み総額（送料・保険・転送・関税・消費税込み）が、同じランクの{c}基準価格より10%以上安いものです。差が大きい順です。",
+  src_all: "すべて", count: "{n}件", check_model: "モデル確認", src_norule: "{c}の関税・送料ルールがまだないため、到着総額を計算できません。",
+  src_note: "送料はお店の見積もりではなく地域別の平均国際便料金です。海外発送しないお店は転送手数料を加えました。基準価格より35%以上安いものはモデルの紐付け違いの可能性があるため「モデル確認」を付け、50%以上安いものは除きました。為替は{d}時点。",
+  riv_title: "競合店", riv_lede: "収集中の他店の新着、価格変更、掲載終了を新しい順に表示します。掲載終了は売れた可能性が高いものの、確定ではありません。",
+  ft_all: "すべて", ft_new: "新着", ft_price: "価格変更", ft_gone: "掲載終了", only_country: "{c}のお店のみ", only_mine: "自店在庫と同じモデルのみ",
+  riv_note: "動きの記録は{d}から。最近14日分を表示します。", mk_cut: "値下げ {p}%", mk_up: "値上げ {p}%", after: "掲載から {d}", hours: "{n}時間",
+  dm_title: "売れ筋モデル", dm_lede: "販売済みが多いのに、今{c}で販売中の商品が少ないモデルです。上にあるほど、仕入れればすぐ売れる可能性が高いです。",
+  dm_note: "順序 = 販売済み件数 ÷（{c}で販売中 + 1）。「売れるまで」は掲載から終了・販売済みまでの日数の中央値です。", dm_note_all: "{c}の販売済み記録が少ないため、全ての国の販売済み件数で数えました。",
+  acct_title: "アカウント", acct_id: "ID", acct_store: "紐付いたお店", acct_country: "基準の国", acct_cur: "通貨", all_stores: "全店（管理者）",
+  pw_title: "パスワード変更", pw_cur: "現在のパスワード", pw_new: "新しいパスワード（10文字以上）", pw_go: "変更", pw_ok: "パスワードを変更しました。", pw_wrong: "現在のパスワードが正しくありません。", pw_short: "新しいパスワードは10文字以上にしてください。", pw_err: "変更できませんでした。しばらくしてからお試しください。",
+  more: "さらに {n}件（残り {r}件）",
+  foot: "Camera Bridge が自動収集したデータ（{t}）です。掲載価格、販売済み直前の価格、実際の取引価格は異なる場合があります。外貨は{d}時点の為替で換算しています。",
+},
+de: {
+  tag: "Händler", my_store: "Mein Geschäft", lang: "Sprache", logout: "Abmelden", load_fail: "Daten konnten nicht geladen werden. Bitte Seite neu laden.", asof: "Stand {t}",
+  nav: ["Heute", "Ankauf prüfen", "Mein Bestand", "Wettbewerb", "Einkauf", "Schnelldreher", "Konto"],
+  grade: { N: "Neu", S: "Neuwertig", A: "Sehr gut+", B: "Sehr gut", C: "Gut", D: "Gebraucht" },
+  brief_title: "{store} heute", brief_lede: "Datenstand {t}. {m} von {n} Angeboten sind mit dem Referenzpreis für {c} verglichen.",
+  fig_high: "Angebote über 15 % über Referenz", fig_old: "Angebote seit über 60 Tagen online", fig_rivals: "Änderungen bei anderen Händlern in {c} (7 Tage)", fig_source: "Angebote im Ausland, die geliefert über 10 % unter Referenz liegen",
+  go_stock: "Bestand prüfen →", go_rivals: "Wettbewerb →", go_source: "Einkauf →",
+  sec_first: "Zuerst prüfen", sec_first_s: "teuerste zuerst", sec_opp: "Einkaufskandidaten", sec_opp_s: "Referenz − geschätzter Lieferpreis", sec_recent: "Neueste Änderungen bei anderen Händlern in {c}", sec_missing: "Gefragte Modelle ohne Angebot in {c}", sec_missing_s: "verkaufen sich voraussichtlich schnell",
+  none_recent: "Keine Änderungen in den letzten 7 Tagen.", empty: "Keine Einträge.",
+  th_item: "Angebot", th_mine: "Mein Preis", th_ref: "Referenz", th_pos: "Lage", th_low: "Günstigstes in {c}", th_age: "Online", th_model: "Modell", th_abroad_item: "Angebot im Ausland", th_local: "Preis vor Ort", th_landed: "Geliefert", th_diff: "Differenz", th_time: "Zeit", th_change: "Änderung", th_price: "Preis", th_sold_n: "Verkauft", th_here: "Angebote in {c}", th_abroad: "Angebote im Ausland", th_turn: "Bis zum Verkauf", th_bref: "Referenz B",
+  pos_high: "Teuer", pos_low: "Günstig", pos_ok: "Im Rahmen", pos_none: "Keine Referenz",
+  basis_sold: "{n} verkauft in {c}", basis_ask: "{n} Angebote in {c}", basis_all: "{n} verkauft, alle Länder", days: "{n} T",
+  stock_title: "Mein Bestand", stock_lede: "Aktuelle Angebote von {store}, verglichen mit der Referenz für {c} bei gleichem Modell und Zustand. Ein Klick auf die Zeile öffnet die Ankaufsprüfung.",
+  f_all: "Alle", f_old: "60 T+",
+  stock_note: "Referenz = Median der Verkaufspreise in {c}, auf Zustand B umgerechnet, × Faktor des Zustands. Bei weniger als 2 Verkäufen in {c} nutzen wir Angebotspreise anderer Händler in {c} (mindestens 3), sonst Verkaufspreise aller Länder. Angebote ohne Zustand zählen als B.",
+  buy_title: "Ankauf prüfen", buy_lede: "Wählen Sie das Modell, das ein Kunde anbietet: Referenz für {c}, aktuelle Angebote, letzte Verkäufe und Umschlagdauer auf einen Blick.", buy_ph: "z. B. M6, Summilux 35 FLE, Noctilux 0.95",
+  buy_meta: "{sold} verkauft · Angebote: {c} {here} / Ausland {abroad}", buy_turn: " · Median {d} Tage bis Verkauf ({n})", sub_models: "Varianten",
+  ref_title: "Referenz nach Zustand", ref_none: "Zu wenige Daten für eine Referenz. Siehe Angebote unten.",
+  basis_note_ask: "Zu wenige Verkäufe in {c}; verwendet werden Angebotspreise anderer Händler in {c}. Das sind keine Verkaufspreise.", basis_note_all: "Zu wenige Daten in {c}; verwendet werden Verkaufspreise aller Länder. Der Markt in {c} kann abweichen.",
+  calc_title: "Ankaufsrechner", calc_grade: "Zustand des Artikels", calc_sale: "Erwarteter Verkaufspreis ({cur})", calc_margin: "Zielmarge (%)", calc_repair: "Reparatur / CLA ({cur})", calc_offer: "Vorgeschlagener Ankaufspreis", calc_margin_l: "Marge {m} %", calc_repair_l: "Reparatur / CLA",
+  calc_note: "Der Verkaufspreis ist mit der Referenz des gewählten Zustands vorbelegt. Passen Sie ihn an Ihr Geschäft an. Eine Rechenhilfe, kein verbindlicher Preis.",
+  here_selling: "Angebote in {c}", sorted_n: "{n} · günstigste zuerst", none_here: "Keine Angebote in {c}.", abroad_selling: "Angebote im Ausland", abroad_s: "geschätzt geliefert nach {c} · günstigste zuerst", none_abroad: "Keine Angebote im Ausland.", listed: "Angebot {p}", day_n: "Tag {n}",
+  sold_recent: "Letzte Verkäufe", sold_recent_s: "letzter Preis vor 'verkauft'", none_sold: "Keine Verkäufe erfasst.", sold_note: "Verkaufspreise sind der letzte Angebotspreis des Händlers. Der tatsächliche Preis kann abweichen.",
+  kind_body: "Gehäuse", kind_lens: "Objektiv", kind_acc: "Zubehör", mount: "{m}-Bajonett",
+  src_title: "Einkauf", src_lede: "Angebote in anderen Ländern, deren geschätzter Lieferpreis nach {c} (Versand, Versicherung, Weiterleitung, Zoll, MwSt.) über 10 % unter der Referenz für {c} im gleichen Zustand liegt. Größte Differenz zuerst.",
+  src_all: "Alle", count: "{n}", check_model: "Modell prüfen", src_norule: "Für {c} gibt es noch keine Zoll- und Versandregeln; Lieferpreise können nicht geschätzt werden.",
+  src_note: "Versand nach regionalen Durchschnittspreisen für versicherte Kuriere, nicht nach Händlerangebot. Händler ohne Auslandsversand enthalten eine Weiterleitungsgebühr. Über 35 % Differenz: 'Modell prüfen'; über 50 % ausgeblendet. Wechselkurse vom {d}.",
+  riv_title: "Wettbewerb", riv_lede: "Neue Angebote, Preisänderungen und entfernte Angebote anderer Händler, neueste zuerst. Entfernt heißt wahrscheinlich verkauft, aber nicht bestätigt.",
+  ft_all: "Alle", ft_new: "Neu", ft_price: "Preisänderung", ft_gone: "Entfernt", only_country: "Nur Händler in {c}", only_mine: "Nur Modelle aus meinem Bestand",
+  riv_note: "Änderungsverlauf seit {d}; gezeigt werden die letzten 14 Tage.", mk_cut: "Preis −{p} %", mk_up: "Preis +{p} %", after: "nach {d}", hours: "{n} Std.",
+  dm_title: "Schnelldreher", dm_lede: "Modelle mit vielen Verkäufen, aber wenigen aktuellen Angeboten in {c}. Je weiter oben, desto schneller verkauft sich ein Ankauf voraussichtlich.",
+  dm_note: "Reihenfolge = Verkäufe ÷ (Angebote in {c} + 1). 'Bis zum Verkauf' ist der Median der Tage bis Entfernung oder Verkauf.", dm_note_all: "Wenige Verkäufe in {c} erfasst; gezählt werden Verkäufe aller Länder.",
+  acct_title: "Konto", acct_id: "Benutzername", acct_store: "Verknüpfte Geschäfte", acct_country: "Referenzland", acct_cur: "Währung", all_stores: "Alle Geschäfte (Admin)",
+  pw_title: "Passwort ändern", pw_cur: "Aktuelles Passwort", pw_new: "Neues Passwort (mind. 10 Zeichen)", pw_go: "Ändern", pw_ok: "Passwort geändert.", pw_wrong: "Das aktuelle Passwort ist falsch.", pw_short: "Das neue Passwort braucht mindestens 10 Zeichen.", pw_err: "Ändern nicht möglich. Bitte später erneut versuchen.",
+  more: "{n} weitere ({r} übrig)",
+  foot: "Automatisch erfasst von Camera Bridge ({t}). Angebotspreis, letzter Preis vor Verkauf und tatsächlicher Preis können abweichen. Fremdwährungen umgerechnet zum Kurs vom {d}.",
+},
+fr: {
+  tag: "Revendeur", my_store: "Mon magasin", lang: "Langue", logout: "Se déconnecter", load_fail: "Impossible de charger les données. Actualisez la page.", asof: "Collecté le {t}",
+  nav: ["Aujourd'hui", "Estimer un rachat", "Mon stock", "Concurrents", "Achats", "Ventes rapides", "Compte"],
+  grade: { N: "Neuf", S: "Comme neuf", A: "Très bon+", B: "Très bon", C: "Bon", D: "Usagé" },
+  brief_title: "{store} aujourd'hui", brief_lede: "Données du {t}. {m} de vos {n} annonces sont comparées au prix de référence en {c}.",
+  fig_high: "Annonces à plus de 15 % au-dessus de la référence", fig_old: "Annonces en ligne depuis plus de 60 jours", fig_rivals: "Changements chez les autres magasins en {c} (7 jours)", fig_source: "Annonces à l'étranger livrées à plus de 10 % sous la référence",
+  go_stock: "Voir le stock →", go_rivals: "Concurrents →", go_source: "Achats →",
+  sec_first: "À voir d'abord", sec_first_s: "les plus chères d'abord", sec_opp: "Pistes d'achat", sec_opp_s: "référence − total livré estimé", sec_recent: "Derniers changements chez les autres magasins en {c}", sec_missing: "Modèles recherchés sans annonce en {c}", sec_missing_s: "devraient se vendre vite",
+  none_recent: "Aucun changement ces 7 derniers jours.", empty: "Rien à afficher.",
+  th_item: "Annonce", th_mine: "Mon prix", th_ref: "Référence", th_pos: "Position", th_low: "Le moins cher en {c}", th_age: "En ligne", th_model: "Modèle", th_abroad_item: "Annonce à l'étranger", th_local: "Prix local", th_landed: "Livré", th_diff: "Écart", th_time: "Heure", th_change: "Changement", th_price: "Prix", th_sold_n: "Vendus", th_here: "En vente en {c}", th_abroad: "En vente à l'étranger", th_turn: "Délai de vente", th_bref: "Référence B",
+  pos_high: "Cher", pos_low: "Bas", pos_ok: "Dans la norme", pos_none: "Pas de référence",
+  basis_sold: "{n} vendus en {c}", basis_ask: "{n} en vente en {c}", basis_all: "{n} vendus, tous pays", days: "{n} j",
+  stock_title: "Mon stock", stock_lede: "Annonces en ligne de {store}, comparées à la référence en {c} pour le même modèle et le même état. Cliquez sur une ligne pour estimer un rachat.",
+  f_all: "Tout", f_old: "60 j+",
+  stock_note: "Référence = médiane des prix vendus en {c}, ramenée à l'état B, × facteur de l'état. Avec moins de 2 ventes en {c}, nous utilisons les prix affichés d'autres magasins en {c} (au moins 3), sinon les prix vendus de tous les pays. Sans état connu, l'annonce compte comme B.",
+  buy_title: "Estimer un rachat", buy_lede: "Choisissez le modèle apporté par un client : référence en {c}, prix affichés, ventes récentes et délai de vente sur une seule page.", buy_ph: "ex. M6, Summilux 35 FLE, Noctilux 0.95",
+  buy_meta: "{sold} vendus · en vente : {c} {here} / étranger {abroad}", buy_turn: " · délai médian {d} jours ({n})", sub_models: "Variantes",
+  ref_title: "Référence par état", ref_none: "Pas assez de données pour une référence. Voir les annonces ci-dessous.",
+  basis_note_ask: "Trop peu de ventes en {c} : nous utilisons les prix affichés d'autres magasins en {c}. Ce ne sont pas des prix de vente.", basis_note_all: "Trop peu de données en {c} : nous utilisons les prix vendus de tous les pays. Le marché en {c} peut différer.",
+  calc_title: "Calcul du rachat", calc_grade: "État de l'article", calc_sale: "Prix de vente prévu ({cur})", calc_margin: "Marge visée (%)", calc_repair: "Réparation / CLA ({cur})", calc_offer: "Prix de rachat proposé", calc_margin_l: "Marge {m} %", calc_repair_l: "Réparation / CLA",
+  calc_note: "Le prix de vente est prérempli avec la référence de l'état choisi. Ajustez-le à votre magasin. C'est une aide au calcul, pas un prix définitif.",
+  here_selling: "En vente en {c}", sorted_n: "{n} · du moins cher", none_here: "Rien en vente en {c}.", abroad_selling: "En vente à l'étranger", abroad_s: "livré en {c} (estimé) · du moins cher", none_abroad: "Rien en vente à l'étranger.", listed: "Affiché {p}", day_n: "jour {n}",
+  sold_recent: "Ventes récentes", sold_recent_s: "dernier prix avant 'vendu'", none_sold: "Aucune vente enregistrée.", sold_note: "Le prix vendu est le dernier prix affiché par le magasin. Le prix réel peut différer.",
+  kind_body: "Boîtier", kind_lens: "Objectif", kind_acc: "Accessoire", mount: "monture {m}",
+  src_title: "Achats", src_lede: "Annonces dans d'autres pays dont le total livré estimé en {c} (port, assurance, transitaire, droits, TVA) est inférieur de plus de 10 % à la référence en {c} pour le même état. Plus grand écart d'abord.",
+  src_all: "Tout", count: "{n}", check_model: "vérifier le modèle", src_norule: "Pas encore de règles de droits et de port pour {c} : le total livré ne peut pas être estimé.",
+  src_note: "Le port suit des tarifs moyens de coursier assuré par région, pas un devis du magasin. Les magasins qui n'expédient pas à l'étranger incluent des frais de transitaire. Écart > 35 % : 'vérifier le modèle' ; > 50 % : exclu. Taux de change du {d}.",
+  riv_title: "Concurrents", riv_lede: "Nouveautés, changements de prix et annonces retirées chez les autres magasins suivis, des plus récentes aux plus anciennes. Une annonce retirée est probablement vendue, sans certitude.",
+  ft_all: "Tout", ft_new: "Nouveau", ft_price: "Prix modifié", ft_gone: "Retiré", only_country: "Seulement les magasins en {c}", only_mine: "Seulement les modèles de mon stock",
+  riv_note: "Historique depuis le {d} ; les 14 derniers jours sont affichés.", mk_cut: "Baisse {p} %", mk_up: "Hausse {p} %", after: "après {d}", hours: "{n} h",
+  dm_title: "Ventes rapides", dm_lede: "Modèles très vendus mais peu proposés en {c} en ce moment. Plus ils sont haut, plus un rachat a de chances de partir vite.",
+  dm_note: "Ordre = ventes ÷ (en vente en {c} + 1). 'Délai de vente' = médiane des jours jusqu'au retrait ou à la vente.", dm_note_all: "Peu de ventes enregistrées en {c} : nous comptons les ventes de tous les pays.",
+  acct_title: "Compte", acct_id: "Identifiant", acct_store: "Magasins liés", acct_country: "Pays de référence", acct_cur: "Devise", all_stores: "Tous les magasins (admin)",
+  pw_title: "Changer le mot de passe", pw_cur: "Mot de passe actuel", pw_new: "Nouveau mot de passe (10 caractères min.)", pw_go: "Changer", pw_ok: "Mot de passe changé.", pw_wrong: "Le mot de passe actuel est incorrect.", pw_short: "Le nouveau mot de passe doit faire au moins 10 caractères.", pw_err: "Impossible de changer le mot de passe. Réessayez bientôt.",
+  more: "Afficher {n} de plus ({r} restants)",
+  foot: "Données collectées automatiquement par Camera Bridge ({t}). Prix affiché, dernier prix avant vente et prix réel peuvent différer. Devises converties au taux du {d}.",
+},
+it: {
+  tag: "Rivenditori", my_store: "Il mio negozio", lang: "Lingua", logout: "Esci", load_fail: "Impossibile caricare i dati. Ricarica la pagina.", asof: "Dati del {t}",
+  nav: ["Oggi", "Valuta un ritiro", "Il mio stock", "Concorrenti", "Acquisti", "Più vendute", "Account"],
+  grade: { N: "Nuovo", S: "Come nuovo", A: "Ottimo+", B: "Ottimo", C: "Buono", D: "Usato" },
+  brief_title: "{store} oggi", brief_lede: "Dati del {t}. {m} dei tuoi {n} annunci sono confrontati con il prezzo di riferimento in {c}.",
+  fig_high: "Annunci oltre il 15% sopra il riferimento", fig_old: "Annunci online da più di 60 giorni", fig_rivals: "Variazioni negli altri negozi in {c} (7 giorni)", fig_source: "Annunci all'estero che arrivano oltre il 10% sotto il riferimento",
+  go_stock: "Controlla lo stock →", go_rivals: "Concorrenti →", go_source: "Acquisti →",
+  sec_first: "Da guardare prima", sec_first_s: "i più cari prima", sec_opp: "Possibili acquisti", sec_opp_s: "riferimento − totale stimato a destinazione", sec_recent: "Ultime variazioni negli altri negozi in {c}", sec_missing: "Modelli richiesti senza annunci in {c}", sec_missing_s: "probabilmente si vendono in fretta",
+  none_recent: "Nessuna variazione negli ultimi 7 giorni.", empty: "Niente da mostrare.",
+  th_item: "Annuncio", th_mine: "Il mio prezzo", th_ref: "Riferimento", th_pos: "Posizione", th_low: "Il più basso in {c}", th_age: "Online", th_model: "Modello", th_abroad_item: "Annuncio all'estero", th_local: "Prezzo locale", th_landed: "A destinazione", th_diff: "Differenza", th_time: "Ora", th_change: "Variazione", th_price: "Prezzo", th_sold_n: "Venduti", th_here: "In vendita in {c}", th_abroad: "In vendita all'estero", th_turn: "Tempo di vendita", th_bref: "Riferimento B",
+  pos_high: "Alto", pos_low: "Basso", pos_ok: "In linea", pos_none: "Nessun riferimento",
+  basis_sold: "{n} venduti in {c}", basis_ask: "{n} in vendita in {c}", basis_all: "{n} venduti, tutti i paesi", days: "{n} g",
+  stock_title: "Il mio stock", stock_lede: "Annunci attuali di {store}, confrontati con il riferimento in {c} per lo stesso modello e la stessa condizione. Clicca una riga per valutare un ritiro.",
+  f_all: "Tutti", f_old: "60 g+",
+  stock_note: "Riferimento = mediana dei prezzi di vendita in {c}, riportata alla condizione B, × fattore della condizione. Con meno di 2 vendite in {c} usiamo i prezzi esposti da altri negozi in {c} (almeno 3), altrimenti i prezzi di vendita di tutti i paesi. Senza condizione l'annuncio conta come B.",
+  buy_title: "Valuta un ritiro", buy_lede: "Scegli il modello portato da un cliente: riferimento in {c}, prezzi in vendita, vendite recenti e tempi di vendita in una pagina.", buy_ph: "es. M6, Summilux 35 FLE, Noctilux 0.95",
+  buy_meta: "{sold} venduti · in vendita: {c} {here} / estero {abroad}", buy_turn: " · mediana {d} giorni per vendere ({n})", sub_models: "Varianti",
+  ref_title: "Riferimento per condizione", ref_none: "Dati insufficienti per un riferimento. Vedi gli annunci sotto.",
+  basis_note_ask: "Poche vendite in {c}: usiamo i prezzi esposti da altri negozi in {c}. Non sono prezzi di vendita.", basis_note_all: "Pochi dati in {c}: usiamo i prezzi di vendita di tutti i paesi. Il mercato in {c} può essere diverso.",
+  calc_title: "Calcolo del ritiro", calc_grade: "Condizione dell'articolo", calc_sale: "Prezzo di vendita previsto ({cur})", calc_margin: "Margine obiettivo (%)", calc_repair: "Riparazione / CLA ({cur})", calc_offer: "Prezzo di ritiro proposto", calc_margin_l: "Margine {m}%", calc_repair_l: "Riparazione / CLA",
+  calc_note: "Il prezzo di vendita è precompilato con il riferimento della condizione scelta. Adattalo al tuo negozio. È un aiuto al calcolo, non un prezzo definitivo.",
+  here_selling: "In vendita in {c}", sorted_n: "{n} · dal più economico", none_here: "Niente in vendita in {c}.", abroad_selling: "In vendita all'estero", abroad_s: "stimato a destinazione in {c} · dal più economico", none_abroad: "Niente in vendita all'estero.", listed: "Esposto {p}", day_n: "giorno {n}",
+  sold_recent: "Vendite recenti", sold_recent_s: "ultimo prezzo prima di 'venduto'", none_sold: "Nessuna vendita registrata.", sold_note: "Il prezzo di vendita è l'ultimo prezzo esposto dal negozio. Il prezzo reale può essere diverso.",
+  kind_body: "Corpo", kind_lens: "Obiettivo", kind_acc: "Accessorio", mount: "innesto {m}",
+  src_title: "Acquisti", src_lede: "Annunci in altri paesi il cui totale stimato a destinazione in {c} (spedizione, assicurazione, inoltro, dazi, IVA) è oltre il 10% sotto il riferimento in {c} per la stessa condizione. Differenza maggiore prima.",
+  src_all: "Tutti", count: "{n}", check_model: "verifica modello", src_norule: "Non ci sono ancora regole di dazi e spedizione per {c}: il totale a destinazione non si può stimare.",
+  src_note: "La spedizione usa tariffe medie di corriere assicurato per area, non preventivi del negozio. I negozi che non spediscono all'estero includono una commissione di inoltro. Differenza > 35%: 'verifica modello'; > 50%: escluso. Cambi del {d}.",
+  riv_title: "Concorrenti", riv_lede: "Nuovi arrivi, cambi di prezzo e annunci rimossi negli altri negozi seguiti, dal più recente. Un annuncio rimosso è probabilmente venduto, ma non è confermato.",
+  ft_all: "Tutti", ft_new: "Nuovo", ft_price: "Prezzo cambiato", ft_gone: "Rimosso", only_country: "Solo negozi in {c}", only_mine: "Solo modelli del mio stock",
+  riv_note: "Storico dal {d}; mostrati gli ultimi 14 giorni.", mk_cut: "Ribasso {p}%", mk_up: "Rialzo {p}%", after: "dopo {d}", hours: "{n} h",
+  dm_title: "Più vendute", dm_lede: "Modelli con molte vendite ma pochi annunci in {c} adesso. Più sono in alto, più è probabile che un ritiro si venda in fretta.",
+  dm_note: "Ordine = vendite ÷ (in vendita in {c} + 1). 'Tempo di vendita' = mediana dei giorni fino a rimozione o vendita.", dm_note_all: "Poche vendite registrate in {c}: contiamo le vendite di tutti i paesi.",
+  acct_title: "Account", acct_id: "Nome utente", acct_store: "Negozi collegati", acct_country: "Paese di riferimento", acct_cur: "Valuta", all_stores: "Tutti i negozi (admin)",
+  pw_title: "Cambia password", pw_cur: "Password attuale", pw_new: "Nuova password (almeno 10 caratteri)", pw_go: "Cambia", pw_ok: "Password cambiata.", pw_wrong: "La password attuale non è corretta.", pw_short: "La nuova password deve avere almeno 10 caratteri.", pw_err: "Impossibile cambiare la password. Riprova tra poco.",
+  more: "Mostra altri {n} ({r} rimanenti)",
+  foot: "Dati raccolti automaticamente da Camera Bridge ({t}). Prezzo esposto, ultimo prezzo prima della vendita e prezzo reale possono differire. Valute convertite al cambio del {d}.",
+},
+es: {
+  tag: "Tiendas", my_store: "Mi tienda", lang: "Idioma", logout: "Salir", load_fail: "No se pudieron cargar los datos. Recarga la página.", asof: "Datos del {t}",
+  nav: ["Hoy", "Tasar una compra", "Mi stock", "Competencia", "Compras", "Se venden rápido", "Cuenta"],
+  grade: { N: "Nuevo", S: "Como nuevo", A: "Excelente+", B: "Excelente", C: "Muy bueno", D: "Bueno" },
+  brief_title: "{store} hoy", brief_lede: "Datos del {t}. {m} de tus {n} anuncios se comparan con el precio de referencia en {c}.",
+  fig_high: "Anuncios más de un 15 % sobre la referencia", fig_old: "Anuncios publicados hace más de 60 días", fig_rivals: "Cambios en otras tiendas de {c} (7 días)", fig_source: "Anuncios en el extranjero que llegan más de un 10 % bajo la referencia",
+  go_stock: "Revisar stock →", go_rivals: "Competencia →", go_source: "Compras →",
+  sec_first: "Revisar primero", sec_first_s: "los más caros primero", sec_opp: "Posibles compras", sec_opp_s: "referencia − total estimado en destino", sec_recent: "Últimos cambios en otras tiendas de {c}", sec_missing: "Modelos buscados sin anuncios en {c}", sec_missing_s: "probablemente se venden rápido",
+  none_recent: "Sin cambios en los últimos 7 días.", empty: "Nada que mostrar.",
+  th_item: "Anuncio", th_mine: "Mi precio", th_ref: "Referencia", th_pos: "Posición", th_low: "Más barato en {c}", th_age: "Publicado", th_model: "Modelo", th_abroad_item: "Anuncio en el extranjero", th_local: "Precio local", th_landed: "En destino", th_diff: "Diferencia", th_time: "Hora", th_change: "Cambio", th_price: "Precio", th_sold_n: "Vendidos", th_here: "En venta en {c}", th_abroad: "En venta fuera", th_turn: "Tiempo de venta", th_bref: "Referencia B",
+  pos_high: "Caro", pos_low: "Barato", pos_ok: "En rango", pos_none: "Sin referencia",
+  basis_sold: "{n} vendidos en {c}", basis_ask: "{n} en venta en {c}", basis_all: "{n} vendidos, todos los países", days: "{n} d",
+  stock_title: "Mi stock", stock_lede: "Anuncios actuales de {store}, comparados con la referencia en {c} para el mismo modelo y estado. Pulsa una fila para tasar ese modelo.",
+  f_all: "Todo", f_old: "60 d+",
+  stock_note: "Referencia = mediana de precios vendidos en {c}, ajustada al estado B, × factor del estado. Con menos de 2 ventas en {c} usamos precios de venta de otras tiendas de {c} (3 o más) y, si no, precios vendidos de todos los países. Sin estado conocido, el anuncio cuenta como B.",
+  buy_title: "Tasar una compra", buy_lede: "Elige el modelo que trae un cliente: referencia en {c}, precios en venta, ventas recientes y rotación en una sola página.", buy_ph: "p. ej. M6, Summilux 35 FLE, Noctilux 0.95",
+  buy_meta: "{sold} vendidos · en venta: {c} {here} / fuera {abroad}", buy_turn: " · mediana {d} días en venderse ({n})", sub_models: "Variantes",
+  ref_title: "Referencia por estado", ref_none: "No hay datos suficientes para una referencia. Mira los anuncios de abajo.",
+  basis_note_ask: "Pocas ventas en {c}: usamos precios de venta de otras tiendas de {c}. No son precios vendidos.", basis_note_all: "Pocos datos en {c}: usamos precios vendidos de todos los países. El mercado de {c} puede ser distinto.",
+  calc_title: "Cálculo de compra", calc_grade: "Estado del artículo", calc_sale: "Precio de venta previsto ({cur})", calc_margin: "Margen objetivo (%)", calc_repair: "Reparación / CLA ({cur})", calc_offer: "Precio de compra sugerido", calc_margin_l: "Margen {m} %", calc_repair_l: "Reparación / CLA",
+  calc_note: "El precio de venta viene con la referencia del estado elegido. Ajústalo a tu tienda. Es una ayuda de cálculo, no un precio definitivo.",
+  here_selling: "En venta en {c}", sorted_n: "{n} · del más barato", none_here: "Nada en venta en {c}.", abroad_selling: "En venta fuera", abroad_s: "estimado en destino en {c} · del más barato", none_abroad: "Nada en venta fuera.", listed: "Publicado a {p}", day_n: "día {n}",
+  sold_recent: "Ventas recientes", sold_recent_s: "último precio antes de 'vendido'", none_sold: "No hay ventas registradas.", sold_note: "El precio vendido es el último precio publicado por la tienda. El precio real puede variar.",
+  kind_body: "Cuerpo", kind_lens: "Objetivo", kind_acc: "Accesorio", mount: "montura {m}",
+  src_title: "Compras", src_lede: "Anuncios de otros países cuyo total estimado en {c} (envío, seguro, reenvío, aranceles e IVA) queda más de un 10 % bajo la referencia en {c} para el mismo estado. Mayor diferencia primero.",
+  src_all: "Todo", count: "{n}", check_model: "revisar modelo", src_norule: "Aún no hay reglas de aranceles y envío para {c}; no se puede estimar el total en destino.",
+  src_note: "El envío usa tarifas medias de mensajería asegurada por región, no presupuestos de la tienda. Las tiendas que no envían fuera incluyen comisión de reenvío. Diferencia > 35 %: 'revisar modelo'; > 50 %: excluido. Cambio del {d}.",
+  riv_title: "Competencia", riv_lede: "Novedades, cambios de precio y anuncios retirados en las otras tiendas que seguimos, de más reciente a más antiguo. Un anuncio retirado probablemente se vendió, pero no está confirmado.",
+  ft_all: "Todo", ft_new: "Nuevo", ft_price: "Cambio de precio", ft_gone: "Retirado", only_country: "Solo tiendas de {c}", only_mine: "Solo modelos de mi stock",
+  riv_note: "Historial desde el {d}; se muestran los últimos 14 días.", mk_cut: "Bajada {p} %", mk_up: "Subida {p} %", after: "tras {d}", hours: "{n} h",
+  dm_title: "Se venden rápido", dm_lede: "Modelos con muchas ventas pero pocos anuncios en {c} ahora mismo. Cuanto más arriba, más probable que una compra se venda rápido.",
+  dm_note: "Orden = ventas ÷ (en venta en {c} + 1). 'Tiempo de venta' = mediana de días hasta retirada o venta.", dm_note_all: "Pocas ventas registradas en {c}: contamos las ventas de todos los países.",
+  acct_title: "Cuenta", acct_id: "Usuario", acct_store: "Tiendas vinculadas", acct_country: "País de referencia", acct_cur: "Moneda", all_stores: "Todas las tiendas (admin)",
+  pw_title: "Cambiar contraseña", pw_cur: "Contraseña actual", pw_new: "Nueva contraseña (mín. 10 caracteres)", pw_go: "Cambiar", pw_ok: "Contraseña cambiada.", pw_wrong: "La contraseña actual no es correcta.", pw_short: "La nueva contraseña debe tener al menos 10 caracteres.", pw_err: "No se pudo cambiar la contraseña. Inténtalo en breve.",
+  more: "Ver {n} más (quedan {r})",
+  foot: "Datos recogidos automáticamente por Camera Bridge ({t}). Precio publicado, último precio antes de la venta y precio real pueden diferir. Monedas convertidas al cambio del {d}.",
+},
+pt: {
+  tag: "Lojas", my_store: "Minha loja", lang: "Idioma", logout: "Sair", load_fail: "Não foi possível carregar os dados. Recarregue a página.", asof: "Dados de {t}",
+  nav: ["Hoje", "Avaliar compra", "Meu estoque", "Concorrentes", "Compras", "Vendem rápido", "Conta"],
+  grade: { N: "Novo", S: "Como novo", A: "Excelente+", B: "Excelente", C: "Muito bom", D: "Bom" },
+  brief_title: "{store} hoje", brief_lede: "Dados de {t}. {m} dos seus {n} anúncios são comparados com o preço de referência em {c}.",
+  fig_high: "Anúncios mais de 15% acima da referência", fig_old: "Anúncios publicados há mais de 60 dias", fig_rivals: "Mudanças em outras lojas de {c} (7 dias)", fig_source: "Anúncios no exterior que chegam mais de 10% abaixo da referência",
+  go_stock: "Ver estoque →", go_rivals: "Concorrentes →", go_source: "Compras →",
+  sec_first: "Ver primeiro", sec_first_s: "mais caros primeiro", sec_opp: "Possíveis compras", sec_opp_s: "referência − total estimado no destino", sec_recent: "Mudanças recentes em outras lojas de {c}", sec_missing: "Modelos procurados sem anúncio em {c}", sec_missing_s: "devem vender rápido",
+  none_recent: "Sem mudanças nos últimos 7 dias.", empty: "Nada para mostrar.",
+  th_item: "Anúncio", th_mine: "Meu preço", th_ref: "Referência", th_pos: "Posição", th_low: "Mais barato em {c}", th_age: "Publicado", th_model: "Modelo", th_abroad_item: "Anúncio no exterior", th_local: "Preço local", th_landed: "No destino", th_diff: "Diferença", th_time: "Hora", th_change: "Mudança", th_price: "Preço", th_sold_n: "Vendidos", th_here: "À venda em {c}", th_abroad: "À venda no exterior", th_turn: "Tempo de venda", th_bref: "Referência B",
+  pos_high: "Caro", pos_low: "Barato", pos_ok: "Na média", pos_none: "Sem referência",
+  basis_sold: "{n} vendidos em {c}", basis_ask: "{n} à venda em {c}", basis_all: "{n} vendidos, todos os países", days: "{n} d",
+  stock_title: "Meu estoque", stock_lede: "Anúncios atuais de {store}, comparados com a referência em {c} para o mesmo modelo e estado. Clique numa linha para avaliar esse modelo.",
+  f_all: "Todos", f_old: "60 d+",
+  stock_note: "Referência = mediana dos preços vendidos em {c}, ajustada ao estado B, × fator do estado. Com menos de 2 vendas em {c}, usamos preços anunciados por outras lojas de {c} (3 ou mais); senão, preços vendidos de todos os países. Sem estado conhecido, o anúncio conta como B.",
+  buy_title: "Avaliar compra", buy_lede: "Escolha o modelo trazido pelo cliente: referência em {c}, preços à venda, vendas recentes e giro numa só página.", buy_ph: "ex.: M6, Summilux 35 FLE, Noctilux 0.95",
+  buy_meta: "{sold} vendidos · à venda: {c} {here} / exterior {abroad}", buy_turn: " · mediana de {d} dias para vender ({n})", sub_models: "Variantes",
+  ref_title: "Referência por estado", ref_none: "Dados insuficientes para uma referência. Veja os anúncios abaixo.",
+  basis_note_ask: "Poucas vendas em {c}: usamos preços anunciados por outras lojas de {c}. Não são preços de venda.", basis_note_all: "Poucos dados em {c}: usamos preços vendidos de todos os países. O mercado de {c} pode ser diferente.",
+  calc_title: "Cálculo de compra", calc_grade: "Estado do item", calc_sale: "Preço de venda previsto ({cur})", calc_margin: "Margem desejada (%)", calc_repair: "Reparo / CLA ({cur})", calc_offer: "Preço de compra sugerido", calc_margin_l: "Margem {m}%", calc_repair_l: "Reparo / CLA",
+  calc_note: "O preço de venda vem com a referência do estado escolhido. Ajuste à sua loja. É uma ajuda de cálculo, não um preço final.",
+  here_selling: "À venda em {c}", sorted_n: "{n} · do mais barato", none_here: "Nada à venda em {c}.", abroad_selling: "À venda no exterior", abroad_s: "estimado no destino em {c} · do mais barato", none_abroad: "Nada à venda no exterior.", listed: "Anunciado a {p}", day_n: "dia {n}",
+  sold_recent: "Vendas recentes", sold_recent_s: "último preço antes de 'vendido'", none_sold: "Nenhuma venda registrada.", sold_note: "O preço vendido é o último preço anunciado pela loja. O preço real pode ser diferente.",
+  kind_body: "Corpo", kind_lens: "Lente", kind_acc: "Acessório", mount: "baioneta {m}",
+  src_title: "Compras", src_lede: "Anúncios de outros países cujo total estimado em {c} (frete, seguro, redirecionamento, impostos) fica mais de 10% abaixo da referência em {c} para o mesmo estado. Maior diferença primeiro.",
+  src_all: "Todos", count: "{n}", check_model: "verificar modelo", src_norule: "Ainda não há regras de impostos e frete para {c}; o total no destino não pode ser estimado.",
+  src_note: "O frete usa tarifas médias de courier com seguro por região, não orçamentos da loja. Lojas que não enviam ao exterior incluem taxa de redirecionamento. Diferença > 35%: 'verificar modelo'; > 50%: excluído. Câmbio de {d}.",
+  riv_title: "Concorrentes", riv_lede: "Novidades, mudanças de preço e anúncios retirados nas outras lojas acompanhadas, do mais recente. Um anúncio retirado provavelmente foi vendido, mas não é confirmado.",
+  ft_all: "Todos", ft_new: "Novo", ft_price: "Preço alterado", ft_gone: "Retirado", only_country: "Só lojas de {c}", only_mine: "Só modelos do meu estoque",
+  riv_note: "Histórico desde {d}; mostramos os últimos 14 dias.", mk_cut: "Queda {p}%", mk_up: "Alta {p}%", after: "após {d}", hours: "{n} h",
+  dm_title: "Vendem rápido", dm_lede: "Modelos com muitas vendas mas poucos anúncios em {c} agora. Quanto mais acima, maior a chance de uma compra vender rápido.",
+  dm_note: "Ordem = vendas ÷ (à venda em {c} + 1). 'Tempo de venda' = mediana de dias até retirada ou venda.", dm_note_all: "Poucas vendas registradas em {c}: contamos as vendas de todos os países.",
+  acct_title: "Conta", acct_id: "Usuário", acct_store: "Lojas vinculadas", acct_country: "País de referência", acct_cur: "Moeda", all_stores: "Todas as lojas (admin)",
+  pw_title: "Mudar senha", pw_cur: "Senha atual", pw_new: "Nova senha (mín. 10 caracteres)", pw_go: "Mudar", pw_ok: "Senha alterada.", pw_wrong: "A senha atual está incorreta.", pw_short: "A nova senha precisa ter pelo menos 10 caracteres.", pw_err: "Não foi possível mudar a senha. Tente novamente em breve.",
+  more: "Mostrar mais {n} (restam {r})",
+  foot: "Dados coletados automaticamente pela Camera Bridge ({t}). Preço anunciado, último preço antes da venda e preço real podem diferir. Moedas convertidas pelo câmbio de {d}.",
+},
+"zh-Hans": {
+  tag: "经销商", my_store: "本店", lang: "语言", logout: "退出", load_fail: "无法加载数据，请刷新页面。", asof: "{t} 采集",
+  nav: ["今日概览", "收购查询", "库存检查", "同行动态", "进货机会", "畅销型号", "账号"],
+  grade: { N: "全新", S: "近新", A: "极好", B: "很好", C: "良好", D: "一般" },
+  brief_title: "{store} 今日概览", brief_lede: "{t} 采集。在售 {n} 件中有 {m} 件已与{c}参考价比较。",
+  fig_high: "高于参考价 15% 以上的库存", fig_old: "上架超过 60 天的库存", fig_rivals: "{c}其他店铺动态（7 天）", fig_source: "进口到手价仍比参考价低 10% 以上的海外商品",
+  go_stock: "检查库存 →", go_rivals: "同行动态 →", go_source: "进货机会 →",
+  sec_first: "优先查看", sec_first_s: "偏贵的在前", sec_opp: "进货候选", sec_opp_s: "参考价 − 预计到手总价", sec_recent: "{c}其他店铺最新动态", sec_missing: "{c}无货的热门型号", sec_missing_s: "收进后可能很快售出",
+  none_recent: "最近 7 天没有变动。", empty: "暂无内容。",
+  th_item: "商品", th_mine: "本店价", th_ref: "参考价", th_pos: "位置", th_low: "{c}最低", th_age: "上架", th_model: "型号", th_abroad_item: "海外商品", th_local: "当地价", th_landed: "到手价", th_diff: "差额", th_time: "时间", th_change: "变动", th_price: "价格", th_sold_n: "已售", th_here: "{c}在售", th_abroad: "海外在售", th_turn: "售出用时", th_bref: "B 参考价",
+  pos_high: "偏贵", pos_low: "偏便宜", pos_ok: "合理", pos_none: "无参考价",
+  basis_sold: "{c}已售 {n} 件", basis_ask: "{c}在售 {n} 件", basis_all: "所有国家已售 {n} 件", days: "{n} 天",
+  stock_title: "库存检查", stock_lede: "{store}当前在售商品，与同型号、同成色的{c}参考价比较。点击行可进入该型号的收购查询。",
+  f_all: "全部", f_old: "60 天+",
+  stock_note: "参考价 = {c}已售价格按成色折算为 B 级后的中位数 × 该商品成色系数。{c}已售不足 2 件时，使用{c}其他店铺的在售价格（3 件以上）；仍不足时使用所有国家的已售价格。成色不明按 B 计。",
+  buy_title: "收购查询", buy_lede: "选择顾客带来的型号，一页查看{c}参考价、在售价格、近期成交和周转速度。", buy_ph: "例：M6、Summilux 35 FLE、Noctilux 0.95",
+  buy_meta: "已售 {sold} 件 · 在售 {c} {here} / 海外 {abroad}", buy_turn: " · 售出用时中位数 {d} 天（{n} 件）", sub_models: "细分型号",
+  ref_title: "各成色参考价", ref_none: "依据不足，暂不给出参考价。请参考下方在售商品。",
+  basis_note_ask: "{c}成交记录不足，因此使用{c}其他店铺的在售价格。这不是成交价。", basis_note_all: "{c}依据不足，因此使用所有国家的已售价格，可能与{c}市场不同。",
+  calc_title: "收购价计算", calc_grade: "来货成色", calc_sale: "预计售价（{cur}）", calc_margin: "目标毛利（%）", calc_repair: "维修·保养费用（{cur}）", calc_offer: "建议收购价", calc_margin_l: "毛利 {m}%", calc_repair_l: "维修·保养",
+  calc_note: "预计售价已按所选成色的参考价填好，请按店铺情况修改。仅供计算参考，并非最终收购价。",
+  here_selling: "{c}在售", sorted_n: "{n} 件 · 由低到高", none_here: "{c}暂无在售。", abroad_selling: "海外在售", abroad_s: "预计到{c}总价 · 由低到高", none_abroad: "海外暂无在售。", listed: "售价 {p}", day_n: "第 {n} 天",
+  sold_recent: "近期已售", sold_recent_s: "标记已售前的最后价格", none_sold: "暂无成交记录。", sold_note: "已售价格为店铺最后标出的价格，实际成交价可能不同。",
+  kind_body: "机身", kind_lens: "镜头", kind_acc: "配件", mount: "{m} 卡口",
+  src_title: "进货机会", src_lede: "其他国家店铺的商品运到{c}的预计总价（运费、保险、转运、关税、增值税）比同成色{c}参考价低 10% 以上。差额大的在前。",
+  src_all: "全部", count: "{n} 件", check_model: "核对型号", src_norule: "{c}暂无关税与运费规则，无法估算到手总价。",
+  src_note: "运费按地区平均保价快递费计算，并非店铺报价。不发海外的店铺已加转运费。低于参考价 35% 以上标为“核对型号”，低于 50% 以上的已排除。汇率为 {d}。",
+  riv_title: "同行动态", riv_lede: "按时间倒序显示所采集其他店铺的新品上架、价格变动和下架。下架很可能是已售出，但并不确定。",
+  ft_all: "全部", ft_new: "新上架", ft_price: "价格变动", ft_gone: "下架", only_country: "仅{c}店铺", only_mine: "仅与本店库存同型号",
+  riv_note: "变动记录自 {d} 起，显示最近 14 天。", mk_cut: "降价 {p}%", mk_up: "涨价 {p}%", after: "上架 {d} 后", hours: "{n} 小时",
+  dm_title: "畅销型号", dm_lede: "成交多但目前{c}在售少的型号。越靠前，收进后越可能很快售出。",
+  dm_note: "排序 = 已售件数 ÷（{c}在售 + 1）。“售出用时”为从上架到下架或售出的天数中位数。", dm_note_all: "{c}成交记录较少，按所有国家的已售件数计算。",
+  acct_title: "账号", acct_id: "账号", acct_store: "关联店铺", acct_country: "参考国家", acct_cur: "货币", all_stores: "全部店铺（管理员）",
+  pw_title: "修改密码", pw_cur: "当前密码", pw_new: "新密码（至少 10 位）", pw_go: "修改", pw_ok: "密码已修改。", pw_wrong: "当前密码不正确。", pw_short: "新密码至少需要 10 位。", pw_err: "无法修改密码，请稍后再试。",
+  more: "再显示 {n} 件（剩余 {r} 件）",
+  foot: "Camera Bridge 自动采集的数据（{t}）。标价、售出前最后价格和实际成交价可能不同。外币按 {d} 汇率换算。",
+},
+"zh-Hant": {
+  tag: "經銷商", my_store: "本店", lang: "語言", logout: "登出", load_fail: "無法載入資料，請重新整理頁面。", asof: "{t} 收集",
+  nav: ["今日概覽", "收購查詢", "庫存檢查", "同業動態", "進貨機會", "熱銷型號", "帳號"],
+  grade: { N: "全新", S: "近新", A: "極美", B: "很好", C: "良好", D: "一般" },
+  brief_title: "{store} 今日概覽", brief_lede: "{t} 收集。在售 {n} 件中有 {m} 件已與{c}參考價比較。",
+  fig_high: "高於參考價 15% 以上的庫存", fig_old: "上架超過 60 天的庫存", fig_rivals: "{c}其他店家動態（7 天）", fig_source: "進口到手價仍比參考價低 10% 以上的海外商品",
+  go_stock: "檢查庫存 →", go_rivals: "同業動態 →", go_source: "進貨機會 →",
+  sec_first: "優先查看", sec_first_s: "偏貴的在前", sec_opp: "進貨候選", sec_opp_s: "參考價 − 預估到手總價", sec_recent: "{c}其他店家最新動態", sec_missing: "{c}無貨的熱門型號", sec_missing_s: "收進後可能很快售出",
+  none_recent: "最近 7 天沒有變動。", empty: "暫無內容。",
+  th_item: "商品", th_mine: "本店價", th_ref: "參考價", th_pos: "位置", th_low: "{c}最低", th_age: "上架", th_model: "型號", th_abroad_item: "海外商品", th_local: "當地價", th_landed: "到手價", th_diff: "差額", th_time: "時間", th_change: "變動", th_price: "價格", th_sold_n: "已售", th_here: "{c}在售", th_abroad: "海外在售", th_turn: "售出天數", th_bref: "B 參考價",
+  pos_high: "偏貴", pos_low: "偏便宜", pos_ok: "合理", pos_none: "無參考價",
+  basis_sold: "{c}已售 {n} 件", basis_ask: "{c}在售 {n} 件", basis_all: "所有國家已售 {n} 件", days: "{n} 天",
+  stock_title: "庫存檢查", stock_lede: "{store}目前在售商品，與同型號、同品相的{c}參考價比較。點選該列可進入該型號的收購查詢。",
+  f_all: "全部", f_old: "60 天+",
+  stock_note: "參考價 = {c}已售價格依品相換算為 B 級後的中位數 × 該商品品相係數。{c}已售不足 2 件時，使用{c}其他店家的在售價格（3 件以上）；仍不足時使用所有國家的已售價格。品相不明以 B 計。",
+  buy_title: "收購查詢", buy_lede: "選擇顧客帶來的型號，一頁查看{c}參考價、在售價格、近期成交與週轉速度。", buy_ph: "例：M6、Summilux 35 FLE、Noctilux 0.95",
+  buy_meta: "已售 {sold} 件 · 在售 {c} {here} / 海外 {abroad}", buy_turn: " · 售出天數中位數 {d} 天（{n} 件）", sub_models: "細分型號",
+  ref_title: "各品相參考價", ref_none: "依據不足，暫不提供參考價。請參考下方在售商品。",
+  basis_note_ask: "{c}成交紀錄不足，因此使用{c}其他店家的在售價格。這不是成交價。", basis_note_all: "{c}依據不足，因此使用所有國家的已售價格，可能與{c}市場不同。",
+  calc_title: "收購價計算", calc_grade: "來貨品相", calc_sale: "預估售價（{cur}）", calc_margin: "目標毛利（%）", calc_repair: "維修·保養費用（{cur}）", calc_offer: "建議收購價", calc_margin_l: "毛利 {m}%", calc_repair_l: "維修·保養",
+  calc_note: "預估售價已依所選品相的參考價填入，請依店家情況修改。僅供計算參考，並非最終收購價。",
+  here_selling: "{c}在售", sorted_n: "{n} 件 · 由低到高", none_here: "{c}暫無在售。", abroad_selling: "海外在售", abroad_s: "預估到{c}總價 · 由低到高", none_abroad: "海外暫無在售。", listed: "售價 {p}", day_n: "第 {n} 天",
+  sold_recent: "近期已售", sold_recent_s: "標記已售前的最後價格", none_sold: "暫無成交紀錄。", sold_note: "已售價格為店家最後標出的價格，實際成交價可能不同。",
+  kind_body: "機身", kind_lens: "鏡頭", kind_acc: "配件", mount: "{m} 接環",
+  src_title: "進貨機會", src_lede: "其他國家店家的商品運到{c}的預估總價（運費、保險、轉運、關稅、營業稅）比同品相{c}參考價低 10% 以上。差額大的在前。",
+  src_all: "全部", count: "{n} 件", check_model: "核對型號", src_norule: "{c}尚無關稅與運費規則，無法估算到手總價。",
+  src_note: "運費依地區平均保價快遞費計算，並非店家報價。不寄海外的店家已加轉運費。低於參考價 35% 以上標為「核對型號」，低於 50% 以上的已排除。匯率為 {d}。",
+  riv_title: "同業動態", riv_lede: "依時間倒序顯示所收集其他店家的新品上架、價格變動與下架。下架很可能已售出，但並不確定。",
+  ft_all: "全部", ft_new: "新上架", ft_price: "價格變動", ft_gone: "下架", only_country: "僅{c}店家", only_mine: "僅與本店庫存同型號",
+  riv_note: "變動紀錄自 {d} 起，顯示最近 14 天。", mk_cut: "降價 {p}%", mk_up: "漲價 {p}%", after: "上架 {d} 後", hours: "{n} 小時",
+  dm_title: "熱銷型號", dm_lede: "成交多但目前{c}在售少的型號。越靠前，收進後越可能很快售出。",
+  dm_note: "排序 = 已售件數 ÷（{c}在售 + 1）。「售出天數」為從上架到下架或售出的天數中位數。", dm_note_all: "{c}成交紀錄較少，依所有國家的已售件數計算。",
+  acct_title: "帳號", acct_id: "帳號", acct_store: "關聯店家", acct_country: "參考國家", acct_cur: "幣別", all_stores: "全部店家（管理員）",
+  pw_title: "變更密碼", pw_cur: "目前密碼", pw_new: "新密碼（至少 10 碼）", pw_go: "變更", pw_ok: "密碼已變更。", pw_wrong: "目前密碼不正確。", pw_short: "新密碼至少需要 10 碼。", pw_err: "無法變更密碼，請稍後再試。",
+  more: "再顯示 {n} 件（剩餘 {r} 件）",
+  foot: "Camera Bridge 自動收集的資料（{t}）。標價、售出前最後價格與實際成交價可能不同。外幣依 {d} 匯率換算。",
+},
+};
+
+let D, ME, NOW, RULES = null, CACHE = {};
+const state = { view: "brief", store: null, lang: "en", entity: null, stockFilter: "all", feedType: "all", feedLocal: false, feedMine: false, srcKind: "all", lim: {} };
+const keep = {
+  get(k) { try { return localStorage.getItem("cbd." + k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem("cbd." + k, v); } catch {} },
+};
+
+function t(key, vars = {}) {
+  const raw = (I[state.lang] && I[state.lang][key] !== undefined ? I[state.lang][key] : I.en[key]);
+  if (typeof raw !== "string") return raw ?? key;
+  return raw.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+}
+const grName = g => t("grade")[g] || g;
+
+// ── 매장·나라·통화 ──
+const siteCountry = s => (D.sites[s] || {}).country || null;
+function myStores() { return ME.admin ? [state.store] : (ME.stores || []); }
+const isMine = s => myStores().includes(s);
+function myCountry() { return (ME.admin ? siteCountry(state.store) : ME.country) || siteCountry(myStores()[0]) || "KR"; }
+function myCurrency() {
+  const c = myCountry();
+  const cur = COUNTRY_CUR[c] || (EU_EURO.includes(c) ? "EUR" : "USD");
+  return D.fx.rates[cur] ? cur : "USD";
+}
+function countryName(c) {
+  if (!c) return "";
+  try { return new Intl.DisplayNames([state.lang], { type: "region" }).of(c) || c; } catch { return c; }
+}
+const C = () => countryName(myCountry());
+const sameCountry = s => siteCountry(s) === myCountry();
+// 수집 매장 이름 끝의 한국어 나라 표기 '(영국)'는 다른 언어에서 뺀다
+const siteName = s => state.lang === "ko" ? s : String(s || "").replace(/\s*\([가-힣·\s]+\)$/, "");
+
+// 금액: 내부는 원(KRW). 한국어+원화면 '만' 단위, 나머지는 나라 통화
+function money(krw, sign) {
+  if (krw == null || isNaN(krw)) return "–";
+  const cur = myCurrency();
+  const v = krw / D.fx.rates[cur];
+  const plus = sign && v > 0 ? "+" : "";
+  if (cur === "KRW" && state.lang === "ko") return plus + Math.round(v / 10000).toLocaleString("ko-KR") + "만";
+  try { return plus + new Intl.NumberFormat(state.lang, { style: "currency", currency: cur, maximumFractionDigits: 0 }).format(v); }
+  catch { return plus + cur + " " + Math.round(v).toLocaleString("en-US"); }
+}
+const toInput = krw => {
+  const cur = myCurrency(), v = krw / D.fx.rates[cur];
+  return cur === "KRW" && state.lang === "ko" ? Math.round(v / 10000) : Math.round(v);
+};
+const fromInput = n => {
+  const cur = myCurrency();
+  return (cur === "KRW" && state.lang === "ko" ? n * 10000 : n) * D.fx.rates[cur];
+};
+const inputUnit = () => myCurrency() === "KRW" && state.lang === "ko" ? "만원" : myCurrency();
+function orig(it) {
+  try { return new Intl.NumberFormat(state.lang, { style: "currency", currency: it.c, maximumFractionDigits: 0 }).format(it.p); }
+  catch { return it.c + " " + Math.round(it.p).toLocaleString("en-US"); }
+}
+const daysSince = s => s ? Math.max(0, Math.floor((NOW - new Date(s.replace(" ", "T") + ":00+09:00")) / 864e5)) : null;
+const ent = id => D.entities[id];
+const entName = id => { const e = ent(id); return e ? (state.lang === "ko" ? (e.ko || e.n) : e.n) : ""; };
+const fkind = e => (e.kind === "Body" ? "Body" : "Lens");
+const median = a => { if (!a.length) return null; const s = a.slice().sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+
+// ── 기준가: 그 나라 판매완료 → 그 나라 다른 매장 판매 중 → 전체 나라 판매완료 ──
+function askIndex() {
+  const key = "ask:" + myCountry() + ":" + myStores().join("|");
+  if (CACHE[key]) return CACHE[key];
+  const idx = {};
+  for (const it of D.active) {
+    if (!it.e || !it.g || it.g === "X" || isMine(it.s) || !sameCountry(it.s)) continue;
+    const e = ent(it.e);
+    if (!e || e.kind === "Accessory") continue;
+    (idx[it.e] = idx[it.e] || []).push(it.k / (D.factors[fkind(e)][it.g] ?? 1));
+  }
+  return (CACHE[key] = idx);
+}
+function basis(eid) {
+  const e = ent(eid);
+  if (!e || e.kind === "Accessory") return null;
+  const c = myCountry();
+  const local = (e.sb || {})[c];
+  if (local && local[0] && local[1] >= 2) return { b: local[0], n: local[1], kind: "sold" };
+  const ask = askIndex()[eid] || [];
+  if (ask.length >= 3) return { b: median(ask), n: ask.length, kind: "ask" };
+  const all = (e.sb || {}).ALL;
+  if (all && all[0]) return { b: all[0], n: all[1], kind: "all" };
+  return null;
+}
+function refPrice(eid, g) {
+  if (!g || g === "X") return null;
+  const b = basis(eid);
+  if (!b) return null;
+  return { krw: b.b * (D.factors[fkind(ent(eid))][g] ?? 1), n: b.n, kind: b.kind };
+}
+const basisLabel = r => t("basis_" + r.kind, { c: C(), n: r.n });
+function position(ratio) {
+  if (ratio == null) return { k: "none", cls: "ok" };
+  if (ratio >= 1.15) return { k: "high", cls: "high" };
+  if (ratio <= 0.88) return { k: "low", cls: "low" };
+  return { k: "ok", cls: "ok" };
+}
+
+// ── 예상 총액 (camerabridge.io 첫 화면 computeLandedCost 를 원화 기준으로 옮김) ──
+const krwPer = c => D.fx.rates[c];
+const conv = (amount, from, to) => (krwPer(from) && krwPer(to) ? amount * krwPer(from) / krwPer(to) : null);
+function regionOf(code) {
+  const regions = RULES.regions || {};
+  return Object.keys(regions).find(name => (regions[name] || []).includes(code)) || "";
+}
+function taxUsd(destRule, ctx) {
+  const dutyKey = ctx.category === "Body" && ctx.digital ? "Body_digital" : ctx.category;
+  const pick = table => Number((table || {})[dutyKey] ?? (table || {})[ctx.category] ?? 0);
+  const base = ctx.priceUsd + ctx.shippingUsd;
+  switch (destRule.rule) {
+    case "kr": {
+      const exempt = Number((destRule.exempt_usd_from_origin || {})[ctx.origin] ?? destRule.exempt_usd ?? 0);
+      if (ctx.priceUsd <= exempt) return 0;
+      let rate = pick(destRule.duty);
+      const fta = destRule.eu_fta;
+      if (fta && rate > 0 && ctx.euOrigin && ctx.euSeller && ctx.priceUsd <= Number(fta.proof_waiver_usd || 0)) rate = 0;
+      const duty = base * rate;
+      return duty + (base + duty) * Number(destRule.vat || 0);
+    }
+    case "jp": {
+      const taxable = ctx.priceUsd * Number(destRule.taxable_ratio || 1);
+      const jpy = conv(taxable, "USD", "JPY");
+      if (jpy !== null && jpy <= Number(destRule.exempt_taxable_jpy || 0)) return 0;
+      const duty = taxable * pick(destRule.duty);
+      return duty + (taxable + duty) * Number(destRule.vat || 0);
+    }
+    case "cn_postal": {
+      const postal = ctx.priceUsd * pick(destRule.postal_tax);
+      const cny = conv(postal, "USD", "CNY");
+      return cny === null || cny > Number(destRule.exempt_tax_cny || 0) ? postal : 0;
+    }
+    case "tw": {
+      const twd = conv(base, "USD", "TWD");
+      if (twd !== null && twd <= Number(destRule.exempt_twd || 0)) return 0;
+      const duty = base * pick(destRule.duty);
+      return duty + (base + duty) * Number(destRule.vat || 0);
+    }
+    case "us":
+      return ctx.priceUsd * (pick(destRule.duty) + Number(destRule.additional_tariff || 0)) + Number(destRule.brokerage_usd || 0);
+    case "gb": {
+      const gbp = conv(ctx.priceUsd, "USD", "GBP");
+      const duty = gbp !== null && gbp > Number(destRule.duty_exempt_gbp || 0) ? base * pick(destRule.duty) : 0;
+      return duty + (base + duty) * Number(destRule.vat || 0) + (conv(Number(destRule.handling_gbp || 0), "GBP", "USD") || 0);
+    }
+    case "eu": {
+      const eu = RULES.eu_rule || {};
+      const eur = conv(ctx.priceUsd, "USD", "EUR");
+      const duty = eur !== null && eur > Number(eu.duty_exempt_eur || 0) ? base * pick(eu.duty) : 0;
+      return duty + (base + duty) * Number(destRule.vat || 0) + (conv(Number(eu.handling_eur || 0), "EUR", "USD") || 0);
+    }
+    case "br": {
+      const imp = base * Number(destRule.import_tax || 0), icms = Number(destRule.icms || 0);
+      return imp + (icms < 1 ? (base + imp) / (1 - icms) * icms : 0);
+    }
+    default:
+      return 0;
+  }
+}
+// 다른 나라 매물을 내 나라로 받을 때 예상 총액(원). 계산할 수 없으면 null
+function landed(it) {
+  if (!RULES) return null;
+  const dest = myCountry(), destRule = (RULES.destinations || {})[dest];
+  const src = (RULES.sources || {})[it.s];
+  const origin = siteCountry(it.s);
+  if (!destRule || !origin || origin === dest || (src && src.online_purchase === false)) return null;
+  const e = it.e && ent(it.e);
+  const category = e && e.kind ? (e.kind === "Body" || e.kind === "Lens" ? e.kind : "Accessory") : (it.kind === "Body" || it.kind === "Lens" ? it.kind : "Accessory");
+  let digital = false, euOrigin = true;
+  try { digital = new RegExp(RULES.digital_body_pattern || "$^", "i").test(it.t || ""); } catch {}
+  try { euOrigin = !new RegExp(RULES.non_eu_made_pattern || "$^", "i").test(it.t || ""); } catch {}
+  const priceUsd = it.k / krwPer("USD");
+  const eu = RULES.eu_countries || [];
+  const ship = RULES.shipping_usd || {}, domestic = ship.domestic || {};
+  let shippingUsd, tax = 0;
+  if (eu.includes(origin) && eu.includes(dest)) {
+    shippingUsd = Number((domestic.EU || domestic.default || {})[category] || 0);
+  } else {
+    const sameRegion = regionOf(origin) && regionOf(origin) === regionOf(dest);
+    const table = sameRegion ? ship.region : (origin === "US" ? ship.far_from_us : ship.far);
+    shippingUsd = Number((table || {})[category] || 0) + priceUsd * Number(ship.insurance_rate_international || 0);
+    if (src && src.ships_international === false) {
+      const fees = RULES.forwarding_fee_usd || {};
+      shippingUsd += Number((domestic[origin] || domestic.default || {})[category] || 0) + Number(fees[origin] ?? fees.default ?? 0);
+    }
+    tax = taxUsd(destRule, { priceUsd, shippingUsd, category, digital, origin, euOrigin, euSeller: eu.includes(origin) });
+  }
+  return Math.round(it.k + (shippingUsd + tax) * krwPer("USD"));
+}
+const hasRule = () => !!(RULES && (RULES.destinations || {})[myCountry()]);
+
+// ── 계산 ──
+function myStock() {
+  return D.active.filter(it => isMine(it.s)).map(it => {
+    const r = it.e ? refPrice(it.e, it.g || "B") : null;
+    const ratio = r ? it.k / r.krw : null;
+    const others = it.e ? D.active.filter(o => o.e === it.e && !isMine(o.s) && sameCountry(o.s)) : [];
+    const cheapest = others.length ? others.reduce((a, b) => (a.k < b.k ? a : b)) : null;
+    return { ...it, ref: r, ratio, pos: position(ratio), days: daysSince(it.fs), cheapest };
+  });
+}
+function opportunities() {
+  const key = "opp:" + myCountry() + ":" + myStores().join("|");
+  if (CACHE[key]) return CACHE[key];
+  const out = [];
+  for (const it of D.active) {
+    if (!it.e || !it.g || it.g === "X" || sameCountry(it.s)) continue;
+    const r = refPrice(it.e, it.g);
+    if (!r || r.n < 3) continue;
+    const land = landed(it);
+    if (!land) continue;
+    const ratio = land / r.krw;
+    if (ratio < 0.5 || ratio > 0.9) continue; // 0.5 밑은 대개 모델 연결 오류
+    out.push({ ...it, land, ref: r, ratio, gain: r.krw - land });
+  }
+  return (CACHE[key] = out.sort((a, b) => b.gain - a.gain));
+}
+function demand() {
+  const c = myCountry();
+  const localSold = Object.values(D.entities).reduce((n, e) => n + (((e.sb || {})[c] || [])[1] || 0), 0);
+  const useAll = localSold < 50;
+  const here = {}, abroad = {};
+  for (const it of D.active) {
+    if (!it.e) continue;
+    if (sameCountry(it.s)) here[it.e] = (here[it.e] || 0) + 1; else abroad[it.e] = (abroad[it.e] || 0) + 1;
+  }
+  const rows = [];
+  for (const [id, e] of Object.entries(D.entities)) {
+    const sold = (((e.sb || {})[useAll ? "ALL" : c] || [])[1]) || 0;
+    if (sold < 5 || e.kind === "Accessory") continue;
+    const h = here[id] || 0;
+    rows.push({ id, e, sold, here: h, abroad: abroad[id] || 0, score: sold / (h + 1), ref: refPrice(id, "B") });
+  }
+  rows.useAll = useAll;
+  return rows.sort((a, b) => b.score - a.score);
+}
+const num = v => parseFloat(String(v).replace(/[^\d.]/g, ""));
+function feed() {
+  const mine = new Set(D.active.filter(it => isMine(it.s) && it.e).map(it => it.e));
+  return D.feed.filter(f => !isMine(f.s)
+    && (state.feedType === "all" || f.ty === state.feedType || (state.feedType === "gone" && f.ty === "sold"))
+    && (!state.feedLocal || sameCountry(f.s))
+    && (!state.feedMine || (f.e && mine.has(f.e))));
+}
+
+// ── 그리기 도우미 ──
+function more(key, total, step) {
+  const shown = state.lim[key] || step;
+  return total > shown ? `<button class="more" data-more="${key}" data-step="${step}">${esc(t("more", { n: Math.min(step, total - shown), r: total - shown }))}</button>` : "";
+}
+const lim = (key, step) => state.lim[key] || step;
+const gradeText = g => g ? `${g} ${grName(g)}${GR_PCT[g] ? " (" + GR_PCT[g] + ")" : ""}` : "";
+function listingCell(it, withEntity = true) {
+  return `<div class="t"><a href="${esc(it.u)}" target="_blank" rel="noopener">${esc(it.t)}</a></div>`
+    + `<div class="sub">${withEntity && it.e ? esc(entName(it.e)) + (it.g ? " · " : "") : ""}${it.g ? esc(gradeText(it.g)) : ""}</div>`;
+}
+function feedLabel(f) {
+  if (f.ty === "new") return `<span class="mark acc">${esc(t("ft_new"))}</span>`;
+  if (f.ty === "price") {
+    const a = num(f.pp), b = num(f.p);
+    const pct = a ? Math.round((b - a) / a * 100) : 0;
+    return `<span class="mark ${pct < 0 ? "low" : "high"}">${esc(t(pct < 0 ? "mk_cut" : "mk_up", { p: Math.abs(pct) }))}</span>`;
+  }
+  return `<span class="mark ok">${esc(t("ft_gone"))}</span>`;
+}
+function feedRows(list) {
+  return list.map(f => {
+    const age = f.h ? (f.h < 48 ? t("hours", { n: Math.round(f.h) }) : t("days", { n: Math.round(f.h / 24) })) : "";
+    return `<tr>
+    <td class="sub num" style="white-space:nowrap">${esc(f.t.slice(5))}</td>
+    <td>${feedLabel(f)}</td>
+    <td><div class="t"><a href="${esc(f.u)}" target="_blank" rel="noopener">${esc(f.ti)}</a></div><div class="sub">${esc(siteName(f.s))}${f.e ? " · " + esc(entName(f.e)) : ""}${age ? " · " + esc(t("after", { d: age })) : ""}</div></td>
+    <td class="r">${f.ty === "price" ? `<span class="sub">${esc(f.pp)} →</span><br>` : ""}${esc(f.p)}</td>
+  </tr>`;
+  }).join("");
+}
+const storeLabel = () => myStores().map(siteName).join(", ");
+
+// ── 화면 ──
+const V = {};
+const VIEWS = ["brief", "buy", "stock", "rivals", "source", "demand", "account"];
+
+V.brief = () => {
+  const st = myStock(), linked = st.filter(x => x.ratio != null);
+  const high = st.filter(x => x.pos.k === "high"), old = st.filter(x => x.days != null && x.days >= 60);
+  const wk = new Date(NOW - 7 * 864e5);
+  const rf = D.feed.filter(f => !isMine(f.s) && sameCountry(f.s) && new Date(f.t.replace(" ", "T") + ":00+09:00") >= wk);
+  const opp = hasRule() ? opportunities() : [];
+  const dm = demand().filter(r => r.here === 0).slice(0, 6);
+  return `
+  <h1>${esc(t("brief_title", { store: storeLabel() }))}</h1>
+  <p class="lede">${esc(t("brief_lede", { t: D.generated, n: st.length, m: linked.length, c: C() }))}</p>
+  <div class="figs">
+    <div><div class="v">${high.length}</div><div class="l">${esc(t("fig_high"))}</div><button data-go="stock" data-sf="high">${esc(t("go_stock"))}</button></div>
+    <div><div class="v">${old.length}</div><div class="l">${esc(t("fig_old"))}</div><button data-go="stock" data-sf="old">${esc(t("go_stock"))}</button></div>
+    <div><div class="v">${rf.length}</div><div class="l">${esc(t("fig_rivals", { c: C() }))}</div><button data-go="rivals" data-local="1">${esc(t("go_rivals"))}</button></div>
+    <div><div class="v">${hasRule() ? opp.length : "–"}</div><div class="l">${esc(t("fig_source"))}</div><button data-go="source">${esc(t("go_source"))}</button></div>
+  </div>
+  <div class="cols">
+    <section>
+      <h2>${esc(t("sec_first"))} <small>${esc(t("sec_first_s"))}</small></h2>
+      ${stockTable(high.sort((a, b) => b.ratio - a.ratio).slice(0, 6), true)}
+    </section>
+    <section>
+      <h2>${esc(t("sec_opp"))} <small>${esc(t("sec_opp_s"))}</small></h2>
+      ${hasRule() ? oppTable(opp.slice(0, 6), true) : `<p class="empty">${esc(t("src_norule", { c: C() }))}</p>`}
+    </section>
+  </div>
+  <div class="cols">
+    <section>
+      <h2>${esc(t("sec_recent", { c: C() }))}</h2>
+      ${rf.length ? `<div class="tbl"><table><tbody>${feedRows(rf.slice(0, 8))}</tbody></table></div>` : `<p class="empty">${esc(t("none_recent"))}</p>`}
+    </section>
+    <section>
+      <h2>${esc(t("sec_missing", { c: C() }))} <small>${esc(t("sec_missing_s"))}</small></h2>
+      ${demandTable(dm, true)}
+    </section>
+  </div>`;
+};
+
+function stockTable(rows, compact) {
+  if (!rows.length) return `<p class="empty">${esc(t("empty"))}</p>`;
+  return `<div class="tbl"><table>
+    <thead><tr><th>${esc(t("th_item"))}</th><th class="r">${esc(t("th_mine"))}</th><th class="r">${esc(t("th_ref"))}</th><th>${esc(t("th_pos"))}</th>${compact ? "" : `<th class="r">${esc(t("th_low", { c: C() }))}</th>`}<th class="r">${esc(t("th_age"))}</th></tr></thead>
+    <tbody>${rows.map(x => `<tr class="click" data-entity="${esc(x.e || "")}">
+      <td>${listingCell(x)}${myStores().length > 1 ? `<div class="sub">${esc(siteName(x.s))}</div>` : ""}</td>
+      <td class="r">${money(x.k)}</td>
+      <td class="r">${x.ref ? money(x.ref.krw) + `<div class="sub">${esc(basisLabel(x.ref))}</div>` : "–"}</td>
+      <td><span class="mark ${x.pos.cls}">${esc(t("pos_" + x.pos.k))}${x.ratio != null && x.pos.k !== "ok" ? " " + money(x.k - x.ref.krw, true) : ""}</span></td>
+      ${compact ? "" : `<td class="r">${x.cheapest ? money(x.cheapest.k) + `<div class="sub">${esc(siteName(x.cheapest.s))}</div>` : "–"}</td>`}
+      <td class="r">${x.days == null ? "–" : esc(t("days", { n: x.days }))}</td>
+    </tr>`).join("")}</tbody></table></div>`;
+}
+
+V.stock = () => {
+  const all = myStock();
+  const f = state.stockFilter;
+  let rows = all;
+  if (["high", "low", "ok", "none"].includes(f)) rows = all.filter(x => x.pos.k === f);
+  if (f === "old") rows = all.filter(x => x.days >= 60);
+  rows = rows.slice().sort((a, b) => (b.ratio ?? 0) - (a.ratio ?? 0) || (b.days ?? 0) - (a.days ?? 0));
+  const c = k => all.filter(x => x.pos.k === k).length;
+  const opts = [["all", `${t("f_all")} ${all.length}`], ["high", `${t("pos_high")} ${c("high")}`], ["ok", `${t("pos_ok")} ${c("ok")}`], ["low", `${t("pos_low")} ${c("low")}`], ["old", `${t("f_old")} ${all.filter(x => x.days >= 60).length}`], ["none", `${t("pos_none")} ${c("none")}`]];
+  return `
+  <h1>${esc(t("stock_title"))}</h1>
+  <p class="lede">${esc(t("stock_lede", { store: storeLabel(), c: C() }))}</p>
+  <div class="bar"><div class="seg" role="group">${opts.map(([k, l]) => `<button data-sf="${k}" aria-pressed="${f === k}">${esc(l)}</button>`).join("")}</div></div>
+  ${stockTable(rows.slice(0, lim("stock", 40)), false)}
+  ${more("stock", rows.length, 40)}
+  <p class="note">${esc(t("stock_note", { c: C() }))}</p>`;
+};
+
+V.buy = () => {
+  const id = state.entity;
+  const e = id && ent(id);
+  let body = "";
+  if (e) {
+    const actives = D.active.filter(it => it.e === id);
+    const here = actives.filter(it => sameCountry(it.s)).sort((a, b) => a.k - b.k);
+    const abroad = actives.filter(it => !sameCountry(it.s)).map(it => ({ ...it, land: landed(it) })).filter(it => it.land).sort((a, b) => a.land - b.land);
+    const abroadAll = actives.filter(it => !sameCountry(it.s)).length;
+    const soldHere = D.sold.filter(it => it.e === id && sameCountry(it.s));
+    const sold = (soldHere.length ? soldHere : D.sold.filter(it => it.e === id)).slice(0, 12);
+    const b = basis(id);
+    const calcG = state.calcG || "B";
+    const r = refPrice(id, calcG);
+    const sale = state.calcSale ?? (r ? toInput(r.krw) : "");
+    const margin = state.calcMargin ?? 15, repair = state.calcRepair ?? 0;
+    const saleK = fromInput(+sale || 0), offer = saleK * (1 - margin / 100) - fromInput(+repair || 0);
+    const kids = Object.entries(D.entities).filter(([, v]) => v.parent === id);
+    const kindName = e.kind === "Body" ? t("kind_body") : e.kind === "Lens" ? t("kind_lens") : t("kind_acc");
+    const soldN = ((e.sb || {})[myCountry()] || [0, 0])[1];
+    body = `
+    <div class="model-head">
+      <div><h1>${esc(entName(id))}</h1><div class="sub">${state.lang === "ko" && e.ko ? esc(e.n) + " · " : ""}${e.mount ? esc(t("mount", { m: e.mount })) + " · " : ""}${esc(kindName)}</div></div>
+      <div class="sub">${esc(t("buy_meta", { sold: soldN, c: C(), here: here.length, abroad: abroadAll }))}${e.turnD != null ? esc(t("buy_turn", { d: e.turnD, n: e.turnN })) : ""}</div>
+    </div>
+    ${kids.length ? `<p class="note">${esc(t("sub_models"))}: ${kids.map(([k]) => `<a href="#" data-pick="${esc(k)}">${esc(entName(k))}</a>`).join(" · ")}</p>` : ""}
+    <h2>${esc(t("ref_title"))} <small>${b ? esc(basisLabel(b)) : ""}</small></h2>
+    ${b ? `<div class="ref">${GR.map(g => `<div><div class="g">${g}<span>${esc(grName(g))}</span></div><div class="p">${money(refPrice(id, g)?.krw)}</div><div class="sub">${GR_PCT[g]}</div></div>`).join("")}</div>
+      ${b.kind !== "sold" ? `<p class="basis">${esc(t(b.kind === "ask" ? "basis_note_ask" : "basis_note_all", { c: C() }))}</p>` : ""}`
+      : `<p class="empty">${esc(t("ref_none"))}</p>`}
+
+    <h2>${esc(t("calc_title"))}</h2>
+    <div class="calc">
+      <div class="fields">
+        <label for="cg">${esc(t("calc_grade"))}</label>
+        <select id="cg">${GR.map(g => `<option value="${g}" ${g === calcG ? "selected" : ""}>${esc(gradeText(g))}</option>`).join("")}</select>
+        <label for="cs">${esc(t("calc_sale", { cur: inputUnit() }))}</label>
+        <input id="cs" type="number" inputmode="numeric" value="${esc(sale)}">
+        <label for="cm">${esc(t("calc_margin"))}</label>
+        <input id="cm" type="number" inputmode="numeric" value="${esc(margin)}">
+        <label for="cr">${esc(t("calc_repair", { cur: inputUnit() }))}</label>
+        <input id="cr" type="number" inputmode="numeric" value="${esc(repair)}">
+      </div>
+      <div class="out">
+        <div class="sub">${esc(t("calc_offer"))}</div>
+        <div class="big">${saleK ? money(offer) : "–"}</div>
+        <div class="lines">
+          <div><span>${esc(t("calc_sale", { cur: myCurrency() }))}</span><span>${money(saleK)}</span></div>
+          <div><span>${esc(t("calc_margin_l", { m: margin }))}</span><span>−${money(saleK * margin / 100)}</span></div>
+          <div><span>${esc(t("calc_repair_l"))}</span><span>−${money(fromInput(+repair || 0))}</span></div>
+        </div>
+        <p class="note">${esc(t("calc_note"))}</p>
+      </div>
+    </div>
+
+    <div class="cols">
+      <section>
+        <h2>${esc(t("here_selling", { c: C() }))} <small>${esc(t("sorted_n", { n: here.length }))}</small></h2>
+        ${here.length ? `<div class="tbl"><table><tbody>${here.slice(0, 10).map(it => `<tr><td>${listingCell(it, false)}<div class="sub">${esc(siteName(it.s))}${isMine(it.s) ? " ★" : ""} · ${esc(t("day_n", { n: daysSince(it.fs) ?? "–" }))}</div></td><td class="r">${money(it.k)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">${esc(t("none_here", { c: C() }))}</p>`}
+      </section>
+      <section>
+        <h2>${esc(t("abroad_selling"))} <small>${esc(t("abroad_s", { c: C() }))}</small></h2>
+        ${abroad.length ? `<div class="tbl"><table><tbody>${abroad.slice(0, 10).map(it => `<tr><td>${listingCell(it, false)}<div class="sub">${esc(siteName(it.s))} · ${esc(orig(it))}</div></td><td class="r">${money(it.land)}<div class="sub">${esc(t("listed", { p: money(it.k) }))}</div></td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">${esc(hasRule() ? t("none_abroad") : t("src_norule", { c: C() }))}</p>`}
+      </section>
+    </div>
+    <h2>${esc(t("sold_recent"))} <small>${esc(t("sold_recent_s"))}${soldHere.length ? "" : " · " + esc(t("basis_all", { n: sold.length }))}</small></h2>
+    ${sold.length ? `<div class="tbl"><table><tbody>${sold.map(it => `<tr><td>${listingCell(it, false)}<div class="sub">${esc(siteName(it.s))}${it.cond ? " · " + esc(it.cond) : ""}</div></td><td class="r sub">${esc((it.sa || it.fs || "").slice(0, 10))}</td><td class="r">${money(it.k)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">${esc(t("none_sold"))}</p>`}
+    <p class="note">${esc(t("sold_note"))}</p>`;
+  }
+  return `
+  <h1>${esc(t("buy_title"))}</h1>
+  <p class="lede">${esc(t("buy_lede", { c: C() }))}</p>
+  <div class="search">
+    <input id="q" type="text" autocomplete="off" placeholder="${esc(t("buy_ph"))}" aria-label="${esc(t("buy_title"))}">
+    <div class="sugg" id="sugg" hidden></div>
+  </div>
+  ${body}`;
+};
+
+function oppTable(rows, compact) {
+  if (!rows.length) return `<p class="empty">${esc(t("empty"))}</p>`;
+  return `<div class="tbl"><table>
+    <thead><tr><th>${esc(t("th_abroad_item"))}</th>${compact ? "" : `<th class="r">${esc(t("th_local"))}</th>`}<th class="r">${esc(t("th_landed"))}</th><th class="r">${esc(t("th_ref"))}</th><th class="r">${esc(t("th_diff"))}</th></tr></thead>
+    <tbody>${rows.map(x => `<tr class="click" data-entity="${esc(x.e)}">
+      <td>${listingCell(x)}<div class="sub">${esc(siteName(x.s))}</div></td>
+      ${compact ? "" : `<td class="r">${esc(orig(x))}</td>`}
+      <td class="r">${money(x.land)}</td>
+      <td class="r">${money(x.ref.krw)}<div class="sub">${esc(basisLabel(x.ref))}</div></td>
+      <td class="r"><span class="mark ${x.ratio < 0.65 ? "warn" : "low"}">${money(x.gain, true)}</span>${x.ratio < 0.65 ? `<div class="sub">${esc(t("check_model"))}</div>` : ""}</td>
+    </tr>`).join("")}</tbody></table></div>`;
+}
+
+V.source = () => {
+  if (!hasRule()) return `<h1>${esc(t("src_title"))}</h1><p class="empty">${esc(t("src_norule", { c: C() }))}</p>`;
+  let rows = opportunities();
+  if (state.srcKind !== "all") rows = rows.filter(x => ent(x.e).kind === state.srcKind);
+  return `
+  <h1>${esc(t("src_title"))}</h1>
+  <p class="lede">${esc(t("src_lede", { c: C() }))}</p>
+  <div class="bar"><div class="seg" role="group">${[["all", t("src_all")], ["Body", t("kind_body")], ["Lens", t("kind_lens")]].map(([k, l]) => `<button data-sk="${k}" aria-pressed="${state.srcKind === k}">${esc(l)}</button>`).join("")}</div><span class="sub">${esc(t("count", { n: rows.length }))}</span></div>
+  ${oppTable(rows.slice(0, lim("src", 30)), false)}
+  ${more("src", rows.length, 30)}
+  <p class="note">${esc(t("src_note", { d: D.fx.at }))}</p>`;
+};
+
+V.rivals = () => {
+  const rows = feed();
+  return `
+  <h1>${esc(t("riv_title"))}</h1>
+  <p class="lede">${esc(t("riv_lede"))}</p>
+  <div class="bar">
+    <div class="seg" role="group">${[["all", t("ft_all")], ["new", t("ft_new")], ["price", t("ft_price")], ["gone", t("ft_gone")]].map(([k, l]) => `<button data-ft="${k}" aria-pressed="${state.feedType === k}">${esc(l)}</button>`).join("")}</div>
+    <label class="chk"><input type="checkbox" id="flocal" ${state.feedLocal ? "checked" : ""}> ${esc(t("only_country", { c: C() }))}</label>
+    <label class="chk"><input type="checkbox" id="fmine" ${state.feedMine ? "checked" : ""}> ${esc(t("only_mine"))}</label>
+    <span class="sub">${esc(t("count", { n: rows.length }))}</span>
+  </div>
+  ${rows.length ? `<div class="tbl"><table><thead><tr><th>${esc(t("th_time"))}</th><th>${esc(t("th_change"))}</th><th>${esc(t("th_item"))}</th><th class="r">${esc(t("th_price"))}</th></tr></thead><tbody>${feedRows(rows.slice(0, lim("feed", 50)))}</tbody></table></div>` : `<p class="empty">${esc(t("empty"))}</p>`}
+  ${more("feed", rows.length, 50)}
+  <p class="note">${esc(t("riv_note", { d: D.eventsFrom }))}</p>`;
+};
+
+function demandTable(rows, compact) {
+  if (!rows.length) return `<p class="empty">${esc(t("empty"))}</p>`;
+  return `<div class="tbl"><table>
+    <thead><tr><th>${esc(t("th_model"))}</th><th class="r">${esc(t("th_sold_n"))}</th><th class="r">${esc(t("th_here", { c: C() }))}</th>${compact ? "" : `<th class="r">${esc(t("th_abroad"))}</th><th class="r">${esc(t("th_turn"))}</th>`}<th class="r">${esc(t("th_bref"))}</th></tr></thead>
+    <tbody>${rows.map(r => `<tr class="click" data-entity="${esc(r.id)}">
+      <td>${esc(entName(r.id))}${state.lang === "ko" && r.e.ko ? `<div class="sub">${esc(r.e.n)}</div>` : ""}</td>
+      <td class="r">${r.sold}</td>
+      <td class="r">${r.here === 0 ? `<span class="mark high">0</span>` : r.here}</td>
+      ${compact ? "" : `<td class="r">${r.abroad}</td><td class="r">${r.e.turnD != null ? esc(t("days", { n: r.e.turnD })) : "–"}</td>`}
+      <td class="r">${r.ref ? money(r.ref.krw) : "–"}</td>
+    </tr>`).join("")}</tbody></table></div>`;
+}
+
+V.demand = () => {
+  const rows = demand();
+  return `
+  <h1>${esc(t("dm_title"))}</h1>
+  <p class="lede">${esc(t("dm_lede", { c: C() }))}</p>
+  ${rows.useAll ? `<p class="basis">${esc(t("dm_note_all", { c: C() }))}</p>` : ""}
+  ${demandTable(rows.slice(0, lim("dm", 40)), false)}
+  ${more("dm", rows.length, 40)}
+  <p class="note">${esc(t("dm_note", { c: C() }))}</p>`;
+};
+
+V.account = () => `
+  <h1>${esc(t("acct_title"))}</h1>
+  <div class="tbl" style="max-width:640px"><table><tbody>
+    <tr><td class="sub">${esc(t("acct_id"))}</td><td>${esc(ME.id)}${ME.name ? " · " + esc(ME.name) : ""}</td></tr>
+    <tr><td class="sub">${esc(t("acct_store"))}</td><td>${ME.admin ? esc(t("all_stores")) : esc((ME.stores || []).map(siteName).join(", "))}</td></tr>
+    <tr><td class="sub">${esc(t("acct_country"))}</td><td>${esc(C())}</td></tr>
+    <tr><td class="sub">${esc(t("acct_cur"))}</td><td>${esc(myCurrency())}</td></tr>
+  </tbody></table></div>
+  <h2>${esc(t("pw_title"))}</h2>
+  <form id="pwform" class="form">
+    <label for="pwc">${esc(t("pw_cur"))}</label><input id="pwc" type="password" autocomplete="current-password" required>
+    <label for="pwn">${esc(t("pw_new"))}</label><input id="pwn" type="password" autocomplete="new-password" minlength="10" required>
+    <span></span><div><button class="btn" type="submit">${esc(t("pw_go"))}</button></div>
+  </form>
+  <p class="msg" id="pwmsg" role="status"></p>`;
+
+// ── 진행 ──
+function chrome() {
+  document.documentElement.lang = state.lang;
+  $("#tag").textContent = t("tag");
+  $("#lang-label").textContent = t("lang");
+  $("#logout").textContent = t("logout");
+  $("#lang").innerHTML = Object.entries(LANGS).map(([k, v]) => `<option value="${k}" ${k === state.lang ? "selected" : ""}>${v}</option>`).join("");
+  $("#asof").textContent = t("asof", { t: D.generated });
+  if (ME.admin) {
+    const counts = {};
+    D.active.forEach(it => { counts[it.s] = (counts[it.s] || 0) + 1; });
+    const sites = Object.keys(counts).filter(s => siteCountry(s)).sort((a, b) => (siteCountry(a) || "").localeCompare(siteCountry(b) || "") || counts[b] - counts[a]);
+    $("#store-box").innerHTML = `<label for="store">${esc(t("my_store"))}</label> <select id="store">${sites.map(s => `<option value="${esc(s)}" ${s === state.store ? "selected" : ""}>${esc(siteName(s))} · ${siteCountry(s)} (${counts[s]})</option>`).join("")}</select>`;
+  } else {
+    $("#store-box").innerHTML = `<label>${esc(t("my_store"))}</label> <span class="store-name">${esc(storeLabel())}</span>`;
+  }
+  $("#toc").innerHTML = VIEWS.map((v, i) => `<button data-v="${v}" aria-current="${state.view === v}"><span class="n">${i + 1}</span>${esc(t("nav")[i])}</button>`).join("");
+  $("#foot").textContent = t("foot", { t: D.generated, d: D.fx.at });
+}
+function render() {
+  chrome();
+  $("#main").innerHTML = V[state.view]();
+  if (state.view === "buy") bindSearch();
+  if (state.view === "account") bindPassword();
+  bindCalc();
+}
+function go(view, opts = {}) {
+  Object.assign(state, opts);
+  state.view = view;
+  keep.set("view", view);
+  render();
+  window.scrollTo({ top: 0 });
+}
+
+function searchEntities(q) {
+  const norm = s => String(s).toLowerCase().replace(/[\s\-_.\/]+/g, "").replace(/mm/g, "").replace(/f(?=\d)/g, "");
+  const nq = norm(q);
+  if (!nq) return [];
+  const hits = [];
+  for (const [id, e] of Object.entries(D.entities)) {
+    const keys = [e.n, e.ko, ...(e.al || [])].filter(Boolean).map(norm);
+    let best = -1;
+    for (const k of keys) {
+      if (k === nq) best = Math.max(best, 3);
+      else if (k.startsWith(nq)) best = Math.max(best, 2);
+      else if (k.includes(nq)) best = Math.max(best, 1);
+    }
+    const act = D.active.length && (CACHE.actN || (CACHE.actN = D.active.reduce((m, it) => (it.e && (m[it.e] = (m[it.e] || 0) + 1), m), {})))[id] || 0;
+    if (best >= 0) hits.push({ id, e, act, score: best * 1000 + (((e.sb || {}).ALL || [0, 0])[1]) + act });
+  }
+  return hits.sort((a, b) => b.score - a.score).slice(0, 10);
+}
+function bindSearch() {
+  const q = $("#q"), sg = $("#sugg");
+  let hits = [], on = 0;
+  const draw = () => {
+    sg.hidden = !hits.length;
+    sg.innerHTML = hits.map((h, i) => `<button type="button" class="${i === on ? "on" : ""}" data-pick="${esc(h.id)}"><span>${esc(entName(h.id))} ${state.lang === "ko" && h.e.ko ? `<span class="sub">${esc(h.e.n)}</span>` : ""}</span><span class="sub num">${h.act}</span></button>`).join("");
+  };
+  q.addEventListener("input", () => { hits = searchEntities(q.value); on = 0; draw(); });
+  q.addEventListener("keydown", ev => {
+    if (!hits.length) return;
+    if (ev.key === "ArrowDown") { on = (on + 1) % hits.length; draw(); ev.preventDefault(); }
+    if (ev.key === "ArrowUp") { on = (on - 1 + hits.length) % hits.length; draw(); ev.preventDefault(); }
+    if (ev.key === "Enter") { pick(hits[on].id); ev.preventDefault(); }
+    if (ev.key === "Escape") { hits = []; draw(); }
+  });
+  if (!state.entity) q.focus();
+}
+function pick(id) {
+  state.entity = id; state.calcSale = null; state.calcG = "B";
+  keep.set("entity", id);
+  render();
+}
+function bindCalc() {
+  const ids = { cg: "calcG", cs: "calcSale", cm: "calcMargin", cr: "calcRepair" };
+  for (const [el, key] of Object.entries(ids)) {
+    const node = document.getElementById(el);
+    if (!node) continue;
+    node.addEventListener("change", () => {
+      if (key === "calcG") { state.calcG = node.value; state.calcSale = null; }
+      else state[key] = node.value === "" ? 0 : +node.value;
+      const y = window.scrollY; render(); window.scrollTo({ top: y });
+    });
+  }
+}
+function bindPassword() {
+  $("#pwform").addEventListener("submit", async ev => {
+    ev.preventDefault();
+    const msg = $("#pwmsg");
+    const show = (key, good) => { msg.textContent = t(key); msg.className = "msg " + (good ? "good" : "bad"); };
+    if ($("#pwn").value.length < 10) return show("pw_short");
+    try {
+      const res = await fetch("/dealer/password", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ current: $("#pwc").value, new: $("#pwn").value }) });
+      const body = await res.json().catch(() => ({}));
+      if (res.ok && body.ok) { $("#pwform").reset(); return show("pw_ok", true); }
+      show(body.error === "wrong" ? "pw_wrong" : body.error === "short" ? "pw_short" : "pw_err");
+    } catch { show("pw_err"); }
+  });
+}
+
+document.addEventListener("click", ev => {
+  const el = ev.target.closest("button, a, tr.click");
+  if (!el) return;
+  if (el.matches("#toc button")) return go(el.dataset.v);
+  if (el.dataset.pick) { ev.preventDefault(); state.view = "buy"; keep.set("view", "buy"); return pick(el.dataset.pick); }
+  if (el.dataset.go) {
+    const o = {};
+    if (el.dataset.sf) o.stockFilter = el.dataset.sf;
+    if (el.dataset.local) { o.feedLocal = true; o.feedType = "all"; }
+    return go(el.dataset.go, o);
+  }
+  if (el.dataset.more) { state.lim[el.dataset.more] = lim(el.dataset.more, +el.dataset.step) + +el.dataset.step; const y = window.scrollY; render(); window.scrollTo({ top: y }); return; }
+  if (el.dataset.sf) { state.stockFilter = el.dataset.sf; state.lim.stock = 0; return render(); }
+  if (el.dataset.ft) { state.feedType = el.dataset.ft; state.lim.feed = 0; return render(); }
+  if (el.dataset.sk) { state.srcKind = el.dataset.sk; state.lim.src = 0; return render(); }
+  if (el.matches("tr.click") && !ev.target.closest("a") && el.dataset.entity) { state.view = "buy"; pick(el.dataset.entity); window.scrollTo({ top: 0 }); }
+});
+document.addEventListener("change", ev => {
+  if (ev.target.id === "flocal") { state.feedLocal = ev.target.checked; render(); }
+  if (ev.target.id === "fmine") { state.feedMine = ev.target.checked; render(); }
+  if (ev.target.id === "lang") { state.lang = ev.target.value; keep.set("lang", state.lang); render(); }
+  if (ev.target.id === "store") { state.store = ev.target.value; state.lim = {}; CACHE = {}; keep.set("store", state.store); render(); }
+});
+
+function defaultLang() {
+  const saved = keep.get("lang");
+  if (saved && LANGS[saved]) return saved;
+  if (ME.lang && LANGS[ME.lang]) return ME.lang;
+  return COUNTRY_LANG[myCountry()] || "en";
+}
+
+Promise.all([
+  fetch("/dealer/data", { cache: "no-store" }).then(r => { if (r.status === 401) { location.href = "/dealer/login"; throw new Error("auth"); } return r.json(); }),
+  fetch("/data/config/landed_cost_rules.json").then(r => (r.ok ? r.json() : null)).catch(() => null),
+]).then(([payload, rules]) => {
+  if (!window.ME) { location.href = "/dealer/login"; return; }
+  D = payload; ME = window.ME; RULES = rules;
+  NOW = new Date(D.generated.replace(" ", "T") + ":00+09:00");
+  if (ME.admin) {
+    const saved = keep.get("store");
+    state.store = saved && D.sites[saved] ? saved : Object.keys(D.sites).find(s => siteCountry(s) === "KR") || Object.keys(D.sites)[0];
+  }
+  state.lang = defaultLang();
+  const v = keep.get("view");
+  state.view = v && V[v] ? v : "brief";
+  const se = keep.get("entity");
+  state.entity = se && D.entities[se] ? se : (D.entities["leica:lens:summilux-m:35:asph-fle"] ? "leica:lens:summilux-m:35:asph-fle" : null);
+  render();
+}).catch(err => {
+  if (err && err.message === "auth") return;
+  $("#main").innerHTML = `<p class="loading">${esc(I.en.load_fail)}</p>`;
+});
+</script>
+</body>
+</html>

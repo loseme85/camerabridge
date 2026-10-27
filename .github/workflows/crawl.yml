@@ -68,6 +68,9 @@ jobs:
       - name: Audit entities (missing-model candidates)
         run: python3 scripts/entity_audit.py
 
+      - name: Build dealer page data (/dealer)
+        run: python3 scripts/build_dealer_data.py
+
       - name: Commit and push results
         run: |
           git config user.name "Camera Bridge Bot"
