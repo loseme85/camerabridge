@@ -338,3 +338,18 @@ def test_cardinal_condition_grades():
     assert grade_of(site, CARDINAL_PREFIX + "good", "Leica M3")[0] == "C"
     assert grade_of(site, CARDINAL_PREFIX + "good / issue", "Leica M3")[0] == "D"
     assert grade_of(site, CARDINAL_PREFIX + "as is", "Leica IIIc")[0] == "X"
+
+
+def test_fivestar_condition_grades():
+    from condition_grade import FIVESTAR_PREFIX, fivestar_condition
+    site = "Five Star Camera (일본)"
+    page = "<p>【Appearance】 {} *Please refer photo. 【Optic】 No haze. 【Function】 We have inspected each function.</p>"
+    best = "There are few scratches or signs of use on the exterior, making it one of the best used models of the same model."
+    good = "There are few scratches or signs of use on the exterior. It is in relatively good condition compared to other used products."
+    average = "There are scratches and signs of use on the exterior. It is in average condition, typical of a used item."
+    worn = "The exterior shows signs of use, including significant paint peeling, rust, and surface rust."
+    assert fivestar_condition(page.format(best)) == FIVESTAR_PREFIX + "best"
+    assert fivestar_condition(page.format(good)) == FIVESTAR_PREFIX + "good"
+    assert fivestar_condition(page.format(average)) == FIVESTAR_PREFIX + "average"
+    assert fivestar_condition(page.format(worn)) == FIVESTAR_PREFIX + "worn"
+    assert [grade_of(site, FIVESTAR_PREFIX + k, "Leica M4")[0] for k in ("best", "good", "average", "worn", "as is")] == ["A", "B", "B", "C", "X"]

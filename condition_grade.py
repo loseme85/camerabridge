@@ -152,6 +152,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return None, None
     if cond.startswith(CARDINAL_PREFIX):
         return _cardinal_grade(cond[len(CARDINAL_PREFIX):].strip()), "text"
+    if cond.startswith(FIVESTAR_PREFIX):
+        return _FIVESTAR.get(cond[len(FIVESTAR_PREFIX):].strip()), "text"
     if cond.startswith(DESC_PREFIX):
         for pattern, grade in _DESC:
             if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
@@ -520,3 +522,29 @@ def _cardinal_grade(value: str) -> str | None:
     level, _, issue = value.partition(" / ")
     grade = _CARDINAL.get(level)
     return GRADES[min(GRADES.index(grade) + 1, GRADES.index("D"))] if grade and issue else grade
+
+
+# 일본 Five Star Camera (수출 중고점, USD): 등급 표기 없이 설명 【Appearance】 문장 — 'one of the best used models'(best) ·
+# 'relatively good condition'(good) · 'average condition, typical'(average) · 녹·도장 크게 벗겨짐·가죽 상함(worn), 고장은 as is
+FIVESTAR_PREFIX = "FiveStar: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-27): best S 3·A 3 · good S 2·A 3·B 1 · average A 5·B 1 · worn A 4·C 1·D 1.
+# 매장 사진(회색 배경, 크게 다듬은 사진)이 모두 깔끔해 말투만큼 갈리지 않음. 아래 대응 기준 정확 일치 6/24 · 한 등급 이내 18/24
+# (사진이 평균 0.92등급 후함 — 기존 0.8과 비슷).
+_FIVESTAR = {"best": "A", "good": "B", "average": "B", "worn": "C", "as is": "X"}
+_FIVESTAR_WORDS = [("best", r"one of the best|almost no signs of use|very good condition|like new|unused"),
+                   ("good", r"relatively good"),
+                   ("worn", r"significant|noticeable|\brust|deteriorat|\btears?\b|distortion|missing lettering|faded|shrunk|"
+                            r"traces of (paint )?repair|dents"),
+                   ("average", r"average|typical"),
+                   ("good", r"slight signs of use|few scratches|minimal scratches|minor")]
+
+
+def fivestar_condition(html: str) -> str | None:
+    """Five Star Camera 상품 설명의 【Appearance】 문장에서 'FiveStar: good' 꼴로."""
+    t = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", html or "")))
+    if re.search(r"not work|does not function|\bjunk\b|for parts|as[\s-]is\b", t, re.I):
+        return FIVESTAR_PREFIX + "as is"
+    m = re.search(r"【Appearance】(.*?)(?:【|$)", t)
+    if not m:
+        return None
+    return FIVESTAR_PREFIX + next((n for n, p in _FIVESTAR_WORDS if re.search(p, m.group(1), re.I)), "average")
