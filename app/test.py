@@ -6122,6 +6122,61 @@ def crawl_cardinal():
     return results
 
 
+def crawl_fivestar():
+    """Five Star Camera (일본) - 신주쿠 수출 중고점 Shopify. 전체가 15,000점(61쪽)이라 'leica' 컬렉션 products.json(400점, 2쪽)만 받고
+    브랜드 칸이 Leica이고 판매 중인 것만 (컬렉션에 라이카 마운트용 다른 회사 렌즈가 섞여 있음). 가격은 USD.
+    등급 표기는 없고 설명 【Appearance】 문장 말투('relatively good condition compared to other used products')"""
+    import html as _html
+    import requests
+    from condition_grade import fivestar_condition
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://five-star-camera.com"
+    print(f"\n  📂 Five Star Camera 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/leica/products.json", "Five Star Camera"):
+        if (p.get("vendor") or "").strip().lower() != "leica":
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.search(r"[A-Za-z]{3}", re.sub(r"from Japan", "", title, flags=re.I)):
+            continue  # 제목이 '- from Japan'뿐인 상품
+        # 'Very Rare!! …', '… 2026.09 Overhauled!!', '… w/ Box from Japan', '※Read!' 같은 꼬리말 떼기
+        name = re.sub(r"^(?:Very\s+)?(?:Rare|Good|Mint)!+\s*|\s*※.*$|\s+from Japan\b.*$", "", title, flags=re.I)
+        name = re.sub(r"\b20\d\d\.\d{1,2}\s+Overhauled!*|\bw/\s*Box\b|\s*!+$", " ", name, flags=re.I)
+        name = re.sub(r"\bf/(\d)", r"f\1", name)
+        name = re.sub(r"\s+", " ", name).strip(" ,-")
+        if not re.match(r"(?:leica|leitz)\b", name, re.I):
+            name = "Leica " + name
+        try:
+            price = f"${float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = "Accessory" if (p.get("product_type") or "").lower() == "accessories" else detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "site": "Five Star Camera (일본)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": fivestar_condition(p.get("body_html") or "") or "정보없음",
+            "가격": price,
+            "통화": "USD",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Five Star Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_oneofmany():
     """One Of Many Cameras (덴마크) - 코펜하겐 중고·렌탈점 Shopify products.json 전체(3,900개쯤, 16쪽)에서 브랜드 칸이 Leica이고
     상품 종류가 'Used …'·'Brugt'(중고)인 것만 (Rental·New는 뺌). 가격은 DKK. 등급 표기는 없고 설명 말투('Mint condition')"""
@@ -6960,6 +7015,7 @@ def crawl_all():
         ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),
         ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
+        ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
