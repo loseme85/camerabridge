@@ -353,3 +353,15 @@ def test_fivestar_condition_grades():
     assert fivestar_condition(page.format(average)) == FIVESTAR_PREFIX + "average"
     assert fivestar_condition(page.format(worn)) == FIVESTAR_PREFIX + "worn"
     assert [grade_of(site, FIVESTAR_PREFIX + k, "Leica M4")[0] for k in ("best", "good", "average", "worn", "as is")] == ["A", "B", "B", "C", "X"]
+
+
+def test_leica_store_amsterdam_condition_grades():
+    from condition_grade import LSA_PREFIX, lsa_condition
+    site = "Leica Store Amsterdam (네덜란드)"
+    # 렌즈 소개 문구('among the best lenses')가 아니라 상태 문장만 봄
+    intro = "The APO-SUMMICRON-SL series are among the best lenses Leica even produced. "
+    assert lsa_condition(intro + "And this very lens is in great condition, there are some small traces of use visible.") == LSA_PREFIX + "minimal"
+    assert lsa_condition("<p>Camera shows some traces of use.</p><p>Condition:</p><p>Some traces of use</p>") == LSA_PREFIX + "some"
+    assert lsa_condition("This Leica M2 is in near mint condition.") == LSA_PREFIX + "mint"
+    assert lsa_condition("Lens is well used and it has some traces of use visible.") == LSA_PREFIX + "well used"
+    assert [grade_of(site, LSA_PREFIX + k, "Leica Q2")[0] for k in ("mint", "minimal", "small", "some", "well used")] == ["S", "A", "B", "C", "D"]

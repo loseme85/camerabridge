@@ -6177,6 +6177,77 @@ def crawl_fivestar():
     return results
 
 
+def crawl_leicastoreamsterdam():
+    """Leica Store Amsterdam (네덜란드) - 라이카 매장의 공인 중고(CPO). Lightspeed 쇼핑몰이라 분류 목록에 ?format=json.
+    Used Cameras·Used Lenses·Used Accessories를 100개씩 (판매 중만 목록에 나옴, 합쳐 60점 안팎).
+    등급 표기는 없고 상품 화면 설명 문장('shows minimal traces of use')이라 상품마다 ?format=json을 한 번씩 더 받음.
+    robots.txt Crawl-delay 2초 지킴"""
+    import requests
+    from condition_grade import lsa_condition
+    results, seen = [], set()
+    base = "https://www.leicastoreamsterdam.nl"
+    print(f"\n  📂 Leica Store Amsterdam 크롤링 시작")
+    s = requests.Session()
+    s.headers["User-Agent"] = random.choice(USER_AGENTS)
+    for cat_slug in ("used-cameras", "used-lenses", "used-accessories"):
+        for page_num in range(1, 10):
+            resp = s.get(f"{base}/used-leica/{cat_slug}/page{page_num}.html", params={"format": "json", "limit": 100}, timeout=30)
+            resp.raise_for_status()  # 빠진 분류가 판매완료로 바뀌지 않게 실패로
+            col = resp.json().get("collection") or {}
+            prods = col.get("products") or {}
+            items = list(prods.values()) if isinstance(prods, dict) else list(prods)
+            print(f"    └─ {cat_slug} {page_num}페이지 {len(items)}개 상품 발견")
+            time.sleep(2)
+            for p in items:
+                link = f"{base}/{p.get('url', '')}"
+                if not p.get("url") or link in seen or not p.get("available", True):
+                    continue
+                seen.add(link)
+                # 'Leica Q2, Used.' · 'Leica M10 monochrom, Used s/n 5617164' · 'M10 Black Paint Finish, Used.'
+                name = re.sub(r"[,.\s]*\b(?:used|demo)\b.*$|\s*s/n\.?\s*\d+.*$", "", p.get("title") or "", flags=re.I)
+                name = re.sub(r"^Leica,\s*", "Leica ", name.strip(" ,."))
+                name = re.sub(r"\bVari0\b", "Vario", name)
+                name = re.sub(r"(?<=[A-Za-z])\s*-\s+(?=[A-Z])", "-", name)  # 'APO-SUMMICRON- SL'
+                name = re.sub(r"\bVario-Elmarit 2\.8 24-70\b", "Vario-Elmarit-SL 24-70mm f2.8", name)  # SL 렌즈인데 SL이 빠짐
+                name = re.sub(r"\bSL-2\b", "SL2", name)
+                name = re.sub(r"\bf/(\d)", r"f\1", name)
+                name = re.sub(r"\s+", " ", name).strip(" ,.")
+                if not re.match(r"(?:leica|leitz)\b", name, re.I):
+                    name = "Leica " + name
+                cond = "정보없음"
+                try:
+                    detail = s.get(f"{link}?format=json", timeout=30).json().get("product") or {}
+                    cond = lsa_condition(detail.get("content") or "") or "정보없음"
+                except Exception as e:
+                    print(f"    ⚠️ 상세 못 읽음 {link}: {e}")
+                time.sleep(2)
+                amount = ((p.get("price") or {}).get("price_incl")) or 0
+                price = f"€{float(amount):,.0f}" if amount else "문의요망"
+                img = f"https://cdn.webshopapp.com/shops/241792/files/{p['image']}/file.jpg" if p.get("image") else ""
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "Leica Store Amsterdam (네덜란드)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "EUR",
+                    "이미지": img,
+                    "링크": link,
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if not col.get("page_next"):
+                break
+    print(f"  ✅ Leica Store Amsterdam 완료: {len(results)}개")
+    return results
+
+
 def crawl_oneofmany():
     """One Of Many Cameras (덴마크) - 코펜하겐 중고·렌탈점 Shopify products.json 전체(3,900개쯤, 16쪽)에서 브랜드 칸이 Leica이고
     상품 종류가 'Used …'·'Brugt'(중고)인 것만 (Rental·New는 뺌). 가격은 DKK. 등급 표기는 없고 설명 말투('Mint condition')"""
@@ -6902,6 +6973,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
     "Fotohandel Delfshaven (네덜란드)": 6,  # 목록 22쪽 (1분쯤)
     "One Of Many Cameras (덴마크)": 6,  # 전체 16쪽 (중고 라이카는 200개쯤)
+    "Leica Store Amsterdam (네덜란드)": 6,  # 매물마다 상세 (약 55개, 2초 간격이라 2분쯤)
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
 
@@ -7016,6 +7088,7 @@ def crawl_all():
         ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
+        ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

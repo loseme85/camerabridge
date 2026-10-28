@@ -154,6 +154,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _cardinal_grade(cond[len(CARDINAL_PREFIX):].strip()), "text"
     if cond.startswith(FIVESTAR_PREFIX):
         return _FIVESTAR.get(cond[len(FIVESTAR_PREFIX):].strip()), "text"
+    if cond.startswith(LSA_PREFIX):
+        return _LSA.get(cond[len(LSA_PREFIX):].strip()), "text"
     if cond.startswith(DESC_PREFIX):
         for pattern, grade in _DESC:
             if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
@@ -548,3 +550,25 @@ def fivestar_condition(html: str) -> str | None:
     if not m:
         return None
     return FIVESTAR_PREFIX + next((n for n, p in _FIVESTAR_WORDS if re.search(p, m.group(1), re.I)), "average")
+
+
+# 네덜란드 Leica Store Amsterdam (라이카 공인 중고 CPO): 등급 표기 없이 상품 화면 설명 문장
+# ('This lens is in a nice condition, shows minimal traces of use', 'Condition: Some traces of use') → mint·minimal·small·some·well used
+LSA_PREFIX = "LeicaStoreAmsterdam: "
+# 사진 평가(표기 가리고 24점, 2026-10-28): 매장 사진이 흰 배경 누끼 사진이라 사용감이 거의 안 보여 24점 모두 A로 보임 —
+# 사진으로 대응을 정할 수 없어 설명 단계를 다른 매장 설명 말투(Photografica excellent A·very good B 등)에 맞춰 둠.
+_LSA = {"mint": "S", "minimal": "A", "small": "B", "some": "C", "well used": "D"}
+_LSA_WORDS = [("mint", r"\bmint\b|like new|as new"),
+              ("well used", r"well used|heavy|damage|signs of wear"),
+              ("minimal", r"minimal|amazing|great|beautiful|very good|excellent"),
+              ("small", r"small (traces|signs)|\bnice\b"),
+              ("some", r"traces of use|signs of use|good condition|used condition")]
+
+
+def lsa_condition(html: str) -> str | None:
+    """Leica Store Amsterdam 상품 설명에서 상태를 적은 문장만 골라 'LeicaStoreAmsterdam: minimal' 꼴로
+    (렌즈 소개 문구 'among the best lenses'에 걸리지 않게)."""
+    t = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", html or "")))
+    s = " ".join(x for x in re.split(r"(?<=[.!])\s", t) if re.search(r"condition|traces|signs of|used\b|mint", x, re.I))
+    level = next((n for n, p in _LSA_WORDS if re.search(p, s, re.I)), None)
+    return LSA_PREFIX + level if level else None
