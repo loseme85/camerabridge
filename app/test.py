@@ -5089,6 +5089,90 @@ def crawl_kasan():
     print(f"  ✅ 가산카메라 완료: {len(results)}개")
     return results
 
+def _kcamera_name(title):
+    """K-Camera 제목 다듬기: _kasan_name 앞에 '/95%/판매완료' 꼬리, 'Rangefinder Film Camera'('finder'라 액세서리로 갈림)·
+    'Film Camera'·'Digital', 바디에 딸린 '.스트렙'·'케이스,스트랩'·'호환충전기'·'(그립.컷수…)', '라이카 코리아정품'을 뗌"""
+    t = re.sub(r"\s*/\s*판매완료\s*$", "", title.strip())
+    t = re.sub(r"\s*(?:Rangefinder\s+)?(?:Film|Digital)\s+Camera\S*|\bRangefinder\b|(?<=Body)\s+Digital\b", " ", t, flags=re.I)
+    t = re.sub(r"\s*라이카\s?코리아\s?정품|\s*코리아정품", " ", t)
+    t = re.sub(r"\s*\([^)]*(?:그립|컷수|밧데리|배터리)[^)]*\)", " ", t)
+    if re.search(r"\bbody\b|\b(?:M\d{1,2}|X1|X2|C2|R\d)\b", t, re.I):
+        t = re.sub(r"[.,]?\s*(?:호환충전기|케이스|스트렙|스트랩)(?:[.,]\s*(?:케이스|스트렙|스트랩))*", " ", t)
+    t = re.sub(r"\s*[.,]\s*(?:케이스|스트렙|스트랩)\s*(?=/|$)", " ", t)
+    t = re.sub(r"\s*\.?\s*컷수\s?[\d,]+|x{3,}|\(\s*\)", " ", t)
+    t = re.sub(r"\bBlackr\b", "Black", t)
+    t = re.sub(r"\bBody(?=silver|black)", "Body ", t, flags=re.I)
+    t = re.sub(r"\b(silver|black)\s+\1\b", r"\1", t, flags=re.I)
+    t = re.sub(r"\(L-?\s*mount\s+L39\s+Visoflex용\)", "Visoflex", t, flags=re.I)
+    return _kasan_name(t)
+
+
+def crawl_kcamera():
+    """K-Camera (한국) - 남대문·충무로 라이카·필름 카메라점(고도몰). 라이카 '중고제품 / USED' 분류(cateCd=001002, 20개씩 page=N,
+    정적 HTML, 8쪽 160점 안팎)에 이름·가격·사진, 품절은 <li class="item_soldout">. 제목 꼴이 가산카메라와 같아
+    ('라이카 Leica … /98%') 이름 다듬기는 _kasan_name, 상태는 제목 끝 '/98%' (국내 % 대응 그대로). robots.txt 'Allow: /'"""
+    import html as _html
+    import requests
+    base = "https://www.kcamera.co.kr"
+    site = "K-Camera"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 K-Camera 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(1, 40):
+        try:
+            resp = sess.get(f"{base}/goods/goods_list.php", params={"cateCd": "001002", "page": page_num}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"K-Camera {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        items = re.findall(r'<li\s+(?:class="([^"]*)"\s+)?style="width:[^"]*">\s*<div class="item_cont">(.*?)<!-- //item_cont -->', resp.text, re.S)
+        new = 0
+        for cls, blk in items:
+            g = re.search(r"goodsNo=(\d+)", blk)
+            nm = re.search(r'class="item_name">([^<]*)<', blk)
+            if not g or not nm or g.group(1) in seen:
+                continue
+            seen.add(g.group(1))
+            new += 1
+            title = _html.unescape(nm.group(1)).strip()
+            if re.search(_KASAN_OTHER, title, re.I) or any(b2 in title.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            pm = re.search(r'class="item_price">(.*?)</strong>', blk, re.S)
+            ptxt = re.sub(r"<[^>]+>", "", pm.group(1)) if pm else ""
+            digits = re.sub(r"[^\d]", "", ptxt)
+            sold = "item_soldout" in (cls or "") or "판매완료" in ptxt or "판매완료" in title  # 제목 끝 '/95%/판매완료'도 있음
+            price = f"{int(digits):,}원" if digits else "문의요망"
+            pc = re.search(r"(\d{2,3})\s?%\s*\]?\s*(?:/\s*판매완료\s*)?$", title)
+            cond = f"{pc.group(1)}%" if pc else "정보없음"
+            name = _kcamera_name(title)
+            img = re.search(r'<img\s+src="([^"]+)"', blk)
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "KRW",
+                "이미지": img.group(1) if img else "",
+                "링크": f"{base}/goods/goods_view.php?goodsNo={g.group(1)}",
+                "품절": sold,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 {len(items)}개")
+        if new == 0:
+            break
+        time.sleep(1.5)
+    if not results:
+        raise RuntimeError("K-Camera 목록이 비어 있음")
+    print(f"  ✅ K-Camera 완료: {len(results)}개")
+    return results
+
 def _cameraelectronic_name(title):
     """Camera Electronic 제목 다듬기: 'Pre-Owned Leica M6 TTL .85 Silver Body Model 10466 With Box, Body, Cap, Strap SN: 2496525
     (Second Hand)' → 'Leica M6 TTL .85 Silver Body Model 10466'. 딸린 물건 목록('With …'·'in Box'·'Boxed …')과 연도·일련번호는
@@ -7073,6 +7157,7 @@ def crawl_all():
         ("カメラの大貫 (일본)", lambda: ce.wrap_full_run("カメラの大貫 (일본)", crawl_ohnuki)),
         ("喜久屋カメラ (일본)", lambda: ce.wrap_full_run("喜久屋カメラ (일본)", crawl_kikuya)),
         ("가산카메라", lambda: ce.wrap_full_run("가산카메라", crawl_kasan)),
+        ("K-Camera", lambda: ce.wrap_full_run("K-Camera", crawl_kcamera)),
         ("MF Camera (미국)", lambda: ce.wrap_full_run("MF Camera (미국)", crawl_mfcamera)),
         ("Classic Connection (미국)", lambda: ce.wrap_full_run("Classic Connection (미국)", crawl_classicconnection)),
         ("The Classic Camera (영국)", lambda: ce.wrap_full_run("The Classic Camera (영국)", crawl_classiccamera)),

@@ -2707,6 +2707,7 @@
       '국민카메라': { ko: '국민카메라', default: 'Kookmin Camera' },
       '가산카메라': { ko: '가산카메라', default: 'Kasan Camera' },
       '무한카메라': { ko: '무한카메라', default: 'Muhan Camera' },
+      'K-Camera': { ko: 'K-Camera', default: 'K-Camera' },
       '기타무라 (일본)': { ko: '기타무라', ja: 'カメラのキタムラ', 'zh-Hans': '北村相机', 'zh-Hant': '北村相機', default: 'Kitamura Camera' },
       'Kamerastore (핀란드)': { default: 'Kamerastore' },
       'M & K Kamera (홍콩)': { default: 'M & K Kamera', ko: 'M & K 카메라', 'zh-Hant': '齊齊影 M & K Kamera', 'zh-Hans': '齐齐影 M & K Kamera' },
@@ -4163,7 +4164,7 @@
       const normalized = String(source || '').trim().toLowerCase();
       if(!normalized) return ux('public_card.location_unknown', 'Location unavailable');
       if(normalized.includes('충무로')) return ux('public_card.location_seoul_korea', 'Seoul, South Korea');
-      if(normalized.includes('사진집') || normalized.includes('장씨카메라') || normalized.includes('국민카메라') || normalized.includes('가산카메라') || normalized.includes('무한카메라')) return ux('public_card.location_korea', 'South Korea');
+      if(normalized.includes('사진집') || normalized.includes('장씨카메라') || normalized.includes('국민카메라') || normalized.includes('가산카메라') || normalized.includes('무한카메라') || normalized.includes('K-Camera')) return ux('public_card.location_korea', 'South Korea');
       if(normalized.includes('영국') || normalized.includes('ffordes')) return ux('public_card.location_uk', 'United Kingdom');
       if(normalized.includes('일본') || normalized.includes('기타무라')) return ux('public_card.location_japan', 'Japan');
       if(normalized.includes('miami')) return ux('public_card.location_miami_us', 'Miami, United States');
