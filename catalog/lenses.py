@@ -399,7 +399,8 @@ for key, name, fam, focal in (("summarit-s:35", "Summarit-S 35mm f/2.5", "summar
                               ("elmarit-s:30", "Elmarit-S 30mm f/2.8", "elmarit", "30"), ("elmarit-s:45", "Elmarit-S 45mm f/2.8", "elmarit", "45"),
                               ("summicron-s:100", "Summicron-S 100mm f/2", "summicron", "100"), ("apo-macro-summarit-s:120", "APO-Macro-Summarit-S 120mm f/2.5", "apo-macro-summarit", "120"),
                               ("apo-elmar-s:180", "APO-Elmar-S 180mm f/3.5", "apo-elmar", "180"), ("super-elmar-s:24", "Super-Elmar-S 24mm f/3.5", "super-elmar", "24"),
-                              ("vario-elmar-s:30-90", "Vario-Elmar-S 30-90mm f/3.5-5.6", "vario-elmar", "30-90")):
+                              ("vario-elmar-s:30-90", "Vario-Elmar-S 30-90mm f/3.5-5.6", "vario-elmar", "30-90"),
+                              ("ts-apo-elmar-s:120", "TS-APO-Elmar-S 120mm f/5.6 ASPH", "apo-elmar", "120")):
     lens(f"leica:lens:{key}", name, None, "S", fam, focal)
 
 # 35/1.4 '복각'은 스틸림 복각 하나뿐 (제목에 스틸림이 없어도)
