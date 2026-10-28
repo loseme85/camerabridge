@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 648,
+   "count": 659,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 597,
+   "count": 606,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 580,
+   "count": 588,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 535,
+   "count": 543,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 220,
+   "count": 221,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 220,
+   "count": 221,
    "example": "Leica M3 Black Repaint"
   },
   {
@@ -51,19 +51,19 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:meter",
-   "count": 184,
+   "count": 186,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:mechanical",
-   "count": 184,
+   "count": 186,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:frameline-28",
-   "count": 176,
+   "count": 178,
    "example": "[중고] M6 CLASSIC"
   },
   {
@@ -75,7 +75,7 @@
   {
    "a": "leica:body:m10:standard",
    "b": "leica:feature:frameline-28",
-   "count": 96,
+   "count": 97,
    "example": "[중고] M10 Black"
   },
   {
@@ -99,19 +99,19 @@
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:no-meter",
-   "count": 77,
+   "count": 79,
    "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:mechanical",
-   "count": 77,
+   "count": 79,
    "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 77,
+   "count": 78,
    "example": "[위탁] M 240 (Black)"
   },
   {
@@ -125,6 +125,24 @@
    "b": "leica:feature:frameline-28",
    "count": 73,
    "example": "Leica M11 Silver"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 70,
+   "example": "Leica MP Silver x0.72"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:meter",
+   "count": 70,
+   "example": "Leica MP Silver x0.72"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:mechanical",
+   "count": 70,
+   "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:m4:standard",
@@ -163,39 +181,21 @@
    "example": "[위탁] M-A (Silver)"
   },
   {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 66,
-   "example": "Leica MP Silver x0.72"
-  },
-  {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:meter",
-   "count": 66,
-   "example": "Leica MP Silver x0.72"
-  },
-  {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:mechanical",
-   "count": 66,
-   "example": "Leica MP Silver x0.72"
-  },
-  {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:meter",
-   "count": 61,
+   "count": 62,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:mechanical",
-   "count": 61,
+   "count": 62,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 60,
+   "count": 61,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -207,8 +207,32 @@
   {
    "a": "leica:body:m8:standard",
    "b": "leica:feature:frameline-28",
-   "count": 50,
+   "count": 51,
    "example": "Leica M8 Silver"
+  },
+  {
+   "a": "leica:body:m5:standard",
+   "b": "leica:feature:meter",
+   "count": 48,
+   "example": "Leica M5 Silver"
+  },
+  {
+   "a": "leica:body:m5:standard",
+   "b": "leica:feature:mechanical",
+   "count": 48,
+   "example": "Leica M5 Silver"
+  },
+  {
+   "a": "leica:body:m4:black-paint",
+   "b": "leica:feature:no-meter",
+   "count": 48,
+   "example": "LEICA M4 Black paint sn.1266"
+  },
+  {
+   "a": "leica:body:m4:black-paint",
+   "b": "leica:feature:mechanical",
+   "count": 48,
+   "example": "LEICA M4 Black paint sn.1266"
   },
   {
    "a": "leica:body:m11-p:standard",
@@ -217,16 +241,10 @@
    "example": "Leica M11-P Black"
   },
   {
-   "a": "leica:body:m5:standard",
-   "b": "leica:feature:meter",
-   "count": 47,
-   "example": "Leica M5 Silver"
-  },
-  {
-   "a": "leica:body:m5:standard",
-   "b": "leica:feature:mechanical",
-   "count": 47,
-   "example": "Leica M5 Silver"
+   "a": "leica:body:m10-monochrom:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 46,
+   "example": "[중고] M10 Monochrom"
   },
   {
    "a": "leica:body:m10-r:standard",
@@ -235,30 +253,24 @@
    "example": "[중고] M10-R (Black)"
   },
   {
-   "a": "leica:body:m4:black-paint",
-   "b": "leica:feature:no-meter",
-   "count": 46,
-   "example": "LEICA M4 Black paint sn.1266"
-  },
-  {
-   "a": "leica:body:m4:black-paint",
-   "b": "leica:feature:mechanical",
-   "count": 46,
-   "example": "LEICA M4 Black paint sn.1266"
-  },
-  {
-   "a": "leica:body:m10-monochrom:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 45,
-   "example": "[중고] M10 Monochrom"
-  },
-  {
    "a": "leica:body:m6:ttl",
    "b": "leica:feature:frameline-28",
    "count": 43,
    "example": "[중고] M6 TTL (Silver)"
   },
   {
+   "a": "leica:body:m3:double-stroke",
+   "b": "leica:feature:no-meter",
+   "count": 38,
+   "example": "LEICA M3 Double stroke sn.8008"
+  },
+  {
+   "a": "leica:body:m3:double-stroke",
+   "b": "leica:feature:mechanical",
+   "count": 38,
+   "example": "LEICA M3 Double stroke sn.8008"
+  },
+  {
    "a": "leica:body:m-a",
    "b": "leica:feature:frameline-28",
    "count": 37,
@@ -275,24 +287,24 @@
    "b": "leica:feature:mechanical",
    "count": 37,
    "example": "[위탁] M-A (Silver)"
-  },
-  {
-   "a": "leica:body:m3:double-stroke",
-   "b": "leica:feature:no-meter",
-   "count": 36,
-   "example": "LEICA M3 Double stroke sn.8008"
-  },
-  {
-   "a": "leica:body:m3:double-stroke",
-   "b": "leica:feature:mechanical",
-   "count": 36,
-   "example": "LEICA M3 Double stroke sn.8008"
   },
   {
    "a": "leica:body:m9:standard",
    "b": "leica:feature:frameline-28",
-   "count": 35,
+   "count": 36,
    "example": "[중고] M9"
+  },
+  {
+   "a": "leica:body:m-monochrom-ccd",
+   "b": "leica:feature:frameline-28",
+   "count": 30,
+   "example": "[중고] M-Monochrom CCD (Black)"
+  },
+  {
+   "a": "leica:body:m-monochrom-246:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 30,
+   "example": "[중고] M Monochrom Typ 246 (Black)"
   },
   {
    "a": "leica:body:m6:ttl-millennium",
@@ -311,18 +323,6 @@
    "b": "leica:feature:mechanical",
    "count": 28,
    "example": "[중고] M6 밀레니엄 Blackpaint"
-  },
-  {
-   "a": "leica:body:m-monochrom-ccd",
-   "b": "leica:feature:frameline-28",
-   "count": 28,
-   "example": "[중고] M-Monochrom CCD (Black)"
-  },
-  {
-   "a": "leica:body:m-monochrom-246:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 28,
-   "example": "[중고] M Monochrom Typ 246 (Black)"
   },
   {
    "a": "leica:body:m6:ttl-millennium",
@@ -367,39 +367,39 @@
    "example": "Leica M11 Monochrome Black"
   },
   {
+   "a": "leica:body:m3:single-stroke",
+   "b": "leica:feature:no-meter",
+   "count": 24,
+   "example": "LEICA M3 Single Stroke sn.1156"
+  },
+  {
+   "a": "leica:body:m3:single-stroke",
+   "b": "leica:feature:mechanical",
+   "count": 24,
+   "example": "LEICA M3 Single Stroke sn.1156"
+  },
+  {
    "a": "leica:body:m11:black-paint",
    "b": "leica:feature:frameline-28",
    "count": 23,
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
   },
   {
-   "a": "leica:body:m3:single-stroke",
-   "b": "leica:feature:no-meter",
-   "count": 23,
-   "example": "LEICA M3 Single Stroke sn.1156"
-  },
-  {
-   "a": "leica:body:m3:single-stroke",
-   "b": "leica:feature:mechanical",
-   "count": 23,
-   "example": "LEICA M3 Single Stroke sn.1156"
-  },
-  {
    "a": "leica:body:m9-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 21,
+   "count": 22,
    "example": "[위탁] M9-P (Silver)"
   },
   {
    "a": "leica:body:m4-2:standard",
    "b": "leica:feature:no-meter",
-   "count": 21,
+   "count": 22,
    "example": "[위탁] M4-2 (Black)"
   },
   {
    "a": "leica:body:m4-2:standard",
    "b": "leica:feature:mechanical",
-   "count": 21,
+   "count": 22,
    "example": "[위탁] M4-2 (Black)"
   },
   {
@@ -463,22 +463,34 @@
    "example": "[중고] MP A la carte 0.72 (Silver)"
   },
   {
-   "a": "leica:body:mp-film:a-la-carte",
-   "b": "leica:feature:frameline-28",
-   "count": 13,
-   "example": "[중고] MP A la carte 0.72 (Silver)"
-  },
-  {
    "a": "leica:body:md",
    "b": "leica:feature:no-meter",
-   "count": 13,
+   "count": 14,
    "example": "[중고] MDa (S)"
   },
   {
    "a": "leica:body:md",
    "b": "leica:feature:mechanical",
-   "count": 13,
+   "count": 14,
    "example": "[중고] MDa (S)"
+  },
+  {
+   "a": "leica:body:m4:50-jahre",
+   "b": "leica:feature:no-meter",
+   "count": 14,
+   "example": "LEICA M4 Black chrome sn.1380"
+  },
+  {
+   "a": "leica:body:m4:50-jahre",
+   "b": "leica:feature:mechanical",
+   "count": 14,
+   "example": "LEICA M4 Black chrome sn.1380"
+  },
+  {
+   "a": "leica:body:mp-film:a-la-carte",
+   "b": "leica:feature:frameline-28",
+   "count": 13,
+   "example": "[중고] MP A la carte 0.72 (Silver)"
   },
   {
    "a": "leica:body:cl-film",
@@ -503,18 +515,6 @@
    "b": "leica:feature:mechanical",
    "count": 13,
    "example": "LEICA M2-R sn.1249"
-  },
-  {
-   "a": "leica:body:m4:50-jahre",
-   "b": "leica:feature:no-meter",
-   "count": 13,
-   "example": "LEICA M4 Black chrome sn.1380"
-  },
-  {
-   "a": "leica:body:m4:50-jahre",
-   "b": "leica:feature:mechanical",
-   "count": 13,
-   "example": "LEICA M4 Black chrome sn.1380"
   },
   {
    "a": "leica:body:m1:standard",
@@ -553,6 +553,18 @@
    "example": "LEICA M6 TTL Titan sn.2754"
   },
   {
+   "a": "leica:body:m6:lhsa",
+   "b": "leica:feature:meter",
+   "count": 11,
+   "example": "[위탁] M6 LHSA (Black Paint)"
+  },
+  {
+   "a": "leica:body:m6:lhsa",
+   "b": "leica:feature:mechanical",
+   "count": 11,
+   "example": "[위탁] M6 LHSA (Black Paint)"
+  },
+  {
    "a": "leica:body:mp3",
    "b": "leica:feature:meter",
    "count": 11,
@@ -571,6 +583,12 @@
    "example": "Leica Summilux-M 35mm f1.4 V2 11870"
   },
   {
+   "a": "leica:body:m6:lhsa",
+   "b": "leica:feature:frameline-28",
+   "count": 9,
+   "example": "[위탁] M6 LHSA (Black Paint)"
+  },
+  {
    "a": "leica:body:m262",
    "b": "leica:feature:frameline-28",
    "count": 9,
@@ -587,18 +605,6 @@
    "b": "leica:feature:mechanical",
    "count": 9,
    "example": "LEICA M3 Vintage Black Paint Regid brass mount"
-  },
-  {
-   "a": "leica:body:m6:lhsa",
-   "b": "leica:feature:meter",
-   "count": 9,
-   "example": "LEICA M6 TTL 0.72 LHSA black paint sn.2548"
-  },
-  {
-   "a": "leica:body:m6:lhsa",
-   "b": "leica:feature:mechanical",
-   "count": 9,
-   "example": "LEICA M6 TTL 0.72 LHSA black paint sn.2548"
   },
   {
    "a": "leica:body:mp-film:lhsa",
@@ -661,6 +667,12 @@
    "example": "LEICA M6 TTL 0.85 NSH black paint finish SH124/400 sn.2680"
   },
   {
+   "a": "leica:body:m-e240",
+   "b": "leica:feature:frameline-28",
+   "count": 7,
+   "example": "LEICA M-E (Typ240) sn.5548"
+  },
+  {
    "a": "leica:body:m6:m6j",
    "b": "leica:feature:meter",
    "count": 7,
@@ -671,12 +683,6 @@
    "b": "leica:feature:mechanical",
    "count": 7,
    "example": "LEICA M6J 40 Jahre 1970-39"
-  },
-  {
-   "a": "leica:body:m6:lhsa",
-   "b": "leica:feature:frameline-28",
-   "count": 7,
-   "example": "LEICA M6 TTL 0.72 LHSA black paint sn.2548"
   },
   {
    "a": "leica:body:mp-film:hermes",
@@ -737,12 +743,6 @@
    "b": "leica:feature:mechanical",
    "count": 6,
    "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
-  },
-  {
-   "a": "leica:body:m-e240",
-   "b": "leica:feature:frameline-28",
-   "count": 6,
-   "example": "LEICA M-E (Typ240) sn.5548"
   },
   {
    "a": "leica:body:mp-film:50-jahre",
@@ -865,6 +865,12 @@
    "example": "LEICA 35mm F2 (4th) 7 element SUMMICRON-M sn.3554"
   },
   {
+   "a": "leica:lens:summilux-m:50:titan",
+   "b": "leica:lens:summilux-m:50:v4",
+   "count": 4,
+   "example": "Leica Summilux M 50/1.4 E46 Titan"
+  },
+  {
    "a": "leica:body:m5:50-jahre",
    "b": "leica:feature:meter",
    "count": 3,
@@ -901,12 +907,6 @@
    "example": "LEICA I TRASF. II BLACK PAINT + 50mm f/3.5 ELMAR"
   },
   {
-   "a": "leica:lens:summilux-m:50:titan",
-   "b": "leica:lens:summilux-m:50:v4",
-   "count": 3,
-   "example": "Leica Summilux M 50/1.4 E46 Titan"
-  },
-  {
    "a": "leica:body:m4-2:gold",
    "b": "leica:feature:no-meter",
    "count": 3,
@@ -929,31 +929,31 @@
   {
    "entity": "leica:feature:mechanical",
    "word": "black paint",
-   "count": 187,
+   "count": 192,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 148,
+   "count": 152,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 130,
+   "count": 135,
    "example": "Leica M11 Monochrome Black"
   },
   {
    "entity": "leica:feature:meter",
    "word": "black paint",
-   "count": 111,
+   "count": 114,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "entity": "leica:feature:no-meter",
    "word": "black paint",
-   "count": 81,
+   "count": 83,
    "example": "Leica M2 BlackPaint"
   },
   {
@@ -989,14 +989,14 @@
   {
    "entity": "leica:feature:meter",
    "word": "LHSA",
-   "count": 25,
-   "example": "LEICA MP3 + Vit LHSA Special Edition 251/1000"
+   "count": 27,
+   "example": "[위탁] M6 LHSA (Black Paint)"
   },
   {
    "entity": "leica:feature:mechanical",
    "word": "LHSA",
-   "count": 25,
-   "example": "LEICA MP3 + Vit LHSA Special Edition 251/1000"
+   "count": 27,
+   "example": "[위탁] M6 LHSA (Black Paint)"
   },
   {
    "entity": "leica:feature:meter",
@@ -1018,27 +1018,27 @@
   },
   {
    "entity": "leica:feature:frameline-28",
+   "word": "LHSA",
+   "count": 16,
+   "example": "[위탁] M6 LHSA (Black Paint)"
+  },
+  {
+   "entity": "leica:feature:frameline-28",
    "word": "safari",
    "count": 14,
    "example": "[중고] M11-P (Safari)"
   },
   {
-   "entity": "leica:feature:frameline-28",
-   "word": "LHSA",
-   "count": 14,
-   "example": "LEICA MP LHSA Edition Grey Hammertone sn.2947"
+   "entity": "leica:lens:noctilux-m:50:f1.2-asph",
+   "word": "black paint",
+   "count": 9,
+   "example": "신품 Leica M 50mm F1.2 Noctilux ASPH 6bit Glossy Black Paint Finish"
   },
   {
    "entity": "leica:feature:no-meter",
    "word": "anniversary",
    "count": 9,
    "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
-  },
-  {
-   "entity": "leica:lens:noctilux-m:50:f1.2-asph",
-   "word": "black paint",
-   "count": 8,
-   "example": "신품 Leica M 50mm F1.2 Noctilux ASPH 6bit Glossy Black Paint Finish"
   },
   {
    "entity": "leica:feature:frameline-28",
@@ -1101,6 +1101,18 @@
    "example": "Leica M9 (Black Paint, 10704)"
   },
   {
+   "entity": "leica:lens:elmar:90:unspecified",
+   "word": "black paint",
+   "count": 4,
+   "example": "LEITZ Leica Elmar L39 90mm/F4.0 Fat/ Rare Black Paint Lens LTM Germany Fat"
+  },
+  {
+   "entity": "leica:lens:summilux-m:50:v4",
+   "word": "titan",
+   "count": 4,
+   "example": "Leica Summilux M 50/1.4 E46 Titan"
+  },
+  {
    "entity": "leica:feature:meter",
    "word": "safari",
    "count": 3,
@@ -1117,18 +1129,6 @@
    "word": "safari",
    "count": 3,
    "example": "Leica Summilux-R 50mm/F1.4 E55 Ver.II V2 Safari 11776"
-  },
-  {
-   "entity": "leica:lens:elmar:90:unspecified",
-   "word": "black paint",
-   "count": 3,
-   "example": "LEITZ Leica Elmar L39 90mm/F4.0 Fat/ Rare Black Paint Lens LTM Germany Fat"
-  },
-  {
-   "entity": "leica:lens:summilux-m:50:v4",
-   "word": "titan",
-   "count": 3,
-   "example": "Leica Summilux M 50/1.4 E46 Titan"
   },
   {
    "entity": "leica:lens:summicron-m:50:current",
