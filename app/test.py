@@ -6368,6 +6368,88 @@ def crawl_konstanz():
     return results
 
 
+def _topcamera_name(title, ja_to_en):
+    """トップカメラ 제목 다듬기: '【中古】 ライカ(leica) M3 1ストローク' → 'Leica M3 single stroke'.
+    ja_to_en이 모르는 말(セルフ付き·ストローク·後塗り·第3世代·イマレクト·ゾフォート)은 먼저 영어로"""
+    t = re.sub(r"【中古】|ライカ\(leica\)\s*(?:ライカ\s+)?", " ", title)
+    for ja, en in (("1ストローク", "single stroke"), ("2ストローク", "double stroke"), ("セルフ付き", "self-timer"),
+                   ("セルフ無し|セルフ無", "no self-timer"), ("ボタンリワインド", "button rewind"), ("後塗り", "repaint"),
+                   (r"第(\d)世代", r"\1th"), ("イマレクト", "Imarect "), ("ゾフォート", "Sofort "), ("レッドシンクロ", "red synchro"),
+                   ("プラスチック", "plastic"), ("最短1m", ""), ("フード組込|組込", ""), ("沈胴式", "collapsible"), ("付", "")):
+        t = re.sub(ja, en, t)
+    t = re.sub(r"\b1th\b", "1st", t)
+    t = re.sub(r"\b2th\b", "2nd", t)
+    t = re.sub(r"\b3th\b", "3rd", t)
+    name = ja_to_en(t)
+    name = re.sub(r"\b(I{1,3}) ([a-g])\b", r"\1\2", name)  # 'III f' → 'IIIf'
+    name = re.sub(r"\bF/(\d)", r"F\1", name)
+    name = re.sub(r"(?<=[A-Za-z])(?=\d{2,3}(?:mm|/))", " ", name)  # 'Summaron35mm' → 'Summaron 35mm'
+    name = re.sub(r"[\[\]()（）]", " ", name)
+    name = re.sub(r"\s+", " ", name).strip(" -")
+    if not re.match(r"(?:leica|leitz)\b", name, re.I):
+        name = "Leica " + name
+    return name
+
+
+def crawl_topcamera():
+    """トップカメラ (일본) - 중고 카메라점 온라인몰(EC-CUBE). 사이트 검색 '라이카'(name=ライカ, 60개씩 pageno=N, 정적 HTML, 110점 안팎)에서
+    제목에 'ライカ(leica)'가 붙은 라이카 상품만 (Sigma·TTArtisan 등 L·M 마운트용 다른 회사 렌즈는 브랜드 표기가 달라 빠짐).
+    카드에 이름·등급(AB+·AB·AB-·A)·가격·사진. 중고 대부분이 '실매장에서만 구매' 표시지만 가격·상태 정보로 담음. robots.txt 없음"""
+    import html as _html
+    import requests
+    from ja_normalize import ja_to_en
+    base = "https://shop.topcamera.co.jp"
+    site = "トップカメラ (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 トップカメラ 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(1, 15):
+        try:
+            resp = sess.get(f"{base}/site/products/list", params={"name": "ライカ", "disp_number": 2, "pageno": page_num}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"トップカメラ {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        items = re.findall(r'<li class="ec-shelfGrid__item">\s*<a href="([^"]+)">.*?<img src="([^"]+)">.*?<p>([^<]+)</p>\s*<p>([^<]*)</p>\s*'
+                           r'<p class="price02-default">\s*([^<]+)</p>', resp.text, re.S)
+        print(f"    └─ {page_num}페이지 {len(items)}개")
+        for link, img, title, grade, ptxt in items:
+            title = _html.unescape(title).strip()
+            if link in seen or "ライカ(leica)" not in title:
+                continue
+            seen.add(link)
+            name = _topcamera_name(title, ja_to_en)
+            digits = re.sub(r"[^\d]", "", ptxt)
+            price = f"¥{int(digits):,}" if digits else "문의요망"
+            cat = detect_category(name, price)
+            if re.search(r"\bhood\b|finder|adapter|Sofort", name, re.I):
+                cat = "Accessory"
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": grade.strip() or "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": base + img if img.startswith("/") else img,
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(items) < 60:
+            break
+        time.sleep(2)
+    if not results:
+        raise RuntimeError("トップカメラ 목록이 비어 있음")
+    print(f"  ✅ トップカメラ 완료: {len(results)}개")
+    return results
+
+
 def crawl_leicastoreamsterdam():
     """Leica Store Amsterdam (네덜란드) - 라이카 매장의 공인 중고(CPO). Lightspeed 쇼핑몰이라 분류 목록에 ?format=json.
     Used Cameras·Used Lenses·Used Accessories를 100개씩 (판매 중만 목록에 나옴, 합쳐 60점 안팎).
@@ -7281,6 +7363,7 @@ def crawl_all():
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
         ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
+        ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
