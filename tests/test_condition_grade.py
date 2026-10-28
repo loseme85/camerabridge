@@ -365,6 +365,12 @@ def test_leica_store_amsterdam_condition_grades():
     assert lsa_condition("This Leica M2 is in near mint condition.") == LSA_PREFIX + "mint"
     assert lsa_condition("Lens is well used and it has some traces of use visible.") == LSA_PREFIX + "well used"
     assert [grade_of(site, LSA_PREFIX + k, "Leica Q2")[0] for k in ("mint", "minimal", "small", "some", "well used")] == ["S", "A", "B", "C", "D"]
+def test_komehyo_condition_grades():
+    from condition_grade import KOMEHYO_PREFIX
+    site = "KOMEHYO (일본)"
+    assert grade_of(site, KOMEHYO_PREFIX + "中古品A", "Leica SUMMICRON-M 50mm F2.0(VER.4)")[0] == "A"
+    assert grade_of(site, KOMEHYO_PREFIX + "中古品B", "Leica M2 self-timer")[0] == "B"
+    assert grade_of(site, KOMEHYO_PREFIX + "中古品C", "Leica ELMARIT-M 90mm F2.8")[0] == "C"
 def test_konstanz_condition_grades():
     from condition_grade import KONSTANZ_PREFIX, konstanz_condition
     site = "Leica Store Konstanz (독일)"
