@@ -6261,6 +6261,113 @@ def crawl_fivestar():
     return results
 
 
+def _konstanz_name(title, cat_slug):
+    """Leica Store Konstanz 제목 다듬기: 'Summilux-M35/1,4   #4947321    (11727)' → 'Leica Summilux-M 35mm f1.4'.
+    일련번호('#…')·주문번호('(11727)'·'14402')·소수점 쉼표·'cm' 초점거리를 고치고, 독일어 색·액세서리 말은 영어로.
+    M39 분류 렌즈는 'L39', R 분류의 'SL Mot'은 Leicaflex SL"""
+    t = re.sub(r"#\s?[A-Z]{0,2}\d{4,}|\(\s*#?\d{4,}\s*\)|\(\s*\d{5}\s*(?:[+/]\s*\d{5}\s*)?\)|(?<![\d/.-])\b\d{5}\b(?:\s*[+/]\s*\d{5})*", " ", title)
+    t = re.sub(r"\((?:letzte Generation|canada|SOONC-MW|Leica-Store-Konstanz-edition)\)", " ", t, flags=re.I)
+    t = re.sub(r"(\d),(\d)", r"\1.\2", t)
+    t = re.sub(r"(\d+(?:\.\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", t)
+    t = re.sub(r"(?<=[A-Za-z])-?\s?(?=\d{2,3}(?:-\d{2,3})?(?:mm)?\s?/)", " ", t)  # 'Summilux-M35/' → 'Summilux-M 35/'
+    t = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)\s?(?:mm)?\s?/\s?(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)", r"\1mm f\2", t)
+    t = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?mm)\s+(\d(?:\.\d)?)\b", r"\1 f\2", t)  # 'Summar 50mm 2.0' → 'f2.0'
+    t = re.sub(r"(?<=-[MRS])(?=\d)|(?<=-SL)(?=\d)|(?<=-TL)(?=\d)", " ", t)
+    for de, en in (("schwarz lackiert", "black paint"), ("schwarz", "black"), ("silber", "silver"), ("grau", "grey"),
+                   ("anthrazit", "anthracite"), ("\\bChrom\\b", "chrome"), ("Doppelzug", "double stroke"), ("mit Brille", "goggles"),
+                   ("mit ROM", "ROM"), ("Spiegelsucher", "mirror finder"), ("Sucher", "finder"), ("Geli\\b", "hood"),
+                   ("Gegenlichtblende", "hood"), ("Multifunktions-Handgriff|Multifunktionshandgriff", "multifunction handgrip"),
+                   ("Handgriff", "handgrip"), ("Bereitschaftstasche|Bereichtsschaftstasche|Every ready case", "ever ready case"),
+                   ("Ledertasche|Leidertasche", "leather case"), ("Protektor", "protector"), ("Daumenstütze", "thumb support"),
+                   ("Kugelgelenkkopf", "ball head"), ("Bodenplatte", "base plate"), ("Stativschelle", "tripod collar"),
+                   ("Tasche", "bag"), ("für", "for"), ("Handschlaufe", "hand strap")):
+        t = re.sub(de, en, t, flags=re.I)
+    t = re.sub(r"\b(\d{2,3}-\d{2,3})\b(?!mm)", r"\1mm", t)  # 'SL 16-35' → '16-35mm'
+    t = re.sub(r"\bM \((\d{3})\)", r"M Typ \1", t)
+    t = re.sub(r"\bS \((\d{3})\)", r"S Typ \1", t)
+    t = re.sub(r"\bM9\s*[–-]\s*Monochrom\b", "M9 Monochrom", t)
+    t = re.sub(r"Macro-Elmar-R(?= ?60)", "Macro-Elmarit-R", t)  # 매장 오타 (R 60은 Macro-Elmarit)
+    t = re.sub(r"Vario-Apo-Elmarit-R", "APO-Vario-Elmarit-R", t, flags=re.I)
+    t = re.sub(r"Super-Vario-Elmarit-SL(?= ?16-35)", "Super-Vario-Elmar-SL", t)
+    t = re.sub(r"\bPA-Curtagon(?!-R)", "PA-Curtagon-R", t)
+    if re.match(r"(?:Leica\s+)?hood\b", t, re.I):
+        t = re.sub(r"(\d{2,3})mm f(\d)", r"\1/\2", t)  # 후드에 붙은 '28mm f2.8'이 렌즈로 읽히지 않게
+    if cat_slug == "leica-r-gehaeuse":
+        t = re.sub(r"^(?:Leica\s+)?SL[\s-]?Mot\b", "Leicaflex SL MOT", t, flags=re.I)
+    if cat_slug == "leica-m39" and re.search(r"\d{2,3}mm", t) and not re.search(r"M39|L39|LTM", t):
+        t += " L39"
+    t = re.sub(r"\s+", " ", t).strip(" -–,")
+    if not re.match(r"(?:leica|leitz|ernst)", t, re.I):
+        t = "Leica " + t
+    return t
+
+
+def crawl_konstanz():
+    """Leica Store Konstanz (독일) - 라이카 매장의 'Gelegenheiten'(중고·진열품) 분류 11곳. 워드프레스 정적 HTML, 분류마다 한 쪽에 다 나옴
+    (합쳐 300점 안팎). 카드에 이름·한 줄 설명('gebraucht – sehr guter Zustand')·가격('EURO 5.390.-')·사진(없으면 회색 그림).
+    'Restposten'(남은 새 액세서리)·쌍안경·다른 회사(Voigtländer 등) 분류는 뺌. 가격 없는 카드는 '문의요망'.
+    robots.txt는 /wp-admin/만 막음"""
+    import html as _html
+    import requests
+    from condition_grade import konstanz_condition
+    base = "https://www.leica-store-konstanz.de"
+    site = "Leica Store Konstanz (독일)"
+    cats = ("leica-m-kameras-analog", "leica-m-kameras-digital", "leica-m-objektive", "leica-m39", "leica-q",
+            "leica-r-gehaeuse", "leica-r-objektive", "leica-s-system", "leica-sl", "leica-kompakt-kameras", "leica-aps-c-system")
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Leica Store Konstanz 크롤링 시작")
+    results, seen = [], set()
+    for slug in cats:
+        try:
+            resp = sess.get(f"{base}/gelegenheiten/{slug}/", timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Leica Store Konstanz {slug} 못 읽음: {e}")  # 빠진 분류가 판매완료로 바뀌지 않게
+        cards = resp.text.split('<div class="product">')[1:]
+        print(f"    └─ {slug} {len(cards)}개")
+        for card in cards:
+            m = re.search(r'<div class="producttext">\s*<a href="([^"]+)">([^<]+)</a>', card)
+            if not m or m.group(1) in seen:
+                continue
+            seen.add(m.group(1))
+            title = _html.unescape(m.group(2)).strip()
+            if re.search(r"sigma|novoflex|voigtl|oberwerth|artisan|leicatime|crescenza|insta360", title, re.I) or any(b2 in title.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            desc = re.search(r'class="producttexttext">(.*?)</span>', card, re.S)
+            desc = desc.group(1) if desc else ""
+            pm = re.search(r'class="lagerstatus">\s*EURO\s*([\d.]+)', card)
+            price = f"€{int(pm.group(1).replace('.', '')):,}" if pm and pm.group(1).strip(".") else "문의요망"
+            img = re.search(r'<img src="(https?://[^"]+\.(?:jpe?g|png|webp))"', card, re.I)
+            name = _konstanz_name(title, slug)
+            accessory = re.search(r"handgrip|protector|case|bag|hood|finder|thumb|winder|adapter|extender|base plate|ball head|tripod collar|strap|Visoflex|SF ?\d{2}|Elpro|T-Snap|Display|Holster|Sofort", name, re.I)
+            if not accessory and not re.search(r"\d{2,3}mm", name) and slug not in ("leica-m-objektive", "leica-r-objektive"):
+                name += " Body"  # 바디 분류의 'Leica R4'·'Leica M-EV1'이 값이 싸거나 이름이 짧아 액세서리·렌즈로 갈리지 않게
+            cat = "Accessory" if accessory else detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": konstanz_condition(desc) or "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": m.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(1.5)
+    if not results:
+        raise RuntimeError("Leica Store Konstanz 목록이 비어 있음")
+    print(f"  ✅ Leica Store Konstanz 완료: {len(results)}개")
+    return results
+
+
 def crawl_leicastoreamsterdam():
     """Leica Store Amsterdam (네덜란드) - 라이카 매장의 공인 중고(CPO). Lightspeed 쇼핑몰이라 분류 목록에 ?format=json.
     Used Cameras·Used Lenses·Used Accessories를 100개씩 (판매 중만 목록에 나옴, 합쳐 60점 안팎).
@@ -7174,6 +7281,7 @@ def crawl_all():
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
         ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
+        ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

@@ -31070,6 +31070,68 @@
    }
   },
   {
+   "id": "leica:lens:ts-apo-elmar-s:120",
+   "name": "TS-APO-Elmar-S 120mm f/5.6 ASPH",
+   "name_ko": null,
+   "kind": "Lens",
+   "mount": "S",
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "apo elmar s 120",
+    "apo elmar-s 120",
+    "apo tele elmar s 120",
+    "apo tele elmar-s 120",
+    "s 120 apo elmar",
+    "s 120 apo tele elmar"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Lens",
+    "mount": "S",
+    "title_must": [
+     "apo.?(tele.?)?elmar\\b",
+     "(?<![\\d./\\-–])120(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "-S\\b|\\bS\\s?\\d|\\bS\\b"
+    ],
+    "title_must_not": [
+     "\\bSL\\b",
+     "-M\\b",
+     "-R\\b",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
    "id": "leica:lens:noctilux-m:50:f0.95-korea-70",
    "name": "Noctilux-M 50mm f/0.95 70th Independence Anniversary (Korea)",
    "name_ko": "녹티룩스 0.95 광복 70주년",

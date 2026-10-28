@@ -365,3 +365,14 @@ def test_leica_store_amsterdam_condition_grades():
     assert lsa_condition("This Leica M2 is in near mint condition.") == LSA_PREFIX + "mint"
     assert lsa_condition("Lens is well used and it has some traces of use visible.") == LSA_PREFIX + "well used"
     assert [grade_of(site, LSA_PREFIX + k, "Leica Q2")[0] for k in ("mint", "minimal", "small", "some", "well used")] == ["S", "A", "B", "C", "D"]
+def test_konstanz_condition_grades():
+    from condition_grade import KONSTANZ_PREFIX, konstanz_condition
+    site = "Leica Store Konstanz (독일)"
+    assert konstanz_condition("<p>gebraucht &#8211; sehr guter Zustand</p>") == KONSTANZ_PREFIX + "sehr gut"
+    assert konstanz_condition("Vorführware &#8211; Neuware &#8211; OVP!") == KONSTANZ_PREFIX + "Vorführware"
+    assert konstanz_condition("gebraucht &#8211; neuwertig") == KONSTANZ_PREFIX + "neuwertig"
+    assert konstanz_condition("gebrauchter Zustand") == KONSTANZ_PREFIX + "gebraucht"
+    assert grade_of(site, KONSTANZ_PREFIX + "neuwertig", "Leica Summicron-M 28mm f2")[0] == "A"
+    assert grade_of(site, KONSTANZ_PREFIX + "gut", "Leica M4 silver Body")[0] == "B"
+    assert grade_of(site, KONSTANZ_PREFIX + "gebraucht", "Leica M3 silver double stroke Body")[0] == "C"
+    assert grade_of(site, KONSTANZ_PREFIX + "Vorführware", "Leica M11-P black Body")[0] == "S"

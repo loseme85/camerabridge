@@ -156,6 +156,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FIVESTAR.get(cond[len(FIVESTAR_PREFIX):].strip()), "text"
     if cond.startswith(LSA_PREFIX):
         return _LSA.get(cond[len(LSA_PREFIX):].strip()), "text"
+    if cond.startswith(KONSTANZ_PREFIX):
+        return _KONSTANZ.get(cond[len(KONSTANZ_PREFIX):].strip()), "text"
     if cond.startswith(DESC_PREFIX):
         for pattern, grade in _DESC:
             if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
@@ -572,3 +574,27 @@ def lsa_condition(html: str) -> str | None:
     s = " ".join(x for x in re.split(r"(?<=[.!])\s", t) if re.search(r"condition|traces|signs of|used\b|mint", x, re.I))
     level = next((n for n, p in _LSA_WORDS if re.search(p, s, re.I)), None)
     return LSA_PREFIX + level if level else None
+
+
+# 독일 Leica Store Konstanz: 목록 카드 아래 한 줄 설명 'gebraucht – sehr guter Zustand'·'Vorführware – Neuware – OVP!'
+# → Neuware·Vorführware(진열품)·neuwertig·sehr gut·gut·gebraucht(상태 말 없음)·defekt
+KONSTANZ_PREFIX = "Konstanz: "
+# 사진 평가(표기 가리고 23점, 사진 3장씩 — 사진 없는 견본 그림 4점 뺌, 2026-10-29): neuwertig S 3·A 2 · sehr gut A 4·B 2 ·
+# gut A 3·B 3 · gebraucht B 4·C 1 · Vorführware A 1. 말 그대로(neuwertig S·sehr gut A·gut B·gebraucht C) 두면 사진과 차이가
+# 0.09등급뿐이라(기존 매장 0.8) 매장 말투가 후함 → neuwertig A, sehr gut·gut B, gebraucht C로 한 칸씩 낮춤.
+# 이 대응 기준 정확 일치 8/23 · 한 등급 이내 23/23 (사진이 평균 0.57등급 후함). 진열품(Vorführware)은 S, 새것(Neuware)은 N.
+_KONSTANZ = {"Neuware": "N", "Vorführware": "S", "neuwertig": "A", "sehr gut": "B", "gut": "B", "gebraucht": "C", "defekt": "D"}
+_KONSTANZ_WORDS = [("defekt", r"defekt|Pilz|Nebel|Fungus"),
+                   ("Vorführware", r"Vorführ|Rückläufer|Ausstellung"),
+                   ("Neuware", r"Neuware|unbenutzt"),
+                   ("neuwertig", r"neuwertig|wie neu|Top-?Zustand"),
+                   ("sehr gut", r"sehr gut"),
+                   ("gut", r"\bgut"),
+                   ("gebraucht", r"gebraucht|Gebrauchsspuren")]
+
+
+def konstanz_condition(text: str) -> str | None:
+    """Leica Store Konstanz 카드 설명 한 줄을 'Konstanz: sehr gut' 꼴로 (진열품의 'Neuware'보다 'Vorführware'를 먼저)."""
+    t = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", text or "")))
+    level = next((n for n, p in _KONSTANZ_WORDS if re.search(p, t, re.I)), None)
+    return KONSTANZ_PREFIX + level if level else None
