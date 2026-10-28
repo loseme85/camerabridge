@@ -6062,6 +6062,66 @@ def crawl_cameratweedehands():
     return results
 
 
+def crawl_cardinal():
+    """Cardinal Camera Used (미국) - 펜실베이니아 중고 전용 몰 Shopify products.json 전체(3,500개쯤, 14쪽)에서 브랜드 칸이 Leica인 것만.
+    상품 종류(Rangefinder·Rangefinder camera lens·35mm lens·Filter·Caps…)로 액세서리를 거르고(종류 칸이 섞여 있어 바디·렌즈는 이름으로),
+    설명서·상자·책·인화 장비는 뺌.
+    등급 표기는 없고 설명 첫 문장 말투('Lens is in very good condition', 고장은 'sold as is')"""
+    import html as _html
+    import requests
+    from condition_grade import cardinal_condition
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://cardinalcameraused.com"
+    lens_body_types = ("rangefinder camera lens", "35mm lens", "digital lens", "rangefinder", "digital camera", "point and shoot", "asis")
+    print(f"\n  📂 Cardinal Camera Used 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Cardinal Camera Used"):
+        ptype = (p.get("product_type") or "").strip().lower()
+        if (p.get("vendor") or "").strip().lower() != "leica" or ptype in ("manual", "boxes", "book", "enlarging equipment", "parts"):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if re.search(r"convert|cine(ma)?\b|nikon f\b|canon ef|\bbox (and|&) case\b|^box\b", title, re.I):
+            continue  # 다른 마운트·영화용으로 개조한 렌즈, 상자만
+        name = re.sub(r"\b(?:35mm )?(?:rangefinder )?(?:film )?camera(?: body)?\b|\brangefinder\b|\b(?:telephoto |camera )?lens\b|\bRARE\b", " ", title, flags=re.I)
+        name = re.sub(r"\bSN\s?:?\s?[0-9X]+\b|\bMFR\s?#\s?\d+|\bw/\s*$|\btelephoto\b|\(copy\)", " ", name, flags=re.I)  # '(Copy)'는 몰의 복제 상품 표시
+        name = re.sub(r"\bLeica 1 Model\b", "Leica I Model", name, flags=re.I)
+        name = re.sub(r"\bf/(\d)", r"f\1", name)
+        name = re.sub(r"\s+", " ", name).strip(" ,-/")
+        if not re.match(r"(?:leica|leitz)\b", name, re.I):
+            name = "Leica " + name
+        try:
+            price = f"${float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = detect_category(name, price) if ptype in lens_body_types else "Accessory"
+        if re.search(r"view ?finder|\bhood\b|\bshade\b|\bcap\b|filter|loupe|extension tube|nooky|crank|\bbarrel\b", name, re.I):
+            cat = "Accessory"  # 렌즈·바디 종류 칸에 필터·캡·후드·파인더가 섞여 있음
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "site": "Cardinal Camera Used (미국)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cardinal_condition(p.get("body_html") or "") or "정보없음",
+            "가격": price,
+            "통화": "USD",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Cardinal Camera Used 완료: {len(results)}개")
+    return results
+
+
 def crawl_oneofmany():
     """One Of Many Cameras (덴마크) - 코펜하겐 중고·렌탈점 Shopify products.json 전체(3,900개쯤, 16쪽)에서 브랜드 칸이 Leica이고
     상품 종류가 'Used …'·'Brugt'(중고)인 것만 (Rental·New는 뺌). 가격은 DKK. 등급 표기는 없고 설명 말투('Mint condition')"""
@@ -6899,6 +6959,7 @@ def crawl_all():
         ("One Of Many Cameras (덴마크)", lambda: ce.wrap_full_run("One Of Many Cameras (덴마크)", crawl_oneofmany)),
         ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),
         ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
+        ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

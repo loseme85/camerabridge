@@ -322,3 +322,19 @@ def test_suffren_etat_out_of_ten():
     assert grade_of(site, SUFFREN_PREFIX + "9", "Leica Summicron-M 35mm f2 Asph.")[0] == "A"
     assert grade_of(site, SUFFREN_PREFIX + "8", "Leica Elmarit-M 90mm f2.8")[0] == "B"
     assert grade_of(site, SUFFREN_PREFIX + "7", "Leitz Elmarit 90mm f2.8 chrome")[0] == "C"
+
+
+def test_cardinal_condition_grades():
+    from condition_grade import CARDINAL_PREFIX, cardinal_condition
+    site = "Cardinal Camera Used (미국)"
+    assert cardinal_condition("<p>Lens is in absolutely excellent condition. Glass is excellent with no fungus or haze.</p>") == CARDINAL_PREFIX + "absolutely excellent"
+    assert cardinal_condition("Lens is in very good condition. Glass is nice with no fungus, haze, or scratches.") == CARDINAL_PREFIX + "very good"
+    assert cardinal_condition("Lens is in good shape. Glass does have light haze and a few fungus spots.") == CARDINAL_PREFIX + "good / issue"
+    assert cardinal_condition("Camera is being sold as is for parts. Jammed and does not work.") == CARDINAL_PREFIX + "as is"
+    # 'works absolutely perfectly'는 작동 설명이라 외관 등급이 아님
+    assert cardinal_condition("This is a very special M2. Works absolutely perfectly. Very nice camera.") == CARDINAL_PREFIX + "very good"
+    assert grade_of(site, CARDINAL_PREFIX + "absolutely excellent", "Leica MP 0.72")[0] == "A"
+    assert grade_of(site, CARDINAL_PREFIX + "excellent", "Leica Summilux-M 35mm")[0] == "B"
+    assert grade_of(site, CARDINAL_PREFIX + "good", "Leica M3")[0] == "C"
+    assert grade_of(site, CARDINAL_PREFIX + "good / issue", "Leica M3")[0] == "D"
+    assert grade_of(site, CARDINAL_PREFIX + "as is", "Leica IIIc")[0] == "X"

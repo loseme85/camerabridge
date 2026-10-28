@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import html as _html
 import re
 
 GRADES = ["N", "S", "A", "B", "C", "D", "X"]
@@ -149,6 +150,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
             if re.search(pattern, cond, re.I):
                 return grade, "text"
         return None, None
+    if cond.startswith(CARDINAL_PREFIX):
+        return _cardinal_grade(cond[len(CARDINAL_PREFIX):].strip()), "text"
     if cond.startswith(DESC_PREFIX):
         for pattern, grade in _DESC:
             if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
@@ -477,3 +480,43 @@ SUFFREN_PREFIX = "Suffren: "
 # 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-26): 10 S 3·A 1 · 9.5 S 1 · 9 S 2·A 2·B 1 · 8 A 6·B 3 · 7 A 2·B 2·C 1.
 # 아래 대응 기준 정확 일치 9/24 · 한 등급 이내 22/24 (사진이 평균 0.54등급 후함 — 기존 0.8보다 조금 덜해 그대로).
 _SUFFREN = {"10": "S", "9.5": "A", "9": "A", "8.5": "B", "8": "B", "7.5": "C", "7": "C", "6.5": "D", "6": "D", "5": "D"}
+
+
+# 미국 Cardinal Camera Used: 등급 표기 없이 설명 첫 문장 'Lens is in very good condition' 꼴
+# (absolutely excellent·excellent·very good(very nice·beautiful)·good(nice)·worn(fair·bargain)), 고장·부품용은 'sold as is'.
+# 곰팡이·분리·부식·셔터 부정확·CLA 필요 같은 문제를 적은 것은 '… / issue'로 한 등급 내림.
+CARDINAL_PREFIX = "Cardinal: "
+# 사진 평가(표기 가리고 24점, 사진 3장씩, 2026-10-27): absolutely excellent S 1·A 1·B 1 · excellent A 5·B 1·C 1 ·
+# very good B 4·C 1·D 1 · good B 2·C 2·D 2 · very good / issue B 1 · good / issue B 1.
+# 아래 대응 기준 정확 일치 5/24 · 한 등급 이내 22/24 (사진이 평균 0.46등급 후함 — good을 D로 하면 0.71이지만 한 등급 이내가 20/24로 줄어 C).
+_CARDINAL = {"absolutely excellent": "A", "excellent": "B", "very good": "C", "good": "C", "worn": "D"}
+_CARDINAL_ASIS = r"\bas[\s-]?is\b|for parts|does not (work|function)|doesn'?t work|not working|jammed|won'?t power"
+_CARDINAL_ISSUE = r"fungus|separation|corrosion|not accurate|inaccurate|needs? (a )?cla|cracked|\bcrack\b"
+_CARDINAL_WORDS = [("absolutely excellent", r"absolutely excellent|essentially no use|almost no use|like new|\bmint\b"),
+                   ("excellent", r"\bexcellent\b"),
+                   ("very good", r"very good|very nice|beautiful|great (shape|condition)|really nice"),
+                   ("good", r"\b(nice|good)\b"),
+                   ("worn", r"\bworn\b|\bfair\b|bargain|bagain|good bit of wear|(lot|good amount) of brassing")]
+
+
+def cardinal_condition(html: str) -> str | None:
+    """Cardinal 상품 설명에서 'Cardinal: very good' · 'Cardinal: good / issue' · 'Cardinal: as is' 꼴로."""
+    t = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", html or ""))).strip()
+    if re.search(_CARDINAL_ASIS, t, re.I):
+        return CARDINAL_PREFIX + "as is"
+    first = re.split(r"(?<=[.!])\s", t, maxsplit=1)[0]
+    level = (next((n for n, p in _CARDINAL_WORDS if re.search(p, first, re.I)), None)
+             or next((n for n, p in _CARDINAL_WORDS if re.search(p, t, re.I)), None))
+    if not level:
+        return None
+    # 'no fungus or haze'처럼 없다고 적은 것은 문제 아님
+    issues = [m for m in re.finditer(_CARDINAL_ISSUE, t, re.I) if not re.search(r"\bno\b[^.]{0,25}$", t[max(0, m.start() - 30):m.start()], re.I)]
+    return CARDINAL_PREFIX + level + (" / issue" if issues else "")
+
+
+def _cardinal_grade(value: str) -> str | None:
+    if value == "as is":
+        return "X"
+    level, _, issue = value.partition(" / ")
+    grade = _CARDINAL.get(level)
+    return GRADES[min(GRADES.index(grade) + 1, GRADES.index("D"))] if grade and issue else grade
