@@ -107,6 +107,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(KIKUYA_PREFIX):
         return _KIKUYA.get(cond[len(KIKUYA_PREFIX):].strip().upper()), "label"
+    if cond.startswith(KOMEHYO_PREFIX):
+        return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
     if cond.startswith(MFCAMERA_PREFIX):
@@ -574,6 +576,14 @@ def lsa_condition(html: str) -> str | None:
     s = " ".join(x for x in re.split(r"(?<=[.!])\s", t) if re.search(r"condition|traces|signs of|used\b|mint", x, re.I))
     level = next((n for n, p in _LSA_WORDS if re.search(p, s, re.I)), None)
     return LSA_PREFIX + level if level else None
+
+
+# 일본 KOMEHYO (중고 명품·카메라 체인): 카드 'ランク：中古品A' — 新品·未使用品·中古品SA·A·B·C (카메라는 A·B·C가 대부분)
+KOMEHYO_PREFIX = "Komehyo: "
+# 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-29): 中古品A A 8 · 中古品B A 8·B 1 · 中古品C B 5·C 3.
+# 글자 그대로(A A·B B·C C) 두면 정확 일치 12/25 · 한 등급 이내 25/25 (사진이 평균 0.52등급 후함). C를 D로 낮추면 0.84지만
+# 한 등급 이내가 20/25로 줄어 그대로 둠.
+_KOMEHYO = {"新品": "N", "未使用品": "N", "中古品SA": "S", "中古品A": "A", "中古品B": "B", "中古品C": "C"}
 
 
 # 독일 Leica Store Konstanz: 목록 카드 아래 한 줄 설명 'gebraucht – sehr guter Zustand'·'Vorführware – Neuware – OVP!'

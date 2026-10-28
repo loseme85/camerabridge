@@ -6450,6 +6450,100 @@ def crawl_topcamera():
     return results
 
 
+def _komehyo_name(title, ja_to_en):
+    """KOMEHYO 제목 다듬기: 전각 글자를 반각으로(NFKC), 줄임말 'S.VARIO-EL-T'·'V-ELMAR-TL'을 풀고,
+    'SUMMICRON-M50mm' → 'SUMMICRON-M 50mm', 'F2ASPH' → 'F2 ASPH', '【WEB限定・現状お渡し品】' 떼기"""
+    import unicodedata
+    t = unicodedata.normalize("NFKC", title)
+    t = re.sub(r"【[^】]*】", " ", t)
+    t = re.sub(r"\bS\.VARIO-EL-T\s?", "Super-Vario-Elmar-TL ", t, flags=re.I)
+    t = re.sub(r"\bV-ELMAR-TL\s?", "Vario-Elmar-TL ", t, flags=re.I)
+    for ja, en in (("1回巻き", "single stroke"), ("2回巻き", "double stroke"), ("セルフ付き", "self-timer"), ("0型復刻", "0-Series reissue"),
+                   ("シルバー・クローム", "silver chrome"), ("ブラックペイント", "black paint"), ("レッドシンクロ", " red synchro"),
+                   ("沈胴式", "collapsible"), ("卓上三脚", "table tripod"), ("ハンドグリップ用フインガーループ", "finger loop for handgrip ")):
+        t = t.replace(ja, en)
+    t = re.sub(r"BODY(?=\S)", "BODY ", t)
+    t = ja_to_en(t)
+    t = re.sub(r"(-(?:SL|TL|M|R|S|T))(?=\d)", r"\1 ", t)  # 'SUMMICRON-M50mm' → 'SUMMICRON-M 50mm'
+    t = re.sub(r"(F\d(?:\.\d)?)(?=ASPH)", r"\1 ", t)
+    t = re.sub(r"(?<=\d)(?=VER\.)|(?<=\d)(?=Ver\.)", " ", t)
+    if not re.search(r"\d{2,3}mm|body", t, re.I) and re.search(r"\b(?:T|TL2?|CL|SL[23]?(?:-S)?)\b", t):
+        t += " Body"  # 'LEICA T TYP701'·'LEICA TL'이 렌즈·액세서리로 갈리지 않게
+    t = re.sub(r"\s+", " ", t).strip(" ,")
+    if not re.match(r"(?:leica|leitz)\b", t, re.I):
+        t = "Leica " + t
+    return t
+
+
+def crawl_komehyo():
+    """KOMEHYO (일본) - 중고 명품·카메라 체인 KOMEHYO ONLINE. 사이트 검색 'LEICA'(정적 HTML, 쪽당 50개, page=N, 60점 안팎)에서
+    브랜드 칸이 LEICA인 카메라·렌즈만 (같은 검색에 걸리는 Sigma 'ライカL' 렌즈와 라이카 손목시계 ZM은 뺌).
+    카드에 이름(전각)·등급('ランク：中古品B')·매장·가격(할인가 있으면 할인가)·사진. robots.txt 막는 줄 없음. 해외 배송은 대행 주문만"""
+    import html as _html
+    import requests
+    from ja_normalize import ja_to_en
+    from condition_grade import KOMEHYO_PREFIX
+    import unicodedata
+    base = "https://komehyo.jp"
+    site = "KOMEHYO (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 KOMEHYO 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(1, 10):
+        try:
+            resp = sess.get(f"{base}/search/", params={"q": "LEICA", "page": page_num}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"KOMEHYO {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        cards = resp.text.split('<a class="p-link p-link--card"')[1:]
+        new = 0
+        for card in cards:
+            link = re.search(r'href="(/product/[^"]+)"', card)
+            nm = re.search(r'productsname">([^<]+)', card)
+            brand = re.search(r'txt--brand">([^<]+)', card)
+            if not link or not nm or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            title = _html.unescape(nm.group(1)).strip()
+            if (brand.group(1).strip().upper() if brand else "") != "LEICA" or re.search(r"ZM\s?\d|自動巻|クォーツ|腕時計", unicodedata.normalize("NFKC", title)):
+                continue
+            rank = re.search(r'txt--rank">ランク：<span class="p-link__txt--rating">([^<]+)', card)
+            prices = re.findall(r'txt--price[^"]*">￥([\d,]+)', card)
+            price = f"¥{int(prices[0].replace(',', '')):,}" if prices else "문의요망"
+            img = re.search(r'data-src="([^"]+)"', card)
+            name = _komehyo_name(title, ja_to_en)
+            cat = detect_category(name, price)
+            if re.search(r"tripod|三脚|finger ?loop|フインガー|grip|adapter|meter|hood", name, re.I):
+                cat = "Accessory"
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": KOMEHYO_PREFIX + unicodedata.normalize("NFKC", rank.group(1)).strip() if rank else "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": img.group(1) if img else "",
+                "링크": base + link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 {len(cards)}개")
+        if new == 0:
+            break
+        time.sleep(2)
+    if not results:
+        raise RuntimeError("KOMEHYO 목록이 비어 있음")
+    print(f"  ✅ KOMEHYO 완료: {len(results)}개")
+    return results
+
+
 def crawl_leicastoreamsterdam():
     """Leica Store Amsterdam (네덜란드) - 라이카 매장의 공인 중고(CPO). Lightspeed 쇼핑몰이라 분류 목록에 ?format=json.
     Used Cameras·Used Lenses·Used Accessories를 100개씩 (판매 중만 목록에 나옴, 합쳐 60점 안팎).
@@ -7363,6 +7457,7 @@ def crawl_all():
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
         ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
+        ("KOMEHYO (일본)", lambda: ce.wrap_full_run("KOMEHYO (일본)", crawl_komehyo)),
         ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
     ]
