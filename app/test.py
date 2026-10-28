@@ -6544,6 +6544,106 @@ def crawl_komehyo():
     return results
 
 
+def _sabatini_name(title):
+    """Sabatini 제목 다듬기: 'USATO Leica Hektor 13,5 cm f/4' → 'Leica Hektor 135mm f4'. 앞의 'USATO'·'KIT', 딸린 것('+ accessori'·
+    '+ Visoflex 2'·'con Brightin Star …'), 이탈리아어 액세서리 말(mirino·paraluce·tracolla …)을 영어로"""
+    t = re.sub(r"^\s*(?:usato|kit)\s+(?:kit\s+)?", "", title.strip(), flags=re.I)
+    t = re.sub(r"\s*\+\s*(?:accessori|visoflex.*)$|\s+con\s+.*$|\s*\(\d{4}\)", "", t, flags=re.I)
+    t = re.sub(r"(\d)\s?,\s?(\d)", r"\1.\2", t)
+    t = re.sub(r"(\d+(?:\.\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", t)
+    t = re.sub(r"\bf\s?/\s?(\d)|\bf (\d)", lambda m: "f" + (m.group(1) or m.group(2)), t, flags=re.I)
+    t = re.sub(r"(\d)m (?=f\d)", r"\1mm ", t)  # '90m f2' 오타
+    t = re.sub(r"\bAPO-\s+MACRO-\s+", "APO-Macro-", t, flags=re.I)
+    t = re.sub(r"\s1:\d(?:\.\d)?$", "", t)
+    t = re.sub(r"(\d)MM\b", r"\1mm", t)
+    for it, en in (("mirino", "finder"), ("paraluce", "hood"), ("tracolla", "strap"), ("impugnatura", "handgrip"), ("custodia", "case"),
+                   ("fondina in pelle", "leather holster"), ("borsa", "bag"), ("lentina di correzione", "correction lens"),
+                   ("soffietto", "bellows"), ("caricabatteria", "charger"), ("tubo", "tube"), ("poggia pollice", "thumb support"),
+                   ("laccetto da polso", "wrist strap"), ("per ", "for ")):
+        t = re.sub(rf"\b{it}\b", en, t, flags=re.I)
+    t = re.sub(r"\s+", " ", t).strip(" -–")
+    if not re.match(r"(?:leica|leitz)\b", t, re.I):
+        t = "Leica " + re.sub(r"^leica\s+", "", t, flags=re.I)
+    return t
+
+
+def crawl_sabatini():
+    """Sabatini Fotografia (이탈리아, 로마) - 중고 카메라·렌즈 WooCommerce 상품 API(Store API). 중고 분류 3곳(obiettivi-usati 240·
+    macchine-fotografiche-usate 371·accessori-usati 184)에서 'leica' 검색, 100개씩. Panasonic Leica DG·Voigtländer·Techart 등
+    다른 회사 것과 쌍안경·현미경은 뺌. 판매 끝난 것도 목록에 남아(is_in_stock false) 품절로 담음. 가격 EUR.
+    등급은 상품 속성 'Condizioni' (AB·BA·B+·B+/B·B)"""
+    import html as _html
+    import requests
+    from condition_grade import SABATINI_PREFIX
+    base = "https://sabatinifotografia.it"
+    site = "Sabatini Fotografia (이탈리아)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Sabatini Fotografia 크롤링 시작")
+    results, seen = [], set()
+    for cat_id in (240, 371, 184):
+        for page_num in range(1, 10):
+            try:
+                resp = sess.get(f"{base}/wp-json/wc/store/v1/products",
+                                params={"category": cat_id, "search": "leica", "per_page": 100, "page": page_num}, timeout=60)
+                resp.raise_for_status()
+                products = resp.json()
+            except Exception as e:
+                raise RuntimeError(f"Sabatini 분류 {cat_id} {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            print(f"    └─ 분류 {cat_id} {page_num}페이지 {len(products)}개")
+            for p in products:
+                if p.get("id") in seen:
+                    continue
+                seen.add(p.get("id"))
+                title = _html.unescape(p.get("name") or "").strip()
+                if not re.search(r"\b(?:leica|leitz)\b", title, re.I) or re.search(
+                        r"panasonic|voigtl|techart|brightin|lumix|noctivid|microscope|binocol|\d+\s?[x×]\s?\d{2}\b", title, re.I):
+                    continue
+                name = _sabatini_name(title)
+                if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                    continue
+                fm = re.fullmatch(r"(?i)(?:leica|leitz)(?: leitz)?(?: (R|M))? (\d{2,3})mm f(\d(?:\.\d+)?)", name)
+                if fm:  # 'Leica 21mm F2.8'처럼 렌즈 이름이 없으면 설명의 'BAIONETTA: Leica-R'로 마운트를 보고 하나로 정해질 때만 채움
+                    desc = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("description") or "") + " " + (p.get("short_description") or ""))
+                    bm = fm.group(1) or (re.search(r"baionetta\s*:?\s*leica[\s-]*([RM])\b", desc, re.I) or [None, None])[1]
+                    fam = _KOOKMIN_FAMILY.get((bm or "").upper(), {}).get((int(fm.group(2)), float(fm.group(3))))
+                    if fam:
+                        name = f"Leica {fam} {fm.group(2)}mm f{fm.group(3)}"
+                prices = p.get("prices") or {}
+                try:
+                    price = f"€{int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+                except (TypeError, ValueError):
+                    price = "문의요망"
+                grade = next((t.get("name") for a in p.get("attributes") or [] if a.get("name") == "Condizioni"
+                              for t in a.get("terms") or []), None)
+                img = p["images"][0].get("src", "") if p.get("images") else ""
+                cat = "Accessory" if cat_id == 184 else detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": site,
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": SABATINI_PREFIX + grade.strip() if grade else "정보없음",
+                    "가격": price,
+                    "통화": "EUR",
+                    "이미지": img,
+                    "링크": p.get("permalink") or "",
+                    "품절": not p.get("is_in_stock"),
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if len(products) < 100:
+                break
+            time.sleep(2)
+    if not results:
+        raise RuntimeError("Sabatini 목록이 비어 있음")
+    print(f"  ✅ Sabatini Fotografia 완료: {len(results)}개")
+    return results
+
+
 def crawl_leicastoreamsterdam():
     """Leica Store Amsterdam (네덜란드) - 라이카 매장의 공인 중고(CPO). Lightspeed 쇼핑몰이라 분류 목록에 ?format=json.
     Used Cameras·Used Lenses·Used Accessories를 100개씩 (판매 중만 목록에 나옴, 합쳐 60점 안팎).
@@ -7457,6 +7557,7 @@ def crawl_all():
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
         ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
+        ("Sabatini Fotografia (이탈리아)", lambda: ce.wrap_full_run("Sabatini Fotografia (이탈리아)", crawl_sabatini)),
         ("KOMEHYO (일본)", lambda: ce.wrap_full_run("KOMEHYO (일본)", crawl_komehyo)),
         ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),

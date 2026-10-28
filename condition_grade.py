@@ -107,6 +107,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SANPOU.get(cond[len(SANPOU_PREFIX):].strip().upper()), "label"
     if cond.startswith(KIKUYA_PREFIX):
         return _KIKUYA.get(cond[len(KIKUYA_PREFIX):].strip().upper()), "label"
+    if cond.startswith(SABATINI_PREFIX):
+        return _SABATINI.get(cond[len(SABATINI_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
@@ -576,6 +578,15 @@ def lsa_condition(html: str) -> str | None:
     s = " ".join(x for x in re.split(r"(?<=[.!])\s", t) if re.search(r"condition|traces|signs of|used\b|mint", x, re.I))
     level = next((n for n, p in _LSA_WORDS if re.search(p, s, re.I)), None)
     return LSA_PREFIX + level if level else None
+
+
+# 이탈리아 Sabatini Fotografia: 상품 속성 'Condizioni' — A(새것)·AB(새것 같음, 거의 안 씀)·BA(새것 같음, 사용 흔적 없음)·
+# B+(아주 좋음, 흔적 거의 안 보임)·B+/B(가벼운 흔적)·B(좋음, 흔적 여럿)
+SABATINI_PREFIX = "Sabatini: "
+# 사진 평가(표기 가리고 24점, 사진 2~3장씩, 2026-10-29): BA A 4·B 2 · B+ A 4·B 3 · B+/B A 1·B 4·D 1 · B B 2·C 3.
+# 말 그대로(AB S·BA A·B+ A·B+/B B·B C)면 사진이 오히려 0.17등급 엄하게 보여(기존 매장은 0.8 후함) 매장 표기가 후함 →
+# AB·BA A, B+ B, B+/B·B C로 낮춤. 이 대응 기준 정확 일치 10/24 · 한 등급 이내 23/24 (사진이 평균 0.38등급 후함). A(새것)는 N.
+_SABATINI = {"A": "N", "AB": "A", "BA": "A", "B+": "B", "B+/B": "C", "B": "C"}
 
 
 # 일본 KOMEHYO (중고 명품·카메라 체인): 카드 'ランク：中古品A' — 新品·未使用品·中古品SA·A·B·C (카메라는 A·B·C가 대부분)
