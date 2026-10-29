@@ -55,11 +55,11 @@ footer.legal a{color:var(--soft)}
 
 FOOT = {
     "ko": {"by": "운영", "rep": "대표", "biz": "사업자등록번호", "mo": "통신판매업 신고", "tm": "Leica는 Leica Camera AG의 상표입니다. 카메라브릿지는 Leica Camera AG와 관계없는 독립 서비스입니다. 가격·재고는 각 매장 정보이며, 일부 링크는 제휴 링크일 수 있습니다.",
-           "about": "운영자 정보", "privacy": "개인정보처리방침", "terms": "이용약관", "home": "카메라브릿지"},
+           "models": "모델별 시세", "about": "운영자 정보", "privacy": "개인정보처리방침", "terms": "이용약관", "home": "카메라브릿지"},
     "en": {"by": "Operated by", "rep": "Owner", "biz": "Business reg. no.", "mo": "Mail-order reg. no.", "tm": "Leica is a trademark of Leica Camera AG. Camera Bridge is an independent service and is not affiliated with Leica Camera AG. Prices and stock come from each shop, and some links may be affiliate links.",
-           "about": "About & contact", "privacy": "Privacy", "terms": "Terms", "home": "Camera Bridge"},
+           "models": "Prices by model", "about": "About & contact", "privacy": "Privacy", "terms": "Terms", "home": "Camera Bridge"},
     "ja": {"by": "運営", "rep": "代表", "biz": "事業者登録番号", "mo": "通信販売業申告番号", "tm": "Leica は Leica Camera AG の商標です。Camera Bridge は Leica Camera AG とは関係のない独立したサービスです。価格・在庫は各店舗の情報で、一部のリンクはアフィリエイトリンクの場合があります。",
-           "about": "運営者情報", "privacy": "プライバシーポリシー", "terms": "利用規約", "home": "Camera Bridge"},
+           "models": "モデル別相場", "about": "運営者情報", "privacy": "プライバシーポリシー", "terms": "利用規約", "home": "Camera Bridge"},
 }
 
 
@@ -73,7 +73,7 @@ def footer(lang: str) -> str:
     line += [html.escape(o["address"][lang]), f'<a href="mailto:{o["email"]}">{o["email"]}</a>']
     if o["phone"]:
         line.append(html.escape(o["phone"]))
-    links = " · ".join(f'<a href="/{lang}/{page}/">{f[page]}</a>' for page in ("about", "privacy", "terms"))
+    links = f'<a href="/{lang}/leica/">{f["models"]}</a> · ' + " · ".join(f'<a href="/{lang}/{page}/">{f[page]}</a>' for page in ("about", "privacy", "terms"))
     return (f'<footer class="legal"><p>{" · ".join(line)}</p><p>{f["tm"]}</p>'
             f'<p>{links} · <a href="/impressum/">Impressum</a></p></footer>')
 
