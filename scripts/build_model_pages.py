@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import html
 import json
 import re
@@ -29,7 +30,9 @@ SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SITE = "https://camerabridge.io"
 LANGS = ("ko", "en", "ja")
-PAGE_COUNT = 50          # 매물 많은 순서로 이만큼
+MIN_ACTIVE = 3           # 판매 중 매물이 이만큼 있는 모델만 페이지로 (빈약한 페이지는 안 만듦)
+MAX_PAGES = 400          # 매물 많은 순서로 최대 이만큼
+LASTMOD = ROOT / "data" / "derived" / "model_pages_lastmod.json"  # 페이지별 내용 지문과 실제로 바뀐 날
 LISTINGS_SHOWN = 30      # 페이지마다 보여 줄 판매 중 매물 (싼 순)
 DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY"}
 # 잘못 연결됐을 가능성이 큰 매물은 페이지에서 뺀다: 대여 상품, 그 모델 B등급 기준가의 이 비율보다 싼 것
@@ -64,7 +67,7 @@ T = {
         "more": "카메라브릿지에서 {name} 전체 검색", "children": "세대·버전별", "parent": "전체 보기",
         "none": "지금 판매 중인 매물이 없습니다.", "index_title": "라이카 중고 시세 · 모델별 | 카메라브릿지",
         "index_h1": "라이카 모델별 중고 시세", "index_desc": "라이카 카메라·렌즈 모델별 중고 시세와 판매 중 매물.",
-        "count": "{n}개", "home": "카메라브릿지", "list": "모델별 시세", "approx": "약 ",
+        "shops_h": "판매처별 가격", "col_count": "매물", "col_low": "최저가", "col_cur": "통화", "info_h": "모델 정보", "kind": "종류", "kind_Body": "카메라 바디", "kind_Lens": "렌즈", "mount": "마운트", "codes": "제품 코드", "bodies": "카메라 바디", "lenses": "렌즈", "aka": "다른 이름", "count": "{n}개", "home": "카메라브릿지", "list": "모델별 시세", "approx": "약 ",
     },
     "en": {
         "title": "{name} Used Price & Listings | Camera Bridge",
@@ -77,7 +80,7 @@ T = {
         "more": "Search all {name} on Camera Bridge", "children": "By generation / version", "parent": "See all",
         "none": "No listings for sale right now.", "index_title": "Leica Used Prices by Model | Camera Bridge",
         "index_h1": "Leica used prices by model", "index_desc": "Used prices and live listings for Leica cameras and lenses, by model.",
-        "count": "{n}", "home": "Camera Bridge", "list": "Prices by model", "approx": "≈ ",
+        "shops_h": "Prices by shop", "col_count": "Listings", "col_low": "Lowest", "col_cur": "Currency", "info_h": "Model info", "kind": "Type", "kind_Body": "Camera body", "kind_Lens": "Lens", "mount": "Mount", "codes": "Product codes", "bodies": "Camera bodies", "lenses": "Lenses", "aka": "Also known as", "count": "{n}", "home": "Camera Bridge", "list": "Prices by model", "approx": "≈ ",
     },
     "ja": {
         "title": "{name} 中古相場・在庫 | Camera Bridge",
@@ -90,7 +93,7 @@ T = {
         "more": "Camera Bridge で {name} をすべて検索", "children": "世代・バージョン別", "parent": "すべて見る",
         "none": "現在販売中の在庫はありません。", "index_title": "ライカ中古相場 · モデル別 | Camera Bridge",
         "index_h1": "ライカ モデル別中古相場", "index_desc": "ライカのカメラ・レンズのモデル別中古相場と販売中の在庫。",
-        "count": "{n} 点", "home": "Camera Bridge", "list": "モデル別相場", "approx": "約",
+        "shops_h": "店舗別価格", "col_count": "在庫", "col_low": "最安値", "col_cur": "通貨", "info_h": "モデル情報", "kind": "種類", "kind_Body": "カメラボディ", "kind_Lens": "レンズ", "mount": "マウント", "codes": "製品コード", "bodies": "カメラボディ", "lenses": "レンズ", "aka": "別名", "count": "{n} 点", "home": "Camera Bridge", "list": "モデル別相場", "approx": "約",
     },
 }
 
@@ -108,6 +111,7 @@ dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;m
 dl div{padding:12px 0;border-bottom:1px solid var(--border)}
 dt{font-size:13px;color:var(--muted)}
 dd{margin:2px 0 0;font-size:18px;font-weight:600}
+dd.small{font-size:14px;font-weight:400}
 .note{font-size:13px;color:var(--muted);margin:8px 0 28px}
 h2{font-size:17px;margin:32px 0 10px}
 .table{overflow-x:auto}
@@ -165,11 +169,12 @@ def shop_parts(source: str) -> tuple[str, str]:
 
 
 def pick_entities(entities: list[dict]) -> list[dict]:
-    """매물 많은 순 PAGE_COUNT개. '세대 미표기' 묶음, 부모와 사실상 같은 '기본형'은 뺀다."""
+    """판매 중 MIN_ACTIVE개 이상인 모델을 매물 많은 순으로 최대 MAX_PAGES개. '세대 미표기' 묶음, 부모와 사실상 같은 '기본형'은 뺀다
+    (M6 → M6 Classic·M6 TTL처럼 세대·버전은 각자 페이지, 부모 페이지는 '세대·버전별'로 이어 줌)."""
     by_id = {e["id"]: e for e in entities}
     pool = []
     for e in entities:
-        if e.get("feature") or e["kind"] not in ("Body", "Lens") or not e.get("active_count"):
+        if e.get("feature") or e["kind"] not in ("Body", "Lens") or (e.get("active_count") or 0) < MIN_ACTIVE:
             continue
         if "unspecified" in e["id"]:
             continue
@@ -178,7 +183,7 @@ def pick_entities(entities: list[dict]) -> list[dict]:
             continue
         pool.append(e)
     pool.sort(key=lambda e: (-e["listing_count"], e["id"]))
-    return pool[:PAGE_COUNT]
+    return pool[:MAX_PAGES]
 
 
 def page_url(lang: str, slug: str | None = None) -> str:
@@ -188,7 +193,8 @@ def page_url(lang: str, slug: str | None = None) -> str:
 def head(lang: str, title: str, desc: str, url_for, json_ld: dict | None) -> str:
     alternates = "".join(f'<link rel="alternate" hreflang="{l}" href="{url_for(l)}">' for l in LANGS)
     alternates += f'<link rel="alternate" hreflang="x-default" href="{url_for("en")}">'
-    ld = f'<script type="application/ld+json">{json.dumps(json_ld, ensure_ascii=False)}</script>' if json_ld else ""
+    blocks = json_ld if isinstance(json_ld, list) else [json_ld] if json_ld else []
+    ld = "".join(f'<script type="application/ld+json">{json.dumps(b, ensure_ascii=False)}</script>' for b in blocks)
     return (f'<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">'
             f'<meta name="viewport" content="width=device-width, initial-scale=1.0">'
             f"<title>{html.escape(title)}</title><meta name=\"description\" content=\"{html.escape(desc)}\">"
@@ -230,6 +236,15 @@ def build(out: Path) -> dict:
 
     for lang in LANGS:
         shutil.rmtree(out / lang / "leica", ignore_errors=True)
+    old_marks = json.loads(LASTMOD.read_text(encoding="utf-8")) if LASTMOD.exists() else {}
+    marks: dict[str, dict] = {}
+    today = updated.date().isoformat()
+
+    def mark(url: str, html_text: str) -> None:
+        """기준 시각 줄을 뺀 내용이 지난번과 같으면 그때 날짜를, 바뀌었으면 오늘을 lastmod로"""
+        digest = hashlib.sha256(html_text.replace(updated_text, "").encode()).hexdigest()[:16]
+        prev = old_marks.get(url) or {}
+        marks[url] = {"h": digest, "d": prev["d"] if prev.get("h") == digest else today}
 
     for e in picked:
         eid = e["id"]
@@ -252,7 +267,11 @@ def build(out: Path) -> dict:
             if lo_hi:
                 json_ld["offers"] = {"@type": "AggregateOffer", "priceCurrency": cur, "offerCount": len(rows),
                                      "lowPrice": round(conv(lo_hi[0]), 2), "highPrice": round(conv(lo_hi[1]), 2)}
-            parts = [head(lang, title, desc, lambda l, s=slug: page_url(l, s), json_ld)]
+            crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": t["home"], "item": f"{SITE}/"},
+                {"@type": "ListItem", "position": 2, "name": t["list"], "item": page_url(lang)},
+                {"@type": "ListItem", "position": 3, "name": name, "item": page_url(lang, slug)}]}
+            parts = [head(lang, title, desc, lambda l, s=slug: page_url(l, s), [json_ld, crumbs])]
             parts.append(f'<nav><a href="/">{t["home"]}</a> › <a href="/{lang}/leica/">{t["list"]}</a></nav>')
             parts.append(f"<h1>{html.escape(t['h1'].format(name=name))}</h1>")
             if lang != "ko" and e.get("name_ko"):
@@ -276,6 +295,30 @@ def build(out: Path) -> dict:
                     parts.append(f'<li><a href="/{lang}/leica/{slugs[c["id"]]}/">{html.escape(display_name(c, lang))}</a> '
                                  f'<span>{t["count"].format(n=c["active_count"])}</span></li>')
                 parts.append("</ul>")
+            info = [(t["kind"], t["kind_" + e["kind"]])]
+            if e.get("mount"):
+                info.append((t["mount"], html.escape(str(e["mount"]))))
+            if e.get("codes"):
+                info.append((t["codes"], html.escape(", ".join(e["codes"][:8]))))
+            aka = [a for a in e.get("aliases") or [] if a.lower() != name.lower() and (lang == "ko" or not re.search(r"[가-힣]", a))][:5]
+            if aka:
+                info.append((t["aka"], html.escape(", ".join(aka))))
+            parts.append(f"<h2>{t['info_h']}</h2><dl>" + "".join(f"<div><dt>{k}</dt><dd class=\"small\">{v}</dd></div>" for k, v in info) + "</dl>")
+            if rows:
+                by_shop: dict[str, list[dict]] = {}
+                for r in rows:
+                    by_shop.setdefault(r["source"], []).append(r)
+                parts.append(f'<h2>{t["shops_h"]}</h2><div class="table"><table><thead><tr><th>{t["col_shop"]}</th>'
+                             f'<th>{t["col_count"]}</th><th>{t["col_cur"]}</th><th class="price">{t["col_low"]}</th></tr></thead><tbody>')
+                for source, shop_rows in sorted(by_shop.items(), key=lambda kv: kv[1][0]["krw"]):
+                    shop, country = shop_parts(source)
+                    low = shop_rows[0]
+                    shown = money(conv(low["krw"]), cur, lang, low["currency"] != cur)
+                    if low["currency"] != cur:
+                        shown = t["approx"] + shown
+                    parts.append(f'<tr><td>{html.escape(shop)}<span class="orig">{COUNTRY[country][lang]}</span></td>'
+                                 f'<td>{len(shop_rows)}</td><td>{html.escape(low["currency"])}</td><td class="price">{shown}</td></tr>')
+                parts.append("</tbody></table></div>")
             parts.append(f"<h2>{t['listings']}</h2>")
             if rows:
                 parts.append(f'<div class="table"><table><thead><tr><th>{t["col_item"]}</th><th>{t["col_shop"]}</th>'
@@ -297,37 +340,44 @@ def build(out: Path) -> dict:
             path = out / lang / "leica" / slug / "index.html"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("".join(parts), encoding="utf-8")
+            mark(page_url(lang, slug), "".join(parts))
 
     # 언어별 목록
     for lang in LANGS:
         t = T[lang]
         parts = [head(lang, t["index_title"], t["index_desc"], lambda l: page_url(l), None)]
-        parts.append(f'<nav><a href="/">{t["home"]}</a></nav><h1>{t["index_h1"]}</h1><ul class="links">')
-        for e in picked:
-            parts.append(f'<li><a href="/{lang}/leica/{slugs[e["id"]]}/">{html.escape(display_name(e, lang))}</a> '
-                         f'<span>{t["count"].format(n=e["active_count"])}</span></li>')
-        parts.append(f'</ul><p class="note">{t["updated"].format(time=updated_text)}</p></main>{footer(lang)}</body></html>\n')
+        parts.append(f'<nav><a href="/">{t["home"]}</a></nav><h1>{t["index_h1"]}</h1>')
+        for kind, heading in (("Body", t["bodies"]), ("Lens", t["lenses"])):
+            parts.append(f'<h2>{heading}</h2><ul class="links">')
+            for e in picked:
+                if e["kind"] == kind:
+                    parts.append(f'<li><a href="/{lang}/leica/{slugs[e["id"]]}/">{html.escape(display_name(e, lang))}</a> '
+                                 f'<span>{t["count"].format(n=e["active_count"])}</span></li>')
+            parts.append("</ul>")
+        parts.append(f'<p class="note">{t["updated"].format(time=updated_text)}</p></main>{footer(lang)}</body></html>\n')
         (out / lang / "leica" / "index.html").write_text("".join(parts), encoding="utf-8")
+        mark(page_url(lang), "".join(parts))
 
     # 사이트맵: 첫 화면 + 언어별 목록 + 모델 페이지 (언어별 짝 표시)
-    lastmod = updated.date().isoformat()
     urls = ['  <url><loc>https://camerabridge.io/</loc><changefreq>daily</changefreq></url>']
     for slug in [None] + [slugs[e["id"]] for e in picked]:
         alts = "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{page_url(l, slug)}"/>' for l in LANGS)
         for lang in LANGS:
-            urls.append(f"  <url><loc>{page_url(lang, slug)}</loc><lastmod>{lastmod}</lastmod>{alts}</url>")
+            urls.append(f"  <url><loc>{page_url(lang, slug)}</loc><lastmod>{marks[page_url(lang, slug)]['d']}</lastmod>{alts}</url>")
     (out / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
         + "\n".join(urls) + "\n</urlset>\n", encoding="utf-8")
-    return {"pages": len(picked) * len(LANGS), "models": [slugs[e["id"]] for e in picked]}
+    if out == ROOT:  # 시험 출력(--out)에서는 기록을 건드리지 않음
+        LASTMOD.write_text(json.dumps(marks, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
+    return {"pages": len(picked) * len(LANGS), "models": [slugs[e["id"]] for e in picked], "lastmod": marks}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, default=ROOT)
     result = build(parser.parse_args().out)
-    print(f"모델 페이지 {result['pages']}개 ({len(result['models'])}개 모델 × {len(LANGS)}개 언어)")
+    print(f"모델 페이지 {result['pages']}개 ({len(result['models'])}개 모델 × {len(LANGS)}개 언어, 판매 중 {MIN_ACTIVE}개 이상)")
 
 
 if __name__ == "__main__":
