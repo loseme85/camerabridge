@@ -108,6 +108,13 @@
     .mark.acc{color:var(--accent);background:var(--accent-soft)}
 
     .bar{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;margin:8px 0 4px}
+    .trend{border-top:1px solid var(--border);padding-top:8px}
+    .trend svg{width:100%;height:auto;display:block}
+    .trend svg text{font-size:13px;fill:var(--text-muted);font-variant-numeric:tabular-nums}
+    .trend svg line.g{stroke:var(--border);stroke-width:1}
+    .trend svg line.base{stroke:var(--border-strong)}
+    .trend .legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;margin-bottom:4px}
+    .trend .legend i{display:inline-block;width:10px;height:10px;margin-right:6px;vertical-align:-1px}
     .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--text)}
     .seg button{background:var(--surface);border:0;border-right:1px solid var(--text);padding:4px 10px}
     .seg button:last-child{border-right:0}
@@ -192,7 +199,11 @@ const EU_EURO = ["AT", "BE", "CY", "DE", "EE", "ES", "FI", "FR", "GR", "HR", "IE
 const I = {
 ko: {
   tag: "딜러", my_store: "내 매장", lang: "언어", logout: "로그아웃", load_fail: "데이터를 불러오지 못했습니다. 페이지를 새로 고쳐 주세요.", asof: "{t} 수집",
-  nav: ["오늘 브리핑", "매입 조회", "내 재고 점검", "경쟁 매장", "사입 기회", "잘 팔리는 모델", "계정"],
+  nav: ["오늘 브리핑", "매입 조회", "내 재고 점검", "경쟁 매장", "사입 기회", "잘 팔리는 모델", "가격 추이", "계정"],
+  tr_lede: "{c}에서는 값이 오르는데 해외에서는 그대로이거나 내리는 모델입니다. 위에 있을수록 해외에서 들여와 {c}에서 팔 만한 후보입니다.", tr_win: "{n}주",
+  th_tr_me: "{c} 변화", th_tr_ab: "해외 변화", th_tr_gap: "차이", th_tr_lv: "{c} B 가격", th_tr_ratio: "해외 ÷ {c}", th_tr_n: "매물 {c} / 해외",
+  tr_note: "판매 중 매물의 B등급 환산 가격으로 냈습니다. 주마다 같은 판매처끼리만 지난주와 비교해 이어 붙여서, 새로 붙은 판매처와 환율은 변화에 들어가지 않습니다. 모델마다 전체 기간 가격의 0.5~2배 밖 매물은 빼고, 한 주 변화는 ±15%까지만 셉니다. 기간 중 평균 매물이 {m}건 이상인 모델만 보여 줍니다. 기록은 {from}부터이고, 해외 판매처 대부분은 2026-10부터 기록이 있습니다.",
+  tr_chart: "가격 추이", tr_chart_s: "B등급 환산, 첫 주 = 100", tr_abroad: "해외", tr_none: "추이를 낼 기록이 아직 없습니다.", tr_ch: "{w}주 변화: {c} {a} · 해외 {b}", tr_thin: "매물이 적어 흔들릴 수 있음",
   grade: { N: "신품", S: "최상", A: "상", B: "중상", C: "중", D: "하" },
   brief_title: "{store} 오늘 브리핑", brief_lede: "{t} 수집 기준. 판매 중인 재고 {n}건 중 {m}건을 {c} 시세와 비교했습니다.",
   fig_high: "시세보다 15% 넘게 비싼 재고", fig_old: "올린 지 60일 넘은 재고", fig_rivals: "{c} 다른 매장 변동 (7일)", fig_source: "들여오면 시세보다 10% 넘게 싼 해외 매물",
@@ -230,7 +241,11 @@ ko: {
 },
 en: {
   tag: "Dealer", my_store: "My shop", lang: "Language", logout: "Sign out", load_fail: "Could not load the data. Please refresh the page.", asof: "Collected {t}",
-  nav: ["Today", "Buy-in check", "My stock", "Competitors", "Sourcing", "Fast sellers", "Account"],
+  nav: ["Today", "Buy-in check", "My stock", "Competitors", "Sourcing", "Fast sellers", "Price trends", "Account"],
+  tr_lede: "Models getting more expensive in {c} while prices abroad stay flat or fall. The higher a model is, the better a candidate it is to buy abroad and sell in {c}.", tr_win: "{n} wk",
+  th_tr_me: "{c} change", th_tr_ab: "Abroad change", th_tr_gap: "Gap", th_tr_lv: "{c} B price", th_tr_ratio: "Abroad ÷ {c}", th_tr_n: "Listings {c} / abroad",
+  tr_note: "Based on asking prices of listings for sale, adjusted to grade B. Each week is compared with the previous one only within the same shops, so newly added shops and exchange rates do not move the trend. Listings outside 0.5–2× of the model's all-period price are dropped, and weekly moves are capped at ±15%. Only models averaging {m}+ listings over the period are shown. History starts {from}; most shops abroad have history only from 2026-10.",
+  tr_chart: "Price trend", tr_chart_s: "grade B, first week = 100", tr_abroad: "Abroad", tr_none: "Not enough history for a trend yet.", tr_ch: "{w}-week change: {c} {a} · abroad {b}", tr_thin: "Few listings; may be noisy",
   grade: { N: "New", S: "Mint", A: "Exc+", B: "Exc", C: "VG", D: "Good" },
   brief_title: "{store} today", brief_lede: "Data collected {t}. {m} of your {n} listings are compared with the {c} reference price.",
   fig_high: "Listings priced over 15% above reference", fig_old: "Listings up for more than 60 days", fig_rivals: "Changes at other shops in {c} (7 days)", fig_source: "Listings abroad that land over 10% below reference",
@@ -268,7 +283,11 @@ en: {
 },
 ja: {
   tag: "販売店", my_store: "自店", lang: "言語", logout: "ログアウト", load_fail: "データを読み込めませんでした。ページを再読み込みしてください。", asof: "{t} 収集",
-  nav: ["本日のまとめ", "買取照会", "在庫チェック", "競合店", "仕入れ候補", "売れ筋モデル", "アカウント"],
+  nav: ["本日のまとめ", "買取照会", "在庫チェック", "競合店", "仕入れ候補", "売れ筋モデル", "価格推移", "アカウント"],
+  tr_lede: "{c}では値上がりしているのに、海外では横ばいか値下がりしているモデルです。上にあるほど海外で仕入れて{c}で売る候補になります。", tr_win: "{n}週",
+  th_tr_me: "{c}の変化", th_tr_ab: "海外の変化", th_tr_gap: "差", th_tr_lv: "{c} B価格", th_tr_ratio: "海外 ÷ {c}", th_tr_n: "出品 {c} / 海外",
+  tr_note: "販売中の出品をB等級に換算した価格です。毎週、同じ店同士だけで前週と比べてつないでいるため、新しく加わった店や為替は変化に入りません。モデルごとに全期間の価格の0.5〜2倍から外れる出品は除き、1週間の変化は±15%までに抑えています。期間中の平均出品が{m}件以上のモデルだけを表示します。記録は{from}からで、海外の店の多くは2026-10からです。",
+  tr_chart: "価格推移", tr_chart_s: "B等級換算、最初の週 = 100", tr_abroad: "海外", tr_none: "推移を出せる記録がまだありません。", tr_ch: "{w}週の変化: {c} {a} · 海外 {b}", tr_thin: "出品が少なく変動しやすい",
   grade: { N: "新品", S: "極上", A: "美品", B: "良品", C: "並品", D: "難あり" },
   brief_title: "{store} 本日のまとめ", brief_lede: "{t} 収集分。販売中の在庫 {n} 点のうち {m} 点を{c}の基準価格と比べました。",
   fig_high: "基準価格より15%以上高い在庫", fig_old: "掲載から60日を超えた在庫", fig_rivals: "{c}の他店の動き（7日）", fig_source: "取り寄せても基準価格より10%以上安い海外在庫",
@@ -306,7 +325,7 @@ ja: {
 },
 de: {
   tag: "Händler", my_store: "Mein Geschäft", lang: "Sprache", logout: "Abmelden", load_fail: "Daten konnten nicht geladen werden. Bitte Seite neu laden.", asof: "Stand {t}",
-  nav: ["Heute", "Ankauf prüfen", "Mein Bestand", "Wettbewerb", "Einkauf", "Schnelldreher", "Konto"],
+  nav: ["Heute", "Ankauf prüfen", "Mein Bestand", "Wettbewerb", "Einkauf", "Schnelldreher", "Preistrends", "Konto"],
   grade: { N: "Neu", S: "Neuwertig", A: "Sehr gut+", B: "Sehr gut", C: "Gut", D: "Gebraucht" },
   brief_title: "{store} heute", brief_lede: "Datenstand {t}. {m} von {n} Angeboten sind mit dem Referenzpreis für {c} verglichen.",
   fig_high: "Angebote über 15 % über Referenz", fig_old: "Angebote seit über 60 Tagen online", fig_rivals: "Änderungen bei anderen Händlern in {c} (7 Tage)", fig_source: "Angebote im Ausland, die geliefert über 10 % unter Referenz liegen",
@@ -344,7 +363,7 @@ de: {
 },
 fr: {
   tag: "Revendeur", my_store: "Mon magasin", lang: "Langue", logout: "Se déconnecter", load_fail: "Impossible de charger les données. Actualisez la page.", asof: "Collecté le {t}",
-  nav: ["Aujourd'hui", "Estimer un rachat", "Mon stock", "Concurrents", "Achats", "Ventes rapides", "Compte"],
+  nav: ["Aujourd'hui", "Estimer un rachat", "Mon stock", "Concurrents", "Achats", "Ventes rapides", "Tendances des prix", "Compte"],
   grade: { N: "Neuf", S: "Comme neuf", A: "Très bon+", B: "Très bon", C: "Bon", D: "Usagé" },
   brief_title: "{store} aujourd'hui", brief_lede: "Données du {t}. {m} de vos {n} annonces sont comparées au prix de référence en {c}.",
   fig_high: "Annonces à plus de 15 % au-dessus de la référence", fig_old: "Annonces en ligne depuis plus de 60 jours", fig_rivals: "Changements chez les autres magasins en {c} (7 jours)", fig_source: "Annonces à l'étranger livrées à plus de 10 % sous la référence",
@@ -382,7 +401,7 @@ fr: {
 },
 it: {
   tag: "Rivenditori", my_store: "Il mio negozio", lang: "Lingua", logout: "Esci", load_fail: "Impossibile caricare i dati. Ricarica la pagina.", asof: "Dati del {t}",
-  nav: ["Oggi", "Valuta un ritiro", "Il mio stock", "Concorrenti", "Acquisti", "Più vendute", "Account"],
+  nav: ["Oggi", "Valuta un ritiro", "Il mio stock", "Concorrenti", "Acquisti", "Più vendute", "Andamento prezzi", "Account"],
   grade: { N: "Nuovo", S: "Come nuovo", A: "Ottimo+", B: "Ottimo", C: "Buono", D: "Usato" },
   brief_title: "{store} oggi", brief_lede: "Dati del {t}. {m} dei tuoi {n} annunci sono confrontati con il prezzo di riferimento in {c}.",
   fig_high: "Annunci oltre il 15% sopra il riferimento", fig_old: "Annunci online da più di 60 giorni", fig_rivals: "Variazioni negli altri negozi in {c} (7 giorni)", fig_source: "Annunci all'estero che arrivano oltre il 10% sotto il riferimento",
@@ -420,7 +439,7 @@ it: {
 },
 es: {
   tag: "Tiendas", my_store: "Mi tienda", lang: "Idioma", logout: "Salir", load_fail: "No se pudieron cargar los datos. Recarga la página.", asof: "Datos del {t}",
-  nav: ["Hoy", "Tasar una compra", "Mi stock", "Competencia", "Compras", "Se venden rápido", "Cuenta"],
+  nav: ["Hoy", "Tasar una compra", "Mi stock", "Competencia", "Compras", "Se venden rápido", "Tendencia de precios", "Cuenta"],
   grade: { N: "Nuevo", S: "Como nuevo", A: "Excelente+", B: "Excelente", C: "Muy bueno", D: "Bueno" },
   brief_title: "{store} hoy", brief_lede: "Datos del {t}. {m} de tus {n} anuncios se comparan con el precio de referencia en {c}.",
   fig_high: "Anuncios más de un 15 % sobre la referencia", fig_old: "Anuncios publicados hace más de 60 días", fig_rivals: "Cambios en otras tiendas de {c} (7 días)", fig_source: "Anuncios en el extranjero que llegan más de un 10 % bajo la referencia",
@@ -458,7 +477,7 @@ es: {
 },
 pt: {
   tag: "Lojas", my_store: "Minha loja", lang: "Idioma", logout: "Sair", load_fail: "Não foi possível carregar os dados. Recarregue a página.", asof: "Dados de {t}",
-  nav: ["Hoje", "Avaliar compra", "Meu estoque", "Concorrentes", "Compras", "Vendem rápido", "Conta"],
+  nav: ["Hoje", "Avaliar compra", "Meu estoque", "Concorrentes", "Compras", "Vendem rápido", "Tendência de preços", "Conta"],
   grade: { N: "Novo", S: "Como novo", A: "Excelente+", B: "Excelente", C: "Muito bom", D: "Bom" },
   brief_title: "{store} hoje", brief_lede: "Dados de {t}. {m} dos seus {n} anúncios são comparados com o preço de referência em {c}.",
   fig_high: "Anúncios mais de 15% acima da referência", fig_old: "Anúncios publicados há mais de 60 dias", fig_rivals: "Mudanças em outras lojas de {c} (7 dias)", fig_source: "Anúncios no exterior que chegam mais de 10% abaixo da referência",
@@ -496,7 +515,7 @@ pt: {
 },
 "zh-Hans": {
   tag: "经销商", my_store: "本店", lang: "语言", logout: "退出", load_fail: "无法加载数据，请刷新页面。", asof: "{t} 采集",
-  nav: ["今日概览", "收购查询", "库存检查", "同行动态", "进货机会", "畅销型号", "账号"],
+  nav: ["今日概览", "收购查询", "库存检查", "同行动态", "进货机会", "畅销型号", "价格走势", "账号"],
   grade: { N: "全新", S: "近新", A: "极好", B: "很好", C: "良好", D: "一般" },
   brief_title: "{store} 今日概览", brief_lede: "{t} 采集。在售 {n} 件中有 {m} 件已与{c}参考价比较。",
   fig_high: "高于参考价 15% 以上的库存", fig_old: "上架超过 60 天的库存", fig_rivals: "{c}其他店铺动态（7 天）", fig_source: "进口到手价仍比参考价低 10% 以上的海外商品",
@@ -534,7 +553,7 @@ pt: {
 },
 "zh-Hant": {
   tag: "經銷商", my_store: "本店", lang: "語言", logout: "登出", load_fail: "無法載入資料，請重新整理頁面。", asof: "{t} 收集",
-  nav: ["今日概覽", "收購查詢", "庫存檢查", "同業動態", "進貨機會", "熱銷型號", "帳號"],
+  nav: ["今日概覽", "收購查詢", "庫存檢查", "同業動態", "進貨機會", "熱銷型號", "價格走勢", "帳號"],
   grade: { N: "全新", S: "近新", A: "極美", B: "很好", C: "良好", D: "一般" },
   brief_title: "{store} 今日概覽", brief_lede: "{t} 收集。在售 {n} 件中有 {m} 件已與{c}參考價比較。",
   fig_high: "高於參考價 15% 以上的庫存", fig_old: "上架超過 60 天的庫存", fig_rivals: "{c}其他店家動態（7 天）", fig_source: "進口到手價仍比參考價低 10% 以上的海外商品",
@@ -573,7 +592,7 @@ pt: {
 };
 
 let D, ME, NOW, RULES = null, CACHE = {};
-const state = { view: "brief", store: null, lang: "en", entity: null, stockFilter: "all", feedType: "all", feedLocal: false, feedMine: false, srcKind: "all", lim: {} };
+const state = { view: "brief", store: null, lang: "en", entity: null, stockFilter: "all", feedType: "all", feedLocal: false, feedMine: false, srcKind: "all", trWin: 4, lim: {} };
 const keep = {
   get(k) { try { return localStorage.getItem("cbd." + k); } catch { return null; } },
   set(k, v) { try { localStorage.setItem("cbd." + k, v); } catch {} },
@@ -872,9 +891,91 @@ function feedRows(list) {
 }
 const storeLabel = () => myStores().map(siteName).join(", ");
 
+// ── 가격 추이 (D.trend: 나라별 지수 [주 번호, 지수, 매물 수], 첫 주 = 1 — scripts/build_dealer_data.py price_trend) ──
+const TR_MIN = 5; // 비교 기간 평균 매물 수가 이보다 적으면 '가격 추이' 표에서 뺌
+function trendOf(id) {
+  const c = myCountry(), key = "tr:" + c + ":" + id;
+  if (CACHE[key]) return CACHE[key];
+  const s = ((D.trend || {}).e || {})[id] || {};
+  // 해외: 주마다 나라별 지난주 대비 변화를 매물 수로 가중한 기하평균으로 이어 붙임 (build_dealer_data.py와 같은 방식).
+  // 기록이 빈 주에도 이미 시작한 나라는 '변화 없음'으로 넣는다 — 안 그러면 나라마다 다른 주에 내린 것이 겹쳐 쌓여
+  // 해외 전체가 각 나라보다 훨씬 크게 내린 것처럼 보임 (Summicron 35 ASPH: 나라마다 −10% 안팎인데 해외 −31%, 2026-10-29)
+  const nW = (D.trend.weeks || []).length, others = Object.entries(s).filter(([cc]) => cc !== c);
+  const abroad = [];
+  let idx = 1;
+  for (let i = 0; i < nW; i++) {
+    let lw = 0, ww = 0, n = 0, started = false;
+    for (const [, pts] of others) {
+      const k = pts.findIndex(p => p[0] === i);
+      if (k > 0) { const w = Math.min(pts[k][2], pts[k - 1][2]); lw += w * Math.log(pts[k][1] / pts[k - 1][1]); ww += w; }
+      const lastPt = pts.filter(p => p[0] <= i).pop();
+      if (lastPt) {
+        started = true;
+        if (k < 0) ww += lastPt[2]; // 이번 주 기록 없음 → 변화 0으로 가중치만
+        if (k >= 0) n += pts[k][2];
+      }
+    }
+    if (!started) continue;
+    if (abroad.length && ww) idx *= Math.exp(lw / ww);
+    abroad.push([i, idx, n]);
+  }
+  return (CACHE[key] = { me: s[c] || [], abroad, lv: ((D.trend || {}).lv || {})[id] || {} });
+}
+// 마지막 주까지 이어진 기록에서 w주 전과 비교한 변화율과 그 사이 평균 매물 수
+function trendChange(pts, w) {
+  const last = (D.trend.weeks || []).length - 1;
+  if (!pts.length || pts[pts.length - 1][0] !== last) return null;
+  const base = pts.filter(p => p[0] <= last - w).pop();
+  if (!base) return null;
+  const span = pts.filter(p => p[0] >= base[0]);
+  return { ch: pts[pts.length - 1][1] / base[1] - 1, n: span.reduce((a, p) => a + p[2], 0) / span.length };
+}
+function abroadLevel(lv) {
+  const vals = Object.entries(lv).filter(([cc]) => cc !== myCountry()).map(([, v]) => v);
+  return vals.length ? Math.min(...vals) : null;
+}
+function trendRows(w) {
+  const key = "trows:" + myCountry() + ":" + w;
+  if (CACHE[key]) return CACHE[key];
+  const rows = [];
+  for (const id of Object.keys((D.trend || {}).e || {})) {
+    const e = D.entities[id];
+    if (!e || (e.kind !== "Body" && e.kind !== "Lens")) continue;
+    const tr = trendOf(id), me = trendChange(tr.me, w), ab = trendChange(tr.abroad, w);
+    if (!me || !ab || me.n < TR_MIN || ab.n < TR_MIN) continue;
+    rows.push({ id, e, me, ab, gap: me.ch - ab.ch, lvMe: tr.lv[myCountry()] || null, lvAb: abroadLevel(tr.lv) });
+  }
+  return (CACHE[key] = rows.sort((a, b) => b.gap - a.gap));
+}
+const pct = v => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v * 100).toFixed(1) + "%";
+const pctMark = v => `<span class="mark ${v >= 0.03 ? "high" : v <= -0.03 ? "low" : "ok"}">${pct(v)}</span>`;
+function trendChart(id) {
+  const tr = trendOf(id), weeks = D.trend.weeks || [];
+  const lines = [[tr.me, "var(--accent)", C()], [tr.abroad, "var(--amber)", t("tr_abroad")]].filter(([p]) => p.length >= 2);
+  if (!lines.length) return `<p class="empty">${esc(t("tr_none"))}</p>`;
+  // 두 선을 같은 출발점(둘 다 기록이 있는 첫 주 = 100)에 맞춤
+  const start = Math.max(...lines.map(([p]) => p[0][0]));
+  const norm = lines.map(([p, col, name]) => {
+    const b = p.filter(x => x[0] <= start).pop() || p[0];
+    return [p.filter(x => x[0] >= b[0]).map(([i, v, n]) => [Math.max(i, start), v / b[1] * 100, n]), col, name];
+  });
+  const vals = norm.flatMap(([p]) => p.map(x => x[1]));
+  let lo = Math.min(95, ...vals), hi = Math.max(105, ...vals);
+  const W = 640, H = 200, L = 44, R = 12, T = 10, B = 26, last = weeks.length - 1;
+  const x = i => L + (i - start) / Math.max(1, last - start) * (W - L - R), y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  const grid = [lo, 100, hi].map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="g${v === 100 ? " base" : ""}"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${Math.round(v)}</text>`).join("");
+  const paths = norm.map(([p, col]) => `<polyline fill="none" stroke="${col}" stroke-width="2" points="${p.map(([i, v]) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}"/>`).join("");
+  const axis = `<text x="${L}" y="${H - 6}">${esc(weeks[start])}</text><text x="${W - R}" y="${H - 6}" text-anchor="end">${esc(weeks[last])}</text>`;
+  const legend = norm.map(([p, col, name]) => `<span><i style="background:${col}"></i>${esc(name)} ${p[p.length - 1][1] >= 100 ? "+" : "−"}${Math.abs(p[p.length - 1][1] - 100).toFixed(1)}% <span class="sub">(${esc(t("count", { n: p[p.length - 1][2] }))})</span></span>`).join("");
+  const thin = norm.some(([p]) => p[p.length - 1][2] < TR_MIN);
+  return `<div class="trend"><div class="legend">${legend}</div>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("tr_chart"))}">${grid}${paths}${axis}</svg>
+    ${thin ? `<p class="note">${esc(t("tr_thin"))}</p>` : ""}</div>`;
+}
+
 // ── 화면 ──
 const V = {};
-const VIEWS = ["brief", "buy", "stock", "rivals", "source", "demand", "account"];
+const VIEWS = ["brief", "buy", "stock", "rivals", "source", "demand", "trend", "account"];
 
 V.brief = () => {
   const st = myStock(), linked = st.filter(x => x.ratio != null);
@@ -1003,6 +1104,9 @@ V.buy = () => {
       </div>
     </div>
 
+    <h2>${esc(t("tr_chart"))} <small>${esc(t("tr_chart_s"))}</small></h2>
+    ${trendChart(id)}
+
     <div class="cols">
       <section>
         <h2>${esc(t("here_selling", { c: C() }))} <small>${esc(t("sorted_n", { n: here.length }))}</small></h2>
@@ -1091,6 +1195,27 @@ V.demand = () => {
   ${demandTable(rows.slice(0, lim("dm", 40)), false)}
   ${more("dm", rows.length, 40)}
   <p class="note">${esc(t("dm_note", { c: C() }))}</p>`;
+};
+
+V.trend = () => {
+  const w = state.trWin, rows = trendRows(w);
+  return `
+  <h1>${esc(t("nav")[VIEWS.indexOf("trend")])}</h1>
+  <p class="lede">${esc(t("tr_lede", { c: C() }))}</p>
+  <div class="bar"><div class="seg" role="group">${[4, 12, 26].map(n => `<button data-tw="${n}" aria-pressed="${w === n}">${esc(t("tr_win", { n }))}</button>`).join("")}</div><span class="sub">${esc(t("count", { n: rows.length }))}</span></div>
+  ${rows.length ? `<div class="tbl"><table>
+    <thead><tr><th>${esc(t("th_model"))}</th><th class="r">${esc(t("th_tr_me", { c: C() }))}</th><th class="r">${esc(t("th_tr_ab"))}</th><th class="r">${esc(t("th_tr_gap"))}</th><th class="r">${esc(t("th_tr_lv", { c: C() }))}</th><th class="r">${esc(t("th_tr_ratio", { c: C() }))}</th><th class="r">${esc(t("th_tr_n", { c: C() }))}</th></tr></thead>
+    <tbody>${rows.slice(0, lim("tr", 40)).map(r => `<tr class="click" data-entity="${esc(r.id)}">
+      <td>${esc(entName(r.id))}${state.lang === "ko" && r.e.ko ? `<div class="sub">${esc(r.e.n)}</div>` : ""}</td>
+      <td class="r">${pctMark(r.me.ch)}</td>
+      <td class="r">${pctMark(r.ab.ch)}</td>
+      <td class="r num">${pct(r.gap)}</td>
+      <td class="r">${r.lvMe ? money(r.lvMe) : "–"}</td>
+      <td class="r num">${r.lvMe && r.lvAb ? (r.lvAb / r.lvMe).toFixed(2) : "–"}</td>
+      <td class="r num">${Math.round(r.me.n)} / ${Math.round(r.ab.n)}</td>
+    </tr>`).join("")}</tbody></table></div>` : `<p class="empty">${esc(t("empty"))}</p>`}
+  ${more("tr", rows.length, 40)}
+  <p class="note">${esc(t("tr_note", { m: TR_MIN, from: (D.trend.weeks || [])[0] || "" }))}</p>`;
 };
 
 V.account = () => `
@@ -1225,6 +1350,7 @@ document.addEventListener("click", ev => {
   if (el.dataset.sf) { state.stockFilter = el.dataset.sf; state.lim.stock = 0; return render(); }
   if (el.dataset.ft) { state.feedType = el.dataset.ft; state.lim.feed = 0; return render(); }
   if (el.dataset.sk) { state.srcKind = el.dataset.sk; state.lim.src = 0; return render(); }
+  if (el.dataset.tw) { state.trWin = +el.dataset.tw; state.lim.tr = 0; return render(); }
   if (el.matches("tr.click") && !ev.target.closest("a") && el.dataset.entity) { state.view = "buy"; pick(el.dataset.entity); window.scrollTo({ top: 0 }); }
 });
 document.addEventListener("change", ev => {
