@@ -20,8 +20,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "scripts"))
 
 from entity_catalog import krw_rates  # noqa: E402
+from build_legal_pages import FOOTER_CSS, footer  # noqa: E402
 
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
@@ -193,7 +195,7 @@ def head(lang: str, title: str, desc: str, url_for, json_ld: dict | None) -> str
             f'<link rel="canonical" href="{url_for(lang)}">{alternates}'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="Camera Bridge">'
             f'<meta property="og:url" content="{url_for(lang)}"><meta property="og:title" content="{html.escape(title)}">'
-            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<style>{CSS}</style></head><body><main>')
+            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<style>{CSS}{FOOTER_CSS}</style></head><body><main>')
 
 
 def build(out: Path) -> dict:
@@ -291,7 +293,7 @@ def build(out: Path) -> dict:
             else:
                 parts.append(f"<p>{t['none']}</p>")
             parts.append(f'<a class="more" href="/?entity={html.escape(eid)}&amp;utm_source=model_page&amp;utm_content={slug}">{html.escape(t["more"].format(name=name))}</a>')
-            parts.append("</main></body></html>\n")
+            parts.append(f"</main>{footer(lang)}</body></html>\n")
             path = out / lang / "leica" / slug / "index.html"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("".join(parts), encoding="utf-8")
@@ -304,7 +306,7 @@ def build(out: Path) -> dict:
         for e in picked:
             parts.append(f'<li><a href="/{lang}/leica/{slugs[e["id"]]}/">{html.escape(display_name(e, lang))}</a> '
                          f'<span>{t["count"].format(n=e["active_count"])}</span></li>')
-        parts.append(f'</ul><p class="note">{t["updated"].format(time=updated_text)}</p></main></body></html>\n')
+        parts.append(f'</ul><p class="note">{t["updated"].format(time=updated_text)}</p></main>{footer(lang)}</body></html>\n')
         (out / lang / "leica" / "index.html").write_text("".join(parts), encoding="utf-8")
 
     # 사이트맵: 첫 화면 + 언어별 목록 + 모델 페이지 (언어별 짝 표시)
