@@ -4,6 +4,7 @@
   {"accounts": {"<아이디>": {"name", "stores": [수집 매장 이름], "country", "lang", "pw", "pv", "disabled", "admin", "created_at", "last_login"}}}
   pw = pbkdf2_sha256$반복$소금$해시. pv = 비밀번호 바꿀 때마다 1씩 올림 (옛 로그인 쿠키를 끊음)
   admin = 사장님 계정: 모든 매장을 골라 볼 수 있음
+  stores가 비고 country만 있으면 수집 매장이 없는 딜러 (개인·온라인 판매 — 사장님 본인 등). 모든 매장이 경쟁 매장
 로그인 쿠키 cb_dealer: <아이디>.<pv>.<만료 시각>.<서명>. 서명 비밀 값은 환경 변수 DEALER_SESSION_SECRET (32자 이상).
 """
 from __future__ import annotations
@@ -194,7 +195,7 @@ def create_account(account_id: str, *, name: str, stores: list[str], country: st
     data = load_accounts(fresh=True)
     if account_id in data["accounts"]:
         raise ValueError("exists")
-    if not stores and not admin:
+    if not stores and not admin and not country:
         raise ValueError("stores")
     password = new_password()
     data["accounts"][account_id] = {
