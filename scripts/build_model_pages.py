@@ -290,7 +290,7 @@ def build(out: Path) -> dict:
                 parts.append("</tbody></table></div>")
             else:
                 parts.append(f"<p>{t['none']}</p>")
-            parts.append(f'<a class="more" href="/?entity={html.escape(eid)}">{html.escape(t["more"].format(name=name))}</a>')
+            parts.append(f'<a class="more" href="/?entity={html.escape(eid)}&amp;utm_source=model_page&amp;utm_content={slug}">{html.escape(t["more"].format(name=name))}</a>')
             parts.append("</main></body></html>\n")
             path = out / lang / "leica" / slug / "index.html"
             path.parent.mkdir(parents=True, exist_ok=True)
