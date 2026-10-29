@@ -1,6 +1,112 @@
 [
   {
     "source": "사진집",
+    "source_url": "https://www.sazinzibb.com/product/jnk-boa-neck-strap-95cm-brown/17255/category/27/display/1/",
+    "title_raw": "JNK Boa Neck Strap 95cm Brown",
+    "price_raw": "150,000원",
+    "currency": "KRW",
+    "image_url": "https://www.sazinzibb.com/web/product/medium/202610/5e4d93eebec0427021b43ce6206b1816.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "jnk boa neck strap 95cm brown",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:neck strap"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "strap",
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-29 14:58:53",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "사진집",
+    "source_url": "https://www.sazinzibb.com/product/leica-m2-black-repaint/17253/category/28/display/1/",
+    "title_raw": "Leica M2 Black Repaint",
+    "price_raw": "3,650,000원",
+    "currency": "KRW",
+    "image_url": "https://www.sazinzibb.com/web/product/medium/202610/09bd988e6bd67a7bbd89f188a72ca6e0.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "leica m2 black repaint",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica m2"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Body+no_mount"
+    ],
+    "model_raw": "M2",
+    "model_canonical": "M2",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [
+      "repaint"
+    ],
+    "positive_flags": [],
+    "flag_confidence": 0.9,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-29 14:58:53",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "사진집",
     "source_url": "https://www.sazinzibb.com/product/leica-m4-silver/17251/category/28/display/1/",
     "title_raw": "Leica M4 Silver",
     "price_raw": "2,700,000원",
@@ -485,7 +591,7 @@
     "source": "사진집",
     "source_url": "https://www.sazinzibb.com/product/leica-m-50mm-f2-apo-summicron-asph-6bit-silver/17238/category/28/display/1/",
     "title_raw": "Leica M 50mm f2 APO-Summicron ASPH 6bit Silver",
-    "price_raw": "7,600,000원",
+    "price_raw": "7,000,000원",
     "currency": "KRW",
     "image_url": "https://www.sazinzibb.com/web/product/medium/202610/fdd4809ea837f142fc50810c0dbaca4c.jpg",
     "condition_raw": "95%",
@@ -540,7 +646,7 @@
     "source": "사진집",
     "source_url": "https://www.sazinzibb.com/product/leica-l-50mm-f35-nikel-elmar/17237/category/28/display/1/",
     "title_raw": "Leica L 50mm f3.5 Nikel Elmar",
-    "price_raw": "1,000,000원",
+    "price_raw": "800,000원",
     "currency": "KRW",
     "image_url": "https://www.sazinzibb.com/web/product/medium/202610/f7ab404781e31c3f39e3912aed898362.jpg",
     "condition_raw": "95%",
@@ -904,15 +1010,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-23 10:42:44",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-29 14:58:53",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -20590,6 +20696,114 @@
   },
   {
     "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-m-adapter-t-black/22450/category/442/display/1/",
+    "title_raw": "[위탁] M Adapter T (Black)",
+    "price_raw": "400,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202610/dd033cc2200c5f9084e1e97d9c320704.jpg",
+    "condition_raw": "88%",
+    "normalized_name": "m adapter t (black)",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:adapter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "adapter",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-29 14:58:53",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-sl2-black/22449/category/442/display/1/",
+    "title_raw": "[위탁] SL2 (Black)",
+    "price_raw": "3,700,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202609/10576d5af9f92811e1f2ecc0cae78478.jpg",
+    "condition_raw": "97%",
+    "normalized_name": "sl2 (black)",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "SL Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-29 14:58:53",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
     "source_url": "https://leica-storebando.co.kr/product/위탁-m11-monochrom/22444/category/442/display/1/",
     "title_raw": "[위탁] M11 Monochrom",
     "price_raw": "13,000,000원",
@@ -21325,15 +21539,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-29 14:58:53",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -25467,15 +25681,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-06 15:31:53",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-29 14:58:53",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -27589,15 +27803,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-30 21:17:59",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-29 14:58:53",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -31964,15 +32178,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-08-20 18:47:53",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-29 14:58:53",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -400736,7 +400950,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:86563"
+      "price_low:87383"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -406524,7 +406738,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:146363"
+      "price_low:147884"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -408356,7 +408570,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:87226"
+      "price_low:88133"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418486,7 +418700,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -421377,7 +421591,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28090"
+      "price_low:28382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -421435,7 +421649,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28090"
+      "price_low:28382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -421493,7 +421707,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28090"
+      "price_low:28382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -424395,7 +424609,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:25133"
+      "price_low:25394"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -425176,7 +425390,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:110881"
+      "price_low:112033"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -425227,7 +425441,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:110881"
+      "price_low:112033"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -425278,7 +425492,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:87226"
+      "price_low:88133"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -425329,7 +425543,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -425749,7 +425963,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:81313"
+      "price_low:82158"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -427885,7 +428099,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -428311,7 +428525,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:47309"
+      "price_low:47801"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -435208,7 +435422,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:13306"
+      "price_low:13444"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -435576,7 +435790,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:14784"
+      "price_low:14938"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -435629,7 +435843,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:34003"
+      "price_low:34357"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -435786,7 +436000,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -436980,7 +437194,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:81313"
+      "price_low:82158"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437084,7 +437298,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437140,7 +437354,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:57658"
+      "price_low:58257"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437297,7 +437511,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:113838"
+      "price_low:115021"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437399,7 +437613,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -437501,7 +437715,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:57658"
+      "price_low:58257"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -439168,7 +439382,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51744"
+      "price_low:52282"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -439272,7 +439486,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:72442"
+      "price_low:73195"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -439531,7 +439745,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:81313"
+      "price_low:82158"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -440788,7 +441002,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:69485"
+      "price_low:70208"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -440839,7 +441053,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:14784"
+      "price_low:14938"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -440892,7 +441106,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59137"
+      "price_low:59751"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -440943,7 +441157,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59137"
+      "price_low:59751"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441198,7 +441412,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:14784"
+      "price_low:14938"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441249,7 +441463,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:17741"
+      "price_low:17925"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441300,7 +441514,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51744"
+      "price_low:52282"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441402,7 +441616,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441455,7 +441669,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:14784"
+      "price_low:14938"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441669,7 +441883,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:7392"
+      "price_low:7469"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441777,7 +441991,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441830,7 +442044,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -441881,7 +442095,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442040,7 +442254,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51744"
+      "price_low:52282"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442093,7 +442307,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442146,7 +442360,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44352"
+      "price_low:44813"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442252,7 +442466,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:81313"
+      "price_low:82158"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442303,7 +442517,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442356,7 +442570,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442409,7 +442623,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51744"
+      "price_low:52282"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442462,7 +442676,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:28090"
+      "price_low:28382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442517,7 +442731,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:17741"
+      "price_low:17925"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442575,7 +442789,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:42874"
+      "price_low:43320"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442730,7 +442944,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442838,7 +443052,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:72442"
+      "price_low:73195"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -442940,7 +443154,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:7392"
+      "price_low:7469"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443042,7 +443256,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:14784"
+      "price_low:14938"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443627,7 +443841,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:14784"
+      "price_low:14938"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443680,7 +443894,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:72442"
+      "price_low:73195"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443736,7 +443950,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:66529"
+      "price_low:67220"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -443840,7 +444054,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:69485"
+      "price_low:70208"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444284,6 +444498,59 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-04 00:10:39",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2443801852528",
+    "title_raw": "Leica Q3 Monochrom",
+    "price_raw": "¥1,074,000",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2443801852528-1-1.jpg",
+    "condition_raw": "AB",
+    "normalized_name": "leica q3 monochrom",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Q",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Q_kw:Q/Q2/Q3"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Q"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Q+Body"
+    ],
+    "model_raw": "Q3",
+    "model_canonical": "Q3",
+    "variant": [
+      "Monochrom"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-29 14:58:53",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -445932,7 +446199,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:101679"
+      "price_low:102700"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -449812,7 +450079,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147897"
+      "price_low:149382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -449863,7 +450130,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:68066"
+      "price_low:68750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -451073,7 +451340,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:110922"
+      "price_low:112037"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -461927,7 +462194,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:68066"
+      "price_low:68750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -462547,7 +462814,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:47058"
+      "price_low:47531"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -463903,7 +464170,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:83192"
+      "price_low:84027"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -463954,7 +464221,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147897"
+      "price_low:149382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -464005,7 +464272,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:100839"
+      "price_low:101851"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -474355,7 +474622,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:68066"
+      "price_low:68750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -474408,7 +474675,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:68066"
+      "price_low:68750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -478325,7 +478592,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:142855"
+      "price_low:144290"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -479057,7 +479324,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:110922"
+      "price_low:112037"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -479531,7 +479798,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:60503"
+      "price_low:61111"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -482020,7 +482287,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67226"
+      "price_low:67901"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -482071,7 +482338,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67226"
+      "price_low:67901"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -484267,7 +484534,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:41176"
+      "price_low:41589"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -496634,7 +496901,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:165760"
+      "price_low:167417"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -497282,7 +497549,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:182675"
+      "price_low:184500"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -498032,7 +498299,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67657"
+      "price_low:68333"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -503242,7 +503509,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:98103"
+      "price_low:99084"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -506935,7 +507202,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:148846"
+      "price_low:150334"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -516317,7 +516584,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:165760"
+      "price_low:167417"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -517579,7 +517846,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:148846"
+      "price_low:150334"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -524088,7 +524355,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:81313"
+      "price_low:82158"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -525131,7 +525398,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -527788,7 +528055,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:103489"
+      "price_low:104565"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -531860,7 +532127,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:125665"
+      "price_low:126971"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -533800,7 +534067,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:118273"
+      "price_low:119502"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -537586,7 +537853,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -537693,7 +537960,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:29568"
+      "price_low:29876"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -538761,7 +539028,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -540233,7 +540500,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:177410"
+      "price_low:179253"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -547972,7 +548239,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44352"
+      "price_low:44813"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -548229,7 +548496,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:192194"
+      "price_low:194191"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -548280,7 +548547,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73921"
+      "price_low:74689"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -548331,7 +548598,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:118273"
+      "price_low:119502"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -548641,7 +548908,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44352"
+      "price_low:44813"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -548902,7 +549169,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51744"
+      "price_low:52282"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -549372,7 +549639,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51744"
+      "price_low:52282"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -549425,7 +549692,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:192194"
+      "price_low:194191"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -550957,7 +551224,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -551167,7 +551434,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:103489"
+      "price_low:104565"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -551603,7 +551870,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -551760,7 +552027,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:66529"
+      "price_low:67220"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -551915,7 +552182,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:177410"
+      "price_low:179253"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -553138,7 +553405,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:103489"
+      "price_low:104565"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -554309,7 +554576,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59137"
+      "price_low:59751"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -554360,7 +554627,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59137"
+      "price_low:59751"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -554411,7 +554678,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:17741"
+      "price_low:17925"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -554679,7 +554946,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73921"
+      "price_low:74689"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -554836,7 +555103,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -555204,7 +555471,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -556227,7 +556494,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -556482,7 +556749,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44352"
+      "price_low:44813"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -556533,7 +556800,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:88705"
+      "price_low:89627"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -556584,7 +556851,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -556635,7 +556902,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -556945,7 +557212,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44352"
+      "price_low:44813"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -558448,7 +558715,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -564885,7 +565152,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:123661"
+      "price_low:124833"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -569587,7 +569854,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:88329"
+      "price_low:89167"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -569638,7 +569905,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:176659"
+      "price_low:178333"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -570052,7 +570319,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44165"
+      "price_low:44583"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -571621,57 +571888,6 @@
   },
   {
     "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-sf24d-217565",
-    "title_raw": "Leica SF240",
-    "price_raw": "$325",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM24351-002-00.jpg?v=1793121290",
-    "condition_raw": "CameraWest: 8",
-    "normalized_name": "leica sf240",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.92,
-    "category_reason": [
-      "acc_kw:sf24"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "flash",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-29 04:39:24",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
     "source_url": "https://www.camerawest.com/products/leica-24-90mm-f2-8-4-vario-elmarit-sl-boxed-4519409",
     "title_raw": "Leica 24-90mm f2.8-4 Vario-Elmarit-SL",
     "price_raw": "$3,505",
@@ -572683,59 +572899,6 @@
     "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM24332-003-00.jpg?v=1792542349",
     "condition_raw": "CameraWest: 9",
     "normalized_name": "leica ablon film trimmer chrome engraved",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.6,
-    "category_reason": [
-      "default_lens"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Chrome"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-22 02:21:14",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-ablon-film-trimmer-chrome",
-    "title_raw": "Leica ABLON Film Trimmer Chrome",
-    "price_raw": "$175",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM24332-002-00.jpg?v=1792542344",
-    "condition_raw": "CameraWest: 9",
-    "normalized_name": "leica ablon film trimmer chrome",
     "normalized_description": "",
     "brand": "Leica",
     "brand_confidence": 0.97,
@@ -577255,7 +577418,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:66340"
+      "price_low:67012"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -578356,7 +578519,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126047"
+      "price_low:127323"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -578508,25 +578671,23 @@
     "mount_reason": [
       "no_mount_match"
     ],
-    "category": "Accessory",
-    "category_confidence": 0.75,
+    "category": "Lens",
+    "category_confidence": 0.6,
     "category_reason": [
-      "price_low:199021"
+      "default_lens"
     ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
     "label_reason": [
-      "category=Accessory"
+      "Leica+Lens+no_mount"
     ],
-    "model_raw": "M-A",
-    "model_canonical": "M-A",
+    "model_raw": null,
+    "model_canonical": null,
     "variant": [],
     "focal_length": null,
-    "accessory_type": "closeup",
+    "accessory_type": null,
     "compatible_mounts": [],
-    "compatible_systems": [
-      "R"
-    ],
+    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -579615,7 +579776,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126047"
+      "price_low:127323"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -583578,7 +583739,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126047"
+      "price_low:127323"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -584150,7 +584311,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:165851"
+      "price_low:167530"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -587002,7 +587163,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:86242"
+      "price_low:87116"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -588199,7 +588360,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59706"
+      "price_low:60311"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -588775,7 +588936,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59706"
+      "price_low:60311"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -588826,7 +588987,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:99510"
+      "price_low:100518"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -592973,57 +593134,6 @@
   },
   {
     "source": "Camera West (미국)",
-    "source_url": "https://leicastoresf.com/products/leica-sl2-boxed-5564102",
-    "title_raw": "Leica SL2",
-    "price_raw": "$2,195",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0644/8168/9749/files/cm22949-012-00.webp?v=1778705836",
-    "condition_raw": "CameraWest: 9+",
-    "normalized_name": "leica sl2",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "SL",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "SL_explicit:SL2"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:leica sl2"
-    ],
-    "label": "SL Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "SL+Body"
-    ],
-    "model_raw": "SL2",
-    "model_canonical": "SL2",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": "2026-10-15 11:41:55",
-    "sold_fx_krw": 1340.880416,
-    "sold_at_unknown": true
-  },
-  {
-    "source": "Camera West (미국)",
     "source_url": "https://leicastoresf.com/products/leica-50mm-f1-4-summilux-m-asph-boxed-dag-cla-4154381",
     "title_raw": "Leica 50mm f1.4 Summilux-M Asph",
     "price_raw": "$3,595",
@@ -593424,60 +593534,6 @@
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": "2026-10-15 11:41:55",
-    "sold_fx_krw": 1340.880416,
-    "sold_at_unknown": true
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://leicastoresf.com/products/leica-q2-boxed-5357697",
-    "title_raw": "Leica Q2 - No Charger",
-    "price_raw": "$4,295",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0644/8168/9749/files/cm22949-011-00.webp?v=1778293400",
-    "condition_raw": "CameraWest: 9+",
-    "normalized_name": "leica q2 - no charger",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.92,
-    "category_reason": [
-      "acc_kw:charger"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "Q2",
-    "model_canonical": "Q2",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "charger",
-    "compatible_mounts": [],
-    "compatible_systems": [
-      "Q",
-      "Q2"
-    ],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -598916,59 +598972,6 @@
     "variant": [],
     "focal_length": null,
     "accessory_type": "bag",
-    "compatible_mounts": [],
-    "compatible_systems": [
-      "Q"
-    ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "sold_confirmed",
-    "sold_confidence": 0.97,
-    "sold_reason": [
-      "sold_confirmed:품절"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": "2026-10-15 11:41:55",
-    "sold_fx_krw": 1340.880416,
-    "sold_at_unknown": true
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://leicastoresf.com/products/leica-q-typ-116-thumbgrip-5337232",
-    "title_raw": "Leica Q Typ 116, Thumbgrip",
-    "price_raw": "$2,595",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0644/8168/9749/files/CM22561-001-00.webp?v=1774398103",
-    "condition_raw": "CameraWest: 9+",
-    "normalized_name": "leica q typ 116, thumbgrip",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:grip"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "Q",
-    "model_canonical": "Q",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "grip",
     "compatible_mounts": [],
     "compatible_systems": [
       "Q"
@@ -608658,7 +608661,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:12366"
+      "price_low:12483"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -608709,7 +608712,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:12366"
+      "price_low:12483"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -608760,7 +608763,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44165"
+      "price_low:44583"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -608811,7 +608814,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44165"
+      "price_low:44583"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -608862,7 +608865,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:21199"
+      "price_low:21400"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -608913,7 +608916,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:68897"
+      "price_low:69550"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -608964,7 +608967,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:132494"
+      "price_low:133750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -609015,7 +609018,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:61831"
+      "price_low:62417"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -609117,7 +609120,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51231"
+      "price_low:51717"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -609168,7 +609171,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:33565"
+      "price_low:33883"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -609653,7 +609656,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51231"
+      "price_low:51717"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -609806,7 +609809,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:121895"
+      "price_low:123050"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -609959,7 +609962,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:86563"
+      "price_low:87383"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610067,7 +610070,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44165"
+      "price_low:44583"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610118,7 +610121,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:33565"
+      "price_low:33883"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610169,7 +610172,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51231"
+      "price_low:51717"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610220,7 +610223,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51231"
+      "price_low:51717"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610271,7 +610274,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:132494"
+      "price_low:133750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610326,7 +610329,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:44165"
+      "price_low:44583"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610430,7 +610433,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:68897"
+      "price_low:69550"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610481,7 +610484,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:51231"
+      "price_low:51717"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610636,7 +610639,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:86563"
+      "price_low:87383"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -610687,7 +610690,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:26499"
+      "price_low:26750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -612843,7 +612846,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:104229"
+      "price_low:105217"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -613778,7 +613781,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:15899"
+      "price_low:16050"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -613833,7 +613836,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:21199"
+      "price_low:21400"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -614301,7 +614304,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:167826"
+      "price_low:169416"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -614356,7 +614359,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:132494"
+      "price_low:133750"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -615040,7 +615043,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:104229"
+      "price_low:105217"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -618593,7 +618596,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:83192"
+      "price_low:84027"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -620200,7 +620203,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:176468"
+      "price_low:178240"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621142,7 +621145,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:9244"
+      "price_low:9336"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621198,7 +621201,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:11092"
+      "price_low:11204"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621249,7 +621252,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:16638"
+      "price_low:16805"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621353,7 +621356,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:9244"
+      "price_low:9336"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621460,7 +621463,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:9244"
+      "price_low:9336"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621513,7 +621516,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:16638"
+      "price_low:16805"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621566,7 +621569,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:9244"
+      "price_low:9336"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -621673,7 +621676,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:23109"
+      "price_low:23341"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -623092,7 +623095,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37814"
+      "price_low:38194"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -623251,7 +623254,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:40335"
+      "price_low:40741"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -624290,7 +624293,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:31932"
+      "price_low:32253"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -624341,7 +624344,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:166384"
+      "price_low:168055"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -624504,7 +624507,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:13445"
+      "price_low:13580"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -625076,7 +625079,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:109242"
+      "price_low:110339"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -625593,7 +625596,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:124368"
+      "price_low:125617"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -626476,7 +626479,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:141174"
+      "price_low:142592"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -627147,7 +627150,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67058"
+      "price_low:67731"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -627198,7 +627201,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67058"
+      "price_low:67731"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -628133,7 +628136,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:84032"
+      "price_low:84876"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -628186,7 +628189,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:75629"
+      "price_low:76389"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -629375,7 +629378,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:117645"
+      "price_low:118827"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -629426,7 +629429,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:151258"
+      "price_low:152777"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -629738,7 +629741,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:142855"
+      "price_low:144290"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -630548,7 +630551,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:151258"
+      "price_low:152777"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -634294,7 +634297,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:176468"
+      "price_low:178240"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -634712,7 +634715,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:142855"
+      "price_low:144290"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -634763,7 +634766,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -634814,7 +634817,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -635318,7 +635321,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012473596/",
     "title_raw": "Leica Summilux 50/1.4 1st",
-    "price_raw": "문의요망",
+    "price_raw": "¥380,000",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012473596-01.jpg",
     "condition_raw": "B",
@@ -635473,7 +635476,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012478539/",
     "title_raw": "Leica Elmarit M 28/2.8 2nd ストッパーナシ",
-    "price_raw": "문의요망",
+    "price_raw": "¥148,000",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012478539-01.jpg",
     "condition_raw": "C",
@@ -635545,7 +635548,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126048"
+      "price_low:127314"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -636652,7 +636655,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:84032"
+      "price_low:84876"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -636945,7 +636948,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012506294/",
     "title_raw": "Leica VARIO-ELMAR R105-280/4.2 (ニコンFマウント改)",
-    "price_raw": "¥341,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012506294-01.jpg",
     "condition_raw": "B",
@@ -636996,7 +636999,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012506317/",
     "title_raw": "Leica VARIO-ELMAR R80-200/4(ニコンFマウント改)",
-    "price_raw": "¥96,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012506317-01.jpg",
     "condition_raw": "C",
@@ -637047,7 +637050,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012506676/",
     "title_raw": "Leica Elmarit R 135/2.8(ニコンF改)",
-    "price_raw": "¥25,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012506676-01.jpg",
     "condition_raw": "C",
@@ -637098,7 +637101,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012506683/",
     "title_raw": "Leica Elmarit R 135/2.8(2CAM)",
-    "price_raw": "¥23,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012506683-01.jpg",
     "condition_raw": "B",
@@ -637114,29 +637117,25 @@
     "mount_reason": [
       "R_suffix:2CAM"
     ],
-    "category": "Accessory",
-    "category_confidence": 0.75,
+    "category": "Lens",
+    "category_confidence": 0.85,
     "category_reason": [
-      "price_low:193274"
+      "lens_protected"
     ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
+    "label": "R Lens",
+    "label_confidence": 0.95,
     "label_reason": [
-      "category=Accessory"
+      "R+Lens"
     ],
     "model_raw": "Elmarit",
-    "model_canonical": "Elmarit",
+    "model_canonical": "Elmarit-R",
     "variant": [
       "2CAM"
     ],
     "focal_length": null,
     "accessory_type": null,
-    "compatible_mounts": [
-      "R"
-    ],
-    "compatible_systems": [
-      "R"
-    ],
+    "compatible_mounts": [],
+    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -637516,7 +637515,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012509264/",
     "title_raw": "Leica Vario-･APO･Elmarit R70-180/2.8(3CAM)",
-    "price_raw": "¥615,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012509264-01.jpg",
     "condition_raw": "B",
@@ -637569,7 +637568,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012510215/",
     "title_raw": "Leica Tele-Elmarit M 90/2.8",
-    "price_raw": "¥100,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012510215-01.jpg",
     "condition_raw": "B",
@@ -637674,7 +637673,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012510277/",
     "title_raw": "Leica DR Summicron-M 50/2 眼鏡付",
-    "price_raw": "¥180,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012510277-01.jpg",
     "condition_raw": "B",
@@ -637725,7 +637724,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012510291/",
     "title_raw": "Leica M4",
-    "price_raw": "¥380,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012510291-01.jpg",
     "condition_raw": "B",
@@ -637980,7 +637979,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012510819/",
     "title_raw": "Leica Summilux-M 50/1.4 Silver",
-    "price_raw": "¥498,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012510819-01.jpg",
     "condition_raw": "AB",
@@ -638033,7 +638032,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012510833/",
     "title_raw": "Leica Summilux-M 35/1.4 ASPH. Silver",
-    "price_raw": "¥598,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012510833-01.jpg",
     "condition_raw": "AB",
@@ -638780,7 +638779,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:75629"
+      "price_low:76389"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -638915,38 +638914,38 @@
   {
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012515869/",
-    "title_raw": "Leica M6 TTL 0.85 GreenPaintフィニッシュ 10478",
+    "title_raw": "Leica 【世界300台 Limited品】M6 TTL 0.85 GreenPaint 10478",
     "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012515869-01.jpg",
     "condition_raw": "AB",
-    "normalized_name": "leica m6 ttl 0.85 greenpaintフィニッシュ 10478",
+    "normalized_name": "leica 【世界300台 limited品】m6 ttl 0.85 greenpaint 10478",
     "normalized_description": "",
     "brand": "Leica",
     "brand_confidence": 0.97,
     "brand_reason": [
       "leica_kw:leica"
     ],
-    "mount": "M",
-    "mount_confidence": 0.95,
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
     "mount_reason": [
-      "M_body_number:M3-M11"
+      "no_mount_match"
     ],
-    "category": "Body",
-    "category_confidence": 0.88,
+    "category": "Lens",
+    "category_confidence": 0.6,
     "category_reason": [
-      "body_kw:leica m6"
+      "default_lens"
     ],
-    "label": "M Body",
-    "label_confidence": 0.95,
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
     "label_reason": [
-      "M+Body"
+      "Leica+Lens+no_mount"
     ],
-    "model_raw": "M6 TTL",
-    "model_canonical": "M6",
+    "model_raw": null,
+    "model_canonical": null,
     "variant": [
-      "TTL",
-      "0.85"
+      "0.85",
+      "TTL"
     ],
     "focal_length": null,
     "accessory_type": null,
@@ -638970,7 +638969,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012516699/",
     "title_raw": "Leica Summicron R 35/2 3CAM",
-    "price_raw": "¥200,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012516699-01.jpg",
     "condition_raw": "B",
@@ -639074,7 +639073,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012516729/",
     "title_raw": "Leica Xenon-L 50/1.5",
-    "price_raw": "¥230,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012516729-01.jpg",
     "condition_raw": "B",
@@ -639125,7 +639124,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012516781/",
     "title_raw": "Leica M6 TTL 0.72 Silver",
-    "price_raw": "¥580,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012516781-01.jpg",
     "condition_raw": "C",
@@ -641140,7 +641139,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111020332397/",
     "title_raw": "Leica A型 Black (New Elmar 50mm F3.5付)",
-    "price_raw": "¥210,000",
+    "price_raw": "문의요망",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111020332397-01.jpg",
     "condition_raw": "B",
@@ -643154,7 +643153,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:176468"
+      "price_low:178240"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -643617,7 +643616,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -643668,7 +643667,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:84032"
+      "price_low:84876"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -648717,7 +648716,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:33613"
+      "price_low:33950"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -649652,7 +649651,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:84032"
+      "price_low:84876"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -649705,7 +649704,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:84032"
+      "price_low:84876"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -650227,7 +650226,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67226"
+      "price_low:67901"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -650918,7 +650917,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:134451"
+      "price_low:135802"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -650971,7 +650970,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126048"
+      "price_low:127314"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -651279,7 +651278,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:100839"
+      "price_low:101851"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -651434,7 +651433,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:42016"
+      "price_low:42438"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -651485,7 +651484,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:33613"
+      "price_low:33950"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -652048,7 +652047,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -652204,7 +652203,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:18487"
+      "price_low:18673"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -652306,7 +652305,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:37814"
+      "price_low:38194"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -652703,7 +652702,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111050116837/",
     "title_raw": "Leica Elmar M 135/4",
-    "price_raw": "문의요망",
+    "price_raw": "¥32,000",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111050116837-01.jpg",
     "condition_raw": "C",
@@ -652754,7 +652753,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111050116844/",
     "title_raw": "Leica IIIf Redダイヤル",
-    "price_raw": "문의요망",
+    "price_raw": "¥64,000",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111050116844-01.jpg",
     "condition_raw": "C",
@@ -652805,7 +652804,7 @@
     "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111050119135/",
     "title_raw": "Leica エバレディCase+ワイドレザーStrap",
-    "price_raw": "문의요망",
+    "price_raw": "¥11,000",
     "currency": "JPY",
     "image_url": "https://cameranonaniwa.jp/img/goods/L/2111050119135-01.jpg",
     "condition_raw": "B",
@@ -656322,7 +656321,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:82352"
+      "price_low:83179"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -656740,7 +656739,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:141174"
+      "price_low:142592"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -658562,7 +658561,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:57142"
+      "price_low:57716"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -658613,7 +658612,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:107561"
+      "price_low:108642"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -658664,7 +658663,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:107561"
+      "price_low:108642"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -658779,7 +658778,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:183190"
+      "price_low:185030"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -659935,7 +659934,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126048"
+      "price_low:127314"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -660246,7 +660245,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:78150"
+      "price_low:78935"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -660660,7 +660659,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:141174"
+      "price_low:142592"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -661656,7 +661655,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:189745"
+      "price_low:191650"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -661864,7 +661863,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:67646"
+      "price_low:68325"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -663847,22 +663846,22 @@
     "mount_reason": [
       "no_mount_match"
     ],
-    "category": "Accessory",
-    "category_confidence": 0.75,
+    "category": "Lens",
+    "category_confidence": 0.85,
     "category_reason": [
-      "price_low:199997"
+      "lens_protected"
     ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
     "label_reason": [
-      "category=Accessory"
+      "Leica+Lens+no_mount"
     ],
     "model_raw": "Elmar",
     "model_canonical": "Elmar",
     "variant": [
       "Chrome"
     ],
-    "focal_length": null,
+    "focal_length": "90",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -664275,7 +664274,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:42016"
+      "price_low:42438"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -670089,7 +670088,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:149577"
+      "price_low:151080"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -671744,7 +671743,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:99158"
+      "price_low:100154"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -673140,7 +673139,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:65545"
+      "price_low:66203"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -673455,7 +673454,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:115964"
+      "price_low:117129"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -676166,7 +676165,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147056"
+      "price_low:148533"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -676686,7 +676685,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:82352"
+      "price_low:83179"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -676994,7 +676993,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:168064"
+      "price_low:169752"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -679211,7 +679210,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:100839"
+      "price_low:101851"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -680104,7 +680103,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:151258"
+      "price_low:152777"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -680155,7 +680154,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -681828,59 +681827,6 @@
       "ASPH"
     ],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-22 14:01:06",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Calumet (독일)",
-    "source_url": "https://www.calumet.de/product/leica-elmarit-m-28mm-f2-8-asph/gebraucht/wie-neu/26HAM01425931",
-    "title_raw": "Leica ELMARIT-M 28mm F2.8 Asph.",
-    "price_raw": "€1,725",
-    "currency": "EUR",
-    "image_url": "https://static.calumet.de/1/1/d/4/c/3/d4c3bc92ad64de0626141ae86d1da6d22d364c14_26HAM01425931_1.jpg",
-    "condition_raw": "Calumet: Wie neu",
-    "normalized_name": "leica elmarit-m 28mm f2.8 asph.",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:ELMARIT-M"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Elmarit-M",
-    "model_canonical": "Elmarit-M",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": "28",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -684124,60 +684070,6 @@
       "ASPH"
     ],
     "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Calumet (독일)",
-    "source_url": "https://www.calumet.de/product/leica-noctilux-m-50mm-f0-95-asph/gebraucht/wie-neu/26STR01384972",
-    "title_raw": "Leica NOCTILUX-M 50mm F0.95 Asph.",
-    "price_raw": "€7,549",
-    "currency": "EUR",
-    "image_url": "https://static.calumet.de/1/1/7/a/6/1/7a61cca4dbf20bbbfed1227e1b042f3d8df08e25_26STR01384972_1.jpg",
-    "condition_raw": "Calumet: Wie neu",
-    "normalized_name": "leica noctilux-m 50mm f0.95 asph.",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:NOCTILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Noctilux",
-    "model_canonical": "Noctilux",
-    "variant": [
-      "ASPH",
-      "f0.95"
-    ],
-    "focal_length": "50",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -686656,7 +686548,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:47309"
+      "price_low:47801"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -686712,7 +686604,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:115316"
+      "price_low:116515"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -686916,7 +686808,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:158190"
+      "price_low:159834"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -687395,7 +687287,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:116795"
+      "price_low:118009"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -693479,57 +693371,6 @@
   },
   {
     "source": "Leica Classic (오스트리아)",
-    "source_url": "https://classic.leica-camera.com/en/Leica-Q3-schwarz-lackiert-Version-EU-US-CN-19080/19080SH-5962596",
-    "title_raw": "Leica Q3, schwarz lackiert (Version EU/US/CN) (19080) Body",
-    "price_raw": "€5,200",
-    "currency": "EUR",
-    "image_url": "https://classic.leica-camera.com/media/cd/ae/f8/1792510041/01a159ec8d897e92bc15e11ac246510e.jpg?ts=1792510041",
-    "condition_raw": "Leica Classic: A/B",
-    "normalized_name": "leica q3, schwarz lackiert (version eu/us/cn) (19080) body",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Q"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Q+Body"
-    ],
-    "model_raw": "Q3",
-    "model_canonical": "Q3",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-21 13:59:44",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Classic (오스트리아)",
     "source_url": "https://classic.leica-camera.com/en/Leica-M11-P-20071-metal-gray-paint-finish-like-new-2-years-of-guarantee/35933-10",
     "title_raw": "Leica M11-P 20071 metal gray paint finish - like new 2 years of guarantee Body",
     "price_raw": "€7,550",
@@ -697253,7 +697094,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -697304,7 +697145,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -697406,7 +697247,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -703020,62 +702861,6 @@
     "model_raw": null,
     "model_canonical": null,
     "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-16 11:31:26",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Classic (오스트리아)",
-    "source_url": "https://classic.leica-camera.com/en/Leica-M6-TTL-0.72-black-paint-Millennium-10442/35526-1",
-    "title_raw": "Leica M6 TTL 0.72 black paint Millennium 10442 Body",
-    "price_raw": "€9,800",
-    "currency": "EUR",
-    "image_url": "https://classic.leica-camera.com/media/80/32/97/1744049719/35526_1.jpg?ts=1744049719",
-    "condition_raw": "Leica Classic: A-",
-    "normalized_name": "leica m6 ttl 0.72 black paint millennium 10442 body",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "M_body_number:M3-M11"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:body"
-    ],
-    "label": "M Body",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Body"
-    ],
-    "model_raw": "M6 TTL",
-    "model_canonical": "M6",
-    "variant": [
-      "TTL",
-      "Black Paint",
-      "Black",
-      "0.72"
-    ],
     "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
@@ -737207,57 +736992,6 @@
   },
   {
     "source": "Leica Classic (독일)",
-    "source_url": "https://classic.leica-camera.com/en/Leica-Summaron-M-2.8-35mm-for-the-M3/11106SH-1949935",
-    "title_raw": "Leica Summaron-M 35mm f2.8 for the M3",
-    "price_raw": "€750",
-    "currency": "EUR",
-    "image_url": "https://classic.leica-camera.com/media/67/42/4c/1789818853/01a0b98443b77d6a98c1dd7928d3d864.jpg?ts=1789818853",
-    "condition_raw": "Leica Classic: B/A",
-    "normalized_name": "leica summaron-m 35mm f2.8 for the m3",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMARON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summaron",
-    "model_canonical": "Summaron",
-    "variant": [],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-16 11:31:26",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Classic (독일)",
     "source_url": "https://classic.leica-camera.com/en/Leica-Summaron-M-35mm-2.8/11106SH-2081188",
     "title_raw": "Leica Summaron-M 35mm 2.8",
     "price_raw": "€970",
@@ -740831,59 +740565,6 @@
   },
   {
     "source": "Leica Classic (스위스)",
-    "source_url": "https://classic.leica-camera.com/en/Leica-Summilux-M-35mm-f-1.4-ASPH/11663SH-4319872",
-    "title_raw": "Leica Summilux-M 35mm f1.4 ASPH",
-    "price_raw": "CHF 3,290",
-    "currency": "CHF",
-    "image_url": "https://classic.leica-camera.com/media/83/0c/78/1772210950/019ca000973e7db7b2cdf97a61f7a74d.jpg?ts=1772210950",
-    "condition_raw": "Leica Classic: A/B",
-    "normalized_name": "leica summilux-m 35mm f1.4 asph",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux-M",
-    "model_canonical": "Summilux-M",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-16 11:31:26",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Classic (스위스)",
     "source_url": "https://classic.leica-camera.com/en/Leica-Motor-Screw-Mount-Cameras/SH010-328",
     "title_raw": "Leica-Motor Screw Mount Cameras Accessory",
     "price_raw": "CHF 690",
@@ -741695,7 +741376,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:32019"
+      "price_low:32333"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -741748,7 +741429,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:32019"
+      "price_low:32333"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -745817,57 +745498,6 @@
     "model_canonical": "APO-Summicron",
     "variant": [],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-16 11:31:26",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Classic (스페인)",
-    "source_url": "https://classic.leica-camera.com/en/Summarit-M-90mm-2.5-Kit-UV-Filter-11646/11646SH-4211989",
-    "title_raw": "Leica Summarit M 90mm 2.5 Kit + UV Filter (11646)",
-    "price_raw": "€1,200",
-    "currency": "EUR",
-    "image_url": "https://classic.leica-camera.com/media/5d/cc/e1/1790693230/01a0eda2349d730e9ae06bd04ab761a9.jpg?ts=1790693230",
-    "condition_raw": "Leica Classic: A-",
-    "normalized_name": "leica summarit m 90mm 2.5 kit + uv filter (11646)",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Summarit",
-    "model_canonical": "Summarit",
-    "variant": [],
-    "focal_length": "90",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -750058,59 +749688,6 @@
       "ASPH"
     ],
     "focal_length": "70",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-16 11:31:26",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Classic (이탈리아)",
-    "source_url": "https://classic.leica-camera.com/en/Leica-SL2-Black/10854SH-5556791",
-    "title_raw": "Leica SL2 Black Body",
-    "price_raw": "€2,250",
-    "currency": "EUR",
-    "image_url": "https://classic.leica-camera.com/media/a0/b3/9f/1744120548/81875360a5914ad412cc11ccc3418286.jpeg?ts=1744120548",
-    "condition_raw": "Leica Classic: B",
-    "normalized_name": "leica sl2 black body",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "SL",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "SL_explicit:SL2"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:body"
-    ],
-    "label": "SL Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "SL+Body"
-    ],
-    "model_raw": "SL2",
-    "model_canonical": "SL2",
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -755002,59 +754579,6 @@
   },
   {
     "source": "Leica Classic (미국)",
-    "source_url": "https://classic.leica-camera.com/en/Leica-SUMMILUX-M-1-1.4-50-ASPH.-schwarz-elox./11728SH-4946304",
-    "title_raw": "Leica SUMMILUX-M 50mm f1.4 ASPH., schwarz elox.",
-    "price_raw": "$4,525",
-    "currency": "USD",
-    "image_url": "https://classic.leica-camera.com/media/2c/a5/e9/1766951549/019b6684e4e370e4a51da11a2109f48b.jpg?ts=1766951550",
-    "condition_raw": "Leica Classic: A-",
-    "normalized_name": "leica summilux-m 50mm f1.4 asph., schwarz elox.",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux-M",
-    "model_canonical": "Summilux-M",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-16 11:31:26",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Classic (미국)",
     "source_url": "https://classic.leica-camera.com/en/SUMMILUX-TL-1.4-35-ASPH.-silbern/11085SH-4602001",
     "title_raw": "Leica SUMMILUX-TL 35mm f1.4 ASPH., silbern",
     "price_raw": "$1,250",
@@ -759725,7 +759249,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -759931,7 +759455,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:184871"
+      "price_low:186728"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -760084,7 +759608,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:184871"
+      "price_low:186728"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -760237,7 +759761,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:9244"
+      "price_low:9336"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -760290,7 +759814,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -760392,7 +759916,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73948"
+      "price_low:74691"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -760700,7 +760224,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:55461"
+      "price_low:56018"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -765465,7 +764989,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:161147"
+      "price_low:162822"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -773501,7 +773025,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:190715"
+      "price_low:192697"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -773979,7 +773503,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:87226"
+      "price_low:88133"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -774013,7 +773537,7 @@
     "title_raw": "Leica II (D) Body with Elmar 50mm f3.5",
     "price_raw": "€499",
     "currency": "EUR",
-    "image_url": "https://www.foto-koester.de/media/6c/ce/0c/1791889436/01a134eeee34726eba82b55f5022f91a.jpg",
+    "image_url": "/media/40/4b/7c/1746701738/Bildbutton_Gelgenheiten_2025_500x500px.PNG",
     "condition_raw": "Koester: gut",
     "normalized_name": "leica ii (d) body with elmar 50mm f3.5",
     "normalized_description": "",
@@ -779404,60 +778928,6 @@
     "model_canonical": "M11",
     "variant": [
       "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-21 00:12:02",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "MF Camera (미국)",
-    "source_url": "https://www.mfcamera.com/products/leica-m10-p-rangefinder-camera-body-silver-chrome-20020",
-    "title_raw": "Leica M10-P Silver Chrome",
-    "price_raw": "$5,500",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0574/4830/0608/files/e-27_f9d8234e-135c-44db-a21e-12079d310e28.jpg?v=1781742726",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica m10-p silver chrome",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "M_body_number:M3-M11"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:leica m10"
-    ],
-    "label": "M Body",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Body"
-    ],
-    "model_raw": "M10-P",
-    "model_canonical": "M10-P",
-    "variant": [
-      "Chrome",
-      "Silver"
     ],
     "focal_length": null,
     "accessory_type": null,
@@ -784919,7 +784389,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:171158"
+      "price_low:172891"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -786424,7 +785894,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:99510"
+      "price_low:100518"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -787158,7 +786628,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:131354"
+      "price_low:132684"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -787368,7 +786838,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:112779"
+      "price_low:113920"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -788622,7 +788092,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:99510"
+      "price_low:100518"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -788673,7 +788143,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126047"
+      "price_low:127323"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -788724,7 +788194,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:165851"
+      "price_low:167530"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -789342,7 +788812,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:126047"
+      "price_low:127323"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -792525,7 +791995,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:86563"
+      "price_low:87383"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -792684,7 +792154,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:139560"
+      "price_low:140883"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -810277,6 +809747,57 @@
   },
   {
     "source": "무한카메라",
+    "source_url": "https://muhan8.co.kr/product/leitz-xenon-50mm-f15-taylor-hobson-각인/2206/category/106/display/1/",
+    "title_raw": "Leica Xenon 50mm f1.5 Taylor-Hobson 각인",
+    "price_raw": "2,500,000원",
+    "currency": "KRW",
+    "image_url": "https://muhan8.co.kr/web/product/big/202610/ccea036a154aee6d993a5c824fbb0da4.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "leica xenon 50mm f1.5 taylor-hobson 각인",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-29 14:58:53",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "무한카메라",
     "source_url": "https://muhan8.co.kr/product/leica-35mm-f14-summilux-2nd-실버도금/2205/category/106/display/1/",
     "title_raw": "Leica 35mm f1.4 Summilux 2nd (Silver도금)",
     "price_raw": "4,300,000원",
@@ -810438,7 +809959,7 @@
     "source": "무한카메라",
     "source_url": "https://muhan8.co.kr/product/leica-m11-p-metal-gray-paint-finish-구매-영수증있음/2192/category/105/display/1/",
     "title_raw": "Leica M11-P Metal Gray Paint Finish / 구매 영수증있음",
-    "price_raw": "15,900,000원",
+    "price_raw": "15,500,000원",
     "currency": "KRW",
     "image_url": "https://muhan8.co.kr/web/product/big/202610/0f331f1779f061f02bcd4d4664f48088.jpg",
     "condition_raw": "정보없음",
@@ -843436,7 +842957,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:140449"
+      "price_low:141909"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -846163,7 +845684,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:131579"
+      "price_low:132946"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -849450,7 +848971,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -854141,7 +853662,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:138653"
+      "price_low:140046"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -857031,7 +856552,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:157140"
+      "price_low:158718"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -857137,7 +856658,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:129410"
+      "price_low:130709"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -857818,7 +857339,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:184871"
+      "price_low:186728"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -858026,7 +857547,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:166384"
+      "price_low:168055"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -859320,7 +858841,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:166384"
+      "price_low:168055"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -860044,7 +859565,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73948"
+      "price_low:74691"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -860707,7 +860228,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:129410"
+      "price_low:130709"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -861282,7 +860803,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:55461"
+      "price_low:56018"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -861384,7 +860905,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:158821"
+      "price_low:160416"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -861953,7 +861474,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:138653"
+      "price_low:140046"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -862106,7 +861627,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:184871"
+      "price_low:186728"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -862363,7 +861884,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:166384"
+      "price_low:168055"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -862465,7 +861986,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -862516,7 +862037,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:138653"
+      "price_low:140046"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -863340,7 +862861,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92435"
+      "price_low:93364"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -863550,7 +863071,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:184871"
+      "price_low:186728"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -864733,7 +864254,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:101679"
+      "price_low:102700"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -865153,7 +864674,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:138653"
+      "price_low:140046"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -865463,7 +864984,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:55461"
+      "price_low:56018"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -865720,7 +865241,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:83192"
+      "price_low:84027"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -865873,7 +865394,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:120166"
+      "price_low:121373"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -865924,7 +865445,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:138653"
+      "price_low:140046"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -866030,7 +865551,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:120166"
+      "price_low:121373"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -866081,7 +865602,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:138653"
+      "price_low:140046"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -866183,7 +865704,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36974"
+      "price_low:37346"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -866901,7 +866422,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:129410"
+      "price_low:130709"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -876770,7 +876291,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:129410"
+      "price_low:130709"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -877335,7 +876856,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:129410"
+      "price_low:130709"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -878000,7 +877521,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73948"
+      "price_low:74691"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -880041,7 +879562,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:190715"
+      "price_low:192697"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -881018,7 +880539,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:16263"
+      "price_low:16432"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -887849,7 +887370,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147391"
+      "price_low:148713"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -888225,7 +887746,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:98722"
+      "price_low:99607"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -888625,108 +888146,6 @@
   },
   {
     "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/9c11a8188d4f428b9b3a30542617cd3d",
-    "title_raw": "Leica 13086 HOOBE Yellow Filter 1 E36 accessory",
-    "price_raw": "€59",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/6c/3c/2a/1789157316/312065.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica 13086 hoobe yellow filter 1 e36 accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:filter"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-29 04:39:24",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/31e32935c00d43aa8a417b3139e7df78",
-    "title_raw": "Leica 12592 A58 Lens Hood Tri-Elmar accessory",
-    "price_raw": "€389",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/d9/d2/37/1775858849/311118.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica 12592 a58 lens hood tri-elmar accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.98,
-    "category_reason": [
-      "primary_acc_rx:lens_hood_primary"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "Tri-Elmar",
-    "model_canonical": "Tri-Elmar",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "hood",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-29 04:39:24",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/detail/f22e0fee44da4d788246efc6ed47b442",
     "title_raw": "Leica GFOOH R.h. Dark Red Filter for SM 50mm Summit accessory",
     "price_raw": "€119",
@@ -889082,110 +888501,6 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-26 01:33:10",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/dafccc358ebb42218b8709a1277801ff",
-    "title_raw": "Leica GFOOH R.h. Dark Red Filter for SM 50mm Summit accessory",
-    "price_raw": "€119",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/b3/15/42/1781923034/311318.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica gfooh r.h. dark red filter for sm 50mm summit accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:filter"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [
-      "R"
-    ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 01:33:10",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/leitz-leica-if-mit-svhwarzen-kontaktzahlen.html",
-    "title_raw": "Leica If with svhwarzen Kontaktzahlen",
-    "price_raw": "€369",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/07/8f/1f/1790367748/312161.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica if with svhwarzen kontaktzahlen",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "L_explicit:LEICA IF"
-    ],
-    "category": "Body",
-    "category_confidence": 0.93,
-    "category_reason": [
-      "barnack_body_kw:leica if"
-    ],
-    "label": "L Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Body"
-    ],
-    "model_raw": "If",
-    "model_canonical": "If",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -891393,57 +890708,6 @@
     "category_confidence": 0.98,
     "category_reason": [
       "primary_acc_rx:lens_hood_primary"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "hood",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/86eab35f544c41d5b7fec61cf9b18c26",
-    "title_raw": "Leica Lens Hood 12564 K accessory",
-    "price_raw": "€69",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/83/94/ec/1775858845/311001.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica lens hood 12564 k accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.99,
-    "category_reason": [
-      "acc_code:12564"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -894918,57 +894182,6 @@
     "compatible_systems": [
       "R"
     ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/leitz-leica-iiif-rote-kontaktzahlen-1952-body.html",
-    "title_raw": "Leica IIIf rote Kontaktzahlen 1952 Body",
-    "price_raw": "€389",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/e3/55/6c/1790367745/312157.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica iiif rote kontaktzahlen 1952 body",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "L_barnack_body:LEICA I/II/III"
-    ],
-    "category": "Body",
-    "category_confidence": 0.93,
-    "category_reason": [
-      "barnack_body_kw:leica iiif"
-    ],
-    "label": "L Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Body"
-    ],
-    "model_raw": "IIIf",
-    "model_canonical": "IIIf",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -899257,59 +898470,6 @@
   },
   {
     "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/1c32307cbfca40a6b1c62bafd8f46c71",
-    "title_raw": "Leica Meter MR black accessory",
-    "price_raw": "€239",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/3f/14/2f/1784354159/311794.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica meter mr black accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:accessory"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/leica-macro-adapter-r-1-1-fuer-60mm-f-2.8-elmarit-r-14198.html",
     "title_raw": "Leica Macro Adapter R 1:1 for 60mm f2.8 Elmarit-R 14198 accessory",
     "price_raw": "€79",
@@ -901738,57 +900898,6 @@
     "variant": [],
     "focal_length": null,
     "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/leitz-leica-grau-luftwaffen-eigentum-summitar-5cm-1-2-gray.html",
-    "title_raw": "Leica grey Luftwaffen-Eigentum Summitar 50mm f2.0 gray",
-    "price_raw": "€3,869",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/3e/d1/14/1781302827/311598.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica grey luftwaffen-eigentum summitar 50mm f2.0 gray",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "L_explicit:SUMMITAR"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "L Lens",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Lens"
-    ],
-    "model_raw": "Summitar",
-    "model_canonical": "Summitar",
-    "variant": [],
-    "focal_length": "50",
-    "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -904625,57 +903734,6 @@
     "model_canonical": "Summicron",
     "variant": [],
     "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/leitz-focotar-4.6-6cm-dqoor.html",
-    "title_raw": "Leica Focotar 60mm f4.6 DQOOR accessory",
-    "price_raw": "€99",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/51/f9/94/1685154059/305792.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica focotar 60mm f4.6 dqoor accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:accessory"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "Q",
-    "model_canonical": "Q",
-    "variant": [],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -907995,57 +907053,6 @@
   },
   {
     "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summicron-r-12-90-2-cam-lens/",
-    "title_raw": "Leica Leitz Summicron-R 1:2 / 90 2-cam lens",
-    "price_raw": "€600",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2022/11/29594.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica leitz summicron-r 1:2 / 90 2-cam lens",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:SUMMICRON-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Summicron-R",
-    "model_canonical": "Summicron-R",
-    "variant": [],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 22:11:25",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
     "source_url": "https://fotohandeldelfshaven.nl/product/leica-elmarit-12-8-90mm-black/",
     "title_raw": "Leica Elmarit 90mm f2.8 M-mount lens black",
     "price_raw": "€280",
@@ -908337,7 +907344,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:118273"
+      "price_low:119502"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -908631,375 +907638,6 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-28 22:11:25",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summilux-35mm-f-1-4-canada-v2/",
-    "title_raw": "Leica Leitz Summilux 35mm f1.4 Canada V2",
-    "price_raw": "€2,250",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2022/10/28345.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica leitz summilux 35mm f1.4 canada v2",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux",
-    "model_canonical": "Summilux-M",
-    "variant": [
-      "v2"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summilux-35mm-f-1-4-v2-m/",
-    "title_raw": "Leica Leitz Summilux 35mm f/1.4 V2 M",
-    "price_raw": "€2,500",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2024/02/51522.jpg",
-    "condition_raw": "설명: good condition",
-    "normalized_name": "leica leitz summilux 35mm f/1.4 v2 m",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux",
-    "model_canonical": "Summilux-M",
-    "variant": [
-      "v2"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-11248-vario-elmar-r-35-70mm-f-3-5-e67-boxed/",
-    "title_raw": "Leica Leitz 11248 Vario-Elmar-R 35-70mm f/3.5 E67, Boxed",
-    "price_raw": "€400",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/04/80642.jpg",
-    "condition_raw": "설명: light wear",
-    "normalized_name": "leica leitz 11248 vario-elmar-r 35-70mm f/3.5 e67, boxed",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:ELMAR-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Vario-Elmar-R",
-    "model_canonical": "Vario-Elmar-R",
-    "variant": [],
-    "focal_length": "35-70",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [
-      "box"
-    ],
-    "flag_confidence": 0.9,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-3-5cm-f-3-5-lens-in-nickel-snail-cam/",
-    "title_raw": "Leica Leitz Elmar 35mm f3.5 lens in Nickel, Snail cam",
-    "price_raw": "€1,200",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2024/09/59004.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica leitz elmar 35mm f3.5 lens in nickel, snail cam",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Elmar",
-    "model_canonical": "Elmar",
-    "variant": [],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summicron-2-35-v1-in-screw-mount-ltm/",
-    "title_raw": "Leica Leitz Summicron 2 / 35 V1 in Screw mount LTM",
-    "price_raw": "€3,600",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/01/77431.jpg",
-    "condition_raw": "설명: good condition",
-    "normalized_name": "leica leitz summicron 2 / 35 v1 in screw mount ltm",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "L_ltm_l39:LTM/L39/M39"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "L Lens",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Lens"
-    ],
-    "model_raw": "Summicron",
-    "model_canonical": "Summicron",
-    "variant": [
-      "v1"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-summicron-2-35mm-8-elements/",
-    "title_raw": "Leica Summicron 2 / 35mm 8-elements",
-    "price_raw": "€2,650",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/03/79520.jpg",
-    "condition_raw": "설명: excellent",
-    "normalized_name": "leica summicron 2 / 35mm 8-elements",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "8-element"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-wetzlar-summicron-12-35mm-v2/",
-    "title_raw": "Leica Leitz Wetzlar Summicron 1:2 / 35mm V2",
-    "price_raw": "€1,350",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/10/84868.jpg",
-    "condition_raw": "설명: good condition",
-    "normalized_name": "leica leitz wetzlar summicron 1:2 / 35mm v2",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "v2"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -909352,163 +907990,6 @@
       "Rigid"
     ],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-elmarit-90mm-f-2-8-m-black/",
-    "title_raw": "Leica Elmarit 90mm f2.8 M-mount Black",
-    "price_raw": "€300",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2021/07/20694.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica elmarit 90mm f2.8 m-mount black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.9,
-    "mount_reason": [
-      "M_mount_explicit:M mount"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Elmarit",
-    "model_canonical": "Elmarit-M",
-    "variant": [
-      "Black"
-    ],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-11123-summicron-90mm-f-2-m-chrome/",
-    "title_raw": "Leica Leitz 11123 Summicron 90mm f/2 M Chrome",
-    "price_raw": "€600",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/06/82480.jpg",
-    "condition_raw": "설명: light wear",
-    "normalized_name": "leica leitz 11123 summicron 90mm f/2 m chrome",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "Chrome"
-    ],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-27 14:20:16",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-9cm-14/",
-    "title_raw": "Leica Leitz Elmar 90mm 1:4",
-    "price_raw": "€150",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/09/84183.jpg",
-    "condition_raw": "설명: brassing",
-    "normalized_name": "leica leitz elmar 90mm 1:4",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Elmar",
-    "model_canonical": "Elmar",
-    "variant": [],
-    "focal_length": "90",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -911159,57 +909640,6 @@
   },
   {
     "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-super-angulon-21mm-f-4-21mm-viewfinder/",
-    "title_raw": "Leica Super-Angulon 21mm f4 + 21mm viewfinder",
-    "price_raw": "€1,600",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2023/01/31489.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica super-angulon 21mm f4 + 21mm viewfinder",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUPER-ANGULON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Super-Angulon",
-    "model_canonical": "Super-Angulon",
-    "variant": [],
-    "focal_length": "21",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
     "source_url": "https://fotohandeldelfshaven.nl/product/leica-11898-elmarit-m-24mm-f-2-8-asph-silver-chrome-hood/",
     "title_raw": "Leica 11898 Elmarit-M 24mm f/2.8 ASPH Silver Chrome with Hood",
     "price_raw": "€2,350",
@@ -911875,165 +910305,6 @@
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summaron-35mm-f-2-8-m-m2/",
-    "title_raw": "Leica Leitz Summaron 35mm f/2.8 M M2",
-    "price_raw": "€1,150",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2024/01/49781.jpg",
-    "condition_raw": "설명: good condition",
-    "normalized_name": "leica leitz summaron 35mm f/2.8 m m2",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMARON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summaron",
-    "model_canonical": "Summaron",
-    "variant": [],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-3-5-3-5cm-in-chrome/",
-    "title_raw": "Leica Leitz Elmar 3.5 / 35mm in chrome",
-    "price_raw": "€350",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/02/78750.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica leitz elmar 3.5 / 35mm in chrome",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Elmar",
-    "model_canonical": "Elmar",
-    "variant": [
-      "Chrome"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summicron-r-35mm-f-2-2-cam-lens-hood/",
-    "title_raw": "Leica Leitz Summicron-R 35mm f/2 2-cam lens with hood",
-    "price_raw": "€500",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/09/84565.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica leitz summicron-r 35mm f/2 2-cam lens with hood",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:SUMMICRON-R"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:hood"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "Summicron-R",
-    "model_canonical": "Summicron-R",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "hood",
-    "compatible_mounts": [
-      "R"
-    ],
-    "compatible_systems": [
-      "R"
-    ],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -913158,108 +911429,6 @@
     "compatible_systems": [
       "R"
     ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-elmar-m-50mm-f-2-8-modern-version/",
-    "title_raw": "Leica Elmar-M 50mm f2.8 modern version",
-    "price_raw": "€700",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/01/77281.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica elmar-m 50mm f2.8 modern version",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Elmar-M",
-    "model_canonical": "Elmar-M",
-    "variant": [],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summicron-r-12-50mm-1-cam-lens/",
-    "title_raw": "Leica Leitz Summicron-R 1:2 / 50mm 1-cam lens",
-    "price_raw": "€250",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/05/81800.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica leitz summicron-r 1:2 / 50mm 1-cam lens",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:SUMMICRON-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Summicron-R",
-    "model_canonical": "Summicron-R",
-    "variant": [],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -914958,57 +913127,6 @@
   },
   {
     "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-14-90mm-1940-univ-repro-mount/",
-    "title_raw": "Leica Leitz Elmar 1:4 / 90mm, 1940, univ repro mount",
-    "price_raw": "€120",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2020/12/12341.jpg",
-    "condition_raw": "설명: good condition",
-    "normalized_name": "leica leitz elmar 1:4 / 90mm, 1940, univ repro mount",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Elmar",
-    "model_canonical": "Elmar",
-    "variant": [],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
     "source_url": "https://fotohandeldelfshaven.nl/product/leica-elmar-f9cm-14-ltm-lens-in-visoflex-focusing-tube/",
     "title_raw": "Leica Elmar f=90mm 1:4 LTM lens in Visoflex focusing tube",
     "price_raw": "€40",
@@ -915051,261 +913169,6 @@
     "compatible_systems": [
       "M"
     ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-elmarit-r-90mm-f-2-8-2-cam-version/",
-    "title_raw": "Leica Elmarit-R 90mm f2.8 2-cam version",
-    "price_raw": "€200",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2023/09/43312.jpg",
-    "condition_raw": "설명: very good",
-    "normalized_name": "leica elmarit-r 90mm f2.8 2-cam version",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:ELMARIT-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Elmarit-R",
-    "model_canonical": "Elmarit-R",
-    "variant": [],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-9cm-f-4-m-mount-lens/",
-    "title_raw": "Leica Leitz Elmar 90mm f4 M-mount lens",
-    "price_raw": "€100",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2024/10/61670.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica leitz elmar 90mm f4 m-mount lens",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.9,
-    "mount_reason": [
-      "M_mount_explicit:M mount"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Elmar",
-    "model_canonical": "Elmar",
-    "variant": [],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmarit-r-90mm-f2-8-e55-r-only/",
-    "title_raw": "Leica Leitz Elmarit-R 90mm f2.8 E55 R-only",
-    "price_raw": "€500",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2021/02/17772.jpg",
-    "condition_raw": "설명: light wear",
-    "normalized_name": "leica leitz elmarit-r 90mm f2.8 e55 r-only",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:ELMARIT-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Elmarit-R",
-    "model_canonical": "Elmarit-R",
-    "variant": [],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-c-90mm-f-4-leica-m/",
-    "title_raw": "Leica Leitz Elmar-C 90mm f/4 Leica M",
-    "price_raw": "€220",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/09/84044.jpg",
-    "condition_raw": "설명: excellent",
-    "normalized_name": "leica leitz elmar-c 90mm f/4 leica m",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "M_leica_m_prefix:LEICA M"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Elmar",
-    "model_canonical": "Elmar",
-    "variant": [],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmarit-90mm-f-2-8-lens-head-in-16464k-focusing-mount-for-visofex/",
-    "title_raw": "Leica Leitz Elmarit 90mm f/2.8 lens head in 16464K focusing mount for visofex",
-    "price_raw": "€90",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/04/79871.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica leitz elmarit 90mm f/2.8 lens head in 16464k focusing mount for visofex",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Elmarit",
-    "model_canonical": "Elmarit",
-    "variant": [],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -915720,57 +913583,6 @@
     "compatible_systems": [
       "M"
     ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-hektor-135mm-f-4-5-m/",
-    "title_raw": "Leica Leitz Hektor 135mm f/4.5 M",
-    "price_raw": "€90",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2024/04/53852.jpg",
-    "condition_raw": "설명: excellent",
-    "normalized_name": "leica leitz hektor 135mm f/4.5 m",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.82,
-    "mount_reason": [
-      "M_trailing:trailing M"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Hektor",
-    "model_canonical": "Hektor",
-    "variant": [],
-    "focal_length": "135",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -918100,7 +915912,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59137"
+      "price_low:59751"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -918221,110 +916033,6 @@
     "model_canonical": "Summicron-M",
     "variant": [],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-sf-24d-flash-boxed/",
-    "title_raw": "Leica SF 24D flash, boxed",
-    "price_raw": "€400",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/10/84920.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica sf 24d flash, boxed",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:flash"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "flash",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [
-      "box"
-    ],
-    "flag_confidence": 0.9,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-isboo-14098-apadter-for-ltm-lens-to-m-body-90mm/",
-    "title_raw": "Leica Leitz ISBOO / 14098 apadter for LTM lens to M body / 90mm",
-    "price_raw": "€50",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/10/85300.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica leitz isboo / 14098 apadter for ltm lens to m body / 90mm",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "L_ltm_l39:LTM/L39/M39"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:body"
-    ],
-    "label": "L Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Body"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -918991,7 +916699,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73921"
+      "price_low:74689"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -919152,7 +916860,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59137"
+      "price_low:59751"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -919516,7 +917224,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:177410"
+      "price_low:179253"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -920369,108 +918077,6 @@
     "variant": [],
     "focal_length": null,
     "accessory_type": "finder",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-voola-ring-for-aperture-control/",
-    "title_raw": "Leica Leitz VOOLA ring for aperture control",
-    "price_raw": "€60",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/03/79376.jpg",
-    "condition_raw": "설명: Good condition",
-    "normalized_name": "leica leitz voola ring for aperture control",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.75,
-    "category_reason": [
-      "price_low:88705"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 23:51:56",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Fotohandel Delfshaven (네덜란드)",
-    "source_url": "https://fotohandeldelfshaven.nl/product/leica-leitz-oztno-14088-soft-shutter-release/",
-    "title_raw": "Leica Leitz OZTNO / 14088 soft shutter release",
-    "price_raw": "€190",
-    "currency": "EUR",
-    "image_url": "https://fotohandeldelfshaven.b-cdn.net/wp-content/uploads/2026/03/79304.jpg",
-    "condition_raw": "설명: good",
-    "normalized_name": "leica leitz oztno / 14088 soft shutter release",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.6,
-    "category_reason": [
-      "default_lens"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -921443,7 +919049,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:36960"
+      "price_low:37344"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -921710,7 +919316,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:97575"
+      "price_low:98589"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -922937,7 +920543,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -922988,7 +920594,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:118273"
+      "price_low:119502"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -923673,7 +921279,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73921"
+      "price_low:74689"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -924148,7 +921754,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:118273"
+      "price_low:119502"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -925607,7 +923213,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:88705"
+      "price_low:89627"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -926343,7 +923949,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:88705"
+      "price_low:89627"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -930534,7 +928140,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:190715"
+      "price_low:192697"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -930587,7 +928193,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:175931"
+      "price_low:177760"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -931214,7 +928820,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:146363"
+      "price_low:147884"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -931844,7 +929450,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:131579"
+      "price_low:132946"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -934113,7 +931719,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:98920"
+      "price_low:99807"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -934166,7 +931772,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:79136"
+      "price_low:79846"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -935102,7 +932708,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:69244"
+      "price_low:69865"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -936184,7 +933790,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:itdoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -936235,7 +933841,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59352"
+      "price_low:59884"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -939355,7 +936961,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:39568"
+      "price_low:39923"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -939463,7 +937069,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59352"
+      "price_low:59884"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -939618,7 +937224,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:128596"
+      "price_low:129749"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -941079,7 +938685,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:79136"
+      "price_low:79846"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -943971,7 +941577,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:125665"
+      "price_low:126971"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -944183,7 +941789,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:103489"
+      "price_low:104565"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -946185,7 +943791,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:192194"
+      "price_low:194191"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -946553,7 +944159,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73921"
+      "price_low:74689"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -949612,7 +947218,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:133057"
+      "price_low:134440"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -949926,7 +947532,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -950087,7 +947693,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73921"
+      "price_low:74689"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -950140,7 +947746,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:73921"
+      "price_low:74689"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -951751,7 +949357,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:192194"
+      "price_low:194191"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -953753,7 +951359,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -953804,7 +951410,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:147841"
+      "price_low:149378"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -953910,7 +951516,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:88705"
+      "price_low:89627"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -954655,7 +952261,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:132681"
+      "price_low:134024"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -954975,7 +952581,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:119413"
+      "price_low:120622"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -955936,7 +953542,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:19902"
+      "price_low:20104"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -956203,7 +953809,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:159217"
+      "price_low:160829"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -956733,7 +954339,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:99510"
+      "price_low:100518"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -957010,59 +954616,6 @@
     "variant": [],
     "focal_length": null,
     "accessory_type": "case",
-    "compatible_mounts": [
-      "M"
-    ],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Cardinal Camera Used (미국)",
-    "source_url": "https://cardinalcameraused.com/products/leica-genuine-original-m3-m2-camera-leather-neck-strap-2",
-    "title_raw": "Leica Genuine Original M3 M2 Leather Neck Strap",
-    "price_raw": "$125",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0602/2915/7103/files/CCCA6EA3-3527-4B35-9E81-80AD37C8998D.jpg?v=1789343194",
-    "condition_raw": "Cardinal: very good",
-    "normalized_name": "leica genuine original m3 m2 leather neck strap",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "M_body_number:M3-M11"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:neck strap"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": "M3",
-    "model_canonical": "M3",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "strap",
     "compatible_mounts": [
       "M"
     ],
@@ -957420,7 +954973,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:152583"
+      "price_low:154128"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -957577,7 +955130,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:92876"
+      "price_low:93817"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -959587,7 +957140,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:132681"
+      "price_low:134024"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -960328,7 +957881,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:39804"
+      "price_low:40207"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -960381,7 +957934,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:39804"
+      "price_low:40207"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -964436,7 +961989,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:39804"
+      "price_low:40207"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -966077,7 +963630,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:59706"
+      "price_low:60311"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -966132,7 +963685,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:66340"
+      "price_low:67012"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -966612,7 +964165,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:9288"
+      "price_low:9382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -967096,7 +964649,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:10614"
+      "price_low:10722"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -967312,7 +964865,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:86242"
+      "price_low:87116"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -968928,7 +966481,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:11941"
+      "price_low:12062"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -969037,7 +966590,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:9288"
+      "price_low:9382"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -973439,57 +970992,6 @@
   },
   {
     "source": "Leica Store Amsterdam (네덜란드)",
-    "source_url": "https://www.leicastoreamsterdam.nl/leica-q2-used-s-n-5380264.html",
-    "title_raw": "Leica Q2",
-    "price_raw": "€3,750",
-    "currency": "EUR",
-    "image_url": "https://cdn.webshopapp.com/shops/241792/files/501521744/file.jpg",
-    "condition_raw": "LeicaStoreAmsterdam: small",
-    "normalized_name": "leica q2",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Q"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Q+Body"
-    ],
-    "model_raw": "Q2",
-    "model_canonical": "Q2",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store Amsterdam (네덜란드)",
     "source_url": "https://www.leicastoreamsterdam.nl/eica-q3-43-used-s-n-6178269-163434628.html",
     "title_raw": "Leica Q3 43",
     "price_raw": "€5,990",
@@ -975322,57 +972824,6 @@
     "model_canonical": "Summicron-SL",
     "variant": [],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store Amsterdam (네덜란드)",
-    "source_url": "https://www.leicastoreamsterdam.nl/leica-vario-elmarit-28-24-70-used-s-n-4768743.html",
-    "title_raw": "Leica Vario-Elmarit-SL 24-70mm f2.8",
-    "price_raw": "€2,350",
-    "currency": "EUR",
-    "image_url": "https://cdn.webshopapp.com/shops/241792/files/501517117/file.jpg",
-    "condition_raw": "LeicaStoreAmsterdam: minimal",
-    "normalized_name": "leica vario-elmarit-sl 24-70mm f2.8",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "S",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "S_kw:ELMARIT-S"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "S Lens",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "S+Lens"
-    ],
-    "model_raw": "Vario-Elmarit-SL",
-    "model_canonical": "Vario-Elmarit-SL",
-    "variant": [],
-    "focal_length": "24-70",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -1005612,7 +1003063,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:88705"
+      "price_low:89627"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -1005771,7 +1003222,7 @@
     "category": "Accessory",
     "category_confidence": 0.75,
     "category_reason": [
-      "price_low:22176"
+      "price_low:22407"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
