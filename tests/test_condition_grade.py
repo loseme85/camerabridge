@@ -389,3 +389,12 @@ def test_konstanz_condition_grades():
     assert grade_of(site, KONSTANZ_PREFIX + "gut", "Leica M4 silver Body")[0] == "B"
     assert grade_of(site, KONSTANZ_PREFIX + "gebraucht", "Leica M3 silver double stroke Body")[0] == "C"
     assert grade_of(site, KONSTANZ_PREFIX + "Vorführware", "Leica M11-P black Body")[0] == "S"
+
+
+def test_ms_materiale_grades():
+    from condition_grade import MS_PREFIX
+    site = "M&S Materiale Fotografico (이탈리아)"
+    assert grade_of(site, MS_PREFIX + "A-", "Leica Summilux-M 35mm f1.4 ASPH.")[0] == "A"
+    assert grade_of(site, MS_PREFIX + "B+", "Leica M5 Black")[0] == "A"
+    assert grade_of(site, MS_PREFIX + "B", "Leica Summicron 50mm f2")[0] == "B"
+    assert grade_of(site, MS_PREFIX + "B-", "Leica Elmarit-M 90mm f2.8")[0] == "B"

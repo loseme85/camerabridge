@@ -6567,6 +6567,85 @@ def _sabatini_name(title):
     return t
 
 
+def crawl_msmateriale():
+    """M&S Materiale Fotografico (이탈리아, 로마) - 라이카 중고 분류 6곳(정적 HTML, 쪽 넘김 없이 한 화면에 전부, 약 220개)의 카드에
+    이름·가격·사진·등급('Condizioni: B+'). 팔린 것은 'Venduto' 띠를 달고 목록에 남아 품절로 담음. 가격 EUR.
+    매장의 액세서리 분류에도 렌즈·바디가 섞여 있어 분류는 이름으로 (crawl_all 끝에서 어차피 다시 정함)"""
+    import html as _html
+    import requests
+    from condition_grade import MS_PREFIX
+    base = "https://www.msmaterialefotografico.it/product-category/"
+    cats = ["fotocamere-leica-m", "obiettivi-leica-m-usati", "fotocamere-leica-r", "obiettivi-leica-r", "Leica-tl",
+            "accessori-leica-usati"]
+    site = "M&S Materiale Fotografico (이탈리아)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 M&S Materiale Fotografico 크롤링 시작")
+    results, seen = [], set()
+    for cat_slug in cats:
+        try:
+            resp = sess.get(base + cat_slug + "/", timeout=60)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"M&S {cat_slug} 못 읽음: {e}")  # 빠진 분류가 판매완료로 바뀌지 않게
+        cards = re.findall(r'<div class="al_archive product-(\d+)[^"]*">(.*?)</a>\s*</div>', resp.text, re.S)
+        print(f"    └─ {cat_slug} {len(cards)}개")
+        for pid, card in cards:
+            if pid in seen:
+                continue
+            seen.add(pid)
+            link = re.search(r'<a href="([^"]+)"', card)
+            title = re.search(r'<h3 class="product-name[^"]*">(.*?)</h3>', card, re.S)
+            if not link or not title:
+                continue
+            title = _html.unescape(re.sub(r"<[^>]+>", "", title.group(1))).strip()
+            if re.search(r"panasonic|voigtl|zeiss|minolta|sigma|tamron|canon|nikon|angenieux|schneider|xenogon", title, re.I):
+                continue
+            name = re.sub(r"\b(?:obiettivo|fotocamera|corpo macchina|macchina fotografica)\s+", "", title, flags=re.I)
+            name = re.sub(r"\s*\((?:leggere|leggi|vedi)(?: bene)? (?:la )?descrizione\)|\s+leggere descrizione$|\s*\(come nuov[ao]\)",
+                          "", name, flags=re.I)
+            name = re.sub(r"\s+[–-]\s+(SL|TL|[MRSPC])\b", r"-\1", name)  # 'Summilux – M' → 'Summilux-M'
+            name = re.sub(r"\b(APO|Super)\s*[–-]\s*", r"\1-", name)       # 'APO – Summicron' · 'Super- Angulon'
+            name = re.sub(r"^(Leica|Leitz)[- ](SL|TL|R|M)\s+((?:APO-|Vario-|Super-|Tele-)?(?:Summilux|Summicron|Summarit|Elmarit|Elmar|"
+                          r"Telyt|Noctilux|Summaron|Angulon))\b(?!-)", r"\1 \3-\2", name, flags=re.I)  # 'Leica R Summilux' → 'Leica Summilux-R'
+            name = re.sub(r"\b(Angulon|Summilux|Summicron|Elmarit|Elmar|Telyt)\s+(R|M)\b", r"\1-\2", name)  # 'Super-Angulon R'
+            for it, en in (("titanio", "Titanium"), ("visore", "viewer"), ("adattatore", "adapter"), ("anello", "ring"),
+                           ("lente di correzione diottrica", "diopter correction lens"), ("nero", "black"), ("cromato", "chrome")):
+                name = re.sub(rf"\b{it}\b", en, name, flags=re.I)
+            name = _sabatini_name(name)
+            if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            grade = re.search(r'Condizioni:</span>\s*<span class="attribute-value-listing">([^<]*)</span>', card)
+            grade = re.sub(r"\s+", "", grade.group(1)) if grade else ""
+            sold = "mes-ribbon-sold" in card or grade.lower() == "venduto"
+            pm = re.search(r'product-price[^"]*">([\d.]+)(?:,\d+)?\s*€', card)
+            price = f"€{int(pm.group(1).replace('.', '')):,}" if pm else "문의요망"
+            img = re.search(r'<img[^>]+src="([^"]+)"', card)
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": MS_PREFIX + grade if grade and not sold else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link.group(1),
+                "품절": sold,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        time.sleep(1)
+    if not results:
+        raise RuntimeError("M&S 목록이 비어 있음")
+    print(f"  ✅ M&S Materiale Fotografico 완료: {len(results)}개")
+    return results
+
+
 def crawl_sabatini():
     """Sabatini Fotografia (이탈리아, 로마) - 중고 카메라·렌즈 WooCommerce 상품 API(Store API). 중고 분류 3곳(obiettivi-usati 240·
     macchine-fotografiche-usate 371·accessori-usati 184)에서 'leica' 검색, 100개씩. Panasonic Leica DG·Voigtländer·Techart 등
@@ -7561,6 +7640,7 @@ def crawl_all():
         ("KOMEHYO (일본)", lambda: ce.wrap_full_run("KOMEHYO (일본)", crawl_komehyo)),
         ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
+        ("M&S Materiale Fotografico (이탈리아)", lambda: ce.wrap_full_run("M&S Materiale Fotografico (이탈리아)", crawl_msmateriale)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
