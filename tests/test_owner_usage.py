@@ -39,3 +39,12 @@ def test_render_counts_visits_by_country():
                {"sid": "z9y8x7w6", "part": 1, "created_at": "2026-10-29T11:00:00+09:00", "searches": [{"q": "m3"}], "clicks": []}]
     page = ou.render(entries, [], 1, False)
     assert "나라별 방문" in page and "🇯🇵 일본" in page and "기록 전" in page
+
+
+def test_model_page_visits_show_source_and_landing():
+    from api import owner_usage as ou
+    landing = "/?utm_source=model_page&utm_content=m6"
+    entries = [{"sid": "m0d3lp4g", "part": 1, "created_at": "2026-10-29T19:00:00+09:00", "referrer": None, "landing": landing,
+                "searches": [{"q": "m6"}], "clicks": []}]
+    page = ou.render(entries, [], 1, False)
+    assert "카메라브릿지 모델 페이지" in page and "utm_content=m6" in page
