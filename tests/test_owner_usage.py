@@ -31,3 +31,11 @@ def test_render_escapes_queries_and_names_referrers():
     page = owner_usage.render(ENTRIES, [{"created_at": "2026-10-05T12:00:00+09:00", "message": "<b>hi</b>"}], 7, False)
     assert "<script>x</script>" not in page and "&lt;script&gt;" in page
     assert "레딧" in page and "결과 없음" in page and "&lt;b&gt;hi" in page
+
+
+def test_render_counts_visits_by_country():
+    from api import owner_usage as ou
+    entries = [{"sid": "a1b2c3d4", "part": 1, "created_at": "2026-10-29T10:00:00+09:00", "country": "JP", "searches": [{"q": "m6"}], "clicks": []},
+               {"sid": "z9y8x7w6", "part": 1, "created_at": "2026-10-29T11:00:00+09:00", "searches": [{"q": "m3"}], "clicks": []}]
+    page = ou.render(entries, [], 1, False)
+    assert "나라별 방문" in page and "🇯🇵 일본" in page and "기록 전" in page

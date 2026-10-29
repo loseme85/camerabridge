@@ -1,7 +1,7 @@
 """사용 기록: 방문 한 번에 한 묶음(검색어·고른 모델·결과 수·판매처 클릭) → 비공개 Vercel Blob.
 
 저장 위치: usage/YYYY-MM-DD/HHMMSS-<세션>-<n>.json (비공개, 저장소에는 안 남김)
-남기지 않는 것: IP, 이메일, 쿠키. 세션 ID는 브라우저 탭마다 새로 만드는 무작위 값.
+남기는 나라: Vercel이 붙여 주는 접속 나라 코드(x-vercel-ip-country, 예: KR)만. 남기지 않는 것: IP, 이메일, 쿠키. 세션 ID는 브라우저 탭마다 새로 만드는 무작위 값.
 Blob 무료 한도(쓰기 월 2,000회)를 아끼려고 화면이 방문당 최대 3번만 보낸다. 끄기: USAGE_LOG_DISABLED=1
 요약: python3 scripts/usage_report.py
 """
@@ -15,6 +15,7 @@ from http.server import BaseHTTPRequestHandler
 
 KST = dt.timezone(dt.timedelta(hours=9))
 SID = re.compile(r"^[a-z0-9]{8,24}$")
+COUNTRY = re.compile(r"^[A-Z]{2}$")
 MAX_SEARCHES = 40
 MAX_CLICKS = 40
 
@@ -71,12 +72,15 @@ def clean(body: dict) -> dict | None:
     }
 
 
-def handle(body: dict) -> tuple[int, dict]:
+def handle(body: dict, country: str | None = None) -> tuple[int, dict]:
     if os.environ.get("USAGE_LOG_DISABLED") == "1":
         return 200, {"ok": True}
     entry = clean(body)
     if entry is None:
         return 400, {"ok": False}
+    country = str(country or "").strip().upper()
+    if COUNTRY.match(country):
+        entry["country"] = country
     from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
 
     now = dt.datetime.now(KST)
@@ -105,7 +109,7 @@ class handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
         except ValueError:
             return self._send(400, {"ok": False})
-        status, payload = handle(body)
+        status, payload = handle(body, self.headers.get("x-vercel-ip-country"))
         return self._send(status, payload)
 
     def do_GET(self):  # noqa: N802
