@@ -160,6 +160,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FIVESTAR.get(cond[len(FIVESTAR_PREFIX):].strip()), "text"
     if cond.startswith(LSA_PREFIX):
         return _LSA.get(cond[len(LSA_PREFIX):].strip()), "text"
+    if cond.startswith(MS_PREFIX):
+        return _MS.get(cond[len(MS_PREFIX):].strip().upper()), "label"
     if cond.startswith(KONSTANZ_PREFIX):
         return _KONSTANZ.get(cond[len(KONSTANZ_PREFIX):].strip()), "text"
     if cond.startswith(DESC_PREFIX):
@@ -619,3 +621,11 @@ def konstanz_condition(text: str) -> str | None:
     t = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", text or "")))
     level = next((n for n, p in _KONSTANZ_WORDS if re.search(p, t, re.I)), None)
     return KONSTANZ_PREFIX + level if level else None
+
+
+# 이탈리아 M&S Materiale Fotografico (로마): 카드 'Condizioni: B+' — A-·B+·B·B-·C (팔린 것은 'venduto')
+MS_PREFIX = "M&S: "
+# 사진 평가(표기 가리고 26점, 사진 1~3장씩, 2026-10-29): A- S 5·A 2 · B+ S 1·A 5·B 1 · B A 5·B 2 · B- A 4·B 1.
+# 글자 그대로(A- A·B+ B·B B·B- C)면 사진이 1.0등급 후해(기존 매장 0.8, 최근 매장 0.4~0.6) 매장이 엄한 편 →
+# B+ A, B- B로 한 칸 올림. 이 대응 기준 정확 일치 10/26 · 한 등급 이내 26/26 (사진이 평균 0.54등급 후함). C는 표본 없어 글자대로.
+_MS = {"A+": "S", "A": "A", "A-": "A", "B+": "A", "B": "B", "B-": "B", "C+": "C", "C": "C", "C-": "D", "D": "D"}
