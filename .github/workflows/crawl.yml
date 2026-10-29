@@ -71,16 +71,19 @@ jobs:
       - name: Build dealer page data (/dealer)
         run: python3 scripts/build_dealer_data.py
 
+      - name: Build model pages and sitemap (검색 노출용)
+        run: python3 scripts/build_model_pages.py
+
       - name: Commit and push results
         run: |
           git config user.name "Camera Bridge Bot"
           git config user.email "bot@camerabridge.app"
-          git add -A data/ crawler/sessions/
+          git add -A data/ crawler/sessions/ ko/ en/ ja/ sitemap.xml
           git diff --staged --quiet && echo "No changes" && exit 0
           git stash
           git pull --rebase origin main
           git stash pop
-          git add -A data/ crawler/sessions/
+          git add -A data/ crawler/sessions/ ko/ en/ ja/ sitemap.xml
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
           git pull --rebase origin main
           git push
