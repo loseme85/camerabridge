@@ -162,6 +162,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _LSA.get(cond[len(LSA_PREFIX):].strip()), "text"
     if cond.startswith(MS_PREFIX):
         return _MS.get(cond[len(MS_PREFIX):].strip().upper()), "label"
+    if cond.startswith(LEICASTOREPL_PREFIX):
+        return _LEICASTOREPL.get(cond[len(LEICASTOREPL_PREFIX):].strip()), "text"
     if cond.startswith(KONSTANZ_PREFIX):
         return _KONSTANZ.get(cond[len(KONSTANZ_PREFIX):].strip()), "text"
     if cond.startswith(DESC_PREFIX):
@@ -629,3 +631,24 @@ MS_PREFIX = "M&S: "
 # 글자 그대로(A- A·B+ B·B B·B- C)면 사진이 1.0등급 후해(기존 매장 0.8, 최근 매장 0.4~0.6) 매장이 엄한 편 →
 # B+ A, B- B로 한 칸 올림. 이 대응 기준 정확 일치 10/26 · 한 등급 이내 26/26 (사진이 평균 0.54등급 후함). C는 표본 없어 글자대로.
 _MS = {"A+": "S", "A": "A", "A-": "A", "B+": "A", "B": "B", "B-": "B", "C+": "C", "C": "C", "C-": "D", "D": "D"}
+# 폴란드 Leica Store Poland (바르샤바 공식 매장): 등급 칸 없이 제목·설명 첫머리의 'Stan Bardzo Dobry'·'w stanie dobrym' 꼴
+# (설명 뒤쪽은 긴 홍보 글이라 'idealny wybór'·'Nowy Rozdział' 같은 말이 섞여 보지 않음) → idealny·bardzo dobry·dobry·dostateczny
+LEICASTOREPL_PREFIX = "LeicaStorePL: "
+# 사진 평가(표기 가리고 22점, 사진 1~3장씩 — 흰 배경 누끼 사진이라 작은 흠은 잘 안 보임, 2026-10-29): idealny A 3 · bardzo dobry A 5 ·
+# dobry A 9·B 5. idealny A·bardzo dobry A·dobry B로 두면 정확 일치 13/22 · 한 등급 이내 22/22 (사진이 평균 0.41등급 후함).
+_LEICASTOREPL = {"idealny": "A", "bardzo dobry": "A", "dobry": "B", "dostateczny": "C", "uszkodzony": "D"}
+_LEICASTOREPL_STATE = re.compile(r"stan\w*\s+(idealn|bardzo dobr|dobr|dostateczn|kolekcjonersk)", re.I)
+
+
+def leicastorepl_condition(text: str) -> str | None:
+    """Leica Store Poland 제목+설명 첫 250자에서 'stan …' 상태 말을 'LeicaStorePL: bardzo dobry' 꼴로. 'Używany'(중고)뿐이면 없음."""
+    t = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", text or "")))[:250]
+    if re.search(r"(?<!bez )(?<!nie)uszkodzon|niesprawn|do naprawy", t, re.I):
+        return LEICASTOREPL_PREFIX + "uszkodzony"
+    m = _LEICASTOREPL_STATE.search(t)
+    if not m:
+        return None
+    word = m.group(1).lower()
+    level = {"idealn": "idealny", "kolekcjonersk": "idealny", "bardzo dobr": "bardzo dobry", "dobr": "dobry",
+             "dostateczn": "dostateczny"}[word]
+    return LEICASTOREPL_PREFIX + level
