@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370}
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -6646,6 +6646,96 @@ def crawl_msmateriale():
     return results
 
 
+def _leicastorepl_name(title):
+    """Leica Store Poland 제목 다듬기: 'Leica 28 f/5.6 SUMMARON-M Matt Black' → 'Leica Summaron-M 28mm f5.6 Matt Black',
+    'Leica Summilux-M 1:1.4/35 ASPH. LE11663 + zestaw filtrów' → 'Leica Summilux-M 35mm f1.4 ASPH. 11663'. 폴란드어 꼬리말(상태·구성품) 뺌"""
+    t = re.sub(r"\s+-\s+(?:stan|pełen|komplet).*$|\s*\+\s*(?:zestaw|akcesoria|filtr).*$|\s*/\s*F\.\s*VAT$", "", title.strip(), flags=re.I)
+    t = re.sub(r"\bLE(\d{5})\b", r"\1", t)
+    t = re.sub(r"(\d)\s?,\s?(\d)", r"\1.\2", t)
+    t = re.sub(r"\b(\d+(?:\.\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", t)
+    t = re.sub(r"\b1:(\d(?:\.\d+)?)\s*/\s*(\d{2,3})\b", r"\2mm f\1", t)          # '1:1.4/35' → '35mm f1.4'
+    t = re.sub(r"\b(\d{2,3})\s*/\s*(\d\.\d+|\d)\b(?!\s*mm)", r"\1mm f\2", t)       # '35/1.4' → '35mm f1.4'
+    t = re.sub(r"\bf\s?/\s?(\d)", r"f\1", t, flags=re.I)
+    t = re.sub(r"^(Leica|Leitz)\s+(\d{2,3})(?:mm)?\s+(f\d(?:\.\d+)?)\s+([A-Z][A-Z-]+(?:-[A-Z]+)?)", r"\1 \4 \2mm \3", t)  # 숫자 먼저 → 이름 먼저
+    t = re.sub(r"\b(APO|SUMMICRON|SUMMILUX|SUMMARON|ELMARIT|ELMAR|NOCTILUX|SUMMARIT|TELE|SUPER|ELMAR|HEKTOR|ASPH)\b",
+               lambda m: m.group(1).capitalize() if m.group(1) not in ("APO", "ASPH") else m.group(1), t)
+    t = re.sub(r"\b(Summicron|Summilux|Summaron|Elmarit|Elmar|Noctilux|Summarit)-m\b", r"\1-M", t, flags=re.I)
+    t = re.sub(r"\s+", " ", t).strip(" -")
+    return t
+
+
+def crawl_leicastorepl():
+    """Leica Store Poland (폴란드, 바르샤바 공식 매장) - 중고(komis) 목록 정적 HTML 쪽마다 16개(5쪽 안팎, 이름순)에서 Leica·Leitz만 골라
+    상세 화면을 읽음 (가격은 목록에 없고 스크립트로 채움). 상세의 itemprop price·availability, 설명 첫 문장의 상태 말
+    ('w stanie dobrym'·'stan idealny'). robots.txt Crawl-delay 2초를 지킴 → 약 2분, 6시간마다. 가격 PLN"""
+    import html as _html
+    import requests
+    from condition_grade import leicastorepl_condition
+    base = "https://leicastore.pl"
+    site = "Leica Store Poland (폴란드)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Leica Store Poland 크롤링 시작")
+    cards, seen = [], set()
+    for page_num in range(1, 21):
+        url = f"{base}/komis" + (f"/page:{page_num}" if page_num > 1 else "")
+        try:
+            resp = sess.get(url, timeout=60)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Leica Store Poland {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        found = re.findall(r'<h2 class="product-name">\s*<a data-type="product-url" href="([^"]+)" title="([^"]*)"', resp.text)
+        print(f"    └─ {page_num}페이지 {len(found)}개")
+        for href, title in found:
+            title = _html.unescape(_html.unescape(title)).strip()
+            if href not in seen and re.match(r"(?:leica|leitz)\b", title, re.I):
+                seen.add(href)
+                cards.append((base + href, title))
+        time.sleep(2)
+        if f"/komis/page:{page_num + 1}" not in resp.text:
+            break
+    results = []
+    for link, title in cards:
+        try:
+            h = sess.get(link, timeout=60).text
+        except Exception as e:
+            print(f"    ⚠️ 상세 오류 {link[-40:]}: {e}")
+            continue
+        finally:
+            time.sleep(2)
+        pm = re.search(r'data-type="product-price">\s*([\d\s]+)(?:,\d+)?\s*Z[ŁL]', h, re.I)
+        amount = int(re.sub(r"\s", "", pm.group(1))) if pm else 0
+        price = f"{amount:,} zł" if amount else "문의요망"
+        stock = re.search(r'itemprop="availability" content="([^"]+)"', h)
+        desc = re.search(r'itemprop="description">(.*?)</div>', h, re.S)
+        img = re.search(r'itemprop="image" content="([^"]+)"', h)
+        name = _leicastorepl_name(title)
+        if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        cat = detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": leicastorepl_condition(title + " " + (desc.group(1) if desc else "")) or "정보없음",
+            "가격": price,
+            "통화": "PLN",
+            "이미지": img.group(1) if img else "",
+            "링크": link,
+            "품절": bool(stock) and "InStock" not in stock.group(1),
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    if not results:
+        raise RuntimeError("Leica Store Poland 목록이 비어 있음")
+    print(f"  ✅ Leica Store Poland 완료: {len(results)}개")
+    return results
+
+
 def crawl_sabatini():
     """Sabatini Fotografia (이탈리아, 로마) - 중고 카메라·렌즈 WooCommerce 상품 API(Store API). 중고 분류 3곳(obiettivi-usati 240·
     macchine-fotografiche-usate 371·accessori-usati 184)에서 'leica' 검색, 100개씩. Panasonic Leica DG·Voigtländer·Techart 등
@@ -7514,6 +7604,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Ffordes (영국)": 6,
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
+    "Leica Store Poland (폴란드)": 6,  # 매물마다 상세, Crawl-delay 2초 (약 40개 · 2분)
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
@@ -7641,6 +7732,7 @@ def crawl_all():
         ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
         ("M&S Materiale Fotografico (이탈리아)", lambda: ce.wrap_full_run("M&S Materiale Fotografico (이탈리아)", crawl_msmateriale)),
+        ("Leica Store Poland (폴란드)", lambda: ce.wrap_full_run("Leica Store Poland (폴란드)", crawl_leicastorepl)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

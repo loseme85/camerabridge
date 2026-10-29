@@ -398,3 +398,13 @@ def test_ms_materiale_grades():
     assert grade_of(site, MS_PREFIX + "B+", "Leica M5 Black")[0] == "A"
     assert grade_of(site, MS_PREFIX + "B", "Leica Summicron 50mm f2")[0] == "B"
     assert grade_of(site, MS_PREFIX + "B-", "Leica Elmarit-M 90mm f2.8")[0] == "B"
+def test_leicastorepl_condition_grades():
+    from condition_grade import LEICASTOREPL_PREFIX, leicastorepl_condition
+    site = "Leica Store Poland (폴란드)"
+    assert leicastorepl_condition("Leica APO-Summicron-M - Stan Idealny / Pełen Zestaw") == LEICASTOREPL_PREFIX + "idealny"
+    assert leicastorepl_condition("Leica M10-P Aparat jest w stanie dobrym. Do aparatu") == LEICASTOREPL_PREFIX + "dobry"
+    assert leicastorepl_condition("Obiektyw bez uszkodzeń, w stanie bardzo dobrym") == LEICASTOREPL_PREFIX + "bardzo dobry"
+    assert leicastorepl_condition("Leica Summilux-SL 50 - Używany Szukasz") is None
+    assert leicastorepl_condition("Leica M10 Monochrom Opis produktu Nowy Rozdział, idealny wybór") is None  # 홍보 글은 상태 아님
+    assert grade_of(site, LEICASTOREPL_PREFIX + "bardzo dobry", "Leica M-E (Typ 240)")[0] == "A"
+    assert grade_of(site, LEICASTOREPL_PREFIX + "dobry", "Leica M4-2 Black")[0] == "B"
