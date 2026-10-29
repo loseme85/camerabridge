@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800}
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -6736,6 +6736,96 @@ def crawl_leicastorepl():
     return results
 
 
+def _photowarehouse_name(title):
+    """Photo Warehouse 제목 다듬기: 'Leica MF 13.5cm F4.5 Hektor M Mount Lens' → 'Leica 135mm f4.5 Hektor', 'in LTM Mount' → '(M39)'"""
+    name = re.sub(r"\b(?:MF|AF)\s+", "", title)
+    name = re.sub(r"\s*-?\s*\(see description\)", "", name, flags=re.I)
+    name = re.sub(r"\bModel (\d{2}) ?(\d{3})\b", r"\1\2", name)  # 'Model 10 760' → '10760' (제품 코드)
+    name = re.sub(r"^Leica Monochrom\b", "Leica M Monochrom", name)
+    name = re.sub(r"^Ernst Leitz Wetzlar\b", "Leitz", name)
+    name = re.sub(r"(\d+),(\d)cm\b", r"\1.\2cm", name)
+    name = re.sub(r"\b(\d+(?:\.\d)?)cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", name)
+    name = re.sub(r"\bF/?(\d)", r"f\1", name)
+    name = re.sub(r"\s+(?:lens\s+)?(?:in\s+)?LTM\s+mount\b|\s+L39\b", " (M39)", name, flags=re.I)
+    name = re.sub(r"\s+-?\s*(?:lens\s+)?(?:in\s+)?(?:Leica\s+)?M\s+mount\b(?:\s+lens)?|\s+lens\s*$", "", name, flags=re.I)
+    return re.sub(r"\s+", " ", name).strip(" -")
+
+
+def crawl_photowarehouse():
+    """Photo Warehouse (뉴질랜드, 오클랜드 등 6개 매장) - 중고 'rangefinders' 분류(사이트에서 'Leica cameras and lenses' 묶음)를
+    ?display=all 한 화면(80여 개 카드)으로 읽고, Leica·Leitz만 골라 상세의 구조화 데이터(Product)에서 설명·사진·가격(NZD)·재고.
+    상태는 짧은 설명 글('Excellent condition')로 (설명이 '1954 red dial'처럼 상태 말이 없으면 등급 없음). 1초씩 쉼 → 약 1분, 6시간마다"""
+    import html as _html
+    import requests
+    from condition_grade import describe_text
+    base = "https://www.photowarehouse.co.nz"
+    site = "Photo Warehouse (뉴질랜드)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print("\n  📂 Photo Warehouse 크롤링 시작")
+    try:
+        resp = sess.get(base + "/shop/second-hand-products/rangefinders", params={"display": "all"}, timeout=90)
+        resp.raise_for_status()
+    except Exception as e:
+        raise RuntimeError(f"Photo Warehouse 목록 못 읽음: {e}")  # 빈 목록이 판매완료로 바뀌지 않게
+    cards = re.findall(r'<a href="(/shop/second-hand-products/rangefinders/[a-z0-9-]+)"[^>]*class="simple-product__link">.*?'
+                       r'<span class="simple-product__title">([^<]*)</span>', resp.text, re.S)
+    print(f"    └─ 목록 {len(cards)}개")
+    results, seen = [], set()
+    for href, title in cards:
+        title = _html.unescape(title).strip()
+        if href in seen or not re.search(r"\b(?:leica|leitz)\b", title, re.I) or re.search(
+                r"voigtl|canon|nikon|zeiss|kmz|\bfed\b|zorki|jupiter", title, re.I):
+            continue
+        seen.add(href)
+        try:
+            h = sess.get(base + href, timeout=60).text
+        except Exception as e:
+            print(f"    ⚠️ 상세 오류 {href[-40:]}: {e}")
+            continue
+        finally:
+            time.sleep(1)
+        prod = {}
+        for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S):
+            try:
+                data = json.loads(block)
+            except ValueError:
+                continue
+            if isinstance(data, dict) and data.get("@type") == "Product":
+                prod = data
+        name = _photowarehouse_name(title)
+        if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+            continue
+        offer = prod.get("offers") or {}
+        try:
+            price = f"NZ${float(offer.get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        imgs = prod.get("image") or []
+        cat = detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": describe_text(prod.get("description") or "") or "정보없음",
+            "가격": price,
+            "통화": "NZD",
+            "이미지": imgs[0] if isinstance(imgs, list) and imgs else "",
+            "링크": base + href,
+            "품절": bool(offer) and "InStock" not in str(offer.get("availability") or ""),
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    if not results:
+        raise RuntimeError("Photo Warehouse 목록이 비어 있음")
+    print(f"  ✅ Photo Warehouse 완료: {len(results)}개")
+    return results
+
+
 def crawl_sabatini():
     """Sabatini Fotografia (이탈리아, 로마) - 중고 카메라·렌즈 WooCommerce 상품 API(Store API). 중고 분류 3곳(obiettivi-usati 240·
     macchine-fotografiche-usate 371·accessori-usati 184)에서 'leica' 검색, 100개씩. Panasonic Leica DG·Voigtländer·Techart 등
@@ -7605,6 +7695,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Leica Store Poland (폴란드)": 6,  # 매물마다 상세, Crawl-delay 2초 (약 40개 · 2분)
+    "Photo Warehouse (뉴질랜드)": 6,  # 매물마다 상세 (약 70개 · 1분)
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
@@ -7733,6 +7824,7 @@ def crawl_all():
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
         ("M&S Materiale Fotografico (이탈리아)", lambda: ce.wrap_full_run("M&S Materiale Fotografico (이탈리아)", crawl_msmateriale)),
         ("Leica Store Poland (폴란드)", lambda: ce.wrap_full_run("Leica Store Poland (폴란드)", crawl_leicastorepl)),
+        ("Photo Warehouse (뉴질랜드)", lambda: ce.wrap_full_run("Photo Warehouse (뉴질랜드)", crawl_photowarehouse)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
