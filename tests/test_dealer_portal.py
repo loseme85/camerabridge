@@ -95,7 +95,10 @@ def test_create_account_validation(blob):
     with pytest.raises(ValueError, match="id"):
         portal.create_account("A B", name="", stores=["사진집"], country="KR", lang="ko")
     with pytest.raises(ValueError, match="stores"):
-        portal.create_account("nostore", name="", stores=[], country="KR", lang="ko")
+        portal.create_account("nostore", name="", stores=[], country="", lang="ko")
+    # 수집 매장 없이 나라만 정한 딜러 (사장님 본인 등)
+    portal.create_account("owner-kr", name="카메라브릿지", stores=[], country="KR", lang="ko")
+    assert portal.public_account("owner-kr", portal.load_accounts(fresh=True)["accounts"]["owner-kr"])["stores"] == []
     portal.create_account("dup", name="", stores=["사진집"], country="KR", lang="ko")
     with pytest.raises(ValueError, match="exists"):
         portal.create_account("dup", name="", stores=["사진집"], country="KR", lang="ko")

@@ -203,6 +203,7 @@ ko: {
   pos_high: "비쌈", pos_low: "쌈", pos_ok: "적정", pos_none: "시세 없음",
   basis_sold: "{c} 판매완료 {n}건", basis_ask: "{c} 판매 중 {n}건", basis_all: "전체 나라 판매완료 {n}건", days: "{n}일",
   basis_new_msrp: "{c} 라이카 공식 정가", basis_new_msrp_eur: "독일 라이카 정가 (유로권)", basis_new_sold: "{c} 신품 판매완료 {n}건", basis_new_ask: "{c} 신품 판매 중 {n}건", basis_new_est: "추정 (등급 비율)", new_note: "신품 기준가는 {c} 라이카 공식 정가를, 단종된 모델은 {c}의 신품 매물 가격을 씁니다. 신품 매물이 2건 미만이면 중고 기준가에 등급 비율을 곱한 추정값이라 현지 정가와 다를 수 있습니다.",
+  no_store: "이 계정에는 묶인 수집 매장이 없어 재고 점검은 비어 있습니다. 매입 조회·사입 기회·잘 팔리는 모델·가격 추이는 {c} 기준으로 그대로 쓸 수 있습니다.",
   stock_title: "내 재고 점검", stock_lede: "{store}에 지금 올라와 있는 매물을 같은 모델·같은 등급의 {c} 기준가와 비교합니다. 줄을 누르면 그 모델의 매입 조회로 넘어갑니다.",
   f_all: "전체", f_old: "60일+",
   stock_note: "기준가 = {c} 판매완료가를 등급 비율로 B등급에 맞춘 중앙값 × 이 매물 등급 비율. {c} 판매완료가 2건 미만이면 {c} 다른 매장의 판매 중 가격(3건 이상), 그것도 없으면 전체 나라 판매완료 가격을 씁니다. 등급을 알 수 없는 매물은 B로 봅니다. '올린 지'는 카메라브릿지가 처음 본 날 기준입니다.",
@@ -241,6 +242,7 @@ en: {
   pos_high: "High", pos_low: "Low", pos_ok: "In range", pos_none: "No reference",
   basis_sold: "{n} sold in {c}", basis_ask: "{n} for sale in {c}", basis_all: "{n} sold, all countries", days: "{n} d",
   basis_new_msrp: "Leica list price in {c}", basis_new_msrp_eur: "Leica list price in Germany (euro area)", basis_new_sold: "{n} sold new in {c}", basis_new_ask: "{n} new for sale in {c}", basis_new_est: "estimate (grade ratio)", new_note: "The new (N) reference uses the Leica list price in {c}, or prices of new items in {c} for discontinued models. With fewer than 2, it is an estimate from the used reference × grade ratio and may differ from the local retail price.",
+  no_store: "No collected shop is linked to this account, so stock checks are empty. Buy-in checks, sourcing, fast sellers and price trends work as usual for {c}.",
   stock_title: "My stock", stock_lede: "Listings currently up at {store}, compared with the {c} reference for the same model and grade. Click a row to open the buy-in check for that model.",
   f_all: "All", f_old: "60 d+",
   stock_note: "Reference = median sold price in {c}, normalised to grade B, × this listing's grade factor. With fewer than 2 sales in {c} we use asking prices at other shops in {c} (3 or more), and otherwise sold prices from all countries. Listings without a grade count as B. 'Listed' is counted from when Camera Bridge first saw the listing.",
@@ -279,6 +281,7 @@ ja: {
   pos_high: "高い", pos_low: "安い", pos_ok: "適正", pos_none: "相場なし",
   basis_sold: "{c}販売済み {n}件", basis_ask: "{c}販売中 {n}件", basis_all: "全ての国の販売済み {n}件", days: "{n}日",
   basis_new_msrp: "{c}ライカ公式価格", basis_new_msrp_eur: "ドイツのライカ公式価格（ユーロ圏）", basis_new_sold: "{c}新品販売済み {n}件", basis_new_ask: "{c}新品販売中 {n}件", basis_new_est: "推定（ランク比率）", new_note: "新品の基準価格は{c}のライカ公式価格を、生産終了モデルは{c}の新品の価格を使います。2件未満の場合は中古の基準価格 × ランク比率による推定で、現地の定価と異なる場合があります。",
+  no_store: "このアカウントには収集中の店が紐付いていないため、在庫チェックは空です。買取照会・仕入れ候補・売れ筋モデル・価格推移は{c}基準でそのまま使えます。",
   stock_title: "在庫チェック", stock_lede: "{store}に今掲載中の商品を、同じモデル・同じランクの{c}基準価格と比べます。行を押すとそのモデルの買取照会に移ります。",
   f_all: "すべて", f_old: "60日+",
   stock_note: "基準価格 = {c}の販売済み価格をランク比率でBランクに揃えた中央値 × この商品のランク比率。{c}の販売済みが2件未満なら{c}の他店の販売中価格（3件以上）、それもなければ全ての国の販売済み価格を使います。ランク不明の商品はBとみなします。",
@@ -870,7 +873,8 @@ function feedRows(list) {
   </tr>`;
   }).join("");
 }
-const storeLabel = () => myStores().map(siteName).join(", ");
+// 수집 매장이 없는 딜러 계정(나라만 정함)은 계정 이름을 '내 매장' 자리에 씀
+const storeLabel = () => myStores().filter(Boolean).map(siteName).join(", ") || ME.name || ME.id;
 
 // ── 화면 ──
 const V = {};
@@ -937,6 +941,7 @@ V.stock = () => {
   rows = rows.slice().sort((a, b) => (b.ratio ?? 0) - (a.ratio ?? 0) || (b.days ?? 0) - (a.days ?? 0));
   const c = k => all.filter(x => x.pos.k === k).length;
   const opts = [["all", `${t("f_all")} ${all.length}`], ["high", `${t("pos_high")} ${c("high")}`], ["ok", `${t("pos_ok")} ${c("ok")}`], ["low", `${t("pos_low")} ${c("low")}`], ["old", `${t("f_old")} ${all.filter(x => x.days >= 60).length}`], ["none", `${t("pos_none")} ${c("none")}`]];
+  if (!myStores().filter(Boolean).length) return `<h1>${esc(t("stock_title"))}</h1><p class="empty">${esc(t("no_store", { c: C() }))}</p>`;
   return `
   <h1>${esc(t("stock_title"))}</h1>
   <p class="lede">${esc(t("stock_lede", { store: storeLabel(), c: C() }))}</p>
