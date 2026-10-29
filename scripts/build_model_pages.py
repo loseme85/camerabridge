@@ -53,6 +53,7 @@ COUNTRY = {
     "아랍에미리트": {"ko": "아랍에미리트", "en": "UAE", "ja": "アラブ首長国連邦"}, "호주": {"ko": "호주", "en": "Australia", "ja": "オーストラリア"},
     "캐나다": {"ko": "캐나다", "en": "Canada", "ja": "カナダ"},
     "폴란드": {"ko": "폴란드", "en": "Poland", "ja": "ポーランド"},
+    "뉴질랜드": {"ko": "뉴질랜드", "en": "New Zealand", "ja": "ニュージーランド"},
 }
 SOURCE_COUNTRY = {"Leica Store Miami": "미국"}
 
@@ -129,7 +130,7 @@ ul.links span{color:var(--muted);font-size:13px}
 """
 
 SYMBOL = {"KRW": "₩", "USD": "$", "JPY": "¥", "EUR": "€", "GBP": "£", "HKD": "HK$", "CHF": "CHF ", "DKK": "DKK ",
-          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł "}
+          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$"}
 
 
 def money(amount: float, currency: str, lang: str, approx: bool = False) -> str:
