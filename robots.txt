@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+# 첫 화면이 /api/search·/data/에서 내용을 불러오므로 막지 않는다 (구글이 화면을 그려 볼 수 있게)
+Allow: /api/search
+Disallow: /api/
+Disallow: /owner
+Disallow: /Owner
+Disallow: /OWNER
+Disallow: /dealer
+Disallow: /admin
+Disallow: /qa
+
+Sitemap: https://camerabridge.io/sitemap.xml
