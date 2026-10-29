@@ -17,6 +17,8 @@ UPDATED = "2026-10-29"
 
 # 통신판매업 신고번호·전화는 사장님이 정하면 채운다 (비어 있으면 화면에 안 나옴)
 OPERATOR = {
+    # 카메라브릿지를 운영하는 회사 이름 (2026-10-29 이름만 정함, 아직 사업자 등록 전 → 법적 운영자는 아래 사업자)
+    "brand": "thehingemeta",
     "name": {"ko": "브로콜리스튜디오", "en": "Broccoli Studio", "ja": "Broccoli Studio（ブロッコリースタジオ）"},
     "rep": {"ko": "박창대", "en": "Changdae Park", "ja": "パク・チャンデ（Changdae Park）"},
     "biz_no": "512-22-00825",
@@ -64,7 +66,7 @@ FOOT = {
 def footer(lang: str) -> str:
     """모든 정적 페이지 아래쪽: 운영자 한 줄 + 상표·제휴 안내 + 법적 고지 링크"""
     f, o = FOOT[lang], OPERATOR
-    line = [f'{f["home"]} · {f["by"]} {html.escape(o["name"][lang])} ({f["rep"]} {html.escape(o["rep"][lang])})',
+    line = [f'{f["home"]} by {o["brand"]} · {f["by"]} {html.escape(o["name"][lang])} ({f["rep"]} {html.escape(o["rep"][lang])})',
             f'{f["biz"]} {o["biz_no"]}']
     if o["mail_order_no"]:
         line.append(f'{f["mo"]} {html.escape(o["mail_order_no"])}')
@@ -92,7 +94,8 @@ FEEDBACK_LINK = {"ko": '첫 화면의 "의견 보내기"', "en": 'the "Send feed
 def about_body(lang: str) -> tuple[str, str]:
     o = OPERATOR
     if lang == "ko":
-        pairs = [("서비스", "카메라브릿지 (camerabridge.io) — 라이카 중고 매물·시세 검색"), ("상호", o["name"]["ko"]),
+        pairs = [("서비스", "카메라브릿지 (camerabridge.io) — 라이카 중고 매물·시세 검색"),
+                 ("회사", f'{o["brand"]} (사업자 등록 전까지 아래 사업자가 운영)'), ("상호", o["name"]["ko"]),
                  ("대표자", o["rep"]["ko"]), ("사업자등록번호", o["biz_no"]), ("주소", o["address"]["ko"]),
                  ("이메일", MAIL), ("호스팅 제공자", "Vercel Inc. (미국)")]
         if o["mail_order_no"]:
@@ -109,7 +112,8 @@ def about_body(lang: str) -> tuple[str, str]:
                 + f"<h2>매장 문의</h2><p>매물 표시를 고치거나 빼고 싶은 매장, 데이터 연결을 원하는 매장은 {MAIL}로 연락해 주세요.</p>")
         return "운영자 정보", body
     if lang == "ja":
-        pairs = [("サービス", "Camera Bridge（camerabridge.io）— ライカ中古在庫・相場検索"), ("事業者名", o["name"]["ja"]),
+        pairs = [("サービス", "Camera Bridge（camerabridge.io）— ライカ中古在庫・相場検索"),
+                 ("会社", f'{o["brand"]}（法人登録までは下記の事業者が運営）'), ("事業者名", o["name"]["ja"]),
                  ("代表者", o["rep"]["ja"]), ("事業者登録番号（韓国）", o["biz_no"]), ("所在地", o["address"]["ja"]),
                  ("メール", MAIL), ("ホスティング", "Vercel Inc.（米国）")]
         if o["mail_order_no"]:
@@ -125,7 +129,8 @@ def about_body(lang: str) -> tuple[str, str]:
                   "商品名・写真は各店舗のもので、元の店舗ページへリンクしています。</p>"
                 + f"<h2>店舗の方へ</h2><p>掲載内容の修正・削除やデータ連携のご相談は {MAIL} までご連絡ください。</p>")
         return "運営者情報", body
-    pairs = [("Service", "Camera Bridge (camerabridge.io) — used Leica listings and price search"), ("Operator", o["name"]["en"]),
+    pairs = [("Service", "Camera Bridge (camerabridge.io) — used Leica listings and price search"),
+             ("Company", f'{o["brand"]} (operated by the business below until it is registered)'), ("Operator", o["name"]["en"]),
              ("Owner", o["rep"]["en"]), ("Business registration no. (Korea)", o["biz_no"]), ("Address", o["address"]["en"]),
              ("Email", MAIL), ("Hosting", "Vercel Inc. (USA)")]
     if o["mail_order_no"]:
@@ -281,7 +286,7 @@ def terms_body(lang: str) -> tuple[str, str]:
 
 def impressum_body() -> str:
     o = OPERATOR
-    de = _rows([("Anbieter", f"{o['name']['en']} (브로콜리스튜디오), Inhaber: {o['rep']['en']}"),
+    de = _rows([("Anbieter", f"{o['name']['en']} (브로콜리스튜디오), Inhaber: {o['rep']['en']} — Camera Bridge by {o['brand']}"),
                 ("Anschrift", o["address"]["en"]),
                 ("Kontakt", f"E-Mail: {MAIL} · Kontaktformular: „Feedback senden“ auf der Startseite"),
                 ("Unternehmensregister", f"Koreanische Unternehmensnummer (사업자등록번호) {o['biz_no']}"),
