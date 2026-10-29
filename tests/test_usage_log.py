@@ -31,3 +31,17 @@ def test_summarize_counts_zero_results_and_referrers():
     assert report["zero_result_queries"] == [("steel rim", 2)]
     assert report["no_active_queries"] == [("m6", 1)]
     assert dict(report["referrers"])["www.reddit.com"] == 1
+
+
+def test_handle_keeps_only_country_code(monkeypatch):
+    import sys
+    import types
+    import api.usage as usage
+    saved = {}
+    fake = types.SimpleNamespace(put=lambda path, data, **kw: saved.update(data=data))
+    monkeypatch.setitem(sys.modules, "vercel", types.SimpleNamespace(blob=fake))
+    body = {"sid": "abcdefgh12", "searches": [{"q": "m6"}]}
+    assert usage.handle(dict(body), "kr")[1]["ok"]
+    assert b'"country": "KR"' in saved["data"]
+    usage.handle(dict(body), "1.2.3.4")
+    assert b"country" not in saved["data"]

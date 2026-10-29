@@ -59,6 +59,19 @@ def load(days: int) -> tuple[list[dict], list[dict], bool]:
     return _read_many(blob, usage_items[:MAX_READS]), _read_many(blob, feedback_items), cut
 
 
+COUNTRY_NAMES = {"KR": "한국", "JP": "일본", "US": "미국", "GB": "영국", "DE": "독일", "FR": "프랑스", "IT": "이탈리아",
+                 "NL": "네덜란드", "CN": "중국", "TW": "대만", "HK": "홍콩", "SG": "싱가포르", "CA": "캐나다", "AU": "호주",
+                 "CH": "스위스", "AT": "오스트리아", "ES": "스페인", "DK": "덴마크", "SE": "스웨덴", "BE": "벨기에"}
+
+
+def _country_name(code: str | None) -> str:
+    """'KR' → '🇰🇷 한국'. 2026-10-29 전 기록에는 나라가 없음."""
+    if not code:
+        return "기록 전"
+    flag = "".join(chr(0x1F1E6 + ord(ch) - ord("A")) for ch in code)
+    return f"{flag} {COUNTRY_NAMES.get(code, code)}"
+
+
 def _ref_name(host: str | None) -> str:
     if not host:
         return "직접·앱 (레딧 앱도 여기로 잡힘)"
@@ -70,11 +83,12 @@ def visits(entries: list[dict]) -> list[dict]:
     grouped: dict[str, dict] = {}
     for e in sorted(entries, key=lambda e: (e["sid"], e.get("part", 1))):
         v = grouped.setdefault(e["sid"], {"start": e.get("created_at", ""), "end": e.get("created_at", ""), "referrer": e.get("referrer"),
-                                          "locale": e.get("locale"), "currency": e.get("currency"), "mobile": e.get("mobile"),
+                                          "locale": e.get("locale"), "currency": e.get("currency"), "mobile": e.get("mobile"), "country": e.get("country"),
                                           "duration_s": 0, "steps": []})
         v["start"] = min(v["start"], e.get("created_at", "")) or v["start"]
         v["end"] = max(v["end"], e.get("created_at", ""))
         v["duration_s"] = max(v["duration_s"], e.get("duration_s") or 0)
+        v["country"] = v["country"] or e.get("country")
         v["steps"] += [("검색", s) for s in e.get("searches", [])] + [("클릭", c) for c in e.get("clicks", [])]
     for v in grouped.values():
         v["steps"].sort(key=lambda step: step[1].get("s") or 0)
@@ -112,6 +126,7 @@ def _bars(entries: list[dict], days: int) -> str:
 def render(entries: list[dict], feedback: list[dict], days: int, cut: bool) -> str:
     r = summarize(entries)
     ref_counts = collections.Counter(_ref_name(e.get("referrer")) for e in {e["sid"]: e for e in sorted(entries, key=lambda e: -e.get("part", 1))}.values())
+    country_counts = collections.Counter(_country_name(v["country"]) for v in visits(entries))
     pct = lambda x: "-" if x is None else f"{round(x * 100)}%"  # noqa: E731
     now = dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M")
     tabs = "".join(f"<a class='{'on' if d == days else ''}' href='?days={d}'>{label}</a>" for d, label in ((1, "오늘"), (7, "7일"), (30, "30일")))
@@ -127,7 +142,7 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool) -> s
                 steps.append(f"<span class='step click'>↗ {_esc(s.get('host'))}</span>")
         when = str(v["start"])[5:16].replace("T", " ")
         device = "📱" if v["mobile"] else "💻"
-        rows.append(f"<tr><td class=nowrap>{_esc(when)}</td><td>{_esc(_ref_name(v['referrer']))}</td><td class=nowrap>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</td>"
+        rows.append(f"<tr><td class=nowrap>{_esc(when)}</td><td>{_esc(_ref_name(v['referrer']))}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
                     f"<td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초</td><td>{''.join(steps)}</td></tr>")
     visit_table = "".join(rows) or "<tr><td colspan=5 class=muted>이 기간에 검색한 방문이 없습니다</td></tr>"
 
@@ -161,13 +176,14 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 <div class=grid>
 {_bars(entries, days)}
 {_table('어디서 왔나', ref_counts.most_common(10), note='휴대폰 앱(레딧 앱 등)은 출처를 안 알려 줘서 "직접·앱"으로 잡힘')}
+{_table('나라별 방문', country_counts.most_common(15), note='접속한 곳 기준 (2026-10-29부터 기록, 그 전은 "기록 전")')}
 {_table('화면 언어', r['locales'])}
 {_table('클릭한 판매처', r['click_hosts'])}
 {_table('많이 찾은 검색어', r['top_queries'][:10])}
 {_table('결과 0건 검색어 (고칠 것)', r['zero_result_queries'][:10])}
 {_table('판매 중 0건 검색어', r['no_active_queries'][:10])}
 <section class='card wide'><h2>최근 방문 (한 줄 = 한 사람의 방문 흐름)</h2>
-<table><tr><td class=muted>시작(한국)</td><td class=muted>어디서</td><td class=muted>기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
+<table><tr><td class=muted>시작(한국)</td><td class=muted>어디서</td><td class=muted>나라·기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
 <section class='card wide'><h2>최근 의견 (💬 의견 보내기)</h2><table>{fb_rows}</table></section>
 </div>
 <p class=note>검색 없이 둘러보기만 한 사람까지 포함한 <b>전체 방문 수·나라</b>는 <a href="{ANALYTICS_URL}" target=_blank rel=noopener>Vercel Analytics</a>에서 봅니다.
