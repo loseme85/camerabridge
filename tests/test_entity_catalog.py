@@ -402,3 +402,36 @@ def test_m6_editions_are_flagged_for_the_version_bar() -> None:
     entities = load_catalog()["entities"]
     assert entities["leica:body:m6:titan"].get("edition") and entities["leica:body:m6:ttl-millennium"].get("edition")
     assert not any(entities[f"leica:body:m6:{k}"].get("edition") for k in ("classic", "ttl", "leitz-wetzlar", "panda"))
+
+
+def test_generation_counts_differ_by_country_and_steel_rim_reissue_without_label() -> None:
+    def lens(title: str, prefix: str) -> list[str]:
+        return sorted(i for i in match_entities(_record(title, "Lens")) if i.startswith(prefix) and i.count(":") >= 4)  # 부모 칸 제외
+    sr = "leica:lens:summilux-m:35:"
+    # 복각 표기가 없어도 11301·2022·오리지널 근거 없는 'Summilux-M … steel rim'은 복각
+    assert lens("Leica Summilux 35mm f1.4 Steel Rim (11301)", sr) == [sr + "steel-rim-reissue"]
+    assert lens("LEICA 35mm F1.4 steel rim SUMMILUX-M sn.4836", sr) == [sr + "steel-rim-reissue"]
+    assert lens("Leica 35mm f1.4 Summilux-M Steel Rim", sr) == [sr + "steel-rim-reissue"]
+    assert lens("Leica Summilux-M 35mm f1.4 M3 Steel Rim With Goggles 11870", sr) == [sr + "v1-steel-rim"]
+    assert lens('Leica Summilux-M 35mm f1.4 "Original Steel Rim 1960"', sr) == [sr + "v1-steel-rim"]
+    assert lens("LEICA 35mm F1.4 steel rim SUMMILUX sn.1765", sr) == [sr + "v1-steel-rim"]
+    # 'V2'·'Ver.2'·'第2世代'는 세대 칸에만 (미표기 칸에 같이 들어가지 않음)
+    assert lens("Leica Summilux-M 35mm f1.4 V2 Infinity Lock 11870", sr) == [sr + "v2"]
+    assert lens("LEICA 35mm F1.4 Ver.2 infinity Lock SUMMILUX sn.2347", sr) == [sr + "v2"]
+    lux = "leica:lens:summilux-m:50:"
+    # 해외 'Type III'(11868·11856)는 E46 후드 내장 = 한국 4세대, 한국 '5th'는 ASPH
+    assert lens("Leica 50mm f1.4 Summilux-M (Type III) (Black, 11868)", lux) == [lux + "v4"]
+    assert lens("Leica Summilux 50mm f1.4 Silver 5th", lux) == [lux + "asph"]
+    assert lens("Leica Summilux M 50/1.4 (第2世代)", lux) == [lux + "v2"]
+    # 주미크론 50: 해외·일본 세대 표기는 현행(4·5세대)이 아님
+    sc50 = "leica:lens:summicron"
+    assert lens("Leica 50mm f2 Summicron (Type II) (Silver, SOOIC-MS / SOSIC / 11118)", sc50) == ["leica:lens:summicron:50:gen12-unspecified"]
+    assert lens("Leica Summicron-M 50mm f2.0 Version III", sc50) == ["leica:lens:summicron:50:v3"]
+    assert lens("Leica Summicron M 50/2 第3世代", sc50) == ["leica:lens:summicron:50:v3"]
+    assert lens("Leica SUMMICRON-M 50mm F2.0(VER.4)", sc50) == ["leica:lens:summicron-m:50:current"]
+    # 주미크론 35: 7매를 '4th'로 쓰는 매장 → 매수가 이김
+    sc35 = "leica:lens:summicron-m:35:"
+    assert lens("LEICA 35mm F2 (4th) 7 element SUMMICRON-M sn.3554", sc35) == [sc35 + "v3"]
+    assert lens("Leica SUMMICRON M 35mm F2.0 ver.4", sc35) == [sc35 + "v4"]
+    assert lens("Leica SUMMICRON-M 35mm F2.0(VER.1)", sc35) == [sc35 + "v1-8element"]
+    assert lens("Leica Elmarit-M 28/2.8 第2世代 Late E48", "leica:lens:elmarit-m:28") == ["leica:lens:elmarit-m:28:v2"]
