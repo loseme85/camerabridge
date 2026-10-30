@@ -207,7 +207,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 "카메라브릿지는 회원 가입 없이 쓸 수 있고, 아래의 최소한의 정보만 처리합니다.</p>"
                 + "<h2>1. 처리하는 정보와 목적</h2>" + _rows([
                     ("의견 보내기", "의견 내용, 이메일(선택 입력), 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함) — 의견 확인·답장, 스팸 막기(하루 5건 제한)"),
-                    ("커뮤니티 게시판", "닉네임, 글·댓글 내용(누구나 볼 수 있게 공개), 글 비밀번호(복원할 수 없는 해시값으로 저장), 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함), 신고 내용 — 게시판 운영, 글쓴이 확인(지우기), 스팸·도배 막기(하루 글 5건·댓글 30건 제한), 신고 처리. 이메일 등 연락처는 받지 않음"),
+                    ("커뮤니티 게시판 (구글 로그인)", "구글 계정 고유번호를 알아볼 수 없게 바꾼 회원 번호(해시값), 닉네임, 글·댓글 내용(누구나 볼 수 있게 공개), 신고한 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함)과 신고 내용 — 회원 확인·로그인 유지, 게시판 운영, 스팸·도배 막기(하루 글 5건·댓글 30건 제한), 신고 처리. 구글 이메일·이름·사진은 받지만 저장하지 않음"),
                     ("매장(딜러) 계정", "아이디, 매장 이름, 비밀번호(복원할 수 없는 해시값으로 저장) — 매장 전용 시세 화면 로그인"),
                     ("방문 기록", "접속 나라 코드, 화면 언어·통화, 들어온 사이트 주소(도메인만)·첫 주소, 모바일 여부, 머문 시간, 검색어·고른 모델·결과 수, 매장 링크 클릭, 탭마다 새로 만드는 무작위 번호 — 서비스 개선과 이용 통계. IP 주소·이메일·쿠키는 남기지 않음"),
                     ("방문 통계", "Vercel Web Analytics의 집계 통계(쿠키 없음, 개인 식별 안 함) — 방문 수 확인"),
@@ -215,7 +215,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + "<h2>2. 보유 기간</h2>" + _list([
                     "의견: 받은 날부터 1년 (답장이 이어지면 마지막 연락부터 1년)",
                     "매장 계정: 계정을 없앨 때까지",
-                    "게시판 글·댓글: 글쓴이가 지울 때까지. 지운 글과 운영자가 내린 글은 분쟁·신고 확인을 위해 30일 비공개로 보관한 뒤 지움",
+                    "게시판 글·댓글: 글쓴이가 지울 때까지. 지운 글과 운영자가 내린 글은 분쟁·신고 확인을 위해 30일 비공개로 보관한 뒤 지움. 회원 번호·닉네임: 탈퇴를 요청할 때까지",
                     "방문 기록: 기록한 날부터 1년",
                     "기간이 지나거나 목적을 이루면 바로 지웁니다. 전자 파일은 복구할 수 없게 지웁니다.",
                 ])
@@ -224,11 +224,12 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + _rows([
                     ("Vercel Inc. (미국)", "사이트 호스팅, 의견·게시판·매장 계정·방문 기록 비공개 저장(Vercel Blob), 방문 통계"),
                     ("Telegram FZ-LLC (아랍에미리트)", "새 의견·게시판 글·신고가 오면 운영자에게 내용을 알림으로 전달"),
+                    ("Google LLC (미국)", "게시판 구글 로그인 확인. 로그인 버튼을 보여 주려고 구글 스크립트를 불러오며, 이때 구글이 자체 쿠키를 쓸 수 있음 (구글 개인정보처리방침을 따름)"),
                 ])
                 + "<p>국외 이전을 원하지 않으면 의견 보내기를 쓰지 않거나 이메일을 비워 두시면 됩니다. 다만 사이트 이용 자체는 Vercel을 거칩니다.</p>"
                 + "<h2>5. 이용자의 권리</h2><p>자신의 정보를 보거나 고치거나 지우거나 처리를 멈추라고 언제든 요청할 수 있습니다. "
                   f"{MAIL}로 연락하시면 지체 없이 처리합니다. 방문 기록은 사람을 알아볼 수 있는 정보와 연결되지 않아 특정 방문을 골라 지우기 어려울 수 있습니다.</p>"
-                + "<h2>6. 쿠키와 브라우저 저장소</h2><p>매장 계정으로 로그인할 때만 로그인 유지용 쿠키(cb_dealer)를 씁니다. "
+                + "<h2>6. 쿠키와 브라우저 저장소</h2><p>매장 계정으로 로그인할 때 로그인 유지용 쿠키(cb_dealer)를, 게시판에 구글로 로그인할 때 로그인 유지용 쿠키(cb_member, 90일)를 씁니다. "
                   "일반 이용자에게는 쿠키를 쓰지 않으며, 고른 언어·통화·배송 나라를 기억하려고 브라우저 저장소(localStorage)를 씁니다. 브라우저 설정에서 지울 수 있습니다.</p>"
                 + "<h2>7. 안전 조치</h2><p>모든 연결은 HTTPS로 암호화하고, 저장 정보는 비공개 저장소에 두며 운영자만 볼 수 있습니다. 비밀번호는 해시값으로만 저장합니다.</p>"
                 + "<h2>8. 만 14세 미만</h2><p>카메라브릿지는 만 14세 미만 아동을 대상으로 하지 않으며, 알면서 아동의 정보를 받지 않습니다.</p>"
@@ -241,7 +242,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 "Camera Bridge は会員登録なしで使え、以下の最小限の情報のみを扱います。</p>"
                 + "<h2>1. 取り扱う情報と目的</h2>" + _rows([
                     ("ご意見の送信", "内容、メールアドレス（任意）、接続元識別値（IP アドレスを日ごとに変換したハッシュ値。IP 自体は保存しません）— 内容の確認・返信、スパム防止（1日5件まで）"),
-                    ("コミュニティ掲示板", "ニックネーム、投稿・コメントの内容（誰でも閲覧できる公開情報）、投稿パスワード（復元できないハッシュ値で保存）、接続元識別値（IP アドレスを日ごとに変換したハッシュ値。IP 自体は保存しません）、通報内容 — 掲示板の運営、投稿者の確認（削除）、スパム防止（1日に投稿5件・コメント30件まで）、通報対応。メールなどの連絡先は受け取りません"),
+                    ("コミュニティ掲示板（Google ログイン）", "Google アカウント固有番号を特定できない形に変換した会員番号（ハッシュ値）、ニックネーム、投稿・コメントの内容（誰でも閲覧できる公開情報）、通報者の接続元識別値（IP アドレスを日ごとに変換したハッシュ値）と通報内容 — 会員の確認・ログイン維持、掲示板の運営、スパム防止（1日に投稿5件・コメント30件まで）、通報対応。Google のメール・名前・写真は保存しません"),
                     ("店舗（ディーラー）アカウント", "ID、店舗名、パスワード（復元できないハッシュ値で保存）— 店舗専用画面へのログイン"),
                     ("利用記録", "接続国コード、表示言語・通貨、参照元（ドメインのみ）・最初のページ、モバイルかどうか、滞在時間、検索語・選んだモデル・結果数、店舗リンクのクリック、タブごとに作るランダムな番号 — サービス改善と利用統計。IP アドレス・メール・Cookie は残しません"),
                     ("アクセス統計", "Vercel Web Analytics の集計統計（Cookie なし、個人を特定しません）"),
@@ -257,9 +258,10 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + "<h2>4. 委託と国外移転</h2>" + _rows([
                     ("Vercel Inc.（米国）", "ホスティング、ご意見・掲示板・店舗アカウント・利用記録の非公開保存、アクセス統計"),
                     ("Telegram FZ-LLC（アラブ首長国連邦）", "新しいご意見・掲示板の投稿・通報の内容を運営者へ通知"),
+                    ("Google LLC（米国）", "掲示板の Google ログインの確認。ログインボタンの表示のため Google のスクリプトを読み込み、Google 独自の Cookie が使われる場合があります"),
                 ])
                 + f"<h2>5. 利用者の権利</h2><p>ご自身の情報の開示・訂正・削除・利用停止をいつでも求めることができます。{MAIL} までご連絡ください。</p>"
-                + "<h2>6. Cookie とブラウザ保存領域</h2><p>店舗アカウントでログインする場合のみログイン維持用 Cookie（cb_dealer）を使います。"
+                + "<h2>6. Cookie とブラウザ保存領域</h2><p>店舗アカウントでログインする場合はログイン維持用 Cookie（cb_dealer）、掲示板に Google でログインする場合はログイン維持用 Cookie（cb_member、90日）を使います。"
                   "一般の利用者には Cookie を使わず、選んだ言語・通貨・配送先を覚えるためにブラウザの保存領域（localStorage）を使います。</p>"
                 + "<h2>7. 安全対策</h2><p>通信はすべて HTTPS で暗号化し、保存情報は非公開の保存先で運営者のみが閲覧します。</p>"
                 + "<h2>8. 個人情報保護責任者</h2>" + _rows([("責任者", f"{o['rep']['ja']}（代表）"), ("連絡先", MAIL)])
@@ -269,7 +271,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
             "This policy is written to meet Korea's Personal Information Protection Act and the EU/UK GDPR.</p>"
             + "<h2>1. What we process, why, and on what basis</h2>" + _rows([
                 ("Feedback form", "Your message, email (optional), and a sender tag (a daily-rotating hash of your IP address; the IP itself is not stored) — to read and reply to feedback and to block spam (5 per day). Basis: your consent by sending it, and our legitimate interest in preventing abuse."),
-                ("Community board", "Nickname, the text of your posts and comments (public — anyone can read them), a post password (stored only as a one-way hash), a sender tag (a daily-rotating hash of your IP address; the IP itself is not stored) and reports — to run the board, let you delete your own posts, block spam (5 posts and 30 comments per day) and handle reports. No email or other contact details are collected. Basis: your consent by posting, and our legitimate interest in preventing abuse."),
+                ("Community board (Google sign-in)", "A member ID (a one-way hash of your Google account ID), your nickname, the text of your posts and comments (public — anyone can read them), and for reports a sender tag (a daily-rotating hash of your IP address) and the report text — to recognise you and keep you signed in, run the board, block spam (5 posts and 30 comments per day) and handle reports. Your Google email, name and photo are not stored. Basis: your consent by signing in and posting, and our legitimate interest in preventing abuse."),
                 ("Shop (dealer) accounts", "Username, shop name and password (stored only as a one-way hash) — to sign in to the dealer view. Basis: contract with the shop."),
                 ("Usage log", "Country code of the connection, interface language and currency, referring site (domain only) and first page, mobile or not, time on page, searches, chosen models, result counts, clicks to shops, and a random ID created per browser tab — to improve the service and count usage. No IP address, email or cookie is kept. Basis: legitimate interest in running and improving the service."),
                 ("Analytics", "Aggregated visit statistics from Vercel Web Analytics (cookieless, does not identify you)."),
@@ -277,7 +279,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
             + "<h2>2. How long we keep it</h2>" + _list([
                 "Feedback: 1 year from receipt (or from the last message if we keep corresponding)",
                 "Shop accounts: until the account is closed",
-                "Board posts and comments: until you delete them. Deleted posts and posts taken down by the operator are kept privately for 30 days to handle reports and disputes, then deleted",
+                "Board posts and comments: until you delete them. Deleted posts and posts taken down by the operator are kept privately for 30 days to handle reports and disputes, then deleted. Member ID and nickname: until you ask us to delete your account",
                 "Usage log: 1 year from the day it was recorded",
                 "After that, data is deleted without delay.",
             ])
@@ -285,11 +287,12 @@ def privacy_body(lang: str) -> tuple[str, str]:
             + "<h2>4. Processors and international transfers</h2>" + _rows([
                 ("Vercel Inc. (USA)", "Hosting, private storage of feedback, board posts, shop accounts and usage log (Vercel Blob), analytics"),
                 ("Telegram FZ-LLC (UAE)", "Forwards new feedback, board posts and reports to the operator as a notification"),
+                ("Google LLC (USA)", "Verifies Google sign-in for the board. To show the sign-in button we load Google's script, which may set Google's own cookies under Google's privacy policy"),
             ])
             + "<p>Data is transferred over the internet when you use the service. Transfers to the US rely on Vercel's standard contractual clauses / data processing terms.</p>"
             + f"<h2>5. Your rights</h2><p>You may ask to access, correct, delete or restrict the processing of your information, object to processing, or withdraw consent, at any time by emailing {MAIL}. "
               "If you are in the EU/UK you may also complain to your local data protection authority. Usage-log entries are not linked to anything that identifies you, so we may not be able to single out a particular visit.</p>"
-            + "<h2>6. Cookies and browser storage</h2><p>We set a cookie (cb_dealer) only when a shop signs in to keep the session; it is strictly necessary. "
+            + "<h2>6. Cookies and browser storage</h2><p>We set a sign-in cookie only when a shop signs in (cb_dealer) or when you sign in to the board with Google (cb_member, 90 days); both are strictly necessary to keep you signed in. "
               "Regular visitors get no cookies. We use your browser's local storage to remember the language, currency and shipping country you chose; you can clear it in your browser settings.</p>"
             + "<h2>7. Security</h2><p>All connections use HTTPS. Stored data is kept in private storage that only the operator can access, and passwords are stored only as hashes.</p>"
             + "<h2>8. Children</h2><p>Camera Bridge is not directed to children under 14 (under 16 in the EU), and we do not knowingly collect their information.</p>"
