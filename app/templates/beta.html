@@ -1135,6 +1135,20 @@
     .feedback-dialog{border:1px solid var(--rule);border-radius:0;box-shadow:6px 6px 0 rgba(22,24,26,0.1)}
     .feedback-dialog h2{font-family:var(--serif);font-weight:500;font-size:24px}
     .feedback-dialog textarea,.feedback-dialog input[type=email]{border-radius:0}
+    /* 판매 중 / 팔렸거나 내려간 기록 구분 */
+    .archive-card h3 .section-count{font-family:var(--sans);font-size:14px;color:var(--text-muted);font-weight:400;margin-left:6px}
+    .jump-history{font-family:var(--sans);font-size:13px;color:var(--text);text-decoration:underline;text-underline-offset:3px;margin-left:8px;white-space:nowrap}
+    #archive-region{scroll-margin-top:80px}
+    .archive-card.section-history{margin-top:56px;padding-top:22px;border-top:3px double var(--rule)}
+    .archive-card.section-history h3{color:var(--text-soft)}
+    .result-card.is-history{background:transparent}
+    .result-card.is-history .thumb img{filter:grayscale(1);opacity:.55}
+    .result-card.is-history .result-title{color:var(--text-soft)}
+    .result-card.is-history .result-price{color:var(--text-muted)}
+    .result-card.is-history .result-landed,.result-card.is-history .result-status-row,.result-card.is-history .result-source-label+.result-source-meta{display:none}
+    .history-stamp{display:inline-block;margin:0 0 8px;padding:2px 8px;border:1px solid var(--text-soft);font:500 12px/1.5 var(--sans);color:var(--text-soft);letter-spacing:0}
+    .history-price-label{margin:2px 0 -2px;font:12px/1.4 var(--sans);color:var(--text-muted)}
+    .action-link{font:13px/1.4 var(--sans);color:var(--text-soft);text-decoration:underline;text-underline-offset:3px}
     /* 아래쪽 판권면: 겹줄 + 세리프 브랜드 + 링크 한 줄 */
     .site-legal{text-align:left;margin:72px 0 72px;color:var(--text-muted);font-family:var(--sans);font-size:12px;line-height:1.65}
     .site-legal .legal-story{font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.5;color:var(--text-soft);margin:0 0 20px}
@@ -1683,11 +1697,14 @@
         unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
       },
       section: {
-        active_listings: { ko: '현재 판매 중', en: 'Active listings', ja: '現在販売中', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'Anúncios ativos', es: 'Anuncios activos', de: 'Verfügbare Angebote', it: 'Annunci attivi' },
-        market_history: { ko: '과거 거래 / 가격 기록', en: 'Market history', ja: '過去の取引・価格記録', 'zh-Hans': '历史成交 / 价格记录', 'zh-Hant': '歷史成交 / 價格紀錄', pt: 'Histórico de mercado', es: 'Historial de mercado', de: 'Markthistorie', it: 'Storico di mercato' },
+        active_listings: { ko: '지금 살 수 있는 매물', en: 'For sale now', ja: 'いま買える在庫', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'Anúncios ativos', es: 'Anuncios activos', de: 'Verfügbare Angebote', it: 'Annunci attivi' },
+        market_history: { ko: '팔렸거나 내려간 기록', en: 'Sold or removed — price record', ja: '売れた・掲載終了の記録', 'zh-Hans': '历史成交 / 价格记录', 'zh-Hant': '歷史成交 / 價格紀錄', pt: 'Histórico de mercado', es: 'Historial de mercado', de: 'Markthistorie', it: 'Storico di mercato' },
         archive: { ko: '과거 기록', en: 'Archive', ja: 'アーカイブ', 'zh-Hans': '历史记录', 'zh-Hant': '歷史記錄', pt: 'Arquivo', es: 'Archivo', de: 'Archiv', it: 'Archivio' },
-        active_subtitle: { ko: '현재 살아 있는 판매 매물을 먼저 보여줍니다.', en: 'Listings that still appear available are shown first.', ja: '現在も購入可能に見える出品を先に表示します。', 'zh-Hans': '优先显示看起来仍可购买的在售商品。', 'zh-Hant': '優先顯示看起來仍可購買的在售商品。', pt: 'Anúncios que ainda parecem disponíveis são mostradas primeiro.', es: 'Primero se muestran los anuncios que aún parecen disponibles.', de: 'Angebote, die noch verfügbar erscheinen, werden zuerst gezeigt.', it: 'Per primi vengono mostrati gli annunci che sembrano ancora disponibili.' },
-        history_subtitle: { ko: '과거 거래와 보관 기록은 별도로 분리해 보여줍니다.', en: 'Historical sold, removed, and archive records are shown separately.', ja: '過去の売却・削除・アーカイブ記録は別枠で表示します。', 'zh-Hans': '历史售出、下架和归档记录会单独展示。', 'zh-Hant': '歷史售出、下架和歸檔記錄會單獨展示。', pt: 'Registros históricos de venda, remoção e arquivo são mostrados separadamente.', es: 'Los registros históricos de venta, eliminación y archivo se muestran por separado.', de: 'Verkaufte, entfernte und archivierte Einträge werden separat angezeigt.', it: 'I record storici di vendita, rimozione e archivio vengono mostrati separatamente.' },
+        active_subtitle: { ko: '판매처에 아직 올라와 있는 매물입니다.', en: 'Still listed at the seller.', ja: '販売店にまだ掲載されている在庫です。', 'zh-Hans': '优先显示看起来仍可购买的在售商品。', 'zh-Hant': '優先顯示看起來仍可購買的在售商品。', pt: 'Anúncios que ainda parecem disponíveis são mostradas primeiro.', es: 'Primero se muestran los anuncios que aún parecen disponibles.', de: 'Angebote, die noch verfügbar erscheinen, werden zuerst gezeigt.', it: 'Per primi vengono mostrati gli annunci che sembrano ancora disponibili.' },
+        jump_history: { ko: '팔렸거나 내려간 기록 {count}건 보기 ↓', en: 'See {count} sold or removed ↓', ja: '売れた・掲載終了の記録 {count}件 ↓' },
+        history_price: { ko: '마지막 표시 가격', en: 'Last price seen', ja: '最後の表示価格' },
+        view_record: { ko: '원래 페이지 보기', en: 'Open original page', ja: '元のページを見る' },
+        history_subtitle: { ko: '지금은 살 수 없습니다. 마지막으로 보인 가격을 시세 참고용으로 남겨 둔 기록입니다.', en: 'These can no longer be bought. The last price we saw is kept as a reference for market value.', ja: '現在は購入できません。最後に確認した価格を相場の参考として残した記録です。', 'zh-Hans': '历史售出、下架和归档记录会单独展示。', 'zh-Hant': '歷史售出、下架和歸檔記錄會單獨展示。', pt: 'Registros históricos de venda, remoção e arquivo são mostrados separadamente.', es: 'Los registros históricos de venta, eliminación y archivo se muestran por separado.', de: 'Verkaufte, entfernte und archivierte Einträge werden separat angezeigt.', it: 'I record storici di vendita, rimozione e archivio vengono mostrati separatamente.' },
         no_active: { ko: '현재 확인되는 판매 매물이 없습니다.', en: 'No active listings are currently visible.', ja: '現在確認できる販売中の出品はありません。', 'zh-Hans': '当前没有可见的在售商品。', 'zh-Hant': '目前沒有可見的在售商品。', pt: 'No momento não há anúncios ativos visíveis.', es: 'Actualmente no hay anuncios activos visibles.', de: 'Derzeit sind keine aktiven Angebote sichtbar.', it: 'Al momento non ci sono annunci attivi visibili.' },
         no_history: { ko: '이 검색에는 아직 과거 거래 기록이 보이지 않습니다.', en: 'No market-history records are visible for this search yet.', ja: 'この検索では過去の市場記録がまだ表示されていません。', 'zh-Hans': '此搜索目前还没有可见的历史市场记录。', 'zh-Hant': '此搜尋目前尚未看到歷史市場記錄。', pt: 'Ainda não há registros de histórico de mercado visíveis para esta pesquisa.', es: 'Todavía no hay registros de historial de mercado visibles para esta búsqueda.', de: 'Für diese Suche sind noch keine Markthistorie-Einträge sichtbar.', it: 'Per questa ricerca non sono ancora visibili record di storico di mercato.' },
       },
@@ -4831,7 +4848,7 @@
       // 모델(사양 묶음)을 고르면 위 요약 칸이 이미 그 모델 기준이라 결과 요약 카드는 생략 (첫 매물 제목을 모델처럼 보여 주던 문제)
       els['market-entry-region'].innerHTML = '';  // '결과 요약' 카드는 위 요약과 겹치고 짐작한 계열 이름이 제목과 달라 헷갈려서 뺌
       els['query-summary-region'].innerHTML = '';
-      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));
+      els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length), historyResults.length);
       els['results-load-more-region'].innerHTML = '';
       els['archive-region'].innerHTML = renderArchiveSection(historyResults);
     }
@@ -5083,7 +5100,7 @@
       `;
     }
 
-    function renderCard(result, index){
+    function renderCard(result, index, isHistory = false){
       const title = result.title || ux('card.title_missing', 'Untitled listing');
       const url = result.affiliate_url || result.source_url || '#';
       const imageUrl = result.image_url;
@@ -5124,11 +5141,13 @@
       const explanation = getBetaCardExplanation(evidenceRole, priceRole, reason);
 
       return `
-        <article class="result-card" data-listing-key="${escapeHtml(listingKey)}"${appendAnchorAttr}>
+        <article class="result-card${isHistory ? ' is-history' : ''}" data-listing-key="${escapeHtml(listingKey)}"${appendAnchorAttr}>
           <div class="result-head">
             <div class="thumb">${thumb}</div>
             <div class="card-copy">
+              ${isHistory ? `<p class="history-stamp">${escapeHtml(localizeStatusLabel(status.label))} · ${escapeHtml(observedMeta.value)}</p>` : ''}
               <a class="result-title" href="${safeUrl}"${target} title="${escapeHtml(title)}">${escapeHtml(title)}</a>
+              ${isHistory ? `<p class="history-price-label">${escapeHtml(ux('section.history_price', 'Last price seen'))}</p>` : ''}
               <div class="result-price-row">
                 ${renderPriceBlock(result)}
                 <div class="result-source">
@@ -5157,7 +5176,7 @@
           ` : ''}
           <div class="result-actions">
             <div class="action-group">
-              ${canViewSource ? `<a class="action-button" href="${safeUrl}"${target}>${escapeHtml(ux('cta.view_listing', 'View at seller'))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(ux('cta.view_listing', 'View at seller'))}</button>`}
+              ${canViewSource ? `<a class="${isHistory ? 'action-link' : 'action-button'}" href="${safeUrl}"${target}>${escapeHtml(isHistory ? ux('section.view_record', 'Open original page') : ux('cta.view_listing', 'View at seller'))}</a>` : `<button type="button" class="action-button" aria-disabled="true">${escapeHtml(ux('cta.view_listing', 'View at seller'))}</button>`}
             </div>
           </div>
         </article>
@@ -5176,7 +5195,7 @@
       return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, ux('common.no_data', 'Not enough data')))}</span></div>`;
     }
 
-    function renderResultSection(sectionName, results, footerHtml = ''){
+    function renderResultSection(sectionName, results, footerHtml = '', historyCount = 0){
       const isActive = sectionName === 'active';
       const title = isActive ? ux('section.active_listings', 'Active listings') : ux('section.market_history', 'Market history');
       const subtitle = isActive
@@ -5188,13 +5207,12 @@
       const listClass = isActive ? 'archive-list active-list' : 'archive-list history-list';
 
       return `
-        <article class="archive-card">
-          <p class="section-label">${escapeHtml(title)}</p>
-          <h3>${escapeHtml(state.entity ? title : `${title} (${formatListingCount(results.length)})`)}</h3>
-          <p>${escapeHtml(subtitle)}</p>
+        <article class="archive-card ${isActive ? 'section-active' : 'section-history'}">
+          <h3>${escapeHtml(title)}${isActive ? '' : ` <span class="section-count">${escapeHtml(formatListingCount(results.length))}</span>`}</h3>
+          <p>${escapeHtml(subtitle)}${isActive && historyCount ? ` <a class="jump-history" href="#archive-region">${escapeHtml(ux('section.jump_history', 'See {count} sold or removed ↓').replace('{count}', historyCount))}</a>` : ''}</p>
           ${
             results.length
-              ? `<div class="${listClass}">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index))).join('')}</div>`
+              ? `<div class="${listClass}">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index), !isActive)).join('')}</div>`
               : `<div class="archive-item"><strong>${escapeHtml(emptyMessage)}</strong></div>`
           }
           ${footerHtml}
