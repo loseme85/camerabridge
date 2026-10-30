@@ -207,6 +207,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 "카메라브릿지는 회원 가입 없이 쓸 수 있고, 아래의 최소한의 정보만 처리합니다.</p>"
                 + "<h2>1. 처리하는 정보와 목적</h2>" + _rows([
                     ("의견 보내기", "의견 내용, 이메일(선택 입력), 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함) — 의견 확인·답장, 스팸 막기(하루 5건 제한)"),
+                    ("커뮤니티 게시판", "닉네임, 글·댓글 내용(누구나 볼 수 있게 공개), 글 비밀번호(복원할 수 없는 해시값으로 저장), 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함), 신고 내용 — 게시판 운영, 글쓴이 확인(지우기), 스팸·도배 막기(하루 글 5건·댓글 30건 제한), 신고 처리. 이메일 등 연락처는 받지 않음"),
                     ("매장(딜러) 계정", "아이디, 매장 이름, 비밀번호(복원할 수 없는 해시값으로 저장) — 매장 전용 시세 화면 로그인"),
                     ("방문 기록", "접속 나라 코드, 화면 언어·통화, 들어온 사이트 주소(도메인만)·첫 주소, 모바일 여부, 머문 시간, 검색어·고른 모델·결과 수, 매장 링크 클릭, 탭마다 새로 만드는 무작위 번호 — 서비스 개선과 이용 통계. IP 주소·이메일·쿠키는 남기지 않음"),
                     ("방문 통계", "Vercel Web Analytics의 집계 통계(쿠키 없음, 개인 식별 안 함) — 방문 수 확인"),
@@ -214,14 +215,15 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + "<h2>2. 보유 기간</h2>" + _list([
                     "의견: 받은 날부터 1년 (답장이 이어지면 마지막 연락부터 1년)",
                     "매장 계정: 계정을 없앨 때까지",
+                    "게시판 글·댓글: 글쓴이가 지울 때까지. 지운 글과 운영자가 내린 글은 분쟁·신고 확인을 위해 30일 비공개로 보관한 뒤 지움",
                     "방문 기록: 기록한 날부터 1년",
                     "기간이 지나거나 목적을 이루면 바로 지웁니다. 전자 파일은 복구할 수 없게 지웁니다.",
                 ])
                 + "<h2>3. 제3자 제공</h2><p>개인정보를 다른 곳에 팔거나 제공하지 않습니다. 법령에 따른 요청이 있을 때만 예외로 합니다.</p>"
                 + "<h2>4. 처리 위탁과 국외 이전</h2><p>서비스 운영을 위해 아래 업체에 정보 보관·전송을 맡깁니다. 정보는 이용 시점에 인터넷으로 전송되며, 위 보유 기간 동안 보관됩니다.</p>"
                 + _rows([
-                    ("Vercel Inc. (미국)", "사이트 호스팅, 의견·매장 계정·방문 기록 비공개 저장(Vercel Blob), 방문 통계"),
-                    ("Telegram FZ-LLC (아랍에미리트)", "새 의견이 오면 운영자에게 의견 내용·이메일을 알림으로 전달"),
+                    ("Vercel Inc. (미국)", "사이트 호스팅, 의견·게시판·매장 계정·방문 기록 비공개 저장(Vercel Blob), 방문 통계"),
+                    ("Telegram FZ-LLC (아랍에미리트)", "새 의견·게시판 글·신고가 오면 운영자에게 내용을 알림으로 전달"),
                 ])
                 + "<p>국외 이전을 원하지 않으면 의견 보내기를 쓰지 않거나 이메일을 비워 두시면 됩니다. 다만 사이트 이용 자체는 Vercel을 거칩니다.</p>"
                 + "<h2>5. 이용자의 권리</h2><p>자신의 정보를 보거나 고치거나 지우거나 처리를 멈추라고 언제든 요청할 수 있습니다. "
@@ -239,6 +241,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 "Camera Bridge は会員登録なしで使え、以下の最小限の情報のみを扱います。</p>"
                 + "<h2>1. 取り扱う情報と目的</h2>" + _rows([
                     ("ご意見の送信", "内容、メールアドレス（任意）、接続元識別値（IP アドレスを日ごとに変換したハッシュ値。IP 自体は保存しません）— 内容の確認・返信、スパム防止（1日5件まで）"),
+                    ("コミュニティ掲示板", "ニックネーム、投稿・コメントの内容（誰でも閲覧できる公開情報）、投稿パスワード（復元できないハッシュ値で保存）、接続元識別値（IP アドレスを日ごとに変換したハッシュ値。IP 自体は保存しません）、通報内容 — 掲示板の運営、投稿者の確認（削除）、スパム防止（1日に投稿5件・コメント30件まで）、通報対応。メールなどの連絡先は受け取りません"),
                     ("店舗（ディーラー）アカウント", "ID、店舗名、パスワード（復元できないハッシュ値で保存）— 店舗専用画面へのログイン"),
                     ("利用記録", "接続国コード、表示言語・通貨、参照元（ドメインのみ）・最初のページ、モバイルかどうか、滞在時間、検索語・選んだモデル・結果数、店舗リンクのクリック、タブごとに作るランダムな番号 — サービス改善と利用統計。IP アドレス・メール・Cookie は残しません"),
                     ("アクセス統計", "Vercel Web Analytics の集計統計（Cookie なし、個人を特定しません）"),
@@ -246,13 +249,14 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + "<h2>2. 保存期間</h2>" + _list([
                     "ご意見：受け取った日から1年（やり取りが続く場合は最後の連絡から1年）",
                     "店舗アカウント：アカウント削除まで",
+                    "掲示板の投稿・コメント：投稿者が削除するまで。削除された投稿と運営者が非公開にした投稿は、通報・紛争の確認のため30日間非公開で保管した後に削除",
                     "利用記録：記録した日から1年",
                     "期間が過ぎるか目的を果たした情報は速やかに削除します。",
                 ])
                 + "<h2>3. 第三者提供</h2><p>法令に基づく場合を除き、個人情報を第三者に販売・提供しません。</p>"
                 + "<h2>4. 委託と国外移転</h2>" + _rows([
-                    ("Vercel Inc.（米国）", "ホスティング、ご意見・店舗アカウント・利用記録の非公開保存、アクセス統計"),
-                    ("Telegram FZ-LLC（アラブ首長国連邦）", "新しいご意見の内容・メールを運営者へ通知"),
+                    ("Vercel Inc.（米国）", "ホスティング、ご意見・掲示板・店舗アカウント・利用記録の非公開保存、アクセス統計"),
+                    ("Telegram FZ-LLC（アラブ首長国連邦）", "新しいご意見・掲示板の投稿・通報の内容を運営者へ通知"),
                 ])
                 + f"<h2>5. 利用者の権利</h2><p>ご自身の情報の開示・訂正・削除・利用停止をいつでも求めることができます。{MAIL} までご連絡ください。</p>"
                 + "<h2>6. Cookie とブラウザ保存領域</h2><p>店舗アカウントでログインする場合のみログイン維持用 Cookie（cb_dealer）を使います。"
@@ -265,6 +269,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
             "This policy is written to meet Korea's Personal Information Protection Act and the EU/UK GDPR.</p>"
             + "<h2>1. What we process, why, and on what basis</h2>" + _rows([
                 ("Feedback form", "Your message, email (optional), and a sender tag (a daily-rotating hash of your IP address; the IP itself is not stored) — to read and reply to feedback and to block spam (5 per day). Basis: your consent by sending it, and our legitimate interest in preventing abuse."),
+                ("Community board", "Nickname, the text of your posts and comments (public — anyone can read them), a post password (stored only as a one-way hash), a sender tag (a daily-rotating hash of your IP address; the IP itself is not stored) and reports — to run the board, let you delete your own posts, block spam (5 posts and 30 comments per day) and handle reports. No email or other contact details are collected. Basis: your consent by posting, and our legitimate interest in preventing abuse."),
                 ("Shop (dealer) accounts", "Username, shop name and password (stored only as a one-way hash) — to sign in to the dealer view. Basis: contract with the shop."),
                 ("Usage log", "Country code of the connection, interface language and currency, referring site (domain only) and first page, mobile or not, time on page, searches, chosen models, result counts, clicks to shops, and a random ID created per browser tab — to improve the service and count usage. No IP address, email or cookie is kept. Basis: legitimate interest in running and improving the service."),
                 ("Analytics", "Aggregated visit statistics from Vercel Web Analytics (cookieless, does not identify you)."),
@@ -272,13 +277,14 @@ def privacy_body(lang: str) -> tuple[str, str]:
             + "<h2>2. How long we keep it</h2>" + _list([
                 "Feedback: 1 year from receipt (or from the last message if we keep corresponding)",
                 "Shop accounts: until the account is closed",
+                "Board posts and comments: until you delete them. Deleted posts and posts taken down by the operator are kept privately for 30 days to handle reports and disputes, then deleted",
                 "Usage log: 1 year from the day it was recorded",
                 "After that, data is deleted without delay.",
             ])
             + "<h2>3. Sharing</h2><p>We do not sell or share personal information, except where required by law.</p>"
             + "<h2>4. Processors and international transfers</h2>" + _rows([
-                ("Vercel Inc. (USA)", "Hosting, private storage of feedback, shop accounts and usage log (Vercel Blob), analytics"),
-                ("Telegram FZ-LLC (UAE)", "Forwards new feedback (message and email) to the operator as a notification"),
+                ("Vercel Inc. (USA)", "Hosting, private storage of feedback, board posts, shop accounts and usage log (Vercel Blob), analytics"),
+                ("Telegram FZ-LLC (UAE)", "Forwards new feedback, board posts and reports to the operator as a notification"),
             ])
             + "<p>Data is transferred over the internet when you use the service. Transfers to the US rely on Vercel's standard contractual clauses / data processing terms.</p>"
             + f"<h2>5. Your rights</h2><p>You may ask to access, correct, delete or restrict the processing of your information, object to processing, or withdraw consent, at any time by emailing {MAIL}. "
@@ -301,6 +307,7 @@ def terms_body(lang: str) -> tuple[str, str]:
             ("4. 외부 링크와 제휴", "매물 링크는 매장 사이트로 연결됩니다. 일부는 제휴 링크일 수 있으며 구매 가격은 달라지지 않습니다."),
             ("5. 매장 계정", "매장 계정은 운영자가 만들어 드립니다. 아이디·비밀번호는 매장이 관리하며 다른 사람과 나누어 쓰지 않습니다. 매장 화면의 데이터는 매장 내부 참고용으로만 씁니다."),
             ("6. 금지 행위", "서비스를 방해하는 행위(과도한 자동 요청, 보안 우회, 다른 사람 계정 사용)와 법을 어기는 행위를 금지합니다."),
+            ("6-1. 커뮤니티 게시판", "게시판 글·댓글은 누구나 볼 수 있습니다. 쓴 글의 책임은 글쓴이에게 있습니다. 매물 판매·구매 글, 개인 연락처, 광고·스팸, 욕설·혐오 표현, 다른 사람의 권리를 침해하는 글, 법에 어긋나는 글은 올릴 수 없고, 운영자가 알리지 않고 가리거나 지울 수 있습니다. 서로 다른 이용자 3명이 신고한 글은 운영자가 확인할 때까지 자동으로 가려집니다(정보통신망법 제44조의2 임시조치). 권리 침해 신고는 글의 '신고' 버튼이나 " + MAIL + "로 할 수 있습니다. 운영자는 게시판에서 일어난 이용자 사이의 거래·분쟁에 책임지지 않습니다."),
             ("7. 권리", "매물 제목·사진은 각 매장의 것입니다. Leica는 Leica Camera AG의 상표이며 카메라브릿지는 Leica Camera AG와 관계없습니다."),
             ("8. 책임 제한", "운영자는 고의나 중대한 과실이 없는 한, 정보 오류나 서비스 중단으로 생긴 손해에 책임지지 않습니다. 서비스는 예고 없이 바뀌거나 멈출 수 있습니다."),
             ("9. 약관 변경", "약관을 바꾸면 이 페이지에 시행일과 함께 알립니다."),
@@ -315,6 +322,7 @@ def terms_body(lang: str) -> tuple[str, str]:
             ("4. 外部リンクとアフィリエイト", "在庫リンクは店舗サイトに移動します。一部はアフィリエイトリンクの場合がありますが、購入価格は変わりません。"),
             ("5. 店舗アカウント", "店舗アカウントは運営者が発行します。ID・パスワードは店舗が管理し、共有しないでください。店舗画面のデータは店舗内部の参考用としてのみ使用してください。"),
             ("6. 禁止事項", "過度な自動アクセス、セキュリティの回避、他人のアカウントの使用など、サービスを妨げる行為や違法行為を禁止します。"),
+            ("6-1. コミュニティ掲示板", "投稿・コメントは誰でも閲覧できます。投稿の責任は投稿者にあります。売買の投稿、個人の連絡先、広告・スパム、暴言・差別表現、他人の権利を侵害する投稿、違法な投稿は禁止で、運営者が予告なく非表示・削除できます。3人の利用者から通報された投稿は、運営者が確認するまで自動で非表示になります。権利侵害の申し立ては投稿の「通報」ボタンまたは " + MAIL + " へ。利用者間の取引・紛争について運営者は責任を負いません。"),
             ("7. 権利", "商品名・写真は各店舗のものです。Leica は Leica Camera AG の商標で、Camera Bridge は Leica Camera AG とは関係ありません。"),
             ("8. 責任の制限", "運営者は故意または重大な過失がない限り、情報の誤りやサービスの停止による損害について責任を負いません。"),
             ("9. 規約の変更", "変更する場合は施行日とともにこのページでお知らせします。"),
@@ -328,6 +336,7 @@ def terms_body(lang: str) -> tuple[str, str]:
         ("4. Links and affiliates", "Listing links take you to the shop's site. Some may be affiliate links; the price you pay does not change."),
         ("5. Shop accounts", "Shop accounts are issued by the operator. Shops keep their credentials private and use dealer-view data for internal reference only."),
         ("6. Prohibited use", "Do not disrupt the service (excessive automated requests, bypassing security, using another account) or use it unlawfully."),
+        ("6a. Community board", "Board posts and comments are public. You are responsible for what you post. Buy/sell posts, personal contact details, ads and spam, abuse or hate speech, content that infringes others' rights and unlawful content are not allowed and may be hidden or removed without notice. A post reported by 3 different users is hidden automatically until the operator reviews it. To report an infringement, use the post's Report button or email " + MAIL + ". We are not responsible for dealings or disputes between users."),
         ("7. Rights", "Listing titles and photos belong to each shop. Leica is a trademark of Leica Camera AG; Camera Bridge is not affiliated with Leica Camera AG."),
         ("8. Liability", "Except for intent or gross negligence, we are not liable for losses caused by inaccurate information or interruptions. Mandatory consumer rights in your country are not affected. The service may change or stop without notice."),
         ("9. Changes", "We will post changes to these terms on this page with the effective date."),

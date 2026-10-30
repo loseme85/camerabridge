@@ -1056,6 +1056,40 @@
     .home-item-shop{font-size:12px;color:var(--text-muted)}
     .home-popular{border-top:1px solid var(--rule);gap:0 48px}
     .home-model{padding:14px 0;align-items:baseline}
+    /* 커뮤니티 게시판 */
+    body.cb-board .home-feed,body.cb-board .workspace{display:none !important}
+    .board-home-list,.board-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+    .board-row{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:6px 16px;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--border)}
+    .board-row a{color:inherit;text-decoration:none;min-width:0}
+    .board-row a:hover .board-row-title{text-decoration:underline;text-underline-offset:3px}
+    .board-row-cat{font-size:12px;color:var(--text-muted)}
+    .board-row-title{font-family:var(--serif);font-size:18px;font-weight:500;overflow-wrap:anywhere}
+    .board-row-count{font-size:13px;color:var(--text-soft);margin-left:6px}
+    .board-row-meta{font-size:12px;color:var(--text-muted);white-space:nowrap}
+    .board-write-link{display:inline-flex;align-items:center;justify-content:center;height:44px;min-width:0;padding:0 22px;color:#fff;text-decoration:none}
+    .board-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0;align-items:center}
+    .board-empty{padding:18px 0;color:var(--text-soft);font-family:var(--serif);font-style:italic;font-size:17px;border-bottom:1px solid var(--border)}
+    .board-view{margin:48px 0 0}
+    .board-tabs{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 0 14px}
+    .board-tabs button{background:none;border:0;padding:4px 0;font:inherit;font-size:14px;color:var(--text-soft);cursor:pointer;border-bottom:2px solid transparent}
+    .board-tabs button.is-on{color:var(--text);border-bottom-color:var(--rule)}
+    .board-rules{font-size:13px;color:var(--text-soft);margin:0 0 16px;max-width:760px}
+    .board-pager{display:flex;gap:14px;align-items:center;margin:16px 0 0;font-size:14px}
+    .board-post h3{font-family:var(--serif);font-weight:500;font-size:30px;letter-spacing:-0.01em;margin:6px 0 8px;overflow-wrap:anywhere}
+    .board-post-meta{font-size:13px;color:var(--text-muted);padding:0 0 14px;border-bottom:1px solid var(--rule)}
+    .board-post-body{white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;line-height:1.7;padding:20px 0;max-width:760px}
+    .board-comments{border-top:1px solid var(--rule);margin-top:12px;padding-top:12px;max-width:760px}
+    .board-comment{padding:10px 0;border-bottom:1px solid var(--border)}
+    .board-comment-meta{font-size:12px;color:var(--text-muted);display:flex;gap:10px;align-items:baseline}
+    .board-comment-body{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:4px}
+    .board-link-button{background:none;border:0;padding:0;font:inherit;font-size:12px;color:var(--text-muted);text-decoration:underline;cursor:pointer}
+    .board-form{display:grid;gap:10px;max-width:760px;margin-top:14px}
+    .board-form label{font-size:13px;color:var(--text-soft);display:grid;gap:4px}
+    .board-form input,.board-form select,.board-form textarea{font:inherit;font-size:15px;padding:10px 12px;border:1px solid var(--border-strong);border-radius:0;background:var(--surface,#fff);color:var(--text);box-sizing:border-box;width:100%}
+    .board-form-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .board-status{font-size:13px;min-height:1.2em;margin:0}
+    .board-status.is-error{color:#a8552e}
+    @media(max-width:720px){.board-row{grid-template-columns:minmax(0,1fr)}.board-row-meta{white-space:normal}.board-form-pair{grid-template-columns:1fr}.board-post h3{font-size:24px}}
     .home-model-name{font-family:var(--serif);font-size:18px;font-weight:500}
     .home-model-price{font-family:var(--serif);font-size:18px;font-weight:500}
     .home-model-meta{font-size:12px}
@@ -1314,16 +1348,26 @@
         </div>
       </section>
 
-      <section id="home-feed" class="home-feed" hidden>
+      <section id="home-feed" class="home-feed">
         <div id="home-picks-block" hidden>
           <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">lowest asking price for sale now</small></h2>
           <div id="home-picks" class="home-popular"></div>
         </div>
-        <div>
+        <div id="home-latest-block" hidden>
           <h2 class="home-heading"><span data-i18n="home.latest">Just listed</span> <small data-i18n="home.latest_note">one per model, newest first</small></h2>
           <div id="home-latest" class="home-latest"></div>
         </div>
+        <div id="board-home">
+          <h2 class="home-heading"><span data-i18n="board.title">Community</span> <small data-i18n="board.note">Leica users around the world, talking freely</small></h2>
+          <ul id="board-home-list" class="board-home-list"></ul>
+          <div class="board-actions">
+            <a class="search-button board-write-link" href="#board/write" data-i18n="board.write">Write a post</a>
+            <a href="#board" data-i18n="board.view_all">See all posts</a>
+          </div>
+        </div>
       </section>
+
+      <section id="board-view" class="board-view" hidden></section>
 
       <section class="workspace">
         <div class="toolbar" data-i18n-aria-label="filters.toolbar_aria" aria-label="Search filters">
@@ -1483,7 +1527,7 @@
         <div class="legal-rule"></div>
         <p class="legal-mark"><span data-i18n="footer.brand">Camera Bridge</span> <i>by thehingemeta</i></p>
         <p class="legal-mail"><a href="mailto:thehingemeta@gmail.com">thehingemeta@gmail.com</a></p>
-        <nav class="legal-links"><a data-legal-page="leica" href="/en/leica/" data-i18n="footer.models">Prices by model</a><a data-legal-page="about" href="/en/about/" data-i18n="footer.about">About &amp; contact</a><a data-legal-page="privacy" href="/en/privacy/" data-i18n="footer.privacy">Privacy</a><a data-legal-page="terms" href="/en/terms/" data-i18n="footer.terms">Terms</a><a href="/impressum/">Impressum</a></nav>
+        <nav class="legal-links"><a href="#board" data-i18n="board.title">Community</a><a data-legal-page="leica" href="/en/leica/" data-i18n="footer.models">Prices by model</a><a data-legal-page="about" href="/en/about/" data-i18n="footer.about">About &amp; contact</a><a data-legal-page="privacy" href="/en/privacy/" data-i18n="footer.privacy">Privacy</a><a data-legal-page="terms" href="/en/terms/" data-i18n="footer.terms">Terms</a><a href="/impressum/">Impressum</a></nav>
         <p class="site-disclaimer" data-i18n="footer.disclaimer">Prices and totals are estimates. Always check the original listing before you buy.</p>
         <p class="legal-tm" data-i18n="footer.trademark">Leica is a trademark of Leica Camera AG. Camera Bridge is an independent service and is not affiliated with Leica Camera AG. Some links may be affiliate links.</p>
       </footer>
@@ -1599,6 +1643,49 @@
       }
     };
     const UX_LOCALE_COPY = {
+      board: {
+        title: { ko: '커뮤니티', en: 'Community', ja: 'コミュニティ', 'zh-Hans': '社区', 'zh-Hant': '社群', pt: 'Comunidade', es: 'Comunidad', de: 'Community', it: 'Community' },
+        note: { ko: '전 세계 라이카 사용자들이 자유롭게 이야기하는 곳', en: 'Leica users around the world, talking freely', ja: '世界中のライカユーザーが自由に話す場所', 'zh-Hans': '全球徕卡用户自由交流的地方', 'zh-Hant': '全球徠卡用戶自由交流的地方', pt: 'Usuários de Leica do mundo todo conversando à vontade', es: 'Usuarios de Leica de todo el mundo conversando libremente', de: 'Leica-Fans aus aller Welt im freien Austausch', it: 'Utenti Leica di tutto il mondo che parlano liberamente' },
+        write: { ko: '글쓰기', en: 'Write a post', ja: '投稿する', 'zh-Hans': '发帖', 'zh-Hant': '發文', pt: 'Escrever', es: 'Escribir', de: 'Beitrag schreiben', it: 'Scrivi' },
+        view_all: { ko: '전체 보기', en: 'See all posts', ja: 'すべて見る', 'zh-Hans': '查看全部', 'zh-Hant': '查看全部', pt: 'Ver todos', es: 'Ver todo', de: 'Alle Beiträge', it: 'Vedi tutti' },
+        back: { ko: '목록으로', en: 'Back to list', ja: '一覧へ戻る', 'zh-Hans': '返回列表', 'zh-Hant': '返回列表', pt: 'Voltar à lista', es: 'Volver a la lista', de: 'Zurück zur Liste', it: 'Torna all’elenco' },
+        all: { ko: '전체', en: 'All', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Tudo', es: 'Todo', de: 'Alle', it: 'Tutti' },
+        cat_free: { ko: '자유', en: 'General', ja: '自由', 'zh-Hans': '自由讨论', 'zh-Hant': '自由討論', pt: 'Geral', es: 'General', de: 'Allgemein', it: 'Generale' },
+        cat_question: { ko: '질문', en: 'Questions', ja: '質問', 'zh-Hans': '提问', 'zh-Hant': '提問', pt: 'Perguntas', es: 'Preguntas', de: 'Fragen', it: 'Domande' },
+        cat_review: { ko: '정보·후기', en: 'Tips & reviews', ja: '情報・レビュー', 'zh-Hans': '资讯·心得', 'zh-Hant': '資訊·心得', pt: 'Dicas e avaliações', es: 'Consejos y reseñas', de: 'Tipps & Erfahrungen', it: 'Consigli e recensioni' },
+        cat_site: { ko: '사이트 의견', en: 'About this site', ja: 'サイトへの意見', 'zh-Hans': '网站建议', 'zh-Hant': '網站建議', pt: 'Sobre o site', es: 'Sobre el sitio', de: 'Zur Website', it: 'Sul sito' },
+        empty: { ko: '아직 글이 없어요. 첫 글을 남겨 주세요.', en: 'No posts yet. Be the first to write one.', ja: 'まだ投稿がありません。最初の投稿をどうぞ。', 'zh-Hans': '还没有帖子，来发第一帖吧。', 'zh-Hant': '還沒有文章，來發第一篇吧。', pt: 'Ainda não há posts. Seja o primeiro.', es: 'Aún no hay publicaciones. Sé el primero.', de: 'Noch keine Beiträge. Schreib den ersten.', it: 'Ancora nessun post. Scrivi il primo.' },
+        rules: { ko: '회원 가입 없이 닉네임과 비밀번호로 써요. 비밀번호는 글을 지울 때 필요해요. 매물 판매·구매 글, 개인 연락처, 광고·욕설은 지워지고, 신고가 3번 쌓이면 자동으로 가려져요. 다른 언어로 써도 괜찮아요.', en: 'No account needed — just a nickname and a password (you need it to delete your post). Buy/sell posts, personal contact details, ads and abuse are removed, and a post is hidden automatically after 3 reports. Any language is welcome.', ja: '会員登録なしでニックネームとパスワードで投稿できます（削除時にパスワードが必要）。売買の投稿、個人の連絡先、広告・暴言は削除され、通報が3件たまると自動で非表示になります。どの言語でも大丈夫です。', 'zh-Hans': '无需注册，用昵称和密码即可发帖（删除时需要密码）。买卖帖、个人联系方式、广告和辱骂会被删除，被举报 3 次会自动隐藏。欢迎使用任何语言。', 'zh-Hant': '無需註冊，用暱稱和密碼即可發文（刪除時需要密碼）。買賣文、個人聯絡方式、廣告和辱罵會被刪除，被檢舉 3 次會自動隱藏。歡迎使用任何語言。', pt: 'Sem cadastro: só apelido e senha (necessária para apagar o post). Posts de compra e venda, contatos pessoais, anúncios e ofensas são removidos, e um post é ocultado após 3 denúncias. Qualquer idioma é bem-vindo.', es: 'Sin cuenta: solo un apodo y una contraseña (la necesitas para borrar). Se eliminan las publicaciones de compraventa, datos de contacto, anuncios e insultos, y una publicación se oculta tras 3 denuncias. Cualquier idioma es bienvenido.', de: 'Kein Konto nötig – nur Spitzname und Passwort (zum Löschen nötig). Kauf-/Verkaufsbeiträge, Kontaktdaten, Werbung und Beleidigungen werden entfernt; nach 3 Meldungen wird ein Beitrag automatisch ausgeblendet. Jede Sprache ist willkommen.', it: 'Nessun account: solo un nickname e una password (serve per cancellare). Post di compravendita, contatti personali, pubblicità e insulti vengono rimossi e un post viene nascosto dopo 3 segnalazioni. Ogni lingua è benvenuta.' },
+        comments: { ko: '댓글', en: 'Comments', ja: 'コメント', 'zh-Hans': '评论', 'zh-Hant': '留言', pt: 'Comentários', es: 'Comentarios', de: 'Kommentare', it: 'Commenti' },
+        comment_submit: { ko: '댓글 달기', en: 'Add comment', ja: 'コメントする', 'zh-Hans': '发表评论', 'zh-Hant': '送出留言', pt: 'Comentar', es: 'Comentar', de: 'Kommentieren', it: 'Commenta' },
+        comment_placeholder: { ko: '댓글을 남겨 주세요', en: 'Write a comment', ja: 'コメントを書く', 'zh-Hans': '写下评论', 'zh-Hant': '寫下留言', pt: 'Escreva um comentário', es: 'Escribe un comentario', de: 'Kommentar schreiben', it: 'Scrivi un commento' },
+        f_category: { ko: '분류', en: 'Category', ja: 'カテゴリー', 'zh-Hans': '分类', 'zh-Hant': '分類', pt: 'Categoria', es: 'Categoría', de: 'Kategorie', it: 'Categoria' },
+        f_title: { ko: '제목', en: 'Title', ja: 'タイトル', 'zh-Hans': '标题', 'zh-Hant': '標題', pt: 'Título', es: 'Título', de: 'Titel', it: 'Titolo' },
+        f_body: { ko: '내용', en: 'Post', ja: '本文', 'zh-Hans': '内容', 'zh-Hant': '內容', pt: 'Texto', es: 'Texto', de: 'Text', it: 'Testo' },
+        f_nick: { ko: '닉네임', en: 'Nickname', ja: 'ニックネーム', 'zh-Hans': '昵称', 'zh-Hant': '暱稱', pt: 'Apelido', es: 'Apodo', de: 'Spitzname', it: 'Nickname' },
+        f_pw: { ko: '비밀번호 (지울 때 필요)', en: 'Password (needed to delete)', ja: 'パスワード（削除時に必要）', 'zh-Hans': '密码（删除时需要）', 'zh-Hant': '密碼（刪除時需要）', pt: 'Senha (para apagar)', es: 'Contraseña (para borrar)', de: 'Passwort (zum Löschen)', it: 'Password (per cancellare)' },
+        submit: { ko: '올리기', en: 'Post', ja: '投稿', 'zh-Hans': '发布', 'zh-Hant': '發布', pt: 'Publicar', es: 'Publicar', de: 'Veröffentlichen', it: 'Pubblica' },
+        cancel: { ko: '취소', en: 'Cancel', ja: 'キャンセル', 'zh-Hans': '取消', 'zh-Hant': '取消', pt: 'Cancelar', es: 'Cancelar', de: 'Abbrechen', it: 'Annulla' },
+        report: { ko: '신고', en: 'Report', ja: '通報', 'zh-Hans': '举报', 'zh-Hant': '檢舉', pt: 'Denunciar', es: 'Denunciar', de: 'Melden', it: 'Segnala' },
+        report_confirm: { ko: '이 글을 신고할까요? (광고·매매·욕설 등)', en: 'Report this? (ads, buying/selling, abuse…)', ja: '通報しますか？（広告・売買・暴言など）', 'zh-Hans': '要举报吗？（广告、买卖、辱骂等）', 'zh-Hant': '要檢舉嗎？（廣告、買賣、辱罵等）', pt: 'Denunciar? (anúncio, compra e venda, ofensa…)', es: '¿Denunciar? (anuncios, compraventa, insultos…)', de: 'Melden? (Werbung, Handel, Beleidigung …)', it: 'Segnalare? (pubblicità, compravendita, insulti…)' },
+        reported: { ko: '신고했어요. 고맙습니다.', en: 'Reported. Thank you.', ja: '通報しました。ありがとうございます。', 'zh-Hans': '已举报，谢谢。', 'zh-Hant': '已檢舉，謝謝。', pt: 'Denunciado. Obrigado.', es: 'Denunciado. Gracias.', de: 'Gemeldet. Danke.', it: 'Segnalato. Grazie.' },
+        delete: { ko: '지우기', en: 'Delete', ja: '削除', 'zh-Hans': '删除', 'zh-Hant': '刪除', pt: 'Apagar', es: 'Borrar', de: 'Löschen', it: 'Elimina' },
+        delete_prompt: { ko: '글을 쓸 때 정한 비밀번호를 입력해 주세요', en: 'Enter the password you set when posting', ja: '投稿時に決めたパスワードを入力してください', 'zh-Hans': '请输入发帖时设置的密码', 'zh-Hant': '請輸入發文時設定的密碼', pt: 'Digite a senha definida ao publicar', es: 'Introduce la contraseña que pusiste al publicar', de: 'Passwort eingeben, das du beim Posten gewählt hast', it: 'Inserisci la password scelta quando hai pubblicato' },
+        deleted: { ko: '지웠어요.', en: 'Deleted.', ja: '削除しました。', 'zh-Hans': '已删除。', 'zh-Hant': '已刪除。', pt: 'Apagado.', es: 'Borrado.', de: 'Gelöscht.', it: 'Eliminato.' },
+        prev: { ko: '이전', en: 'Previous', ja: '前へ', 'zh-Hans': '上一页', 'zh-Hant': '上一頁', pt: 'Anterior', es: 'Anterior', de: 'Zurück', it: 'Precedente' },
+        next: { ko: '다음', en: 'Next', ja: '次へ', 'zh-Hans': '下一页', 'zh-Hant': '下一頁', pt: 'Próxima', es: 'Siguiente', de: 'Weiter', it: 'Successiva' },
+        not_found: { ko: '글을 찾을 수 없어요. 지워졌거나 가려진 글일 수 있어요.', en: 'Post not found — it may have been deleted or hidden.', ja: '投稿が見つかりません。削除または非表示になった可能性があります。', 'zh-Hans': '找不到帖子，可能已被删除或隐藏。', 'zh-Hant': '找不到文章，可能已被刪除或隱藏。', pt: 'Post não encontrado — pode ter sido apagado ou ocultado.', es: 'No se encontró — puede haberse borrado u ocultado.', de: 'Beitrag nicht gefunden – evtl. gelöscht oder ausgeblendet.', it: 'Post non trovato: potrebbe essere stato eliminato o nascosto.' },
+        loading: { ko: '불러오는 중…', en: 'Loading…', ja: '読み込み中…', 'zh-Hans': '加载中…', 'zh-Hant': '載入中…', pt: 'Carregando…', es: 'Cargando…', de: 'Wird geladen …', it: 'Caricamento…' },
+        err_title: { ko: '제목은 2~80자로 적어 주세요.', en: 'Title must be 2–80 characters.', ja: 'タイトルは2〜80文字で。', 'zh-Hans': '标题需 2–80 字。', 'zh-Hant': '標題需 2–80 字。', pt: 'O título deve ter 2–80 caracteres.', es: 'El título debe tener 2–80 caracteres.', de: 'Titel: 2–80 Zeichen.', it: 'Il titolo deve avere 2–80 caratteri.' },
+        err_body: { ko: '내용을 조금 더 적어 주세요.', en: 'Please write a bit more.', ja: 'もう少し書いてください。', 'zh-Hans': '请再多写一点。', 'zh-Hant': '請再多寫一點。', pt: 'Escreva um pouco mais.', es: 'Escribe un poco más.', de: 'Bitte etwas mehr schreiben.', it: 'Scrivi qualcosa in più.' },
+        err_nick: { ko: '닉네임을 적어 주세요 (20자까지).', en: 'Please enter a nickname (up to 20 characters).', ja: 'ニックネームを入力してください（20文字まで）。', 'zh-Hans': '请输入昵称（最多 20 字）。', 'zh-Hant': '請輸入暱稱（最多 20 字）。', pt: 'Informe um apelido (até 20 caracteres).', es: 'Escribe un apodo (hasta 20 caracteres).', de: 'Bitte Spitzname eingeben (bis 20 Zeichen).', it: 'Inserisci un nickname (fino a 20 caratteri).' },
+        err_password: { ko: '비밀번호는 4~40자로 정해 주세요.', en: 'Password must be 4–40 characters.', ja: 'パスワードは4〜40文字で。', 'zh-Hans': '密码需 4–40 位。', 'zh-Hant': '密碼需 4–40 位。', pt: 'A senha deve ter 4–40 caracteres.', es: 'La contraseña debe tener 4–40 caracteres.', de: 'Passwort: 4–40 Zeichen.', it: 'La password deve avere 4–40 caratteri.' },
+        err_links: { ko: '링크는 3개까지 넣을 수 있어요.', en: 'Up to 3 links per post.', ja: 'リンクは3つまでです。', 'zh-Hans': '最多 3 个链接。', 'zh-Hant': '最多 3 個連結。', pt: 'No máximo 3 links.', es: 'Máximo 3 enlaces.', de: 'Höchstens 3 Links.', it: 'Al massimo 3 link.' },
+        err_limit: { ko: '오늘은 더 쓸 수 없어요. 내일 다시 써 주세요.', en: 'You’ve reached today’s limit. Please try again tomorrow.', ja: '本日の上限に達しました。明日またどうぞ。', 'zh-Hans': '今天已达上限，请明天再来。', 'zh-Hant': '今天已達上限，請明天再來。', pt: 'Limite de hoje atingido. Tente amanhã.', es: 'Has llegado al límite de hoy. Vuelve mañana.', de: 'Tageslimit erreicht. Bitte morgen wieder.', it: 'Limite di oggi raggiunto. Riprova domani.' },
+        err_too_fast: { ko: '조금만 천천히 써 주세요.', en: 'Slow down a little, please.', ja: '少し時間をおいてから送ってください。', 'zh-Hans': '请稍慢一点。', 'zh-Hant': '請稍慢一點。', pt: 'Vá um pouco mais devagar.', es: 'Ve un poco más despacio.', de: 'Bitte etwas langsamer.', it: 'Un attimo più piano, per favore.' },
+        err_password_wrong: { ko: '비밀번호가 맞지 않아요.', en: 'That password doesn’t match.', ja: 'パスワードが違います。', 'zh-Hans': '密码不正确。', 'zh-Hant': '密碼不正確。', pt: 'Senha incorreta.', es: 'Contraseña incorrecta.', de: 'Passwort stimmt nicht.', it: 'Password errata.' },
+        err_generic: { ko: '올리지 못했어요. 잠시 뒤 다시 시도해 주세요.', en: 'Couldn’t post it. Please try again in a moment.', ja: '投稿できませんでした。しばらくしてからお試しください。', 'zh-Hans': '发布失败，请稍后再试。', 'zh-Hant': '發布失敗，請稍後再試。', pt: 'Não foi possível publicar. Tente de novo.', es: 'No se pudo publicar. Inténtalo de nuevo.', de: 'Konnte nicht veröffentlicht werden. Bitte gleich noch einmal.', it: 'Pubblicazione non riuscita. Riprova tra poco.' },
+      },
       feedback: {
         button: { ko: '의견 보내기', en: 'Send feedback', ja: 'ご意見を送る', 'zh-Hans': '提交反馈', 'zh-Hant': '提交意見', pt: 'Enviar sugestão', es: 'Enviar comentarios', de: 'Feedback senden', it: 'Invia un suggerimento' },
         title: { ko: '이런 기능이 있으면 좋겠어요', en: 'What would make Camera Bridge better?', ja: 'こんな機能があったらいいな', 'zh-Hans': '你希望有什么功能？', 'zh-Hant': '你希望有什麼功能？', pt: 'O que tornaria o Camera Bridge melhor?', es: '¿Qué haría mejor a Camera Bridge?', de: 'Was würde Camera Bridge besser machen?', it: 'Cosa renderebbe Camera Bridge migliore?' },
@@ -2345,7 +2432,9 @@
         }).join('');
         picksBlock.hidden = !picks.length;
       }
-      section.hidden = !latest.length && !picks.length;
+      const latestBlock = document.getElementById('home-latest-block');
+      if(latestBlock) latestBlock.hidden = !latest.length;
+      section.hidden = false;  // 커뮤니티 칸은 매물이 없어도 보임
     }
 
     // 위 검색창이 화면에 보이는 동안엔 결과 사이의 두 번째 검색창을 숨김 (같은 검색창이 두 개로 보이던 문제)
@@ -2355,6 +2444,226 @@
       new IntersectionObserver(entries => {
         document.body.classList.toggle('cb-hero-search-visible', entries.some(entry => entry.isIntersecting));
       }).observe(panel);
+    }
+
+    // ── 커뮤니티 게시판 (api/board.py): 첫 화면 최신 글 + #board 목록 · #board/<id> 글 · #board/write 쓰기 ──
+    const BOARD_CATS = ['free', 'question', 'review', 'site'];
+    const boardState = { category: '', page: 1, openedAt: 0 };
+    const bx = key => ux(`board.${key}`, key);
+
+    function boardAgo(iso){
+      const at = Date.parse(String(iso || ''));
+      if(!Number.isFinite(at)) return '';
+      const minutes = Math.max(1, Math.round((Date.now() - at) / 60000));
+      const rtf = new Intl.RelativeTimeFormat(uiState.locale, { numeric: 'auto' });
+      if(minutes < 60) return rtf.format(-minutes, 'minute');
+      if(minutes < 48 * 60) return rtf.format(-Math.round(minutes / 60), 'hour');
+      return rtf.format(-Math.round(minutes / 1440), 'day');
+    }
+
+    // 본문은 글자 그대로 (HTML 없음), 주소만 링크로
+    function boardText(text){
+      return escapeHtml(text).replace(/https?:\/\/[^\s<]+/g, url => `<a href="${url}" target="_blank" rel="nofollow ugc noopener">${url}</a>`);
+    }
+
+    function boardRow(post){
+      const count = post.comments ? `<span class="board-row-count">[${Number(post.comments)}]</span>` : '';
+      return `<li class="board-row">
+        <span class="board-row-cat">${escapeHtml(bx('cat_' + post.category))}</span>
+        <a href="#board/${escapeHtml(post.id)}"><span class="board-row-title">${escapeHtml(post.title)}</span>${count}</a>
+        <span class="board-row-meta">${escapeHtml(post.nick)} · ${escapeHtml(boardAgo(post.created_at))}</span>
+      </li>`;
+    }
+
+    async function boardFetch(params){
+      const response = await fetch(`/api/board?${new URLSearchParams(params)}`);
+      const data = await response.json().catch(() => ({}));
+      return { ok: response.ok && data.ok, status: response.status, data };
+    }
+
+    async function boardSend(payload){
+      try{
+        const response = await fetch('/api/board', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+        const data = await response.json().catch(() => ({}));
+        return { ok: response.ok && data.ok, data };
+      }catch(error){
+        return { ok: false, data: {} };
+      }
+    }
+
+    function boardError(data){
+      const map = { title: 'err_title', body: 'err_body', nick: 'err_nick', password: 'err_password', links: 'err_links', limit: 'err_limit', too_fast: 'err_too_fast' };
+      if(data && data.error === 'password' && data.wrong) return bx('err_password_wrong');
+      return bx(map[(data || {}).error] || 'err_generic');
+    }
+
+    async function renderBoardHome(){
+      const list = document.getElementById('board-home-list');
+      if(!list) return;
+      const { ok, data } = await boardFetch({ page: 1 }).catch(() => ({ ok: false }));
+      const posts = ok ? (data.posts || []).slice(0, 6) : [];
+      list.innerHTML = posts.length ? posts.map(boardRow).join('') : `<li class="board-empty">${escapeHtml(bx('empty'))}</li>`;
+    }
+
+    function boardAuthorFields(){
+      return `<div class="board-form-pair">
+        <label>${escapeHtml(bx('f_nick'))}<input name="nick" maxlength="20" autocomplete="nickname" required></label>
+        <label>${escapeHtml(bx('f_pw'))}<input name="password" type="password" minlength="4" maxlength="40" autocomplete="new-password" required></label>
+      </div>
+      <input name="website" type="text" tabindex="-1" autocomplete="off" class="feedback-hp" aria-hidden="true">`;
+    }
+
+    async function renderBoardList(view){
+      const tabs = ['', ...BOARD_CATS].map(cat => `<button type="button" data-board-cat="${cat}" class="${cat === boardState.category ? 'is-on' : ''}">${escapeHtml(cat ? bx('cat_' + cat) : bx('all'))}</button>`).join('');
+      view.innerHTML = `<h2 class="home-heading"><span>${escapeHtml(bx('title'))}</span> <small>${escapeHtml(bx('note'))}</small></h2>
+        <p class="board-rules">${escapeHtml(bx('rules'))}</p>
+        <div class="board-tabs" role="group">${tabs}</div>
+        <ul class="board-list"><li class="board-empty">${escapeHtml(bx('loading'))}</li></ul>
+        <div class="board-actions"><a class="search-button board-write-link" href="#board/write">${escapeHtml(bx('write'))}</a></div>
+        <div class="board-pager"></div>`;
+      const params = { page: boardState.page };
+      if(boardState.category) params.category = boardState.category;
+      const { ok, data } = await boardFetch(params).catch(() => ({ ok: false }));
+      const posts = ok ? data.posts || [] : [];
+      view.querySelector('.board-list').innerHTML = posts.length ? posts.map(boardRow).join('') : `<li class="board-empty">${escapeHtml(ok ? bx('empty') : bx('err_generic'))}</li>`;
+      if(ok && data.pages > 1){
+        view.querySelector('.board-pager').innerHTML = `${data.page > 1 ? `<button type="button" class="ghost-button" data-board-page="${data.page - 1}">${escapeHtml(bx('prev'))}</button>` : ''}
+          <span>${data.page} / ${data.pages}</span>
+          ${data.page < data.pages ? `<button type="button" class="ghost-button" data-board-page="${data.page + 1}">${escapeHtml(bx('next'))}</button>` : ''}`;
+      }
+    }
+
+    function renderBoardWrite(view){
+      boardState.openedAt = Date.now();
+      const options = BOARD_CATS.map(cat => `<option value="${cat}">${escapeHtml(bx('cat_' + cat))}</option>`).join('');
+      view.innerHTML = `<p><a href="#board">← ${escapeHtml(bx('back'))}</a></p>
+        <h2 class="home-heading"><span>${escapeHtml(bx('write'))}</span></h2>
+        <p class="board-rules">${escapeHtml(bx('rules'))}</p>
+        <form class="board-form" data-board-form="post" novalidate>
+          <label>${escapeHtml(bx('f_category'))}<select name="category">${options}</select></label>
+          <label>${escapeHtml(bx('f_title'))}<input name="title" maxlength="80" required></label>
+          <label>${escapeHtml(bx('f_body'))}<textarea name="body" rows="10" maxlength="5000" required></textarea></label>
+          ${boardAuthorFields()}
+          <p class="board-status" role="status"></p>
+          <div class="board-actions"><a href="#board">${escapeHtml(bx('cancel'))}</a><button type="submit" class="search-button">${escapeHtml(bx('submit'))}</button></div>
+        </form>`;
+      const select = view.querySelector('select[name=category]');
+      if(boardState.category) select.value = boardState.category;
+    }
+
+    async function renderBoardPost(view, id){
+      view.innerHTML = `<p><a href="#board">← ${escapeHtml(bx('back'))}</a></p><p class="board-empty">${escapeHtml(bx('loading'))}</p>`;
+      const { ok, data } = await boardFetch({ id }).catch(() => ({ ok: false }));
+      if(!ok){
+        view.innerHTML = `<p><a href="#board">← ${escapeHtml(bx('back'))}</a></p><p class="board-empty">${escapeHtml(bx('not_found'))}</p>`;
+        return;
+      }
+      boardState.openedAt = Date.now();
+      const post = data.post;
+      const comments = (data.comments || []).map(comment => `<div class="board-comment">
+          <div class="board-comment-meta"><strong>${escapeHtml(comment.nick)}</strong><span>${escapeHtml(boardAgo(comment.created_at))}</span>
+            <button type="button" class="board-link-button" data-board-report="${escapeHtml(comment.id)}">${escapeHtml(bx('report'))}</button>
+            <button type="button" class="board-link-button" data-board-delete="${escapeHtml(comment.id)}">${escapeHtml(bx('delete'))}</button></div>
+          <div class="board-comment-body">${boardText(comment.body)}</div>
+        </div>`).join('');
+      view.innerHTML = `<p><a href="#board">← ${escapeHtml(bx('back'))}</a></p>
+        <article class="board-post" data-post-id="${escapeHtml(post.id)}">
+          <span class="board-row-cat">${escapeHtml(bx('cat_' + post.category))}</span>
+          <h3>${escapeHtml(post.title)}</h3>
+          <div class="board-post-meta">${escapeHtml(post.nick)} · ${escapeHtml(boardAgo(post.created_at))} ·
+            <button type="button" class="board-link-button" data-board-report="">${escapeHtml(bx('report'))}</button>
+            <button type="button" class="board-link-button" data-board-delete="">${escapeHtml(bx('delete'))}</button></div>
+          <div class="board-post-body">${boardText(post.body)}</div>
+          <p class="board-status" role="status" data-board-post-status></p>
+          <section class="board-comments">
+            <h4>${escapeHtml(bx('comments'))} ${(data.comments || []).length}</h4>
+            ${comments}
+            <form class="board-form" data-board-form="comment" novalidate>
+              <textarea name="body" rows="3" maxlength="1000" required placeholder="${escapeHtml(bx('comment_placeholder'))}"></textarea>
+              ${boardAuthorFields()}
+              <p class="board-status" role="status"></p>
+              <div class="board-actions"><button type="submit" class="search-button">${escapeHtml(bx('comment_submit'))}</button></div>
+            </form>
+          </section>
+        </article>`;
+    }
+
+    function renderBoardRoute(options = {}){
+      const view = document.getElementById('board-view');
+      if(!view) return;
+      const hash = location.hash || '';
+      const inBoard = hash === '#board' || hash.startsWith('#board/');
+      document.body.classList.toggle('cb-board', inBoard);
+      view.hidden = !inBoard;
+      if(!inBoard){ renderBoardHome(); return; }
+      const rest = hash.slice('#board/'.length);
+      if(hash === '#board') renderBoardList(view);
+      else if(rest === 'write') renderBoardWrite(view);
+      else renderBoardPost(view, rest);
+      if(options.scroll !== false){  // 위 고정 머리줄 아래로
+        const offset = typeof getStickyAnchorOffset === 'function' ? getStickyAnchorOffset() : 0;
+        window.scrollTo({ top: Math.max(0, view.getBoundingClientRect().top + window.scrollY - offset - 16), behavior: 'instant' });
+      }
+    }
+
+    function bindBoard(){
+      const view = document.getElementById('board-view');
+      if(!view) return;
+      window.addEventListener('hashchange', () => renderBoardRoute());
+      // 게시판을 보다가 검색하면 게시판을 닫음
+      document.getElementById('search-form')?.addEventListener('submit', () => {
+        if(document.body.classList.contains('cb-board')) history.replaceState(null, '', location.pathname + location.search);
+        document.body.classList.remove('cb-board');
+        view.hidden = true;
+      }, true);
+      view.addEventListener('click', async event => {
+        const cat = event.target.closest('[data-board-cat]');
+        if(cat){ boardState.category = cat.dataset.boardCat; boardState.page = 1; renderBoardList(view); return; }
+        const page = event.target.closest('[data-board-page]');
+        if(page){ boardState.page = Number(page.dataset.boardPage) || 1; renderBoardList(view); return; }
+        const article = event.target.closest('.board-post');
+        if(!article) return;
+        const postId = article.dataset.postId;
+        const status = article.querySelector('[data-board-post-status]');
+        const report = event.target.closest('[data-board-report]');
+        if(report){
+          if(!window.confirm(bx('report_confirm'))) return;
+          const { ok } = await boardSend({ action: 'report', post_id: postId, comment_id: report.dataset.boardReport });
+          status.textContent = ok ? bx('reported') : bx('err_generic');
+          return;
+        }
+        const del = event.target.closest('[data-board-delete]');
+        if(del){
+          const password = window.prompt(bx('delete_prompt'));
+          if(!password) return;
+          const { ok, data } = await boardSend({ action: 'delete', post_id: postId, comment_id: del.dataset.boardDelete, password });
+          if(ok){
+            if(del.dataset.boardDelete) renderBoardPost(view, postId);
+            else location.hash = '#board';
+          }else{
+            status.textContent = data.error === 'password' ? bx('err_password_wrong') : bx('err_generic');
+          }
+        }
+      });
+      view.addEventListener('submit', async event => {
+        const form = event.target.closest('[data-board-form]');
+        if(!form) return;
+        event.preventDefault();
+        const status = form.querySelector('.board-status');
+        const fields = Object.fromEntries(new FormData(form).entries());
+        const kind = form.dataset.boardForm;
+        const button = form.querySelector('button[type=submit]');
+        button.disabled = true;
+        const payload = { ...fields, action: kind, locale: uiState.locale, elapsed_ms: Date.now() - boardState.openedAt };
+        if(kind === 'comment') payload.post_id = form.closest('.board-post').dataset.postId;
+        const { ok, data } = await boardSend(payload);
+        button.disabled = false;
+        status.className = `board-status${ok ? '' : ' is-error'}`;
+        if(!ok){ status.textContent = boardError(data); return; }
+        if(kind === 'post') location.hash = `#board/${data.id}`;
+        else renderBoardPost(view, payload.post_id);
+      });
+      renderBoardRoute();
     }
 
     function bindHome(){
@@ -3767,6 +4076,7 @@
       loadTrustLine();
       renderHome();
       renderCountryChips();
+      if(typeof renderBoardRoute === 'function') renderBoardRoute({ scroll: false });
     }
 
     function cacheElements(){
@@ -4162,7 +4472,8 @@
 
     function buildHistoryUrl(searchState){
       const queryString = buildHistoryKey(searchState);
-      return queryString ? `?${queryString}` : window.location.pathname;
+      const boardHash = /^#board(\/|$)/.test(window.location.hash) ? window.location.hash : '';  // 게시판 주소(#board…)는 지우지 않음
+      return (queryString ? `?${queryString}` : window.location.pathname) + boardHash;
     }
 
     function applySearchStateToControls(searchState){
@@ -5681,6 +5992,7 @@
     bindHeroSearchVisibility();
     bindFeedback();
     hydrateFromUrl();
+    bindBoard();
   </script>
 </body>
 </html>

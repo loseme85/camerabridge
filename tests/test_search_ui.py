@@ -714,3 +714,17 @@ def test_card_shows_price_inferred_and_too_cheap_notes() -> None:
         line = next(l for l in beta.splitlines() if l.strip().startswith(key + ":"))
         for locale in ("ko:", "en:", "ja:", "de:", "it:"):
             assert locale in line
+
+
+def test_home_has_community_board() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert 'id="board-home"' in beta and 'id="board-view"' in beta and 'href="#board"' in beta
+    assert "bindBoard();" in beta and "fetch('/api/board'" in beta and "/api/board?" in beta
+    assert 'rel="nofollow ugc noopener"' in beta  # 글 속 링크는 검색엔진에 점수를 주지 않음
+    block = beta.split("      board: {\n", 1)[1].split("\n      },", 1)[0]
+    for key in ("title", "rules", "write", "report", "delete_prompt", "err_limit"):
+        line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))
+        for locale in ("ko:", "en:", "ja:", "'zh-Hans':", "pt:", "es:", "de:", "it:"):
+            assert locale in line, (key, locale)
+    vercel = (PROJECT_ROOT / "vercel.json").read_text(encoding="utf-8")
+    assert '"/owner/board"' in vercel
