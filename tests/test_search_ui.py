@@ -449,7 +449,7 @@ def test_load_more_is_scoped_to_active_section_and_history_stays_separate() -> N
         render_section = _function_body(html, "renderResultSection")
         render_load_more = _function_body(html, "renderLoadMore")
         assert "state.historyVisibleCount" in render_content
-        assert "renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length))" in render_content
+        assert "renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length), historyResults.length)" in render_content
         assert "els['results-load-more-region'].innerHTML = '';" in render_content
         assert "renderArchiveSection(historyResults)" in render_content
         assert "${footerHtml}" in render_section
@@ -557,7 +557,7 @@ def test_load_more_stays_after_active_cards_and_before_market_history() -> None:
         render_content = _function_body(html, "renderContent")
         assert "results.length\n              ? `<div class=\"${listClass}\">" in render_section
         assert "${footerHtml}" in render_section
-        assert "els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length));" in render_content
+        assert "els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length), historyResults.length);" in render_content
         assert "els['archive-region'].innerHTML = renderArchiveSection(historyResults);" in render_content
 
 
