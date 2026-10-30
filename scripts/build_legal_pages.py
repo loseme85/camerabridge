@@ -110,6 +110,34 @@ FEEDBACK_LINK = {"ko": '첫 화면의 "의견 보내기"', "en": 'the "Send feed
                  "ja": "トップページの「ご意見を送る」"}
 
 
+WHY = {
+    "ko": ('<h2 id="why">만든 이유</h2>'
+           "<p>저는 라이카 공식 스토어에서 VIP 고객을 관리했고, 개인 프리미엄 샵에서 매니저로 일했습니다. 그때 가장 힘들었던 일은 매입이었습니다. "
+           "손님이 가져온 렌즈를 얼마에 사야 하는지, 세대와 상태와 구성품에 따라 값이 몇 배씩 달라지는데 그 자리에서 답해야 했습니다. "
+           "경력이 쌓이기 전에는 늘 불안했고, 계산이 빠르지 않은 동료들에게는 더 큰 스트레스였습니다.</p>"
+           "<p>지금은 전혀 다른 일을 하지만 그때의 갈증이 남아 카메라브릿지를 만들었습니다. 여러 나라 매장의 매물을 모아 같은 모델끼리 정확히 묶어 보여 주는 것이 목표입니다. "
+           "가격 때문에 생기는 스트레스가 조금이라도 줄어 매입하고, 팔고, 사는 일이 쉬워지기를 바랍니다.</p>"
+           "<p>카메라브릿지는 Leica Camera AG와 관계없이 혼자 운영하는 독립 서비스입니다.</p>"),
+    "en": ('<h2 id="why">Why I built this</h2>'
+           "<p>I used to look after VIP clients at an official Leica Store, and later managed a private premium camera shop. "
+           "The hardest part of the job was always buying. Someone brings in a lens, and you have to name a price on the spot, "
+           "knowing that version, condition and what comes in the box can change its value several times over. "
+           "Before I had the experience, it made me anxious every time, and it was even harder for colleagues who weren't quick with numbers.</p>"
+           "<p>I work in a different field now, but that frustration stayed with me, so I built Camera Bridge. "
+           "It collects listings from shops in many countries and groups them precisely by model, version and generation. "
+           "I hope it takes some of the stress out of pricing, whether you're buying stock, selling it, or buying a camera for yourself.</p>"
+           "<p>Camera Bridge is an independent, one-person service with no connection to Leica Camera AG.</p>"),
+    "ja": ('<h2 id="why">つくった理由</h2>'
+           "<p>私はライカ公式ストアで VIP のお客さまを担当し、その後は個人のプレミアムカメラ店でマネージャーをしていました。いちばん大変だったのは買取です。"
+           "お客さまが持ち込んだレンズにその場で値をつけなければならないのに、型や世代、状態、付属品で価格は何倍も変わります。"
+           "経験が浅いうちは毎回不安で、計算が得意でない同僚にとってはなおさら負担でした。</p>"
+           "<p>今はまったく別の仕事をしていますが、あのときのもどかしさが残っていて Camera Bridge をつくりました。"
+           "各国の店の在庫を集め、同じモデル・同じ世代ごとに正確にまとめて見せることを目指しています。"
+           "価格にまつわるストレスが少しでも減り、買取・販売・購入が楽になればうれしいです。</p>"
+           "<p>Camera Bridge は Leica Camera AG とは関係のない、個人で運営する独立したサービスです。</p>"),
+}
+
+
 def about_body(lang: str) -> tuple[str, str]:
     o = OPERATOR
     if lang == "ko":
@@ -121,7 +149,7 @@ def about_body(lang: str) -> tuple[str, str]:
             pairs.insert(4, ("통신판매업 신고번호", o["mail_order_no"]))
         if o["phone"]:
             pairs.append(("전화", o["phone"]))
-        body = (_rows(pairs)
+        body = (_rows(pairs) + WHY[lang]
                 + "<h2>서비스 성격</h2><p>카메라브릿지는 여러 나라 카메라 매장이 공개한 라이카 중고 매물과 가격을 모아 보여 주는 검색 서비스입니다. "
                   "물건을 직접 팔거나 거래를 중개하지 않으며, 구매·결제·배송·반품은 각 매장과 직접 이루어집니다.</p>"
                 + "<h2>제휴 링크 안내</h2><p>일부 매장 링크(예: eBay)는 제휴(어필리에이트) 링크일 수 있습니다. 이 링크로 구매하면 카메라브릿지가 매장으로부터 수수료를 받을 수 있으며, "
@@ -139,7 +167,7 @@ def about_body(lang: str) -> tuple[str, str]:
             pairs.insert(4, ("通信販売業申告番号（韓国）", o["mail_order_no"]))
         if o["phone"]:
             pairs.append(("電話", o["phone"]))
-        body = (_rows(pairs)
+        body = (_rows(pairs) + WHY[lang]
                 + "<h2>サービスについて</h2><p>Camera Bridge は、各国のカメラ店が公開しているライカ中古在庫と価格をまとめて表示する検索サービスです。"
                   "商品の販売や取引の仲介は行わず、購入・決済・配送・返品は各店舗と直接行っていただきます。</p>"
                 + "<h2>アフィリエイトリンクについて</h2><p>一部の店舗リンク（例：eBay）はアフィリエイトリンクの場合があります。リンク経由で購入されると Camera Bridge が店舗から手数料を受け取ることがありますが、"
@@ -156,7 +184,7 @@ def about_body(lang: str) -> tuple[str, str]:
         pairs.insert(4, ("Mail-order business reg. no. (Korea)", o["mail_order_no"]))
     if o["phone"]:
         pairs.append(("Phone", o["phone"]))
-    body = (_rows(pairs)
+    body = (_rows(pairs) + WHY[lang]
             + "<h2>What Camera Bridge is</h2><p>Camera Bridge is a search service that collects used Leica listings and prices published by camera shops in several countries. "
               "We do not sell items or broker transactions; purchase, payment, shipping and returns are always between you and the shop.</p>"
             + "<h2>Affiliate disclosure</h2><p>Some shop links (for example eBay) may be affiliate links. If you buy through one, Camera Bridge may earn a commission from the shop "
