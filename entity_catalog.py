@@ -44,6 +44,45 @@ PAIR_GAP = 2.0     # 다른 쪽 중앙값과 이 배수 이상 떨어져야 옮�
 TOO_CHEAP = 0.1    # 모델 B급 시세의 10분의 1도 안 되면 부품·액세서리 의심 → 시세 계산에서 뺌
 TOO_CHEAP_MIN_N = 5
 
+# ── 바디 이름은 제목에서 렌즈 표기보다 앞에 있어야 바디 (2026-10-30, 분류 오류 케이스) ──
+# 케이스 1 조리개·초점거리 안의 숫자: "Summaron M3.5/3.5" → M3, "75-200 Vario-Elmarit-R 3 Cam" → R3
+# 케이스 2 렌즈 세대 표기: "9cm f4 Elmar (Type II)" → 라이카 II
+# 케이스 3 '…용' 렌즈·액세서리: "Summaron-M 35mm f2.8 for Leica M3", "Telyt-R 400mm/F6.8 Leicaflex", "Data Back for R-E, R3"
+# → 렌즈 표기가 바디 이름보다 먼저 나오는 제목은 바디로 보지 않고, 'for' 뒤는 바디 규칙에서 뺀다.
+#   바디 이름이 먼저 나오면 제목 전체를 본다 (렌즈 뒤에 적힌 기념판 이름 'Millennium' 등을 놓치지 않게). 세트 표기가 있으면 언제나 전체.
+LENS_SIGNAL = re.compile(
+    r"summi|elmar|nocti|hektor|telyt|angulon|summar|xenon|thambar"
+    r"|(?<![.\d])\b\d{2,3}(?:-\d{2,3})?\s?mm\b(?!\s+(?:film|slr|rangefinder|camera|kamera|format|フィルム))|(?<![.\d])\b\d{1,2}(?:\.\d)?\s?cm\b|\bf/?\s?\d(?:\.\d)?\b"
+    r"|\b\d(?:\.\d)?\s?/\s?\d{2,3}\b|\b\d{2,3}\s?/\s?\d(?:\.\d)?\b|\b\d\s?-?cams?\b|\bE\s?\d{2}\b", re.I)
+BODY_WORD = re.compile(r"\b(?:M|R|CL|SL|S|Q|X|T)\s?-?\d|\bI{1,3}[a-g]?\b|leicaflex|standard|\bbody\b|바디", re.I)
+FOR_WORD = re.compile(r"\b(?:for|für|fuer|pour|per|para|voor|fits?)\b|用|対応|専用", re.I)
+SET_MARK = re.compile(r"\+|\bset\b|\bkit\b|outfit|\bwith\b|\bw/|&|세트|セット|付|\bmit\b|\bcon\b|\bavec\b", re.I)
+# 렌즈 일체형 바디(Q·X·D-Lux·미니룩스·CM 등)는 렌즈 표기가 바디 이름의 일부라 제목 전체를 봄. 라이카 I(Model A)도 렌즈 고정
+FIXED_LENS_BODY = re.compile(r"^leica:body:(?:q|q-p|q2|q2-monochrom|q3|q3-43|q3-monochrom|x1|x2|x113|x-[a-z]+|d-lux[\w-]*|c-lux[\w-]*|v-lux|"
+                             r"digilux(?:-[12]|-zoom|-4-3|-unspecified)?|minilux[\w-]*|mini|cm[\w-]*|c-series|c2-zoom|z2x|sofort[\w-]*|af-c1|i)(?::|$)")
+
+
+def body_view(title: str) -> str:
+    """바디 규칙이 볼 제목. 세트 표기가 있으면 전체, 아니면 'for' 앞부분, 그중 렌즈 표기가 바디 이름보다 먼저면 그 앞까지."""
+    if SET_MARK.search(title):
+        return title
+    cut = FOR_WORD.search(title)
+    text = title[:cut.start()] if cut else title
+    lens_at = LENS_SIGNAL.search(text)
+    if lens_at and not BODY_WORD.search(text[:lens_at.start()]):
+        return text[:lens_at.start()]
+    return text
+
+
+def is_set(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> bool:
+    """렌즈 교환식 바디에 연결됐는데 제목에 렌즈 표기도 있는 매물 = 바디·렌즈 세트."""
+    catalog = catalog or load_catalog()
+    title = record_title(record)
+    bodies = [e for e in record.get("entity_ids") or [] if catalog["entities"][e].get("kind") == "Body"
+              and not catalog["entities"][e].get("children") and not catalog["entities"][e].get("feature") and not FIXED_LENS_BODY.match(e)]
+    return bool(bodies) and bool(LENS_SIGNAL.search(title))
+
+
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)
 LENS_IN_TITLE = re.compile(r"(\d{2,3}\s?mm\b|\b\d{2,3}/\d(\.\d)?\b|\bf/?\s?\d\.\d)", re.I)
 # 제목 앞쪽에 적힌 마운트 (예: "[중고] M 135/3.4", "Leica SL 50mm")
@@ -210,12 +249,11 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
     title = record_title(record)
     if ACCESSORY_FOR.search(title):
         return []
-    hits: list[str] = []
-    for entity_id, (rule, must, must_not) in catalog["compiled"].items():
-        if not _category_ok(rule, final, title) or not _mount_ok(rule, final, title):
-            continue
-        if all(p.search(title) for p in must) and not any(p.search(title) for p in must_not):
-            hits.append(entity_id)
+    hits = _rule_hits(catalog, final, title)
+    lens_at = LENS_SIGNAL.search(title)
+    if not hits and final.get("category") == "Body" and lens_at and not BODY_WORD.search(title[:lens_at.start()]):
+        # 바디로 분류됐지만 렌즈 표기가 먼저 나오고 바디 이름은 그 뒤에만 있는 매물(케이스 3)은 렌즈로 다시 본다
+        hits = _rule_hits(catalog, {**final, "category": "Lens"}, title)
     if not hits:
         hits = _code_hits(title, final, catalog)
     for i, hit in enumerate(hits):
@@ -225,6 +263,18 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
             if krw and krw < limit and not marked.search(title):
                 hits[i] = cheaper
     return _with_parents(list(dict.fromkeys(hits)), catalog, title)
+
+
+def _rule_hits(catalog: dict[str, Any], final: dict, title: str) -> list[str]:
+    hits: list[str] = []
+    body_title = body_view(title)
+    for entity_id, (rule, must, must_not) in catalog["compiled"].items():
+        if not _category_ok(rule, final, title) or not _mount_ok(rule, final, title):
+            continue
+        text = body_title if rule["category"] == "Body" and not FIXED_LENS_BODY.match(entity_id) else title
+        if all(p.search(text) for p in must) and not any(p.search(text) for p in must_not):
+            hits.append(entity_id)
+    return hits
 
 
 def _with_parents(hits: list[str], catalog: dict[str, Any], title: str) -> list[str]:

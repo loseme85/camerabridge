@@ -2932,6 +2932,7 @@
       vs_grade_pricier: { ko: '같은 등급 시세보다 {p}% 비쌈', en: '{p}% above the market price for this grade', ja: '同ランク相場より{p}%高い', 'zh-Hans': '比同级行情高 {p}%', 'zh-Hant': '比同級行情高 {p}%', pt: '{p}% acima do preço de mercado deste grau', es: '{p}% por encima del precio de mercado de este grado', de: '{p} % über dem Marktpreis für diesen Zustand', it: '{p}% sopra il prezzo di mercato di questo grado' },
       note_price_inferred: { ko: '제목에 구분 표기가 없어 가격대로 모델을 추정함', en: 'Model inferred from price — the title does not say which version', ja: 'タイトルに区別表記がなく価格帯からモデルを推定', 'zh-Hans': '标题未注明版本，按价格区间推断型号', 'zh-Hant': '標題未註明版本，依價格區間推斷型號', pt: 'Modelo deduzido pelo preço — o título não indica a versão', es: 'Modelo deducido por el precio: el título no indica la versión', de: 'Modell aus dem Preis abgeleitet – der Titel nennt die Version nicht', it: 'Modello dedotto dal prezzo: il titolo non indica la versione' },
       note_too_cheap: { ko: '시세보다 지나치게 싸 시세 계산에서 뺌 (부품·액세서리일 수 있음)', en: 'Far below the market price, left out of the price — may be a part or accessory', ja: '相場より極端に安いため相場計算から除外（部品・アクセサリーの可能性）', 'zh-Hans': '远低于行情，未计入行情（可能是零件或配件）', 'zh-Hant': '遠低於行情，未計入行情（可能是零件或配件）', pt: 'Muito abaixo do preço de mercado, fora do cálculo — pode ser peça ou acessório', es: 'Muy por debajo del precio de mercado, fuera del cálculo: puede ser una pieza o accesorio', de: 'Weit unter dem Marktpreis, nicht eingerechnet – evtl. Ersatzteil oder Zubehör', it: 'Molto sotto il prezzo di mercato, escluso dal calcolo: può essere un ricambio o accessorio' },
+      note_set: { ko: '바디·렌즈 세트 매물 — 단품 시세와 비교하지 않음', en: 'Body and lens set — not compared with the single-item price', ja: 'ボディ・レンズのセット — 単品相場とは比較しない', 'zh-Hans': '机身与镜头套装 — 不与单品行情比较', 'zh-Hant': '機身與鏡頭套裝 — 不與單品行情比較', pt: 'Conjunto de corpo e lente — não comparado com o preço avulso', es: 'Conjunto de cuerpo y objetivo: no se compara con el precio por separado', de: 'Set aus Gehäuse und Objektiv – nicht mit dem Einzelpreis verglichen', it: 'Set corpo e obiettivo: non confrontato con il prezzo del singolo pezzo' },
       price_basis: { ko: '판매 완료 {n}건 기준', en: 'Based on {n} sold listings', ja: '販売済み {n} 件の中央値', 'zh-Hans': '基于 {n} 件已售商品', 'zh-Hant': '依據 {n} 件已售商品', pt: 'Com base em {n} anúncios vendidos', es: 'Según {n} anuncios vendidos', de: 'Basierend auf {n} verkauften Angeboten', it: 'Basato su {n} annunci venduti' },
       price_range_label: { ko: '판매 중 가격대', en: 'Asking price range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa de preço à venda', es: 'Rango de precios en venta', de: 'Preisspanne der Angebote', it: 'Fascia di prezzo in vendita' },
       feature_models: { ko: '이 사양의 바디', en: 'Bodies with this spec', ja: 'この仕様のボディ', 'zh-Hans': '具备此规格的机身', 'zh-Hant': '具備此規格的機身', pt: 'Corpos com esta especificação', es: 'Cuerpos con esta especificación', de: 'Gehäuse mit dieser Ausstattung', it: 'Corpi con questa specifica' },
@@ -3147,8 +3148,8 @@
       const note = (result.final_output || {}).entity_note;
       const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
       const factor = entity && !(entity.children || []).length ? gradeFactor(entity, grade) : 0;
-      if(note === 'too_cheap'){
-        compare = `<span class="grade-compare is-note">${escapeHtml(ec('note_too_cheap'))}</span>`;
+      if(note === 'too_cheap' || note === 'set'){
+        compare = `<span class="grade-compare is-note">${escapeHtml(ec(note === 'set' ? 'note_set' : 'note_too_cheap'))}</span>`;
       } else if(entity && entity.b_price_krw && factor && grade !== 'X' && cost && cost.listed && fxRate(cost.currency) && fxRate('KRW')){
         const listedKrw = convertAmount(cost.listed, cost.currency, 'KRW');
         const diff = Math.round((listedKrw / (entity.b_price_krw * factor) - 1) * 100);
@@ -3234,7 +3235,7 @@
     function ladderPoints(results){
       const points = [];
       results.forEach(result => {
-        if(!LADDER_GRADES.includes(result.grade) || (result.final_output || {}).entity_note === 'too_cheap') return;
+        if(!LADDER_GRADES.includes(result.grade) || ['too_cheap', 'set'].includes((result.final_output || {}).entity_note)) return;
         const cost = computeLandedCost(result);
         const value = cost ? (cost.landed ? cost.landed.total : cost.converted) : 0;
         if(!value) return;

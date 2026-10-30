@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from condition_grade import grade_of  # noqa: E402
-from entity_catalog import annotate_records, flag_too_cheap, infer_by_price, krw_rates, load_catalog, price_krw  # noqa: E402
+from entity_catalog import annotate_records, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, price_krw  # noqa: E402
 from fx_history import krw_per_unit_on  # noqa: E402
 
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
@@ -125,11 +125,16 @@ def main() -> None:
     value = _b_value(catalog)
     moved = infer_by_price(records, value, catalog)
     too_cheap = flag_too_cheap(records, value, catalog)
+    sets = set()
+    for record in records:  # 바디·렌즈 세트: 단품 시세와 비교하지 않고, 단품 매물이 충분하면 시세 계산에서 뺌
+        if id(record) not in too_cheap and is_set(record, catalog):
+            record.setdefault("final_output", {})["entity_note"] = "set"
+            sets.add(id(record))
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     to_krw = krw_rates()
-    stats: dict[str, dict] = {eid: {"total": 0, "active": 0, "active_prices": [], "sold_prices": [], "graded": []}
-                              for eid in catalog["entities"]}
+    stats: dict[str, dict] = {eid: {"total": 0, "active": 0, "active_prices": [], "sold_prices": [], "graded": [],
+                                    "set_active": [], "set_sold": [], "set_graded": []} for eid in catalog["entities"]}
     for record in records:
         final = record.get("final_output") or {}
         price = final.get("parsed_price_numeric")
@@ -140,17 +145,23 @@ def main() -> None:
             rate = final.get("sold_fx_krw") or krw_per_unit_on(final.get("currency"), final.get("sold_at")) or rate
         krw = price * rate if price and rate and id(record) not in too_cheap else None  # 너무 싼 매물은 시세에서 뺌
         grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
+        prefix = "set_" if id(record) in sets else ""
         for eid in record.get("entity_ids") or []:
             s = stats[eid]
             s["total"] += 1
             if active:
                 s["active"] += 1
                 if krw:
-                    s["active_prices"].append(krw)
+                    s[f"{prefix}active" if prefix else "active_prices"].append(krw)
             elif krw and sold:
-                s["sold_prices"].append(krw)
+                s[f"{prefix}sold" if prefix else "sold_prices"].append(krw)
             if krw and grade and grade != "X" and (active or sold):
-                s["graded"].append((grade, krw, "sold" if sold else "asking"))
+                s[f"{prefix}graded"].append((grade, krw, "sold" if sold else "asking"))
+    for s in stats.values():  # 단품 매물로 시세를 낼 수 없으면(3건 미만) 세트도 넣음 (예: 늘 세트로 나오는 기념판)
+        if len(s["graded"]) < 3:
+            s["graded"] += s["set_graded"]
+            s["active_prices"] += s["set_active"]
+            s["sold_prices"] += s["set_sold"]
     factors = _grade_factors(stats, catalog["entities"])
 
     entities = []
@@ -176,7 +187,7 @@ def main() -> None:
                                    "entities": entities}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     HOME_FEED.write_text(json.dumps(_home_feed(records, catalog), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     linked = sum(1 for r in records if r.get("entity_ids"))
-    print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약 · 가격으로 옮김 {moved} · 시세에서 뺌 {len(too_cheap)}")
+    print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약 · 가격으로 옮김 {moved} · 시세에서 뺌 {len(too_cheap)} · 세트 {len(sets)}")
 
 
 if __name__ == "__main__":

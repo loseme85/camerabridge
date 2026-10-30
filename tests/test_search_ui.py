@@ -708,8 +708,9 @@ def test_model_view_has_price_by_condition_chart():
 def test_card_shows_price_inferred_and_too_cheap_notes() -> None:
     beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
     assert "note === 'too_cheap'" in beta and "note === 'price_inferred'" in beta
-    assert "entity_note === 'too_cheap'" in beta  # 그래프에서도 뺌
-    for key in ("note_price_inferred", "note_too_cheap"):
+    assert "['too_cheap', 'set'].includes((result.final_output || {}).entity_note)" in beta  # 그래프에서도 뺌
+    assert "note === 'set'" in beta
+    for key in ("note_price_inferred", "note_too_cheap", "note_set"):
         line = next(l for l in beta.splitlines() if l.strip().startswith(key + ":"))
         for locale in ("ko:", "en:", "ja:", "de:", "it:"):
             assert locale in line

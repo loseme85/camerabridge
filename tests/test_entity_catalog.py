@@ -469,3 +469,43 @@ def test_far_too_cheap_listing_is_flagged_and_left_out_of_market_price() -> None
     records.append(manual)
     flagged = flag_too_cheap(records, lambda r: r["_v"])
     assert flagged == {id(manual)} and manual["final_output"]["entity_note"] == "too_cheap"
+
+
+# 분류 오류 케이스 (2026-10-30): 렌즈 표기 속 숫자·'…용'·렌즈 세대 표기를 바디로 읽던 매물
+BODY_MISREAD_CASES = [
+    # (케이스, 제목, 분류, 연결되면 안 되는 바디)
+    ("조리개 숫자", "Leica Summaron M3.5/3.5", "Lens", "leica:body:m3:standard"),
+    ("캠 수", "Leica 75-200 Vario-Elmarit-R 3 Cam", "Lens", "leica:body:r3:standard"),
+    ("렌즈 세대", "Leica 9cm f4 Elmar (Type II, Collapsible) (ILNOO / 11631 / 11131)", "Lens", "leica:body:ii"),
+    ("렌즈 세대", "Leica 9cm f4 Elmar (Type III) (11830)", "Lens", "leica:body:iii"),
+    ("…용 렌즈", "Leica Summaron-M 35mm f2.8 for Leica M3", "Body", "leica:body:m3:standard"),
+    ("…용 렌즈", "Leica Telyt-R 400mm/F6.8 Leicaflex 11960", "Body", "leica:body:leicaflex"),
+    ("…용 액세서리", "Leica Handgriff schwarz für M11", "Body", "leica:body:m11:standard"),
+    ("…용 액세서리", "LEICA Barnack VIT for IIIg", "Body", "leica:body:iiig"),
+    ("이름 뒤 소수점", "Leica M 8.2 Silver", "Body", "leica:body:m8"),
+]
+
+
+def test_lens_notation_and_for_words_are_not_read_as_bodies() -> None:
+    for case, title, category, body in BODY_MISREAD_CASES:
+        ids = match_entities(_record(title, category))
+        assert not any(i == body or i.startswith(body + ":") for i in ids), (case, title, ids)
+    assert "leica:lens:summaron:35:f2.8" in match_entities(_record("Leica Summaron-M 35mm f2.8 for Leica M3", "Body"))  # 바디로 분류돼도 렌즈로
+    # 바디 이름이 먼저 나오면 그대로 바디 (렌즈 뒤 기념판 이름도 읽음)
+    assert "leica:body:m3:standard" in match_entities(_record("LEICA M3 50mm F2 SUMMICRON sn.1139", "Body"))
+    assert "leica:body:m6:ttl-millennium" in match_entities(_record("LEICA M6 TTL 0.72 35mm 50mm black paint Millennium 3 piece", "Body"))
+    assert match_entities(_record("[중고] Q3 43mm", "Body", None)) == ["leica:body:q3-43"]  # 렌즈 일체형은 렌즈 표기가 이름의 일부
+
+
+def test_body_with_lens_is_a_set_but_fixed_lens_camera_is_not() -> None:
+    from entity_catalog import is_set
+    def rec(title: str, category: str = "Body", mount: str | None = "M") -> dict:
+        r = _record(title, category, mount)
+        r["entity_ids"] = match_entities(r)
+        return r
+    assert is_set(rec("LEICA M3 50mm F2 SUMMICRON sn.1139"))
+    assert is_set(rec("Leica IIIf + Elmar 3.5 / 50mm lens", mount=None))
+    assert not is_set(rec("Leica M6 .72mm Black Chrome"))
+    assert not is_set(rec("Leica R3 Electronic Black 35mm SLR Film Body", mount="R"))
+    assert not is_set(rec("[중고] Q3 43mm", mount=None))
+    assert not is_set(rec("Leica Minilux Zoom Vario-Elmar 35-70mm silber", mount=None))
