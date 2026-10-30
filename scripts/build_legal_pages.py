@@ -64,7 +64,9 @@ th,td{text-align:left;vertical-align:baseline;border-bottom:1px solid var(--bord
 th{font:500 13px/1.5 var(--sans);color:var(--soft);width:30%}
 td{font-size:16px}
 .table{overflow-x:auto}
-@media (max-width:560px){body{font-size:16px}h2{grid-template-columns:1fr}h2::before{margin-bottom:6px}h2~p,h2~ul,h2~.table{margin-left:0}th{width:38%}}
+figure.maker{margin:6px 0 22px 44px}
+figure.maker img{display:block;width:100%;height:auto;background:#111}
+@media (max-width:560px){body{font-size:16px}h2{grid-template-columns:1fr}h2::before{margin-bottom:6px}h2~p,h2~ul,h2~.table,figure.maker{margin-left:0}th{width:38%}}
 """
 FOOTER_CSS = """
 footer.legal{max-width:720px;margin:0 auto;padding:0 20px 56px;color:var(--muted);font:12px/1.65 "Inter","Pretendard Variable",system-ui,-apple-system,sans-serif}
@@ -112,6 +114,7 @@ FEEDBACK_LINK = {"ko": '첫 화면의 "의견 보내기"', "en": 'the "Send feed
 
 WHY = {
     "ko": ('<h2 id="why">만든 이유</h2>'
+           '<figure class="maker"><img src="/img/maker-night.jpg" width="1610" height="1080" loading="lazy" alt="밤거리에서 카메라를 들고 선 만든 사람"></figure>'
            "<p>저는 라이카 공식 스토어에서 VIP 고객을 관리했고, 개인 프리미엄 샵에서 매니저로 일했습니다. 그때 가장 힘들었던 일은 매입이었습니다. "
            "손님이 가져온 렌즈를 얼마에 사야 하는지, 세대와 상태와 구성품에 따라 값이 몇 배씩 달라지는데 그 자리에서 답해야 했습니다. "
            "경력이 쌓이기 전에는 늘 불안했고, 계산이 빠르지 않은 동료들에게는 더 큰 스트레스였습니다.</p>"
@@ -119,6 +122,7 @@ WHY = {
            "가격 때문에 생기는 스트레스가 조금이라도 줄어 매입하고, 팔고, 사는 일이 쉬워지기를 바랍니다.</p>"
            "<p>카메라브릿지는 Leica Camera AG와 관계없이 혼자 운영하는 독립 서비스입니다.</p>"),
     "en": ('<h2 id="why">Why I built this</h2>'
+           '<figure class="maker"><img src="/img/maker-night.jpg" width="1610" height="1080" loading="lazy" alt="The maker of Camera Bridge, holding a camera on a street at night"></figure>'
            "<p>I used to look after VIP clients at an official Leica Store, and later managed a private premium camera shop. "
            "The hardest part of the job was always buying. Someone brings in a lens, and you have to name a price on the spot, "
            "knowing that version, condition and what comes in the box can change its value several times over. "
@@ -128,6 +132,7 @@ WHY = {
            "I hope it takes some of the stress out of pricing, whether you're buying stock, selling it, or buying a camera for yourself.</p>"
            "<p>Camera Bridge is an independent, one-person service with no connection to Leica Camera AG.</p>"),
     "ja": ('<h2 id="why">つくった理由</h2>'
+           '<figure class="maker"><img src="/img/maker-night.jpg" width="1610" height="1080" loading="lazy" alt="夜の通りでカメラを構えるつくり手"></figure>'
            "<p>私はライカ公式ストアで VIP のお客さまを担当し、その後は個人のプレミアムカメラ店でマネージャーをしていました。いちばん大変だったのは買取です。"
            "お客さまが持ち込んだレンズにその場で値をつけなければならないのに、型や世代、状態、付属品で価格は何倍も変わります。"
            "経験が浅いうちは毎回不安で、計算が得意でない同僚にとってはなおさら負担でした。</p>"

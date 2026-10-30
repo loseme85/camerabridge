@@ -61,3 +61,9 @@ def test_about_page_tells_why_and_home_links_to_it():
         assert 'id="why"' in about and "Leica Camera AG" in about
     beta = (ROOT / "beta.html").read_text(encoding="utf-8")
     assert 'data-legal-hash="#why"' in beta and "footer.story" in beta
+
+
+def test_about_photo_exists_and_is_not_bundled():
+    assert (ROOT / "img/maker-night.jpg").exists()
+    assert "/img/maker-night.jpg" in "".join(lp.about_body("ko"))
+    assert "img/**" in (ROOT / "vercel.json").read_text(encoding="utf-8")
