@@ -235,7 +235,7 @@ fam("leica:body:mp6", "Leica MP6", "라이카 MP6", "M", [r"\bMP ?6\b"], [], [])
 fam("leica:body:m-a", "Leica M-A (Typ 127)", "라이카 M-A", "M", [r"\bM-?A\b"], [], ["ma typ 127", "m-a typ 127", "엠에이"])
 
 # ── M 디지털 바디 ──
-fam("leica:body:m8", "Leica M8", "라이카 M8", "M", [r"\bM ?8\b"], [r"M8\.2"], [], [
+fam("leica:body:m8", "Leica M8", "라이카 M8", "M", [r"\bM ?8\b"], [r"M ?8\.2"], [], [
     v("white", "Leica M8 White Edition", "M8 화이트", r"white|화이트", ["m8 white"]),
     v("hermes", "Leica M8 Hermès", "M8 에르메스", r"herm[eè]s|에르메스", ["m8 hermes"]),  # 확인 필요
 ])
