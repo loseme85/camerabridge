@@ -28,6 +28,22 @@ PRICE_SPLIT = {
                                        re.compile(r"\bTL\b|-TL\b|1930\d|kit|킷|digital|디지털|2017|18-5[06]|sigma|urban", re.I)),
 }
 
+# 오리지널·복각처럼 가격대가 뚜렷이 갈리는 쌍: 제목에 어느 쪽 근거도 없으면(또는 둘 다 있으면) 가격으로 정한다 (2026-10-30).
+# 가격대는 제목 근거가 확실한 매물로만 잡고, 한쪽 가격대 안이면서 다른 쪽 중앙값과 2배 이상 차이 날 때만 옮긴다.
+# (오리지널 쪽, 복각 쪽, 오리지널 근거, 복각 근거)
+PRICE_PAIRS = [
+    ("leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:steel-rim-reissue",
+     re.compile(r"\bM3\b|1186[89]|11870|goggle|고글|안경|\beyes?\b|original|오리지널|\b1st\b|first|196\d", re.I),
+     re.compile(r"11301|re-?issue|복각|리이슈|2022", re.I)),
+    ("leica:lens:noctilux:50:f1.2-original", "leica:lens:noctilux-m:50:f1.2-asph",
+     re.compile(r"11820|original|오리지널|1세대|\b1st\b|double ?aspherical|\bAA\b", re.I),
+     re.compile(r"\bASPH\b|11686|11731|복각|re-?issue", re.I)),
+]
+PAIR_MIN_SURE = 3  # 쌍마다 제목 근거가 확실한 매물이 이만큼은 있어야 가격대를 믿음
+PAIR_GAP = 2.0     # 다른 쪽 중앙값과 이 배수 이상 떨어져야 옮김
+TOO_CHEAP = 0.1    # 모델 B급 시세의 10분의 1도 안 되면 부품·액세서리 의심 → 시세 계산에서 뺌
+TOO_CHEAP_MIN_N = 5
+
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)
 LENS_IN_TITLE = re.compile(r"(\d{2,3}\s?mm\b|\b\d{2,3}/\d(\.\d)?\b|\bf/?\s?\d\.\d)", re.I)
 # 제목 앞쪽에 적힌 마운트 (예: "[중고] M 135/3.4", "Leica SL 50mm")
@@ -208,7 +224,11 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
             krw = price_krw(final)
             if krw and krw < limit and not marked.search(title):
                 hits[i] = cheaper
-    hits = list(dict.fromkeys(hits))
+    return _with_parents(list(dict.fromkeys(hits)), catalog, title)
+
+
+def _with_parents(hits: list[str], catalog: dict[str, Any], title: str) -> list[str]:
+    """자식 엔티티들에 부모(부모의 부모까지)와 사양 묶음을 붙인다."""
     parents: set[str] = set()
     frontier = {catalog["entities"][h].get("parent") for h in hits} - {None}
     while frontier:  # 부모의 부모까지 (예: D-Lux 7 BAPE → D-Lux 7 → D-Lux 전체)
@@ -225,6 +245,69 @@ def annotate_records(records: Iterable[dict[str, Any]]) -> None:
     catalog = load_catalog()
     for record in records:
         record["entity_ids"] = match_entities(record, catalog)
+        (record.get("final_output") or {}).pop("entity_note", None)
+
+
+def infer_by_price(records: list[dict[str, Any]], value, catalog: dict[str, Any] | None = None) -> int:
+    """PRICE_PAIRS의 쌍마다 제목 근거가 없는 매물을 가격대로 옮긴다. value(record) = B급 환산 원화.
+    옮긴 매물은 final_output.entity_note = 'price_inferred'. 옮긴 수를 돌려준다."""
+    catalog = catalog or load_catalog()
+    moved = 0
+    for high, low, high_mark, low_mark in PRICE_PAIRS:
+        pair = []
+        for record in records:
+            ids = record.get("entity_ids") or []
+            if high in ids or low in ids:
+                title = record_title(record)
+                sure_high, sure_low = bool(high_mark.search(title)), bool(low_mark.search(title))
+                side = high if sure_high and not sure_low else low if sure_low and not sure_high else None
+                pair.append((record, side, value(record)))
+        bands = {}
+        for side in (high, low):
+            prices = sorted(v for _, s, v in pair if s == side and v)
+            if len(prices) < PAIR_MIN_SURE:
+                break
+            bands[side] = (prices[0], prices[-1], prices[len(prices) // 2])
+        if len(bands) < 2:
+            continue
+        for record, side, v in pair:
+            if side or not v:
+                continue  # 제목 근거가 한쪽에만 있으면 제목을 따름
+            for target, other in ((high, low), (low, high)):
+                lo, hi, _ = bands[target]
+                gap = max(v, bands[other][2]) / min(v, bands[other][2])
+                if lo <= v <= hi and gap >= PAIR_GAP:
+                    ids = record["entity_ids"]
+                    if other in ids:
+                        title = record_title(record)
+                        leaves = [i for i in ids if not catalog["entities"][i].get("children") and not catalog["entities"][i].get("feature")]
+                        hits = [target if i == other else i for i in leaves]
+                        record["entity_ids"] = _with_parents(list(dict.fromkeys(hits)), catalog, title)
+                        record.setdefault("final_output", {})["entity_note"] = "price_inferred"
+                        moved += 1
+                    break
+    return moved
+
+
+def flag_too_cheap(records: list[dict[str, Any]], value, catalog: dict[str, Any] | None = None) -> set[int]:
+    """모델 B급 시세(그 모델 매물 중앙값)의 TOO_CHEAP배도 안 되는 매물 → final_output.entity_note = 'too_cheap'.
+    설명서·부품·대여처럼 모델로 잘못 연결된 매물을 시세 계산에서 빼기 위함. 표시한 매물의 id()를 돌려준다."""
+    catalog = catalog or load_catalog()
+    entities = catalog["entities"]
+    by_entity: dict[str, list[float]] = {}
+    for record in records:
+        v = value(record)
+        for eid in record.get("entity_ids") or []:
+            if v and not entities[eid].get("children") and not entities[eid].get("feature"):
+                by_entity.setdefault(eid, []).append(v)
+    medians = {eid: sorted(vs)[len(vs) // 2] for eid, vs in by_entity.items() if len(vs) >= TOO_CHEAP_MIN_N}
+    flagged = set()
+    for record in records:
+        v = value(record)
+        if v and any(v < TOO_CHEAP * medians[e] for e in record.get("entity_ids") or [] if e in medians):
+            record.setdefault("final_output", {})["entity_note"] = "too_cheap"
+            flagged.add(id(record))
+    return flagged
 
 
 # ── 검색창 후보 (beta.html의 suggestEntities와 같은 규칙) ──

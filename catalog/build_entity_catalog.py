@@ -68,9 +68,9 @@ model("leica:lens:noctilux-m:50:f0.95", "Noctilux-M 50mm f/0.95 ASPH", "Lens", "
 # Noctilux-M 50 f/1.0 은 세대 부모 → catalog/lenses.py
 model("leica:lens:noctilux:50:f1.2-original", "Noctilux 50mm f/1.2 (original, 1966)", "Lens", "M",
       [r"nocti", r"1\.2\b|original|오리지널|1세대|\b1st\b"],  # 국내 표기 1세대 = f/1.2 오리지널
-      [r"복각", r"re-?issue", r"ASPH", r"6 ?bit", r"신품", r"\b75\b", f("35"), r"0\.95", r"(?<![\d.])1\.0\b|/1\b(?!\.\d)|f/?1\b(?!\.\d)|E58|E60"] + ACC_NOT)
+      [r"복각", r"re-?issue", r"ASPH(?!erical)", r"6 ?bit", r"신품", r"\b75\b", f("35"), r"0\.95", r"(?<![\d.])1\.0\b|/1\b(?!\.\d)|f/?1\b(?!\.\d)|E58|E60"] + ACC_NOT)
 model("leica:lens:noctilux-m:50:f1.2-asph", "Noctilux-M 50mm f/1.2 ASPH (2021 reissue)", "Lens", "M",
-      [r"nocti", r"1\.2\b", r"(복각|re-?issue|ASPH|6 ?bit|신품)"], [r"오리지널|original", r"\b75\b", f("35")] + ACC_NOT)
+      [r"nocti", r"1\.2\b", r"(복각|re-?issue|ASPH(?!erical)|6 ?bit|신품)"], [r"오리지널|original|double ?aspherical|\bAA\b", r"\b75\b", f("35")] + ACC_NOT)
 model("leica:lens:noctilux-m:75", "Noctilux-M 75mm f/1.25 ASPH", "Lens", "M", [r"nocti", f("75")], ACC_NOT)
 model("leica:lens:noctilux-m:35", "Noctilux-M 35mm f/1.2 ASPH", "Lens", "M", [r"nocti", f("35")], ACC_NOT)
 model("leica:lens:elmarit-m:28:asph", "Elmarit-M 28mm f/2.8 ASPH", "Lens", "M", [r"elmarit", f("28"), r"ASPH"], ACC_NOT)

@@ -194,7 +194,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "(steel ?rim|스틸 ?림).{0,40}(re-?issue|복각|2021)|(re-?issue|복각|2021)"
+     "re-?issue|복각|리이슈|202[12]|11301|^(?!.*(\\bM3\\b|1186[89]|11870|goggle|고글|안경|\\beyes?\\b|original|오리지널|\\b1st\\b|\\bv\\.?1\\b|first|196\\d|ollux|black ?paint|re-?paint)).*(summilux-m\\b.*(steel ?rim|스틸 ?림)|(steel ?rim|스틸 ?림).*summilux-m\\b)"
     ],
     "title_must_not": [
      "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
@@ -365,9 +365,9 @@
     "category": "Lens",
     "mount": "M",
     "title_must": [
-     "summicron|cron",
-     "(?<![\\d./])35(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
-     "(8 ?el|8매|eight|1st|1세대|\\bv\\.? ?1\\b)"
+     "(summicron|\\bcron\\b)",
+     "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "(8 ?el|8매|eight|1st|1세대|\\bv\\.? ?1\\b)|\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代"
     ],
     "title_must_not": [
      "ASPH",
@@ -450,9 +450,9 @@
     "category": "Lens",
     "mount": "M",
     "title_must": [
-     "summicron|cron",
-     "(?<![\\d./])35(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
-     "(4th|v4|4세대|6매|6 ?el|IV\\b|king ?of ?bokeh|bokeh ?king|\\bKOB\\b)"
+     "(summicron|\\bcron\\b)",
+     "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "(4th|v4|4세대|6매|6 ?el|IV\\b|king ?of ?bokeh|bokeh ?king|\\bKOB\\b)|\\b4th\\b|fourth|4세대|\\bv\\.?4\\b|\\b(type|ver\\.?|version) ?iv\\b|\\bver(sion)?\\.? ?4\\b|第4世代"
     ],
     "title_must_not": [
      "ASPH",
@@ -485,6 +485,7 @@
      "설명서",
      "box only",
      "박스만",
+     "7 ?el|7매|7枚",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -600,8 +601,8 @@
     "mount": "M",
     "title_must": [
      "(summilux|\\blux\\b)",
-     "(?<![\\d./])50(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
-     "ASPH"
+     "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "ASPH|\\b5th\\b|5세대"
     ],
     "title_must_not": [
      "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
@@ -725,8 +726,8 @@
      "설명서",
      "box only",
      "박스만",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b",
-     "\\b(?:1st|2nd)\\b|[12]세대|\\bv\\.?[12]\\b|\\bfirst\\b|\\bsecond\\b|[12]代目",
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代",
+     "\\b(?:1st|2nd)\\b|[12]세대|\\bv\\.?[12]\\b|\\bfirst\\b|\\bsecond\\b|[12]代目|第[12]世代|\\b(type|ver\\.?|version) ?i{1,2}\\b|\\bver(sion)?\\.? ?[12]\\b",
      "50 ?jahre",
      "토륨|thorium",
      "safari|사파리|サファリ",
@@ -1094,7 +1095,7 @@
     "title_must_not": [
      "복각",
      "re-?issue",
-     "ASPH",
+     "ASPH(?!erical)",
      "6 ?bit",
      "신품",
      "\\b75\\b",
@@ -1174,10 +1175,10 @@
     "title_must": [
      "nocti",
      "1\\.2\\b",
-     "(복각|re-?issue|ASPH|6 ?bit|신품)"
+     "(복각|re-?issue|ASPH(?!erical)|6 ?bit|신품)"
     ],
     "title_must_not": [
-     "오리지널|original",
+     "오리지널|original|double ?aspherical|\\bAA\\b",
      "\\b75\\b",
      "(?<![\\d./])35(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
      "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
@@ -20339,7 +20340,7 @@
      "steel ?rim|스틸 ?림"
     ],
     "title_must_not": [
-     "복각|re-?issue|2021",
+     "re-?issue|복각|리이슈|202[12]|11301|^(?!.*(\\bM3\\b|1186[89]|11870|goggle|고글|안경|\\beyes?\\b|original|오리지널|\\b1st\\b|\\bv\\.?1\\b|first|196\\d|ollux|black ?paint|re-?paint)).*(summilux-m\\b.*(steel ?rim|스틸 ?림)|(steel ?rim|스틸 ?림).*summilux-m\\b)",
      "titan|티탄",
      "leitz ?wetzlar",
      "10 ?jahre",
@@ -20417,7 +20418,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代"
     ],
     "title_must_not": [
      "steel ?rim|스틸 ?림",
@@ -20507,7 +20508,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b|pre-?asph"
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代|pre-?asph"
     ],
     "title_must_not": [
      "titan|티탄",
@@ -20924,6 +20925,9 @@
      "설명서",
      "safari|사파리|サファリ",
      "\\btype ?i{1,3}v?\\b",
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代",
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代",
+     "11301",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -21331,7 +21335,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -21410,7 +21414,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -21489,7 +21493,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b"
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -21516,6 +21520,7 @@
      "박스만",
      "manual",
      "설명서",
+     "E46|11868|11856",
      "safari|사파리|サファリ",
      "black ?paint|블랙 ?페인트|블페|ブラックペイント",
      "ASPH",
@@ -21579,7 +21584,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b|E46"
+     "\\b4th\\b|fourth|4세대|\\bv\\.?4\\b|\\b(type|ver\\.?|version) ?iv\\b|\\bver(sion)?\\.? ?4\\b|第4世代|E46|11868|11856"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -22098,10 +22103,10 @@
     "title_must_not": [
      "\\bSL\\b",
      "\\bTL\\b",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b|E46",
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代",
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代",
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代",
+     "\\b4th\\b|fourth|4세대|\\bv\\.?4\\b|\\b(type|ver\\.?|version) ?iv\\b|\\bver(sion)?\\.? ?4\\b|第4世代|E46|11868|11856",
      "classic|클래식",
      "titan|티탄",
      "millenn?ium|밀레니엄",
@@ -22131,6 +22136,7 @@
      "manual",
      "설명서",
      "ASPH",
+     "\\b5th\\b|5세대",
      "safari|사파리|サファリ",
      "black ?paint|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
@@ -22270,7 +22276,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -22362,7 +22368,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b|7 ?el|7매"
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代|7 ?el|7매"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -22702,7 +22708,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "^(?!.*(ASPH|APO|\\bv\\.? ?[1-5]\\b|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|현행|millenn|titan|ara ?g|your ?mark)).*$"
+     "^(?!.*(ASPH|APO|\\bv\\.? ?[1-5]\\b|\\bver(sion)?\\.? ?([1-5]|i{1,3}|iv|v)\\b|第[1-5]世代|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|현행|millenn|titan|ara ?g|your ?mark)).*$"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -23014,7 +23020,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b"
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -23158,7 +23164,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b(?:1st|2nd)\\b|[12]세대|\\bv\\.?[12]\\b|\\bfirst\\b|\\bsecond\\b|[12]代目"
+     "\\b(?:1st|2nd)\\b|[12]세대|\\bv\\.?[12]\\b|\\bfirst\\b|\\bsecond\\b|[12]代目|第[12]世代|\\b(type|ver\\.?|version) ?i{1,2}\\b|\\bver(sion)?\\.? ?[12]\\b"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -23190,7 +23196,7 @@
      "박스만",
      "manual",
      "설명서",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b",
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代",
      "50 ?jahre",
      "토륨|thorium",
      "safari|사파리|サファリ",
@@ -23252,7 +23258,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -23320,7 +23326,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -23390,7 +23396,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b"
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -23460,7 +23466,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])28(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b"
+     "\\b4th\\b|fourth|4세대|\\bv\\.?4\\b|\\b(type|ver\\.?|version) ?iv\\b|\\bver(sion)?\\.? ?4\\b|第4世代"
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
@@ -23526,10 +23532,10 @@
     "title_must_not": [
      "\\bR\\b|-R\\b",
      "ASPH",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b",
-     "\\b3rd\\b|\\b3th\\b|3세대|\\bv\\.?3\\b|third|\\b(type|ver\\.?) ?iii\\b",
-     "\\b4th\\b|4세대|\\bv\\.?4\\b|fourth|\\b(type|ver\\.?) ?iv\\b",
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代",
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代",
+     "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代",
+     "\\b4th\\b|fourth|4세대|\\bv\\.?4\\b|\\b(type|ver\\.?|version) ?iv\\b|\\bver(sion)?\\.? ?4\\b|第4世代",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -23596,7 +23602,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b"
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代"
     ],
     "title_must_not": [
      "tele",
@@ -23665,7 +23671,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b"
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代"
     ],
     "title_must_not": [
      "tele",
@@ -23735,8 +23741,8 @@
      "\\bR\\b|-R\\b",
      "APO",
      "macro",
-     "\\b1st\\b|\\b1th\\b|1세대|\\bv\\.?1\\b|first|\\b(type|ver\\.?) ?i\\b",
-     "\\b2nd\\b|2세대|\\bv\\.?2\\b|second|\\b(type|ver\\.?) ?ii\\b",
+     "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代",
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
