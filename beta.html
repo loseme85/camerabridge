@@ -1125,15 +1125,26 @@
     .price-ladder{margin:8px 0 28px;padding:18px 0 14px;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
     .price-ladder h3{margin:0;font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-0.01em}
     .price-ladder>p{margin:4px 0 14px;font-size:13px;color:var(--text-soft)}
-    .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:34px;border-top:1px solid var(--border)}
+    .price-ladder{position:relative}
+    .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:36px;border-top:1px solid var(--border)}
     .ladder-grade{font-family:var(--serif);font-size:15px;font-weight:600}
-    .ladder-strip{position:relative;height:22px}
+    .ladder-strip{position:relative;align-self:stretch;min-height:36px}
+    .ladder-grid{position:absolute;top:0;bottom:0;border-left:1px solid var(--border);opacity:.7}
     .ladder-strip::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dotted var(--border-strong)}
     .ladder-band{position:absolute;top:calc(50% - 3px);height:6px;background:var(--surface-muted)}
-    .ladder-dot{position:absolute;top:50%;width:9px;height:9px;margin:-5px 0 0 -5px;background:var(--ladder-home);border:1.5px solid var(--ladder-home);box-sizing:border-box}
+    .ladder-dot{position:absolute;top:50%;padding:0;cursor:pointer;width:9px;height:9px;margin:-5px 0 0 -5px;background:var(--ladder-home);border:1.5px solid var(--ladder-home);box-sizing:border-box}
     .ladder-dot.is-abroad{background:var(--ladder-abroad);border-color:var(--ladder-abroad)}
     .ladder-dot.is-gone{background:var(--bg)}
-    .ladder-dot:hover,.ladder-dot:focus-visible{transform:scale(1.5);z-index:1;outline:none}
+    .ladder-dot:hover,.ladder-dot:focus-visible,.ladder-dot.is-on{transform:scale(1.6);z-index:2;outline:none}
+    .ladder-tip{position:absolute;z-index:5;width:280px;display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px;background:var(--bg);border:1px solid var(--text);font-size:12px;line-height:1.45;pointer-events:none}
+    .ladder-tip[hidden]{display:none}
+    .ladder-tip>img{width:56px;height:56px;object-fit:contain;background:#fff}
+    .ladder-tip .source-flag{width:16px;height:12px;vertical-align:-1px;margin-right:2px}
+    .ladder-tip b{display:block;font-family:var(--serif);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+    .ladder-tip .tip-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
+    .ladder-tip .tip-meta{color:var(--text-muted)}
+    .ladder-tip .tip-go{grid-column:1/-1;border-top:1px solid var(--border);padding-top:6px;color:var(--text-soft)}
+    .result-card.is-ladder-target{outline:2px solid var(--text);outline-offset:6px;transition:outline-color 1.2s}
     .ladder-range{font-family:var(--serif);font-size:15px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
     .ladder-range small{display:block;font-family:var(--sans);font-size:11px;color:var(--text-muted)}
     .ladder-axis{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;gap:14px;border-top:1px solid var(--border)}
@@ -2939,6 +2950,10 @@
       ladder_gone: { ko: '팔림·내려감', en: 'Sold or removed', ja: '販売済み・削除', 'zh-Hans': '已售/已下架', 'zh-Hant': '已售/已下架', pt: 'Vendido ou removido', es: 'Vendido o retirado', de: 'Verkauft oder entfernt', it: 'Venduto o rimosso' },
       ladder_band: { ko: '판매 중 가격대', en: 'Asking range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa pedida', es: 'Rango pedido', de: 'Preisspanne', it: 'Fascia richiesta' },
       ladder_counts: { ko: '판매 중 {a} · 지난 기록 {h}', en: '{a} for sale · {h} past', ja: '販売中 {a} · 過去 {h}', 'zh-Hans': '在售 {a} · 过往 {h}', 'zh-Hant': '在售 {a} · 過往 {h}', pt: '{a} à venda · {h} anteriores', es: '{a} en venta · {h} anteriores', de: '{a} zu kaufen · {h} früher', it: '{a} in vendita · {h} passati' },
+      ladder_abroad_short: { ko: '해외 · 도착 총액', en: 'Abroad · est. delivered', ja: '海外 · 到着総額', 'zh-Hans': '海外 · 到手总价', 'zh-Hant': '海外 · 到手總價', pt: 'Exterior · total estimado', es: 'Extranjero · total estimado', de: 'Ausland · geschätzt geliefert', it: 'Estero · totale stimato' },
+      ladder_go: { ko: '누르면 아래 매물로 이동 (휴대폰은 한 번 더)', en: 'Click to jump to this listing below', ja: 'クリックで下の出品へ移動', 'zh-Hans': '点击跳到下方商品', 'zh-Hant': '點擊跳到下方商品', pt: 'Clique para ir ao anúncio abaixo', es: 'Haz clic para ir al anuncio abajo', de: 'Klicken, um zum Angebot unten zu springen', it: "Clicca per andare all'annuncio sotto" },
+      ladder_listed: { ko: '판매가 {p}', en: 'Listed {p}', ja: '販売価格 {p}', 'zh-Hans': '标价 {p}', 'zh-Hant': '標價 {p}', pt: 'Anunciado {p}', es: 'Publicado {p}', de: 'Angebot {p}', it: 'In vendita {p}' },
+      ladder_finding: { ko: '목록에서 찾는 중…', en: 'Finding it in the list…', ja: 'リストから探しています…', 'zh-Hans': '正在列表中查找…', 'zh-Hant': '正在列表中尋找…', pt: 'Procurando na lista…', es: 'Buscando en la lista…', de: 'Wird in der Liste gesucht…', it: 'Ricerca nella lista…' },
       ladder_none: { ko: '판매 중 없음', en: 'None for sale', ja: '販売中なし', 'zh-Hans': '无在售', 'zh-Hant': '無在售', pt: 'Nenhum à venda', es: 'Ninguno en venta', de: 'Keins zu kaufen', it: 'Nessuno in vendita' },
       suggestions: { ko: '모델 후보', en: 'Model suggestions', ja: 'モデル候補', 'zh-Hans': '型号候选', 'zh-Hant': '型號候選', pt: 'Sugestões de modelo', es: 'Sugerencias de modelo', de: 'Modellvorschläge', it: 'Suggerimenti di modello' }
     };
@@ -3173,7 +3188,7 @@
 
     // 모델 시세 그림: 고른 모델의 매물을 최대 300개까지 따로 받아 등급 줄마다 점으로 찍음 (목록은 12개씩이라 한눈에 안 들어와서)
     const LADDER_GRADES = ['N', 'S', 'A', 'B', 'C', 'D'];
-    const ladderState = { key: '', results: null };
+    const ladderState = { key: '', results: null, points: [] };
 
     function ladderEntity(){
       const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
@@ -3227,11 +3242,20 @@
 
     function ladderTicks(low, high){
       const span = high - low;
-      const raw = span / 4;
+      const raw = span / 8;
       const step = [1, 2, 2.5, 5, 10].map(m => m * Math.pow(10, Math.floor(Math.log10(raw)))).find(v => v >= raw) || raw;
       const ticks = [];
       for(let v = Math.ceil(low / step) * step; v <= high; v += step) ticks.push(v);
       return ticks;
+    }
+
+    function ladderAxisMoney(value){
+      const amount = roundEstimate(value, uiState.currency);
+      try{
+        return new Intl.NumberFormat(uiState.locale || 'en', { style: 'currency', currency: uiState.currency, notation: 'compact', maximumFractionDigits: 1 }).format(amount);
+      }catch(error){
+        return formatMoney(amount, uiState.currency);
+      }
     }
 
     function renderPriceLadder(){
@@ -3246,6 +3270,9 @@
       low = Math.max(0, low - pad); high += pad;
       const x = v => Math.max(0, Math.min(100, (v - low) / (high - low) * 100));
       const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
+      const ticks = ladderTicks(low, high);
+      const grid = ticks.map(v => `<span class="ladder-grid" style="left:${x(v).toFixed(2)}%"></span>`).join('');
+      ladderState.points = points;
       const rows = LADDER_GRADES.map(grade => {
         const mine = points.filter(p => p.grade === grade);
         if(!mine.length) return '';
@@ -3256,30 +3283,122 @@
         const dots = mine
           .sort((a, b) => Number(a.active) - Number(b.active))
           .map(p => {
-            const url = p.result.affiliate_url || p.result.source_url || '';
-            const label = `${p.result.source || ''} · ${money(p.value)} · ${p.active ? ux('section.active_listings', 'Active') : ec('ladder_gone')}`;
+            const label = `${localizeSourceName(p.result.source || '')} · ${money(p.value)} · ${p.active ? ux('section.active_listings', 'Active') : ec('ladder_gone')}`;
             const cls = `ladder-dot${p.abroad ? ' is-abroad' : ''}${p.active ? '' : ' is-gone'}`;
-            const style = `left:${x(p.value).toFixed(2)}%`;
-            return url
-              ? `<a class="${cls}" style="${style}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"></a>`
-              : `<span class="${cls}" style="${style}" title="${escapeHtml(label)}"></span>`;
+            return `<button type="button" class="${cls}" style="left:${x(p.value).toFixed(2)}%" data-ladder-i="${points.indexOf(p)}" aria-label="${escapeHtml(label)}"></button>`;
           }).join('');
         const range = active.length
           ? (active.length > 1 && money(active[0]) !== money(active[active.length - 1]) ? `${money(active[0])} – ${money(active[active.length - 1])}` : money(active[0]))
           : ec('ladder_none');
         return `<div class="ladder-row"><span class="ladder-grade">${escapeHtml(grade === 'N' ? ec('grade_new') : grade)}</span>`
-          + `<div class="ladder-strip">${band}${dots}</div>`
+          + `<div class="ladder-strip">${grid}${band}${dots}</div>`
           + `<span class="ladder-range">${escapeHtml(range)}<small>${escapeHtml(ec('ladder_counts', { a: String(active.length), h: String(mine.length - active.length) }))}</small></span></div>`;
       }).join('');
-      const axis = ladderTicks(low, high).map(v => `<span style="left:${x(v).toFixed(2)}%">${escapeHtml(money(v))}</span>`).join('');
+      const axis = ticks.map(v => `<span style="left:${x(v).toFixed(2)}%">${escapeHtml(ladderAxisMoney(v))}</span>`).join('');
       return `
         <section class="price-ladder" aria-label="${escapeHtml(ec('ladder_title'))}">
           <h3>${escapeHtml(ec('ladder_title'))}</h3>
           <p>${escapeHtml(ec('ladder_note', { n: String(points.length) }))}</p>
           ${rows}
           <div class="ladder-axis"><div></div><div>${axis}</div><div></div></div>
+          <div class="ladder-tip" hidden></div>
           <div class="ladder-key"><span><i></i>${escapeHtml(ec('ladder_home'))}</span><span><i class="is-abroad"></i>${escapeHtml(ec('ladder_abroad'))}</span><span><i class="is-gone"></i>${escapeHtml(ec('ladder_gone'))}</span><span><i class="is-band"></i>${escapeHtml(ec('ladder_band'))}</span></div>
         </section>`;
+    }
+
+    // 점에 커서: 대략의 정보 / 누르기: 아래 목록의 그 카드로 (아직 안 불러온 카드면 더 불러오며 찾음)
+    function ladderPointFrom(target){
+      const dot = target && target.closest ? target.closest('.ladder-dot') : null;
+      const point = dot ? (ladderState.points || [])[Number(dot.dataset.ladderI)] : null;
+      return point ? { dot, point } : null;
+    }
+
+    function showLadderTip(dot, point){
+      const box = dot.closest('.price-ladder');
+      const tip = box ? box.querySelector('.ladder-tip') : null;
+      if(!tip) return;
+      const result = point.result;
+      const cost = computeLandedCost(result);
+      const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
+      const rule = landedSourceRule(result);
+      const listed = cost && cost.currency !== cost.target ? ec('ladder_listed', { p: formatMoney(cost.listed, cost.currency) }) : '';
+      const grade = result.grade === 'N' ? ec('grade_new') : gradeLabel(result.grade);
+      tip.innerHTML = `${result.image_url ? `<img src="${escapeHtml(result.image_url)}" alt="">` : '<span></span>'}`
+        + `<div><b>${escapeHtml(money(point.value))}</b>`
+        + `<div class="tip-title">${escapeHtml(result.title || '')}</div>`
+        + `<div class="tip-meta">${countryFlagHtml(rule && rule.country)} ${escapeHtml(localizeSourceName(result.source || ''))} · ${escapeHtml(grade)}${result.condition ? ` (${escapeHtml(String(result.condition))})` : ''}</div>`
+        + `<div class="tip-meta">${escapeHtml([point.active ? ux('section.active_listings', 'Active') : ec('ladder_gone'), point.abroad ? ec('ladder_abroad_short') : '', listed].filter(Boolean).join(' · '))}</div></div>`
+        + `<div class="tip-go">${escapeHtml(ec('ladder_go'))}</div>`;
+      tip.hidden = false;
+      const boxRect = box.getBoundingClientRect();
+      const dotRect = dot.getBoundingClientRect();
+      const width = tip.offsetWidth;
+      let left = dotRect.left - boxRect.left + dotRect.width / 2 - width / 2;
+      left = Math.max(0, Math.min(boxRect.width - width, left));
+      tip.style.left = `${left}px`;
+      const below = dotRect.bottom - boxRect.top + 8;
+      tip.style.top = `${dotRect.top - boxRect.top - tip.offsetHeight - 8 > 0 ? dotRect.top - boxRect.top - tip.offsetHeight - 8 : below}px`;
+    }
+
+    function hideLadderTip(){
+      document.querySelectorAll('.ladder-tip').forEach(tip => { tip.hidden = true; });
+    }
+
+    async function jumpToLadderListing(dot, point){
+      const key = buildListingIdentityKey(point.result);
+      const find = () => Array.from(document.querySelectorAll('.result-card[data-listing-key]')).find(card => card.dataset.listingKey === key);
+      let card = find();
+      if(!card){
+        const tip = dot.closest('.price-ladder') && dot.closest('.price-ladder').querySelector('.tip-go');
+        if(tip) tip.textContent = ec('ladder_finding');
+      }
+      let tries = 0;
+      for(; !card && tries < 30; tries++){
+        const pagination = state.response ? (state.response.pagination || {}) : {};
+        if(!pagination.has_more || state.loading) break;
+        if(state.appending){ await new Promise(done => setTimeout(done, 200)); }
+        else{ await runSearch(Number(pagination.next_offset || getResults().length || PAGE_SIZE), { append: true, historyMode: 'replace' }); }
+        card = find();
+      }
+      hideLadderTip();
+      if(!card) return;
+      // 더 불러온 직후엔 목록이 자기 자리로 스크롤하므로 그 뒤에 이동
+      const loaded = !!card && tries > 0;
+      if(loaded) await new Promise(done => setTimeout(done, 150));
+      card = find() || card;
+      window.scrollTo({ top: Math.max(0, window.scrollY + card.getBoundingClientRect().top - getStickyAnchorOffset() - 12), behavior: loaded ? 'instant' : 'smooth' });
+      card.classList.add('is-ladder-target');
+      setTimeout(() => card.classList.remove('is-ladder-target'), 2400);
+    }
+
+    function bindPriceLadder(){
+      document.addEventListener('mouseover', event => {
+        const hit = ladderPointFrom(event.target);
+        if(hit) showLadderTip(hit.dot, hit.point);
+      });
+      document.addEventListener('mouseout', event => {
+        if(ladderPointFrom(event.target) && !ladderPointFrom(event.relatedTarget)) hideLadderTip();
+      });
+      document.addEventListener('focusin', event => {
+        const hit = ladderPointFrom(event.target);
+        if(hit) showLadderTip(hit.dot, hit.point);
+      });
+      document.addEventListener('focusout', event => { if(ladderPointFrom(event.target)) hideLadderTip(); });
+      document.addEventListener('click', event => {
+        const hit = ladderPointFrom(event.target);
+        if(!hit) return;
+        event.preventDefault();
+        // 휴대폰(커서 없음): 첫 번째 누름은 정보만, 같은 점을 한 번 더 누르면 이동
+        const touch = window.matchMedia && window.matchMedia('(hover: none)').matches;
+        if(touch && !hit.dot.classList.contains('is-on')){
+          document.querySelectorAll('.ladder-dot.is-on').forEach(dot => dot.classList.remove('is-on'));
+          hit.dot.classList.add('is-on');
+          showLadderTip(hit.dot, hit.point);
+          return;
+        }
+        showLadderTip(hit.dot, hit.point);
+        jumpToLadderListing(hit.dot, hit.point);
+      });
     }
 
     function entityMetaLine(entity){
@@ -5534,6 +5653,7 @@
     bindEntitySuggest('query-input');
     bindEntitySuggest('sticky-query-input', { preserveResultsAnchor: true });
     bindEntityBar();
+    bindPriceLadder();
     loadEntitySummary();
     loadHomeFeed();
     bindHome();
