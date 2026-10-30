@@ -956,15 +956,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-23 10:42:44",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-30 17:04:57",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -4930,15 +4930,15 @@
       "cla"
     ],
     "flag_confidence": 0.9,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-06-20 16:01:25",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-30 17:04:57",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -183963,12 +183963,12 @@
   {
     "source": "장씨카메라",
     "source_url": "https://j-camera.com/product/detail.html?product_no=12401&cate_no=358&display_group=1",
-    "title_raw": "LEICA 50mm F1.4 Black Chrome Finish SUMMILUX-M sn.",
+    "title_raw": "LEICA 50mm F1.4 Black Chrome Finish SUMMILUX-M sn.4789",
     "price_raw": "4,900,000원",
     "currency": "KRW",
     "image_url": "https://j-camera.com/web/product/medium/202610/417e4fc9be18c1b8d6a4668e5e546689.jpg",
     "condition_raw": "95%",
-    "normalized_name": "leica 50mm f1.4 black chrome finish summilux-m sn.",
+    "normalized_name": "leica 50mm f1.4 black chrome finish summilux-m sn.4789",
     "normalized_description": "",
     "brand": "Leica",
     "brand_confidence": 0.97,
@@ -184073,12 +184073,12 @@
   {
     "source": "장씨카메라",
     "source_url": "https://j-camera.com/product/detail.html?product_no=12399&cate_no=358&display_group=1",
-    "title_raw": "LEICA 28mm F5.6 Summaron L sn.",
+    "title_raw": "LEICA 28mm F5.6 Summaron L sn.1675",
     "price_raw": "3,500,000원",
     "currency": "KRW",
     "image_url": "https://j-camera.com/web/product/medium/202610/72c4a6d409fe5a53df6e7c4121e186a5.jpg",
     "condition_raw": "95%",
-    "normalized_name": "leica 28mm f5.6 summaron l sn.",
+    "normalized_name": "leica 28mm f5.6 summaron l sn.1675",
     "normalized_description": "",
     "brand": "Leica",
     "brand_confidence": 0.97,
@@ -405759,6 +405759,161 @@
   },
   {
     "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-90mm-f2-summicron-type-ii-black-seoom-11122-leica-m-t158931",
+    "title_raw": "Leica 90mm f2 Summicron (Type II) (Black, SEOOM / 11122)",
+    "price_raw": "€519",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/5_-_KY2008-1.jpg?v=1793346940",
+    "condition_raw": "Kamerastore: some",
+    "normalized_name": "leica 90mm f2 summicron (type ii) (black, seoom / 11122)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": "90",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-90mm-f2-summicron-r-3-cam-11219-leica-r-t158927",
+    "title_raw": "Leica 90mm f2 Summicron-R (3-Cam) (11219)",
+    "price_raw": "€569",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/3_-_KY2010-1.jpg?v=1793346165",
+    "condition_raw": "Kamerastore: working",
+    "normalized_name": "leica 90mm f2 summicron-r (3-cam) (11219)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:SUMMICRON-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Summicron-R",
+    "model_canonical": "Summicron-R",
+    "variant": [],
+    "focal_length": "90",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
+    "source_url": "https://kamerastore.com/products/leica-180mm-f2-8-elmarit-r-type-i-3-cam-11919-leica-r-t158920",
+    "title_raw": "Leica 180mm f2.8 Elmarit-R (Type I) (3-Cam) (11919)",
+    "price_raw": "€360",
+    "currency": "EUR",
+    "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/1_-_KY2009-1.jpg?v=1793345502",
+    "condition_raw": "Kamerastore: minor",
+    "normalized_name": "leica 180mm f2.8 elmarit-r (type i) (3-cam) (11919)",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:ELMARIT-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Elmarit-R",
+    "model_canonical": "Elmarit-R",
+    "variant": [],
+    "focal_length": "180",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Kamerastore (핀란드)",
     "source_url": "https://kamerastore.com/products/leica-leicaflex-sl-black-10012-leica-r-t158892",
     "title_raw": "Leica Leicaflex SL (Black, 10012)",
     "price_raw": "€349",
@@ -410458,7 +410613,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -411551,7 +411706,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -418164,7 +418319,7 @@
     "source": "Kamerastore (핀란드)",
     "source_url": "https://kamerastore.com/products/leica-90mm-f2-summicron-r-3-cam-11219-leica-r-t144242",
     "title_raw": "Leica 90mm f2 Summicron-R (3-Cam) (11219)",
-    "price_raw": "€599",
+    "price_raw": "€569",
     "currency": "EUR",
     "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/10_-_LE6921-1.jpg?v=1781513527",
     "condition_raw": "Kamerastore: minor",
@@ -429947,7 +430102,7 @@
     "source": "Kamerastore (핀란드)",
     "source_url": "https://kamerastore.com/products/leica-50mm-f1-noctilux-m-type-ii-11821-leica-m-t127109",
     "title_raw": "Leica 50mm f1 Noctilux-M (Type II) (11821) + Lens Hood (50mm f1 II) (12539)",
-    "price_raw": "€5,899",
+    "price_raw": "€4,999",
     "currency": "EUR",
     "image_url": "https://cdn.shopify.com/s/files/1/0521/9496/7750/files/1_-_KW5417-1.jpg?v=1766055567",
     "condition_raw": "Kamerastore: great",
@@ -444167,7 +444322,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444320,7 +444475,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444790,7 +444945,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444841,7 +444996,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -445114,59 +445269,6 @@
     "model_raw": null,
     "model_canonical": null,
     "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-26 22:43:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2449960053066",
-    "title_raw": "Leica Q (Typ116) Black",
-    "price_raw": "¥379,400",
-    "currency": "JPY",
-    "image_url": "",
-    "condition_raw": "A",
-    "normalized_name": "leica q (typ116) black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Q"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Q+Body"
-    ],
-    "model_raw": "Q",
-    "model_canonical": "Q",
-    "variant": [
-      "Black"
-    ],
     "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
@@ -448249,7 +448351,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -448982,7 +449084,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -453779,7 +453881,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454093,7 +454195,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454174,59 +454276,6 @@
   },
   {
     "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2445480190052",
-    "title_raw": "Leica Vario-Elmarit SL 24-70mm f2.8 ASPH.",
-    "price_raw": "¥292,200",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2445480190052-1-1.jpg",
-    "condition_raw": "AB",
-    "normalized_name": "leica vario-elmarit sl 24-70mm f2.8 asph.",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Vario-Elmarit",
-    "model_canonical": "Vario-Elmarit",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": "24-70",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2445310028098",
     "title_raw": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
     "price_raw": "¥3,900",
@@ -454248,7 +454297,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454299,7 +454348,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455884,7 +455933,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455935,7 +455984,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455986,7 +456035,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -456037,7 +456086,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -456088,7 +456137,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -458606,57 +458655,6 @@
     "model_canonical": "Summicron-M",
     "variant": [],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2119341204973",
-    "title_raw": "Leica I (A) 50mm F3.5(New Elmar)",
-    "price_raw": "¥357,200",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2119341204973-1-1.jpg",
-    "condition_raw": "AB",
-    "normalized_name": "leica i (a) 50mm f3.5(new elmar)",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "L_barnack_body:LEICA I/II/III"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:leica i "
-    ],
-    "label": "L Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Body"
-    ],
-    "model_raw": "M-A",
-    "model_canonical": "M-A",
-    "variant": [],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -461482,57 +461480,6 @@
     "model_canonical": "Summilux-M",
     "variant": [],
     "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2443060235193",
-    "title_raw": "Leica APO-Vario-Elmarit SL 90-280mm f2.8-4",
-    "price_raw": "¥514,800",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2443060235193-1-1.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica apo-vario-elmarit sl 90-280mm f2.8-4",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Vario-Elmarit",
-    "model_canonical": "Vario-Elmarit",
-    "variant": [],
-    "focal_length": "90-280",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -469033,57 +468980,6 @@
     "variant": [],
     "focal_length": null,
     "accessory_type": "hood",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-04 09:41:29",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2119341117921",
-    "title_raw": "Leica SL3 Body [10608]",
-    "price_raw": "¥753,200",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2119341117921-1-1.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica sl3 body [10608]",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "SL",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "SL_explicit:SL3"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:body"
-    ],
-    "label": "SL Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "SL+Body"
-    ],
-    "model_raw": "SL3",
-    "model_canonical": "SL3",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -484942,6 +484838,960 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-04 09:41:29",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leitz-leica-elmarit-m-135mm-f2-8-lens-yr-1981-canada-88435",
+    "title_raw": "LEITZ Leica Elmarit-M 135mm/F2.8 Lens Yr.1981 Canada",
+    "price_raw": "HK$1,980",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/656d96b464487e6b736c4f0a1055da98.jpg?v=1793346712",
+    "condition_raw": "M&K: normal signs of wear",
+    "normalized_name": "leitz leica elmarit-m 135mm/f2.8 lens yr.1981 canada",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:ELMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Elmarit-M",
+    "model_canonical": "Elmarit-M",
+    "variant": [],
+    "focal_length": "135",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-summicron-m-35mm-f2-0-ver-4-7-elements-black-lens-yr-1991-germany-11310-12163",
+    "title_raw": "Leica Summicron-M 35mm/F2.0 Ver.4 7 Elements Black Lens Yr.1991 Germany 11310",
+    "price_raw": "HK$36,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/5c973182c2a8345ac1d1a2c4279774ff.jpg?v=1793346688",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summicron-m 35mm/f2.0 ver.4 7 elements black lens yr.1991 germany 11310",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-summarit-m-35mm-f2-4-asph-silver-lens-germany-11679-88976",
+    "title_raw": "Leica Summarit-M 35mm/F2.4 ASPH Silver Lens Germany 11679",
+    "price_raw": "HK$9,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/68a3fa838aa67e654da8d25d6ed0822b.jpg?v=1793346661",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica summarit-m 35mm/f2.4 asph silver lens germany 11679",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summarit-M",
+    "model_canonical": "Summarit-M",
+    "variant": [
+      "ASPH",
+      "Silver"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-summicron-m-35mm-f2-0-asph-silver-lens-germany-11882-88975",
+    "title_raw": "Leica Summicron-M 35mm/F2.0 ASPH Silver Lens Germany 11882",
+    "price_raw": "HK$15,300",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/3c35167f9e8473981348a5fbe0a71425.jpg?v=1793346640",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica summicron-m 35mm/f2.0 asph silver lens germany 11882",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "ASPH",
+      "Silver"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-sl2-s-reporter-digital-mirrorless-interchangeable-lens-camera-10891-88973",
+    "title_raw": "Leica SL2-S Reporter Digital Mirrorless Interchangeable Lens Camera 10891",
+    "price_raw": "HK$23,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/81af6e1a833e0e1e160292d14aaffd9b.jpg?v=1793346614",
+    "condition_raw": "M&K: slightly used",
+    "normalized_name": "leica sl2-s reporter digital mirrorless interchangeable lens camera 10891",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "SL",
+    "mount_confidence": 0.96,
+    "mount_reason": [
+      "SL_explicit:SL2"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica sl2"
+    ],
+    "label": "SL Body",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "SL+Body"
+    ],
+    "model_raw": "SL2-S",
+    "model_canonical": "SL2-S",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-summilux-m-35mm-f1-4-pre-asph-black-lens-yr-1986-canada-88972",
+    "title_raw": "Leica Summilux M 35mm/F1.4 Pre-Asph Black Lens Yr.1986 Canada",
+    "price_raw": "HK$22,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/e82309021c29c9ddbd585f38b9900417.jpg?v=1793346593",
+    "condition_raw": "M&K: normal signs of wear",
+    "normalized_name": "leica summilux m 35mm/f1.4 pre-asph black lens yr.1986 canada",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux",
+    "model_canonical": "Summilux-M",
+    "variant": [
+      "ASPH",
+      "Pre-ASPH",
+      "Black"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-tri-elmar-m-16-18-21mm-f4-0-asph-lens-germany-11626-88775",
+    "title_raw": "Leica Tri-Elmar-M 16-18-21mm/F4.0 ASPH Lens Germany 11626",
+    "price_raw": "HK$23,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/542c1ce87dd8e6a4d9f689c141a46e8b.jpg?v=1793346567",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica tri-elmar-m 16-18-21mm/f4.0 asph lens germany 11626",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Tri-Elmar",
+    "model_canonical": "Tri-Elmar",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "16-18-21",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-elmarit-m-28mm-f2-8-asph-11677-lens-germany-11677-24049",
+    "title_raw": "Leica Elmarit-M 28mm/F2.8 ASPH./ 11677 Lens Germany 11677",
+    "price_raw": "HK$14,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/bd03565b63285a360ddb1bdd7a4af814.jpg?v=1793346538",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica elmarit-m 28mm/f2.8 asph./ 11677 lens germany 11677",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:ELMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Elmarit-M",
+    "model_canonical": "Elmarit-M",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "28",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leitz-leica-elmar-m-90mm-f4-0-silver-lens-yr-1956-germany-24048",
+    "title_raw": "LEITZ Leica Elmar M 90mm/F4.0 Silver Lens Yr.1956 Germany",
+    "price_raw": "HK$1,880",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/7c996bc1414a9c2a49d275a1f0ada453.jpg?v=1793346518",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leitz leica elmar m 90mm/f4.0 silver lens yr.1956 germany",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Elmar",
+    "model_canonical": "Elmar",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": "90",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-m7-0-72-black-film-rangefinder-camera-10503-12169",
+    "title_raw": "Leica M7 0.72 Black Film Rangefinder Camera 10503",
+    "price_raw": "HK$33,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/32ad047738e60beac6e1b8c8bce8c258.jpg?v=1793346490",
+    "condition_raw": "M&K: slightly used",
+    "normalized_name": "leica m7 0.72 black film rangefinder camera 10503",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica m7"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M7",
+    "model_canonical": "M7",
+    "variant": [
+      "Black",
+      "0.72"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-elmar-m-24mm-f3-8-asph-lens-germany-11648-12168",
+    "title_raw": "Leica Elmar-M 24mm/F3.8 ASPH Lens Germany 11648",
+    "price_raw": "HK$15,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/756f3dc870cee2f5e4a1ad9c3fa26d8a.jpg?v=1793346468",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica elmar-m 24mm/f3.8 asph lens germany 11648",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Elmar-M",
+    "model_canonical": "Elmar-M",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "24",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-elmar-m-24mm-f3-8-asph-lens-yr-2009-germany-11648-12167",
+    "title_raw": "Leica Elmar-M 24mm/F3.8 ASPH Lens Yr.2009 Germany 11648",
+    "price_raw": "HK$14,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/c3aef52aaf7de6de66db886f11bee310.jpg?v=1793346448",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica elmar-m 24mm/f3.8 asph lens yr.2009 germany 11648",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Elmar-M",
+    "model_canonical": "Elmar-M",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "24",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-elmarit-m-24mm-f2-8-asph-silver-brass-rare-11898-12166",
+    "title_raw": "Leica Elmarit-M 24mm/F2.8 ASPH Silver Brass Rare 11898",
+    "price_raw": "HK$19,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/6dcaa7baa2020d8d53660e0cb3f6abec.jpg?v=1793346425",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica elmarit-m 24mm/f2.8 asph silver brass rare 11898",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:ELMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Elmarit-M",
+    "model_canonical": "Elmarit-M",
+    "variant": [
+      "ASPH",
+      "Silver"
+    ],
+    "focal_length": "24",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leitz-leica-elmar-m-135mm-f4-0-e39-ver-i-lens-yr-1960-germany-12165",
+    "title_raw": "LEITZ Leica Elmar M 135mm/F4.0 E39 Ver.I Lens Yr.1960 Germany",
+    "price_raw": "HK$2,380",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/e278ca9d83eec6bd27bc3bc776faf9e4.jpg?v=1793346404",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leitz leica elmar m 135mm/f4.0 e39 ver.i lens yr.1960 germany",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Elmar",
+    "model_canonical": "Elmar",
+    "variant": [],
+    "focal_length": "135",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-summarit-m-75mm-f2-4-silver-lens-germany-11683-12161",
+    "title_raw": "Leica Summarit-M 75mm/F2.4 Silver Lens Germany 11683",
+    "price_raw": "HK$9,380",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/074b4acde971c5be8a87d474acfe5d87.jpg?v=1793346380",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica summarit-m 75mm/f2.4 silver lens germany 11683",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summarit-M",
+    "model_canonical": "Summarit-M",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": "75",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leica-summarit-m-75mm-f2-4-silver-lens-germany-11683-12160",
+    "title_raw": "Leica Summarit-M 75mm/F2.4 Silver Lens Germany 11683",
+    "price_raw": "HK$9,800",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/b2be4841da0c257e594b92c59b946abb.jpg?v=1793346350",
+    "condition_raw": "M&K: only minor signs of use",
+    "normalized_name": "leica summarit-m 75mm/f2.4 silver lens germany 11683",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMARIT-M"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summarit-M",
+    "model_canonical": "Summarit-M",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": "75",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leitz-leica-elmar-m-50mm-f2-8-ver-i-silver-lens-yr-1958-germany-11474",
+    "title_raw": "LEITZ Leica Elmar M 50mm/F2.8 Ver.I Silver Lens Yr.1958 Germany",
+    "price_raw": "HK$2,880",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/b0c536f0c316dbaf101f7b18adb51185.jpg?v=1793346329",
+    "condition_raw": "M&K: normal signs of wear",
+    "normalized_name": "leitz leica elmar m 50mm/f2.8 ver.i silver lens yr.1958 germany",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "Leica Lens",
+    "label_confidence": 0.82,
+    "label_reason": [
+      "Leica+Lens+no_mount"
+    ],
+    "model_raw": "Elmar",
+    "model_canonical": "Elmar",
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "M & K Kamera (홍콩)",
+    "source_url": "https://mkkcamera.com/products/leitz-leica-summar-l39-50mm-f2-0-silver-lens-yr-1934-ltm-germany-11087",
+    "title_raw": "LEITZ Leica Summar L39 50mm/F2.0 Silver Lens Yr.1934 LTM Germany",
+    "price_raw": "HK$3,680",
+    "currency": "HKD",
+    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/e514ebbe6f46442af80214b41d6b5992.jpg?v=1793346308",
+    "condition_raw": "M&K: normal signs of wear",
+    "normalized_name": "leitz leica summar l39 50mm/f2.0 silver lens yr.1934 ltm germany",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "L",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "L_ltm_l39:LTM/L39/M39"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "L Lens",
+    "label_confidence": 0.93,
+    "label_reason": [
+      "L+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Silver"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -519056,59 +519906,6 @@
   },
   {
     "source": "M & K Kamera (홍콩)",
-    "source_url": "https://mkkcamera.com/products/leitz-leica-tele-elmarit-m-90mm-f2-8-e39-ver-ii-v2-slim-lens-yr-1977-canada-11800-68331",
-    "title_raw": "LEITZ Leica Tele-Elmarit-M 90mm/F2.8 E39 Ver.II V2/ Slim Lens Yr.1977 Canada 11800",
-    "price_raw": "HK$7,800",
-    "currency": "HKD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0526/8088/4424/files/6baab918d1f11f1a305d709827bbe617.jpg?v=1787835044",
-    "condition_raw": "M&K: normal signs of wear",
-    "normalized_name": "leitz leica tele-elmarit-m 90mm/f2.8 e39 ver.ii v2/ slim lens yr.1977 canada 11800",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:ELMARIT-M"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Tele-Elmar",
-    "model_canonical": "Tele-Elmar",
-    "variant": [
-      "v2"
-    ],
-    "focal_length": "90",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-06 17:25:18",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "M & K Kamera (홍콩)",
     "source_url": "https://mkkcamera.com/products/leica-12529-hood-for-elmarit-r-19mm-f-2-8-v1-67979",
     "title_raw": "Leica 12529 Hood for Elmarit-R 19mm f/2.8 V1",
     "price_raw": "HK$880",
@@ -536872,6 +537669,223 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-07 11:02:59",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26C1886",
+    "title_raw": "Leica M7 0.72 BLACK CHROME",
+    "price_raw": "€2,300",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26C1886",
+    "condition_raw": "NOC: B+/B",
+    "normalized_name": "leica m7 0.72 black chrome",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Body",
+    "category_confidence": 0.88,
+    "category_reason": [
+      "body_kw:leica m7"
+    ],
+    "label": "M Body",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Body"
+    ],
+    "model_raw": "M7",
+    "model_canonical": "M7",
+    "variant": [
+      "Black Chrome",
+      "Chrome",
+      "Black",
+      "0.72"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3427",
+    "title_raw": "Leica 35mm f/2.8 ELMARIT-R",
+    "price_raw": "€190",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26U3427",
+    "condition_raw": "NOC: B+",
+    "normalized_name": "leica 35mm f/2.8 elmarit-r",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "R",
+    "mount_confidence": 0.97,
+    "mount_reason": [
+      "R_suffix:ELMARIT-R"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "R Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "R+Lens"
+    ],
+    "model_raw": "Elmarit-R",
+    "model_canonical": "Elmarit-R",
+    "variant": [],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3809",
+    "title_raw": "Leica 11236 EXTENDER-R R4 R3 ECC.",
+    "price_raw": "€80",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26U3809",
+    "condition_raw": "NOC: BA",
+    "normalized_name": "leica 11236 extender-r r4 r3 ecc.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:extender"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "R4",
+    "model_canonical": "R4",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [
+      "R"
+    ],
+    "compatible_systems": [
+      "R"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "Newoldcamera (이탈리아)",
+    "source_url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U3806",
+    "title_raw": "Leica 14544 case M5 IN leather black",
+    "price_raw": "€80",
+    "currency": "EUR",
+    "image_url": "https://camerabridge.io/api/noc_image?code=26U3806",
+    "condition_raw": "NOC: B+",
+    "normalized_name": "leica 14544 case m5 in leather black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.95,
+    "mount_reason": [
+      "M_body_number:M3-M11"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:case"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "M5",
+    "model_canonical": "M5",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "case",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -574206,57 +575220,6 @@
   },
   {
     "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-28mm-f2-8-elmarit-r-boxed-3367892",
-    "title_raw": "Leica 28mm f2.8 Elmarit-R 3-Cam",
-    "price_raw": "$695",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM24277-016-00.jpg?v=1791845195",
-    "condition_raw": "CameraWest: 9+",
-    "normalized_name": "leica 28mm f2.8 elmarit-r 3-cam",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:ELMARIT-R"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Elmarit-R",
-    "model_canonical": "Elmarit-R",
-    "variant": [],
-    "focal_length": "28",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-20 14:00:36",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
     "source_url": "https://www.camerawest.com/products/leica-50mm-f1-4-summilux-m-boxed-3494660",
     "title_raw": "Leica 50mm f1.4 Summilux-M",
     "price_raw": "$2,995",
@@ -575011,57 +575974,6 @@
     ],
     "model_raw": null,
     "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-q2-boxed-5365142",
-    "title_raw": "Leica Q2",
-    "price_raw": "$3,775",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM24263-001-00.jpg?v=1792007525",
-    "condition_raw": "CameraWest: 8+",
-    "normalized_name": "leica q2",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Q"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Q+Body"
-    ],
-    "model_raw": "Q2",
-    "model_canonical": "Q2",
     "variant": [],
     "focal_length": null,
     "accessory_type": null,
@@ -578904,61 +579816,6 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-iiif-black-dial-dag-overhauled-451525",
-    "title_raw": "Leica IIIf Black Dial DAG Overhauled",
-    "price_raw": "$695",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM23633-001-00.jpg?v=1790183517",
-    "condition_raw": "CameraWest: 8+",
-    "normalized_name": "leica iiif black dial dag overhauled",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "L_barnack_body:LEICA I/II/III"
-    ],
-    "category": "Body",
-    "category_confidence": 0.93,
-    "category_reason": [
-      "barnack_body_kw:leica iiif"
-    ],
-    "label": "L Body",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Body"
-    ],
-    "model_raw": "IIIf",
-    "model_canonical": "IIIf",
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [
-      "serviced"
-    ],
-    "flag_confidence": 0.9,
     "sold_quality": "asking",
     "sold_confidence": 0.85,
     "sold_reason": [
@@ -585830,57 +586687,6 @@
     ],
     "model_raw": "IIIc",
     "model_canonical": "IIIc",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-sdpoo-close-focus-goggles-9",
-    "title_raw": "Leica SDPOO Close Focus Goggles",
-    "price_raw": "$250",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/1809616-00.jpg?v=1760118194",
-    "condition_raw": "CameraWest: 9",
-    "normalized_name": "leica sdpoo close focus goggles",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.6,
-    "category_reason": [
-      "default_lens"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
     "variant": [],
     "focal_length": null,
     "accessory_type": null,
@@ -603553,7 +604359,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -628164,57 +628970,6 @@
   },
   {
     "source": "카메라노나니와 (일본)",
-    "source_url": "https://cameranonaniwa.jp/shop/g/g2221091115925/",
-    "title_raw": "Leica Summilux M 50/1.4",
-    "price_raw": "¥398,000",
-    "currency": "JPY",
-    "image_url": "https://cameranonaniwa.jp/img/goods/L/2221091115925-01.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica summilux m 50/1.4",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.9,
-    "mount_reason": [
-      "M_lens_shorthand:M NN/F"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux",
-    "model_canonical": "Summilux-M",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-23 02:26:13",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2221091115932/",
     "title_raw": "Leica Summicron M 50/2",
     "price_raw": "¥168,000",
@@ -628407,59 +629162,6 @@
     ],
     "focal_length": null,
     "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-23 02:26:13",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "카메라노나니와 (일본)",
-    "source_url": "https://cameranonaniwa.jp/shop/g/g2222120091814/",
-    "title_raw": "Leica Q (Typ116) Black",
-    "price_raw": "¥358,000",
-    "currency": "JPY",
-    "image_url": "https://cameranonaniwa.jp/img/goods/L/2222120091814-01.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica q (typ116) black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Q"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Q+Body"
-    ],
-    "model_raw": "Q",
-    "model_canonical": "Q",
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -648446,7 +649148,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -648499,7 +649201,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -650121,7 +650823,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -675212,59 +675914,6 @@
   },
   {
     "source": "카메라노나니와 (일본)",
-    "source_url": "https://cameranonaniwa.jp/shop/g/g2221190038507/",
-    "title_raw": "Leica 11606 Elmarit M 28/2.8 ASPH",
-    "price_raw": "¥298,000",
-    "currency": "JPY",
-    "image_url": "https://cameranonaniwa.jp/img/goods/L/2221190038507-01.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica 11606 elmarit m 28/2.8 asph",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.9,
-    "mount_reason": [
-      "M_lens_shorthand:M NN/F"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Elmarit",
-    "model_canonical": "Elmarit-M",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2221190042504/",
     "title_raw": "Leica Elmar 90mmf4 Rigid鏡胴Mマウント",
     "price_raw": "¥16,000",
@@ -675662,57 +676311,6 @@
     "model_canonical": "Noctilux",
     "variant": [],
     "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "카메라노나니와 (일본)",
-    "source_url": "https://cameranonaniwa.jp/shop/g/g2221240047800/",
-    "title_raw": "Leica Nickel Hektor (L)5cm/2.5",
-    "price_raw": "¥148,000",
-    "currency": "JPY",
-    "image_url": "https://cameranonaniwa.jp/img/goods/L/2221240047800-01.jpg",
-    "condition_raw": "C",
-    "normalized_name": "leica nickel hektor (l)5cm/2.5",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Hektor",
-    "model_canonical": "Hektor",
-    "variant": [],
-    "focal_length": "50",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -677463,7 +678061,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -678942,7 +679540,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -761034,57 +761632,6 @@
   },
   {
     "source": "Akasaka Camera (일본)",
-    "source_url": "https://www.akasaka-camera.com/product/view/5938",
-    "title_raw": "Leica Elmarit 135mm f2.8 M",
-    "price_raw": "¥69,000",
-    "currency": "JPY",
-    "image_url": "https://www.akasaka-camera.com/media/3/7/7/2/3/37723_600x400.jpg",
-    "condition_raw": "Akasaka: 中",
-    "normalized_name": "leica elmarit 135mm f2.8 m",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.82,
-    "mount_reason": [
-      "M_trailing:trailing M"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Elmarit",
-    "model_canonical": "Elmarit-M",
-    "variant": [],
-    "focal_length": "135",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-16 11:41:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Akasaka Camera (일본)",
     "source_url": "https://www.akasaka-camera.com/product/view/5936",
     "title_raw": "Leica Nickel Elmar 50mm f3.5 L Short Mount",
     "price_raw": "¥128,000",
@@ -779253,60 +779800,6 @@
   },
   {
     "source": "Rangefinder (홍콩)",
-    "source_url": "https://www.rangefinder.com.hk/store/leica-summilux-m-50mm-f1-4-asph-black-anodized-used/",
-    "title_raw": "Leica Summilux-M 50mm f1.4 ASPH Black Anodized",
-    "price_raw": "HK$19,500",
-    "currency": "HKD",
-    "image_url": "https://www.rangefinder.com.hk/wp-content/uploads/2026/09/LRF-07312.jpg",
-    "condition_raw": "Rangefinder: 96",
-    "normalized_name": "leica summilux-m 50mm f1.4 asph black anodized",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux-M",
-    "model_canonical": "Summilux-M",
-    "variant": [
-      "ASPH",
-      "Black"
-    ],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-20 20:49:43",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Rangefinder (홍콩)",
     "source_url": "https://www.rangefinder.com.hk/store/leica-m11-monochrom-open-box/",
     "title_raw": "Leica M11 Monochrom",
     "price_raw": "HK$66,500",
@@ -783527,57 +784020,6 @@
     "model_canonical": "Elmar",
     "variant": [],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-21 00:12:02",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Classic Connection (미국)",
-    "source_url": "https://classicconnection.com/product/leica-m3-single-stroke-1953-3rd-type-summicron-50mm-f-2-rigid-1963-elmar-135mm-f-4-1961-fully-clad-ex-free-shipping/",
-    "title_raw": "Leica M3 Single Stroke",
-    "price_raw": "$3,399",
-    "currency": "USD",
-    "image_url": "https://classicconnection.com/wp-content/uploads/2026/06/DSCN3636.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica m3 single stroke",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "M_body_number:M3-M11"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:leica m3"
-    ],
-    "label": "M Body",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Body"
-    ],
-    "model_raw": "M3",
-    "model_canonical": "M3",
-    "variant": [],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -799619,6 +800061,59 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-21 00:12:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "국민카메라",
+    "source_url": "https://kookmincamera.co.kr/product/1874-m-35mm-f2-as-위탁/11601/category/530/display/1/",
+    "title_raw": "Leica Summicron-M 35mm f2.0 ASPH",
+    "price_raw": "3,600,000원",
+    "currency": "KRW",
+    "image_url": "https://kookmincamera.co.kr/web/product/medium/202609/510372c9b77d4a80d1c8c8824126c93b.jpg",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica summicron-m 35mm f2.0 asph",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summicron-M",
+    "model_canonical": "Summicron-M",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "35",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -880097,59 +880592,6 @@
   },
   {
     "source": "喜久屋カメラ (일본)",
-    "source_url": "https://kikuya-camera.shop-pro.jp/?pid=192290301",
-    "title_raw": "Leica SUMMILUX-M 50mm f1.4 2nd",
-    "price_raw": "¥330,000",
-    "currency": "JPY",
-    "image_url": "https://img17.shop-pro.jp/PA01265/366/product/192290301.jpg?cmsp_timestamp=20260622161306",
-    "condition_raw": "Kikuya: A-",
-    "normalized_name": "leica summilux-m 50mm f1.4 2nd",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summilux-M",
-    "model_canonical": "Summilux-M",
-    "variant": [
-      "v2"
-    ],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "喜久屋カメラ (일본)",
     "source_url": "https://kikuya-camera.shop-pro.jp/?pid=192221105",
     "title_raw": "Leica IIIb Body",
     "price_raw": "¥72,600",
@@ -889454,57 +889896,6 @@
   },
   {
     "source": "Photografica (덴마크)",
-    "source_url": "https://www.photografica.com/products/leica-neck-strap-leather-braun",
-    "title_raw": "Leica NECK STRAP LEATHER BROWN",
-    "price_raw": "DKK 599",
-    "currency": "DKK",
-    "image_url": "https://cdn.shopify.com/s/files/1/0996/4244/2067/files/2900000887220-11.jpg?v=1786014713",
-    "condition_raw": "Photografica: good",
-    "normalized_name": "leica neck strap leather brown",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:neck strap"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "strap",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 11:41:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Photografica (덴마크)",
     "source_url": "https://www.photografica.com/products/leica-e39-uva-ii-13031-silver",
     "title_raw": "Leica E39 UVa II 13031 SILVER",
     "price_raw": "DKK 599",
@@ -891145,6 +891536,110 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-25 11:41:31",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "SHphoto (독일)",
+    "source_url": "https://shphoto.de/detail/1c32307cbfca40a6b1c62bafd8f46c71",
+    "title_raw": "Leica Meter MR black accessory",
+    "price_raw": "€239",
+    "currency": "EUR",
+    "image_url": "https://shphoto.de/media/3f/14/2f/1784354159/311794.jpg",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica meter mr black accessory",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:accessory"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "SHphoto (독일)",
+    "source_url": "https://shphoto.de/detail/946e2f6d66c246d1be3fd8b54cef4dcd",
+    "title_raw": "Leica APDOO Self Timer accessory",
+    "price_raw": "€79",
+    "currency": "EUR",
+    "image_url": "https://shphoto.de/media/c4/0c/07/1778281962/311172.jpg",
+    "condition_raw": "정보없음",
+    "normalized_name": "leica apdoo self timer accessory",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:accessory"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:04:57",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -893071,7 +893566,7 @@
     "title_raw": "Leica APDOO Self Timer accessory",
     "price_raw": "€79",
     "currency": "EUR",
-    "image_url": "https://shphoto.de/media/c4/0c/07/1778281962/311172.jpg",
+    "image_url": "https://shphoto.de/media/d5/32/17/1776379512/311171.jpg",
     "condition_raw": "정보없음",
     "normalized_name": "leica apdoo self timer accessory",
     "normalized_description": "",
@@ -895094,7 +895589,7 @@
     "title_raw": "Leica M silver Bottom Cover for Registriertstreifen accessory",
     "price_raw": "€159",
     "currency": "EUR",
-    "image_url": "",
+    "image_url": "https://shphoto.de/bundles/shphototheme/assets/images/facebook-logo.svg?17594266951199",
     "condition_raw": "정보없음",
     "normalized_name": "leica m silver bottom cover for registriertstreifen accessory",
     "normalized_description": "",
@@ -896625,9 +897120,9 @@
     "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/leica-leitz-13086-hoobe-gelbfilter-1-e36.html",
     "title_raw": "Leica 13086 HOOBE Yellow Filter 1 E36 accessory",
-    "price_raw": "€49",
+    "price_raw": "€59",
     "currency": "EUR",
-    "image_url": "https://shphoto.de/media/19/e6/10/1789157316/312063.jpg",
+    "image_url": "https://shphoto.de/media/6c/3c/2a/1789157316/312065.jpg",
     "condition_raw": "정보없음",
     "normalized_name": "leica 13086 hoobe yellow filter 1 e36 accessory",
     "normalized_description": "",
@@ -900976,7 +901471,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -901734,9 +902229,9 @@
     "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/leitz-leica-wetzlar-aufsu-waist-level-finder-2x-schuhe.html",
     "title_raw": "Leica AUFSU Waist Level Finder 2x Schuhe accessory",
-    "price_raw": "€249",
+    "price_raw": "€459",
     "currency": "EUR",
-    "image_url": "https://shphoto.de/media/eb/1e/8f/1778281959/310994.jpg",
+    "image_url": "https://shphoto.de/media/67/15/cf/1780530912/311442.jpg",
     "condition_raw": "정보없음",
     "normalized_name": "leica aufsu waist level finder 2x schuhe accessory",
     "normalized_description": "",
@@ -902105,7 +902600,7 @@
     "title_raw": "Leica Hektor 135mm f4.5 M Bajonett Leica M",
     "price_raw": "€169",
     "currency": "EUR",
-    "image_url": "",
+    "image_url": "https://shphoto.de/bundles/shphototheme/assets/images/facebook-logo.svg?17594266951199",
     "condition_raw": "정보없음",
     "normalized_name": "leica hektor 135mm f4.5 m bajonett leica m",
     "normalized_description": "",
@@ -903820,7 +904315,7 @@
     "title_raw": "Leica GFOOH R.h. Dark Red Filter for SM 50mm Summit accessory",
     "price_raw": "€119",
     "currency": "EUR",
-    "image_url": "https://shphoto.de/media/b3/15/42/1781923034/311318.jpg",
+    "image_url": "https://shphoto.de/media/c8/27/e8/1781923035/311321.jpg",
     "condition_raw": "정보없음",
     "normalized_name": "leica gfooh r.h. dark red filter for sm 50mm summit accessory",
     "normalized_description": "",
@@ -904337,9 +904832,9 @@
     "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/leica-meter-mr-black.html",
     "title_raw": "Leica Meter MR black accessory",
-    "price_raw": "€239",
+    "price_raw": "€259",
     "currency": "EUR",
-    "image_url": "https://shphoto.de/media/3f/14/2f/1784354159/311794.jpg",
+    "image_url": "https://shphoto.de/media/9a/3a/c2/1784354159/311795.jpg",
     "condition_raw": "정보없음",
     "normalized_name": "leica meter mr black accessory",
     "normalized_description": "",
@@ -904598,7 +905093,7 @@
     "title_raw": "Leica Elmar 50mm Lens Hood A36mm FISON chrome Lens Shade Hood accessory",
     "price_raw": "€119",
     "currency": "EUR",
-    "image_url": "https://shphoto.de/bundles/shphototheme/assets/images/facebook-logo.svg?17594266951199",
+    "image_url": "",
     "condition_raw": "정보없음",
     "normalized_name": "leica elmar 50mm lens hood a36mm fison chrome lens shade hood accessory",
     "normalized_description": "",
@@ -936802,7 +937297,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:itooy"
+      "acc_code:itdoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -965190,59 +965685,6 @@
   },
   {
     "source": "Cardinal Camera Used (미국)",
-    "source_url": "https://cardinalcameraused.com/products/leica-ernst-leitz-filter-a-pale-orange-e36-36mm-e-leitz-ny-1",
-    "title_raw": "Leica Ernst Leitz filter A Pale Orange E36 - 36mm E leitz NY",
-    "price_raw": "$30",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0602/2915/7103/files/670FEC0A-4342-4744-872D-D7D3097DDBA2.jpg?v=1771893773",
-    "condition_raw": "Cardinal: absolutely excellent",
-    "normalized_name": "leica ernst leitz filter a pale orange e36 - 36mm e leitz ny",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "L_explicit:ERNST LEITZ"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:filter"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "filter",
-    "compatible_mounts": [
-      "L"
-    ],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Cardinal Camera Used (미국)",
     "source_url": "https://cardinalcameraused.com/products/leica-ernst-leitz-filter-a-pale-orange-e36-36mm-e-leitz-ny",
     "title_raw": "Leica Ernst Leitz filter A Pale Orange E36 - 36mm E leitz NY",
     "price_raw": "$30",
@@ -970308,57 +970750,6 @@
       "Black"
     ],
     "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Five Star Camera (일본)",
-    "source_url": "https://five-star-camera.com/products/f0046266",
-    "title_raw": "Leica Summitar 50mm f2 Later Model L39 LTM Leica Thread Mount Lens",
-    "price_raw": "$335",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0734/4799/7715/files/261012-2-129.jpg?v=1792671344",
-    "condition_raw": "FiveStar: average",
-    "normalized_name": "leica summitar 50mm f2 later model l39 ltm leica thread mount lens",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "L_ltm_l39:LTM/L39/M39"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "L Lens",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Lens"
-    ],
-    "model_raw": "Summitar",
-    "model_canonical": "Summitar",
-    "variant": [],
-    "focal_length": "50",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
