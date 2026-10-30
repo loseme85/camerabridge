@@ -81,11 +81,11 @@ footer.legal .tm{max-width:38em}
 """
 
 FOOT = {
-    "ko": {"tm": "Leica는 Leica Camera AG의 상표입니다. 카메라브릿지는 Leica Camera AG와 관계없는 독립 서비스입니다. 가격·재고는 각 매장 정보이며, 일부 링크는 제휴 링크일 수 있습니다.",
+    "ko": {"tm": "Leica는 Leica Camera AG의 상표입니다. 카메라브릿지는 Leica Camera AG와 관계없는 독립 서비스입니다. 가격·재고는 각 매장 정보입니다.",
            "models": "모델별 시세", "about": "운영자 정보", "privacy": "개인정보처리방침", "terms": "이용약관", "home": "카메라브릿지"},
-    "en": {"tm": "Leica is a trademark of Leica Camera AG. Camera Bridge is an independent service and is not affiliated with Leica Camera AG. Prices and stock come from each shop, and some links may be affiliate links.",
+    "en": {"tm": "Leica is a trademark of Leica Camera AG. Camera Bridge is an independent service and is not affiliated with Leica Camera AG. Prices and stock come from each shop.",
            "models": "Prices by model", "about": "About & contact", "privacy": "Privacy", "terms": "Terms", "home": "Camera Bridge"},
-    "ja": {"tm": "Leica は Leica Camera AG の商標です。Camera Bridge は Leica Camera AG とは関係のない独立したサービスです。価格・在庫は各店舗の情報で、一部のリンクはアフィリエイトリンクの場合があります。",
+    "ja": {"tm": "Leica は Leica Camera AG の商標です。Camera Bridge は Leica Camera AG とは関係のない独立したサービスです。価格・在庫は各店舗の情報です。",
            "models": "モデル別相場", "about": "運営者情報", "privacy": "プライバシーポリシー", "terms": "利用規約", "home": "Camera Bridge"},
 }
 
@@ -157,8 +157,8 @@ def about_body(lang: str) -> tuple[str, str]:
         body = (_rows(pairs) + WHY[lang]
                 + "<h2>서비스 성격</h2><p>카메라브릿지는 여러 나라 카메라 매장이 공개한 라이카 중고 매물과 가격을 모아 보여 주는 검색 서비스입니다. "
                   "물건을 직접 팔거나 거래를 중개하지 않으며, 구매·결제·배송·반품은 각 매장과 직접 이루어집니다.</p>"
-                + "<h2>제휴 링크 안내</h2><p>일부 매장 링크(예: eBay)는 제휴(어필리에이트) 링크일 수 있습니다. 이 링크로 구매하면 카메라브릿지가 매장으로부터 수수료를 받을 수 있으며, "
-                  "구매자가 내는 가격은 달라지지 않습니다. 수수료 여부는 검색 결과 순서와 가격 표시에 영향을 주지 않습니다.</p>"
+                + "<h2>광고·제휴</h2><p>카메라브릿지는 지금 광고를 싣지 않고, 매장 링크로 수수료를 받지도 않습니다. 매장 링크는 매장 사이트로 그대로 연결됩니다. "
+                  "나중에 제휴 링크나 광고를 쓰게 되면 이 페이지와 이용약관에 먼저 알립니다.</p>"
                 + "<h2>상표</h2><p>Leica 및 관련 제품명은 Leica Camera AG의 상표입니다. 카메라브릿지는 Leica Camera AG의 공식 서비스가 아니며 후원·제휴 관계가 없습니다. "
                   "매물 제목·사진은 각 매장의 것이며 원래 매장 페이지로 연결합니다.</p>"
                 + f"<h2>매장 문의</h2><p>매물 표시를 고치거나 빼고 싶은 매장, 데이터 연결을 원하는 매장은 {MAIL}로 연락해 주세요.</p>")
@@ -175,8 +175,8 @@ def about_body(lang: str) -> tuple[str, str]:
         body = (_rows(pairs) + WHY[lang]
                 + "<h2>サービスについて</h2><p>Camera Bridge は、各国のカメラ店が公開しているライカ中古在庫と価格をまとめて表示する検索サービスです。"
                   "商品の販売や取引の仲介は行わず、購入・決済・配送・返品は各店舗と直接行っていただきます。</p>"
-                + "<h2>アフィリエイトリンクについて</h2><p>一部の店舗リンク（例：eBay）はアフィリエイトリンクの場合があります。リンク経由で購入されると Camera Bridge が店舗から手数料を受け取ることがありますが、"
-                  "購入価格は変わりません。手数料の有無は検索結果の順序や価格表示に影響しません。</p>"
+                + "<h2>広告・アフィリエイト</h2><p>Camera Bridge は現在、広告を掲載しておらず、店舗リンクから手数料も受け取っていません。店舗リンクはそのまま店舗サイトにつながります。"
+                  "今後アフィリエイトリンクや広告を使う場合は、このページと利用規約で事前にお知らせします。</p>"
                 + "<h2>商標</h2><p>Leica および関連製品名は Leica Camera AG の商標です。Camera Bridge は Leica Camera AG の公式サービスではなく、提携・後援関係もありません。"
                   "商品名・写真は各店舗のもので、元の店舗ページへリンクしています。</p>"
                 + f"<h2>店舗の方へ</h2><p>掲載内容の修正・削除やデータ連携のご相談は {MAIL} までご連絡ください。</p>")
@@ -192,8 +192,8 @@ def about_body(lang: str) -> tuple[str, str]:
     body = (_rows(pairs) + WHY[lang]
             + "<h2>What Camera Bridge is</h2><p>Camera Bridge is a search service that collects used Leica listings and prices published by camera shops in several countries. "
               "We do not sell items or broker transactions; purchase, payment, shipping and returns are always between you and the shop.</p>"
-            + "<h2>Affiliate disclosure</h2><p>Some shop links (for example eBay) may be affiliate links. If you buy through one, Camera Bridge may earn a commission from the shop "
-              "at no extra cost to you. Commissions do not affect the order of results or the prices shown.</p>"
+            + "<h2>Ads and affiliates</h2><p>Camera Bridge currently shows no ads and earns no commission from shop links; they go straight to the shop's site. "
+              "If we ever use affiliate links or ads, we will say so on this page and in the terms first.</p>"
             + "<h2>Trademarks</h2><p>Leica and related product names are trademarks of Leica Camera AG. Camera Bridge is not an official Leica service and is not sponsored by or affiliated with Leica Camera AG. "
               "Listing titles and photos belong to each shop and link back to the original shop page.</p>"
             + f"<h2>For shops</h2><p>To correct or remove a listing, or to connect your inventory data, email {MAIL}.</p>")
@@ -307,7 +307,7 @@ def terms_body(lang: str) -> tuple[str, str]:
             ("1. 서비스", "카메라브릿지는 여러 매장이 공개한 라이카 중고 매물·가격을 모아 검색하게 해 주는 무료 정보 서비스입니다. 회원 가입 없이 쓸 수 있습니다."),
             ("2. 정보의 정확성", "가격·재고·상태·예상 총액(배송비·관세 등)은 매장 정보와 추정치를 바탕으로 하며, 늦게 반영되거나 틀릴 수 있습니다. 환산 가격은 참고용 환율을 씁니다. 구매 전에 반드시 매장 원래 페이지에서 확인해 주세요."),
             ("3. 거래", "카메라브릿지는 물건을 팔거나 거래를 중개하지 않습니다. 구매·결제·배송·반품·보증은 이용자와 매장 사이의 일이며, 운영자는 그 거래에 책임지지 않습니다."),
-            ("4. 외부 링크와 제휴", "매물 링크는 매장 사이트로 연결됩니다. 일부는 제휴 링크일 수 있으며 구매 가격은 달라지지 않습니다."),
+            ("4. 외부 링크", "매물 링크는 매장 사이트로 그대로 연결됩니다. 카메라브릿지는 지금 매장 링크로 수수료를 받지 않으며, 제휴 링크를 쓰게 되면 이 약관을 바꿔 먼저 알립니다."),
             ("5. 매장 계정", "매장 계정은 운영자가 만들어 드립니다. 아이디·비밀번호는 매장이 관리하며 다른 사람과 나누어 쓰지 않습니다. 매장 화면의 데이터는 매장 내부 참고용으로만 씁니다."),
             ("6. 금지 행위", "서비스를 방해하는 행위(과도한 자동 요청, 보안 우회, 다른 사람 계정 사용)와 법을 어기는 행위를 금지합니다."),
             ("6-1. 커뮤니티 게시판", "게시판 글·댓글은 누구나 볼 수 있습니다. 쓴 글의 책임은 글쓴이에게 있습니다. 매물 판매·구매 글, 개인 연락처, 광고·스팸, 욕설·혐오 표현, 다른 사람의 권리를 침해하는 글, 법에 어긋나는 글은 올릴 수 없고, 운영자가 알리지 않고 가리거나 지울 수 있습니다. 서로 다른 이용자 3명이 신고한 글은 운영자가 확인할 때까지 자동으로 가려집니다(정보통신망법 제44조의2 임시조치). 권리 침해 신고는 글의 '신고' 버튼이나 " + MAIL + "로 할 수 있습니다. 운영자는 게시판에서 일어난 이용자 사이의 거래·분쟁에 책임지지 않습니다."),
@@ -322,7 +322,7 @@ def terms_body(lang: str) -> tuple[str, str]:
             ("1. サービス", "Camera Bridge は、各店舗が公開するライカ中古在庫・価格をまとめて検索できる無料の情報サービスです。会員登録は不要です。"),
             ("2. 情報の正確性", "価格・在庫・状態・到着時の目安（送料・関税など）は店舗情報と推定に基づき、反映の遅れや誤りがある場合があります。購入前に必ず店舗の元ページでご確認ください。"),
             ("3. 取引", "Camera Bridge は商品の販売や取引の仲介を行いません。購入・決済・配送・返品・保証は利用者と店舗との間のもので、運営者は責任を負いません。"),
-            ("4. 外部リンクとアフィリエイト", "在庫リンクは店舗サイトに移動します。一部はアフィリエイトリンクの場合がありますが、購入価格は変わりません。"),
+            ("4. 外部リンク", "在庫リンクはそのまま店舗サイトに移動します。Camera Bridge は現在、店舗リンクから手数料を受け取っておらず、アフィリエイトリンクを使う場合は本規約を改定して事前にお知らせします。"),
             ("5. 店舗アカウント", "店舗アカウントは運営者が発行します。ID・パスワードは店舗が管理し、共有しないでください。店舗画面のデータは店舗内部の参考用としてのみ使用してください。"),
             ("6. 禁止事項", "過度な自動アクセス、セキュリティの回避、他人のアカウントの使用など、サービスを妨げる行為や違法行為を禁止します。"),
             ("6-1. コミュニティ掲示板", "投稿・コメントは誰でも閲覧できます。投稿の責任は投稿者にあります。売買の投稿、個人の連絡先、広告・スパム、暴言・差別表現、他人の権利を侵害する投稿、違法な投稿は禁止で、運営者が予告なく非表示・削除できます。3人の利用者から通報された投稿は、運営者が確認するまで自動で非表示になります。権利侵害の申し立ては投稿の「通報」ボタンまたは " + MAIL + " へ。利用者間の取引・紛争について運営者は責任を負いません。"),
@@ -336,7 +336,7 @@ def terms_body(lang: str) -> tuple[str, str]:
         ("1. The service", "Camera Bridge is a free information service that lets you search used Leica listings and prices published by shops. No account is needed."),
         ("2. Accuracy", "Prices, stock, condition and estimated delivered totals (shipping, duties, taxes) are based on shop data and estimates, and may be delayed or wrong. Converted prices use reference exchange rates. Always check the original shop page before you buy."),
         ("3. Purchases", "Camera Bridge does not sell items or broker transactions. Purchase, payment, shipping, returns and warranty are between you and the shop, and we are not a party to them."),
-        ("4. Links and affiliates", "Listing links take you to the shop's site. Some may be affiliate links; the price you pay does not change."),
+        ("4. Links", "Listing links take you straight to the shop's site. Camera Bridge currently earns no commission from them; if we start using affiliate links we will update these terms first."),
         ("5. Shop accounts", "Shop accounts are issued by the operator. Shops keep their credentials private and use dealer-view data for internal reference only."),
         ("6. Prohibited use", "Do not disrupt the service (excessive automated requests, bypassing security, using another account) or use it unlawfully."),
         ("6a. Community board", "Board posts and comments are public. You are responsible for what you post. Buy/sell posts, personal contact details, ads and spam, abuse or hate speech, content that infringes others' rights and unlawful content are not allowed and may be hidden or removed without notice. A post reported by 3 different users is hidden automatically until the operator reviews it. To report an infringement, use the post's Report button or email " + MAIL + ". We are not responsible for dealings or disputes between users."),
