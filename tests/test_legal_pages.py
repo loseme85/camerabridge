@@ -53,3 +53,11 @@ def test_home_page_has_legal_footer():
         assert f'data-legal-page="{page}"' in beta
     assert 'href="/impressum/"' in beta and "thehingemeta" in beta
     assert lp.OPERATOR["biz_no"] not in beta and "박창대" not in beta and "브로콜리" not in beta
+
+
+def test_about_page_tells_why_and_home_links_to_it():
+    for lang in lp.LANGS:
+        about = "".join(lp.about_body(lang))
+        assert 'id="why"' in about and "Leica Camera AG" in about
+    beta = (ROOT / "beta.html").read_text(encoding="utf-8")
+    assert 'data-legal-hash="#why"' in beta and "footer.story" in beta
