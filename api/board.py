@@ -1,13 +1,17 @@
 """게시판 (전 세계 이용자 커뮤니티): 글 목록·읽기·쓰기·댓글·지우기·신고 + 운영자 관리 화면.
 
-회원 가입 없음: 닉네임 + 글 비밀번호(복원할 수 없는 해시로 저장)로 쓰고, 같은 비밀번호로 지운다.
+회원: 구글 로그인 (Google Identity Services ID 토큰 → tokeninfo로 확인). 구글 이메일·이름·사진은 저장하지 않고,
+  구글 계정 고유번호(sub)를 비밀 값과 섞은 해시(회원 id)와 닉네임만 board/members/<회원id>.json 에 저장.
+  로그인 유지: cb_member 쿠키 <회원id>.<만료>.<서명> (서명 비밀 = BOARD_SESSION_SECRET, 없으면 DEALER_SESSION_SECRET에서 용도를 나눠 만듦)
+  환경 변수 GOOGLE_CLIENT_ID (구글 클라우드의 웹 OAuth 클라이언트 ID, 공개 값) 가 있어야 로그인 버튼이 나옴.
 저장 위치: Vercel Blob (private), 의견 보내기와 같은 스토어
-  board/posts/<글id>~<분류>~<접속지태그>.json            보이는 글
-  board/comments/<글id>/<댓글id>~<접속지태그>.json        보이는 댓글
+  board/posts/<글id>~<분류>~<회원id>.json                보이는 글
+  board/comments/<글id>/<댓글id>~<회원id>.json            보이는 댓글
   board/held/…                                            신고 HIDE_REPORTS명 이상 → 자동으로 가림 (운영자가 확인 뒤 되살리거나 지움)
   board/removed/…                                         지운 글·댓글 (REMOVED_DAYS일 보관 뒤 운영자가 비움)
   board/reports/<글id>[~<댓글id>]/<접속지태그>.json        신고
-스팸 막기: 숨은 입력칸, 창을 연 지 3초 안에 보내면 거절, 같은 접속지(IP 해시, 날마다 바뀜) 하루 글 POST_LIMIT·댓글 COMMENT_LIMIT건, 링크 MAX_LINKS개까지.
+스팸 막기: 로그인한 회원만 쓰기, 숨은 입력칸, 쓰기 시작한 지 1.5초 안에 보내면 거절, 회원당 하루 글 POST_LIMIT·댓글 COMMENT_LIMIT건, 링크 MAX_LINKS개까지.
+신고는 로그인 없이도 가능 (같은 접속지는 한 번, 접속지 = 날마다 바뀌는 IP 해시).
 운영자 관리: /owner/board (cb_owner 쿠키 = OWNER_DASHBOARD_KEY, /owner/usage?key=… 로 한 번 들어가면 생김)
 """
 from __future__ import annotations
@@ -30,13 +34,16 @@ import requests
 KST = dt.timezone(dt.timedelta(hours=9))
 CATEGORIES = ("free", "question", "review", "site")  # 자유 · 질문 · 정보·후기 · 사이트 의견
 PAGE_SIZE = 20
-TITLE_LEN, BODY_LEN, COMMENT_LEN, NICK_LEN, PW_LEN = (2, 80), (5, 5000), (1, 1000), (1, 20), (4, 40)
+TITLE_LEN, BODY_LEN, COMMENT_LEN, NICK_LEN = (2, 80), (5, 5000), (1, 1000), (1, 20)
 POST_LIMIT, COMMENT_LIMIT = 5, 30
 MAX_LINKS = 3
-MIN_ELAPSED_MS = 3000
+MIN_ELAPSED_MS = 1500
 HIDE_REPORTS = 3
 REMOVED_DAYS = 30
 COOKIE = "cb_owner"
+MEMBER_COOKIE = "cb_member"
+SESSION_DAYS = 90
+GOOGLE_ISSUERS = ("accounts.google.com", "https://accounts.google.com")
 LINK = re.compile(r"https?://|www\.", re.I)
 ID = re.compile(r"^\d{14}-[0-9a-f]{6}$")
 STAMP = re.compile(r"(\d{14})-[0-9a-f]{6}")
@@ -54,8 +61,88 @@ def _tag(headers, day: str) -> str:
     return hashlib.sha256(f"{salt}:board:{day}:{_client_ip(headers)}".encode()).hexdigest()[:12]
 
 
-def _hash_pw(password: str, salt: str) -> str:
-    return hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 120_000).hex()
+# ── 회원 (구글 로그인) ──
+def _secret() -> bytes | None:
+    value = os.environ.get("BOARD_SESSION_SECRET") or os.environ.get("DEALER_SESSION_SECRET", "")
+    return hashlib.sha256(b"board-session:" + value.encode()).digest() if len(value) >= 32 else None
+
+
+def _sign(payload: str, secret: bytes) -> str:
+    return hmac.new(secret, payload.encode(), hashlib.sha256).hexdigest()[:32]
+
+
+def session_value(member_id: str, now: float | None = None) -> str:
+    secret = _secret()
+    expires = int((now or dt.datetime.now().timestamp()) + SESSION_DAYS * 86400)
+    payload = f"{member_id}.{expires}"
+    return f"{payload}.{_sign(payload, secret)}"
+
+
+def member_from_cookie(value: str, now: float | None = None) -> str | None:
+    secret = _secret()
+    parts = str(value or "").split(".")
+    if not secret or len(parts) != 3 or not re.fullmatch(r"[0-9a-f]{20}", parts[0]) or not parts[1].isdigit():
+        return None
+    if int(parts[1]) < (now or dt.datetime.now().timestamp()):
+        return None
+    return parts[0] if hmac.compare_digest(_sign(f"{parts[0]}.{parts[1]}", secret), parts[2]) else None
+
+
+def verify_google(credential: str) -> str | None:
+    """구글 ID 토큰을 구글 tokeninfo로 확인 → 계정 고유번호(sub). 우리 클라이언트 ID로 발급된 토큰만."""
+    client_id = os.environ.get("GOOGLE_CLIENT_ID", "")
+    if not client_id or not credential or len(credential) > 4096:
+        return None
+    try:
+        info = requests.get("https://oauth2.googleapis.com/tokeninfo", params={"id_token": credential}, timeout=8).json()
+    except (requests.RequestException, ValueError):
+        return None
+    if info.get("aud") != client_id or info.get("iss") not in GOOGLE_ISSUERS or not info.get("sub"):
+        return None
+    if int(info.get("exp") or 0) < dt.datetime.now().timestamp():
+        return None
+    return str(info["sub"])
+
+
+def _member_id(sub: str) -> str:
+    return hmac.new(_secret(), f"google:{sub}".encode(), hashlib.sha256).hexdigest()[:20]
+
+
+def _member(blob, member_id: str | None) -> dict | None:
+    return _read(blob, f"board/members/{member_id}.json") if member_id else None
+
+
+def login(body: dict) -> tuple[int, dict, str | None]:
+    if not _secret():
+        return 503, {"ok": False, "error": "unavailable"}, None
+    sub = verify_google(str(body.get("credential") or ""))
+    if not sub:
+        return 401, {"ok": False, "error": "login"}, None
+    member_id = _member_id(sub)
+    blob = _blob()
+    member = _member(blob, member_id)
+    if not member:
+        member = {"id": member_id, "nick": None, "created_at": _now()[0].isoformat(timespec="seconds")}
+        _put(blob, f"board/members/{member_id}.json", member)
+    return 200, {"ok": True, "member": {"nick": member.get("nick")}}, session_value(member_id)
+
+
+def set_nick(body: dict, member_id: str | None) -> tuple[int, dict]:
+    blob = _blob()
+    member = _member(blob, member_id)
+    if not member:
+        return 401, {"ok": False, "error": "login"}
+    nick = _clean(body.get("nick"), NICK_LEN[1]).replace("\n", " ")
+    if not (NICK_LEN[0] <= len(nick) <= NICK_LEN[1]):
+        return 400, {"ok": False, "error": "nick"}
+    _put(blob, f"board/members/{member_id}.json", {**member, "nick": nick})
+    return 200, {"ok": True, "member": {"nick": nick}}
+
+
+def me(member_id: str | None) -> dict:
+    member = _member(_blob(), member_id) if member_id else None
+    return {"ok": True, "client_id": os.environ.get("GOOGLE_CLIENT_ID") or None,
+            "member": {"nick": member.get("nick")} if member else None}
 
 
 def _clean(text, limit: int) -> str:
@@ -121,9 +208,13 @@ def _notify(text: str) -> None:
         pass
 
 
-def _public(entry: dict) -> dict:
-    return {k: entry.get(k) for k in ("id", "post_id", "category", "title", "body", "nick", "created_at", "locale")
-            if entry.get(k) is not None}
+def _public(entry: dict, member_id: str | None = None) -> dict:
+    """밖으로 보내는 칸만 (회원 id는 내보내지 않고, 내 글인지만 mine으로)."""
+    row = {k: entry.get(k) for k in ("id", "post_id", "category", "title", "body", "nick", "created_at", "locale")
+           if entry.get(k) is not None}
+    if member_id and entry.get("member") == member_id:
+        row["mine"] = True
+    return row
 
 
 def _check_human(body: dict) -> tuple[int, dict] | None:
@@ -138,14 +229,13 @@ def _check_human(body: dict) -> tuple[int, dict] | None:
     return None
 
 
-def _author(body: dict) -> tuple[str, str] | tuple[None, str]:
-    nick = _clean(body.get("nick"), NICK_LEN[1]).replace("\n", " ")
-    password = str(body.get("password") or "")
-    if not (NICK_LEN[0] <= len(nick) <= NICK_LEN[1]):
+def _writer(blob, member_id: str | None) -> tuple[dict | None, str]:
+    member = _member(blob, member_id)
+    if not member:
+        return None, "login"
+    if not member.get("nick"):
         return None, "nick"
-    if not (PW_LEN[0] <= len(password) <= PW_LEN[1]):
-        return None, "password"
-    return nick, password
+    return member, ""
 
 
 def _find_post(blob, post_id: str, where: str = "posts"):
@@ -177,19 +267,19 @@ def list_posts(category: str = "", page: int = 1) -> dict:
     return {"ok": True, "posts": posts, "page": page, "pages": pages, "total": len(items)}
 
 
-def read_post(post_id: str) -> tuple[int, dict]:
+def read_post(post_id: str, member_id: str | None = None) -> tuple[int, dict]:
     blob = _blob()
     item = _find_post(blob, post_id)
     entry = _read(blob, item) if item else None
     if not entry:
         return 404, {"ok": False, "error": "not_found"}
     comment_items = sorted(_names(blob, f"board/comments/{post_id}/"), key=lambda i: i.pathname)
-    comments = [_public(c) for c in _read_many(blob, comment_items) if c]
-    return 200, {"ok": True, "post": _public(entry), "comments": comments}
+    comments = [_public(c, member_id) for c in _read_many(blob, comment_items) if c]
+    return 200, {"ok": True, "post": _public(entry, member_id), "comments": comments}
 
 
 # ── 쓰기 ──
-def create_post(body: dict, headers) -> tuple[int, dict]:
+def create_post(body: dict, member_id: str | None) -> tuple[int, dict]:
     blocked = _check_human(body)
     if blocked:
         return blocked
@@ -204,25 +294,23 @@ def create_post(body: dict, headers) -> tuple[int, dict]:
         return 400, {"ok": False, "error": "body"}
     if len(LINK.findall(title + " " + text)) > MAX_LINKS:
         return 400, {"ok": False, "error": "links"}
-    nick, password = _author(body)
-    if not nick:
-        return 400, {"ok": False, "error": password}
     blob = _blob()
-    now, stamp, day = _now()
-    tag = _tag(headers, day)
+    member, error = _writer(blob, member_id)
+    if not member:
+        return 401 if error == "login" else 400, {"ok": False, "error": error}
+    now, stamp, _ = _now()
     today = stamp[:8]
-    mine = [i for i in _names(blob, f"board/posts/{today}") + _names(blob, f"board/held/{today}") if i.pathname.endswith(f"~{tag}.json")]
+    mine = [i for i in _names(blob, f"board/posts/{today}") + _names(blob, f"board/held/{today}") if i.pathname.endswith(f"~{member_id}.json")]
     if len(mine) >= POST_LIMIT:
         return 429, {"ok": False, "error": "limit"}
-    salt = secrets.token_hex(8)
     entry = {"id": _new_id(stamp), "created_at": now.isoformat(timespec="seconds"), "category": category, "title": title,
-             "body": text, "nick": nick, "salt": salt, "pw": _hash_pw(password, salt), "locale": str(body.get("locale") or "")[:12] or None}
-    _put(blob, f"board/posts/{entry['id']}~{category}~{tag}.json", entry)
-    _notify(f"📝 게시판 새 글 ({category})\n\n{title}\n{text[:500]}\n\n— {nick}\nhttps://camerabridge.io/#board/{entry['id']}")
+             "body": text, "nick": member["nick"], "member": member_id, "locale": str(body.get("locale") or "")[:12] or None}
+    _put(blob, f"board/posts/{entry['id']}~{category}~{member_id}.json", entry)
+    _notify(f"📝 게시판 새 글 ({category})\n\n{title}\n{text[:500]}\n\n— {member['nick']}\nhttps://camerabridge.io/#board/{entry['id']}")
     return 200, {"ok": True, "id": entry["id"]}
 
 
-def create_comment(body: dict, headers) -> tuple[int, dict]:
+def create_comment(body: dict, member_id: str | None) -> tuple[int, dict]:
     blocked = _check_human(body)
     if blocked:
         return blocked
@@ -232,22 +320,20 @@ def create_comment(body: dict, headers) -> tuple[int, dict]:
         return 400, {"ok": False, "error": "body"}
     if len(LINK.findall(text)) > MAX_LINKS:
         return 400, {"ok": False, "error": "links"}
-    nick, password = _author(body)
-    if not nick:
-        return 400, {"ok": False, "error": password}
     blob = _blob()
+    member, error = _writer(blob, member_id)
+    if not member:
+        return 401 if error == "login" else 400, {"ok": False, "error": error}
     if not _find_post(blob, post_id):
         return 404, {"ok": False, "error": "not_found"}
-    now, stamp, day = _now()
-    tag = _tag(headers, day)
+    now, stamp, _ = _now()
     today = stamp[:8]
-    mine = [i for i in _names(blob, "board/comments/") if i.pathname.split("/")[-1].startswith(today) and i.pathname.endswith(f"~{tag}.json")]
+    mine = [i for i in _names(blob, "board/comments/") if i.pathname.split("/")[-1].startswith(today) and i.pathname.endswith(f"~{member_id}.json")]
     if len(mine) >= COMMENT_LIMIT:
         return 429, {"ok": False, "error": "limit"}
-    salt = secrets.token_hex(8)
     entry = {"id": _new_id(stamp), "post_id": post_id, "created_at": now.isoformat(timespec="seconds"), "body": text,
-             "nick": nick, "salt": salt, "pw": _hash_pw(password, salt)}
-    _put(blob, f"board/comments/{post_id}/{entry['id']}~{tag}.json", entry)
+             "nick": member["nick"], "member": member_id, "locale": str(body.get("locale") or "")[:12] or None}
+    _put(blob, f"board/comments/{post_id}/{entry['id']}~{member_id}.json", entry)
     return 200, {"ok": True, "id": entry["id"]}
 
 
@@ -260,16 +346,16 @@ def _target(blob, post_id: str, comment_id: str = ""):
     return _find_post(blob, post_id)
 
 
-def delete_entry(body: dict) -> tuple[int, dict]:
-    """글쓴이가 비밀번호로 지움 → board/removed 로 옮김 (댓글도 같이)."""
+def delete_entry(body: dict, member_id: str | None) -> tuple[int, dict]:
+    """글쓴이(로그인한 그 회원)가 지움 → board/removed 로 옮김 (글이면 댓글도 같이)."""
     blob = _blob()
     post_id, comment_id = str(body.get("post_id") or ""), str(body.get("comment_id") or "")
     item = _target(blob, post_id, comment_id)
     entry = _read(blob, item) if item else None
     if not entry:
         return 404, {"ok": False, "error": "not_found"}
-    if not hmac.compare_digest(_hash_pw(str(body.get("password") or ""), entry.get("salt", "")), entry.get("pw", "")):
-        return 403, {"ok": False, "error": "password"}
+    if not member_id or not hmac.compare_digest(str(entry.get("member") or ""), member_id):
+        return 403, {"ok": False, "error": "not_yours"}
     _move(blob, item, "removed", {**entry, "removed_at": _now()[0].isoformat(timespec="seconds"), "removed_by": "author"})
     if not comment_id:
         for comment in _names(blob, f"board/comments/{post_id}/"):
@@ -370,9 +456,15 @@ class handler(BaseHTTPRequestHandler):
     def _query(self) -> dict:
         return {k: v[0] for k, v in parse_qs(urlparse(self.path).query).items()}
 
-    def _owner(self) -> bool:
+    def _cookie(self, name: str) -> str:
         cookie = SimpleCookie(self.headers.get("cookie") or "")
-        return authorized(cookie[COOKIE].value if COOKIE in cookie else "")
+        return cookie[name].value if name in cookie else ""
+
+    def _owner(self) -> bool:
+        return authorized(self._cookie(COOKIE))
+
+    def _member_id(self) -> str | None:
+        return member_from_cookie(self._cookie(MEMBER_COOKIE))
 
     def do_GET(self):  # noqa: N802
         query = self._query()
@@ -381,9 +473,11 @@ class handler(BaseHTTPRequestHandler):
                 if not self._owner():
                     return self._send(401, "<!doctype html><meta charset=utf-8><p>권한이 없습니다. /owner/usage?key=… 로 먼저 들어가 주세요.</p>", "text/html; charset=utf-8")
                 return self._send(200, owner_page(), "text/html; charset=utf-8", extra={"x-robots-tag": "noindex, nofollow"})
-            if query.get("id"):
-                status, payload = read_post(query["id"])
-                return self._send(status, payload, cache="public, s-maxage=15, stale-while-revalidate=60")
+            if query.get("r") == "me":
+                return self._send(200, me(self._member_id()))
+            if query.get("id"):  # 내 글 표시(mine) 때문에 캐시하지 않음
+                status, payload = read_post(query["id"], self._member_id())
+                return self._send(status, payload)
             try:
                 page = int(query.get("page") or 1)
             except ValueError:
@@ -410,12 +504,22 @@ class handler(BaseHTTPRequestHandler):
             if not isinstance(body, dict):
                 return self._send(400, {"ok": False, "error": "bad_request"})
             action = body.get("action")
-            if action == "post":
-                status, payload = create_post(body, self.headers)
+            member_id = self._member_id()
+            if action == "login":
+                status, payload, session = login(body)
+                cookie = (f"{MEMBER_COOKIE}={session}; Path=/api/board; Max-Age={SESSION_DAYS * 86400}; HttpOnly; Secure; SameSite=Lax"
+                          if session else None)
+                return self._send(status, payload, extra={"set-cookie": cookie} if cookie else None)
+            if action == "logout":
+                return self._send(200, {"ok": True}, extra={"set-cookie": f"{MEMBER_COOKIE}=; Path=/api/board; Max-Age=0; HttpOnly; Secure; SameSite=Lax"})
+            if action == "nick":
+                status, payload = set_nick(body, member_id)
+            elif action == "post":
+                status, payload = create_post(body, member_id)
             elif action == "comment":
-                status, payload = create_comment(body, self.headers)
+                status, payload = create_comment(body, member_id)
             elif action == "delete":
-                status, payload = delete_entry(body)
+                status, payload = delete_entry(body, member_id)
             elif action == "report":
                 status, payload = report(body, self.headers)
             else:
