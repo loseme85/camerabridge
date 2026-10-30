@@ -28508,15 +28508,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-23 17:10:43",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-30 17:39:46",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -150193,15 +150193,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-09-23 17:10:43",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-30 17:39:46",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -183959,6 +183959,59 @@
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": true
+  },
+  {
+    "source": "장씨카메라",
+    "source_url": "https://j-camera.com/product/detail.html?product_no=12403&cate_no=358&display_group=1",
+    "title_raw": "LEICA 50mm F1.4 ASPH II SUMMILUX-M sn.4988",
+    "price_raw": "5,300,000원",
+    "currency": "KRW",
+    "image_url": "https://j-camera.com/web/product/medium/202610/c57418e837a21932b8bbc7fcc2b306ca.jpg",
+    "condition_raw": "98%",
+    "normalized_name": "leica 50mm f1.4 asph ii summilux-m sn.4988",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMILUX"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "Summilux-M",
+    "model_canonical": "Summilux-M",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-30 17:39:46",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
   },
   {
     "source": "장씨카메라",
@@ -640551,59 +640604,6 @@
   },
   {
     "source": "카메라노나니와 (일본)",
-    "source_url": "https://cameranonaniwa.jp/shop/g/g2111012516699/",
-    "title_raw": "Leica Summicron R 35/2 3CAM",
-    "price_raw": "문의요망",
-    "currency": "JPY",
-    "image_url": "https://cameranonaniwa.jp/img/goods/L/2111012516699-01.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica summicron r 35/2 3cam",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.97,
-    "mount_reason": [
-      "R_suffix:3CAM"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "R Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Lens"
-    ],
-    "model_raw": "Summicron",
-    "model_canonical": "Summicron-R",
-    "variant": [
-      "3CAM"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2111012516712/",
     "title_raw": "Leica Hood XOONS",
     "price_raw": "¥30,000",
@@ -800224,59 +800224,6 @@
   },
   {
     "source": "국민카메라",
-    "source_url": "https://kookmincamera.co.kr/product/1874-m-35mm-f2-as/11601/category/530/display/1/",
-    "title_raw": "Leica Summicron-M 35mm f2.0 ASPH",
-    "price_raw": "360,000원",
-    "currency": "KRW",
-    "image_url": "https://kookmincamera.co.kr/web/product/medium/202609/510372c9b77d4a80d1c8c8824126c93b.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica summicron-m 35mm f2.0 asph",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron-M",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "ASPH"
-    ],
-    "focal_length": "35",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-23 00:08:26",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "국민카메라",
     "source_url": "https://kookmincamera.co.kr/product/1858-라이카-m-35mm-f35-스마론/11588/category/530/display/1/",
     "title_raw": "Leica M 35mm f3.5 Summaron",
     "price_raw": "1,300,000원",
@@ -891646,108 +891593,6 @@
   },
   {
     "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/6a3dbb4c8af246098dde0debead7926d",
-    "title_raw": "Leica AUFSU Waist Level Finder 2x Schuhe accessory",
-    "price_raw": "€459",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/67/15/cf/1780530912/311442.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica aufsu waist level finder 2x schuhe accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:finder"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "finder",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-30 14:56:35",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/9c11a8188d4f428b9b3a30542617cd3d",
-    "title_raw": "Leica 13086 HOOBE Yellow Filter 1 E36 accessory",
-    "price_raw": "€59",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/6c/3c/2a/1789157316/312065.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica 13086 hoobe yellow filter 1 e36 accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:filter"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-30 00:11:39",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/detail/86eab35f544c41d5b7fec61cf9b18c26",
     "title_raw": "Leica Lens Hood 12564 K accessory",
     "price_raw": "€69",
@@ -891781,57 +891626,6 @@
     "variant": [],
     "focal_length": null,
     "accessory_type": "hood",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-29 22:17:58",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/faad90e2855d43d8a697346ac9b41ba7",
-    "title_raw": "Leica APDOO Self Timer accessory",
-    "price_raw": "€79",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/d5/32/17/1776379512/311171.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica apdoo self timer accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:accessory"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -891954,59 +891748,6 @@
   },
   {
     "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/0548c86674a0498a84acff9ba883197d",
-    "title_raw": "Leica Meter MR black accessory",
-    "price_raw": "€259",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/9a/3a/c2/1784354159/311795.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica meter mr black accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:accessory"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-29 07:58:19",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/leitz-leica-iiif-rote-kontaktzahlen-mit-vorlaufwerk.html",
     "title_raw": "Leica IIIf rote Kontaktzahlen with Vorlaufwerk",
     "price_raw": "€659",
@@ -892052,59 +891793,6 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-29 04:39:24",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/f22e0fee44da4d788246efc6ed47b442",
-    "title_raw": "Leica GFOOH R.h. Dark Red Filter for SM 50mm Summit accessory",
-    "price_raw": "€119",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/c8/27/e8/1781923035/311321.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica gfooh r.h. dark red filter for sm 50mm summit accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:filter"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": "filter",
-    "compatible_mounts": [],
-    "compatible_systems": [
-      "R"
-    ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 22:11:25",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -937297,7 +936985,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:itdoo"
+      "acc_code:iufoo"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
