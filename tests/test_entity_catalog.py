@@ -369,3 +369,28 @@ def test_accessories_for_a_lens_are_not_the_lens() -> None:
         assert match_entities(_record(title, mount=None)) == [], title
     # 렌즈에 부속품이 딸린 매물은 그대로 렌즈
     assert "leica:lens:elmar:65" in match_entities(_record("Leitz 65mm f3.5 Elmar + 16464 universal focusing mount", mount=None))
+
+
+def test_m6_special_editions_are_split_from_classic_and_ttl() -> None:
+    def m6(title: str) -> list[str]:
+        return [i for i in match_entities(_record(title, "Body")) if i.startswith("leica:body:m6:")]
+    assert m6("LEICA M6 PANDA sn.1773") == ["leica:body:m6:panda"]
+    assert m6("LEICA M6 PANDA 'sh' 125th ANNIVERSARY 106/125") == ["leica:body:m6:siber-hegner"]
+    assert m6('[중고] M6 "Colombo 92" -200대한정-') == ["leica:body:m6:columbus"]
+    assert m6("LEICA M6 chrome Gold Dragon Edition, 1995") == ["leica:body:m6:gold-dragon"]
+    assert m6("Leica M 6 플라티늄 (75주년)") == ["leica:body:m6:platinum"]
+    assert m6("Leica M6 LEITZ WETZLAR刻印 Silver") == ["leica:body:m6:leitz-wetzlar"]
+    assert m6("Leica 【世界300台 Limited品】M6 TTL 0.85 GreenPaint 10478") == ["leica:body:m6:ttl-green"]
+    assert m6("Leica M6 TTL Olive Green x0.85 [Custom]") == ["leica:body:m6:ttl"]  # 개인 도색은 그린페인트 한정판이 아님
+    assert m6("LEICA M6 TTL 0.85 NSH black paint finish SH124/400 sn.2680") == ["leica:body:m6:ttl-nsh"]
+    assert m6("Leica M6 TTL 0.85 Øresundsbron Black Paint set with Summilux-M 50mm f1.4 10492") == ["leica:body:m6:ttl-oresund"]
+    assert m6("Leica M6 “Royal-Photo Austria” Black chromium") == []
+    assert m6("Leica MP 0.72 Black Paint w/ M6 Dial FIRST BATCH") == []
+    assert m6("[중고] M6 CLASSIC") == ["leica:body:m6:classic"]
+    assert m6("Leica M6 TTL 0.72 Black") == ["leica:body:m6:ttl"]
+
+
+def test_m6_editions_are_flagged_for_the_version_bar() -> None:
+    entities = load_catalog()["entities"]
+    assert entities["leica:body:m6:panda"].get("edition") and entities["leica:body:m6:ttl-millennium"].get("edition")
+    assert not entities["leica:body:m6:classic"].get("edition") and not entities["leica:body:m6:leitz-wetzlar"].get("edition")
