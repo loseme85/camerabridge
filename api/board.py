@@ -332,7 +332,7 @@ def create_comment(body: dict, member_id: str | None) -> tuple[int, dict]:
     if len(mine) >= COMMENT_LIMIT:
         return 429, {"ok": False, "error": "limit"}
     entry = {"id": _new_id(stamp), "post_id": post_id, "created_at": now.isoformat(timespec="seconds"), "body": text,
-             "nick": member["nick"], "member": member_id}
+             "nick": member["nick"], "member": member_id, "locale": str(body.get("locale") or "")[:12] or None}
     _put(blob, f"board/comments/{post_id}/{entry['id']}~{member_id}.json", entry)
     return 200, {"ok": True, "id": entry["id"]}
 

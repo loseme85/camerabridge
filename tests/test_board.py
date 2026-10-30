@@ -65,11 +65,12 @@ def test_google_member_posts_and_comments_without_password(monkeypatch):
     status, out = board.create_post(POST, a)
     assert status == 200
     post_id = out["id"]
-    assert board.create_comment({"post_id": post_id, "body": "네 원래 그래요", "elapsed_ms": 4000}, b)[0] == 200
+    assert board.create_comment({"post_id": post_id, "body": "네 원래 그래요", "elapsed_ms": 4000, "locale": "en"}, b)[0] == 200
     listed = board.list_posts()
     assert listed["total"] == 1 and listed["posts"][0]["comments"] == 1 and listed["posts"][0]["nick"] == "필름러"
     status, read = board.read_post(post_id, a)
     assert read["post"].get("mine") is True and "mine" not in read["comments"][0]
+    assert read["post"]["locale"] == "ko" and read["comments"][0]["locale"] == "en"  # 번역 보기를 띄울지 정하는 데 씀
     dump = json.dumps(read, ensure_ascii=False) + json.dumps(listed, ensure_ascii=False)
     assert a not in dump and "sub-a" not in dump  # 회원 id·구글 번호는 밖으로 안 나감
     assert "sub-a" not in json.dumps(fake.store)  # 구글 번호 자체는 저장 안 함 (해시만)
