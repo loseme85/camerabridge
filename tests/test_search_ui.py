@@ -697,6 +697,9 @@ def test_model_view_has_price_by_condition_chart():
         assert "loadPriceLadder();" in html
         # 모델 하나(버전)를 골랐을 때만 — '모든 버전'·사양 묶음은 섞여서 그리지 않음
         assert "!entity.feature && !(entity.children || []).length" in html
-        for key in ("ladder_title", "ladder_note", "ladder_home", "ladder_abroad", "ladder_gone", "ladder_band", "ladder_counts"):
+        # 점: 커서는 정보 칸, 클릭은 아래 카드로 (원문으로 바로 나가지 않음)
+        assert "bindPriceLadder();" in html and "jumpToLadderListing(hit.dot, hit.point);" in html
+        assert 'class="${cls}" style="left:' in html and 'target="_blank" rel="noopener noreferrer" title="${escapeHtml(label)}"' not in html
+        for key in ("ladder_title", "ladder_note", "ladder_home", "ladder_abroad", "ladder_gone", "ladder_band", "ladder_counts", "ladder_go", "ladder_listed"):
             line = next(l for l in html.splitlines() if l.strip().startswith(key + ":"))
             assert "ko:" in line and "en:" in line and "ja:" in line
