@@ -38,6 +38,14 @@
       "destination": "/api/owner_dealers.py"
     },
     {
+      "source": "/owner/board",
+      "destination": "/api/board.py?r=owner"
+    },
+    {
+      "source": "/owner/board/",
+      "destination": "/api/board.py?r=owner"
+    },
+    {
       "source": "/owner/usage",
       "destination": "/api/owner_usage.py"
     },
