@@ -384,7 +384,15 @@ def test_m6_special_editions_are_split_from_classic_and_ttl() -> None:
     assert m6("Leica M6 TTL Olive Green x0.85 [Custom]") == ["leica:body:m6:ttl"]  # 개인 도색은 그린페인트 한정판이 아님
     assert m6("LEICA M6 TTL 0.85 NSH black paint finish SH124/400 sn.2680") == ["leica:body:m6:ttl-nsh"]
     assert m6("Leica M6 TTL 0.85 Øresundsbron Black Paint set with Summilux-M 50mm f1.4 10492") == ["leica:body:m6:ttl-oresund"]
-    assert m6("Leica M6 “Royal-Photo Austria” Black chromium") == []
+    assert m6("Leica M6 “Royal-Photo Austria” Black chromium") == ["leica:body:m6:royal-foto"]
+    assert m6("LEICA M6 ROYAL CENTENARY 1994 043/100") == ["leica:body:m6:royal"]
+    assert m6("Leica M6 with 35mm f2 Summicron-M Danish Royal Wedding (028/200)") == ["leica:body:m6:royal-wedding"]
+    assert m6('Leica M6 "EIN STÜCK Leica" + 35mm f1.4 - 306/996') == ["leica:body:m6:ein-stueck"]
+    assert m6("LEICA M6 TTL the last 999 sn.2756") == ["leica:body:m6:last-999"]
+    assert m6("LEICA M6 TTL ICS Black paint sn.2555") == ["leica:body:m6:ttl-ics"]
+    assert m6("Black Paint Leica M6 TTL 0.85 Dragon 2000") == ["leica:body:m6:ttl-dragon"]
+    assert m6("LEICA M6 black paint") == ["leica:body:m6:classic"]
+    assert m6("Leica M6 Safari 타조 custom 0.85") == ["leica:body:m6:classic"]  # 개인 도색은 한정판이 아님
     assert m6("Leica MP 0.72 Black Paint w/ M6 Dial FIRST BATCH") == []
     assert m6("[중고] M6 CLASSIC") == ["leica:body:m6:classic"]
     assert m6("Leica M6 TTL 0.72 Black") == ["leica:body:m6:ttl"]
@@ -392,5 +400,5 @@ def test_m6_special_editions_are_split_from_classic_and_ttl() -> None:
 
 def test_m6_editions_are_flagged_for_the_version_bar() -> None:
     entities = load_catalog()["entities"]
-    assert entities["leica:body:m6:panda"].get("edition") and entities["leica:body:m6:ttl-millennium"].get("edition")
-    assert not entities["leica:body:m6:classic"].get("edition") and not entities["leica:body:m6:leitz-wetzlar"].get("edition")
+    assert entities["leica:body:m6:titan"].get("edition") and entities["leica:body:m6:ttl-millennium"].get("edition")
+    assert not any(entities[f"leica:body:m6:{k}"].get("edition") for k in ("classic", "ttl", "leitz-wetzlar", "panda"))

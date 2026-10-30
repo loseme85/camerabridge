@@ -110,70 +110,106 @@ fam("leica:body:m5", "Leica M5", "라이카 M5", "M", [r"\bM ?5\b"], [], ["엠5"
 fam("leica:body:cl-film", "Leica CL (1973, film)", "라이카 CL (필름)", "M",
     [r"\bCL\b", r"(leitz|minolta|50 ?jahre|summicron-?c|rokkor|40\s?mm|film|필름|1973)"], [r"\bTL\b|\bSL\b", r"50 ?jahre|50주년"], ["leitz cl", "minolta cl", "cl film", "cl 필름"])
 fam("leica:body:cl-film-50-jahre", "Leica CL 50 Jahre (1975)", "라이카 CL 50주년", "M", [r"\bCL\b", r"50 ?jahre|50주년"], [r"\bTL\b|\bSL\b"], ["cl 50 jahre", "cl 50주년"])
-# M6: 클래식·TTL·리이슈 + 기념판 (모두 M6 부모의 자식)
+# M6: 클래식·TTL·리이슈 + 기념·한정판 (모두 M6 부모의 자식)
+# 2026-10-30 기념판 목록 정리: Wikipedia 'Leica M6' 특별판 표 + adaminsights.com 'History of the Leica M6 Models and Special Editions'
+# (공식 목록이 아니라 수량은 출처마다 조금씩 다름. 한 대뿐인 유니크 바디·단면 모형은 넣지 않음)
+TTL = r"(?<!non )(?<!non-)(?<!non)TTL"
 PLATINUM = r"platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)"
-M6_MARKERS = [r"(?<!non )(?<!non-)(?<!non)TTL", r"re-?issue|리이슈|복각|2022", r"M6 ?J\b", r"titan|티탄", PLATINUM, r"LHSA", r"royal|로얄",
-              r"jaguar|재규어", r"millenn?ium|밀레니엄", r"siber|hegner|125 ?(th|jahre|周年|주년)",
-              # 2026-10-30 클래식에 섞여 있던 기념판·다른 바디 (MP 바디에 M6 다이얼 등)
-              r"panda|판다|パンダ", r"dragon|드래곤|ドラゴン", r"colomb|columb|콜럼버스|콜롬보|コロンブス", r"thailand|태국|タイ国王",
-              r"leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー", r"\bMP\b"]
-MODELS["leica:body:m6:classic"] = {"model_key": "leica:body:m6:classic", "display_name": "Leica M6 (Classic)", "category": "Body", "mount": "M",
-                                   "title_must": [r"\bM ?6\b"], "title_must_not": M6_MARKERS}
-ALIASES["leica:body:m6:classic"] = ["leica m6 classic", "m6 classic", "m6 클래식", "라이카 m6 클래식", "엠6 클래식"]
-NAME_KO["leica:body:m6:classic"] = "라이카 M6 클래식"
-MODELS["leica:body:m6:ttl"] = {"model_key": "leica:body:m6:ttl", "display_name": "Leica M6 TTL", "category": "Body", "mount": "M",
-                               "title_must": [r"\bM ?6\b", r"TTL"], "title_must_not": [r"millenn?ium|밀레니엄", r"LHSA", r"non.?ttl",
-                                                                                      r"green ?paint|그린 ?페인트|グリーン", r"\bNSH\b", r"[øo0]resund|외레순", r"1984.?2002"]}
-ALIASES["leica:body:m6:ttl"] = ["leica m6 ttl", "m6 ttl", "m6ttl", "라이카 m6 ttl", "엠6 ttl"]
-NAME_KO["leica:body:m6:ttl"] = "라이카 M6 TTL"
-MODELS["leica:body:m6:reissue"] = {"model_key": "leica:body:m6:reissue", "display_name": "Leica M6 (2022 Reissue)", "category": "Body", "mount": "M",
-                                   "title_must": [r"\bM ?6\b", r"(re-?issue|리이슈|2022|복각)"], "title_must_not": [r"TTL"]}
-ALIASES["leica:body:m6:reissue"] = ["leica m6 reissue", "m6 reissue", "m6 2022", "m6 리이슈", "m6 복각", "라이카 m6 리이슈"]
-NAME_KO["leica:body:m6:reissue"] = "라이카 M6 리이슈 (2022)"
+M6 = r"\bM ?6\b"
+# (slug, 이름, 한국어 이름, 꼭 있어야 할 말(마지막이 그 판의 표시), 별칭)
 M6_EDITIONS = [
-    ("m6j", "Leica M6J (40 Jahre Leica M)", "M6J", [r"M6 ?J\b"], ["m6j", "m6 j"]),
-    ("titan", "Leica M6 Titan", "M6 티탄", [r"\bM ?6\b", r"titan|티탄"], ["m6 titan", "m6 티탄"]),
-    ("platinum", "Leica M6 Platinum (150 Jahre)", "M6 플래티넘", [r"\bM ?6\b", PLATINUM], ["m6 platinum", "m6 플라티늄"]),
-    ("lhsa", "Leica M6 LHSA", "M6 LHSA", [r"\bM ?6\b", r"LHSA"], ["m6 lhsa"]),
-    ("royal", "Leica M6 Royal (Centenary · Wedding)", "M6 로얄", [r"\bM ?6\b", r"royal|로얄"], ["m6 royal"]),
-    ("jaguar", "Leica M6 Jaguar XK", "M6 재규어", [r"\bM ?6\b", r"jaguar|재규어"], ["m6 jaguar"]),
-    ("ttl-millennium", "Leica M6 TTL Millennium (Black Paint)", "M6 TTL 밀레니엄", [r"\bM ?6\b", r"millenn?ium|밀레니엄"], ["m6 ttl millennium", "m6 millennium", "m6 밀레니엄"]),
-    ("ttl-titan", "Leica M6 TTL Titan", "M6 TTL 티탄", [r"\bM ?6\b", r"(?<!non )(?<!non-)(?<!non)TTL", r"titan|티탄"], ["m6 ttl titan", "m6 ttl 티탄"]),
-    ("ttl-black-paint", "Leica M6 TTL Black Paint", "M6 TTL 블랙페인트", [r"\bM ?6\b", r"(?<!non )(?<!non-)(?<!non)TTL", BLACK_PAINT[0]], ["m6 ttl black paint", "m6 ttl 블랙페인트"]),
-    # 2026-10-14 나니와 'M6 シーベルヘグナー125周年' (스위스 Siber Hegner 125주년 판다, 125대)
-    ("siber-hegner", "Leica M6 Siber Hegner 125 Jahre", "M6 시버헤그너 125주년", [r"\bM ?6\b", r"siber|hegner|125 ?(th|jahre|周年|주년)"],
+    # ── 클래식 (1984–1998) ──
+    ("gold-logo", "Leica M6 G (Gold Logo, 1987)", "M6 골드 로고 (1987)", [M6, r"gold ?logo|골드 ?로고|M6 ?G\b"], ["m6 gold logo", "m6g"]),
+    ("platinum", "Leica M6 Platinum (150 Jahre Photographie, 1989)", "M6 플래티넘 (150주년)", [M6, PLATINUM], ["m6 platinum", "m6 플라티늄", "m6 150 jahre"]),
+    ("siber-hegner", "Leica M6 Siber Hegner 125 Jahre (1990)", "M6 시버헤그너 125주년", [M6, r"siber|hegner|125 ?(th|jahre|周年|주년)"],
      ["m6 siber hegner", "m6 125th", "m6 시버헤그너"]),
-    # 2026-10-30 클래식·TTL에 섞여 있던 기념·한정판을 따로 (시세가 기본 모델과 다름)
-    ("panda", "Leica M6 Panda", "M6 판다", [r"\bM ?6\b", r"panda|판다|パンダ"], ["m6 panda", "m6 판다"]),
-    ("gold-dragon", "Leica M6 Gold Dragon (1995)", "M6 골드 드래곤", [r"\bM ?6\b", r"dragon|드래곤|ドラゴン"], ["m6 dragon", "m6 gold dragon", "m6 드래곤"]),
-    ("columbus", "Leica M6 Columbus (1492–1992)", "M6 콜럼버스 (콜롬보 92)", [r"\bM ?6\b", r"colomb|columb|콜럼버스|콜롬보|コロンブス"],
+    ("columbus", "Leica M6 Colombo '92 (1492–1992)", "M6 콜롬보 92", [M6, r"colomb|columb|콜럼버스|콜롬보|コロンブス"],
      ["m6 columbus", "m6 colombo", "m6 콜럼버스", "m6 콜롬보"]),
-    ("thailand", "Leica M6 Gold (King of Thailand)", "M6 태국 국왕 골드", [r"\bM ?6\b", r"thailand|태국|タイ国王"], ["m6 thailand", "m6 king of thailand", "m6 태국"]),
-    ("ttl-green", "Leica M6 TTL Green Paint", "M6 TTL 그린페인트", [r"\bM ?6\b", r"(?<!non )(?<!non-)(?<!non)TTL", r"green ?paint|그린 ?페인트|グリーン"],
-     ["m6 ttl green", "m6 green paint", "m6 그린페인트"]),
-    ("ttl-nsh", "Leica M6 TTL NSH (Black Paint)", "M6 TTL NSH", [r"\bM ?6\b", r"\bNSH\b"], ["m6 nsh", "m6 ttl nsh"]),
-    ("ttl-oresund", "Leica M6 TTL Øresund Bridge (2000)", "M6 TTL 외레순 다리", [r"\bM ?6\b", r"[øo0]resund|외레순"], ["m6 oresund", "m6 øresund", "m6 외레순"]),
-    ("ttl-1984-2002", "Leica M6 TTL '1984–2002' Edition", "M6 TTL 1984–2002 에디션", [r"\bM ?6\b", r"1984.?2002"], ["m6 1984-2002", "m6 ttl 1984-2002"]),
+    ("brunei", "Leica M6 Sultan of Brunei (Gold · Platinum)", "M6 브루나이 술탄", [M6, r"brunei|브루나이|sultan|술탄"], ["m6 brunei", "m6 sultan"]),
+    ("titan", "Leica M6 Titan", "M6 티탄", [M6, r"titan|티탄"], ["m6 titan", "m6 티탄"]),
+    ("lhsa", "Leica M6 LHSA", "M6 LHSA", [M6, r"LHSA"], ["m6 lhsa"]),
+    ("royal-foto", "Leica M6 Royal-Foto Austria (1968–1993)", "M6 로열 포토 오스트리아", [M6, r"royal.?(foto|photo)\b(?!graphic)|austria|오스트리아"],
+     ["m6 royal foto", "m6 royal photo austria"]),
+    ("m6j", "Leica M6J (40 Jahre Leica M, 1994)", "M6J", [r"M6 ?J\b"], ["m6j", "m6 j"]),
+    ("royal", "Leica M6 Royal Photographic Society Centenary (1994)", "M6 영국왕립사진협회 100주년", [M6, r"royal|로얄|로열|\bRPS\b"],
+     ["m6 royal", "m6 rps", "m6 royal centenary"]),
+    ("photo-ganz", "Leica M6 Photo Ganz Zürich", "M6 포토 간츠 취리히", [M6, r"photo ?ganz|z(ü|ue|u)rich|취리히"], ["m6 photo ganz", "m6 zurich"]),
+    ("traveller", "Leica M6 Traveller Set (1994)", "M6 트래블러 세트", [M6, r"travell?er|트래블러"], ["m6 traveller", "m6 traveler"]),
+    ("historica", "Leica M6 Historica (1975–1995)", "M6 히스토리카", [M6, r"historica|히스토리카"], ["m6 historica"]),
+    ("gold-dragon", "Leica M6 Gold Dragon (1995)", "M6 골드 드래곤", [M6, r"dragon|드래곤|ドラゴン|龍"], ["m6 gold dragon", "m6 dragon", "m6 드래곤"]),
+    ("royal-wedding", "Leica M6 Danish Royal Wedding (1995)", "M6 덴마크 왕실 결혼", [M6, r"wedding|웨딩|결혼|danish|denmark|d(ä|ae)nemark|덴마크"],
+     ["m6 royal wedding", "m6 danish royal wedding"]),
+    ("thailand", "Leica M6 Thai Jubilee (King Bhumibol 50 Years, 1996)", "M6 태국 국왕 즉위 50주년", [M6, r"thai|태국|bhumibol|타이 ?국왕|タイ国王"],
+     ["m6 thai", "m6 thailand", "m6 king of thailand", "m6 태국"]),
+    ("schmidt", "Leica M6 Schmidt Centenary", "M6 슈미트 100주년", [M6, r"schmidt|슈미트"], ["m6 schmidt"]),
+    ("bruckner", "Leica M6 Anton Bruckner (1824–1896)", "M6 안톤 브루크너", [M6, r"bruckner|브루크너"], ["m6 bruckner", "m6 anton bruckner"]),
+    ("partners", "Leica M6 Partners", "M6 파트너스", [M6, r"partners|파트너스"], ["m6 partners"]),
+    ("benelux", "Leica M6 Demo Benelux '96", "M6 베네룩스 데모", [M6, r"benelux|베네룩스"], ["m6 benelux"]),
+    ("polyphoto", "Leica M6 Polyphoto Demo", "M6 폴리포토 데모", [M6, r"polyphoto|폴리포토"], ["m6 polyphoto"]),
+    ("ein-stueck", "Leica M6 'Ein Stück Leica'", "M6 아인 슈튁 라이카", [M6, r"ein ?st(ü|ue|u)ck"], ["m6 ein stuck leica", "m6 ein stück leica"]),
+    ("canada", "Leica M6 Canada", "M6 캐나다", [M6, r"canada|캐나다"], ["m6 canada"]),
+    ("rooster", "Leica M6 Year of the Rooster", "M6 닭띠", [M6, r"rooster|닭|酉"], ["m6 rooster", "m6 year of the rooster"]),
+    # ── TTL (1998–2002) ──
+    ("jaguar", "Leica M6 TTL Jaguar XK 50 (1948–1998)", "M6 재규어 XK50", [M6, r"jaguar|재규어"], ["m6 jaguar", "m6 재규어"]),
+    ("ttl-millennium", "Leica M6 TTL Millennium (Black Paint, 2000)", "M6 TTL 밀레니엄", [M6, r"millenn?ium|밀레니엄|ミレニアム"],
+     ["m6 ttl millennium", "m6 millennium", "m6 밀레니엄"]),
+    ("ttl-dragon", "Leica M6 TTL Dragon 2000 (Black Paint, China)", "M6 TTL 드래곤 2000", [M6, TTL, r"dragon|드래곤|ドラゴン|龍"], ["m6 ttl dragon", "m6 dragon 2000"]),
+    ("ttl-green", "Leica M6 TTL Safari Green", "M6 TTL 사파리 그린", [M6, r"safari|사파리|green ?paint|그린 ?페인트|グリーン"],
+     ["m6 ttl safari", "m6 safari green", "m6 그린페인트", "m6 사파리"]),
+    ("ttl-nsh", "Leica M6 TTL NSH (Black Paint, Japan)", "M6 TTL NSH", [M6, r"\bNSH\b"], ["m6 nsh", "m6 ttl nsh"]),
+    ("ttl-kanto", "Leica M6 TTL Kanto Camera", "M6 TTL 관동 카메라", [M6, r"kanto|関東|관동"], ["m6 kanto"]),
+    ("ttl-test-the-best", "Leica M6 TTL 'Test the Best' (Swiss demo)", "M6 TTL 테스트 더 베스트", [M6, r"test ?the ?best"], ["m6 test the best"]),
+    ("ttl-ics", "Leica M6 ICS (Black Paint)", "M6 ICS", [M6, r"\bICS\b"], ["m6 ics"]),
+    ("ttl-oresund", "Leica M6 TTL Øresundsbron (2000)", "M6 TTL 외레순 다리", [M6, r"[øo0]resund|외레순"], ["m6 oresund", "m6 øresund", "m6 외레순"]),
+    ("ttl-hansa", "Leica M6 TTL Hansa", "M6 TTL 한자", [M6, r"\bhansa\b|한자"], ["m6 hansa"]),
+    ("ttl-al-thani", "Leica M6 TTL Sheikh Saud Al-Thani", "M6 TTL 알타니", [M6, r"al.?thani|알타니|sheikh"], ["m6 al thani"]),
+    ("ttl-titan", "Leica M6 TTL Titan", "M6 TTL 티탄", [M6, TTL, r"titan|티탄"], ["m6 ttl titan", "m6 ttl 티탄"]),
+    ("ttl-black-paint", "Leica M6 TTL Black Paint", "M6 TTL 블랙페인트", [M6, TTL, BLACK_PAINT[0]], ["m6 ttl black paint", "m6 ttl 블랙페인트"]),
+    ("last-999", "Leica M6 TTL 'Die letzten 999' (1984–2002)", "M6 마지막 999대 (1984–2002)", [M6, r"1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999"],
+     ["m6 last 999", "m6 1984-2002", "m6 letzten 999"]),
 ]
 # 기본 생산분이지만 시세가 달라 따로 (기념판 칸이 아니라 기본 모델 칸에)
 M6_VARIANTS = [
-    ("leitz-wetzlar", "Leica M6 Leitz Wetzlar (early engraving)", "M6 라이츠 베츨라 각인 (초기)", [r"\bM ?6\b", r"leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー"],
+    ("leitz-wetzlar", "Leica M6 Leitz Wetzlar (early engraving)", "M6 라이츠 베츨라 각인 (초기)", [M6, r"leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー"],
      ["m6 leitz wetzlar", "m6 wetzlar", "m6 베츨라"]),
+    ("panda", "Leica M6 Panda (chrome with black controls)", "M6 판다", [M6, r"panda|판다|パンダ"], ["m6 panda", "m6 판다"]),
 ]
+EDITION_MARKS = [e[3][-1] for e in M6_EDITIONS + M6_VARIANTS if e[0] not in ("ttl-black-paint", "ttl-green")]
+# 개인 도색(커스텀) 사파리·그린은 한정판이 아니라 원래 바디 그대로
+EDITION_MARKS.append(r"^(?!.*(re-?paint|리페인트|재도색|custom|커스텀)).*(safari|사파리|green ?paint|그린 ?페인트|グリーン)")
+MODELS["leica:body:m6:classic"] = {"model_key": "leica:body:m6:classic", "display_name": "Leica M6 (Classic)", "category": "Body", "mount": "M",
+                                   "title_must": [M6], "title_must_not": [TTL, r"re-?issue|리이슈|복각|2022", r"\bMP\b"] + EDITION_MARKS}
+ALIASES["leica:body:m6:classic"] = ["leica m6 classic", "m6 classic", "m6 클래식", "라이카 m6 클래식", "엠6 클래식"]
+NAME_KO["leica:body:m6:classic"] = "라이카 M6 클래식"
+MODELS["leica:body:m6:ttl"] = {"model_key": "leica:body:m6:ttl", "display_name": "Leica M6 TTL", "category": "Body", "mount": "M",
+                               "title_must": [M6, r"TTL"], "title_must_not": [r"non.?ttl", BLACK_PAINT[0]] + EDITION_MARKS}
+ALIASES["leica:body:m6:ttl"] = ["leica m6 ttl", "m6 ttl", "m6ttl", "라이카 m6 ttl", "엠6 ttl"]
+NAME_KO["leica:body:m6:ttl"] = "라이카 M6 TTL"
+MODELS["leica:body:m6:reissue"] = {"model_key": "leica:body:m6:reissue", "display_name": "Leica M6 (2022 Reissue)", "category": "Body", "mount": "M",
+                                   "title_must": [M6, r"(re-?issue|리이슈|2022|복각)"], "title_must_not": [r"TTL"]}
+ALIASES["leica:body:m6:reissue"] = ["leica m6 reissue", "m6 reissue", "m6 2022", "m6 리이슈", "m6 복각", "라이카 m6 리이슈"]
+NAME_KO["leica:body:m6:reissue"] = "라이카 M6 리이슈 (2022)"
 for slug, name, ko, must, aliases in M6_EDITIONS + M6_VARIANTS:
     key = f"leica:body:m6:{slug}"
     MODELS[key] = {"model_key": key, "display_name": name, "category": "Body", "mount": "M", "title_must": must, "title_must_not": [],
                    "edition": (slug, name, ko, must, aliases) in M6_EDITIONS}
     ALIASES[key] = aliases
     NAME_KO[key] = ko
-# TTL 티탄·TTL 블랙페인트는 TTL·티탄과 따로 (시세가 다름)
-MODELS["leica:body:m6:ttl"]["title_must_not"] += [r"titan|티탄", BLACK_PAINT[0]]
-MODELS["leica:body:m6:titan"]["title_must_not"] = [r"(?<!non )(?<!non-)(?<!non)TTL"]
-MODELS["leica:body:m6:ttl-black-paint"]["title_must_not"] = [r"millenn?ium|밀레니엄", r"LHSA", REPAINT, r"\bNSH\b", r"[øo0]resund|외레순"]
-MODELS["leica:body:m6:royal"]["title_must_not"] = [r"royal.?photo"]  # 'Royal-Photo Austria'는 오스트리아 판매점 기념판 (로얄 센테너리·결혼 기념판과 다름)
-MODELS["leica:body:m6:panda"]["title_must_not"] = [r"siber|hegner|125 ?(th|jahre|周年|주년)"]  # 시버헤그너 125주년도 판다 모양
-MODELS["leica:body:m6:ttl-green"]["title_must_not"] = [REPAINT]
-MODELS["leica:body:m6:ttl-nsh"]["title_must_not"] = [r"millenn?ium|밀레니엄"]  # 'NSH Millenium'은 밀레니엄으로
+# 판끼리 겹치는 말 정리 (시세가 다름)
+NOT = {
+    "titan": [TTL],
+    "platinum": [r"brunei|브루나이|sultan", r"thai|태국|bhumibol", r"schmidt|슈미트"],  # 브루나이·태국·슈미트판에도 플래티넘 마감이 있음
+    "royal": [r"wedding|웨딩|결혼|danish|denmark|덴마크", r"royal.?(foto|photo)\b(?!graphic)|austria|오스트리아"],
+    "gold-dragon": [TTL, r"2000|black ?paint|블랙 ?페인트"],
+    "panda": [r"siber|hegner|125 ?(th|jahre|周年|주년)", r"royal|\bRPS\b"],  # 시버헤그너·영국왕립사진협회판도 판다 모양
+    "ttl-green": [REPAINT],
+    "ttl-nsh": [r"millenn?ium|밀레니엄"],  # 'NSH Millenium'은 밀레니엄으로
+    "ttl-millennium": [r"dragon|드래곤"],
+    "ttl-black-paint": [REPAINT] + EDITION_MARKS,
+    "thailand": [r"thai ?baht"],
+}
+for slug, extra in NOT.items():
+    MODELS[f"leica:body:m6:{slug}"]["title_must_not"] = MODELS[f"leica:body:m6:{slug}"]["title_must_not"] + extra
 PARENTS["leica:body:m6"] = ("Leica M6 (all)", "Body", "M",
                             ["leica:body:m6:classic", "leica:body:m6:ttl", "leica:body:m6:reissue"] + [f"leica:body:m6:{e[0]}" for e in M6_VARIANTS + M6_EDITIONS],
                             ["leica m6", "m6", "라이카 m6", "엠6"], "라이카 M6 (전체)")
