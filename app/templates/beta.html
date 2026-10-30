@@ -1122,6 +1122,8 @@
     .result-source-meta{font-family:var(--sans);font-size:12px;color:var(--text-muted)}
     .grade-chip{border-radius:0;border-color:var(--text);font-family:var(--serif);font-size:13px;font-weight:600;padding:0 7px}
     /* 모델 시세 그림: 등급 줄마다 판매 중 가격대 띠 + 매물 점 */
+    .entity-bar-editions{margin-top:10px;padding-top:10px;border-top:1px dotted var(--border-strong)}
+    .entity-bar-group{align-self:center;margin-right:6px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--text-soft)}
     .price-ladder{margin:8px 0 28px;padding:18px 0 14px;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
     .price-ladder h3{margin:0;font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-0.01em}
     .price-ladder>p{margin:4px 0 14px;font-size:13px;color:var(--text-soft)}
@@ -2943,6 +2945,7 @@
       all_versions: { ko: '모든 버전', en: 'All versions', ja: 'すべてのバージョン', 'zh-Hans': '全部版本', 'zh-Hant': '全部版本', pt: 'Todas as versões', es: 'Todas las versiones', de: 'Alle Versionen', it: 'Tutte le versioni' },
       narrow: { ko: '버전으로 좁히기', en: 'Narrow by version', ja: 'バージョンで絞り込む', 'zh-Hans': '按版本筛选', 'zh-Hant': '依版本篩選', pt: 'Filtrar por versão', es: 'Filtrar por versión', de: 'Nach Version eingrenzen', it: 'Filtra per versione' },
       free_text: { ko: '“{q}” 그대로 검색', en: 'Search “{q}” as typed', ja: '「{q}」をそのまま検索', 'zh-Hans': '直接搜索“{q}”', 'zh-Hant': '直接搜尋「{q}」', pt: 'Buscar “{q}” como digitado', es: 'Buscar “{q}” tal cual', de: '„{q}“ wörtlich suchen', it: 'Cerca “{q}” così com’è' },
+      editions: { ko: '기념·한정판', en: 'Special editions', ja: '記念・限定モデル', 'zh-Hans': '纪念·限量版', 'zh-Hant': '紀念·限量版', pt: 'Edições especiais', es: 'Ediciones especiales', de: 'Sondermodelle', it: 'Edizioni speciali' },
       ladder_title: { ko: '등급별 가격대', en: 'Price by condition', ja: 'ランク別の価格帯', 'zh-Hans': '按成色的价格区间', 'zh-Hant': '依成色的價格區間', pt: 'Preço por estado', es: 'Precio por estado', de: 'Preis nach Zustand', it: 'Prezzo per condizione' },
       ladder_note: { ko: '매물 {n}개를 등급별로 한 줄에 모았어요. 띠는 지금 판매 중인 가격대예요', en: '{n} listings, one row per condition. The band is the current asking range', ja: '{n}件の出品をランクごとに1行にまとめました。帯は現在の販売価格帯です', 'zh-Hans': '{n} 件商品按成色各占一行，色带为当前在售价格区间', 'zh-Hant': '{n} 件商品依成色各占一行，色帶為目前在售價格區間', pt: '{n} anúncios, uma linha por estado. A faixa é o preço pedido atual', es: '{n} anuncios, una fila por estado. La banda es el rango de precio actual', de: '{n} Angebote, eine Zeile pro Zustand. Das Band zeigt die aktuelle Preisspanne', it: '{n} annunci, una riga per condizione. La fascia è il prezzo richiesto attuale' },
       ladder_home: { ko: '국내 판매 중', en: 'For sale in your country', ja: '国内で販売中', 'zh-Hans': '本国在售', 'zh-Hant': '本國在售', pt: 'À venda no seu país', es: 'En venta en tu país', de: 'Im Inland zu kaufen', it: 'In vendita nel tuo paese' },
@@ -3578,12 +3581,21 @@
       const members = entity.feature ? (entity.members || []).map(id => entityState.byId[id])
         .filter(item => item && item.active_count).sort((a, b) => b.active_count - a.active_count) : [];
       const memberChips = members.map(item => `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(item.id)}" aria-pressed="false">${escapeHtml(entityDisplayName(item))} <span class="entity-chip-count">${item.active_count}</span></button>`).join('');
-      const chips = memberChips || (family ? [family.id, ...family.children].map(id => {
+      const chipOf = id => {
         const item = entityState.byId[id];
         if(!item) return '';
         const label = id === family.id ? ec('all_versions') : entityDisplayName(item);
         return `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(id)}" aria-pressed="${id === entity.id}">${escapeHtml(label)} <span class="entity-chip-count">${item.active_count || 0}</span></button>`;
-      }).join('') : '');
+      };
+      // 기본 모델과 기념·한정판을 두 줄로 (기념판은 판매 중 많은 순, 기록이 하나도 없는 기념판은 숨김)
+      const kids = family ? family.children.map(id => entityState.byId[id]).filter(Boolean) : [];
+      const editions = kids.filter(item => item.edition && (item.listing_count || item.id === entity.id))
+        .sort((a, b) => (b.active_count || 0) - (a.active_count || 0) || (b.listing_count || 0) - (a.listing_count || 0));
+      const baseChips = family ? [family.id, ...kids.filter(item => !item.edition).map(item => item.id)].map(chipOf).join('') : '';
+      const editionChips = editions.length
+        ? `<div class="entity-bar-chips entity-bar-editions" role="group" aria-label="${escapeHtml(ec('editions'))}"><span class="entity-bar-group">${escapeHtml(ec('editions'))}</span>${editions.map(item => chipOf(item.id)).join('')}</div>`
+        : '';
+      const chips = memberChips || baseChips;
       bar.innerHTML = `
         <div class="entity-bar-main">
           <span class="entity-bar-label">${escapeHtml(ec('model'))}</span>
@@ -3591,7 +3603,8 @@
           <span class="entity-bar-meta">${escapeHtml(entityMetaLine(entity))}</span>
           <button type="button" class="entity-clear" data-entity-clear="1" aria-label="${escapeHtml(ec('clear'))}">✕</button>
         </div>
-        ${chips ? `<div class="entity-bar-chips" role="group" aria-label="${escapeHtml(ec('narrow'))}">${chips}</div>` : ''}`;
+        ${chips ? `<div class="entity-bar-chips" role="group" aria-label="${escapeHtml(ec('narrow'))}">${chips}</div>` : ''}
+        ${memberChips ? '' : editionChips}`;
       bar.hidden = false;
     }
 

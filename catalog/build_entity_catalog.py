@@ -199,6 +199,7 @@ def build() -> dict:
             "id": key, "name": spec["display_name"], "name_ko": NAME_KO.get(key), "kind": spec["category"],
             "mount": spec["mount"], "parent": next((p for p, v in PARENTS.items() if key in v[3]), None), "children": [],
             "aliases": sorted(set(a.lower() for a in ALIASES[key])), "codes": all_codes.get(key, []),
+            **({"edition": True} if spec.get("edition") else {}),
             "match": {"category": spec["category"], "mount": spec["mount"], "title_must": spec["title_must"],
                       "title_must_not": spec["title_must_not"] + THIRD_PARTY
                       + ([p for p in ACC_NOT if p not in spec["title_must_not"]] if spec["category"] == "Body" else [])},
