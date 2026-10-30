@@ -723,6 +723,7 @@ def test_home_has_community_board() -> None:
     assert 'rel="nofollow ugc noopener"' in beta  # 글 속 링크는 검색엔진에 점수를 주지 않음
     block = beta.split("      board: {\n", 1)[1].split("\n      },", 1)[0]
     assert "accounts.google.com/gsi/client" in beta and "data-board-composer" in beta  # 구글 로그인 + 목록 위에서 바로 쓰기
+    assert "boardState.freshUntil = Date.now() + 120000" in beta and "login_failed" in beta  # 쓰거나 지운 직후 새 목록, 로그인 실패 안내
     assert "translate.google.com/?sl=auto" in beta and "zh-Hant': 'zh-TW'" in beta  # 글·댓글 '번역 보기'(화면 언어로)
     for key in ("title", "rules", "login_prompt", "compose_placeholder", "report", "delete_confirm", "err_limit"):
         line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))

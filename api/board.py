@@ -483,7 +483,9 @@ class handler(BaseHTTPRequestHandler):
             except ValueError:
                 page = 1
             category = query.get("category") if query.get("category") in CATEGORIES else ""
-            return self._send(200, list_posts(category, page), cache="public, s-maxage=15, stale-while-revalidate=60")
+            # 목록은 잠깐 저장(캐시). 글쓴이는 쓰거나 지운 직후 ?fresh=… 로 새 목록을 받음
+            cache = "no-store" if query.get("fresh") else "public, s-maxage=15, stale-while-revalidate=45"
+            return self._send(200, list_posts(category, page), cache=cache)
         except Exception:  # noqa: BLE001
             return self._send(503, {"ok": False, "error": "unavailable"})
 
