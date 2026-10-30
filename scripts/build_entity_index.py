@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from condition_grade import grade_of  # noqa: E402
-from entity_catalog import annotate_records, krw_rates, load_catalog  # noqa: E402
+from entity_catalog import annotate_records, flag_too_cheap, infer_by_price, krw_rates, load_catalog, price_krw  # noqa: E402
 from fx_history import krw_per_unit_on  # noqa: E402
 
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
@@ -78,6 +78,21 @@ def _b_grade_price(graded: list, factors: dict) -> dict:
     return {"b_price_krw": round(statistics.median(pool)), "b_price_n": len(pool), "b_price_basis": basis}
 
 
+def _b_value(catalog: dict):
+    """매물 → B급 환산 원화 (기본 등급 비율로). 가격 추정·너무 싼 매물 찾기에만 씀."""
+    def value(record: dict) -> float | None:
+        final = record.get("final_output") or {}
+        krw = price_krw(final)
+        status = str(final.get("sold_quality") or "")
+        if not krw or not (status == "asking" or status.startswith("sold")):
+            return None
+        leaf = next((catalog["entities"][e] for e in record.get("entity_ids") or [] if e in catalog["entities"]), None)
+        grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
+        factors = DEFAULT_FACTORS["Body" if leaf and leaf.get("kind") == "Body" else "Lens"]
+        return krw / factors.get(grade, 1.0)
+    return value
+
+
 def _home_feed(records: list, catalog: dict) -> dict:
     """첫 화면 '새로 올라온 매물': 판매 중·사진·가격이 있는 매물을 최근 순으로, 같은 모델은 한 건만.
     (레딧 피드백 '흔한 AI 사이트 같다' → 첫 화면에 실제 매물이 먼저 보이게)"""
@@ -106,9 +121,12 @@ def main() -> None:
     payload = json.loads(INDEX.read_text(encoding="utf-8"))
     records = payload["records"]
     annotate_records(records)
+    catalog = load_catalog()
+    value = _b_value(catalog)
+    moved = infer_by_price(records, value, catalog)
+    too_cheap = flag_too_cheap(records, value, catalog)
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
-    catalog = load_catalog()
     to_krw = krw_rates()
     stats: dict[str, dict] = {eid: {"total": 0, "active": 0, "active_prices": [], "sold_prices": [], "graded": []}
                               for eid in catalog["entities"]}
@@ -120,7 +138,7 @@ def main() -> None:
         rate = to_krw.get(str(final.get("currency") or "KRW").upper())
         if sold:  # 판매완료는 팔린 날 환율로 (기록된 그 순간 환율 → 날짜별 환율 → 없으면 오늘 환율)
             rate = final.get("sold_fx_krw") or krw_per_unit_on(final.get("currency"), final.get("sold_at")) or rate
-        krw = price * rate if price and rate else None
+        krw = price * rate if price and rate and id(record) not in too_cheap else None  # 너무 싼 매물은 시세에서 뺌
         grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
         for eid in record.get("entity_ids") or []:
             s = stats[eid]
@@ -158,7 +176,7 @@ def main() -> None:
                                    "entities": entities}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     HOME_FEED.write_text(json.dumps(_home_feed(records, catalog), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     linked = sum(1 for r in records if r.get("entity_ids"))
-    print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약")
+    print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약 · 가격으로 옮김 {moved} · 시세에서 뺌 {len(too_cheap)}")
 
 
 if __name__ == "__main__":

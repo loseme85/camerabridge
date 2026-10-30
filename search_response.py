@@ -67,6 +67,7 @@ FINAL_OUTPUT_FIELDS = [
     "classification_conflict_detected",
     "body_lens_boundary_conflict_detected",
     "stale_body_normalization_detected",
+    "entity_note",  # 'price_inferred'(가격대로 모델 추정) · 'too_cheap'(시세 계산에서 뺌), scripts/build_entity_index.py
 ]
 
 

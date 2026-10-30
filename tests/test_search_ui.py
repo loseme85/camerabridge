@@ -703,3 +703,13 @@ def test_model_view_has_price_by_condition_chart():
         for key in ("ladder_title", "ladder_note", "ladder_home", "ladder_abroad", "ladder_gone", "ladder_band", "ladder_counts", "ladder_go", "ladder_listed"):
             line = next(l for l in html.splitlines() if l.strip().startswith(key + ":"))
             assert "ko:" in line and "en:" in line and "ja:" in line
+
+
+def test_card_shows_price_inferred_and_too_cheap_notes() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert "note === 'too_cheap'" in beta and "note === 'price_inferred'" in beta
+    assert "entity_note === 'too_cheap'" in beta  # 그래프에서도 뺌
+    for key in ("note_price_inferred", "note_too_cheap"):
+        line = next(l for l in beta.splitlines() if l.strip().startswith(key + ":"))
+        for locale in ("ko:", "en:", "ja:", "de:", "it:"):
+            assert locale in line

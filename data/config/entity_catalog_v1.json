@@ -1095,7 +1095,7 @@
     "title_must_not": [
      "복각",
      "re-?issue",
-     "ASPH",
+     "ASPH(?!erical)",
      "6 ?bit",
      "신품",
      "\\b75\\b",
@@ -1175,10 +1175,10 @@
     "title_must": [
      "nocti",
      "1\\.2\\b",
-     "(복각|re-?issue|ASPH|6 ?bit|신품)"
+     "(복각|re-?issue|ASPH(?!erical)|6 ?bit|신품)"
     ],
     "title_must_not": [
-     "오리지널|original",
+     "오리지널|original|double ?aspherical|\\bAA\\b",
      "\\b75\\b",
      "(?<![\\d./])35(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
      "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",

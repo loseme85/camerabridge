@@ -435,3 +435,37 @@ def test_generation_counts_differ_by_country_and_steel_rim_reissue_without_label
     assert lens("Leica SUMMICRON M 35mm F2.0 ver.4", sc35) == [sc35 + "v4"]
     assert lens("Leica SUMMICRON-M 35mm F2.0(VER.1)", sc35) == [sc35 + "v1-8element"]
     assert lens("Leica Elmarit-M 28/2.8 第2世代 Late E48", "leica:lens:elmarit-m:28") == ["leica:lens:elmarit-m:28:v2"]
+
+
+def _priced(title: str, krw: float) -> dict:
+    record = _record(title)
+    record["entity_ids"] = match_entities(record)
+    record["_v"] = krw
+    return record
+
+
+def test_price_band_decides_original_or_reissue_only_when_title_is_silent() -> None:
+    from entity_catalog import infer_by_price
+    orig, re_ = "leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:steel-rim-reissue"
+    records = [_priced("Leica Summilux 35mm f1.4 Steel Rim M3 11870", v) for v in (9_000_000, 14_000_000, 20_000_000)]
+    records += [_priced("Leica Summilux 35mm f1.4 Steel Rim Reissue 11301", v) for v in (4_500_000, 5_000_000, 5_500_000)]
+    silent_cheap = _priced("[중고] M 35/1.4 Summilux 스틸림 (Silver)", 5_100_000)
+    silent_between = _priced("[위탁] M 35/1.4 Summilux 스틸림 (Black)", 7_000_000)  # 어느 가격대에도 안 들어감 → 그대로
+    cheap_but_marked = _priced("Leica Summilux 35mm f1.4 Steel Rim M3 goggles", 5_000_000)  # 제목 근거가 이김
+    records += [silent_cheap, silent_between, cheap_but_marked]
+    assert orig in silent_cheap["entity_ids"]
+    assert infer_by_price(records, lambda r: r["_v"]) == 1
+    assert re_ in silent_cheap["entity_ids"] and orig not in silent_cheap["entity_ids"]
+    assert "leica:lens:summilux-m:35" in silent_cheap["entity_ids"]  # 부모는 그대로
+    assert silent_cheap["final_output"]["entity_note"] == "price_inferred"
+    assert orig in silent_between["entity_ids"] and "entity_note" not in silent_between["final_output"]
+    assert orig in cheap_but_marked["entity_ids"]
+
+
+def test_far_too_cheap_listing_is_flagged_and_left_out_of_market_price() -> None:
+    from entity_catalog import flag_too_cheap
+    records = [_priced("Leica Summicron-M 50mm f2 Silver", v) for v in (2_000_000, 2_200_000, 2_400_000, 2_300_000, 2_100_000)]
+    manual = _priced("Leica Summicron-M 50mm f2 Instructions", 15_000)
+    records.append(manual)
+    flagged = flag_too_cheap(records, lambda r: r["_v"])
+    assert flagged == {id(manual)} and manual["final_output"]["entity_note"] == "too_cheap"
