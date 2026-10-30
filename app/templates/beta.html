@@ -1004,6 +1004,8 @@
       --serif:"Newsreader","Noto Serif KR",Georgia,serif;
       --sans:"Inter","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
       --sticky-search-offset:72px;
+      --ladder-home:#16181a;
+      --ladder-abroad:#a8552e;
     }
     body{font-family:var(--sans);font-size:15px;background:var(--bg)}
     ::selection{background:#d9e4de}
@@ -1119,6 +1121,38 @@
     .result-source-label{font-size:13px;font-weight:500}
     .result-source-meta{font-family:var(--sans);font-size:12px;color:var(--text-muted)}
     .grade-chip{border-radius:0;border-color:var(--text);font-family:var(--serif);font-size:13px;font-weight:600;padding:0 7px}
+    /* 모델 시세 그림: 등급 줄마다 판매 중 가격대 띠 + 매물 점 */
+    .price-ladder{margin:8px 0 28px;padding:18px 0 14px;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
+    .price-ladder h3{margin:0;font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-0.01em}
+    .price-ladder>p{margin:4px 0 14px;font-size:13px;color:var(--text-soft)}
+    .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:34px;border-top:1px solid var(--border)}
+    .ladder-grade{font-family:var(--serif);font-size:15px;font-weight:600}
+    .ladder-strip{position:relative;height:22px}
+    .ladder-strip::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dotted var(--border-strong)}
+    .ladder-band{position:absolute;top:calc(50% - 3px);height:6px;background:var(--surface-muted)}
+    .ladder-dot{position:absolute;top:50%;width:9px;height:9px;margin:-5px 0 0 -5px;background:var(--ladder-home);border:1.5px solid var(--ladder-home);box-sizing:border-box}
+    .ladder-dot.is-abroad{background:var(--ladder-abroad);border-color:var(--ladder-abroad)}
+    .ladder-dot.is-gone{background:var(--bg)}
+    .ladder-dot:hover,.ladder-dot:focus-visible{transform:scale(1.5);z-index:1;outline:none}
+    .ladder-range{font-family:var(--serif);font-size:15px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+    .ladder-range small{display:block;font-family:var(--sans);font-size:11px;color:var(--text-muted)}
+    .ladder-axis{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;gap:14px;border-top:1px solid var(--border)}
+    .ladder-axis div{position:relative;height:20px;font-size:11px;color:var(--text-muted);font-variant-numeric:tabular-nums}
+    .ladder-axis span{position:absolute;top:4px;transform:translateX(-50%);white-space:nowrap}
+    .ladder-axis span:first-child{transform:none}.ladder-axis span:last-child{transform:translateX(-100%)}
+    .ladder-key{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px;font-size:12px;color:var(--text-soft)}
+    .ladder-key i{display:inline-block;width:8px;height:8px;margin-right:5px;background:var(--ladder-home);border:1.5px solid var(--ladder-home);vertical-align:0}
+    .ladder-key i.is-abroad{background:var(--ladder-abroad);border-color:var(--ladder-abroad)}
+    .ladder-key i.is-gone{background:var(--bg)}
+    .ladder-key i.is-band{width:18px;height:6px;border:0;background:var(--surface-muted);vertical-align:1px}
+    @media (max-width:640px){
+      .ladder-row{grid-template-columns:52px minmax(0,1fr);row-gap:0;padding:6px 0}
+      .ladder-range{grid-column:2;text-align:left;font-size:14px}
+      .ladder-range small{display:inline;margin-left:6px}
+      .ladder-axis{grid-template-columns:52px minmax(0,1fr)}
+      .ladder-axis div:last-child{display:none}
+      .ladder-axis span:nth-child(even){display:none}
+    }
     .result-facts{padding:12px 0;border-bottom:0;border-top:1px solid var(--border);margin-top:12px}
     .card-note{font-size:13px}
     .result-details{padding:0 0 10px;border:0}
@@ -2898,6 +2932,14 @@
       all_versions: { ko: '모든 버전', en: 'All versions', ja: 'すべてのバージョン', 'zh-Hans': '全部版本', 'zh-Hant': '全部版本', pt: 'Todas as versões', es: 'Todas las versiones', de: 'Alle Versionen', it: 'Tutte le versioni' },
       narrow: { ko: '버전으로 좁히기', en: 'Narrow by version', ja: 'バージョンで絞り込む', 'zh-Hans': '按版本筛选', 'zh-Hant': '依版本篩選', pt: 'Filtrar por versão', es: 'Filtrar por versión', de: 'Nach Version eingrenzen', it: 'Filtra per versione' },
       free_text: { ko: '“{q}” 그대로 검색', en: 'Search “{q}” as typed', ja: '「{q}」をそのまま検索', 'zh-Hans': '直接搜索“{q}”', 'zh-Hant': '直接搜尋「{q}」', pt: 'Buscar “{q}” como digitado', es: 'Buscar “{q}” tal cual', de: '„{q}“ wörtlich suchen', it: 'Cerca “{q}” così com’è' },
+      ladder_title: { ko: '등급별 가격대', en: 'Price by condition', ja: 'ランク別の価格帯', 'zh-Hans': '按成色的价格区间', 'zh-Hant': '依成色的價格區間', pt: 'Preço por estado', es: 'Precio por estado', de: 'Preis nach Zustand', it: 'Prezzo per condizione' },
+      ladder_note: { ko: '매물 {n}개를 등급별로 한 줄에 모았어요. 띠는 지금 판매 중인 가격대예요', en: '{n} listings, one row per condition. The band is the current asking range', ja: '{n}件の出品をランクごとに1行にまとめました。帯は現在の販売価格帯です', 'zh-Hans': '{n} 件商品按成色各占一行，色带为当前在售价格区间', 'zh-Hant': '{n} 件商品依成色各占一行，色帶為目前在售價格區間', pt: '{n} anúncios, uma linha por estado. A faixa é o preço pedido atual', es: '{n} anuncios, una fila por estado. La banda es el rango de precio actual', de: '{n} Angebote, eine Zeile pro Zustand. Das Band zeigt die aktuelle Preisspanne', it: '{n} annunci, una riga per condizione. La fascia è il prezzo richiesto attuale' },
+      ladder_home: { ko: '국내 판매 중', en: 'For sale in your country', ja: '国内で販売中', 'zh-Hans': '本国在售', 'zh-Hant': '本國在售', pt: 'À venda no seu país', es: 'En venta en tu país', de: 'Im Inland zu kaufen', it: 'In vendita nel tuo paese' },
+      ladder_abroad: { ko: '해외 판매 중 (도착 총액)', en: 'For sale abroad (est. delivered)', ja: '海外で販売中（到着総額）', 'zh-Hans': '海外在售（到手总价）', 'zh-Hant': '海外在售（到手總價）', pt: 'À venda no exterior (total estimado)', es: 'En venta en el extranjero (total estimado)', de: 'Im Ausland (geschätzt geliefert)', it: "In vendita all'estero (totale stimato)" },
+      ladder_gone: { ko: '팔림·내려감', en: 'Sold or removed', ja: '販売済み・削除', 'zh-Hans': '已售/已下架', 'zh-Hant': '已售/已下架', pt: 'Vendido ou removido', es: 'Vendido o retirado', de: 'Verkauft oder entfernt', it: 'Venduto o rimosso' },
+      ladder_band: { ko: '판매 중 가격대', en: 'Asking range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa pedida', es: 'Rango pedido', de: 'Preisspanne', it: 'Fascia richiesta' },
+      ladder_counts: { ko: '판매 중 {a} · 지난 기록 {h}', en: '{a} for sale · {h} past', ja: '販売中 {a} · 過去 {h}', 'zh-Hans': '在售 {a} · 过往 {h}', 'zh-Hant': '在售 {a} · 過往 {h}', pt: '{a} à venda · {h} anteriores', es: '{a} en venta · {h} anteriores', de: '{a} zu kaufen · {h} früher', it: '{a} in vendita · {h} passati' },
+      ladder_none: { ko: '판매 중 없음', en: 'None for sale', ja: '販売中なし', 'zh-Hans': '无在售', 'zh-Hant': '無在售', pt: 'Nenhum à venda', es: 'Ninguno en venta', de: 'Keins zu kaufen', it: 'Nessuno in vendita' },
       suggestions: { ko: '모델 후보', en: 'Model suggestions', ja: 'モデル候補', 'zh-Hans': '型号候选', 'zh-Hant': '型號候選', pt: 'Sugestões de modelo', es: 'Sugerencias de modelo', de: 'Modellvorschläge', it: 'Suggerimenti di modello' }
     };
     const ENTITY_STOP_TOKENS = new Set(['leica', '라이카', 'ライカ', '徕卡', '徠卡', 'lens', '렌즈', 'body', '바디',
@@ -3127,6 +3169,117 @@
         return { caption: ec('price_range_label'), value: rangeText, meta: isParent ? ec('choose_version') : ec('few_sold') };
       }
       return { caption: ux('summary.market_price_label', 'Market price'), value: '—', meta: ec('none_on_sale') };
+    }
+
+    // 모델 시세 그림: 고른 모델의 매물을 최대 300개까지 따로 받아 등급 줄마다 점으로 찍음 (목록은 12개씩이라 한눈에 안 들어와서)
+    const LADDER_GRADES = ['N', 'S', 'A', 'B', 'C', 'D'];
+    const ladderState = { key: '', results: null };
+
+    function ladderEntity(){
+      const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
+      return entity && !entity.feature && !(entity.children || []).length ? entity : null;
+    }
+
+    async function loadPriceLadder(){
+      if(!ladderEntity() || !state.response) return;
+      const params = buildParams(0, { limit: 100 });
+      const key = params.toString();
+      if(ladderState.key === key) return;
+      ladderState.key = key;
+      ladderState.results = null;
+      const all = [];
+      for(let offset = 0; offset < 300; offset += 100){
+        params.set('offset', String(offset));
+        try{
+          const response = await fetch('/api/search?' + params.toString(), { headers: { 'Accept': 'application/json' } });
+          if(!response.ok) break;
+          const payload = await response.json();
+          if(ladderState.key !== key) return;
+          all.push(...(payload.results || []));
+          if(!(payload.pagination || {}).has_more) break;
+        }catch(error){
+          break;
+        }
+      }
+      if(ladderState.key !== key) return;
+      ladderState.results = all;
+      if(els['query-summary-region'] && !state.loading && !state.error) els['query-summary-region'].innerHTML = renderPriceLadder();
+    }
+
+    function ladderPoints(results){
+      const points = [];
+      results.forEach(result => {
+        if(!LADDER_GRADES.includes(result.grade)) return;
+        const cost = computeLandedCost(result);
+        const value = cost ? (cost.landed ? cost.landed.total : cost.converted) : 0;
+        if(!value) return;
+        const rule = landedSourceRule(result);
+        points.push({
+          grade: result.grade,
+          value,
+          active: getMarketActivityInfo(result).section === 'active',
+          abroad: Boolean(rule && rule.country && rule.country !== uiState.destination),
+          result
+        });
+      });
+      return points;
+    }
+
+    function ladderTicks(low, high){
+      const span = high - low;
+      const raw = span / 4;
+      const step = [1, 2, 2.5, 5, 10].map(m => m * Math.pow(10, Math.floor(Math.log10(raw)))).find(v => v >= raw) || raw;
+      const ticks = [];
+      for(let v = Math.ceil(low / step) * step; v <= high; v += step) ticks.push(v);
+      return ticks;
+    }
+
+    function renderPriceLadder(){
+      const points = ladderState.results && ladderEntity() ? ladderPoints(ladderState.results) : [];
+      if(points.length < 3) return '';
+      // 끝의 튀는 값 몇 개 때문에 나머지가 한쪽에 몰리지 않게 양 끝 3%는 가장자리에 붙임
+      const sorted = points.map(p => p.value).sort((a, b) => a - b);
+      const pick = q => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round(q * (sorted.length - 1))))];
+      let low = pick(0.03), high = pick(0.97);
+      if(high <= low){ low = sorted[0] * 0.95; high = sorted[sorted.length - 1] * 1.05; }
+      const pad = (high - low) * 0.04;
+      low = Math.max(0, low - pad); high += pad;
+      const x = v => Math.max(0, Math.min(100, (v - low) / (high - low) * 100));
+      const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
+      const rows = LADDER_GRADES.map(grade => {
+        const mine = points.filter(p => p.grade === grade);
+        if(!mine.length) return '';
+        const active = mine.filter(p => p.active).map(p => p.value).sort((a, b) => a - b);
+        const band = active.length
+          ? `<span class="ladder-band" style="left:${x(active[0]).toFixed(2)}%;width:${Math.max(0.6, x(active[active.length - 1]) - x(active[0])).toFixed(2)}%"></span>`
+          : '';
+        const dots = mine
+          .sort((a, b) => Number(a.active) - Number(b.active))
+          .map(p => {
+            const url = p.result.affiliate_url || p.result.source_url || '';
+            const label = `${p.result.source || ''} · ${money(p.value)} · ${p.active ? ux('section.active_listings', 'Active') : ec('ladder_gone')}`;
+            const cls = `ladder-dot${p.abroad ? ' is-abroad' : ''}${p.active ? '' : ' is-gone'}`;
+            const style = `left:${x(p.value).toFixed(2)}%`;
+            return url
+              ? `<a class="${cls}" style="${style}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(label)}" aria-label="${escapeHtml(label)}"></a>`
+              : `<span class="${cls}" style="${style}" title="${escapeHtml(label)}"></span>`;
+          }).join('');
+        const range = active.length
+          ? (active.length > 1 && money(active[0]) !== money(active[active.length - 1]) ? `${money(active[0])} – ${money(active[active.length - 1])}` : money(active[0]))
+          : ec('ladder_none');
+        return `<div class="ladder-row"><span class="ladder-grade">${escapeHtml(grade === 'N' ? ec('grade_new') : grade)}</span>`
+          + `<div class="ladder-strip">${band}${dots}</div>`
+          + `<span class="ladder-range">${escapeHtml(range)}<small>${escapeHtml(ec('ladder_counts', { a: String(active.length), h: String(mine.length - active.length) }))}</small></span></div>`;
+      }).join('');
+      const axis = ladderTicks(low, high).map(v => `<span style="left:${x(v).toFixed(2)}%">${escapeHtml(money(v))}</span>`).join('');
+      return `
+        <section class="price-ladder" aria-label="${escapeHtml(ec('ladder_title'))}">
+          <h3>${escapeHtml(ec('ladder_title'))}</h3>
+          <p>${escapeHtml(ec('ladder_note', { n: String(points.length) }))}</p>
+          ${rows}
+          <div class="ladder-axis"><div></div><div>${axis}</div><div></div></div>
+          <div class="ladder-key"><span><i></i>${escapeHtml(ec('ladder_home'))}</span><span><i class="is-abroad"></i>${escapeHtml(ec('ladder_abroad'))}</span><span><i class="is-gone"></i>${escapeHtml(ec('ladder_gone'))}</span><span><i class="is-band"></i>${escapeHtml(ec('ladder_band'))}</span></div>
+        </section>`;
     }
 
     function entityMetaLine(entity){
@@ -4847,7 +5000,8 @@
 
       // 모델(사양 묶음)을 고르면 위 요약 칸이 이미 그 모델 기준이라 결과 요약 카드는 생략 (첫 매물 제목을 모델처럼 보여 주던 문제)
       els['market-entry-region'].innerHTML = '';  // '결과 요약' 카드는 위 요약과 겹치고 짐작한 계열 이름이 제목과 달라 헷갈려서 뺌
-      els['query-summary-region'].innerHTML = '';
+      els['query-summary-region'].innerHTML = renderPriceLadder();
+      loadPriceLadder();
       els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length), historyResults.length);
       els['results-load-more-region'].innerHTML = '';
       els['archive-region'].innerHTML = renderArchiveSection(historyResults);
