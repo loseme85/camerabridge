@@ -1,21 +1,41 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>이용약관 | Camera Bridge</title><link rel="canonical" href="https://camerabridge.io/ko/terms/"><style>
-:root{--bg:#fff;--text:#16181a;--soft:#5d6266;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a}
-@media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2c3133;--accent:#8cc5ad}}
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>이용약관 | Camera Bridge</title><link rel="canonical" href="https://camerabridge.io/ko/terms/"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Noto+Serif+KR:wght@400;500;600&display=swap"><style>
+:root{--bg:#fbfaf7;--text:#16181a;--soft:#55595c;--muted:#878b8d;--border:#d9d7d0;--accent:#1f4a3a;
+--serif:"Newsreader","Noto Serif KR",Georgia,serif;--sans:"Inter","Pretendard Variable",system-ui,-apple-system,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2f3436;--accent:#8cc5ad}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 Inter,"Pretendard Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:760px;margin:0 auto;padding:24px 16px 48px}
-nav{font-size:13px;color:var(--muted);margin-bottom:20px}
-nav a{color:var(--soft)}
-h1{font-size:24px;line-height:1.3;margin:0 0 4px}
-h2{font-size:17px;margin:28px 0 8px}
-.note{font-size:13px;color:var(--muted)}
-a{color:var(--accent)}
-table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
-th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--border);padding:8px 8px 8px 0}
-th{font-weight:500;color:var(--soft);width:34%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.85 var(--serif);font-optical-sizing:auto;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+main{max-width:720px;margin:0 auto;padding:0 20px 72px;counter-reset:sec}
+.mast{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px;border-bottom:2px solid var(--text);padding:28px 0 10px}
+.mast .home{font-family:var(--serif);font-size:20px;color:var(--text);text-decoration:none;letter-spacing:-0.01em}
+.mast .home i{color:var(--muted);font-size:15px}
+.mast nav{font:13px/1.4 var(--sans);display:flex;flex-wrap:wrap;gap:4px 16px}
+.mast nav a{color:var(--soft);text-decoration:none}
+.mast nav a:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.mast nav a[aria-current]{color:var(--text);border-bottom:1px solid var(--text)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,6vw,48px);line-height:1.1;letter-spacing:-0.02em;margin:44px 0 32px}
+h2{font-family:var(--serif);font-weight:500;font-size:21px;line-height:1.35;margin:48px 0 10px;display:grid;grid-template-columns:44px 1fr;align-items:baseline}
+h2::before{counter-increment:sec;content:counter(sec,decimal-leading-zero);font:400 13px/1 var(--sans);color:var(--muted);font-variant-numeric:tabular-nums}
+h2~p,h2~ul,h2~.table{margin-left:44px}
+p{margin:0 0 14px}
+ul{margin:0 0 14px;padding-left:1.1em}
+li{margin:0 0 6px}
+li::marker{color:var(--muted)}
+.note{font:13px/1.6 var(--sans);color:var(--muted)}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+table{width:100%;border-collapse:collapse;margin:0 0 8px;border-top:1px solid var(--text)}
+th,td{text-align:left;vertical-align:baseline;border-bottom:1px solid var(--border);padding:11px 12px 11px 0}
+th{font:500 13px/1.5 var(--sans);color:var(--soft);width:30%}
+td{font-size:16px}
 .table{overflow-x:auto}
+@media (max-width:560px){body{font-size:16px}h2{grid-template-columns:1fr}h2::before{margin-bottom:6px}h2~p,h2~ul,h2~.table{margin-left:0}th{width:38%}}
 
-footer.legal{max-width:960px;margin:0 auto;padding:20px 16px 40px;border-top:1px solid var(--border);font-size:12px;line-height:1.6;color:var(--muted)}
-footer.legal p{margin:0 0 6px}
-footer.legal a{color:var(--soft)}
-</style></head><body><main><nav><a href="/">카메라브릿지</a></nav><h1>이용약관</h1><h2>1. 서비스</h2><p>카메라브릿지는 여러 매장이 공개한 라이카 중고 매물·가격을 모아 검색하게 해 주는 무료 정보 서비스입니다. 회원 가입 없이 쓸 수 있습니다.</p><h2>2. 정보의 정확성</h2><p>가격·재고·상태·예상 총액(배송비·관세 등)은 매장 정보와 추정치를 바탕으로 하며, 늦게 반영되거나 틀릴 수 있습니다. 환산 가격은 참고용 환율을 씁니다. 구매 전에 반드시 매장 원래 페이지에서 확인해 주세요.</p><h2>3. 거래</h2><p>카메라브릿지는 물건을 팔거나 거래를 중개하지 않습니다. 구매·결제·배송·반품·보증은 이용자와 매장 사이의 일이며, 운영자는 그 거래에 책임지지 않습니다.</p><h2>4. 외부 링크와 제휴</h2><p>매물 링크는 매장 사이트로 연결됩니다. 일부는 제휴 링크일 수 있으며 구매 가격은 달라지지 않습니다.</p><h2>5. 매장 계정</h2><p>매장 계정은 운영자가 만들어 드립니다. 아이디·비밀번호는 매장이 관리하며 다른 사람과 나누어 쓰지 않습니다. 매장 화면의 데이터는 매장 내부 참고용으로만 씁니다.</p><h2>6. 금지 행위</h2><p>서비스를 방해하는 행위(과도한 자동 요청, 보안 우회, 다른 사람 계정 사용)와 법을 어기는 행위를 금지합니다.</p><h2>7. 권리</h2><p>매물 제목·사진은 각 매장의 것입니다. Leica는 Leica Camera AG의 상표이며 카메라브릿지는 Leica Camera AG와 관계없습니다.</p><h2>8. 책임 제한</h2><p>운영자는 고의나 중대한 과실이 없는 한, 정보 오류나 서비스 중단으로 생긴 손해에 책임지지 않습니다. 서비스는 예고 없이 바뀌거나 멈출 수 있습니다.</p><h2>9. 약관 변경</h2><p>약관을 바꾸면 이 페이지에 시행일과 함께 알립니다.</p><h2>10. 준거법</h2><p>이 약관은 대한민국 법을 따르며, 분쟁은 민사소송법에 따른 관할 법원에서 다룹니다.</p><p class="note">시행일: 2026-10-29 · 문의 <a href="mailto:thehingemeta@gmail.com">thehingemeta@gmail.com</a></p></main><footer class="legal"><p>카메라브릿지 by thehingemeta · <a href="mailto:thehingemeta@gmail.com">thehingemeta@gmail.com</a></p><p>Leica는 Leica Camera AG의 상표입니다. 카메라브릿지는 Leica Camera AG와 관계없는 독립 서비스입니다. 가격·재고는 각 매장 정보이며, 일부 링크는 제휴 링크일 수 있습니다.</p><p><a href="/ko/leica/">모델별 시세</a> · <a href="/ko/about/">운영자 정보</a> · <a href="/ko/privacy/">개인정보처리방침</a> · <a href="/ko/terms/">이용약관</a> · <a href="/impressum/">Impressum</a></p></footer></body></html>
+footer.legal{max-width:720px;margin:0 auto;padding:0 20px 56px;color:var(--muted);font:12px/1.65 "Inter","Pretendard Variable",system-ui,-apple-system,sans-serif}
+footer.legal .rule{border-top:2px solid var(--text);border-bottom:1px solid var(--text);height:5px;margin-bottom:18px}
+footer.legal .mark{font:20px/1.3 "Newsreader","Noto Serif KR",Georgia,serif;color:var(--text);margin:0 0 2px;letter-spacing:-0.01em}
+footer.legal .mark i{color:var(--muted);font-size:15px}
+footer.legal p{margin:0 0 12px}
+footer.legal nav{display:flex;flex-wrap:wrap;gap:2px 18px;margin:0 0 14px;font-size:13px}
+footer.legal a{color:var(--soft);text-decoration:none}
+footer.legal a:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+footer.legal .tm{max-width:38em}
+</style></head><body><main><header class="mast"><a class="home" href="/">카메라브릿지</a><nav><a href="/ko/about/">운영자 정보</a><a href="/ko/privacy/">개인정보처리방침</a><a href="/ko/terms/" aria-current="page">이용약관</a><a href="/impressum/">Impressum</a></nav></header><h1>이용약관</h1><h2>서비스</h2><p>카메라브릿지는 여러 매장이 공개한 라이카 중고 매물·가격을 모아 검색하게 해 주는 무료 정보 서비스입니다. 회원 가입 없이 쓸 수 있습니다.</p><h2>정보의 정확성</h2><p>가격·재고·상태·예상 총액(배송비·관세 등)은 매장 정보와 추정치를 바탕으로 하며, 늦게 반영되거나 틀릴 수 있습니다. 환산 가격은 참고용 환율을 씁니다. 구매 전에 반드시 매장 원래 페이지에서 확인해 주세요.</p><h2>거래</h2><p>카메라브릿지는 물건을 팔거나 거래를 중개하지 않습니다. 구매·결제·배송·반품·보증은 이용자와 매장 사이의 일이며, 운영자는 그 거래에 책임지지 않습니다.</p><h2>외부 링크와 제휴</h2><p>매물 링크는 매장 사이트로 연결됩니다. 일부는 제휴 링크일 수 있으며 구매 가격은 달라지지 않습니다.</p><h2>매장 계정</h2><p>매장 계정은 운영자가 만들어 드립니다. 아이디·비밀번호는 매장이 관리하며 다른 사람과 나누어 쓰지 않습니다. 매장 화면의 데이터는 매장 내부 참고용으로만 씁니다.</p><h2>금지 행위</h2><p>서비스를 방해하는 행위(과도한 자동 요청, 보안 우회, 다른 사람 계정 사용)와 법을 어기는 행위를 금지합니다.</p><h2>권리</h2><p>매물 제목·사진은 각 매장의 것입니다. Leica는 Leica Camera AG의 상표이며 카메라브릿지는 Leica Camera AG와 관계없습니다.</p><h2>책임 제한</h2><p>운영자는 고의나 중대한 과실이 없는 한, 정보 오류나 서비스 중단으로 생긴 손해에 책임지지 않습니다. 서비스는 예고 없이 바뀌거나 멈출 수 있습니다.</p><h2>약관 변경</h2><p>약관을 바꾸면 이 페이지에 시행일과 함께 알립니다.</p><h2>준거법</h2><p>이 약관은 대한민국 법을 따르며, 분쟁은 민사소송법에 따른 관할 법원에서 다룹니다.</p><p class="note">시행일: 2026-10-29 · 문의 <a href="mailto:thehingemeta@gmail.com">thehingemeta@gmail.com</a></p></main><footer class="legal"><div class="rule"></div><p class="mark">카메라브릿지 <i>by thehingemeta</i></p><p><a href="mailto:thehingemeta@gmail.com">thehingemeta@gmail.com</a></p><nav><a href="/ko/leica/">모델별 시세</a><a href="/ko/about/">운영자 정보</a><a href="/ko/privacy/">개인정보처리방침</a><a href="/ko/terms/">이용약관</a><a href="/impressum/">Impressum</a></nav><p class="tm">Leica는 Leica Camera AG의 상표입니다. 카메라브릿지는 Leica Camera AG와 관계없는 독립 서비스입니다. 가격·재고는 각 매장 정보이며, 일부 링크는 제휴 링크일 수 있습니다.</p></footer></body></html>

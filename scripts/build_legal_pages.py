@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,27 +31,51 @@ OPERATOR = {
     "email": "thehingemeta@gmail.com",
 }
 
+FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Noto+Serif+KR:wght@400;500;600&display=swap">')
+
+# 첫 화면과 같은 인쇄 카탈로그 틀: 세리프 본문, 굵은 줄 + 가는 줄, 각진 모서리, 장식 없음
 CSS = """
-:root{--bg:#fff;--text:#16181a;--soft:#5d6266;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a}
-@media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2c3133;--accent:#8cc5ad}}
+:root{--bg:#fbfaf7;--text:#16181a;--soft:#55595c;--muted:#878b8d;--border:#d9d7d0;--accent:#1f4a3a;
+--serif:"Newsreader","Noto Serif KR",Georgia,serif;--sans:"Inter","Pretendard Variable",system-ui,-apple-system,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2f3436;--accent:#8cc5ad}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.7 Inter,"Pretendard Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:760px;margin:0 auto;padding:24px 16px 48px}
-nav{font-size:13px;color:var(--muted);margin-bottom:20px}
-nav a{color:var(--soft)}
-h1{font-size:24px;line-height:1.3;margin:0 0 4px}
-h2{font-size:17px;margin:28px 0 8px}
-.note{font-size:13px;color:var(--muted)}
-a{color:var(--accent)}
-table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
-th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--border);padding:8px 8px 8px 0}
-th{font-weight:500;color:var(--soft);width:34%}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.85 var(--serif);font-optical-sizing:auto;word-break:keep-all;overflow-wrap:anywhere;-webkit-font-smoothing:antialiased}
+main{max-width:720px;margin:0 auto;padding:0 20px 72px;counter-reset:sec}
+.mast{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 24px;border-bottom:2px solid var(--text);padding:28px 0 10px}
+.mast .home{font-family:var(--serif);font-size:20px;color:var(--text);text-decoration:none;letter-spacing:-0.01em}
+.mast .home i{color:var(--muted);font-size:15px}
+.mast nav{font:13px/1.4 var(--sans);display:flex;flex-wrap:wrap;gap:4px 16px}
+.mast nav a{color:var(--soft);text-decoration:none}
+.mast nav a:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.mast nav a[aria-current]{color:var(--text);border-bottom:1px solid var(--text)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,6vw,48px);line-height:1.1;letter-spacing:-0.02em;margin:44px 0 32px}
+h2{font-family:var(--serif);font-weight:500;font-size:21px;line-height:1.35;margin:48px 0 10px;display:grid;grid-template-columns:44px 1fr;align-items:baseline}
+h2::before{counter-increment:sec;content:counter(sec,decimal-leading-zero);font:400 13px/1 var(--sans);color:var(--muted);font-variant-numeric:tabular-nums}
+h2~p,h2~ul,h2~.table{margin-left:44px}
+p{margin:0 0 14px}
+ul{margin:0 0 14px;padding-left:1.1em}
+li{margin:0 0 6px}
+li::marker{color:var(--muted)}
+.note{font:13px/1.6 var(--sans);color:var(--muted)}
+a{color:var(--accent);text-underline-offset:3px;text-decoration-thickness:1px}
+table{width:100%;border-collapse:collapse;margin:0 0 8px;border-top:1px solid var(--text)}
+th,td{text-align:left;vertical-align:baseline;border-bottom:1px solid var(--border);padding:11px 12px 11px 0}
+th{font:500 13px/1.5 var(--sans);color:var(--soft);width:30%}
+td{font-size:16px}
 .table{overflow-x:auto}
+@media (max-width:560px){body{font-size:16px}h2{grid-template-columns:1fr}h2::before{margin-bottom:6px}h2~p,h2~ul,h2~.table{margin-left:0}th{width:38%}}
 """
 FOOTER_CSS = """
-footer.legal{max-width:960px;margin:0 auto;padding:20px 16px 40px;border-top:1px solid var(--border);font-size:12px;line-height:1.6;color:var(--muted)}
-footer.legal p{margin:0 0 6px}
-footer.legal a{color:var(--soft)}
+footer.legal{max-width:720px;margin:0 auto;padding:0 20px 56px;color:var(--muted);font:12px/1.65 "Inter","Pretendard Variable",system-ui,-apple-system,sans-serif}
+footer.legal .rule{border-top:2px solid var(--text);border-bottom:1px solid var(--text);height:5px;margin-bottom:18px}
+footer.legal .mark{font:20px/1.3 "Newsreader","Noto Serif KR",Georgia,serif;color:var(--text);margin:0 0 2px;letter-spacing:-0.01em}
+footer.legal .mark i{color:var(--muted);font-size:15px}
+footer.legal p{margin:0 0 12px}
+footer.legal nav{display:flex;flex-wrap:wrap;gap:2px 18px;margin:0 0 14px;font-size:13px}
+footer.legal a{color:var(--soft);text-decoration:none}
+footer.legal a:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+footer.legal .tm{max-width:38em}
 """
 
 FOOT = {
@@ -64,12 +89,12 @@ FOOT = {
 
 
 def footer(lang: str) -> str:
-    """모든 정적 페이지 아래쪽: 브랜드·이메일 한 줄 + 상표·제휴 안내 + 법적 고지 링크 (운영자 실명·사업자번호는 운영자 정보 페이지에만)"""
+    """모든 정적 페이지 아래쪽(판권면): 겹줄 + 브랜드·이메일 + 법적 고지 링크 + 상표·제휴 안내 (운영자 실명·사업자번호는 운영자 정보 페이지에만)"""
     f, o = FOOT[lang], OPERATOR
-    line = f'{f["home"]} by {o["brand"]} · <a href="mailto:{o["email"]}">{o["email"]}</a>'
-    links = f'<a href="/{lang}/leica/">{f["models"]}</a> · ' + " · ".join(f'<a href="/{lang}/{page}/">{f[page]}</a>' for page in ("about", "privacy", "terms"))
-    return (f'<footer class="legal"><p>{line}</p><p>{f["tm"]}</p>'
-            f'<p>{links} · <a href="/impressum/">Impressum</a></p></footer>')
+    links = [f'<a href="/{lang}/leica/">{f["models"]}</a>'] + [f'<a href="/{lang}/{page}/">{f[page]}</a>' for page in ("about", "privacy", "terms")]
+    return (f'<footer class="legal"><div class="rule"></div><p class="mark">{f["home"]} <i>by {o["brand"]}</i></p>'
+            f'<p><a href="mailto:{o["email"]}">{o["email"]}</a></p>'
+            f'<nav>{"".join(links)}<a href="/impressum/">Impressum</a></nav><p class="tm">{f["tm"]}</p></footer>')
 
 
 def _rows(pairs) -> str:
@@ -299,11 +324,18 @@ def impressum_body() -> str:
 
 def page(lang: str, path: str, title: str, body: str, home: str) -> str:
     url = f"{SITE}{path}"
+    f = FOOT[lang if lang in LANGS else "en"]
+    base = lang if lang in LANGS else "en"
+    tabs = [(f"/{base}/{name}/", f[name]) for name in ("about", "privacy", "terms")] + [("/impressum/", "Impressum")]
+    body = re.sub(r"<h2>\d+\. ", "<h2>", body)  # 번호는 CSS가 붙임 (01, 02 …)
+    current = ' aria-current="page"'
+    nav = "".join(f'<a href="{href}"{current if href == path else ""}>{label}</a>' for href, label in tabs)
     return (f'<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
-            f"<title>{html.escape(title)} | Camera Bridge</title><link rel=\"canonical\" href=\"{url}\">"
-            f"<style>{CSS}{FOOTER_CSS}</style></head><body><main><nav><a href=\"/\">{home}</a></nav><h1>{html.escape(title)}</h1>{body}</main>"
-            f"{footer(lang if lang in LANGS else 'en')}</body></html>\n")
+            f"<title>{html.escape(title)} | Camera Bridge</title><link rel=\"canonical\" href=\"{url}\">{FONTS}"
+            f"<style>{CSS}{FOOTER_CSS}</style></head><body><main><header class=\"mast\"><a class=\"home\" href=\"/\">{home}</a>"
+            f"<nav>{nav}</nav></header><h1>{html.escape(title)}</h1>{body}</main>"
+            f"{footer(base)}</body></html>\n")
 
 
 def build(out: Path) -> list[Path]:
