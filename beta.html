@@ -3630,19 +3630,24 @@
       if(ladderState.key === key) return;
       ladderState.key = key;
       ladderState.results = null;
-      const all = [];
-      for(let offset = 0; offset < 300; offset += 100){
-        params.set('offset', String(offset));
+      // 첫 100건을 받고, 더 있으면 다음 200건은 한꺼번에(나란히) 받음
+      const page = async offset => {
+        const query = new URLSearchParams(params);
+        query.set('offset', String(offset));
         try{
-          const response = await fetch('/api/search?' + params.toString(), { headers: { 'Accept': 'application/json' } });
-          if(!response.ok) break;
-          const payload = await response.json();
-          if(ladderState.key !== key) return;
-          all.push(...(payload.results || []));
-          if(!(payload.pagination || {}).has_more) break;
+          const response = await fetch('/api/search?' + query.toString(), { headers: { 'Accept': 'application/json' } });
+          return response.ok ? await response.json() : null;
         }catch(error){
-          break;
+          return null;
         }
+      };
+      const first = await page(0);
+      if(ladderState.key !== key) return;
+      const all = [...((first && first.results) || [])];
+      if(first && (first.pagination || {}).has_more){
+        const rest = await Promise.all([page(100), page(200)]);
+        if(ladderState.key !== key) return;
+        rest.forEach(payload => all.push(...((payload && payload.results) || [])));
       }
       if(ladderState.key !== key) return;
       ladderState.results = all;

@@ -4000,7 +4000,8 @@ class handler(BaseHTTPRequestHandler):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Cache-Control", "no-store")
+        # 성공한 검색은 Vercel CDN에 저장: 같은 검색은 서버를 거치지 않음. 새 배포(크롤링 뒤)마다 CDN 저장분이 비워짐
+        self.send_header("Cache-Control", "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400" if status == 200 else "no-store")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
