@@ -748,3 +748,13 @@ def test_price_ladder_loads_with_results_not_after() -> None:
     assert "if(!append) loadPriceLadder();" in beta  # 목록과 동시에 시작
     assert "Promise.all([page(0), page(100), page(200)])" in beta  # 3쪽 나란히
     assert "ladderState.key === ladderKey()" in beta  # 이전 모델 그래프가 남지 않게
+
+
+def test_zoomed_price_ladder_pans_sideways() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert "data-ladder-pan" in beta and "const panTo = " in beta  # ◀ ▶ 버튼 · 끌기 · 트랙패드
+    assert "ladderState.bounds" in beta  # 전체 범위 밖으로는 안 나감
+    for key in ("ladder_pan_hint", "ladder_left", "ladder_right"):
+        line = next(l for l in beta.splitlines() if l.strip().startswith(key + ":"))
+        for locale in ("ko:", "en:", "ja:", "de:", "it:"):
+            assert locale in line
