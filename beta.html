@@ -3378,7 +3378,7 @@
       ladder_home: { ko: '국내 판매 중', en: 'For sale in your country', ja: '国内で販売中', 'zh-Hans': '本国在售', 'zh-Hant': '本國在售', pt: 'À venda no seu país', es: 'En venta en tu país', de: 'Im Inland zu kaufen', it: 'In vendita nel tuo paese' },
       ladder_abroad: { ko: '해외 판매 중 (도착 총액)', en: 'For sale abroad (est. delivered)', ja: '海外で販売中（到着総額）', 'zh-Hans': '海外在售（到手总价）', 'zh-Hant': '海外在售（到手總價）', pt: 'À venda no exterior (total estimado)', es: 'En venta en el extranjero (total estimado)', de: 'Im Ausland (geschätzt geliefert)', it: "In vendita all'estero (totale stimato)" },
       ladder_gone: { ko: '팔림·내려감', en: 'Sold or removed', ja: '販売済み・削除', 'zh-Hans': '已售/已下架', 'zh-Hant': '已售/已下架', pt: 'Vendido ou removido', es: 'Vendido o retirado', de: 'Verkauft oder entfernt', it: 'Venduto o rimosso' },
-      ladder_zoom_hint: { ko: '보고 싶은 가격 구간을 옆으로 끌어 넓게 보기', en: 'Drag across a price range to zoom in', ja: '見たい価格帯を横にドラッグして拡大', 'zh-Hans': '横向拖动选择价格区间放大', 'zh-Hant': '橫向拖曳選擇價格區間放大', pt: 'Arraste sobre uma faixa de preço para ampliar', es: 'Arrastra sobre un rango de precios para ampliar', de: 'Über einen Preisbereich ziehen zum Vergrößern', it: 'Trascina su una fascia di prezzo per ingrandire' },
+      ladder_zoom_hint: { ko: '보고 싶은 가격 구간을 옆으로 끌거나 두 손가락으로 벌려 넓게 보기', en: 'Drag across a price range or pinch to zoom in', ja: '見たい価格帯を横にドラッグ、または2本指で広げて拡大', 'zh-Hans': '横向拖动或双指张开放大价格区间', 'zh-Hant': '橫向拖曳或雙指張開放大價格區間', pt: 'Arraste sobre uma faixa de preço ou faça pinça para ampliar', es: 'Arrastra sobre un rango de precios o pellizca para ampliar', de: 'Über einen Preisbereich ziehen oder mit zwei Fingern spreizen zum Vergrößern', it: 'Trascina su una fascia di prezzo o allarga con due dita per ingrandire' },
       ladder_zoom_reset: { ko: '전체 보기', en: 'Show all', ja: '全体を表示', 'zh-Hans': '查看全部', 'zh-Hant': '查看全部', pt: 'Ver tudo', es: 'Ver todo', de: 'Alles zeigen', it: 'Mostra tutto' },
       ladder_zoomed: { ko: '{a} – {b} 구간 · 이 구간 밖 {n}건 숨김', en: '{a} – {b} · {n} outside hidden', ja: '{a}〜{b} の範囲 · 範囲外 {n}件は非表示', 'zh-Hans': '{a} – {b} 区间 · 区间外 {n} 件已隐藏', 'zh-Hant': '{a} – {b} 區間 · 區間外 {n} 件已隱藏', pt: '{a} – {b} · {n} fora ocultos', es: '{a} – {b} · {n} fuera ocultos', de: '{a} – {b} · {n} außerhalb ausgeblendet', it: '{a} – {b} · {n} fuori nascosti' },
       ladder_pan_hint: { ko: '옆으로 끌어 옆 가격대 보기', en: 'Drag sideways to see nearby prices', ja: '横にドラッグして隣の価格帯を見る', 'zh-Hans': '左右拖动查看相邻价格', 'zh-Hant': '左右拖曳查看相鄰價格', pt: 'Arraste para os lados para ver preços vizinhos', es: 'Arrastra a los lados para ver precios cercanos', de: 'Seitlich ziehen für benachbarte Preise', it: 'Trascina di lato per vedere i prezzi vicini' },
@@ -3717,6 +3717,7 @@
       // 확대해서 옆으로 옮길 수 있는 끝: 잘라 낸 양 끝 3%까지 포함한 전체
       const span0 = sorted[sorted.length - 1] - sorted[0] || sorted[0] * 0.1 || 1;
       ladderState.bounds = { low: Math.max(0, Math.min(low, sorted[0] - span0 * 0.02)), high: Math.max(high, sorted[sorted.length - 1] + span0 * 0.02) };
+      ladderState.base = { low, high };  // 확대 전 화면 (이보다 넓게 오므리면 전체 보기로)
       // 끌어서 고른 구간이 있으면 그 구간만 넓게 (밖의 점은 숨김)
       const zoom = ladderState.zoom;
       if(zoom){ low = zoom.low; high = zoom.high; }
@@ -3878,15 +3879,71 @@
         hideLadderTip();
         redraw();
       };
+      // 벌리고 오므려 확대·축소: center 값이 화면의 ratio 자리에 그대로 있게 폭만 바꿈
+      const zoomAround = (center, ratio, width) => {
+        const base = ladderState.base || ladderState.view;
+        const baseWidth = base.high - base.low;
+        if(width >= baseWidth * 0.98){
+          if(ladderState.zoom){ ladderState.zoom = null; hideLadderTip(); redraw(); }
+          return;
+        }
+        width = Math.max(width, baseWidth * 0.03);
+        const low = center - ratio * width;
+        panTo(low, low + width);
+      };
+      // 손가락 두 개 (휴대폰): 벌리면 확대, 오므리면 축소
+      const touches = new Map();
+      let pinch = null;
+      const pinchState = () => {
+        const [a, b] = [...touches.values()];
+        return { dist: Math.hypot(a.x - b.x, a.y - b.y), mid: (a.x + b.x) / 2 };
+      };
+      document.addEventListener('pointerdown', event => {
+        if(event.pointerType !== 'touch' || !(event.target.closest && event.target.closest('.price-ladder .ladder-strip'))) return;
+        touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        if(touches.size !== 2) return;
+        if(drag && drag.box) drag.box.remove();
+        drag = null;  // 두 번째 손가락이 오면 끌기 대신 확대·축소
+        const strip = document.querySelector('.price-ladder .ladder-strip');
+        const rect = strip.getBoundingClientRect();
+        const view = ladderState.view;
+        const { dist, mid } = pinchState();
+        const ratio = Math.max(0, Math.min(1, (mid - rect.left) / rect.width));
+        pinch = { dist: Math.max(dist, 1), width: view.high - view.low, center: view.low + ratio * (view.high - view.low), left: rect.left, size: rect.width };
+      }, true);
+      document.addEventListener('pointermove', event => {
+        if(!touches.has(event.pointerId)) return;
+        touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        if(!pinch || touches.size !== 2) return;
+        const { dist, mid } = pinchState();
+        const ratio = Math.max(0, Math.min(1, (mid - pinch.left) / pinch.size));
+        zoomAround(pinch.center, ratio, pinch.width * pinch.dist / Math.max(dist, 1));
+      }, true);
+      const lift = event => {
+        touches.delete(event.pointerId);
+        if(touches.size < 2) pinch = null;
+      };
+      document.addEventListener('pointerup', lift, true);
+      document.addEventListener('pointercancel', lift, true);
+      // 트랙패드 두 손가락 벌리기·오므리기 (브라우저는 ctrl+휠로 보냄): 커서 자리를 기준으로
+      document.addEventListener('wheel', event => {
+        const strip = event.ctrlKey && event.target.closest && event.target.closest('.price-ladder .ladder-strip');
+        if(!strip) return;
+        event.preventDefault();
+        const rect = strip.getBoundingClientRect();
+        const view = ladderState.view;
+        const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+        zoomAround(view.low + ratio * (view.high - view.low), ratio, (view.high - view.low) * Math.exp(event.deltaY * 0.01));
+      }, { passive: false });
       document.addEventListener('pointerdown', event => {
         const strip = event.target.closest && event.target.closest('.ladder-strip');
-        if(!strip || event.target.closest('.ladder-dot') || event.button > 0) return;
+        if(!strip || event.target.closest('.ladder-dot') || event.button > 0 || pinch) return;
         const zoom = ladderState.zoom;
         drag = { strip, startX: event.clientX, startY: event.clientY, box: null,
           pan: zoom ? { low: zoom.low, high: zoom.high, width: strip.getBoundingClientRect().width, moving: false } : null };
       });
       document.addEventListener('pointermove', event => {
-        if(!drag) return;
+        if(!drag || pinch) return;
         const dx = event.clientX - drag.startX;
         if(drag.pan){
           if(!drag.pan.moving && (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(event.clientY - drag.startY))) return;

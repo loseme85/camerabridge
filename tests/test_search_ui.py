@@ -758,3 +758,10 @@ def test_zoomed_price_ladder_pans_sideways() -> None:
         line = next(l for l in beta.splitlines() if l.strip().startswith(key + ":"))
         for locale in ("ko:", "en:", "ja:", "de:", "it:"):
             assert locale in line
+
+
+def test_price_ladder_pinch_zoom() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert "const zoomAround = " in beta and "pinchState()" in beta  # 손가락 두 개로 벌리기·오므리기
+    assert "event.ctrlKey && event.target.closest" in beta  # 트랙패드 벌리기·오므리기
+    assert "ladderState.base" in beta  # 처음보다 오므리면 전체 보기로
