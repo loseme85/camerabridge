@@ -478,15 +478,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-28 14:54:47",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-31 13:40:02",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -21027,6 +21027,320 @@
   },
   {
     "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-m-502-apo-black-chrome/22454/category/442/display/1/",
+    "title_raw": "[위탁] M 50/2 APO black chrome",
+    "price_raw": "15,500,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202610/fcfa8885ec474fbf4c0869f12b69b86c.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "m 50/2 apo black chrome",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "M_lens_shorthand:M NN/F"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black Chrome",
+      "Chrome",
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-d-lux5/22453/category/442/display/1/",
+    "title_raw": "[위탁] D-LUX5",
+    "price_raw": "400,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202610/498d7ccf33813aac9e69344768593375.jpg",
+    "condition_raw": "80%",
+    "normalized_name": "d-lux5",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Body",
+    "label_confidence": 0.8,
+    "label_reason": [
+      "Compact+Body_no_mount_label"
+    ],
+    "model_raw": "D-LUX",
+    "model_canonical": "D-LUX",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-magnifier-10x/22452/category/442/display/1/",
+    "title_raw": "[위탁] Magnifier 10x",
+    "price_raw": "750,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202610/56cba4e244efbb493d007ac59e197fe1.jpg",
+    "condition_raw": "정보없음",
+    "normalized_name": "magnifier 10x",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "Lens",
+    "label_confidence": 0.6,
+    "label_reason": [
+      "Lens_only"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-m-502-apo-black-chrome/22454/category/436/display/1/",
+    "title_raw": "[위탁] M 50/2 APO black chrome",
+    "price_raw": "15,500,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202610/fcfa8885ec474fbf4c0869f12b69b86c.jpg",
+    "condition_raw": "95%",
+    "normalized_name": "m 50/2 apo black chrome",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.9,
+    "mount_reason": [
+      "M_lens_shorthand:M NN/F"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "Black Chrome",
+      "Chrome",
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-d-lux5/22453/category/436/display/1/",
+    "title_raw": "[위탁] D-LUX5",
+    "price_raw": "400,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202610/498d7ccf33813aac9e69344768593375.jpg",
+    "condition_raw": "80%",
+    "normalized_name": "d-lux5",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:D-LUX"
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Body",
+    "label_confidence": 0.8,
+    "label_reason": [
+      "Compact+Body_no_mount_label"
+    ],
+    "model_raw": "D-LUX",
+    "model_canonical": "D-LUX",
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
+    "source_url": "https://leica-storebando.co.kr/product/위탁-magnifier-10x/22452/category/436/display/1/",
+    "title_raw": "[위탁] Magnifier 10x",
+    "price_raw": "750,000원",
+    "currency": "KRW",
+    "image_url": "https://leica-storebando.co.kr/web/product/medium/202610/56cba4e244efbb493d007ac59e197fe1.jpg",
+    "condition_raw": "정보없음",
+    "normalized_name": "magnifier 10x",
+    "normalized_description": "",
+    "brand": "Unknown",
+    "brand_confidence": 0.4,
+    "brand_reason": [
+      "no_brand_match"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.6,
+    "category_reason": [
+      "default_lens"
+    ],
+    "label": "Lens",
+    "label_confidence": 0.6,
+    "label_reason": [
+      "Lens_only"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "라이카스토어 충무로",
     "source_url": "https://leica-storebando.co.kr/product/위탁-m-adapter-t-black/22450/category/442/display/1/",
     "title_raw": "[위탁] M Adapter T (Black)",
     "price_raw": "400,000원",
@@ -21441,15 +21755,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-31 13:40:02",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -47981,15 +48295,15 @@
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
+    "sold_quality": "sold_confirmed",
+    "sold_confidence": 0.97,
     "sold_reason": [
-      "default_asking"
+      "sold_confirmed:품절"
     ],
     "crawl_time": "",
     "first_seen": "2026-04-09 04:32:15",
-    "sold_at": null,
-    "sold_fx_krw": null,
+    "sold_at": "2026-10-31 13:40:02",
+    "sold_fx_krw": 1.0,
     "sold_at_unknown": false
   },
   {
@@ -444655,6 +444969,112 @@
   },
   {
     "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2444050040872",
+    "title_raw": "Leica APO-Summicron-M 50mm f2.0 ASPH.",
+    "price_raw": "¥840,800",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2444050040872-1-1.jpg",
+    "condition_raw": "A",
+    "normalized_name": "leica apo-summicron-m 50mm f2.0 asph.",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "M",
+    "mount_confidence": 0.92,
+    "mount_reason": [
+      "M_lens_kw:SUMMICRON"
+    ],
+    "category": "Lens",
+    "category_confidence": 0.85,
+    "category_reason": [
+      "lens_protected"
+    ],
+    "label": "M Lens",
+    "label_confidence": 0.95,
+    "label_reason": [
+      "M+Lens"
+    ],
+    "model_raw": "APO-Summicron",
+    "model_canonical": "APO-Summicron",
+    "variant": [
+      "ASPH"
+    ],
+    "focal_length": "50",
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2443060238972",
+    "title_raw": "Leica X Vario Black",
+    "price_raw": "¥125,000",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2443060238972-1-1.jpg",
+    "condition_raw": "C",
+    "normalized_name": "leica x vario black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:LEICA X "
+    ],
+    "category": "Body",
+    "category_confidence": 0.9,
+    "category_reason": [
+      "mount_compact_pns_q:Compact"
+    ],
+    "label": "Leica Body",
+    "label_confidence": 0.88,
+    "label_reason": [
+      "Leica+Compact+Body"
+    ],
+    "model_raw": "X Vario",
+    "model_canonical": "X Vario",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-10-31 13:40:02",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
     "source_url": "https://shop.kitamura.jp/ec/used/2445740044958",
     "title_raw": "Leica Summilux-M 50mm F1.4 E46 Black",
     "price_raw": "¥379,800",
@@ -562202,57 +562622,6 @@
   },
   {
     "source": "Aperture (영국)",
-    "source_url": "https://www.apertureuk.com/leica-q3-a6102601.html",
-    "title_raw": "Leica Q3",
-    "price_raw": "£3,590",
-    "currency": "GBP",
-    "image_url": "https://cdn.webshopapp.com/shops/299238/files/504893774/file.jpg",
-    "condition_raw": "Aperture: Mint-",
-    "normalized_name": "leica q3",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.93,
-    "mount_reason": [
-      "Q_kw:Q/Q2/Q3"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Q"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Q+Body"
-    ],
-    "model_raw": "Q3",
-    "model_canonical": "Q3",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-30 00:11:39",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Aperture (영국)",
     "source_url": "https://www.apertureuk.com/leica-100mm-f28-apo-macro-elmarit-r-3-cam-alc17400.html",
     "title_raw": "Leica 100mm f2.8 Apo-Macro-Elmarit-R 3 Cam",
     "price_raw": "£790",
@@ -573094,60 +573463,6 @@
   },
   {
     "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-28mm-f2-summicron-m-asph-iii-4962067",
-    "title_raw": "Leica 28mm f2 Summicron-M Asph III Black",
-    "price_raw": "$4,595",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM24373-002-00.jpg?v=1793379242",
-    "condition_raw": "CameraWest: 9+",
-    "normalized_name": "leica 28mm f2 summicron-m asph iii black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Summicron-M",
-    "model_canonical": "Summicron-M",
-    "variant": [
-      "ASPH",
-      "Black"
-    ],
-    "focal_length": "28",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-31 04:28:34",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
     "source_url": "https://www.camerawest.com/products/leica-50mm-f1-4-summilux-m-asph-ii-black-4981122",
     "title_raw": "Leica 50mm f1.4 Summilux-M Asph II Black",
     "price_raw": "$4,195",
@@ -573183,59 +573498,6 @@
       "Black"
     ],
     "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-31 04:28:34",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-m10-monochrom-5507837",
-    "title_raw": "Leica M10 Monochrom",
-    "price_raw": "$5,595",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/CM24369-001-00.jpg?v=1793379209",
-    "condition_raw": "CameraWest: 8+",
-    "normalized_name": "leica m10 monochrom",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.95,
-    "mount_reason": [
-      "M_body_number:M3-M11"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:leica m10"
-    ],
-    "label": "M Body",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Body"
-    ],
-    "model_raw": "M10",
-    "model_canonical": "M10",
-    "variant": [
-      "Monochrom"
-    ],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -589160,60 +589422,6 @@
     "model_canonical": "IIIc",
     "variant": [],
     "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-15 11:41:55",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Camera West (미국)",
-    "source_url": "https://www.camerawest.com/products/leica-90mm-f2-apo-summicron-m-asph-black-3894219",
-    "title_raw": "Leica 90mm f2 Apo Summicron-M Asph, Black",
-    "price_raw": "$2,795",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0709/3256/2235/files/1675085-00.jpg?v=1724188188",
-    "condition_raw": "CameraWest: 9+",
-    "normalized_name": "leica 90mm f2 apo summicron-m asph, black",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:SUMMICRON"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "APO-Summicron",
-    "model_canonical": "APO-Summicron",
-    "variant": [
-      "ASPH",
-      "Black"
-    ],
-    "focal_length": "90",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -628934,57 +629142,6 @@
       "3CAM"
     ],
     "focal_length": "28-70",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-24 02:16:31",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "카메라노나니와 (일본)",
-    "source_url": "https://cameranonaniwa.jp/shop/g/g2221000221068/",
-    "title_raw": "Leica Summicron L 50/2 Collapsible",
-    "price_raw": "¥130,000",
-    "currency": "JPY",
-    "image_url": "https://cameranonaniwa.jp/img/goods/L/2221000221068-01.jpg",
-    "condition_raw": "B",
-    "normalized_name": "leica summicron l 50/2 collapsible",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "L",
-    "mount_confidence": 0.88,
-    "mount_reason": [
-      "L_chungmuro:L NN/"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "L Lens",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "L+Lens"
-    ],
-    "model_raw": "Summicron",
-    "model_canonical": "Summicron",
-    "variant": [],
-    "focal_length": null,
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -763558,59 +763715,6 @@
   },
   {
     "source": "Glazers Camera (미국)",
-    "source_url": "https://glazerscamera.com/products/used-leica-m-50mm-95-silver",
-    "title_raw": "Leica M 50mm .95 Silver",
-    "price_raw": "$8,999",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0397/6167/4285/files/332910Ex.jpg?v=1791562756",
-    "condition_raw": "Glazers: EX",
-    "normalized_name": "leica m 50mm .95 silver",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "M_leica_m_prefix:LEICA M"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Silver"
-    ],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 04:29:08",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Glazers Camera (미국)",
     "source_url": "https://glazerscamera.com/products/used-leica-q3-thumb-grip-gold",
     "title_raw": "Leica Q3 Thumb Grip Gold",
     "price_raw": "$150",
@@ -773827,59 +773931,6 @@
     "model_canonical": "M5",
     "variant": [],
     "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-29 04:39:24",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Leica Store Heidelberg (독일)",
-    "source_url": "https://leica-store-heidelberg.de/products/leica-canada-elmarit-28mm-f2-8-v2-11801",
-    "title_raw": "Leica Canada Elmarit 28mm f2.8 v2 11801",
-    "price_raw": "€850",
-    "currency": "EUR",
-    "image_url": "https://cdn.shopify.com/s/files/1/0814/6780/1897/files/DSC1212.jpg?v=1793201644",
-    "condition_raw": "Heidelberg: 2+",
-    "normalized_name": "leica canada elmarit 28mm f2.8 v2 11801",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "Leica Lens",
-    "label_confidence": 0.82,
-    "label_reason": [
-      "Leica+Lens+no_mount"
-    ],
-    "model_raw": "Elmarit",
-    "model_canonical": "Elmarit",
-    "variant": [
-      "v2"
-    ],
-    "focal_length": "28",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -891097,59 +891148,6 @@
   },
   {
     "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/0548c86674a0498a84acff9ba883197d",
-    "title_raw": "Leica Meter MR black accessory",
-    "price_raw": "€259",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/9a/3a/c2/1784354159/311795.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica meter mr black accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:accessory"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [
-      "Black"
-    ],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-31 04:28:34",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
     "source_url": "https://shphoto.de/detail/f22e0fee44da4d788246efc6ed47b442",
     "title_raw": "Leica GFOOH R.h. Dark Red Filter for SM 50mm Summit accessory",
     "price_raw": "€119",
@@ -891187,57 +891185,6 @@
     "compatible_systems": [
       "R"
     ],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-30 22:09:44",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "SHphoto (독일)",
-    "source_url": "https://shphoto.de/detail/faad90e2855d43d8a697346ac9b41ba7",
-    "title_raw": "Leica APDOO Self Timer accessory",
-    "price_raw": "€79",
-    "currency": "EUR",
-    "image_url": "https://shphoto.de/media/d5/32/17/1776379512/311171.jpg",
-    "condition_raw": "정보없음",
-    "normalized_name": "leica apdoo self timer accessory",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Unknown",
-    "mount_confidence": 0.3,
-    "mount_reason": [
-      "no_mount_match"
-    ],
-    "category": "Accessory",
-    "category_confidence": 0.97,
-    "category_reason": [
-      "hard_acc_kw:accessory"
-    ],
-    "label": "Accessory",
-    "label_confidence": 0.99,
-    "label_reason": [
-      "category=Accessory"
-    ],
-    "model_raw": null,
-    "model_canonical": null,
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
     "flag_confidence": 0.5,
@@ -965661,61 +965608,6 @@
     "compatible_mounts": [
       "M"
     ],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-28 10:55:40",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "Cardinal Camera Used (미국)",
-    "source_url": "https://cardinalcameraused.com/products/leica-noctilux-m-50mm-f1-2-asph-lens-black-11686",
-    "title_raw": "Leica Noctilux-M 50mm F1.2 ASPH. Black 11686 Reissue",
-    "price_raw": "$4,499",
-    "currency": "USD",
-    "image_url": "https://cdn.shopify.com/s/files/1/0602/2915/7103/files/1B803319-F316-4391-AEB8-61A1A266DF27.jpg?v=1766569318",
-    "condition_raw": "Cardinal: good",
-    "normalized_name": "leica noctilux-m 50mm f1.2 asph. black 11686 reissue",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "M",
-    "mount_confidence": 0.92,
-    "mount_reason": [
-      "M_lens_kw:NOCTILUX"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "M Lens",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "M+Lens"
-    ],
-    "model_raw": "Noctilux",
-    "model_canonical": "Noctilux",
-    "variant": [
-      "ASPH",
-      "f1.2",
-      "Black"
-    ],
-    "focal_length": "50",
-    "accessory_type": null,
-    "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
     "positive_flags": [],
