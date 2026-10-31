@@ -731,3 +731,13 @@ def test_home_has_community_board() -> None:
             assert locale in line, (key, locale)
     vercel = (PROJECT_ROOT / "vercel.json").read_text(encoding="utf-8")
     assert '"/owner/board"' in vercel
+
+
+def test_price_ladder_spreads_overlapping_dots_and_zooms() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert "laneEnd" in beta and "top:calc(50% + ${offset}px)" in beta  # 겹치는 점은 위아래로
+    assert "bindLadderZoom();" in beta and "data-ladder-reset" in beta  # 끌어서 구간 확대 · 전체 보기
+    for key in ("ladder_zoom_hint", "ladder_zoom_reset", "ladder_zoomed"):
+        line = next(l for l in beta.splitlines() if l.strip().startswith(key + ":"))
+        for locale in ("ko:", "en:", "ja:", "de:", "it:"):
+            assert locale in line
