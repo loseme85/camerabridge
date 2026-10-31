@@ -1175,6 +1175,9 @@
     .ladder-strip{position:relative;align-self:stretch;min-height:36px;touch-action:pan-y;cursor:crosshair;user-select:none}
     .ladder-select{position:absolute;top:0;bottom:0;background:rgba(22,24,26,0.08);border-left:1px solid var(--text);border-right:1px solid var(--text);pointer-events:none;z-index:3}
     .ladder-zoom{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin:0 0 8px;font-size:12px;color:var(--text-muted)}
+    .price-ladder.is-zoomed .ladder-strip{cursor:grab}
+    .price-ladder.is-panning .ladder-strip{cursor:grabbing}
+    .ladder-zoom .ladder-pan{text-decoration:none;font-size:13px;padding:0 4px}
     .ladder-zoom button{background:none;border:0;padding:0;font:inherit;color:var(--text);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
     .ladder-grid{position:absolute;top:0;bottom:0;border-left:1px solid var(--border);opacity:.7}
     .ladder-strip::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dotted var(--border-strong)}
@@ -3378,6 +3381,9 @@
       ladder_zoom_hint: { ko: '보고 싶은 가격 구간을 옆으로 끌어 넓게 보기', en: 'Drag across a price range to zoom in', ja: '見たい価格帯を横にドラッグして拡大', 'zh-Hans': '横向拖动选择价格区间放大', 'zh-Hant': '橫向拖曳選擇價格區間放大', pt: 'Arraste sobre uma faixa de preço para ampliar', es: 'Arrastra sobre un rango de precios para ampliar', de: 'Über einen Preisbereich ziehen zum Vergrößern', it: 'Trascina su una fascia di prezzo per ingrandire' },
       ladder_zoom_reset: { ko: '전체 보기', en: 'Show all', ja: '全体を表示', 'zh-Hans': '查看全部', 'zh-Hant': '查看全部', pt: 'Ver tudo', es: 'Ver todo', de: 'Alles zeigen', it: 'Mostra tutto' },
       ladder_zoomed: { ko: '{a} – {b} 구간 · 이 구간 밖 {n}건 숨김', en: '{a} – {b} · {n} outside hidden', ja: '{a}〜{b} の範囲 · 範囲外 {n}件は非表示', 'zh-Hans': '{a} – {b} 区间 · 区间外 {n} 件已隐藏', 'zh-Hant': '{a} – {b} 區間 · 區間外 {n} 件已隱藏', pt: '{a} – {b} · {n} fora ocultos', es: '{a} – {b} · {n} fuera ocultos', de: '{a} – {b} · {n} außerhalb ausgeblendet', it: '{a} – {b} · {n} fuori nascosti' },
+      ladder_pan_hint: { ko: '옆으로 끌어 옆 가격대 보기', en: 'Drag sideways to see nearby prices', ja: '横にドラッグして隣の価格帯を見る', 'zh-Hans': '左右拖动查看相邻价格', 'zh-Hant': '左右拖曳查看相鄰價格', pt: 'Arraste para os lados para ver preços vizinhos', es: 'Arrastra a los lados para ver precios cercanos', de: 'Seitlich ziehen für benachbarte Preise', it: 'Trascina di lato per vedere i prezzi vicini' },
+      ladder_left: { ko: '더 싼 쪽', en: 'Lower prices', ja: '安い方へ', 'zh-Hans': '往低价', 'zh-Hant': '往低價', pt: 'Preços menores', es: 'Precios más bajos', de: 'Günstiger', it: 'Prezzi più bassi' },
+      ladder_right: { ko: '더 비싼 쪽', en: 'Higher prices', ja: '高い方へ', 'zh-Hans': '往高价', 'zh-Hant': '往高價', pt: 'Preços maiores', es: 'Precios más altos', de: 'Teurer', it: 'Prezzi più alti' },
       ladder_band: { ko: '판매 중 가격대', en: 'Asking range', ja: '販売中の価格帯', 'zh-Hans': '在售价格区间', 'zh-Hant': '在售價格區間', pt: 'Faixa pedida', es: 'Rango pedido', de: 'Preisspanne', it: 'Fascia richiesta' },
       ladder_counts: { ko: '판매 중 {a} · 지난 기록 {h}', en: '{a} for sale · {h} past', ja: '販売中 {a} · 過去 {h}', 'zh-Hans': '在售 {a} · 过往 {h}', 'zh-Hant': '在售 {a} · 過往 {h}', pt: '{a} à venda · {h} anteriores', es: '{a} en venta · {h} anteriores', de: '{a} zu kaufen · {h} früher', it: '{a} in vendita · {h} passati' },
       ladder_abroad_short: { ko: '해외 · 도착 총액', en: 'Abroad · est. delivered', ja: '海外 · 到着総額', 'zh-Hans': '海外 · 到手总价', 'zh-Hant': '海外 · 到手總價', pt: 'Exterior · total estimado', es: 'Extranjero · total estimado', de: 'Ausland · geschätzt geliefert', it: 'Estero · totale stimato' },
@@ -3708,6 +3714,9 @@
       if(high <= low){ low = sorted[0] * 0.95; high = sorted[sorted.length - 1] * 1.05; }
       const pad = (high - low) * 0.04;
       low = Math.max(0, low - pad); high += pad;
+      // 확대해서 옆으로 옮길 수 있는 끝: 잘라 낸 양 끝 3%까지 포함한 전체
+      const span0 = sorted[sorted.length - 1] - sorted[0] || sorted[0] * 0.1 || 1;
+      ladderState.bounds = { low: Math.max(0, Math.min(low, sorted[0] - span0 * 0.02)), high: Math.max(high, sorted[sorted.length - 1] + span0 * 0.02) };
       // 끌어서 고른 구간이 있으면 그 구간만 넓게 (밖의 점은 숨김)
       const zoom = ladderState.zoom;
       if(zoom){ low = zoom.low; high = zoom.high; }
@@ -3759,11 +3768,14 @@
       }).join('');
       const axis = ticks.map(v => `<span style="left:${x(v).toFixed(2)}%">${escapeHtml(ladderAxisMoney(v))}</span>`).join('');
       return `
-        <section class="price-ladder" aria-label="${escapeHtml(ec('ladder_title'))}">
+        <section class="price-ladder${zoom ? ' is-zoomed' : ''}" aria-label="${escapeHtml(ec('ladder_title'))}">
           <h3>${escapeHtml(ec('ladder_title'))}</h3>
           <p>${escapeHtml(ec('ladder_note', { n: String(points.length) }))}</p>
           <div class="ladder-zoom">${zoom
-            ? `<span>${escapeHtml(ec('ladder_zoomed', { a: money(low), b: money(high), n: String(points.filter(p => !inView(p)).length) }))}</span><button type="button" data-ladder-reset>${escapeHtml(ec('ladder_zoom_reset'))}</button>`
+            ? `<button type="button" class="ladder-pan" data-ladder-pan="-1" aria-label="${escapeHtml(ec('ladder_left'))}" title="${escapeHtml(ec('ladder_left'))}">◀</button>`
+              + `<span>${escapeHtml(ec('ladder_zoomed', { a: money(low), b: money(high), n: String(points.filter(p => !inView(p)).length) }))}</span>`
+              + `<button type="button" class="ladder-pan" data-ladder-pan="1" aria-label="${escapeHtml(ec('ladder_right'))}" title="${escapeHtml(ec('ladder_right'))}">▶</button>`
+              + `<button type="button" data-ladder-reset>${escapeHtml(ec('ladder_zoom_reset'))}</button><span>${escapeHtml(ec('ladder_pan_hint'))}</span>`
             : `<span>${escapeHtml(ec('ladder_zoom_hint'))}</span>`}</div>
           ${rows}
           <div class="ladder-axis"><div></div><div>${axis}</div><div></div></div>
@@ -3846,14 +3858,43 @@
         const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
         return view.low + ratio * (view.high - view.low);
       };
+      let frame = 0;
+      const redraw = () => {
+        if(frame) return;
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
+          const box = document.querySelector('.price-ladder');
+          if(box && drag && drag.pan) box.classList.add('is-panning');
+        });
+      };
+      // 확대한 구간을 옆으로 옮김 (전체 범위 밖으로는 안 나감)
+      const panTo = (low, high) => {
+        const bounds = ladderState.bounds || { low, high };
+        const width = high - low;
+        if(low < bounds.low){ low = bounds.low; high = low + width; }
+        if(high > bounds.high){ high = bounds.high; low = high - width; }
+        ladderState.zoom = { low: Math.max(bounds.low, low), high: Math.min(bounds.high, high) };
+        hideLadderTip();
+        redraw();
+      };
       document.addEventListener('pointerdown', event => {
         const strip = event.target.closest && event.target.closest('.ladder-strip');
         if(!strip || event.target.closest('.ladder-dot') || event.button > 0) return;
-        drag = { strip, startX: event.clientX, startY: event.clientY, box: null };
+        const zoom = ladderState.zoom;
+        drag = { strip, startX: event.clientX, startY: event.clientY, box: null,
+          pan: zoom ? { low: zoom.low, high: zoom.high, width: strip.getBoundingClientRect().width, moving: false } : null };
       });
       document.addEventListener('pointermove', event => {
         if(!drag) return;
         const dx = event.clientX - drag.startX;
+        if(drag.pan){
+          if(!drag.pan.moving && (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(event.clientY - drag.startY))) return;
+          drag.pan.moving = true;
+          const shift = dx / drag.pan.width * (drag.pan.high - drag.pan.low);
+          panTo(drag.pan.low - shift, drag.pan.high - shift);
+          return;
+        }
         if(!drag.box){
           if(Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(event.clientY - drag.startY)) return;
           drag.box = document.createElement('div');
@@ -3868,8 +3909,9 @@
       });
       const finish = event => {
         if(!drag) return;
-        const { strip, startX, box } = drag;
+        const { strip, startX, box, pan } = drag;
         drag = null;
+        if(pan){ document.querySelector('.price-ladder')?.classList.remove('is-panning'); return; }
         if(!box) return;
         box.remove();
         const a = valueAt(strip, startX), b = valueAt(strip, event.clientX);
@@ -3880,7 +3922,23 @@
       };
       document.addEventListener('pointerup', finish);
       document.addEventListener('pointercancel', () => { if(drag && drag.box) drag.box.remove(); drag = null; });
+      // 트랙패드 두 손가락 옆으로 밀기 (위아래 스크롤은 그대로)
+      document.addEventListener('wheel', event => {
+        const strip = event.target.closest && event.target.closest('.price-ladder.is-zoomed .ladder-strip');
+        if(!strip || Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+        event.preventDefault();
+        const zoom = ladderState.zoom;
+        const shift = event.deltaX / strip.getBoundingClientRect().width * (zoom.high - zoom.low);
+        panTo(zoom.low + shift, zoom.high + shift);
+      }, { passive: false });
       document.addEventListener('click', event => {
+        const step = event.target.closest('[data-ladder-pan]');
+        if(step && ladderState.zoom){
+          const { low, high } = ladderState.zoom;
+          const shift = (high - low) / 2 * Number(step.dataset.ladderPan);
+          panTo(low + shift, high + shift);
+          return;
+        }
         if(!event.target.closest('[data-ladder-reset]')) return;
         ladderState.zoom = null;
         if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
