@@ -3629,15 +3629,19 @@
       return entity && !entity.feature && !(entity.children || []).length ? entity : null;
     }
 
+    function ladderKey(){
+      return buildParams(0, { limit: 100 }).toString();
+    }
+
+    // 모델을 고르면 매물 목록과 동시에 시작 (목록을 기다리지 않음), 100건씩 3쪽을 나란히 받음
     async function loadPriceLadder(){
-      if(!ladderEntity() || !state.response) return;
+      if(!ladderEntity()) return;
       const params = buildParams(0, { limit: 100 });
       const key = params.toString();
       if(ladderState.key === key) return;
       ladderState.key = key;
       ladderState.results = null;
       ladderState.zoom = null;
-      // 첫 100건을 받고, 더 있으면 다음 200건은 한꺼번에(나란히) 받음
       const page = async offset => {
         const query = new URLSearchParams(params);
         query.set('offset', String(offset));
@@ -3648,14 +3652,10 @@
           return null;
         }
       };
-      const first = await page(0);
+      const pages = await Promise.all([page(0), page(100), page(200)]);
       if(ladderState.key !== key) return;
-      const all = [...((first && first.results) || [])];
-      if(first && (first.pagination || {}).has_more){
-        const rest = await Promise.all([page(100), page(200)]);
-        if(ladderState.key !== key) return;
-        rest.forEach(payload => all.push(...((payload && payload.results) || [])));
-      }
+      const all = [];
+      pages.forEach(payload => all.push(...((payload && payload.results) || [])));
       if(ladderState.key !== key) return;
       ladderState.results = all;
       if(els['query-summary-region'] && !state.loading && !state.error) els['query-summary-region'].innerHTML = renderPriceLadder();
@@ -3699,7 +3699,7 @@
     }
 
     function renderPriceLadder(){
-      const points = ladderState.results && ladderEntity() ? ladderPoints(ladderState.results) : [];
+      const points = ladderState.results && ladderEntity() && ladderState.key === ladderKey() ? ladderPoints(ladderState.results) : [];
       if(points.length < 3) return '';
       // 끝의 튀는 값 몇 개 때문에 나머지가 한쪽에 몰리지 않게 양 끝 3%는 가장자리에 붙임
       const sorted = points.map(p => p.value).sort((a, b) => a - b);
@@ -4775,6 +4775,7 @@
       }
       const seq = append ? searchSeq : ++searchSeq;
       render();
+      if(!append) loadPriceLadder();
 
       try{
         const params = buildParams(Math.max(0, offset), {
