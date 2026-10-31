@@ -17,6 +17,7 @@ concurrency:
 
 permissions:
   contents: write
+  statuses: read  # 미리 깨우기: Vercel 배포가 끝났는지 커밋 상태로 확인
 
 jobs:
   crawl:
@@ -114,6 +115,22 @@ jobs:
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
             --data-urlencode text="$MSG"
+
+      - name: Warm up after deploy (배포 직후 첫 검색이 느리지 않게)
+        if: success()
+        continue-on-error: true  # 미리 깨우기가 실패해도 크롤링은 성공
+        run: |
+          SHA=$(git rev-parse HEAD)
+          [ "$SHA" = "${{ github.sha }}" ] && echo "새 커밋 없음 → 배포 없음" && exit 0
+          for i in $(seq 1 40); do
+            STATE=$(gh api "repos/${{ github.repository }}/commits/$SHA/status" -q .state)
+            [ "$STATE" = success ] && break
+            [ "$STATE" = failure ] || [ "$STATE" = error ] && echo "배포 실패 ($STATE)" && exit 0
+            sleep 15
+          done
+          python3 scripts/warm_up.py https://camerabridge.io
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Notify failure
         if: failure()
