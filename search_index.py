@@ -274,8 +274,26 @@ def search_index_cache_info(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dic
     }
 
 
+_METADATA_CACHE: dict[str, tuple[int, dict[str, Any]]] = {}
+
+
 def load_search_index_metadata(path: str | Path = DEFAULT_SEARCH_INDEX_PATH) -> dict[str, Any]:
+    """색인 머리 정보. 검색할 때마다 30MB 파일을 다시 읽던 것(2026-10-30 속도 점검)을 파일이 바뀔 때만 읽게."""
     index_path = Path(path)
+    try:
+        mtime = index_path.stat().st_mtime_ns
+    except OSError:
+        mtime = -1
+    cached = _METADATA_CACHE.get(str(index_path))
+    if cached and cached[0] == mtime:
+        return dict(cached[1])
+    metadata = _read_search_index_metadata(index_path)
+    _METADATA_CACHE[str(index_path)] = (mtime, metadata)
+    return dict(metadata)
+
+
+def _read_search_index_metadata(index_path: Path) -> dict[str, Any]:
+    path = index_path
     with index_path.open(encoding="utf-8") as f:
         payload = json.load(f)
 

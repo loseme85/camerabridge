@@ -635,6 +635,25 @@ def _finder_detail_anchor_active(intent: dict[str, Any]) -> bool:
     )
 
 
+_NARROW_CACHE: dict[tuple[int, int, str], tuple[list[dict[str, Any]], dict[str, Any]]] = {}
+_NARROW_CACHE_SIZE = 64
+
+
+def _narrow_cached(query, intent, records, all_records, has_live):
+    """같은 색인(같은 records 객체)·같은 검색어면 후보 좁히기 결과를 다시 씀.
+    한 요청이 결과용·가격 근거용으로 검색을 두 번 돌리고, 인기 검색어는 여러 번 오므로 (2026-10-30 속도 점검)."""
+    if has_live:
+        return narrow_candidate_records(intent, all_records)
+    key = (id(records), len(records), str(query or "").strip().lower())
+    hit = _NARROW_CACHE.get(key)
+    if hit is None:
+        if len(_NARROW_CACHE) >= _NARROW_CACHE_SIZE:
+            _NARROW_CACHE.pop(next(iter(_NARROW_CACHE)))
+        hit = narrow_candidate_records(intent, all_records)
+        _NARROW_CACHE[key] = hit
+    return list(hit[0]), dict(hit[1])
+
+
 def narrow_candidate_records(
     intent: dict[str, Any],
     records: list[dict[str, Any]],
@@ -1028,7 +1047,7 @@ def search_records(
         use_candidate_narrowing = False  # 이미 그 모델 매물만 남았으므로 더 좁히지 않음
     intent = parse_query(query)
     candidate_records, candidate_stats = (
-        narrow_candidate_records(intent, all_records)
+        _narrow_cached(query, intent, records, all_records, bool(live_source_records))
         if use_candidate_narrowing
         else (
             all_records,
