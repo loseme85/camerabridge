@@ -11,6 +11,9 @@
   board/removed/…                                         지운 글·댓글 (REMOVED_DAYS일 보관 뒤 운영자가 비움)
   board/reports/<글id>[~<댓글id>]/<접속지태그>.json        신고
   board/saves/<회원id>.json                               회원이 스크랩한 상품 (원래 주소 + 저장할 때 제목·가격 등), 최대 SAVE_LIMIT개
+가격 알림: 회원이 직접 켜면(구글 계정을 한 번 더 확인) 그때만 이메일을 회원 파일 alerts에 저장, 끄면 바로 지움.
+  매일 Vercel Cron(vercel.json) → GET ?r=alerts → 저장한 상품이 지난번 알린 뒤 1% 넘게 내렸거나 팔리면 한 통으로 Resend 발송.
+  같은 변화는 한 번만 (상품마다 notified_price·notified_status). RESEND_API_KEY가 없으면 보내지 않음. CRON_SECRET이 있으면 그 값으로만 실행.
 스팸 막기: 로그인한 회원만 쓰기, 숨은 입력칸, 쓰기 시작한 지 1.5초 안에 보내면 거절, 회원당 하루 글 POST_LIMIT·댓글 COMMENT_LIMIT건, 링크 MAX_LINKS개까지.
 신고는 로그인 없이도 가능 (같은 접속지는 한 번, 접속지 = 날마다 바뀌는 IP 해시).
 운영자 관리: /owner/board (cb_owner 쿠키 = OWNER_DASHBOARD_KEY, /owner/usage?key=… 로 한 번 들어가면 생김)
@@ -92,6 +95,12 @@ def member_from_cookie(value: str, now: float | None = None) -> str | None:
 
 def verify_google(credential: str) -> str | None:
     """구글 ID 토큰을 구글 tokeninfo로 확인 → 계정 고유번호(sub). 우리 클라이언트 ID로 발급된 토큰만."""
+    identity = google_identity(credential)
+    return identity["sub"] if identity else None
+
+
+def google_identity(credential: str) -> dict | None:
+    """구글 ID 토큰 → {sub, email, email_verified}. 이메일은 알림을 켤 때만 씀."""
     client_id = os.environ.get("GOOGLE_CLIENT_ID", "")
     if not client_id or not credential or len(credential) > 4096:
         return None
@@ -103,7 +112,7 @@ def verify_google(credential: str) -> str | None:
         return None
     if int(info.get("exp") or 0) < dt.datetime.now().timestamp():
         return None
-    return str(info["sub"])
+    return {"sub": str(info["sub"]), "email": str(info.get("email") or ""), "email_verified": str(info.get("email_verified")).lower() == "true"}
 
 
 def _member_id(sub: str) -> str:
@@ -126,7 +135,7 @@ def login(body: dict) -> tuple[int, dict, str | None]:
     if not member:
         member = {"id": member_id, "nick": None, "created_at": _now()[0].isoformat(timespec="seconds")}
         _put(blob, f"board/members/{member_id}.json", member)
-    return 200, {"ok": True, "member": {"nick": member.get("nick")}}, session_value(member_id)
+    return 200, {"ok": True, "member": _public_member(member)}, session_value(member_id)
 
 
 def set_nick(body: dict, member_id: str | None) -> tuple[int, dict]:
@@ -137,14 +146,172 @@ def set_nick(body: dict, member_id: str | None) -> tuple[int, dict]:
     nick = _clean(body.get("nick"), NICK_LEN[1]).replace("\n", " ")
     if not (NICK_LEN[0] <= len(nick) <= NICK_LEN[1]):
         return 400, {"ok": False, "error": "nick"}
-    _put(blob, f"board/members/{member_id}.json", {**member, "nick": nick})
-    return 200, {"ok": True, "member": {"nick": nick}}
+    member = {**member, "nick": nick}
+    _put(blob, f"board/members/{member_id}.json", member)
+    return 200, {"ok": True, "member": _public_member(member)}
+
+
+def _mask(email: str) -> str:
+    name, _, domain = email.partition("@")
+    return f"{name[:2]}{'*' * max(1, len(name) - 2)}@{domain}" if domain else ""
+
+
+def _public_member(member: dict) -> dict:
+    alerts = member.get("alerts") or {}
+    return {"nick": member.get("nick"), "alerts": bool(alerts.get("email")), "alerts_email": _mask(alerts.get("email") or "")}
 
 
 def me(member_id: str | None) -> dict:
     member = _member(_blob(), member_id) if member_id else None
     return {"ok": True, "client_id": os.environ.get("GOOGLE_CLIENT_ID") or None,
-            "member": {"nick": member.get("nick")} if member else None}
+            "member": _public_member(member) if member else None}
+
+
+# ── 가격 알림 (회원이 켰을 때만 이메일 저장) ──
+def alerts_on(body: dict, member_id: str | None, current: dict | None = None) -> tuple[int, dict]:
+    blob = _blob()
+    member = _member(blob, member_id)
+    if not member:
+        return 401, {"ok": False, "error": "login"}
+    identity = google_identity(str(body.get("credential") or ""))
+    if not identity or _member_id(identity["sub"]) != member_id:
+        return 401, {"ok": False, "error": "login"}
+    if not identity["email"] or not identity["email_verified"]:
+        return 400, {"ok": False, "error": "email"}
+    member = {**member, "alerts": {"email": identity["email"], "locale": str(body.get("locale") or "")[:12] or "en",
+                                   "since": _now()[0].isoformat(timespec="seconds")}}
+    _put(blob, f"board/members/{member_id}.json", member)
+    # 켜는 순간의 가격을 기준으로 (켜기 전 변화는 알리지 않음)
+    current = current if current is not None else _current_listings_safe()
+    if current is not None:
+        items = _saves(blob, member_id)
+        for item in items:
+            listing = current.get(item.get("url")) or {}
+            item["notified_price"] = listing.get("parsed_price_numeric") or item.get("price")
+            item["notified_status"] = "asking" if listing.get("sold_quality") == "asking" else ("sold" if listing else "gone")
+        _put(blob, f"board/saves/{member_id}.json", {"items": items})
+    return 200, {"ok": True, "member": _public_member(member)}
+
+
+def alerts_off(member_id: str | None) -> tuple[int, dict]:
+    blob = _blob()
+    member = _member(blob, member_id)
+    if not member:
+        return 401, {"ok": False, "error": "login"}
+    member.pop("alerts", None)
+    _put(blob, f"board/members/{member_id}.json", member)
+    return 200, {"ok": True, "member": _public_member(member)}
+
+
+def unsubscribe_sig(member_id: str) -> str:
+    return _sign(f"unsub:{member_id}", _secret())
+
+
+def unsubscribe(member_id: str, sig: str) -> bool:
+    if not _secret() or not re.fullmatch(r"[0-9a-f]{20}", member_id or "") or not hmac.compare_digest(unsubscribe_sig(member_id), sig or ""):
+        return False
+    alerts_off(member_id)
+    return True
+
+
+ALERT_TEXT = {
+    "ko": {"subject": "저장한 상품 {n}개에 변화가 있어요", "drop": "가격 내림 {a} → {b} (−{p}%)", "sold": "판매 완료", "gone": "더 이상 안 보임",
+           "list": "저장한 상품 모두 보기", "stop": "이 알림 끄기", "intro": "카메라브릿지에 저장한 상품의 소식입니다."},
+    "ja": {"subject": "保存した商品 {n}件に変化があります", "drop": "値下げ {a} → {b}（−{p}%）", "sold": "売り切れ", "gone": "掲載終了",
+           "list": "保存した商品をすべて見る", "stop": "この通知を停止", "intro": "Camera Bridge に保存した商品のお知らせです。"},
+    "en": {"subject": "{n} of your saved listings changed", "drop": "Price dropped {a} → {b} (−{p}%)", "sold": "Sold", "gone": "No longer listed",
+           "list": "See all saved listings", "stop": "Turn off these emails", "intro": "Updates on the listings you saved on Camera Bridge."},
+}
+
+
+def _fmt(price, currency) -> str:
+    if price is None:
+        return "—"
+    return f"{currency or ''} {price:,.0f}".strip()
+
+
+def _alert_events(items: list[dict], current: dict) -> list[dict]:
+    """지난번 알린 뒤 1% 넘게 내렸거나 팔린 상품. items를 고쳐 놓음(notified_*)."""
+    events = []
+    for item in items:
+        listing = current.get(item.get("url"))
+        status = "gone" if not listing else ("asking" if listing.get("sold_quality") == "asking" else "sold")
+        before = item.get("notified_price") if item.get("notified_price") is not None else item.get("price")
+        price = (listing or {}).get("parsed_price_numeric")
+        same_currency = (listing or {}).get("currency") == item.get("currency")
+        if status == "asking" and price and before and same_currency and price < before * 0.99:
+            events.append({"kind": "drop", "item": item, "before": before, "after": price})
+            item["notified_price"] = price
+        elif status == "asking" and price and same_currency and (before is None or price > before):
+            item["notified_price"] = price  # 오르면 기준만 올림 (알리지 않음)
+        if status != "asking" and item.get("notified_status", "asking") == "asking":
+            events.append({"kind": status, "item": item})
+        item["notified_status"] = status
+    return events
+
+
+def _alert_email(member_id: str, alerts: dict, events: list[dict]) -> tuple[str, str]:
+    text = ALERT_TEXT.get((alerts.get("locale") or "en")[:2], ALERT_TEXT["en"])
+    rows = []
+    for event in events:
+        item = event["item"]
+        if event["kind"] == "drop":
+            pct = round((1 - event["after"] / event["before"]) * 100)
+            note = text["drop"].format(a=_fmt(event["before"], item.get("currency")), b=_fmt(event["after"], item.get("currency")), p=pct)
+        else:
+            note = text[event["kind"]]
+        rows.append(f'<tr><td style="padding:8px 0;border-bottom:1px solid #ddd"><a href="{html.escape(item["url"])}" style="color:#16181a">'
+                    f'{html.escape(item.get("title") or item["url"])}</a><br><span style="color:#5d6266;font-size:13px">'
+                    f'{html.escape(item.get("source") or "")} · {html.escape(note)}</span></td></tr>')
+    stop = f"https://camerabridge.io/api/board?r=unsub&m={member_id}&s={unsubscribe_sig(member_id)}"
+    body = (f'<div style="font:15px/1.5 -apple-system,Helvetica,sans-serif;color:#16181a;max-width:560px">'
+            f'<p>{html.escape(text["intro"])}</p><table style="width:100%;border-collapse:collapse">{"".join(rows)}</table>'
+            f'<p><a href="https://camerabridge.io/#saved" style="color:#16181a">{html.escape(text["list"])}</a></p>'
+            f'<p style="color:#878b8d;font-size:12px"><a href="{stop}" style="color:#878b8d">{html.escape(text["stop"])}</a> · Camera Bridge</p></div>')
+    return text["subject"].format(n=len(events)), body
+
+
+def _send_email(to: str, subject: str, body: str) -> bool:
+    key = os.environ.get("RESEND_API_KEY", "")
+    if not key:
+        return False
+    sender = os.environ.get("ALERT_FROM", "Camera Bridge <alerts@camerabridge.io>")
+    try:
+        response = requests.post("https://api.resend.com/emails", timeout=15, headers={"Authorization": f"Bearer {key}"},
+                                 json={"from": sender, "to": [to], "subject": subject, "html": body})
+        return response.status_code < 300
+    except requests.RequestException:
+        return False
+
+
+def _current_listings_safe():
+    try:
+        return _current_listings()
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def run_alerts(current: dict | None = None, send=None) -> dict:
+    """알림을 켠 회원마다 변화를 모아 한 통씩. 보내지 못하면 notified_*를 저장하지 않아 다음에 다시 시도."""
+    send = send or _send_email
+    blob = _blob()
+    current = current if current is not None else _current_listings()
+    members = sent = 0
+    for item in _names(blob, "board/members/"):
+        member = _read(blob, item) or {}
+        alerts = member.get("alerts") or {}
+        if not alerts.get("email") or not member.get("id"):
+            continue
+        members += 1
+        items = _saves(blob, member["id"])
+        events = _alert_events(items, current)
+        if events:
+            subject, body = _alert_email(member["id"], alerts, events)
+            if not send(alerts["email"], subject, body):
+                continue
+            sent += 1
+        _put(blob, f"board/saves/{member['id']}.json", {"items": items})
+    return {"ok": True, "members": members, "sent": sent}
 
 
 def _clean(text, limit: int) -> str:
@@ -547,6 +714,15 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(200, owner_page(), "text/html; charset=utf-8", extra={"x-robots-tag": "noindex, nofollow"})
             if query.get("r") == "me":
                 return self._send(200, me(self._member_id()))
+            if query.get("r") == "alerts":  # Vercel Cron (매일)
+                secret = os.environ.get("CRON_SECRET", "")
+                if secret and not hmac.compare_digest(self.headers.get("authorization") or "", f"Bearer {secret}"):
+                    return self._send(401, {"ok": False})
+                return self._send(200, run_alerts())
+            if query.get("r") == "unsub":
+                done = unsubscribe(query.get("m", ""), query.get("s", ""))
+                message = "알림을 껐습니다. · Email alerts are turned off." if done else "링크가 맞지 않습니다. · This link is not valid."
+                return self._send(200 if done else 400, f"<!doctype html><meta charset=utf-8><meta name=robots content=noindex><p style='font:16px sans-serif;margin:40px'>{message} <a href='https://camerabridge.io/'>camerabridge.io</a></p>", "text/html; charset=utf-8")
             if query.get("r") == "saves":
                 status, payload = list_saves(self._member_id(), with_status=bool(query.get("full")))
                 return self._send(status, payload)
@@ -597,6 +773,10 @@ class handler(BaseHTTPRequestHandler):
                 status, payload = create_comment(body, member_id)
             elif action == "delete":
                 status, payload = delete_entry(body, member_id)
+            elif action == "alerts_on":
+                status, payload = alerts_on(body, member_id)
+            elif action == "alerts_off":
+                status, payload = alerts_off(member_id)
             elif action == "save":
                 status, payload = save_item(body, member_id)
             elif action == "unsave":

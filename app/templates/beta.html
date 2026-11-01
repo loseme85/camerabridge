@@ -1082,6 +1082,9 @@
     .saved-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--text);text-decoration:none}
     .saved-link svg{width:17px;height:17px;fill:currentColor;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
     .saved-link[hidden]{display:none}
+    .saved-alerts{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin:0 0 14px;font-size:14px;color:var(--text-soft)}
+    .saved-alerts p{margin:0;max-width:640px}
+    .saved-alerts .search-button{height:38px;min-width:0;padding:0 16px}
     .saved-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
     .saved-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:6px 16px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
     .saved-row img{width:72px;height:54px;object-fit:contain;background:#fff}
@@ -1726,6 +1729,11 @@
         conf_low: { ko: "낮음 (같은 등급 {n}건) — 참고만", en: "Low ({n} in this condition) — use with care", ja: "低い（同じ状態 {n}件）— 参考程度に", 'zh-Hans': "低（同等成色 {n} 件）— 仅供参考", 'zh-Hant': "低（同等成色 {n} 件）— 僅供參考", pt: "Baixa ({n} nesta condição) — use com cautela", es: "Baja ({n} en este estado) — úsalo con cautela", de: "Niedrig ({n} in diesem Zustand) — mit Vorsicht", it: "Bassa ({n} in questa condizione) — con cautela" },
       },
       saves: {
+        alerts_ask: { ko: "저장한 상품의 가격이 내리거나 팔리면 메일로 알려 드릴까요? (하루 한 번, 변화가 있을 때만)", en: "Get an email when a saved listing drops in price or sells? (Once a day, only when something changes)", ja: "保存した商品が値下げ・売り切れになったらメールでお知らせしましょうか？（1日1回、変化があるときだけ）", 'zh-Hans': "收藏的商品降价或售出时发邮件通知您吗？（每天一次，仅在有变化时）", 'zh-Hant': "收藏的商品降價或售出時寄信通知您嗎？（每天一次，僅在有變化時）", pt: "Receber um e-mail quando um anúncio salvo baixar de preço ou for vendido? (Uma vez por dia, só quando houver mudança)", es: "¿Recibir un correo cuando un anuncio guardado baje de precio o se venda? (Una vez al día, solo si hay cambios)", de: "E-Mail erhalten, wenn ein gemerktes Angebot billiger wird oder verkauft ist? (Einmal täglich, nur bei Änderungen)", it: "Ricevere un’email quando un annuncio salvato cala di prezzo o viene venduto? (Una volta al giorno, solo se cambia qualcosa)" },
+        alerts_on_btn: { ko: "메일 받기", en: "Email me", ja: "メールを受け取る", 'zh-Hans': "接收邮件", 'zh-Hant': "接收郵件", pt: "Receber e-mail", es: "Recibir correo", de: "Per E-Mail", it: "Ricevi email" },
+        alerts_on_text: { ko: "가격이 내리거나 팔리면 {email}로 알려 드려요 (매일 아침).", en: "We’ll email {email} when a saved listing drops in price or sells (every morning).", ja: "値下げ・売り切れのとき {email} にお知らせします（毎朝）。", 'zh-Hans': "降价或售出时将通知 {email}（每天早上）。", 'zh-Hant': "降價或售出時將通知 {email}（每天早上）。", pt: "Avisaremos {email} quando baixar de preço ou for vendido (toda manhã).", es: "Avisaremos a {email} cuando baje de precio o se venda (cada mañana).", de: "Wir benachrichtigen {email}, wenn der Preis fällt oder es verkauft ist (jeden Morgen).", it: "Avviseremo {email} quando il prezzo cala o viene venduto (ogni mattina)." },
+        alerts_off_btn: { ko: "알림 끄기", en: "Turn off", ja: "通知を停止", 'zh-Hans': "关闭通知", 'zh-Hant': "關閉通知", pt: "Desativar", es: "Desactivar", de: "Abschalten", it: "Disattiva" },
+        alerts_prompt: { ko: "메일 알림을 켜려면 구글 계정을 한 번 더 확인해 주세요. 알림을 받는 동안에만 이메일을 저장하고, 끄면 바로 지워요.", en: "To turn on email alerts, confirm your Google account once more. We keep your email only while alerts are on and delete it when you turn them off.", ja: "メール通知をオンにするには Google アカウントをもう一度確認してください。通知を受け取る間だけメールアドレスを保存し、オフにするとすぐ削除します。", 'zh-Hans': "开启邮件通知前，请再确认一次 Google 账号。仅在开启通知期间保存邮箱，关闭后立即删除。", 'zh-Hant': "開啟郵件通知前，請再確認一次 Google 帳號。僅在開啟通知期間保存電子郵件，關閉後立即刪除。", pt: "Para ativar os alertas, confirme sua conta Google mais uma vez. Guardamos seu e-mail só enquanto os alertas estiverem ativos e o apagamos ao desativar.", es: "Para activar las alertas, confirma tu cuenta de Google una vez más. Guardamos tu correo solo mientras estén activas y lo borramos al desactivarlas.", de: "Zum Einschalten bitte das Google-Konto noch einmal bestätigen. Wir speichern die E-Mail nur, solange Benachrichtigungen aktiv sind, und löschen sie beim Abschalten.", it: "Per attivare gli avvisi, conferma ancora una volta l’account Google. Conserviamo l’email solo finché gli avvisi sono attivi e la cancelliamo quando li disattivi." },
         save: { ko: "저장", en: "Save", ja: "保存", 'zh-Hans': "收藏", 'zh-Hant': "收藏", pt: "Salvar", es: "Guardar", de: "Merken", it: "Salva" },
         saved: { ko: "저장됨", en: "Saved", ja: "保存済み", 'zh-Hans': "已收藏", 'zh-Hant': "已收藏", pt: "Salvo", es: "Guardado", de: "Gemerkt", it: "Salvato" },
         header: { ko: "저장", en: "Saved", ja: "保存", 'zh-Hans': "收藏", 'zh-Hant': "收藏", pt: "Salvos", es: "Guardados", de: "Gemerkt", it: "Salvati" },
@@ -2641,6 +2649,11 @@
       const { ok, data } = await boardSend({ action: 'login', credential: response.credential });
       if(ok) boardState.member = data.member;
       boardState.loginError = !ok;
+      if(ok && boardState.pendingAlerts){  // 메일 알림 켜기: 방금 받은 구글 확인으로 이메일 저장
+        boardState.pendingAlerts = false;
+        const turned = await boardSend({ action: 'alerts_on', credential: response.credential, locale: uiState.locale });
+        if(turned.ok) boardState.member = turned.data.member;
+      }
       if(ok) afterSaveLogin();
       renderComposers();
       const view = document.getElementById('board-view');
@@ -2950,10 +2963,21 @@
       });
     }
 
+    function openAlertsConsent(){
+      const dialog = document.getElementById('save-dialog');
+      boardState.pendingAlerts = true;
+      if(!dialog || typeof dialog.showModal !== 'function') return;
+      document.getElementById('save-dialog-text').textContent = sx('alerts_prompt');
+      dialog.querySelector('[data-save-dialog-close]').textContent = ux('feedback.close', 'Close');
+      dialog.showModal();
+      renderGoogleButtons(dialog).then(() => { if(window.google && window.google.accounts) window.google.accounts.id.prompt(); });
+    }
+
     async function afterSaveLogin(){
       const dialog = document.getElementById('save-dialog');
       if(dialog && dialog.open) dialog.close();
       await loadSaves();
+      if(location.hash === '#saved') renderSavedView(document.getElementById('board-view'));
       const url = saveState.pending;
       saveState.pending = null;
       if(url && !saveState.urls.has(url)) toggleSave(url);
@@ -2963,6 +2987,14 @@
       view.innerHTML = `<h2 class="home-heading"><span>${escapeHtml(sx('title'))}</span> <small>${escapeHtml(sx('note'))}</small></h2>
         <ul class="saved-list"><li class="board-empty">${escapeHtml(bx('loading'))}</li></ul>`;
       const list = view.querySelector('.saved-list');
+      if(boardState.member){
+        const alertsRow = document.createElement('div');
+        alertsRow.className = 'saved-alerts';
+        alertsRow.innerHTML = boardState.member.alerts
+          ? `<p>${escapeHtml(sx('alerts_on_text').replace('{email}', boardState.member.alerts_email || ''))}</p><button type="button" class="board-link-button" data-alerts-off>${escapeHtml(sx('alerts_off_btn'))}</button>`
+          : `<p>${escapeHtml(sx('alerts_ask'))}</p><button type="button" class="search-button" data-alerts-on>${escapeHtml(sx('alerts_on_btn'))}</button>`;
+        list.before(alertsRow);
+      }
       if(!boardState.member){
         list.innerHTML = `<li>${boardLoginRow().replace(escapeHtml(bx('login_prompt')), escapeHtml(sx('login_prompt')))}</li>`;
         renderGoogleButtons(view);
@@ -3011,7 +3043,13 @@
           renderSavedView(document.getElementById('board-view'));
           return;
         }
-        if(event.target.closest('[data-save-dialog-close]')){ saveState.pending = null; document.getElementById('save-dialog').close(); }
+        if(event.target.closest('[data-save-dialog-close]')){ saveState.pending = null; boardState.pendingAlerts = false; document.getElementById('save-dialog').close(); }
+        if(event.target.closest('[data-alerts-on]')){ openAlertsConsent(); return; }
+        if(event.target.closest('[data-alerts-off]')){
+          const { ok, data } = await boardSend({ action: 'alerts_off' });
+          if(ok) boardState.member = data.member;
+          renderSavedView(document.getElementById('board-view'));
+        }
       });
     }
 

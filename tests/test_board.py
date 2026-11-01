@@ -86,7 +86,7 @@ def test_login_needed_and_nick_needed(monkeypatch):
     assert out["member"]["nick"] is None
     assert board.create_post(POST, member_id)[1]["error"] == "nick"  # 닉네임 먼저
     assert board.set_nick({"nick": ""}, member_id)[0] == 400
-    assert board.me(member_id)["member"] == {"nick": None} and board.me(None)["client_id"] == "cid.apps.googleusercontent.com"
+    assert board.me(member_id)["member"] == {"nick": None, "alerts": False, "alerts_email": ""} and board.me(None)["client_id"] == "cid.apps.googleusercontent.com"
 
 
 def test_session_cookie_is_signed_and_expires(monkeypatch):
@@ -163,3 +163,46 @@ def test_members_save_listings_and_see_price_changes(monkeypatch):
     assert now["https://shop.example/q3"]["status"] == "gone"
     assert board.unsave_item({"url": "https://shop.example/m6"}, a)[1]["urls"] == ["https://shop.example/q3"]
     assert board.list_saves(_join("tok-b", "다른사람"))[1]["urls"] == []  # 회원마다 따로
+
+
+def test_price_drop_alerts_only_for_members_who_turn_them_on(monkeypatch):
+    fake, _ = _setup(monkeypatch)
+    identities = {"tok-a": {"sub": "sub-a", "email": "film@example.com", "email_verified": True},
+                  "tok-b": {"sub": "sub-b", "email": "", "email_verified": False}}
+    monkeypatch.setattr(board, "google_identity", lambda c: identities.get(c))
+    a = _join("tok-a", "필름러")
+    board.save_item({"url": "https://shop/m6", "title": "Leica M6", "price": 4000000, "currency": "KRW", "source": "샵"}, a)
+    board.save_item({"url": "https://shop/q3", "title": "Leica Q3", "price": 7000000, "currency": "KRW", "source": "샵"}, a)
+    sent = []
+    send = lambda to, subject, body: sent.append((to, subject, body)) or True
+    now = {"https://shop/m6": {"sold_quality": "asking", "parsed_price_numeric": 4000000, "currency": "KRW"},
+           "https://shop/q3": {"sold_quality": "asking", "parsed_price_numeric": 7000000, "currency": "KRW"}}
+    assert board.run_alerts(current=now, send=send)["members"] == 0 and sent == []  # 켜지 않으면 안 보냄
+    assert "film@example.com" not in json.dumps(fake.store)  # 켜기 전에는 이메일을 저장하지 않음
+    assert board.alerts_on({"credential": "tok-b"}, a)[0] == 401  # 다른 사람 계정으로는 못 켬
+    status, out = board.alerts_on({"credential": "tok-a", "locale": "ko"}, a, current=now)
+    assert status == 200 and out["member"]["alerts"] is True and out["member"]["alerts_email"] == "fi**@example.com"
+    assert board.run_alerts(current=now, send=send)["sent"] == 0  # 변화 없음
+    now["https://shop/m6"]["parsed_price_numeric"] = 3600000  # 10% 내림
+    del now["https://shop/q3"]  # 사라짐
+    assert board.run_alerts(current=now, send=send)["sent"] == 1
+    to, subject, body = sent[0]
+    assert to == "film@example.com" and "2개" in subject and "−10%" in body and "더 이상 안 보임" in body and "r=unsub" in body
+    assert board.run_alerts(current=now, send=send)["sent"] == 0  # 같은 변화는 다시 안 보냄
+    assert len(sent) == 1
+    sig = body.split("&s=")[1].split('"')[0]
+    assert not board.unsubscribe(a, "wrong") and board.unsubscribe(a, sig)
+    assert "film@example.com" not in json.dumps(fake.store)  # 끄면 이메일 지움
+
+
+def test_failed_send_is_retried_next_time(monkeypatch):
+    fake, _ = _setup(monkeypatch)
+    monkeypatch.setattr(board, "google_identity", lambda c: {"sub": "sub-a", "email": "a@example.com", "email_verified": True})
+    a = _join("tok-a", "필름러")
+    board.save_item({"url": "https://shop/m6", "title": "M6", "price": 100, "currency": "KRW"}, a)
+    now = {"https://shop/m6": {"sold_quality": "asking", "parsed_price_numeric": 100, "currency": "KRW"}}
+    board.alerts_on({"credential": "x"}, a, current=now)
+    now["https://shop/m6"]["parsed_price_numeric"] = 80
+    assert board.run_alerts(current=now, send=lambda *x: False)["sent"] == 0
+    got = []
+    assert board.run_alerts(current=now, send=lambda *x: got.append(x) or True)["sent"] == 1 and got
