@@ -410587,7 +410587,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -411680,7 +411680,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444241,7 +444241,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444394,7 +444394,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -444577,6 +444577,170 @@
     ],
     "crawl_time": "",
     "first_seen": "2026-10-04 00:10:39",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2448520072257",
+    "title_raw": "Leica Visoflex (Typ 020) Black",
+    "price_raw": "¥47,500",
+    "currency": "JPY",
+    "image_url": "",
+    "condition_raw": "A",
+    "normalized_name": "leica visoflex (typ 020) black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:visoflex"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [
+      "FLE",
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": "visoflex",
+    "compatible_mounts": [
+      "M"
+    ],
+    "compatible_systems": [
+      "M"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-11-01 21:11:18",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2448520072264",
+    "title_raw": "Leica T for MLensAdapter",
+    "price_raw": "¥41,400",
+    "currency": "JPY",
+    "image_url": "https://nc-img.kitamura.jp/2448520072264-1-1.jpg",
+    "condition_raw": "B",
+    "normalized_name": "leica t for mlensadapter",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Compact",
+    "mount_confidence": 0.93,
+    "mount_reason": [
+      "Compact_kw:LEICA T "
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.97,
+    "category_reason": [
+      "hard_acc_kw:adapter"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": null,
+    "model_canonical": null,
+    "variant": [],
+    "focal_length": null,
+    "accessory_type": "adapter",
+    "compatible_mounts": [],
+    "compatible_systems": [
+      "Compact"
+    ],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-11-01 21:11:18",
+    "sold_at": null,
+    "sold_fx_krw": null,
+    "sold_at_unknown": false
+  },
+  {
+    "source": "기타무라 (일본)",
+    "source_url": "https://shop.kitamura.jp/ec/used/2448710205557",
+    "title_raw": "Leica Trinovid コンパクト双眼鏡8X20BC Black",
+    "price_raw": "¥37,600",
+    "currency": "JPY",
+    "image_url": "",
+    "condition_raw": "AB",
+    "normalized_name": "leica trinovid コンパクト双眼鏡8x20bc black",
+    "normalized_description": "",
+    "brand": "Leica",
+    "brand_confidence": 0.97,
+    "brand_reason": [
+      "leica_kw:leica"
+    ],
+    "mount": "Unknown",
+    "mount_confidence": 0.3,
+    "mount_reason": [
+      "no_mount_match"
+    ],
+    "category": "Accessory",
+    "category_confidence": 0.92,
+    "category_reason": [
+      "acc_kw:trinovid"
+    ],
+    "label": "Accessory",
+    "label_confidence": 0.99,
+    "label_reason": [
+      "category=Accessory"
+    ],
+    "model_raw": "X2",
+    "model_canonical": "X2",
+    "variant": [
+      "Black"
+    ],
+    "focal_length": null,
+    "accessory_type": null,
+    "compatible_mounts": [],
+    "compatible_systems": [],
+    "risk_flags": [],
+    "positive_flags": [],
+    "flag_confidence": 0.5,
+    "sold_quality": "asking",
+    "sold_confidence": 0.85,
+    "sold_reason": [
+      "default_asking"
+    ],
+    "crawl_time": "",
+    "first_seen": "2026-11-01 21:11:18",
     "sold_at": null,
     "sold_fx_krw": null,
     "sold_at_unknown": false
@@ -445177,7 +445341,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -445228,7 +445392,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -448425,7 +448589,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -449054,7 +449218,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -449066,57 +449230,6 @@
     "variant": [],
     "focal_length": null,
     "accessory_type": "hood",
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-08 22:45:46",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "기타무라 (일본)",
-    "source_url": "https://shop.kitamura.jp/ec/used/2445190119176",
-    "title_raw": "Leica Q3 43",
-    "price_raw": "¥1,010,000",
-    "currency": "JPY",
-    "image_url": "https://nc-img.kitamura.jp/2445190119176-1-1.jpg",
-    "condition_raw": "A",
-    "normalized_name": "leica q3 43",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "Q",
-    "mount_confidence": 0.9,
-    "mount_reason": [
-      "Q_body_shorthand:Q focal shorthand"
-    ],
-    "category": "Body",
-    "category_confidence": 0.9,
-    "category_reason": [
-      "mount_compact_pns_q:Q"
-    ],
-    "label": "Leica Body",
-    "label_confidence": 0.88,
-    "label_reason": [
-      "Leica+Q+Body"
-    ],
-    "model_raw": "Q3",
-    "model_canonical": "Q3",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
     "risk_flags": [],
@@ -453800,7 +453913,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454061,7 +454174,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454163,7 +454276,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -454214,7 +454327,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455799,7 +455912,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455850,7 +455963,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455901,7 +456014,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -455952,7 +456065,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -456003,7 +456116,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -603175,7 +603288,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -627633,57 +627746,6 @@
   },
   {
     "source": "카메라노나니와 (일본)",
-    "source_url": "https://cameranonaniwa.jp/shop/g/g2221140409982/",
-    "title_raw": "Leica 10071 R6 SL BODY",
-    "price_raw": "¥99,800",
-    "currency": "JPY",
-    "image_url": "https://cameranonaniwa.jp/img/goods/L/2221140409982-01.jpg",
-    "condition_raw": "AB",
-    "normalized_name": "leica 10071 r6 sl body",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "R",
-    "mount_confidence": 0.88,
-    "mount_reason": [
-      "R_body_number:R6-R9"
-    ],
-    "category": "Body",
-    "category_confidence": 0.88,
-    "category_reason": [
-      "body_kw:body"
-    ],
-    "label": "R Body",
-    "label_confidence": 0.95,
-    "label_reason": [
-      "R+Body"
-    ],
-    "model_raw": "R6",
-    "model_canonical": "R6",
-    "variant": [],
-    "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-25 01:04:32",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "카메라노나니와 (일본)",
     "source_url": "https://cameranonaniwa.jp/shop/g/g2221140409999/",
     "title_raw": "Leica 10068 R7 BK BODY",
     "price_raw": "¥84,800",
@@ -648119,7 +648181,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -648172,7 +648234,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -649794,7 +649856,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -676930,7 +676992,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -678409,7 +678471,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
@@ -768919,57 +768981,6 @@
     "model_canonical": "Q3",
     "variant": [],
     "focal_length": null,
-    "accessory_type": null,
-    "compatible_mounts": [],
-    "compatible_systems": [],
-    "risk_flags": [],
-    "positive_flags": [],
-    "flag_confidence": 0.5,
-    "sold_quality": "asking",
-    "sold_confidence": 0.85,
-    "sold_reason": [
-      "default_asking"
-    ],
-    "crawl_time": "",
-    "first_seen": "2026-10-18 23:46:54",
-    "sold_at": null,
-    "sold_fx_krw": null,
-    "sold_at_unknown": false
-  },
-  {
-    "source": "fotohandel.de (독일)",
-    "source_url": "https://www.fotohandel.de/Leica-Summicron-TL-23mm-2.0-11081",
-    "title_raw": "Leica Summicron-TL 23mm f2.0 11081",
-    "price_raw": "€895",
-    "currency": "EUR",
-    "image_url": "https://www.fotohandel.de/media/a9/d1/88/1776176223/L1090096.jpg",
-    "condition_raw": "fotohandel: A-",
-    "normalized_name": "leica summicron-tl 23mm f2.0 11081",
-    "normalized_description": "",
-    "brand": "Leica",
-    "brand_confidence": 0.97,
-    "brand_reason": [
-      "leica_kw:leica"
-    ],
-    "mount": "SL",
-    "mount_confidence": 0.96,
-    "mount_reason": [
-      "SL_explicit:SUMMICRON-TL"
-    ],
-    "category": "Lens",
-    "category_confidence": 0.85,
-    "category_reason": [
-      "lens_protected"
-    ],
-    "label": "SL Lens",
-    "label_confidence": 0.93,
-    "label_reason": [
-      "SL+Lens"
-    ],
-    "model_raw": "Summicron",
-    "model_canonical": "Summicron-SL",
-    "variant": [],
-    "focal_length": "23",
     "accessory_type": null,
     "compatible_mounts": [],
     "compatible_systems": [],
@@ -899308,7 +899319,7 @@
     "category": "Accessory",
     "category_confidence": 0.99,
     "category_reason": [
-      "acc_code:iufoo"
+      "acc_code:12575"
     ],
     "label": "Accessory",
     "label_confidence": 0.99,
