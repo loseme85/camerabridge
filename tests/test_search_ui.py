@@ -777,7 +777,7 @@ def test_english_default_with_country_language_suggestion() -> None:
 def test_members_can_save_listings() -> None:
     beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
     assert "saveButtonHtml(result.source_url)" in beta and "const SAVE_ICON" in beta and 'id="saved-link"' in beta and "renderSavedView(view)" in beta
-    assert "openSaveLogin(" in beta and "afterSaveLogin()" in beta  # 로그인 안 했으면 구글 로그인 뒤 바로 저장
+    assert "openSaveLogin(" in beta and "afterSaveLogin()" in beta and 'id="alerts-bell"' in beta  # 로그인 안 했으면 구글 로그인 뒤 바로 저장
     block = beta.split("      saves: {\n", 1)[1].split("\n      },", 1)[0]
     for key in ("save", "saved", "title", "login_prompt", "down", "up", "gone"):
         line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))
