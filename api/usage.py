@@ -113,4 +113,8 @@ class handler(BaseHTTPRequestHandler):
         return self._send(status, payload)
 
     def do_GET(self):  # noqa: N802
+        # 첫 화면 언어 권유용: 접속 나라 코드만 돌려줌 (기록하지 않음, 사람마다 달라 캐시 안 함)
+        if "geo" in (self.path.split("?", 1)[1] if "?" in self.path else ""):
+            country = str(self.headers.get("x-vercel-ip-country") or "").upper()[:2]
+            return self._send(200, {"ok": True, "country": country or None})
         return self._send(405, {"ok": False})
