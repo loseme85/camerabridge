@@ -520,3 +520,41 @@ def test_apo_summicron_50_finishes_are_split() -> None:
     assert apo("Leica APO-Summicron M 50mm F2.0 ASPH.Titan") == ["leica:lens:apo-summicron-m:50:titan"]
     assert apo("Leica M 50mm f2 APO-Summicron ASPH 6bit Silver") == ["leica:lens:apo-summicron-m:50"]
     assert apo("LEICA 50mm F2 ASPH APO-SUMMICRON-M LHSA Edition 161/200") == ["leica:lens:apo-summicron-m:50:lhsa"]
+
+
+def test_remaining_misreads_from_outlier_check() -> None:
+    def bodies(title: str, mount: str | None = None) -> set[str]:
+        return {i for i in match_entities(_record(title, "Body", mount)) if i.startswith("leica:body:")}
+    # 라이카플렉스 SL2는 디지털 SL2가 아니고, 'Mark II'는 바르낙 II가 아님
+    assert "leica:body:sl2" not in bodies("Leicaflex SL2 chrome 10021 pre series Body", "R")
+    assert "leica:body:leicaflex-sl2" in bodies("Leicaflex SL2 chrome 10021 pre series Body", "R")
+    assert "leica:body:ii" not in bodies("Leicaflex Mark II Black Paint Film SLR Camera", "R")
+    # 'SL-2'·'SL-3'·'SL-2S' 표기
+    assert "leica:body:sl2" in bodies("LEICA SL-2", "SL") and "leica:body:sl601" not in bodies("LEICA SL-2", "SL")
+    assert "leica:body:sl3" in bodies("Leica SL-3", "SL")
+    assert "leica:body:sl2-s" in bodies("Leica SL-2S Body", "SL")
+    # 화소 수 'MP'는 필름 MP가 아님
+    for t in ["Leica Q3 Black 60.3 MP Digital Camera", "Leica M Typ262 24.0 MP Digital Rangefinder Camera Body",
+              "Leica D-LUX 6 G-STAR RAW Edition 10.1 MP Digital Camera"]:
+        assert "leica:body:mp-film" not in bodies(t)
+    assert "leica:body:mp-film" in bodies("Leica 10302 MP 0.72 ブラツクPaint", "M")
+    # 'M 10-R'은 M10이 아님
+    assert "leica:body:m10" not in bodies("Leica M 10-R Black Paint", "M")
+    # 에디션
+    assert "leica:body:m3:olive" in bodies("Leica M3 オリーブ Body(Earlyロット)", "M")
+    assert "leica:body:mp-film:terry-oneill" in bodies("Leica MP 'Terry O'Nelll'", "M")
+    assert "leica:body:q2:disney" in bodies("Leica Q2 Disney 100 Years of Wonder Edition 19092 Body")
+    assert "leica:body:q2:daniel-craig" in bodies("Leica Q2 Daniel Craig x Greg Williams Body")
+    assert "leica:body:q2:007" in bodies("Leica Q2 James Bond Limited Edition boxed as new")
+
+
+def test_long_telyt_is_split_by_focal_length() -> None:
+    def telyt(title: str, mount: str | None = None) -> list[str]:
+        return sorted(i for i in match_entities(_record(title, "Lens", mount)) if ":telyt" in i)
+    v, r = "leica:lens:telyt:visoflex", "leica:lens:telyt-r:long"
+    assert telyt("Leica 20cm f4.5 Telyt (OTPLO / 11063)") == [v, f"{v}:200"]
+    assert telyt("Leica Telyt 40cm f5.0 TLCOO 1. Type") == [v, f"{v}:400-f5"]
+    assert telyt("Leica Telyt 400mm f5.0 L39") == [v, f"{v}:400-f5"]
+    assert telyt("TELYT-VISO 400 MM F/6.8 1971-1984") == [v, f"{v}:400-f68"]
+    assert telyt("Leica 250mm f4 Telyt-R (Type I) (3-Cam) (11920)", "R") == [r, f"{r}:250"]
+    assert telyt("Leica Telyt-R 350mm f4.8 11915", "R") == [r, f"{r}:350"]
