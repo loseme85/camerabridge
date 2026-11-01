@@ -185,5 +185,11 @@
       "destination": "https://camerabridge.io/:path*",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/board?r=alerts",
+      "schedule": "0 23 * * *"
+    }
   ]
 }
