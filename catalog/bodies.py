@@ -75,7 +75,7 @@ fam("leica:body:m3", "Leica M3", "라이카 M3", "M", [r"\bM ?3\b"], [r"M3 ?J", 
     v("double-stroke", "Leica M3 Double Stroke", "M3 더블스트로크", r"double ?stroke|더블 ?스트로크|\bDS\b", ["m3 ds", "m3 더블"]),
     v("single-stroke", "Leica M3 Single Stroke", "M3 싱글스트로크", r"single ?stroke|싱글 ?스트로크|\bSS\b", ["m3 ss", "m3 싱글", "m3 싱글스트로크", "m3 싱글 스트로크", "싱글스트로크"]),
     BP("M3"),
-    v("olive", "Leica M3 Olive", "M3 올리브", r"olive|올리브", ["m3 olive"], [REPAINT]),
+    v("olive", "Leica M3 Olive", "M3 올리브", r"olive|올리브|オリーブ", ["m3 olive"], [REPAINT]),
 ])
 fam("leica:body:m3j", "Leica M3J", "라이카 M3J", "M", [r"M3 ?J\b"])
 fam("leica:body:m2", "Leica M2", "라이카 M2", "M", [r"\bM ?2\b"], [r"M2-?R", r"\bM ?24\d", r"M ?2 ?\d{2}"], ["엠2"], [
@@ -219,15 +219,16 @@ fam("leica:body:m7", "Leica M7", "라이카 M7", "M", [r"\bM ?7\b"], [], ["엠7"
     v("a-la-carte", "Leica M7 à la carte", "M7 알라카르테", r"[aà] ?la ?carte|알라카르트|알라카르테", ["m7 a la carte", "m7 alacarte"]),
 ])
 fam("leica:body:mp-film", "Leica MP (film)", "라이카 MP", "M", [r"\bMP\b"],
-    [r"M-?P\b ?(240|typ)", r"M10-?P", r"M11-?P", r"\bMP ?[36]\b", r"\bQ-?P\b", r"M9-?P"], ["mp film", "엠피", "mp", "leica mp", "라이카 mp"], [
+    [r"M-?P\b ?(240|typ)", r"M10-?P", r"M11-?P", r"\bMP ?[36]\b", r"\bQ-?P\b", r"M9-?P", r"\b\d{1,2}([.,]\d)?\s?MP\b", r"d-?lux"], ["mp film", "엠피", "mp", "leica mp", "라이카 mp"], [
     v("hermes", "Leica MP Hermès", "MP 에르메스", r"herm[eè]s|에르메스", ["mp hermes", "mp 에르메스"]),
     v("lhsa", "Leica MP LHSA (Grey Hammertone)", "MP LHSA", r"LHSA|hammertone|해머톤", ["mp lhsa", "mp hammertone"]),
     v("a-la-carte", "Leica MP à la carte", "MP 알라카르테", r"[aà] ?la ?carte|알라카르트|알라카르테", ["mp a la carte"]),
     v("oskar-barnack", "Leica MP Oskar Barnack Edition (1879–2004)", "MP 오스카 바르낙", r"oskar|barnack", ["mp oskar barnack"], [r"0-?series|o-?series"]),
+    v("terry-oneill", "Leica MP 'Terry O'Neill' Edition", "MP 테리 오닐 에디션", r"terry|테리 ?오닐", ["mp terry oneill", "mp terry o'neill"]),
     v("korea-70", "Leica MP 70th Independence Anniversary (Korea)", "MP 광복 70주년", r"광복|independence", ["mp 광복 70주년", "mp independence"]),
     # 블랙 페인트는 블랙 크롬보다 비싸게 거래됨 → 별도 모델 (알라카르트·LHSA·기념판은 각자)
     v("black-paint", "Leica MP Black Paint", "MP 블랙페인트", BLACK_PAINT[0], ["mp black paint", "mp 블랙페인트", "mp 블페"],
-      [REPAINT, r"[aà] ?la ?carte|알라카르트|알라카르테", r"LHSA|hammertone|해머톤", r"herm[eè]s|에르메스", r"광복|independence", r"50(th| ?jahre)|50주년|anthrac"]),
+      [REPAINT, r"[aà] ?la ?carte|알라카르트|알라카르테", r"LHSA|hammertone|해머톤", r"herm[eè]s|에르메스", r"광복|independence", r"50(th| ?jahre)|50주년|anthrac", r"terry"]),
     v("50-jahre", "Leica MP 'Leica M 50 Jahre' (Anthracite, 2004)", "MP 50주년 (안트라사이트)", r"50(th| ?jahre)|50주년|anthrac|안트라", ["mp 50 jahre", "mp anthracite", "mp 50주년"]),  # 확인 필요
 ], standard_name="Leica MP (film, standard)")
 fam("leica:body:mp3", "Leica MP3 (LHSA)", "라이카 MP3", "M", [r"\bMP ?3\b"], [], ["mp3 lhsa"])
@@ -271,7 +272,7 @@ fam("leica:body:m-monochrom-246", "Leica M Monochrom (Typ 246)", "라이카 M �
 ])
 fam("leica:body:m262", "Leica M (Typ 262)", "라이카 M262", "M", [r"\bM ?262\b|typ ?262"], [r"M-?D"], ["m typ 262", "m262"])
 fam("leica:body:m-d262", "Leica M-D (Typ 262)", "라이카 M-D", "M", [r"\bM-D\b"], [r"M10-?D|M11-?D"], ["m-d 262", "md 262"])
-fam("leica:body:m10", "Leica M10", "라이카 M10", "M", [r"\bM ?10\b"], [r"M10-?(P|R|D|E)\b", r"monochrom"], ["엠10"], [
+fam("leica:body:m10", "Leica M10", "라이카 M10", "M", [r"\bM ?10\b"], [r"M ?10-?(P|R|D|E)\b", r"monochrom"], ["엠10"], [
     v("zagato", "Leica M10 Edition Zagato", "M10 자가토", r"zagato|자가토", ["m10 zagato"]),
 ])
 fam("leica:body:m10-p", "Leica M10-P", "라이카 M10-P", "M", [r"\bM ?10-?P\b"], [], ["m10p"], [
@@ -309,7 +310,9 @@ fam("leica:body:q", "Leica Q (Typ 116)", "라이카 Q", None, [r"\bQ\b(?!-?P)"],
 fam("leica:body:q-p", "Leica Q-P", "라이카 Q-P", None, [r"\bQ-?P\b"], [], ["qp"])
 fam("leica:body:q2", "Leica Q2", "라이카 Q2", None, [r"\bQ ?2\b"], [r"monochrom"], ["큐2"], [
     v("reporter", "Leica Q2 Reporter", "Q2 리포터", r"reporter|리포터", ["q2 reporter"]),
-    v("007", "Leica Q2 '007 Edition'", "Q2 007 에디션", r"\b007\b", ["q2 007"]),
+    v("007", "Leica Q2 '007 Edition'", "Q2 007 에디션", r"\b007\b|james ?bond", ["q2 007", "q2 james bond"]),
+    v("disney", "Leica Q2 Disney '100 Years of Wonder'", "Q2 디즈니 100주년", r"disney|디즈니", ["q2 disney"]),
+    v("daniel-craig", "Leica Q2 Daniel Craig x Greg Williams", "Q2 대니얼 크레이그 x 그렉 윌리엄스", r"daniel ?craig|greg ?williams|크레이그", ["q2 daniel craig", "q2 greg williams"]),
     v("ghost", "Leica Q2 Ghost (Hodinkee)", "Q2 고스트", r"ghost|hodinkee|고스트", ["q2 ghost"]),
     v("dawn", "Leica Q2 'Dawn' by Seal", "Q2 던 바이 씰", r"dawn|seal", ["q2 dawn", "q2 dawn by seal"]),
 ])
@@ -321,15 +324,15 @@ fam("leica:body:q3-monochrom", "Leica Q3 Monochrom", "라이카 Q3 모노크롬"
 fam("leica:body:q3-43", "Leica Q3 43", "라이카 Q3 43", None, [r"\bQ ?3\b", r"\b43(\s?mm)?\b"], [], ["q3 43", "q343", "큐3 43"])
 
 # ── SL · TL · CL · S ──
-fam("leica:body:sl601", "Leica SL (Typ 601)", "라이카 SL (601)", "SL", [r"\bSL\b(?! ?\d)|typ ?601"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\bSL ?[23]\b", r"leicaflex"], ["sl typ 601", "sl601", "sl 601"])
-fam("leica:body:sl2", "Leica SL2", "라이카 SL2", "SL", [r"\bSL ?2\b"], [r"SL2-?S"], [])
-fam("leica:body:sl2-s", "Leica SL2-S", "라이카 SL2-S", "SL", [r"\bSL ?2-?S\b"], [], ["sl2s"], [
+fam("leica:body:sl601", "Leica SL (Typ 601)", "라이카 SL (601)", "SL", [r"\bSL\b(?! ?\d)|typ ?601"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\bSL[ -]?[23]\b", r"leicaflex"], ["sl typ 601", "sl601", "sl 601"])
+fam("leica:body:sl2", "Leica SL2", "라이카 SL2", "SL", [r"\bSL[ -]?2\b"], [r"SL[ -]?2-?S\b", r"leicaflex"], [])
+fam("leica:body:sl2-s", "Leica SL2-S", "라이카 SL2-S", "SL", [r"\bSL[ -]?2-?S\b"], [r"leicaflex"], ["sl2s"], [
     v("reporter", "Leica SL2-S Reporter", "SL2-S 리포터", r"reporter|리포터", ["sl2-s reporter"]),
 ])
-fam("leica:body:sl3", "Leica SL3", "라이카 SL3", "SL", [r"\bSL ?3\b"], [r"SL3-?S"], [], [
+fam("leica:body:sl3", "Leica SL3", "라이카 SL3", "SL", [r"\bSL[ -]?3\b"], [r"SL[ -]?3-?S\b", r"leicaflex"], [], [
     v("reporter", "Leica SL3 Reporter", "SL3 리포터", r"reporter|리포터", ["sl3 reporter", "sl3 리포터"]),
 ])
-fam("leica:body:sl3-s", "Leica SL3-S", "라이카 SL3-S", "SL", [r"\bSL ?3-?S\b"], [], ["sl3s"])
+fam("leica:body:sl3-s", "Leica SL3-S", "라이카 SL3-S", "SL", [r"\bSL[ -]?3-?S\b"], [r"leicaflex"], ["sl3s"])
 fam("leica:body:t701", "Leica T (Typ 701)", "라이카 T", "TL", [r"\bT\b ?\(?typ ?701|\bleica T\b(?! ?L)"], [], ["t typ 701", "t701"])
 fam("leica:body:tl", "Leica TL", "라이카 TL", "TL", [r"\bTL\b(?! ?2)"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\d{2}-\d{2}", r"elmar|summi|vario|apo"], [])
 fam("leica:body:tl2", "Leica TL2", "라이카 TL2", "TL", [r"\bTL ?2\b"], [], [])
@@ -410,7 +413,7 @@ BARNACK = [
 for slug, name, pattern in BARNACK:
     short = _short(name).split(" (")[0].lower()
     fam(f"leica:body:{slug}", name, f"라이카 {_short(name).split(' (')[0]}", None, [pattern],
-        [r"\bM ?\d", r"\bR ?\d", r"\bSL\b", r"\bQ\b", r"\bX\b", r"\bS ?\d", r"\bQ ?\d", r"magnifier|data ?back|soft ?release|vit\b"] if slug in ("i", "ii", "iii", "standard") else [r"\bM ?\d"],
+        [r"\bM ?\d", r"\bR ?\d", r"\bSL\b", r"\bQ\b", r"\bX\b", r"\bS ?\d", r"\bQ ?\d", r"magnifier|data ?back|soft ?release|vit\b", r"leicaflex"] if slug in ("i", "ii", "iii", "standard") else [r"\bM ?\d"],
         [short, f"barnack {short}", f"바르낙 {short}"])
 
 MODELS["leica:body:iii"]["title_must_not"].append(BLACK_PAINT[0])

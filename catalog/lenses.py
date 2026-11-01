@@ -329,8 +329,27 @@ lens("leica:lens:elmar:135", "Elmar 135mm f/4", "엘마 135", None, "elmar", "13
 lens("leica:lens:macro-elmar-m:90", "Macro-Elmar-M 90mm f/4", "매크로 엘마 90", "M", "macro-elmar", "90")
 lens("leica:lens:apo-telyt-m:135", "APO-Telyt-M 135mm f/3.4", "아포 텔리트 135", "M", "apo-telyt", "135")
 lens("leica:lens:tele-elmar-m:135", "Tele-Elmar-M 135mm f/4", "텔레엘마 135", "M", "tele-elmar", "135")
-lens("leica:lens:telyt:visoflex", "Telyt (Visoflex) 200 · 280 · 400 · 560", "텔리트 (비조플렉스)", None, "telyt", "", [r"\b(200|280|400|560)(?:\s?mm)?\b"], must_not=[r"apo|-R\b|\bR\b"],
-     extra_aliases=["telyt 200", "telyt 280", "telyt 400", "telyt 560"])
+
+
+def telyt_long(key, name, ko, mount, focals, must_not, parent_aliases):
+    """장망원 텔리트: 초점거리마다 값이 몇 배씩 달라 따로 본다 (예전 키는 묶음으로 남김)"""
+    kids = []
+    for slug, cname, cko, marker, cnot in focals:
+        n = slug.split("-")[0]
+        als = [f"telyt {n}", f"{n} telyt", f"텔리트 {n}"] if mount is None else [f"telyt-r {n}", f"telyt r {n}", f"r {n} telyt", f"텔리트 r {n}"]
+        _add(f"{key}:{slug}", cname, cko, mount, [FAM["telyt"][0], marker], list(must_not) + list(cnot), als)
+        kids.append(f"{key}:{slug}")
+    PARENTS[key] = (f"{name} (all)", "Lens", mount, kids, list(parent_aliases), f"{ko} (전체)")
+
+
+TELYT_400_F5 = r"40 ?cm|\b(f/?|1:) ?5([.,]0)?\b(?![.,]\d)"
+telyt_long("leica:lens:telyt:visoflex", "Telyt (Visoflex) 200 · 280 · 400 · 560", "텔리트 (비조플렉스)", None, [
+    ("200", "Telyt 200mm f/4 · 20cm f/4.5 (Visoflex)", "텔리트 200 (비조플렉스)", r"\b200(?:\s?mm)?\b|\b20 ?cm\b", []),
+    ("280", "Telyt 280mm f/4.8 (Visoflex)", "텔리트 280 (비조플렉스)", r"\b280(?:\s?mm)?\b", []),
+    ("400-f5", "Telyt 40cm f/5 (Visoflex, 1937–)", "텔리트 40cm f/5 (비조플렉스)", rf"\b40 ?cm\b|\b400(?:\s?mm)?\b.*({TELYT_400_F5})", [r"6[.,]8"]),
+    ("400-f68", "Telyt 400mm f/6.8 (Visoflex)", "텔리트 400 f/6.8 (비조플렉스)", r"\b400(?:\s?mm)?\b", [TELYT_400_F5]),
+    ("560", "Telyt 560mm f/5.6 · f/6.8 (Visoflex)", "텔리트 560 (비조플렉스)", r"\b560(?:\s?mm)?\b", []),
+], [r"apo|-R\b|\bR\b"], ["telyt visoflex", "visoflex telyt", "텔리트 비조플렉스"])
 lens("leica:lens:summitar:50", "Summitar 50mm f/2", "즈미타 50", None, "summitar", "50")
 lens("leica:lens:summar:50", "Summar 50mm f/2", "주마 50", None, "summar", "50")
 lens("leica:lens:summarex:85", "Summarex 85mm f/1.5", "주마렉스 85", None, "summarex", "85")
@@ -394,7 +413,9 @@ TIGHTEN["leica:lens:elmarit-r:100"] = TIGHTEN.get("leica:lens:elmarit-r:100", []
 lens("leica:lens:apo-summicron-r:180", "APO-Summicron-R 180mm f/2", "아포 주미크론 R 180", "R", "summicron", "180", [r"\bAPO\b|apo-"])
 lens("leica:lens:apo-elmarit-r:180", "APO-Elmarit-R 180mm f/2.8", "아포 엘마리트 R 180", "R", "apo-elmarit", "180")
 lens("leica:lens:apo-telyt-r:280", "APO-Telyt-R 280mm f/4 · f/2.8", "아포 텔리트 R 280", "R", "apo-telyt", "280")
-lens("leica:lens:telyt-r:long", "Telyt-R 250 · 350 · 400 · 560 · 800", "텔리트 R 장망원", "R", "telyt", "", [r"\b(250|350|400|560|800)(?:\s?mm)?\b"], must_not=[r"\bapo\b", r"\bMR\b|mirror"])
+telyt_long("leica:lens:telyt-r:long", "Telyt-R 250 · 350 · 400 · 560 · 800", "텔리트 R 장망원", "R", [
+    (n, f"Telyt-R {n}mm", f"텔리트 R {n}", rf"\b{n}(?:\s?mm)?\b", []) for n in ("250", "350", "400", "560", "800")
+], [r"\bapo\b", r"\bMR\b|mirror"], ["telyt-r", "telyt r", "텔리트 r"])
 lens("leica:lens:mr-telyt-r:500", "MR-Telyt-R 500mm f/8 (mirror)", "MR 텔리트 R 500 (반사)", "R", "telyt", "500", [r"\bMR\b|mirror|reflex|반사"], extra_aliases=["mr telyt 500", "mr-telyt-r 500"])
 _add("leica:lens:pa-curtagon-r:35", "PA-Curtagon-R 35mm f/4 (shift)", "PA 쿠르타곤 R 35 (시프트)", "R", [r"curtagon", f("35")], [],
      ["pa-curtagon-r 35", "pa curtagon 35", "curtagon 35", "쿠르타곤 35"])
