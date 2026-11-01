@@ -772,3 +772,14 @@ def test_english_default_with_country_language_suggestion() -> None:
     assert "return 'en';" in beta.split("function detectInitialLocale", 1)[1][:400]  # 기본은 영어
     assert "suggestLocale();" in beta and "/api/usage?geo=1" in beta and "KR: 'ko'" in beta
     assert "cb.beta.locale_hint" in beta  # 고르거나 닫으면 다시 안 물음
+
+
+def test_members_can_save_listings() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert "saveButtonHtml(result.source_url)" in beta and 'id="saved-link"' in beta and "renderSavedView(view)" in beta
+    assert "openSaveLogin(" in beta and "afterSaveLogin()" in beta  # 로그인 안 했으면 구글 로그인 뒤 바로 저장
+    block = beta.split("      saves: {\n", 1)[1].split("\n      },", 1)[0]
+    for key in ("save", "saved", "title", "login_prompt", "down", "up", "gone"):
+        line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))
+        for locale in ("ko:", "en:", "ja:", "de:", "it:"):
+            assert locale in line, (key, locale)

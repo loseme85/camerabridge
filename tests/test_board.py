@@ -143,3 +143,23 @@ def test_owner_needs_key(monkeypatch):
     assert board.authorized("k" * 20) and not board.authorized("") and not board.authorized("nope")
     monkeypatch.setenv("OWNER_DASHBOARD_KEY", "short")
     assert not board.authorized("short")
+
+
+def test_members_save_listings_and_see_price_changes(monkeypatch):
+    fake, _ = _setup(monkeypatch)
+    a = _join("tok-a", "필름러")
+    item = {"url": "https://shop.example/m6", "title": "Leica M6", "price": 4000000, "currency": "KRW", "source": "샵", "image": "javascript:alert(1)"}
+    assert board.save_item(item, None)[0] == 401  # 로그인한 회원만
+    assert board.save_item({**item, "url": "ftp://x"}, a)[1]["error"] == "url"
+    assert board.save_item(item, a)[1]["urls"] == ["https://shop.example/m6"]
+    assert board.save_item({**item, "url": "https://shop.example/q3"}, a)[0] == 200
+    assert board.save_item(item, a)[1]["urls"] == ["https://shop.example/m6", "https://shop.example/q3"]  # 같은 주소는 하나만, 최근이 앞
+    saved = fake.store[f"board/saves/{a}.json"]["items"][0]
+    assert saved["image"] == ""  # http(s)가 아닌 그림 주소는 저장 안 함
+    current = {"https://shop.example/m6": {"sold_quality": "asking", "parsed_price_numeric": 3600000, "currency": "KRW"}}
+    status, out = board.list_saves(a, with_status=True, current=current)
+    now = {i["url"]: i["now"] for i in out["items"]}
+    assert now["https://shop.example/m6"] == {"status": "asking", "price": 3600000, "currency": "KRW"}
+    assert now["https://shop.example/q3"]["status"] == "gone"
+    assert board.unsave_item({"url": "https://shop.example/m6"}, a)[1]["urls"] == ["https://shop.example/q3"]
+    assert board.list_saves(_join("tok-b", "다른사람"))[1]["urls"] == []  # 회원마다 따로

@@ -10,6 +10,7 @@
   board/held/…                                            신고 HIDE_REPORTS명 이상 → 자동으로 가림 (운영자가 확인 뒤 되살리거나 지움)
   board/removed/…                                         지운 글·댓글 (REMOVED_DAYS일 보관 뒤 운영자가 비움)
   board/reports/<글id>[~<댓글id>]/<접속지태그>.json        신고
+  board/saves/<회원id>.json                               회원이 스크랩한 상품 (원래 주소 + 저장할 때 제목·가격 등), 최대 SAVE_LIMIT개
 스팸 막기: 로그인한 회원만 쓰기, 숨은 입력칸, 쓰기 시작한 지 1.5초 안에 보내면 거절, 회원당 하루 글 POST_LIMIT·댓글 COMMENT_LIMIT건, 링크 MAX_LINKS개까지.
 신고는 로그인 없이도 가능 (같은 접속지는 한 번, 접속지 = 날마다 바뀌는 IP 해시).
 운영자 관리: /owner/board (cb_owner 쿠키 = OWNER_DASHBOARD_KEY, /owner/usage?key=… 로 한 번 들어가면 생김)
@@ -40,6 +41,7 @@ MAX_LINKS = 3
 MIN_ELAPSED_MS = 1500
 HIDE_REPORTS = 3
 REMOVED_DAYS = 30
+SAVE_LIMIT = 300
 COOKIE = "cb_owner"
 MEMBER_COOKIE = "cb_member"
 SESSION_DAYS = 90
@@ -382,6 +384,76 @@ def report(body: dict, headers) -> tuple[int, dict]:
     return 200, {"ok": True, "hidden": hidden}
 
 
+# ── 상품 스크랩 (구글 로그인 회원만) ──
+def _saves(blob, member_id: str) -> list[dict]:
+    return (_read(blob, f"board/saves/{member_id}.json") or {}).get("items") or []
+
+
+def _clip(value, limit: int) -> str:
+    return str(value or "").strip()[:limit]
+
+
+def save_item(body: dict, member_id: str | None) -> tuple[int, dict]:
+    if not member_id:
+        return 401, {"ok": False, "error": "login"}
+    url = _clip(body.get("url"), 1000)
+    if not re.match(r"^https?://", url):
+        return 400, {"ok": False, "error": "url"}
+    try:
+        price = float(body.get("price")) if body.get("price") not in (None, "") else None
+    except (TypeError, ValueError):
+        price = None
+    blob = _blob()
+    items = [i for i in _saves(blob, member_id) if i.get("url") != url]
+    if len(items) >= SAVE_LIMIT:
+        return 400, {"ok": False, "error": "limit"}
+    items.insert(0, {"url": url, "saved_at": _now()[0].isoformat(timespec="seconds"), "title": _clip(body.get("title"), 200),
+                     "price": price, "currency": _clip(body.get("currency"), 5).upper() or None, "source": _clip(body.get("source"), 80),
+                     "image": _clip(body.get("image"), 1000) if re.match(r"^https?://", str(body.get("image") or "")) else "",
+                     "grade": _clip(body.get("grade"), 3), "entity": _clip(body.get("entity"), 120)})
+    _put(blob, f"board/saves/{member_id}.json", {"items": items})
+    return 200, {"ok": True, "urls": [i["url"] for i in items]}
+
+
+def unsave_item(body: dict, member_id: str | None) -> tuple[int, dict]:
+    if not member_id:
+        return 401, {"ok": False, "error": "login"}
+    blob = _blob()
+    url = _clip(body.get("url"), 1000)
+    items = [i for i in _saves(blob, member_id) if i.get("url") != url]
+    _put(blob, f"board/saves/{member_id}.json", {"items": items})
+    return 200, {"ok": True, "urls": [i["url"] for i in items]}
+
+
+def _current_listings() -> dict[str, dict]:
+    """원래 주소 → 지금 색인의 매물 (가격·판매 상태). 검색 색인을 불러옴 (파일이 바뀔 때만 다시 읽음)."""
+    import sys  # noqa: WPS433
+    from pathlib import Path  # noqa: WPS433
+    root = Path(__file__).resolve().parents[1]
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index  # noqa: WPS433
+    path = Path(DEFAULT_SEARCH_INDEX_PATH)
+    records = load_search_index(path if path.is_absolute() else root / path)
+    return {(r.get("final_output") or {}).get("source_url"): (r.get("final_output") or {}) for r in records}
+
+
+def list_saves(member_id: str | None, with_status: bool = False, current=None) -> tuple[int, dict]:
+    if not member_id:
+        return 401, {"ok": False, "error": "login"}
+    items = _saves(_blob(), member_id)
+    if not with_status:
+        return 200, {"ok": True, "urls": [i["url"] for i in items]}
+    now = current if current is not None else _current_listings()
+    out = []
+    for item in items:
+        listing = now.get(item["url"])
+        status = "gone" if not listing else ("asking" if listing.get("sold_quality") == "asking" else "sold")
+        out.append({**item, "now": {"status": status, "price": (listing or {}).get("parsed_price_numeric"),
+                                    "currency": (listing or {}).get("currency")}})
+    return 200, {"ok": True, "items": out}
+
+
 # ── 운영자 ──
 def authorized(cookie_value: str) -> bool:
     expected = os.environ.get("OWNER_DASHBOARD_KEY", "")
@@ -475,6 +547,9 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(200, owner_page(), "text/html; charset=utf-8", extra={"x-robots-tag": "noindex, nofollow"})
             if query.get("r") == "me":
                 return self._send(200, me(self._member_id()))
+            if query.get("r") == "saves":
+                status, payload = list_saves(self._member_id(), with_status=bool(query.get("full")))
+                return self._send(status, payload)
             if query.get("id"):  # 내 글 표시(mine) 때문에 캐시하지 않음
                 status, payload = read_post(query["id"], self._member_id())
                 return self._send(status, payload)
@@ -522,6 +597,10 @@ class handler(BaseHTTPRequestHandler):
                 status, payload = create_comment(body, member_id)
             elif action == "delete":
                 status, payload = delete_entry(body, member_id)
+            elif action == "save":
+                status, payload = save_item(body, member_id)
+            elif action == "unsave":
+                status, payload = unsave_item(body, member_id)
             elif action == "report":
                 status, payload = report(body, self.headers)
             else:
