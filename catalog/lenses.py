@@ -546,6 +546,18 @@ _add("leica:lens:apo-summicron-m:50:lhsa", "APO-Summicron-M 50mm f/2 ASPH LHSA E
      [r"APO", CRON, f("50"), LHSA], [r"\bSL\b"], ["apo summicron 50 lhsa", "아포 주미크론 50 lhsa"])
 EXTEND_PARENTS.setdefault(SC50, []).append("leica:lens:apo-summicron-m:50:lhsa")
 TIGHTEN["leica:lens:apo-summicron-m:50"] = TIGHTEN.get("leica:lens:apo-summicron-m:50", []) + [LHSA]
+# APO-Summicron-M 50 한정 마감: 블랙크롬·레드·티탄 (기본형의 2~7배, 2026-11-01 사장님 확인 요청) → 기념·한정판 칸
+APO50 = "leica:lens:apo-summicron-m:50"
+for slug, name, ko, marker, als in [
+    ("black-chrome", "APO-Summicron-M 50mm f/2 ASPH Black Chrome Edition", "아포 주미크론 50 블랙크롬", r"black[- ]?chrome|블랙 ?크롬|ブラッククローム", ["black chrome", "블랙크롬"]),
+    ("red", "APO-Summicron-M 50mm f/2 ASPH Red (anodized)", "아포 주미크론 50 레드", r"\bred\b|레드|レッド|赤", ["red", "레드"]),
+    ("titan", "APO-Summicron-M 50mm f/2 ASPH Titan", "아포 주미크론 50 티탄", r"titan|티탄|チタン", ["titan", "티탄"]),
+]:
+    key = f"{APO50}:{slug}"
+    _add(key, name, ko, "M", [r"APO", CRON, f("50"), marker], [r"\bSL\b", LHSA], [f"apo summicron 50 {a}" for a in als] + [f"아포 주미크론 50 {a}" for a in als])
+    MODELS[key]["edition"] = True
+    EXTEND_PARENTS.setdefault(SC50, []).append(key)
+    TIGHTEN[APO50] = TIGHTEN.get(APO50, []) + [marker]
 
 # Summicron 28 ASPH 사파리, Summicron 90 블랙페인트
 _add("leica:lens:summicron-m:28:safari", "Summicron-M 28mm f/2 ASPH Safari", "주미크론 28 사파리", "M", [CRON, f("28"), SAFARI], [r"\bAPO\b"],

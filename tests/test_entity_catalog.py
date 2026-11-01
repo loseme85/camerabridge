@@ -509,3 +509,14 @@ def test_body_with_lens_is_a_set_but_fixed_lens_camera_is_not() -> None:
     assert not is_set(rec("Leica R3 Electronic Black 35mm SLR Film Body", mount="R"))
     assert not is_set(rec("[중고] Q3 43mm", mount=None))
     assert not is_set(rec("Leica Minilux Zoom Vario-Elmar 35-70mm silber", mount=None))
+
+
+def test_apo_summicron_50_finishes_are_split() -> None:
+    def apo(title: str) -> list[str]:
+        return sorted(i for i in match_entities(_record(title)) if i.startswith("leica:lens:apo-summicron-m:50"))
+    assert apo("[중고] M 50/2 Summicron APO (Black Chrome)") == ["leica:lens:apo-summicron-m:50:black-chrome"]
+    assert apo("Leica APO-Summicron-M 50mm f2 ASPH. (Black-Chrome Edition)") == ["leica:lens:apo-summicron-m:50:black-chrome"]
+    assert apo("Leica APO Summicron 50mm f2.0 red anodised") == ["leica:lens:apo-summicron-m:50:red"]
+    assert apo("Leica APO-Summicron M 50mm F2.0 ASPH.Titan") == ["leica:lens:apo-summicron-m:50:titan"]
+    assert apo("Leica M 50mm f2 APO-Summicron ASPH 6bit Silver") == ["leica:lens:apo-summicron-m:50"]
+    assert apo("LEICA 50mm F2 ASPH APO-SUMMICRON-M LHSA Edition 161/200") == ["leica:lens:apo-summicron-m:50:lhsa"]
