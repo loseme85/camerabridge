@@ -783,3 +783,14 @@ def test_members_can_save_listings() -> None:
         line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))
         for locale in ("ko:", "en:", "ja:", "de:", "it:"):
             assert locale in line, (key, locale)
+
+
+def test_model_view_has_value_calculator() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert 'id="value-calc-region"' in beta and "function renderValueCalc()" in beta and "bindValueCalc();" in beta
+    assert "['too_cheap', 'set'].includes((r.final_output || {}).entity_note)" in beta  # 부품·세트는 계산에서 뺌
+    block = beta.split("      calc: {\n", 1)[1].split("\n      },", 1)[0]
+    for key in ("title", "note", "asking", "sold", "home", "days", "conf_high", "conf_low"):
+        line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))
+        for locale in ("ko:", "en:", "ja:", "de:", "it:"):
+            assert locale in line, (key, locale)
