@@ -765,3 +765,10 @@ def test_price_ladder_pinch_zoom() -> None:
     assert "const zoomAround = " in beta and "pinchState()" in beta  # 손가락 두 개로 벌리기·오므리기
     assert "event.ctrlKey && event.target.closest" in beta  # 트랙패드 벌리기·오므리기
     assert "ladderState.base" in beta  # 처음보다 오므리면 전체 보기로
+
+
+def test_english_default_with_country_language_suggestion() -> None:
+    beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert "return 'en';" in beta.split("function detectInitialLocale", 1)[1][:400]  # 기본은 영어
+    assert "suggestLocale();" in beta and "/api/usage?geo=1" in beta and "KR: 'ko'" in beta
+    assert "cb.beta.locale_hint" in beta  # 고르거나 닫으면 다시 안 물음
