@@ -47,6 +47,7 @@ FINAL_OUTPUT_FIELDS = [
     "crawl_time",
     "first_seen",
     "last_seen",
+    "sold_at",  # 시세 계산: 처음 본 날 → 팔린 날 (보통 며칠 안에 팔리나)
     "source_marketplace",
     "source_item_id",
     "legacy_item_id",
