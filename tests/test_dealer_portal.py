@@ -1,3 +1,4 @@
+from pathlib import Path
 import json
 import time
 
@@ -161,3 +162,9 @@ def test_leica_list_price_sanity_and_country():
     assert not plausible(7990, "DKK", gb, krw_per)  # 덴마크 페이지: 유로 가격에 DKK가 붙어 있음
     assert not plausible(7990, "XYZ", gb, krw_per)
     assert country_of("en-DK") == "DK" and country_of("fr-CH") == "CH" and country_of("zh-Hant") == "zh-Hant"
+
+
+def test_dealer_buy_view_shows_same_grade_counts_and_confidence():
+    page = (Path(__file__).resolve().parents[1] / "app/templates/dealer.html").read_text(encoding="utf-8")
+    assert "function sameGradeCount(eid, g)" in page and 't("same_n"' in page
+    assert page.count("same_n:") == 10 and page.count("conf_low:") == 10  # 10개 언어
