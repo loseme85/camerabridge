@@ -207,7 +207,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 "카메라브릿지는 회원 가입 없이 쓸 수 있고, 아래의 최소한의 정보만 처리합니다.</p>"
                 + "<h2>1. 처리하는 정보와 목적</h2>" + _rows([
                     ("의견 보내기", "의견 내용, 이메일(선택 입력), 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함) — 의견 확인·답장, 스팸 막기(하루 5건 제한)"),
-                    ("커뮤니티 게시판 (구글 로그인)", "구글 계정 고유번호를 알아볼 수 없게 바꾼 회원 번호(해시값), 닉네임, 글·댓글 내용(누구나 볼 수 있게 공개), 신고한 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함)과 신고 내용 — 회원 확인·로그인 유지, 게시판 운영, 스팸·도배 막기(하루 글 5건·댓글 30건 제한), 신고 처리. 구글 이메일·이름·사진은 받지만 저장하지 않음"),
+                    ("커뮤니티 게시판 (구글 로그인)", "구글 계정 고유번호를 알아볼 수 없게 바꾼 회원 번호(해시값), 닉네임, 글·댓글 내용(누구나 볼 수 있게 공개), 신고한 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함)과 신고 내용, 저장(스크랩)한 상품의 주소와 저장할 때의 제목·가격 — 회원 확인·로그인 유지, 게시판 운영, 저장한 상품 보여 주기, 스팸·도배 막기(하루 글 5건·댓글 30건 제한), 신고 처리. 구글 이메일·이름·사진은 받지만 저장하지 않음"),
                     ("매장(딜러) 계정", "아이디, 매장 이름, 비밀번호(복원할 수 없는 해시값으로 저장) — 매장 전용 시세 화면 로그인"),
                     ("방문 기록", "접속 나라 코드, 화면 언어·통화, 들어온 사이트 주소(도메인만)·첫 주소, 모바일 여부, 머문 시간, 검색어·고른 모델·결과 수, 매장 링크 클릭, 탭마다 새로 만드는 무작위 번호 — 서비스 개선과 이용 통계. IP 주소·이메일·쿠키는 남기지 않음"),
                     ("방문 통계", "Vercel Web Analytics의 집계 통계(쿠키 없음, 개인 식별 안 함) — 방문 수 확인"),
@@ -215,7 +215,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + "<h2>2. 보유 기간</h2>" + _list([
                     "의견: 받은 날부터 1년 (답장이 이어지면 마지막 연락부터 1년)",
                     "매장 계정: 계정을 없앨 때까지",
-                    "게시판 글·댓글: 글쓴이가 지울 때까지. 지운 글과 운영자가 내린 글은 분쟁·신고 확인을 위해 30일 비공개로 보관한 뒤 지움. 회원 번호·닉네임: 탈퇴를 요청할 때까지",
+                    "게시판 글·댓글: 글쓴이가 지울 때까지. 지운 글과 운영자가 내린 글은 분쟁·신고 확인을 위해 30일 비공개로 보관한 뒤 지움. 회원 번호·닉네임·저장한 상품: 탈퇴를 요청할 때까지 (저장한 상품은 목록에서 빼면 바로 지움)",
                     "방문 기록: 기록한 날부터 1년",
                     "기간이 지나거나 목적을 이루면 바로 지웁니다. 전자 파일은 복구할 수 없게 지웁니다.",
                 ])
@@ -242,7 +242,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 "Camera Bridge は会員登録なしで使え、以下の最小限の情報のみを扱います。</p>"
                 + "<h2>1. 取り扱う情報と目的</h2>" + _rows([
                     ("ご意見の送信", "内容、メールアドレス（任意）、接続元識別値（IP アドレスを日ごとに変換したハッシュ値。IP 自体は保存しません）— 内容の確認・返信、スパム防止（1日5件まで）"),
-                    ("コミュニティ掲示板（Google ログイン）", "Google アカウント固有番号を特定できない形に変換した会員番号（ハッシュ値）、ニックネーム、投稿・コメントの内容（誰でも閲覧できる公開情報）、通報者の接続元識別値（IP アドレスを日ごとに変換したハッシュ値）と通報内容 — 会員の確認・ログイン維持、掲示板の運営、スパム防止（1日に投稿5件・コメント30件まで）、通報対応。Google のメール・名前・写真は保存しません"),
+                    ("コミュニティ掲示板（Google ログイン）", "Google アカウント固有番号を特定できない形に変換した会員番号（ハッシュ値）、ニックネーム、投稿・コメントの内容（誰でも閲覧できる公開情報）、通報者の接続元識別値（IP アドレスを日ごとに変換したハッシュ値）と通報内容、保存した商品の URL と保存時のタイトル・価格 — 会員の確認・ログイン維持、掲示板の運営、保存した商品の表示、スパム防止（1日に投稿5件・コメント30件まで）、通報対応。Google のメール・名前・写真は保存しません"),
                     ("店舗（ディーラー）アカウント", "ID、店舗名、パスワード（復元できないハッシュ値で保存）— 店舗専用画面へのログイン"),
                     ("利用記録", "接続国コード、表示言語・通貨、参照元（ドメインのみ）・最初のページ、モバイルかどうか、滞在時間、検索語・選んだモデル・結果数、店舗リンクのクリック、タブごとに作るランダムな番号 — サービス改善と利用統計。IP アドレス・メール・Cookie は残しません"),
                     ("アクセス統計", "Vercel Web Analytics の集計統計（Cookie なし、個人を特定しません）"),
@@ -271,7 +271,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
             "This policy is written to meet Korea's Personal Information Protection Act and the EU/UK GDPR.</p>"
             + "<h2>1. What we process, why, and on what basis</h2>" + _rows([
                 ("Feedback form", "Your message, email (optional), and a sender tag (a daily-rotating hash of your IP address; the IP itself is not stored) — to read and reply to feedback and to block spam (5 per day). Basis: your consent by sending it, and our legitimate interest in preventing abuse."),
-                ("Community board (Google sign-in)", "A member ID (a one-way hash of your Google account ID), your nickname, the text of your posts and comments (public — anyone can read them), and for reports a sender tag (a daily-rotating hash of your IP address) and the report text — to recognise you and keep you signed in, run the board, block spam (5 posts and 30 comments per day) and handle reports. Your Google email, name and photo are not stored. Basis: your consent by signing in and posting, and our legitimate interest in preventing abuse."),
+                ("Community board (Google sign-in)", "A member ID (a one-way hash of your Google account ID), your nickname, the text of your posts and comments (public — anyone can read them), for reports a sender tag (a daily-rotating hash of your IP address) and the report text, and the listings you save (link plus title and price at the time you saved) — to recognise you and keep you signed in, run the board, show your saved listings, block spam (5 posts and 30 comments per day) and handle reports. Your Google email, name and photo are not stored. Basis: your consent by signing in and posting, and our legitimate interest in preventing abuse."),
                 ("Shop (dealer) accounts", "Username, shop name and password (stored only as a one-way hash) — to sign in to the dealer view. Basis: contract with the shop."),
                 ("Usage log", "Country code of the connection, interface language and currency, referring site (domain only) and first page, mobile or not, time on page, searches, chosen models, result counts, clicks to shops, and a random ID created per browser tab — to improve the service and count usage. No IP address, email or cookie is kept. Basis: legitimate interest in running and improving the service."),
                 ("Analytics", "Aggregated visit statistics from Vercel Web Analytics (cookieless, does not identify you)."),
@@ -279,7 +279,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
             + "<h2>2. How long we keep it</h2>" + _list([
                 "Feedback: 1 year from receipt (or from the last message if we keep corresponding)",
                 "Shop accounts: until the account is closed",
-                "Board posts and comments: until you delete them. Deleted posts and posts taken down by the operator are kept privately for 30 days to handle reports and disputes, then deleted. Member ID and nickname: until you ask us to delete your account",
+                "Board posts and comments: until you delete them. Deleted posts and posts taken down by the operator are kept privately for 30 days to handle reports and disputes, then deleted. Member ID, nickname and saved listings: until you ask us to delete your account (a saved listing is deleted as soon as you remove it)",
                 "Usage log: 1 year from the day it was recorded",
                 "After that, data is deleted without delay.",
             ])
