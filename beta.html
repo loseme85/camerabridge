@@ -1217,6 +1217,7 @@
     .price-ladder h3{margin:0;font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-0.01em}
     .price-ladder>p{margin:4px 0 14px;font-size:13px;color:var(--text-soft)}
     .price-ladder{position:relative}
+    .price-ladder .ladder-row{touch-action:pan-y}
     .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:36px;border-top:1px solid var(--border)}
     .ladder-grade{font-family:var(--serif);font-size:15px;font-weight:600}
     .ladder-strip{position:relative;align-self:stretch;min-height:36px;touch-action:pan-y;cursor:crosshair;user-select:none}
@@ -4263,7 +4264,18 @@
         const low = center - ratio * width;
         panTo(low, low + width);
       };
-      // 손가락 두 개 (휴대폰): 벌리면 확대, 오므리면 축소
+      // 움직이는 동안 그래프를 다시 그려 손가락 밑 요소가 바뀜 — iOS는 그 뒤 움직임을 문서로 안 올려 보내서
+      // 처음 누른 요소에도 같은 처리를 붙이고, 같은 이벤트는 한 번만 처리
+      const followers = [];
+      const follow = (type, fn, capture) => {
+        const done = new WeakSet();
+        const run = event => { if(done.has(event)) return; done.add(event); fn(event); };
+        document.addEventListener(type, run, capture);
+        followers.push([type, run]);
+      };
+      const stick = target => { followers.forEach(([type, run]) => target.addEventListener(type, run)); };
+      let draggedAt = 0;  // 끌고 난 직후의 누름은 점 누르기로 보지 않음
+      // 손가락 두 개 (휴대폰): 벌리면 확대, 오므리면 축소 (두 번째 손가락은 그래프 줄 어디에 닿아도 됨)
       const touches = new Map();
       let pinch = null;
       const pinchState = () => {
@@ -4271,32 +4283,35 @@
         return { dist: Math.hypot(a.x - b.x, a.y - b.y), mid: (a.x + b.x) / 2 };
       };
       document.addEventListener('pointerdown', event => {
-        if(event.pointerType !== 'touch' || !(event.target.closest && event.target.closest('.price-ladder .ladder-strip'))) return;
+        if(event.pointerType !== 'touch' || !(event.target.closest && event.target.closest('.price-ladder .ladder-row'))) return;
         touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        stick(event.target);
         if(touches.size !== 2) return;
         if(drag && drag.box) drag.box.remove();
         drag = null;  // 두 번째 손가락이 오면 끌기 대신 확대·축소
         const strip = document.querySelector('.price-ladder .ladder-strip');
+        if(!strip || !ladderState.view) return;
         const rect = strip.getBoundingClientRect();
         const view = ladderState.view;
         const { dist, mid } = pinchState();
         const ratio = Math.max(0, Math.min(1, (mid - rect.left) / rect.width));
         pinch = { dist: Math.max(dist, 1), width: view.high - view.low, center: view.low + ratio * (view.high - view.low), left: rect.left, size: rect.width };
       }, true);
-      document.addEventListener('pointermove', event => {
+      follow('pointermove', event => {
         if(!touches.has(event.pointerId)) return;
         touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
         if(!pinch || touches.size !== 2) return;
         const { dist, mid } = pinchState();
         const ratio = Math.max(0, Math.min(1, (mid - pinch.left) / pinch.size));
         zoomAround(pinch.center, ratio, pinch.width * pinch.dist / Math.max(dist, 1));
+        draggedAt = Date.now();
       }, true);
       const lift = event => {
         touches.delete(event.pointerId);
         if(touches.size < 2) pinch = null;
       };
-      document.addEventListener('pointerup', lift, true);
-      document.addEventListener('pointercancel', lift, true);
+      follow('pointerup', lift, true);
+      follow('pointercancel', lift, true);
       // 트랙패드 두 손가락 벌리기·오므리기 (브라우저는 ctrl+휠로 보냄): 커서 자리를 기준으로
       document.addEventListener('wheel', event => {
         const strip = event.ctrlKey && event.target.closest && event.target.closest('.price-ladder .ladder-strip');
@@ -4309,17 +4324,19 @@
       }, { passive: false });
       document.addEventListener('pointerdown', event => {
         const strip = event.target.closest && event.target.closest('.ladder-strip');
-        if(!strip || event.target.closest('.ladder-dot') || event.button > 0 || pinch) return;
+        if(!strip || (event.pointerType !== 'touch' && event.target.closest('.ladder-dot')) || event.button > 0 || pinch) return;
         const zoom = ladderState.zoom;
+        stick(event.target);
         drag = { strip, startX: event.clientX, startY: event.clientY, box: null,
           pan: zoom ? { low: zoom.low, high: zoom.high, width: strip.getBoundingClientRect().width, moving: false } : null };
       });
-      document.addEventListener('pointermove', event => {
+      follow('pointermove', event => {
         if(!drag || pinch) return;
         const dx = event.clientX - drag.startX;
         if(drag.pan){
           if(!drag.pan.moving && (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(event.clientY - drag.startY))) return;
           drag.pan.moving = true;
+          draggedAt = Date.now();
           const shift = dx / drag.pan.width * (drag.pan.high - drag.pan.low);
           panTo(drag.pan.low - shift, drag.pan.high - shift);
           return;
@@ -4328,6 +4345,7 @@
           if(Math.abs(dx) < 8 || Math.abs(dx) < Math.abs(event.clientY - drag.startY)) return;
           drag.box = document.createElement('div');
           drag.box.className = 'ladder-select';
+          draggedAt = Date.now();
           drag.strip.appendChild(drag.box);
         }
         const rect = drag.strip.getBoundingClientRect();
@@ -4349,8 +4367,13 @@
         hideLadderTip();
         if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
       };
-      document.addEventListener('pointerup', finish);
-      document.addEventListener('pointercancel', () => { if(drag && drag.box) drag.box.remove(); drag = null; });
+      follow('pointerup', finish);
+      follow('pointercancel', () => {
+        if(drag && drag.box) drag.box.remove();
+        if(drag && drag.pan) document.querySelector('.price-ladder')?.classList.remove('is-panning');
+        drag = null;
+      });
+      ladderState.recentlyDragged = () => Date.now() - draggedAt < 450;
       // 트랙패드 두 손가락 옆으로 밀기 (위아래 스크롤은 그대로)
       document.addEventListener('wheel', event => {
         const strip = event.target.closest && event.target.closest('.price-ladder.is-zoomed .ladder-strip');
@@ -4392,6 +4415,7 @@
         const hit = ladderPointFrom(event.target);
         if(!hit) return;
         event.preventDefault();
+        if(ladderState.recentlyDragged && ladderState.recentlyDragged()) return;
         // 휴대폰(커서 없음): 첫 번째 누름은 정보만, 같은 점을 한 번 더 누르면 이동
         const touch = window.matchMedia && window.matchMedia('(hover: none)').matches;
         if(touch && !hit.dot.classList.contains('is-on')){
