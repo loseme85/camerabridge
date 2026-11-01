@@ -2899,7 +2899,10 @@
       document.getElementById('save-dialog-text').textContent = boardState.clientId ? sx('login_prompt') : bx('login_unavailable');
       dialog.querySelector('[data-save-dialog-close]').textContent = ux('feedback.close', 'Close');
       dialog.showModal();
-      renderGoogleButtons(dialog);
+      // 버튼을 그리고, 구글 계정 고르기(원탭)도 바로 띄움 → 계정만 고르면 로그인·저장 (원탭이 막히면 창 안 버튼으로)
+      renderGoogleButtons(dialog).then(() => {
+        if(window.google && window.google.accounts && saveState.pending) window.google.accounts.id.prompt();
+      });
     }
 
     async function afterSaveLogin(){
