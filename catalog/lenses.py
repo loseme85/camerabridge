@@ -168,6 +168,16 @@ for slug, name, ko, marker, extra_not, sfx in [
     nots = list(extra_not) + ([m for m in EDITION_35LUX if m != marker] if slug not in ("titan", "leitz-wetzlar", "10-jahre", "korea-70", "classic") else [])
     _add(key, name, ko, "M", [FAM["summilux"][0], f("35"), marker], nots, aliases("summilux", "35", sfx, "M"))
     EXTEND_PARENTS.setdefault(SL35, []).append(key)
+# 스틸림 오리지널은 M3용 아이(고글) 버전과 아이 없는 버전의 값이 달라 나눔 (2026-11-02 사장님). 'no goggle'·'without goggles'는 아이 없는 쪽
+SR_GOGGLE = (r"^(?!.*(non-?|no |without |w/o )goggles?).*(goggles?|고글|안경|眼鏡|メガネ|\beyes?\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전"
+             r"|\bM3\b|for ?M3|M3 ?용)")
+_add(f"{SL35}:v1-steel-rim-goggles", "Summilux 35mm f/1.4 1st Steel Rim with Goggles (M3, original)", "주미룩스 35 1세대 스틸림 아이 버전 (M3용 고글)", "M",
+     [FAM["summilux"][0], f("35"), r"steel ?rim|스틸 ?림", SR_GOGGLE], [SR_REISSUE] + EDITION_35LUX,
+     aliases("summilux", "35", ["steel rim eye", "steel rim goggles", "스틸림 아이", "스틸림 고글", "steel rim m3"], "M"))
+EXTEND_PARENTS.setdefault(SL35, []).append(f"{SL35}:v1-steel-rim-goggles")
+TIGHTEN[f"{SL35}:v1-steel-rim"] = [SR_GOGGLE]
+MODELS[f"{SL35}:v1-steel-rim"]["display_name"] = "Summilux 35mm f/1.4 1st Steel Rim (original, no goggles or not stated)"
+NAME_KO[f"{SL35}:v1-steel-rim"] = "주미룩스 35 1세대 스틸림 (오리지널, 아이 없음·표기 없음)"
 for existing in ("asph-fle", "asph-fle2", "steel-rim-reissue"):
     TIGHTEN[f"{SL35}:{existing}"] = EDITION_35LUX + [r"aspherical|\bAA\b"]
 OVERRIDE_MUST[f"{SL35}:asph-fle2"] = [FAM["summilux"][0], f("35"), r"FLE ?(II|2)\b|ASPH.{0,30}\bnew\b|\bnew\b.{0,30}ASPH"]

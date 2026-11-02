@@ -412,7 +412,7 @@ def test_generation_counts_differ_by_country_and_steel_rim_reissue_without_label
     assert lens("Leica Summilux 35mm f1.4 Steel Rim (11301)", sr) == [sr + "steel-rim-reissue"]
     assert lens("LEICA 35mm F1.4 steel rim SUMMILUX-M sn.4836", sr) == [sr + "steel-rim-reissue"]
     assert lens("Leica 35mm f1.4 Summilux-M Steel Rim", sr) == [sr + "steel-rim-reissue"]
-    assert lens("Leica Summilux-M 35mm f1.4 M3 Steel Rim With Goggles 11870", sr) == [sr + "v1-steel-rim"]
+    assert lens("Leica Summilux-M 35mm f1.4 M3 Steel Rim With Goggles 11870", sr) == [sr + "v1-steel-rim-goggles"]
     assert lens('Leica Summilux-M 35mm f1.4 "Original Steel Rim 1960"', sr) == [sr + "v1-steel-rim"]
     assert lens("LEICA 35mm F1.4 steel rim SUMMILUX sn.1765", sr) == [sr + "v1-steel-rim"]
     # 'V2'·'Ver.2'·'第2世代'는 세대 칸에만 (미표기 칸에 같이 들어가지 않음)
@@ -447,7 +447,7 @@ def _priced(title: str, krw: float) -> dict:
 def test_price_band_decides_original_or_reissue_only_when_title_is_silent() -> None:
     from entity_catalog import infer_by_price
     orig, re_ = "leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:steel-rim-reissue"
-    records = [_priced("Leica Summilux 35mm f1.4 Steel Rim M3 11870", v) for v in (9_000_000, 14_000_000, 20_000_000)]
+    records = [_priced("Leica Summilux 35mm f1.4 Steel Rim 1st original", v) for v in (9_000_000, 14_000_000, 20_000_000)]
     records += [_priced("Leica Summilux 35mm f1.4 Steel Rim Reissue 11301", v) for v in (4_500_000, 5_000_000, 5_500_000)]
     silent_cheap = _priced("[중고] M 35/1.4 Summilux 스틸림 (Silver)", 5_100_000)
     silent_between = _priced("[위탁] M 35/1.4 Summilux 스틸림 (Black)", 7_000_000)  # 어느 가격대에도 안 들어감 → 그대로
@@ -459,7 +459,7 @@ def test_price_band_decides_original_or_reissue_only_when_title_is_silent() -> N
     assert "leica:lens:summilux-m:35" in silent_cheap["entity_ids"]  # 부모는 그대로
     assert silent_cheap["final_output"]["entity_note"] == "price_inferred"
     assert orig in silent_between["entity_ids"] and "entity_note" not in silent_between["final_output"]
-    assert orig in cheap_but_marked["entity_ids"]
+    assert "leica:lens:summilux-m:35:v1-steel-rim-goggles" in cheap_but_marked["entity_ids"]
 
 
 def test_far_too_cheap_listing_is_flagged_and_left_out_of_market_price() -> None:
@@ -653,3 +653,16 @@ def test_m3_first_batch_separate_from_early():
     early = match_entities(_record("Leica M3 (段付き) Body Chrome", category="Body"))
     assert "leica:body:m3:first-batch" in first and "leica:body:m3:early" not in first
     assert "leica:body:m3:early" in early and "leica:body:m3:first-batch" not in early
+
+
+def test_summilux_35_steel_rim_goggles_separate():
+    eye = "leica:lens:summilux-m:35:v1-steel-rim-goggles"
+    plain = "leica:lens:summilux-m:35:v1-steel-rim"
+    for title in ("[위탁] M 35/1.4 Steel Rim EYE (Silver)", "Leica Summilux-M 35mm f1.4 M3 Steel Rim With Goggles 11870",
+                  "Leica 35mm f1.4 Summilux 1st steel rim Silver eye 앰버코팅"):
+        ids = match_entities(_record(title))
+        assert eye in ids and plain not in ids, title
+    for title in ("[위탁] M 35/1.4 Summilux Steel Rim", "Leica Summilux 35mm f1.4 Steel Rim without goggles"):
+        ids = match_entities(_record(title))
+        assert plain in ids and eye not in ids, title
+    assert eye not in match_entities(_record("[중고] M 35/1.4 Summilux 스틸림 복각 (Silver)"))
