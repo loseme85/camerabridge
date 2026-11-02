@@ -5647,6 +5647,81 @@ def crawl_howardparker():
     print(f"  ✅ Howard Parker 완료: {len(results)}개")
     return results
 
+
+def crawl_photoco():
+    """PhotoCo Camera House (호주 애들레이드) - WooCommerce 'Leica Pre-Owned' 분류(180개쯤, 2쪽)를 상품 API(Store API) JSON으로.
+    판매 중만, 라이카·라이츠만. 등급 표기 없음. robots.txt Crawl-delay 600초라 쪽 사이 10분 쉬고, 하루 한 번만 돈다"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    results = []
+    base = "https://photococamera.com"
+    print(f"\n  📂 PhotoCo 크롤링 시작")
+    for page_num in range(1, 6):
+        if page_num > 1:
+            time.sleep(600)
+        url = f"{base}/wp-json/wc/store/v1/products?category=730&per_page=100&page={page_num}"
+        try:
+            resp = requests.get(url, headers={"User-Agent": _ce.BROWSER_UA}, timeout=60)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"PhotoCo {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            title = _html.unescape(p.get("name") or "")
+            if not re.search(r"\b(?:leica|leitz)", title, re.I) or not p.get("is_in_stock"):
+                continue
+            name = _photoco_name(title)
+            prices = p.get("prices") or {}
+            try:
+                price = f"A${int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "PhotoCo (호주)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "AUD",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+    print(f"  ✅ PhotoCo 완료: {len(results)}개")
+    return results
+
+
+def _photoco_name(title):
+    """PhotoCo 제목 다듬기: 'Leica M39 3.5cm f3.5 Summaron' → '… 35mm …', 'Leica 1f Body' → 'Leica If Body',
+    'Leica 35mm f1.4 TL Summilux' → 'Leica Summilux-TL 35mm f1.4', 계열 없는 'Leica M 24mm f3.8'은 Glazer's 표로 계열을 채움"""
+    name = re.sub(r"\s+(?:Boxed|Bxd\.?)\s*$", "", _rangefinder_name(title), flags=re.I)
+    name = re.sub(r"\s*\+\s*(?:Hood|Adapter|Caps?|Goggles)\b", "", name, flags=re.I)
+    name = re.sub(r"\bAsph\.?\s*Lens\b", "ASPH.", name, flags=re.I)
+    name = re.sub(r"\b(\d{1,2}(?:\.\d)?)\s?cm\b", lambda m: f"{float(m.group(1)) * 10:g}mm", name)
+    name = re.sub(r"^Leica 1([cfg])\b", lambda m: "Leica I" + m.group(1), name)
+    name = re.sub(r"\b35mm (SLR|Film|Rangefinder)\b", r"\1", name, flags=re.I)  # 필름 규격 '35mm'를 렌즈로 읽지 않게
+    name = re.sub(r"\b13\.5(?=\s+f\d)", "135mm", name)  # 'Hektor 13.5 f4.5' (13.5cm)
+    name = re.sub(r"(?<!APO-)\bSummicron-M 75mm", "APO-Summicron-M 75mm", name)  # 주미크론 75는 APO뿐
+    name = re.sub(r"\b(\d{2,3}mm f[\d.]+) TL (Summilux|Summicron|Elmarit|APO-Macro-Elmarit)\b", r"\2-TL \1", name)
+    name = re.sub(r"^Leica M39 (?:LTM )?(.+)$", r"Leica \1 LTM", name)  # 'M39'를 바디로 읽지 않게
+    name = re.sub(r"\bf(\d)\.0\b", r"f\1", name)
+    name = re.sub(r"^Leica (M|R|SL) (\d{2,3}mm f[\d.]+) APO\b", r"Leica \1 APO \2", name)
+    return _glazers_lens_name(name)
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -7768,14 +7843,15 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Leica Store Poland (폴란드)": 6,  # 매물마다 상세, Crawl-delay 2초 (약 40개 · 2분)
-    "Photo Warehouse (뉴질랜드)": 6,
-    "Howard Parker (영국)": 6,  # 매물마다 상세 (약 50개)  # 매물마다 상세 (약 70개 · 1분)
+    "Photo Warehouse (뉴질랜드)": 6,  # 매물마다 상세 (약 70개 · 1분)
+    "Howard Parker (영국)": 6,  # 매물마다 상세 (약 50개)
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
     "Fotohandel Delfshaven (네덜란드)": 6,  # 목록 22쪽 (1분쯤)
     "One Of Many Cameras (덴마크)": 6,  # 전체 16쪽 (중고 라이카는 200개쯤)
     "Leica Store Amsterdam (네덜란드)": 6,  # 매물마다 상세 (약 55개, 2초 간격이라 2분쯤)
+    "PhotoCo (호주)": 24,  # robots.txt Crawl-delay 600초, 목록 2쪽 (약 10분)
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
 
@@ -7900,6 +7976,7 @@ def crawl_all():
         ("Leica Store Poland (폴란드)", lambda: ce.wrap_full_run("Leica Store Poland (폴란드)", crawl_leicastorepl)),
         ("Photo Warehouse (뉴질랜드)", lambda: ce.wrap_full_run("Photo Warehouse (뉴질랜드)", crawl_photowarehouse)),
         ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
+        ("PhotoCo (호주)", lambda: ce.wrap_full_run("PhotoCo (호주)", crawl_photoco)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
