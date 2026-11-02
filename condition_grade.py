@@ -608,15 +608,21 @@ _KOMEHYO = {"新品": "N", "未使用品": "N", "中古品SA": "S", "中古品A"
 # 글자로 쓰는 곳(A·AB·B, 기존 일본 매장 _JP 대응)
 JCAMERA_PREFIX = "JCamera: "
 _JCAMERA = {"新品": "N", "新品同様": "S", "未使用品": "S", "極上品": "S", "中古美品": "A", "中古良上品": "B", "中古良品": "B",
-            "中古並品": "C", "並品": "C", "難あり": "D", "ジャンク": "X"}
+            "中古並品": "C", "並品": "C", "難あり": "D", "ジャンク": "X",
+            # 매장 안 다른 표기 (2026-11-02, 미니룩스 '美品'이 그래프에 안 나와서) — 위 말뜻 그대로 맞춤, 사진 확인 전
+            "新同品": "S", "極上美品": "S", "美品": "A", "上程度": "B", "良品": "B", "中程度": "C", "普通": "C", "中古並": "C",
+            "現状品": "D", "カビ有": "D"}
 # 사진 평가(표기 가리고 30점, 사진 1장씩, 2026-11-02): 정확 일치 10/30 · 한 등급 이내 29/30 (사진이 평균 0.3등급 후함)
 _JCAMERA_RANK = {"S": "S", "A": "A", "A-": "B", "AB": "B", "AB-": "B", "B": "C", "C": "D"}
 
 
 def jcamera_grade(word: str) -> str | None:
     """'中古美品'·'A'·'美品Aランク'·'94%'·'程度はAB-です。' → 공통 등급"""
+    word = word.replace("＋", "+").replace("－", "-")
     if word in _JCAMERA:
         return _JCAMERA[word]
+    if word in _JCAMERA_RANK:  # 'A-' 등 순위만 쓴 것
+        return _JCAMERA_RANK[word]
     m = re.search(r"(AB-|AB|A-|S|A|B|C)\s?ランク|程度は\s?(AB\+|AB-|AB|AA|A|B\+|B|C)", word)
     if m:
         return _JCAMERA_RANK.get(m.group(1)) if m.group(1) else _JP.get(m.group(2))

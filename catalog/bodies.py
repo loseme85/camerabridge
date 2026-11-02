@@ -395,8 +395,10 @@ PARENTS["leica:body:digilux"] = ("Leica Digilux (all)", "Body", None, [f"leica:b
                                 ["leica digilux", "digilux", "라이카 디지룩스", "디지룩스"], "라이카 디지룩스 (전체)")
 fam("leica:body:s1", "Leica S1 (scanner camera, 1997 · Pro · Alpha · High Speed)", "라이카 S1 (스캐너 카메라)", None,
     [r"\bS1\b", r"leica|alpha|high ?speed|scan"], [r"panasonic|lumix|\bS1[RHM]\b"], ["leica s1", "s1 pro", "s1 alpha", "s1 high speed"])
-fam("leica:body:minilux", "Leica Minilux", "라이카 미니룩스", None, [r"minilux"], [r"zoom|줌"], ["미니룩스"])
-fam("leica:body:minilux-zoom", "Leica Minilux Zoom", "라이카 미니룩스 줌", None, [r"minilux", r"zoom|줌"], [], ["minilux zoom", "미니룩스 줌"])
+# 데이터백(18525) 단품은 카메라가 아님 — '카메라 + 데이터백'(with·+·付)은 그대로 (2026-11-02)
+MINILUX_ACC = r"^(?!.*(\bwith\b|\bw/|\+|\bmit\b|付)).*(dat[ae] ?back|datenr|デート|데이터 ?백)|\b18 ?525\b"
+fam("leica:body:minilux", "Leica Minilux", "라이카 미니룩스", None, [r"minilux"], [r"zoom|줌", MINILUX_ACC], ["미니룩스"])
+fam("leica:body:minilux-zoom", "Leica Minilux Zoom", "라이카 미니룩스 줌", None, [r"minilux", r"zoom|줌"], [MINILUX_ACC], ["minilux zoom", "미니룩스 줌"])
 fam("leica:body:cm", "Leica CM", "라이카 CM", None, [r"\bCM\b"], [r"zoom|줌"], [])
 fam("leica:body:cm-zoom", "Leica CM Zoom", "라이카 CM 줌", None, [r"\bCM\b", r"zoom|줌"], [], ["cm zoom"])
 fam("leica:body:c-series", "Leica C1 · C2 · C3 · C11", "라이카 C1·C2·C3", None, [r"\bC ?(1|2|3|11)\b(?! ?[0-9])"], [r"C-?Lux", r"AF-?C ?1", r"C ?2-? ?zoom"], ["c1", "c2", "c3", "c11"])

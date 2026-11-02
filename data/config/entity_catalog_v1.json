@@ -17171,6 +17171,7 @@
     ],
     "title_must_not": [
      "zoom|줌",
+     "^(?!.*(\\bwith\\b|\\bw/|\\+|\\bmit\\b|付)).*(dat[ae] ?back|datenr|デート|데이터 ?백)|\\b18 ?525\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -17242,6 +17243,7 @@
      "zoom|줌"
     ],
     "title_must_not": [
+     "^(?!.*(\\bwith\\b|\\bw/|\\+|\\bmit\\b|付)).*(dat[ae] ?back|datenr|デート|데이터 ?백)|\\b18 ?525\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
