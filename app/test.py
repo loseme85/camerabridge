@@ -5946,6 +5946,94 @@ def crawl_usedcl():
     print(f"  ✅ Used.cl 완료: {len(results)}개")
     return results
 
+
+_FOTODOTTI_OTHER = re.compile(r"minolta|voigtl|zeiss|schneider|shneider|closter|kipon|fotodiox|fotga|k&f|peipro|quenox|crumpler|"
+                              r"\beos\b|nikon|canon|sony|copy", re.I)
+
+
+_FOTODOTTI_WORDS = [(r"\bparaluce\b", "Hood"), (r"\bmirino\b", "Viewfinder"), (r"\bfiltro\b", "Filter"),
+                    (r"\bcustodia\b|\bborsa\b", "Case"), (r"\banello\b", "Ring"), (r"\btappo\b|\bfondello\b", "Cap"),
+                    (r"\btubo\b", "Tube"), (r"\bsoffietto\b", "Bellows"), (r"\bcampana\b", "Hood"), (r"\bscatto flessibile\b", "Release")]
+
+
+def _fotodotti_name(raw):
+    """Foto Dotti 제목 다듬기: 'Obiettivo'·'Accessorio per …'·끝의 'Bello'·'Completo' 빼기, 이탈리아어 액세서리 말을 영어로,
+    'Leica M39 Elmar 9cm' → 'Leica Elmar 9cm LTM', 'Leica R Summilux 80mm' → 'Leica Summilux-R 80mm'"""
+    name = re.sub(r"^(?:Obiettivo(?: manuale)?|Accessorio(?: analogico)? per (?:fotocamera|obiettivo|macro)|Accessorio(?: analogico)?)\s+",
+                  "", raw, flags=re.I)
+    name = re.sub(r"\s+(?:bellissim[oa]|bell[oa]|rar[oa]|come nuov[oa]|ottim[oa]|perfett[oa]|completo)\b.*$", "", name, flags=re.I)
+    name = re.sub(r"\s+(?:\+|con)\s+(?:filtro|filter|paraluce|hood|custodia|case)\b.*$", "", name, flags=re.I)  # 딸린 필터·후드
+    name = re.sub(r"\b1\s?:\s?(\d+)(?:[,.](\d))?\s*/\s*(\d{2,3})\s?mm\b",
+                  lambda m: f"{m.group(3)}mm f{m.group(1)}" + (f".{m.group(2)}" if m.group(2) else ""), name)
+    name = re.sub(r"\b(\d{1,2}),(\d)\s?cm\b", lambda m: f"{int(m.group(1)) * 10 + int(m.group(2))}mm", name)
+    for pattern, word in _FOTODOTTI_WORDS:
+        name = re.sub(pattern, word, name, flags=re.I)
+    name = re.sub(r"^(Leica)\s+M39\s+(.+)$", r"\1 \2 LTM", name, flags=re.I)
+    name = re.sub(r"^(Leica)\s+R\s+(Summilux|Summicron|Elmarit|Elmar|Macro[ -]Elmarit|Super[ -]Angulon|Telyt)\b", r"\1 \2-R", name, flags=re.I)
+    name = re.sub(r"\b(Summilux|Summicron|Elmarit|Elmar|Telyt)\s+R\b", r"\1-R", name, flags=re.I)
+    name = re.sub(r"\s+", " ", name).strip(" -.")
+    return name if re.search(r"\b(?:leica|leitz)\b", name, re.I) else "Leica " + name
+
+
+def crawl_fotodotti():
+    """Foto Dotti (이탈리아 모데나) - Magento 라이카 중고 분류 3곳(렌즈·바디·액세서리)을 정적 HTML로 (쪽마다 12개).
+    목록에 있는 것은 판매 중, 가격 EUR. 등급 표기 없음 (주소 끝 'bello'·'bellissimo'는 설명이라 쓰지 않음).
+    robots.txt는 일반 수집을 막지 않음 (AI 봇만 막음, 2026-11-02 사장님 확인)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://www.fotodotti.it/prodotti/leica"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 Foto Dotti 크롤링 시작")
+    for section in ("obiettivi", "fotocamere", "accessori"):
+        for page_num in range(1, 30):
+            try:
+                resp = sess.get(f"{base}/{section}/usato.html?p={page_num}", timeout=30)
+                resp.raise_for_status()
+            except Exception as e:
+                raise RuntimeError(f"Foto Dotti {section} {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            new = 0
+            for card in re.split(r'<li\s+class="item\s+product-item', resp.text)[1:]:
+                link = re.search(r'<h2\s+class="product-name"><a\s+href="([^"]+)"[^>]*>([^<]+)</a>', card)
+                if not link or link.group(1) in seen:
+                    continue
+                seen.add(link.group(1))
+                new += 1
+                raw = re.sub(r"\s+", " ", _html.unescape(link.group(2))).strip()
+                if _FOTODOTTI_OTHER.search(raw):
+                    continue  # 라이카 분류에 섞인 다른 회사 렌즈·어댑터
+                name = _fotodotti_name(raw)
+                pr = re.search(r'<span\s+class="price">([\d.]+,\d{2})\s*€', card)
+                # 이탈리아식 '4.800,00 €' (점이 천 단위) → '€4,800'
+                price = f"€{int(pr.group(1).split(',')[0].replace('.', '')):,}" if pr else "문의요망"
+                img = re.search(r'<img\s+src="([^"]+)"', card)
+                cat = "Accessory" if section == "accessori" else detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "Foto Dotti (이탈리아)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "EUR",
+                    "이미지": img.group(1) if img else "",
+                    "링크": link.group(1),
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            print(f"    └─ {section} {page_num}페이지 새 상품 {new}개")
+            if not new:
+                break
+            time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Foto Dotti 완료: {len(results)}개")
+    return results
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8205,6 +8293,7 @@ def crawl_all():
         ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),
         ("Kenmore Camera (미국)", lambda: ce.wrap_full_run("Kenmore Camera (미국)", crawl_kenmore)),
         ("Used.cl (칠레)", lambda: ce.wrap_full_run("Used.cl (칠레)", crawl_usedcl)),
+        ("Foto Dotti (이탈리아)", lambda: ce.wrap_full_run("Foto Dotti (이탈리아)", crawl_fotodotti)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
