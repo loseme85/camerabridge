@@ -421,7 +421,7 @@ def test_generation_counts_differ_by_country_and_steel_rim_reissue_without_label
     lux = "leica:lens:summilux-m:50:"
     # 해외 'Type III'(11868·11856)는 E46 후드 내장 = 한국 4세대, 한국 '5th'는 ASPH
     assert lens("Leica 50mm f1.4 Summilux-M (Type III) (Black, 11868)", lux) == [lux + "v4"]
-    assert lens("Leica Summilux 50mm f1.4 Silver 5th", lux) == [lux + "asph"]
+    assert lens("Leica Summilux 50mm f1.4 Silver 5th", lux) == [lux + "asph:silver-chrome"]  # 5th = ASPH, 실버는 크롬 (2026-11-02)
     assert lens("Leica Summilux M 50/1.4 (第2世代)", lux) == [lux + "v2"]
     # 주미크론 50: 해외·일본 세대 표기는 현행(4·5세대)이 아님
     sc50 = "leica:lens:summicron"
@@ -465,7 +465,7 @@ def test_price_band_decides_original_or_reissue_only_when_title_is_silent() -> N
 def test_far_too_cheap_listing_is_flagged_and_left_out_of_market_price() -> None:
     from entity_catalog import flag_too_cheap
     records = [_priced("Leica Summicron-M 50mm f2 Silver", v) for v in (2_000_000, 2_200_000, 2_400_000, 2_300_000, 2_100_000)]
-    manual = _priced("Leica Summicron-M 50mm f2 Instructions", 15_000)
+    manual = _priced("Leica Summicron-M 50mm f2 (heavy fungus)", 15_000)  # 설명서는 2026-11-02부터 아예 모델에 안 붙음
     records.append(manual)
     flagged = flag_too_cheap(records, lambda r: r["_v"])
     assert flagged == {id(manual)} and manual["final_output"]["entity_note"] == "too_cheap"
@@ -558,6 +558,73 @@ def test_long_telyt_is_split_by_focal_length() -> None:
     assert telyt("TELYT-VISO 400 MM F/6.8 1971-1984") == [v, f"{v}:400-f68"]
     assert telyt("Leica 250mm f4 Telyt-R (Type I) (3-Cam) (11920)", "R") == [r, f"{r}:250"]
     assert telyt("Leica Telyt-R 350mm f4.8 11915", "R") == [r, f"{r}:350"]
+
+
+def test_mixed_models_found_on_2026_11_02() -> None:
+    def ids(title, category="Lens", mount="M"):
+        return set(match_entities(_record(title, category, mount)))
+    # 에디션은 세대 모델에 같이 붙지 않음
+    assert "leica:lens:summilux-m:50:v4" not in ids("Leica 50mm f1.4 Summilux Titan 4th")
+    assert "leica:lens:summilux-m:50:titan" in ids("Leica 50mm f1.4 Summilux Titan 4th")
+    assert "leica:lens:summilux-m:50:v2" not in ids("Leica 50mm f1.4 Summilux Chrome Classic Silver 2세대 Reissue")
+    assert "leica:lens:summicron-m:35:v1-eyes" in ids("Leica Summicron-M 35mm F2.0 眼鏡付 Black")
+    assert "leica:lens:summicron-m:35:unspecified" not in ids("Leica Summicron-M 35mm f2.0 goggles")
+    assert "leica:lens:summicron-m:35:v4" not in ids("Leica 6 Elements V2 Leica Leitz Summicron M 35mm F2")
+    assert "leica:lens:summicron-m:50:current" not in ids("Leica 50mm f/2 RADIOACTIVE SUMMICRON chrome")
+    assert "leica:lens:elmarit-m:28:v1" in ids("Leica Elmarit-M 28mm f2.8 9 Element Red Scale 11801")
+    # 부품은 렌즈가 아님, 포커싱 마운트에 단 렌즈는 렌즈
+    assert not {i for i in ids("Leica GHIERA DIAFRAMMA 12509 35mm f/2 SUMMICRON-R", mount="R") if i.startswith("leica:lens:")}
+    assert "leica:lens:hektor:135" in ids("Leitz 13.5cm f4.5 Hektor, chrome, in short focusing mount", mount=None)
+    # 바디: M3 '블랙'은 블랙페인트, 재도색은 일반, 초기형, 일본어 에디션, 라이카플렉스
+    assert "leica:body:m3:black-paint" in ids("Leica M3 Body Black", "Body")
+    assert "leica:body:m3:standard" in ids("Leica M3 Black Repaint", "Body")
+    assert "leica:body:m3:early" in ids("Leica M3 (段付き) Body Chrome", "Body")
+    assert "leica:body:m7:a-la-carte" in ids("Leica M7 アラカルト BlackPaint", "Body")
+    assert "leica:body:leicaflex-sl2" in ids("Leicaフレックス SL2 Black", "Body", "R")
+    assert "leica:body:sl2" not in ids("Leicaフレックス SL2 Black", "Body", "R")
+
+
+def test_body_lens_sets_seen_from_lens_side() -> None:
+    from entity_catalog import is_set
+    def rec(title):
+        r = _record(title)
+        r["entity_ids"] = match_entities(r)
+        return r
+    assert is_set(rec("[위탁] M6+M 50/1.4 Summilux 4세대 150주년 Edition"))
+    assert is_set(rec("Leica CL con Summicron C 40mm F2"))
+    assert not is_set(rec("Leica 35mm f1.4 Summilux Version II with Infinity Lock"))
+    assert not is_set(rec("Leica Elmarit-M 135mm f2.8 with goggles M3"))
+    assert not is_set(rec("Leica 200mm f4 Telyt-M 11063 with Visoflex III 16498"))
+
+
+def test_summilux_50_asph_finishes_and_ii() -> None:
+    def lux(title):
+        return sorted(i for i in match_entities(_record(title)) if i.startswith("leica:lens:summilux-m:50:asph"))
+    assert lux("[위탁] M 50/1.4 Summilux ASPH II (Black)") == ["leica:lens:summilux-m:50:asph:asph-ii"]
+    assert lux("Leica Summilux-M 50mm f1.4 ASPH Black Chrome 11688") == ["leica:lens:summilux-m:50:asph:black-chrome"]
+    assert lux("Leica Summilux-M 50mm f1.4 ASPH Silver Chrome 11892") == ["leica:lens:summilux-m:50:asph:silver-chrome"]
+    assert lux("[위탁] M 50/1.4 Summilux ASPH 6bit (Silver)") == ["leica:lens:summilux-m:50:asph:silver-chrome"]
+    assert lux("Leica 50mm F1.4 Asph Black 6bit - 11891") == ["leica:lens:summilux-m:50:asph"]
+
+
+def test_mixed_models_second_pass() -> None:
+    def ids(title, category="Lens", mount="M"):
+        return set(match_entities(_record(title, category, mount)))
+    for t in ["Leica Mini Zoom Instructions", "box ROSSA LEICA IIIF", "Leica IIIg for Close-up Device ADVOO",
+              "PARASOLEIL SOOMP POUR SUMMAR 50mm A VIS", "Leica Mini treppiede Leica Leitz"]:
+        assert ids(t, "Accessory", None) == set() and ids(t, "Body", None) == set(), t
+    assert "leica:lens:hektor:135:military" in ids("Leica Hektor 135mm f4.5 olive Bundeseigentum", mount=None)
+    assert "leica:lens:summar:50:tropen" in ids("Leica TROPEN Summar 5cm f2.0", mount=None)
+    assert "leica:lens:summicron:50:50-jahre" in ids('Leica Summicron-M 50mm f2.0 "50Years Summicron"')
+    assert "leica:lens:summicron:50:compur" in ids("Leica Compur-Summicron 5cm f2.0", mount=None)
+    assert "leica:lens:summicron-m:35:asph-black-chrome" in ids("Leica Summicron-M 35mm f2 ASPH Black Chrome 11689")
+    assert "leica:lens:summicron-m:35:v1-8element" in ids("Leica M Summicron 35mm F2 8枚玉 カナダ製")
+    assert "leica:lens:noctilux-m:50:f1.0:last-100" in ids('Leica NOCTILUX-M 50mm /f1 "The last 100" (11603)')
+    assert "leica:body:barnack-military" in ids("Leica IIIc グレー", "Body", None)
+    assert "leica:body:barnack-military" in ids("LEICA IIIc Militaire + Moteur MOOLY-C", "Body", None)
+    assert "leica:body:m4:black-paint" in ids("Leica M4, black lacquered Body", "Body")
+    assert "leica:body:m-a:titan" in ids("Leica M-A 10372 'Titan' set Body", "Body")
+    assert "leica:body:i" in ids("Leica A型(Old Elmar)", "Body", None)
 
 
 def test_listing_date_from_image_url() -> None:

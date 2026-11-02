@@ -18,7 +18,10 @@ TIGHTEN: dict[str, list[str]] = {}
 OVERRIDE_MUST: dict[str, list[str]] = {}
 
 ACC = [r"^(?!.*\b(with|w/)\s.*\bhood).*\bhood\b", r"후드", r"\bcap\b", r"캡", r"^(?!.*\b(with|w/)\s.*case).*case", r"케이스", r"부속품", r"filter\b", r"필터", r"adapter", r"어댑터",
-       r"finder", r"파인더", r"box only", r"박스만", r"manual", r"설명서"]
+       r"finder", r"파인더", r"box only", r"박스만", r"manual", r"설명서",
+       # 2026-11-02 섞임 점검: 조리개 링 부품(이탈리아어)·접사 장치·포커싱 마운트·렌즈 헤드만·상자만·삼각대
+       r"ghiera|diaframma", r"close[- ]?(?:focus|up) device|\bSOOKY\b|\bADVOO\b", r"^(?:leica\s+|leitz\s+)?focus(?:ing)? mount",
+       r"^box\b|\bbox rossa\b", r"treppiede|tripod|三脚"]
 
 
 def f(n: str) -> str:
@@ -177,7 +180,7 @@ group("leica:lens:summilux-m:50", "Summilux-M 50mm f/1.4", "주미룩스 50", "M
     c("v3", "Summilux-M 50mm f/1.4 3rd", "주미룩스 50 3세대", GEN3, [], ["3rd", "3세대"]),
     c("v4", "Summilux-M 50mm f/1.4 4th (E46, built-in hood)", "주미룩스 50 4세대", GEN4 + r"|E46|11868|11856", [], ["4th", "4세대", "e46"]),
     c("classic", "Summilux-M 50mm f/1.4 'Classic'", "주미룩스 50 클래식", r"classic|클래식", [], ["classic", "클래식"]),  # 확인 필요
-    c("titan", "Summilux-M 50mm f/1.4 Titan", "주미룩스 50 티탄", r"titan|티탄", [], ["titan"]),
+    c("titan", "Summilux-M 50mm f/1.4 Titan", "주미룩스 50 티탄", r"titan|티탄|チタン", [], ["titan"]),
     c("millennium", "Summilux-M 50mm f/1.4 Millennium (Black Paint)", "주미룩스 50 밀레니엄", r"millenn?ium|밀레니엄", [], ["millennium", "밀레니엄"]),
     c("asph-lhsa", "Summilux-M 50mm f/1.4 ASPH LHSA", "주미룩스 50 ASPH LHSA", r"LHSA", [], ["asph lhsa", "lhsa"]),
     c("asph-kravitz", "Summilux-M 50mm f/1.4 ASPH Lenny Kravitz", "주미룩스 50 ASPH 레니 크라비츠", r"kravitz|lenny", [], ["lenny kravitz", "kravitz"]),
@@ -189,13 +192,17 @@ TIGHTEN["leica:lens:summilux-m:50:asph"] = [r"LHSA", r"kravitz|lenny", r"titan|�
 MODELS["leica:lens:summilux-m:50:unspecified"]["title_must_not"] += [r"ASPH", r"\b5th\b|5세대"]
 # 해외 'Type III'는 E46 후드 내장(11868·11856)이라 한국 셈법으로 4세대 (2026-10-30)
 TIGHTEN["leica:lens:summilux-m:50:v3"] = [r"E46|11868|11856"]
+TIGHTEN["leica:lens:summilux-m:35:pre-asph-unspecified"] = TIGHTEN.get("leica:lens:summilux-m:35:pre-asph-unspecified", []) + [r"11874|11883"]  # 1994 ASPH 품번
+# 티탄·클래식(2세대 복각)·밀레니엄은 세대 모델이 아니라 에디션으로만 (2026-11-02: '4th Titan'이 4세대·티탄 둘 다에 붙음)
+for _gen in ("v1", "v2", "v3", "v4", "unspecified"):
+    TIGHTEN[f"leica:lens:summilux-m:50:{_gen}"] = TIGHTEN.get(f"leica:lens:summilux-m:50:{_gen}", []) + [r"titan|티탄|チタン", r"classic|클래식|reissue|복각", r"millenn?ium|밀레니엄"]
 # 한국 매장의 '5th'·'5세대'는 ASPH (ASPH 표기가 없어도)
 OVERRIDE_MUST["leica:lens:summilux-m:50:asph"] = [FAM["summilux"][0], f("50"), r"ASPH|\b5th\b|5세대"]
 
 # ───────────── M: Summicron 35 (기존 부모에 추가) ─────────────
 SC35 = "leica:lens:summicron-m:35"
 for slug, name, ko, marker, extra_not, sfx in [
-    ("v1-eyes", "Summicron 35mm f/2 1st (8 elements) with eyes (M3)", "주미크론 35 8매 안경(고글)", r"\beyes?\b|고글|goggle|안경", [], ["eye", "고글", "8 element eye"]),
+    ("v1-eyes", "Summicron 35mm f/2 1st (8 elements) with eyes (M3)", "주미크론 35 8매 안경(고글)", r"\beyes?\b|고글|goggle|안경|眼鏡|メガネ", [], ["eye", "고글", "8 element eye"]),
     ("v2", "Summicron 35mm f/2 2nd", "주미크론 35 2세대", GEN2, [r"ASPH"], ["2nd", "2세대"]),
     ("v3", "Summicron 35mm f/2 3rd (7 elements)", "주미크론 35 3세대 (7매)", GEN3 + r"|7 ?el|7매", [r"ASPH"], ["3rd", "3세대", "7 element", "7매"]),
     ("millennium", "Summicron-M 35mm f/2 Millennium (Black Paint)", "주미크론 35 밀레니엄", r"millenn?ium|밀레니엄", [], ["millennium"]),
@@ -203,15 +210,15 @@ for slug, name, ko, marker, extra_not, sfx in [
     ("your-mark", "Summicron-M 35mm f/2 'Your Mark'", "주미크론 35 유어마크", r"your ?mark", [], ["your mark"]),  # 확인 필요
     ("titan", "Summicron-M 35mm f/2 ASPH Titan", "주미크론 35 티탄", r"titan|티탄", [], ["titan"]),
     ("unspecified", "Summicron 35mm f/2 pre-ASPH (generation not stated)", "주미크론 35 구형 (세대 미표기)",
-     r"^(?!.*(ASPH|APO|\bv\.? ?[1-5]\b|\bver(sion)?\.? ?([1-5]|i{1,3}|iv|v)\b|第[1-5]世代|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|현행|millenn|titan|ara ?g|your ?mark)).*$", [], [""]),
+     r"^(?!.*(ASPH|APO|\bv\.? ?[1-5]\b|\bver(sion)?\.? ?([1-5]|i{1,3}|iv|v)\b|第[1-5]世代|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|8枚|7 ?el|7매|6매|6 ?el|eye|고글|goggle|안경|眼鏡|メガネ|현행|millenn|titan|ara ?g|your ?mark)).*$", [], [""]),
 ]:
     key = f"{SC35}:{slug}"
     _add(key, name, ko, "M", [FAM["summicron"][0], f("35"), marker], [r"\bAPO\b"] + list(extra_not), aliases("summicron", "35", sfx, "M"))
     EXTEND_PARENTS.setdefault(SC35, []).append(key)
-TIGHTEN[f"{SC35}:v1-8element"] = [r"\beyes?\b|고글|goggle|안경"]
+TIGHTEN[f"{SC35}:v1-8element"] = [r"\beyes?\b|고글|goggle|안경|眼鏡|メガネ"]
 # 장씨카메라·M&K는 7매를 '4th'·'Ver.4'로도 적음 → 렌즈 매수가 세대 숫자보다 먼저 (2026-10-30)
-TIGHTEN[f"{SC35}:v4"] = [r"7 ?el|7매|7枚"]
-OVERRIDE_MUST[f"{SC35}:v1-8element"] = [FAM["summicron"][0], f("35"), r"(8 ?el|8매|eight|1st|1세대|\bv\.? ?1\b)|" + GEN1]
+TIGHTEN[f"{SC35}:v4"] = [r"7 ?el|7매|7枚", GEN2]  # '6 Elements V2'는 2세대 (6매는 2·4세대 둘 다)
+OVERRIDE_MUST[f"{SC35}:v1-8element"] = [FAM["summicron"][0], f("35"), r"(8 ?el|8매|8枚|eight|1st|1세대|\bv\.? ?1\b)|" + GEN1]
 OVERRIDE_MUST[f"{SC35}:v4"] = [FAM["summicron"][0], f("35"), r"(4th|v4|4세대|6매|6 ?el|IV\b|king ?of ?bokeh|bokeh ?king|\bKOB\b)|" + GEN4]
 TIGHTEN[f"{SC35}:asph"] = [r"millenn?ium|밀레니엄", r"ara ?g[uü]ler", r"your ?mark", r"titan|티탄", r"\bSL\b|-SL\b", r"\bTL\b"]
 OVERRIDE_MUST[f"{SC35}:asph"] = [FAM["summicron"][0], f("35"), r"ASPH|5세대|현행"]
@@ -223,7 +230,7 @@ for slug, name, ko, marker, mount, extra_not, sfx in [
     ("rigid-early", "Summicron 50mm f/2 Rigid 1st (early)", "주미크론 50 리짓 전기형", r"(rigid|리짓|리지드).{0,20}(전기|early|1st)|(전기|early).{0,20}(rigid|리짓)", None, [], ["rigid early", "리짓 전기형"]),
     ("rigid-late", "Summicron 50mm f/2 Rigid 2nd (late)", "주미크론 50 리짓 후기형", r"(rigid|리짓|리지드).{0,20}(후기|late|2nd)|(후기|late).{0,20}(rigid|리짓)", None, [], ["rigid late", "리짓 후기형"]),
     ("v3", "Summicron-M 50mm f/2 3rd", "주미크론 50 3세대", GEN3, "M", [], ["3rd", "3세대"]),
-    ("50-jahre", "Summicron-M 50mm f/2 '50 Jahre'", "주미크론 50 50주년", r"50 ?jahre|50주년|50th anniv", "M", [], ["50 jahre", "50주년"]),
+    ("50-jahre", "Summicron-M 50mm f/2 '50 Jahre'", "주미크론 50 50주년", r"50 ?jahre|50 ?years|50주년|50th anniv", "M", [], ["50 jahre", "50주년"]),
 ]:
     key = f"{SC50}:{slug}"
     _add(key, name, ko, mount, [FAM["summicron"][0], f("50"), marker], [r"\bAPO\b", r"\bSL\b|-SL\b", r"-R\b|\bR ?50"] + list(extra_not), aliases("summicron", "50", sfx, None))
@@ -231,7 +238,7 @@ for slug, name, ko, marker, mount, extra_not, sfx in [
 TIGHTEN["leica:lens:summicron:50:rigid"] = [r"전기|early|후기|late|1st|2nd"]
 # 한국·일본 매장의 2nd는 1969년형(서양 3세대), 서양의 2nd는 리지드라 셈법이 달라 '1·2세대 표기'는 따로 받음 (2026-10-23, PR #67)
 GEN12_SC50 = r"\b(?:1st|2nd)\b|[12]세대|\bv\.?[12]\b|\bfirst\b|\bsecond\b|[12]代目|第[12]世代|\b(type|ver\.?|version) ?i{1,2}\b|\bver(sion)?\.? ?[12]\b"
-TIGHTEN["leica:lens:summicron-m:50:current"] = [GEN3, GEN12_SC50, r"50 ?jahre", r"토륨|thorium"]
+TIGHTEN["leica:lens:summicron-m:50:current"] = [GEN3, GEN12_SC50, r"50 ?jahre|50 ?years", r"토륨|thorium|radioactive|collaps|침동", r"compur"]
 _add(f"{SC50}:gen12-unspecified", "Summicron 50mm f/2 '1st·2nd' (generation count differs by shop)",
      "주미크론 50 1·2세대 표기 (매장마다 셈법이 달라 구분 안 함)", "M", [FAM["summicron"][0], f("50"), GEN12_SC50],
      [r"\bAPO\b", r"rigid|리짓", r"\bDR\b|dual ?range", r"collaps|침동", r"\bR\b ?50|-R\b", r"\bSL\b", r"\bL ?50|LTM|M39"],
@@ -243,7 +250,7 @@ TIGHTEN[f"{SC50}:gen12-unspecified"] = [GEN3, r"50 ?jahre", r"토륨|thorium", r
 
 # ───────────── M: Elmarit 28 (새 부모, 기존 ASPH 포함) ─────────────
 group("leica:lens:elmarit-m:28", "Elmarit-M 28mm f/2.8", "엘마리트 28", "M", "elmarit", "28", [
-    c("v1", "Elmarit 28mm f/2.8 1st (Canada, 1965)", "엘마리트 28 1세대", GEN1, [], ["1st", "1세대", "v1", "9 element", "9매"]),
+    c("v1", "Elmarit 28mm f/2.8 1st (Canada, 1965)", "엘마리트 28 1세대", GEN1 + r"|9 ?el|9매|9枚", [], ["1st", "1세대", "v1", "9 element", "9매"]),
     c("v2", "Elmarit-M 28mm f/2.8 2nd", "엘마리트 28 2세대", GEN2, [], ["2nd", "2세대"]),
     c("v3", "Elmarit-M 28mm f/2.8 3rd", "엘마리트 28 3세대", GEN3, [], ["3rd", "3세대"]),
     c("v4", "Elmarit-M 28mm f/2.8 4th", "엘마리트 28 4세대", GEN4, [], ["4th", "4세대"]),
@@ -290,7 +297,7 @@ group("leica:lens:summaron:35", "Summaron 35mm", "즈마론 35", None, "summaron
 lens("leica:lens:super-elmar-m:18", "Super-Elmar-M 18mm f/3.8 ASPH", "수퍼엘마 18", "M", "super-elmar", "18")
 group("leica:lens:tri-elmar-m:28-35-50", "Tri-Elmar-M 28-35-50mm f/4 (MATE)", "트라이엘마 28-35-50", "M", "tri-elmar", "28-35-50", [
     c("e49", "Tri-Elmar-M 28-35-50 E49 (1st)", "트라이엘마 28-35-50 E49", r"E49|1st|1세대|구형", [], ["e49"]),
-    c("e46", "Tri-Elmar-M 28-35-50 ASPH E46 (2nd)", "트라이엘마 28-35-50 E46", r"E46|ASPH|2nd|2세대|신형", [], ["e46", "asph"]),
+    c("e46", "Tri-Elmar-M 28-35-50 ASPH E46 (2nd)", "트라이엘마 28-35-50 E46", r"E46|ASPH|2nd|2세대|신형", [r"E49"], ["e46", "asph"]),
 ], parent_aliases=["mate", "메이트"])
 group("leica:lens:super-angulon:21", "Super-Angulon 21mm", "슈퍼앵귤론 21", "M", "super-angulon", "21", [
     c("f4", "Super-Angulon 21mm f/4", "슈퍼앵귤론 21 f/4", r"(?<![\d.])4\b|f/?4\b", [r"3\.4"], ["f4"]),
@@ -580,6 +587,26 @@ for slug, name, ko, marker, als in [
     EXTEND_PARENTS.setdefault(SC50, []).append(key)
     TIGHTEN[APO50] = TIGHTEN.get(APO50, []) + [marker]
 
+# Summilux-M 50 ASPH 마감·세대 (2026-11-02 사장님: '실버·크롬·크롬 피니시가 다 다른 것 같다') — 판매 중 중간값:
+# 블랙 아노다이즈 442만 · 실버 크롬(11892, 황동) 498만 · 블랙 크롬 한정판(11688) 581만 · ASPH II(2023~ 근접, 11728·11729) 600만대
+LUX50A = "leica:lens:summilux-m:50:asph"
+LUX50A_II = r"ASPH\.? ?II\b|ASPH\.? ?2\b|\(type ii\)|close ?focus|근접|\b1172[89]\b"
+LUX50A_BC = r"black[- ]?chrome|블랙 ?크롬|ブラッククローム|\b11688\b"
+LUX50A_SC = r"silver ?chrome|silber ?verchromt|verchromt|\bchrome\b|크롬|クローム|\b11892\b|\bsilver\b|실버|シルバ|silbern"
+for slug, name, ko, marker, nots, als, edition in [
+    ("black-chrome", "Summilux-M 50mm f/1.4 ASPH Black Chrome", "주미룩스 50 ASPH 블랙크롬", LUX50A_BC, [LUX50A_II], ["black chrome", "블랙크롬"], True),
+    ("asph-ii", "Summilux-M 50mm f/1.4 ASPH II (2023, close focus)", "주미룩스 50 ASPH II (2023 근접)", LUX50A_II, [], ["asph ii", "close focus", "근접"], False),
+    ("silver-chrome", "Summilux-M 50mm f/1.4 ASPH Silver Chrome (11892)", "주미룩스 50 ASPH 실버 크롬", LUX50A_SC, [LUX50A_BC, LUX50A_II], ["silver chrome", "실버 크롬", "chrome"], False),
+]:
+    key = f"{LUX50A}:{slug}"
+    _add(key, name, ko, "M", [FAM["summilux"][0], f("50"), r"ASPH|aspherical|\b5th\b|5세대", marker],  # 한국 매장 '5th' = ASPH
+         nots + [r"LHSA", r"kravitz|lenny", r"titan|티탄|チタン", r"independence|광복", r"\bSL\b|-SL\b", r"\bTL\b|-TL\b", r"-R\b", BP_L],
+         [f"summilux 50 asph {a}" for a in als] + [f"주미룩스 50 asph {a}" for a in als] + [f"50 룩스 {a}" for a in als])
+    if edition:
+        MODELS[key]["edition"] = True
+    EXTEND_PARENTS.setdefault("leica:lens:summilux-m:50", []).append(key)
+    TIGHTEN[LUX50A] = TIGHTEN.get(LUX50A, []) + [marker]  # 기본 ASPH = 블랙 아노다이즈 1세대
+
 # Summicron 28 ASPH 사파리, Summicron 90 블랙페인트
 _add("leica:lens:summicron-m:28:safari", "Summicron-M 28mm f/2 ASPH Safari", "주미크론 28 사파리", "M", [CRON, f("28"), SAFARI], [r"\bAPO\b"],
      ["summicron 28 safari", "주미크론 28 사파리", "28 cron safari"])
@@ -616,3 +643,30 @@ for slug, name, ko, marker, als in [
 ]:
     _add(f"leica:lens:apo-summicron-m:90:{slug}", name, ko, "M", [r"\bAPO\b|apo-", CRON, f("90"), marker], [REPAINT_L], als)
 TIGHTEN["leica:lens:apo-summicron-m:90"] = TIGHTEN.get("leica:lens:apo-summicron-m:90", []) + [BP_L, SAFARI, r"titan|티탄|チタン"]
+
+
+# ── 2026-11-02 섞임 점검 2차: 군용·트로펜·한정판 ──
+MIL_LENS = r"bundeseigentum|eigentum|\bheer\b|luftwaffe|kriegsmarine|\bmilitary\b|militaire|milit[äa]r|\bolive\b|군용|軍"
+for base, slug, name, ko, marker, als in [
+    ("leica:lens:hektor:135", "military", "Hektor 135mm f/4.5 Military (Bundeseigentum · olive)", "헥토르 135 군용", MIL_LENS, ["hektor 135 military", "헥토르 135 군용"]),
+    ("leica:lens:summar:50", "tropen", "Summar 50mm f/2 'Tropen' (tropical)", "주마 50 트로펜", r"tropen|tropical|트로펜", ["summar tropen", "주마 트로펜"]),
+]:
+    key = f"{base}:{slug}"
+    _add(key, name, ko, MODELS[base]["mount"], [m for m in MODELS[base]["title_must"] if m != MOUNT_EVIDENCE.get(MODELS[base]["mount"])] + [marker],
+         MODELS[base]["title_must_not"], als)
+    MODELS[key]["edition"] = True
+    TIGHTEN[base] = TIGHTEN.get(base, []) + [marker]
+_add("leica:lens:summicron:50:compur", "Compur-Summicron 5cm f/2", "콤푸어 주미크론 50", None, [FAM["summicron"][0], f("50"), r"compur"], [], ["compur summicron", "콤푸어 주미크론"])
+MODELS["leica:lens:summicron:50:compur"]["edition"] = True
+# Summicron-M 35 ASPH 블랙크롬(11689), Noctilux f/1 'The last 100'
+SC35_BC = r"black[- ]?chrome|블랙 ?크롬|ブラッククローム|\b11689\b"
+_add(f"{SC35}:asph-black-chrome", "Summicron-M 35mm f/2 ASPH Black Chrome", "주미크론 35 ASPH 블랙크롬", "M", [FAM["summicron"][0], f("35"), r"ASPH", SC35_BC],
+     [r"\bAPO\b", BP_L], ["summicron 35 asph black chrome", "주미크론 35 asph 블랙크롬"])
+MODELS[f"{SC35}:asph-black-chrome"]["edition"] = True
+EXTEND_PARENTS.setdefault(SC35, []).append(f"{SC35}:asph-black-chrome")
+TIGHTEN[f"{SC35}:asph"] = TIGHTEN.get(f"{SC35}:asph", []) + [SC35_BC]
+_add(f"{NX10}:last-100", "Noctilux-M 50mm f/1.0 'The last 100'", "녹티룩스 50 f/1.0 마지막 100개", "M", [r"nocti", f("50"), r"last ?100|letzten ?100"], [], ["noctilux last 100"])
+MODELS[f"{NX10}:last-100"]["edition"] = True
+EXTEND_PARENTS.setdefault(NX10, []).append(f"{NX10}:last-100")
+for _k in [k for k in MODELS if k.startswith(NX10 + ":") and not k.endswith("last-100")]:
+    TIGHTEN[_k] = TIGHTEN.get(_k, []) + [r"last ?100|letzten ?100"]

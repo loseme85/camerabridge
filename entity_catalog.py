@@ -74,13 +74,29 @@ def body_view(title: str) -> str:
     return text
 
 
+# 렌즈 모델에만 연결됐어도 제목에 바디 이름과 세트 표기가 같이 있으면 세트 ('M6+M 50/1.4 Summilux', 'A型 Black (Elmar 50mm付)')
+SET_BODY = re.compile(r"\bM(?:2|3|4|5|6|7|8|9|10|11|P|-?A|-?D|-?E|D|E)(?:-P|-R| ?TTL)?\b(?![./]\d)"
+                      r"|(?<!version )(?<!type )(?<!ver\.)(?<!ver )(?<!mark )(?<!typ )(?<!visoflex )\bI{1,3}[a-g]?(?:-K)?\b|\b[ABC]型|\bCL\b|\bR[3-9]\b|"
+                      r"leicaflex|ライカフレックス|\bbody\b|ボディ|ボデー|바디", re.I)
+
+
+GOGGLES = re.compile(r"goggle|\beyes?\b|眼鏡|メガネ|고글|안경", re.I)
+
+
 def is_set(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> bool:
-    """렌즈 교환식 바디에 연결됐는데 제목에 렌즈 표기도 있는 매물 = 바디·렌즈 세트."""
+    """렌즈 교환식 바디에 연결됐는데 제목에 렌즈 표기도 있는 매물 = 바디·렌즈 세트.
+    렌즈 모델에만 연결됐어도 제목에 세트 표기(+·付·with·outfit…)와 바디 이름이 같이 있으면 세트."""
     catalog = catalog or load_catalog()
     title = record_title(record)
-    bodies = [e for e in record.get("entity_ids") or [] if catalog["entities"][e].get("kind") == "Body"
-              and not catalog["entities"][e].get("children") and not catalog["entities"][e].get("feature") and not FIXED_LENS_BODY.match(e)]
-    return bool(bodies) and bool(LENS_SIGNAL.search(title))
+    ids = record.get("entity_ids") or []
+    leaf = lambda e: not catalog["entities"][e].get("children") and not catalog["entities"][e].get("feature")  # noqa: E731
+    bodies = [e for e in ids if catalog["entities"][e].get("kind") == "Body" and leaf(e) and not FIXED_LENS_BODY.match(e)]
+    if bodies:
+        return bool(LENS_SIGNAL.search(title))
+    lenses = [e for e in ids if catalog["entities"][e].get("kind") == "Lens" and leaf(e)]
+    if not lenses or not SET_MARK.search(title) or FOR_WORD.search(title) or GOGGLES.search(title):
+        return False  # 'with goggles M3'·'M3 Steel Rim With Goggles'는 M3용 안경 달린 렌즈
+    return bool(SET_BODY.search(title))
 
 
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)
@@ -239,7 +255,10 @@ def _code_hits(title: str, final: dict, catalog: dict) -> list[str]:
 ACCESSORY_FOR = re.compile(
     r"\b(rings?|mounts?|hoods?|shades?|caps?|adapters?|finders?|viewfinders?|filters?|cases?|collars?|bayonets?|tubes?|spools?|releases?|cranks?)\s+for\s+(?:the\s+|a\s+)?"
     r"(?:\d|[a-z-]*(?:elmar|summ|noct|lux|cron|angulon|telyt|hektor|leica|leitz|barnack))"
-    r"|(?:mm|f ?/?\d(?:\.\d+)?)\s*용(?![가-힣])", re.I)
+    r"|(?:mm|f ?/?\d(?:\.\d+)?)\s*용(?![가-힣])"
+    # 2026-11-02 섞임 점검: 상자만·설명서·접사 장치·포커싱 마운트·조리개 링·삼각대·후드(프랑스어)는 어느 모델에도 안 붙임
+    r"|^(?:leica\s+|leitz\s+)?(?:box\b|focus(?:ing)?\s+mount\b)|\bbox\s+rossa\b|\binstructions?\b|\bbedienungsanleitung\b|\bmode d'emploi\b"
+    r"|close[- ]?(?:focus|up)\s+device|\bSOOKY\b|\bADVOO|ghiera|diaframma|treppiede|parasoleil", re.I)
 
 
 def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> list[str]:
