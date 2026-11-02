@@ -5881,6 +5881,71 @@ def crawl_kenmore():
     print(f"  ✅ Kenmore Camera 완료: {len(results)}개")
     return results
 
+
+def crawl_usedcl():
+    """Used.cl (칠레 산티아고) - Horizontal Foto의 중고 전문몰(Jumpseller). '/leica' 분류를 정적 HTML로 (쪽마다 30개쯤).
+    라이카·라이츠 제목만 (분류에 시그마·보이그랜더 M 마운트 렌즈도 섞임). 'No disponible'은 품절. 가격 CLP, 가격 없는 매물은 문의.
+    등급 표기 없음"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://www.used.cl"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 Used.cl 크롤링 시작")
+    for page_num in range(1, 20):
+        try:
+            resp = sess.get(f"{base}/leica?page={page_num}", timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Used.cl {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        new = 0
+        for block in resp.text.split("product-block__wrapper")[1:]:
+            a = re.search(r'href="(/[^"]+)" class="product-block__anchor" title="Ir a ([^"]+)"', block)
+            if not a or a.group(1) in seen:
+                continue
+            seen.add(a.group(1))
+            new += 1
+            title = _html.unescape(a.group(2)).strip()
+            if (not re.search(r"\b(?:leica|leitz)\b", title, re.I)
+                    or re.search(r"\b(?:for|para|montura)\b|\(leica|minolta|sigma|voigtl", title, re.I)):
+                continue
+            name = re.sub(r"\s*-\s*usad[oa]\.?\s*$", "", title, flags=re.I).strip()
+            # 'APO-ELMARIT-R 1:2,8/180' → '180mm f2.8', 'Visor 24mm'(파인더) → 'Viewfinder 24mm'
+            name = re.sub(r"\b1\s?:\s?(\d+)(?:[,.](\d))?\s*/\s*(\d{2,3})\b",
+                          lambda m: f"{m.group(3)}mm f{m.group(1)}" + (f".{m.group(2)}" if m.group(2) else ""), name)
+            name = re.sub(r"\bVisor\b", "Viewfinder", name, flags=re.I)
+            name = re.sub(r"^Leica Leitz\b", "Leitz", name, flags=re.I)
+            pr = re.search(r'product-block__price[^>]*>\s*\$\s*([\d.]+)', block)
+            price = f"CLP {int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+            img = re.search(r'<img src="(https://cdnx\.jumpseller\.com/[^"]+)"', block)
+            img = re.sub(r"/resize/\d+/\d+", "/resize/640/640", img.group(1)) if img else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Used.cl (칠레)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "CLP",
+                "이미지": img,
+                "링크": base + a.group(1),
+                "품절": "No disponible" in block,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Used.cl 완료: {len(results)}개")
+    return results
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8139,6 +8204,7 @@ def crawl_all():
         ("PhotoCo (호주)", lambda: ce.wrap_full_run("PhotoCo (호주)", crawl_photoco)),
         ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),
         ("Kenmore Camera (미국)", lambda: ce.wrap_full_run("Kenmore Camera (미국)", crawl_kenmore)),
+        ("Used.cl (칠레)", lambda: ce.wrap_full_run("Used.cl (칠레)", crawl_usedcl)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
