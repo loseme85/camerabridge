@@ -264,7 +264,7 @@ group("leica:lens:elmarit-m:28", "Elmarit-M 28mm f/2.8", "엘마리트 28", "M",
     c("v2", "Elmarit-M 28mm f/2.8 2nd", "엘마리트 28 2세대", GEN2, [], ["2nd", "2세대"]),
     c("v3", "Elmarit-M 28mm f/2.8 3rd", "엘마리트 28 3세대", GEN3, [], ["3rd", "3세대"]),
     c("v4", "Elmarit-M 28mm f/2.8 4th", "엘마리트 28 4세대", GEN4, [], ["4th", "4세대"]),
-], must_not=[r"\bR\b|-R\b", r"ASPH"], existing=["leica:lens:elmarit-m:28:asph"])
+], must_not=[r"\bR\b|-R\b", r"ASPH|ASAPH"], existing=["leica:lens:elmarit-m:28:asph"])
 # ───────────── M: 90mm f/2.8 ─────────────
 group("leica:lens:elmarit-m:90", "Elmarit-M 90mm f/2.8", "엘마리트 90", "M", "elmarit", "90", [
     c("v1", "Elmarit 90mm f/2.8 1st", "엘마리트 90 1세대", GEN1, [], ["1st"]),
@@ -299,9 +299,9 @@ group("leica:lens:summaron-m:28:f5.6", "Summaron 28mm f/5.6", "즈마론 28", No
     c("reissue", "Summaron-M 28mm f/5.6 (2016 reissue)", "즈마론 28 복각", r"복각|re-?issue|summaron-m|\bM ?28|6 ?bit|신품", [], ["reissue", "복각"]),
 ], unspecified=True)
 group("leica:lens:summaron:35", "Summaron 35mm", "즈마론 35", None, "summaron", "35", [
-    c("f3.5", "Summaron 35mm f/3.5", "즈마론 35 f/3.5", r"3\.5", [r"\beyes?\b|고글"], ["3.5"]),
+    c("f3.5", "Summaron 35mm f/3.5", "즈마론 35 f/3.5 (고글 없음·표기 없음)", r"3\.5", [r"\beyes?\b|고글"], ["3.5"]),
     c("f3.5-eyes", "Summaron 35mm f/3.5 with eyes (M3)", "즈마론 35 f/3.5 고글", r"3\.5.{0,40}(\beyes?\b|고글)|(\beyes?\b|고글).{0,40}3\.5", [], ["3.5 eye"]),
-    c("f2.8", "Summaron 35mm f/2.8", "즈마론 35 f/2.8", r"2\.8", [r"\beyes?\b|고글"], ["2.8"]),
+    c("f2.8", "Summaron 35mm f/2.8", "즈마론 35 f/2.8 (고글 없음·표기 없음)", r"2\.8", [r"\beyes?\b|고글"], ["2.8"]),
     c("f2.8-eyes", "Summaron 35mm f/2.8 with eyes (M3)", "즈마론 35 f/2.8 고글", r"2\.8.{0,40}(\beyes?\b|고글)|(\beyes?\b|고글).{0,40}2\.8", [], ["2.8 eye"]),
 ])
 lens("leica:lens:super-elmar-m:18", "Super-Elmar-M 18mm f/3.8 ASPH", "수퍼엘마 18", "M", "super-elmar", "18")

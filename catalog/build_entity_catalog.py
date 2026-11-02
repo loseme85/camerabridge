@@ -73,7 +73,7 @@ model("leica:lens:noctilux-m:50:f1.2-asph", "Noctilux-M 50mm f/1.2 ASPH (2021 re
       [r"nocti", r"1\.2\b", r"(복각|re-?issue|ASPH(?!erical)|6 ?bit|신품)"], [r"오리지널|original|double ?aspherical|\bAA\b", r"\b75\b", f("35")] + ACC_NOT)
 model("leica:lens:noctilux-m:75", "Noctilux-M 75mm f/1.25 ASPH", "Lens", "M", [r"nocti", f("75")], ACC_NOT)
 model("leica:lens:noctilux-m:35", "Noctilux-M 35mm f/1.2 ASPH", "Lens", "M", [r"nocti", f("35")], ACC_NOT)
-model("leica:lens:elmarit-m:28:asph", "Elmarit-M 28mm f/2.8 ASPH", "Lens", "M", [r"elmarit", f("28"), r"ASPH"], ACC_NOT)
+model("leica:lens:elmarit-m:28:asph", "Elmarit-M 28mm f/2.8 ASPH", "Lens", "M", [r"elmarit", f("28"), r"ASPH|ASAPH"], ACC_NOT)  # ASAPH: 장씨카메라 오타
 model("leica:lens:summicron-m:90", "Summicron-M 90mm f/2", "Lens", "M", [r"summicron|cron", f("90")], [r"\bAPO\b", r"-R\b|\bR ?90", r"\bSL\b"] + ACC_NOT)
 model("leica:lens:summilux-m:75", "Summilux-M 75mm f/1.4", "Lens", "M", [r"(summilux|\blux\b)", f("75")], [r"\bSL\b"] + ACC_NOT)
 model("leica:lens:tri-elmar-m:16-18-21", "Tri-Elmar-M 16-18-21mm f/4 (WATE)", "Lens", "M", [r"(tri.?elmar|WATE)", r"16"], ACC_NOT)
@@ -125,8 +125,8 @@ NAME_KO = {
     "leica:lens:summilux-m:35:asph-fle": "주미룩스 35 FLE", "leica:lens:summilux-m:35:asph-fle2": "주미룩스 35 FLE II",
     "leica:lens:summilux-m:35:steel-rim-reissue": "주미룩스 35 스틸림 복각", "leica:lens:summicron-m:35:asph": "주미크론 35 ASPH",
     "leica:lens:summicron-m:35:v1-8element": "주미크론 35 1세대 8매", "leica:lens:summicron-m:35:v4": "주미크론 35 4세대 (6매)",
-    "leica:lens:apo-summicron-m:35": "아포 주미크론 M 35", "leica:lens:summilux-m:50:asph": "주미룩스 50 ASPH",
-    "leica:lens:summicron-m:50:current": "주미크론 M 50 (4·5세대)", "leica:lens:summicron:50:rigid": "주미크론 50 리짓",
+    "leica:lens:apo-summicron-m:35": "아포 주미크론 M 35", "leica:lens:summilux-m:50:asph": "주미룩스 50 ASPH (블랙)",
+    "leica:lens:summicron-m:50:current": "주미크론 M 50 (4·5세대)", "leica:lens:summicron:50:rigid": "주미크론 50 리짓 (전·후기 표기 없음)",
     "leica:lens:summicron:50:dr": "주미크론 50 DR", "leica:lens:apo-summicron-m:50": "아포 주미크론 M 50",
     "leica:lens:noctilux-m:50:f0.95": "녹티룩스 50 f/0.95",
     "leica:lens:noctilux:50:f1.2-original": "녹티룩스 50 f/1.2 오리지널", "leica:lens:noctilux-m:50:f1.2-asph": "녹티룩스 50 f/1.2 ASPH (복각)",

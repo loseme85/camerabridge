@@ -578,7 +578,7 @@
   {
    "id": "leica:lens:summilux-m:50:asph",
    "name": "Summilux-M 50mm f/1.4 ASPH",
-   "name_ko": "주미룩스 50 ASPH",
+   "name_ko": "주미룩스 50 ASPH (블랙)",
    "kind": "Lens",
    "mount": "M",
    "parent": "leica:lens:summilux-m:50",
@@ -758,7 +758,7 @@
   {
    "id": "leica:lens:summicron:50:rigid",
    "name": "Summicron 50mm f/2 Rigid",
-   "name_ko": "주미크론 50 리짓",
+   "name_ko": "주미크론 50 리짓 (전·후기 표기 없음)",
    "kind": "Lens",
    "mount": null,
    "parent": "leica:lens:summicron:50",
@@ -1404,7 +1404,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./])28(?!\\s?/\\s?\\d{3})(?:\\s?mm|/|\\b)",
-     "ASPH"
+     "ASPH|ASAPH"
     ],
     "title_must_not": [
      "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
@@ -3506,7 +3506,7 @@
     "title_must_not": [
      "KE-? ?7A?\\b",
      "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
-     "50 ?jahre|50 ?years|50th|anniversary|black ?chrome",
+     "50 ?jahre|50 ?years|50th|anniversary",
      "olive|올리브",
      "leeworks",
      "light ?lens ?lab",
@@ -3648,7 +3648,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?4\\b(?!-)",
-     "50 ?jahre|50 ?years|50th|anniversary|black ?chrome"
+     "50 ?jahre|50 ?years|50th|anniversary"
     ],
     "title_must_not": [
      "KE-? ?7A?\\b",
@@ -24045,7 +24045,7 @@
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
-     "ASPH",
+     "ASPH|ASAPH",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -24118,7 +24118,7 @@
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
-     "ASPH",
+     "ASPH|ASAPH",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -24193,7 +24193,7 @@
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
-     "ASPH",
+     "ASPH|ASAPH",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -24268,7 +24268,7 @@
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
-     "ASPH",
+     "ASPH|ASAPH",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -24334,7 +24334,7 @@
     ],
     "title_must_not": [
      "\\bR\\b|-R\\b",
-     "ASPH",
+     "ASPH|ASAPH",
      "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代|9 ?el|9매|9枚",
      "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代",
      "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代",
@@ -26643,7 +26643,7 @@
   {
    "id": "leica:lens:summaron:35:f3.5",
    "name": "Summaron 35mm f/3.5",
-   "name_ko": "즈마론 35 f/3.5",
+   "name_ko": "즈마론 35 f/3.5 (고글 없음·표기 없음)",
    "kind": "Lens",
    "mount": null,
    "parent": "leica:lens:summaron:35",
@@ -26783,7 +26783,7 @@
   {
    "id": "leica:lens:summaron:35:f2.8",
    "name": "Summaron 35mm f/2.8",
-   "name_ko": "즈마론 35 f/2.8",
+   "name_ko": "즈마론 35 f/2.8 (고글 없음·표기 없음)",
    "kind": "Lens",
    "mount": null,
    "parent": "leica:lens:summaron:35",

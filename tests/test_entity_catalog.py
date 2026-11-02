@@ -666,3 +666,21 @@ def test_summilux_35_steel_rim_goggles_separate():
         ids = match_entities(_record(title))
         assert plain in ids and eye not in ids, title
     assert eye not in match_entities(_record("[중고] M 35/1.4 Summilux 스틸림 복각 (Silver)"))
+
+
+def test_same_shop_same_number_is_one_item():
+    from entity_catalog import merge_same_item
+
+    def rec(title, price=None, quality="sold_confirmed", seen="2026-01-01"):
+        r = _record(title, category="Body")
+        r["final_output"].update({"source": "장씨카메라", "parsed_price_numeric": price, "sold_quality": quality, "first_seen": seen})
+        r["entity_ids"] = match_entities(r)
+        return r
+    bp, plain, other = rec("LEICA MP Black Paint sn.2890", 9_000_000), rec("LEICA MP sn.2890"), rec("LEICA M6 sn.2890")
+    assert merge_same_item([bp, plain, other]) == 1
+    assert "leica:body:mp-film:black-paint" in plain["entity_ids"]
+    assert plain["final_output"]["entity_note"] == "duplicate" and "entity_note" not in bp["final_output"]
+    assert "entity_note" not in other["final_output"]  # 번호가 같아도 다른 계열이면 다른 물건
+    a, b = rec("LEICA M6 Titan sn.1929"), rec("LEICA M6 Panda sn.1929")
+    merge_same_item([a, b])
+    assert "leica:body:m6:titan" in a["entity_ids"] and "leica:body:m6:titan" not in b["entity_ids"]  # 자세한 모델끼리 다르면 그대로

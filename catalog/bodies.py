@@ -97,7 +97,7 @@ fam("leica:body:nasa", "Leica NASA (MDa · Leicaflex SL MOT for space use)", "�
 fam("leica:body:ke-7a", "Leica KE-7A (US Army M4)", "라이카 KE-7A (미군 M4)", "M", [r"KE-? ?7A?\b"], [], ["ke7a", "ke-7a", "ke 7a", "leica ke-7a"])
 fam("leica:body:m4", "Leica M4", "라이카 M4", "M", [r"\bM ?4\b(?!-)"], [r"KE-? ?7A?\b"], ["엠4"], [
     BP("M4"),
-    v("50-jahre", "Leica M4 50 Jahre (Black Chrome)", "M4 50주년", r"50 ?jahre|50 ?years|50th|anniversary|black ?chrome", ["m4 50 jahre", "m4 50th anniversary"]),
+    v("50-jahre", "Leica M4 50 Jahre (Black Chrome)", "M4 50주년", r"50 ?jahre|50 ?years|50th|anniversary", ["m4 50 jahre", "m4 50th anniversary"]),  # M4 블랙은 원래 블랙 크롬이라 'black chrome'은 50주년 근거가 아님 (2026-11-02)
     v("olive", "Leica M4 Olive", "M4 올리브", r"olive|올리브", [], [REPAINT]),
 ])
 fam("leica:body:m4-2", "Leica M4-2", "라이카 M4-2", "M", [r"\bM ?4-2\b"], [], ["m42"], [

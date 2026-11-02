@@ -3136,7 +3136,7 @@
       const ready = entity && ladderState.results && ladderState.key === ladderKey();
       if(!ready){ region.innerHTML = ''; return; }
       const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
-      const rows = ladderState.results.filter(r => r.grade && r.grade !== 'X' && !['too_cheap', 'set'].includes((r.final_output || {}).entity_note))
+      const rows = ladderState.results.filter(r => r.grade && r.grade !== 'X' && !['too_cheap', 'set', 'duplicate'].includes((r.final_output || {}).entity_note))
         .map(r => {
           const cost = computeLandedCost(r);
           const final = r.final_output || {};
@@ -4162,7 +4162,7 @@
     function ladderPoints(results){
       const points = [];
       results.forEach(result => {
-        if(!LADDER_GRADES.includes(result.grade) || ['too_cheap', 'set'].includes((result.final_output || {}).entity_note)) return;
+        if(!LADDER_GRADES.includes(result.grade) || ['too_cheap', 'set', 'duplicate'].includes((result.final_output || {}).entity_note)) return;
         const cost = computeLandedCost(result);
         const value = cost ? (cost.landed ? cost.landed.total : cost.converted) : 0;
         if(!value) return;
