@@ -1234,6 +1234,7 @@
     .ladder-dot.is-abroad{background:var(--ladder-abroad);border-color:var(--ladder-abroad)}
     .ladder-dot.is-gone{background:var(--bg)}
     .ladder-dot.is-undated{border-style:dotted;opacity:.55}
+    .ladder-dot.is-old{opacity:.3}
     .ladder-dot:hover,.ladder-dot:focus-visible,.ladder-dot.is-on{transform:scale(1.6);z-index:2;outline:none}
     .ladder-tip{position:absolute;z-index:5;width:280px;display:grid;grid-template-columns:56px 1fr;gap:10px;padding:10px;background:var(--bg);border:1px solid var(--text);font-size:12px;line-height:1.45;pointer-events:none}
     .ladder-tip[hidden]{display:none}
@@ -3766,6 +3767,10 @@
       ladder_listed: { ko: '판매가 {p}', en: 'Listed {p}', ja: '販売価格 {p}', 'zh-Hans': '标价 {p}', 'zh-Hant': '標價 {p}', pt: 'Anunciado {p}', es: 'Publicado {p}', de: 'Angebot {p}', it: 'In vendita {p}' },
       ladder_sold_on: { ko: '{d}에 팔림 ({n}일 걸림)', en: 'Sold {d} ({n} days on sale)', ja: '{d}に販売 ({n}日)', 'zh-Hans': '{d} 售出（在售 {n} 天）', 'zh-Hant': '{d} 售出（在售 {n} 天）', pt: 'Vendido em {d} ({n} dias à venda)', es: 'Vendido el {d} ({n} días a la venta)', de: 'Verkauft am {d} ({n} Tage im Angebot)', it: 'Venduto il {d} ({n} giorni in vendita)' },
       ladder_undated: { ko: '팔린 날 모름', en: 'Sale date unknown', ja: '販売日不明', 'zh-Hans': '售出日期未知', 'zh-Hant': '售出日期未知', pt: 'Data de venda desconhecida', es: 'Fecha de venta desconocida', de: 'Verkaufsdatum unbekannt', it: 'Data di vendita sconosciuta' },
+      ladder_listed_est: { ko: '{m} 무렵 게시 ({a})', en: 'Listed around {m} ({a})', ja: '{m}頃に掲載（{a}）', 'zh-Hans': '约 {m} 上架（{a}）', 'zh-Hant': '約 {m} 上架（{a}）', pt: 'Anunciado por volta de {m} ({a})', es: 'Publicado hacia {m} ({a})', de: 'Eingestellt um {m} ({a})', it: 'Pubblicato verso {m} ({a})' },
+      ladder_listed_note: { ko: '판매일 모름 · 사진 올린 날로 추정, 그 무렵 팔린 값', en: 'Sale date unknown · estimated from the photo upload date, a price from around then', ja: '販売日不明・写真の掲載日から推定、その頃の販売価格', 'zh-Hans': '售出日期未知 · 按照片上传日期推算，约为当时的成交价', 'zh-Hant': '售出日期未知 · 依照片上傳日期推算，約為當時的成交價', pt: 'Data de venda desconhecida · estimada pela data da foto, preço dessa época', es: 'Fecha de venta desconocida · estimada por la fecha de la foto, precio de esa época', de: 'Verkaufsdatum unbekannt · aus dem Foto-Upload geschätzt, Preis aus dieser Zeit', it: 'Data di vendita sconosciuta · stimata dalla data della foto, prezzo di allora' },
+      ladder_years_ago: { ko: '{n}년 전', en: '{n}y ago', ja: '{n}年前', 'zh-Hans': '{n} 年前', 'zh-Hant': '{n} 年前', pt: 'há {n} anos', es: 'hace {n} años', de: 'vor {n} J.', it: '{n} anni fa' },
+      ladder_months_ago: { ko: '{n}개월 전', en: '{n}mo ago', ja: '{n}か月前', 'zh-Hans': '{n} 个月前', 'zh-Hant': '{n} 個月前', pt: 'há {n} meses', es: 'hace {n} meses', de: 'vor {n} Mon.', it: '{n} mesi fa' },
       ladder_sold_unknown: { ko: '판매일 모름 (처음 볼 때 이미 팔림)', en: 'Sale date unknown (already sold when first seen)', ja: '販売日不明（初回確認時に販売済み）', 'zh-Hans': '售出日期未知（首次发现时已售）', 'zh-Hant': '售出日期未知（首次發現時已售）', pt: 'Data de venda desconhecida (já vendido quando visto)', es: 'Fecha de venta desconocida (ya vendido al verlo)', de: 'Verkaufsdatum unbekannt (beim ersten Sehen schon verkauft)', it: 'Data di vendita sconosciuta (già venduto alla prima rilevazione)' },
       ladder_vs_then: { ko: '그때 같은 등급 시세 대비 {p}', en: '{p} vs same grade then', ja: '当時の同ランク相場比 {p}', 'zh-Hans': '较当时同等级行情 {p}', 'zh-Hant': '較當時同等級行情 {p}', pt: '{p} vs mesmo grau na época', es: '{p} vs mismo grado entonces', de: '{p} ggü. gleicher Note damals', it: '{p} rispetto allo stesso grado allora' },
       ladder_vs_now: { ko: '지금 대비 {p}', en: '{p} vs now', ja: '現在比 {p}', 'zh-Hans': '较现在 {p}', 'zh-Hant': '較現在 {p}', pt: '{p} vs agora', es: '{p} vs ahora', de: '{p} ggü. heute', it: '{p} rispetto a oggi' },
@@ -4064,6 +4069,8 @@
           abroad: Boolean(rule && rule.country && rule.country !== uiState.destination),
           firstSeen: ladderTime(fin.first_seen),
           soldAt: fin.sold_at_unknown ? null : ladderTime(fin.sold_at),
+          listedAt: fin.listed_est ? ladderTime(fin.listed_est.length === 7 ? `${fin.listed_est}-15 00:00:00` : `${fin.listed_est} 00:00:00`) : null,
+          listedText: fin.listed_est || '',
           result
         });
       });
@@ -4087,8 +4094,13 @@
       const byGrade = {};
       points.forEach(p => { (byGrade[p.grade] = byGrade[p.grade] || []).push(p); });
       points.forEach(p => {
-        if(p.active || !p.soldAt) return;
+        if(p.active) return;
         const same = byGrade[p.grade].filter(q => q !== p);
+        if(!p.soldAt){  // 판매일 모름: 지금 대비만 (그때 판매 중이던 매물 기록이 없음)
+          const nowOnly = median(same.filter(q => q.active).map(q => q.value));
+          p.vsNow = nowOnly ? p.value / nowOnly - 1 : null;
+          return;
+        }
         const then = median(same.filter(q => q.firstSeen !== null && q.firstSeen <= p.soldAt && (q.active || (q.soldAt !== null && q.soldAt >= p.soldAt))).map(q => q.value));
         const now = median(same.filter(q => q.active).map(q => q.value));
         p.vsThen = then ? p.value / then - 1 : null;
@@ -4167,7 +4179,8 @@
           .sort((a, b) => Number(a.p.active) - Number(b.p.active))
           .map(({ p, px, offset }) => {
             const label = `${localizeSourceName(p.result.source || '')} · ${money(p.value)} · ${p.active ? ux('section.active_listings', 'Active') : ec('ladder_gone')}`;
-            const cls = `ladder-dot${p.abroad ? ' is-abroad' : ''}${p.active ? '' : ' is-gone'}${!p.active && !p.soldAt ? ' is-undated' : ''}`;
+            const old = !p.active && !p.soldAt && (!p.listedAt || Date.now() - p.listedAt > 365 * 86400000);
+            const cls = `ladder-dot${p.abroad ? ' is-abroad' : ''}${p.active ? '' : ' is-gone'}${!p.active && !p.soldAt ? ' is-undated' : ''}${old ? ' is-old' : ''}`;
             return `<button type="button" class="${cls}" style="left:${px.toFixed(2)}%;top:calc(50% + ${offset}px)" data-ladder-i="${points.indexOf(p)}" aria-label="${escapeHtml(label)}"></button>`;
           }).join('');
         const range = active.length
@@ -4244,6 +4257,11 @@
         if(fx && cost && cost.currency !== 'KRW' && uiState.currency === 'KRW' && cost.listed){
           lines.push(ec('ladder_fx_then', { p: formatMoney(roundEstimate(cost.listed * fx, 'KRW'), 'KRW') }));
         }
+      }else if(point.listedAt){
+        const years = (Date.now() - point.listedAt) / (365.25 * 86400000);
+        lines.push(ec('ladder_listed_est', { m: point.listedText.slice(0, 7), a: years >= 1 ? ec('ladder_years_ago', { n: String(Math.floor(years)) }) : ec('ladder_months_ago', { n: String(Math.max(0, Math.round(years * 12))) }) }));
+        lines.push(ec('ladder_listed_note'));
+        if(point.vsNow != null) lines.push(ec('ladder_vs_now', { p: pct(point.vsNow) }));
       }else{
         lines.push(ec('ladder_sold_unknown'));
       }
