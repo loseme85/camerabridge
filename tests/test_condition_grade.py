@@ -455,3 +455,10 @@ def test_fujikoshi_teido():
     assert grade_of("富士越カメラ (일본)", "Fujikoshi: 極上品", "")[0] == "A"
     assert grade_of("富士越カメラ (일본)", "Fujikoshi: 上程度", "")[0] == "C"
     assert grade_of("富士越カメラ (일본)", "Fujikoshi: ジャンク", "")[0] == "X"
+
+
+def test_ohbayashi_teido():
+    from condition_grade import grade_of
+    assert grade_of("カメラの大林 (일본)", "Ohbayashi: A", "")[0] == "A"
+    assert grade_of("カメラの大林 (일본)", "Ohbayashi: AB", "")[0] == "B"
+    assert grade_of("カメラの大林 (일본)", "정보없음 (상세 봄)", "")[0] is None

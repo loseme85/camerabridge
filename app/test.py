@@ -6439,6 +6439,107 @@ def _fujikoshi_name(title):
     return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
 
 
+OHBAYASHI_CATEGORIES = ["ct1021", "ct1056", "ct1008", "ct1044", "ct921"]  # 중고 라이카: 렌즈·필름·디지털·콤팩트·액세서리
+
+
+def crawl_ohbayashi():
+    """カメラの大林 (일본) - MakeShop 새 화면 중고 라이카 분류 5곳(/view/category/ct…, 정적 HTML, 한 쪽에 다 나옴 — 70개쯤).
+    목록에 있으면 판매 중, 가격 JPY(세금 포함). 등급은 상세 화면 '商品の詳細' 표의 程度(A·AB·B·C)뿐이라 처음 본 매물만 상세를 읽고
+    전에 읽은 등급은 이전 결과에서 다시 씀. robots.txt 없음(404)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import OHBAYASHI_PREFIX
+    base = "https://www.camera-no-ohbayashi.co.jp"
+    site = "カメラの大林 (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    known = {}
+    try:
+        with open("data/raw/results.json", encoding="utf-8") as f:
+            known = {r["링크"]: r.get("컨디션") for r in json.load(f) if r.get("site") == site}
+    except (OSError, ValueError):
+        pass
+    results, seen = [], set()
+    print(f"\n  📂 カメラの大林 크롤링 시작 (이전 등급 {len(known)}개)")
+    for cat in OHBAYASHI_CATEGORIES:
+        for page_num in range(1, 20):
+            try:
+                resp = sess.get(f"{base}/view/category/{cat}", params={"page": page_num} if page_num > 1 else None, timeout=30)
+                resp.raise_for_status()
+            except Exception as e:
+                raise RuntimeError(f"カメラの大林 {cat} {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            new = 0
+            for card in resp.text.split('<div class="item-list-image">')[1:]:
+                m = re.search(r'<p class="item-name"><a href="(/view/item/(\d+))[^"]*">([^<]+)</a>', card)
+                if not m or base + m.group(1) in seen:
+                    continue
+                link = base + m.group(1)
+                seen.add(link)
+                new += 1
+                raw = _html.unescape(m.group(3)).replace("　", " ").strip()
+                if re.search(r"Konica|コニカ|Voigtl|フォクトレンダー|Zeiss|ツァイス|ミノルタ|シグマ|Sigma|Panasonic|パナソニック", raw, re.I):
+                    continue  # 라이카 분류에 섞인 다른 회사 렌즈·어댑터 (L 마운트 공용 렌즈 등)
+                name = _ohbayashi_name(raw)
+                pr = re.search(r'class="price">￥([\d,]+)', card)
+                price = f"¥{int(pr.group(1).replace(',', '')):,}" if pr else "문의요망"
+                img = re.search(r'<img src="([^"]+itemimages/[^"]+)"', card)
+                results.append({
+                    "site": site,
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "JPY",
+                    "이미지": img.group(1) if img else "",
+                    "링크": link,
+                    "품절": False,
+                    "예약중": False,
+                    "mount": detect_mount(name),
+                    "category": "Accessory" if cat == "ct921" else detect_category(name, price),
+                    "brand": detect_brand(name),
+                })
+            print(f"    └─ {cat} {page_num}페이지 새 상품 {new}개")
+            if not new:
+                break
+            time.sleep(random.uniform(1.0, 2.0))
+    read = 0
+    for r in results:
+        prev = known.get(r["링크"])
+        if prev and prev != "정보없음":
+            r["컨디션"] = prev
+            continue
+        if r["category"] == "Accessory" or read >= 120:
+            continue
+        read += 1
+        try:
+            page = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", sess.get(r["링크"], timeout=30).text))
+            g = re.search(r"程度 保証 ケース フード 取説 元箱 備考 (AB|A|B|C) ", page)
+            r["컨디션"] = OHBAYASHI_PREFIX + g.group(1) if g else "정보없음 (상세 봄)"  # 표가 깨진('#REF!') 상품은 다시 안 엶
+        except Exception as e:
+            print(f"    ⚠️ 상세 못 읽음: {r['링크'][-30:]} ({e})")
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ カメラの大林 완료: {len(results)}개 (상세 새로 {read}개)")
+    return results
+
+
+def _ohbayashi_name(title):
+    """カメラの大林 제목 다듬기: 'ライカ APO ズミクロンM 90mm F2 ASPH【中古管理番号：SW0198】' → 'Leica APO Summicron-M 90mm f2 ASPH'"""
+    import unicodedata
+    from ja_normalize import ja_to_en
+    t = unicodedata.normalize("NFKC", re.sub(r"【[^】]*】", " ", title))  # 반각 가타카나 'ｽﾞﾐｸﾛﾝ'·전각 숫자 '９０mm'
+    t = re.sub(r"\s+", " ", ja_to_en(t)).strip()
+    t = re.sub(r"^(?:leica|ライカ)\s*", "", t, flags=re.I)
+    t = re.sub(r"\bF(\d+(?:\.\d+)?)\b", r"f\1", t)
+    t = re.sub(r"(\d{2,3})mm(\d(?:\.\d)?)\b|(\d(?:\.\d)?cm)(\d(?:\.\d)?)\b",
+               lambda m: f"{m.group(1)}mm f{m.group(2)}" if m.group(1) else f"{m.group(3)} f{m.group(4)}", t)  # '90mm2.8'·'3.5cm3.5'
+    t = re.sub(r"-\s+(?=[A-Z])", "-", t)  # 'Vario- Elmarit'
+    t = re.sub(r"\b(I{1,3}[a-g]?)Body\b", r"\1 Body", t).replace("ゾフォート", "Sofort ")
+    t = re.sub(r"\b(Summicron|Summaron|Elmar|Summitar|Hektor)\s+L\b", r"\1-L", t)  # 'Summicron L 50mm' (L 마운트)
+    return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
+
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8576,8 +8677,9 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Leica Store Poland (폴란드)": 6,  # 매물마다 상세, Crawl-delay 2초 (약 40개 · 2분)
-    "Photo Warehouse (뉴질랜드)": 6,
-    "富士越カメラ (일본)": 6,  # 목록 6쪽 + 새 매물 상세  # 매물마다 상세 (약 70개 · 1분)
+    "Photo Warehouse (뉴질랜드)": 6,  # 매물마다 상세 (약 70개 · 1분)
+    "富士越カメラ (일본)": 6,  # 목록 6쪽 + 새 매물 상세
+    "カメラの大林 (일본)": 6,  # 분류 5곳 + 새 매물 상세
     "Howard Parker (영국)": 6,  # 매물마다 상세 (약 50개)
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
@@ -8712,6 +8814,7 @@ def crawl_all():
         ("Leica Store Poland (폴란드)", lambda: ce.wrap_full_run("Leica Store Poland (폴란드)", crawl_leicastorepl)),
         ("Photo Warehouse (뉴질랜드)", lambda: ce.wrap_full_run("Photo Warehouse (뉴질랜드)", crawl_photowarehouse)),
         ("富士越カメラ (일본)", lambda: ce.wrap_full_run("富士越カメラ (일본)", crawl_fujikoshi)),
+        ("カメラの大林 (일본)", lambda: ce.wrap_full_run("カメラの大林 (일본)", crawl_ohbayashi)),
         ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
         # PhotoCo (호주): GitHub 서버에서 매번 403이라 보류 (2026-11-02, 수집기는 남겨 둠)
         ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),
