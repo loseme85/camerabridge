@@ -5813,6 +5813,74 @@ def _jcamera_name(title):
     t = re.sub(r"\bElmarc\s?(\d)", r"Elmar-C \1", t)
     return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
 
+
+KENMORE_SECTIONS = ["used-lenses-for-mirrorless/used-leica-m-mount-lenses", "used-film-era-lenses/used-leica-ltm-m39-lenses",
+                    "used-film-era-lenses/used-leica-r-lenses", "used-mirrorless-digital-cameras/used-leica-mirrorless-cameras",
+                    "used-compact-digital-cameras/used-leica-compact-digital-cameras", "used-camera-lens-accessories/used-accessories-for-leica"]
+
+
+def crawl_kenmore():
+    """Kenmore Camera (미국 시애틀) - BigCommerce 중고 라이카 분류 6곳을 정적 HTML로 (목록에 있으면 판매 중). 가격 USD.
+    제목 'USED LEICA (M) 50MM F1.4 SUMMILUX' → 'Leica Summilux-M 50mm f1.4' 꼴. 분류에 섞인 다른 회사(7Artisans·보이그랜더·Orion) 제외.
+    등급 표기 없음"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://kenmorecamera.com/used-equipment"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 Kenmore Camera 크롤링 시작")
+    for section in KENMORE_SECTIONS:
+        for page_num in range(1, 10):
+            try:
+                resp = sess.get(f"{base}/{section}/?page={page_num}", timeout=30)
+                resp.raise_for_status()
+            except Exception as e:
+                raise RuntimeError(f"Kenmore {section} {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            new = 0
+            for card in re.split(r"<article\s", resp.text)[1:]:
+                link = re.search(r'class="image-link desktop" href="([^"]+)"', card)
+                title = re.search(r'title="([^"]+)"', card)
+                if not link or not title or link.group(1) in seen:
+                    continue
+                seen.add(link.group(1))
+                new += 1
+                raw = _html.unescape(title.group(1)).strip()
+                if not re.search(r"\bLEICA\b", raw) or re.search(r"7ARTISANS|VOIGTL|ORION|TTARTISAN|ZEISS|\(LEICA[- ]M\)", raw, re.I):
+                    continue
+                name = re.sub(r"^USED\s+", "", raw, flags=re.I)
+                name = re.sub(r"^LEICA \((M|R|LTM)\)\s+", r"Leica \1 ", name)  # 'LEICA (R) 19MM …' → 'Leica R 19MM …'
+                name = re.sub(r"(\d)MM\b", r"\1mm", name)
+                name = re.sub(r"\bF(\d)", r"f\1", name)
+                name = re.sub(r"^LEICA\b", "Leica", name)
+                pr = re.search(r"price price--withoutTax[^>]*>\s*\$([\d,.]+)", card)
+                price = f"${pr.group(1)}" if pr else "문의요망"
+                img = re.search(r'data-src="([^"]+)"', card)
+                cat = "Accessory" if "accessories" in section else detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "Kenmore Camera (미국)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "USD",
+                    "이미지": img.group(1) if img else "",
+                    "링크": link.group(1),
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if not new or f"?page={page_num + 1}" not in resp.text:
+                break
+            time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Kenmore Camera 완료: {len(results)}개")
+    return results
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8070,6 +8138,7 @@ def crawl_all():
         ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
         ("PhotoCo (호주)", lambda: ce.wrap_full_run("PhotoCo (호주)", crawl_photoco)),
         ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),
+        ("Kenmore Camera (미국)", lambda: ce.wrap_full_run("Kenmore Camera (미국)", crawl_kenmore)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
