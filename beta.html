@@ -4177,6 +4177,7 @@
           soldAt: fin.sold_at_unknown ? null : ladderTime(fin.sold_at),
           listedAt: fin.listed_est ? ladderTime(fin.listed_est.length === 7 ? `${fin.listed_est}-15 00:00:00` : `${fin.listed_est} 00:00:00`) : null,
           listedText: fin.listed_est || '',
+          postedAt: fin.posted_at ? ladderTime(`${fin.posted_at} 00:00:00`) : null,
           result
         });
       });
@@ -4353,7 +4354,9 @@
       const pct = r => `${r >= 0 ? '+' : '−'}${Math.round(Math.abs(r) * 100)}%`;
       const lines = [];
       if(point.soldAt){
-        const days = point.firstSeen ? Math.max(0, Math.round((point.soldAt - point.firstSeen) / 86400000)) : null;
+        const listedDay = point.postedAt;  // 매장이 준 게시일(Shopify) — 처음 본 날보다 이르면 그날부터
+        const start = listedDay && (!point.firstSeen || listedDay < point.firstSeen) ? listedDay : point.firstSeen;
+        const days = start ? Math.max(0, Math.round((point.soldAt - start) / 86400000)) : null;
         const date = new Date(point.soldAt + 9 * 3600000).toISOString().slice(0, 10);
         lines.push(days === null ? date : ec('ladder_sold_on', { d: date, n: String(days) }));
         const cmp = [point.vsThen != null ? ec('ladder_vs_then', { p: pct(point.vsThen) }) : '',

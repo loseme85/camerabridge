@@ -7,6 +7,8 @@
 - WordPress: /wp-content/uploads/2026/06/… → 2026-06
 - Shopify 등 파일 버전: ?v=1783637860 · ?1730109430 (유닉스 시각) → 그날
 - Drupal 등: /public/2025-11/… → 2025-11, Lecuit: /260915-occ-… → 2026-09-15
+
+매장이 상품 등록일을 알려 주면(Shopify created_at → 매물 '게시일' 칸) 사진 주소보다 그것을 먼저 쓴다.
 """
 from __future__ import annotations
 
@@ -42,6 +44,20 @@ def estimate_listed(image_url: str | None, now: dt.date | None = None) -> tuple[
         day = dt.datetime.fromtimestamp(int(m.group(1)), dt.timezone(dt.timedelta(hours=9))).date()
         return (day.isoformat(), "day") if dt.date(2015, 1, 1) <= day <= today else (None, None)
     return None, None
+
+
+_DAY = re.compile(r"20\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])")
+
+
+def posted_of(item: dict, now: dt.date | None = None) -> str | None:
+    """매장이 준 게시일(Shopify created_at → '게시일' 칸) '2025-03-04', 없거나 이상하면 None"""
+    posted = str(item.get("게시일") or "")[:10]
+    return posted if _DAY.fullmatch(posted) and posted <= (now or dt.date.today()).isoformat() else None
+
+
+def listed_of(item: dict, now: dt.date | None = None) -> str | None:
+    """매물 → 게시일. 매장이 준 게시일이 있으면 그날, 없으면 사진 주소로 어림."""
+    return posted_of(item, now) or estimate_listed(item.get("이미지"), now)[0]
 
 
 def as_datetime_text(listed: str | None) -> str | None:

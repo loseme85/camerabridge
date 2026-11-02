@@ -22,6 +22,7 @@ from fx_history import krw_per_unit_on  # noqa: E402
 from listing_date import as_datetime_text  # noqa: E402
 
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
+SOLD_MEDIAN_DAYS = 730  # 판매 중간값에 넣는 기간: 최근 2년 (2026-11-02 사장님, 예전 가격이 지금 시세를 끌어내리지 않게)
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 HOME_FEED = ROOT / "data" / "derived" / "home_feed.json"
 HOME_FEED_SIZE = 12
@@ -134,6 +135,7 @@ def main() -> None:
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     to_krw = krw_rates()
+    sold_cutoff = (dt.date.today() - dt.timedelta(days=SOLD_MEDIAN_DAYS)).isoformat()
     stats: dict[str, dict] = {eid: {"total": 0, "active": 0, "active_prices": [], "sold_prices": [], "graded": [],
                                     "set_active": [], "set_sold": [], "set_graded": []} for eid in catalog["entities"]}
     for record in records:
@@ -142,8 +144,12 @@ def main() -> None:
         active = final.get("sold_quality") == "asking"
         sold = str(final.get("sold_quality") or "").startswith("sold")
         rate = to_krw.get(str(final.get("currency") or "KRW").upper())
+        recent = False
         if sold:  # 판매완료는 팔린 날 환율로 (기록된 그 순간 환율 → 날짜별 환율 → 없으면 오늘 환율)
             when = (as_datetime_text(final.get("listed_est")) if final.get("sold_at_unknown") else None) or final.get("sold_at")
+            # 판매 중간값은 최근 2년 판매만 (팔린 날 모르면 게시 추정일, 그것도 모르면 넣지 않음)
+            known = when if not final.get("sold_at_unknown") or final.get("listed_est") else None
+            recent = bool(known) and str(known)[:10] >= sold_cutoff
             rate = (None if final.get("sold_at_unknown") else final.get("sold_fx_krw")) or krw_per_unit_on(final.get("currency"), when) or rate
         krw = price * rate if price and rate and id(record) not in too_cheap else None  # 너무 싼 매물은 시세에서 뺌
         grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
@@ -155,7 +161,7 @@ def main() -> None:
                 s["active"] += 1
                 if krw:
                     s[f"{prefix}active" if prefix else "active_prices"].append(krw)
-            elif krw and sold:
+            elif krw and sold and recent:
                 s[f"{prefix}sold" if prefix else "sold_prices"].append(krw)
             if krw and grade and grade != "X" and (active or sold):
                 s[f"{prefix}graded"].append((grade, krw, "sold" if sold else "asking"))

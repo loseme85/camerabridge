@@ -2544,6 +2544,7 @@ def crawl_leicamiami():
             brand = detect_brand(name)
             cat = detect_category(name, price)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Leica Store Miami",
                 "label": label,
                 "상품명": name,
@@ -2604,6 +2605,7 @@ def crawl_kamerastore():
             from condition_grade import ks_condition
             cond_text = ks_condition(p.get("body_html") or "") or "정보없음"
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Kamerastore (핀란드)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -2663,6 +2665,7 @@ def crawl_mkkamera():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "M & K Kamera (홍콩)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -2734,6 +2737,7 @@ def crawl_leicasg():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Leica Store Singapore (싱가포르)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -3153,6 +3157,7 @@ def crawl_harrison():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Harrison Cameras (영국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -3553,6 +3558,7 @@ def crawl_camerawest():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Camera West (미국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -3949,6 +3955,7 @@ def crawl_glazers():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Glazers Camera (미국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -4424,6 +4431,7 @@ def crawl_heidelberg():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Leica Store Heidelberg (독일)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -4859,6 +4867,7 @@ def crawl_ohnuki():
                 cat = detect_category(name, price)
                 mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
                 results.append({
+                    "게시일": _shopify_listed(p),
                     "site": site,
                     "label": auto_label(name),
                     "상품명": name,
@@ -5247,6 +5256,7 @@ def crawl_mfcamera():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "MF Camera (미국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -6184,6 +6194,7 @@ def crawl_leicastoremy():
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
+            "게시일": _shopify_listed(p),
             "site": "Leica Store Malaysia (말레이시아)",
             "label": auto_label(name),
             "상품명": name,
@@ -6241,6 +6252,7 @@ def crawl_imagefoto():
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
+            "게시일": _shopify_listed(p),
             "site": "Image Foto (덴마크)",
             "label": auto_label(name),
             "상품명": name,
@@ -6260,10 +6272,15 @@ def crawl_imagefoto():
     return results
 
 
-def _listed_est(image_url):
-    """사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
-    from listing_date import estimate_listed
-    return estimate_listed(image_url)[0] or ""
+def _listed_est(item):
+    """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
+    from listing_date import listed_of
+    return listed_of(item) or ""
+
+
+def _shopify_listed(p):
+    """Shopify 상품의 등록일 (created_at '2025-03-04T10:00:00-05:00' → '2025-03-04'), 없으면 빈 문자열"""
+    return str(p.get("created_at") or p.get("published_at") or "")[:10]
 
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
@@ -6562,6 +6579,7 @@ def crawl_photografica():
                 cat = detect_category(name, price)
                 mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
                 results.append({
+                    "게시일": _shopify_listed(p),
                     "site": "Photografica (덴마크)",
                     "label": auto_label(name),
                     "상품명": name,
@@ -6878,6 +6896,7 @@ def crawl_cardinal():
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
+            "게시일": _shopify_listed(p),
             "site": "Cardinal Camera Used (미국)",
             "label": auto_label(name),
             "상품명": name,
@@ -6933,6 +6952,7 @@ def crawl_fivestar():
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
+            "게시일": _shopify_listed(p),
             "site": "Five Star Camera (일본)",
             "label": auto_label(name),
             "상품명": name,
@@ -7701,6 +7721,7 @@ def crawl_oneofmany():
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
+            "게시일": _shopify_listed(p),
             "site": "One Of Many Cameras (덴마크)",
             "label": auto_label(name),
             "상품명": name,
@@ -7770,6 +7791,7 @@ def crawl_cavour():
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
+            "게시일": _shopify_listed(p),
             "site": "Foto Ottica Cavour (이탈리아)",
             "label": auto_label(name),
             "상품명": name,
@@ -7854,6 +7876,7 @@ def crawl_suffren():
             cat = "Accessory"  # 'Viseur Leica 24 mm'은 매장이 Optique로 둠
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         results.append({
+            "게시일": _shopify_listed(p),
             "site": "Photo Suffren (프랑스)",
             "label": auto_label(name),
             "상품명": name,
@@ -7925,6 +7948,7 @@ def crawl_cameraelectronic():
             cat = detect_category(name, price)
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
+                "게시일": _shopify_listed(p),
                 "site": "Camera Electronic (호주)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -8521,7 +8545,7 @@ def crawl_all():
         ("Leica Store Poland (폴란드)", lambda: ce.wrap_full_run("Leica Store Poland (폴란드)", crawl_leicastorepl)),
         ("Photo Warehouse (뉴질랜드)", lambda: ce.wrap_full_run("Photo Warehouse (뉴질랜드)", crawl_photowarehouse)),
         ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
-        ("PhotoCo (호주)", lambda: ce.wrap_full_run("PhotoCo (호주)", crawl_photoco)),
+        # PhotoCo (호주): GitHub 서버에서 매번 403이라 보류 (2026-11-02, 수집기는 남겨 둠)
         ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),
         ("Kenmore Camera (미국)", lambda: ce.wrap_full_run("Kenmore Camera (미국)", crawl_kenmore)),
         ("Used.cl (칠레)", lambda: ce.wrap_full_run("Used.cl (칠레)", crawl_usedcl)),
@@ -8818,7 +8842,7 @@ def crawl_all():
                 "sold_at": _s.get("sold_at",""),
                 "sold_fx_krw": _s.get("sold_fx_krw"),
                 "sold_at_unknown": bool(_s.get("sold_at_unknown")),
-                "listed_est": _listed_est(_s.get("이미지")),
+                "listed_est": _listed_est(_s),
             })
         with open("data/derived/sold_quality_latest.json", "w", encoding="utf-8") as f:
             _json_sold.dump(_sold_quality, f, ensure_ascii=False, indent=2)
