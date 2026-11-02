@@ -178,6 +178,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return it_grade(cond[len(IT_PREFIX):]), "text"
     if cond.startswith(SH_PREFIX):
         return _SH.get(cond[len(SH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(DE_PREFIX):
+        return de_grade(cond[len(DE_PREFIX):]), "text"
     if cond.startswith(DESC_PREFIX):
         for pattern, grade in _DESC:
             if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
@@ -226,6 +228,33 @@ def it_condition(text: str) -> str | None:
 # A 새것 같음 · AB 가벼운 사용감 · B 중간 사용감 · C 뚜렷한 사용감 (말뜻대로, 사진 확인 전 2026-11-02)
 SH_PREFIX = "SH: "
 _SH = {"A": "S", "A-": "A", "AB": "A", "B": "B", "BC": "C", "C": "C", "D": "D"}
+
+
+# 독일 used-photo.de: 등급 표기 없이 설명 글 말투 ('äußerst gepflegten Zustand (Near Mint)', 'leichte Gebrauchsspuren').
+# 말뜻대로 맞추고 사진 평가로 확인 (2026-11-03). 위에서부터 먼저 맞는 것
+DE_PREFIX = "DE: "
+_DE = [
+    (r"neuwertig|wie neu|unbenutzt|neuzustand", "S"),
+    (r"near ?mint|praktisch (?:keine|nicht)|kaum (?:sichtbare )?gebrauchsspuren|minimale[n]? (?:\w+[, ]+){0,3}gebrauchsspuren", "A"),
+    (r"leichte[n]? (?:\w+[, ]+){0,3}gebrauchsspuren|sehr (?:gut|schön)|gepflegt", "B"),  # 'äußerst gepflegt'도 사진으로는 B~C
+    (r"deutliche[n]? (?:\w+[, ]+){0,3}gebrauchsspuren|starke[n]? (?:\w+[, ]+){0,3}gebrauchsspuren|defekt|bastler", "D"),
+    (r"normale[n]? (?:\w+[, ]+){0,3}gebrauchsspuren|gebrauchsspuren|guter? zustand", "C"),
+]
+
+
+def de_grade(phrase: str) -> str | None:
+    for pattern, grade in _DE:
+        if re.search(pattern, phrase or "", re.I):
+            return grade
+    return None
+
+
+def de_condition(text: str) -> str | None:
+    """독일어 설명 글에서 컨디션 말투를 뽑아 'DE: near mint' 꼴로 (없으면 None). 설명 앞쪽(상태 요약)에 먼저 나온 말을 씀 —
+    뒤쪽 구성품·다른 물건 이야기의 'neuwertig'가 잡히지 않게 (사진 평가 2026-11-03)"""
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text or ""))
+    hits = [m for m in (re.search(pattern, t, re.I) for pattern, _ in _DE) if m]
+    return DE_PREFIX + min(hits, key=lambda m: m.start()).group(0).lower() if hits else None
 
 
 def describe_text(text: str) -> str | None:

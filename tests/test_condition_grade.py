@@ -462,3 +462,12 @@ def test_ohbayashi_teido():
     assert grade_of("カメラの大林 (일본)", "Ohbayashi: A", "")[0] == "A"
     assert grade_of("カメラの大林 (일본)", "Ohbayashi: AB", "")[0] == "B"
     assert grade_of("カメラの大林 (일본)", "정보없음 (상세 봄)", "")[0] is None
+
+
+def test_german_description_first_phrase_wins():
+    from condition_grade import de_condition, grade_of
+    text = "Das Objektiv ist in einem sehr schönen Zustand mit leichten Gebrauchsspuren. Dazu ein neuwertiger Deckel."
+    assert de_condition(text) == "DE: sehr schön"
+    assert grade_of("used-photo.de (독일)", de_condition(text), "")[0] == "B"
+    assert grade_of("used-photo.de (독일)", de_condition("Zustand (Near Mint)."), "")[0] == "A"
+    assert de_condition("Neueingänge") is None
