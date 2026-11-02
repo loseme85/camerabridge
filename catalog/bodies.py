@@ -16,10 +16,10 @@ NAME_KO: dict[str, str] = {}
 
 REPAINT = r"re-?paint|리페인트|재도색|custom|커스텀"
 # 군납·특수 모델: 같은 모델이라도 값이 몇 배라 따로 본다
-MILITARY = r"luftwaffe|\bheer\b|wehrmacht|kriegsmarine|eigentum|\bW\.?\s?H\.?(?=\s|$)|\bFl\.?\s?\d{5}|military|군용|군납|III ?c ?K\b"
+MILITARY = r"luftwaffe|\bheer\b|wehrmacht|kriegsmarine|eigentum|\bW\.?\s?H\.?(?=\s|$)|\bFl\.?\s?\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\s?K\b|III ?c\b.*(?:grey|gray|グレー|그레이)"
 SWEDISH = r"swed|sweden|three ?crowns?|tre ?kronor|스웨덴|military|군용|군납"
 OLIVE_MILITARY = r"olive|military|\barmy\b|bundeswehr|올리브|군용|군납"
-BLACK_PAINT = (r"black ?paint|블랙 ?페인트|블페", [REPAINT])
+BLACK_PAINT = (r"black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント", [REPAINT])
 
 
 def _short(name: str) -> str:
@@ -235,7 +235,10 @@ fam("leica:body:mp-film", "Leica MP (film)", "라이카 MP", "M", [r"\bMP\b"],
 ], standard_name="Leica MP (film, standard)")
 fam("leica:body:mp3", "Leica MP3 (LHSA)", "라이카 MP3", "M", [r"\bMP ?3\b"], [], ["mp3 lhsa"])
 fam("leica:body:mp6", "Leica MP6", "라이카 MP6", "M", [r"\bMP ?6\b"], [], [])  # 확인 필요
-fam("leica:body:m-a", "Leica M-A (Typ 127)", "라이카 M-A", "M", [r"\bM-?A\b"], [], ["ma typ 127", "m-a typ 127", "엠에이"])
+fam("leica:body:m-a", "Leica M-A (Typ 127)", "라이카 M-A", "M", [r"\bM-?A\b"], [], ["ma typ 127", "m-a typ 127", "엠에이"], [
+    v("titan", "Leica M-A 'Titan' Set", "M-A 티탄", r"titan|티탄|チタン", ["m-a titan"]),
+    v("hammertone", "Leica M-A Hammertone (LHSA)", "M-A 해머톤", r"hammertone|해머톤|ハンマートーン|LHSA", ["m-a hammertone"]),
+])
 
 # ── M 디지털 바디 ──
 fam("leica:body:m8", "Leica M8", "라이카 M8", "M", [r"\bM ?8\b"], [r"M ?8\.2"], [], [
@@ -405,7 +408,7 @@ fam("leica:body:sofort-2", "Leica Sofort 2", "라이카 소포트 2", None, [r"s
 
 # ── 바르낙 (스크루마운트) ──
 BARNACK = [
-    ("i", "Leica I (Model A · C)", r"\bI\b ?\(?[AC]\)?(?!\w)|\bLeica I\b(?! ?[cfg]\b)"), ("ic", "Leica Ic", r"\bI ?c\b"), ("if", "Leica If", r"\bI ?f\b"), ("ig", "Leica Ig", r"\bI ?g\b"),
+    ("i", "Leica I (Model A · C)", r"\bI\b ?\(?[AC]\)?(?!\w)|\bLeica I\b(?! ?[cfg]\b)|\bI ?a\b|\bLeica [AC]型"), ("ic", "Leica Ic", r"\bI ?c\b"), ("if", "Leica If", r"\bI ?f\b"), ("ig", "Leica Ig", r"\bI ?g\b"),
     ("ii", "Leica II (Model D)", r"\bII\b ?\(?D?\)?(?! ?[a-f]\b)|\bIID\b"), ("iia", "Leica IIa", r"\bII ?a\b"), ("iic", "Leica IIc", r"\bII ?c\b"), ("iif", "Leica IIf", r"\bII ?f\b"),
     ("iii", "Leica III (Model F)", r"\bIII\b ?\(?F?\)?(?! ?[a-g]\b)"), ("iiia", "Leica IIIa", r"\bIII ?a\b"), ("iiib", "Leica IIIb", r"\bIII ?b\b"), ("iiic", "Leica IIIc", r"\bIII ?c\b"),
     ("iiid", "Leica IIId", r"\bIII ?d\b"), ("iiif", "Leica IIIf", r"\bIII ?f\b|ⅢF"), ("iiig", "Leica IIIg", r"\bIII ?g\b"), ("72", "Leica 72", r"leica ?72\b"),

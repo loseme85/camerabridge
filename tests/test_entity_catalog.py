@@ -465,7 +465,7 @@ def test_price_band_decides_original_or_reissue_only_when_title_is_silent() -> N
 def test_far_too_cheap_listing_is_flagged_and_left_out_of_market_price() -> None:
     from entity_catalog import flag_too_cheap
     records = [_priced("Leica Summicron-M 50mm f2 Silver", v) for v in (2_000_000, 2_200_000, 2_400_000, 2_300_000, 2_100_000)]
-    manual = _priced("Leica Summicron-M 50mm f2 Instructions", 15_000)
+    manual = _priced("Leica Summicron-M 50mm f2 (heavy fungus)", 15_000)  # 설명서는 2026-11-02부터 아예 모델에 안 붙음
     records.append(manual)
     flagged = flag_too_cheap(records, lambda r: r["_v"])
     assert flagged == {id(manual)} and manual["final_output"]["entity_note"] == "too_cheap"
@@ -605,3 +605,23 @@ def test_summilux_50_asph_finishes_and_ii() -> None:
     assert lux("Leica Summilux-M 50mm f1.4 ASPH Silver Chrome 11892") == ["leica:lens:summilux-m:50:asph:silver-chrome"]
     assert lux("[위탁] M 50/1.4 Summilux ASPH 6bit (Silver)") == ["leica:lens:summilux-m:50:asph:silver-chrome"]
     assert lux("Leica 50mm F1.4 Asph Black 6bit - 11891") == ["leica:lens:summilux-m:50:asph"]
+
+
+def test_mixed_models_second_pass() -> None:
+    def ids(title, category="Lens", mount="M"):
+        return set(match_entities(_record(title, category, mount)))
+    for t in ["Leica Mini Zoom Instructions", "box ROSSA LEICA IIIF", "Leica IIIg for Close-up Device ADVOO",
+              "PARASOLEIL SOOMP POUR SUMMAR 50mm A VIS", "Leica Mini treppiede Leica Leitz"]:
+        assert ids(t, "Accessory", None) == set() and ids(t, "Body", None) == set(), t
+    assert "leica:lens:hektor:135:military" in ids("Leica Hektor 135mm f4.5 olive Bundeseigentum", mount=None)
+    assert "leica:lens:summar:50:tropen" in ids("Leica TROPEN Summar 5cm f2.0", mount=None)
+    assert "leica:lens:summicron:50:50-jahre" in ids('Leica Summicron-M 50mm f2.0 "50Years Summicron"')
+    assert "leica:lens:summicron:50:compur" in ids("Leica Compur-Summicron 5cm f2.0", mount=None)
+    assert "leica:lens:summicron-m:35:asph-black-chrome" in ids("Leica Summicron-M 35mm f2 ASPH Black Chrome 11689")
+    assert "leica:lens:summicron-m:35:v1-8element" in ids("Leica M Summicron 35mm F2 8枚玉 カナダ製")
+    assert "leica:lens:noctilux-m:50:f1.0:last-100" in ids('Leica NOCTILUX-M 50mm /f1 "The last 100" (11603)')
+    assert "leica:body:barnack-military" in ids("Leica IIIc グレー", "Body", None)
+    assert "leica:body:barnack-military" in ids("LEICA IIIc Militaire + Moteur MOOLY-C", "Body", None)
+    assert "leica:body:m4:black-paint" in ids("Leica M4, black lacquered Body", "Body")
+    assert "leica:body:m-a:titan" in ids("Leica M-A 10372 'Titan' set Body", "Body")
+    assert "leica:body:i" in ids("Leica A型(Old Elmar)", "Body", None)

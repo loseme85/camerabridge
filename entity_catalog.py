@@ -255,7 +255,10 @@ def _code_hits(title: str, final: dict, catalog: dict) -> list[str]:
 ACCESSORY_FOR = re.compile(
     r"\b(rings?|mounts?|hoods?|shades?|caps?|adapters?|finders?|viewfinders?|filters?|cases?|collars?|bayonets?|tubes?|spools?|releases?|cranks?)\s+for\s+(?:the\s+|a\s+)?"
     r"(?:\d|[a-z-]*(?:elmar|summ|noct|lux|cron|angulon|telyt|hektor|leica|leitz|barnack))"
-    r"|(?:mm|f ?/?\d(?:\.\d+)?)\s*용(?![가-힣])", re.I)
+    r"|(?:mm|f ?/?\d(?:\.\d+)?)\s*용(?![가-힣])"
+    # 2026-11-02 섞임 점검: 상자만·설명서·접사 장치·포커싱 마운트·조리개 링·삼각대·후드(프랑스어)는 어느 모델에도 안 붙임
+    r"|^(?:leica\s+|leitz\s+)?(?:box\b|focus(?:ing)?\s+mount\b)|\bbox\s+rossa\b|\binstructions?\b|\bbedienungsanleitung\b|\bmode d'emploi\b"
+    r"|close[- ]?(?:focus|up)\s+device|\bSOOKY\b|\bADVOO|ghiera|diaframma|treppiede|parasoleil", re.I)
 
 
 def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> list[str]:

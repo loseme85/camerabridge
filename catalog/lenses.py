@@ -210,7 +210,7 @@ for slug, name, ko, marker, extra_not, sfx in [
     ("your-mark", "Summicron-M 35mm f/2 'Your Mark'", "주미크론 35 유어마크", r"your ?mark", [], ["your mark"]),  # 확인 필요
     ("titan", "Summicron-M 35mm f/2 ASPH Titan", "주미크론 35 티탄", r"titan|티탄", [], ["titan"]),
     ("unspecified", "Summicron 35mm f/2 pre-ASPH (generation not stated)", "주미크론 35 구형 (세대 미표기)",
-     r"^(?!.*(ASPH|APO|\bv\.? ?[1-5]\b|\bver(sion)?\.? ?([1-5]|i{1,3}|iv|v)\b|第[1-5]世代|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|goggle|안경|眼鏡|メガネ|현행|millenn|titan|ara ?g|your ?mark)).*$", [], [""]),
+     r"^(?!.*(ASPH|APO|\bv\.? ?[1-5]\b|\bver(sion)?\.? ?([1-5]|i{1,3}|iv|v)\b|第[1-5]世代|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|8枚|7 ?el|7매|6매|6 ?el|eye|고글|goggle|안경|眼鏡|メガネ|현행|millenn|titan|ara ?g|your ?mark)).*$", [], [""]),
 ]:
     key = f"{SC35}:{slug}"
     _add(key, name, ko, "M", [FAM["summicron"][0], f("35"), marker], [r"\bAPO\b"] + list(extra_not), aliases("summicron", "35", sfx, "M"))
@@ -218,7 +218,7 @@ for slug, name, ko, marker, extra_not, sfx in [
 TIGHTEN[f"{SC35}:v1-8element"] = [r"\beyes?\b|고글|goggle|안경|眼鏡|メガネ"]
 # 장씨카메라·M&K는 7매를 '4th'·'Ver.4'로도 적음 → 렌즈 매수가 세대 숫자보다 먼저 (2026-10-30)
 TIGHTEN[f"{SC35}:v4"] = [r"7 ?el|7매|7枚", GEN2]  # '6 Elements V2'는 2세대 (6매는 2·4세대 둘 다)
-OVERRIDE_MUST[f"{SC35}:v1-8element"] = [FAM["summicron"][0], f("35"), r"(8 ?el|8매|eight|1st|1세대|\bv\.? ?1\b)|" + GEN1]
+OVERRIDE_MUST[f"{SC35}:v1-8element"] = [FAM["summicron"][0], f("35"), r"(8 ?el|8매|8枚|eight|1st|1세대|\bv\.? ?1\b)|" + GEN1]
 OVERRIDE_MUST[f"{SC35}:v4"] = [FAM["summicron"][0], f("35"), r"(4th|v4|4세대|6매|6 ?el|IV\b|king ?of ?bokeh|bokeh ?king|\bKOB\b)|" + GEN4]
 TIGHTEN[f"{SC35}:asph"] = [r"millenn?ium|밀레니엄", r"ara ?g[uü]ler", r"your ?mark", r"titan|티탄", r"\bSL\b|-SL\b", r"\bTL\b"]
 OVERRIDE_MUST[f"{SC35}:asph"] = [FAM["summicron"][0], f("35"), r"ASPH|5세대|현행"]
@@ -230,7 +230,7 @@ for slug, name, ko, marker, mount, extra_not, sfx in [
     ("rigid-early", "Summicron 50mm f/2 Rigid 1st (early)", "주미크론 50 리짓 전기형", r"(rigid|리짓|리지드).{0,20}(전기|early|1st)|(전기|early).{0,20}(rigid|리짓)", None, [], ["rigid early", "리짓 전기형"]),
     ("rigid-late", "Summicron 50mm f/2 Rigid 2nd (late)", "주미크론 50 리짓 후기형", r"(rigid|리짓|리지드).{0,20}(후기|late|2nd)|(후기|late).{0,20}(rigid|리짓)", None, [], ["rigid late", "리짓 후기형"]),
     ("v3", "Summicron-M 50mm f/2 3rd", "주미크론 50 3세대", GEN3, "M", [], ["3rd", "3세대"]),
-    ("50-jahre", "Summicron-M 50mm f/2 '50 Jahre'", "주미크론 50 50주년", r"50 ?jahre|50주년|50th anniv", "M", [], ["50 jahre", "50주년"]),
+    ("50-jahre", "Summicron-M 50mm f/2 '50 Jahre'", "주미크론 50 50주년", r"50 ?jahre|50 ?years|50주년|50th anniv", "M", [], ["50 jahre", "50주년"]),
 ]:
     key = f"{SC50}:{slug}"
     _add(key, name, ko, mount, [FAM["summicron"][0], f("50"), marker], [r"\bAPO\b", r"\bSL\b|-SL\b", r"-R\b|\bR ?50"] + list(extra_not), aliases("summicron", "50", sfx, None))
@@ -238,7 +238,7 @@ for slug, name, ko, marker, mount, extra_not, sfx in [
 TIGHTEN["leica:lens:summicron:50:rigid"] = [r"전기|early|후기|late|1st|2nd"]
 # 한국·일본 매장의 2nd는 1969년형(서양 3세대), 서양의 2nd는 리지드라 셈법이 달라 '1·2세대 표기'는 따로 받음 (2026-10-23, PR #67)
 GEN12_SC50 = r"\b(?:1st|2nd)\b|[12]세대|\bv\.?[12]\b|\bfirst\b|\bsecond\b|[12]代目|第[12]世代|\b(type|ver\.?|version) ?i{1,2}\b|\bver(sion)?\.? ?[12]\b"
-TIGHTEN["leica:lens:summicron-m:50:current"] = [GEN3, GEN12_SC50, r"50 ?jahre", r"토륨|thorium|radioactive|collaps|침동"]
+TIGHTEN["leica:lens:summicron-m:50:current"] = [GEN3, GEN12_SC50, r"50 ?jahre|50 ?years", r"토륨|thorium|radioactive|collaps|침동", r"compur"]
 _add(f"{SC50}:gen12-unspecified", "Summicron 50mm f/2 '1st·2nd' (generation count differs by shop)",
      "주미크론 50 1·2세대 표기 (매장마다 셈법이 달라 구분 안 함)", "M", [FAM["summicron"][0], f("50"), GEN12_SC50],
      [r"\bAPO\b", r"rigid|리짓", r"\bDR\b|dual ?range", r"collaps|침동", r"\bR\b ?50|-R\b", r"\bSL\b", r"\bL ?50|LTM|M39"],
@@ -643,3 +643,30 @@ for slug, name, ko, marker, als in [
 ]:
     _add(f"leica:lens:apo-summicron-m:90:{slug}", name, ko, "M", [r"\bAPO\b|apo-", CRON, f("90"), marker], [REPAINT_L], als)
 TIGHTEN["leica:lens:apo-summicron-m:90"] = TIGHTEN.get("leica:lens:apo-summicron-m:90", []) + [BP_L, SAFARI, r"titan|티탄|チタン"]
+
+
+# ── 2026-11-02 섞임 점검 2차: 군용·트로펜·한정판 ──
+MIL_LENS = r"bundeseigentum|eigentum|\bheer\b|luftwaffe|kriegsmarine|\bmilitary\b|militaire|milit[äa]r|\bolive\b|군용|軍"
+for base, slug, name, ko, marker, als in [
+    ("leica:lens:hektor:135", "military", "Hektor 135mm f/4.5 Military (Bundeseigentum · olive)", "헥토르 135 군용", MIL_LENS, ["hektor 135 military", "헥토르 135 군용"]),
+    ("leica:lens:summar:50", "tropen", "Summar 50mm f/2 'Tropen' (tropical)", "주마 50 트로펜", r"tropen|tropical|트로펜", ["summar tropen", "주마 트로펜"]),
+]:
+    key = f"{base}:{slug}"
+    _add(key, name, ko, MODELS[base]["mount"], [m for m in MODELS[base]["title_must"] if m != MOUNT_EVIDENCE.get(MODELS[base]["mount"])] + [marker],
+         MODELS[base]["title_must_not"], als)
+    MODELS[key]["edition"] = True
+    TIGHTEN[base] = TIGHTEN.get(base, []) + [marker]
+_add("leica:lens:summicron:50:compur", "Compur-Summicron 5cm f/2", "콤푸어 주미크론 50", None, [FAM["summicron"][0], f("50"), r"compur"], [], ["compur summicron", "콤푸어 주미크론"])
+MODELS["leica:lens:summicron:50:compur"]["edition"] = True
+# Summicron-M 35 ASPH 블랙크롬(11689), Noctilux f/1 'The last 100'
+SC35_BC = r"black[- ]?chrome|블랙 ?크롬|ブラッククローム|\b11689\b"
+_add(f"{SC35}:asph-black-chrome", "Summicron-M 35mm f/2 ASPH Black Chrome", "주미크론 35 ASPH 블랙크롬", "M", [FAM["summicron"][0], f("35"), r"ASPH", SC35_BC],
+     [r"\bAPO\b", BP_L], ["summicron 35 asph black chrome", "주미크론 35 asph 블랙크롬"])
+MODELS[f"{SC35}:asph-black-chrome"]["edition"] = True
+EXTEND_PARENTS.setdefault(SC35, []).append(f"{SC35}:asph-black-chrome")
+TIGHTEN[f"{SC35}:asph"] = TIGHTEN.get(f"{SC35}:asph", []) + [SC35_BC]
+_add(f"{NX10}:last-100", "Noctilux-M 50mm f/1.0 'The last 100'", "녹티룩스 50 f/1.0 마지막 100개", "M", [r"nocti", f("50"), r"last ?100|letzten ?100"], [], ["noctilux last 100"])
+MODELS[f"{NX10}:last-100"]["edition"] = True
+EXTEND_PARENTS.setdefault(NX10, []).append(f"{NX10}:last-100")
+for _k in [k for k in MODELS if k.startswith(NX10 + ":") and not k.endswith("last-100")]:
+    TIGHTEN[_k] = TIGHTEN.get(_k, []) + [r"last ?100|letzten ?100"]

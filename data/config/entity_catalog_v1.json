@@ -317,6 +317,7 @@
      "광복 ?60|60th jubilee|60th.{0,20}independence",
      "jubilee",
      "50th anniv|50 ?jahre|50주년",
+     "black[- ]?chrome|블랙 ?크롬|ブラッククローム|\\b11689\\b",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -367,7 +368,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "(8 ?el|8매|eight|1st|1세대|\\bv\\.? ?1\\b)|\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代"
+     "(8 ?el|8매|8枚|eight|1st|1세대|\\bv\\.? ?1\\b)|\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代"
     ],
     "title_must_not": [
      "ASPH",
@@ -732,8 +733,9 @@
      "박스만",
      "\\b3rd\\b|\\b3th\\b|third|3세대|\\bv\\.?3\\b|\\b(type|ver\\.?|version) ?iii\\b|\\bver(sion)?\\.? ?3\\b|第3世代",
      "\\b(?:1st|2nd)\\b|[12]세대|\\bv\\.?[12]\\b|\\bfirst\\b|\\bsecond\\b|[12]代目|第[12]世代|\\b(type|ver\\.?|version) ?i{1,2}\\b|\\bver(sion)?\\.? ?[12]\\b",
-     "50 ?jahre",
+     "50 ?jahre|50 ?years",
      "토륨|thorium|radioactive|collaps|침동",
+     "compur",
      "safari|사파리|サファリ",
      "black ?paint|블랙 ?페인트|블페|ブラックペイント",
      "50주년|50th anniv",
@@ -2139,7 +2141,7 @@
      "MP ?3",
      "double ?stroke|더블 ?스트로크|\\bDS\\b",
      "single ?stroke|싱글 ?스트로크|\\bSS\\b",
-     "black ?paint|블랙 ?페인트|블페|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))",
      "olive|올리브|オリーブ",
      "段付き|段付|\\b700\\d{3}\\b|700001|very early|first batch|初期",
      "leeworks",
@@ -2355,7 +2357,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?3\\b",
-     "black ?paint|블랙 ?페인트|블페|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))"
     ],
     "title_must_not": [
      "M3 ?J",
@@ -2640,7 +2642,7 @@
      "M2-?R",
      "\\bM ?24\\d",
      "M ?2 ?\\d{2}",
-     "black ?paint|블랙 ?페인트|블페",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "button|버튼",
      "olive|military|\\barmy\\b|bundeswehr|올리브|군용|군납",
      "leeworks",
@@ -2709,7 +2711,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?2\\b",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "M2-?R",
@@ -3427,7 +3429,7 @@
     ],
     "title_must_not": [
      "KE-? ?7A?\\b",
-     "black ?paint|블랙 ?페인트|블페",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "50 ?jahre|50 ?years|50th|anniversary|black ?chrome",
      "olive|올리브",
      "leeworks",
@@ -3498,7 +3500,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?4\\b(?!-)",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "KE-? ?7A?\\b",
@@ -4537,7 +4539,7 @@
     ],
     "title_must_not": [
      "non.?ttl",
-     "black ?paint|블랙 ?페인트|블페",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "gold ?logo|골드 ?로고|M6 ?G\\b",
      "platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
      "siber|hegner|125 ?(th|jahre|周年|주년)",
@@ -7156,7 +7158,7 @@
     "title_must": [
      "\\bM ?6\\b",
      "(?<!non )(?<!non-)(?<!non)TTL",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "re-?paint|리페인트|재도색|custom|커스텀",
@@ -7767,7 +7769,7 @@
      "oskar|barnack",
      "terry|테리 ?오닐",
      "광복|independence",
-     "black ?paint|블랙 ?페인트|블페",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "50(th| ?jahre)|50주년|anthrac|안트라",
      "leeworks",
      "light ?lens ?lab",
@@ -8311,7 +8313,7 @@
     "mount": "M",
     "title_must": [
      "\\bMP\\b",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "M-?P\\b ?(240|typ)",
@@ -8590,31 +8592,163 @@
    }
   },
   {
-   "id": "leica:body:m-a",
-   "name": "Leica M-A (Typ 127)",
-   "name_ko": "라이카 M-A",
+   "id": "leica:body:m-a:standard",
+   "name": "Leica M-A (Typ 127) (standard)",
+   "name_ko": "라이카 M-A 기본형",
    "kind": "Body",
    "mount": "M",
-   "parent": null,
+   "parent": "leica:body:m-a",
    "children": [],
    "aliases": [
-    "leica m-a (typ 127)",
-    "m-a (typ 127)",
-    "m-a typ 127",
-    "ma typ 127",
-    "ma(typ127)",
-    "라이카 m-a (typ 127)",
-    "엠에이"
+    "m-a (typ 127) standard",
+    "m-a (typ 127) 기본"
    ],
-   "codes": [
-    "10370",
-    "10371"
-   ],
+   "codes": [],
    "match": {
     "category": "Body",
     "mount": "M",
     "title_must": [
      "\\bM-?A\\b"
+    ],
+    "title_must_not": [
+     "titan|티탄|チタン",
+     "hammertone|해머톤|ハンマートーン|LHSA",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:m-a:titan",
+   "name": "Leica M-A 'Titan' Set",
+   "name_ko": "M-A 티탄",
+   "kind": "Body",
+   "mount": "M",
+   "parent": "leica:body:m-a",
+   "children": [],
+   "aliases": [
+    "leica m-a 'titan' set",
+    "m-a 'titan' set",
+    "m-a titan",
+    "ma'titan'set",
+    "라이카 m-a 'titan' set"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bM-?A\\b",
+     "titan|티탄|チタン"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:m-a:hammertone",
+   "name": "Leica M-A Hammertone (LHSA)",
+   "name_ko": "M-A 해머톤",
+   "kind": "Body",
+   "mount": "M",
+   "parent": "leica:body:m-a",
+   "children": [],
+   "aliases": [
+    "leica m-a hammertone (lhsa)",
+    "m-a hammertone",
+    "m-a hammertone (lhsa)",
+    "mahammertone(lhsa)",
+    "라이카 m-a hammertone (lhsa)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bM-?A\\b",
+     "hammertone|해머톤|ハンマートーン|LHSA"
     ],
     "title_must_not": [
      "leeworks",
@@ -9247,7 +9381,7 @@
     ],
     "title_must_not": [
      "herm[eè]s|에르메스",
-     "black ?paint|블랙 ?페인트|블페",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -9385,7 +9519,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?9-?P\\b",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "re-?paint|리페인트|재도색|custom|커스텀",
@@ -9900,7 +10034,7 @@
      "correspondent|kravitz|크라비츠",
      "safari|사파리",
      "광복|independence|70th anniv|70주년|\\b\\d{1,2}/70\\b",
-     "black ?paint|블랙 ?페인트|블페",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "\\bgrip\\b|gibson",
      "leeworks",
      "light ?lens ?lab",
@@ -10187,7 +10321,7 @@
     "mount": "M",
     "title_must": [
      "\\bM-P\\b|\\bM-?P ?(240|typ ?240)",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "M10|M11|M9",
@@ -11309,7 +11443,7 @@
      "\\bM ?10-?R\\b"
     ],
     "title_must_not": [
-     "black ?paint|블랙 ?페인트|블페",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -11375,7 +11509,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?10-?R\\b",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "re-?paint|리페인트|재도색|custom|커스텀",
@@ -11657,7 +11791,7 @@
     "title_must_not": [
      "M11-?(P|D|V)\\b",
      "monochrom",
-     "black ?paint|블랙 ?페인트|블페|glossy",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|glossy",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -11727,7 +11861,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?11\\b",
-     "black ?paint|블랙 ?페인트|블페|glossy"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|glossy"
     ],
     "title_must_not": [
      "M11-?(P|D|V)\\b",
@@ -17728,7 +17862,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "\\bI\\b ?\\(?[AC]\\)?(?!\\w)|\\bLeica I\\b(?! ?[cfg]\\b)"
+     "\\bI\\b ?\\(?[AC]\\)?(?!\\w)|\\bLeica I\\b(?! ?[cfg]\\b)|\\bI ?a\\b|\\bLeica [AC]型"
     ],
     "title_must_not": [
      "\\bM ?\\d",
@@ -18312,8 +18446,8 @@
      "\\bQ ?\\d",
      "magnifier|data ?back|soft ?release|vit\\b",
      "leicaflex",
-     "black ?paint|블랙 ?페인트|블페",
-     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\\s?K\\b|III ?c\\b.*(?:grey|gray|グレー|그레이)",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -18383,7 +18517,7 @@
     ],
     "title_must_not": [
      "\\bM ?\\d",
-     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\\s?K\\b|III ?c\\b.*(?:grey|gray|グレー|그레이)",
      "mont[eé] ?en ?sarre|\\bsaar",
      "leeworks",
      "light ?lens ?lab",
@@ -18454,7 +18588,7 @@
     ],
     "title_must_not": [
      "\\bM ?\\d",
-     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\\s?K\\b|III ?c\\b.*(?:grey|gray|グレー|그레이)",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -18524,7 +18658,7 @@
     ],
     "title_must_not": [
      "\\bM ?\\d",
-     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b",
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\\s?K\\b|III ?c\\b.*(?:grey|gray|グレー|그레이)",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -19024,7 +19158,7 @@
     "mount": null,
     "title_must": [
      "\\bIII ?[abc]?\\b",
-     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|군용|군납|III ?c ?K\\b"
+     "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\\s?K\\b|III ?c\\b.*(?:grey|gray|グレー|그레이)"
     ],
     "title_must_not": [
      "\\bM ?\\d",
@@ -19381,7 +19515,7 @@
     "mount": null,
     "title_must": [
      "\\bIII\\b(?! ?[a-g]\\b)",
-     "black ?paint|블랙 ?페인트|블페"
+     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bM ?\\d",
@@ -23206,7 +23340,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "^(?!.*(ASPH|APO|\\bv\\.? ?[1-5]\\b|\\bver(sion)?\\.? ?([1-5]|i{1,3}|iv|v)\\b|第[1-5]世代|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|7 ?el|7매|6매|6 ?el|eye|고글|goggle|안경|眼鏡|メガネ|현행|millenn|titan|ara ?g|your ?mark)).*$"
+     "^(?!.*(ASPH|APO|\\bv\\.? ?[1-5]\\b|\\bver(sion)?\\.? ?([1-5]|i{1,3}|iv|v)\\b|第[1-5]世代|1st|2nd|3rd|3th|4th|1세대|2세대|3세대|4세대|5세대|8 ?el|8매|8枚|7 ?el|7매|6매|6 ?el|eye|고글|goggle|안경|眼鏡|メガネ|현행|millenn|titan|ara ?g|your ?mark)).*$"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -23622,7 +23756,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "50 ?jahre|50주년|50th anniv"
+     "50 ?jahre|50 ?years|50주년|50th anniv"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -28790,6 +28924,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
+     "tropen|tropical|트로펜",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -29237,6 +29372,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
+     "bundeseigentum|eigentum|\\bheer\\b|luftwaffe|kriegsmarine|\\bmilitary\\b|militaire|milit[äa]r|\\bolive\\b|군용|軍",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -35194,6 +35330,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
+     "last ?100|letzten ?100",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -35280,6 +35417,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
+     "last ?100|letzten ?100",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -35381,6 +35519,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
+     "last ?100|letzten ?100",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -35453,6 +35592,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
+     "last ?100|letzten ?100",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -38250,6 +38390,367 @@
    }
   },
   {
+   "id": "leica:lens:hektor:135:military",
+   "name": "Hektor 135mm f/4.5 Military (Bundeseigentum · olive)",
+   "name_ko": "헥토르 135 군용",
+   "kind": "Lens",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "hektor 135 military",
+    "헥토르 135 군용"
+   ],
+   "codes": [],
+   "edition": true,
+   "match": {
+    "category": "Lens",
+    "mount": null,
+    "title_must": [
+     "hektor",
+     "(?<![\\d./\\-–])135(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "bundeseigentum|eigentum|\\bheer\\b|luftwaffe|kriegsmarine|\\bmilitary\\b|militaire|milit[äa]r|\\bolive\\b|군용|軍"
+    ],
+    "title_must_not": [
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:summar:50:tropen",
+   "name": "Summar 50mm f/2 'Tropen' (tropical)",
+   "name_ko": "주마 50 트로펜",
+   "kind": "Lens",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "summar tropen",
+    "주마 트로펜"
+   ],
+   "codes": [],
+   "edition": true,
+   "match": {
+    "category": "Lens",
+    "mount": null,
+    "title_must": [
+     "\\bsummar\\b",
+     "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "tropen|tropical|트로펜"
+    ],
+    "title_must_not": [
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:summicron:50:compur",
+   "name": "Compur-Summicron 5cm f/2",
+   "name_ko": "콤푸어 주미크론 50",
+   "kind": "Lens",
+   "mount": null,
+   "parent": null,
+   "children": [],
+   "aliases": [
+    "compur summicron",
+    "콤푸어 주미크론"
+   ],
+   "codes": [],
+   "edition": true,
+   "match": {
+    "category": "Lens",
+    "mount": null,
+    "title_must": [
+     "(summicron|\\bcron\\b)",
+     "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "compur"
+    ],
+    "title_must_not": [
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:summicron-m:35:asph-black-chrome",
+   "name": "Summicron-M 35mm f/2 ASPH Black Chrome",
+   "name_ko": "주미크론 35 ASPH 블랙크롬",
+   "kind": "Lens",
+   "mount": "M",
+   "parent": "leica:lens:summicron-m:35",
+   "children": [],
+   "aliases": [
+    "summicron 35 asph black chrome",
+    "주미크론 35 asph 블랙크롬"
+   ],
+   "codes": [],
+   "edition": true,
+   "match": {
+    "category": "Lens",
+    "mount": "M",
+    "title_must": [
+     "(summicron|\\bcron\\b)",
+     "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "ASPH",
+     "black[- ]?chrome|블랙 ?크롬|ブラッククローム|\\b11689\\b"
+    ],
+    "title_must_not": [
+     "\\bAPO\\b",
+     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "\\bSL\\b|-SL\\b",
+     "\\bTL\\b|-TL?\\b",
+     "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
+     "-S\\b",
+     "\\bL ?\\d{2}/|LTM|M39|screw",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:noctilux-m:50:f1.0:last-100",
+   "name": "Noctilux-M 50mm f/1.0 'The last 100'",
+   "name_ko": "녹티룩스 50 f/1.0 마지막 100개",
+   "kind": "Lens",
+   "mount": "M",
+   "parent": "leica:lens:noctilux-m:50:f1.0",
+   "children": [],
+   "aliases": [
+    "noctilux last 100"
+   ],
+   "codes": [],
+   "edition": true,
+   "match": {
+    "category": "Lens",
+    "mount": "M",
+    "title_must": [
+     "nocti",
+     "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "last ?100|letzten ?100"
+    ],
+    "title_must_not": [
+     "\\bSL\\b|-SL\\b",
+     "\\bTL\\b|-TL?\\b",
+     "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
+     "-S\\b",
+     "\\bL ?\\d{2}/|LTM|M39|screw",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "adapter",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
+    ]
+   }
+  },
+  {
    "id": "leica:lens:noctilux-m:50",
    "name": "Noctilux-M 50mm (all)",
    "name_ko": "녹티룩스 50 (전체)",
@@ -38377,7 +38878,8 @@
     "leica:lens:summicron-m:35:asph-50-jahre",
     "leica:lens:summicron-m:35:asph-lhsa",
     "leica:lens:summicron-m:35:asph-korea-60",
-    "leica:lens:summicron-m:35:black-paint"
+    "leica:lens:summicron-m:35:black-paint",
+    "leica:lens:summicron-m:35:asph-black-chrome"
    ],
    "aliases": [
     "35 cron",
@@ -38659,6 +39161,33 @@
     "엠피"
    ],
    "codes": [],
+   "match": null
+  },
+  {
+   "id": "leica:body:m-a",
+   "name": "Leica M-A (Typ 127) (all)",
+   "name_ko": "라이카 M-A (전체)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": null,
+   "children": [
+    "leica:body:m-a:standard",
+    "leica:body:m-a:titan",
+    "leica:body:m-a:hammertone"
+   ],
+   "aliases": [
+    "leica m-a (typ 127)",
+    "m-a (typ 127)",
+    "m-a typ 127",
+    "ma typ 127",
+    "ma(typ127)",
+    "라이카 m-a (typ 127)",
+    "엠에이"
+   ],
+   "codes": [
+    "10370",
+    "10371"
+   ],
    "match": null
   },
   {
@@ -39782,7 +40311,8 @@
     "leica:lens:noctilux-m:50:f1.0:v2-e58",
     "leica:lens:noctilux-m:50:f1.0:v3-e60",
     "leica:lens:noctilux-m:50:f1.0:v4-builtin-hood",
-    "leica:lens:noctilux-m:50:f1.0:unspecified"
+    "leica:lens:noctilux-m:50:f1.0:unspecified",
+    "leica:lens:noctilux-m:50:f1.0:last-100"
    ],
    "aliases": [
     "nocti 1.0",
