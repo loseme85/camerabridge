@@ -448,3 +448,10 @@ def test_italian_description_and_shphoto_zustand():
     assert it_condition("Fotografare in condizioni di controluce crea riflessi") is None  # 렌즈 소개 글의 '조건'은 상태가 아님
     assert grade_of("SHphoto (독일)", "SH: AB", "")[0] == "A"
     assert grade_of("SHphoto (독일)", "정보없음 (상세 봄)", "")[0] is None
+
+
+def test_fujikoshi_teido():
+    from condition_grade import grade_of
+    assert grade_of("富士越カメラ (일본)", "Fujikoshi: 極上品", "")[0] == "A"
+    assert grade_of("富士越カメラ (일본)", "Fujikoshi: 上程度", "")[0] == "C"
+    assert grade_of("富士越カメラ (일본)", "Fujikoshi: ジャンク", "")[0] == "X"
