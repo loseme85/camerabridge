@@ -111,6 +111,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SABATINI.get(cond[len(SABATINI_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
+    if cond.startswith(JCAMERA_PREFIX):
+        return jcamera_grade(cond[len(JCAMERA_PREFIX):].strip()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
         return _HEIDELBERG.get(cond[len(HEIDELBERG_PREFIX):].strip()), "label"
     if cond.startswith(MFCAMERA_PREFIX):
@@ -599,6 +601,27 @@ KOMEHYO_PREFIX = "Komehyo: "
 # 글자 그대로(A A·B B·C C) 두면 정확 일치 12/25 · 한 등급 이내 25/25 (사진이 평균 0.52등급 후함). C를 D로 낮추면 0.84지만
 # 한 등급 이내가 20/25로 줄어 그대로 둠.
 _KOMEHYO = {"新品": "N", "未使用品": "N", "中古品SA": "S", "中古品A": "A", "中古品B": "B", "中古品C": "C"}
+
+# 일본 J-カメラ (중고점 모음): 매장마다 '程度' 말이 다름 — 말로 쓰는 곳(中古美品·中古良上品·中古良品·中古並品…)과
+# 글자로 쓰는 곳(A·AB·B, 기존 일본 매장 _JP 대응)
+JCAMERA_PREFIX = "JCamera: "
+_JCAMERA = {"新品": "N", "新品同様": "S", "未使用品": "S", "極上品": "S", "中古美品": "A", "中古良上品": "B", "中古良品": "B",
+            "中古並品": "C", "並品": "C", "難あり": "D", "ジャンク": "X"}
+# 사진 평가(표기 가리고 30점, 사진 1장씩, 2026-11-02): 정확 일치 10/30 · 한 등급 이내 29/30 (사진이 평균 0.3등급 후함)
+_JCAMERA_RANK = {"S": "S", "A": "A", "A-": "B", "AB": "B", "AB-": "B", "B": "C", "C": "D"}
+
+
+def jcamera_grade(word: str) -> str | None:
+    """'中古美品'·'A'·'美品Aランク'·'94%'·'程度はAB-です。' → 공통 등급"""
+    if word in _JCAMERA:
+        return _JCAMERA[word]
+    m = re.search(r"(AB-|AB|A-|S|A|B|C)\s?ランク|程度は\s?(AB\+|AB-|AB|AA|A|B\+|B|C)", word)
+    if m:
+        return _JCAMERA_RANK.get(m.group(1)) if m.group(1) else _JP.get(m.group(2))
+    pct = re.fullmatch(r"(\d{2})\s?%", word)
+    if pct:
+        return from_percent(int(pct.group(1)))
+    return _JP.get(word.upper())
 
 
 # 독일 Leica Store Konstanz: 목록 카드 아래 한 줄 설명 'gebraucht – sehr guter Zustand'·'Vorführware – Neuware – OVP!'

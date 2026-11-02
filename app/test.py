@@ -5722,6 +5722,97 @@ def _photoco_name(title):
     name = re.sub(r"^Leica (M|R|SL) (\d{2,3}mm f[\d.]+) APO\b", r"Leica \1 APO \2", name)
     return _glazers_lens_name(name)
 
+
+# J-カメラ에서 담는 매장: 이미 따로 수집하는 곳(기타무라·나니와·대원·키쿠야·코메효·삼보·톱카메라·파이브스타·아카사카)과
+# 봇 수집을 막은 곳(맵카메라·후지야)은 뺀다
+JCAMERA_SHOPS = ["aikoudou", "esakura", "irohas", "Inherit", "otsuka", "ogisaku", "camerasb", "sanwa0", "yamagen", "yamagen2",
+                 "rokko", "cross", "comphoto", "saito", "j2", "suginami", "sukiya", "suzuki", "takanashi", "tokyocam", "nissin",
+                 "nisshindo", "nitto", "kitsunedou", "fotoborse", "fujii", "fujikoshi", "penguin", "matsuo", "ricoh"]
+
+
+def crawl_jcamera():
+    """J-カメラ (j-camera.net, 일본 중고점 모음 검색) - 제조사 'ライカ'(mk=14)에 위 매장만 골라 100개씩 정적 HTML.
+    robots.txt Crawl-delay 10초 지킴 (7쪽 안팎 → 1분). 카드의 '程度'(中古美品·中古良品·A·AB 등)가 등급, 매장 이름은 상품명 끝 괄호로"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import JCAMERA_PREFIX
+    from ja_normalize import ja_to_en
+    base = "https://j-camera.net"
+    query = "mk[]=14&" + "&".join(f"sh[]={s}" for s in JCAMERA_SHOPS) + "&sr=-15&max=100"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 J-カメラ 크롤링 시작")
+    for page_num in range(0, 40):
+        if page_num:
+            time.sleep(10)
+        try:
+            resp = sess.get(f"{base}/listp.php?{query}&p={page_num}", timeout=40)
+            resp.raise_for_status()
+            text = resp.content.decode("utf-8", "replace")
+        except Exception as e:
+            raise RuntimeError(f"J-カメラ {page_num + 1}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        cards = re.findall(r'<tr class="item">(.*?)</tr>', text, re.S)
+        new = 0
+        for card in cards:
+            item = re.search(r'href="itemp\.php\?id=(\d+)', card)
+            if not item or item.group(1) in seen:
+                continue
+            seen.add(item.group(1))
+            new += 1
+            title = _html.unescape((re.search(r"<strong>(.*?)</strong>", card, re.S) or [None, ""])[1]).strip()
+            grade = _html.unescape((re.search(r"<li>程度</li>\s*<li><p>([^<]*)</p>", card) or [None, ""])[1]).strip()
+            shop = re.search(r'<li class="itemmaker">[^<]*</li>\s*<li>([^<]*)</li>\s*<li>([^<]*)</li>', card)
+            kind, shop_name = (shop.group(1), shop.group(2)) if shop else ("", "")
+            yen = re.search(r'itemkakaku">&yen;([\d,]+)', card)
+            price = f"¥{yen.group(1)}" if yen else "문의요망"
+            name = _jcamera_name(title)
+            img = re.search(r'<img src="(https?://[^"]+)"[^>]*alt=', card)
+            cat = "Accessory" if kind == "アクセサリー" else detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "J-カメラ (일본)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": JCAMERA_PREFIX + grade if grade else "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": img.group(1) if img else "",
+                "링크": f"{base}/itemp.php?id={item.group(1)}",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+                "shop": shop_name,
+            })
+        print(f"    └─ {page_num + 1}페이지 {len(cards)}개")
+        if not new or len(cards) < 100:
+            break
+    print(f"  ✅ J-カメラ 완료: {len(results)}개")
+    return results
+
+
+def _jcamera_name(title):
+    """J-カメラ 제목 다듬기: 【希少】·【1954年製】 같은 꼬리표 빼기, 오타(Sumicron·ズミルクス)·붙여 쓴 이름(Elmar90mm·M6TTL)·
+    일본식 바르낙 이름(3c·0型 復刻·A型) 고치기. 일본어를 ja_to_en으로 바꾼 뒤에 고친다 (エルマー90mm → Elmar90mm)"""
+    from ja_normalize import ja_to_en
+    t = re.sub(r"【[^】]*】", " ", title.replace("　", " "))
+    t = t.replace("ズミルクス", "ズミルックス").replace("パリオ", "バリオ").replace("ファット", "Fat ")
+    t = re.sub(r"\s+", " ", ja_to_en(t)).strip()
+    t = re.sub(r"^(?:leica|ライカ)\s*", "", t, flags=re.I)
+    t = re.sub(r"\bSumicron\b", "Summicron", t, flags=re.I)
+    t = re.sub(r"^0型\s*復刻(?:版)?", "0-Series Reissue ", t)
+    t = re.sub(r"^([1-3])([a-gA-G])\b", lambda m: "I" * int(m.group(1)) + m.group(2).lower(), t)
+    t = re.sub(r"^A型", "I (Model A)", t)
+    t = re.sub(r"\bM6TTL\b", "M6 TTL", t, flags=re.I)
+    t = re.sub(r"([A-Za-z])(\d{2,3}(?:\.\d)?\s?(?:mm|cm))", r"\1 \2", t)  # 'Elmar90mm' → 'Elmar 90mm'
+    t = re.sub(r"(\d)\s?mm\s?f\s?(\d)", r"\1mm f\2", t, flags=re.I)
+    t = re.sub(r"\bElmarc\s?(\d)", r"Elmar-C \1", t)
+    return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -7852,6 +7943,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "One Of Many Cameras (덴마크)": 6,  # 전체 16쪽 (중고 라이카는 200개쯤)
     "Leica Store Amsterdam (네덜란드)": 6,  # 매물마다 상세 (약 55개, 2초 간격이라 2분쯤)
     "PhotoCo (호주)": 24,  # robots.txt Crawl-delay 600초, 목록 2쪽 (약 10분)
+    "J-カメラ (일본)": 6,  # Crawl-delay 10초, 7쪽 안팎
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
 
@@ -7977,6 +8069,7 @@ def crawl_all():
         ("Photo Warehouse (뉴질랜드)", lambda: ce.wrap_full_run("Photo Warehouse (뉴질랜드)", crawl_photowarehouse)),
         ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
         ("PhotoCo (호주)", lambda: ce.wrap_full_run("PhotoCo (호주)", crawl_photoco)),
+        ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

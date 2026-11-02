@@ -408,3 +408,14 @@ def test_leicastorepl_condition_grades():
     assert leicastorepl_condition("Leica M10 Monochrom Opis produktu Nowy Rozdział, idealny wybór") is None  # 홍보 글은 상태 아님
     assert grade_of(site, LEICASTOREPL_PREFIX + "bardzo dobry", "Leica M-E (Typ 240)")[0] == "A"
     assert grade_of(site, LEICASTOREPL_PREFIX + "dobry", "Leica M4-2 Black")[0] == "B"
+
+
+def test_jcamera_mixed_grade_words() -> None:
+    from condition_grade import JCAMERA_PREFIX
+    site = "J-カメラ (일본)"
+    assert grade_of(site, JCAMERA_PREFIX + "中古美品", "Leica M4")[0] == "A"
+    assert grade_of(site, JCAMERA_PREFIX + "中古良上品", "Leica IIIg")[0] == "B"
+    assert grade_of(site, JCAMERA_PREFIX + "中古並品", "Leica IIIc")[0] == "C"
+    assert grade_of(site, JCAMERA_PREFIX + "美品Aランク", "Leica M6")[0] == "A"
+    assert grade_of(site, JCAMERA_PREFIX + "程度はAB-です。", "Leica M10-R")[0] == "B"
+    assert grade_of(site, JCAMERA_PREFIX + "AB", "Leica Summicron 50mm f2")[0] == "B"
