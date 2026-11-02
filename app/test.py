@@ -6259,6 +6259,12 @@ def crawl_imagefoto():
     print(f"  ✅ Image Foto 완료: {len(results)}개")
     return results
 
+
+def _listed_est(image_url):
+    """사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
+    from listing_date import estimate_listed
+    return estimate_listed(image_url)[0] or ""
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8812,6 +8818,7 @@ def crawl_all():
                 "sold_at": _s.get("sold_at",""),
                 "sold_fx_krw": _s.get("sold_fx_krw"),
                 "sold_at_unknown": bool(_s.get("sold_at_unknown")),
+                "listed_est": _listed_est(_s.get("이미지")),
             })
         with open("data/derived/sold_quality_latest.json", "w", encoding="utf-8") as f:
             _json_sold.dump(_sold_quality, f, ensure_ascii=False, indent=2)
