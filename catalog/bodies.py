@@ -77,7 +77,9 @@ fam("leica:body:m3", "Leica M3", "라이카 M3", "M", [r"\bM ?3\b"], [r"M3 ?J", 
     v("black-paint", "Leica M3 Black Paint", "M3 블랙페인트", BLACK_PAINT[0] + r"|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\bblack\b(?!\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\s*크롬))",
       ["m3 black paint", "m3 블랙페인트"], BLACK_PAINT[1] + [r"black ?chrome|블랙 ?크롬"]),  # M3는 블랙 크롬이 없어 '블랙' = 블랙페인트 (2026-11-02)
     v("olive", "Leica M3 Olive", "M3 올리브", r"olive|올리브|オリーブ", ["m3 olive"], [REPAINT]),
-    v("early", "Leica M3 early (stepped · first batch 700xxx)", "M3 초기형 (단차·700번대)", r"段付き|段付|\b700\d{3}\b|700001|very early|first batch|初期", ["m3 early", "m3 단차"], [REPAINT]),
+    # 첫 생산분(1954년 첫 1,000대)과 그 밖의 초기형은 값 차이가 커서 나눔 (2026-11-02)
+    v("first-batch", "Leica M3 First Batch (700001–701000)", "M3 첫 생산분 (700001~701000)", r"\b700\d{3}\b|\b701000\b|first ?batch|첫 ?생산", ["m3 first batch", "m3 700001", "m3 첫 생산분"], [REPAINT]),
+    v("early", "Leica M3 Early (stepped · very early)", "M3 초기형 (단차)", r"段付き|段付|very early|初期", ["m3 early", "m3 단차"], [REPAINT, r"\b700\d{3}\b|\b701000\b|first ?batch|첫 ?생산"]),
 ])
 fam("leica:body:m3j", "Leica M3J", "라이카 M3J", "M", [r"M3 ?J\b"])
 fam("leica:body:m2", "Leica M2", "라이카 M2", "M", [r"\bM ?2\b"], [r"M2-?R", r"\bM ?24\d", r"M ?2 ?\d{2}"], ["엠2"], [
