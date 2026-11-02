@@ -646,3 +646,10 @@ def test_unknown_sale_date_uses_listing_date_for_weight() -> None:
     from price_engine import sold_when
     assert sold_when({"sold_at": "2026-10-04 10:00:00", "sold_at_unknown": True, "listed_est": "2023-05"}) == "2023-05-15 00:00:00"
     assert sold_when({"sold_at": "2026-10-20 10:00:00", "listed_est": "2026-10"}) == "2026-10-20 10:00:00"
+
+
+def test_m3_first_batch_separate_from_early():
+    first = match_entities(_record("Leica M3 シリアルナンバー700001~701000 Body Chrome", category="Body"))
+    early = match_entities(_record("Leica M3 (段付き) Body Chrome", category="Body"))
+    assert "leica:body:m3:first-batch" in first and "leica:body:m3:early" not in first
+    assert "leica:body:m3:early" in early and "leica:body:m3:first-batch" not in early
