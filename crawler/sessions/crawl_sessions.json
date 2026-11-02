@@ -1,475 +1,5 @@
 [
   {
-    "start_time": "2026-10-07 22:37:18",
-    "end_time": "2026-10-07 22:37:19",
-    "seconds": 81.6,
-    "new_items": 43,
-    "total_items": 10388,
-    "site_counts": {
-      "사진집": 405,
-      "라이카스토어 충무로": 3094,
-      "장씨카메라": 4074,
-      "Ffordes (영국)": 126,
-      "Leica Store Miami": 62,
-      "Kamerastore (핀란드)": 733,
-      "기타무라 (일본)": 791,
-      "M & K Kamera (홍콩)": 723,
-      "Leica Store France (프랑스)": 354,
-      "Leica Store Singapore (싱가포르)": 26
-    },
-    "events": {
-      "price": 9,
-      "sold": 2,
-      "gone": 1,
-      "new": 43
-    },
-    "sources": [
-      {
-        "site": "사진집",
-        "coverage": "full",
-        "pages": 13,
-        "seconds": 7.9,
-        "status": "ok",
-        "rows": 405,
-        "active": 338,
-        "carried": 27,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 5
-      },
-      {
-        "site": "라이카스토어 충무로",
-        "coverage": "full",
-        "pages": 32,
-        "seconds": 24.7,
-        "status": "ok",
-        "rows": 3094,
-        "active": 607,
-        "carried": 21,
-        "gone": 37,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "장씨카메라",
-        "coverage": "full",
-        "pages": 205,
-        "seconds": 74.4,
-        "status": "ok",
-        "rows": 4074,
-        "active": 44,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 3
-      },
-      {
-        "site": "Ffordes (영국)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 60.8,
-        "status": "ok",
-        "rows": 126,
-        "active": 126,
-        "carried": 1,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "Leica Store Miami",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 0.4,
-        "status": "ok",
-        "rows": 62,
-        "active": 62,
-        "carried": 5,
-        "gone": 1,
-        "left_active": 0,
-        "new": 0,
-        "changed": 1
-      },
-      {
-        "site": "Kamerastore (핀란드)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 10.2,
-        "status": "ok",
-        "rows": 733,
-        "active": 733,
-        "carried": 2,
-        "gone": 0,
-        "left_active": 0,
-        "new": 12,
-        "changed": 14
-      },
-      {
-        "site": "기타무라 (일본)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 9.9,
-        "status": "ok",
-        "rows": 791,
-        "active": 791,
-        "carried": 1,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "M & K Kamera (홍콩)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 9.8,
-        "status": "ok",
-        "rows": 723,
-        "active": 723,
-        "carried": 2,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "Leica Store France (프랑스)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 56.7,
-        "status": "ok",
-        "rows": 354,
-        "active": 294,
-        "carried": 38,
-        "gone": 0,
-        "left_active": 0,
-        "new": 31,
-        "changed": 32
-      },
-      {
-        "site": "Leica Store Singapore (싱가포르)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 2.9,
-        "status": "ok",
-        "rows": 26,
-        "active": 26,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      }
-    ],
-    "new_listings": [
-      {
-        "상품명": "Leica Right-Angle Finder (14186)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€59",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-right-angle-finder-14186-leica-r-t155738"
-      },
-      {
-        "상품명": "Leica Multifunction Handgrip (14495)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€239",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-multifunction-handgrip-14495-leica-m-t155737"
-      },
-      {
-        "상품명": "Leica Leicaflex SL Leather Case",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€29",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-leicaflex-sl-leather-case-leica-r-t155731"
-      },
-      {
-        "상품명": "Leica Extension Tube Set (14158-1) (14135) (14158-2)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€59",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-extension-tube-set-14158-1-14135-14158-2-leica-r-t155721"
-      },
-      {
-        "상품명": "Leica M4 (Silver, 10400)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€2,199",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-m4-silver-10400-leica-m-t155696"
-      },
-      {
-        "상품명": "Leica 40mm f2 Summicron-C (11542)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€849",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-40mm-f2-summicron-c-11542-leica-m-t155675"
-      },
-      {
-        "상품명": "Leica SL2-S",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€1,999",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-sl2-s-l-mount-t155672"
-      },
-      {
-        "상품명": "Leica 90mm f2.8 Tele-Elmarit (Silver, 11800)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€1,139",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-90mm-f2-8-tele-elmarit-silver-11800-leica-m-t155669"
-      },
-      {
-        "상품명": "Leica M9-P (Black Paint, 10703)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€2,939",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-m9-p-black-paint-10703-leica-m-t149236"
-      },
-      {
-        "상품명": "Leica M6 (0.72x) (Black, 10404)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€3,499",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-m6-0-72x-black-10404-leica-m-t148103"
-      },
-      {
-        "상품명": "Leica 50mm f2 Summicron (Type II, Dual Range) (SOOIC-MN / SOMNI / 11918 / 11318)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€1,315",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-50mm-f2-summicron-type-ii-dual-range-sooic-mn-somni-11918-11318-leica-m-t139808"
-      },
-      {
-        "상품명": "Leica M (Typ 240) (Silver, 10771)",
-        "site": "Kamerastore (핀란드)",
-        "가격": "€2,999",
-        "통화": "EUR",
-        "링크": "https://kamerastore.com/products/leica-m-typ-240-silver-10771-leica-m-t134871"
-      },
-      {
-        "상품명": "LEICA Q3",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€5,290",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-q3-0"
-      },
-      {
-        "상품명": "SUMMICRON-M 28 mm f/2 ASPH. close focus (2024-ACTU)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€3,990",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summicron-m-28-mm-f2-asph-close-focus-2024-actu"
-      },
-      {
-        "상품명": "ELMARIT-M 90 mm f/2.8 (1990-2007)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,090",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/elmarit-m-90-mm-f28-1990-2007-0"
-      },
-      {
-        "상품명": "Leica Parasoleil Q3 en laiton",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€180",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-parasoleil-q3-en-laiton"
-      },
-      {
-        "상품명": "Leica Repose pouce Q3 laiton",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€180",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-repose-pouce-q3-laiton"
-      },
-      {
-        "상품명": "LEICA M10-R",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€5,590",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-m10-r-0"
-      },
-      {
-        "상품명": "LEICA IIIf",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,890",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-iiif-0"
-      },
-      {
-        "상품명": "Leica DLUX7",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€890",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-dlux7"
-      },
-      {
-        "상품명": "magnifier de viewfinder x1.25",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€150",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/loupe-de-viseur-x125-0"
-      },
-      {
-        "상품명": "magnifier de viewfinder x1.25",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€170",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/loupe-de-viseur-x125"
-      },
-      {
-        "상품명": "SUMMICRON-M 35 mm f/2 ASPH ( 1996-2015 )",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€2,390",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summicron-m-35-mm-f2-asph-1996-2015-0"
-      },
-      {
-        "상품명": "APO-SUMMICRON-SL 50 MM F/2 ASPH (11185) (Ex-demo)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€2,790",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/apo-summicron-sl-50-mm-f2-asph-11185"
-      },
-      {
-        "상품명": "VARIO-ELMARIT-SL 24-70 F/2.8 ASPH (11189)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€2,190",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/vario-elmarit-sl-24-70-f28-asph-11189-0"
-      },
-      {
-        "상품명": "APO-TELYT-R 280mm f/4",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€2,890",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/apo-telyt-r-280mm-f4"
-      },
-      {
-        "상품명": "SUMMARIT-M 75 mm f/2.5",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,050",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summarit-m-75-mm-f25"
-      },
-      {
-        "상품명": "LEICA M EV1",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€6,790",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-m-ev1"
-      },
-      {
-        "상품명": "LEICA APO-VARIO-ELMAR-T 55-135 mm f/3.5-4.5 Asph.",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,090",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-apo-vario-elmar-t-55-135-mm-f35-45-asph"
-      },
-      {
-        "상품명": "NOCTILUX-M 50 mm f/1.2 new (2021-ACTU)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€6,390",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/noctilux-m-50-mm-f12-new-2021-actu"
-      },
-      {
-        "상품명": "LEICA M (Typ 240)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€2,490",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-m-typ-240"
-      },
-      {
-        "상품명": "LEICA M11",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€6,100",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-m11-0"
-      },
-      {
-        "상품명": "VARIO-ELMARIT-SL 24-70 F/2.8 ASPH (11189) (Ex-demo)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,990",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/vario-elmarit-sl-24-70-f28-asph-11189"
-      },
-      {
-        "상품명": "D-LUX 7 EDITION SPECIALE \"007\"",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€2,190",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/d-lux-7-edition-speciale-007"
-      },
-      {
-        "상품명": "LEICA M5",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€790",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-m5"
-      },
-      {
-        "상품명": "LEICA SL (Typ 601)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,190",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-sl-typ-601"
-      },
-      {
-        "상품명": "SUMMILUX-M 75 mm f/1.4 (1980-2007)",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€2,490",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/summilux-m-75-mm-f14-1980-2007"
-      },
-      {
-        "상품명": "Demi case cuir Rose pour Leica Q ou Leica Q2",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€100",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/demi-etui-cuir-rose-pour-leica-q-ou-leica-q2"
-      },
-      {
-        "상품명": "Demi case cuir Jaune pour Leica Q 116",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€75",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/demi-etui-cuir-jaune-pour-leica-q-116"
-      },
-      {
-        "상품명": "Leica demi case cuir Cemento pour Q 116",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€85",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/index%2Ephp/en/occasion/leica-demi-etui-cuir-cemento-pour-q-116"
-      },
-      {
-        "상품명": "LEICA VARIO-ELMAR-T 18-56 mm f/3.5-5.6 Asph.",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€790",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-vario-elmar-t-18-56-mm-f35-56-asph"
-      },
-      {
-        "상품명": "LEICA SUMMILUX-TL 35 mm f/1.4 Asph.",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,290",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/leica-summilux-tl-35-mm-f14-asph"
-      },
-      {
-        "상품명": "APO-MACRO-ELMARIT-TL 60 mm f/2.8 ASPH",
-        "site": "Leica Store France (프랑스)",
-        "가격": "€1,390",
-        "통화": "EUR",
-        "링크": "https://www.leica-camera-france-occasions.com/en/occasion/apo-macro-elmarit-tl-60-mm-f28-asph"
-      }
-    ]
-  },
-  {
     "start_time": "2026-10-08 05:03:20",
     "end_time": "2026-10-08 05:03:21",
     "seconds": 88.1,
@@ -140447,6 +139977,5929 @@
         "가격": "14,000,000원",
         "통화": "KRW",
         "링크": "https://www.kcamera.co.kr/goods/goods_view.php?goodsNo=1000004080"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-11-02 19:53:16",
+    "end_time": "2026-11-02 19:53:21",
+    "seconds": 539.2,
+    "new_items": 679,
+    "total_items": 20942,
+    "site_counts": {
+      "사진집": 394,
+      "라이카스토어 충무로": 3039,
+      "장씨카메라": 4098,
+      "Ffordes (영국)": 128,
+      "Leica Store Miami": 34,
+      "Kamerastore (핀란드)": 744,
+      "기타무라 (일본)": 760,
+      "M & K Kamera (홍콩)": 712,
+      "Leica Store France (프랑스)": 264,
+      "Leica Store Singapore (싱가포르)": 20,
+      "Newoldcamera (이탈리아)": 463,
+      "Camtec Photo (캐나다)": 20,
+      "Aperture (영국)": 82,
+      "Wex Photo Video (영국)": 70,
+      "Harrison Cameras (영국)": 47,
+      "Camera West (미국)": 584,
+      "Peter Loy (영국)": 237,
+      "Lucky Camera (일본)": 212,
+      "카메라노나니와 (일본)": 1044,
+      "Calumet (독일)": 128,
+      "Tamarkin Camera (미국)": 31,
+      "Camera Electronic (호주)": 68,
+      "Leica Classic (오스트리아)": 368,
+      "Leica Classic (영국)": 156,
+      "Leica Classic (독일)": 368,
+      "Leica Classic (스위스)": 83,
+      "Leica Classic (스페인)": 56,
+      "Leica Classic (포르투갈)": 49,
+      "Leica Classic (이탈리아)": 91,
+      "Leica Classic (덴마크)": 17,
+      "Leica Classic (미국)": 53,
+      "Leica Classic (아랍에미리트)": 5,
+      "Leica Classic (말레이시아)": 6,
+      "Akasaka Camera (일본)": 57,
+      "Glazers Camera (미국)": 61,
+      "Nivo Schweitzer (네덜란드)": 33,
+      "fotohandel.de (독일)": 41,
+      "三宝カメラ (일본)": 50,
+      "Leica Store Heidelberg (독일)": 55,
+      "Foto Köster (독일)": 45,
+      "Rangefinder (홍콩)": 35,
+      "MF Camera (미국)": 47,
+      "Classic Connection (미국)": 179,
+      "The Classic Camera (영국)": 78,
+      "Japan Camera Hunter (일본)": 63,
+      "국민카메라": 258,
+      "무한카메라": 594,
+      "Lecuit (룩셈부르크)": 109,
+      "カメラの大貫 (일본)": 372,
+      "가산카메라": 188,
+      "喜久屋カメラ (일본)": 32,
+      "Roter Punkt (독일)": 72,
+      "Photografica (덴마크)": 114,
+      "SHphoto (독일)": 339,
+      "Fotohandel Delfshaven (네덜란드)": 354,
+      "Camera Tweedehands (네덜란드)": 111,
+      "One Of Many Cameras (덴마크)": 167,
+      "Foto Ottica Cavour (이탈리아)": 193,
+      "Photo Suffren (프랑스)": 59,
+      "Cardinal Camera Used (미국)": 273,
+      "Five Star Camera (일본)": 71,
+      "Leica Store Amsterdam (네덜란드)": 48,
+      "K-Camera": 161,
+      "KOMEHYO (일본)": 50,
+      "トップカメラ (일본)": 81,
+      "Leica Store Konstanz (독일)": 284,
+      "M&S Materiale Fotografico (이탈리아)": 214,
+      "Leica Store Poland (폴란드)": 32,
+      "Photo Warehouse (뉴질랜드)": 76,
+      "Howard Parker (영국)": 48,
+      "Kenmore Camera (미국)": 36,
+      "Used.cl (칠레)": 22,
+      "Foto Dotti (이탈리아)": 697,
+      "The Rangefinder (캐나다)": 11,
+      "Leica Store Australia (호주)": 15,
+      "Leica Store Malaysia (말레이시아)": 18,
+      "Image Foto (덴마크)": 12,
+      "J-カメラ (일본)": 656
+    },
+    "events": {
+      "sold": 11,
+      "gone": 12,
+      "new": 679,
+      "price": 5
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 12,
+        "seconds": 8.7,
+        "status": "ok",
+        "rows": 394,
+        "active": 322,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 1,
+        "new": 0,
+        "changed": 6
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 14.0,
+        "status": "ok",
+        "rows": 3039,
+        "active": 595,
+        "carried": 1948,
+        "gone": 0,
+        "left_active": 5,
+        "new": 0,
+        "changed": 5
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 9,
+        "seconds": 5.1,
+        "status": "ok",
+        "rows": 4098,
+        "active": 53,
+        "carried": 3921,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Ffordes (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 56.6,
+        "status": "ok",
+        "rows": 128,
+        "active": 128,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.4,
+        "status": "ok",
+        "rows": 34,
+        "active": 34,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.7,
+        "status": "ok",
+        "rows": 744,
+        "active": 744,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 2
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.4,
+        "status": "ok",
+        "rows": 760,
+        "active": 760,
+        "carried": 4,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.2,
+        "status": "ok",
+        "rows": 712,
+        "active": 712,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 13,
+        "changed": 14
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 22.9,
+        "status": "ok",
+        "rows": 264,
+        "active": 259,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.8,
+        "status": "ok",
+        "rows": 20,
+        "active": 20,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 41.7,
+        "status": "ok",
+        "rows": 463,
+        "active": 463,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camtec Photo (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 21.3,
+        "status": "ok",
+        "rows": 20,
+        "active": 20,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Aperture (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 13.6,
+        "status": "ok",
+        "rows": 82,
+        "active": 82,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Wex Photo Video (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.4,
+        "status": "ok",
+        "rows": 70,
+        "active": 70,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Harrison Cameras (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 37.2,
+        "status": "ok",
+        "rows": 47,
+        "active": 45,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera West (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 51.6,
+        "status": "ok",
+        "rows": 584,
+        "active": 309,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Peter Loy (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.0,
+        "status": "ok",
+        "rows": 237,
+        "active": 237,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "카메라노나니와 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 49.5,
+        "status": "ok",
+        "rows": 1044,
+        "active": 1044,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Calumet (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 203.9,
+        "status": "ok",
+        "rows": 128,
+        "active": 128,
+        "carried": 2,
+        "gone": 1,
+        "left_active": 0,
+        "new": 2,
+        "changed": 3
+      },
+      {
+        "site": "Tamarkin Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 56.5,
+        "status": "ok",
+        "rows": 31,
+        "active": 31,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera Electronic (호주)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.5,
+        "status": "ok",
+        "rows": 68,
+        "active": 68,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (오스트리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 66.1,
+        "status": "ok",
+        "rows": 368,
+        "active": 368,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 2,
+        "changed": 2
+      },
+      {
+        "site": "Leica Classic (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 30.3,
+        "status": "ok",
+        "rows": 156,
+        "active": 156,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 368,
+        "active": 368,
+        "carried": 3,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (스위스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 83,
+        "active": 83,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (스페인)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 56,
+        "active": 56,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (포르투갈)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 49,
+        "active": 49,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 91,
+        "active": 91,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 17,
+        "active": 17,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 53,
+        "active": 53,
+        "carried": 1,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Leica Classic (아랍에미리트)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 5,
+        "active": 5,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (말레이시아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 6,
+        "active": 6,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Akasaka Camera (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 29.2,
+        "status": "ok",
+        "rows": 57,
+        "active": 57,
+        "carried": 0,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Glazers Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.3,
+        "status": "ok",
+        "rows": 61,
+        "active": 61,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Nivo Schweitzer (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 6.7,
+        "status": "ok",
+        "rows": 33,
+        "active": 30,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "fotohandel.de (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 19.1,
+        "status": "ok",
+        "rows": 41,
+        "active": 41,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "三宝カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.1,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Heidelberg (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.8,
+        "status": "ok",
+        "rows": 55,
+        "active": 55,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Köster (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 79.0,
+        "status": "ok",
+        "rows": 45,
+        "active": 45,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "Rangefinder (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.1,
+        "status": "ok",
+        "rows": 35,
+        "active": 35,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "MF Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.0,
+        "status": "ok",
+        "rows": 47,
+        "active": 47,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Classic Connection (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 28.6,
+        "status": "ok",
+        "rows": 179,
+        "active": 179,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "The Classic Camera (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 26.7,
+        "status": "ok",
+        "rows": 78,
+        "active": 78,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Japan Camera Hunter (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.2,
+        "status": "ok",
+        "rows": 63,
+        "active": 63,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "국민카메라",
+        "coverage": "full",
+        "pages": 10,
+        "seconds": 8.2,
+        "status": "ok",
+        "rows": 258,
+        "active": 228,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "무한카메라",
+        "coverage": "full",
+        "pages": 54,
+        "seconds": 23.7,
+        "status": "ok",
+        "rows": 594,
+        "active": 123,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Lecuit (룩셈부르크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.1,
+        "status": "ok",
+        "rows": 109,
+        "active": 104,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "カメラの大貫 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 20.5,
+        "status": "ok",
+        "rows": 372,
+        "active": 372,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 3,
+        "changed": 3
+      },
+      {
+        "site": "가산카메라",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 37.9,
+        "status": "ok",
+        "rows": 188,
+        "active": 155,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "喜久屋カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.3,
+        "status": "ok",
+        "rows": 32,
+        "active": 32,
+        "carried": 0,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Roter Punkt (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.7,
+        "status": "ok",
+        "rows": 72,
+        "active": 72,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Photografica (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 6.6,
+        "status": "ok",
+        "rows": 114,
+        "active": 114,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "SHphoto (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 43.4,
+        "status": "ok",
+        "rows": 339,
+        "active": 339,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Fotohandel Delfshaven (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 54.9,
+        "status": "ok",
+        "rows": 354,
+        "active": 354,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera Tweedehands (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 13.7,
+        "status": "ok",
+        "rows": 111,
+        "active": 111,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "One Of Many Cameras (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 68.4,
+        "status": "ok",
+        "rows": 167,
+        "active": 167,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Ottica Cavour (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 23.2,
+        "status": "ok",
+        "rows": 193,
+        "active": 193,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Photo Suffren (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.5,
+        "status": "ok",
+        "rows": 59,
+        "active": 59,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Cardinal Camera Used (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 61.0,
+        "status": "ok",
+        "rows": 273,
+        "active": 273,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Five Star Camera (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.8,
+        "status": "ok",
+        "rows": 71,
+        "active": 71,
+        "carried": 1,
+        "gone": 3,
+        "left_active": 0,
+        "new": 0,
+        "changed": 5
+      },
+      {
+        "site": "Leica Store Amsterdam (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 117.8,
+        "status": "ok",
+        "rows": 48,
+        "active": 48,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "K-Camera",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 29.5,
+        "status": "ok",
+        "rows": 161,
+        "active": 158,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "KOMEHYO (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 6.1,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "トップカメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 4.0,
+        "status": "ok",
+        "rows": 81,
+        "active": 81,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Konstanz (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 28.2,
+        "status": "ok",
+        "rows": 284,
+        "active": 284,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "M&S Materiale Fotografico (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 11.7,
+        "status": "ok",
+        "rows": 214,
+        "active": 205,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Poland (폴란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 102.4,
+        "status": "ok",
+        "rows": 32,
+        "active": 30,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Photo Warehouse (뉴질랜드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 132.4,
+        "status": "ok",
+        "rows": 76,
+        "active": 76,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Howard Parker (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 56.5,
+        "status": "ok",
+        "rows": 48,
+        "active": 36,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kenmore Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 7.6,
+        "status": "ok",
+        "rows": 36,
+        "active": 36,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Used.cl (칠레)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.7,
+        "status": "ok",
+        "rows": 22,
+        "active": 21,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Dotti (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 115.1,
+        "status": "ok",
+        "rows": 697,
+        "active": 697,
+        "carried": 12,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "The Rangefinder (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.3,
+        "status": "ok",
+        "rows": 11,
+        "active": 11,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Malaysia (말레이시아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.6,
+        "status": "ok",
+        "rows": 18,
+        "active": 18,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Image Foto (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.7,
+        "status": "ok",
+        "rows": 12,
+        "active": 12,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Sabatini Fotografia (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.2,
+        "status": "failed",
+        "reason": "Sabatini 분류 240 1쪽 못 읽음: 403 Client Error: Forbidden for url: https://sabatinifotografia.it/wp-json/wc/store/v1/products?category=240&search=leica&per_page=100&page=1",
+        "kept": 0
+      },
+      {
+        "site": "J-カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 117.9,
+        "status": "ok",
+        "rows": 656,
+        "active": 656,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 656,
+        "changed": 656
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Leica Neck Strap (14253)",
+        "site": "Kamerastore (핀란드)",
+        "가격": "€59",
+        "통화": "EUR",
+        "링크": "https://kamerastore.com/products/leica-neck-strap-14253-leica-m-t159102"
+      },
+      {
+        "상품명": "Leica Q3",
+        "site": "기타무라 (일본)",
+        "가격": "¥848,000",
+        "통화": "JPY",
+        "링크": "https://shop.kitamura.jp/ec/used/2448500081088"
+      },
+      {
+        "상품명": "Leica M6 TTL LHSA 10443 0.72 Black Paint Film Rangefinder Camera 10442",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$118,000",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-m6-ttl-lhsa-10443-0-72-black-paint-film-rangefinder-camera-10442-22307"
+      },
+      {
+        "상품명": "LEITZ Leica Elmarit-R 28mm/F2.8 Ver.I V.1 Lens Yr.1979 Germany",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$4,980",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leitz-leica-elmarit-r-28mm-f2-8-ver-i-v-1-lens-yr-1979-germany-22377"
+      },
+      {
+        "상품명": "Leica M6 TTL 0.72 Black Film Rangefinder Camera 10433",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$26,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-m6-ttl-0-72-black-film-rangefinder-camera-10433-22634"
+      },
+      {
+        "상품명": "LEITZ Leica Summicron-C 40mm/F2.0 Serie 5.5 Lens Yr.1974 Germany",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$5,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leitz-leica-summicron-c-40mm-f2-0-serie-5-5-lens-yr-1974-germany-22778"
+      },
+      {
+        "상품명": "LEITZ Leica Fisheye-Elmarit-R 16mm/F2.8 Lens Yr.1974 Japan",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$6,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leitz-leica-fisheye-elmarit-r-16mm-f2-8-lens-yr-1974-japan-22889"
+      },
+      {
+        "상품명": "Leica Summar L39 50mm/F2.0 Silver with L39 to M adapter",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$5,880",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-summar-l39-50mm-f2-0-silver-with-l39-to-m-adapter-88981"
+      },
+      {
+        "상품명": "Leica Summilux-M 50mm/F1.4 E46 ASPH Silver 6 bit coded 11892",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$18,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-summilux-m-50mm-f1-4-e46-asph-silver-6-bit-coded-11892-88974"
+      },
+      {
+        "상품명": "Leica M3 Double Stroke Film Rangefinder Camera",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$10,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-m3-double-stroke-film-rangefinder-camera-88784"
+      },
+      {
+        "상품명": "Leica M6 classic 0.72 Silver Film Rangefinder Camera 10414",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$18,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-m6-classic-0-72-silver-film-rangefinder-camera-10414-23960"
+      },
+      {
+        "상품명": "Leica Elmar-M 24mm/F3.8 ASPH Lens Germany 11648",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$14,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-elmar-m-24mm-f3-8-asph-lens-germany-11648-12173"
+      },
+      {
+        "상품명": "Leica Viewfinder Magnifier M 1.25x 12004 for M9, M-E, M240, M7",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$1,500",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-viewfinder-magnifier-m-1-25x-12004-for-m9-m-e-m240-m7-12172"
+      },
+      {
+        "상품명": "Leica Summicron-M 50mm/F2.0 IV Silver boxed 11825",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$19,800",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-summicron-m-50mm-f2-0-iv-silver-boxed-11825-12170"
+      },
+      {
+        "상품명": "Leica Viewfinder Black for 21mm brightline",
+        "site": "M & K Kamera (홍콩)",
+        "가격": "HK$1,580",
+        "통화": "HKD",
+        "링크": "https://mkkcamera.com/products/leica-viewfinder-black-for-21mm-brightline-12162"
+      },
+      {
+        "상품명": "Leica D-Lux 5 Digi-Kamera schwarz",
+        "site": "Calumet (독일)",
+        "가격": "€469",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-d-lux-5-digi-kamera-schwarz-gebraucht/gebraucht/sehr-gut/26MUC01445019"
+      },
+      {
+        "상품명": "Leica Elamar R 180mm/4,0 3CAM",
+        "site": "Calumet (독일)",
+        "가격": "€299",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-elamar-r-180mm-4-0-3cam-gebraucht/gebraucht/stark-gebraucht/26HAM01440283"
+      },
+      {
+        "상품명": "Leica Summaron 2.8cm f5.6",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€990",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-Summaron-5-6-2-8cm/33451-3"
+      },
+      {
+        "상품명": "Leica Apo-Summicron-M 11699 35mm f2.0 Asph. 6-bit - like new with 2 years guarantee",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€6,750",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-Apo-Summicron-M-11699-2-35mm-Asph.-6-bit-like-new-with-2-years-guarantee/35931-17"
+      },
+      {
+        "상품명": "Leica Summilux-M 50mm f1.4 ASPH., silbern verchromt (11892)",
+        "site": "Foto Köster (독일)",
+        "가격": "€2,400",
+        "통화": "EUR",
+        "링크": "https://www.foto-koester.de/summilux-m-1-1.4-50-asph.-silbern-verchromt-11892/7700005106648"
+      },
+      {
+        "상품명": "Leica SL3",
+        "site": "カメラの大貫 (일본)",
+        "가격": "¥825,000",
+        "통화": "JPY",
+        "링크": "https://www.camera-ohnuki.com/products/ライカ-sl3"
+      },
+      {
+        "상품명": "Leica APO Summicron M 35/2 ASPH",
+        "site": "カメラの大貫 (일본)",
+        "가격": "¥1,210,000",
+        "통화": "JPY",
+        "링크": "https://www.camera-ohnuki.com/products/apo-ズミクロンm35-2-asph"
+      },
+      {
+        "상품명": "Leica Summicron M 28/2 APSH 11618",
+        "site": "カメラの大貫 (일본)",
+        "가격": "¥770,000",
+        "통화": "JPY",
+        "링크": "https://www.camera-ohnuki.com/products/ズミクロン-m28-2-apsh-11619"
+      },
+      {
+        "상품명": "Leica ELMAR 65mm f3.5 Visoflex for リアCap Black [Y2610025]",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,750",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213061721"
+      },
+      {
+        "상품명": "Leica ELMAR 65mm f3.5 Visoflex for リアCap Black [Y2610024]",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,750",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213061722"
+      },
+      {
+        "상품명": "Leica minilux zoom",
+        "site": "J-カメラ (일본)",
+        "가격": "¥168,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145182"
+      },
+      {
+        "상품명": "Leica LensリアCap SL 16064",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145356"
+      },
+      {
+        "상품명": "Leica カメラカバー SL 16060",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145357"
+      },
+      {
+        "상품명": "Leica E55 UVaFilter Black 13373",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145370"
+      },
+      {
+        "상품명": "Leica E60 UVaFilter 13381",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145373"
+      },
+      {
+        "상품명": "Leica S for ユニバーサルフォーカシングスクリーン 16000",
+        "site": "J-カメラ (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145374"
+      },
+      {
+        "상품명": "Leica E43 UV/IRFilter Silver 13417",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145375"
+      },
+      {
+        "상품명": "Leica E46 UV/IRFilter Black 13411",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145377"
+      },
+      {
+        "상품명": "Leica E55 UV/IRFilter Silver 13419",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145378"
+      },
+      {
+        "상품명": "Leica E39 UV/IRFilter Black 13410",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145379"
+      },
+      {
+        "상품명": "Leica E67 UV/IRFilter Black 13415",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145380"
+      },
+      {
+        "상품명": "Leica M2 Body 後塗り黒",
+        "site": "J-カメラ (일본)",
+        "가격": "¥798,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145582"
+      },
+      {
+        "상품명": "Leica Sシステム for クイックチャージャー 16009",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145748"
+      },
+      {
+        "상품명": "Leica E39Elmar5cm for Hood 12580(ITOOY)Early型",
+        "site": "J-カメラ (일본)",
+        "가격": "¥30,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145750"
+      },
+      {
+        "상품명": "Leitz 85mm Finder SGOOD",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145752"
+      },
+      {
+        "상품명": "Leica 21mm ビューFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145754"
+      },
+      {
+        "상품명": "Leica 12538 Summicron50/2 for プラスチック",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145764"
+      },
+      {
+        "상품명": "Leica 12586 Summilux50/1.4Late for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145765"
+      },
+      {
+        "상품명": "Leica 卓上三脚 14100 14110",
+        "site": "J-カメラ (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145769"
+      },
+      {
+        "상품명": "Leica Meter MR Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥14,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145772"
+      },
+      {
+        "상품명": "Leica Meter MC",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145773"
+      },
+      {
+        "상품명": "Leica M-P (Typ240) サファリ Summicron-M 35mm f2 ASPH.Set",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,498,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145908"
+      },
+      {
+        "상품명": "Leica 24mm ビューFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥42,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145915"
+      },
+      {
+        "상품명": "Leica ビドム 視野可変式Finder 逆像",
+        "site": "J-カメラ (일본)",
+        "가격": "¥29,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145916"
+      },
+      {
+        "상품명": "Leica M2-R 刻印あり 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145935"
+      },
+      {
+        "상품명": "Leica Summicron-M 35mm f2.0 ASPH BlackChrome 11689 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,298,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145936"
+      },
+      {
+        "상품명": "Leica Summaron-L 35mm f3.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥109,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145937"
+      },
+      {
+        "상품명": "Leica Elmarit-M 28mm f2.8 ASPH. 6bit 11606",
+        "site": "J-カメラ (일본)",
+        "가격": "¥269,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145938"
+      },
+      {
+        "상품명": "Leica Summarit M 50mm f2.4 11680 SUMMARIT-M 50mm f2.4",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145939"
+      },
+      {
+        "상품명": "Leica Summarit-M 35mm f2.5 6Vit SUMMARIT-M 35mm f2.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥259,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145940"
+      },
+      {
+        "상품명": "Leica M6 Titanium Titan",
+        "site": "J-カメラ (일본)",
+        "가격": "¥598,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145943"
+      },
+      {
+        "상품명": "Leica M6 TTL Titanium0.72 SUMMILUX-M 35mm f1.4 ASPH.Titanium MVitSilver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145944"
+      },
+      {
+        "상품명": "Leica Tri-Elmar M 28-35-50mm f4.0 ASPH. 6bit改 11890 Tri-Elmar-M 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥798,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146040"
+      },
+      {
+        "상품명": "Leica Tele-Elmar-M 135mm f4.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146059"
+      },
+      {
+        "상품명": "Leica IIIf Elmar 35mm f3.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥148,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146060"
+      },
+      {
+        "상품명": "Leica Standard (Black) Elmar 35mm f3.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146061"
+      },
+      {
+        "상품명": "Leica IIIC Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥228,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146062"
+      },
+      {
+        "상품명": "Leica IIIf フラッシュガンAdapter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥39,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146063"
+      },
+      {
+        "상품명": "Leica Standard",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146064"
+      },
+      {
+        "상품명": "Leica WINTU 横向きFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146065"
+      },
+      {
+        "상품명": "Leica MDa 後塗りBlack梨地仕上げ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146066"
+      },
+      {
+        "상품명": "Leica M4(Black) 122番台 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,980,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146067"
+      },
+      {
+        "상품명": "Leica 0-Series Reissue ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥298,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146068"
+      },
+      {
+        "상품명": "Leica SUMMICRON-L 35mm f2 ASPH Limited品 11608 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146070"
+      },
+      {
+        "상품명": "Leica Summicron L 50mm f2.0 Silver Rigid鏡胴",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146071"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 75mm F/1.4 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥770,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146072"
+      },
+      {
+        "상품명": "Leica NOCTILUX-M 50mm f1.0 E60 6Vit改造 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146073"
+      },
+      {
+        "상품명": "Leica Summilux-R 80mm f1.4 (ROM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥498,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146074"
+      },
+      {
+        "상품명": "Leica M4-2 Gold Summilux 50mm f1.4付 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,050,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146079"
+      },
+      {
+        "상품명": "Leica R4 GOLD Summilux 50mm f1.4付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥398,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146080"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 35mm f1.4 CANADA 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146083"
+      },
+      {
+        "상품명": "Leica Super-Angulon-R 21mm f3.4",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146122"
+      },
+      {
+        "상품명": "Leica If (Redシンクロ)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥69,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146125"
+      },
+      {
+        "상품명": "Leica Summicron 折り畳みHood",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146130"
+      },
+      {
+        "상품명": "Leica Summitar 折り畳みHood SOOPD",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146131"
+      },
+      {
+        "상품명": "Leica APO-EXTENDER-R 2x R for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥89,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146136"
+      },
+      {
+        "상품명": "Leica Elmar 90mm f4.0 (Collapsible) Mマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146143"
+      },
+      {
+        "상품명": "Leica Elmarit-R 16mm f2.8フィッシュアイ 3CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146144"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 28mm f/1.4 ASPH. 11668 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥880,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146155"
+      },
+      {
+        "상품명": "Leica M6 PLATINUM SUMMILUX M 50mm f1.4 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,698,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146156"
+      },
+      {
+        "상품명": "Leica Telyt-R 400mm f6.8",
+        "site": "J-カメラ (일본)",
+        "가격": "¥49,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146169"
+      },
+      {
+        "상품명": "Leica Elmarit-M 28mm f2.8 第3世代",
+        "site": "J-カメラ (일본)",
+        "가격": "¥149,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146172"
+      },
+      {
+        "상품명": "Leica Vario-Elmar-R 105-280mm f4.2 ROM付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥248,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146173"
+      },
+      {
+        "상품명": "Leica M4 後塗りBlackPaint 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥770,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146174"
+      },
+      {
+        "상품명": "Leica M4(BlackChrome)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥498,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146175"
+      },
+      {
+        "상품명": "Leica M6 RoyalWedding Summicron-M 35/2 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,798,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146177"
+      },
+      {
+        "상품명": "Leica Summarex 8.5cm F1.5 Lマウント Summarex 85mm f1.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥498,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146196"
+      },
+      {
+        "상품명": "Leica Hektor L 73mm f1.9 Black-Chrome Lマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥498,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146198"
+      },
+      {
+        "상품명": "Leica R for Vario-Elmar-R 21-35mm f3.5-4ASPH. ROM付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥298,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146215"
+      },
+      {
+        "상품명": "Leica R for Super-Elmar-R 15mm f3.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥398,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146216"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 35mm F/1.4 ASPH Silver 11675 6bit 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥588,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146251"
+      },
+      {
+        "상품명": "Leica Summarit 5cmF1.5 L (Summarit 50mm f1.5)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥138,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146257"
+      },
+      {
+        "상품명": "Leica Summilux-M 50mm f1.4 Titan 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥628,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146261"
+      },
+      {
+        "상품명": "Leica Noctilux-M 50mm f/1.0 E60 Hood組込 11822 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,150,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146287"
+      },
+      {
+        "상품명": "Leica ELMARIT-M 21mm f2.8 E60 11134",
+        "site": "J-カメラ (일본)",
+        "가격": "¥298,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146289"
+      },
+      {
+        "상품명": "Leica SUMMICRON-L 35mm f2 ASPH Limited品 11608 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥578,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146290"
+      },
+      {
+        "상품명": "Leica APO-SUMMICRON-M 90mm F/2 ASPH Titan 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥898,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146291"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 28mm f2 ASPH. 6Vit 11604C",
+        "site": "J-カメラ (일본)",
+        "가격": "¥498,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146292"
+      },
+      {
+        "상품명": "Leica R for APO-Telyt-R 280mm f2.8 (3CAM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥398,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146314"
+      },
+      {
+        "상품명": "Leica Summarit 5cmF1.5 L (Summarit 50mm f1.5)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥138,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146388"
+      },
+      {
+        "상품명": "Leica M6 JAGUAR XK Elmar M 50mm f2.8Collapsible 代引き不可",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,698,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146434"
+      },
+      {
+        "상품명": "Leica へクトール13.5cm F4.5 Lマウント Hektor 135mm f4.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥14,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146459"
+      },
+      {
+        "상품명": "Leica IIIg",
+        "site": "J-カメラ (일본)",
+        "가격": "¥128,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214146530"
+      },
+      {
+        "상품명": "Leica Ig 92万台",
+        "site": "J-カメラ (일본)",
+        "가격": "¥128,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200970343"
+      },
+      {
+        "상품명": "Leica Visoflex for Telyt 200mm f4.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥328,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200970346"
+      },
+      {
+        "상품명": "Leica 12538",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=168794606"
+      },
+      {
+        "상품명": "Leica Elmar 5cm for ダブルフックHood",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=168795182"
+      },
+      {
+        "상품명": "Leica 12538",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=168796822"
+      },
+      {
+        "상품명": "Leica M6 GOLD DRAGON EDITION SUMMICRON-M 50/2 Set",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,850,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=168830274"
+      },
+      {
+        "상품명": "Leica 2236 Stereoリー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥195,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=168831212"
+      },
+      {
+        "상품명": "Leica IIf ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥115,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=99730330"
+      },
+      {
+        "상품명": "Leica IIIf セルフ付 ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=116236959"
+      },
+      {
+        "상품명": "Leica 逆像ビドム BlackNickel",
+        "site": "J-カメラ (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=155576294"
+      },
+      {
+        "상품명": "Leica Summicron 90mm f2 (M)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥95,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=156875390"
+      },
+      {
+        "상품명": "Leica E55 UVa 13373",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174650485"
+      },
+      {
+        "상품명": "Leica Elmar 135mm f4.5 (L) BlackNickel",
+        "site": "J-カメラ (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=181362871"
+      },
+      {
+        "상품명": "Leica 35mm B.L Finder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=184878060"
+      },
+      {
+        "상품명": "Leica SOOPD WETZLAR刻印",
+        "site": "J-カメラ (일본)",
+        "가격": "¥14,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174650851"
+      },
+      {
+        "상품명": "Leica Visoflex for Hektor 125mm f2.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥115,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=187738412"
+      },
+      {
+        "상품명": "Leica Elmar 90mm f4 (M) Collapsible",
+        "site": "J-カメラ (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=187738413"
+      },
+      {
+        "상품명": "Leica Visoflex for Elmar 65mm f3.5 Black ジャーマニー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=187738414"
+      },
+      {
+        "상품명": "Leica Elmarit 135mm f2.8 (M) メガネ付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥68,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=187738415"
+      },
+      {
+        "상품명": "Leica イマレクトFinder 28mm アタッチメント付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=190300894"
+      },
+      {
+        "상품명": "Leica IIIC シャークスキン ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=190780913"
+      },
+      {
+        "상품명": "Leica Red Elmar 50mm f3.5 (L)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥95,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=191388881"
+      },
+      {
+        "상품명": "Leica M4 120万台 1968年製",
+        "site": "J-カメラ (일본)",
+        "가격": "¥495,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174651206"
+      },
+      {
+        "상품명": "Leica IIIc Summitar 50mm f2 空軍 ルフトワッフェン アイゲンチューム刻印",
+        "site": "J-カメラ (일본)",
+        "가격": "¥785,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197222569"
+      },
+      {
+        "상품명": "Leica If ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=198063187"
+      },
+      {
+        "상품명": "Leica IIIg Late型 ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥245,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=198922510"
+      },
+      {
+        "상품명": "Leica IIIg ボデー Late型",
+        "site": "J-カメラ (일본)",
+        "가격": "¥385,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204221136"
+      },
+      {
+        "상품명": "Leica Fat Elmar 90mm f4 (L) Nickel コーティング後付け",
+        "site": "J-カメラ (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204992749"
+      },
+      {
+        "상품명": "Leica Elmar 90mm f4 (L) Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥38,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205925648"
+      },
+      {
+        "상품명": "Leica Nickel Elmar 50mm f3.5 (L)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209606095"
+      },
+      {
+        "상품명": "Leica IIIf セルフ無し ボデー Blackダイヤル",
+        "site": "J-カメラ (일본)",
+        "가격": "¥95,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211674067"
+      },
+      {
+        "상품명": "Leica IIIf セルフ付 ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥98,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211674068"
+      },
+      {
+        "상품명": "Leica IIf ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211674069"
+      },
+      {
+        "상품명": "Leica IIIa ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥115,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211674070"
+      },
+      {
+        "상품명": "Leica III ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211674071"
+      },
+      {
+        "상품명": "Leica IIIc 段付き戦前型 ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211738593"
+      },
+      {
+        "상품명": "Leica Hektor 125mm f2.5 Visoflex for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213256803"
+      },
+      {
+        "상품명": "Leica Telyt 280mm f4.8 (L) Visoflex for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213256804"
+      },
+      {
+        "상품명": "Leica Summaron 35mm f3.5 (L)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥78,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213614089"
+      },
+      {
+        "상품명": "Leica Summarit 50mm f1.5 (L)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥115,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213614090"
+      },
+      {
+        "상품명": "Leica IIIg ボデー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥255,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213614091"
+      },
+      {
+        "상품명": "Leica Elmar 50mm f2.8 (L)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥68,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213754160"
+      },
+      {
+        "상품명": "Leica 21mm Black ブライトラインFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826694"
+      },
+      {
+        "상품명": "Leica 85mm ブライトラインFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥58,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826695"
+      },
+      {
+        "상품명": "Leica 35mm ブライトラインFinder 最終型シュー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826696"
+      },
+      {
+        "상품명": "Leica 21mm ブライトラインFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826697"
+      },
+      {
+        "상품명": "Leica 逆像 BlackNickel ビドムFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826698"
+      },
+      {
+        "상품명": "Leica イマレクトFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826699"
+      },
+      {
+        "상품명": "Leica E-43 UVa Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826701"
+      },
+      {
+        "상품명": "Leica M2-R DR Summicron 50mm f2 Set Lens235万台",
+        "site": "J-カメラ (일본)",
+        "가격": "¥985,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214090985"
+      },
+      {
+        "상품명": "Leica Thambar 90mm f2.2 (L)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥785,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214090986"
+      },
+      {
+        "상품명": "Leica SUMMICRON M 90mm f2.0 Black 第2世代",
+        "site": "J-カメラ (일본)",
+        "가격": "¥120,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174653457"
+      },
+      {
+        "상품명": "Leica ML Ring 9cm",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174653738"
+      },
+      {
+        "상품명": "Leica Summarit 5cm F1.5 feet表記",
+        "site": "J-カメラ (일본)",
+        "가격": "¥165,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174653746"
+      },
+      {
+        "상품명": "LEITZ E55 UVa 13373",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174653851"
+      },
+      {
+        "상품명": "LEITZ E39 UVa 13131",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176185537"
+      },
+      {
+        "상품명": "Leica ML Ring 13.5cm",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176185862"
+      },
+      {
+        "상품명": "Leica R7 カタログ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176185909"
+      },
+      {
+        "상품명": "Leica 1996 PHOTOKINA News",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176185911"
+      },
+      {
+        "상품명": "Leica FIKUS BlackChrome",
+        "site": "J-カメラ (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196119810"
+      },
+      {
+        "상품명": "Leica R5 カタログ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196120007"
+      },
+      {
+        "상품명": "Leica R4 カタログ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196120008"
+      },
+      {
+        "상품명": "Leica M3 英文カタログ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196120009"
+      },
+      {
+        "상품명": "Leica FIKUS BlackChrome",
+        "site": "J-カメラ (일본)",
+        "가격": "¥14,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196120519"
+      },
+      {
+        "상품명": "Leica SUMMARON M 35mm f2.8 メガネ付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥175,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196120704"
+      },
+      {
+        "상품명": "Leica Vit SYOOM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥145,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196120834"
+      },
+      {
+        "상품명": "Leica R3 ELECTRONIC",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121024"
+      },
+      {
+        "상품명": "Leica Red Elmar 5cm F3.5 Collapsible ダイヤマーク入り 101万台1952年製",
+        "site": "J-カメラ (일본)",
+        "가격": "¥130,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121115"
+      },
+      {
+        "상품명": "Leica Filter Adapter SOOEY 13077P 元箱付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121153"
+      },
+      {
+        "상품명": "Leica Rewind crank Silver 14437 元箱付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121156"
+      },
+      {
+        "상품명": "Leica XOOQG 41mm径 Yellow Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121166"
+      },
+      {
+        "상품명": "Leica MR METER Black Paint",
+        "site": "J-カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121181"
+      },
+      {
+        "상품명": "Leica WINTU 横向きFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121216"
+      },
+      {
+        "상품명": "Leica SOFORT 2 Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥58,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121237"
+      },
+      {
+        "상품명": "Leica Summarit 5cm F1.5 feet表記 整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥143,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121595"
+      },
+      {
+        "상품명": "Leica 12504",
+        "site": "J-カメラ (일본)",
+        "가격": "¥19,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121609"
+      },
+      {
+        "상품명": "Leica D II Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121765"
+      },
+      {
+        "상품명": "Leica OTVXO ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121808"
+      },
+      {
+        "상품명": "Leica E60 UVa II 13067 Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121888"
+      },
+      {
+        "상품명": "Leica Red Elmar 5cm F3.5 Collapsible ダイヤマーク入り 104万台1952年製 整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121932"
+      },
+      {
+        "상품명": "Leica 90°アングルFinder 14300",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196121939"
+      },
+      {
+        "상품명": "Leica SERIE VI UVa",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196232738"
+      },
+      {
+        "상품명": "Leica SERIE VI for Filter Ring 14160",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196232739"
+      },
+      {
+        "상품명": "Leica E67 UVa 13386",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,150",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196232796"
+      },
+      {
+        "상품명": "Leica M5 for CAMERA CASE",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196232803"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 24mm f2.8 3CAM 純正Hood12523付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196232866"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 19mm f2.8 ROM 純正Hood12546付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥880,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233147"
+      },
+      {
+        "상품명": "Leica SUPER-ANGULON-R 21mm f4.0 3CAM 純正Hood12506付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233148"
+      },
+      {
+        "상품명": "Leica PC-SUPER-ANGULON-R 28mm f2.8",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233218"
+      },
+      {
+        "상품명": "Leica VARIO-ELMAR-R 21-35mm f3.5-4 ASPH. ROM 純正Hood付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥297,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233219"
+      },
+      {
+        "상품명": "Leica Hektor 7.3cm F1.9 Silver×Black 純正Hood付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥440,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233249"
+      },
+      {
+        "상품명": "Leica VARIO-ELMAR-R 35-70mm f4.0 ROM 純正Hood付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233313"
+      },
+      {
+        "상품명": "Leica MOTOR WINDER R 14208",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233318"
+      },
+      {
+        "상품명": "Leica 12586",
+        "site": "J-カメラ (일본)",
+        "가격": "¥27,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233336"
+      },
+      {
+        "상품명": "Leica A42 14251 LENS CAP",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233457"
+      },
+      {
+        "상품명": "Leica ML Ring 28-50mm for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233463"
+      },
+      {
+        "상품명": "Leica ML Ring 21-35-135mm for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233464"
+      },
+      {
+        "상품명": "Leica E39 UVa Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233465"
+      },
+      {
+        "상품명": "Leica UVa E46 13005 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233466"
+      },
+      {
+        "상품명": "Leica UVa E46 UVa Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233467"
+      },
+      {
+        "상품명": "Leica SERIE 7 UVa Filter ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233468"
+      },
+      {
+        "상품명": "Leica E60 UVa 13381 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233470"
+      },
+      {
+        "상품명": "Leica UVa E46 13004 Filter 元箱付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233472"
+      },
+      {
+        "상품명": "Leica UVa E49 13329 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233473"
+      },
+      {
+        "상품명": "Leica UVa D E72 18672 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥18,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233474"
+      },
+      {
+        "상품명": "Leica HOOD 13352 E39 PLFilter付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥18,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233499"
+      },
+      {
+        "상품명": "Leica 12538 純正Cap付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233542"
+      },
+      {
+        "상품명": "Leica E55 UVa 13373 GERMANY刻印",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233592"
+      },
+      {
+        "상품명": "Leica Summarit 5cm F1.5 feet表記 XOOSHイエローFilter付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥154,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233632"
+      },
+      {
+        "상품명": "Leica APO-TELYT-R 180mm f3.4 3CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233677"
+      },
+      {
+        "상품명": "Leica SUPER-ANGULON-R 21mm f4.0 3CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥154,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233687"
+      },
+      {
+        "상품명": "Leica SUMMICRON-R 50mm f2.0 Hood組込 3CAM ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥143,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233691"
+      },
+      {
+        "상품명": "Leica E48 UVa Filter POOFX",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233698"
+      },
+      {
+        "상품명": "Leica E55 UVa 13373 LEITZ WETZLAR GERMANY刻印",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233701"
+      },
+      {
+        "상품명": "Leica Summaron M 3.5cm F3.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233751"
+      },
+      {
+        "상품명": "Leica SUMMILUX-R 50mm f1.4 サファリ 元箱付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233809"
+      },
+      {
+        "상품명": "Leica ITOOY Early型",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233859"
+      },
+      {
+        "상품명": "Leica 12585",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233860"
+      },
+      {
+        "상품명": "Leica FIKUS BlackChrome ※キレイな物をお探しの方必見!自信ありの逸品",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233861"
+      },
+      {
+        "상품명": "Leica FIKUS BlackChrome ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233879"
+      },
+      {
+        "상품명": "Leica ML Ring M2 21-35 M3 135",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233944"
+      },
+      {
+        "상품명": "Leica ハードレザーLensCase ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233952"
+      },
+      {
+        "상품명": "Leica M6 カタログ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196233998"
+      },
+      {
+        "상품명": "Leica SUMMICRON-R 35mm f2.0 Hood組込 3CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234045"
+      },
+      {
+        "상품명": "Leica 12585 純正HoodCap1403付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234130"
+      },
+      {
+        "상품명": "Leitz Xenon 5cm F1.5 Taylor-Hobson 刻印入り 28万台1936年製",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234142"
+      },
+      {
+        "상품명": "Leica OUBIO 16466M",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234156"
+      },
+      {
+        "상품명": "Leica 16464 Black ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥15,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234157"
+      },
+      {
+        "상품명": "Leica SERIE 6 UVa 1312 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234210"
+      },
+      {
+        "상품명": "Leica E55 UVa 13373",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234211"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 135mm f2.8 3CAM Red Scale",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234217"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 90mm f2.8 3CAM Red Scale 元箱付一式",
+        "site": "J-カメラ (일본)",
+        "가격": "¥165,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196234218"
+      },
+      {
+        "상품명": "Leica 千代田光学 SUPER ROKKOR C 45mm f2.8 整備済 通称:梅鉢",
+        "site": "J-カメラ (일본)",
+        "가격": "¥29,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196266701"
+      },
+      {
+        "상품명": "Leica MR METER Black Paint",
+        "site": "J-カメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197199848"
+      },
+      {
+        "상품명": "Leica E48 UVa POOFX Black Paint",
+        "site": "J-カメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197224219"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 50mm f2.0 第3世代 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197370902"
+      },
+      {
+        "상품명": "Leica SUMMICRON 35mm f2.0 ASPH. Chrome Limited 元箱付一式",
+        "site": "J-カメラ (일본)",
+        "가격": "¥495,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197370906"
+      },
+      {
+        "상품명": "Leica 12536",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197429117"
+      },
+      {
+        "상품명": "Leica FISON",
+        "site": "J-カメラ (일본)",
+        "가격": "¥14,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197429119"
+      },
+      {
+        "상품명": "Leica Summicron M 5cm F2.0 Collapsible",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200955440"
+      },
+      {
+        "상품명": "Leica SBOOI 5cm View Finder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201028719"
+      },
+      {
+        "상품명": "Leica Summicron M 5cm F2.0 Collapsible 整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201028722"
+      },
+      {
+        "상품명": "Leica FOOKH",
+        "site": "J-カメラ (일본)",
+        "가격": "¥27,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201028725"
+      },
+      {
+        "상품명": "Leica vit MP OriginalSilver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥990,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201028727"
+      },
+      {
+        "상품명": "Leica E46 UVa 13004 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201087845"
+      },
+      {
+        "상품명": "Leica 内径34mm METAL HOOD",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201087847"
+      },
+      {
+        "상품명": "Leica E60 UVa 13381",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201238917"
+      },
+      {
+        "상품명": "Leica VIT M BlackPaint 14009 元箱付一式",
+        "site": "J-カメラ (일본)",
+        "가격": "¥440,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201279016"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 50mm f1.4 ASPH.Black 6bit 元箱付一式",
+        "site": "J-カメラ (일본)",
+        "가격": "¥682,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201279018"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 21mm f1.4 ASPH.Black 6bit 元箱付一式",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,100,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201279019"
+      },
+      {
+        "상품명": "Leica SUPER-ANGULON M 21mm f3.4 Silver 純正Hood12501、元箱付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥363,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203219001"
+      },
+      {
+        "상품명": "Leica ITDOO ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥29,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203320634"
+      },
+      {
+        "상품명": "Leica 12586 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203320635"
+      },
+      {
+        "상품명": "Leica FISON 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203433974"
+      },
+      {
+        "상품명": "Leica 視度補正LensM+2.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203433976"
+      },
+      {
+        "상품명": "Leica M3 2ストローク福耳",
+        "site": "J-カメラ (일본)",
+        "가격": "¥231,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203500951"
+      },
+      {
+        "상품명": "Leica E60 UVa 13381 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203564713"
+      },
+      {
+        "상품명": "Leica E60 UVa II 13039 Filter 現行商品New 品販売価格34100円",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203564714"
+      },
+      {
+        "상품명": "Leica E46 UVa 13004 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203564718"
+      },
+      {
+        "상품명": "Leica SERIE 7 UVa Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203564721"
+      },
+      {
+        "상품명": "Leica E48 UVa POOFX",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203564722"
+      },
+      {
+        "상품명": "Leica E55 UVa 13373 Filter",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203843272"
+      },
+      {
+        "상품명": "Leica VARIO-ELMAR-R 35-70mm f3.5 3CAM 324万台1982年製",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203843275"
+      },
+      {
+        "상품명": "Leica VISOFLEX I型-LVFOO 垂直式5倍ルーペ Set",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203957361"
+      },
+      {
+        "상품명": "Leica IWKOO 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204856580"
+      },
+      {
+        "상품명": "Leica ML Ring M2 50 M3 28-50",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204898411"
+      },
+      {
+        "상품명": "Leica ITOOY",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205108832"
+      },
+      {
+        "상품명": "Leica HOOD CAP 42mm",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,630",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205351371"
+      },
+      {
+        "상품명": "Leica Meter MR Silver Chrome #66434 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214145002"
+      },
+      {
+        "상품명": "Leica R5 Black Body",
+        "site": "J-カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207578937"
+      },
+      {
+        "상품명": "Leica 純正本革速写Case",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,920",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208112302"
+      },
+      {
+        "상품명": "Leica Ever Ready Case",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208123944"
+      },
+      {
+        "상품명": "Leica Ever Ready Case",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208123945"
+      },
+      {
+        "상품명": "Leica 本革カメラCase",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208405551"
+      },
+      {
+        "상품명": "Leitz VIDOM Finder All Chrome ※当店メンテ済商品",
+        "site": "J-カメラ (일본)",
+        "가격": "¥27,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208583540"
+      },
+      {
+        "상품명": "Leica 12504 METAL HOOD",
+        "site": "J-カメラ (일본)",
+        "가격": "¥15,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208583541"
+      },
+      {
+        "상품명": "Leica E39 UVa 13131",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208919958"
+      },
+      {
+        "상품명": "LEITZ E48 UVa 13330 Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥18,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208955402"
+      },
+      {
+        "상품명": "Leica E48 UVa 13330 Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥18,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208955403"
+      },
+      {
+        "상품명": "Leica XOOIM 12521G ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥28,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208955404"
+      },
+      {
+        "상품명": "Leica SBLOO 35mm View Finder 純正Case付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥59,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208955405"
+      },
+      {
+        "상품명": "Leica SBLOO 35mm View Finder 純正Case付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥57,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208955406"
+      },
+      {
+        "상품명": "Leica IUFOO 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥15,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208993831"
+      },
+      {
+        "상품명": "Leica ITDOO 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208993832"
+      },
+      {
+        "상품명": "Leitz IZQOO/14501 METAL Rear Cap 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208993833"
+      },
+      {
+        "상품명": "Leitz IROOW/14042 Rear Cap Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥18,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209007693"
+      },
+      {
+        "상품명": "Leitz IZQOO/14051 METAL Rear Cap",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209007695"
+      },
+      {
+        "상품명": "Leica ITDOO",
+        "site": "J-カメラ (일본)",
+        "가격": "¥29,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209007696"
+      },
+      {
+        "상품명": "Leica IWKOO 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209091101"
+      },
+      {
+        "상품명": "Leica SBKOO/12002 Silver 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209091102"
+      },
+      {
+        "상품명": "Leica SBOOI 5cm View Finder ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥68,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209091103"
+      },
+      {
+        "상품명": "Leica SBKOO/12002 Black 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209091104"
+      },
+      {
+        "상품명": "Leica IVZOO/14056 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,950",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209135055"
+      },
+      {
+        "상품명": "Leica Neck strap 18764 元箱付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209135058"
+      },
+      {
+        "상품명": "Leica protector M10 24021 元箱付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥18,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209276389"
+      },
+      {
+        "상품명": "Leica Viewfinder Magnifer M 1.25× 12004 元箱付一式",
+        "site": "J-カメラ (일본)",
+        "가격": "¥39,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209602363"
+      },
+      {
+        "상품명": "Leica Soft Release Button\"Leica\"8mm Chrome",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209633375"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 135mm f2.8 3CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥36,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209754285"
+      },
+      {
+        "상품명": "Leica TELYT-R 250mm f4.0 3CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥63,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209754286"
+      },
+      {
+        "상품명": "Leitz SDPOO 14002 DR SUMMICRON 50/2 for ビューFinderアタッチメント 純正専 for Case付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥39,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209976441"
+      },
+      {
+        "상품명": "Leitz Leather Case ENOOR 14523",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210173216"
+      },
+      {
+        "상품명": "LEITZ 14191 A35.5 HOOD CAP 35.5mm ※キレイな物をお探しの方必見!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,850",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210875965"
+      },
+      {
+        "상품명": "Leica 12575 IUFOO 14033純正Cap付 ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210875966"
+      },
+      {
+        "상품명": "Leica IROOA 12571J 純正HoodCap付 ※キレイな物をお探しの方必見!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥39,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210875969"
+      },
+      {
+        "상품명": "Leica ORQDO 14031 A42 METAL CAP ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210875972"
+      },
+      {
+        "상품명": "Leica XOOYL UVa Filter ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥38,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210875974"
+      },
+      {
+        "상품명": "LEITZ E48 UVa 13330 Black GERMANY",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210903414"
+      },
+      {
+        "상품명": "Leica 12504 METAL HOOD ※キレイな物をお探しの方必見!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210903416"
+      },
+      {
+        "상품명": "LEITZ IZQOO 14051 Lens Rear Cap ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,850",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210974205"
+      },
+      {
+        "상품명": "Leica M4-2 EVER-READY CASE 14546 元箱付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211624976"
+      },
+      {
+        "상품명": "Leica Summar 5cm F2.0 Collapsible 整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211878199"
+      },
+      {
+        "상품명": "LEITZ 12585 METAL HOOD ※キレイな物をお探しの方必見!!自信ありの逸品!!",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211878200"
+      },
+      {
+        "상품명": "LEITZ 12575 Hood基部+短縮Hood部",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211960864"
+      },
+      {
+        "상품명": "Leica SBLOO ビューFinder",
+        "site": "J-カメラ (일본)",
+        "가격": "¥54,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=191767902"
+      },
+      {
+        "상품명": "Leica SUMMAR 5cm F2.0 (L:568)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥46,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=191767903"
+      },
+      {
+        "상품명": "Leica L for RLensAdapter 16076 (B:076)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥74,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=191768214"
+      },
+      {
+        "상품명": "Leica FIKUS 12530M",
+        "site": "J-カメラ (일본)",
+        "가격": "¥15,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=191768408"
+      },
+      {
+        "상품명": "Leica 19529",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206111709"
+      },
+      {
+        "상품명": "Leica M4",
+        "site": "J-カメラ (일본)",
+        "가격": "¥385,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214001367"
+      },
+      {
+        "상품명": "Leica M6 0.85",
+        "site": "J-カメラ (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214001366"
+      },
+      {
+        "상품명": "Leica Summicron (M)35mm f2.0 ASPH. Silver (第4世代)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥328,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=214001362"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 35mm f1.4 ASPH. Silver (11675) Summilux",
+        "site": "J-カメラ (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213998778"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 50mm f1.4 ASPH. (6bit) Silver (Summilux) 11892",
+        "site": "J-カメラ (일본)",
+        "가격": "¥440,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213998776"
+      },
+      {
+        "상품명": "Leica Summicron-L 50mm f2.0 (Collapsible) Summicron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥82,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213979441"
+      },
+      {
+        "상품명": "Leitz Summicron 50mm F/2 Lens for Leica M #66446 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥232,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213998759"
+      },
+      {
+        "상품명": "Leitz Summilux 50mm F/1.4 for Leica M #66441 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥297,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213998760"
+      },
+      {
+        "상품명": "Leica M4 35mm Rangefinder Film Camera #66440 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥264,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213998761"
+      },
+      {
+        "상품명": "Leica Lens Hood 12535 for M2.8/28 #66416 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥19,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213998766"
+      },
+      {
+        "상품명": "Leitz Summilux-M 35mm F/1.4 Lens for Leica M #65573 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥449,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213998775"
+      },
+      {
+        "상품명": "Leica minilux 35mm Point & Shoot Film Camera #66443 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥155,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213945817"
+      },
+      {
+        "상품명": "Leica NOCTILUX-M 50mm f1.0 (E60-Late) Noctilux",
+        "site": "J-カメラ (일본)",
+        "가격": "¥880,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213944892"
+      },
+      {
+        "상품명": "Leica ELMAR-M 50mm f2.8 Silver (Elmar)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥154,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213944889"
+      },
+      {
+        "상품명": "Leica III c",
+        "site": "J-カメラ (일본)",
+        "가격": "¥63,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213944888"
+      },
+      {
+        "상품명": "Leica Lenshood 12550 ELMAR-M 50/2.8 for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213944894"
+      },
+      {
+        "상품명": "Leica MElmarit21 F2.8 ASPH",
+        "site": "J-カメラ (일본)",
+        "가격": "¥258,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213944887"
+      },
+      {
+        "상품명": "Leica Camer Case for Leica M #66413 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213863338"
+      },
+      {
+        "상품명": "Leica Camer Case for Leica M6 #66402 T",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213863339"
+      },
+      {
+        "상품명": "Leica M4-P Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥363,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213826681"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 50mm f1.4 ASPH. (6bit) Black (Summilux) 11891",
+        "site": "J-カメラ (일본)",
+        "가격": "¥440,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213823150"
+      },
+      {
+        "상품명": "Leica Elmar-M 50mm f2.8 (Elmar)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥68,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213823149"
+      },
+      {
+        "상품명": "Leica R8 Silver (Winder付)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213790327"
+      },
+      {
+        "상품명": "Leica Elmar-L 90mm f4.0 Black (Elmar)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥29,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205172751"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 24mm f2.8 (ROM) Elmarit",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204569289"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 50mm f2.0 (70周年) Summicron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204569299"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 135mm f2.8 (2-CAM) Elmarit",
+        "site": "J-カメラ (일본)",
+        "가격": "¥38,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203843280"
+      },
+      {
+        "상품명": "Leica Summitar-L 50mm f2.0 (Summitar)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥72,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210619139"
+      },
+      {
+        "상품명": "Leica SUPER-ELMAR-R 15mm f3.5 (3-CAM) Super-Elmar (11213)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥440,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206183111"
+      },
+      {
+        "상품명": "Leica M5 (50周年) Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥385,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201388207"
+      },
+      {
+        "상품명": "Leica Hektor-L 50mm f2.5 (Nickel ) Hektor",
+        "site": "J-カメラ (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206069073"
+      },
+      {
+        "상품명": "Leica ELMARIT-M 28mm f2.8 (2nd-E48) Elmarit",
+        "site": "J-カメラ (일본)",
+        "가격": "¥253,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207747683"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 50mm f2.0 (Hood組込) Black (Summicron)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥253,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=199973284"
+      },
+      {
+        "상품명": "Leica D III Chrome",
+        "site": "J-カメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196387330"
+      },
+      {
+        "상품명": "Leica VIT M BlackPaint 14009 (Leicavit)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥286,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=192578969"
+      },
+      {
+        "상품명": "Leica Hektor-V 125mm f2.5 (ドイツ) Hektor",
+        "site": "J-カメラ (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212683690"
+      },
+      {
+        "상품명": "Leica TELYT-V 280mm f4.8 (Telyt)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197708965"
+      },
+      {
+        "상품명": "Leica SUMMARON-L 35mm f2.8 (Summaron)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204456376"
+      },
+      {
+        "상품명": "Leica Summaron-L 28mm f5.6 (Red Summaron)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥275,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=188675197"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 50mm f1.4 (2nd) Silver (Summilux)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥363,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212281226"
+      },
+      {
+        "상품명": "Leica SUPER-ANGULON-M 21mm f3.4 Black (Super-Angulon)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥253,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204356384"
+      },
+      {
+        "상품명": "Leica SUPER-ANGULON-R 21mm f4.0 (2-CAM) Super-Angulon",
+        "site": "J-カメラ (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=189393301"
+      },
+      {
+        "상품명": "Leica Vario-Elmar R 80-200mm f4.0 (ROM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=180804417"
+      },
+      {
+        "상품명": "Leica Hektor-V 125mm f2.5 (カナダ) Hektor",
+        "site": "J-カメラ (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204569278"
+      },
+      {
+        "상품명": "Leica Telyt V 200mm f4.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176058879"
+      },
+      {
+        "상품명": "Leica Elmar-L 50mm f3.5 (Old Elmar)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥220,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212703958"
+      },
+      {
+        "상품명": "Leica I (Model A) Old Elmar付 Gold (後塗り)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=195481167"
+      },
+      {
+        "상품명": "Leica I (Model A) 近接Elmar付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=173353397"
+      },
+      {
+        "상품명": "Leica Elmar-L 105mm f6.3 (山岳-Nickel ) MountainElmar",
+        "site": "J-カメラ (일본)",
+        "가격": "¥187,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=190008669"
+      },
+      {
+        "상품명": "Leica NOCTILUX-M 50mm f1.2 ASPH. (Noctilux) 11686",
+        "site": "J-カメラ (일본)",
+        "가격": "¥880,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207582595"
+      },
+      {
+        "상품명": "Leica M4 Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥363,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209039694"
+      },
+      {
+        "상품명": "Leica Super-Angulon R 21mm f4.0 (3-CAM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=171965132"
+      },
+      {
+        "상품명": "Leica Summar Summar 5cm/2 (L) Collapsible feet表記",
+        "site": "J-カメラ (일본)",
+        "가격": "¥69,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212313959"
+      },
+      {
+        "상품명": "Leica Elmarit ELMARIT 90/2.8 (M) Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥38,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205743286"
+      },
+      {
+        "상품명": "Leica M5 Black 革Strap付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥158,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205743287"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 180/2.8 E67 (3CAM) Hood組込 点検整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥68,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=201841673"
+      },
+      {
+        "상품명": "Leica SOOBK Summaron 28/5.6 (L) for Hood",
+        "site": "J-カメラ (일본)",
+        "가격": "¥78,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=180122446"
+      },
+      {
+        "상품명": "Leica ライツ 13.5cmFinder SHOOC 皮Case付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=171968187"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 3rd v4 50mm f2.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213630988"
+      },
+      {
+        "상품명": "Leica M6 Body (Black) LEITZ WETZLAR 刻印",
+        "site": "J-カメラ (일본)",
+        "가격": "¥599,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213630989"
+      },
+      {
+        "상품명": "Leica IIIf red dial [L39]",
+        "site": "J-カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213631059"
+      },
+      {
+        "상품명": "Leica M4 (50周年)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213613211"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 28mm f2.8 (3-CAM) Elmarit",
+        "site": "J-カメラ (일본)",
+        "가격": "¥187,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213577083"
+      },
+      {
+        "상품명": "Leica APO-Macro--Elmarit (R)100mm f2.8 (ROM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥248,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=101879282"
+      },
+      {
+        "상품명": "Leica 等倍Macro-Adapter Leica R3CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213574662"
+      },
+      {
+        "상품명": "Leica Telyt 400mm f5 ペンタ645改",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213574660"
+      },
+      {
+        "상품명": "Leica IIIc Elmar 5cm/2.8つき",
+        "site": "J-カメラ (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213559674"
+      },
+      {
+        "상품명": "Leica Q3 43 (19085)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,100,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213558884"
+      },
+      {
+        "상품명": "Leica SUMMARIT-M 50mm f2.4 Silver (Summarit) 11681",
+        "site": "J-カメラ (일본)",
+        "가격": "¥255,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213543792"
+      },
+      {
+        "상품명": "Leica FLEX SL2 MOT (Leicaフレックス)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213538628"
+      },
+      {
+        "상품명": "Leica III f (Blackシンクロ)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥113,750",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213325912"
+      },
+      {
+        "상품명": "Leica M6 TTL (0.85) Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥660,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213413107"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 35mm f2.0 (7枚玉-カナダ) Summicron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥660,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213325953"
+      },
+      {
+        "상품명": "Leica 0-Series Reissue  オスカーバルナックエディション",
+        "site": "J-カメラ (일본)",
+        "가격": "¥360,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213205991"
+      },
+      {
+        "상품명": "Leica Summicron-M 50mm f2.0 (Collapsible) Summicron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥143,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213166683"
+      },
+      {
+        "상품명": "Leica Summilux (M)50mm f1.4 Black Chrome 11688",
+        "site": "J-カメラ (일본)",
+        "가격": "¥598,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213147264"
+      },
+      {
+        "상품명": "Leica S7(SERIE 7) UVaII 13044",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213079284"
+      },
+      {
+        "상품명": "Leica E67 UVa 13386",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213079283"
+      },
+      {
+        "상품명": "Leica E49 UVa 13328",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213079282"
+      },
+      {
+        "상품명": "Leica E39 UVa Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213079280"
+      },
+      {
+        "상품명": "Leica Summicron (M)50mm f2.0 Silver (第4世代)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥248,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213079274"
+      },
+      {
+        "상품명": "Leica 12575-12585Hood for HoodCap 「LEICA」表記 14033",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213079273"
+      },
+      {
+        "상품명": "Leica 12575-12585Hood for HoodCap 「LEITZ」表記 14033",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=213079272"
+      },
+      {
+        "상품명": "Leica M4-2",
+        "site": "J-カメラ (일본)",
+        "가격": "¥352,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212942140"
+      },
+      {
+        "상품명": "Leica E49 UVaII 13035",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212683688"
+      },
+      {
+        "상품명": "Leica S7(SERIE 7) UVa 13009",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212683687"
+      },
+      {
+        "상품명": "Leica 75mm f2.5 + 9mm for LensCap 14475",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212600962"
+      },
+      {
+        "상품명": "Leica T for LensCap E52 14027",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212600961"
+      },
+      {
+        "상품명": "Leica DR SUMMICRON-M 50mm f2.0 (M2-R) Summicron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥275,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212471283"
+      },
+      {
+        "상품명": "Leica MACRO-ELMARIT-R 60mm f2.8 (ROM) Macro-Elmarit",
+        "site": "J-カメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212438617"
+      },
+      {
+        "상품명": "Leica M3",
+        "site": "J-カメラ (일본)",
+        "가격": "¥597,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212373931"
+      },
+      {
+        "상품명": "Leica SUMMARIT-M 35mm f2.4 ASPH. (11671) Summarit",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212294539"
+      },
+      {
+        "상품명": "Leica SUMMARON-M 35mm f2.8 (M3 for ) Summaron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥165,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212281225"
+      },
+      {
+        "상품명": "Leica D-LUX8 (19191)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥264,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212231558"
+      },
+      {
+        "상품명": "Leica Summaron-M 35mm f3.5 (Summaron)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212231539"
+      },
+      {
+        "상품명": "Leica SUMMILUX-R 50mm f1.4 (2-CAM) Summilux",
+        "site": "J-カメラ (일본)",
+        "가격": "¥143,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212231538"
+      },
+      {
+        "상품명": "Leica SUMMICRON-R 50mm f2.0 (1-CAM) Summicron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥48,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212231537"
+      },
+      {
+        "상품명": "Leica M8.2",
+        "site": "J-カメラ (일본)",
+        "가격": "¥396,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212227851"
+      },
+      {
+        "상품명": "Leica APO-Summicron (M)90mm f2.0 ASPH.",
+        "site": "J-カメラ (일본)",
+        "가격": "¥398,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=212199333"
+      },
+      {
+        "상품명": "Leica 視度－1 Leica M10-11 for",
+        "site": "J-カメラ (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211960870"
+      },
+      {
+        "상품명": "Leica <<専 for Finder付き！！>> LEICA Leica SUPER ANGULON 21mm f4.0 L39 Lマウント Super- Angulon #LE2027599",
+        "site": "J-カメラ (일본)",
+        "가격": "¥378,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211638543"
+      },
+      {
+        "상품명": "Leica <<Strap付き！！>> LEICA Leica MP 0.72 BlackPaint 300万番台 Mマウント Body #LE2027572",
+        "site": "J-カメラ (일본)",
+        "가격": "¥948,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211624279"
+      },
+      {
+        "상품명": "Leica <<専 for Case付き！！>> LEICA Leica SUMMICRON M 35mm f2.0 8枚玉 ドイツ製 Mマウント #LE2027569",
+        "site": "J-カメラ (일본)",
+        "가격": "¥758,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211624266"
+      },
+      {
+        "상품명": "Leica <<Strap付き！！>> LEICA Leica M4 Body Silver Chrome 127万台 Mマウント #LE20275601",
+        "site": "J-カメラ (일본)",
+        "가격": "¥425,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211607136"
+      },
+      {
+        "상품명": "Leica Standard Standard E型 Lマウント L39 #LE2027548",
+        "site": "J-カメラ (일본)",
+        "가격": "¥93,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211607134"
+      },
+      {
+        "상품명": "Leica SUMMICRON Summicron 50mm f2.0 5cm 単焦点 #LE20275381",
+        "site": "J-カメラ (일본)",
+        "가격": "¥104,310",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211588537"
+      },
+      {
+        "상품명": "Leica IIIf Body Ernst Leitz Wetzlar Barnack バルナックLeica Lマウント レンジFinder #LE2027538",
+        "site": "J-カメラ (일본)",
+        "가격": "¥59,660",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211588536"
+      },
+      {
+        "상품명": "Leica <<レザーStrap付き！！>> LEICA Leica M3 Silver シングルストローク 95万番台 Body #LE2027524",
+        "site": "J-カメラ (일본)",
+        "가격": "¥273,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211588290"
+      },
+      {
+        "상품명": "Leica Nickel Elmar Nickel Elmar 50mm f3.5 5cm L39 Lマウント #LE20275221",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,310",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211588288"
+      },
+      {
+        "상품명": "Leica IIIc Body Ernst Leitz Wetzlar バルナック レンジFinder #LE2027522",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,310",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211588287"
+      },
+      {
+        "상품명": "Leica <<化粧箱付き！！>> LEICA Leica M4-P LEITZ CANADA ライツ カナダ レンジFinder Silver Chrome #LE20275681",
+        "site": "J-カメラ (일본)",
+        "가격": "¥340,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210973489"
+      },
+      {
+        "상품명": "Leica ＜＜マウントAdapter付き！！＞＞ LEICA Leica TELE-ELMARIT 90mm 2.8 LEITZ CANADA Old 型 Black #LE20273742",
+        "site": "J-カメラ (일본)",
+        "가격": "¥140,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211539073"
+      },
+      {
+        "상품명": "Leica M10-RBlackPaint(20062)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,580,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=211166417"
+      },
+      {
+        "상품명": "Leica DR SUMMICRON 5cm 50mm f2.0 Early 147万台 Summicron #LE2027576",
+        "site": "J-カメラ (일본)",
+        "가격": "¥178,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210987068"
+      },
+      {
+        "상품명": "Leica M3 ダブルストローク Early シリアル70万番台 レンジFinder #LE2027575",
+        "site": "J-カメラ (일본)",
+        "가격": "¥474,810",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210973491"
+      },
+      {
+        "상품명": "Leica IIIf Barnack Leica バルナックLeica L39マウント #LE20275222",
+        "site": "J-カメラ (일본)",
+        "가격": "¥85,310",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210971823"
+      },
+      {
+        "상품명": "Leica <<露出計(MERERMC)付き！！>> LEICA M2 Leica Early型 内ギザ Rボタン リワインド Silver #LE2027566",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210918572"
+      },
+      {
+        "상품명": "Leica M2 Leica Early型 内ギザ Rボタン リワインド Silver #LE2027554",
+        "site": "J-カメラ (일본)",
+        "가격": "¥302,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210903418"
+      },
+      {
+        "상품명": "Leica Elmar 90mm f4.0 Triplet Mマウント 単焦点Lens マニュアルフォーカス Elmar Tri-プレット #LE2027357",
+        "site": "J-カメラ (일본)",
+        "가격": "¥123,310",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210903409"
+      },
+      {
+        "상품명": "Leica SUPER-ANGULON 21mm f4.0 Super-Angulon Lマウント L39 レンジFinderカメラ for Lens #LE2027560",
+        "site": "J-カメラ (일본)",
+        "가격": "¥235,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210903408"
+      },
+      {
+        "상품명": "Leica <<スカイライトFilter付き！！>> LEICA Leica SUMMILUX M 35mm f1.4 ASPH. Summilux #LE2027584",
+        "site": "J-カメラ (일본)",
+        "가격": "¥663,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210875976"
+      },
+      {
+        "상품명": "Leica ＜＜保護Filter付き！！＞＞ LEICA Leica Summicron M 50mm f2.0 Collapsible #LE2027600",
+        "site": "J-カメラ (일본)",
+        "가격": "¥140,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210842922"
+      },
+      {
+        "상품명": "Leica Summicron M 50mm f2.0 Rigid鏡筒 第一世代 #LE2027592",
+        "site": "J-カメラ (일본)",
+        "가격": "¥235,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210842918"
+      },
+      {
+        "상품명": "Leica ＜＜ UVFilter(LEICA)付き！！＞＞ LEICA Leica Super-Angulon 21mm f4.0 LEITZ WETZLAR L39 #LE2027570",
+        "site": "J-カメラ (일본)",
+        "가격": "¥378,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210842917"
+      },
+      {
+        "상품명": "Leica FLEX SL2 50 JAHRE Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥128,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=185299292"
+      },
+      {
+        "상품명": "Leica <<専 for Case付き！！>> LEICA Leica SUMMICRON Summicron LEITZ WETZLAR 35mm f2.0 ライツ Silver 8枚玉 GERMANY #LE20275181",
+        "site": "J-カメラ (일본)",
+        "가격": "¥615,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210794933"
+      },
+      {
+        "상품명": "Leica Summicron Summicron Leitz Canada 35mm f2 ライツ カナダ SilverLens 8枚玉 #LE2027515",
+        "site": "J-カメラ (일본)",
+        "가격": "¥663,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210794928"
+      },
+      {
+        "상품명": "Leica <<マウンドAdapter(LM-SαE)付き！！>> LEICA Leica SUMMICRON Summicron-M 50mm f2.0 Black(2nd) GERMANY #LE2027511",
+        "site": "J-カメラ (일본)",
+        "가격": "¥444,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210794910"
+      },
+      {
+        "상품명": "Leica MP (0.72) BlackPaint",
+        "site": "J-カメラ (일본)",
+        "가격": "¥957,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210619140"
+      },
+      {
+        "상품명": "Leica S6(SERIE VI) UVa｜LEITZ WETZLAR GERMANY",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210205712"
+      },
+      {
+        "상품명": "Leica E60 UVa 13381 (表記：LEITZ)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,150",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210205709"
+      },
+      {
+        "상품명": "Leica PC-SUPER-ANGULON-R 28mm f2.8 (Super-Angulon)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥187,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210142874"
+      },
+      {
+        "상품명": "Leica APO-TELYT-R 180mm f3.4 (3-CAM) APO-Telyt",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210142870"
+      },
+      {
+        "상품명": "Leica D-LUX7 (19141)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥192,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210071584"
+      },
+      {
+        "상품명": "Leica Tele-Elmarit90 f 2.8",
+        "site": "J-カメラ (일본)",
+        "가격": "¥140,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=210022898"
+      },
+      {
+        "상품명": "Leica Summilux-TL 35mm f1.4 ASPH",
+        "site": "J-カメラ (일본)",
+        "가격": "¥190,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209896072"
+      },
+      {
+        "상품명": "Leica FLEX Silver Super-Angulon21/3.4付 (Leicaフレックス)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209784199"
+      },
+      {
+        "상품명": "Leica Elmar 9cm F4.0 Collapsible Mマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥38,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209784202"
+      },
+      {
+        "상품명": "Leica Summar-L 50mm f2.0 (ヒョットコ) Summar",
+        "site": "J-カメラ (일본)",
+        "가격": "¥770,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209754283"
+      },
+      {
+        "상품명": "Leica Xenon (L)50mm f1.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=169932262"
+      },
+      {
+        "상품명": "Leica Summaron (L)28mm f5.6",
+        "site": "J-カメラ (일본)",
+        "가격": "¥278,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=151422989"
+      },
+      {
+        "상품명": "Leica TRI-ELMAR-M 28-35-50mm f4.0 ASPH. (E55-6bit) Tri-Elmar",
+        "site": "J-カメラ (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209551575"
+      },
+      {
+        "상품명": "Leica Standard Black (Standard)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209551574"
+      },
+      {
+        "상품명": "Leica E48 UVa Silver POOFX/13330",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209549286"
+      },
+      {
+        "상품명": "Leica R for LensリアCap 14162",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,650",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209549276"
+      },
+      {
+        "상품명": "Leica I g",
+        "site": "J-カメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209503832"
+      },
+      {
+        "상품명": "Leica 12508Hood for HoodCap 14171",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209431429"
+      },
+      {
+        "상품명": "Leica SUMMICRON-R 50mm f2.0 2CAM",
+        "site": "J-カメラ (일본)",
+        "가격": "¥75,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209369234"
+      },
+      {
+        "상품명": "Leica Summilux (M)35mm f1.4 ASPH(第3世代)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥398,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=155237067"
+      },
+      {
+        "상품명": "Leica M4 Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥385,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209162291"
+      },
+      {
+        "상품명": "Leica minilux (ミニルックス)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥187,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209162290"
+      },
+      {
+        "상품명": "Leica ELMAR-M 90mm f4.0 (Tri-プレット) Elmar",
+        "site": "J-カメラ (일본)",
+        "가격": "¥165,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=209084809"
+      },
+      {
+        "상품명": "Leica Summarit 5cm F1.5 Lマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥160,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208789596"
+      },
+      {
+        "상품명": "Leica E48 イエロー 1 Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208735037"
+      },
+      {
+        "상품명": "Leica E49 UVa (薄型) 13329",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208735036"
+      },
+      {
+        "상품명": "Leica S6(シリーズ6) for Filter Ring 「6」 14160",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200791594"
+      },
+      {
+        "상품명": "Leica S6(シリーズ6) for Filter Ring 「VI」 14160",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208705948"
+      },
+      {
+        "상품명": "Leica S6(シリーズ6) UVa 13012",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208733417"
+      },
+      {
+        "상품명": "Leica Stemar 33mm f3.5 for Filter イエロー/オレンジ Set",
+        "site": "J-カメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208733416"
+      },
+      {
+        "상품명": "Leica Super-Elmar-M 18/3.8 ASPH.専 for UV/IRFilter 13422",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208733414"
+      },
+      {
+        "상품명": "Leica L for MLensAdapter Black 18771",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208733413"
+      },
+      {
+        "상품명": "Leica M35/2.4、M50/2.4 for Hood Silver 12440",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208720020"
+      },
+      {
+        "상품명": "Leica ITDOO for HoodCap",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208720019"
+      },
+      {
+        "상품명": "Leica APO-SUMMICRON-M 75mm f2.0 ASPH. (6bit) APO-Summicron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥539,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208587169"
+      },
+      {
+        "상품명": "Leica I c",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208587166"
+      },
+      {
+        "상품명": "Leica Tri-Elmar-M 16-18-21/4 ASPH. for Hood 12458",
+        "site": "J-カメラ (일본)",
+        "가격": "¥48,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208329069"
+      },
+      {
+        "상품명": "Leica ELMAR 50mm f2.8 Mマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥120,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208283589"
+      },
+      {
+        "상품명": "Leica VisoflexIII型",
+        "site": "J-カメラ (일본)",
+        "가격": "¥28,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=208260819"
+      },
+      {
+        "상품명": "Leica IIIc シャークスキン",
+        "site": "J-カメラ (일본)",
+        "가격": "¥58,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202523011"
+      },
+      {
+        "상품명": "Leica VisoflexII/III for Telyt-L 280/F4.8+16466M",
+        "site": "J-カメラ (일본)",
+        "가격": "¥25,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207980294"
+      },
+      {
+        "상품명": "Leica E46 UVa 13004(前面にネジ切りなし)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207722979"
+      },
+      {
+        "상품명": "Leica S8 UVa｜LEITZ WETZLAR GERMANY",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207722977"
+      },
+      {
+        "상품명": "Leica Summaron-L 35mm f3.5 (A36) Summaron",
+        "site": "J-カメラ (일본)",
+        "가격": "¥72,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207498680"
+      },
+      {
+        "상품명": "Leica ELMAR-M 90mm f4.0 (Tri-プレット) Elmar",
+        "site": "J-カメラ (일본)",
+        "가격": "¥165,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207498679"
+      },
+      {
+        "상품명": "Leica レリーズAdapter OZTNO",
+        "site": "J-カメラ (일본)",
+        "가격": "¥48,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207498678"
+      },
+      {
+        "상품명": "Leica Filter E55 UVa 13373 極上美品",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207398556"
+      },
+      {
+        "상품명": "Leica R4 GOLD, SUMMILUX-R 50mm f1.4",
+        "site": "J-カメラ (일본)",
+        "가격": "¥340,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206180020"
+      },
+      {
+        "상품명": "Leica ELMARIT 90mm f2.8 Mマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥39,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174283922"
+      },
+      {
+        "상품명": "Leica Summicron 5cm F2.0 Collapsible Lマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥95,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=188539188"
+      },
+      {
+        "상품명": "Leica Summaron 3.5cm F3.5 Mマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥130,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=189713058"
+      },
+      {
+        "상품명": "Leica M11 BlackPaint (20202)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,100,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207359322"
+      },
+      {
+        "상품명": "Leica Elmar for カブセ式LensCap Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316967"
+      },
+      {
+        "상품명": "Leica D-LUX/D-LUX7/D-LUX8 for オートLensCap 18548",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316964"
+      },
+      {
+        "상품명": "Leica E46 UVa Silver 13005",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316963"
+      },
+      {
+        "상품명": "Leica R28/2.8-R35/2-R35/2.8 for Hood 12509",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316962"
+      },
+      {
+        "상품명": "Leica E55 UVa Black (Leicaロゴ) 13135",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316959"
+      },
+      {
+        "상품명": "Leica HoodCap 35mm f1.4 ASPH. for 14040",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316957"
+      },
+      {
+        "상품명": "Leica Elmarit-R 90/2.8 for LensCap 14089",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316956"
+      },
+      {
+        "상품명": "Leica LensCap 14133",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207316952"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 50mm f1.4 (2nd) Black (Summilux)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥363,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207288167"
+      },
+      {
+        "상품명": "Leica レザーStrap ＜チェストナッツ-オスTri-ッチ風＞ 14467",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=207189229"
+      },
+      {
+        "상품명": "Leica SUMMARON 35mm f2.8 眼鏡付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥117,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=174629986"
+      },
+      {
+        "상품명": "Leica IIf Blackダイヤル",
+        "site": "J-カメラ (일본)",
+        "가격": "¥53,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203471252"
+      },
+      {
+        "상품명": "Leica IIIf Redダイヤル",
+        "site": "J-カメラ (일본)",
+        "가격": "¥92,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203471254"
+      },
+      {
+        "상품명": "Leica ビューFinder 21/28mm f24 12014",
+        "site": "J-カメラ (일본)",
+        "가격": "¥37,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204255110"
+      },
+      {
+        "상품명": "Leica Summaron 3.5cm F3.5 Lマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥130,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206109612"
+      },
+      {
+        "상품명": "Leica ELMARIT-M 28mm f2.8 (2nd-E48) Elmarit",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206849640"
+      },
+      {
+        "상품명": "Leica Summicron (M)50mm f2.0 Black (第1世代 Rigid鏡胴 後塗り)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥498,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206472192"
+      },
+      {
+        "상품명": "Leica Summicron (M)35mm f2.0 (第1世代 8枚玉)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥698,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=155182460"
+      },
+      {
+        "상품명": "Leica キャ Ring-Strap(標準) 14312 「LEICA」表記",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=206393959"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 75mm f1.4 (6bit) Summilux",
+        "site": "J-カメラ (일본)",
+        "가격": "¥737,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205883257"
+      },
+      {
+        "상품명": "Leica M for RAdapter 14642",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205883234"
+      },
+      {
+        "상품명": "Leica バヨネッTri-ング(ML Ring) 28/90｜LEITZ WETZLAR GERMANY DBP",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205883254"
+      },
+      {
+        "상품명": "Leica Strap",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205883252"
+      },
+      {
+        "상품명": "Leica VARIO-ELMARIT-T 18-56mm f3.5-5.6 ASPH. (Vario-Elmarit) 11080",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205798188"
+      },
+      {
+        "상품명": "Leica M2 BlackPaint",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,530,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=192735903"
+      },
+      {
+        "상품명": "Leica B型 New コンパー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,210,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=186116091"
+      },
+      {
+        "상품명": "Leica B型 Old コンパー",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,750,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=186113140"
+      },
+      {
+        "상품명": "Leica Summarex (L)85mm f1.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥398,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=155639319"
+      },
+      {
+        "상품명": "Leica バヨネッTri-ング(ML Ring) 9cm｜Ernst Leitz GmbH Wetzlar Germany DBP",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205576795"
+      },
+      {
+        "상품명": "Leica Leitz Elmar 50mm F/3.5 Lens for Leica L39 #LE20274111",
+        "site": "J-カメラ (일본)",
+        "가격": "¥94,810",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205235803"
+      },
+      {
+        "상품명": "Leica FLEX SL 取扱説明書 (取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205208886"
+      },
+      {
+        "상품명": "Leica M3 取扱説明書 (英語) (取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205208875"
+      },
+      {
+        "상품명": "Leica LNickel Summar5cm F2.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥187,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=205188612"
+      },
+      {
+        "상품명": "Leica MSummicron5cm F2.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥148,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204919430"
+      },
+      {
+        "상품명": "Leica MElmarit28 F2.8",
+        "site": "J-カメラ (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204919424"
+      },
+      {
+        "상품명": "Leica E39 UVa Silver 13132",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204900005"
+      },
+      {
+        "상품명": "Leica Elmar(A36) for 接写Lens 2 ELPIK",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,650",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=190143409"
+      },
+      {
+        "상품명": "Leica E58 スカイライト/ E.Leitz U.S.A. SL",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197278007"
+      },
+      {
+        "상품명": "Leica RLens/MBody for Adapter 22228/500934",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204727364"
+      },
+      {
+        "상품명": "Leica VisoflexLens/RBody for Adapter 14167",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204745161"
+      },
+      {
+        "상품명": "Leica R50/1.4 for Hood 12508",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204568765"
+      },
+      {
+        "상품명": "Leica M5(英語) 取扱説明書 (取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204454820"
+      },
+      {
+        "상품명": "Leica 等倍Macro-Adapter (R 60mm f2.8 for ) 3CAM 14198",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204454814"
+      },
+      {
+        "상품명": "Leica M21/3.4-28/2.8 for Hood 12501",
+        "site": "J-カメラ (일본)",
+        "가격": "¥25,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204451005"
+      },
+      {
+        "상품명": "Leica レリーズ 50cm 14076",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204451002"
+      },
+      {
+        "상품명": "Leica 50mmFinder SBOOI/12015",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204342581"
+      },
+      {
+        "상품명": "Leica Super-Angulon21/4 for Hood IWKOO/12502",
+        "site": "J-カメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204342148"
+      },
+      {
+        "상품명": "Leica IROOA for HoodCap",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=204031352"
+      },
+      {
+        "상품명": "Leica DIII",
+        "site": "J-カメラ (일본)",
+        "가격": "¥213,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203772656"
+      },
+      {
+        "상품명": "Leica ハンドGripR(モーターWinderR for ) 14308",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203721112"
+      },
+      {
+        "상품명": "Leica FilterAdapter S8/E72 14165",
+        "site": "J-カメラ (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203721110"
+      },
+      {
+        "상품명": "Leica ELMARIT-M 135mm f2.8 (Elmarit)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥78,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=198177710"
+      },
+      {
+        "상품명": "Leica IIIa",
+        "site": "J-カメラ (일본)",
+        "가격": "¥58,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203471253"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 90mm f2.0 (E48) BlackPaint (Summicron)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥253,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=187928911"
+      },
+      {
+        "상품명": "Leica M35/1.4-M35/2 for Hood 12504",
+        "site": "J-カメラ (일본)",
+        "가격": "¥26,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203320590"
+      },
+      {
+        "상품명": "Leica S7/E55 for Filter Ring 14225",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203320589"
+      },
+      {
+        "상품명": "Leica Elmar(A36) for 接写Lens 3 ELPET",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203320580"
+      },
+      {
+        "상품명": "Leica E43 UVa 薄型-Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=203320579"
+      },
+      {
+        "상품명": "Leica ミニFinder 35mm",
+        "site": "J-カメラ (일본)",
+        "가격": "¥168,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202523021"
+      },
+      {
+        "상품명": "Leica Elmar絞りHood",
+        "site": "J-カメラ (일본)",
+        "가격": "¥17,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202523018"
+      },
+      {
+        "상품명": "Leica I (Model A)Elmar50/3.5付 整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥258,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202523010"
+      },
+      {
+        "상품명": "Leica 90mm-135mm for Hood 12575",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202450428"
+      },
+      {
+        "상품명": "Leica 12564Hood for HoodCap 14163",
+        "site": "J-カメラ (일본)",
+        "가격": "¥6,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202203535"
+      },
+      {
+        "상품명": "Leica M50/2 for Hood 12538",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202050893"
+      },
+      {
+        "상품명": "Leica Telyt 200mm for UVa Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥39,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202032265"
+      },
+      {
+        "상품명": "Leica M50/1.4(E43) for Hood 12586",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=202032262"
+      },
+      {
+        "상품명": "Leica M3 SS",
+        "site": "J-カメラ (일본)",
+        "가격": "¥193,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=167785324"
+      },
+      {
+        "상품명": "Leica S8 UVa Black 13018",
+        "site": "J-カメラ (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200793126"
+      },
+      {
+        "상품명": "Leica R for BodyCap 14103",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,650",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200793124"
+      },
+      {
+        "상품명": "Leica R35/2.8-50/2 for Hood 12564",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200355905"
+      },
+      {
+        "상품명": "Leica S8/E67 for Filter Ring 14264",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200355904"
+      },
+      {
+        "상품명": "Leica Elmar(A36) for Filter UV Black (モノクロフィルム時代の薄黄色いUV)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=200323569"
+      },
+      {
+        "상품명": "Leica CL, SUMMICRON-C 40mm f2.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥250,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=198578019"
+      },
+      {
+        "상품명": "Leica S7(シリーズ7) for Filter Ring 「7」14161R",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=187758868"
+      },
+      {
+        "상품명": "Leica S7(シリーズ7) for Filter Ring 「VII」 14161R",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194309345"
+      },
+      {
+        "상품명": "Leica E39 UVa Black 13131",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=198120927"
+      },
+      {
+        "상품명": "Leica I (Model A) for 革Case",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197520642"
+      },
+      {
+        "상품명": "Leica R3 取扱説明書(英語)(取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,650",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197484375"
+      },
+      {
+        "상품명": "Leica 35mm-50mm for Hood 12585",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197427042"
+      },
+      {
+        "상품명": "Leica Summilux50/1.4 for Hood XOOIM/12521",
+        "site": "J-カメラ (일본)",
+        "가격": "¥29,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197277991"
+      },
+      {
+        "상품명": "Leica E39 UVaII Black 13030",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197278012"
+      },
+      {
+        "상품명": "Leica E43 UVaII Black 13032",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,100",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197278004"
+      },
+      {
+        "상품명": "Leica E39 UVa Black",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197278003"
+      },
+      {
+        "상품명": "Leica Elmar50/2.8 for Hood ITOOY",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197278002"
+      },
+      {
+        "상품명": "Leica キャ Ring-Strap(標準) 14253 「L E I C A」表記",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=197277996"
+      },
+      {
+        "상품명": "Leica VIT M Silver 14008 (Leicavit)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥220,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=196210999"
+      },
+      {
+        "상품명": "Leica Summarit-L 50/F1.5",
+        "site": "J-カメラ (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=195578471"
+      },
+      {
+        "상품명": "Leica Q3 for Protector オリーブGreen 19653",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=167528244"
+      },
+      {
+        "상품명": "Leica Elmar-Summaron 35mm for Hood FOOKH",
+        "site": "J-カメラ (일본)",
+        "가격": "¥27,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=195207005"
+      },
+      {
+        "상품명": "Leica 縦型距離計 FODIS",
+        "site": "J-カメラ (일본)",
+        "가격": "¥48,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=195207004"
+      },
+      {
+        "상품명": "Leica D-LUX8 for レザーCase Black 18556",
+        "site": "J-カメラ (일본)",
+        "가격": "¥27,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194443842"
+      },
+      {
+        "상품명": "Leica D-LUX8 for Protector コニャック 19685",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194443841"
+      },
+      {
+        "상품명": "Leica ライツミノルタ CL",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194376589"
+      },
+      {
+        "상품명": "Leica DR SUMMICRON 50mm f2.0 (M)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥193,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194360296"
+      },
+      {
+        "상품명": "Leica Summarit for Filter E41 UVa XOOYL/13205",
+        "site": "J-カメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194309354"
+      },
+      {
+        "상품명": "Leica SF58 for ディフューザー 14489",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194309342"
+      },
+      {
+        "상품명": "Leica R4～R7 for 交換Finderスクリーン ユニバーサル-スクリーン 14303",
+        "site": "J-カメラ (일본)",
+        "가격": "¥4,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=194309341"
+      },
+      {
+        "상품명": "Leica Summarex 8.5cm F1.5 (L)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥385,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=170342409"
+      },
+      {
+        "상품명": "Leica R for 接写 RingSet 14159",
+        "site": "J-カメラ (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=193936341"
+      },
+      {
+        "상품명": "Leica T for LensリアCap 14025",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=193483322"
+      },
+      {
+        "상품명": "Leica SL for BodyCap 16060",
+        "site": "J-カメラ (일본)",
+        "가격": "¥3,300",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=193483321"
+      },
+      {
+        "상품명": "Leica ズームHood FIKUS",
+        "site": "J-カメラ (일본)",
+        "가격": "¥15,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=191093136"
+      },
+      {
+        "상품명": "Leica 90mm-135mm for Hood 12575N",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=190496067"
+      },
+      {
+        "상품명": "Leica VisoflexLens/フレックスBody for Adapter 14127",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=190496065"
+      },
+      {
+        "상품명": "Leica Elmar(A36) for 接写Lens 1 ELPRO",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,650",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=190143408"
+      },
+      {
+        "상품명": "Leica FilterAdapter SOOEY/13077",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=155201437"
+      },
+      {
+        "상품명": "Leica Elmar(A36) for イエローFilter(Early)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=132973313"
+      },
+      {
+        "상품명": "Leica エクステンダーR 2x (RCAM) 11236",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=142780884"
+      },
+      {
+        "상품명": "Leica R8/R9 for ラージアイカップ 14217",
+        "site": "J-カメラ (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=184800981"
+      },
+      {
+        "상품명": "Leica IIIf セルフ付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥75,900",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=184471123"
+      },
+      {
+        "상품명": "Leica If Redシンクロ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥59,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=180172967"
+      },
+      {
+        "상품명": "Leica MP for 巻き戻しクランク 14437",
+        "site": "J-カメラ (일본)",
+        "가격": "¥59,400",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=178422102"
+      },
+      {
+        "상품명": "Leica 90/2-135/2.8 for ヘリコイド Ring Black 16462",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=188169865"
+      },
+      {
+        "상품명": "Leica M35/1.4(1st) for Hood OLLUX/12522",
+        "site": "J-カメラ (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=187238573"
+      },
+      {
+        "상품명": "Leica M1,M2 取扱説明書(英語) (取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=167621754"
+      },
+      {
+        "상품명": "Leica APO-ELMARIT-R 180mm f2.8 (ROM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥440,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=184318105"
+      },
+      {
+        "상품명": "Leica Ur-Leica (レプリカ) ウルLeica",
+        "site": "J-カメラ (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=186598453"
+      },
+      {
+        "상품명": "Leica SERIE VIII/IV (S8.5/シリーズ8.5) UVa 13024",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=186035660"
+      },
+      {
+        "상품명": "Leica SUMMILUX-R 80mm f1.4 (ROM) 11349",
+        "site": "J-カメラ (일본)",
+        "가격": "¥495,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=184318104"
+      },
+      {
+        "상품명": "Leica ELMARIT-R 24mm f2.8 (ROM) 11331",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=184318102"
+      },
+      {
+        "상품명": "Leica M3 83万台 整備済み",
+        "site": "J-カメラ (일본)",
+        "가격": "¥268,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=179599107"
+      },
+      {
+        "상품명": "Leica IIIAPistol Grip 整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=182016633"
+      },
+      {
+        "상품명": "Leica ELMAR50/2.8M 関東カメラ整備済",
+        "site": "J-カメラ (일본)",
+        "가격": "¥118,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=179599121"
+      },
+      {
+        "상품명": "Leica 90mm-135mm for Hood 12575/IUFOO",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=183980153"
+      },
+      {
+        "상품명": "Leica Mirror lock-up release R 14087",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=182363328"
+      },
+      {
+        "상품명": "Leica M50/1.0(E60-Late) for Hood 12544",
+        "site": "J-カメラ (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=182363276"
+      },
+      {
+        "상품명": "Leica SUMMARIT50/1.5L スクリューマウント",
+        "site": "J-カメラ (일본)",
+        "가격": "¥148,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=131415601"
+      },
+      {
+        "상품명": "Leica E72 UVa D 18672",
+        "site": "J-カメラ (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=181973739"
+      },
+      {
+        "상품명": "Leica E112 NDx1 13003",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=181595378"
+      },
+      {
+        "상품명": "Leica ULTRAVID 8x20 BR (ウルトラビッド) 40252",
+        "site": "J-カメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=178668787"
+      },
+      {
+        "상품명": "Leica MountainElmar L 105mm f6.3",
+        "site": "J-カメラ (일본)",
+        "가격": "¥209,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=159587327"
+      },
+      {
+        "상품명": "Leica Elmarit R 28mm f2.8 (3-CAM) サファリ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176739909"
+      },
+      {
+        "상품명": "Leica IIIf for Case",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176568567"
+      },
+      {
+        "상품명": "Leica M3 for Case (小ネジ)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176568550"
+      },
+      {
+        "상품명": "Leica Elmarit R 35mm f2.8 (1-CAM) Silver",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176291098"
+      },
+      {
+        "상품명": "Leica ユニバーサル偏光Filter for E46 for Adapter 14210",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176167041"
+      },
+      {
+        "상품명": "Leica ユニバーサル偏光Filter for E46(APO-M135/3.4) for Adapter 14418",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176167039"
+      },
+      {
+        "상품명": "Leica ユニバーサル偏光Filter for E46(M135/4) for Adapter 14213",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176167038"
+      },
+      {
+        "상품명": "Leica C-LUX for キャ RingStrap Black 18681",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=176100502"
+      },
+      {
+        "상품명": "Leica VISOFLEX III Visoflex III (英文) 取扱説明書(取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,980",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=146807648"
+      },
+      {
+        "상품명": "Leica プレート (モノクロ)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144534750"
+      },
+      {
+        "상품명": "Leica R for Tele-スコープ-Adapter TO-R 14234",
+        "site": "J-カメラ (일본)",
+        "가격": "¥29,700",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=173353400"
+      },
+      {
+        "상품명": "Leica R35/2.8-50/2 for Hood 14164",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=173358544"
+      },
+      {
+        "상품명": "Leica E55 UVa 13373",
+        "site": "J-カメラ (일본)",
+        "가격": "¥5,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=172287663"
+      },
+      {
+        "상품명": "Leica SUMMICRON 50mm f2.0 (2nd)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥213,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=171775578"
+      },
+      {
+        "상품명": "Leica Elmar50/3.5(A36) for Hood(最Early) FISON",
+        "site": "J-カメラ (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=171065814"
+      },
+      {
+        "상품명": "Leica M50/1.0(E60-Early)-75/1.4 for Hood 12539",
+        "site": "J-カメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=170299524"
+      },
+      {
+        "상품명": "Leica PHOTAR 25mm f2.5 (フォター 25/2.5)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=167300465"
+      },
+      {
+        "상품명": "Leica HOW TO USE YOUR Leica METER MC 取扱説明書(英文) (取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,420",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=152142501"
+      },
+      {
+        "상품명": "Leica C-LUX3 取扱説明書(取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,430",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=146807652"
+      },
+      {
+        "상품명": "Leica モーターM (英文) 取扱説明書(取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,430",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=146807650"
+      },
+      {
+        "상품명": "Leica MP(フィルム) (英語/ドイツ語) 取扱説明書(取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,980",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=146813918"
+      },
+      {
+        "상품명": "Leica AF-C1 (和文) 取扱説明書(取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,420",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=146807653"
+      },
+      {
+        "상품명": "Leica FLEX SL 取扱説明書(英文) (取説)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥1,980",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=166435221"
+      },
+      {
+        "상품명": "Leica Vario-Elmar R 35-70mm f3.5 (3-CAM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=166210121"
+      },
+      {
+        "상품명": "Leica Elmar-C 90/4M",
+        "site": "J-カメラ (일본)",
+        "가격": "¥58,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=164660905"
+      },
+      {
+        "상품명": "Leica E.LEITZ WETZLAR バルナック for ダブルレリーズ",
+        "site": "J-カメラ (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=164374799"
+      },
+      {
+        "상품명": "Leica M42Lens/MBody for Adapter 22232",
+        "site": "J-カメラ (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=160201656"
+      },
+      {
+        "상품명": "Leica マイクロSummar 24/4.5 (LAdapter付)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥137,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=145826738"
+      },
+      {
+        "상품명": "Leica 中型雲台 KGOON/14115",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144665458"
+      },
+      {
+        "상품명": "Leica 視度補正Lens(R8/R9 for ) +2.0 14381",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144534762"
+      },
+      {
+        "상품명": "Leica 視度補正Lens(R8/R9 for ) +3.0 14382",
+        "site": "J-カメラ (일본)",
+        "가격": "¥2,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144534761"
+      },
+      {
+        "상품명": "Leica 腕時計",
+        "site": "J-カメラ (일본)",
+        "가격": "¥60,910",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144534758"
+      },
+      {
+        "상품명": "Leica Winder/モーターR for 三脚ホルダーR 14284",
+        "site": "J-カメラ (일본)",
+        "가격": "¥12,600",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144665446"
+      },
+      {
+        "상품명": "Leica Elmarit R 90mm f2.8 (2-CAM)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=154233936"
+      },
+      {
+        "상품명": "Leica パノラマヘッド FARUX",
+        "site": "J-カメラ (일본)",
+        "가격": "¥13,200",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144665454"
+      },
+      {
+        "상품명": "Leica VisoflexI型 (M for -45度ルーペ付)",
+        "site": "J-カメラ (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144665462"
+      },
+      {
+        "상품명": "Leica Stereoリー ビューワー付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥298,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=144665448"
+      },
+      {
+        "상품명": "Leica Summicron M 90mm f2.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥90,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=145826740"
+      },
+      {
+        "상품명": "Leica イマレクトフアインダー 28mmアタッチメント付",
+        "site": "J-カメラ (일본)",
+        "가격": "¥48,000",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=151250530"
+      },
+      {
+        "상품명": "Leica Elmar M 9cm F4.0",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,840",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=34256131"
+      },
+      {
+        "상품명": "Leica Elmar M 90mm f4.0 Collapsible式",
+        "site": "J-カメラ (일본)",
+        "가격": "¥24,840",
+        "통화": "JPY",
+        "링크": "https://j-camera.net/itemp.php?id=34256126"
       }
     ]
   }
