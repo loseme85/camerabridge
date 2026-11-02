@@ -775,18 +775,6 @@
    "example": "LEICA MP + VIT 50th anniversary anthracite 566/600"
   },
   {
-   "a": "leica:body:m3:early",
-   "b": "leica:feature:no-meter",
-   "count": 6,
-   "example": "Leica M3 シリアルナンバー700001~701000 Body Chrome"
-  },
-  {
-   "a": "leica:body:m3:early",
-   "b": "leica:feature:mechanical",
-   "count": 6,
-   "example": "Leica M3 シリアルナンバー700001~701000 Body Chrome"
-  },
-  {
    "a": "leica:body:m7:titan",
    "b": "leica:feature:frameline-28",
    "count": 5,
@@ -953,6 +941,30 @@
    "b": "leica:body:m2:button-rewind",
    "count": 3,
    "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
+  },
+  {
+   "a": "leica:body:m3:first-batch",
+   "b": "leica:feature:no-meter",
+   "count": 3,
+   "example": "Leica M3 シリアルナンバー700001~701000 Body Chrome"
+  },
+  {
+   "a": "leica:body:m3:first-batch",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "Leica M3 シリアルナンバー700001~701000 Body Chrome"
+  },
+  {
+   "a": "leica:body:m3:early",
+   "b": "leica:feature:no-meter",
+   "count": 3,
+   "example": "Leica M3 (段付き) Body Chrome"
+  },
+  {
+   "a": "leica:body:m3:early",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "Leica M3 (段付き) Body Chrome"
   },
   {
    "a": "leica:body:mp-film:terry-oneill",
@@ -1235,16 +1247,16 @@
  ],
  "new": [
   {
-   "entity": "leica:body:leicaflex-sl2",
-   "word": "anniversary",
+   "a": "leica:body:m3:first-batch",
+   "b": "leica:feature:no-meter",
    "count": 3,
-   "example": "LEICAFLEX SL2 chrome 50 JAHRE"
+   "example": "Leica M3 シリアルナンバー700001~701000 Body Chrome"
   },
   {
-   "entity": "leica:body:m5:standard",
-   "word": "anniversary",
+   "a": "leica:body:m3:first-batch",
+   "b": "leica:feature:mechanical",
    "count": 3,
-   "example": "Leica M5 Body Silver 50周年記念"
+   "example": "Leica M3 シリアルナンバー700001~701000 Body Chrome"
   }
  ]
 }
