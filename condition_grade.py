@@ -170,6 +170,10 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _LEICASTOREPL.get(cond[len(LEICASTOREPL_PREFIX):].strip()), "text"
     if cond.startswith(KONSTANZ_PREFIX):
         return _KONSTANZ.get(cond[len(KONSTANZ_PREFIX):].strip()), "text"
+    if cond.startswith(IT_PREFIX):
+        return it_grade(cond[len(IT_PREFIX):]), "text"
+    if cond.startswith(SH_PREFIX):
+        return _SH.get(cond[len(SH_PREFIX):].strip().upper()), "label"
     if cond.startswith(DESC_PREFIX):
         for pattern, grade in _DESC:
             if re.search(pattern, cond[len(DESC_PREFIX):], re.I):
@@ -182,6 +186,42 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
     if up == "NEW":
         return "N", "label"
     return None, None
+
+
+# 이탈리아 Foto Dotti·Foto Ottica Cavour: 등급 표기 없이 설명 글 말투 ('IN OTTIME CONDIZIONI ESTETICHE E FUNZIONALI',
+# 'In eccellenti condizioni estetiche ed ottiche'). 말뜻대로 맞춤 — 사진 확인 전 (2026-11-02, 일요일 등급 점검에서 볼 것)
+IT_PREFIX = "IT: "
+_IT = [
+    (r"mai (?:stato )?(?:aperto|usato)|ancora (?:sigillat|imballat)|nuovo di (?:negozio|fabbrica)", "S"),
+    (r"(?:pari|come) (?:al )?nuovo|perfette condizioni|condizioni perfette|stato perfetto|perfetto stato", "S"),
+    (r"eccellenti condizioni|condizioni eccellenti|eccellente stato|stato eccellente|bellissim[oa]", "A"),
+    (r"ottime condizioni|condizioni ottime|ottimo stato|stato ottimo|lievi segni d.uso|\bbell[oa]\b", "B"),
+    (r"buone condizioni|condizioni buone|buono stato|discrete condizioni|normali segni d.uso|segni d.uso", "C"),
+    (r"evidenti segni d.uso|forti segni|molto usat|da revisionare|difettos", "D"),
+]
+
+
+def it_grade(phrase: str) -> str | None:
+    for pattern, grade in _IT:
+        if re.search(pattern, phrase or "", re.I):
+            return grade
+    return None
+
+
+def it_condition(text: str) -> str | None:
+    """이탈리아어 설명 글에서 컨디션 말투를 뽑아 'IT: ottime condizioni' 꼴로 (없으면 None)"""
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text or ""))
+    for pattern, _ in _IT:
+        m = re.search(pattern, t, re.I)
+        if m:
+            return IT_PREFIX + m.group(0).lower()
+    return None
+
+
+# 독일 SHphoto: 상세 화면 'Zustand: AB, voll funktionsfähiger guter Zustand, mit leichten Gebrauchsspuren'.
+# A 새것 같음 · AB 가벼운 사용감 · B 중간 사용감 · C 뚜렷한 사용감 (말뜻대로, 사진 확인 전 2026-11-02)
+SH_PREFIX = "SH: "
+_SH = {"A": "S", "A-": "A", "AB": "A", "B": "B", "BC": "C", "C": "C", "D": "D"}
 
 
 def describe_text(text: str) -> str | None:

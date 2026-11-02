@@ -438,3 +438,13 @@ def test_grade_audit_sampling_is_even_across_labels():
     history = {"sites": {"old": {"last": "2026-10-01"}, "new": {"last": "2026-11-01"}}}
     by_site = {"old": [{}] * 20, "new": [{}] * 20, "never": [{}] * 15, "tiny": [{}] * 3}
     assert audit.pick_sites(by_site, history, 3) == ["never", "old", "new"]  # 안 본 곳 → 오래된 곳, 표본 적은 곳은 빼고
+
+
+def test_italian_description_and_shphoto_zustand():
+    from condition_grade import grade_of, it_condition
+    assert it_condition("IN OTTIME CONDIZIONI ESTETICHE E FUNZIONALI (VEDI FOTOGRAFIE)") == "IT: ottime condizioni"
+    assert grade_of("Foto Dotti (이탈리아)", "IT: ottime condizioni", "")[0] == "B"
+    assert grade_of("Foto Ottica Cavour (이탈리아)", it_condition("In eccellenti condizioni estetiche ed ottiche"), "")[0] == "A"
+    assert it_condition("Fotografare in condizioni di controluce crea riflessi") is None  # 렌즈 소개 글의 '조건'은 상태가 아님
+    assert grade_of("SHphoto (독일)", "SH: AB", "")[0] == "A"
+    assert grade_of("SHphoto (독일)", "정보없음 (상세 봄)", "")[0] is None

@@ -5205,6 +5205,19 @@ def _cameraelectronic_name(title):
 _MF_GRADE_RE = re.compile(r"\b(Like New Minus|Like New|Open Box|Mint|Excellent Plus|Excellent|Very Good|Good)\b", re.I)
 
 
+def _mf_option_grade(p):
+    """상품 옵션 'Product Condition'의 값('Excellent Plus-CLA'd' 등, 판매 중인 옵션 먼저) → 등급 매치 (2026-11-02)"""
+    variants = p.get("variants") or []
+    for i, opt in enumerate(p.get("options") or []):
+        if "condition" in str(opt.get("name") or "").lower():
+            vals = [v.get(f"option{i + 1}") for v in variants if v.get("available")] + [v.get(f"option{i + 1}") for v in variants]
+            for val in vals:
+                m = _MF_GRADE_RE.match(str(val or ""))
+                if m:
+                    return m
+    return None
+
+
 def crawl_mfcamera():
     """MF Camera (미국) - 캘리포니아 폴섬 중고점 Shopify products.json 전체(350개쯤)에서 라이카·라이츠 중고만.
     신품이 섞여 있어 태그에 Used·Pre-Owned·As Is·CLA가 있거나 제목에 상태 말이 있는 것만 담고, 'New' 태그만 있거나
@@ -5240,6 +5253,7 @@ def crawl_mfcamera():
                 continue
             m = _MF_GRADE_RE.search(re.split(r"\s+[\u2013\u2014-]\s+", title, maxsplit=1)[-1]) if re.search(r"\s[\u2013\u2014-]\s", title) else None
             m = m or re.search(r"(?:Condition|Cosmetic(?: Condition)?)\s*[:\-\u2013]\s*(Like New Minus|Like New|Open Box|Mint|Excellent Plus|Excellent|Very Good|Good)\b", text, re.I)
+            m = m or _mf_option_grade(p)
             cond = MFCAMERA_PREFIX + m.group(1).title() if m else "정보없음"
             name = re.split(r"\s+[\u2013\u2014|]\s+|\s+-\s+(?=[A-Z][a-z])", title, maxsplit=1)[0]
             name = re.sub(r"\s+Used(?:\s+(?:Like New Minus|Like New|Excellent Plus|Excellent|Very Good|Good))?\b|\s*\(Used\)", "", name, flags=re.I)
@@ -5987,7 +6001,7 @@ def _fotodotti_name(raw):
 
 def crawl_fotodotti():
     """Foto Dotti (이탈리아 모데나) - Magento 라이카 중고 분류 3곳(렌즈·바디·액세서리)을 정적 HTML로 (쪽마다 12개).
-    목록에 있는 것은 판매 중, 가격 EUR. 등급 표기 없음 (주소 끝 'bello'·'bellissimo'는 설명이라 쓰지 않음).
+    목록에 있는 것은 판매 중, 가격 EUR. 목록에 등급 표기가 없어 상세 화면 설명 글 말투로 (처음 본 매물만, IT: …).
     robots.txt는 일반 수집을 막지 않음 (AI 봇만 막음, 2026-11-02 사장님 확인)"""
     import html as _html
     import requests
@@ -6041,6 +6055,14 @@ def crawl_fotodotti():
             if not new:
                 break
             time.sleep(random.uniform(1.0, 2.0))
+    from condition_grade import it_condition
+
+    def read_detail(url):  # 'Dettagli' 칸의 설명 글 ('IN OTTIME CONDIZIONI ESTETICHE E FUNZIONALI …')
+        page = sess.get(url, timeout=30)
+        page.raise_for_status()
+        m = re.search(r'Dettagli([\s\S]{0,4000}?)Specifiche', re.sub(r"<[^>]+>", " ", page.text))
+        return it_condition(_html.unescape(m.group(1))) if m else None
+    _fill_detail_conditions("Foto Dotti (이탈리아)", results, read_detail)
     print(f"  ✅ Foto Dotti 완료: {len(results)}개")
     return results
 
@@ -6281,6 +6303,41 @@ def _listed_est(item):
 def _shopify_listed(p):
     """Shopify 상품의 등록일 (created_at '2025-03-04T10:00:00-05:00' → '2025-03-04'), 없으면 빈 문자열"""
     return str(p.get("created_at") or p.get("published_at") or "")[:10]
+
+
+DETAIL_SEEN = "정보없음 (상세 봄)"  # 상세 화면을 봤는데 상태 표기가 없던 매물 — 다시 열지 않음
+
+
+def _fill_detail_conditions(site, results, read_detail, limit=80):
+    """목록에 상태 표기가 없는 매장: 상세 화면의 상태를 처음 본 매물만 읽고(한 번에 limit개, 1~2초 간격),
+    전에 읽은 것은 이전 결과(data/raw/results.json)에서 다시 씀. 액세서리는 읽지 않음. read_detail(url) → 컨디션 문자열 또는 None"""
+    known = {}
+    try:
+        with open("data/raw/results.json", encoding="utf-8") as f:
+            known = {r["링크"]: r.get("컨디션") for r in json.load(f) if r.get("site") == site}
+    except (OSError, ValueError):
+        pass
+    fetched = found = 0
+    for r in results:
+        if r.get("category") == "Accessory" or r.get("컨디션") not in (None, "", "정보없음"):
+            continue
+        prev = known.get(r["링크"])
+        if prev and prev != "정보없음":
+            r["컨디션"] = prev
+            continue
+        if fetched >= limit:
+            continue
+        fetched += 1
+        try:
+            cond = read_detail(r["링크"])
+        except Exception as e:
+            print(f"    ⚠️ 상세 못 읽음: {r['링크'][-50:]} ({e})")
+            continue
+        r["컨디션"] = cond or DETAIL_SEEN
+        found += bool(cond)
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"    └─ 상세 상태: 새로 {fetched}개 열어 {found}개 찾음")
+
 
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
@@ -6657,7 +6714,7 @@ _SH_ACCESSORY = (r"Close-up|Extension Ring|Macro Ring|Bellows|projekt|Projektor|
 def crawl_shphoto():
     """SHphoto (독일) - 뉘른베르크 매장(Fotomax, Shopware) '/gebrauchtware/leica/' 분류 정적 HTML (24개씩 17쪽쯤, 390개 —
     빈티지 필터·후드 같은 액세서리가 절반 넘음). 제목이 Leica·Leitz로 시작하는 것만 (FED·Jupiter·Novoflex 같은 다른 회사 M39
-    렌즈 제외). 'Für Sie bestellt'(LimitedAvailability)는 예약중으로. 목록·상세 모두 등급 표기가 없어 정보없음"""
+    렌즈 제외). 'Für Sie bestellt'(LimitedAvailability)는 예약중으로. 등급은 상세 화면 'Zustand: AB'(있는 상품만, 처음 본 매물만 읽음)"""
     import html as _html
     import requests
     results, seen = [], set()
@@ -6717,6 +6774,14 @@ def crawl_shphoto():
             break
         print(f"    └─ {page_num}페이지 {new}개 상품 발견")
         time.sleep(random.uniform(1.0, 2.0))
+    from condition_grade import SH_PREFIX
+
+    def read_detail(url):  # 상세 화면 'Zustand: AB, voll funktionsfähiger guter Zustand …' (없는 상품도 있음)
+        page = requests.get(url, headers={"User-Agent": USER_AGENTS[1]}, timeout=30)
+        page.raise_for_status()
+        m = re.search(r"Zustand:\s*(A-|AB|A|BC|B|C|D)\b", re.sub(r"<[^>]+>", " ", page.text))
+        return SH_PREFIX + m.group(1) if m else None
+    _fill_detail_conditions("SHphoto (독일)", results, read_detail)
     print(f"  ✅ SHphoto 완료: {len(results)}개")
     return results
 
@@ -7765,8 +7830,9 @@ def _cavour_name(title):
 def crawl_cavour():
     """Foto Ottica Cavour (이탈리아) - 밀라노 라이카 중고점 Shopify products.json 전체(1,200개쯤, 5쪽)에서 브랜드 칸이 Leica Camera AG·
     Ernst Leitz Wetzlar·Leica Group이고 'Usato'(중고) 태그가 있는 것만 ('Nuovo' 새 상품은 뺌). 가격은 EUR.
-    등급 표기가 없어 컨디션은 정보없음"""
+    등급 표기가 없어 설명 글 말투로 ('In ottime condizioni' → IT: …, 없으면 정보없음)"""
     import requests
+    from condition_grade import it_condition
     results = []
     sess = requests.Session()
     sess.headers["User-Agent"] = random.choice(USER_AGENTS)
@@ -7796,7 +7862,7 @@ def crawl_cavour():
             "label": auto_label(name),
             "상품명": name,
             "세대": detect_generation(name),
-            "컨디션": "정보없음",
+            "컨디션": it_condition(p.get("body_html") or "") or "정보없음",
             "가격": price,
             "통화": "EUR",
             "이미지": img,
