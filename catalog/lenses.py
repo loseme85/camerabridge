@@ -150,14 +150,14 @@ SR_REISSUE = (r"re-?issue|복각|리이슈|202[12]|11301"
 SL35 = "leica:lens:summilux-m:35"
 EDITION_35LUX = [r"titan|티탄", r"leitz ?wetzlar", r"10 ?jahre", r"independence|광복", r"LHSA", r"classic|클래식"]
 for slug, name, ko, marker, extra_not, sfx in [
-    ("v1-steel-rim", "Summilux 35mm f/1.4 1st Steel Rim (original)", "주미룩스 35 1세대 스틸림 (오리지널)", r"steel ?rim|스틸 ?림", [SR_REISSUE], ["steel rim", "스틸림", "1st steel rim"]),
-    ("v1", "Summilux 35mm f/1.4 1st", "주미룩스 35 1세대", GEN1, [r"steel ?rim|스틸 ?림"], ["1st", "1세대"]),
+    # '1st·V1'만 쓴 매물은 따로 두지 않음 (2026-11-02): 국내는 스틸림, 일본 Ver.1은 그 뒤 구형 값이라 섞여서 → 구형(세대 미표기)에 두고 가격으로 스틸림을 가림
+    ("v1-steel-rim", "Summilux 35mm f/1.4 1st Steel Rim (original)", "주미룩스 35 1세대 스틸림 (오리지널)", r"steel ?rim|스틸 ?림", [SR_REISSUE], ["steel rim", "스틸림", "1st steel rim", "1st", "1세대"]),
     ("v2", "Summilux 35mm f/1.4 2nd (pre-ASPH)", "주미룩스 35 2세대", GEN2 + r"|pre-?asph", [], ["2nd", "2세대", "pre asph"]),
     # 국내 표기: 1세대 스틸림·1st, 2세대 pre-ASPH, 3세대 Aspherical(AA, 비구면 2매), 4세대 ASPH(1994), 그 뒤 FLE·FLE II
     ("aa", "Summilux-M 35mm f/1.4 Aspherical (AA, 3rd gen, 1990)", "주미룩스 35 3세대 AA (Aspherical, 비구면 2매)", r"aspherical|\bAA\b|더블 ?어스|3세대|\b3rd\b|2매", [r"4세대|\b4th\b"], ["aa", "aspherical", "double aspherical", "3세대", "3rd", "3세대 aa", "2매"]),
     ("asph-1994", "Summilux-M 35mm f/1.4 ASPH (4th gen, 1994, pre-FLE)", "주미룩스 35 4세대 ASPH (1994, FLE 이전)", r"4세대|\b4th\b|non-?fle|11874|11883", [r"FLE", r"3세대|\b3rd\b"], ["asph 1994", "4세대", "4th", "asph 4세대", "asph non fle"]),
-    ("asph-unspecified", "Summilux-M 35mm f/1.4 ASPH (version not stated)", "주미룩스 35 ASPH (버전 미표기)", r"ASPH", [r"FLE", r"aspherical|\bAA\b", r"4세대|4th|non-?fle", r"\bnew\b"], ["asph"]),
-    ("pre-asph-unspecified", "Summilux 35mm f/1.4 pre-ASPH (generation not stated)", "주미룩스 35 구형 (세대 미표기)", r"^(?!.*(ASPH|aspherical|\bAA\b|FLE|1st|1th|2nd|3rd|4th|1세대|2세대|3세대|4세대|2매|steel|스틸|복각|reissue|titan|티탄|classic|클래식)).*$", [], ["pre asph"]),
+    ("asph-unspecified", "Summilux-M 35mm f/1.4 ASPH (version not stated)", "주미룩스 35 ASPH (버전 미표기)", r"ASPH|\bASH\b", [r"FLE", r"aspherical|\bAA\b", r"4세대|4th|non-?fle", r"\bnew\b"], ["asph"]),
+    ("pre-asph-unspecified", "Summilux 35mm f/1.4 pre-ASPH (generation not stated)", "주미룩스 35 구형 (세대 미표기)", r"^(?!.*(ASPH|\bASH\b|aspherical|\bAA\b|FLE|2nd|3rd|4th|2세대|3세대|4세대|2매|steel|스틸|복각|reissue|titan|티탄|classic|클래식)).*$", [], ["pre asph"]),
     ("titan", "Summilux-M 35mm f/1.4 Titan", "주미룩스 35 티탄", r"titan|티탄", [], ["titan", "티탄"]),
     ("classic", "Summilux-M 35mm f/1.4 'Classic'", "주미룩스 35 클래식", r"classic|클래식", [], ["classic", "클래식"]),  # 확인 필요
     ("leitz-wetzlar", "Summilux-M 35mm f/1.4 ASPH 'Leitz Wetzlar'", "주미룩스 35 라이츠 베츨라", r"leitz ?wetzlar", [], ["leitz wetzlar"]),
@@ -168,6 +168,16 @@ for slug, name, ko, marker, extra_not, sfx in [
     nots = list(extra_not) + ([m for m in EDITION_35LUX if m != marker] if slug not in ("titan", "leitz-wetzlar", "10-jahre", "korea-70", "classic") else [])
     _add(key, name, ko, "M", [FAM["summilux"][0], f("35"), marker], nots, aliases("summilux", "35", sfx, "M"))
     EXTEND_PARENTS.setdefault(SL35, []).append(key)
+# 스틸림 오리지널은 M3용 아이(고글) 버전과 아이 없는 버전의 값이 달라 나눔 (2026-11-02 사장님). 'no goggle'·'without goggles'는 아이 없는 쪽
+SR_GOGGLE = (r"^(?!.*(non-?|no |without |w/o )goggles?).*(goggles?|고글|안경|眼鏡|メガネ|\beyes?\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전"
+             r"|\bM3\b|for ?M3|M3 ?용)")
+_add(f"{SL35}:v1-steel-rim-goggles", "Summilux 35mm f/1.4 1st Steel Rim with Goggles (M3, original)", "주미룩스 35 1세대 스틸림 아이 버전 (M3용 고글)", "M",
+     [FAM["summilux"][0], f("35"), r"steel ?rim|스틸 ?림", SR_GOGGLE], [SR_REISSUE] + EDITION_35LUX,
+     aliases("summilux", "35", ["steel rim eye", "steel rim goggles", "스틸림 아이", "스틸림 고글", "steel rim m3"], "M"))
+EXTEND_PARENTS.setdefault(SL35, []).append(f"{SL35}:v1-steel-rim-goggles")
+TIGHTEN[f"{SL35}:v1-steel-rim"] = [SR_GOGGLE]
+MODELS[f"{SL35}:v1-steel-rim"]["display_name"] = "Summilux 35mm f/1.4 1st Steel Rim (original, no goggles or not stated)"
+NAME_KO[f"{SL35}:v1-steel-rim"] = "주미룩스 35 1세대 스틸림 (오리지널, 아이 없음·표기 없음)"
 for existing in ("asph-fle", "asph-fle2", "steel-rim-reissue"):
     TIGHTEN[f"{SL35}:{existing}"] = EDITION_35LUX + [r"aspherical|\bAA\b"]
 OVERRIDE_MUST[f"{SL35}:asph-fle2"] = [FAM["summilux"][0], f("35"), r"FLE ?(II|2)\b|ASPH.{0,30}\bnew\b|\bnew\b.{0,30}ASPH"]
@@ -254,7 +264,7 @@ group("leica:lens:elmarit-m:28", "Elmarit-M 28mm f/2.8", "엘마리트 28", "M",
     c("v2", "Elmarit-M 28mm f/2.8 2nd", "엘마리트 28 2세대", GEN2, [], ["2nd", "2세대"]),
     c("v3", "Elmarit-M 28mm f/2.8 3rd", "엘마리트 28 3세대", GEN3, [], ["3rd", "3세대"]),
     c("v4", "Elmarit-M 28mm f/2.8 4th", "엘마리트 28 4세대", GEN4, [], ["4th", "4세대"]),
-], must_not=[r"\bR\b|-R\b", r"ASPH"], existing=["leica:lens:elmarit-m:28:asph"])
+], must_not=[r"\bR\b|-R\b", r"ASPH|ASAPH"], existing=["leica:lens:elmarit-m:28:asph"])
 # ───────────── M: 90mm f/2.8 ─────────────
 group("leica:lens:elmarit-m:90", "Elmarit-M 90mm f/2.8", "엘마리트 90", "M", "elmarit", "90", [
     c("v1", "Elmarit 90mm f/2.8 1st", "엘마리트 90 1세대", GEN1, [], ["1st"]),
@@ -289,9 +299,9 @@ group("leica:lens:summaron-m:28:f5.6", "Summaron 28mm f/5.6", "즈마론 28", No
     c("reissue", "Summaron-M 28mm f/5.6 (2016 reissue)", "즈마론 28 복각", r"복각|re-?issue|summaron-m|\bM ?28|6 ?bit|신품", [], ["reissue", "복각"]),
 ], unspecified=True)
 group("leica:lens:summaron:35", "Summaron 35mm", "즈마론 35", None, "summaron", "35", [
-    c("f3.5", "Summaron 35mm f/3.5", "즈마론 35 f/3.5", r"3\.5", [r"\beyes?\b|고글"], ["3.5"]),
+    c("f3.5", "Summaron 35mm f/3.5", "즈마론 35 f/3.5 (고글 없음·표기 없음)", r"3\.5", [r"\beyes?\b|고글"], ["3.5"]),
     c("f3.5-eyes", "Summaron 35mm f/3.5 with eyes (M3)", "즈마론 35 f/3.5 고글", r"3\.5.{0,40}(\beyes?\b|고글)|(\beyes?\b|고글).{0,40}3\.5", [], ["3.5 eye"]),
-    c("f2.8", "Summaron 35mm f/2.8", "즈마론 35 f/2.8", r"2\.8", [r"\beyes?\b|고글"], ["2.8"]),
+    c("f2.8", "Summaron 35mm f/2.8", "즈마론 35 f/2.8 (고글 없음·표기 없음)", r"2\.8", [r"\beyes?\b|고글"], ["2.8"]),
     c("f2.8-eyes", "Summaron 35mm f/2.8 with eyes (M3)", "즈마론 35 f/2.8 고글", r"2\.8.{0,40}(\beyes?\b|고글)|(\beyes?\b|고글).{0,40}2\.8", [], ["2.8 eye"]),
 ])
 lens("leica:lens:super-elmar-m:18", "Super-Elmar-M 18mm f/3.8 ASPH", "수퍼엘마 18", "M", "super-elmar", "18")
@@ -484,7 +494,7 @@ PARENTS[NX10] = ("Noctilux-M 50mm f/1.0 (all)", "Lens", "M", _nx_kids + [f"{NX10
 
 # ───────────── 자식 순서: 세대순 → 미표기 → 에디션 (검색창 후보가 이 순서로 뜸) ─────────────
 CHILD_ORDER = {
-    SL35: ["v1-steel-rim", "v1", "v2", "aa", "asph-1994", "asph-fle", "asph-fle2", "asph-unspecified", "pre-asph-unspecified",
+    SL35: ["v1-steel-rim", "v1-steel-rim-goggles", "v2", "aa", "asph-1994", "asph-fle", "asph-fle2", "asph-unspecified", "pre-asph-unspecified",
            "steel-rim-reissue", "titan", "classic", "leitz-wetzlar", "10-jahre", "korea-70"],
     SC35: ["v1-8element", "v1-eyes", "v2", "v3", "v4", "asph", "leica:lens:apo-summicron-m:35", "unspecified", "millennium", "ara-guler", "your-mark", "titan"],
     "leica:lens:summilux-m:50": ["v1", "v2", "v3", "v4", "asph", "unspecified", "classic", "titan", "millennium", "asph-lhsa", "asph-kravitz", "korea-70"],
@@ -536,10 +546,10 @@ EXTEND_PARENTS.setdefault(SL35, []).append(f"{SL35}:safari")
 for k in ("asph-fle", "asph-fle2", "asph-unspecified", "pre-asph-unspecified", "steel-rim-reissue"):
     TIGHTEN[f"{SL35}:{k}"] = TIGHTEN.get(f"{SL35}:{k}", []) + [SAFARI]
 TIGHTEN[f"{SL35}:asph-unspecified"] += [r"11874|11883", r"\btype ?ii\b"]
-TIGHTEN[f"{SL35}:pre-asph-unspecified"] += [r"\btype ?i{1,3}v?\b", GEN1, GEN2, r"11301"]
+TIGHTEN[f"{SL35}:pre-asph-unspecified"] += [r"\btype ?(ii|iii|iv)\b", GEN2, r"11301"]  # '1st·V1'만 쓴 것은 여기 (가격 쌍으로 스틸림을 가림)
 for k in ("v1", "v2", "v3", "v4"):  # Summilux 50 구형 세대에 'ASPH (Type I)' 같은 신형 표기가 걸리지 않게
     TIGHTEN[f"{SL50}:{k}"] = TIGHTEN.get(f"{SL50}:{k}", []) + [r"ASPH"]
-for k in ("v1", "v2"):  # 구형 세대에 'ASPH (Type II)' 같은 신형 표기가 걸리지 않게
+for k in ("v2",):  # 구형 세대에 'ASPH (Type II)' 같은 신형 표기가 걸리지 않게
     TIGHTEN[f"{SL35}:{k}"] = TIGHTEN.get(f"{SL35}:{k}", []) + [r"ASPH"]
 
 # Summicron 35: ASPH 블랙페인트 · ASPH LHSA · ASPH 광복 60주년 · 구형 블랙페인트

@@ -708,7 +708,7 @@ def test_model_view_has_price_by_condition_chart():
 def test_card_shows_price_inferred_and_too_cheap_notes() -> None:
     beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
     assert "note === 'too_cheap'" in beta and "note === 'price_inferred'" in beta
-    assert "['too_cheap', 'set'].includes((result.final_output || {}).entity_note)" in beta  # 그래프에서도 뺌
+    assert "['too_cheap', 'set', 'duplicate'].includes((result.final_output || {}).entity_note)" in beta  # 그래프에서도 뺌
     assert "note === 'set'" in beta
     for key in ("note_price_inferred", "note_too_cheap", "note_set"):
         line = next(l for l in beta.splitlines() if l.strip().startswith(key + ":"))
@@ -788,7 +788,7 @@ def test_members_can_save_listings() -> None:
 def test_model_view_has_value_calculator() -> None:
     beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
     assert 'id="value-calc-region"' in beta and "function renderValueCalc()" in beta and "bindValueCalc();" in beta
-    assert "['too_cheap', 'set'].includes((r.final_output || {}).entity_note)" in beta  # 부품·세트는 계산에서 뺌
+    assert "['too_cheap', 'set', 'duplicate'].includes((r.final_output || {}).entity_note)" in beta  # 부품·세트는 계산에서 뺌
     block = beta.split("      calc: {\n", 1)[1].split("\n      },", 1)[0]
     for key in ("title", "note", "asking", "sold", "home", "days", "conf_high", "conf_low"):
         line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))

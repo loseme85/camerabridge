@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from condition_grade import grade_of  # noqa: E402
-from entity_catalog import annotate_records, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, price_krw  # noqa: E402
+from entity_catalog import annotate_records, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, merge_same_item, price_krw  # noqa: E402
 from fx_history import krw_per_unit_on  # noqa: E402
 from listing_date import as_datetime_text  # noqa: E402
 
@@ -126,10 +126,12 @@ def main() -> None:
     catalog = load_catalog()
     value = _b_value(catalog)
     moved = infer_by_price(records, value, catalog)
+    duplicates = merge_same_item(records, catalog)
+    dup_ids = {id(r) for r in records if (r.get("final_output") or {}).get("entity_note") == "duplicate"}
     too_cheap = flag_too_cheap(records, value, catalog)
     sets = set()
     for record in records:  # 바디·렌즈 세트: 단품 시세와 비교하지 않고, 단품 매물이 충분하면 시세 계산에서 뺌
-        if id(record) not in too_cheap and is_set(record, catalog):
+        if id(record) not in too_cheap and id(record) not in dup_ids and is_set(record, catalog):
             record.setdefault("final_output", {})["entity_note"] = "set"
             sets.add(id(record))
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
@@ -140,6 +142,8 @@ def main() -> None:
                                     "set_active": [], "set_sold": [], "set_graded": []} for eid in catalog["entities"]}
     for record in records:
         final = record.get("final_output") or {}
+        if id(record) in dup_ids:
+            continue  # 같은 물건의 다른 기록은 한 번만 셈
         price = final.get("parsed_price_numeric")
         active = final.get("sold_quality") == "asking"
         sold = str(final.get("sold_quality") or "").startswith("sold")
@@ -195,7 +199,7 @@ def main() -> None:
                                    "entities": entities}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     HOME_FEED.write_text(json.dumps(_home_feed(records, catalog), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     linked = sum(1 for r in records if r.get("entity_ids"))
-    print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약 · 가격으로 옮김 {moved} · 시세에서 뺌 {len(too_cheap)} · 세트 {len(sets)}")
+    print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약 · 가격으로 옮김 {moved} · 시세에서 뺌 {len(too_cheap)} · 세트 {len(sets)} · 같은 물건 중복 {duplicates}")
 
 
 if __name__ == "__main__":

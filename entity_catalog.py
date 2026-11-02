@@ -35,6 +35,10 @@ PRICE_PAIRS = [
     ("leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:steel-rim-reissue",
      re.compile(r"\bM3\b|1186[89]|11870|goggle|고글|안경|\beyes?\b|original|오리지널|\b1st\b|first|196\d", re.I),
      re.compile(r"11301|re-?issue|복각|리이슈|2022", re.I)),
+    # 주미룩스 35 '1st·V1'만 쓴 구형: 국내는 스틸림, 일본 Ver.1은 그 뒤 구형 → 스틸림 가격대면 스틸림으로 (2026-11-02)
+    ("leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:pre-asph-unspecified",
+     re.compile(r"steel ?rim|스틸 ?림", re.I),
+     re.compile(r"^(?!.*(steel ?rim|스틸 ?림|\b1st\b|\b1th\b|\bv\.? ?1\b|ver\.? ?1\b|1세대|first|第1世代)).*$", re.I)),
     ("leica:lens:noctilux:50:f1.2-original", "leica:lens:noctilux-m:50:f1.2-asph",
      re.compile(r"11820|original|오리지널|1세대|\b1st\b|double ?aspherical|\bAA\b", re.I),
      re.compile(r"\bASPH\b|11686|11731|복각|re-?issue", re.I)),
@@ -308,6 +312,64 @@ def _with_parents(hits: list[str], catalog: dict[str, Any], title: str) -> list[
     features = [fid for fid, members, exclude in catalog.get("features", [])
                 if linked & members and not any(p.search(title) for p in exclude)]
     return hits + sorted(parents) + features
+
+
+# ── 같은 물건의 여러 기록 (2026-11-02): 장씨카메라는 같은 물건(같은 번호 sn.)을 제목만 바꿔 여러 번 올림
+# ('MP Black Paint sn.2890' · 'MP sn.2890'). 간단한 제목은 기본형·세대 미표기로 가서 모델이 갈라지고 매물 수가 부풂.
+# 같은 매장·같은 번호·같은 계열이면 한 물건: 가장 자세한 제목의 모델로 맞추고, 하나만 남기고 나머지는 entity_note='duplicate'.
+# 번호는 다른 상품에도 다시 쓰여서(sn.2061 = 주미룩스 35·엘마리트 28) 계열이 같을 때만, 자세한 모델이 둘 이상이면 건드리지 않음.
+SAME_ITEM_NO = re.compile(r"\bsn\.?\s*(\d{3,6})\b", re.I)
+GENERIC_LEAF = re.compile(r":(standard|unspecified|current|classic|pre-asph-unspecified|asph-unspecified)$|-unspecified$")
+
+
+def _generic_leaf(entity_id: str, ents: dict[str, Any]) -> bool:
+    """기본형·세대 미표기처럼 '더 자세한 표기가 없을 때' 가는 모델"""
+    name = str((ents.get(entity_id) or {}).get("name_ko") or "")
+    return bool(GENERIC_LEAF.search(entity_id)) or any(w in name for w in ("미표기", "표기 없음", "기본형", "(블랙)"))
+
+
+def _family(entity_id: str, catalog: dict[str, Any]) -> str:
+    entity = catalog["entities"].get(entity_id) or {}
+    return entity.get("parent") or entity_id
+
+
+def merge_same_item(records: list[dict[str, Any]], catalog: dict[str, Any] | None = None) -> int:
+    """같은 물건 기록을 묶어 모델을 맞추고 중복 표시. 중복으로 표시한 수를 돌려준다."""
+    catalog = catalog or load_catalog()
+    ents = catalog["entities"]
+    groups: dict[tuple, list[tuple[dict, str]]] = {}
+    for record in records:
+        final = record.get("final_output") or {}
+        m = SAME_ITEM_NO.search(str(final.get("title_raw") or ""))
+        if not m:
+            continue
+        leaves = [i for i in record.get("entity_ids") or [] if i in ents and not ents[i].get("children") and not ents[i].get("feature")]
+        if len(leaves) != 1:
+            continue
+        groups.setdefault((final.get("source"), m.group(1), _family(leaves[0], catalog)), []).append((record, leaves[0]))
+    marked = 0
+    for members in groups.values():
+        if len(members) < 2:
+            continue
+        specific = {leaf for _, leaf in members if not _generic_leaf(leaf, ents)}
+        if len(specific) > 1:
+            continue  # 자세한 모델끼리 다름 → 다른 물건일 수 있어 그대로
+        if specific:
+            target = specific.pop()
+            for record, leaf in members:
+                if leaf != target:
+                    title = record_title(record)
+                    record["entity_ids"] = _with_parents([target], catalog, title)
+        # 남길 기록: 판매 중 > 가격 있음 > 최근에 처음 본 것
+        def rank(item):
+            final = item[0].get("final_output") or {}
+            return (final.get("sold_quality") == "asking", bool(final.get("parsed_price_numeric")), str(final.get("first_seen") or ""))
+        keep = max(members, key=rank)[0]
+        for record, _ in members:
+            if record is not keep and not (record.get("final_output") or {}).get("entity_note"):
+                record.setdefault("final_output", {})["entity_note"] = "duplicate"
+                marked += 1
+    return marked
 
 
 def annotate_records(records: Iterable[dict[str, Any]]) -> None:

@@ -97,7 +97,7 @@ fam("leica:body:nasa", "Leica NASA (MDa · Leicaflex SL MOT for space use)", "�
 fam("leica:body:ke-7a", "Leica KE-7A (US Army M4)", "라이카 KE-7A (미군 M4)", "M", [r"KE-? ?7A?\b"], [], ["ke7a", "ke-7a", "ke 7a", "leica ke-7a"])
 fam("leica:body:m4", "Leica M4", "라이카 M4", "M", [r"\bM ?4\b(?!-)"], [r"KE-? ?7A?\b"], ["엠4"], [
     BP("M4"),
-    v("50-jahre", "Leica M4 50 Jahre (Black Chrome)", "M4 50주년", r"50 ?jahre|50 ?years|50th|anniversary|black ?chrome", ["m4 50 jahre", "m4 50th anniversary"]),
+    v("50-jahre", "Leica M4 50 Jahre (Black Chrome)", "M4 50주년", r"50 ?jahre|50 ?years|50th|anniversary", ["m4 50 jahre", "m4 50th anniversary"]),  # M4 블랙은 원래 블랙 크롬이라 'black chrome'은 50주년 근거가 아님 (2026-11-02)
     v("olive", "Leica M4 Olive", "M4 올리브", r"olive|올리브", [], [REPAINT]),
 ])
 fam("leica:body:m4-2", "Leica M4-2", "라이카 M4-2", "M", [r"\bM ?4-2\b"], [], ["m42"], [
@@ -395,8 +395,10 @@ PARENTS["leica:body:digilux"] = ("Leica Digilux (all)", "Body", None, [f"leica:b
                                 ["leica digilux", "digilux", "라이카 디지룩스", "디지룩스"], "라이카 디지룩스 (전체)")
 fam("leica:body:s1", "Leica S1 (scanner camera, 1997 · Pro · Alpha · High Speed)", "라이카 S1 (스캐너 카메라)", None,
     [r"\bS1\b", r"leica|alpha|high ?speed|scan"], [r"panasonic|lumix|\bS1[RHM]\b"], ["leica s1", "s1 pro", "s1 alpha", "s1 high speed"])
-fam("leica:body:minilux", "Leica Minilux", "라이카 미니룩스", None, [r"minilux"], [r"zoom|줌"], ["미니룩스"])
-fam("leica:body:minilux-zoom", "Leica Minilux Zoom", "라이카 미니룩스 줌", None, [r"minilux", r"zoom|줌"], [], ["minilux zoom", "미니룩스 줌"])
+# 데이터백(18525) 단품은 카메라가 아님 — '카메라 + 데이터백'(with·+·付)은 그대로 (2026-11-02)
+MINILUX_ACC = r"^(?!.*(\bwith\b|\bw/|\+|\bmit\b|付)).*(dat[ae] ?back|datenr|デート|데이터 ?백)|\b18 ?525\b"
+fam("leica:body:minilux", "Leica Minilux", "라이카 미니룩스", None, [r"minilux"], [r"zoom|줌", MINILUX_ACC], ["미니룩스"])
+fam("leica:body:minilux-zoom", "Leica Minilux Zoom", "라이카 미니룩스 줌", None, [r"minilux", r"zoom|줌"], [MINILUX_ACC], ["minilux zoom", "미니룩스 줌"])
 fam("leica:body:cm", "Leica CM", "라이카 CM", None, [r"\bCM\b"], [r"zoom|줌"], [])
 fam("leica:body:cm-zoom", "Leica CM Zoom", "라이카 CM 줌", None, [r"\bCM\b", r"zoom|줌"], [], ["cm zoom"])
 fam("leica:body:c-series", "Leica C1 · C2 · C3 · C11", "라이카 C1·C2·C3", None, [r"\bC ?(1|2|3|11)\b(?! ?[0-9])"], [r"C-?Lux", r"AF-?C ?1", r"C ?2-? ?zoom"], ["c1", "c2", "c3", "c11"])
