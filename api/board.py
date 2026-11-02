@@ -216,11 +216,14 @@ def unsubscribe(member_id: str, sig: str) -> bool:
 
 ALERT_TEXT = {
     "ko": {"subject": "저장한 상품 {n}개에 변화가 있어요", "drop": "가격 내림 {a} → {b} (−{p}%)", "sold": "판매 완료", "gone": "더 이상 안 보임",
-           "list": "저장한 상품 모두 보기", "stop": "이 알림 끄기", "intro": "카메라브릿지에 저장한 상품의 소식입니다."},
+           "list": "저장한 상품 모두 보기", "stop": "이 알림 끄기", "intro": "카메라브릿지에 저장한 상품의 소식입니다.",
+           "want_subject": "찾던 매물 {n}개가 나왔어요", "want": "{name} · {grade} 등급 · 도착 총액 {total} (판매가 {listed}, 배송·세금 포함 예상)"},
     "ja": {"subject": "保存した商品 {n}件に変化があります", "drop": "値下げ {a} → {b}（−{p}%）", "sold": "売り切れ", "gone": "掲載終了",
-           "list": "保存した商品をすべて見る", "stop": "この通知を停止", "intro": "Camera Bridge に保存した商品のお知らせです。"},
+           "list": "保存した商品をすべて見る", "stop": "この通知を停止", "intro": "Camera Bridge に保存した商品のお知らせです。",
+           "want_subject": "探していた商品が{n}件見つかりました", "want": "{name} · {grade}ランク · 到着総額 {total}（販売価格 {listed}、送料・税込の見込み）"},
     "en": {"subject": "{n} of your saved listings changed", "drop": "Price dropped {a} → {b} (−{p}%)", "sold": "Sold", "gone": "No longer listed",
-           "list": "See all saved listings", "stop": "Turn off these emails", "intro": "Updates on the listings you saved on Camera Bridge."},
+           "list": "See all saved listings", "stop": "Turn off these emails", "intro": "Updates on the listings you saved on Camera Bridge.",
+           "want_subject": "{n} listings match what you're looking for", "want": "{name} · grade {grade} · est. delivered {total} (listed {listed}, incl. shipping & taxes)"},
 }
 
 
@@ -254,6 +257,14 @@ def _alert_email(member_id: str, alerts: dict, events: list[dict]) -> tuple[str,
     text = ALERT_TEXT.get((alerts.get("locale") or "en")[:2], ALERT_TEXT["en"])
     rows = []
     for event in events:
+        if event["kind"] == "want":
+            match, want = event["match"], event["want"]
+            note = text["want"].format(name=want.get("name") or want["entity"], grade=match["grade"], total=_fmt(match["total"], want["currency"]),
+                                       listed=_fmt(match["listed"], match["listed_currency"]))
+            rows.append(f'<tr><td style="padding:8px 0;border-bottom:1px solid #ddd"><a href="{html.escape(match["url"] or "")}" style="color:#16181a">'
+                        f'{html.escape(match.get("title") or match["url"] or "")}</a><br><span style="color:#5d6266;font-size:13px">'
+                        f'{html.escape(match.get("source") or "")} · {html.escape(note)}</span></td></tr>')
+            continue
         item = event["item"]
         if event["kind"] == "drop":
             pct = round((1 - event["after"] / event["before"]) * 100)
@@ -268,7 +279,9 @@ def _alert_email(member_id: str, alerts: dict, events: list[dict]) -> tuple[str,
             f'<p>{html.escape(text["intro"])}</p><table style="width:100%;border-collapse:collapse">{"".join(rows)}</table>'
             f'<p><a href="https://camerabridge.io/#saved" style="color:#16181a">{html.escape(text["list"])}</a></p>'
             f'<p style="color:#878b8d;font-size:12px"><a href="{stop}" style="color:#878b8d">{html.escape(text["stop"])}</a> · Camera Bridge</p></div>')
-    return text["subject"].format(n=len(events)), body
+    wanted = sum(1 for e in events if e["kind"] == "want")
+    subject = text["want_subject"].format(n=wanted) if wanted == len(events) else text["subject"].format(n=len(events))
+    return subject, body
 
 
 def _send_email(to: str, subject: str, body: str) -> bool:
@@ -291,11 +304,17 @@ def _current_listings_safe():
         return None
 
 
-def run_alerts(current: dict | None = None, send=None) -> dict:
-    """알림을 켠 회원마다 변화를 모아 한 통씩. 보내지 못하면 notified_*를 저장하지 않아 다음에 다시 시도."""
+def run_alerts(current: dict | None = None, send=None, records=None) -> dict:
+    """알림을 켠 회원마다 변화(저장한 상품 + 원하는 매물)를 모아 한 통씩. 보내지 못하면 notified를 저장하지 않아 다음에 다시 시도."""
     send = send or _send_email
     blob = _blob()
     current = current if current is not None else _current_listings()
+    records_cache = {"v": records}
+
+    def recs():
+        if records_cache["v"] is None:
+            records_cache["v"] = _current_records()
+        return records_cache["v"]
     members = sent = 0
     for item in _names(blob, "board/members/"):
         member = _read(blob, item) or {}
@@ -305,12 +324,17 @@ def run_alerts(current: dict | None = None, send=None) -> dict:
         members += 1
         items = _saves(blob, member["id"])
         events = _alert_events(items, current)
+        wants = _wants(blob, member["id"])
+        if wants:
+            events += _want_events(wants, recs())
         if events:
             subject, body = _alert_email(member["id"], alerts, events)
             if not send(alerts["email"], subject, body):
                 continue
             sent += 1
         _put(blob, f"board/saves/{member['id']}.json", {"items": items})
+        if wants:
+            _put(blob, f"board/wants/{member['id']}.json", {"items": wants})
     return {"ok": True, "members": members, "sent": sent}
 
 
@@ -592,6 +616,126 @@ def unsave_item(body: dict, member_id: str | None) -> tuple[int, dict]:
     return 200, {"ok": True, "urls": [i["url"] for i in items]}
 
 
+# ── 원하는 매물 알림: 모델·최소 등급·세금까지 낸 최대 총액 → 조건에 맞는 새 매물이 나오면 메일 ──
+WANT_LIMIT = 20
+GRADE_ORDER = ["N", "S", "A", "B", "C", "D"]
+
+
+def _wants(blob, member_id: str) -> list[dict]:
+    return (_read(blob, f"board/wants/{member_id}.json") or {}).get("items") or []
+
+
+def _current_records() -> list[tuple[dict, list]]:
+    """지금 색인의 (매물, 연결된 모델들)"""
+    import sys  # noqa: WPS433
+    from pathlib import Path  # noqa: WPS433
+    root = Path(__file__).resolve().parents[1]
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from search_index import DEFAULT_SEARCH_INDEX_PATH, load_search_index  # noqa: WPS433
+    path = Path(DEFAULT_SEARCH_INDEX_PATH)
+    records = load_search_index(path if path.is_absolute() else root / path)
+    return [(r.get("final_output") or {}, r.get("entity_ids") or []) for r in records]
+
+
+def want_matches(want: dict, records) -> list[dict]:
+    """판매 중이고, 그 모델(하위 모델 포함)이고, 등급이 최소 등급 이상이고, 도착 총액이 상한 이하인 매물 (싼 순)"""
+    import sys  # noqa: WPS433
+    from pathlib import Path  # noqa: WPS433
+    root = Path(__file__).resolve().parents[1]
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from condition_grade import grade_of  # noqa: WPS433
+    from landed_cost import landed_total  # noqa: WPS433
+    floor = GRADE_ORDER.index(want["grade"]) if want.get("grade") in GRADE_ORDER else len(GRADE_ORDER) - 1
+    out = []
+    for final, entity_ids in records:
+        if want["entity"] not in entity_ids or final.get("sold_quality") != "asking":
+            continue
+        if (final.get("entity_note") or "") in ("too_cheap",):
+            continue
+        grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
+        if grade not in GRADE_ORDER or GRADE_ORDER.index(grade) > floor:
+            continue  # 등급을 모르는 매물은 알리지 않음 (컨디션을 확인할 수 없어서)
+        cost = landed_total(final, want["currency"], want["dest"])
+        total = (cost or {}).get("total")
+        if total is None or total > want["max_total"]:
+            continue
+        out.append({"url": final.get("source_url"), "title": final.get("title_raw"), "source": final.get("source"), "grade": grade,
+                    "total": total, "listed": cost["listed"], "listed_currency": cost["currency"], "image": final.get("image_url")})
+    return sorted(out, key=lambda m: m["total"])
+
+
+def want_add(body: dict, member_id: str | None, records=None) -> tuple[int, dict]:
+    if not member_id:
+        return 401, {"ok": False, "error": "login"}
+    entity = _clip(body.get("entity"), 120)
+    if not re.fullmatch(r"leica:[a-z0-9:._+-]+", entity):
+        return 400, {"ok": False, "error": "entity"}
+    grade = str(body.get("grade") or "B").upper()
+    currency = str(body.get("currency") or "").upper()[:3]
+    dest = str(body.get("dest") or "").upper()[:2]
+    try:
+        max_total = float(body.get("max_total"))
+    except (TypeError, ValueError):
+        return 400, {"ok": False, "error": "price"}
+    import sys  # noqa: WPS433
+    from pathlib import Path  # noqa: WPS433
+    root = Path(__file__).resolve().parents[1]
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
+    from landed_cost import load_rates, load_rules  # noqa: WPS433
+    if grade not in GRADE_ORDER or max_total <= 0 or currency not in load_rates() or dest not in (load_rules().get("destinations") or {}):
+        return 400, {"ok": False, "error": "bad"}
+    blob = _blob()
+    items = [w for w in _wants(blob, member_id) if not (w.get("entity") == entity and w.get("grade") == grade)]
+    if len(items) >= WANT_LIMIT:
+        return 400, {"ok": False, "error": "limit"}
+    want = {"id": secrets.token_hex(4), "entity": entity, "name": _clip(body.get("name"), 120) or entity, "grade": grade,
+            "max_total": max_total, "currency": currency, "dest": dest, "since": _now()[0].isoformat(timespec="seconds")}
+    matches = want_matches(want, records if records is not None else _current_records())
+    want["notified"] = [m["url"] for m in matches]  # 지금 있는 매물은 화면에서 보여 주고, 메일은 새로 나오는 것만
+    items.append(want)
+    _put(blob, f"board/wants/{member_id}.json", {"items": items})
+    member = _member(blob, member_id) or {}
+    return 200, {"ok": True, "want": {k: v for k, v in want.items() if k != "notified"}, "matches": matches[:10],
+                 "alerts": bool((member.get("alerts") or {}).get("email"))}
+
+
+def want_remove(body: dict, member_id: str | None) -> tuple[int, dict]:
+    if not member_id:
+        return 401, {"ok": False, "error": "login"}
+    blob = _blob()
+    items = [w for w in _wants(blob, member_id) if w.get("id") != str(body.get("id") or "")]
+    _put(blob, f"board/wants/{member_id}.json", {"items": items})
+    return 200, {"ok": True}
+
+
+def list_wants(member_id: str | None, records=None) -> tuple[int, dict]:
+    if not member_id:
+        return 401, {"ok": False, "error": "login"}
+    items = _wants(_blob(), member_id)
+    records = records if records is not None else (_current_records() if items else [])
+    out = []
+    for want in items:
+        matches = want_matches(want, records)
+        out.append({**{k: v for k, v in want.items() if k != "notified"}, "count": len(matches), "matches": matches[:5]})
+    return 200, {"ok": True, "items": out}
+
+
+def _want_events(wants: list[dict], records) -> list[dict]:
+    """지난번 알린 뒤 새로 조건에 맞게 된 매물. wants를 고쳐 놓음(notified)."""
+    events = []
+    for want in wants:
+        matches = want_matches(want, records)
+        seen = set(want.get("notified") or [])
+        for match in matches:
+            if match["url"] not in seen:
+                events.append({"kind": "want", "want": want, "match": match})
+        want["notified"] = sorted(seen | {m["url"] for m in matches})[-500:]
+    return events
+
+
 def _current_listings() -> dict[str, dict]:
     """원래 주소 → 지금 색인의 매물 (가격·판매 상태). 검색 색인을 불러옴 (파일이 바뀔 때만 다시 읽음)."""
     import sys  # noqa: WPS433
@@ -723,6 +867,9 @@ class handler(BaseHTTPRequestHandler):
                 done = unsubscribe(query.get("m", ""), query.get("s", ""))
                 message = "알림을 껐습니다. · Email alerts are turned off." if done else "링크가 맞지 않습니다. · This link is not valid."
                 return self._send(200 if done else 400, f"<!doctype html><meta charset=utf-8><meta name=robots content=noindex><p style='font:16px sans-serif;margin:40px'>{message} <a href='https://camerabridge.io/'>camerabridge.io</a></p>", "text/html; charset=utf-8")
+            if query.get("r") == "wants":
+                status, payload = list_wants(self._member_id())
+                return self._send(status, payload)
             if query.get("r") == "saves":
                 status, payload = list_saves(self._member_id(), with_status=bool(query.get("full")))
                 return self._send(status, payload)
@@ -781,6 +928,10 @@ class handler(BaseHTTPRequestHandler):
                 status, payload = save_item(body, member_id)
             elif action == "unsave":
                 status, payload = unsave_item(body, member_id)
+            elif action == "want":
+                status, payload = want_add(body, member_id)
+            elif action == "unwant":
+                status, payload = want_remove(body, member_id)
             elif action == "report":
                 status, payload = report(body, self.headers)
             else:

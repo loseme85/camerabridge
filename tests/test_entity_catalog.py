@@ -625,3 +625,24 @@ def test_mixed_models_second_pass() -> None:
     assert "leica:body:m4:black-paint" in ids("Leica M4, black lacquered Body", "Body")
     assert "leica:body:m-a:titan" in ids("Leica M-A 10372 'Titan' set Body", "Body")
     assert "leica:body:i" in ids("Leica A型(Old Elmar)", "Body", None)
+
+
+def test_listing_date_from_image_url() -> None:
+    import datetime as dt
+    from listing_date import as_datetime_text, estimate_listed
+    today = dt.date(2026, 11, 2)
+    assert estimate_listed("https://jangcamera.com/web/product/medium/202412/487bee.jpg", today) == ("2024-12", "month")
+    assert estimate_listed("https://x.com/wp-content/uploads/2026/06/2-38.jpg", today) == ("2026-06", "month")
+    assert estimate_listed("https://cdn.shopify.com/s/files/1/files/CM23058.webp?v=1783637860", today) == ("2026-07-10", "day")
+    assert estimate_listed("https://lecuit.lu/WebRoot/E/0074/260915-occ-leica-q2.jpg", today) == ("2026-09-15", "day")
+    assert estimate_listed("https://x.com/web/product/big/203012/a.jpg", today) == (None, None)  # 미래 날짜는 버림
+    assert estimate_listed("https://images.sumup.com/img_3NP3", today) == (None, None)
+    assert as_datetime_text("2024-12") == "2024-12-15 00:00:00"
+
+
+def test_unknown_sale_date_uses_listing_date_for_weight() -> None:
+    import sys
+    sys.path.insert(0, "app/services")
+    from price_engine import sold_when
+    assert sold_when({"sold_at": "2026-10-04 10:00:00", "sold_at_unknown": True, "listed_est": "2023-05"}) == "2023-05-15 00:00:00"
+    assert sold_when({"sold_at": "2026-10-20 10:00:00", "listed_est": "2026-10"}) == "2026-10-20 10:00:00"

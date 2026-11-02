@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from fx_history import krw_per_unit_on  # noqa: E402
+from listing_date import as_datetime_text  # noqa: E402
 
 LAMBDA = 0.1  # 감쇠 상수 (1년 전 = 가중치 ~30%)
 MIN_SAMPLES = 3  # 최소 샘플 수
@@ -62,12 +63,20 @@ def _price_number(price_str: str) -> float:
         return 0
 
 
+def sold_when(item: dict) -> str:
+    """팔린 때: 기록된 판매 시각, 판매일을 모르면(처음 볼 때 이미 팔림) 처음 본 날 대신 게시 추정일 (사진 올린 날짜).
+    처음 본 날로 두면 몇 년 전 판매 기록이 최근 판매처럼 무겁게 들어감"""
+    if item.get("sold_at_unknown"):
+        return as_datetime_text(item.get("listed_est")) or ""
+    return item.get("sold_at") or ""
+
+
 def sold_price_krw(item: dict) -> float:
     """판매완료가 → 원화. 팔린 순간 환율(sold_fx_krw) → 팔린 날 환율(fx_history) 순으로, 둘 다 없으면 예전 대략 환율."""
     currency = str(item.get("currency") or "KRW").upper()
     if currency == "KRW":
         return parse_price_krw(item.get("price", ""), "KRW")
-    rate = item.get("sold_fx_krw") or krw_per_unit_on(currency, item.get("sold_at"))
+    rate = (None if item.get("sold_at_unknown") else item.get("sold_fx_krw")) or krw_per_unit_on(currency, sold_when(item) or item.get("sold_at"))
     if rate:
         return _price_number(item.get("price", "")) * rate
     if currency in ("GBP", "JPY", "USD", "EUR"):
@@ -115,7 +124,7 @@ def compute_market_prices(sold_quality_path: str = "data/derived/sold_quality_la
             price = sold_price_krw(item)
             if price <= 0:
                 continue
-            w = calc_weight(item.get("sold_at",""), now)
+            w = calc_weight(sold_when(item), now)
             prices.append(price)
             weights.append(w)
 
