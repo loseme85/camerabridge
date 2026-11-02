@@ -6093,6 +6093,60 @@ def crawl_therangefinder():
     print(f"  ✅ The Rangefinder 완료: {len(results)}개")
     return results
 
+
+def crawl_leicastoreau(page):
+    """Leica Store Australia (멜버른·시드니 공식 매장, Pronto Avenue 몰) - 중고 분류 3곳(바디·렌즈·액세서리)을 브라우저로 열어
+    카드의 이름·가격(AUD, GST 포함)·사진을 읽는다 (목록을 스크립트로 그려서 브라우저 필요). robots.txt Crawl-delay 30초 지킴 →
+    한 번에 1분 30초쯤, 하루 한 번. 목록에 있는 것은 판매 중. 등급 표기 없음 (상세에만 글로 있음)"""
+    import html as _html
+    base = "https://www.leica-store.com.au"
+    results, seen = [], set()
+    print(f"\n  📂 Leica Store Australia 크롤링 시작")
+    for n, section in enumerate(("camerasbodies", "Lenses", "accessories")):
+        if n:
+            time.sleep(30)
+        page.goto(f"{base}/categories/photography/preowned/{section}", wait_until="domcontentloaded", timeout=60_000)
+        try:
+            page.wait_for_selector("div.product-title a", timeout=30_000)
+        except Exception:
+            print(f"    └─ {section}: 상품 없음")
+            continue
+        time.sleep(2)
+        html = page.content()
+        cards = re.split(r'<li class="col-xs-12', html)[1:]
+        for card in cards:
+            link = re.search(r'<div class="product-title">\s*<a href="(/products/[^"]+)">\s*([^<]+?)\s*</a>', card)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            name = re.sub(r"\s*\(pre-owned\)\s*", " ", _html.unescape(link.group(2)), flags=re.I).strip()
+            if not re.search(r"\b(?:leica|leitz)\b", name, re.I):
+                name = "Leica " + name
+            pr = re.search(r'<div class="price">\$([\d,]+)(?:\.\d{2})?</div>', card)
+            price = f"A${pr.group(1)}" if pr else "문의요망"
+            img = re.search(r'<img data-src="(https://[^"]+)"[^>]*class="primary-image', card)
+            cat = "Accessory" if section == "accessories" else detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Leica Store Australia (호주)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "AUD",
+                "이미지": img.group(1) if img else "",
+                "링크": base + link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {section}: {len(cards)}개")
+    print(f"  ✅ Leica Store Australia 완료: {len(results)}개")
+    return results
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8224,6 +8278,7 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Leica Store Amsterdam (네덜란드)": 6,  # 매물마다 상세 (약 55개, 2초 간격이라 2분쯤)
     "PhotoCo (호주)": 24,  # robots.txt Crawl-delay 600초, 목록 2쪽 (약 10분)
     "J-カメラ (일본)": 6,  # Crawl-delay 10초, 7쪽 안팎
+    "Leica Store Australia (호주)": 24,  # 브라우저, Crawl-delay 30초 (1분 30초쯤)
     **{site: 6 for _, _, site in LEICA_CLASSIC_COUNTRIES},  # 사이트맵 + 새 매물 상세 (나라별 사이트가 한 번에 같이)
 }
 
@@ -8354,6 +8409,7 @@ def crawl_all():
         ("Used.cl (칠레)", lambda: ce.wrap_full_run("Used.cl (칠레)", crawl_usedcl)),
         ("Foto Dotti (이탈리아)", lambda: ce.wrap_full_run("Foto Dotti (이탈리아)", crawl_fotodotti)),
         ("The Rangefinder (캐나다)", lambda: ce.wrap_full_run("The Rangefinder (캐나다)", crawl_therangefinder)),
+        ("Leica Store Australia (호주)", lambda: ce.wrap_full_run("Leica Store Australia (호주)", lambda: _with_browser(crawl_leicastoreau))),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
