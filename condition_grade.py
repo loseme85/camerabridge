@@ -61,8 +61,10 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
     if _NEW.search(title):
         return "N", "title"
     pct = re.fullmatch(r"(\d{2,3})\s?%", cond)
-    if pct:
+    if pct and int(pct.group(1)) <= 100:  # '400%'는 컨디션이 아니라 상품 크기 (BE@RBRICK 400%, 2026-11-02 등급 점검에서 발견)
         return from_percent(int(pct.group(1))), "label"
+    if pct:
+        return None, None
     up = cond.upper()
     if site and ("기타무라" in site or "일본" in site) and up in _JP:
         return _JP[up], "label"

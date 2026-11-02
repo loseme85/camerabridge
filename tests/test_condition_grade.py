@@ -419,3 +419,22 @@ def test_jcamera_mixed_grade_words() -> None:
     assert grade_of(site, JCAMERA_PREFIX + "美品Aランク", "Leica M6")[0] == "A"
     assert grade_of(site, JCAMERA_PREFIX + "程度はAB-です。", "Leica M10-R")[0] == "B"
     assert grade_of(site, JCAMERA_PREFIX + "AB", "Leica Summicron 50mm f2")[0] == "B"
+
+
+def test_percent_over_100_is_not_a_condition():
+    assert grade_of("라이카스토어 충무로", "400%", "[위탁] Leica BE@RBRICK Royal Selangor 400%") == (None, None)
+    assert grade_of("라이카스토어 충무로", "97%", "M 35/2 Summicron")[0] == "A"
+
+
+def test_grade_audit_sampling_is_even_across_labels():
+    import importlib.util
+    from pathlib import Path
+    spec = importlib.util.spec_from_file_location("grade_audit", Path(__file__).resolve().parents[1] / "scripts" / "grade_audit.py")
+    audit = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(audit)
+    rows = [{"label": "A", "n": i} for i in range(30)] + [{"label": "C", "n": i} for i in range(3)]
+    picked = audit.stratified(rows, 6, seed=1)
+    assert sum(1 for r in picked if r["label"] == "C") == 3  # 드문 표기도 빠지지 않게
+    history = {"sites": {"old": {"last": "2026-10-01"}, "new": {"last": "2026-11-01"}}}
+    by_site = {"old": [{}] * 20, "new": [{}] * 20, "never": [{}] * 15, "tiny": [{}] * 3}
+    assert audit.pick_sites(by_site, history, 3) == ["never", "old", "new"]  # 안 본 곳 → 오래된 곳, 표본 적은 곳은 빼고
