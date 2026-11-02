@@ -69,6 +69,7 @@ FINAL_OUTPUT_FIELDS = [
     "sold_at",
     "sold_fx_krw",
     "sold_at_unknown",
+    "listed_est",
     "source_marketplace",
     "source_item_id",
     "legacy_item_id",

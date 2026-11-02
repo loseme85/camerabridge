@@ -19,6 +19,7 @@ sys.path.insert(0, str(ROOT))
 from condition_grade import grade_of  # noqa: E402
 from entity_catalog import annotate_records, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, price_krw  # noqa: E402
 from fx_history import krw_per_unit_on  # noqa: E402
+from listing_date import as_datetime_text  # noqa: E402
 
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
@@ -142,7 +143,8 @@ def main() -> None:
         sold = str(final.get("sold_quality") or "").startswith("sold")
         rate = to_krw.get(str(final.get("currency") or "KRW").upper())
         if sold:  # 판매완료는 팔린 날 환율로 (기록된 그 순간 환율 → 날짜별 환율 → 없으면 오늘 환율)
-            rate = final.get("sold_fx_krw") or krw_per_unit_on(final.get("currency"), final.get("sold_at")) or rate
+            when = (as_datetime_text(final.get("listed_est")) if final.get("sold_at_unknown") else None) or final.get("sold_at")
+            rate = (None if final.get("sold_at_unknown") else final.get("sold_fx_krw")) or krw_per_unit_on(final.get("currency"), when) or rate
         krw = price * rate if price and rate and id(record) not in too_cheap else None  # 너무 싼 매물은 시세에서 뺌
         grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
         prefix = "set_" if id(record) in sets else ""

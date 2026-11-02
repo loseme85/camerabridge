@@ -48,6 +48,8 @@ FINAL_OUTPUT_FIELDS = [
     "first_seen",
     "last_seen",
     "sold_at",  # 시세 계산: 처음 본 날 → 팔린 날 (보통 며칠 안에 팔리나)
+    "sold_at_unknown",  # 처음 볼 때 이미 판매완료라 실제 판매일을 모름
+    "listed_est",  # 게시 추정일 (사진 주소의 올린 날짜)
     "source_marketplace",
     "source_item_id",
     "legacy_item_id",
