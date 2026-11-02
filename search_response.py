@@ -52,6 +52,7 @@ FINAL_OUTPUT_FIELDS = [
     "sold_fx_krw",  # 팔린 날 환율 (통화 1단위 = 원), 그래프 말풍선의 그날 환율 금액
     "listed_est",  # 게시 추정일 (사진 주소의 올린 날짜)
     "posted_at",  # 매장이 준 게시일 (Shopify 상품 등록일)
+    "image_grade",  # 사진으로 매긴 등급
     "source_marketplace",
     "source_item_id",
     "legacy_item_id",

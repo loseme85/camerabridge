@@ -27,3 +27,15 @@ def test_sold_history_adds_gone_listings_once():
     assert [x["링크"] for x in out] == ["b", "a"]
     assert out[1]["품절"] is True
     assert _with_sold_history([{"링크": "x"}], None) == [{"링크": "x"}]
+
+
+def test_photo_grades_attach_image_grade():
+    from final_resolution_pipeline import _with_photo_grades
+    import json, tempfile, os
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+        json.dump({"grades": {"a": {"grade": "B"}, "b": {"grade": None, "note": "사진으로 판단 못 함"}}}, f)
+    try:
+        out = _with_photo_grades([{"링크": "a"}, {"링크": "b"}, {"링크": "c"}], f.name)
+    finally:
+        os.unlink(f.name)
+    assert [x.get("image_grade") for x in out] == ["B", None, None]

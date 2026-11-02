@@ -1557,6 +1557,7 @@ def classify_listing_v2(raw_item: dict) -> dict:
         # 게시 추정일: 사진 주소에 남은 올린 날짜 ('2024-12' 달 · '2026-10-15' 날). 판매일 모르는 기록이 언제쯤 팔린 값인지 가늠
         "listed_est":   listed_of(raw_item),
         "posted_at":    posted_of(raw_item),
+        "image_grade":  raw_item.get("image_grade") or None,  # 사진으로 매긴 등급 (photo_grades.json, 매장 표기로 못 정한 매물만)
     }
 
 

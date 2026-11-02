@@ -654,7 +654,7 @@ def want_matches(want: dict, records) -> list[dict]:
             continue
         if (final.get("entity_note") or "") in ("too_cheap",):
             continue
-        grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
+        grade = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))[0] or final.get("image_grade")  # 사진 추정 포함
         if grade not in GRADE_ORDER or GRADE_ORDER.index(grade) > floor:
             continue  # 등급을 모르는 매물은 알리지 않음 (컨디션을 확인할 수 없어서)
         cost = landed_total(final, want["currency"], want["dest"])
