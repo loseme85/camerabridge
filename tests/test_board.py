@@ -206,3 +206,45 @@ def test_failed_send_is_retried_next_time(monkeypatch):
     assert board.run_alerts(current=now, send=lambda *x: False)["sent"] == 0
     got = []
     assert board.run_alerts(current=now, send=lambda *x: got.append(x) or True)["sent"] == 1 and got
+
+
+def _rec(url, price, currency="KRW", source="국민카메라", cond="", title="Leica Summicron 35mm f2 4th", entity="leica:lens:summicron-m:35:v4",
+         status="asking"):
+    return ({"source_url": url, "title_raw": title, "source": source, "currency": currency, "parsed_price_numeric": price,
+             "condition_raw": cond, "category": "Lens", "sold_quality": status},
+            [entity, "leica:lens:summicron-m:35"])
+
+
+def test_want_alert_by_grade_and_delivered_total(monkeypatch):
+    fake, _ = _setup(monkeypatch)
+    monkeypatch.setattr(board, "google_identity", lambda c: {"sub": "sub-a", "email": "a@example.com", "email_verified": True})
+    a = _join("tok-a", "필름러")
+    records = [_rec("https://k/1", 2400000, cond="95%"),  # A, 국내 → 총액 240만 + 배송
+               _rec("https://k/2", 2000000, cond="85%"),  # C → 등급 미달
+               _rec("https://k/3", 3000000, cond="97%"),  # 총액 초과
+               _rec("https://k/4", 1500000, cond=""),  # 등급 모름 → 알리지 않음
+               _rec("https://k/5", 2000000, cond="96%", status="sold_confirmed")]  # 팔림
+    status, out = board.want_add({"entity": "leica:lens:summicron-m:35:v4", "name": "Summicron 35 4th", "grade": "B",
+                                  "max_total": 2500000, "currency": "KRW", "dest": "KR"}, a, records=records)
+    assert status == 200 and [m["url"] for m in out["matches"]] == ["https://k/1"] and out["alerts"] is False
+    assert out["matches"][0]["total"] == 2407000  # 판매가 + 국내 배송 (세금 없음)
+    # 부모 모델로 걸어도 하위 모델 매물이 잡힘 (A 이상: 97%만, 95%는 B)
+    assert [m["url"] for m in board.want_add({"entity": "leica:lens:summicron-m:35", "grade": "A", "max_total": 5000000, "currency": "KRW",
+                                              "dest": "KR"}, a, records=records)[1]["matches"]] == ["https://k/3"]
+    assert board.want_add({"entity": "bad id", "grade": "B", "max_total": 1, "currency": "KRW", "dest": "KR"}, a)[0] == 400
+    assert board.want_add({"entity": "leica:lens:x", "grade": "B", "max_total": 1, "currency": "XXX", "dest": "KR"}, a)[0] == 400
+    # 메일은 알림을 켠 회원에게, 등록할 때 있던 매물은 빼고 새로 나온 것만
+    board.alerts_on({"credential": "x", "locale": "ko"}, a, current={})
+    sent = []
+    send = lambda to, subject, body: sent.append((to, subject, body)) or True
+    assert board.run_alerts(current={}, send=send, records=records)["sent"] == 0
+    records.append(_rec("https://k/6", 2100000, cond="A", source="기타무라 (일본)", currency="KRW"))  # 새 매물, 일본 → 한국 (세금 포함)
+    records.append(_rec("https://k/7", 2300000, cond="96%"))  # 새 매물, 국내
+    assert board.run_alerts(current={}, send=send, records=records)["sent"] == 1
+    to, subject, body = sent[0]
+    assert to == "a@example.com" and "찾던 매물" in subject and "https://k/7" in body and "도착 총액" in body
+    assert board.run_alerts(current={}, send=send, records=records)["sent"] == 0  # 같은 매물은 다시 안 보냄
+    status, listed = board.list_wants(a, records=records)
+    assert status == 200 and len(listed["items"]) == 2 and "notified" not in listed["items"][0]
+    board.want_remove({"id": listed["items"][0]["id"]}, a)
+    assert len(board.list_wants(a, records=records)[1]["items"]) == 1

@@ -1099,6 +1099,21 @@
     .save-dialog::backdrop{background:rgba(0,0,0,0.35)}
     @media(max-width:720px){.saved-row{grid-template-columns:56px minmax(0,1fr)}.saved-row img{width:56px;height:42px}.saved-row .saved-price{grid-column:2;text-align:left}}
     .value-calc{margin:28px 0 8px;border-top:1px solid var(--rule);padding-top:14px}
+    .want-form{margin:18px 0 4px;padding-top:12px;border-top:1px dotted var(--border-strong)}
+    .want-form h4{margin:0 0 4px;font-family:var(--serif);font-weight:500;font-size:18px}
+    .want-form p{margin:0 0 10px;font-size:13px;color:var(--text-soft);max-width:680px}
+    .want-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:6px}
+    .want-row select,.want-row input{height:38px;border:1px solid var(--border-strong);border-radius:0;background:var(--surface);color:var(--text);font:inherit;font-size:14px;padding:0 10px}
+    .want-row label{display:grid;gap:3px;font-size:12px;color:var(--text-muted)}
+    .want-row input{width:160px}
+    .want-row .search-button{height:38px;min-width:0;padding:0 16px}
+    .want-form small{color:var(--text-muted);font-size:12px}
+    .want-message{margin-top:10px !important;color:var(--text) !important}
+    .want-list{margin:0 0 18px}
+    .want-list h3{margin:0 0 6px;font-family:var(--serif);font-weight:500;font-size:18px}
+    .want-list ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+    .want-list li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+    .want-list li span{color:var(--text-soft)}
     .value-calc h3{font-family:var(--serif);font-weight:500;font-size:22px;margin:0 0 4px}
     .value-calc>p{margin:0 0 12px;font-size:13px;color:var(--text-soft);max-width:760px}
     .value-calc-controls{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:12px}
@@ -1734,6 +1749,20 @@
         conf_high: { ko: "높음 (같은 등급 {n}건)", en: "High ({n} in this condition)", ja: "高い（同じ状態 {n}件）", 'zh-Hans': "高（同等成色 {n} 件）", 'zh-Hant': "高（同等成色 {n} 件）", pt: "Alta ({n} nesta condição)", es: "Alta ({n} en este estado)", de: "Hoch ({n} in diesem Zustand)", it: "Alta ({n} in questa condizione)" },
         conf_mid: { ko: "보통 (같은 등급 {n}건)", en: "Medium ({n} in this condition)", ja: "普通（同じ状態 {n}件）", 'zh-Hans': "中（同等成色 {n} 件）", 'zh-Hant': "中（同等成色 {n} 件）", pt: "Média ({n} nesta condição)", es: "Media ({n} en este estado)", de: "Mittel ({n} in diesem Zustand)", it: "Media ({n} in questa condizione)" },
         conf_low: { ko: "낮음 (같은 등급 {n}건) — 참고만", en: "Low ({n} in this condition) — use with care", ja: "低い（同じ状態 {n}件）— 参考程度に", 'zh-Hans': "低（同等成色 {n} 件）— 仅供参考", 'zh-Hant': "低（同等成色 {n} 件）— 僅供參考", pt: "Baixa ({n} nesta condição) — use com cautela", es: "Baja ({n} en este estado) — úsalo con cautela", de: "Niedrig ({n} in diesem Zustand) — mit Vorsicht", it: "Bassa ({n} in questa condizione) — con cautela" },
+      },
+      want: {
+        title: { ko: '원하는 매물 알림', en: 'Alert me when one comes up', ja: '希望の商品が出たら通知', 'zh-Hans': '有合适的货时通知我', 'zh-Hant': '有合適的貨時通知我', pt: 'Avise-me quando aparecer', es: 'Avísame cuando aparezca', de: 'Benachrichtigen, wenn eines auftaucht', it: 'Avvisami quando ne arriva uno' },
+        note: { ko: '이 모델이 고른 등급 이상, 배송·관세·부가세까지 낸 총액이 아래 금액 이하로 나오면 매일 아침 메일로 알려 드려요. 등급을 모르는 매물은 알리지 않아요.', en: 'We email you each morning when this model turns up at or above the grade, with the delivered total (shipping, duty and tax) at or below your limit. Listings without a known condition are skipped.', ja: 'この型が選んだランク以上で、送料・関税・消費税込みの総額が上限以下で出たら毎朝メールでお知らせします。状態不明の商品は通知しません。', 'zh-Hans': '当该型号达到所选成色以上、含运费关税的到手总价不超过上限时，每天早上邮件通知。成色未知的商品不通知。', 'zh-Hant': '當該型號達到所選成色以上、含運費關稅的到手總價不超過上限時，每天早上郵件通知。成色未知的商品不通知。', pt: 'Avisamos por e-mail toda manhã quando este modelo aparecer no grau escolhido ou melhor, com total entregue (frete e impostos) até o seu limite. Itens sem estado conhecido são ignorados.', es: 'Te avisamos por correo cada mañana cuando este modelo aparezca con el grado elegido o mejor y un total entregado (envío e impuestos) dentro de tu límite. Se omiten los anuncios sin estado conocido.', de: 'Wir mailen jeden Morgen, wenn dieses Modell in der gewählten Note oder besser zum Lieferpreis (Versand, Zoll, Steuer) unter Ihrem Limit auftaucht. Angebote ohne bekannten Zustand werden übersprungen.', it: 'Ti avvisiamo ogni mattina via email quando questo modello compare nel grado scelto o migliore, con totale consegnato (spedizione e tasse) entro il limite. Gli annunci senza stato noto sono esclusi.' },
+        grade: { ko: '등급 {g} 이상', en: 'Grade {g} or better', ja: '{g}ランク以上', 'zh-Hans': '{g} 级及以上', 'zh-Hant': '{g} 級及以上', pt: 'Grau {g} ou melhor', es: 'Grado {g} o mejor', de: 'Note {g} oder besser', it: 'Grado {g} o migliore' },
+        max: { ko: '도착 총액 상한 ({c})', en: 'Max delivered total ({c})', ja: '到着総額の上限（{c}）', 'zh-Hans': '到手总价上限（{c}）', 'zh-Hant': '到手總價上限（{c}）', pt: 'Total entregue máximo ({c})', es: 'Total entregado máximo ({c})', de: 'Max. Lieferpreis ({c})', it: 'Totale consegnato massimo ({c})' },
+        dest: { ko: '받는 곳: {d}', en: 'Delivered to: {d}', ja: '届け先: {d}', 'zh-Hans': '收货地: {d}', 'zh-Hant': '收貨地: {d}', pt: 'Entrega em: {d}', es: 'Entrega en: {d}', de: 'Lieferung nach: {d}', it: 'Consegna in: {d}' },
+        button: { ko: '알림 신청', en: 'Set alert', ja: '通知を登録', 'zh-Hans': '设置提醒', 'zh-Hant': '設定提醒', pt: 'Criar alerta', es: 'Crear alerta', de: 'Alarm setzen', it: 'Crea avviso' },
+        done: { ko: '등록했어요. 지금 조건에 맞는 매물 {n}개 — 새로 나오는 것만 메일로 알려 드려요.', en: 'Saved. {n} listings match right now — we’ll email only new ones.', ja: '登録しました。今条件に合う商品 {n}件 — 新しく出たものだけメールします。', 'zh-Hans': '已设置。目前有 {n} 件符合 — 只通知新出现的。', 'zh-Hant': '已設定。目前有 {n} 件符合 — 只通知新出現的。', pt: 'Salvo. {n} anúncios atendem agora — enviaremos só os novos.', es: 'Guardado. {n} anuncios coinciden ahora — solo te avisaremos de los nuevos.', de: 'Gespeichert. {n} Angebote passen jetzt — wir melden nur neue.', it: 'Salvato. {n} annunci corrispondono ora — ti avviseremo solo dei nuovi.' },
+        need_email: { ko: '메일로 받으려면 알림을 켜 주세요.', en: 'Turn on email alerts to get these.', ja: 'メールで受け取るには通知をオンにしてください。', 'zh-Hans': '开启邮件提醒以接收通知。', 'zh-Hant': '開啟郵件提醒以接收通知。', pt: 'Ative os alertas por e-mail para recebê-los.', es: 'Activa las alertas por correo para recibirlos.', de: 'E-Mail-Benachrichtigungen einschalten, um sie zu erhalten.', it: 'Attiva gli avvisi email per riceverli.' },
+        list_title: { ko: '원하는 매물 알림', en: 'Your alerts', ja: '希望商品の通知', 'zh-Hans': '我的提醒', 'zh-Hant': '我的提醒', pt: 'Seus alertas', es: 'Tus alertas', de: 'Ihre Alarme', it: 'I tuoi avvisi' },
+        row: { ko: '{g} 이상 · {d} 도착 총액 {p} 이하 · 지금 {n}개', en: '{g}+ · delivered to {d} for {p} or less · {n} now', ja: '{g}以上 · {d}到着 {p}以下 · 現在 {n}件', 'zh-Hans': '{g} 及以上 · 到{d}总价 ≤ {p} · 现在 {n} 件', 'zh-Hant': '{g} 及以上 · 到{d}總價 ≤ {p} · 現在 {n} 件', pt: '{g}+ · entregue em {d} por até {p} · {n} agora', es: '{g}+ · entregado en {d} por {p} o menos · {n} ahora', de: '{g}+ · Lieferung nach {d} bis {p} · {n} jetzt', it: '{g}+ · consegnato in {d} entro {p} · {n} ora' },
+        bad: { ko: '금액을 확인해 주세요.', en: 'Check the amount.', ja: '金額を確認してください。', 'zh-Hans': '请检查金额。', 'zh-Hant': '請檢查金額。', pt: 'Verifique o valor.', es: 'Revisa el importe.', de: 'Bitte Betrag prüfen.', it: "Controlla l'importo." },
+        limit: { ko: '알림은 20개까지예요.', en: 'Up to 20 alerts.', ja: '通知は20件までです。', 'zh-Hans': '最多 20 个提醒。', 'zh-Hant': '最多 20 個提醒。', pt: 'Até 20 alertas.', es: 'Hasta 20 alertas.', de: 'Bis zu 20 Alarme.', it: 'Fino a 20 avvisi.' }
       },
       saves: {
         bell_on: { ko: "가격 알림 켜짐", en: "Price alerts on", ja: "価格通知オン", 'zh-Hans': "价格提醒已开启", 'zh-Hant': "價格提醒已開啟", pt: "Alertas de preço ativados", es: "Alertas de precio activadas", de: "Preisalarm an", it: "Avvisi di prezzo attivi" },
@@ -2903,6 +2932,7 @@
     // ── 상품 스크랩 (구글 로그인 회원만, api/board.py save·unsave·saves) ──
     const saveState = { urls: new Set(), pending: null };
     const sx = key => ux(`saves.${key}`, key);
+    const wx = (key, vars = {}) => Object.entries(vars).reduce((text, [k, v]) => text.split(`{${k}}`).join(v), ux(`want.${key}`, key));
 
     const SAVE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h12v18l-6-5.5L6 21z"/></svg>';
     function saveButtonHtml(url){
@@ -2976,7 +3006,7 @@
       dialog.showModal();
       // 버튼을 그리고, 구글 계정 고르기(원탭)도 바로 띄움 → 계정만 고르면 로그인·저장 (원탭이 막히면 창 안 버튼으로)
       renderGoogleButtons(dialog).then(() => {
-        if(window.google && window.google.accounts && saveState.pending) window.google.accounts.id.prompt();
+        if(window.google && window.google.accounts && (saveState.pending || wantState.pending)) window.google.accounts.id.prompt();
       });
     }
 
@@ -2998,6 +3028,11 @@
       const url = saveState.pending;
       saveState.pending = null;
       if(url && !saveState.urls.has(url)) toggleSave(url);
+      if(wantState.pending){
+        wantState.pending = null;
+        const form = document.querySelector('.want-form');
+        if(form) submitWant(form);
+      }
     }
 
     async function renderSavedView(view){
@@ -3017,6 +3052,7 @@
         renderGoogleButtons(view);
         return;
       }
+      renderWantList(view);
       const { ok, data } = await boardFetch({ r: 'saves', full: 1 }).catch(() => ({ ok: false }));
       const items = ok ? data.items || [] : [];
       if(!items.length){ list.innerHTML = `<li class="board-empty">${escapeHtml(ok ? sx('empty') : bx('err_generic'))}</li>`; return; }
@@ -3062,6 +3098,14 @@
         }
         if(event.target.closest('[data-save-dialog-close]')){ saveState.pending = null; boardState.pendingAlerts = false; document.getElementById('save-dialog').close(); }
         if(event.target.closest('[data-alerts-on]')){ openAlertsConsent(); return; }
+        const wantAdd = event.target.closest('[data-want-add]');
+        if(wantAdd){ submitWant(wantAdd.closest('.want-form')); return; }
+        const wantRemove = event.target.closest('[data-want-remove]');
+        if(wantRemove){
+          await boardSend({ action: 'unwant', id: wantRemove.dataset.wantRemove });
+          renderSavedView(document.getElementById('board-view'));
+          return;
+        }
         if(event.target.closest('[data-alerts-off]')){
           const { ok, data } = await boardSend({ action: 'alerts_off' });
           if(ok){ boardState.member = data.member; syncSaveUi(); }
@@ -3139,7 +3183,65 @@
           ${days.length >= 3 ? `<div><dt>${escapeHtml(cx('days'))}</dt><dd>${escapeHtml(cx('days_value', { d: String(Math.round(calcMedian(days))), n: String(days.length) }))}</dd></div>` : ''}
           <div><dt>${escapeHtml(cx('confidence'))}</dt><dd><small>${escapeHtml(confidence)}</small></dd></div>
         </dl>
+        ${renderWantForm(entity, active.length ? calcMedian(active) : null)}
       </section>`;
+    }
+
+    // ── 원하는 매물 알림: 모델·최소 등급·도착 총액 상한 (세금은 서버가 화면과 같은 규칙으로 계산) ──
+    const wantState = { grade: '', max: '', message: '', pending: null };
+    function renderWantForm(entity, suggest){
+      const grade = wantState.grade || (['S', 'A', 'B', 'C'].includes(calcState.grade) ? calcState.grade : 'B');
+      const max = wantState.max || (suggest ? String(roundEstimate(suggest, uiState.currency)) : '');
+      const options = ['S', 'A', 'B', 'C'].map(g => `<option value="${g}"${g === grade ? ' selected' : ''}>${escapeHtml(wx('grade', { g }))}</option>`).join('');
+      return `<div class="want-form" data-want-entity="${escapeHtml(entity.id)}" data-want-name="${escapeHtml(entity.name || entity.id)}">
+          <h4>${escapeHtml(wx('title'))}</h4>
+          <p>${escapeHtml(wx('note'))}</p>
+          <div class="want-row">
+            <select data-want-grade aria-label="${escapeHtml(wx('grade', { g: '' }))}">${options}</select>
+            <label><span>${escapeHtml(wx('max', { c: uiState.currency }))}</span><input type="number" min="1" step="any" inputmode="decimal" data-want-max value="${escapeHtml(max)}"></label>
+            <button type="button" class="search-button" data-want-add>${escapeHtml(wx('button'))}</button>
+          </div>
+          <small>${escapeHtml(wx('dest', { d: displayNameOf('region', uiState.destination) }))}</small>
+          ${wantState.message ? `<p class="want-message">${wantState.message}</p>` : ''}
+        </div>`;
+    }
+
+    async function submitWant(form){
+      const grade = form.querySelector('[data-want-grade]').value;
+      const max = Number(form.querySelector('[data-want-max]').value);
+      wantState.grade = grade; wantState.max = String(form.querySelector('[data-want-max]').value || '');
+      if(!(max > 0)){ wantState.message = escapeHtml(wx('bad')); renderValueCalc(); return; }
+      const payload = { action: 'want', entity: form.dataset.wantEntity, name: form.dataset.wantName, grade, max_total: max,
+                        currency: uiState.currency, dest: uiState.destination };
+      if(!boardState.member){ wantState.pending = payload; openSaveLogin(null); return; }
+      const { ok, data } = await boardSend(payload);
+      if(!ok){
+        if(data && data.error === 'login'){ boardState.member = null; wantState.pending = payload; openSaveLogin(null); return; }
+        wantState.message = escapeHtml(wx(data && data.error === 'limit' ? 'limit' : 'bad'));
+        renderValueCalc();
+        return;
+      }
+      const matches = data.matches || [];
+      const list = matches.slice(0, 3).map(m => `<a href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${escapeHtml(m.title || m.url)}</a> · ${escapeHtml(m.grade)} · ${escapeHtml(formatMoney(m.total, uiState.currency))}`).join('<br>');
+      wantState.message = escapeHtml(wx('done', { n: String(matches.length) })) + (list ? `<br>${list}` : '')
+        + (data.alerts ? '' : ` <button type="button" class="board-link-button" data-alerts-on>${escapeHtml(wx('need_email'))}</button>`);
+      renderValueCalc();
+    }
+
+    async function renderWantList(view){
+      if(!boardState.member) return;
+      const { ok, data } = await boardFetch({ r: 'wants' }).catch(() => ({ ok: false }));
+      const items = ok ? data.items || [] : [];
+      if(!items.length) return;
+      const section = document.createElement('section');
+      section.className = 'want-list';
+      section.innerHTML = `<h3>${escapeHtml(wx('list_title'))}</h3><ul>${items.map(w => `<li>
+          <strong>${escapeHtml(w.name || w.entity)}</strong>
+          <span>${escapeHtml(wx('row', { g: w.grade, d: displayNameOf('region', w.dest), p: formatMoney(w.max_total, w.currency), n: String(w.count) }))}</span>
+          <button type="button" class="board-link-button" data-want-remove="${escapeHtml(w.id)}">${escapeHtml(sx('remove'))}</button>
+        </li>`).join('')}</ul>`;
+      const list = view.querySelector('.saved-list');
+      if(list) list.before(section);
     }
 
     function bindValueCalc(){
