@@ -5574,6 +5574,79 @@ def crawl_jch():
     return results
 
 
+def crawl_howardparker():
+    """Howard Parker Photographic (영국) - 빈티지 라이카 전문 소규모 매장(SumUp 몰). 사이트맵(sitemap.products.xml)에서
+    leica·leitz 상품 주소를 골라 상세의 구조화 데이터(JSON-LD Product)로 이름·가격(GBP)·재고·사진을 읽는다.
+    'reserved-' 주소·OutOfStock은 예약중/품절. 등급 표기 없어 설명 글('Excellent condition' 등)로 (describe_text)"""
+    import json as _json
+    from concurrent.futures import ThreadPoolExecutor
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import describe_text
+    base = "https://howard-parker.com"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Howard Parker 크롤링 시작")
+    xml = sess.get(f"{base}/sitemap.products.xml", timeout=30)
+    xml.raise_for_status()
+    links = [u for u in re.findall(r"<loc>([^<]+)</loc>", xml.text)
+             if re.search(r"/product/(?:reserved-)?(?:leica|leitz)", u, re.I) and not re.search(r"m-fit-|copy-of", u, re.I)]
+    print(f"    └─ 사이트맵 라이카 상품 {len(links)}개")
+
+    def one(url):
+        html = sess.get(url, timeout=30).text
+        for block in re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, re.S):
+            try:
+                data = _json.loads(block)
+            except ValueError:
+                continue
+            for node in data.get("@graph", [data]) if isinstance(data, dict) else []:
+                if node.get("@type") == "Product":
+                    return url, node
+        return url, None
+
+    results = []
+    with ThreadPoolExecutor(3) as ex:
+        for url, node in ex.map(one, links):
+            if not node:
+                continue
+            offer = node.get("offers") or {}
+            if isinstance(offer, list):
+                offer = offer[0] if offer else {}
+            name = re.sub(r"\s*\[[^\]]*\]\s*$", "", node.get("name") or "").strip()
+            name = re.sub(r"^\[?Reserved\]?\s*[-:]?\s*", "", name, flags=re.I)
+            # 딸린 케이스·상자('in Case'·'Boxed')는 액세서리로 읽히지 않게 뺀다
+            name = re.sub(r"\s+(?:in|with|w/)\s+(?:original\s+)?(?:ever[- ]ready\s+)?(?:case|box)\b", "", name, flags=re.I)
+            name = re.sub(r"\s+(?:boxed|in original box)\b", "", name, flags=re.I)
+            try:
+                price = f"£{float(offer.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            imgs = node.get("image") or []
+            img = imgs[0] if isinstance(imgs, list) and imgs else (imgs if isinstance(imgs, str) else "")
+            reserved = "/product/reserved-" in url
+            sold = "OutOfStock" in str(offer.get("availability") or "") and not reserved
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Howard Parker (영국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": describe_text(node.get("description") or "") or "정보없음",
+                "가격": price,
+                "통화": "GBP",
+                "이미지": img,
+                "링크": url,
+                "품절": sold,
+                "예약중": reserved,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+    print(f"  ✅ Howard Parker 완료: {len(results)}개")
+    return results
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -7695,7 +7768,8 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Leica Store Poland (폴란드)": 6,  # 매물마다 상세, Crawl-delay 2초 (약 40개 · 2분)
-    "Photo Warehouse (뉴질랜드)": 6,  # 매물마다 상세 (약 70개 · 1분)
+    "Photo Warehouse (뉴질랜드)": 6,
+    "Howard Parker (영국)": 6,  # 매물마다 상세 (약 50개)  # 매물마다 상세 (약 70개 · 1분)
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
     "Calumet (독일)": 6,  # 상품 화면 120개쯤 (4~5분)
@@ -7825,6 +7899,7 @@ def crawl_all():
         ("M&S Materiale Fotografico (이탈리아)", lambda: ce.wrap_full_run("M&S Materiale Fotografico (이탈리아)", crawl_msmateriale)),
         ("Leica Store Poland (폴란드)", lambda: ce.wrap_full_run("Leica Store Poland (폴란드)", crawl_leicastorepl)),
         ("Photo Warehouse (뉴질랜드)", lambda: ce.wrap_full_run("Photo Warehouse (뉴질랜드)", crawl_photowarehouse)),
+        ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
