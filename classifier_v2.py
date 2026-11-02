@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Optional
 from model_detector import detect_model
 from accessory_classifier import classify_accessory
-from listing_date import estimate_listed
+from listing_date import listed_of, posted_of
 
 
 # ─────────────────────────────────────────────
@@ -1555,7 +1555,8 @@ def classify_listing_v2(raw_item: dict) -> dict:
         "sold_at_unknown": bool(is_sold) and (bool(raw_item.get("sold_at_unknown")) or not raw_item.get("sold_at")
                                               or raw_item.get("sold_at") == raw_item.get("first_seen")),
         # 게시 추정일: 사진 주소에 남은 올린 날짜 ('2024-12' 달 · '2026-10-15' 날). 판매일 모르는 기록이 언제쯤 팔린 값인지 가늠
-        "listed_est":   estimate_listed(raw_item.get("이미지"))[0],
+        "listed_est":   listed_of(raw_item),
+        "posted_at":    posted_of(raw_item),
     }
 
 

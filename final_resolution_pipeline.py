@@ -58,6 +58,7 @@ from search_index import DEFAULT_SEARCH_INDEX_PATH, write_search_index
 
 
 DEFAULT_INPUT_PATH = PROJECT_ROOT / "data/raw/results.json"
+DEFAULT_SOLD_HISTORY_PATH = PROJECT_ROOT / "data/sold_items.json"
 DEFAULT_DERIVED_DIR = PROJECT_ROOT / "data/derived"
 DEFAULT_CLASSIFIED_OUTPUT_PATH = DEFAULT_DERIVED_DIR / "results_classified_v2.json"
 DEFAULT_RESOLVED_OUTPUT_PATH = DEFAULT_DERIVED_DIR / "results_resolved_v2.json"
@@ -74,6 +75,27 @@ def _load_items(path: str | Path) -> list[dict[str, Any]]:
     if not isinstance(payload, list):
         raise ValueError(f"{path} must contain a list of raw listing objects")
     return payload
+
+
+def _with_sold_history(items: list[dict[str, Any]], path: str | Path | None) -> list[dict[str, Any]]:
+    """판매 기록(sold_items.json) 중 지금 목록에 없는 것을 판매완료로 더한다.
+    해외 매장 대부분은 팔리면 목록에서 지워서(사라짐) 그래프·시세에 판매 점이 안 나오던 것 (2026-11-02)."""
+    if not path or not Path(path).exists():
+        return items
+    try:
+        sold = _load_items(path)
+    except ValueError:
+        return items
+    links = {item.get("링크") for item in items}
+    extra = []
+    for record in sold:
+        link = record.get("링크")
+        price = record.get("가격")
+        if not link or link in links or not price or price == "문의요망" or not record.get("is_sold"):
+            continue
+        extra.append({**record, "품절": True})
+        links.add(link)
+    return items + extra
 
 
 def _write_json(path: str | Path, payload: Any) -> None:
@@ -221,8 +243,9 @@ def write_resolved_outputs(
     trusted_path: str | Path = DEFAULT_TRUSTED_METADATA_PATH,
     curated_path: str | Path = DEFAULT_CURATED_REFERENCE_PATH,
     limit: Optional[int] = None,
+    sold_history_path: str | Path | None = None,
 ) -> dict[str, Any]:
-    items = _load_items(input_path)
+    items = _with_sold_history(_load_items(input_path), sold_history_path)
     if limit is not None:
         items = items[:limit]
 
@@ -263,6 +286,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--trusted-metadata", default=str(DEFAULT_TRUSTED_METADATA_PATH))
     parser.add_argument("--curated-reference", default=str(DEFAULT_CURATED_REFERENCE_PATH))
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--sold-history", default=str(DEFAULT_SOLD_HISTORY_PATH), help="판매 기록 (목록에서 사라진 판매완료), 빈 값이면 안 씀")
     return parser.parse_args()
 
 
@@ -277,6 +301,7 @@ def main() -> None:
         trusted_path=args.trusted_metadata,
         curated_path=args.curated_reference,
         limit=args.limit,
+        sold_history_path=args.sold_history or None,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
