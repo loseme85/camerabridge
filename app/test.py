@@ -6034,6 +6034,65 @@ def crawl_fotodotti():
     print(f"  ✅ Foto Dotti 완료: {len(results)}개")
     return results
 
+
+def crawl_therangefinder():
+    """The Rangefinder (캐나다 몬트리올) - WooCommerce 상품 API(Store API)에서 'leica' 검색, 판매 중만, 가격 CAD.
+    다른 회사의 라이카 마운트 렌즈·어댑터(캐논 LTM·보이그랜더·Light Lens Lab·파나소닉 등)는 뺀다.
+    robots.txt Crawl-delay 10초 지킴. 등급 표기 없음"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://therangefinder.com"
+    other = re.compile(r"canon|voigtl|panasonic|lumix|7artisans|ttartisan|light lens|meyer|artralab|rayqual|match technical|sigma|"
+                       r"\bfor (?:the )?leica|leica[- ](?:m|l|r)[- ]mount|leica thread|lpl mount|cine kit", re.I)
+    results = []
+    print(f"\n  📂 The Rangefinder 크롤링 시작")
+    for page_num in range(1, 10):
+        if page_num > 1:
+            time.sleep(10)
+        try:
+            resp = requests.get(f"{base}/wp-json/wc/store/v1/products?search=leica&per_page=100&page={page_num}",
+                                headers={"User-Agent": _ce.BROWSER_UA}, timeout=30)
+            resp.raise_for_status()
+            products = resp.json()
+        except Exception as e:
+            raise RuntimeError(f"The Rangefinder {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        if not products:
+            break
+        for p in products:
+            title = re.sub(r"\s+", " ", _html.unescape(p.get("name") or "")).strip()
+            if not p.get("is_in_stock") or not re.search(r"\b(?:leica|leitz)\b", title, re.I) or other.search(title):
+                continue
+            name = re.sub(r"\s+Lens\b", "", title)
+            prices = p.get("prices") or {}
+            try:
+                price = f"C${int(prices.get('price')) / 10 ** int(prices.get('currency_minor_unit', 2)):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "The Rangefinder (캐나다)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "CAD",
+                "이미지": img,
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(products) < 100:
+            break
+    print(f"  ✅ The Rangefinder 완료: {len(results)}개")
+    return results
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8294,6 +8353,7 @@ def crawl_all():
         ("Kenmore Camera (미국)", lambda: ce.wrap_full_run("Kenmore Camera (미국)", crawl_kenmore)),
         ("Used.cl (칠레)", lambda: ce.wrap_full_run("Used.cl (칠레)", crawl_usedcl)),
         ("Foto Dotti (이탈리아)", lambda: ce.wrap_full_run("Foto Dotti (이탈리아)", crawl_fotodotti)),
+        ("The Rangefinder (캐나다)", lambda: ce.wrap_full_run("The Rangefinder (캐나다)", crawl_therangefinder)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
