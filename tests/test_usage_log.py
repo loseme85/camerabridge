@@ -45,3 +45,22 @@ def test_handle_keeps_only_country_code(monkeypatch):
     assert b'"country": "KR"' in saved["data"]
     usage.handle(dict(body), "1.2.3.4")
     assert b"country" not in saved["data"]
+
+
+def test_owner_browser_is_not_logged(monkeypatch):
+    import sys
+    import types
+    import api.usage as usage
+    saved = []
+    fake = types.SimpleNamespace(put=lambda path, data, **kw: saved.append(path))
+    monkeypatch.setitem(sys.modules, "vercel", types.SimpleNamespace(blob=fake))
+    body = {"sid": "abcdefgh12", "searches": [{"q": "m6"}]}
+    assert usage.handle(dict(body), "KR", "cb_skip_usage=1")[1]["skipped"]
+    assert saved == []
+    usage.handle(dict(body), "KR", "other=1")
+    assert len(saved) == 1
+
+
+def test_owner_usage_page_marks_browser_to_skip():
+    import api.owner_usage as owner
+    assert "Path=/api/usage" in owner.SKIP_USAGE_COOKIE and owner.SKIP_USAGE_COOKIE.startswith("cb_skip_usage=1")
