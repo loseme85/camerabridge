@@ -6202,6 +6202,63 @@ def crawl_leicastoremy():
     print(f"  ✅ Leica Store Malaysia 완료: {len(results)}개")
     return results
 
+
+def crawl_imagefoto():
+    """Image Foto (덴마크, 라이카 공인 딜러) - Shopify '브루트'(brugt, 중고) 컬렉션 JSON에서 판매자 Leica만, 판매 중만. 가격 DKK.
+    제목 'Brugt Leica M2 Chrome m. Selvudløser' → 'Leica M2 Chrome', 'Udstillingsmodel'(진열품)은 그대로 둠. 등급 표기 없음"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://imagefoto.dk"
+    print(f"\n  📂 Image Foto 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/brugt/products.json", "Image Foto"):
+        if (p.get("vendor") or "").strip().lower() not in ("leica", "leitz"):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        name = re.sub(r"^Brugt\s+", "", title, flags=re.I)
+        name = re.sub(r"\s+m\.\s+Selvudløser\b", " self-timer", name, flags=re.I)
+        name = re.sub(r"\s*\+\s*Lysmåler\b", "", name, flags=re.I)
+        name = re.sub(r"\bSølv\b", "Silver", name)
+        name = re.sub(r"\bSort\b", "Black", name)
+        name = re.sub(r"\b1:(\d+)\s*/\s*(\d{2,3})mm\b", r"\2mm f\1", name)
+        name = re.sub(r"(\d),(\d)\s?cm\b", lambda m: f"{int(m.group(1)) * 10 + int(m.group(2))}mm", name)
+        name = re.sub(r"\bf/(\d),(\d)", r"f\1.\2", name)
+        name = re.sub(r"^Ernst-Leitz Wetzlar\b", "Leitz", name)
+        name = re.sub(r"\s+", " ", name).strip(" –-")
+        if not re.search(r"\b(?:leica|leitz)\b", name, re.I):
+            name = "Leica " + name
+        try:
+            price = f"DKK {float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "site": "Image Foto (덴마크)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": "정보없음",
+            "가격": price,
+            "통화": "DKK",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Image Foto 완료: {len(results)}개")
+    return results
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8466,6 +8523,7 @@ def crawl_all():
         ("The Rangefinder (캐나다)", lambda: ce.wrap_full_run("The Rangefinder (캐나다)", crawl_therangefinder)),
         ("Leica Store Australia (호주)", lambda: ce.wrap_full_run("Leica Store Australia (호주)", lambda: _with_browser(crawl_leicastoreau))),
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
+        ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
