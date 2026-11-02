@@ -35,6 +35,10 @@ PRICE_PAIRS = [
     ("leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:steel-rim-reissue",
      re.compile(r"\bM3\b|1186[89]|11870|goggle|고글|안경|\beyes?\b|original|오리지널|\b1st\b|first|196\d", re.I),
      re.compile(r"11301|re-?issue|복각|리이슈|2022", re.I)),
+    # 주미룩스 35 '1st·V1'만 쓴 구형: 국내는 스틸림, 일본 Ver.1은 그 뒤 구형 → 스틸림 가격대면 스틸림으로 (2026-11-02)
+    ("leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:pre-asph-unspecified",
+     re.compile(r"steel ?rim|스틸 ?림", re.I),
+     re.compile(r"^(?!.*(steel ?rim|스틸 ?림|\b1st\b|\b1th\b|\bv\.? ?1\b|ver\.? ?1\b|1세대|first|第1世代)).*$", re.I)),
     ("leica:lens:noctilux:50:f1.2-original", "leica:lens:noctilux-m:50:f1.2-asph",
      re.compile(r"11820|original|오리지널|1세대|\b1st\b|double ?aspherical|\bAA\b", re.I),
      re.compile(r"\bASPH\b|11686|11731|복각|re-?issue", re.I)),
