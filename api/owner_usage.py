@@ -25,6 +25,8 @@ from scripts.usage_report import summarize  # noqa: E402
 
 KST = dt.timezone(dt.timedelta(hours=9))
 COOKIE = "cb_owner"
+# 이 화면을 연 브라우저(사장님)는 방문 기록에서 뺀다: /api/usage 에만 가는 표시 쿠키 (값은 비밀 아님, 끄면 기록이 빠질 뿐)
+SKIP_USAGE_COOKIE = "cb_skip_usage=1; Path=/api/usage; Max-Age=31536000; HttpOnly; Secure; SameSite=Lax"
 ANALYTICS_URL = "https://vercel.com/camerabridge/camerabridge/analytics"
 REFERRER_NAMES = {"www.reddit.com": "레딧", "old.reddit.com": "레딧", "reddit.com": "레딧", "out.reddit.com": "레딧",
                   "www.google.com": "구글", "com.reddit.frontpage": "레딧 앱", "t.co": "X(트위터)"}
@@ -201,7 +203,8 @@ class handler(BaseHTTPRequestHandler):
         self.send_header("cache-control", "no-store")
         self.send_header("x-robots-tag", "noindex, nofollow")
         for name, value in (extra or {}).items():
-            self.send_header(name, value)
+            for one in (value if isinstance(value, list) else [value]):
+                self.send_header(name, one)
         self.end_headers()
         self.wfile.write(data)
 
@@ -214,7 +217,8 @@ class handler(BaseHTTPRequestHandler):
             return self._send(401, "<!doctype html><meta charset=utf-8><meta name=robots content=noindex><p>권한이 없습니다.</p>")
         if key:  # 키는 쿠키로 옮기고 주소창에서 지움
             return self._send(302, "", {"location": "/owner/usage",
-                                        "set-cookie": f"{COOKIE}={key}; Path=/owner; Max-Age=7776000; HttpOnly; Secure; SameSite=Lax"})
+                                        "set-cookie": [f"{COOKIE}={key}; Path=/owner; Max-Age=7776000; HttpOnly; Secure; SameSite=Lax",
+                                                       SKIP_USAGE_COOKIE]})
         try:
             days = max(1, min(int((query.get("days") or ["7"])[0]), 30))
         except ValueError:
@@ -223,4 +227,4 @@ class handler(BaseHTTPRequestHandler):
             entries, feedback, cut = load(days)
         except Exception as error:  # noqa: BLE001
             return self._send(500, f"<!doctype html><meta charset=utf-8><p>기록을 읽지 못했습니다: {_esc(type(error).__name__)}</p>")
-        return self._send(200, render(entries, feedback, days, cut))
+        return self._send(200, render(entries, feedback, days, cut), {"set-cookie": SKIP_USAGE_COOKIE})

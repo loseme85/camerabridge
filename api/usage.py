@@ -2,6 +2,7 @@
 
 저장 위치: usage/YYYY-MM-DD/HHMMSS-<세션>-<n>.json (비공개, 저장소에는 안 남김)
 남기는 나라: Vercel이 붙여 주는 접속 나라 코드(x-vercel-ip-country, 예: KR)만. 남기지 않는 것: IP, 이메일, 쿠키. 세션 ID는 브라우저 탭마다 새로 만드는 무작위 값.
+사장님 브라우저는 빼기: /owner/usage 를 열면 /api/usage 에만 가는 표시 쿠키(cb_skip_usage=1)가 생기고, 그 쿠키가 오면 기록하지 않음.
 Blob 무료 한도(쓰기 월 2,000회)를 아끼려고 화면이 방문당 최대 3번만 보낸다. 끄기: USAGE_LOG_DISABLED=1
 요약: python3 scripts/usage_report.py
 """
@@ -72,9 +73,11 @@ def clean(body: dict) -> dict | None:
     }
 
 
-def handle(body: dict, country: str | None = None) -> tuple[int, dict]:
+def handle(body: dict, country: str | None = None, cookie: str | None = None) -> tuple[int, dict]:
     if os.environ.get("USAGE_LOG_DISABLED") == "1":
         return 200, {"ok": True}
+    if "cb_skip_usage=1" in (cookie or ""):  # 사장님 브라우저 (/owner/usage 를 연 적 있음) → 기록 안 함
+        return 200, {"ok": True, "skipped": True}
     entry = clean(body)
     if entry is None:
         return 400, {"ok": False}
@@ -109,7 +112,7 @@ class handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
         except ValueError:
             return self._send(400, {"ok": False})
-        status, payload = handle(body, self.headers.get("x-vercel-ip-country"))
+        status, payload = handle(body, self.headers.get("x-vercel-ip-country"), self.headers.get("cookie"))
         return self._send(status, payload)
 
     def do_GET(self):  # noqa: N802
