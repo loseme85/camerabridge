@@ -136,6 +136,25 @@ def tax_usd(dest: str, dest_rule: dict, ctx: dict, rules: dict, rates: dict) -> 
     return tax, flags
 
 
+def ship_status(srule: dict | None, origin: str, dest: str, rules: dict) -> str:
+    """매장이 받는 나라로 보내는지 (화면 landedShipStatus와 같음): 'yes'·'no'·'ask'·'unknown'(shipping_checked 없음)"""
+    if not srule or not srule.get("shipping_checked"):
+        return "unknown"
+    to = srule.get("ships_to")
+    if dest in (srule.get("ships_to_excludes") or []):
+        return "no"
+    if origin == dest or to == "worldwide":
+        return "yes"
+    if to == "domestic":
+        return "no"
+    if to == "ask":
+        return "ask"
+    if isinstance(to, list):
+        eu = rules.get("eu_countries") or []
+        return "yes" if dest in to or ("EU" in to and dest in eu) else "no"
+    return "unknown"
+
+
 def landed_total(listing: dict, target: str, dest: str, rules: dict | None = None, rates: dict | None = None) -> dict | None:
     """listing: 색인의 final_output (source·currency·parsed_price_numeric·category·title_raw·country).
     → {'listed','currency','converted','total','shipping','taxes','international','store_only'} (target 통화), 계산 못 하면 None"""
@@ -175,7 +194,8 @@ def landed_total(listing: dict, target: str, dest: str, rules: dict | None = Non
         same_region = _region_of(origin, rules) and _region_of(origin, rules) == _region_of(dest, rules)
         table = ship.get("region") if same_region else (ship.get("far_from_us") if origin == "US" else ship.get("far"))
         shipping_usd = _num((table or {}).get(category)) + price_usd * _num(ship.get("insurance_rate_international"))
-        if srule and srule.get("ships_international") is False:
+        status = ship_status(srule, origin, dest, rules)
+        if status == "no" or (status != "yes" and srule and srule.get("ships_international") is False):
             fees = rules.get("forwarding_fee_usd") or {}
             origin_domestic = domestic.get(origin) or domestic.get("default") or {}
             fee = fees.get(origin) if fees.get(origin) is not None else fees.get("default", 0)

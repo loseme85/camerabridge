@@ -13,7 +13,7 @@ from landed_cost import landed_total, load_rates, load_rules
 
 ROOT = Path(__file__).resolve().parents[1]
 FUNCS = ["finalField", "fxRate", "convertAmount", "roundEstimate", "resultCategory", "resultOriginCountry", "landedSourceRule",
-         "landedRegionOf", "landedTaxUsd", "computeLandedCost", "parseNumericPrice"]
+         "landedShipStatus", "landedRegionOf", "landedTaxUsd", "computeLandedCost", "parseNumericPrice"]
 
 CASES = [
     {"source": "Five Star Camera (일본)", "currency": "USD", "price": "$2,848", "category": "Lens", "title": "Leica Summicron-M 35mm f2 ASPH"},
@@ -68,3 +68,14 @@ console.log(JSON.stringify(out));
                               "category": c["category"], "title_raw": c["title"]}, target, dest, rules, rates)
             server.append(r["total"] if r else None)
     assert server == page
+
+
+def test_ship_status_uses_ships_to():
+    from landed_cost import ship_status
+    rules = {"eu_countries": ["AT", "DE", "FR"]}
+    eu_ch = {"country": "AT", "ships_to": ["EU", "CH"], "shipping_checked": "2026-11-04"}
+    assert ship_status(eu_ch, "AT", "DE", rules) == "yes"
+    assert ship_status(eu_ch, "AT", "KR", rules) == "no"
+    assert ship_status({"ships_to": "worldwide", "ships_to_excludes": ["KR"], "shipping_checked": "x"}, "US", "KR", rules) == "no"
+    assert ship_status({"ships_to": "ask", "shipping_checked": "x"}, "FR", "KR", rules) == "ask"
+    assert ship_status({"ships_international": True}, "GB", "KR", rules) == "unknown"
