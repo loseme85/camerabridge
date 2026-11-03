@@ -1204,6 +1204,17 @@ SITES = [
         ],
         "통화": "KRW",
     },
+    {
+        "name": "강산 중고샵",
+        "active_first": False,  # 판매 중·품절 섞임, 라이카 카메라 79·렌즈 66개 (쪽당 12개)
+        "name_fix": lambda t: _ekangsan_name(t),
+        "base": "https://www.ekangsan.com",
+        "categories": [
+            "https://www.ekangsan.com/product/list.html?cate_no=108",  # 카메라 > 라이카
+            "https://www.ekangsan.com/product/list.html?cate_no=163",  # 렌즈 > LEICA
+        ],
+        "통화": "KRW",
+    },
 ]
 
 def _ilkwang_name(title):
@@ -1235,6 +1246,19 @@ def _scamera_grade(title):
     """제목 끝 등급 '(A+)' → 'SC: A+' (없으면 None)"""
     m = re.search(r"\((S|A\+|A|A-|B\+|B|B-|C\+|C)\)\s*$", title.strip())
     return "SC: " + m.group(1) if m else None
+
+
+def _ekangsan_name(title):
+    """강산 중고샵 제목 '[중고]   라이카 Leica SUMMICRON 35mm F2 ASPH.(3878847)' → 'Leica SUMMICRON 35mm F2 ASPH.' (머리말·'라이카'·끝 일련번호 빼기)"""
+    if re.search(r"(?i)파나소닉|panasonic|lumix|ttartisan|7artisans|voigtl|보이그랜더", title):
+        return ""  # 라이카 분류에 섞인 다른 회사 물건
+    t = re.sub(r"^\[[^\]]*\]\s*", "", title)
+    t = re.sub(r"^라이카\s+", "", t)
+    t = re.sub(r"\b(\d{2,3})mf(\d)", r"\1mm f\2", t)  # 'M 50mf2' 오타
+    t = re.sub(r"\s*\[(?:No|NO)?[\dA-Za-z-]{5,}\]\s*$", "", t)  # 끝 '[No4648-05]' 관리 번호
+    t = re.sub(r"(\d{2,3})mm(F\d)", r"\1mm \2", t)
+    t = re.sub(r"\s*\((?:[\dXx*]{4,}|[A-Z]?\d{3,}[Xx*]*)\)\s*$", "", t)
+    return re.sub(r"\s+", " ", t).strip()
 
 
 # 국민카메라 제목은 렌즈 이름 없이 '라이카 M 50mm f2'처럼 마운트·초점거리·조리개만 적는 일이 많아, 그 셋으로 라이카 렌즈가
