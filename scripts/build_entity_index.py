@@ -89,7 +89,7 @@ def _b_value(catalog: dict):
         if not krw or not (status == "asking" or status.startswith("sold")):
             return None
         leaf = next((catalog["entities"][e] for e in record.get("entity_ids") or [] if e in catalog["entities"]), None)
-        grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
+        grade = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))[0] or final.get("image_grade")
         factors = DEFAULT_FACTORS["Body" if leaf and leaf.get("kind") == "Body" else "Lens"]
         return krw / factors.get(grade, 1.0)
     return value
@@ -156,7 +156,7 @@ def main() -> None:
             recent = bool(known) and str(known)[:10] >= sold_cutoff
             rate = (None if final.get("sold_at_unknown") else final.get("sold_fx_krw")) or krw_per_unit_on(final.get("currency"), when) or rate
         krw = price * rate if price and rate and id(record) not in too_cheap else None  # 너무 싼 매물은 시세에서 뺌
-        grade, _ = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))
+        grade = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))[0] or final.get("image_grade")
         prefix = "set_" if id(record) in sets else ""
         for eid in record.get("entity_ids") or []:
             s = stats[eid]

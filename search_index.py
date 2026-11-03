@@ -71,6 +71,7 @@ FINAL_OUTPUT_FIELDS = [
     "sold_at_unknown",
     "listed_est",
     "posted_at",
+    "image_grade",
     "source_marketplace",
     "source_item_id",
     "legacy_item_id",
