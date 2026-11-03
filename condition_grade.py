@@ -111,6 +111,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KIKUYA.get(cond[len(KIKUYA_PREFIX):].strip().upper()), "label"
     if cond.startswith(SABATINI_PREFIX):
         return _SABATINI.get(cond[len(SABATINI_PREFIX):].strip().upper()), "label"
+    if cond.startswith(GBK_PREFIX):
+        return _GBK.get(cond[len(GBK_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
@@ -671,6 +673,12 @@ _SABATINI = {"A": "N", "AB": "A", "BA": "A", "B+": "B", "B+/B": "C", "B": "C"}
 
 
 # 일본 KOMEHYO (중고 명품·카메라 체인): 카드 'ランク：中古品A' — 新品·未使用品·中古品SA·A·B·C (카메라는 A·B·C가 대부분)
+# 독일 gebrauchtkameras.de: 설명의 'Zustand: A-' (매장 등급 A 신품 같음 · A/B 아주 좋음 · B 사용감 조금 · C 많이 사용). 사진 평가 22점(2026-11-04)에서 B 표기도 사진은 A로 보여 매장이 엄한 편 →
+# A/B는 A, B는 B로 맞춤 (정확히 15/22, 한 등급 이내 22/22, 상품마다 사진 한 장뿐이라 구분력 낮음)
+GBK_PREFIX = "GBK: "
+_GBK = {"A+": "A", "A": "A", "A-": "A", "A/B": "A", "B/A": "B", "B+": "B", "B": "B", "B-": "C", "B/C": "C", "C/B": "C", "C+": "D", "C": "D", "C-": "D"}
+
+
 KOMEHYO_PREFIX = "Komehyo: "
 # 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-29): 中古品A A 8 · 中古品B A 8·B 1 · 中古品C B 5·C 3.
 # 글자 그대로(A A·B B·C C) 두면 정확 일치 12/25 · 한 등급 이내 25/25 (사진이 평균 0.52등급 후함). C를 D로 낮추면 0.84지만

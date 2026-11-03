@@ -471,3 +471,12 @@ def test_german_description_first_phrase_wins():
     assert grade_of("used-photo.de (독일)", de_condition(text), "")[0] == "B"
     assert grade_of("used-photo.de (독일)", de_condition("Zustand (Near Mint)."), "")[0] == "A"
     assert de_condition("Neueingänge") is None
+
+
+def test_gebrauchtkameras_grade():
+    from condition_grade import grade_of
+    site = "gebrauchtkameras.de (독일)"
+    assert grade_of(site, "GBK: A-", "")[0] == "A"
+    assert grade_of(site, "GBK: A/B", "")[0] == "A"
+    assert grade_of(site, "GBK: B", "")[0] == "B"
+    assert grade_of(site, "GBK: C", "")[0] == "D"
