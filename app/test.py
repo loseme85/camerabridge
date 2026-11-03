@@ -6294,6 +6294,94 @@ def crawl_imagefoto():
     return results
 
 
+GEBRAUCHTKAMERAS_SLUG = re.compile(r"leica|leitz|summicron|summilux|summarit|summaron|noctilux|elmar|telyt|hektor|visoflex", re.I)
+
+
+def crawl_gebrauchtkameras():
+    """gebrauchtkameras.de (독일) - ePages 상점. 사이트맵(sitemap-products-N.xml)의 상품 주소 중 라이카 이름이 든 것만 상세를 읽음 (100개쯤, 1~2초 간격).
+    'Auf Lager'만, 가격 EUR. 상태는 설명의 'Zustand: A-' (매장 등급표 A·A-·A/B·B/A·B+·B·B-·B/C·C/B·C+·C·C-, /c/zustandsbeschreibung)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import GBK_PREFIX
+    base = "https://www.gebrauchtkameras.de"
+    site = "gebrauchtkameras.de (독일)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 gebrauchtkameras.de 크롤링 시작")
+    try:
+        index = sess.get(f"{base}/sitemap.xml", timeout=30)
+        index.raise_for_status()
+        maps = [u for u in re.findall(r"<loc>([^<]+)</loc>", index.text) if "sitemap-products" in u]
+        urls = []
+        for m in maps:
+            r = sess.get(m, timeout=30)
+            r.raise_for_status()
+            urls += re.findall(r"<loc>([^<]+/p/[^<]+)</loc>", r.text)
+    except Exception as e:
+        raise RuntimeError(f"gebrauchtkameras.de 사이트맵 못 읽음: {e}")  # 빠진 목록이 판매완료로 바뀌지 않게
+    urls = [u for u in dict.fromkeys(urls) if GEBRAUCHTKAMERAS_SLUG.search(u.rsplit("/p/", 1)[-1])]
+    print(f"    └─ 사이트맵 상품 중 라이카 주소 {len(urls)}개")
+    results = []
+    for url in urls:
+        try:
+            page = sess.get(url, timeout=30)
+            if page.status_code == 404:
+                continue
+            page.raise_for_status()
+        except Exception as e:
+            print(f"    ⚠️ 상세 못 읽음: {url[-50:]} ({e})")
+            continue
+        h = page.text
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<script.*?</script>|<style.*?</style>|<[^>]+>", " ", h, flags=re.S)))
+        time.sleep(random.uniform(1.0, 2.0))
+        if "Auf Lager" not in text:
+            continue
+        title = _html.unescape((re.search(r'<meta property="og:title" content="([^"]+)"', h) or re.search(r"<h1[^>]*>([^<]+)</h1>", h) or [None, ""])[1]).strip()
+        title = re.sub(r"\s*[-|]\s*Gebrauchtkameras\.de\s*$", "", title)
+        if any(b in title.lower() for b in THIRD_PARTY_BRANDS) or re.search(r"\bf(?:ü|ue)r\s+(?:das\s+|die\s+)?leica\b|panasonic|lumix|\bmetz\b", title, re.I):
+            continue  # 'Zeiss … für Leica M'·'Handgriff für Leica D-Lux' 같은 다른 회사 물건
+        pr = re.search(r"Verkaufspreis:\s*([\d.]+,\d{2})\s*€", text)
+        price = f"€{float(pr.group(1).replace('.', '').replace(',', '.')):,.0f}" if pr else "문의요망"
+        z = re.search(r"Zustand\s*:\s*(A\+|AB|BA|BC|CB|[ABCD][+-]?(?:/[ABCD])?)(?![A-Za-z])", text)
+        img = re.search(r'<meta property="og:image" content="([^"]+)"', h)
+        name = _gebrauchtkameras_name(title)
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": GBK_PREFIX + {"AB": "A/B", "BA": "B/A", "BC": "B/C", "CB": "C/B"}.get(z.group(1), z.group(1)) if z else "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": _html.unescape(img.group(1)) if img else "",
+            "링크": url,
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ gebrauchtkameras.de 완료: {len(results)}개")
+    return results
+
+
+def _gebrauchtkameras_name(title):
+    """'Leica APO-Summicron-M 1:2/90mm ASPH. 6-Bit' → 'Leica APO-Summicron-M 90mm f2 ASPH. 6-Bit'"""
+    t = re.sub(r"\b1:(\d+(?:[.,]\d+)?(?:-\d+(?:[.,]\d+)?)?)\s*[/ ]\s*(\d{2,3}(?:-\d{2,3})?)(?:\s*mm)?\b", lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", title)
+    t = re.sub(r"(\d(?:[.,]\d)?)\s*/\s*(\d{2,3})\s*mm", lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", t)
+    for de, en in (("schwarz", "black"), ("verchromt", "chrome"), ("silber", "silver"), ("chrom", "chrome"), ("Gehäuse", "body"), ("mit", "with"), ("Handgriff", "grip")):
+        t = re.sub(rf"\b{de}\b", en, t, flags=re.I)
+    t = re.sub(r"\b(Summicron|Summilux|Elmarit|Elmar|Summaron|Super-Angulon)\s+([RM])\b", r"\1-\2", t)
+    t = re.sub(r"\bApo\b", "APO", t)
+    t = re.sub(r"\bVario-APO-Elmarit\b", "APO-Vario-Elmarit", t)
+    t = re.sub(r"\bMacro-Elmarit-R 100mm f4\b", "Macro-Elmar-R 100mm f4", t)  # 1:4/100은 Macro-Elmar (Elmarit은 2.8)
+    t = re.sub(r"\bTrageriemen\b", "strap", t)
+    t = re.sub(r"\bWeitwinkelsucher\b", "wide-angle finder", t)
+    t = re.sub(r"\s+", " ", t).strip(" ,-")
+    return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -8752,6 +8840,7 @@ DETAIL_CONDITION = {
 
 # 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
 SOURCE_MIN_INTERVAL_HOURS = {
+    "gebrauchtkameras.de (독일)": 12,  # 라이카 상품 상세 100개쯤 (3분)
     "Ffordes (영국)": 6,
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
@@ -8905,6 +8994,7 @@ def crawl_all():
         ("Leica Store Australia (호주)", lambda: ce.wrap_full_run("Leica Store Australia (호주)", lambda: _with_browser(crawl_leicastoreau))),
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
+        ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
