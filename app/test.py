@@ -6548,6 +6548,85 @@ def _auvieuxformat_name(title):
     return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
 
 
+FOTOCURATOLO_CATEGORIES = ["catalogo-395-229-Usato-garantito-Fotocamere-usate-Usato-leica.html",
+                           "catalogo-463-229-Usato-garantito-Obiettivi-fotografici-usati-Usato-attacco-leica.html"]
+
+
+def crawl_fotocuratolo():
+    """Foto Curatolo (이탈리아) - '보증 중고(Usato garantito)' 라이카 카메라·렌즈 분류에서 'Usato…Leica' 상품 주소를 모아 상세의 JSON-LD로
+    이름·재고(InStock)·가격 EUR을 읽음 (몇 개뿐). 상태는 설명 글의 이탈리아어 말투 (IT: …)"""
+    import html as _html
+    import json as _json
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import it_condition
+    base = "https://www.fotocuratolo.it"
+    site = "Foto Curatolo (이탈리아)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Foto Curatolo 크롤링 시작")
+    links = []
+    for cat in FOTOCURATOLO_CATEGORIES:
+        try:
+            resp = sess.get(f"{base}/{cat}", timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Foto Curatolo 분류 못 읽음: {e}")  # 빠진 목록이 판매완료로 바뀌지 않게
+        for pid, card in re.findall(r"<article class='default_height Singlearticle[^']*' id=\"article(\d+)\">(.*?)</article>", resp.text, re.S):
+            href = re.search(r'href="(\d+-Usato[^"]*\.html)"', card)
+            if href and re.search(r"(?i)leica|leitz", href.group(1)):
+                links.append(f"{base}/{href.group(1)}")
+        time.sleep(random.uniform(1.0, 2.0))
+    results = []
+    for link in dict.fromkeys(links):
+        try:
+            page = sess.get(link, timeout=30)
+            page.raise_for_status()
+        except Exception as e:
+            print(f"    ⚠️ 상세 못 읽음: {link[-50:]} ({e})")
+            continue
+        block = re.search(r'<script type="application/ld\+json">(.*?)</script>', page.text, re.S)
+        try:
+            data = _json.loads(block.group(1)) if block else {}
+        except ValueError:
+            data = {}
+        offer = data.get("offers") or {}
+        time.sleep(random.uniform(1.0, 2.0))
+        if "InStock" not in str(offer.get("availability") or ""):
+            continue
+        raw = _html.unescape(str(data.get("name") or "")).strip()
+        name = re.sub(r"^Usato\s+", "", raw, flags=re.I)
+        name = re.sub(r"\+?\s*\bOTTICA\b", " with", name)
+        name = re.sub(r"\+?\s*CUSTODIA IN PELLE ORIGINALE", " leather case", name, flags=re.I)
+        name = re.sub(r"(\d{2,3})MM\b", r"\1mm", name)
+        name = re.sub(r"\bF\.?\s?(\d+(?:[.,]\d+)?)\b", lambda m: "f" + m.group(1).replace(",", "."), name)
+        name = re.sub(r"\((\d{2}) (\d{3})\)", r"\1\2", name)
+        name = re.sub(r"\s+", " ", name).strip(" .")
+        try:
+            price = f"€{float(offer.get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cond = it_condition(_html.unescape(str(data.get("description") or "")))
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond or "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": str(data.get("image") or ""),
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Foto Curatolo 완료: {len(results)}개")
+    return results
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -9163,6 +9242,7 @@ def crawl_all():
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
+        ("Foto Curatolo (이탈리아)", lambda: ce.wrap_full_run("Foto Curatolo (이탈리아)", crawl_fotocuratolo)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
