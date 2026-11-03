@@ -6754,6 +6754,66 @@ def crawl_mpex():
     return results
 
 
+def crawl_2ndbase():
+    """2nd BASE (일본, 三宝カメラ 계열) - MakeShop '[LEICA M]' 분류 /shopbrand/ct46/ (EUC-JP 정적 HTML, 10개 안팎). SOLD OUT 빼고 판매 중만, 가격 JPY(세금 포함).
+    등급은 제목 앞 '【AB】' (일본 매장 공통 대응 _JP)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://www.2ndbase.jp"
+    site = "2nd BASE (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 2nd BASE 크롤링 시작")
+    for page_num in range(1, 20):
+        try:
+            resp = sess.get(f"{base}/shopbrand/ct46/page{page_num}/order/", timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"2nd BASE {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        text = resp.content.decode("euc-jp", "ignore")
+        new = 0
+        for card in re.findall(r'<div class="innerBox">(.*?)</li>', text, re.S):
+            m = re.search(r'<p class="name"><a href="(/shopdetail/(\d+)/[^"]*)">([^<]+)</a>', card)
+            if not m or m.group(2) in seen:
+                continue
+            seen.add(m.group(2))
+            new += 1
+            if re.search(r"(?i)sold ?out|売切|品切", card):
+                continue
+            raw = _html.unescape(m.group(3)).strip()
+            g = re.match(r"【([A-Z+\-]{1,3})】\s*", raw)
+            name = re.sub(r"\s+", " ", raw[g.end():] if g else raw).strip()
+            name = re.sub(r"\bF(\d+(?:\.\d+)?)\b", r"f\1", name)
+            name = name if re.match(r"(?:leica|leitz)\b", name, re.I) else "Leica " + name
+            pr = re.search(r"([\d,]+)円", card)
+            price = f"¥{int(pr.group(1).replace(',', '')):,}" if pr else "문의요망"
+            img = re.search(r'<img[^>]+src="([^"]+)"', card)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": g.group(1) if g else "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": img.group(1) if img else "",
+                "링크": base + m.group(1).split("/ct46/")[0] + "/",
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new or f"page{page_num + 1}/" not in text:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ 2nd BASE 완료: {len(results)}개")
+    return results
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -9372,6 +9432,7 @@ def crawl_all():
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
         ("Foto Curatolo (이탈리아)", lambda: ce.wrap_full_run("Foto Curatolo (이탈리아)", crawl_fotocuratolo)),
         ("Midwest Photo (미국)", lambda: ce.wrap_full_run("Midwest Photo (미국)", crawl_mpex)),
+        ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
