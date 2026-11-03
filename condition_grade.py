@@ -113,6 +113,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SABATINI.get(cond[len(SABATINI_PREFIX):].strip().upper()), "label"
     if cond.startswith(GBK_PREFIX):
         return _GBK.get(cond[len(GBK_PREFIX):].strip().upper()), "label"
+    if cond.startswith(MPEX_PREFIX):
+        return _MPEX.get(cond[len(MPEX_PREFIX):].strip()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
@@ -677,6 +679,11 @@ _SABATINI = {"A": "N", "AB": "A", "BA": "A", "B+": "B", "B+/B": "C", "B": "C"}
 # A/B는 A, B는 B로 맞춤 (정확히 15/22, 한 등급 이내 22/22, 상품마다 사진 한 장뿐이라 구분력 낮음)
 GBK_PREFIX = "GBK: "
 _GBK = {"A+": "A", "A": "A", "A-": "A", "A/B": "A", "B/A": "B", "B+": "B", "B": "B", "B-": "C", "B/C": "C", "C/B": "C", "C+": "D", "C": "D", "C-": "D"}
+
+
+# 미국 Midwest Photo: 설명 첫 단어 등급. 'GOOD = 원래 상태의 70~79%, 가벼운 사용감·작은 흠 여러 개' (매장 설명). 사진 평가 전 말뜻대로 (2026-11-04)
+MPEX_PREFIX = "MPEX: "
+_MPEX = {"like new": "A", "excellent+": "B", "excellent +": "B", "excellent": "B", "good": "C", "fair": "D", "poor": "D"}
 
 
 KOMEHYO_PREFIX = "Komehyo: "

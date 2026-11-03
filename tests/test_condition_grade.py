@@ -473,6 +473,12 @@ def test_german_description_first_phrase_wins():
     assert de_condition("Neueingänge") is None
 
 
+def test_mpex_grade():
+    from condition_grade import grade_of
+    assert grade_of("Midwest Photo (미국)", "MPEX: good", "")[0] == "C"
+    assert grade_of("Midwest Photo (미국)", "MPEX: like new", "")[0] == "A"
+
+
 def test_gebrauchtkameras_grade():
     from condition_grade import grade_of
     site = "gebrauchtkameras.de (독일)"
