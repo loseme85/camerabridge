@@ -1237,6 +1237,7 @@
     .price-ladder .ladder-row{touch-action:pan-y}
     .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:36px;border-top:1px solid var(--border)}
     .ladder-grade{font-family:var(--serif);font-size:15px;font-weight:600}
+    .ladder-row.is-unknown .ladder-grade{font-family:inherit;font-size:12px;font-weight:500;color:var(--text-soft)}
     .ladder-strip{position:relative;align-self:stretch;min-height:36px;touch-action:pan-y;cursor:crosshair;user-select:none}
     .ladder-select{position:absolute;top:0;bottom:0;background:rgba(22,24,26,0.08);border-left:1px solid var(--text);border-right:1px solid var(--text);pointer-events:none;z-index:3}
     .ladder-zoom{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin:0 0 8px;font-size:12px;color:var(--text-muted)}
@@ -3882,6 +3883,8 @@
       ladder_vs_now: { ko: '지금 대비 {p}', en: '{p} vs now', ja: '現在比 {p}', 'zh-Hans': '较现在 {p}', 'zh-Hant': '較現在 {p}', pt: '{p} vs agora', es: '{p} vs ahora', de: '{p} ggü. heute', it: '{p} rispetto a oggi' },
       ladder_fx_then: { ko: '그날 환율로 {p}', en: '{p} at that day’s rate', ja: '当日レートで {p}', 'zh-Hans': '按当天汇率 {p}', 'zh-Hant': '按當天匯率 {p}', pt: '{p} no câmbio do dia', es: '{p} al cambio de ese día', de: '{p} zum Tageskurs', it: '{p} al cambio del giorno' },
       ladder_finding: { ko: '목록에서 찾는 중…', en: 'Finding it in the list…', ja: 'リストから探しています…', 'zh-Hans': '正在列表中查找…', 'zh-Hant': '正在列表中尋找…', pt: 'Procurando na lista…', es: 'Buscando en la lista…', de: 'Wird in der Liste gesucht…', it: 'Ricerca nella lista…' },
+      ladder_unknown: { ko: '등급 모름', en: 'Grade unknown', ja: 'ランク不明', 'zh-Hans': '等级不明', 'zh-Hant': '等級不明', pt: 'Grau desconhecido', es: 'Grado desconocido', de: 'Zustand unbekannt', it: 'Grado sconosciuto' },
+      ladder_unknown_tip: { ko: '매장 상태 표기를 등급으로 바꾸지 못한 매물', en: "The shop's condition wording could not be matched to a grade", ja: '店の状態表記をランクに置き換えられなかった商品', 'zh-Hans': '无法把店铺的成色描述换算成等级', 'zh-Hant': '無法把店家的成色描述換算成等級', pt: 'Não foi possível converter a descrição da loja em grau', es: 'No se pudo convertir la descripción de la tienda en un grado', de: 'Die Zustandsangabe des Händlers ließ sich keiner Stufe zuordnen', it: 'Non è stato possibile convertire la descrizione del negozio in un grado' },
       ladder_none: { ko: '판매 중 없음', en: 'None for sale', ja: '販売中なし', 'zh-Hans': '无在售', 'zh-Hant': '無在售', pt: 'Nenhum à venda', es: 'Ninguno en venta', de: 'Keins zu kaufen', it: 'Nessuno in vendita' },
       suggestions: { ko: '모델 후보', en: 'Model suggestions', ja: 'モデル候補', 'zh-Hans': '型号候选', 'zh-Hant': '型號候選', pt: 'Sugestões de modelo', es: 'Sugerencias de modelo', de: 'Modellvorschläge', it: 'Suggerimenti di modello' }
     };
@@ -4120,6 +4123,7 @@
 
     // 모델 시세 그림: 고른 모델의 매물을 최대 300개까지 따로 받아 등급 줄마다 점으로 찍음 (목록은 12개씩이라 한눈에 안 들어와서)
     const LADDER_GRADES = ['N', 'S', 'A', 'B', 'C', 'D'];
+    const LADDER_UNKNOWN = '?';  // 매장 상태 표기를 등급으로 못 바꾼 매물: 맨 아래 줄 (리스팅에는 있는데 그래프에 없던 것, 2026-11-02)
     const ladderState = { key: '', results: null, points: [], zoom: null, view: null };
 
     function ladderEntity(){
@@ -4162,14 +4166,15 @@
     function ladderPoints(results){
       const points = [];
       results.forEach(result => {
-        if(!LADDER_GRADES.includes(result.grade) || ['too_cheap', 'set', 'duplicate'].includes((result.final_output || {}).entity_note)) return;
+        if(result.grade === 'X' || ['too_cheap', 'set', 'duplicate'].includes((result.final_output || {}).entity_note)) return;
+        const grade = LADDER_GRADES.includes(result.grade) ? result.grade : LADDER_UNKNOWN;
         const cost = computeLandedCost(result);
         const value = cost ? (cost.landed ? cost.landed.total : cost.converted) : 0;
         if(!value) return;
         const rule = landedSourceRule(result);
         const fin = result.final_output || {};
         points.push({
-          grade: result.grade,
+          grade,
           value,
           active: getMarketActivityInfo(result).section === 'active',
           abroad: Boolean(rule && rule.country && rule.country !== uiState.destination),
@@ -4201,7 +4206,7 @@
       const byGrade = {};
       points.forEach(p => { (byGrade[p.grade] = byGrade[p.grade] || []).push(p); });
       points.forEach(p => {
-        if(p.active) return;
+        if(p.active || p.grade === LADDER_UNKNOWN) return;  // 등급 모름끼리는 견주지 않음
         const same = byGrade[p.grade].filter(q => q !== p);
         if(!p.soldAt){  // 판매일 모름: 지금 대비만 (그때 판매 중이던 매물 기록이 없음)
           const nowOnly = median(same.filter(q => q.active).map(q => q.value));
@@ -4263,7 +4268,7 @@
       const stripPx = Math.max(200, ((region && region.clientWidth) || 900) - (narrow ? 66 : 300));
       const gap = 11 / stripPx * 100;
       const LANE = 11;
-      const rows = LADDER_GRADES.map(grade => {
+      const rows = LADDER_GRADES.concat(LADDER_UNKNOWN).map(grade => {
         const mine = points.filter(p => p.grade === grade && inView(p));
         if(!mine.length) return '';
         const active = mine.filter(p => p.active).map(p => p.value).sort((a, b) => a - b);
@@ -4293,7 +4298,8 @@
         const range = active.length
           ? (active.length > 1 && money(active[0]) !== money(active[active.length - 1]) ? `${money(active[0])} – ${money(active[active.length - 1])}` : money(active[0]))
           : ec('ladder_none');
-        return `<div class="ladder-row"><span class="ladder-grade">${escapeHtml(grade === 'N' ? ec('grade_new') : grade)}</span>`
+        const gradeText = grade === 'N' ? ec('grade_new') : grade === LADDER_UNKNOWN ? ec('ladder_unknown') : grade;
+        return `<div class="ladder-row${grade === LADDER_UNKNOWN ? ' is-unknown' : ''}"><span class="ladder-grade"${grade === LADDER_UNKNOWN ? ` title="${escapeHtml(ec('ladder_unknown_tip'))}"` : ''}>${escapeHtml(gradeText)}</span>`
           + `<div class="ladder-strip" style="min-height:${height}px">${grid}${band}${dots}</div>`
           + `<span class="ladder-range">${escapeHtml(range)}<small>${escapeHtml(ec('ladder_counts', { a: String(active.length), h: String(mine.length - active.length) }))}</small></span></div>`;
       }).join('');
@@ -4331,7 +4337,7 @@
       const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
       const rule = landedSourceRule(result);
       const listed = cost && cost.currency !== cost.target ? ec('ladder_listed', { p: formatMoney(cost.listed, cost.currency) }) : '';
-      const grade = result.grade === 'N' ? ec('grade_new') : gradeLabel(result.grade);
+      const grade = result.grade === 'N' ? ec('grade_new') : LADDER_GRADES.includes(result.grade) ? gradeLabel(result.grade) : ec('ladder_unknown');
       tip.innerHTML = `${result.image_url ? `<img src="${escapeHtml(result.image_url)}" alt="">` : '<span></span>'}`
         + `<div><b>${escapeHtml(money(point.value))}</b>${cost && cost.landed ? ` <small class="tip-incl">${escapeHtml(ec('ladder_incl'))}</small>` : ''}`
         + `<div class="tip-title">${escapeHtml(result.title || '')}</div>`
