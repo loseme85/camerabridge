@@ -1,15 +1,37 @@
 {
  "about": "사진으로 매긴 등급 (scripts/photo_grade_queue.py). 매장 표기로 등급을 못 정한 매물만. 링크 → {grade, at, note}",
  "grades": {
+  "https://fotohandeldelfshaven.nl/product/leica-11821-noctilux-m-50mm-f-1-version-ii-boxed/": {
+   "grade": "B",
+   "at": "2026-11-03",
+   "site": "Fotohandel Delfshaven (네덜란드)"
+  },
   "https://fotohandeldelfshaven.nl/product/leica-leitz-rigid-summicron-12-50mm-black-paint-m/": {
    "grade": "C",
    "at": "2026-11-02",
+   "site": "Fotohandel Delfshaven (네덜란드)"
+  },
+  "https://fotohandeldelfshaven.nl/product/leitz-leica-11821-noctilux-m-50mm-f-1-0-1981-version-ii-boxed/": {
+   "grade": "B",
+   "at": "2026-11-03",
    "site": "Fotohandel Delfshaven (네덜란드)"
   },
   "https://imagefoto.dk/products/leica-sl3-sort-udstillingsmodel": {
    "grade": null,
    "at": "2026-11-03",
    "site": "Image Foto (덴마크)",
+   "note": "사진으로 판단 못 함"
+  },
+  "https://j-camera.net/itemp.php?id=196233147": {
+   "grade": null,
+   "at": "2026-11-03",
+   "site": "J-カメラ (일본)",
+   "note": "사진으로 판단 못 함"
+  },
+  "https://j-camera.net/itemp.php?id=201028727": {
+   "grade": null,
+   "at": "2026-11-03",
+   "site": "J-カメラ (일본)",
    "note": "사진으로 판단 못 함"
   },
   "https://kenmorecamera.com/used-leica-m-50mm-f0-95-noctilux-asph-6-bit/": {
@@ -33,6 +55,16 @@
    "at": "2026-11-02",
    "site": "국민카메라"
   },
+  "https://kookmincamera.co.kr/product/1834-라이카-m7-box/11027/category/530/display/1/": {
+   "grade": "B",
+   "at": "2026-11-03",
+   "site": "국민카메라"
+  },
+  "https://kookmincamera.co.kr/product/4811-라이카-m-35mm14-ti-위탁상품/5748/category/530/display/1/": {
+   "grade": "B",
+   "at": "2026-11-03",
+   "site": "국민카메라"
+  },
   "https://leica-store.sg/products/leica-m6-chrome-gold-dragon-edition-1995": {
    "grade": "A",
    "at": "2026-11-02",
@@ -47,6 +79,38 @@
    "grade": "A",
    "at": "2026-11-03",
    "site": "Leica Store Singapore (싱가포르)"
+  },
+  "https://leica-store.sg/products/leica-sl3-black-pre-owned": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Leica Store Singapore (싱가포르)"
+  },
+  "https://leica-store.sg/products/leica-sl3-black-pre-owned-1": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Leica Store Singapore (싱가포르)"
+  },
+  "https://leica-store.sg/products/leica-super-vario-elmar-sl-16-35mm-f-3-5-4-5-asph": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Leica Store Singapore (싱가포르)"
+  },
+  "https://leica-store.sg/products/leica-super-vario-elmar-sl-16-35mm-f-3-5-4-5-asph-pre-owned": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Leica Store Singapore (싱가포르)"
+  },
+  "https://leica-storebando.co.kr/product/위탁-m-5012-noctilux-복각-black/21704/category/442/display/1/": {
+   "grade": null,
+   "at": "2026-11-03",
+   "site": "라이카스토어 충무로",
+   "note": "사진으로 판단 못 함"
+  },
+  "https://leica-storebando.co.kr/product/위탁-m-5012-noctilux-복각-black/22282/category/442/display/1/": {
+   "grade": null,
+   "at": "2026-11-03",
+   "site": "라이카스토어 충무로",
+   "note": "사진으로 판단 못 함"
   },
   "https://leica-storebando.co.kr/product/위탁-m-502-apo-summicron-asph-6bit-black/22201/category/442/display/1/": {
    "grade": "N",
@@ -90,6 +154,16 @@
    "at": "2026-11-03",
    "site": "Leica Store Poland (폴란드)"
   },
+  "https://mkkcamera.com/products/leica-apo-summicron-m-90mm-f2-0-asph-silver-boxed-rare-11885-64335": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "M & K Kamera (홍콩)"
+  },
+  "https://mkkcamera.com/products/leica-noctilux-m-50mm-f1-0-e60-v4-ver-iv-lens-yr-2001-canada-11822-12128": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "M & K Kamera (홍콩)"
+  },
   "https://muhan8.co.kr/product/leica-35mm-f2-apo-summicron-asph-black/2193/category/106/display/1/": {
    "grade": "N",
    "at": "2026-11-02",
@@ -100,6 +174,11 @@
    "at": "2026-11-02",
    "site": "무한카메라",
    "note": "사진으로 판단 못 함"
+  },
+  "https://theclassiccamera.com/product/leica-sl3/": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "The Classic Camera (영국)"
   },
   "https://www.camera-tweedehands.nl/leica-apo-summicron-m-35mm-f-2-asph-11699.html": {
    "grade": "A",
@@ -117,8 +196,18 @@
    "at": "2026-11-02",
    "site": "Camera Tweedehands (네덜란드)"
   },
+  "https://www.camera-tweedehands.nl/leica-q3-43.html": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Camera Tweedehands (네덜란드)"
+  },
   "https://www.cameraelectronic.com.au/products/pre-owned-leica-m10-r-digital-camera-silver-with-box-battery-charger-manuals-sn-05618724-second-hand": {
    "grade": "S",
+   "at": "2026-11-03",
+   "site": "Camera Electronic (호주)"
+  },
+  "https://www.cameraelectronic.com.au/products/pre-owned-leica-q3-28-digital-camera-new-lens-see-report-with-thumb-support-sn-5729559-second-hand": {
+   "grade": "A",
    "at": "2026-11-03",
    "site": "Camera Electronic (호주)"
   },
@@ -133,11 +222,27 @@
    "site": "Foto Köster (독일)",
    "note": "사진으로 판단 못 함"
   },
+  "https://www.foto-koester.de/q3-schwarz-lackiert-version-eu-us-cn/7700005113691": {
+   "grade": null,
+   "at": "2026-11-03",
+   "site": "Foto Köster (독일)",
+   "note": "사진으로 판단 못 함"
+  },
   "https://www.fotodotti.it/prodotti/leica/fotocamere/usato/fotocamera-leica-m10-r-20062-black-paint.html": {
    "grade": null,
    "at": "2026-11-02",
    "site": "Foto Dotti (이탈리아)",
    "note": "사진으로 판단 못 함"
+  },
+  "https://www.fotodotti.it/prodotti/leica/fotocamere/usato/fotocamera-leica-q3-43-19084-35054.html": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "Foto Dotti (이탈리아)"
+  },
+  "https://www.fotodotti.it/prodotti/leica/fotocamere/usato/fotocamera-leica-q3-43-19084.html": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Foto Dotti (이탈리아)"
   },
   "https://www.fotodotti.it/prodotti/leica/obiettivi/usato/leica-noctilux-m-50mm-f0-95-asph-11667-bellissimo.html": {
    "grade": null,
@@ -145,7 +250,18 @@
    "site": "Foto Dotti (이탈리아)",
    "note": "사진으로 판단 못 함"
   },
+  "https://www.fotodotti.it/prodotti/leica/obiettivi/usato/leitz-wetzlar-summilux-m-35mm-f1-4-asph-11700.html": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Foto Dotti (이탈리아)"
+  },
   "https://www.fotodotti.it/prodotti/leica/obiettivi/usato/obiettivo-manuale-leica-apo-summicron-m-50mm-11141-come-nuovo.html": {
+   "grade": null,
+   "at": "2026-11-03",
+   "site": "Foto Dotti (이탈리아)",
+   "note": "사진으로 판단 못 함"
+  },
+  "https://www.fotodotti.it/prodotti/leica/obiettivi/usato/obiettivo-manuale-leica-m-noctilux-50mm-asph-f1-2-11686.html": {
    "grade": null,
    "at": "2026-11-03",
    "site": "Foto Dotti (이탈리아)",
@@ -169,6 +285,11 @@
    "site": "Foto Ottica Cavour (이탈리아)"
   },
   "https://www.fotootticacavour.com/products/leica-apo-summicron-m-50mm-f-2-asph-silver-anodized4667048": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "Foto Ottica Cavour (이탈리아)"
+  },
+  "https://www.fotootticacavour.com/products/leica-m10-p-black-chrome-1": {
    "grade": "S",
    "at": "2026-11-03",
    "site": "Foto Ottica Cavour (이탈리아)"
@@ -208,6 +329,11 @@
    "at": "2026-11-03",
    "site": "Foto Ottica Cavour (이탈리아)"
   },
+  "https://www.fotootticacavour.com/products/leica-summilux-m-35mm-f-1-4-asph-leitz-wetzlar4778248": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "Foto Ottica Cavour (이탈리아)"
+  },
   "https://www.fotootticacavour.com/products/leica-summilux-m-35mm-f-1-4-i-black": {
    "grade": null,
    "at": "2026-11-02",
@@ -219,6 +345,11 @@
    "at": "2026-11-02",
    "site": "Japan Camera Hunter (일본)",
    "note": "사진으로 판단 못 함"
+  },
+  "https://www.japancamerahunter.com/product/leica-m4-2-project-stormtrooper-commander-1977/": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Japan Camera Hunter (일본)"
   },
   "https://www.leica-store.com.au/products/11326SH/044401": {
    "grade": null,
@@ -266,6 +397,11 @@
    "at": "2026-11-03",
    "site": "MF Camera (미국)"
   },
+  "https://www.nivo-schweitzer.nl/occasion-leica-11686-noctilux-m-50mm12-o-black-o-6-bit-coding-sn-4828731/p35909": {
+   "grade": "A",
+   "at": "2026-11-03",
+   "site": "Nivo Schweitzer (네덜란드)"
+  },
   "https://www.nivo-schweitzer.nl/occasion-leica-20002-m10-r-body-o-black-chrome-sn-05625664-incl-visoflex-typ-020/p37198": {
    "grade": "A",
    "at": "2026-11-03",
@@ -281,6 +417,12 @@
    "grade": "A",
    "at": "2026-11-02",
    "site": "Photografica (덴마크)"
+  },
+  "https://www.photografica.com/products/leica-m-50-1-4-summilux-asph-black-chrome-finish": {
+   "grade": null,
+   "at": "2026-11-03",
+   "site": "Photografica (덴마크)",
+   "note": "사진으로 판단 못 함"
   },
   "https://www.photografica.com/products/leica-m-50-1-4-summilux-black-paint-oeresundsbron-2000": {
    "grade": "A",
@@ -318,6 +460,21 @@
    "grade": "B",
    "at": "2026-11-03",
    "site": "Photo Warehouse (뉴질랜드)"
+  },
+  "https://www.rangefinder.com.hk/store/leica-apo-summicron-m-35mm-f2-0-asph-open-box/": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "Rangefinder (홍콩)"
+  },
+  "https://www.rangefinder.com.hk/store/leica-apo-summicron-m-50mm-f2-0-asph-metal-gray-open-box/": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "Rangefinder (홍콩)"
+  },
+  "https://www.rangefinder.com.hk/store/leica-m11-glossy-black-open-box/": {
+   "grade": "S",
+   "at": "2026-11-03",
+   "site": "Rangefinder (홍콩)"
   }
  }
 }
