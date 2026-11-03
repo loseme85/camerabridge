@@ -473,6 +473,13 @@ def test_german_description_first_phrase_wins():
     assert de_condition("Neueingänge") is None
 
 
+def test_scamera_grade():
+    from condition_grade import grade_of
+    assert grade_of("신성카메라", "SC: S", "")[0] == "S"
+    assert grade_of("신성카메라", "SC: A+", "")[0] == "A"
+    assert grade_of("신성카메라", "SC: B", "")[0] == "B"
+
+
 def test_mpex_grade():
     from condition_grade import grade_of
     assert grade_of("Midwest Photo (미국)", "MPEX: good", "")[0] == "C"
