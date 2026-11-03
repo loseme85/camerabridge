@@ -6470,6 +6470,84 @@ def crawl_mitsubado():
     return results
 
 
+AUVIEUXFORMAT_CATEGORIES = ["appareil-photo-argentique-leica", "objectif-argentique-leica"]
+
+
+def crawl_auvieuxformat():
+    """Au Vieux Format (프랑스 생투앙) - WooCommerce 라이카 카메라·렌즈 분류 정적 HTML (각 20개쯤). 'instock'만, 가격 EUR.
+    분류에 섞인 Konica Hexar·Hexanon 등은 뺌. 등급 표기 없음 (설명 'état esthétique'는 글뿐)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://www.auvieuxformat.com"
+    site = "Au Vieux Format (프랑스)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 Au Vieux Format 크롤링 시작")
+    for cat in AUVIEUXFORMAT_CATEGORIES:
+        for page_num in range(1, 10):
+            url = f"{base}/{cat}/" + (f"page/{page_num}/" if page_num > 1 else "")
+            try:
+                resp = sess.get(url, timeout=30)
+                if resp.status_code == 404 and page_num > 1:
+                    break
+                resp.raise_for_status()
+            except Exception as e:
+                raise RuntimeError(f"Au Vieux Format {cat} {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            cards = re.findall(r'<li class="(product [^"]+)">(.*?)</li>', resp.text, re.S)
+            new = 0
+            for cls, card in cards:
+                link = re.search(r'href="([^"]+)"', card)
+                if not link or link.group(1) in seen:
+                    continue
+                seen.add(link.group(1))
+                new += 1
+                if " instock" not in cls:
+                    continue
+                raw = _html.unescape((re.search(r'loop-product__title">([^<]+)', card) or [None, ""])[1]).strip()
+                if any(b in raw.lower() for b in THIRD_PARTY_BRANDS) or re.search(r"(?i)hexar|hexanon|konica|voigtl|zeiss|minolta|canon|nikon", raw):
+                    continue
+                pr = re.search(r'amount">([\d\s.,]+)', card)
+                price = f"€{float(pr.group(1).replace(' ', '').replace('.', '').replace(',', '.')):,.0f}" if pr else "문의요망"
+                img = re.search(r'<img[^>]+src="([^"]+)"', card)
+                name = _auvieuxformat_name(raw)
+                results.append({
+                    "site": site,
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "EUR",
+                    "이미지": re.sub(r"-\d+x\d+(\.\w+)$", r"\1", img.group(1)) if img else "",
+                    "링크": link.group(1),
+                    "품절": False,
+                    "예약중": False,
+                    "mount": detect_mount(name),
+                    "category": detect_category(name, price),
+                    "brand": detect_brand(name),
+                })
+            print(f"    └─ {cat} {page_num}페이지 새 상품 {new}개")
+            if not new or "next page-numbers" not in resp.text:
+                break
+            time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Au Vieux Format 완료: {len(results)}개")
+    return results
+
+
+def _auvieuxformat_name(title):
+    """'APO SUMMICRON 2/75 MM ASPH' → 'Leica APO-Summicron 75mm f2 ASPH', 'TELYT R 4/250' → 'Leica Telyt-R 250mm f4', 'LEICA IIIG' → 'Leica IIIg'"""
+    t = re.sub(r"(\d(?:[.,]\d)?)\s*/\s*(\d{2,3})\s*(?:MM)?\b", lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", title, flags=re.I)
+    t = re.sub(r"\b(APO|SUMMICRON|SUMMILUX|SUMMARIT|SUMMARON|ELMARIT|ELMAR|TELYT|NOCTILUX|HEKTOR|ASPH)\b", lambda m: m.group(1) if m.group(1) in ("APO", "ASPH") else m.group(1).capitalize(), t)
+    t = re.sub(r"\bAPO (Summicron|Summilux|Telyt|Elmarit)", r"APO-\1", t)
+    t = re.sub(r"\b(Summicron|Summilux|Elmarit|Elmar|Telyt|Summaron)\s+([RM])\b", r"\1-\2", t)
+    t = re.sub(r"\bLEICA\b", "Leica", t)
+    t = re.sub(r"\bLeica (I{1,3})([A-G])\b", lambda m: f"Leica {m.group(1)}{m.group(2).lower()}", t)
+    t = re.sub(r"\s+", " ", t).strip(" ,-")
+    return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -9084,6 +9162,7 @@ def crawl_all():
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
+        ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
