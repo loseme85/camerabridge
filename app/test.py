@@ -6339,6 +6339,106 @@ def _fill_detail_conditions(site, results, read_detail, limit=80):
     print(f"    └─ 상세 상태: 새로 {fetched}개 열어 {found}개 찾음")
 
 
+def crawl_fujikoshi():
+    """富士越カメラ (일본) - 라이카 정규 판매점 MakeShop 중고 라이카 분류(/shopbrand/006/X/, EUC-JP 정적 HTML, 50개씩 6쪽쯤 260개).
+    목록에 있는 것은 판매 중, 가격 JPY(세금 포함). 등급은 상세 화면 '■程度 極上品'(新品＞新同品＞極上品＞美品＞上程度＞中程度＞ジャンク)뿐이라
+    처음 본 매물만 상세를 읽고 전에 읽은 등급은 이전 결과에서 다시 씀 (액세서리는 안 읽음). robots.txt 없음(404)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import FUJIKOSHI_PREFIX
+    base = "https://www.fujikoshi-camera.com"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    site = "富士越カメラ (일본)"
+    known = {}
+    try:
+        with open("data/raw/results.json", encoding="utf-8") as f:
+            known = {r["링크"]: (r.get("컨디션"), r.get("이미지")) for r in json.load(f) if r.get("site") == site}
+    except (OSError, ValueError):
+        pass
+    results, seen = [], set()
+    print(f"\n  📂 富士越カメラ 크롤링 시작 (이전 등급 {len(known)}개)")
+    for page_num in range(1, 30):
+        try:
+            resp = sess.get(f"{base}/shopbrand/006/X/page{page_num}/order/", timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"富士越カメラ {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        text = resp.content.decode("euc-jp", "ignore")
+        new = 0
+        for m in re.finditer(r'<a href="(/shopdetail/(\d+)/006/X/page\d+/order/)">\s*([^<]+)</a>([\s\S]{0,700}?)([\d,]+)円', text):
+            link = base + m.group(1)
+            if link in seen:
+                continue
+            seen.add(link)
+            new += 1
+            raw = re.sub(r"\s+", " ", _html.unescape(m.group(3)).replace("　", " ")).strip()
+            if any(b2 in raw.lower() for b2 in THIRD_PARTY_BRANDS) or re.search(
+                    r"Konica|コニカ|Voigtl|フォクトレンダー|Rayqual|レイクォール|Zeiss|ツァイス|Minolta|ミノルタ|TTArtisan|銘匠|腕時計", raw, re.I):
+                continue  # 라이카 분류에 섞인 다른 회사 렌즈·어댑터
+            name = _fujikoshi_name(raw)
+            price = f"¥{int(m.group(5).replace(',', '')):,}"
+            img_url = re.search(r'(https://[^"\s]+itemimages/[^"\s]*' + m.group(2) + r'[^"\s]*\.jpg)', text)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": img_url.group(1) if img_url else "",
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    read = 0
+    for r in results:
+        prev_cond, prev_img = known.get(r["링크"]) or (None, None)
+        if prev_cond and prev_cond != "정보없음":
+            r["컨디션"] = prev_cond
+            r["이미지"] = prev_img or r["이미지"]
+            continue
+        if r["category"] == "Accessory" or read >= 150:
+            continue
+        read += 1
+        try:
+            page = sess.get(r["링크"], timeout=30).content.decode("euc-jp", "ignore")
+            g = re.search(r"■程度\s*(?:<[^>]+>\s*)*(新品|新同品|極上品|美品|上程度|中程度|ジャンク)", page)
+            if g:
+                r["컨디션"] = FUJIKOSHI_PREFIX + g.group(1)
+            # 목록 사진은 100px 썸네일 → 상세의 큰 사진(800px, 'itemimages/<상품번호>_xxxx.jpg')
+            big = re.search(r'(https://[^"\s]+/itemimages/' + r["링크"].split("/shopdetail/")[1][:12] + r'_\w+\.jpg)', page)
+            if big:
+                r["이미지"] = big.group(1)
+        except Exception as e:
+            print(f"    ⚠️ 상세 못 읽음: {r['링크'][-40:]} ({e})")
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ 富士越カメラ 완료: {len(results)}개 (상세 새로 {read}개)")
+    return results
+
+
+def _fujikoshi_name(title):
+    """富士越カメラ 제목 다듬기: 'Leica(ライカ)　SUMMILUX-M　35mm　F1.4　ASPH.　シルバー　481万台　(NL-5446)'
+    → 'Leica Summilux-M 35mm f1.4 ASPH. silver' ('481万台' 일련번호 대·관리 번호·【委託】 빼기)"""
+    from ja_normalize import ja_to_en
+    t = re.sub(r"【[^】]*】|\((?:N[A-Z]{1,2}|0NAC|NAC)-?\d+\)|\s\d{2,4}万台|\(ライカ\)|\(Leica\)", " ", title)
+    t = re.sub(r"\s+", " ", ja_to_en(t)).strip()
+    t = re.sub(r"^(?:leica|ライカ)\s*", "", t, flags=re.I)
+    t = re.sub(r"\bF(\d+(?:\.\d+)?)\b", r"f\1", t)
+    t = re.sub(r"\bM6TTL\b", "M6 TTL", t, flags=re.I)
+    t = re.sub(r"\bVARIO-ELMARIT-T\b", "Vario-Elmar-T", t, flags=re.I)  # 매장 오기 (T 마운트 18-56은 Vario-Elmar-T)
+    return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
+
+
 def _rangefinder_name(title):
     """Rangefinder 제목 다듬기: 'Leica Summilux-M 35mm F1.4 ASPH FLE &#8211; Silver (Used)' → 'Leica Summilux-M 35mm f1.4 ASPH FLE Silver'"""
     import html as _html
@@ -8476,7 +8576,8 @@ SOURCE_MIN_INTERVAL_HOURS = {
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
     "Leica Store Poland (폴란드)": 6,  # 매물마다 상세, Crawl-delay 2초 (약 40개 · 2분)
-    "Photo Warehouse (뉴질랜드)": 6,  # 매물마다 상세 (약 70개 · 1분)
+    "Photo Warehouse (뉴질랜드)": 6,
+    "富士越カメラ (일본)": 6,  # 목록 6쪽 + 새 매물 상세  # 매물마다 상세 (약 70개 · 1분)
     "Howard Parker (영국)": 6,  # 매물마다 상세 (약 50개)
     "Foto Köster (독일)": 6,  # 매물마다 상세 (약 40개)
     "Lecuit (룩셈부르크)": 6,  # 목록 2쪽 + 새 매물 상세 (약 110개)
@@ -8610,6 +8711,7 @@ def crawl_all():
         ("M&S Materiale Fotografico (이탈리아)", lambda: ce.wrap_full_run("M&S Materiale Fotografico (이탈리아)", crawl_msmateriale)),
         ("Leica Store Poland (폴란드)", lambda: ce.wrap_full_run("Leica Store Poland (폴란드)", crawl_leicastorepl)),
         ("Photo Warehouse (뉴질랜드)", lambda: ce.wrap_full_run("Photo Warehouse (뉴질랜드)", crawl_photowarehouse)),
+        ("富士越カメラ (일본)", lambda: ce.wrap_full_run("富士越カメラ (일본)", crawl_fujikoshi)),
         ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
         # PhotoCo (호주): GitHub 서버에서 매번 403이라 보류 (2026-11-02, 수집기는 남겨 둠)
         ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),

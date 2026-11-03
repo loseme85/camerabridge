@@ -113,6 +113,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SABATINI.get(cond[len(SABATINI_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
+    if cond.startswith(FUJIKOSHI_PREFIX):
+        return _FUJIKOSHI.get(cond[len(FUJIKOSHI_PREFIX):].strip()), "label"
     if cond.startswith(JCAMERA_PREFIX):
         return jcamera_grade(cond[len(JCAMERA_PREFIX):].strip()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
@@ -646,6 +648,10 @@ _KOMEHYO = {"新品": "N", "未使用品": "N", "中古品SA": "S", "中古品A"
 
 # 일본 J-カメラ (중고점 모음): 매장마다 '程度' 말이 다름 — 말로 쓰는 곳(中古美品·中古良上品·中古良品·中古並品…)과
 # 글자로 쓰는 곳(A·AB·B, 기존 일본 매장 _JP 대응)
+# 일본 富士越カメラ: 상세 화면 '■程度 極上品' (新品＞新同品＞極上品＞美品＞上程度＞中程度＞ジャンク)
+FUJIKOSHI_PREFIX = "Fujikoshi: "
+_FUJIKOSHI = {"新品": "N", "新同品": "S", "極上品": "A", "美品": "B", "上程度": "C", "中程度": "D", "ジャンク": "X"}
+
 JCAMERA_PREFIX = "JCamera: "
 _JCAMERA = {"新品": "N", "新品同様": "S", "未使用品": "S", "極上品": "S", "中古美品": "A", "中古良上品": "B", "中古良品": "B",
             "中古並品": "C", "並品": "C", "難あり": "D", "ジャンク": "X",
