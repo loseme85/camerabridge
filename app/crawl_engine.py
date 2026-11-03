@@ -286,6 +286,7 @@ def parse_cafe24_cards(html: str, site: dict, keep: Callable[[str], bool], fix_i
             continue
         name = " ".join(name_el.get_text(" ", strip=True).split())
         name = re.sub(r"^상품명\s*:\s*", "", name)  # 화면에서 숨겨진 '상품명 :' 라벨
+        raw_name = name
         if site.get("name_fix"):
             name = site["name_fix"](name)  # 사이트별 제목 다듬기 (국민카메라: 렌즈 이름 채우기)
         if not name:
@@ -317,8 +318,11 @@ def parse_cafe24_cards(html: str, site: dict, keep: Callable[[str], bool], fix_i
                 if raw and "img_product_big.gif" not in raw:
                     img_url = fix_img(raw, base)
         cond = re.search(r"(\d{2,3})%", card_text) or re.search(r"(\d{2,3})%", name)
+        condition = cond.group(1) + "%" if cond else "정보없음"
+        if site.get("cond_fix"):  # 사이트별 제목 속 등급 (신성카메라: 끝의 '(A+)')
+            condition = site["cond_fix"](raw_name) or condition
         cards.append({"active": not is_soldout, "row": {
-            "site": site["name"], "상품명": name, "컨디션": cond.group(1) + "%" if cond else "정보없음", "가격": price,
+            "site": site["name"], "상품명": name, "컨디션": condition, "가격": price,
             "통화": site["통화"], "이미지": img_url, "링크": href, "품절": is_soldout, "예약중": is_reserved,
         }})
     return cards

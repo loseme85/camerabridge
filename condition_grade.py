@@ -115,6 +115,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _GBK.get(cond[len(GBK_PREFIX):].strip().upper()), "label"
     if cond.startswith(MPEX_PREFIX):
         return _MPEX.get(cond[len(MPEX_PREFIX):].strip()), "label"
+    if cond.startswith(SC_PREFIX):
+        return _SC.get(cond[len(SC_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
@@ -684,6 +686,11 @@ _GBK = {"A+": "A", "A": "A", "A-": "A", "A/B": "A", "B/A": "B", "B+": "B", "B": 
 # 미국 Midwest Photo: 설명 첫 단어 등급. 'GOOD = 원래 상태의 70~79%, 가벼운 사용감·작은 흠 여러 개' (매장 설명). 사진 평가 전 말뜻대로 (2026-11-04)
 MPEX_PREFIX = "MPEX: "
 _MPEX = {"like new": "A", "excellent+": "B", "excellent +": "B", "excellent": "B", "good": "C", "fair": "D", "poor": "D"}
+
+
+# 한국 신성카메라: 제목 끝 '(S)'·'(A+)'·'(A)' (국내 매장 표기 — 국내 매장은 사진보다 엄한 편이라 그대로 맞춤, 2026-11-04)
+SC_PREFIX = "SC: "
+_SC = {"S": "S", "A+": "A", "A": "A", "A-": "B", "B+": "B", "B": "B", "B-": "C", "C+": "C", "C": "C"}
 
 
 KOMEHYO_PREFIX = "Komehyo: "

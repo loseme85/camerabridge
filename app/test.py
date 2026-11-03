@@ -1191,6 +1191,19 @@ SITES = [
         ],
         "통화": "KRW",
     },
+    {
+        "name": "신성카메라",
+        "active_first": False,  # 판매된 물건은 목록에서 빠짐 (라이카 분류 3곳 20개 안팎)
+        "name_fix": lambda t: _scamera_name(t),
+        "cond_fix": lambda t: _scamera_grade(t),
+        "base": "https://scamera.co.kr",
+        "categories": [
+            "https://scamera.co.kr/product/list.html?cate_no=53",  # 중고 35mm카메라 > 라이카
+            "https://scamera.co.kr/product/list.html?cate_no=93",  # 중고 35mm렌즈 > 라이카
+            "https://scamera.co.kr/product/list.html?cate_no=48",  # 중고 DSLR카메라 > 라이카
+        ],
+        "통화": "KRW",
+    },
 ]
 
 def _ilkwang_name(title):
@@ -1201,6 +1214,27 @@ def _ilkwang_name(title):
     t = re.sub(r"\s*(?:필름|디지털)카메라\s*", " ", t)
     t = re.sub(r"\[\d{2,3}%\]", " ", t)  # 상태 %는 카드 글에서 따로 읽음
     return re.sub(r"\s+", " ", t).strip()
+
+
+def _scamera_name(title):
+    """신성카메라 제목 '[중고-위탁판매] 라이카 LEICA M6 TTL 0.72 BODY 박스품 (S)' → 'LEICA M6 TTL 0.72 BODY'
+    (머리말·'라이카'·끝 등급·박스품·s/n·덧붙인 구성품 문구 빼기)"""
+    if re.search(r"(?i)보이그랜더|voigtl|썬포토|7artisans|ttartisan", title):
+        return ""  # 'For 라이카 M 마운트' 다른 회사 렌즈 (빈 이름은 수집기가 건너뜀)
+    t = re.sub(r"^\[[^\]]*\]\s*", "", title)
+    t = re.sub(r"^(?:라이카|미니룩스)\s+", "", t)
+    t = re.sub(r"\s*\((?:S|A\+|A|A-|B\+|B|B-|C\+|C)\)\s*$", "", t)
+    t = re.sub(r"\s*[,+]?\s*(?:박스품|정품|라이카코리아 정품|스트랩포함|케이스포함)\b", "", t)
+    t = re.sub(r"\s*s/n\s*[\d*x]+\S*", "", t, flags=re.I)
+    t = re.split(r"\s\+\s(?=.*(?:후드|필터|UV|B\+W|B$|케이스|캡|스트랩))", t)[0]
+    t = re.sub(r"\s*-\s*\[[^\]]*\]\s*$", "", t)
+    return re.sub(r"\s+", " ", t).strip(" ,+-")
+
+
+def _scamera_grade(title):
+    """제목 끝 등급 '(A+)' → 'SC: A+' (없으면 None)"""
+    m = re.search(r"\((S|A\+|A|A-|B\+|B|B-|C\+|C)\)\s*$", title.strip())
+    return "SC: " + m.group(1) if m else None
 
 
 # 국민카메라 제목은 렌즈 이름 없이 '라이카 M 50mm f2'처럼 마운트·초점거리·조리개만 적는 일이 많아, 그 셋으로 라이카 렌즈가
