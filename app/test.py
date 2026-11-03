@@ -1176,7 +1176,32 @@ SITES = [
         ],
         "통화": "KRW",
     },
+    {
+        "name": "일광카메라",
+        "active_first": False,  # 분류마다 판매 중·품절이 섞여 매번 전체 (라이카 분류 6곳, 쪽당 12개)
+        "name_fix": lambda t: _ilkwang_name(t),
+        "base": "https://ilkwang.co.kr",
+        "categories": [
+            "https://ilkwang.co.kr/product/list.html?cate_no=523",  # 렌즈교환식(필름) > 라이카
+            "https://ilkwang.co.kr/product/list.html?cate_no=728",  # 미러리스 > 라이카
+            "https://ilkwang.co.kr/product/list.html?cate_no=721",  # 일체형/컴팩트 > 라이카
+            "https://ilkwang.co.kr/product/list.html?cate_no=978",  # 일체형/컴팩트(필름) > 라이카
+            "https://ilkwang.co.kr/product/list.html?cate_no=545",  # SLR렌즈 > 라이카
+            "https://ilkwang.co.kr/product/list.html?cate_no=938",  # 미러리스렌즈 > 라이카
+        ],
+        "통화": "KRW",
+    },
 ]
+
+def _ilkwang_name(title):
+    """일광카메라 제목 '중고/라이카 필름카메라 M3[92%]' → '라이카 M3' ('중고/'·'필름카메라'·'디지털카메라'·[92%] 빼기 — %는 카드 글에서 상태로 읽음), 라이카·라이츠 아니면 빈 이름"""
+    t = re.sub(r"^(?:중고|위탁)\s*/\s*", "", title)
+    if not re.match(r"(?:라이카|라이츠|leica|leitz)\b", t, re.I):
+        return ""
+    t = re.sub(r"\s*(?:필름|디지털)카메라\s*", " ", t)
+    t = re.sub(r"\[\d{2,3}%\]", " ", t)  # 상태 %는 카드 글에서 따로 읽음
+    return re.sub(r"\s+", " ", t).strip()
+
 
 # 국민카메라 제목은 렌즈 이름 없이 '라이카 M 50mm f2'처럼 마운트·초점거리·조리개만 적는 일이 많아, 그 셋으로 라이카 렌즈가
 # 하나로 정해질 때만 이름을 채운다 (M 90/2.8은 Elmarit·Tele-Elmarit, R 180/2.8은 Elmarit·APO-Elmarit, L 50/2는 Summicron·
