@@ -6382,6 +6382,69 @@ def _gebrauchtkameras_name(title):
     return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
 
 
+def crawl_mitsubado():
+    """三葉堂寫眞機店 (일본 닛포리) - colorme 온라인몰 'leica' 검색 목록 (EUC-JP 정적 HTML, 한 쪽 15개, 70개쯤). SOLD OUT 빼고 판매 중만, 가격 JPY(세금 포함).
+    상태는 설명 글(【コンディション】)뿐이라 등급 없이 둠 — 사진 등급 대기열에서 매김"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from ja_normalize import ja_to_en
+    base = "https://mitsubado-online.com"
+    site = "三葉堂寫眞機店 (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 三葉堂 크롤링 시작")
+    for page_num in range(1, 20):
+        try:
+            resp = sess.get(f"{base}/", params={"mode": "srh", "keyword": "leica", "page": page_num}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"三葉堂 {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        text = resp.content.decode("euc-jp", "ignore")
+        cards = re.findall(r'<li class="col col-sm-4 col-lg-4 productlist_list">(.*?)</li>', text, re.S)
+        new = 0
+        for card in cards:
+            pid = re.search(r"\?pid=(\d+)", card)
+            if not pid or pid.group(1) in seen:
+                continue
+            seen.add(pid.group(1))
+            new += 1
+            if re.search(r"(?i)sold ?out", card):
+                continue
+            raw = _html.unescape((re.search(r'item_name show">([^<]+)', card) or [None, ""])[1]).strip()
+            if not re.search(r"(?i)leica|leitz|ライカ", raw):
+                continue
+            pr = re.search(r'item_price show">([\d,]+)円', card)
+            price = f"¥{int(pr.group(1).replace(',', '')):,}" if pr else "문의요망"
+            img = re.search(r'<img src="([^"]+)"', card)
+            name = re.sub(r"\s+", " ", ja_to_en(raw)).strip()
+            name = re.sub(r"\b(\d(?:\.\d)?)cm\s*f\s?(\d(?:\.\d)?)\b", r"\1cm f\2", name)
+            name = name if re.match(r"(?:leica|leitz)\b", name, re.I) else "Leica " + name
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": _html.unescape(img.group(1)) if img else "",
+                "링크": f"{base}/?pid={pid.group(1)}",
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ 三葉堂 완료: {len(results)}개")
+    return results
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -8995,6 +9058,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
+        ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
