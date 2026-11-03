@@ -6627,6 +6627,75 @@ def crawl_fotocuratolo():
     return results
 
 
+def crawl_mpex():
+    """Midwest Photo (미국 콜럼버스, mpex.com) - Magento. robots.txt가 검색·'?' 주소를 막아 사이트맵(sitemap-1-1·1-2.xml, 1만 개)에서
+    'used-…leica/summicron…' 상품 주소만 골라 상세를 읽음 (몇 개뿐). 'In stock'만, 가격 USD. 상태는 설명 첫 단어 (LIKE NEW·EXCELLENT·GOOD·FAIR)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import MPEX_PREFIX
+    base = "https://mpex.com"
+    site = "Midwest Photo (미국)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Midwest Photo 크롤링 시작")
+    urls = []
+    try:
+        index = sess.get(f"{base}/sitemap/sitemap.xml", timeout=60)
+        index.raise_for_status()
+        for m in re.findall(r"<loc>([^<]+)</loc>", index.text):
+            r = sess.get(m, timeout=90)
+            r.raise_for_status()
+            urls += re.findall(r"<loc>([^<]+)</loc>", r.text)
+            time.sleep(2)
+    except Exception as e:
+        raise RuntimeError(f"Midwest Photo 사이트맵 못 읽음: {e}")  # 빠진 목록이 판매완료로 바뀌지 않게
+    urls = [u for u in dict.fromkeys(urls) if re.search(r"^https://mpex\.com/used-[^/]*(?:leica|leitz|summicron|summilux|summaron|summarit|elmarit|elmar|noctilux)[^/]*\.html$", u, re.I)
+            and not re.search(r"(?i)blackmagic|sigma|panasonic|lumix|l-mount|voigtl|zeiss|7artisans|ttartisan", u)]
+    print(f"    └─ 사이트맵 중고 라이카 주소 {len(urls)}개")
+    results = []
+    for url in urls:
+        try:
+            page = sess.get(url, timeout=30)
+            if page.status_code == 404:
+                continue
+            page.raise_for_status()
+        except Exception as e:
+            print(f"    ⚠️ 상세 못 읽음: {url[-50:]} ({e})")
+            continue
+        time.sleep(random.uniform(1.0, 2.0))
+        h = page.text
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<script.*?</script>|<style.*?</style>|<[^>]+>", " ", h, flags=re.S)))
+        if not re.search(r"\bIn stock\b", text, re.I) or re.search(r"\bOut of stock\b", text, re.I):
+            continue
+        title = _html.unescape((re.search(r"<title>([^<]+)</title>", h) or [None, ""])[1]).strip()
+        name = re.sub(r"^Used\s+", "", title, flags=re.I)
+        name = re.sub(r"\bf/(\d+(?:\.\d+)?)", r"f\1", name)
+        name = re.sub(r"\bM Mount\b", "M", name)
+        pr = re.search(r"\$([\d,]+\.\d{2})", text)
+        price = f"${float(pr.group(1).replace(',', '')):,.0f}" if pr else "문의요망"
+        g = re.search(r"Description\s+(LIKE NEW|EXCELLENT\s?\+?|EXCELLENT|GOOD|FAIR|POOR)\b", text)
+        img = re.search(r'og:image" content="([^"]+)"', h)
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": MPEX_PREFIX + g.group(1).strip().lower() if g else "정보없음",
+            "가격": price,
+            "통화": "USD",
+            "이미지": img.group(1) if img else "",
+            "링크": url,
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Midwest Photo 완료: {len(results)}개")
+    return results
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -9086,6 +9155,7 @@ DETAIL_CONDITION = {
 # 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
 SOURCE_MIN_INTERVAL_HOURS = {
     "gebrauchtkameras.de (독일)": 12,  # 라이카 상품 상세 100개쯤 (3분)
+    "Midwest Photo (미국)": 12,  # 사이트맵 1만 개 받아 거름
     "Ffordes (영국)": 6,
     "Lucky Camera (일본)": 12,  # 목록 30쪽 + 새 매물 상세
     "Tamarkin Camera (미국)": 6,  # 카드마다 상세 (약 170개)
@@ -9243,6 +9313,7 @@ def crawl_all():
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
         ("Foto Curatolo (이탈리아)", lambda: ce.wrap_full_run("Foto Curatolo (이탈리아)", crawl_fotocuratolo)),
+        ("Midwest Photo (미국)", lambda: ce.wrap_full_run("Midwest Photo (미국)", crawl_mpex)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
