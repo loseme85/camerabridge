@@ -269,6 +269,7 @@ CAFE24_SOLD_MARKERS = {
     "사진집": lambda html: "pdi_sold.png" in html or "품절" in html,
     "장씨카메라": lambda html: 'alt="품절"' in html or "icon_202505071559330700.gif" in html or "soldout" in html.lower(),
     "라이카스토어 충무로": lambda html: "icon_202209171535309800.gif" in html or "SOLD OUT" in html or "품절" in html,
+    "강산 중고샵": lambda html: "icon_sellout.gif" in html or "품절" in html or "판매완료" in html,
 }
 
 
@@ -280,7 +281,9 @@ def parse_cafe24_cards(html: str, site: dict, keep: Callable[[str], bool], fix_i
     base = site["base"]
     sold_marker = CAFE24_SOLD_MARKERS.get(site["name"], lambda h: "품절" in h or "soldout" in h.lower())
     cards = []
-    for card in BeautifulSoup(html, "html.parser").select("ul.prdList > li"):
+    soup = BeautifulSoup(html, "html.parser")
+    # 옛 'mono' 스킨(강산 중고샵)은 ul.prdList 대신 .xans-product-listnormal 안의 li.xans-record-
+    for card in soup.select("ul.prdList > li") or soup.select(".xans-product-listnormal li.xans-record-"):
         name_el = card.select_one(".name")
         if not name_el:
             continue
@@ -303,7 +306,9 @@ def parse_cafe24_cards(html: str, site: dict, keep: Callable[[str], bool], fix_i
             href = base + href
         href = href.split("#")[0]
         card_text = card.get_text(" ", strip=True)
-        price_match = re.search(r"([\d,]+원)", card_text)
+        price_el = card.select_one(".price")  # 옛 스킨은 소비자가 '0원'이 먼저 나와서 판매가 칸을 먼저 봄
+        price_match = re.search(r"([\d,]+원)", price_el.get_text(" ", strip=True)) if price_el else None
+        price_match = price_match or re.search(r"([\d,]+원)", card_text)
         price = normalize_price(price_match.group(1) if price_match else "문의요망")
         img_url = ""
         for img in card.select("img"):
