@@ -115,6 +115,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
         return _FUJIKOSHI.get(cond[len(FUJIKOSHI_PREFIX):].strip()), "label"
+    if cond.startswith(OHBAYASHI_PREFIX):
+        return _OHBAYASHI.get(cond[len(OHBAYASHI_PREFIX):].strip()), "label"
     if cond.startswith(JCAMERA_PREFIX):
         return jcamera_grade(cond[len(JCAMERA_PREFIX):].strip()), "label"
     if cond.startswith(HEIDELBERG_PREFIX):
@@ -651,6 +653,10 @@ _KOMEHYO = {"新品": "N", "未使用品": "N", "中古品SA": "S", "中古品A"
 # 일본 富士越カメラ: 상세 화면 '■程度 極上品' (新品＞新同品＞極上品＞美品＞上程度＞中程度＞ジャンク)
 FUJIKOSHI_PREFIX = "Fujikoshi: "
 _FUJIKOSHI = {"新品": "N", "新同品": "S", "極上品": "A", "美品": "B", "上程度": "C", "中程度": "D", "ジャンク": "X"}
+
+# 일본 カメラの大林: 상세 표 '程度' — A 사용 적고 외관 깨끗 · AB 보통 사용, 양호 · B 외관 안 깨끗하나 사용 문제없음 · C 일부 불량
+OHBAYASHI_PREFIX = "Ohbayashi: "
+_OHBAYASHI = {"A": "A", "AB": "B", "B": "C", "C": "D"}
 
 JCAMERA_PREFIX = "JCamera: "
 _JCAMERA = {"新品": "N", "新品同様": "S", "未使用品": "S", "極上品": "S", "中古美品": "A", "中古良上品": "B", "中古良品": "B",
