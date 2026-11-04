@@ -502,3 +502,11 @@ def test_scandinavianphoto():
     assert grade_of(site, SCANPHOTO_PREFIX + "B-skick")[0] == "B"
     assert grade_of(site, SCANPHOTO_PREFIX + "C-skick")[0] == "C"
     assert grade_of(site, SCANPHOTO_PREFIX + "demo")[0] == "S"
+
+
+def test_itscamera():
+    from condition_grade import ITSCAMERA_PREFIX
+    site = "잇츠카메라"
+    assert grade_of(site, ITSCAMERA_PREFIX + "AAA")[0] == "A"
+    assert grade_of(site, ITSCAMERA_PREFIX + "A")[0] == "B"
+    assert grade_of(site, "정보없음", "Leica X (TYP113)")[0] is None

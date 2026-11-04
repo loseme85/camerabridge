@@ -6920,6 +6920,90 @@ def crawl_scandinavianphoto():
     return results
 
 
+def _itscamera_name(title):
+    """잇츠카메라 제목 '[중고]Leica 라이카 M10-R(m10r) Black 블랙 AAA급 중고카메라매입 잇츠카메라' → 'Leica M10-R Black'
+    (머리말·가게 이름·'중고카메라매입' 같은 검색용 말·한글 중복 이름·등급 빼기). 라이카가 아니면 빈 이름"""
+    t = re.sub(r"\[[^\]]*\]\s*", " ", title)
+    t = re.sub(r"\([^)]*(?:라이카|정품|m10r|q2리포터|렌즈미포함|바디단품)[^)]*\)", " ", t, flags=re.I)
+    t = re.sub(r"\S*(?:잇츠카메라|매입)\S*", " ", t)
+    t = re.sub(r"\b(?:S|A{1,3}|B)급", " ", t)
+    t = re.sub(r"라이카\s*(?:중고)?\s*(?:카메라|렌즈)?", " ", t)
+    t = re.sub(r"\s(?:블랙|실버|디룩스\s*\d*|미러리스카메라|렌즈교환식|고성능카메라|방수 가능 아웃도어|바디만|본체)(?=\s|$)", " ", t)
+    t = re.sub(r"\(\s*\)", " ", t)
+    t = re.sub(r"\s+", " ", t).strip()
+    if not re.search(r"(?i)\b(?:leica|leitz)\b", t):
+        return ""
+    t = re.sub(r"(?i)^.*?\b(leica|leitz)\b", r"\1", t)
+    t = re.sub(r"(?i)\bnew\s+x\b", "X", t)  # 'NEW X (TYP113)'은 모델 이름 (신품 아님)
+    return t
+
+
+def crawl_itscamera():
+    """잇츠카메라 (한국) - MakeShop 중고 분류 4곳의 '라이카' 하위 분류 (미러리스·컴팩트·렌즈·기타, 30여 개). 정적 HTML(UTF-8).
+    가격은 판매가(price02, 할인가), 품절은 가격 대신 '품절' 표시. 등급은 제목의 'AAA급' 같은 말뿐이라 거의 없음"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import ITSCAMERA_PREFIX
+    base = "http://www.itscamera.com"
+    site = "잇츠카메라"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 잇츠카메라 크롤링 시작")
+    for xcode, mcode in [("003", "009"), ("004", "010"), ("002", "014"), ("012", "008")]:
+        for page_num in range(1, 15):
+            try:
+                resp = sess.get(f"{base}/shop/shopbrand.html", params={"type": "M", "xcode": xcode, "mcode": mcode,
+                                                                       "sort": "order", "page": page_num}, timeout=30)
+                resp.raise_for_status()
+            except Exception as e:
+                raise RuntimeError(f"잇츠카메라 {xcode}-{mcode} {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            text = resp.content.decode("utf-8", "ignore")
+            new = 0
+            for box in re.findall(r'<div class="item_box">(.*?)<!-- //item_box -->', text, re.S):
+                u = re.search(r'href="/shop/shopdetail\.html\?branduid=(\d+)', box)
+                nm = re.search(r'<li class="name">(.*?)</li>', box, re.S)
+                if not u or not nm or u.group(1) in seen:
+                    continue
+                seen.add(u.group(1))
+                new += 1
+                raw = _html.unescape(re.sub(r"<[^>]+>|\s+", " ", nm.group(1))).strip()
+                name = _itscamera_name(raw)
+                if not name:
+                    continue
+                if "새상품" in raw:
+                    name += " 신품"  # 등급(N)은 제목의 '신품'으로 매김
+                body = re.sub(r"<!--.*?-->", "", box, flags=re.S)
+                sold = bool(re.search(r"품절|soldout", body, re.I))
+                pr = re.search(r'class="price02">([\d,]+)원', box) or re.search(r'class="price01">([\d,]+)원', box)
+                price = f"{int(pr.group(1).replace(',', '')):,}원" if pr else "문의요망"
+                g = re.search(r"\b(S|A{1,3}|B)급", raw)
+                img = re.search(r'<img class="MS_prod_img_m" src="([^"]+)"', box)
+                img = img.group(1) if img else ""
+                results.append({
+                    "site": site,
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": ITSCAMERA_PREFIX + g.group(1) if g else "정보없음",
+                    "가격": price,
+                    "통화": "KRW",
+                    "이미지": (base + img) if img.startswith("/") else img,
+                    "링크": f"{base}/shop/shopdetail.html?branduid={u.group(1)}",
+                    "품절": sold,
+                    "예약중": False,
+                    "mount": detect_mount(name),
+                    "category": detect_category(name, price),
+                    "brand": detect_brand(name),
+                })
+            if not new or f"page={page_num + 1}" not in text:
+                break
+            time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ 잇츠카메라 완료: {len(results)}개")
+    return results
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -9540,6 +9624,7 @@ def crawl_all():
         ("Midwest Photo (미국)", lambda: ce.wrap_full_run("Midwest Photo (미국)", crawl_mpex)),
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
+        ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
