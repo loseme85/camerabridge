@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(ITSCAMERA_PREFIX):
+        return _ITSCAMERA.get(cond[len(ITSCAMERA_PREFIX):].strip().upper()), "label"
     if cond.startswith(LCF_PREFIX):
         letter = cond[len(LCF_PREFIX):].strip()[:1].upper()
         return (_LCF[letter], "label") if letter in _LCF else (None, None)
@@ -794,3 +796,8 @@ def leicastorepl_condition(text: str) -> str | None:
 # 매장 사진이 모두 새 상품 사진('Bilden visar en ny produkt')이라 사진 평가는 못 함 (2026-11-05) → 글자대로 A·B·C, 전시품·개봉품 S.
 SCANPHOTO_PREFIX = "ScandinavianPhoto: "
 _SCANPHOTO = {"a-skick": "A", "b-skick": "B", "c-skick": "C", "d-skick": "D", "demo": "S", "uppackad": "S"}
+
+# 한국 잇츠카메라: 제목 속 'AAA급' (라이카 30여 점 중 1점뿐, 2026-11-05) — 표본이 없어 사진 평가 없이 한국 매장 말투대로
+# AAA·S 'A', AA·A 'B', B 'C' (국내 매장의 'A급'은 보통 사용감 조금 있는 중고)
+ITSCAMERA_PREFIX = "ItsCamera: "
+_ITSCAMERA = {"S": "A", "AAA": "A", "AA": "B", "A": "B", "B": "C"}
