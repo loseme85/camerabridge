@@ -493,3 +493,12 @@ def test_gebrauchtkameras_grade():
     assert grade_of(site, "GBK: A/B", "")[0] == "A"
     assert grade_of(site, "GBK: B", "")[0] == "B"
     assert grade_of(site, "GBK: C", "")[0] == "D"
+
+
+def test_scandinavianphoto():
+    from condition_grade import SCANPHOTO_PREFIX
+    site = "Scandinavian Photo (스웨덴)"
+    assert grade_of(site, SCANPHOTO_PREFIX + "A-skick")[0] == "A"
+    assert grade_of(site, SCANPHOTO_PREFIX + "B-skick")[0] == "B"
+    assert grade_of(site, SCANPHOTO_PREFIX + "C-skick")[0] == "C"
+    assert grade_of(site, SCANPHOTO_PREFIX + "demo")[0] == "S"
