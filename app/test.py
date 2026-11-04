@@ -1215,7 +1215,43 @@ SITES = [
         ],
         "통화": "KRW",
     },
+    {
+        "name": "THE CAMERA",
+        "active_first": False,  # 여러 브랜드가 섞인 중고·위탁 분류 (쪽당 100개), 라이카 위탁 60여 개
+        "name_fix": lambda t: _thecamera_name(t),
+        "base": "https://thecamera.co.kr",
+        "categories": [
+            "https://thecamera.co.kr/product/list.html?cate_no=105",  # 위탁상품
+            "https://thecamera.co.kr/product/list.html?cate_no=97",  # 중고카메라
+            "https://thecamera.co.kr/product/list.html?cate_no=344",  # 중고 렌즈
+        ],
+        "통화": "KRW",
+    },
 ]
+
+def _thecamera_name(title):
+    """THE CAMERA(임성재tv) 제목 '[위탁] Leica M10-P + 라이카 엄지그립 [4072]' → 'Leica M10-P + 라이카 엄지그립'
+    ('[위탁]'·'[중고]' 머리말과 끝 관리번호 빼기). 라이카·라이츠가 아니거나 '추가결제' 같은 결제용 상품이면 빈 이름(건너뜀)"""
+    t = re.sub(r"^\s*(?:\[[^\]]*\]\s*)+", "", title)
+    t = re.sub(r"\s*\[?\b\d{4}\]?\s*$", "", t)
+    if not re.match(r"(?:라이카|라이츠|leica|leitz)\b", t, re.I) or re.search(r"추가\s*결제|결제\s*전용", t):
+        return ""
+    t = re.sub(r"(?i)\bvariso\b", "Vario", t)  # 오타
+    t = re.sub(r"(?i)\bvario\s+(elmar|elmarit)", r"Vario-\1", t)
+    t = re.sub(r"\s+-\s+(?=[RM]\b)", "-", t)  # 'Summilux - R' → 'Summilux-R'
+    t = re.sub(r"(?i)\s*\+\s*(?:hood|후드)\b", "", t)  # 덤 후드
+    t = re.sub(r"(?i)\b(\d(?:\.\d)?)\s*cm\b", lambda m: f"{round(float(m.group(1)) * 10)}mm", t)  # '5Cm' → '50mm'
+    if re.search(r"(?i)\brigid\b", t) and not re.search(r"(?i)summicron", t):
+        t = re.sub(r"(?i)\b50mm\b", "Summicron 50mm", t, count=1)  # '50mm F2 1st Rigid'
+    m = re.match(r"(?i)(leica)\s+R\s+(\d+)mm\s+f?\s*(\d(?:\.\d)?)\b(.*)$", t)
+    if m:  # 'Leica R 50mm F1.4 …' 렌즈 이름 빠진 R 렌즈 → 화각·조리개로 이름 채움 (100mm f2.8처럼 둘 이상이면 그대로)
+        fam = {("50", "1.4"): "Summilux-R", ("50", "2"): "Summicron-R", ("19", "2.8"): "Elmarit-R", ("28", "2.8"): "Elmarit-R",
+               ("35", "2.8"): "Elmarit-R", ("90", "2"): "Summicron-R", ("135", "2.8"): "Elmarit-R", ("180", "2.8"): "Elmarit-R",
+               ("35", "2"): "Summicron-R", ("24", "2.8"): "Elmarit-R"}.get((m.group(2), m.group(3).rstrip("0").rstrip(".") if "." in m.group(3) else m.group(3)))
+        if fam:
+            t = f"{m.group(1)} {fam} {m.group(2)}mm f/{m.group(3)}{m.group(4)}"
+    return re.sub(r"\s+", " ", t).strip()
+
 
 def _ilkwang_name(title):
     """일광카메라 제목 '중고/라이카 필름카메라 M3[92%]' → '라이카 M3' ('중고/'·'필름카메라'·'디지털카메라'·[92%] 빼기 — %는 카드 글에서 상태로 읽음), 라이카·라이츠 아니면 빈 이름"""
