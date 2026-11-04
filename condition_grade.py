@@ -72,6 +72,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FFORDES[up], "label"
     if cond.startswith(KS_PREFIX):
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
+    if cond.startswith(SCANPHOTO_PREFIX):
+        return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
     if cond.startswith(LCF_PREFIX):
         letter = cond[len(LCF_PREFIX):].strip()[:1].upper()
         return (_LCF[letter], "label") if letter in _LCF else (None, None)
@@ -786,3 +788,9 @@ def leicastorepl_condition(text: str) -> str | None:
     level = {"idealn": "idealny", "kolekcjonersk": "idealny", "bardzo dobr": "bardzo dobry", "dobr": "dobry",
              "dostateczn": "dostateczny"}[word]
     return LEICASTOREPL_PREFIX + level
+
+
+# 스웨덴 Scandinavian Photo: 카드 문구 'A-skick'·'B-skick'·'C-skick' (중고), 'Tidigare demoprodukt' (전시품), 제목 '(uppackad)' (개봉품).
+# 매장 사진이 모두 새 상품 사진('Bilden visar en ny produkt')이라 사진 평가는 못 함 (2026-11-05) → 글자대로 A·B·C, 전시품·개봉품 S.
+SCANPHOTO_PREFIX = "ScandinavianPhoto: "
+_SCANPHOTO = {"a-skick": "A", "b-skick": "B", "c-skick": "C", "d-skick": "D", "demo": "S", "uppackad": "S"}

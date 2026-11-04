@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130}
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -6814,6 +6814,76 @@ def crawl_2ndbase():
     return results
 
 
+def crawl_scandinavianphoto():
+    """Scandinavian Photo (스웨덴) - 중고 목록 /begagnat?p_brand_name=Leica 화면에 실린 상품 JSON(window.CURRENT_PAGE).
+    중고(begagnad)·전시품(demo)·개봉품(uppackad) 모두 Leica만, 가격 SEK(부가세 포함). robots.txt Crawl-delay 10이라 쪽마다 10초 쉼.
+    등급은 카드 문구 'A-skick'·'B-skick'·'C-skick'·'Tidigare demoprodukt' (사진은 모두 새 상품 사진이라 사진 평가 없음)"""
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import SCANPHOTO_PREFIX
+    base = "https://www.scandinavianphoto.se"
+    site = "Scandinavian Photo (스웨덴)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 Scandinavian Photo 크롤링 시작")
+    page_num, pages = 1, 1
+    while page_num <= min(pages, 10):
+        try:
+            resp = sess.get(f"{base}/begagnat", params={"p_brand_name": "Leica", "page": page_num}, timeout=30)
+            resp.raise_for_status()
+            text = resp.text
+            start = text.index("window.CURRENT_PAGE") 
+            start = text.index("{", start)
+            data, _ = json.JSONDecoder().raw_decode(text[start:])
+            block = data["products"]
+        except Exception as e:
+            raise RuntimeError(f"Scandinavian Photo {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        pages = int(block.get("pagesCount") or 1)
+        for p in block.get("products") or []:
+            url = p.get("url") or ""
+            if not url or url in seen or str(p.get("brand") or p.get("brandName") or "").lower() != "leica":
+                continue
+            seen.add(url)
+            raw = re.sub(r"\s+", " ", p.get("displayName") or "").strip()
+            name = re.sub(r"\s*\((?:begagna[dt]|demo|uppackad|använd)\)\s*", " ", raw, flags=re.I)
+            name = re.sub(r"(\d),(\d)", r"\1.\2", name).strip()  # 'f/1,4' → 'f/1.4'
+            name = name if re.match(r"(?:leica|leitz)\b", name, re.I) else "Leica " + name
+            usps = [str(u) for u in (p.get("uspList") or [])]
+            level = next((u.strip() for u in usps if re.match(r"\s*[A-D]-skick", u, re.I)), None)
+            if not level and (p.get("isDemo") or re.search(r"(?i)demo", raw + " ".join(usps))):
+                level = "demo"
+            if not level and re.search(r"(?i)uppackad", raw):
+                level = "uppackad"
+            price_v = (p.get("price") or {}).get("currentInclVat")
+            price = f"SEK {float(price_v):,.0f}" if price_v else "문의요망"
+            imgs = p.get("imageUrls") or []
+            img = imgs[0].get("url", "") if imgs else ""
+            sold = bool(p.get("isNotBuyable")) or str(p.get("stockLevel") or "").lower() in ("none", "outofstock", "soldout")
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": SCANPHOTO_PREFIX + level if level else "정보없음",
+                "가격": price,
+                "통화": "SEK",
+                "이미지": (base + img) if img.startswith("/") else img,
+                "링크": base + url,
+                "품절": sold,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}/{pages}페이지 누적 {len(results)}개")
+        page_num += 1
+        if page_num <= min(pages, 10):
+            time.sleep(10)
+    print(f"  ✅ Scandinavian Photo 완료: {len(results)}개")
+    return results
+
+
 def _listed_est(item):
     """매장이 준 게시일(Shopify) 또는 사진 주소에 남은 올린 날짜 → 게시 추정일 ('2024-12'·'2026-10-15'), 모르면 빈 문자열"""
     from listing_date import listed_of
@@ -9433,6 +9503,7 @@ def crawl_all():
         ("Foto Curatolo (이탈리아)", lambda: ce.wrap_full_run("Foto Curatolo (이탈리아)", crawl_fotocuratolo)),
         ("Midwest Photo (미국)", lambda: ce.wrap_full_run("Midwest Photo (미국)", crawl_mpex)),
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
+        ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
