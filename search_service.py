@@ -704,7 +704,10 @@ def narrow_candidate_records(
         elif match_count == 1:
             broad.append((-match_count, position, record))
 
-    if not strong and not (accessory_anchor_active and broad):
+    # 기준이 하나뿐인 검색어('noctilux'·'summilux' 등)는 2개 맞는 후보가 없어 전체(2만 개+)를 점수 매기던 것 →
+    # 그 기준이 맞는 후보만 (개수 제한 없이) 점수 매김. 'noctilux' 9초 → 1초 안팎 (2026-11-05 속도 점검)
+    single_anchor = len(anchor_fields) == 1 and not strong and bool(broad)
+    if not strong and not (accessory_anchor_active and broad) and not single_anchor:
         stats["precomputed_field_record_count"] = precomputed_count
         return records, stats
 
@@ -733,7 +736,9 @@ def narrow_candidate_records(
         candidate_max = max_records
         candidate_broad_records = min_broad_records
 
-    if accessory_anchor_active and not strong and broad:
+    if single_anchor and not accessory_anchor_active:
+        selected = [item[2] for item in broad]
+    elif accessory_anchor_active and not strong and broad:
         selected = [item[2] for item in broad[:candidate_max]]
     else:
         strong_limit = candidate_max
