@@ -9655,6 +9655,72 @@ def crawl_cameraobscura():
     print(f"  ✅ Camera Obscura Elburg 완료: {len(results)}개")
     return results
 
+
+def crawl_chiswick():
+    """Chiswick Camera Centre (영국 런던) - WooCommerce. 상품 API는 쪽 넘김을 무시해 같은 10개만 돌려줘서(2026-11-05)
+    중고 분류 화면의 'Used brand: Leica' 필터(?filter_used-brand=leica, ?paged=N)를 읽음. 판매 중(instock)만. 가격 GBP.
+    등급 표기 없음. 영국 안에만 배송"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://chiswickcameras.co.uk"
+    print(f"\n  📂 Chiswick Camera Centre 크롤링 시작")
+    for page_num in range(1, 20):
+        resp = sess.get(f"{base}/products/category/used/", params={"filter_used-brand": "leica", "paged": page_num}, timeout=30)
+        if resp.status_code == 404 and page_num > 1:
+            break
+        resp.raise_for_status()
+        items = re.findall(r'<li class="product [^"]*">(.*?)</li>', resp.text, re.S)
+        classes = re.findall(r'<li class="(product [^"]*)">', resp.text)
+        new = 0
+        for cls, li in zip(classes, items):
+            m_link = re.search(r'<a href="([^"]+)"', li)
+            if not m_link or m_link.group(1) in seen:
+                continue
+            seen.add(m_link.group(1))
+            new += 1
+            if "instock" not in cls.split():
+                continue
+            m_name = re.search(r'woocommerce-loop-product__title">(.*?)</h2>', li, re.S)
+            name = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", m_name.group(1)))).strip() if m_name else ""
+            name = re.sub(r"\s*[–-]\s*", " ", name).strip()
+            name = re.sub(r"\bGoogles\b", "Goggles", name)
+            if not name:
+                continue
+            if not re.search(r"\b(?:leica|leitz)\b", name, re.I):
+                name = "Leica " + name
+            m_price = re.search(r'</span>([\d,]+\.\d\d)</bdi>', li)
+            price = f"£{float(m_price.group(1).replace(',', '')):,.0f}" if m_price else "문의요망"
+            m_img = re.search(r'<img[^>]+src="([^"]+)"', li)
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "게시일": "",
+                "site": "Chiswick Camera Centre (영국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "GBP",
+                "이미지": m_img.group(1) if m_img else "",
+                "링크": m_link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ Chiswick {page_num}페이지 {len(items)}개")
+        if not new or 'class="next page-numbers"' not in resp.text:
+            break
+        time.sleep(2)
+    print(f"  ✅ Chiswick Camera Centre 완료: {len(results)}개")
+    return results
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -9782,6 +9848,7 @@ def crawl_all():
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
         ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
+        ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
     ]
