@@ -116,7 +116,12 @@ def _write_json(path: str | Path, payload: Any) -> None:
     output_path = Path(path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
+        if isinstance(payload, list):
+            # 레코드 하나에 한 줄, 공백 없이 (2026-11-06): indent=2로 쓰던 results_resolved_v2.json이 100MB를 넘어
+            # GitHub이 push를 거부함(파일 하나 100MB 한도). 같은 JSON이라 읽는 쪽은 그대로, 줄 단위라 git 비교도 됨. 104MB → 78MB
+            f.write("[\n" + ",\n".join(json.dumps(item, ensure_ascii=False, separators=(",", ":")) for item in payload) + "\n]\n")
+        else:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
 
 
 def _summary_fields(output: dict[str, Any]) -> dict[str, Any]:
