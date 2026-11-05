@@ -9565,6 +9565,94 @@ def crawl_fotogoerlitz():
             break
         time.sleep(2)
     print(f"  ✅ Foto Görlitz 완료: {len(results)}개")
+COE_SLUG = re.compile(r"leica|leitz|summi|elmar|noctilux|summaron|hektor|visoflex|telyt|angulon|elmarit", re.I)
+COE_STATE = "data/raw/cameraobscura_state.json"
+
+
+def crawl_cameraobscura():
+    """Camera Obscura Elburg (네덜란드 엘뷔르흐) - 중고점 WooCommerce. 상품 API·쪽 넘김은 robots.txt가 막아(Disallow: /wp-json, /*page/)
+    사이트맵(product-sitemap.xml, lastmod 있음)의 라이카 주소(340개쯤)만 상품 화면을 1~2초 간격으로 읽음.
+    처음 한 번은 전부, 다음부터는 lastmod가 바뀐 상품 + 무작위 40개만 다시 읽고 나머지는 상태 파일(COE_STATE)의 이전 결과를 씀.
+    사이트맵에서 빠진 상품 = 판매 완료. 판매 중('InStock')만 담음. 가격 EUR.
+    등급 표기가 없고 설명이 자유 문장이라('clearly seen plenty of use … glass in excellent shape') describe_text가 엉뚱하게 잡혀 등급 없이 둠 (2026-11-05)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://www.cameraobscuraelburg.nl"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Camera Obscura Elburg 크롤링 시작")
+    resp = sess.get(f"{base}/product-sitemap.xml", timeout=30)
+    resp.raise_for_status()
+    urls = re.findall(r"<url>\s*<loc>([^<]+)</loc>\s*(?:<lastmod>([^<]+)</lastmod>)?", resp.text)
+    if len(urls) < 200:
+        raise RuntimeError(f"Camera Obscura 사이트맵 상품 {len(urls)}개뿐")  # 덜 나오면 판매 완료로 바뀌지 않게
+    links = {u: (m or "") for u, m in urls if COE_SLUG.search(u.rstrip("/").rsplit("/", 1)[-1])}
+    try:
+        with open(COE_STATE, encoding="utf-8") as f:
+            state = json.load(f)
+    except (OSError, ValueError):
+        state = {}
+    changed = [u for u, m in links.items() if u not in state or state[u].get("lastmod") != m]
+    same = [u for u in links if u not in changed]
+    todo = changed + random.sample(same, min(40, len(same)))
+    print(f"    └─ 사이트맵 라이카 {len(links)}개 · 새로·바뀜 {len(changed)}개 · 다시 확인 {len(todo) - len(changed)}개")
+
+    def detail(link):
+        h = sess.get(link, timeout=40).text
+        m_name = re.search(r"<h1[^>]*>(.*?)</h1>", h, re.S)
+        m_av = re.search(r'"availability":"([^"]+)"', h)
+        m_pr = re.search(r'"price":"?([\d.]+)', h)
+        m_img = re.search(r'og:image" content="([^"]+)"', h)
+        return {"name": _html.unescape(re.sub(r"<[^>]+>", "", m_name.group(1))).strip() if m_name else "",
+                "in_stock": bool(m_av and "InStock" in m_av.group(1)),
+                "amount": float(m_pr.group(1)) if m_pr else 0.0,
+                "image": m_img.group(1) if m_img else ""}
+
+    fails = 0
+    for i, link in enumerate(todo):
+        try:
+            info = detail(link)
+        except Exception as e:
+            fails += 1
+            print(f"    ⚠️ 상세 오류 {link[-50:]}: {e}")
+            if fails > 20:
+                raise RuntimeError("Camera Obscura 상세 오류가 너무 많음")
+            continue
+        info["lastmod"] = links[link]
+        state[link] = info
+        if (i + 1) % 50 == 0:
+            print(f"    └─ 상세 {i + 1}/{len(todo)}")
+        time.sleep(random.uniform(1, 2))
+    state = {u: v for u, v in state.items() if u in links}
+    with open(COE_STATE, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=0)
+    results = []
+    for link, info in state.items():
+        name = re.sub(r"\s+", " ", info.get("name") or "").strip()
+        if not info.get("in_stock") or not re.search(r"\b(?:leica|leitz)\b", name, re.I):
+            continue
+        price = f"€{info['amount']:,.0f}" if info.get("amount") else "문의요망"
+        cat = detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "게시일": "",
+            "site": "Camera Obscura Elburg (네덜란드)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": info.get("image") or "",
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Camera Obscura Elburg 완료: {len(results)}개")
     return results
 
 def crawl_all():
@@ -9695,6 +9783,7 @@ def crawl_all():
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
         ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
+        ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
