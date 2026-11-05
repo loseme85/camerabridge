@@ -78,6 +78,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FOTOGOERLITZ.get(cond[len(FOTOGOERLITZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTONO_PREFIX):
         return _FOTONO.get(cond[len(FOTONO_PREFIX):].strip()), "label"
+    if cond.startswith(FCT_PREFIX):
+        return _FCT.get(cond[len(FCT_PREFIX):].strip().upper()), "label"
     if cond.startswith(ITSCAMERA_PREFIX):
         return _ITSCAMERA.get(cond[len(ITSCAMERA_PREFIX):].strip().upper()), "label"
     if cond.startswith(LCF_PREFIX):
@@ -805,6 +807,12 @@ _SCANPHOTO = {"a-skick": "A", "b-skick": "B", "c-skick": "C", "d-skick": "D", "d
 # AAA·S 'A', AA·A 'B', B 'C' (국내 매장의 'A급'은 보통 사용감 조금 있는 중고)
 ITSCAMERA_PREFIX = "ItsCamera: "
 _ITSCAMERA = {"S": "A", "AAA": "A", "AA": "B", "A": "B", "B": "C"}
+
+# 일본 Film Camera Tokyo: 설명 'Product status: A/Beautiful' (S/Brand New·A/Beautiful·B/Good·C/Normal·D).
+# 사진 평가(표기 가리고 26점, 사진 3장씩, 2026-11-05): S A 2 · A A 3 · B A 12·B 1 · C A 2·B 3·C 2 · D B 1.
+# 사진이 평균 0.9등급 후함(기존 매장 0.8과 비슷) → 매장이 엄격한 편이라 글자 그대로. 정확 6/26 · 한 등급 이내 23/26
+FCT_PREFIX = "FCT: "
+_FCT = {"S": "S", "A": "A", "B": "B", "C": "C", "D": "D"}
 
 # 노르웨이 Foto.no: 중고 제목 'Tilstand: 2' (숫자 1~5, 클수록 사용감). 사진 평가(표기 가리고 22점 — 라이카가 8점뿐이라 다른 브랜드 중고 섞음,
 # 상품마다 사진 한 장뿐, 2026-11-05): 2 → A 7·B 3 · 3 → A 5·B 1·C 1 · 4 → B·C · 5 → B 2. 사진이 평소처럼 한 등급쯤 후하다고 보고

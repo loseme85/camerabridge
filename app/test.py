@@ -9876,6 +9876,73 @@ def crawl_fotosipkes():
     print(f"  ✅ Foto Sipkes 완료: {len(results)}개")
     return results
 
+
+def _fct_name(title):
+    """Film Camera Tokyo 제목 다듬기: 'SN. 4230670'·'Year 1970' 떼고, '(L)'은 L39, '(M)'은 뗌, 오타 'Jagur'"""
+    name = re.sub(r"\s*SN\.?\s*[\d*]+\s*$", "", title, flags=re.I)
+    name = re.sub(r"\s*\b(?:year|yr)\.?\s*(19|20)\d\d\b", "", name, flags=re.I)
+    name = re.sub(r"\s*\(L\)", " L39", name)
+    name = re.sub(r"\s*\(M\)", "", name)
+    name = re.sub(r"\bJagur\b", "Jaguar", name, flags=re.I)
+    name = re.sub(r"\b(\d{1,2})cm\b", lambda m: f"{int(m.group(1)) * 10}mm", name)  # '5cm' → '50mm' (모델 규칙이 mm로 봄)
+    name = re.sub(r"^MINOLTA LEITZ minolta CL\b", "Leitz Minolta CL", name, flags=re.I)
+    name = re.sub(r"\s+", " ", name).strip(" -")
+    if not re.search(r"\b(?:leica|leitz)\b", name, re.I):
+        name = "Leica " + name
+    return name
+
+
+def crawl_filmcameratokyo():
+    """Film Camera Tokyo (일본 도쿄) - 필름 카메라점 Shopify products.json 전체(500개쯤)에서 라이카·라이츠만, 판매 중만. 가격 JPY.
+    쪽 사이를 천천히(빠르면 429 'local_rate_limited'). 등급은 설명의 'Product status: A/Beautiful'
+    (S/Brand New·A/Beautiful·B/Good·C/Normal·D) — 사진 평가로 글자 그대로 씀 (condition_grade FCT_PREFIX)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import FCT_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://filmcameratokyo.com"
+    print(f"\n  📂 Film Camera Tokyo 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Film Camera Tokyo"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.search(r"\b(?:leica|leitz)\b", title, re.I):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        name = _fct_name(title)
+        text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or ""))
+        m = re.search(r"Product status\s*[:：]?\s*([SABCD])\b", text)
+        cond = FCT_PREFIX + m.group(1) if m else "정보없음"
+        try:
+            price = f"¥{float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = detect_category(name, price)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "게시일": _shopify_listed(p),
+            "site": "Film Camera Tokyo (일본)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "JPY",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
+    return results
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -10003,6 +10070,7 @@ def crawl_all():
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
         ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
+        ("Film Camera Tokyo (일본)", lambda: ce.wrap_full_run("Film Camera Tokyo (일본)", crawl_filmcameratokyo)),
         ("Foto Sipkes (네덜란드)", lambda: ce.wrap_full_run("Foto Sipkes (네덜란드)", crawl_fotosipkes)),
         ("Foto.no (노르웨이)", lambda: ce.wrap_full_run("Foto.no (노르웨이)", crawl_fotono)),
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
