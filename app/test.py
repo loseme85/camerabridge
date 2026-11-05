@@ -9795,6 +9795,68 @@ def crawl_fotono():
     print(f"  ✅ Foto.no 완료: {len(results)}개")
     return results
 
+
+SIPKES_CATEGORIES = ["occasion-objectieven/leica", "occasion-compact-camera-s-digitaal/leica", "occasion-accessoires/leica"]
+
+
+def crawl_fotosipkes():
+    """Foto Sipkes (네덜란드 흐로닝언) - Magento 'occasion'(중고) 분류의 라이카 하위 분류 3개(렌즈·디지털 콤팩트·액세서리) 정적 HTML (?p=N).
+    robots.txt Crawl-delay 2 → 2.5초 간격. 주문 버튼(btn-cart)이 있는 것만 판매 중. 가격 EUR. 등급 표기 없음"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://www.fotosipkes.nl"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 Foto Sipkes 크롤링 시작")
+    for cat in SIPKES_CATEGORIES:
+        for page_num in range(1, 20):
+            time.sleep(2.5)
+            resp = sess.get(f"{base}/occasion-s/{cat}.html", params={"p": page_num} if page_num > 1 else None, timeout=30)
+            resp.raise_for_status()
+            new = 0
+            for li in re.findall(r'<li class="item">(.*?)<!-- End div class product-block-inner --> </li>', re.sub(r"\s+", " ", resp.text)):
+                m = re.search(r'<h2 class="product-name"><a href="([^"]+)" title="([^"]*)"', li)
+                if not m or m.group(1) in seen:
+                    continue
+                seen.add(m.group(1))
+                new += 1
+                if "btn-cart" not in li:
+                    continue
+                name = re.sub(r"\s*\boccasion\b.*$", "", _html.unescape(m.group(2)), flags=re.I).strip()
+                name = re.sub(r"\s+", " ", name)
+                if not re.search(r"\b(?:leica|leitz)\b", name, re.I):
+                    continue
+                pr = re.search(r'class="price">€\s*([\d.]+,\d\d)<', li)
+                amount = float(pr.group(1).replace(".", "").replace(",", ".")) if pr else 0
+                price = f"€{amount:,.0f}" if amount else "문의요망"
+                img = re.search(r'<img class="remover-image"[^>]+src="([^"]+)"', li)
+                cat_ = detect_category(name, price)
+                mount = 'Accessory' if cat_ == 'Accessory' else detect_mount(name)
+                results.append({
+                    "게시일": "",
+                    "site": "Foto Sipkes (네덜란드)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "EUR",
+                    "이미지": img.group(1) if img else "",
+                    "링크": m.group(1),
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat_,
+                    "brand": detect_brand(name),
+                })
+            print(f"    └─ {cat} {page_num}페이지 새 상품 {new}개")
+            if not new or f"?p={page_num + 1}" not in resp.text:
+                break
+    print(f"  ✅ Foto Sipkes 완료: {len(results)}개")
+    return results
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -9922,6 +9984,7 @@ def crawl_all():
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
         ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
+        ("Foto Sipkes (네덜란드)", lambda: ce.wrap_full_run("Foto Sipkes (네덜란드)", crawl_fotosipkes)),
         ("Foto.no (노르웨이)", lambda: ce.wrap_full_run("Foto.no (노르웨이)", crawl_fotono)),
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
