@@ -248,3 +248,28 @@ def test_want_alert_by_grade_and_delivered_total(monkeypatch):
     assert status == 200 and len(listed["items"]) == 2 and "notified" not in listed["items"][0]
     board.want_remove({"id": listed["items"][0]["id"]}, a)
     assert len(board.list_wants(a, records=records)[1]["items"]) == 1
+
+
+def test_run_retention_deletes_only_expired_days():
+    import datetime as dt
+    from types import SimpleNamespace
+    import importlib, sys
+    sys.path.insert(0, "api")
+    board = importlib.import_module("board")
+    today = dt.date(2027, 11, 10)
+    old_day = (today - dt.timedelta(days=365)).isoformat()
+    new_day = (today - dt.timedelta(days=364)).isoformat()
+    store = {f"usage/{old_day}/a.json", f"usage/{new_day}/b.json", f"feedback/{old_day}/c.json", "board/removed/x~20200101~m.json"}
+
+    class FakeBlob:
+        def iter_objects(self, prefix=None):
+            return [SimpleNamespace(pathname=p, url=p) for p in sorted(store) if p.startswith(prefix)]
+
+        def delete(self, urls):
+            for u in ([urls] if isinstance(urls, str) else urls):
+                store.discard(u)
+
+    result = board.run_retention(FakeBlob(), today=today)
+    assert f"usage/{new_day}/b.json" in store
+    assert f"usage/{old_day}/a.json" not in store and f"feedback/{old_day}/c.json" not in store
+    assert result["usage"] == 1 and result["feedback"] == 1
