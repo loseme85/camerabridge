@@ -8,7 +8,7 @@
   board/posts/<글id>~<분류>~<회원id>.json                보이는 글
   board/comments/<글id>/<댓글id>~<회원id>.json            보이는 댓글
   board/held/…                                            신고 HIDE_REPORTS명 이상 → 자동으로 가림 (운영자가 확인 뒤 되살리거나 지움)
-  board/removed/…                                         지운 글·댓글 (REMOVED_DAYS일 보관 뒤 운영자가 비움)
+  board/removed/…                                         지운 글·댓글 (REMOVED_DAYS일 보관 뒤 매일 정리 run_retention, 운영자 화면 purge로도)
   board/reports/<글id>[~<댓글id>]/<접속지태그>.json        신고
   board/saves/<회원id>.json                               회원이 스크랩한 상품 (원래 주소 + 저장할 때 제목·가격 등), 최대 SAVE_LIMIT개
 가격 알림: 회원이 직접 켜면(구글 계정을 한 번 더 확인) 그때만 이메일을 회원 파일 alerts에 저장, 끄면 바로 지움.
@@ -352,6 +352,32 @@ def _now():
 def _new_id(stamp: str) -> str:
     return f"{stamp}-{secrets.token_hex(3)}"
 
+
+
+KEEP_DAYS = 365  # 개인정보처리방침: 의견·방문 기록은 받은 날(기록한 날)부터 1년
+RETENTION_PREFIXES = ("usage/", "feedback/")  # usage/<YYYY-MM-DD>/… · feedback/<YYYY-MM-DD>/…
+
+
+def run_retention(blob=None, today: dt.date | None = None, catch_up_days: int = 30) -> dict:
+    """보유 기간이 지난 기록 지우기 (매일 Vercel Cron에서 알림 뒤에 부름, 2026-11-05).
+    - 방문 기록·의견: 날짜 폴더가 KEEP_DAYS일 지난 것. 매일 돌므로 지난 catch_up_days일치만 봄 (빠진 날을 메움, 목록을 크게 읽지 않음)
+    - 지운 글·댓글(board/removed/): 쓴 날 기준 REMOVED_DAYS일 지난 것 (전에는 운영자 화면 'purge'로만 비웠음)"""
+    blob = blob or _blob()
+    today = today or dt.datetime.now(KST).date()
+    deleted = {"usage": 0, "feedback": 0, "removed": 0}
+    for back in range(catch_up_days):
+        day = (today - dt.timedelta(days=KEEP_DAYS + back)).isoformat()
+        for prefix in RETENTION_PREFIXES:
+            urls = [i.url for i in _names(blob, f"{prefix}{day}/")]
+            for start in range(0, len(urls), 500):
+                blob.delete(urls[start:start + 500])
+            deleted[prefix.rstrip("/")] += len(urls)
+    cutoff = (dt.datetime.now(KST) - dt.timedelta(days=REMOVED_DAYS)).strftime("%Y%m%d")
+    old = [i.url for i in _names(blob, "board/removed/") if (STAMP.findall(i.pathname) or ["99999999"])[-1][:8] < cutoff]
+    if old:
+        blob.delete(old)
+    deleted["removed"] = len(old)
+    return deleted
 
 def _blob():
     from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
@@ -862,7 +888,12 @@ class handler(BaseHTTPRequestHandler):
                 secret = os.environ.get("CRON_SECRET", "")
                 if secret and not hmac.compare_digest(self.headers.get("authorization") or "", f"Bearer {secret}"):
                     return self._send(401, {"ok": False})
-                return self._send(200, run_alerts())
+                result = run_alerts()
+                try:
+                    result["retention"] = run_retention()
+                except Exception as e:  # noqa: BLE001 (정리 실패가 알림 응답을 막지 않게)
+                    result["retention"] = {"error": str(e)[:200]}
+                return self._send(200, result)
             if query.get("r") == "unsub":
                 done = unsubscribe(query.get("m", ""), query.get("s", ""))
                 message = "알림을 껐습니다. · Email alerts are turned off." if done else "링크가 맞지 않습니다. · This link is not valid."
