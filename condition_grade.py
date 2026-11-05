@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(EEL_PREFIX):
+        return eel_grade(cond[len(EEL_PREFIX):]), "label"
     if cond.startswith(ITSCAMERA_PREFIX):
         return _ITSCAMERA.get(cond[len(ITSCAMERA_PREFIX):].strip().upper()), "label"
     if cond.startswith(LCF_PREFIX):
@@ -801,3 +803,17 @@ _SCANPHOTO = {"a-skick": "A", "b-skick": "B", "c-skick": "C", "d-skick": "D", "d
 # AAA·S 'A', AA·A 'B', B 'C' (국내 매장의 'A급'은 보통 사용감 조금 있는 중고)
 ITSCAMERA_PREFIX = "ItsCamera: "
 _ITSCAMERA = {"S": "A", "AAA": "A", "AA": "B", "A": "B", "B": "C"}
+
+# 프랑스 Elle et Lui Photographie: 상세 화면 'Cosmétique n/5' (외관 점수, 0.5 단위)
+EEL_PREFIX = "EEL: "
+_EEL = {"5": "A", "4.5": "B", "4": "C", "3.5": "C", "3": "D"}
+
+
+def eel_grade(score: str) -> str | None:
+    s = (score or "").strip()
+    if s in _EEL:
+        return _EEL[s]
+    try:
+        return "D" if float(s) < 3 else None
+    except ValueError:
+        return None

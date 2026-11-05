@@ -9498,6 +9498,90 @@ def _with_browser(fn, headers=None):
             browser.close()
 
 
+
+
+def _elleetlui_name(title):
+    """'Noctilux-M 50 F/1 sn°3434964' → 'Leica Noctilux-M 50mm f1', 'M11-P (garantie juillet 2027)' → 'Leica M11-P'"""
+    t = re.sub(r"\bsn\s?°\s?\S+|\(garantie[^)]*\)|\bn°\s?\S+", " ", title, flags=re.I)
+    t = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?)\s*(?:mm)?\s*F\s?/\s?(\d+(?:[.,]\d+)?)", lambda m: f"{m.group(1)}mm f{m.group(2).replace(',', '.')}", t, flags=re.I)
+    for fr, en in (("Poignée", "grip"), ("Viseur", "finder"), ("Batterie", "battery"), ("chromé", "chrome"), ("CHROMÉ", "chrome"), ("noir", "black"), ("argent", "silver")):
+        t = re.sub(rf"\b{fr}\b", en, t, flags=re.I)
+    t = re.sub(r"\s+", " ", t).strip(" ,-+")
+    return t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t
+
+
+def crawl_elleetlui():
+    """Elle et Lui Photographie (프랑스 파리) - 중고(occasion) 라이카 목록 정적 HTML (?marque=leica&page=N, 한 쪽 48개, 100개쯤).
+    'En stock'만, 가격 EUR. 상태는 상세 화면 'Cosmétique 4,5/5'뿐이라 처음 본 매물만 상세를 읽음 (액세서리는 안 읽음).
+    요청이 잦으면 429(Retry-After 60) — 5초 간격이면 괜찮음 (2026-11-05 확인)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import EEL_PREFIX
+    base = "https://elle-et-lui-photographie.fr"
+    site = "Elle et Lui Photographie (프랑스)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+
+    def get(url, **kw):
+        for attempt in range(4):
+            time.sleep(5)
+            r = sess.get(url, timeout=30, **kw)
+            if r.status_code != 429:
+                r.raise_for_status()
+                return r
+            time.sleep(int(r.headers.get("Retry-After") or 60))
+        r.raise_for_status()
+        return r
+    print(f"\n  📂 Elle et Lui 크롤링 시작")
+    for page_num in range(1, 15):
+        try:
+            resp = get(f"{base}/boutique/occasion", params={"marque": "leica", "page": page_num})
+        except Exception as e:
+            raise RuntimeError(f"Elle et Lui {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        new = 0
+        for card in re.findall(r'<a class="prod" href="([^"]+)">(.*?)</a>', resp.text, re.S):
+            link, body = card
+            if link in seen:
+                continue
+            seen.add(link)
+            new += 1
+            if "En stock" not in body:
+                continue
+            raw = _html.unescape(re.sub(r"<[^>]+>", "", (re.search(r'class="prod-n">(.*?)</span>', body, re.S) or [None, ""])[1])).strip()
+            pr = re.search(r'class="prod-p">([\d\s\u202f\xa0.,]+)\s*€', body)
+            price = f"€{float(re.sub(r'[\s\u202f\xa0]', '', pr.group(1)).replace(',', '.')):,.0f}" if pr else "문의요망"
+            img = re.search(r'<img[^>]+src="([^"]+)"', body)
+            name = _elleetlui_name(raw)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": (base + img.group(1).split("?")[0]) if img else "",
+                "링크": link,
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new:
+            break
+
+    def read_detail(url):
+        page = get(url)
+        m = re.search(r"Cosm[ée]tique\s*(?:<[^>]+>\s*)*([0-5](?:,5)?)\s*/\s*5", page.text)
+        return EEL_PREFIX + m.group(1).replace(",", ".") if m else None
+    _fill_detail_conditions(site, results, read_detail)
+    print(f"  ✅ Elle et Lui 완료: {len(results)}개")
+    return results
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -9625,6 +9709,7 @@ def crawl_all():
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
         ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
+        ("Elle et Lui Photographie (프랑스)", lambda: ce.wrap_full_run("Elle et Lui Photographie (프랑스)", crawl_elleetlui)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
