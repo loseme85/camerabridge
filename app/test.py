@@ -1216,6 +1216,16 @@ SITES = [
         "통화": "KRW",
     },
     {
+        "name": "UA카메라",
+        "active_first": False,  # 라이카 분류가 없어 사이트 검색 '라이카' 결과(40여 개, 판매 중·품절 섞임)
+        "name_fix": lambda t: _uacamera_name(t),
+        "base": "https://uacamera.co.kr",
+        "categories": [
+            "https://uacamera.co.kr/product/search.html?keyword=%EB%9D%BC%EC%9D%B4%EC%B9%B4",  # 검색 '라이카'
+        ],
+        "통화": "KRW",
+    },
+    {
         "name": "THE CAMERA",
         "active_first": False,  # 여러 브랜드가 섞인 중고·위탁 분류 (쪽당 100개), 라이카 위탁 60여 개
         "name_fix": lambda t: _thecamera_name(t),
@@ -1282,6 +1292,15 @@ def _scamera_grade(title):
     """제목 끝 등급 '(A+)' → 'SC: A+' (없으면 None)"""
     m = re.search(r"\((S|A\+|A|A-|B\+|B|B-|C\+|C)\)\s*$", title.strip())
     return "SC: " + m.group(1) if m else None
+
+
+def _uacamera_name(title):
+    """UA카메라 검색 '라이카' 결과 다듬기: 라이카 제품만 ('시그마 … (L마운트 / 라이카…)'·'파나소닉 라이카 DG …'는 빈 이름 → 빠짐),
+    앞의 '라이카' → 'Leica', '(해외배송 가능상품)' 꼬리 뗌"""
+    t = re.sub(r"\s*\(해외배송[^)]*\)", "", title).strip()
+    if not re.match(r"(?:라이카|leica|leitz)\b", t, re.I) or re.search(r"파나소닉|panasonic", t, re.I):
+        return ""
+    return re.sub(r"^라이카\s*", "Leica ", t)
 
 
 def _ekangsan_name(title):
