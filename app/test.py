@@ -9498,6 +9498,75 @@ def _with_browser(fn, headers=None):
             browser.close()
 
 
+
+def _fotogoerlitz_name(title):
+    """Foto Görlitz 제목 다듬기: 'Demo'·'DEMO' 떼고 독일어 색(schwarz·silber·glänzend) → 영어, '50mm 1.2' → '50mm f1.2'"""
+    name = re.sub(r"\s*\b(?:demo|demoartikel)\b", "", title, flags=re.I)
+    name = re.sub(r"\bschwarz\b", "black", name, flags=re.I)
+    name = re.sub(r"\bsilber\b", "silver", name, flags=re.I)
+    name = re.sub(r"\bglänzend\b", "glossy", name, flags=re.I)
+    name = re.sub(r"\b(\d{2,3})mm\s+(\d\.\d)\b", r"\1mm f\2", name)
+    return re.sub(r"\s+", " ", name).strip(" -")
+
+
+def crawl_fotogoerlitz():
+    """Foto Görlitz (독일 뷘데) - 라이카 매장 WooCommerce 상품 API(Store API)의 'Demoartikel' 분류(id 479, 18점 안팎)만, 판매 중만. 가격 EUR.
+    신품 분류는 빼고 데모품만 (2026-11-05 사장님). 데모품이라 등급은 전부 S (condition_grade FOTOGOERLITZ_PREFIX)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import FOTOGOERLITZ_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://fotogoerlitz.de"
+    print(f"\n  📂 Foto Görlitz 크롤링 시작")
+    for page_num in range(1, 10):
+        resp = sess.get(f"{base}/wp-json/wc/store/v1/products",
+                        params={"category": 479, "per_page": 100, "page": page_num}, timeout=30)
+        resp.raise_for_status()
+        items = resp.json()
+        if not items:
+            break
+        print(f"    └─ Foto Görlitz {page_num}페이지 {len(items)}개")
+        for p in items:
+            if not p.get("is_in_stock", True):
+                continue
+            title = re.sub(r"\s+", " ", _html.unescape(p.get("name") or "")).strip()
+            if not re.search(r"\b(?:leica|leitz)\b", title, re.I):
+                continue
+            name = _fotogoerlitz_name(title)
+            pr = p.get("prices") or {}
+            try:
+                price = f"€{int(pr.get('price')) / 10 ** int(pr.get('currency_minor_unit') or 2):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            imgs = p.get("images") or []
+            results.append({
+                "게시일": "",
+                "site": "Foto Görlitz (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": FOTOGOERLITZ_PREFIX + "Demo",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": imgs[0].get("src", "") if imgs else "",
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(items) < 100:
+            break
+        time.sleep(2)
+    print(f"  ✅ Foto Görlitz 완료: {len(results)}개")
+    return results
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -9625,6 +9694,7 @@ def crawl_all():
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
         ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
+        ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
