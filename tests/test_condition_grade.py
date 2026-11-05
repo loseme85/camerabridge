@@ -512,6 +512,13 @@ def test_itscamera():
     assert grade_of(site, "정보없음", "Leica X (TYP113)")[0] is None
 
 
+def test_fotono():
+    from condition_grade import FOTONO_PREFIX
+    site = "Foto.no (노르웨이)"
+    assert grade_of(site, FOTONO_PREFIX + "2")[0] == "B"
+    assert grade_of(site, FOTONO_PREFIX + "3")[0] == "C"
+
+
 def test_fotogoerlitz():
     from condition_grade import FOTOGOERLITZ_PREFIX
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
