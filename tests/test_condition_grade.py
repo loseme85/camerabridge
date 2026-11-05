@@ -512,6 +512,14 @@ def test_itscamera():
     assert grade_of(site, "정보없음", "Leica X (TYP113)")[0] is None
 
 
+def test_filmcameratokyo():
+    from condition_grade import FCT_PREFIX
+    site = "Film Camera Tokyo (일본)"
+    assert grade_of(site, FCT_PREFIX + "A")[0] == "A"
+    assert grade_of(site, FCT_PREFIX + "C")[0] == "C"
+    assert grade_of(site, FCT_PREFIX + "S")[0] == "S"
+
+
 def test_fotono():
     from condition_grade import FOTONO_PREFIX
     site = "Foto.no (노르웨이)"
