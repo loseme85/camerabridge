@@ -684,3 +684,10 @@ def test_same_shop_same_number_is_one_item():
     a, b = rec("LEICA M6 Titan sn.1929"), rec("LEICA M6 Panda sn.1929")
     merge_same_item([a, b])
     assert "leica:body:m6:titan" in a["entity_ids"] and "leica:body:m6:titan" not in b["entity_ids"]  # 자세한 모델끼리 다르면 그대로
+
+
+def test_modified_with_other_body_part():
+    # 'M1 modified with télémètre de M6' — 개조에 쓴 M6 거리계는 모델이 아님 (2026-11-05)
+    from entity_catalog import body_view
+    assert "M6" not in body_view("Leica M1 modified with télémètre de M6")
+    assert "IIIf" in body_view("Leica IIIc body, war-time, converted to IIIf")
