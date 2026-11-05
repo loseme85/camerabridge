@@ -110,6 +110,7 @@
     "Leica Store Poland (폴란드)": { "country": "PL", "ships_international": false },
     "Photo Warehouse (뉴질랜드)": { "country": "NZ", "ships_international": false },
     "Scandinavian Photo (스웨덴)": { "country": "SE", "ships_international": false, "ships_to": "ask", "shipping_evidence": "https://www.scandinavianphoto.se/kundservice/leverans", "shipping_checked": "2026-11-05" },
+    "Foto Görlitz (독일)": { "country": "DE", "ships_international": true, "ships_to": ["EU"], "shipping_evidence": "https://fotogoerlitz.de/versand/", "shipping_checked": "2026-11-05" },
     "eBay": { "country": null, "ships_international": true }
   },
   "forwarding_fee_usd": {

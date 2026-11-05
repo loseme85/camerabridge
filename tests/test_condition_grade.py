@@ -510,3 +510,8 @@ def test_itscamera():
     assert grade_of(site, ITSCAMERA_PREFIX + "AAA")[0] == "A"
     assert grade_of(site, ITSCAMERA_PREFIX + "A")[0] == "B"
     assert grade_of(site, "정보없음", "Leica X (TYP113)")[0] is None
+
+
+def test_fotogoerlitz():
+    from condition_grade import FOTOGOERLITZ_PREFIX
+    assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"

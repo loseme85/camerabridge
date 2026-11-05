@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(FOTOGOERLITZ_PREFIX):
+        return _FOTOGOERLITZ.get(cond[len(FOTOGOERLITZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(ITSCAMERA_PREFIX):
         return _ITSCAMERA.get(cond[len(ITSCAMERA_PREFIX):].strip().upper()), "label"
     if cond.startswith(LCF_PREFIX):
@@ -801,3 +803,7 @@ _SCANPHOTO = {"a-skick": "A", "b-skick": "B", "c-skick": "C", "d-skick": "D", "d
 # AAA·S 'A', AA·A 'B', B 'C' (국내 매장의 'A급'은 보통 사용감 조금 있는 중고)
 ITSCAMERA_PREFIX = "ItsCamera: "
 _ITSCAMERA = {"S": "A", "AAA": "A", "AA": "B", "A": "B", "B": "C"}
+
+# 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
+FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
+_FOTOGOERLITZ = {"DEMO": "S"}
