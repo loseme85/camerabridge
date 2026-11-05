@@ -38,6 +38,16 @@ MODEL_FAMILY_ALIASES: dict[str, str] = {
     "vario-elmarit-sl": "Vario-Elmarit-SL",
     "vario-elmar-r": "Vario-Elmar-R",
     "vario-elmarit-r": "Vario-Elmarit-R",
+    # 한글 모델 이름 (2026-11-05 사장님: 영어와 같은 모델로 — 해외 매물도 함께, 빠르게)
+    "녹티룩스": "Noctilux",
+    "녹티": "Noctilux",
+    "주미룩스": "Summilux",
+    "주미크론": "Summicron",
+    "엘마리트": "Elmarit",
+    "엘마": "Elmar",
+    "주마론": "Summaron",
+    "주마릿": "Summarit",
+    "트리엘마": "Tri-Elmar",
     "mp3": "MP3",
     "cm": "CM",
 }
