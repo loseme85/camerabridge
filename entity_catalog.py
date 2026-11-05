@@ -66,8 +66,15 @@ FIXED_LENS_BODY = re.compile(r"^leica:body:(?:q|q-p|q2|q2-monochrom|q3|q3-43|q3-
                              r"digilux(?:-[12]|-zoom|-4-3|-unspecified)?|minilux[\w-]*|mini|cm[\w-]*|c-series|c2-zoom|z2x|sofort[\w-]*|af-c1|i)(?::|$)")
 
 
+# 'converted to IIIf'(공장 개조로 사양이 바뀜)는 그대로 두고, 다른 바디 부품을 단 'modified with …'만 (2026-11-05)
+MODIFIED_WITH = re.compile(r"\bmodified\s+with\b|\bavec\s+t[ée]l[ée]m[èe]tre\b", re.I)
+
+
 def body_view(title: str) -> str:
     """바디 규칙이 볼 제목. 세트 표기가 있으면 전체, 아니면 'for' 앞부분, 그중 렌즈 표기가 바디 이름보다 먼저면 그 앞까지."""
+    mod = MODIFIED_WITH.search(title)
+    if mod and BODY_WORD.search(title[:mod.start()]):
+        title = title[:mod.start()]  # 'M1 modified with télémètre de M6' — 개조에 쓴 다른 바디 부품은 모델이 아님 (2026-11-05)
     if SET_MARK.search(title):
         return title
     cut = FOR_WORD.search(title)
