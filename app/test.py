@@ -9721,6 +9721,80 @@ def crawl_chiswick():
     print(f"  ✅ Chiswick Camera Centre 완료: {len(results)}개")
     return results
 
+
+
+def crawl_fotono():
+    """Foto.no (노르웨이 대형 사진점) - 라이카 중고('Brukt'). 브랜드 화면은 100개까지만 보이고 쪽 넘김이 자바스크립트라
+    사이트맵(sitemap-default.xml)에서 라이카 주소(/leica/…) 중 'tilstand'(중고 상태)가 든 것만 상품 화면을 2초 간격으로 읽음 (10개 안팎).
+    상품 화면의 lipscore 속성(이름·사진·재고)과 가격 칸을 씀. 판매 중(ls-availability=1)만. 가격 NOK.
+    등급은 제목의 'Tilstand: 2' (condition_grade FOTONO_PREFIX). '/search'는 robots.txt 금지라 안 씀"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import FOTONO_PREFIX
+    base = "https://www.foto.no"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Foto.no 크롤링 시작")
+    resp = sess.get(f"{base}/sitemap-default.xml", timeout=60)
+    resp.raise_for_status()
+    urls = re.findall(r"<loc>([^<]+)</loc>", resp.text)
+    if len(urls) < 5000:
+        raise RuntimeError(f"Foto.no 사이트맵 {len(urls)}개뿐")  # 덜 나오면 판매 완료로 바뀌지 않게
+    links = [u for u in dict.fromkeys(urls) if "/leica/" in u.lower() and "tilstand" in u.lower()]
+    print(f"    └─ 사이트맵 라이카 중고 {len(links)}개")
+    results = []
+    for link in links:
+        time.sleep(2)
+        try:
+            h = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ 상세 오류 {link[-50:]}: {e}")
+            continue
+        m_av = re.search(r'ls-availability="(\d)"', h)
+        if not m_av or m_av.group(1) != "1":
+            continue
+        m_name = re.search(r"<h1[^>]*>(.*?)</h1>", h, re.S)
+        m_title = re.search(r"<title>(.*?)</title>", h, re.S)
+        title = _html.unescape(re.sub(r"\s+", " ", m_title.group(1))).split(" - Foto.no")[0].strip() if m_title else ""
+        m_cond = re.search(r"Tilstand:\s*([1-5])", title)
+        name = _html.unescape(re.sub(r"<[^>]+>", "", m_name.group(1))).strip() if m_name else re.sub(r"\s*Tilstand:.*$", "", title)
+        name = re.sub(r"\s+", " ", name)
+        name = re.sub(r"(?<!APO-)\bSummicron-M ASPH 75mm", "APO-Summicron-M 75mm ASPH", name)  # 75/2는 APO뿐
+        if not re.search(r"\b(?:leica|leitz)\b", name, re.I):
+            name = "Leica " + name
+        if "Leica M" in title.split("|")[-1] and not re.search(r"\bM\b|-M\b", name):
+            name += " M"
+        elif "skrufatning" in title.lower():
+            name += " LTM"
+        m_price = re.search(r'class="[^"]*(?:price|Price)[^"]*"[^>]*>\s*([\d\s.,]+)\s*(?:kr|,-)', h)
+        try:
+            price = f"NOK {int(re.sub(r'[^0-9]', '', m_price.group(1))):,}" if m_price else "문의요망"
+        except ValueError:
+            price = "문의요망"
+        m_img = re.search(r'ls-image-url="([^"]+)"', h)
+        cat = detect_category(name)  # 'NOK'가 붙은 가격을 주면 바디도 액세서리로 갈림 (2026-11-05)
+        mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+        results.append({
+            "게시일": "",
+            "site": "Foto.no (노르웨이)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": FOTONO_PREFIX + m_cond.group(1) if m_cond else "정보없음",
+            "가격": price,
+            "통화": "NOK",
+            "이미지": m_img.group(1).replace(":443", "") if m_img else "",
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": mount,
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Foto.no 완료: {len(results)}개")
+    return results
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -9848,6 +9922,7 @@ def crawl_all():
         ("2nd BASE (일본)", lambda: ce.wrap_full_run("2nd BASE (일본)", crawl_2ndbase)),
         ("Scandinavian Photo (스웨덴)", lambda: ce.wrap_full_run("Scandinavian Photo (스웨덴)", crawl_scandinavianphoto)),
         ("잇츠카메라", lambda: ce.wrap_full_run("잇츠카메라", crawl_itscamera)),
+        ("Foto.no (노르웨이)", lambda: ce.wrap_full_run("Foto.no (노르웨이)", crawl_fotono)),
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),

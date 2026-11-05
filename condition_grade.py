@@ -76,6 +76,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
     if cond.startswith(FOTOGOERLITZ_PREFIX):
         return _FOTOGOERLITZ.get(cond[len(FOTOGOERLITZ_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTONO_PREFIX):
+        return _FOTONO.get(cond[len(FOTONO_PREFIX):].strip()), "label"
     if cond.startswith(ITSCAMERA_PREFIX):
         return _ITSCAMERA.get(cond[len(ITSCAMERA_PREFIX):].strip().upper()), "label"
     if cond.startswith(LCF_PREFIX):
@@ -803,6 +805,12 @@ _SCANPHOTO = {"a-skick": "A", "b-skick": "B", "c-skick": "C", "d-skick": "D", "d
 # AAA·S 'A', AA·A 'B', B 'C' (국내 매장의 'A급'은 보통 사용감 조금 있는 중고)
 ITSCAMERA_PREFIX = "ItsCamera: "
 _ITSCAMERA = {"S": "A", "AAA": "A", "AA": "B", "A": "B", "B": "C"}
+
+# 노르웨이 Foto.no: 중고 제목 'Tilstand: 2' (숫자 1~5, 클수록 사용감). 사진 평가(표기 가리고 22점 — 라이카가 8점뿐이라 다른 브랜드 중고 섞음,
+# 상품마다 사진 한 장뿐, 2026-11-05): 2 → A 7·B 3 · 3 → A 5·B 1·C 1 · 4 → B·C · 5 → B 2. 사진이 평소처럼 한 등급쯤 후하다고 보고
+# 2 B · 3 C · 4 C · 5 D, 1(거의 새것)은 A. 사진 한 장이라 구분력 낮음 — 등급 점검 때 다시 볼 것
+FOTONO_PREFIX = "FotoNo: "
+_FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
