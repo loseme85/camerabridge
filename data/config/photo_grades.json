@@ -1,6 +1,36 @@
 {
  "about": "사진으로 매긴 등급 (scripts/photo_grade_queue.py). 매장 표기로 등급을 못 정한 매물만. 링크 → {grade, at, note}",
  "grades": {
+  "http://www.itscamera.com/shop/shopdetail.html?branduid=3539745": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "잇츠카메라",
+   "note": "사진으로 판단 못 함"
+  },
+  "http://www.itscamera.com/shop/shopdetail.html?branduid=889402": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "잇츠카메라",
+   "note": "사진으로 판단 못 함"
+  },
+  "http://www.itscamera.com/shop/shopdetail.html?branduid=890435": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "잇츠카메라",
+   "note": "사진으로 판단 못 함"
+  },
+  "http://www.itscamera.com/shop/shopdetail.html?branduid=890967": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "잇츠카메라",
+   "note": "사진으로 판단 못 함"
+  },
+  "http://www.itscamera.com/shop/shopdetail.html?branduid=891185": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "잇츠카메라",
+   "note": "사진으로 판단 못 함"
+  },
   "https://fotohandeldelfshaven.nl/product/leica-11821-noctilux-m-50mm-f-1-version-ii-boxed/": {
    "grade": "B",
    "at": "2026-11-03",
@@ -11,10 +41,20 @@
    "at": "2026-11-02",
    "site": "Fotohandel Delfshaven (네덜란드)"
   },
+  "https://fotohandeldelfshaven.nl/product/leica-summilux-35mm-f-1-4-v2-with-infinity-lock-and-black-paint-goggles/": {
+   "grade": "B",
+   "at": "2026-11-05",
+   "site": "Fotohandel Delfshaven (네덜란드)"
+  },
   "https://fotohandeldelfshaven.nl/product/leitz-leica-11821-noctilux-m-50mm-f-1-0-1981-version-ii-boxed/": {
    "grade": "B",
    "at": "2026-11-03",
    "site": "Fotohandel Delfshaven (네덜란드)"
+  },
+  "https://glazerscamera.com/products/used-leica-m-50-1-4-asph-11728": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "Glazers Camera (미국)"
   },
   "https://imagefoto.dk/products/leica-sl3-sort-udstillingsmodel": {
    "grade": null,
@@ -59,6 +99,11 @@
    "at": "2026-11-02",
    "site": "국민카메라",
    "note": "사진으로 판단 못 함"
+  },
+  "https://kookmincamera.co.kr/product/1361-라이카-m-35mm-f14-실버/7730/category/530/display/1/": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "국민카메라"
   },
   "https://kookmincamera.co.kr/product/1657-라이카-m-6-플라티늄-75주년-위탁/9711/category/530/display/1/": {
    "grade": "B",
@@ -212,6 +257,11 @@
    "at": "2026-11-03",
    "site": "M & K Kamera (홍콩)"
   },
+  "https://mkkcamera.com/products/leica-summicron-m-35mm-f2-0-ver-4-7-elements-black-lens-yr-1991-germany-11310-12163": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "M & K Kamera (홍콩)"
+  },
   "https://muhan8.co.kr/product/leica-35mm-f2-apo-summicron-asph-black/2193/category/106/display/1/": {
    "grade": "N",
    "at": "2026-11-02",
@@ -223,10 +273,77 @@
    "site": "무한카메라",
    "note": "사진으로 판단 못 함"
   },
+  "https://thecamera.co.kr/product/detail.html?product_no=5241&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=5380&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=5385&cate_no=344&display_group=1": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "THE CAMERA",
+   "note": "사진으로 판단 못 함"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=5670&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=5782&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=5959&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=6102&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=6113&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=6123&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=6124&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=6322&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
+  "https://thecamera.co.kr/product/detail.html?product_no=6345&cate_no=105&display_group=1": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "THE CAMERA"
+  },
   "https://theclassiccamera.com/product/leica-sl3/": {
    "grade": "A",
    "at": "2026-11-03",
    "site": "The Classic Camera (영국)"
+  },
+  "https://www.camera-tweedehands.nl/leica-21mm-f14-summilux-m-asph-11647.html": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "Camera Tweedehands (네덜란드)",
+   "note": "사진으로 판단 못 함"
   },
   "https://www.camera-tweedehands.nl/leica-35mm-f-14-summilux-m-asph-11726.html": {
    "grade": "A",
@@ -270,10 +387,25 @@
    "at": "2026-11-05",
    "site": "Camera Tweedehands (네덜란드)"
   },
+  "https://www.camera-tweedehands.nl/leica-q2-ghost-set-by-hodinkee.html": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "Camera Tweedehands (네덜란드)"
+  },
   "https://www.camera-tweedehands.nl/leica-q3-43.html": {
    "grade": "A",
    "at": "2026-11-03",
    "site": "Camera Tweedehands (네덜란드)"
+  },
+  "https://www.camera-tweedehands.nl/leica-q3.html": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "Camera Tweedehands (네덜란드)"
+  },
+  "https://www.cameraelectronic.com.au/products/pre-owned-leica-apo-summicron-sl-90mm-f2-asph-lens-sn-04713313-second-hand": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "Camera Electronic (호주)"
   },
   "https://www.cameraelectronic.com.au/products/pre-owned-leica-m-75mm-f-1-4-summilux-lens-1983-made-in-canada-with-front-rear-caps-sn-3259711-second-hand": {
    "grade": "A",
@@ -324,6 +456,12 @@
    "grade": "A",
    "at": "2026-11-05",
    "site": "강산 중고샵"
+  },
+  "https://www.ffordes.com/p/10896/leica-sl/sl2-body-only-silver": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "Ffordes (영국)",
+   "note": "사진으로 판단 못 함"
   },
   "https://www.foto-koester.de/m11-p-silber/7700000403162": {
    "grade": null,
@@ -480,6 +618,18 @@
    "at": "2026-11-05",
    "site": "Leica Store France (프랑스)"
   },
+  "https://www.leica-camera-france-occasions.com/en/occasion/super-vario-elmar-sl-16-35mm-f35-45-asph-0": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "Leica Store France (프랑스)",
+   "note": "사진으로 판단 못 함"
+  },
+  "https://www.leica-store-konstanz.de/leicastore_sh/sl3-6009146/": {
+   "grade": null,
+   "at": "2026-11-05",
+   "site": "Leica Store Konstanz (독일)",
+   "note": "사진으로 판단 못 함"
+  },
   "https://www.leica-store.com.au/products/10607SH/065701": {
    "grade": null,
    "at": "2026-11-05",
@@ -501,6 +651,11 @@
    "at": "2026-11-02",
    "site": "Leica Store Australia (호주)",
    "note": "사진으로 판단 못 함"
+  },
+  "https://www.leica-store.com.au/products/19056SH/052501": {
+   "grade": "A",
+   "at": "2026-11-05",
+   "site": "Leica Store Australia (호주)"
   },
   "https://www.mfcamera.com/products/leica-90mm-f-1-5-summilux-m-asph-lens-black-11678": {
    "grade": "A",
@@ -593,6 +748,12 @@
   "https://www.photografica.com/products/leica-sl-16-35-3-5-4-5-asph-super-vario-elmar": {
    "grade": null,
    "at": "2026-11-03",
+   "site": "Photografica (덴마크)",
+   "note": "사진으로 판단 못 함"
+  },
+  "https://www.photografica.com/products/leica-sl-35-2-0-summicron-asph": {
+   "grade": null,
+   "at": "2026-11-05",
    "site": "Photografica (덴마크)",
    "note": "사진으로 판단 못 함"
   },
