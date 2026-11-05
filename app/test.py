@@ -9584,6 +9584,9 @@ def crawl_fotogoerlitz():
             break
         time.sleep(2)
     print(f"  ✅ Foto Görlitz 완료: {len(results)}개")
+    return results
+
+
 COE_SLUG = re.compile(r"leica|leitz|summi|elmar|noctilux|summaron|hektor|visoflex|telyt|angulon|elmarit", re.I)
 COE_STATE = "data/raw/cameraobscura_state.json"
 
