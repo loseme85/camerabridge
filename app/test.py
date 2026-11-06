@@ -9946,6 +9946,76 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+def crawl_realcamera():
+    """The Real Camera Company (영국 맨체스터·리버풀 중고 전문점) - WooCommerce Store API 'leica' 검색
+    (`/wp-json/wc/store/v1/products?search=leica`, 100개씩 2쪽쯤). 재고 있는 것 중 제목이 Leica·Leitz로 시작하는 것만
+    (Panasonic·Voigtländer·FED 같은 'for Leica' 타사 물건과 책·안내지는 뺌). 가격 GBP(펜스 단위 → 파운드).
+    등급은 설명의 'CONDITION Cosmetic – 9.5' 점수 (condition_grade REALCAMERA_PREFIX)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import REALCAMERA_PREFIX
+    base = "https://realcamera.co.uk"
+    site = "The Real Camera Company (영국)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Real Camera 크롤링 시작")
+    items, page_num, total_pages = [], 1, 1
+    while page_num <= min(total_pages, 10):
+        for _try in range(4):  # Store API가 짧은 간격 요청에 429를 줌 → 기다렸다 다시 (최대 3번)
+            resp = sess.get(f"{base}/wp-json/wc/store/v1/products",
+                            params={"search": "leica", "per_page": 100, "page": page_num}, timeout=40)
+            if resp.status_code != 429:
+                break
+            time.sleep(min(int(resp.headers.get("Retry-After") or 30), 90))
+        resp.raise_for_status()
+        items += resp.json()
+        total_pages = int(resp.headers.get("X-WP-TotalPages", "1"))
+        page_num += 1
+        time.sleep(random.uniform(5.0, 8.0))
+    if len(items) < 20:
+        raise RuntimeError(f"Real Camera 'leica' 검색 {len(items)}개뿐")  # 덜 나오면 판매 완료로 바뀌지 않게
+    results = []
+    for it in items:
+        if not it.get("is_in_stock"):
+            continue
+        name = re.sub(r"\s+", " ", _html.unescape(it.get("name") or "")).strip()
+        cats = {c.get("slug") for c in it.get("categories") or []}
+        if cats & {"books", "photobook", "non-fiction"} or re.search(r"(?i)brochure|leaflet|manual\b|magazine|guide by", name):
+            continue
+        if not re.match(r"(?i)(?:(?:boxed|very|rare|legendary|original|genuine|excellent|1x)\s+)*(?:leica|leitz)\b", name):
+            continue
+        prices = it.get("prices") or {}
+        try:
+            amount = int(prices.get("price") or 0) / (10 ** int(prices.get("currency_minor_unit", 2)))
+        except ValueError:
+            amount = 0
+        if amount <= 0:
+            continue
+        price = f"£{amount:,.2f}".replace(".00", "")
+        desc = _html.unescape(re.sub(r"<[^>]+>", " ", it.get("description") or ""))
+        m_cos = re.search(r"Cosmetic\s*[–—-]\s*(\d+(?:\.\d)?)", desc)
+        imgs = it.get("images") or []
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": REALCAMERA_PREFIX + m_cos.group(1) if m_cos else "정보없음",
+            "가격": price,
+            "통화": prices.get("currency_code") or "GBP",
+            "이미지": (imgs[0].get("thumbnail") or imgs[0].get("src")) if imgs else "",
+            "링크": it.get("permalink") or f"{base}/?p={it.get('id')}",
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Real Camera 완료: {len(results)}개 ('leica' 검색 {len(items)}개 중)")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -10079,6 +10149,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("The Real Camera Company (영국)", lambda: ce.wrap_full_run("The Real Camera Company (영국)", crawl_realcamera)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

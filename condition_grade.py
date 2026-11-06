@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(REALCAMERA_PREFIX):
+        return realcamera_grade(cond[len(REALCAMERA_PREFIX):]), "label"
     if cond.startswith(FOTOGOERLITZ_PREFIX):
         return _FOTOGOERLITZ.get(cond[len(FOTOGOERLITZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTONO_PREFIX):
@@ -823,3 +825,22 @@ _FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
 _FOTOGOERLITZ = {"DEMO": "S"}
+
+# 영국 The Real Camera Company: 설명 'CONDITION Cosmetic – 9.5 · Mechanical – 10 · Optical – 9.5' 중 외관(Cosmetic) 점수 (10점 만점)
+REALCAMERA_PREFIX = "RealCamera: "
+
+
+def realcamera_grade(score: str) -> str | None:
+    try:
+        s = float(score)
+    except ValueError:
+        return None
+    if s >= 9.9:
+        return "S"
+    if s >= 9.5:
+        return "A"
+    if s >= 8.5:
+        return "B"
+    if s >= 7.5:
+        return "C"
+    return "D"
