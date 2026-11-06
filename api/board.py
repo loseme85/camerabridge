@@ -315,7 +315,7 @@ def run_alerts(current: dict | None = None, send=None, records=None) -> dict:
         if records_cache["v"] is None:
             records_cache["v"] = _current_records()
         return records_cache["v"]
-    members = sent = 0
+    members = sent = waiting = 0
     for item in _names(blob, "board/members/"):
         member = _read(blob, item) or {}
         alerts = member.get("alerts") or {}
@@ -330,12 +330,15 @@ def run_alerts(current: dict | None = None, send=None, records=None) -> dict:
         if events:
             subject, body = _alert_email(member["id"], alerts, events)
             if not send(alerts["email"], subject, body):
+                waiting += 1  # 못 보냄 (메일 키 없음·발송 실패) → 다음 검사에서 다시
                 continue
             sent += 1
         _put(blob, f"board/saves/{member['id']}.json", {"items": items})
         if wants:
             _put(blob, f"board/wants/{member['id']}.json", {"items": wants})
-    return {"ok": True, "members": members, "sent": sent}
+    # mail_ready: 메일 키가 있는지. 없으면 알림을 켠 사람이 있어도 한 통도 안 나감 (크롤링 기록에 경고로 띄움)
+    return {"ok": True, "members": members, "sent": sent, "waiting": waiting,
+            "mail_ready": bool(os.environ.get("RESEND_API_KEY"))}
 
 
 def _clean(text, limit: int) -> str:

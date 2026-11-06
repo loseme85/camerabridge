@@ -159,6 +159,8 @@ jobs:
           CODE=$(curl -s -o /tmp/alerts.json -w "%{http_code}" -m 120 ${CRON_SECRET:+-H "Authorization: Bearer $CRON_SECRET"} \
                  "https://camerabridge.io/api/board?r=alerts")
           echo "🔔 알림 검사: HTTP $CODE $(cat /tmp/alerts.json 2>/dev/null | head -c 200)"
+          grep -q '"mail_ready": false' /tmp/alerts.json 2>/dev/null && \
+            echo "::warning::메일 키(RESEND_API_KEY)가 Vercel에 없어 알림 메일이 안 나감 — $(grep -o '"members": [0-9]*' /tmp/alerts.json)명이 알림을 켬"
           [ "$CODE" = 401 ] && echo "⚠️ Vercel에 CRON_SECRET이 있으면 GitHub 저장소 비밀값에도 같은 값으로 CRON_SECRET을 넣어야 함"
           true
         env:
