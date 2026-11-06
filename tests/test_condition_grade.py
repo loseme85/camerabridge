@@ -532,6 +532,15 @@ def test_fotogoerlitz():
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
 
 
+def test_sunrise():
+    from condition_grade import SUNRISE_PREFIX
+    site = "サンライズカメラ (일본)"
+    assert grade_of(site, SUNRISE_PREFIX + "A+")[0] == "S"
+    assert grade_of(site, SUNRISE_PREFIX + "A")[0] == "A"
+    assert grade_of(site, SUNRISE_PREFIX + "B+")[0] == "B"
+    assert grade_of(site, SUNRISE_PREFIX + "D")[0] == "D"
+
+
 def test_moritz():
     from condition_grade import MORITZ_PREFIX
     site = "モリッツ (일본)"
