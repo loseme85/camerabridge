@@ -6414,6 +6414,7 @@
       if(!results.length){
         els['state-region'].innerHTML = renderEmptyState(uiHints);
         renderValueCalc();  // 모델을 골랐는데 매물이 없으면 '원하는 매물 알림' 신청 칸 (그래프용 매물을 다 받은 뒤에도 다시 그림)
+        loadPriceLadder();  // 검색 시작 때 모델 정보가 아직 없었으면 여기서 받음 (매물이 있을 때와 같은 순서)
         return;
       }
 
