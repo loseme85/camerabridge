@@ -530,3 +530,12 @@ def test_fotono():
 def test_fotogoerlitz():
     from condition_grade import FOTOGOERLITZ_PREFIX
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
+
+
+def test_moritz():
+    from condition_grade import MORITZ_PREFIX
+    site = "モリッツ (일본)"
+    assert grade_of(site, MORITZ_PREFIX + "美品")[0] == "A"
+    assert grade_of(site, MORITZ_PREFIX + "良上品")[0] == "B"
+    assert grade_of(site, MORITZ_PREFIX + "良品")[0] == "B"
+    assert grade_of(site, MORITZ_PREFIX + "並上")[0] == "C"
