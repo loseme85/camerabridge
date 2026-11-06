@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62}
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -9946,6 +9946,87 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+def crawl_pazdera():
+    """Foto Optika Jan Pazdera (체코 프라하 바츨라프 광장 옆 중고점, '체코 최대 사진 바자') - Sun-shop 몰.
+    검색 화면이 상품을 다 보여 주지 않아 사이트맵(sitemap.xml)에서 중고(bazar) 주소 중 라이카 낱말(leica·leitz·laica·leicaflex)이
+    든 것만 골라(20여 개) 상품 화면을 1.5초 간격으로 읽음. 상품 화면의 itemprop price·availability(InStock)·og:image를 씀.
+    판매 중(InStock)만. 가격 CZK(세금 포함). 등급 표기 없음('stav plně funkční' 작동 여부뿐) → 사진 등급 대기열"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    base = "https://www.fotopazdera.cz"
+    site = "Foto Pazdera (체코)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Foto Pazdera 크롤링 시작")
+    sm = sess.get(f"{base}/sitemap.xml", timeout=60)
+    sm.raise_for_status()
+    urls = [u for u in re.findall(r"<loc>([^<]+)</loc>", sm.text)
+            if "/katalog/bazar/" in u and re.search(r"leica|leitz|laica|leicaflex", u, re.I)
+            and not re.search(r"vogtl|voigtl|zeiss|distagon|panasonic|dicomar|diaprojektor", u, re.I)]
+    if len(urls) < 5:
+        raise RuntimeError(f"Foto Pazdera 사이트맵 라이카 {len(urls)}개뿐")  # 덜 나오면 판매 완료로 바뀌지 않게
+    results = []
+    for url in urls:
+        try:
+            resp = sess.get(url, timeout=30)
+            if resp.status_code == 404:
+                continue  # 사이트맵에 남은 지운 상품
+            resp.raise_for_status()
+        except requests.HTTPError:
+            raise
+        except Exception as e:
+            raise RuntimeError(f"Foto Pazdera 상품 화면 못 읽음: {e}")
+        text = resp.text
+        m_name = re.search(r'<h1 itemprop="name">(.*?)</h1>', text, re.S)
+        m_price = re.search(r'itemprop="price"[^>]*content="([\d.]+)"', text)
+        in_stock = 'itemprop="availability" href="http://schema.org/InStock"' in text
+        if not (m_name and m_price and in_stock):
+            time.sleep(1.5)
+            continue
+        raw = re.sub(r"\s+", " ", _html.unescape(m_name.group(1))).strip()
+        name = re.sub(r"(?i)\blaica\b", "Leica", raw)
+        name = re.sub(r"(?i)\b(?:objektiv|obj)\b:?|\bfotoapar[aá]t\b", " ", name)
+        name = re.sub(r"(?i)\btělo\b", "Body", name)
+        name = re.sub(r"(?i)\bbajonet\s+(m|r)\b", lambda m: m.group(1).upper() + "-mount", name)
+        name = re.sub(r"(?i)\brok\s+(\d{4})\b", r"(\1)", name)
+        name = re.sub(r"(?i)\bkrabice\b", "box", name)
+        name = re.sub(r"\b3A\b|\bIII A\b", "IIIa", name)
+        name = re.sub(r"\bIII F\b", "IIIf", name)
+        name = re.sub(r"(?i)^Leica Compur\b", "Leica I Compur Body", name)  # 1920년대 콤푸어 셔터 바디(+Elmar) — Elmar 렌즈로 붙지 않게
+        f = lambda x: x.replace(",", ".")
+        name = re.sub(r"\b(\d)[,.](\d)\s?/\s?(\d{2,3})\s?mm\b", lambda m: f"{m.group(3)}mm f{m.group(1)}.{m.group(2)}", name)  # '3,5/50mm'
+        name = re.sub(r"\b(\d(?:[,.]\d)?)\s?F\s+(\d{2,3})\s?mm\b", lambda m: f"{m.group(2)}mm f{f(m.group(1))}", name)  # '3,5F 50mm'
+        name = re.sub(r"\b(\d{2,3})\s?mm\s?(?:/|1\s?:\s?|1\s?-\s?)(\d(?:[,.]\d)?)\s?F?\b", lambda m: f"{m.group(1)}mm f{f(m.group(2))}", name)  # '50mm/2'·'90mm 1:4F'
+        name = re.sub(r"\b(\d{2,3})\s?mm\s+(\d(?:[,.]\d)?)\s?F\b", lambda m: f"{m.group(1)}mm f{f(m.group(2))}", name)  # '135mm 4,5F'
+        name = re.sub(r"\b1\s?:\s?(\d(?:[.,]\d)?)\s?/?\s?(\d{2,3})\s?mm\b", lambda m: f"{m.group(2)}mm f{f(m.group(1))}", name)
+        name = re.sub(r"\s+", " ", name).strip(" -")
+        name = name if re.match(r"(?i)leica|leitz|e\. ?leitz", name) else "Leica " + name
+        if re.match(r"(?i)(?:e\.?\s?leitz wetzlar\s+)?(?:hledáček|blesk)|leica motor", raw) and "accessory" not in name:
+            name += " accessory"  # 파인더·모터·플래시 단품이 바디·렌즈 시세에 섞이지 않게
+        img = re.search(r'<meta property="og:image" content="([^"]+)"', text)
+        price = f"Kč {float(m_price.group(1)):,.0f}"
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": "정보없음",
+            "가격": price,
+            "통화": "CZK",
+            "이미지": (img.group(1).replace("/tn_", "/") if img else ""),
+            "링크": url,
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+        time.sleep(1.5)
+    print(f"  ✅ Foto Pazdera 완료: {len(results)}개 (사이트맵 라이카 {len(urls)}개 중)")
+    return results
+
+
 def crawl_adophoto():
     """AdoPhoto (그리스 아테네 사진점) - 중고(Μεταχειρισμένα) 하위 분류 화면 10여 곳 정적 HTML (한 화면에 분류 상품 전부, 쪽 넘김은
     화면 안에서만). 상품 칸의 'filter_brand_id_7'(Leica)이거나 제목이 Leica·Leitz로 시작하는 것만.
@@ -10567,6 +10648,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("Foto Pazdera (체코)", lambda: ce.wrap_full_run("Foto Pazdera (체코)", crawl_pazdera)),
         ("AdoPhoto (그리스)", lambda: ce.wrap_full_run("AdoPhoto (그리스)", crawl_adophoto)),
         ("PCH Pro Shop (벨기에)", lambda: ce.wrap_full_run("PCH Pro Shop (벨기에)", crawl_pch)),
         ("Pacific Rim Camera (미국)", lambda: ce.wrap_full_run("Pacific Rim Camera (미국)", crawl_pacificrim)),
