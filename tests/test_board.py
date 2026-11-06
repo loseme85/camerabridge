@@ -203,7 +203,10 @@ def test_failed_send_is_retried_next_time(monkeypatch):
     now = {"https://shop/m6": {"sold_quality": "asking", "parsed_price_numeric": 100, "currency": "KRW"}}
     board.alerts_on({"credential": "x"}, a, current=now)
     now["https://shop/m6"]["parsed_price_numeric"] = 80
-    assert board.run_alerts(current=now, send=lambda *x: False)["sent"] == 0
+    monkeypatch.delenv("RESEND_API_KEY", raising=False)
+    failed = board.run_alerts(current=now, send=lambda *x: False)
+    assert failed["sent"] == 0 and failed["waiting"] == 1  # 못 보낸 건 기다리는 수로 (메일 키 없음 경고용)
+    assert failed["mail_ready"] is False
     got = []
     assert board.run_alerts(current=now, send=lambda *x: got.append(x) or True)["sent"] == 1 and got
 
