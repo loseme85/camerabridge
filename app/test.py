@@ -9946,6 +9946,89 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+def crawl_pch():
+    """PCH Pro Shop (벨기에 브뤼셀 사진점) - Magento 중고(Occasions) 'Leica' 분류 정적 HTML (`/fr/occasions/leica.html?p=1~`,
+    한 쪽 18개, 70여 개). 중고 분류라 모두 'Occasion - pièce unique'(한 점뿐), 품절 표시가 붙은 것은 뺌. 가격 EUR(세금 포함).
+    등급 표기가 없어 등급 없이 둠 (사진 등급 대기열에서 매김). 'DEMO'(시연품)는 S"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import PCH_PREFIX
+    base = "https://pch.be/fr/occasions/leica.html"
+    site = "PCH Pro Shop (벨기에)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 PCH Pro Shop 크롤링 시작")
+    results, seen, total = [], set(), None
+    for page_num in range(1, 15):
+        try:
+            resp = sess.get(base, params={"p": page_num} if page_num > 1 else None, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"PCH {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        text = resp.text
+        if total is None:
+            nums = re.findall(r'toolbar-number">(\d+)<', text)
+            total = int(nums[-1]) if nums else 0
+        new = 0
+        for blk in text.split('product-item-info"')[1:]:
+            m_link = re.search(r'class="product-item-link"\s+href="([^"]+)"[^>]*>\s*(.*?)\s*</a>', blk, re.S)
+            if not m_link or m_link.group(1) in seen:
+                continue
+            seen.add(m_link.group(1))
+            new += 1
+            if re.search(r'stock unavailable|out-of-stock|Rupture', blk, re.I):
+                continue
+            raw = re.sub(r"\s+", " ", _html.unescape(m_link.group(2))).strip()
+            if not re.search(r"(?i)\bleica|\bleitz|\blecia", raw) or re.match(r"(?i)voigtl|kamerakraft|rapid grip", raw):
+                continue
+            m_price = re.search(r'data-price-amount="([\d.]+)"', blk)
+            if not m_price:
+                continue
+            price = f"€{float(m_price.group(1)):,.0f}"
+            name = re.sub(r"(?i)\s*\boccasion\b", "", raw).replace("Lecia", "Leica").strip()
+            name = re.sub(r"(?i)^bo[iî]te\s+(.*)$", r"\1 box only accessory", name)  # 'Boîte Leica …' 빈 상자
+            name = name.replace("–", "-")
+            name = re.sub(r"(?i)\bAPO[ -]Telyt M\b", "APO-Telyt-M", name)
+            name = re.sub(r"(?i)\bAPO[ -]Summicron SL\b", "APO-Summicron-SL", name)
+            name = re.sub(r"\b1:(\d(?:[.,]\d)?)\s?/\s?(\d{2,3})(?:\s?mm)?\b", lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", name)  # '1:2/35' → '35mm f2'
+            name = re.sub(r"\b(\d{1,2}),(\d)\s?cm\b", lambda m: f"{int(m.group(1)) * 10 + int(m.group(2))}mm", name)  # '7,3cm' → '73mm'
+            name = re.sub(r"\b(\d{1,2})\s?cm\b", lambda m: f"{int(m.group(1)) * 10}mm", name)  # '5cm' → '50mm'
+            name = re.sub(r"\bM-(\d{2,3}mm)", r"M \1", name)  # 'M-50mm APO-Summicron' → 'M 50mm …'
+            name = re.sub(r"(?i)\bF\s?1:(\d(?:[.,]\d)?)", lambda m: f"f{m.group(1).replace(',', '.')}", name)
+            name = re.sub(r"(?i)\b(\d{2,3})\s?mm\s+f/?\s?(\d(?:[.,]\d)?)\b", lambda m: f"{m.group(1)}mm f{m.group(2).replace(',', '.')}", name)
+            name = re.sub(r"(?i)\b(SL|M|S)\s+(\d{2,3})\s+f/?\s?(\d(?:\.\d)?)\b", r"\1 \2mm f\3", name)  # 'Summicron-SL 50 f/2' → '50mm f2'
+            if re.search(r"(?i)\b(housse|sac|poign[ée]e|filtres?|thumb|soufflet|adaptateur|adapter|grip|case|dos dmr|flash|tripod|winder|booster|sfc1|sf-?\d\d)\b", name) \
+                    and "accessory" not in name:
+                name += " accessory"  # 'Housse en cuir C-Lux'(가죽 케이스)가 C-Lux 바디로 붙지 않게
+            img = re.search(r'class="product-image-photo"\s+src="([^"]+)"', blk)
+            demo = re.search(r"(?i)\bdemo\b|comme neuf", raw)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": PCH_PREFIX + "DEMO" if demo else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": m_link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new or (total and len(seen) >= total):
+            break
+        time.sleep(random.uniform(1.5, 2.5))
+    if total and len(seen) < total * 0.8:
+        raise RuntimeError(f"PCH 상품 {len(seen)}/{total}개만 읽음")
+    print(f"  ✅ PCH Pro Shop 완료: {len(results)}개")
+    return results
+
+
 # Pacific Rim Camera 라이카 카탈로그 화면 (책·안내지·카탈로그·잡지 화면은 뺌)
 PACIFICRIM_PAGES = ["th_bm12", "th_bm21", "th_bm31", "th_bm39", "th_bk14", "th_bk31", "th_bh11", "th_bl31", "th_bl35", "th_bl33", "th_bl38"]
 
@@ -10416,6 +10499,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("PCH Pro Shop (벨기에)", lambda: ce.wrap_full_run("PCH Pro Shop (벨기에)", crawl_pch)),
         ("Pacific Rim Camera (미국)", lambda: ce.wrap_full_run("Pacific Rim Camera (미국)", crawl_pacificrim)),
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),

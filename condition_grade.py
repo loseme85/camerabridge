@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(PCH_PREFIX):
+        return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
         return _PACIFICRIM.get(cond[len(PACIFICRIM_PREFIX):].strip().upper()), "label"
     if cond.startswith(CAMERACOLLECTION_PREFIX):
@@ -831,6 +833,10 @@ _FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
 _FOTOGOERLITZ = {"DEMO": "S"}
+
+# 벨기에 PCH Pro Shop: 중고 목록에 등급 표기가 없음 — 제목의 'DEMO'·'comme neuf'(새것 같음)만 S, 나머지는 등급 없이 사진 등급 대기열로
+PCH_PREFIX = "PCH: "
+_PCH = {"DEMO": "S"}
 
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
