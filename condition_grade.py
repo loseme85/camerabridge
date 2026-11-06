@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(MEDIAJOY_PREFIX):
+        return _MEDIAJOY.get(cond[len(MEDIAJOY_PREFIX):].strip()), "label"
     if cond.startswith(KATSUMIDO_PREFIX):
         return _KATSUMIDO.get(cond[len(KATSUMIDO_PREFIX):].strip().upper()), "label"
     if cond.startswith(ADOPHOTO_PREFIX):
@@ -837,6 +839,12 @@ _FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
 _FOTOGOERLITZ = {"DEMO": "S"}
+
+# 일본 メディアジョイカメラ: 상품 화면 'グレード：★★ 並品' — 별 개수(★5 새것 같음 … ★2 並品 … ★1 난 있음)
+# 사진 평가(표기 가리고 판매 중 11점 전부, 사진 1장씩, 2026-11-07): ★4 A 1 · ★3 A 4·B 1 · ★2 B 4·C 1.
+# 정확 일치 3/11 · 한 등급 이내 11/11 (사진이 평균 0.73등급 후함, 기존 매장 0.8과 비슷 → 별 개수 그대로)
+MEDIAJOY_PREFIX = "MediaJoy: "
+_MEDIAJOY = {"5": "S", "4": "A", "3": "B", "2": "C", "1": "D"}
 
 # 일본 銀座カツミ堂: 목록 '商品状態:AB' — A(미품)·AB(보통 중고, 양호)·B(사용감)
 # 사진 평가(표기 가리고 판매 중 18점 전부, 사진 1장씩, 2026-11-07): A A 2 · AB A 11·B 1 · B A 3·B 1.

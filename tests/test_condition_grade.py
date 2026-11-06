@@ -532,6 +532,13 @@ def test_fotogoerlitz():
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
 
 
+def test_mediajoy():
+    from condition_grade import MEDIAJOY_PREFIX
+    site = "メディアジョイカメラ (일본)"
+    assert grade_of(site, MEDIAJOY_PREFIX + "4")[0] == "A"
+    assert grade_of(site, MEDIAJOY_PREFIX + "2")[0] == "C"
+
+
 def test_katsumido():
     from condition_grade import KATSUMIDO_PREFIX
     site = "銀座カツミ堂 (일본)"
