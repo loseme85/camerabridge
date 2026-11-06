@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(CAMERACOLLECTION_PREFIX):
+        return _CAMERACOLLECTION.get(cond[len(CAMERACOLLECTION_PREFIX):].strip().upper()), "label"
     if cond.startswith(SUNRISE_PREFIX):
         return _SUNRISE.get(cond[len(SUNRISE_PREFIX):].strip().upper()), "label"
     if cond.startswith(MORITZ_PREFIX):
@@ -827,6 +829,13 @@ _FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
 _FOTOGOERLITZ = {"DEMO": "S"}
+
+# 일본 カメラコレクション (삿포로): 재고 표 '程度' AAA·AA~AAA·AA·A~AA·A·AB·B·C (A가 많을수록 좋음)
+# 사진 평가(표기 가리고 24점 — 등급마다 최대 6점, 사진 1장씩, 2026-11-07): AA~AAA A 5·S 1 · AA A 5·S 1 · A~AA A 5·B 1 ·
+# A A 1·B 2 · AB A 1·B 1 · C A 1(렌즈 안경 금 — 사진에 안 보임). 이 대응 기준 정확 일치 13/24 · 한 등급 이내 22/24
+# (사진이 평균 0.58등급 후함, 기존 매장 0.8과 비슷 → 글자 순서대로)
+CAMERACOLLECTION_PREFIX = "CameraCollection: "
+_CAMERACOLLECTION = {"AAA": "S", "AA~AAA": "A", "AA": "A", "A~AA": "B", "A": "B", "AB": "C", "B": "C", "C": "D"}
 
 # 일본 サンライズカメラ: 목록 설명 '【コンディションランク】' S 미사용·A+ 새것 같음·A 미품·B+ 양품(위)·B 양품·C 병품·D 사연 있음(訳あり)
 # 사진 평가(표기 가리고 판매 중 19점 전부, 목록 사진 1장씩 — 흰 배경 스튜디오 사진, 2026-11-07): S S 1 · A+ S 1 · A A 5·B 1 ·
