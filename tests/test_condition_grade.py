@@ -532,6 +532,14 @@ def test_fotogoerlitz():
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
 
 
+def test_katsumido():
+    from condition_grade import KATSUMIDO_PREFIX
+    site = "銀座カツミ堂 (일본)"
+    assert grade_of(site, KATSUMIDO_PREFIX + "A")[0] == "A"
+    assert grade_of(site, KATSUMIDO_PREFIX + "AB")[0] == "B"
+    assert grade_of(site, KATSUMIDO_PREFIX + "B")[0] == "B"
+
+
 def test_adophoto():
     from condition_grade import ADOPHOTO_PREFIX
     assert grade_of("AdoPhoto (그리스)", ADOPHOTO_PREFIX + "DEMO")[0] == "S"

@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(KATSUMIDO_PREFIX):
+        return _KATSUMIDO.get(cond[len(KATSUMIDO_PREFIX):].strip().upper()), "label"
     if cond.startswith(ADOPHOTO_PREFIX):
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
@@ -835,6 +837,12 @@ _FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
 _FOTOGOERLITZ = {"DEMO": "S"}
+
+# 일본 銀座カツミ堂: 목록 '商品状態:AB' — A(미품)·AB(보통 중고, 양호)·B(사용감)
+# 사진 평가(표기 가리고 판매 중 18점 전부, 사진 1장씩, 2026-11-07): A A 2 · AB A 11·B 1 · B A 3·B 1.
+# B를 C로 두면 사진이 평균 1.0등급 후해(기존 매장 0.8) 매장이 엄한 편 → B를 B로 한 칸 올림. 정확 일치 4/18 · 한 등급 이내 18/18 (0.78등급)
+KATSUMIDO_PREFIX = "Katsumido: "
+_KATSUMIDO = {"S": "S", "A": "A", "AB": "B", "B": "B", "BC": "C", "C": "D"}
 
 # 그리스 AdoPhoto: 중고 목록에 등급 표기가 없음 — 제목의 'Δείγμα'(시연품)만 S, 나머지는 등급 없이 사진 등급 대기열로
 ADOPHOTO_PREFIX = "AdoPhoto: "
