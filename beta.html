@@ -179,6 +179,12 @@
     @media(max-width:720px){.hero-how{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.hero-how li{padding-bottom:10px}}
     .market-map{--map-0:#2a78d6;--map-1:#eb6834;--map-2:#1baf7a;--map-3:#eda100;--map-4:#e87ba4;--map-grid:rgba(0,0,0,.12)}
     @media (prefers-color-scheme:dark){.market-map{--map-0:#3987e5;--map-1:#d95926;--map-2:#199e70;--map-3:#c98500;--map-4:#d55181;--map-grid:rgba(255,255,255,.14)}}
+    .hero-stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0;margin:6px 0 10px;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
+    .hero-stat{padding:12px 36px 12px 0;margin-right:36px;border-right:1px solid var(--border)}
+    .hero-stat:last-child{border-right:0;margin-right:0;padding-right:0}
+    .hero-stat b{display:block;font-family:var(--serif);font-weight:500;font-size:56px;line-height:1;letter-spacing:-0.02em;font-variant-numeric:lining-nums tabular-nums}
+    .hero-stat span{display:block;margin-top:6px;font-size:14px;color:var(--text-soft)}
+    @media(max-width:720px){.hero-stat{padding-right:16px;margin-right:16px}.hero-stat b{font-size:34px}.hero-stat span{font-size:12px}}
     .shops-title{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.15;margin:0}
     .shops-bars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;border-top:1px solid var(--rule,var(--text));margin-top:8px}
     .shops-row{display:grid;grid-template-columns:150px minmax(0,1fr) auto;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
@@ -1466,6 +1472,8 @@
           <div class="hero-copy">
             <h1 class="hero-title" data-i18n="hero.title">What is a used Leica worth?</h1>
             <p class="hero-subtitle" data-i18n="hero.subtitle">Used Leica listings from dealers worldwide, matched to the exact model and priced by condition.</p>
+            <!-- 큰 숫자 셋 (2026-11-07 사장님: 113개 매장·29개 나라·만4천여 매물이 작은 글씨라 한눈에 안 들어옴) -->
+            <div id="hero-stats" class="hero-stats" hidden></div>
             <p id="hero-trust" class="hero-trust" hidden></p>
             <section class="search-panel" data-i18n-aria-label="search.home_aria" aria-label="Search home">
               <div class="search-panel-label" data-i18n="search.panel_label">Search</div>
@@ -1992,6 +2000,10 @@
         picks_note: { ko: 'B등급 시세 · 지금 판매 중', en: 'market value at grade B · for sale now', ja: 'B等級の相場 · 現在販売中', 'zh-Hans': 'B 级行情 · 当前在售', 'zh-Hant': 'B 級行情 · 目前在售', pt: 'valor de mercado no grau B · à venda agora', es: 'valor de mercado en grado B · a la venta ahora', de: 'Marktwert bei Note B · aktuell im Angebot', it: 'valore di mercato al grado B · in vendita ora' },
         on_sale_from: { ko: '판매 중 {n} · {p}부터', en: '{n} for sale · from {p}', ja: '販売中 {n} · {p}〜', 'zh-Hans': '在售 {n} · {p} 起', 'zh-Hant': '在售 {n} · {p} 起', pt: '{n} à venda · a partir de {p}', es: '{n} a la venta · desde {p}', de: '{n} im Angebot · ab {p}', it: '{n} in vendita · da {p}' },
         quiz_title: { ko: '당신의 라이카 레벨은?', en: 'What’s your Leica level?', ja: 'あなたのライカレベルは？', 'zh-Hans': '你的徕卡等级是多少？', 'zh-Hant': '你的徠卡等級是多少？', pt: 'Qual é o seu nível Leica?', es: '¿Cuál es tu nivel Leica?', de: 'Wie hoch ist dein Leica-Level?', it: 'Qual è il tuo livello Leica?' },
+        stat_listings: { ko: '판매 중 매물', en: 'listings for sale', ja: '販売中の出品', 'zh-Hans': '在售商品', 'zh-Hant': '在售商品', pt: 'anúncios à venda', es: 'anuncios a la venta', de: 'Angebote', it: 'annunci in vendita' },
+        stat_shops: { ko: '매장', en: 'shops', ja: '店舗', 'zh-Hans': '家店铺', 'zh-Hant': '家店鋪', pt: 'lojas', es: 'tiendas', de: 'Händler', it: 'negozi' },
+        stat_countries: { ko: '나라', en: 'countries', ja: 'か国', 'zh-Hans': '个国家', 'zh-Hant': '個國家', pt: 'países', es: 'países', de: 'Länder', it: 'paesi' },
+        stat_updated: { ko: '{ago} 갱신 · 매장 홈페이지에서 직접 모음', en: 'updated {ago} · read straight from each shop’s website', ja: '{ago}更新 · 各店のサイトから直接収集', 'zh-Hans': '{ago}更新 · 直接从各店官网收集', 'zh-Hant': '{ago}更新 · 直接從各店官網收集', pt: 'atualizado {ago} · direto do site de cada loja', es: 'actualizado {ago} · directo de la web de cada tienda', de: 'aktualisiert {ago} · direkt von den Händler-Websites', it: 'aggiornato {ago} · direttamente dai siti dei negozi' },
         shops_title: { ko: '{countries}개 나라 {shops}개 매장', en: '{shops} shops in {countries} countries', ja: '{countries}か国 {shops}店舗', 'zh-Hans': '{countries} 个国家 {shops} 家店铺', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪', pt: '{shops} lojas em {countries} países', es: '{shops} tiendas en {countries} países', de: '{shops} Händler in {countries} Ländern', it: '{shops} negozi in {countries} paesi' },
         shops_sub: { ko: '판매 중 {listings}개 · {ago} 갱신 · 매장 홈페이지에서 직접 모음', en: '{listings} listings for sale · updated {ago} · read straight from each shop’s own website', ja: '販売中 {listings}点 · {ago}更新 · 各店のサイトから直接収集', 'zh-Hans': '在售 {listings} 件 · {ago}更新 · 直接从各店官网收集', 'zh-Hant': '在售 {listings} 件 · {ago}更新 · 直接從各店官網收集', pt: '{listings} anúncios à venda · atualizado {ago} · lidos direto do site de cada loja', es: '{listings} anuncios a la venta · actualizado {ago} · leídos directamente de la web de cada tienda', de: '{listings} Angebote · aktualisiert {ago} · direkt von den Websites der Händler', it: '{listings} annunci in vendita · aggiornato {ago} · letti direttamente dai siti dei negozi' },
         shops_row: { ko: '매장 {n} · 매물 {m}', en: '{n} shops · {m} listings', ja: '{n}店 · {m}点', 'zh-Hans': '{n} 家 · {m} 件', 'zh-Hant': '{n} 家 · {m} 件', pt: '{n} lojas · {m} anúncios', es: '{n} tiendas · {m} anuncios', de: '{n} Händler · {m} Angebote', it: '{n} negozi · {m} annunci' },
@@ -2655,6 +2667,14 @@
           .replace('{ago}', ago);
         el.innerHTML = `${countries.map(countryFlagHtml).join('')}<span>${escapeHtml(text)}</span>`;
         el.hidden = false;
+        const stats = document.getElementById('hero-stats');
+        if(stats && sites.length){  // 큰 숫자 셋을 보이면 아래 한 줄은 국기와 갱신 시각만
+          const nf = new Intl.NumberFormat(uiState.locale);
+          stats.innerHTML = [[nf.format(listings), 'stat_listings'], [String(sites.length), 'stat_shops'], [String(countries.length), 'stat_countries']]
+            .map(([n, key]) => `<div class="hero-stat"><b>${escapeHtml(n)}</b><span>${escapeHtml(ux(`home.${key}`, key))}</span></div>`).join('');
+          stats.hidden = false;
+          el.innerHTML = `${countries.map(countryFlagHtml).join('')}<span>${escapeHtml(ux('home.stat_updated', 'updated {ago}').replace('{ago}', ago))}</span>`;
+        }
         renderShopsByCountry(fresh, rules, ago);
       }catch(error){
         el.hidden = true;
