@@ -6374,6 +6374,74 @@ def crawl_leicastoremy():
     return results
 
 
+def crawl_fotomeyer():
+    """Foto Meyer (독일 베를린) - Magento 사이트 검색 'leica gebraucht'(robots.txt 막는 것 없음)에서 제목이 '… - gebraucht'인 라이카만.
+    상태는 상품 화면 속성 'Zustand'(neuwertig·sehr leichte Gebrauchsspuren·leichte·deutliche·starke Gebrauchsspuren)라
+    처음 본 매물만 읽고 전에 읽은 것은 다시 씀(_fill_detail_conditions). Panasonic Leica DG 등 다른 회사는 뺌"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import FOTOMEYER_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://www.fotomeyer.de"
+    print(f"\n  📂 Foto Meyer 크롤링 시작")
+    for page in range(1, 15):
+        resp = sess.get(f"{base}/catalogsearch/result/", params={"q": "leica gebraucht", "p": page}, timeout=30)
+        resp.raise_for_status()
+        blocks = re.findall(r'<li class="item product product-item">(.*?)</li>\s*(?=<li class="item product|</ol>)', resp.text, re.S)
+        new = 0
+        for b in blocks:
+            link = re.search(r'class="product-item-link"[^>]*href="([^"]+)"[^>]*>\s*([^<]+)<', b)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            title = re.sub(r"\s+", " ", _html.unescape(link.group(2))).strip()
+            if not re.search(r"(?i)gebraucht\s*$", title) or not re.search(r"(?i)\b(?:leica|leitz)\b", title) or re.search(r"(?i)^panasonic|lumix|sigma|tamron|voigt|walimex", title):
+                continue
+            name = re.sub(r"(?i)\s*-\s*gebraucht\s*$", "", title).strip()
+            # 독일식 조리개 '180mm 2,8'·'65mm/3,5'·'5cm 3,5' → 'f2.8' (렌즈로 알아보게)
+            name = re.sub(r"\b(\d),(\d)cm\b", r"\1\g<2>mm", name)  # 'Summarex 8,5cm' → 85mm
+            name = re.sub(r"(\d+(?:mm|cm))\s*/?\s*(\d{1,2}),(\d)\b", r"\1 f\2.\3", name)
+            if re.search(r"\b65mm\b", name):  # 비조플렉스 'M 65mm/3,5 Macro Elmar' = Elmar 65mm
+                name = re.sub(r"(?i)\bmacro[ -]?elmar\b", "Elmar", name)
+            amount = re.search(r'data-price-amount="([\d.]+)"', b)
+            price = f"€{float(amount.group(1)):,.0f}" if amount else "문의요망"
+            img = re.search(r'class="product-image-photo"[^>]*src="([^"]+)"', b)
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Foto Meyer (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(blocks)}개 (새 {new})")
+        if not blocks or not new:
+            break
+        time.sleep(3)
+
+    def read_detail(url):
+        text = _html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", sess.get(url, timeout=30).text)))
+        m = re.search(r"Zustand\s+(neuwertig|sehr leichte Gebrauchsspuren|leichte Gebrauchsspuren|deutliche Gebrauchsspuren|starke Gebrauchsspuren|Gebrauchsspuren|[A-Za-zäöüÄÖÜß ]{3,40}?)\s+funktionsgeprüft", text)
+        return FOTOMEYER_PREFIX + m.group(1).strip().lower() if m else None
+
+    _fill_detail_conditions("Foto Meyer (독일)", results, read_detail)
+    print(f"  ✅ Foto Meyer 완료: {len(results)}개")
+    return results
+
+
 def crawl_imagefoto():
     """Image Foto (덴마크, 라이카 공인 딜러) - Shopify '브루트'(brugt, 중고) 컬렉션 JSON에서 판매자 Leica만, 판매 중만. 가격 DKK.
     제목 'Brugt Leica M2 Chrome m. Selvudløser' → 'Leica M2 Chrome', 'Udstillingsmodel'(진열품)은 그대로 둠. 등급 표기 없음"""
@@ -10902,6 +10970,7 @@ def crawl_all():
         ("Leica Store Australia (호주)", lambda: ce.wrap_full_run("Leica Store Australia (호주)", lambda: _with_browser(crawl_leicastoreau))),
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
+        ("Foto Meyer (독일)", lambda: ce.wrap_full_run("Foto Meyer (독일)", crawl_fotomeyer)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
