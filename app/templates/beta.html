@@ -824,10 +824,9 @@
     .grade-chip.grade-D,.grade-chip.grade-X{border-color:#b26a00;color:#b26a00}
     .grade-compare{font-size:12px;font-weight:600}
     .deal-badge{display:inline-block;align-self:flex-start;width:fit-content;margin:4px 0 2px;padding:2px 7px;border:1px solid #2f7d4f;color:#2f7d4f;font-size:13px;font-weight:700;line-height:1.4}
-    .sort-bar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:6px 0 14px;font-size:14px;color:var(--text-soft)}
-    .sort-bar button{border:0;background:none;padding:2px 0;font:inherit;color:var(--text-soft);cursor:pointer}
-    .sort-bar button[aria-pressed="true"]{color:var(--text);font-weight:700;text-decoration:underline;text-underline-offset:4px}
-    .sort-bar button:hover{color:var(--text)}
+    .sort-bar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:6px 0 14px;font-size:14px;color:var(--text-soft)}
+    .sort-bar select{min-width:190px;padding:8px 30px 8px 10px;border:1px solid var(--text);border-radius:0;background-color:var(--bg,#fff);color:var(--text);font:inherit;font-size:14px;cursor:pointer}
+    @media(max-width:720px){.sort-bar{justify-content:flex-start}.sort-bar select{flex:1;min-width:0}}
     .deal-badge.is-above{border-color:var(--border-strong,var(--border));color:var(--text-soft);font-weight:600}
     .grade-compare.is-cheaper{color:#2f7d4f}
     .grade-compare.is-pricier{color:var(--text-soft)}
@@ -1607,8 +1606,8 @@
             </section>
             <section id="value-calc-region"></section>
             <section id="query-summary-region" aria-live="polite"></section>
-            <!-- 정렬 (2026-11-07 사장님: 검색 결과에 정렬을) — 선택칸(#sort-select)은 숨겨 두고 이 줄이 대신 바꿈 -->
-            <nav id="sort-bar" class="sort-bar" hidden aria-label="Sort"></nav>
+            <!-- 정렬 (2026-11-07 사장님: 누르면 고르는 상자로) — 숨겨진 필터 칸의 #sort-select를 처음 그릴 때 여기로 옮겨 옴 -->
+            <div id="sort-bar" class="sort-bar" hidden><label for="sort-select" data-i18n="filters.sort.label">Sort</label></div>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
             <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
             <section id="archive-region" aria-live="polite"></section>
@@ -6301,16 +6300,13 @@
       return 1;
     }
 
-    const SORT_BAR = [['relevance', 'Recommended'], ['price_asc', 'Price: Low to High'], ['price_desc', 'Price: High to Low'], ['newest', 'Newest'], ['deal', 'Best deals first']];
+    // 정렬 상자: 숨겨진 필터 칸에 있던 #sort-select를 결과 바로 위로 옮겨 보여 줌 (바꾸면 원래 change 처리 그대로)
     function renderSortBar(){
       const bar = document.getElementById('sort-bar');
-      if(!bar || !els['sort-select']) return;
-      const show = Boolean(state.query) && !state.loading && getResults().length > 1;
-      bar.hidden = !show;
-      if(!show) return;
-      const current = els['sort-select'].value || 'relevance';
-      bar.innerHTML = `<span>${escapeHtml(ux('filters.sort.label', 'Sort'))}</span>` + SORT_BAR.map(([value, fallback]) =>
-        `<button type="button" data-sort="${value}" aria-pressed="${value === current}">${escapeHtml(ux(`sort.${value}`, fallback))}</button>`).join('');
+      const select = els['sort-select'];
+      if(!bar || !select) return;
+      if(select.parentElement !== bar) bar.appendChild(select);
+      bar.hidden = !(Boolean(state.query) && !state.loading && getResults().length > 1);
     }
 
     function sortMarketBucket(items, sortMode){
@@ -7206,13 +7202,6 @@
         });
       });
       if(els['sort-select']){
-        const sortBar = document.getElementById('sort-bar');
-        if(sortBar) sortBar.addEventListener('click', event => {
-          const button = event.target.closest('[data-sort]');
-          if(!button || els['sort-select'].value === button.dataset.sort) return;
-          els['sort-select'].value = button.dataset.sort;
-          els['sort-select'].dispatchEvent(new Event('change'));
-        });
         els['sort-select'].addEventListener('change', () => {
           render();
           if(state.query || els['query-input'].value.trim()){
