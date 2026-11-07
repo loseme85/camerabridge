@@ -593,3 +593,10 @@ def test_moritz():
     assert grade_of(site, MORITZ_PREFIX + "良上品")[0] == "B"
     assert grade_of(site, MORITZ_PREFIX + "良品")[0] == "B"
     assert grade_of(site, MORITZ_PREFIX + "並上")[0] == "C"
+
+
+def test_panajou_title_state():
+    from condition_grade import grade_of, PANAJOU_PREFIX
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "comme neuf")[0] == "A"
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "très bon état")[0] == "A"
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
