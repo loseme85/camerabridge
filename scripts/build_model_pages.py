@@ -204,7 +204,9 @@ def head(lang: str, title: str, desc: str, url_for, json_ld: dict | None) -> str
             f'<link rel="canonical" href="{url_for(lang)}">{alternates}'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="Camera Bridge">'
             f'<meta property="og:url" content="{url_for(lang)}"><meta property="og:title" content="{html.escape(title)}">'
-            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<style>{CSS}{FOOTER_CSS}</style></head><body><main>')
+            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<style>{CSS}{FOOTER_CSS}</style>'
+            # 방문 기록(어디서 왔나·매장 클릭, 첫 화면과 같은 /api/usage)과 Vercel 방문 통계
+            f'<script defer src="/track.js"></script><script defer src="/_vercel/insights/script.js"></script></head><body><main>')
 
 
 def build(out: Path) -> dict:

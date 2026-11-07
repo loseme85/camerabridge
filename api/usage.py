@@ -2,6 +2,8 @@
 
 저장 위치: usage/YYYY-MM-DD/HHMMSS-<세션>-<n>.json (비공개, 저장소에는 안 남김)
 남기는 나라: Vercel이 붙여 주는 접속 나라 코드(x-vercel-ip-country, 예: KR)만. 남기지 않는 것: IP, 이메일, 쿠키. 세션 ID는 브라우저 탭마다 새로 만드는 무작위 값.
+보내는 곳: 첫 화면(beta.html)과 모델 시세 페이지(track.js). 같은 탭이면 한 방문(sid)으로 묶이고, 페이지마다 첫 묶음은 검색·클릭이 없어도 보냄(어디서 왔는지 남기려고).
+들어온 곳(referrer): 바깥 사이트의 도메인+경로(?·# 뒤는 버림, 예: www.reddit.com/r/Leica/comments/abc). 로봇(user-agent)은 기록 안 함.
 사장님 브라우저는 빼기: /owner/usage 를 열면 /api/usage 에만 가는 표시 쿠키(cb_skip_usage=1)가 생기고, 그 쿠키가 오면 기록하지 않음.
 Blob 무료 한도(쓰기 월 2,000회)를 아끼려고 화면이 방문당 최대 3번만 보낸다. 끄기: USAGE_LOG_DISABLED=1
 요약: python3 scripts/usage_report.py
@@ -19,6 +21,7 @@ SID = re.compile(r"^[a-z0-9]{8,24}$")
 COUNTRY = re.compile(r"^[A-Z]{2}$")
 MAX_SEARCHES = 40
 MAX_CLICKS = 40
+BOT = re.compile(r"bot|crawl|spider|slurp|headless|lighthouse|preview|python|curl|wget", re.I)
 
 
 def _text(value, limit: int) -> str | None:
@@ -57,14 +60,16 @@ def clean(body: dict) -> dict | None:
             "q": _text(item.get("q"), 120),
             "s": _int(item.get("s")),
         })
-    if not searches and not clicks:
+    page = _text(body.get("page"), 200)
+    if not searches and not clicks and not page:
         return None
     return {
         "sid": body["sid"],
         "part": _int(body.get("part")) or 1,
         "locale": _text(body.get("locale"), 12),
         "currency": _text(body.get("currency"), 8),
-        "referrer": _text(body.get("referrer"), 80),  # 호스트만 (예: www.reddit.com)
+        "page": page,                                  # 이 묶음을 보낸 페이지 경로 (예: /ko/leica/m6/)
+        "referrer": _text(body.get("referrer"), 160),  # 도메인+경로 (예: www.reddit.com/r/Leica/comments/abc)
         "landing": _text(body.get("landing"), 200),   # 경로와 utm만
         "mobile": bool(body.get("mobile")),
         "duration_s": _int(body.get("duration_s")),
@@ -73,9 +78,11 @@ def clean(body: dict) -> dict | None:
     }
 
 
-def handle(body: dict, country: str | None = None, cookie: str | None = None) -> tuple[int, dict]:
+def handle(body: dict, country: str | None = None, cookie: str | None = None, agent: str | None = None) -> tuple[int, dict]:
     if os.environ.get("USAGE_LOG_DISABLED") == "1":
         return 200, {"ok": True}
+    if agent and BOT.search(agent):  # 검색엔진 로봇이 페이지를 그리다 보낸 것
+        return 200, {"ok": True, "skipped": True}
     if "cb_skip_usage=1" in (cookie or ""):  # 사장님 브라우저 (/owner/usage 를 연 적 있음) → 기록 안 함
         return 200, {"ok": True, "skipped": True}
     entry = clean(body)
@@ -112,7 +119,8 @@ class handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
         except ValueError:
             return self._send(400, {"ok": False})
-        status, payload = handle(body, self.headers.get("x-vercel-ip-country"), self.headers.get("cookie"))
+        status, payload = handle(body, self.headers.get("x-vercel-ip-country"), self.headers.get("cookie"),
+                                 self.headers.get("user-agent"))
         return self._send(status, payload)
 
     def do_GET(self):  # noqa: N802

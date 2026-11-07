@@ -64,3 +64,17 @@ def test_owner_browser_is_not_logged(monkeypatch):
 def test_owner_usage_page_marks_browser_to_skip():
     import api.owner_usage as owner
     assert "Path=/api/usage" in owner.SKIP_USAGE_COOKIE and owner.SKIP_USAGE_COOKIE.startswith("cb_skip_usage=1")
+
+
+def test_browse_only_visit_with_page_is_kept_and_bots_skipped(monkeypatch):
+    import sys
+    import types
+    entry = usage.clean({"sid": "abcd1234efgh", "page": "/ko/leica/m6/", "referrer": "www.reddit.com/r/Leica/comments/abc"})
+    assert entry["page"] == "/ko/leica/m6/" and entry["referrer"].endswith("/comments/abc")
+    saved = []
+    monkeypatch.setitem(sys.modules, "vercel", types.SimpleNamespace(blob=types.SimpleNamespace(put=lambda path, data, **kw: saved.append(path))))
+    body = {"sid": "abcdefgh12", "page": "/"}
+    assert usage.handle(dict(body), "KR", "", "Mozilla/5.0 (compatible; Googlebot/2.1)")[1]["skipped"]
+    assert saved == []
+    usage.handle(dict(body), "KR", "", "Mozilla/5.0 (iPhone)")
+    assert len(saved) == 1
