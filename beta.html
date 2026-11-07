@@ -824,6 +824,11 @@
     .grade-chip.grade-D,.grade-chip.grade-X{border-color:#b26a00;color:#b26a00}
     .grade-compare{font-size:12px;font-weight:600}
     .deal-badge{display:inline-block;align-self:flex-start;width:fit-content;margin:4px 0 2px;padding:2px 7px;border:1px solid #2f7d4f;color:#2f7d4f;font-size:13px;font-weight:700;line-height:1.4}
+    .sort-bar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin:6px 0 14px;font-size:14px;color:var(--text-soft)}
+    .sort-bar button{border:0;background:none;padding:2px 0;font:inherit;color:var(--text-soft);cursor:pointer}
+    .sort-bar button[aria-pressed="true"]{color:var(--text);font-weight:700;text-decoration:underline;text-underline-offset:4px}
+    .sort-bar button:hover{color:var(--text)}
+    .deal-badge.is-above{border-color:var(--border-strong,var(--border));color:var(--text-soft);font-weight:600}
     .grade-compare.is-cheaper{color:#2f7d4f}
     .grade-compare.is-pricier{color:var(--text-soft)}
     .grade-compare.is-note{color:var(--text-soft);font-weight:400;font-style:italic}
@@ -1602,6 +1607,8 @@
             </section>
             <section id="value-calc-region"></section>
             <section id="query-summary-region" aria-live="polite"></section>
+            <!-- 정렬 (2026-11-07 사장님: 검색 결과에 정렬을) — 선택칸(#sort-select)은 숨겨 두고 이 줄이 대신 바꿈 -->
+            <nav id="sort-bar" class="sort-bar" hidden aria-label="Sort"></nav>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
             <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
             <section id="archive-region" aria-live="polite"></section>
@@ -3852,8 +3859,9 @@
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
       const diff = dealDiff(result, cost);
-      const deal = diff !== null && diff <= -5 && (result.final_output || {}).sold_quality === 'asking'  // 살 수 있는 매물에만
-        ? `<div class="deal-badge" title="${escapeHtml(ec('vs_grade_cheaper', { p: String(-diff) }))}">${escapeHtml(ec('deal_below', { p: String(-diff) }))}</div>` : '';
+      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
+      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
+        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
       return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${deal}${original}${gradeRow}${landed}</div>`;
     }
 
@@ -4141,6 +4149,7 @@
       grade_market: { ko: '시세 ({grade} 기준)', en: 'Market price ({grade})', ja: '相場（{grade}基準）', 'zh-Hans': '行情（{grade}）', 'zh-Hant': '行情（{grade}）', pt: 'Preço de mercado ({grade})', es: 'Precio de mercado ({grade})', de: 'Marktpreis ({grade})', it: 'Prezzo di mercato ({grade})' },
       vs_grade_cheaper: { ko: '같은 등급 시세보다 {p}% 쌈', en: '{p}% below the market price for this grade', ja: '同ランク相場より{p}%安い', 'zh-Hans': '比同级行情低 {p}%', 'zh-Hant': '比同級行情低 {p}%', pt: '{p}% abaixo do preço de mercado deste grau', es: '{p}% por debajo del precio de mercado de este grado', de: '{p} % unter dem Marktpreis für diesen Zustand', it: '{p}% sotto il prezzo di mercato di questo grado' },
       deal_below: { ko: '시세보다 {p}% 쌈', en: '{p}% below market', ja: '相場より{p}%安い', 'zh-Hans': '低于行情 {p}%', 'zh-Hant': '低於行情 {p}%', pt: '{p}% abaixo do mercado', es: '{p}% bajo el mercado', de: '{p}% unter Marktwert', it: '{p}% sotto il mercato' },
+      deal_above: { ko: '시세보다 {p}% 비쌈', en: '{p}% above market', ja: '相場より{p}%高い', 'zh-Hans': '高于行情 {p}%', 'zh-Hant': '高於行情 {p}%', pt: '{p}% acima do mercado', es: '{p}% sobre el mercado', de: '{p}% über Marktwert', it: '{p}% sopra il mercato' },
       vs_grade_pricier: { ko: '같은 등급 시세보다 {p}% 비쌈', en: '{p}% above the market price for this grade', ja: '同ランク相場より{p}%高い', 'zh-Hans': '比同级行情高 {p}%', 'zh-Hant': '比同級行情高 {p}%', pt: '{p}% acima do preço de mercado deste grau', es: '{p}% por encima del precio de mercado de este grado', de: '{p} % über dem Marktpreis für diesen Zustand', it: '{p}% sopra il prezzo di mercato di questo grado' },
       note_price_inferred: { ko: '제목에 구분 표기가 없어 가격대로 모델을 추정함', en: 'Model inferred from price — the title does not say which version', ja: 'タイトルに区別表記がなく価格帯からモデルを推定', 'zh-Hans': '标题未注明版本，按价格区间推断型号', 'zh-Hant': '標題未註明版本，依價格區間推斷型號', pt: 'Modelo deduzido pelo preço — o título não indica a versão', es: 'Modelo deducido por el precio: el título no indica la versión', de: 'Modell aus dem Preis abgeleitet – der Titel nennt die Version nicht', it: 'Modello dedotto dal prezzo: il titolo non indica la versione' },
       note_too_cheap: { ko: '시세보다 지나치게 싸 시세 계산에서 뺌 (부품·액세서리일 수 있음)', en: 'Far below the market price, left out of the price — may be a part or accessory', ja: '相場より極端に安いため相場計算から除外（部品・アクセサリーの可能性）', 'zh-Hans': '远低于行情，未计入行情（可能是零件或配件）', 'zh-Hant': '遠低於行情，未計入行情（可能是零件或配件）', pt: 'Muito abaixo do preço de mercado, fora do cálculo — pode ser peça ou acessório', es: 'Muy por debajo del precio de mercado, fuera del cálculo: puede ser una pieza o accesorio', de: 'Weit unter dem Marktpreis, nicht eingerechnet – evtl. Ersatzteil oder Zubehör', it: 'Molto sotto il prezzo di mercato, escluso dal calcolo: può essere un ricambio o accessorio' },
@@ -4398,11 +4407,9 @@
       const title = result.grade_basis === 'text' ? ec('grade_basis_text') : result.grade_basis === 'image' ? ec('grade_basis_image') : String(result.condition || '');
       let compare = '';
       const note = (result.final_output || {}).entity_note;
-      const diff = dealDiff(result, cost);
+      // 시세 대비 %는 가격 바로 아래 한 곳에만 (2026-11-07 사장님: 초록 네모와 작은 글씨가 섞여 보임)
       if(note === 'too_cheap' || note === 'set'){
         compare = `<span class="grade-compare is-note">${escapeHtml(ec(note === 'set' ? 'note_set' : 'note_too_cheap'))}</span>`;
-      } else if(diff !== null && diff >= 3){
-        compare = `<span class="grade-compare is-pricier">${escapeHtml(ec('vs_grade_pricier', { p: String(diff) }))}</span>`;
       }
       if(note === 'price_inferred') compare += `<span class="grade-compare is-note">${escapeHtml(ec('note_price_inferred'))}</span>`;
       return `<div class="result-grade-row"><span class="grade-chip grade-${escapeHtml(grade)}" title="${escapeHtml(title)}">${escapeHtml(gradeLabel(grade))}</span>${compare}</div>`;
@@ -6294,12 +6301,26 @@
       return 1;
     }
 
+    const SORT_BAR = [['relevance', 'Recommended'], ['price_asc', 'Price: Low to High'], ['price_desc', 'Price: High to Low'], ['newest', 'Newest'], ['deal', 'Best deals first']];
+    function renderSortBar(){
+      const bar = document.getElementById('sort-bar');
+      if(!bar || !els['sort-select']) return;
+      const show = Boolean(state.query) && !state.loading && getResults().length > 1;
+      bar.hidden = !show;
+      if(!show) return;
+      const current = els['sort-select'].value || 'relevance';
+      bar.innerHTML = `<span>${escapeHtml(ux('filters.sort.label', 'Sort'))}</span>` + SORT_BAR.map(([value, fallback]) =>
+        `<button type="button" data-sort="${value}" aria-pressed="${value === current}">${escapeHtml(ux(`sort.${value}`, fallback))}</button>`).join('');
+    }
+
     function sortMarketBucket(items, sortMode){
       const sorted = [...items];
       sorted.sort((left, right) => {
         const leftPrice = left.priceValue;
         const rightPrice = right.priceValue;
-        if(left.compatibilityTier !== right.compatibilityTier) return left.compatibilityTier - right.compatibilityTier;
+        // 가격·시세 정렬에서는 '정확히 맞음(0)'과 '같은 모델(1)'을 한 묶음으로 가격순. 리페인트·액세서리·튀는 값(2)만 뒤로
+        const tierOf = item => (['price_asc', 'price_desc', 'deal'].includes(sortMode) ? (item.compatibilityTier >= 2 ? 1 : 0) : item.compatibilityTier);
+        if(tierOf(left) !== tierOf(right)) return tierOf(left) - tierOf(right);
         if(sortMode === 'newest'){
           if(right.recency !== left.recency) return right.recency - left.recency;
           if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
@@ -6351,7 +6372,7 @@
         firstSeen: getResultFirstSeenScore(result),
         compatibility: getResultCompatibilityScore(result),
         compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
-        priceValue: parseNumericPrice(result),
+        priceValue: comparablePrice(result),
         marketInfo: getMarketActivityInfo(result),
         deal: sortMode === 'deal' && (result.final_output || {}).sold_quality === 'asking' ? dealDiff(result, computeLandedCost(result)) : null,
       }));
@@ -6744,6 +6765,7 @@
       els['query-summary-region'].innerHTML = renderPriceLadder();
       renderValueCalc();
       loadPriceLadder();
+      renderSortBar();
       els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length), historyResults.length);
       els['results-load-more-region'].innerHTML = '';
       els['archive-region'].innerHTML = renderArchiveSection(historyResults);
@@ -6882,6 +6904,15 @@
           </div>
         </article>
       `;
+    }
+
+    // 가격 정렬용: 매장 통화가 섞여 있으므로 원화로 바꿔 비교 (₩2,400,000과 £1,199를 숫자 그대로 비교하던 문제, 2026-11-07)
+    function comparablePrice(result){
+      const value = parseNumericPrice(result);
+      if(value === null) return null;
+      const currency = String(result.currency || 'KRW').toUpperCase();
+      const krw = currency === 'KRW' ? value : convertAmount(value, currency, 'KRW');
+      return krw === null || !Number.isFinite(krw) ? value : krw;
     }
 
     function parseNumericPrice(result){
@@ -7175,6 +7206,13 @@
         });
       });
       if(els['sort-select']){
+        const sortBar = document.getElementById('sort-bar');
+        if(sortBar) sortBar.addEventListener('click', event => {
+          const button = event.target.closest('[data-sort]');
+          if(!button || els['sort-select'].value === button.dataset.sort) return;
+          els['sort-select'].value = button.dataset.sort;
+          els['sort-select'].dispatchEvent(new Event('change'));
+        });
         els['sort-select'].addEventListener('change', () => {
           render();
           if(state.query || els['query-input'].value.trim()){
