@@ -181,11 +181,10 @@
     .home-quiz p{margin:4px 0 14px;max-width:44em;color:var(--text-soft);font-size:14px}
     .home-quiz-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
     .home-quiz-best{font-family:var(--serif);font-style:italic;color:var(--text-soft)}
-    .quiz-dialog{width:min(560px, calc(100% - 32px));border:1px solid var(--text);border-radius:0;padding:22px;background:var(--bg,#fff);color:var(--text)}
-    .quiz-dialog::backdrop{background:rgba(0,0,0,0.4)}
-    .quiz-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:8px}
+    .quiz-inline{max-width:620px;border:1px solid var(--text);padding:18px 20px}
+        .quiz-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:8px}
     .quiz-top button{border:0;background:none;color:var(--text-soft);font:inherit;cursor:pointer;padding:0}
-    .quiz-dialog h3{font-family:var(--serif);font-weight:500;font-size:22px;line-height:1.3;margin:16px 0 12px}
+    .quiz-inline h3{font-family:var(--serif);font-weight:500;font-size:22px;line-height:1.3;margin:16px 0 12px}
     .quiz-item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;margin:0 0 12px;font-size:13px;color:var(--text-soft)}
     .quiz-item>img{width:96px;height:96px;object-fit:cover;border:1px solid var(--border)}
     .quiz-item .source-flag{width:16px;height:12px;margin-right:5px;vertical-align:-1px}
@@ -1473,9 +1472,9 @@
       <section id="home-feed" class="home-feed">
         <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
         <div id="home-quiz-block" class="home-quiz" hidden>
-          <h2 class="home-heading" data-i18n="home.quiz_title">How well do you know Leica?</h2>
-          <p data-i18n="home.quiz_intro">10 questions most people get wrong — order numbers, Leitz code names, specs and real sold prices. Get your Leica level.</p>
-          <div class="home-quiz-actions"><button type="button" id="quiz-open" class="search-button" data-i18n="home.quiz_start">Take the test</button><span id="quiz-best" class="home-quiz-best"></span></div>
+          <h2 class="home-heading"><span data-i18n="home.quiz_title">What’s your Leica level?</span> <small id="quiz-best" class="home-quiz-best"></small></h2>
+          <p data-i18n="home.quiz_intro">10 questions most people get wrong. Start with the first one right here.</p>
+          <div id="quiz-body" class="quiz-inline" aria-live="polite"></div>
         </div>
         <div id="home-picks-block" hidden>
           <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
@@ -1633,7 +1632,6 @@
           </aside>
         </div>
       </section>
-      <dialog id="quiz-dialog" class="quiz-dialog" aria-labelledby="quiz-question"><div id="quiz-body"></div></dialog>
       <dialog id="save-dialog" class="save-dialog">
         <p id="save-dialog-text"></p>
         <div data-google-button></div>
@@ -1954,8 +1952,8 @@
         picks: { ko: '수집가들이 찾는 모델', en: 'Collector favorites', ja: 'コレクターが探すモデル', 'zh-Hans': '藏家追捧的型号', 'zh-Hant': '藏家追捧的型號', pt: 'Favoritos dos colecionadores', es: 'Favoritos de coleccionistas', de: 'Sammlerstücke', it: 'I preferiti dei collezionisti' },
         picks_note: { ko: 'B등급 시세 · 지금 판매 중', en: 'market value at grade B · for sale now', ja: 'B等級の相場 · 現在販売中', 'zh-Hans': 'B 级行情 · 当前在售', 'zh-Hant': 'B 級行情 · 目前在售', pt: 'valor de mercado no grau B · à venda agora', es: 'valor de mercado en grado B · a la venta ahora', de: 'Marktwert bei Note B · aktuell im Angebot', it: 'valore di mercato al grado B · in vendita ora' },
         on_sale_from: { ko: '판매 중 {n} · {p}부터', en: '{n} for sale · from {p}', ja: '販売中 {n} · {p}〜', 'zh-Hans': '在售 {n} · {p} 起', 'zh-Hant': '在售 {n} · {p} 起', pt: '{n} à venda · a partir de {p}', es: '{n} a la venta · desde {p}', de: '{n} im Angebot · ab {p}', it: '{n} in vendita · da {p}' },
-        quiz_title: { ko: '나는 라이카를 얼마나 알까?', en: 'How well do you know Leica?', ja: 'あなたのライカ度は？', 'zh-Hans': '你有多懂徕卡？', 'zh-Hant': '你有多懂徠卡？', pt: 'Quanto você conhece a Leica?', es: '¿Cuánto sabes de Leica?', de: 'Wie gut kennst du Leica?', it: 'Quanto conosci Leica?' },
-        quiz_intro: { ko: '주문 번호, 라이츠 코드 이름, 사양, 실제 팔린 가격까지 — 일반인은 거의 못 맞히는 10문제로 라이카 레벨을 받아 보세요.', en: '10 questions most people get wrong — order numbers, Leitz code names, specs and real sold prices. Get your Leica level.', ja: '注文番号、ライツのコードネーム、仕様、実際の販売価格 — 普通はまず解けない10問で、あなたのライカレベルを判定します。', 'zh-Hans': '订货号、徕兹代号、规格和真实成交价——普通人很难答对的 10 道题，测出你的徕卡等级。', 'zh-Hant': '訂貨號、徠茲代號、規格與真實成交價——一般人很難答對的 10 道題，測出你的徠卡等級。', pt: '10 perguntas que quase ninguém acerta — números de pedido, códigos Leitz, especificações e preços reais de venda. Descubra seu nível Leica.', es: '10 preguntas que casi nadie acierta: números de pedido, códigos Leitz, especificaciones y precios reales de venta. Descubre tu nivel Leica.', de: '10 Fragen, an denen die meisten scheitern – Bestellnummern, Leitz-Codewörter, Daten und echte Verkaufspreise. Finde dein Leica-Level heraus.', it: '10 domande che quasi nessuno indovina: numeri d’ordine, codici Leitz, specifiche e prezzi reali di vendita. Scopri il tuo livello Leica.' },
+        quiz_title: { ko: '당신의 라이카 레벨은?', en: 'What’s your Leica level?', ja: 'あなたのライカレベルは？', 'zh-Hans': '你的徕卡等级是多少？', 'zh-Hant': '你的徠卡等級是多少？', pt: 'Qual é o seu nível Leica?', es: '¿Cuál es tu nivel Leica?', de: 'Wie hoch ist dein Leica-Level?', it: 'Qual è il tuo livello Leica?' },
+        quiz_intro: { ko: '일반인은 거의 못 맞히는 10문제. 첫 문제부터 바로 풀어 보세요.', en: '10 questions most people get wrong. Start with the first one right here.', ja: '普通はまず解けない10問。ここから1問目をどうぞ。', 'zh-Hans': '普通人很难答对的 10 道题，直接从第一题开始。', 'zh-Hant': '一般人很難答對的 10 道題，直接從第一題開始。', pt: '10 perguntas que quase ninguém acerta. Comece pela primeira aqui mesmo.', es: '10 preguntas que casi nadie acierta. Empieza por la primera aquí mismo.', de: '10 Fragen, an denen die meisten scheitern. Fang gleich hier mit der ersten an.', it: '10 domande che quasi nessuno indovina. Inizia subito dalla prima qui.' },
         quiz_start: { ko: '테스트 시작', en: 'Take the test', ja: 'テストを受ける', 'zh-Hans': '开始测试', 'zh-Hant': '開始測驗', pt: 'Fazer o teste', es: 'Hacer el test', de: 'Test starten', it: 'Inizia il test' },
         quiz_best: { ko: '내 최고 기록: 레벨 {n} · {name}', en: 'Your best: Level {n} · {name}', ja: '自己ベスト：レベル {n} · {name}', 'zh-Hans': '最佳成绩：等级 {n} · {name}', 'zh-Hant': '最佳成績：等級 {n} · {name}', pt: 'Seu melhor: nível {n} · {name}', es: 'Tu mejor: nivel {n} · {name}', de: 'Dein Bestwert: Level {n} · {name}', it: 'Il tuo migliore: livello {n} · {name}' },
         quiz_q_code_word_lens: { ko: '라이츠 코드 이름 {c}는 어느 렌즈일까요?', en: 'Which lens had the Leitz code name {c}?', ja: 'ライツのコードネーム {c} はどのレンズ？', 'zh-Hans': '徕兹代号 {c} 是哪支镜头？', 'zh-Hant': '徠茲代號 {c} 是哪支鏡頭？', pt: 'Qual lente tinha o código Leitz {c}?', es: '¿Qué objetivo tenía el código Leitz {c}?', de: 'Welches Objektiv hatte das Leitz-Codewort {c}?', it: 'Quale obiettivo aveva il codice Leitz {c}?' },
@@ -3403,10 +3401,11 @@
       const block = document.getElementById('home-quiz-block');
       if(block) block.hidden = quizState.bank.length < 20;
       renderQuizBest();
-      if(quizState.bank.length >= 20 && QUIZ_FROM_URL){
-        // 환율·모델 이름을 받을 때까지 잠깐 기다렸다 염 (최대 6초)
+      if(quizState.bank.length >= 20){
+        // 첫 화면에 첫 문제를 바로 (누르지 않아도). 환율·모델 이름을 받을 때까지 잠깐 기다림 (최대 6초)
         for(let i = 0; i < 30 && !(fxRate('KRW') && fxRate(uiState.currency) && entityState.byId); i++) await new Promise(r => setTimeout(r, 200));
         openQuiz();
+        if(QUIZ_FROM_URL && block) block.scrollIntoView({ block: 'start' });  // 공유 주소로 들어오면 문제로 바로
       }
     }
     function pickQuiz(){
@@ -3439,7 +3438,7 @@
         if(!best || level > best.level){ try{ localStorage.setItem('cb_quiz_best', JSON.stringify({ level, right: quizState.right })); }catch(error){} }
         renderQuizBest();
         body.innerHTML = `
-          <div class="quiz-top"><span>${escapeHtml(qx('quiz_title'))}</span><button type="button" data-quiz-close>✕</button></div>
+          <div class="quiz-top"><span>${escapeHtml(qx('quiz_title'))}</span></div>
           <p class="quiz-level" id="quiz-question">${escapeHtml(qx('quiz_result', { n: String(level), name: qx(`quiz_lv${level}`) }))}</p>
           <p>${escapeHtml(qx('quiz_score', { r: String(quizState.right), t: String(total) }))}</p>
           <p class="quiz-feedback" id="quiz-share-status" role="status"></p>
@@ -3459,7 +3458,7 @@
           <span><strong>${escapeHtml(quizEntityName(q.entity) || q.vars.title)}</strong>${countryFlagHtml((rules[q.vars.source] || {}).country)}${escapeHtml(meta)}<br><small>${escapeHtml(q.vars.title || '')}</small></span></div>`;
       }
       body.innerHTML = `
-        <div class="quiz-top"><span>${escapeHtml(qx('quiz_title'))} · ${quizState.index + 1} / ${total}</span><button type="button" data-quiz-close aria-label="${escapeHtml(qx('quiz_close'))}">✕</button></div>
+        <div class="quiz-top"><span>${quizState.index + 1} / ${total}</span></div>
         <h3 id="quiz-question">${escapeHtml(quizPrompt(q))}</h3>
         ${item}
         <div class="quiz-options">${labels.map((label, i) => `<button type="button" data-quiz-pick="${i}">${escapeHtml(label)}</button>`).join('')}</div>
@@ -3486,28 +3485,22 @@
       const link = name ? ` <button type="button" class="quiz-link" data-quiz-entity="${escapeHtml(q.entity)}">${escapeHtml(qx('quiz_see_model', { name }))} →</button>` : '';
       body.querySelector('.quiz-feedback').innerHTML = `${escapeHtml(right ? qx('quiz_right') : qx('quiz_wrong', { a: labels[q.answer] }))}${escapeHtml(extra)}${link}`;
       body.querySelector('.quiz-actions').hidden = false;
-      body.querySelector('[data-quiz-next]').focus();
     }
     function openQuiz(){
-      const dialog = document.getElementById('quiz-dialog');
-      if(!dialog || typeof dialog.showModal !== 'function' || !quizState.bank || !quizState.bank.length) return;
+      if(!quizState.bank || !quizState.bank.length) return;
       Object.assign(quizState, { list: pickQuiz(), index: 0, right: 0, answered: false });
       renderQuiz();
-      if(!dialog.open) dialog.showModal();
     }
     function bindQuiz(){
-      const open = document.getElementById('quiz-open');
-      if(open) open.addEventListener('click', openQuiz);
-      const dialog = document.getElementById('quiz-dialog');
-      if(!dialog) return;
-      dialog.addEventListener('click', async event => {
+      const box = document.getElementById('quiz-body');
+      if(!box) return;
+      box.addEventListener('click', async event => {
         const target = event.target.closest('button');
-        if(event.target === dialog || (target && target.hasAttribute('data-quiz-close'))) return dialog.close();
         if(!target) return;
         if(target.dataset.quizPick !== undefined) return answerQuiz(Number(target.dataset.quizPick));
-        if(target.hasAttribute('data-quiz-next')){ quizState.index += 1; quizState.answered = false; return renderQuiz(); }
+        if(target.hasAttribute('data-quiz-next')){ quizState.index += 1; quizState.answered = false; renderQuiz(); return box.querySelector('[data-quiz-pick], [data-quiz-share]')?.focus({ preventScroll: true }); }
         if(target.hasAttribute('data-quiz-again')) return openQuiz();
-        if(target.dataset.quizEntity){ dialog.close(); return selectEntity(target.dataset.quizEntity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false }); }
+        if(target.dataset.quizEntity){ return selectEntity(target.dataset.quizEntity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false }); }
         if(target.hasAttribute('data-quiz-share')){
           const level = Number(target.dataset.level);
           const text = qx('quiz_share_text', { n: String(level), name: qx(`quiz_lv${level}`) });
