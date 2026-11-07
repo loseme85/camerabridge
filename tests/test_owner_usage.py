@@ -77,3 +77,43 @@ def test_browse_only_visits_are_counted_with_pages():
     from scripts import usage_report
     r = usage_report.summarize(entries)
     assert r["visits"] == 2 and r["visits_with_activity"] == 1
+
+
+def test_search_via_and_day_view():
+    import datetime as dt
+    from api import owner_usage as ou
+    from api import usage
+    from scripts import usage_report
+    today = dt.datetime.now(ou.KST).date().isoformat()
+    entries = [{"sid": "typ3dv1s1t", "part": 1, "created_at": f"{today}T10:00:00+09:00", "page": "/", "referrer": "www.reddit.com/r/Leica/comments/x",
+                "searches": [{"q": "Leica M6", "via": "pick", "typed": "m6 ttl", "results": 5, "active": 3, "s": 4},
+                             {"q": "noctilux", "via": "typed", "results": 9, "active": 2, "s": 30},
+                             {"q": "Leica M3", "via": "link", "results": 4, "active": 4, "s": 50}], "clicks": []}]
+    r = usage_report.summarize(entries)
+    assert dict(r["typed_queries"]) == {"m6 ttl": 1, "noctilux": 1}
+    assert dict(r["opened_models"]) == {"Leica M3": 1}
+    week = ou.render(entries, [], 7, False)
+    assert f"?date={today}" in week and "날짜별" in week and "손님이 직접 친 검색어" in week
+    day = ou.render(entries, [], 7, False, today)
+    assert "◀ 전날" in day and "“m6 ttl” 치고" in day and "링크로 열림" in day
+    kept = usage.clean({"sid": "abcd1234efgh", "searches": [{"q": "m6", "via": "hack", "typed": "x"}]})
+    assert "via" not in kept["searches"][0]
+
+
+def test_same_ip_same_day_counts_once(monkeypatch):
+    import sys
+    import types
+    from api import usage, owner_usage as ou
+    from scripts import usage_report
+    saved = []
+    monkeypatch.setenv("USAGE_SALT", "s3cret")
+    monkeypatch.setitem(sys.modules, "vercel", types.SimpleNamespace(blob=types.SimpleNamespace(put=lambda path, data, **kw: saved.append(data))))
+    usage.handle({"sid": "tab0ne1234", "page": "/"}, "KR", "", "Mozilla/5.0", "1.2.3.4, 10.0.0.1")
+    usage.handle({"sid": "tabtw05678", "page": "/ko/leica/m6/"}, "KR", "", "Mozilla/5.0", "1.2.3.4")
+    import json
+    a, b = (json.loads(x) for x in saved)
+    assert a["vtag"] == b["vtag"] and "1.2.3.4" not in saved[0].decode()
+    assert usage.visitor_tag("1.2.3.4", "2026-11-07") != usage.visitor_tag("1.2.3.4", "2026-11-08")
+    r = usage_report.summarize([a, b])
+    assert r["visits"] == 1
+    assert len(ou.visits([a, b])) == 1

@@ -42,18 +42,23 @@ def fetch(days: list[str]) -> list[dict]:
     return entries
 
 
+def visitor_key(e: dict) -> str:
+    """방문 한 번을 세는 기준: 같은 IP(해시 vtag)·같은 날이면 한 번. vtag 없는 예전 기록은 탭(sid)마다."""
+    return f"{str(e.get('created_at', ''))[:10]}:{e['vtag']}" if e.get("vtag") else e["sid"]
+
+
 def summarize(entries: list[dict]) -> dict:
-    sessions = {e["sid"] for e in entries}
+    sessions = {visitor_key(e) for e in entries}
     searches = [s for e in entries for s in e.get("searches", [])]
     clicks = [c for e in entries for c in e.get("clicks", [])]
     first = {}
-    for e in sorted(entries, key=lambda e: e.get("part", 1)):
-        first.setdefault(e["sid"], e)
+    for e in sorted(entries, key=lambda e: (e.get("created_at", ""), e.get("part", 1))):
+        first.setdefault(visitor_key(e), e)
     norm = lambda q: " ".join(str(q).lower().split())  # noqa: E731
     return {
         "visits": len(sessions),
-        "visits_with_activity": len({e["sid"] for e in entries if e.get("searches") or e.get("clicks")}),
-        "visits_with_click": len({e["sid"] for e in entries if e.get("clicks")}),
+        "visits_with_activity": len({visitor_key(e) for e in entries if e.get("searches") or e.get("clicks")}),
+        "visits_with_click": len({visitor_key(e) for e in entries if e.get("clicks")}),
         "searches": len(searches),
         "clicks": len(clicks),
         "referrers": collections.Counter(e.get("referrer") or "(직접·알 수 없음)" for e in first.values()).most_common(10),
@@ -62,6 +67,9 @@ def summarize(entries: list[dict]) -> dict:
         "locales": collections.Counter(e.get("locale") or "-" for e in first.values()).most_common(10),
         "mobile_share": round(sum(1 for e in first.values() if e.get("mobile")) / len(first), 2) if first else None,
         "top_queries": collections.Counter(norm(s["q"]) for s in searches).most_common(20),
+        # 손님이 직접 찾은 것: 쳐서 Enter 한 검색어 + 후보를 고르기 전에 친 글자 (모델 페이지 링크·버튼으로 열린 건 빼고)
+        "typed_queries": collections.Counter(norm(s.get("typed") or s["q"]) for s in searches if s.get("via") in ("typed", "pick")).most_common(20),
+        "opened_models": collections.Counter(s["q"] for s in searches if s.get("via") in ("link", "chip")).most_common(15),
         "top_entities": collections.Counter(s["entity"] for s in searches if s.get("entity")).most_common(15),
         "zero_result_queries": collections.Counter(norm(s["q"]) for s in searches if s.get("results") == 0).most_common(20),
         "no_active_queries": collections.Counter(norm(s["q"]) for s in searches if s.get("results") and s.get("active") == 0).most_common(20),
