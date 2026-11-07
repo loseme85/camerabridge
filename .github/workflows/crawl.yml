@@ -88,6 +88,10 @@ jobs:
       - name: Link listings to model entities
         run: python3 scripts/build_entity_index.py
 
+      - name: Build Leica level test questions (첫 화면 레벨 테스트)
+        run: python3 scripts/build_quiz.py
+        continue-on-error: true
+
       - name: Audit entities (missing-model candidates)
         run: python3 scripts/entity_audit.py
 

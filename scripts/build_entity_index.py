@@ -26,6 +26,8 @@ SOLD_MEDIAN_DAYS = 730  # 판매 중간값에 넣는 기간: 최근 2년 (2026-1
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 HOME_FEED = ROOT / "data" / "derived" / "home_feed.json"
 HOME_FEED_SIZE = 12
+QUIZ_SIZE = 40       # 첫 화면 '가격 맞히기': 최근 팔린 매물, 모델마다 한 건
+QUIZ_DAYS = 60
 
 
 # 등급별 가격 비율 (B = 1). 데이터가 모자라면 이 기본값 (2026-10 수집분으로 계산한 등급표 초안)
@@ -119,6 +121,36 @@ def _home_feed(records: list, catalog: dict) -> dict:
     return {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "latest": picked}
 
 
+def _home_quiz(records: list, catalog: dict, skip: set, to_krw: dict) -> list:
+    """첫 화면 '이 매물, 얼마에 팔렸을까?' 문제: 최근 QUIZ_DAYS일 안에 팔린 날이 분명한 매물 중 사진 있는 것, 모델마다 한 건.
+    같은 물건 중복·너무 싼 것(잘못 연결 의심)·세트는 뺌. 가격은 팔린 날 환율로 원화."""
+    entities = catalog["entities"]
+    cutoff = (dt.date.today() - dt.timedelta(days=QUIZ_DAYS)).isoformat()
+    sold = [r for r in records if id(r) not in skip and (r.get("final_output") or {}).get("sold_quality") == "sold_confirmed"]
+    sold.sort(key=lambda r: str(r["final_output"].get("sold_at") or ""), reverse=True)
+    picked, seen = [], set()
+    for record in sold:
+        final = record["final_output"]
+        when = str(final.get("sold_at") or "")
+        if final.get("sold_at_unknown") or when[:10] < cutoff or not final.get("image_url") or not final.get("parsed_price_numeric"):
+            continue
+        leaf = next((e for e in record.get("entity_ids") or []
+                     if not entities[e].get("children") and not entities[e].get("feature")), None)
+        if not leaf or leaf in seen:
+            continue
+        rate = final.get("sold_fx_krw") or krw_per_unit_on(final.get("currency"), when) or to_krw.get(str(final.get("currency") or "KRW").upper())
+        if not rate:
+            continue
+        seen.add(leaf)
+        grade = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))[0] or final.get("image_grade")
+        picked.append({"entity": leaf, "title": final.get("title_raw"), "image": final.get("image_url"), "source": final.get("source"),
+                       "sold_at": when[:10], "grade": grade if grade and grade != "X" else None,
+                       "krw": round(final["parsed_price_numeric"] * rate)})
+        if len(picked) >= QUIZ_SIZE:
+            break
+    return picked
+
+
 def main() -> None:
     payload = json.loads(INDEX.read_text(encoding="utf-8"))
     records = payload["records"]
@@ -197,7 +229,9 @@ def main() -> None:
                                    "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
                                    "grade_factors": factors,
                                    "entities": entities}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    HOME_FEED.write_text(json.dumps(_home_feed(records, catalog), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    feed = _home_feed(records, catalog)
+    feed["quiz"] = _home_quiz(records, catalog, dup_ids | too_cheap | sets, to_krw)
+    HOME_FEED.write_text(json.dumps(feed, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     linked = sum(1 for r in records if r.get("entity_ids"))
     print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약 · 가격으로 옮김 {moved} · 시세에서 뺌 {len(too_cheap)} · 세트 {len(sets)} · 같은 물건 중복 {duplicates}")
 
