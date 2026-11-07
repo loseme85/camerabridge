@@ -6490,6 +6490,24 @@ def crawl_fototrade():
                       rename=_abbr_lens_name)
 
 
+def crawl_fotoman():
+    """Fotoman (핀란드 휘빈캐) - WooCommerce 공개 상품 API, '중고 라이카'(Käytetyt Leica) 분류에 든 라이카·라이츠만.
+    이름 앞 'Käytetty '(중고)와 뒤 ' – filmikamera'·' – Leica M' 등을 떼고 'hopea' → silver. 상태는 자유 문장이라 등급 없음(사진 등급 대기열)"""
+    def keep(p, name):
+        used = any((c.get("name") or "") == "Käytetyt Leica" for c in p.get("categories") or [])
+        return used and bool(re.search(r"(?i)\b(?:leica|leitz)", name)) and not re.search(r"(?i)voigt|panasonic|ttartisan|adapter|adapteri", name)
+
+    def rename(name):
+        n = re.sub(r"(?i)^käytetty\s+", "", name)
+        n = re.sub(r"\s+[–-]\s*(?:filmikamera|leica m(?:\s*\(visoflex\))?\s*-?\s*(?:objektiivi)?|-?objektiivi)\s*$", "", n, flags=re.I)
+        n = re.sub(r"(?i)\bhopea\b", "silver", n)
+        n = re.sub(r"(?i)\blaturi\b", "charger", n)
+        n = re.sub(r"(?i)\bmini\s+ii\b", "Mini 2", n)  # 필름 똑딱이 Leica Mini II가 바르낙 Leica II에 붙지 않게
+        n = re.sub(r"(?i)^leica\s+1\s*\(c\)", "Leica I (Model C)", n)
+        return n.strip(" –-")
+    return _woo_leica("https://fotoman.fi", "Fotoman (핀란드)", "Fotoman", keep=keep, rename=rename)
+
+
 def crawl_imagefoto():
     """Image Foto (덴마크, 라이카 공인 딜러) - Shopify '브루트'(brugt, 중고) 컬렉션 JSON에서 판매자 Leica만, 판매 중만. 가격 DKK.
     제목 'Brugt Leica M2 Chrome m. Selvudløser' → 'Leica M2 Chrome', 'Udstillingsmodel'(진열품)은 그대로 둠. 등급 표기 없음"""
@@ -11019,6 +11037,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Fotoman (핀란드)", lambda: ce.wrap_full_run("Fotoman (핀란드)", crawl_fotoman)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
