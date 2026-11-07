@@ -26,7 +26,7 @@ LANGS = {"ko": "한국어", "en": "English", "ja": "日本語", "zh-Hans": "简�
 COUNTRY_LANG = {"KR": "ko", "JP": "ja", "CN": "zh-Hans", "TW": "zh-Hant", "HK": "zh-Hant", "DE": "de", "AT": "de", "CH": "de",
                 "FR": "fr", "LU": "fr", "IT": "it", "ES": "es", "PT": "pt", "BR": "pt"}
 ERRORS = {"id": "아이디는 영문 소문자·숫자·-·_ 3~32자로 써 주세요.", "exists": "같은 아이디가 이미 있습니다.",
-          "stores": "매장을 하나 이상 골라 주세요.", "missing": "없는 계정입니다."}
+          "stores": "묶을 매장을 고르거나, 매장 없이 만들 때는 나라를 골라 주세요.", "missing": "없는 계정입니다."}
 
 
 def sites() -> dict[str, dict]:
@@ -42,7 +42,7 @@ def render(accounts: dict, site_info: dict, notice: str = "", error: str = "") -
     for account_id, a in sorted(accounts.items()):
         state = "꺼짐" if a.get("disabled") else "사용 중"
         toggle = "켜기" if a.get("disabled") else "끄기"
-        stores = "모든 매장 (사장님)" if a.get("admin") else ", ".join(a.get("stores") or [])
+        stores = "모든 매장 (사장님)" if a.get("admin") else ", ".join(a.get("stores") or []) or "매장 없음 (나라 기준)"
         rows.append(f"""<tr{' class="off"' if a.get("disabled") else ""}>
 <td><b>{e(account_id)}</b><div class="sub">{e(a.get("name") or "")}</div></td>
 <td>{e(stores)}</td><td>{e(a.get("country") or "–")} · {e(LANGS.get(a.get("lang") or "", "–"))}</td>
@@ -86,7 +86,7 @@ nav a{{color:var(--accent);margin-right:12px}}
 <input type="hidden" name="do" value="create">
 <label for="nid">아이디</label><div><input id="nid" name="id" required pattern="[a-z0-9][a-z0-9_\\-]{{2,31}}" placeholder="예: chungmuro"><div class="sub">영문 소문자·숫자. 딜러가 로그인할 때 씀</div></div>
 <label for="nname">매장명</label><input id="nname" name="name" placeholder="예: 라이카스토어 충무로">
-<label for="nstores">묶을 매장</label><div><select id="nstores" name="stores" multiple>{store_opts}</select><div class="sub">수집 중인 매장 이름. 여러 곳은 ⌘ 누르고 고르기</div></div>
+<label for="nstores">묶을 매장</label><div><select id="nstores" name="stores" multiple>{store_opts}</select><div class="sub">수집 중인 매장 이름. 여러 곳은 ⌘ 누르고 고르기. 수집 매장이 없는 딜러(사장님 본인·개인 판매자)는 비워 두고 아래 나라를 고르기</div></div>
 <label for="ncountry">나라</label><div><select id="ncountry" name="country"><option value="">첫 매장 나라</option>{country_opts}</select></div>
 <label for="nlang">기본 언어</label><div><select id="nlang" name="lang"><option value="">나라에 맞게</option>{lang_opts}</select><div class="sub">딜러가 화면에서 언제든 바꿀 수 있음</div></div>
 <label for="nadmin">사장님 계정</label><label><input id="nadmin" type="checkbox" name="admin" value="1" style="width:auto"> 모든 매장을 골라 볼 수 있게 (시연용)</label>
