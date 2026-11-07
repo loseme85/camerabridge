@@ -532,6 +532,11 @@ def test_fotogoerlitz():
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
 
 
+def test_adophoto():
+    from condition_grade import ADOPHOTO_PREFIX
+    assert grade_of("AdoPhoto (그리스)", ADOPHOTO_PREFIX + "DEMO")[0] == "S"
+
+
 def test_pch():
     from condition_grade import PCH_PREFIX
     site = "PCH Pro Shop (벨기에)"

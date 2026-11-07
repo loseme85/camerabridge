@@ -9946,6 +9946,74 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+def crawl_adophoto():
+    """AdoPhoto (그리스 아테네 사진점) - 중고(Μεταχειρισμένα) 하위 분류 화면 10여 곳 정적 HTML (한 화면에 분류 상품 전부, 쪽 넘김은
+    화면 안에서만). 상품 칸의 'filter_brand_id_7'(Leica)이거나 제목이 Leica·Leitz로 시작하는 것만.
+    재고는 'filter_availability_id_1'(Άμεσα Διαθέσιμο, 바로 발송)만 판매 중 — '_5'(1~2달 뒤 입고)는 사실상 없는 물건이라 뺌.
+    가격 EUR(세금 포함). 등급 표기 없음 → 사진 등급 대기열, 'Δείγμα'(시연품)만 S"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import ADOPHOTO_PREFIX
+    base = "https://www.adophoto.gr/used/metaxeirismena-eidi"
+    site = "AdoPhoto (그리스)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 AdoPhoto 크롤링 시작")
+    top = sess.get(base, timeout=30)
+    top.raise_for_status()
+    cats = sorted(set(re.findall(r'href="https://www\.adophoto\.gr/used/metaxeirismena-eidi/([a-z0-9-]+)"', top.text)))
+    if len(cats) < 5:
+        raise RuntimeError(f"AdoPhoto 중고 분류 {len(cats)}곳뿐")  # 화면이 바뀌면 판매 완료로 잘못 바뀌지 않게
+    results, seen = [], set()
+    for cat in cats:
+        try:
+            resp = sess.get(f"{base}/{cat}", timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"AdoPhoto {cat} 못 읽음: {e}")
+        for cls, price_num, blk in re.findall(
+                r'class="col-md-4 active product-item-holder([^"]*)" data-price="([\d.]+)">(.*?)</ul>\s*</div>\s*</div>\s*</div>',
+                resp.text, re.S):
+            m_link = re.search(r'class="product-link" href="([^"]+)">(.*?)</a>', blk, re.S)
+            if not m_link or m_link.group(1) in seen:
+                continue
+            seen.add(m_link.group(1))
+            raw = re.sub(r"\s+", " ", _html.unescape(m_link.group(2))).strip()
+            if not ("filter_brand_id_7 " in cls + " " or re.match(r"(?i)leica|leitz", raw)) or re.search(r"(?i)\bleica dg\b|panasonic|lumix", raw):
+                continue
+            if "filter_availability_id_1 " not in cls + " ":
+                continue
+            demo = re.search(r"Δείγμα|Δειγμα|\bsample\b|\bdemo\b", raw, re.I)
+            name = re.sub(r"\((?:used|Used|USED|Δείγμα|Δειγμα|Μεταχειρισμένος)\)", "", raw)
+            name = re.sub(r"\bLeica Camera\b", "Leica", name)
+            if re.search(r"\b\d{2,3}-\d{2,3}mm\b", name) and re.search(r"(?i)\bR Mount\b", name) and not re.search(r"(?i)elmar|angenieux", name):
+                name = name.replace("Leica ", "Leica Vario-Elmar-R ", 1)  # 'Leica 35-70mm f/3.5 Leica R Mount Lens'
+            name = re.sub(r"\bf/\s+(\d)", r"f/\1", name)
+            name = re.sub(r"\s+", " ", name).strip()
+            img = re.search(r"background-image: url\('([^']+)'\)", blk)
+            price = f"€{float(price_num):,.0f}"
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": ADOPHOTO_PREFIX + "DEMO" if demo else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": m_link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ AdoPhoto 완료: {len(results)}개 (중고 분류 {len(cats)}곳)")
+    return results
+
+
 def crawl_pch():
     """PCH Pro Shop (벨기에 브뤼셀 사진점) - Magento 중고(Occasions) 'Leica' 분류 정적 HTML (`/fr/occasions/leica.html?p=1~`,
     한 쪽 18개, 70여 개). 중고 분류라 모두 'Occasion - pièce unique'(한 점뿐), 품절 표시가 붙은 것은 뺌. 가격 EUR(세금 포함).
@@ -10499,6 +10567,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("AdoPhoto (그리스)", lambda: ce.wrap_full_run("AdoPhoto (그리스)", crawl_adophoto)),
         ("PCH Pro Shop (벨기에)", lambda: ce.wrap_full_run("PCH Pro Shop (벨기에)", crawl_pch)),
         ("Pacific Rim Camera (미국)", lambda: ce.wrap_full_run("Pacific Rim Camera (미국)", crawl_pacificrim)),
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
