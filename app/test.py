@@ -6490,6 +6490,17 @@ def crawl_fototrade():
                       rename=_abbr_lens_name)
 
 
+def crawl_lampersky():
+    """Lampersky (헝가리 부다페스트) - 중고 카메라점 WooCommerce 공개 상품 API의 라이카 판매 중만 (#232 _woo_leica). 가격 HUF.
+    이름 뒤 마운트 꼬리(' – Leica R'·' – L39'·' – 4/3'·' – B stock') 떼기. 등급 표기 없음(사진 등급 대기열). 헝가리 첫 사이트"""
+    def rename(name):
+        n = re.sub(r"\s+[–-]\s+(?:leica[- ]?[rm]|l39|4/3|b stock)(?:\s+[–-]\s+b stock)?\s*$", "", name, flags=re.I)
+        n = re.sub(r"\s+[–-]\s+(?:leica[- ]?[rm]|l39)\s*$", "", n, flags=re.I)
+        n = re.sub(r"(?i)\bR3 MOT electronic\b", "R3 Electronic", n)  # MOT를 남기면 모터(액세서리)로 분류됨
+        return re.sub(r"(?i)\bleicaflex sl 2\b", "Leicaflex SL2", n).strip()
+    return _woo_leica("https://lampersky.com", "Lampersky (헝가리)", "Lampersky", rename=rename)
+
+
 def crawl_imagefoto():
     """Image Foto (덴마크, 라이카 공인 딜러) - Shopify '브루트'(brugt, 중고) 컬렉션 JSON에서 판매자 Leica만, 판매 중만. 가격 DKK.
     제목 'Brugt Leica M2 Chrome m. Selvudløser' → 'Leica M2 Chrome', 'Udstillingsmodel'(진열품)은 그대로 둠. 등급 표기 없음"""
@@ -11019,6 +11030,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
