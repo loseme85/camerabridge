@@ -177,6 +177,29 @@
     .hero-how span{display:block;margin-top:4px;font-size:13px;line-height:1.5;color:var(--text-soft)}
     body.cb-searched .hero-how{display:none}
     @media(max-width:720px){.hero-how{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.hero-how li{padding-bottom:10px}}
+    .home-quiz{border-top:1px solid var(--rule,var(--text));padding-top:4px}
+    .home-quiz p{margin:4px 0 14px;max-width:44em;color:var(--text-soft);font-size:14px}
+    .home-quiz-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+    .home-quiz-best{font-family:var(--serif);font-style:italic;color:var(--text-soft)}
+    .quiz-dialog{width:min(560px, calc(100% - 32px));border:1px solid var(--text);border-radius:0;padding:22px;background:var(--bg,#fff);color:var(--text)}
+    .quiz-dialog::backdrop{background:rgba(0,0,0,0.4)}
+    .quiz-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:8px}
+    .quiz-top button{border:0;background:none;color:var(--text-soft);font:inherit;cursor:pointer;padding:0}
+    .quiz-dialog h3{font-family:var(--serif);font-weight:500;font-size:22px;line-height:1.3;margin:16px 0 12px}
+    .quiz-item{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;margin:0 0 12px;font-size:13px;color:var(--text-soft)}
+    .quiz-item>img{width:96px;height:96px;object-fit:cover;border:1px solid var(--border)}
+    .quiz-item .source-flag{width:16px;height:12px;margin-right:5px;vertical-align:-1px}
+    .quiz-item strong{display:block;color:var(--text);font-size:15px;font-weight:600}
+    .quiz-options{display:grid;gap:6px}
+    .quiz-options button{text-align:left;padding:11px 12px;border:1px solid var(--border-strong,var(--border));border-radius:0;background:none;color:var(--text);font:inherit;font-size:15px;cursor:pointer}
+    .quiz-options button:hover:not(:disabled){border-color:var(--text)}
+    .quiz-options button.is-right{border-color:#1f7a4a;box-shadow:inset 3px 0 0 #1f7a4a}
+    .quiz-options button.is-wrong{border-color:#b3261e;box-shadow:inset 3px 0 0 #b3261e;color:var(--text-soft)}
+    .quiz-options button:disabled{cursor:default}
+    .quiz-feedback{margin:12px 0 0;font-size:14px;min-height:1.4em}
+    .quiz-feedback .quiz-link{border:0;background:none;padding:0;color:var(--accent,var(--text));text-decoration:underline;font:inherit;cursor:pointer}
+    .quiz-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px}
+    .quiz-level{font-family:var(--serif);font-size:34px;line-height:1.2;margin:18px 0 4px}
     .home-popular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;border-top:1px solid var(--border)}
     .home-model{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 2px;border:0;border-bottom:1px solid var(--border);
       background:none;color:inherit;text-align:left;cursor:pointer;font-size:13px}
@@ -1448,6 +1471,12 @@
       </section>
 
       <section id="home-feed" class="home-feed">
+        <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
+        <div id="home-quiz-block" class="home-quiz" hidden>
+          <h2 class="home-heading" data-i18n="home.quiz_title">How well do you know Leica?</h2>
+          <p data-i18n="home.quiz_intro">10 questions most people get wrong — order numbers, Leitz code names, specs and real sold prices. Get your Leica level.</p>
+          <div class="home-quiz-actions"><button type="button" id="quiz-open" class="search-button" data-i18n="home.quiz_start">Take the test</button><span id="quiz-best" class="home-quiz-best"></span></div>
+        </div>
         <div id="home-picks-block" hidden>
           <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
           <div id="home-picks" class="home-popular"></div>
@@ -1604,6 +1633,7 @@
           </aside>
         </div>
       </section>
+      <dialog id="quiz-dialog" class="quiz-dialog" aria-labelledby="quiz-question"><div id="quiz-body"></div></dialog>
       <dialog id="save-dialog" class="save-dialog">
         <p id="save-dialog-text"></p>
         <div data-google-button></div>
@@ -1924,6 +1954,37 @@
         picks: { ko: '수집가들이 찾는 모델', en: 'Collector favorites', ja: 'コレクターが探すモデル', 'zh-Hans': '藏家追捧的型号', 'zh-Hant': '藏家追捧的型號', pt: 'Favoritos dos colecionadores', es: 'Favoritos de coleccionistas', de: 'Sammlerstücke', it: 'I preferiti dei collezionisti' },
         picks_note: { ko: 'B등급 시세 · 지금 판매 중', en: 'market value at grade B · for sale now', ja: 'B等級の相場 · 現在販売中', 'zh-Hans': 'B 级行情 · 当前在售', 'zh-Hant': 'B 級行情 · 目前在售', pt: 'valor de mercado no grau B · à venda agora', es: 'valor de mercado en grado B · a la venta ahora', de: 'Marktwert bei Note B · aktuell im Angebot', it: 'valore di mercato al grado B · in vendita ora' },
         on_sale_from: { ko: '판매 중 {n} · {p}부터', en: '{n} for sale · from {p}', ja: '販売中 {n} · {p}〜', 'zh-Hans': '在售 {n} · {p} 起', 'zh-Hant': '在售 {n} · {p} 起', pt: '{n} à venda · a partir de {p}', es: '{n} a la venta · desde {p}', de: '{n} im Angebot · ab {p}', it: '{n} in vendita · da {p}' },
+        quiz_title: { ko: '나는 라이카를 얼마나 알까?', en: 'How well do you know Leica?', ja: 'あなたのライカ度は？', 'zh-Hans': '你有多懂徕卡？', 'zh-Hant': '你有多懂徠卡？', pt: 'Quanto você conhece a Leica?', es: '¿Cuánto sabes de Leica?', de: 'Wie gut kennst du Leica?', it: 'Quanto conosci Leica?' },
+        quiz_intro: { ko: '주문 번호, 라이츠 코드 이름, 사양, 실제 팔린 가격까지 — 일반인은 거의 못 맞히는 10문제로 라이카 레벨을 받아 보세요.', en: '10 questions most people get wrong — order numbers, Leitz code names, specs and real sold prices. Get your Leica level.', ja: '注文番号、ライツのコードネーム、仕様、実際の販売価格 — 普通はまず解けない10問で、あなたのライカレベルを判定します。', 'zh-Hans': '订货号、徕兹代号、规格和真实成交价——普通人很难答对的 10 道题，测出你的徕卡等级。', 'zh-Hant': '訂貨號、徠茲代號、規格與真實成交價——一般人很難答對的 10 道題，測出你的徠卡等級。', pt: '10 perguntas que quase ninguém acerta — números de pedido, códigos Leitz, especificações e preços reais de venda. Descubra seu nível Leica.', es: '10 preguntas que casi nadie acierta: números de pedido, códigos Leitz, especificaciones y precios reales de venta. Descubre tu nivel Leica.', de: '10 Fragen, an denen die meisten scheitern – Bestellnummern, Leitz-Codewörter, Daten und echte Verkaufspreise. Finde dein Leica-Level heraus.', it: '10 domande che quasi nessuno indovina: numeri d’ordine, codici Leitz, specifiche e prezzi reali di vendita. Scopri il tuo livello Leica.' },
+        quiz_start: { ko: '테스트 시작', en: 'Take the test', ja: 'テストを受ける', 'zh-Hans': '开始测试', 'zh-Hant': '開始測驗', pt: 'Fazer o teste', es: 'Hacer el test', de: 'Test starten', it: 'Inizia il test' },
+        quiz_best: { ko: '내 최고 기록: 레벨 {n} · {name}', en: 'Your best: Level {n} · {name}', ja: '自己ベスト：レベル {n} · {name}', 'zh-Hans': '最佳成绩：等级 {n} · {name}', 'zh-Hant': '最佳成績：等級 {n} · {name}', pt: 'Seu melhor: nível {n} · {name}', es: 'Tu mejor: nivel {n} · {name}', de: 'Dein Bestwert: Level {n} · {name}', it: 'Il tuo migliore: livello {n} · {name}' },
+        quiz_q_code_word_lens: { ko: '라이츠 코드 이름 {c}는 어느 렌즈일까요?', en: 'Which lens had the Leitz code name {c}?', ja: 'ライツのコードネーム {c} はどのレンズ？', 'zh-Hans': '徕兹代号 {c} 是哪支镜头？', 'zh-Hant': '徠茲代號 {c} 是哪支鏡頭？', pt: 'Qual lente tinha o código Leitz {c}?', es: '¿Qué objetivo tenía el código Leitz {c}?', de: 'Welches Objektiv hatte das Leitz-Codewort {c}?', it: 'Quale obiettivo aveva il codice Leitz {c}?' },
+        quiz_q_code_word_body: { ko: '라이츠 코드 이름 {c}는 어느 카메라일까요?', en: 'Which camera had the Leitz code name {c}?', ja: 'ライツのコードネーム {c} はどのカメラ？', 'zh-Hans': '徕兹代号 {c} 是哪台相机？', 'zh-Hant': '徠茲代號 {c} 是哪台相機？', pt: 'Qual câmera tinha o código Leitz {c}?', es: '¿Qué cámara tenía el código Leitz {c}?', de: 'Welche Kamera hatte das Leitz-Codewort {c}?', it: 'Quale fotocamera aveva il codice Leitz {c}?' },
+        quiz_q_order_no: { ko: '라이카 주문 번호 {c}는?', en: 'Leica order number {c} is…', ja: 'ライカの注文番号 {c} は？', 'zh-Hans': '徕卡订货号 {c} 是？', 'zh-Hant': '徠卡訂貨號 {c} 是？', pt: 'O número de pedido Leica {c} é…', es: 'El número de pedido Leica {c} es…', de: 'Die Leica-Bestellnummer {c} ist …', it: 'Il numero d’ordine Leica {c} è…' },
+        quiz_q_no_meter: { ko: '다음 중 노출계가 없는 바디는?', en: 'Which of these has no built-in light meter?', ja: '露出計を内蔵していないのはどれ？', 'zh-Hans': '以下哪台没有内置测光表？', 'zh-Hant': '以下哪台沒有內建測光表？', pt: 'Qual destas não tem fotômetro embutido?', es: '¿Cuál de estas no tiene fotómetro incorporado?', de: 'Welche hat keinen eingebauten Belichtungsmesser?', it: 'Quale di queste non ha l’esposimetro incorporato?' },
+        quiz_q_has_meter: { ko: '다음 중 노출계가 내장된 바디는?', en: 'Which of these has a built-in light meter?', ja: '露出計を内蔵しているのはどれ？', 'zh-Hans': '以下哪台内置测光表？', 'zh-Hant': '以下哪台內建測光表？', pt: 'Qual destas tem fotômetro embutido?', es: '¿Cuál de estas tiene fotómetro incorporado?', de: 'Welche hat einen eingebauten Belichtungsmesser?', it: 'Quale di queste ha l’esposimetro incorporato?' },
+        quiz_q_ttl: { ko: '다음 중 TTL 플래시 측광이 되는 바디는?', en: 'Which of these meters flash through the lens (TTL)?', ja: 'TTLフラッシュ測光ができるのはどれ？', 'zh-Hans': '以下哪台支持 TTL 闪光测光？', 'zh-Hant': '以下哪台支援 TTL 閃光測光？', pt: 'Qual destas mede o flash pela lente (TTL)?', es: '¿Cuál de estas mide el flash a través del objetivo (TTL)?', de: 'Welche misst Blitzlicht durchs Objektiv (TTL)?', it: 'Quale di queste misura il flash attraverso l’obiettivo (TTL)?' },
+        quiz_q_battery: { ko: '다음 필름 M 중 배터리가 없으면 셔터가 안 눌리는 바디는?', en: 'Which of these film M bodies can’t fire without a battery?', ja: '電池がないとシャッターが切れないフィルムMはどれ？', 'zh-Hans': '以下哪台胶片 M 没有电池就无法释放快门？', 'zh-Hant': '以下哪台底片 M 沒有電池就無法釋放快門？', pt: 'Qual destas M de filme não dispara sem bateria?', es: '¿Cuál de estas M de película no dispara sin batería?', de: 'Welche Film-M löst ohne Batterie nicht aus?', it: 'Quale di queste M a pellicola non scatta senza batteria?' },
+        quiz_q_no_28: { ko: '다음 중 28mm 프레임라인이 없는 바디는?', en: 'Which of these has no 28mm frameline?', ja: '28mmのブライトフレームがないのはどれ？', 'zh-Hans': '以下哪台没有 28mm 取景框线？', 'zh-Hant': '以下哪台沒有 28mm 觀景框線？', pt: 'Qual destas não tem linha de enquadramento de 28mm?', es: '¿Cuál de estas no tiene marco de 28 mm?', de: 'Welche hat keinen 28-mm-Leuchtrahmen?', it: 'Quale di queste non ha la cornice da 28 mm?' },
+        quiz_q_compare: { ko: 'B등급 시세가 더 높은 것은?', en: 'Which is worth more at grade B?', ja: 'B等級の相場が高いのはどっち？', 'zh-Hans': 'B 级行情哪个更高？', 'zh-Hant': 'B 級行情哪個更高？', pt: 'Qual vale mais no grau B?', es: '¿Cuál vale más en grado B?', de: 'Was ist bei Note B mehr wert?', it: 'Quale vale di più al grado B?' },
+        quiz_q_price: { ko: '이 매물은 얼마에 팔렸을까요?', en: 'What did this sell for?', ja: 'これはいくらで売れた？', 'zh-Hans': '这件成交价是多少？', 'zh-Hant': '這件成交價是多少？', pt: 'Por quanto isto foi vendido?', es: '¿Por cuánto se vendió?', de: 'Wofür wurde das verkauft?', it: 'A quanto è stato venduto?' },
+        quiz_sold: { ko: '판매 완료 {d}', en: 'sold {d}', ja: '販売済み {d}', 'zh-Hans': '售出 {d}', 'zh-Hant': '售出 {d}', pt: 'vendido {d}', es: 'vendido {d}', de: 'verkauft {d}', it: 'venduto {d}' },
+        quiz_right: { ko: '정답', en: 'Correct', ja: '正解', 'zh-Hans': '正确', 'zh-Hant': '正確', pt: 'Certo', es: 'Correcto', de: 'Richtig', it: 'Esatto' },
+        quiz_wrong: { ko: '아쉬워요 — 정답은 {a}', en: 'Not quite — it’s {a}', ja: '残念 — 正解は {a}', 'zh-Hans': '不对——答案是 {a}', 'zh-Hant': '不對——答案是 {a}', pt: 'Quase — a resposta é {a}', es: 'Casi: la respuesta es {a}', de: 'Knapp daneben – richtig ist {a}', it: 'Quasi: la risposta è {a}' },
+        quiz_next: { ko: '다음', en: 'Next', ja: '次へ', 'zh-Hans': '下一题', 'zh-Hant': '下一題', pt: 'Próxima', es: 'Siguiente', de: 'Weiter', it: 'Avanti' },
+        quiz_result: { ko: '레벨 {n} · {name}', en: 'Level {n} · {name}', ja: 'レベル {n} · {name}', 'zh-Hans': '等级 {n} · {name}', 'zh-Hant': '等級 {n} · {name}', pt: 'Nível {n} · {name}', es: 'Nivel {n} · {name}', de: 'Level {n} · {name}', it: 'Livello {n} · {name}' },
+        quiz_score: { ko: '{t}문제 중 {r}개 정답', en: '{r} of {t} right', ja: '{t}問中 {r}問正解', 'zh-Hans': '{t} 题答对 {r} 题', 'zh-Hant': '{t} 題答對 {r} 題', pt: '{r} de {t} certas', es: '{r} de {t} correctas', de: '{r} von {t} richtig', it: '{r} su {t} giuste' },
+        quiz_share: { ko: '내 레벨 공유', en: 'Share my level', ja: 'レベルをシェア', 'zh-Hans': '分享我的等级', 'zh-Hant': '分享我的等級', pt: 'Compartilhar meu nível', es: 'Compartir mi nivel', de: 'Mein Level teilen', it: 'Condividi il mio livello' },
+        quiz_copied: { ko: '복사했어요', en: 'Copied', ja: 'コピーしました', 'zh-Hans': '已复制', 'zh-Hant': '已複製', pt: 'Copiado', es: 'Copiado', de: 'Kopiert', it: 'Copiato' },
+        quiz_again: { ko: '다시 하기', en: 'Try again', ja: 'もう一度', 'zh-Hans': '再测一次', 'zh-Hant': '再測一次', pt: 'Tentar de novo', es: 'Intentar de nuevo', de: 'Nochmal', it: 'Riprova' },
+        quiz_close: { ko: '닫기', en: 'Close', ja: '閉じる', 'zh-Hans': '关闭', 'zh-Hant': '關閉', pt: 'Fechar', es: 'Cerrar', de: 'Schließen', it: 'Chiudi' },
+        quiz_share_text: { ko: '카메라브릿지 라이카 테스트에서 레벨 {n}({name})을 받았어요. 당신은 라이카를 얼마나 알까요?', en: 'I got Level {n} ({name}) on the Camera Bridge Leica test. How well do you know Leica?', ja: 'Camera Bridge のライカテストでレベル {n}（{name}）でした。あなたのライカ度は？', 'zh-Hans': '我在 Camera Bridge 徕卡测试中得到等级 {n}（{name}）。你有多懂徕卡？', 'zh-Hant': '我在 Camera Bridge 徠卡測驗中得到等級 {n}（{name}）。你有多懂徠卡？', pt: 'Tirei nível {n} ({name}) no teste Leica da Camera Bridge. Quanto você conhece a Leica?', es: 'Saqué nivel {n} ({name}) en el test Leica de Camera Bridge. ¿Cuánto sabes de Leica?', de: 'Ich habe Level {n} ({name}) im Leica-Test von Camera Bridge. Wie gut kennst du Leica?', it: 'Ho ottenuto il livello {n} ({name}) nel test Leica di Camera Bridge. Quanto conosci Leica?' },
+        quiz_see_model: { ko: '{name} 시세 보기', en: 'See {name} prices', ja: '{name} の相場を見る', 'zh-Hans': '查看 {name} 行情', 'zh-Hant': '查看 {name} 行情', pt: 'Ver preços de {name}', es: 'Ver precios de {name}', de: '{name}-Preise ansehen', it: 'Vedi prezzi di {name}' },
+        quiz_lv1: { ko: '입문자', en: 'Curious', ja: 'ビギナー', 'zh-Hans': '好奇者', 'zh-Hant': '好奇者', pt: 'Curioso', es: 'Curioso', de: 'Neugierig', it: 'Curioso' },
+        quiz_lv2: { ko: '애호가', en: 'Enthusiast', ja: '愛好家', 'zh-Hans': '爱好者', 'zh-Hant': '愛好者', pt: 'Entusiasta', es: 'Entusiasta', de: 'Enthusiast', it: 'Appassionato' },
+        quiz_lv3: { ko: '컬렉터', en: 'Collector', ja: 'コレクター', 'zh-Hans': '收藏家', 'zh-Hant': '收藏家', pt: 'Colecionador', es: 'Coleccionista', de: 'Sammler', it: 'Collezionista' },
+        quiz_lv4: { ko: '전문가', en: 'Expert', ja: 'エキスパート', 'zh-Hans': '专家', 'zh-Hant': '專家', pt: 'Especialista', es: 'Experto', de: 'Experte', it: 'Esperto' },
+        quiz_lv5: { ko: '베츨라 마스터', en: 'Wetzlar Master', ja: 'ヴェッツラー・マスター', 'zh-Hans': '韦茨拉大师', 'zh-Hant': '韋茨拉大師', pt: 'Mestre de Wetzlar', es: 'Maestro de Wetzlar', de: 'Wetzlar-Meister', it: 'Maestro di Wetzlar' },
         from_price: { ko: '{p}부터', en: 'from {p}', ja: '{p}〜', 'zh-Hans': '{p} 起', 'zh-Hant': '{p} 起', pt: 'a partir de {p}', es: 'desde {p}', de: 'ab {p}', it: 'da {p}' },
         on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
       },
@@ -3318,6 +3379,139 @@
         if(!event.target.matches('[data-calc-box]')) return;
         calcState.box = event.target.checked;
         renderValueCalc();
+      });
+    }
+
+    // ── 라이카 레벨 테스트: 문제 은행에서 종류별로 10문제 (쉬운 것부터), 맞힌 수로 레벨 1~5 ──
+    const quizState = { bank: null, list: [], index: 0, right: 0, answered: false };
+    // 공유 주소(?quiz=1)는 첫 화면이 주소를 다시 쓰기 전에 읽어 둠
+    const QUIZ_FROM_URL = new URLSearchParams(location.search).get('quiz') === '1';
+    const qx = (key, vars = {}) => { let text = ux(`home.${key}`, key); Object.entries(vars).forEach(([k, v]) => { text = text.split(`{${k}}`).join(v); }); return text; };
+    const QUIZ_PLAN = [['price', 1], ['feature', 2], ['price', 2], ['compare', 2], ['feature', 2], ['compare', 2], ['order_no', 2], ['order_no', 3], ['code_word', 3], ['code_word', 3]];
+    function quizLevel(right){ return right >= 10 ? 5 : right >= 8 ? 4 : right >= 6 ? 3 : right >= 4 ? 2 : 1; }
+    function quizBest(){ try{ return JSON.parse(localStorage.getItem('cb_quiz_best') || 'null'); }catch(error){ return null; } }
+    function renderQuizBest(){
+      const el = document.getElementById('quiz-best');
+      const best = quizBest();
+      if(el) el.textContent = best ? qx('quiz_best', { n: String(best.level), name: qx(`quiz_lv${best.level}`) }) : '';
+    }
+    async function loadQuizBank(){
+      try{
+        const response = await fetch('/data/derived/quiz_bank.json', { cache: 'no-cache' });
+        quizState.bank = response.ok ? ((await response.json()).questions || []) : [];
+      }catch(error){ quizState.bank = []; }
+      const block = document.getElementById('home-quiz-block');
+      if(block) block.hidden = quizState.bank.length < 20;
+      renderQuizBest();
+      if(quizState.bank.length >= 20 && QUIZ_FROM_URL) openQuiz();
+    }
+    function pickQuiz(){
+      const used = new Set();
+      const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+      return QUIZ_PLAN.map(([kind, level]) => {
+        const pool = shuffle(quizState.bank.filter(q => q.kind === kind && !used.has(q)));
+        const q = pool.find(x => x.level === level && !used.has(x.entity)) || pool.find(x => !used.has(x.entity)) || pool[0];
+        if(q){ used.add(q); used.add(q.entity); }
+        return q;
+      }).filter(Boolean);
+    }
+    function quizPrompt(q){
+      if(q.kind === 'code_word') return qx(q.vars.kind === 'body' ? 'quiz_q_code_word_body' : 'quiz_q_code_word_lens', { c: q.vars.c });
+      if(q.kind === 'order_no') return qx('quiz_q_order_no', { c: q.vars.c });
+      if(q.kind === 'feature') return qx(`quiz_q_${q.vars.f}`);
+      return qx(q.kind === 'compare' ? 'quiz_q_compare' : 'quiz_q_price');
+    }
+    function quizLabels(q){ return q.kind === 'price' ? q.options_krw.map(krw => krwToDisplay(krw) || '—') : q.options; }
+    function quizEntityName(id){ const e = entityState.byId && entityState.byId[id]; return e ? entityDisplayName(e) : ''; }
+    function renderQuiz(){
+      const body = document.getElementById('quiz-body');
+      if(!body) return;
+      const total = quizState.list.length;
+      if(quizState.index >= total){
+        const level = quizLevel(quizState.right);
+        const best = quizBest();
+        if(!best || level > best.level){ try{ localStorage.setItem('cb_quiz_best', JSON.stringify({ level, right: quizState.right })); }catch(error){} }
+        renderQuizBest();
+        body.innerHTML = `
+          <div class="quiz-top"><span>${escapeHtml(qx('quiz_title'))}</span><button type="button" data-quiz-close>✕</button></div>
+          <p class="quiz-level" id="quiz-question">${escapeHtml(qx('quiz_result', { n: String(level), name: qx(`quiz_lv${level}`) }))}</p>
+          <p>${escapeHtml(qx('quiz_score', { r: String(quizState.right), t: String(total) }))}</p>
+          <p class="quiz-feedback" id="quiz-share-status" role="status"></p>
+          <div class="quiz-actions">
+            <button type="button" class="ghost-button" data-quiz-again>${escapeHtml(qx('quiz_again'))}</button>
+            <button type="button" class="search-button" data-quiz-share data-level="${level}">${escapeHtml(qx('quiz_share'))}</button>
+          </div>`;
+        return;
+      }
+      const q = quizState.list[quizState.index];
+      const labels = quizLabels(q);
+      let item = '';
+      if(q.kind === 'price'){
+        const rules = (landedState.rules && landedState.rules.sources) || {};
+        const meta = [q.vars.grade ? gradeLabel(q.vars.grade) : '', localizeSourceName(q.vars.source), qx('quiz_sold', { d: q.vars.sold_at })].filter(Boolean).join(' · ');
+        item = `<div class="quiz-item"><img src="${escapeHtml(homeThumb(q.image))}" alt="" loading="lazy">
+          <span><strong>${escapeHtml(quizEntityName(q.entity) || q.vars.title)}</strong>${countryFlagHtml((rules[q.vars.source] || {}).country)}${escapeHtml(meta)}<br><small>${escapeHtml(q.vars.title || '')}</small></span></div>`;
+      }
+      body.innerHTML = `
+        <div class="quiz-top"><span>${escapeHtml(qx('quiz_title'))} · ${quizState.index + 1} / ${total}</span><button type="button" data-quiz-close aria-label="${escapeHtml(qx('quiz_close'))}">✕</button></div>
+        <h3 id="quiz-question">${escapeHtml(quizPrompt(q))}</h3>
+        ${item}
+        <div class="quiz-options">${labels.map((label, i) => `<button type="button" data-quiz-pick="${i}">${escapeHtml(label)}</button>`).join('')}</div>
+        <div class="quiz-feedback" role="status"></div>
+        <div class="quiz-actions" hidden><button type="button" class="search-button" data-quiz-next>${escapeHtml(qx('quiz_next'))}</button></div>`;
+    }
+    function answerQuiz(pick){
+      if(quizState.answered) return;
+      quizState.answered = true;
+      const q = quizState.list[quizState.index];
+      const labels = quizLabels(q);
+      const right = pick === q.answer;
+      if(right) quizState.right += 1;
+      const body = document.getElementById('quiz-body');
+      body.querySelectorAll('[data-quiz-pick]').forEach(button => {
+        const i = Number(button.dataset.quizPick);
+        button.disabled = true;
+        if(i === q.answer) button.classList.add('is-right');
+        else if(i === pick) button.classList.add('is-wrong');
+      });
+      let extra = '';
+      if(q.kind === 'compare' && q.krw) extra = ` (${q.options.map((name, i) => `${name} ${krwToDisplay(q.krw[i]) || ''}`).join(' · ')})`;
+      const name = quizEntityName(q.entity);
+      const link = name ? ` <button type="button" class="quiz-link" data-quiz-entity="${escapeHtml(q.entity)}">${escapeHtml(qx('quiz_see_model', { name }))} →</button>` : '';
+      body.querySelector('.quiz-feedback').innerHTML = `${escapeHtml(right ? qx('quiz_right') : qx('quiz_wrong', { a: labels[q.answer] }))}${escapeHtml(extra)}${link}`;
+      body.querySelector('.quiz-actions').hidden = false;
+      body.querySelector('[data-quiz-next]').focus();
+    }
+    function openQuiz(){
+      const dialog = document.getElementById('quiz-dialog');
+      if(!dialog || typeof dialog.showModal !== 'function' || !quizState.bank || !quizState.bank.length) return;
+      Object.assign(quizState, { list: pickQuiz(), index: 0, right: 0, answered: false });
+      renderQuiz();
+      if(!dialog.open) dialog.showModal();
+    }
+    function bindQuiz(){
+      const open = document.getElementById('quiz-open');
+      if(open) open.addEventListener('click', openQuiz);
+      const dialog = document.getElementById('quiz-dialog');
+      if(!dialog) return;
+      dialog.addEventListener('click', async event => {
+        const target = event.target.closest('button');
+        if(event.target === dialog || (target && target.hasAttribute('data-quiz-close'))) return dialog.close();
+        if(!target) return;
+        if(target.dataset.quizPick !== undefined) return answerQuiz(Number(target.dataset.quizPick));
+        if(target.hasAttribute('data-quiz-next')){ quizState.index += 1; quizState.answered = false; return renderQuiz(); }
+        if(target.hasAttribute('data-quiz-again')) return openQuiz();
+        if(target.dataset.quizEntity){ dialog.close(); return selectEntity(target.dataset.quizEntity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false }); }
+        if(target.hasAttribute('data-quiz-share')){
+          const level = Number(target.dataset.level);
+          const text = qx('quiz_share_text', { n: String(level), name: qx(`quiz_lv${level}`) });
+          const url = 'https://camerabridge.io/?quiz=1&utm_source=quiz-share';
+          const status = document.getElementById('quiz-share-status');
+          try{
+            if(navigator.share) await navigator.share({ text, url });
+            else{ await navigator.clipboard.writeText(`${text} ${url}`); if(status) status.textContent = qx('quiz_copied'); }
+          }catch(error){}
+        }
       });
     }
 
@@ -7038,6 +7232,8 @@
     loadEntitySummary();
     loadHomeFeed();
     bindHome();
+    bindQuiz();
+    loadQuizBank();
     bindHeroSearchVisibility();
     bindFeedback();
     hydrateFromUrl();
