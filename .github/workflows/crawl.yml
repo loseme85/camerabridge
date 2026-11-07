@@ -12,6 +12,10 @@ on:
         description: '판매완료 기록까지 전체 다시 읽기 (평소엔 하루 1번 자동)'
         type: boolean
         default: false
+      scheduled:
+        description: '바깥 예약 서비스(cron-job.org)가 부른 실행 — 예약 실행처럼 100분 안이면 건너뜀'
+        type: boolean
+        default: false
 
 concurrency:
   group: crawl
@@ -23,7 +27,8 @@ permissions:
 
 jobs:
   guard:
-    # 예약 실행일 때만: 마지막 자동 크롤링 커밋이 100분 안이면 이번 회차는 건너뜀 (손으로 돌리면 항상 실행)
+    # 예약 실행(GitHub 예약 또는 바깥 예약 서비스 scheduled=true)일 때만: 마지막 자동 크롤링 커밋이 100분 안이면 건너뜀 (손으로 돌리면 항상 실행)
+    # GitHub 예약은 1시간마다로 두어도 하루 2~3번만 돌아서(2026-11-07) cron-job.org가 2시간마다 workflow_dispatch(scheduled=true)를 부름
     runs-on: ubuntu-24.04
     outputs:
       skip: ${{ steps.check.outputs.skip }}
@@ -33,7 +38,7 @@ jobs:
           fetch-depth: 50
       - id: check
         run: |
-          if [ "${{ github.event_name }}" != "schedule" ]; then echo "skip=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "${{ github.event_name }}" != "schedule" ] && [ "${{ inputs.scheduled }}" != "true" ]; then echo "skip=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           last=$(git log -1 --format=%ct --grep='Auto crawl' origin/main 2>/dev/null || git log -1 --format=%ct --grep='Auto crawl')
           now=$(date +%s)
           age=$(( (now - ${last:-0}) / 60 ))
