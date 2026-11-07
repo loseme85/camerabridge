@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(PACIFICRIM_PREFIX):
+        return _PACIFICRIM.get(cond[len(PACIFICRIM_PREFIX):].strip().upper()), "label"
     if cond.startswith(CAMERACOLLECTION_PREFIX):
         return _CAMERACOLLECTION.get(cond[len(CAMERACOLLECTION_PREFIX):].strip().upper()), "label"
     if cond.startswith(SUNRISE_PREFIX):
@@ -829,6 +831,13 @@ _FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
 _FOTOGOERLITZ = {"DEMO": "S"}
+
+# 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
+# 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
+# EX+ A 4·B 1 · EX A 1·B 4 · EX- B 3·C 2 · VG+ C 1 · VG C 1. 이 대응 기준 정확 일치 4/20 · 한 등급 이내 19/20
+# (사진이 평균 0.65등급 후함, 기존 매장 0.8과 비슷 → Tamarkin과 같은 대응 그대로)
+PACIFICRIM_PREFIX = "PacificRim: "
+_PACIFICRIM = {"MINT": "S", "MINT-": "A", "EX++": "A", "EX+": "B", "EX": "C", "EX-": "C", "VG+": "D", "VG": "D", "G": "D"}
 
 # 일본 カメラコレクション (삿포로): 재고 표 '程度' AAA·AA~AAA·AA·A~AA·A·AB·B·C (A가 많을수록 좋음)
 # 사진 평가(표기 가리고 24점 — 등급마다 최대 6점, 사진 1장씩, 2026-11-07): AA~AAA A 5·S 1 · AA A 5·S 1 · A~AA A 5·B 1 ·

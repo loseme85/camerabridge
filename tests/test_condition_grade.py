@@ -532,6 +532,15 @@ def test_fotogoerlitz():
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
 
 
+def test_pacificrim():
+    from condition_grade import PACIFICRIM_PREFIX
+    site = "Pacific Rim Camera (미국)"
+    assert grade_of(site, PACIFICRIM_PREFIX + "MINT-")[0] == "A"
+    assert grade_of(site, PACIFICRIM_PREFIX + "EX+")[0] == "B"
+    assert grade_of(site, PACIFICRIM_PREFIX + "EX")[0] == "C"
+    assert grade_of(site, PACIFICRIM_PREFIX + "VG")[0] == "D"
+
+
 def test_cameracollection():
     from condition_grade import CAMERACOLLECTION_PREFIX
     site = "カメラコレクション (일본)"

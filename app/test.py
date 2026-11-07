@@ -9946,6 +9946,90 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+# Pacific Rim Camera 라이카 카탈로그 화면 (책·안내지·카탈로그·잡지 화면은 뺌)
+PACIFICRIM_PAGES = ["th_bm12", "th_bm21", "th_bm31", "th_bm39", "th_bk14", "th_bk31", "th_bh11", "th_bl31", "th_bl35", "th_bl33", "th_bl38"]
+
+
+def crawl_pacificrim():
+    """Pacific Rim Camera (미국 오리건 빈티지 딜러) - 정적 HTML 카탈로그 'Leica Hub'의 카메라·렌즈·액세서리 화면 11곳.
+    상품마다 '<h3>제목/재고번호 $가격</h3>설명 …, LOOKS EX+' 꼴. 상세 화면이 없어 링크는 화면 주소 + '#재고번호'.
+    제목에 LEITZ가 있거나 LEICA로 시작하는 것만 (캐논 'IN LEICA THREAD' 같은 타사 물건은 뺌). 가격 USD.
+    등급은 설명 끝 Shutterbug 등급 MINT·MINT-·EX++·EX+·EX·EX-·VG+·VG·G (condition_grade PACIFICRIM_PREFIX).
+    목록에 있는 것은 모두 판매 중 (팔리면 화면에서 빠짐)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import PACIFICRIM_PREFIX
+    base = "https://www.pacificrimcamera.com/catalog"
+    site = "Pacific Rim Camera (미국)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 Pacific Rim Camera 크롤링 시작")
+    results, seen = [], set()
+    for page in PACIFICRIM_PAGES:
+        url = f"{base}/{page}.htm"
+        try:
+            resp = sess.get(url, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Pacific Rim {page} 못 읽음: {e}")  # 빠진 화면이 판매완료로 바뀌지 않게
+        text = resp.content.decode("latin-1", "ignore")
+        if "Pacific Rim Camera" not in text:
+            raise RuntimeError(f"Pacific Rim {page} 화면 틀이 바뀜")
+        for m in re.finditer(r"<h3>(.*?)</H3></b>(.*?)<p>", text, re.S | re.I):
+            head = re.split(r"(?i)<h3>|<hr>|</h2>", m.group(1))[-1]  # 화면 머리말이 첫 상품 제목에 붙지 않게
+            title = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", head))).strip()
+            m_t = re.match(r"(.*)/(\d{4,7})\s*\$([\d,]+(?:\.\d\d)?)$", title)
+            if not m_t or m_t.group(2) in seen:
+                continue
+            seen.add(m_t.group(2))
+            raw, pid = m_t.group(1).strip(), m_t.group(2)
+            if not (re.search(r"\bLEITZ\b", raw) or re.match(r"(?:\d+MM\s+)?LEICA\b", raw)):
+                continue
+            raw = re.sub(r"^\d+MM\s+", "", raw)  # '135MM 135/4.5 LEITZ HEKTOR' 앞의 분류용 초점거리
+            desc = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", m.group(2)))).strip()
+            grades = re.findall(r"\b(MINT-?|EX\+\+|EX\+|EX-|EX|VG\+|VG|G)(?=[\s,./)]|$)", desc)
+            def _word(w):
+                core = w.strip(",.()")
+                if re.fullmatch(r"I{1,3}[A-Ga-g]?|IV|D?II", core):  # 'IIIF' → 'IIIf'
+                    return w.replace(core, core[:len(core.rstrip("ABCDEFGabcdefg"))] + core[len(core.rstrip("ABCDEFGabcdefg")):].lower())
+                if re.search(r"\d", w) or core in ("ASPH", "SLR", "TTL", "MP", "SL", "R", "M", "II", "RD", "CL", "MDA", "MD"):
+                    return w
+                return w.capitalize()
+            name = " ".join(_word(w) for w in raw.split())
+            head_part = re.split(r",|\bWITH\b", raw)[0]
+            if page not in ("th_bm12", "th_bm21", "th_bk14", "th_bh11") or re.search(
+                    r"\bFOR\b|\b(?:BOX|BOXES|CASE|BUBBLE|CAN|CAP|BASEPLATE|BASE|FILTER|ADAPTER|ADATER|HOOD|SHADE|EXTENSION|TUBE|"
+                    r"CLOSE-UP|FINDER|STAND|REPRINT|COUPLER|RING|ELPRO|EXTENDER|STRAP|GRIP|WINDER|MOTOR|FLASH|CABLE|SCREEN)\b", head_part):
+                name += " accessory"  # 'Bubble for 90mm Elmar' 같은 것이 렌즈·바디 시세에 섞이지 않게
+            name = re.sub(r"\b(\d{2,3})/(\d(?:\.\d)?)\b", r"\1mm f\2", name)
+            name = re.sub(r"(?i)\bin leica (?:thread|screw)(?: mount)?\b", "L39", name)
+            name = re.sub(r"(?i)\bin leica m mount\b", "M-mount", name)
+            name = re.sub(r"(?i),?\s*with (?:rear |front )?caps?\b", "", name)  # 'With Rear Cap'이 렌즈를 액세서리로 보이게 함
+            name = re.sub(r"^(?:Leica )?(\d{2,3}mm f[\d.]+) Leitz (\w+)", r"Leitz \2 \1", name)  # 'Leica 135mm f4.5 Leitz Hektor' → 'Leitz Hektor 135mm f4.5'
+            name = name if re.match(r"(?:leica|leitz)\b", name, re.I) else "Leica " + name
+            price = f"${float(m_t.group(3).replace(',', '')):,.0f}"
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": PACIFICRIM_PREFIX + grades[-1] if grades else "정보없음",
+                "가격": price,
+                "통화": "USD",
+                "이미지": f"https://www.pacificrimcamera.com/images/{pid}.jpg",
+                "링크": f"{url}#{pid}",
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ Pacific Rim Camera 완료: {len(results)}개")
+    return results
+
+
 CAMERACOLLECTION_JA = [("ズミルクス", "Summilux "), ("ライカフレックス", "Leicaflex "), ("A型 新エルマー", "Leica I Model A Body "), ("A型", "Leica I Model A "), ("DⅢ", "Leica III Body "),
                        ("フード・ファインダー付", " "), ("グランドグラススクリーン", "Focusing Screen "), ("後期型", "Late "),
                        ("前期型", "Early "), ("後期", "Late "), ("前期", "Early "), ("50周年", "50 Jahre "),
@@ -10332,6 +10416,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("Pacific Rim Camera (미국)", lambda: ce.wrap_full_run("Pacific Rim Camera (미국)", crawl_pacificrim)),
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
