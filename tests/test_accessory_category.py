@@ -235,3 +235,12 @@ def test_rangefinder_camera_is_not_viewfinder_accessory() -> None:
     assert body["category"] == "Body"
     finder = classify_listing_v2({"상품명": "Leica 24mm Viewfinder Black 12019", "가격": "HK$2,800", "통화": "HKD"})
     assert finder["category"] == "Accessory"
+
+
+def test_enlarger_lens_and_film_cassette_are_accessory() -> None:
+    # 2026-11-07: 초점거리가 있어도 확대기 렌즈·필름 카세트는 촬영용 렌즈 시세에 넣지 않음
+    for title in ["Leica LEITZ FOCOTAR 60mm F4.5", "Leica 50/4.5 FOCOTAR Leitz Wetzlar Germany",
+                  "Leica Rapid Loading System (14260)", "Leica DRXOO 35mm Reloadable Film Cassette"]:
+        assert _classify(title)["category"] == "Accessory", title
+    # 'Rapid Load' 장치가 붙은 M3 바디는 그대로 바디
+    assert _classify("Leica M3 Single Stroke Rapid Load")["category"] == "Body"

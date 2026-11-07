@@ -826,6 +826,9 @@ _HARD_ACC_REGEX = (
     (r'\bbp-scl\d+\b', "battery_code"),
     (r'\b(?:leica\s+)?m\s+motor\b|\bmotor\s+m\b', "motor_winder"),
     (r'\bbooks?\b', "book"),
+    # 확대기 렌즈·필름 카세트는 초점거리가 있어도 촬영용 렌즈가 아님 (2026-11-07 밤샘: 'LEITZ FOCOTAR 60mm F4.5'·'Rapid Loading System 14260'이 렌즈로 잡힘)
+    (r'\bfocotar\b', "enlarger_lens"),
+    (r'\b(?:film\s+)?cassettes?\b|\breloadable\b|\brapid\s+load(?:ing)?\s+(?:system|spool|kit)\b|\bspool\s+kit\b', "film_cassette"),
 )
 
 
