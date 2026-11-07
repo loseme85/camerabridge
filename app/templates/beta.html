@@ -171,6 +171,12 @@
     .home-item-name{color:var(--text);font-size:13px;font-weight:600;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
     .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hero-how{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 28px;border-top:1px solid var(--rule,var(--text))}
+    .hero-how li{padding:12px 0 0}
+    .hero-how strong{display:block;font-family:var(--serif);font-weight:500;font-size:18px;line-height:1.3}
+    .hero-how span{display:block;margin-top:4px;font-size:13px;line-height:1.5;color:var(--text-soft)}
+    body.cb-searched .hero-how{display:none}
+    @media(max-width:720px){.hero-how{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.hero-how li{padding-bottom:10px}}
     .home-popular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;border-top:1px solid var(--border)}
     .home-model{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 2px;border:0;border-bottom:1px solid var(--border);
       background:none;color:inherit;text-align:left;cursor:pointer;font-size:13px}
@@ -1413,8 +1419,8 @@
       <section class="hero">
         <div class="hero-grid">
           <div class="hero-copy">
-            <h1 class="hero-title" data-i18n="hero.title">Find used Leica gear across Korea, Japan, the UK, the US and Europe.</h1>
-            <p class="hero-subtitle" data-i18n="hero.subtitle">Prices are converted to your currency, with shipping and import taxes estimated to your door.</p>
+            <h1 class="hero-title" data-i18n="hero.title">What is a used Leica worth?</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">Used Leica listings from dealers worldwide, matched to the exact model and priced by condition.</p>
             <p id="hero-trust" class="hero-trust" hidden></p>
             <section class="search-panel" data-i18n-aria-label="search.home_aria" aria-label="Search home">
               <div class="search-panel-label" data-i18n="search.panel_label">Search</div>
@@ -1430,13 +1436,20 @@
                 <button class="query-chip" type="button" data-query="Leica M10">M10</button>
               </div>
             </section>
+            <!-- 무엇이 다른가: 핵심 기술 네 가지 (2026-11-07 사장님: classic.com처럼 들어오자마자 알아보게) -->
+            <ol class="hero-how">
+              <li><strong data-i18n="hero.how1_t">Exact model</strong><span data-i18n="hero.how1">M6, M6 TTL or M6 Classic — told apart in any language.</span></li>
+              <li><strong data-i18n="hero.how2_t">One condition scale</strong><span data-i18n="hero.how2">“AB”, “8+” and “Gut” become one grade, so prices compare like for like.</span></li>
+              <li><strong data-i18n="hero.how3_t">What it sold for</strong><span data-i18n="hero.how3">Market value from listings that sold, not just asking prices.</span></li>
+              <li><strong data-i18n="hero.how4_t">Cost to your door</strong><span data-i18n="hero.how4">Shipping and import tax estimated for your country.</span></li>
+            </ol>
           </div>
         </div>
       </section>
 
       <section id="home-feed" class="home-feed">
         <div id="home-picks-block" hidden>
-          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">lowest asking price for sale now</small></h2>
+          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
           <div id="home-picks" class="home-popular"></div>
         </div>
         <div id="home-latest-block" hidden>
@@ -1890,8 +1903,16 @@
       },
       hero: {
         eyebrow: { ko: 'Leica 중고 시장 검색 제한 베타', en: 'Limited beta for Leica market search', ja: 'Leica中古市場検索の限定ベータ', 'zh-Hans': 'Leica 二手市场搜索小范围测试版', 'zh-Hant': 'Leica 二手市場搜尋小規模測試版', pt: 'Beta limitada para busca no mercado Leica', es: 'Beta limitada para búsqueda del mercado Leica', de: 'Begrenzte Beta für die Leica-Marktsuche', it: 'Beta limitata per la ricerca nel mercato Leica' },
-        title: { ko: '한국·일본·영국·미국·유럽의 Leica 중고 매물을 한 번에 찾아보세요.', en: 'Find used Leica gear across Korea, Japan, the UK, the US and Europe.', ja: '韓国・日本・英国・米国・欧州のLeica中古品をまとめて探せます。', 'zh-Hans': '一次搜索韩国、日本、英国、美国和欧洲的 Leica 二手器材。', 'zh-Hant': '一次搜尋韓國、日本、英國、美國與歐洲的 Leica 二手器材。', pt: 'Encontre equipamentos Leica usados na Coreia, no Japão, no Reino Unido, nos EUA e na Europa.', es: 'Encuentra equipo Leica usado en Corea, Japón, Reino Unido, EE. UU. y Europa.', de: 'Gebrauchte Leica-Ausrüstung aus Korea, Japan, Großbritannien, den USA und Europa an einem Ort finden.', it: 'Trova attrezzatura Leica usata in Corea, Giappone, Regno Unito, Stati Uniti ed Europa.' },
-        subtitle: { ko: '가격은 내 통화로 바꿔 보여 주고, 배송비와 관부가세까지 받을 때 기준으로 계산해 드립니다.', en: 'Prices are converted to your currency, with shipping and import taxes estimated to your door.', ja: '価格はお使いの通貨に換算し、送料と輸入税を含めた到着時の目安も表示します。', 'zh-Hans': '价格会换算成你的货币，并估算运费和进口税，显示到手价。', 'zh-Hant': '價格會換算成你的貨幣，並估算運費與進口稅，顯示到手價。', pt: 'Os preços aparecem na sua moeda, com frete e impostos de importação estimados até a sua casa.', es: 'Los precios se muestran en tu moneda, con envío e impuestos de importación estimados hasta tu puerta.', de: 'Preise werden in deine Währung umgerechnet – mit geschätzten Versandkosten und Einfuhrabgaben bis zu dir nach Hause.', it: 'I prezzi sono convertiti nella tua valuta, con spedizione e tasse d’importazione stimate fino a casa tua.' },
+        title: { ko: '중고 라이카, 지금 얼마일까?', en: 'What is a used Leica worth?', ja: '中古ライカ、いまいくら？', 'zh-Hans': '二手徕卡现在值多少？', 'zh-Hant': '二手徠卡現在值多少？', pt: 'Quanto vale uma Leica usada?', es: '¿Cuánto vale una Leica usada?', de: 'Was ist eine gebrauchte Leica wert?', it: 'Quanto vale una Leica usata?' },
+        subtitle: { ko: '세계 매장의 라이카 중고 매물을 정확한 모델로 묶고, 상태별 시세로 보여 드립니다.', en: 'Used Leica listings from dealers worldwide, matched to the exact model and priced by condition.', ja: '世界の取扱店のライカ中古在庫を正確なモデルでまとめ、状態別の相場で表示します。', 'zh-Hans': '汇集全球店铺的徕卡二手商品，按精确型号归类，并按成色给出行情。', 'zh-Hant': '匯集全球店鋪的徠卡二手商品，按精確型號歸類，並依成色給出行情。', pt: 'Anúncios de Leica usadas de lojas do mundo todo, agrupados pelo modelo exato e com preço por estado.', es: 'Anuncios de Leica usadas de tiendas de todo el mundo, agrupados por modelo exacto y con precio según estado.', de: 'Gebrauchte Leica-Angebote von Händlern weltweit, dem genauen Modell zugeordnet und nach Zustand bewertet.', it: 'Annunci Leica usati da negozi di tutto il mondo, raggruppati per modello esatto e con prezzo per condizione.' },
+        how1_t: { ko: '정확한 모델', en: 'Exact model', ja: '正確なモデル', 'zh-Hans': '精确型号', 'zh-Hant': '精確型號', pt: 'Modelo exato', es: 'Modelo exacto', de: 'Genaues Modell', it: 'Modello esatto' },
+        how1: { ko: 'M6·M6 TTL·M6 Classic을 어느 나라 말로 올라와도 구분합니다.', en: 'M6, M6 TTL or M6 Classic — told apart in any language.', ja: 'M6・M6 TTL・M6 Classicを、どの言語の出品でも見分けます。', 'zh-Hans': 'M6、M6 TTL、M6 Classic，无论哪种语言的商品都能区分。', 'zh-Hant': 'M6、M6 TTL、M6 Classic，不論哪種語言的商品都能區分。', pt: 'M6, M6 TTL ou M6 Classic — distinguidos em qualquer idioma.', es: 'M6, M6 TTL o M6 Classic: diferenciados en cualquier idioma.', de: 'M6, M6 TTL oder M6 Classic – in jeder Sprache auseinandergehalten.', it: 'M6, M6 TTL o M6 Classic: distinti in qualsiasi lingua.' },
+        how2_t: { ko: '하나의 등급', en: 'One condition scale', ja: 'ひとつの等級', 'zh-Hans': '统一成色等级', 'zh-Hant': '統一成色等級', pt: 'Uma escala de estado', es: 'Una escala de estado', de: 'Eine Zustandsskala', it: 'Una scala di condizione' },
+        how2: { ko: '“AB”, “8+”, “Gut”처럼 매장마다 다른 표기를 한 등급으로 맞춰 같은 상태끼리 비교합니다.', en: '“AB”, “8+” and “Gut” become one grade, so prices compare like for like.', ja: '「AB」「8+」「Gut」など店ごとの表記をひとつの等級にそろえ、同じ状態どうしで比べます。', 'zh-Hans': '把“AB”“8+”“Gut”等各店写法统一为一个等级，同成色才比较。', 'zh-Hant': '把「AB」「8+」「Gut」等各店寫法統一為一個等級，同成色才比較。', pt: '“AB”, “8+” e “Gut” viram uma só nota, para comparar igual com igual.', es: '“AB”, “8+” y “Gut” se convierten en un solo grado para comparar lo comparable.', de: '„AB“, „8+“ und „Gut“ werden zu einer Note – so vergleicht man Gleiches mit Gleichem.', it: '“AB”, “8+” e “Gut” diventano un solo grado, per confrontare a parità di condizione.' },
+        how3_t: { ko: '실제로 팔린 가격', en: 'What it sold for', ja: '実際に売れた価格', 'zh-Hans': '实际成交参考', 'zh-Hant': '實際成交參考', pt: 'Por quanto vendeu', es: 'Por cuánto se vendió', de: 'Wofür es verkauft wurde', it: 'A quanto è stato venduto' },
+        how3: { ko: '판매 중 호가만이 아니라 팔린 매물로 시세를 냅니다.', en: 'Market value from listings that sold, not just asking prices.', ja: '販売中の価格だけでなく、売れた出品から相場を出します。', 'zh-Hans': '行情来自已售出的商品，而不只是挂牌价。', 'zh-Hant': '行情來自已售出的商品，而不只是掛牌價。', pt: 'Valor de mercado a partir de anúncios vendidos, não só preços pedidos.', es: 'Valor de mercado a partir de anuncios vendidos, no solo precios pedidos.', de: 'Marktwert aus verkauften Angeboten, nicht nur aus Angebotspreisen.', it: 'Valore di mercato dagli annunci venduti, non solo dai prezzi richiesti.' },
+        how4_t: { ko: '받을 때까지 총액', en: 'Cost to your door', ja: '届くまでの総額', 'zh-Hans': '到手总价', 'zh-Hant': '到手總價', pt: 'Custo até sua porta', es: 'Coste hasta tu puerta', de: 'Kosten bis zur Tür', it: 'Costo fino a casa' },
+        how4: { ko: '배송비와 관부가세를 내 나라 기준으로 어림합니다.', en: 'Shipping and import tax estimated for your country.', ja: '送料と輸入税をお住まいの国の基準で見積もります。', 'zh-Hans': '按你的国家估算运费和进口税。', 'zh-Hant': '依你的國家估算運費與進口稅。', pt: 'Frete e impostos de importação estimados para o seu país.', es: 'Envío e impuestos de importación estimados para tu país.', de: 'Versand und Einfuhrabgaben für dein Land geschätzt.', it: 'Spedizione e dazi stimati per il tuo paese.' },
         notice_beta: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '小范围测试版', 'zh-Hant': '小規模測試版', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
         notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.', ja: '現在はLeica中心のカバレッジでテスト中です。', 'zh-Hans': '当前正在以 Leica 为中心进行测试。', 'zh-Hant': '目前正以 Leica 為中心進行測試。', pt: 'No momento, o teste está focado em cobertura Leica.', es: 'Actualmente la prueba se centra en cobertura Leica.', de: 'Der Test konzentriert sich derzeit auf Leica-Abdeckung.', it: 'Il test è attualmente focalizzato sulla copertura Leica.' },
         notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.', ja: '一部の希少モデルはデータ不足により価格が保留されたままになることがあります。', 'zh-Hans': '部分稀有型号可能因依据不足而暂不估算价格。', 'zh-Hant': '部分稀有型號可能因依據不足而暫不估算價格。', pt: 'Alguns modelos raros podem permanecer com o preço bloqueado quando a evidência for limitada.', es: 'Algunos modelos raros pueden mantener el precio bloqueado cuando la evidencia es limitada.', de: 'Einige seltene Modelle bleiben bei geringer Datenlage preisgesperrt.', it: 'Alcuni modelli rari possono restare con il prezzo bloccato quando i dati sono limitati.' },
@@ -1901,7 +1922,8 @@
         latest: { ko: '새로 올라온 매물', en: 'Just listed', ja: '新着の出品', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Recém-anunciados', es: 'Recién publicados', de: 'Neu eingestellt', it: 'Appena pubblicati' },
         latest_note: { ko: '모델마다 한 건, 최근 순', en: 'one per model, newest first', ja: 'モデルごとに1件、新しい順', 'zh-Hans': '每个型号一件，按时间排序', 'zh-Hant': '每個型號一件，依時間排序', pt: 'um por modelo, mais recentes primeiro', es: 'uno por modelo, más recientes primero', de: 'eins pro Modell, neueste zuerst', it: 'uno per modello, dal più recente' },
         picks: { ko: '수집가들이 찾는 모델', en: 'Collector favorites', ja: 'コレクターが探すモデル', 'zh-Hans': '藏家追捧的型号', 'zh-Hant': '藏家追捧的型號', pt: 'Favoritos dos colecionadores', es: 'Favoritos de coleccionistas', de: 'Sammlerstücke', it: 'I preferiti dei collezionisti' },
-        picks_note: { ko: '지금 판매 중인 매물의 최저 호가', en: 'lowest asking price for sale now', ja: '現在販売中の最安値', 'zh-Hans': '当前在售最低报价', 'zh-Hant': '目前在售最低報價', pt: 'menor preço pedido à venda agora', es: 'precio más bajo en venta ahora', de: 'niedrigster Angebotspreis aktuell', it: 'prezzo richiesto più basso ora in vendita' },
+        picks_note: { ko: 'B등급 시세 · 지금 판매 중', en: 'market value at grade B · for sale now', ja: 'B等級の相場 · 現在販売中', 'zh-Hans': 'B 级行情 · 当前在售', 'zh-Hant': 'B 級行情 · 目前在售', pt: 'valor de mercado no grau B · à venda agora', es: 'valor de mercado en grado B · a la venta ahora', de: 'Marktwert bei Note B · aktuell im Angebot', it: 'valore di mercato al grado B · in vendita ora' },
+        on_sale_from: { ko: '판매 중 {n} · {p}부터', en: '{n} for sale · from {p}', ja: '販売中 {n} · {p}〜', 'zh-Hans': '在售 {n} · {p} 起', 'zh-Hant': '在售 {n} · {p} 起', pt: '{n} à venda · a partir de {p}', es: '{n} a la venta · desde {p}', de: '{n} im Angebot · ab {p}', it: '{n} in vendita · da {p}' },
         from_price: { ko: '{p}부터', en: 'from {p}', ja: '{p}〜', 'zh-Hans': '{p} 起', 'zh-Hant': '{p} 起', pt: 'a partir de {p}', es: 'desde {p}', de: 'ab {p}', it: 'da {p}' },
         on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
       },
@@ -2609,8 +2631,13 @@
         picksEl.innerHTML = picks.map(entity => {
           const active = entity.active_count || 0;
           const low = (entity.active_price_krw || [])[0];
-          const price = low ? ux('home.from_price', 'from {p}').replace('{p}', krwToDisplay(low)) : '—';
-          const meta = ux('home.on_sale', '{n} for sale').replace('{n}', String(active));
+          const lowText = low ? krwToDisplay(low) : '';
+          // 큰 숫자는 B등급 시세(같은 상태 기준값), 없으면 지금 최저 호가
+          const value = entity.b_price_krw ? krwToDisplay(entity.b_price_krw) : '';
+          const price = value || (lowText ? ux('home.from_price', 'from {p}').replace('{p}', lowText) : '—');
+          const meta = value && lowText
+            ? ux('home.on_sale_from', '{n} for sale · from {p}').replace('{n}', String(active)).replace('{p}', lowText)
+            : ux('home.on_sale', '{n} for sale').replace('{n}', String(active));
           return `<button type="button" class="home-model" data-entity="${escapeHtml(entity.id)}">
             <span class="home-model-name">${escapeHtml(homeName(entity))}</span>
             <span class="home-model-price">${escapeHtml(price)}</span>
