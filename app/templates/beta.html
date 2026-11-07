@@ -3403,7 +3403,11 @@
       const block = document.getElementById('home-quiz-block');
       if(block) block.hidden = quizState.bank.length < 20;
       renderQuizBest();
-      if(quizState.bank.length >= 20 && QUIZ_FROM_URL) openQuiz();
+      if(quizState.bank.length >= 20 && QUIZ_FROM_URL){
+        // 환율·모델 이름을 받을 때까지 잠깐 기다렸다 염 (최대 6초)
+        for(let i = 0; i < 30 && !(fxRate('KRW') && fxRate(uiState.currency) && entityState.byId); i++) await new Promise(r => setTimeout(r, 200));
+        openQuiz();
+      }
     }
     function pickQuiz(){
       const used = new Set();
@@ -3421,7 +3425,9 @@
       if(q.kind === 'feature') return qx(`quiz_q_${q.vars.f}`);
       return qx(q.kind === 'compare' ? 'quiz_q_compare' : 'quiz_q_price');
     }
-    function quizLabels(q){ return q.kind === 'price' ? q.options_krw.map(krw => krwToDisplay(krw) || '—') : q.options; }
+    // 환율을 아직 못 받았으면 원화로라도 보여 줌 (공유 주소로 들어오면 창이 환율보다 먼저 열릴 수 있음)
+    function quizMoney(krw){ return krwToDisplay(krw) || formatMoney(Math.round(krw / 1000) * 1000, 'KRW'); }
+    function quizLabels(q){ return q.kind === 'price' ? q.options_krw.map(quizMoney) : q.options; }
     function quizEntityName(id){ const e = entityState.byId && entityState.byId[id]; return e ? entityDisplayName(e) : ''; }
     function renderQuiz(){
       const body = document.getElementById('quiz-body');
@@ -3475,7 +3481,7 @@
         else if(i === pick) button.classList.add('is-wrong');
       });
       let extra = '';
-      if(q.kind === 'compare' && q.krw) extra = ` (${q.options.map((name, i) => `${name} ${krwToDisplay(q.krw[i]) || ''}`).join(' · ')})`;
+      if(q.kind === 'compare' && q.krw) extra = ` (${q.options.map((name, i) => `${name} ${quizMoney(q.krw[i])}`).join(' · ')})`;
       const name = quizEntityName(q.entity);
       const link = name ? ` <button type="button" class="quiz-link" data-quiz-entity="${escapeHtml(q.entity)}">${escapeHtml(qx('quiz_see_model', { name }))} →</button>` : '';
       body.querySelector('.quiz-feedback').innerHTML = `${escapeHtml(right ? qx('quiz_right') : qx('quiz_wrong', { a: labels[q.answer] }))}${escapeHtml(extra)}${link}`;
