@@ -177,6 +177,15 @@
     .hero-how span{display:block;margin-top:4px;font-size:13px;line-height:1.5;color:var(--text-soft)}
     body.cb-searched .hero-how{display:none}
     @media(max-width:720px){.hero-how{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.hero-how li{padding-bottom:10px}}
+    .market-map{--map-0:#2a78d6;--map-1:#eb6834;--map-2:#1baf7a;--map-3:#eda100;--map-4:#e87ba4;--map-grid:rgba(0,0,0,.12)}
+    @media (prefers-color-scheme:dark){.market-map{--map-0:#3987e5;--map-1:#d95926;--map-2:#199e70;--map-3:#c98500;--map-4:#d55181;--map-grid:rgba(255,255,255,.14)}}
+    .market-map-note{margin:2px 0 8px;font-size:13px;color:var(--text-soft)}
+    .market-map-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--text-soft);margin:0 0 6px}
+    .market-map-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
+    .market-map-frame{position:relative;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
+    .market-map-frame canvas{display:block;width:100%;cursor:crosshair}
+    .market-map-tip{position:absolute;pointer-events:none;background:var(--bg,#fff);color:var(--text);border:1px solid var(--text);padding:6px 9px;font-size:13px;line-height:1.4;white-space:nowrap;z-index:2}
+    .market-map-tip small{display:block;color:var(--text-soft)}
     .home-quiz{border-top:1px solid var(--rule,var(--text));padding-top:4px}
     .home-quiz p{margin:4px 0 14px;max-width:44em;color:var(--text-soft);font-size:14px}
     .home-quiz-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
@@ -1475,6 +1484,13 @@
       </section>
 
       <section id="home-feed" class="home-feed">
+        <!-- 지금 팔리는 라이카 전부 (2026-11-07 사장님: 메인 화면에 전체 매물 그래프) — data/derived/market_map.json, 점 하나 = 매물 하나 -->
+        <div id="market-map-block" class="market-map" hidden>
+          <h2 class="home-heading" data-i18n="home.map_title">Every used Leica for sale right now</h2>
+          <p id="market-map-note" class="market-map-note"></p>
+          <div id="market-map-legend" class="market-map-legend"></div>
+          <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
+        </div>
         <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
         <div id="home-quiz-block" class="home-quiz" hidden>
           <h2 class="home-heading"><span data-i18n="home.quiz_title">What’s your Leica level?</span> <small id="quiz-best" class="home-quiz-best"></small></h2>
@@ -1961,6 +1977,15 @@
         picks_note: { ko: 'B등급 시세 · 지금 판매 중', en: 'market value at grade B · for sale now', ja: 'B等級の相場 · 現在販売中', 'zh-Hans': 'B 级行情 · 当前在售', 'zh-Hant': 'B 級行情 · 目前在售', pt: 'valor de mercado no grau B · à venda agora', es: 'valor de mercado en grado B · a la venta ahora', de: 'Marktwert bei Note B · aktuell im Angebot', it: 'valore di mercato al grado B · in vendita ora' },
         on_sale_from: { ko: '판매 중 {n} · {p}부터', en: '{n} for sale · from {p}', ja: '販売中 {n} · {p}〜', 'zh-Hans': '在售 {n} · {p} 起', 'zh-Hant': '在售 {n} · {p} 起', pt: '{n} à venda · a partir de {p}', es: '{n} a la venta · desde {p}', de: '{n} im Angebot · ab {p}', it: '{n} in vendita · da {p}' },
         quiz_title: { ko: '당신의 라이카 레벨은?', en: 'What’s your Leica level?', ja: 'あなたのライカレベルは？', 'zh-Hans': '你的徕卡等级是多少？', 'zh-Hant': '你的徠卡等級是多少？', pt: 'Qual é o seu nível Leica?', es: '¿Cuál es tu nivel Leica?', de: 'Wie hoch ist dein Leica-Level?', it: 'Qual è il tuo livello Leica?' },
+        map_title: { ko: '지금 팔리는 라이카 전부', en: 'Every used Leica for sale right now', ja: 'いま販売中のライカ、全部', 'zh-Hans': '此刻在售的所有二手徕卡', 'zh-Hant': '此刻在售的所有二手徠卡', pt: 'Todas as Leica usadas à venda agora', es: 'Todas las Leica usadas a la venta ahora', de: 'Jede gebrauchte Leica, die gerade angeboten wird', it: 'Tutte le Leica usate in vendita ora' },
+        map_note: { ko: '모델이 확인된 매물 {n}개 · 점 하나가 매물 하나 · 점을 눌러 보세요', en: '{n} listings matched to a model · one dot each · hover or tap a dot', ja: 'モデルを確認できた出品 {n} 点 · 点1つが1点 · 点に触れてみてください', 'zh-Hans': '已识别型号的在售商品 {n} 件 · 一个点代表一件 · 点一下看看', 'zh-Hant': '已辨識型號的在售商品 {n} 件 · 一個點代表一件 · 點一下看看', pt: '{n} anúncios com modelo identificado · um ponto cada · toque num ponto', es: '{n} anuncios con modelo identificado · un punto cada uno · toca un punto', de: '{n} Angebote mit erkanntem Modell · ein Punkt je Angebot · Punkt antippen', it: '{n} annunci con modello riconosciuto · un punto ciascuno · tocca un punto' },
+        map_row0: { ko: 'M 바디', en: 'M bodies', ja: 'Mボディ', 'zh-Hans': 'M 机身', 'zh-Hant': 'M 機身', pt: 'Corpos M', es: 'Cuerpos M', de: 'M-Gehäuse', it: 'Corpi M' },
+        map_row1: { ko: '그 밖의 바디', en: 'Other bodies', ja: 'その他のボディ', 'zh-Hans': '其他机身', 'zh-Hant': '其他機身', pt: 'Outros corpos', es: 'Otros cuerpos', de: 'Andere Gehäuse', it: 'Altri corpi' },
+        map_row2: { ko: 'M 렌즈', en: 'M lenses', ja: 'Mレンズ', 'zh-Hans': 'M 镜头', 'zh-Hant': 'M 鏡頭', pt: 'Lentes M', es: 'Objetivos M', de: 'M-Objektive', it: 'Obiettivi M' },
+        map_row3: { ko: '그 밖의 렌즈', en: 'Other lenses', ja: 'その他のレンズ', 'zh-Hans': '其他镜头', 'zh-Hant': '其他鏡頭', pt: 'Outras lentes', es: 'Otros objetivos', de: 'Andere Objektive', it: 'Altri obiettivi' },
+        map_region2: { ko: '유럽', en: 'Europe', ja: 'ヨーロッパ', 'zh-Hans': '欧洲', 'zh-Hant': '歐洲', pt: 'Europa', es: 'Europa', de: 'Europa', it: 'Europa' },
+        map_region3: { ko: '미국·캐나다', en: 'US & Canada', ja: '米国・カナダ', 'zh-Hans': '美国·加拿大', 'zh-Hant': '美國·加拿大', pt: 'EUA e Canadá', es: 'EE. UU. y Canadá', de: 'USA & Kanada', it: 'USA e Canada' },
+        map_region4: { ko: '그 밖', en: 'Other', ja: 'その他', 'zh-Hans': '其他', 'zh-Hant': '其他', pt: 'Outros', es: 'Otros', de: 'Andere', it: 'Altri' },
         quiz_intro: { ko: '더블 스트로크, 기념 바디, 별칭, 주문 번호 — 매니아만 아는 10문제. 첫 문제부터 바로 풀어 보세요.', en: 'Double strokes, commemorative bodies, nicknames, order numbers — 10 questions only Leica nerds get right. Start right here.', ja: 'ダブルストローク、記念モデル、愛称、注文番号 — マニアしか解けない10問。ここから1問目をどうぞ。', 'zh-Hans': '双拨杆、纪念机身、昵称、订货号——只有徕卡迷才答得出的 10 道题，直接从第一题开始。', 'zh-Hant': '雙撥桿、紀念機身、暱稱、訂貨號——只有徠卡迷才答得出的 10 道題，直接從第一題開始。', pt: 'Double stroke, corpos comemorativos, apelidos, números de pedido — 10 perguntas só para fanáticos por Leica. Comece aqui.', es: 'Doble palanca, cuerpos conmemorativos, apodos, números de pedido: 10 preguntas solo para fanáticos de Leica. Empieza aquí.', de: 'Doppelhub, Sondermodelle, Spitznamen, Bestellnummern – 10 Fragen nur für Leica-Kenner. Fang gleich hier an.', it: 'Doppia carica, corpi commemorativi, soprannomi, numeri d’ordine: 10 domande solo per veri appassionati Leica. Inizia qui.' },
         quiz_start: { ko: '테스트 시작', en: 'Take the test', ja: 'テストを受ける', 'zh-Hans': '开始测试', 'zh-Hant': '開始測驗', pt: 'Fazer o teste', es: 'Hacer el test', de: 'Test starten', it: 'Inizia il test' },
         quiz_best: { ko: '내 최고 기록: 레벨 {n} · {name}', en: 'Your best: Level {n} · {name}', ja: '自己ベスト：レベル {n} · {name}', 'zh-Hans': '最佳成绩：等级 {n} · {name}', 'zh-Hant': '最佳成績：等級 {n} · {name}', pt: 'Seu melhor: nível {n} · {name}', es: 'Tu mejor: nivel {n} · {name}', de: 'Dein Bestwert: Level {n} · {name}', it: 'Il tuo migliore: livello {n} · {name}' },
@@ -3392,6 +3417,127 @@
         calcState.box = event.target.checked;
         renderValueCalc();
       });
+    }
+
+    // ── 첫 화면 '지금 팔리는 라이카 전부': 판매 중 매물을 점 하나씩 (가로 가격 로그 눈금, 세로 4줄, 색 = 지역) ──
+    const mapState = { data: null, dots: [], hover: -1 };
+    const mx = key => ux(`home.${key}`, key);
+    function mapRegionName(r){ return r === 0 ? (displayNameOf('region', 'KR') || 'Korea') : r === 1 ? (displayNameOf('region', 'JP') || 'Japan') : mx(`map_region${r}`); }
+    async function loadMarketMap(){
+      try{
+        const response = await fetch('/data/derived/market_map.json', { cache: 'no-cache' });
+        mapState.data = response.ok ? await response.json() : null;
+      }catch(error){ mapState.data = null; }
+      const block = document.getElementById('market-map-block');
+      if(!block || !mapState.data || !(mapState.data.points || []).length) return;
+      for(let i = 0; i < 30 && !(fxRate('KRW') && fxRate(uiState.currency)); i++) await new Promise(r => setTimeout(r, 200));
+      block.hidden = false;
+      drawMarketMap();
+    }
+    function drawMarketMap(){
+      const data = mapState.data;
+      const canvas = document.getElementById('market-map');
+      if(!data || !canvas) return;
+      const block = document.getElementById('market-map-block');
+      const css = getComputedStyle(block);
+      const colors = [0, 1, 2, 3, 4].map(i => css.getPropertyValue(`--map-${i}`).trim());
+      const ink = getComputedStyle(document.body).color;
+      const soft = css.getPropertyValue('--text-soft').trim() || ink;
+      const narrow = canvas.parentElement.clientWidth < 560;
+      const width = canvas.parentElement.clientWidth;
+      const left = narrow ? 8 : 112, right = 12, rowH = narrow ? 64 : 72, top = narrow ? 18 : 10, axisH = 26;
+      const height = top + rowH * 4 + axisH;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+      canvas.style.height = `${height}px`;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      // 가로: 원화 10만 ~ 1억(로그), 눈금은 보는 통화로
+      const lo = Math.log10(100000), hi = Math.log10(100000000);
+      const xOf = krw => left + (Math.log10(Math.min(Math.max(krw, 100000), 100000000)) - lo) / (hi - lo) * (width - left - right);
+      const krwPerUnit = convertAmount(1, uiState.currency, 'KRW') || 1;
+      const fmt = new Intl.NumberFormat(uiState.locale, { style: 'currency', currency: uiState.currency, notation: 'compact', maximumFractionDigits: 0 });
+      ctx.font = '12px system-ui, sans-serif';
+      ctx.textBaseline = 'middle';
+      for(let e = -1; e <= 9; e++){
+        [1, 3].forEach(m => {
+          const value = m * Math.pow(10, e);  // 보는 통화 금액
+          const krw = value * krwPerUnit;
+          if(krw < 100000 || krw > 100000000) return;
+          if(narrow && m === 3) return;
+          const x = xOf(krw);
+          ctx.strokeStyle = css.getPropertyValue('--map-grid').trim(); ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(x + .5, top); ctx.lineTo(x + .5, top + rowH * 4); ctx.stroke();
+          ctx.fillStyle = soft; ctx.textAlign = 'center';
+          ctx.fillText(fmt.format(value), x, top + rowH * 4 + axisH / 2 + 2);
+        });
+      }
+      // 줄 이름과 구분선
+      ctx.textAlign = 'left';
+      for(let r = 0; r < 4; r++){
+        const y0 = top + rowH * r;
+        if(r){ ctx.strokeStyle = css.getPropertyValue('--map-grid').trim(); ctx.beginPath(); ctx.moveTo(narrow ? 0 : left, y0 + .5); ctx.lineTo(width, y0 + .5); ctx.stroke(); }
+        ctx.fillStyle = ink;
+        if(narrow) ctx.fillText(mx(`map_row${r}`), 4, y0 + 8); else ctx.fillText(mx(`map_row${r}`), 0, y0 + rowH / 2);
+      }
+      // 점: 줄 안에서 흩뿌림 (번호로 정해지는 값이라 다시 그려도 같은 자리)
+      const dots = [];
+      const counts = [0, 0, 0, 0];
+      data.points.forEach((p, i) => {
+        const [k, row, region, ei] = p;
+        const jitter = ((Math.sin(i * 12.9898) * 43758.5453) % 1 + 1) % 1;
+        const pad = narrow ? 16 : 8;
+        const x = xOf(k * 1000), y = top + rowH * row + pad + jitter * (rowH - pad - 8);
+        dots.push([x, y, i]);
+        counts[row] += 1;
+        ctx.fillStyle = colors[region]; ctx.globalAlpha = 0.6;
+        ctx.beginPath(); ctx.arc(x, y, 2.1, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      mapState.dots = dots;
+      mapState.layout = { width, height };
+      const note = document.getElementById('market-map-note');
+      if(note) note.textContent = mx('map_note').replace('{n}', data.points.length.toLocaleString(uiState.locale));
+      const legend = document.getElementById('market-map-legend');
+      if(legend) legend.innerHTML = [0, 1, 2, 3, 4].map(r => `<span><i style="background:${colors[r]}"></i>${escapeHtml(mapRegionName(r))}</span>`).join('');
+      canvas.setAttribute('aria-label', `${mx('map_title')}: ${[0, 1, 2, 3].map(r => `${mx(`map_row${r}`)} ${counts[r]}`).join(', ')}`);
+    }
+    function mapPick(event){
+      const canvas = document.getElementById('market-map');
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left, y = event.clientY - rect.top;
+      let best = -1, bestD = 64;  // 8px 안
+      for(const [dx, dy, i] of mapState.dots){ const d = (dx - x) ** 2 + (dy - y) ** 2; if(d < bestD){ bestD = d; best = i; } }
+      return { best, x, y };
+    }
+    function bindMarketMap(){
+      const canvas = document.getElementById('market-map');
+      const tip = document.getElementById('market-map-tip');
+      if(!canvas || !tip) return;
+      const show = event => {
+        if(!mapState.data) return;
+        const { best, x, y } = mapPick(event);
+        if(best < 0){ tip.hidden = true; return null; }
+        const [k, row, region, ei] = mapState.data.points[best];
+        const id = mapState.data.entities[ei];
+        const entity = entityState.byId && entityState.byId[id];
+        tip.innerHTML = `<strong>${escapeHtml(entity ? entityDisplayName(entity) : id)}</strong><small>${escapeHtml(krwToDisplay(k * 1000) || '')} · ${escapeHtml(mapRegionName(region))}</small>`;
+        tip.hidden = false;
+        const w = tip.offsetWidth;
+        tip.style.left = `${Math.min(Math.max(0, x - w / 2), canvas.clientWidth - w)}px`;
+        tip.style.top = `${Math.max(0, y - 52)}px`;
+        return id;
+      };
+      canvas.addEventListener('mousemove', show);
+      canvas.addEventListener('mouseleave', () => { tip.hidden = true; });
+      canvas.addEventListener('click', event => {
+        const id = show(event);
+        if(id && entityState.byId && entityState.byId[id]) selectEntity(id, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
+      });
+      let resizeTimer = null;
+      window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(drawMarketMap, 150); });
+      if(window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', drawMarketMap);
     }
 
     // ── 라이카 레벨 테스트: 문제 은행에서 종류별로 10문제 (쉬운 것부터), 맞힌 수로 레벨 1~5 ──
@@ -7311,6 +7457,8 @@
     bindHome();
     bindQuiz();
     loadQuizBank();
+    bindMarketMap();
+    loadMarketMap();
     bindHeroSearchVisibility();
     bindFeedback();
     hydrateFromUrl();
