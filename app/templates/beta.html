@@ -824,6 +824,7 @@
     .grade-chip.grade-D,.grade-chip.grade-X{border-color:#b26a00;color:#b26a00}
     .grade-compare{font-size:12px;font-weight:600}
     .deal-badge{display:inline-block;align-self:flex-start;width:fit-content;margin:4px 0 2px;padding:2px 7px;border:1px solid #2f7d4f;color:#2f7d4f;font-size:13px;font-weight:700;line-height:1.4}
+    .deal-badge.is-above{border-color:var(--border-strong,var(--border));color:var(--text-soft);font-weight:600}
     .grade-compare.is-cheaper{color:#2f7d4f}
     .grade-compare.is-pricier{color:var(--text-soft)}
     .grade-compare.is-note{color:var(--text-soft);font-weight:400;font-style:italic}
@@ -3852,8 +3853,9 @@
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
       const diff = dealDiff(result, cost);
-      const deal = diff !== null && diff <= -5 && (result.final_output || {}).sold_quality === 'asking'  // 살 수 있는 매물에만
-        ? `<div class="deal-badge" title="${escapeHtml(ec('vs_grade_cheaper', { p: String(-diff) }))}">${escapeHtml(ec('deal_below', { p: String(-diff) }))}</div>` : '';
+      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
+      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
+        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
       return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${deal}${original}${gradeRow}${landed}</div>`;
     }
 
@@ -4141,6 +4143,7 @@
       grade_market: { ko: '시세 ({grade} 기준)', en: 'Market price ({grade})', ja: '相場（{grade}基準）', 'zh-Hans': '行情（{grade}）', 'zh-Hant': '行情（{grade}）', pt: 'Preço de mercado ({grade})', es: 'Precio de mercado ({grade})', de: 'Marktpreis ({grade})', it: 'Prezzo di mercato ({grade})' },
       vs_grade_cheaper: { ko: '같은 등급 시세보다 {p}% 쌈', en: '{p}% below the market price for this grade', ja: '同ランク相場より{p}%安い', 'zh-Hans': '比同级行情低 {p}%', 'zh-Hant': '比同級行情低 {p}%', pt: '{p}% abaixo do preço de mercado deste grau', es: '{p}% por debajo del precio de mercado de este grado', de: '{p} % unter dem Marktpreis für diesen Zustand', it: '{p}% sotto il prezzo di mercato di questo grado' },
       deal_below: { ko: '시세보다 {p}% 쌈', en: '{p}% below market', ja: '相場より{p}%安い', 'zh-Hans': '低于行情 {p}%', 'zh-Hant': '低於行情 {p}%', pt: '{p}% abaixo do mercado', es: '{p}% bajo el mercado', de: '{p}% unter Marktwert', it: '{p}% sotto il mercato' },
+      deal_above: { ko: '시세보다 {p}% 비쌈', en: '{p}% above market', ja: '相場より{p}%高い', 'zh-Hans': '高于行情 {p}%', 'zh-Hant': '高於行情 {p}%', pt: '{p}% acima do mercado', es: '{p}% sobre el mercado', de: '{p}% über Marktwert', it: '{p}% sopra il mercato' },
       vs_grade_pricier: { ko: '같은 등급 시세보다 {p}% 비쌈', en: '{p}% above the market price for this grade', ja: '同ランク相場より{p}%高い', 'zh-Hans': '比同级行情高 {p}%', 'zh-Hant': '比同級行情高 {p}%', pt: '{p}% acima do preço de mercado deste grau', es: '{p}% por encima del precio de mercado de este grado', de: '{p} % über dem Marktpreis für diesen Zustand', it: '{p}% sopra il prezzo di mercato di questo grado' },
       note_price_inferred: { ko: '제목에 구분 표기가 없어 가격대로 모델을 추정함', en: 'Model inferred from price — the title does not say which version', ja: 'タイトルに区別表記がなく価格帯からモデルを推定', 'zh-Hans': '标题未注明版本，按价格区间推断型号', 'zh-Hant': '標題未註明版本，依價格區間推斷型號', pt: 'Modelo deduzido pelo preço — o título não indica a versão', es: 'Modelo deducido por el precio: el título no indica la versión', de: 'Modell aus dem Preis abgeleitet – der Titel nennt die Version nicht', it: 'Modello dedotto dal prezzo: il titolo non indica la versione' },
       note_too_cheap: { ko: '시세보다 지나치게 싸 시세 계산에서 뺌 (부품·액세서리일 수 있음)', en: 'Far below the market price, left out of the price — may be a part or accessory', ja: '相場より極端に安いため相場計算から除外（部品・アクセサリーの可能性）', 'zh-Hans': '远低于行情，未计入行情（可能是零件或配件）', 'zh-Hant': '遠低於行情，未計入行情（可能是零件或配件）', pt: 'Muito abaixo do preço de mercado, fora do cálculo — pode ser peça ou acessório', es: 'Muy por debajo del precio de mercado, fuera del cálculo: puede ser una pieza o accesorio', de: 'Weit unter dem Marktpreis, nicht eingerechnet – evtl. Ersatzteil oder Zubehör', it: 'Molto sotto il prezzo di mercato, escluso dal calcolo: può essere un ricambio o accessorio' },
@@ -4398,11 +4401,9 @@
       const title = result.grade_basis === 'text' ? ec('grade_basis_text') : result.grade_basis === 'image' ? ec('grade_basis_image') : String(result.condition || '');
       let compare = '';
       const note = (result.final_output || {}).entity_note;
-      const diff = dealDiff(result, cost);
+      // 시세 대비 %는 가격 바로 아래 한 곳에만 (2026-11-07 사장님: 초록 네모와 작은 글씨가 섞여 보임)
       if(note === 'too_cheap' || note === 'set'){
         compare = `<span class="grade-compare is-note">${escapeHtml(ec(note === 'set' ? 'note_set' : 'note_too_cheap'))}</span>`;
-      } else if(diff !== null && diff >= 3){
-        compare = `<span class="grade-compare is-pricier">${escapeHtml(ec('vs_grade_pricier', { p: String(diff) }))}</span>`;
       }
       if(note === 'price_inferred') compare += `<span class="grade-compare is-note">${escapeHtml(ec('note_price_inferred'))}</span>`;
       return `<div class="result-grade-row"><span class="grade-chip grade-${escapeHtml(grade)}" title="${escapeHtml(title)}">${escapeHtml(gradeLabel(grade))}</span>${compare}</div>`;
