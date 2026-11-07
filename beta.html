@@ -1982,9 +1982,12 @@
         quiz_see_model: { ko: '{name} 시세 보기', en: 'See {name} prices', ja: '{name} の相場を見る', 'zh-Hans': '查看 {name} 行情', 'zh-Hant': '查看 {name} 行情', pt: 'Ver preços de {name}', es: 'Ver precios de {name}', de: '{name}-Preise ansehen', it: 'Vedi prezzi di {name}' },
         quiz_lv1: { ko: '입문자', en: 'Curious', ja: 'ビギナー', 'zh-Hans': '好奇者', 'zh-Hant': '好奇者', pt: 'Curioso', es: 'Curioso', de: 'Neugierig', it: 'Curioso' },
         quiz_lv2: { ko: '애호가', en: 'Enthusiast', ja: '愛好家', 'zh-Hans': '爱好者', 'zh-Hant': '愛好者', pt: 'Entusiasta', es: 'Entusiasta', de: 'Enthusiast', it: 'Appassionato' },
-        quiz_lv3: { ko: '컬렉터', en: 'Collector', ja: 'コレクター', 'zh-Hans': '收藏家', 'zh-Hant': '收藏家', pt: 'Colecionador', es: 'Coleccionista', de: 'Sammler', it: 'Collezionista' },
-        quiz_lv4: { ko: '전문가', en: 'Expert', ja: 'エキスパート', 'zh-Hans': '专家', 'zh-Hant': '專家', pt: 'Especialista', es: 'Experto', de: 'Experte', it: 'Esperto' },
-        quiz_lv5: { ko: '베츨라 마스터', en: 'Wetzlar Master', ja: 'ヴェッツラー・マスター', 'zh-Hans': '韦茨拉大师', 'zh-Hant': '韋茨拉大師', pt: 'Mestre de Wetzlar', es: 'Maestro de Wetzlar', de: 'Wetzlar-Meister', it: 'Maestro di Wetzlar' },
+        quiz_lv3: { ko: '실사용자', en: 'Shooter', ja: 'シューター', 'zh-Hans': '实拍玩家', 'zh-Hant': '實拍玩家', pt: 'Fotógrafo', es: 'Fotógrafo', de: 'Fotograf', it: 'Fotografo' },
+        quiz_lv4: { ko: '컬렉터', en: 'Collector', ja: 'コレクター', 'zh-Hans': '收藏家', 'zh-Hant': '收藏家', pt: 'Colecionador', es: 'Coleccionista', de: 'Sammler', it: 'Collezionista' },
+        quiz_lv5: { ko: '전문가', en: 'Expert', ja: 'エキスパート', 'zh-Hans': '专家', 'zh-Hant': '專家', pt: 'Especialista', es: 'Experto', de: 'Experte', it: 'Esperto' },
+        quiz_lv6: { ko: '감정가', en: 'Connoisseur', ja: '目利き', 'zh-Hans': '鉴赏家', 'zh-Hant': '鑑賞家', pt: 'Conhecedor', es: 'Conocedor', de: 'Kenner', it: 'Intenditore' },
+        quiz_lv7: { ko: '베츨라 마스터', en: 'Wetzlar Master', ja: 'ヴェッツラー・マスター', 'zh-Hans': '韦茨拉大师', 'zh-Hant': '韋茨拉大師', pt: 'Mestre de Wetzlar', es: 'Maestro de Wetzlar', de: 'Wetzlar-Meister', it: 'Maestro di Wetzlar' },
+        quiz_done_today: { ko: '오늘 테스트는 끝났어요. 내일 새 문제로 다시 도전하세요.', en: 'You’ve taken today’s test. New questions tomorrow.', ja: '今日のテストは終わりました。明日また新しい問題で。', 'zh-Hans': '今天的测试已完成，明天再来挑战新题。', 'zh-Hant': '今天的測驗已完成，明天再來挑戰新題。', pt: 'Você já fez o teste de hoje. Novas perguntas amanhã.', es: 'Ya hiciste el test de hoy. Preguntas nuevas mañana.', de: 'Du hast den heutigen Test gemacht. Morgen gibt es neue Fragen.', it: 'Hai già fatto il test di oggi. Nuove domande domani.' },
         from_price: { ko: '{p}부터', en: 'from {p}', ja: '{p}〜', 'zh-Hans': '{p} 起', 'zh-Hant': '{p} 起', pt: 'a partir de {p}', es: 'desde {p}', de: 'ab {p}', it: 'da {p}' },
         on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
       },
@@ -3389,7 +3392,12 @@
     const qx = (key, vars = {}) => { let text = ux(`home.${key}`, key); Object.entries(vars).forEach(([k, v]) => { text = text.split(`{${k}}`).join(v); }); return text; };
     // 매니아만 아는 것 (2026-11-07 사장님: 가격 문제 말고 별칭·더블 스트로크·기념 바디 등)
     const QUIZ_PLAN = [['variant', 2], ['feature', 2], ['variant', 2], ['variant', 2], ['feature', 2], ['variant', 3], ['order_no', 2], ['variant', 3], ['code_word', 3], ['code_word', 3]];
-    function quizLevel(right){ return right >= 10 ? 5 : right >= 8 ? 4 : right >= 6 ? 3 : right >= 4 ? 2 : 1; }
+    // 7단계 (2026-11-07 사장님): 0–1 · 2–3 · 4–5 · 6–7 · 8 · 9 · 10개
+    function quizLevel(right){ return right >= 10 ? 7 : right >= 9 ? 6 : right >= 8 ? 5 : right >= 6 ? 4 : right >= 4 ? 3 : right >= 2 ? 2 : 1; }
+    // 하루 한 번 (2026-11-07 사장님): 오늘 문제·진행을 이 브라우저에 저장, 새로고침해도 이어서. 다 풀면 내일까지 결과만
+    function quizToday(){ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; }
+    function quizSaved(){ try{ const v = JSON.parse(localStorage.getItem('cb_quiz_day') || 'null'); return v && v.date === quizToday() ? v : null; }catch(error){ return null; } }
+    function quizSave(){ try{ localStorage.setItem('cb_quiz_day', JSON.stringify({ date: quizToday(), list: quizState.list, index: quizState.index, right: quizState.right, answered: quizState.answered, pick: quizState.pick })); }catch(error){} }
     function quizBest(){ try{ return JSON.parse(localStorage.getItem('cb_quiz_best') || 'null'); }catch(error){ return null; } }
     function renderQuizBest(){
       const el = document.getElementById('quiz-best');
@@ -3444,10 +3452,9 @@
         body.innerHTML = `
           <div class="quiz-top"><span>${escapeHtml(qx('quiz_title'))}</span></div>
           <p class="quiz-level" id="quiz-question">${escapeHtml(qx('quiz_result', { n: String(level), name: qx(`quiz_lv${level}`) }))}</p>
-          <p>${escapeHtml(qx('quiz_score', { r: String(quizState.right), t: String(total) }))}</p>
+          <p>${escapeHtml(qx('quiz_score', { r: String(quizState.right), t: String(total) }))} · ${escapeHtml(qx('quiz_done_today'))}</p>
           <p class="quiz-feedback" id="quiz-share-status" role="status"></p>
           <div class="quiz-actions">
-            <button type="button" class="ghost-button" data-quiz-again>${escapeHtml(qx('quiz_again'))}</button>
             <button type="button" class="search-button" data-quiz-share data-level="${level}">${escapeHtml(qx('quiz_share'))}</button>
           </div>`;
         return;
@@ -3469,13 +3476,15 @@
         <div class="quiz-feedback" role="status"></div>
         <div class="quiz-actions" hidden><button type="button" class="search-button" data-quiz-next>${escapeHtml(qx('quiz_next'))}</button></div>`;
     }
-    function answerQuiz(pick){
+    function answerQuiz(pick, restoring = false){
       if(quizState.answered) return;
       quizState.answered = true;
       const q = quizState.list[quizState.index];
       const labels = quizLabels(q);
       const right = pick === q.answer;
-      if(right) quizState.right += 1;
+      if(right && !restoring) quizState.right += 1;
+      quizState.pick = pick;
+      if(!restoring) quizSave();
       const body = document.getElementById('quiz-body');
       body.querySelectorAll('[data-quiz-pick]').forEach(button => {
         const i = Number(button.dataset.quizPick);
@@ -3492,7 +3501,15 @@
     }
     function openQuiz(){
       if(!quizState.bank || !quizState.bank.length) return;
-      Object.assign(quizState, { list: pickQuiz(), index: 0, right: 0, answered: false });
+      const saved = quizSaved();
+      if(saved && Array.isArray(saved.list) && saved.list.length){
+        Object.assign(quizState, { list: saved.list, index: saved.index || 0, right: saved.right || 0, answered: false });
+        renderQuiz();
+        if(saved.answered && quizState.index < quizState.list.length) answerQuiz(saved.pick, true);  // 답한 채로 새로고침 → 답 보인 상태로
+        return;
+      }
+      Object.assign(quizState, { list: pickQuiz(), index: 0, right: 0, answered: false, pick: null });
+      quizSave();
       renderQuiz();
     }
     function bindQuiz(){
@@ -3502,8 +3519,7 @@
         const target = event.target.closest('button');
         if(!target) return;
         if(target.dataset.quizPick !== undefined) return answerQuiz(Number(target.dataset.quizPick));
-        if(target.hasAttribute('data-quiz-next')){ quizState.index += 1; quizState.answered = false; renderQuiz(); return box.querySelector('[data-quiz-pick], [data-quiz-share]')?.focus({ preventScroll: true }); }
-        if(target.hasAttribute('data-quiz-again')) return openQuiz();
+        if(target.hasAttribute('data-quiz-next')){ quizState.index += 1; quizState.answered = false; quizState.pick = null; quizSave(); renderQuiz(); return box.querySelector('[data-quiz-pick], [data-quiz-share]')?.focus({ preventScroll: true }); }
         if(target.dataset.quizEntity){ return selectEntity(target.dataset.quizEntity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false }); }
         if(target.hasAttribute('data-quiz-share')){
           const level = Number(target.dataset.level);
