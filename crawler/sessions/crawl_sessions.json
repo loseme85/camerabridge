@@ -1,253 +1,5 @@
 [
   {
-    "start_time": "2026-10-12 15:10:48",
-    "end_time": "2026-10-12 15:10:50",
-    "seconds": 78.4,
-    "new_items": 7,
-    "total_items": 10708,
-    "site_counts": {
-      "사진집": 345,
-      "라이카스토어 충무로": 3069,
-      "장씨카메라": 4075,
-      "Ffordes (영국)": 133,
-      "Leica Store Miami": 48,
-      "Kamerastore (핀란드)": 720,
-      "기타무라 (일본)": 840,
-      "M & K Kamera (홍콩)": 708,
-      "Leica Store France (프랑스)": 286,
-      "Leica Store Singapore (싱가포르)": 26,
-      "Newoldcamera (이탈리아)": 437,
-      "Camtec Photo (캐나다)": 21
-    },
-    "events": {
-      "new": 7,
-      "sold": 5,
-      "gone": 1,
-      "price": 19
-    },
-    "sources": [
-      {
-        "site": "사진집",
-        "coverage": "active_zone",
-        "pages": 11,
-        "seconds": 7.7,
-        "status": "ok",
-        "rows": 345,
-        "active": 335,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 1,
-        "new": 5,
-        "changed": 8
-      },
-      {
-        "site": "라이카스토어 충무로",
-        "coverage": "active_zone",
-        "pages": 11,
-        "seconds": 11.5,
-        "status": "ok",
-        "rows": 3069,
-        "active": 590,
-        "carried": 1984,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 2
-      },
-      {
-        "site": "장씨카메라",
-        "coverage": "active_zone",
-        "pages": 8,
-        "seconds": 4.9,
-        "status": "ok",
-        "rows": 4075,
-        "active": 44,
-        "carried": 3918,
-        "gone": 0,
-        "left_active": 0,
-        "new": 1,
-        "changed": 1
-      },
-      {
-        "site": "Ffordes (영국)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 77.1,
-        "status": "ok",
-        "rows": 133,
-        "active": 133,
-        "carried": 1,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "Leica Store Miami",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 0.7,
-        "status": "ok",
-        "rows": 48,
-        "active": 48,
-        "carried": 1,
-        "gone": 1,
-        "left_active": 0,
-        "new": 0,
-        "changed": 1
-      },
-      {
-        "site": "Kamerastore (핀란드)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 11.3,
-        "status": "ok",
-        "rows": 720,
-        "active": 720,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "기타무라 (일본)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 8.8,
-        "status": "ok",
-        "rows": 840,
-        "active": 840,
-        "carried": 10,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "M & K Kamera (홍콩)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 9.0,
-        "status": "ok",
-        "rows": 708,
-        "active": 708,
-        "carried": 2,
-        "gone": 0,
-        "left_active": 0,
-        "new": 1,
-        "changed": 20
-      },
-      {
-        "site": "Leica Store France (프랑스)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 23.8,
-        "status": "ok",
-        "rows": 286,
-        "active": 266,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "Leica Store Singapore (싱가포르)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 2.6,
-        "status": "ok",
-        "rows": 26,
-        "active": 26,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "Newoldcamera (이탈리아)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 43.0,
-        "status": "ok",
-        "rows": 437,
-        "active": 437,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      },
-      {
-        "site": "Camtec Photo (캐나다)",
-        "coverage": "full",
-        "pages": null,
-        "seconds": 21.3,
-        "status": "ok",
-        "rows": 21,
-        "active": 21,
-        "carried": 0,
-        "gone": 0,
-        "left_active": 0,
-        "new": 0,
-        "changed": 0
-      }
-    ],
-    "new_listings": [
-      {
-        "상품명": "7Artisans M 35mm F2 Silver",
-        "site": "사진집",
-        "가격": "220,000원",
-        "통화": "KRW",
-        "링크": "https://www.sazinzibb.com/product/7artisans-m-35mm-f2-silver/17122/category/27/display/1/"
-      },
-      {
-        "상품명": "Leica SL 50mm f1.4 Summilux ASPH Black",
-        "site": "사진집",
-        "가격": "4,000,000원",
-        "통화": "KRW",
-        "링크": "https://www.sazinzibb.com/product/leica-sl-50mm-f14-summilux-asph-black/17060/category/27/display/1/"
-      },
-      {
-        "상품명": "Luigi's Leather Hand Strap Black",
-        "site": "사진집",
-        "가격": "40,000원",
-        "통화": "KRW",
-        "링크": "https://www.sazinzibb.com/product/luigis-leather-hand-strap-black/17120/category/27/display/1/"
-      },
-      {
-        "상품명": "Leica M 50mm f0.95 Noctilux ASPH 6bit Black",
-        "site": "사진집",
-        "가격": "11,500,000원",
-        "통화": "KRW",
-        "링크": "https://www.sazinzibb.com/product/leica-m-50mm-f095-noctilux-asph-6bit-black/17123/category/28/display/1/"
-      },
-      {
-        "상품명": "Light Lens Lab M 50mm f2 (Elcan) Black",
-        "site": "사진집",
-        "가격": "950,000원",
-        "통화": "KRW",
-        "링크": "https://www.sazinzibb.com/product/light-lens-lab-m-50mm-f2-elcan-black/17121/category/28/display/1/"
-      },
-      {
-        "상품명": "LEICA MONOCHROM Typ246 sn.4830",
-        "site": "장씨카메라",
-        "가격": "5,800,000원",
-        "통화": "KRW",
-        "링크": "https://j-camera.com/product/detail.html?product_no=12161&cate_no=358&display_group=1"
-      },
-      {
-        "상품명": "Brand New Leica M11-P 20211 Black Digital Rangefinder Camera 20211",
-        "site": "M & K Kamera (홍콩)",
-        "가격": "HK$62,760",
-        "통화": "HKD",
-        "링크": "https://mkkcamera.com/products/brand-new-leica-m11-p-20211-black-digital-rangefinder-camera-20211-20211"
-      }
-    ]
-  },
-  {
     "start_time": "2026-10-13 00:43:49",
     "end_time": "2026-10-13 00:43:51",
     "seconds": 84.8,
@@ -166817,6 +166569,5175 @@
         "가격": "€750",
         "통화": "EUR",
         "링크": "https://www.cameraobscuraelburg.nl/product/futura-evar-50mm-f2-converted-to-leica-m-2/"
+      }
+    ]
+  },
+  {
+    "start_time": "2026-11-07 09:31:18",
+    "end_time": "2026-11-07 09:31:22",
+    "seconds": 726.8,
+    "new_items": 503,
+    "total_items": 22815,
+    "site_counts": {
+      "사진집": 327,
+      "라이카스토어 충무로": 3054,
+      "장씨카메라": 4103,
+      "Ffordes (영국)": 126,
+      "Leica Store Miami": 50,
+      "Kamerastore (핀란드)": 761,
+      "기타무라 (일본)": 749,
+      "M & K Kamera (홍콩)": 702,
+      "Leica Store France (프랑스)": 280,
+      "Leica Store Singapore (싱가포르)": 19,
+      "Newoldcamera (이탈리아)": 461,
+      "Camtec Photo (캐나다)": 20,
+      "Aperture (영국)": 81,
+      "Wex Photo Video (영국)": 62,
+      "Harrison Cameras (영국)": 46,
+      "Camera West (미국)": 634,
+      "Peter Loy (영국)": 238,
+      "Lucky Camera (일본)": 212,
+      "카메라노나니와 (일본)": 1013,
+      "Calumet (독일)": 127,
+      "Tamarkin Camera (미국)": 27,
+      "Camera Electronic (호주)": 67,
+      "Leica Classic (오스트리아)": 367,
+      "Leica Classic (영국)": 164,
+      "Leica Classic (독일)": 343,
+      "Leica Classic (스위스)": 77,
+      "Leica Classic (스페인)": 56,
+      "Leica Classic (포르투갈)": 54,
+      "Leica Classic (이탈리아)": 111,
+      "Leica Classic (덴마크)": 16,
+      "Leica Classic (미국)": 50,
+      "Leica Classic (아랍에미리트)": 5,
+      "Leica Classic (말레이시아)": 6,
+      "Akasaka Camera (일본)": 57,
+      "Glazers Camera (미국)": 65,
+      "Nivo Schweitzer (네덜란드)": 33,
+      "fotohandel.de (독일)": 45,
+      "三宝カメラ (일본)": 50,
+      "Leica Store Heidelberg (독일)": 51,
+      "Foto Köster (독일)": 55,
+      "Rangefinder (홍콩)": 34,
+      "MF Camera (미국)": 48,
+      "Classic Connection (미국)": 177,
+      "The Classic Camera (영국)": 77,
+      "Japan Camera Hunter (일본)": 64,
+      "국민카메라": 261,
+      "무한카메라": 594,
+      "Lecuit (룩셈부르크)": 109,
+      "カメラの大貫 (일본)": 372,
+      "가산카메라": 194,
+      "喜久屋カメラ (일본)": 32,
+      "Roter Punkt (독일)": 74,
+      "Photografica (덴마크)": 114,
+      "SHphoto (독일)": 339,
+      "Fotohandel Delfshaven (네덜란드)": 353,
+      "Camera Tweedehands (네덜란드)": 117,
+      "One Of Many Cameras (덴마크)": 168,
+      "Foto Ottica Cavour (이탈리아)": 188,
+      "Photo Suffren (프랑스)": 56,
+      "Cardinal Camera Used (미국)": 280,
+      "Five Star Camera (일본)": 68,
+      "Leica Store Amsterdam (네덜란드)": 49,
+      "K-Camera": 165,
+      "KOMEHYO (일본)": 50,
+      "トップカメラ (일본)": 83,
+      "Leica Store Konstanz (독일)": 289,
+      "M&S Materiale Fotografico (이탈리아)": 220,
+      "Leica Store Poland (폴란드)": 30,
+      "Photo Warehouse (뉴질랜드)": 77,
+      "Howard Parker (영국)": 48,
+      "Kenmore Camera (미국)": 38,
+      "Used.cl (칠레)": 22,
+      "Foto Dotti (이탈리아)": 697,
+      "The Rangefinder (캐나다)": 11,
+      "Leica Store Australia (호주)": 14,
+      "Leica Store Malaysia (말레이시아)": 18,
+      "Image Foto (덴마크)": 11,
+      "J-カメラ (일본)": 740,
+      "富士越カメラ (일본)": 249,
+      "カメラの大林 (일본)": 87,
+      "used-photo.de (독일)": 71,
+      "일광카메라": 352,
+      "신성카메라": 14,
+      "강산 중고샵": 141,
+      "gebrauchtkameras.de (독일)": 88,
+      "三葉堂寫眞機店 (일본)": 2,
+      "Au Vieux Format (프랑스)": 4,
+      "Foto Curatolo (이탈리아)": 2,
+      "Midwest Photo (미국)": 1,
+      "2nd BASE (일본)": 7,
+      "THE CAMERA": 112,
+      "Scandinavian Photo (스웨덴)": 5,
+      "잇츠카메라": 35,
+      "UA카메라": 34,
+      "Film Camera Tokyo (일본)": 19,
+      "Foto Sipkes (네덜란드)": 21,
+      "Foto.no (노르웨이)": 8,
+      "Chiswick Camera Centre (영국)": 1,
+      "Camera Obscura Elburg (네덜란드)": 64,
+      "Foto Görlitz (독일)": 18,
+      "メディアジョイカメラ (일본)": 11,
+      "銀座カツミ堂 (일본)": 18,
+      "マツバラ光機 (일본)": 162,
+      "Foto Pazdera (체코)": 16,
+      "AdoPhoto (그리스)": 6,
+      "Pacific Rim Camera (미국)": 144,
+      "カメラコレクション (일본)": 49,
+      "サンライズカメラ (일본)": 19,
+      "モリッツ (일본)": 10
+    },
+    "events": {
+      "new": 503,
+      "gone": 72,
+      "sold": 2,
+      "price": 77
+    },
+    "sources": [
+      {
+        "site": "사진집",
+        "coverage": "active_zone",
+        "pages": 11,
+        "seconds": 6.8,
+        "status": "ok",
+        "rows": 327,
+        "active": 322,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "라이카스토어 충무로",
+        "coverage": "active_zone",
+        "pages": 12,
+        "seconds": 10.3,
+        "status": "ok",
+        "rows": 3054,
+        "active": 606,
+        "carried": 1868,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "장씨카메라",
+        "coverage": "active_zone",
+        "pages": 9,
+        "seconds": 4.3,
+        "status": "ok",
+        "rows": 4103,
+        "active": 58,
+        "carried": 3926,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Ffordes (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 55.4,
+        "status": "ok",
+        "rows": 126,
+        "active": 126,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Miami",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.3,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 14,
+        "changed": 14
+      },
+      {
+        "site": "Kamerastore (핀란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 12.3,
+        "status": "ok",
+        "rows": 761,
+        "active": 761,
+        "carried": 7,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "기타무라 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.8,
+        "status": "ok",
+        "rows": 749,
+        "active": 749,
+        "carried": 6,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "M & K Kamera (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.4,
+        "status": "ok",
+        "rows": 702,
+        "active": 702,
+        "carried": 0,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Leica Store France (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 51.7,
+        "status": "ok",
+        "rows": 280,
+        "active": 271,
+        "carried": 7,
+        "gone": 6,
+        "left_active": 0,
+        "new": 6,
+        "changed": 13
+      },
+      {
+        "site": "Leica Store Singapore (싱가포르)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.8,
+        "status": "ok",
+        "rows": 19,
+        "active": 19,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Newoldcamera (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 43.0,
+        "status": "ok",
+        "rows": 461,
+        "active": 461,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camtec Photo (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 21.3,
+        "status": "ok",
+        "rows": 20,
+        "active": 20,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Aperture (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 13.6,
+        "status": "ok",
+        "rows": 81,
+        "active": 81,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Wex Photo Video (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.4,
+        "status": "ok",
+        "rows": 62,
+        "active": 62,
+        "carried": 1,
+        "gone": 4,
+        "left_active": 0,
+        "new": 0,
+        "changed": 4
+      },
+      {
+        "site": "Harrison Cameras (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 38.1,
+        "status": "ok",
+        "rows": 46,
+        "active": 44,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera West (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 48.0,
+        "status": "ok",
+        "rows": 634,
+        "active": 359,
+        "carried": 5,
+        "gone": 0,
+        "left_active": 0,
+        "new": 31,
+        "changed": 31
+      },
+      {
+        "site": "Peter Loy (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.2,
+        "status": "ok",
+        "rows": 238,
+        "active": 238,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "Lucky Camera (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 100.4,
+        "status": "ok",
+        "rows": 212,
+        "active": 212,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "카메라노나니와 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 47.5,
+        "status": "ok",
+        "rows": 1013,
+        "active": 1013,
+        "carried": 2,
+        "gone": 2,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Calumet (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 245.6,
+        "status": "ok",
+        "rows": 127,
+        "active": 127,
+        "carried": 1,
+        "gone": 4,
+        "left_active": 0,
+        "new": 2,
+        "changed": 6
+      },
+      {
+        "site": "Tamarkin Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 54.9,
+        "status": "ok",
+        "rows": 27,
+        "active": 27,
+        "carried": 1,
+        "gone": 1,
+        "left_active": 0,
+        "new": 1,
+        "changed": 2
+      },
+      {
+        "site": "Camera Electronic (호주)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.3,
+        "status": "ok",
+        "rows": 67,
+        "active": 67,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Leica Classic (오스트리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 31.5,
+        "status": "ok",
+        "rows": 367,
+        "active": 367,
+        "carried": 1,
+        "gone": 4,
+        "left_active": 0,
+        "new": 2,
+        "changed": 6
+      },
+      {
+        "site": "Leica Classic (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 22.5,
+        "status": "ok",
+        "rows": 164,
+        "active": 164,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 21.9,
+        "status": "ok",
+        "rows": 343,
+        "active": 343,
+        "carried": 2,
+        "gone": 6,
+        "left_active": 0,
+        "new": 0,
+        "changed": 6
+      },
+      {
+        "site": "Leica Classic (스위스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 77,
+        "active": 77,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Leica Classic (스페인)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 56,
+        "active": 56,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (포르투갈)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 54,
+        "active": 54,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 111,
+        "active": 111,
+        "carried": 1,
+        "gone": 2,
+        "left_active": 0,
+        "new": 2,
+        "changed": 4
+      },
+      {
+        "site": "Leica Classic (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 16,
+        "active": 16,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (아랍에미리트)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 5,
+        "active": 5,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Classic (말레이시아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.0,
+        "status": "ok",
+        "rows": 6,
+        "active": 6,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Akasaka Camera (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 28.7,
+        "status": "ok",
+        "rows": 57,
+        "active": 57,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Glazers Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.0,
+        "status": "suspect",
+        "reason": "판매 중 65 → 21",
+        "kept": 65
+      },
+      {
+        "site": "Nivo Schweitzer (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 7.0,
+        "status": "ok",
+        "rows": 33,
+        "active": 30,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "fotohandel.de (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 18.3,
+        "status": "ok",
+        "rows": 45,
+        "active": 45,
+        "carried": 1,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "三宝カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.0,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Heidelberg (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.8,
+        "status": "ok",
+        "rows": 51,
+        "active": 51,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Foto Köster (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 215.0,
+        "status": "ok",
+        "rows": 55,
+        "active": 55,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 2
+      },
+      {
+        "site": "Rangefinder (홍콩)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.0,
+        "status": "ok",
+        "rows": 34,
+        "active": 34,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "MF Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 4.0,
+        "status": "ok",
+        "rows": 48,
+        "active": 48,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 3,
+        "changed": 3
+      },
+      {
+        "site": "Classic Connection (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 26.2,
+        "status": "ok",
+        "rows": 177,
+        "active": 177,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "The Classic Camera (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 25.2,
+        "status": "ok",
+        "rows": 77,
+        "active": 77,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Japan Camera Hunter (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.9,
+        "status": "ok",
+        "rows": 64,
+        "active": 64,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "국민카메라",
+        "coverage": "full",
+        "pages": 10,
+        "seconds": 6.6,
+        "status": "ok",
+        "rows": 261,
+        "active": 231,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "무한카메라",
+        "coverage": "full",
+        "pages": 54,
+        "seconds": 20.9,
+        "status": "ok",
+        "rows": 594,
+        "active": 123,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Lecuit (룩셈부르크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.8,
+        "status": "ok",
+        "rows": 109,
+        "active": 105,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 1
+      },
+      {
+        "site": "カメラの大貫 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 21.1,
+        "status": "ok",
+        "rows": 372,
+        "active": 372,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "가산카메라",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 34.9,
+        "status": "ok",
+        "rows": 194,
+        "active": 160,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "喜久屋カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.1,
+        "status": "ok",
+        "rows": 32,
+        "active": 32,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Roter Punkt (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 8.5,
+        "status": "ok",
+        "rows": 74,
+        "active": 74,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Photografica (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 4.4,
+        "status": "ok",
+        "rows": 114,
+        "active": 114,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "SHphoto (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 43.8,
+        "status": "ok",
+        "rows": 339,
+        "active": 339,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Fotohandel Delfshaven (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 52.8,
+        "status": "ok",
+        "rows": 353,
+        "active": 353,
+        "carried": 0,
+        "gone": 24,
+        "left_active": 0,
+        "new": 0,
+        "changed": 24
+      },
+      {
+        "site": "Camera Tweedehands (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 14.4,
+        "status": "ok",
+        "rows": 117,
+        "active": 117,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "One Of Many Cameras (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 59.6,
+        "status": "ok",
+        "rows": 168,
+        "active": 168,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Ottica Cavour (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 19.4,
+        "status": "ok",
+        "rows": 188,
+        "active": 188,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 3,
+        "changed": 3
+      },
+      {
+        "site": "Photo Suffren (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 7.5,
+        "status": "ok",
+        "rows": 56,
+        "active": 56,
+        "carried": 0,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "Cardinal Camera Used (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 56.2,
+        "status": "ok",
+        "rows": 280,
+        "active": 280,
+        "carried": 1,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 9
+      },
+      {
+        "site": "Five Star Camera (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 7.9,
+        "status": "ok",
+        "rows": 68,
+        "active": 68,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 5
+      },
+      {
+        "site": "Leica Store Amsterdam (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 120.9,
+        "status": "ok",
+        "rows": 49,
+        "active": 49,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "K-Camera",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 27.7,
+        "status": "ok",
+        "rows": 165,
+        "active": 162,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "KOMEHYO (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 6.6,
+        "status": "ok",
+        "rows": 50,
+        "active": 50,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "トップカメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 4.0,
+        "status": "ok",
+        "rows": 83,
+        "active": 83,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Konstanz (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 26.4,
+        "status": "ok",
+        "rows": 289,
+        "active": 289,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "M&S Materiale Fotografico (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 10.6,
+        "status": "ok",
+        "rows": 220,
+        "active": 211,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Poland (폴란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 93.8,
+        "status": "ok",
+        "rows": 30,
+        "active": 29,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Photo Warehouse (뉴질랜드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 120.7,
+        "status": "ok",
+        "rows": 77,
+        "active": 77,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Howard Parker (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.8,
+        "status": "ok",
+        "rows": 48,
+        "active": 35,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Kenmore Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 9.2,
+        "status": "ok",
+        "rows": 38,
+        "active": 38,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 16
+      },
+      {
+        "site": "Used.cl (칠레)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 4.8,
+        "status": "ok",
+        "rows": 22,
+        "active": 21,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Dotti (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 113.7,
+        "status": "ok",
+        "rows": 697,
+        "active": 697,
+        "carried": 2,
+        "gone": 0,
+        "left_active": 0,
+        "new": 1,
+        "changed": 48
+      },
+      {
+        "site": "The Rangefinder (캐나다)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 7.4,
+        "status": "ok",
+        "rows": 11,
+        "active": 11,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Leica Store Malaysia (말레이시아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.4,
+        "status": "ok",
+        "rows": 18,
+        "active": 18,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Image Foto (덴마크)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 3.7,
+        "status": "ok",
+        "rows": 11,
+        "active": 11,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "J-カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 40.2,
+        "status": "failed",
+        "reason": "J-カメラ 1페이지 못 읽음: HTTPSConnectionPool(host='j-camera.net', port=443): Max retries exceeded with url: /listp.php?mk%5B%5D=14&sh%5B%5D=aikoudou&sh%5B%5D=esakura&sh%5B%5D=irohas&sh%5B%5D=Inherit&sh%5B%5D=",
+        "kept": 740
+      },
+      {
+        "site": "富士越カメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 16.3,
+        "status": "ok",
+        "rows": 249,
+        "active": 249,
+        "carried": 0,
+        "gone": 5,
+        "left_active": 0,
+        "new": 0,
+        "changed": 5
+      },
+      {
+        "site": "カメラの大林 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 17.4,
+        "status": "ok",
+        "rows": 87,
+        "active": 87,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "used-photo.de (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 11.2,
+        "status": "ok",
+        "rows": 71,
+        "active": 71,
+        "carried": 1,
+        "gone": 1,
+        "left_active": 0,
+        "new": 0,
+        "changed": 1
+      },
+      {
+        "site": "일광카메라",
+        "coverage": "full",
+        "pages": 33,
+        "seconds": 15.3,
+        "status": "ok",
+        "rows": 352,
+        "active": 32,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "신성카메라",
+        "coverage": "full",
+        "pages": 2,
+        "seconds": 4.0,
+        "status": "ok",
+        "rows": 14,
+        "active": 13,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "강산 중고샵",
+        "coverage": "full",
+        "pages": 13,
+        "seconds": 6.2,
+        "status": "ok",
+        "rows": 141,
+        "active": 52,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "gebrauchtkameras.de (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 214.8,
+        "status": "ok",
+        "rows": 88,
+        "active": 88,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "三葉堂寫眞機店 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 11.1,
+        "status": "ok",
+        "rows": 2,
+        "active": 2,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Au Vieux Format (프랑스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.9,
+        "status": "ok",
+        "rows": 4,
+        "active": 4,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Curatolo (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 7.9,
+        "status": "ok",
+        "rows": 2,
+        "active": 2,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Midwest Photo (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 6.6,
+        "status": "ok",
+        "rows": 1,
+        "active": 1,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "2nd BASE (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.1,
+        "status": "ok",
+        "rows": 7,
+        "active": 7,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "THE CAMERA",
+        "coverage": "full",
+        "pages": 9,
+        "seconds": 6.7,
+        "status": "ok",
+        "rows": 112,
+        "active": 111,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Scandinavian Photo (스웨덴)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.6,
+        "status": "ok",
+        "rows": 5,
+        "active": 5,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "잇츠카메라",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 4.1,
+        "status": "ok",
+        "rows": 35,
+        "active": 27,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "UA카메라",
+        "coverage": "full",
+        "pages": 1,
+        "seconds": 2.0,
+        "status": "ok",
+        "rows": 34,
+        "active": 20,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Film Camera Tokyo (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 11.1,
+        "status": "ok",
+        "rows": 19,
+        "active": 19,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Sipkes (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 13.8,
+        "status": "ok",
+        "rows": 21,
+        "active": 21,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto.no (노르웨이)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 19.3,
+        "status": "ok",
+        "rows": 8,
+        "active": 8,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Chiswick Camera Centre (영국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.8,
+        "status": "ok",
+        "rows": 1,
+        "active": 1,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Camera Obscura Elburg (네덜란드)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 68.5,
+        "status": "ok",
+        "rows": 64,
+        "active": 64,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Foto Görlitz (독일)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.1,
+        "status": "ok",
+        "rows": 18,
+        "active": 18,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 0,
+        "changed": 0
+      },
+      {
+        "site": "Sabatini Fotografia (이탈리아)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.2,
+        "status": "failed",
+        "reason": "Sabatini 분류 240 1쪽 못 읽음: 403 Client Error: Forbidden for url: https://sabatinifotografia.it/wp-json/wc/store/v1/products?category=240&search=leica&per_page=100&page=1",
+        "kept": 0
+      },
+      {
+        "site": "メディアジョイカメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 27.0,
+        "status": "ok",
+        "rows": 11,
+        "active": 11,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 11,
+        "changed": 11
+      },
+      {
+        "site": "銀座カツミ堂 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 1.8,
+        "status": "ok",
+        "rows": 18,
+        "active": 18,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 18,
+        "changed": 18
+      },
+      {
+        "site": "マツバラ光機 (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 34.9,
+        "status": "ok",
+        "rows": 162,
+        "active": 162,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 162,
+        "changed": 162
+      },
+      {
+        "site": "Foto Pazdera (체코)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 44.3,
+        "status": "ok",
+        "rows": 16,
+        "active": 16,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 16,
+        "changed": 16
+      },
+      {
+        "site": "AdoPhoto (그리스)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 22.8,
+        "status": "ok",
+        "rows": 6,
+        "active": 6,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 6,
+        "changed": 6
+      },
+      {
+        "site": "PCH Pro Shop (벨기에)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 0.2,
+        "status": "failed",
+        "reason": "PCH 1페이지 못 읽음: 403 Client Error: Forbidden for url: https://pch.be/fr/occasions/leica.html",
+        "kept": 0
+      },
+      {
+        "site": "Pacific Rim Camera (미국)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 16.6,
+        "status": "ok",
+        "rows": 144,
+        "active": 144,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 144,
+        "changed": 144
+      },
+      {
+        "site": "カメラコレクション (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 4.5,
+        "status": "ok",
+        "rows": 49,
+        "active": 49,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 49,
+        "changed": 49
+      },
+      {
+        "site": "サンライズカメラ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 13.6,
+        "status": "ok",
+        "rows": 19,
+        "active": 19,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 19,
+        "changed": 19
+      },
+      {
+        "site": "モリッツ (일본)",
+        "coverage": "full",
+        "pages": null,
+        "seconds": 2.2,
+        "status": "ok",
+        "rows": 10,
+        "active": 10,
+        "carried": 0,
+        "gone": 0,
+        "left_active": 0,
+        "new": 10,
+        "changed": 10
+      }
+    ],
+    "new_listings": [
+      {
+        "상품명": "Used Leica APO-Summicron-M 50mm f/2 ASPH, black - UVa Filter",
+        "site": "Leica Store Miami",
+        "가격": "$5,895",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-apo-summicron-m-50mm-f-2-asph-black-uva-filter-4"
+      },
+      {
+        "상품명": "Used Leica APO-Summicron-M 90mm f/2 ASPH, black - 6-Bit - UVa Filter",
+        "site": "Leica Store Miami",
+        "가격": "$3,495",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-apo-summicron-m-90mm-f-2-asph-black-6-bit-uva-filter-11"
+      },
+      {
+        "상품명": "Used Leica Finger Loop - Medium",
+        "site": "Leica Store Miami",
+        "가격": "$80",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-finger-loop-medium-27"
+      },
+      {
+        "상품명": "Used Leica Handgrip M11, black",
+        "site": "Leica Store Miami",
+        "가격": "$350",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-handgrip-m11-black-19"
+      },
+      {
+        "상품명": "Used Leica M10 Correction lens II, -3.0 diopter",
+        "site": "Leica Store Miami",
+        "가격": "$135",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-m10-correction-lens-ii-3-0-diopter-4"
+      },
+      {
+        "상품명": "Used Leica M10, black chrome with Extra Battery",
+        "site": "Leica Store Miami",
+        "가격": "$4,795",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-m10-black-chrome-with-extra-battery-4"
+      },
+      {
+        "상품명": "Used Leica M11, black finish - Extra Battery",
+        "site": "Leica Store Miami",
+        "가격": "$6,995",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-m11-black-finish-extra-battery-4"
+      },
+      {
+        "상품명": "Used Leica M11 Protector, cognac",
+        "site": "Leica Store Miami",
+        "가격": "$195",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-m11-protector-cognac-1"
+      },
+      {
+        "상품명": "Used Leica M-Adapter-L, silver",
+        "site": "Leica Store Miami",
+        "가격": "$350",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-m-adapter-l-silver-19"
+      },
+      {
+        "상품명": "Used Leica SL2-S with Extra Battery",
+        "site": "Leica Store Miami",
+        "가격": "$2,295",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-sl2-s-with-extra-battery-3"
+      },
+      {
+        "상품명": "Used Leica Summilux-M 28mm f/1.4 ASPH, black",
+        "site": "Leica Store Miami",
+        "가격": "$5,695",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-summilux-m-28mm-f-1-4-asph-black-16"
+      },
+      {
+        "상품명": "Used Leica Visoflex 2",
+        "site": "Leica Store Miami",
+        "가격": "$795",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-leica-visoflex-41"
+      },
+      {
+        "상품명": "Used Oberwerth Louis M11 Visoflex Leather Camera Bag, Black with Red Stitching",
+        "site": "Leica Store Miami",
+        "가격": "$495",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-oberwerth-louis-m11-visoflex-leather-camera-bag-black-with-red-stitching-1"
+      },
+      {
+        "상품명": "Used Thumbs Up EP-SL2, Black for Leica SL2, SL2-S",
+        "site": "Leica Store Miami",
+        "가격": "$125",
+        "통화": "USD",
+        "링크": "https://leicastoremiami.com/products/used-thumbs-up-ep-sl2-black-for-leica-sl2-sl2-s-12"
+      },
+      {
+        "상품명": "LEICA Q3 43",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€5,690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-q3-43-0"
+      },
+      {
+        "상품명": "Leica SL-3",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€4,990",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-sl-3"
+      },
+      {
+        "상품명": "LEICA IIIc",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€690",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/leica-iiic-2"
+      },
+      {
+        "상품명": "SUPER-VARIO-ELMAR-T 11-23 mm f/3.5-4.5 Asph. (Ex-demo)",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€1,190",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/super-vario-elmar-t-11-23-mm-f35-45-asph"
+      },
+      {
+        "상품명": "TELYT-R 560mm f/6.8",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€590",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/telyt-r-560mm-f68"
+      },
+      {
+        "상품명": "BOBINE CHARGEMENT M5 LEITZ",
+        "site": "Leica Store France (프랑스)",
+        "가격": "€70",
+        "통화": "EUR",
+        "링크": "https://www.leica-camera-france-occasions.com/index%2ephp/en/occasion/bobine-chargement-m5-leitz"
+      },
+      {
+        "상품명": "Leica Viewfinder 21/24/28 Silver 12014",
+        "site": "Camera West (미국)",
+        "가격": "$295",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-viewfinder-21-24-28-silver-12014-boxed"
+      },
+      {
+        "상품명": "Leica 21mm f1.4 Summilux-M ASPH",
+        "site": "Camera West (미국)",
+        "가격": "$4,995",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-21mm-f1-4-summilux-m-asph-boxed-4098720"
+      },
+      {
+        "상품명": "Leica 50mm f0.95 Noctilux-M Asph Black",
+        "site": "Camera West (미국)",
+        "가격": "$7,995",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-50mm-f0-95-noctilux-m-asph-black-boxed-4086015"
+      },
+      {
+        "상품명": "Leica 35mm f1.4 Summilux-M Asph II Black",
+        "site": "Camera West (미국)",
+        "가격": "$3,995",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-35mm-f1-4-summilux-m-asph-ii-black-boxed-4105382"
+      },
+      {
+        "상품명": "Leica 18mm f3.8 Elmarit-M Asph",
+        "site": "Camera West (미국)",
+        "가격": "$2,495",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-18mm-f3-8-elmarit-m-asph-boxed-4088675"
+      },
+      {
+        "상품명": "Leica 75mm f1.4 Summilux-M Germany",
+        "site": "Camera West (미국)",
+        "가격": "$3,795",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-75mm-f1-4-summilux-m-germany-boxed-3837658"
+      },
+      {
+        "상품명": "Leica 90mm f2 Apo Summicron-M Asph",
+        "site": "Camera West (미국)",
+        "가격": "$3,195",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-90mm-f2-apo-summicron-m-asph-3994944"
+      },
+      {
+        "상품명": "Leica 135mm f3.4 APO-Telyt-M",
+        "site": "Camera West (미국)",
+        "가격": "$3,195",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-135mm-f3-4-apo-telyt-m-boxed-3956441"
+      },
+      {
+        "상품명": "Leica 35mm f2 8-Element M3, Case",
+        "site": "Camera West (미국)",
+        "가격": "$2,995",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-35mm-f2-8-element-m3-case-1780856"
+      },
+      {
+        "상품명": "Leica 9cm f2.2 Thambar, Filter",
+        "site": "Camera West (미국)",
+        "가격": "$3,995",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-9cm-f2-2-thambar-filter-shade-283055"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 Summilux-M Asph Silver",
+        "site": "Camera West (미국)",
+        "가격": "$3,195",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-50mm-f1-4-summilux-m-asph-silver-3992772"
+      },
+      {
+        "상품명": "Leica MP 0.85 Silver, Orange Leather",
+        "site": "Camera West (미국)",
+        "가격": "$5,995",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-mp-0-85-silver-orange-leather-boxed-2921648"
+      },
+      {
+        "상품명": "Leica M-P 240 Silver",
+        "site": "Camera West (미국)",
+        "가격": "$3,695",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-m-p-240-silver-boxed-4912755"
+      },
+      {
+        "상품명": "Leica M Monochrom 2600 Act",
+        "site": "Camera West (미국)",
+        "가격": "$2,995",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-m-monochrom-2600-act-boxed-4343866"
+      },
+      {
+        "상품명": "Leica IMFIN Imarect Universal Finder",
+        "site": "Camera West (미국)",
+        "가격": "$150",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-imfin-imarect-universal-finder"
+      },
+      {
+        "상품명": "Leica SOOKY Close Up Attachment Summicron",
+        "site": "Camera West (미국)",
+        "가격": "$75",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-sooky-close-up-attachment-summicron"
+      },
+      {
+        "상품명": "Leica NOOKY-HESUM Close Up Attachment",
+        "site": "Camera West (미국)",
+        "가격": "$75",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-nooky-hesum-close-up-attachment"
+      },
+      {
+        "상품명": "Leica 135mm f4 Tele Elmar",
+        "site": "Camera West (미국)",
+        "가격": "$450",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-135mm-f4-tele-elmar-2481871"
+      },
+      {
+        "상품명": "Leica Braided Rayon Leather Cord Black #14696",
+        "site": "Camera West (미국)",
+        "가격": "$95",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-braided-rayon-leather-cord-black-14696"
+      },
+      {
+        "상품명": "Leica Multifunctional Handgrip HG-SCL7",
+        "site": "Camera West (미국)",
+        "가격": "$695",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-multifunctional-handgrip-hg-scl7-1073280"
+      },
+      {
+        "상품명": "Leica 50mm f2 Summicron-SL Asph",
+        "site": "Camera West (미국)",
+        "가격": "$1,395",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-50mm-f2-summicron-sl-asph-4864579"
+      },
+      {
+        "상품명": "Leica SL3-S Mirrorless Body",
+        "site": "Camera West (미국)",
+        "가격": "$3,695",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-sl3-s-mirrorless-body-5992789"
+      },
+      {
+        "상품명": "Leica E82 UVa II Black 13042",
+        "site": "Camera West (미국)",
+        "가격": "$295",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-e82-black-uva-ii-1"
+      },
+      {
+        "상품명": "Leica E82 UVa II Black 13042",
+        "site": "Camera West (미국)",
+        "가격": "$295",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-e82-black-uva-ii"
+      },
+      {
+        "상품명": "Leica USB-C Dual Charger BC-SCL6",
+        "site": "Camera West (미국)",
+        "가격": "$135",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-usb-c-dual-charger-bc-scl6-boxed"
+      },
+      {
+        "상품명": "Leica 35mm f2 APO-Summicron-SL",
+        "site": "Camera West (미국)",
+        "가격": "$3,960",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-sl-35mm-f2-0-apo-summicron-sl-asph-4788727"
+      },
+      {
+        "상품명": "Leica SL3",
+        "site": "Camera West (미국)",
+        "가격": "$5,595",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-leica-sl3-5954970"
+      },
+      {
+        "상품명": "Leica Lens M, Round for M 35mm f1.4, Black",
+        "site": "Camera West (미국)",
+        "가격": "$130",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-lens-hood-m-round-for-m-35mm-f1-4-black-n-a"
+      },
+      {
+        "상품명": "Leica M11 BC-SCL7 Charger",
+        "site": "Camera West (미국)",
+        "가격": "$130",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-m11-bc-scl7-charger-boxed-n-a"
+      },
+      {
+        "상품명": "Leica 35mm f1.4 Summilux-M Asph II Black",
+        "site": "Camera West (미국)",
+        "가격": "$3,795",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-35mm-f1-4-summilux-m-asph-ii-black-boxed-4101221"
+      },
+      {
+        "상품명": "Leica SL 35mm f2.0 APO-Summicron-SL Asph",
+        "site": "Camera West (미국)",
+        "가격": "$3,760",
+        "통화": "USD",
+        "링크": "https://www.camerawest.com/products/leica-sl-35mm-f2-0-apo-summicron-sl-asph-4811940"
+      },
+      {
+        "상품명": "Leica M1 body",
+        "site": "Peter Loy (영국)",
+        "가격": "£649",
+        "통화": "GBP",
+        "링크": "https://www.peterloy.com/?p=21776"
+      },
+      {
+        "상품명": "Leica M-P (Typ 240), schwarz lackiert",
+        "site": "Calumet (독일)",
+        "가격": "€2,549",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-m-p-typ-240-schwarz-lackiert-gebraucht/gebraucht/akzeptabel/26MUC01451491"
+      },
+      {
+        "상품명": "Leica D-Lux 7 silber eloxiert",
+        "site": "Calumet (독일)",
+        "가격": "€949",
+        "통화": "EUR",
+        "링크": "https://www.calumet.de/product/leica-d-lux-7-silber-eloxiert/gebraucht/gut/26SHD269261"
+      },
+      {
+        "상품명": "Leica Q2 set Body",
+        "site": "Tamarkin Camera (미국)",
+        "가격": "$3,950",
+        "통화": "USD",
+        "링크": "https://www.tamarkin.com/products/compact-digital/leica-q2-set"
+      },
+      {
+        "상품명": "Leica M6 'Ein Stück Leica' 10496 Body",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€8,400",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-M6-Ein-Stueck-Leica-10496/35548-2"
+      },
+      {
+        "상품명": "Leica Summicron-M 11879 35mm f2.0 Asph. black 6-bit",
+        "site": "Leica Classic (오스트리아)",
+        "가격": "€2,000",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-Summicron-M-11879-2-35mm-Asph.-black-6-bit/35908-3"
+      },
+      {
+        "상품명": "Leica Summilux-M 35mm f1.4 ASPH. 11663",
+        "site": "Leica Classic (이탈리아)",
+        "가격": "€3,750",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-Summilux-M-35mm-f1.4-ASPH.-11663/11663SH-4099381"
+      },
+      {
+        "상품명": "Leica Summaron-M 28mm f5.6 11695",
+        "site": "Leica Classic (이탈리아)",
+        "가격": "€1,990",
+        "통화": "EUR",
+        "링크": "https://classic.leica-camera.com/en/Leica-Summaron-M-28mm-f5.6-11695/11695SH-4879600"
+      },
+      {
+        "상품명": "Leica Noctilux-M 50mm f1.0 Version 3 Black, Canada",
+        "site": "MF Camera (미국)",
+        "가격": "$6,000",
+        "통화": "USD",
+        "링크": "https://www.mfcamera.com/products/leica-noctilux-m-50mm-f-1-0-asph-version-3-11821-3533769"
+      },
+      {
+        "상품명": "Leica Summicron-C 40mm f2",
+        "site": "MF Camera (미국)",
+        "가격": "$599",
+        "통화": "USD",
+        "링크": "https://www.mfcamera.com/products/leica-summicron-c-40mm-f-2-lens-11542-2634973-excellent"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 Summilux-M M-Mount with Built-In Hood, Germany, Silver Chrome {E46}",
+        "site": "MF Camera (미국)",
+        "가격": "$3,300",
+        "통화": "USD",
+        "링크": "https://www.mfcamera.com/products/leica-50mm-f-1-4-summilux-m-m-mount-lens-with-built-in-hood-germany-silver-chrome-e46-11856"
+      },
+      {
+        "상품명": "Leica Visoflex 2",
+        "site": "Lecuit (룩셈부르크)",
+        "가격": "€530",
+        "통화": "EUR",
+        "링크": "https://www.lecuit.lu/epages/Lecuit.sf/fr_FR/?ObjectPath=/Shops/Lecuit/Products/2007-O43712"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 35mm f1.4 ASPH. v3 FLE I black anodized",
+        "site": "Foto Ottica Cavour (이탈리아)",
+        "가격": "€3,650",
+        "통화": "EUR",
+        "링크": "https://www.fotootticacavour.com/products/leica-summilux-m-35mm-f-1-4-asph-iii-fle-i-black-anodized4308813"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 50mm f2 v5 black anodized",
+        "site": "Foto Ottica Cavour (이탈리아)",
+        "가격": "€1,300",
+        "통화": "EUR",
+        "링크": "https://www.fotootticacavour.com/products/leica-summicron-m-50mm-f-2-v-black-anodized3909323"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 50mm f1.4 v3 black anodized",
+        "site": "Foto Ottica Cavour (이탈리아)",
+        "가격": "€2,200",
+        "통화": "EUR",
+        "링크": "https://www.fotootticacavour.com/products/leica-summilux-m-50mm-f-1-4-iii-black-anodized-1"
+      },
+      {
+        "상품명": "LEITZ RING ADAPTER OUFRO MACRO ADAPTER PULL OUT EXTENSION LEICA (16469)",
+        "site": "Cardinal Camera Used (미국)",
+        "가격": "$115",
+        "통화": "USD",
+        "링크": "https://cardinalcameraused.com/products/leitz-ring-adapter-oufro-macro-adapter-pull-out-extension-leica-16469-copy"
+      },
+      {
+        "상품명": "LEICA Q3 MONOCHROM 19200",
+        "site": "Foto Dotti (이탈리아)",
+        "가격": "€5,500",
+        "통화": "EUR",
+        "링크": "https://www.fotodotti.it/prodotti/leica/fotocamere/usato/leica-q3-monochrom-19200-come-nuova-completa.html"
+      },
+      {
+        "상품명": "Leica III (DIII) Body",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥98,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1912054"
+      },
+      {
+        "상품명": "Leica IIIa",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥93,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1906063"
+      },
+      {
+        "상품명": "Leica IIIc",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥95,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1906030"
+      },
+      {
+        "상품명": "Leica IIIc",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1901618"
+      },
+      {
+        "상품명": "Leica IIf- Red Dial",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1049424"
+      },
+      {
+        "상품명": "Leica Hektor 135mm f4.5 M",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥110,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1366915"
+      },
+      {
+        "상품명": "Leica Elmarit 135mm f2.8 M",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥220,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1376683"
+      },
+      {
+        "상품명": "Leica Hektor 135mm f4.5 M",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1458370"
+      },
+      {
+        "상품명": "Leica Elmarit 135mm f2.8 M",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥154,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1458374"
+      },
+      {
+        "상품명": "Leica Hektor 135mm f4.5 M",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1458428"
+      },
+      {
+        "상품명": "Leica Elmarit 90mm f2.8 M",
+        "site": "メディアジョイカメラ (일본)",
+        "가격": "¥71,200",
+        "통화": "JPY",
+        "링크": "https://mediajoycamera.com/item-detail/1469054"
+      },
+      {
+        "상품명": "Leica Summilux-M 50mm f1.4",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥396,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=189971135"
+      },
+      {
+        "상품명": "Leica Elmarit-R 90mm f2.8 3CAM",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥60,500",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=188661501"
+      },
+      {
+        "상품명": "Leica Summicron-M 90mm f2 Silver",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥143,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=188661280"
+      },
+      {
+        "상품명": "Leica Summaron-M (M3) 35mm f2.8 メガネ付",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥275,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=188003762"
+      },
+      {
+        "상품명": "Leica M3 88万台",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥297,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=185020427"
+      },
+      {
+        "상품명": "Leica M11 Silver",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥1,012,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=183664611"
+      },
+      {
+        "상품명": "Leica M5 Silver 2ラグ",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥330,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=179094591"
+      },
+      {
+        "상품명": "Leica Summilux-R 50mm f1.4 R専 for",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥231,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=178991123"
+      },
+      {
+        "상품명": "Leica Summicron L39 50mm f2",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=178991070"
+      },
+      {
+        "상품명": "Leica Summaron L39 35mm f3.5",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=170678230"
+      },
+      {
+        "상품명": "Leica Summarit L39 50mm f1.5",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥165,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=167744194"
+      },
+      {
+        "상품명": "Leica E67 P-cirFilter 13407 accessory",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=166250850"
+      },
+      {
+        "상품명": "Leica E46 UVaFilter Chrome 13005 accessory",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥15,400",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=166220335"
+      },
+      {
+        "상품명": "Leica Elmarit-R 180mm f2.8 3CAM",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥71,500",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=166025661"
+      },
+      {
+        "상품명": "Leica 90°アングルFinder R for 14300 accessory",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=163893691"
+      },
+      {
+        "상품명": "Leica Elmar 135mm f4 (Visoflex)",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥50,600",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=110730669"
+      },
+      {
+        "상품명": "Leica Summicron 90mm f2 (Visoflex)",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=106870008"
+      },
+      {
+        "상품명": "Leica Elmar 65mm f3.5 (Visoflex)",
+        "site": "銀座カツミ堂 (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://www.katsumido-camera.com/?pid=104803370"
+      },
+      {
+        "상품명": "Leica 28mm f2.8 ELMARIT-M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥185,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000891-5"
+      },
+      {
+        "상품명": "Leica 35mm f2.8 Summaron M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥175,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000896-4-1"
+      },
+      {
+        "상품명": "Leica 35mm f2.8 Summaron M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥195,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000896-4-3"
+      },
+      {
+        "상품명": "Leica 35mm f2 Summicron",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥295,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000897-6"
+      },
+      {
+        "상품명": "Leica 35mm f2 Summicron",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥335,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000897-7-3"
+      },
+      {
+        "상품명": "Leica 50mm f2 Summicron M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥295,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000912-6"
+      },
+      {
+        "상품명": "Leica 50mm f2 近接 Summicron M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥235,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000912-9"
+      },
+      {
+        "상품명": "Leica 50mm f2 近接 SUMMICRON Sn.なし ! M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥275,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000915"
+      },
+      {
+        "상품명": "Leica 50mm f2 Summicron M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥235,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000917-5"
+      },
+      {
+        "상품명": "Leica 50mm f2 Summicron M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥255,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000918"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 SUMMILUX M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥575,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000921-7-3-3"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 SUMMILUX M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥655,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000921-7-6"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 SUMMILUX M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥755,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000921-7-9-1"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 SUMMILUX L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥855,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000921-7-9-2"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 Summilux L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥955,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000921-7-9-3"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 SUMMILUX M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥385,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000922-5"
+      },
+      {
+        "상품명": "Leica 90mm f2 SUMMICRON M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥155,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000933-5"
+      },
+      {
+        "상품명": "Leica 90mm f4 Tri-プレット-Elmar M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000936-3"
+      },
+      {
+        "상품명": "Leica 90mm f4 Tri-プレット-Elmar M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000936-3-3"
+      },
+      {
+        "상품명": "Leica 90mm f4 Tri-プレット-Elmar M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000936-3-5"
+      },
+      {
+        "상품명": "Leica 90mm f4 Elmar- C M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥39,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000937"
+      },
+      {
+        "상품명": "Leica 90mm f2.8 Elmarit M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000939"
+      },
+      {
+        "상품명": "Leica 90mm f2.8 Elmarit M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥56,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000941-1-1"
+      },
+      {
+        "상품명": "Leica 90mm f2.8 Elmarit M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥57,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000941-2"
+      },
+      {
+        "상품명": "Leica 135mm f4 Elmar M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000943-5"
+      },
+      {
+        "상품명": "Leica 135mm f4 Elmar M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥49,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000943-6"
+      },
+      {
+        "상품명": "Leica 135mm f4 Tele-Elmar M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥75,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000947-3"
+      },
+      {
+        "상품명": "Leica 135mm f2.8 Elmarit M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000947-6"
+      },
+      {
+        "상품명": "Leica 135mm f2.8 Elmarit M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥75,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000948-5"
+      },
+      {
+        "상품명": "Leica III Body + black 50/2 Summar(nickel)",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥215,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000950-3"
+      },
+      {
+        "상품명": "Leica IIIf (converted) Body",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000950-6"
+      },
+      {
+        "상품명": "Leica IIIf Body",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000950-7-3"
+      },
+      {
+        "상품명": "Leica If Body",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥75,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000950-8-5"
+      },
+      {
+        "상품명": "Leica Ig (Late型)",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥145,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000950-8-7"
+      },
+      {
+        "상품명": "Leica Ig Body + (Late型) 50/3.5 Elmar",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥215,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000950-8-9"
+      },
+      {
+        "상품명": "Leica 28mm f5.6 Red Summaron L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥495,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000960-1"
+      },
+      {
+        "상품명": "Leica 50mm f2.5 Nickel Hektor Leica スクリユー(L39) for Germany",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥335,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000975-8"
+      },
+      {
+        "상품명": "Leica 50mm f2 XENON L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥55,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000978"
+      },
+      {
+        "상품명": "Leica 50mm f1.5 Summarit L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥285,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000980-2-3"
+      },
+      {
+        "상품명": "Leica 50mm f1.5 Xenon L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥335,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000980-2-6"
+      },
+      {
+        "상품명": "Leica 50mm f1.5 Xenon L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥375,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000980-2-8"
+      },
+      {
+        "상품명": "Leica 50mm f2 Summicron Collapsible L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥355,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000980-5-6"
+      },
+      {
+        "상품명": "Leica 50mm f2 Summicron Collapsible L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥375,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000980-6C"
+      },
+      {
+        "상품명": "Leica 50mm f1.4 Summilux L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥955,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000985-2-3"
+      },
+      {
+        "상품명": "Leicaflex 50/2 Summmicron付 l カメラCase付",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥125,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000986-5"
+      },
+      {
+        "상품명": "Leica 15mm f3.5 Super-Elmar-R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥255,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000989-1"
+      },
+      {
+        "상품명": "Leica 21mm f4 Super-Angulon-R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥180,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000989-3"
+      },
+      {
+        "상품명": "Leica 28mm f2.8 ELMARIT-R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000989-8"
+      },
+      {
+        "상품명": "Leica 35mm f2.8 Elmarit-R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥95,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000989-9-7"
+      },
+      {
+        "상품명": "Leica 60mm f2.8 Macro-ELMARIT-R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥115,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000993-3"
+      },
+      {
+        "상품명": "Leica 100mm f2.8 Apo-Macro-ELMARIT-R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥185,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000000996-8"
+      },
+      {
+        "상품명": "Leica 200mm f4 TELYT R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥69,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001002"
+      },
+      {
+        "상품명": "Leica 280mm f2.8 Apo-Telyt-R 3CAM",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥435,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001002-5"
+      },
+      {
+        "상품명": "Leica Leitz R Extender-R 2X with caps accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001004-6"
+      },
+      {
+        "상품명": "Leica Visoflex3 M for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001007-10"
+      },
+      {
+        "상품명": "Leica Magnifier & for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001007-5"
+      },
+      {
+        "상품명": "Leica Magnifier & for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001007-7"
+      },
+      {
+        "상품명": "Leica Visoflex3 M for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥35,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001007-8"
+      },
+      {
+        "상품명": "Leica Visoflex3 M for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥39,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001007-9"
+      },
+      {
+        "상품명": "Leica Magnifier & for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥22,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001008"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16464K(OTZFO) 65/3.5、90/2.8、135/4、135/4.5 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥8,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001009-5"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16464K(OTZFO) 65/3.5、90/2.8、135/4、135/4.5 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001009-6"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16464K(OTZFO) 65/3.5、90/2.8、135/4、135/4.5 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥12,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001009-7"
+      },
+      {
+        "상품명": "Leica 65mm f3.5 Elmar",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥75,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001011-2"
+      },
+      {
+        "상품명": "Leica 65mm f3.5 Elmar",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥85,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001011-3"
+      },
+      {
+        "상품명": "Leica 65mm f3.5 Elmar",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥95,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001011-3-5"
+      },
+      {
+        "상품명": "Leica 65mm f3.5 Elmar (Black) Leitz Wetzlar Germany",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥125,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001011-4-7"
+      },
+      {
+        "상품명": "Leica 200mm f4 Telyt.V L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001011-9-5"
+      },
+      {
+        "상품명": "Leica 200mm f4 Telyt.V L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥39,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001012-5-5"
+      },
+      {
+        "상품명": "Leica 280mm f4.8 Telyt.V L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥125,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001012-8"
+      },
+      {
+        "상품명": "Leica 400mm f6.8 Telyt ( M",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥85,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001014-7"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16462 (OUEPO) 90/2、135/2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥29,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001019"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16462 (OUEPO) 90/2、135/2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001019-2"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16462 (OUEPO) 90/2、135/2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001019-5"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16462 (OUEPO) 90/2、135/2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001019-6"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16462 (OUEPO) 90/2、135/2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001019-7"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16467N(OUAGO) 90/4 Elmar for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001021"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16467N(OUAGO) 90/4 Elmar for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001021-3"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 16467N(OUAGO) 90/4 Elmar for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥20,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001021-5"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 14071 135/4.5Hektor for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001022"
+      },
+      {
+        "상품명": "Leica Visoflex for Ring 14071 135/4 Elmar for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001023"
+      },
+      {
+        "상품명": "Leica Visoflex for 16472(OTSRO) Ring accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥5,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001025-3"
+      },
+      {
+        "상품명": "Leica Visoflex for 16472(OTSRO) Ring accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥7,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001027"
+      },
+      {
+        "상품명": "Leica Visoflex for 16466M(OUBIO) 125/2.5、200/4、 200/4.5、280/4.8 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001029-3"
+      },
+      {
+        "상품명": "Leica Visoflex for 16466M(OUBIO) 125/2.5、200/4、 200/4.5、280/4.8 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001029-4"
+      },
+      {
+        "상품명": "Leica 21mm for Finder(Black) accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥30,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001030-3"
+      },
+      {
+        "상품명": "Leica 21mm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001031-2"
+      },
+      {
+        "상품명": "Leica 21mm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥75,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001031-2-4"
+      },
+      {
+        "상품명": "Leica 21mm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥85,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001031-2-4-a"
+      },
+      {
+        "상품명": "Leica 21mm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥85,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001031-2-4-b"
+      },
+      {
+        "상품명": "Leica 28mm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥58,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001031-7A"
+      },
+      {
+        "상품명": "Leica 35mm for Finder(Chrome) accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001032-4"
+      },
+      {
+        "상품명": "Leica 35mm for Finder(Chrome) accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥68,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001032-5"
+      },
+      {
+        "상품명": "Leica 5cm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥68,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001034-8-6"
+      },
+      {
+        "상품명": "Leica 50mmの彫刻 かつ ’’全ローマ字大文字’’のレア物 5cm for Finder、Early型",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥85,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001034-9-6-5B"
+      },
+      {
+        "상품명": "Leica Rare、Finder, Leica 3.3cm Stereo accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥135,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001035-5B"
+      },
+      {
+        "상품명": "Leica 9cm for Finder accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥23,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001035-8"
+      },
+      {
+        "상품명": "Leica 35.50.85.90.135mm、 ELEITZ WETZLAR Germany for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001038-3"
+      },
+      {
+        "상품명": "Leica 35.50.85.90.135mm accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥19,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001039"
+      },
+      {
+        "상품명": "Leica for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001040"
+      },
+      {
+        "상품명": "Leica Wender M accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001048-2"
+      },
+      {
+        "상품명": "Leica 28mm F5.6 Summaron for Hood、36mmΦ accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥65,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001049-6"
+      },
+      {
+        "상품명": "Leica L,M 50/1.5 Summarit for 44 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001049-8"
+      },
+      {
+        "상품명": "Leica L,M 50/1.5 Summarit for 44 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥23,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001049-9"
+      },
+      {
+        "상품명": "Leica L Elmar 50/3.5 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥16,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001054"
+      },
+      {
+        "상품명": "Leica L Elmar 50/3.5 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001054-1"
+      },
+      {
+        "상품명": "Leica ビンテージ Leica Leitz Wetzlar Germany Elmar 35mm & 50mm Lens Hood black paint",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥45,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001054-6"
+      },
+      {
+        "상품명": "Leica L Elmar 50/3.5 for FISON accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001055-1"
+      },
+      {
+        "상품명": "Leica Lens Hood 42φ Ernst Lelitz Wetzlar Germany L,M 12585 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001056-3-1"
+      },
+      {
+        "상품명": "Leica Lens Hood 42φ Ernst Lelitz Wetzlar Germany L,M 12585 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001056-3-2"
+      },
+      {
+        "상품명": "Leica Lens Hood 42φ Ernst Lelitz Wetzlar Germany L,M 12585 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥20,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001056-3-3"
+      },
+      {
+        "상품명": "Leica L,M Elmar 5cm F2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥20,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001057"
+      },
+      {
+        "상품명": "Leica L,M Elmar 5cm F2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001057-6"
+      },
+      {
+        "상품명": "Leica L,M Elmar 5cm F2.8 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥20,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001057-6-3"
+      },
+      {
+        "상품명": "Leica L,M Summaron 35cm, Summicro 50mm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥23,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001057-9-2"
+      },
+      {
+        "상품명": "Leica L,M Summaron 35cm, Summicro 50mm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥35,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001057-9-3"
+      },
+      {
+        "상품명": "Leica L,M Elmar 9/4 & Elmar 135/4 Hektor 135/4.5 for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001058"
+      },
+      {
+        "상품명": "Leica L,M Elmar 9cm & Hektor 13.5cm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001058-1"
+      },
+      {
+        "상품명": "Leica L,M Elmar 9cm & Hektor 13.5cm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥16,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001059"
+      },
+      {
+        "상품명": "Leica L,M Elmar 9cm, Hektor 13.5cm for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥7,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001060"
+      },
+      {
+        "상품명": "Leica L,M Elmar 9cm & Hektor 13.5cm for 12575 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥16,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001063"
+      },
+      {
+        "상품명": "Leica L 125/2.5 Hektor for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥16,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001070"
+      },
+      {
+        "상품명": "Leica 24/2.8 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥13,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001070-7"
+      },
+      {
+        "상품명": "Leica Elmarit-R 24mm f2.8 12523 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001072-3"
+      },
+      {
+        "상품명": "Leica M for New accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥300",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001080"
+      },
+      {
+        "상품명": "Leica 14012 125φ 280mm F2.8 APO-Telyt-R for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥5,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001080-10"
+      },
+      {
+        "상품명": "Leitz Leica",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥4,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001080-10-6"
+      },
+      {
+        "상품명": "Leitz Leica R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥4,500",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001080-10-7"
+      },
+      {
+        "상품명": "Leitz Leica R",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥3,500",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001080-10-8"
+      },
+      {
+        "상품명": "Leica 36φ Elmar 35/3.5, Elmar 50/3.5, etc. for (wil accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001080-10-8C"
+      },
+      {
+        "상품명": "Leica 39mm UVa Leitz Wetzlar Germany accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001081-2"
+      },
+      {
+        "상품명": "Leica 39mm UVa LEITZ Wetzlar Germany accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥8,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001081-9"
+      },
+      {
+        "상품명": "Leica 55mm UV1R 13413 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥8,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001082"
+      },
+      {
+        "상품명": "Leica 55mm UVa 13373 LEITZ Germany accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥5,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001082-1"
+      },
+      {
+        "상품명": "Leica R for 60/2.8 Macro-Elmarit for 14198 3CAM Ring accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥16,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001087"
+      },
+      {
+        "상품명": "Leica 距離計 (E,LEITZ WETZLAR) Meter目盛り Body & Lensは別売りです",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥35,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001091"
+      },
+      {
+        "상품명": "Leica small accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001091-3"
+      },
+      {
+        "상품명": "Leica small accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001091-4"
+      },
+      {
+        "상품명": "Leica small + accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001091-6"
+      },
+      {
+        "상품명": "Leica + accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥23,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001091-8"
+      },
+      {
+        "상품명": "Leitz accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥18,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001092"
+      },
+      {
+        "상품명": "Leitz accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001094"
+      },
+      {
+        "상품명": "Leica 50mm f4.5 FOCOTAR 引き伸ばし for Lens Leitz Wetzlar Germany DOOCQ",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥38,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001096-5"
+      },
+      {
+        "상품명": "Leica 50mm f2 Summicron 17672U accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥9,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001099-1-1"
+      },
+      {
+        "상품명": "Leica 90mm f4 Elmar Visoflex for Ring",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥8,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001099-1-2"
+      },
+      {
+        "상품명": "Leica 90mm f4 Elmar Visoflex for Ring",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001099-1-3"
+      },
+      {
+        "상품명": "Leica : Leica : 65mm P×1.0 Ring accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001099-1-4"
+      },
+      {
+        "상품명": "Leica for Ring accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001099-6"
+      },
+      {
+        "상품명": "Leica for 16558Z (90/4、90/2.8、65/3.5) Ring accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥10,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001099-9"
+      },
+      {
+        "상품명": "Leica 73mm f1.9 Hektor L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥395,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001488-6-2"
+      },
+      {
+        "상품명": "Leica 73mm f1.9 Hektor L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥495,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001488-6-3"
+      },
+      {
+        "상품명": "Leica 85mm f1.5 Summarex L-39スクリュー L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥355,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001488-7-9"
+      },
+      {
+        "상품명": "Leica 90mm f4 Elmar S/N565738 Leicaスクリュー(L39) 前後Cap付 距離計連動 1940年製造",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥29,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001491"
+      },
+      {
+        "상품명": "Leica 90mm f4 Elmar S/N295796 Leicaスクリュー(L39) 前後Cap付 距離計連動",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥39,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001491-5"
+      },
+      {
+        "상품명": "Leica 90mm f4 Elmar S/N458874 Leicaスクリュー(L39) 前後純正Cap付 距離計連動 1938年製造",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥49,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001492"
+      },
+      {
+        "상품명": "Leica 135mm f4.5 Hektor L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥25,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001499-5"
+      },
+      {
+        "상품명": "Leica 135mm f4.5 Hektor L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥28,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001499-6"
+      },
+      {
+        "상품명": "Leica 135mm f4.5 Hektor L39",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥33,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001499-9"
+      },
+      {
+        "상품명": "Leica L39-M Adapter Ring、 Leitz GmbH Wetzlar Germany DBP & 90 accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001528-3"
+      },
+      {
+        "상품명": "Leica L39-M Adapter Ring、 Ernst Leitz GmbH Wetzlar Germany DBP accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001528-5"
+      },
+      {
+        "상품명": "Leica-R for Ring Ring) (60/2.8 Macro-ELMARIT-R for accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥15,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001600-1B"
+      },
+      {
+        "상품명": "Leica R for Ring) accessory",
+        "site": "マツバラ光機 (일본)",
+        "가격": "¥19,000",
+        "통화": "JPY",
+        "링크": "https://m-camera.com/c-item-detail?ic=A000001600-1C"
+      },
+      {
+        "상품명": "E. Leitz Wetzlar blesk accessory",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 1,900",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/blesky--prislusenstvi/produkt/e.-leitz-wetzlar-blesk"
+      },
+      {
+        "상품명": "Leica III elmar 50mm f3.5",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 14,000",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/fotoaparat-leica-iii--objektiv-elmar-3-550mm"
+      },
+      {
+        "상품명": "Leica III Elmar 50mm 3,5f",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 12,500",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/fotoaparat-leica-iii-objektiv-elmar-50mm-3-5f"
+      },
+      {
+        "상품명": "Leica Hledáček E. Leitz Wetzlar 20cm accessory",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 1,900",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/blesky--prislusenstvi/produkt/hledacek-e.-leitz-wetzlar-20cm"
+      },
+      {
+        "상품명": "Leica IIIf 1953 Summar 50mm F2",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 13,800",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/leica--iii-f-1953-objektiv-summar-50mm-f2"
+      },
+      {
+        "상품명": "Leica IIIa (1935)",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 6,800",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/leica-3a-rok-1935"
+      },
+      {
+        "상품명": "Leica I Compur Body Elmar 50mm f3.5",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 199,000",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/leica-compur-objektiv-elmar-3-5f-50mm"
+      },
+      {
+        "상품명": "Leica IIIa (1938) SUMMAR 50mm f2",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 17,000",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/leica-iii-a-rok-1938-obj-summar-50mm2"
+      },
+      {
+        "상품명": "Leica IIIa 1939 Summar 50mm f2",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 14,000",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/leica-iiia-1939-objektiv-summar-50mm-1-2-f"
+      },
+      {
+        "상품명": "Leica Leicaflex SL Body",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 4,600",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/kinofilmove-zrcadlovky/produkt/leica-leicaflex-sl-body_2766"
+      },
+      {
+        "상품명": "Leica M5 Body",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 25,000",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/hledackove-pristroje_497/produkt/leica-m5-telo"
+      },
+      {
+        "상품명": "Leica Motor M + box accessory",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 8,500",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/blesky--prislusenstvi/produkt/leica-motor-m---krabice"
+      },
+      {
+        "상품명": "Leica R8 Body + Motor Wider R8+Blesk Leica SF58",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 22,400",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/kinofilmove-zrcadlovky/produkt/leica-r8-telo---motor-wider-r8-blesk-leica-sf58"
+      },
+      {
+        "상품명": "Leica Hektor 135mm 4,5 f M-mount Leica",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 3,900",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/objektivy/s-pevnym-ohniskem_403/produkt/objektiv-hektor-135mm-4-5-f-bajonet-m-laica"
+      },
+      {
+        "상품명": "Leica Hektor 135mm f4.5 Ernst Leitz Wetzlar",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 2,900",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/objektivy/s-pevnym-ohniskem_403/produkt/objektiv-hektor-135mm-4-5f-ernst-leitz-wetzlar"
+      },
+      {
+        "상품명": "Leica M-mount Elmar 90mm f4",
+        "site": "Foto Pazdera (체코)",
+        "가격": "Kč 15,000",
+        "통화": "CZK",
+        "링크": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/objektivy/s-pevnym-ohniskem_403/produkt/objektiv-leica-bajonet-m-elmar-90mm-1-4f"
+      },
+      {
+        "상품명": "Leica Q2 Reporter",
+        "site": "AdoPhoto (그리스)",
+        "가격": "€4,300",
+        "통화": "EUR",
+        "링크": "https://www.adophoto.gr/used/metaxeirismena-eidi/compact/leica-q2-reporter-used"
+      },
+      {
+        "상품명": "Leica Vario-Elmar-R 35-70mm f/3.5 Leica R Mount Lens",
+        "site": "AdoPhoto (그리스)",
+        "가격": "€600",
+        "통화": "EUR",
+        "링크": "https://www.adophoto.gr/used/metaxeirismena-eidi/fakoi/leica-35-70mm-f-35-leica-r-mount-lens-used"
+      },
+      {
+        "상품명": "Leica 65mm f/3.5 Elmar With Visoflex",
+        "site": "AdoPhoto (그리스)",
+        "가격": "€650",
+        "통화": "EUR",
+        "링크": "https://www.adophoto.gr/used/metaxeirismena-eidi/fakoi/leica-65mm-f-35-elmar-with-visoflex-used"
+      },
+      {
+        "상품명": "Leitz 50mm f/2 Summicron-M Lens Made In Canada",
+        "site": "AdoPhoto (그리스)",
+        "가격": "€1,150",
+        "통화": "EUR",
+        "링크": "https://www.adophoto.gr/used/metaxeirismena-eidi/fakoi/leitz-50mm-f-2-summicron-m-lens-made-in-canada-used"
+      },
+      {
+        "상품명": "Leica 21mm f/2.8 Elmarit-M ASPH. Lens Boxed",
+        "site": "AdoPhoto (그리스)",
+        "가격": "€2,300",
+        "통화": "EUR",
+        "링크": "https://www.adophoto.gr/used/metaxeirismena-eidi/fakoi/leica-21mm-f28-elmarit-m-asph-lens-boxed-used"
+      },
+      {
+        "상품명": "Leica M3 Silver Chrome +Lightmeter+50mm f/2 Summicron Lens",
+        "site": "AdoPhoto (그리스)",
+        "가격": "€2,750",
+        "통화": "EUR",
+        "링크": "https://www.adophoto.gr/used/metaxeirismena-eidi/mirrorless/leica-m3-silver-chrome-+lightmeter+50mm-f-2-summicron-lens-used"
+      },
+      {
+        "상품명": "Leitz Leica III, Black And Nickel, 50mm f2.5 Nickel Hektor (separation)",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$875",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm12.htm#228148"
+      },
+      {
+        "상품명": "Leitz Hektor 135mm f4.5 L39",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$225",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm21.htm#226875"
+      },
+      {
+        "상품명": "Leitz 50MM Brightline Finder Sbooi For Leica (apart) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$75",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#228153"
+      },
+      {
+        "상품명": "Leitz Amplifier/booster For Leica-meter, Defective, As-is accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#176405"
+      },
+      {
+        "상품명": "Leitz Bakelight Can For 90MM Elmar L39 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$35",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#217813"
+      },
+      {
+        "상품명": "Leitz Base Only For Close Up Stand Boowu accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#50226"
+      },
+      {
+        "상품명": "Leitz Baseplate For Leica Iiic-iiif accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$70",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#228138"
+      },
+      {
+        "상품명": "Leitz Baseplate For Leica Iiic-iiif accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$75",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#228137"
+      },
+      {
+        "상품명": "Leitz Baseplate For Leica IIIf RD And IIIg With Finger (read) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$85",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#228136"
+      },
+      {
+        "상품명": "Leitz Baseplate For Leica IIIf RD And IIIg With Finger (read) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$75",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#228135"
+      },
+      {
+        "상품명": "Leitz Bindomat Slide Binder For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#128835"
+      },
+      {
+        "상품명": "Leitz Box For Leica IIIf Loohw accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$100",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#79796"
+      },
+      {
+        "상품명": "Leitz Box For Leica IIIf accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$125",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#46620"
+      },
+      {
+        "상품명": "Leitz Box Only For Boowu (leica) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#176110"
+      },
+      {
+        "상품명": "Leitz Empty Box Only For Leica II Lykupchrom + Dividers accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$250",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#198823"
+      },
+      {
+        "상품명": "Leitz Box Only Fpr Leica IIIf Lookx, Lid Is Split And Worn accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#220389"
+      },
+      {
+        "상품명": "Leitz Boxes For Small Leica Accessories, Lot Of Five accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#220943"
+      },
+      {
+        "상품명": "Leitz Bubble For 90mm f4 Elmar L39 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#216771"
+      },
+      {
+        "상품명": "Leitz Bubble For 90mm f4 Elmar L39 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#216772"
+      },
+      {
+        "상품명": "Leitz Bubble For 90mm f4 Elmar L39 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#216773"
+      },
+      {
+        "상품명": "Leitz Close-up Device Nooky-hesum For Leica Hektor And Summar accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$65",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#226693"
+      },
+      {
+        "상품명": "Leitz Copy Stand Boowu, L39 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$50",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#180401"
+      },
+      {
+        "상품명": "Leitz Finder For 90MM Seroo, Chrome accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$245",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#103387"
+      },
+      {
+        "상품명": "Leitz Flash Ceyoo For Leica, In Box, Untested accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#226626"
+      },
+      {
+        "상품명": "Leitz Rangefinder Farno, 20CM Base, Marked In Yards accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$1,450",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#219168"
+      },
+      {
+        "상품명": "Leitz Ny Extension Tube, 90MM L39, With Decent Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$40",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm31.htm#220684"
+      },
+      {
+        "상품명": "Leitz Bakelite Case For 135mm f4.5 Hektor L39 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#226879"
+      },
+      {
+        "상품명": "Leitz Case For Leica I Through IIIb, With Strap accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$60",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#228130"
+      },
+      {
+        "상품명": "Leitz Case For Leica I Through IIIb, With Strap, 1/4 Tripod Screw accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#228149"
+      },
+      {
+        "상품명": "Leitz Case For Leica I Through IIIb, With Strap accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$35",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#228129"
+      },
+      {
+        "상품명": "Leitz Case For Leica Iiic-iiif, Tall Lid accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#228134"
+      },
+      {
+        "상품명": "Leitz Case For Leica Iiic-iiif, With Strap accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#228131"
+      },
+      {
+        "상품명": "Leitz Case For Leica Iiic-iiif, With Strap accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$30",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#228133"
+      },
+      {
+        "상품명": "Leitz Case For Leica Iiic-iiif, With Strap accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#228132"
+      },
+      {
+        "상품명": "Leitz Copy Stand Beooy For Leica, In Worn/torn And Taped Up Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$30",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#226869"
+      },
+      {
+        "상품명": "Leitz Right Angle Finder Wintu, For Leica, Chrome/sse accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$75",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bm39.htm#223336"
+      },
+      {
+        "상품명": "Leitz Elmar 90mm f4 M-mount, Collapsible",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$195",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk14.htm#213327"
+      },
+      {
+        "상품명": "Leitz Booster For Leica-meter Mc Exposure Meter, Untested accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#206254"
+      },
+      {
+        "상품명": "Leitz Booster For Leica-meter Mc Exposure Meter, Untested accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#206257"
+      },
+      {
+        "상품명": "Leitz Booster For Leica-meter, Untested, For Display Only accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#206262"
+      },
+      {
+        "상품명": "Leitz Box Only For Leica M3 Isumo (camera And 50mm f2 Summicron) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#226396"
+      },
+      {
+        "상품명": "Leitz Cap, Body For Leica M, Plastic accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#221979"
+      },
+      {
+        "상품명": "Leitz Copying Cassette For Focotar IIc Enlarger accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$85",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#226048"
+      },
+      {
+        "상품명": "Leitz Extension Ring 16782, In Decent Box (needs Glue) Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#220938"
+      },
+      {
+        "상품명": "Leitz Leica Meter Mc, Chrome, Active accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#220804"
+      },
+      {
+        "상품명": "Leitz Leica Meter Mc, Chrome, Meter Is Dead accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#220694"
+      },
+      {
+        "상품명": "Leitz Leica-meter Mc, Chrome, Non-working accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#221059"
+      },
+      {
+        "상품명": "Leitz Lens Shade/hood 12538 For 50mm f2 Summicron Leica M accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$50",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bk31.htm#227443"
+      },
+      {
+        "상품명": "Leitz Leica Adater 14161 For Series Vii accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#136709"
+      },
+      {
+        "상품명": "Leitz Box For Macro Adapter-r 1:1 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#106777"
+      },
+      {
+        "상품명": "Leitz Box Only For Adapter 14127 (viso To Leica R) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#179990"
+      },
+      {
+        "상품명": "Leitz Box Only For Motor Winder R4 14282 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#186969"
+      },
+      {
+        "상품명": "Leitz Bubble For Short Leica/leicaflex SLR Lenses accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#205157"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica R accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#107299"
+      },
+      {
+        "상품명": "Leitz Cap, Rear Lens For Leica R Series/leicaflex accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#211937"
+      },
+      {
+        "상품명": "Leitz Cap, Rear Lens For Leica R Series/leicaflex accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#211940"
+      },
+      {
+        "상품명": "Leitz Rear Lens Cap For Leica SLR accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#104145"
+      },
+      {
+        "상품명": "Leitz Elpro Via Close-up Lens accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$30",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#184474"
+      },
+      {
+        "상품명": "Leitz Close-up Lens Elpro Via For Leicaflex/leica R accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#161294"
+      },
+      {
+        "상품명": "Leitz 2X Extender-r For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$95",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#120708"
+      },
+      {
+        "상품명": "Leitz Filter Retaining Ring For Leica, Series Vii accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#190260"
+      },
+      {
+        "상품명": "Leica Laminated Reprint Of R4 Advertisment accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#137314"
+      },
+      {
+        "상품명": "Leitz Lens Coupler R For Leica R/leiacaflex accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$30",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#120852"
+      },
+      {
+        "상품명": "Leitz Lens Coupler R For Leica R/leiacaflex accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#124269"
+      },
+      {
+        "상품명": "Leitz Lens Coupler R For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#124552"
+      },
+      {
+        "상품명": "Leitz Lens Coupler R For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#163007"
+      },
+      {
+        "상품명": "Leitz Macro Extension Ring 14135 In Decent Box (leica) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#220260"
+      },
+      {
+        "상품명": "Leitz Leica Macrotar Vib",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#136683"
+      },
+      {
+        "상품명": "Leitz Motor Drive Tripod Centering Bracket 14284 For Leica R4 And R6 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#221053"
+      },
+      {
+        "상품명": "Leitz Rc Leica R Release, Untested",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#220819"
+      },
+      {
+        "상품명": "Leitz Rear Lens Cap For Leica SLR accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#186009"
+      },
+      {
+        "상품명": "Leitz Tripod Holder 14284 For Leica R4 & Motor Drive accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$35",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#163001"
+      },
+      {
+        "상품명": "Leitz Nj Case For Leica Lens #1, With Short Strap accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#227080"
+      },
+      {
+        "상품명": "Leitz Telyt 400mm f6.8 For Leica Visoflex Boxed/near Perfect accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$395",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#219137"
+      },
+      {
+        "상품명": "Leitz Adapter 16471J/OTRPO For Leica Viso accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#219833"
+      },
+      {
+        "상품명": "Leitz Adapter 16472K/OTSRO For Leica Viso accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#219799"
+      },
+      {
+        "상품명": "Leitz Adapter 16598/UOOZK For 90MM Summicron Head To Bellows Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#199799"
+      },
+      {
+        "상품명": "Leitz Adapter 16863, Mount Leica 65mm f3.5, 90mm f2.8 And 135mm f4 On Bellows accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$35",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#220675"
+      },
+      {
+        "상품명": "Leitz Adapter 17672 (dmuoo) For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#220680"
+      },
+      {
+        "상품명": "Leitz Adapter 17672U (dmuoo) For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#220681"
+      },
+      {
+        "상품명": "Leitz Adapter UOOZK/16598 For 90MM Summicron Head On Bellows accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#226880"
+      },
+      {
+        "상품명": "Leitz Bellows I For Leica, With Compendium Shade accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#226871"
+      },
+      {
+        "상품명": "Leitz Double Cable Release For Leica, Late Black Crinkle Finish accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#220818"
+      },
+      {
+        "상품명": "Leitz Focoslide, New York accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#105224"
+      },
+      {
+        "상품명": "Leitz Visoflex I For Leica M, With Chimney Finder Lvfoo (fungus/read) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#226870"
+      },
+      {
+        "상품명": "Leitz Visoflex I Ozyxo M-mount, With Worn/taped Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$85",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#213322"
+      },
+      {
+        "상품명": "Leitz Visoflex II, Leica M Bayonet, No Finder accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$35",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#219640"
+      },
+      {
+        "상품명": "Leitz Focusing Bellows II Brochure, 1962, Worn And Wrinkled accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#208367"
+      },
+      {
+        "상품명": "Leitz Leica Visoflex III Sales Leaflet, 1967 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#208347"
+      },
+      {
+        "상품명": "Leitz Visoflex II Sales Brochure accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl31.htm#108355"
+      },
+      {
+        "상품명": "Leitz Flash Bracket Ctoom accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#105562"
+      },
+      {
+        "상품명": "Leitz Flash Bracket Ctoom accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#77992"
+      },
+      {
+        "상품명": "Leitz Flash Cord COOSX/15523 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#137229"
+      },
+      {
+        "상품명": "Leitz Flash Cord Csoon accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#93976"
+      },
+      {
+        "상품명": "Leitz Flash Cord Csoon accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#93977"
+      },
+      {
+        "상품명": "Leitz Flash Unit Chico For Leica, No Cord, Has Crack (for Display) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$12",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#220658"
+      },
+      {
+        "상품명": "Leitz Flash Unit Chico For Leica + Bracket/case No Cord (for Display) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#220659"
+      },
+      {
+        "상품명": "Leitz Flash Unit Chico For Leica, With Cracked Case accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#221057"
+      },
+      {
+        "상품명": "Leica Flash Data Sheet For Expendable Flash Bulbs accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$10",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#169372"
+      },
+      {
+        "상품명": "Leitz Leica Flash Guide Numbers, 1959 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl35.htm#130866"
+      },
+      {
+        "상품명": "Leitz 69MM To Series 8 Roto Adapter accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#98356"
+      },
+      {
+        "상품명": "Leitz Close-up Lens 1 For Leica 35 And 50MM Elmar Elpro, In Nice Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#221028"
+      },
+      {
+        "상품명": "Leitz Close-up Lens 1 For 50MM Leica Hektor Hepro, In Nice Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$30",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#221031"
+      },
+      {
+        "상품명": "Leitz Close-up Lens 2 For Leica 35 And 50MM Elmar Elpik, In Nice Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#221029"
+      },
+      {
+        "상품명": "Leitz Close-up Lens 3 For Leica 35 And 50MM Elmar Elpet, In Nice Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#221026"
+      },
+      {
+        "상품명": "Leitz Filter For Summitar, Yellow 0 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$30",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#228156"
+      },
+      {
+        "상품명": "Leitz Filter Retaining Ring For Series Vii (7) 14161 Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#220273"
+      },
+      {
+        "상품명": "Leitz Filter, A36 36MM Slip-on, Light Yellow (0) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$40",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#227158"
+      },
+      {
+        "상품명": "Leitz Filter, Close-up Lens 1 Hepro In Early Written On Box (leica) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#220529"
+      },
+      {
+        "상품명": "Leitz Filter, Close-up Lens 3 Elpet, In Box For Leica 35/50MM Elmar accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#227161"
+      },
+      {
+        "상품명": "Leitz Filter, Close-up Lens 3 Elpet, In Box For Leica 35/50MM Elmar accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#227160"
+      },
+      {
+        "상품명": "Leitz Filter, Close-up No. 1 Elpro For 50MM Elmar (leica) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$35",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#217806"
+      },
+      {
+        "상품명": "Leitz Filter, Close-up No. 2 Elpik For 50MM Elmar (leica), With Box accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$45",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#217808"
+      },
+      {
+        "상품명": "Leitz Filter, Close-up No. 3 Elpet For 50MM Elmar (leica) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$35",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#217807"
+      },
+      {
+        "상품명": "Leitz Filter, Summarit, Green (ggr) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$75",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl33.htm#227159"
+      },
+      {
+        "상품명": "Leica Cap, 45MM Slip In, Plastic, Uncertain As To What It Fits accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#221052"
+      },
+      {
+        "상품명": "Leitz Body Cap 14103 For Leica R Series accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#166379"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica M Series accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#211949"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica M Series accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#211950"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica M Series accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#211951"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica M Series accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#211953"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica M accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226885"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica R accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#162995"
+      },
+      {
+        "상품명": "Leitz Cap 14158, Front, 76MM Slip On, Plastic (leica) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$25",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#220869"
+      },
+      {
+        "상품명": "Leitz Cap 14280, E60 Clip On For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226017"
+      },
+      {
+        "상품명": "Leitz Cap For Leica, Front Slip On, 68MM (marked 66 Inside) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#227538"
+      },
+      {
+        "상품명": "Leitz Cap, 42MM Snap In For Leica, Black Plastic, Marked 42 Inside accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226009"
+      },
+      {
+        "상품명": "Leitz Cap, 42MM Snap In For Leica, Black Plastic, Marked 42 Inside accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226010"
+      },
+      {
+        "상품명": "Leitz Cap, 42MM Snap In For Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#221373"
+      },
+      {
+        "상품명": "Leitz Cap, 42MM Snap In, Black Plastic accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#213479"
+      },
+      {
+        "상품명": "Leitz Cap, 50MM Slip On (marked 42 Inside), For Leica Reversed Shade accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#221966"
+      },
+      {
+        "상품명": "Leitz Cap, 50MM Slip On For Leica Reversed Shade accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226014"
+      },
+      {
+        "상품명": "Leitz Cap, 50MM Slip On For Leica Reversed Shade accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226015"
+      },
+      {
+        "상품명": "Leitz Cap, 50MM Slip On For Leica Reversed Shade accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226016"
+      },
+      {
+        "상품명": "Leitz Cap, 65MM Slip On For Leica, Lightweight Black Metal accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$20",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#226018"
+      },
+      {
+        "상품명": "Leitz Cap For Leica, A36 Early Flat Chrome Over Brass (read) accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$85",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#227276"
+      },
+      {
+        "상품명": "Leitz Body Cap For M Series Leica accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#101609"
+      },
+      {
+        "상품명": "Leitz Body Cap For Leica M Late Type accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#142158"
+      },
+      {
+        "상품명": "Leitz Cap, Body, Leica R/leicaflex, 14103 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#220931"
+      },
+      {
+        "상품명": "Leitz Cap, Front Lens, E67 accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#211945"
+      },
+      {
+        "상품명": "Leitz Cap, Front, 64MM Slip On, Chrome accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$50",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#220942"
+      },
+      {
+        "상품명": "Leitz Cap, Front, 64MM Slip On, Chrome accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#220945"
+      },
+      {
+        "상품명": "Leitz Cap, Front, 64MM Slip On, Chrome accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$50",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#227167"
+      },
+      {
+        "상품명": "Leitz Rear Lens Cap For Leica R/leicaflex, 14162J accessory",
+        "site": "Pacific Rim Camera (미국)",
+        "가격": "$15",
+        "통화": "USD",
+        "링크": "https://www.pacificrimcamera.com/catalog/th_bl38.htm#215447"
+      },
+      {
+        "상품명": "Leica Q for Handgrip 19505",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=133624"
+      },
+      {
+        "상품명": "Leica MP x0.72(Silver )",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥660,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=133605"
+      },
+      {
+        "상품명": "Leica R4",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥39,600",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=133334"
+      },
+      {
+        "상품명": "Leica M5 50 Jahre Black Chrome",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥363,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=133324"
+      },
+      {
+        "상품명": "Leica Summilux M 50mm f1.4",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥352,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=133306"
+      },
+      {
+        "상품명": "Leica DR Summicron M 50mm f2 Late",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=132895"
+      },
+      {
+        "상품명": "Leica DR Summicron M 50mm f2 Late",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥198,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=132796"
+      },
+      {
+        "상품명": "Leica Elmar L 50mm f2.8",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=132680"
+      },
+      {
+        "상품명": "Leica Summilux M 35mm f1.4 with Goggles",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥1,430,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=129812"
+      },
+      {
+        "상품명": "Leica I Model A Body",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=130531"
+      },
+      {
+        "상품명": "Leica Summilux R 35mm f1.4 (3CAM)",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥550,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=101699"
+      },
+      {
+        "상품명": "Leica M11 Glossy Black Paint",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥1,320,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=129396"
+      },
+      {
+        "상품명": "Leica Elmar L 50mm f3.5",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=130192"
+      },
+      {
+        "상품명": "Leica Super-Angulon R21/4 3CAM",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=129674"
+      },
+      {
+        "상품명": "Leica III Body Black",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=129670"
+      },
+      {
+        "상품명": "Leica Red Elmar L 50mm f3.5",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=128556"
+      },
+      {
+        "상품명": "Leica Summilux L 50mm f1.4",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥946,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=126612"
+      },
+      {
+        "상품명": "Leica Super-Angulon M 21mm f3.4",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥220,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=126391"
+      },
+      {
+        "상품명": "Leica R8 for Focusing Screen",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥8,800",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=125542"
+      },
+      {
+        "상품명": "Leica Elmarit M 28mm f2.8",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥242,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=125305"
+      },
+      {
+        "상품명": "Leica Standard",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥99,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=124413"
+      },
+      {
+        "상품명": "Leica IF",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥77,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=124402"
+      },
+      {
+        "상품명": "Leica IIIG",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=124289"
+      },
+      {
+        "상품명": "Leica Nickel Hektor L 50mm f2.5",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥176,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=123498"
+      },
+      {
+        "상품명": "Leica Nickel Elmar L 50mm f3.5",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥143,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=123489"
+      },
+      {
+        "상품명": "Leica IIf",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=121394"
+      },
+      {
+        "상품명": "Leica Elmarit M 24mm f2.8 ASPH",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥297,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=117828"
+      },
+      {
+        "상품명": "Leica 24mm Finder",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥44,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=117821"
+      },
+      {
+        "상품명": "Leica Tele-Vario-gon R 80-240mm f4",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥66,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=116403"
+      },
+      {
+        "상품명": "Leica Elmarit R 28mm f2.8",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥220,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=116393"
+      },
+      {
+        "상품명": "Leica Elmarit R 35mm f2.8",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=116384"
+      },
+      {
+        "상품명": "Leica Hektor L125/2.5 Leica R for",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=113910"
+      },
+      {
+        "상품명": "Leica 21mm Finder",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=112833"
+      },
+      {
+        "상품명": "Leica IIIF Self-timer",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥132,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=85122"
+      },
+      {
+        "상품명": "Leica Vidom Finder (Silver )",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=110149"
+      },
+      {
+        "상품명": "Leica FONOR for (100mm~150mm 6X9~10X15)",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥39,600",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=109686"
+      },
+      {
+        "상품명": "Leica 24mm Finder",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥24,200",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=109032"
+      },
+      {
+        "상품명": "Leica SYEOO 135mm Finder",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=108391"
+      },
+      {
+        "상품명": "Leica 28mm Finder SUOOQ(Black )",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=107015"
+      },
+      {
+        "상품명": "Leica Visoflex for Hektor 125mm f2.5",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥121,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=101670"
+      },
+      {
+        "상품명": "Leica Fisheye Elmarit R 16mm f2.8 (3CAM)",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥154,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=101479"
+      },
+      {
+        "상품명": "Leica Elmarit R 28mm f2.8 (3CAM)",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥88,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=101471"
+      },
+      {
+        "상품명": "Leica RM Ring (14167)",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥19,800",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=99770"
+      },
+      {
+        "상품명": "Leica Extender R 2x",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥15,400",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=99761"
+      },
+      {
+        "상품명": "Leica 13422 [UV/IR Filter M 18mm f3.8 for ]",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥16,500",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=79721"
+      },
+      {
+        "상품명": "Leica Flash Bracket",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥9,900",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=74147"
+      },
+      {
+        "상품명": "Leica Flash Bracket CTOOM M for",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥11,000",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=74189"
+      },
+      {
+        "상품명": "Leica 24001 M10/M11 Finder",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥7,700",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=64379"
+      },
+      {
+        "상품명": "Leica Vidom Finder (Silver )",
+        "site": "カメラコレクション (일본)",
+        "가격": "¥14,300",
+        "통화": "JPY",
+        "링크": "https://camera-collection.jp/?p=51397"
+      },
+      {
+        "상품명": "Leica ラピッドローディング クイックローディング システム 14260",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥45,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/162038389"
+      },
+      {
+        "상품명": "Leica M2 Body",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥175,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/162038255"
+      },
+      {
+        "상품명": "Leica SUMMICRON M 35mm F2.0 8 Element CANADA",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥519,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/162020891"
+      },
+      {
+        "상품명": "Leica LEITZ FOCOTAR 60mm F4.5",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥13,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/162020293"
+      },
+      {
+        "상품명": "Leica LEITZ FOCOTAR II 100mm F5.6 フォコターII",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥89,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/162020193"
+      },
+      {
+        "상품명": "Leica FISON Lens Hood 黒 Elmar 5cm",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥59,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/162019986"
+      },
+      {
+        "상품명": "Leica LEITZ SUMMICRON 35mm F2.0 8 Element Germany M",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥529,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/160246557"
+      },
+      {
+        "상품명": "Leica SUMMICRON-M 35mm F2.0 ASPH. BlackPaint",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥1,199,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/109152585"
+      },
+      {
+        "상품명": "Leica M4 BlackPaint Original",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥1,199,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/83307251"
+      },
+      {
+        "상품명": "Leica SUMMICRON M 5cm F2.0 Collapsible",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥79,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/113445795"
+      },
+      {
+        "상품명": "Leica SF20 Flash 14414",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥47,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/122588855"
+      },
+      {
+        "상품명": "Leica SUMMILUX-M 90mm F1.5 ASPH. E67 Summilux",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥1,350,000",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/139823837"
+      },
+      {
+        "상품명": "Leica TRI-ELMAR-M 28-35-50mm F4.0 ASPH. Tri-Elmar",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥421,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/140102805"
+      },
+      {
+        "상품명": "Leica LEICAVIT M Black",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥205,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/140103345"
+      },
+      {
+        "상품명": "Leica M6 Body Chrome Big Name",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥529,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/155826842"
+      },
+      {
+        "상품명": "Leica VARIO APO ELMARIT R 70-180mm F2.8 E77",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥428,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/155746825"
+      },
+      {
+        "상품명": "Leica SUMMILUX M 35mm F1.4 ASPH. E46 Titan Summilux",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥579,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/137702717"
+      },
+      {
+        "상품명": "Leica Summaron 35mm F3.5 L39",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥79,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/154025308"
+      },
+      {
+        "상품명": "Leica SUMMILUX M 50mm F1.4 BlackPaint 1st",
+        "site": "サンライズカメラ (일본)",
+        "가격": "¥2,249,800",
+        "통화": "JPY",
+        "링크": "https://www.sunrise-camera.net/items/146575835"
+      },
+      {
+        "상품명": "Leica M5 Black Body",
+        "site": "モリッツ (일본)",
+        "가격": "¥203,500",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#3026"
+      },
+      {
+        "상품명": "Leica IIIf Red Dial Self-timer Late Body",
+        "site": "モリッツ (일본)",
+        "가격": "¥80,300",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#3027"
+      },
+      {
+        "상품명": "Leica IIf Black Dial Body",
+        "site": "モリッツ (일본)",
+        "가격": "¥49,500",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#3028"
+      },
+      {
+        "상품명": "Leica IIIf Black Dial Body",
+        "site": "モリッツ (일본)",
+        "가격": "¥74,800",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#3005"
+      },
+      {
+        "상품명": "Leica IIIf Black Dial Body",
+        "site": "モリッツ (일본)",
+        "가격": "¥69,300",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#2809"
+      },
+      {
+        "상품명": "Leica Elmar 90mm f4.0 Rigid M mount",
+        "site": "モリッツ (일본)",
+        "가격": "¥41,800",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#2391"
+      },
+      {
+        "상품명": "Leica Visoflex Bellows I",
+        "site": "モリッツ (일본)",
+        "가격": "¥24,200",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#2149"
+      },
+      {
+        "상품명": "Leica Elmar 90mm f4.0 L39",
+        "site": "モリッツ (일본)",
+        "가격": "¥38,500",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#2008"
+      },
+      {
+        "상품명": "Leica 135mm Finder",
+        "site": "モリッツ (일본)",
+        "가격": "¥30,800",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#1487"
+      },
+      {
+        "상품명": "Leica Elmar 90mm f4.0 L39",
+        "site": "モリッツ (일본)",
+        "가격": "¥38,500",
+        "통화": "JPY",
+        "링크": "https://www.moritz.co.jp/doitu.html#0793"
       }
     ]
   }
