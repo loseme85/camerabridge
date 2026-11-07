@@ -67,6 +67,8 @@ T = {
         "q_where": "{name} 중고는 어느 나라가 가장 싼가요?",
         "a_where": "지금 나라별 최저가: {list}. 오늘 환율로 환산한 매장 표시 가격이며, 배송비·관세는 빠져 있습니다.",
         "related": "비슷한 모델", "sep": ", ",
+        "new": "새 제품 정가 (라이카 영국)", "vs_new": "중고 B등급 / 정가", "vs_new_val": "정가의 {pct}%",
+        "a_new": " 새 제품은 라이카 영국 공식 가격 {new}이고, 중고 B등급 시세는 그 {pct}% 수준입니다.",
         "desc": "{name} 중고 판매 중 {active}개 ({shops}개 매장), {range}. 한국·일본·유럽·미국 라이카 매장 매물과 판매완료 가격을 한곳에서.",
         "h1": "{name} 중고 시세", "active": "판매 중", "active_val": "{n}개 · {shops}개 매장",
         "range": "판매 중 가격", "sold": "팔린 매물 중간값", "sold_val": "{price} (팔린 매물 {n}개)",
@@ -86,6 +88,8 @@ T = {
         "q_where": "Where is a used {name} cheapest?",
         "a_where": "Cheapest by country right now: {list}. Shop prices converted at today's rate; shipping and import tax not included.",
         "related": "Similar models", "sep": ", ",
+        "new": "New price (Leica UK)", "vs_new": "Used grade B vs new", "vs_new_val": "{pct}% of new",
+        "a_new": " New, it costs {new} at Leica UK; a grade B used one runs about {pct}% of that.",
         "desc": "{active} used {name} listings from {shops} shops, {range}. Leica shops in Korea, Japan, Europe and the US, with sold prices, in one place.",
         "h1": "{name} used prices", "active": "For sale now", "active_val": "{n} listings · {shops} shops",
         "range": "Asking prices", "sold": "Sold median", "sold_val": "{price} ({n} sold listings)",
@@ -105,6 +109,8 @@ T = {
         "q_where": "{name} の中古はどの国が安い？",
         "a_where": "現在の国別最安値：{list}。各店の表示価格を本日のレートで換算したもので、送料・関税は含みません。",
         "related": "似ているモデル", "sep": "、",
+        "new": "新品価格（ライカ英国）", "vs_new": "中古B等級 / 新品", "vs_new_val": "新品の {pct}%",
+        "a_new": " 新品はライカ英国の公式価格で {new}、中古B等級の相場はその約 {pct}% です。",
         "desc": "{name} の中古在庫 {active} 点（{shops} 店）、{range}。韓国・日本・欧州・米国のライカ取扱店の在庫と販売済み価格をまとめて。",
         "h1": "{name} 中古相場", "active": "販売中", "active_val": "{n} 点 · {shops} 店",
         "range": "販売価格", "sold": "販売済み中央値", "sold_val": "{price}（販売済み {n} 点）",
@@ -269,6 +275,17 @@ def build(out: Path) -> dict:
         prev = old_marks.get(url) or {}
         marks[url] = {"h": digest, "d": prev["d"] if prev.get("h") == digest else today}
 
+    # 새 제품 정가: 라이카 영국 공식 가격(부가세 포함, scripts/update_leica_msrp.py) — 제품 번호로 모델에 연결
+    msrp_path = ROOT / "data" / "config" / "leica_msrp.json"
+    msrp = json.loads(msrp_path.read_text(encoding="utf-8")).get("prices", {}) if msrp_path.exists() else {}
+    from catalog import codes as catalog_codes
+    new_price: dict[str, float] = {}  # 모델 → 영국 정가(GBP)
+    for eid, numbers in catalog_codes.CODES.items():
+        gb = [msrp[n]["GB"][0] for n in numbers if n in msrp and "GB" in msrp[n] and msrp[n]["GB"][1] == "GBP"]
+        if gb:
+            new_price[eid] = min(gb)
+    gbp_krw = to_krw.get("GBP")
+
     def series(slug: str) -> str:
         """비슷한 모델 묶음: 주소 앞의 글자 부분 (q2→q, m262→m, sl2→sl, summilux-m-35…→summilux)"""
         return re.match(r"[a-z]+", slug).group(0) if re.match(r"[a-z]+", slug) else slug
@@ -318,6 +335,14 @@ def build(out: Path) -> dict:
             if e.get("sold_median_krw") and e.get("sold_price_count"):
                 sold = t["sold_val"].format(price=money(conv(e["sold_median_krw"]), cur, lang, True), n=e["sold_price_count"])
                 parts.append(f"<div><dt>{t['sold']}</dt><dd>{sold}</dd></div>")
+            vs_new = None
+            if new_price.get(eid) and gbp_krw and e.get("b_price_krw") and not children:
+                vs_new = round(e["b_price_krw"] / (new_price[eid] * gbp_krw) * 100)
+                if 40 <= vs_new <= 130:  # 벗어나면 옛 제품과 복각판이 한 번호로 섞였을 수 있어 안 보임 (틀린 숫자보다 안 보이는 게 나음)
+                    parts.append(f"<div><dt>{t['new']}</dt><dd>£{new_price[eid]:,.0f}</dd></div>")
+                    parts.append(f"<div><dt>{t['vs_new']}</dt><dd>{t['vs_new_val'].format(pct=vs_new)}</dd></div>")
+                else:
+                    vs_new = None
             parts.append("</dl>")
             note = t["updated"].format(time=updated_text)
             if e.get("sold_median_krw"):
@@ -329,6 +354,8 @@ def build(out: Path) -> dict:
                                              high=money(conv(lo_hi[1]), cur, lang, True), median=money(conv(mid), cur, lang, True))
                 if e.get("sold_median_krw") and e.get("sold_price_count"):
                     answer += t["a_sold"].format(k=e["sold_price_count"], sold=money(conv(e["sold_median_krw"]), cur, lang, True))
+                if vs_new:
+                    answer += t["a_new"].format(new=f"£{new_price[eid]:,.0f}", pct=vs_new)
                 parts.append(f"<h2>{html.escape(t['q_price'].format(name=name))}</h2><p>{html.escape(answer)}</p>")
                 if len(by_country) >= 2:
                     cheap = t["sep"].join(f"{COUNTRY[c][lang]} {money(conv(v), cur, lang, True)}" for c, v in sorted(by_country.items(), key=lambda kv: kv[1])[:4])
