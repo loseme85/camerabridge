@@ -6374,6 +6374,60 @@ def crawl_leicastoremy():
     return results
 
 
+def crawl_photo19():
+    """Photo19 (이탈리아 브레시아) - PrestaShop 중고 분류 화면(카메라 191·렌즈 192·액세서리 194, 15개씩)에서 라이카·라이츠만.
+    robots.txt가 사이트 검색(controller=search)을 막아 분류 화면만 읽음. 이름은 사진 alt, 가격 'price' 칸. 등급 표기 없음(사진 등급 대기열).
+    다른 회사의 라이카 마운트 렌즈(7artisans 등)·Panasonic Leica DG는 뺌"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://www.photo19.it"
+    print(f"\n  📂 Photo19 크롤링 시작")
+    for cat in ("191-fotocamere-usate", "192-obiettivi-usati", "194-accessori-usati-flash-varie"):
+        for page in range(1, 20):
+            resp = sess.get(f"{base}/{cat}", params={"page": page}, timeout=30)
+            resp.raise_for_status()
+            arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+            for a in arts:
+                link = re.search(r'href="(https://www\.photo19\.it/[^"]+\.html)"', a)
+                alt = re.search(r'alt="([^"]{4,200})"', a)
+                if not link or not alt or link.group(1) in seen:
+                    continue
+                seen.add(link.group(1))
+                name = re.sub(r"\s+", " ", _html.unescape(alt.group(1))).strip()
+                if not re.search(r"(?i)\b(?:leica|leitz)\b", name) or re.search(r"(?i)panasonic|lumix|7 ?artisans|sigma|voigt|adatt|per leica|x leica", name):
+                    continue
+                price_m = re.findall(r'class="price[^"]*"[^>]*>([^<]+)<', a)
+                num = re.sub(r"[^\d,]", "", _html.unescape(price_m[-1]).replace(".", "")) if price_m else ""
+                price = f"€{float(num.replace(',', '.')):,.0f}" if num else "문의요망"
+                img = re.search(r'(?:data-src|src)="(https://[^"]+\.(?:jpg|jpeg|webp|png))"', a)
+                cat_name = detect_category(name, price)
+                results.append({
+                    "site": "Photo19 (이탈리아)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "EUR",
+                    "이미지": img.group(1) if img else "",
+                    "링크": link.group(1),
+                    "품절": False,
+                    "예약중": False,
+                    "mount": 'Accessory' if cat_name == 'Accessory' else detect_mount(name),
+                    "category": cat_name,
+                    "brand": detect_brand(name),
+                })
+            if len(arts) < 15:
+                break
+            time.sleep(2)
+    print(f"  ✅ Photo19 완료: {len(results)}개")
+    return results
+
+
 def crawl_imagefoto():
     """Image Foto (덴마크, 라이카 공인 딜러) - Shopify '브루트'(brugt, 중고) 컬렉션 JSON에서 판매자 Leica만, 판매 중만. 가격 DKK.
     제목 'Brugt Leica M2 Chrome m. Selvudløser' → 'Leica M2 Chrome', 'Udstillingsmodel'(진열품)은 그대로 둠. 등급 표기 없음"""
@@ -10902,6 +10956,7 @@ def crawl_all():
         ("Leica Store Australia (호주)", lambda: ce.wrap_full_run("Leica Store Australia (호주)", lambda: _with_browser(crawl_leicastoreau))),
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
+        ("Photo19 (이탈리아)", lambda: ce.wrap_full_run("Photo19 (이탈리아)", crawl_photo19)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
