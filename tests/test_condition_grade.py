@@ -532,6 +532,13 @@ def test_fotogoerlitz():
     assert grade_of("Foto Görlitz (독일)", FOTOGOERLITZ_PREFIX + "Demo")[0] == "S"
 
 
+def test_pch():
+    from condition_grade import PCH_PREFIX
+    site = "PCH Pro Shop (벨기에)"
+    assert grade_of(site, PCH_PREFIX + "DEMO")[0] == "S"
+    assert grade_of(site, "정보없음", "Leica Summicron-M 35mm f2 ASPH")[0] is None
+
+
 def test_pacificrim():
     from condition_grade import PACIFICRIM_PREFIX
     site = "Pacific Rim Camera (미국)"
