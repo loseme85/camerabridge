@@ -5,7 +5,7 @@
     python3 scripts/usage_report.py --days 30
     python3 scripts/usage_report.py --since 2026-10-04 --json
 
-방문 수·나라·기기는 Vercel 프로젝트 화면 Analytics 에서 본다. 여기서는 검색·클릭만.
+2026-11-07부터 둘러보기만 한 방문(첫 화면·모델 시세 페이지)도 남는다. 그 전 기록은 검색·클릭한 방문만.
 """
 from __future__ import annotations
 
@@ -51,11 +51,14 @@ def summarize(entries: list[dict]) -> dict:
         first.setdefault(e["sid"], e)
     norm = lambda q: " ".join(str(q).lower().split())  # noqa: E731
     return {
-        "visits_with_activity": len(sessions),
+        "visits": len(sessions),
+        "visits_with_activity": len({e["sid"] for e in entries if e.get("searches") or e.get("clicks")}),
         "visits_with_click": len({e["sid"] for e in entries if e.get("clicks")}),
         "searches": len(searches),
         "clicks": len(clicks),
         "referrers": collections.Counter(e.get("referrer") or "(직접·알 수 없음)" for e in first.values()).most_common(10),
+        "landings": collections.Counter(e.get("landing") or "/" for e in first.values()).most_common(10),
+        "pages": collections.Counter(e["page"] for e in entries if e.get("page")).most_common(15),
         "locales": collections.Counter(e.get("locale") or "-" for e in first.values()).most_common(10),
         "mobile_share": round(sum(1 for e in first.values() if e.get("mobile")) / len(first), 2) if first else None,
         "top_queries": collections.Counter(norm(s["q"]) for s in searches).most_common(20),
@@ -69,10 +72,10 @@ def summarize(entries: list[dict]) -> dict:
 
 def print_report(start: str, end: str, r: dict) -> None:
     print(f"# 사용 기록 {start} ~ {end} (KST)\n")
-    print(f"- 검색·클릭한 방문 {r['visits_with_activity']} · 판매처까지 간 방문 {r['visits_with_click']}")
+    print(f"- 방문 {r['visits']} · 검색·클릭한 방문 {r['visits_with_activity']} · 판매처까지 간 방문 {r['visits_with_click']}")
     print(f"- 검색 {r['searches']} (모델 안 고르고 그대로 검색 {r['free_text_share']}) · 판매처 클릭 {r['clicks']} · 휴대폰 {r['mobile_share']}")
     sections = [
-        ("어디서 왔나", "referrers"), ("화면 언어", "locales"), ("많이 찾은 검색어", "top_queries"),
+        ("어디서 왔나", "referrers"), ("처음 들어온 페이지", "landings"), ("본 페이지", "pages"), ("화면 언어", "locales"), ("많이 찾은 검색어", "top_queries"),
         ("많이 고른 모델", "top_entities"), ("결과 0건 검색어 → 고칠 것", "zero_result_queries"),
         ("판매 중 0건 검색어", "no_active_queries"), ("클릭한 판매처", "click_hosts"),
     ]

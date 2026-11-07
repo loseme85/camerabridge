@@ -3,7 +3,7 @@
 사용 기록(api/usage.py 가 쌓은 Blob usage/)과 의견(feedback/)을 읽어 한 화면에 보여 준다.
 들어가기: /owner/usage?key=<OWNER_DASHBOARD_KEY> 로 한 번 열면 쿠키가 남아 다음부터는 /owner/usage 만으로 열림.
 기간: ?days=1 · 7(기본) · 30
-전체 방문 수(검색 안 한 사람 포함)는 Vercel Analytics 에서 본다.
+2026-11-07부터 둘러보기만 한 방문(첫 화면·모델 시세 페이지)도 남고, 들어온 곳은 도메인+경로까지 남는다.
 """
 from __future__ import annotations
 
@@ -28,8 +28,17 @@ COOKIE = "cb_owner"
 # 이 화면을 연 브라우저(사장님)는 방문 기록에서 뺀다: /api/usage 에만 가는 표시 쿠키 (값은 비밀 아님, 끄면 기록이 빠질 뿐)
 SKIP_USAGE_COOKIE = "cb_skip_usage=1; Path=/api/usage; Max-Age=31536000; HttpOnly; Secure; SameSite=Lax"
 ANALYTICS_URL = "https://vercel.com/camerabridge/camerabridge/analytics"
-REFERRER_NAMES = {"www.reddit.com": "레딧", "old.reddit.com": "레딧", "reddit.com": "레딧", "out.reddit.com": "레딧",
-                  "www.google.com": "구글", "com.reddit.frontpage": "레딧 앱", "t.co": "X(트위터)"}
+# 들어온 곳 묶음 이름: 도메인에 이 글자가 들어가면 (위에서부터 먼저 맞는 것)
+REFERRER_GROUPS = [
+    ("com.reddit.frontpage", "레딧 앱"), ("reddit.com", "레딧"), ("google.", "구글 검색"), ("naver.com", "네이버"),
+    ("bing.com", "Bing 검색"), ("daum.net", "다음"), ("duckduckgo.com", "DuckDuckGo"), ("yahoo.", "야후"),
+    ("yandex.", "얀덱스"), ("ecosia.org", "Ecosia"), ("chatgpt.com", "ChatGPT"), ("perplexity.ai", "Perplexity"),
+    ("instagram.com", "인스타그램"), ("facebook.com", "페이스북"), ("threads.", "스레드"), ("t.co", "X(트위터)"),
+    ("x.com", "X(트위터)"), ("youtube.com", "유튜브"), ("clien.net", "클리앙"), ("dcinside.com", "디시인사이드"),
+    ("slrclub.com", "SLR클럽"), ("kakao.com", "카카오"), ("github.com", "GitHub"), ("rangefinderforum.com", "Rangefinder Forum"),
+    ("l-camera-forum.com", "L-Camera Forum"), ("fredmiranda.com", "FredMiranda"), ("vercel.app", "Vercel 미리보기"),
+]
+SEARCH_GROUPS = {"구글 검색", "네이버", "Bing 검색", "다음", "DuckDuckGo", "야후", "얀덱스", "Ecosia"}
 MAX_READS = 400  # 한 번 열 때 읽는 기록 수 상한 (Blob 읽기 한도 아끼기)
 
 
@@ -75,11 +84,25 @@ def _country_name(code: str | None) -> str:
 
 
 def _ref_name(host: str | None, landing: str | None = None) -> str:
+    """들어온 곳 묶음 이름. host 는 2026-11-07부터 '도메인/경로', 그 전은 도메인만."""
     if not host and "utm_source=model_page" in (landing or ""):
         return "카메라브릿지 모델 페이지"
     if not host:
-        return "직접·앱 (레딧 앱도 여기로 잡힘)"
-    return REFERRER_NAMES.get(host, host)
+        return "직접·앱 (주소 입력·즐겨찾기·레딧 앱 등)"
+    domain = host.split("/", 1)[0].lower()
+    for key, name in REFERRER_GROUPS:
+        # 'google.' 처럼 점으로 끝나면 나라별 도메인(google.co.kr 등)까지, 아니면 그 도메인과 하위 도메인만
+        hit = ("." + key) in ("." + domain) if key.endswith(".") else domain == key or domain.endswith("." + key)
+        if hit:
+            return name
+    return domain
+
+
+def _ref_detail(host: str | None) -> str | None:
+    """검색엔진은 경로가 의미 없어 묶음 이름만, 그 밖(커뮤니티 글 등)은 도메인+경로 그대로."""
+    if not host:
+        return None
+    return _ref_name(host) if _ref_name(host) in SEARCH_GROUPS else host
 
 
 def visits(entries: list[dict]) -> list[dict]:
@@ -93,9 +116,12 @@ def visits(entries: list[dict]) -> list[dict]:
         v["end"] = max(v["end"], e.get("created_at", ""))
         v["duration_s"] = max(v["duration_s"], e.get("duration_s") or 0)
         v["country"] = v["country"] or e.get("country")
-        v["steps"] += [("검색", s) for s in e.get("searches", [])] + [("클릭", c) for c in e.get("clicks", [])]
+        page = [("페이지", {"page": e["page"], "s": None})] if e.get("page") and e["page"] not in v.setdefault("pages", []) else []
+        if page:
+            v["pages"].append(e["page"])
+        v["steps"] += page + [("검색", s) for s in e.get("searches", [])] + [("클릭", c) for c in e.get("clicks", [])]
     for v in grouped.values():
-        v["steps"].sort(key=lambda step: step[1].get("s") or 0)
+        v["steps"].sort(key=lambda step: -1 if step[1].get("s") is None else step[1]["s"])
     return sorted(grouped.values(), key=lambda v: v["end"], reverse=True)
 
 
@@ -124,12 +150,14 @@ def _bars(entries: list[dict], days: int) -> str:
     top = max(counts + [1])
     bars = "".join(f"<div class=bar title='{_esc(l)}: {c}'><span style='height:{round(c / top * 100)}%'></span><b>{c or ''}</b><i>{_esc(l[-5:] if days > 1 else l + '시')}</i></div>"
                    for l, c in zip(labels, counts))
-    return f"<section class='card wide'><h2>{'오늘 시간별' if days == 1 else '날짜별'} 검색한 방문</h2><div class=bars>{bars}</div></section>"
+    return f"<section class='card wide'><h2>{'오늘 시간별' if days == 1 else '날짜별'} 방문</h2><div class=bars>{bars}</div></section>"
 
 
 def render(entries: list[dict], feedback: list[dict], days: int, cut: bool) -> str:
     r = summarize(entries)
-    ref_counts = collections.Counter(_ref_name(e.get("referrer"), e.get("landing")) for e in {e["sid"]: e for e in sorted(entries, key=lambda e: -e.get("part", 1))}.values())
+    firsts = {e["sid"]: e for e in sorted(entries, key=lambda e: -e.get("part", 1))}.values()
+    ref_counts = collections.Counter(_ref_name(e.get("referrer"), e.get("landing")) for e in firsts)
+    ref_details = collections.Counter(d for d in (_ref_detail(e.get("referrer")) for e in firsts) if d)
     country_counts = collections.Counter(_country_name(v["country"]) for v in visits(entries))
     pct = lambda x: "-" if x is None else f"{round(x * 100)}%"  # noqa: E731
     now = dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M")
@@ -139,6 +167,9 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool) -> s
     for v in visits(entries)[:60]:
         steps = []
         for kind, s in v["steps"]:
+            if kind == "페이지":
+                steps.append(f"<span class='step page'>📄 {_esc(s.get('page'))}</span>")
+                continue
             if kind == "검색":
                 tail = "결과 없음" if s.get("results") == 0 else f"판매 중 {s.get('active', 0)} / 전체 {s.get('results', 0)}"
                 steps.append(f"<span class=step>🔎 {_esc(s.get('q'))} <small>{tail}</small></span>")
@@ -146,9 +177,9 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool) -> s
                 steps.append(f"<span class='step click'>↗ {_esc(s.get('host'))}</span>")
         when = str(v["start"])[5:16].replace("T", " ")
         device = "📱" if v["mobile"] else "💻"
-        rows.append(f"<tr><td class=nowrap>{_esc(when)}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
+        rows.append(f"<tr><td class=nowrap>{_esc(when)}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
                     f"<td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초</td><td>{''.join(steps)}</td></tr>")
-    visit_table = "".join(rows) or "<tr><td colspan=5 class=muted>이 기간에 검색한 방문이 없습니다</td></tr>"
+    visit_table = "".join(rows) or "<tr><td colspan=5 class=muted>이 기간에 방문이 없습니다</td></tr>"
 
     fb_rows = "".join(f"<tr><td class=nowrap>{_esc(str(f.get('created_at', ''))[5:16].replace('T', ' '))}</td><td>{_esc(f.get('locale') or '-')}</td><td>{_esc(f.get('message'))}</td></tr>" for f in feedback) \
         or "<tr><td colspan=3 class=muted>아직 없음</td></tr>"
@@ -165,21 +196,24 @@ h1{{font-size:22px;margin:0}}h2{{font-size:15px;margin:0 0 10px}}.muted{{color:v
 .kpi b{{display:block;font-size:26px}}.kpi span{{color:var(--muted);font-size:13px}}
 .grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}}.card{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto}}.wide{{grid-column:1/-1}}
 table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px solid var(--line);vertical-align:top}}tr:first-child td{{border-top:0}}td.n{{text-align:right;font-variant-numeric:tabular-nums}}.nowrap{{white-space:nowrap}}
-.step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}
+.step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}.step.page{{background:transparent;border:1px solid var(--line)}}
 .bars{{display:flex;gap:4px;align-items:flex-end;height:130px}}.bar{{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}}
 .bar span{{display:block;width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:1px}}.bar b{{font-size:11px;order:-1}}.bar i{{font-size:10px;color:var(--muted);font-style:normal;white-space:nowrap}}
 .note{{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:13px}}a{{color:var(--accent)}}
 @media (max-width:760px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}td{{font-size:13px}}}}
 </style></head><body><main>
-<header><div><h1>방문 현황</h1><span class=muted>{now} 기준 · 검색하거나 판매처를 누른 방문만</span></div><nav class=tabs>{tabs}</nav></header>
+<header><div><h1>방문 현황</h1><span class=muted>{now} 기준 · 2026-11-07부터 둘러보기만 한 방문도 포함</span></div><nav class=tabs>{tabs}</nav></header>
 <div class=kpis>
-<div class=kpi><b>{r['visits_with_activity']}</b><span>검색한 방문</span></div>
+<div class=kpi><b>{r['visits']}</b><span>방문</span></div>
+<div class=kpi><b>{r['visits_with_activity']}</b><span>검색·클릭한 방문</span></div>
 <div class=kpi><b>{r['visits_with_click']}</b><span>판매처까지 간 방문</span></div>
-<div class=kpi><b>{r['searches']}</b><span>검색 수</span></div>
 <div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div></div>
 <div class=grid>
 {_bars(entries, days)}
-{_table('어디서 왔나', ref_counts.most_common(10), note='휴대폰 앱(레딧 앱 등)은 출처를 안 알려 줘서 "직접·앱"으로 잡힘')}
+{_table('어디서 왔나', ref_counts.most_common(12), note='휴대폰 앱(레딧·카카오톡 앱 등)은 출처를 안 알려 줘서 "직접·앱"으로 잡힘')}
+{_table('들어온 곳 자세히', ref_details.most_common(15), note='커뮤니티 글·사이트는 주소까지. 구글은 검색어를 안 알려 줌 → 검색어는 서치 콘솔에서')}
+{_table('처음 들어온 페이지', r['landings'])}
+{_table('많이 본 페이지', r['pages'][:10])}
 {_table('나라별 방문', country_counts.most_common(15), note='접속한 곳 기준 (2026-10-29부터 기록, 그 전은 "기록 전")')}
 {_table('화면 언어', r['locales'])}
 {_table('클릭한 판매처', r['click_hosts'])}
@@ -190,7 +224,7 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 <table><tr><td class=muted>시작(한국)</td><td class=muted>어디서 · 처음 들어온 주소</td><td class=muted>나라·기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
 <section class='card wide'><h2>최근 의견 (💬 의견 보내기)</h2><table>{fb_rows}</table></section>
 </div>
-<p class=note>검색 없이 둘러보기만 한 사람까지 포함한 <b>전체 방문 수·나라</b>는 <a href="{ANALYTICS_URL}" target=_blank rel=noopener>Vercel Analytics</a>에서 봅니다.
+<p class=note>2026-11-07 전 기록은 검색·클릭한 방문만 남아 있습니다. 같은 숫자를 <a href="{ANALYTICS_URL}" target=_blank rel=noopener>Vercel Analytics</a>에서도 볼 수 있습니다.
 {'<br>⚠️ 기록이 많아 최근 ' + str(MAX_READS) + '건만 읽었습니다.' if cut else ''}</p>
 </main></body></html>"""
 

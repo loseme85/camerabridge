@@ -48,3 +48,32 @@ def test_model_page_visits_show_source_and_landing():
                 "searches": [{"q": "m6"}], "clicks": []}]
     page = ou.render(entries, [], 1, False)
     assert "카메라브릿지 모델 페이지" in page and "utm_content=m6" in page
+
+
+def test_referrer_groups_and_details():
+    from api import owner_usage as ou
+    assert ou._ref_name("www.google.co.kr") == "구글 검색"
+    assert ou._ref_name("m.search.naver.com") == "네이버"
+    assert ou._ref_name("www.reddit.com/r/Leica/comments/abc") == "레딧"
+    assert ou._ref_name("t.co") == "X(트위터)" and ou._ref_name("www.tistory.com") == "www.tistory.com"
+    assert ou._ref_detail("www.google.com") == "구글 검색"
+    assert ou._ref_detail("www.reddit.com/r/Leica/comments/abc") == "www.reddit.com/r/Leica/comments/abc"
+
+
+def test_browse_only_visits_are_counted_with_pages():
+    from api import owner_usage as ou
+    entries = [
+        {"sid": "v1s1t0nly", "part": 1, "created_at": "2026-11-07T10:00:00+09:00", "page": "/ko/leica/m6/",
+         "referrer": "www.google.com", "landing": "/ko/leica/m6/", "searches": [], "clicks": [{"host": "ffordes.com", "s": 20}]},
+        {"sid": "v1s1t0nly", "part": 2, "created_at": "2026-11-07T10:01:00+09:00", "page": "/",
+         "referrer": "www.google.com", "landing": "/ko/leica/m6/", "searches": [{"q": "m6", "s": 40}], "clicks": []},
+        {"sid": "r3dd1tv1", "part": 1, "created_at": "2026-11-07T11:00:00+09:00", "page": "/",
+         "referrer": "www.reddit.com/r/Leica/comments/abc", "landing": "/", "searches": [], "clicks": []},
+    ]
+    v = next(v for v in ou.visits(entries) if v["referrer"] == "www.google.com")
+    assert [k for k, _ in v["steps"]] == ["페이지", "페이지", "클릭", "검색"]
+    page = ou.render(entries, [], 1, False)
+    assert "www.reddit.com/r/Leica/comments/abc" in page and "구글 검색" in page and "/ko/leica/m6/" in page
+    from scripts import usage_report
+    r = usage_report.summarize(entries)
+    assert r["visits"] == 2 and r["visits_with_activity"] == 1
