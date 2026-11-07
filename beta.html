@@ -823,6 +823,7 @@
     .grade-chip.grade-N,.grade-chip.grade-S{border-color:#2f7d4f;color:#2f7d4f}
     .grade-chip.grade-D,.grade-chip.grade-X{border-color:#b26a00;color:#b26a00}
     .grade-compare{font-size:12px;font-weight:600}
+    .deal-badge{display:inline-block;align-self:flex-start;width:fit-content;margin:4px 0 2px;padding:2px 7px;border:1px solid #2f7d4f;color:#2f7d4f;font-size:13px;font-weight:700;line-height:1.4}
     .grade-compare.is-cheaper{color:#2f7d4f}
     .grade-compare.is-pricier{color:var(--text-soft)}
     .grade-compare.is-note{color:var(--text-soft);font-weight:400;font-style:italic}
@@ -1545,6 +1546,7 @@
               <option value="relevance">Recommended</option>
               <option value="price_asc">Price: Low to High</option>
               <option value="price_desc">Price: High to Low</option>
+              <option value="deal">Best deals first</option>
               <option value="newest">Newest</option>
             </select>
           </div>
@@ -2073,6 +2075,7 @@
         newest: { ko: '최신순', en: 'Newest', ja: '新着順', 'zh-Hans': '最新', 'zh-Hant': '最新', pt: 'Mais recentes', es: 'Más recientes', de: 'Neueste', it: 'Più recenti' },
         price_asc: { ko: '낮은 가격순', en: 'Price: Low to High', ja: '価格の安い順', 'zh-Hans': '价格从低到高', 'zh-Hant': '價格從低到高', pt: 'Preço: menor para maior', es: 'Precio: de menor a mayor', de: 'Preis: aufsteigend', it: 'Prezzo: crescente' },
         price_desc: { ko: '높은 가격순', en: 'Price: High to Low', ja: '価格の高い順', 'zh-Hans': '价格从高到低', 'zh-Hant': '價格從高到低', pt: 'Preço: maior para menor', es: 'Precio: de mayor a menor', de: 'Preis: absteigend', it: 'Prezzo: decrescente' },
+        deal: { ko: '시세보다 싼 순', en: 'Best deals first', ja: 'お買い得順', 'zh-Hans': '最划算', 'zh-Hant': '最划算', pt: 'Melhores ofertas', es: 'Mejores ofertas', de: 'Beste Angebote zuerst', it: 'Migliori affari' },
       },
       sold_filter: {
         any: { ko: '전체', en: 'Any', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
@@ -3848,7 +3851,10 @@
       }
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
-      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${original}${gradeRow}${landed}</div>`;
+      const diff = dealDiff(result, cost);
+      const deal = diff !== null && diff <= -5 && (result.final_output || {}).sold_quality === 'asking'  // 살 수 있는 매물에만
+        ? `<div class="deal-badge" title="${escapeHtml(ec('vs_grade_cheaper', { p: String(-diff) }))}">${escapeHtml(ec('deal_below', { p: String(-diff) }))}</div>` : '';
+      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${deal}${original}${gradeRow}${landed}</div>`;
     }
 
     function localizePriceBand(text){
@@ -4134,6 +4140,7 @@
       grade_basis_image: { ko: '사진으로 추정', en: 'Estimated from photos', ja: '写真から推定', 'zh-Hans': '根据照片估计', 'zh-Hant': '根據照片估計', pt: 'Estimado pelas fotos', es: 'Estimado por las fotos', de: 'Anhand der Fotos geschätzt', it: 'Stimato dalle foto' },
       grade_market: { ko: '시세 ({grade} 기준)', en: 'Market price ({grade})', ja: '相場（{grade}基準）', 'zh-Hans': '行情（{grade}）', 'zh-Hant': '行情（{grade}）', pt: 'Preço de mercado ({grade})', es: 'Precio de mercado ({grade})', de: 'Marktpreis ({grade})', it: 'Prezzo di mercato ({grade})' },
       vs_grade_cheaper: { ko: '같은 등급 시세보다 {p}% 쌈', en: '{p}% below the market price for this grade', ja: '同ランク相場より{p}%安い', 'zh-Hans': '比同级行情低 {p}%', 'zh-Hant': '比同級行情低 {p}%', pt: '{p}% abaixo do preço de mercado deste grau', es: '{p}% por debajo del precio de mercado de este grado', de: '{p} % unter dem Marktpreis für diesen Zustand', it: '{p}% sotto il prezzo di mercato di questo grado' },
+      deal_below: { ko: '시세보다 {p}% 쌈', en: '{p}% below market', ja: '相場より{p}%安い', 'zh-Hans': '低于行情 {p}%', 'zh-Hant': '低於行情 {p}%', pt: '{p}% abaixo do mercado', es: '{p}% bajo el mercado', de: '{p}% unter Marktwert', it: '{p}% sotto il mercato' },
       vs_grade_pricier: { ko: '같은 등급 시세보다 {p}% 비쌈', en: '{p}% above the market price for this grade', ja: '同ランク相場より{p}%高い', 'zh-Hans': '比同级行情高 {p}%', 'zh-Hant': '比同級行情高 {p}%', pt: '{p}% acima do preço de mercado deste grau', es: '{p}% por encima del precio de mercado de este grado', de: '{p} % über dem Marktpreis für diesen Zustand', it: '{p}% sopra il prezzo di mercato di questo grado' },
       note_price_inferred: { ko: '제목에 구분 표기가 없어 가격대로 모델을 추정함', en: 'Model inferred from price — the title does not say which version', ja: 'タイトルに区別表記がなく価格帯からモデルを推定', 'zh-Hans': '标题未注明版本，按价格区间推断型号', 'zh-Hant': '標題未註明版本，依價格區間推斷型號', pt: 'Modelo deduzido pelo preço — o título não indica a versão', es: 'Modelo deducido por el precio: el título no indica la versión', de: 'Modell aus dem Preis abgeleitet – der Titel nennt die Version nicht', it: 'Modello dedotto dal prezzo: il titolo non indica la versione' },
       note_too_cheap: { ko: '시세보다 지나치게 싸 시세 계산에서 뺌 (부품·액세서리일 수 있음)', en: 'Far below the market price, left out of the price — may be a part or accessory', ja: '相場より極端に安いため相場計算から除外（部品・アクセサリーの可能性）', 'zh-Hans': '远低于行情，未计入行情（可能是零件或配件）', 'zh-Hant': '遠低於行情，未計入行情（可能是零件或配件）', pt: 'Muito abaixo do preço de mercado, fora do cálculo — pode ser peça ou acessório', es: 'Muy por debajo del precio de mercado, fuera del cálculo: puede ser una pieza o accesorio', de: 'Weit unter dem Marktpreis, nicht eingerechnet – evtl. Ersatzteil oder Zubehör', it: 'Molto sotto il prezzo di mercato, escluso dal calcolo: può essere un ricambio o accessorio' },
@@ -4368,23 +4375,34 @@
       return Number(table[grade] || 0);
     }
 
-    // 카드: 공통 등급 + (모델을 골랐으면) 같은 등급 시세와 비교
+    // 같은 등급 시세 대비 % (음수 = 싸다). 고른 모델이 있으면 그 모델, 없으면 매물 자신의 모델(result.entity)로.
+    // 세트·너무 싼 것(잘못 연결 의심)·가격으로 추정한 모델은 빼고, -60%보다 싸거나 +150%보다 비싸면 연결이 틀린 것으로 보고 안 보임
+    function dealDiff(result, cost){
+      const grade = result.grade;
+      const note = (result.final_output || {}).entity_note;
+      if(!grade || grade === 'X' || grade === 'N' || note === 'too_cheap' || note === 'set' || note === 'price_inferred') return null;
+      if(!entityState.byId || !cost || !cost.listed || !fxRate(cost.currency) || !fxRate('KRW')) return null;
+      const picked = state.entity ? entityState.byId[state.entity] : null;
+      const entity = picked && !(picked.children || []).length && !picked.feature ? picked : entityState.byId[result.entity];
+      if(!entity || (entity.children || []).length || !entity.b_price_krw) return null;
+      const factor = gradeFactor(entity, grade);
+      if(!factor) return null;
+      const diff = Math.round((convertAmount(cost.listed, cost.currency, 'KRW') / (entity.b_price_krw * factor) - 1) * 100);
+      return diff < -60 || diff > 150 ? null : diff;
+    }
+
+    // 카드: 공통 등급 + 같은 등급 시세와 비교 (싸면 가격 바로 아래 굵게, 비싸면 등급 옆에 흐리게)
     function renderGradeRow(result, cost){
       const grade = result.grade;
       if(!grade) return '';
       const title = result.grade_basis === 'text' ? ec('grade_basis_text') : result.grade_basis === 'image' ? ec('grade_basis_image') : String(result.condition || '');
       let compare = '';
       const note = (result.final_output || {}).entity_note;
-      const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
-      const factor = entity && !(entity.children || []).length ? gradeFactor(entity, grade) : 0;
+      const diff = dealDiff(result, cost);
       if(note === 'too_cheap' || note === 'set'){
         compare = `<span class="grade-compare is-note">${escapeHtml(ec(note === 'set' ? 'note_set' : 'note_too_cheap'))}</span>`;
-      } else if(entity && entity.b_price_krw && factor && grade !== 'X' && cost && cost.listed && fxRate(cost.currency) && fxRate('KRW')){
-        const listedKrw = convertAmount(cost.listed, cost.currency, 'KRW');
-        const diff = Math.round((listedKrw / (entity.b_price_krw * factor) - 1) * 100);
-        if(Math.abs(diff) >= 3){
-          compare = `<span class="grade-compare ${diff < 0 ? 'is-cheaper' : 'is-pricier'}">${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}</span>`;
-        }
+      } else if(diff !== null && diff >= 3){
+        compare = `<span class="grade-compare is-pricier">${escapeHtml(ec('vs_grade_pricier', { p: String(diff) }))}</span>`;
       }
       if(note === 'price_inferred') compare += `<span class="grade-compare is-note">${escapeHtml(ec('note_price_inferred'))}</span>`;
       return `<div class="result-grade-row"><span class="grade-chip grade-${escapeHtml(grade)}" title="${escapeHtml(title)}">${escapeHtml(gradeLabel(grade))}</span>${compare}</div>`;
@@ -5291,6 +5309,7 @@
           if(option.value === 'newest') option.textContent = ux('sort.newest', 'Newest');
           if(option.value === 'price_asc') option.textContent = ux('sort.price_asc', 'Price: Low to High');
           if(option.value === 'price_desc') option.textContent = ux('sort.price_desc', 'Price: High to Low');
+          if(option.value === 'deal') option.textContent = ux('sort.deal', 'Best deals first');
         });
       }
       if(els['sold-filter']){
@@ -6297,6 +6316,12 @@
           if(right.firstSeen !== left.firstSeen) return right.firstSeen - left.firstSeen;
           return left.originalIndex - right.originalIndex;
         }
+        if(sortMode === 'deal'){  // 같은 등급 시세보다 많이 싼 순, 계산이 안 되는 매물은 뒤로
+          const l = left.deal === null ? 999 : left.deal;
+          const r = right.deal === null ? 999 : right.deal;
+          if(l !== r) return l - r;
+          return left.originalIndex - right.originalIndex;
+        }
         if(sortMode === 'price_desc'){
           const leftMissing = leftPrice === null ? 1 : 0;
           const rightMissing = rightPrice === null ? 1 : 0;
@@ -6328,6 +6353,7 @@
         compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
         priceValue: parseNumericPrice(result),
         marketInfo: getMarketActivityInfo(result),
+        deal: sortMode === 'deal' && (result.final_output || {}).sold_quality === 'asking' ? dealDiff(result, computeLandedCost(result)) : null,
       }));
       wrapped.forEach(item => {
         item.result.__ui_original_index = item.originalIndex;
