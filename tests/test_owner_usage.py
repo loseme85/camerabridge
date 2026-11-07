@@ -117,3 +117,21 @@ def test_same_ip_same_day_counts_once(monkeypatch):
     r = usage_report.summarize([a, b])
     assert r["visits"] == 1
     assert len(ou.visits([a, b])) == 1
+
+
+def test_visit_time_shown_in_local_time(monkeypatch):
+    import sys
+    import types
+    import json
+    from api import usage, owner_usage as ou
+    saved = []
+    monkeypatch.setitem(sys.modules, "vercel", types.SimpleNamespace(blob=types.SimpleNamespace(put=lambda path, data, **kw: saved.append(data))))
+    usage.handle({"sid": "tzt3st1234", "page": "/"}, "US", "", "Mozilla/5.0", "1.2.3.4", "America/New_York")
+    usage.handle({"sid": "tzt3st5678", "page": "/"}, "US", "", "Mozilla/5.0", "1.2.3.5", "not a zone; drop")
+    assert json.loads(saved[0])["tz"] == "America/New_York" and "tz" not in json.loads(saved[1])
+    assert ou._local_time("2026-11-07T13:44:00+09:00", "America/New_York", "US")[0] == "11-06 23:44"
+    assert ou._local_time("2026-11-07T13:44:00+09:00", None, "GB")[0] == "11-07 04:44"
+    assert "모름" in ou._local_time("2026-11-07T13:44:00+09:00", None, "US")[1]
+    page = ou.render([{"sid": "tzt3st1234", "part": 1, "created_at": "2026-11-07T13:44:00+09:00", "tz": "America/New_York",
+                       "country": "US", "page": "/", "searches": [], "clicks": []}], [], 7, False)
+    assert "11-06 23:44" in page and "New York" in page
