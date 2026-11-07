@@ -6370,7 +6370,7 @@
         firstSeen: getResultFirstSeenScore(result),
         compatibility: getResultCompatibilityScore(result),
         compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
-        priceValue: parseNumericPrice(result),
+        priceValue: comparablePrice(result),
         marketInfo: getMarketActivityInfo(result),
         deal: sortMode === 'deal' && (result.final_output || {}).sold_quality === 'asking' ? dealDiff(result, computeLandedCost(result)) : null,
       }));
@@ -6902,6 +6902,15 @@
           </div>
         </article>
       `;
+    }
+
+    // 가격 정렬용: 매장 통화가 섞여 있으므로 원화로 바꿔 비교 (₩2,400,000과 £1,199를 숫자 그대로 비교하던 문제, 2026-11-07)
+    function comparablePrice(result){
+      const value = parseNumericPrice(result);
+      if(value === null) return null;
+      const currency = String(result.currency || 'KRW').toUpperCase();
+      const krw = currency === 'KRW' ? value : convertAmount(value, currency, 'KRW');
+      return krw === null || !Number.isFinite(krw) ? value : krw;
     }
 
     function parseNumericPrice(result){
