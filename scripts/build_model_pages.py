@@ -61,6 +61,12 @@ SOURCE_COUNTRY = {"Leica Store Miami": "미국"}
 T = {
     "ko": {
         "title": "{name} 중고 시세·매물 | 카메라브릿지",
+        "q_price": "{name} 중고 가격은 얼마인가요?",
+        "a_price": "지금 {countries}개 나라 {shops}개 매장에 {n}개가 올라와 있습니다. 판매 가격은 {low}부터 {high}까지, 중간값은 {median}입니다.",
+        "a_sold": " 최근 팔린 매물 {k}개의 판매완료 직전 표시 가격 중간값은 {sold}입니다.",
+        "q_where": "{name} 중고는 어느 나라가 가장 싼가요?",
+        "a_where": "지금 나라별 최저가: {list}. 오늘 환율로 환산한 매장 표시 가격이며, 배송비·관세는 빠져 있습니다.",
+        "related": "비슷한 모델", "sep": ", ",
         "desc": "{name} 중고 판매 중 {active}개 ({shops}개 매장), {range}. 한국·일본·유럽·미국 라이카 매장 매물과 판매완료 가격을 한곳에서.",
         "h1": "{name} 중고 시세", "active": "판매 중", "active_val": "{n}개 · {shops}개 매장",
         "range": "판매 중 가격", "sold": "팔린 매물 중간값", "sold_val": "{price} (팔린 매물 {n}개)",
@@ -74,6 +80,12 @@ T = {
     },
     "en": {
         "title": "{name} Used Price & Listings | Camera Bridge",
+        "q_price": "How much is a used {name}?",
+        "a_price": "Right now {n} are listed at {shops} shops in {countries} countries. Asking prices run from {low} to {high}, with a median of {median}.",
+        "a_sold": " The last {k} that sold had a median final asking price of {sold}.",
+        "q_where": "Where is a used {name} cheapest?",
+        "a_where": "Cheapest by country right now: {list}. Shop prices converted at today's rate; shipping and import tax not included.",
+        "related": "Similar models", "sep": ", ",
         "desc": "{active} used {name} listings from {shops} shops, {range}. Leica shops in Korea, Japan, Europe and the US, with sold prices, in one place.",
         "h1": "{name} used prices", "active": "For sale now", "active_val": "{n} listings · {shops} shops",
         "range": "Asking prices", "sold": "Sold median", "sold_val": "{price} ({n} sold listings)",
@@ -87,6 +99,12 @@ T = {
     },
     "ja": {
         "title": "{name} 中古相場・在庫 | Camera Bridge",
+        "q_price": "{name} の中古価格はいくら？",
+        "a_price": "現在 {countries} か国 {shops} 店に {n} 点が出品されています。販売価格は {low} から {high}、中央値は {median} です。",
+        "a_sold": " 最近販売済みになった {k} 点の、販売済み直前の表示価格の中央値は {sold} でした。",
+        "q_where": "{name} の中古はどの国が安い？",
+        "a_where": "現在の国別最安値：{list}。各店の表示価格を本日のレートで換算したもので、送料・関税は含みません。",
+        "related": "似ているモデル", "sep": "、",
         "desc": "{name} の中古在庫 {active} 点（{shops} 店）、{range}。韓国・日本・欧州・米国のライカ取扱店の在庫と販売済み価格をまとめて。",
         "h1": "{name} 中古相場", "active": "販売中", "active_val": "{n} 点 · {shops} 店",
         "range": "販売価格", "sold": "販売済み中央値", "sold_val": "{price}（販売済み {n} 点）",
@@ -251,6 +269,10 @@ def build(out: Path) -> dict:
         prev = old_marks.get(url) or {}
         marks[url] = {"h": digest, "d": prev["d"] if prev.get("h") == digest else today}
 
+    def series(slug: str) -> str:
+        """비슷한 모델 묶음: 주소 앞의 글자 부분 (q2→q, m262→m, sl2→sl, summilux-m-35…→summilux)"""
+        return re.match(r"[a-z]+", slug).group(0) if re.match(r"[a-z]+", slug) else slug
+
     for e in picked:
         eid = e["id"]
         slug = slugs[eid]
@@ -259,6 +281,13 @@ def build(out: Path) -> dict:
         shops = len({r["source"] for r in rows})
         children = [by_id[c] for c in e.get("children") or [] if c in slugs]
         parent = by_id.get(e.get("parent") or "") if (e.get("parent") or "") in slugs else None
+        family_ids = {c["id"] for c in children} | ({parent["id"]} if parent else set()) | {eid}
+        related = sorted((x for x in picked if x["id"] not in family_ids and x["kind"] == e["kind"] and not x.get("parent")
+                          and series(slugs[x["id"]]) == series(slug)), key=lambda x: (-x.get("active_count", 0), x["id"]))[:8]
+        by_country: dict[str, float] = {}
+        for r in rows:
+            c = shop_parts(r["source"])[1]
+            by_country[c] = min(by_country.get(c, r["krw"]), r["krw"])
         for lang in LANGS:
             t, cur = T[lang], DISPLAY_CURRENCY[lang]
             conv = convert[cur]
@@ -294,6 +323,16 @@ def build(out: Path) -> dict:
             if e.get("sold_median_krw"):
                 note += "<br>" + t["sold_note"]
             parts.append(f'<p class="note">{note}</p>')
+            if len(rows) >= 2:  # 검색하는 질문에 그대로 답하는 문장 (데이터로 매번 새로 씀)
+                mid = rows[len(rows) // 2]["krw"]
+                answer = t["a_price"].format(n=len(rows), shops=shops, countries=len(by_country), low=money(conv(lo_hi[0]), cur, lang, True),
+                                             high=money(conv(lo_hi[1]), cur, lang, True), median=money(conv(mid), cur, lang, True))
+                if e.get("sold_median_krw") and e.get("sold_price_count"):
+                    answer += t["a_sold"].format(k=e["sold_price_count"], sold=money(conv(e["sold_median_krw"]), cur, lang, True))
+                parts.append(f"<h2>{html.escape(t['q_price'].format(name=name))}</h2><p>{html.escape(answer)}</p>")
+                if len(by_country) >= 2:
+                    cheap = t["sep"].join(f"{COUNTRY[c][lang]} {money(conv(v), cur, lang, True)}" for c, v in sorted(by_country.items(), key=lambda kv: kv[1])[:4])
+                    parts.append(f"<h2>{html.escape(t['q_where'].format(name=name))}</h2><p>{html.escape(t['a_where'].format(list=cheap))}</p>")
             if children or parent:
                 parts.append(f"<h2>{t['children'] if children else t['parent']}</h2><ul class=\"links\">")
                 for c in children or [parent]:
@@ -340,6 +379,10 @@ def build(out: Path) -> dict:
                 parts.append("</tbody></table></div>")
             else:
                 parts.append(f"<p>{t['none']}</p>")
+            if related:
+                parts.append(f"<h2>{t['related']}</h2><ul class=\"links\">" + "".join(
+                    f'<li><a href="/{lang}/leica/{slugs[x["id"]]}/">{html.escape(display_name(x, lang))}</a> <span>{t["count"].format(n=x.get("active_count", 0))}</span></li>'
+                    for x in related) + "</ul>")
             parts.append(f'<a class="more" href="/?entity={html.escape(eid)}&amp;utm_source=model_page&amp;utm_content={slug}">{html.escape(t["more"].format(name=name))}</a>')
             parts.append(f"</main>{footer(lang)}</body></html>\n")
             path = out / lang / "leica" / slug / "index.html"
