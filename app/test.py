@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62, 'EUR': 1500, 'GBP': 1800, 'USD': 1350, 'HUF': 4}  # 코드 표기('EUR 1,290')도 — 없으면 1,290원으로 읽어 바디가 부속품이 됨 (2026-11-08)
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -6374,6 +6374,35 @@ def crawl_leicastoremy():
     return results
 
 
+def crawl_digitalcameragraz():
+    """오스트리아 그라츠 Digital Camera Graz (WooCommerce, 2026-11-08 밤샘). 새 상품과 섞여 있어 이름에 시리얼(Sn.)이 있는
+    낱개(중고·진열품·데모)만, 바디·렌즈 분류만 담음. 이름의 'Sn.…, ArtNr.…, OVP, 1 Jahr Garantie' 꼬리는 자르고 '35mm/1,4' → '35mm f1.4'.
+    컨디션: Demogerät·Ausstellungsstück·Vitrinenstück → DEMO(S), 나머지는 표기 없음(사진 등급 대기열)"""
+    cats = re.compile(r"^Leica (M-Objektive|M-Kameras|SL[- ]Objektive|SL[- ]Kameras|Q-Kameras|Kompaktkameras digital|Schraub M39|R|S-System|M)$")
+    other = re.compile(r"(?i)voigt|zeiss|sigma|panasonic|lumix|ttartisan|7 ?artisans|für leica|for leica")
+
+    def keep(p, name):
+        import html as _h
+        names = [_h.unescape(c.get("name") or "") for c in p.get("categories") or []]
+        return (re.search(r"(?i)\bleica\b", name) and re.search(r"\bSn\.? ?\d", name) and not other.search(name)
+                and any(cats.match(n) for n in names))
+
+    def condition(p, name, text):
+        return "DCGraz: DEMO" if re.search(r"(?i)demoger|ausstellungs|vitrinen", name) else None
+
+    def rename(name):
+        name = re.split(r",?\s*\bSn\.?\s?\d", name)[0]
+        name = re.sub(r"(\d+)cm/(\d+(?:[.,]\d+)?)", lambda m: f"{int(m.group(1)) * 10}mm f{m.group(2).replace(',', '.')}", name)
+        name = re.sub(r"^Leica M39 (.+)$", r"Leica \1 (M39)", name)
+        name = re.sub(r"^Leica R ([A-Z][\w-]*)", r"Leica \1-R", name)  # 'Leica R Elmarit 135mm' → 'Leica Elmarit-R 135mm'
+        name = re.sub(r"\b(?:M )?Noctilux 75mm/1,2\b", "Noctilux-M 75mm/1,25", name)
+        name = re.sub(r"(\d+(?:-\d+)?)mm/(\d+(?:[.,]\d+)?(?:-\d+(?:[.,]\d+)?)?)", lambda m: f"{m.group(1)}mm f{m.group(2).replace(',', '.')}", name)
+        name = re.sub(r"\s*\b(Gehäuse|silbern? verchromt|schwarz verchromt|verchromt)\b", lambda m: "" if m.group(1) == "Gehäuse" else " " + m.group(1), name)
+        return re.sub(r"\s+", " ", name).strip(" ,")
+
+    return _woo_leica("https://www.digitalcameragraz.at", "digitalcameragraz", "Digital Camera Graz", keep=keep, condition=condition, rename=rename)
+
+
 def _woo_leica(base, site, label, keep=None, condition=None, rename=None, search="leica"):
     """WooCommerce 공개 상품 API(/wp-json/wc/store/v1/products?search=…)에서 판매 중 라이카만 행으로 (2026-11-08 밤샘, 여러 매장 공통).
     keep(p, name) → 담을지(기본: 라이카·라이츠이고 다른 회사 라이카 마운트 렌즈·Panasonic Leica DG가 아님),
@@ -6389,7 +6418,15 @@ def _woo_leica(base, site, label, keep=None, condition=None, rename=None, search
     for page in range(1, 20):
         resp = None
         for attempt in range(3):
-            resp = sess.get(f"{base}/wp-json/wc/store/v1/products", params={"search": search, "per_page": 100, "page": page}, timeout=30)
+            if page > 1:
+                time.sleep(2)  # 쉬지 않고 연달아 받으면 연결을 끊는 매장이 있음 (Digital Camera Graz)
+            try:
+                resp = sess.get(f"{base}/wp-json/wc/store/v1/products", params={"search": search, "per_page": 100, "page": page}, timeout=30)
+            except requests.ConnectionError:
+                if attempt == 2:
+                    raise
+                time.sleep(15 * (attempt + 1))
+                continue
             if resp.status_code != 429:
                 break
             time.sleep(int(resp.headers.get("Retry-After") or 0) or 20 * (attempt + 1))
@@ -11019,6 +11056,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
