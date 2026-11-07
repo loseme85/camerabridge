@@ -426,6 +426,9 @@ for slug, name, pattern in BARNACK:
         [short, f"barnack {short}", f"바르낙 {short}"])
 
 MODELS["leica:body:iii"]["title_must_not"].append(BLACK_PAINT[0])
+MODELS["leica:body:i"]["title_must_not"].append(r"compur")
+fam("leica:body:i-compur", "Leica I Model B (Compur)", "라이카 I 콤푸어 (모델 B)", None, [r"compur"],
+    [r"summicron|\bM ?\d", r"\bII+\b"], ["leica compur", "compur leica", "model b", "콤푸어 라이카"])
 for slug in ("iii", "iiia", "iiib", "iiic"):
     MODELS[f"leica:body:{slug}"]["title_must_not"].append(MILITARY)
 MODELS["leica:body:iiig"]["title_must_not"].append(SWEDISH)
