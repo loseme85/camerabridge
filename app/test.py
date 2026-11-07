@@ -9946,6 +9946,85 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+def crawl_sunrise():
+    """サンライズカメラ (일본 필름카메라·올드렌즈점) - BASE 몰 'Leica（ライカ）' 분류 정적 HTML (?page=1~, 한 쪽 24개, 90여 개).
+    판매 중이 앞쪽에 오고 뒤는 SOLD OUT으로 남은 것. 쪽 수는 화면의 data-last-page. SOLD OUT 빼고 판매 중만, 가격 JPY.
+    등급은 목록 설명의 '【コンディションランク】 A 美品' (S·A+·A·B+·B·C·D, condition_grade SUNRISE_PREFIX)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from ja_normalize import ja_to_en
+    from condition_grade import SUNRISE_PREFIX
+    base = "https://www.sunrise-camera.net"
+    site = "サンライズカメラ (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    results, seen = [], set()
+    print(f"\n  📂 サンライズカメラ 크롤링 시작")
+    last_page = 1
+    page_num = 1
+    while page_num <= min(last_page, 15):
+        try:
+            resp = sess.get(f"{base}/categories/4296284", params={"page": page_num}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"サンライズカメラ {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        text = resp.text
+        m_last = re.search(r'id="itemList"[^>]*data-last-page="(\d+)"', text)
+        if page_num == 1:
+            if not m_last:
+                raise RuntimeError("サンライズカメラ 목록 틀이 바뀜 (itemList 없음)")
+            last_page = int(m_last.group(1))
+        cards = re.findall(r'<li class="items-grid_itemListLI_\w+">(.*?)</li>', text, re.S)
+        for card in cards:
+            m_id = re.search(r'href="https://www\.sunrise-camera\.net/items/(\d+)"', card)
+            if not m_id or m_id.group(1) in seen:
+                continue
+            seen.add(m_id.group(1))
+            if re.search(r"items-grid_soldOut_", card):
+                continue
+            m_title = re.search(r'itemTitleText_\w+">(.*?)</p>', card, re.S)
+            raw = _html.unescape(m_title.group(1)).strip() if m_title else ""
+            if not re.search(r"(?i)leica|leitz|ライカ", raw):
+                continue
+            m_price = re.search(r'items-grid_price_\w+">\s*JPY\s*([\d,]+)', card)
+            if not m_price:
+                continue
+            price = f"¥{int(m_price.group(1).replace(',', '')):,}"
+            desc = _html.unescape(card)
+            m_rank = re.search(r"【コンディションランク】\s*([SABCD][+＋]?)\s*", desc)
+            img = re.search(r'<img class="items-grid_image_\w+" src="([^"]+)"', card)
+            name = re.sub(r"[（(]\s*\d{4,6}\s*[)）]\s*$", "", raw)
+            for ja, en in (("レンジファインダーフィルムカメラ", " "), ("フィルムカメラ", " "), ("ライカビット", " "), ("8枚玉", " 8 Element "),
+                           ("初代", " 1st "), ("ビッグネーム", " Big Name "), ("Lマウント", " L39 "), ("Mマウント", " M "),
+                           ("ドイツ", " Germany "), ("外付けフラッシュ", " Flash "), ("スピードライト", " "), ("被せ", " ")):
+                name = name.replace(ja, en)
+            name = re.sub(r"\s*ライカ\s*", " ", name)
+            name = re.sub(r"\s+", " ", ja_to_en(name)).strip()
+            name = name if re.match(r"(?:leica|leitz)\b", name, re.I) else "Leica " + name
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": SUNRISE_PREFIX + m_rank.group(1).replace("＋", "+") if m_rank else "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": _html.unescape(img.group(1)).split("?")[0] if img else "",
+                "링크": f"{base}/items/{m_id.group(1)}",
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}/{last_page}페이지 상품 {len(cards)}개")
+        page_num += 1
+        time.sleep(random.uniform(1.5, 2.5))
+    print(f"  ✅ サンライズカメラ 완료: {len(results)}개")
+    return results
+
+
 MORITZ_EXTRA_JA = [("レッドダイヤル", "Red Dial "), ("ブラックダイヤル", "Black Dial "), ("ダイヤル", "Dial "), ("セルフ付", "Self-timer "),
                    ("ブラックボディ", "Black Body"), ("ブラック", "Black "), ("ボディ", "Body "), ("ミニルックス", "Minilux "),
                    ("ベローズ", "Visoflex Bellows "), ("カナダ", "Canada "), ("ライツカナダ", "Leitz Canada "), ("沈胴", "Collapsible "),
@@ -10165,6 +10244,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
