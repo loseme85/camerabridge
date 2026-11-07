@@ -9946,6 +9946,94 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+CAMERACOLLECTION_JA = [("ズミルクス", "Summilux "), ("ライカフレックス", "Leicaflex "), ("A型 新エルマー", "Leica I Model A Body "), ("A型", "Leica I Model A "), ("DⅢ", "Leica III Body "),
+                       ("フード・ファインダー付", " "), ("グランドグラススクリーン", "Focusing Screen "), ("後期型", "Late "),
+                       ("前期型", "Early "), ("後期", "Late "), ("前期", "Early "), ("50周年", "50 Jahre "),
+                       ("ハンドグリップ", "Handgrip "), ("ブラッククローム", "Black Chrome "), ("ブラックペイント", "Black Paint "),
+                       ("グロッシー", "Glossy "), ("シルバー", "Silver "), ("ブラック", "Black "), ("セルフ付", "Self-timer "),
+                       ("固定鏡胴", "Rigid "), ("沈胴", "Collapsible "), ("メガネ付", "with Goggles "), ("用", " for "), ("元箱付", " "),
+                       ("フィッシュアイ", "Fisheye "), ("フラッシュブラケット", "Flash Bracket "), ("エクステンダー", "Extender "),
+                       ("逆像ビドム", "Vidom Finder "), ("ファインダー", " Finder "), ("ゴン", "gon")]
+
+
+def crawl_cameracollection():
+    """カメラコレクション (일본 삿포로 중고 카메라점) - 워드프레스 재고 목록. 공개 REST API
+    `/wp-json/wp/v2/itemlist?maker=30`(메이커 '라이카', 70개쯤 한 번에)에서 본문 표의 価格(세금 포함)·在庫状況·程度를 읽음.
+    在庫あり만 담음 ('販売済'는 판매 완료). '店頭販売のみ発送できません'(매장 판매만)도 판매 중이라 담음.
+    등급은 표의 '程度' 'AA'·'A～AA'·'AB'·'C' (condition_grade CAMERACOLLECTION_PREFIX)"""
+    import html as _html
+    import unicodedata
+    import requests
+    import crawl_engine as _ce
+    from ja_normalize import ja_to_en
+    from condition_grade import CAMERACOLLECTION_PREFIX
+    base = "https://camera-collection.jp"
+    site = "カメラコレクション (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 カメラコレクション 크롤링 시작")
+    items, page_num = [], 1
+    while page_num <= 10:
+        resp = sess.get(f"{base}/wp-json/wp/v2/itemlist", params={"maker": 30, "per_page": 100, "page": page_num}, timeout=30)
+        resp.raise_for_status()
+        items += resp.json()
+        if page_num >= int(resp.headers.get("X-WP-TotalPages", "1")):
+            break
+        page_num += 1
+        time.sleep(random.uniform(1.0, 2.0))
+    if len(items) < 10:
+        raise RuntimeError(f"カメラコレクション 라이카 {len(items)}개뿐")  # 덜 나오면 판매 완료로 바뀌지 않게
+    results = []
+    for it in items:
+        body = it.get("content", {}).get("rendered", "")
+        cells = {}
+        for k, v in re.findall(r"<tr><td>(.*?)</td><td>(.*?)</td></tr>", body, re.S):
+            key = re.sub(r"<[^>]+>|\s", "", _html.unescape(k))
+            cells[key] = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", v))).strip()
+        if "在庫あり" not in cells.get("在庫状況", ""):
+            continue
+        m_price = re.search(r"([\d,]+)\s*円", cells.get("価格(税込）", "") or cells.get("価格(税込)", ""))
+        if not m_price:
+            continue
+        price = f"¥{int(m_price.group(1).replace(',', '')):,}"
+        title = unicodedata.normalize("NFKC", _html.unescape(it.get("title", {}).get("rendered", "")))
+        raw = re.split(r"[※]", title)[0]
+        raw = re.sub(r"\([^)]*#[^)]*\)", " ", raw)  # '(1st、L#1759…、1,960年)' 같은 일련번호·연도 괄호
+        raw = re.sub(r"(美品|極上品|良品|現状特価品|値下しました|元箱一式.*|店頭販売のみ.*)", " ", raw)
+        for ja, en in CAMERACOLLECTION_JA:
+            raw = raw.replace(unicodedata.normalize("NFKC", ja), en)
+        name = re.sub(r"[、,]", " ", ja_to_en(raw))
+        # 남은 일본어 설명('プラCase'·'撮影に影響のない…')은 모델 연결을 흐려 뺌 — 영문·숫자 조각만 남김
+        name = " ".join(t for t in name.split() if not re.search(r"[\u3040-\u30ff\u4e00-\u9fff]", t))
+        name = re.sub(r"\(\s*\)|\[\s*\]|\bfor\s*$", " ", name)
+        if name.count(")") > name.count("("):
+            name = name.replace(")", " ")
+        name = re.sub(r"\s+", " ", name).strip()
+        name = re.sub(r"\b(\d{2,3})/(\d(?:\.\d)?)\b", r"\1mm f\2", name)
+        name = re.sub(r"\b([RLM])(\d{2,3})mm\b", r"\1 \2mm", name)
+        name = name if re.match(r"(?:leica|leitz)\b", name, re.I) else "Leica " + name
+        m_grade = re.match(r"(AA\s*[~～]\s*AAA|A\s*[~～]\s*AA|AAA|AA|AB|A|B|C)", unicodedata.normalize("NFKC", cells.get("程度", "")))
+        img = re.search(r'<img[^>]+src="([^"]+)"', body)
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": CAMERACOLLECTION_PREFIX + re.sub(r"\s", "", m_grade.group(1)).replace("～", "~") if m_grade else "정보없음",
+            "가격": price,
+            "통화": "JPY",
+            "이미지": img.group(1) if img else "",
+            "링크": f"{base}/?p={it['id']}",
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ カメラコレクション 완료: {len(results)}개 (라이카 {len(items)}개 중 재고 있음)")
+    return results
+
+
 def crawl_sunrise():
     """サンライズカメラ (일본 필름카메라·올드렌즈점) - BASE 몰 'Leica（ライカ）' 분류 정적 HTML (?page=1~, 한 쪽 24개, 90여 개).
     판매 중이 앞쪽에 오고 뒤는 SOLD OUT으로 남은 것. 쪽 수는 화면의 data-last-page. SOLD OUT 빼고 판매 중만, 가격 JPY.
@@ -10244,6 +10332,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
     ]
