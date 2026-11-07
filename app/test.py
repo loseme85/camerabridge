@@ -9946,6 +9946,87 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+MEDIAJOY_CATEGORIES = [66002, 66014]  # 35mm 소형 카메라 › ライカ, 35mm 소형 렌즈 › ライカ
+
+
+def crawl_mediajoy():
+    """メディアジョイカメラ (일본 교토 통신판매 전문 중고점) - 楽ウル 몰 'ライカ' 카메라·렌즈 분류 정적 HTML (10여 개).
+    목록에는 이름·가격·사진만 있어 상품 화면을 1.5초 간격으로 읽어 '在庫 ○'(재고 있음)와 'グレード：★★ 並品'을 봄.
+    가격 JPY(세금 포함). 등급은 별 개수 (condition_grade MEDIAJOY_PREFIX)"""
+    import html as _html
+    import unicodedata
+    import requests
+    import crawl_engine as _ce
+    from ja_normalize import ja_to_en
+    from condition_grade import MEDIAJOY_PREFIX
+    base = "https://mediajoycamera.com"
+    site = "メディアジョイカメラ (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 メディアジョイ 크롤링 시작")
+    cards, seen = [], set()
+    for cat in MEDIAJOY_CATEGORIES:
+        for page_idx in range(0, 10):
+            try:
+                resp = sess.get(f"{base}/item-list", params={"categoryId": cat, "pageIndex": page_idx, "sortKind": 3}, timeout=30)
+                resp.raise_for_status()
+            except Exception as e:
+                raise RuntimeError(f"メディアジョイ 분류 {cat} 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            new = 0
+            for pid, img, name, price in re.findall(
+                    r'<a href="/item-detail/(\d+)">\s*<img src="([^"]+)"[^>]*>.*?<p class="item-name"><a[^>]*>(.*?)</a></p>\s*'
+                    r'<p class="item-price">([\d,]+)円', resp.text, re.S):
+                if pid in seen:
+                    continue
+                seen.add(pid)
+                new += 1
+                cards.append((pid, img, name, price))
+            if not new:
+                break
+            time.sleep(1.5)
+    if not cards:
+        raise RuntimeError("メディアジョイ 라이카 분류가 비어 있음")
+    results = []
+    for pid, img, raw_name, price_txt in cards:
+        try:
+            det = sess.get(f"{base}/item-detail/{pid}", timeout=30)
+            det.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"メディアジョイ 상품 {pid} 못 읽음: {e}")
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"(?s)<script.*?</script>|<style.*?</style>", "", det.text))))
+        time.sleep(1.5)
+        if not re.search(r"在庫\s*○", text):
+            continue
+        m_grade = re.search(r"グレード\s*[:：]\s*(★+)", text)
+        raw = unicodedata.normalize("NFKC", _html.unescape(raw_name)).strip()
+        name = re.sub(r"^ライカ\s*", "", raw)
+        name = re.sub(r"\bD\s?III\b", "III (DIII) Body", name)
+        name = name.replace("レッドダイヤル", " Red Dial").replace("-Red Dial", " Red Dial")
+        name = re.sub(r"\((M|L|R|L39)\)", lambda m: " " + {"L": "L39"}.get(m.group(1), m.group(1)), name)
+        name = re.sub(r"(\d{2,3})\s?(?:mm|㎜)?\s?/\s?F\s?(\d(?:\.\d)?)", r" \1mm f\2", name)
+        name = re.sub(r"\s+", " ", ja_to_en(name)).strip().replace("-Redダイヤル", " Red Dial").replace("Redダイヤル", "Red Dial")
+        name = re.sub(r"(?i)^(?:leica\s+)?", "Leica ", name)
+        price = f"¥{int(price_txt.replace(',', '')):,}"
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": MEDIAJOY_PREFIX + str(len(m_grade.group(1))) if m_grade else "정보없음",
+            "가격": price,
+            "통화": "JPY",
+            "이미지": img.replace("_400.", "_800.") if "_400." in img else img,
+            "링크": f"{base}/item-detail/{pid}",
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ メディアジョイ 완료: {len(results)}개 (목록 {len(cards)}개)")
+    return results
+
+
 def crawl_katsumido():
     """銀座カツミ堂写真機店 (일본 도쿄 긴자 라이카·롤라이 중고점) - colorme 몰 'Leica(ライカ)' 분류(cbid=1788926, 하위 M·R·바르낙·
     렌즈·비조·액세서리 전부) 정적 HTML(EUC-JP), 한 쪽 60개. 팔린 상품은 몰에서 내려가 목록에는 판매 중만 남음. 가격 JPY(세금 포함).
@@ -10835,6 +10916,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("メディアジョイカメラ (일본)", lambda: ce.wrap_full_run("メディアジョイカメラ (일본)", crawl_mediajoy)),
         ("銀座カツミ堂 (일본)", lambda: ce.wrap_full_run("銀座カツミ堂 (일본)", crawl_katsumido)),
         ("マツバラ光機 (일본)", lambda: ce.wrap_full_run("マツバラ光機 (일본)", crawl_matsubara)),
         ("Foto Pazdera (체코)", lambda: ce.wrap_full_run("Foto Pazdera (체코)", crawl_pazdera)),
