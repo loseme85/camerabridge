@@ -100,6 +100,10 @@ jobs:
       - name: Build model pages and sitemap (검색 노출용)
         run: python3 scripts/build_model_pages.py
 
+      - name: List changed pages for IndexNow (Bing·네이버에 알릴 목록)
+        run: python3 scripts/indexnow.py --plan
+        continue-on-error: true
+
       - name: Commit and push results
         run: |
           git config user.name "Camera Bridge Bot"
@@ -115,6 +119,10 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tell Bing·Naver about changed pages (IndexNow)
+        run: python3 scripts/indexnow.py --send
+        continue-on-error: true
 
       - name: Notify success
         if: success()
