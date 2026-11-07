@@ -9946,6 +9946,92 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+MORITZ_EXTRA_JA = [("レッドダイヤル", "Red Dial "), ("ブラックダイヤル", "Black Dial "), ("ダイヤル", "Dial "), ("セルフ付", "Self-timer "),
+                   ("ブラックボディ", "Black Body"), ("ブラック", "Black "), ("ボディ", "Body "), ("ミニルックス", "Minilux "),
+                   ("ベローズ", "Visoflex Bellows "), ("カナダ", "Canada "), ("ライツカナダ", "Leitz Canada "), ("沈胴", "Collapsible "),
+                   ("固定鏡胴", "Rigid "), ("後期型", "Late "), ("初期型", "Early "), ("前期型", "Early "), ("後期", "Late "),
+                   ("Ｍマウント", "M mount"), ("Ｌマウント", "L39"), ("マウント", " mount"), ("ダブルストローク", "Double Stroke "),
+                   ("シングルストローク", "Single Stroke "), ("ファインダー", "Finder "), ("製造", "")]
+MORITZ_NOT_LEICA = r"キャノン|キヤノン|ジュピター|ニッコール|シュタンハイル|ソリゴール|コムラー|インダスタール|ロッコール|クルト|フレクサメーター|ローライ|ツァイス|ツアイス|フォクトレンダー|ペンタックス|ミノルタ|オリンパス"
+
+
+def crawl_moritz():
+    """クラシックカメラ モリッツ (일본 신주쿠) - 'ドイツカメラ(ライカ・ローライ)' 한 화면(doitu.html, Shift_JIS 정적 HTML 표).
+    상품마다 사진 번호(./image/jpeg/3026.jpg)가 있어 그것을 링크 꼬리표(#3026)로 씀. 가격 칸이 '売り切れ'이면 판매 완료.
+    가격은 세금 별도(税別)라 10%를 더해 JPY(세금 포함)로. 다른 회사 L39 렌즈(캐논·주피터 등)는 뺌.
+    등급은 설명 끝 '外観良上品'·'外観極上' 꼴 (condition_grade MORITZ_PREFIX)"""
+    import html as _html
+    import unicodedata
+    import requests
+    import crawl_engine as _ce
+    from ja_normalize import ja_to_en
+    from condition_grade import MORITZ_PREFIX
+    base = "https://www.moritz.co.jp"
+    site = "モリッツ (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 モリッツ 크롤링 시작")
+    resp = sess.get(f"{base}/doitu.html", timeout=30)
+    resp.raise_for_status()
+    text = resp.content.decode("cp932", "ignore")
+    blocks = re.findall(r'<A HREF="\./image/jpeg/\s*(\d+)\.jpg\s*"(.*?)</TABLE></CENTER>', text, re.S | re.I)
+    if len(blocks) < 10:
+        raise RuntimeError(f"モリッツ 상품 칸 {len(blocks)}개뿐")  # 화면이 바뀌면 판매 완료로 잘못 바뀌지 않게
+    results, seen = [], set()
+    for pid, block in blocks:
+        if pid in seen:  # 위쪽 '새로 들어온 상품' 칸과 아래 목록에 같은 상품이 두 번 나옴
+            continue
+        seen.add(pid)
+        m_name = re.search(r'<FONT SIZE="\+1"><B>(.*?)</B>', block, re.S | re.I)
+        if not m_name:
+            continue
+        parts = [unicodedata.normalize("NFKC", _html.unescape(re.sub(r"<[^>]+>", " ", p))).strip()
+                 for p in re.split(r"<BR>", m_name.group(1), flags=re.I)]
+        first = re.sub(r"\s+", " ", parts[0])
+        second = re.sub(r"\s+", " ", " ".join(parts[1:]))
+        if not re.search(r"ライカ|ライツ|ズミ|ズマ|エルマ|ノクチ|テリート|ヘクトール|Leica|Leitz", first, re.I):
+            continue
+        if re.search(MORITZ_NOT_LEICA, first):
+            continue
+        m_price = re.search(r'<FONT SIZE="\+2"><B>(.*?)</B>', block, re.S | re.I)
+        price_cell = re.sub(r"\s+", "", m_price.group(1)) if m_price else ""
+        sold = "売り切れ" in price_cell
+        m_yen = re.search(r"\\(\d[\d,]*)", price_cell)
+        if sold or not m_yen:
+            continue
+        price = f"¥{round(int(m_yen.group(1).replace(',', '')) * 1.1):,}"
+        desc = unicodedata.normalize("NFKC", _html.unescape(re.sub(r"<[^>]+>", " ", block.split("</B></FONT><BR><BR>", 1)[-1])))
+        m_grade = re.search(r"外観\s*(極上|美品|良上品|良上|良品|並上|並品|並)", desc)
+        lens_extra = second if re.search(r"\d+/\d|cm|mm|ミリ|マウント|カム", second) and not second.startswith("#") else ""
+        raw = f"{first} {lens_extra}".strip()
+        if second.startswith("#") and not re.search(r"\d+/\d|ボディ|ズミ|ズマ|エルマ|ファインダー|ベローズ", first):
+            raw += " ボディ"  # 'ライカ IIf ブラックダイヤル' + 일련번호뿐인 줄 → 바디
+        raw = re.sub(r"#\S+", " ", raw)
+        for ja, en in MORITZ_EXTRA_JA:
+            raw = raw.replace(unicodedata.normalize("NFKC", ja), en)
+        name = re.sub(r"\s+", " ", ja_to_en(raw)).strip()
+        name = re.sub(r"\b(\d{2,3})/(\d(?:\.\d)?)\b", r"\1mm f\2", name)
+        name = name if re.match(r"(?:leica|leitz)\b", name, re.I) else "Leica " + name
+        results.append({
+            "site": site,
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": MORITZ_PREFIX + m_grade.group(1) if m_grade else "정보없음",
+            "가격": price,
+            "통화": "JPY",
+            "이미지": f"{base}/image/jpeg/{pid}.jpg",
+            "링크": f"{base}/doitu.html#{pid}",
+            "품절": False,
+            "예약중": False,
+            "mount": detect_mount(name),
+            "category": detect_category(name, price),
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ モリッツ 완료: {len(results)}개 (상품 칸 {len(seen)}개)")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -10079,6 +10165,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

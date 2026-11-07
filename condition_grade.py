@@ -74,6 +74,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
+    if cond.startswith(MORITZ_PREFIX):
+        return _MORITZ.get(cond[len(MORITZ_PREFIX):].strip()), "label"
     if cond.startswith(FOTOGOERLITZ_PREFIX):
         return _FOTOGOERLITZ.get(cond[len(FOTOGOERLITZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTONO_PREFIX):
@@ -823,3 +825,9 @@ _FOTONO = {"1": "A", "2": "B", "3": "C", "4": "C", "5": "D"}
 # 독일 Foto Görlitz: 'Demoartikel' 분류(매장 진열·시연품)만 붙임 (2026-11-05 사장님) — 표기가 없고 모두 데모품이라 S
 FOTOGOERLITZ_PREFIX = "FotoGoerlitz: "
 _FOTOGOERLITZ = {"DEMO": "S"}
+
+# 일본 モリッツ (신주쿠 클래식 카메라점): 설명 끝 '外観極上'·'外観美品'·'外観良上品'·'外観良品'·'外観並上' (극상＞미품＞양상＞양품＞병상)
+# 사진 평가(표기 가리고 10점 — 판매 중 라이카 전부, 사진 1장씩, 2026-11-07): 美品 A 1 · 良上 A 5·B 1 · 良品 A 2·B 2(바디 1·렌즈 1).
+# 美品 A·良上 B·良品 B로 두면 정확 일치 4/10 · 한 등급 이내 10/10 (사진이 평균 0.6등급 후함, 기존 매장 0.8과 비슷 → 그대로)
+MORITZ_PREFIX = "Moritz: "
+_MORITZ = {"極上": "A", "美品": "A", "良上品": "B", "良上": "B", "良品": "B", "並上": "C", "並品": "C", "並": "D"}
