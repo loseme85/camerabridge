@@ -179,6 +179,21 @@
     @media(max-width:720px){.hero-how{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.hero-how li{padding-bottom:10px}}
     .market-map{--map-0:#2a78d6;--map-1:#eb6834;--map-2:#1baf7a;--map-3:#eda100;--map-4:#e87ba4;--map-grid:rgba(0,0,0,.12)}
     @media (prefers-color-scheme:dark){.market-map{--map-0:#3987e5;--map-1:#d95926;--map-2:#199e70;--map-3:#c98500;--map-4:#d55181;--map-grid:rgba(255,255,255,.14)}}
+    .hero-stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:0;margin:6px 0 10px;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
+    .hero-stat{padding:12px 36px 12px 0;margin-right:36px;border-right:1px solid var(--border)}
+    .hero-stat:last-child{border-right:0;margin-right:0;padding-right:0}
+    .hero-stat b{display:block;font-family:var(--serif);font-weight:500;font-size:56px;line-height:1;letter-spacing:-0.02em;font-variant-numeric:lining-nums tabular-nums}
+    .hero-stat span{display:block;margin-top:6px;font-size:14px;color:var(--text-soft)}
+    @media(max-width:720px){.hero-stat{padding-right:16px;margin-right:16px}.hero-stat b{font-size:34px}.hero-stat span{font-size:12px}}
+    .shops-title{font-family:var(--serif);font-weight:500;font-size:34px;line-height:1.15;margin:0}
+    .shops-bars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;border-top:1px solid var(--rule,var(--text));margin-top:8px}
+    .shops-row{display:grid;grid-template-columns:150px minmax(0,1fr) auto;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+    .shops-row .source-flag{margin-right:6px}
+    .shops-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+    .shops-track{height:8px;background:transparent}
+    .shops-bar{height:8px;background:var(--text);opacity:.78}
+    .shops-count{color:var(--text-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+    @media(max-width:720px){.shops-title{font-size:26px}.shops-bars{grid-template-columns:minmax(0,1fr)}.shops-row{grid-template-columns:118px minmax(0,1fr) auto}}
     .market-map-note{margin:2px 0 8px;font-size:13px;color:var(--text-soft)}
     .market-map-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--text-soft);margin:0 0 6px}
     .market-map-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0}
@@ -1457,6 +1472,8 @@
           <div class="hero-copy">
             <h1 class="hero-title" data-i18n="hero.title">What is a used Leica worth?</h1>
             <p class="hero-subtitle" data-i18n="hero.subtitle">Used Leica listings from dealers worldwide, matched to the exact model and priced by condition.</p>
+            <!-- 큰 숫자 셋 (2026-11-07 사장님: 113개 매장·29개 나라·만4천여 매물이 작은 글씨라 한눈에 안 들어옴) -->
+            <div id="hero-stats" class="hero-stats" hidden></div>
             <p id="hero-trust" class="hero-trust" hidden></p>
             <section class="search-panel" data-i18n-aria-label="search.home_aria" aria-label="Search home">
               <div class="search-panel-label" data-i18n="search.panel_label">Search</div>
@@ -1484,6 +1501,12 @@
       </section>
 
       <section id="home-feed" class="home-feed">
+        <!-- 나라별 매장 (2026-11-07 사장님: 113개 매장·29개 나라를 그래프로 강조) — 제목 아래 숫자와 같은 data/status/source_freshness.json -->
+        <div id="shops-block" class="shops-block" hidden>
+          <h2 id="shops-title" class="shops-title"></h2>
+          <p id="shops-sub" class="market-map-note"></p>
+          <div id="shops-bars" class="shops-bars"></div>
+        </div>
         <!-- 지금 팔리는 라이카 전부 (2026-11-07 사장님: 메인 화면에 전체 매물 그래프) — data/derived/market_map.json, 점 하나 = 매물 하나 -->
         <div id="market-map-block" class="market-map" hidden>
           <h2 class="home-heading" data-i18n="home.map_title">Every used Leica for sale right now</h2>
@@ -1977,6 +2000,14 @@
         picks_note: { ko: 'B등급 시세 · 지금 판매 중', en: 'market value at grade B · for sale now', ja: 'B等級の相場 · 現在販売中', 'zh-Hans': 'B 级行情 · 当前在售', 'zh-Hant': 'B 級行情 · 目前在售', pt: 'valor de mercado no grau B · à venda agora', es: 'valor de mercado en grado B · a la venta ahora', de: 'Marktwert bei Note B · aktuell im Angebot', it: 'valore di mercato al grado B · in vendita ora' },
         on_sale_from: { ko: '판매 중 {n} · {p}부터', en: '{n} for sale · from {p}', ja: '販売中 {n} · {p}〜', 'zh-Hans': '在售 {n} · {p} 起', 'zh-Hant': '在售 {n} · {p} 起', pt: '{n} à venda · a partir de {p}', es: '{n} a la venta · desde {p}', de: '{n} im Angebot · ab {p}', it: '{n} in vendita · da {p}' },
         quiz_title: { ko: '당신의 라이카 레벨은?', en: 'What’s your Leica level?', ja: 'あなたのライカレベルは？', 'zh-Hans': '你的徕卡等级是多少？', 'zh-Hant': '你的徠卡等級是多少？', pt: 'Qual é o seu nível Leica?', es: '¿Cuál es tu nivel Leica?', de: 'Wie hoch ist dein Leica-Level?', it: 'Qual è il tuo livello Leica?' },
+        stat_listings: { ko: '판매 중 매물', en: 'listings for sale', ja: '販売中の出品', 'zh-Hans': '在售商品', 'zh-Hant': '在售商品', pt: 'anúncios à venda', es: 'anuncios a la venta', de: 'Angebote', it: 'annunci in vendita' },
+        stat_shops: { ko: '매장', en: 'shops', ja: '店舗', 'zh-Hans': '家店铺', 'zh-Hant': '家店鋪', pt: 'lojas', es: 'tiendas', de: 'Händler', it: 'negozi' },
+        stat_countries: { ko: '나라', en: 'countries', ja: 'か国', 'zh-Hans': '个国家', 'zh-Hant': '個國家', pt: 'países', es: 'países', de: 'Länder', it: 'paesi' },
+        stat_updated: { ko: '{ago} 갱신 · 매장 홈페이지에서 직접 모음', en: 'updated {ago} · read straight from each shop’s website', ja: '{ago}更新 · 各店のサイトから直接収集', 'zh-Hans': '{ago}更新 · 直接从各店官网收集', 'zh-Hant': '{ago}更新 · 直接從各店官網收集', pt: 'atualizado {ago} · direto do site de cada loja', es: 'actualizado {ago} · directo de la web de cada tienda', de: 'aktualisiert {ago} · direkt von den Händler-Websites', it: 'aggiornato {ago} · direttamente dai siti dei negozi' },
+        shops_title: { ko: '매물을 모은 곳', en: 'Where the listings come from', ja: '出品の集め先', 'zh-Hans': '商品来源', 'zh-Hant': '商品來源', pt: 'De onde vêm os anúncios', es: 'De dónde vienen los anuncios', de: 'Woher die Angebote kommen', it: 'Da dove arrivano gli annunci' },
+        shops_sub: { ko: '나라별 매장 수 · 줄에 올리면 매장 이름', en: 'Shops per country · hover a row to see the shops', ja: '国別の店舗数 · 行に触れると店名', 'zh-Hans': '各国店铺数 · 悬停查看店名', 'zh-Hant': '各國店鋪數 · 滑過查看店名', pt: 'Lojas por país · passe o mouse para ver as lojas', es: 'Tiendas por país · pasa el ratón para ver las tiendas', de: 'Händler pro Land · Zeile antippen für Namen', it: 'Negozi per paese · passa sopra per vedere i negozi' },
+        shops_row: { ko: '매장 {n} · 매물 {m}', en: '{n} shops · {m} listings', ja: '{n}店 · {m}点', 'zh-Hans': '{n} 家 · {m} 件', 'zh-Hant': '{n} 家 · {m} 件', pt: '{n} lojas · {m} anúncios', es: '{n} tiendas · {m} anuncios', de: '{n} Händler · {m} Angebote', it: '{n} negozi · {m} annunci' },
+        shops_row_one: { ko: '매장 1 · 매물 {m}', en: '1 shop · {m} listings', ja: '1店 · {m}点', 'zh-Hans': '1 家 · {m} 件', 'zh-Hant': '1 家 · {m} 件', pt: '1 loja · {m} anúncios', es: '1 tienda · {m} anuncios', de: '1 Händler · {m} Angebote', it: '1 negozio · {m} annunci' },
         map_title: { ko: '지금 팔리는 라이카 전부', en: 'Every used Leica for sale right now', ja: 'いま販売中のライカ、全部', 'zh-Hans': '此刻在售的所有二手徕卡', 'zh-Hant': '此刻在售的所有二手徠卡', pt: 'Todas as Leica usadas à venda agora', es: 'Todas las Leica usadas a la venta ahora', de: 'Jede gebrauchte Leica, die gerade angeboten wird', it: 'Tutte le Leica usate in vendita ora' },
         map_note: { ko: '모델이 확인된 매물 {n}개 · 점 하나가 매물 하나 · 점을 눌러 보세요', en: '{n} listings matched to a model · one dot each · hover or tap a dot', ja: 'モデルを確認できた出品 {n} 点 · 点1つが1点 · 点に触れてみてください', 'zh-Hans': '已识别型号的在售商品 {n} 件 · 一个点代表一件 · 点一下看看', 'zh-Hant': '已辨識型號的在售商品 {n} 件 · 一個點代表一件 · 點一下看看', pt: '{n} anúncios com modelo identificado · um ponto cada · toque num ponto', es: '{n} anuncios con modelo identificado · un punto cada uno · toca un punto', de: '{n} Angebote mit erkanntem Modell · ein Punkt je Angebot · Punkt antippen', it: '{n} annunci con modello riconosciuto · un punto ciascuno · tocca un punto' },
         map_row0: { ko: 'M 바디', en: 'M bodies', ja: 'Mボディ', 'zh-Hans': 'M 机身', 'zh-Hant': 'M 機身', pt: 'Corpos M', es: 'Cuerpos M', de: 'M-Gehäuse', it: 'Corpi M' },
@@ -2636,9 +2667,51 @@
           .replace('{ago}', ago);
         el.innerHTML = `${countries.map(countryFlagHtml).join('')}<span>${escapeHtml(text)}</span>`;
         el.hidden = false;
+        const stats = document.getElementById('hero-stats');
+        if(stats && sites.length){  // 큰 숫자 셋을 보이면 아래 한 줄은 국기와 갱신 시각만
+          const nf = new Intl.NumberFormat(uiState.locale);
+          stats.innerHTML = [[nf.format(listings), 'stat_listings'], [String(sites.length), 'stat_shops'], [String(countries.length), 'stat_countries']]
+            .map(([n, key]) => `<div class="hero-stat"><b>${escapeHtml(n)}</b><span>${escapeHtml(ux(`home.${key}`, key))}</span></div>`).join('');
+          stats.hidden = false;
+          el.innerHTML = `${countries.map(countryFlagHtml).join('')}<span>${escapeHtml(ux('home.stat_updated', 'updated {ago}').replace('{ago}', ago))}</span>`;
+        }
+        renderShopsByCountry(fresh, rules, ago);
       }catch(error){
         el.hidden = true;
       }
+    }
+
+    // 첫 화면 '29개 나라 113개 매장': 나라마다 국기·막대(매장 수)·매장·매물 수, 막대에 올리면 매장 이름 (제목 아래 숫자와 같은 기준)
+    function renderShopsByCountry(fresh, rules, ago){
+      const block = document.getElementById('shops-block');
+      if(!block) return;
+      const byCountry = {};
+      Object.keys(fresh).forEach(site => {
+        const cc = (rules[site] || {}).country;
+        if(!cc) return;
+        const row = byCountry[cc] || (byCountry[cc] = { shops: [], listings: 0 });
+        row.shops.push(localizeSourceName(site));
+        row.listings += Number((fresh[site] || {}).active || 0);
+      });
+      const rows = Object.entries(byCountry).sort((a, b) => b[1].shops.length - a[1].shops.length || b[1].listings - a[1].listings);
+      if(rows.length < 3) return;
+      const max = rows[0][1].shops.length;
+      const shops = Object.keys(fresh).length;
+      const listings = Object.values(fresh).reduce((sum, v) => sum + Number((v || {}).active || 0), 0);
+      const nf = new Intl.NumberFormat(uiState.locale);
+      // 큰 숫자는 제목 아래(hero-stats)에 있으니 여기는 '어디서 모았나'만
+      document.getElementById('shops-title').textContent = ux('home.shops_title', 'Where the listings come from');
+      document.getElementById('shops-sub').textContent = ux('home.shops_sub', '');
+      document.getElementById('shops-bars').innerHTML = rows.map(([cc, row]) => {
+        const count = row.shops.length === 1 ? ux('home.shops_row_one', '1 shop · {m} listings').replace('{m}', nf.format(row.listings))
+          : ux('home.shops_row', '{n} shops · {m} listings').replace('{n}', String(row.shops.length)).replace('{m}', nf.format(row.listings));
+        return `<div class="shops-row" title="${escapeHtml(row.shops.sort().join(', '))}">
+          <span class="shops-name">${countryFlagHtml(cc)}${escapeHtml(displayNameOf('region', cc) || cc)}</span>
+          <span class="shops-track"><span class="shops-bar" style="display:block;width:${Math.max(4, Math.round(row.shops.length / max * 100))}%"></span></span>
+          <span class="shops-count">${escapeHtml(count)}</span>
+        </div>`;
+      }).join('');
+      block.hidden = false;
     }
 
     // 첫 화면: 새로 올라온 실제 매물 + 많이 찾는 모델 시세 (data/derived/home_feed.json, entity_summary_v1.json)
