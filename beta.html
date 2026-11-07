@@ -1231,6 +1231,7 @@
     .price-ladder{margin:8px 0 28px;padding:18px 0 14px;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
     .price-ladder h3{margin:0;font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-0.01em}
     .price-ladder>p{margin:4px 0 14px;font-size:13px;color:var(--text-soft)}
+    .ladder-guide .entity-bar-chips{display:flex;flex-wrap:wrap;gap:6px}
     .price-ladder .ladder-incl{display:inline-block;margin-top:4px;font-size:14px;font-weight:600;color:var(--text)}
     .ladder-tip .tip-incl{display:inline-block;margin:3px 0 2px;padding:1px 6px;border:1px solid var(--text);font-size:12px;font-weight:600;color:var(--text);line-height:1.5}
     .price-ladder{position:relative}
@@ -3896,6 +3897,10 @@
       feature_models: { ko: '이 사양의 바디', en: 'Bodies with this spec', ja: 'この仕様のボディ', 'zh-Hans': '具备此规格的机身', 'zh-Hant': '具備此規格的機身', pt: 'Corpos com esta especificação', es: 'Cuerpos con esta especificación', de: 'Gehäuse mit dieser Ausstattung', it: 'Corpi con questa specifica' },
       feature_model_count: { ko: '{n}개 모델', en: '{n} models', ja: '{n}モデル', 'zh-Hans': '{n} 个型号', 'zh-Hant': '{n} 個型號', pt: '{n} modelos', es: '{n} modelos', de: '{n} Modelle', it: '{n} modelli' },
       feature_pick: { ko: '여러 모델이 섞여 있어요. 아래에서 모델을 고르면 시세가 나와요', en: 'Several models together — pick one below to see its market price', ja: '複数のモデルが混在しています。下でモデルを選ぶと相場が表示されます', 'zh-Hans': '包含多个型号，在下方选择型号即可查看行情', 'zh-Hant': '包含多個型號，在下方選擇型號即可查看行情', pt: 'Vários modelos juntos — escolha um abaixo para ver o preço de mercado', es: 'Varios modelos juntos: elige uno abajo para ver su precio de mercado', de: 'Mehrere Modelle zusammen – wähle unten eines, um den Marktpreis zu sehen', it: 'Più modelli insieme: scegline uno qui sotto per vedere il prezzo di mercato' },
+      ladder_pick_title: { ko: '정확한 모델을 선택해 주세요', en: 'Choose the exact model', ja: '正確なモデルを選んでください', 'zh-Hans': '请选择具体型号', 'zh-Hant': '請選擇具體型號', pt: 'Escolha o modelo exato', es: 'Elige el modelo exacto', de: 'Wähle das genaue Modell', it: 'Scegli il modello esatto' },
+      ladder_pick_body: { ko: '모델을 고르면 등급별 시세 그래프가 나와요.', en: 'Pick a model to see its price-by-condition chart.', ja: 'モデルを選ぶとランク別の相場グラフが表示されます。', 'zh-Hans': '选择型号后即可查看按成色的行情图。', 'zh-Hant': '選擇型號後即可查看依成色的行情圖。', pt: 'Escolha um modelo para ver o gráfico de preço por estado.', es: 'Elige un modelo para ver el gráfico de precio por estado.', de: 'Wähle ein Modell, um das Preisdiagramm nach Zustand zu sehen.', it: 'Scegli un modello per vedere il grafico dei prezzi per condizione.' },
+      ladder_few: { ko: '매물이 3개 이상 모이면 등급별 그래프가 나와요.', en: 'The chart appears once there are at least 3 listings.', ja: '出品が3件以上集まるとグラフが表示されます。', 'zh-Hans': '在售达到 3 件以上后显示图表。', 'zh-Hant': '在售達到 3 件以上後顯示圖表。', pt: 'O gráfico aparece com pelo menos 3 anúncios.', es: 'El gráfico aparece con al menos 3 anuncios.', de: 'Das Diagramm erscheint ab 3 Angeboten.', it: 'Il grafico appare con almeno 3 annunci.' },
+      market_price_pick: { ko: '모델을 선택해 주세요', en: 'Choose a model', ja: 'モデルを選んでください', 'zh-Hans': '请选择型号', 'zh-Hant': '請選擇型號', pt: 'Escolha um modelo', es: 'Elige un modelo', de: 'Modell wählen', it: 'Scegli un modello' },
       choose_version: { ko: '버전을 고르면 시세가 나와요', en: 'Pick a version to see its market price', ja: 'バージョンを選ぶと相場が表示されます', 'zh-Hans': '选择具体版本即可查看行情', 'zh-Hant': '選擇具體版本即可查看行情', pt: 'Escolha uma versão para ver o preço de mercado', es: 'Elige una versión para ver su precio de mercado', de: 'Wähle eine Version, um den Marktpreis zu sehen', it: 'Scegli una versione per vedere il prezzo di mercato' },
       few_sold: { ko: '판매 완료 기록이 적어 판매 중 가격대를 보여 드려요', en: 'Not enough sales yet, so this shows the asking range', ja: '販売済みの記録が少ないため、販売中の価格帯を表示しています', 'zh-Hans': '成交记录较少，暂显示在售价格区间', 'zh-Hant': '成交紀錄較少，暫顯示在售價格區間', pt: 'Poucas vendas registradas, por isso mostramos a faixa de preços à venda', es: 'Aún hay pocas ventas, así que mostramos el rango de precios en venta', de: 'Noch zu wenige Verkäufe – daher die Preisspanne der Angebote', it: 'Ancora poche vendite, quindi mostriamo la fascia di prezzo in vendita' },
       model: { ko: '모델', en: 'Model', ja: 'モデル', 'zh-Hans': '型号', 'zh-Hant': '型號', pt: 'Modelo', es: 'Modelo', de: 'Modell', it: 'Modello' },
@@ -4292,9 +4297,27 @@
       }
     }
 
+    // 그래프가 안 나올 때 빈칸 대신 안내 (2026-11-07 사장님): 모델이 넓거나 안 골랐으면 '정확한 모델을 선택해 주세요' + 후보 버튼,
+    // 정확한 모델인데 매물이 3개 미만이면 그 사실을 알림
+    function renderLadderGuide(){
+      if(!state.query || state.loading || state.error || !state.response) return '';
+      const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
+      let picks = [];
+      if(entity && entity.feature) picks = (entity.members || []).map(id => entityState.byId[id]);
+      else if(entity && (entity.children || []).length) picks = entity.children.map(id => entityState.byId[id]);
+      else if(!entity) picks = suggestEntities(state.query, 12).map(item => item.entity);
+      else{
+        if(!ladderState.results || ladderState.key !== ladderKey()) return '';  // 아직 불러오는 중
+        return `<section class="price-ladder ladder-guide"><h3>${escapeHtml(ec('ladder_title'))}</h3><p>${escapeHtml(ec('ladder_few'))}</p></section>`;
+      }
+      picks = picks.filter(item => item && !item.feature && item.active_count).sort((a, b) => b.active_count - a.active_count).slice(0, 8);
+      const chips = picks.map(item => `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(item.id)}">${escapeHtml(entityDisplayName(item))} <span class="entity-chip-count">${item.active_count}</span></button>`).join('');
+      return `<section class="price-ladder ladder-guide"><h3>${escapeHtml(ec('ladder_pick_title'))}</h3><p>${escapeHtml(ec('ladder_pick_body'))}</p>${chips ? `<div class="entity-bar-chips">${chips}</div>` : ''}</section>`;
+    }
+
     function renderPriceLadder(){
       const points = ladderState.results && ladderEntity() && ladderState.key === ladderKey() ? ladderPoints(ladderState.results) : [];
-      if(points.length < 3) return '';
+      if(points.length < 3) return renderLadderGuide();
       // 끝의 튀는 값 몇 개 때문에 나머지가 한쪽에 몰리지 않게 양 끝 3%는 가장자리에 붙임
       const sorted = points.map(p => p.value).sort((a, b) => a - b);
       const pick = q => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round(q * (sorted.length - 1))))];
@@ -4879,6 +4902,11 @@
     }
 
     function bindEntityBar(){
+      const guide = document.getElementById('query-summary-region');
+      if(guide) guide.addEventListener('click', event => {
+        const chip = event.target.closest('.ladder-guide [data-entity]');
+        if(chip) selectEntity(chip.dataset.entity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: true });
+      });
       const bar = document.getElementById('entity-bar');
       if(!bar) return;
       bar.addEventListener('click', event => {
@@ -5787,6 +5815,7 @@
       if(policy.display_broader_reference_allowed){
         return localizePriceBand(policy.display_broader_reference_band) || ux('summary.market_price_pending', 'Market price on hold');
       }
+      if(state.query && !state.entity) return ec('market_price_pick');
       return ux('summary.market_price_pending', 'Market price on hold');
     }
 
