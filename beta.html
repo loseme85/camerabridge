@@ -4031,7 +4031,10 @@
     function localizeSourceName(source){
       const raw = String(source || '').trim();
       const entry = SOURCE_DISPLAY_NAMES[raw];
-      return entry ? (entry[uiState.locale] || entry.default || raw) : raw;
+      if(entry) return entry[uiState.locale] || entry.default || raw;
+      // 번역표에 없는 해외 판매처는 'Foto Ottica Cavour (이탈리아)'처럼 한국어 나라 이름이 붙어 있음 → 한국어 화면이 아니면 뗌 (나라는 국기로 보임)
+      const named = uiState.locale !== 'ko' && raw.match(/^(.+?)\s*\(([가-힣]+)\)$/);
+      return named ? named[1] : raw;
     }
 
     const PRICE_ON_REQUEST = { ko: '가격 문의', en: 'Price on request', ja: '価格はお問い合わせ', 'zh-Hans': '价格请咨询', 'zh-Hant': '價格請洽詢', pt: 'Preço sob consulta', es: 'Precio a consultar', de: 'Preis auf Anfrage', it: 'Prezzo su richiesta' };
