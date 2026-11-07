@@ -92,6 +92,12 @@ def _grade_fields(ranked_result: dict, final_output: dict) -> dict:
     return {"grade": grade, "grade_basis": basis}
 
 
+def _leaf_entity(record: dict) -> str | None:
+    """entity_ids 중 가장 구체적인 것 (콜론이 가장 많은 것). 사양 묶음(feature)은 뺌."""
+    ids = [eid for eid in (record.get("entity_ids") or []) if ":feature:" not in eid]
+    return max(ids, key=lambda eid: (eid.count(":"), len(eid))) if ids else None
+
+
 def summarize_result_quality(
     results: list[dict[str, Any]],
     strong_only: bool = False,
@@ -285,6 +291,8 @@ def format_search_result(
         "image_url": final_output.get("image_url"),
         "condition": final_output.get("condition_raw"),
         **_grade_fields(ranked_result, final_output),
+        # 이 매물의 가장 구체적인 모델 (화면이 모델을 안 골라도 '같은 등급 시세보다 몇 % 싸다'를 계산하게, 2026-11-07)
+        "entity": _leaf_entity(source_record if isinstance(source_record, dict) else ranked_result),
         "seller": final_output.get("seller"),
         "seller_feedback_score": final_output.get("seller_feedback_score"),
         "seller_feedback_percentage": final_output.get("seller_feedback_percentage"),
