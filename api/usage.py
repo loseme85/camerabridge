@@ -23,6 +23,7 @@ SID = re.compile(r"^[a-z0-9]{8,24}$")
 COUNTRY = re.compile(r"^[A-Z]{2}$")
 MAX_SEARCHES = 40
 MAX_CLICKS = 40
+TZ = re.compile(r"^[A-Za-z]+(?:/[A-Za-z0-9_+\-]+){1,2}$")
 VIA = {"typed", "pick", "chip", "link", "other"}
 BOT = re.compile(r"bot|crawl|spider|slurp|headless|lighthouse|preview|python|curl|wget", re.I)
 
@@ -96,7 +97,7 @@ def visitor_tag(ip: str, day: str) -> str | None:
 
 
 def handle(body: dict, country: str | None = None, cookie: str | None = None, agent: str | None = None,
-           ip: str | None = None) -> tuple[int, dict]:
+           ip: str | None = None, timezone: str | None = None) -> tuple[int, dict]:
     if os.environ.get("USAGE_LOG_DISABLED") == "1":
         return 200, {"ok": True}
     if agent and BOT.search(agent):  # 검색엔진 로봇이 페이지를 그리다 보낸 것
@@ -109,6 +110,9 @@ def handle(body: dict, country: str | None = None, cookie: str | None = None, ag
     country = str(country or "").strip().upper()
     if COUNTRY.match(country):
         entry["country"] = country
+    timezone = str(timezone or "").strip()
+    if TZ.match(timezone):  # 접속한 곳의 시간대 (Vercel x-vercel-ip-timezone, 예: America/New_York) → 방문 현황에서 현지 시각으로
+        entry["tz"] = timezone
     from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
 
     now = dt.datetime.now(KST)
@@ -142,7 +146,8 @@ class handler(BaseHTTPRequestHandler):
             return self._send(400, {"ok": False})
         status, payload = handle(body, self.headers.get("x-vercel-ip-country"), self.headers.get("cookie"),
                                  self.headers.get("user-agent"),
-                                 self.headers.get("x-forwarded-for") or self.headers.get("x-real-ip"))
+                                 self.headers.get("x-forwarded-for") or self.headers.get("x-real-ip"),
+                                 self.headers.get("x-vercel-ip-timezone"))
         return self._send(status, payload)
 
     def do_GET(self):  # noqa: N802
