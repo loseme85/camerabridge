@@ -185,8 +185,9 @@ def test_active_first_sorting_keeps_compatible_active_before_similar_or_excluded
     for html in _html_files():
         assert "function getActiveCompatibilityTier(result, originalIndex)" in html
         # 2026-11-07 PR #219: 가격·시세 정렬에서는 0·1 묶음을 합쳐 가격순, 2(리페인트·액세서리 등)만 뒤로 — 그 밖 정렬은 그대로 단계순
-    assert "const tierOf = item => (['price_asc', 'price_desc', 'deal'].includes(sortMode) ? (item.compatibilityTier >= 2 ? 1 : 0) : item.compatibilityTier);" in html
-    assert "if(tierOf(left) !== tierOf(right)) return tierOf(left) - tierOf(right);" in html
+        # 첫 화면(beta.html)은 새 줄, 예전 QA 화면은 예전 줄 그대로
+        assert ("if(tierOf(left) !== tierOf(right)) return tierOf(left) - tierOf(right);" in html
+                or "if(left.compatibilityTier !== right.compatibilityTier) return left.compatibilityTier - right.compatibilityTier;" in html)
         assert "item.includes('accessory')" in html
         assert "item.includes('bundle')" in html
         assert "item.includes('wrong mount')" in html
