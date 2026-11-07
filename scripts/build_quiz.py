@@ -6,8 +6,9 @@
   code_word  옛 라이트 코드 이름(SOOIC 등) → 모델          catalog/codes.py CODE_WORDS (lens-db·딜러 제목)   어려움 3
   order_no   라이카 주문 번호(11873 등) → 모델             catalog/codes.py CODES (공식 6비트 목록 등)       어려움 2~3
   feature    노출계·TTL·28mm 프레임라인·기계식 셔터         catalog/features.py (공식 사양)                   어려움 2
-  compare    둘 중 B등급 시세가 더 높은 것                  entity_summary_v1.json b_price_krw (판매 기록)     어려움 2
-  price      이 매물, 얼마에 팔렸을까? (보기 4개)           home_feed.json quiz (최근 팔린 실제 매물)          어려움 1~2
+  variant    'Double Stroke'·'Everest '82'·'with eyes'는 어느 모델의 변형?   catalog 변형·기념판 (부모 모델)    어려움 2~3
+             같은 이름이 여러 모델에 있는 변형(블랙페인트·올리브·50 Jahre 등)은 정답이 둘이 되므로 뺌
+  (2026-11-07 사장님: 가격 문제 말고 매니아여야 아는 것 — 가격·시세 비교 문제는 뺌)
 
 화면은 이 은행에서 종류별로 섞어 10문제를 낸다. 크롤마다 다시 만든다 (build_entity_index.py 다음).
 """
@@ -94,36 +95,63 @@ def main() -> None:
             if others:
                 add("feature", 2, {"f": key}, name(B + r), [name(x) for x in others], B + r)
 
-    # 4. 둘 중 B등급 시세가 높은 것: 같은 계열, 20% 넘게 차이 나는 쌍
-    priced = [e for e in summary["entities"] if e.get("b_price_krw") and not e.get("children") and not e.get("feature") and (e.get("b_price_n") or 0) >= 5]
-    by_family: dict[str, list[dict]] = {}
-    for e in priced:
-        by_family.setdefault(family(e["id"]), []).append(e)
-    for fam_items in by_family.values():
-        rng.shuffle(fam_items)
-        for a, b in zip(fam_items[::2], fam_items[1::2]):
-            hi, lo = (a, b) if a["b_price_krw"] > b["b_price_krw"] else (b, a)
-            if hi["b_price_krw"] >= lo["b_price_krw"] * 1.2:
-                options = [name(hi["id"]), name(lo["id"])]
-                rng.shuffle(options)
-                pair = [hi, lo]
-                rng.shuffle(pair)
-                questions.append({"kind": "compare", "level": 2, "vars": {}, "options": [name(x["id"]) for x in pair],
-                                  "answer": pair.index(hi), "entity": hi["id"], "krw": [x["b_price_krw"] for x in pair]})
+    # 4. 변형·기념판 → 바탕 모델 (바디는 바디끼리, 렌즈는 렌즈끼리)
+    def label_of(e: dict) -> str:
+        pn = name(e["parent"])
+        n = e["name"]
+        return (n[len(pn):] if n.startswith(pn) else n).strip(" -·")
+    lens_words = re.compile(r"eyes|goggle|rigid|collapsible|dual range|steel rim|safari|titan|classic|lhsa|black paint|built-in hood|"
+                            r"close focus|red|jahre|years|anniversary|edition|limited|8 elements|chrome|silver|military|olive", re.I)
+    skip_label = re.compile(r"^\(?(standard|classic|generation not stated|\d{4} reissue)\)?$|not stated|differs by shop|\(all\)|^\(?typ\b|^[\d.]+$", re.I)
 
-    # 5. 팔린 가격 맞히기: 보기 4개 (정답 + 비율로 만든 오답), 1단계는 차이 크게, 2단계는 작게
-    feed = json.loads(HOME_FEED.read_text(encoding="utf-8")) if HOME_FEED.exists() else {}
-    for item in feed.get("quiz") or []:
-        if item["entity"] not in ents:
+    # 막연하거나 다른 모델 변형과 헷갈리는 이름 (2026-11-07 문제 전부 훑어보고 뺌)
+    vague = re.compile(r"^(zoom|white|black|silver|partners|titanium|\d+(st|nd|rd|th))$")
+
+    def core(label: str) -> str:
+        """중복 판단용 핵심 말: 'f/1.4 ASPH Safari' · 'Safari' → 'safari' (조리개·ASPH·연도·괄호 빼고)"""
+        text = re.sub(r"\(.*?\)|f/\d+(?:\.\d+)?|\basph\b|\b\d{4}\b|['’‘\"]", " ", label.lower())
+        return " ".join(text.split())
+
+    def gives_away(label: str, parent: str) -> bool:
+        """변형 이름에 바탕 모델 이름이 들어 있으면 답이 보임 (M2 Black Paint → M2)"""
+        words = [w for w in re.split(r"[\s()·]+", name(parent).lower()) if len(w) >= 2 and w not in ("leica", "f/1.4", "f/2", "f/2.8")]
+        return bool(re.search(r"\bleica\b", label, re.I)) or any(re.search(rf"(?<![\w-]){re.escape(w)}(?![\w-])", label.lower()) for w in words)
+
+    def series_of(eid: str) -> str:
+        """비슷한 오답: 'leica:body:m6' → body:m, 'leica:lens:summilux-m' → lens:summilux"""
+        part = eid.split(":")[2]
+        return eid.split(":")[1] + ":" + (re.match(r"[a-z]+", part).group(0) if re.match(r"[a-z]+", part) else part)
+    variants: dict[tuple[str, str], set[str]] = {}
+    for e in summary["entities"]:
+        if not e.get("parent") or e.get("feature") or e["parent"] not in ents:
             continue
-        level = rng.choice([1, 2])
-        ratios = rng.sample([0.5, 0.65, 1.5, 1.9] if level == 1 else [0.75, 0.85, 1.18, 1.35], 3)
-        krws = [item["krw"]] + [round(item["krw"] * r, -4) for r in ratios]
-        order = list(range(4))
-        rng.shuffle(order)
-        questions.append({"kind": "price", "level": level, "vars": {"title": item["title"], "grade": item.get("grade"), "source": item["source"],
-                                                                   "sold_at": item["sold_at"]},
-                          "image": item["image"], "options_krw": [krws[i] for i in order], "answer": order.index(0), "entity": item["entity"]})
+        label = label_of(e)
+        kind = e["id"].split(":")[1]
+        if not label or skip_label.search(label) or gives_away(label, e["parent"]) or not core(label) or vague.match(core(label)):
+            continue  # 기본형·'세대 모름'·바탕 모델 이름이 들어 있는 것은 문제로 안 냄
+        if kind == "lens" and not lens_words.search(label):
+            continue  # 렌즈는 세대 번호보다 매니아가 아는 별칭·한정판만
+        variants.setdefault((kind, core(label)), set()).add(e["parent"])
+    skip_ids = {e["id"] for e in summary["entities"]
+                if not e.get("parent") or e.get("feature") or (e.get("parent") in ents and (skip_label.search(label_of(e) or "x") or gives_away(label_of(e), e["parent"])))}
+    parents_by_kind: dict[str, list[str]] = {}
+    for e in summary["entities"]:
+        if e.get("children") and not e.get("feature"):
+            parents_by_kind.setdefault(e["id"].split(":")[1], []).append(e["id"])
+    for e in summary["entities"]:
+        if not e.get("parent") or e["parent"] not in ents:
+            continue
+        kind = e["id"].split(":")[1]
+        label = label_of(e)
+        owners = variants.get((kind, core(label)))
+        if not owners or len(owners) != 1 or e["id"] in skip_ids:
+            continue  # 여러 모델에 같은 이름의 변형이 있으면 정답이 둘
+        pool = parents_by_kind.get(kind, [])
+        similar = [x for x in pool if series_of(x) == series_of(e["parent"]) and (kind == "lens" or x.startswith(B + "m") == e["parent"].startswith(B + "m"))]
+        others = pick_others(e["parent"], similar) or pick_others(e["parent"], [x for x in pool if x.startswith(B + "m") == e["parent"].startswith(B + "m")]) or pick_others(e["parent"], pool)
+        if others:
+            add("variant", 3 if e.get("edition") or re.search(r"\d{4}", label) else 2, {"v": label, "kind": kind},
+                name(e["parent"]), [name(x) for x in others], e["id"])
 
     kinds: dict[str, int] = {}
     for q in questions:

@@ -7,7 +7,7 @@ BANK = Path(__file__).resolve().parent.parent / "data" / "derived" / "quiz_bank.
 def test_quiz_bank_answers_are_valid():
     questions = json.loads(BANK.read_text(encoding="utf-8"))["questions"]
     kinds = {q["kind"] for q in questions}
-    assert {"code_word", "order_no", "feature", "compare", "price"} <= kinds
+    assert {"code_word", "order_no", "feature", "variant"} <= kinds and not kinds & {"price", "compare"}
     for q in questions:
         options = q.get("options") or q.get("options_krw")
         assert 2 <= len(options) <= 4 and 0 <= q["answer"] < len(options)
@@ -21,3 +21,12 @@ def test_feature_answers_match_official_specs():
     for q in questions:
         if q["kind"] == "feature" and q["vars"]["f"] == "no_meter":
             assert q["entity"] in no_meter
+
+
+def test_variant_questions_do_not_give_away_the_answer():
+    questions = json.loads(BANK.read_text(encoding="utf-8"))["questions"]
+    for q in questions:
+        if q["kind"] == "variant":
+            assert "leica" not in q["vars"]["v"].lower()
+            answer = q["options"][q["answer"]].replace("Leica ", "").split(" (")[0].lower()
+            assert answer not in q["vars"]["v"].lower(), q
