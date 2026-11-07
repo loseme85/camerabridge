@@ -2,7 +2,7 @@
 
 사용 기록(api/usage.py 가 쌓은 Blob usage/)과 의견(feedback/)을 읽어 한 화면에 보여 준다.
 들어가기: /owner/usage?key=<OWNER_DASHBOARD_KEY> 로 한 번 열면 쿠키가 남아 다음부터는 /owner/usage 만으로 열림.
-기간: ?days=1 · 7(기본) · 30
+기간: ?days=1 · 7(기본) · 30, 하루만: ?date=YYYY-MM-DD (날짜별 표·막대를 누르면 그날로)
 2026-11-07부터 둘러보기만 한 방문(첫 화면·모델 시세 페이지)도 남고, 들어온 곳은 도메인+경로까지 남는다.
 """
 from __future__ import annotations
@@ -21,7 +21,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from scripts.usage_report import summarize  # noqa: E402
+from scripts.usage_report import summarize, visitor_key  # noqa: E402
 
 KST = dt.timezone(dt.timedelta(hours=9))
 COOKIE = "cb_owner"
@@ -59,11 +59,14 @@ def _read_many(blob, items) -> list[dict]:
         return [entry for entry in pool.map(read, items) if entry]
 
 
-def load(days: int) -> tuple[list[dict], list[dict], bool]:
+def load(days: int, date: str | None = None) -> tuple[list[dict], list[dict], bool]:
     from vercel import blob  # noqa: WPS433
 
-    start = (dt.datetime.now(KST).date() - dt.timedelta(days=days - 1)).isoformat()
-    usage_items = [i for i in blob.iter_objects(prefix="usage/") if i.pathname.split("/")[1] >= start]
+    if date:  # 하루만
+        usage_items = list(blob.iter_objects(prefix=f"usage/{date}/"))
+    else:
+        start = (dt.datetime.now(KST).date() - dt.timedelta(days=days - 1)).isoformat()
+        usage_items = [i for i in blob.iter_objects(prefix="usage/") if i.pathname.split("/")[1] >= start]
     usage_items.sort(key=lambda i: i.pathname, reverse=True)
     cut = len(usage_items) > MAX_READS
     feedback_items = sorted(blob.iter_objects(prefix="feedback/"), key=lambda i: i.pathname, reverse=True)[:20]
@@ -106,10 +109,10 @@ def _ref_detail(host: str | None) -> str | None:
 
 
 def visits(entries: list[dict]) -> list[dict]:
-    """방문(세션)별로 묶어 최신순."""
+    """방문별로 묶어 최신순. 같은 IP(해시)·같은 날이면 탭이 달라도 한 방문."""
     grouped: dict[str, dict] = {}
-    for e in sorted(entries, key=lambda e: (e["sid"], e.get("part", 1))):
-        v = grouped.setdefault(e["sid"], {"start": e.get("created_at", ""), "end": e.get("created_at", ""), "referrer": e.get("referrer"), "landing": e.get("landing"),
+    for e in sorted(entries, key=lambda e: (visitor_key(e), e.get("created_at", ""), e.get("part", 1))):
+        v = grouped.setdefault(visitor_key(e), {"start": e.get("created_at", ""), "end": e.get("created_at", ""), "referrer": e.get("referrer"), "landing": e.get("landing"),
                                           "locale": e.get("locale"), "currency": e.get("currency"), "mobile": e.get("mobile"), "country": e.get("country"),
                                           "duration_s": 0, "steps": []})
         v["start"] = min(v["start"], e.get("created_at", "")) or v["start"]
@@ -134,34 +137,67 @@ def _table(title: str, rows, empty="없음", note="") -> str:
     return f"<section class=card><h2>{_esc(title)}</h2>{f'<p class=muted>{note}</p>' if note else ''}<table>{body}</table></section>"
 
 
-def _bars(entries: list[dict], days: int) -> str:
+def _bars(entries: list[dict], days: int, date: str | None = None) -> str:
     today = dt.datetime.now(KST).date()
     per_day = collections.defaultdict(set)
     for e in entries:
-        per_day[str(e.get("created_at", ""))[:10]].add(e["sid"])
+        per_day[str(e.get("created_at", ""))[:10]].add(visitor_key(e))
     labels = [str(today - dt.timedelta(days=i)) for i in range(days - 1, -1, -1)]
-    if days == 1:  # 오늘은 시간별
+    if days == 1 or date:  # 하루는 시간별
         per_hour = collections.defaultdict(set)
         for e in entries:
-            per_hour[str(e.get("created_at", ""))[11:13]].add(e["sid"])
+            per_hour[str(e.get("created_at", ""))[11:13]].add(visitor_key(e))
         labels, counts = [f"{h:02d}" for h in range(24)], [len(per_hour[f"{h:02d}"]) for h in range(24)]
     else:
         counts = [len(per_day[d]) for d in labels]
     top = max(counts + [1])
-    bars = "".join(f"<div class=bar title='{_esc(l)}: {c}'><span style='height:{round(c / top * 100)}%'></span><b>{c or ''}</b><i>{_esc(l[-5:] if days > 1 else l + '시')}</i></div>"
-                   for l, c in zip(labels, counts))
-    return f"<section class='card wide'><h2>{'오늘 시간별' if days == 1 else '날짜별'} 방문</h2><div class=bars>{bars}</div></section>"
+    hourly = days == 1 or bool(date)
+
+    def bar(l, c):
+        inner = f"<span style='height:{round(c / top * 100)}%'></span><b>{c or ''}</b><i>{_esc(l + '시' if hourly else l[-5:])}</i>"
+        if not hourly:  # 날짜 막대를 누르면 그날 하루 보기
+            inner = f"<a href='?date={_esc(l)}'>{inner}</a>"
+        return f"<div class=bar title='{_esc(l)}: {c}'>{inner}</div>"
+    bars = "".join(bar(l, c) for l, c in zip(labels, counts))
+    title = f"{date} 시간별" if date else ("오늘 시간별" if days == 1 else "날짜별 (막대를 누르면 그날 보기)")
+    return f"<section class='card wide'><h2>{_esc(title)} 방문</h2><div class=bars>{bars}</div></section>"
 
 
-def render(entries: list[dict], feedback: list[dict], days: int, cut: bool) -> str:
+def _day_table(entries: list[dict], days: int) -> str:
+    """날짜별 한 줄: 방문·직접 검색한 방문·판매처 간 방문·많이 온 곳. 날짜를 누르면 그날 보기."""
+    today = dt.datetime.now(KST).date()
+    by_day: dict[str, list[dict]] = collections.defaultdict(list)
+    for e in entries:
+        by_day[str(e.get("created_at", ""))[:10]].append(e)
+    rows = []
+    for i in range(days):
+        d = str(today - dt.timedelta(days=i))
+        es = by_day.get(d, [])
+        sids = {visitor_key(e) for e in es}
+        typed = {visitor_key(e) for e in es if any(x.get("via") in ("typed", "pick") for x in e.get("searches", []))}
+        clicked = {visitor_key(e) for e in es if e.get("clicks")}
+        firsts = {visitor_key(e): e for e in sorted(es, key=lambda e: e.get("created_at", ""), reverse=True)}.values()
+        top = ", ".join(f"{n} {c}" for n, c in collections.Counter(_ref_name(e.get("referrer"), e.get("landing")) for e in firsts).most_common(3))
+        rows.append(f"<tr><td class=nowrap><a href='?date={d}'>{d[5:]}</a></td><td class=n>{len(sids)}</td><td class=n>{len(typed)}</td>"
+                    f"<td class=n>{len(clicked)}</td><td><small>{_esc(top) or '-'}</small></td></tr>")
+    head = "<tr><td class=muted>날짜</td><td class='muted n'>방문</td><td class='muted n'>직접 검색</td><td class='muted n'>판매처로</td><td class=muted>많이 온 곳</td></tr>"
+    return f"<section class='card wide days'><h2>날짜별 (날짜를 누르면 그날 하루)</h2><table>{head}{''.join(rows)}</table></section>"
+
+
+def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date: str | None = None) -> str:
     r = summarize(entries)
-    firsts = {e["sid"]: e for e in sorted(entries, key=lambda e: -e.get("part", 1))}.values()
+    firsts = {visitor_key(e): e for e in sorted(entries, key=lambda e: (e.get("created_at", ""), e.get("part", 1)), reverse=True)}.values()
     ref_counts = collections.Counter(_ref_name(e.get("referrer"), e.get("landing")) for e in firsts)
     ref_details = collections.Counter(d for d in (_ref_detail(e.get("referrer")) for e in firsts) if d)
     country_counts = collections.Counter(_country_name(v["country"]) for v in visits(entries))
     pct = lambda x: "-" if x is None else f"{round(x * 100)}%"  # noqa: E731
     now = dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M")
-    tabs = "".join(f"<a class='{'on' if d == days else ''}' href='?days={d}'>{label}</a>" for d, label in ((1, "오늘"), (7, "7일"), (30, "30일")))
+    tabs = "".join(f"<a class='{'on' if d == days and not date else ''}' href='?days={d}'>{label}</a>" for d, label in ((1, "오늘"), (7, "7일"), (30, "30일")))
+    if date:  # 하루 보기: 전날·다음날
+        day = dt.date.fromisoformat(date)
+        prev_d, next_d = day - dt.timedelta(days=1), day + dt.timedelta(days=1)
+        nxt = f"<a href='?date={next_d}'>다음날 ▶</a>" if next_d <= dt.datetime.now(KST).date() else ""
+        tabs = f"<a href='?date={prev_d}'>◀ 전날</a><a class=on href='?date={date}'>{date[5:]}</a>{nxt}" + tabs
 
     rows = []
     for v in visits(entries)[:60]:
@@ -172,7 +208,18 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool) -> s
                 continue
             if kind == "검색":
                 tail = "결과 없음" if s.get("results") == 0 else f"판매 중 {s.get('active', 0)} / 전체 {s.get('results', 0)}"
-                steps.append(f"<span class=step>🔎 {_esc(s.get('q'))} <small>{tail}</small></span>")
+                via = s.get("via")
+                if via == "typed":
+                    label = f"⌨️ 직접 검색 “{_esc(s.get('q'))}”"
+                elif via == "pick":
+                    label = (f"⌨️ “{_esc(s.get('typed'))}” 치고 → {_esc(s.get('q'))} 고름" if s.get("typed") else f"⌨️ 후보에서 {_esc(s.get('q'))} 고름")
+                elif via == "link":
+                    label = f"🔗 링크로 열림: {_esc(s.get('q'))}"
+                elif via == "chip":
+                    label = f"👆 모델 버튼: {_esc(s.get('q'))}"
+                else:
+                    label = f"🔎 {_esc(s.get('q'))}"
+                steps.append(f"<span class='step{' typed' if via in ('typed', 'pick') else ''}'>{label} <small>{tail}</small></span>")
             else:
                 steps.append(f"<span class='step click'>↗ {_esc(s.get('host'))}</span>")
         when = str(v["start"])[5:16].replace("T", " ")
@@ -196,20 +243,22 @@ h1{{font-size:22px;margin:0}}h2{{font-size:15px;margin:0 0 10px}}.muted{{color:v
 .kpi b{{display:block;font-size:26px}}.kpi span{{color:var(--muted);font-size:13px}}
 .grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}}.card{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto}}.wide{{grid-column:1/-1}}
 table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px solid var(--line);vertical-align:top}}tr:first-child td{{border-top:0}}td.n{{text-align:right;font-variant-numeric:tabular-nums}}.nowrap{{white-space:nowrap}}
-.step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}.step.page{{background:transparent;border:1px solid var(--line)}}
+.step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}.step.page{{background:transparent;border:1px solid var(--line)}}.step.typed{{outline:2px solid var(--text)}}
+.days td a{{color:var(--text)}}.days tr.on td{{font-weight:700}}.bar a{{display:contents;color:inherit}}
 .bars{{display:flex;gap:4px;align-items:flex-end;height:130px}}.bar{{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}}
 .bar span{{display:block;width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:1px}}.bar b{{font-size:11px;order:-1}}.bar i{{font-size:10px;color:var(--muted);font-style:normal;white-space:nowrap}}
 .note{{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:13px}}a{{color:var(--accent)}}
 @media (max-width:760px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}td{{font-size:13px}}}}
 </style></head><body><main>
-<header><div><h1>방문 현황</h1><span class=muted>{now} 기준 · 2026-11-07부터 둘러보기만 한 방문도 포함</span></div><nav class=tabs>{tabs}</nav></header>
+<header><div><h1>방문 현황{f' · {_esc(date)}' if date else ''}</h1><span class=muted>{now} 기준 · 같은 IP는 하루 1번 · 2026-11-07부터 둘러보기만 한 방문도 포함</span></div><nav class=tabs>{tabs}</nav></header>
 <div class=kpis>
 <div class=kpi><b>{r['visits']}</b><span>방문</span></div>
 <div class=kpi><b>{r['visits_with_activity']}</b><span>검색·클릭한 방문</span></div>
 <div class=kpi><b>{r['visits_with_click']}</b><span>판매처까지 간 방문</span></div>
 <div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div></div>
 <div class=grid>
-{_bars(entries, days)}
+{_bars(entries, days, date)}
+{_day_table(entries, days) if days > 1 and not date else ''}
 {_table('어디서 왔나', ref_counts.most_common(12), note='휴대폰 앱(레딧·카카오톡 앱 등)은 출처를 안 알려 줘서 "직접·앱"으로 잡힘')}
 {_table('들어온 곳 자세히', ref_details.most_common(15), note='커뮤니티 글·사이트는 주소까지. 구글은 검색어를 안 알려 줌 → 검색어는 서치 콘솔에서')}
 {_table('처음 들어온 페이지', r['landings'])}
@@ -217,10 +266,11 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 {_table('나라별 방문', country_counts.most_common(15), note='접속한 곳 기준 (2026-10-29부터 기록, 그 전은 "기록 전")')}
 {_table('화면 언어', r['locales'])}
 {_table('클릭한 판매처', r['click_hosts'])}
-{_table('많이 찾은 검색어', r['top_queries'][:10])}
+{_table('손님이 직접 친 검색어', r['typed_queries'][:10], note='검색창에 직접 친 것 (후보를 골랐으면 고르기 전에 친 글자)')}
+{_table('링크·버튼으로 연 모델', r['opened_models'][:10], note='모델 시세 페이지의 "전체 매물 보기"나 첫 화면 모델 버튼')}
 {_table('결과 0건 검색어 (고칠 것)', r['zero_result_queries'][:10])}
 {_table('판매 중 0건 검색어', r['no_active_queries'][:10])}
-<section class='card wide'><h2>최근 방문 (한 줄 = 한 사람의 방문 흐름)</h2>
+<section class='card wide'><h2>최근 방문 (한 줄 = 한 사람의 그날 방문 흐름, 같은 IP는 하루 한 줄)</h2>
 <table><tr><td class=muted>시작(한국)</td><td class=muted>어디서 · 처음 들어온 주소</td><td class=muted>나라·기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
 <section class='card wide'><h2>최근 의견 (💬 의견 보내기)</h2><table>{fb_rows}</table></section>
 </div>
@@ -257,8 +307,13 @@ class handler(BaseHTTPRequestHandler):
             days = max(1, min(int((query.get("days") or ["7"])[0]), 30))
         except ValueError:
             days = 7
+        date = (query.get("date") or [""])[0]
         try:
-            entries, feedback, cut = load(days)
+            date = dt.date.fromisoformat(date).isoformat() if date else None
+        except ValueError:
+            date = None
+        try:
+            entries, feedback, cut = load(days, date)
         except Exception as error:  # noqa: BLE001
             return self._send(500, f"<!doctype html><meta charset=utf-8><p>기록을 읽지 못했습니다: {_esc(type(error).__name__)}</p>")
-        return self._send(200, render(entries, feedback, days, cut), {"set-cookie": SKIP_USAGE_COOKIE})
+        return self._send(200, render(entries, feedback, days, cut, date), {"set-cookie": SKIP_USAGE_COOKIE})

@@ -2427,12 +2427,13 @@
         clicks.push({ host, entity: state.entity || '', q: state.query || '', s: seconds() });
       }, true);
       return {
-        search(q, entity, results, active){
+        // via: typed(검색창에 직접 쳐서 Enter) · pick(치다가 후보 모델을 고름, typed 에 친 글자) · chip(화면의 모델 버튼) · link(모델 페이지·공유 링크 주소로 열림) · other(필터·다듬기 등)
+        search(q, entity, results, active, via, typed){
           if(off) return;
           const key = `${q}|${entity || ''}`;
           if(key === last) return;  // 같은 검색 다시 그리기는 한 번만
           last = key;
-          searches.push({ q, entity: entity || '', results, active, s: seconds() });
+          searches.push({ q, entity: entity || '', results, active, s: seconds(), via: via || 'other', typed: typed || '' });
         }
       };
     })();
@@ -3297,7 +3298,7 @@
       if(!section) return;
       section.addEventListener('click', event => {
         const target = event.target.closest('[data-entity]');
-        if(target) selectEntity(target.dataset.entity, 'query-input', { preserveResultsAnchor: false });
+        if(target) selectEntity(target.dataset.entity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
       });
     }
 
@@ -3997,7 +3998,7 @@
         const exact = state.query && !state.entity ? findEntityByExactName(state.query) : null;
         if(exact){
           state.entity = exact.id;
-          runSearch(0, { queryOverride: state.query, historyMode: 'replace' });
+          runSearch(0, { usageVia: 'link', queryOverride: state.query, historyMode: 'replace' });
         }
       }catch(error){
         entityState.summary = null;
@@ -4776,15 +4777,17 @@
       state.entity = entity.id;
       closeEntityMenu(inputId);
       const label = entityDisplayName(entity);
+      const typed = String((els[inputId] && els[inputId].value) || '').trim();
       syncSearchInputs(label);
-      runSearch(0, { queryOverride: label, historyMode: 'push', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
+      const via = options.usageVia || 'pick';
+      runSearch(0, { usageVia: via, usageTyped: via === 'pick' && typed !== label ? typed : '', queryOverride: label, historyMode: 'push', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
     }
 
     function runFreeTextSearch(inputId, options = {}){
       state.entity = '';
       closeEntityMenu(inputId);
       syncSearchInputs(els[inputId].value);
-      runSearch(0, { historyMode: 'push', freeText: true, preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
+      runSearch(0, { usageVia: 'typed', historyMode: 'push', freeText: true, preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
     }
 
     // Enter: 고른 후보 → 그 모델 / 고른 게 없으면 1순위 후보 / 후보가 없으면 그대로 검색
@@ -4885,12 +4888,12 @@
         if(event.target.closest('[data-entity-clear]')){
           state.entity = '';
           const raw = els['query-input'].value.trim();
-          if(raw) runSearch(0, { queryOverride: raw, historyMode: 'push', freeText: true });
+          if(raw) runSearch(0, { usageVia: 'typed', queryOverride: raw, historyMode: 'push', freeText: true });
           else render();
           return;
         }
         const chip = event.target.closest('[data-entity]');
-        if(chip) selectEntity(chip.dataset.entity, 'query-input', { preserveResultsAnchor: true });
+        if(chip) selectEntity(chip.dataset.entity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: true });
       });
     }
 
@@ -5611,7 +5614,7 @@
           state.historyVisibleCount = requestedHistoryVisibleCount === null
             ? initialSections.history.length
             : Math.min(initialSections.history.length, requestedHistoryVisibleCount);
-          if(historyMode !== 'none') usageLog.search(state.query, state.entity, getResults().length, initialSections.active.length);
+          if(historyMode !== 'none') usageLog.search(state.query, state.entity, getResults().length, initialSections.active.length, options.usageVia, options.usageTyped);
         }
         if(!append) state.error = null;
         if(historyMode !== 'none'){
@@ -6839,6 +6842,7 @@
       commitHistoryState('replace', initialState);
       if(initialState.query){
         runSearch(initialState.offset, {
+          usageVia: 'link',
           queryOverride: initialState.query,
           historyMode: 'replace',
           visibleCount: initialState.visibleCount,

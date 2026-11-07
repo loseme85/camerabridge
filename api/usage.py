@@ -3,6 +3,7 @@
 저장 위치: usage/YYYY-MM-DD/HHMMSS-<세션>-<n>.json (비공개, 저장소에는 안 남김)
 남기는 나라: Vercel이 붙여 주는 접속 나라 코드(x-vercel-ip-country, 예: KR)만. 남기지 않는 것: IP, 이메일, 쿠키. 세션 ID는 브라우저 탭마다 새로 만드는 무작위 값.
 보내는 곳: 첫 화면(beta.html)과 모델 시세 페이지(track.js). 같은 탭이면 한 방문(sid)으로 묶이고, 페이지마다 첫 묶음은 검색·클릭이 없어도 보냄(어디서 왔는지 남기려고).
+같은 사람 하루 한 번: IP를 그날 날짜·비밀 소금과 섞은 해시(vtag, 12자)만 남김. IP 자체는 저장 안 하고, 날이 바뀌면 값도 바뀌어 날끼리 이어 볼 수 없음.
 들어온 곳(referrer): 바깥 사이트의 도메인+경로(?·# 뒤는 버림, 예: www.reddit.com/r/Leica/comments/abc). 로봇(user-agent)은 기록 안 함.
 사장님 브라우저는 빼기: /owner/usage 를 열면 /api/usage 에만 가는 표시 쿠키(cb_skip_usage=1)가 생기고, 그 쿠키가 오면 기록하지 않음.
 Blob 무료 한도(쓰기 월 2,000회)를 아끼려고 화면이 방문당 최대 3번만 보낸다. 끄기: USAGE_LOG_DISABLED=1
@@ -11,6 +12,7 @@ Blob 무료 한도(쓰기 월 2,000회)를 아끼려고 화면이 방문당 최�
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -21,6 +23,7 @@ SID = re.compile(r"^[a-z0-9]{8,24}$")
 COUNTRY = re.compile(r"^[A-Z]{2}$")
 MAX_SEARCHES = 40
 MAX_CLICKS = 40
+VIA = {"typed", "pick", "chip", "link", "other"}
 BOT = re.compile(r"bot|crawl|spider|slurp|headless|lighthouse|preview|python|curl|wget", re.I)
 
 
@@ -43,13 +46,18 @@ def clean(body: dict) -> dict | None:
     for item in (body.get("searches") or [])[:MAX_SEARCHES]:
         if not isinstance(item, dict) or not _text(item.get("q"), 120):
             continue
-        searches.append({
+        one = {
             "q": _text(item.get("q"), 120),
             "entity": _text(item.get("entity"), 120),
             "results": _int(item.get("results")),
             "active": _int(item.get("active")),
             "s": _int(item.get("s")),  # 방문 시작 뒤 몇 초
-        })
+        }
+        if item.get("via") in VIA:  # 어떻게 찾았나: typed·pick·chip·link·other
+            one["via"] = item["via"]
+        if _text(item.get("typed"), 120):  # pick 일 때 고르기 전에 친 글자
+            one["typed"] = _text(item.get("typed"), 120)
+        searches.append(one)
     clicks = []
     for item in (body.get("clicks") or [])[:MAX_CLICKS]:
         if not isinstance(item, dict) or not _text(item.get("host"), 80):
@@ -78,7 +86,17 @@ def clean(body: dict) -> dict | None:
     }
 
 
-def handle(body: dict, country: str | None = None, cookie: str | None = None, agent: str | None = None) -> tuple[int, dict]:
+def visitor_tag(ip: str, day: str) -> str | None:
+    """같은 IP·같은 날 → 같은 값. 소금은 비밀값(USAGE_SALT, 없으면 Blob 토큰)이라 IP를 거꾸로 맞혀 볼 수 없음."""
+    ip = str(ip or "").split(",")[0].strip()
+    if not ip:
+        return None
+    salt = os.environ.get("USAGE_SALT") or os.environ.get("BLOB_READ_WRITE_TOKEN") or "camerabridge-usage"
+    return hashlib.sha256(f"{salt}:{day}:{ip}".encode()).hexdigest()[:12]
+
+
+def handle(body: dict, country: str | None = None, cookie: str | None = None, agent: str | None = None,
+           ip: str | None = None) -> tuple[int, dict]:
     if os.environ.get("USAGE_LOG_DISABLED") == "1":
         return 200, {"ok": True}
     if agent and BOT.search(agent):  # 검색엔진 로봇이 페이지를 그리다 보낸 것
@@ -95,6 +113,9 @@ def handle(body: dict, country: str | None = None, cookie: str | None = None, ag
 
     now = dt.datetime.now(KST)
     entry["created_at"] = now.isoformat(timespec="seconds")
+    tag = visitor_tag(ip, f"{now:%Y-%m-%d}")
+    if tag:
+        entry["vtag"] = tag
     path = f"usage/{now:%Y-%m-%d}/{now:%H%M%S}-{entry['sid']}-{entry['part']}.json"
     try:
         blob.put(path, json.dumps(entry, ensure_ascii=False).encode("utf-8"),
@@ -120,7 +141,8 @@ class handler(BaseHTTPRequestHandler):
         except ValueError:
             return self._send(400, {"ok": False})
         status, payload = handle(body, self.headers.get("x-vercel-ip-country"), self.headers.get("cookie"),
-                                 self.headers.get("user-agent"))
+                                 self.headers.get("user-agent"),
+                                 self.headers.get("x-forwarded-for") or self.headers.get("x-real-ip"))
         return self._send(status, payload)
 
     def do_GET(self):  # noqa: N802
