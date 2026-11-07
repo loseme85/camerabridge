@@ -823,7 +823,7 @@
     .grade-chip.grade-N,.grade-chip.grade-S{border-color:#2f7d4f;color:#2f7d4f}
     .grade-chip.grade-D,.grade-chip.grade-X{border-color:#b26a00;color:#b26a00}
     .grade-compare{font-size:12px;font-weight:600}
-    .deal-badge{display:inline-block;margin:4px 0 2px;padding:2px 7px;border:1px solid #2f7d4f;color:#2f7d4f;font-size:13px;font-weight:700;line-height:1.4}
+    .deal-badge{display:inline-block;align-self:flex-start;width:fit-content;margin:4px 0 2px;padding:2px 7px;border:1px solid #2f7d4f;color:#2f7d4f;font-size:13px;font-weight:700;line-height:1.4}
     .grade-compare.is-cheaper{color:#2f7d4f}
     .grade-compare.is-pricier{color:var(--text-soft)}
     .grade-compare.is-note{color:var(--text-soft);font-weight:400;font-style:italic}
@@ -3852,7 +3852,7 @@
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
       const diff = dealDiff(result, cost);
-      const deal = diff !== null && diff <= -5
+      const deal = diff !== null && diff <= -5 && (result.final_output || {}).sold_quality === 'asking'  // 살 수 있는 매물에만
         ? `<div class="deal-badge" title="${escapeHtml(ec('vs_grade_cheaper', { p: String(-diff) }))}">${escapeHtml(ec('deal_below', { p: String(-diff) }))}</div>` : '';
       return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${deal}${original}${gradeRow}${landed}</div>`;
     }
@@ -6353,7 +6353,7 @@
         compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
         priceValue: parseNumericPrice(result),
         marketInfo: getMarketActivityInfo(result),
-        deal: sortMode === 'deal' ? dealDiff(result, computeLandedCost(result)) : null,
+        deal: sortMode === 'deal' && (result.final_output || {}).sold_quality === 'asking' ? dealDiff(result, computeLandedCost(result)) : null,
       }));
       wrapped.forEach(item => {
         item.result.__ui_original_index = item.originalIndex;
