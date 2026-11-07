@@ -9946,6 +9946,111 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+MATSUBARA_NOT_LEICA = (r"(?i)7artisans|七工匠|voigtl|nokton|ultron|jupit|zeiss|biogon|sonnar|biotar|canon|angenieux|cooke|ross|taylor|"
+                       r"dallmeyer|dalrac|nikkor|wollensak|velostigmat|meyer|plasmat|torioplan|kinoptik|apochromat|fulgior|astoro|konica|"
+                       r"hexar|light lens lab|mr\.?ding|noxlux|alpa|zork|olympia|fernobjektiv|old delft|minor\b|u\.s\.s\.r|made in china|社外品|"
+                       r"hassel|ハッセル|nikon z|n\.z\.|sony ?e|sony nex|nex/e")  # 소니 E로 개조한 렌즈도 뺌 (원래 렌즈 시세와 다름)
+MATSUBARA_LEICA = r"(?i)leica|leitz|ライカ|summi|summa|elmar|hektor|noctilux|xenon|telyt|angulon|thambar|focotar|ビゾ|visoflex|summarex|tele-elmar"
+MATSUBARA_ACC = (r"フード|キャップ|キヤップ|ファインダー|finder|ヘリコイド|リング|ring|雲台|三脚|ルーペ|magnifier|フィルター|filter|ベロース|アダプタ|"
+                 r"adapter|wender|距離計 （|接写|ビゾフレックス3|visoflex3|extender|エクステンダー|中間")
+
+
+def crawl_matsubara():
+    """カメラのマツバラ光機 (일본 오사카 우메다 클래식 카메라점) - easy-myshop 몰 'Leica' 분류(category_id=9, 하위 M·L39·R·비조·액세서리
+    전부) 정적 HTML, 한 쪽 100개 7쪽쯤 (620여 개 중 판매 중 230여 개). robots.txt Crawl-delay 5라 쪽마다 5초 쉼.
+    'soldout_item'은 판매 완료로 뺌. 분류에 섞인 타사 렌즈(7Artisans·보이그랜더·캐논·안제니외 등)는 뺌. 가격 JPY(세금 포함).
+    이름 '50/2 Summicron SN.… ライカＭ用 …'은 일련번호 앞까지 → '50mm f2 Summicron' + 마운트(M·L39·R). 등급 표기 없음 → 사진 등급 대기열"""
+    import html as _html
+    import unicodedata
+    import requests
+    import crawl_engine as _ce
+    from ja_normalize import ja_to_en
+    base = "https://m-camera.com"
+    site = "マツバラ光機 (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 マツバラ光機 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(0, 15):
+        try:
+            resp = sess.get(f"{base}/c-item-list", params={
+                "keyword": "", "category_id": 9, "parent_category_id": 9, "page_category_id": 9, "category_search_type": 1,
+                "scnt": 100, "sort": 4, "p": page_num}, timeout=40)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"マツバラ {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        cards = re.findall(r'<div class="item ([^"]*)" id="item_\d+">(.*?)<div class="item_price_block"(.*?)</a>', resp.text, re.S)
+        for cls, blk, price_blk in cards:
+            m_link = re.search(r'href="(https://m-camera\.com/c-item-detail\?ic=[^"]+)"', blk)
+            if not m_link or m_link.group(1) in seen:
+                continue
+            seen.add(m_link.group(1))
+            if "soldout" in cls:
+                continue
+            m_name = re.search(r'<div class="item_name">\s*(.*?)</div>', blk, re.S)
+            m_price = re.search(r'item_price_val">([\d,]+)<', price_blk)
+            if not (m_name and m_price):
+                continue
+            raw = unicodedata.normalize("NFKC", re.sub(r"\s+", " ", _html.unescape(m_name.group(1)))).strip()
+            if not re.search(MATSUBARA_LEICA, raw) or re.search(MATSUBARA_NOT_LEICA, raw):
+                continue
+            mount = ("L39" if re.search(r"スクリ[ュユ]ー|L39|L-39|スクリュー", raw) else
+                     "R" if re.search(r"ライカ ?R|R用|-R\b|R型|\bR\b", raw) else
+                     "M" if re.search(r"M用|ライカM|Leica M\b|Mマウント", raw) else "")
+            head = raw[:1] + re.split(r"\s(?:SN|S/N|Sn|L#|L ?#|B#|N\.)\s?[.:,]?\s?\d|\s?\((?:made|Made) in|\(Germany|\(Canada|ライカ|距離計|前後|専用|純正|元箱|\s{2,}", raw[1:])[0]
+            lens_like = re.match(r"\d{2,3}(?:\s?/\s?|mm\s?F)\d", raw)
+            acc = (bool(re.search(MATSUBARA_ACC + r"|フ-ド|フ−ド", head[:45] if len(head) > 10 else raw[:45], re.I))
+                   and not lens_like) or bool(re.search(r"\b1\d{4}[A-Z]\b", raw) or re.match(r"(?i)leica \d{2}mm uv", raw))  # 'Summicron 17672U'(부품 번호)·필터
+            if len(head) <= 10:
+                head = re.split(r"\s{2,}", raw)[0][:60]
+            name = head if not acc else re.split(r"\s{2,}", raw)[0][:70]
+            name = re.sub(r"^(\d{2,3})\s?/\s?(\d(?:\.\d)?)\s+", r"\1mm f\2 ", name)
+            name = re.sub(r"^(\d{2,3})mm F(\d(?:\.\d)?)\s+", r"\1mm f\2 ", name)
+            name = re.sub(r"\b1([FG])\b", lambda m: "I" + m.group(1).lower(), name)
+            name = re.sub(r"\bIII?([CFG])\b", lambda m: m.group(0)[:-1] + m.group(1).lower(), name)
+            name = re.sub(r"ライカフレックス\s?1型", "Leicaflex", name)
+            name = re.sub(r"(?i)SUPER ANGULON\s+L-Rマウント", "Super-Angulon-R", name)
+            name = re.sub(r"IIIc & IIIf combination", "IIIf (converted)", name)  # IIIc 몸체에 IIIf 부품 — 두 모델 겹침으로 잡히지 않게
+            m_body = re.match(r"(?i)Leica\s+(I+[cfg]|D?III|IIIc & IIIf|Ig)\b(.*)$", name)
+            if m_body and re.search(r"\d{2}\s?/\s?\d", m_body.group(2)) and "Body" not in name:
+                name = f"Leica {m_body.group(1)} Body + {m_body.group(2).strip()}"  # 'Leica Ig 50/3.5 Elmar …' 바디 세트가 렌즈로 붙지 않게
+            name = re.sub(r"ボデー(のみ)?", " Body ", name)
+            name = re.sub(r"\s+", " ", ja_to_en(name)).strip(" ,、")
+            if acc:
+                name = " ".join(t for t in name.split() if not re.search(r"[぀-ヿ一-鿿]", t)) or name
+            name = name if re.match(r"(?i)leica|leitz", name) else "Leica " + name
+            if mount and not acc and not re.search(rf"\b{mount}\b", name):
+                name += f" {mount}"
+            if acc:
+                name += " accessory"
+            price = f"¥{int(m_price.group(1).replace(',', '')):,}"
+            img = re.search(r'data-src="([^"]+)"', blk)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": img.group(1) if img else "",
+                "링크": m_link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num + 1}페이지 상품 {len(cards)}개")
+        if len(cards) < 100:
+            break
+        time.sleep(5)
+    if len(seen) < 100:
+        raise RuntimeError(f"マツバラ 라이카 분류 {len(seen)}개뿐")
+    print(f"  ✅ マツバラ光機 완료: {len(results)}개 (분류 {len(seen)}개 중)")
+    return results
+
+
 def crawl_pazdera():
     """Foto Optika Jan Pazdera (체코 프라하 바츨라프 광장 옆 중고점, '체코 최대 사진 바자') - Sun-shop 몰.
     검색 화면이 상품을 다 보여 주지 않아 사이트맵(sitemap.xml)에서 중고(bazar) 주소 중 라이카 낱말(leica·leitz·laica·leicaflex)이
@@ -10648,6 +10753,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("マツバラ光機 (일본)", lambda: ce.wrap_full_run("マツバラ光機 (일본)", crawl_matsubara)),
         ("Foto Pazdera (체코)", lambda: ce.wrap_full_run("Foto Pazdera (체코)", crawl_pazdera)),
         ("AdoPhoto (그리스)", lambda: ce.wrap_full_run("AdoPhoto (그리스)", crawl_adophoto)),
         ("PCH Pro Shop (벨기에)", lambda: ce.wrap_full_run("PCH Pro Shop (벨기에)", crawl_pch)),
