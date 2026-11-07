@@ -4608,6 +4608,8 @@
       const grade = result.grade;
       const note = (result.final_output || {}).entity_note;
       if(!grade || grade === 'X' || grade === 'N' || note === 'too_cheap' || note === 'set' || note === 'price_inferred') return null;
+      // 리페인트·개조품은 같은 모델 기본형 시세와 값이 달라 비교하지 않음 ('M3 Black Repaint'가 '116% 비쌈'으로 나오던 것, 2026-11-07)
+      if(/(repaint|re-paint|repainted|modified|custom|改造|リペイント|리페인트|재도색|개조)/i.test(String(result.title || ''))) return null;
       if(!entityState.byId || !cost || !cost.listed || !fxRate(cost.currency) || !fxRate('KRW')) return null;
       const picked = state.entity ? entityState.byId[state.entity] : null;
       const entity = picked && !(picked.children || []).length && !picked.feature ? picked : entityState.byId[result.entity];
