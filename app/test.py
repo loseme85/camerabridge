@@ -6490,6 +6490,25 @@ def crawl_fototrade():
                       rename=_abbr_lens_name)
 
 
+def crawl_romanaphoto():
+    """Romana Photo (이탈리아 로마) - 중고 카메라점 WooCommerce 공개 상품 API, 'LEICA' 분류의 라이카만 (#232 _woo_leica).
+    이름 'SUMMICRON -R 50MM F/2'·'ELMARIT – R 24MM' → 'Summicron-R 50mm f2'(띄어 쓴 마운트 붙이기) 뒤 _abbr_lens_name. 등급 표기 없음"""
+    def keep(p, name):
+        leica_cat = any((c.get("name") or "").upper() == "LEICA" for c in p.get("categories") or [])
+        return leica_cat and not re.search(r"(?i)sigma|schneider|minolta rokkor m 90", name) or bool(re.match(r"(?i)leica\b", name)) and leica_cat
+
+    def rename(name):
+        n = re.sub(r"\s+", " ", name)
+        n = re.sub(r"(?i)\b(summicron|summilux|elmarit|elmar|vario[- ]elmar|super[- ]vario[- ]elmar|telyt)\s*[-–]\s*(r|m|sl|tl|c)\b", lambda m: m.group(1).replace(" ", "-") + "-" + m.group(2), n)
+        n = re.sub(r"(?i)\bMR TELYT R\b", "MR-Telyt-R", n)
+        n = re.sub(r"(?i)\bV LUX (\d)\b.*$", r"V-Lux \1", n)  # 'V LUX 4 C DC VARIO ELMARIT …' → V-Lux 4
+        n = re.sub(r"(?i)\bF/(\d)", r"F\1", n)
+        n = re.sub(r"(?i)\s*\(leica(?: m)?\)\s*$", "", n)
+        n = re.sub(r"(?i)\bMM\b", "mm", n)
+        return _abbr_lens_name(n.upper() if n.isupper() else n).replace("mmmm", "mm")
+    return _woo_leica("https://www.romanaphoto.it", "Romana Photo (이탈리아)", "Romana Photo", keep=keep, rename=rename)
+
+
 def crawl_imagefoto():
     """Image Foto (덴마크, 라이카 공인 딜러) - Shopify '브루트'(brugt, 중고) 컬렉션 JSON에서 판매자 Leica만, 판매 중만. 가격 DKK.
     제목 'Brugt Leica M2 Chrome m. Selvudløser' → 'Leica M2 Chrome', 'Udstillingsmodel'(진열품)은 그대로 둠. 등급 표기 없음"""
@@ -11019,6 +11038,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
