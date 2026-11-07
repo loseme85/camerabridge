@@ -9946,6 +9946,88 @@ def crawl_filmcameratokyo():
     print(f"  ✅ Film Camera Tokyo 완료: {len(results)}개")
     return results
 
+def crawl_katsumido():
+    """銀座カツミ堂写真機店 (일본 도쿄 긴자 라이카·롤라이 중고점) - colorme 몰 'Leica(ライカ)' 분류(cbid=1788926, 하위 M·R·바르낙·
+    렌즈·비조·액세서리 전부) 정적 HTML(EUC-JP), 한 쪽 60개. 팔린 상품은 몰에서 내려가 목록에는 판매 중만 남음. 가격 JPY(세금 포함).
+    등급은 목록 설명 '商品状態:AB' (A·AB·B…, condition_grade KATSUMIDO_PREFIX). 새 상품('新品')은 다른 분류라 안 들어옴"""
+    import html as _html
+    import unicodedata
+    import requests
+    import crawl_engine as _ce
+    from ja_normalize import ja_to_en
+    from condition_grade import KATSUMIDO_PREFIX
+    base = "https://www.katsumido-camera.com"
+    site = "銀座カツミ堂 (일본)"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    print(f"\n  📂 カツミ堂 크롤링 시작")
+    results, seen, total = [], set(), None
+    for page_num in range(1, 10):
+        try:
+            resp = sess.get(f"{base}/", params={"mode": "cate", "cbid": 1788926, "csid": 0, "sort": "n", "page": page_num}, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"カツミ堂 {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        text = resp.content.decode("euc-jp", "ignore")
+        if total is None:
+            m_total = re.search(r"全\s*\[(\d+)\]\s*商品中", text)
+            if not m_total:
+                raise RuntimeError("カツミ堂 목록 틀이 바뀜 (상품 수 없음)")
+            total = int(m_total.group(1))
+        new = 0
+        for blk in re.findall(r'<div class="item_box[^"]*">(.*?)</div>\s*</div>', text, re.S):
+            m_pid = re.search(r"\?pid=(\d+)", blk)
+            m_name = re.search(r'<p class="item_name">\s*<a[^>]*>(.*?)</a>', blk, re.S)
+            m_price = re.search(r"([\d,]+)円", blk)
+            if not (m_pid and m_name and m_price) or m_pid.group(1) in seen:
+                continue
+            seen.add(m_pid.group(1))
+            new += 1
+            if re.search(r"SOLD ?OUT|売り切れ|在庫なし", blk, re.I):
+                continue
+            raw = unicodedata.normalize("NFKC", re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", m_name.group(1))))).strip()
+            if "新品" in raw:
+                continue
+            name = re.sub(r"\([A-Z]\d{4}\)\*?|\*$", "", raw).strip()  # 매장 관리번호 '(A4218)*'
+            viso = "(V)" in name
+            name = re.sub(r"\((M|R|L39|V|M3)\)", lambda m: {"V": "", "M3": "M (M3)"}.get(m.group(1), m.group(1)), name)
+            name = re.sub(r"\b(\d{1,3}(?:\.\d)?)(cm|mm)?\s?/\s?(\d(?:\.\d)?)\b",
+                          lambda m: f"{round(float(m.group(1)) * (10 if m.group(2) == 'cm' else 1))}mm f{m.group(3)}", name)
+            name = re.sub(r"\s+", " ", ja_to_en(name)).strip()
+            name = re.sub(r"(?i)^leica\s+(summilux|summicron|summaron|summarit|elmarit|elmar|hektor|noctilux)\s+(M|R)\b",
+                          lambda m: f"Leica {m.group(1)}-{m.group(2)}", name)
+            name = name if re.match(r"(?i)leica|leitz", name) else "Leica " + name
+            if viso:
+                name += " (Visoflex)"  # 'エルマー (V) 65/3.5' → 'Leica Elmar 65mm f3.5 (Visoflex)'
+            if re.search(r"(?i)filter|フィルター|finder|ファインダー|hood|フード|cap\b|キャップ", name):
+                name += " accessory"
+            m_cond = re.search(r"商品状態\s*[:：]\s*([A-D][A-D]?[+-]?)", blk)
+            img = re.search(r'<img src="([^"]+)"', blk)
+            price = f"¥{int(m_price.group(1).replace(',', '')):,}"
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": KATSUMIDO_PREFIX + m_cond.group(1) if m_cond else "정보없음",
+                "가격": price,
+                "통화": "JPY",
+                "이미지": img.group(1).split("?")[0].replace("_th.jpg", ".jpg") if img else "",
+                "링크": f"{base}/?pid={m_pid.group(1)}",
+                "품절": False,
+                "예약중": False,
+                "mount": detect_mount(name),
+                "category": detect_category(name, price),
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new or len(seen) >= total:
+            break
+        time.sleep(random.uniform(1.0, 2.0))
+    print(f"  ✅ カツミ堂 완료: {len(results)}개 (분류 {total}개)")
+    return results
+
+
 MATSUBARA_NOT_LEICA = (r"(?i)7artisans|七工匠|voigtl|nokton|ultron|jupit|zeiss|biogon|sonnar|biotar|canon|angenieux|cooke|ross|taylor|"
                        r"dallmeyer|dalrac|nikkor|wollensak|velostigmat|meyer|plasmat|torioplan|kinoptik|apochromat|fulgior|astoro|konica|"
                        r"hexar|light lens lab|mr\.?ding|noxlux|alpa|zork|olympia|fernobjektiv|old delft|minor\b|u\.s\.s\.r|made in china|社外品|"
@@ -10753,6 +10835,7 @@ def crawl_all():
         ("Chiswick Camera Centre (영국)", lambda: ce.wrap_full_run("Chiswick Camera Centre (영국)", crawl_chiswick)),
         ("Foto Görlitz (독일)", lambda: ce.wrap_full_run("Foto Görlitz (독일)", crawl_fotogoerlitz)),
         ("Camera Obscura Elburg (네덜란드)", lambda: ce.wrap_full_run("Camera Obscura Elburg (네덜란드)", crawl_cameraobscura)),
+        ("銀座カツミ堂 (일본)", lambda: ce.wrap_full_run("銀座カツミ堂 (일본)", crawl_katsumido)),
         ("マツバラ光機 (일본)", lambda: ce.wrap_full_run("マツバラ光機 (일본)", crawl_matsubara)),
         ("Foto Pazdera (체코)", lambda: ce.wrap_full_run("Foto Pazdera (체코)", crawl_pazdera)),
         ("AdoPhoto (그리스)", lambda: ce.wrap_full_run("AdoPhoto (그리스)", crawl_adophoto)),
