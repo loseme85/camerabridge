@@ -3424,8 +3424,11 @@
       const shuffle = arr => arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
       return QUIZ_PLAN.map(([kind, level]) => {
         const pool = shuffle(quizState.bank.filter(q => q.kind === kind && !used.has(q)));
-        const q = pool.find(x => x.level === level && !used.has(x.entity)) || pool.find(x => !used.has(x.entity)) || pool[0];
-        if(q){ used.add(q); used.add(q.entity); }
+        // 같은 정답(예: M6 기념판 여러 개)은 한 번만
+        const answerOf = x => `answer:${(x.options || [])[x.answer]}`;
+        const fresh = x => !used.has(x.entity) && !used.has(answerOf(x));
+        const q = pool.find(x => x.level === level && fresh(x)) || pool.find(fresh) || pool[0];
+        if(q){ used.add(q); used.add(q.entity); used.add(answerOf(q)); }
         return q;
       }).filter(Boolean);
     }
@@ -3450,7 +3453,6 @@
         if(!best || level > best.level){ try{ localStorage.setItem('cb_quiz_best', JSON.stringify({ level, right: quizState.right })); }catch(error){} }
         renderQuizBest();
         body.innerHTML = `
-          <div class="quiz-top"><span>${escapeHtml(qx('quiz_title'))}</span></div>
           <p class="quiz-level" id="quiz-question">${escapeHtml(qx('quiz_result', { n: String(level), name: qx(`quiz_lv${level}`) }))}</p>
           <p>${escapeHtml(qx('quiz_score', { r: String(quizState.right), t: String(total) }))} · ${escapeHtml(qx('quiz_done_today'))}</p>
           <p class="quiz-feedback" id="quiz-share-status" role="status"></p>

@@ -104,6 +104,9 @@ def main() -> None:
                             r"close focus|red|jahre|years|anniversary|edition|limited|8 elements|chrome|silver|military|olive", re.I)
     skip_label = re.compile(r"^\(?(standard|classic|generation not stated|\d{4} reissue)\)?$|not stated|differs by shop|\(all\)|^\(?typ\b|^[\d.]+$", re.I)
 
+    # 막연하거나 다른 모델 변형과 헷갈리는 이름 (2026-11-07 문제 전부 훑어보고 뺌)
+    vague = re.compile(r"^(zoom|white|black|silver|partners|titanium|\d+(st|nd|rd|th))$")
+
     def core(label: str) -> str:
         """중복 판단용 핵심 말: 'f/1.4 ASPH Safari' · 'Safari' → 'safari' (조리개·ASPH·연도·괄호 빼고)"""
         text = re.sub(r"\(.*?\)|f/\d+(?:\.\d+)?|\basph\b|\b\d{4}\b|['’‘\"]", " ", label.lower())
@@ -124,7 +127,7 @@ def main() -> None:
             continue
         label = label_of(e)
         kind = e["id"].split(":")[1]
-        if not label or skip_label.search(label) or gives_away(label, e["parent"]) or not core(label):
+        if not label or skip_label.search(label) or gives_away(label, e["parent"]) or not core(label) or vague.match(core(label)):
             continue  # 기본형·'세대 모름'·바탕 모델 이름이 들어 있는 것은 문제로 안 냄
         if kind == "lens" and not lens_words.search(label):
             continue  # 렌즈는 세대 번호보다 매니아가 아는 별칭·한정판만
