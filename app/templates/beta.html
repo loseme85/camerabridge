@@ -6318,7 +6318,9 @@
       sorted.sort((left, right) => {
         const leftPrice = left.priceValue;
         const rightPrice = right.priceValue;
-        if(left.compatibilityTier !== right.compatibilityTier) return left.compatibilityTier - right.compatibilityTier;
+        // 가격·시세 정렬에서는 '정확히 맞음(0)'과 '같은 모델(1)'을 한 묶음으로 가격순. 리페인트·액세서리·튀는 값(2)만 뒤로
+        const tierOf = item => (['price_asc', 'price_desc', 'deal'].includes(sortMode) ? (item.compatibilityTier >= 2 ? 1 : 0) : item.compatibilityTier);
+        if(tierOf(left) !== tierOf(right)) return tierOf(left) - tierOf(right);
         if(sortMode === 'newest'){
           if(right.recency !== left.recency) return right.recency - left.recency;
           if(right.compatibility !== left.compatibility) return right.compatibility - left.compatibility;
