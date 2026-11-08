@@ -129,7 +129,7 @@
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 116,
+   "count": 117,
    "example": "[중고] M11 (Silver)"
   },
   {
@@ -219,7 +219,7 @@
   {
    "a": "leica:body:m10-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 74,
+   "count": 73,
    "example": "Leica M10-P Black"
   },
   {
@@ -1719,11 +1719,24 @@
    "example": "Leica D-Lux 5 Titan Body"
   },
   {
+   "entity": "leica:body:q3",
+   "word": "black paint",
+   "count": 3,
+   "example": "LEICA Q3, black paint finish Body"
+  },
+  {
    "entity": "leica:body:m2:standard",
    "word": "gold",
    "count": 3,
    "example": "Leica M2 -S Gold 4Frames Vit장착가능"
   }
  ],
- "new": []
+ "new": [
+  {
+   "entity": "leica:body:q3",
+   "word": "black paint",
+   "count": 3,
+   "example": "LEICA Q3, black paint finish Body"
+  }
+ ]
 }
