@@ -6400,7 +6400,7 @@ def crawl_digitalcameragraz():
         name = re.sub(r"\s*\b(Gehäuse|silbern? verchromt|schwarz verchromt|verchromt)\b", lambda m: "" if m.group(1) == "Gehäuse" else " " + m.group(1), name)
         return re.sub(r"\s+", " ", name).strip(" ,")
 
-    return _woo_leica("https://www.digitalcameragraz.at", "digitalcameragraz", "Digital Camera Graz", keep=keep, condition=condition, rename=rename)
+    return _woo_leica("https://www.digitalcameragraz.at", "Digital Camera Graz (오스트리아)", "Digital Camera Graz", keep=keep, condition=condition, rename=rename)
 
 
 def _woo_leica(base, site, label, keep=None, condition=None, rename=None, search="leica"):
@@ -11259,6 +11259,8 @@ def crawl_all():
         prev_all = []
     prev_by_site = {}
     for r in prev_all:
+        if r.get("site") == "digitalcameragraz":  # 2026-11-08 첫 크롤에서 매장 이름이 잘못 들어간 줄 → 올바른 이름으로 이어 붙임
+            r["site"] = "Digital Camera Graz (오스트리아)"
         prev_by_site.setdefault(r.get("site"), []).append(r)
     print(f"📋 기존 매물 {len(prev_all)}개 로드")
 
