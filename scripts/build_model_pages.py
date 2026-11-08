@@ -142,14 +142,15 @@ for _l, _v in {'ko': '{name} 중고: B등급 시세 {b}, {shops}개 매장에 {n
     T[_l]["lead"] = _v
 
 CSS = """
-:root{--bg:#fff;--text:#16181a;--soft:#5d6266;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
+:root{--bg:#FEFEFD;--text:#22201E;--soft:#6E6A64;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
 @media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2c3133;--accent:#8cc5ad;--row:#1b1e1f}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,"Pretendard Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Jost","Pretendard Variable",Pretendard,system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
 main{max-width:960px;margin:0 auto;padding:24px 16px 64px}
 nav{font-size:13px;color:var(--muted);margin-bottom:20px}
 nav a{color:var(--soft)}
-h1{font-size:26px;line-height:1.3;margin:0 0 4px}
+h1{font:500 34px/1.2 "EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;margin:0 0 6px;letter-spacing:-.005em}
+h2{font-family:"EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;font-weight:500}
 .ko-name{color:var(--soft);margin:0 0 20px}
 .lead{font-size:16px;margin:0 0 18px}
 dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;margin:0 0 8px;border-top:1px solid var(--border)}
@@ -253,7 +254,7 @@ def head(lang: str, title: str, desc: str, url_for, json_ld: dict | None) -> str
             f'<link rel="canonical" href="{url_for(lang)}">{alternates}'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="Camera Bridge">'
             f'<meta property="og:url" content="{url_for(lang)}"><meta property="og:title" content="{html.escape(title)}">'
-            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<style>{CSS}{FOOTER_CSS}</style>'
+            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<link rel=\"stylesheet\" href=\"/img/fonts/fonts.css\"><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\"><style>{CSS}{FOOTER_CSS}</style>'
             # 방문 기록(어디서 왔나·매장 클릭, 첫 화면과 같은 /api/usage)과 Vercel 방문 통계
             f'<script defer src="/track.js"></script><script defer src="/_vercel/insights/script.js"></script></head><body><main>')
 

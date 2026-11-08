@@ -16,9 +16,18 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Camera Bridge","url":"https://camerabridge.io/","potentialAction":{"@type":"SearchAction","target":"https://camerabridge.io/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231f4a3a%22/%3E%3Cpath%20d%3D%22M15%2042a17%2017%200%200%201%2034%200%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.4%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2240%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20font-size%3D%2221%22%20letter-spacing%3D%221%22%20fill%3D%22%23fff%22%3ECB%3C/text%3E%3C/svg%3E">
   <meta name="theme-color" content="#fcfcfa">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+KR:wght@400;500;600&display=swap">
+  <!-- 서체 (2026-11-08 사장님 F안): 제목 EB Garamond · UI·숫자 Jost · 한글 Pretendard. 구글 글꼴 연결 대신 사이트에 직접 둠(독일 GDPR 판결 대응·속도) -->
+  <link rel="preload" href="/img/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/img/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <style>
+@font-face{font-family:"Jost";font-style:normal;font-weight:300 700;font-display:swap;src:url(/img/fonts/jost-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Jost";font-style:normal;font-weight:300 700;font-display:swap;src:url(/img/fonts/jost-latin-ext-wght-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(/img/fonts/eb-garamond-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:600;font-display:swap;src:url(/img/fonts/eb-garamond-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(/img/fonts/eb-garamond-latin-ext-500-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:600;font-display:swap;src:url(/img/fonts/eb-garamond-latin-ext-600-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <style>
     :root{
@@ -47,7 +56,7 @@
       min-height:100vh;
       background:var(--bg);
       color:var(--text);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-family:"Jost","Pretendard Variable",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       -webkit-font-smoothing:antialiased;
     }
     a{color:inherit}
@@ -1109,27 +1118,36 @@
        상자·그림자 대신 가는 줄로 나누고, 제목·모델명·가격은 세리프, 기능 글자는 산세리프.
        초록은 로고·링크·눌리는 곳에만. 모든 구역은 같은 왼쪽 선에 맞춘다. */
     :root{
-      --bg:#fcfcfa;
-      --surface:#fcfcfa;
+      --bg:#FEFEFD;            /* Warm Ivory(#F6F1E7) 10% — 2026-11-08 사장님 */
+      --surface:#FEFEFD;
       --surface-soft:#f3f3ef;
       --surface-muted:#e9e9e3;
       --border:#e2e2dc;
-      --border-strong:#16181a;
-      --rule:#16181a;
-      --text:#16181a;
-      --text-soft:#55595c;
-      --text-muted:#878b8d;
+      --border-strong:#22201E;
+      --rule:#22201E;
+      --text:#22201E;          /* Charcoal */
+      --text-soft:#6E6A64;     /* Muted Gray */
+      --text-muted:#8A857E;
       --accent:#1f4a3a;
       --accent-soft:rgba(31,74,58,0.07);
       --shadow:none;
       --radius:2px;
-      --serif:"Newsreader","Noto Serif KR",Georgia,serif;
-      --sans:"Inter","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
+      --serif:"EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;   /* 제목·브랜드만 */
+      --sans:"Jost","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;  /* UI·숫자·데이터 */
       --sticky-search-offset:72px;
-      --ladder-home:#16181a;
+      --ladder-home:#22201E;
       --ladder-abroad:#a8552e;
     }
     body{font-family:var(--sans);font-size:15px;background:var(--bg)}
+    /* 타이포그래피 원칙 (2026-11-08 F안): 세리프는 '브랜드와 이야기'(큰 제목·구역 제목·퀴즈 질문)에만,
+       가격·숫자·모델명·등급·그래프 글자는 Jost, 숫자는 고정폭으로 자리를 맞춤 */
+    .result-price,.hero-stat b,.home-item-price,.home-model-name,.home-model-price,.grade-chip,.ladder-grade,.ladder-range,.ladder-tip b,
+    .metric-card span,.rot-name,.saved-row .saved-price,.saved-row .saved-title,.summary-value,.value-calc-grades button,.value-calc-grid dd,
+    .entity-bar-group,.meta-pill.accent,#query-input::placeholder,.hero-line,.hero-trust,.thumb{font-family:var(--sans) !important;font-style:normal !important}
+    .result-price,.hero-stat b,.home-item-price,.home-model-price,.ladder-range,.summary-value,.value-calc-grid dd,.saved-row .saved-price,
+    .rot-meta,.hist-axis,.hist-tip,.market-map-note{font-variant-numeric:tabular-nums}
+    .result-price{font-weight:500;letter-spacing:0}
+    .hero-title,.home-heading,.summary-title,.shops-title,.price-ladder h3,.quiz-inline h3,.quiz-level{font-weight:500}
     ::selection{background:#d9e4de}
     main{width:min(1200px, calc(100% - 48px));padding:0 0 64px}
 

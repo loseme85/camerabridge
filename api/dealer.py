@@ -103,7 +103,7 @@ def login_page(lang: str, error: str | None = None, account_id: str = "") -> str
     message = f'<p class="err" role="alert">{html.escape(t.get(error, t["error"]))}</p>' if error else ""
     return f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(t["title"])} · Camera Bridge</title><meta name="robots" content="noindex,nofollow">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<link rel="stylesheet" href="/img/fonts/fonts.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{{--bg:#fff;--soft:#f5f6f5;--border:#e1e4e3;--strong:#c9cecc;--text:#16181a;--text-soft:#5d6266;--accent:#1f4a3a;--red:#9b2c22}}
@@ -112,7 +112,7 @@ body{{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Inter,"Pret
 header{{border-bottom:1px solid var(--text);padding:14px 16px}}
 header a{{display:inline-flex;color:var(--accent);text-decoration:none}}.brand-logo{{display:block;height:40px;width:auto;margin:-4px 0}}
 main{{max-width:400px;margin:56px auto;padding:0 16px}}
-h1{{font-family:Newsreader,Georgia,serif;font-weight:600;font-size:30px;margin:0 0 6px}}
+h1{{font-family:"EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;font-weight:600;font-size:30px;margin:0 0 6px}}
 .lead{{color:var(--text-soft);margin:0 0 24px}}
 label{{display:block;font-size:13px;color:var(--text-soft);margin:14px 0 4px}}
 input{{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--strong);border-radius:0;background:var(--bg);color:var(--text)}}
