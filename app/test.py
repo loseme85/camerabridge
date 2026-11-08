@@ -6490,6 +6490,30 @@ def crawl_fototrade():
                       rename=_abbr_lens_name)
 
 
+def crawl_blackdove():
+    """Blackdove Cameras (이탈리아 부스토아르시치오) - WooCommerce 공개 상품 API에서 렌즈 분류('Obiettivi R'·'Obiettivi M')의 라이카만 (#232 _woo_leica).
+    이 매장 '라이카' 검색의 대부분은 R3·Leicaflex 부품(Ricambio)·케이스라 그대로 담으면 이름의 'R3' 때문에 바디 시세가 흐려짐 → 렌즈 분류만.
+    이름 뒤 ' per Leica R…'·'Made in …' 떼기, '3,5cm f3,5' → 35mm f3.5. 등급 표기 없음"""
+    lens_cats = {"Obiettivi R", "Obiettivi M"}
+
+    def keep(p, name):
+        cats = {(c.get("name") or "") for c in p.get("categories") or []}
+        return bool(cats & lens_cats) and bool(re.search(r"(?i)\b(?:leica|leitz)", name)) and \
+            not re.search(r"(?i)minolta|rokkor|adatt|adapter|ricambio|schermo|vetrino", name)
+
+    def rename(name):
+        n = re.split(r"(?i)\s+per\s+(?:m6|fotocamere|sistema|leica)", name)[0]
+        n = re.sub(r"(?i)\s*made in (?:germany|japan|canada|portugal)\b", "", n)
+        n = re.sub(r"\b(\d+),(\d)cm\b", lambda m: f"{int(m.group(1)) * 10 + int(m.group(2))}mm", n)  # 3,5cm → 35mm, 13,5cm → 135mm
+        n = re.sub(r"(?i)\bf\s?(\d),(\d)\b", r"f\1.\2", n)
+        n = re.sub(r"(?i)\b(\d{2,3})mm\.", r"\1mm", n)
+        n = re.sub(r"(?i)\bobiettivo(?:\s+zoom)?\s+", "", n)
+        n = re.sub(r"\b(\d{2,3})/(\d{2,3})mm\b", r"\1-\2mm", n)  # 75/200mm → 75-200mm
+        n = re.sub(r"(?i)\b(Summaron|Hektor|Elmarit|Vario Elmar|Macro-Elmarit)\s+(M|R)\b", lambda m: m.group(1).replace(" ", "-") + "-" + m.group(2), n)
+        return re.sub(r"\s+", " ", n).strip(" .–-")
+    return _woo_leica("https://www.blackdove-cameras.it", "Blackdove Cameras (이탈리아)", "Blackdove Cameras", keep=keep, rename=rename)
+
+
 def crawl_romanaphoto():
     """Romana Photo (이탈리아 로마) - 중고 카메라점 WooCommerce 공개 상품 API, 'LEICA' 분류의 라이카만 (#232 _woo_leica).
     이름 'SUMMICRON -R 50MM F/2'·'ELMARIT – R 24MM' → 'Summicron-R 50mm f2'(띄어 쓴 마운트 붙이기) 뒤 _abbr_lens_name. 등급 표기 없음"""
@@ -11269,6 +11293,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Blackdove Cameras (이탈리아)", lambda: ce.wrap_full_run("Blackdove Cameras (이탈리아)", crawl_blackdove)),
         ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
         ("Fotoman (핀란드)", lambda: ce.wrap_full_run("Fotoman (핀란드)", crawl_fotoman)),
