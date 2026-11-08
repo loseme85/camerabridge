@@ -75,7 +75,7 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 186,
+   "count": 187,
    "example": "신품 Leica MP Blackpaint x0.72"
   },
   {
@@ -219,7 +219,7 @@
   {
    "a": "leica:body:m10-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 73,
+   "count": 74,
    "example": "Leica M10-P Black"
   },
   {
@@ -1135,6 +1135,18 @@
    "example": "Leica M4-2 Gold Painted Body"
   },
   {
+   "a": "leica:body:m9-p:black-paint",
+   "b": "leica:feature:frameline-28",
+   "count": 6,
+   "example": "[위탁] M9-P Black Paint"
+  },
+  {
+   "a": "leica:body:m9-p:black-paint",
+   "b": "leica:feature:black-paint",
+   "count": 6,
+   "example": "[위탁] M9-P Black Paint"
+  },
+  {
    "a": "leica:body:m4:50-jahre",
    "b": "leica:feature:no-meter",
    "count": 6,
@@ -1205,18 +1217,6 @@
    "b": "leica:lens:summilux-m:35:safari",
    "count": 5,
    "example": "[중고] M 35/1.4 Safari"
-  },
-  {
-   "a": "leica:body:m9-p:black-paint",
-   "b": "leica:feature:frameline-28",
-   "count": 5,
-   "example": "[위탁] M9-P Black Paint"
-  },
-  {
-   "a": "leica:body:m9-p:black-paint",
-   "b": "leica:feature:black-paint",
-   "count": 5,
-   "example": "[위탁] M9-P Black Paint"
   },
   {
    "a": "leica:body:m5:50-jahre",
@@ -1457,7 +1457,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 197,
+   "count": 198,
    "example": "신품 Leica MP Blackpaint x0.72"
   },
   {
@@ -1571,7 +1571,7 @@
   {
    "entity": "leica:lens:noctilux-m:50:f1.2-asph",
    "word": "black paint",
-   "count": 9,
+   "count": 10,
    "example": "신품 Leica M 50mm F1.2 Noctilux ASPH 6bit Glossy Black Paint Finish"
   },
   {
