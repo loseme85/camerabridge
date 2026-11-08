@@ -2601,7 +2601,7 @@
     // 사용 기록: 방문 한 번의 검색어·고른 모델·결과 수·판매처 클릭을 묶어 /api/usage 로 (IP·쿠키 없음)
     // 사장님 테스트는 빼기: 주소 끝에 ?notrack=1 로 한 번 열면 그 브라우저는 기록 안 함 (?notrack=0 으로 해제)
     const usageLog = (() => {
-      const MAX_SENDS = 3;
+      const MAX_SENDS = 8;
       let off = false;
       try{
         const flag = new URLSearchParams(location.search).get('notrack');
@@ -2633,16 +2633,22 @@
       const seconds = () => Math.round((Date.now() - startedAt) / 1000);
       const referrer = visit.referrer;
       const landing = visit.landing;
-      let searches = [], clicks = [], sends = 0, last = '';
+      let searches = [], clicks = [], sends = 0, last = '', sentAt = 0, scrollMax = 0;
+      // 얼마나 내려 봤나 (화면 아래 끝이 문서의 몇 %까지 왔나, 2026-11-08)
+      const trackScroll = () => { const h = document.documentElement.scrollHeight || 1; scrollMax = Math.max(scrollMax, Math.min(100, Math.round((window.scrollY + window.innerHeight) / h * 100))); };
+      window.addEventListener('scroll', trackScroll, { passive: true });
+      setTimeout(trackScroll, 1500);
       function send(){
-        // 첫 번째는 둘러보기만 해도 보냄 (어디서 왔는지 남기려고), 그 뒤로는 새 검색·클릭이 있을 때만
-        if(off || sends >= MAX_SENDS || (sends > 0 && !searches.length && !clicks.length)) return;
+        // 첫 번째는 둘러보기만 해도 보냄 (어디서 왔는지 남기려고), 그 뒤로는 새 검색·클릭이 있거나
+        // 지난번보다 15초 넘게 더 머물렀을 때 (2026-11-08 사장님: 머문 시간이 1~4초 — 처음 탭을 벗어난 순간 시간만 남던 것)
+        if(off || sends >= MAX_SENDS || (sends > 0 && !searches.length && !clicks.length && seconds() - sentAt < 15)) return;
+        sentAt = seconds();
         sends += 1;
         visit.part = (visit.part || 0) + 1;
         saveVisit();
         const body = JSON.stringify({
           sid, part: visit.part, page: location.pathname, locale: uiState.locale, currency: uiState.currency, referrer, landing,
-          mobile: isNarrowScreen(), duration_s: seconds(), searches, clicks
+          mobile: isNarrowScreen(), duration_s: seconds(), scroll: scrollMax, searches, clicks
         });
         searches = []; clicks = [];
         try{

@@ -30,16 +30,24 @@
 
   var slug = (location.pathname.match(/\/leica\/([^/]+)\//) || [])[1] || '';
   var seconds = function () { return Math.round((Date.now() - visit.t0) / 1000); };
-  var clicks = [], sends = 0;
+  var clicks = [], sends = 0, sentAt = 0, scrollMax = 0;
+  function trackScroll() {
+    var h = document.documentElement.scrollHeight || 1;
+    scrollMax = Math.max(scrollMax, Math.min(100, Math.round((window.scrollY + window.innerHeight) / h * 100)));
+  }
+  window.addEventListener('scroll', trackScroll, { passive: true });
+  setTimeout(trackScroll, 1500);
 
   function send() {
-    if (sends >= 3 || (sends > 0 && !clicks.length)) return;  // 첫 번째는 보기만 해도, 그 뒤로는 새 클릭이 있을 때만
+    // 첫 번째는 보기만 해도, 그 뒤로는 새 클릭이 있거나 지난번보다 15초 넘게 더 머물렀을 때 (2026-11-08: 머문 시간이 처음 탭을 벗어난 순간으로 남던 것)
+    if (sends >= 8 || (sends > 0 && !clicks.length && seconds() - sentAt < 15)) return;
     sends += 1;
+    sentAt = seconds();
     visit.part = (visit.part || 0) + 1;
     save();
     var body = JSON.stringify({
       sid: visit.sid, part: visit.part, page: location.pathname, locale: document.documentElement.lang || '',
-      referrer: visit.referrer, landing: visit.landing, duration_s: seconds(), searches: [], clicks: clicks,
+      referrer: visit.referrer, landing: visit.landing, duration_s: seconds(), scroll: scrollMax, searches: [], clicks: clicks,
       mobile: window.matchMedia ? window.matchMedia('(max-width: 720px)').matches : false
     });
     clicks = [];
