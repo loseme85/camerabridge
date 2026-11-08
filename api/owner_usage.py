@@ -61,6 +61,15 @@ def _read_many(blob, items) -> list[dict]:
 
 
 def load(days: int, date: str | None = None) -> tuple[list[dict], list[dict], bool]:
+    import pgstore  # noqa: WPS433
+    if pgstore.enabled():  # Neon Postgres (2026-11 Blob 무료 한도 초과 뒤) — 400건 상한 없이 한 번에
+        start = date or (dt.datetime.now(KST).date() - dt.timedelta(days=days - 1)).isoformat()
+        entries = pgstore.usage_since(start, date)
+        try:
+            feedback = pgstore.recent_feedback(20)
+        except Exception:  # noqa: BLE001
+            feedback = []
+        return entries, feedback, False
     from vercel import blob  # noqa: WPS433
 
     if date:  # 하루만

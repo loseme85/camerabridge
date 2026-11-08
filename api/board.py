@@ -380,6 +380,16 @@ def run_retention(blob=None, today: dt.date | None = None, catch_up_days: int = 
     if old:
         blob.delete(old)
     deleted["removed"] = len(old)
+    try:  # Neon Postgres로 옮긴 방문 기록·의견 (2026-11, pgstore.py)
+        import sys as _sys
+        from pathlib import Path as _Path
+        _sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+        import pgstore  # noqa: WPS433
+        if pgstore.enabled():
+            pgstore.delete_older_than(KEEP_DAYS)
+            deleted["db"] = "ok"
+    except Exception as error:  # noqa: BLE001
+        deleted["db"] = f"error: {type(error).__name__}"
     return deleted
 
 def _blob():
