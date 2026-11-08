@@ -217,7 +217,70 @@ def build() -> dict:
         entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": "Body", "mount": "M", "parent": None,
                          "children": [], "aliases": sorted(set(a.lower() for a in aliases)), "codes": [], "match": None,
                          "feature": {"members": members, "exclude": exclude}})
+    # 여러 모델에 걸친 별칭 묶음: 이름이 맞는 모델(자식이 없는 것)을 모음
+    leaves = [e for e in entities if not e.get("children") and not e.get("feature")]
+    for key, (name, name_ko, pattern, aliases) in features.AUTO_FEATURES.items():
+        rx = re.compile(pattern, re.I)
+        members = [e["id"] for e in leaves if rx.search(e["name"])]
+        assert len(members) >= 2, f"auto feature {key}: {len(members)} members"
+        kinds = [e["kind"] for e in leaves if e["id"] in members]
+        entities.append({"id": key, "name": name, "name_ko": name_ko, "kind": max(set(kinds), key=kinds.count), "mount": None,
+                         "parent": None, "children": [], "aliases": sorted(set(a.lower() for a in aliases)), "codes": [],
+                         "match": None, "feature": {"members": members, "exclude": []}})
+    _add_variant_aliases(entities)
+    _add_nicknames(entities)
     return {"schema_version": "entity_catalog_v1", "updated_at": "2026-10-03", "entities": entities}
+
+
+# 퀴즈 변형 문제의 이름('TTL Hansa'·'Siber Hegner 125 Jahre')도 그대로 찾히게 (2026-11-08 사장님: 퀴즈에 나오는 단어로 찾기)
+# 모델 이름에서 바탕 모델 이름을 뺀 부분이 다른 모델과 겹치지 않을 때만 별칭으로 — 겹치면 답이 둘이라 뺌
+_GENERIC_LABEL = re.compile(r"^(standard|classic|black|silver|chrome|white|titan|titanium|zoom|asph|1st|2nd|3rd|4th|5th|"
+                            r"black paint|black chrome|silver chrome|early|late|original|reissue|set|kit|"
+                            r"version not stated|generation not stated|not stated|all)$", re.I)
+
+
+def _variant_labels(name: str, parent_name: str) -> set[str]:
+    """퀴즈에 나오는 그대로('f/2 Rigid')와 조리개를 뗀 것('Rigid'), 괄호를 뗀 것('Siber Hegner 125 Jahre')"""
+    base = parent_name.replace(" (all)", "").strip()
+    label = (name[len(base):] if name.startswith(base) else "").strip(" -·'\"‘’")
+    bare = re.sub(r"^f/\d+(\.\d+)?\s*", "", label).strip(" -·'\"‘’")
+    out = {label, bare}
+    return out | {re.sub(r"\s*\(.*?\)\s*", " ", x).strip() for x in out}
+
+
+def _add_variant_aliases(entities: list[dict]) -> None:
+    by_id = {e["id"]: e for e in entities}
+    labels: dict[str, list[dict]] = {}
+    for e in entities:
+        parent = by_id.get(e.get("parent") or "")
+        if not parent or e.get("feature"):
+            continue
+        for text in _variant_labels(e["name"], parent["name"]):
+            key = re.sub(r"[\s'’‘\"]+", " ", text.lower()).strip()
+            if len(key) < 4 or _GENERIC_LABEL.match(key) or not re.search(r"[a-z]{3,}", key) or re.fullmatch(r"[\d\s.]+", key):
+                continue
+            labels.setdefault(key, []).append(e)
+    taken = {a for e in entities for a in e["aliases"]}
+    for key, owners in labels.items():
+        if len({o["id"] for o in owners}) == 1 and key not in taken:
+            owners[0]["aliases"] = sorted(set(owners[0]["aliases"]) | {key})
+
+
+# 매니아 별칭 (사이트에서 시험해 0건이던 것, 2026-11-08). 모델 하나를 뜻하는 것만 — 여러 모델이면 위 묶음으로
+NICKNAMES: dict[str, list[str]] = {
+    "leica:lens:summilux-m:35:asph-1994": ["pre-fle", "pre fle", "prefle", "35 lux pre-fle", "lux pre-fle", "summilux 35 pre-fle", "lux 35 pre-fle"],
+    "leica:body:q3-43": ["q43", "q 43"],
+    "leica:body:m3:double-stroke": ["더블스트로크", "더블 스트로크", "double stroke", "doublestroke"],
+    "leica:body:m3:single-stroke": ["single stroke", "싱글 스트로크"],
+    "leica:lens:summicron:50:dr": ["듀얼레인지", "듀얼 레인지", "dr summicron", "summicron dr", "dual range summicron"],
+}
+
+
+def _add_nicknames(entities: list[dict]) -> None:
+    by_id = {e["id"]: e for e in entities}
+    for key, words in NICKNAMES.items():
+        assert key in by_id, f"nickname: unknown entity {key}"
+        by_id[key]["aliases"] = sorted(set(by_id[key]["aliases"]) | {w.lower() for w in words})
 
 
 if __name__ == "__main__":

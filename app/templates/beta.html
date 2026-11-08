@@ -171,6 +171,10 @@
     .home-item-name{color:var(--text);font-size:13px;font-weight:600;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
     .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hero-landed{margin:10px 0 0;font-size:14px;line-height:1.5;color:var(--text)}
+    .alias-hint{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:10px;font-size:13px;color:var(--text-soft)}
+    .alias-hint span{margin-right:2px}
+    body.cb-searched .hero-landed,body.cb-searched .alias-hint{display:none}
     .hero-how{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 28px;border-top:1px solid var(--rule,var(--text))}
     .hero-how li{padding:12px 0 0}
     .hero-how strong{display:block;font-family:var(--serif);font-weight:500;font-size:18px;line-height:1.3}
@@ -1472,6 +1476,8 @@
           <div class="hero-copy">
             <h1 class="hero-title" data-i18n="hero.title">What is a used Leica worth?</h1>
             <p class="hero-subtitle" data-i18n="hero.subtitle">Used Leica listings from dealers worldwide, matched to the exact model and priced by condition.</p>
+            <!-- 2026-11-08 사장님: 비교하는 금액이 받아 볼 금액이라는 것 — 가격순 정렬이 예상 총액 기준 (deliveredPrice) -->
+            <p class="hero-landed" data-i18n="hero.landed">Prices are compared as the estimated total to your door — shipping and import tax included.</p>
             <!-- 큰 숫자 셋 (2026-11-07 사장님: 113개 매장·29개 나라·만4천여 매물이 작은 글씨라 한눈에 안 들어옴) -->
             <div id="hero-stats" class="hero-stats" hidden></div>
             <p id="hero-trust" class="hero-trust" hidden></p>
@@ -1487,6 +1493,15 @@
                 <button class="query-chip" type="button" data-query="Summilux 35">Summilux 35</button>
                 <button class="query-chip" type="button" data-query="Noctilux 50">Noctilux 50</button>
                 <button class="query-chip" type="button" data-query="Leica M10">M10</button>
+              </div>
+              <!-- 2026-11-08 사장님: 이름이 기억 안 나면 별칭으로 — 별칭·옛 코드·주문 번호·변형 이름이 모두 모델로 이어짐 (catalog) -->
+              <div class="alias-hint">
+                <span data-i18n="hero.alias_hint">Can’t remember the exact name? Try a nickname, code or order number:</span>
+                <button class="query-chip" type="button" data-query="Bokeh King">Bokeh King</button>
+                <button class="query-chip" type="button" data-query="Double Stroke">Double Stroke</button>
+                <button class="query-chip" type="button" data-query="Goggles">Goggles</button>
+                <button class="query-chip" type="button" data-query="SOOIC">SOOIC</button>
+                <button class="query-chip" type="button" data-query="11873">11873</button>
               </div>
             </section>
             <!-- 무엇이 다른가: 핵심 기술 네 가지 (2026-11-07 사장님: classic.com처럼 들어오자마자 알아보게) -->
@@ -1587,8 +1602,8 @@
             <label for="sort-select" data-i18n="filters.sort.label">Sort</label>
             <select id="sort-select">
               <option value="relevance">Recommended</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
+              <option value="price_asc">Est. total: Low to High</option>
+              <option value="price_desc">Est. total: High to Low</option>
               <option value="deal">Best deals first</option>
               <option value="newest">Newest</option>
             </select>
@@ -1987,6 +2002,8 @@
         how3_t: { ko: '실제로 팔린 가격', en: 'What it sold for', ja: '実際に売れた価格', 'zh-Hans': '实际成交参考', 'zh-Hant': '實際成交參考', pt: 'Por quanto vendeu', es: 'Por cuánto se vendió', de: 'Wofür es verkauft wurde', it: 'A quanto è stato venduto' },
         how3: { ko: '판매 중 호가만이 아니라 팔린 매물로 시세를 냅니다.', en: 'Market value from listings that sold, not just asking prices.', ja: '販売中の価格だけでなく、売れた出品から相場を出します。', 'zh-Hans': '行情来自已售出的商品，而不只是挂牌价。', 'zh-Hant': '行情來自已售出的商品，而不只是掛牌價。', pt: 'Valor de mercado a partir de anúncios vendidos, não só preços pedidos.', es: 'Valor de mercado a partir de anuncios vendidos, no solo precios pedidos.', de: 'Marktwert aus verkauften Angeboten, nicht nur aus Angebotspreisen.', it: 'Valore di mercato dagli annunci venduti, non solo dai prezzi richiesti.' },
         how4_t: { ko: '받을 때까지 총액', en: 'Cost to your door', ja: '届くまでの総額', 'zh-Hans': '到手总价', 'zh-Hant': '到手總價', pt: 'Custo até sua porta', es: 'Coste hasta tu puerta', de: 'Kosten bis zur Tür', it: 'Costo fino a casa' },
+        landed: { ko: '여기서 비교하는 금액은 배송비와 관부가세를 더한, 내 나라까지 받아 볼 예상 총액입니다.', en: 'Prices are compared as the estimated total to your door — shipping and import tax included.', ja: 'ここで比べる金額は、送料と輸入税を含めたお手元までの概算合計です。', 'zh-Hans': '这里比较的是含运费和进口税、寄到你手上的预估总价。', 'zh-Hant': '這裡比較的是含運費與進口稅、寄到你手上的預估總價。', pt: 'Os preços são comparados pelo total estimado até sua porta — frete e impostos de importação incluídos.', es: 'Los precios se comparan por el total estimado hasta tu puerta, con envío e impuestos de importación.', de: 'Preise werden als geschätzter Gesamtpreis bis zu dir verglichen – inkl. Versand und Einfuhrabgaben.', it: 'I prezzi sono confrontati come totale stimato fino a casa tua, spedizione e dazi inclusi.' },
+        alias_hint: { ko: '이름이 정확히 기억 안 나세요? 별칭·코드·주문 번호로 찾아보세요:', en: 'Can’t remember the exact name? Try a nickname, code or order number:', ja: '正確な名前を覚えていませんか？愛称・コード・品番で探せます：', 'zh-Hans': '记不清准确名字？试试昵称、代码或订货号：', 'zh-Hant': '記不清準確名字？試試暱稱、代碼或訂貨號：', pt: 'Não lembra o nome exato? Tente um apelido, código ou número de pedido:', es: '¿No recuerdas el nombre exacto? Prueba un apodo, código o número de pedido:', de: 'Name entfallen? Probier einen Spitznamen, Code oder eine Bestellnummer:', it: 'Non ricordi il nome esatto? Prova un soprannome, un codice o il numero d’ordine:' },
         how4: { ko: '배송비와 관부가세를 내 나라 기준으로 어림합니다.', en: 'Shipping and import tax estimated for your country.', ja: '送料と輸入税をお住まいの国の基準で見積もります。', 'zh-Hans': '按你的国家估算运费和进口税。', 'zh-Hant': '依你的國家估算運費與進口稅。', pt: 'Frete e impostos de importação estimados para o seu país.', es: 'Envío e impuestos de importación estimados para tu país.', de: 'Versand und Einfuhrabgaben für dein Land geschätzt.', it: 'Spedizione e dazi stimati per il tuo paese.' },
         notice_beta: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '小范围测试版', 'zh-Hant': '小規模測試版', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
         notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.', ja: '現在はLeica中心のカバレッジでテスト中です。', 'zh-Hans': '当前正在以 Leica 为中心进行测试。', 'zh-Hant': '目前正以 Leica 為中心進行測試。', pt: 'No momento, o teste está focado em cobertura Leica.', es: 'Actualmente la prueba se centra en cobertura Leica.', de: 'Der Test konzentriert sich derzeit auf Leica-Abdeckung.', it: 'Il test è attualmente focalizzato sulla copertura Leica.' },
@@ -2135,8 +2152,8 @@
       sort: {
         relevance: { ko: '추천순', en: 'Recommended', ja: 'おすすめ順', 'zh-Hans': '推荐', 'zh-Hant': '推薦', pt: 'Recomendado', es: 'Recomendado', de: 'Empfohlen', it: 'Consigliati' },
         newest: { ko: '최신순', en: 'Newest', ja: '新着順', 'zh-Hans': '最新', 'zh-Hant': '最新', pt: 'Mais recentes', es: 'Más recientes', de: 'Neueste', it: 'Più recenti' },
-        price_asc: { ko: '낮은 가격순', en: 'Price: Low to High', ja: '価格の安い順', 'zh-Hans': '价格从低到高', 'zh-Hant': '價格從低到高', pt: 'Preço: menor para maior', es: 'Precio: de menor a mayor', de: 'Preis: aufsteigend', it: 'Prezzo: crescente' },
-        price_desc: { ko: '높은 가격순', en: 'Price: High to Low', ja: '価格の高い順', 'zh-Hans': '价格从高到低', 'zh-Hant': '價格從高到低', pt: 'Preço: maior para menor', es: 'Precio: de mayor a menor', de: 'Preis: absteigend', it: 'Prezzo: decrescente' },
+        price_asc: { ko: '예상 총액 낮은순', en: 'Est. total: Low to High', ja: '概算合計の安い順', 'zh-Hans': '预估到手价从低到高', 'zh-Hant': '預估到手價從低到高', pt: 'Total estimado: menor para maior', es: 'Total estimado: de menor a mayor', de: 'Gesamtpreis (geschätzt): aufsteigend', it: 'Totale stimato: crescente' },
+        price_desc: { ko: '예상 총액 높은순', en: 'Est. total: High to Low', ja: '概算合計の高い順', 'zh-Hans': '预估到手价从高到低', 'zh-Hant': '預估到手價從高到低', pt: 'Total estimado: maior para menor', es: 'Total estimado: de mayor a menor', de: 'Gesamtpreis (geschätzt): absteigend', it: 'Totale stimato: decrescente' },
         deal: { ko: '시세보다 싼 순', en: 'Best deals first', ja: 'お買い得順', 'zh-Hans': '最划算', 'zh-Hant': '最划算', pt: 'Melhores ofertas', es: 'Mejores ofertas', de: 'Beste Angebote zuerst', it: 'Migliori affari' },
       },
       sold_filter: {
@@ -4428,7 +4445,7 @@
       suggestions: { ko: '모델 후보', en: 'Model suggestions', ja: 'モデル候補', 'zh-Hans': '型号候选', 'zh-Hant': '型號候選', pt: 'Sugestões de modelo', es: 'Sugerencias de modelo', de: 'Modellvorschläge', it: 'Suggerimenti di modello' }
     };
     const ENTITY_STOP_TOKENS = new Set(['leica', '라이카', 'ライカ', '徕卡', '徠卡', 'lens', '렌즈', 'body', '바디',
-      '0.58', '0.72', '0.85', '0.68', 'black', 'silver', 'chrome', '블랙', '실버', '크롬', 'used', '중고', '신품', 'new', 'paint', '블랙페인트']);
+      '0.58', '0.72', '0.85', '0.68', 'black', 'silver', 'chrome', '블랙', '실버', '크롬', 'used', '중고', '신품', 'new', 'paint', '블랙페인트', 'mandler']);  // mandler: 설계자 이름 — 오타 고치기가 'moncler'로 잘못 맞춤
     const entityState = { summary: null, byId: {}, suggestions: {}, active: {} };
 
     function ec(key, vars = {}){
@@ -5532,8 +5549,8 @@
         Array.from(els['sort-select'].options).forEach(option => {
           if(option.value === 'relevance') option.textContent = ux('sort.relevance', 'Recommended');
           if(option.value === 'newest') option.textContent = ux('sort.newest', 'Newest');
-          if(option.value === 'price_asc') option.textContent = ux('sort.price_asc', 'Price: Low to High');
-          if(option.value === 'price_desc') option.textContent = ux('sort.price_desc', 'Price: High to Low');
+          if(option.value === 'price_asc') option.textContent = ux('sort.price_asc', 'Est. total: Low to High');
+          if(option.value === 'price_desc') option.textContent = ux('sort.price_desc', 'Est. total: High to Low');
           if(option.value === 'deal') option.textContent = ux('sort.deal', 'Best deals first');
         });
       }
@@ -6587,7 +6604,7 @@
         firstSeen: getResultFirstSeenScore(result),
         compatibility: getResultCompatibilityScore(result),
         compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
-        priceValue: comparablePrice(result),
+        priceValue: deliveredPrice(result),  // 가격순은 내 나라까지 예상 총액 (2026-11-08 사장님)
         marketInfo: getMarketActivityInfo(result),
         deal: sortMode === 'deal' && (result.final_output || {}).sold_quality === 'asking' ? dealDiff(result, computeLandedCost(result)) : null,
       }));
@@ -7122,6 +7139,16 @@
     }
 
     // 가격 정렬용: 매장 통화가 섞여 있으므로 원화로 바꿔 비교 (₩2,400,000과 £1,199를 숫자 그대로 비교하던 문제, 2026-11-07)
+    // 가격순 정렬: 배송비·관부가세를 더한 예상 총액(원화로 맞춤). 총액을 못 내는 매물(매장 방문만·나라 모름)은 판매가
+    function deliveredPrice(result){
+      const cost = computeLandedCost(result);
+      if(cost && cost.landed && !cost.storeOnly){
+        const krw = cost.target === 'KRW' ? cost.landed.total : convertAmount(cost.landed.total, cost.target, 'KRW');
+        if(krw !== null && Number.isFinite(krw)) return krw;
+      }
+      return comparablePrice(result);
+    }
+
     function comparablePrice(result){
       const value = parseNumericPrice(result);
       if(value === null) return null;

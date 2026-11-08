@@ -161,8 +161,8 @@ def test_active_first_market_sections_and_sorts_exist() -> None:
         assert "active_asking" in html
         assert "sold_confirmed" in html
         assert "Recommended" in html
-        assert "Price: Low to High" in html
-        assert "Price: High to Low" in html
+        assert "Est. total: Low to High" in html or "Price: Low to High" in html  # 첫 화면은 예상 총액순 (2026-11-08), QA 화면은 예전 이름
+        assert "Est. total: High to Low" in html or "Price: High to Low" in html
         assert "Active listings" in html
         assert "Market history" in html
 
@@ -232,8 +232,8 @@ def test_locale_strings_cover_active_first_surface() -> None:
         assert "Market history" in html
         assert "추천순" in html
         assert "Newest" in html
-        assert "낮은 가격순" in html
-        assert "Price: High to Low" in html
+        assert "예상 총액 낮은순" in html or "낮은 가격순" in html
+        assert "Est. total: High to Low" in html or "Price: High to Low" in html
         assert "판매 중" in html
         assert "판매 완료" in html
         assert "판매 종료" in html
