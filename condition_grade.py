@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(JBV_PREFIX):
+        return _JBV.get(cond[len(JBV_PREFIX):].strip().upper()), "label"
     if cond.startswith(DCGRAZ_PREFIX):
         return _DCGRAZ.get(cond[len(DCGRAZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
@@ -869,6 +871,13 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 독일 JBV Foto: 제목 끝 상태 말 — 'NOS MINT'·'NOS'·'BNIB'(쓰지 않은 재고) · 'MINT' · 'near MINT' · 'EXC' · 'HAZE'·'FUNGUS'(렌즈 흐림·곰팡이) ·
+# 'NOTTESTED'(시험 안 함) · 'DEFECTIVE'(고장, _BROKEN이 먼저 X). 대부분은 말이 없어 사진 등급 대기열로.
+# 다른 매장의 MINT·near MINT 대응(Tamarkin·Classic Connection)에 맞춤 — 표본이 적어 사진 평가는 다음 등급 점검 때
+JBV_PREFIX = "JBV: "
+_JBV = {"NOS MINT": "N", "NOS": "N", "BNIB": "N", "MINT": "S", "MINT-": "A", "NEAR MINT": "A", "EXC": "B", "EXC+": "B", "EXC++": "B",
+        "HAZE": "D", "FUNGUS": "D", "NOTTESTED": "D", "DEFECTIVE": "X"}
 
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
