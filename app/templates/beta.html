@@ -173,16 +173,10 @@
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .home-extra:not(.is-open){display:none !important}
     .hero-line{margin:10px 0 26px;font-size:18px;line-height:1.45;color:var(--text);max-width:680px}
-    /* 서체 안 미리보기 (2026-11-08) */
-    html[data-type="a"] .hero-line{font-family:var(--serif);font-size:21px;font-weight:400;color:var(--text-soft);letter-spacing:-0.005em}
-    html[data-type="a"] .hero-line .hl-num{color:var(--text)}
-    html[data-type="a"] #query-input::placeholder{font-family:var(--serif);font-size:18px;color:var(--text-muted)}
-    html[data-type="b"] .hero-line{font-size:15px;color:var(--text-soft);letter-spacing:.005em}
-    html[data-type="b"] .hero-line .hl-num{font-family:var(--serif);font-size:19px;color:var(--text);font-variant-numeric:lining-nums;margin-right:1px}
-    html[data-type="b"] #query-input::placeholder{font-size:15px;color:var(--text-muted);letter-spacing:.005em}
-    html[data-type="c"] .hero-line{font-size:13.5px;color:var(--text-soft);letter-spacing:.03em;font-weight:400}
-    html[data-type="c"] .hero-line .hl-num{color:var(--text);font-weight:600;letter-spacing:0}
-    html[data-type="c"] #query-input::placeholder{font-size:15px;color:#9a9a96;letter-spacing:.02em}
+    /* 2026-11-08 사장님: 한 줄·검색창 안내 글을 제목과 같은 세리프로 (A안), 글은 회색·숫자만 진하게 */
+    .hero-line{font-family:var(--serif);font-size:21px;font-weight:400;color:var(--text-soft);letter-spacing:-0.005em}
+    .hero-line .hl-num{color:var(--text)}
+    #query-input::placeholder{font-family:var(--serif);font-size:18px;color:var(--text-muted)}
     .home-showcase{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 20px;margin-top:36px;padding-top:24px;border-top:1px solid var(--rule,var(--text))}
     .showcase-item{display:grid;gap:4px;padding:0;background:none;border:0;text-align:left;cursor:pointer;color:var(--text);font:inherit}
     .showcase-photo{display:block;aspect-ratio:4/3;background:#fff;overflow:hidden;margin-bottom:6px}
@@ -2769,7 +2763,6 @@
     }
 
     // 첫 화면: 새로 올라온 실제 매물 + 많이 찾는 모델 시세 (data/derived/home_feed.json, entity_summary_v1.json)
-    try{ const t = new URLSearchParams(location.search).get('type'); if(/^[abc]$/.test(t || '')) document.documentElement.dataset.type = t; }catch(error){}
     const homeState = { feed: null, picks: [] };
 
     async function loadHomeFeed(){
