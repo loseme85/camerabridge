@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62, 'EUR': 1500, 'GBP': 1800, 'USD': 1350, 'HUF': 4}  # 코드 표기('EUR 1,290')도 — 없으면 1,290원으로 읽어 바디가 부속품이 됨 (2026-11-08)
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62, 'EUR': 1500, 'GBP': 1800, 'USD': 1350, 'HUF': 4, 'RON': 300}  # 코드 표기('EUR 1,290')도 — 없으면 1,290원으로 읽어 바디가 부속품이 됨 (2026-11-08)
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -6554,6 +6554,65 @@ def crawl_fksecondhand():
     return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
 
 
+def crawl_f64():
+    """F64 (루마니아 부쿠레슈티, VTEX, 2026-11-09 밤샘) - 루마니아 첫 사이트. 개인이 맡긴 중고를 파는 'Consignatie'(위탁) 분류의 라이카만.
+    VTEX 공개 상품 검색 API('leica', 50개씩 10번쯤)에서 분류가 Consignatie·(SH)이고 브랜드가 Leica인 것 (Panasonic Leica DG는 뺌).
+    가격 RON, 이름 끝 위탁 번호 'SH-1036899' 떼기. 등급은 사양 'Descriptive text SH'의 문장
+    ('Stare excelenta' 아주 좋음 · 'Stare foarte buna' · 'Stare buna' 좋음) — 'Note for SH'는 모두 10이라 안 씀"""
+    import html as _html
+    import requests
+    from condition_grade import F64_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.f64.ro"
+    print(f"\n  📂 F64 크롤링 시작")
+    for start in range(0, 2500, 50):
+        resp = sess.get(f"{base}/api/catalog_system/pub/products/search", params={"ft": "leica", "_from": start, "_to": start + 49}, timeout=30)
+        if resp.status_code not in (200, 206):
+            resp.raise_for_status()
+        batch = resp.json()
+        for p in batch:
+            cats = " ".join(p.get("categories") or [])
+            if "Consignatie" not in cats or (p.get("brand") or "").strip().lower() != "leica":
+                continue
+            item = (p.get("items") or [{}])[0]
+            offer = ((item.get("sellers") or [{}])[0]).get("commertialOffer") or {}
+            if not offer.get("AvailableQuantity"):
+                continue
+            name = re.sub(r"\s+SH-\d+\s*$", "", (p.get("productName") or "").strip())
+            name = re.sub(r"\bF(\d(?:\.\d)?)\b", r"f\1", name)
+            name = re.sub(r"(?i)^Leica Summicron (\d+mm f[\d.]+) - M-Mount$", r"Leica Summicron-M \1", name)
+            name = re.sub(r"(?i)\s+-\s+M-Mount$", " (M)", name)
+            desc = " ".join(p.get("Descriptive text SH") or p.get("Buletts txt listing") or [])
+            m = re.search(r"(?i)stare\s+(excelenta|excelentă|foarte bun[aă]|bun[aă]|acceptabil[aă]|satisf[aă]c[aă]toare|uzat[aă])", _html.unescape(re.sub(r"<[^>]+>", " ", desc)))
+            price = f"RON {float(offer.get('Price') or 0):,.0f}" if offer.get("Price") else "문의요망"
+            imgs = item.get("images") or []
+            cat = detect_category(name, price)
+            results.append({
+                "site": "F64 (루마니아)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": F64_PREFIX + m.group(1).lower() if m else "정보없음",
+                "가격": price,
+                "통화": "RON",
+                "이미지": imgs[0].get("imageUrl", "") if imgs else "",
+                "링크": p.get("link") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {start // 50 + 1}번째 {len(batch)}개")
+        if len(batch) < 50:
+            break
+        time.sleep(1)
+    print(f"  ✅ F64 완료: {len(results)}개")
+    return results
+
+
 def _html_unescape(text):
     import html as _html
     return _html.unescape(text)
@@ -11366,6 +11425,7 @@ def crawl_all():
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
         ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
         ("Blackdove Cameras (이탈리아)", lambda: ce.wrap_full_run("Blackdove Cameras (이탈리아)", crawl_blackdove)),
         ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
