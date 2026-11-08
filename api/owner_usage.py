@@ -150,10 +150,11 @@ def visits(entries: list[dict]) -> list[dict]:
     for e in sorted(entries, key=lambda e: (visitor_key(e), e.get("created_at", ""), e.get("part", 1))):
         v = grouped.setdefault(visitor_key(e), {"start": e.get("created_at", ""), "end": e.get("created_at", ""), "referrer": e.get("referrer"), "landing": e.get("landing"),
                                           "locale": e.get("locale"), "currency": e.get("currency"), "mobile": e.get("mobile"), "country": e.get("country"), "tz": e.get("tz"),
-                                          "duration_s": 0, "steps": []})
+                                          "duration_s": 0, "scroll": 0, "steps": []})
         v["start"] = min(v["start"], e.get("created_at", "")) or v["start"]
         v["end"] = max(v["end"], e.get("created_at", ""))
         v["duration_s"] = max(v["duration_s"], e.get("duration_s") or 0)
+        v["scroll"] = max(v.get("scroll") or 0, e.get("scroll") or 0)
         v["country"] = v["country"] or e.get("country")
         v["tz"] = v["tz"] or e.get("tz")
         page = [("페이지", {"page": e["page"], "s": None})] if e.get("page") and e["page"] not in v.setdefault("pages", []) else []
@@ -262,7 +263,7 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
         when, when_note = _local_time(v["start"], v["tz"], v["country"])
         device = "📱" if v["mobile"] else "💻"
         rows.append(f"<tr><td class=nowrap>{_esc(when)}{f"<br><small>{_esc(when_note)}</small>" if when_note else ''}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
-                    f"<td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초</td><td>{''.join(steps)}</td></tr>")
+                    f"<td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초{f"<br><span class=muted>{_esc(v['scroll'])}% 내려 봄</span>" if v.get('scroll') else ''}</td><td>{''.join(steps)}</td></tr>")
     visit_table = "".join(rows) or "<tr><td colspan=5 class=muted>이 기간에 방문이 없습니다</td></tr>"
 
     fb_rows = "".join(f"<tr><td class=nowrap>{_esc(str(f.get('created_at', ''))[5:16].replace('T', ' '))}</td><td>{_esc(f.get('locale') or '-')}</td><td>{_esc(f.get('message'))}</td></tr>" for f in feedback) \

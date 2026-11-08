@@ -86,6 +86,7 @@ def clean(body: dict) -> dict | None:
         "landing": _text(body.get("landing"), 200),   # 경로와 utm만
         "mobile": bool(body.get("mobile")),
         "duration_s": _int(body.get("duration_s")),
+        "scroll": min(100, _int(body.get("scroll")) or 0),  # 얼마나 내려 봤나 % (2026-11-08)
         "searches": searches,
         "clicks": clicks,
     }
