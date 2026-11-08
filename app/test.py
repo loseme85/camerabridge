@@ -11343,7 +11343,7 @@ def crawl_all():
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
         ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
-        ("Sabatini Fotografia (이탈리아)", lambda: ce.wrap_full_run("Sabatini Fotografia (이탈리아)", crawl_sabatini)),
+        # ("Sabatini Fotografia (이탈리아)", ...) 보류 2026-11-08: GitHub 서버에서 403 (내 맥 210점) — 막히면 보류, 나중에 매장과 계약으로 진행
         ("KOMEHYO (일본)", lambda: ce.wrap_full_run("KOMEHYO (일본)", crawl_komehyo)),
         ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
