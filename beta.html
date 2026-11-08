@@ -1514,10 +1514,14 @@
       </section>
 
       <section id="home-feed" class="home-feed">
-        <div id="home-picks-block" hidden>
-          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
-          <div id="home-picks" class="home-popular"></div>
-        </div>
+        <!-- 2026-11-08 사장님: 메인 단순화 — 묶음 링크를 검색창 바로 아래에(2026-11-08 사장님: 카테고리 위로), 누르면 링크 밑에 열림 -->
+        <nav class="home-more" aria-label="More">
+          <button type="button" data-open="shops-block" data-i18n="home.more_shops">Shops by country</button>
+          <button type="button" data-open="market-map-block" data-i18n="home.more_map">Every listing on one chart</button>
+          <button type="button" data-open="home-quiz-block" data-i18n="home.more_quiz">What’s your Leica level?</button>
+          <button type="button" data-open="home-latest-block" data-i18n="home.more_latest">Just listed</button>
+          <button type="button" data-open="board-home" data-i18n="home.more_board">Community</button>
+        </nav>
         <!-- 나라별 매장 (2026-11-07 사장님: 113개 매장·29개 나라를 그래프로 강조) — 제목 아래 숫자와 같은 data/status/source_freshness.json -->
         <div id="shops-block" class="shops-block home-extra" hidden>
           <h2 id="shops-title" class="shops-title"></h2>
@@ -1541,19 +1545,15 @@
           <h2 class="home-heading"><span data-i18n="home.latest">Just listed</span> <small data-i18n="home.latest_note">one per model, newest first</small></h2>
           <div id="home-latest" class="home-latest"></div>
         </div>
-        <!-- 2026-11-08 사장님: 메인 단순화 — 아래 묶음은 링크를 눌러야 열림 -->
-        <nav class="home-more" aria-label="More">
-          <button type="button" data-open="shops-block" data-i18n="home.more_shops">Shops by country</button>
-          <button type="button" data-open="market-map-block" data-i18n="home.more_map">Every listing on one chart</button>
-          <button type="button" data-open="home-quiz-block" data-i18n="home.more_quiz">What’s your Leica level?</button>
-          <button type="button" data-open="home-latest-block" data-i18n="home.more_latest">Just listed</button>
-          <button type="button" data-open="board-home" data-i18n="home.more_board">Community</button>
-        </nav>
         <div id="board-home" class="home-extra">
           <h2 class="home-heading"><span data-i18n="board.title">Community</span> <small data-i18n="board.note">Leica users around the world, talking freely</small></h2>
           <div class="board-composer" data-board-composer></div>
           <ul id="board-home-list" class="board-home-list"></ul>
           <div class="board-actions"><a href="#board" data-i18n="board.view_all">See all posts</a></div>
+        </div>
+        <div id="home-picks-block" hidden>
+          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
+          <div id="home-picks" class="home-popular"></div>
         </div>
       </section>
 
