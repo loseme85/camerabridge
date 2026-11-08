@@ -593,3 +593,24 @@ def test_moritz():
     assert grade_of(site, MORITZ_PREFIX + "良上品")[0] == "B"
     assert grade_of(site, MORITZ_PREFIX + "良品")[0] == "B"
     assert grade_of(site, MORITZ_PREFIX + "並上")[0] == "C"
+
+
+def test_digitalcameragraz():
+    from condition_grade import DCGRAZ_PREFIX
+    site = "Digital Camera Graz (오스트리아)"
+    assert grade_of(site, DCGRAZ_PREFIX + "DEMO")[0] == "S"
+    assert grade_of(site, "정보없음")[0] is None
+
+
+def test_fotomeyer_zustand():
+    from condition_grade import grade_of, FOTOMEYER_PREFIX
+    assert grade_of("Foto Meyer (독일)", FOTOMEYER_PREFIX + "sehr leichte gebrauchsspuren")[0] == "A"
+    assert grade_of("Foto Meyer (독일)", FOTOMEYER_PREFIX + "gebrauchsspuren")[0] == "B"
+    assert grade_of("Foto Meyer (독일)", FOTOMEYER_PREFIX + "starke gebrauchsspuren")[0] == "D"
+
+
+def test_panajou_title_state():
+    from condition_grade import grade_of, PANAJOU_PREFIX
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "comme neuf")[0] == "A"
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "très bon état")[0] == "A"
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
