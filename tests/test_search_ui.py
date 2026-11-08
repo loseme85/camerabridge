@@ -696,7 +696,8 @@ def test_exact_model_name_query_uses_that_model() -> None:
 def test_model_view_has_price_by_condition_chart():
     for path in BETA_PATHS:
         html = path.read_text(encoding="utf-8")
-        assert "els['query-summary-region'].innerHTML = renderPriceLadder();" in html
+        assert "els['query-summary-region'].innerHTML = renderChartArea();" in html  # 2026-11-08: 탭(등급별 가격 | 판매 금액 추이)
+        assert "function renderPriceHistory()" in html and "data-chart-tab" in html
         assert "loadPriceLadder();" in html
         # 모델 하나(버전)를 골랐을 때만 — '모든 버전'·사양 묶음은 섞여서 그리지 않음
         assert "!entity.feature && !(entity.children || []).length" in html

@@ -1328,6 +1328,22 @@
     .ladder-tip .tip-incl{display:inline-block;margin:3px 0 2px;padding:1px 6px;border:1px solid var(--text);font-size:12px;font-weight:600;color:var(--text);line-height:1.5}
     .price-ladder{position:relative}
     .ladder-guide.is-ghost{position:relative}
+    .chart-tabs{display:flex;gap:22px;margin:8px 0 -1px;border-bottom:1px solid var(--border)}
+    .chart-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 0;font:inherit;font-size:14px;color:var(--text-soft);cursor:pointer}
+    .chart-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
+    .chart-tabs + .price-ladder{border-top:0;margin-top:0}
+    .hist-chart{display:block;width:100%;height:260px;overflow:visible}
+    .hist-grid{stroke:var(--border);stroke-width:1}
+    .hist-axis{fill:var(--text-soft);font-size:12px}
+    .hist-base{stroke:var(--text-soft);stroke-width:1.5;stroke-dasharray:5 4}
+    .hist-line{fill:none;stroke:var(--text);stroke-width:2}
+    .hist-dot{fill:var(--ladder-home, #2f6f5e);stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
+    .hist-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--text-soft);margin:4px 0 8px}
+    .hist-legend i{display:inline-block;vertical-align:middle;margin-right:6px}
+    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:var(--ladder-home, #2f6f5e)}
+    .hist-key-line{width:18px;height:2px;background:var(--text)}
+    .hist-key-base{width:18px;border-top:1.5px dashed var(--text-soft)}
+    .hist-note{font-size:12px;color:var(--text-soft);margin:6px 0 0}
     .result-price-incl{font-family:inherit;font-size:12px;font-weight:500;color:var(--text-soft);white-space:nowrap;vertical-align:middle}
     /* 2026-11-08 사장님: 모델 밑 Prev·Next 없어도 됨 — 아래 '더 보기'로 넘김 */
     .page-controls{display:none !important}
@@ -3593,6 +3609,13 @@
       block.hidden = false;
       drawMarketMap();
     }
+    document.addEventListener('click', event => {
+      const tab = event.target.closest('[data-chart-tab]');
+      if(!tab || !els['query-summary-region']) return;
+      uiState.chartTab = tab.dataset.chartTab;
+      els['query-summary-region'].innerHTML = renderChartArea();
+    });
+
     // 첫 화면 아래 '더 보기' 링크: 누른 묶음만 열고(다시 누르면 닫음) 그 자리로 이동. 지도는 열린 뒤 다시 그림
     document.addEventListener('click', event => {
       const button = event.target.closest('.topnav [data-open]');
@@ -4538,6 +4561,14 @@
       editions: { ko: '기념·한정판', en: 'Special editions', ja: '記念・限定モデル', 'zh-Hans': '纪念·限量版', 'zh-Hant': '紀念·限量版', pt: 'Edições especiais', es: 'Ediciones especiales', de: 'Sondermodelle', it: 'Edizioni speciali' },
       ladder_incl: { ko: '배송비·관세 포함', en: 'incl. shipping & duties', ja: '送料・関税込み', 'zh-Hans': '含运费和关税', 'zh-Hant': '含運費和關稅', pt: 'com frete e impostos', es: 'con envío e impuestos', de: 'inkl. Versand & Zoll', it: 'spedizione e dazi inclusi' },
       ladder_incl_note: { ko: '가격은 {d}까지 받는 데 드는 배송비·관세·부가세를 포함한 예상 총액이에요', en: 'Prices are estimated totals delivered to {d}, including shipping, duties and tax', ja: '価格は{d}までの送料・関税・消費税を含む見込み総額です', 'zh-Hans': '价格为送到{d}的预计总价，含运费、关税和税费', 'zh-Hant': '價格為送到{d}的預估總價，含運費、關稅和稅費', pt: 'Os preços são totais estimados entregues em {d}, com frete, impostos e taxas', es: 'Los precios son totales estimados entregados en {d}, con envío, aranceles e impuestos', de: 'Preise sind geschätzte Gesamtkosten bis {d} inkl. Versand, Zoll und Steuer', it: 'I prezzi sono totali stimati consegnati in {d}, con spedizione, dazi e tasse' },
+      chart_tab_grade: { ko: '등급별 가격', en: 'Price by condition', ja: 'ランク別価格', 'zh-Hans': '按成色价格', 'zh-Hant': '依成色價格', pt: 'Preço por estado', es: 'Precio por estado', de: 'Preis nach Zustand', it: 'Prezzo per condizione' },
+      chart_tab_history: { ko: '판매 금액 추이', en: 'Sold prices over time', ja: '販売済み価格の推移', 'zh-Hans': '成交价格走势', 'zh-Hant': '成交價格走勢', pt: 'Preços vendidos ao longo do tempo', es: 'Precios vendidos en el tiempo', de: 'Verkaufspreise im Zeitverlauf', it: 'Prezzi di vendita nel tempo' },
+      hist_title: { ko: '언제 얼마에 팔렸나', en: 'When and for how much it sold', ja: 'いつ、いくらで売れたか', 'zh-Hans': '何时以多少钱售出', 'zh-Hant': '何時以多少錢售出', pt: 'Quando e por quanto vendeu', es: 'Cuándo y por cuánto se vendió', de: 'Wann und zu welchem Preis verkauft', it: 'Quando e a quanto è stata venduta' },
+      hist_note: { ko: '점 하나 = 팔린 매물 하나 (판매완료로 바뀌기 직전 표시 가격, 오늘 환율). 선은 B등급으로 맞춘 2주 중간값, 점선은 지금 B등급 시세. 기록은 {d}부터 쌓이고 있어요.', en: 'One dot = one sold listing (last asking price before it was marked sold, at today’s rate). The line is the 2-week median adjusted to grade B; the dashed line is today’s grade B market value. Records start {d}.', ja: '点1つ＝販売済み1点（販売済みになる直前の表示価格、本日のレート）。線はB等級に換算した2週間の中央値、点線は現在のB等級相場。記録は{d}から。', 'zh-Hans': '每个点 = 一件已售商品（标记售出前的最后标价，按今日汇率）。实线是换算为 B 级的两周中位数，虚线是当前 B 级行情。记录始于 {d}。', 'zh-Hant': '每個點 = 一件已售商品（標記售出前的最後標價，按今日匯率）。實線是換算為 B 級的兩週中位數，虛線是目前 B 級行情。紀錄始於 {d}。', pt: 'Um ponto = um anúncio vendido (último preço antes de ser marcado como vendido, ao câmbio de hoje). A linha é a mediana de 2 semanas ajustada ao grau B; a tracejada é o valor de mercado de hoje no grau B. Registros desde {d}.', es: 'Un punto = un anuncio vendido (último precio antes de marcarse como vendido, al cambio de hoy). La línea es la mediana de 2 semanas ajustada a grado B; la discontinua es el valor de mercado actual en grado B. Registros desde {d}.', de: 'Ein Punkt = ein verkauftes Angebot (letzter Preis vor „verkauft“, zum heutigen Kurs). Die Linie ist der 2-Wochen-Median auf Zustand B umgerechnet, die gestrichelte der heutige Marktwert Zustand B. Daten seit {d}.', it: 'Un punto = un annuncio venduto (ultimo prezzo prima di essere segnato come venduto, al cambio di oggi). La linea è la mediana di 2 settimane riportata al grado B; la tratteggiata è il valore di mercato attuale grado B. Dati dal {d}.' },
+      hist_few: { ko: '아직 팔린 기록이 적어요 ({n}건). 팔린 매물이 쌓이면 여기에 그려집니다.', en: 'Not enough sold records yet ({n}). The chart fills in as listings sell.', ja: 'まだ販売済みの記録が少なめです（{n}件）。売れるたびにここに増えていきます。', 'zh-Hans': '已售记录还太少（{n} 条），售出越多图表越完整。', 'zh-Hant': '已售紀錄還太少（{n} 筆），售出越多圖表越完整。', pt: 'Ainda há poucos registros de venda ({n}). O gráfico cresce conforme os anúncios vendem.', es: 'Aún hay pocos registros de venta ({n}). El gráfico se completa a medida que se venden.', de: 'Noch zu wenige Verkäufe ({n}). Das Diagramm füllt sich, wenn Angebote verkauft werden.', it: 'Ancora pochi dati di vendita ({n}). Il grafico si riempie man mano che gli annunci vengono venduti.' },
+      hist_line: { ko: 'B등급 2주 중간값', en: 'Grade B, 2-week median', ja: 'B等級・2週間中央値', 'zh-Hans': 'B 级两周中位数', 'zh-Hant': 'B 級兩週中位數', pt: 'Grau B, mediana de 2 semanas', es: 'Grado B, mediana de 2 semanas', de: 'Zustand B, 2-Wochen-Median', it: 'Grado B, mediana 2 settimane' },
+      hist_base: { ko: '지금 B등급 시세', en: 'Grade B market value now', ja: '現在のB等級相場', 'zh-Hans': '当前 B 级行情', 'zh-Hant': '目前 B 級行情', pt: 'Valor de mercado grau B hoje', es: 'Valor de mercado grado B hoy', de: 'Marktwert Zustand B heute', it: 'Valore di mercato grado B oggi' },
+      hist_dot: { ko: '팔린 매물', en: 'Sold listing', ja: '販売済み', 'zh-Hans': '已售商品', 'zh-Hant': '已售商品', pt: 'Anúncio vendido', es: 'Anuncio vendido', de: 'Verkauftes Angebot', it: 'Annuncio venduto' },
       ladder_title: { ko: '등급별 가격대', en: 'Price by condition', ja: 'ランク別の価格帯', 'zh-Hans': '按成色的价格区间', 'zh-Hant': '依成色的價格區間', pt: 'Preço por estado', es: 'Precio por estado', de: 'Preis nach Zustand', it: 'Prezzo per condizione' },
       ladder_note: { ko: '매물 {n}개를 등급별로 한 줄에 모았어요. 띠는 지금 판매 중인 가격대예요', en: '{n} listings, one row per condition. The band is the current asking range', ja: '{n}件の出品をランクごとに1行にまとめました。帯は現在の販売価格帯です', 'zh-Hans': '{n} 件商品按成色各占一行，色带为当前在售价格区间', 'zh-Hant': '{n} 件商品依成色各占一行，色帶為目前在售價格區間', pt: '{n} anúncios, uma linha por estado. A faixa é o preço pedido atual', es: '{n} anuncios, una fila por estado. La banda es el rango de precio actual', de: '{n} Angebote, eine Zeile pro Zustand. Das Band zeigt die aktuelle Preisspanne', it: '{n} annunci, una riga per condizione. La fascia è il prezzo richiesto attuale' },
       ladder_home: { ko: '국내 판매 중', en: 'For sale in your country', ja: '国内で販売中', 'zh-Hans': '本国在售', 'zh-Hant': '本國在售', pt: 'À venda no seu país', es: 'En venta en tu país', de: 'Im Inland zu kaufen', it: 'In vendita nel tuo paese' },
@@ -4851,7 +4882,7 @@
       pages.forEach(payload => all.push(...((payload && payload.results) || [])));
       if(ladderState.key !== key) return;
       ladderState.results = all;
-      if(els['query-summary-region'] && !state.loading && !state.error){ els['query-summary-region'].innerHTML = renderPriceLadder(); renderValueCalc(); }
+      if(els['query-summary-region'] && !state.loading && !state.error){ els['query-summary-region'].innerHTML = renderChartArea(); renderValueCalc(); }
     }
 
     function ladderPoints(results){
@@ -4964,6 +4995,63 @@
         const band = `<span class="ladder-band" style="left:${((center - 0.12) * 100).toFixed(1)}%;width:24%"></span>`;
         return `<div class="ladder-row"><span class="ladder-grade">${grade}</span><div class="ladder-strip">${band}${dots}</div><span class="ladder-range">—</span></div>`;
       }).join('');
+    }
+
+    // 그래프 탭 (2026-11-08 사장님): 등급별 가격 | 판매 금액 추이. 여러 버전을 묶은 모델은 탭 없이 흐린 안내 그대로
+    function renderChartArea(){
+      if(!ladderEntity()) return renderPriceLadder();
+      const tab = uiState.chartTab === 'history' ? 'history' : 'grade';
+      const tabs = `<div class="chart-tabs" role="tablist">${['grade', 'history'].map(t => `<button type="button" role="tab" data-chart-tab="${t}" aria-selected="${t === tab}">${escapeHtml(ec(t === 'grade' ? 'chart_tab_grade' : 'chart_tab_history'))}</button>`).join('')}</div>`;
+      return tabs + (tab === 'history' ? renderPriceHistory() : renderPriceLadder());
+    }
+
+    // 판매 금액 추이: 점 = 팔린 매물(팔린 날짜 × 판매완료 직전 표시 가격), 선 = B등급으로 맞춘 2주 이동 중간값, 점선 = 지금 B등급 시세
+    function renderPriceHistory(){
+      const entity = ladderEntity();
+      if(!entity || !ladderState.results || ladderState.key !== ladderKey()) return '';
+      const sold = ladderPoints(ladderState.results)
+        .filter(p => !p.active && p.soldAt)
+        .map(p => { const cost = computeLandedCost(p.result); return { t: p.soldAt, v: cost ? cost.converted : 0, grade: p.grade, result: p.result }; })
+        .filter(p => p.v > 0)
+        .sort((a, b) => a.t - b.t);
+      const first = sold.length ? new Date(sold[0].t).toISOString().slice(0, 10) : '';
+      if(sold.length < 3){
+        return `<section class="price-ladder price-history"><h3>${escapeHtml(ec('hist_title'))}</h3><p>${escapeHtml(ec('hist_few', { n: String(sold.length) }))}</p></section>`;
+      }
+      const W = 900, H = 260, L = 70, R = 16, T = 14, B = 34;
+      const now = Date.now();
+      const t0 = sold[0].t - 86400000, t1 = Math.max(now, sold[sold.length - 1].t) + 86400000;
+      const base = entity.b_price_krw ? convertAmount(entity.b_price_krw, 'KRW', uiState.currency) : null;
+      const norm = sold.map(p => { const f = LADDER_GRADES.includes(p.grade) && p.grade !== 'N' ? gradeFactor(entity, p.grade) : 0; return f ? p.v / f : null; });
+      const line = [];
+      sold.forEach(p => {
+        const win = sold.map((q, j) => (q.t <= p.t && q.t > p.t - 14 * 86400000 && norm[j]) ? norm[j] : null).filter(Boolean).sort((a, b) => a - b);
+        if(win.length >= 3) line.push([p.t, win[Math.floor(win.length / 2)]]);
+      });
+      const values = sold.map(p => p.v).concat(line.map(xv => xv[1])).concat(base ? [base] : []).sort((a, b) => a - b);
+      const qv = r => values[Math.min(values.length - 1, Math.max(0, Math.round(r * (values.length - 1))))];
+      let lo = qv(0.03), hi = qv(0.97);
+      const pad = (hi - lo) * 0.12 || hi * 0.1;
+      lo = Math.max(0, lo - pad); hi += pad;
+      const x = t => L + (t - t0) / (t1 - t0) * (W - L - R);
+      const y = v => T + (1 - (Math.min(Math.max(v, lo), hi) - lo) / (hi - lo)) * (H - T - B);
+      const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
+      const grid = ladderTicks(lo, hi).map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" class="hist-grid"/><text x="${L - 8}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end" class="hist-axis">${escapeHtml(ladderAxisMoney(v))}</text>`).join('');
+      const mondays = [];
+      for(let d = new Date(t0); d.getTime() <= t1; d.setDate(d.getDate() + 1)) if(d.getDay() === 1) mondays.push(d.getTime());
+      const fmtDay = new Intl.DateTimeFormat(uiState.locale, { month: 'short', day: 'numeric' });
+      const xt = mondays.map(t => `<text x="${x(t).toFixed(1)}" y="${H - 10}" text-anchor="middle" class="hist-axis">${escapeHtml(fmtDay.format(t))}</text>`).join('');
+      const baseLine = base ? `<line x1="${L}" x2="${W - R}" y1="${y(base).toFixed(1)}" y2="${y(base).toFixed(1)}" class="hist-base"/>` : '';
+      const path = line.length >= 2 ? `<polyline class="hist-line" points="${line.map(([t, v]) => `${x(t).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}"/>` : '';
+      const fmtDate = new Intl.DateTimeFormat(uiState.locale, { year: 'numeric', month: 'short', day: 'numeric' });
+      const dots = sold.map(p => {
+        const label = `${fmtDate.format(p.t)} · ${money(p.v)} · ${p.grade === LADDER_UNKNOWN ? ec('ladder_unknown') : gradeLabel(p.grade)} · ${localizeSourceName(p.result.source || '')}`;
+        return `<a href="${escapeHtml(p.result.source_url || '#')}" target="_blank" rel="noopener"><circle cx="${x(p.t).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="4.5" class="hist-dot"><title>${escapeHtml(label)}</title></circle></a>`;
+      }).join('');
+      const legend = `<div class="hist-legend"><span><i class="hist-key-dot"></i>${escapeHtml(ec('hist_dot'))} ${sold.length}</span>${path ? `<span><i class="hist-key-line"></i>${escapeHtml(ec('hist_line'))}</span>` : ''}${base ? `<span><i class="hist-key-base"></i>${escapeHtml(ec('hist_base'))} ${escapeHtml(money(base))}</span>` : ''}</div>`;
+      return `<section class="price-ladder price-history" aria-label="${escapeHtml(ec('hist_title'))}"><h3>${escapeHtml(ec('hist_title'))}</h3>${legend}
+        <svg class="hist-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(ec('hist_title'))}">${grid}${xt}${baseLine}${path}${dots}</svg>
+        <p class="hist-note">${escapeHtml(ec('hist_note', { d: first }))}</p></section>`;
     }
 
     function renderPriceLadder(){
@@ -5156,7 +5244,7 @@
         if(frame) return;
         frame = requestAnimationFrame(() => {
           frame = 0;
-          if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
+          if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderChartArea();
           const box = document.querySelector('.price-ladder');
           if(box && drag && drag.pan) box.classList.add('is-panning');
         });
@@ -5284,7 +5372,7 @@
         if(Math.abs(b - a) <= 0) return;
         ladderState.zoom = { low: Math.min(a, b), high: Math.max(a, b) };
         hideLadderTip();
-        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
+        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderChartArea();
       };
       follow('pointerup', finish);
       follow('pointercancel', () => {
@@ -5312,7 +5400,7 @@
         }
         if(!event.target.closest('[data-ladder-reset]')) return;
         ladderState.zoom = null;
-        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
+        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderChartArea();
       });
     }
 
@@ -7147,7 +7235,7 @@
 
       // 모델(사양 묶음)을 고르면 위 요약 칸이 이미 그 모델 기준이라 결과 요약 카드는 생략 (첫 매물 제목을 모델처럼 보여 주던 문제)
       els['market-entry-region'].innerHTML = '';  // '결과 요약' 카드는 위 요약과 겹치고 짐작한 계열 이름이 제목과 달라 헷갈려서 뺌
-      els['query-summary-region'].innerHTML = renderPriceLadder();
+      els['query-summary-region'].innerHTML = renderChartArea();
       renderValueCalc();
       loadPriceLadder();
       renderSortBar();
