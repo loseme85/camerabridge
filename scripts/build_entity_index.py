@@ -122,7 +122,7 @@ def _home_feed(records: list, catalog: dict) -> dict:
 
 
 def _home_showcase(records: list, catalog: dict, skip: set, to_krw: dict, size: int = 8) -> list:
-    """첫 화면 사진 줄 (2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게) — 수집가 추천 모델(home_picks.json 순서)마다
+    """첫 화면 사진 줄 (2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게) — 수집가 추천 모델(home_picks.json) 중 구하기 어려운(매물 적은) 순서로
     판매 중 매물 사진 한 장(가운데 가격대 매물), 가장 싼 값(원화), 매물이 있는 나라. 사진이 있는 매물이 없는 모델은 건너뜀"""
     entities = catalog["entities"]
     picks = json.loads((ROOT / "data" / "config" / "home_picks.json").read_text(encoding="utf-8")).get("picks", [])
@@ -152,9 +152,9 @@ def _home_showcase(records: list, catalog: dict, skip: set, to_krw: dict, size: 
         mid = white[len(white) // 2][1]
         ccs = sorted({countries.get(r[1].get("source")) for r in rows} - {None})
         out.append({"entity": eid, "image": mid.get("image_url"), "low_krw": round(rows[0][0], -3), "count": len(rows), "countries": ccs})
-        if len(out) >= size:
-            break
-    return out
+    # 구하기 어려운 순서 (2026-11-08 사장님): 추천 모델 중 지금 전 세계 판매 중 매물이 적은 것부터, 같으면 비싼 것부터
+    out.sort(key=lambda x: (x["count"], -x["low_krw"]))
+    return out[:size]
 
 
 def _home_quiz(records: list, catalog: dict, skip: set, to_krw: dict) -> list:

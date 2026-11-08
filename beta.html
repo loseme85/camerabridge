@@ -181,7 +181,7 @@
     .showcase-item:hover .showcase-name{text-decoration:underline;text-underline-offset:3px}
     .showcase-name{font-size:14px;line-height:1.35}
     .showcase-price{font-size:15px;font-weight:600}
-    .showcase-price small{font-weight:400;color:var(--text-soft);font-size:12px}
+    .showcase-count{font-size:12px;color:var(--text-soft)}
     .showcase-flags{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
     .showcase-flags .source-flag{width:16px;height:12px}
     .showcase-more{font-size:11px;color:var(--text-soft);margin-left:2px}
@@ -2018,6 +2018,7 @@
         trust: { ko: '판매처 {shops}곳 · {countries}개국 · 판매 중 {listings}개 · {ago} 갱신', en: '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}', ja: '{countries}か国・{shops}店舗 · 販売中 {listings}点 · {ago}更新', 'zh-Hans': '{countries} 个国家 {shops} 家店铺 · 在售 {listings} 件 · {ago}更新', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪 · 在售 {listings} 件 · {ago}更新', pt: '{shops} lojas em {countries} países · {listings} anúncios à venda · atualizado {ago}', es: '{shops} tiendas en {countries} países · {listings} anuncios a la venta · actualizado {ago}', de: '{shops} Händler in {countries} Ländern · {listings} Angebote · aktualisiert {ago}', it: '{shops} negozi in {countries} paesi · {listings} annunci in vendita · aggiornato {ago}' },
       },
       home: {
+        showcase_count: { ko: '전 세계 {n}개', en: '{n} for sale worldwide', ja: '世界で{n}点', 'zh-Hans': '全球仅 {n} 件', 'zh-Hant': '全球僅 {n} 件', pt: '{n} à venda no mundo', es: '{n} a la venta en el mundo', de: '{n} weltweit im Angebot', it: '{n} in vendita nel mondo' },
         more_shops: { ko: '나라별 매장', en: 'Shops by country', ja: '国別の店舗', 'zh-Hans': '各国店铺', 'zh-Hant': '各國店鋪', pt: 'Lojas por país', es: 'Tiendas por país', de: 'Händler nach Land', it: 'Negozi per paese' },
         more_map: { ko: '전체 매물 한눈에', en: 'Every listing on one chart', ja: '全出品をひと目で', 'zh-Hans': '全部在售一览', 'zh-Hant': '全部在售一覽', pt: 'Todos os anúncios num gráfico', es: 'Todos los anuncios en un gráfico', de: 'Alle Angebote auf einen Blick', it: 'Tutti gli annunci in un grafico' },
         more_quiz: { ko: '내 라이카 레벨은?', en: 'What’s your Leica level?', ja: 'あなたのライカレベルは？', 'zh-Hans': '你的徕卡等级？', 'zh-Hant': '你的徠卡等級？', pt: 'Qual é o seu nível Leica?', es: '¿Cuál es tu nivel Leica?', de: 'Wie gut kennst du Leica?', it: 'Qual è il tuo livello Leica?' },
@@ -2811,13 +2812,16 @@
       if(!items.length){ box.hidden = true; return; }
       box.innerHTML = items.map(item => {
         const entity = entityState.byId[item.entity];
-        const converted = convertAmount(Number(item.low_krw), 'KRW', uiState.currency);
+        // 값은 B등급 시세(최저가 한 건은 잘못 연결된 매물일 수 있음), 시세가 없으면 최저가
+        const krw = Number(entity.b_price_krw || item.low_krw);
+        const converted = convertAmount(krw, 'KRW', uiState.currency);
         const low = converted !== null ? formatMoney(roundEstimate(converted, uiState.currency), uiState.currency) : '';
         const flags = (item.countries || []).slice(0, 8).map(countryFlagHtml).join('') + ((item.countries || []).length > 8 ? `<span class="showcase-more">+${item.countries.length - 8}</span>` : '');
         return `<button type="button" class="showcase-item" data-entity="${escapeHtml(item.entity)}">
           <span class="showcase-photo"><img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="eager" fetchpriority="high" referrerpolicy="no-referrer" onerror="this.closest('.showcase-item').remove()"></span>
           <span class="showcase-name">${escapeHtml(homeName(entity))}</span>
-          <span class="showcase-price">${escapeHtml(low)}<small> · ${escapeHtml(String(item.count))}</small></span>
+          <span class="showcase-count">${escapeHtml(ux('home.showcase_count', '{n} for sale worldwide').replace('{n}', String(item.count)))}</span>
+          <span class="showcase-price">${escapeHtml(low)}</span>
           <span class="showcase-flags">${flags}</span>
         </button>`;
       }).join('');
