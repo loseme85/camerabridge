@@ -1367,8 +1367,15 @@
     .hist-base{stroke:var(--text-soft);stroke-width:1.5;stroke-dasharray:5 4}
     .hist-line{fill:none;stroke:var(--text);stroke-width:2}
     .hist-dot{fill:#2f7d5f;stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
-    .hist-g-S{fill:#0f3d2e;background:#0f3d2e}.hist-g-A{fill:#1f6b4f;background:#1f6b4f}.hist-g-B{fill:#3f9a72;background:#3f9a72}
-    .hist-g-C{fill:#7cc4a0;background:#7cc4a0}.hist-g-D{fill:#b9e2cc;background:#b9e2cc}.hist-g-U,.hist-g-N,.hist-g-\?{fill:#b5b8ba;background:#b5b8ba}
+    /* 등급 색 (2026-11-08 사장님: 초록 진하기로는 구분이 어려움) — 색맹 검사를 통과한 범주 색 5개, 등급 모름은 회색 */
+    :root{--g-S:#2a78d6;--g-A:#eb6834;--g-B:#1baf7a;--g-C:#eda100;--g-D:#e87ba4;--g-U:#a3a6a8}
+    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-S:#3987e5;--g-A:#d95926;--g-B:#199e70;--g-C:#c98500;--g-D:#d55181;--g-U:#7d8285}}
+    .hist-g-S{fill:var(--g-S);background:var(--g-S)}.hist-g-A{fill:var(--g-A);background:var(--g-A)}.hist-g-B{fill:var(--g-B);background:var(--g-B)}
+    .hist-g-C{fill:var(--g-C);background:var(--g-C)}.hist-g-D{fill:var(--g-D);background:var(--g-D)}.hist-g-U,.hist-g-N{fill:var(--g-U);background:var(--g-U)}
+    .price-history{position:relative}
+    .hist-tip{position:absolute;z-index:5;pointer-events:none;background:var(--bg,#fff);border:1px solid var(--text);padding:7px 10px;font-size:12px;line-height:1.45;white-space:nowrap;box-shadow:none}
+    .hist-tip b{font-size:14px}
+    .hist-tip i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
     .hist-grades{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
     .hist-grades button{background:none;border:1px solid var(--border);padding:4px 10px;font:inherit;font-size:13px;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
     .hist-grades button[aria-pressed="true"]{border-color:var(--text);font-weight:600}
@@ -1377,7 +1384,7 @@
     .hist-g{display:inline-block;width:9px;height:9px;border-radius:50%}
     .hist-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--text-soft);margin:4px 0 8px}
     .hist-legend i{display:inline-block;vertical-align:middle;margin-right:6px}
-    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(90deg,#0f3d2e,#3f9a72,#b9e2cc)}
+    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(90deg,var(--g-S),var(--g-A),var(--g-B),var(--g-C),var(--g-D))}
     .hist-key-line{width:18px;height:2px;background:var(--text)}
     .hist-key-base{width:18px;border-top:1.5px dashed var(--text-soft)}
     .hist-note{font-size:12px;color:var(--text-soft);margin:6px 0 0}
@@ -3785,6 +3792,22 @@
       block.hidden = false;
       drawMarketMap();
     }
+    // 판매 금액 추이 점에 마우스를 올리면 간단한 정보 (2026-11-08 사장님)
+    document.addEventListener('mouseover', event => {
+      const dot = event.target.closest && event.target.closest('.hist-dot');
+      const box = dot && dot.closest('.price-history');
+      document.querySelectorAll('.hist-tip').forEach(tip => { if(!box || !box.contains(tip)) tip.hidden = true; });
+      if(!dot || !box) return;
+      const tip = box.querySelector('.hist-tip');
+      const [date, price, meta, g] = String(dot.dataset.tip || '').split('\n');
+      tip.innerHTML = `${escapeHtml(date)}<br><b>${escapeHtml(price)}</b><br><i class="hist-g-${escapeHtml(g)}"></i>${escapeHtml(meta)}`;
+      tip.hidden = false;
+      const a = dot.getBoundingClientRect(), b = box.getBoundingClientRect();
+      const left = Math.min(a.left - b.left + 12, b.width - tip.offsetWidth - 4);
+      tip.style.left = `${Math.max(0, left)}px`;
+      tip.style.top = `${a.top - b.top - tip.offsetHeight - 8}px`;
+    });
+
     document.addEventListener('click', event => {
       const g = event.target.closest('[data-hist-grade]');
       if(g && els['query-summary-region']){ uiState.histGrade = g.dataset.histGrade; els['query-summary-region'].innerHTML = renderChartArea(); return; }
@@ -5238,12 +5261,15 @@
       const fmtDate = new Intl.DateTimeFormat(uiState.locale, { year: 'numeric', month: 'short', day: 'numeric' });
       const dots = shown.map(p => {
         const label = `${fmtDate.format(p.t)} · ${money(p.v)} · ${p.grade === LADDER_UNKNOWN ? ec('ladder_unknown') : gradeLabel(p.grade)} · ${localizeSourceName(p.result.source || '')}`;
-        return `<a href="${escapeHtml(p.result.source_url || '#')}" target="_blank" rel="noopener"><circle cx="${x(p.t).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="4.5" class="hist-dot hist-g-${LADDER_GRADES.includes(p.grade) ? p.grade : 'U'}"><title>${escapeHtml(label)}</title></circle></a>`;
+        const g = LADDER_GRADES.includes(p.grade) ? p.grade : 'U';
+        const tip = [fmtDate.format(p.t), money(p.v), `${p.grade === LADDER_UNKNOWN ? ec('ladder_unknown') : gradeLabel(p.grade)} · ${localizeSourceName(p.result.source || '')}`, g].join('\n');
+        return `<a href="${escapeHtml(p.result.source_url || '#')}" target="_blank" rel="noopener" aria-label="${escapeHtml(label)}"><circle cx="${x(p.t).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="5" class="hist-dot hist-g-${g}" data-tip="${escapeHtml(tip)}"></circle></a>`;
       }).join('');
       const gradeName = pick || 'B';
       const legend = `<div class="hist-legend"><span><i class="hist-key-dot"></i>${escapeHtml(ec('hist_dot'))} ${shown.length}</span>${path ? `<span><i class="hist-key-line"></i>${escapeHtml(ec('hist_line', { g: gradeName }))}</span>` : ''}${base ? `<span><i class="hist-key-base"></i>${escapeHtml(ec('hist_base', { g: gradeName }))} ${escapeHtml(money(base))}</span>` : ''}</div>`;
       return `<section class="price-ladder price-history" aria-label="${escapeHtml(ec('hist_title'))}"><h3>${escapeHtml(ec('hist_title'))}</h3>${chips}${legend}
         <svg class="hist-chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeHtml(ec('hist_title'))}">${grid}${xt}${baseLine}${path}${dots}</svg>
+        <div class="hist-tip" hidden></div>
         <p class="hist-note">${escapeHtml(ec('hist_note', { d: first }))}</p></section>`;
     }
 
