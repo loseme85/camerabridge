@@ -5205,7 +5205,8 @@
 
     function entityMetaLine(entity){
       const kind = entity.kind === 'Body' ? ec('body') : ec('lens');
-      const parts = [entity.mount ? `${kind} · ${entity.mount}` : kind];
+      // 바디·렌즈가 섞인 별칭 묶음(블랙페인트·티타늄 등)은 종류를 쓰지 않음
+      const parts = entity.feature && !entity.mount ? [] : [entity.mount ? `${kind} · ${entity.mount}` : kind];
       if(entity.active_count){
         let sale = ec('on_sale', { n: String(entity.active_count) });
         const range = entity.active_price_krw;
