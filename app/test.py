@@ -6490,6 +6490,17 @@ def crawl_fototrade():
                       rename=_abbr_lens_name)
 
 
+def crawl_lampersky():
+    """Lampersky (헝가리 부다페스트) - 중고 카메라점 WooCommerce 공개 상품 API의 라이카 판매 중만 (#232 _woo_leica). 가격 HUF.
+    이름 뒤 마운트 꼬리(' – Leica R'·' – L39'·' – 4/3'·' – B stock') 떼기. 등급 표기 없음(사진 등급 대기열). 헝가리 첫 사이트"""
+    def rename(name):
+        n = re.sub(r"\s+[–-]\s+(?:leica[- ]?[rm]|l39|4/3|b stock)(?:\s+[–-]\s+b stock)?\s*$", "", name, flags=re.I)
+        n = re.sub(r"\s+[–-]\s+(?:leica[- ]?[rm]|l39)\s*$", "", n, flags=re.I)
+        n = re.sub(r"(?i)\bR3 MOT electronic\b", "R3 Electronic", n)  # MOT를 남기면 모터(액세서리)로 분류됨
+        return re.sub(r"(?i)\bleicaflex sl 2\b", "Leicaflex SL2", n).strip()
+    return _woo_leica("https://lampersky.com", "Lampersky (헝가리)", "Lampersky", rename=rename)
+
+
 def crawl_fotoman():
     """Fotoman (핀란드 휘빈캐) - WooCommerce 공개 상품 API, '중고 라이카'(Käytetyt Leica) 분류에 든 라이카·라이츠만.
     이름 앞 'Käytetty '(중고)와 뒤 ' – filmikamera'·' – Leica M' 등을 떼고 'hopea' → silver. 상태는 자유 문장이라 등급 없음(사진 등급 대기열)"""
@@ -11239,6 +11250,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
         ("Fotoman (핀란드)", lambda: ce.wrap_full_run("Fotoman (핀란드)", crawl_fotoman)),
         ("Foto Meyer (독일)", lambda: ce.wrap_full_run("Foto Meyer (독일)", crawl_fotomeyer)),
         ("Photo19 (이탈리아)", lambda: ce.wrap_full_run("Photo19 (이탈리아)", crawl_photo19)),

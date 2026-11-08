@@ -155,7 +155,7 @@ ul.links span{color:var(--muted);font-size:13px}
 """
 
 SYMBOL = {"KRW": "₩", "USD": "$", "JPY": "¥", "EUR": "€", "GBP": "£", "HKD": "HK$", "CHF": "CHF ", "DKK": "DKK ",
-          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$", "CLP": "CLP ", "SEK": "SEK ", "CZK": "Kč "}
+          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$", "CLP": "CLP ", "SEK": "SEK ", "CZK": "Kč ", "HUF": "Ft "}
 
 
 def money(amount: float, currency: str, lang: str, approx: bool = False) -> str:
