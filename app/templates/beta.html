@@ -187,7 +187,12 @@
     .rot-dots button{width:7px;height:7px;padding:0;border:1px solid var(--text);background:none;cursor:pointer}
     .rot-dots button[aria-pressed="true"]{background:var(--text)}
     @media (prefers-reduced-motion: reduce){.rot-slide{transition:none}}
-    .home-world{position:relative;margin-top:44px;padding-top:18px;border-top:1px solid var(--rule,var(--text))}
+    .home-world{position:relative;margin-top:44px;border-top:1px solid var(--rule,var(--text))}
+    .world-tabs{display:flex;gap:22px;border-bottom:1px solid var(--border);margin-bottom:14px}
+    .world-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 0;font:inherit;font-size:15px;color:var(--text-soft);cursor:pointer}
+    .world-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
+    .home-world .market-map{margin:0}
+    section.hero .hero-title{font-size:clamp(30px,3.3vw,48px);word-break:keep-all}
     #world-map{display:block;max-width:100%;height:auto}
     .world-land path{fill:#e9e6de;stroke:var(--bg,#fff);stroke-width:.5}
     .world-dot{fill:#1f4a3a;fill-opacity:.72;stroke:var(--bg,#fff);stroke-width:1.2;cursor:default}
@@ -1587,9 +1592,21 @@
           <div id="home-rotator" class="home-rotator" hidden></div>
         </div>
         <!-- 세계 지도: 매장이 있는 나라마다 원(크기 = 판매 중 매물 수), 마우스를 올리면 나라·매장·매물 수 -->
-        <div id="home-world" class="home-world" hidden>
-          <svg id="world-map" role="img"></svg>
-          <div id="world-tip" class="world-tip" hidden></div>
+        <!-- 2026-11-08 사장님: 지도 위에 탭으로 넘기고 전체 매물 그래프로 — [전체 매물 | 매장 지도], 처음엔 전체 매물 -->
+        <div id="home-world" class="home-world">
+          <div class="world-tabs" role="tablist">
+            <button type="button" role="tab" data-world-tab="chart" aria-selected="true" data-i18n="home.map_title">Every used Leica for sale right now</button>
+            <button type="button" role="tab" data-world-tab="map" aria-selected="false" data-i18n="home.shops_title">Where the listings come from</button>
+          </div>
+          <div id="market-map-block" class="market-map world-pane" data-world-pane="chart" hidden>
+            <p id="market-map-note" class="market-map-note"></p>
+            <div id="market-map-legend" class="market-map-legend"></div>
+            <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
+          </div>
+          <div class="world-pane" data-world-pane="map" hidden>
+            <svg id="world-map" role="img"></svg>
+            <div id="world-tip" class="world-tip" hidden></div>
+          </div>
         </div>
       </section>
 
@@ -1602,12 +1619,6 @@
         </div>
         <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
         <!-- 지금 팔리는 라이카 전부 (2026-11-07 사장님: 메인 화면에 전체 매물 그래프) — data/derived/market_map.json, 점 하나 = 매물 하나 -->
-        <div id="market-map-block" class="market-map home-extra" hidden>
-          <h2 class="home-heading" data-i18n="home.map_title">Every used Leica for sale right now</h2>
-          <p id="market-map-note" class="market-map-note"></p>
-          <div id="market-map-legend" class="market-map-legend"></div>
-          <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
-        </div>
         <div id="home-quiz-block" class="home-quiz home-extra" hidden>
           <h2 class="home-heading"><span data-i18n="home.quiz_title">What’s your Leica level?</span> <small id="quiz-best" class="home-quiz-best"></small></h2>
           <p data-i18n="home.quiz_intro">Double strokes, commemorative bodies, nicknames, order numbers — 10 questions only Leica nerds get right. Start right here.</p>
@@ -2804,6 +2815,21 @@
     }
 
     // 첫 화면 '29개 나라 113개 매장': 나라마다 국기·막대(매장 수)·매장·매물 수, 막대에 올리면 매장 이름 (제목 아래 숫자와 같은 기준)
+    function showWorldTab(tab){
+      document.querySelectorAll('[data-world-tab]').forEach(el => el.setAttribute('aria-selected', el.dataset.worldTab === tab ? 'true' : 'false'));
+      document.querySelectorAll('[data-world-pane]').forEach(el => {
+        const on = el.dataset.worldPane === tab;
+        if(tab === 'chart' && el.id === 'market-map-block') el.hidden = !(on && mapState.data);
+        else el.hidden = !on;
+      });
+      if(tab === 'chart' && typeof drawMarketMap === 'function') setTimeout(drawMarketMap, 30);
+      if(tab === 'map' && worldState.byCountry) setTimeout(() => drawWorldMap(worldState.byCountry), 30);
+    }
+    document.addEventListener('click', event => {
+      const tab = event.target.closest && event.target.closest('[data-world-tab]');
+      if(tab) showWorldTab(tab.dataset.worldTab);
+    });
+
     // 세계 지도 (2026-11-08): 바탕은 world-atlas 110m(공개 데이터), 원 위치는 나라 대표 좌표(경도, 위도)
     const COUNTRY_LONLAT = { KR: [127.8, 36.5], JP: [138.3, 36.2], HK: [114.2, 22.3], SG: [103.8, 1.35], MY: [101.7, 3.9], AU: [134, -25.5], NZ: [172.5, -41.5],
       US: [-98.5, 39.5], CA: [-106, 56], CL: [-71, -33.5], GB: [-2, 53.5], FR: [2.3, 46.6], DE: [10.4, 51.2], IT: [12.6, 42.8], NL: [5.3, 52.2], BE: [4.5, 50.6],
@@ -2837,7 +2863,9 @@
       let land;
       try{ land = await loadWorld(); }catch(error){ return; }
       if(!window.d3 || !window.d3.geoNaturalEarth1) return;
-      box.hidden = false;
+      const pane = svg.closest('.world-pane');
+      worldState.byCountry = byCountry;
+      if(pane && pane.hidden) return;  // 탭을 열 때 다시 그림
       const W = Math.max(320, box.clientWidth || 900), H = Math.round(W * 0.46);
       const proj = window.d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], land);
       const path = window.d3.geoPath(proj);
@@ -3772,6 +3800,11 @@
       if(!button) return;
       if(document.body.classList.contains('cb-searched') || document.body.classList.contains('cb-board')){
         location.href = '/?open=' + encodeURIComponent(button.dataset.open);  // 검색·게시판 화면이면 첫 화면으로 가서 열기
+        return;
+      }
+      if(button.dataset.open === 'market-map-block'){  // 전체 매물 그래프는 첫 화면 아래 탭에 있음
+        showWorldTab('chart');
+        document.getElementById('home-world')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       const block = document.getElementById(button.dataset.open);
