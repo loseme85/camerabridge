@@ -121,7 +121,7 @@ def _home_feed(records: list, catalog: dict) -> dict:
     return {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "latest": picked}
 
 
-def _home_showcase(records: list, catalog: dict, skip: set, to_krw: dict, b_prices: dict, size: int = 8, max_active: int = 40) -> list:
+def _home_showcase(records: list, catalog: dict, skip: set, to_krw: dict, b_prices: dict, size: int = 16, max_active: int = 40) -> list:
     """첫 화면 사진 줄 (2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게) — 수집가 추천 모델(home_picks.json) 중 꿈의 라이카(비싸고 귀한) 순서로
     판매 중 매물 사진 한 장(가운데 가격대 매물), 가장 싼 값(원화), 매물이 있는 나라. 사진이 있는 매물이 없는 모델은 건너뜀"""
     entities = catalog["entities"]
