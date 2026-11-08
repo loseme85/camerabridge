@@ -255,6 +255,8 @@
     .quiz-feedback{margin:12px 0 0;font-size:14px;min-height:1.4em}
     .quiz-feedback .quiz-link{border:0;background:none;padding:0;color:var(--accent,var(--text));text-decoration:underline;font:inherit;cursor:pointer}
     .quiz-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px}
+    .quiz-card{display:block;width:100%;max-width:600px;height:auto;margin-top:16px;border:1px solid var(--border)}
+    .quiz-save{margin-left:10px;text-decoration:none;display:inline-flex;align-items:center}
     .quiz-level{font-family:var(--serif);font-size:34px;line-height:1.2;margin:18px 0 4px}
     .home-popular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;border-top:1px solid var(--border)}
     .home-model{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 2px;border:0;border-bottom:1px solid var(--border);
@@ -2093,6 +2095,7 @@
         quiz_next: { ko: '다음', en: 'Next', ja: '次へ', 'zh-Hans': '下一题', 'zh-Hant': '下一題', pt: 'Próxima', es: 'Siguiente', de: 'Weiter', it: 'Avanti' },
         quiz_result: { ko: '레벨 {n} · {name}', en: 'Level {n} · {name}', ja: 'レベル {n} · {name}', 'zh-Hans': '等级 {n} · {name}', 'zh-Hant': '等級 {n} · {name}', pt: 'Nível {n} · {name}', es: 'Nivel {n} · {name}', de: 'Level {n} · {name}', it: 'Livello {n} · {name}' },
         quiz_score: { ko: '{t}문제 중 {r}개 정답', en: '{r} of {t} right', ja: '{t}問中 {r}問正解', 'zh-Hans': '{t} 题答对 {r} 题', 'zh-Hant': '{t} 題答對 {r} 題', pt: '{r} de {t} certas', es: '{r} de {t} correctas', de: '{r} von {t} richtig', it: '{r} su {t} giuste' },
+        quiz_save_image: { ko: '카드 이미지 저장', en: 'Save card image', ja: 'カード画像を保存', 'zh-Hans': '保存卡片图片', 'zh-Hant': '儲存卡片圖片', pt: 'Salvar imagem do cartão', es: 'Guardar imagen', de: 'Kartenbild speichern', it: 'Salva immagine' },
         quiz_share: { ko: '내 레벨 공유', en: 'Share my level', ja: 'レベルをシェア', 'zh-Hans': '分享我的等级', 'zh-Hant': '分享我的等級', pt: 'Compartilhar meu nível', es: 'Compartir mi nivel', de: 'Mein Level teilen', it: 'Condividi il mio livello' },
         quiz_copied: { ko: '복사했어요', en: 'Copied', ja: 'コピーしました', 'zh-Hans': '已复制', 'zh-Hant': '已複製', pt: 'Copiado', es: 'Copiado', de: 'Kopiert', it: 'Copiato' },
         quiz_again: { ko: '다시 하기', en: 'Try again', ja: 'もう一度', 'zh-Hans': '再测一次', 'zh-Hant': '再測一次', pt: 'Tentar de novo', es: 'Intentar de nuevo', de: 'Nochmal', it: 'Riprova' },
@@ -3765,7 +3768,11 @@
         // 첫 화면에 첫 문제를 바로 (누르지 않아도). 환율·모델 이름을 받을 때까지 잠깐 기다림 (최대 6초)
         for(let i = 0; i < 30 && !(fxRate('KRW') && fxRate(uiState.currency) && entityState.byId); i++) await new Promise(r => setTimeout(r, 200));
         openQuiz();
-        if(QUIZ_FROM_URL && block) block.scrollIntoView({ block: 'start' });  // 공유 주소로 들어오면 문제로 바로
+        if(QUIZ_FROM_URL && block){  // 공유 주소로 들어오면 문제로 바로 — 첫 화면 단순화 뒤로 닫혀 있는 묶음이라 열어 줌 (2026-11-08)
+          block.classList.add('is-open');
+          document.querySelectorAll('.topnav [data-open="home-quiz-block"]').forEach(el => el.setAttribute('aria-pressed', 'true'));
+          block.scrollIntoView({ block: 'start' });
+        }
       }
     }
     function pickQuiz(){
@@ -3807,7 +3814,9 @@
           <p class="quiz-feedback" id="quiz-share-status" role="status"></p>
           <div class="quiz-actions">
             <button type="button" class="search-button" data-quiz-share data-level="${level}">${escapeHtml(qx('quiz_share'))}</button>
-          </div>`;
+            <a class="ghost-button quiz-save" href="/img/level/${level}.png" download="camera-bridge-leica-level-${level}.png">${escapeHtml(qx('quiz_save_image'))}</a>
+          </div>
+          <img class="quiz-card" src="/img/level/${level}.png" alt="${escapeHtml(qx('quiz_result', { n: String(level), name: qx(`quiz_lv${level}`) }))}" width="600" height="315" loading="lazy">`;
         return;
       }
       const q = quizState.list[quizState.index];
@@ -3875,7 +3884,8 @@
         if(target.hasAttribute('data-quiz-share')){
           const level = Number(target.dataset.level);
           const text = qx('quiz_share_text', { n: String(level), name: qx(`quiz_lv${level}`) });
-          const url = 'https://camerabridge.io/?quiz=1&utm_source=quiz-share';
+          // 레벨별 공유 주소: 레딧·카톡·X 미리보기에 그 레벨 카드가 뜨고 누르면 퀴즈로 (scripts/build_level_cards.py)
+          const url = `https://camerabridge.io/lv/${level}/`;
           const status = document.getElementById('quiz-share-status');
           try{
             if(navigator.share) await navigator.share({ text, url });
