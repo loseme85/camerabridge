@@ -1332,15 +1332,15 @@
     .chart-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 0;font:inherit;font-size:14px;color:var(--text-soft);cursor:pointer}
     .chart-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
     .chart-tabs + .price-ladder{border-top:0;margin-top:0}
-    .hist-chart{display:block;width:100%;height:260px;overflow:visible}
+    .hist-chart{display:block;max-width:100%;height:auto;overflow:visible}
     .hist-grid{stroke:var(--border);stroke-width:1}
     .hist-axis{fill:var(--text-soft);font-size:12px}
     .hist-base{stroke:var(--text-soft);stroke-width:1.5;stroke-dasharray:5 4}
     .hist-line{fill:none;stroke:var(--text);stroke-width:2}
-    .hist-dot{fill:var(--ladder-home, #2f6f5e);stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
+    .hist-dot{fill:#2f7d5f;stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
     .hist-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--text-soft);margin:4px 0 8px}
     .hist-legend i{display:inline-block;vertical-align:middle;margin-right:6px}
-    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:var(--ladder-home, #2f6f5e)}
+    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:#2f7d5f}
     .hist-key-line{width:18px;height:2px;background:var(--text)}
     .hist-key-base{width:18px;border-top:1.5px dashed var(--text-soft)}
     .hist-note{font-size:12px;color:var(--text-soft);margin:6px 0 0}
@@ -5018,7 +5018,8 @@
       if(sold.length < 3){
         return `<section class="price-ladder price-history"><h3>${escapeHtml(ec('hist_title'))}</h3><p>${escapeHtml(ec('hist_few', { n: String(sold.length) }))}</p></section>`;
       }
-      const W = 900, H = 260, L = 70, R = 16, T = 14, B = 34;
+      const region = els['query-summary-region'];
+      const W = Math.max(320, Math.round((region && region.clientWidth) || 900)), H = 260, L = W < 520 ? 52 : 70, R = 12, T = 14, B = 34;  // 실제 폭으로 그려 점·글자가 찌그러지지 않게
       const now = Date.now();
       const t0 = sold[0].t - 86400000, t1 = Math.max(now, sold[sold.length - 1].t) + 86400000;
       const base = entity.b_price_krw ? convertAmount(entity.b_price_krw, 'KRW', uiState.currency) : null;
@@ -5026,7 +5027,7 @@
       const line = [];
       sold.forEach(p => {
         const win = sold.map((q, j) => (q.t <= p.t && q.t > p.t - 14 * 86400000 && norm[j]) ? norm[j] : null).filter(Boolean).sort((a, b) => a - b);
-        if(win.length >= 3) line.push([p.t, win[Math.floor(win.length / 2)]]);
+        if(win.length >= 5) line.push([p.t, win[Math.floor(win.length / 2)]]);  // 5건 미만이면 비싼 매물 몇 개에 선이 크게 튐 (기록 초반)
       });
       const values = sold.map(p => p.v).concat(line.map(xv => xv[1])).concat(base ? [base] : []).sort((a, b) => a - b);
       const qv = r => values[Math.min(values.length - 1, Math.max(0, Math.round(r * (values.length - 1))))];
@@ -5050,7 +5051,7 @@
       }).join('');
       const legend = `<div class="hist-legend"><span><i class="hist-key-dot"></i>${escapeHtml(ec('hist_dot'))} ${sold.length}</span>${path ? `<span><i class="hist-key-line"></i>${escapeHtml(ec('hist_line'))}</span>` : ''}${base ? `<span><i class="hist-key-base"></i>${escapeHtml(ec('hist_base'))} ${escapeHtml(money(base))}</span>` : ''}</div>`;
       return `<section class="price-ladder price-history" aria-label="${escapeHtml(ec('hist_title'))}"><h3>${escapeHtml(ec('hist_title'))}</h3>${legend}
-        <svg class="hist-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${escapeHtml(ec('hist_title'))}">${grid}${xt}${baseLine}${path}${dots}</svg>
+        <svg class="hist-chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeHtml(ec('hist_title'))}">${grid}${xt}${baseLine}${path}${dots}</svg>
         <p class="hist-note">${escapeHtml(ec('hist_note', { d: first }))}</p></section>`;
     }
 
