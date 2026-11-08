@@ -3610,9 +3610,12 @@
     });
 
     // 첫 화면 주소에 ?open=묶음 이 있으면 (다른 화면에서 머리줄 메뉴를 누른 경우) 그 묶음을 열어 줌
+    // 주소는 스크립트를 읽는 순간 바로 기억 (뒤에서 검색 주소를 정리하며 ?open= 이 지워짐)
+    let OPEN_ON_LOAD = '';
+    try{ OPEN_ON_LOAD = new URLSearchParams(location.search).get('open') || ''; }catch(error){}
     window.addEventListener('load', () => {
       try{
-        const id = new URLSearchParams(location.search).get('open');
+        const id = OPEN_ON_LOAD;
         const button = id && document.querySelector(`.topnav [data-open="${CSS.escape(id)}"]`);
         if(button) setTimeout(() => button.click(), 400);
       }catch(error){}
