@@ -1318,7 +1318,7 @@
     .ladder-tip .tip-incl{display:inline-block;margin:3px 0 2px;padding:1px 6px;border:1px solid var(--text);font-size:12px;font-weight:600;color:var(--text);line-height:1.5}
     .price-ladder{position:relative}
     .ladder-guide.is-ghost{position:relative}
-    .result-price-label{font-size:11px;color:var(--text-soft);margin-bottom:1px}
+    .result-price-incl{font-family:inherit;font-size:12px;font-weight:500;color:var(--text-soft);white-space:nowrap;vertical-align:middle}
     /* 2026-11-08 사장님: 모델 밑 Prev·Next 없어도 됨 — 아래 '더 보기'로 넘김 */
     .page-controls{display:none !important}
     .ladder-ghost{filter:blur(2.5px);opacity:.35;pointer-events:none;user-select:none}
@@ -4175,8 +4175,9 @@
       }
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
-      const mainLabel = delivered ? `<div class="result-price-label">${escapeHtml(ux('landed.total', 'Est. total delivered'))}</div>` : '';
-      return `<div class="result-price-block">${mainLabel}<div class="result-price">${escapeHtml(main)}</div>${delivered ? '' : deal}${original}${gradeRow}${landed}</div>`;
+      // 큰 총액 옆에 '배송비·관세 포함' (그래프와 같은 문구, 2026-11-08 사장님)
+      const incl = delivered ? ` <span class="result-price-incl">${escapeHtml(ec('ladder_incl'))}</span>` : '';
+      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}${incl}</div>${delivered ? '' : deal}${original}${gradeRow}${landed}</div>`;
     }
 
     function localizePriceBand(text){
