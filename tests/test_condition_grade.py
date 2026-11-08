@@ -614,3 +614,13 @@ def test_panajou_title_state():
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "comme neuf")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "très bon état")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
+
+
+def test_fotoc_kategori():
+    from condition_grade import grade_of, FOTOC_PREFIX
+    site = "FOTO/C (덴마크)"
+    assert grade_of(site, FOTOC_PREFIX + "A")[0] == "A"
+    assert grade_of(site, FOTOC_PREFIX + "B+")[0] == "B"
+    assert grade_of(site, FOTOC_PREFIX + "B-")[0] == "C"
+    assert grade_of(site, FOTOC_PREFIX + "C+")[0] == "C"
+    assert grade_of(site, FOTOC_PREFIX + "defekt")[0] == "X"

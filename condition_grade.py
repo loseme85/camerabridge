@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTOC_PREFIX):
+        return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
     if cond.startswith(DCGRAZ_PREFIX):
         return _DCGRAZ.get(cond[len(DCGRAZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
@@ -869,6 +871,12 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
+# 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.
+# 사진이 후한 기존 경향(0.8) → 글자대로, '-'는 한 칸 아래: 정확 일치 1/6 · 한 등급 이내 6/6. Vintage는 상태가 아니라 연식이라 등급 없음
+FOTOC_PREFIX = "FotoC: "
+_FOTOC = {"NY": "S", "A": "A", "B+": "B", "B": "B", "B-": "C", "C+": "C", "C": "D", "C-": "D", "DEFEKT": "X"}
 
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
