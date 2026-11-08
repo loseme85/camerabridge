@@ -142,7 +142,7 @@ for _l, _v in {'ko': '{name} 중고: B등급 시세 {b}, {shops}개 매장에 {n
     T[_l]["lead"] = _v
 
 CSS = """
-:root{--bg:#FEFEFD;--text:#22201E;--soft:#6E6A64;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
+:root{--bg:#FDFCFA;--text:#22201E;--soft:#6E6A64;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
 @media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2c3133;--accent:#8cc5ad;--row:#1b1e1f}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Jost","Pretendard Variable",Pretendard,system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
