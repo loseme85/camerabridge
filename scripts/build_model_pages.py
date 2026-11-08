@@ -128,7 +128,7 @@ CSS = """
 :root{--bg:#fff;--text:#16181a;--soft:#5d6266;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
 @media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2c3133;--accent:#8cc5ad;--row:#1b1e1f}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,"Pretendard Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
 main{max-width:960px;margin:0 auto;padding:24px 16px 64px}
 nav{font-size:13px;color:var(--muted);margin-bottom:20px}
 nav a{color:var(--soft)}
