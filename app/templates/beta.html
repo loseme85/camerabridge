@@ -1317,6 +1317,16 @@
     .price-ladder .ladder-incl{display:inline-block;margin-top:4px;font-size:14px;font-weight:600;color:var(--text)}
     .ladder-tip .tip-incl{display:inline-block;margin:3px 0 2px;padding:1px 6px;border:1px solid var(--text);font-size:12px;font-weight:600;color:var(--text);line-height:1.5}
     .price-ladder{position:relative}
+    .ladder-guide.is-ghost{position:relative}
+    .result-price-incl{font-family:inherit;font-size:12px;font-weight:500;color:var(--text-soft);white-space:nowrap;vertical-align:middle}
+    /* 2026-11-08 사장님: 모델 밑 Prev·Next 없어도 됨 — 아래 '더 보기'로 넘김 */
+    .page-controls{display:none !important}
+    .ladder-ghost{filter:blur(2.5px);opacity:.35;pointer-events:none;user-select:none}
+    .ladder-ghost .ladder-strip{cursor:default}
+    .ladder-ghost-overlay{position:absolute;left:0;right:0;top:44px;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 16px;gap:6px}
+    .ladder-ghost-overlay strong{font-family:var(--serif);font-weight:500;font-size:22px}
+    .ladder-ghost-overlay p{margin:0 0 6px;color:var(--text-soft);font-size:13px}
+    .ladder-ghost-overlay .entity-bar-chips{justify-content:center;background:var(--bg)}
     .price-ladder .ladder-row{touch-action:pan-y}
     .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:36px;border-top:1px solid var(--border)}
     .ladder-grade{font-family:var(--serif);font-size:15px;font-weight:600}
@@ -2467,6 +2477,7 @@
       label: { ko: '받는 나라', en: 'Ship to', ja: 'お届け先の国', 'zh-Hans': '收货国家/地区', 'zh-Hant': '收件國家/地區', pt: 'Entregar em', es: 'Enviar a', de: 'Lieferland', it: 'Spedire in' }
     };
     UX_LOCALE_COPY.landed = {
+      item: { ko: '물건 금액', en: 'Item price', ja: '商品価格', 'zh-Hans': '商品价格', 'zh-Hant': '商品價格', pt: 'Preço do item', es: 'Precio del artículo', de: 'Artikelpreis', it: 'Prezzo articolo' },
       original: { ko: '판매가 {price}', en: 'Listed at {price}', ja: '販売価格 {price}', 'zh-Hans': '原标价 {price}', 'zh-Hant': '原標價 {price}', pt: 'Preço anunciado {price}', es: 'Precio publicado {price}', de: 'Angebotspreis {price}', it: 'Prezzo in vendita {price}' },
       total: { ko: '받을 때까지 예상 총액', en: 'Est. total delivered', ja: 'お届けまでの概算合計', 'zh-Hans': '预估到手总价', 'zh-Hant': '預估到手總價', pt: 'Total estimado com entrega', es: 'Total estimado con envío', de: 'Geschätzter Gesamtpreis inkl. Lieferung', it: 'Totale stimato con consegna' },
       shipping: { ko: '배송비', en: 'Shipping', ja: '送料', 'zh-Hans': '运费', 'zh-Hant': '運費', pt: 'Frete', es: 'Envío', de: 'Versand', it: 'Spedizione' },
@@ -4125,8 +4136,16 @@
       const cost = computeLandedCost(result);
       if(!cost) return `<div class="result-price">${fallback}</div>${renderGradeRow(result, null)}`;
       const sameCurrency = cost.currency === cost.target;
-      const main = sameCurrency ? formatMoney(cost.listed, cost.currency) : `≈ ${formatMoney(roundEstimate(cost.converted, cost.target), cost.target)}`;
+      const itemPrice = sameCurrency ? formatMoney(cost.listed, cost.currency) : `≈ ${formatMoney(roundEstimate(cost.converted, cost.target), cost.target)}`;
+      // 2026-11-08 사장님: 큰 글씨는 받아 볼 금액(예상 총액) — 첫 화면 '내 집까지 총액으로'·가격순 정렬과 같게. 물건 금액은 아래 작은 줄
+      const delivered = cost.landed && !cost.storeOnly;
+      const main = delivered ? `≈ ${formatMoney(cost.landed.total, cost.target)}` : itemPrice;
       const original = sameCurrency ? '' : `<div class="result-price-original">${escapeHtml(ux('landed.original', 'Listed at {price}').replace('{price}', formatMoney(cost.listed, cost.currency)))}</div>`;
+      const diff = dealDiff(result, cost);
+      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
+      // 시세는 물건 금액끼리 비교라, 큰 글씨가 총액일 때는 '물건 금액' 줄 옆에 둠 (2026-11-08)
+      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
+        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
       let landed = '';
       if(cost.landed){
         const parts = [`${ux('landed.shipping', 'Shipping')} ${formatMoney(cost.landed.shipping, cost.target)}`];
@@ -4143,7 +4162,8 @@
           .join('');
         landed = `
           <div class="result-landed">
-            <div class="result-landed-total">${escapeHtml(ux('landed.total', 'Est. total delivered'))} ≈ ${escapeHtml(formatMoney(cost.landed.total, cost.target))}</div>
+            <div class="result-landed-total">${escapeHtml(ux('landed.item', 'Item price'))} ${escapeHtml(itemPrice)}</div>
+            ${delivered ? deal : ''}
             <div class="result-landed-parts">${escapeHtml(parts.join(' · '))}</div>
             ${notes}
             <details class="result-landed-how">
@@ -4155,11 +4175,9 @@
       }
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
-      const diff = dealDiff(result, cost);
-      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
-      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
-        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
-      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${deal}${original}${gradeRow}${landed}</div>`;
+      // 큰 총액 옆에 '배송비·관세 포함' (그래프와 같은 문구, 2026-11-08 사장님)
+      const incl = delivered ? ` <span class="result-price-incl">${escapeHtml(ec('ladder_incl'))}</span>` : '';
+      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}${incl}</div>${delivered ? '' : deal}${original}${gradeRow}${landed}</div>`;
     }
 
     function localizePriceBand(text){
@@ -4880,7 +4898,26 @@
       }
       picks = picks.filter(item => item && !item.feature && item.active_count).sort((a, b) => b.active_count - a.active_count).slice(0, 8);
       const chips = picks.map(item => `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(item.id)}">${escapeHtml(entityDisplayName(item))} <span class="entity-chip-count">${item.active_count}</span></button>`).join('');
-      return `<section class="price-ladder ladder-guide"><h3>${escapeHtml(ec('ladder_pick_title'))}</h3><p>${escapeHtml(ec('ladder_pick_body'))}</p>${chips ? `<div class="entity-bar-chips">${chips}</div>` : ''}</section>`;
+      // 2026-11-08 사장님: 빈칸 대신 그래프 모양은 흐리게 보이고, 그 위에 '정확한 모델을 선택하세요' — 점은 실제 값이 아닌 모양만
+      return `<section class="price-ladder ladder-guide is-ghost"><h3>${escapeHtml(ec('ladder_title'))}</h3>
+        <div class="ladder-ghost" aria-hidden="true">${ladderGhostRows()}</div>
+        <div class="ladder-ghost-overlay"><strong>${escapeHtml(ec('ladder_pick_title'))}</strong><p>${escapeHtml(ec('ladder_pick_body'))}</p>${chips ? `<div class="entity-bar-chips">${chips}</div>` : ''}</div></section>`;
+    }
+
+    // 흐린 그래프 모양: 등급 줄마다 점 몇 개 (값을 뜻하지 않음, 늘 같은 모양)
+    function ladderGhostRows(){
+      const rows = [['S', 0.62, 7], ['A', 0.52, 11], ['B', 0.42, 14], ['C', 0.33, 9], ['D', 0.24, 5]];
+      let seed = 7;
+      const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+      return rows.map(([grade, center, n]) => {
+        const dots = Array.from({ length: n }, () => {
+          const left = Math.max(3, Math.min(97, (center + (rnd() - 0.5) * 0.34) * 100));
+          const top = 50 + (rnd() - 0.5) * 44;
+          return `<span class="ladder-dot" style="left:${left.toFixed(1)}%;top:${top.toFixed(1)}%"></span>`;
+        }).join('');
+        const band = `<span class="ladder-band" style="left:${((center - 0.12) * 100).toFixed(1)}%;width:24%"></span>`;
+        return `<div class="ladder-row"><span class="ladder-grade">${grade}</span><div class="ladder-strip">${band}${dots}</div><span class="ladder-range">—</span></div>`;
+      }).join('');
     }
 
     function renderPriceLadder(){
