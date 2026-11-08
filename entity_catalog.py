@@ -451,7 +451,7 @@ def flag_too_cheap(records: list[dict[str, Any]], value, catalog: dict[str, Any]
 # ── 검색창 후보 (beta.html의 suggestEntities와 같은 규칙) ──
 STOP_TOKENS = {"leica", "라이카", "ライカ", "徕卡", "徠卡", "lens", "렌즈", "body", "바디",
                "0.58", "0.72", "0.85", "0.68", "black", "silver", "chrome", "블랙", "실버", "크롬",
-               "used", "중고", "신품", "new", "paint", "블랙페인트"}
+               "used", "중고", "신품", "new", "paint", "블랙페인트", "mandler"}  # mandler: 설계자 이름 (화면 ENTITY_STOP_TOKENS와 같게)
 APERTURE = re.compile(r"^f?\d+(\.\d+)?$")
 
 
