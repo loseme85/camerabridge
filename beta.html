@@ -172,6 +172,20 @@
     .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .home-extra:not(.is-open){display:none !important}
+    .hero-line{margin:10px 0 26px;font-size:18px;line-height:1.45;color:var(--text);max-width:680px}
+    .home-showcase{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 20px;margin-top:36px;padding-top:24px;border-top:1px solid var(--rule,var(--text))}
+    .showcase-item{display:grid;gap:4px;padding:0;background:none;border:0;text-align:left;cursor:pointer;color:var(--text);font:inherit}
+    .showcase-photo{display:block;aspect-ratio:4/3;background:#f1efea;overflow:hidden;margin-bottom:6px}
+    .showcase-photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .showcase-item:hover .showcase-name{text-decoration:underline;text-underline-offset:3px}
+    .showcase-name{font-size:14px;line-height:1.35}
+    .showcase-price{font-size:15px;font-weight:600}
+    .showcase-price small{font-weight:400;color:var(--text-soft);font-size:12px}
+    .showcase-flags{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+    .showcase-flags .source-flag{width:16px;height:12px}
+    .showcase-more{font-size:11px;color:var(--text-soft);margin-left:2px}
+    @media(max-width:720px){.home-showcase{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}}
+    body.cb-searched .hero-line,body.cb-searched .home-showcase{display:none !important}
     .home-more{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
     .home-more button{background:none;border:0;border-right:1px solid var(--border);padding:12px 18px 12px 0;margin-right:18px;font:inherit;font-size:14px;color:var(--text);cursor:pointer;text-align:left}
     .home-more button:last-child{border-right:0}
@@ -1481,34 +1495,17 @@
         <div class="hero-grid">
           <div class="hero-copy">
             <h1 class="hero-title" data-i18n="hero.title">What is a used Leica worth?</h1>
-            <p class="hero-subtitle" data-i18n="hero.subtitle">Used Leica listings from dealers worldwide, matched to the exact model and priced by condition.</p>
-            <!-- 2026-11-08 사장님: 비교하는 금액이 받아 볼 금액이라는 것 — 가격순 정렬이 예상 총액 기준 (deliveredPrice) -->
-            <p class="hero-landed" data-i18n="hero.landed">Prices are compared as the estimated total to your door — shipping and import tax included.</p>
+            <!-- 2026-11-08 사장님: 텍스트는 줄이고 눈에 보이는 것으로 — 설명·총액 문구·숫자를 한 줄로 (숫자는 source_freshness로 채움) -->
+            <p id="hero-trust" class="hero-line" data-i18n="hero.line_static">Used Leicas from shops worldwide — priced to your door.</p>
             <section class="search-panel" data-i18n-aria-label="search.home_aria" aria-label="Search home">
               <div class="search-panel-label" data-i18n="search.panel_label">Search</div>
               <form id="search-form" class="search-form-row">
-                <input id="query-input" class="search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="e.g. M6, Summilux 35, Noctilux 50, Q3">
+                <input id="query-input" class="search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="M6, Summilux 35 — or a nickname like Bokeh King">
                 <button class="search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.button_aria" aria-label="Search">Search</button>
               </form>
-              <div class="query-chip-row" data-i18n-aria-label="search.examples_aria" aria-label="Example searches">
-                <button class="query-chip" type="button" data-query="Leica M6">M6</button>
-                <button class="query-chip" type="button" data-query="Leica Q3">Q3</button>
-                <button class="query-chip" type="button" data-query="Summilux 35">Summilux 35</button>
-                <button class="query-chip" type="button" data-query="Noctilux 50">Noctilux 50</button>
-                <button class="query-chip" type="button" data-query="Leica M10">M10</button>
-              </div>
-              <!-- 2026-11-08 사장님: 이름이 기억 안 나면 별칭으로 — 별칭·옛 코드·주문 번호·변형 이름이 모두 모델로 이어짐 (catalog) -->
-              <div class="alias-hint">
-                <span data-i18n="hero.alias_hint">Can’t remember the exact name? Try a nickname, code or order number:</span>
-                <button class="query-chip" type="button" data-query="Bokeh King">Bokeh King</button>
-                <button class="query-chip" type="button" data-query="Double Stroke">Double Stroke</button>
-                <button class="query-chip" type="button" data-query="Goggles">Goggles</button>
-                <button class="query-chip" type="button" data-query="SOOIC">SOOIC</button>
-                <button class="query-chip" type="button" data-query="11873">11873</button>
-              </div>
             </section>
-            <!-- 2026-11-08 사장님: 메인을 단순하게 — 큰 숫자·국기·기술 설명 4칸은 빼고 숫자는 작은 한 줄로 -->
-            <p id="hero-trust" class="hero-trust" hidden></p>
+            <!-- 2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게 — 수집가 추천 모델의 실제 매물 사진·최저가·매물 있는 나라 (home_feed.json showcase) -->
+            <div id="home-showcase" class="home-showcase" hidden></div>
           </div>
         </div>
       </section>
@@ -1528,6 +1525,7 @@
           <p id="shops-sub" class="market-map-note"></p>
           <div id="shops-bars" class="shops-bars"></div>
         </div>
+        <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
         <!-- 지금 팔리는 라이카 전부 (2026-11-07 사장님: 메인 화면에 전체 매물 그래프) — data/derived/market_map.json, 점 하나 = 매물 하나 -->
         <div id="market-map-block" class="market-map home-extra" hidden>
           <h2 class="home-heading" data-i18n="home.map_title">Every used Leica for sale right now</h2>
@@ -1535,7 +1533,6 @@
           <div id="market-map-legend" class="market-map-legend"></div>
           <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
         </div>
-        <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
         <div id="home-quiz-block" class="home-quiz home-extra" hidden>
           <h2 class="home-heading"><span data-i18n="home.quiz_title">What’s your Leica level?</span> <small id="quiz-best" class="home-quiz-best"></small></h2>
           <p data-i18n="home.quiz_intro">Double strokes, commemorative bodies, nicknames, order numbers — 10 questions only Leica nerds get right. Start right here.</p>
@@ -2014,6 +2011,8 @@
         notice_beta: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '小范围测试版', 'zh-Hant': '小規模測試版', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
         notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.', ja: '現在はLeica中心のカバレッジでテスト中です。', 'zh-Hans': '当前正在以 Leica 为中心进行测试。', 'zh-Hant': '目前正以 Leica 為中心進行測試。', pt: 'No momento, o teste está focado em cobertura Leica.', es: 'Actualmente la prueba se centra en cobertura Leica.', de: 'Der Test konzentriert sich derzeit auf Leica-Abdeckung.', it: 'Il test è attualmente focalizzato sulla copertura Leica.' },
         notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.', ja: '一部の希少モデルはデータ不足により価格が保留されたままになることがあります。', 'zh-Hans': '部分稀有型号可能因依据不足而暂不估算价格。', 'zh-Hant': '部分稀有型號可能因依據不足而暫不估算價格。', pt: 'Alguns modelos raros podem permanecer com o preço bloqueado quando a evidência for limitada.', es: 'Algunos modelos raros pueden mantener el precio bloqueado cuando la evidencia es limitada.', de: 'Einige seltene Modelle bleiben bei geringer Datenlage preisgesperrt.', it: 'Alcuni modelli rari possono restare con il prezzo bloccato quando i dati sono limitati.' },
+        line_static: { ko: '전 세계 매장의 중고 라이카 — 내 집까지 총액으로.', en: 'Used Leicas from shops worldwide — priced to your door.', ja: '世界の店舗の中古ライカ — お手元までの総額で。', 'zh-Hans': '全球店铺的二手徕卡 —— 按到手总价比较。', 'zh-Hant': '全球店鋪的二手徠卡 —— 按到手總價比較。', pt: 'Leicas usadas de lojas do mundo todo — com preço até sua porta.', es: 'Leicas usadas de tiendas de todo el mundo — con precio hasta tu puerta.', de: 'Gebrauchte Leicas von Händlern weltweit — Preis bis zu dir nach Hause.', it: 'Leica usate da negozi di tutto il mondo — con prezzo fino a casa tua.' },
+        line: { ko: '중고 라이카 {listings}개, {countries}개 나라 {shops}개 매장 — 내 집까지 총액으로.', en: '{listings} used Leicas from {shops} shops in {countries} countries — priced to your door.', ja: '中古ライカ{listings}点、{countries}か国{shops}店舗 — お手元までの総額で。', 'zh-Hans': '{countries} 个国家 {shops} 家店铺的 {listings} 件二手徕卡 —— 按到手总价比较。', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪的 {listings} 件二手徠卡 —— 按到手總價比較。', pt: '{listings} Leicas usadas de {shops} lojas em {countries} países — com preço até sua porta.', es: '{listings} Leicas usadas de {shops} tiendas en {countries} países — con precio hasta tu puerta.', de: '{listings} gebrauchte Leicas von {shops} Händlern in {countries} Ländern — Preis bis zu dir nach Hause.', it: '{listings} Leica usate da {shops} negozi in {countries} paesi — con prezzo fino a casa tua.' },
         trust: { ko: '판매처 {shops}곳 · {countries}개국 · 판매 중 {listings}개 · {ago} 갱신', en: '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}', ja: '{countries}か国・{shops}店舗 · 販売中 {listings}点 · {ago}更新', 'zh-Hans': '{countries} 个国家 {shops} 家店铺 · 在售 {listings} 件 · {ago}更新', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪 · 在售 {listings} 件 · {ago}更新', pt: '{shops} lojas em {countries} países · {listings} anúncios à venda · atualizado {ago}', es: '{shops} tiendas en {countries} países · {listings} anuncios a la venta · actualizado {ago}', de: '{shops} Händler in {countries} Ländern · {listings} Angebote · aktualisiert {ago}', it: '{shops} negozi in {countries} paesi · {listings} annunci in vendita · aggiornato {ago}' },
       },
       home: {
@@ -2089,7 +2088,7 @@
       search: {
         home_aria: { ko: '홈 검색', en: 'Search home', ja: '検索ホーム', 'zh-Hans': '搜索首页', 'zh-Hant': '搜尋首頁', pt: 'Página inicial da busca', es: 'Inicio de búsqueda', de: 'Such-Startseite', it: 'Home della ricerca' },
         panel_label: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suche', it: 'Cerca' },
-        placeholder: { ko: '예: M6, 주미룩스 35, 녹티룩스 50, Q3', en: 'e.g. M6, Summilux 35, Noctilux 50, Q3', ja: '例: M6、Summilux 35、Noctilux 50、Q3', 'zh-Hans': '例如：M6、Summilux 35、Noctilux 50、Q3', 'zh-Hant': '例如：M6、Summilux 35、Noctilux 50、Q3', pt: 'ex.: M6, Summilux 35, Noctilux 50, Q3', es: 'p. ej.: M6, Summilux 35, Noctilux 50, Q3', de: 'z. B. M6, Summilux 35, Noctilux 50, Q3', it: 'es. M6, Summilux 35, Noctilux 50, Q3' },
+        placeholder: { ko: 'M6, 주미룩스 35 — 보케킹 같은 별칭도 돼요', en: 'M6, Summilux 35 — or a nickname like Bokeh King', ja: 'M6、Summilux 35 — Bokeh Kingのような愛称でも', 'zh-Hans': 'M6、Summilux 35 —— 也可以用 Bokeh King 这样的昵称', 'zh-Hant': 'M6、Summilux 35 —— 也可以用 Bokeh King 這樣的暱稱', pt: 'M6, Summilux 35 — ou um apelido como Bokeh King', es: 'M6, Summilux 35 — o un apodo como Bokeh King', de: 'M6, Summilux 35 — oder ein Spitzname wie Bokeh King', it: 'M6, Summilux 35 — o un soprannome come Bokeh King' },
         button: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
         button_aria: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
         examples_aria: { ko: '예시 검색어', en: 'Example searches', ja: '検索例', 'zh-Hans': '示例搜索', 'zh-Hant': '範例搜尋', pt: 'Exemplos de busca', es: 'Búsquedas de ejemplo', de: 'Beispiel-Suchen', it: 'Ricerche di esempio' },
@@ -2690,12 +2689,13 @@
           const rtf = new Intl.RelativeTimeFormat(uiState.locale, { numeric: 'auto' });
           ago = minutes < 60 ? rtf.format(-minutes, 'minute') : rtf.format(-Math.round(minutes / 60), 'hour');
         }
-        const text = ux('hero.trust', '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}')
+        const text = ux('hero.line', '{listings} used Leicas from {shops} shops in {countries} countries — priced to your door.')
           .replace('{shops}', String(sites.length))
           .replace('{countries}', String(countries.length))
           .replace('{listings}', new Intl.NumberFormat(uiState.locale).format(listings))
           .replace('{ago}', ago);
-        el.innerHTML = `<span>${escapeHtml(text)}</span>`;
+        el.textContent = text;
+        el.removeAttribute('data-i18n');  // 숫자가 든 문장으로 바꾼 뒤에는 번역이 고정 문장으로 덮지 않게
         el.hidden = false;
         const stats = null;  // 큰 숫자 셋은 2026-11-08 메인 단순화로 뺌
         if(stats && sites.length){  // 큰 숫자 셋을 보이면 아래 한 줄은 국기와 갱신 시각만
@@ -2707,7 +2707,7 @@
         }
         renderShopsByCountry(fresh, rules, ago);
       }catch(error){
-        el.hidden = true;
+        el.hidden = false;  // 숫자를 못 읽어도 고정 문장은 보임
       }
     }
 
@@ -2802,7 +2802,28 @@
       });
     }
 
+    function renderShowcase(){
+      const box = document.getElementById('home-showcase');
+      if(!box) return;
+      const items = ((homeState.feed && homeState.feed.showcase) || []).filter(item => entityState.byId[item.entity]);
+      if(!items.length){ box.hidden = true; return; }
+      box.innerHTML = items.map(item => {
+        const entity = entityState.byId[item.entity];
+        const converted = convertAmount(Number(item.low_krw), 'KRW', uiState.currency);
+        const low = converted !== null ? formatMoney(roundEstimate(converted, uiState.currency), uiState.currency) : '';
+        const flags = (item.countries || []).slice(0, 8).map(countryFlagHtml).join('') + ((item.countries || []).length > 8 ? `<span class="showcase-more">+${item.countries.length - 8}</span>` : '');
+        return `<button type="button" class="showcase-item" data-entity="${escapeHtml(item.entity)}">
+          <span class="showcase-photo"><img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.showcase-item').remove()"></span>
+          <span class="showcase-name">${escapeHtml(homeName(entity))}</span>
+          <span class="showcase-price">${escapeHtml(low)}<small> · ${escapeHtml(String(item.count))}</small></span>
+          <span class="showcase-flags">${flags}</span>
+        </button>`;
+      }).join('');
+      box.hidden = false;
+    }
+
     function renderHome(){
+      renderShowcase();
       const section = document.getElementById('home-feed');
       const latestEl = document.getElementById('home-latest');
       if(!section || !latestEl) return;
@@ -3812,6 +3833,11 @@
     }
 
     function bindHome(){
+      const showcase = document.getElementById('home-showcase');
+      if(showcase) showcase.addEventListener('click', event => {
+        const target = event.target.closest('[data-entity]');
+        if(target) selectEntity(target.dataset.entity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
+      });
       const section = document.getElementById('home-feed');
       if(!section) return;
       section.addEventListener('click', event => {

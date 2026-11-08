@@ -397,7 +397,7 @@ def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
     for html in _html_files(BETA_PATHS):
         for snippet in [
             'data-i18n="hero.title"',
-            'data-i18n="hero.subtitle"',
+            'data-i18n="hero.line_static"',  # 2026-11-08 첫 화면 단순화: 설명 줄 → 숫자가 든 한 줄
             'id="hero-trust"',
             'data-i18n="footer.disclaimer"',
             'data-i18n="search.panel_label"',
