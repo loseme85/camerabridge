@@ -11343,7 +11343,7 @@ def crawl_all():
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
         ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
-        ("Sabatini Fotografia (이탈리아)", lambda: ce.wrap_full_run("Sabatini Fotografia (이탈리아)", crawl_sabatini)),
+        # ("Sabatini Fotografia (이탈리아)", ...) 보류 2026-11-08: GitHub 서버에서 403 (내 맥 210점) — 막히면 보류, 나중에 매장과 계약으로 진행
         ("KOMEHYO (일본)", lambda: ce.wrap_full_run("KOMEHYO (일본)", crawl_komehyo)),
         ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
@@ -11392,7 +11392,7 @@ def crawl_all():
         ("マツバラ光機 (일본)", lambda: ce.wrap_full_run("マツバラ光機 (일본)", crawl_matsubara)),
         ("Foto Pazdera (체코)", lambda: ce.wrap_full_run("Foto Pazdera (체코)", crawl_pazdera)),
         ("AdoPhoto (그리스)", lambda: ce.wrap_full_run("AdoPhoto (그리스)", crawl_adophoto)),
-        ("PCH Pro Shop (벨기에)", lambda: ce.wrap_full_run("PCH Pro Shop (벨기에)", crawl_pch)),
+        # ("PCH Pro Shop (벨기에)", ...) 보류 2026-11-08: GitHub 서버 접속을 Cloudflare가 403으로 막음 (내 맥은 200) — 우회 안 함. 풀리면 crawl_pch 다시 등록
         ("Pacific Rim Camera (미국)", lambda: ce.wrap_full_run("Pacific Rim Camera (미국)", crawl_pacificrim)),
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
