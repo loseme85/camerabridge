@@ -55,3 +55,12 @@ def test_variants_shop_table_and_lastmod(tmp_path):
     assert f"<loc>{url}</loc><lastmod>{result['lastmod'][url]['d']}</lastmod>" in sitemap
     # 시험 출력은 실제 lastmod 기록을 건드리지 않음
     assert not (tmp_path / "data").exists()
+
+
+def test_vercel_exclude_files_within_limit():
+    """vercel.json functions.excludeFiles는 256자까지 (넘으면 배포 전체가 실패 — 2026-11-08 9개 언어 추가 때 실제로 일어남)"""
+    import json
+    from pathlib import Path
+    conf = json.loads((Path(__file__).resolve().parents[1] / "vercel.json").read_text(encoding="utf-8"))
+    for spec in conf.get("functions", {}).values():
+        assert len(spec.get("excludeFiles", "")) <= 256
