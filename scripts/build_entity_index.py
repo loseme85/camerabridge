@@ -147,7 +147,9 @@ def _home_showcase(records: list, catalog: dict, skip: set, to_krw: dict, size: 
         with_photo = [r for r in rows if r[1].get("image_url")]
         if not with_photo:
             continue
-        mid = with_photo[len(with_photo) // 2][1]
+        # 사진 배경을 맞추려고 흰 배경 사진이 많은 일본 매장 사진을 먼저 (없으면 전체에서), 그중 가운데 가격대
+        white = [r for r in with_photo if countries.get(r[1].get("source")) == "JP"] or with_photo
+        mid = white[len(white) // 2][1]
         ccs = sorted({countries.get(r[1].get("source")) for r in rows} - {None})
         out.append({"entity": eid, "image": mid.get("image_url"), "low_krw": round(rows[0][0], -3), "count": len(rows), "countries": ccs})
         if len(out) >= size:

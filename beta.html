@@ -175,7 +175,8 @@
     .hero-line{margin:10px 0 26px;font-size:18px;line-height:1.45;color:var(--text);max-width:680px}
     .home-showcase{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 20px;margin-top:36px;padding-top:24px;border-top:1px solid var(--rule,var(--text))}
     .showcase-item{display:grid;gap:4px;padding:0;background:none;border:0;text-align:left;cursor:pointer;color:var(--text);font:inherit}
-    .showcase-photo{display:block;aspect-ratio:4/3;background:#f1efea;overflow:hidden;margin-bottom:6px}
+    .showcase-photo{display:block;aspect-ratio:4/3;background:#fff;overflow:hidden;margin-bottom:6px}
+    .showcase-photo img{mix-blend-mode:multiply}
     .showcase-photo img{width:100%;height:100%;object-fit:cover;display:block}
     .showcase-item:hover .showcase-name{text-decoration:underline;text-underline-offset:3px}
     .showcase-name{font-size:14px;line-height:1.35}
@@ -1548,7 +1549,8 @@
           <ul id="board-home-list" class="board-home-list"></ul>
           <div class="board-actions"><a href="#board" data-i18n="board.view_all">See all posts</a></div>
         </div>
-        <div id="home-picks-block" hidden>
+        <!-- 2026-11-08: 첫 화면 사진 줄과 겹쳐서 글 목록은 안 보임 (사진 줄이 같은 home_picks.json) -->
+        <div id="home-picks-block" class="home-extra" hidden>
           <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
           <div id="home-picks" class="home-popular"></div>
         </div>
@@ -2813,7 +2815,7 @@
         const low = converted !== null ? formatMoney(roundEstimate(converted, uiState.currency), uiState.currency) : '';
         const flags = (item.countries || []).slice(0, 8).map(countryFlagHtml).join('') + ((item.countries || []).length > 8 ? `<span class="showcase-more">+${item.countries.length - 8}</span>` : '');
         return `<button type="button" class="showcase-item" data-entity="${escapeHtml(item.entity)}">
-          <span class="showcase-photo"><img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.showcase-item').remove()"></span>
+          <span class="showcase-photo"><img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="eager" fetchpriority="high" referrerpolicy="no-referrer" onerror="this.closest('.showcase-item').remove()"></span>
           <span class="showcase-name">${escapeHtml(homeName(entity))}</span>
           <span class="showcase-price">${escapeHtml(low)}<small> · ${escapeHtml(String(item.count))}</small></span>
           <span class="showcase-flags">${flags}</span>
