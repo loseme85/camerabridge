@@ -1925,6 +1925,8 @@
         ask: { ko: '한국어로 보시겠어요?', en: 'View in English?', ja: '日本語で表示しますか？', 'zh-Hans': '要以简体中文显示吗？', 'zh-Hant': '要以繁體中文顯示嗎？', pt: 'Ver em português?', es: '¿Ver en español?', de: 'Auf Deutsch anzeigen?', it: 'Vuoi vedere il sito in italiano?' },
         yes: { ko: '한국어로 보기', en: 'English', ja: '日本語で見る', 'zh-Hans': '切换到简体中文', 'zh-Hant': '切換到繁體中文', pt: 'Ver em português', es: 'Ver en español', de: 'Auf Deutsch', it: 'In italiano' },
         keep: { en: 'Keep English' },
+        auto: { en: 'Shown in your country’s language.' },
+        to_en: { en: 'Switch to English' },
       },
       board: {
         title: { ko: '커뮤니티', en: 'Community', ja: 'コミュニティ', 'zh-Hans': '社区', 'zh-Hant': '社群', pt: 'Comunidade', es: 'Comunidad', de: 'Community', it: 'Community' },
@@ -5595,13 +5597,14 @@
       if(!box || stored || dismissed) return;
       let country = '';
       try{ country = ((await fetch('/api/usage?geo=1', { cache: 'no-store' }).then(r => r.ok ? r.json() : {})) || {}).country || ''; }catch(error){}
-      const fromBrowser = normalizeLocale(navigator.language || '');
-      const suggested = COUNTRY_LOCALE[country] || (fromBrowser !== 'en' ? fromBrowser : '');
-      if(!suggested || suggested === uiState.locale) return;
-      const copy = UX_LOCALE_COPY.locale_hint;
-      box.innerHTML = `<p lang="${escapeHtml(suggested)}">${escapeHtml(copy.ask[suggested])}</p>
-        <button type="button" class="is-main" lang="${escapeHtml(suggested)}" data-locale-hint="${escapeHtml(suggested)}">${escapeHtml(copy.yes[suggested])}</button>
-        <button type="button" data-locale-hint="">${escapeHtml(copy.keep.en)}</button>`;
+      // 브라우저 언어로 이미 그 나라 말이면 끝. 브라우저가 영어인데 접속 나라 언어가 있으면 그 언어로 바꾸고, 영어로 되돌리는 버튼만 보임
+      const suggested = COUNTRY_LOCALE[country] || '';
+      if(!suggested || suggested === uiState.locale || uiState.locale !== 'en') return;
+      setLocale(suggested);
+      try{ localStorage.removeItem('cb.beta.locale'); }catch(error){}  // 자동으로 바꾼 것은 기억하지 않음 (직접 고른 것만 기억)
+      box.innerHTML = `<p>${escapeHtml(UX_LOCALE_COPY.locale_hint.auto.en)}</p>
+        <button type="button" data-locale-hint="en">${escapeHtml(UX_LOCALE_COPY.locale_hint.to_en.en)}</button>
+        <button type="button" data-locale-hint="">✕</button>`;
       box.hidden = false;
       box.addEventListener('click', event => {
         const button = event.target.closest('[data-locale-hint]');
@@ -5613,9 +5616,15 @@
     }
 
     function detectInitialLocale(){
-      const stored = window.localStorage ? window.localStorage.getItem('cb.beta.locale') : '';
+      let stored = '';
+      try{ stored = window.localStorage ? window.localStorage.getItem('cb.beta.locale') || '' : ''; }catch(error){}
       if(stored) return normalizeLocale(stored);
-      // 기본은 영어. 다른 언어는 헤더 언어 버튼으로 고르면 기억함
+      // 2026-11-08 사장님: 접속한 나라 언어로 자동 — 먼저 브라우저 언어(바로 보임), 브라우저가 영어면 접속 나라로 (suggestLocale)
+      const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
+      for(const lang of langs){
+        const locale = normalizeLocale(lang);
+        if(locale !== 'en' || /^en/i.test(lang)) return locale;
+      }
       return 'en';
     }
 

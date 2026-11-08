@@ -770,11 +770,13 @@ def test_price_ladder_pinch_zoom() -> None:
     assert "ladderState.base" in beta  # 처음보다 오므리면 전체 보기로
 
 
-def test_english_default_with_country_language_suggestion() -> None:
+def test_visitor_language_is_automatic() -> None:
+    """2026-11-08 사장님: 접속한 나라 언어로 자동 (예전: 영어 기본 + 권유). 직접 고른 언어가 먼저, 다음 브라우저 언어, 브라우저가 영어면 접속 나라"""
     beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
-    assert "return 'en';" in beta.split("function detectInitialLocale", 1)[1][:400]  # 기본은 영어
+    detect = beta.split("function detectInitialLocale", 1)[1][:900]
+    assert "cb.beta.locale" in detect and "navigator.languages" in detect
     assert "suggestLocale();" in beta and "/api/usage?geo=1" in beta and "KR: 'ko'" in beta
-    assert "cb.beta.locale_hint" in beta  # 고르거나 닫으면 다시 안 물음
+    assert "cb.beta.locale_hint" in beta and "to_en:" in beta  # 자동으로 바꾸면 영어로 되돌리는 버튼
 
 
 def test_members_can_save_listings() -> None:
