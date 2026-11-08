@@ -6490,6 +6490,25 @@ def crawl_fototrade():
                       rename=_abbr_lens_name)
 
 
+def crawl_romanaphoto():
+    """Romana Photo (이탈리아 로마) - 중고 카메라점 WooCommerce 공개 상품 API, 'LEICA' 분류의 라이카만 (#232 _woo_leica).
+    이름 'SUMMICRON -R 50MM F/2'·'ELMARIT – R 24MM' → 'Summicron-R 50mm f2'(띄어 쓴 마운트 붙이기) 뒤 _abbr_lens_name. 등급 표기 없음"""
+    def keep(p, name):
+        leica_cat = any((c.get("name") or "").upper() == "LEICA" for c in p.get("categories") or [])
+        return leica_cat and not re.search(r"(?i)sigma|schneider|minolta rokkor m 90", name) or bool(re.match(r"(?i)leica\b", name)) and leica_cat
+
+    def rename(name):
+        n = re.sub(r"\s+", " ", name)
+        n = re.sub(r"(?i)\b(summicron|summilux|elmarit|elmar|vario[- ]elmar|super[- ]vario[- ]elmar|telyt)\s*[-–]\s*(r|m|sl|tl|c)\b", lambda m: m.group(1).replace(" ", "-") + "-" + m.group(2), n)
+        n = re.sub(r"(?i)\bMR TELYT R\b", "MR-Telyt-R", n)
+        n = re.sub(r"(?i)\bV LUX (\d)\b.*$", r"V-Lux \1", n)  # 'V LUX 4 C DC VARIO ELMARIT …' → V-Lux 4
+        n = re.sub(r"(?i)\bF/(\d)", r"F\1", n)
+        n = re.sub(r"(?i)\s*\(leica(?: m)?\)\s*$", "", n)
+        n = re.sub(r"(?i)\bMM\b", "mm", n)
+        return _abbr_lens_name(n.upper() if n.isupper() else n).replace("mmmm", "mm")
+    return _woo_leica("https://www.romanaphoto.it", "Romana Photo (이탈리아)", "Romana Photo", keep=keep, rename=rename)
+
+
 def crawl_lampersky():
     """Lampersky (헝가리 부다페스트) - 중고 카메라점 WooCommerce 공개 상품 API의 라이카 판매 중만 (#232 _woo_leica). 가격 HUF.
     이름 뒤 마운트 꼬리(' – Leica R'·' – L39'·' – 4/3'·' – B stock') 떼기. 등급 표기 없음(사진 등급 대기열). 헝가리 첫 사이트"""
@@ -11250,6 +11269,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
         ("Fotoman (핀란드)", lambda: ce.wrap_full_run("Fotoman (핀란드)", crawl_fotoman)),
         ("Foto Meyer (독일)", lambda: ce.wrap_full_run("Foto Meyer (독일)", crawl_fotomeyer)),
