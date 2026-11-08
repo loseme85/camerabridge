@@ -1529,13 +1529,14 @@
   <script>
   (function(){
     var f = new URLSearchParams(location.search).get('font');
-    if(!/^[bcde]$/.test(f || '')) return;
+    if(!/^[bcdefg]$/.test(f || '')) return;
     document.documentElement.dataset.font = f;
     var add = function(href){ var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l); };
     add('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
     if(f === 'b') add('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
     if(f === 'c') add('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap');
     if(f === 'e') add('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;500&family=Red+Hat+Text:wght@400;500&display=swap');
+    if(f === 'f' || f === 'g') add('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Jost:wght@400;500;600&display=swap');
     if(f === 'd') add('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap');
   })();
   </script>
@@ -1553,6 +1554,15 @@
     html[data-font="e"]{--serif:"Red Hat Display","Pretendard Variable",sans-serif}
     html[data-font="e"] body{font-family:"Red Hat Text","Pretendard Variable",sans-serif}
     html[data-font="e"] .hero-title{font-weight:300;letter-spacing:0}
+    /* F: 제목 EB Garamond · UI Jost · 한글 Pretendard · 배경 아이보리 10% (#FEFEFD) · 글자 차콜 · 보조 회색 */
+    html[data-font="f"],html[data-font="g"]{--bg:#FEFEFD;--text:#22201E;--text-soft:#6E6A64;--text-muted:#8A857E}
+    html[data-font="f"] body,html[data-font="g"] body{background:#FEFEFD;color:#22201E;font-family:"Jost","Pretendard Variable",sans-serif}
+    html[data-font="f"]{--serif:"EB Garamond","Pretendard Variable",serif}
+    html[data-font="f"] .hero-title{font-weight:500;letter-spacing:-.01em}
+    html[data-font="f"] .rot-name{font-family:"Jost","Pretendard Variable",sans-serif;font-weight:500}
+    html[data-font="g"]{--serif:"Jost","Pretendard Variable",sans-serif}
+    html[data-font="g"] .hero-title{font-weight:400;letter-spacing:-.01em}
+    html[data-font="f"] .result-price,html[data-font="g"] .result-price,html[data-font="f"] .rot-meta,html[data-font="g"] .rot-meta{font-variant-numeric:tabular-nums}
     html[data-font] .hero-title,html[data-font] .rot-name{font-style:normal}
   </style>
 </head>
