@@ -6490,6 +6490,38 @@ def crawl_fototrade():
                       rename=_abbr_lens_name)
 
 
+def crawl_fksecondhand():
+    """FK Second Hand (오스트리아 그라츠) - 중고 전문 WooCommerce 공개 상품 API('leica' 검색 약 500개)에서
+    렌즈·카메라 분류(Objektive·Antike Objektive·Analogkameras·Digitalkameras·Antike Kameras·Kompaktkameras)의 라이카만 (#232 _woo_leica).
+    영사기·설명서·부품·필터 분류와 '더미·Attrape·not working'은 뺌. 이름 끝 ' – #일련번호' 떼기, 'f/1,4' → f/1.4. 등급 표기 없음"""
+    cats_ok = {"Objektive", "Antike Objektive", "Analogkameras", "Digitalkameras", "Antike Kameras", "Kompaktkameras", "Messsucherkameras"}
+
+    def keep(p, name):
+        cats = {_html_unescape(c.get("name") or "") for c in p.get("categories") or []}
+        return bool(cats & cats_ok) and bool(re.search(r"(?i)\b(?:leica|leitz)", name)) and \
+            not re.search(r"(?i)voigt|panasonic|ttartisan|sigma|schneider|angenieux|für mft|four-thirds|\bDG\b|^leica d vario|dummy|attrape|not working|defekt|mikroskop|elmaron|photar|dygon|lupen|varob", name)
+
+    def rename(name):
+        n = re.sub(r"\s+[–-]\s+#\s?[\w-]+\s*$", "", name)
+        n = re.sub(r"(?i)\bf/(\d+),(\d+)", r"f/\1.\2", n)
+        n = re.sub(r"\b(\d+),(\d)cm\b", lambda m: f"{int(m.group(1)) * 10 + int(m.group(2))}mm", n)
+        n = re.sub(r"\b(\d{1,2})cm\b", lambda m: f"{int(m.group(1)) * 10}mm", n)  # 'Telyt 20cm' → 200mm, 'Summitar 5cm' → 50mm
+        n = re.sub(r"(?i)\bmacro\s*[–-]\s*elmar\s+r\b", "Macro-Elmar-R", n)
+        n = re.sub(r"(?i)\bteyt\b", "Telyt", n)
+        n = re.sub(r"(?i)\s+für leica [mr]\b", "", n)
+        # 'Leica M39 Telyt 200mm' — 앞의 M39 때문에 바디로 분류됨 → 뒤로 ('Leica Telyt 200mm … (M39)')
+        m = re.match(r"(?i)^(leica)\s+M39\s+(.+)$", n)
+        if m and re.search(r"\d{2,3}mm", m.group(2)):
+            n = f"{m.group(1)} {m.group(2)} (M39)"
+        return re.sub(r"\s+", " ", n).strip(" –-/")
+    return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
+
+
+def _html_unescape(text):
+    import html as _html
+    return _html.unescape(text)
+
+
 def crawl_blackdove():
     """Blackdove Cameras (이탈리아 부스토아르시치오) - WooCommerce 공개 상품 API에서 렌즈 분류('Obiettivi R'·'Obiettivi M')의 라이카만 (#232 _woo_leica).
     이 매장 '라이카' 검색의 대부분은 R3·Leicaflex 부품(Ricambio)·케이스라 그대로 담으면 이름의 'R3' 때문에 바디 시세가 흐려짐 → 렌즈 분류만.
@@ -11293,6 +11325,7 @@ def crawl_all():
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
         ("Blackdove Cameras (이탈리아)", lambda: ce.wrap_full_run("Blackdove Cameras (이탈리아)", crawl_blackdove)),
         ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
