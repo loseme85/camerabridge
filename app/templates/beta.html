@@ -4141,6 +4141,11 @@
       const delivered = cost.landed && !cost.storeOnly;
       const main = delivered ? `≈ ${formatMoney(cost.landed.total, cost.target)}` : itemPrice;
       const original = sameCurrency ? '' : `<div class="result-price-original">${escapeHtml(ux('landed.original', 'Listed at {price}').replace('{price}', formatMoney(cost.listed, cost.currency)))}</div>`;
+      const diff = dealDiff(result, cost);
+      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
+      // 시세는 물건 금액끼리 비교라, 큰 글씨가 총액일 때는 '물건 금액' 줄 옆에 둠 (2026-11-08)
+      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
+        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
       let landed = '';
       if(cost.landed){
         const parts = [`${ux('landed.shipping', 'Shipping')} ${formatMoney(cost.landed.shipping, cost.target)}`];
@@ -4158,6 +4163,7 @@
         landed = `
           <div class="result-landed">
             <div class="result-landed-total">${escapeHtml(ux('landed.item', 'Item price'))} ${escapeHtml(itemPrice)}</div>
+            ${delivered ? deal : ''}
             <div class="result-landed-parts">${escapeHtml(parts.join(' · '))}</div>
             ${notes}
             <details class="result-landed-how">
@@ -4169,12 +4175,8 @@
       }
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
-      const diff = dealDiff(result, cost);
-      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
-      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
-        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
       const mainLabel = delivered ? `<div class="result-price-label">${escapeHtml(ux('landed.total', 'Est. total delivered'))}</div>` : '';
-      return `<div class="result-price-block">${mainLabel}<div class="result-price">${escapeHtml(main)}</div>${deal}${original}${gradeRow}${landed}</div>`;
+      return `<div class="result-price-block">${mainLabel}<div class="result-price">${escapeHtml(main)}</div>${delivered ? '' : deal}${original}${gradeRow}${landed}</div>`;
     }
 
     function localizePriceBand(text){
