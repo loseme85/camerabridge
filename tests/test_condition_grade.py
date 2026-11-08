@@ -600,3 +600,10 @@ def test_fotomeyer_zustand():
     assert grade_of("Foto Meyer (독일)", FOTOMEYER_PREFIX + "sehr leichte gebrauchsspuren")[0] == "A"
     assert grade_of("Foto Meyer (독일)", FOTOMEYER_PREFIX + "gebrauchsspuren")[0] == "B"
     assert grade_of("Foto Meyer (독일)", FOTOMEYER_PREFIX + "starke gebrauchsspuren")[0] == "D"
+
+
+def test_panajou_title_state():
+    from condition_grade import grade_of, PANAJOU_PREFIX
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "comme neuf")[0] == "A"
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "très bon état")[0] == "A"
+    assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
