@@ -6554,6 +6554,88 @@ def crawl_fksecondhand():
     return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
 
 
+def crawl_hebenstreit():
+    """Foto Hebenstreit (오스트리아 펠트키르히, Shopware 6, 2026-11-09 밤샘). robots.txt가 물음표 주소(/*?)를 모두 막아
+    분류 쪽 넘김·필터를 못 씀 → 사이트맵의 상품 주소 중 'gebraucht'와 'leica·leitz'가 들어간 것만 상세를 읽음 (30개쯤).
+    다른 회사 렌즈·어댑터(TTArtisan·Takumar·Zeiss 'für Leica M')는 뺌. 판매 중은 itemprop availability InStock.
+    등급은 설명 'Zustand A‑B: …' (A·A-B·B·B-C·C), 없으면 등급 없이 (사진 등급 대기열)"""
+    import gzip
+    import html as _html
+    import requests
+    from condition_grade import HEBENSTREIT_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.foto-hebenstreit.com"
+    print(f"\n  📂 Foto Hebenstreit 크롤링 시작")
+    index = sess.get(f"{base}/sitemap.xml", timeout=30)
+    index.raise_for_status()
+    urls = []
+    for sm in re.findall(r"<loc>([^<]+)</loc>", index.text):
+        raw = sess.get(sm, timeout=60).content
+        text = gzip.decompress(raw).decode("utf-8", "ignore") if sm.endswith(".gz") else raw.decode("utf-8", "ignore")
+        urls += [u for u in re.findall(r"<loc>([^<]+)</loc>", text)
+                 if not u.endswith("/") and re.search(r"(?i)gebraucht", u) and re.search(r"(?i)leica|leitz", u)
+                 and not re.search(r"(?i)ttartisan|takumar|asahi|ricoh|zeiss|meyer|quenox|objektivadapter|voigtl|sigma|panasonic", u)]
+    print(f"    └─ 사이트맵 중고 라이카 주소 {len(urls)}개")
+    for link in urls:
+        try:
+            t = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ Foto Hebenstreit 상세 오류: {e}")
+            continue
+        time.sleep(1.2)
+        if not re.search(r'itemprop="availability"\s+href="https://schema\.org/InStock"', t):
+            continue
+        title = re.search(r'product-detail-name" itemprop="name">\s*(.*?)\s*</h1>', t, re.S)
+        price = re.search(r'itemprop="price"\s+content="([\d.]+)"', t)
+        if not title:
+            continue
+        zm = re.search(r"Zustand:?\s+([A-E](?:\s*[‑–/-]\s*[A-E])?)(?![\w])", _html.unescape(t))  # 'Zustand A‑B:'·'Zustand B,'·'im Zustand B-C mit'·'Zustand: B
+        cond = HEBENSTREIT_PREFIX + re.sub(r"\s*[‑–/-]\s*", "-", zm.group(1)) if zm else "정보없음"
+        imgs = re.findall(r'data-full-image="([^"]+)"', t)
+        name = _hebenstreit_name(_html.unescape(title.group(1)))
+        price_str = f"EUR {float(price.group(1)):,.0f}" if price else "문의요망"
+        cat = detect_category(name, price_str)
+        results.append({
+            "site": "Foto Hebenstreit (오스트리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": price_str,
+            "통화": "EUR",
+            "이미지": imgs[0] if imgs else "",
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Foto Hebenstreit 완료: {len(results)}개")
+    return results
+
+
+def _hebenstreit_name(title):
+    """'Leica 28-70mm 1:3.5-4.5 VARIO-ELMAR-R gebraucht' → 'Leica 28-70mm f3.5-4.5 VARIO-ELMAR-R'.
+    'gebraucht'·'OVP' 떼기, '1:2.8'·'F:2.8' → f2.8, '5cm Objektiv' → 50mm, 독일어 말, 이름이 짧은 두 렌즈는 정식 이름으로"""
+    n = re.sub(r"(?i)\s*\bgebraucht\b", "", title)
+    n = re.sub(r"(?i)\bOVP\b", "", n)
+    n = re.sub(r"(?i)\b(?:1:|F:)\s?(\d+(?:[.,]\d+)?(?:-\d+(?:[.,]\d+)?)?)", lambda m: "f" + m.group(1).replace(",", "."), n)
+    n = re.sub(r"(?i)\bmit (\d)cm Objektiv\b", lambda m: f"+ {int(m.group(1)) * 10}mm lens", n)
+    for de, en in (("Gehäuse", "Body"), ("silber", "silver"), ("grau", "grey"), ("schwarz", "black"),
+                   ("Handgriff für", "Hand grip for"), ("Akku griff für die", "Battery grip for"), ("Akku für", "Battery for"),
+                   ("Winder Motor für", "Motor Winder for"), ("Sucher", "Viewfinder")):
+        n = re.sub(rf"(?i)\b{de}\b", en, n)
+    n = re.sub(r"\s+", " ", n).strip()
+    n = re.sub(r"(?i)^Leica 24-70 f2\.8$", "Leica Vario-Elmarit-SL 24-70mm f2.8 ASPH", n)
+    n = re.sub(r"(?i)^Leica 90mm f4$", "Leica Elmar 90mm f4", n)
+    if re.fullmatch(r"(?i)Leica R-?\d?E?\d?", n):  # 'Leica R4'·'Leica R-E' — 바디 이름만 있으면 렌즈로 분류됨
+        n += " Body"
+    return n
+
+
 def _html_unescape(text):
     import html as _html
     return _html.unescape(text)
@@ -11366,6 +11448,7 @@ def crawl_all():
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
         ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
         ("Blackdove Cameras (이탈리아)", lambda: ce.wrap_full_run("Blackdove Cameras (이탈리아)", crawl_blackdove)),
         ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),

@@ -614,3 +614,11 @@ def test_panajou_title_state():
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "comme neuf")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "très bon état")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
+
+
+def test_hebenstreit_zustand():
+    from condition_grade import grade_of, HEBENSTREIT_PREFIX
+    site = "Foto Hebenstreit (오스트리아)"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "A")[0] == "A"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "A-B")[0] == "B"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "B-C")[0] == "C"
