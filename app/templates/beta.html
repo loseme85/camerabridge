@@ -181,6 +181,14 @@
     .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .home-extra:not(.is-open){display:none !important}
+    /* 모델 화면 정리 (2026-11-08 사장님: 텍스트가 많아 한눈에 안 들어옴) — 아래 시세 계산 칸이 같은 숫자를 더 자세히 보여 줌 */
+    body.cb-calc .summary-metrics,body.cb-calc #summary-meta{display:none !important}
+    .sort-bar{display:flex;align-items:center;justify-content:flex-end;gap:10px 14px;flex-wrap:wrap}
+    .sort-bar .country-chips{display:flex;align-items:center;gap:8px;margin-right:auto}
+    .sort-bar .country-chips label{font-size:13px;color:var(--text-soft)}
+    .sort-bar select{min-height:38px;border:1px solid var(--border-strong);background:var(--bg);color:var(--text);padding:0 30px 0 10px;font:inherit;font-size:14px;border-radius:0}
+    #want-region:empty{display:none}
+    .want-box{margin-top:0}
     /* 첫 화면: 왼쪽 글·검색, 오른쪽 돌아가는 큰 사진, 아래 세계 지도 (2026-11-08) */
     section.hero > .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center}
     .home-rotator{position:relative;aspect-ratio:1/1.05}
@@ -1671,7 +1679,6 @@
       <section class="workspace">
         <div class="toolbar" data-i18n-aria-label="filters.toolbar_aria" aria-label="Search filters">
           <!-- 나라별로 보기 (종류·마운트·판매 상태·정렬 선택칸은 숨김: 모델을 고르면 거의 안 씀) -->
-          <div id="country-chips" class="country-chips" role="group"></div>
           <input type="hidden" id="country-filter" value="">
           <div class="control" hidden>
             <label for="category-filter" data-i18n="filters.category.label">Category</label>
@@ -1775,8 +1782,11 @@
             </section>
             <section id="value-calc-region"></section>
             <section id="query-summary-region" aria-live="polite"></section>
-            <!-- 정렬 (2026-11-07 사장님: 누르면 고르는 상자로) — 숨겨진 필터 칸의 #sort-select를 처음 그릴 때 여기로 옮겨 옴 -->
-            <div id="sort-bar" class="sort-bar" hidden><label for="sort-select" data-i18n="filters.sort.label">Sort</label></div>
+            <!-- 2026-11-08 사장님: 알림은 그래프 밑으로 -->
+            <section id="want-region"></section>
+            <!-- 정렬 (2026-11-07 사장님: 누르면 고르는 상자로) — 숨겨진 필터 칸의 #sort-select를 처음 그릴 때 여기로 옮겨 옴.
+                 2026-11-08 사장님: 나라 버튼 30개가 위에 쭉 → 정렬 옆 고르기 상자 하나로 -->
+            <div id="sort-bar" class="sort-bar" hidden><div id="country-chips" class="country-chips"></div><label for="sort-select" data-i18n="filters.sort.label">Sort</label></div>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
             <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
             <section id="archive-region" aria-live="polite"></section>
@@ -2993,22 +3003,21 @@
       if(!box) return;
       const sources = (landedState.rules && landedState.rules.sources) || {};
       const present = new Set(Object.values(sources).map(rule => String((rule && rule.country) || '').toUpperCase()).filter(Boolean));
-      const codes = COUNTRY_ORDER.filter(code => present.has(code)).concat([...present].filter(code => !COUNTRY_ORDER.includes(code)).sort());
+      const codes = COUNTRY_ORDER.filter(code => present.has(code)).concat([...present].filter(code => !COUNTRY_ORDER.includes(code)).sort((a, b) => displayNameOf('region', a).localeCompare(displayNameOf('region', b), uiState.locale)));
       const current = String(els['country-filter'].value || '').toUpperCase();
-      box.setAttribute('aria-label', ux('filters.country.label', 'Country'));
-      box.innerHTML = [`<button type="button" class="country-chip" data-country="" aria-pressed="${current ? 'false' : 'true'}">${escapeHtml(ux('filters.country.all', 'All countries'))}</button>`]
-        .concat(codes.map(code => `<button type="button" class="country-chip" data-country="${code}" aria-pressed="${current === code ? 'true' : 'false'}">${countryFlagHtml(code)}${escapeHtml(displayNameOf('region', code))}</button>`))
-        .join('');
+      const label = ux('filters.country.label', 'Country');
+      box.innerHTML = `<label for="country-select">${escapeHtml(label)}</label><select id="country-select">`
+        + [`<option value="">${escapeHtml(ux('filters.country.all', 'All countries'))}</option>`]
+          .concat(codes.map(code => `<option value="${code}"${current === code ? ' selected' : ''}>${escapeHtml(displayNameOf('region', code))}</option>`)).join('')
+        + `</select>`;
     }
 
     function bindCountryChips(){
       const box = els['country-chips'];
       if(!box) return;
-      box.addEventListener('click', event => {
-        const chip = event.target.closest('[data-country]');
-        if(!chip) return;
-        els['country-filter'].value = chip.dataset.country;
-        renderCountryChips();
+      box.addEventListener('change', event => {
+        if(event.target.id !== 'country-select') return;
+        els['country-filter'].value = event.target.value;
         if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
       });
     }
@@ -3661,7 +3670,10 @@
       if(!region) return;
       const entity = ladderEntity();
       const ready = entity && ladderState.results && ladderState.key === ladderKey();
-      if(!ready){ region.innerHTML = ''; return; }
+      const wantRegion = document.getElementById('want-region');
+      const putWant = html => { if(wantRegion) wantRegion.innerHTML = html ? `<section class="value-calc want-box">${html}</section>` : ''; };
+      document.body.classList.toggle('cb-calc', Boolean(ready));
+      if(!ready){ region.innerHTML = ''; putWant(''); return; }
       const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
       const rows = ladderState.results.filter(r => r.grade && r.grade !== 'X' && !['too_cheap', 'set', 'duplicate'].includes((r.final_output || {}).entity_note))
         .map(r => {
@@ -3673,10 +3685,8 @@
             box: BOX_WORDS.test(r.title || ''), firstSeen: final.first_seen, soldAt: final.sold_at } : null;
         }).filter(Boolean);
       if(!rows.length){  // 지금 매물이 없을 때가 알림이 가장 필요한 때 → 신청 칸만이라도 보여 줌
-        region.innerHTML = `<section class="value-calc" aria-label="${escapeHtml(wx('title'))}">
-          <p>${escapeHtml(wx('empty'))}</p>
-          ${renderWantForm(entity, entity.b_price_krw && fxRate('KRW') && fxRate(uiState.currency) ? convertAmount(entity.b_price_krw, 'KRW', uiState.currency) : null)}
-        </section>`;
+        region.innerHTML = `<section class="value-calc" aria-label="${escapeHtml(wx('title'))}"><p>${escapeHtml(wx('empty'))}</p></section>`;
+        putWant(renderWantForm(entity, entity.b_price_krw && fxRate('KRW') && fxRate(uiState.currency) ? convertAmount(entity.b_price_krw, 'KRW', uiState.currency) : null));
         return;
       }
       const grades = ['N', 'S', 'A', 'B', 'C', 'D'];
@@ -3718,8 +3728,8 @@
           ${days.length >= 3 ? `<div><dt>${escapeHtml(cx('days'))}</dt><dd>${escapeHtml(cx('days_value', { d: String(Math.round(calcMedian(days))), n: String(days.length) }))}</dd></div>` : ''}
           <div><dt>${escapeHtml(cx('confidence'))}</dt><dd><small>${escapeHtml(confidence)}</small></dd></div>
         </dl>
-        ${renderWantForm(entity, active.length ? calcMedian(active) : null)}
       </section>`;
+      putWant(renderWantForm(entity, active.length ? calcMedian(active) : null));
     }
 
     // ── 원하는 매물 알림: 모델·최소 등급·도착 총액 상한 (세금은 서버가 화면과 같은 규칙으로 계산) ──
@@ -7020,7 +7030,7 @@
       const select = els['sort-select'];
       if(!bar || !select) return;
       if(select.parentElement !== bar) bar.appendChild(select);
-      bar.hidden = !(Boolean(state.query) && !state.loading && getResults().length > 1);
+      bar.hidden = !(Boolean(state.query) && !state.loading && (getResults().length > 1 || Boolean(els['country-filter'] && els['country-filter'].value)));
     }
 
     function sortMarketBucket(items, sortMode){
