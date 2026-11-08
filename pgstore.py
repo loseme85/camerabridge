@@ -7,6 +7,7 @@
 표
   usage_events(id, created_at, day, entry jsonb)   — api/usage.py 가 방문 묶음마다 한 줄
   feedback_events(id, created_at, day, tag, entry jsonb) — api/feedback.py 의견 한 건마다 한 줄
+  blob_docs(path PK, body, updated_at)             — 게시판·회원·저장 목록·가격 알림·딜러 계정 (예전 Blob 파일 한 개 = 한 줄, 2026-11-08)
 """
 from __future__ import annotations
 
@@ -23,6 +24,7 @@ SCHEMA = [
     "CREATE TABLE IF NOT EXISTS feedback_events (id bigserial PRIMARY KEY, created_at timestamptz NOT NULL DEFAULT now(),"
     " day date NOT NULL, tag text, entry jsonb NOT NULL)",
     "CREATE INDEX IF NOT EXISTS feedback_events_day ON feedback_events (day)",
+    "CREATE TABLE IF NOT EXISTS blob_docs (path text PRIMARY KEY, body text NOT NULL, updated_at timestamptz NOT NULL DEFAULT now())",
 ]
 
 
@@ -100,3 +102,58 @@ def delete_older_than(days: int = 365) -> None:
     ensure_schema()
     sql("DELETE FROM usage_events WHERE day < (now() - ($1 || ' days')::interval)::date", [str(days)])
     sql("DELETE FROM feedback_events WHERE day < (now() - ($1 || ' days')::interval)::date", [str(days)])
+
+
+# ── Blob과 같은 모양의 저장소 (2026-11-08) ─────────────────────────────────────
+# api/board.py·dealer_portal.py는 vercel.blob의 iter_objects·get·put·delete와 목록 항목의 .pathname·.url만 쓴다.
+# 같은 이름의 함수를 Neon 표(blob_docs) 위에 두어 코드를 거의 그대로 두고 저장소만 바꾼다. url = pathname.
+class _Item:
+    __slots__ = ("pathname", "url")
+
+    def __init__(self, pathname: str):
+        self.pathname = pathname
+        self.url = pathname
+
+
+class _Content:
+    __slots__ = ("content",)
+
+    def __init__(self, content: bytes):
+        self.content = content
+
+
+class PgBlob:
+    def iter_objects(self, prefix: str = "", **_kw):
+        ensure_schema()
+        rows = sql("SELECT path FROM blob_docs WHERE left(path, length($1)) = $1 ORDER BY path", [prefix])
+        return [_Item(r["path"]) for r in rows]
+
+    def get(self, url_or_path, **_kw) -> _Content:
+        ensure_schema()
+        path = getattr(url_or_path, "pathname", url_or_path)
+        rows = sql("SELECT body FROM blob_docs WHERE path = $1", [path])
+        if not rows:
+            raise FileNotFoundError(path)
+        return _Content(str(rows[0]["body"]).encode("utf-8"))
+
+    def put(self, path: str, data, **_kw) -> _Item:
+        ensure_schema()
+        body = data.decode("utf-8") if isinstance(data, (bytes, bytearray)) else str(data)
+        sql("INSERT INTO blob_docs (path, body, updated_at) VALUES ($1, $2, now()) "
+            "ON CONFLICT (path) DO UPDATE SET body = EXCLUDED.body, updated_at = now()", [path, body])
+        return _Item(path)
+
+    def delete(self, url_or_list, **_kw) -> None:
+        ensure_schema()
+        items = url_or_list if isinstance(url_or_list, (list, tuple)) else [url_or_list]
+        paths = [getattr(x, "pathname", x) for x in items]
+        if paths:
+            sql("DELETE FROM blob_docs WHERE path = ANY($1::text[])", [paths])
+
+
+def blob_store():
+    """Neon이 연결돼 있으면 Neon 저장소, 아니면 예전 Vercel Blob"""
+    if enabled():
+        return PgBlob()
+    from vercel import blob  # noqa: WPS433
+    return blob
