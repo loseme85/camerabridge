@@ -172,6 +172,35 @@
     .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .home-extra:not(.is-open){display:none !important}
+    /* 첫 화면: 왼쪽 글·검색, 오른쪽 돌아가는 큰 사진, 아래 세계 지도 (2026-11-08) */
+    section.hero > .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center}
+    .home-rotator{position:relative;aspect-ratio:1/1.05}
+    .rot-slide{position:absolute;inset:0;display:flex;flex-direction:column;gap:6px;padding:0;background:none;border:0;text-align:left;cursor:pointer;color:var(--text);font:inherit;opacity:0;transition:opacity .6s ease;pointer-events:none}
+    .rot-slide.is-on{opacity:1;pointer-events:auto}
+    .rot-photo{display:block;flex:1;min-height:0;background:#fff;border:1px solid var(--border);overflow:hidden}
+    .rot-photo img{width:100%;height:100%;object-fit:contain;display:block}
+    .rot-name{font-family:var(--serif);font-size:22px;line-height:1.25;margin-top:6px}
+    .rot-meta{font-size:14px;color:var(--text-soft)}
+    .rot-meta b{color:var(--text);font-size:16px}
+    .rot-flags{display:flex;gap:3px;flex-wrap:wrap}
+    .rot-dots{position:absolute;right:0;bottom:-26px;display:flex;gap:6px}
+    .rot-dots button{width:7px;height:7px;padding:0;border:1px solid var(--text);background:none;cursor:pointer}
+    .rot-dots button[aria-pressed="true"]{background:var(--text)}
+    @media (prefers-reduced-motion: reduce){.rot-slide{transition:none}}
+    .home-world{position:relative;margin-top:44px;border-top:1px solid var(--rule,var(--text))}
+    .world-tabs{display:flex;gap:22px;border-bottom:1px solid var(--border);margin-bottom:14px}
+    .world-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 0;font:inherit;font-size:15px;color:var(--text-soft);cursor:pointer}
+    .world-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
+    .home-world .market-map{margin:0}
+    section.hero .hero-title{font-size:clamp(30px,3.3vw,48px);word-break:keep-all}
+    #world-map{display:block;max-width:100%;height:auto}
+    .world-land path{fill:#e9e6de;stroke:var(--bg,#fff);stroke-width:.5}
+    .world-dot{fill:#1f4a3a;fill-opacity:.72;stroke:var(--bg,#fff);stroke-width:1.2;cursor:default}
+    .world-dot:hover{fill-opacity:1}
+    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .world-land path{fill:#2b2e30}:root:not([data-theme="light"]) .world-dot{fill:#8cc5ad}}
+    .world-tip{position:absolute;z-index:5;pointer-events:none;background:var(--bg,#fff);border:1px solid var(--text);padding:6px 10px;font-size:13px;white-space:nowrap}
+    body.cb-searched .home-rotator,body.cb-searched .home-world{display:none !important}
+    @media(max-width:860px){section.hero > .hero-grid{grid-template-columns:minmax(0,1fr);gap:28px}.home-rotator{aspect-ratio:1/1.1;max-width:520px}}
     .topnav{display:flex;align-items:center;gap:22px;margin:0 auto 0 36px}
     .topnav button{background:none;border:0;padding:4px 0;font:inherit;font-size:14px;color:var(--text);cursor:pointer;white-space:nowrap}
     .topnav button:hover,.topnav button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:5px}
@@ -1564,8 +1593,26 @@
                 <button class="search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.button_aria" aria-label="Search">Search</button>
               </form>
             </section>
-            <!-- 2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게 — 수집가 추천 모델의 실제 매물 사진·최저가·매물 있는 나라 (home_feed.json showcase) -->
-            <div id="home-showcase" class="home-showcase" hidden></div>
+            <!-- (예전 사진 16장 격자 — 2026-11-08 돌아가는 큰 사진으로 바꿈, 데이터는 같은 home_feed.json showcase) 2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게 — 수집가 추천 모델의 실제 매물 사진·최저가·매물 있는 나라 (home_feed.json showcase) -->
+          </div>
+          <!-- 2026-11-08 사장님: 물건을 하나씩 크게 몇 초씩 넘겨 보여 주고 지도를 보여 주기 — 꿈의 라이카 16개를 4초마다 -->
+          <div id="home-rotator" class="home-rotator" hidden></div>
+        </div>
+        <!-- 세계 지도: 매장이 있는 나라마다 원(크기 = 판매 중 매물 수), 마우스를 올리면 나라·매장·매물 수 -->
+        <!-- 2026-11-08 사장님: 지도 위에 탭으로 넘기고 전체 매물 그래프로 — [전체 매물 | 매장 지도], 처음엔 전체 매물 -->
+        <div id="home-world" class="home-world">
+          <div class="world-tabs" role="tablist">
+            <button type="button" role="tab" data-world-tab="chart" aria-selected="true" data-i18n="home.map_title">Every used Leica for sale right now</button>
+            <button type="button" role="tab" data-world-tab="map" aria-selected="false" data-i18n="home.shops_title">Where the listings come from</button>
+          </div>
+          <div id="market-map-block" class="market-map world-pane" data-world-pane="chart" hidden>
+            <p id="market-map-note" class="market-map-note"></p>
+            <div id="market-map-legend" class="market-map-legend"></div>
+            <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
+          </div>
+          <div class="world-pane" data-world-pane="map" hidden>
+            <svg id="world-map" role="img"></svg>
+            <div id="world-tip" class="world-tip" hidden></div>
           </div>
         </div>
       </section>
@@ -1579,12 +1626,6 @@
         </div>
         <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
         <!-- 지금 팔리는 라이카 전부 (2026-11-07 사장님: 메인 화면에 전체 매물 그래프) — data/derived/market_map.json, 점 하나 = 매물 하나 -->
-        <div id="market-map-block" class="market-map home-extra" hidden>
-          <h2 class="home-heading" data-i18n="home.map_title">Every used Leica for sale right now</h2>
-          <p id="market-map-note" class="market-map-note"></p>
-          <div id="market-map-legend" class="market-map-legend"></div>
-          <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
-        </div>
         <div id="home-quiz-block" class="home-quiz home-extra" hidden>
           <h2 class="home-heading"><span data-i18n="home.quiz_title">What’s your Leica level?</span> <small id="quiz-best" class="home-quiz-best"></small></h2>
           <p data-i18n="home.quiz_intro">Double strokes, commemorative bodies, nicknames, order numbers — 10 questions only Leica nerds get right. Start right here.</p>
@@ -2781,6 +2822,88 @@
     }
 
     // 첫 화면 '29개 나라 113개 매장': 나라마다 국기·막대(매장 수)·매장·매물 수, 막대에 올리면 매장 이름 (제목 아래 숫자와 같은 기준)
+    function showWorldTab(tab){
+      document.querySelectorAll('[data-world-tab]').forEach(el => el.setAttribute('aria-selected', el.dataset.worldTab === tab ? 'true' : 'false'));
+      document.querySelectorAll('[data-world-pane]').forEach(el => {
+        const on = el.dataset.worldPane === tab;
+        if(tab === 'chart' && el.id === 'market-map-block') el.hidden = !(on && mapState.data);
+        else el.hidden = !on;
+      });
+      if(tab === 'chart' && typeof drawMarketMap === 'function') setTimeout(drawMarketMap, 30);
+      if(tab === 'map' && worldState.byCountry) setTimeout(() => drawWorldMap(worldState.byCountry), 30);
+    }
+    document.addEventListener('click', event => {
+      const tab = event.target.closest && event.target.closest('[data-world-tab]');
+      if(tab) showWorldTab(tab.dataset.worldTab);
+    });
+
+    // 세계 지도 (2026-11-08): 바탕은 world-atlas 110m(공개 데이터), 원 위치는 나라 대표 좌표(경도, 위도)
+    const COUNTRY_LONLAT = { KR: [127.8, 36.5], JP: [138.3, 36.2], HK: [114.2, 22.3], SG: [103.8, 1.35], MY: [101.7, 3.9], AU: [134, -25.5], NZ: [172.5, -41.5],
+      US: [-98.5, 39.5], CA: [-106, 56], CL: [-71, -33.5], GB: [-2, 53.5], FR: [2.3, 46.6], DE: [10.4, 51.2], IT: [12.6, 42.8], NL: [5.3, 52.2], BE: [4.5, 50.6],
+      LU: [6.1, 49.8], AT: [14.5, 47.6], CH: [8.2, 46.8], ES: [-3.7, 40.2], PT: [-8.2, 39.6], DK: [9.5, 56], SE: [16, 62], NO: [9, 61], FI: [26, 63],
+      PL: [19.4, 52], CZ: [15.5, 49.8], HU: [19.5, 47.2], GR: [22, 39.3], AE: [54, 24] };
+    const worldState = { geo: null, loading: null };
+    function loadScriptOnce(src){
+      return new Promise((resolve, reject) => {
+        if(document.querySelector(`script[src="${src}"]`)) return resolve();
+        const el = document.createElement('script'); el.src = src; el.async = true; el.onload = resolve; el.onerror = reject; document.head.appendChild(el);
+      });
+    }
+    async function loadWorld(){
+      if(worldState.geo) return worldState.geo;
+      if(!worldState.loading) worldState.loading = (async () => {
+        await loadScriptOnce('https://cdn.jsdelivr.net/npm/d3-array@3.2.4/dist/d3-array.min.js');
+        await loadScriptOnce('https://cdn.jsdelivr.net/npm/d3-geo@3.1.0/dist/d3-geo.min.js');
+        await loadScriptOnce('https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js');
+        const topo = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(r => r.json());
+        const land = window.topojson.feature(topo, topo.objects.countries);
+        land.features = land.features.filter(f => f.id !== '010');  // 남극 빼기
+        worldState.geo = land;
+        return land;
+      })();
+      return worldState.loading;
+    }
+    async function drawWorldMap(byCountry){
+      const box = document.getElementById('home-world');
+      const svg = document.getElementById('world-map');
+      if(!box || !svg) return;
+      let land;
+      try{ land = await loadWorld(); }catch(error){ return; }
+      if(!window.d3 || !window.d3.geoNaturalEarth1) return;
+      const pane = svg.closest('.world-pane');
+      worldState.byCountry = byCountry;
+      if(pane && pane.hidden) return;  // 탭을 열 때 다시 그림
+      const W = Math.max(320, box.clientWidth || 900), H = Math.round(W * 0.46);
+      const proj = window.d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], land);
+      const path = window.d3.geoPath(proj);
+      const max = Math.max(...Object.values(byCountry).map(r => r.listings || 0), 1);
+      const nf = new Intl.NumberFormat(uiState.locale);
+      const dots = Object.entries(byCountry)
+        .filter(([cc]) => COUNTRY_LONLAT[cc])
+        .sort((a, b) => b[1].listings - a[1].listings)  // 큰 원 먼저 → 작은 원이 위에
+        .map(([cc, row]) => {
+          const [x, y] = proj(COUNTRY_LONLAT[cc]);
+          const r = 3 + Math.sqrt((row.listings || 0) / max) * (W < 600 ? 16 : 26);
+          const tip = `${displayNameOf('region', cc)} · ${ux('home.shops_row', '{n} shops · {m} listings').replace('{n}', String(row.shops.length)).replace('{m}', nf.format(row.listings))}`;
+          return `<circle class="world-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" data-cc="${cc}" data-tip="${escapeHtml(tip)}"></circle>`;
+        }).join('');
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('width', String(W)); svg.setAttribute('height', String(H));
+      svg.setAttribute('aria-label', ux('home.shops_title', 'Where the listings come from'));
+      svg.innerHTML = `<g class="world-land">${land.features.map(f => `<path d="${path(f)}"></path>`).join('')}</g><g>${dots}</g>`;
+      const tipEl = document.getElementById('world-tip');
+      svg.onmousemove = event => {
+        const dot = event.target.closest && event.target.closest('.world-dot');
+        if(!dot){ tipEl.hidden = true; return; }
+        tipEl.innerHTML = `${countryFlagHtml(dot.dataset.cc)} ${escapeHtml(dot.dataset.tip)}`;
+        tipEl.hidden = false;
+        const b = box.getBoundingClientRect();
+        tipEl.style.left = `${Math.min(event.clientX - b.left + 12, b.width - tipEl.offsetWidth - 4)}px`;
+        tipEl.style.top = `${event.clientY - b.top - tipEl.offsetHeight - 10}px`;
+      };
+      svg.onmouseleave = () => { tipEl.hidden = true; };
+    }
+
     function renderShopsByCountry(fresh, rules, ago){
       const block = document.getElementById('shops-block');
       if(!block) return;
@@ -2794,6 +2917,7 @@
       });
       const rows = Object.entries(byCountry).sort((a, b) => b[1].shops.length - a[1].shops.length || b[1].listings - a[1].listings);
       if(rows.length < 3) return;
+      drawWorldMap(byCountry);
       const max = rows[0][1].shops.length;
       const shops = Object.keys(fresh).length;
       const listings = Object.values(fresh).reduce((sum, v) => sum + Number((v || {}).active || 0), 0);
@@ -2871,7 +2995,45 @@
       });
     }
 
+    const rotatorState = { i: 0, timer: null, paused: false };
     function renderShowcase(){
+      const box = document.getElementById('home-rotator');
+      if(!box) return;
+      const items = ((homeState.feed && homeState.feed.showcase) || []).filter(item => entityState.byId[item.entity]);
+      if(!items.length){ box.hidden = true; return; }
+      const nf = new Intl.NumberFormat(uiState.locale);
+      box.innerHTML = items.map((item, i) => {
+        const entity = entityState.byId[item.entity];
+        const krw = Number(entity.b_price_krw || item.low_krw);
+        const converted = convertAmount(krw, 'KRW', uiState.currency);
+        const price = converted !== null ? formatMoney(roundEstimate(converted, uiState.currency), uiState.currency) : '';
+        const flags = (item.countries || []).slice(0, 10).map(countryFlagHtml).join('');
+        return `<button type="button" class="rot-slide${i === rotatorState.i ? ' is-on' : ''}" data-entity="${escapeHtml(item.entity)}" aria-hidden="${i === rotatorState.i ? 'false' : 'true'}" tabindex="${i === rotatorState.i ? '0' : '-1'}">
+          <span class="rot-photo"><img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="${i < 2 ? 'eager' : 'lazy'}" referrerpolicy="no-referrer"></span>
+          <span class="rot-name">${escapeHtml(homeName(entity))}</span>
+          <span class="rot-meta"><b>${escapeHtml(price)}</b> · ${escapeHtml(ux('home.showcase_count', '{n} for sale worldwide').replace('{n}', nf.format(item.count)))}</span>
+          <span class="rot-flags">${flags}</span>
+        </button>`;
+      }).join('') + `<div class="rot-dots">${items.map((_, i) => `<button type="button" data-rot="${i}" aria-label="${i + 1}" aria-pressed="${i === rotatorState.i}"></button>`).join('')}</div>`;
+      box.hidden = false;
+      const show = i => {
+        rotatorState.i = (i + items.length) % items.length;
+        box.querySelectorAll('.rot-slide').forEach((el, j) => { const on = j === rotatorState.i; el.classList.toggle('is-on', on); el.setAttribute('aria-hidden', on ? 'false' : 'true'); el.tabIndex = on ? 0 : -1; });
+        box.querySelectorAll('[data-rot]').forEach((el, j) => el.setAttribute('aria-pressed', j === rotatorState.i ? 'true' : 'false'));
+      };
+      clearInterval(rotatorState.timer);
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!reduce) rotatorState.timer = setInterval(() => { if(!rotatorState.paused && !document.hidden) show(rotatorState.i + 1); }, 4000);
+      box.onmouseenter = () => { rotatorState.paused = true; };
+      box.onmouseleave = () => { rotatorState.paused = false; };
+      box.onclick = event => {
+        const dot = event.target.closest('[data-rot]');
+        if(dot){ show(Number(dot.dataset.rot)); return; }
+        const slide = event.target.closest('[data-entity]');
+        if(slide) selectEntity(slide.dataset.entity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
+      };
+    }
+    function renderShowcaseGrid(){
       const box = document.getElementById('home-showcase');
       if(!box) return;
       const items = ((homeState.feed && homeState.feed.showcase) || []).filter(item => entityState.byId[item.entity]);
@@ -3661,6 +3823,11 @@
       if(!button) return;
       if(document.body.classList.contains('cb-searched') || document.body.classList.contains('cb-board')){
         location.href = '/?open=' + encodeURIComponent(button.dataset.open);  // 검색·게시판 화면이면 첫 화면으로 가서 열기
+        return;
+      }
+      if(button.dataset.open === 'market-map-block'){  // 전체 매물 그래프는 첫 화면 아래 탭에 있음
+        showWorldTab('chart');
+        document.getElementById('home-world')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       const block = document.getElementById(button.dataset.open);
