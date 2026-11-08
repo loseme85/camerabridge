@@ -393,8 +393,14 @@ def run_retention(blob=None, today: dt.date | None = None, catch_up_days: int = 
     return deleted
 
 def _blob():
-    from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
-    return blob
+    # 2026-11-08: Blob 무료 한도 초과(12/1까지 막힘) → Neon이 연결돼 있으면 같은 모양의 Neon 저장소 (pgstore.PgBlob)
+    import sys as _sys
+    from pathlib import Path as _Path
+    root = str(_Path(__file__).resolve().parent.parent)
+    if root not in _sys.path:
+        _sys.path.insert(0, root)
+    import pgstore  # noqa: WPS433
+    return pgstore.blob_store()
 
 
 def _names(blob, prefix: str) -> list:
