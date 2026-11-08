@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTOMUNDUS_PREFIX):
+        return _FOTOMUNDUS.get(cond[len(FOTOMUNDUS_PREFIX):].strip().lower()), "label"
     if cond.startswith(DCGRAZ_PREFIX):
         return _DCGRAZ.get(cond[len(DCGRAZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
@@ -869,6 +871,13 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 독일 Foto Mundus: 중고 제목 속 상태 말 — 'Messeware'·'Ausstellungsstück'(전시품) · 'Neuzustand'·'wie neu'·'Retoure'(반품) · 'Topzustand' ·
+# 'sehr gut' · 'guter Zustand'. 사진 평가(표기 가리고 라이카 바디·렌즈 20여 점, 목록 사진 1장씩, 2026-11-09 밤샘): wie neu·Retoure·Neuzustand 모두 A,
+# Topzustand A, guter Zustand A 1·B 1 — 사진이 후한 기존 경향(0.8)을 따라 Topzustand B · guter Zustand C
+FOTOMUNDUS_PREFIX = "FotoMundus: "
+_FOTOMUNDUS = {"messeware": "S", "ausstellungsstück": "S", "neuzustand": "A", "wie neu": "A", "retoure": "A",
+               "topzustand": "B", "sehr gut": "B", "guter zustand": "C"}
 
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
