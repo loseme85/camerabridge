@@ -614,3 +614,11 @@ def test_panajou_title_state():
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "comme neuf")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "très bon état")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
+
+
+def test_lbpn_etat():
+    from condition_grade import grade_of, LBPN_PREFIX
+    site = "LBPN (프랑스)"
+    assert grade_of(site, LBPN_PREFIX + "tres bon etat")[0] == "A"
+    assert grade_of(site, LBPN_PREFIX + "bon etat")[0] == "B"
+    assert grade_of(site, LBPN_PREFIX + "etat moyen")[0] == "C"
