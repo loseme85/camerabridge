@@ -16,9 +16,6 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Camera Bridge","url":"https://camerabridge.io/","potentialAction":{"@type":"SearchAction","target":"https://camerabridge.io/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231f4a3a%22/%3E%3Cpath%20d%3D%22M15%2042a17%2017%200%200%201%2034%200%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.4%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2240%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20font-size%3D%2221%22%20letter-spacing%3D%221%22%20fill%3D%22%23fff%22%3ECB%3C/text%3E%3C/svg%3E">
   <meta name="theme-color" content="#fcfcfa">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+KR:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <style>
     :root{
@@ -47,7 +44,7 @@
       min-height:100vh;
       background:var(--bg);
       color:var(--text);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
       -webkit-font-smoothing:antialiased;
     }
     a{color:inherit}
@@ -208,7 +205,7 @@
     .home-quiz{border-top:1px solid var(--rule,var(--text));padding-top:4px}
     .home-quiz p{margin:4px 0 14px;max-width:44em;color:var(--text-soft);font-size:14px}
     .home-quiz-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
-    .home-quiz-best{font-family:var(--serif);font-style:italic;color:var(--text-soft)}
+    .home-quiz-best{font-family:var(--serif);font-style:normal;color:var(--text-soft)}
     .quiz-inline{max-width:620px;border:1px solid var(--text);padding:18px 20px}
         .quiz-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--text-muted);border-bottom:1px solid var(--border);padding-bottom:8px}
     .quiz-top button{border:0;background:none;color:var(--text-soft);font:inherit;cursor:pointer;padding:0}
@@ -858,7 +855,7 @@
     .deal-badge.is-above{border-color:var(--border-strong,var(--border));color:var(--text-soft);font-weight:600}
     .grade-compare.is-cheaper{color:#2f7d4f}
     .grade-compare.is-pricier{color:var(--text-soft)}
-    .grade-compare.is-note{color:var(--text-soft);font-weight:400;font-style:italic}
+    .grade-compare.is-note{color:var(--text-soft);font-weight:400;font-style:normal}
     .source-flag{
       display:inline-block;width:16px;height:12px;margin-right:6px;vertical-align:-1px;
       border-radius:2px;box-shadow:0 0 0 1px var(--border);object-fit:cover;
@@ -1063,8 +1060,8 @@
       --accent-soft:rgba(31,74,58,0.07);
       --shadow:none;
       --radius:2px;
-      --serif:"Newsreader","Noto Serif KR",Georgia,serif;
-      --sans:"Inter","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
+      --serif:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+      --sans:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
       --sticky-search-offset:72px;
       --ladder-home:#16181a;
       --ladder-abroad:#a8552e;
@@ -1077,7 +1074,7 @@
     .topbar{background:var(--bg);backdrop-filter:none;border-bottom:1px solid var(--rule);padding:12px max(24px, calc((100% - 1200px) / 2))}
     .meta-pill,.lang-button{border:0;background:none;border-radius:0;padding:6px 4px;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:0;color:var(--text)}
     .lang-button:hover,.lang-button[aria-expanded="true"]{color:var(--accent);background:none}
-    .meta-pill.accent{background:none;border:0;color:var(--text-muted);font-family:var(--serif);font-style:italic;font-size:14px}
+    .meta-pill.accent{background:none;border:0;color:var(--text-muted);font-family:var(--serif);font-style:normal;font-size:14px}
     .topbar-meta{gap:14px}
     .lang-menu,.prefs-panel,.entity-menu{border:1px solid var(--rule);border-radius:0;box-shadow:4px 4px 0 rgba(22,24,26,0.08)}
 
@@ -1098,7 +1095,7 @@
     .query-chip{min-height:0;border:0;background:none;padding:2px 0;border-radius:0;font-family:var(--sans);font-size:14px;color:var(--text);
       text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:4px}
     .query-chip:hover{color:var(--accent);text-decoration-color:var(--accent)}
-    .hero-trust{margin:0 0 12px;font-family:var(--serif);font-style:italic;font-size:17px;color:var(--text-soft);gap:4px 8px}
+    .hero-trust{margin:0 0 12px;font-family:var(--serif);font-style:normal;font-size:17px;color:var(--text-soft);gap:4px 8px}
     .hero-trust .source-flag{width:18px;height:13px}
 
     /* 구역 제목: 굵은 줄 위 세리프 */
@@ -1197,7 +1194,7 @@
     .board-me{font-size:12px;color:var(--text-muted);display:flex;gap:12px;align-items:baseline;margin:6px 0 0}
     .board-form .search-button{height:44px;min-width:0;padding:0 22px}
     .board-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0;align-items:center}
-    .board-empty{padding:18px 0;color:var(--text-soft);font-family:var(--serif);font-style:italic;font-size:17px;border-bottom:1px solid var(--border)}
+    .board-empty{padding:18px 0;color:var(--text-soft);font-family:var(--serif);font-style:normal;font-size:17px;border-bottom:1px solid var(--border)}
     .board-view{margin:48px 0 0}
     .board-tabs{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0 0 14px}
     .board-tabs button{background:none;border:0;padding:4px 0;font:inherit;font-size:14px;color:var(--text-soft);cursor:pointer;border-bottom:2px solid transparent}
@@ -1273,7 +1270,7 @@
     .archive-list{gap:40px 24px;margin-top:20px}
     .result-card{border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
     .result-head{display:block;padding:0;border:0}
-    .thumb{width:100%;aspect-ratio:4/3;border:0;border-radius:0;background:var(--surface-soft);margin-bottom:14px;font-family:var(--serif);font-style:italic;font-weight:400}
+    .thumb{width:100%;aspect-ratio:4/3;border:0;border-radius:0;background:var(--surface-soft);margin-bottom:14px;font-family:var(--serif);font-style:normal;font-weight:400}
     .result-card:hover .thumb img{filter:brightness(0.94)}
     .result-title{font-size:14px;font-weight:500;line-height:1.45;margin-bottom:6px;-webkit-line-clamp:2}
     .result-title:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
@@ -1288,7 +1285,7 @@
     .grade-chip{border-radius:0;border-color:var(--text);font-family:var(--serif);font-size:13px;font-weight:600;padding:0 7px}
     /* 모델 시세 그림: 등급 줄마다 판매 중 가격대 띠 + 매물 점 */
     .entity-bar-editions{margin-top:10px;padding-top:10px;border-top:1px dotted var(--border-strong)}
-    .entity-bar-group{align-self:center;margin-right:6px;font-family:var(--serif);font-style:italic;font-size:14px;color:var(--text-soft)}
+    .entity-bar-group{align-self:center;margin-right:6px;font-family:var(--serif);font-style:normal;font-size:14px;color:var(--text-soft)}
     .price-ladder{margin:8px 0 28px;padding:18px 0 14px;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
     .price-ladder h3{margin:0;font-family:var(--serif);font-weight:500;font-size:22px;letter-spacing:-0.01em}
     .price-ladder>p{margin:4px 0 14px;font-size:13px;color:var(--text-soft)}
@@ -1377,7 +1374,7 @@
     .action-link{font:13px/1.4 var(--sans);color:var(--text-soft);text-decoration:underline;text-underline-offset:3px}
     /* 아래쪽 판권면: 겹줄 + 세리프 브랜드 + 링크 한 줄 */
     .site-legal{text-align:left;margin:72px 0 72px;color:var(--text-muted);font-family:var(--sans);font-size:12px;line-height:1.65}
-    .site-legal .legal-story{font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.5;color:var(--text-soft);margin:0 0 20px}
+    .site-legal .legal-story{font-family:var(--serif);font-style:normal;font-size:18px;line-height:1.5;color:var(--text-soft);margin:0 0 20px}
     .site-legal .legal-story a{font-style:normal;font-family:var(--sans);font-size:13px;color:var(--text);text-decoration:underline;text-underline-offset:3px;margin-left:6px}
     .site-legal .legal-rule{border-top:2px solid var(--rule);border-bottom:1px solid var(--rule);height:5px;margin-bottom:18px}
     .site-legal .legal-mark{font-family:var(--serif);font-size:22px;line-height:1.3;color:var(--text);letter-spacing:-0.01em;margin:0 0 2px}
@@ -5205,7 +5202,8 @@
 
     function entityMetaLine(entity){
       const kind = entity.kind === 'Body' ? ec('body') : ec('lens');
-      const parts = [entity.mount ? `${kind} · ${entity.mount}` : kind];
+      // 바디·렌즈가 섞인 별칭 묶음(블랙페인트·티타늄 등)은 종류를 쓰지 않음
+      const parts = entity.feature && !entity.mount ? [] : [entity.mount ? `${kind} · ${entity.mount}` : kind];
       if(entity.active_count){
         let sale = ec('on_sale', { n: String(entity.active_count) });
         const range = entity.active_price_krw;
