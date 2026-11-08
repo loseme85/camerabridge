@@ -1317,6 +1317,13 @@
     .price-ladder .ladder-incl{display:inline-block;margin-top:4px;font-size:14px;font-weight:600;color:var(--text)}
     .ladder-tip .tip-incl{display:inline-block;margin:3px 0 2px;padding:1px 6px;border:1px solid var(--text);font-size:12px;font-weight:600;color:var(--text);line-height:1.5}
     .price-ladder{position:relative}
+    .ladder-guide.is-ghost{position:relative}
+    .ladder-ghost{filter:blur(2.5px);opacity:.35;pointer-events:none;user-select:none}
+    .ladder-ghost .ladder-strip{cursor:default}
+    .ladder-ghost-overlay{position:absolute;left:0;right:0;top:44px;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 16px;gap:6px}
+    .ladder-ghost-overlay strong{font-family:var(--serif);font-weight:500;font-size:22px}
+    .ladder-ghost-overlay p{margin:0 0 6px;color:var(--text-soft);font-size:13px}
+    .ladder-ghost-overlay .entity-bar-chips{justify-content:center;background:var(--bg)}
     .price-ladder .ladder-row{touch-action:pan-y}
     .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:36px;border-top:1px solid var(--border)}
     .ladder-grade{font-family:var(--serif);font-size:15px;font-weight:600}
@@ -4880,7 +4887,26 @@
       }
       picks = picks.filter(item => item && !item.feature && item.active_count).sort((a, b) => b.active_count - a.active_count).slice(0, 8);
       const chips = picks.map(item => `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(item.id)}">${escapeHtml(entityDisplayName(item))} <span class="entity-chip-count">${item.active_count}</span></button>`).join('');
-      return `<section class="price-ladder ladder-guide"><h3>${escapeHtml(ec('ladder_pick_title'))}</h3><p>${escapeHtml(ec('ladder_pick_body'))}</p>${chips ? `<div class="entity-bar-chips">${chips}</div>` : ''}</section>`;
+      // 2026-11-08 사장님: 빈칸 대신 그래프 모양은 흐리게 보이고, 그 위에 '정확한 모델을 선택하세요' — 점은 실제 값이 아닌 모양만
+      return `<section class="price-ladder ladder-guide is-ghost"><h3>${escapeHtml(ec('ladder_title'))}</h3>
+        <div class="ladder-ghost" aria-hidden="true">${ladderGhostRows()}</div>
+        <div class="ladder-ghost-overlay"><strong>${escapeHtml(ec('ladder_pick_title'))}</strong><p>${escapeHtml(ec('ladder_pick_body'))}</p>${chips ? `<div class="entity-bar-chips">${chips}</div>` : ''}</div></section>`;
+    }
+
+    // 흐린 그래프 모양: 등급 줄마다 점 몇 개 (값을 뜻하지 않음, 늘 같은 모양)
+    function ladderGhostRows(){
+      const rows = [['S', 0.62, 7], ['A', 0.52, 11], ['B', 0.42, 14], ['C', 0.33, 9], ['D', 0.24, 5]];
+      let seed = 7;
+      const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+      return rows.map(([grade, center, n]) => {
+        const dots = Array.from({ length: n }, () => {
+          const left = Math.max(3, Math.min(97, (center + (rnd() - 0.5) * 0.34) * 100));
+          const top = 50 + (rnd() - 0.5) * 44;
+          return `<span class="ladder-dot" style="left:${left.toFixed(1)}%;top:${top.toFixed(1)}%"></span>`;
+        }).join('');
+        const band = `<span class="ladder-band" style="left:${((center - 0.12) * 100).toFixed(1)}%;width:24%"></span>`;
+        return `<div class="ladder-row"><span class="ladder-grade">${grade}</span><div class="ladder-strip">${band}${dots}</div><span class="ladder-range">—</span></div>`;
+      }).join('');
     }
 
     function renderPriceLadder(){
