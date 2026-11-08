@@ -6554,6 +6554,86 @@ def crawl_fksecondhand():
     return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
 
 
+def crawl_digitalstore():
+    """Digitalstore (오스트리아 빈, Shopware 6, 2026-11-09 밤샘) - 'Gebraucht' 분류 전체(50개쯤, 3쪽 — robots.txt가 쪽 넘김 ?p=는
+    허용, 필터 properties=는 금지)에서 이름에 Leica가 든 것만 상세를 읽음 (보이그랜더 'für Leica M'은 뺌).
+    목록 이름에 브랜드가 없는 상품도 있어 이름만으로 고름. 'Nicht mehr verfügbar'(판매 끝남)는 뺌.
+    등급은 상세 'ZUSTAND: A neuwertiger Zustand' / 'B guter Zustand' (A·B·C)"""
+    import html as _html
+    import json as _json
+    import requests
+    from condition_grade import DIGITALSTORE_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.digitalstore.at"
+    print(f"\n  📂 Digitalstore 크롤링 시작")
+    links = []
+    for page in range(1, 15):
+        resp = sess.get(f"{base}/Gebraucht/", params={"p": page}, timeout=30)
+        resp.raise_for_status()
+        boxes = resp.text.split('class="card product-box')[1:]
+        for box in boxes:
+            info = re.search(r'data-product-information="([^"]+)"', box)
+            href = re.search(r'href="(https://www\.digitalstore\.at/[^"]+)"', box)
+            try:
+                name = _json.loads(_html.unescape(info.group(1))).get("name") or "" if info else ""
+            except ValueError:
+                name = ""
+            if href and re.search(r"(?i)\bleica\b|\bleitz\b", name) and not re.search(r"(?i)voigtl|ttartisan|für leica|fuer leica", name):
+                links.append(href.group(1))
+        print(f"    └─ {page}페이지 {len(boxes)}개")
+        if len(boxes) < 23:  # 한 쪽 23개
+            break
+        time.sleep(1.5)
+    for link in dict.fromkeys(links):
+        try:
+            t = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ Digitalstore 상세 오류: {e}")
+            continue
+        time.sleep(1.2)
+        if "Nicht mehr verfügbar" in t:
+            continue
+        title = re.search(r'product-detail-name" itemprop="name">\s*(.*?)\s*</h1>', t, re.S)
+        price = re.search(r'itemprop="price"\s+content="([\d.]+)"', t)
+        if not title or not price:
+            continue
+        zm = re.search(r"ZUSTAND:?\s*([A-D])\b", _html.unescape(re.sub(r"<[^>]+>", " ", t)))
+        imgs = re.findall(r'data-full-image="([^"]+)"', t)
+        name = _digitalstore_name(_html.unescape(re.sub(r"<[^>]+>", " ", title.group(1))))  # 제목 앞 '<span>Gebraucht</span>' 
+        price_str = f"EUR {float(price.group(1)):,.0f}"
+        cat = detect_category(name, price_str)
+        results.append({
+            "site": "Digitalstore (오스트리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": DIGITALSTORE_PREFIX + zm.group(1) if zm else "정보없음",
+            "가격": price_str,
+            "통화": "EUR",
+            "이미지": imgs[0] if imgs else "",
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Digitalstore 완료: {len(results)}개")
+    return results
+
+
+def _digitalstore_name(title):
+    """'Gebraucht Leica Summicron-M 50mm 2.0 Schwarz' → 'Leica Summicron-M 50mm f2.0 black'. 'Gebraucht'·'– L-Mount' 떼기"""
+    n = re.sub(r"(?i)^\s*gebraucht\s+|\s*[–-]\s*L-Mount\s*$", "", title)
+    n = re.sub(r"(?i)\b(\d{2,3}(?:-\d{2,3})?mm)\s+F?(\d(?:\.\d)?)\b", r"\1 f\2", n)
+    for de, en in (("Gehäuse", "Body"), ("schwarz", "black"), ("silber", "silver"), ("Blitz Sender", "flash transmitter")):
+        n = re.sub(rf"(?i)\b{de}\b", en, n)
+    n = re.sub(r"(?i)^Leica Vario Elmarit-SL", "Leica Vario-Elmarit-SL", n)
+    return re.sub(r"\s+", " ", n).strip()
+
+
 def _html_unescape(text):
     import html as _html
     return _html.unescape(text)
@@ -11366,6 +11446,7 @@ def crawl_all():
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
         ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Blackdove Cameras (이탈리아)", lambda: ce.wrap_full_run("Blackdove Cameras (이탈리아)", crawl_blackdove)),
         ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),

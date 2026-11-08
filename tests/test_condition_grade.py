@@ -614,3 +614,10 @@ def test_panajou_title_state():
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "comme neuf")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "très bon état")[0] == "A"
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
+
+
+def test_digitalstore_zustand():
+    from condition_grade import grade_of, DIGITALSTORE_PREFIX
+    site = "Digitalstore (오스트리아)"
+    assert grade_of(site, DIGITALSTORE_PREFIX + "A")[0] == "A"
+    assert grade_of(site, DIGITALSTORE_PREFIX + "B")[0] == "B"
