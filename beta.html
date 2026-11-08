@@ -2666,6 +2666,8 @@
       try{
         const fresh = await fetch('/data/status/source_freshness.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
         if(!fresh) return;
+        // 한 번도 수집에 성공하지 못한 매장(막혀서 보류 등)은 매장·나라 수와 나라별 목록에서 뺌 (2026-11-08 벨기에 PCH '0 listings')
+        Object.keys(fresh).forEach(site => { if(!(fresh[site] || {}).last_success) delete fresh[site]; });
         const rules = (landedState.rules && landedState.rules.sources) || {};
         const sites = Object.keys(fresh);
         const countries = [...new Set(sites.map(site => (rules[site] || {}).country).filter(Boolean))];
