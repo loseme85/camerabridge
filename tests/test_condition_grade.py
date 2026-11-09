@@ -621,3 +621,38 @@ def test_f64_stare():
     site = "F64 (루마니아)"
     assert grade_of(site, F64_PREFIX + "excelenta")[0] == "A"
     assert grade_of(site, F64_PREFIX + "bună")[0] == "B"
+
+
+def test_fotoc_kategori():
+    from condition_grade import grade_of, FOTOC_PREFIX
+    site = "FOTO/C (덴마크)"
+    assert grade_of(site, FOTOC_PREFIX + "A")[0] == "A"
+    assert grade_of(site, FOTOC_PREFIX + "B+")[0] == "B"
+    assert grade_of(site, FOTOC_PREFIX + "B-")[0] == "C"
+    assert grade_of(site, FOTOC_PREFIX + "C+")[0] == "C"
+    assert grade_of(site, FOTOC_PREFIX + "defekt")[0] == "X"
+
+
+def test_digitalstore_zustand():
+    from condition_grade import grade_of, DIGITALSTORE_PREFIX
+    site = "Digitalstore (오스트리아)"
+    assert grade_of(site, DIGITALSTORE_PREFIX + "A")[0] == "A"
+    assert grade_of(site, DIGITALSTORE_PREFIX + "B")[0] == "B"
+
+
+def test_hebenstreit_zustand():
+    from condition_grade import grade_of, HEBENSTREIT_PREFIX
+    site = "Foto Hebenstreit (오스트리아)"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "A")[0] == "A"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "A-B")[0] == "B"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "B-C")[0] == "C"
+
+
+def test_kuecher_zustand():
+    from condition_grade import grade_of, KUECHER_PREFIX
+    site = "Kücher (오스트리아)"
+    assert grade_of(site, KUECHER_PREFIX + "A+")[0] == "S"
+    assert grade_of(site, KUECHER_PREFIX + "A-")[0] == "A"
+    assert grade_of(site, KUECHER_PREFIX + "B")[0] == "B"
+    assert grade_of(site, KUECHER_PREFIX + "B-")[0] == "C"
+    assert grade_of(site, KUECHER_PREFIX + "C")[0] == "D"
