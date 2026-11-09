@@ -622,3 +622,68 @@ def test_fotomundus_title_state():
     assert grade_of(site, FOTOMUNDUS_PREFIX + "wie neu")[0] == "A"
     assert grade_of(site, FOTOMUNDUS_PREFIX + "topzustand")[0] == "B"
     assert grade_of(site, FOTOMUNDUS_PREFIX + "guter zustand")[0] == "C"
+
+
+def test_jbv_title_state():
+    from condition_grade import grade_of, JBV_PREFIX
+    site = "JBV Foto (독일)"
+    assert grade_of(site, JBV_PREFIX + "NEAR MINT")[0] == "A"
+    assert grade_of(site, JBV_PREFIX + "FUNGUS")[0] == "D"
+    assert grade_of(site, JBV_PREFIX + "NOS MINT")[0] == "N"
+
+
+def test_fotok_stars():
+    from condition_grade import grade_of, FOTOK_PREFIX
+    site = "Foto K (스페인)"
+    assert grade_of(site, FOTOK_PREFIX + "4")[0] == "A"
+    assert grade_of(site, FOTOK_PREFIX + "3")[0] == "B"
+
+
+def test_lbpn_etat():
+    from condition_grade import grade_of, LBPN_PREFIX
+    site = "LBPN (프랑스)"
+    assert grade_of(site, LBPN_PREFIX + "tres bon etat")[0] == "A"
+    assert grade_of(site, LBPN_PREFIX + "bon etat")[0] == "B"
+    assert grade_of(site, LBPN_PREFIX + "etat moyen")[0] == "C"
+
+
+def test_f64_stare():
+    from condition_grade import grade_of, F64_PREFIX
+    site = "F64 (루마니아)"
+    assert grade_of(site, F64_PREFIX + "excelenta")[0] == "A"
+    assert grade_of(site, F64_PREFIX + "bună")[0] == "B"
+
+
+def test_fotoc_kategori():
+    from condition_grade import grade_of, FOTOC_PREFIX
+    site = "FOTO/C (덴마크)"
+    assert grade_of(site, FOTOC_PREFIX + "A")[0] == "A"
+    assert grade_of(site, FOTOC_PREFIX + "B+")[0] == "B"
+    assert grade_of(site, FOTOC_PREFIX + "B-")[0] == "C"
+    assert grade_of(site, FOTOC_PREFIX + "C+")[0] == "C"
+    assert grade_of(site, FOTOC_PREFIX + "defekt")[0] == "X"
+
+
+def test_digitalstore_zustand():
+    from condition_grade import grade_of, DIGITALSTORE_PREFIX
+    site = "Digitalstore (오스트리아)"
+    assert grade_of(site, DIGITALSTORE_PREFIX + "A")[0] == "A"
+    assert grade_of(site, DIGITALSTORE_PREFIX + "B")[0] == "B"
+
+
+def test_hebenstreit_zustand():
+    from condition_grade import grade_of, HEBENSTREIT_PREFIX
+    site = "Foto Hebenstreit (오스트리아)"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "A")[0] == "A"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "A-B")[0] == "B"
+    assert grade_of(site, HEBENSTREIT_PREFIX + "B-C")[0] == "C"
+
+
+def test_kuecher_zustand():
+    from condition_grade import grade_of, KUECHER_PREFIX
+    site = "Kücher (오스트리아)"
+    assert grade_of(site, KUECHER_PREFIX + "A+")[0] == "S"
+    assert grade_of(site, KUECHER_PREFIX + "A-")[0] == "A"
+    assert grade_of(site, KUECHER_PREFIX + "B")[0] == "B"
+    assert grade_of(site, KUECHER_PREFIX + "B-")[0] == "C"
+    assert grade_of(site, KUECHER_PREFIX + "C")[0] == "D"

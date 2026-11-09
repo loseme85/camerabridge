@@ -84,6 +84,22 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTOMUNDUS_PREFIX):
         return _FOTOMUNDUS.get(cond[len(FOTOMUNDUS_PREFIX):].strip().lower()), "label"
+    if cond.startswith(JBV_PREFIX):
+        return _JBV.get(cond[len(JBV_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTOK_PREFIX):
+        return _FOTOK.get(cond[len(FOTOK_PREFIX):].strip()), "label"
+    if cond.startswith(LBPN_PREFIX):
+        return _LBPN.get(cond[len(LBPN_PREFIX):].strip().lower()), "label"
+    if cond.startswith(F64_PREFIX):
+        return _F64.get(cond[len(F64_PREFIX):].strip().lower().replace("ă", "a")), "label"
+    if cond.startswith(FOTOC_PREFIX):
+        return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(DIGITALSTORE_PREFIX):
+        return _DIGITALSTORE.get(cond[len(DIGITALSTORE_PREFIX):].strip().upper()), "label"
+    if cond.startswith(HEBENSTREIT_PREFIX):
+        return _HEBENSTREIT.get(cond[len(HEBENSTREIT_PREFIX):].strip().upper()), "label"
+    if cond.startswith(KUECHER_PREFIX):
+        return _KUECHER.get(cond[len(KUECHER_PREFIX):].strip().upper()), "label"
     if cond.startswith(DCGRAZ_PREFIX):
         return _DCGRAZ.get(cond[len(DCGRAZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
@@ -878,6 +894,52 @@ _DCGRAZ = {"DEMO": "S"}
 FOTOMUNDUS_PREFIX = "FotoMundus: "
 _FOTOMUNDUS = {"messeware": "S", "ausstellungsstück": "S", "neuzustand": "A", "wie neu": "A", "retoure": "A",
                "topzustand": "B", "sehr gut": "B", "guter zustand": "C"}
+
+# 독일 JBV Foto: 제목 끝 상태 말 — 'NOS MINT'·'NOS'·'BNIB'(쓰지 않은 재고) · 'MINT' · 'near MINT' · 'EXC' · 'HAZE'·'FUNGUS'(렌즈 흐림·곰팡이) ·
+# 'NOTTESTED'(시험 안 함) · 'DEFECTIVE'(고장, _BROKEN이 먼저 X). 대부분은 말이 없어 사진 등급 대기열로.
+# 다른 매장의 MINT·near MINT 대응(Tamarkin·Classic Connection)에 맞춤 — 표본이 적어 사진 평가는 다음 등급 점검 때
+JBV_PREFIX = "JBV: "
+_JBV = {"NOS MINT": "N", "NOS": "N", "BNIB": "N", "MINT": "S", "MINT-": "A", "NEAR MINT": "A", "EXC": "B", "EXC+": "B", "EXC++": "B",
+        "HAZE": "D", "FUNGUS": "D", "NOTTESTED": "D", "DEFECTIVE": "X"}
+
+# 스페인 Foto K: 중고 이름 끝 별 개수 '2ª Mano ***' — 중고 135개 중 별 3개 98 · 4개 33 · 5개 2 · 2개 1 (2026-11-09)
+# 사진 대부분이 제조사 카탈로그 그림(한 상품은 다른 렌즈 사진)이라 사진 평가를 못 함 → 별 3개(대부분)를 보통 중고 B로, 한 개씩 위아래
+FOTOK_PREFIX = "FotoK: "
+_FOTOK = {"5": "S", "4": "A", "3": "B", "2": "C", "1": "D"}
+
+# 프랑스 LBPN (La Boutique Photo Nikon): 설명의 'Très bon état'·'Bon état'·'Etat moyen' — Panajou(PANAJOU_PREFIX)와 같은 말
+# 사진 평가(표기 가리고 판매 중 라이카 렌즈 4점, 사진 2장씩, 2026-11-09 밤샘): bon A 2·B 1 · moyen B 1 → 정확 일치 2/4 · 한 등급 이내 4/4
+LBPN_PREFIX = "LBPN: "
+_LBPN = {"comme neuf": "S", "excellent etat": "A", "tres bon etat": "A", "bon etat": "B", "etat moyen": "C", "etat d'usage": "C", "etat d’usage": "C"}
+
+# 루마니아 F64 (위탁 중고): 사양 'Descriptive text SH' 문장 'Stare excelenta'(아주 좋음) · 'foarte buna'(매우 좋음) · 'buna'(좋음)
+# 사진 평가(표기 가리고 판매 중 라이카 3점 전부, 사진 3장씩, 2026-11-09 밤샘): excelenta A 1 · buna A 1·B 1 → 정확 일치 2/3 · 한 등급 이내 3/3
+F64_PREFIX = "F64: "
+_F64 = {"excelenta": "A", "excelentă": "A", "foarte buna": "B", "buna": "B", "acceptabila": "C", "satisfacatoare": "C", "uzata": "D"}
+
+# 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
+# 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.
+# 사진이 후한 기존 경향(0.8) → 글자대로, '-'는 한 칸 아래: 정확 일치 1/6 · 한 등급 이내 6/6. Vintage는 상태가 아니라 연식이라 등급 없음
+FOTOC_PREFIX = "FotoC: "
+_FOTOC = {"NY": "S", "A": "A", "B+": "B", "B": "B", "B-": "C", "C+": "C", "C": "D", "C-": "D", "DEFEKT": "X"}
+
+# 오스트리아 Digitalstore (빈): 상세 'ZUSTAND: A neuwertiger Zustand'(흔적 없거나 아주 적음) · 'B guter Zustand'(적은 흔적) · C
+# 사진 평가(표기 가리고 판매 중 라이카 7점 전부, 사진 2장씩, 2026-11-09 밤샘): A A 4 · B A 3 — 사진이 후한 기존 경향과 같음 →
+# 글자대로: 정확 일치 4/7 · 한 등급 이내 7/7
+DIGITALSTORE_PREFIX = "Digitalstore: "
+_DIGITALSTORE = {"A": "A", "B": "B", "C": "C", "D": "D"}
+
+# 오스트리아 Foto Hebenstreit: 설명 'Zustand A‑B: …' (A·A-B·B·B-C·C)
+# 사진 평가(표기 가리고 판매 중 등급 있는 라이카 11점 전부, 사진 2장씩, 2026-11-09 밤샘): A A 1·B 1 · A-B A 1 · B A 3·B 2 ·
+# B-C A 1 · C B 2. 사진이 평균 0.8등급 후함(기존 매장과 같음) → 글자 앞쪽대로: 정확 일치 3/11 · 한 등급 이내 10/11
+HEBENSTREIT_PREFIX = "Hebenstreit: "
+_HEBENSTREIT = {"A": "A", "A-B": "B", "B": "B", "B-C": "C", "C": "C", "C-D": "D", "D": "D"}
+
+# 오스트리아 Kücher: 상세 설명 'Zustand: A' (A+·A·A-·B+·B·B-·C·D). 판매 중 라이카 22점 중 15점은 사진이 매장 로고뿐이라
+# 표기를 가린 채 상세 설명 글(흠·먼지·곰팡이·기름·셔터)로 평가 (2026-11-09 밤샘): A+ S 1 · A S 1·A 5·C 1(R6 셔터 늦음) · A- A 2 ·
+# B B 2·C 1 · B- C 3 · C D 5 · D D 1. 이 대응 기준 정확 일치 19/22 · 한 등급 이내 21/22 — C는 '광학계 긁힘 심함·곰팡이·조리개 기름'이라 D
+KUECHER_PREFIX = "Kuecher: "
+_KUECHER = {"A+": "S", "A": "A", "A-": "A", "B+": "B", "B": "B", "B-": "C", "C": "D", "D": "D", "E": "X"}
 
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
