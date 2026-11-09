@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(JBV_PREFIX):
+        return _JBV.get(cond[len(JBV_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTOK_PREFIX):
         return _FOTOK.get(cond[len(FOTOK_PREFIX):].strip()), "label"
     if cond.startswith(LBPN_PREFIX):
@@ -883,6 +885,13 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 독일 JBV Foto: 제목 끝 상태 말 — 'NOS MINT'·'NOS'·'BNIB'(쓰지 않은 재고) · 'MINT' · 'near MINT' · 'EXC' · 'HAZE'·'FUNGUS'(렌즈 흐림·곰팡이) ·
+# 'NOTTESTED'(시험 안 함) · 'DEFECTIVE'(고장, _BROKEN이 먼저 X). 대부분은 말이 없어 사진 등급 대기열로.
+# 다른 매장의 MINT·near MINT 대응(Tamarkin·Classic Connection)에 맞춤 — 표본이 적어 사진 평가는 다음 등급 점검 때
+JBV_PREFIX = "JBV: "
+_JBV = {"NOS MINT": "N", "NOS": "N", "BNIB": "N", "MINT": "S", "MINT-": "A", "NEAR MINT": "A", "EXC": "B", "EXC+": "B", "EXC++": "B",
+        "HAZE": "D", "FUNGUS": "D", "NOTTESTED": "D", "DEFECTIVE": "X"}
 
 # 스페인 Foto K: 중고 이름 끝 별 개수 '2ª Mano ***' — 중고 135개 중 별 3개 98 · 4개 33 · 5개 2 · 2개 1 (2026-11-09)
 # 사진 대부분이 제조사 카탈로그 그림(한 상품은 다른 렌즈 사진)이라 사진 평가를 못 함 → 별 3개(대부분)를 보통 중고 B로, 한 개씩 위아래
