@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(KUECHER_PREFIX):
+        return _KUECHER.get(cond[len(KUECHER_PREFIX):].strip().upper()), "label"
     if cond.startswith(DCGRAZ_PREFIX):
         return _DCGRAZ.get(cond[len(DCGRAZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
@@ -869,6 +871,12 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 오스트리아 Kücher: 상세 설명 'Zustand: A' (A+·A·A-·B+·B·B-·C·D). 판매 중 라이카 22점 중 15점은 사진이 매장 로고뿐이라
+# 표기를 가린 채 상세 설명 글(흠·먼지·곰팡이·기름·셔터)로 평가 (2026-11-09 밤샘): A+ S 1 · A S 1·A 5·C 1(R6 셔터 늦음) · A- A 2 ·
+# B B 2·C 1 · B- C 3 · C D 5 · D D 1. 이 대응 기준 정확 일치 19/22 · 한 등급 이내 21/22 — C는 '광학계 긁힘 심함·곰팡이·조리개 기름'이라 D
+KUECHER_PREFIX = "Kuecher: "
+_KUECHER = {"A+": "S", "A": "A", "A-": "A", "B+": "B", "B": "B", "B-": "C", "C": "D", "D": "D", "E": "X"}
 
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·

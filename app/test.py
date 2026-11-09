@@ -6554,6 +6554,92 @@ def crawl_fksecondhand():
     return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
 
 
+def crawl_kuecher():
+    """Foto-Video Kücher (오스트리아 잘츠부르크·린츠, Shopware 6, 2026-11-09 밤샘) - 'Gebrauchtbörse Foto' 분류를
+    제조사(Hersteller (Gebraucht)) = Leica 필터로 받음 (20여 개, 한 쪽). 가격은 EUR.
+    등급은 상세 화면 설명 'Zustand: A' (A+·A·A-·B+·B·B-·C·D) — 목록에 없어 상품마다 상세를 한 번씩 읽음.
+    상세 화면 첫 그림은 매장 로고라 목록 그림을 씀. robots.txt는 '*/?'(슬래시 바로 뒤 물음표)만 막음"""
+    import html as _html
+    import requests
+    from condition_grade import KUECHER_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.kuecher.com"
+    leica_filter = "019639bd6b8e7299a27de2799df7a5a6"  # 'Hersteller (Gebraucht)' 필터의 Leica 값
+    print(f"\n  📂 Kücher 크롤링 시작")
+    items = []
+    for page in range(1, 10):
+        resp = sess.get(f"{base}/shop/foto/gebrauchtboerse-foto", params={"properties": leica_filter, "p": page}, timeout=30)
+        resp.raise_for_status()
+        boxes = resp.text.split('class="card product-box')[1:]
+        for box in boxes:
+            name = re.search(r'class="product-name[^"]*"[^>]*>\s*([^<]+?)\s*<', box)
+            href = re.search(r'href="(https://www\.kuecher\.com/[^"]+)"', box)
+            price = re.search(r"€\xa0?([\d.]+),(\d\d)", box)
+            img = re.search(r'<img src="([^"]+)"', box)
+            if name and href:
+                items.append((_html.unescape(name.group(1)).strip(), href.group(1),
+                              f"EUR {int(price.group(1).replace('.', '')):,}" if price else "문의요망",
+                              img.group(1) if img else ""))
+        last = re.findall(r'id="p-last-bottom" value="(\d+)"', resp.text)
+        print(f"    └─ {page}페이지 {len(boxes)}개")
+        if not boxes or not last or page >= int(last[0]):
+            break
+        time.sleep(2)
+    for title, link, price, img in items:
+        if not re.search(r"(?i)\b(?:leica|leitz)", title) or re.search(r"(?i)defekt|ersatzteil|dummy", title):
+            continue
+        cond = "정보없음"
+        try:
+            detail = sess.get(link, timeout=30).text
+            m = re.search(r"Zustand:\s*([A-E][+-]?)", detail)
+            if m:
+                cond = KUECHER_PREFIX + m.group(1)
+        except Exception as e:
+            print(f"    ⚠️ Kücher 상세 오류: {e}")
+        time.sleep(1.5)
+        name = _kuecher_name(title)
+        cat = detect_category(name, price)
+        results.append({
+            "site": "Kücher (오스트리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Kücher 완료: {len(results)}개")
+    return results
+
+
+def _kuecher_name(title):
+    """'Leica R 100mm f/2,8 APO MACRO | GEBRAUCHT' → 'Leica R 100mm f2.8 APO MACRO'. 끝의 '| Gebraucht'·'| Aussteller',
+    주문번호(10412·20201 같은 1·2로 시작하는 다섯 자리), 'BJ.1953'(제조 연도), 독일어 말(Gehäuse·silber·schwarz·titanisiert·Objektiv, 'mit'은 '+')"""
+    n = re.sub(r"\s*\|\s*(?:gebraucht|aussteller)\s*$", "", title, flags=re.I)
+    n = re.sub(r"\b[12]\d{4}\b", " ", n)
+    n = re.sub(r"(?i)\bBJ\.?\s?\d{4}\b", " ", n)
+    n = re.sub(r"(?i)\bf/(\d+),(\d+)", r"f\1.\2", n)
+    n = re.sub(r"(?i)\bf/(\d)", r"f\1", n)
+    for de, en in (("Gehäuse", "Body"), ("titanisiert", "Titanium"), ("silber", "silver"), ("schwarz", "black"),
+                   ("mit", "+"), ("Objektiv", "")):
+        n = re.sub(rf"(?i)\b{de}\b", en, n)
+    n = re.sub(r"(?i)^Leica C (\d+mm f[\d.]+) ELMAR$", r"Leica Elmar-C \1", n.strip())
+    n = re.sub(r"(?i)^Leica R 100mm (f2\.8) APO MACRO$", r"Leica APO-Macro-Elmarit-R 100mm \1", n)
+    n = re.sub(r"\s+", " ", n).strip(" +|")
+    if re.fullmatch(r"(?i)Leica R\d(?:\.\d)?(?:E|S)?", n):  # 바디 이름만 있으면 렌즈로 분류됨
+        n += " Body"
+    return n
+
+
 def _html_unescape(text):
     import html as _html
     return _html.unescape(text)
@@ -11366,6 +11452,7 @@ def crawl_all():
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
         ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("Kücher (오스트리아)", lambda: ce.wrap_full_run("Kücher (오스트리아)", crawl_kuecher)),
         ("Blackdove Cameras (이탈리아)", lambda: ce.wrap_full_run("Blackdove Cameras (이탈리아)", crawl_blackdove)),
         ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
         ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
