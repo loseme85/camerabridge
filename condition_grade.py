@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(DCGRAZ_PREFIX):
+        return _DCGRAZ.get(cond[len(DCGRAZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
         return _PACIFICRIM.get(cond[len(PACIFICRIM_PREFIX):].strip().upper()), "label"
     if cond.startswith(CAMERACOLLECTION_PREFIX):
@@ -90,6 +92,10 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SUNRISE.get(cond[len(SUNRISE_PREFIX):].strip().upper()), "label"
     if cond.startswith(MORITZ_PREFIX):
         return _MORITZ.get(cond[len(MORITZ_PREFIX):].strip()), "label"
+    if cond.startswith(FOTOMEYER_PREFIX):
+        return _FOTOMEYER.get(cond[len(FOTOMEYER_PREFIX):].strip().lower()), "label"
+    if cond.startswith(PANAJOU_PREFIX):
+        return _PANAJOU.get(cond[len(PANAJOU_PREFIX):].strip().lower()), "label"
     if cond.startswith(FOTOGOERLITZ_PREFIX):
         return _FOTOGOERLITZ.get(cond[len(FOTOGOERLITZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTONO_PREFIX):
@@ -860,6 +866,10 @@ _ADOPHOTO = {"DEMO": "S"}
 PCH_PREFIX = "PCH: "
 _PCH = {"DEMO": "S"}
 
+# 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
+DCGRAZ_PREFIX = "DCGraz: "
+_DCGRAZ = {"DEMO": "S"}
+
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
 # EX+ A 4·B 1 · EX A 1·B 4 · EX- B 3·C 2 · VG+ C 1 · VG C 1. 이 대응 기준 정확 일치 4/20 · 한 등급 이내 19/20
@@ -886,3 +896,20 @@ _SUNRISE = {"S": "S", "A+": "S", "A": "A", "B+": "B", "B": "B", "C": "C", "D": "
 # 美品 A·良上 B·良品 B로 두면 정확 일치 4/10 · 한 등급 이내 10/10 (사진이 평균 0.6등급 후함, 기존 매장 0.8과 비슷 → 그대로)
 MORITZ_PREFIX = "Moritz: "
 _MORITZ = {"極上": "A", "美品": "A", "良上品": "B", "良上": "B", "良品": "B", "並上": "C", "並品": "C", "並": "D"}
+
+
+
+# 독일 Foto Meyer (베를린): 중고 상품 화면 속성 'Zustand' (2026-11-08 밤샘).
+# 사진 평가(표기 가리고 20점): 'sehr leichte' 5점 모두 사진 A, 'leichte' A5·B2, 'Gebrauchsspuren' B3·A2, 'starke' D2·A1
+# → 사진이 0.8등급 후한 것을 감안해 아래처럼 (정확히 12/20, 한 등급 이내 19/20)
+FOTOMEYER_PREFIX = "FotoMeyer: "
+_FOTOMEYER = {"neuwertig": "S", "sehr leichte gebrauchsspuren": "A", "leichte gebrauchsspuren": "B",
+              "gebrauchsspuren": "B", "deutliche gebrauchsspuren": "C", "starke gebrauchsspuren": "D"}
+
+
+# 프랑스 Panajou (보르도·4개 매장): 중고 제목 끝 '… d'Occasion Bon État Garantie 12 Mois' 꼴의 상태 말 (2026-11-08 밤샘).
+# 'Comme Neuf'(새것 같음)·'Très bon état'·'Bon état' 세 가지, 상태 말이 없는 'Occasion Garantie 12 Mois'는 등급 없이 사진 등급 대기열로.
+# 사진 평가(표기 가리고 8점): 'Bon état' 6점 중 5점이 사진으로 흠이 안 보임(A) — 매장 표기가 엄한 편이라
+# 다른 매장의 '사진이 0.8등급 후함'을 감안해도 한 칸 올림: Comme neuf·Très bon état → A, Bon état → B (8점 모두 한 등급 이내).
+PANAJOU_PREFIX = "Panajou: "
+_PANAJOU = {"comme neuf": "A", "très bon état": "A", "tres bon etat": "A", "bon état": "B", "bon etat": "B"}
