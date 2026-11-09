@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(LBPN_PREFIX):
+        return _LBPN.get(cond[len(LBPN_PREFIX):].strip().lower()), "label"
     if cond.startswith(F64_PREFIX):
         return _F64.get(cond[len(F64_PREFIX):].strip().lower().replace("ă", "a")), "label"
     if cond.startswith(FOTOC_PREFIX):
@@ -879,6 +881,11 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 프랑스 LBPN (La Boutique Photo Nikon): 설명의 'Très bon état'·'Bon état'·'Etat moyen' — Panajou(PANAJOU_PREFIX)와 같은 말
+# 사진 평가(표기 가리고 판매 중 라이카 렌즈 4점, 사진 2장씩, 2026-11-09 밤샘): bon A 2·B 1 · moyen B 1 → 정확 일치 2/4 · 한 등급 이내 4/4
+LBPN_PREFIX = "LBPN: "
+_LBPN = {"comme neuf": "S", "excellent etat": "A", "tres bon etat": "A", "bon etat": "B", "etat moyen": "C", "etat d'usage": "C", "etat d’usage": "C"}
 
 # 루마니아 F64 (위탁 중고): 사양 'Descriptive text SH' 문장 'Stare excelenta'(아주 좋음) · 'foarte buna'(매우 좋음) · 'buna'(좋음)
 # 사진 평가(표기 가리고 판매 중 라이카 3점 전부, 사진 3장씩, 2026-11-09 밤샘): excelenta A 1 · buna A 1·B 1 → 정확 일치 2/3 · 한 등급 이내 3/3
