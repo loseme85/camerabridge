@@ -84,6 +84,12 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTOC_PREFIX):
         return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(DIGITALSTORE_PREFIX):
+        return _DIGITALSTORE.get(cond[len(DIGITALSTORE_PREFIX):].strip().upper()), "label"
+    if cond.startswith(HEBENSTREIT_PREFIX):
+        return _HEBENSTREIT.get(cond[len(HEBENSTREIT_PREFIX):].strip().upper()), "label"
+    if cond.startswith(KUECHER_PREFIX):
+        return _KUECHER.get(cond[len(KUECHER_PREFIX):].strip().upper()), "label"
     if cond.startswith(DCGRAZ_PREFIX):
         return _DCGRAZ.get(cond[len(DCGRAZ_PREFIX):].strip().upper()), "label"
     if cond.startswith(PACIFICRIM_PREFIX):
@@ -877,6 +883,24 @@ _DCGRAZ = {"DEMO": "S"}
 # 사진이 후한 기존 경향(0.8) → 글자대로, '-'는 한 칸 아래: 정확 일치 1/6 · 한 등급 이내 6/6. Vintage는 상태가 아니라 연식이라 등급 없음
 FOTOC_PREFIX = "FotoC: "
 _FOTOC = {"NY": "S", "A": "A", "B+": "B", "B": "B", "B-": "C", "C+": "C", "C": "D", "C-": "D", "DEFEKT": "X"}
+
+# 오스트리아 Digitalstore (빈): 상세 'ZUSTAND: A neuwertiger Zustand'(흔적 없거나 아주 적음) · 'B guter Zustand'(적은 흔적) · C
+# 사진 평가(표기 가리고 판매 중 라이카 7점 전부, 사진 2장씩, 2026-11-09 밤샘): A A 4 · B A 3 — 사진이 후한 기존 경향과 같음 →
+# 글자대로: 정확 일치 4/7 · 한 등급 이내 7/7
+DIGITALSTORE_PREFIX = "Digitalstore: "
+_DIGITALSTORE = {"A": "A", "B": "B", "C": "C", "D": "D"}
+
+# 오스트리아 Foto Hebenstreit: 설명 'Zustand A‑B: …' (A·A-B·B·B-C·C)
+# 사진 평가(표기 가리고 판매 중 등급 있는 라이카 11점 전부, 사진 2장씩, 2026-11-09 밤샘): A A 1·B 1 · A-B A 1 · B A 3·B 2 ·
+# B-C A 1 · C B 2. 사진이 평균 0.8등급 후함(기존 매장과 같음) → 글자 앞쪽대로: 정확 일치 3/11 · 한 등급 이내 10/11
+HEBENSTREIT_PREFIX = "Hebenstreit: "
+_HEBENSTREIT = {"A": "A", "A-B": "B", "B": "B", "B-C": "C", "C": "C", "C-D": "D", "D": "D"}
+
+# 오스트리아 Kücher: 상세 설명 'Zustand: A' (A+·A·A-·B+·B·B-·C·D). 판매 중 라이카 22점 중 15점은 사진이 매장 로고뿐이라
+# 표기를 가린 채 상세 설명 글(흠·먼지·곰팡이·기름·셔터)로 평가 (2026-11-09 밤샘): A+ S 1 · A S 1·A 5·C 1(R6 셔터 늦음) · A- A 2 ·
+# B B 2·C 1 · B- C 3 · C D 5 · D D 1. 이 대응 기준 정확 일치 19/22 · 한 등급 이내 21/22 — C는 '광학계 긁힘 심함·곰팡이·조리개 기름'이라 D
+KUECHER_PREFIX = "Kuecher: "
+_KUECHER = {"A+": "S", "A": "A", "A-": "A", "B+": "B", "B": "B", "B-": "C", "C": "D", "D": "D", "E": "X"}
 
 # 미국 Pacific Rim Camera: 설명 끝 Shutterbug 등급 (Mint＞Mint-＞EX++＞EX+＞EX＞EX-＞VG+＞VG＞G) — 같은 등급을 쓰는 Tamarkin 대응에 맞춤
 # 사진 평가(표기 가리고 20점 — 바디·렌즈가 3점뿐이라 액세서리 섞음, 사진 1장씩, 2026-11-07): MINT A 1 · MINT- A 1·B 1 ·
