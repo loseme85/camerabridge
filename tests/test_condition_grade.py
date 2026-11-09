@@ -616,6 +616,14 @@ def test_panajou_title_state():
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
 
 
+def test_fotomundus_title_state():
+    from condition_grade import grade_of, FOTOMUNDUS_PREFIX
+    site = "Foto Mundus (독일)"
+    assert grade_of(site, FOTOMUNDUS_PREFIX + "wie neu")[0] == "A"
+    assert grade_of(site, FOTOMUNDUS_PREFIX + "topzustand")[0] == "B"
+    assert grade_of(site, FOTOMUNDUS_PREFIX + "guter zustand")[0] == "C"
+
+
 def test_jbv_title_state():
     from condition_grade import grade_of, JBV_PREFIX
     site = "JBV Foto (독일)"

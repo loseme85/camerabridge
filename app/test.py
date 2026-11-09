@@ -6554,6 +6554,79 @@ def crawl_fksecondhand():
     return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
 
 
+def crawl_fotomundus():
+    """Foto Mundus (독일 노르트호른, Shopware 6, 2026-11-09 밤샘) - 'Gebrauchtware' 분류 전체(620여 개, 24개씩 26쪽, ?p= —
+    robots.txt 금지 아님)에서 이름에 Leica·Leitz가 든 것만 (Voigtländer 'für Leica M'·Panasonic Leica DG·Sigma는 뺌).
+    상세 화면 첫 그림은 매장 로고라 목록 그림을 씀. 가격 EUR.
+    등급은 제목 속 말: 'Messeware'·'Ausstellungsstück'(전시품) · 'Neuzustand'·'wie neu'·'Retoure' · 'Topzustand' · 'sehr gut' · 'guter Zustand'"""
+    import html as _html
+    import requests
+    from condition_grade import FOTOMUNDUS_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.foto-mundus.de"
+    print(f"\n  📂 Foto Mundus 크롤링 시작")
+    for page in range(1, 60):
+        resp = sess.get(f"{base}/angebote/gebrauchtware/", params={"p": page}, timeout=30)
+        resp.raise_for_status()
+        boxes = resp.text.split('class="card product-box')[1:]
+        new = 0
+        for b in boxes:
+            link = re.search(r'href="(https://www\.foto-mundus\.de/p/[^"]+)"\s*title="([^"]+)"', b)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            title = re.sub(r"\s+", " ", _html.unescape(link.group(2))).strip()
+            if not re.search(r"(?i)\bleica\b|\bleitz\b", title) or re.search(r"(?i)panasonic|lumix|sigma|voigtl|für leica|fuer leica|ttartisan", title):
+                continue
+            pr = re.search(r"([\d.]+),(\d\d)\s*(?:&nbsp;|\xa0|\s)*€", b)
+            img = re.search(r'<img src="([^"]+)"', b)
+            m = re.search(r"(?i)(Messeware|Ausstellungsstück|Neuzustand|wie neu|Retoure|Topzustand|sehr gut|guter Zustand)", title)
+            name = _fotomundus_name(title)
+            price = f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Foto Mundus (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": FOTOMUNDUS_PREFIX + m.group(1).lower() if m else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if page % 10 == 1:
+            print(f"    └─ {page}페이지 {len(boxes)}개 (새 {new})")
+        if not boxes or not new:
+            break
+        time.sleep(1.2)
+    print(f"  ✅ Foto Mundus 완료: {len(results)}개")
+    return results
+
+
+def _fotomundus_name(title):
+    """'Leica APO-SUMMICRON-SL 28mm 2.0 ASPH 11183 wie neu, originalverpackt #47868**' → 'Leica APO-SUMMICRON-SL 28mm f2.0 ASPH 11183'.
+    끝의 매장 번호 '#47868**', 쉼표 뒤·상태 말 뒤 꼬리, '28mm 2.0' → f2.0, 'Gehäuse' → Body, 'silber' → silver"""
+    n = re.sub(r"\s*#X?\d+\**\s*$", "", title)
+    n = re.sub(r"(?i)\s*,?\s*\b(?:Messeware|Ausstellungsstück|Neuzustand|wie neu|Retoure|Topzustand|sehr gut|guter Zustand|komplett geprüft|"
+               r"Sammlerstück|SAMMLERSTÜCK|aus Sammlerhand|Einzelstück|org\.-verpackt|originalverpackt|ovp)\b.*$", "", n)
+    n = re.sub(r"(?i)\b(\d{2,3}(?:-\d{2,3})?mm)\s+(\d(?:\.\d)?(?:-\d(?:\.\d)?)?)\b", r"\1 f\2", n)
+    n = re.sub(r"(?i)\bGehäuse\b", "Body", n)
+    n = re.sub(r"(?i)\bsilber\b", "silver", n)
+    n = re.sub(r"(?i)^Leica Leitz Wetzlar\b", "Leitz", n)
+    n = re.sub(r"(?i)\bHandgriff\b", "Handgrip", n)  # 독일어 'Handgriff'는 부속품으로 못 읽어 Q2·D-Lux 8 바디에 붙음
+    n = re.sub(r"(?i)\bminilux Summarit 35-70mm\b", "Minilux Zoom", n)
+    return re.sub(r"\s+", " ", n).strip(" ,")
+
+
 def crawl_jbvfoto():
     """JBV Foto (독일 뉘른베르크, 클래식 카메라점, JTL-Shop 5, 2026-11-09 밤샘) - 제조사 Leica 화면 '/hersteller/leica/'
     (24개씩, 쪽 넘김 '_s2' — robots.txt는 물음표 필터만 막음) 전체에서 'Verfügbar'(판매 중)만. 다른 회사(Voigtländer 등) 렌즈는 뺌.
@@ -12063,6 +12136,7 @@ def crawl_all():
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
         ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("Foto Mundus (독일)", lambda: ce.wrap_full_run("Foto Mundus (독일)", crawl_fotomundus)),
         ("JBV Foto (독일)", lambda: ce.wrap_full_run("JBV Foto (독일)", crawl_jbvfoto)),
         ("fotopro24 (독일)", lambda: ce.wrap_full_run("fotopro24 (독일)", crawl_fotopro24)),
         ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),

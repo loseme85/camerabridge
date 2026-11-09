@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTOMUNDUS_PREFIX):
+        return _FOTOMUNDUS.get(cond[len(FOTOMUNDUS_PREFIX):].strip().lower()), "label"
     if cond.startswith(JBV_PREFIX):
         return _JBV.get(cond[len(JBV_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTOK_PREFIX):
@@ -885,6 +887,13 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 독일 Foto Mundus: 중고 제목 속 상태 말 — 'Messeware'·'Ausstellungsstück'(전시품) · 'Neuzustand'·'wie neu'·'Retoure'(반품) · 'Topzustand' ·
+# 'sehr gut' · 'guter Zustand'. 사진 평가(표기 가리고 라이카 바디·렌즈 20여 점, 목록 사진 1장씩, 2026-11-09 밤샘): wie neu·Retoure·Neuzustand 모두 A,
+# Topzustand A, guter Zustand A 1·B 1 — 사진이 후한 기존 경향(0.8)을 따라 Topzustand B · guter Zustand C
+FOTOMUNDUS_PREFIX = "FotoMundus: "
+_FOTOMUNDUS = {"messeware": "S", "ausstellungsstück": "S", "neuzustand": "A", "wie neu": "A", "retoure": "A",
+               "topzustand": "B", "sehr gut": "B", "guter zustand": "C"}
 
 # 독일 JBV Foto: 제목 끝 상태 말 — 'NOS MINT'·'NOS'·'BNIB'(쓰지 않은 재고) · 'MINT' · 'near MINT' · 'EXC' · 'HAZE'·'FUNGUS'(렌즈 흐림·곰팡이) ·
 # 'NOTTESTED'(시험 안 함) · 'DEFECTIVE'(고장, _BROKEN이 먼저 X). 대부분은 말이 없어 사진 등급 대기열로.
