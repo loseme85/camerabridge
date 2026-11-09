@@ -1,4 +1,5 @@
 """모델별 시세 페이지(scripts/build_model_pages.py)가 언어별로 짝을 맞춰 만들어지는지."""
+import json
 import re
 import sys
 from pathlib import Path
@@ -12,7 +13,7 @@ import build_model_pages as mp  # noqa: E402
 def test_pages_sitemap_and_hreflang(tmp_path):
     result = mp.build(tmp_path)
     models = result["models"]
-    assert 0 < len(models) <= mp.MAX_PAGES
+    assert len(models) > 0  # 기존 공개 주소는 신규 후보 수 제한과 별도로 유지
     assert len(set(models)) == len(models)
     for lang in mp.LANGS:
         path = mp.PATH[lang]  # 2026-11-08: 9개 언어, 주소는 소문자 (/zh-hans/)
@@ -26,6 +27,12 @@ def test_pages_sitemap_and_hreflang(tmp_path):
     sitemap = (tmp_path / "sitemap.xml").read_text(encoding="utf-8")
     assert sitemap.count("<url>") == 1 + (len(models) + 1) * len(mp.LANGS)
     assert "<loc>https://camerabridge.io/</loc>" in sitemap
+    # Search Console 404로 신고된 세 모델은 모든 언어에서 복원되어야 한다.
+    for slug in ("x2-standard", "m4-50-jahre", "m6-leitz-wetzlar"):
+        assert slug in models
+        for lang in mp.LANGS:
+            assert (tmp_path / mp.PATH[lang] / "leica" / slug / "index.html").exists()
+            assert f"<loc>{mp.page_url(lang, slug)}</loc>" in sitemap
 
 
 def test_listing_filters():
@@ -64,3 +71,48 @@ def test_vercel_exclude_files_within_limit():
     conf = json.loads((Path(__file__).resolve().parents[1] / "vercel.json").read_text(encoding="utf-8"))
     for spec in conf.get("functions", {}).values():
         assert len(spec.get("excludeFiles", "")) <= 256
+
+
+def test_published_urls_survive_stock_rank_and_standard_ratio_changes(monkeypatch):
+    def model(eid, active, total, **extra):
+        return {"id": eid, "kind": "Body", "active_count": active, "listing_count": total, **extra}
+
+    entities = [model("leica:body:parent", 20, 30),
+                model("leica:body:parent:standard", 8, 21, parent="leica:body:parent"),
+                model("leica:body:rare", 0, 5),
+                model("leica:body:runner-up", 3, 10),
+                model("leica:body:new-thin", 2, 2)]
+    monkeypatch.setattr(mp, "MAX_PAGES", 1)
+    assert [e["id"] for e in mp.pick_entities(entities)] == ["leica:body:parent"]
+    published = {"leica:body:parent:standard", "leica:body:rare", "leica:body:runner-up"}
+    assert {e["id"] for e in mp.pick_entities(entities, published)} == published | {"leica:body:parent"}
+
+
+def test_retained_empty_page_uses_current_data_and_dry_run_preserves_registry(tmp_path, monkeypatch):
+    summary = json.loads(mp.SUMMARY.read_text(encoding="utf-8"))
+    entity = next(e for e in summary["entities"] if e["id"] == "leica:body:m4:50-jahre")
+    entity.update(active_count=0, sold_median_krw=None, sold_price_count=0)
+    summary["entities"] = [entity]
+    source = tmp_path / "source"
+    source.mkdir()
+    summary_path, index_path = source / "summary.json", source / "index.json"
+    registry, lastmod = source / "published.json", source / "lastmod.json"
+    summary_path.write_text(json.dumps(summary))
+    index_path.write_text(json.dumps({"records": []}))
+    registry.write_text(json.dumps({"entity_ids": [entity["id"]]}))
+    # 기존 lastmod로부터 공개 이력을 복구할 때도 수량 기준으로 삭제되지 않는다.
+    lastmod.write_text(json.dumps({mp.page_url("ko", "m4-50-jahre"): {"h": "old", "d": "2026-11-01"}}))
+    before = registry.read_bytes(), lastmod.read_bytes()
+    for key, value in (("SUMMARY", summary_path), ("INDEX", index_path), ("PUBLISHED", registry), ("LASTMOD", lastmod)):
+        monkeypatch.setattr(mp, key, value)
+    output = tmp_path / "site"
+    result = mp.build(output)
+    assert result["models"] == ["m4-50-jahre"]
+    page = (output / "en/leica/m4-50-jahre/index.html").read_text()
+    assert mp.T["en"]["none"] in page
+    assert mp.T["en"]["active_val"].format(n=0, shops=0) in page
+    assert '"AggregateOffer"' not in page
+    assert "Leica M4 50 Jahre" in page
+    assert (registry.read_bytes(), lastmod.read_bytes()) == before
+    registry.write_text(json.dumps({"entity_ids": []}))
+    assert mp.build(output)["models"] == ["m4-50-jahre"]
