@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(DIGITALSTORE_PREFIX):
+        return _DIGITALSTORE.get(cond[len(DIGITALSTORE_PREFIX):].strip().upper()), "label"
     if cond.startswith(HEBENSTREIT_PREFIX):
         return _HEBENSTREIT.get(cond[len(HEBENSTREIT_PREFIX):].strip().upper()), "label"
     if cond.startswith(KUECHER_PREFIX):
@@ -873,6 +875,12 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 오스트리아 Digitalstore (빈): 상세 'ZUSTAND: A neuwertiger Zustand'(흔적 없거나 아주 적음) · 'B guter Zustand'(적은 흔적) · C
+# 사진 평가(표기 가리고 판매 중 라이카 7점 전부, 사진 2장씩, 2026-11-09 밤샘): A A 4 · B A 3 — 사진이 후한 기존 경향과 같음 →
+# 글자대로: 정확 일치 4/7 · 한 등급 이내 7/7
+DIGITALSTORE_PREFIX = "Digitalstore: "
+_DIGITALSTORE = {"A": "A", "B": "B", "C": "C", "D": "D"}
 
 # 오스트리아 Foto Hebenstreit: 설명 'Zustand A‑B: …' (A·A-B·B·B-C·C)
 # 사진 평가(표기 가리고 판매 중 등급 있는 라이카 11점 전부, 사진 2장씩, 2026-11-09 밤샘): A A 1·B 1 · A-B A 1 · B A 3·B 2 ·
