@@ -616,6 +616,13 @@ def test_panajou_title_state():
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
 
 
+def test_f64_stare():
+    from condition_grade import grade_of, F64_PREFIX
+    site = "F64 (루마니아)"
+    assert grade_of(site, F64_PREFIX + "excelenta")[0] == "A"
+    assert grade_of(site, F64_PREFIX + "bună")[0] == "B"
+
+
 def test_fotoc_kategori():
     from condition_grade import grade_of, FOTOC_PREFIX
     site = "FOTO/C (덴마크)"

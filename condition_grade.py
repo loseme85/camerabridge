@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(F64_PREFIX):
+        return _F64.get(cond[len(F64_PREFIX):].strip().lower().replace("ă", "a")), "label"
     if cond.startswith(FOTOC_PREFIX):
         return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
     if cond.startswith(DIGITALSTORE_PREFIX):
@@ -877,6 +879,11 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 루마니아 F64 (위탁 중고): 사양 'Descriptive text SH' 문장 'Stare excelenta'(아주 좋음) · 'foarte buna'(매우 좋음) · 'buna'(좋음)
+# 사진 평가(표기 가리고 판매 중 라이카 3점 전부, 사진 3장씩, 2026-11-09 밤샘): excelenta A 1 · buna A 1·B 1 → 정확 일치 2/3 · 한 등급 이내 3/3
+F64_PREFIX = "F64: "
+_F64 = {"excelenta": "A", "excelentă": "A", "foarte buna": "B", "buna": "B", "acceptabila": "C", "satisfacatoare": "C", "uzata": "D"}
 
 # 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
 # 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.
