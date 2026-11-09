@@ -82,6 +82,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(HEBENSTREIT_PREFIX):
+        return _HEBENSTREIT.get(cond[len(HEBENSTREIT_PREFIX):].strip().upper()), "label"
     if cond.startswith(KUECHER_PREFIX):
         return _KUECHER.get(cond[len(KUECHER_PREFIX):].strip().upper()), "label"
     if cond.startswith(DCGRAZ_PREFIX):
@@ -871,6 +873,12 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 오스트리아 Foto Hebenstreit: 설명 'Zustand A‑B: …' (A·A-B·B·B-C·C)
+# 사진 평가(표기 가리고 판매 중 등급 있는 라이카 11점 전부, 사진 2장씩, 2026-11-09 밤샘): A A 1·B 1 · A-B A 1 · B A 3·B 2 ·
+# B-C A 1 · C B 2. 사진이 평균 0.8등급 후함(기존 매장과 같음) → 글자 앞쪽대로: 정확 일치 3/11 · 한 등급 이내 10/11
+HEBENSTREIT_PREFIX = "Hebenstreit: "
+_HEBENSTREIT = {"A": "A", "A-B": "B", "B": "B", "B-C": "C", "C": "C", "C-D": "D", "D": "D"}
 
 # 오스트리아 Kücher: 상세 설명 'Zustand: A' (A+·A·A-·B+·B·B-·C·D). 판매 중 라이카 22점 중 15점은 사진이 매장 로고뿐이라
 # 표기를 가린 채 상세 설명 글(흠·먼지·곰팡이·기름·셔터)로 평가 (2026-11-09 밤샘): A+ S 1 · A S 1·A 5·C 1(R6 셔터 늦음) · A- A 2 ·
