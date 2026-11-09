@@ -6554,6 +6554,80 @@ def crawl_fksecondhand():
     return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
 
 
+def crawl_fotok():
+    """Foto K (스페인 바르셀로나, PrestaShop, 2026-11-09 밤샘) - 중고 분류 'material-segunda-mano' 전체(130여 개, 5쪽)에서
+    이름에 Leica·Leitz가 든 것만 (Panasonic Leica DG·Zeiss·'para Leica'는 뺌). 가격 EUR.
+    등급은 이름 끝 별 개수 '2ª Mano ***' (중고 135개 중 별 3개가 98개 = 보통 중고)"""
+    import html as _html
+    import requests
+    from condition_grade import FOTOK_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://fotok.es"
+    print(f"\n  📂 Foto K 크롤링 시작")
+    for page in range(1, 30):
+        resp = sess.get(f"{base}/material-segunda-mano", params={"page": page} if page > 1 else None, timeout=30)
+        resp.raise_for_status()
+        arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+        new = 0
+        for a in arts:
+            link = re.search(r'href="(https://fotok\.es/[^"#?]+)"', a)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            t = re.search(r'product-title[^>]*>\s*<a[^>]*>\s*([^<]+)', a) or re.search(r'alt="([^"]+)"', a)
+            title = re.sub(r"\s+", " ", _html.unescape(t.group(1))).strip() if t else ""
+            if not re.search(r"(?i)\bleica\b|\bleitz\b", title) or re.search(r"(?i)panasonic|lumix|zeiss|voigtl|sigma|ttartisan|para leica", title):
+                continue
+            stars = re.search(r"(\*{1,5})\s*$", title)
+            pr = re.search(r"([\d.]+),(\d\d)\s*(?:&nbsp;|\xa0|\s)*€", a)
+            slug = link.group(1).rstrip("/").rsplit("/", 1)[-1]
+            # 상품 칸 HTML에 다른 상품 그림이 섞여 있음(2026-11-09) → 상품 주소와 같은 이름의 그림만
+            img = next((m for m in re.findall(r'(https://fotok\.es/\d+-[a-z_]+/[^"\s,]+\.(?:jpg|jpeg|webp|png))', a) if slug and slug in m), "")
+            name = _fotok_name(title)
+            price = f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Foto K (스페인)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": FOTOK_PREFIX + str(len(stars.group(1))) if stars else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(arts)}개 (새 {new})")
+        if not arts or not new:
+            break
+        time.sleep(1.5)
+    print(f"  ✅ Foto K 완료: {len(results)}개")
+    return results
+
+
+def _fotok_name(title):
+    """'CAMARA ANALOGICA LEICA M2 Cuerpo 2ª Mano ***' → 'Leica M2 Body'. 앞의 'CAMARA ANALOGICA'·'OBJETIVO', 뒤의 '2ª Mano'·별,
+    'montura L', 'F/2.8' → f2.8, 'M39' 렌즈 → '(L39)', 'Leica 50mm f3.5 (L39)'는 Elmar"""
+    n = re.sub(r"\s*2\s?ª\s?Mano.*$", "", title, flags=re.I)
+    n = re.sub(r"(?i)^(?:CAMARA ANALOGICA|CAMARA|OBJETIVO)\s+", "", n)
+    n = re.sub(r"(?i)\s+montura L\b", "", n)
+    n = re.sub(r"(?i)\bF/(\d)", r"f\1", n)
+    n = re.sub(r"(?i)\bCuerpo\b", "Body", n)
+    n = re.sub(r"(?i)\b(\d{2,3}mm f[\d.]+) M39\b", r"\1 (L39)", n)
+    n = re.sub(r"(?i)^LEICA\b", "Leica", re.sub(r"\s+", " ", n).strip())
+    n = re.sub(r"(?i)^Leica 50mm f3\.5 \(L39\)$", "Leica Elmar 50mm f3.5 (L39)", n)
+    n = re.sub(r"(?i)^Leica VARIO-ELMARIT-SL\b", "Leica Vario-Elmarit-SL", n)
+    return n
+
+
 def crawl_lbpn():
     """LBPN · La Boutique Photo Nikon (프랑스 파리, PrestaShop, 2026-11-09 밤샘) - 라이카 중고 분류 4곳(바디 313·렌즈 328·액세서리 343·
     플래시 320)의 상품 주소를 모아 상세 화면 JSON-LD(이름·가격·재고·설명)를 읽음 (10여 개). 분류 안에 다른 회사(Canon 7·Industar)가
@@ -11838,6 +11912,7 @@ def crawl_all():
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
         ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
