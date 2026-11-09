@@ -31,8 +31,9 @@ INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SITE = "https://camerabridge.io"
 LANGS = ("ko", "en", "ja", "de", "it", "es", "pt", "zh-Hans", "zh-Hant")  # 2026-11-08 사장님: 방문 늘리기 — 독일어·이탈리아어·스페인어·포르투갈어·중국어 2종 추가
 PATH = {l: l.lower() for l in LANGS}  # 주소: /zh-hans/leica/…
-MIN_ACTIVE = 3           # 판매 중 매물이 이만큼 있는 모델만 페이지로 (빈약한 페이지는 안 만듦)
-MAX_PAGES = 400          # 매물 많은 순서로 최대 이만큼
+MIN_ACTIVE = 3           # 새 모델 페이지를 처음 공개할 때의 최소 판매 중 매물 수
+MAX_PAGES = 400          # 신규 공개 후보의 상위 모델 수 (이미 공개한 주소는 별도로 유지)
+PUBLISHED = ROOT / "data" / "derived" / "model_pages_published.json"
 LASTMOD = ROOT / "data" / "derived" / "model_pages_lastmod.json"  # 페이지별 내용 지문과 실제로 바뀐 날
 LISTINGS_SHOWN = 30      # 페이지마다 보여 줄 판매 중 매물 (싼 순)
 DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY", "de": "EUR", "it": "EUR", "es": "EUR", "pt": "EUR", "zh-Hans": "CNY", "zh-Hant": "HKD"}
@@ -215,22 +216,33 @@ def shop_parts(source: str) -> tuple[str, str]:
     return source, SOURCE_COUNTRY.get(source, "한국")
 
 
-def pick_entities(entities: list[dict]) -> list[dict]:
-    """판매 중 MIN_ACTIVE개 이상인 모델을 매물 많은 순으로 최대 MAX_PAGES개. '세대 미표기' 묶음, 부모와 사실상 같은 '기본형'은 뺀다
-    (M6 → M6 Classic·M6 TTL처럼 세대·버전은 각자 페이지, 부모 페이지는 '세대·버전별'로 이어 줌)."""
+def pick_entities(entities: list[dict], published: set[str] | None = None) -> list[dict]:
+    """새 페이지에는 수량·중복 기준을 적용하되 이미 공개한 모델 주소는 유지한다.
+
+    재고 감소·상위 순위 변화·기본형 비율 변화가 기존 URL의 404로 이어지면 안 된다.
+    카탈로그에서 제거된 모델이나 기능·세대 미표기 묶음은 보존 대상이 아니다.
+    """
+    published = published or set()
     by_id = {e["id"]: e for e in entities}
     pool = []
+    retained = []
     for e in entities:
-        if e.get("feature") or e["kind"] not in ("Body", "Lens") or (e.get("active_count") or 0) < MIN_ACTIVE:
+        if e.get("feature") or e["kind"] not in ("Body", "Lens"):
             continue
         if "unspecified" in e["id"]:
+            continue
+        if e["id"] in published:
+            retained.append(e)
+        if (e.get("active_count") or 0) < MIN_ACTIVE:
             continue
         parent = by_id.get(e.get("parent") or "")
         if e["id"].endswith(":standard") and parent and parent["listing_count"] <= e["listing_count"] * 1.5:
             continue
         pool.append(e)
     pool.sort(key=lambda e: (-e["listing_count"], e["id"]))
-    return pool[:MAX_PAGES]
+    selected = {e["id"]: e for e in pool[:MAX_PAGES]}
+    selected.update({e["id"]: e for e in retained})
+    return sorted(selected.values(), key=lambda e: (-e["listing_count"], e["id"]))
 
 
 def footer_for(lang: str) -> str:
@@ -264,7 +276,12 @@ def build(out: Path) -> dict:
     summary = json.loads(SUMMARY.read_text(encoding="utf-8"))
     entities = summary["entities"]
     by_id = {e["id"]: e for e in entities}
-    picked = pick_entities(entities)
+    # 시험 출력은 실서비스의 공개 기록을 읽기만 하고 변경하지 않는다.
+    published = set(json.loads(PUBLISHED.read_text(encoding="utf-8"))["entity_ids"]) if PUBLISHED.exists() else set()
+    # 기존 lastmod도 읽어 배포·크롤 병합 시 새로 공개된 주소를 놓치지 않는다.
+    old_marks = json.loads(LASTMOD.read_text(encoding="utf-8")) if LASTMOD.exists() else {}
+    published.update(e["id"] for e in entities if any(page_url(lang, slug_of(e["id"])) in old_marks for lang in LANGS))
+    picked = pick_entities(entities, published)
     slugs = {e["id"]: slug_of(e["id"]) for e in picked}
     assert len(set(slugs.values())) == len(slugs), "모델 주소가 겹침"
     to_krw = krw_rates()
@@ -294,7 +311,6 @@ def build(out: Path) -> dict:
 
     for lang in LANGS:
         shutil.rmtree(out / PATH[lang] / "leica", ignore_errors=True)
-    old_marks = json.loads(LASTMOD.read_text(encoding="utf-8")) if LASTMOD.exists() else {}
     marks: dict[str, dict] = {}
     today = updated.date().isoformat()
 
@@ -497,6 +513,7 @@ def build(out: Path) -> dict:
     (out / "llms.txt").write_text("\n".join(lines), encoding="utf-8")
     if out == ROOT:  # 시험 출력(--out)에서는 기록을 건드리지 않음
         LASTMOD.write_text(json.dumps(marks, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
+        PUBLISHED.write_text(json.dumps({"entity_ids": sorted(published | set(slugs))}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return {"pages": len(picked) * len(LANGS), "models": [slugs[e["id"]] for e in picked], "lastmod": marks}
 
 
@@ -504,7 +521,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, default=ROOT)
     result = build(parser.parse_args().out)
-    print(f"모델 페이지 {result['pages']}개 ({len(result['models'])}개 모델 × {len(LANGS)}개 언어, 판매 중 {MIN_ACTIVE}개 이상)")
+    print(f"모델 페이지 {result['pages']}개 ({len(result['models'])}개 모델 × {len(LANGS)}개 언어, 신규는 판매 중 {MIN_ACTIVE}개 이상·기존 주소 유지)")
 
 
 if __name__ == "__main__":
