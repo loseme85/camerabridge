@@ -616,6 +616,37 @@ def test_panajou_title_state():
     assert grade_of("Panajou (프랑스)", PANAJOU_PREFIX + "bon état")[0] == "B"
 
 
+def test_fotomundus_title_state():
+    from condition_grade import grade_of, FOTOMUNDUS_PREFIX
+    site = "Foto Mundus (독일)"
+    assert grade_of(site, FOTOMUNDUS_PREFIX + "wie neu")[0] == "A"
+    assert grade_of(site, FOTOMUNDUS_PREFIX + "topzustand")[0] == "B"
+    assert grade_of(site, FOTOMUNDUS_PREFIX + "guter zustand")[0] == "C"
+
+
+def test_jbv_title_state():
+    from condition_grade import grade_of, JBV_PREFIX
+    site = "JBV Foto (독일)"
+    assert grade_of(site, JBV_PREFIX + "NEAR MINT")[0] == "A"
+    assert grade_of(site, JBV_PREFIX + "FUNGUS")[0] == "D"
+    assert grade_of(site, JBV_PREFIX + "NOS MINT")[0] == "N"
+
+
+def test_fotok_stars():
+    from condition_grade import grade_of, FOTOK_PREFIX
+    site = "Foto K (스페인)"
+    assert grade_of(site, FOTOK_PREFIX + "4")[0] == "A"
+    assert grade_of(site, FOTOK_PREFIX + "3")[0] == "B"
+
+
+def test_lbpn_etat():
+    from condition_grade import grade_of, LBPN_PREFIX
+    site = "LBPN (프랑스)"
+    assert grade_of(site, LBPN_PREFIX + "tres bon etat")[0] == "A"
+    assert grade_of(site, LBPN_PREFIX + "bon etat")[0] == "B"
+    assert grade_of(site, LBPN_PREFIX + "etat moyen")[0] == "C"
+
+
 def test_f64_stare():
     from condition_grade import grade_of, F64_PREFIX
     site = "F64 (루마니아)"

@@ -82,6 +82,14 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _ADOPHOTO.get(cond[len(ADOPHOTO_PREFIX):].strip().upper()), "label"
     if cond.startswith(PCH_PREFIX):
         return _PCH.get(cond[len(PCH_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTOMUNDUS_PREFIX):
+        return _FOTOMUNDUS.get(cond[len(FOTOMUNDUS_PREFIX):].strip().lower()), "label"
+    if cond.startswith(JBV_PREFIX):
+        return _JBV.get(cond[len(JBV_PREFIX):].strip().upper()), "label"
+    if cond.startswith(FOTOK_PREFIX):
+        return _FOTOK.get(cond[len(FOTOK_PREFIX):].strip()), "label"
+    if cond.startswith(LBPN_PREFIX):
+        return _LBPN.get(cond[len(LBPN_PREFIX):].strip().lower()), "label"
     if cond.startswith(F64_PREFIX):
         return _F64.get(cond[len(F64_PREFIX):].strip().lower().replace("ă", "a")), "label"
     if cond.startswith(FOTOC_PREFIX):
@@ -879,6 +887,30 @@ _PCH = {"DEMO": "S"}
 # 오스트리아 Digital Camera Graz: 등급 표기 없음 — 이름의 Demogerät·Ausstellungsstück·Vitrinenstück(진열·시연품)만 S, 나머지는 사진 등급 대기열로
 DCGRAZ_PREFIX = "DCGraz: "
 _DCGRAZ = {"DEMO": "S"}
+
+# 독일 Foto Mundus: 중고 제목 속 상태 말 — 'Messeware'·'Ausstellungsstück'(전시품) · 'Neuzustand'·'wie neu'·'Retoure'(반품) · 'Topzustand' ·
+# 'sehr gut' · 'guter Zustand'. 사진 평가(표기 가리고 라이카 바디·렌즈 20여 점, 목록 사진 1장씩, 2026-11-09 밤샘): wie neu·Retoure·Neuzustand 모두 A,
+# Topzustand A, guter Zustand A 1·B 1 — 사진이 후한 기존 경향(0.8)을 따라 Topzustand B · guter Zustand C
+FOTOMUNDUS_PREFIX = "FotoMundus: "
+_FOTOMUNDUS = {"messeware": "S", "ausstellungsstück": "S", "neuzustand": "A", "wie neu": "A", "retoure": "A",
+               "topzustand": "B", "sehr gut": "B", "guter zustand": "C"}
+
+# 독일 JBV Foto: 제목 끝 상태 말 — 'NOS MINT'·'NOS'·'BNIB'(쓰지 않은 재고) · 'MINT' · 'near MINT' · 'EXC' · 'HAZE'·'FUNGUS'(렌즈 흐림·곰팡이) ·
+# 'NOTTESTED'(시험 안 함) · 'DEFECTIVE'(고장, _BROKEN이 먼저 X). 대부분은 말이 없어 사진 등급 대기열로.
+# 다른 매장의 MINT·near MINT 대응(Tamarkin·Classic Connection)에 맞춤 — 표본이 적어 사진 평가는 다음 등급 점검 때
+JBV_PREFIX = "JBV: "
+_JBV = {"NOS MINT": "N", "NOS": "N", "BNIB": "N", "MINT": "S", "MINT-": "A", "NEAR MINT": "A", "EXC": "B", "EXC+": "B", "EXC++": "B",
+        "HAZE": "D", "FUNGUS": "D", "NOTTESTED": "D", "DEFECTIVE": "X"}
+
+# 스페인 Foto K: 중고 이름 끝 별 개수 '2ª Mano ***' — 중고 135개 중 별 3개 98 · 4개 33 · 5개 2 · 2개 1 (2026-11-09)
+# 사진 대부분이 제조사 카탈로그 그림(한 상품은 다른 렌즈 사진)이라 사진 평가를 못 함 → 별 3개(대부분)를 보통 중고 B로, 한 개씩 위아래
+FOTOK_PREFIX = "FotoK: "
+_FOTOK = {"5": "S", "4": "A", "3": "B", "2": "C", "1": "D"}
+
+# 프랑스 LBPN (La Boutique Photo Nikon): 설명의 'Très bon état'·'Bon état'·'Etat moyen' — Panajou(PANAJOU_PREFIX)와 같은 말
+# 사진 평가(표기 가리고 판매 중 라이카 렌즈 4점, 사진 2장씩, 2026-11-09 밤샘): bon A 2·B 1 · moyen B 1 → 정확 일치 2/4 · 한 등급 이내 4/4
+LBPN_PREFIX = "LBPN: "
+_LBPN = {"comme neuf": "S", "excellent etat": "A", "tres bon etat": "A", "bon etat": "B", "etat moyen": "C", "etat d'usage": "C", "etat d’usage": "C"}
 
 # 루마니아 F64 (위탁 중고): 사양 'Descriptive text SH' 문장 'Stare excelenta'(아주 좋음) · 'foarte buna'(매우 좋음) · 'buna'(좋음)
 # 사진 평가(표기 가리고 판매 중 라이카 3점 전부, 사진 3장씩, 2026-11-09 밤샘): excelenta A 1 · buna A 1·B 1 → 정확 일치 2/3 · 한 등급 이내 3/3
