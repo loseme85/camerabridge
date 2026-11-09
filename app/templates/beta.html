@@ -181,6 +181,13 @@
     .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .home-extra:not(.is-open){display:none !important}
+    /* 로딩 표시 (2026-11-09) */
+    .cb-loading-dots{color:var(--text-soft);font-size:.8em;font-weight:400;white-space:nowrap}
+    .cb-loading-dots::after{content:'';display:inline-block;width:1.2em;text-align:left;animation:cbDots 1.2s steps(4,end) infinite}
+    @keyframes cbDots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+    .state-card.loading h3::before{content:'';display:inline-block;width:.85em;height:.85em;margin-right:.5em;vertical-align:-.08em;border:2px solid var(--border-strong);border-right-color:transparent;border-radius:50%;animation:cbSpin .8s linear infinite}
+    @keyframes cbSpin{to{transform:rotate(360deg)}}
+    @media (prefers-reduced-motion: reduce){.cb-loading-dots::after{animation:none;content:'…'}.state-card.loading h3::before{animation:none}}
     /* 모델 화면 정리 (2026-11-08 사장님: 텍스트가 많아 한눈에 안 들어옴) — 아래 시세 계산 칸이 같은 숫자를 더 자세히 보여 줌 */
     body.cb-calc .summary-metrics,body.cb-calc #summary-meta{display:none !important}
     .sort-bar{display:flex;align-items:center;justify-content:flex-end;gap:10px 14px;flex-wrap:wrap}
@@ -2364,6 +2371,7 @@
         market_price_label: { ko: '시세', en: 'Market price', ja: '相場', 'zh-Hans': '市场价格', 'zh-Hant': '市場價格', pt: 'Preço de mercado', es: 'Precio de mercado', de: 'Marktpreis', it: 'Prezzo di mercato' },
         market_price_pending: { ko: '시세 산정 보류', en: 'Market price on hold', ja: '相場の算出を保留中', 'zh-Hans': '暂不估算市场价', 'zh-Hant': '暫不估算市場價', pt: 'Preço de mercado em espera', es: 'Precio de mercado en espera', de: 'Marktpreis ausgesetzt', it: 'Prezzo di mercato in sospeso' },
         loading_caption: { ko: '검색 중', en: 'Searching', ja: '検索中', 'zh-Hans': '搜索中', 'zh-Hant': '搜尋中', pt: 'Buscando', es: 'Buscando', de: 'Suche läuft', it: 'Ricerca in corso' },
+        loading_count: { ko: '불러오는 중', en: 'Loading', ja: '読み込み中', 'zh-Hans': '加载中', 'zh-Hant': '載入中', pt: 'Carregando', es: 'Cargando', de: 'Wird geladen', it: 'Caricamento' },
         loading_meta: { ko: '매물과 가격 근거를 불러오고 있습니다', en: 'Loading listings and price evidence', ja: '商品と価格の根拠を読み込んでいます', 'zh-Hans': '正在加载商品与价格依据', 'zh-Hant': '正在載入商品與價格依據', pt: 'Carregando anúncios e evidências de preço', es: 'Cargando anuncios y evidencia de precio', de: 'Angebote und Preisnachweise werden geladen', it: 'Caricamento annunci ed evidenze di prezzo' },
         appending_meta: { ko: '결과를 더 불러오는 중입니다', en: 'Loading more results', ja: 'さらに結果を読み込んでいます', 'zh-Hans': '正在加载更多结果', 'zh-Hant': '正在載入更多結果', pt: 'Carregando mais resultados', es: 'Cargando más resultados', de: 'Weitere Ergebnisse werden geladen', it: 'Caricamento di altri risultati' },
         error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again', ja: 'もう一度検索してください', 'zh-Hans': '请再次尝试此搜索', 'zh-Hant': '請再次嘗試此搜尋', pt: 'Tente esta busca novamente', es: 'Intenta esta búsqueda de nuevo', de: 'Bitte versuche diese Suche erneut', it: 'Prova di nuovo questa ricerca' },
@@ -2473,7 +2481,7 @@
         low_data: { ko: '데이터 부족', en: 'Low coverage', ja: 'データ不足', 'zh-Hans': '数据不足', 'zh-Hant': '資料不足', pt: 'Poucos dados', es: 'Pocos datos', de: 'Wenig Daten', it: 'Dati limitati' },
       },
       state_card: {
-        loading_title: { ko: '검색 중입니다', en: 'Searching now', ja: '検索中です', 'zh-Hans': '正在搜索', 'zh-Hant': '正在搜尋', pt: 'Buscando agora', es: 'Buscando ahora', de: 'Suche läuft', it: 'Ricerca in corso' },
+        loading_title: { ko: '매물을 불러오는 중이에요 — 잠시만 기다려 주세요', en: 'Loading listings — one moment please', ja: '商品を読み込み中です — 少々お待ちください', 'zh-Hans': '正在加载商品 — 请稍候', 'zh-Hant': '正在載入商品 — 請稍候', pt: 'Carregando anúncios — aguarde um momento', es: 'Cargando anuncios — espera un momento', de: 'Angebote werden geladen — einen Moment bitte', it: 'Caricamento annunci — attendi un momento' },
         loading_body: { ko: '매물, 가격, 출처 정보를 정리하고 있습니다.', en: 'Listings, prices, and source details are being prepared.', ja: '商品・価格・出典情報を準備しています。', 'zh-Hans': '正在整理商品、价格与来源信息。', 'zh-Hant': '正在整理商品、價格與來源資訊。', pt: 'Anúncios, preços e detalhes da fonte estão sendo preparados.', es: 'Se están preparando anuncios, precios y detalles de la fuente.', de: 'Angebote, Preise und Quelldetails werden vorbereitet.', it: 'Si stanno preparando annunci, prezzi e dettagli della fonte.' },
         error_title: { ko: '검색 중 문제가 발생했습니다.', en: 'Something went wrong while searching.', ja: '検索中に問題が発生しました。', 'zh-Hans': '搜索时发生问题。', 'zh-Hant': '搜尋時發生問題。', pt: 'Algo deu errado durante a busca.', es: 'Ocurrió un problema durante la búsqueda.', de: 'Bei der Suche ist ein Problem aufgetreten.', it: 'Si è verificato un problema durante la ricerca.' },
         error_body: { ko: '데이터는 변경되지 않았습니다. 검색어를 조금 더 구체적으로 입력해 보세요.', en: 'No data was changed. Try a more specific query.', ja: 'データは変更されていません。より具体的な検索語を試してください。', 'zh-Hans': '数据未被更改。请尝试更具体的搜索词。', 'zh-Hant': '資料未被更改。請嘗試更具體的搜尋詞。', pt: 'Nenhum dado foi alterado. Tente uma busca mais específica.', es: 'No se cambiaron los datos. Prueba una búsqueda más específica.', de: 'Es wurden keine Daten geändert. Versuche eine spezifischere Suche.', it: 'Nessun dato è stato modificato. Prova una ricerca più specifica.' },
@@ -7374,6 +7382,11 @@
       els['market-price-caption'].textContent = ux('summary.market_price_label', 'Market price');
       els['market-price-value'].textContent = getPublicSummaryMarketPrice(policy);
       if(state.loading){
+        // 2026-11-09 사장님: 검색 직후 '0개'가 한동안 떠서 매물이 없는 것처럼 보임 → 숫자 대신 '불러오는 중…'
+        const wait = `<span class="cb-loading-dots">${escapeHtml(ux('summary.loading_count', 'Loading'))}</span>`;
+        els['result-count'].innerHTML = wait;
+        els['active-count'].innerHTML = wait;
+        els['market-price-value'].innerHTML = wait;
         els['summary-meta'].textContent = ux('summary.loading_meta', 'Loading listings and price evidence');
       }else if(state.appending && state.query){
         els['summary-meta'].textContent = ux('summary.appending_meta', 'Loading more results');
@@ -7439,7 +7452,7 @@
           ux('state_card.loading_title', 'Searching now'),
           ux('state_card.loading_body', 'Listings, prices, and source details are being prepared.'),
           [],
-          'subtle'
+          'subtle loading'
         );
         return;
       }
