@@ -16,9 +16,18 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Camera Bridge","url":"https://camerabridge.io/","potentialAction":{"@type":"SearchAction","target":"https://camerabridge.io/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231f4a3a%22/%3E%3Cpath%20d%3D%22M15%2042a17%2017%200%200%201%2034%200%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%222.4%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2240%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20font-size%3D%2221%22%20letter-spacing%3D%221%22%20fill%3D%22%23fff%22%3ECB%3C/text%3E%3C/svg%3E">
   <meta name="theme-color" content="#fcfcfa">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Noto+Serif+KR:wght@400;500;600&display=swap">
+  <!-- 서체 (2026-11-08 사장님 F안): 제목 EB Garamond · UI·숫자 Jost · 한글 Pretendard. 구글 글꼴 연결 대신 사이트에 직접 둠(독일 GDPR 판결 대응·속도) -->
+  <link rel="preload" href="/img/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/img/fonts/eb-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <style>
+@font-face{font-family:"Jost";font-style:normal;font-weight:300 700;font-display:swap;src:url(/img/fonts/jost-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Jost";font-style:normal;font-weight:300 700;font-display:swap;src:url(/img/fonts/jost-latin-ext-wght-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(/img/fonts/eb-garamond-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:600;font-display:swap;src:url(/img/fonts/eb-garamond-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:500;font-display:swap;src:url(/img/fonts/eb-garamond-latin-ext-500-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"EB Garamond";font-style:normal;font-weight:600;font-display:swap;src:url(/img/fonts/eb-garamond-latin-ext-600-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+  </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <style>
     :root{
@@ -47,7 +56,7 @@
       min-height:100vh;
       background:var(--bg);
       color:var(--text);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-family:"Jost","Pretendard Variable",ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       -webkit-font-smoothing:antialiased;
     }
     a{color:inherit}
@@ -171,6 +180,76 @@
     .home-item-name{color:var(--text);font-size:13px;font-weight:600;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
     .home-item-price{color:var(--text);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
     .home-item-shop{display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .home-extra:not(.is-open){display:none !important}
+    /* 모델 화면 정리 (2026-11-08 사장님: 텍스트가 많아 한눈에 안 들어옴) — 아래 시세 계산 칸이 같은 숫자를 더 자세히 보여 줌 */
+    body.cb-calc .summary-metrics,body.cb-calc #summary-meta{display:none !important}
+    .sort-bar{display:flex;align-items:center;justify-content:flex-end;gap:10px 14px;flex-wrap:wrap}
+    .sort-bar .country-chips{display:flex;align-items:center;gap:8px;margin-right:auto}
+    .sort-bar .country-chips label{font-size:13px;color:var(--text-soft)}
+    .sort-bar select{min-height:38px;border:1px solid var(--border-strong);background:var(--bg);color:var(--text);padding:0 30px 0 10px;font:inherit;font-size:14px;border-radius:0}
+    #want-region:empty{display:none}
+    .want-box{margin-top:0}
+    /* 첫 화면: 왼쪽 글·검색, 오른쪽 돌아가는 큰 사진, 아래 세계 지도 (2026-11-08) */
+    section.hero > .hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center}
+    .home-rotator{position:relative;aspect-ratio:1/1.05}
+    .rot-slide{position:absolute;inset:0;display:flex;flex-direction:column;gap:6px;padding:0;background:none;border:0;text-align:left;cursor:pointer;color:var(--text);font:inherit;opacity:0;transition:opacity .6s ease;pointer-events:none}
+    .rot-slide.is-on{opacity:1;pointer-events:auto}
+    .rot-photo{display:block;flex:1;min-height:0;background:#fff;border:1px solid var(--border);overflow:hidden}
+    .rot-photo img{width:100%;height:100%;object-fit:contain;display:block}
+    .rot-name{font-family:var(--serif);font-size:22px;line-height:1.25;margin-top:6px}
+    .rot-meta{font-size:14px;color:var(--text-soft)}
+    .rot-meta b{color:var(--text);font-size:16px}
+    .rot-flags{display:flex;gap:3px;flex-wrap:wrap}
+    .rot-dots{position:absolute;right:0;bottom:-26px;display:flex;gap:6px}
+    .rot-dots button{width:7px;height:7px;padding:0;border:1px solid var(--text);background:none;cursor:pointer}
+    .rot-dots button[aria-pressed="true"]{background:var(--text)}
+    @media (prefers-reduced-motion: reduce){.rot-slide{transition:none}}
+    .home-world{position:relative;margin-top:44px;border-top:1px solid var(--rule,var(--text))}
+    .world-tabs{display:flex;gap:22px;border-bottom:1px solid var(--border);margin-bottom:14px}
+    .world-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 0;font:inherit;font-size:15px;color:var(--text-soft);cursor:pointer}
+    .world-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
+    .home-world .market-map{margin:0}
+    section.hero .hero-title{font-size:clamp(30px,3.3vw,48px);word-break:keep-all}
+    #world-map{display:block;max-width:100%;height:auto}
+    .world-land path{fill:#e9e6de;stroke:var(--bg,#fff);stroke-width:.5}
+    .world-dot{fill:#1f4a3a;fill-opacity:.72;stroke:var(--bg,#fff);stroke-width:1.2;cursor:default}
+    .world-dot:hover{fill-opacity:1}
+    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .world-land path{fill:#2b2e30}:root:not([data-theme="light"]) .world-dot{fill:#8cc5ad}}
+    .world-tip{position:absolute;z-index:5;pointer-events:none;background:var(--bg,#fff);border:1px solid var(--text);padding:6px 10px;font-size:13px;white-space:nowrap}
+    body.cb-searched .home-rotator,body.cb-searched .home-world{display:none !important}
+    @media(max-width:860px){section.hero > .hero-grid{grid-template-columns:minmax(0,1fr);gap:28px}.home-rotator{aspect-ratio:1/1.1;max-width:520px}}
+    .topnav{display:flex;align-items:center;gap:22px;margin:0 auto 0 36px}
+    .topnav button{background:none;border:0;padding:4px 0;font:inherit;font-size:14px;color:var(--text);cursor:pointer;white-space:nowrap}
+    .topnav button:hover,.topnav button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:5px}
+    @media(max-width:860px){.topbar{flex-wrap:wrap}.topnav{order:3;flex-basis:100%;margin:6px 0 0;gap:18px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.topnav::-webkit-scrollbar{display:none}}
+    .hero-line{margin:10px 0 26px;font-size:18px;line-height:1.45;color:var(--text);max-width:680px}
+    /* 2026-11-08 사장님: 한 줄·검색창 안내 글을 제목과 같은 세리프로 (A안), 글은 회색·숫자만 진하게 */
+    .hero-line{font-family:var(--serif);font-size:21px;font-weight:400;color:var(--text-soft);letter-spacing:-0.005em}
+    .hero-line .hl-num{color:var(--text)}
+    #query-input::placeholder{font-family:var(--serif);font-size:18px;color:var(--text-muted)}
+    .home-showcase{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 20px;margin-top:36px;padding-top:24px;border-top:1px solid var(--rule,var(--text))}
+    .showcase-item{display:grid;gap:4px;padding:0;background:none;border:0;text-align:left;cursor:pointer;color:var(--text);font:inherit}
+    .showcase-photo{display:block;aspect-ratio:4/3;background:#fff;overflow:hidden;margin-bottom:6px}
+    .showcase-photo img{mix-blend-mode:multiply}
+    .showcase-photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .showcase-item:hover .showcase-name{text-decoration:underline;text-underline-offset:3px}
+    .showcase-name{font-size:14px;line-height:1.35}
+    .showcase-price{font-size:15px;font-weight:600}
+    .showcase-count{font-size:12px;color:var(--text-soft)}
+    .showcase-flags{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+    .showcase-flags .source-flag{width:16px;height:12px}
+    .showcase-more{font-size:11px;color:var(--text-soft);margin-left:2px}
+    @media(max-width:720px){.home-showcase{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}}
+    body.cb-searched .hero-line,body.cb-searched .home-showcase{display:none !important}
+    .home-more{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--rule,var(--text));border-bottom:1px solid var(--border)}
+    .home-more button{background:none;border:0;border-right:1px solid var(--border);padding:12px 18px 12px 0;margin-right:18px;font:inherit;font-size:14px;color:var(--text);cursor:pointer;text-align:left}
+    .home-more button:last-child{border-right:0}
+    .home-more button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:4px}
+    .hero-trust{font-size:13px !important;font-style:normal !important;font-family:inherit !important;color:var(--text-soft);margin:14px 0 0 !important}
+    .hero-landed{margin:10px 0 0;font-size:14px;line-height:1.5;color:var(--text)}
+    .alias-hint{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:10px;font-size:13px;color:var(--text-soft)}
+    .alias-hint span{margin-right:2px}
+    body.cb-searched .hero-landed,body.cb-searched .alias-hint{display:none}
     .hero-how{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 28px;border-top:1px solid var(--rule,var(--text))}
     .hero-how li{padding:12px 0 0}
     .hero-how strong{display:block;font-family:var(--serif);font-weight:500;font-size:18px;line-height:1.3}
@@ -222,6 +301,8 @@
     .quiz-feedback{margin:12px 0 0;font-size:14px;min-height:1.4em}
     .quiz-feedback .quiz-link{border:0;background:none;padding:0;color:var(--accent,var(--text));text-decoration:underline;font:inherit;cursor:pointer}
     .quiz-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:16px}
+    .quiz-card{display:block;width:100%;max-width:600px;height:auto;margin-top:16px;border:1px solid var(--border)}
+    .quiz-save{margin-left:10px;text-decoration:none;display:inline-flex;align-items:center}
     .quiz-level{font-family:var(--serif);font-size:34px;line-height:1.2;margin:18px 0 4px}
     .home-popular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px;border-top:1px solid var(--border)}
     .home-model{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 2px;border:0;border-bottom:1px solid var(--border);
@@ -1045,27 +1126,36 @@
        상자·그림자 대신 가는 줄로 나누고, 제목·모델명·가격은 세리프, 기능 글자는 산세리프.
        초록은 로고·링크·눌리는 곳에만. 모든 구역은 같은 왼쪽 선에 맞춘다. */
     :root{
-      --bg:#fcfcfa;
-      --surface:#fcfcfa;
+      --bg:#FDFCFA;            /* Warm Ivory(#F6F1E7) 20% — 2026-11-08 사장님 (10% → 20%) */
+      --surface:#FDFCFA;
       --surface-soft:#f3f3ef;
       --surface-muted:#e9e9e3;
       --border:#e2e2dc;
-      --border-strong:#16181a;
-      --rule:#16181a;
-      --text:#16181a;
-      --text-soft:#55595c;
-      --text-muted:#878b8d;
+      --border-strong:#22201E;
+      --rule:#22201E;
+      --text:#22201E;          /* Charcoal */
+      --text-soft:#6E6A64;     /* Muted Gray */
+      --text-muted:#8A857E;
       --accent:#1f4a3a;
       --accent-soft:rgba(31,74,58,0.07);
       --shadow:none;
       --radius:2px;
-      --serif:"Newsreader","Noto Serif KR",Georgia,serif;
-      --sans:"Inter","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
+      --serif:"EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;   /* 제목·브랜드만 */
+      --sans:"Jost","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;  /* UI·숫자·데이터 */
       --sticky-search-offset:72px;
-      --ladder-home:#16181a;
+      --ladder-home:#22201E;
       --ladder-abroad:#a8552e;
     }
     body{font-family:var(--sans);font-size:15px;background:var(--bg)}
+    /* 타이포그래피 원칙 (2026-11-08 F안): 세리프는 '브랜드와 이야기'(큰 제목·구역 제목·퀴즈 질문)에만,
+       가격·숫자·모델명·등급·그래프 글자는 Jost, 숫자는 고정폭으로 자리를 맞춤 */
+    .result-price,.hero-stat b,.home-item-price,.home-model-name,.home-model-price,.grade-chip,.ladder-grade,.ladder-range,.ladder-tip b,
+    .metric-card span,.rot-name,.saved-row .saved-price,.saved-row .saved-title,.summary-value,.value-calc-grades button,.value-calc-grid dd,
+    .entity-bar-group,.meta-pill.accent,#query-input::placeholder,.hero-line,.hero-trust,.thumb{font-family:var(--sans) !important;font-style:normal !important}
+    .result-price,.hero-stat b,.home-item-price,.home-model-price,.ladder-range,.summary-value,.value-calc-grid dd,.saved-row .saved-price,
+    .rot-meta,.hist-axis,.hist-tip,.market-map-note{font-variant-numeric:tabular-nums}
+    .result-price{font-weight:500;letter-spacing:0}
+    .hero-title,.home-heading,.summary-title,.shops-title,.price-ladder h3,.quiz-inline h3,.quiz-level{font-weight:500}
     ::selection{background:#d9e4de}
     main{width:min(1200px, calc(100% - 48px));padding:0 0 64px}
 
@@ -1292,6 +1382,47 @@
     .price-ladder .ladder-incl{display:inline-block;margin-top:4px;font-size:14px;font-weight:600;color:var(--text)}
     .ladder-tip .tip-incl{display:inline-block;margin:3px 0 2px;padding:1px 6px;border:1px solid var(--text);font-size:12px;font-weight:600;color:var(--text);line-height:1.5}
     .price-ladder{position:relative}
+    .ladder-guide.is-ghost{position:relative}
+    .chart-tabs{display:flex;gap:22px;margin:8px 0 -1px;border-bottom:1px solid var(--border)}
+    .chart-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 0;font:inherit;font-size:14px;color:var(--text-soft);cursor:pointer}
+    .chart-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--text)}
+    .chart-tabs + .price-ladder{border-top:0;margin-top:0}
+    .hist-chart{display:block;max-width:100%;height:auto;overflow:visible}
+    .hist-grid{stroke:var(--border);stroke-width:1}
+    .hist-axis{fill:var(--text-soft);font-size:12px}
+    .hist-base{stroke:var(--text-soft);stroke-width:1.5;stroke-dasharray:5 4}
+    .hist-line{fill:none;stroke:var(--text);stroke-width:2}
+    .hist-dot{fill:#2f7d5f;stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
+    /* 등급 색 (2026-11-08 사장님: 초록 진하기로는 구분이 어려움) — 색맹 검사를 통과한 범주 색 5개, 등급 모름은 회색 */
+    :root{--g-S:#2a78d6;--g-A:#eb6834;--g-B:#1baf7a;--g-C:#eda100;--g-D:#e87ba4;--g-U:#a3a6a8}
+    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-S:#3987e5;--g-A:#d95926;--g-B:#199e70;--g-C:#c98500;--g-D:#d55181;--g-U:#7d8285}}
+    .hist-g-S{fill:var(--g-S);background:var(--g-S)}.hist-g-A{fill:var(--g-A);background:var(--g-A)}.hist-g-B{fill:var(--g-B);background:var(--g-B)}
+    .hist-g-C{fill:var(--g-C);background:var(--g-C)}.hist-g-D{fill:var(--g-D);background:var(--g-D)}.hist-g-U,.hist-g-N{fill:var(--g-U);background:var(--g-U)}
+    .price-history{position:relative}
+    .hist-tip{position:absolute;z-index:5;pointer-events:none;background:var(--bg,#fff);border:1px solid var(--text);padding:7px 10px;font-size:12px;line-height:1.45;white-space:nowrap;box-shadow:none}
+    .hist-tip b{font-size:14px}
+    .hist-tip i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+    .hist-grades{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
+    .hist-grades button{background:none;border:1px solid var(--border);padding:4px 10px;font:inherit;font-size:13px;color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+    .hist-grades button[aria-pressed="true"]{border-color:var(--text);font-weight:600}
+    .hist-grades button:disabled{opacity:.35;cursor:default}
+    .hist-grades small{color:var(--text-soft);font-weight:400}
+    .hist-g{display:inline-block;width:9px;height:9px;border-radius:50%}
+    .hist-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--text-soft);margin:4px 0 8px}
+    .hist-legend i{display:inline-block;vertical-align:middle;margin-right:6px}
+    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(90deg,var(--g-S),var(--g-A),var(--g-B),var(--g-C),var(--g-D))}
+    .hist-key-line{width:18px;height:2px;background:var(--text)}
+    .hist-key-base{width:18px;border-top:1.5px dashed var(--text-soft)}
+    .hist-note{font-size:12px;color:var(--text-soft);margin:6px 0 0}
+    .result-price-incl{font-family:inherit;font-size:12px;font-weight:500;color:var(--text-soft);white-space:nowrap;vertical-align:middle}
+    /* 2026-11-08 사장님: 모델 밑 Prev·Next 없어도 됨 — 아래 '더 보기'로 넘김 */
+    .page-controls{display:none !important}
+    .ladder-ghost{filter:blur(2.5px);opacity:.35;pointer-events:none;user-select:none}
+    .ladder-ghost .ladder-strip{cursor:default}
+    .ladder-ghost-overlay{position:absolute;left:0;right:0;top:44px;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 16px;gap:6px}
+    .ladder-ghost-overlay strong{font-family:var(--serif);font-weight:500;font-size:22px}
+    .ladder-ghost-overlay p{margin:0 0 6px;color:var(--text-soft);font-size:13px}
+    .ladder-ghost-overlay .entity-bar-chips{justify-content:center;background:var(--bg)}
     .price-ladder .ladder-row{touch-action:pan-y}
     .ladder-row{display:grid;grid-template-columns:76px minmax(0,1fr) 190px;align-items:center;gap:14px;min-height:36px;border-top:1px solid var(--border)}
     .ladder-grade{font-family:var(--serif);font-size:15px;font-weight:600}
@@ -1435,6 +1566,14 @@
       <a href="/" class="brand" data-i18n-aria-label="topbar.brand_aria" aria-label="Camera Bridge Beta">
         <svg class="brand-logo" viewBox="-40 -747 4391 1205" aria-hidden="true" focusable="false"><path fill="currentColor" d="M69 -364Q122 -364 185 -381Q303 -516 436.5 -609.5Q570 -703 662 -703Q708 -703 708 -680Q708 -649 638.0 -591.0Q568 -533 456.0 -472.0Q344 -411 236 -375Q155 -281 105.0 -193.0Q55 -105 55 -48Q55 32 157 32Q214 32 283.0 -4.0Q352 -40 397 -75Q407 -82 414.5 -82.0Q422 -82 422 -74Q422 -69 418 -65Q371 -31 334.5 -9.0Q298 13 239.0 34.5Q180 56 126 56Q0 56 0 -41Q0 -158 162 -354Q114 -342 70 -339Q58 -341 58.0 -352.0Q58 -363 69 -364ZM631 -675Q572 -675 467.5 -596.5Q363 -518 261 -404Q354 -437 448.5 -490.5Q543 -544 600.0 -591.5Q657 -639 657 -661Q657 -675 631 -675ZM643 -120Q637 -120 637.0 -124.5Q637 -129 644 -135Q677 -162 677 -184Q677 -198 652 -200Q607 -199 544.5 -135.0Q482 -71 482 -39Q482 -28 494.5 -28.0Q507 -28 528 -45Q547 -57 599 -105Q611 -117 622 -117Q636 -117 636 -104Q636 -99 633.0 -96.0Q630 -93 622.0 -83.5Q614 -74 608 -66Q590 -40 590 -32Q590 -12 606 -12Q627 -12 685.0 -50.5Q743 -89 791 -128L839 -166Q846 -171 852.0 -171.0Q858 -171 858 -164V-162Q781 -97 695.5 -40.0Q610 17 583 17Q551 17 551 -17Q551 -25 554.0 -32.0Q557 -39 557.0 -42.0Q557 -45 555 -46Q552 -46 516.5 -19.0Q481 8 454.5 8.0Q428 8 428.0 -20.0Q428 -48 465.5 -95.5Q503 -143 566.0 -182.0Q629 -221 689 -221Q703 -221 712.5 -214.0Q722 -207 722.0 -192.5Q722 -178 693.0 -149.0Q664 -120 643 -120ZM845 -174 843 -185Q843 -190 864 -190Q876 -190 876.0 -175.0Q876 -160 841.5 -108.5Q807 -57 807.0 -55.0Q807 -53 811.0 -53.0Q815 -53 903.5 -123.0Q992 -193 1010.0 -193.0Q1028 -193 1028.0 -180.5Q1028 -168 1018.0 -152.5Q1008 -137 976.0 -96.5Q944 -56 942.0 -53.0Q940 -50 940.0 -46.0Q940 -42 946.5 -42.0Q953 -42 1045.0 -110.0Q1137 -178 1150.0 -178.0Q1163 -178 1163 -167Q1163 -147 1119.0 -97.0Q1075 -47 1075.0 -33.5Q1075 -20 1085.5 -20.0Q1096 -20 1138 -48Q1213 -98 1276 -149L1298 -167Q1306 -172 1311.5 -172.0Q1317 -172 1317 -166V-163Q1106 13 1056 13Q1027 13 1027 -11Q1027 -31 1056.0 -70.0Q1085 -109 1085.0 -112.5Q1085 -116 1082.5 -116.0Q1080 -116 1000.5 -59.0Q921 -2 906 -2Q899 -2 894.0 -7.5Q889 -13 889 -19Q889 -37 932 -92Q975 -146 975 -151Q975 -156 969 -156Q962 -156 827 -46L777 -6Q764 5 757.5 5.0Q751 5 745.0 1.5Q739 -2 739.0 -9.0Q739 -16 756.5 -43.0Q774 -70 802 -109Q845 -167 845 -174ZM1554 -166Q1561 -171 1567.0 -171.0Q1573 -171 1573 -164V-162Q1469 -76 1400.0 -33.0Q1331 10 1275 10Q1230 10 1230 -34Q1230 -99 1296.0 -167.5Q1362 -236 1407 -236Q1432 -236 1432 -208Q1427 -153 1274 -60V-50Q1274 -17 1308.5 -17.0Q1343 -17 1383 -40Q1461 -86 1529 -145ZM1381 -205Q1359 -205 1324.5 -168.0Q1290 -131 1278 -84Q1326 -113 1359.0 -145.5Q1392 -178 1392.0 -191.5Q1392 -205 1381 -205ZM1776 -166Q1783 -171 1789.0 -171.0Q1795 -171 1795 -164V-162Q1720 -102 1647.0 -49.5Q1574 3 1540 3Q1515 3 1515.0 -24.0Q1515 -51 1539.0 -78.0Q1563 -105 1586.5 -125.0Q1610 -145 1610.0 -151.5Q1610 -158 1602.5 -166.5Q1595 -175 1590 -178Q1573 -161 1516 -116L1512 -131Q1575 -181 1585 -198V-207Q1585 -232 1590.0 -241.0Q1595 -250 1614.0 -266.0Q1633 -282 1640.0 -282.0Q1647 -282 1652.5 -277.0Q1658 -272 1658.0 -267.0Q1658 -262 1654.5 -255.5Q1651 -249 1647.5 -244.5Q1644 -240 1638.0 -233.5Q1632 -227 1630.5 -224.5Q1629 -222 1627.5 -216.0Q1626 -210 1621.0 -206.0Q1616 -202 1616.0 -196.0Q1616 -190 1624.0 -169.5Q1632 -149 1632.0 -139.5Q1632 -130 1595.0 -94.5Q1558 -59 1558 -37Q1558 -25 1569 -25Q1583 -25 1621 -50L1633 -58Q1698 -103 1755 -149ZM1879 -120Q1873 -120 1873.0 -124.5Q1873 -129 1880 -135Q1913 -162 1913 -184Q1913 -198 1888 -200Q1843 -199 1780.5 -135.0Q1718 -71 1718 -39Q1718 -28 1730.5 -28.0Q1743 -28 1764 -45Q1783 -57 1835 -105Q1847 -117 1858 -117Q1872 -117 1872 -104Q1872 -99 1869.0 -96.0Q1866 -93 1858.0 -83.5Q1850 -74 1844 -66Q1826 -40 1826 -32Q1826 -12 1842 -12Q1863 -12 1921.0 -50.5Q1979 -89 2027 -128L2075 -166Q2082 -171 2088.0 -171.0Q2094 -171 2094 -164V-162Q2017 -97 1931.5 -40.0Q1846 17 1819 17Q1787 17 1787 -17Q1787 -25 1790.0 -32.0Q1793 -39 1793.0 -42.0Q1793 -45 1791 -46Q1788 -46 1752.5 -19.0Q1717 8 1690.5 8.0Q1664 8 1664.0 -20.0Q1664 -48 1701.5 -95.5Q1739 -143 1802.0 -182.0Q1865 -221 1925 -221Q1939 -221 1948.5 -214.0Q1958 -207 1958.0 -192.5Q1958 -178 1929.0 -149.0Q1900 -120 1879 -120ZM2752 -394Q2752 -394 2796 -397Q2867 -397 2901.5 -370.5Q2936 -344 2936.0 -295.5Q2936 -247 2892.0 -182.0Q2848 -117 2778 -64H2835Q2870 -64 2884.0 -67.0Q2898 -70 2900 -70Q2914 -70 2914.0 -55.0Q2914 -40 2894 -39Q2817 -39 2746 -41Q2634 30 2526 30Q2475 30 2445.0 11.0Q2415 -8 2415.0 -27.5Q2415 -47 2431.5 -58.0Q2448 -69 2478 -69Q2595 -69 2740 -64Q2800 -113 2836.0 -177.5Q2872 -242 2872 -294Q2872 -377 2783 -377Q2748 -377 2710.5 -366.0Q2673 -355 2665.5 -350.5Q2658 -346 2656 -346Q2650 -346 2650.0 -354.5Q2650 -363 2676 -375Q2790 -430 2899.0 -521.5Q3008 -613 3008 -652Q3008 -670 2980 -670Q2866 -669 2667 -499Q2627 -396 2535.5 -246.0Q2444 -96 2344.0 22.5Q2244 141 2195 141Q2165 141 2165 110Q2165 39 2299.5 -143.0Q2434 -325 2604 -478Q2634 -551 2634.0 -584.5Q2634 -618 2618.0 -637.5Q2602 -657 2571 -666Q2522 -679 2467.5 -679.0Q2413 -679 2384.0 -676.5Q2355 -674 2313.5 -666.5Q2272 -659 2246.0 -640.5Q2220 -622 2220.0 -593.5Q2220 -565 2248.0 -549.5Q2276 -534 2316.5 -528.0Q2357 -522 2397.0 -515.0Q2437 -508 2465.0 -487.5Q2493 -467 2493 -430Q2493 -420 2488.5 -420.0Q2484 -420 2481.5 -423.0Q2479 -426 2473 -435Q2464 -448 2446.5 -455.0Q2429 -462 2392.5 -468.5Q2356 -475 2323.5 -482.5Q2291 -490 2258.0 -502.0Q2225 -514 2205.0 -536.0Q2185 -558 2185.0 -587.5Q2185 -617 2210.0 -640.0Q2235 -663 2276 -676Q2360 -701 2451 -701Q2687 -701 2687 -577Q2687 -566 2682 -544Q2884 -707 3010 -707Q3066 -707 3066 -673Q3066 -624 2963.5 -534.0Q2861 -444 2752 -394ZM2220 112Q2249 112 2375.5 -73.5Q2502 -259 2578 -419Q2428 -276 2312.5 -121.5Q2197 33 2197 89Q2197 112 2220 112ZM2709 -42 2528 -46Q2451 -46 2451 -23Q2451 -10 2477.0 1.5Q2503 13 2537 13Q2626 13 2709 -42ZM3274 -166Q3281 -171 3287.0 -171.0Q3293 -171 3293 -164V-162Q3218 -102 3145.0 -49.5Q3072 3 3038 3Q3013 3 3013.0 -24.0Q3013 -51 3037.0 -78.0Q3061 -105 3084.5 -125.0Q3108 -145 3108.0 -151.5Q3108 -158 3100.5 -166.5Q3093 -175 3088 -178Q3071 -161 3014 -116L3010 -131Q3073 -181 3083 -198V-207Q3083 -232 3088.0 -241.0Q3093 -250 3112.0 -266.0Q3131 -282 3138.0 -282.0Q3145 -282 3150.5 -277.0Q3156 -272 3156.0 -267.0Q3156 -262 3152.5 -255.5Q3149 -249 3145.5 -244.5Q3142 -240 3136.0 -233.5Q3130 -227 3128.5 -224.5Q3127 -222 3125.5 -216.0Q3124 -210 3119.0 -206.0Q3114 -202 3114.0 -196.0Q3114 -190 3122.0 -169.5Q3130 -149 3130.0 -139.5Q3130 -130 3093.0 -94.5Q3056 -59 3056 -37Q3056 -25 3067 -25Q3081 -25 3119 -50L3131 -58Q3196 -103 3253 -149ZM3381.5 -302.0Q3391 -302 3396.5 -296.0Q3402 -290 3402.0 -279.0Q3402 -268 3387.0 -251.0Q3372 -234 3361.0 -234.0Q3350 -234 3345.0 -240.5Q3340 -247 3340.0 -255.5Q3340 -264 3356.0 -283.0Q3372 -302 3381.5 -302.0ZM3464 -167Q3472 -172 3476.5 -172.0Q3481 -172 3481 -166V-163Q3485 -163 3427.5 -119.0Q3370 -75 3304.5 -31.0Q3239 13 3222 13Q3193 13 3193 -11Q3193 -40 3243.0 -120.5Q3293 -201 3316 -201Q3333 -201 3333.0 -188.0Q3333 -175 3287.0 -117.0Q3241 -59 3241 -34Q3241 -20 3251.5 -20.0Q3262 -20 3304 -48Q3379 -98 3442 -149ZM3534 -143 3566 -192Q3563 -193 3560 -193Q3518 -193 3450.0 -129.0Q3382 -65 3382 -39Q3382 -32 3390 -32Q3415 -32 3466.0 -74.5Q3517 -117 3534 -143ZM3757 -162Q3549 6 3505 6Q3488 6 3488.0 -14.0Q3488 -34 3503 -81Q3503 -82 3501 -82Q3386 13 3348 13Q3322 13 3322 -6Q3322 -48 3412.5 -129.0Q3503 -210 3557 -210Q3564 -210 3572 -200Q3595 -234 3830 -569Q3855 -600 3870.5 -600.0Q3886 -600 3886 -590Q3886 -565 3714 -354Q3650 -274 3596.5 -187.5Q3543 -101 3543 -56Q3543 -37 3554 -37Q3567 -37 3600 -60Q3668 -109 3719 -150L3738 -166Q3745 -171 3751.0 -171.0Q3757 -171 3757 -164ZM4035 -166Q4042 -171 4048.0 -171.0Q4054 -171 4054 -164V-162Q3957 -82 3902 -46L3702 84L3640 171Q3496 368 3496 383Q3480 418 3465 418Q3446 418 3446.0 393.0Q3446 368 3470.5 326.0Q3495 284 3519 258L3614 158Q3626 139 3663.0 88.0Q3700 37 3712 20L3755 -44L3757 -48Q3757 -50 3755 -50Q3696 -1 3657.0 -1.0Q3618 -1 3618.0 -23.5Q3618 -46 3648.0 -83.0Q3678 -120 3720.5 -155.0Q3763 -190 3814.5 -215.5Q3866 -241 3905.5 -241.0Q3945 -241 3945 -213Q3945 -193 3907.5 -165.0Q3870 -137 3861.5 -137.0Q3853 -137 3853 -141Q3853 -147 3861 -152Q3895 -176 3895.0 -197.5Q3895 -219 3877 -219Q3833 -219 3754.5 -144.5Q3676 -70 3676 -39Q3676 -30 3690.5 -30.0Q3705 -30 3740.0 -53.5Q3775 -77 3793 -99L3820 -133Q3825 -140 3833.0 -140.0Q3841 -140 3847.0 -135.0Q3853 -130 3853 -125L3732 43L3880 -50Q3946 -90 4012 -146ZM4292 -166Q4299 -171 4305.0 -171.0Q4311 -171 4311 -164V-162Q4207 -76 4138.0 -33.0Q4069 10 4013 10Q3968 10 3968 -34Q3968 -99 4034.0 -167.5Q4100 -236 4145 -236Q4170 -236 4170 -208Q4165 -153 4012 -60V-50Q4012 -17 4046.5 -17.0Q4081 -17 4121 -40Q4199 -86 4267 -145ZM4119 -205Q4097 -205 4062.5 -168.0Q4028 -131 4016 -84Q4064 -113 4097.0 -145.5Q4130 -178 4130.0 -191.5Q4130 -205 4119 -205Z"/><path d="M172 140 C776 115 1552 105 2026 70" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"/></svg>
       </a>
+      <!-- 2026-11-08 사장님: 아래 링크 줄은 잘 안 보임 → 머리줄 메뉴로 (누르면 첫 화면 아래 그 묶음이 열리고 그 자리로) -->
+      <nav class="topnav" aria-label="Sections">
+        <button type="button" data-open="shops-block" data-i18n="home.nav_shops">Shops</button>
+        <button type="button" data-open="market-map-block" data-i18n="home.nav_chart">Market</button>
+        <button type="button" data-open="home-quiz-block" data-i18n="home.nav_quiz">Leica level</button>
+        <button type="button" data-open="home-latest-block" data-i18n="home.nav_latest">Just listed</button>
+        <button type="button" data-open="board-home" data-i18n="home.nav_board">Community</button>
+      </nav>
       <div class="topbar-meta">
         <a href="#saved" id="alerts-bell" class="saved-link alerts-bell" hidden><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/></svg></a>
         <a href="#saved" id="saved-link" class="saved-link" hidden data-i18n-aria-label="saves.header" aria-label="Saved"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h12v18l-6-5.5L6 21z"/></svg><span id="saved-count"></span></a>
@@ -1471,68 +1610,67 @@
         <div class="hero-grid">
           <div class="hero-copy">
             <h1 class="hero-title" data-i18n="hero.title">What is a used Leica worth?</h1>
-            <p class="hero-subtitle" data-i18n="hero.subtitle">Used Leica listings from dealers worldwide, matched to the exact model and priced by condition.</p>
-            <!-- 큰 숫자 셋 (2026-11-07 사장님: 113개 매장·29개 나라·만4천여 매물이 작은 글씨라 한눈에 안 들어옴) -->
-            <div id="hero-stats" class="hero-stats" hidden></div>
-            <p id="hero-trust" class="hero-trust" hidden></p>
+            <!-- 2026-11-08 사장님: 텍스트는 줄이고 눈에 보이는 것으로 — 설명·총액 문구·숫자를 한 줄로 (숫자는 source_freshness로 채움) -->
+            <p id="hero-trust" class="hero-line" data-i18n="hero.line_static">Used Leicas from shops worldwide — priced to your door.</p>
             <section class="search-panel" data-i18n-aria-label="search.home_aria" aria-label="Search home">
               <div class="search-panel-label" data-i18n="search.panel_label">Search</div>
               <form id="search-form" class="search-form-row">
-                <input id="query-input" class="search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="e.g. M6, Summilux 35, Noctilux 50, Q3">
+                <input id="query-input" class="search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="M6, Summilux 35 — or a nickname like Bokeh King">
                 <button class="search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.button_aria" aria-label="Search">Search</button>
               </form>
-              <div class="query-chip-row" data-i18n-aria-label="search.examples_aria" aria-label="Example searches">
-                <button class="query-chip" type="button" data-query="Leica M6">M6</button>
-                <button class="query-chip" type="button" data-query="Leica Q3">Q3</button>
-                <button class="query-chip" type="button" data-query="Summilux 35">Summilux 35</button>
-                <button class="query-chip" type="button" data-query="Noctilux 50">Noctilux 50</button>
-                <button class="query-chip" type="button" data-query="Leica M10">M10</button>
-              </div>
             </section>
-            <!-- 무엇이 다른가: 핵심 기술 네 가지 (2026-11-07 사장님: classic.com처럼 들어오자마자 알아보게) -->
-            <ol class="hero-how">
-              <li><strong data-i18n="hero.how1_t">Exact model</strong><span data-i18n="hero.how1">M6, M6 TTL or M6 Classic — told apart in any language.</span></li>
-              <li><strong data-i18n="hero.how2_t">One condition scale</strong><span data-i18n="hero.how2">“AB”, “8+” and “Gut” become one grade, so prices compare like for like.</span></li>
-              <li><strong data-i18n="hero.how3_t">What it sold for</strong><span data-i18n="hero.how3">Market value from listings that sold, not just asking prices.</span></li>
-              <li><strong data-i18n="hero.how4_t">Cost to your door</strong><span data-i18n="hero.how4">Shipping and import tax estimated for your country.</span></li>
-            </ol>
+            <!-- (예전 사진 16장 격자 — 2026-11-08 돌아가는 큰 사진으로 바꿈, 데이터는 같은 home_feed.json showcase) 2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게 — 수집가 추천 모델의 실제 매물 사진·최저가·매물 있는 나라 (home_feed.json showcase) -->
+          </div>
+          <!-- 2026-11-08 사장님: 물건을 하나씩 크게 몇 초씩 넘겨 보여 주고 지도를 보여 주기 — 꿈의 라이카 16개를 4초마다 -->
+          <div id="home-rotator" class="home-rotator" hidden></div>
+        </div>
+        <!-- 세계 지도: 매장이 있는 나라마다 원(크기 = 판매 중 매물 수), 마우스를 올리면 나라·매장·매물 수 -->
+        <!-- 2026-11-08 사장님: 지도 위에 탭으로 넘기고 전체 매물 그래프로 — [전체 매물 | 매장 지도], 처음엔 전체 매물 -->
+        <div id="home-world" class="home-world">
+          <div class="world-tabs" role="tablist">
+            <button type="button" role="tab" data-world-tab="chart" aria-selected="true" data-i18n="home.map_title">Every used Leica for sale right now</button>
+            <button type="button" role="tab" data-world-tab="map" aria-selected="false" data-i18n="home.shops_title">Where the listings come from</button>
+          </div>
+          <div id="market-map-block" class="market-map world-pane" data-world-pane="chart" hidden>
+            <p id="market-map-note" class="market-map-note"></p>
+            <div id="market-map-legend" class="market-map-legend"></div>
+            <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
+          </div>
+          <div class="world-pane" data-world-pane="map" hidden>
+            <svg id="world-map" role="img"></svg>
+            <div id="world-tip" class="world-tip" hidden></div>
           </div>
         </div>
       </section>
 
       <section id="home-feed" class="home-feed">
         <!-- 나라별 매장 (2026-11-07 사장님: 113개 매장·29개 나라를 그래프로 강조) — 제목 아래 숫자와 같은 data/status/source_freshness.json -->
-        <div id="shops-block" class="shops-block" hidden>
+        <div id="shops-block" class="shops-block home-extra" hidden>
           <h2 id="shops-title" class="shops-title"></h2>
           <p id="shops-sub" class="market-map-note"></p>
           <div id="shops-bars" class="shops-bars"></div>
         </div>
-        <!-- 지금 팔리는 라이카 전부 (2026-11-07 사장님: 메인 화면에 전체 매물 그래프) — data/derived/market_map.json, 점 하나 = 매물 하나 -->
-        <div id="market-map-block" class="market-map" hidden>
-          <h2 class="home-heading" data-i18n="home.map_title">Every used Leica for sale right now</h2>
-          <p id="market-map-note" class="market-map-note"></p>
-          <div id="market-map-legend" class="market-map-legend"></div>
-          <div class="market-map-frame"><canvas id="market-map" role="img"></canvas><div id="market-map-tip" class="market-map-tip" hidden></div></div>
-        </div>
         <!-- 라이카 레벨 테스트 (2026-11-07 사장님: 라이카를 잘 아는 사람만 풀 수 있는 문제로 레벨) — 문제는 data/derived/quiz_bank.json -->
-        <div id="home-quiz-block" class="home-quiz" hidden>
+        <!-- 지금 팔리는 라이카 전부 (2026-11-07 사장님: 메인 화면에 전체 매물 그래프) — data/derived/market_map.json, 점 하나 = 매물 하나 -->
+        <div id="home-quiz-block" class="home-quiz home-extra" hidden>
           <h2 class="home-heading"><span data-i18n="home.quiz_title">What’s your Leica level?</span> <small id="quiz-best" class="home-quiz-best"></small></h2>
           <p data-i18n="home.quiz_intro">Double strokes, commemorative bodies, nicknames, order numbers — 10 questions only Leica nerds get right. Start right here.</p>
           <div id="quiz-body" class="quiz-inline" aria-live="polite"></div>
         </div>
-        <div id="home-picks-block" hidden>
-          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
-          <div id="home-picks" class="home-popular"></div>
-        </div>
-        <div id="home-latest-block" hidden>
+        <div id="home-latest-block" class="home-extra" hidden>
           <h2 class="home-heading"><span data-i18n="home.latest">Just listed</span> <small data-i18n="home.latest_note">one per model, newest first</small></h2>
           <div id="home-latest" class="home-latest"></div>
         </div>
-        <div id="board-home">
+        <div id="board-home" class="home-extra">
           <h2 class="home-heading"><span data-i18n="board.title">Community</span> <small data-i18n="board.note">Leica users around the world, talking freely</small></h2>
           <div class="board-composer" data-board-composer></div>
           <ul id="board-home-list" class="board-home-list"></ul>
           <div class="board-actions"><a href="#board" data-i18n="board.view_all">See all posts</a></div>
+        </div>
+        <!-- 2026-11-08: 첫 화면 사진 줄과 겹쳐서 글 목록은 안 보임 (사진 줄이 같은 home_picks.json) -->
+        <div id="home-picks-block" class="home-extra" hidden>
+          <h2 class="home-heading"><span data-i18n="home.picks">Collector favorites</span> <small data-i18n="home.picks_note">market value at grade B · for sale now</small></h2>
+          <div id="home-picks" class="home-popular"></div>
         </div>
       </section>
 
@@ -1541,7 +1679,6 @@
       <section class="workspace">
         <div class="toolbar" data-i18n-aria-label="filters.toolbar_aria" aria-label="Search filters">
           <!-- 나라별로 보기 (종류·마운트·판매 상태·정렬 선택칸은 숨김: 모델을 고르면 거의 안 씀) -->
-          <div id="country-chips" class="country-chips" role="group"></div>
           <input type="hidden" id="country-filter" value="">
           <div class="control" hidden>
             <label for="category-filter" data-i18n="filters.category.label">Category</label>
@@ -1587,8 +1724,8 @@
             <label for="sort-select" data-i18n="filters.sort.label">Sort</label>
             <select id="sort-select">
               <option value="relevance">Recommended</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
+              <option value="price_asc">Est. total: Low to High</option>
+              <option value="price_desc">Est. total: High to Low</option>
               <option value="deal">Best deals first</option>
               <option value="newest">Newest</option>
             </select>
@@ -1645,8 +1782,11 @@
             </section>
             <section id="value-calc-region"></section>
             <section id="query-summary-region" aria-live="polite"></section>
-            <!-- 정렬 (2026-11-07 사장님: 누르면 고르는 상자로) — 숨겨진 필터 칸의 #sort-select를 처음 그릴 때 여기로 옮겨 옴 -->
-            <div id="sort-bar" class="sort-bar" hidden><label for="sort-select" data-i18n="filters.sort.label">Sort</label></div>
+            <!-- 2026-11-08 사장님: 알림은 그래프 밑으로 -->
+            <section id="want-region"></section>
+            <!-- 정렬 (2026-11-07 사장님: 누르면 고르는 상자로) — 숨겨진 필터 칸의 #sort-select를 처음 그릴 때 여기로 옮겨 옴.
+                 2026-11-08 사장님: 나라 버튼 30개가 위에 쭉 → 정렬 옆 고르기 상자 하나로 -->
+            <div id="sort-bar" class="sort-bar" hidden><div id="country-chips" class="country-chips"></div><label for="sort-select" data-i18n="filters.sort.label">Sort</label></div>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
             <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
             <section id="archive-region" aria-live="polite"></section>
@@ -1887,6 +2027,8 @@
         ask: { ko: '한국어로 보시겠어요?', en: 'View in English?', ja: '日本語で表示しますか？', 'zh-Hans': '要以简体中文显示吗？', 'zh-Hant': '要以繁體中文顯示嗎？', pt: 'Ver em português?', es: '¿Ver en español?', de: 'Auf Deutsch anzeigen?', it: 'Vuoi vedere il sito in italiano?' },
         yes: { ko: '한국어로 보기', en: 'English', ja: '日本語で見る', 'zh-Hans': '切换到简体中文', 'zh-Hant': '切換到繁體中文', pt: 'Ver em português', es: 'Ver en español', de: 'Auf Deutsch', it: 'In italiano' },
         keep: { en: 'Keep English' },
+        auto: { en: 'Shown in your country’s language.' },
+        to_en: { en: 'Switch to English' },
       },
       board: {
         title: { ko: '커뮤니티', en: 'Community', ja: 'コミュニティ', 'zh-Hans': '社区', 'zh-Hant': '社群', pt: 'Comunidade', es: 'Comunidad', de: 'Community', it: 'Community' },
@@ -1987,13 +2129,28 @@
         how3_t: { ko: '실제로 팔린 가격', en: 'What it sold for', ja: '実際に売れた価格', 'zh-Hans': '实际成交参考', 'zh-Hant': '實際成交參考', pt: 'Por quanto vendeu', es: 'Por cuánto se vendió', de: 'Wofür es verkauft wurde', it: 'A quanto è stato venduto' },
         how3: { ko: '판매 중 호가만이 아니라 팔린 매물로 시세를 냅니다.', en: 'Market value from listings that sold, not just asking prices.', ja: '販売中の価格だけでなく、売れた出品から相場を出します。', 'zh-Hans': '行情来自已售出的商品，而不只是挂牌价。', 'zh-Hant': '行情來自已售出的商品，而不只是掛牌價。', pt: 'Valor de mercado a partir de anúncios vendidos, não só preços pedidos.', es: 'Valor de mercado a partir de anuncios vendidos, no solo precios pedidos.', de: 'Marktwert aus verkauften Angeboten, nicht nur aus Angebotspreisen.', it: 'Valore di mercato dagli annunci venduti, non solo dai prezzi richiesti.' },
         how4_t: { ko: '받을 때까지 총액', en: 'Cost to your door', ja: '届くまでの総額', 'zh-Hans': '到手总价', 'zh-Hant': '到手總價', pt: 'Custo até sua porta', es: 'Coste hasta tu puerta', de: 'Kosten bis zur Tür', it: 'Costo fino a casa' },
+        landed: { ko: '여기서 비교하는 금액은 배송비와 관부가세를 더한, 내 나라까지 받아 볼 예상 총액입니다.', en: 'Prices are compared as the estimated total to your door — shipping and import tax included.', ja: 'ここで比べる金額は、送料と輸入税を含めたお手元までの概算合計です。', 'zh-Hans': '这里比较的是含运费和进口税、寄到你手上的预估总价。', 'zh-Hant': '這裡比較的是含運費與進口稅、寄到你手上的預估總價。', pt: 'Os preços são comparados pelo total estimado até sua porta — frete e impostos de importação incluídos.', es: 'Los precios se comparan por el total estimado hasta tu puerta, con envío e impuestos de importación.', de: 'Preise werden als geschätzter Gesamtpreis bis zu dir verglichen – inkl. Versand und Einfuhrabgaben.', it: 'I prezzi sono confrontati come totale stimato fino a casa tua, spedizione e dazi inclusi.' },
+        alias_hint: { ko: '이름이 정확히 기억 안 나세요? 별칭·코드·주문 번호로 찾아보세요:', en: 'Can’t remember the exact name? Try a nickname, code or order number:', ja: '正確な名前を覚えていませんか？愛称・コード・品番で探せます：', 'zh-Hans': '记不清准确名字？试试昵称、代码或订货号：', 'zh-Hant': '記不清準確名字？試試暱稱、代碼或訂貨號：', pt: 'Não lembra o nome exato? Tente um apelido, código ou número de pedido:', es: '¿No recuerdas el nombre exacto? Prueba un apodo, código o número de pedido:', de: 'Name entfallen? Probier einen Spitznamen, Code oder eine Bestellnummer:', it: 'Non ricordi il nome esatto? Prova un soprannome, un codice o il numero d’ordine:' },
         how4: { ko: '배송비와 관부가세를 내 나라 기준으로 어림합니다.', en: 'Shipping and import tax estimated for your country.', ja: '送料と輸入税をお住まいの国の基準で見積もります。', 'zh-Hans': '按你的国家估算运费和进口税。', 'zh-Hant': '依你的國家估算運費與進口稅。', pt: 'Frete e impostos de importação estimados para o seu país.', es: 'Envío e impuestos de importación estimados para tu país.', de: 'Versand und Einfuhrabgaben für dein Land geschätzt.', it: 'Spedizione e dazi stimati per il tuo paese.' },
         notice_beta: { ko: '제한적 베타', en: 'Limited Beta', ja: '限定ベータ', 'zh-Hans': '小范围测试版', 'zh-Hant': '小規模測試版', pt: 'Beta limitada', es: 'Beta limitada', de: 'Begrenzte Beta', it: 'Beta limitata' },
         notice_focus: { ko: '현재 Leica 중심으로 테스트 중입니다.', en: 'Currently testing with Leica-focused coverage.', ja: '現在はLeica中心のカバレッジでテスト中です。', 'zh-Hans': '当前正在以 Leica 为中心进行测试。', 'zh-Hant': '目前正以 Leica 為中心進行測試。', pt: 'No momento, o teste está focado em cobertura Leica.', es: 'Actualmente la prueba se centra en cobertura Leica.', de: 'Der Test konzentriert sich derzeit auf Leica-Abdeckung.', it: 'Il test è attualmente focalizzato sulla copertura Leica.' },
         notice_rare: { ko: '일부 희귀 모델은 데이터 부족으로 가격이 잠길 수 있습니다.', en: 'Some rare models may stay price-locked when evidence is limited.', ja: '一部の希少モデルはデータ不足により価格が保留されたままになることがあります。', 'zh-Hans': '部分稀有型号可能因依据不足而暂不估算价格。', 'zh-Hant': '部分稀有型號可能因依據不足而暫不估算價格。', pt: 'Alguns modelos raros podem permanecer com o preço bloqueado quando a evidência for limitada.', es: 'Algunos modelos raros pueden mantener el precio bloqueado cuando la evidencia es limitada.', de: 'Einige seltene Modelle bleiben bei geringer Datenlage preisgesperrt.', it: 'Alcuni modelli rari possono restare con il prezzo bloccato quando i dati sono limitati.' },
+        line_static: { ko: '전 세계 매장의 중고 라이카 — 내 집까지 총액으로.', en: 'Used Leicas from shops worldwide — priced to your door.', ja: '世界の店舗の中古ライカ — お手元までの総額で。', 'zh-Hans': '全球店铺的二手徕卡 —— 按到手总价比较。', 'zh-Hant': '全球店鋪的二手徠卡 —— 按到手總價比較。', pt: 'Leicas usadas de lojas do mundo todo — com preço até sua porta.', es: 'Leicas usadas de tiendas de todo el mundo — con precio hasta tu puerta.', de: 'Gebrauchte Leicas von Händlern weltweit — Preis bis zu dir nach Hause.', it: 'Leica usate da negozi di tutto il mondo — con prezzo fino a casa tua.' },
+        line: { ko: '중고 라이카 {listings}개, {countries}개 나라 {shops}개 매장 — 내 집까지 총액으로.', en: '{listings} used Leicas from {shops} shops in {countries} countries — priced to your door.', ja: '中古ライカ{listings}点、{countries}か国{shops}店舗 — お手元までの総額で。', 'zh-Hans': '{countries} 个国家 {shops} 家店铺的 {listings} 件二手徕卡 —— 按到手总价比较。', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪的 {listings} 件二手徠卡 —— 按到手總價比較。', pt: '{listings} Leicas usadas de {shops} lojas em {countries} países — com preço até sua porta.', es: '{listings} Leicas usadas de {shops} tiendas en {countries} países — con precio hasta tu puerta.', de: '{listings} gebrauchte Leicas von {shops} Händlern in {countries} Ländern — Preis bis zu dir nach Hause.', it: '{listings} Leica usate da {shops} negozi in {countries} paesi — con prezzo fino a casa tua.' },
         trust: { ko: '판매처 {shops}곳 · {countries}개국 · 판매 중 {listings}개 · {ago} 갱신', en: '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}', ja: '{countries}か国・{shops}店舗 · 販売中 {listings}点 · {ago}更新', 'zh-Hans': '{countries} 个国家 {shops} 家店铺 · 在售 {listings} 件 · {ago}更新', 'zh-Hant': '{countries} 個國家 {shops} 家店鋪 · 在售 {listings} 件 · {ago}更新', pt: '{shops} lojas em {countries} países · {listings} anúncios à venda · atualizado {ago}', es: '{shops} tiendas en {countries} países · {listings} anuncios a la venta · actualizado {ago}', de: '{shops} Händler in {countries} Ländern · {listings} Angebote · aktualisiert {ago}', it: '{shops} negozi in {countries} paesi · {listings} annunci in vendita · aggiornato {ago}' },
       },
       home: {
+        nav_shops: { ko: '매장', en: 'Shops', ja: '店舗', 'zh-Hans': '店铺', 'zh-Hant': '店鋪', pt: 'Lojas', es: 'Tiendas', de: 'Händler', it: 'Negozi' },
+        nav_chart: { ko: '시장 한눈에', en: 'Market', ja: '市場', 'zh-Hans': '市场', 'zh-Hant': '市場', pt: 'Mercado', es: 'Mercado', de: 'Markt', it: 'Mercato' },
+        nav_quiz: { ko: '라이카 레벨', en: 'Leica level', ja: 'ライカレベル', 'zh-Hans': '徕卡等级', 'zh-Hant': '徠卡等級', pt: 'Nível Leica', es: 'Nivel Leica', de: 'Leica-Level', it: 'Livello Leica' },
+        nav_latest: { ko: '새 매물', en: 'Just listed', ja: '新着', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Novidades', es: 'Novedades', de: 'Neu', it: 'Novità' },
+        nav_board: { ko: '커뮤니티', en: 'Community', ja: 'コミュニティ', 'zh-Hans': '社区', 'zh-Hant': '社群', pt: 'Comunidade', es: 'Comunidad', de: 'Community', it: 'Community' },
+        showcase_count: { ko: '전 세계 {n}개', en: '{n} for sale worldwide', ja: '世界で{n}点', 'zh-Hans': '全球仅 {n} 件', 'zh-Hant': '全球僅 {n} 件', pt: '{n} à venda no mundo', es: '{n} a la venta en el mundo', de: '{n} weltweit im Angebot', it: '{n} in vendita nel mondo' },
+        more_shops: { ko: '나라별 매장', en: 'Shops by country', ja: '国別の店舗', 'zh-Hans': '各国店铺', 'zh-Hant': '各國店鋪', pt: 'Lojas por país', es: 'Tiendas por país', de: 'Händler nach Land', it: 'Negozi per paese' },
+        more_map: { ko: '전체 매물 한눈에', en: 'Every listing on one chart', ja: '全出品をひと目で', 'zh-Hans': '全部在售一览', 'zh-Hant': '全部在售一覽', pt: 'Todos os anúncios num gráfico', es: 'Todos los anuncios en un gráfico', de: 'Alle Angebote auf einen Blick', it: 'Tutti gli annunci in un grafico' },
+        more_quiz: { ko: '내 라이카 레벨은?', en: 'What’s your Leica level?', ja: 'あなたのライカレベルは？', 'zh-Hans': '你的徕卡等级？', 'zh-Hant': '你的徠卡等級？', pt: 'Qual é o seu nível Leica?', es: '¿Cuál es tu nivel Leica?', de: 'Wie gut kennst du Leica?', it: 'Qual è il tuo livello Leica?' },
+        more_latest: { ko: '새로 올라온 매물', en: 'Just listed', ja: '新着', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Recém-anunciados', es: 'Recién publicados', de: 'Neu eingestellt', it: 'Appena inseriti' },
+        more_board: { ko: '커뮤니티', en: 'Community', ja: 'コミュニティ', 'zh-Hans': '社区', 'zh-Hant': '社群', pt: 'Comunidade', es: 'Comunidad', de: 'Community', it: 'Community' },
         latest: { ko: '새로 올라온 매물', en: 'Just listed', ja: '新着の出品', 'zh-Hans': '最新上架', 'zh-Hant': '最新上架', pt: 'Recém-anunciados', es: 'Recién publicados', de: 'Neu eingestellt', it: 'Appena pubblicati' },
         latest_note: { ko: '모델마다 한 건, 최근 순', en: 'one per model, newest first', ja: 'モデルごとに1件、新しい順', 'zh-Hans': '每个型号一件，按时间排序', 'zh-Hant': '每個型號一件，依時間排序', pt: 'um por modelo, mais recentes primeiro', es: 'uno por modelo, más recientes primero', de: 'eins pro Modell, neueste zuerst', it: 'uno per modello, dal più recente' },
         picks: { ko: '수집가들이 찾는 모델', en: 'Collector favorites', ja: 'コレクターが探すモデル', 'zh-Hans': '藏家追捧的型号', 'zh-Hant': '藏家追捧的型號', pt: 'Favoritos dos colecionadores', es: 'Favoritos de coleccionistas', de: 'Sammlerstücke', it: 'I preferiti dei collezionisti' },
@@ -2038,6 +2195,7 @@
         quiz_next: { ko: '다음', en: 'Next', ja: '次へ', 'zh-Hans': '下一题', 'zh-Hant': '下一題', pt: 'Próxima', es: 'Siguiente', de: 'Weiter', it: 'Avanti' },
         quiz_result: { ko: '레벨 {n} · {name}', en: 'Level {n} · {name}', ja: 'レベル {n} · {name}', 'zh-Hans': '等级 {n} · {name}', 'zh-Hant': '等級 {n} · {name}', pt: 'Nível {n} · {name}', es: 'Nivel {n} · {name}', de: 'Level {n} · {name}', it: 'Livello {n} · {name}' },
         quiz_score: { ko: '{t}문제 중 {r}개 정답', en: '{r} of {t} right', ja: '{t}問中 {r}問正解', 'zh-Hans': '{t} 题答对 {r} 题', 'zh-Hant': '{t} 題答對 {r} 題', pt: '{r} de {t} certas', es: '{r} de {t} correctas', de: '{r} von {t} richtig', it: '{r} su {t} giuste' },
+        quiz_save_image: { ko: '카드 이미지 저장', en: 'Save card image', ja: 'カード画像を保存', 'zh-Hans': '保存卡片图片', 'zh-Hant': '儲存卡片圖片', pt: 'Salvar imagem do cartão', es: 'Guardar imagen', de: 'Kartenbild speichern', it: 'Salva immagine' },
         quiz_share: { ko: '내 레벨 공유', en: 'Share my level', ja: 'レベルをシェア', 'zh-Hans': '分享我的等级', 'zh-Hant': '分享我的等級', pt: 'Compartilhar meu nível', es: 'Compartir mi nivel', de: 'Mein Level teilen', it: 'Condividi il mio livello' },
         quiz_copied: { ko: '복사했어요', en: 'Copied', ja: 'コピーしました', 'zh-Hans': '已复制', 'zh-Hant': '已複製', pt: 'Copiado', es: 'Copiado', de: 'Kopiert', it: 'Copiato' },
         quiz_again: { ko: '다시 하기', en: 'Try again', ja: 'もう一度', 'zh-Hans': '再测一次', 'zh-Hant': '再測一次', pt: 'Tentar de novo', es: 'Intentar de nuevo', de: 'Nochmal', it: 'Riprova' },
@@ -2061,7 +2219,7 @@
       search: {
         home_aria: { ko: '홈 검색', en: 'Search home', ja: '検索ホーム', 'zh-Hans': '搜索首页', 'zh-Hant': '搜尋首頁', pt: 'Página inicial da busca', es: 'Inicio de búsqueda', de: 'Such-Startseite', it: 'Home della ricerca' },
         panel_label: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suche', it: 'Cerca' },
-        placeholder: { ko: '예: M6, 주미룩스 35, 녹티룩스 50, Q3', en: 'e.g. M6, Summilux 35, Noctilux 50, Q3', ja: '例: M6、Summilux 35、Noctilux 50、Q3', 'zh-Hans': '例如：M6、Summilux 35、Noctilux 50、Q3', 'zh-Hant': '例如：M6、Summilux 35、Noctilux 50、Q3', pt: 'ex.: M6, Summilux 35, Noctilux 50, Q3', es: 'p. ej.: M6, Summilux 35, Noctilux 50, Q3', de: 'z. B. M6, Summilux 35, Noctilux 50, Q3', it: 'es. M6, Summilux 35, Noctilux 50, Q3' },
+        placeholder: { ko: 'M6, 주미룩스 35 — 보케킹 같은 별칭도 돼요', en: 'M6, Summilux 35 — or a nickname like Bokeh King', ja: 'M6、Summilux 35 — Bokeh Kingのような愛称でも', 'zh-Hans': 'M6、Summilux 35 —— 也可以用 Bokeh King 这样的昵称', 'zh-Hant': 'M6、Summilux 35 —— 也可以用 Bokeh King 這樣的暱稱', pt: 'M6, Summilux 35 — ou um apelido como Bokeh King', es: 'M6, Summilux 35 — o un apodo como Bokeh King', de: 'M6, Summilux 35 — oder ein Spitzname wie Bokeh King', it: 'M6, Summilux 35 — o un soprannome come Bokeh King' },
         button: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
         button_aria: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
         examples_aria: { ko: '예시 검색어', en: 'Example searches', ja: '検索例', 'zh-Hans': '示例搜索', 'zh-Hant': '範例搜尋', pt: 'Exemplos de busca', es: 'Búsquedas de ejemplo', de: 'Beispiel-Suchen', it: 'Ricerche di esempio' },
@@ -2135,8 +2293,8 @@
       sort: {
         relevance: { ko: '추천순', en: 'Recommended', ja: 'おすすめ順', 'zh-Hans': '推荐', 'zh-Hant': '推薦', pt: 'Recomendado', es: 'Recomendado', de: 'Empfohlen', it: 'Consigliati' },
         newest: { ko: '최신순', en: 'Newest', ja: '新着順', 'zh-Hans': '最新', 'zh-Hant': '最新', pt: 'Mais recentes', es: 'Más recientes', de: 'Neueste', it: 'Più recenti' },
-        price_asc: { ko: '낮은 가격순', en: 'Price: Low to High', ja: '価格の安い順', 'zh-Hans': '价格从低到高', 'zh-Hant': '價格從低到高', pt: 'Preço: menor para maior', es: 'Precio: de menor a mayor', de: 'Preis: aufsteigend', it: 'Prezzo: crescente' },
-        price_desc: { ko: '높은 가격순', en: 'Price: High to Low', ja: '価格の高い順', 'zh-Hans': '价格从高到低', 'zh-Hant': '價格從高到低', pt: 'Preço: maior para menor', es: 'Precio: de mayor a menor', de: 'Preis: absteigend', it: 'Prezzo: decrescente' },
+        price_asc: { ko: '예상 총액 낮은순', en: 'Est. total: Low to High', ja: '概算合計の安い順', 'zh-Hans': '预估到手价从低到高', 'zh-Hant': '預估到手價從低到高', pt: 'Total estimado: menor para maior', es: 'Total estimado: de menor a mayor', de: 'Gesamtpreis (geschätzt): aufsteigend', it: 'Totale stimato: crescente' },
+        price_desc: { ko: '예상 총액 높은순', en: 'Est. total: High to Low', ja: '概算合計の高い順', 'zh-Hans': '预估到手价从高到低', 'zh-Hant': '預估到手價從高到低', pt: 'Total estimado: maior para menor', es: 'Total estimado: de mayor a menor', de: 'Gesamtpreis (geschätzt): absteigend', it: 'Totale stimato: decrescente' },
         deal: { ko: '시세보다 싼 순', en: 'Best deals first', ja: 'お買い得順', 'zh-Hans': '最划算', 'zh-Hant': '最划算', pt: 'Melhores ofertas', es: 'Mejores ofertas', de: 'Beste Angebote zuerst', it: 'Migliori affari' },
       },
       sold_filter: {
@@ -2437,6 +2595,7 @@
       label: { ko: '받는 나라', en: 'Ship to', ja: 'お届け先の国', 'zh-Hans': '收货国家/地区', 'zh-Hant': '收件國家/地區', pt: 'Entregar em', es: 'Enviar a', de: 'Lieferland', it: 'Spedire in' }
     };
     UX_LOCALE_COPY.landed = {
+      item: { ko: '물건 금액', en: 'Item price', ja: '商品価格', 'zh-Hans': '商品价格', 'zh-Hant': '商品價格', pt: 'Preço do item', es: 'Precio del artículo', de: 'Artikelpreis', it: 'Prezzo articolo' },
       original: { ko: '판매가 {price}', en: 'Listed at {price}', ja: '販売価格 {price}', 'zh-Hans': '原标价 {price}', 'zh-Hant': '原標價 {price}', pt: 'Preço anunciado {price}', es: 'Precio publicado {price}', de: 'Angebotspreis {price}', it: 'Prezzo in vendita {price}' },
       total: { ko: '받을 때까지 예상 총액', en: 'Est. total delivered', ja: 'お届けまでの概算合計', 'zh-Hans': '预估到手总价', 'zh-Hant': '預估到手總價', pt: 'Total estimado com entrega', es: 'Total estimado con envío', de: 'Geschätzter Gesamtpreis inkl. Lieferung', it: 'Totale stimato con consegna' },
       shipping: { ko: '배송비', en: 'Shipping', ja: '送料', 'zh-Hans': '运费', 'zh-Hant': '運費', pt: 'Frete', es: 'Envío', de: 'Versand', it: 'Spedizione' },
@@ -2518,7 +2677,7 @@
     // 사용 기록: 방문 한 번의 검색어·고른 모델·결과 수·판매처 클릭을 묶어 /api/usage 로 (IP·쿠키 없음)
     // 사장님 테스트는 빼기: 주소 끝에 ?notrack=1 로 한 번 열면 그 브라우저는 기록 안 함 (?notrack=0 으로 해제)
     const usageLog = (() => {
-      const MAX_SENDS = 3;
+      const MAX_SENDS = 8;
       let off = false;
       try{
         const flag = new URLSearchParams(location.search).get('notrack');
@@ -2550,16 +2709,22 @@
       const seconds = () => Math.round((Date.now() - startedAt) / 1000);
       const referrer = visit.referrer;
       const landing = visit.landing;
-      let searches = [], clicks = [], sends = 0, last = '';
+      let searches = [], clicks = [], sends = 0, last = '', sentAt = 0, scrollMax = 0;
+      // 얼마나 내려 봤나 (화면 아래 끝이 문서의 몇 %까지 왔나, 2026-11-08)
+      const trackScroll = () => { const h = document.documentElement.scrollHeight || 1; scrollMax = Math.max(scrollMax, Math.min(100, Math.round((window.scrollY + window.innerHeight) / h * 100))); };
+      window.addEventListener('scroll', trackScroll, { passive: true });
+      setTimeout(trackScroll, 1500);
       function send(){
-        // 첫 번째는 둘러보기만 해도 보냄 (어디서 왔는지 남기려고), 그 뒤로는 새 검색·클릭이 있을 때만
-        if(off || sends >= MAX_SENDS || (sends > 0 && !searches.length && !clicks.length)) return;
+        // 첫 번째는 둘러보기만 해도 보냄 (어디서 왔는지 남기려고), 그 뒤로는 새 검색·클릭이 있거나
+        // 지난번보다 15초 넘게 더 머물렀을 때 (2026-11-08 사장님: 머문 시간이 1~4초 — 처음 탭을 벗어난 순간 시간만 남던 것)
+        if(off || sends >= MAX_SENDS || (sends > 0 && !searches.length && !clicks.length && seconds() - sentAt < 15)) return;
+        sentAt = seconds();
         sends += 1;
         visit.part = (visit.part || 0) + 1;
         saveVisit();
         const body = JSON.stringify({
           sid, part: visit.part, page: location.pathname, locale: uiState.locale, currency: uiState.currency, referrer, landing,
-          mobile: isNarrowScreen(), duration_s: seconds(), searches, clicks
+          mobile: isNarrowScreen(), duration_s: seconds(), scroll: scrollMax, searches, clicks
         });
         searches = []; clicks = [];
         try{
@@ -2649,6 +2814,8 @@
       try{
         const fresh = await fetch('/data/status/source_freshness.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null);
         if(!fresh) return;
+        // 한 번도 수집에 성공하지 못한 매장(막혀서 보류 등)은 매장·나라 수와 나라별 목록에서 뺌 (2026-11-08 벨기에 PCH '0 listings')
+        Object.keys(fresh).forEach(site => { if(!(fresh[site] || {}).last_success) delete fresh[site]; });
         const rules = (landedState.rules && landedState.rules.sources) || {};
         const sites = Object.keys(fresh);
         const countries = [...new Set(sites.map(site => (rules[site] || {}).country).filter(Boolean))];
@@ -2660,14 +2827,15 @@
           const rtf = new Intl.RelativeTimeFormat(uiState.locale, { numeric: 'auto' });
           ago = minutes < 60 ? rtf.format(-minutes, 'minute') : rtf.format(-Math.round(minutes / 60), 'hour');
         }
-        const text = ux('hero.trust', '{shops} shops in {countries} countries · {listings} listings for sale · updated {ago}')
+        const text = ux('hero.line', '{listings} used Leicas from {shops} shops in {countries} countries — priced to your door.')
           .replace('{shops}', String(sites.length))
           .replace('{countries}', String(countries.length))
           .replace('{listings}', new Intl.NumberFormat(uiState.locale).format(listings))
           .replace('{ago}', ago);
-        el.innerHTML = `${countries.map(countryFlagHtml).join('')}<span>${escapeHtml(text)}</span>`;
+        el.innerHTML = escapeHtml(text).replace(/(\d[\d,.]*)/g, '<span class="hl-num">$1</span>');
+        el.removeAttribute('data-i18n');  // 숫자가 든 문장으로 바꾼 뒤에는 번역이 고정 문장으로 덮지 않게
         el.hidden = false;
-        const stats = document.getElementById('hero-stats');
+        const stats = null;  // 큰 숫자 셋은 2026-11-08 메인 단순화로 뺌
         if(stats && sites.length){  // 큰 숫자 셋을 보이면 아래 한 줄은 국기와 갱신 시각만
           const nf = new Intl.NumberFormat(uiState.locale);
           stats.innerHTML = [[nf.format(listings), 'stat_listings'], [String(sites.length), 'stat_shops'], [String(countries.length), 'stat_countries']]
@@ -2677,11 +2845,93 @@
         }
         renderShopsByCountry(fresh, rules, ago);
       }catch(error){
-        el.hidden = true;
+        el.hidden = false;  // 숫자를 못 읽어도 고정 문장은 보임
       }
     }
 
     // 첫 화면 '29개 나라 113개 매장': 나라마다 국기·막대(매장 수)·매장·매물 수, 막대에 올리면 매장 이름 (제목 아래 숫자와 같은 기준)
+    function showWorldTab(tab){
+      document.querySelectorAll('[data-world-tab]').forEach(el => el.setAttribute('aria-selected', el.dataset.worldTab === tab ? 'true' : 'false'));
+      document.querySelectorAll('[data-world-pane]').forEach(el => {
+        const on = el.dataset.worldPane === tab;
+        if(tab === 'chart' && el.id === 'market-map-block') el.hidden = !(on && mapState.data);
+        else el.hidden = !on;
+      });
+      if(tab === 'chart' && typeof drawMarketMap === 'function') setTimeout(drawMarketMap, 30);
+      if(tab === 'map' && worldState.byCountry) setTimeout(() => drawWorldMap(worldState.byCountry), 30);
+    }
+    document.addEventListener('click', event => {
+      const tab = event.target.closest && event.target.closest('[data-world-tab]');
+      if(tab) showWorldTab(tab.dataset.worldTab);
+    });
+
+    // 세계 지도 (2026-11-08): 바탕은 world-atlas 110m(공개 데이터), 원 위치는 나라 대표 좌표(경도, 위도)
+    const COUNTRY_LONLAT = { KR: [127.8, 36.5], JP: [138.3, 36.2], HK: [114.2, 22.3], SG: [103.8, 1.35], MY: [101.7, 3.9], AU: [134, -25.5], NZ: [172.5, -41.5],
+      US: [-98.5, 39.5], CA: [-106, 56], CL: [-71, -33.5], GB: [-2, 53.5], FR: [2.3, 46.6], DE: [10.4, 51.2], IT: [12.6, 42.8], NL: [5.3, 52.2], BE: [4.5, 50.6],
+      LU: [6.1, 49.8], AT: [14.5, 47.6], CH: [8.2, 46.8], ES: [-3.7, 40.2], PT: [-8.2, 39.6], DK: [9.5, 56], SE: [16, 62], NO: [9, 61], FI: [26, 63],
+      PL: [19.4, 52], CZ: [15.5, 49.8], HU: [19.5, 47.2], RO: [25, 45.9], GR: [22, 39.3], AE: [54, 24] };
+    const worldState = { geo: null, loading: null };
+    function loadScriptOnce(src){
+      return new Promise((resolve, reject) => {
+        if(document.querySelector(`script[src="${src}"]`)) return resolve();
+        const el = document.createElement('script'); el.src = src; el.async = true; el.onload = resolve; el.onerror = reject; document.head.appendChild(el);
+      });
+    }
+    async function loadWorld(){
+      if(worldState.geo) return worldState.geo;
+      if(!worldState.loading) worldState.loading = (async () => {
+        await loadScriptOnce('https://cdn.jsdelivr.net/npm/d3-array@3.2.4/dist/d3-array.min.js');
+        await loadScriptOnce('https://cdn.jsdelivr.net/npm/d3-geo@3.1.0/dist/d3-geo.min.js');
+        await loadScriptOnce('https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js');
+        const topo = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json').then(r => r.json());
+        const land = window.topojson.feature(topo, topo.objects.countries);
+        land.features = land.features.filter(f => f.id !== '010');  // 남극 빼기
+        worldState.geo = land;
+        return land;
+      })();
+      return worldState.loading;
+    }
+    async function drawWorldMap(byCountry){
+      const box = document.getElementById('home-world');
+      const svg = document.getElementById('world-map');
+      if(!box || !svg) return;
+      let land;
+      try{ land = await loadWorld(); }catch(error){ return; }
+      if(!window.d3 || !window.d3.geoNaturalEarth1) return;
+      const pane = svg.closest('.world-pane');
+      worldState.byCountry = byCountry;
+      if(pane && pane.hidden) return;  // 탭을 열 때 다시 그림
+      const W = Math.max(320, box.clientWidth || 900), H = Math.round(W * 0.46);
+      const proj = window.d3.geoNaturalEarth1().fitExtent([[4, 4], [W - 4, H - 4]], land);
+      const path = window.d3.geoPath(proj);
+      const max = Math.max(...Object.values(byCountry).map(r => r.listings || 0), 1);
+      const nf = new Intl.NumberFormat(uiState.locale);
+      const dots = Object.entries(byCountry)
+        .filter(([cc]) => COUNTRY_LONLAT[cc])
+        .sort((a, b) => b[1].listings - a[1].listings)  // 큰 원 먼저 → 작은 원이 위에
+        .map(([cc, row]) => {
+          const [x, y] = proj(COUNTRY_LONLAT[cc]);
+          const r = 3 + Math.sqrt((row.listings || 0) / max) * (W < 600 ? 16 : 26);
+          const tip = `${displayNameOf('region', cc)} · ${ux('home.shops_row', '{n} shops · {m} listings').replace('{n}', String(row.shops.length)).replace('{m}', nf.format(row.listings))}`;
+          return `<circle class="world-dot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" data-cc="${cc}" data-tip="${escapeHtml(tip)}"></circle>`;
+        }).join('');
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('width', String(W)); svg.setAttribute('height', String(H));
+      svg.setAttribute('aria-label', ux('home.shops_title', 'Where the listings come from'));
+      svg.innerHTML = `<g class="world-land">${land.features.map(f => `<path d="${path(f)}"></path>`).join('')}</g><g>${dots}</g>`;
+      const tipEl = document.getElementById('world-tip');
+      svg.onmousemove = event => {
+        const dot = event.target.closest && event.target.closest('.world-dot');
+        if(!dot){ tipEl.hidden = true; return; }
+        tipEl.innerHTML = `${countryFlagHtml(dot.dataset.cc)} ${escapeHtml(dot.dataset.tip)}`;
+        tipEl.hidden = false;
+        const b = box.getBoundingClientRect();
+        tipEl.style.left = `${Math.min(event.clientX - b.left + 12, b.width - tipEl.offsetWidth - 4)}px`;
+        tipEl.style.top = `${event.clientY - b.top - tipEl.offsetHeight - 10}px`;
+      };
+      svg.onmouseleave = () => { tipEl.hidden = true; };
+    }
+
     function renderShopsByCountry(fresh, rules, ago){
       const block = document.getElementById('shops-block');
       if(!block) return;
@@ -2695,6 +2945,7 @@
       });
       const rows = Object.entries(byCountry).sort((a, b) => b[1].shops.length - a[1].shops.length || b[1].listings - a[1].listings);
       if(rows.length < 3) return;
+      drawWorldMap(byCountry);
       const max = rows[0][1].shops.length;
       const shops = Object.keys(fresh).length;
       const listings = Object.values(fresh).reduce((sum, v) => sum + Number((v || {}).active || 0), 0);
@@ -2752,27 +3003,88 @@
       if(!box) return;
       const sources = (landedState.rules && landedState.rules.sources) || {};
       const present = new Set(Object.values(sources).map(rule => String((rule && rule.country) || '').toUpperCase()).filter(Boolean));
-      const codes = COUNTRY_ORDER.filter(code => present.has(code)).concat([...present].filter(code => !COUNTRY_ORDER.includes(code)).sort());
+      const codes = COUNTRY_ORDER.filter(code => present.has(code)).concat([...present].filter(code => !COUNTRY_ORDER.includes(code)).sort((a, b) => displayNameOf('region', a).localeCompare(displayNameOf('region', b), uiState.locale)));
       const current = String(els['country-filter'].value || '').toUpperCase();
-      box.setAttribute('aria-label', ux('filters.country.label', 'Country'));
-      box.innerHTML = [`<button type="button" class="country-chip" data-country="" aria-pressed="${current ? 'false' : 'true'}">${escapeHtml(ux('filters.country.all', 'All countries'))}</button>`]
-        .concat(codes.map(code => `<button type="button" class="country-chip" data-country="${code}" aria-pressed="${current === code ? 'true' : 'false'}">${countryFlagHtml(code)}${escapeHtml(displayNameOf('region', code))}</button>`))
-        .join('');
+      const label = ux('filters.country.label', 'Country');
+      box.innerHTML = `<label for="country-select">${escapeHtml(label)}</label><select id="country-select">`
+        + [`<option value="">${escapeHtml(ux('filters.country.all', 'All countries'))}</option>`]
+          .concat(codes.map(code => `<option value="${code}"${current === code ? ' selected' : ''}>${escapeHtml(displayNameOf('region', code))}</option>`)).join('')
+        + `</select>`;
     }
 
     function bindCountryChips(){
       const box = els['country-chips'];
       if(!box) return;
-      box.addEventListener('click', event => {
-        const chip = event.target.closest('[data-country]');
-        if(!chip) return;
-        els['country-filter'].value = chip.dataset.country;
-        renderCountryChips();
+      box.addEventListener('change', event => {
+        if(event.target.id !== 'country-select') return;
+        els['country-filter'].value = event.target.value;
         if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
       });
     }
 
+    const rotatorState = { i: 0, timer: null, paused: false };
+    function renderShowcase(){
+      const box = document.getElementById('home-rotator');
+      if(!box) return;
+      const items = ((homeState.feed && homeState.feed.showcase) || []).filter(item => entityState.byId[item.entity]);
+      if(!items.length){ box.hidden = true; return; }
+      const nf = new Intl.NumberFormat(uiState.locale);
+      box.innerHTML = items.map((item, i) => {
+        const entity = entityState.byId[item.entity];
+        const krw = Number(entity.b_price_krw || item.low_krw);
+        const converted = convertAmount(krw, 'KRW', uiState.currency);
+        const price = converted !== null ? formatMoney(roundEstimate(converted, uiState.currency), uiState.currency) : '';
+        const flags = (item.countries || []).slice(0, 10).map(countryFlagHtml).join('');
+        return `<button type="button" class="rot-slide${i === rotatorState.i ? ' is-on' : ''}" data-entity="${escapeHtml(item.entity)}" aria-hidden="${i === rotatorState.i ? 'false' : 'true'}" tabindex="${i === rotatorState.i ? '0' : '-1'}">
+          <span class="rot-photo"><img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="${i < 2 ? 'eager' : 'lazy'}" referrerpolicy="no-referrer"></span>
+          <span class="rot-name">${escapeHtml(homeName(entity))}</span>
+          <span class="rot-meta"><b>${escapeHtml(price)}</b> · ${escapeHtml(ux('home.showcase_count', '{n} for sale worldwide').replace('{n}', nf.format(item.count)))}</span>
+          <span class="rot-flags">${flags}</span>
+        </button>`;
+      }).join('') + `<div class="rot-dots">${items.map((_, i) => `<button type="button" data-rot="${i}" aria-label="${i + 1}" aria-pressed="${i === rotatorState.i}"></button>`).join('')}</div>`;
+      box.hidden = false;
+      const show = i => {
+        rotatorState.i = (i + items.length) % items.length;
+        box.querySelectorAll('.rot-slide').forEach((el, j) => { const on = j === rotatorState.i; el.classList.toggle('is-on', on); el.setAttribute('aria-hidden', on ? 'false' : 'true'); el.tabIndex = on ? 0 : -1; });
+        box.querySelectorAll('[data-rot]').forEach((el, j) => el.setAttribute('aria-pressed', j === rotatorState.i ? 'true' : 'false'));
+      };
+      clearInterval(rotatorState.timer);
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!reduce) rotatorState.timer = setInterval(() => { if(!rotatorState.paused && !document.hidden) show(rotatorState.i + 1); }, 4000);
+      box.onmouseenter = () => { rotatorState.paused = true; };
+      box.onmouseleave = () => { rotatorState.paused = false; };
+      box.onclick = event => {
+        const dot = event.target.closest('[data-rot]');
+        if(dot){ show(Number(dot.dataset.rot)); return; }
+        const slide = event.target.closest('[data-entity]');
+        if(slide) selectEntity(slide.dataset.entity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
+      };
+    }
+    function renderShowcaseGrid(){
+      const box = document.getElementById('home-showcase');
+      if(!box) return;
+      const items = ((homeState.feed && homeState.feed.showcase) || []).filter(item => entityState.byId[item.entity]);
+      if(!items.length){ box.hidden = true; return; }
+      box.innerHTML = items.map(item => {
+        const entity = entityState.byId[item.entity];
+        // 값은 B등급 시세(최저가 한 건은 잘못 연결된 매물일 수 있음), 시세가 없으면 최저가
+        const krw = Number(entity.b_price_krw || item.low_krw);
+        const converted = convertAmount(krw, 'KRW', uiState.currency);
+        const low = converted !== null ? formatMoney(roundEstimate(converted, uiState.currency), uiState.currency) : '';
+        const flags = (item.countries || []).slice(0, 8).map(countryFlagHtml).join('') + ((item.countries || []).length > 8 ? `<span class="showcase-more">+${item.countries.length - 8}</span>` : '');
+        return `<button type="button" class="showcase-item" data-entity="${escapeHtml(item.entity)}">
+          <span class="showcase-photo"><img src="${escapeHtml(homeThumb(item.image))}" alt="" loading="eager" fetchpriority="high" referrerpolicy="no-referrer" onerror="this.closest('.showcase-item').remove()"></span>
+          <span class="showcase-name">${escapeHtml(homeName(entity))}</span>
+          <span class="showcase-count">${escapeHtml(ux('home.showcase_count', '{n} for sale worldwide').replace('{n}', String(item.count)))}</span>
+          <span class="showcase-price">${escapeHtml(low)}</span>
+          <span class="showcase-flags">${flags}</span>
+        </button>`;
+      }).join('');
+      box.hidden = false;
+    }
+
     function renderHome(){
+      renderShowcase();
       const section = document.getElementById('home-feed');
       const latestEl = document.getElementById('home-latest');
       if(!section || !latestEl) return;
@@ -3358,7 +3670,10 @@
       if(!region) return;
       const entity = ladderEntity();
       const ready = entity && ladderState.results && ladderState.key === ladderKey();
-      if(!ready){ region.innerHTML = ''; return; }
+      const wantRegion = document.getElementById('want-region');
+      const putWant = html => { if(wantRegion) wantRegion.innerHTML = html ? `<section class="value-calc want-box">${html}</section>` : ''; };
+      document.body.classList.toggle('cb-calc', Boolean(ready));
+      if(!ready){ region.innerHTML = ''; putWant(''); return; }
       const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
       const rows = ladderState.results.filter(r => r.grade && r.grade !== 'X' && !['too_cheap', 'set', 'duplicate'].includes((r.final_output || {}).entity_note))
         .map(r => {
@@ -3370,10 +3685,8 @@
             box: BOX_WORDS.test(r.title || ''), firstSeen: final.first_seen, soldAt: final.sold_at } : null;
         }).filter(Boolean);
       if(!rows.length){  // 지금 매물이 없을 때가 알림이 가장 필요한 때 → 신청 칸만이라도 보여 줌
-        region.innerHTML = `<section class="value-calc" aria-label="${escapeHtml(wx('title'))}">
-          <p>${escapeHtml(wx('empty'))}</p>
-          ${renderWantForm(entity, entity.b_price_krw && fxRate('KRW') && fxRate(uiState.currency) ? convertAmount(entity.b_price_krw, 'KRW', uiState.currency) : null)}
-        </section>`;
+        region.innerHTML = `<section class="value-calc" aria-label="${escapeHtml(wx('title'))}"><p>${escapeHtml(wx('empty'))}</p></section>`;
+        putWant(renderWantForm(entity, entity.b_price_krw && fxRate('KRW') && fxRate(uiState.currency) ? convertAmount(entity.b_price_krw, 'KRW', uiState.currency) : null));
         return;
       }
       const grades = ['N', 'S', 'A', 'B', 'C', 'D'];
@@ -3415,8 +3728,8 @@
           ${days.length >= 3 ? `<div><dt>${escapeHtml(cx('days'))}</dt><dd>${escapeHtml(cx('days_value', { d: String(Math.round(calcMedian(days))), n: String(days.length) }))}</dd></div>` : ''}
           <div><dt>${escapeHtml(cx('confidence'))}</dt><dd><small>${escapeHtml(confidence)}</small></dd></div>
         </dl>
-        ${renderWantForm(entity, active.length ? calcMedian(active) : null)}
       </section>`;
+      putWant(renderWantForm(entity, active.length ? calcMedian(active) : null));
     }
 
     // ── 원하는 매물 알림: 모델·최소 등급·도착 총액 상한 (세금은 서버가 화면과 같은 규칙으로 계산) ──
@@ -3507,6 +3820,69 @@
       block.hidden = false;
       drawMarketMap();
     }
+    // 판매 금액 추이 점에 마우스를 올리면 간단한 정보 (2026-11-08 사장님)
+    document.addEventListener('mouseover', event => {
+      const dot = event.target.closest && event.target.closest('.hist-dot');
+      const box = dot && dot.closest('.price-history');
+      document.querySelectorAll('.hist-tip').forEach(tip => { if(!box || !box.contains(tip)) tip.hidden = true; });
+      if(!dot || !box) return;
+      const tip = box.querySelector('.hist-tip');
+      const [date, price, meta, g] = String(dot.dataset.tip || '').split('\n');
+      tip.innerHTML = `${escapeHtml(date)}<br><b>${escapeHtml(price)}</b><br><i class="hist-g-${escapeHtml(g)}"></i>${escapeHtml(meta)}`;
+      tip.hidden = false;
+      const a = dot.getBoundingClientRect(), b = box.getBoundingClientRect();
+      const left = Math.min(a.left - b.left + 12, b.width - tip.offsetWidth - 4);
+      tip.style.left = `${Math.max(0, left)}px`;
+      tip.style.top = `${a.top - b.top - tip.offsetHeight - 8}px`;
+    });
+
+    document.addEventListener('click', event => {
+      const g = event.target.closest('[data-hist-grade]');
+      if(g && els['query-summary-region']){ uiState.histGrade = g.dataset.histGrade; els['query-summary-region'].innerHTML = renderChartArea(); return; }
+      const tab = event.target.closest('[data-chart-tab]');
+      if(!tab || !els['query-summary-region']) return;
+      uiState.chartTab = tab.dataset.chartTab;
+      els['query-summary-region'].innerHTML = renderChartArea();
+    });
+
+    // 첫 화면 아래 '더 보기' 링크: 누른 묶음만 열고(다시 누르면 닫음) 그 자리로 이동. 지도는 열린 뒤 다시 그림
+    document.addEventListener('click', event => {
+      const button = event.target.closest('.topnav [data-open]');
+      if(!button) return;
+      if(document.body.classList.contains('cb-searched') || document.body.classList.contains('cb-board')){
+        location.href = '/?open=' + encodeURIComponent(button.dataset.open);  // 검색·게시판 화면이면 첫 화면으로 가서 열기
+        return;
+      }
+      if(button.dataset.open === 'market-map-block'){  // 전체 매물 그래프는 첫 화면 아래 탭에 있음
+        showWorldTab('chart');
+        document.getElementById('home-world')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      const block = document.getElementById(button.dataset.open);
+      if(!block) return;
+      const open = !block.classList.contains('is-open');
+      document.querySelectorAll('.home-extra.is-open').forEach(el => el.classList.remove('is-open'));
+      document.querySelectorAll('.topnav [data-open]').forEach(el => el.setAttribute('aria-pressed', 'false'));
+      if(open){
+        block.classList.add('is-open');
+        button.setAttribute('aria-pressed', 'true');
+        if(block.id === 'market-map-block' && typeof drawMarketMap === 'function') setTimeout(drawMarketMap, 30);
+        block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+
+    // 첫 화면 주소에 ?open=묶음 이 있으면 (다른 화면에서 머리줄 메뉴를 누른 경우) 그 묶음을 열어 줌
+    // 주소는 스크립트를 읽는 순간 바로 기억 (뒤에서 검색 주소를 정리하며 ?open= 이 지워짐)
+    let OPEN_ON_LOAD = '';
+    try{ OPEN_ON_LOAD = new URLSearchParams(location.search).get('open') || ''; }catch(error){}
+    window.addEventListener('load', () => {
+      try{
+        const id = OPEN_ON_LOAD;
+        const button = id && document.querySelector(`.topnav [data-open="${CSS.escape(id)}"]`);
+        if(button) setTimeout(() => button.click(), 400);
+      }catch(error){}
+    });
+
     function drawMarketMap(){
       const data = mapState.data;
       const canvas = document.getElementById('market-map');
@@ -3518,7 +3894,7 @@
       const soft = css.getPropertyValue('--text-soft').trim() || ink;
       const narrow = canvas.parentElement.clientWidth < 560;
       const width = canvas.parentElement.clientWidth;
-      const left = narrow ? 8 : 112, right = 12, rowH = narrow ? 64 : 72, top = narrow ? 18 : 10, axisH = 26;
+      const left = narrow ? 8 : 112, right = 12, rowH = narrow ? 84 : 104, top = narrow ? 18 : 10, axisH = 26;  // 줄을 높여 점이 덜 겹치게 (2026-11-08)
       const height = top + rowH * 4 + axisH;
       const dpr = window.devicePixelRatio || 1;
       canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
@@ -3557,6 +3933,9 @@
       // 점: 줄 안에서 흩뿌림 (번호로 정해지는 값이라 다시 그려도 같은 자리)
       const dots = [];
       const counts = [0, 0, 0, 0];
+      // 2026-11-08 사장님: 점이 물감처럼 번짐 → 반투명을 없애고 점마다 배경색 테두리(겹쳐도 하나하나 보이게)
+      const surface = getComputedStyle(document.body).backgroundColor || '#fff';
+      const R = narrow ? 1.9 : 2.3;
       data.points.forEach((p, i) => {
         const [k, row, region, ei] = p;
         const jitter = ((Math.sin(i * 12.9898) * 43758.5453) % 1 + 1) % 1;
@@ -3564,8 +3943,10 @@
         const x = xOf(k * 1000), y = top + rowH * row + pad + jitter * (rowH - pad - 8);
         dots.push([x, y, i]);
         counts[row] += 1;
-        ctx.fillStyle = colors[region]; ctx.globalAlpha = 0.6;
-        ctx.beginPath(); ctx.arc(x, y, 2.1, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = surface;
+        ctx.beginPath(); ctx.arc(x, y, R + 0.9, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = colors[region];
+        ctx.beginPath(); ctx.arc(x, y, R, 0, Math.PI * 2); ctx.fill();
       });
       ctx.globalAlpha = 1;
       mapState.dots = dots;
@@ -3644,7 +4025,11 @@
         // 첫 화면에 첫 문제를 바로 (누르지 않아도). 환율·모델 이름을 받을 때까지 잠깐 기다림 (최대 6초)
         for(let i = 0; i < 30 && !(fxRate('KRW') && fxRate(uiState.currency) && entityState.byId); i++) await new Promise(r => setTimeout(r, 200));
         openQuiz();
-        if(QUIZ_FROM_URL && block) block.scrollIntoView({ block: 'start' });  // 공유 주소로 들어오면 문제로 바로
+        if(QUIZ_FROM_URL && block){  // 공유 주소로 들어오면 문제로 바로 — 첫 화면 단순화 뒤로 닫혀 있는 묶음이라 열어 줌 (2026-11-08)
+          block.classList.add('is-open');
+          document.querySelectorAll('.topnav [data-open="home-quiz-block"]').forEach(el => el.setAttribute('aria-pressed', 'true'));
+          block.scrollIntoView({ block: 'start' });
+        }
       }
     }
     function pickQuiz(){
@@ -3686,7 +4071,9 @@
           <p class="quiz-feedback" id="quiz-share-status" role="status"></p>
           <div class="quiz-actions">
             <button type="button" class="search-button" data-quiz-share data-level="${level}">${escapeHtml(qx('quiz_share'))}</button>
-          </div>`;
+            <a class="ghost-button quiz-save" href="/img/level/${level}.png" download="camera-bridge-leica-level-${level}.png">${escapeHtml(qx('quiz_save_image'))}</a>
+          </div>
+          <img class="quiz-card" src="/img/level/${level}.png" alt="${escapeHtml(qx('quiz_result', { n: String(level), name: qx(`quiz_lv${level}`) }))}" width="600" height="315" loading="lazy">`;
         return;
       }
       const q = quizState.list[quizState.index];
@@ -3754,7 +4141,8 @@
         if(target.hasAttribute('data-quiz-share')){
           const level = Number(target.dataset.level);
           const text = qx('quiz_share_text', { n: String(level), name: qx(`quiz_lv${level}`) });
-          const url = 'https://camerabridge.io/?quiz=1&utm_source=quiz-share';
+          // 레벨별 공유 주소: 레딧·카톡·X 미리보기에 그 레벨 카드가 뜨고 누르면 퀴즈로 (scripts/build_level_cards.py)
+          const url = `https://camerabridge.io/lv/${level}/`;
           const status = document.getElementById('quiz-share-status');
           try{
             if(navigator.share) await navigator.share({ text, url });
@@ -3765,6 +4153,11 @@
     }
 
     function bindHome(){
+      const showcase = document.getElementById('home-showcase');
+      if(showcase) showcase.addEventListener('click', event => {
+        const target = event.target.closest('[data-entity]');
+        if(target) selectEntity(target.dataset.entity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
+      });
       const section = document.getElementById('home-feed');
       if(!section) return;
       section.addEventListener('click', event => {
@@ -4046,8 +4439,16 @@
       const cost = computeLandedCost(result);
       if(!cost) return `<div class="result-price">${fallback}</div>${renderGradeRow(result, null)}`;
       const sameCurrency = cost.currency === cost.target;
-      const main = sameCurrency ? formatMoney(cost.listed, cost.currency) : `≈ ${formatMoney(roundEstimate(cost.converted, cost.target), cost.target)}`;
+      const itemPrice = sameCurrency ? formatMoney(cost.listed, cost.currency) : `≈ ${formatMoney(roundEstimate(cost.converted, cost.target), cost.target)}`;
+      // 2026-11-08 사장님: 큰 글씨는 받아 볼 금액(예상 총액) — 첫 화면 '내 집까지 총액으로'·가격순 정렬과 같게. 물건 금액은 아래 작은 줄
+      const delivered = cost.landed && !cost.storeOnly;
+      const main = delivered ? `≈ ${formatMoney(cost.landed.total, cost.target)}` : itemPrice;
       const original = sameCurrency ? '' : `<div class="result-price-original">${escapeHtml(ux('landed.original', 'Listed at {price}').replace('{price}', formatMoney(cost.listed, cost.currency)))}</div>`;
+      const diff = dealDiff(result, cost);
+      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
+      // 시세는 물건 금액끼리 비교라, 큰 글씨가 총액일 때는 '물건 금액' 줄 옆에 둠 (2026-11-08)
+      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
+        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
       let landed = '';
       if(cost.landed){
         const parts = [`${ux('landed.shipping', 'Shipping')} ${formatMoney(cost.landed.shipping, cost.target)}`];
@@ -4064,7 +4465,8 @@
           .join('');
         landed = `
           <div class="result-landed">
-            <div class="result-landed-total">${escapeHtml(ux('landed.total', 'Est. total delivered'))} ≈ ${escapeHtml(formatMoney(cost.landed.total, cost.target))}</div>
+            <div class="result-landed-total">${escapeHtml(ux('landed.item', 'Item price'))} ${escapeHtml(itemPrice)}</div>
+            ${delivered ? deal : ''}
             <div class="result-landed-parts">${escapeHtml(parts.join(' · '))}</div>
             ${notes}
             <details class="result-landed-how">
@@ -4076,11 +4478,9 @@
       }
       if(cost.storeOnly) landed = `<div class="result-landed"><div class="result-landed-note">${escapeHtml(ux('landed.store_only', ''))}</div></div>`;
       const gradeRow = renderGradeRow(result, cost);
-      const diff = dealDiff(result, cost);
-      // 같은 등급 시세 대비: 살 수 있는 매물에만, 3% 넘게 차이 날 때. 싸면 초록, 비싸면 회색 — 같은 자리·같은 모양
-      const deal = diff !== null && Math.abs(diff) >= 3 && (result.final_output || {}).sold_quality === 'asking'
-        ? `<div class="deal-badge${diff > 0 ? ' is-above' : ''}" title="${escapeHtml(ec(diff < 0 ? 'vs_grade_cheaper' : 'vs_grade_pricier', { p: String(Math.abs(diff)) }))}">${escapeHtml(ec(diff < 0 ? 'deal_below' : 'deal_above', { p: String(Math.abs(diff)) }))}</div>` : '';
-      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}</div>${deal}${original}${gradeRow}${landed}</div>`;
+      // 큰 총액 옆에 '배송비·관세 포함' (그래프와 같은 문구, 2026-11-08 사장님)
+      const incl = delivered ? ` <span class="result-price-incl">${escapeHtml(ec('ladder_incl'))}</span>` : '';
+      return `<div class="result-price-block"><div class="result-price">${escapeHtml(main)}${incl}</div>${delivered ? '' : deal}${original}${gradeRow}${landed}</div>`;
     }
 
     function localizePriceBand(text){
@@ -4395,6 +4795,15 @@
       editions: { ko: '기념·한정판', en: 'Special editions', ja: '記念・限定モデル', 'zh-Hans': '纪念·限量版', 'zh-Hant': '紀念·限量版', pt: 'Edições especiais', es: 'Ediciones especiales', de: 'Sondermodelle', it: 'Edizioni speciali' },
       ladder_incl: { ko: '배송비·관세 포함', en: 'incl. shipping & duties', ja: '送料・関税込み', 'zh-Hans': '含运费和关税', 'zh-Hant': '含運費和關稅', pt: 'com frete e impostos', es: 'con envío e impuestos', de: 'inkl. Versand & Zoll', it: 'spedizione e dazi inclusi' },
       ladder_incl_note: { ko: '가격은 {d}까지 받는 데 드는 배송비·관세·부가세를 포함한 예상 총액이에요', en: 'Prices are estimated totals delivered to {d}, including shipping, duties and tax', ja: '価格は{d}までの送料・関税・消費税を含む見込み総額です', 'zh-Hans': '价格为送到{d}的预计总价，含运费、关税和税费', 'zh-Hant': '價格為送到{d}的預估總價，含運費、關稅和稅費', pt: 'Os preços são totais estimados entregues em {d}, com frete, impostos e taxas', es: 'Los precios son totales estimados entregados en {d}, con envío, aranceles e impuestos', de: 'Preise sind geschätzte Gesamtkosten bis {d} inkl. Versand, Zoll und Steuer', it: 'I prezzi sono totali stimati consegnati in {d}, con spedizione, dazi e tasse' },
+      chart_tab_grade: { ko: '등급별 가격', en: 'Price by condition', ja: 'ランク別価格', 'zh-Hans': '按成色价格', 'zh-Hant': '依成色價格', pt: 'Preço por estado', es: 'Precio por estado', de: 'Preis nach Zustand', it: 'Prezzo per condizione' },
+      chart_tab_history: { ko: '판매 금액 추이', en: 'Sold prices over time', ja: '販売済み価格の推移', 'zh-Hans': '成交价格走势', 'zh-Hant': '成交價格走勢', pt: 'Preços vendidos ao longo do tempo', es: 'Precios vendidos en el tiempo', de: 'Verkaufspreise im Zeitverlauf', it: 'Prezzi di vendita nel tempo' },
+      hist_title: { ko: '언제 얼마에 팔렸나', en: 'When and for how much it sold', ja: 'いつ、いくらで売れたか', 'zh-Hans': '何时以多少钱售出', 'zh-Hant': '何時以多少錢售出', pt: 'Quando e por quanto vendeu', es: 'Cuándo y por cuánto se vendió', de: 'Wann und zu welchem Preis verkauft', it: 'Quando e a quanto è stata venduta' },
+      hist_note: { ko: '점 하나 = 팔린 매물 하나 (판매완료로 바뀌기 직전 표시 가격, 오늘 환율). 선은 B등급으로 맞춘 2주 중간값, 점선은 지금 B등급 시세. 기록은 {d}부터 쌓이고 있어요.', en: 'One dot = one sold listing (last asking price before it was marked sold, at today’s rate). The line is the 2-week median adjusted to grade B; the dashed line is today’s grade B market value. Records start {d}.', ja: '点1つ＝販売済み1点（販売済みになる直前の表示価格、本日のレート）。線はB等級に換算した2週間の中央値、点線は現在のB等級相場。記録は{d}から。', 'zh-Hans': '每个点 = 一件已售商品（标记售出前的最后标价，按今日汇率）。实线是换算为 B 级的两周中位数，虚线是当前 B 级行情。记录始于 {d}。', 'zh-Hant': '每個點 = 一件已售商品（標記售出前的最後標價，按今日匯率）。實線是換算為 B 級的兩週中位數，虛線是目前 B 級行情。紀錄始於 {d}。', pt: 'Um ponto = um anúncio vendido (último preço antes de ser marcado como vendido, ao câmbio de hoje). A linha é a mediana de 2 semanas ajustada ao grau B; a tracejada é o valor de mercado de hoje no grau B. Registros desde {d}.', es: 'Un punto = un anuncio vendido (último precio antes de marcarse como vendido, al cambio de hoy). La línea es la mediana de 2 semanas ajustada a grado B; la discontinua es el valor de mercado actual en grado B. Registros desde {d}.', de: 'Ein Punkt = ein verkauftes Angebot (letzter Preis vor „verkauft“, zum heutigen Kurs). Die Linie ist der 2-Wochen-Median auf Zustand B umgerechnet, die gestrichelte der heutige Marktwert Zustand B. Daten seit {d}.', it: 'Un punto = un annuncio venduto (ultimo prezzo prima di essere segnato come venduto, al cambio di oggi). La linea è la mediana di 2 settimane riportata al grado B; la tratteggiata è il valore di mercato attuale grado B. Dati dal {d}.' },
+      hist_few: { ko: '아직 팔린 기록이 적어요 ({n}건). 팔린 매물이 쌓이면 여기에 그려집니다.', en: 'Not enough sold records yet ({n}). The chart fills in as listings sell.', ja: 'まだ販売済みの記録が少なめです（{n}件）。売れるたびにここに増えていきます。', 'zh-Hans': '已售记录还太少（{n} 条），售出越多图表越完整。', 'zh-Hant': '已售紀錄還太少（{n} 筆），售出越多圖表越完整。', pt: 'Ainda há poucos registros de venda ({n}). O gráfico cresce conforme os anúncios vendem.', es: 'Aún hay pocos registros de venta ({n}). El gráfico se completa a medida que se venden.', de: 'Noch zu wenige Verkäufe ({n}). Das Diagramm füllt sich, wenn Angebote verkauft werden.', it: 'Ancora pochi dati di vendita ({n}). Il grafico si riempie man mano che gli annunci vengono venduti.' },
+      hist_line: { ko: '{g}등급 2주 중간값', en: 'Grade {g}, 2-week median', ja: '{g}等級・2週間中央値', 'zh-Hans': '{g} 级两周中位数', 'zh-Hant': '{g} 級兩週中位數', pt: 'Grau {g}, mediana de 2 semanas', es: 'Grado {g}, mediana de 2 semanas', de: 'Zustand {g}, 2-Wochen-Median', it: 'Grado {g}, mediana 2 settimane' },
+      hist_base: { ko: '지금 {g}등급 시세', en: 'Grade {g} market value now', ja: '現在の{g}等級相場', 'zh-Hans': '当前 {g} 级行情', 'zh-Hant': '目前 {g} 級行情', pt: 'Valor de mercado grau {g} hoje', es: 'Valor de mercado grado {g} hoy', de: 'Marktwert Zustand {g} heute', it: 'Valore di mercato grado {g} oggi' },
+      hist_all: { ko: '전체', en: 'All', ja: 'すべて', 'zh-Hans': '全部', 'zh-Hant': '全部', pt: 'Todos', es: 'Todos', de: 'Alle', it: 'Tutti' },
+      hist_dot: { ko: '팔린 매물', en: 'Sold listing', ja: '販売済み', 'zh-Hans': '已售商品', 'zh-Hant': '已售商品', pt: 'Anúncio vendido', es: 'Anuncio vendido', de: 'Verkauftes Angebot', it: 'Annuncio venduto' },
       ladder_title: { ko: '등급별 가격대', en: 'Price by condition', ja: 'ランク別の価格帯', 'zh-Hans': '按成色的价格区间', 'zh-Hant': '依成色的價格區間', pt: 'Preço por estado', es: 'Precio por estado', de: 'Preis nach Zustand', it: 'Prezzo per condizione' },
       ladder_note: { ko: '매물 {n}개를 등급별로 한 줄에 모았어요. 띠는 지금 판매 중인 가격대예요', en: '{n} listings, one row per condition. The band is the current asking range', ja: '{n}件の出品をランクごとに1行にまとめました。帯は現在の販売価格帯です', 'zh-Hans': '{n} 件商品按成色各占一行，色带为当前在售价格区间', 'zh-Hant': '{n} 件商品依成色各占一行，色帶為目前在售價格區間', pt: '{n} anúncios, uma linha por estado. A faixa é o preço pedido atual', es: '{n} anuncios, una fila por estado. La banda es el rango de precio actual', de: '{n} Angebote, eine Zeile pro Zustand. Das Band zeigt die aktuelle Preisspanne', it: '{n} annunci, una riga per condizione. La fascia è il prezzo richiesto attuale' },
       ladder_home: { ko: '국내 판매 중', en: 'For sale in your country', ja: '国内で販売中', 'zh-Hans': '本国在售', 'zh-Hant': '本國在售', pt: 'À venda no seu país', es: 'En venta en tu país', de: 'Im Inland zu kaufen', it: 'In vendita nel tuo paese' },
@@ -4428,7 +4837,7 @@
       suggestions: { ko: '모델 후보', en: 'Model suggestions', ja: 'モデル候補', 'zh-Hans': '型号候选', 'zh-Hant': '型號候選', pt: 'Sugestões de modelo', es: 'Sugerencias de modelo', de: 'Modellvorschläge', it: 'Suggerimenti di modello' }
     };
     const ENTITY_STOP_TOKENS = new Set(['leica', '라이카', 'ライカ', '徕卡', '徠卡', 'lens', '렌즈', 'body', '바디',
-      '0.58', '0.72', '0.85', '0.68', 'black', 'silver', 'chrome', '블랙', '실버', '크롬', 'used', '중고', '신품', 'new', 'paint', '블랙페인트']);
+      '0.58', '0.72', '0.85', '0.68', 'black', 'silver', 'chrome', '블랙', '실버', '크롬', 'used', '중고', '신품', 'new', 'paint', '블랙페인트', 'mandler']);  // mandler: 설계자 이름 — 오타 고치기가 'moncler'로 잘못 맞춤
     const entityState = { summary: null, byId: {}, suggestions: {}, active: {} };
 
     function ec(key, vars = {}){
@@ -4608,6 +5017,8 @@
       const grade = result.grade;
       const note = (result.final_output || {}).entity_note;
       if(!grade || grade === 'X' || grade === 'N' || note === 'too_cheap' || note === 'set' || note === 'price_inferred') return null;
+      // 리페인트·개조품은 같은 모델 기본형 시세와 값이 달라 비교하지 않음 ('M3 Black Repaint'가 '116% 비쌈'으로 나오던 것, 2026-11-07)
+      if(/(repaint|re-paint|repainted|modified|custom|改造|リペイント|리페인트|재도색|개조)/i.test(String(result.title || ''))) return null;
       if(!entityState.byId || !cost || !cost.listed || !fxRate(cost.currency) || !fxRate('KRW')) return null;
       const picked = state.entity ? entityState.byId[state.entity] : null;
       const entity = picked && !(picked.children || []).length && !picked.feature ? picked : entityState.byId[result.entity];
@@ -4708,7 +5119,7 @@
       pages.forEach(payload => all.push(...((payload && payload.results) || [])));
       if(ladderState.key !== key) return;
       ladderState.results = all;
-      if(els['query-summary-region'] && !state.loading && !state.error){ els['query-summary-region'].innerHTML = renderPriceLadder(); renderValueCalc(); }
+      if(els['query-summary-region'] && !state.loading && !state.error){ els['query-summary-region'].innerHTML = renderChartArea(); renderValueCalc(); }
     }
 
     function ladderPoints(results){
@@ -4801,7 +5212,95 @@
       }
       picks = picks.filter(item => item && !item.feature && item.active_count).sort((a, b) => b.active_count - a.active_count).slice(0, 8);
       const chips = picks.map(item => `<button type="button" class="ghost-button entity-chip" data-entity="${escapeHtml(item.id)}">${escapeHtml(entityDisplayName(item))} <span class="entity-chip-count">${item.active_count}</span></button>`).join('');
-      return `<section class="price-ladder ladder-guide"><h3>${escapeHtml(ec('ladder_pick_title'))}</h3><p>${escapeHtml(ec('ladder_pick_body'))}</p>${chips ? `<div class="entity-bar-chips">${chips}</div>` : ''}</section>`;
+      // 2026-11-08 사장님: 빈칸 대신 그래프 모양은 흐리게 보이고, 그 위에 '정확한 모델을 선택하세요' — 점은 실제 값이 아닌 모양만
+      return `<section class="price-ladder ladder-guide is-ghost"><h3>${escapeHtml(ec('ladder_title'))}</h3>
+        <div class="ladder-ghost" aria-hidden="true">${ladderGhostRows()}</div>
+        <div class="ladder-ghost-overlay"><strong>${escapeHtml(ec('ladder_pick_title'))}</strong><p>${escapeHtml(ec('ladder_pick_body'))}</p>${chips ? `<div class="entity-bar-chips">${chips}</div>` : ''}</div></section>`;
+    }
+
+    // 흐린 그래프 모양: 등급 줄마다 점 몇 개 (값을 뜻하지 않음, 늘 같은 모양)
+    function ladderGhostRows(){
+      const rows = [['S', 0.62, 7], ['A', 0.52, 11], ['B', 0.42, 14], ['C', 0.33, 9], ['D', 0.24, 5]];
+      let seed = 7;
+      const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+      return rows.map(([grade, center, n]) => {
+        const dots = Array.from({ length: n }, () => {
+          const left = Math.max(3, Math.min(97, (center + (rnd() - 0.5) * 0.34) * 100));
+          const top = 50 + (rnd() - 0.5) * 44;
+          return `<span class="ladder-dot" style="left:${left.toFixed(1)}%;top:${top.toFixed(1)}%"></span>`;
+        }).join('');
+        const band = `<span class="ladder-band" style="left:${((center - 0.12) * 100).toFixed(1)}%;width:24%"></span>`;
+        return `<div class="ladder-row"><span class="ladder-grade">${grade}</span><div class="ladder-strip">${band}${dots}</div><span class="ladder-range">—</span></div>`;
+      }).join('');
+    }
+
+    // 그래프 탭 (2026-11-08 사장님): 등급별 가격 | 판매 금액 추이. 여러 버전을 묶은 모델은 탭 없이 흐린 안내 그대로
+    function renderChartArea(){
+      if(!ladderEntity()) return renderPriceLadder();
+      const tab = uiState.chartTab === 'history' ? 'history' : 'grade';
+      const tabs = `<div class="chart-tabs" role="tablist">${['grade', 'history'].map(t => `<button type="button" role="tab" data-chart-tab="${t}" aria-selected="${t === tab}">${escapeHtml(ec(t === 'grade' ? 'chart_tab_grade' : 'chart_tab_history'))}</button>`).join('')}</div>`;
+      return tabs + (tab === 'history' ? renderPriceHistory() : renderPriceLadder());
+    }
+
+    // 판매 금액 추이: 점 = 팔린 매물(팔린 날짜 × 판매완료 직전 표시 가격), 선 = B등급으로 맞춘 2주 이동 중간값, 점선 = 지금 B등급 시세
+    function renderPriceHistory(){
+      const entity = ladderEntity();
+      if(!entity || !ladderState.results || ladderState.key !== ladderKey()) return '';
+      const sold = ladderPoints(ladderState.results)
+        .filter(p => !p.active && p.soldAt)
+        .map(p => { const cost = computeLandedCost(p.result); return { t: p.soldAt, v: cost ? cost.converted : 0, grade: p.grade, result: p.result }; })
+        .filter(p => p.v > 0)
+        .sort((a, b) => a.t - b.t);
+      const first = sold.length ? new Date(sold[0].t).toISOString().slice(0, 10) : '';
+      if(sold.length < 3){
+        return `<section class="price-ladder price-history"><h3>${escapeHtml(ec('hist_title'))}</h3><p>${escapeHtml(ec('hist_few', { n: String(sold.length) }))}</p></section>`;
+      }
+      const region = els['query-summary-region'];
+      // 등급 고르기 (2026-11-08 사장님: 다른 등급은?): 고르면 그 등급 점만, 선·점선도 그 등급 값으로 (B등급으로 맞춘 값 × 그 등급 비율)
+      const pick = ['S', 'A', 'B', 'C', 'D'].includes(uiState.histGrade) ? uiState.histGrade : '';
+      const shown = pick ? sold.filter(p => p.grade === pick) : sold;
+      const factorOf = g => (g && LADDER_GRADES.includes(g) && g !== 'N' ? gradeFactor(entity, g) : 0);
+      const scale = pick ? (factorOf(pick) || 1) : 1;
+      const counts = {}; sold.forEach(p => { counts[p.grade] = (counts[p.grade] || 0) + 1; });
+      const chips = `<div class="hist-grades">${['', 'S', 'A', 'B', 'C', 'D'].map(g => `<button type="button" data-hist-grade="${g}" aria-pressed="${g === pick}"${g && !counts[g] ? ' disabled' : ''}>${g ? `<i class="hist-g hist-g-${g}"></i>${escapeHtml(g)} <small>${counts[g] || 0}</small>` : escapeHtml(ec('hist_all'))}</button>`).join('')}</div>`;
+      const W = Math.max(320, Math.round((region && region.clientWidth) || 900)), H = 260, L = W < 520 ? 52 : 70, R = 12, T = 14, B = 34;  // 실제 폭으로 그려 점·글자가 찌그러지지 않게
+      const now = Date.now();
+      const t0 = sold[0].t - 86400000, t1 = Math.max(now, sold[sold.length - 1].t) + 86400000;
+      const base = entity.b_price_krw ? convertAmount(entity.b_price_krw, 'KRW', uiState.currency) * scale : null;
+      const norm = sold.map(p => { const f = LADDER_GRADES.includes(p.grade) && p.grade !== 'N' ? gradeFactor(entity, p.grade) : 0; return f ? p.v / f : null; });
+      const line = [];
+      sold.forEach(p => {
+        const win = sold.map((q, j) => (q.t <= p.t && q.t > p.t - 14 * 86400000 && norm[j]) ? norm[j] : null).filter(Boolean).sort((a, b) => a - b);
+        if(win.length >= 5) line.push([p.t, win[Math.floor(win.length / 2)] * scale]);  // 5건 미만이면 비싼 매물 몇 개에 선이 크게 튐 (기록 초반)
+      });
+      const values = shown.map(p => p.v).concat(line.map(xv => xv[1])).concat(base ? [base] : []).sort((a, b) => a - b);
+      const qv = r => values[Math.min(values.length - 1, Math.max(0, Math.round(r * (values.length - 1))))];
+      let lo = qv(0.03), hi = qv(0.97);
+      const pad = (hi - lo) * 0.12 || hi * 0.1;
+      lo = Math.max(0, lo - pad); hi += pad;
+      const x = t => L + (t - t0) / (t1 - t0) * (W - L - R);
+      const y = v => T + (1 - (Math.min(Math.max(v, lo), hi) - lo) / (hi - lo)) * (H - T - B);
+      const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
+      const grid = ladderTicks(lo, hi).map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" class="hist-grid"/><text x="${L - 8}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end" class="hist-axis">${escapeHtml(ladderAxisMoney(v))}</text>`).join('');
+      const mondays = [];
+      for(let d = new Date(t0); d.getTime() <= t1; d.setDate(d.getDate() + 1)) if(d.getDay() === 1) mondays.push(d.getTime());
+      const fmtDay = new Intl.DateTimeFormat(uiState.locale, { month: 'short', day: 'numeric' });
+      const xt = mondays.map(t => `<text x="${x(t).toFixed(1)}" y="${H - 10}" text-anchor="middle" class="hist-axis">${escapeHtml(fmtDay.format(t))}</text>`).join('');
+      const baseLine = base ? `<line x1="${L}" x2="${W - R}" y1="${y(base).toFixed(1)}" y2="${y(base).toFixed(1)}" class="hist-base"/>` : '';
+      const path = line.length >= 2 ? `<polyline class="hist-line" points="${line.map(([t, v]) => `${x(t).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}"/>` : '';
+      const fmtDate = new Intl.DateTimeFormat(uiState.locale, { year: 'numeric', month: 'short', day: 'numeric' });
+      const dots = shown.map(p => {
+        const label = `${fmtDate.format(p.t)} · ${money(p.v)} · ${p.grade === LADDER_UNKNOWN ? ec('ladder_unknown') : gradeLabel(p.grade)} · ${localizeSourceName(p.result.source || '')}`;
+        const g = LADDER_GRADES.includes(p.grade) ? p.grade : 'U';
+        const tip = [fmtDate.format(p.t), money(p.v), `${p.grade === LADDER_UNKNOWN ? ec('ladder_unknown') : gradeLabel(p.grade)} · ${localizeSourceName(p.result.source || '')}`, g].join('\n');
+        return `<a href="${escapeHtml(p.result.source_url || '#')}" target="_blank" rel="noopener" aria-label="${escapeHtml(label)}"><circle cx="${x(p.t).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="5" class="hist-dot hist-g-${g}" data-tip="${escapeHtml(tip)}"></circle></a>`;
+      }).join('');
+      const gradeName = pick || 'B';
+      const legend = `<div class="hist-legend"><span><i class="hist-key-dot"></i>${escapeHtml(ec('hist_dot'))} ${shown.length}</span>${path ? `<span><i class="hist-key-line"></i>${escapeHtml(ec('hist_line', { g: gradeName }))}</span>` : ''}${base ? `<span><i class="hist-key-base"></i>${escapeHtml(ec('hist_base', { g: gradeName }))} ${escapeHtml(money(base))}</span>` : ''}</div>`;
+      return `<section class="price-ladder price-history" aria-label="${escapeHtml(ec('hist_title'))}"><h3>${escapeHtml(ec('hist_title'))}</h3>${chips}${legend}
+        <svg class="hist-chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escapeHtml(ec('hist_title'))}">${grid}${xt}${baseLine}${path}${dots}</svg>
+        <div class="hist-tip" hidden></div>
+        <p class="hist-note">${escapeHtml(ec('hist_note', { d: first }))}</p></section>`;
     }
 
     function renderPriceLadder(){
@@ -4994,7 +5493,7 @@
         if(frame) return;
         frame = requestAnimationFrame(() => {
           frame = 0;
-          if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
+          if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderChartArea();
           const box = document.querySelector('.price-ladder');
           if(box && drag && drag.pan) box.classList.add('is-panning');
         });
@@ -5122,7 +5621,7 @@
         if(Math.abs(b - a) <= 0) return;
         ladderState.zoom = { low: Math.min(a, b), high: Math.max(a, b) };
         hideLadderTip();
-        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
+        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderChartArea();
       };
       follow('pointerup', finish);
       follow('pointercancel', () => {
@@ -5150,7 +5649,7 @@
         }
         if(!event.target.closest('[data-ladder-reset]')) return;
         ladderState.zoom = null;
-        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderPriceLadder();
+        if(els['query-summary-region']) els['query-summary-region'].innerHTML = renderChartArea();
       });
     }
 
@@ -5188,7 +5687,8 @@
 
     function entityMetaLine(entity){
       const kind = entity.kind === 'Body' ? ec('body') : ec('lens');
-      const parts = [entity.mount ? `${kind} · ${entity.mount}` : kind];
+      // 바디·렌즈가 섞인 별칭 묶음(블랙페인트·티타늄 등)은 종류를 쓰지 않음
+      const parts = entity.feature && !entity.mount ? [] : [entity.mount ? `${kind} · ${entity.mount}` : kind];
       if(entity.active_count){
         let sale = ec('on_sale', { n: String(entity.active_count) });
         const range = entity.active_price_krw;
@@ -5452,13 +5952,14 @@
       if(!box || stored || dismissed) return;
       let country = '';
       try{ country = ((await fetch('/api/usage?geo=1', { cache: 'no-store' }).then(r => r.ok ? r.json() : {})) || {}).country || ''; }catch(error){}
-      const fromBrowser = normalizeLocale(navigator.language || '');
-      const suggested = COUNTRY_LOCALE[country] || (fromBrowser !== 'en' ? fromBrowser : '');
-      if(!suggested || suggested === uiState.locale) return;
-      const copy = UX_LOCALE_COPY.locale_hint;
-      box.innerHTML = `<p lang="${escapeHtml(suggested)}">${escapeHtml(copy.ask[suggested])}</p>
-        <button type="button" class="is-main" lang="${escapeHtml(suggested)}" data-locale-hint="${escapeHtml(suggested)}">${escapeHtml(copy.yes[suggested])}</button>
-        <button type="button" data-locale-hint="">${escapeHtml(copy.keep.en)}</button>`;
+      // 브라우저 언어로 이미 그 나라 말이면 끝. 브라우저가 영어인데 접속 나라 언어가 있으면 그 언어로 바꾸고, 영어로 되돌리는 버튼만 보임
+      const suggested = COUNTRY_LOCALE[country] || '';
+      if(!suggested || suggested === uiState.locale || uiState.locale !== 'en') return;
+      setLocale(suggested);
+      try{ localStorage.removeItem('cb.beta.locale'); }catch(error){}  // 자동으로 바꾼 것은 기억하지 않음 (직접 고른 것만 기억)
+      box.innerHTML = `<p>${escapeHtml(UX_LOCALE_COPY.locale_hint.auto.en)}</p>
+        <button type="button" data-locale-hint="en">${escapeHtml(UX_LOCALE_COPY.locale_hint.to_en.en)}</button>
+        <button type="button" data-locale-hint="">✕</button>`;
       box.hidden = false;
       box.addEventListener('click', event => {
         const button = event.target.closest('[data-locale-hint]');
@@ -5470,9 +5971,15 @@
     }
 
     function detectInitialLocale(){
-      const stored = window.localStorage ? window.localStorage.getItem('cb.beta.locale') : '';
+      let stored = '';
+      try{ stored = window.localStorage ? window.localStorage.getItem('cb.beta.locale') || '' : ''; }catch(error){}
       if(stored) return normalizeLocale(stored);
-      // 기본은 영어. 다른 언어는 헤더 언어 버튼으로 고르면 기억함
+      // 2026-11-08 사장님: 접속한 나라 언어로 자동 — 먼저 브라우저 언어(바로 보임), 브라우저가 영어면 접속 나라로 (suggestLocale)
+      const langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']);
+      for(const lang of langs){
+        const locale = normalizeLocale(lang);
+        if(locale !== 'en' || /^en/i.test(lang)) return locale;
+      }
       return 'en';
     }
 
@@ -5532,8 +6039,8 @@
         Array.from(els['sort-select'].options).forEach(option => {
           if(option.value === 'relevance') option.textContent = ux('sort.relevance', 'Recommended');
           if(option.value === 'newest') option.textContent = ux('sort.newest', 'Newest');
-          if(option.value === 'price_asc') option.textContent = ux('sort.price_asc', 'Price: Low to High');
-          if(option.value === 'price_desc') option.textContent = ux('sort.price_desc', 'Price: High to Low');
+          if(option.value === 'price_asc') option.textContent = ux('sort.price_asc', 'Est. total: Low to High');
+          if(option.value === 'price_desc') option.textContent = ux('sort.price_desc', 'Est. total: High to Low');
           if(option.value === 'deal') option.textContent = ux('sort.deal', 'Best deals first');
         });
       }
@@ -6525,7 +7032,7 @@
       const select = els['sort-select'];
       if(!bar || !select) return;
       if(select.parentElement !== bar) bar.appendChild(select);
-      bar.hidden = !(Boolean(state.query) && !state.loading && getResults().length > 1);
+      bar.hidden = !(Boolean(state.query) && !state.loading && (getResults().length > 1 || Boolean(els['country-filter'] && els['country-filter'].value)));
     }
 
     function sortMarketBucket(items, sortMode){
@@ -6587,7 +7094,7 @@
         firstSeen: getResultFirstSeenScore(result),
         compatibility: getResultCompatibilityScore(result),
         compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
-        priceValue: comparablePrice(result),
+        priceValue: deliveredPrice(result),  // 가격순은 내 나라까지 예상 총액 (2026-11-08 사장님)
         marketInfo: getMarketActivityInfo(result),
         deal: sortMode === 'deal' && (result.final_output || {}).sold_quality === 'asking' ? dealDiff(result, computeLandedCost(result)) : null,
       }));
@@ -6977,7 +7484,7 @@
 
       // 모델(사양 묶음)을 고르면 위 요약 칸이 이미 그 모델 기준이라 결과 요약 카드는 생략 (첫 매물 제목을 모델처럼 보여 주던 문제)
       els['market-entry-region'].innerHTML = '';  // '결과 요약' 카드는 위 요약과 겹치고 짐작한 계열 이름이 제목과 달라 헷갈려서 뺌
-      els['query-summary-region'].innerHTML = renderPriceLadder();
+      els['query-summary-region'].innerHTML = renderChartArea();
       renderValueCalc();
       loadPriceLadder();
       renderSortBar();
@@ -7122,6 +7629,16 @@
     }
 
     // 가격 정렬용: 매장 통화가 섞여 있으므로 원화로 바꿔 비교 (₩2,400,000과 £1,199를 숫자 그대로 비교하던 문제, 2026-11-07)
+    // 가격순 정렬: 배송비·관부가세를 더한 예상 총액(원화로 맞춤). 총액을 못 내는 매물(매장 방문만·나라 모름)은 판매가
+    function deliveredPrice(result){
+      const cost = computeLandedCost(result);
+      if(cost && cost.landed && !cost.storeOnly){
+        const krw = cost.target === 'KRW' ? cost.landed.total : convertAmount(cost.landed.total, cost.target, 'KRW');
+        if(krw !== null && Number.isFinite(krw)) return krw;
+      }
+      return comparablePrice(result);
+    }
+
     function comparablePrice(result){
       const value = parseNumericPrice(result);
       if(value === null) return null;

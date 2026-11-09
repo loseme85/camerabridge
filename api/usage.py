@@ -1,6 +1,6 @@
 """사용 기록: 방문 한 번에 한 묶음(검색어·고른 모델·결과 수·판매처 클릭) → 비공개 Vercel Blob.
 
-저장 위치: usage/YYYY-MM-DD/HHMMSS-<세션>-<n>.json (비공개, 저장소에는 안 남김)
+저장 위치: Neon Postgres usage_events (DATABASE_URL 있을 때, pgstore.py) · 없으면 Blob usage/YYYY-MM-DD/HHMMSS-<세션>-<n>.json
 남기는 나라: Vercel이 붙여 주는 접속 나라 코드(x-vercel-ip-country, 예: KR)만. 남기지 않는 것: IP, 이메일, 쿠키. 세션 ID는 브라우저 탭마다 새로 만드는 무작위 값.
 보내는 곳: 첫 화면(beta.html)과 모델 시세 페이지(track.js). 같은 탭이면 한 방문(sid)으로 묶이고, 페이지마다 첫 묶음은 검색·클릭이 없어도 보냄(어디서 왔는지 남기려고).
 같은 사람 하루 한 번: IP를 그날 날짜·비밀 소금과 섞은 해시(vtag, 12자)만 남김. IP 자체는 저장 안 하고, 날이 바뀌면 값도 바뀌어 날끼리 이어 볼 수 없음.
@@ -16,7 +16,11 @@ import hashlib
 import json
 import os
 import re
+import sys
 from http.server import BaseHTTPRequestHandler
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 KST = dt.timezone(dt.timedelta(hours=9))
 SID = re.compile(r"^[a-z0-9]{8,24}$")
@@ -82,6 +86,7 @@ def clean(body: dict) -> dict | None:
         "landing": _text(body.get("landing"), 200),   # 경로와 utm만
         "mobile": bool(body.get("mobile")),
         "duration_s": _int(body.get("duration_s")),
+        "scroll": min(100, _int(body.get("scroll")) or 0),  # 얼마나 내려 봤나 % (2026-11-08)
         "searches": searches,
         "clicks": clicks,
     }
@@ -113,17 +118,20 @@ def handle(body: dict, country: str | None = None, cookie: str | None = None, ag
     timezone = str(timezone or "").strip()
     if TZ.match(timezone):  # 접속한 곳의 시간대 (Vercel x-vercel-ip-timezone, 예: America/New_York) → 방문 현황에서 현지 시각으로
         entry["tz"] = timezone
-    from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
-
     now = dt.datetime.now(KST)
     entry["created_at"] = now.isoformat(timespec="seconds")
     tag = visitor_tag(ip, f"{now:%Y-%m-%d}")
     if tag:
         entry["vtag"] = tag
-    path = f"usage/{now:%Y-%m-%d}/{now:%H%M%S}-{entry['sid']}-{entry['part']}.json"
+    import pgstore  # noqa: WPS433
     try:
-        blob.put(path, json.dumps(entry, ensure_ascii=False).encode("utf-8"),
-                 access="private", content_type="application/json")
+        if pgstore.enabled():  # Neon Postgres (2026-11 Blob 무료 한도 초과 뒤)
+            pgstore.add_usage(entry)
+        else:
+            from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
+            path = f"usage/{now:%Y-%m-%d}/{now:%H%M%S}-{entry['sid']}-{entry['part']}.json"
+            blob.put(path, json.dumps(entry, ensure_ascii=False).encode("utf-8"),
+                     access="private", content_type="application/json")
     except Exception:  # noqa: BLE001 (기록 실패는 사용자에게 알리지 않음)
         return 200, {"ok": False}
     return 200, {"ok": True}
