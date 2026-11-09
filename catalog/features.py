@@ -58,3 +58,31 @@ FEATURES: dict[str, tuple[str, str, list[str], list[str], list[str]]] = {
         [],
     ),
 }
+
+
+# 여러 모델에 걸친 별칭 → 그 이름을 가진 모델 전부 (2026-11-08 사장님: 별칭·퀴즈 단어로 찾기)
+# 'black paint'·'티타늄'처럼 모델 하나로 정할 수 없는 말은 하나를 골라 주지 않고 묶음 후보로 보여 준다.
+# members는 build_entity_catalog.py가 모델 이름(name_pattern)으로 채운다 — 새 모델이 생겨도 자동으로 들어감
+# id: (영어 이름, 한국어 이름, 모델 이름 정규식, 검색 별칭)
+AUTO_FEATURES: dict[str, tuple[str, str, str, list[str]]] = {
+    "leica:feature:black-paint": (
+        "Black Paint bodies and lenses (all)", "블랙페인트 바디·렌즈 (전체)", r"black paint",
+        ["black paint", "blackpaint", "black-paint", "블랙페인트", "블랙 페인트", "블페"],
+    ),
+    "leica:feature:titanium": (
+        "Titanium bodies and lenses (all)", "티타늄 바디·렌즈 (전체)", r"\btitan(ium)?\b",
+        ["titanium", "titan", "티타늄", "티탄"],
+    ),
+    "leica:feature:eyes": (
+        "Lenses with eyes (goggles) for the M3 (all)", "M3용 안경(고글) 달린 렌즈 (전체)", r"with eyes|goggles",
+        ["goggles", "with eyes", "eyes", "goggle", "안경", "고글", "안경 렌즈", "아이 버전"],
+    ),
+    "leica:feature:safari": (
+        "Safari editions (all)", "사파리 에디션 (전체)", r"\bsafari\b",
+        ["safari", "사파리", "safari edition"],
+    ),
+    "leica:feature:monochrom": (
+        "Monochrom cameras (all)", "모노크롬 카메라 (전체)", r"\bmonochrom\b",
+        ["monochrom", "monochrome", "모노크롬", "모노"],
+    ),
+}

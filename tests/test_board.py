@@ -276,3 +276,20 @@ def test_run_retention_deletes_only_expired_days():
     assert f"usage/{new_day}/b.json" in store
     assert f"usage/{old_day}/a.json" not in store and f"feedback/{old_day}/c.json" not in store
     assert result["usage"] == 1 and result["feedback"] == 1
+
+
+def test_alerts_on_sends_confirmation_email(monkeypatch):
+    """2026-11-08 사장님: 알림을 켜면 확인 메일 — 받는 사람 언어로, 끄기 링크 포함, 못 보내도 켜기는 성공"""
+    _setup(monkeypatch)
+    monkeypatch.setattr(board, "google_identity", lambda c: {"sub": "sub-c", "email": "lens@example.com", "email_verified": True})
+    monkeypatch.setattr(board, "verify_google", lambda c: "sub-c")
+    a = _join("tok-c", "렌즈")
+    board.save_item({"url": "https://shop/m3", "title": "Leica M3", "price": 3000000, "currency": "KRW", "source": "샵"}, a)
+    sent = []
+    status, _ = board.alerts_on({"credential": "tok-c", "locale": "ko"}, a, current={}, send=lambda to, s, b: sent.append((to, s, b)) or True)
+    assert status == 200 and len(sent) == 1
+    to, subject, body = sent[0]
+    assert to == "lens@example.com" and "가격 알림을 켰어요" in subject and "1개" in body and "r=unsub" in body
+    def boom(*_a):
+        raise RuntimeError("mail down")
+    assert board.alerts_on({"credential": "tok-c", "locale": "de"}, a, current={}, send=boom)[0] == 200

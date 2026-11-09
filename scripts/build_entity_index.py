@@ -121,6 +121,44 @@ def _home_feed(records: list, catalog: dict) -> dict:
     return {"generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "latest": picked}
 
 
+def _home_showcase(records: list, catalog: dict, skip: set, to_krw: dict, b_prices: dict, size: int = 16, max_active: int = 40) -> list:
+    """첫 화면 사진 줄 (2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게) — 수집가 추천 모델(home_picks.json) 중 꿈의 라이카(비싸고 귀한) 순서로
+    판매 중 매물 사진 한 장(가운데 가격대 매물), 가장 싼 값(원화), 매물이 있는 나라. 사진이 있는 매물이 없는 모델은 건너뜀"""
+    entities = catalog["entities"]
+    picks = json.loads((ROOT / "data" / "config" / "home_picks.json").read_text(encoding="utf-8")).get("picks", [])
+    countries = {k: (v or {}).get("country") for k, v in
+                 json.loads((ROOT / "data" / "config" / "landed_cost_rules.json").read_text(encoding="utf-8")).get("sources", {}).items()}
+    by_entity: dict[str, list] = {}
+    for record in records:
+        final = record.get("final_output") or {}
+        if final.get("sold_quality") != "asking" or id(record) in skip or final.get("entity_note") in ("duplicate", "too_cheap", "set"):
+            continue
+        price, currency = final.get("parsed_price_numeric"), str(final.get("currency") or "KRW").upper()
+        if not price or currency not in to_krw:
+            continue
+        for eid in record.get("entity_ids") or []:
+            by_entity.setdefault(eid, []).append((price * to_krw[currency], final))
+    out = []
+    for eid in picks:
+        rows = by_entity.get(eid) or []
+        if eid not in entities or not rows:
+            continue
+        rows.sort(key=lambda x: x[0])
+        with_photo = [r for r in rows if r[1].get("image_url")]
+        if not with_photo:
+            continue
+        # 사진 배경을 맞추려고 흰 배경 사진이 많은 일본 매장 사진을 먼저 (없으면 전체에서), 그중 가운데 가격대
+        white = [r for r in with_photo if countries.get(r[1].get("source")) == "JP"] or with_photo
+        mid = white[len(white) // 2][1]
+        ccs = sorted({countries.get(r[1].get("source")) for r in rows} - {None})
+        out.append({"entity": eid, "image": mid.get("image_url"), "low_krw": round(rows[0][0], -3), "count": len(rows), "countries": ccs})
+    # 꿈의 라이카 (2026-11-08 사장님: 비싸지만 구하기 어렵고, 갖고 싶지만 너무 비싼 것) —
+    # 추천 모델(갖고 싶은 것) 중 판매 중 매물이 max_active개 이하(구하기 어려운 것)를, B등급 시세가 비싼 순서로
+    rare = [x for x in out if x["count"] <= max_active]
+    rare.sort(key=lambda x: -(b_prices.get(x["entity"]) or x["low_krw"]))
+    return rare[:size]
+
+
 def _home_quiz(records: list, catalog: dict, skip: set, to_krw: dict) -> list:
     """첫 화면 '이 매물, 얼마에 팔렸을까?' 문제: 최근 QUIZ_DAYS일 안에 팔린 날이 분명한 매물 중 사진 있는 것, 모델마다 한 건.
     같은 물건 중복·너무 싼 것(잘못 연결 의심)·세트는 뺌. 가격은 팔린 날 환율로 원화."""
@@ -231,6 +269,7 @@ def main() -> None:
                                    "entities": entities}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     feed = _home_feed(records, catalog)
     feed["quiz"] = _home_quiz(records, catalog, dup_ids | too_cheap | sets, to_krw)
+    feed["showcase"] = _home_showcase(records, catalog, dup_ids | too_cheap | sets, to_krw, {e["id"]: e.get("b_price_krw") for e in entities})
     HOME_FEED.write_text(json.dumps(feed, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     linked = sum(1 for r in records if r.get("entity_ids"))
     print(f"✅ 엔티티 연결: 매물 {linked}/{len(records)}, 엔티티 {len(entities)}개 요약 · 가격으로 옮김 {moved} · 시세에서 뺌 {len(too_cheap)} · 세트 {len(sets)} · 같은 물건 중복 {duplicates}")

@@ -168,7 +168,7 @@ def me(member_id: str | None) -> dict:
 
 
 # ── 가격 알림 (회원이 켰을 때만 이메일 저장) ──
-def alerts_on(body: dict, member_id: str | None, current: dict | None = None) -> tuple[int, dict]:
+def alerts_on(body: dict, member_id: str | None, current: dict | None = None, send=None) -> tuple[int, dict]:
     blob = _blob()
     member = _member(blob, member_id)
     if not member:
@@ -190,7 +190,52 @@ def alerts_on(body: dict, member_id: str | None, current: dict | None = None) ->
             item["notified_price"] = listing.get("parsed_price_numeric") or item.get("price")
             item["notified_status"] = "asking" if listing.get("sold_quality") == "asking" else ("sold" if listing else "gone")
         _put(blob, f"board/saves/{member_id}.json", {"items": items})
+    # 켰다는 확인 메일 (2026-11-08 사장님: 알림 신청하면 내 메일로 확인 메일) — 못 보내도 켜기는 그대로
+    try:
+        subject, html_body = _confirm_email(member_id, member["alerts"], len(_saves(blob, member_id)))
+        (send or _send_email)(member["alerts"]["email"], subject, html_body)
+    except Exception:  # noqa: BLE001
+        pass
     return 200, {"ok": True, "member": _public_member(member)}
+
+
+CONFIRM_TEXT = {
+    "ko": ("가격 알림을 켰어요 · 카메라브릿지", "카메라브릿지 가격 알림을 켰습니다.",
+           "저장한 상품이 1% 넘게 내리거나 팔리면 한 번에 묶어 메일로 알려 드려요. 지금 저장한 상품: {n}개.",
+           "상품 카드의 책갈피 아이콘으로 더 저장할 수 있어요.", "저장한 상품 보기", "알림 끄기"),
+    "ja": ("価格通知をオンにしました · Camera Bridge", "Camera Bridge の価格通知をオンにしました。",
+           "保存した商品が1%以上値下がりするか売り切れると、まとめてメールでお知らせします。現在の保存商品：{n}件。",
+           "商品カードのしおりアイコンでさらに保存できます。", "保存した商品を見る", "通知を停止"),
+    "en": ("Price alerts are on · Camera Bridge", "Price alerts are on for your Camera Bridge account.",
+           "We'll email you once when a listing you saved drops more than 1% or sells. Saved listings now: {n}.",
+           "Save more with the bookmark icon on any listing.", "See saved listings", "Turn off alerts"),
+    "de": ("Preisalarm ist aktiv · Camera Bridge", "Der Preisalarm für dein Camera-Bridge-Konto ist aktiv.",
+           "Wir schreiben dir, sobald ein gemerktes Angebot um mehr als 1 % fällt oder verkauft ist. Gemerkte Angebote: {n}.",
+           "Mit dem Lesezeichen-Symbol kannst du weitere Angebote merken.", "Gemerkte Angebote ansehen", "Alarm ausschalten"),
+    "it": ("Avvisi di prezzo attivi · Camera Bridge", "Gli avvisi di prezzo per il tuo account Camera Bridge sono attivi.",
+           "Ti scriviamo quando un annuncio salvato scende di oltre l'1% o viene venduto. Annunci salvati: {n}.",
+           "Salvane altri con l'icona segnalibro su ogni annuncio.", "Vedi annunci salvati", "Disattiva avvisi"),
+    "es": ("Alertas de precio activadas · Camera Bridge", "Las alertas de precio de tu cuenta de Camera Bridge están activadas.",
+           "Te escribiremos cuando un anuncio guardado baje más de un 1 % o se venda. Anuncios guardados: {n}.",
+           "Guarda más con el icono de marcador en cualquier anuncio.", "Ver anuncios guardados", "Desactivar alertas"),
+    "pt": ("Alertas de preço ativados · Camera Bridge", "Os alertas de preço da sua conta Camera Bridge estão ativados.",
+           "Avisaremos por e-mail quando um anúncio salvo cair mais de 1% ou for vendido. Anúncios salvos: {n}.",
+           "Salve mais com o ícone de marcador em qualquer anúncio.", "Ver anúncios salvos", "Desativar alertas"),
+    "zh": ("价格提醒已开启 · Camera Bridge", "你的 Camera Bridge 价格提醒已开启。",
+           "保存的商品降价超过 1% 或售出时，我们会合并发一封邮件通知你。当前保存的商品：{n} 件。",
+           "在任意商品卡片上点书签图标即可保存更多。", "查看保存的商品", "关闭提醒"),
+}
+
+
+def _confirm_email(member_id: str, alerts: dict, saved: int) -> tuple[str, str]:
+    subject, title, how, more, see, stop_text = CONFIRM_TEXT.get((alerts.get("locale") or "en")[:2], CONFIRM_TEXT["en"])
+    stop = f"https://camerabridge.io/api/board?r=unsub&m={member_id}&s={unsubscribe_sig(member_id)}"
+    body = (f'<div style="font:15px/1.5 -apple-system,Helvetica,sans-serif;color:#16181a;max-width:560px">'
+            f'<p style="font:22px/1.3 Georgia,serif;margin:0 0 12px">{html.escape(title)}</p>'
+            f'<p>{html.escape(how.format(n=saved))}</p><p>{html.escape(more)}</p>'
+            f'<p><a href="https://camerabridge.io/#saved" style="color:#16181a">{html.escape(see)}</a></p>'
+            f'<p style="color:#878b8d;font-size:12px"><a href="{stop}" style="color:#878b8d">{html.escape(stop_text)}</a> · Camera Bridge</p></div>')
+    return subject, body
 
 
 def alerts_off(member_id: str | None) -> tuple[int, dict]:
@@ -380,11 +425,27 @@ def run_retention(blob=None, today: dt.date | None = None, catch_up_days: int = 
     if old:
         blob.delete(old)
     deleted["removed"] = len(old)
+    try:  # Neon Postgres로 옮긴 방문 기록·의견 (2026-11, pgstore.py)
+        import sys as _sys
+        from pathlib import Path as _Path
+        _sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+        import pgstore  # noqa: WPS433
+        if pgstore.enabled():
+            pgstore.delete_older_than(KEEP_DAYS)
+            deleted["db"] = "ok"
+    except Exception as error:  # noqa: BLE001
+        deleted["db"] = f"error: {type(error).__name__}"
     return deleted
 
 def _blob():
-    from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
-    return blob
+    # 2026-11-08: Blob 무료 한도 초과(12/1까지 막힘) → Neon이 연결돼 있으면 같은 모양의 Neon 저장소 (pgstore.PgBlob)
+    import sys as _sys
+    from pathlib import Path as _Path
+    root = str(_Path(__file__).resolve().parent.parent)
+    if root not in _sys.path:
+        _sys.path.insert(0, root)
+    import pgstore  # noqa: WPS433
+    return pgstore.blob_store()
 
 
 def _names(blob, prefix: str) -> list:
