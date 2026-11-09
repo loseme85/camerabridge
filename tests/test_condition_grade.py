@@ -622,3 +622,13 @@ def test_hebenstreit_zustand():
     assert grade_of(site, HEBENSTREIT_PREFIX + "A")[0] == "A"
     assert grade_of(site, HEBENSTREIT_PREFIX + "A-B")[0] == "B"
     assert grade_of(site, HEBENSTREIT_PREFIX + "B-C")[0] == "C"
+
+
+def test_kuecher_zustand():
+    from condition_grade import grade_of, KUECHER_PREFIX
+    site = "Kücher (오스트리아)"
+    assert grade_of(site, KUECHER_PREFIX + "A+")[0] == "S"
+    assert grade_of(site, KUECHER_PREFIX + "A-")[0] == "A"
+    assert grade_of(site, KUECHER_PREFIX + "B")[0] == "B"
+    assert grade_of(site, KUECHER_PREFIX + "B-")[0] == "C"
+    assert grade_of(site, KUECHER_PREFIX + "C")[0] == "D"
