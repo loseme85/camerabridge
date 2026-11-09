@@ -241,16 +241,16 @@
    "example": "Leica M11-P Silver"
   },
   {
+   "a": "leica:body:m8:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 65,
+   "example": "Leica M8 Silver"
+  },
+  {
    "a": "leica:body:m-p240:standard",
    "b": "leica:feature:frameline-28",
    "count": 65,
    "example": "Leica M-P Black"
-  },
-  {
-   "a": "leica:body:m8:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 64,
-   "example": "Leica M8 Silver"
   },
   {
    "a": "leica:feature:frameline-28",
@@ -289,18 +289,6 @@
    "example": "LEICA M4 Black paint sn.1266"
   },
   {
-   "a": "leica:body:m3:double-stroke",
-   "b": "leica:feature:no-meter",
-   "count": 58,
-   "example": "LEICA M3 Double stroke sn.8008"
-  },
-  {
-   "a": "leica:body:m3:double-stroke",
-   "b": "leica:feature:mechanical",
-   "count": 58,
-   "example": "LEICA M3 Double stroke sn.8008"
-  },
-  {
    "a": "leica:feature:meter",
    "b": "leica:feature:titanium",
    "count": 57,
@@ -317,6 +305,18 @@
    "b": "leica:feature:mechanical",
    "count": 57,
    "example": "Leica MP Silver x0.72"
+  },
+  {
+   "a": "leica:body:m3:double-stroke",
+   "b": "leica:feature:no-meter",
+   "count": 57,
+   "example": "LEICA M3 Double stroke sn.8008"
+  },
+  {
+   "a": "leica:body:m3:double-stroke",
+   "b": "leica:feature:mechanical",
+   "count": 57,
+   "example": "LEICA M3 Double stroke sn.8008"
   },
   {
    "a": "leica:body:mp-film:standard",
@@ -493,6 +493,18 @@
    "example": "[중고] M-Monochrom CCD (Black)"
   },
   {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:no-meter",
+   "count": 32,
+   "example": "[위탁] M4-2 (Black)"
+  },
+  {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:mechanical",
+   "count": 32,
+   "example": "[위탁] M4-2 (Black)"
+  },
+  {
    "a": "leica:body:m4-p:standard",
    "b": "leica:feature:frameline-28",
    "count": 32,
@@ -557,18 +569,6 @@
    "b": "leica:feature:ttl-flash",
    "count": 31,
    "example": "[중고] M6 밀레니엄 Blackpaint"
-  },
-  {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:no-meter",
-   "count": 31,
-   "example": "[위탁] M4-2 (Black)"
-  },
-  {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:mechanical",
-   "count": 31,
-   "example": "[위탁] M4-2 (Black)"
   },
   {
    "a": "leica:body:m6:ttl-millennium",
