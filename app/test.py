@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62}
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62, 'EUR': 1500, 'GBP': 1800, 'USD': 1350, 'HUF': 4, 'RON': 300}  # 코드 표기('EUR 1,290')도 — 없으면 1,290원으로 읽어 바디가 부속품이 됨 (2026-11-08)
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -6374,6 +6374,1235 @@ def crawl_leicastoremy():
     return results
 
 
+def crawl_digitalcameragraz():
+    """오스트리아 그라츠 Digital Camera Graz (WooCommerce, 2026-11-08 밤샘). 새 상품과 섞여 있어 이름에 시리얼(Sn.)이 있는
+    낱개(중고·진열품·데모)만, 바디·렌즈 분류만 담음. 이름의 'Sn.…, ArtNr.…, OVP, 1 Jahr Garantie' 꼬리는 자르고 '35mm/1,4' → '35mm f1.4'.
+    컨디션: Demogerät·Ausstellungsstück·Vitrinenstück → DEMO(S), 나머지는 표기 없음(사진 등급 대기열)"""
+    cats = re.compile(r"^Leica (M-Objektive|M-Kameras|SL[- ]Objektive|SL[- ]Kameras|Q-Kameras|Kompaktkameras digital|Schraub M39|R|S-System|M)$")
+    other = re.compile(r"(?i)voigt|zeiss|sigma|panasonic|lumix|ttartisan|7 ?artisans|für leica|for leica")
+
+    def keep(p, name):
+        import html as _h
+        names = [_h.unescape(c.get("name") or "") for c in p.get("categories") or []]
+        return (re.search(r"(?i)\bleica\b", name) and re.search(r"\bSn\.? ?\d", name) and not other.search(name)
+                and any(cats.match(n) for n in names))
+
+    def condition(p, name, text):
+        return "DCGraz: DEMO" if re.search(r"(?i)demoger|ausstellungs|vitrinen", name) else None
+
+    def rename(name):
+        name = re.split(r",?\s*\bSn\.?\s?\d", name)[0]
+        name = re.sub(r"(\d+)cm/(\d+(?:[.,]\d+)?)", lambda m: f"{int(m.group(1)) * 10}mm f{m.group(2).replace(',', '.')}", name)
+        name = re.sub(r"^Leica M39 (.+)$", r"Leica \1 (M39)", name)
+        name = re.sub(r"^Leica R ([A-Z][\w-]*)", r"Leica \1-R", name)  # 'Leica R Elmarit 135mm' → 'Leica Elmarit-R 135mm'
+        name = re.sub(r"\b(?:M )?Noctilux 75mm/1,2\b", "Noctilux-M 75mm/1,25", name)
+        name = re.sub(r"(\d+(?:-\d+)?)mm/(\d+(?:[.,]\d+)?(?:-\d+(?:[.,]\d+)?)?)", lambda m: f"{m.group(1)}mm f{m.group(2).replace(',', '.')}", name)
+        name = re.sub(r"\s*\b(Gehäuse|silbern? verchromt|schwarz verchromt|verchromt)\b", lambda m: "" if m.group(1) == "Gehäuse" else " " + m.group(1), name)
+        return re.sub(r"\s+", " ", name).strip(" ,")
+
+    return _woo_leica("https://www.digitalcameragraz.at", "Digital Camera Graz (오스트리아)", "Digital Camera Graz", keep=keep, condition=condition, rename=rename)
+
+
+def _woo_leica(base, site, label, keep=None, condition=None, rename=None, search="leica"):
+    """WooCommerce 공개 상품 API(/wp-json/wc/store/v1/products?search=…)에서 판매 중 라이카만 행으로 (2026-11-08 밤샘, 여러 매장 공통).
+    keep(p, name) → 담을지(기본: 라이카·라이츠이고 다른 회사 라이카 마운트 렌즈·Panasonic Leica DG가 아님),
+    condition(p, name, text) → 컨디션 문자열, rename(name) → 이름 다듬기. 가격은 API의 정수 가격 ÷ 10^소수 자릿수"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    other = re.compile(r"(?i)panasonic|lumix|7 ?artisans|ttartisan|voigt|sigma|tamron|novoflex|godox|nisi|polarpro|walimex|for leica|per leica|pour leica|für leica|x leica|leica[- ]m adapter")
+    results = []
+    print(f"\n  📂 {label} 크롤링 시작")
+    for page in range(1, 20):
+        resp = None
+        for attempt in range(3):
+            if page > 1:
+                time.sleep(2)  # 쉬지 않고 연달아 받으면 연결을 끊는 매장이 있음 (Digital Camera Graz)
+            try:
+                resp = sess.get(f"{base}/wp-json/wc/store/v1/products", params={"search": search, "per_page": 100, "page": page}, timeout=30)
+            except requests.ConnectionError:
+                if attempt == 2:
+                    raise
+                time.sleep(15 * (attempt + 1))
+                continue
+            if resp.status_code != 429:
+                break
+            time.sleep(int(resp.headers.get("Retry-After") or 0) or 20 * (attempt + 1))
+        resp.raise_for_status()
+        items = resp.json()
+        for p in items:
+            if not p.get("is_in_stock") or not p.get("is_purchasable", True):
+                continue
+            name = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", p.get("name") or ""))).strip()
+            if keep is not None:
+                if not keep(p, name):
+                    continue
+            elif not re.search(r"(?i)\b(?:leica|leitz)", name) or other.search(name):
+                continue
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
+            cond = (condition(p, name, text) if condition else None) or "정보없음"
+            if rename:
+                name = rename(name)
+            pr = p.get("prices") or {}
+            try:
+                amount = int(pr.get("price")) / 10 ** int(pr.get("currency_minor_unit", 2))
+                cur = pr.get("currency_code") or "EUR"
+                price = f"{cur} {amount:,.0f}"
+            except (TypeError, ValueError):
+                price, cur = "문의요망", pr.get("currency_code") or "EUR"
+            imgs = p.get("images") or []
+            cat = detect_category(name, price)
+            results.append({
+                "site": site,
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": cur,
+                "이미지": imgs[0].get("src", "") if imgs else "",
+                "링크": p.get("permalink") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(items)}개")
+        if len(items) < 100:
+            break
+        time.sleep(3)
+    print(f"  ✅ {label} 완료: {len(results)}개")
+    return results
+
+
+def _abbr_lens_name(name):
+    """줄여 쓴 렌즈 이름 다듬기: 'LEICA M 35 1.4 SUMMILUX' → 'Leica M 35mm f1.4 Summilux', 'R 35 F2,0' → 'R 35mm f2.0'"""
+    n = name
+    if n.isupper():  # 전부 대문자면 먼저 낱말 첫 글자만 크게 (숫자 든 낱말·3글자 이하는 그대로)
+        n = " ".join(w if re.search(r"\d", w) or len(w) <= 3 else w.capitalize() for w in n.split())
+        n = re.sub(r"(?i)\bleica\b", "Leica", n)
+    n = re.sub(r"(?i)\bF\s?(\d{1,2}),(\d)\b", r"f\1.\2", n)
+    n = re.sub(r"\b(\d),(\d)\b", r"\1.\2", n)
+    n = re.sub(r"(?i)\b(M|R|L|SL|S|TL|T)\s?(\d{2,3})\s+(?:F\s?)?(\d{1,2}(?:\.\d)?)\b(?!\s?mm)", r"\1 \2mm f\3", n)
+    n = re.sub(r"(?i)\b(M|R|L|SL|TL)\s?(\d{2,3}(?:-\d{2,3})?)\s+(f\d)", r"\1 \2mm \3", n)
+    n = re.sub(r"(?i)\bf\s(\d)", r"f\1", n)
+    n = re.sub(r"(?i)\btype\s?(\d{3})\b", r"(Typ \1)", n)
+    n = re.sub(r"(?i)\b(\d{1,2})\s?cm\b", lambda m: f"{int(m.group(1)) * 10}mm", n)  # '5CM' → 50mm
+    n = re.sub(r"\b(\d{2,3})mm\s(\d\.\d)\b", r"\1mm f\2", n)  # '50mm 2.0' → f2.0
+    # 이름이 맨 뒤에 붙은 것('M39 50mm f2.0 Summitar')은 앞으로 — 모델 이름이 앞에 와야 잘 붙음
+    m = re.match(r"(?i)^(leica)\s+(.*?\d{2,3}mm\s+f\d(?:\.\d+)?)\s+(summitar|summaron|summarit|summar|elmar|hektor|xenon)\b(.*)$", n)
+    if m:
+        n = f"{m.group(1)} {m.group(3).capitalize()} {m.group(2)}{m.group(4)}"
+    # 렌즈 이름 없이 '마운트 초점거리 조리개'만 있으면 라이카 표준 이름으로 (조합이 하나뿐인 것만)
+    if not re.search(r"(?i)summ|elmar|noct|telyt|hektor|angulon|tri-|vario|macro|thambar|xenon|summar", n):
+        m = re.search(r"(?i)\b(M|R)\s(\d{2,3})mm\sf(\d(?:\.\d+)?)", n)
+        if m:
+            fam = _ABBR_FAMILY.get((m.group(1).upper(), m.group(2), str(float(m.group(3)))))
+            if fam:
+                n = n[:m.end()] + " " + fam + n[m.end():]
+    elif re.search(r"(?i)\bR\s60(?:mm)?\b.*\belmarit\b.*\bmacro\b", n):
+        n = re.sub(r"(?i)\belmarit\b", "Macro-Elmarit-R", n)
+    return n
+
+
+# '마운트·초점거리·조리개'만 적은 렌즈 → 이름 (그 조합의 라이카 렌즈가 하나뿐인 것만)
+_ABBR_FAMILY = {
+    ("R", "19", "2.8"): "Elmarit-R", ("R", "24", "2.8"): "Elmarit-R", ("R", "28", "2.8"): "Elmarit-R", ("R", "35", "2.8"): "Elmarit-R",
+    ("R", "35", "2.0"): "Summicron-R", ("R", "50", "2.0"): "Summicron-R", ("R", "90", "2.0"): "Summicron-R",
+    ("R", "35", "1.4"): "Summilux-R", ("R", "50", "1.4"): "Summilux-R", ("R", "80", "1.4"): "Summilux-R",
+    ("R", "90", "2.8"): "Elmarit-R", ("R", "135", "2.8"): "Elmarit-R", ("R", "180", "2.8"): "Elmarit-R", ("R", "60", "2.8"): "Macro-Elmarit-R",
+    ("M", "21", "2.8"): "Elmarit-M", ("M", "24", "2.8"): "Elmarit-M", ("M", "28", "2.8"): "Elmarit-M", ("M", "90", "2.8"): "Elmarit-M",
+    ("M", "28", "2.0"): "Summicron-M", ("M", "35", "2.0"): "Summicron-M", ("M", "50", "2.0"): "Summicron-M",
+    ("M", "35", "1.4"): "Summilux-M", ("M", "50", "1.4"): "Summilux-M", ("M", "50", "0.95"): "Noctilux-M", ("M", "135", "3.4"): "APO-Telyt-M",
+}
+
+
+def crawl_fototrade():
+    """Foto Trade Occasion (룩셈부르크) - 중고 전용 WooCommerce(occasion.fototrade.lu)의 공개 상품 API에서 라이카 판매 중만.
+    이름이 'LEICA M 35 1.4 SUMMILUX'·'LEICA R 35 F2,0'처럼 줄임 → _abbr_lens_name. 등급 표기 없음(사진 등급 대기열)"""
+    return _woo_leica("https://occasion.fototrade.lu", "Foto Trade Occasion (룩셈부르크)", "Foto Trade Occasion",
+                      rename=_abbr_lens_name)
+
+
+def crawl_fksecondhand():
+    """FK Second Hand (오스트리아 그라츠) - 중고 전문 WooCommerce 공개 상품 API('leica' 검색 약 500개)에서
+    렌즈·카메라 분류(Objektive·Antike Objektive·Analogkameras·Digitalkameras·Antike Kameras·Kompaktkameras)의 라이카만 (#232 _woo_leica).
+    영사기·설명서·부품·필터 분류와 '더미·Attrape·not working'은 뺌. 이름 끝 ' – #일련번호' 떼기, 'f/1,4' → f/1.4. 등급 표기 없음"""
+    cats_ok = {"Objektive", "Antike Objektive", "Analogkameras", "Digitalkameras", "Antike Kameras", "Kompaktkameras", "Messsucherkameras"}
+
+    def keep(p, name):
+        cats = {_html_unescape(c.get("name") or "") for c in p.get("categories") or []}
+        return bool(cats & cats_ok) and bool(re.search(r"(?i)\b(?:leica|leitz)", name)) and \
+            not re.search(r"(?i)voigt|panasonic|ttartisan|sigma|schneider|angenieux|für mft|four-thirds|\bDG\b|^leica d vario|dummy|attrape|not working|defekt|mikroskop|elmaron|photar|dygon|lupen|varob", name)
+
+    def rename(name):
+        n = re.sub(r"\s+[–-]\s+#\s?[\w-]+\s*$", "", name)
+        n = re.sub(r"(?i)\bf/(\d+),(\d+)", r"f/\1.\2", n)
+        n = re.sub(r"\b(\d+),(\d)cm\b", lambda m: f"{int(m.group(1)) * 10 + int(m.group(2))}mm", n)
+        n = re.sub(r"\b(\d{1,2})cm\b", lambda m: f"{int(m.group(1)) * 10}mm", n)  # 'Telyt 20cm' → 200mm, 'Summitar 5cm' → 50mm
+        n = re.sub(r"(?i)\bmacro\s*[–-]\s*elmar\s+r\b", "Macro-Elmar-R", n)
+        n = re.sub(r"(?i)\bteyt\b", "Telyt", n)
+        n = re.sub(r"(?i)\s+für leica [mr]\b", "", n)
+        # 'Leica M39 Telyt 200mm' — 앞의 M39 때문에 바디로 분류됨 → 뒤로 ('Leica Telyt 200mm … (M39)')
+        m = re.match(r"(?i)^(leica)\s+M39\s+(.+)$", n)
+        if m and re.search(r"\d{2,3}mm", m.group(2)):
+            n = f"{m.group(1)} {m.group(2)} (M39)"
+        return re.sub(r"\s+", " ", n).strip(" –-/")
+    return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
+
+
+def crawl_fotomundus():
+    """Foto Mundus (독일 노르트호른, Shopware 6, 2026-11-09 밤샘) - 'Gebrauchtware' 분류 전체(620여 개, 24개씩 26쪽, ?p= —
+    robots.txt 금지 아님)에서 이름에 Leica·Leitz가 든 것만 (Voigtländer 'für Leica M'·Panasonic Leica DG·Sigma는 뺌).
+    상세 화면 첫 그림은 매장 로고라 목록 그림을 씀. 가격 EUR.
+    등급은 제목 속 말: 'Messeware'·'Ausstellungsstück'(전시품) · 'Neuzustand'·'wie neu'·'Retoure' · 'Topzustand' · 'sehr gut' · 'guter Zustand'"""
+    import html as _html
+    import requests
+    from condition_grade import FOTOMUNDUS_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.foto-mundus.de"
+    print(f"\n  📂 Foto Mundus 크롤링 시작")
+    for page in range(1, 60):
+        resp = sess.get(f"{base}/angebote/gebrauchtware/", params={"p": page}, timeout=30)
+        resp.raise_for_status()
+        boxes = resp.text.split('class="card product-box')[1:]
+        new = 0
+        for b in boxes:
+            link = re.search(r'href="(https://www\.foto-mundus\.de/p/[^"]+)"\s*title="([^"]+)"', b)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            title = re.sub(r"\s+", " ", _html.unescape(link.group(2))).strip()
+            if not re.search(r"(?i)\bleica\b|\bleitz\b", title) or re.search(r"(?i)panasonic|lumix|sigma|voigtl|für leica|fuer leica|ttartisan", title):
+                continue
+            pr = re.search(r"([\d.]+),(\d\d)\s*(?:&nbsp;|\xa0|\s)*€", b)
+            img = re.search(r'<img src="([^"]+)"', b)
+            m = re.search(r"(?i)(Messeware|Ausstellungsstück|Neuzustand|wie neu|Retoure|Topzustand|sehr gut|guter Zustand)", title)
+            name = _fotomundus_name(title)
+            price = f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Foto Mundus (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": FOTOMUNDUS_PREFIX + m.group(1).lower() if m else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if page % 10 == 1:
+            print(f"    └─ {page}페이지 {len(boxes)}개 (새 {new})")
+        if not boxes or not new:
+            break
+        time.sleep(1.2)
+    print(f"  ✅ Foto Mundus 완료: {len(results)}개")
+    return results
+
+
+def _fotomundus_name(title):
+    """'Leica APO-SUMMICRON-SL 28mm 2.0 ASPH 11183 wie neu, originalverpackt #47868**' → 'Leica APO-SUMMICRON-SL 28mm f2.0 ASPH 11183'.
+    끝의 매장 번호 '#47868**', 쉼표 뒤·상태 말 뒤 꼬리, '28mm 2.0' → f2.0, 'Gehäuse' → Body, 'silber' → silver"""
+    n = re.sub(r"\s*#X?\d+\**\s*$", "", title)
+    n = re.sub(r"(?i)\s*,?\s*\b(?:Messeware|Ausstellungsstück|Neuzustand|wie neu|Retoure|Topzustand|sehr gut|guter Zustand|komplett geprüft|"
+               r"Sammlerstück|SAMMLERSTÜCK|aus Sammlerhand|Einzelstück|org\.-verpackt|originalverpackt|ovp)\b.*$", "", n)
+    n = re.sub(r"(?i)\b(\d{2,3}(?:-\d{2,3})?mm)\s+(\d(?:\.\d)?(?:-\d(?:\.\d)?)?)\b", r"\1 f\2", n)
+    n = re.sub(r"(?i)\bGehäuse\b", "Body", n)
+    n = re.sub(r"(?i)\bsilber\b", "silver", n)
+    n = re.sub(r"(?i)^Leica Leitz Wetzlar\b", "Leitz", n)
+    n = re.sub(r"(?i)\bHandgriff\b", "Handgrip", n)  # 독일어 'Handgriff'는 부속품으로 못 읽어 Q2·D-Lux 8 바디에 붙음
+    n = re.sub(r"(?i)\bminilux Summarit 35-70mm\b", "Minilux Zoom", n)
+    return re.sub(r"\s+", " ", n).strip(" ,")
+
+
+def crawl_jbvfoto():
+    """JBV Foto (독일 뉘른베르크, 클래식 카메라점, JTL-Shop 5, 2026-11-09 밤샘) - 제조사 Leica 화면 '/hersteller/leica/'
+    (24개씩, 쪽 넘김 '_s2' — robots.txt는 물음표 필터만 막음) 전체에서 'Verfügbar'(판매 중)만. 다른 회사(Voigtländer 등) 렌즈는 뺌.
+    가격 EUR(itemprop price). 등급은 제목 끝 말: 'NOS MINT'(새것 재고)·'MINT'·'near MINT'·'EXC'·'HAZE'·'FUNGUS'·'NOTTESTED'·'DEFECTIVE'"""
+    import html as _html
+    import requests
+    from condition_grade import JBV_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://jbvfoto.de"
+    print(f"\n  📂 JBV Foto 크롤링 시작")
+    for page in range(1, 40):
+        resp = sess.get(f"{base}/hersteller/leica/" + (f"_s{page}" if page > 1 else ""), timeout=30)
+        resp.raise_for_status()
+        cells = resp.text.split('class="product-wrapper ')[1:]
+        new = 0
+        for c in cells:
+            a = re.search(r'product-cell__title[^>]*><a href="([^"]+)">([^<]+)</a>', c)
+            if not a or a.group(1) in seen:
+                continue
+            seen.add(a.group(1))
+            new += 1
+            title = re.sub(r"\s+", " ", _html.unescape(a.group(2))).strip()
+            if "Verfügbar" not in c or not re.match(r"(?i)lei(?:ca|tz)\b", title) or re.search(r"(?i)voigtl|canon|nikon|zeiss|minolta|carl zeiss|schneider", title):
+                continue
+            pr = re.search(r'itemprop="price" content="([\d.]+)"', c)
+            img = re.search(r'data-src="([^"]+)"', c)
+            m = re.search(r"(?i)\b(NOS MINT|BNIB|NOS|near MINT|MINT-?|EXC\+*|DEFECTIVE|FUNGUS|HAZE|NOTTESTED)\b", title)
+            name = _jbv_name(title)
+            price = f"€{float(pr.group(1)):,.0f}" if pr else "문의요망"
+            cat = detect_category(name, price)
+            results.append({
+                "site": "JBV Foto (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": JBV_PREFIX + m.group(1).upper() if m else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1).replace("/sm/", "/md/") if img else "",
+                "링크": a.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(cells)}개 (새 {new})")
+        if not cells or not new:
+            break
+        time.sleep(1.5)
+    print(f"  ✅ JBV Foto 완료: {len(results)}개")
+    return results
+
+
+def _jbv_name(title):
+    """'Leica Summicron 2/35mm 8-Element 1. Version LTM M39 READ' → 'Leica Summicron 35mm f2 8-Element 1. Version (L39)'.
+    '조리개/초점거리'(2/35mm·1.9/7.3cm·4,5/135mm) → '35mm f2', 끝의 상태 말(CLA·near MINT·READ·NOTTESTED·FUNGUS·HAZE·NOS·BOXED·RARE) 떼기,
+    'Leica Leitz'·'Leitz Leica' → 'Leitz'"""
+    n = re.sub(r"(?i)\b(\d+(?:[.,]\d+)?)\s*/\s*(\d+(?:[.,]\d+)?)\s?cm\b",
+               lambda m: f"{round(float(m.group(2).replace(',', '.')) * 10)}mm f{m.group(1).replace(',', '.')}", title)
+    n = re.sub(r"(?i)\b(\d+(?:[.,]\d+)?)\s*/\s*(\d{2,4}(?:-\d{2,4})?)\s?mm\b", lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", n)
+    n = re.sub(r"(?i)\b(?:CLA|near MINT|NOS MINT|MINT-?|NOS|BNIB|EXC\+*|READ|NOTTESTED|FUNGUS|HAZE|BOXED|RARE|DEFECTIVE)\b", " ", n)
+    n = re.sub(r"(?i)\bLTM M39\b|\bM39 LTM\b|\bM39\b", "(L39)", n)
+    n = re.sub(r"(?i)^(?:Leica Leitz|Leitz Leica)\b", "Leitz", n)
+    n = re.sub(r"(?i)\bLeitz Wetzlar\b", "Leitz", n)
+    n = re.sub(r"(?i)\bMacro-Elmarit-R (100mm f4)\b", r"Macro-Elmar-R \1", n)  # 100mm f4는 Macro-Elmar (매장 표기 오류)
+    n = re.sub(r"\s+", " ", n).strip(" ,-")
+    if re.match(r"(?i)leitz\b", n) and re.search(r"(?i)leica (?:m|r)\b", n):  # 'Leitz Elmarit 90mm f2.8 Leica M' → 'Leica Elmarit-M …'
+        n = re.sub(r"(?i)^Leitz\s+", "Leica ", n)
+    return n
+
+
+def crawl_fotopro24():
+    """fotopro24 (독일 프랑크푸르트, 중고 매입 전문 Fotocash24의 판매점, PrestaShop, 2026-11-09 밤샘) - 제조사 Leica 화면
+    '13_leica'(330여 개, 100개씩 4쪽, ?page= — robots.txt 금지 아님)의 판매 중(itemprop availability InStock)만.
+    전부 매입한 중고. 쌍안경·거리측정기(DISTO)·영사기·현미경은 뺌. 가격 EUR(itemprop price).
+    등급은 상세 '기술 정보'에 'Zustand B (Sehr Gut)'가 드물게만 있어(표본 36개 중 1개) 읽지 않음 → 사진 등급 대기열"""
+    import html as _html
+    import requests
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://fotopro24.de"
+    print(f"\n  📂 fotopro24 크롤링 시작")
+    for page in range(1, 15):
+        resp = sess.get(f"{base}/13_leica", params={"page": page} if page > 1 else None, timeout=30)
+        resp.raise_for_status()
+        arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+        new = 0
+        for a in arts:
+            link = re.search(r'href="(https://fotopro24\.de/[^"]+\.html)"', a)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            if "schema.org/InStock" not in a:
+                continue
+            alt = re.search(r'itemprop="url">([^<]+)</a>', a) or re.search(r'alt\s*=\s*"([^"]+)"', a)
+            title = re.sub(r"\s+", " ", _html.unescape(alt.group(1))).strip() if alt else ""
+            if not title or re.search(r"(?i)fernglas|binocular|disto|entfernungsmesser|projekt|diaprojektor|mikroskop|spektiv|rangemaster|geovid|ultravid|trinovid|noctivid|"
+                                      r"leicina|panasonic|dygon|digiscoping", title):
+                continue  # 쌍안경·거리측정기·영사기, 영화 카메라 Leicina, 파나소닉, 영사·관측 렌즈
+            price = re.search(r'itemprop="price" content="([\d.]+)"', a)
+            img = re.search(r'data-full-size-image-url\s*=\s*"([^"]+)"', a)
+            name = _fotopro24_name(title)
+            price_str = f"€{float(price.group(1)):,.0f}" if price else "문의요망"
+            cat = detect_category(name, price_str)
+            results.append({
+                "site": "fotopro24 (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price_str,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(arts)}개 (새 {new})")
+        if not arts or not new:
+            break
+        time.sleep(2)
+    print(f"  ✅ fotopro24 완료: {len(results)}개")
+    return results
+
+
+def _fotopro24_name(title):
+    """'Leica Elmarit-R 2,8/180 E-67 (294645)' → 'Leica Elmarit-R 180mm f2.8 E-67'. 끝의 매장 번호 '(294645)',
+    '조리개/초점거리'(2,8/180·3,5-5,6/18-56·3,5/5cm) → '초점거리mm f조리개', 'Leica Leitz'·'Leica Leicaflex' 겹친 이름"""
+    n = re.sub(r"\s*\(\d{5,7}\)\s*$", "", title)
+    n = re.sub(r"(?i)\b(\d+(?:,\d+)?(?:-\d+(?:,\d+)?)?)\s*/\s*(\d+(?:,\d)?)\s?cm\b",
+               lambda m: f"{round(float(m.group(2).replace(',', '.')) * 10)}mm f{m.group(1).replace(',', '.')}", n)
+    n = re.sub(r"\b(\d+(?:,\d+)?(?:-\d+(?:,\d+)?)?)\s*/\s*(\d{2,4}(?:-\d{2,4})?)\b(?!\s?mm)",
+               lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", n)
+    n = re.sub(r"(?i)^Leica (Leitz|Leicaflex|Ernst Leitz)\b", r"\1", n)
+    n = re.sub(r"(?i)\bfür m39\b", "(L39)", n)
+    n = re.sub(r"(?i)\bVario-APO-Elmarit-R\b", "APO-Vario-Elmarit-R", n)
+    n = re.sub(r"(?i)\bElmar-S (\d+mm f[\d.]+) APO\b", r"APO-Elmar-S \1", n)
+    n = re.sub(r"(?i)(\d+mm f[\d.]+) \d cm\b", r"\1", n)  # 'Summicron 50mm f2.0 5 cm'
+    n = re.sub(r"(?i)\bChrom\b", "chrome", n)
+    n = re.sub(r"(?i)\bSilber\b", "silver", n)
+    return re.sub(r"\s+", " ", n).strip()
+
+
+def crawl_fotok():
+    """Foto K (스페인 바르셀로나, PrestaShop, 2026-11-09 밤샘) - 중고 분류 'material-segunda-mano' 전체(130여 개, 5쪽)에서
+    이름에 Leica·Leitz가 든 것만 (Panasonic Leica DG·Zeiss·'para Leica'는 뺌). 가격 EUR.
+    등급은 이름 끝 별 개수 '2ª Mano ***' (중고 135개 중 별 3개가 98개 = 보통 중고)"""
+    import html as _html
+    import requests
+    from condition_grade import FOTOK_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://fotok.es"
+    print(f"\n  📂 Foto K 크롤링 시작")
+    for page in range(1, 30):
+        resp = sess.get(f"{base}/material-segunda-mano", params={"page": page} if page > 1 else None, timeout=30)
+        resp.raise_for_status()
+        arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+        new = 0
+        for a in arts:
+            link = re.search(r'href="(https://fotok\.es/[^"#?]+)"', a)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            t = re.search(r'product-title[^>]*>\s*<a[^>]*>\s*([^<]+)', a) or re.search(r'alt="([^"]+)"', a)
+            title = re.sub(r"\s+", " ", _html.unescape(t.group(1))).strip() if t else ""
+            if not re.search(r"(?i)\bleica\b|\bleitz\b", title) or re.search(r"(?i)panasonic|lumix|zeiss|voigtl|sigma|ttartisan|para leica", title):
+                continue
+            stars = re.search(r"(\*{1,5})\s*$", title)
+            pr = re.search(r"([\d.]+),(\d\d)\s*(?:&nbsp;|\xa0|\s)*€", a)
+            slug = link.group(1).rstrip("/").rsplit("/", 1)[-1]
+            # 상품 칸 HTML에 다른 상품 그림이 섞여 있음(2026-11-09) → 상품 주소와 같은 이름의 그림만
+            img = next((m for m in re.findall(r'(https://fotok\.es/\d+-[a-z_]+/[^"\s,]+\.(?:jpg|jpeg|webp|png))', a) if slug and slug in m), "")
+            name = _fotok_name(title)
+            price = f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Foto K (스페인)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": FOTOK_PREFIX + str(len(stars.group(1))) if stars else "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img,
+                "링크": link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(arts)}개 (새 {new})")
+        if not arts or not new:
+            break
+        time.sleep(1.5)
+    print(f"  ✅ Foto K 완료: {len(results)}개")
+    return results
+
+
+def _fotok_name(title):
+    """'CAMARA ANALOGICA LEICA M2 Cuerpo 2ª Mano ***' → 'Leica M2 Body'. 앞의 'CAMARA ANALOGICA'·'OBJETIVO', 뒤의 '2ª Mano'·별,
+    'montura L', 'F/2.8' → f2.8, 'M39' 렌즈 → '(L39)', 'Leica 50mm f3.5 (L39)'는 Elmar"""
+    n = re.sub(r"\s*2\s?ª\s?Mano.*$", "", title, flags=re.I)
+    n = re.sub(r"(?i)^(?:CAMARA ANALOGICA|CAMARA|OBJETIVO)\s+", "", n)
+    n = re.sub(r"(?i)\s+montura L\b", "", n)
+    n = re.sub(r"(?i)\bF/(\d)", r"f\1", n)
+    n = re.sub(r"(?i)\bCuerpo\b", "Body", n)
+    n = re.sub(r"(?i)\b(\d{2,3}mm f[\d.]+) M39\b", r"\1 (L39)", n)
+    n = re.sub(r"(?i)^LEICA\b", "Leica", re.sub(r"\s+", " ", n).strip())
+    n = re.sub(r"(?i)^Leica 50mm f3\.5 \(L39\)$", "Leica Elmar 50mm f3.5 (L39)", n)
+    n = re.sub(r"(?i)^Leica VARIO-ELMARIT-SL\b", "Leica Vario-Elmarit-SL", n)
+    return n
+
+
+def crawl_lbpn():
+    """LBPN · La Boutique Photo Nikon (프랑스 파리, PrestaShop, 2026-11-09 밤샘) - 라이카 중고 분류 4곳(바디 313·렌즈 328·액세서리 343·
+    플래시 320)의 상품 주소를 모아 상세 화면 JSON-LD(이름·가격·재고·설명)를 읽음 (10여 개). 분류 안에 다른 회사(Canon 7·Industar)가
+    섞여 있어 이름이 LEICA·LEITZ로 시작하는 것만. 등급은 설명의 'Très bon état'·'Bon état'·'Etat moyen'. 가격 EUR"""
+    import html as _html
+    import json as _json
+    import requests
+    from condition_grade import LBPN_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.lbpn.fr"
+    print(f"\n  📂 LBPN 크롤링 시작")
+    links = []
+    for cat in ("313-boitiers-occasions-leica", "328-objectifs-occasions-leica", "343-accessoires-occasions-leica", "320-flashes-occasions-leica"):
+        for page in range(1, 10):
+            resp = sess.get(f"{base}/{cat}", params={"page": page} if page > 1 else None, timeout=30)
+            resp.raise_for_status()
+            found = [u for u in dict.fromkeys(re.findall(r'href="(https://www\.lbpn\.fr/occasions/\d+-[^"#]+\.html)', resp.text)) if u not in links]
+            links += found
+            if not found:
+                break
+            time.sleep(1.5)
+    print(f"    └─ 라이카 중고 분류 상품 {len(links)}개")
+    for link in links:
+        try:
+            t = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ LBPN 상세 오류: {e}")
+            continue
+        time.sleep(1.2)
+        prod = None
+        for block in re.findall(r'<script type="application/ld\+json">\s*(.*?)\s*</script>', t, re.S):
+            try:
+                j = _json.loads(block)
+            except ValueError:
+                continue
+            if isinstance(j, dict) and j.get("@type") == "Product":
+                prod = j
+        if not prod:
+            continue
+        offer = prod.get("offers") or {}
+        title = _html.unescape(prod.get("name") or "").strip()
+        if "InStock" not in str(offer.get("availability")) or not re.match(r"(?i)lei(?:ca|tz)\b", title):
+            continue
+        desc = _html.unescape(re.sub(r"<[^>]+>", " ", prod.get("description") or ""))
+        m = re.search(r"(?i)\b(comme neuf|excellent [ée]tat|tr[eè]s bon [ée]tat|bon [ée]tat|[ée]tat moyen|[ée]tat d['’]usage)\b", desc)
+        name = _lbpn_name(title)
+        price = f"€{float(offer.get('price')):,.0f}" if offer.get("price") else "문의요망"
+        img = prod.get("image")
+        img = img[0] if isinstance(img, list) and img else (img or "")
+        cat = detect_category(name, price)
+        results.append({
+            "site": "LBPN (프랑스)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": LBPN_PREFIX + m.group(1).lower().replace("é", "e").replace("è", "e") if m else "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ LBPN 완료: {len(results)}개")
+    return results
+
+
+def _lbpn_name(title):
+    """'LEICA M 28/2.8 VERSION III' → 'Leica Elmarit-M 28mm f2.8 version III'. 매장 제목은 '초점거리/조리개'만 적어
+    라이카 렌즈 이름을 넣음(같은 초점거리·조리개 조합이 하나뿐인 것만), '5CM/3.5 39 à VIS' → 'Elmar 50mm f3.5 (L39)'"""
+    n = re.sub(r"\s+", " ", title).strip()
+    n = re.sub(r"(?i)^LEICA\s*/\s*LEITZ\b", "Leica", n)
+    n = re.sub(r"(?i)\b(\d)CM\s*/\s*(\d(?:\.\d)?)", lambda m: f"{int(m.group(1)) * 10}mm f{m.group(2)}", n)
+    n = re.sub(r"(?i)\b(\d{2,3}(?:-\d{2,3})?)\s*/\s*(\d(?:\.\d)?)\b", r"\1mm f\2", n)
+    n = re.sub(r"(?i)\s+39 à VIS\b", " (L39)", n)
+    n = re.sub(r"(?i)\s+LEITZ$", "", n)
+    n = re.sub(r"(?i)\bVERSION\b", "version", n)
+    n = re.sub(r"(?i)\bPARASOLEIL\b|\bPare-soleil\b", "lens hood", n)
+    for pat, rep in ((r"(?i)^LEICA 40mm f2$", "Leica Summicron-C 40mm f2"),
+                     (r"(?i)^LEICA M 28mm f2\.8", "Leica Elmarit-M 28mm f2.8"),
+                     (r"(?i)^LEICA R 60mm f2\.8$", "Leica Macro-Elmarit-R 60mm f2.8"),
+                     (r"(?i)^LEICA R 80-200mm f4\.5$", "Leica Vario-Elmar-R 80-200mm f4.5"),
+                     (r"(?i)^Leica 50mm f3\.5 \(L39\)$", "Leica Elmar 50mm f3.5 (L39)")):
+        n = re.sub(pat, rep, n)
+    return re.sub(r"^LEICA\b", "Leica", n)
+
+
+def crawl_f64():
+    """F64 (루마니아 부쿠레슈티, VTEX, 2026-11-09 밤샘) - 루마니아 첫 사이트. 개인이 맡긴 중고를 파는 'Consignatie'(위탁) 분류의 라이카만.
+    VTEX 공개 상품 검색 API('leica', 50개씩 10번쯤)에서 분류가 Consignatie·(SH)이고 브랜드가 Leica인 것 (Panasonic Leica DG는 뺌).
+    가격 RON, 이름 끝 위탁 번호 'SH-1036899' 떼기. 등급은 사양 'Descriptive text SH'의 문장
+    ('Stare excelenta' 아주 좋음 · 'Stare foarte buna' · 'Stare buna' 좋음) — 'Note for SH'는 모두 10이라 안 씀"""
+    import html as _html
+    import requests
+    from condition_grade import F64_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.f64.ro"
+    print(f"\n  📂 F64 크롤링 시작")
+    for start in range(0, 2500, 50):
+        resp = sess.get(f"{base}/api/catalog_system/pub/products/search", params={"ft": "leica", "_from": start, "_to": start + 49}, timeout=30)
+        if resp.status_code not in (200, 206):
+            resp.raise_for_status()
+        batch = resp.json()
+        for p in batch:
+            cats = " ".join(p.get("categories") or [])
+            if "Consignatie" not in cats or (p.get("brand") or "").strip().lower() != "leica":
+                continue
+            item = (p.get("items") or [{}])[0]
+            offer = ((item.get("sellers") or [{}])[0]).get("commertialOffer") or {}
+            if not offer.get("AvailableQuantity"):
+                continue
+            name = re.sub(r"\s+SH-\d+\s*$", "", (p.get("productName") or "").strip())
+            name = re.sub(r"\bF(\d(?:\.\d)?)\b", r"f\1", name)
+            name = re.sub(r"(?i)^Leica Summicron (\d+mm f[\d.]+) - M-Mount$", r"Leica Summicron-M \1", name)
+            name = re.sub(r"(?i)\s+-\s+M-Mount$", " (M)", name)
+            desc = " ".join(p.get("Descriptive text SH") or p.get("Buletts txt listing") or [])
+            m = re.search(r"(?i)stare\s+(excelenta|excelentă|foarte bun[aă]|bun[aă]|acceptabil[aă]|satisf[aă]c[aă]toare|uzat[aă])", _html.unescape(re.sub(r"<[^>]+>", " ", desc)))
+            price = f"RON {float(offer.get('Price') or 0):,.0f}" if offer.get("Price") else "문의요망"
+            imgs = item.get("images") or []
+            cat = detect_category(name, price)
+            results.append({
+                "site": "F64 (루마니아)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": F64_PREFIX + m.group(1).lower() if m else "정보없음",
+                "가격": price,
+                "통화": "RON",
+                "이미지": imgs[0].get("imageUrl", "") if imgs else "",
+                "링크": p.get("link") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {start // 50 + 1}번째 {len(batch)}개")
+        if len(batch) < 50:
+            break
+        time.sleep(1)
+    print(f"  ✅ F64 완료: {len(results)}개")
+    return results
+
+
+def crawl_fotoc():
+    """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
+    상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
+    등급은 상세 설명 끝 'Kategori B+' / 'Stand A' (Ny·A·B+·B·B-·C+·C·defekt) — 목록에 없어 라이카만 상세를 읽음"""
+    import html as _html
+    import requests
+    from condition_grade import FOTOC_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.fotoc.dk"
+    print(f"\n  📂 FOTO/C 크롤링 시작")
+    items = []
+    for page in range(1, 40):
+        resp = sess.get(f"{base}/42-brugt-udstyr", params={"page": page}, timeout=30)
+        resp.raise_for_status()
+        arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+        new = 0
+        for a in arts:
+            link = re.search(r'href="(https://www\.fotoc\.dk/[^"]+\.html)"', a)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            brand = re.search(r'brand-name">([^<]+)', a)
+            alt = re.search(r'alt="([^"]+)"', a)
+            name = re.sub(r"\s+", " ", _html.unescape(alt.group(1))).strip() if alt else ""
+            if not brand or brand.group(1).strip().lower() != "leica" or not re.match(r"(?i)lei(?:ca|tz)", name):
+                continue
+            pr = re.search(r"([\d.]+),(\d\d)\s*(?:&nbsp;|\xa0|\s)*DKK", a)
+            img = re.search(r'data-full-size-image-url="([^"]+)"', a)
+            items.append((name, link.group(1), f"DKK {int(pr.group(1).replace('.', '')):,}" if pr else "문의요망",
+                          img.group(1) if img else "", "out-of-stock" in a))
+        print(f"    └─ {page}페이지 {len(arts)}개 (새 {new})")
+        if not arts or not new:
+            break
+        time.sleep(1.5)
+    for name, link, price, img, sold in items:
+        cond = "정보없음"
+        try:
+            t = sess.get(link, timeout=30).text
+            desc = re.search(r'"description":\s*"(.*?)",\s*"category"', t, re.S)
+            m = re.search(r"(?i)\b(?:kategori|stand)\s*:?\s*(ny|a|b\+|b-|b|c\+|c-|c|defekt|vintage)(?![\w+-])", _html.unescape(desc.group(1)) if desc else "")
+            if m:
+                cond = FOTOC_PREFIX + m.group(1)
+        except Exception as e:
+            print(f"    ⚠️ FOTO/C 상세 오류: {e}")
+        time.sleep(1.2)
+        nm = re.sub(r"(?i)\bf/(\d)", r"f\1", name)
+        nm = re.sub(r"(?i)\s+M mount$", " (M)", nm)
+        nm = re.sub(r"(?i)\bkamerahus\b", "body", nm)
+        nm = re.sub(r"(?i)\bModlysblænde til\b", "lens hood for", nm)
+        cat = detect_category(nm, price)
+        results.append({
+            "site": "FOTO/C (덴마크)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "DKK",
+            "이미지": img,
+            "링크": link,
+            "품절": sold,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ FOTO/C 완료: {len(results)}개")
+    return results
+
+
+def crawl_digitalstore():
+    """Digitalstore (오스트리아 빈, Shopware 6, 2026-11-09 밤샘) - 'Gebraucht' 분류 전체(50개쯤, 3쪽 — robots.txt가 쪽 넘김 ?p=는
+    허용, 필터 properties=는 금지)에서 이름에 Leica가 든 것만 상세를 읽음 (보이그랜더 'für Leica M'은 뺌).
+    목록 이름에 브랜드가 없는 상품도 있어 이름만으로 고름. 'Nicht mehr verfügbar'(판매 끝남)는 뺌.
+    등급은 상세 'ZUSTAND: A neuwertiger Zustand' / 'B guter Zustand' (A·B·C)"""
+    import html as _html
+    import json as _json
+    import requests
+    from condition_grade import DIGITALSTORE_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.digitalstore.at"
+    print(f"\n  📂 Digitalstore 크롤링 시작")
+    links = []
+    for page in range(1, 15):
+        resp = sess.get(f"{base}/Gebraucht/", params={"p": page}, timeout=30)
+        resp.raise_for_status()
+        boxes = resp.text.split('class="card product-box')[1:]
+        for box in boxes:
+            info = re.search(r'data-product-information="([^"]+)"', box)
+            href = re.search(r'href="(https://www\.digitalstore\.at/[^"]+)"', box)
+            try:
+                name = _json.loads(_html.unescape(info.group(1))).get("name") or "" if info else ""
+            except ValueError:
+                name = ""
+            if href and re.search(r"(?i)\bleica\b|\bleitz\b", name) and not re.search(r"(?i)voigtl|ttartisan|für leica|fuer leica", name):
+                links.append(href.group(1))
+        print(f"    └─ {page}페이지 {len(boxes)}개")
+        if len(boxes) < 23:  # 한 쪽 23개
+            break
+        time.sleep(1.5)
+    for link in dict.fromkeys(links):
+        try:
+            t = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ Digitalstore 상세 오류: {e}")
+            continue
+        time.sleep(1.2)
+        if "Nicht mehr verfügbar" in t:
+            continue
+        title = re.search(r'product-detail-name" itemprop="name">\s*(.*?)\s*</h1>', t, re.S)
+        price = re.search(r'itemprop="price"\s+content="([\d.]+)"', t)
+        if not title or not price:
+            continue
+        zm = re.search(r"ZUSTAND:?\s*([A-D])\b", _html.unescape(re.sub(r"<[^>]+>", " ", t)))
+        imgs = re.findall(r'data-full-image="([^"]+)"', t)
+        name = _digitalstore_name(_html.unescape(re.sub(r"<[^>]+>", " ", title.group(1))))  # 제목 앞 '<span>Gebraucht</span>' 
+        price_str = f"EUR {float(price.group(1)):,.0f}"
+        cat = detect_category(name, price_str)
+        results.append({
+            "site": "Digitalstore (오스트리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": DIGITALSTORE_PREFIX + zm.group(1) if zm else "정보없음",
+            "가격": price_str,
+            "통화": "EUR",
+            "이미지": imgs[0] if imgs else "",
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Digitalstore 완료: {len(results)}개")
+    return results
+
+
+def _digitalstore_name(title):
+    """'Gebraucht Leica Summicron-M 50mm 2.0 Schwarz' → 'Leica Summicron-M 50mm f2.0 black'. 'Gebraucht'·'– L-Mount' 떼기"""
+    n = re.sub(r"(?i)^\s*gebraucht\s+|\s*[–-]\s*L-Mount\s*$", "", title)
+    n = re.sub(r"(?i)\b(\d{2,3}(?:-\d{2,3})?mm)\s+F?(\d(?:\.\d)?)\b", r"\1 f\2", n)
+    for de, en in (("Gehäuse", "Body"), ("schwarz", "black"), ("silber", "silver"), ("Blitz Sender", "flash transmitter")):
+        n = re.sub(rf"(?i)\b{de}\b", en, n)
+    n = re.sub(r"(?i)^Leica Vario Elmarit-SL", "Leica Vario-Elmarit-SL", n)
+    return re.sub(r"\s+", " ", n).strip()
+
+
+def crawl_hebenstreit():
+    """Foto Hebenstreit (오스트리아 펠트키르히, Shopware 6, 2026-11-09 밤샘). robots.txt가 물음표 주소(/*?)를 모두 막아
+    분류 쪽 넘김·필터를 못 씀 → 사이트맵의 상품 주소 중 'gebraucht'와 'leica·leitz'가 들어간 것만 상세를 읽음 (30개쯤).
+    다른 회사 렌즈·어댑터(TTArtisan·Takumar·Zeiss 'für Leica M')는 뺌. 판매 중은 itemprop availability InStock.
+    등급은 설명 'Zustand A‑B: …' (A·A-B·B·B-C·C), 없으면 등급 없이 (사진 등급 대기열)"""
+    import gzip
+    import html as _html
+    import requests
+    from condition_grade import HEBENSTREIT_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.foto-hebenstreit.com"
+    print(f"\n  📂 Foto Hebenstreit 크롤링 시작")
+    index = sess.get(f"{base}/sitemap.xml", timeout=30)
+    index.raise_for_status()
+    urls = []
+    for sm in re.findall(r"<loc>([^<]+)</loc>", index.text):
+        raw = sess.get(sm, timeout=60).content
+        text = gzip.decompress(raw).decode("utf-8", "ignore") if sm.endswith(".gz") else raw.decode("utf-8", "ignore")
+        urls += [u for u in re.findall(r"<loc>([^<]+)</loc>", text)
+                 if not u.endswith("/") and re.search(r"(?i)gebraucht", u) and re.search(r"(?i)leica|leitz", u)
+                 and not re.search(r"(?i)ttartisan|takumar|asahi|ricoh|zeiss|meyer|quenox|objektivadapter|voigtl|sigma|panasonic", u)]
+    print(f"    └─ 사이트맵 중고 라이카 주소 {len(urls)}개")
+    for link in urls:
+        try:
+            t = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ Foto Hebenstreit 상세 오류: {e}")
+            continue
+        time.sleep(1.2)
+        if not re.search(r'itemprop="availability"\s+href="https://schema\.org/InStock"', t):
+            continue
+        title = re.search(r'product-detail-name" itemprop="name">\s*(.*?)\s*</h1>', t, re.S)
+        price = re.search(r'itemprop="price"\s+content="([\d.]+)"', t)
+        if not title:
+            continue
+        zm = re.search(r"Zustand:?\s+([A-E](?:\s*[‑–/-]\s*[A-E])?)(?![\w])", _html.unescape(t))  # 'Zustand A‑B:'·'Zustand B,'·'im Zustand B-C mit'·'Zustand: B
+        cond = HEBENSTREIT_PREFIX + re.sub(r"\s*[‑–/-]\s*", "-", zm.group(1)) if zm else "정보없음"
+        imgs = re.findall(r'data-full-image="([^"]+)"', t)
+        name = _hebenstreit_name(_html.unescape(title.group(1)))
+        price_str = f"EUR {float(price.group(1)):,.0f}" if price else "문의요망"
+        cat = detect_category(name, price_str)
+        results.append({
+            "site": "Foto Hebenstreit (오스트리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": price_str,
+            "통화": "EUR",
+            "이미지": imgs[0] if imgs else "",
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Foto Hebenstreit 완료: {len(results)}개")
+    return results
+
+
+def _hebenstreit_name(title):
+    """'Leica 28-70mm 1:3.5-4.5 VARIO-ELMAR-R gebraucht' → 'Leica 28-70mm f3.5-4.5 VARIO-ELMAR-R'.
+    'gebraucht'·'OVP' 떼기, '1:2.8'·'F:2.8' → f2.8, '5cm Objektiv' → 50mm, 독일어 말, 이름이 짧은 두 렌즈는 정식 이름으로"""
+    n = re.sub(r"(?i)\s*\bgebraucht\b", "", title)
+    n = re.sub(r"(?i)\bOVP\b", "", n)
+    n = re.sub(r"(?i)\b(?:1:|F:)\s?(\d+(?:[.,]\d+)?(?:-\d+(?:[.,]\d+)?)?)", lambda m: "f" + m.group(1).replace(",", "."), n)
+    n = re.sub(r"(?i)\bmit (\d)cm Objektiv\b", lambda m: f"+ {int(m.group(1)) * 10}mm lens", n)
+    for de, en in (("Gehäuse", "Body"), ("silber", "silver"), ("grau", "grey"), ("schwarz", "black"),
+                   ("Handgriff für", "Hand grip for"), ("Akku griff für die", "Battery grip for"), ("Akku für", "Battery for"),
+                   ("Winder Motor für", "Motor Winder for"), ("Sucher", "Viewfinder")):
+        n = re.sub(rf"(?i)\b{de}\b", en, n)
+    n = re.sub(r"\s+", " ", n).strip()
+    n = re.sub(r"(?i)^Leica 24-70 f2\.8$", "Leica Vario-Elmarit-SL 24-70mm f2.8 ASPH", n)
+    n = re.sub(r"(?i)^Leica 90mm f4$", "Leica Elmar 90mm f4", n)
+    if re.fullmatch(r"(?i)Leica R-?\d?E?\d?", n):  # 'Leica R4'·'Leica R-E' — 바디 이름만 있으면 렌즈로 분류됨
+        n += " Body"
+    return n
+
+
+def crawl_kuecher():
+    """Foto-Video Kücher (오스트리아 잘츠부르크·린츠, Shopware 6, 2026-11-09 밤샘) - 'Gebrauchtbörse Foto' 분류를
+    제조사(Hersteller (Gebraucht)) = Leica 필터로 받음 (20여 개, 한 쪽). 가격은 EUR.
+    등급은 상세 화면 설명 'Zustand: A' (A+·A·A-·B+·B·B-·C·D) — 목록에 없어 상품마다 상세를 한 번씩 읽음.
+    상세 화면 첫 그림은 매장 로고라 목록 그림을 씀. robots.txt는 '*/?'(슬래시 바로 뒤 물음표)만 막음"""
+    import html as _html
+    import requests
+    from condition_grade import KUECHER_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.kuecher.com"
+    leica_filter = "019639bd6b8e7299a27de2799df7a5a6"  # 'Hersteller (Gebraucht)' 필터의 Leica 값
+    print(f"\n  📂 Kücher 크롤링 시작")
+    items = []
+    for page in range(1, 10):
+        resp = sess.get(f"{base}/shop/foto/gebrauchtboerse-foto", params={"properties": leica_filter, "p": page}, timeout=30)
+        resp.raise_for_status()
+        boxes = resp.text.split('class="card product-box')[1:]
+        for box in boxes:
+            name = re.search(r'class="product-name[^"]*"[^>]*>\s*([^<]+?)\s*<', box)
+            href = re.search(r'href="(https://www\.kuecher\.com/[^"]+)"', box)
+            price = re.search(r"€\xa0?([\d.]+),(\d\d)", box)
+            img = re.search(r'<img src="([^"]+)"', box)
+            if name and href:
+                items.append((_html.unescape(name.group(1)).strip(), href.group(1),
+                              f"EUR {int(price.group(1).replace('.', '')):,}" if price else "문의요망",
+                              img.group(1) if img else ""))
+        last = re.findall(r'id="p-last-bottom" value="(\d+)"', resp.text)
+        print(f"    └─ {page}페이지 {len(boxes)}개")
+        if not boxes or not last or page >= int(last[0]):
+            break
+        time.sleep(2)
+    for title, link, price, img in items:
+        if not re.search(r"(?i)\b(?:leica|leitz)", title) or re.search(r"(?i)defekt|ersatzteil|dummy", title):
+            continue
+        cond = "정보없음"
+        try:
+            detail = sess.get(link, timeout=30).text
+            m = re.search(r"Zustand:\s*([A-E][+-]?)", detail)
+            if m:
+                cond = KUECHER_PREFIX + m.group(1)
+        except Exception as e:
+            print(f"    ⚠️ Kücher 상세 오류: {e}")
+        time.sleep(1.5)
+        name = _kuecher_name(title)
+        cat = detect_category(name, price)
+        results.append({
+            "site": "Kücher (오스트리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": link,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Kücher 완료: {len(results)}개")
+    return results
+
+
+def _kuecher_name(title):
+    """'Leica R 100mm f/2,8 APO MACRO | GEBRAUCHT' → 'Leica R 100mm f2.8 APO MACRO'. 끝의 '| Gebraucht'·'| Aussteller',
+    주문번호(10412·20201 같은 1·2로 시작하는 다섯 자리), 'BJ.1953'(제조 연도), 독일어 말(Gehäuse·silber·schwarz·titanisiert·Objektiv, 'mit'은 '+')"""
+    n = re.sub(r"\s*\|\s*(?:gebraucht|aussteller)\s*$", "", title, flags=re.I)
+    n = re.sub(r"\b[12]\d{4}\b", " ", n)
+    n = re.sub(r"(?i)\bBJ\.?\s?\d{4}\b", " ", n)
+    n = re.sub(r"(?i)\bf/(\d+),(\d+)", r"f\1.\2", n)
+    n = re.sub(r"(?i)\bf/(\d)", r"f\1", n)
+    for de, en in (("Gehäuse", "Body"), ("titanisiert", "Titanium"), ("silber", "silver"), ("schwarz", "black"),
+                   ("mit", "+"), ("Objektiv", "")):
+        n = re.sub(rf"(?i)\b{de}\b", en, n)
+    n = re.sub(r"(?i)^Leica C (\d+mm f[\d.]+) ELMAR$", r"Leica Elmar-C \1", n.strip())
+    n = re.sub(r"(?i)^Leica R 100mm (f2\.8) APO MACRO$", r"Leica APO-Macro-Elmarit-R 100mm \1", n)
+    n = re.sub(r"\s+", " ", n).strip(" +|")
+    if re.fullmatch(r"(?i)Leica R\d(?:\.\d)?(?:E|S)?", n):  # 바디 이름만 있으면 렌즈로 분류됨
+        n += " Body"
+    return n
+
+
+def _html_unescape(text):
+    import html as _html
+    return _html.unescape(text)
+
+
+def crawl_blackdove():
+    """Blackdove Cameras (이탈리아 부스토아르시치오) - WooCommerce 공개 상품 API에서 렌즈 분류('Obiettivi R'·'Obiettivi M')의 라이카만 (#232 _woo_leica).
+    이 매장 '라이카' 검색의 대부분은 R3·Leicaflex 부품(Ricambio)·케이스라 그대로 담으면 이름의 'R3' 때문에 바디 시세가 흐려짐 → 렌즈 분류만.
+    이름 뒤 ' per Leica R…'·'Made in …' 떼기, '3,5cm f3,5' → 35mm f3.5. 등급 표기 없음"""
+    lens_cats = {"Obiettivi R", "Obiettivi M"}
+
+    def keep(p, name):
+        cats = {(c.get("name") or "") for c in p.get("categories") or []}
+        return bool(cats & lens_cats) and bool(re.search(r"(?i)\b(?:leica|leitz)", name)) and \
+            not re.search(r"(?i)minolta|rokkor|adatt|adapter|ricambio|schermo|vetrino", name)
+
+    def rename(name):
+        n = re.split(r"(?i)\s+per\s+(?:m6|fotocamere|sistema|leica)", name)[0]
+        n = re.sub(r"(?i)\s*made in (?:germany|japan|canada|portugal)\b", "", n)
+        n = re.sub(r"\b(\d+),(\d)cm\b", lambda m: f"{int(m.group(1)) * 10 + int(m.group(2))}mm", n)  # 3,5cm → 35mm, 13,5cm → 135mm
+        n = re.sub(r"(?i)\bf\s?(\d),(\d)\b", r"f\1.\2", n)
+        n = re.sub(r"(?i)\b(\d{2,3})mm\.", r"\1mm", n)
+        n = re.sub(r"(?i)\bobiettivo(?:\s+zoom)?\s+", "", n)
+        n = re.sub(r"\b(\d{2,3})/(\d{2,3})mm\b", r"\1-\2mm", n)  # 75/200mm → 75-200mm
+        n = re.sub(r"(?i)\b(Summaron|Hektor|Elmarit|Vario Elmar|Macro-Elmarit)\s+(M|R)\b", lambda m: m.group(1).replace(" ", "-") + "-" + m.group(2), n)
+        return re.sub(r"\s+", " ", n).strip(" .–-")
+    return _woo_leica("https://www.blackdove-cameras.it", "Blackdove Cameras (이탈리아)", "Blackdove Cameras", keep=keep, rename=rename)
+
+
+def crawl_romanaphoto():
+    """Romana Photo (이탈리아 로마) - 중고 카메라점 WooCommerce 공개 상품 API, 'LEICA' 분류의 라이카만 (#232 _woo_leica).
+    이름 'SUMMICRON -R 50MM F/2'·'ELMARIT – R 24MM' → 'Summicron-R 50mm f2'(띄어 쓴 마운트 붙이기) 뒤 _abbr_lens_name. 등급 표기 없음"""
+    def keep(p, name):
+        leica_cat = any((c.get("name") or "").upper() == "LEICA" for c in p.get("categories") or [])
+        return leica_cat and not re.search(r"(?i)sigma|schneider|minolta rokkor m 90", name) or bool(re.match(r"(?i)leica\b", name)) and leica_cat
+
+    def rename(name):
+        n = re.sub(r"\s+", " ", name)
+        n = re.sub(r"(?i)\b(summicron|summilux|elmarit|elmar|vario[- ]elmar|super[- ]vario[- ]elmar|telyt)\s*[-–]\s*(r|m|sl|tl|c)\b", lambda m: m.group(1).replace(" ", "-") + "-" + m.group(2), n)
+        n = re.sub(r"(?i)\bMR TELYT R\b", "MR-Telyt-R", n)
+        n = re.sub(r"(?i)\bV LUX (\d)\b.*$", r"V-Lux \1", n)  # 'V LUX 4 C DC VARIO ELMARIT …' → V-Lux 4
+        n = re.sub(r"(?i)\bF/(\d)", r"F\1", n)
+        n = re.sub(r"(?i)\s*\(leica(?: m)?\)\s*$", "", n)
+        n = re.sub(r"(?i)\bMM\b", "mm", n)
+        return _abbr_lens_name(n.upper() if n.isupper() else n).replace("mmmm", "mm")
+    return _woo_leica("https://www.romanaphoto.it", "Romana Photo (이탈리아)", "Romana Photo", keep=keep, rename=rename)
+
+
+def crawl_lampersky():
+    """Lampersky (헝가리 부다페스트) - 중고 카메라점 WooCommerce 공개 상품 API의 라이카 판매 중만 (#232 _woo_leica). 가격 HUF.
+    이름 뒤 마운트 꼬리(' – Leica R'·' – L39'·' – 4/3'·' – B stock') 떼기. 등급 표기 없음(사진 등급 대기열). 헝가리 첫 사이트"""
+    def rename(name):
+        n = re.sub(r"\s+[–-]\s+(?:leica[- ]?[rm]|l39|4/3|b stock)(?:\s+[–-]\s+b stock)?\s*$", "", name, flags=re.I)
+        n = re.sub(r"\s+[–-]\s+(?:leica[- ]?[rm]|l39)\s*$", "", n, flags=re.I)
+        n = re.sub(r"(?i)\bR3 MOT electronic\b", "R3 Electronic", n)  # MOT를 남기면 모터(액세서리)로 분류됨
+        return re.sub(r"(?i)\bleicaflex sl 2\b", "Leicaflex SL2", n).strip()
+    return _woo_leica("https://lampersky.com", "Lampersky (헝가리)", "Lampersky", rename=rename)
+
+
+def crawl_fotoman():
+    """Fotoman (핀란드 휘빈캐) - WooCommerce 공개 상품 API, '중고 라이카'(Käytetyt Leica) 분류에 든 라이카·라이츠만.
+    이름 앞 'Käytetty '(중고)와 뒤 ' – filmikamera'·' – Leica M' 등을 떼고 'hopea' → silver. 상태는 자유 문장이라 등급 없음(사진 등급 대기열)"""
+    def keep(p, name):
+        used = any((c.get("name") or "") == "Käytetyt Leica" for c in p.get("categories") or [])
+        return used and bool(re.search(r"(?i)\b(?:leica|leitz)", name)) and not re.search(r"(?i)voigt|panasonic|ttartisan|adapter|adapteri", name)
+
+    def rename(name):
+        n = re.sub(r"(?i)^käytetty\s+", "", name)
+        n = re.sub(r"\s+[–-]\s*(?:filmikamera|leica m(?:\s*\(visoflex\))?\s*-?\s*(?:objektiivi)?|-?objektiivi)\s*$", "", n, flags=re.I)
+        n = re.sub(r"(?i)\bhopea\b", "silver", n)
+        n = re.sub(r"(?i)\blaturi\b", "charger", n)
+        n = re.sub(r"(?i)\bmini\s+ii\b", "Mini 2", n)  # 필름 똑딱이 Leica Mini II가 바르낙 Leica II에 붙지 않게
+        n = re.sub(r"(?i)^leica\s+1\s*\(c\)", "Leica I (Model C)", n)
+        return n.strip(" –-")
+    return _woo_leica("https://fotoman.fi", "Fotoman (핀란드)", "Fotoman", keep=keep, rename=rename)
+
+
+def crawl_fotomeyer():
+    """Foto Meyer (독일 베를린) - Magento 사이트 검색 'leica gebraucht'(robots.txt 막는 것 없음)에서 제목이 '… - gebraucht'인 라이카만.
+    상태는 상품 화면 속성 'Zustand'(neuwertig·sehr leichte Gebrauchsspuren·leichte·deutliche·starke Gebrauchsspuren)라
+    처음 본 매물만 읽고 전에 읽은 것은 다시 씀(_fill_detail_conditions). Panasonic Leica DG 등 다른 회사는 뺌"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import FOTOMEYER_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://www.fotomeyer.de"
+    print(f"\n  📂 Foto Meyer 크롤링 시작")
+    for page in range(1, 15):
+        resp = sess.get(f"{base}/catalogsearch/result/", params={"q": "leica gebraucht", "p": page}, timeout=30)
+        resp.raise_for_status()
+        blocks = re.findall(r'<li class="item product product-item">(.*?)</li>\s*(?=<li class="item product|</ol>)', resp.text, re.S)
+        new = 0
+        for b in blocks:
+            link = re.search(r'class="product-item-link"[^>]*href="([^"]+)"[^>]*>\s*([^<]+)<', b)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            title = re.sub(r"\s+", " ", _html.unescape(link.group(2))).strip()
+            if not re.search(r"(?i)gebraucht\s*$", title) or not re.search(r"(?i)\b(?:leica|leitz)\b", title) or re.search(r"(?i)^panasonic|lumix|sigma|tamron|voigt|walimex", title):
+                continue
+            name = re.sub(r"(?i)\s*-\s*gebraucht\s*$", "", title).strip()
+            # 독일식 조리개 '180mm 2,8'·'65mm/3,5'·'5cm 3,5' → 'f2.8' (렌즈로 알아보게)
+            name = re.sub(r"\b(\d),(\d)cm\b", r"\1\g<2>mm", name)  # 'Summarex 8,5cm' → 85mm
+            name = re.sub(r"(\d+(?:mm|cm))\s*/?\s*(\d{1,2}),(\d)\b", r"\1 f\2.\3", name)
+            if re.search(r"\b65mm\b", name):  # 비조플렉스 'M 65mm/3,5 Macro Elmar' = Elmar 65mm
+                name = re.sub(r"(?i)\bmacro[ -]?elmar\b", "Elmar", name)
+            amount = re.search(r'data-price-amount="([\d.]+)"', b)
+            price = f"€{float(amount.group(1)):,.0f}" if amount else "문의요망"
+            img = re.search(r'class="product-image-photo"[^>]*src="([^"]+)"', b)
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Foto Meyer (독일)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(blocks)}개 (새 {new})")
+        if not blocks or not new:
+            break
+        time.sleep(3)
+
+    def read_detail(url):
+        text = _html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", sess.get(url, timeout=30).text)))
+        m = re.search(r"Zustand\s+(neuwertig|sehr leichte Gebrauchsspuren|leichte Gebrauchsspuren|deutliche Gebrauchsspuren|starke Gebrauchsspuren|Gebrauchsspuren|[A-Za-zäöüÄÖÜß ]{3,40}?)\s+funktionsgeprüft", text)
+        return FOTOMEYER_PREFIX + m.group(1).strip().lower() if m else None
+
+    _fill_detail_conditions("Foto Meyer (독일)", results, read_detail)
+    print(f"  ✅ Foto Meyer 완료: {len(results)}개")
+    return results
+
+
+def crawl_photo19():
+    """Photo19 (이탈리아 브레시아) - PrestaShop 중고 분류 화면(카메라 191·렌즈 192·액세서리 194, 15개씩)에서 라이카·라이츠만.
+    robots.txt가 사이트 검색(controller=search)을 막아 분류 화면만 읽음. 이름은 사진 alt, 가격 'price' 칸. 등급 표기 없음(사진 등급 대기열).
+    다른 회사의 라이카 마운트 렌즈(7artisans 등)·Panasonic Leica DG는 뺌"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://www.photo19.it"
+    print(f"\n  📂 Photo19 크롤링 시작")
+    for cat in ("191-fotocamere-usate", "192-obiettivi-usati", "194-accessori-usati-flash-varie"):
+        for page in range(1, 20):
+            resp = sess.get(f"{base}/{cat}", params={"page": page}, timeout=30)
+            resp.raise_for_status()
+            arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+            for a in arts:
+                link = re.search(r'href="(https://www\.photo19\.it/[^"]+\.html)"', a)
+                alt = re.search(r'alt="([^"]{4,200})"', a)
+                if not link or not alt or link.group(1) in seen:
+                    continue
+                seen.add(link.group(1))
+                name = re.sub(r"\s+", " ", _html.unescape(alt.group(1))).strip()
+                if not re.search(r"(?i)\b(?:leica|leitz)\b", name) or re.search(r"(?i)panasonic|lumix|7 ?artisans|sigma|voigt|adatt|per leica|x leica", name):
+                    continue
+                price_m = re.findall(r'class="price[^"]*"[^>]*>([^<]+)<', a)
+                num = re.sub(r"[^\d,]", "", _html.unescape(price_m[-1]).replace(".", "")) if price_m else ""
+                price = f"€{float(num.replace(',', '.')):,.0f}" if num else "문의요망"
+                img = re.search(r'(?:data-src|src)="(https://[^"]+\.(?:jpg|jpeg|webp|png))"', a)
+                cat_name = detect_category(name, price)
+                results.append({
+                    "site": "Photo19 (이탈리아)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "EUR",
+                    "이미지": img.group(1) if img else "",
+                    "링크": link.group(1),
+                    "품절": False,
+                    "예약중": False,
+                    "mount": 'Accessory' if cat_name == 'Accessory' else detect_mount(name),
+                    "category": cat_name,
+                    "brand": detect_brand(name),
+                })
+            if len(arts) < 15:
+                break
+            time.sleep(2)
+    print(f"  ✅ Photo19 완료: {len(results)}개")
+    return results
+
+
+def crawl_panajou():
+    """Panajou (프랑스, 보르도 등 4개 매장) - PrestaShop 사이트 검색 'leica occasion' 결과 화면(25개씩)에서 제목이 Leica로 시작하는 중고만.
+    전체 제목은 사진 alt('Leica Summicron-M 50mm f/2 Safari Occasion Garantie 12 Mois'), 가격은 'price' 칸(할인가면 할인가).
+    상태는 제목 속 'Comme Neuf'·'Très bon état'·'Bon état' (condition_grade PANAJOU_PREFIX), 없으면 정보없음.
+    robots.txt는 '?search_query='만 막음 — 이 수집기는 '?controller=search&s='를 씀. 배송은 프랑스·벨기에만"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import PANAJOU_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://www.panajou.fr"
+    print(f"\n  📂 Panajou 크롤링 시작")
+    for page in range(1, 11):
+        resp = sess.get(f"{base}/recherche", params={"controller": "search", "s": "leica occasion", "page": page}, timeout=30)
+        resp.raise_for_status()
+        arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+        new = 0
+        for a in arts:
+            link = re.search(r'href="(https://www\.panajou\.fr/[^"]+_p\d+)"', a)
+            alt = re.search(r'alt="([^"]{10,200})"', a)
+            if not link or not alt or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            title = re.sub(r"\s+", " ", _html.unescape(alt.group(1))).strip()
+            used = "occasion" in title.lower() or "occasion" in link.group(1).lower()  # 중고는 주소에도 '-occasion_p…'
+            if title.endswith("...") and re.match(r"(?i)leica\b", title):  # 긴 제목은 alt에서 잘림 → 상품 화면 제목
+                try:
+                    time.sleep(2)
+                    page_html = sess.get(link.group(1), timeout=30).text
+                    h1 = re.search(r"<h1[^>]*>(.*?)</h1>", page_html, re.S)
+                    if h1:
+                        title = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", "", h1.group(1)))).strip() or title
+                        title = re.sub(r"(?i)^(?:appareils photo|objectifs photo|accessoires)(?: d['’]occasion)?\s+", "", title)  # h1 앞의 분류 이름
+                    # 화면 제목엔 'Occasion'이 없을 수 있음 → 중고 분류(occasions_c35 등) 안에 있으면 중고
+                    used = used or "occasion" in title.lower() or bool(re.search(r"occasions?_c3[5-7]", page_html))
+                    if not re.search(r"(?i)\b(comme neuf|tr[eè]s bon [ée]tat|bon [ée]tat)\b", title):
+                        state = re.search(r"(?i)occasion\s+(comme neuf|tr[eè]s bon [ée]tat|bon [ée]tat)\b", _html.unescape(re.sub(r"<[^>]+>", " ", page_html)))
+                        if state:
+                            title += " " + state.group(1)
+                except Exception:
+                    pass
+            if not re.match(r"(?i)leica\b", title) or not used:
+                continue  # 새 상품·다른 회사(Voigtländer·Panasonic Leica DG 등)
+            m = re.search(r"(?i)\b(comme neuf|tr[eè]s bon [ée]tat|bon [ée]tat)\b", title)
+            cond = PANAJOU_PREFIX + m.group(1).lower() if m else "정보없음"
+            name = re.sub(r"(?i)\s*[-–]?\s*(?:d['’])?occasion\b.*$", "", title)
+            name = re.sub(r"(?i)\s+appareil photo$", "", name).strip(" -–")
+            price_m = re.findall(r'class="price[^"]*"[^>]*>([^<]+)<', a)
+            raw = _html.unescape(price_m[-1]).replace("\u202f", "").replace("\xa0", "").replace(" ", "") if price_m else ""
+            num = re.sub(r"[^\d,]", "", raw).replace(",", ".")
+            price = f"€{float(num):,.0f}" if num else "문의요망"
+            img = re.search(r'(?:data-src|src)="(https://[^"]+\.(?:jpg|jpeg|webp|png))"', a)
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Panajou (프랑스)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": link.group(1),
+                "품절": "en stock" not in a.lower(),
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}페이지 {len(arts)}개 (새 {new})")
+        if not arts or not new or len(arts) < 25:
+            break
+        time.sleep(3)
+    print(f"  ✅ Panajou 완료: {len(results)}개")
+    return results
+
+
 def crawl_imagefoto():
     """Image Foto (덴마크, 라이카 공인 딜러) - Shopify '브루트'(brugt, 중고) 컬렉션 JSON에서 판매자 Leica만, 판매 중만. 가격 DKK.
     제목 'Brugt Leica M2 Chrome m. Selvudløser' → 'Leica M2 Chrome', 'Udstillingsmodel'(진열품)은 그대로 둠. 등급 표기 없음"""
@@ -10800,6 +12029,8 @@ def crawl_all():
         prev_all = []
     prev_by_site = {}
     for r in prev_all:
+        if r.get("site") == "digitalcameragraz":  # 2026-11-08 첫 크롤에서 매장 이름이 잘못 들어간 줄 → 올바른 이름으로 이어 붙임
+            r["site"] = "Digital Camera Graz (오스트리아)"
         prev_by_site.setdefault(r.get("site"), []).append(r)
     print(f"📋 기존 매물 {len(prev_all)}개 로드")
 
@@ -10882,7 +12113,7 @@ def crawl_all():
         ("Cardinal Camera Used (미국)", lambda: ce.wrap_full_run("Cardinal Camera Used (미국)", crawl_cardinal)),
         ("Five Star Camera (일본)", lambda: ce.wrap_full_run("Five Star Camera (일본)", crawl_fivestar)),
         ("Leica Store Amsterdam (네덜란드)", lambda: ce.wrap_full_run("Leica Store Amsterdam (네덜란드)", crawl_leicastoreamsterdam)),
-        ("Sabatini Fotografia (이탈리아)", lambda: ce.wrap_full_run("Sabatini Fotografia (이탈리아)", crawl_sabatini)),
+        # ("Sabatini Fotografia (이탈리아)", ...) 보류 2026-11-08: GitHub 서버에서 403 (내 맥 210점) — 막히면 보류, 나중에 매장과 계약으로 진행
         ("KOMEHYO (일본)", lambda: ce.wrap_full_run("KOMEHYO (일본)", crawl_komehyo)),
         ("トップカメラ (일본)", lambda: ce.wrap_full_run("トップカメラ (일본)", crawl_topcamera)),
         ("Leica Store Konstanz (독일)", lambda: ce.wrap_full_run("Leica Store Konstanz (독일)", crawl_konstanz)),
@@ -10902,6 +12133,26 @@ def crawl_all():
         ("Leica Store Australia (호주)", lambda: ce.wrap_full_run("Leica Store Australia (호주)", lambda: _with_browser(crawl_leicastoreau))),
         ("Leica Store Malaysia (말레이시아)", lambda: ce.wrap_full_run("Leica Store Malaysia (말레이시아)", crawl_leicastoremy)),
         ("Image Foto (덴마크)", lambda: ce.wrap_full_run("Image Foto (덴마크)", crawl_imagefoto)),
+        ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
+        ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
+        ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("Foto Mundus (독일)", lambda: ce.wrap_full_run("Foto Mundus (독일)", crawl_fotomundus)),
+        ("JBV Foto (독일)", lambda: ce.wrap_full_run("JBV Foto (독일)", crawl_jbvfoto)),
+        ("fotopro24 (독일)", lambda: ce.wrap_full_run("fotopro24 (독일)", crawl_fotopro24)),
+        ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),
+        ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
+        ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
+        ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
+        ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
+        ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
+        ("Kücher (오스트리아)", lambda: ce.wrap_full_run("Kücher (오스트리아)", crawl_kuecher)),
+        ("Blackdove Cameras (이탈리아)", lambda: ce.wrap_full_run("Blackdove Cameras (이탈리아)", crawl_blackdove)),
+        ("Romana Photo (이탈리아)", lambda: ce.wrap_full_run("Romana Photo (이탈리아)", crawl_romanaphoto)),
+        ("Lampersky (헝가리)", lambda: ce.wrap_full_run("Lampersky (헝가리)", crawl_lampersky)),
+        ("Fotoman (핀란드)", lambda: ce.wrap_full_run("Fotoman (핀란드)", crawl_fotoman)),
+        ("Foto Meyer (독일)", lambda: ce.wrap_full_run("Foto Meyer (독일)", crawl_fotomeyer)),
+        ("Photo19 (이탈리아)", lambda: ce.wrap_full_run("Photo19 (이탈리아)", crawl_photo19)),
+        ("Panajou (프랑스)", lambda: ce.wrap_full_run("Panajou (프랑스)", crawl_panajou)),
         ("gebrauchtkameras.de (독일)", lambda: ce.wrap_full_run("gebrauchtkameras.de (독일)", crawl_gebrauchtkameras)),
         ("三葉堂寫眞機店 (일본)", lambda: ce.wrap_full_run("三葉堂寫眞機店 (일본)", crawl_mitsubado)),
         ("Au Vieux Format (프랑스)", lambda: ce.wrap_full_run("Au Vieux Format (프랑스)", crawl_auvieuxformat)),
@@ -10921,7 +12172,7 @@ def crawl_all():
         ("マツバラ光機 (일본)", lambda: ce.wrap_full_run("マツバラ光機 (일본)", crawl_matsubara)),
         ("Foto Pazdera (체코)", lambda: ce.wrap_full_run("Foto Pazdera (체코)", crawl_pazdera)),
         ("AdoPhoto (그리스)", lambda: ce.wrap_full_run("AdoPhoto (그리스)", crawl_adophoto)),
-        ("PCH Pro Shop (벨기에)", lambda: ce.wrap_full_run("PCH Pro Shop (벨기에)", crawl_pch)),
+        # ("PCH Pro Shop (벨기에)", ...) 보류 2026-11-08: GitHub 서버 접속을 Cloudflare가 403으로 막음 (내 맥은 200) — 우회 안 함. 풀리면 crawl_pch 다시 등록
         ("Pacific Rim Camera (미국)", lambda: ce.wrap_full_run("Pacific Rim Camera (미국)", crawl_pacificrim)),
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),

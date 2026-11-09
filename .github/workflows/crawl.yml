@@ -121,12 +121,12 @@ jobs:
         run: |
           git config user.name "Camera Bridge Bot"
           git config user.email "bot@camerabridge.app"
-          git add -A data/ crawler/sessions/ ko/ en/ ja/ sitemap.xml
+          git add -A data/ crawler/sessions/ ko/ en/ ja/ de/ it/ es/ pt/ zh-hans/ zh-hant/ sitemap.xml llms.txt
           git diff --staged --quiet && echo "No changes" && exit 0
           git stash
           git pull --rebase origin main
           git stash pop
-          git add -A data/ crawler/sessions/ ko/ en/ ja/ sitemap.xml
+          git add -A data/ crawler/sessions/ ko/ en/ ja/ de/ it/ es/ pt/ zh-hans/ zh-hant/ sitemap.xml llms.txt
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
           git pull --rebase origin main
           git push

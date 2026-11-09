@@ -161,8 +161,8 @@ def test_active_first_market_sections_and_sorts_exist() -> None:
         assert "active_asking" in html
         assert "sold_confirmed" in html
         assert "Recommended" in html
-        assert "Price: Low to High" in html
-        assert "Price: High to Low" in html
+        assert "Est. total: Low to High" in html or "Price: Low to High" in html  # 첫 화면은 예상 총액순 (2026-11-08), QA 화면은 예전 이름
+        assert "Est. total: High to Low" in html or "Price: High to Low" in html
         assert "Active listings" in html
         assert "Market history" in html
 
@@ -184,7 +184,10 @@ def test_active_first_freshness_prefers_last_seen_then_crawl_time() -> None:
 def test_active_first_sorting_keeps_compatible_active_before_similar_or_excluded() -> None:
     for html in _html_files():
         assert "function getActiveCompatibilityTier(result, originalIndex)" in html
-        assert "if(left.compatibilityTier !== right.compatibilityTier) return left.compatibilityTier - right.compatibilityTier;" in html
+        # 2026-11-07 PR #219: 가격·시세 정렬에서는 0·1 묶음을 합쳐 가격순, 2(리페인트·액세서리 등)만 뒤로 — 그 밖 정렬은 그대로 단계순
+        # 첫 화면(beta.html)은 새 줄, 예전 QA 화면은 예전 줄 그대로
+        assert ("if(tierOf(left) !== tierOf(right)) return tierOf(left) - tierOf(right);" in html
+                or "if(left.compatibilityTier !== right.compatibilityTier) return left.compatibilityTier - right.compatibilityTier;" in html)
         assert "item.includes('accessory')" in html
         assert "item.includes('bundle')" in html
         assert "item.includes('wrong mount')" in html
@@ -229,8 +232,8 @@ def test_locale_strings_cover_active_first_surface() -> None:
         assert "Market history" in html
         assert "추천순" in html
         assert "Newest" in html
-        assert "낮은 가격순" in html
-        assert "Price: High to Low" in html
+        assert "예상 총액 낮은순" in html or "낮은 가격순" in html
+        assert "Est. total: High to Low" in html or "Price: High to Low" in html
         assert "판매 중" in html
         assert "판매 완료" in html
         assert "판매 종료" in html
@@ -394,7 +397,7 @@ def test_public_locale_surface_covers_hero_notice_search_and_sections() -> None:
     for html in _html_files(BETA_PATHS):
         for snippet in [
             'data-i18n="hero.title"',
-            'data-i18n="hero.subtitle"',
+            'data-i18n="hero.line_static"',  # 2026-11-08 첫 화면 단순화: 설명 줄 → 숫자가 든 한 줄
             'id="hero-trust"',
             'data-i18n="footer.disclaimer"',
             'data-i18n="search.panel_label"',
@@ -693,7 +696,8 @@ def test_exact_model_name_query_uses_that_model() -> None:
 def test_model_view_has_price_by_condition_chart():
     for path in BETA_PATHS:
         html = path.read_text(encoding="utf-8")
-        assert "els['query-summary-region'].innerHTML = renderPriceLadder();" in html
+        assert "els['query-summary-region'].innerHTML = renderChartArea();" in html  # 2026-11-08: 탭(등급별 가격 | 판매 금액 추이)
+        assert "function renderPriceHistory()" in html and "data-chart-tab" in html
         assert "loadPriceLadder();" in html
         # 모델 하나(버전)를 골랐을 때만 — '모든 버전'·사양 묶음은 섞여서 그리지 않음
         assert "!entity.feature && !(entity.children || []).length" in html
@@ -767,11 +771,13 @@ def test_price_ladder_pinch_zoom() -> None:
     assert "ladderState.base" in beta  # 처음보다 오므리면 전체 보기로
 
 
-def test_english_default_with_country_language_suggestion() -> None:
+def test_visitor_language_is_automatic() -> None:
+    """2026-11-08 사장님: 접속한 나라 언어로 자동 (예전: 영어 기본 + 권유). 직접 고른 언어가 먼저, 다음 브라우저 언어, 브라우저가 영어면 접속 나라"""
     beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
-    assert "return 'en';" in beta.split("function detectInitialLocale", 1)[1][:400]  # 기본은 영어
+    detect = beta.split("function detectInitialLocale", 1)[1][:900]
+    assert "cb.beta.locale" in detect and "navigator.languages" in detect
     assert "suggestLocale();" in beta and "/api/usage?geo=1" in beta and "KR: 'ko'" in beta
-    assert "cb.beta.locale_hint" in beta  # 고르거나 닫으면 다시 안 물음
+    assert "cb.beta.locale_hint" in beta and "to_en:" in beta  # 자동으로 바꾸면 영어로 되돌리는 버튼
 
 
 def test_members_can_save_listings() -> None:

@@ -12,7 +12,11 @@ import json
 import os
 import re
 import secrets
+import sys
 from http.server import BaseHTTPRequestHandler
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import requests
 
@@ -71,18 +75,22 @@ def handle(body: dict, headers) -> tuple[int, dict]:
     if email and not EMAIL.match(email):
         return 400, {"ok": False, "error": "email"}
 
-    from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
-
+    import pgstore  # noqa: WPS433
     now = dt.datetime.now(KST)
     day = now.strftime("%Y-%m-%d")
     tag = _ip_tag(_client_ip(headers), day)
     prefix = f"feedback/{day}/"
+    use_db = pgstore.enabled()  # Neon Postgres (2026-11 Blob 무료 한도 초과 뒤), 없으면 Blob
     try:
-        listed = blob.list_objects(prefix=prefix, limit=1000)
-        names = [item.pathname for item in (getattr(listed, "blobs", None) or [])]
+        if use_db:
+            sent_today = pgstore.feedback_count_today(day, tag)
+        else:
+            from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
+            listed = blob.list_objects(prefix=prefix, limit=1000)
+            sent_today = sum(1 for item in (getattr(listed, "blobs", None) or []) if f"-{tag}-" in item.pathname)
     except Exception:  # noqa: BLE001
-        names = []
-    if sum(1 for name in names if f"-{tag}-" in name) >= DAILY_LIMIT:
+        sent_today = 0
+    if sent_today >= DAILY_LIMIT:
         return 429, {"ok": False, "error": "limit"}
 
     entry = {
@@ -97,9 +105,13 @@ def handle(body: dict, headers) -> tuple[int, dict]:
         "public": False,      # 사장님이 고른 의견만 공개
     }
     try:
-        blob.put(f"{prefix}{now.strftime('%H%M%S')}-{tag}-{secrets.token_hex(4)}.json",
-                 json.dumps(entry, ensure_ascii=False).encode("utf-8"),
-                 access="private", content_type="application/json")
+        if use_db:
+            pgstore.add_feedback(entry, tag)
+        else:
+            from vercel import blob  # noqa: WPS433
+            blob.put(f"{prefix}{now.strftime('%H%M%S')}-{tag}-{secrets.token_hex(4)}.json",
+                     json.dumps(entry, ensure_ascii=False).encode("utf-8"),
+                     access="private", content_type="application/json")
     except Exception:  # noqa: BLE001
         _notify({**entry, "message": entry["message"] + "\n\n(⚠️ 저장 실패 — 이 알림이 유일한 기록)"})
         return 200, {"ok": True}

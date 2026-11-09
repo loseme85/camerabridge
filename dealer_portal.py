@@ -104,8 +104,9 @@ def clear_cookie() -> str:
 
 # ── 계정 저장 (Blob) ──
 def _blob():
-    from vercel import blob  # noqa: WPS433 (함수가 불릴 때만)
-    return blob
+    # 2026-11-08: Blob 무료 한도 초과(12/1까지 막힘) → Neon이 연결돼 있으면 같은 모양의 Neon 저장소 (pgstore.PgBlob)
+    import pgstore  # noqa: WPS433
+    return pgstore.blob_store()
 
 
 def load_accounts(*, fresh: bool = False) -> dict:
