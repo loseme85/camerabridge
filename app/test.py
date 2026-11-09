@@ -6554,6 +6554,79 @@ def crawl_fksecondhand():
     return _woo_leica("https://fk-secondhand.com", "FK Second Hand (오스트리아)", "FK Second Hand", keep=keep, rename=rename)
 
 
+def crawl_fotoc():
+    """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
+    상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
+    등급은 상세 설명 끝 'Kategori B+' / 'Stand A' (Ny·A·B+·B·B-·C+·C·defekt) — 목록에 없어 라이카만 상세를 읽음"""
+    import html as _html
+    import requests
+    from condition_grade import FOTOC_PREFIX
+    results, seen = [], set()
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.fotoc.dk"
+    print(f"\n  📂 FOTO/C 크롤링 시작")
+    items = []
+    for page in range(1, 40):
+        resp = sess.get(f"{base}/42-brugt-udstyr", params={"page": page}, timeout=30)
+        resp.raise_for_status()
+        arts = re.findall(r'<article[^>]*product-miniature[^>]*>(.*?)</article>', resp.text, re.S)
+        new = 0
+        for a in arts:
+            link = re.search(r'href="(https://www\.fotoc\.dk/[^"]+\.html)"', a)
+            if not link or link.group(1) in seen:
+                continue
+            seen.add(link.group(1))
+            new += 1
+            brand = re.search(r'brand-name">([^<]+)', a)
+            alt = re.search(r'alt="([^"]+)"', a)
+            name = re.sub(r"\s+", " ", _html.unescape(alt.group(1))).strip() if alt else ""
+            if not brand or brand.group(1).strip().lower() != "leica" or not re.match(r"(?i)lei(?:ca|tz)", name):
+                continue
+            pr = re.search(r"([\d.]+),(\d\d)\s*(?:&nbsp;|\xa0|\s)*DKK", a)
+            img = re.search(r'data-full-size-image-url="([^"]+)"', a)
+            items.append((name, link.group(1), f"DKK {int(pr.group(1).replace('.', '')):,}" if pr else "문의요망",
+                          img.group(1) if img else "", "out-of-stock" in a))
+        print(f"    └─ {page}페이지 {len(arts)}개 (새 {new})")
+        if not arts or not new:
+            break
+        time.sleep(1.5)
+    for name, link, price, img, sold in items:
+        cond = "정보없음"
+        try:
+            t = sess.get(link, timeout=30).text
+            desc = re.search(r'"description":\s*"(.*?)",\s*"category"', t, re.S)
+            m = re.search(r"(?i)\b(?:kategori|stand)\s*:?\s*(ny|a|b\+|b-|b|c\+|c-|c|defekt|vintage)(?![\w+-])", _html.unescape(desc.group(1)) if desc else "")
+            if m:
+                cond = FOTOC_PREFIX + m.group(1)
+        except Exception as e:
+            print(f"    ⚠️ FOTO/C 상세 오류: {e}")
+        time.sleep(1.2)
+        nm = re.sub(r"(?i)\bf/(\d)", r"f\1", name)
+        nm = re.sub(r"(?i)\s+M mount$", " (M)", nm)
+        nm = re.sub(r"(?i)\bkamerahus\b", "body", nm)
+        nm = re.sub(r"(?i)\bModlysblænde til\b", "lens hood for", nm)
+        cat = detect_category(nm, price)
+        results.append({
+            "site": "FOTO/C (덴마크)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "DKK",
+            "이미지": img,
+            "링크": link,
+            "품절": sold,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ FOTO/C 완료: {len(results)}개")
+    return results
+
+
 def crawl_digitalstore():
     """Digitalstore (오스트리아 빈, Shopware 6, 2026-11-09 밤샘) - 'Gebraucht' 분류 전체(50개쯤, 3쪽 — robots.txt가 쪽 넘김 ?p=는
     허용, 필터 properties=는 금지)에서 이름에 Leica가 든 것만 상세를 읽음 (보이그랜더 'für Leica M'은 뺌).
@@ -11614,6 +11687,7 @@ def crawl_all():
         ("Foto Trade Occasion (룩셈부르크)", lambda: ce.wrap_full_run("Foto Trade Occasion (룩셈부르크)", crawl_fototrade)),
         ("Digital Camera Graz (오스트리아)", lambda: ce.wrap_full_run("Digital Camera Graz (오스트리아)", crawl_digitalcameragraz)),
         ("FK Second Hand (오스트리아)", lambda: ce.wrap_full_run("FK Second Hand (오스트리아)", crawl_fksecondhand)),
+        ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
         ("Kücher (오스트리아)", lambda: ce.wrap_full_run("Kücher (오스트리아)", crawl_kuecher)),
