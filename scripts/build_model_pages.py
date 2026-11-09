@@ -29,12 +29,13 @@ from build_legal_pages import FOOTER_CSS, footer  # noqa: E402
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SITE = "https://camerabridge.io"
-LANGS = ("ko", "en", "ja")
+LANGS = ("ko", "en", "ja", "de", "it", "es", "pt", "zh-Hans", "zh-Hant")  # 2026-11-08 사장님: 방문 늘리기 — 독일어·이탈리아어·스페인어·포르투갈어·중국어 2종 추가
+PATH = {l: l.lower() for l in LANGS}  # 주소: /zh-hans/leica/…
 MIN_ACTIVE = 3           # 판매 중 매물이 이만큼 있는 모델만 페이지로 (빈약한 페이지는 안 만듦)
 MAX_PAGES = 400          # 매물 많은 순서로 최대 이만큼
 LASTMOD = ROOT / "data" / "derived" / "model_pages_lastmod.json"  # 페이지별 내용 지문과 실제로 바뀐 날
 LISTINGS_SHOWN = 30      # 페이지마다 보여 줄 판매 중 매물 (싼 순)
-DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY"}
+DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY", "de": "EUR", "it": "EUR", "es": "EUR", "pt": "EUR", "zh-Hans": "CNY", "zh-Hant": "HKD"}
 # 잘못 연결됐을 가능성이 큰 매물은 페이지에서 뺀다: 대여 상품, 그 모델 B등급 기준가의 이 비율보다 싼 것
 RENTAL = re.compile(r"\brental\b|\bfor rent\b|대여|렌탈|レンタル", re.I)
 MIN_PRICE_RATIO = 0.35
@@ -55,8 +56,18 @@ COUNTRY = {
     "폴란드": {"ko": "폴란드", "en": "Poland", "ja": "ポーランド"},
     "뉴질랜드": {"ko": "뉴질랜드", "en": "New Zealand", "ja": "ニュージーランド"},
     "칠레": {"ko": "칠레", "en": "Chile", "ja": "チリ"},
+    "그리스": {"ko": "그리스", "en": "Greece", "ja": "ギリシャ"},
+    "노르웨이": {"ko": "노르웨이", "en": "Norway", "ja": "ノルウェー"},
+    "벨기에": {"ko": "벨기에", "en": "Belgium", "ja": "ベルギー"},
+    "스웨덴": {"ko": "스웨덴", "en": "Sweden", "ja": "スウェーデン"},
+    "체코": {"ko": "체코", "en": "Czechia", "ja": "チェコ"},
+    "헝가리": {"ko": "헝가리", "en": "Hungary", "ja": "ハンガリー"},
 }
 SOURCE_COUNTRY = {"Leica Store Miami": "미국"}
+# 새 6개 언어 나라 이름 (de, it, es, pt, zh-Hans, zh-Hant 순서)
+COUNTRY_NEW_LANGS = {'한국': ('Korea', 'Corea del Sud', 'Corea del Sur', 'Coreia do Sul', '韩国', '韓國'), '일본': ('Japan', 'Giappone', 'Japón', 'Japão', '日本', '日本'), '미국': ('USA', 'Stati Uniti', 'EE. UU.', 'EUA', '美国', '美國'), '영국': ('Vereinigtes Königreich', 'Regno Unito', 'Reino Unido', 'Reino Unido', '英国', '英國'), '독일': ('Deutschland', 'Germania', 'Alemania', 'Alemanha', '德国', '德國'), '프랑스': ('Frankreich', 'Francia', 'Francia', 'França', '法国', '法國'), '이탈리아': ('Italien', 'Italia', 'Italia', 'Itália', '意大利', '義大利'), '네덜란드': ('Niederlande', 'Paesi Bassi', 'Países Bajos', 'Países Baixos', '荷兰', '荷蘭'), '덴마크': ('Dänemark', 'Danimarca', 'Dinamarca', 'Dinamarca', '丹麦', '丹麥'), '스위스': ('Schweiz', 'Svizzera', 'Suiza', 'Suíça', '瑞士', '瑞士'), '스페인': ('Spanien', 'Spagna', 'España', 'Espanha', '西班牙', '西班牙'), '포르투갈': ('Portugal', 'Portogallo', 'Portugal', 'Portugal', '葡萄牙', '葡萄牙'), '오스트리아': ('Österreich', 'Austria', 'Austria', 'Áustria', '奥地利', '奧地利'), '핀란드': ('Finnland', 'Finlandia', 'Finlandia', 'Finlândia', '芬兰', '芬蘭'), '룩셈부르크': ('Luxemburg', 'Lussemburgo', 'Luxemburgo', 'Luxemburgo', '卢森堡', '盧森堡'), '홍콩': ('Hongkong', 'Hong Kong', 'Hong Kong', 'Hong Kong', '香港', '香港'), '싱가포르': ('Singapur', 'Singapore', 'Singapur', 'Singapura', '新加坡', '新加坡'), '말레이시아': ('Malaysia', 'Malesia', 'Malasia', 'Malásia', '马来西亚', '馬來西亞'), '아랍에미리트': ('VAE', 'Emirati Arabi Uniti', 'EAU', 'EAU', '阿联酋', '阿聯酋'), '호주': ('Australien', 'Australia', 'Australia', 'Austrália', '澳大利亚', '澳洲'), '캐나다': ('Kanada', 'Canada', 'Canadá', 'Canadá', '加拿大', '加拿大'), '폴란드': ('Polen', 'Polonia', 'Polonia', 'Polônia', '波兰', '波蘭'), '뉴질랜드': ('Neuseeland', 'Nuova Zelanda', 'Nueva Zelanda', 'Nova Zelândia', '新西兰', '紐西蘭'), '칠레': ('Chile', 'Cile', 'Chile', 'Chile', '智利', '智利'), '그리스': ('Griechenland', 'Grecia', 'Grecia', 'Grécia', '希腊', '希臘'), '노르웨이': ('Norwegen', 'Norvegia', 'Noruega', 'Noruega', '挪威', '挪威'), '벨기에': ('Belgien', 'Belgio', 'Bélgica', 'Bélgica', '比利时', '比利時'), '스웨덴': ('Schweden', 'Svezia', 'Suecia', 'Suécia', '瑞典', '瑞典'), '체코': ('Tschechien', 'Repubblica Ceca', 'Chequia', 'Chéquia', '捷克', '捷克'), '헝가리': ('Ungarn', 'Ungheria', 'Hungría', 'Hungria', '匈牙利', '匈牙利')}
+for _ko, _names in COUNTRY_NEW_LANGS.items():
+    COUNTRY.setdefault(_ko, {}).update(dict(zip(("de", "it", "es", "pt", "zh-Hans", "zh-Hant"), _names)))
 
 T = {
     "ko": {
@@ -124,16 +135,24 @@ T = {
     },
 }
 
+# 새 6개 언어 (2026-11-08)
+T.update({'de': {'title': '{name} gebraucht: Preise & Angebote | Camera Bridge', 'q_price': 'Was kostet eine gebrauchte {name}?', 'a_price': 'Aktuell sind {n} Stück bei {shops} Händlern in {countries} Ländern gelistet. Die Angebotspreise reichen von {low} bis {high}, der Median liegt bei {median}.', 'a_sold': ' Die letzten {k} verkauften Exemplare hatten einen mittleren letzten Angebotspreis von {sold}.', 'q_where': 'Wo ist eine gebrauchte {name} am günstigsten?', 'a_where': 'Günstigste Länder aktuell: {list}. Händlerpreise zum heutigen Kurs umgerechnet, ohne Versand und Einfuhrabgaben.', 'related': 'Ähnliche Modelle', 'sep': ', ', 'new': 'Neupreis (Leica UK)', 'vs_new': 'Gebraucht Zustand B / neu', 'vs_new_val': '{pct}% vom Neupreis', 'a_new': ' Neu kostet sie {new} bei Leica UK; gebraucht in Zustand B etwa {pct}% davon.', 'desc': '{active} gebrauchte {name} von {shops} Händlern, {range}. Leica-Händler in Korea, Japan, Europa und den USA mit Verkaufspreisen an einem Ort.', 'h1': '{name} gebraucht: Preise', 'active': 'Jetzt im Angebot', 'active_val': '{n} Angebote · {shops} Händler', 'range': 'Angebotspreise', 'sold': 'Median verkauft', 'sold_val': '{price} ({n} verkauft)', 'sold_note': 'Median des letzten Angebotspreises, bevor ein Angebot als verkauft markiert wurde. Tatsächliche Verkaufspreise können abweichen.', 'updated': 'Stand {time} · Händlerpreise zum heutigen Kurs in EUR umgerechnet', 'listings': 'Jetzt im Angebot (günstigste zuerst)', 'col_item': 'Angebot', 'col_shop': 'Händler', 'col_cond': 'Zustand', 'col_price': 'Preis', 'more': 'Alle {name} auf Camera Bridge suchen', 'children': 'Nach Generation / Version', 'parent': 'Alle ansehen', 'none': 'Derzeit keine Angebote.', 'index_title': 'Leica Gebrauchtpreise nach Modell | Camera Bridge', 'index_h1': 'Leica Gebrauchtpreise nach Modell', 'index_desc': 'Gebrauchtpreise und aktuelle Angebote für Leica Kameras und Objektive, nach Modell.', 'shops_h': 'Preise nach Händler', 'col_count': 'Angebote', 'col_low': 'Günstigster', 'col_cur': 'Währung', 'info_h': 'Modellinfo', 'kind': 'Art', 'kind_Body': 'Kameragehäuse', 'kind_Lens': 'Objektiv', 'mount': 'Bajonett', 'codes': 'Bestellnummern', 'bodies': 'Kameragehäuse', 'lenses': 'Objektive', 'aka': 'Auch bekannt als', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Preise nach Modell', 'approx': '≈ ', 'lead': 'Gebrauchte {name}: Marktwert Zustand B {b}, {n} im Angebot bei {shops} Händlern (Stand {date}).'}, 'it': {'title': '{name} usata: prezzi e annunci | Camera Bridge', 'q_price': 'Quanto costa una {name} usata?', 'a_price': 'Al momento ce ne sono {n} in vendita in {shops} negozi di {countries} paesi. I prezzi vanno da {low} a {high}, con una mediana di {median}.', 'a_sold': ' Gli ultimi {k} venduti avevano un ultimo prezzo richiesto mediano di {sold}.', 'q_where': 'Dove costa meno una {name} usata?', 'a_where': 'Paesi più economici ora: {list}. Prezzi dei negozi convertiti al cambio di oggi, spedizione e dazi esclusi.', 'related': 'Modelli simili', 'sep': ', ', 'new': 'Prezzo nuovo (Leica UK)', 'vs_new': 'Usato grado B / nuovo', 'vs_new_val': '{pct}% del nuovo', 'a_new': ' Nuova costa {new} da Leica UK; usata in grado B circa il {pct}%.', 'desc': '{active} {name} usate da {shops} negozi, {range}. Negozi Leica in Corea, Giappone, Europa e USA, con prezzi di vendita, in un solo posto.', 'h1': '{name} usata: prezzi', 'active': 'In vendita ora', 'active_val': '{n} annunci · {shops} negozi', 'range': 'Prezzi richiesti', 'sold': 'Mediana venduti', 'sold_val': '{price} ({n} venduti)', 'sold_note': "Mediana dell'ultimo prezzo visto prima che l'annuncio fosse segnato come venduto. I prezzi reali possono differire.", 'updated': 'Aggiornato {time} · prezzi convertiti in EUR al cambio di oggi', 'listings': 'In vendita ora (dal più economico)', 'col_item': 'Annuncio', 'col_shop': 'Negozio', 'col_cond': 'Condizione', 'col_price': 'Prezzo', 'more': 'Cerca tutte le {name} su Camera Bridge', 'children': 'Per generazione / versione', 'parent': 'Vedi tutto', 'none': 'Nessun annuncio al momento.', 'index_title': 'Prezzi Leica usate per modello | Camera Bridge', 'index_h1': 'Prezzi Leica usate per modello', 'index_desc': "Prezzi dell'usato e annunci attuali di fotocamere e obiettivi Leica, per modello.", 'shops_h': 'Prezzi per negozio', 'col_count': 'Annunci', 'col_low': 'Minimo', 'col_cur': 'Valuta', 'info_h': 'Scheda modello', 'kind': 'Tipo', 'kind_Body': 'Corpo macchina', 'kind_Lens': 'Obiettivo', 'mount': 'Innesto', 'codes': 'Codici prodotto', 'bodies': 'Corpi macchina', 'lenses': 'Obiettivi', 'aka': 'Conosciuta anche come', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Prezzi per modello', 'approx': '≈ ', 'lead': '{name} usata: valore di mercato grado B {b}, {n} in vendita in {shops} negozi (al {date}).'}, 'es': {'title': '{name} usada: precios y anuncios | Camera Bridge', 'q_price': '¿Cuánto cuesta una {name} usada?', 'a_price': 'Ahora hay {n} a la venta en {shops} tiendas de {countries} países. Los precios van de {low} a {high}, con una mediana de {median}.', 'a_sold': ' Las últimas {k} vendidas tuvieron un último precio pedido mediano de {sold}.', 'q_where': '¿Dónde es más barata una {name} usada?', 'a_where': 'Países más baratos ahora: {list}. Precios de tienda convertidos al cambio de hoy, sin envío ni impuestos de importación.', 'related': 'Modelos similares', 'sep': ', ', 'new': 'Precio nueva (Leica UK)', 'vs_new': 'Usada grado B / nueva', 'vs_new_val': '{pct}% de la nueva', 'a_new': ' Nueva cuesta {new} en Leica UK; usada en grado B, cerca del {pct}%.', 'desc': '{active} {name} usadas de {shops} tiendas, {range}. Tiendas Leica de Corea, Japón, Europa y EE. UU., con precios de venta, en un solo lugar.', 'h1': '{name} usada: precios', 'active': 'A la venta ahora', 'active_val': '{n} anuncios · {shops} tiendas', 'range': 'Precios pedidos', 'sold': 'Mediana vendidas', 'sold_val': '{price} ({n} vendidas)', 'sold_note': 'Mediana del último precio visto antes de que el anuncio se marcara como vendido. El precio real puede variar.', 'updated': 'A {time} · precios convertidos a EUR al cambio de hoy', 'listings': 'A la venta ahora (más baratas primero)', 'col_item': 'Anuncio', 'col_shop': 'Tienda', 'col_cond': 'Estado', 'col_price': 'Precio', 'more': 'Buscar todas las {name} en Camera Bridge', 'children': 'Por generación / versión', 'parent': 'Ver todo', 'none': 'No hay anuncios ahora.', 'index_title': 'Precios de Leica usadas por modelo | Camera Bridge', 'index_h1': 'Precios de Leica usadas por modelo', 'index_desc': 'Precios de segunda mano y anuncios actuales de cámaras y objetivos Leica, por modelo.', 'shops_h': 'Precios por tienda', 'col_count': 'Anuncios', 'col_low': 'Más barato', 'col_cur': 'Moneda', 'info_h': 'Ficha del modelo', 'kind': 'Tipo', 'kind_Body': 'Cuerpo de cámara', 'kind_Lens': 'Objetivo', 'mount': 'Montura', 'codes': 'Códigos de producto', 'bodies': 'Cuerpos de cámara', 'lenses': 'Objetivos', 'aka': 'También conocida como', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Precios por modelo', 'approx': '≈ ', 'lead': '{name} usada: valor de mercado grado B {b}, {n} a la venta en {shops} tiendas (a {date}).'}, 'pt': {'title': '{name} usada: preços e anúncios | Camera Bridge', 'q_price': 'Quanto custa uma {name} usada?', 'a_price': 'Agora há {n} à venda em {shops} lojas de {countries} países. Os preços vão de {low} a {high}, com mediana de {median}.', 'a_sold': ' As últimas {k} vendidas tiveram um último preço pedido mediano de {sold}.', 'q_where': 'Onde uma {name} usada é mais barata?', 'a_where': 'Países mais baratos agora: {list}. Preços das lojas convertidos ao câmbio de hoje, sem frete nem impostos de importação.', 'related': 'Modelos semelhantes', 'sep': ', ', 'new': 'Preço nova (Leica UK)', 'vs_new': 'Usada grau B / nova', 'vs_new_val': '{pct}% da nova', 'a_new': ' Nova custa {new} na Leica UK; usada em grau B, cerca de {pct}%.', 'desc': '{active} {name} usadas de {shops} lojas, {range}. Lojas Leica na Coreia, Japão, Europa e EUA, com preços de venda, num só lugar.', 'h1': '{name} usada: preços', 'active': 'À venda agora', 'active_val': '{n} anúncios · {shops} lojas', 'range': 'Preços pedidos', 'sold': 'Mediana vendidas', 'sold_val': '{price} ({n} vendidas)', 'sold_note': 'Mediana do último preço visto antes de o anúncio ser marcado como vendido. O preço real pode variar.', 'updated': 'Em {time} · preços convertidos em EUR ao câmbio de hoje', 'listings': 'À venda agora (mais baratas primeiro)', 'col_item': 'Anúncio', 'col_shop': 'Loja', 'col_cond': 'Estado', 'col_price': 'Preço', 'more': 'Procurar todas as {name} na Camera Bridge', 'children': 'Por geração / versão', 'parent': 'Ver tudo', 'none': 'Nenhum anúncio agora.', 'index_title': 'Preços de Leica usadas por modelo | Camera Bridge', 'index_h1': 'Preços de Leica usadas por modelo', 'index_desc': 'Preços de usados e anúncios atuais de câmeras e objetivas Leica, por modelo.', 'shops_h': 'Preços por loja', 'col_count': 'Anúncios', 'col_low': 'Mais barato', 'col_cur': 'Moeda', 'info_h': 'Ficha do modelo', 'kind': 'Tipo', 'kind_Body': 'Corpo de câmera', 'kind_Lens': 'Objetiva', 'mount': 'Encaixe', 'codes': 'Códigos do produto', 'bodies': 'Corpos de câmera', 'lenses': 'Objetivas', 'aka': 'Também conhecida como', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Preços por modelo', 'approx': '≈ ', 'lead': '{name} usada: valor de mercado grau B {b}, {n} à venda em {shops} lojas (em {date}).'}, 'zh-Hans': {'title': '{name} 二手价格与在售 | Camera Bridge', 'q_price': '二手 {name} 多少钱？', 'a_price': '目前 {countries} 个国家的 {shops} 家店铺共有 {n} 件在售，售价从 {low} 到 {high}，中位数为 {median}。', 'a_sold': ' 最近售出的 {k} 件，售出前最后标价的中位数为 {sold}。', 'q_where': '二手 {name} 哪个国家最便宜？', 'a_where': '目前各国最低价：{list}。按今日汇率换算的店铺标价，不含运费和进口税。', 'related': '相似型号', 'sep': '、', 'new': '新品价格（徕卡英国）', 'vs_new': '二手 B 级 / 新品', 'vs_new_val': '新品的 {pct}%', 'a_new': ' 新品在徕卡英国官方售价 {new}，二手 B 级约为其 {pct}%。', 'desc': '二手 {name} 在售 {active} 件（{shops} 家店铺），{range}。汇集韩国、日本、欧洲、美国徕卡店铺的在售与成交价格。', 'h1': '{name} 二手行情', 'active': '在售', 'active_val': '{n} 件 · {shops} 家店铺', 'range': '在售价格', 'sold': '成交中位数', 'sold_val': '{price}（已售 {n} 件）', 'sold_note': '这是标记为已售前最后看到的标价中位数，可能与实际成交价不同。', 'updated': '{time} · 店铺标价按今日汇率换算为人民币', 'listings': '在售商品（价格从低到高）', 'col_item': '商品', 'col_shop': '店铺', 'col_cond': '成色', 'col_price': '价格', 'more': '在 Camera Bridge 搜索全部 {name}', 'children': '按代数 / 版本', 'parent': '查看全部', 'none': '目前没有在售商品。', 'index_title': '徕卡二手行情 · 按型号 | Camera Bridge', 'index_h1': '徕卡二手行情（按型号）', 'index_desc': '徕卡相机和镜头的二手行情与在售商品，按型号查看。', 'shops_h': '各店铺价格', 'col_count': '在售', 'col_low': '最低价', 'col_cur': '货币', 'info_h': '型号信息', 'kind': '类别', 'kind_Body': '相机机身', 'kind_Lens': '镜头', 'mount': '卡口', 'codes': '产品编号', 'bodies': '相机机身', 'lenses': '镜头', 'aka': '别名', 'count': '{n} 件', 'home': 'Camera Bridge', 'list': '按型号行情', 'approx': '约', 'lead': '二手 {name}：B 级市场价 {b}，{shops} 家店铺在售 {n} 件（{date}）。'}, 'zh-Hant': {'title': '{name} 二手價格與在售 | Camera Bridge', 'q_price': '二手 {name} 多少錢？', 'a_price': '目前 {countries} 個國家的 {shops} 家店鋪共有 {n} 件在售，售價從 {low} 到 {high}，中位數為 {median}。', 'a_sold': ' 最近售出的 {k} 件，售出前最後標價的中位數為 {sold}。', 'q_where': '二手 {name} 哪個國家最便宜？', 'a_where': '目前各國最低價：{list}。按今日匯率換算的店鋪標價，不含運費和進口稅。', 'related': '相似型號', 'sep': '、', 'new': '新品價格（徠卡英國）', 'vs_new': '二手 B 級 / 新品', 'vs_new_val': '新品的 {pct}%', 'a_new': ' 新品在徠卡英國官方售價 {new}，二手 B 級約為其 {pct}%。', 'desc': '二手 {name} 在售 {active} 件（{shops} 家店鋪），{range}。匯集韓國、日本、歐洲、美國徠卡店鋪的在售與成交價格。', 'h1': '{name} 二手行情', 'active': '在售', 'active_val': '{n} 件 · {shops} 家店鋪', 'range': '在售價格', 'sold': '成交中位數', 'sold_val': '{price}（已售 {n} 件）', 'sold_note': '這是標記為已售前最後看到的標價中位數，可能與實際成交價不同。', 'updated': '{time} · 店鋪標價按今日匯率換算為港幣', 'listings': '在售商品（價格由低到高）', 'col_item': '商品', 'col_shop': '店鋪', 'col_cond': '成色', 'col_price': '價格', 'more': '在 Camera Bridge 搜尋全部 {name}', 'children': '按代數 / 版本', 'parent': '查看全部', 'none': '目前沒有在售商品。', 'index_title': '徠卡二手行情 · 按型號 | Camera Bridge', 'index_h1': '徠卡二手行情（按型號）', 'index_desc': '徠卡相機和鏡頭的二手行情與在售商品，按型號查看。', 'shops_h': '各店鋪價格', 'col_count': '在售', 'col_low': '最低價', 'col_cur': '貨幣', 'info_h': '型號資訊', 'kind': '類別', 'kind_Body': '相機機身', 'kind_Lens': '鏡頭', 'mount': '卡口', 'codes': '產品編號', 'bodies': '相機機身', 'lenses': '鏡頭', 'aka': '別名', 'count': '{n} 件', 'home': 'Camera Bridge', 'list': '按型號行情', 'approx': '約', 'lead': '二手 {name}：B 級市場價 {b}，{shops} 家店鋪在售 {n} 件（{date}）。'}})
+# 첫 줄 한 줄 답 (AI 검색·검색엔진이 인용하기 쉬운 숫자 문장)
+for _l, _v in {'ko': '{name} 중고: B등급 시세 {b}, {shops}개 매장에 {n}개 판매 중 ({date} 기준).', 'en': 'Used {name}: grade B market value {b}, {n} for sale at {shops} shops (as of {date}).', 'ja': '中古 {name}：B等級の相場 {b}、{shops} 店で {n} 点販売中（{date} 時点）。'}.items():
+    T[_l]["lead"] = _v
+
 CSS = """
-:root{--bg:#fff;--text:#16181a;--soft:#5d6266;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
+:root{--bg:#FDFCFA;--text:#22201E;--soft:#6E6A64;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
 @media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2c3133;--accent:#8cc5ad;--row:#1b1e1f}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,"Pretendard Variable",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Jost","Pretendard Variable",Pretendard,system-ui,-apple-system,"Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
 main{max-width:960px;margin:0 auto;padding:24px 16px 64px}
 nav{font-size:13px;color:var(--muted);margin-bottom:20px}
 nav a{color:var(--soft)}
-h1{font-size:26px;line-height:1.3;margin:0 0 4px}
+h1{font:500 34px/1.2 "EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;margin:0 0 6px;letter-spacing:-.005em}
+h2{font-family:"EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;font-weight:500}
 .ko-name{color:var(--soft);margin:0 0 20px}
+.lead{font-size:16px;margin:0 0 18px}
 dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;margin:0 0 8px;border-top:1px solid var(--border)}
 dl div{padding:12px 0;border-bottom:1px solid var(--border)}
 dt{font-size:13px;color:var(--muted)}
@@ -154,8 +173,8 @@ ul.links li{margin:4px 0}
 ul.links span{color:var(--muted);font-size:13px}
 """
 
-SYMBOL = {"KRW": "₩", "USD": "$", "JPY": "¥", "EUR": "€", "GBP": "£", "HKD": "HK$", "CHF": "CHF ", "DKK": "DKK ",
-          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$", "CLP": "CLP ", "SEK": "SEK ", "CZK": "Kč "}
+SYMBOL = {"KRW": "₩", "USD": "$", "JPY": "¥", "EUR": "€", "CNY": "CN¥", "TWD": "NT$", "GBP": "£", "HKD": "HK$", "CHF": "CHF ", "DKK": "DKK ",
+          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$", "CLP": "CLP ", "SEK": "SEK ", "CZK": "Kč ", "HUF": "Ft "}
 
 
 def money(amount: float, currency: str, lang: str, approx: bool = False) -> str:
@@ -213,8 +232,15 @@ def pick_entities(entities: list[dict]) -> list[dict]:
     return pool[:MAX_PAGES]
 
 
+def footer_for(lang: str) -> str:
+    """법적 고지 페이지는 한·영·일만 있어 새 언어는 영어 바닥글, '모델별 시세' 링크만 그 언어로"""
+    if lang in ("ko", "en", "ja"):
+        return footer(lang)
+    return footer("en").replace('href="/en/leica/"', f'href="/{PATH[lang]}/leica/"', 1)
+
+
 def page_url(lang: str, slug: str | None = None) -> str:
-    return f"{SITE}/{lang}/leica/{slug}/" if slug else f"{SITE}/{lang}/leica/"
+    return f"{SITE}/{PATH[lang]}/leica/{slug}/" if slug else f"{SITE}/{PATH[lang]}/leica/"
 
 
 def head(lang: str, title: str, desc: str, url_for, json_ld: dict | None) -> str:
@@ -228,7 +254,7 @@ def head(lang: str, title: str, desc: str, url_for, json_ld: dict | None) -> str
             f'<link rel="canonical" href="{url_for(lang)}">{alternates}'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="Camera Bridge">'
             f'<meta property="og:url" content="{url_for(lang)}"><meta property="og:title" content="{html.escape(title)}">'
-            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<style>{CSS}{FOOTER_CSS}</style>'
+            f'<meta property="og:description" content="{html.escape(desc)}">{ld}<link rel=\"stylesheet\" href=\"/img/fonts/fonts.css\"><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\"><style>{CSS}{FOOTER_CSS}</style>'
             # 방문 기록(어디서 왔나·매장 클릭, 첫 화면과 같은 /api/usage)과 Vercel 방문 통계
             f'<script defer src="/track.js"></script><script defer src="/_vercel/insights/script.js"></script></head><body><main>')
 
@@ -244,6 +270,8 @@ def build(out: Path) -> dict:
     usd_krw = to_krw.get("USD", 1350)
     jpy_krw = to_krw.get("JPY", 9)
     convert = {"KRW": lambda k: k, "USD": lambda k: k / usd_krw, "JPY": lambda k: k / jpy_krw}
+    for _cur in set(DISPLAY_CURRENCY.values()) - set(convert):
+        convert[_cur] = (lambda rate: (lambda k: k / rate))(to_krw[_cur])
     updated = dt.datetime.fromisoformat(summary["generated_at"]).astimezone(dt.timezone(dt.timedelta(hours=9)))
     updated_text = updated.strftime("%Y-%m-%d %H:%M KST")
 
@@ -264,7 +292,7 @@ def build(out: Path) -> dict:
                                       "price": price, "currency": currency, "krw": price * rate})
 
     for lang in LANGS:
-        shutil.rmtree(out / lang / "leica", ignore_errors=True)
+        shutil.rmtree(out / PATH[lang] / "leica", ignore_errors=True)
     old_marks = json.loads(LASTMOD.read_text(encoding="utf-8")) if LASTMOD.exists() else {}
     marks: dict[str, dict] = {}
     today = updated.date().isoformat()
@@ -323,12 +351,15 @@ def build(out: Path) -> dict:
                 {"@type": "ListItem", "position": 2, "name": t["list"], "item": page_url(lang)},
                 {"@type": "ListItem", "position": 3, "name": name, "item": page_url(lang, slug)}]}
             parts = [head(lang, title, desc, lambda l, s=slug: page_url(l, s), [json_ld, crumbs])]
-            parts.append(f'<nav><a href="/">{t["home"]}</a> › <a href="/{lang}/leica/">{t["list"]}</a></nav>')
+            parts.append(f'<nav><a href="/">{t["home"]}</a> › <a href="/{PATH[lang]}/leica/">{t["list"]}</a></nav>')
             parts.append(f"<h1>{html.escape(t['h1'].format(name=name))}</h1>")
-            if lang != "ko" and e.get("name_ko"):
+            if lang in ("en", "ja") and e.get("name_ko"):
                 parts.append(f'<p class="ko-name">{html.escape(e["name_ko"].replace(" (전체)", ""))}</p>')
             elif lang == "ko":
                 parts.append(f'<p class="ko-name">{html.escape(e["name"].replace(" (all)", ""))}</p>')
+            if rows:  # 한 줄 답: AI 검색·검색엔진이 그대로 인용하기 쉬운 숫자 문장
+                b = e.get("b_price_krw") or rows[len(rows) // 2]["krw"]
+                parts.append(f'<p class="lead">{html.escape(t["lead"].format(name=name, b=money(conv(b), cur, lang, True), n=len(rows), shops=shops, date=updated.date().isoformat()))}</p>')
             parts.append("<dl>")
             parts.append(f"<div><dt>{t['active']}</dt><dd>{t['active_val'].format(n=len(rows), shops=shops)}</dd></div>")
             parts.append(f"<div><dt>{t['range']}</dt><dd>{range_text}</dd></div>")
@@ -363,7 +394,7 @@ def build(out: Path) -> dict:
             if children or parent:
                 parts.append(f"<h2>{t['children'] if children else t['parent']}</h2><ul class=\"links\">")
                 for c in children or [parent]:
-                    parts.append(f'<li><a href="/{lang}/leica/{slugs[c["id"]]}/">{html.escape(display_name(c, lang))}</a> '
+                    parts.append(f'<li><a href="/{PATH[lang]}/leica/{slugs[c["id"]]}/">{html.escape(display_name(c, lang))}</a> '
                                  f'<span>{t["count"].format(n=c["active_count"])}</span></li>')
                 parts.append("</ul>")
             info = [(t["kind"], t["kind_" + e["kind"]])]
@@ -408,11 +439,11 @@ def build(out: Path) -> dict:
                 parts.append(f"<p>{t['none']}</p>")
             if related:
                 parts.append(f"<h2>{t['related']}</h2><ul class=\"links\">" + "".join(
-                    f'<li><a href="/{lang}/leica/{slugs[x["id"]]}/">{html.escape(display_name(x, lang))}</a> <span>{t["count"].format(n=x.get("active_count", 0))}</span></li>'
+                    f'<li><a href="/{PATH[lang]}/leica/{slugs[x["id"]]}/">{html.escape(display_name(x, lang))}</a> <span>{t["count"].format(n=x.get("active_count", 0))}</span></li>'
                     for x in related) + "</ul>")
             parts.append(f'<a class="more" href="/?entity={html.escape(eid)}&amp;utm_source=model_page&amp;utm_content={slug}">{html.escape(t["more"].format(name=name))}</a>')
-            parts.append(f"</main>{footer(lang)}</body></html>\n")
-            path = out / lang / "leica" / slug / "index.html"
+            parts.append(f"</main>{footer_for(lang)}</body></html>\n")
+            path = out / PATH[lang] / "leica" / slug / "index.html"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text("".join(parts), encoding="utf-8")
             mark(page_url(lang, slug), "".join(parts))
@@ -426,11 +457,11 @@ def build(out: Path) -> dict:
             parts.append(f'<h2>{heading}</h2><ul class="links">')
             for e in picked:
                 if e["kind"] == kind:
-                    parts.append(f'<li><a href="/{lang}/leica/{slugs[e["id"]]}/">{html.escape(display_name(e, lang))}</a> '
+                    parts.append(f'<li><a href="/{PATH[lang]}/leica/{slugs[e["id"]]}/">{html.escape(display_name(e, lang))}</a> '
                                  f'<span>{t["count"].format(n=e["active_count"])}</span></li>')
             parts.append("</ul>")
-        parts.append(f'<p class="note">{t["updated"].format(time=updated_text)}</p></main>{footer(lang)}</body></html>\n')
-        (out / lang / "leica" / "index.html").write_text("".join(parts), encoding="utf-8")
+        parts.append(f'<p class="note">{t["updated"].format(time=updated_text)}</p></main>{footer_for(lang)}</body></html>\n')
+        (out / PATH[lang] / "leica" / "index.html").write_text("".join(parts), encoding="utf-8")
         mark(page_url(lang), "".join(parts))
 
     # 사이트맵: 첫 화면 + 언어별 목록 + 모델 페이지 (언어별 짝 표시)
@@ -443,6 +474,26 @@ def build(out: Path) -> dict:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
         + "\n".join(urls) + "\n</urlset>\n", encoding="utf-8")
+    # llms.txt (2026-11-08): ChatGPT 등 AI 검색이 사이트를 이해하고 모델 페이지를 인용하기 쉽게 — 무엇인지·숫자 기준·언어별 목록·인기 모델
+    top = sorted(picked, key=lambda e: -(e.get("active_count") or 0))[:40]
+    shops_n = len({r["source"] for rows in listings.values() for r in rows})
+    lines = ["# Camera Bridge", "",
+             "> Used Leica cameras and lenses listed at dealers worldwide, matched to the exact model, graded on one condition scale, "
+             "and priced as an estimated total to your door (shipping and import tax). Updated several times a day.", "",
+             f"- Coverage as of {updated.date().isoformat()}: {sum(len(v) for v in listings.values()) and len({r['url'] for rows in listings.values() for r in rows}):,} listings "
+             f"linked to {len(picked)} model pages, from about {shops_n} shops.",
+             "- Prices on model pages are shop asking prices converted at the day's exchange rate. 'Sold median' is the median of the last "
+             "asking price seen before a listing was marked sold, not a confirmed transaction price.",
+             "- Grade scale: S (like new), A, B, C, D. 'Grade B market value' is the typical price for a grade B example.", "",
+             "## Model price pages by language", ""]
+    for lang in LANGS:
+        lines.append(f"- [{lang}]({page_url(lang)})")
+    lines += ["", "## Most listed models (English)", ""]
+    for e in top:
+        lines.append(f"- [{e['name'].replace(' (all)', '')}]({page_url('en', slugs[e['id']])}): {e.get('active_count')} for sale")
+    lines += ["", "## Search", "", "- Search any model, nickname (e.g. Bokeh King, Double Stroke), old Leitz code word (e.g. SOOIC) "
+              "or order number (e.g. 11873): https://camerabridge.io/", ""]
+    (out / "llms.txt").write_text("\n".join(lines), encoding="utf-8")
     if out == ROOT:  # 시험 출력(--out)에서는 기록을 건드리지 않음
         LASTMOD.write_text(json.dumps(marks, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
     return {"pages": len(picked) * len(LANGS), "models": [slugs[e["id"]] for e in picked], "lastmod": marks}
