@@ -177,12 +177,18 @@ jobs:
           python3 scripts/warm_up.py https://camerabridge.io
           # 저장 상품·원하는 매물 알림을 크롤링 직후마다 (하루 한 번 cron만 있으면 새 매물 메일이 최대 하루 늦음).
           # 이미 알린 매물은 다시 안 보내서 여러 번 돌려도 같은 메일이 또 가지 않음
-          CODE=$(curl -s -o /tmp/alerts.json -w "%{http_code}" -m 120 ${CRON_SECRET:+-H "Authorization: Bearer $CRON_SECRET"} \
+          if [ -z "$CRON_SECRET" ]; then
+            echo "::warning::CRON_SECRET 미설정 — 인증 없는 알림 요청은 보내지 않음"
+            exit 0
+          fi
+          CODE=$(curl -s -o /tmp/alerts.json -w "%{http_code}" -m 120 -H "Authorization: Bearer $CRON_SECRET" \
                  "https://camerabridge.io/api/board?r=alerts")
           echo "🔔 알림 검사: HTTP $CODE $(cat /tmp/alerts.json 2>/dev/null | head -c 200)"
           grep -q '"mail_ready": false' /tmp/alerts.json 2>/dev/null && \
             echo "::warning::메일 키(RESEND_API_KEY)가 Vercel에 없어 알림 메일이 안 나감 — $(grep -o '"members": [0-9]*' /tmp/alerts.json)명이 알림을 켬"
-          [ "$CODE" = 401 ] && echo "⚠️ Vercel에 CRON_SECRET이 있으면 GitHub 저장소 비밀값에도 같은 값으로 CRON_SECRET을 넣어야 함"
+          if [ "$CODE" != 200 ]; then
+            echo "::warning::알림 검사 실패 (HTTP $CODE) — Vercel과 GitHub의 CRON_SECRET 설정·배포 상태를 확인하세요"
+          fi
           true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

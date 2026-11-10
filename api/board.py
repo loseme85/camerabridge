@@ -13,7 +13,7 @@
   board/saves/<회원id>.json                               회원이 스크랩한 상품 (원래 주소 + 저장할 때 제목·가격 등), 최대 SAVE_LIMIT개
 가격 알림: 회원이 직접 켜면(구글 계정을 한 번 더 확인) 그때만 이메일을 회원 파일 alerts에 저장, 끄면 바로 지움.
   매일 Vercel Cron(vercel.json) → GET ?r=alerts → 저장한 상품이 지난번 알린 뒤 1% 넘게 내렸거나 팔리면 한 통으로 Resend 발송.
-  같은 변화는 한 번만 (상품마다 notified_price·notified_status). RESEND_API_KEY가 없으면 보내지 않음. CRON_SECRET이 있으면 그 값으로만 실행.
+  같은 변화는 한 번만 (상품마다 notified_price·notified_status). RESEND_API_KEY가 없으면 보내지 않음. CRON_SECRET 인증 필수, 미설정이면 실행하지 않음.
 스팸 막기: 로그인한 회원만 쓰기, 숨은 입력칸, 쓰기 시작한 지 1.5초 안에 보내면 거절, 회원당 하루 글 POST_LIMIT·댓글 COMMENT_LIMIT건, 링크 MAX_LINKS개까지.
 신고는 로그인 없이도 가능 (같은 접속지는 한 번, 접속지 = 날마다 바뀌는 IP 해시).
 운영자 관리: /owner/board (cb_owner 쿠키 = OWNER_DASHBOARD_KEY, /owner/usage?key=… 로 한 번 들어가면 생김)
@@ -950,7 +950,9 @@ class handler(BaseHTTPRequestHandler):
                 return self._send(200, me(self._member_id()))
             if query.get("r") == "alerts":  # Vercel Cron (매일)
                 secret = os.environ.get("CRON_SECRET", "")
-                if secret and not hmac.compare_digest(self.headers.get("authorization") or "", f"Bearer {secret}"):
+                if not secret:
+                    return self._send(503, {"ok": False, "error": "cron_not_configured"})
+                if not hmac.compare_digest((self.headers.get("authorization") or "").encode(), f"Bearer {secret}".encode()):
                     return self._send(401, {"ok": False})
                 result = run_alerts()
                 try:

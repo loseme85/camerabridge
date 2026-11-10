@@ -2,11 +2,44 @@ import importlib.util
 import json
 import sys
 import types
+from email.message import Message
 from pathlib import Path
+
+import pytest
 
 _spec = importlib.util.spec_from_file_location("board_api", Path(__file__).resolve().parents[1] / "api" / "board.py")
 board = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(board)
+
+
+@pytest.mark.parametrize("secret,authorization,status", [
+    (None, None, 503),
+    ("", "Bearer forged", 503),
+    ("test-cron-secret", None, 401),
+    ("test-cron-secret", "Bearer forged", 401),
+    ("test-cron-secret", "test-cron-secret", 401),
+    ("test-cron-secret", "Bearer 잘못된값", 401),
+    ("test-cron-secret", "Bearer test-cron-secret", 200),
+])
+def test_alerts_route_requires_secret_before_any_side_effect(monkeypatch, secret, authorization, status):
+    if secret is None:
+        monkeypatch.delenv("CRON_SECRET", raising=False)
+    else:
+        monkeypatch.setenv("CRON_SECRET", secret)
+    calls = []
+    monkeypatch.setattr(board, "run_alerts", lambda: calls.append("alerts") or {"sent": 0})
+    monkeypatch.setattr(board, "run_retention", lambda: calls.append("retention") or {"deleted": 0})
+    request = object.__new__(board.handler)
+    request.path = "/api/board?r=alerts"
+    request.headers = Message()
+    if authorization is not None:
+        request.headers["Authorization"] = authorization
+    replies = []
+    request._send = lambda code, payload, **kwargs: replies.append((code, payload))
+    request.do_GET()
+    assert len(replies) == 1 and replies[0][0] == status
+    assert calls == (["alerts", "retention"] if status == 200 else [])
+    assert "test-cron-secret" not in json.dumps(replies)
 
 
 class FakeBlob:
