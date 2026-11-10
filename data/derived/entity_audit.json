@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 907,
+   "count": 909,
    "example": "Leica M2 Black Repaint"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 260,
+   "count": 261,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 260,
+   "count": 261,
    "example": "Leica M3 Black Repaint"
   },
   {
@@ -75,13 +75,13 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 189,
+   "count": 188,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 167,
+   "count": 166,
    "example": "[위탁] M11 Monochrom"
   },
   {
@@ -111,19 +111,19 @@
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:no-meter",
-   "count": 124,
+   "count": 125,
    "example": "LEICA M4 sn.1179"
   },
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:mechanical",
-   "count": 124,
+   "count": 125,
    "example": "LEICA M4 sn.1179"
   },
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 120,
+   "count": 119,
    "example": "[중고] M11 (Silver)"
   },
   {
@@ -363,13 +363,13 @@
   {
    "a": "leica:body:m11:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 44,
+   "count": 43,
    "example": "Leica M11 Glossy Black Paint Finish"
   },
   {
    "a": "leica:body:m11:black-paint",
    "b": "leica:feature:black-paint",
-   "count": 44,
+   "count": 43,
    "example": "Leica M11 Glossy Black Paint Finish"
   },
   {
@@ -483,13 +483,13 @@
   {
    "a": "leica:body:m-monochrom-ccd",
    "b": "leica:feature:frameline-28",
-   "count": 35,
+   "count": 34,
    "example": "[중고] M-Monochrom CCD (Black)"
   },
   {
    "a": "leica:body:m-monochrom-ccd",
    "b": "leica:feature:monochrom",
-   "count": 35,
+   "count": 34,
    "example": "[중고] M-Monochrom CCD (Black)"
   },
   {
@@ -583,12 +583,6 @@
    "example": "Leica M11-D Black"
   },
   {
-   "a": "leica:feature:frameline-28",
-   "b": "leica:feature:safari",
-   "count": 27,
-   "example": "[중고] M11-P (Safari)"
-  },
-  {
    "a": "leica:body:q3-monochrom",
    "b": "leica:feature:monochrom",
    "count": 27,
@@ -599,6 +593,12 @@
    "b": "leica:feature:frameline-28",
    "count": 26,
    "example": "[위탁] M9-P (Silver)"
+  },
+  {
+   "a": "leica:feature:frameline-28",
+   "b": "leica:feature:safari",
+   "count": 26,
+   "example": "[중고] M11-P (Safari)"
   },
   {
    "a": "leica:feature:black-paint",
@@ -889,18 +889,6 @@
    "example": "LEICA M-P sn.4934"
   },
   {
-   "a": "leica:body:m10-p:safari",
-   "b": "leica:feature:frameline-28",
-   "count": 10,
-   "example": "LEICA M10-P sn.5501"
-  },
-  {
-   "a": "leica:body:m10-p:safari",
-   "b": "leica:feature:safari",
-   "count": 10,
-   "example": "LEICA M10-P sn.5501"
-  },
-  {
    "a": "leica:feature:safari",
    "b": "leica:lens:summilux-m:50:asph-safari",
    "count": 9,
@@ -923,6 +911,18 @@
    "b": "leica:feature:mechanical",
    "count": 9,
    "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
+  },
+  {
+   "a": "leica:body:m10-p:safari",
+   "b": "leica:feature:frameline-28",
+   "count": 9,
+   "example": "LEICA M10-P sn.5501"
+  },
+  {
+   "a": "leica:body:m10-p:safari",
+   "b": "leica:feature:safari",
+   "count": 9,
+   "example": "LEICA M10-P sn.5501"
   },
   {
    "a": "leica:body:m-p240:korea-70",
@@ -1135,6 +1135,12 @@
    "example": "Leica M4-2 Gold Painted Body"
   },
   {
+   "a": "leica:body:r3:safari",
+   "b": "leica:feature:safari",
+   "count": 6,
+   "example": "Leica R3 + R 50mm f2 Summicron Safari SET"
+  },
+  {
    "a": "leica:body:m9-p:black-paint",
    "b": "leica:feature:frameline-28",
    "count": 6,
@@ -1205,12 +1211,6 @@
    "b": "leica:lens:apo-summicron-m:90:black-paint",
    "count": 5,
    "example": "Leica M 90mm f2 APO-Summicron ASPH BlackPaint"
-  },
-  {
-   "a": "leica:body:r3:safari",
-   "b": "leica:feature:safari",
-   "count": 5,
-   "example": "Leica R3 + R 50mm f2 Summicron Safari SET"
   },
   {
    "a": "leica:feature:safari",
@@ -1481,7 +1481,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 167,
+   "count": 166,
    "example": "[위탁] M11 Monochrom"
   },
   {
@@ -1571,7 +1571,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "safari",
-   "count": 19,
+   "count": 18,
    "example": "[중고] M11-P (Safari)"
   },
   {
@@ -1743,11 +1743,24 @@
    "example": "LEICA Q3, black paint finish Body"
   },
   {
+   "entity": "leica:body:mp6",
+   "word": "black paint",
+   "count": 3,
+   "example": "Leica MP 6 0.72 Black Paint Body Film Camera"
+  },
+  {
    "entity": "leica:body:m2:standard",
    "word": "gold",
    "count": 3,
    "example": "Leica M2 -S Gold 4Frames Vit장착가능"
   }
  ],
- "new": []
+ "new": [
+  {
+   "entity": "leica:body:mp6",
+   "word": "black paint",
+   "count": 3,
+   "example": "Leica MP 6 0.72 Black Paint Body Film Camera"
+  }
+ ]
 }
