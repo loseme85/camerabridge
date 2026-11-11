@@ -7431,6 +7431,83 @@ def crawl_fotoerhardt():
     return results
 
 
+def crawl_kameraklinikum():
+    """Kamera Klinikum (독일 뉘른베르크 수리점, OpenCart, 2026-11-12 밤샘) - 분류 3곳(analog-kameras·digital-kameras·gebrauchte-teile,
+    쪽 넘김 ?page=)에서 이름에 Leica·Leitz가 든 것만 (파나소닉 'Leica DG' 뺌). 목록 이름이 잘려 상세 <h1>·og:image를 읽음.
+    robots.txt는 검색(route=product/search)·장바구니만 막음. 등급 표기 없음 — 제목의 'stark gebraucht'·'DEFEKT'만. 가격 EUR"""
+    import html as _html
+    import requests
+    from condition_grade import KAMERAKLINIKUM_PREFIX
+    base = "https://www.kameraklinikum.de"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Kamera Klinikum 크롤링 시작")
+    items, seen = [], set()
+    for cat in ("analog-kameras", "digital-kameras", "gebrauchte-teile"):
+        for page in range(1, 40):
+            resp = sess.get(f"{base}/{cat}", params={"page": page} if page > 1 else None, timeout=30)
+            resp.raise_for_status()
+            blocks = resp.text.split('class="product-thumb')[1:]
+            if not blocks:
+                break
+            for b in blocks:
+                n = re.search(r'class="name"><a href="([^"]+)">([^<]+)', b) or re.search(r'<h4><a href="([^"]+)">([^<]+)', b)
+                if not n or n.group(1) in seen:
+                    continue
+                seen.add(n.group(1))
+                nm = _html.unescape(n.group(2))
+                if not re.search(r"(?i)\blei(?:ca|tz)\b", nm) or re.search(r"(?i)panasonic|\bDG\b", nm):
+                    continue
+                pr = re.search(r'class="price-(?:normal|new)">\s*€?([\d.]+),(\d\d)', b) or re.search(r'class="price">\s*€?([\d.]+),(\d\d)', b)
+                items.append((_html.unescape(n.group(1)), f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망", "out-of-stock" in b))
+            if f"page={page + 1}" not in resp.text:
+                break
+            time.sleep(1.0)
+    results = []
+    for link, price, sold in items:
+        try:
+            t = sess.get(link, timeout=30).text
+        except Exception as e:
+            print(f"    ⚠️ Kamera Klinikum 상세 오류: {e}")
+            continue
+        time.sleep(1.0)
+        h1 = re.search(r"<h1[^>]*>([^<]+)", t)
+        img = re.search(r'og:image" content="([^"]+)', t)
+        name = re.sub(r"\s+", " ", _html.unescape(h1.group(1))).strip() if h1 else ""
+        if not name:
+            continue
+        cond = "정보없음"
+        if re.search(r"(?i)\bdefekt\b", name):
+            cond = KAMERAKLINIKUM_PREFIX + "defekt"
+        elif re.search(r"(?i)stark gebraucht", name):
+            cond = KAMERAKLINIKUM_PREFIX + "stark gebraucht"
+        nm = re.sub(r"\s+–\s+geprüft stark gebraucht", "", name)
+        nm = re.sub(r"\s+–\s+Analog Messsucherkamera mit\s+", " body + ", nm)
+        nm = re.sub(r"(?i)F/(\d),(\d)", r"f/\1.\2", nm)
+        nm = re.sub(r"\s+DEFEKT\b", " (defekt, for parts)", nm)
+        if " body + " in nm:
+            nm += " set"
+        cat = detect_category(nm, price)
+        results.append({
+            "site": "Kamera Klinikum (독일)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img.group(1) if img else "",
+            "링크": link,
+            "품절": sold,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ Kamera Klinikum 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12576,6 +12653,7 @@ def crawl_all():
         ("PhotoQueen (그리스)", lambda: ce.wrap_full_run("PhotoQueen (그리스)", crawl_photoqueen)),
         ("e-darkroom (그리스)", lambda: ce.wrap_full_run("e-darkroom (그리스)", crawl_edarkroom)),
         ("Foto Erhardt (독일)", lambda: ce.wrap_full_run("Foto Erhardt (독일)", crawl_fotoerhardt)),
+        ("Kamera Klinikum (독일)", lambda: ce.wrap_full_run("Kamera Klinikum (독일)", crawl_kameraklinikum)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
