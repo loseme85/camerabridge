@@ -94,6 +94,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _F64.get(cond[len(F64_PREFIX):].strip().lower().replace("ă", "a")), "label"
     if cond.startswith(KAMERADOKTORN_PREFIX):
         return _KAMERADOKTORN.get(cond[len(KAMERADOKTORN_PREFIX):].strip().lower()), "label"
+    if cond.startswith(GOECKER_PREFIX):
+        return _GOECKER.get(cond[len(GOECKER_PREFIX):].strip()), "label"
     if cond.startswith(FOTOC_PREFIX):
         return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
     if cond.startswith(DIGITALSTORE_PREFIX):
@@ -926,6 +928,12 @@ _F64 = {"excelenta": "A", "excelentă": "A", "foarte buna": "B", "buna": "B", "a
 KAMERADOKTORN_PREFIX = "Kameradoktorn: "
 _KAMERADOKTORN = {"nyskick": "S", "nytt": "S", "mycket fint skick": "A", "fint skick": "B", "mycket gott skick": "B", "gott skick": "C",
                   "bra skick": "C", "normalt skick": "C", "brukskick": "D", "slitet skick": "D", "sliten": "D", "defekt": "X"}
+
+# 덴마크 Goecker (코펜하겐·오르후스): 이름 끝 '(1) USED' / '(2) DEMO' — 매장 안내 Stand 1 새것에 가장 가까움 · 2 작은 사용 흔적 ·
+# 3 보통 사용 흔적 · 4 많이 쓴 상태(작동함). 사진 평가(표기 가리고 판매 중 라이카 20점 전부, 흰 배경 사진 2장씩, 2026-11-12 밤샘):
+# 1 A 8 · 2 A 10 · 3 A 2 — 스튜디오 사진이라 흠이 안 보임(기존 경향과 같음) → 숫자대로: 정확 일치 8/20 · 한 등급 이내 18/20
+GOECKER_PREFIX = "Goecker: "
+_GOECKER = {"1": "A", "2": "B", "3": "C", "4": "D"}
 
 # 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
 # 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.
