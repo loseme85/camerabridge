@@ -7508,6 +7508,56 @@ def crawl_kameraklinikum():
     return results
 
 
+def crawl_clickpic():
+    """Photohaus Clickpic (독일 라이프치히·렘고, 2026-11-12 밤샘) - '/shop' 한 화면에 상품 전부(40개쯤, 정적 HTML — 브라우저 필요 없음)
+    상품 칸 <a href=".../artikel/...">·<h2>'Leica M - Leitz Summilux M 1,4/50mm …'·<p class="preis">에서 앞머리가 'Leica'인 것만.
+    판매 끝난 상품은 목록에서 빠짐. 등급 표기 없음 (사진 등급 대기열). robots.txt는 /api/·/orders/·/panel/만 막음. 가격 EUR"""
+    import html as _html
+    import requests
+    base = "https://photohaus-clickpic.de"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Photohaus Clickpic 크롤링 시작")
+    resp = sess.get(f"{base}/shop", timeout=30)
+    resp.raise_for_status()
+    results, seen = [], set()
+    for href, card in re.findall(r'<a href="(https://photohaus-clickpic\.de/artikel/[^"]+)" class="article-item[^"]*">(.*?)</a>', resp.text, re.S):
+        if href in seen:
+            continue
+        seen.add(href)
+        h2 = re.search(r"<h2>([^<]+)</h2>", card)
+        name = re.sub(r"\s+", " ", _html.unescape(h2.group(1))).strip() if h2 else ""
+        if not re.match(r"(?i)lei(?:ca|tz)\b", name):
+            continue
+        pr = re.search(r'class="preis">\s*([\d.]+)(?:,(\d\d))?\s*€', card)
+        img = re.search(r'data-src="([^"]+)"', card)
+        nm = re.sub(r"^Leica \w+ - ", "", name)  # 앞머리는 분류 ('Leica M - ')
+        nm = re.sub(r"\b(\d),(\d)/(\d{2,3})mm\b", r"\3mm f/\1.\2", nm)
+        nm = re.sub(r"\b(\d)/(\d{2,3})mm\b", r"\2mm f/\1", nm)
+        nm = re.sub(r"\bBereitschaftstasche\b", "ever-ready case", nm)
+        nm = re.sub(r"\b(\d{2}) (\d{3})$", r"\1\2", nm)  # '11 874' → '11874'
+        price = f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+        cat = detect_category(nm, price)
+        results.append({
+            "site": "Photohaus Clickpic (독일)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img.group(1) if img else "",
+            "링크": href,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ Photohaus Clickpic 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12654,6 +12704,7 @@ def crawl_all():
         ("e-darkroom (그리스)", lambda: ce.wrap_full_run("e-darkroom (그리스)", crawl_edarkroom)),
         ("Foto Erhardt (독일)", lambda: ce.wrap_full_run("Foto Erhardt (독일)", crawl_fotoerhardt)),
         ("Kamera Klinikum (독일)", lambda: ce.wrap_full_run("Kamera Klinikum (독일)", crawl_kameraklinikum)),
+        ("Photohaus Clickpic (독일)", lambda: ce.wrap_full_run("Photohaus Clickpic (독일)", crawl_clickpic)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
