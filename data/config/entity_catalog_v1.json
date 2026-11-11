@@ -9558,6 +9558,7 @@
     ],
     "title_must_not": [
      "herm[eè]s|에르메스",
+     "\\bfoto\\s+rahn\\b|포토\\s?란|フォト\\s?ラーン",
      "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
@@ -9620,6 +9621,7 @@
     "라이카 m9-p hermès"
    ],
    "codes": [],
+   "edition": true,
    "match": {
     "category": "Body",
     "mount": "M",
@@ -9628,6 +9630,80 @@
      "herm[eè]s|에르메스"
     ],
     "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:m9-p:foto-rahn-grey",
+   "name": "Leica M9-P GREY Foto Rahn",
+   "name_ko": "M9-P 그레이 Foto Rahn 한정판",
+   "kind": "Body",
+   "mount": "M",
+   "parent": "leica:body:m9-p",
+   "children": [],
+   "aliases": [
+    "grey foto rahn",
+    "leica m9-p grey foto rahn",
+    "m9-p foto rahn",
+    "m9-p grey foto rahn",
+    "m9-p 그레이 포토란",
+    "m9p foto rahn",
+    "m9pgreyfotorahn",
+    "라이카 m9-p grey foto rahn"
+   ],
+   "codes": [],
+   "edition": true,
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bM ?9-?P\\b",
+     "\\bfoto\\s+rahn\\b|포토\\s?란|フォト\\s?ラーン"
+    ],
+    "title_must_not": [
+     "re-?paint|리페인트|재도색|custom|커스텀",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -39664,6 +39740,7 @@
    "children": [
     "leica:body:m9-p:standard",
     "leica:body:m9-p:hermes",
+    "leica:body:m9-p:foto-rahn-grey",
     "leica:body:m9-p:black-paint"
    ],
    "aliases": [

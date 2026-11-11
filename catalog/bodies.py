@@ -256,8 +256,14 @@ fam("leica:body:m9", "Leica M9", "라이카 M9", "M", [r"\bM ?9\b"], [r"M9-?P", 
 ])
 fam("leica:body:m9-p", "Leica M9-P", "라이카 M9-P", "M", [r"\bM ?9-?P\b"], [], ["m9p"], [
     v("hermes", "Leica M9-P Hermès", "M9-P 에르메스", r"herm[eè]s|에르메스", ["m9-p hermes"]),
+    # 렌즈가 포함된 Foto Rahn 한정판. 단순한 'grey' 색상만으로는 판정하지 않는다.
+    # 근거: https://fotohennyhoogeveen.com/leica-m9-p-set-grey-foto-rahn
+    v("foto-rahn-grey", "Leica M9-P GREY Foto Rahn", "M9-P 그레이 Foto Rahn 한정판", r"\bfoto\s+rahn\b|포토\s?란|フォト\s?ラーン",
+      ["m9-p foto rahn", "m9p foto rahn", "m9-p grey foto rahn", "m9-p 그레이 포토란"], [REPAINT]),
     v("black-paint", "Leica M9-P Black Paint", "M9-P 블랙페인트", BLACK_PAINT[0], ["m9-p black paint", "m9-p 블랙페인트"], [REPAINT]),  # 확인 필요
 ])
+for _edition in ("hermes", "foto-rahn-grey"):
+    MODELS[f"leica:body:m9-p:{_edition}"]["edition"] = True
 fam("leica:body:m-monochrom-ccd", "Leica M Monochrom (2012, CCD)", "라이카 M 모노크롬 (CCD)", "M",
     [r"(\bM\b|M9)[ -]?monochrom"], [r"M ?1[01]", r"246", r"240", r"M-?P"], ["m monochrom ccd", "m9 monochrom", "mm ccd", "m 모노크롬"])
 fam("leica:body:m-e", "Leica M-E (Typ 220)", "라이카 M-E (220)", "M", [r"\bM-?E\b|typ ?220"], [r"M10-?E", r"240"], ["m-e 220", "me typ 220"])

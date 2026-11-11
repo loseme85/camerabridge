@@ -404,6 +404,38 @@ def test_m6_editions_are_flagged_for_the_version_bar() -> None:
     assert not any(entities[f"leica:body:m6:{k}"].get("edition") for k in ("classic", "ttl", "leitz-wetzlar", "panda"))
 
 
+def test_m9p_foto_rahn_is_a_separate_special_edition() -> None:
+    family = "leica:body:m9-p"
+    edition = f"{family}:foto-rahn-grey"
+    for title in (
+        'Leica M9-P Set “GREY” Foto Rahn 18.0 MP 35 Lens',
+        'LEICA M9-P Set GREY Foto Rahn with SUMMICRON-M 35mm f2 ASPH',
+        'Leica M9P Foto Rahn GREY',
+    ):
+        ids = match_entities(_record(title, "Body"))
+        assert edition in ids and family in ids, title
+        assert f"{family}:standard" not in ids and f"{family}:black-paint" not in ids
+    assert f"{family}:standard" in match_entities(_record("LEICA M9-P Silver", "Body"))
+    assert f"{family}:black-paint" in match_entities(_record("Leica M9-P Black Paint 10703", "Body"))
+    assert edition not in match_entities(_record("Leica M9-P grey leather", "Body"))
+    assert edition not in match_entities(_record("Leica M9 Grey Hammertone", "Body"))
+    assert edition not in match_entities(_record("Leica M9-P Foto Rahn custom repaint", "Body"))
+    assert load_catalog()["entities"][edition]["edition"] is True
+    suggester = Suggester(list(load_catalog()["entities"].values()))
+    assert suggester.suggest("m9-p foto rahn", 1)[0]["id"] == edition
+
+
+def test_m9p_foto_rahn_35_lens_is_treated_as_a_body_lens_set() -> None:
+    from entity_catalog import is_set
+
+    record = _record('Leica M9-P Set “GREY” Foto Rahn 18.0 MP 35 Lens', "Body")
+    record["entity_ids"] = match_entities(record)
+    assert is_set(record)
+    body = _record("Leica M9-P Silver 18.0 MP", "Body")
+    body["entity_ids"] = match_entities(body)
+    assert not is_set(body)
+
+
 def test_generation_counts_differ_by_country_and_steel_rim_reissue_without_label() -> None:
     def lens(title: str, prefix: str) -> list[str]:
         return sorted(i for i in match_entities(_record(title, "Lens")) if i.startswith(prefix) and i.count(":") >= 4)  # 부모 칸 제외
