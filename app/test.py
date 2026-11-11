@@ -7090,6 +7090,67 @@ def crawl_kameradoktorn():
     return results
 
 
+def crawl_goecker():
+    """Goecker (덴마크 코펜하겐·오르후스, Dynamicweb Swift, 2026-11-12 밤샘) - 중고 분류 '/brugt'를 제조사 필터 'Producent=Leica'로
+    받음 (robots.txt는 SortBy·PageSize·q 주소만 막음 — 쓰지 않음). 기본 쪽 크기 30, 라이카 20개쯤이라 한 화면.
+    이름 'LEICA LENS M 35 2,0 ASPH BLACK 11673 (1) USED' — 괄호 숫자가 매장 등급(Stand 1~4), DEMO도 같은 표기. 가격 DKK"""
+    import html as _html
+    import requests
+    from condition_grade import GOECKER_PREFIX
+    base = "https://www.goecker.dk"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Goecker 크롤링 시작")
+    resp = sess.get(f"{base}/brugt", params={"Producent": "Leica"}, timeout=30)
+    resp.raise_for_status()
+    arts = re.findall(r'<article class="[^"]*product-list-item.*?</article>', resp.text, re.S)
+    if len(arts) >= 30:
+        print(f"    ⚠️ Goecker: 한 화면이 가득 참({len(arts)}개) — 쪽 넘김 확인 필요")
+    results, seen = [], set()
+    for a in arts:
+        nm = re.search(r'itemprop="name">\s*([^<]+)', a)
+        href = re.search(r'<a href="(/[^"]+)" class="text-decoration-none', a)
+        if not nm or not href or href.group(1) in seen:
+            continue
+        seen.add(href.group(1))
+        raw = re.sub(r"\s+", " ", _html.unescape(nm.group(1))).strip()
+        if not re.match(r"(?i)lei(?:ca|tz)\b", raw):
+            continue
+        stand = re.search(r"\((\d)\)\s*(?:USED|DEMO)\b", raw, re.I)
+        pr = re.search(r'itemprop="price" content="([\d.]+)"', a)
+        img = re.search(r"(/Admin/Public/GetImage\.ashx\?width=640&(?:amp;)?image=[^'\"]+)", a)
+        stock = re.search(r'icon-stock[^>]*>([^<]+)', a)
+        name = re.sub(r"\s*\(\d\)\s*(?:USED|DEMO)\s*$", "", raw, flags=re.I)
+        name = re.sub(r"(?i)^LEICA\s+(?:LENS|BODY)\s+", "Leica ", name)
+        name = re.sub(r"(?i)^LEICA\s+", "Leica ", name)
+        name = re.sub(r"\b(\d{2,3}(?:-\d{2,3})?) (\d),(\d)(?:-(\d),(\d))?\b",
+                      lambda m: f"{m.group(1)}mm f/{m.group(2)}.{m.group(3)}" + (f"-{m.group(4)}.{m.group(5)}" if m.group(4) else ""), name)
+        name = re.sub(r"\b([A-Z]{2,})\b", lambda m: m.group(1) if m.group(1) in ("SL", "ASPH", "APO", "II", "TL", "CL") else m.group(1).title(), name)
+        name = re.sub(r"^Leica SL 16-35mm", "Leica Super-Vario-Elmar-SL 16-35mm", name)
+        if re.search(r"(?i)\(\d\)\s*DEMO\b", raw):
+            name += " (demo)"
+        price = f"DKK {float(pr.group(1)):,.0f}" if pr else "문의요망"
+        cat = detect_category(name, price)
+        results.append({
+            "site": "Goecker (덴마크)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": GOECKER_PREFIX + stand.group(1) if stand else "정보없음",
+            "가격": price,
+            "통화": "DKK",
+            "이미지": base + _html.unescape(img.group(1)).replace("width=640", "width=900").replace("&format=webp", "") if img else "",
+            "링크": base + href.group(1),
+            "품절": bool(stock) and "på lager" not in stock.group(1).lower(),
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Goecker 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12230,6 +12291,7 @@ def crawl_all():
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
         ("Kameradoktorn (스웨덴)", lambda: ce.wrap_full_run("Kameradoktorn (스웨덴)", crawl_kameradoktorn)),
+        ("Goecker (덴마크)", lambda: ce.wrap_full_run("Goecker (덴마크)", crawl_goecker)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),

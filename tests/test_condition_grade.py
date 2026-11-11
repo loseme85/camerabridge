@@ -663,6 +663,15 @@ def test_kameradoktorn_skick():
     assert grade_of(site, KAMERADOKTORN_PREFIX + "Nyskick")[0] == "S"
 
 
+def test_goecker_stand():
+    from condition_grade import grade_of, GOECKER_PREFIX
+    site = "Goecker (덴마크)"
+    assert grade_of(site, GOECKER_PREFIX + "1")[0] == "A"
+    assert grade_of(site, GOECKER_PREFIX + "2")[0] == "B"
+    assert grade_of(site, GOECKER_PREFIX + "3")[0] == "C"
+    assert grade_of(site, GOECKER_PREFIX + "4")[0] == "D"
+
+
 def test_fotoc_kategori():
     from condition_grade import grade_of, FOTOC_PREFIX
     site = "FOTO/C (덴마크)"
