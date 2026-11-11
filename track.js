@@ -1,14 +1,32 @@
-// 방문 기록 (모델 시세 페이지용): 어디서 왔는지·본 페이지·매장 링크 클릭을 /api/usage 로 (IP·쿠키 없음)
+// 방문 기록 (모델 시세 페이지용): 어디서 왔는지·본 페이지·매장 링크 클릭을 /api/usage 로 (IP 원문·쿠키 없음, 브라우저 무작위 식별값 포함)
 // 첫 화면(beta.html usageLog)과 같은 규칙: 같은 탭이면 sessionStorage 'cb_visit' 로 한 방문으로 묶음,
 // 바깥 사이트에서 다시 들어오거나 30분 넘게 지나면 새 방문. ?notrack=1 로 연 브라우저와 검색엔진 로봇은 기록 안 함.
 (function () {
+  var flag = new URLSearchParams(location.search).get('notrack');
   try {
-    var flag = new URLSearchParams(location.search).get('notrack');
-    if (flag === '1') localStorage.setItem('cb_notrack', '1');
+    if (flag === '1') { localStorage.removeItem('cb_browser'); localStorage.setItem('cb_notrack', '1'); }
     if (flag === '0') localStorage.removeItem('cb_notrack');
     if (localStorage.getItem('cb_notrack') === '1') return;
   } catch (error) {}
+  if (flag === '1') return;
   if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent || '')) return;
+
+  const off = false;
+  // 브라우저 재방문 식별: IP와 무관한 무작위 값, 생성 후 1년. track.js·beta.html 동기화.
+  const browserId = (() => {
+    try {
+      if (off) return null;
+      let saved = JSON.parse(localStorage.getItem('cb_browser') || 'null');
+      const now = Date.now(), year = 365 * 24 * 60 * 60 * 1000;
+      if (!saved || !/^[a-f0-9]{32}$/.test(saved.id) || !Number.isFinite(saved.expires) || saved.expires <= now || saved.expires > now + year) {
+        const bytes = crypto.getRandomValues(new Uint8Array(16));
+        saved = { id: Array.from(bytes, b => b.toString(16).padStart(2, '0')).join(''), expires: now + year };
+        localStorage.setItem('cb_browser', JSON.stringify(saved));
+      }
+      return saved.id;
+    } catch (error) { return null; }
+  })();
+  // 브라우저 재방문 식별 끝
 
   var visit = null;
   try { visit = JSON.parse(sessionStorage.getItem('cb_visit') || 'null'); } catch (error) {}
@@ -39,6 +57,7 @@
   setTimeout(trackScroll, 1500);
 
   function send() {
+    try { if (localStorage.getItem('cb_notrack') === '1') return; } catch (error) {}
     // 첫 번째는 보기만 해도, 그 뒤로는 새 클릭이 있거나 지난번보다 15초 넘게 더 머물렀을 때 (2026-11-08: 머문 시간이 처음 탭을 벗어난 순간으로 남던 것)
     if (sends >= 8 || (sends > 0 && !clicks.length && seconds() - sentAt < 15)) return;
     sends += 1;
@@ -46,7 +65,7 @@
     visit.part = (visit.part || 0) + 1;
     save();
     var body = JSON.stringify({
-      sid: visit.sid, part: visit.part, page: location.pathname, locale: document.documentElement.lang || '',
+      sid: visit.sid, vid: browserId, part: visit.part, page: location.pathname, locale: document.documentElement.lang || '',
       referrer: visit.referrer, landing: visit.landing, duration_s: seconds(), scroll: scrollMax, searches: [], clicks: clicks,
       mobile: window.matchMedia ? window.matchMedia('(max-width: 720px)').matches : false
     });

@@ -3,7 +3,7 @@
 저장 위치: Neon Postgres usage_events (DATABASE_URL 있을 때, pgstore.py) · 없으면 Blob usage/YYYY-MM-DD/HHMMSS-<세션>-<n>.json
 남기는 나라: Vercel이 붙여 주는 접속 나라 코드(x-vercel-ip-country, 예: KR)만. 남기지 않는 것: IP, 이메일, 쿠키. 세션 ID는 브라우저 탭마다 새로 만드는 무작위 값.
 보내는 곳: 첫 화면(beta.html)과 모델 시세 페이지(track.js). 같은 탭이면 한 방문(sid)으로 묶이고, 페이지마다 첫 묶음은 검색·클릭이 없어도 보냄(어디서 왔는지 남기려고).
-같은 사람 하루 한 번: IP를 그날 날짜·비밀 소금과 섞은 해시(vtag, 12자)만 남김. IP 자체는 저장 안 하고, 날이 바뀌면 값도 바뀌어 날끼리 이어 볼 수 없음.
+같은 사람 하루 한 번: IP를 그날 날짜·비밀 소금과 섞은 해시(vtag, 12자)만 남김. IP 자체는 저장 안 하고, 날이 바뀌면 값도 바뀌어 날끼리 이어 볼 수 없음. 새 기록은 브라우저 저장소의 무작위 vid로 날짜를 넘어 연결(생성 후 1년), 로그인 정보와 연결하지 않음.
 들어온 곳(referrer): 바깥 사이트의 도메인+경로(?·# 뒤는 버림, 예: www.reddit.com/r/Leica/comments/abc). 로봇(user-agent)은 기록 안 함.
 사장님 브라우저는 빼기: /owner/usage 를 열면 /api/usage 에만 가는 표시 쿠키(cb_skip_usage=1)가 생기고, 그 쿠키가 오면 기록하지 않음.
 Blob 무료 한도(쓰기 월 2,000회)를 아끼려고 화면이 방문당 최대 3번만 보낸다. 끄기: USAGE_LOG_DISABLED=1
@@ -23,6 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 KST = dt.timezone(dt.timedelta(hours=9))
+BROWSER_ID = re.compile(r"^[a-f0-9]{32}$")
 SID = re.compile(r"^[a-z0-9]{8,24}$")
 COUNTRY = re.compile(r"^[A-Z]{2}$")
 MAX_SEARCHES = 40
@@ -78,6 +79,7 @@ def clean(body: dict) -> dict | None:
         return None
     return {
         "sid": body["sid"],
+        "vid": body.get("vid") if isinstance(body.get("vid"), str) and BROWSER_ID.fullmatch(body["vid"]) else None,
         "part": _int(body.get("part")) or 1,
         "locale": _text(body.get("locale"), 12),
         "currency": _text(body.get("currency"), 8),

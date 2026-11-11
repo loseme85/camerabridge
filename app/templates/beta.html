@@ -2682,18 +2682,33 @@
       }
     }
 
-    // 사용 기록: 방문 한 번의 검색어·고른 모델·결과 수·판매처 클릭을 묶어 /api/usage 로 (IP·쿠키 없음)
+    // 사용 기록: 방문 한 번의 검색어·고른 모델·결과 수·판매처 클릭을 묶어 /api/usage 로 (IP 원문·쿠키 없음, 브라우저 무작위 식별값 포함)
     // 사장님 테스트는 빼기: 주소 끝에 ?notrack=1 로 한 번 열면 그 브라우저는 기록 안 함 (?notrack=0 으로 해제)
     const usageLog = (() => {
       const MAX_SENDS = 8;
-      let off = false;
+      const flag = new URLSearchParams(location.search).get('notrack');
+      let off = flag === '1';
       try{
-        const flag = new URLSearchParams(location.search).get('notrack');
-        if(flag === '1') localStorage.setItem('cb_notrack', '1');
+        if(flag === '1') { localStorage.removeItem('cb_browser'); localStorage.setItem('cb_notrack', '1'); }
         if(flag === '0') localStorage.removeItem('cb_notrack');
-        off = localStorage.getItem('cb_notrack') === '1';
+        off = off || localStorage.getItem('cb_notrack') === '1';
       }catch(error){}
       if(navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent || '')) off = true;
+      // 브라우저 재방문 식별: IP와 무관한 무작위 값, 생성 후 1년. track.js·beta.html 동기화.
+      const browserId = (() => {
+        try {
+          if (off) return null;
+          let saved = JSON.parse(localStorage.getItem('cb_browser') || 'null');
+          const now = Date.now(), year = 365 * 24 * 60 * 60 * 1000;
+          if (!saved || !/^[a-f0-9]{32}$/.test(saved.id) || !Number.isFinite(saved.expires) || saved.expires <= now || saved.expires > now + year) {
+            const bytes = crypto.getRandomValues(new Uint8Array(16));
+            saved = { id: Array.from(bytes, b => b.toString(16).padStart(2, '0')).join(''), expires: now + year };
+            localStorage.setItem('cb_browser', JSON.stringify(saved));
+          }
+          return saved.id;
+        } catch (error) { return null; }
+      })();
+      // 브라우저 재방문 식별 끝
       // 같은 탭에서 모델 페이지 → 첫 화면처럼 옮겨 다녀도 한 방문으로 묶음 (track.js 와 같은 규칙, sessionStorage 'cb_visit')
       // 새 방문: 탭에 기록이 없거나, 바깥 사이트에서 다시 들어왔거나, 30분 넘게 지났을 때
       let visit = null;
@@ -2723,6 +2738,7 @@
       window.addEventListener('scroll', trackScroll, { passive: true });
       setTimeout(trackScroll, 1500);
       function send(){
+        try { if (localStorage.getItem('cb_notrack') === '1') return; } catch (error) {}
         // 첫 번째는 둘러보기만 해도 보냄 (어디서 왔는지 남기려고), 그 뒤로는 새 검색·클릭이 있거나
         // 지난번보다 15초 넘게 더 머물렀을 때 (2026-11-08 사장님: 머문 시간이 1~4초 — 처음 탭을 벗어난 순간 시간만 남던 것)
         if(off || sends >= MAX_SENDS || (sends > 0 && !searches.length && !clicks.length && seconds() - sentAt < 15)) return;
@@ -2731,7 +2747,7 @@
         visit.part = (visit.part || 0) + 1;
         saveVisit();
         const body = JSON.stringify({
-          sid, part: visit.part, page: location.pathname, locale: uiState.locale, currency: uiState.currency, referrer, landing,
+          sid, vid: browserId, part: visit.part, page: location.pathname, locale: uiState.locale, currency: uiState.currency, referrer, landing,
           mobile: isNarrowScreen(), duration_s: seconds(), scroll: scrollMax, searches, clicks
         });
         searches = []; clicks = [];
