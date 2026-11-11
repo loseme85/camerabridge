@@ -82,22 +82,35 @@ def usage_since(start_day: str, end_day: str | None = None, limit: int = 5000) -
 
 
 def browser_history(browser_ids: list[str]) -> dict[str, dict]:
-    """표시할 브라우저의 보유 기록 전체(최근 365일). 화면 기간·5,000건 상한과 무관.
+    """최근 365일 전체 이력: 같은 브라우저의 기록 간격이 30분 미만이면 한 방문.
 
-    같은 방문의 여러 전송·재전송·페이지 이동은 sid 하나로 센다.
-    별도 누적 표를 만들지 않아 기존 기록 삭제 시 이 집계에서도 함께 빠진다.
+    탭 번호가 달라도 합치고, 같은 탭이라도 30분 이상 비면 새 방문으로 센다.
+    날짜 필터·5,000건 상한은 적용하지 않으며 원본 삭제가 집계에도 반영된다.
     """
     if not browser_ids:
         return {}
     ensure_schema()
     rows = sql(
-        "SELECT entry->>'vid' AS vid, COUNT(DISTINCT entry->>'sid') AS visits, "
-        "MIN(entry->>'created_at') AS first_seen, MAX(entry->>'created_at') AS last_seen "
-        "FROM usage_events WHERE entry->>'vid' = ANY($1::text[]) "
-        "AND day >= ((now() AT TIME ZONE 'Asia/Seoul')::date - 364) "
-        "GROUP BY entry->>'vid'", [sorted(set(browser_ids))])
-    return {row["vid"]: {"visits": int(row["visits"]), "first_seen": row["first_seen"],
-                         "last_seen": row["last_seen"]} for row in rows}
+        "WITH ordered AS ("
+        " SELECT id, entry->>'vid' AS vid, (entry->>'created_at')::timestamptz AS at,"
+        " LAG((entry->>'created_at')::timestamptz) OVER ("
+        " PARTITION BY entry->>'vid' ORDER BY (entry->>'created_at')::timestamptz, id) AS previous_at"
+        " FROM usage_events WHERE entry->>'vid' = ANY($1::text[])"
+        " AND day >= ((now() AT TIME ZONE 'Asia/Seoul')::date - 364)"
+        "), grouped AS ("
+        " SELECT *, SUM(CASE WHEN previous_at IS NULL OR at - previous_at >= INTERVAL '30 minutes'"
+        " THEN 1 ELSE 0 END) OVER (PARTITION BY vid ORDER BY at, id) AS visit_number FROM ordered"
+        ") SELECT vid, MIN(at) AS first_seen, MAX(at) AS last_seen"
+        " FROM grouped GROUP BY vid, visit_number ORDER BY vid, MIN(at)", [sorted(set(browser_ids))])
+    history = {}
+    for row in rows:
+        span = {"first_seen": row["first_seen"], "last_seen": row["last_seen"]}
+        record = history.setdefault(row["vid"], {"visits": 0, "first_seen": span["first_seen"],
+                                                 "last_seen": span["last_seen"], "sessions": []})
+        record["visits"] += 1
+        record["last_seen"] = span["last_seen"]
+        record["sessions"].append(span)
+    return history
 
 
 def add_feedback(entry: dict, tag: str) -> None:

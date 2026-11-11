@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import argparse
+import bisect
 import collections
 import datetime as dt
 import json
@@ -42,14 +43,58 @@ def fetch(days: list[str]) -> list[dict]:
     return entries
 
 
+VISIT_GAP_SECONDS = 30 * 60
+
+
+def _timestamp(value) -> float | None:
+    try:
+        when = dt.datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        return (when if when.tzinfo else when.replace(tzinfo=KST)).timestamp()
+    except (TypeError, ValueError):
+        return None
+
+
+def group_visits(entries: list[dict], history: dict | None = None) -> list[dict]:
+    """브라우저의 기록 간격이 30분 미만이면 탭·페이지·sid와 무관하게 한 방문.
+
+    전체 이력의 방문 구간이 있으면 그것을 써서 날짜 필터·조회 상한에서 방문이
+    잘려도 같은 방문으로 묶는다. 원본 기록은 고치거나 지우지 않는다.
+    """
+    result = [dict(e) for e in entries]
+    browsers = collections.defaultdict(list)
+    for e in result:
+        if not e.get("vid") or (e.get("_visit_key") and history is None):
+            continue
+        when = _timestamp(e.get("created_at"))
+        if when is not None:
+            browsers[e["vid"]].append((when, e))
+    for vid, events in browsers.items():
+        spans = sorted((_timestamp(s["first_seen"]), _timestamp(s["last_seen"]))
+                       for s in ((history or {}).get(vid, {}).get("sessions") or []))
+        spans = [(a, b) for a, b in spans if a is not None and b is not None]
+        starts = [a for a, _ in spans]
+        previous = anchor = None
+        for when, e in sorted(events, key=lambda x: x[0]):
+            if previous is None or when - previous >= VISIT_GAP_SECONDS:
+                anchor = when
+            i = bisect.bisect_right(starts, when) - 1
+            first = starts[i] if i >= 0 and when <= spans[i][1] else anchor
+            e["_visit_key"] = f"browser:{vid}:{first:.6f}"
+            previous = when
+    return result
+
+
 def visitor_key(e: dict) -> str:
-    """새 기록은 브라우저·방문(sid)별. 식별값 없는 기존 기록은 IP·날짜별 규칙 유지."""
+    """group_visits로 묶은 방문. 브라우저 식별 전의 기록은 기존 일별 IP 규칙."""
+    if e.get("_visit_key"):
+        return e["_visit_key"]
     if e.get("vid"):
         return f"browser:{e['vid']}:{e['sid']}"
     return f"{str(e.get('created_at', ''))[:10]}:{e['vtag']}" if e.get("vtag") else e["sid"]
 
 
 def summarize(entries: list[dict]) -> dict:
+    entries = group_visits(entries)
     sessions = {visitor_key(e) for e in entries}
     searches = [s for e in entries for s in e.get("searches", [])]
     clicks = [c for e in entries for c in e.get("clicks", [])]
