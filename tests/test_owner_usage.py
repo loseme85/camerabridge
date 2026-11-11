@@ -119,7 +119,7 @@ def test_same_ip_same_day_counts_once(monkeypatch):
     assert len(ou.visits([a, b])) == 1
 
 
-def test_visit_time_shown_in_local_time(monkeypatch):
+def test_visit_time_shown_in_korean_time(monkeypatch):
     import sys
     import types
     import json
@@ -129,9 +129,36 @@ def test_visit_time_shown_in_local_time(monkeypatch):
     usage.handle({"sid": "tzt3st1234", "page": "/"}, "US", "", "Mozilla/5.0", "1.2.3.4", "America/New_York")
     usage.handle({"sid": "tzt3st5678", "page": "/"}, "US", "", "Mozilla/5.0", "1.2.3.5", "not a zone; drop")
     assert json.loads(saved[0])["tz"] == "America/New_York" and "tz" not in json.loads(saved[1])
-    assert ou._local_time("2026-11-07T13:44:00+09:00", "America/New_York", "US")[0] == "11-06 23:44"
-    assert ou._local_time("2026-11-07T13:44:00+09:00", None, "GB")[0] == "11-07 04:44"
-    assert "모름" in ou._local_time("2026-11-07T13:44:00+09:00", None, "US")[1]
+    assert ou._kst_time("2026-11-07T04:44:00Z") == "11-07 13:44:00"
+    assert ou._kst_time("2026-11-06T23:44:00-05:00") == "11-07 13:44:00"
+    assert ou._kst_time("2026-11-07T13:44:00") == "11-07 13:44:00"
     page = ou.render([{"sid": "tzt3st1234", "part": 1, "created_at": "2026-11-07T13:44:00+09:00", "tz": "America/New_York",
                        "country": "US", "page": "/", "searches": [], "clicks": []}], [], 7, False)
-    assert "11-06 23:44" in page and "New York" in page
+    assert "11-07 13:44:00" in page and "한국 시간 기준" in page
+    assert "11-06 23:44" not in page and "New York" not in page
+
+
+def test_visits_sort_by_displayed_korean_start_time_not_last_activity():
+    from api import owner_usage as ou
+    entries = [
+        {"sid": "early", "created_at": "2026-11-11T09:00:00+09:00", "page": "/early"},
+        {"sid": "early", "created_at": "2026-11-11T12:00:00+09:00", "page": "/early-later"},
+        {"sid": "later", "created_at": "2026-11-11T10:00:00+09:00", "page": "/later"},
+    ]
+    assert [v["start"] for v in ou.visits(entries)] == ["2026-11-11T10:00:00+09:00", "2026-11-11T09:00:00+09:00"]
+    page = ou.render(entries, [], 1, False)
+    assert page.index("11-11 10:00:00") < page.index("11-11 09:00:00")
+
+
+def test_korean_sort_and_day_boundary_with_mixed_timezones():
+    from api import owner_usage as ou
+    entries = [
+        {"sid": "kst", "created_at": "2026-11-11T23:30:00+09:00", "page": "/kst"},
+        {"sid": "utc", "created_at": "2026-11-11T15:00:00Z", "page": "/utc", "country": "US", "tz": "America/New_York"},
+        {"sid": "west", "created_at": "2026-11-11T07:00:00-08:00", "page": "/west"},
+    ]
+    visits = ou.visits(entries)
+    assert [ou._kst_time(v["start"]) for v in visits] == ["11-12 00:00:00", "11-12 00:00:00", "11-11 23:30:00"]
+    page = ou.render(entries, [], 1, False)
+    assert page.index("11-12 00:00:00") < page.index("11-11 23:30:00")
+    assert "11-11 15:00:00" not in page

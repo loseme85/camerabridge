@@ -19,7 +19,6 @@ from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
-from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scripts.usage_report import group_visits, summarize, visitor_key  # noqa: E402
@@ -88,30 +87,18 @@ COUNTRY_NAMES = {"KR": "한국", "JP": "일본", "US": "미국", "GB": "영국",
                  "CH": "스위스", "AT": "오스트리아", "ES": "스페인", "DK": "덴마크", "SE": "스웨덴", "BE": "벨기에"}
 
 
-# 2026-11-07 전 기록(시간대 없음)은 나라로 짐작: 시간대가 하나뿐인 나라만 (미국·캐나다·호주·브라질 등은 몰라서 한국 시각)
-COUNTRY_TZ = {"KR": "Asia/Seoul", "JP": "Asia/Tokyo", "GB": "Europe/London", "IE": "Europe/Dublin", "DE": "Europe/Berlin",
-              "FR": "Europe/Paris", "IT": "Europe/Rome", "NL": "Europe/Amsterdam", "BE": "Europe/Brussels", "ES": "Europe/Madrid",
-              "PT": "Europe/Lisbon", "GR": "Europe/Athens", "CH": "Europe/Zurich", "AT": "Europe/Vienna", "DK": "Europe/Copenhagen",
-              "SE": "Europe/Stockholm", "FI": "Europe/Helsinki", "PL": "Europe/Warsaw", "CZ": "Europe/Prague", "TW": "Asia/Taipei",
-              "HK": "Asia/Hong_Kong", "SG": "Asia/Singapore", "CN": "Asia/Shanghai", "TH": "Asia/Bangkok", "MY": "Asia/Kuala_Lumpur"}
-
-
-def _local_time(created_at: str, tz: str | None, country: str | None, fmt: str = "%m-%d %H:%M") -> tuple[str, str]:
-    """(현지 시각 'MM-DD HH:MM', 설명). 시간대를 모르면 한국 시각 그대로."""
+def _time_key(value: str) -> dt.datetime:
+    """시간대가 섞여 있어도 실제 시각으로 비교. 시간대 없는 예전 기록은 한국 기준."""
     try:
-        when = dt.datetime.fromisoformat(created_at)
+        when = dt.datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        return (when if when.tzinfo else when.replace(tzinfo=KST)).astimezone(KST)
     except (TypeError, ValueError):
-        return str(created_at or "")[5:16].replace("T", " "), ""
-    name = tz or COUNTRY_TZ.get(country or "")
-    try:
-        zone = ZoneInfo(name) if name else None
-    except Exception:  # noqa: BLE001
-        zone = None
-    if not zone:
-        return when.astimezone(KST).strftime(fmt), "한국 시각 (현지 시간대 모름)"
-    local = when.astimezone(zone)
-    city = name.split("/")[-1].replace("_", " ")
-    return local.strftime(fmt), f"{city} · 한국 {when.astimezone(KST).strftime('%m-%d %H:%M')}"
+        return dt.datetime.min.replace(tzinfo=KST)
+
+
+def _kst_time(value: str, fmt: str = "%m-%d %H:%M:%S") -> str:
+    when = _time_key(value)
+    return when.strftime(fmt) if when.year > 1 else "시각 확인 불가"
 
 
 def _country_name(code: str | None) -> str:
@@ -148,12 +135,12 @@ def visits(entries: list[dict]) -> list[dict]:
     """방문별 최신순. 브라우저별 30분 간격, 예전 기록은 IP·날짜별."""
     entries = group_visits(entries)
     grouped: dict[str, dict] = {}
-    for e in sorted(entries, key=lambda e: (visitor_key(e), e.get("created_at", ""), e.get("part", 1))):
+    for e in sorted(entries, key=lambda e: (visitor_key(e), _time_key(e.get("created_at", "")), e.get("part", 1))):
         v = grouped.setdefault(visitor_key(e), {"vid": e.get("vid"), "start": e.get("created_at", ""), "end": e.get("created_at", ""), "referrer": e.get("referrer"), "landing": e.get("landing"),
                                           "locale": e.get("locale"), "currency": e.get("currency"), "mobile": e.get("mobile"), "country": e.get("country"), "tz": e.get("tz"),
                                           "duration_s": 0, "scroll": 0, "steps": []})
-        v["start"] = min(v["start"], e.get("created_at", "")) or v["start"]
-        v["end"] = max(v["end"], e.get("created_at", ""))
+        v["start"] = min(v["start"], e.get("created_at", ""), key=_time_key) or v["start"]
+        v["end"] = max(v["end"], e.get("created_at", ""), key=_time_key)
         v["duration_s"] = max(v["duration_s"], e.get("duration_s") or 0)
         v["scroll"] = max(v.get("scroll") or 0, e.get("scroll") or 0)
         v["country"] = v["country"] or e.get("country")
@@ -164,7 +151,7 @@ def visits(entries: list[dict]) -> list[dict]:
         v["steps"] += page + [("검색", s) for s in e.get("searches", [])] + [("클릭", c) for c in e.get("clicks", [])]
     for v in grouped.values():
         v["steps"].sort(key=lambda step: -1 if step[1].get("s") is None else step[1]["s"])
-    return sorted(grouped.values(), key=lambda v: v["end"], reverse=True)
+    return sorted(grouped.values(), key=lambda v: _time_key(v["start"]), reverse=True)
 
 
 def _esc(value) -> str:
@@ -256,6 +243,8 @@ def _prior_visit_badge(v: dict, history: dict[str, dict] | None) -> str:
 
 def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date: str | None = None,
            history: dict[str, dict] | None = None) -> str:
+    entries = [dict(e, created_at=_time_key(e.get("created_at", "")).isoformat())
+               if _time_key(e.get("created_at", "")).year > 1 else dict(e) for e in entries]
     entries = group_visits(entries, history)
     r = summarize(entries)
     firsts = {visitor_key(e): e for e in sorted(entries, key=lambda e: (e.get("created_at", ""), e.get("part", 1)), reverse=True)}.values()
@@ -295,14 +284,14 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
                 steps.append(f"<span class='step{' typed' if via in ('typed', 'pick') else ''}'>{label} <small>{tail}</small></span>")
             else:
                 steps.append(f"<span class='step click'>↗ {_esc(s.get('host'))}</span>")
-        when, when_note = _local_time(v["start"], v["tz"], v["country"], "%m-%d %H:%M:%S")
+        when = _kst_time(v["start"])
         prior = _prior_visit_badge(v, history)
         device = "📱" if v["mobile"] else "💻"
-        rows.append(f"<tr><td class=nowrap>{_esc(when)}<br>{prior}{f"<br><small>{_esc(when_note)}</small>" if when_note else ''}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
+        rows.append(f"<tr><td class=nowrap>{_esc(when)}<br>{prior}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
                     f"<td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초{f"<br><span class=muted>{_esc(v['scroll'])}% 내려 봄</span>" if v.get('scroll') else ''}</td><td>{''.join(steps)}</td></tr>")
     visit_table = "".join(rows) or "<tr><td colspan=5 class=muted>이 기간에 방문이 없습니다</td></tr>"
 
-    fb_rows = "".join(f"<tr><td class=nowrap>{_esc(str(f.get('created_at', ''))[5:16].replace('T', ' '))}</td><td>{_esc(f.get('locale') or '-')}</td><td>{_esc(f.get('message'))}</td></tr>" for f in feedback) \
+    fb_rows = "".join(f"<tr><td class=nowrap>{_esc(_kst_time(f.get('created_at', ''), "%m-%d %H:%M"))}</td><td>{_esc(f.get('locale') or '-')}</td><td>{_esc(f.get('message'))}</td></tr>" for f in feedback) \
         or "<tr><td colspan=3 class=muted>아직 없음</td></tr>"
 
     return f"""<!doctype html><html lang=ko><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
@@ -326,7 +315,7 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 .note{{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:13px}}a{{color:var(--accent)}}
 @media (max-width:760px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}td{{font-size:13px}}}}
 </style></head><body><main>
-<header><div><h1>방문 현황{f' · {_esc(date)}' if date else ''}</h1><span class=muted>{now} 기준</span></div><nav class=tabs>{tabs}</nav></header>
+<header><div><h1>방문 현황{f' · {_esc(date)}' if date else ''}</h1><span class=muted>{now} 한국 시간 기준</span></div><nav class=tabs>{tabs}</nav></header>
 <div class=kpis>
 <div class=kpi><b>{r['visits']}</b><span>방문</span></div>
 <div class=kpi><b>{r['visits_with_activity']}</b><span>검색·클릭한 방문</span></div>
@@ -348,7 +337,7 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 {_table('판매 중 0건 검색어', r['no_active_queries'][:10])}
 <section class='card wide'><h2>최근 방문</h2>
 <p class=muted>각 방문 아래에 그전에 방문한 횟수를 표시합니다. 기록된 최근 1년 · 같은 브라우저 기준입니다.</p>
-<table class=visit-table><tr><td class=muted>방문 시각 · 이전 방문</td><td class=muted>어디서 · 처음 들어온 주소</td><td class=muted>나라·기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
+<table class=visit-table><tr><td class=muted>방문 시각 (한국) · 이전 방문</td><td class=muted>어디서 · 처음 들어온 주소</td><td class=muted>나라·기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
 <section class='card wide'><h2>최근 의견 (💬 의견 보내기)</h2><table>{fb_rows}</table></section>
 </div>
 <p class=note>2026-11-07 전 기록은 검색·클릭한 방문만 남아 있습니다. 집계 방식이 다른 <a href="{ANALYTICS_URL}" target=_blank rel=noopener>Vercel Analytics</a> 통계와 숫자가 다를 수 있습니다.
