@@ -18,17 +18,19 @@ UPDATED = "2026-11-07"
 PRIVACY_UPDATED = "2026-11-11"
 
 # 통신판매업 신고번호·전화는 사장님이 정하면 채운다 (비어 있으면 화면에 안 나옴)
+# 2026-11-12 사장님: 스미싱 문자·전화가 와서 꼭 올려야 하는 게 아니면 숨김 — 대표자 이름·사업자등록번호는 비우고(화면에 안 나옴),
+# 주소는 도시까지만. 이 저장소는 공개라 여기에 실제 값을 다시 적지 않는다.
 OPERATOR = {
     # 카메라브릿지를 운영하는 회사 이름 (2026-10-29 이름만 정함, 아직 사업자 등록 전 → 법적 운영자는 아래 사업자)
     "brand": "thehingemeta",
     "name": {"ko": "브로콜리스튜디오", "en": "Broccoli Studio", "ja": "Broccoli Studio（ブロッコリースタジオ）"},
-    "rep": {"ko": "박창대", "en": "Changdae Park", "ja": "パク・チャンデ（Changdae Park）"},
-    "biz_no": "512-22-00825",
+    "rep": {"ko": "", "en": "", "ja": ""},
+    "biz_no": "",
     "mail_order_no": "",
     "phone": "",
-    "address": {"ko": "서울시 노원구 상계동 450 210호",
-                "en": "Room 210, 450 Sanggye-dong, Nowon-gu, Seoul, Republic of Korea",
-                "ja": "大韓民国 ソウル特別市 蘆原区 上渓洞 450 210号"},
+    "address": {"ko": "대한민국 서울특별시",
+                "en": "Seoul, Republic of Korea",
+                "ja": "大韓民国 ソウル特別市"},
     "email": "thehingemeta@gmail.com",
 }
 
@@ -154,6 +156,7 @@ def about_body(lang: str) -> tuple[str, str]:
             pairs.insert(4, ("통신판매업 신고번호", o["mail_order_no"]))
         if o["phone"]:
             pairs.append(("전화", o["phone"]))
+        pairs = [(k, v) for k, v in pairs if v]
         body = (_rows(pairs) + WHY[lang]
                 + "<h2>서비스 성격</h2><p>카메라브릿지는 여러 나라 카메라 매장이 공개한 라이카 중고 매물과 가격을 모아 보여 주는 검색 서비스입니다. "
                   "물건을 직접 팔거나 거래를 중개하지 않으며, 구매·결제·배송·반품은 각 매장과 직접 이루어집니다.</p>"
@@ -172,6 +175,7 @@ def about_body(lang: str) -> tuple[str, str]:
             pairs.insert(4, ("通信販売業申告番号（韓国）", o["mail_order_no"]))
         if o["phone"]:
             pairs.append(("電話", o["phone"]))
+        pairs = [(k, v) for k, v in pairs if v]
         body = (_rows(pairs) + WHY[lang]
                 + "<h2>サービスについて</h2><p>Camera Bridge は、各国のカメラ店が公開しているライカ中古在庫と価格をまとめて表示する検索サービスです。"
                   "商品の販売や取引の仲介は行わず、購入・決済・配送・返品は各店舗と直接行っていただきます。</p>"
@@ -189,6 +193,7 @@ def about_body(lang: str) -> tuple[str, str]:
         pairs.insert(4, ("Mail-order business reg. no. (Korea)", o["mail_order_no"]))
     if o["phone"]:
         pairs.append(("Phone", o["phone"]))
+    pairs = [(k, v) for k, v in pairs if v]
     body = (_rows(pairs) + WHY[lang]
             + "<h2>What Camera Bridge is</h2><p>Camera Bridge is a search service that collects used Leica listings and prices published by camera shops in several countries. "
               "We do not sell items or broker transactions; purchase, payment, shipping and returns are always between you and the shop.</p>"
@@ -234,7 +239,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                   "일반 이용자에게는 쿠키를 쓰지 않으며, 고른 언어·통화·배송 나라를 기억하려고 브라우저 저장소(localStorage)를 씁니다. 브라우저 설정에서 지울 수 있습니다. 재방문 집계를 위한 무작위 식별값(cb_browser)도 localStorage에 생성 후 최대 1년 동안 저장합니다. 브라우저 데이터를 지우거나 다른 브라우저·기기를 쓰면 별도로 집계됩니다. <a href='/?notrack=1'>방문 기록 끄기</a>를 누르면 이 브라우저의 기록을 중단하고 식별값을 지웁니다. <a href='/?notrack=0'>다시 켜기</a>도 가능합니다.</p>"
                 + "<h2>7. 안전 조치</h2><p>모든 연결은 HTTPS로 암호화하고, 저장 정보는 비공개 저장소에 두며 운영자만 볼 수 있습니다. 비밀번호는 해시값으로만 저장합니다.</p>"
                 + "<h2>8. 만 14세 미만</h2><p>카메라브릿지는 만 14세 미만 아동을 대상으로 하지 않으며, 알면서 아동의 정보를 받지 않습니다.</p>"
-                + "<h2>9. 개인정보 보호책임자</h2>" + _rows([("책임자", f"{o['rep']['ko']} (대표)"), ("연락처", MAIL)])
+                + "<h2>9. 개인정보 보호책임자</h2>" + _rows([("책임자", f"{o['rep']['ko']} (대표)" if o["rep"]["ko"] else "카메라브릿지 운영자"), ("연락처", MAIL)])
                 + "<p>개인정보 침해 신고·상담은 개인정보침해신고센터(privacy.kisa.or.kr, 국번 없이 118), 개인정보분쟁조정위원회(kopico.go.kr, 1833-6972)에도 하실 수 있습니다.</p>"
                 + f"<h2>10. 바뀔 때</h2><p>이 방침이 바뀌면 이 페이지에 알립니다. 시행일: {PRIVACY_UPDATED}</p>")
         return "개인정보처리방침", body
@@ -267,7 +272,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + "<h2>6. Cookie とブラウザ保存領域</h2><p>店舗アカウントでログインする場合はログイン維持用 Cookie（cb_dealer）、掲示板に Google でログインする場合はログイン維持用 Cookie（cb_member、90日）を使います。"
                   "一般の利用者には Cookie を使わず、選んだ言語・通貨・配送先を覚えるためにブラウザの保存領域（localStorage）を使います。再訪問の集計用のランダムな識別値（cb_browser）も作成から最大1年間保存します。保存データの削除・別のブラウザや端末では別に集計されます。<a href='/?notrack=1'>利用記録を停止</a>すると識別値を削除し、このブラウザの記録を止めます。<a href='/?notrack=0'>再開</a>もできます。</p>"
                 + "<h2>7. 安全対策</h2><p>通信はすべて HTTPS で暗号化し、保存情報は非公開の保存先で運営者のみが閲覧します。</p>"
-                + "<h2>8. 個人情報保護責任者</h2>" + _rows([("責任者", f"{o['rep']['ja']}（代表）"), ("連絡先", MAIL)])
+                + "<h2>8. 個人情報保護責任者</h2>" + _rows([("責任者", f"{o['rep']['ja']}（代表）" if o["rep"]["ja"] else "Camera Bridge 運営者"), ("連絡先", MAIL)])
                 + f"<h2>9. 改定</h2><p>改定する場合はこのページでお知らせします。施行日：{PRIVACY_UPDATED}</p>")
         return "プライバシーポリシー", body
     body = (f"<p>{o['name']['en']} (\"we\") operates Camera Bridge (camerabridge.io). Camera Bridge works without an account, and we process only the minimal information below. "
@@ -300,7 +305,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
               "Regular visitors get no cookies. We use your browser's local storage to remember the language, currency and shipping country you chose; you can clear it in your browser settings. We also store a random browser identifier (cb_browser) for return-visit statistics for up to one year from creation. Clearing storage or using another browser or device starts a separate history. <a href='/?notrack=1'>Turn off usage logging</a> to delete this identifier and stop logging this browser, or <a href='/?notrack=0'>turn it back on</a>.</p>"
             + "<h2>7. Security</h2><p>All connections use HTTPS. Stored data is kept in private storage that only the operator can access, and passwords are stored only as hashes.</p>"
             + "<h2>8. Children</h2><p>Camera Bridge is not directed to children under 14 (under 16 in the EU), and we do not knowingly collect their information.</p>"
-            + "<h2>9. Controller and contact</h2>" + _rows([("Controller", f"{o['name']['en']}, {o['address']['en']}"), ("Privacy contact", f"{o['rep']['en']} — {MAIL}")])
+            + "<h2>9. Controller and contact</h2>" + _rows([("Controller", f"{o['name']['en']}, {o['address']['en']}"), ("Privacy contact", f"{o['rep']['en'] or 'Camera Bridge operator'} — {MAIL}")])
             + f"<h2>10. Changes</h2><p>We will post any changes on this page. Effective: {PRIVACY_UPDATED}</p>")
     return "Privacy policy", body
 
@@ -354,15 +359,18 @@ def terms_body(lang: str) -> tuple[str, str]:
 
 def impressum_body() -> str:
     o = OPERATOR
-    de = _rows([("Anbieter", f"{o['name']['en']} (브로콜리스튜디오), Inhaber: {o['rep']['en']} — Camera Bridge by {o['brand']}"),
+    owner = f", Inhaber: {o['rep']['en']}" if o["rep"]["en"] else ""
+    de = _rows([(k, v) for k, v in [
+                ("Anbieter", f"{o['name']['en']} (브로콜리스튜디오){owner} — Camera Bridge by {o['brand']}"),
                 ("Anschrift", o["address"]["en"]),
                 ("Kontakt", f"E-Mail: {MAIL} · Kontaktformular: „Feedback senden“ auf der Startseite"),
-                ("Unternehmensregister", f"Koreanische Unternehmensnummer (사업자등록번호) {o['biz_no']}"),
+                ("Unternehmensregister", f"Koreanische Unternehmensnummer (사업자등록번호) {o['biz_no']}" if o["biz_no"] else ""),
                 ("Umsatzsteuer-ID", "Nicht vorhanden (Unternehmen mit Sitz in der Republik Korea)"),
-                ("Verantwortlich für den Inhalt (§ 18 Abs. 2 MStV)", f"{o['rep']['en']}, Anschrift wie oben")])
-    en = _rows([("Provider", f"{o['name']['en']}, owner {o['rep']['en']}"), ("Address", o["address"]["en"]),
+                ("Verantwortlich für den Inhalt (§ 18 Abs. 2 MStV)", f"{o['rep']['en']}, Anschrift wie oben" if o["rep"]["en"] else "")] if v])
+    en = _rows([(k, v) for k, v in [
+                ("Provider", f"{o['name']['en']}" + (f", owner {o['rep']['en']}" if o["rep"]["en"] else "")), ("Address", o["address"]["en"]),
                 ("Contact", f"Email {MAIL} · contact form: \"Send feedback\" on the home page"),
-                ("Business registration (Korea)", o["biz_no"]), ("Responsible for content", o["rep"]["en"])])
+                ("Business registration (Korea)", o["biz_no"]), ("Responsible for content", o["rep"]["en"])] if v])
     return ("<p>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p>" + de
             + "<h2>Verbraucherstreitbeilegung</h2><p>Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>"
             + "<h2>Haftung für Links</h2><p>Camera Bridge verlinkt auf Angebote externer Händler. Für deren Inhalte, Preise und Angebote sind ausschließlich die jeweiligen Händler verantwortlich.</p>"
