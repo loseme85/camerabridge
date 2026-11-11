@@ -7558,6 +7558,96 @@ def crawl_clickpic():
     return results
 
 
+def _ilcontatto_name(raw):
+    """Il Contatto 제목 다듬기: 'OBIETTIVO LEICA SUMMICRON-M 90:2 E55 CROMATO PRE ASPH “11137”' → 'Leica Summicron-M 90mm f/2 E55 …'"""
+    n = re.sub(r"[“”″\"]", "", raw)
+    n = re.sub(r"(?i)^(?:obiettivo|fotocamera)\s+", "", n)
+    acc = {"mirino": "finder", "paraluce": "lens hood", "filtro": "filter", "borsa pronto": "ever-ready case", "borsa": "case",
+           "cavo scatto flessibile": "release cable", "anello": "ring", "esposimetro": "light meter", "cavalletto": "tripod",
+           "tubo di estensione": "extension tube", "tubo di prolunga": "extension tube", "rocchetto": "film spool", "impugnatura": "grip",
+           "autoscatto": "self-timer", "proiettore": "projector", "testa panoramica": "panorama head", "lente addizionale": "close-up lens",
+           "lente messa a fuoco ravvicinata": "close-up lens", "apparato riproduzione": "copy stand", "motor winder": "motor winder"}
+    lead = re.match(r"(?i)^(" + "|".join(sorted(map(re.escape, acc), key=len, reverse=True)) + r")\b\s*(?:x\s+)?(.*)$", n)
+    if lead:  # 액세서리는 영어 낱말을 남겨야 액세서리로 분류됨 ('FILTRO GIALLO LEICA' → 'Leica … filter')
+        n = lead.group(2) + " " + acc[lead.group(1).lower()]
+    for it, en in acc.items():
+        n = re.sub(r"(?i)\b" + re.escape(it) + r"\b", en, n)
+    n = re.sub(r"(?i)\b(\d{1,2}(?:[.,]\d)?)\s*cm\s*:\s*(\d(?:[.,]\d)?)", lambda m: f"{m.group(1).replace(',', '.')}cm f/{m.group(2).replace(',', '.')}", n)
+    n = re.sub(r"\b(\d{2,3}(?:[-/]\d{2,3})?)\s*:\s*(\d(?:[.,]\d)?(?:-\d(?:[.,]\d)?)?)\b",
+               lambda m: f"{m.group(1).replace('/', '-')}mm f/{m.group(2).replace(',', '.')}", n)
+    n = re.sub(r"(?i)\b39\s*[x×]\s*1\b", "(L39)", n)
+    n = re.sub(r"(?i)\bOB\.?\s+", "+ ", n)
+    n = re.sub(r"(?i)\s+\+\s+obiettivo\s+", " + ", n)
+    if re.search(r"(?i)brevi distanze|\b11918\b", n):
+        n = re.sub(r"(?i)\s*\+?\s*occhialini\s+brevi distanze", "", n)
+        n = re.sub(r"(?i)\bsummicron\b", "Summicron Dual Range (DR)", n, count=1)  # 11918 = 근접 안경 달린 DR Summicron
+    n = re.sub(r"(?i)\bocchialini\b", "goggles", n)
+    n = re.sub(r"(?i)\bimballo\b", "boxed", n)
+    n = re.sub(r"\s+", " ", n).strip(" .")
+    words = []
+    for w in n.split(" "):
+        words.append(w.capitalize() if w.isupper() and len(w) > 3 and not re.search(r"\d", w) and w not in ("ASPH", "ASPH.", "LEITZ") else w)
+    n = " ".join(words)
+    n = re.sub(r"(?i)^leica\b", "Leica", n)
+    n = re.sub(r"(?i)\bleitz\b", "Leitz", n)
+    return n
+
+
+def crawl_ilcontatto():
+    """Il Contatto Store (이탈리아, WooCommerce, 2026-11-12 밤샘 — Leica Lens List 새 매장) - Store API 'leica' 검색(160개쯤, 2쪽,
+    robots.txt는 /wp-admin/만 막음). 거의 전부 빈티지 중고(M3·M6·III·Summicron 등) — 앞머리 일반 낱말(OBIETTIVO·BORSA…)을 떼고
+    브랜드가 Leica·Leitz로 시작하는 것만 (파나소닉 'Leica DG'·7Artisans·Zeiss 'Leica M용'·복제품·책 뺌). 등급 표기 없음. 가격 EUR"""
+    import html as _html
+    import requests
+    api = "https://www.ilcontattostore.it/wp-json/wc/store/v1/products"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Il Contatto 크롤링 시작")
+    results, seen = [], set()
+    for page in range(1, 20):
+        resp = sess.get(api, params={"search": "leica", "per_page": 100, "page": page}, timeout=40)
+        resp.raise_for_status()
+        rows = resp.json()
+        for p in rows:
+            if p.get("id") in seen:
+                continue
+            seen.add(p.get("id"))
+            raw = re.sub(r"\s+", " ", _html.unescape(p.get("name") or "")).strip()
+            name = _ilcontatto_name(raw)
+            if not re.match(r"(?i)(?:\S+\s+){0,3}(?:ernst\s+)?lei(?:ca|tz|caflex|cameter)\b", raw):
+                continue  # 앞 세 낱말 안에 Leica·Leitz ('FILTRO GIALLO LEICA M39'·'OBIETTIVO LEICA …')
+            if re.search(r"(?i)panasonic|lumix|\bDG\b|7\s?artisan|zeiss|fotodiox|contax|sonne|copia|libro|\bISO STANDARD|disponibili anelli|\b(?:attacco|su|innesto)\s+leica", raw):
+                continue
+            pr = p.get("prices") or {}
+            unit = 10 ** int(pr.get("currency_minor_unit", 2))
+            price = f"€{int(pr['price']) / unit:,.0f}" if pr.get("price") else "문의요망"
+            imgs = p.get("images") or []
+            cat = detect_category(name, price)
+            if cat == "Body" and " + " in name and not re.search(r"(?i)\bset\b", name):
+                name += " set"
+            results.append({
+                "site": "Il Contatto Store (이탈리아)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": imgs[0].get("src", "") if imgs else "",
+                "링크": p.get("permalink", ""),
+                "품절": not p.get("is_in_stock", True),
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if len(rows) < 100:
+            break
+        time.sleep(1.5)
+    print(f"  ✅ Il Contatto 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12705,6 +12795,7 @@ def crawl_all():
         ("Foto Erhardt (독일)", lambda: ce.wrap_full_run("Foto Erhardt (독일)", crawl_fotoerhardt)),
         ("Kamera Klinikum (독일)", lambda: ce.wrap_full_run("Kamera Klinikum (독일)", crawl_kameraklinikum)),
         ("Photohaus Clickpic (독일)", lambda: ce.wrap_full_run("Photohaus Clickpic (독일)", crawl_clickpic)),
+        ("Il Contatto Store (이탈리아)", lambda: ce.wrap_full_run("Il Contatto Store (이탈리아)", crawl_ilcontatto)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
