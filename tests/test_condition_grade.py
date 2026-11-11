@@ -690,6 +690,13 @@ def test_fotoerhardt_zustand():
     assert grade_of(site, FOTOERHARDT_PREFIX + "C")[0] == "C"
 
 
+def test_kameraklinikum_title_words():
+    from condition_grade import grade_of, KAMERAKLINIKUM_PREFIX
+    site = "Kamera Klinikum (독일)"
+    assert grade_of(site, KAMERAKLINIKUM_PREFIX + "stark gebraucht")[0] == "D"
+    assert grade_of(site, KAMERAKLINIKUM_PREFIX + "defekt")[0] == "X"
+
+
 def test_fotoc_kategori():
     from condition_grade import grade_of, FOTOC_PREFIX
     site = "FOTO/C (덴마크)"

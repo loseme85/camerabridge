@@ -100,6 +100,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _nebo(cond[len(NEBO_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(FOTOERHARDT_PREFIX):
         return _FOTOERHARDT.get(cond[len(FOTOERHARDT_PREFIX):].strip().upper()), "label"
+    if cond.startswith(KAMERAKLINIKUM_PREFIX):
+        return _KAMERAKLINIKUM.get(cond[len(KAMERAKLINIKUM_PREFIX):].strip().lower()), "label"
     if cond.startswith(FOTOC_PREFIX):
         return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
     if cond.startswith(DIGITALSTORE_PREFIX):
@@ -957,6 +959,11 @@ def _nebo(score: str) -> str | None:
 # 사진이 후한 기존 경향과 같음 → 글자대로: 정확 일치 0/7 · 한 등급 이내 5/7
 FOTOERHARDT_PREFIX = "FotoErhardt: "
 _FOTOERHARDT = {"A+": "S", "A": "A", "A-": "A", "B+": "B", "B": "B", "B-": "C", "C+": "C", "C": "C", "C-": "D", "D": "D"}
+
+# 독일 Kamera Klinikum (뉘른베르크 수리점): 등급 표기 없이 제목에 'geprüft stark gebraucht'(점검함, 많이 씀) · 'DEFEKT'(고장, 부품용)만
+# 적힘 (2026-11-12 밤샘, 라이카 3점). 그 말이 있을 때만 등급, 나머지는 등급 없음 (사진 등급 대기열)
+KAMERAKLINIKUM_PREFIX = "KameraKlinikum: "
+_KAMERAKLINIKUM = {"stark gebraucht": "D", "defekt": "X"}
 
 # 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
 # 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.
