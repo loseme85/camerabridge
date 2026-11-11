@@ -7648,6 +7648,80 @@ def crawl_ilcontatto():
     return results
 
 
+def crawl_vintagecameragear():
+    """Vintage Camera Gear (독일 비스바덴, WooCommerce Woodmart, 2026-11-12 밤샘 — Leica Lens List 새 매장) - 분류 '/produkt-kategorie/leica/'
+    (420개쯤, 24쪽, 쪽 넘김 /page/N/). robots.txt가 /wp-json/·검색(?s=)을 막아 분류 화면 HTML을 읽음.
+    상품 칸의 이름·가격·instock/outofstock·분류 클래스. 쌍안경(leica-fernglaeser)과 이름 앞 세 낱말에 Leica·Leitz가 없는 것(Kühn 등) 뺌.
+    상세 상태는 'Zustand: Gebraucht'뿐이라 등급 없음. 가격 EUR"""
+    import html as _html
+    import requests
+    base = "https://www.vintagecameragear.com/produkt-kategorie/leica/"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Vintage Camera Gear 크롤링 시작")
+    results, seen = [], set()
+    for page in range(1, 60):
+        url = base if page == 1 else f"{base}page/{page}/"
+        try:
+            resp = sess.get(url, timeout=40)
+        except requests.exceptions.ConnectionError:
+            time.sleep(20)  # 빨리 받으면 연결을 끊음 (2026-11-12) — 쉬었다 한 번만 다시
+            resp = sess.get(url, timeout=40)
+        if resp.status_code == 404:
+            break
+        resp.raise_for_status()
+        blocks = re.split(r'<div class="wd-product ', resp.text)[1:]
+        new = 0
+        for b in blocks:
+            n = re.search(r'wd-entities-title"><a href="([^"]+)">([^<]+)', b)
+            if not n or n.group(1) in seen:
+                continue
+            seen.add(n.group(1))
+            new += 1
+            raw = re.sub(r"\s+", " ", _html.unescape(n.group(2))).strip()
+            head = b.split(">", 1)[0]
+            if "product_cat-leica-fernglaeser" in head or "product_cat-fernglaeser" in head:
+                continue
+            if not re.match(r"(?i)(?:\S+\s+){0,2}lei(?:ca|tz|caflex|cina)\b", raw):
+                continue
+            pr = re.search(r"<bdi>([\d.]+),(\d\d)", b)
+            img = re.search(r'data-src="([^"]+)"', b)
+            nm = re.sub(r"\s+Leitz\s+\d{5}(?:-\d)?$|\s+\d{5}$", "", raw)
+            nm = re.sub(r"(?i)\bObjektiv lens\b|\bObjektiv\b|\bKamera Camera\b", lambda m: "lens" if "bj" in m.group(0).lower() else "camera", nm)
+            nm = re.sub(r"(?i)\bf(\d(?:\.\d)?)\b", r"f/\1", nm)
+            nm = re.sub(r"(?i)\b(Vario|Macro|Super|APO|PC|Fisheye) (Elmarit|Elmar|Angulon|Telyt|Summicron)\b", r"\1-\2", nm)
+            nm = re.sub(r"(?i)\b((?:Vario-|Macro-|Super-|APO-|PC-|Fisheye-)?(?:Summicron|Summilux|Elmarit|Elmar|Angulon|Telyt|Summarit|Noctilux)) R\b", r"\1-R", nm)
+            if re.search(r"(?i)Bastelobjekt|Ersatzteil|spare part|ohne Funktion|Attrappe|\bDummy\b", nm):
+                nm += " for parts"  # 부품용·예비 부품·전시용 모형 → 등급 X
+            if re.search(r"(?i)\b(?:camera|Kamera)\b.*\b(?:Summicron|Summilux|Elmarit|Elmar|Summaron|Summitar|Hektor)", nm) and " + " not in nm:
+                nm = re.sub(r"(?i)\b(camera|Kamera)\s+", r"\1 + ", nm, count=1) + " set"  # 'R3 … Kamera Summicron R 50mm' 바디·렌즈 묶음
+            nm = re.sub(r"\s+", " ", nm).strip()
+            price = f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+            cat = detect_category(nm, price)
+            results.append({
+                "site": "Vintage Camera Gear (독일)",
+                "label": auto_label(nm),
+                "상품명": nm,
+                "세대": detect_generation(nm),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1).replace("-430x430", "") if img else "",
+                "링크": n.group(1),
+                "품절": "outofstock" in head,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+                "category": cat,
+                "brand": detect_brand(nm),
+            })
+        print(f"    └─ {page}페이지 {len(blocks)}개 (새 {new})")
+        if not blocks or not new or f"/page/{page + 1}/" not in resp.text:
+            break
+        time.sleep(4)
+    print(f"  ✅ Vintage Camera Gear 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12796,6 +12870,7 @@ def crawl_all():
         ("Kamera Klinikum (독일)", lambda: ce.wrap_full_run("Kamera Klinikum (독일)", crawl_kameraklinikum)),
         ("Photohaus Clickpic (독일)", lambda: ce.wrap_full_run("Photohaus Clickpic (독일)", crawl_clickpic)),
         ("Il Contatto Store (이탈리아)", lambda: ce.wrap_full_run("Il Contatto Store (이탈리아)", crawl_ilcontatto)),
+        ("Vintage Camera Gear (독일)", lambda: ce.wrap_full_run("Vintage Camera Gear (독일)", crawl_vintagecameragear)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
