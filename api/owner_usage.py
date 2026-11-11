@@ -287,9 +287,9 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
         when = _kst_time(v["start"])
         prior = _prior_visit_badge(v, history)
         device = "📱" if v["mobile"] else "💻"
-        rows.append(f"<tr><td class=nowrap>{_esc(when)}<br>{prior}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
-                    f"<td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초{f"<br><span class=muted>{_esc(v['scroll'])}% 내려 봄</span>" if v.get('scroll') else ''}</td><td>{''.join(steps)}</td></tr>")
-    visit_table = "".join(rows) or "<tr><td colspan=5 class=muted>이 기간에 방문이 없습니다</td></tr>"
+        rows.append(f"<tr class=visit-row><td data-label='방문 시각 (한국)'>{_esc(when)}<br>{prior}</td><td data-label='어디서 왔나'>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td data-label='나라·기기·언어'>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
+                    f"<td data-label='머문 시간'>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초{f"<br><span class=muted>{_esc(v['scroll'])}% 내려 봄</span>" if v.get('scroll') else ''}</td><td data-label='한 일'>{''.join(steps)}</td></tr>")
+    visit_table = "".join(rows) or "<tr class=empty><td colspan=5 class=muted>이 기간에 방문이 없습니다</td></tr>"
 
     fb_rows = "".join(f"<tr><td class=nowrap>{_esc(_kst_time(f.get('created_at', ''), "%m-%d %H:%M"))}</td><td>{_esc(f.get('locale') or '-')}</td><td>{_esc(f.get('message'))}</td></tr>" for f in feedback) \
         or "<tr><td colspan=3 class=muted>아직 없음</td></tr>"
@@ -299,21 +299,34 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
 :root{{--bg:#f6f6f4;--card:#fff;--text:#1d1d1b;--muted:#77756f;--line:#e4e2dc;--accent:#c8102e;--soft:#f1efe9}}
 @media (prefers-color-scheme:dark){{:root{{--bg:#151514;--card:#1e1e1c;--text:#eceae4;--muted:#9a978f;--line:#33322f;--accent:#ff5a6e;--soft:#272724}}}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif}}
-main{{max-width:1100px;margin:0 auto;padding:20px 16px 60px}}header{{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}}
+main{{width:100%;max-width:1440px;margin:0 auto;padding:20px 16px 60px}}header{{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}}
 h1{{font-size:22px;margin:0}}h2{{font-size:15px;margin:0 0 10px}}.muted{{color:var(--muted)}}small{{color:var(--muted)}}
-.tabs a{{padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--text);text-decoration:none;margin-left:4px}}.tabs a.on{{background:var(--text);color:var(--bg)}}
-.kpis{{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}}.kpi{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}}
+.tabs{{display:flex;flex-wrap:wrap;gap:6px}}
+.tabs a{{padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--text);text-decoration:none;margin-left:0}}.tabs a.on{{background:var(--text);color:var(--bg)}}
+.kpis{{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0}}.kpi{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}}
 .kpi b{{display:block;font-size:26px}}.kpi span{{color:var(--muted);font-size:13px}}
-.grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}}.card{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto}}.wide{{grid-column:1/-1}}
-table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px solid var(--line);vertical-align:top}}tr:first-child td{{border-top:0}}td.n{{text-align:right;font-variant-numeric:tabular-nums}}.nowrap{{white-space:nowrap}}
-.visit-table{{min-width:880px}}
+.grid{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}}.card{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0;overflow-wrap:anywhere}}.wide{{grid-column:1/-1}}
+table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6px 4px;border-top:1px solid var(--line);vertical-align:top}}tr:first-child td{{border-top:0}}td.n{{text-align:right;font-variant-numeric:tabular-nums}}.nowrap{{white-space:nowrap}}
+.visit-table{{width:100%;table-layout:fixed}}
+.visit-table th{{padding:8px 4px;text-align:left;font-size:13px;font-weight:400}}
+.visit-table th:nth-child(1){{width:17%}}.visit-table th:nth-child(2){{width:22%}}.visit-table th:nth-child(3){{width:15%}}.visit-table th:nth-child(4){{width:12%}}.visit-table th:nth-child(5){{width:34%}}
+.visit-table td{{white-space:normal;overflow-wrap:anywhere}}.visit-table .step{{max-width:100%;vertical-align:top;white-space:normal;overflow-wrap:anywhere}}
 .prior-visit{{display:inline-block;font-size:13px;margin-top:3px}}.prior-visit.returning{{font-weight:700}}
 .step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}.step.page{{background:transparent;border:1px solid var(--line)}}.step.typed{{outline:2px solid var(--text)}}
 .days td a{{color:var(--text)}}.days tr.on td{{font-weight:700}}.bar a{{display:contents;color:inherit}}
 .bars{{display:flex;gap:4px;align-items:flex-end;height:130px}}.bar{{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}}
 .bar span{{display:block;width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:1px}}.bar b{{font-size:11px;order:-1}}.bar i{{font-size:10px;color:var(--muted);font-style:normal;white-space:nowrap}}
 .note{{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:13px}}a{{color:var(--accent)}}
-@media (max-width:760px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}td{{font-size:13px}}}}
+@media (max-width:900px){{
+.visit-table,.visit-table tbody{{display:block}}.visit-table thead{{display:none}}
+.visit-table .visit-row{{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"time device" "source source" "duration duration" "activity activity";gap:10px 16px;border-top:1px solid var(--line);padding:14px 0}}
+.visit-table td{{display:block;min-width:0;border:0;padding:0}}
+.visit-table td::before{{content:attr(data-label);display:block;font-size:12px;color:var(--muted);margin-bottom:3px}}
+.visit-table td:nth-child(1){{grid-area:time}}.visit-table td:nth-child(2){{grid-area:source}}.visit-table td:nth-child(3){{grid-area:device}}.visit-table td:nth-child(4){{grid-area:duration}}.visit-table td:nth-child(5){{grid-area:activity}}
+.visit-table td:nth-child(4)::before{{display:inline;margin-right:8px}}
+.visit-table .empty,.visit-table .empty td{{display:block}}.visit-table .empty td::before{{content:none}}
+}}
+@media (max-width:760px){{.kpis{{grid-template-columns:repeat(2,minmax(0,1fr))}}.grid{{grid-template-columns:1fr}}td{{font-size:13px}}}}
 </style></head><body><main>
 <header><div><h1>방문 현황{f' · {_esc(date)}' if date else ''}</h1><span class=muted>{now} 한국 시간 기준</span></div><nav class=tabs>{tabs}</nav></header>
 <div class=kpis>
@@ -337,7 +350,7 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 {_table('판매 중 0건 검색어', r['no_active_queries'][:10])}
 <section class='card wide'><h2>최근 방문</h2>
 <p class=muted>각 방문 아래에 그전에 방문한 횟수를 표시합니다. 기록된 최근 1년 · 같은 브라우저 기준입니다.</p>
-<table class=visit-table><tr><td class=muted>방문 시각 (한국) · 이전 방문</td><td class=muted>어디서 · 처음 들어온 주소</td><td class=muted>나라·기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
+<table class=visit-table><thead><tr><th scope=col class=muted>방문 시각 (한국) · 이전 방문</th><th scope=col class=muted>어디서 · 처음 들어온 주소</th><th scope=col class=muted>나라·기기·언어</th><th scope=col class=muted>머문 시간</th><th scope=col class=muted>한 일</th></tr></thead><tbody>{visit_table}</tbody></table></section>
 <section class='card wide'><h2>최근 의견 (💬 의견 보내기)</h2><table>{fb_rows}</table></section>
 </div>
 <p class=note>2026-11-07 전 기록은 검색·클릭한 방문만 남아 있습니다. 집계 방식이 다른 <a href="{ANALYTICS_URL}" target=_blank rel=noopener>Vercel Analytics</a> 통계와 숫자가 다를 수 있습니다.
