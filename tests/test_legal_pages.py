@@ -18,16 +18,28 @@ def test_pages_exist_with_operator_footer(tmp_path):
             assert lp.OPERATOR["email"] in page
             assert 'href="/impressum/"' in page and "Leica Camera AG" in page
         about = (tmp_path / lang / "about" / "index.html").read_text(encoding="utf-8")
-        assert lp.OPERATOR["biz_no"] in about and lp.OPERATOR["rep"][lang] in about
+        assert lp.OPERATOR["name"][lang] in about and lp.OPERATOR["address"][lang] in about
     impressum = (tmp_path / "impressum" / "index.html").read_text(encoding="utf-8")
     assert "§ 5" in impressum and lp.OPERATOR["address"]["en"] in impressum
+
+
+def test_private_details_stay_hidden(tmp_path):
+    """2026-11-12 사장님: 스미싱이 와서 대표자 이름·사업자등록번호·상세 주소는 공개하지 않음"""
+    assert not lp.OPERATOR["biz_no"] and not any(lp.OPERATOR["rep"].values()) and not lp.OPERATOR["phone"]
+    lp.build(tmp_path)
+    for path in tmp_path.rglob("index.html"):
+        text = path.read_text(encoding="utf-8")
+        for word in ("대표자", "사업자등록번호", "代表者", "事業者登録番号", "Owner", "owner ", "Business registration", "Inhaber",
+                     "Unternehmensnummer", "Verantwortlich für den Inhalt"):
+            assert word not in text, (path, word)
 
 
 def test_footer_shows_brand_only():
     for lang in lp.LANGS:
         foot = lp.footer(lang)
         assert lp.OPERATOR["brand"] in foot and lp.OPERATOR["email"] in foot
-        assert lp.OPERATOR["biz_no"] not in foot and lp.OPERATOR["rep"][lang] not in foot
+        for secret in (lp.OPERATOR["biz_no"], lp.OPERATOR["rep"][lang]):
+            assert not secret or secret not in foot
         assert lp.OPERATOR["name"][lang] not in foot
 
 
@@ -52,7 +64,7 @@ def test_home_page_has_legal_footer():
     for page in ("about", "privacy", "terms"):
         assert f'data-legal-page="{page}"' in beta
     assert 'href="/impressum/"' in beta and "thehingemeta" in beta
-    assert lp.OPERATOR["biz_no"] not in beta and "박창대" not in beta and "브로콜리" not in beta
+    assert (not lp.OPERATOR["biz_no"] or lp.OPERATOR["biz_no"] not in beta) and "브로콜리" not in beta
 
 
 def test_about_page_tells_why_and_home_links_to_it():
