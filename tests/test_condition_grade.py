@@ -681,6 +681,15 @@ def test_nebo_score():
     assert grade_of(site, NEBO_PREFIX + "6,5/10")[0] == "C"
 
 
+def test_fotoerhardt_zustand():
+    from condition_grade import grade_of, FOTOERHARDT_PREFIX
+    site = "Foto Erhardt (독일)"
+    assert grade_of(site, FOTOERHARDT_PREFIX + "A+")[0] == "S"
+    assert grade_of(site, FOTOERHARDT_PREFIX + "A-")[0] == "A"
+    assert grade_of(site, FOTOERHARDT_PREFIX + "B")[0] == "B"
+    assert grade_of(site, FOTOERHARDT_PREFIX + "C")[0] == "C"
+
+
 def test_fotoc_kategori():
     from condition_grade import grade_of, FOTOC_PREFIX
     site = "FOTO/C (덴마크)"
