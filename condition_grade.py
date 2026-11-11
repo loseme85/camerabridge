@@ -98,6 +98,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _GOECKER.get(cond[len(GOECKER_PREFIX):].strip()), "label"
     if cond.startswith(NEBO_PREFIX):
         return _nebo(cond[len(NEBO_PREFIX):].strip().split("/")[0]), "label"
+    if cond.startswith(FOTOERHARDT_PREFIX):
+        return _FOTOERHARDT.get(cond[len(FOTOERHARDT_PREFIX):].strip().upper()), "label"
     if cond.startswith(FOTOC_PREFIX):
         return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
     if cond.startswith(DIGITALSTORE_PREFIX):
@@ -949,6 +951,12 @@ def _nebo(score: str) -> str | None:
     except ValueError:
         return None
     return "S" if v >= 9.5 else "A" if v >= 8.5 else "B" if v >= 7.5 else "C" if v >= 6.5 else "D"
+
+# 독일 Foto Erhardt: 상세 'Der Zustand dieses Produktes: B (NORMAL, leichte Gebrauchsspuren)' — A+ (WIE NEU, ohne OVP) · A · A- · B · C (GEBRAUCHT,
+# stärkere Gebrauchsspuren) · D. 사진 평가(표기 가리고 사진 있는 라이카 7점, 사진 1~3장, 2026-11-12 밤샘): A+ A 1 · B A 3 · C B 1·A 2.
+# 사진이 후한 기존 경향과 같음 → 글자대로: 정확 일치 0/7 · 한 등급 이내 5/7
+FOTOERHARDT_PREFIX = "FotoErhardt: "
+_FOTOERHARDT = {"A+": "S", "A": "A", "A-": "A", "B+": "B", "B": "B", "B-": "C", "C+": "C", "C": "C", "C-": "D", "D": "D"}
 
 # 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
 # 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.

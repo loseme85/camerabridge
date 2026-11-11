@@ -7361,6 +7361,76 @@ def crawl_edarkroom():
     return results
 
 
+def crawl_fotoerhardt():
+    """Foto Erhardt (독일 베스터카펠른, modified eCommerce, 2026-11-12 밤샘) - 중고 분류 3곳(카메라·렌즈·액세서리, 쪽 넘김 '.html/2')에서
+    주소에 leica·leitz가 든 상품만 상세를 읽음 (파나소닉 'Leica DG'는 뺌). robots.txt는 /product/·filter.php·search.php를 막음 — 쓰지 않음.
+    상세 JSON-LD offers의 price(행사 할인 적용가)·availability, og:title·og:image. 등급은 'Der Zustand dieses Produktes: B (…)'"""
+    import html as _html
+    import requests
+    from condition_grade import FOTOERHARDT_PREFIX
+    base = "https://www.foto-erhardt.de/second-hand"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Foto Erhardt 크롤링 시작")
+    links = []
+    for cat in ("gebrauchte-kameras", "gebrauchte-objektive", "gebrauchtes-fotozubehoer"):
+        for page in range(1, 60):
+            resp = sess.get(f"{base}/{cat}.html" + ("" if page == 1 else f"/{page}"), timeout=40)
+            resp.raise_for_status()
+            found = list(dict.fromkeys(re.findall(r'href="(' + re.escape(base) + "/" + cat + r'/[^"]+\.html)"', resp.text)))
+            if not found:
+                break
+            links += [u for u in found if re.search(r"(?i)/lei(?:ca|tz)-", u) and "panasonic" not in u.lower()]
+            if f'{cat}.html/{page + 1}"' not in resp.text:
+                break
+            time.sleep(1.0)
+        print(f"    └─ {cat}: 라이카 누적 {len(links)}개")
+    results = []
+    for link in dict.fromkeys(links):
+        try:
+            t = sess.get(link, timeout=40).text
+        except Exception as e:
+            print(f"    ⚠️ Foto Erhardt 상세 오류: {e}")
+            continue
+        time.sleep(1.0)
+        og = re.search(r'og:title" content="([^"]+)', t)
+        img = re.search(r'og:image" content="([^"]+)', t)
+        offer = re.search(r'"availability":"http://schema.org/(\w+)","price":([\d.]+)', t)
+        z = re.search(r"Zustand dieses Produktes:\s*([A-D][+-]?)(?=[\s(<]|$)", t)
+        mount = re.search(r"\b([MR])[\u2011-](?:Mount|Bajonett)", _html.unescape(t))
+        name = _html.unescape(og.group(1)) if og else ""
+        name = re.sub(r"\s+gebraucht\s+#\d+.*$", "", name).strip()
+        if not name:
+            continue
+        nm = re.sub(r"\b(\d{2,3})mm (\d),(\d)\b", r"\1mm f/\2.\3", name)
+        nm = re.sub(r"\b(\d),(\d)/(\d{2,3})mm\b", r"\3mm f/\1.\2", nm)
+        nm = re.sub(r"\b1:(\d),(\d) (\d{2,3})mm\b", r"\3mm f/\1.\2", nm)
+        nm = re.sub(r"\b(\d{2,3})/(\d),(\d)\b", r"\1mm f/\2.\3", nm)
+        nm = nm.replace("Okkular", "eyepiece")
+        if mount and not re.search(r"(?i)(?:\b|-)" + mount.group(1) + r"\b", nm.split(" ", 1)[-1]):
+            nm += f" ({mount.group(1)})"  # 이름에 마운트가 없고 설명에 'M‑Mount'·'R-Bajonett'가 있으면
+        price = f"€{float(offer.group(2)):,.0f}" if offer else "문의요망"
+        cat = detect_category(nm, price)
+        results.append({
+            "site": "Foto Erhardt (독일)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": FOTOERHARDT_PREFIX + z.group(1) if z else "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img.group(1) if img else "",
+            "링크": link,
+            "품절": not offer or offer.group(1) not in ("InStock", "LimitedAvailability"),
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ Foto Erhardt 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12505,6 +12575,7 @@ def crawl_all():
         ("NEBO (네덜란드)", lambda: ce.wrap_full_run("NEBO (네덜란드)", crawl_nebo)),
         ("PhotoQueen (그리스)", lambda: ce.wrap_full_run("PhotoQueen (그리스)", crawl_photoqueen)),
         ("e-darkroom (그리스)", lambda: ce.wrap_full_run("e-darkroom (그리스)", crawl_edarkroom)),
+        ("Foto Erhardt (독일)", lambda: ce.wrap_full_run("Foto Erhardt (독일)", crawl_fotoerhardt)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
