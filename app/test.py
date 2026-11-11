@@ -7229,6 +7229,85 @@ def crawl_nebo():
     return results
 
 
+def crawl_photoqueen():
+    """PhotoQueen (그리스 테살로니키, OpenCart Journal3, 2026-11-12 밤샘) - 제조사 화면 LEICA(manufacturer_id=1012, 25개쯤, 2쪽)에서
+    이름·설명에 '중고(Μεταχειρισμένο/-η/-ος)'가 적힌 것만. robots.txt는 정렬·쪽 크기·검색(filter_name) 주소를 막음 — 쪽 넘김 page=2는 허용.
+    재고는 상세의 'product-stock in-stock'/'out-of-stock'. 등급 표기 없음 (사진 등급 대기열). 가격 EUR"""
+    import html as _html
+    import requests
+    base = "https://photoqueen.gr/index.php"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    used = re.compile(r"(?i)μεταχειρισμ|ΜΕΤΑΧΕΙΡΙΣΜ|\bused\b")
+    print(f"\n  📂 PhotoQueen 크롤링 시작")
+    items, seen = [], set()
+    for page in range(1, 20):
+        params = {"route": "product/manufacturer/info", "manufacturer_id": "1012"}
+        if page > 1:
+            params["page"] = page
+        resp = sess.get(base, params=params, timeout=30)
+        resp.raise_for_status()
+        blocks = [b for b in resp.text.split('<div class="product-layout')[1:] if 'class="name"' in b]
+        new = 0
+        for b in blocks:
+            n = re.search(r'class="name"><a href="([^"]+)">([^<]+)', b)
+            if not n:
+                continue
+            pid = re.search(r"product_id=(\d+)", n.group(1))
+            if not pid or pid.group(1) in seen:
+                continue
+            seen.add(pid.group(1))
+            new += 1
+            name = re.sub(r"\s+", " ", _html.unescape(n.group(2))).strip()
+            desc = _html.unescape((re.search(r'class="description">([^<]*)', b) or [None, ""])[1])
+            if not used.search(name + " " + desc[:200]) or not re.match(r"(?i)lei(?:ca|tz)\b", name):
+                continue
+            pr = re.search(r'class="price-(?:normal|new)">\s*([\d.]+),(\d\d)\s*€', b)
+            img = re.search(r'srcset="[^"]*?(https://photoqueen\.gr/image/cache/[^" ]+-500x500h\.\w+) 2x"', b)
+            items.append((name, f"https://photoqueen.gr/index.php?route=product/product&product_id={pid.group(1)}",
+                          f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망", img.group(1) if img else ""))
+        print(f"    └─ {page}페이지 {len(blocks)}개 (새 {new})")
+        if not blocks or not new or f"page={page + 1}" not in resp.text.replace("&amp;", "&"):
+            break
+        time.sleep(1.5)
+    results = []
+    for name, link, price, img in items:
+        sold = False
+        try:
+            t = sess.get(link, timeout=30).text
+            st = re.search(r'product-stock ([\w-]+)', t)
+            sold = bool(st) and st.group(1) != "in-stock"
+        except Exception as e:
+            print(f"    ⚠️ PhotoQueen 상세 오류: {e}")
+        time.sleep(1.2)
+        nm = re.sub(r"(?i)\s*\(?\s*μεταχειρισμ\w*\s*\)?", "", name).strip()
+        nm = re.sub(r"\s*ΣΩΜΑ\b", " body", nm)
+        nm = re.sub(r"\s*ΑΝΑΛΟΓΙΚΗ\b", "", nm)
+        nm = re.sub(r"(?i)^LEICA\b", "Leica", nm)
+        nm = re.sub(r"(?i)\bELEMAR\b-?\s*R\b", "Elmar-R", nm)
+        nm = re.sub(r"(?i)^Leica (\d{2,3})-(\d{2,3}) F\s*(?:1:)?(\d(?:\.\d)?) VARIO Elmar-R", r"Leica Vario-Elmar-R \1-\2mm f/\3", nm)
+        nm = re.sub(r"(?i)^Leica M3 \+ LENS LEICA SUMMARIT 5CM 50MM F1\.5 L39 KIT", "Leica M3 body + Summarit 5cm f/1.5 (L39) set", nm)
+        cat = detect_category(nm, price)
+        results.append({
+            "site": "PhotoQueen (그리스)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": link,
+            "품절": sold,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ PhotoQueen 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12371,6 +12450,7 @@ def crawl_all():
         ("Kameradoktorn (스웨덴)", lambda: ce.wrap_full_run("Kameradoktorn (스웨덴)", crawl_kameradoktorn)),
         ("Goecker (덴마크)", lambda: ce.wrap_full_run("Goecker (덴마크)", crawl_goecker)),
         ("NEBO (네덜란드)", lambda: ce.wrap_full_run("NEBO (네덜란드)", crawl_nebo)),
+        ("PhotoQueen (그리스)", lambda: ce.wrap_full_run("PhotoQueen (그리스)", crawl_photoqueen)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
