@@ -691,18 +691,21 @@ def narrow_candidate_records(
         return records, stats
 
     anchor_query = _candidate_anchor_query(intent)
-    strong: list[tuple[int, int, dict[str, Any]]] = []
-    broad: list[tuple[int, int, dict[str, Any]]] = []
+    strong: list[tuple[int, int, int, dict[str, Any]]] = []
+    broad: list[tuple[int, int, int, dict[str, Any]]] = []
     precomputed_count = 0
     for position, record in enumerate(records):
         if _record_has_precomputed_search_fields(record):
             precomputed_count += 1
         matches = _candidate_anchor_matches(intent, record, anchor_query=anchor_query)
         match_count = len(matches)
-        if match_count >= 2:
-            strong.append((-match_count, position, record))
-        elif match_count == 1:
-            broad.append((-match_count, position, record))
+        if match_count:
+            # 같은 맞춤 수끼리는 판매 중 매물을 먼저 남김. 예전에는 목록 순서로만 잘라서
+            # 나중에 붙은 사이트의 판매 중 매물이 빠지고 팔린 매물이 남았음
+            # ('leica m6' 판매 중 217개 빠짐, 2026-11-12).
+            sold_rank = 0 if _final_output(record).get("sold_quality") == "asking" else 1
+            item = (-match_count, sold_rank, position, record)
+            (strong if match_count >= 2 else broad).append(item)
 
     # 기준이 하나뿐인 검색어('noctilux'·'summilux' 등)는 2개 맞는 후보가 없어 전체(2만 개+)를 점수 매기던 것 →
     # 그 기준이 맞는 후보만 (개수 제한 없이) 점수 매김. 'noctilux' 9초 → 1초 안팎 (2026-11-05 속도 점검)
@@ -737,17 +740,17 @@ def narrow_candidate_records(
         candidate_broad_records = min_broad_records
 
     if single_anchor and not accessory_anchor_active:
-        selected = [item[2] for item in broad]
+        selected = [item[-1] for item in broad]
     elif accessory_anchor_active and not strong and broad:
-        selected = [item[2] for item in broad[:candidate_max]]
+        selected = [item[-1] for item in broad[:candidate_max]]
     else:
         strong_limit = candidate_max
         if body_anchor_active and broad:
             strong_limit = max(candidate_max - min(candidate_broad_records, len(broad)), 0)
-        selected = [item[2] for item in strong[:strong_limit]]
+        selected = [item[-1] for item in strong[:strong_limit]]
         remaining_slots = candidate_max - len(selected)
         broad_limit = min(candidate_broad_records, remaining_slots) if remaining_slots > 0 else 0
-        selected.extend(item[2] for item in broad[:broad_limit])
+        selected.extend(item[-1] for item in broad[:broad_limit])
 
     if not selected or len(selected) >= input_count:
         return records, stats
