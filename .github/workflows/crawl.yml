@@ -66,7 +66,14 @@ jobs:
         run: |
           pip install -r requirements.txt
           playwright install chromium
-          playwright install-deps chromium
+          # 우분투 서버 주소를 잠깐 못 찾는 일이 있어(2026-11-11 밤 4번 실패) 쉬었다가 3번까지 다시 시도
+          for i in 1 2 3; do
+            playwright install-deps chromium && break
+            [ "$i" = 3 ] && exit 1
+            echo "브라우저 부품 설치 실패 — 60초 뒤 다시 시도 ($i/3)"
+            sleep 60
+            sudo apt-get update || true
+          done
 
       - name: Run crawler
         run: python3 app/test.py
@@ -125,7 +132,16 @@ jobs:
           git diff --staged --quiet && echo "No changes" && exit 0
           git stash
           git pull --rebase origin main
-          git stash pop
+          # 크롤링 중에 다른 커밋이 같은 결과 파일을 고쳤으면(2026-11-11 22:16 실패) 다시 만드는 결과물만 이번 크롤링 값으로 정리
+          if ! git stash pop; then
+            BAD=$(git diff --name-only --diff-filter=U)
+            echo "충돌 파일:"; echo "$BAD"
+            if echo "$BAD" | grep -vqE '^(data/derived/|(ko|en|ja|de|it|es|pt|zh-hans|zh-hant)/|sitemap\.xml$|llms\.txt$)'; then
+              echo "다시 만드는 결과물이 아닌 파일이 충돌해 멈춤"; exit 1
+            fi
+            echo "$BAD" | while read -r f; do git checkout --theirs -- "$f"; git add -- "$f"; done
+            git stash drop
+          fi
           git add -A data/ crawler/sessions/ ko/ en/ ja/ de/ it/ es/ pt/ zh-hans/ zh-hant/ sitemap.xml llms.txt
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
           git pull --rebase origin main
