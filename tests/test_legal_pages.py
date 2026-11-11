@@ -40,7 +40,8 @@ def test_footer_shows_brand_only():
         assert lp.OPERATOR["brand"] in foot and lp.OPERATOR["email"] in foot
         for secret in (lp.OPERATOR["biz_no"], lp.OPERATOR["rep"][lang]):
             assert not secret or secret not in foot
-        assert lp.OPERATOR["name"][lang] not in foot
+        if lp.OPERATOR["name"][lang] != lp.OPERATOR["brand"]:
+            assert lp.OPERATOR["name"][lang] not in foot
 
 
 def test_empty_optional_fields_are_hidden():
@@ -75,7 +76,10 @@ def test_about_page_tells_why_and_home_links_to_it():
     assert 'data-legal-hash="#why"' in beta and "footer.story" in beta
 
 
-def test_about_photo_exists_and_is_not_bundled():
-    assert (ROOT / "img/maker-night.jpg").exists()
-    assert "/img/maker-night.jpg" in "".join(lp.about_body("ko"))
-    assert "img/**" in (ROOT / "vercel.json").read_text(encoding="utf-8")
+def test_no_identifying_photo_or_studio():
+    """2026-11-12 사장님: 얼굴·거리 간판이 보이는 사진, 스튜디오 상호, 특정 매장 경력은 싣지 않음"""
+    assert not (ROOT / "img/maker-night.jpg").exists()
+    for lang in lp.LANGS:
+        about = "".join(lp.about_body(lang))
+        assert "maker-night" not in about and "VIP" not in about
+    assert "브로콜리" not in (ROOT / "scripts/build_legal_pages.py").read_text(encoding="utf-8")
