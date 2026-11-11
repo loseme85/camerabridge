@@ -57,7 +57,8 @@ TOO_CHEAP_MIN_N = 5
 LENS_SIGNAL = re.compile(
     r"summi|elmar|nocti|hektor|telyt|angulon|summar|xenon|thambar"
     r"|(?<![.\d])\b\d{2,3}(?:-\d{2,3})?\s?mm\b(?!\s+(?:film|slr|rangefinder|camera|kamera|format|フィルム))|(?<![.\d])\b\d{1,2}(?:\.\d)?\s?cm\b|\bf/?\s?\d(?:\.\d)?\b"
-    r"|\b\d(?:\.\d)?\s?/\s?\d{2,3}\b|\b\d{2,3}\s?/\s?\d(?:\.\d)?\b|\b\d\s?-?cams?\b|\bE\s?\d{2}\b", re.I)
+    r"|\b\d(?:\.\d)?\s?/\s?\d{2,3}\b|\b\d{2,3}\s?/\s?\d(?:\.\d)?\b|\b\d\s?-?cams?\b|\bE\s?\d{2}\b"
+    r"|\b\d{2,3}\s+lens(?:es)?\b", re.I)  # 'M9-P Set … 35 Lens'처럼 mm가 빠진 세트
 BODY_WORD = re.compile(r"\b(?:M|R|CL|SL|S|Q|X|T)\s?-?\d|\bI{1,3}[a-g]?\b|leicaflex|standard|\bbody\b|바디", re.I)
 FOR_WORD = re.compile(r"\b(?:for|für|fuer|pour|per|para|voor|fits?)\b|用|対応|専用", re.I)
 SET_MARK = re.compile(r"\+|\bset\b|\bkit\b|outfit|\bwith\b|\bw/|&|세트|セット|付|\bmit\b|\bcon\b|\bavec\b", re.I)
