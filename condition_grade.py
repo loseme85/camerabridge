@@ -92,6 +92,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _LBPN.get(cond[len(LBPN_PREFIX):].strip().lower()), "label"
     if cond.startswith(F64_PREFIX):
         return _F64.get(cond[len(F64_PREFIX):].strip().lower().replace("ă", "a")), "label"
+    if cond.startswith(KAMERADOKTORN_PREFIX):
+        return _KAMERADOKTORN.get(cond[len(KAMERADOKTORN_PREFIX):].strip().lower()), "label"
     if cond.startswith(FOTOC_PREFIX):
         return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
     if cond.startswith(DIGITALSTORE_PREFIX):
@@ -916,6 +918,14 @@ _LBPN = {"comme neuf": "S", "excellent etat": "A", "tres bon etat": "A", "bon et
 # 사진 평가(표기 가리고 판매 중 라이카 3점 전부, 사진 3장씩, 2026-11-09 밤샘): excelenta A 1 · buna A 1·B 1 → 정확 일치 2/3 · 한 등급 이내 3/3
 F64_PREFIX = "F64: "
 _F64 = {"excelenta": "A", "excelentă": "A", "foarte buna": "B", "buna": "B", "acceptabila": "C", "satisfacatoare": "C", "uzata": "D"}
+
+# 스웨덴 Kameradoktorn (스톡홀름): 상세 'Skick & information' — OPTISKT / MEKANISKT · KOSMETISKT 각각
+# Nyskick·Mycket fint skick·Fint skick·Gott skick·Bra skick·Normalt skick·Slitet skick·Defekt. 둘 중 나쁜 쪽을 씀.
+# 사진 평가(판매 중 라이카 12점 전부, 사진 3장씩, 2026-11-12 밤샘 — 표기를 먼저 봐 완전히 가린 평가는 아님): 외관 Mycket fint A 7 ·
+# Fint A 3·C 1(칠 벗겨진 M4 블랙 페인트) · Gott B 1. 사진이 후한 기존 경향과 같음 → 글자대로
+KAMERADOKTORN_PREFIX = "Kameradoktorn: "
+_KAMERADOKTORN = {"nyskick": "S", "nytt": "S", "mycket fint skick": "A", "fint skick": "B", "mycket gott skick": "B", "gott skick": "C",
+                  "bra skick": "C", "normalt skick": "C", "brukskick": "D", "slitet skick": "D", "sliten": "D", "defekt": "X"}
 
 # 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
 # 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.
