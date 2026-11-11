@@ -43,7 +43,9 @@ def fetch(days: list[str]) -> list[dict]:
 
 
 def visitor_key(e: dict) -> str:
-    """방문 한 번을 세는 기준: 같은 IP(해시 vtag)·같은 날이면 한 번. vtag 없는 예전 기록은 탭(sid)마다."""
+    """새 기록은 브라우저·방문(sid)별. 식별값 없는 기존 기록은 IP·날짜별 규칙 유지."""
+    if e.get("vid"):
+        return f"browser:{e['vid']}:{e['sid']}"
     return f"{str(e.get('created_at', ''))[:10]}:{e['vtag']}" if e.get("vtag") else e["sid"]
 
 

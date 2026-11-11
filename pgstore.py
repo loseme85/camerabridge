@@ -21,6 +21,7 @@ SCHEMA = [
     "CREATE TABLE IF NOT EXISTS usage_events (id bigserial PRIMARY KEY, created_at timestamptz NOT NULL DEFAULT now(),"
     " day date NOT NULL, entry jsonb NOT NULL)",
     "CREATE INDEX IF NOT EXISTS usage_events_day ON usage_events (day)",
+    "CREATE INDEX IF NOT EXISTS usage_events_browser ON usage_events ((entry->>'vid')) WHERE entry->>'vid' IS NOT NULL",
     "CREATE TABLE IF NOT EXISTS feedback_events (id bigserial PRIMARY KEY, created_at timestamptz NOT NULL DEFAULT now(),"
     " day date NOT NULL, tag text, entry jsonb NOT NULL)",
     "CREATE INDEX IF NOT EXISTS feedback_events_day ON feedback_events (day)",
@@ -78,6 +79,25 @@ def usage_since(start_day: str, end_day: str | None = None, limit: int = 5000) -
     else:
         rows = sql("SELECT entry FROM usage_events WHERE day >= $1::date ORDER BY id DESC LIMIT $2", [start_day, limit])
     return [_entry(r) for r in rows]
+
+
+def browser_history(browser_ids: list[str]) -> dict[str, dict]:
+    """표시할 브라우저의 보유 기록 전체(최근 365일). 화면 기간·5,000건 상한과 무관.
+
+    같은 방문의 여러 전송·재전송·페이지 이동은 sid 하나로 센다.
+    별도 누적 표를 만들지 않아 기존 기록 삭제 시 이 집계에서도 함께 빠진다.
+    """
+    if not browser_ids:
+        return {}
+    ensure_schema()
+    rows = sql(
+        "SELECT entry->>'vid' AS vid, COUNT(DISTINCT entry->>'sid') AS visits, "
+        "MIN(entry->>'created_at') AS first_seen, MAX(entry->>'created_at') AS last_seen "
+        "FROM usage_events WHERE entry->>'vid' = ANY($1::text[]) "
+        "AND day >= ((now() AT TIME ZONE 'Asia/Seoul')::date - 364) "
+        "GROUP BY entry->>'vid'", [sorted(set(browser_ids))])
+    return {row["vid"]: {"visits": int(row["visits"]), "first_seen": row["first_seen"],
+                         "last_seen": row["last_seen"]} for row in rows}
 
 
 def add_feedback(entry: dict, tag: str) -> None:
