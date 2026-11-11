@@ -7003,6 +7003,93 @@ def crawl_f64():
     return results
 
 
+def crawl_kameradoktorn():
+    """Kameradoktorn (스웨덴 스톡홀름, 2026-11-12 밤샘) - 중고 분류 'Begagnat' 전체(200개쯤, 3쪽 — robots.txt는 Search?만 막음)에서
+    이름이 'Beg Leica'·'Beg Leitz'로 시작하는 것만 (TTArtisan 'Leica M' 어댑터 등은 뺌). 가격 SEK, 목록의 재고 표시 'I lager'.
+    등급은 상세 설명 'OPTISKT / MEKANISKT …skick' · 'KOSMETISKT …skick' — 둘 중 나쁜 쪽. 국내 배송만"""
+    import html as _html
+    import requests
+    from condition_grade import KAMERADOKTORN_PREFIX
+    order = ["nyskick", "nytt", "mycket fint skick", "fint skick", "mycket gott skick", "gott skick", "bra skick",
+             "normalt skick", "brukskick", "slitet skick", "sliten", "defekt"]
+    base = "https://kameradoktorn.se"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 Kameradoktorn 크롤링 시작")
+    items, seen = [], set()
+    for page in range(1, 30):
+        resp = sess.get(f"{base}/Kameradoktorn/Begagnat", params={"page": page}, timeout=30)
+        resp.raise_for_status()
+        cards = re.split(r'<div id="ctl00_MainContent_view_WindowView_Product-\d+"', resp.text)[1:]
+        new = 0
+        for c in cards:
+            nm = re.search(r'class="itemnamelink">([^<]+)</a>', c)
+            href = re.search(r'href="(/Kameradoktorn/Begagnat/[^"]+)"', c)
+            if not nm or not href or href.group(1) in seen:
+                continue
+            seen.add(href.group(1))
+            new += 1
+            name = re.sub(r"\s+", " ", _html.unescape(nm.group(1))).strip()
+            if not re.match(r"(?i)beg\.?\s+lei(?:ca|tz)\b", name):
+                continue
+            pr = re.search(r'class="value">([\d\s\xa0]+)', c)
+            img = re.search(r'<img src="(/images/[^"]+)"', c)
+            stock = re.search(r'labelStockBalance">([^<]+)', c)
+            items.append((name, base + _html.unescape(href.group(1)),
+                          f"SEK {int(re.sub(r'[^0-9]', '', pr.group(1))):,}" if pr and re.sub(r"[^0-9]", "", pr.group(1)) else "문의요망",
+                          base + img.group(1) if img else "", bool(stock) and "i lager" not in stock.group(1).lower()))
+        print(f"    └─ {page}페이지 {len(cards)}개 (새 {new})")
+        if not cards or not new or f"page={page + 1}" not in resp.text:
+            break
+        time.sleep(1.5)
+    results = []
+    for name, link, price, img, sold in items:
+        cond = "정보없음"
+        try:
+            t = sess.get(link, timeout=30).text
+            d = re.search(r'<meta name="description" content="([^"]*)"', t)
+            desc = re.sub(r"\s+", " ", _html.unescape(d.group(1))).lower() if d else ""
+            found = []
+            for label in ("optiskt / mekaniskt", "optiskt/mekaniskt", "optiskt skick", "mekaniskt skick", "kosmetiskt skick", "kosmetiskt"):
+                m = re.search(re.escape(label) + r"\s*:?\s*(" + "|".join(re.escape(k) for k in order) + r")", desc)
+                if m:
+                    found.append(m.group(1))
+            if found:
+                cond = KAMERADOKTORN_PREFIX + max(found, key=order.index)
+            pid = re.search(r"[?&]id=([A-Za-z0-9]+)", link)
+            big = pid and re.search(r'/images/prod(?:Zoom|1000)/' + re.escape(pid.group(1)) + r'[^"\' ]*\.jpg', t, re.I)
+            if big:
+                img = base + big.group(0)
+        except Exception as e:
+            print(f"    ⚠️ Kameradoktorn 상세 오류: {e}")
+        time.sleep(1.2)
+        nm = re.sub(r"(?i)^beg\.?\s+", "", name)
+        nm = re.sub(r"(\d+)/(\d+),(\d+)", r"\1mm f/\2.\3", nm)
+        nm = re.sub(r"(?<![\d/.])(\d{2,3})/(\d(?:\.\d)?)\b", r"\1mm f/\2", nm)
+        nm = nm.replace("Summmaron", "Summaron")  # 'sökare'(파인더)는 그대로 둠 — 'finder'로 바꾸면 파인더 단품으로 보여 렌즈 연결이 빠짐
+        cat = detect_category(nm, price)
+        if cat == "Body" and " + " in nm and not re.search(r"(?i)\bset\b", nm):
+            nm += " set"  # 'Leica R5 + Vario-Elmar-R 35-70' 같은 바디·렌즈 묶음 — 바디 모델에 붙고 세트로 표시되게
+        results.append({
+            "site": "Kameradoktorn (스웨덴)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "SEK",
+            "이미지": img,
+            "링크": link,
+            "품절": sold,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ Kameradoktorn 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12142,6 +12229,7 @@ def crawl_all():
         ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
+        ("Kameradoktorn (스웨덴)", lambda: ce.wrap_full_run("Kameradoktorn (스웨덴)", crawl_kameradoktorn)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),

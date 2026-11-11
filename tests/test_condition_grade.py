@@ -654,6 +654,15 @@ def test_f64_stare():
     assert grade_of(site, F64_PREFIX + "bună")[0] == "B"
 
 
+def test_kameradoktorn_skick():
+    from condition_grade import grade_of, KAMERADOKTORN_PREFIX
+    site = "Kameradoktorn (스웨덴)"
+    assert grade_of(site, KAMERADOKTORN_PREFIX + "Mycket fint skick")[0] == "A"
+    assert grade_of(site, KAMERADOKTORN_PREFIX + "Fint skick")[0] == "B"
+    assert grade_of(site, KAMERADOKTORN_PREFIX + "Gott skick")[0] == "C"
+    assert grade_of(site, KAMERADOKTORN_PREFIX + "Nyskick")[0] == "S"
+
+
 def test_fotoc_kategori():
     from condition_grade import grade_of, FOTOC_PREFIX
     site = "FOTO/C (덴마크)"
