@@ -96,6 +96,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _KAMERADOKTORN.get(cond[len(KAMERADOKTORN_PREFIX):].strip().lower()), "label"
     if cond.startswith(GOECKER_PREFIX):
         return _GOECKER.get(cond[len(GOECKER_PREFIX):].strip()), "label"
+    if cond.startswith(NEBO_PREFIX):
+        return _nebo(cond[len(NEBO_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(FOTOC_PREFIX):
         return _FOTOC.get(cond[len(FOTOC_PREFIX):].strip().upper()), "label"
     if cond.startswith(DIGITALSTORE_PREFIX):
@@ -934,6 +936,19 @@ _KAMERADOKTORN = {"nyskick": "S", "nytt": "S", "mycket fint skick": "A", "fint s
 # 1 A 8 · 2 A 10 · 3 A 2 — 스튜디오 사진이라 흠이 안 보임(기존 경향과 같음) → 숫자대로: 정확 일치 8/20 · 한 등급 이내 18/20
 GOECKER_PREFIX = "Goecker: "
 _GOECKER = {"1": "A", "2": "B", "3": "C", "4": "D"}
+
+# 네덜란드 NEBO: 상세 설명 '… occasion (8/10)' · 'goede staat (7.5/10)' 10점 만점 점수
+# 사진 평가(판매 중 라이카 3점 전부, 사진 1장씩, 2026-11-12 밤샘 — 점수를 먼저 봄): 7.5 A · 8 A 2 → 사진이 후한 기존 경향과 같아 점수대로
+# 9.5~10 S · 8.5~9 A · 7.5~8 B · 6.5~7 C · 그 아래 D: 정확 일치 0/3 · 한 등급 이내 3/3
+NEBO_PREFIX = "NEBO: "
+
+
+def _nebo(score: str) -> str | None:
+    try:
+        v = float(score.replace(",", "."))
+    except ValueError:
+        return None
+    return "S" if v >= 9.5 else "A" if v >= 8.5 else "B" if v >= 7.5 else "C" if v >= 6.5 else "D"
 
 # 덴마크 FOTO/C: 설명 끝 'Kategori B+' / 'Stand A' — 매장 안내 Ny(새것 같음)·A(흔적 아주 적음)·B(보통)·C(흔적 많지만 잘 작동)·Vintage, +·- 붙음
 # 사진 평가(표기 가리고 판매 중 라이카 6점 전부, 작은 사진 1장씩, 2026-11-09 밤샘): A A 1 · B+ A 3 · B- B 1 · C+ B 1.

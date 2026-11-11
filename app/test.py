@@ -7151,6 +7151,84 @@ def crawl_goecker():
     return results
 
 
+def crawl_nebo():
+    """NEBO (네덜란드, Magento, 2026-11-12 밤샘) - 중고 '/tweedehands/'를 제조사 필터 manufacturer=429(Leica)로 받음
+    (robots.txt는 product_list_* 정렬·쪽 크기 주소만 막음 — 쓰지 않음, 쪽 넘김 ?p=는 허용). 가격 EUR.
+    등급은 상세 설명의 10점 만점 점수 '… occasion (8/10)' · 'goede staat (7.5/10)' (매장 리뷰 점수 8,8/10과 헷갈리지 않게 괄호 안만)"""
+    import html as _html
+    import requests
+    from condition_grade import NEBO_PREFIX
+    base = "https://www.neboweb.nl"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 NEBO 크롤링 시작")
+    items, seen = [], set()
+    for page in range(1, 20):
+        params = {"manufacturer": "429"} if page == 1 else {"manufacturer": "429", "p": page}
+        resp = sess.get(f"{base}/tweedehands/", params=params, timeout=40)
+        resp.raise_for_status()
+        lis = re.findall(r'<li class="item product product-item".*?</li>\s*(?=<li class="item product|</ol>)', resp.text, re.S)
+        new = 0
+        for li in lis:
+            nm = re.search(r'class="product-item-link"[^>]*>\s*([^<]+)', li)
+            href = re.search(r'href="(https://www\.neboweb\.nl/[^"]+)"', li)
+            if not nm or not href or href.group(1) in seen:
+                continue
+            seen.add(href.group(1))
+            new += 1
+            name = re.sub(r"\s+", " ", _html.unescape(nm.group(1))).strip()
+            if not re.match(r"(?i)lei(?:ca|tz)\b", name):
+                continue
+            pr = re.search(r'data-price-amount="([\d.]+)"', li)
+            items.append((name, href.group(1), f"€{float(pr.group(1)):,.0f}" if pr else "문의요망", "stock unavailable" in li))
+        print(f"    └─ {page}페이지 {len(lis)}개 (새 {new})")
+        if not lis or not new or f"p={page + 1}" not in resp.text:
+            break
+        time.sleep(1.5)
+    results = []
+    for name, link, price, sold in items:
+        cond, img = "정보없음", ""
+        try:
+            t = sess.get(link, timeout=40).text
+            full = re.search(r'"full":"([^"]+)"', t)
+            img = full.group(1).replace("\\/", "/") if full else ""
+            text = _html.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"(?s)<(script|style).*?</\1>", "", t)))
+            m = re.search(r"(?i)(?:staat|occasion|conditie)\s*\(\s*(\d+(?:[.,]\d)?)\s*/\s*10\s*\)", text)
+            if m:
+                cond = NEBO_PREFIX + m.group(1) + "/10"
+        except Exception as e:
+            print(f"    ⚠️ NEBO 상세 오류: {e}")
+        time.sleep(1.2)
+        nm = re.sub(r"(?i)\s+occasion\b", "", name)
+        nm = re.sub(r"(?i)\s*\+\s*tas\b", "", nm)  # 케이스가 이름에 있으면 케이스 단품(액세서리)으로 분류돼 카메라 연결이 빠짐
+        nm = re.sub(r"(?i)^Leica mini \(inc(?:l\.?)? date back\)", "Leica Mini Date", nm)
+        nm = re.sub(r"(?i)^Leica (CL|CLE|M\d\w*) \+ ", r"Leica \1 body + ", nm)  # 바디·렌즈 묶음은 바디에 붙게
+        nm = re.sub(r"(?i)\b(\d{2,3})mm (\d)\.(\d)\b", r"\1mm f/\2.\3", nm)
+        nm = re.sub(r"(?i)\bsummicron-c\b", "Summicron-C", nm)
+        nm = re.sub(r"(?i)\binc\b", "incl.", nm)
+        if re.search(r"(?i)\bbody \+ ", nm) and not re.search(r"(?i)\bset\b", nm):
+            nm += " set"
+        cat = detect_category(nm, price)
+        results.append({
+            "site": "NEBO (네덜란드)",
+            "label": auto_label(nm),
+            "상품명": nm,
+            "세대": detect_generation(nm),
+            "컨디션": cond,
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": link,
+            "품절": sold,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+            "category": cat,
+            "brand": detect_brand(nm),
+        })
+    print(f"  ✅ NEBO 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12292,6 +12370,7 @@ def crawl_all():
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
         ("Kameradoktorn (스웨덴)", lambda: ce.wrap_full_run("Kameradoktorn (스웨덴)", crawl_kameradoktorn)),
         ("Goecker (덴마크)", lambda: ce.wrap_full_run("Goecker (덴마크)", crawl_goecker)),
+        ("NEBO (네덜란드)", lambda: ce.wrap_full_run("NEBO (네덜란드)", crawl_nebo)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),

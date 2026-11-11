@@ -672,6 +672,15 @@ def test_goecker_stand():
     assert grade_of(site, GOECKER_PREFIX + "4")[0] == "D"
 
 
+def test_nebo_score():
+    from condition_grade import grade_of, NEBO_PREFIX
+    site = "NEBO (네덜란드)"
+    assert grade_of(site, NEBO_PREFIX + "7.5/10")[0] == "B"
+    assert grade_of(site, NEBO_PREFIX + "8/10")[0] == "B"
+    assert grade_of(site, NEBO_PREFIX + "9/10")[0] == "A"
+    assert grade_of(site, NEBO_PREFIX + "6,5/10")[0] == "C"
+
+
 def test_fotoc_kategori():
     from condition_grade import grade_of, FOTOC_PREFIX
     site = "FOTO/C (덴마크)"
