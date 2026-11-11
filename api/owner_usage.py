@@ -236,39 +236,22 @@ def load_browser_history(entries: list[dict]) -> dict[str, dict] | None:
         return None
 
 
-def _browser_cell(v: dict, history: dict[str, dict] | None) -> str:
-    vid = v.get("vid")
-    if not vid:
-        return '<span class=muted>재방문 식별 없음</span>'
-    label = f"브라우저 {_esc(vid[:8])}"
-    if not (history or {}).get(vid):
-        return label + '<br><small>누적 집계 확인 불가</small>'
-    return f'<a href="#browser-{_esc(vid)}">{label}</a>'
-
-
-def _browser_table(recent: list[dict], history: dict[str, dict] | None) -> str:
-    """전체 이력을 최근 방문마다 되풀이하지 않고 브라우저당 한 줄로 보여 준다."""
-    seen, rows = set(), []
-    for v in recent:
-        vid = v.get("vid")
-        if not vid or vid in seen:
-            continue
-        seen.add(vid)
-        record = (history or {}).get(vid)
-        if record:
-            first, _ = _local_time(record["first_seen"], "Asia/Seoul", "KR", "%Y-%m-%d %H:%M:%S")
-            last, _ = _local_time(record["last_seen"], "Asia/Seoul", "KR", "%Y-%m-%d %H:%M:%S")
-            cells = (f'<td class=nowrap><b>누적 {_esc(record["visits"])}회</b></td>'
-                     f'<td class=nowrap>첫 방문 {_esc(first)}</td><td class=nowrap>최근 방문 {_esc(last)}</td>')
-        else:
-            cells = '<td colspan=3 class=muted>누적 집계 확인 불가</td>'
-        rows.append(f'<tr id="browser-{_esc(vid)}"><td class=nowrap>브라우저 {_esc(vid[:8])}</td>{cells}</tr>')
-    body = "".join(rows) or '<tr><td colspan=4 class=muted>재방문을 식별할 수 있는 기록이 없습니다.</td></tr>'
-    return ("<section class='card wide'><h2>브라우저별 재방문 이력 (한 브라우저 = 한 줄)</h2>"
-            "<p class=muted>아래 최근 방문에 나온 브라우저의 전체 이력입니다. 누적 횟수·첫 방문·최근 방문은 선택 기간과 "
-            "관계없이 보유 기록 전체(최근 365일) 기준이며, 이 표의 시각은 한국 시각입니다.</p>"
-            "<table><tr><td class=muted>브라우저</td><td class=muted>누적 방문</td>"
-            f"<td class=muted>첫 방문 (한국 시각)</td><td class=muted>최근 방문 (한국 시각)</td></tr>{body}</table></section>")
+def _prior_visit_badge(v: dict, history: dict[str, dict] | None) -> str:
+    """이번 방문 전에 몇 번 왔는지만 표시. 뒤에 일어난 방문은 세지 않는다."""
+    record = (history or {}).get(v.get("vid"))
+    if record:
+        try:
+            when = dt.datetime.fromisoformat(v["start"].replace("Z", "+00:00"))
+            for previous, span in enumerate(record.get("sessions") or []):
+                first = dt.datetime.fromisoformat(str(span["first_seen"]).replace("Z", "+00:00"))
+                last = dt.datetime.fromisoformat(str(span["last_seen"]).replace("Z", "+00:00"))
+                if first <= when <= last:
+                    if previous == 0:
+                        return '<span class="prior-visit muted">첫 방문</span>'
+                    return f'<span class="prior-visit returning">이전에 {previous}번 방문</span>'
+        except (KeyError, TypeError, ValueError):
+            pass
+    return '<span class="prior-visit muted">이전 방문 확인 불가</span>'
 
 
 def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date: str | None = None,
@@ -313,10 +296,11 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
             else:
                 steps.append(f"<span class='step click'>↗ {_esc(s.get('host'))}</span>")
         when, when_note = _local_time(v["start"], v["tz"], v["country"], "%m-%d %H:%M:%S")
+        prior = _prior_visit_badge(v, history)
         device = "📱" if v["mobile"] else "💻"
-        rows.append(f"<tr><td class=nowrap>{_esc(when)}{f"<br><small>{_esc(when_note)}</small>" if when_note else ''}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
-                    f"<td class=nowrap>{_browser_cell(v, history)}</td><td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초{f"<br><span class=muted>{_esc(v['scroll'])}% 내려 봄</span>" if v.get('scroll') else ''}</td><td>{''.join(steps)}</td></tr>")
-    visit_table = "".join(rows) or "<tr><td colspan=6 class=muted>이 기간에 방문이 없습니다</td></tr>"
+        rows.append(f"<tr><td class=nowrap>{_esc(when)}<br>{prior}{f"<br><small>{_esc(when_note)}</small>" if when_note else ''}</td><td>{_esc(_ref_name(v['referrer'], v['landing']))}{f"<br><small>{_esc(v['referrer'])}</small>" if v['referrer'] and '/' in v['referrer'] else ''}{f"<br><small>→ {_esc(v['landing'])}</small>" if v['landing'] and v['landing'] != '/' else ''}</td><td class=nowrap>{_esc(_country_name(v['country']))}<br><small>{device} {_esc(v['locale'] or '-')} · {_esc(v['currency'] or '')}</small></td>"
+                    f"<td class=nowrap>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초{f"<br><span class=muted>{_esc(v['scroll'])}% 내려 봄</span>" if v.get('scroll') else ''}</td><td>{''.join(steps)}</td></tr>")
+    visit_table = "".join(rows) or "<tr><td colspan=5 class=muted>이 기간에 방문이 없습니다</td></tr>"
 
     fb_rows = "".join(f"<tr><td class=nowrap>{_esc(str(f.get('created_at', ''))[5:16].replace('T', ' '))}</td><td>{_esc(f.get('locale') or '-')}</td><td>{_esc(f.get('message'))}</td></tr>" for f in feedback) \
         or "<tr><td colspan=3 class=muted>아직 없음</td></tr>"
@@ -333,7 +317,8 @@ h1{{font-size:22px;margin:0}}h2{{font-size:15px;margin:0 0 10px}}.muted{{color:v
 .kpi b{{display:block;font-size:26px}}.kpi span{{color:var(--muted);font-size:13px}}
 .grid{{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}}.card{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto}}.wide{{grid-column:1/-1}}
 table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px solid var(--line);vertical-align:top}}tr:first-child td{{border-top:0}}td.n{{text-align:right;font-variant-numeric:tabular-nums}}.nowrap{{white-space:nowrap}}
-.visit-table{{min-width:1000px}}
+.visit-table{{min-width:880px}}
+.prior-visit{{display:inline-block;font-size:13px;margin-top:3px}}.prior-visit.returning{{font-weight:700}}
 .step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}.step.page{{background:transparent;border:1px solid var(--line)}}.step.typed{{outline:2px solid var(--text)}}
 .days td a{{color:var(--text)}}.days tr.on td{{font-weight:700}}.bar a{{display:contents;color:inherit}}
 .bars{{display:flex;gap:4px;align-items:flex-end;height:130px}}.bar{{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}}
@@ -341,7 +326,7 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 .note{{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:13px}}a{{color:var(--accent)}}
 @media (max-width:760px){{.kpis{{grid-template-columns:repeat(2,1fr)}}.grid{{grid-template-columns:1fr}}td{{font-size:13px}}}}
 </style></head><body><main>
-<header><div><h1>방문 현황{f' · {_esc(date)}' if date else ''}</h1><span class=muted>{now} 기준 · 같은 브라우저의 30분 이내 연속 기록은 한 방문 · 예전 기록은 같은 IP 하루 1번</span></div><nav class=tabs>{tabs}</nav></header>
+<header><div><h1>방문 현황{f' · {_esc(date)}' if date else ''}</h1><span class=muted>{now} 기준</span></div><nav class=tabs>{tabs}</nav></header>
 <div class=kpis>
 <div class=kpi><b>{r['visits']}</b><span>방문</span></div>
 <div class=kpi><b>{r['visits_with_activity']}</b><span>검색·클릭한 방문</span></div>
@@ -361,12 +346,9 @@ table{{width:100%;border-collapse:collapse}}td{{padding:6px 4px;border-top:1px s
 {_table('링크·버튼으로 연 모델', r['opened_models'][:10], note='모델 시세 페이지의 "전체 매물 보기"나 첫 화면 모델 버튼')}
 {_table('결과 0건 검색어 (고칠 것)', r['zero_result_queries'][:10])}
 {_table('판매 중 0건 검색어', r['no_active_queries'][:10])}
-<section class='card wide'><h2>최근 방문 (새 기록은 한 줄 = 한 번의 방문)</h2>
-<p class=muted>브라우저 식별 적용 이후부터 집계하며, 저장소 삭제·다른 브라우저·다른 기기는 별도로 셉니다.
-같은 브라우저의 탭·페이지 이동·반복 전송을 묶고, 기록 간격이 30분 이상일 때만 새 방문으로 셉니다.
-시각은 해당 방문의 첫 기록 시각이며 손님 현지 시각입니다. 브라우저 링크를 누르면 아래 전체 이력으로 이동합니다.</p>
-<table class=visit-table><tr><td class=muted>첫 기록 (손님 현지 시각)</td><td class=muted>어디서 · 처음 들어온 주소</td><td class=muted>나라·기기·언어</td><td class=muted>브라우저</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
-{_browser_table(recent, history)}
+<section class='card wide'><h2>최근 방문</h2>
+<p class=muted>각 방문 아래에 그전에 방문한 횟수를 표시합니다. 기록된 최근 1년 · 같은 브라우저 기준입니다.</p>
+<table class=visit-table><tr><td class=muted>방문 시각 · 이전 방문</td><td class=muted>어디서 · 처음 들어온 주소</td><td class=muted>나라·기기·언어</td><td class=muted>머문 시간</td><td class=muted>한 일</td></tr>{visit_table}</table></section>
 <section class='card wide'><h2>최근 의견 (💬 의견 보내기)</h2><table>{fb_rows}</table></section>
 </div>
 <p class=note>2026-11-07 전 기록은 검색·클릭한 방문만 남아 있습니다. 집계 방식이 다른 <a href="{ANALYTICS_URL}" target=_blank rel=noopener>Vercel Analytics</a> 통계와 숫자가 다를 수 있습니다.
