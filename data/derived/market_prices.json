@@ -1,109 +1,4 @@
 {
-  "Leica M5": {
-    "weighted_median": 2000000,
-    "sample_count": 20,
-    "min": 80000,
-    "max": 12009227,
-    "avg": 2425949
-  },
-  "75mm APO-Summicron": {
-    "weighted_median": 4280000,
-    "sample_count": 43,
-    "min": 2700000,
-    "max": 6810514,
-    "avg": 4335917
-  },
-  "Leica MP": {
-    "weighted_median": 7180000,
-    "sample_count": 73,
-    "min": 317553,
-    "max": 56058334,
-    "avg": 8411877
-  },
-  "Leica Q2": {
-    "weighted_median": 5180000,
-    "sample_count": 96,
-    "min": 3500000,
-    "max": 11187589,
-    "avg": 5209012
-  },
-  "Leica V-LUX": {
-    "weighted_median": 1200000,
-    "sample_count": 11,
-    "min": 537004,
-    "max": 1650000,
-    "avg": 1168221
-  },
-  "Leica D-LUX": {
-    "weighted_median": 1957397,
-    "sample_count": 87,
-    "min": 424586,
-    "max": 3313585,
-    "avg": 1673699
-  },
-  "Summicron": {
-    "weighted_median": 1926974,
-    "sample_count": 45,
-    "min": 98080,
-    "max": 59781186,
-    "avg": 3469856
-  },
-  "Leica Q": {
-    "weighted_median": 3130000,
-    "sample_count": 41,
-    "min": 1800000,
-    "max": 4162948,
-    "avg": 3018098
-  },
-  "Leica M262": {
-    "weighted_median": 16347024,
-    "sample_count": 5,
-    "min": 4305946,
-    "max": 19340651,
-    "avg": 10408304
-  },
-  "50mm Summicron DR": {
-    "weighted_median": 1500000,
-    "sample_count": 13,
-    "min": 1033351,
-    "max": 2949928,
-    "avg": 1692481
-  },
-  "35mm Summaron": {
-    "weighted_median": 1188353,
-    "sample_count": 82,
-    "min": 518846,
-    "max": 2980000,
-    "avg": 1407168
-  },
-  "Tri-Elmar 28-35-50 (MATE)": {
-    "weighted_median": 4629725,
-    "sample_count": 9,
-    "min": 1404156,
-    "max": 7044998,
-    "avg": 4047204
-  },
-  "50mm Summar": {
-    "weighted_median": 662901,
-    "sample_count": 16,
-    "min": 501602,
-    "max": 2750000,
-    "avg": 900942
-  },
-  "Leica Barnack": {
-    "weighted_median": 900000,
-    "sample_count": 61,
-    "min": 545534,
-    "max": 6313699,
-    "avg": 1379832
-  },
-  "180mm Elmarit-R": {
-    "weighted_median": 527067,
-    "sample_count": 7,
-    "min": 390787,
-    "max": 3324122,
-    "avg": 1298463
-  },
   "21mm Super-Angulon": {
     "weighted_median": 1400000,
     "sample_count": 27,
@@ -127,17 +22,17 @@
   },
   "35mm Summicron ASPH": {
     "weighted_median": 3300000,
-    "sample_count": 121,
+    "sample_count": 122,
     "min": 360000,
     "max": 33000000,
-    "avg": 4500245
+    "avg": 4486877
   },
   "Leica M11": {
     "weighted_median": 10480000,
-    "sample_count": 145,
+    "sample_count": 147,
     "min": 550000,
     "max": 15000000,
-    "avg": 10723752
+    "avg": 10737222
   },
   "Leica Q3": {
     "weighted_median": 8004049,
@@ -174,6 +69,13 @@
     "max": 1572169,
     "avg": 1038520
   },
+  "Leica Q2": {
+    "weighted_median": 5180000,
+    "sample_count": 95,
+    "min": 3500000,
+    "max": 11187589,
+    "avg": 5236619
+  },
   "Vario-35mm R": {
     "weighted_median": 2687074,
     "sample_count": 4,
@@ -202,12 +104,26 @@
     "max": 14488447,
     "avg": 7453690
   },
+  "Leica Barnack": {
+    "weighted_median": 900000,
+    "sample_count": 60,
+    "min": 545534,
+    "max": 6313699,
+    "avg": 1385570
+  },
   "90mm Elmarit": {
     "weighted_median": 1180000,
     "sample_count": 48,
     "min": 224798,
     "max": 5752486,
     "avg": 1265636
+  },
+  "75mm APO-Summicron": {
+    "weighted_median": 4280000,
+    "sample_count": 41,
+    "min": 2700000,
+    "max": 6810514,
+    "avg": 4306415
   },
   "24mm Summilux ASPH": {
     "weighted_median": 6880000,
@@ -265,6 +181,20 @@
     "max": 14712939,
     "avg": 4039572
   },
+  "Leica D-LUX": {
+    "weighted_median": 1957397,
+    "sample_count": 86,
+    "min": 424586,
+    "max": 3313585,
+    "avg": 1665958
+  },
+  "Leica MP": {
+    "weighted_median": 7200000,
+    "sample_count": 72,
+    "min": 317553,
+    "max": 56058334,
+    "avg": 8521352
+  },
   "50mm Noctilux f1.2 ASPH": {
     "weighted_median": 7680000,
     "sample_count": 38,
@@ -279,6 +209,13 @@
     "max": 3500000,
     "avg": 1140141
   },
+  "Summicron": {
+    "weighted_median": 1926974,
+    "sample_count": 43,
+    "min": 98080,
+    "max": 59781186,
+    "avg": 3509782
+  },
   "Leica M240": {
     "weighted_median": 4460474,
     "sample_count": 17,
@@ -287,11 +224,18 @@
     "avg": 4443156
   },
   "Elmarit": {
-    "weighted_median": 2763490,
-    "sample_count": 18,
+    "weighted_median": 2762900,
+    "sample_count": 19,
     "min": 758932,
     "max": 6800000,
-    "avg": 3058904
+    "avg": 2938671
+  },
+  "Leica M5": {
+    "weighted_median": 2300000,
+    "sample_count": 19,
+    "min": 80000,
+    "max": 12009227,
+    "avg": 2458893
   },
   "Leica M6": {
     "weighted_median": 4900772,
@@ -306,6 +250,13 @@
     "min": 1054794,
     "max": 1792028,
     "avg": 1372374
+  },
+  "180mm Elmarit-R": {
+    "weighted_median": 527067,
+    "sample_count": 6,
+    "min": 390787,
+    "max": 3324122,
+    "avg": 1414818
   },
   "280mm R Lens": {
     "weighted_median": 2695571,
@@ -329,11 +280,11 @@
     "avg": 6567739
   },
   "90mm Summicron-R": {
-    "weighted_median": 938250,
-    "sample_count": 5,
+    "weighted_median": 605627,
+    "sample_count": 6,
     "min": 569224,
     "max": 1120094,
-    "avg": 851216
+    "avg": 809156
   },
   "Leica M3": {
     "weighted_median": 2422315,
@@ -342,19 +293,26 @@
     "max": 4548003,
     "avg": 2485770
   },
+  "Leica Q": {
+    "weighted_median": 3130000,
+    "sample_count": 40,
+    "min": 1800000,
+    "max": 4162948,
+    "avg": 3030140
+  },
   "90mm Summicron": {
     "weighted_median": 1480000,
-    "sample_count": 29,
+    "sample_count": 31,
     "min": 887047,
     "max": 2693250,
-    "avg": 1549443
+    "avg": 1548908
   },
   "35mm Summicron": {
     "weighted_median": 3400000,
-    "sample_count": 46,
+    "sample_count": 47,
     "min": 1625780,
     "max": 84087501,
-    "avg": 7248665
+    "avg": 7138986
   },
   "Leica CL": {
     "weighted_median": 2300000,
@@ -442,10 +400,10 @@
   },
   "Leica SL3": {
     "weighted_median": 6490996,
-    "sample_count": 63,
+    "sample_count": 64,
     "min": 4387853,
     "max": 8980000,
-    "avg": 6921666
+    "avg": 6939278
   },
   "28mm Elmarit": {
     "weighted_median": 1603214,
@@ -463,10 +421,10 @@
   },
   "28mm Summilux ASPH": {
     "weighted_median": 6671013,
-    "sample_count": 26,
+    "sample_count": 27,
     "min": 4700000,
     "max": 8294938,
-    "avg": 6518314
+    "avg": 6457948
   },
   "35mm Summilux ASPH": {
     "weighted_median": 4500000,
@@ -526,10 +484,10 @@
   },
   "50mm Elmar f2.8": {
     "weighted_median": 1180085,
-    "sample_count": 42,
+    "sample_count": 44,
     "min": 496600,
     "max": 12500000,
-    "avg": 1715589
+    "avg": 1683058
   },
   "50mm Summicron Rigid": {
     "weighted_median": 2200000,
@@ -537,6 +495,13 @@
     "min": 999834,
     "max": 11859351,
     "avg": 2566426
+  },
+  "50mm Summicron DR": {
+    "weighted_median": 1525064,
+    "sample_count": 12,
+    "min": 1150174,
+    "max": 2949928,
+    "avg": 1747409
   },
   "200mm Elmarit": {
     "weighted_median": 3843958,
@@ -573,6 +538,13 @@
     "max": 1870000,
     "avg": 1179593
   },
+  "Leica V-LUX": {
+    "weighted_median": 1200000,
+    "sample_count": 10,
+    "min": 675622,
+    "max": 1650000,
+    "avg": 1231343
+  },
   "Leica SL": {
     "weighted_median": 1880000,
     "sample_count": 25,
@@ -586,6 +558,13 @@
     "min": 2007999,
     "max": 6044749,
     "avg": 3298012
+  },
+  "35mm Summaron": {
+    "weighted_median": 1156525,
+    "sample_count": 81,
+    "min": 518846,
+    "max": 2980000,
+    "avg": 1399651
   },
   "90mm APO-Summicron": {
     "weighted_median": 3920204,
@@ -638,10 +617,10 @@
   },
   "50mm Noctilux f1.2": {
     "weighted_median": 10740165,
-    "sample_count": 8,
+    "sample_count": 9,
     "min": 6003946,
-    "max": 13430999,
-    "avg": 10040520
+    "max": 31518873,
+    "avg": 12427003
   },
   "Elmar": {
     "weighted_median": 718066,
@@ -707,11 +686,11 @@
     "avg": 1430449
   },
   "Leica M-A": {
-    "weighted_median": 6950000,
-    "sample_count": 19,
+    "weighted_median": 6880000,
+    "sample_count": 20,
     "min": 5380000,
     "max": 7356352,
-    "avg": 6612357
+    "avg": 6617096
   },
   "28mm Summaron": {
     "weighted_median": 3100000,
@@ -750,10 +729,10 @@
   },
   "180mm R Lens": {
     "weighted_median": 676909,
-    "sample_count": 6,
+    "sample_count": 7,
     "min": 490126,
     "max": 1777217,
-    "avg": 907190
+    "avg": 863651
   },
   "90mm Summarit": {
     "weighted_median": 1680000,
@@ -777,11 +756,11 @@
     "avg": 11866849
   },
   "135mm APO-Telyt": {
-    "weighted_median": 3103139,
-    "sample_count": 13,
+    "weighted_median": 3180000,
+    "sample_count": 14,
     "min": 2300000,
     "max": 4583250,
-    "avg": 3186126
+    "avg": 3245955
   },
   "280mm Elmarit": {
     "weighted_median": 5962630,
@@ -804,12 +783,26 @@
     "max": 1380000,
     "avg": 578409
   },
+  "Leica M262": {
+    "weighted_median": 16347024,
+    "sample_count": 4,
+    "min": 4305946,
+    "max": 19340651,
+    "avg": 11671259
+  },
   "90mm Elmarit-R": {
     "weighted_median": 521345,
     "sample_count": 10,
     "min": 295682,
     "max": 3858284,
     "avg": 1359142
+  },
+  "50mm Summar": {
+    "weighted_median": 669301,
+    "sample_count": 17,
+    "min": 501602,
+    "max": 3452067,
+    "avg": 1042915
   },
   "28mm Hektor": {
     "weighted_median": 1951838,
@@ -888,6 +881,13 @@
     "max": 17000000,
     "avg": 6720494
   },
+  "Tri-Elmar 28-35-50 (MATE)": {
+    "weighted_median": 4629725,
+    "sample_count": 8,
+    "min": 1404156,
+    "max": 7044998,
+    "avg": 4130248
+  },
   "Leica R7": {
     "weighted_median": 649833,
     "sample_count": 6,
@@ -909,12 +909,19 @@
     "max": 4980000,
     "avg": 4656666
   },
+  "Vario-210mm R": {
+    "weighted_median": 341271,
+    "sample_count": 3,
+    "min": 330197,
+    "max": 655449,
+    "avg": 442306
+  },
   "35mm Summilux-R": {
-    "weighted_median": 5559071,
-    "sample_count": 5,
+    "weighted_median": 4447256,
+    "sample_count": 6,
     "min": 3991389,
     "max": 5900000,
-    "avg": 5159543
+    "avg": 5037561
   },
   "Leica X": {
     "weighted_median": 1300000,
@@ -1009,10 +1016,10 @@
   },
   "35mm Summicron 8-element": {
     "weighted_median": 7000000,
-    "sample_count": 21,
+    "sample_count": 22,
     "min": 2464208,
     "max": 8600000,
-    "avg": 6653533
+    "avg": 6491368
   },
   "Leica R3": {
     "weighted_median": 672056,
@@ -1111,6 +1118,13 @@
     "min": 600000,
     "max": 832179,
     "avg": 677393
+  },
+  "135mm Elmarit-R": {
+    "weighted_median": 374332,
+    "sample_count": 3,
+    "min": 180625,
+    "max": 435260,
+    "avg": 330073
   },
   "Leica Q-P": {
     "weighted_median": 3980000,
