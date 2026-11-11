@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 886,
+   "count": 887,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 735,
+   "count": 734,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 639,
+   "count": 638,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 603,
+   "count": 602,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -57,13 +57,13 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:meter",
-   "count": 190,
+   "count": 189,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:mechanical",
-   "count": 190,
+   "count": 189,
    "example": "[중고] M6 CLASSIC"
   },
   {
@@ -75,13 +75,13 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:frameline-28",
-   "count": 180,
+   "count": 179,
    "example": "[중고] M6 CLASSIC"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 165,
+   "count": 167,
    "example": "[위탁] M11 Monochrom"
   },
   {
@@ -117,7 +117,7 @@
   {
    "a": "leica:body:m10:standard",
    "b": "leica:feature:frameline-28",
-   "count": 120,
+   "count": 119,
    "example": "Leica M10 Black"
   },
   {
@@ -351,7 +351,7 @@
   {
    "a": "leica:body:q2-monochrom:standard",
    "b": "leica:feature:monochrom",
-   "count": 47,
+   "count": 49,
    "example": "[중고] Leica Q2 Monochrome"
   },
   {
@@ -377,6 +377,18 @@
    "b": "leica:feature:mechanical",
    "count": 40,
    "example": "LEICA M3 Single Stroke sn.1156"
+  },
+  {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:frameline-28",
+   "count": 39,
+   "example": "[위탁] M11 Monochrom"
+  },
+  {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:monochrom",
+   "count": 39,
+   "example": "[위탁] M11 Monochrom"
   },
   {
    "a": "leica:body:m-monochrom-246:standard",
@@ -419,18 +431,6 @@
    "b": "leica:feature:frameline-28",
    "count": 38,
    "example": "[중고] M9"
-  },
-  {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:frameline-28",
-   "count": 37,
-   "example": "[위탁] M11 Monochrom"
-  },
-  {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:monochrom",
-   "count": 37,
-   "example": "[위탁] M11 Monochrom"
   },
   {
    "a": "leica:feature:black-paint",
@@ -513,13 +513,13 @@
   {
    "a": "leica:body:m4-2:standard",
    "b": "leica:feature:no-meter",
-   "count": 30,
+   "count": 31,
    "example": "[위탁] M4-2 (Black)"
   },
   {
    "a": "leica:body:m4-2:standard",
    "b": "leica:feature:mechanical",
-   "count": 30,
+   "count": 31,
    "example": "[위탁] M4-2 (Black)"
   },
   {
@@ -1499,7 +1499,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 165,
+   "count": 167,
    "example": "[위탁] M11 Monochrom"
   },
   {
