@@ -7308,6 +7308,59 @@ def crawl_photoqueen():
     return results
 
 
+def crawl_edarkroom():
+    """e-darkroom (그리스 아테네, nopCommerce, 2026-11-12 밤샘) - 사이트 검색 '/search?q=leica'·'q=leitz'(robots.txt 허용)에서
+    이름에 '중고(μεταχειρισμένη/-ος/-ο · second hand · used)'가 적힌 라이카만. 검색 결과에 판매 중인 것만 나옴(장바구니 버튼).
+    등급 표기 없음 — 설명 글에 'πολύ καλή κατάσταση'(아주 좋은 상태) 같은 말뿐 (사진 등급 대기열). 가격 EUR"""
+    import html as _html
+    import requests
+    base = "https://www.e-darkroom.gr"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    used = re.compile(r"(?i)μεταχειρισμ|second[- ]hand|\bused\b")
+    print(f"\n  📂 e-darkroom 크롤링 시작")
+    results, seen = [], set()
+    for q in ("leica", "leitz"):
+        resp = sess.get(f"{base}/search", params={"q": q}, timeout=30)
+        resp.raise_for_status()
+        for b in re.split(r'<div class="product-item"', resp.text)[1:]:
+            n = re.search(r'product-title">\s*<a href="([^"]+)">([^<]+)', b)
+            if not n or n.group(1) in seen:
+                continue
+            seen.add(n.group(1))
+            name = re.sub(r"\s+", " ", _html.unescape(n.group(2))).strip().rstrip(".")
+            if not used.search(name) or not re.search(r"(?i)\blei(?:ca|tz)", name):
+                continue
+            pr = re.search(r'price actual-price">\s*([\d.]+),(\d\d)', b)
+            img = re.search(r'<img[^>]+src="([^"]+)"', b)
+            nm = re.sub(r"(?i)\s*μεταχειρισμ\w*\.?", "", name)
+            nm = re.sub(r"(?i)\s*αναλογική φωτογραφική μηχανή", "", nm)
+            nm = re.sub(r"(?i)^LEICAFLEX SL kit\b", "Leicaflex SL body (with Pentor 35mm · Soligor 250mm lenses)", nm) if "LEICAFLEX SL kit" in nm else nm
+            nm = re.sub(r"(?i)^LEITZ WETZLAR MACRO-ELMAR-R lens 100mm f4 for LEICA BODY R", "Leitz Macro-Elmar-R 100mm f/4", nm)
+            nm = re.sub(r"\s+", " ", nm).strip()
+            price = f"€{int(pr.group(1).replace('.', '')):,}" if pr else "문의요망"
+            cat = detect_category(nm, price)
+            results.append({
+                "site": "e-darkroom (그리스)",
+                "label": auto_label(nm),
+                "상품명": nm,
+                "세대": detect_generation(nm),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "EUR",
+                "이미지": img.group(1) if img else "",
+                "링크": base + n.group(1),
+                "품절": "add-to-cart-button" not in b,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(nm),
+                "category": cat,
+                "brand": detect_brand(nm),
+            })
+        time.sleep(1.5)
+    print(f"  ✅ e-darkroom 완료: {len(results)}개")
+    return results
+
+
 def crawl_fotoc():
     """FOTO/C (덴마크 코펜하겐, PrestaShop, 2026-11-09 밤샘) - 중고 분류 '42-brugt-udstyr' 전체(240개쯤, 10쪽)에서
     상품 칸의 브랜드가 Leica이고 이름이 Leica·Leitz로 시작하는 것만 (브랜드가 잘못 붙은 니콘 후드가 있었음). 가격 DKK.
@@ -12451,6 +12504,7 @@ def crawl_all():
         ("Goecker (덴마크)", lambda: ce.wrap_full_run("Goecker (덴마크)", crawl_goecker)),
         ("NEBO (네덜란드)", lambda: ce.wrap_full_run("NEBO (네덜란드)", crawl_nebo)),
         ("PhotoQueen (그리스)", lambda: ce.wrap_full_run("PhotoQueen (그리스)", crawl_photoqueen)),
+        ("e-darkroom (그리스)", lambda: ce.wrap_full_run("e-darkroom (그리스)", crawl_edarkroom)),
         ("FOTO/C (덴마크)", lambda: ce.wrap_full_run("FOTO/C (덴마크)", crawl_fotoc)),
         ("Digitalstore (오스트리아)", lambda: ce.wrap_full_run("Digitalstore (오스트리아)", crawl_digitalstore)),
         ("Foto Hebenstreit (오스트리아)", lambda: ce.wrap_full_run("Foto Hebenstreit (오스트리아)", crawl_hebenstreit)),
