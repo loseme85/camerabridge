@@ -81,7 +81,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 167,
+   "count": 166,
    "example": "[위탁] M11 Monochrom"
   },
   {
@@ -229,16 +229,16 @@
    "example": "LEICA M5 sn.1377"
   },
   {
-   "a": "leica:body:m11-p:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 68,
-   "example": "Leica M11-P Silver"
-  },
-  {
    "a": "leica:body:m240:standard",
    "b": "leica:feature:frameline-28",
    "count": 68,
    "example": "[위탁] M 240 (Black)"
+  },
+  {
+   "a": "leica:body:m11-p:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 67,
+   "example": "Leica M11-P Silver"
   },
   {
    "a": "leica:body:m8:standard",
@@ -391,18 +391,6 @@
    "example": "[위탁] M11 Monochrom"
   },
   {
-   "a": "leica:body:m-monochrom-246:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 39,
-   "example": "[중고] M Monochrom Typ 246 (Black)"
-  },
-  {
-   "a": "leica:body:m-monochrom-246:standard",
-   "b": "leica:feature:monochrom",
-   "count": 39,
-   "example": "[중고] M Monochrom Typ 246 (Black)"
-  },
-  {
    "a": "leica:body:m-a:standard",
    "b": "leica:feature:frameline-28",
    "count": 38,
@@ -425,6 +413,18 @@
    "b": "leica:lens:summicron-m:35:v1-eyes",
    "count": 38,
    "example": "Leica M 35mm f2 Summicron 1st 8elements EYE Black Repaint"
+  },
+  {
+   "a": "leica:body:m-monochrom-246:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 38,
+   "example": "[중고] M Monochrom Typ 246 (Black)"
+  },
+  {
+   "a": "leica:body:m-monochrom-246:standard",
+   "b": "leica:feature:monochrom",
+   "count": 38,
+   "example": "[중고] M Monochrom Typ 246 (Black)"
   },
   {
    "a": "leica:body:m9:standard",
@@ -1499,7 +1499,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 167,
+   "count": 166,
    "example": "[위탁] M11 Monochrom"
   },
   {
