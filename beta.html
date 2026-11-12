@@ -8269,16 +8269,20 @@
 
     // 2026-11-13 사장님: 맨 위에서만 머리글 전체, 조금이라도 내려가면 body.cb-scroll-down (휴대폰은 검색창만 남음),
     // 맨 위로 다시 올라가야 전체가 돌아옴 (올릴 때마다 나타났다 사라져 어지러웠음)
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
+    // 아이폰은 튕김·관성 스크롤 끝에 scroll 이벤트가 정확히 0에서 안 올 때가 있어 40px 안이면 '맨 위'로 보고, 손을 뗄 때·스크롤이 멈출 때도 다시 봄
+    function updateTopbarCollapse(){
+      const y = Math.max(0, window.scrollY);
       const body = document.body.classList;
-      if(!body.contains('cb-scroll-down') && y > 60){
+      if(!body.contains('cb-scroll-down') && y > 80){
         updateStickySearchVisibility();
         body.add('cb-scroll-down');
-      }else if(body.contains('cb-scroll-down') && y < 4){
+      }else if(body.contains('cb-scroll-down') && y < 40){
         body.remove('cb-scroll-down');
       }
-    }, { passive: true });
+    }
+    window.addEventListener('scroll', updateTopbarCollapse, { passive: true });
+    window.addEventListener('scrollend', updateTopbarCollapse, { passive: true });
+    window.addEventListener('touchend', () => setTimeout(updateTopbarCollapse, 350), { passive: true });
 
     function bindEvents(){
       const shareButton = document.getElementById('summary-share');
