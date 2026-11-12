@@ -326,3 +326,21 @@ def test_alerts_on_sends_confirmation_email(monkeypatch):
     def boom(*_a):
         raise RuntimeError("mail down")
     assert board.alerts_on({"credential": "tok-c", "locale": "de"}, a, current={}, send=boom)[0] == 200
+
+
+def test_want_add_sends_confirmation_email(monkeypatch):
+    # 2026-11-13 사장님: 알림을 걸면 어떤 조건으로 걸었는지, 맞으면 메일을 준다고 바로 확인 메일 (로고·정중하게)
+    fake, _ = _setup(monkeypatch)
+    monkeypatch.setattr(board, "google_identity", lambda c: {"sub": "sub-a", "email": "a@example.com", "email_verified": True})
+    a = _join("tok-a", "필름러")
+    sent = []
+    send = lambda to, subject, body: sent.append((to, subject, body)) or True
+    want = {"entity": "leica:lens:summicron-m:35:v4", "name": "Summicron 35 4th", "grade": "B", "max_total": 2500000, "currency": "KRW", "dest": "KR"}
+    status, out = board.want_add(want, a, records=[], send=send)
+    assert status == 200 and out["mailed"] is False and not sent  # 메일 알림을 안 켰으면 보내지 않음
+    board.alerts_on({"credential": "x", "locale": "ko"}, a, current={}, send=lambda *x: True)
+    status, out = board.want_add(want, a, records=[], send=send)
+    assert status == 200 and out["mailed"] is True and len(sent) == 1
+    to, subject, body = sent[0]
+    assert to == "a@example.com" and "Summicron 35 4th" in subject
+    assert board.EMAIL_LOGO in body and "B등급 이상" in body and "KRW 2,500,000" in body and "한국" in body and "r=unsub" in body
