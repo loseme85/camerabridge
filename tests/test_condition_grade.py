@@ -730,3 +730,10 @@ def test_kuecher_zustand():
     assert grade_of(site, KUECHER_PREFIX + "B")[0] == "B"
     assert grade_of(site, KUECHER_PREFIX + "B-")[0] == "C"
     assert grade_of(site, KUECHER_PREFIX + "C")[0] == "D"
+
+
+def test_lcf_for_parts_is_broken():
+    """Leica Store France: 등급 칸 'B : Very good'이어도 설명이 '부품용'이면 X (2026-11-12, M5 790€)"""
+    from condition_grade import LCF_PREFIX
+    assert grade_of("Leica Store France (프랑스)", LCF_PREFIX + "B : Very good · for parts", "LEICA M5")[0] == "X"
+    assert grade_of("Leica Store France (프랑스)", LCF_PREFIX + "B : Very good", "LEICA M5")[0] == "B"
