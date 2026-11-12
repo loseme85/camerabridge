@@ -1,4 +1,10 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "site-test/**": false,
+      "source-*": false
+    }
+  },
   "functions": {
     "api/*.py": {
       "excludeFiles": "{data/derived/results_classified_v2.json,data/normalized/normalized_latest.json,data/raw/results.json,results.json,??/**,zh-*/**,impressum/**,img/**,data/dealer/price_weekly.json,data/derived/results_resolved_v2.json,data/admin/**,data/history/**}"
