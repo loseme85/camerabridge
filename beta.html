@@ -1626,7 +1626,10 @@
     /* 칸이 좁은 화면(노트북 작은 창)은 검색창을 메뉴 아래 한 줄로 */
     @media(max-width:1100px){
       .topbar{flex-wrap:wrap}
-      .top-search{order:4;flex-basis:100%;max-width:none;margin:8px 0 0}
+      /* 좁은 화면은 머리글 검색창을 늘 보이고 첫 화면 큰 검색창을 숨김.
+         둘을 번갈아 보이면 머리글 높이가 바뀌며 화면이 들썩여 보였다 안 보였다 했음 (2026-11-13) */
+      .top-search{display:flex;order:4;flex-basis:100%;max-width:none;margin:8px 0 0}
+      .hero .search-panel{display:none}
     }
     @media(max-width:720px){
       /* 머리글 위아래 폭 줄임 (로고·메뉴·검색 세 줄 사이) */
@@ -6324,26 +6327,13 @@
       return window.matchMedia ? window.matchMedia('(max-width: 720px)').matches : false;
     }
 
+    function isReloadNavigation(){
+      try{ return (performance.getEntriesByType('navigation')[0] || {}).type === 'reload'; }catch(error){ return false; }
+    }
+
     function scrollResultsIntoView(){
-      // 검색 뒤 첫 화면에 모델 이름과 숫자 세 칸(전체 결과·판매 중·가격대)이 보이게 (2026-11-12 사장님)
-      // 이미 다 보이면 그대로, 아래로 밀려 있으면 모델 이름이 맨 위에 오게
-      const kicker = els['summary-query-kicker'] || document.getElementById('summary-query-kicker');
-      const metrics = document.querySelector('.summary-metrics');
-      const offset = getStickyAnchorOffset();
-      if(kicker && metrics && metrics.offsetHeight){
-        const top = kicker.getBoundingClientRect().top;
-        const bottom = metrics.getBoundingClientRect().bottom;
-        if(top >= offset - 18 && bottom <= window.innerHeight - 8) return;
-        window.scrollTo({ top: Math.max(0, window.scrollY + top - offset), behavior: 'auto' });
-        return;
-      }
-      const anchor = getResultsAnchorElement();
-      if(!anchor) return;
-      const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - offset);
-      window.scrollTo({
-        top: targetTop,
-        behavior: 'auto'
-      });
+      // 검색하면 맨 위로 (2026-11-13 사장님: 검색 뒤 로고·메뉴·통화가 보여야 함). 검색 뒤엔 큰 제목을 숨겨 모델 이름·숫자 칸이 바로 머리글 아래에 옴
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
     function scrollAppendAnchorIntoView(){
@@ -8237,6 +8227,8 @@
 
     function hydrateFromUrl(){
       const initialState = parseSearchStateFromUrl();
+      // 새로고침하면 브라우저가 보던 자리로 내려 주는 것을 끔 → 머리글 전체가 보이는 맨 위에서 시작
+      if(isReloadNavigation() && 'scrollRestoration' in history) history.scrollRestoration = 'manual';
       applySearchStateToControls(initialState);
       commitHistoryState('replace', initialState);
       if(initialState.query){
@@ -8245,7 +8237,8 @@
           queryOverride: initialState.query,
           historyMode: 'replace',
           visibleCount: initialState.visibleCount,
-          historyScrollY: initialState.scrollY
+          // 새로고침이면 맨 위에서 (뒤로 가기로 돌아온 때만 보던 자리로)
+          historyScrollY: isReloadNavigation() ? null : initialState.scrollY
         });
       }else{
         render();
