@@ -1867,6 +1867,7 @@
 
   <script>
     const PAGE_SIZE = 12;
+    const BG_PAGE_SIZE = 48;  // 첫 12개를 보여 준 뒤 판매 중 매물을 끝까지 자동으로 불러올 때 한 번에 (2026-11-12 사장님: 전체에서 정렬되게)
     const FALLBACK_COPY = {
       ko: '검색을 불러오는 중 문제가 발생했습니다. 데이터는 변경되지 않았습니다. 검색어를 더 구체적으로 입력하거나 잠시 후 다시 시도해 주세요.',
       en: 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.',
@@ -2381,7 +2382,6 @@
         appending_meta: { ko: '결과를 더 불러오는 중입니다', en: 'Loading more results', ja: 'さらに結果を読み込んでいます', 'zh-Hans': '正在加载更多结果', 'zh-Hant': '正在載入更多結果', pt: 'Carregando mais resultados', es: 'Cargando más resultados', de: 'Weitere Ergebnisse werden geladen', it: 'Caricamento di altri risultati' },
         // 2026-11-12 사장님: 위에서 볼 때 아래 매물을 다 불러왔는지 모름 → 판매 중 개수 밑에 불러온 수
         active_progress: { ko: '{loaded}개 불러옴', en: '{loaded} loaded', ja: '{loaded}件 読み込み済み', 'zh-Hans': '已加载 {loaded} 条', 'zh-Hant': '已載入 {loaded} 條', pt: '{loaded} carregados', es: '{loaded} cargados', de: '{loaded} geladen', it: '{loaded} caricati' },
-        active_progress_more: { ko: '내리면 더 불러와요', en: 'scroll down for more', ja: '下にスクロールで続きを表示', 'zh-Hans': '向下滚动加载更多', 'zh-Hant': '向下捲動載入更多', pt: 'role para ver mais', es: 'desplázate para ver más', de: 'nach unten scrollen für mehr', it: 'scorri per vederne altri' },
         active_progress_loading: { ko: '더 불러오는 중…', en: 'loading more…', ja: 'さらに読み込み中…', 'zh-Hans': '正在加载更多…', 'zh-Hant': '正在載入更多…', pt: 'carregando mais…', es: 'cargando más…', de: 'lädt weitere…', it: 'caricamento…' },
         active_progress_done: { ko: '전부 불러옴', en: 'all loaded', ja: 'すべて読み込み済み', 'zh-Hans': '已全部加载', 'zh-Hant': '已全部載入', pt: 'todos carregados', es: 'todos cargados', de: 'alle geladen', it: 'tutti caricati' },
         error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again', ja: 'もう一度検索してください', 'zh-Hans': '请再次尝试此搜索', 'zh-Hant': '請再次嘗試此搜尋', pt: 'Tente esta busca novamente', es: 'Intenta esta búsqueda de nuevo', de: 'Bitte versuche diese Suche erneut', it: 'Prova di nuovo questa ricerca' },
@@ -6626,7 +6626,7 @@
 
       try{
         const params = buildParams(Math.max(0, offset), {
-          limit: append ? PAGE_SIZE : limitOverride
+          limit: append ? (options.background ? BG_PAGE_SIZE : PAGE_SIZE) : limitOverride
         });
         const response = await fetch('/api/search?' + params.toString(), {
           headers: { 'Accept': 'application/json' },
@@ -6713,7 +6713,11 @@
         state.appending = false;
         // 다시 그리기 직전 위치를 기억 (불러오는 동안 사용자가 더 내린 것은 그대로 둠)
         const viewAnchor = append ? captureViewAnchor() : null;
+        // 판매 중을 다 불러왔고 아직 목록을 보고 있지 않으면 전체를 정렬 기준대로 한 번 다시.
+        // 목록을 내려 보고 있으면 순서를 건드리지 않음(누르려던 카드가 움직이지 않게) — 정렬을 바꾸면 그때 전체로 정렬됨
+        if(append && state.stableOrder && !viewAnchor && activeLoadDone()) state.stableOrder = false;
         render();
+        if(state.response && !state.error && !activeLoadDone()) setTimeout(() => continueBackgroundLoad(seq), 0);
         if(append){
           // 새 매물로 화면을 옮기지 않음: 보고 있던 카드를 그대로 그 자리에
           // 크롬은 스스로 위치를 맞추므로(scroll anchoring) 한 화면 뒤에 남은 차이만 고침 (사파리 등)
@@ -7211,7 +7215,9 @@
       const top = getStickyAnchorOffset();
       const card = Array.from(document.querySelectorAll('.result-card[data-listing-key]'))
         .find(el => el.getBoundingClientRect().bottom > top);
-      return card ? { key: card.dataset.listingKey, top: card.getBoundingClientRect().top } : null;
+      // 화면 안에 실제로 보이는 카드만 (위쪽만 보고 있을 때 아래 카드를 따라 내려가지 않게)
+      if(!card || card.getBoundingClientRect().top >= window.innerHeight) return null;
+      return { key: card.dataset.listingKey, top: card.getBoundingClientRect().top };
     }
 
     function restoreViewAnchor(anchor){
@@ -7438,12 +7444,12 @@
       const done = !pagination.has_more || (total > 0 && Number(loadedActive || 0) >= total);
       // 막대: 판매 중 전체 대비 불러온 수 (2026-11-12 사장님: 막대로 실시간 진행 표시)
       const pct = done ? 100 : (total ? Math.min(99, Math.round(Number(loadedActive || 0) / total * 100)) : 0);
-      const bar = `<span class="active-bar${state.appending && !done ? ' loading' : ''}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></span>`;
+      const bar = `<span class="active-bar${!done ? ' loading' : ''}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></span>`;
       if(done){
         return `${bar}<small class="active-progress">${escapeHtml(ux('summary.active_progress_done', 'all loaded'))}</small>`;
       }
       const loaded = ux('summary.active_progress', '{loaded} loaded').replace('{loaded}', formatLocaleNumber(Math.max(0, Number(loadedActive || 0))));
-      const next = state.appending ? ux('summary.active_progress_loading', 'loading more…') : ux('summary.active_progress_more', 'scroll down for more');
+      const next = ux('summary.active_progress_loading', 'loading more…');
       return `${bar}<small class="active-progress">${escapeHtml(loaded)} · ${escapeHtml(next)}</small>`;
     }
 
@@ -7611,6 +7617,24 @@
           ${state.appending ? `<span class="load-more-status">${escapeHtml(ux('load_more.active_loading', 'Loading more active listings…'))}</span>` : ''}
         </div>
       `;
+    }
+
+    // 판매 중 매물을 다 불러왔나 (뒤에 팔린 매물이 남아 has_more 가 true 여도 판매 중을 다 채우면 끝)
+    function activeLoadDone(){
+      if(!state.response) return true;
+      const pagination = state.response.pagination || {};
+      if(!pagination.has_more) return true;
+      const total = Number(state.response.active_total);
+      const loaded = buildDisplaySections(getResults(), getSortMode()).active.length;
+      return Number.isFinite(total) && total > 0 && loaded >= total;
+    }
+
+    // 내리지 않아도 판매 중 매물을 끝까지 자동으로 불러옴 — 정렬이 불러온 매물 안에서만 되므로 (2026-11-12 사장님)
+    function continueBackgroundLoad(seq){
+      if(seq !== searchSeq || !state.response || state.loading || state.appending || state.error || activeLoadDone()) return;
+      if(getResults().length >= 1200) return;  // 아주 넓은 검색어는 끝없이 받지 않음 (나머지는 내리면 불러옴)
+      const current = state.response.pagination || {};
+      runSearch(Number(current.next_offset || getResults().length || PAGE_SIZE), { append: true, background: true, historyMode: 'none', queryOverride: state.query });
     }
 
     function loadMoreActive(){
