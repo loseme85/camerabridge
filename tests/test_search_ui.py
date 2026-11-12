@@ -830,3 +830,11 @@ def test_picked_model_keeps_summary_metrics() -> None:
     for html in _html_files(BETA_PATHS):
         assert "body.cb-calc .summary-metrics" not in html
         assert "els['summary-query-subtitle'].textContent = entityTitleLine(pickedEntity);" in html
+
+
+def test_entity_only_link_runs_search() -> None:
+    # 2026-11-12 사장님: 모델 페이지 버튼(/?entity=…, 검색어 없음)을 누르면 홈페이지만 열림
+    for html in _html_files(BETA_PATHS):
+        body = _function_body(html, "loadEntitySummary")
+        assert "state.entity && !state.query ? entityState.byId[state.entity]" in body
+        assert "queryOverride: label" in body

@@ -4937,6 +4937,15 @@
         });
         entityState.vocab = [...vocab];
         renderHome();
+        // 모델만 있고 검색어가 없는 주소(모델 페이지의 '전 세계 매물 전부 보기' 버튼 /?entity=…): 그 모델 이름으로 검색 (2026-11-12 사장님: 홈페이지만 열림)
+        const linked = state.entity && !state.query ? entityState.byId[state.entity] : null;
+        if(linked){
+          const label = entityDisplayName(linked);
+          syncSearchInputs(label);
+          runSearch(0, { usageVia: 'link', queryOverride: label, historyMode: 'replace', preserveResultsAnchor: true });
+          return;
+        }
+        if(state.entity && !state.query) state.entity = '';  // 없는 모델 번호면 그냥 첫 화면
         if(state.entity) render();
         // 모델 선택 없이 모델 이름만 있는 주소로 들어온 경우(공유 링크 등): 그 모델로 다시 검색
         const exact = state.query && !state.entity ? findEntityByExactName(state.query) : null;
