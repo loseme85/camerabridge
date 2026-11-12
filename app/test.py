@@ -12851,6 +12851,75 @@ def crawl_timsphoto():
     return results
 
 
+# 2026-11-12 밤샘: トキワカメラ (일본) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _tokiwa_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 2026-11-12 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _tokiwa_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _tokiwa_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def crawl_tokiwa():
+    """トキワカメラ (일본 오사카) - Shopify 전체(약 3,800점, 16쪽) 중 상품 종류 '中古（used)'이고 제목이 라이카인 것.
+    Lマウント 시그마·파나소닉·보이그랜더 등 다른 회사는 뺌. 등급은 설명 【程度】AB 같은 일본 표준 표기. 가격 JPY"""
+    import html as _html
+    import requests
+    from ja_normalize import ja_to_en
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://tokiwa-camera.co.jp"
+    other = re.compile(r"sigma|シグマ|panasonic|パナソニック|lumix|voigt|フォクト|コシナ|cosina|zeiss|ツァイス|ttartisan|7artisans|銘匠|kipon|k&f|nikon|canon|sony|fuji|olympus|pentax|minolta|ミノルタ|konica|コニカ", re.I)
+    print(f"\n  📂 トキワカメラ 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "トキワカメラ"):
+        if "中古" not in (p.get("product_type") or ""):
+            continue
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        title = re.sub(r"【[^】]*】", " ", title).strip()
+        if not re.search(r"leica|leitz|ライカ|ライツ", title, re.I) or other.search(title):
+            continue
+        body = re.sub(r"<[^>]+>", " ", _html.unescape(p.get("body_html") or ""))
+        grade = re.search(r"【程度】\s*([A-C][A-B]?[+\-]?)", body)
+        name = _tokiwa_leica_name(ja_to_en(title))
+        results.append(_tokiwa_row("トキワカメラ (일본)", base, p, name, grade.group(1) if grade else None, _tokiwa_price(p, "¥"), "JPY"))
+    print(f"  ✅ トキワカメラ 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13026,6 +13095,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("トキワカメラ (일본)", lambda: ce.wrap_full_run("トキワカメラ (일본)", crawl_tokiwa)),
         ("Tim's Photo (캐나다)", lambda: ce.wrap_full_run("Tim's Photo (캐나다)", crawl_timsphoto)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
