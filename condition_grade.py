@@ -177,6 +177,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _MPEX.get(cond[len(MPEX_PREFIX):].strip()), "label"
     if cond.startswith(SC_PREFIX):
         return _SC.get(cond[len(SC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(TIMS_PREFIX):
+        return tims_grade(cond[len(TIMS_PREFIX):]), "text"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
@@ -1032,3 +1034,20 @@ _FOTOMEYER = {"neuwertig": "S", "sehr leichte gebrauchsspuren": "A", "leichte ge
 # 다른 매장의 '사진이 0.8등급 후함'을 감안해도 한 칸 올림: Comme neuf·Très bon état → A, Bon état → B (8점 모두 한 등급 이내).
 PANAJOU_PREFIX = "Panajou: "
 _PANAJOU = {"comme neuf": "A", "très bon état": "A", "tres bon etat": "A", "bon état": "B", "bon etat": "B"}
+
+
+# 캐나다 Tim's Photo: 제목 말(BNIB·LNIB·Unused·Mint·Near Mint·NMIB) 또는 설명 첫 문장('shows some normal usage signs').
+# 사진 평가(표기 가리고 20점, 사진 1장씩, 2026-11-12 밤)에서 사진이 표기보다 한 등급쯤 후해(기존 매장과 같음)
+# Unused·LNIB → S, Mint → A, Near Mint·NMIB·작은 사용감 → B, 보통 사용감 → C (정확히 6/20 · 한 등급 이내 15/20)
+TIMS_PREFIX = "Tim's: "
+_TIMS = [
+    (r"bnib|unused|lnib|like new|brand new|sealed", "S"),
+    (r"(?<!near )(?<!near-)\bmint\b", "A"),
+    (r"nmib|near[\s-]?mint|almost no|very small|\bsmall\b|minor|light", "B"),
+    (r"normal|obvious", "C"),
+    (r"heavy|well[\s-]?used", "D"),
+]
+
+
+def tims_grade(phrase: str) -> str | None:
+    return next((g for pat, g in _TIMS if re.search(pat, phrase or "", re.I)), None)
