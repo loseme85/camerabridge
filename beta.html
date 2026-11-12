@@ -6630,7 +6630,19 @@
         if(append && state.response){
           const currentResults = Array.isArray(state.response.results) ? state.response.results : [];
           const nextResults = Array.isArray(payload.results) ? payload.results : [];
-          const mergedResults = mergeUniqueResults(currentResults, nextResults);
+          // 2026-11-12 사장님: 내려서 누르려는데 순서가 바뀜 → 보이던 매물은 그 순서 그대로 두고,
+          // 새로 받은 매물만 정렬해 '판매 중'·'지난 기록' 칸 끝에 차례로 붙임 (전체 다시 정렬 안 함)
+          const shownSections = buildDisplaySections(currentResults, getSortMode());
+          const seenKeys = buildListingIdentitySet(currentResults);
+          const freshResults = nextResults.filter(result => {
+            const key = buildListingIdentityKey(result);
+            if(seenKeys.has(key)) return false;
+            seenKeys.add(key);
+            return true;
+          });
+          const freshSections = buildDisplaySections(freshResults, getSortMode(), false);
+          const mergedResults = [...shownSections.active, ...freshSections.active, ...shownSections.history, ...freshSections.history];
+          state.stableOrder = true;
           const currentPagination = state.response.pagination || {};
           const nextPagination = payload.pagination || {};
           const mergedSections = buildDisplaySections(mergedResults, getSortMode());
@@ -6653,6 +6665,7 @@
           state.offset = 0;
         }else{
           pendingAppendScrollTargetKey = '';
+          state.stableOrder = false;
           state.response = payload;
           state.offset = Math.max(0, offset);
           const initialSections = buildDisplaySections(getResults(), getSortMode());
@@ -6688,8 +6701,16 @@
         if(seq !== searchSeq) return;  // eslint-disable-line no-unsafe-finally
         state.loading = false;
         state.appending = false;
+        // 다시 그리기 직전 위치를 기억 (불러오는 동안 사용자가 더 내린 것은 그대로 둠)
+        const viewAnchor = append ? captureViewAnchor() : null;
         render();
-        if(pendingAppendScrollTargetKey){
+        if(append){
+          // 새 매물로 화면을 옮기지 않음: 보고 있던 카드를 그대로 그 자리에
+          // 크롬은 스스로 위치를 맞추므로(scroll anchoring) 한 화면 뒤에 남은 차이만 고침 (사파리 등)
+          pendingAppendScrollTargetKey = '';
+          restoreViewAnchor(viewAnchor);
+          requestAnimationFrame(() => { restoreViewAnchor(viewAnchor); scheduleHistoryScrollSync(); });
+        }else if(pendingAppendScrollTargetKey){
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               scrollAppendAnchorIntoView();
@@ -7059,8 +7080,10 @@
       bar.hidden = !(Boolean(state.query) && !state.loading && (getResults().length > 1 || Boolean(els['country-filter'] && els['country-filter'].value)));
     }
 
-    function sortMarketBucket(items, sortMode){
+    function sortMarketBucket(items, sortMode, keepOrder = false){
       const sorted = [...items];
+      // 더 불러온 뒤에는 이미 보인 순서를 그대로 둠 (state.response.results가 이미 화면 순서)
+      if(keepOrder) return sorted.sort((left, right) => left.originalIndex - right.originalIndex).map(item => item.result);
       sorted.sort((left, right) => {
         const leftPrice = left.priceValue;
         const rightPrice = right.priceValue;
@@ -7110,7 +7133,7 @@
       return sorted.map(item => item.result);
     }
 
-    function buildDisplaySections(results, sortMode){
+    function buildDisplaySections(results, sortMode, keepOrder = Boolean(state.stableOrder)){
       const wrapped = results.map((result, originalIndex) => ({
         result,
         originalIndex,
@@ -7135,15 +7158,20 @@
       wrapped.forEach(item => {
         buckets[item.marketInfo.bucket].push(item);
       });
-      const active = [
-        ...sortMarketBucket(buckets.active_asking, sortMode),
-        ...sortMarketBucket(buckets.uncertain_asking, sortMode),
-      ];
-      const history = [
-        ...sortMarketBucket(buckets.sold_confirmed, sortMode),
-        ...sortMarketBucket(buckets.sold_likely_removed, sortMode),
-        ...sortMarketBucket(buckets.historical_archive, sortMode),
-      ];
+      // 고정 순서면 칸('판매 중'·'지난 기록') 안의 작은 묶음도 다시 나누지 않음 — 새 매물이 '확인 필요' 매물 위로 끼어들지 않게
+      const active = keepOrder
+        ? sortMarketBucket([...buckets.active_asking, ...buckets.uncertain_asking], sortMode, true)
+        : [
+          ...sortMarketBucket(buckets.active_asking, sortMode),
+          ...sortMarketBucket(buckets.uncertain_asking, sortMode),
+        ];
+      const history = keepOrder
+        ? sortMarketBucket([...buckets.sold_confirmed, ...buckets.sold_likely_removed, ...buckets.historical_archive], sortMode, true)
+        : [
+          ...sortMarketBucket(buckets.sold_confirmed, sortMode),
+          ...sortMarketBucket(buckets.sold_likely_removed, sortMode),
+          ...sortMarketBucket(buckets.historical_archive, sortMode),
+        ];
       return {
         active,
         history,
@@ -7166,6 +7194,22 @@
         activeKeys: buildListingIdentitySet(sections.active),
         scrollY: window.scrollY
       };
+    }
+
+    // 화면에 보이는 첫 카드와 그 위치 — 더 불러와 다시 그린 뒤 같은 자리로 맞춤
+    function captureViewAnchor(){
+      const top = getStickyAnchorOffset();
+      const card = Array.from(document.querySelectorAll('.result-card[data-listing-key]'))
+        .find(el => el.getBoundingClientRect().bottom > top);
+      return card ? { key: card.dataset.listingKey, top: card.getBoundingClientRect().top } : null;
+    }
+
+    function restoreViewAnchor(anchor){
+      if(!anchor) return;
+      const card = Array.from(document.querySelectorAll('.result-card[data-listing-key]')).find(el => el.dataset.listingKey === anchor.key);
+      if(!card) return;
+      const shift = card.getBoundingClientRect().top - anchor.top;
+      if(Math.abs(shift) > 1) window.scrollBy(0, shift);
     }
 
     function resolveFirstNewActiveKey(activeResults, existingActiveKeys){
@@ -7968,6 +8012,7 @@
       });
       if(els['sort-select']){
         els['sort-select'].addEventListener('change', () => {
+          state.stableOrder = false;  // 정렬을 바꾸면 불러온 매물 전체를 새 기준으로
           render();
           if(state.query || els['query-input'].value.trim()){
             commitHistoryState('push', buildSearchState({
@@ -7988,6 +8033,7 @@
           uiState.currency = event.target.value;
           landedState.manualCurrency = true;
           storeChoice('cb.beta.currency', uiState.currency);
+          state.stableOrder = false;
           render();
         });
       }
@@ -7996,6 +8042,7 @@
           uiState.destination = event.target.value;
           landedState.manualDestination = true;
           storeChoice('cb.beta.destination', uiState.destination);
+          state.stableOrder = false;  // 받는 나라가 바뀌면 예상 총액 가격순도 바뀜
           render();
         });
       }
