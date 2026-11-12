@@ -1496,6 +1496,7 @@
     .feedback-dialog h2{font-family:var(--serif);font-weight:500;font-size:24px}
     .feedback-dialog textarea,.feedback-dialog input[type=email]{border-radius:0}
     /* 판매 중 / 팔렸거나 내려간 기록 구분 */
+    .sort-group-divider{grid-column:1/-1;margin:18px 0 6px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted)}
     .archive-card h3 .section-count{font-family:var(--sans);font-size:14px;color:var(--text-muted);font-weight:400;margin-left:6px}
     .jump-history{font-family:var(--sans);font-size:13px;color:var(--text);text-decoration:underline;text-underline-offset:3px;margin-left:8px;white-space:nowrap}
     #archive-region{scroll-margin-top:80px}
@@ -2323,6 +2324,8 @@
         market_history: { ko: '팔렸거나 내려간 기록', en: 'Sold or removed — price record', ja: '売れた・掲載終了の記録', 'zh-Hans': '历史成交 / 价格记录', 'zh-Hant': '歷史成交 / 價格紀錄', pt: 'Histórico de mercado', es: 'Historial de mercado', de: 'Markthistorie', it: 'Storico di mercato' },
         archive: { ko: '과거 기록', en: 'Archive', ja: 'アーカイブ', 'zh-Hans': '历史记录', 'zh-Hant': '歷史記錄', pt: 'Arquivo', es: 'Archivo', de: 'Archiv', it: 'Archivio' },
         active_subtitle: { ko: '판매처에 아직 올라와 있는 매물입니다.', en: 'Still listed at the seller.', ja: '販売店にまだ掲載されている在庫です。', 'zh-Hans': '优先显示看起来仍可购买的在售商品。', 'zh-Hant': '優先顯示看起來仍可購買的在售商品。', pt: 'Anúncios que ainda parecem disponíveis são mostradas primeiro.', es: 'Primero se muestran los anuncios que aún parecen disponibles.', de: 'Angebote, die noch verfügbar erscheinen, werden zuerst gezeigt.', it: 'Per primi vengono mostrati gli annunci che sembrano ancora disponibili.' },
+        group_other: { ko: '다른 버전·리페인트·비슷한 매물', en: 'Other versions, repaints and similar items', ja: '別バージョン・リペイント・近い出品', 'zh-Hans': '其他版本、重新喷漆及类似商品', 'zh-Hant': '其他版本、重新噴漆及類似商品', pt: 'Outras versões, repinturas e itens semelhantes', es: 'Otras versiones, repintados y artículos similares', de: 'Andere Versionen, Umlackierungen und Ähnliches', it: 'Altre versioni, riverniciature e articoli simili' },
+        group_accessory: { ko: '부속품·브로셔·설명서', en: 'Accessories, brochures and manuals', ja: 'アクセサリー・カタログ・説明書', 'zh-Hans': '配件、宣传册与说明书', 'zh-Hant': '配件、型錄與說明書', pt: 'Acessórios, folhetos e manuais', es: 'Accesorios, folletos y manuales', de: 'Zubehör, Prospekte und Anleitungen', it: 'Accessori, brochure e manuali' },
         jump_history: { ko: '팔렸거나 내려간 기록 {count}건 보기 ↓', en: 'See {count} sold or removed ↓', ja: '売れた・掲載終了の記録 {count}件 ↓' },
         history_price: { ko: '마지막 표시 가격', en: 'Last price seen', ja: '最後の表示価格' },
         view_record: { ko: '원래 페이지 보기', en: 'Open original page', ja: '元のページを見る' },
@@ -7101,8 +7104,8 @@
       sorted.sort((left, right) => {
         const leftPrice = left.priceValue;
         const rightPrice = right.priceValue;
-        // 가격·시세 정렬에서는 '정확히 맞음(0)'과 '같은 모델(1)'을 한 묶음으로 가격순. 리페인트·액세서리·튀는 값(2)만 뒤로
-        const tierOf = item => (['price_asc', 'price_desc', 'deal'].includes(sortMode) ? (item.compatibilityTier >= 2 ? 1 : 0) : item.compatibilityTier);
+        // 가격·시세 정렬: 본 매물(정확히 맞음·같은 모델) → 다른 모델·리페인트 → 부속품(브로셔·케이스·후드) 순, 묶음 안은 가격순 (2026-11-12 사장님: 낮은 가격순 맨 위에 브로셔가 옴)
+        const tierOf = item => (isPriceSort(sortMode) ? item.sortGroup : item.compatibilityTier);
         if(tierOf(left) !== tierOf(right)) return tierOf(left) - tierOf(right);
         if(sortMode === 'newest'){
           if(right.recency !== left.recency) return right.recency - left.recency;
@@ -7147,6 +7150,26 @@
       return sorted.map(item => item.result);
     }
 
+    const isPriceSort = sortMode => ['price_asc', 'price_desc', 'deal'].includes(sortMode);
+    // 가격순 묶음: 0 본 매물 · 1 비슷한 매물(다른 브랜드·종류·세트·리페인트·중복) · 2 부속품 (2026-11-12 사장님: 가격순이 안 맞음)
+    // 호환 등급(getActiveCompatibilityTier)은 'Summilux 35' 검색에서 진짜 ASPH를 '안 맞음', Voigtlander를 '같은 모델'로 거꾸로 매겨서 가격순엔 매칭 품질을 씀
+    function priceSortGroup(result, originalIndex){
+      const category = String(((result.final_output || {}).category) || result.category || '').toLowerCase();
+      const intent = (state.response || {}).intent || {};
+      const level = String(result.query_match_level || '').toLowerCase();
+      if(!intent.accessory_intent && (category === 'accessory' || level === 'accessory_compatible')) return 2;
+      // 'Leica M6'(바디)를 찾았는데 마운트만 맞은 렌즈, 'Summilux 35'(렌즈)를 찾았는데 바디
+      const wantsBody = Boolean(intent.body_intent) && !intent.focal_length;
+      const wantsLens = !intent.body_intent && Boolean(intent.focal_length || intent.model_family);
+      if((wantsBody && category === 'lens') || (wantsLens && category === 'body')) return 1;
+      if(String(result.match_quality || '').toLowerCase() === 'weak' || level === 'boundary_conflict') return 1;
+      const evidence = getResultEvidence(result, originalIndex) || {};
+      const excluded = (Array.isArray(evidence.excluded_reason) ? evidence.excluded_reason : []).map(item => String(item || '').toLowerCase());
+      if(excluded.some(item => /duplicate|outlier|wrong model|wrong mount|bundle|variant boundary|condition/.test(item))) return 1;
+      if(/(repaint|repainted|modified|custom|改造)/i.test(result.title || '')) return 1;
+      return 0;
+    }
+
     function buildDisplaySections(results, sortMode, keepOrder = Boolean(state.stableOrder)){
       const wrapped = results.map((result, originalIndex) => ({
         result,
@@ -7155,12 +7178,15 @@
         firstSeen: getResultFirstSeenScore(result),
         compatibility: getResultCompatibilityScore(result),
         compatibilityTier: getActiveCompatibilityTier(result, originalIndex),
+        sortGroup: null,
         priceValue: deliveredPrice(result),  // 가격순은 내 나라까지 예상 총액 (2026-11-08 사장님)
         marketInfo: getMarketActivityInfo(result),
         deal: sortMode === 'deal' && (result.final_output || {}).sold_quality === 'asking' ? dealDiff(result, computeLandedCost(result)) : null,
       }));
       wrapped.forEach(item => {
         item.result.__ui_original_index = item.originalIndex;
+        item.sortGroup = priceSortGroup(item.result, item.originalIndex);
+        item.result.__ui_sort_group = isPriceSort(sortMode) ? item.sortGroup : null;
       });
       const buckets = {
         active_asking: [],
@@ -7173,8 +7199,8 @@
         buckets[item.marketInfo.bucket].push(item);
       });
       // 고정 순서면 칸('판매 중'·'지난 기록') 안의 작은 묶음도 다시 나누지 않음 — 새 매물이 '확인 필요' 매물 위로 끼어들지 않게
-      const active = keepOrder
-        ? sortMarketBucket([...buckets.active_asking, ...buckets.uncertain_asking], sortMode, true)
+      const active = (keepOrder || isPriceSort(sortMode))
+        ? sortMarketBucket([...buckets.active_asking, ...buckets.uncertain_asking], sortMode, keepOrder)
         : [
           ...sortMarketBucket(buckets.active_asking, sortMode),
           ...sortMarketBucket(buckets.uncertain_asking, sortMode),
@@ -8008,12 +8034,20 @@
           <p>${escapeHtml(subtitle)}${isActive && historyCount ? ` <a class="jump-history" href="#archive-region">${escapeHtml(ux('section.jump_history', 'See {count} sold or removed ↓').replace('{count}', historyCount))}</a>` : ''}</p>
           ${
             results.length
-              ? `<div class="${listClass}">${results.map((result, index) => renderCard(result, Number(result.__ui_original_index ?? index), !isActive)).join('')}</div>`
+              ? `<div class="${listClass}">${results.map((result, index) => sortGroupDivider(results, index, isActive) + renderCard(result, Number(result.__ui_original_index ?? index), !isActive)).join('')}</div>`
               : `<div class="archive-item"><strong>${escapeHtml(emptyMessage)}</strong></div>`
           }
           ${footerHtml}
         </article>
       `;
+    }
+
+    // 가격순에서 묶음이 바뀌는 첫 카드 위에 한 줄 (가격이 다시 낮아지는 이유)
+    function sortGroupDivider(results, index, isActive){
+      const group = results[index].__ui_sort_group;
+      if(!isActive || !group || (index > 0 && results[index - 1].__ui_sort_group === group)) return '';
+      const label = group === 2 ? ux('section.group_accessory', 'Accessories, brochures and manuals') : ux('section.group_other', 'Other versions, repaints and similar items');
+      return `<div class="sort-group-divider">${escapeHtml(label)}</div>`;
     }
 
     function renderArchiveSection(results){

@@ -197,12 +197,23 @@ def test_active_first_sorting_keeps_compatible_active_before_similar_or_excluded
 def test_active_and_history_sections_are_sorted_independently() -> None:
     for html in _html_files():
         # 2026-11-12: 더 불러온 뒤에는 보인 순서 그대로(keepOrder), 아니면 예전처럼 칸별 정렬
-        assert "const active = [" in html or "const active = keepOrder" in html
+        assert "const active = [" in html or "const active = keepOrder" in html or "const active = (keepOrder || isPriceSort(sortMode))" in html
         assert "const history = [" in html or "const history = keepOrder" in html
         assert "sortMarketBucket(buckets.active_asking, sortMode)" in html
         assert "sortMarketBucket(buckets.sold_confirmed, sortMode)" in html
         assert "renderResultSection('active', displaySections.active" in html
         assert "renderArchiveSection(" in html
+
+
+def test_price_sort_keeps_one_price_line_and_puts_accessories_last() -> None:
+    # 2026-11-12 사장님: 낮은 가격순 맨 위에 브로셔·케이스, 뒤에서 가격이 다시 낮아짐
+    for html in _html_files(BETA_PATHS):
+        assert "function priceSortGroup(" in html
+        assert "category === 'accessory'" in html
+        assert "accessory_intent" in _function_body(html, "priceSortGroup")
+        assert "match_quality" in _function_body(html, "priceSortGroup")
+        assert "function sortGroupDivider(" in html
+        assert "group_accessory:" in html and "group_other:" in html
 
 
 def test_language_switch_preserves_results_without_research() -> None:
