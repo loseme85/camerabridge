@@ -13109,6 +13109,69 @@ def crawl_fotododici():
     return results
 
 
+# 2026-11-12 밤샘: Khrome (독일) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _khrome_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 2026-11-12 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _khrome_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _khrome_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def crawl_khrome():
+    """Khrome (독일 함부르크) - 정비(Refurbished) 중고 Shopify 전체(약 760점) 중 상품 종류 'Refurbished'이고 제목이 Leica·Leitz인 것.
+    제목의 '(S/N 1742043)'·'(int. S/N 0498)'는 뗌. 등급 표기 없음, 설명 'Anmerkungen:'에 흠. 가격 EUR"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://khrome.de"
+    print(f"\n  📂 Khrome 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Khrome"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if "refurbished" not in (p.get("product_type") or "").lower() or not re.match(r"(?:leica|leitz)\b", title, re.I):
+            continue
+        name = re.sub(r"\s*\((?:int\.\s*)?S/N[^)]*\)", "", title)
+        name = re.sub(r"(\d(?:[.,]\d)?)/(\d{2,3})\s?mm", lambda m: m.group(2) + "mm f" + m.group(1).replace(",", "."), name)
+        results.append(_khrome_row("Khrome (독일)", base, p, name, None, _khrome_price(p, "€"), "EUR"))
+    print(f"  ✅ Khrome 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13284,6 +13347,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Khrome (독일)", lambda: ce.wrap_full_run("Khrome (독일)", crawl_khrome)),
         ("Fotododici (이탈리아)", lambda: ce.wrap_full_run("Fotododici (이탈리아)", crawl_fotododici)),
         ("Profotica (네덜란드)", lambda: ce.wrap_full_run("Profotica (네덜란드)", crawl_profotica)),
         ("The Camera Store (캐나다)", lambda: ce.wrap_full_run("The Camera Store (캐나다)", crawl_thecamerastore)),
