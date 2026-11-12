@@ -5099,6 +5099,10 @@
         const models = (entity.members || []).filter(id => (entityState.byId[id] || {}).active_count).length;
         return { caption: ec('feature_models'), value: ec('feature_model_count', { n: String(models) }), meta: ec('feature_pick') };
       }
+      // 위 숫자 세 칸의 세 번째는 시세 대신 '판매 중 얼마부터 얼마까지' (2026-11-12 사장님) — 등급별 시세는 아래 'What it's worth' 칸에
+      if(rangeText){
+        return { caption: ec('price_range_label'), value: rangeText, meta: isParent ? ec('choose_version') : '' };
+      }
       if(!isParent && entity.b_price_krw){
         const b = krwToDisplay(entity.b_price_krw);
         const others = ['S', 'A', 'C', 'D']
