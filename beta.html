@@ -5830,14 +5830,14 @@
       const typed = String((els[inputId] && els[inputId].value) || '').trim();
       syncSearchInputs(label);
       const via = options.usageVia || 'pick';
-      runSearch(0, { usageVia: via, usageTyped: via === 'pick' && typed !== label ? typed : '', queryOverride: label, historyMode: 'push', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
+      runSearch(0, { usageVia: via, usageTyped: via === 'pick' && typed !== label ? typed : '', queryOverride: label, historyMode: 'push', preserveResultsAnchor: true });
     }
 
     function runFreeTextSearch(inputId, options = {}){
       state.entity = '';
       closeEntityMenu(inputId);
       syncSearchInputs(els[inputId].value);
-      runSearch(0, { usageVia: 'typed', historyMode: 'push', freeText: true, preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: Boolean(options.preserveResultsAnchor) || isNarrowScreen() });
+      runSearch(0, { usageVia: 'typed', historyMode: 'push', freeText: true, preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: true });
     }
 
     // Enter: 고른 후보 → 그 모델 / 고른 게 없으면 1순위 후보 / 후보가 없으면 그대로 검색
@@ -6187,11 +6187,21 @@
     }
 
     function scrollResultsIntoView(){
-      const entityBar = els['entity-bar'] || document.getElementById('entity-bar');
-      // 휴대폰: 모델(세대) 버튼이 있으면 거기서부터 보이게
-      const anchor = isNarrowScreen() && entityBar && !entityBar.hidden ? entityBar : getResultsAnchorElement();
+      // 검색 뒤 첫 화면에 모델 이름과 숫자 세 칸(전체 결과·판매 중·가격대)이 보이게 (2026-11-12 사장님)
+      // 이미 다 보이면 그대로, 아래로 밀려 있으면 모델 이름이 맨 위에 오게
+      const kicker = els['summary-query-kicker'] || document.getElementById('summary-query-kicker');
+      const metrics = document.querySelector('.summary-metrics');
+      const offset = getStickyAnchorOffset();
+      if(kicker && metrics && metrics.offsetHeight){
+        const top = kicker.getBoundingClientRect().top;
+        const bottom = metrics.getBoundingClientRect().bottom;
+        if(top >= offset - 18 && bottom <= window.innerHeight - 8) return;
+        window.scrollTo({ top: Math.max(0, window.scrollY + top - offset), behavior: 'auto' });
+        return;
+      }
+      const anchor = getResultsAnchorElement();
       if(!anchor) return;
-      const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - getStickyAnchorOffset());
+      const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - offset);
       window.scrollTo({
         top: targetTop,
         behavior: 'auto'
