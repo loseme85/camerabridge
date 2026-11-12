@@ -12776,6 +12776,81 @@ def crawl_moritz():
     return results
 
 
+# 2026-11-12 밤샘: Tim's Photo (캐나다) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _timsphoto_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 2026-11-12 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _timsphoto_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _timsphoto_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def crawl_timsphoto():
+    """Tim's Photo Ltd. (캐나다 온타리오·베이징) - 라이카 중고 전문 개인 딜러, Shopify 'leica' 컬렉션(약 200점). 가격 USD.
+    제목 끝 가격('US$2880')을 떼고, 상태는 제목 말(Mint·Near Mint·NMIB·LNIB·Unused·BNIB) 또는 설명 첫 문장('in near mint condition',
+    'shows some normal usage signs'). 새 상품(봉인)은 'brand-new-sealed-leica' 컬렉션이라 제목 'Sealed·BNIB'로 N"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://timlei.ca"
+    print(f"\n  📂 Tim's Photo 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/leica/products.json", "Tim's Photo"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        name = re.sub(r"\s*US\$?\s?[\d,]+(?:\.\d+)?\s*$", "", title)
+        name = re.sub(r"^\d+\s*(?:Mth|Month|Week)s?\s+", "", name, flags=re.I)  # '1 Mth Leica M11-P …'
+        word = re.search(r"\b(BNIB|LNIB|NMIB|Unused|Like New|Near Mint|Mint|Excellent\+*|Boxed)\b", name, re.I)
+        body = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", _html.unescape(p.get("body_html") or "")))
+        phrase = re.search(r"\b(?:is|looks) (?:in )?((?:like new|near mint|mint|unused|excellent|very good|good)[^.]{0,20}?)(?: condition)?[.,]", body, re.I)
+        signs = re.search(r"shows? (?:some |only )?((?:very |quite )?(?:small|normal|minor|light|heavy|obvious|almost no)\s+(?:usage |use )?(?:signs|wear)[^.]{0,20})", body, re.I)
+        if word and word.group(1).lower() not in ("boxed",):
+            condition = "Tim's: " + word.group(1)
+        elif phrase:
+            condition = "Tim's: " + phrase.group(1).strip()
+        elif signs:
+            condition = "Tim's: " + signs.group(1).strip()
+        else:
+            condition = None
+        name = re.sub(r"\b(BNIB|LNIB|NMIB|Unused|Like New|Near Mint|MINT|Boxed|SN\s?\d+x*)\b", " ", name, flags=re.I)
+        results.append(_timsphoto_row("Tim's Photo (캐나다)", base, p, _timsphoto_leica_name(name), condition, _timsphoto_price(p, "$"), "USD"))
+    print(f"  ✅ Tim's Photo 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -12951,6 +13026,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Tim's Photo (캐나다)", lambda: ce.wrap_full_run("Tim's Photo (캐나다)", crawl_timsphoto)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]

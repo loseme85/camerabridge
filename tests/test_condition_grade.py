@@ -737,3 +737,13 @@ def test_lcf_for_parts_is_broken():
     from condition_grade import LCF_PREFIX
     assert grade_of("Leica Store France (프랑스)", LCF_PREFIX + "B : Very good · for parts", "LEICA M5")[0] == "X"
     assert grade_of("Leica Store France (프랑스)", LCF_PREFIX + "B : Very good", "LEICA M5")[0] == "B"
+
+
+def test_tims_photo_grade():
+    from condition_grade import grade_of
+    site = "Tim's Photo (캐나다)"
+    assert grade_of(site, "Tim's: LNIB", "")[0] == "S"
+    assert grade_of(site, "Tim's: MINT", "")[0] == "A"
+    assert grade_of(site, "Tim's: Near Mint", "")[0] == "B"
+    assert grade_of(site, "Tim's: small usage signs", "")[0] == "B"
+    assert grade_of(site, "Tim's: normal usage signs", "")[0] == "C"
