@@ -1567,6 +1567,11 @@
     .sticky-search-region .sticky-search-form{flex:1 1 420px;min-width:0}
     .sticky-title{flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--serif);font-size:20px;line-height:1.2}
     .sticky-title small{font-family:var(--sans);font-size:13px;color:var(--text-soft);margin-left:10px}
+    /* 휴대폰: 아래로 내리면 검색 띠를 머리글 뒤로 숨기고, 위로 올리면 다시 (2026-11-13 사장님: 입력창에 가려 물건이 거의 안 보임) */
+    @media(max-width:720px){
+      .sticky-search-region{transition:transform .2s ease}
+      body.cb-scroll-down .sticky-search-region{transform:translateY(calc(-100% - 2px));pointer-events:none}
+    }
     @media(max-width:720px){
       .sticky-search-region .sticky-search-bar{flex-direction:column;align-items:stretch;gap:6px;padding:8px 0}
       .sticky-title{font-size:16px}
@@ -8214,6 +8219,17 @@
         }
       }catch(error){ /* 공유 창을 닫음 등 */ }
     }
+
+    // 내리는 중이면 body.cb-scroll-down (휴대폰에서 검색 띠 숨김). 검색창에 입력 중이면 숨기지 않음
+    let lastScrollY = 0;
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      const delta = y - lastScrollY;
+      if(Math.abs(delta) < 6) return;
+      const typing = document.activeElement && document.activeElement.id === 'sticky-query-input';
+      document.body.classList.toggle('cb-scroll-down', delta > 0 && y > 240 && !typing);
+      lastScrollY = y;
+    }, { passive: true });
 
     function bindEvents(){
       const shareButton = document.getElementById('summary-share');
