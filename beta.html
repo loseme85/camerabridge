@@ -1561,6 +1561,11 @@
       .result-head{grid-template-columns:none}
       .thumb{width:100%}
     }
+    .active-progress{display:block;margin-top:4px;font-size:12px;font-weight:400;letter-spacing:0;color:var(--text-muted)}
+    .active-bar{display:block;height:4px;margin-top:6px;background:var(--border);overflow:hidden}
+    .active-bar i{display:block;height:100%;background:currentColor;transition:width .4s ease}
+    .active-bar.loading i{animation:cb-bar-pulse 1s ease-in-out infinite alternate}
+    @keyframes cb-bar-pulse{from{opacity:1}to{opacity:.35}}
   </style>
   <!-- 방문 통계: Vercel Web Analytics (쿠키 없음). Vercel 프로젝트 화면에서 Analytics를 켜야 쌓임 -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -1862,6 +1867,7 @@
 
   <script>
     const PAGE_SIZE = 12;
+    const BG_PAGE_SIZE = 48;  // 첫 12개를 보여 준 뒤 판매 중 매물을 끝까지 자동으로 불러올 때 한 번에 (2026-11-12 사장님: 전체에서 정렬되게)
     const FALLBACK_COPY = {
       ko: '검색을 불러오는 중 문제가 발생했습니다. 데이터는 변경되지 않았습니다. 검색어를 더 구체적으로 입력하거나 잠시 후 다시 시도해 주세요.',
       en: 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.',
@@ -2374,6 +2380,10 @@
         loading_count: { ko: '불러오는 중', en: 'Loading', ja: '読み込み中', 'zh-Hans': '加载中', 'zh-Hant': '載入中', pt: 'Carregando', es: 'Cargando', de: 'Wird geladen', it: 'Caricamento' },
         loading_meta: { ko: '매물과 가격 근거를 불러오고 있습니다', en: 'Loading listings and price evidence', ja: '商品と価格の根拠を読み込んでいます', 'zh-Hans': '正在加载商品与价格依据', 'zh-Hant': '正在載入商品與價格依據', pt: 'Carregando anúncios e evidências de preço', es: 'Cargando anuncios y evidencia de precio', de: 'Angebote und Preisnachweise werden geladen', it: 'Caricamento annunci ed evidenze di prezzo' },
         appending_meta: { ko: '결과를 더 불러오는 중입니다', en: 'Loading more results', ja: 'さらに結果を読み込んでいます', 'zh-Hans': '正在加载更多结果', 'zh-Hant': '正在載入更多結果', pt: 'Carregando mais resultados', es: 'Cargando más resultados', de: 'Weitere Ergebnisse werden geladen', it: 'Caricamento di altri risultati' },
+        // 2026-11-12 사장님: 위에서 볼 때 아래 매물을 다 불러왔는지 모름 → 판매 중 개수 밑에 불러온 수
+        active_progress: { ko: '{loaded}개 불러옴', en: '{loaded} loaded', ja: '{loaded}件 読み込み済み', 'zh-Hans': '已加载 {loaded} 条', 'zh-Hant': '已載入 {loaded} 條', pt: '{loaded} carregados', es: '{loaded} cargados', de: '{loaded} geladen', it: '{loaded} caricati' },
+        active_progress_loading: { ko: '더 불러오는 중…', en: 'loading more…', ja: 'さらに読み込み中…', 'zh-Hans': '正在加载更多…', 'zh-Hant': '正在載入更多…', pt: 'carregando mais…', es: 'cargando más…', de: 'lädt weitere…', it: 'caricamento…' },
+        active_progress_done: { ko: '전부 불러옴', en: 'all loaded', ja: 'すべて読み込み済み', 'zh-Hans': '已全部加载', 'zh-Hant': '已全部載入', pt: 'todos carregados', es: 'todos cargados', de: 'alle geladen', it: 'tutti caricati' },
         error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again', ja: 'もう一度検索してください', 'zh-Hans': '请再次尝试此搜索', 'zh-Hant': '請再次嘗試此搜尋', pt: 'Tente esta busca novamente', es: 'Intenta esta búsqueda de nuevo', de: 'Bitte versuche diese Suche erneut', it: 'Prova di nuovo questa ricerca' },
         error_meta: { ko: '데이터는 변경되지 않았습니다', en: 'No data was changed', ja: 'データは変更されていません', 'zh-Hans': '数据未被更改', 'zh-Hant': '資料未被更改', pt: 'Nenhum dado foi alterado', es: 'No se cambiaron los datos', de: 'Es wurden keine Daten geändert', it: 'Nessun dato è stato modificato' },
         ready_caption: { ko: '검색 준비 완료', en: 'Ready to search', ja: '検索準備完了', 'zh-Hans': '可以开始搜索', 'zh-Hant': '可以開始搜尋', pt: 'Pronto para buscar', es: 'Listo para buscar', de: 'Bereit zur Suche', it: 'Pronto per cercare' },
@@ -6616,7 +6626,7 @@
 
       try{
         const params = buildParams(Math.max(0, offset), {
-          limit: append ? PAGE_SIZE : limitOverride
+          limit: append ? (options.background ? BG_PAGE_SIZE : PAGE_SIZE) : limitOverride
         });
         const response = await fetch('/api/search?' + params.toString(), {
           headers: { 'Accept': 'application/json' },
@@ -6703,7 +6713,11 @@
         state.appending = false;
         // 다시 그리기 직전 위치를 기억 (불러오는 동안 사용자가 더 내린 것은 그대로 둠)
         const viewAnchor = append ? captureViewAnchor() : null;
+        // 판매 중을 다 불러왔고 아직 목록을 보고 있지 않으면 전체를 정렬 기준대로 한 번 다시.
+        // 목록을 내려 보고 있으면 순서를 건드리지 않음(누르려던 카드가 움직이지 않게) — 정렬을 바꾸면 그때 전체로 정렬됨
+        if(append && state.stableOrder && !viewAnchor && activeLoadDone()) state.stableOrder = false;
         render();
+        if(state.response && !state.error && !activeLoadDone()) setTimeout(() => continueBackgroundLoad(seq), 0);
         if(append){
           // 새 매물로 화면을 옮기지 않음: 보고 있던 카드를 그대로 그 자리에
           // 크롬은 스스로 위치를 맞추므로(scroll anchoring) 한 화면 뒤에 남은 차이만 고침 (사파리 등)
@@ -7201,7 +7215,9 @@
       const top = getStickyAnchorOffset();
       const card = Array.from(document.querySelectorAll('.result-card[data-listing-key]'))
         .find(el => el.getBoundingClientRect().bottom > top);
-      return card ? { key: card.dataset.listingKey, top: card.getBoundingClientRect().top } : null;
+      // 화면 안에 실제로 보이는 카드만 (위쪽만 보고 있을 때 아래 카드를 따라 내려가지 않게)
+      if(!card || card.getBoundingClientRect().top >= window.innerHeight) return null;
+      return { key: card.dataset.listingKey, top: card.getBoundingClientRect().top };
     }
 
     function restoreViewAnchor(anchor){
@@ -7419,6 +7435,24 @@
       return ux('coverage.low_data', 'Low coverage');
     }
 
+    // 판매 중 매물을 몇 개 불러왔는지 (아래로 내릴 때만 더 불러오므로 위에서 보면 다 불러왔는지 모름 — 2026-11-12)
+    function activeLoadProgressHtml(loadedActive, activeTotal){
+      if(!state.response || state.loading || state.error) return '';
+      const pagination = state.response.pagination || {};
+      const total = Math.max(0, Number(activeTotal || 0));
+      // 판매 중을 다 불러왔으면 끝 (뒤에 팔린 매물이 남아 has_more 가 계속 true 일 수 있음)
+      const done = !pagination.has_more || (total > 0 && Number(loadedActive || 0) >= total);
+      // 막대: 판매 중 전체 대비 불러온 수 (2026-11-12 사장님: 막대로 실시간 진행 표시)
+      const pct = done ? 100 : (total ? Math.min(99, Math.round(Number(loadedActive || 0) / total * 100)) : 0);
+      const bar = `<span class="active-bar${!done ? ' loading' : ''}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${pct}%"></i></span>`;
+      if(done){
+        return `${bar}<small class="active-progress">${escapeHtml(ux('summary.active_progress_done', 'all loaded'))}</small>`;
+      }
+      const loaded = ux('summary.active_progress', '{loaded} loaded').replace('{loaded}', formatLocaleNumber(Math.max(0, Number(loadedActive || 0))));
+      const next = ux('summary.active_progress_loading', 'loading more…');
+      return `${bar}<small class="active-progress">${escapeHtml(loaded)} · ${escapeHtml(next)}</small>`;
+    }
+
     function renderSummary(){
       const pagination = state.response ? (state.response.pagination || {}) : {};
       const total = state.response ? Number(state.response.total_ranked || 0) : 0;
@@ -7468,6 +7502,8 @@
         // 서버가 센 수(나라 조건 포함)가 없을 때만 그 모델 전체의 판매 중 매물 수
         if(!Number.isFinite(activeTotal)) els['active-count'].textContent = formatListingCount(Number(pickedEntity.active_count || 0));
       }
+      const progress = activeLoadProgressHtml(displaySections.active.length, Number.isFinite(activeTotal) ? activeTotal : activeCount);
+      if(progress) els['active-count'].insertAdjacentHTML('beforeend', progress);
 
       if(els['index-debug-line']){
         if(meta && meta.index_record_count != null){
@@ -7581,6 +7617,24 @@
           ${state.appending ? `<span class="load-more-status">${escapeHtml(ux('load_more.active_loading', 'Loading more active listings…'))}</span>` : ''}
         </div>
       `;
+    }
+
+    // 판매 중 매물을 다 불러왔나 (뒤에 팔린 매물이 남아 has_more 가 true 여도 판매 중을 다 채우면 끝)
+    function activeLoadDone(){
+      if(!state.response) return true;
+      const pagination = state.response.pagination || {};
+      if(!pagination.has_more) return true;
+      const total = Number(state.response.active_total);
+      const loaded = buildDisplaySections(getResults(), getSortMode()).active.length;
+      return Number.isFinite(total) && total > 0 && loaded >= total;
+    }
+
+    // 내리지 않아도 판매 중 매물을 끝까지 자동으로 불러옴 — 정렬이 불러온 매물 안에서만 되므로 (2026-11-12 사장님)
+    function continueBackgroundLoad(seq){
+      if(seq !== searchSeq || !state.response || state.loading || state.appending || state.error || activeLoadDone()) return;
+      if(getResults().length >= 1200) return;  // 아주 넓은 검색어는 끝없이 받지 않음 (나머지는 내리면 불러옴)
+      const current = state.response.pagination || {};
+      runSearch(Number(current.next_offset || getResults().length || PAGE_SIZE), { append: true, background: true, historyMode: 'none', queryOverride: state.query });
     }
 
     function loadMoreActive(){
@@ -7927,6 +7981,15 @@
       return `<div class="result-role-row"><b>${escapeHtml(label)}</b><span>${escapeHtml(displayValue(value, ux('common.no_data', 'Not enough data')))}</span></div>`;
     }
 
+    // 목록 바로 위에도 '불러온 수 / 판매 중 전체' (2026-11-12)
+    function activeSectionCount(loaded){
+      if(!state.response || state.loading || state.error) return '';
+      const total = Number(state.response.active_total);
+      const more = (state.response.pagination || {}).has_more;
+      if(!more || !Number.isFinite(total) || total <= loaded) return ` <span class="section-count">${escapeHtml(formatListingCount(loaded))}</span>`;
+      return ` <span class="section-count">${escapeHtml(formatLocaleNumber(loaded))} / ${escapeHtml(formatListingCount(total))}</span>`;
+    }
+
     function renderResultSection(sectionName, results, footerHtml = '', historyCount = 0){
       const isActive = sectionName === 'active';
       const title = isActive ? ux('section.active_listings', 'Active listings') : ux('section.market_history', 'Market history');
@@ -7940,7 +8003,7 @@
 
       return `
         <article class="archive-card ${isActive ? 'section-active' : 'section-history'}">
-          <h3>${escapeHtml(title)}${isActive ? '' : ` <span class="section-count">${escapeHtml(formatListingCount(results.length))}</span>`}</h3>
+          <h3>${escapeHtml(title)}${isActive ? activeSectionCount(results.length) : ` <span class="section-count">${escapeHtml(formatListingCount(results.length))}</span>`}</h3>
           <p>${escapeHtml(subtitle)}${isActive && historyCount ? ` <a class="jump-history" href="#archive-region">${escapeHtml(ux('section.jump_history', 'See {count} sold or removed ↓').replace('{count}', historyCount))}</a>` : ''}</p>
           ${
             results.length
