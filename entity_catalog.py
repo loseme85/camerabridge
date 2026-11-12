@@ -380,11 +380,30 @@ def merge_same_item(records: list[dict[str, Any]], catalog: dict[str, Any] | Non
     return marked
 
 
+NOT_A_BODY = re.compile(r"case|tasche|sonnenblende|\bhood\b|hand ?g?rip|handgrip|\bgrip\b|그립|data ?back|데이타백|데이터백|motor|winder|와인더|"
+                        r"spiegelkasten|visoflex|visiflex|turret|(?<!interchangeable )\blens\b|렌즈|strap|스트랩|battery|배터리|charger|충전|케이스|후드", re.I)
+
+
+def fix_body_category(record: dict[str, Any]) -> bool:
+    """연결된 모델이 모두 바디인데 분류가 렌즈면 바디로 바로잡는다.
+    라이카 전문점은 제목에 브랜드를 안 써서('[위탁] SL3', '[중고] M11 (Silver)' — 라이카스토어 충무로) 분류기가 기본값 렌즈로 둠
+    (2026-11-12 밤: 충무로 바디 수백 개가 렌즈 → 가격순·검색 의도에서 '비슷한 매물'로 밀림). 렌즈·세트가 섞이면 그대로."""
+    final = record.get("final_output") or {}
+    leaves = [i for i in record.get("entity_ids") or [] if ":feature:" not in i]
+    if NOT_A_BODY.search(record_title(record)):
+        return False  # 바디 이름이 들어간 부속품 (X1 케이스, M240 핸드그립, R 모터 드라이브 등)
+    if final.get("category") == "Lens" and leaves and all(i.startswith("leica:body:") for i in leaves):
+        final["category"] = "Body"
+        return True
+    return False
+
+
 def annotate_records(records: Iterable[dict[str, Any]]) -> None:
     catalog = load_catalog()
     for record in records:
         record["entity_ids"] = match_entities(record, catalog)
         (record.get("final_output") or {}).pop("entity_note", None)
+        fix_body_category(record)
 
 
 def infer_by_price(records: list[dict[str, Any]], value, catalog: dict[str, Any] | None = None) -> int:
