@@ -337,15 +337,19 @@ fam("leica:body:q3-monochrom", "Leica Q3 Monochrom", "라이카 Q3 모노크롬"
 fam("leica:body:q3-43", "Leica Q3 43", "라이카 Q3 43", None, [r"\bQ ?3\b", r"\b43(\s?mm)?\b"], [], ["q3 43", "q343", "큐3 43"])
 
 # ── SL · TL · CL · S ──
-fam("leica:body:sl601", "Leica SL (Typ 601)", "라이카 SL (601)", "SL", [r"\bSL\b(?! ?\d)|typ ?601"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\bSL[ -]?[23]\b", r"leicaflex"], ["sl typ 601", "sl601", "sl 601"])
-fam("leica:body:sl2", "Leica SL2", "라이카 SL2", "SL", [r"\bSL[ -]?2\b"], [r"SL[ -]?2-?S\b", r"leicaflex|フレックス|라이카플렉스"], [])
-fam("leica:body:sl2-s", "Leica SL2-S", "라이카 SL2-S", "SL", [r"\bSL[ -]?2-?S\b"], [r"leicaflex"], ["sl2s"], [
+# 필름 일안반사 Leicaflex (1964~). 'Leica FLEX SL2'처럼 띄어 쓰는 매장이 있어 디지털 SL 바디 제외어로도 씀 (2026-11-12 사장님: SL2에 Leicaflex SL2 섞임)
+LEICAFLEX = r"leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스"
+# 바디 규칙은 제목에서 'Leica'를 떼고 보므로(body_view) 디지털 SL 제외어에는 FLEX 단어만 있어도 뺌
+NOT_LEICAFLEX = LEICAFLEX + r"|\bflex\b|フレックス"
+fam("leica:body:sl601", "Leica SL (Typ 601)", "라이카 SL (601)", "SL", [r"\bSL\b(?! ?\d)|typ ?601"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\bSL[ -]?[23]\b", NOT_LEICAFLEX], ["sl typ 601", "sl601", "sl 601"])
+fam("leica:body:sl2", "Leica SL2", "라이카 SL2", "SL", [r"\bSL[ -]?2\b"], [r"SL[ -]?2-?S\b", NOT_LEICAFLEX], [])
+fam("leica:body:sl2-s", "Leica SL2-S", "라이카 SL2-S", "SL", [r"\bSL[ -]?2-?S\b"], [NOT_LEICAFLEX], ["sl2s"], [
     v("reporter", "Leica SL2-S Reporter", "SL2-S 리포터", r"reporter|리포터", ["sl2-s reporter"]),
 ])
-fam("leica:body:sl3", "Leica SL3", "라이카 SL3", "SL", [r"\bSL[ -]?3\b"], [r"SL[ -]?3-?S\b", r"leicaflex"], [], [
+fam("leica:body:sl3", "Leica SL3", "라이카 SL3", "SL", [r"\bSL[ -]?3\b"], [r"SL[ -]?3-?S\b", NOT_LEICAFLEX], [], [
     v("reporter", "Leica SL3 Reporter", "SL3 리포터", r"reporter|리포터", ["sl3 reporter", "sl3 리포터"]),
 ])
-fam("leica:body:sl3-s", "Leica SL3-S", "라이카 SL3-S", "SL", [r"\bSL[ -]?3-?S\b"], [r"leicaflex"], ["sl3s"])
+fam("leica:body:sl3-s", "Leica SL3-S", "라이카 SL3-S", "SL", [r"\bSL[ -]?3-?S\b"], [NOT_LEICAFLEX], ["sl3s"])
 fam("leica:body:t701", "Leica T (Typ 701)", "라이카 T", "TL", [r"\bT\b ?\(?typ ?701|\bleica T\b(?! ?L)"], [], ["t typ 701", "t701"])
 fam("leica:body:tl", "Leica TL", "라이카 TL", "TL", [r"\bTL\b(?! ?2)"], [r"\b\d{2,3}(-\d{2,3})?\s?(mm|/)", r"\d{2}-\d{2}", r"elmar|summi|vario|apo"], [])
 fam("leica:body:tl2", "Leica TL2", "라이카 TL2", "TL", [r"\bTL ?2\b"], [], [])
@@ -452,7 +456,6 @@ fam("leica:body:iii-black-paint", "Leica III (Model F) Black Paint", "라이카 
     [r"\bM ?\d", REPAINT], ["iii black paint", "barnack iii black paint", "바르낙 iii 블랙페인트"])
 
 # ── R · 라이카플렉스 ──
-LEICAFLEX = r"leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스"
 fam("leica:body:leicaflex", "Leicaflex (standard)", "라이카플렉스", "R", [LEICAFLEX], [rf"(?:{LEICAFLEX}) ?sl"], ["leicaflex", "라이카플렉스"])
 fam("leica:body:leicaflex-sl", "Leicaflex SL", "라이카플렉스 SL", "R", [rf"(?:{LEICAFLEX}) ?sl\b(?! ?2)"], [r"\bNASA\b"], ["leicaflex sl"])
 fam("leica:body:leicaflex-sl2", "Leicaflex SL2", "라이카플렉스 SL2", "R", [rf"(?:{LEICAFLEX}) ?sl ?2"], [], ["leicaflex sl2"])

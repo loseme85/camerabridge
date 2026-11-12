@@ -723,3 +723,14 @@ def test_modified_with_other_body_part():
     from entity_catalog import body_view
     assert "M6" not in body_view("Leica M1 modified with télémètre de M6")
     assert "IIIf" in body_view("Leica IIIc body, war-time, converted to IIIf")
+
+
+def test_leicaflex_written_apart_is_not_digital_sl() -> None:
+    # 2026-11-12 사장님: 디지털 SL2 검색에 'Leica FLEX SL2 50 JAHRE'(필름 Leicaflex SL2)가 섞임
+    from entity_catalog import load_catalog, match_entities
+    cat = load_catalog()
+    def ids(title):
+        return match_entities({"final_output": {"title": title, "title_raw": title, "category": "Body", "brand": "Leica"}}, cat)
+    assert ids("Leica FLEX SL2 50 JAHRE Black") == ["leica:body:leicaflex-sl2"]
+    assert "leica:body:sl2" in ids("Leica SL2 Body")
+    assert "leica:body:sl3" in ids("Leica SL3 Reporter")
