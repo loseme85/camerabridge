@@ -7186,7 +7186,8 @@
       wrapped.forEach(item => {
         item.result.__ui_original_index = item.originalIndex;
         item.sortGroup = priceSortGroup(item.result, item.originalIndex);
-        item.result.__ui_sort_group = isPriceSort(sortMode) ? item.sortGroup : null;
+        // 더 불러오는 중(순서 고정)에는 묶음이 조각마다 다시 시작해 구분 줄이 반복되므로, 다 불러와 다시 정렬된 뒤에만 표시
+        item.result.__ui_sort_group = isPriceSort(sortMode) && !keepOrder ? item.sortGroup : null;
       });
       const buckets = {
         active_asking: [],

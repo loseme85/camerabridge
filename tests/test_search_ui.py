@@ -213,6 +213,7 @@ def test_price_sort_keeps_one_price_line_and_puts_accessories_last() -> None:
         assert "accessory_intent" in _function_body(html, "priceSortGroup")
         assert "match_quality" in _function_body(html, "priceSortGroup")
         assert "function sortGroupDivider(" in html
+        assert "isPriceSort(sortMode) && !keepOrder ? item.sortGroup : null" in html
         assert "group_accessory:" in html and "group_other:" in html
 
 
