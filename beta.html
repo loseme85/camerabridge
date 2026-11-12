@@ -2386,6 +2386,9 @@
         // 2026-11-12 사장님: 위에서 볼 때 아래 매물을 다 불러왔는지 모름 → 판매 중 개수 밑에 불러온 수
         active_progress: { ko: '{loaded}개 불러옴', en: '{loaded} loaded', ja: '{loaded}件 読み込み済み', 'zh-Hans': '已加载 {loaded} 条', 'zh-Hant': '已載入 {loaded} 條', pt: '{loaded} carregados', es: '{loaded} cargados', de: '{loaded} geladen', it: '{loaded} caricati' },
         active_progress_loading: { ko: '더 불러오는 중…', en: 'loading more…', ja: 'さらに読み込み中…', 'zh-Hans': '正在加载更多…', 'zh-Hant': '正在載入更多…', pt: 'carregando mais…', es: 'cargando más…', de: 'lädt weitere…', it: 'caricamento…' },
+        entity_for_sale: { ko: '지금 판매 중 {n}개', en: '{n} for sale now', ja: '現在販売中 {n}件', 'zh-Hans': '当前在售 {n} 件', 'zh-Hant': '目前在售 {n} 件', pt: '{n} à venda agora', es: '{n} a la venta ahora', de: '{n} aktuell im Angebot', it: '{n} in vendita ora' },
+        entity_none_for_sale: { ko: '지금 판매 중 없음', en: 'None for sale now', ja: '現在販売中なし', 'zh-Hans': '目前无在售', 'zh-Hant': '目前無在售', pt: 'Nenhum à venda agora', es: 'Ninguno a la venta ahora', de: 'Derzeit keins im Angebot', it: 'Nessuno in vendita ora' },
+        entity_sold_records: { ko: '팔린 기록 {n}개', en: '{n} sold records', ja: '販売済みの記録 {n}件', 'zh-Hans': '成交记录 {n} 条', 'zh-Hant': '成交紀錄 {n} 筆', pt: '{n} vendas registradas', es: '{n} ventas registradas', de: '{n} Verkäufe erfasst', it: '{n} vendite registrate' },
         active_progress_done: { ko: '전부 불러옴', en: 'all loaded', ja: 'すべて読み込み済み', 'zh-Hans': '已全部加载', 'zh-Hant': '已全部載入', pt: 'todos carregados', es: 'todos cargados', de: 'alle geladen', it: 'tutti caricati' },
         error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again', ja: 'もう一度検索してください', 'zh-Hans': '请再次尝试此搜索', 'zh-Hant': '請再次嘗試此搜尋', pt: 'Tente esta busca novamente', es: 'Intenta esta búsqueda de nuevo', de: 'Bitte versuche diese Suche erneut', it: 'Prova di nuovo questa ricerca' },
         error_meta: { ko: '데이터는 변경되지 않았습니다', en: 'No data was changed', ja: 'データは変更されていません', 'zh-Hans': '数据未被更改', 'zh-Hant': '資料未被更改', pt: 'Nenhum dado foi alterado', es: 'No se cambiaron los datos', de: 'Es wurden keine Daten geändert', it: 'Nessun dato è stato modificato' },
@@ -7453,6 +7456,27 @@
       };
     }
 
+    // 모델 이름 밑 한 줄: '지금 판매 중 33개 · ₩3,885,000 – ₩11,000,000 · 팔린 기록 47개'
+    function entityTitleLine(entity, activeCount){
+      const parts = [];
+      if(activeCount > 0){
+        parts.push(ux('summary.entity_for_sale', '{n} for sale now').replace('{n}', formatLocaleNumber(activeCount)));
+        const range = entity.active_price_krw;
+        // 가격 범위는 모델 전체(모든 나라) 기준이라 나라를 골랐으면 뺌
+        const countryPicked = Boolean(els['country-filter'] && els['country-filter'].value);
+        if(!countryPicked && Array.isArray(range) && range.length === 2 && fxRate('KRW') && fxRate(uiState.currency)){
+          const low = roundEstimate(convertAmount(range[0], 'KRW', uiState.currency), uiState.currency);
+          const high = roundEstimate(convertAmount(range[1], 'KRW', uiState.currency), uiState.currency);
+          parts.push(`${formatMoney(low, uiState.currency)}${high > low ? ' – ' + formatMoney(high, uiState.currency) : ''}`);
+        }
+      }else{
+        parts.push(ux('summary.entity_none_for_sale', 'None for sale now'));
+      }
+      const sold = Number(entity.sold_price_count || 0);
+      if(sold > 0) parts.push(ux('summary.entity_sold_records', '{n} sold records').replace('{n}', formatLocaleNumber(sold)));
+      return parts.join(' · ');
+    }
+
     function getCoverageLabel(){
       const uiHints = getUiHints();
       const total = state.response ? Number(state.response.total_ranked || 0) : 0;
@@ -7528,6 +7552,8 @@
         els['summary-meta'].textContent = price.meta;
         // 서버가 센 수(나라 조건 포함)가 없을 때만 그 모델 전체의 판매 중 매물 수
         if(!Number.isFinite(activeTotal)) els['active-count'].textContent = formatListingCount(Number(pickedEntity.active_count || 0));
+        // 모델을 고르면 숫자 세 칸은 숨기므로(cb-calc) 이름 밑 한 줄에 판매 중 전체 수·가격 범위·팔린 기록 (2026-11-12 사장님)
+        els['summary-query-subtitle'].textContent = entityTitleLine(pickedEntity, Number.isFinite(activeTotal) ? activeTotal : Number(pickedEntity.active_count || 0));
       }
       const progress = activeLoadProgressHtml(displaySections.active.length, Number.isFinite(activeTotal) ? activeTotal : activeCount);
       if(progress) els['active-count'].insertAdjacentHTML('beforeend', progress);
