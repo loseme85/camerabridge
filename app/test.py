@@ -9284,8 +9284,11 @@ def _usedphoto_name(title):
     'LEICA 20002 – Leica M10-R' → 'Leica M10-R 20002', 'f/1,7' → 'f1.7', 광고 꼬리('– Vom Erstbesitzer') 빼기"""
     t = title.replace("|", " ")
     parts = [x.strip() for x in re.split(r"\s+[\u2013\u2014-]\s+", t)]
-    main = next((x for x in parts if re.search(r"\b(?:M\d|Q\d?|SL\d?|CL|TL|X\d?|R\d|summi|elmar|nocti|elmarit|leicaflex|minilux|D-?Lux|Sofort)", x, re.I)
-                 and not re.match(r"^(?:leica|LEICA)\s+\d{5}$", x)), parts[0])
+    # 앞부분이 진짜 이름. 'Leica 20002 –'·'Leica Prime –'·'Full Service –' 같은 머리말일 때만 다음 부분을 씀.
+    # 예전에는 모델 글자가 있는 부분을 골라서 'Leica Leicavit M – 14009 | M7 M6 MP'가
+    # 맞는 카메라 목록('14009 M7 M6 MP')으로 바뀌어 M7 검색에 섞임 (2026-11-12)
+    prefix = re.compile(r"^(?:(?:leica|leitz)\s+(?:\d{5}|prime|steel rim(?:\s+\d{4})?)|full service)$", re.I)
+    main = next((x for x in parts if x and not prefix.match(x)), parts[0])
     code = re.search(r"\b(1\d{4}|2\d{4})\b", t)
     name = main + (f" {code.group(1)}" if code and code.group(1) not in main else "")
     name = re.sub(r"f/?\s?(\d),(\d)", r"f\1.\2", name)
