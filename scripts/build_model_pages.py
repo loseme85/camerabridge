@@ -293,6 +293,7 @@ def build(out: Path) -> dict:
     updated = dt.datetime.fromisoformat(summary["generated_at"]).astimezone(dt.timezone(dt.timedelta(hours=9)))
     updated_text = updated.strftime("%Y-%m-%d %H:%M KST")
 
+    from condition_grade import grade_of
     # 판매 중 매물을 모델별로
     listings: dict[str, list[dict]] = {eid: [] for eid in slugs}
     for record in json.loads(INDEX.read_text(encoding="utf-8"))["records"]:
@@ -302,6 +303,10 @@ def build(out: Path) -> dict:
         price, currency = final.get("parsed_price_numeric"), str(final.get("currency") or "KRW").upper()
         rate = to_krw.get(currency)
         if not price or not rate or not final.get("source_url"):
+            continue
+        # 고장·부품용(X)은 가격 범위·최저가에서 뺌 — entity_summary와 같은 기준
+        # (2026-11-12: Leica Store France M5 '부품용' 790€가 M5 최저가 $878로 보이던 것)
+        if grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))[0] == "X":
             continue
         for eid in record.get("entity_ids") or []:
             if eid in listings:
