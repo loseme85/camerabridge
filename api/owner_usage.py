@@ -14,6 +14,7 @@ import html
 import json
 import os
 import sys
+import urllib.parse
 from concurrent.futures import ThreadPoolExecutor
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler
@@ -241,6 +242,25 @@ def _prior_visit_badge(v: dict, history: dict[str, dict] | None) -> str:
     return '<span class="prior-visit muted">이전 방문 확인 불가</span>'
 
 
+def _step_href(kind: str, s: dict) -> str | None:
+    """'한 일' 단계를 누르면 그 손님이 본 화면으로: 페이지는 그 주소, 검색·매장 클릭은 그 모델(없으면 검색어) 검색 결과."""
+    if kind == "페이지":
+        page = str(s.get("page") or "")
+        return page if page.startswith("/") and not page.startswith("//") else None
+    if s.get("entity"):
+        return "/?" + urllib.parse.urlencode({"entity": s["entity"]})
+    if s.get("q"):
+        return "/?" + urllib.parse.urlencode({"q": s["q"]})
+    return None
+
+
+def _step(kind: str, s: dict, cls: str, label: str) -> str:
+    href = _step_href(kind, s)
+    if href:
+        return f"<a class='{cls}' href='{_esc(href)}' target=_blank rel=noopener>{label}</a>"
+    return f"<span class='{cls}'>{label}</span>"
+
+
 def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date: str | None = None,
            history: dict[str, dict] | None = None) -> str:
     entries = [dict(e, created_at=_time_key(e.get("created_at", "")).isoformat())
@@ -266,7 +286,7 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
         steps = []
         for kind, s in v["steps"]:
             if kind == "페이지":
-                steps.append(f"<span class='step page'>📄 {_esc(s.get('page'))}</span>")
+                steps.append(_step(kind, s, "step page", f"📄 {_esc(s.get('page'))}"))
                 continue
             if kind == "검색":
                 tail = "결과 없음" if s.get("results") == 0 else f"판매 중 {s.get('active', 0)} / 전체 {s.get('results', 0)}"
@@ -281,9 +301,9 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
                     label = f"👆 모델 버튼: {_esc(s.get('q'))}"
                 else:
                     label = f"🔎 {_esc(s.get('q'))}"
-                steps.append(f"<span class='step{' typed' if via in ('typed', 'pick') else ''}'>{label} <small>{tail}</small></span>")
+                steps.append(_step(kind, s, "step typed" if via in ("typed", "pick") else "step", f"{label} <small>{tail}</small>"))
             else:
-                steps.append(f"<span class='step click'>↗ {_esc(s.get('host'))}</span>")
+                steps.append(_step(kind, s, "step click", f"↗ {_esc(s.get('host'))}"))
         when = _kst_time(v["start"])
         prior = _prior_visit_badge(v, history)
         device = "📱" if v["mobile"] else "💻"
@@ -312,7 +332,7 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 .visit-table th:nth-child(1){{width:17%}}.visit-table th:nth-child(2){{width:22%}}.visit-table th:nth-child(3){{width:15%}}.visit-table th:nth-child(4){{width:12%}}.visit-table th:nth-child(5){{width:34%}}
 .visit-table td{{white-space:normal;overflow-wrap:anywhere}}.visit-table .step{{max-width:100%;vertical-align:top;white-space:normal;overflow-wrap:anywhere}}
 .prior-visit{{display:inline-block;font-size:13px;margin-top:3px}}.prior-visit.returning{{font-weight:700}}
-.step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}.step.page{{background:transparent;border:1px solid var(--line)}}.step.typed{{outline:2px solid var(--text)}}
+.step{{display:inline-block;background:var(--soft);border-radius:8px;padding:2px 8px;margin:2px 4px 2px 0}}.step.click{{background:var(--accent);color:#fff}}.step.page{{background:transparent;border:1px solid var(--line)}}.step.typed{{outline:2px solid var(--text)}}a.step{{color:inherit;text-decoration:none}}a.step:hover{{text-decoration:underline}}
 .days td a{{color:var(--text)}}.days tr.on td{{font-weight:700}}.bar a{{display:contents;color:inherit}}
 .bars{{display:flex;gap:4px;align-items:flex-end;height:130px}}.bar{{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}}
 .bar span{{display:block;width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:1px}}.bar b{{font-size:11px;order:-1}}.bar i{{font-size:10px;color:var(--muted);font-style:normal;white-space:nowrap}}
