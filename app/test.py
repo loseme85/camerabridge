@@ -941,7 +941,13 @@ def detect_category(name, price_str=""):
         return "Accessory"
 
     # ── 가격 50만원 이하 → Accessory (단, 렌즈 보호 키워드 없을 때만) ──
-    if not is_lens and price_str and price_str not in ['문의요망', '']:
+    # 렌즈 계열 이름이 있으면 싸도 렌즈 ('Elmar-R 180mm F4' €113처럼 조리개를 정수로 적은 옛 렌즈가
+    # 액세서리가 되던 것, 2026-11-12). 후드·케이스 등은 위 단어 규칙에서 이미 걸러짐
+    lens_family = re.search(r"elmar|summicron|summilux|summaron|summarit|summar\b|hektor|telyt|angulon|curtagon|"
+                            r"thambar|xenon|\d{2,3}\s?(?:mm|cm)\s*f\s?\d", n)
+    if lens_family and re.search(r"extension|tube|tubo|focusing mount|focus ring|\bring\b|adapter|magnifier|anello|中間|リング|ヘリコイド", n):
+        lens_family = None  # 렌즈 이름이 붙은 접사링·튜브·초점 마운트·어댑터는 그대로 가격 규칙
+    if not is_lens and not lens_family and price_str and price_str not in ['문의요망', '']:
         try:
             nums = re.findall(r"[\d,]+", price_str.replace('£', ''))
             if nums:
@@ -962,7 +968,8 @@ def detect_category(name, price_str=""):
                'leica m8', 'leica m9', 'leica m10', 'leica m11', 'leica m240',
                'typ 240', 'r3 ', 'r4 ', 'r5 ', 'r6 ', 'r7 ', 'r8 ', 'r9 ',
                'leica i ', 'leica ii', 'leica iii', 'leica if', 'leica iif']
-    if any(kw in n for kw in body_kw):
+    # 'leica ma'(M-A)는 단어로만 — 'leica macro-elmar'가 바디가 되던 것 (2026-11-12)
+    if any(kw in n for kw in body_kw if kw != 'leica ma') or re.search(r"leica ma\b", n):
         return "Body"
 
     return "Lens"
@@ -6199,7 +6206,10 @@ def crawl_fotodotti():
                 if _FOTODOTTI_OTHER.search(raw):
                     continue  # 라이카 분류에 섞인 다른 회사 렌즈·어댑터
                 name = _fotodotti_name(raw)
-                pr = re.search(r'<span\s+class="price">([\d.]+,\d{2})\s*€', card)
+                # 할인 상품은 정가(old-price)·할인가(special-price) 두 칸이고 가격 칸에 id가 붙음 → 파는 값(product-price) 먼저.
+                # 예전에는 id 없는 칸만 찾아 할인 상품 45개가 €0이었음 (M5 2,280€가 ₩127,000(배송비만)으로, 2026-11-12)
+                pr = (re.search(r'id="product-price-\d+"[^>]*>(?:\s*<span\s+class="price">)?\s*([\d.]+,\d{2})\s*€', card)
+                      or re.search(r'<span\s+class="price"[^>]*>\s*([\d.]+,\d{2})\s*€', card))
                 # 이탈리아식 '4.800,00 €' (점이 천 단위) → '€4,800'
                 price = f"€{int(pr.group(1).split(',')[0].replace('.', '')):,}" if pr else "문의요망"
                 img = re.search(r'<img\s+src="([^"]+)"', card)
@@ -13013,6 +13023,9 @@ def crawl_all():
             name = name.split(':', 1)[-1].strip()
             r['상품명'] = name
         name_lower = name.lower()
+        # 가격 0은 '가격 문의' (Foto Dotti 할인 상품·used-photo.de·Il Contatto 등에서 €0이 배송비만 총액으로 보이던 것, 2026-11-12)
+        if re.fullmatch(r"[^\d]*0+(?:[.,]0+)?[^\d]*", str(r.get('가격') or '').strip()):
+            r['가격'] = '문의요망'
         # system/category 분류
         r['category'] = detect_category(r['상품명'], r.get('가격', ''))
         # label 항상 재계산 (코드 업데이트 반영)
