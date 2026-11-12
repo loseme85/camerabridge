@@ -47,7 +47,6 @@
       --amber:#99611f;
       --shadow:0 20px 48px rgba(22,24,26,0.06);
       --radius:6px;
-      --sticky-search-offset:76px;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -227,7 +226,7 @@
     .world-tip{position:absolute;z-index:5;pointer-events:none;background:var(--bg,#fff);border:1px solid var(--text);padding:6px 10px;font-size:13px;white-space:nowrap}
     body.cb-searched .home-rotator,body.cb-searched .home-world{display:none !important}
     @media(max-width:860px){section.hero > .hero-grid{grid-template-columns:minmax(0,1fr);gap:28px}.home-rotator{aspect-ratio:1/1.1;max-width:520px}}
-    .topnav{display:flex;align-items:center;gap:22px;margin:0 auto 0 36px}
+    .topnav{display:flex;align-items:center;gap:18px;margin:0 0 0 28px}
     .topnav button{background:none;border:0;padding:4px 0;font:inherit;font-size:14px;color:var(--text);cursor:pointer;white-space:nowrap}
     .topnav button:hover,.topnav button[aria-pressed="true"]{text-decoration:underline;text-underline-offset:5px}
     @media(max-width:860px){.topbar{flex-wrap:wrap}.topnav{order:3;flex-basis:100%;margin:6px 0 0;gap:18px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}.topnav::-webkit-scrollbar{display:none}}
@@ -450,29 +449,6 @@
       letter-spacing:0.6px;
     }
     .search-button:hover{filter:brightness(0.96)}
-    .sticky-search-region{
-      position:sticky;
-      top:var(--sticky-search-offset);
-      z-index:16;
-      margin:0 0 14px;
-      padding-top:4px;
-    }
-    .sticky-search-region[hidden]{display:none}
-    body.cb-hero-search-visible .sticky-search-region{display:none}
-    .sticky-search-bar{
-      border:1px solid var(--border);
-      background:rgba(255,255,255,0.94);
-      border-radius:var(--radius);
-      padding:12px;
-      box-shadow:0 10px 24px rgba(22,24,26,0.08);
-      backdrop-filter:blur(14px);
-    }
-    .sticky-search-form{margin-top:0}
-    .sticky-search-field{height:44px}
-    .sticky-search-button{
-      height:44px;
-      min-width:108px;
-    }
     .query-chip-row{
       display:flex;
       flex-wrap:wrap;
@@ -1103,16 +1079,6 @@
       .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media(max-width:720px){
-      .sticky-search-region{
-        top:108px;
-        padding-top:0;
-      }
-      .topbar{
-        padding:12px 14px;
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .topbar-meta{justify-content:flex-start}
       .lang-menu{right:auto;left:0}
       .prefs-panel{right:auto;left:0}
       main{width:min(100% - 20px, 1280px)}
@@ -1151,7 +1117,6 @@
       --radius:2px;
       --serif:"EB Garamond","Pretendard Variable",Pretendard,Georgia,serif;   /* 제목·브랜드만 */
       --sans:"Jost","Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;  /* UI·숫자·데이터 */
-      --sticky-search-offset:72px;
       --ladder-home:#22201E;
       --ladder-abroad:#a8552e;
     }
@@ -1356,9 +1321,6 @@
     .index-debug-line{font-size:11px}
     .page-button{border:1px solid var(--border);border-radius:0;font-family:var(--sans);font-size:13px;background:#fff}
     .workspace-main{padding:28px 0 0}
-    .sticky-search-bar{border:0;border-bottom:1px solid var(--rule);border-radius:0;background:rgba(252,252,250,0.97);box-shadow:none;padding:12px 0}
-    .sticky-search-field{height:46px}
-    .sticky-search-button{height:46px}
 
     .state-card,.market-entry-card,.archive-card,.side-panel,.workspace-card,.sidebar-card{
       background:none;border:0;border-top:1px solid var(--rule);border-radius:0;box-shadow:none;padding:20px 0 8px;margin-bottom:28px}
@@ -1558,37 +1520,18 @@
     *,*::before,*::after{border-radius:0 !important}
     /* 줄이 두 겹으로 겹치지 않게 */
     .status-strip{border-bottom:0}
-    .sticky-search-bar{border-bottom:0}
-    /* 스크롤해도 따라오는 띠: 머리글 바로 밑에 틈 없이, 바탕을 가득 채워 카드가 비치지 않게, 왼쪽에 지금 보는 모델 이름 (2026-11-12 사장님) */
-    .sticky-search-region{padding-top:0;margin-top:0}
-    /* 바탕은 ::before로 화면 폭 가득 (clip-path로 하면 아래로 펼쳐지는 검색 후보 목록까지 잘림 — 2026-11-12) */
     html{overflow-x:clip}
-    .sticky-search-region .sticky-search-bar{position:relative;display:flex;align-items:center;gap:20px;padding:10px 0;background:transparent;border-bottom:0}
-    .sticky-search-region .sticky-search-bar::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:var(--bg,#FDFCFA);border-bottom:1px solid var(--border);z-index:-1;pointer-events:none}
-    .sticky-search-region .sticky-search-form{flex:1 1 420px;min-width:0}
-    .sticky-title{flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--serif);font-size:20px;line-height:1.2}
-    .sticky-title small{font-family:var(--sans);font-size:13px;color:var(--text-soft);margin-left:10px}
-    /* 휴대폰: 아래로 내리면 검색 띠를 머리글 뒤로 숨기고, 위로 올리면 다시 (2026-11-13 사장님: 입력창에 가려 물건이 거의 안 보임) */
+    /* 휴대폰 버전 버튼: 접어 두고 '버전 바꾸기 ▾' (펼치면 다시 보임) */
     @media(max-width:720px){
-      /* 머리글(로고·메뉴 2~3줄, 약 160px)도 같이 숨김 — 메뉴 줄만 숨기면 높이가 바뀌어 화면이 덜컹거림 */
-      /* 버전 버튼: 접어 두고 '버전 바꾸기 ▾' (펼치면 다시 보임) */
       .entity-chips-toggle{display:inline-flex}
       .entity-bar:not(.chips-open) .entity-bar-chips{display:none}
-    }
-    @media(max-width:720px){
-      .sticky-search-region .sticky-search-bar{flex-direction:column;align-items:stretch;gap:6px;padding:8px 0}
-      /* 세로로 쌓이면 'flex: 1 1 420px'의 420px이 높이가 되어 검색창 아래 빈칸 약 370px이 생겼음 (2026-11-13 사장님 휴대폰 캡처) */
-      .sticky-search-region .sticky-search-form{flex:0 0 auto}
-      .sticky-title{font-size:16px}
-      .sticky-title small{display:none}
     }
     .query-review-header + *{border-top:0}
     @media(max-width:720px){
       main{width:calc(100% - 32px)}
-      .topbar{padding:10px 16px;flex-direction:row;align-items:center}
+      .topbar{padding:6px 16px 8px;row-gap:4px}
       .topbar-meta{gap:6px}
       .meta-pill.accent{display:none}
-      .sticky-search-region{top:64px}
       .hero-copy{padding:36px 0 28px}
       .hero-title{font-size:34px}
       .search-form-row{flex-direction:row}
@@ -1607,10 +1550,8 @@
     .active-bar.loading i{animation:cb-bar-pulse 1s ease-in-out infinite alternate}
     @keyframes cb-bar-pulse{from{opacity:1}to{opacity:.35}}
     /* 2026-11-13 머리글 검색창 (예전 따라오는 검색 띠 대신) */
-    .topnav{margin-right:0}
     .topbar-meta{margin-left:auto}
     .top-search{display:none;flex:1 1 320px;max-width:560px;min-width:0;margin-left:20px}
-    .topbar .topnav{gap:18px;margin-left:28px}
     body.cb-searched .top-search,body:not(.cb-hero-search-visible) .top-search{display:flex}
     .top-search .sticky-search-form{flex:1 1 auto;min-width:0;margin:0}
     .top-search .sticky-search-field{height:40px;font-size:14px}
@@ -1626,11 +1567,13 @@
     /* 칸이 좁은 화면(노트북 작은 창)은 검색창을 메뉴 아래 한 줄로 */
     @media(max-width:1100px){
       .topbar{flex-wrap:wrap}
-      .top-search{order:4;flex-basis:100%;max-width:none;margin:8px 0 0}
+      /* 좁은 화면은 머리글 검색창을 늘 보이고 첫 화면 큰 검색창을 숨김.
+         둘을 번갈아 보이면 머리글 높이가 바뀌며 화면이 들썩여 보였다 안 보였다 했음 (2026-11-13) */
+      .top-search{display:flex;order:4;flex-basis:100%;max-width:none;margin:8px 0 0}
+      .hero .search-panel{display:none}
     }
     @media(max-width:720px){
       /* 머리글 위아래 폭 줄임 (로고·메뉴·검색 세 줄 사이) */
-      .topbar{row-gap:4px;padding-top:6px;padding-bottom:8px}
       .topbar .topnav{margin:0;padding-bottom:0}
       .topnav button{padding:2px 0}
       .top-search{margin-top:4px}
@@ -2321,7 +2264,6 @@
         button_aria: { ko: '검색', en: 'Search', ja: '検索', 'zh-Hans': '搜索', 'zh-Hant': '搜尋', pt: 'Buscar', es: 'Buscar', de: 'Suchen', it: 'Cerca' },
         examples_aria: { ko: '예시 검색어', en: 'Example searches', ja: '検索例', 'zh-Hans': '示例搜索', 'zh-Hant': '範例搜尋', pt: 'Exemplos de busca', es: 'Búsquedas de ejemplo', de: 'Beispiel-Suchen', it: 'Ricerche di esempio' },
         sticky_aria: { ko: '고정 검색', en: 'Sticky search', ja: '固定検索', 'zh-Hans': '固定搜索', 'zh-Hant': '固定搜尋', pt: 'Busca fixa', es: 'Búsqueda fija', de: 'Angeheftete Suche', it: 'Ricerca fissa' },
-        sticky_placeholder: { ko: '결과를 보면서 다음 검색어를 입력하세요', en: 'Search again while keeping the current results in view', ja: '結果を見ながら次の検索語を入力してください', 'zh-Hans': '在查看结果的同时输入下一个搜索词', 'zh-Hant': '在查看結果時輸入下一個搜尋詞', pt: 'Pesquise novamente mantendo os resultados atuais à vista', es: 'Busca de nuevo manteniendo los resultados actuales a la vista', de: 'Erneut suchen, während die aktuellen Ergebnisse sichtbar bleiben', it: 'Cerca di nuovo mantenendo i risultati attuali in vista' },
         sticky_button_aria: { ko: '고정 검색창에서 검색', en: 'Search from sticky bar', ja: '固定検索バーから検索', 'zh-Hans': '从固定搜索栏搜索', 'zh-Hant': '從固定搜尋列搜尋', pt: 'Buscar pela barra fixa', es: 'Buscar desde la barra fija', de: 'Über die fixe Leiste suchen', it: 'Cerca dalla barra fissa' },
       },
       sidebar: {
@@ -3496,8 +3438,7 @@
       else if(hash === '#board' || rest === 'write') renderBoardList(view);
       else renderBoardPost(view, rest);
       if(options.scroll !== false){  // 위 고정 머리줄 아래로
-        const offset = typeof getStickyAnchorOffset === 'function' ? getStickyAnchorOffset() : 0;
-        window.scrollTo({ top: Math.max(0, view.getBoundingClientRect().top + window.scrollY - offset - 16), behavior: 'instant' });
+        window.scrollTo({ top: Math.max(0, view.getBoundingClientRect().top + window.scrollY - getStickyAnchorOffset() - 16), behavior: 'instant' });
       }
     }
 
@@ -6302,48 +6243,25 @@
       if(root.getPropertyValue('--topbar-hide') !== `${hide}px`) root.setProperty('--topbar-hide', `${hide}px`);
     }
 
-    function getResultsAnchorElement(){
-      if(els['query-summary-region'] && els['query-summary-region'].firstElementChild){
-        return els['query-summary-region'];
-      }
-      if(els['results-grid']) return els['results-grid'];
-      return els['state-region'] || null;
-    }
-
+    // 카드로 내려갈 때 머리글에 가리지 않게 둘 위 여백 (휴대폰은 내려가면 머리글이 검색창만 남으므로 그 높이)
     function getStickyAnchorOffset(){
-      const stickyRegion = els['sticky-search-region'];
-      const stickyBar = stickyRegion ? stickyRegion.querySelector('.sticky-search-bar') : null;
       const topbar = document.querySelector('.topbar');
-      const stickyHeight = stickyBar ? stickyBar.getBoundingClientRect().height : 0;
-      const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 0;
-      return topbarHeight + stickyHeight + 18;
+      if(!topbar) return 18;
+      const stuckTop = Math.min(0, parseFloat(getComputedStyle(topbar).top) || 0);
+      return topbar.offsetHeight + stuckTop + 18;
     }
 
-    // 휴대폰에선 검색 뒤 결과가 제목·검색창 아래에 가려지므로 결과로 내려감
     function isNarrowScreen(){
       return window.matchMedia ? window.matchMedia('(max-width: 720px)').matches : false;
     }
 
+    function isReloadNavigation(){
+      try{ return (performance.getEntriesByType('navigation')[0] || {}).type === 'reload'; }catch(error){ return false; }
+    }
+
     function scrollResultsIntoView(){
-      // 검색 뒤 첫 화면에 모델 이름과 숫자 세 칸(전체 결과·판매 중·가격대)이 보이게 (2026-11-12 사장님)
-      // 이미 다 보이면 그대로, 아래로 밀려 있으면 모델 이름이 맨 위에 오게
-      const kicker = els['summary-query-kicker'] || document.getElementById('summary-query-kicker');
-      const metrics = document.querySelector('.summary-metrics');
-      const offset = getStickyAnchorOffset();
-      if(kicker && metrics && metrics.offsetHeight){
-        const top = kicker.getBoundingClientRect().top;
-        const bottom = metrics.getBoundingClientRect().bottom;
-        if(top >= offset - 18 && bottom <= window.innerHeight - 8) return;
-        window.scrollTo({ top: Math.max(0, window.scrollY + top - offset), behavior: 'auto' });
-        return;
-      }
-      const anchor = getResultsAnchorElement();
-      if(!anchor) return;
-      const targetTop = Math.max(0, window.scrollY + anchor.getBoundingClientRect().top - offset);
-      window.scrollTo({
-        top: targetTop,
-        behavior: 'auto'
-      });
+      // 검색하면 맨 위로 (2026-11-13 사장님: 검색 뒤 로고·메뉴·통화가 보여야 함). 검색 뒤엔 큰 제목을 숨겨 모델 이름·숫자 칸이 바로 머리글 아래에 옴
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
     function scrollAppendAnchorIntoView(){
@@ -8237,6 +8155,8 @@
 
     function hydrateFromUrl(){
       const initialState = parseSearchStateFromUrl();
+      // 새로고침하면 브라우저가 보던 자리로 내려 주는 것을 끔 → 머리글 전체가 보이는 맨 위에서 시작
+      if(isReloadNavigation() && 'scrollRestoration' in history) history.scrollRestoration = 'manual';
       applySearchStateToControls(initialState);
       commitHistoryState('replace', initialState);
       if(initialState.query){
@@ -8245,7 +8165,8 @@
           queryOverride: initialState.query,
           historyMode: 'replace',
           visibleCount: initialState.visibleCount,
-          historyScrollY: initialState.scrollY
+          // 새로고침이면 맨 위에서 (뒤로 가기로 돌아온 때만 보던 자리로)
+          historyScrollY: isReloadNavigation() ? null : initialState.scrollY
         });
       }else{
         render();
