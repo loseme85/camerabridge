@@ -22,7 +22,7 @@ jobs:
         run: |
           TARGET="$(head -n1 .site-test)"
           if [ "$TARGET" = "probe" ]; then
-            python3 scripts/probe_shops.py | tee site_test_out.txt
+            python3 scripts/probe_shipping.py | tee site_test_out.txt
           else
             python3 app/test.py --site "$TARGET" 2>&1 | tail -120 | tee site_test_out.txt
             python3 - "$TARGET" <<'PY'
@@ -42,5 +42,6 @@ jobs:
             site_test_out.txt
             site_rows.json
             probe_*.json
+            probe_ship_*.txt
           retention-days: 3
           if-no-files-found: ignore
