@@ -756,3 +756,12 @@ def test_km_camera_grade():
     assert grade_of(site, "K&M: U9", "")[0] == "B"
     assert grade_of(site, "K&M: U8", "")[0] == "C"
     assert grade_of(site, "K&M: U6", "")[0] == "D"
+
+
+def test_cameraboutique_grade():
+    from condition_grade import grade_of
+    site = "Camera Boutique Graz (오스트리아)"
+    assert grade_of(site, "CBG: wie neu", "")[0] == "A"
+    assert grade_of(site, "CBG: sehr gut", "")[0] == "B"
+    assert grade_of(site, "CBG: gut", "")[0] == "C"
+    assert grade_of(site, "CBG: stark gebraucht", "")[0] == "D"

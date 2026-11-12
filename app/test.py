@@ -13241,6 +13241,87 @@ def crawl_kmcamera():
     return results
 
 
+# 2026-11-12 밤샘: Camera Boutique Graz (오스트리아) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def crawl_cameraboutique():
+    """Camera Boutique Graz (오스트리아) - Shopify products.json 전체(240개쯤)에서 판매자 Leica·제목에 Leica/Leitz만, 판매 중만. 가격 EUR.
+    상태는 제목 끝 '– Sehr guter Zustand' (매장 '/pages/zustandskategorien': Wie Neu·Sehr Gut·Gut·Akzeptabel·Stark Gebraucht)"""
+    import html as _html
+    import requests
+    import crawl_engine as _ce
+    from condition_grade import CBG_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = _ce.BROWSER_UA
+    base = "https://cameraboutique.at"
+    print(f"\n  📂 Camera Boutique Graz 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Camera Boutique Graz"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if (p.get("vendor") or "").strip().lower() not in ("leica", "leitz") and not re.match(r"(?:leica|leitz)\b", title, re.I):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        name, cond = _cameraboutique_name(title)
+        try:
+            price = f"€{float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = "Accessory" if p.get("product_type") == "Zubehör" else detect_category(name, price)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "게시일": _shopify_listed(p),
+            "site": "Camera Boutique Graz (오스트리아)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": CBG_PREFIX + cond if cond else "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": False,
+            "예약중": False,
+            "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Camera Boutique Graz 완료: {len(results)}개")
+    return results
+
+
+def _cameraboutique_name(title):
+    """'Leica Summicron-M 2/50mm Version III Art. 11817 – Guter Zustand' → ('Leica Summicron-M 50mm f2 Version III 11817', 'gut').
+    상태 말은 매장 등급(wie neu·sehr gut·gut·akzeptabel·stark gebraucht·neu)으로 줄임, 없으면 ''"""
+    cond = ""
+    m = re.search(r"\s*(?:[–—]|\s-\s)\s*([^–—]+)$", title) or re.search(r"\s+((?:sehr |außergewöhnlich )?gut(?:er)? zustand.*)$", title, re.I)
+    head = title
+    if m:
+        tail = m.group(1).lower()
+        if re.search(r"ungeöffnet|neuprodukt|\bovp\b", tail):
+            cond = "neu"
+        elif re.search(r"wie neu|neuwertig", tail):
+            cond = "wie neu"
+        elif re.search(r"sehr gut|außergewöhnlich gut", tail):
+            cond = "sehr gut"
+        elif re.search(r"akzeptabel", tail):
+            cond = "akzeptabel"
+        elif re.search(r"stark gebraucht", tail):
+            cond = "stark gebraucht"
+        elif re.search(r"\bgut", tail):
+            cond = "gut"
+        if cond:
+            head = title[:m.start()]
+    t = re.sub(r"\bArt\.\s*", "", head)
+    t = re.sub(r"(\d(?:[.,]\d)?)\s*/\s*(\d{2,3}(?:-\d{2,3})?)\s*mm", lambda m: f"{m.group(2)}mm f{m.group(1).replace(',', '.')}", t)
+    t = re.sub(r"(\d{2,3})\s+mm\b", r"\1mm", t)
+    t = re.sub(r"\bM\s?39(?:\s+Gewinde)?\b", "M39", t)
+    t = re.sub(r"\bGewinde\b|\bObjektiv\b|\bKompaktkamera\b", "", t)
+    for de, en in (("chrom", "chrome"), ("schwarz", "black"), ("Schwarz", "black"), ("Silber", "silver"), ("Gehäuse", "body"), ("Sucher", "finder"), ("mit", "with")):
+        t = re.sub(rf"\b{de}\b", en, t)
+    t = re.sub(r"\s+", " ", t).strip(" ,–-")
+    return (t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t), cond
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13416,6 +13497,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Camera Boutique Graz (오스트리아)", lambda: ce.wrap_full_run("Camera Boutique Graz (오스트리아)", crawl_cameraboutique)),
         ("K&M Camera (미국)", lambda: ce.wrap_full_run("K&M Camera (미국)", crawl_kmcamera)),
         ("Khrome (독일)", lambda: ce.wrap_full_run("Khrome (독일)", crawl_khrome)),
         ("Fotododici (이탈리아)", lambda: ce.wrap_full_run("Fotododici (이탈리아)", crawl_fotododici)),

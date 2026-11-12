@@ -181,6 +181,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return tims_grade(cond[len(TIMS_PREFIX):]), "text"
     if cond.startswith(KM_PREFIX):
         return _km_grade(cond[len(KM_PREFIX):].strip().upper()), "label"
+    if cond.startswith(CBG_PREFIX):
+        return _CBG.get(cond[len(CBG_PREFIX):].strip()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
@@ -1072,3 +1074,9 @@ def _km_grade(score: str) -> str | None:
     if value >= 7:
         return "C"
     return "D"
+
+
+# 오스트리아 Camera Boutique Graz: 매장 등급 Wie Neu·Sehr Gut·Gut·Akzeptabel·Stark Gebraucht (제목 끝). 사진 평가 18점(2026-11-03)에서
+# 사진이 표기보다 한 등급쯤 후해 wie neu→A, sehr gut→B, gut→C로 맞춤 (정확히 8/17, 한 등급 이내 17/17)
+CBG_PREFIX = "CBG: "
+_CBG = {"neu": "N", "wie neu": "A", "sehr gut": "B", "gut": "C", "akzeptabel": "D", "stark gebraucht": "D"}
