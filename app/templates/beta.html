@@ -1333,6 +1333,10 @@
     .status-strip{background:none;padding:36px 0 28px;border-bottom:1px solid var(--rule)}
     .summary-title{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,48px);letter-spacing:-0.015em;line-height:1.05}
     .summary-subtitle{font-size:14px}
+    /* 모델 이름 옆 공유 (2026-11-12 사장님): 휴대폰은 기본 공유 창, PC는 주소 복사 */
+    .summary-title-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px}
+    .summary-share{flex:0 0 auto;padding:6px 14px;border:1px solid var(--border-strong,var(--border));background:none;color:var(--text);font:inherit;font-size:13px;cursor:pointer}
+    .summary-share:hover{border-color:var(--text)}
     .summary-metrics{gap:0;margin-top:28px;border-top:1px solid var(--border)}
     .summary-metric{border:0;border-right:1px solid var(--border);border-radius:0;background:none;padding:14px 20px 0 0;margin-right:20px}
     .summary-metric:last-child{border-right:0;margin-right:0}
@@ -1768,7 +1772,10 @@
         <section class="status-strip">
           <div class="summary-copy">
             <div id="summary-query-kicker" class="summary-kicker">Model</div>
-            <div id="summary-query-title" class="summary-title">Search Leica listings</div>
+            <div class="summary-title-row">
+              <div id="summary-query-title" class="summary-title">Search Leica listings</div>
+              <button id="summary-share" class="summary-share" type="button" hidden>Share</button>
+            </div>
             <div id="summary-query-subtitle" class="summary-subtitle">Search results, active listings, and market price appear here.</div>
             <div class="summary-metrics">
               <article class="summary-metric">
@@ -2402,6 +2409,8 @@
         // 2026-11-12 사장님: 위에서 볼 때 아래 매물을 다 불러왔는지 모름 → 판매 중 개수 밑에 불러온 수
         active_progress: { ko: '{loaded}개 불러옴', en: '{loaded} loaded', ja: '{loaded}件 読み込み済み', 'zh-Hans': '已加载 {loaded} 条', 'zh-Hant': '已載入 {loaded} 條', pt: '{loaded} carregados', es: '{loaded} cargados', de: '{loaded} geladen', it: '{loaded} caricati' },
         active_progress_loading: { ko: '더 불러오는 중…', en: 'loading more…', ja: 'さらに読み込み中…', 'zh-Hans': '正在加载更多…', 'zh-Hant': '正在載入更多…', pt: 'carregando mais…', es: 'cargando más…', de: 'lädt weitere…', it: 'caricamento…' },
+        share: { ko: '공유', en: 'Share', ja: '共有', 'zh-Hans': '分享', 'zh-Hant': '分享', pt: 'Compartilhar', es: 'Compartir', de: 'Teilen', it: 'Condividi' },
+        link_copied: { ko: '주소를 복사했어요', en: 'Link copied', ja: 'リンクをコピーしました', 'zh-Hans': '已复制链接', 'zh-Hant': '已複製連結', pt: 'Link copiado', es: 'Enlace copiado', de: 'Link kopiert', it: 'Link copiato' },
         entity_sold_records: { ko: '팔린 기록 {n}개', en: '{n} sold records', ja: '販売済みの記録 {n}件', 'zh-Hans': '成交记录 {n} 条', 'zh-Hant': '成交紀錄 {n} 筆', pt: '{n} vendas registradas', es: '{n} ventas registradas', de: '{n} Verkäufe erfasst', it: '{n} vendite registrate' },
         active_progress_done: { ko: '전부 불러옴', en: 'all loaded', ja: 'すべて読み込み済み', 'zh-Hans': '已全部加载', 'zh-Hant': '已全部載入', pt: 'todos carregados', es: 'todos cargados', de: 'alle geladen', it: 'tutti caricati' },
         error_caption: { ko: '검색을 다시 시도해 주세요', en: 'Please try this search again', ja: 'もう一度検索してください', 'zh-Hans': '请再次尝试此搜索', 'zh-Hant': '請再次嘗試此搜尋', pt: 'Tente esta busca novamente', es: 'Intenta esta búsqueda de nuevo', de: 'Bitte versuche diese Suche erneut', it: 'Prova di nuovo questa ricerca' },
@@ -7588,6 +7597,11 @@
         // 모델 이름 밑: 팔린 기록 수 ('Seen across multiple results' 대신)
         els['summary-query-subtitle'].textContent = entityTitleLine(pickedEntity);
       }
+      const shareButton = document.getElementById('summary-share');
+      if(shareButton){
+        shareButton.hidden = !(pickedEntity && !state.loading && !state.error);
+        if(!shareButton.dataset.copied) shareButton.textContent = ux('summary.share', 'Share');
+      }
       const progress = activeLoadProgressHtml(displaySections.active.length, Number.isFinite(activeTotal) ? activeTotal : activeCount);
       if(progress) els['active-count'].insertAdjacentHTML('beforeend', progress);
 
@@ -8147,7 +8161,25 @@
       }
     }
 
+    // 모델 공유: 주소는 /?entity=… (그 모델 검색 화면으로 열림). 휴대폰은 기본 공유 창, PC는 주소 복사
+    async function shareCurrentModel(){
+      const button = document.getElementById('summary-share');
+      const entity = state.entity && entityState.byId ? entityState.byId[state.entity] : null;
+      if(!button || !entity) return;
+      const url = `${location.origin}/?entity=${encodeURIComponent(entity.id)}&utm_source=share`;
+      const title = entityDisplayName(entity);
+      try{
+        if(isNarrowScreen() && navigator.share){ await navigator.share({ title: `${title} | Camera Bridge`, url }); return; }
+        await navigator.clipboard.writeText(url);
+        button.dataset.copied = '1';
+        button.textContent = ux('summary.link_copied', 'Link copied');
+        setTimeout(() => { delete button.dataset.copied; button.textContent = ux('summary.share', 'Share'); }, 2000);
+      }catch(error){ /* 공유 창을 닫음 등 */ }
+    }
+
     function bindEvents(){
+      const shareButton = document.getElementById('summary-share');
+      if(shareButton) shareButton.addEventListener('click', shareCurrentModel);
       els['search-form'].addEventListener('submit', event => {
         event.preventDefault();
         submitEntitySearch('query-input');

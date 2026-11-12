@@ -838,3 +838,12 @@ def test_entity_only_link_runs_search() -> None:
         body = _function_body(html, "loadEntitySummary")
         assert "state.entity && !state.query ? entityState.byId[state.entity]" in body
         assert "queryOverride: label" in body
+
+
+def test_model_share_button() -> None:
+    # 2026-11-12 사장님: 모델 검색 뒤 모델 이름 옆에 공유하기 (휴대폰 기본 공유 창, PC 주소 복사, 주소는 /?entity=…)
+    for html in _html_files(BETA_PATHS):
+        assert 'id="summary-share"' in html
+        body = _function_body(html, "shareCurrentModel")
+        assert "/?entity=" in body and "navigator.share" in body and "navigator.clipboard.writeText" in body
+        assert "link_copied:" in html
