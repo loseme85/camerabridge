@@ -31,7 +31,7 @@ import secrets
 from concurrent.futures import ThreadPoolExecutor
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 import requests
 
@@ -236,6 +236,123 @@ def _confirm_email(member_id: str, alerts: dict, saved: int) -> tuple[str, str]:
             f'<p><a href="https://camerabridge.io/#saved" style="color:#16181a">{html.escape(see)}</a></p>'
             f'<p style="color:#878b8d;font-size:12px"><a href="{stop}" style="color:#878b8d">{html.escape(stop_text)}</a> · Camera Bridge</p></div>')
     return subject, body
+
+
+# ── 원하는 매물 알림을 걸면 바로 보내는 확인 메일 (2026-11-13 사장님: 어떤 조건으로 걸었는지, 맞으면 메일 준다고 알려 주기, 로고 넣고 정중하게)
+# 다른 서비스 확인 메일(구글 항공권 가격 추적·eBay 저장 검색·Chrono24 검색 알림)처럼: 로고 → 한 줄 제목 → 조건 표 → 언제 보내는지 →
+# 버튼(지금 매물 보기·알림 관리) → 왜 받았는지 + 끄기
+EMAIL_LOGO = "https://camerabridge.io/img/email-logo.png"
+DEST_NAMES = {
+    "ko": {"KR": "한국", "JP": "일본", "CN": "중국", "TW": "대만", "HK": "홍콩", "US": "미국", "GB": "영국", "DE": "독일", "FR": "프랑스",
+           "IT": "이탈리아", "ES": "스페인", "PT": "포르투갈", "BR": "브라질"},
+    "ja": {"KR": "韓国", "JP": "日本", "CN": "中国", "TW": "台湾", "HK": "香港", "US": "アメリカ", "GB": "イギリス", "DE": "ドイツ", "FR": "フランス",
+           "IT": "イタリア", "ES": "スペイン", "PT": "ポルトガル", "BR": "ブラジル"},
+    "zh": {"KR": "韩国", "JP": "日本", "CN": "中国", "TW": "台湾", "HK": "香港", "US": "美国", "GB": "英国", "DE": "德国", "FR": "法国",
+           "IT": "意大利", "ES": "西班牙", "PT": "葡萄牙", "BR": "巴西"},
+    "en": {"KR": "South Korea", "JP": "Japan", "CN": "China", "TW": "Taiwan", "HK": "Hong Kong", "US": "United States", "GB": "United Kingdom",
+           "DE": "Germany", "FR": "France", "IT": "Italy", "ES": "Spain", "PT": "Portugal", "BR": "Brazil"},
+}
+WANT_CONFIRM_TEXT = {
+    "ko": {"subject": "알림을 설정했습니다 · {name}", "heading": "원하는 매물 알림을 설정했습니다",
+           "hello": "안녕하세요, 카메라브릿지입니다.",
+           "intro": "요청하신 조건으로 알림을 설정했습니다. 조건에 맞는 매물이 새로 올라오면 이 주소로 메일을 보내 드리겠습니다.",
+           "model": "모델", "grade": "상태", "grade_v": "{g}등급 이상", "max": "도착 총액", "max_v": "{p} 이하 (배송비·관세·부가세 포함 예상)",
+           "dest": "받는 곳", "now": "지금 맞는 매물", "now_v": "{n}개 — 이미 있는 매물은 빼고 새로 나오는 것만 알려 드립니다",
+           "how": "전 세계 라이카 매장의 매물을 새로 읽을 때마다 확인하고, 맞는 매물이 있으면 한 통으로 묶어 보내 드립니다. 등급을 알 수 없는 매물은 알리지 않습니다.",
+           "view": "지금 매물 보기", "manage": "알림 관리",
+           "why": "카메라브릿지에서 직접 알림을 신청하셔서 이 메일을 받으셨습니다. 신청하신 적이 없다면 아래에서 알림을 꺼 주세요.",
+           "stop": "모든 알림 끄기", "thanks": "카메라브릿지를 이용해 주셔서 감사합니다."},
+    "ja": {"subject": "通知を設定しました · {name}", "heading": "希望商品の通知を設定しました",
+           "hello": "Camera Bridge をご利用いただきありがとうございます。",
+           "intro": "ご指定の条件で通知を設定しました。条件に合う商品が新たに出品されたら、このアドレスへメールでお知らせします。",
+           "model": "モデル", "grade": "状態", "grade_v": "{g}ランク以上", "max": "到着総額", "max_v": "{p} 以下（送料・関税・消費税込みの目安）",
+           "dest": "お届け先", "now": "現在の該当商品", "now_v": "{n}件 — すでにある商品は除き、新しい出品だけをお知らせします",
+           "how": "世界のライカ取扱店の在庫を読み込むたびに確認し、該当する商品があればまとめて1通でお送りします。ランクが分からない商品は通知しません。",
+           "view": "いまの商品を見る", "manage": "通知の管理",
+           "why": "Camera Bridge で通知をお申し込みいただいたため、このメールをお送りしています。お心当たりがない場合は、下のリンクから通知を停止してください。",
+           "stop": "すべての通知を停止", "thanks": "今後とも Camera Bridge をよろしくお願いいたします。"},
+    "en": {"subject": "Your alert is set · {name}", "heading": "Your alert is set",
+           "hello": "Hello from Camera Bridge,",
+           "intro": "Thanks for setting an alert. We’ll email you at this address as soon as a new listing matches the conditions below.",
+           "model": "Model", "grade": "Condition", "grade_v": "Grade {g} or better", "max": "Delivered total", "max_v": "{p} or less (est. shipping, duties and tax included)",
+           "dest": "Delivered to", "now": "Matching now", "now_v": "{n} — we skip listings already up and only tell you about new ones",
+           "how": "We check every time we refresh listings from Leica shops worldwide, and send one email that groups any new matches. Listings without a known grade are not included.",
+           "view": "See listings now", "manage": "Manage alerts",
+           "why": "You’re receiving this because you set an alert on Camera Bridge. If this wasn’t you, you can turn alerts off below.",
+           "stop": "Turn off all alerts", "thanks": "Thank you for using Camera Bridge."},
+    "de": {"subject": "Ihr Alarm ist eingerichtet · {name}", "heading": "Ihr Alarm ist eingerichtet",
+           "hello": "Guten Tag von Camera Bridge,",
+           "intro": "vielen Dank. Sobald ein neues Angebot zu den Bedingungen unten passt, benachrichtigen wir Sie per E-Mail an diese Adresse.",
+           "model": "Modell", "grade": "Zustand", "grade_v": "Note {g} oder besser", "max": "Gesamtpreis geliefert", "max_v": "höchstens {p} (geschätzt inkl. Versand, Zoll und Steuer)",
+           "dest": "Lieferland", "now": "Aktuell passend", "now_v": "{n} — bestehende Angebote lassen wir aus und melden nur neue",
+           "how": "Wir prüfen bei jeder Aktualisierung der Angebote von Leica-Händlern weltweit und senden eine E-Mail mit allen neuen Treffern. Angebote ohne bekannte Note werden nicht berücksichtigt.",
+           "view": "Angebote ansehen", "manage": "Alarme verwalten",
+           "why": "Sie erhalten diese E-Mail, weil Sie auf Camera Bridge einen Alarm eingerichtet haben. Falls nicht, können Sie die Alarme unten ausschalten.",
+           "stop": "Alle Alarme ausschalten", "thanks": "Vielen Dank, dass Sie Camera Bridge nutzen."},
+    "it": {"subject": "Avviso impostato · {name}", "heading": "Il tuo avviso è impostato",
+           "hello": "Un saluto da Camera Bridge,",
+           "intro": "grazie. Ti scriveremo a questo indirizzo appena un nuovo annuncio corrisponde alle condizioni qui sotto.",
+           "model": "Modello", "grade": "Condizione", "grade_v": "Grado {g} o migliore", "max": "Totale consegnato", "max_v": "fino a {p} (stima con spedizione, dazi e IVA)",
+           "dest": "Consegna in", "now": "Corrispondenze ora", "now_v": "{n} — escludiamo gli annunci già presenti e segnaliamo solo i nuovi",
+           "how": "Controlliamo a ogni aggiornamento degli annunci dei negozi Leica nel mondo e inviamo un’unica email con le nuove corrispondenze. Gli annunci senza grado noto non sono inclusi.",
+           "view": "Vedi gli annunci", "manage": "Gestisci avvisi",
+           "why": "Ricevi questa email perché hai impostato un avviso su Camera Bridge. Se non sei stato tu, puoi disattivare gli avvisi qui sotto.",
+           "stop": "Disattiva tutti gli avvisi", "thanks": "Grazie per usare Camera Bridge."},
+    "es": {"subject": "Alerta creada · {name}", "heading": "Tu alerta está creada",
+           "hello": "Un saludo de Camera Bridge,",
+           "intro": "gracias. Te escribiremos a esta dirección en cuanto un anuncio nuevo cumpla las condiciones de abajo.",
+           "model": "Modelo", "grade": "Estado", "grade_v": "Grado {g} o mejor", "max": "Total entregado", "max_v": "hasta {p} (estimado con envío, aranceles e impuestos)",
+           "dest": "Entrega en", "now": "Coincidencias ahora", "now_v": "{n} — omitimos los anuncios ya publicados y solo avisamos de los nuevos",
+           "how": "Lo comprobamos cada vez que actualizamos los anuncios de tiendas Leica de todo el mundo y enviamos un solo correo con las coincidencias nuevas. No incluimos anuncios sin grado conocido.",
+           "view": "Ver anuncios", "manage": "Gestionar alertas",
+           "why": "Recibes este correo porque creaste una alerta en Camera Bridge. Si no fuiste tú, puedes desactivar las alertas abajo.",
+           "stop": "Desactivar todas las alertas", "thanks": "Gracias por usar Camera Bridge."},
+    "pt": {"subject": "Alerta criado · {name}", "heading": "Seu alerta está criado",
+           "hello": "Olá, aqui é a Camera Bridge.",
+           "intro": "Obrigado. Enviaremos um e-mail para este endereço assim que um novo anúncio atender às condições abaixo.",
+           "model": "Modelo", "grade": "Estado", "grade_v": "Grau {g} ou melhor", "max": "Total entregue", "max_v": "até {p} (estimativa com frete, impostos e taxas)",
+           "dest": "Entrega em", "now": "Correspondências agora", "now_v": "{n} — deixamos de fora os anúncios já publicados e avisamos só dos novos",
+           "how": "Verificamos sempre que atualizamos os anúncios de lojas Leica do mundo todo e enviamos um único e-mail com as novas correspondências. Anúncios sem grau conhecido não entram.",
+           "view": "Ver anúncios", "manage": "Gerenciar alertas",
+           "why": "Você recebeu este e-mail porque criou um alerta na Camera Bridge. Se não foi você, desative os alertas abaixo.",
+           "stop": "Desativar todos os alertas", "thanks": "Obrigado por usar a Camera Bridge."},
+    "zh": {"subject": "提醒已设置 · {name}", "heading": "已为你设置心仪商品提醒",
+           "hello": "你好，这里是 Camera Bridge。",
+           "intro": "已按你的条件设置提醒。一旦有符合条件的新商品上架，我们会发邮件到这个地址通知你。",
+           "model": "型号", "grade": "成色", "grade_v": "{g} 级及以上", "max": "到手总价", "max_v": "{p} 以内（预估含运费、关税和税费）",
+           "dest": "收货地", "now": "当前符合", "now_v": "{n} 件 — 已在售的不提醒，只通知新上架的",
+           "how": "每次更新全球徕卡店铺的商品时都会检查，有符合的就合并成一封邮件发给你。成色未知的商品不提醒。",
+           "view": "查看当前商品", "manage": "管理提醒",
+           "why": "你在 Camera Bridge 设置了提醒，所以收到这封邮件。如果不是你本人操作，可以在下方关闭提醒。",
+           "stop": "关闭全部提醒", "thanks": "感谢使用 Camera Bridge。"},
+}
+
+
+def _want_confirm_email(member_id: str, alerts: dict, want: dict, matching: int) -> tuple[str, str]:
+    lang = (alerts.get("locale") or "en")[:2]
+    t = WANT_CONFIRM_TEXT.get(lang, WANT_CONFIRM_TEXT["en"])
+    dests = DEST_NAMES.get(lang, DEST_NAMES["en"])
+    name = want.get("name") or want["entity"]
+    stop = f"https://camerabridge.io/api/board?r=unsub&m={member_id}&s={unsubscribe_sig(member_id)}"
+    view = f"https://camerabridge.io/?entity={quote(want['entity'], safe='')}&utm_source=alert_email"
+    rows = [(t["model"], name), (t["grade"], t["grade_v"].format(g=want["grade"])),
+            (t["max"], t["max_v"].format(p=_fmt(want["max_total"], want.get("currency")))),
+            (t["dest"], dests.get(want.get("dest") or "", want.get("dest") or "")), (t["now"], t["now_v"].format(n=matching))]
+    table = "".join(f'<tr><td style="padding:9px 14px 9px 0;color:#6e6a64;font-size:13px;white-space:nowrap;vertical-align:top;border-top:1px solid #e6e2dc">{html.escape(k)}</td>'
+                    f'<td style="padding:9px 0;font-size:14px;border-top:1px solid #e6e2dc">{html.escape(v)}</td></tr>' for k, v in rows)
+    button = ('display:inline-block;padding:11px 18px;background:#22201e;color:#fdfcfa;text-decoration:none;font-size:14px;margin:0 8px 8px 0')
+    body = (f'<div style="background:#fdfcfa;padding:24px 0"><div style="font:15px/1.6 -apple-system,Helvetica,Arial,sans-serif;color:#22201e;max-width:560px;margin:0 auto;padding:0 20px">'
+            f'<a href="https://camerabridge.io/?utm_source=alert_email"><img src="{EMAIL_LOGO}" width="176" height="48" alt="Camera Bridge" style="display:block;border:0;margin:0 0 20px"></a>'
+            f'<h1 style="font:500 24px/1.3 Georgia,serif;margin:0 0 14px">{html.escape(t["heading"])}</h1>'
+            f'<p style="margin:0 0 6px">{html.escape(t["hello"])}</p><p style="margin:0 0 18px">{html.escape(t["intro"])}</p>'
+            f'<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;border-bottom:1px solid #e6e2dc;margin:0 0 18px">{table}</table>'
+            f'<p style="margin:0 0 20px;color:#6e6a64;font-size:13px">{html.escape(t["how"])}</p>'
+            f'<p style="margin:0 0 24px"><a href="{html.escape(view)}" style="{button}">{html.escape(t["view"])}</a>'
+            f'<a href="https://camerabridge.io/#saved" style="{button.replace("#22201e;color:#fdfcfa", "#fdfcfa;color:#22201e;border:1px solid #22201e")}">{html.escape(t["manage"])}</a></p>'
+            f'<p style="margin:0 0 24px">{html.escape(t["thanks"])}</p>'
+            f'<p style="margin:0;padding-top:14px;border-top:1px solid #e6e2dc;color:#8a8680;font-size:12px">{html.escape(t["why"])}<br>'
+            f'<a href="{stop}" style="color:#8a8680">{html.escape(t["stop"])}</a> · Camera Bridge · camerabridge.io</p></div></div>')
+    return t["subject"].format(name=name), body
 
 
 def alerts_off(member_id: str | None) -> tuple[int, dict]:
@@ -756,7 +873,7 @@ def want_matches(want: dict, records) -> list[dict]:
     return sorted(out, key=lambda m: m["total"])
 
 
-def want_add(body: dict, member_id: str | None, records=None) -> tuple[int, dict]:
+def want_add(body: dict, member_id: str | None, records=None, send=None) -> tuple[int, dict]:
     if not member_id:
         return 401, {"ok": False, "error": "login"}
     entity = _clip(body.get("entity"), 120)
@@ -788,8 +905,16 @@ def want_add(body: dict, member_id: str | None, records=None) -> tuple[int, dict
     items.append(want)
     _put(blob, f"board/wants/{member_id}.json", {"items": items})
     member = _member(blob, member_id) or {}
+    alerts = member.get("alerts") or {}
+    mailed = False
+    if alerts.get("email"):  # 알림을 켠 회원이면 바로 확인 메일 (어떤 조건인지, 맞으면 메일 준다고)
+        try:
+            subject, html_body = _want_confirm_email(member_id, alerts, want, len(matches))
+            mailed = bool((send or _send_email)(alerts["email"], subject, html_body))
+        except Exception:  # noqa: BLE001 — 메일이 실패해도 알림 저장은 그대로
+            mailed = False
     return 200, {"ok": True, "want": {k: v for k, v in want.items() if k != "notified"}, "matches": matches[:10],
-                 "alerts": bool((member.get("alerts") or {}).get("email"))}
+                 "alerts": bool(alerts.get("email")), "mailed": mailed}
 
 
 def want_remove(body: dict, member_id: str | None) -> tuple[int, dict]:
