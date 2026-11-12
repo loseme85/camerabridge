@@ -825,9 +825,8 @@ def test_append_keeps_shown_order() -> None:
     assert "state.stableOrder = false;" in body
 
 
-def test_picked_model_shows_total_for_sale_under_title() -> None:
-    # 2026-11-12 사장님: 모델을 고르면 숫자 세 칸이 숨어 판매 중 전체 수가 안 보임 → 이름 밑 한 줄
+def test_picked_model_keeps_summary_metrics() -> None:
+    # 2026-11-12 사장님: 세부 버전을 고르면 숫자 세 칸이 사라짐 → All versions처럼 늘 보이게
     for html in _html_files(BETA_PATHS):
-        assert "function entityTitleLine(" in html
-        assert "els['summary-query-subtitle'].textContent = entityTitleLine(pickedEntity" in html
-        assert "entity_for_sale:" in html and "entity_sold_records:" in html
+        assert "body.cb-calc .summary-metrics" not in html
+        assert "els['summary-query-subtitle'].textContent = entityTitleLine(pickedEntity);" in html
