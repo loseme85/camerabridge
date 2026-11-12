@@ -3,19 +3,19 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 926,
+   "count": 925,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 783,
+   "count": 784,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 681,
+   "count": 680,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -39,7 +39,7 @@
   {
    "a": "leica:feature:meter",
    "b": "leica:feature:ttl-flash",
-   "count": 266,
+   "count": 265,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
@@ -51,7 +51,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:ttl-flash",
-   "count": 230,
+   "count": 229,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
@@ -87,13 +87,13 @@
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:no-meter",
-   "count": 134,
+   "count": 133,
    "example": "Leica M2 Black Repaint"
   },
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:mechanical",
-   "count": 134,
+   "count": 133,
    "example": "Leica M2 Black Repaint"
   },
   {
@@ -235,16 +235,16 @@
    "example": "LEICA M5 + 50mm F2 SUMMICRON-M sn.1287 / sn.2294"
   },
   {
-   "a": "leica:body:m11-p:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 67,
-   "example": "Leica M11-P Silver"
-  },
-  {
    "a": "leica:body:m8:standard",
    "b": "leica:feature:frameline-28",
    "count": 67,
    "example": "Leica M8 Silver"
+  },
+  {
+   "a": "leica:body:m11-p:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 66,
+   "example": "Leica M11-P Silver"
   },
   {
    "a": "leica:feature:frameline-28",
@@ -441,19 +441,19 @@
   {
    "a": "leica:body:m7:a-la-carte",
    "b": "leica:feature:frameline-28",
-   "count": 37,
+   "count": 36,
    "example": "[중고] M7 A La Carte - Black Paint"
   },
   {
    "a": "leica:body:m7:a-la-carte",
    "b": "leica:feature:ttl-flash",
-   "count": 37,
+   "count": 36,
    "example": "[중고] M7 A La Carte - Black Paint"
   },
   {
    "a": "leica:body:m7:a-la-carte",
    "b": "leica:feature:meter",
-   "count": 37,
+   "count": 36,
    "example": "[중고] M7 A La Carte - Black Paint"
   },
   {
@@ -913,12 +913,6 @@
    "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
   },
   {
-   "a": "leica:feature:safari",
-   "b": "leica:lens:summilux-m:50:asph-safari",
-   "count": 9,
-   "example": "[중고] M50/1.4 Safari"
-  },
-  {
    "a": "leica:body:m-p240:korea-70",
    "b": "leica:feature:frameline-28",
    "count": 9,
@@ -989,6 +983,12 @@
    "b": "leica:lens:summicron:50:black-paint",
    "count": 8,
    "example": "Leica M 50mm f2 Summicron BlackPaint [MP Classic Edition Lens]"
+  },
+  {
+   "a": "leica:feature:safari",
+   "b": "leica:lens:summilux-m:50:asph-safari",
+   "count": 8,
+   "example": "[중고] M50/1.4 Safari"
   },
   {
    "a": "leica:feature:black-paint",
@@ -1063,6 +1063,18 @@
    "example": "LEICA M6 EIN STUCK sn.2300"
   },
   {
+   "a": "leica:body:m6:leitz-wetzlar",
+   "b": "leica:feature:meter",
+   "count": 8,
+   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
+  },
+  {
+   "a": "leica:body:m6:leitz-wetzlar",
+   "b": "leica:feature:mechanical",
+   "count": 8,
+   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
+  },
+  {
    "a": "leica:body:m4-2:gold",
    "b": "leica:feature:no-meter",
    "count": 8,
@@ -1115,18 +1127,6 @@
    "b": "leica:feature:frameline-28",
    "count": 7,
    "example": "LEICA M-E (Typ240) sn.5548"
-  },
-  {
-   "a": "leica:body:m6:leitz-wetzlar",
-   "b": "leica:feature:meter",
-   "count": 7,
-   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
-  },
-  {
-   "a": "leica:body:m6:leitz-wetzlar",
-   "b": "leica:feature:mechanical",
-   "count": 7,
-   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
   },
   {
    "a": "leica:body:m10-r:black-paint",
@@ -1607,7 +1607,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "safari",
-   "count": 19,
+   "count": 18,
    "example": "[중고] M11-P (Safari)"
   },
   {
