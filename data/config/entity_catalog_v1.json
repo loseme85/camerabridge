@@ -13836,7 +13836,7 @@
     "title_must_not": [
      "\\b\\d{2,3}(-\\d{2,3})?\\s?(mm|/)",
      "\\bSL[ -]?[23]\\b",
-     "leicaflex",
+     "leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스|\\bflex\\b|フレックス",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -13906,7 +13906,7 @@
     ],
     "title_must_not": [
      "SL[ -]?2-?S\\b",
-     "leicaflex|フレックス|라이카플렉스",
+     "leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스|\\bflex\\b|フレックス",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -13974,7 +13974,7 @@
      "\\bSL[ -]?2-?S\\b"
     ],
     "title_must_not": [
-     "leicaflex",
+     "leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스|\\bflex\\b|フレックス",
      "reporter|리포터",
      "leeworks",
      "light ?lens ?lab",
@@ -14046,7 +14046,7 @@
      "reporter|리포터"
     ],
     "title_must_not": [
-     "leicaflex",
+     "leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스|\\bflex\\b|フレックス",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -14116,7 +14116,7 @@
     ],
     "title_must_not": [
      "SL[ -]?3-?S\\b",
-     "leicaflex",
+     "leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스|\\bflex\\b|フレックス",
      "reporter|리포터",
      "leeworks",
      "light ?lens ?lab",
@@ -14190,7 +14190,7 @@
     ],
     "title_must_not": [
      "SL[ -]?3-?S\\b",
-     "leicaflex",
+     "leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스|\\bflex\\b|フレックス",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -14261,7 +14261,7 @@
      "\\bSL[ -]?3-?S\\b"
     ],
     "title_must_not": [
-     "leicaflex",
+     "leica ?(?:flex|フレックス)|ライカフレックス|라이카플렉스|\\bflex\\b|フレックス",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
