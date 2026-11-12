@@ -35,7 +35,7 @@ MIN_ACTIVE = 3           # 새 모델 페이지를 처음 공개할 때의 최�
 MAX_PAGES = 400          # 신규 공개 후보의 상위 모델 수 (이미 공개한 주소는 별도로 유지)
 PUBLISHED = ROOT / "data" / "derived" / "model_pages_published.json"
 LASTMOD = ROOT / "data" / "derived" / "model_pages_lastmod.json"  # 페이지별 내용 지문과 실제로 바뀐 날
-LISTINGS_SHOWN = 30      # 페이지마다 보여 줄 판매 중 매물 (싼 순)
+# 2026-11-12 사장님: 모델 페이지로 들어온 사람이 판매 중 매물을 다 보게 — 개수 제한 없음 (싼 순)
 DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY", "de": "EUR", "it": "EUR", "es": "EUR", "pt": "EUR", "zh-Hans": "CNY", "zh-Hant": "HKD"}
 # 잘못 연결됐을 가능성이 큰 매물은 페이지에서 뺀다: 대여 상품, 그 모델 B등급 기준가의 이 비율보다 싼 것
 RENTAL = re.compile(r"\brental\b|\bfor rent\b|대여|렌탈|レンタル", re.I)
@@ -447,7 +447,7 @@ def build(out: Path) -> dict:
             if rows:
                 parts.append(f'<div class="table"><table><thead><tr><th>{t["col_item"]}</th><th>{t["col_shop"]}</th>'
                              f'<th>{t["col_cond"]}</th><th class="price">{t["col_price"]}</th></tr></thead><tbody>')
-                for r in rows[:LISTINGS_SHOWN]:
+                for r in rows:
                     shop, country = shop_parts(r["source"])
                     shown = money(conv(r["krw"]), cur, lang, r["currency"] != cur)
                     orig = "" if r["currency"] == cur else f'<span class="orig">{money(r["price"], r["currency"], lang)}</span>'
