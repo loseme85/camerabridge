@@ -4531,7 +4531,7 @@
     ],
     "title_must_not": [
      "(?<!non )(?<!non-)(?<!non)TTL",
-     "re-?issue|리이슈|복각|2022",
+     "re-?issue|리이슈|복각|2022|\\b10557\\b",
      "\\bMP\\b",
      "gold ?logo|골드 ?로고|M6 ?G\\b",
      "platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
@@ -4569,6 +4569,7 @@
      "al.?thani|알타니|sheikh",
      "titan|티탄",
      "1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999",
+     "partner.?aktion",
      "leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー",
      "panda|판다|パンダ",
      "^(?!.*(re-?paint|리페인트|재도색|custom|커스텀)).*(safari|사파리|サファリ|green ?paint|그린 ?페인트|グリーン)",
@@ -4690,6 +4691,7 @@
      "al.?thani|알타니|sheikh",
      "titan|티탄",
      "1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999",
+     "partner.?aktion",
      "leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー",
      "panda|판다|パンダ",
      "^(?!.*(re-?paint|리페인트|재도색|custom|커스텀)).*(safari|사파리|サファリ|green ?paint|그린 ?페인트|グリーン)",
@@ -4763,7 +4765,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?6\\b",
-     "(re-?issue|리이슈|2022|복각)"
+     "(re-?issue|리이슈|2022|복각|\\b10557\\b)"
     ],
     "title_must_not": [
      "TTL",
@@ -7367,6 +7369,7 @@
      "al.?thani|알타니|sheikh",
      "titan|티탄",
      "1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999",
+     "partner.?aktion",
      "leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー",
      "panda|판다|パンダ",
      "^(?!.*(re-?paint|리페인트|재도색|custom|커스텀)).*(safari|사파리|サファリ|green ?paint|그린 ?페인트|グリーン)",
@@ -7438,6 +7441,74 @@
     "title_must": [
      "\\bM ?6\\b",
      "1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:m6:partner-aktion",
+   "name": "Leica M6 Partner-Aktion Deutschland",
+   "name_ko": "M6 파트너 악치온 (독일)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": "leica:body:m6",
+   "children": [],
+   "aliases": [
+    "m6 partner aktion",
+    "m6 partner-aktion",
+    "partner-aktion deutschland"
+   ],
+   "codes": [],
+   "edition": true,
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bM ?6\\b",
+     "partner.?aktion"
     ],
     "title_must_not": [
      "leeworks",
@@ -39578,7 +39649,8 @@
     "leica:body:m6:ttl-al-thani",
     "leica:body:m6:ttl-titan",
     "leica:body:m6:ttl-black-paint",
-    "leica:body:m6:last-999"
+    "leica:body:m6:last-999",
+    "leica:body:m6:partner-aktion"
    ],
    "aliases": [
     "leica m6",
@@ -40883,6 +40955,7 @@
      "leica:body:m6:ttl-titan",
      "leica:body:m6:ttl-black-paint",
      "leica:body:m6:siber-hegner",
+     "leica:body:m6:partner-aktion",
      "leica:body:m8",
      "leica:body:m8-2",
      "leica:body:m9",
