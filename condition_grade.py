@@ -179,6 +179,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SC.get(cond[len(SC_PREFIX):].strip().upper()), "label"
     if cond.startswith(TIMS_PREFIX):
         return tims_grade(cond[len(TIMS_PREFIX):]), "text"
+    if cond.startswith(KM_PREFIX):
+        return _km_grade(cond[len(KM_PREFIX):].strip().upper()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
@@ -1051,3 +1053,22 @@ _TIMS = [
 
 def tims_grade(phrase: str) -> str | None:
     return next((g for pat, g in _TIMS if re.search(pat, phrase or "", re.I)), None)
+
+
+# 미국 K&M Camera: 제목 끝 자체 점수 'U9'·'U8'·'U9+' (10점 만점). 사진 평가(표기 가리고 16점, 2026-11-12 밤)에서 U9는 사진 B가 6/8,
+# U8은 B 4·A 2·C 1 — 사진이 한 등급쯤 후해 U10·U9+ → A, U9 → B, U8·U7 → C, 그 아래 D (정확히 7/16 · 한 등급 이내 16/16)
+KM_PREFIX = "K&M: "
+
+
+def _km_grade(score: str) -> str | None:
+    m = re.fullmatch(r"U(\d{1,2})(\+?)", score)
+    if not m:
+        return None
+    value = int(m.group(1))
+    if value >= 10 or (value == 9 and m.group(2)):
+        return "A"
+    if value == 9:
+        return "B"
+    if value >= 7:
+        return "C"
+    return "D"

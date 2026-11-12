@@ -747,3 +747,12 @@ def test_tims_photo_grade():
     assert grade_of(site, "Tim's: Near Mint", "")[0] == "B"
     assert grade_of(site, "Tim's: small usage signs", "")[0] == "B"
     assert grade_of(site, "Tim's: normal usage signs", "")[0] == "C"
+
+
+def test_km_camera_grade():
+    from condition_grade import grade_of
+    site = "K&M Camera (미국)"
+    assert grade_of(site, "K&M: U9+", "")[0] == "A"
+    assert grade_of(site, "K&M: U9", "")[0] == "B"
+    assert grade_of(site, "K&M: U8", "")[0] == "C"
+    assert grade_of(site, "K&M: U6", "")[0] == "D"
