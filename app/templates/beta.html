@@ -1577,7 +1577,9 @@
       .topbar .topnav{margin:0;padding-bottom:0}
       .topnav button{padding:2px 0}
       .top-search{margin-top:4px}
-      .top-search .sticky-search-field{font-size:16px}
+      /* 아이폰은 글자가 16px보다 작은 입력칸·선택 상자를 누르면 화면을 확대하고 다시 줄이지 않음 (2026-11-13 사장님: 손으로 줄여야 해서 불편)
+         → 휴대폰에서는 모든 입력칸·선택 상자를 16px로 */
+      input:not([type="checkbox"]):not([type="radio"]),select,textarea{font-size:16px !important}
       .prefs-panel{left:auto;right:0}
       .brand-logo{height:34px;margin:-2px 0}
       /* 맨 위에서만 머리글 전체, 내려가면 검색창만 (맨 위로 다시 올라가야 전체).
