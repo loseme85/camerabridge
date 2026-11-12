@@ -120,6 +120,44 @@ _BODY_INTENT_ALIASES = {
     "r7": ("R7", "R", None, ()),
     "r8": ("R8", "R", None, ()),
     "barnack": ("Barnack", "L", None, ()),
+    # 2026-11-12: 매물 분류(model_detector)에는 있는데 여기 없어서 'm7'·'m-a'·'m8' 등이 결과 0개였던 바디들.
+    # 일반 단어·여러 모델을 가리키는 말(if·standard·monochrom·q·sl·m·cl)은 넣지 않음.
+    "m1": ("M1", None, None, ()),  # 매물 마운트가 대부분 Unknown
+    "m2-r": ("M2-R", None, None, ()),  # 매물 마운트가 대부분 Unknown
+    "m4-p": ("M4-P", "M", None, ()),
+    "m4-2": ("M4-2", "M", None, ()),
+    "m6j": ("M6J", None, None, ()),  # 매물 마운트가 대부분 Unknown
+    "m7": ("M7", "M", None, ()),
+    "m8": ("M8", "M", None, ()),
+    "m8.2": ("M8.2", "M", None, ()),
+    "m9p": ("M9-P", "M", None, ("P",)),
+    "m10-p": ("M10-P", "M", None, ("P",)),
+    "m10p": ("M10-P", "M", None, ("P",)),
+    "m10-d": ("M10-D", "M", None, ("D",)),
+    "m10d": ("M10-D", "M", None, ("D",)),
+    "m10r": ("M10-R", "M", None, ("R",)),
+    "m240": ("M240", None, None, ()),  # 매물 마운트가 대부분 Unknown
+    "m262": ("M262", None, None, ()),  # 매물 마운트가 대부분 Unknown
+    "m-a": ("M-A", "M", None, ()),
+    "m-p": ("M-P", "M", None, ()),
+    "m-e": ("M-E", "M", None, ()),
+    "m-d": ("M-D", "M", None, ()),
+    "mda": ("MDa", "M", None, ()),
+    "q-p": ("Q-P", None, "Q", ()),
+    "sl2-s": ("SL2-S", "SL", None, ()),
+    "sl2s": ("SL2-S", "SL", None, ()),
+    "r3": ("R3", "R", None, ()),
+    "r4": ("R4", "R", None, ()),
+    "r5": ("R5", "R", None, ()),
+    "r6.2": ("R6.2", "R", None, ()),
+    "r9": ("R9", "R", None, ()),
+    "r-e": ("R-E", None, None, ()),  # 매물 마운트가 대부분 Unknown
+    "leicaflex": ("Leicaflex", "R", None, ()),
+    "iiia": ("IIIa", "L", None, ()),
+    "iiib": ("IIIb", "L", None, ()),
+    "iif": ("IIf", "L", None, ()),
+    "x1": ("X1", None, "Compact", ()),
+    "x2": ("X2", None, "Compact", ()),
     "iiic": ("IIIc", "L", None, ()),
     "iiif": ("IIIf", "L", None, ()),
     "iiig": ("IIIg", "L", None, ()),

@@ -159,6 +159,7 @@ _BODY_MODEL_PATTERNS: list[tuple[str, str]] = [
     ("r6.2",            "R6.2"),
     ("r6",              "R6"),
     ("r5",              "R5"),
+    ("r4s",             "R4"),
     ("r4",              "R4"),
     ("r3",              "R3"),
     ("r-e",             "R-E"),
@@ -183,6 +184,7 @@ _BODY_MODEL_PATTERNS: list[tuple[str, str]] = [
     # SL
     ("sl3",             "SL3"),
     ("sl2-s",           "SL2-S"),
+    ("sl2s",            "SL2-S"),
     ("sl2",             "SL2"),
     ("sl",              "SL"),
     # S
@@ -430,6 +432,16 @@ def _detect_sl_zoom_shorthand_model(
 # 메인 함수
 # ─────────────────────────────────────────────
 
+
+def _body_kw_in(kw: str, text: str) -> bool:
+    """바디 모델 이름이 상품명에 있는지. 3글자 이하('ma'·'q'·'if'·'mp'·'cl')는 단어로만 찾음 —
+    글자 조각으로 찾으면 'elmar'의 'ma'가 M-A, 'handgriff'의 'if'가 If, 'compact'의 'mp'가 MP가 됨
+    (바르낙·M3·R 바디 280여 개가 잘못 묶임, 2026-11-12)."""
+    if len(kw) <= 3:
+        return re.search(r"(?<![a-z0-9])" + re.escape(kw) + r"(?![a-z0-9])", text) is not None
+    return kw in text
+
+
 def detect_model(
     normalized_name: str,
     normalized_description: Optional[str] = None,
@@ -458,7 +470,7 @@ def detect_model(
     # ── model_raw: 상품명 패턴 매칭 ──
     if cat == "body":
         for kw, canon in _BODY_MODEL_PATTERNS:
-            if kw in n:
+            if _body_kw_in(kw, n):
                 model_raw = canon
                 break
     elif cat == "lens":
@@ -476,7 +488,7 @@ def detect_model(
                 break
         if not model_raw:
             for kw, canon in _BODY_MODEL_PATTERNS:
-                if kw in n:
+                if _body_kw_in(kw, n):
                     model_raw = canon
                     break
 
