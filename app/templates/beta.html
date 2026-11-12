@@ -1544,6 +1544,17 @@
     /* 줄이 두 겹으로 겹치지 않게 */
     .status-strip{border-bottom:0}
     .sticky-search-bar{border-bottom:0}
+    /* 스크롤해도 따라오는 띠: 머리글 바로 밑에 틈 없이, 바탕을 가득 채워 카드가 비치지 않게, 왼쪽에 지금 보는 모델 이름 (2026-11-12 사장님) */
+    .sticky-search-region{padding-top:0;margin-top:0}
+    .sticky-search-region .sticky-search-bar{display:flex;align-items:center;gap:20px;padding:10px 0;background:var(--bg,#FDFCFA);box-shadow:0 0 0 100vmax var(--bg,#FDFCFA);clip-path:inset(0 -100vmax -1px -100vmax);border-bottom:1px solid var(--border)}
+    .sticky-search-region .sticky-search-form{flex:1 1 420px;min-width:0}
+    .sticky-title{flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--serif);font-size:20px;line-height:1.2}
+    .sticky-title small{font-family:var(--sans);font-size:13px;color:var(--text-soft);margin-left:10px}
+    @media(max-width:720px){
+      .sticky-search-region .sticky-search-bar{flex-direction:column;align-items:stretch;gap:6px;padding:8px 0}
+      .sticky-title{font-size:16px}
+      .sticky-title small{display:none}
+    }
     .query-review-header + *{border-top:0}
     @media(max-width:720px){
       main{width:calc(100% - 32px)}
@@ -1788,6 +1799,7 @@
             <section id="refinement-region" aria-live="polite"></section>
             <section id="sticky-search-region" class="sticky-search-region" data-i18n-aria-label="search.sticky_aria" aria-label="Sticky search" hidden>
               <div class="sticky-search-bar">
+                <div id="sticky-title" class="sticky-title" hidden></div>
                 <form id="sticky-search-form" class="search-form-row sticky-search-form">
                   <input id="sticky-query-input" class="search-field sticky-search-field" type="search" autocomplete="off" data-i18n-placeholder="search.sticky_placeholder" placeholder="Search again while keeping the current results in view">
                   <button class="search-button sticky-search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.sticky_button_aria" aria-label="Search from sticky bar">Search</button>
@@ -6166,6 +6178,17 @@
       if(!els['sticky-search-region']) return;
       const hasActiveSearch = Boolean(state.query || state.loading || state.response || state.error);
       els['sticky-search-region'].hidden = !hasActiveSearch;
+      // 머리글 높이에 딱 붙임 (틈이 있으면 그 사이로 카드가 비침)
+      const topbar = document.querySelector('.topbar');
+      if(topbar && getComputedStyle(topbar).position === 'sticky') els['sticky-search-region'].style.top = `${topbar.offsetHeight}px`;
+      // 띠 왼쪽: 지금 보는 모델(검색어) 이름 + 판매 중 수
+      const title = document.getElementById('sticky-title');
+      if(title){
+        const name = (els['summary-query-title'] && els['summary-query-title'].textContent.trim()) || state.query || '';
+        const activeTotal = state.response ? Number(state.response.active_total) : NaN;
+        title.hidden = !hasActiveSearch || !name || state.loading;
+        title.innerHTML = `${escapeHtml(name)}${Number.isFinite(activeTotal) && !state.loading ? `<small>${escapeHtml(ux('summary.active_listings_label', 'Active listings'))} ${escapeHtml(formatListingCount(activeTotal))}</small>` : ''}`;
+      }
     }
 
     function getResultsAnchorElement(){
