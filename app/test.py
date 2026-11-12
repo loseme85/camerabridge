@@ -13388,6 +13388,75 @@ def crawl_kameraexpresslu():
     return results
 
 
+# 2026-11-12 밤샘: Leica Store Manchester (영국) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _lsmanchester_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 2026-11-12 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _lsmanchester_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _lsmanchester_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def crawl_lsmanchester():
+    """Leica Store Manchester (영국) - Shopify 전체(약 940점) 중 중고: 상품 종류에 'Pre'(Pre-Owned·Pre-Owned M Lens·Leica Pre Owned)가
+    있거나 제목 끝에 일련번호('M11-P, Black. 5883907'). 제목에 브랜드가 없어 'Leica'를 붙임. 가격 GBP.
+    등급 표기는 없고 설명 첫 문장 말투('Fine condition', 'very fine cosmetic condition', 'Good, used')"""
+    import html as _html
+    import requests
+    from condition_grade import describe_text
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.leicastoremanchester.com"
+    print(f"\n  📂 Leica Store Manchester 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Leica Store Manchester"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        ptype = (p.get("product_type") or "").lower()
+        serial = re.search(r"\.\s*\d{6,8}\s*$", title)
+        if "pre" not in ptype and not serial:
+            continue
+        name = re.sub(r"\.\s*\d{5,8}\s*$|\.\s*\d{2}\s?\d{3}\s*$", "", title)  # 일련번호·주문번호 꼬리
+        name = re.sub(r"^(M\d+(?:-[A-Z])?),\s*(Monochrom)\b", r"\1 \2", name)  # 'M9, Monochrom' -> 'M9 Monochrom'
+        body = _html.unescape(p.get("body_html") or "")
+        results.append(_lsmanchester_row("Leica Store Manchester (영국)", base, p, _lsmanchester_leica_name(name),
+                                  describe_text(body), _lsmanchester_price(p, "£"), "GBP"))
+    print(f"  ✅ Leica Store Manchester 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13563,6 +13632,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Leica Store Manchester (영국)", lambda: ce.wrap_full_run("Leica Store Manchester (영국)", crawl_lsmanchester)),
         ("Kamera Express (룩셈부르크)", lambda: ce.wrap_full_run("Kamera Express (룩셈부르크)", crawl_kameraexpresslu)),
         ("Camera Boutique Graz (오스트리아)", lambda: ce.wrap_full_run("Camera Boutique Graz (오스트리아)", crawl_cameraboutique)),
         ("K&M Camera (미국)", lambda: ce.wrap_full_run("K&M Camera (미국)", crawl_kmcamera)),
