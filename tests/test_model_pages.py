@@ -116,3 +116,18 @@ def test_retained_empty_page_uses_current_data_and_dry_run_preserves_registry(tm
     assert (registry.read_bytes(), lastmod.read_bytes()) == before
     registry.write_text(json.dumps({"entity_ids": []}))
     assert mp.build(output)["models"] == ["m4-50-jahre"]
+
+
+def test_model_page_has_big_search_button_under_numbers() -> None:
+    # 2026-11-12 사장님: 모델 페이지 손님 98명 중 3명만 검색 화면으로 넘어옴 → 숫자 칸 바로 밑 큰 버튼 (9개 언어)
+    import importlib.util
+    from pathlib import Path
+    path = Path(__file__).resolve().parent.parent / "scripts" / "build_model_pages.py"
+    spec = importlib.util.spec_from_file_location("build_model_pages_cta", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert set(module.CTA) == set(module.T)
+    assert all("{n}" in title for title, _ in module.CTA.values())
+    source = path.read_text(encoding="utf-8")
+    assert source.index('class="cta"') < source.index('t["updated"].format(time=updated_text)\n            if e.get("sold_median_krw")')
+    assert "utm_medium=cta" in source

@@ -145,6 +145,9 @@ T.update({'de': {'title': '{name} gebraucht: Preise & Angebote | Camera Bridge',
 for _l, _v in {'ko': '{name} 중고: B등급 시세 {b}, {shops}개 매장에 {n}개 판매 중 ({date} 기준).', 'en': 'Used {name}: grade B market value {b}, {n} for sale at {shops} shops (as of {date}).', 'ja': '中古 {name}：B等級の相場 {b}、{shops} 店で {n} 点販売中（{date} 時点）。'}.items():
     T[_l]["lead"] = _v
 
+# 숫자 칸 바로 밑 큰 버튼: 모델 페이지로 들어온 손님 98명 중 3명만 검색 화면으로 넘어와서 (2026-11-12 사장님)
+CTA = {'ko': ('전 세계 매물 {n}개 전부 보기', '사진 · 등급(S~D) · 내 나라까지 배송비·관세 포함 예상 총액으로 비교'), 'en': ('See all {n} listings worldwide', 'Photos · condition grades (S–D) · estimated total to your country with shipping and duties'), 'ja': ('世界中の在庫 {n} 点をすべて見る', '写真 · 状態ランク（S〜D）· 送料・関税込みの到着予想総額で比較'), 'de': ('Alle {n} Angebote weltweit ansehen', 'Fotos · Zustandsnoten (S–D) · geschätzter Gesamtpreis inkl. Versand und Zoll in dein Land'), 'it': ('Vedi tutti i {n} annunci nel mondo', 'Foto · gradi di condizione (S–D) · totale stimato nel tuo paese con spedizione e dazi'), 'es': ('Ver los {n} anuncios de todo el mundo', 'Fotos · grados de estado (S–D) · total estimado a tu país con envío e impuestos'), 'pt': ('Ver todos os {n} anúncios do mundo', 'Fotos · graus de estado (S–D) · total estimado até o seu país com frete e impostos'), 'zh-Hans': ('查看全球全部 {n} 件在售', '照片 · 成色等级（S–D）· 含运费和关税的到手预估总价'), 'zh-Hant': ('查看全球全部 {n} 件在售', '照片 · 成色等級（S–D）· 含運費和關稅的到手預估總價')}
+
 CSS = """
 :root{--bg:#FDFCFA;--text:#22201E;--soft:#6E6A64;--muted:#8a9094;--border:#e1e4e3;--accent:#1f4a3a;--row:#f5f6f5}
 @media (prefers-color-scheme:dark){:root{--bg:#141617;--text:#e8eaea;--soft:#a9afb2;--muted:#7d8488;--border:#2c3133;--accent:#8cc5ad;--row:#1b1e1f}}
@@ -172,6 +175,10 @@ td.price,th.price{text-align:right;white-space:nowrap;padding-right:0}
 td .orig{display:block;font-size:12px;color:var(--muted)}
 a{color:var(--accent)}
 .more{display:inline-block;margin-top:20px;padding:10px 14px;border:1px solid var(--accent);text-decoration:none}
+.cta{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:16px 0 6px;padding:16px 20px;background:var(--text);color:var(--bg);text-decoration:none}
+.cta b{display:block;font-size:17px;font-weight:600}
+.cta small{display:block;font-size:13px;opacity:.75;margin-top:3px}
+.cta i{font-style:normal;font-size:22px}
 ul.links{padding-left:18px}
 ul.links li{margin:4px 0}
 ul.links span{color:var(--muted);font-size:13px}
@@ -417,6 +424,10 @@ def build(out: Path) -> dict:
                 else:
                     vs_new = None
             parts.append("</dl>")
+            if rows:
+                cta_title, cta_sub = CTA[lang]
+                parts.append(f'<a class="cta" href="/?entity={html.escape(eid)}&amp;utm_source=model_page&amp;utm_medium=cta&amp;utm_content={slug}">'
+                             f'<span><b>{html.escape(cta_title.format(n=len(rows)))}</b><small>{html.escape(cta_sub)}</small></span><i aria-hidden="true">→</i></a>')
             note = t["updated"].format(time=updated_text)
             if e.get("sold_median_krw"):
                 note += "<br>" + t["sold_note"]
