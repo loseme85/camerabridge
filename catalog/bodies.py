@@ -171,6 +171,8 @@ M6_EDITIONS = [
     ("ttl-black-paint", "Leica M6 TTL Black Paint", "M6 TTL 블랙페인트", [M6, TTL, BLACK_PAINT[0]], ["m6 ttl black paint", "m6 ttl 블랙페인트"]),
     ("last-999", "Leica M6 TTL 'Die letzten 999' (1984–2002)", "M6 마지막 999대 (1984–2002)", [M6, r"1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999"],
      ["m6 last 999", "m6 1984-2002", "m6 letzten 999"]),
+    # 독일 판매점 한정 ('nur 500 Stück' — 매장 설명), 2026-11-12 밤 M6 클래식에 섞여 있던 것
+    ("partner-aktion", "Leica M6 Partner-Aktion Deutschland", "M6 파트너 악치온 (독일)", [M6, r"partner.?aktion"], ["m6 partner aktion", "m6 partner-aktion"]),
 ]
 # 기본 생산분이지만 시세가 달라 따로 (기념판 칸이 아니라 기본 모델 칸에)
 M6_VARIANTS = [
@@ -182,7 +184,7 @@ EDITION_MARKS = [e[3][-1] for e in M6_EDITIONS + M6_VARIANTS if e[0] not in ("tt
 # 개인 도색(커스텀) 사파리·그린은 한정판이 아니라 원래 바디 그대로
 EDITION_MARKS.append(r"^(?!.*(re-?paint|리페인트|재도색|custom|커스텀)).*(safari|사파리|サファリ|green ?paint|그린 ?페인트|グリーン)")
 MODELS["leica:body:m6:classic"] = {"model_key": "leica:body:m6:classic", "display_name": "Leica M6 (Classic)", "category": "Body", "mount": "M",
-                                   "title_must": [M6], "title_must_not": [TTL, r"re-?issue|리이슈|복각|2022", r"\bMP\b"] + EDITION_MARKS}
+                                   "title_must": [M6], "title_must_not": [TTL, r"re-?issue|리이슈|복각|2022|\b10557\b", r"\bMP\b"] + EDITION_MARKS}
 ALIASES["leica:body:m6:classic"] = ["leica m6 classic", "m6 classic", "m6 클래식", "라이카 m6 클래식", "엠6 클래식"]
 NAME_KO["leica:body:m6:classic"] = "라이카 M6 클래식"
 MODELS["leica:body:m6:ttl"] = {"model_key": "leica:body:m6:ttl", "display_name": "Leica M6 TTL", "category": "Body", "mount": "M",
@@ -190,7 +192,7 @@ MODELS["leica:body:m6:ttl"] = {"model_key": "leica:body:m6:ttl", "display_name":
 ALIASES["leica:body:m6:ttl"] = ["leica m6 ttl", "m6 ttl", "m6ttl", "라이카 m6 ttl", "엠6 ttl"]
 NAME_KO["leica:body:m6:ttl"] = "라이카 M6 TTL"
 MODELS["leica:body:m6:reissue"] = {"model_key": "leica:body:m6:reissue", "display_name": "Leica M6 (2022 Reissue)", "category": "Body", "mount": "M",
-                                   "title_must": [M6, r"(re-?issue|리이슈|2022|복각)"], "title_must_not": [r"TTL"]}
+                                   "title_must": [M6, r"(re-?issue|리이슈|2022|복각|\b10557\b)"], "title_must_not": [r"TTL"]}  # 10557 = 2022 복각판 주문 번호 (catalog/codes.py)
 ALIASES["leica:body:m6:reissue"] = ["leica m6 reissue", "m6 reissue", "m6 2022", "m6 리이슈", "m6 복각", "라이카 m6 리이슈"]
 NAME_KO["leica:body:m6:reissue"] = "라이카 M6 리이슈 (2022)"
 for slug, name, ko, must, aliases in M6_EDITIONS + M6_VARIANTS:

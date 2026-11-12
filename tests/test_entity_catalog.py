@@ -734,3 +734,15 @@ def test_leicaflex_written_apart_is_not_digital_sl() -> None:
     assert ids("Leica FLEX SL2 50 JAHRE Black") == ["leica:body:leicaflex-sl2"]
     assert "leica:body:sl2" in ids("Leica SL2 Body")
     assert "leica:body:sl3" in ids("Leica SL3 Reporter")
+
+
+def test_m6_reissue_code_and_partner_aktion_not_classic() -> None:
+    # 2026-11-12 밤: M6 클래식에 2022 복각판(10557)·Partner-Aktion 한정판이 섞여 있었음
+    from entity_catalog import load_catalog, match_entities
+    cat = load_catalog()
+    def ids(title):
+        return match_entities({"final_output": {"title": title, "title_raw": title, "category": "Body", "brand": "Leica"}}, cat)
+    assert "leica:body:m6:reissue" in ids("Leica M6 Body black paint (10557)")
+    assert "leica:body:m6:classic" not in ids("Leica M6 0.72 10557")
+    assert "leica:body:m6:partner-aktion" in ids("Leica M6 Partner Aktion Deutschland (nur 500 Stück) Body")
+    assert "leica:body:m6:classic" in ids("Leica M6 black Body")
