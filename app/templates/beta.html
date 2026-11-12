@@ -1630,13 +1630,14 @@
     }
     @media(max-width:720px){
       /* 머리글 위아래 폭 줄임 (로고·메뉴·검색 세 줄 사이) */
-      .topbar{transition:transform .2s ease;row-gap:4px;padding-top:6px;padding-bottom:8px}
+      .topbar{row-gap:4px;padding-top:6px;padding-bottom:8px}
       .topbar .topnav{margin:0;padding-bottom:0}
       .topnav button{padding:2px 0}
       .top-search{margin-top:4px}
       .brand-logo{height:34px;margin:-2px 0}
-      /* 맨 위에서만 머리글 전체, 내려가면 검색창만 (맨 위로 다시 올라가야 전체) */
-      body.cb-scroll-down .topbar{transform:translateY(calc(-1 * var(--topbar-hide, 100%)))}
+      /* 맨 위에서만 머리글 전체, 내려가면 검색창만 (맨 위로 다시 올라가야 전체).
+         스크롤 상태를 JS로 쫓지 않고, 머리글을 '검색창 윗부분 높이만큼 위로 빠진 자리'에 붙여 둠 — 맨 위에서는 원래 자리라 다 보임 */
+      .topbar{top:calc(-1 * var(--topbar-hide, 0px))}
       .entity-bar{flex-wrap:wrap}
       .entity-bar.chips-open .entity-bar-chips{flex-basis:100%}
       /* 숫자 세 칸: 결과·판매 중은 한 줄에 둘, 가격대는 아래 한 줄 */
@@ -6292,11 +6293,13 @@
     }
 
     function updateStickySearchVisibility(){
-      // 휴대폰에서 내릴 때 로고·메뉴 줄만 접고 머리글 검색창은 남김
+      // --topbar-hide: 휴대폰에서 내렸을 때 화면 위로 빠질 머리글 높이 (로고·메뉴 줄). 검색창이 안 보이는 때(첫 화면 큰 검색창이 보일 때)는 머리글 전체
       const topbar = document.querySelector('.topbar');
+      if(!topbar) return;
       const top = document.getElementById('top-search');
-      if(topbar && top && top.offsetParent) document.documentElement.style.setProperty('--topbar-hide', `${Math.max(0, top.offsetTop - 8)}px`);
-      else document.documentElement.style.removeProperty('--topbar-hide');
+      const hide = top && top.offsetParent ? Math.max(0, top.offsetTop - 8) : topbar.offsetHeight;
+      const root = document.documentElement.style;
+      if(root.getPropertyValue('--topbar-hide') !== `${hide}px`) root.setProperty('--topbar-hide', `${hide}px`);
     }
 
     function getResultsAnchorElement(){
@@ -8267,22 +8270,7 @@
       }catch(error){ /* 공유 창을 닫음 등 */ }
     }
 
-    // 2026-11-13 사장님: 맨 위에서만 머리글 전체, 조금이라도 내려가면 body.cb-scroll-down (휴대폰은 검색창만 남음),
-    // 맨 위로 다시 올라가야 전체가 돌아옴 (올릴 때마다 나타났다 사라져 어지러웠음)
-    // 아이폰은 튕김·관성 스크롤 끝에 scroll 이벤트가 정확히 0에서 안 올 때가 있어 40px 안이면 '맨 위'로 보고, 손을 뗄 때·스크롤이 멈출 때도 다시 봄
-    function updateTopbarCollapse(){
-      const y = Math.max(0, window.scrollY);
-      const body = document.body.classList;
-      if(!body.contains('cb-scroll-down') && y > 80){
-        updateStickySearchVisibility();
-        body.add('cb-scroll-down');
-      }else if(body.contains('cb-scroll-down') && y < 40){
-        body.remove('cb-scroll-down');
-      }
-    }
-    window.addEventListener('scroll', updateTopbarCollapse, { passive: true });
-    window.addEventListener('scrollend', updateTopbarCollapse, { passive: true });
-    window.addEventListener('touchend', () => setTimeout(updateTopbarCollapse, 350), { passive: true });
+    window.addEventListener('resize', updateStickySearchVisibility, { passive: true });
 
     function bindEvents(){
       const shareButton = document.getElementById('summary-share');
