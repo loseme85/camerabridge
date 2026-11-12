@@ -23,7 +23,7 @@ PRIVACY_UPDATED = "2026-11-11"
 OPERATOR = {
     # 카메라브릿지를 운영하는 회사 이름 (2026-10-29 이름만 정함, 아직 사업자 등록 전 → 법적 운영자는 아래 사업자)
     "brand": "thehingemeta",
-    "name": {"ko": "브로콜리스튜디오", "en": "Broccoli Studio", "ja": "Broccoli Studio（ブロッコリースタジオ）"},
+    "name": {"ko": "thehingemeta", "en": "thehingemeta", "ja": "thehingemeta"},  # 2026-11-12 사장님: 스튜디오 상호도 숨김 — 브랜드만
     "rep": {"ko": "", "en": "", "ja": ""},
     "biz_no": "",
     "mail_order_no": "",
@@ -116,17 +116,14 @@ FEEDBACK_LINK = {"ko": '첫 화면의 "의견 보내기"', "en": 'the "Send feed
 
 WHY = {
     "ko": ('<h2 id="why">만든 이유</h2>'
-           '<figure class="maker"><img src="/img/maker-night.jpg" width="1610" height="1080" loading="lazy" alt="밤거리에서 카메라를 들고 선 만든 사람"></figure>'
-           "<p>저는 라이카 공식 스토어에서 VIP 고객을 관리했고, 개인 프리미엄 샵에서 매니저로 일했습니다. 그때 가장 힘들었던 일은 매입이었습니다. "
+           "<p>예전에 카메라 매장에서 일할 때 가장 힘들었던 일은 매입이었습니다. "
            "손님이 가져온 렌즈를 얼마에 사야 하는지, 세대와 상태와 구성품에 따라 값이 몇 배씩 달라지는데 그 자리에서 답해야 했습니다. "
            "경력이 쌓이기 전에는 늘 불안했고, 계산이 빠르지 않은 동료들에게는 더 큰 스트레스였습니다.</p>"
            "<p>지금은 전혀 다른 일을 하지만 그때의 갈증이 남아 카메라브릿지를 만들었습니다. 여러 나라 매장의 매물을 모아 같은 모델끼리 정확히 묶어 보여 주는 것이 목표입니다. "
            "가격 때문에 생기는 스트레스가 조금이라도 줄어 매입하고, 팔고, 사는 일이 쉬워지기를 바랍니다.</p>"
            "<p>카메라브릿지는 Leica Camera AG와 관계없이 혼자 운영하는 독립 서비스입니다.</p>"),
     "en": ('<h2 id="why">Why I built this</h2>'
-           '<figure class="maker"><img src="/img/maker-night.jpg" width="1610" height="1080" loading="lazy" alt="The maker of Camera Bridge, holding a camera on a street at night"></figure>'
-           "<p>I used to look after VIP clients at an official Leica Store, and later managed a private premium camera shop. "
-           "The hardest part of the job was always buying. Someone brings in a lens, and you have to name a price on the spot, "
+           "<p>When I worked in camera retail, the hardest part of the job was always buying. Someone brings in a lens, and you have to name a price on the spot, "
            "knowing that version, condition and what comes in the box can change its value several times over. "
            "Before I had the experience, it made me anxious every time, and it was even harder for colleagues who weren't quick with numbers.</p>"
            "<p>I work in a different field now, but that frustration stayed with me, so I built Camera Bridge. "
@@ -134,8 +131,7 @@ WHY = {
            "I hope it takes some of the stress out of pricing, whether you're buying stock, selling it, or buying a camera for yourself.</p>"
            "<p>Camera Bridge is an independent, one-person service with no connection to Leica Camera AG.</p>"),
     "ja": ('<h2 id="why">つくった理由</h2>'
-           '<figure class="maker"><img src="/img/maker-night.jpg" width="1610" height="1080" loading="lazy" alt="夜の通りでカメラを構えるつくり手"></figure>'
-           "<p>私はライカ公式ストアで VIP のお客さまを担当し、その後は個人のプレミアムカメラ店でマネージャーをしていました。いちばん大変だったのは買取です。"
+           "<p>以前カメラ店で働いていたころ、いちばん大変だったのは買取です。"
            "お客さまが持ち込んだレンズにその場で値をつけなければならないのに、型や世代、状態、付属品で価格は何倍も変わります。"
            "経験が浅いうちは毎回不安で、計算が得意でない同僚にとってはなおさら負担でした。</p>"
            "<p>今はまったく別の仕事をしていますが、あのときのもどかしさが残っていて Camera Bridge をつくりました。"
@@ -149,7 +145,7 @@ def about_body(lang: str) -> tuple[str, str]:
     o = OPERATOR
     if lang == "ko":
         pairs = [("서비스", "카메라브릿지 (camerabridge.io) — 라이카 중고 매물·시세 검색"),
-                 ("회사", f'{o["brand"]} (사업자 등록 전까지 아래 사업자가 운영)'), ("상호", o["name"]["ko"]),
+                 ("운영", o["brand"]),
                  ("대표자", o["rep"]["ko"]), ("사업자등록번호", o["biz_no"]), ("주소", o["address"]["ko"]),
                  ("이메일", MAIL), ("호스팅 제공자", "Vercel Inc. (미국)")]
         if o["mail_order_no"]:
@@ -168,7 +164,7 @@ def about_body(lang: str) -> tuple[str, str]:
         return "운영자 정보", body
     if lang == "ja":
         pairs = [("サービス", "Camera Bridge（camerabridge.io）— ライカ中古在庫・相場検索"),
-                 ("会社", f'{o["brand"]}（法人登録までは下記の事業者が運営）'), ("事業者名", o["name"]["ja"]),
+                 ("運営", o["brand"]),
                  ("代表者", o["rep"]["ja"]), ("事業者登録番号（韓国）", o["biz_no"]), ("所在地", o["address"]["ja"]),
                  ("メール", MAIL), ("ホスティング", "Vercel Inc.（米国）")]
         if o["mail_order_no"]:
@@ -186,7 +182,7 @@ def about_body(lang: str) -> tuple[str, str]:
                 + f"<h2>店舗の方へ</h2><p>掲載内容の修正・削除やデータ連携のご相談は {MAIL} までご連絡ください。</p>")
         return "運営者情報", body
     pairs = [("Service", "Camera Bridge (camerabridge.io) — used Leica listings and price search"),
-             ("Company", f'{o["brand"]} (operated by the business below until it is registered)'), ("Operator", o["name"]["en"]),
+             ("Operator", o["brand"]),
              ("Owner", o["rep"]["en"]), ("Business registration no. (Korea)", o["biz_no"]), ("Address", o["address"]["en"]),
              ("Email", MAIL), ("Hosting", "Vercel Inc. (USA)")]
     if o["mail_order_no"]:
@@ -361,14 +357,14 @@ def impressum_body() -> str:
     o = OPERATOR
     owner = f", Inhaber: {o['rep']['en']}" if o["rep"]["en"] else ""
     de = _rows([(k, v) for k, v in [
-                ("Anbieter", f"{o['name']['en']} (브로콜리스튜디오){owner} — Camera Bridge by {o['brand']}"),
+                ("Anbieter", f"Camera Bridge by {o['brand']}{owner}"),
                 ("Anschrift", o["address"]["en"]),
                 ("Kontakt", f"E-Mail: {MAIL} · Kontaktformular: „Feedback senden“ auf der Startseite"),
                 ("Unternehmensregister", f"Koreanische Unternehmensnummer (사업자등록번호) {o['biz_no']}" if o["biz_no"] else ""),
                 ("Umsatzsteuer-ID", "Nicht vorhanden (Unternehmen mit Sitz in der Republik Korea)"),
                 ("Verantwortlich für den Inhalt (§ 18 Abs. 2 MStV)", f"{o['rep']['en']}, Anschrift wie oben" if o["rep"]["en"] else "")] if v])
     en = _rows([(k, v) for k, v in [
-                ("Provider", f"{o['name']['en']}" + (f", owner {o['rep']['en']}" if o["rep"]["en"] else "")), ("Address", o["address"]["en"]),
+                ("Provider", f"Camera Bridge by {o['brand']}" + (f", owner {o['rep']['en']}" if o["rep"]["en"] else "")), ("Address", o["address"]["en"]),
                 ("Contact", f"Email {MAIL} · contact form: \"Send feedback\" on the home page"),
                 ("Business registration (Korea)", o["biz_no"]), ("Responsible for content", o["rep"]["en"])] if v])
     return ("<p>Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p>" + de
