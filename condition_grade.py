@@ -177,6 +177,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _MPEX.get(cond[len(MPEX_PREFIX):].strip()), "label"
     if cond.startswith(SC_PREFIX):
         return _SC.get(cond[len(SC_PREFIX):].strip().upper()), "label"
+    if cond.startswith(CBG_PREFIX):
+        return _CBG.get(cond[len(CBG_PREFIX):].strip()), "label"
     if cond.startswith(KOMEHYO_PREFIX):
         return _KOMEHYO.get(cond[len(KOMEHYO_PREFIX):].strip()), "label"
     if cond.startswith(FUJIKOSHI_PREFIX):
@@ -752,6 +754,11 @@ _MPEX = {"like new": "A", "excellent+": "B", "excellent +": "B", "excellent": "B
 SC_PREFIX = "SC: "
 _SC = {"S": "S", "A+": "A", "A": "A", "A-": "B", "B+": "B", "B": "B", "B-": "C", "C+": "C", "C": "C"}
 
+
+# 오스트리아 Camera Boutique Graz: 매장 등급 Wie Neu·Sehr Gut·Gut·Akzeptabel·Stark Gebraucht (제목 끝). 사진 평가 18점(2026-11-03)에서
+# 사진이 표기보다 한 등급쯤 후해 wie neu→A, sehr gut→B, gut→C로 맞춤 (정확히 8/17, 한 등급 이내 17/17)
+CBG_PREFIX = "CBG: "
+_CBG = {"neu": "N", "wie neu": "A", "sehr gut": "B", "gut": "C", "akzeptabel": "D", "stark gebraucht": "D"}
 
 KOMEHYO_PREFIX = "Komehyo: "
 # 사진 평가(표기 가리고 25점, 사진 3장씩, 2026-10-29): 中古品A A 8 · 中古品B A 8·B 1 · 中古品C B 5·C 3.
