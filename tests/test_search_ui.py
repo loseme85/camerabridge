@@ -196,8 +196,9 @@ def test_active_first_sorting_keeps_compatible_active_before_similar_or_excluded
 
 def test_active_and_history_sections_are_sorted_independently() -> None:
     for html in _html_files():
-        assert "const active = [" in html
-        assert "const history = [" in html
+        # 2026-11-12: 더 불러온 뒤에는 보인 순서 그대로(keepOrder), 아니면 예전처럼 칸별 정렬
+        assert "const active = [" in html or "const active = keepOrder" in html
+        assert "const history = [" in html or "const history = keepOrder" in html
         assert "sortMarketBucket(buckets.active_asking, sortMode)" in html
         assert "sortMarketBucket(buckets.sold_confirmed, sortMode)" in html
         assert "renderResultSection('active', displaySections.active" in html
@@ -800,3 +801,13 @@ def test_model_view_has_value_calculator() -> None:
         line = next(l for l in block.splitlines() if l.strip().startswith(key + ":"))
         for locale in ("ko:", "en:", "ja:", "de:", "it:"):
             assert locale in line, (key, locale)
+
+
+def test_append_keeps_shown_order() -> None:
+    """2026-11-12 사장님: 내려서 누르려는데 순서가 바뀜 → 더 불러올 때 보인 매물은 그대로, 새 매물만 정렬해 뒤에"""
+    html = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
+    assert "const freshSections = buildDisplaySections(freshResults, getSortMode(), false);" in html
+    assert "state.stableOrder = true;" in html
+    assert "restoreViewAnchor(viewAnchor);" in html
+    body = html[html.index("els['sort-select'].addEventListener('change'"):][:300]
+    assert "state.stableOrder = false;" in body
