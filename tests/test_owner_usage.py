@@ -162,3 +162,16 @@ def test_korean_sort_and_day_boundary_with_mixed_timezones():
     page = ou.render(entries, [], 1, False)
     assert page.index("11-12 00:00:00") < page.index("11-11 23:30:00")
     assert "11-11 15:00:00" not in page
+
+
+def test_steps_link_to_what_the_visitor_saw():
+    """한 일을 누르면 그 결과로: 검색은 모델(없으면 검색어), 페이지는 그 주소. 매장 클릭은 모델이 없으면 링크 없음."""
+    entries = ENTRIES + [{"sid": "c", "part": 1, "created_at": "2026-10-05T12:00:00+09:00", "referrer": None, "locale": "ko",
+                          "mobile": False, "duration_s": 5, "page": "/ko/leica/m6/", "searches": [], "clicks": []}]
+    page = owner_usage.render(entries, [], 7, False)
+    assert "href='/?entity=leica%3Abody%3Am6'" in page
+    assert "href='/?q=%3Cscript%3Ex%3C%2Fscript%3E'" in page
+    assert "href='/ko/leica/m6/'" in page
+    assert "<span class='step click'>↗ www.ffordes.com</span>" in page
+    assert "<script>x</script>" not in page
+    assert owner_usage._step_href("페이지", {"page": "//evil.example"}) is None
