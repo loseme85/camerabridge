@@ -267,7 +267,7 @@ def test_beta_has_locale_translation_hooks_for_static_shell() -> None:
         assert 'data-i18n="workspace_sidebar.how_to_read.label"' in html
         assert 'data-i18n="filters.category.label"' in html
         assert 'data-i18n-placeholder="search.placeholder"' in html
-        assert 'data-i18n-placeholder="search.sticky_placeholder"' in html
+        assert 'id="top-search"' in html  # 2026-11-13 검색창은 머리글에
 
 
 def test_beta_locale_dictionary_covers_shell_completion_keys() -> None:
