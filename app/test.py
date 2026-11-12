@@ -12920,6 +12920,69 @@ def crawl_tokiwa():
     return results
 
 
+# 2026-11-12 밤샘: The Camera Store (캐나다) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _thecamerastore_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 2026-11-12 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _thecamerastore_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _thecamerastore_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def crawl_thecamerastore():
+    """The Camera Store (캐나다 캘거리) - Shopify 전체(약 5,000점) 중 제목 끝 '*USED'이고 브랜드 태그가 Leica인 것. 가격 CAD.
+    등급 표기 없음 (태그 'Pre-Owned'·'Consignment'뿐)"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.thecamerastore.com"
+    print(f"\n  📂 The Camera Store 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "The Camera Store"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        tags = [t.lower() for t in p.get("tags") or []]
+        if not re.search(r"\*\s?used\b", title, re.I) or "brand_leica" not in tags:
+            continue
+        name = re.sub(r"\s*\*\s?used\b.*$", "", title, flags=re.I)
+        results.append(_thecamerastore_row("The Camera Store (캐나다)", base, p, _thecamerastore_leica_name(name), None, _thecamerastore_price(p, "C$"), "CAD"))
+    print(f"  ✅ The Camera Store 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13095,6 +13158,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("The Camera Store (캐나다)", lambda: ce.wrap_full_run("The Camera Store (캐나다)", crawl_thecamerastore)),
         ("トキワカメラ (일본)", lambda: ce.wrap_full_run("トキワカメラ (일본)", crawl_tokiwa)),
         ("Tim's Photo (캐나다)", lambda: ce.wrap_full_run("Tim's Photo (캐나다)", crawl_timsphoto)),
     ]
