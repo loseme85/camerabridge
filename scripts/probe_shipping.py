@@ -4,7 +4,7 @@ import time
 
 import requests
 
-SHOPS = ["https://timlei.ca", "https://www.leicastoremanchester.com", "https://tokiwa-camera.co.jp", "https://www.thecamerastore.com",
+SHOPS = ["https://www.kamera-express.lu", "https://www.leicastoremanchester.com"]
          "https://www.robertwhite.co.uk", "https://www.profotica.nl", "https://www.fotododici.com", "https://khrome.de",
          "https://kmcamera.com", "https://cameraboutique.at"]
 PATHS = ["/policies/shipping-policy", "/pages/shipping", "/pages/shipping-policy", "/pages/delivery", "/pages/versand",
