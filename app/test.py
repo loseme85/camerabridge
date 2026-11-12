@@ -2913,6 +2913,11 @@ def _lcf_normalize(name: str) -> str:
     return name
 
 
+# '부품용·고장'이 분명한 말만 ('ne fonctionne plus'는 '무한대 잠금 스프링이 작동 안 함' 같은 부분 결함에도 써서 뺌)
+LCF_PARTS = re.compile(r"pour pi[eè]ces|pi[eè]ces d[ée]tach[ée]es|hors service|en panne|for parts|not working", re.I)
+LCF_PARTS_CACHE = "data/status/lcf_parts_checked.json"  # 한 번 읽은 상품 화면은 다시 안 엶 (처음 한 번 200개쯤 9분)
+
+
 def crawl_leicafrance():
     """Leica Store France (프랑스) - 라이카 프랑스 공식 중고 몰 (Drupal 정적 HTML, ?page=N 30개씩).
     매장 5곳(파리 3·마르세유·릴) 재고. 온라인 결제 없이 매장 연락·방문 구매. 판매 완료(SOLD OUT)도 목록에 남음 → 품절로 담음"""
@@ -2980,6 +2985,33 @@ def crawl_leicafrance():
                 "매장": field("Location"),
             })
         time.sleep(random.uniform(1.0, 2.0))
+    # 매장 등급 칸은 'B : Very good'인데 설명에 'Vendu pour pièces'(부품용)인 매물이 있음 → 판매 중 바디·렌즈만 상품 화면
+    # 설명(meta description)을 읽어 부품용·고장이면 등급 X (시세·가격 범위에서 빠짐). 2026-11-12: M5 790€가 최저가로 보이던 것
+    try:
+        with open(LCF_PARTS_CACHE, encoding="utf-8") as f:
+            cache = json.load(f)
+    except (OSError, ValueError):
+        cache = {}
+    checked = parts = 0
+    for r in results:
+        if r["품절"] or r["category"] not in ("Body", "Lens"):
+            continue
+        if r["링크"] not in cache:
+            try:
+                page = requests.get(r["링크"], headers={"User-Agent": random.choice(USER_AGENTS)}, timeout=20).text
+            except Exception:
+                continue
+            m = re.search(r'<meta name="description" content="([^"]*)"', page)
+            cache[r["링크"]] = bool(m and LCF_PARTS.search(_html.unescape(m.group(1))))
+            checked += 1
+            time.sleep(random.uniform(0.5, 1.0))
+        if cache[r["링크"]]:
+            r["컨디션"] = (r["컨디션"] if r["컨디션"] != "정보없음" else LCF_PREFIX) + " · for parts"
+            parts += 1
+    live = {r["링크"] for r in results}
+    with open(LCF_PARTS_CACHE, "w", encoding="utf-8") as f:
+        json.dump({k: v for k, v in sorted(cache.items()) if k in live}, f, ensure_ascii=False, indent=0)
+    print(f"    └─ 상품 설명 새로 확인 {checked}개 · 부품용 {parts}개")
     print(f"  ✅ Leica Store France 완료: {len(results)}개")
     return results
 

@@ -225,8 +225,10 @@ def main() -> None:
             known = when if not final.get("sold_at_unknown") or final.get("listed_est") else None
             recent = bool(known) and str(known)[:10] >= sold_cutoff
             rate = (None if final.get("sold_at_unknown") else final.get("sold_fx_krw")) or krw_per_unit_on(final.get("currency"), when) or rate
-        krw = price * rate if price and rate and id(record) not in too_cheap else None  # 너무 싼 매물은 시세에서 뺌
         grade = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))[0] or final.get("image_grade")
+        # 너무 싼 매물, 고장·부품용(X)은 가격 범위·시세에서 뺌 (매물 수에는 넣음).
+        # 2026-11-12: Leica Store France M5 '부품용' 790€가 M5 최저가로 보이던 것
+        krw = price * rate if price and rate and id(record) not in too_cheap and grade != "X" else None
         prefix = "set_" if id(record) in sets else ""
         for eid in record.get("entity_ids") or []:
             s = stats[eid]
