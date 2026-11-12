@@ -1577,6 +1577,8 @@
       .topbar .topnav{margin:0;padding-bottom:0}
       .topnav button{padding:2px 0}
       .top-search{margin-top:4px}
+      .top-search .sticky-search-field{font-size:16px}
+      .prefs-panel{left:auto;right:0}
       .brand-logo{height:34px;margin:-2px 0}
       /* 맨 위에서만 머리글 전체, 내려가면 검색창만 (맨 위로 다시 올라가야 전체).
          스크롤 상태를 JS로 쫓지 않고, 머리글을 '검색창 윗부분 높이만큼 위로 빠진 자리'에 붙여 둠 — 맨 위에서는 원래 자리라 다 보임 */
@@ -3083,7 +3085,7 @@
       box.addEventListener('change', event => {
         if(event.target.id !== 'country-select') return;
         els['country-filter'].value = event.target.value;
-        if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push' });
+        if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push', holdSortBarTop: holdSortBar() });
       });
     }
 
@@ -6664,6 +6666,24 @@
     // 검색 순서 번호: 늦게 도착한 옛 검색 응답이 새 결과를 덮어쓰지 않게
     let searchSeq = 0;
 
+    // 정렬·나라를 바꿔도 정렬 줄이 화면 같은 자리에 있게 (2026-11-13 사장님: 위로 올라가지 말고 그대로).
+    // 사파리는 다시 그릴 때 위치를 스스로 맞추지 않고, 불러오는 동안 목록이 비어 페이지가 짧아지면 위로 튐 → 그동안 높이를 붙잡아 둠
+    function holdSortBar(){
+      const bar = document.getElementById('sort-bar');
+      if(!bar || bar.hidden) return null;
+      document.body.style.minHeight = `${document.documentElement.scrollHeight}px`;
+      return bar.getBoundingClientRect().top;
+    }
+
+    function releaseSortBar(top){
+      const bar = document.getElementById('sort-bar');
+      if(top !== null && top !== undefined && bar && !bar.hidden){
+        const shift = bar.getBoundingClientRect().top - top;
+        if(Math.abs(shift) > 1) window.scrollBy(0, shift);
+      }
+      document.body.style.minHeight = '';
+    }
+
     async function runSearch(offset = 0, options = {}){
       const nextQuery = String(options.queryOverride || getSearchQueryValue(Boolean(options.preferSticky))).trim();
       if(!nextQuery) return;
@@ -6788,6 +6808,7 @@
         // 목록을 내려 보고 있으면 순서를 건드리지 않음(누르려던 카드가 움직이지 않게) — 정렬을 바꾸면 그때 전체로 정렬됨
         if(append && state.stableOrder && !viewAnchor && activeLoadDone()) state.stableOrder = false;
         render();
+        if(options.holdSortBarTop !== undefined) releaseSortBar(options.holdSortBarTop);
         if(state.response && !state.error && !activeLoadDone()) setTimeout(() => continueBackgroundLoad(seq), 0);
         if(append){
           // 새 매물로 화면을 옮기지 않음: 보고 있던 카드를 그대로 그 자리에
@@ -8219,7 +8240,9 @@
       if(els['sort-select']){
         els['sort-select'].addEventListener('change', () => {
           state.stableOrder = false;  // 정렬을 바꾸면 불러온 매물 전체를 새 기준으로
+          const held = holdSortBar();
           render();
+          releaseSortBar(held);
           if(state.query || els['query-input'].value.trim()){
             commitHistoryState('push', buildSearchState({
               query: state.query || els['query-input'].value.trim(),
