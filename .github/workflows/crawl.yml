@@ -56,6 +56,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          # 대기했다 도는 크롤링도 그때의 최신 main에서 시작 (2026-11-12: 앞 크롤링이 결과를 올린 뒤 예전 커밋에서 시작해 원본 데이터가 충돌·실패)
+          ref: ${{ github.ref_name }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
