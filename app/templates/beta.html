@@ -1334,9 +1334,12 @@
     .summary-title{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,48px);letter-spacing:-0.015em;line-height:1.05}
     .summary-subtitle{font-size:14px}
     /* 모델 이름 옆 공유 (2026-11-12 사장님): 휴대폰은 기본 공유 창, PC는 주소 복사 */
-    .summary-title-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px}
-    .summary-share{flex:0 0 auto;padding:6px 14px;border:1px solid var(--border-strong,var(--border));background:none;color:var(--text);font:inherit;font-size:13px;cursor:pointer}
-    .summary-share:hover{border-color:var(--text)}
+    /* 공유는 글자 대신 공유 아이콘(네모에서 위로 나가는 화살표), 모델 이름과 떨어져 줄 오른쪽 끝 (2026-11-12 사장님) */
+    .summary-title-row{display:flex;align-items:center;justify-content:space-between;gap:8px 24px}
+    .summary-share{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;height:44px;min-width:44px;padding:0 10px;border:0;background:none;color:var(--text);font:inherit;font-size:12px;cursor:pointer}
+    .summary-share[hidden]{display:none}
+    .summary-share:hover,.summary-share:focus-visible{color:var(--text);background:var(--surface-2,rgba(0,0,0,.05))}
+    .summary-share svg{flex:0 0 auto}
     .summary-metrics{gap:0;margin-top:28px;border-top:1px solid var(--border)}
     .summary-metric{border:0;border-right:1px solid var(--border);border-radius:0;background:none;padding:14px 20px 0 0;margin-right:20px}
     .summary-metric:last-child{border-right:0;margin-right:0}
@@ -1774,7 +1777,7 @@
             <div id="summary-query-kicker" class="summary-kicker">Model</div>
             <div class="summary-title-row">
               <div id="summary-query-title" class="summary-title">Search Leica listings</div>
-              <button id="summary-share" class="summary-share" type="button" hidden>Share</button>
+              <button id="summary-share" class="summary-share" type="button" hidden aria-label="Share" title="Share"><span class="summary-share-note" aria-live="polite"></span><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.8 7.7 12 3.5l4.2 4.2"/><path d="M8.5 10.5H6.5v9.5h11v-9.5h-2"/></svg></button>
             </div>
             <div id="summary-query-subtitle" class="summary-subtitle">Search results, active listings, and market price appear here.</div>
             <div class="summary-metrics">
@@ -7600,7 +7603,8 @@
       const shareButton = document.getElementById('summary-share');
       if(shareButton){
         shareButton.hidden = !(pickedEntity && !state.loading && !state.error);
-        if(!shareButton.dataset.copied) shareButton.textContent = ux('summary.share', 'Share');
+        shareButton.setAttribute('aria-label', ux('summary.share', 'Share'));
+        shareButton.title = ux('summary.share', 'Share');
       }
       const progress = activeLoadProgressHtml(displaySections.active.length, Number.isFinite(activeTotal) ? activeTotal : activeCount);
       if(progress) els['active-count'].insertAdjacentHTML('beforeend', progress);
@@ -8171,9 +8175,11 @@
       try{
         if(isNarrowScreen() && navigator.share){ await navigator.share({ title: `${title} | Camera Bridge`, url }); return; }
         await navigator.clipboard.writeText(url);
-        button.dataset.copied = '1';
-        button.textContent = ux('summary.link_copied', 'Link copied');
-        setTimeout(() => { delete button.dataset.copied; button.textContent = ux('summary.share', 'Share'); }, 2000);
+        const note = button.querySelector('.summary-share-note');
+        if(note){
+          note.textContent = ux('summary.link_copied', 'Link copied');
+          setTimeout(() => { note.textContent = ''; }, 2000);
+        }
       }catch(error){ /* 공유 창을 닫음 등 */ }
     }
 
