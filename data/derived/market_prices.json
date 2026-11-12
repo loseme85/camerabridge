@@ -1,25 +1,4 @@
 {
-  "50mm Summicron-R": {
-    "weighted_median": 730074,
-    "sample_count": 19,
-    "min": 509242,
-    "max": 1073664,
-    "avg": 741873
-  },
-  "Vario-200mm R": {
-    "weighted_median": 883795,
-    "sample_count": 9,
-    "min": 584203,
-    "max": 1042962,
-    "avg": 771777
-  },
-  "35mm Summicron ASPH": {
-    "weighted_median": 3300000,
-    "sample_count": 122,
-    "min": 360000,
-    "max": 33000000,
-    "avg": 4486877
-  },
   "Leica M11": {
     "weighted_median": 10480000,
     "sample_count": 147,
@@ -174,12 +153,19 @@
     "max": 14712939,
     "avg": 4039572
   },
+  "35mm Summicron ASPH": {
+    "weighted_median": 3300000,
+    "sample_count": 121,
+    "min": 360000,
+    "max": 33000000,
+    "avg": 4498848
+  },
   "Leica D-LUX": {
     "weighted_median": 1957397,
     "sample_count": 86,
     "min": 424586,
     "max": 3313585,
-    "avg": 1665958
+    "avg": 1665778
   },
   "Leica MP": {
     "weighted_median": 7200000,
@@ -244,12 +230,26 @@
     "max": 1792028,
     "avg": 1372374
   },
+  "50mm Summicron-R": {
+    "weighted_median": 650358,
+    "sample_count": 18,
+    "min": 509242,
+    "max": 1073664,
+    "avg": 725556
+  },
   "180mm Elmarit-R": {
     "weighted_median": 527067,
     "sample_count": 6,
     "min": 390787,
     "max": 3324122,
     "avg": 1414818
+  },
+  "Vario-200mm R": {
+    "weighted_median": 883795,
+    "sample_count": 8,
+    "min": 584203,
+    "max": 1042962,
+    "avg": 757563
   },
   "280mm R Lens": {
     "weighted_median": 2695571,
@@ -483,11 +483,11 @@
     "avg": 1683058
   },
   "50mm Summicron Rigid": {
-    "weighted_median": 2200000,
-    "sample_count": 24,
+    "weighted_median": 2265544,
+    "sample_count": 25,
     "min": 999834,
     "max": 11859351,
-    "avg": 2566426
+    "avg": 2554391
   },
   "50mm Summicron DR": {
     "weighted_median": 1525064,
@@ -1097,6 +1097,13 @@
     "min": 13036130,
     "max": 16800000,
     "avg": 15139896
+  },
+  "Leica R9": {
+    "weighted_median": 2117313,
+    "sample_count": 3,
+    "min": 1196260,
+    "max": 5000000,
+    "avg": 2771191
   },
   "Leica M-P": {
     "weighted_median": 4650000,
