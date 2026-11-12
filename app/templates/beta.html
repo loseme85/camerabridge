@@ -1609,11 +1609,12 @@
     /* 2026-11-13 머리글 검색창 (예전 따라오는 검색 띠 대신) */
     .topnav{margin-right:0}
     .topbar-meta{margin-left:auto}
-    .top-search{display:none;flex:1 1 260px;max-width:440px;min-width:0;margin-left:28px}
+    .top-search{display:none;flex:1 1 320px;max-width:560px;min-width:0;margin-left:20px}
+    .topbar .topnav{gap:18px;margin-left:28px}
     body.cb-searched .top-search,body:not(.cb-hero-search-visible) .top-search{display:flex}
     .top-search .sticky-search-form{flex:1 1 auto;min-width:0;margin:0}
     .top-search .sticky-search-field{height:40px;font-size:14px}
-    .top-search .sticky-search-button{height:40px;padding:0 16px}
+    .top-search .sticky-search-button{height:40px;min-width:0;width:auto;padding:0 14px;font-size:13px}
     body.cb-searched .hero{display:none}
     body.cb-searched main{padding-top:8px}
     /* 버전 줄: 모델 이름·숫자는 바로 아래 제목·숫자 칸에 있으니 버전 버튼과 ✕만 */
@@ -1622,11 +1623,19 @@
     .entity-bar-main .entity-bar-label,.entity-bar-main > strong,.entity-bar-main .entity-bar-meta{display:none}
     .entity-bar .entity-bar-chips{flex:1 1 auto;min-width:0}
     .entity-bar .entity-bar-editions{flex-basis:100%}
-    @media(max-width:860px){
+    /* 칸이 좁은 화면(노트북 작은 창)은 검색창을 메뉴 아래 한 줄로 */
+    @media(max-width:1100px){
+      .topbar{flex-wrap:wrap}
       .top-search{order:4;flex-basis:100%;max-width:none;margin:8px 0 0}
     }
     @media(max-width:720px){
-      .topbar{transition:transform .2s ease}
+      /* 머리글 위아래 폭 줄임 (로고·메뉴·검색 세 줄 사이) */
+      .topbar{transition:transform .2s ease;row-gap:4px;padding-top:6px;padding-bottom:8px}
+      .topbar .topnav{margin:0;padding-bottom:0}
+      .topnav button{padding:2px 0}
+      .top-search{margin-top:4px}
+      .brand-logo{height:34px;margin:-2px 0}
+      /* 맨 위에서만 머리글 전체, 내려가면 검색창만 (맨 위로 다시 올라가야 전체) */
       body.cb-scroll-down .topbar{transform:translateY(calc(-1 * var(--topbar-hide, 100%)))}
       .entity-bar{flex-wrap:wrap}
       .entity-bar.chips-open .entity-bar-chips{flex-basis:100%}
@@ -8258,16 +8267,17 @@
       }catch(error){ /* 공유 창을 닫음 등 */ }
     }
 
-    // 내리는 중이면 body.cb-scroll-down (휴대폰에서 검색 띠 숨김). 검색창에 입력 중이면 숨기지 않음
-    let lastScrollY = 0;
+    // 2026-11-13 사장님: 맨 위에서만 머리글 전체, 조금이라도 내려가면 body.cb-scroll-down (휴대폰은 검색창만 남음),
+    // 맨 위로 다시 올라가야 전체가 돌아옴 (올릴 때마다 나타났다 사라져 어지러웠음)
     window.addEventListener('scroll', () => {
       const y = window.scrollY;
-      const delta = y - lastScrollY;
-      if(Math.abs(delta) < 6) return;
-      if(delta > 0 && !document.body.classList.contains('cb-scroll-down')) updateStickySearchVisibility();
-      const typing = document.activeElement && document.activeElement.id === 'sticky-query-input';
-      document.body.classList.toggle('cb-scroll-down', delta > 0 && y > 240 && !typing);
-      lastScrollY = y;
+      const body = document.body.classList;
+      if(!body.contains('cb-scroll-down') && y > 60){
+        updateStickySearchVisibility();
+        body.add('cb-scroll-down');
+      }else if(body.contains('cb-scroll-down') && y < 4){
+        body.remove('cb-scroll-down');
+      }
     }, { passive: true });
 
     function bindEvents(){
