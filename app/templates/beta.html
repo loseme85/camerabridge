@@ -1570,10 +1570,7 @@
     .sticky-title small{font-family:var(--sans);font-size:13px;color:var(--text-soft);margin-left:10px}
     /* 휴대폰: 아래로 내리면 검색 띠를 머리글 뒤로 숨기고, 위로 올리면 다시 (2026-11-13 사장님: 입력창에 가려 물건이 거의 안 보임) */
     @media(max-width:720px){
-      .topbar,.sticky-search-region{transition:transform .2s ease}
       /* 머리글(로고·메뉴 2~3줄, 약 160px)도 같이 숨김 — 메뉴 줄만 숨기면 높이가 바뀌어 화면이 덜컹거림 */
-      body.cb-scroll-down .topbar{transform:translateY(-100%)}
-      body.cb-scroll-down .sticky-search-region{transform:translateY(calc(-100% - var(--topbar-h, 160px) - 2px));pointer-events:none}
       /* 버전 버튼: 접어 두고 '버전 바꾸기 ▾' (펼치면 다시 보임) */
       .entity-chips-toggle{display:inline-flex}
       .entity-bar:not(.chips-open) .entity-bar-chips{display:none}
@@ -1609,6 +1606,36 @@
     .active-bar i{display:block;height:100%;background:currentColor;transition:width .4s ease}
     .active-bar.loading i{animation:cb-bar-pulse 1s ease-in-out infinite alternate}
     @keyframes cb-bar-pulse{from{opacity:1}to{opacity:.35}}
+    /* 2026-11-13 머리글 검색창 (예전 따라오는 검색 띠 대신) */
+    .topnav{margin-right:0}
+    .topbar-meta{margin-left:auto}
+    .top-search{display:none;flex:1 1 260px;max-width:440px;min-width:0;margin-left:28px}
+    body.cb-searched .top-search,body:not(.cb-hero-search-visible) .top-search{display:flex}
+    .top-search .sticky-search-form{flex:1 1 auto;min-width:0;margin:0}
+    .top-search .sticky-search-field{height:40px;font-size:14px}
+    .top-search .sticky-search-button{height:40px;padding:0 16px}
+    body.cb-searched .hero{display:none}
+    body.cb-searched main{padding-top:8px}
+    /* 버전 줄: 모델 이름·숫자는 바로 아래 제목·숫자 칸에 있으니 버전 버튼과 ✕만 */
+    .entity-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+    .entity-bar .entity-bar-main{order:9;margin-left:auto}
+    .entity-bar-main .entity-bar-label,.entity-bar-main > strong,.entity-bar-main .entity-bar-meta{display:none}
+    .entity-bar .entity-bar-chips{flex:1 1 auto;min-width:0}
+    .entity-bar .entity-bar-editions{flex-basis:100%}
+    @media(max-width:860px){
+      .top-search{order:4;flex-basis:100%;max-width:none;margin:8px 0 0}
+    }
+    @media(max-width:720px){
+      .topbar{transition:transform .2s ease}
+      body.cb-scroll-down .topbar{transform:translateY(calc(-1 * var(--topbar-hide, 100%)))}
+      .entity-bar{flex-wrap:wrap}
+      .entity-bar.chips-open .entity-bar-chips{flex-basis:100%}
+      /* 숫자 세 칸: 결과·판매 중은 한 줄에 둘, 가격대는 아래 한 줄 */
+      .summary-metrics{grid-template-columns:1fr 1fr}
+      .summary-metric{padding:10px 0}
+      .summary-metric:nth-child(1){border-right:1px solid var(--border);margin-right:14px}
+      .summary-metric:nth-child(n+3){grid-column:1/-1}
+    }
   </style>
   <!-- 방문 통계: Vercel Web Analytics (쿠키 없음). Vercel 프로젝트 화면에서 Analytics를 켜야 쌓임 -->
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -1629,6 +1656,13 @@
         <button type="button" data-open="home-latest-block" data-i18n="home.nav_latest">Just listed</button>
         <button type="button" data-open="board-home" data-i18n="home.nav_board">Community</button>
       </nav>
+      <!-- 2026-11-13 사장님: 검색창은 머리글 "커뮤니티" 옆에 고정 (휴대폰은 머리글 아래 줄). 첫 화면의 큰 검색창이 보이는 동안은 숨김 -->
+      <div id="top-search" class="top-search">
+        <form id="sticky-search-form" class="search-form-row sticky-search-form">
+                  <input id="sticky-query-input" class="search-field sticky-search-field" type="search" autocomplete="off" data-i18n-placeholder="search.placeholder" placeholder="M6, Summilux 35">
+                  <button class="search-button sticky-search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.sticky_button_aria" aria-label="Search from sticky bar">Search</button>
+                </form>
+      </div>
       <div class="topbar-meta">
         <a href="#saved" id="alerts-bell" class="saved-link alerts-bell" hidden><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/></svg></a>
         <a href="#saved" id="saved-link" class="saved-link" hidden data-i18n-aria-label="saves.header" aria-label="Saved"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h12v18l-6-5.5L6 21z"/></svg><span id="saved-count"></span></a>
@@ -1830,15 +1864,6 @@
             <section id="state-region" aria-live="polite"></section>
             <section id="market-entry-region" aria-live="polite"></section>
             <section id="refinement-region" aria-live="polite"></section>
-            <section id="sticky-search-region" class="sticky-search-region" data-i18n-aria-label="search.sticky_aria" aria-label="Sticky search" hidden>
-              <div class="sticky-search-bar">
-                <div id="sticky-title" class="sticky-title" hidden></div>
-                <form id="sticky-search-form" class="search-form-row sticky-search-form">
-                  <input id="sticky-query-input" class="search-field sticky-search-field" type="search" autocomplete="off" data-i18n-placeholder="search.sticky_placeholder" placeholder="Search again while keeping the current results in view">
-                  <button class="search-button sticky-search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.sticky_button_aria" aria-label="Search from sticky bar">Search</button>
-                </form>
-              </div>
-            </section>
             <section id="value-calc-region"></section>
             <section id="query-summary-region" aria-live="polite"></section>
             <!-- 2026-11-08 사장님: 알림은 그래프 밑으로 -->
@@ -3228,6 +3253,7 @@
       if(!panel || !('IntersectionObserver' in window)) return;
       new IntersectionObserver(entries => {
         document.body.classList.toggle('cb-hero-search-visible', entries.some(entry => entry.isIntersecting));
+        updateStickySearchVisibility();
       }).observe(panel);
     }
 
@@ -5184,7 +5210,7 @@
       }
       // 위 숫자 세 칸의 세 번째는 시세 대신 '판매 중 얼마부터 얼마까지' (2026-11-12 사장님) — 등급별 시세는 아래 'What it's worth' 칸에
       if(rangeText){
-        return { caption: ec('price_range_label'), value: rangeText, meta: isParent ? ec('choose_version') : '' };
+        return { caption: ec('price_range_label'), value: rangeText, meta: '' };
       }
       if(!isParent && entity.b_price_krw){
         const b = krwToDisplay(entity.b_price_krw);
@@ -5201,7 +5227,7 @@
                  meta: [basis, rangeText ? `${ec('on_sale', { n: String(entity.active_count || 0) })} ${rangeText}` : ''].filter(Boolean).join(' · ') };
       }
       if(rangeText){
-        return { caption: ec('price_range_label'), value: rangeText, meta: isParent ? ec('choose_version') : ec('few_sold') };
+        return { caption: ec('price_range_label'), value: rangeText, meta: isParent ? '' : ec('few_sold') };
       }
       return { caption: ux('summary.market_price_label', 'Market price'), value: '—', meta: ec('none_on_sale') };
     }
@@ -6228,7 +6254,7 @@
 
     function cacheElements(){
       [
-        'search-form','query-input','sticky-search-form','sticky-query-input','sticky-search-region','locale-select',
+        'search-form','query-input','sticky-search-form','sticky-query-input','locale-select',
         'currency-select','destination-select',
         'category-filter','brand-filter','mount-filter','sold-filter','country-filter','country-chips',
         'sort-select','summary-query-kicker','summary-query-title','summary-query-subtitle',
@@ -6257,21 +6283,11 @@
     }
 
     function updateStickySearchVisibility(){
-      if(!els['sticky-search-region']) return;
-      const hasActiveSearch = Boolean(state.query || state.loading || state.response || state.error);
-      els['sticky-search-region'].hidden = !hasActiveSearch;
-      // 머리글 높이에 딱 붙임 (틈이 있으면 그 사이로 카드가 비침)
+      // 휴대폰에서 내릴 때 로고·메뉴 줄만 접고 머리글 검색창은 남김
       const topbar = document.querySelector('.topbar');
-      if(topbar && getComputedStyle(topbar).position === 'sticky') els['sticky-search-region'].style.top = `${topbar.offsetHeight}px`;
-      if(topbar) document.documentElement.style.setProperty('--topbar-h', `${topbar.offsetHeight}px`);
-      // 띠 왼쪽: 지금 보는 모델(검색어) 이름 + 판매 중 수
-      const title = document.getElementById('sticky-title');
-      if(title){
-        const name = (els['summary-query-title'] && els['summary-query-title'].textContent.trim()) || state.query || '';
-        const activeTotal = state.response ? Number(state.response.active_total) : NaN;
-        title.hidden = !hasActiveSearch || !name || state.loading;
-        title.innerHTML = `${escapeHtml(name)}${Number.isFinite(activeTotal) && !state.loading ? `<small>${escapeHtml(ux('summary.active_listings_label', 'Active listings'))} ${escapeHtml(formatListingCount(activeTotal))}</small>` : ''}`;
-      }
+      const top = document.getElementById('top-search');
+      if(topbar && top && top.offsetParent) document.documentElement.style.setProperty('--topbar-hide', `${Math.max(0, top.offsetTop - 8)}px`);
+      else document.documentElement.style.removeProperty('--topbar-hide');
     }
 
     function getResultsAnchorElement(){
@@ -8248,6 +8264,7 @@
       const y = window.scrollY;
       const delta = y - lastScrollY;
       if(Math.abs(delta) < 6) return;
+      if(delta > 0 && !document.body.classList.contains('cb-scroll-down')) updateStickySearchVisibility();
       const typing = document.activeElement && document.activeElement.id === 'sticky-query-input';
       document.body.classList.toggle('cb-scroll-down', delta > 0 && y > 240 && !typing);
       lastScrollY = y;
