@@ -34,7 +34,9 @@ PATH = {l: l.lower() for l in LANGS}  # 주소: /zh-hans/leica/…
 MIN_ACTIVE = 3           # 새 모델 페이지를 처음 공개할 때의 최소 판매 중 매물 수
 MAX_PAGES = 400          # 신규 공개 후보의 상위 모델 수 (이미 공개한 주소는 별도로 유지)
 PUBLISHED = ROOT / "data" / "derived" / "model_pages_published.json"
-LASTMOD = ROOT / "data" / "derived" / "model_pages_lastmod.json"  # 페이지별 내용 지문과 실제로 바뀐 날
+LASTMOD = ROOT / "data" / "derived" / "model_pages_lastmod.json"
+# 2026-11-12 구글 서치 콘솔 404: 모델이 나뉘거나 이름이 바뀌어 사라진 옛 주소 → 가장 가까운 페이지로 넘김 (한 번 생기면 계속 유지)
+REDIRECTS = ROOT / "data" / "derived" / "model_pages_redirects.json"  # 페이지별 내용 지문과 실제로 바뀐 날
 # 2026-11-12 사장님: 모델 페이지로 들어온 사람이 판매 중 매물을 다 보게 — 개수 제한 없음 (싼 순)
 DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY", "de": "EUR", "it": "EUR", "es": "EUR", "pt": "EUR", "zh-Hans": "CNY", "zh-Hant": "HKD"}
 # 잘못 연결됐을 가능성이 큰 매물은 페이지에서 뺀다: 대여 상품, 그 모델 B등급 기준가의 이 비율보다 싼 것
@@ -250,6 +252,24 @@ def footer_for(lang: str) -> str:
     if lang in ("ko", "en", "ja"):
         return footer(lang)
     return footer("en").replace('href="/en/leica/"', f'href="/{PATH[lang]}/leica/"', 1)
+
+
+def redirect_target(old: str, live: set[str]) -> str:
+    """옛 주소의 가장 가까운 지금 페이지: 끝 마디를 하나씩 떼어 봄 (summilux-m-35-v1 → summilux-m-35). 없으면 '' = 언어별 목록"""
+    parts = old.split("-")
+    for n in range(len(parts) - 1, 0, -1):
+        if "-".join(parts[:n]) in live:
+            return "-".join(parts[:n])
+    return ""
+
+
+def redirect_page(url: str) -> str:
+    """정적 페이지라 서버 리디렉트 대신 즉시 이동 + canonical (구글은 0초 meta refresh를 영구 이동으로 봄)"""
+    u = html.escape(url)
+    return (f'<!doctype html><html><head><meta charset="utf-8"><title>Camera Bridge</title>'
+            f'<link rel="canonical" href="{u}">'
+            f'<meta http-equiv="refresh" content="0; url={u}"><script>location.replace({json.dumps(url)})</script>'
+            f'</head><body><a href="{u}">{u}</a></body></html>\n')
 
 
 def page_url(lang: str, slug: str | None = None) -> str:
@@ -486,6 +506,20 @@ def build(out: Path) -> dict:
         (out / PATH[lang] / "leica" / "index.html").write_text("".join(parts), encoding="utf-8")
         mark(page_url(lang), "".join(parts))
 
+    # 사라진 옛 모델 주소: 지난번에 있던 페이지가 이번에 없으면 기록해 두고, 매번 넘김 페이지를 만듦
+    redirects = json.loads(REDIRECTS.read_text(encoding="utf-8")) if REDIRECTS.exists() else {}
+    live = set(slugs.values())
+    for url in old_marks:
+        m = re.match(re.escape(SITE) + r"/[^/]+/leica/([^/]+)/$", url)
+        if m and m.group(1) not in live:
+            redirects.setdefault(m.group(1), "")
+    redirects = {old: redirect_target(old, live) for old in redirects if old not in live}
+    for old, target in redirects.items():
+        for lang in LANGS:
+            path = out / PATH[lang] / "leica" / old / "index.html"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(redirect_page(page_url(lang, target or None)), encoding="utf-8")
+
     # 사이트맵: 첫 화면 + 언어별 목록 + 모델 페이지 (언어별 짝 표시)
     urls = ['  <url><loc>https://camerabridge.io/</loc><changefreq>daily</changefreq></url>']
     for slug in [None] + [slugs[e["id"]] for e in picked]:
@@ -518,6 +552,7 @@ def build(out: Path) -> dict:
     (out / "llms.txt").write_text("\n".join(lines), encoding="utf-8")
     if out == ROOT:  # 시험 출력(--out)에서는 기록을 건드리지 않음
         LASTMOD.write_text(json.dumps(marks, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
+        REDIRECTS.write_text(json.dumps(redirects, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         PUBLISHED.write_text(json.dumps({"entity_ids": sorted(published | set(slugs))}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return {"pages": len(picked) * len(LANGS), "models": [slugs[e["id"]] for e in picked], "lastmod": marks}
 
