@@ -13322,6 +13322,72 @@ def _cameraboutique_name(title):
     return (t if re.match(r"(?:leica|leitz)\b", t, re.I) else "Leica " + t), cond
 
 
+# 2026-11-12 밤샘: Kamera Express (룩셈부르크) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _kameraexpresslu_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 2026-11-12 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _kameraexpresslu_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _kameraexpresslu_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def crawl_kameraexpresslu():
+    """Kamera Express (룩셈부르크) - Shopify 전체 중 제목 끝 'occasion'(중고)이고 제목이 Leica로 시작하는 것
+    (파나소닉 Leica DG·Zeiss ZM·7artisans 등 다른 회사는 뺌). 제목의 라이카 주문 번호('Leica 11879 Summicron-M …')는 그대로 두고
+    프랑스어 'boîtier·argent·noir'만 영어로. 등급 표기 없음. 가격 EUR"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.kamera-express.lu"
+    print(f"\n  📂 Kamera Express LU 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Kamera Express LU"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.search(r"\boccasion\b", title, re.I) or not re.match(r"leica\b", title, re.I):
+            continue
+        name = re.sub(r"\s*\boccasion\b\s*", " ", title, flags=re.I)
+        for fr, en in (("boîtier", "body"), ("boitier", "body"), ("argent", "silver"), ("noir", "black")):
+            name = re.sub(rf"\b{fr}\b", en, name, flags=re.I)
+        results.append(_kameraexpresslu_row("Kamera Express (룩셈부르크)", base, p, re.sub(r"\s+", " ", name).strip(), None,
+                                  _kameraexpresslu_price(p, "€"), "EUR"))
+    print(f"  ✅ Kamera Express LU 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13497,6 +13563,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Kamera Express (룩셈부르크)", lambda: ce.wrap_full_run("Kamera Express (룩셈부르크)", crawl_kameraexpresslu)),
         ("Camera Boutique Graz (오스트리아)", lambda: ce.wrap_full_run("Camera Boutique Graz (오스트리아)", crawl_cameraboutique)),
         ("K&M Camera (미국)", lambda: ce.wrap_full_run("K&M Camera (미국)", crawl_kmcamera)),
         ("Khrome (독일)", lambda: ce.wrap_full_run("Khrome (독일)", crawl_khrome)),
