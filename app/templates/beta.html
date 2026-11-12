@@ -120,6 +120,7 @@
     .entity-clear{margin-left:auto;border:1px solid var(--border-strong);background:var(--surface);border-radius:999px;width:28px;height:28px;cursor:pointer;color:var(--text-soft)}
     .entity-clear:hover{color:var(--accent);border-color:var(--accent)}
     .entity-bar-chips{display:flex;flex-wrap:wrap;gap:6px}
+    .entity-chips-toggle{display:none;align-items:center;gap:4px;padding:8px 12px;border:1px solid var(--border-strong,var(--border));background:none;color:var(--text);font:inherit;font-size:13px;cursor:pointer;justify-self:start}
     .entity-chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:700}
     .entity-chip-count{opacity:.7;font-size:11px}
     .lang-switch{position:relative}
@@ -1569,8 +1570,13 @@
     .sticky-title small{font-family:var(--sans);font-size:13px;color:var(--text-soft);margin-left:10px}
     /* 휴대폰: 아래로 내리면 검색 띠를 머리글 뒤로 숨기고, 위로 올리면 다시 (2026-11-13 사장님: 입력창에 가려 물건이 거의 안 보임) */
     @media(max-width:720px){
-      .sticky-search-region{transition:transform .2s ease}
-      body.cb-scroll-down .sticky-search-region{transform:translateY(calc(-100% - 2px));pointer-events:none}
+      .topbar,.sticky-search-region{transition:transform .2s ease}
+      /* 머리글(로고·메뉴 2~3줄, 약 160px)도 같이 숨김 — 메뉴 줄만 숨기면 높이가 바뀌어 화면이 덜컹거림 */
+      body.cb-scroll-down .topbar{transform:translateY(-100%)}
+      body.cb-scroll-down .sticky-search-region{transform:translateY(calc(-100% - var(--topbar-h, 160px) - 2px));pointer-events:none}
+      /* 버전 버튼: 접어 두고 '버전 바꾸기 ▾' (펼치면 다시 보임) */
+      .entity-chips-toggle{display:inline-flex}
+      .entity-bar:not(.chips-open) .entity-bar-chips{display:none}
     }
     @media(max-width:720px){
       .sticky-search-region .sticky-search-bar{flex-direction:column;align-items:stretch;gap:6px;padding:8px 0}
@@ -4894,6 +4900,8 @@
       none_on_sale: { ko: '지금 판매 중 없음', en: 'None for sale now', ja: '現在販売中なし', 'zh-Hans': '目前无在售', 'zh-Hant': '目前無在售', pt: 'Nenhum à venda agora', es: 'Ninguno en venta ahora', de: 'Derzeit nicht verfügbar', it: 'Nessuno in vendita ora' },
       body: { ko: '바디', en: 'Body', ja: 'ボディ', 'zh-Hans': '机身', 'zh-Hant': '機身', pt: 'Corpo', es: 'Cuerpo', de: 'Gehäuse', it: 'Corpo' },
       lens: { ko: '렌즈', en: 'Lens', ja: 'レンズ', 'zh-Hans': '镜头', 'zh-Hant': '鏡頭', pt: 'Lente', es: 'Objetivo', de: 'Objektiv', it: 'Obiettivo' },
+      more_versions: { ko: '버전 바꾸기', en: 'Change version', ja: 'バージョンを変更', 'zh-Hans': '切换版本', 'zh-Hant': '切換版本', pt: 'Mudar versão', es: 'Cambiar versión', de: 'Version wechseln', it: 'Cambia versione' },
+      hide_versions: { ko: '접기', en: 'Hide', ja: '閉じる', 'zh-Hans': '收起', 'zh-Hant': '收起', pt: 'Ocultar', es: 'Ocultar', de: 'Ausblenden', it: 'Nascondi' },
       all_versions: { ko: '모든 버전', en: 'All versions', ja: 'すべてのバージョン', 'zh-Hans': '全部版本', 'zh-Hant': '全部版本', pt: 'Todas as versões', es: 'Todas las versiones', de: 'Alle Versionen', it: 'Tutte le versioni' },
       narrow: { ko: '버전으로 좁히기', en: 'Narrow by version', ja: 'バージョンで絞り込む', 'zh-Hans': '按版本筛选', 'zh-Hant': '依版本篩選', pt: 'Filtrar por versão', es: 'Filtrar por versión', de: 'Nach Version eingrenzen', it: 'Filtra per versione' },
       free_text: { ko: '“{q}” 그대로 검색', en: 'Search “{q}” as typed', ja: '「{q}」をそのまま検索', 'zh-Hans': '直接搜索“{q}”', 'zh-Hant': '直接搜尋「{q}」', pt: 'Buscar “{q}” como digitado', es: 'Buscar “{q}” tal cual', de: '„{q}“ wörtlich suchen', it: 'Cerca “{q}” così com’è' },
@@ -5977,6 +5985,7 @@
         bar.innerHTML = '';
         return;
       }
+      if(entityBarFor !== entity.id){ entityBarOpen = false; entityBarFor = entity.id; }
       const parent = entity.parent ? entityState.byId[entity.parent] : null;
       const family = entity.children && entity.children.length ? entity : parent;
       // 사양 묶음 (예: 28mm 프레임라인 있는 M 바디): 판매 중인 모델을 많은 순서로 골라 좁히게
@@ -6005,10 +6014,15 @@
           <span class="entity-bar-meta">${escapeHtml(entityMetaLine(entity))}</span>
           <button type="button" class="entity-clear" data-entity-clear="1" aria-label="${escapeHtml(ec('clear'))}">✕</button>
         </div>
+        ${chips ? `<button type="button" class="entity-chips-toggle" data-chips-toggle aria-expanded="${entityBarOpen}">${escapeHtml(entityBarOpen ? ec('hide_versions') : ec('more_versions'))} ${entityBarOpen ? '▴' : '▾'} <span class="entity-chip-count">${(chips.match(/class="ghost-button entity-chip"/g) || []).length + editions.length}</span></button>` : ''}
         ${chips ? `<div class="entity-bar-chips" role="group" aria-label="${escapeHtml(ec('narrow'))}">${chips}</div>` : ''}
         ${memberChips ? '' : editionChips}`;
+      bar.classList.toggle('chips-open', entityBarOpen);
       bar.hidden = false;
     }
+    // 휴대폰에서 버전 버튼이 한 줄에 하나씩 쌓여 화면 한 장(약 540px)을 차지 → 접어 둠 (2026-11-13 사장님). 모델을 바꾸면 다시 접힘
+    var entityBarOpen = false;
+    var entityBarFor = "";
 
     function bindEntityBar(){
       const guide = document.getElementById('query-summary-region');
@@ -6019,6 +6033,11 @@
       const bar = document.getElementById('entity-bar');
       if(!bar) return;
       bar.addEventListener('click', event => {
+        if(event.target.closest('[data-chips-toggle]')){
+          entityBarOpen = !entityBarOpen;
+          renderEntityBar();
+          return;
+        }
         if(event.target.closest('[data-entity-clear]')){
           state.entity = '';
           const raw = els['query-input'].value.trim();
@@ -6244,6 +6263,7 @@
       // 머리글 높이에 딱 붙임 (틈이 있으면 그 사이로 카드가 비침)
       const topbar = document.querySelector('.topbar');
       if(topbar && getComputedStyle(topbar).position === 'sticky') els['sticky-search-region'].style.top = `${topbar.offsetHeight}px`;
+      if(topbar) document.documentElement.style.setProperty('--topbar-h', `${topbar.offsetHeight}px`);
       // 띠 왼쪽: 지금 보는 모델(검색어) 이름 + 판매 중 수
       const title = document.getElementById('sticky-title');
       if(title){
