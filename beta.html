@@ -1546,7 +1546,10 @@
     .sticky-search-bar{border-bottom:0}
     /* 스크롤해도 따라오는 띠: 머리글 바로 밑에 틈 없이, 바탕을 가득 채워 카드가 비치지 않게, 왼쪽에 지금 보는 모델 이름 (2026-11-12 사장님) */
     .sticky-search-region{padding-top:0;margin-top:0}
-    .sticky-search-region .sticky-search-bar{display:flex;align-items:center;gap:20px;padding:10px 0;background:var(--bg,#FDFCFA);box-shadow:0 0 0 100vmax var(--bg,#FDFCFA);clip-path:inset(0 -100vmax -1px -100vmax);border-bottom:1px solid var(--border)}
+    /* 바탕은 ::before로 화면 폭 가득 (clip-path로 하면 아래로 펼쳐지는 검색 후보 목록까지 잘림 — 2026-11-12) */
+    html{overflow-x:clip}
+    .sticky-search-region .sticky-search-bar{position:relative;display:flex;align-items:center;gap:20px;padding:10px 0;background:transparent;border-bottom:0}
+    .sticky-search-region .sticky-search-bar::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:var(--bg,#FDFCFA);border-bottom:1px solid var(--border);z-index:-1;pointer-events:none}
     .sticky-search-region .sticky-search-form{flex:1 1 420px;min-width:0}
     .sticky-title{flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--serif);font-size:20px;line-height:1.2}
     .sticky-title small{font-family:var(--sans);font-size:13px;color:var(--text-soft);margin-left:10px}
