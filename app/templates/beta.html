@@ -61,7 +61,7 @@
     a{color:inherit}
     button,input,select{font:inherit}
     button{cursor:pointer}
-    .shell{min-height:100vh}
+    .shell{min-height:100vh;overflow-x:clip}  /* 아이폰: html·body의 overflow로는 화면보다 넓은 것 때문에 페이지가 축소되는 것을 못 막음 (2026-11-13) */
     .topbar{
       position:sticky;
       top:0;
@@ -916,7 +916,7 @@
     .deal-badge{display:inline-block;align-self:flex-start;width:fit-content;margin:4px 0 2px;padding:2px 7px;border:1px solid #2f7d4f;color:#2f7d4f;font-size:13px;font-weight:700;line-height:1.4}
     .sort-bar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:6px 0 14px;font-size:14px;color:var(--text-soft)}
     .sort-bar select{min-width:190px;padding:8px 30px 8px 10px;border:1px solid var(--text);border-radius:0;background-color:var(--bg,#fff);color:var(--text);font:inherit;font-size:14px;cursor:pointer}
-    @media(max-width:720px){.sort-bar{justify-content:flex-start}.sort-bar select{flex:1;min-width:0}}
+    @media(max-width:720px){.sort-bar{justify-content:flex-start;flex-wrap:nowrap}.sort-bar .country-chips{flex:1 1 0;min-width:0;flex-wrap:nowrap}.sort-bar select{flex:1 1 0;min-width:0;width:100%}}
     .deal-badge.is-above{border-color:var(--border-strong,var(--border));color:var(--text-soft);font-weight:600}
     .grade-compare.is-cheaper{color:#2f7d4f}
     .grade-compare.is-pricier{color:var(--text-soft)}
@@ -3087,7 +3087,7 @@
       box.addEventListener('change', event => {
         if(event.target.id !== 'country-select') return;
         els['country-filter'].value = event.target.value;
-        if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push', holdSortBarTop: holdSortBar() });
+        if(state.query || els['query-input'].value.trim()) runSearch(0, { historyMode: 'push', quiet: true, holdSortBarTop: holdSortBar() });
       });
     }
 
@@ -6265,6 +6265,8 @@
 
     function scrollResultsIntoView(){
       // 검색하면 맨 위로 (2026-11-13 사장님: 검색 뒤 로고·메뉴·통화가 보여야 함). 검색 뒤엔 큰 제목을 숨겨 모델 이름·숫자 칸이 바로 머리글 아래에 옴
+      const main = document.querySelector('main');
+      if(main) main.style.minHeight = '';  // 나라 고를 때 붙잡아 둔 높이 풀기
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
 
@@ -6669,21 +6671,30 @@
     let searchSeq = 0;
 
     // 정렬·나라를 바꿔도 정렬 줄이 화면 같은 자리에 있게 (2026-11-13 사장님: 위로 올라가지 말고 그대로).
-    // 사파리는 다시 그릴 때 위치를 스스로 맞추지 않고, 불러오는 동안 목록이 비어 페이지가 짧아지면 위로 튐 → 그동안 높이를 붙잡아 둠
+    // 사파리는 다시 그릴 때 위치를 스스로 맞추지 않음. 또 나라를 고르면 매물이 줄어 페이지가 짧아지고 브라우저가 화면을 위로 당김
+    // → 본문 높이를 다음 검색 때까지 붙잡아 둠 (아래에 빈칸이 생길 수 있음)
     function holdSortBar(){
       const bar = document.getElementById('sort-bar');
-      if(!bar || bar.hidden) return null;
-      document.body.style.minHeight = `${document.documentElement.scrollHeight}px`;
+      const main = document.querySelector('main');
+      if(!bar || bar.hidden || !main) return null;
+      main.style.minHeight = `${Math.max(main.offsetHeight, parseFloat(main.style.minHeight) || 0)}px`;
       return bar.getBoundingClientRect().top;
     }
 
+    // 다시 그린 직후 '불러오는 중' 줄 같은 것이 잠깐 생겼다 없어지므로 1초 동안 몇 번 더 맞춤 (그사이 사용자가 스크롤하면 멈춤)
     function releaseSortBar(top){
-      const bar = document.getElementById('sort-bar');
-      if(top !== null && top !== undefined && bar && !bar.hidden){
+      if(top === null || top === undefined) return;
+      let lastY = null;
+      const fix = () => {
+        const bar = document.getElementById('sort-bar');
+        if(!bar || bar.hidden || (lastY !== null && Math.abs(window.scrollY - lastY) > 1)) return false;
         const shift = bar.getBoundingClientRect().top - top;
         if(Math.abs(shift) > 1) window.scrollBy(0, shift);
-      }
-      document.body.style.minHeight = '';
+        lastY = window.scrollY;
+        return true;
+      };
+      if(!fix()) return;
+      requestAnimationFrame(() => { if(fix()) [150, 400, 1000].forEach(ms => setTimeout(fix, ms)); });
     }
 
     async function runSearch(offset = 0, options = {}){
@@ -6714,7 +6725,8 @@
         state.appending = true;
       }
       const seq = append ? searchSeq : ++searchSeq;
-      render();
+      // quiet: 나라 바꾸기처럼 같은 모델을 다시 불러올 때는 '불러오는 중' 화면으로 바꾸지 않고 지금 화면을 둔 채 결과만 바꿈 (화면이 움직이지 않게)
+      if(!options.quiet) render();
       if(!append) loadPriceLadder();
 
       try{
