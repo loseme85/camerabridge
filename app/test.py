@@ -14035,6 +14035,77 @@ def crawl_carmarthen():
     return results
 
 
+# 2026-11-13 밤샘: Pro Photo Supply (미국) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _prophotosupply_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _prophotosupply_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _prophotosupply_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab|artra|keks|k&f", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def _prophotosupply_is_leica(title, vendor=""):
+    return bool(re.search(r"\b(leica|leitz)\b|ライカ", f"{title} {vendor}", re.I)) and not _PROPHOTOSUPPLY_OTHER.search(title)
+
+
+_PROPHOTOSUPPLY_OTHER = re.compile(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|ttartisan|7artisans|minolta|rokkor|konica|hexanon|"
+                          r"canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|artra ?lab|keks|k&f|noname|light ?lens ?lab|pradovit.*isco|isco", re.I)
+
+
+def crawl_prophotosupply():
+    """Pro Photo Supply (미국 포틀랜드) - Shopify 'used-inventory' 컬렉션 중 판매자 Leica (파나소닉 Leica DG·Voigtländer 제외).
+    'Lecia' 오타 고침. 가격 USD, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://prophotosupply.com"
+    print(f"\n  📂 Pro Photo Supply 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/used-inventory/products.json", "Pro Photo Supply"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        title = re.sub(r"\bLecia\b", "Leica", title)
+        if str(p.get("vendor") or "").lower() != "leica" or _PROPHOTOSUPPLY_OTHER.search(title):
+            continue
+        name = re.sub(r"\s+(?:Digital\s+)?(?:Rangefinder\s+)?(?:Camera|Lens)\b(?:\s+for\s+[\w-]+(?:\s+mount)?)?", " ", title, flags=re.I)
+        results.append(_prophotosupply_row("Pro Photo Supply (미국)", base, p, _prophotosupply_leica_name(name), None, _prophotosupply_price(p, "$"), "USD"))
+    print(f"  ✅ Pro Photo Supply 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14210,6 +14281,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Pro Photo Supply (미국)", lambda: ce.wrap_full_run("Pro Photo Supply (미국)", crawl_prophotosupply)),
         ("Carmarthen Cameras (영국)", lambda: ce.wrap_full_run("Carmarthen Cameras (영국)", crawl_carmarthen)),
         ("click & surr (독일)", lambda: ce.wrap_full_run("click & surr (독일)", crawl_clickundsurr)),
         ("Grain Over Pixel (독일)", lambda: ce.wrap_full_run("Grain Over Pixel (독일)", crawl_grainoverpixel)),
