@@ -213,7 +213,9 @@ def test_price_sort_keeps_one_price_line_and_puts_accessories_last() -> None:
         assert "accessory_intent" in _function_body(html, "priceSortGroup")
         assert "match_quality" in _function_body(html, "priceSortGroup")
         assert "function sortGroupDivider(" in html
-        assert "isPriceSort(sortMode) && !keepOrder ? item.sortGroup : null" in html
+        # 2026-11-13: 부속품은 어느 정렬이든 맨 아래 묶음 (가격순은 비슷한 매물 묶음도)
+        assert "(isPriceSort(sortMode) ? item.sortGroup : (item.sortGroup === 2 ? 2 : null))" in html
+        assert "isAccessoryTitle(result.title)" in _function_body(html, "priceSortGroup")
         assert "group_accessory:" in html and "group_other:" in html
 
 

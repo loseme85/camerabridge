@@ -2354,7 +2354,7 @@
         archive: { ko: '과거 기록', en: 'Archive', ja: 'アーカイブ', 'zh-Hans': '历史记录', 'zh-Hant': '歷史記錄', pt: 'Arquivo', es: 'Archivo', de: 'Archiv', it: 'Archivio' },
         active_subtitle: { ko: '판매처에 아직 올라와 있는 매물입니다.', en: 'Still listed at the seller.', ja: '販売店にまだ掲載されている在庫です。', 'zh-Hans': '优先显示看起来仍可购买的在售商品。', 'zh-Hant': '優先顯示看起來仍可購買的在售商品。', pt: 'Anúncios que ainda parecem disponíveis são mostradas primeiro.', es: 'Primero se muestran los anuncios que aún parecen disponibles.', de: 'Angebote, die noch verfügbar erscheinen, werden zuerst gezeigt.', it: 'Per primi vengono mostrati gli annunci che sembrano ancora disponibili.' },
         group_other: { ko: '다른 버전·리페인트·비슷한 매물', en: 'Other versions, repaints and similar items', ja: '別バージョン・リペイント・近い出品', 'zh-Hans': '其他版本、重新喷漆及类似商品', 'zh-Hant': '其他版本、重新噴漆及類似商品', pt: 'Outras versões, repinturas e itens semelhantes', es: 'Otras versiones, repintados y artículos similares', de: 'Andere Versionen, Umlackierungen und Ähnliches', it: 'Altre versioni, riverniciature e articoli simili' },
-        group_accessory: { ko: '부속품·브로셔·설명서', en: 'Accessories, brochures and manuals', ja: 'アクセサリー・カタログ・説明書', 'zh-Hans': '配件、宣传册与说明书', 'zh-Hant': '配件、型錄與說明書', pt: 'Acessórios, folhetos e manuais', es: 'Accesorios, folletos y manuales', de: 'Zubehör, Prospekte und Anleitungen', it: 'Accessori, brochure e manuali' },
+        group_accessory: { ko: '이 모델에 쓰는 부속품·브로셔·설명서', en: 'Accessories for this model, brochures and manuals', ja: 'アクセサリー・カタログ・説明書', 'zh-Hans': '配件、宣传册与说明书', 'zh-Hant': '配件、型錄與說明書', pt: 'Acessórios, folhetos e manuais', es: 'Accesorios, folletos y manuales', de: 'Zubehör, Prospekte und Anleitungen', it: 'Accessori, brochure e manuali' },
         jump_history: { ko: '팔렸거나 내려간 기록 {count}건 보기 ↓', en: 'See {count} sold or removed ↓', ja: '売れた・掲載終了の記録 {count}件 ↓' },
         history_price: { ko: '마지막 표시 가격', en: 'Last price seen', ja: '最後の表示価格' },
         view_record: { ko: '원래 페이지 보기', en: 'Open original page', ja: '元のページを見る' },
@@ -7215,6 +7215,8 @@
         const leftPrice = left.priceValue;
         const rightPrice = right.priceValue;
         // 가격·시세 정렬: 본 매물(정확히 맞음·같은 모델) → 다른 모델·리페인트 → 부속품(브로셔·케이스·후드) 순, 묶음 안은 가격순 (2026-11-12 사장님: 낮은 가격순 맨 위에 브로셔가 옴)
+        // 어느 정렬이든 부속품은 맨 아래 '이 모델에 쓰는 부속품' 묶음으로 (가격순은 아래 sortGroup이 이미 그렇게 함)
+        if(!isPriceSort(sortMode) && (left.sortGroup === 2) !== (right.sortGroup === 2)) return left.sortGroup === 2 ? 1 : -1;
         const tierOf = item => (isPriceSort(sortMode) ? item.sortGroup : item.compatibilityTier);
         if(tierOf(left) !== tierOf(right)) return tierOf(left) - tierOf(right);
         if(sortMode === 'newest'){
@@ -7263,19 +7265,35 @@
     const isPriceSort = sortMode => ['price_asc', 'price_desc', 'deal'].includes(sortMode);
     // 가격순 묶음: 0 본 매물 · 1 비슷한 매물(다른 브랜드·종류·세트·리페인트·중복) · 2 부속품 (2026-11-12 사장님: 가격순이 안 맞음)
     // 호환 등급(getActiveCompatibilityTier)은 'Summilux 35' 검색에서 진짜 ASPH를 '안 맞음', Voigtlander를 '같은 모델'로 거꾸로 매겨서 가격순엔 매칭 품질을 씀
+    // 모델 이름이 붙어 바디·렌즈로 분류된 부속품 ('Leica Daumenstütze Q2', 'Leica Q2 for サムサポート', 'Handgrip M(Typ240용)').
+    // 본체에 딸려 오는 것('with case', '+ hood', 'フード付き', 'Set')은 부속품으로 보지 않음 (2026-11-13 사장님: 매물에 부속품이 섞여 나옴)
+    const ACCESSORY_TITLE = /(daumenst[uü]tze|thumbs?[\s-]?(rest|support|grip)|サムサポート|サムレスト|ポーチ|pouch|holster|half[\s-]?case|ever[\s-]?ready|速写ケース|hand[\s-]?g?rip|ハンドグリップ|핸드그립|lens[\s-]?hood|lens[\s-]?cap|body[\s-]?cap|ボディキャップ|eyecup|brochure|prospekt|bedienungsanleitung|取扱説明書|empty[\s-]?box|box[\s-]?only|元箱のみ|strap|ストラップ)/i;
+    const BUNDLED_TITLE = /(\bwith\b|\bmit\b|\bcon\b|\bavec\b|\+|&|\bset\b|\bkit\b|付き|付属|포함)/i;
+    function isAccessoryTitle(title){
+      const text = String(title || '');
+      return ACCESSORY_TITLE.test(text) && !BUNDLED_TITLE.test(text);
+    }
+
     function priceSortGroup(result, originalIndex){
       const category = String(((result.final_output || {}).category) || result.category || '').toLowerCase();
       const intent = (state.response || {}).intent || {};
       const level = String(result.query_match_level || '').toLowerCase();
-      if(!intent.accessory_intent && (category === 'accessory' || level === 'accessory_compatible')) return 2;
+      if(!intent.accessory_intent && (category === 'accessory' || level === 'accessory_compatible' || isAccessoryTitle(result.title))) return 2;
       // 'Leica M6'(바디)를 찾았는데 마운트만 맞은 렌즈, 'Summilux 35'(렌즈)를 찾았는데 바디
-      const wantsBody = Boolean(intent.body_intent) && !intent.focal_length;
-      const wantsLens = !intent.body_intent && Boolean(intent.focal_length || intent.model_family);
+      // 모델을 골랐으면 그 모델 종류로 판단 (검색 글자만 보면 'Leica M (Typ 240)'을 렌즈 찾기로 읽어 바디가 전부 아래로 갔음, 2026-11-13)
+      const pickedKind = (String(state.entity || '').match(/^leica:(body|lens):/) || [])[1] || '';
+      const wantsBody = pickedKind ? pickedKind === 'body' : (Boolean(intent.body_intent) && !intent.focal_length);
+      const wantsLens = pickedKind ? pickedKind === 'lens' : (!intent.body_intent && Boolean(intent.focal_length || intent.model_family));
       if((wantsBody && category === 'lens') || (wantsLens && category === 'body')) return 1;
-      if(String(result.match_quality || '').toLowerCase() === 'weak' || level === 'boundary_conflict') return 1;
+      // 고른 모델(또는 그 아래 버전)에 연결된 매물은 검색 글자가 약하게 맞아도 본 매물 (2026-11-13 사장님: 맞는 매물이 아래로 —
+      // 'Leica M (Typ 240) (standard)'의 '(standard)'가 제목에 없어 M240 90개가 전부 '약하게 맞음'으로 빠졌음)
+      const entityId = String((result.final_output || {}).entity || result.entity || '');
+      const sameModel = Boolean(state.entity) && (entityId === state.entity || entityId.startsWith(state.entity + ':'));
+      if(!sameModel && (String(result.match_quality || '').toLowerCase() === 'weak' || level === 'boundary_conflict')) return 1;
       const evidence = getResultEvidence(result, originalIndex) || {};
       const excluded = (Array.isArray(evidence.excluded_reason) ? evidence.excluded_reason : []).map(item => String(item || '').toLowerCase());
-      if(excluded.some(item => /duplicate|outlier|wrong model|wrong mount|bundle|variant boundary|condition/.test(item))) return 1;
+      // 'Duplicate listing'은 시세에서 같은 물건을 두 번 세지 않으려는 표시라 목록 위치에는 쓰지 않음 (Summicron 50 73개·Q2 40개가 아래로 갔음)
+      if(excluded.some(item => /outlier|wrong model|wrong mount|bundle|variant boundary|condition/.test(item))) return 1;
       if(/(repaint|repainted|modified|custom|改造)/i.test(result.title || '')) return 1;
       return 0;
     }
@@ -7297,7 +7315,7 @@
         item.result.__ui_original_index = item.originalIndex;
         item.sortGroup = priceSortGroup(item.result, item.originalIndex);
         // 더 불러오는 중(순서 고정)에는 묶음이 조각마다 다시 시작해 구분 줄이 반복되므로, 다 불러와 다시 정렬된 뒤에만 표시
-        item.result.__ui_sort_group = isPriceSort(sortMode) && !keepOrder ? item.sortGroup : null;
+        item.result.__ui_sort_group = keepOrder ? null : (isPriceSort(sortMode) ? item.sortGroup : (item.sortGroup === 2 ? 2 : null));
       });
       const buckets = {
         active_asking: [],
