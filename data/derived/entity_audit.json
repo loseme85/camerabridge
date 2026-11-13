@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 958,
+   "count": 963,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -21,7 +21,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 679,
+   "count": 681,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -51,7 +51,7 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:mechanical",
-   "count": 240,
+   "count": 241,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -81,7 +81,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 174,
+   "count": 175,
    "example": "[위탁] M10 Monochrom (Black)"
   },
   {
@@ -123,19 +123,19 @@
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:no-meter",
-   "count": 122,
+   "count": 123,
    "example": "LEICA M4 sn.1250"
   },
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:mechanical",
-   "count": 122,
+   "count": 123,
    "example": "LEICA M4 sn.1250"
   },
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:no-meter",
-   "count": 110,
+   "count": 111,
    "example": "Leica M2 BlackPaint"
   },
   {
@@ -151,6 +151,12 @@
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
+   "a": "leica:feature:frameline-28",
+   "b": "leica:feature:no-meter",
+   "count": 94,
+   "example": "Leica M-A Black Chrome x0.72"
+  },
+  {
    "a": "leica:body:m6:ttl",
    "b": "leica:feature:ttl-flash",
    "count": 93,
@@ -167,12 +173,6 @@
    "b": "leica:feature:mechanical",
    "count": 93,
    "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
-  },
-  {
-   "a": "leica:feature:frameline-28",
-   "b": "leica:feature:no-meter",
-   "count": 92,
-   "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:body:mp-film:black-paint",
@@ -193,16 +193,16 @@
    "example": "Leica MP BlackPaint x0.72"
   },
   {
+   "a": "leica:body:m240:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 91,
+   "example": "[위탁] M 240 (Black)"
+  },
+  {
    "a": "leica:body:m7:standard",
    "b": "leica:feature:frameline-28",
    "count": 90,
    "example": "Leica M7 Black 0.72x [Japan Version]"
-  },
-  {
-   "a": "leica:body:m240:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 90,
-   "example": "[위탁] M 240 (Black)"
   },
   {
    "a": "leica:body:mp-film:black-paint",
@@ -267,19 +267,19 @@
   {
    "a": "leica:body:m4:black-paint",
    "b": "leica:feature:no-meter",
-   "count": 60,
+   "count": 61,
    "example": "LEICA M4 Black paint sn.1266"
   },
   {
    "a": "leica:body:m4:black-paint",
    "b": "leica:feature:mechanical",
-   "count": 60,
+   "count": 61,
    "example": "LEICA M4 Black paint sn.1266"
   },
   {
    "a": "leica:body:m4:black-paint",
    "b": "leica:feature:black-paint",
-   "count": 60,
+   "count": 61,
    "example": "LEICA M4 Black paint sn.1266"
   },
   {
@@ -339,13 +339,13 @@
   {
    "a": "leica:body:m10-monochrom:standard",
    "b": "leica:feature:frameline-28",
-   "count": 51,
+   "count": 52,
    "example": "[위탁] M10 Monochrom (Black)"
   },
   {
    "a": "leica:body:m10-monochrom:standard",
    "b": "leica:feature:monochrom",
-   "count": 51,
+   "count": 52,
    "example": "[위탁] M10 Monochrom (Black)"
   },
   {
@@ -375,14 +375,32 @@
   {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:no-meter",
-   "count": 42,
+   "count": 43,
    "example": "LEICA M3 Single Stroke sn.1156"
   },
   {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:mechanical",
-   "count": 42,
+   "count": 43,
    "example": "LEICA M3 Single Stroke sn.1156"
+  },
+  {
+   "a": "leica:body:m-a:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 41,
+   "example": "Leica M-A Black Chrome x0.72"
+  },
+  {
+   "a": "leica:body:m-a:standard",
+   "b": "leica:feature:no-meter",
+   "count": 41,
+   "example": "Leica M-A Black Chrome x0.72"
+  },
+  {
+   "a": "leica:body:m-a:standard",
+   "b": "leica:feature:mechanical",
+   "count": 41,
+   "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:body:m11-monochrom",
@@ -413,24 +431,6 @@
    "b": "leica:lens:summicron-m:35:v1-eyes",
    "count": 40,
    "example": "Leica M 35mm f2 Summicron 1st 8elements EYE Black Repaint"
-  },
-  {
-   "a": "leica:body:m-a:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 39,
-   "example": "Leica M-A Black Chrome x0.72"
-  },
-  {
-   "a": "leica:body:m-a:standard",
-   "b": "leica:feature:no-meter",
-   "count": 39,
-   "example": "Leica M-A Black Chrome x0.72"
-  },
-  {
-   "a": "leica:body:m-a:standard",
-   "b": "leica:feature:mechanical",
-   "count": 39,
-   "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:black-paint",
@@ -1553,7 +1553,7 @@
   {
    "entity": "leica:feature:mechanical",
    "word": "black paint",
-   "count": 233,
+   "count": 234,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -1565,7 +1565,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 174,
+   "count": 175,
    "example": "[위탁] M10 Monochrom (Black)"
   },
   {
@@ -1577,7 +1577,7 @@
   {
    "entity": "leica:feature:no-meter",
    "word": "black paint",
-   "count": 101,
+   "count": 102,
    "example": "Leica M2 BlackPaint"
   },
   {
@@ -1845,18 +1845,5 @@
    "example": "Leica M2 -S Gold 4Frames Vit장착가능"
   }
  ],
- "new": [
-  {
-   "a": "leica:lens:hektor:50",
-   "b": "leica:lens:summitar:50",
-   "count": 3,
-   "example": "Leica Lマウント接写 Ring/Summitar,Summar,Hektor 5cm (LAC 42)"
-  },
-  {
-   "a": "leica:body:ii",
-   "b": "leica:body:mini",
-   "count": 3,
-   "example": "Leica Mini II Elmar 35mm f3.5"
-  }
- ]
+ "new": []
 }
