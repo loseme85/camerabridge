@@ -1896,7 +1896,7 @@
 
   <script>
     const PAGE_SIZE = 12;
-    const BG_PAGE_SIZE = 48;  // 첫 12개를 보여 준 뒤 판매 중 매물을 끝까지 자동으로 불러올 때 한 번에 (2026-11-12 사장님: 전체에서 정렬되게)
+    const BG_PAGE_SIZE = 100;  // 첫 12개를 보여 준 뒤 판매 중 매물을 끝까지 자동으로 불러올 때 한 번에 (2026-11-12 사장님: 전체에서 정렬되게). 서버 최대(100)로 — 부를 때마다 서버가 전체를 다시 검색하므로 횟수를 줄임 (2026-11-13 Vercel 무료 CPU 한도 초과)
     const FALLBACK_COPY = {
       ko: '검색을 불러오는 중 문제가 발생했습니다. 데이터는 변경되지 않았습니다. 검색어를 더 구체적으로 입력하거나 잠시 후 다시 시도해 주세요.',
       en: 'Something went wrong while loading this search. No data was changed. Please try again or refine the query.',
@@ -5220,7 +5220,10 @@
           return null;
         }
       };
-      const pages = await Promise.all([page(0), page(100), page(200)]);
+      // 모델 매물 수만큼만 쪽을 나란히 받음 (예전엔 늘 세 쪽 — 매물 100개 아래 모델도 서버를 세 번 불렀음, 2026-11-13 Vercel CPU 한도)
+      const count = Number(ladderEntity().listing_count) || 300;
+      const offsets = [0, 100, 200].filter(offset => offset === 0 || offset < count);
+      const pages = await Promise.all(offsets.map(page));
       if(ladderState.key !== key) return;
       const all = [];
       pages.forEach(payload => all.push(...((payload && payload.results) || [])));
