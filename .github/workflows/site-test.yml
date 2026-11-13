@@ -1,0 +1,52 @@
+# 사이트 수집기 시험 (밤샘용, 2026-11-12 사장님 허락): site-test/** 브랜치에 올리면 GitHub 서버에서 한 번 돈다.
+# 이 맥 주소가 Shopify에 묶여(429) 로컬 시험이 안 될 때, 실제 크롤링이 도는 곳에서 시험한다. main·사이트 PR에는 넣지 않음.
+# .site-test 파일: 첫 줄 'probe' → scripts/probe_shops.py / 그 밖 → app/test.py --site <그 이름>
+name: Site test (branch)
+on:
+  push:
+    branches: ['site-test/**']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run
+        run: |
+          if [ "$(head -n1 .site-test)" = "probe" ]; then
+            python3 scripts/probe_shops.py | tee site_test_out.txt
+            exit 0
+          fi
+          i=0
+          while IFS= read -r TARGET; do
+            [ -z "$TARGET" ] && continue
+            i=$((i+1))
+            echo "=================== $TARGET" | tee -a site_test_out.txt
+            python3 app/test.py --site "$TARGET" 2>&1 | grep -E "📂|✅|⚠️|❌|🔀|오류|Error|Traceback|    └─" | tail -40 | tee -a site_test_out.txt
+            python3 - "$TARGET" "$i" <<'PY' | tee -a site_test_out.txt
+          import json, sys
+          target, idx = sys.argv[1].lower(), sys.argv[2]
+          rows = [r for r in json.load(open("data/raw/results.json", encoding="utf-8")) if target in str(r.get("site", "")).lower()]
+          json.dump(rows, open(f"site_rows_{idx}.json", "w", encoding="utf-8"), ensure_ascii=False)
+          print(f"rows {len(rows)} · 판매 중 {sum(1 for r in rows if not r.get('품절'))}")
+          for r in rows[:12]:
+              print(" ", r.get("가격"), "|", str(r.get("상품명"))[:70], "|", r.get("컨디션"), "|", r.get("category"))
+          PY
+          done < .site-test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-test-${{ github.run_id }}
+          path: |
+            site_test_out.txt
+            site_rows_*.json
+            probe_*.json
+            probe_ship_*.txt
+          retention-days: 3
+          if-no-files-found: ignore
