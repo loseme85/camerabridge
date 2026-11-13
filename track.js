@@ -37,17 +37,22 @@
       if (ref.host !== location.host) outside = (ref.host + ref.pathname).replace(/\/$/, '').slice(0, 160);
     }
   } catch (error) {}
+  function newVisit(referrer, landing) {
+    return { sid: Math.random().toString(36).slice(2, 10) + Date.now().toString(36), t0: Date.now(), referrer: referrer, landing: landing, part: 0, active: 0 };
+  }
   if (!visit || !visit.sid || outside || Date.now() - (visit.last || 0) > 30 * 60 * 1000) {
     var utm = [];
     try { new URLSearchParams(location.search).forEach(function (value, key) { if (key.indexOf('utm_') === 0) utm.push(key + '=' + value); }); } catch (error) {}
-    visit = { sid: Math.random().toString(36).slice(2, 10) + Date.now().toString(36), t0: Date.now(), referrer: outside,
-              landing: location.pathname + (utm.length ? '?' + utm.join('&') : ''), part: 0 };
+    visit = newVisit(outside, location.pathname + (utm.length ? '?' + utm.join('&') : ''));
   }
   function save() { visit.last = Date.now(); try { sessionStorage.setItem('cb_visit', JSON.stringify(visit)); } catch (error) {} }
   save();
 
   var slug = (location.pathname.match(/\/leica\/([^/]+)\//) || [])[1] || '';
-  var seconds = function () { return Math.round((Date.now() - visit.t0) / 1000); };
+  // 머문 시간 = 화면을 실제로 보고 있던 시간만 (2026-11-13: 탭을 열어 둔 채 다음 날 보면 하루가 통째로 들어가 1,500분 같은 값이 나왔음).
+  // 30분 넘게 가려졌다 돌아오면 새 방문 (beta.html 과 같은 규칙)
+  var visibleSince = document.visibilityState === 'visible' ? Date.now() : null;
+  var seconds = function () { return Math.round(((visit.active || 0) + (visibleSince ? Date.now() - visibleSince : 0)) / 1000); };
   var clicks = [], sends = 0, sentAt = 0, scrollMax = 0;
   function trackScroll() {
     var h = document.documentElement.scrollHeight || 1;
@@ -85,6 +90,11 @@
     if (!host || host === location.host) return;
     clicks.push({ host: host, entity: slug, q: '', s: seconds() });
   }, true);
-  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') send(); });
-  window.addEventListener('pagehide', send);
+  function pause() { if (visibleSince) { visit.active = (visit.active || 0) + (Date.now() - visibleSince); visibleSince = null; save(); } }
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') { send(); pause(); return; }
+    if (Date.now() - (visit.last || 0) > 30 * 60 * 1000) { visit = newVisit('', location.pathname); sends = 0; sentAt = 0; scrollMax = 0; clicks = []; save(); }
+    visibleSince = Date.now();
+  });
+  window.addEventListener('pagehide', function () { send(); pause(); });
 })();
