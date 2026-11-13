@@ -13532,6 +13532,79 @@ def crawl_robertwhite():
     return results
 
 
+# 2026-11-13 밤샘: Artra Lab (홍콩) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _artralab_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _artralab_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _artralab_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab|artra|keks|k&f", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def _artralab_is_leica(title, vendor=""):
+    return bool(re.search(r"\b(leica|leitz)\b|ライカ", f"{title} {vendor}", re.I)) and not _ARTRALAB_OTHER.search(title)
+
+
+_ARTRALAB_OTHER = re.compile(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|ttartisan|7artisans|minolta|rokkor|konica|hexanon|"
+                          r"canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|artra ?lab|keks|k&f|noname|light ?lens ?lab|pradovit.*isco|isco", re.I)
+
+
+def crawl_artralab():
+    """Artra Lab (홍콩) - Shopify 전체(약 110점). 대부분 자체 M마운트 렌즈·어댑터라 판매자(vendor)가 Leica이거나
+    'Artra Collectibles' 태그인 빈티지 라이카만 ('1930 LEITZ LEICA I 50830 WITH NICKEL ELMAR'). 가격 HKD, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://artralab.com"
+    print(f"\n  📂 Artra Lab 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Artra Lab"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        tags = [t.lower() for t in p.get("tags") or []]
+        if str(p.get("vendor") or "").lower() != "leica" and "artra collectibles" not in tags:
+            continue
+        if not re.search(r"\b(leica|leitz)\b", title, re.I):
+            continue
+        name = re.sub(r"^\d{4}\s+", "", title)  # 앞의 제조 연도 '1930 '
+        results.append(_artralab_row("Artra Lab (홍콩)", base, p, _artralab_leica_name(name), None, _artralab_price(p, "HK$"), "HKD"))
+    print(f"  ✅ Artra Lab 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13707,6 +13780,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
         ("Leica Store Manchester (영국)", lambda: ce.wrap_full_run("Leica Store Manchester (영국)", crawl_lsmanchester)),
         ("Kamera Express (룩셈부르크)", lambda: ce.wrap_full_run("Kamera Express (룩셈부르크)", crawl_kameraexpresslu)),
