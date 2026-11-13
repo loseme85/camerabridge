@@ -14106,6 +14106,87 @@ def crawl_prophotosupply():
     return results
 
 
+# 2026-11-13 밤샘: 八百富写真機店 (일본) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _yaotomi_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _yaotomi_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _yaotomi_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab|artra|keks|k&f", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def _yaotomi_is_leica(title, vendor=""):
+    return bool(re.search(r"\b(leica|leitz)\b|ライカ", f"{title} {vendor}", re.I)) and not _YAOTOMI_OTHER.search(title)
+
+
+_YAOTOMI_OTHER = re.compile(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|ttartisan|7artisans|minolta|rokkor|konica|hexanon|"
+                          r"canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|artra ?lab|keks|k&f|noname|light ?lens ?lab|pradovit.*isco|isco", re.I)
+
+
+def crawl_yaotomi():
+    """八百富写真機店 (일본 오사카) - Shopify 'used' 컬렉션 중 제목에 ライカ·Leica·Leitz (K&F 어댑터 등 타사 제외).
+    일본어 제목은 ja_to_en. 등급은 제목·태그의 일본 표준 표기(美品·良品 등)가 있으면 그대로, 가격 JPY"""
+    import html as _html
+    import requests
+    from ja_normalize import ja_to_en
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.yaotomi.co.jp"
+    print(f"\n  📂 八百富 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/used/products.json", "八百富"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        # 제목이 ライカ·ライツ·Leica·Leitz로 시작하는 것만 (シュナイダー 'Leica Rマウント' 렌즈·RAYQUAL 어댑터·현미경 등 제외)
+        title = re.sub(r"^(?:販売済み|SOLD)\s*", "", title)
+        if not re.search(r"ライカ|ライツ|\bleica\b|\bleitz\b", title, re.I):
+            continue
+        if re.search(r"シュナイダー|メイヤー|レイコール|ハンザ|フジ|FUJINON|RAYQUAL|K&F|Schneider|Meyer|Hansa|顕微鏡|マイクロスコープ|マウントアダプター|Adapter|"
+                     r"Lマウント用|for (?:Schneider|Meyer)|ソニー|ニコン|キヤノン|パナソニック|シグマ|フォクトレンダー", title, re.I):
+            continue
+        tags = " ".join(p.get("tags") or [])
+        grade = re.search(r"(新品同様|極上品|美品|並品|良品|難あり|ジャンク|AB|A\+|A|B|C)(?:ランク)?", tags)
+        name = ja_to_en(re.sub(r"【[^】]*】|［[^］]*］", " ", title))
+        # 제목 끝 분류 말·재고 번호 ("… LEICA フイルムカメラ 52092", "… アクセサリー 46570") 뗌
+        name = re.sub(r"\s+(?:(?:Leica|LEICA|Leitz|LEITZ|LEICAVIT M)\s+)*(?:フイルムカメラ|フィルムカメラ|アクセサリー|交換レンズ|デジタルカメラ)?\s*\d{5}\s*$", "", name)
+        results.append(_yaotomi_row("八百富写真機店 (일본)", base, p, _yaotomi_leica_name(name),
+                                  grade.group(1) if grade else None, _yaotomi_price(p, "¥"), "JPY"))
+    print(f"  ✅ 八百富 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14281,6 +14362,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("八百富写真機店 (일본)", lambda: ce.wrap_full_run("八百富写真機店 (일본)", crawl_yaotomi)),
         ("Pro Photo Supply (미국)", lambda: ce.wrap_full_run("Pro Photo Supply (미국)", crawl_prophotosupply)),
         ("Carmarthen Cameras (영국)", lambda: ce.wrap_full_run("Carmarthen Cameras (영국)", crawl_carmarthen)),
         ("click & surr (독일)", lambda: ce.wrap_full_run("click & surr (독일)", crawl_clickundsurr)),
