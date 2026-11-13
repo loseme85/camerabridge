@@ -2765,18 +2765,17 @@
           if(ref.host !== location.host) outside = (ref.host + ref.pathname).replace(/\/$/, '').slice(0, 160);  // 주소 뒤 ?·# 는 버림
         }
       }catch(error){}
+      const newVisit = (referrer, landing) => ({ sid: Math.random().toString(36).slice(2, 10) + Date.now().toString(36), t0: Date.now(), referrer, landing, part: 0, active: 0 });
       if(!visit || !visit.sid || outside || Date.now() - (visit.last || 0) > 30 * 60 * 1000){
         const utm = [...new URLSearchParams(location.search)].filter(([key]) => key.startsWith('utm_')).map(([key, value]) => `${key}=${value}`).join('&');
-        visit = { sid: Math.random().toString(36).slice(2, 10) + Date.now().toString(36), t0: Date.now(), referrer: outside,
-                  landing: location.pathname + (utm ? '?' + utm : ''), part: 0 };
+        visit = newVisit(outside, location.pathname + (utm ? '?' + utm : ''));
       }
       const saveVisit = () => { visit.last = Date.now(); try{ sessionStorage.setItem('cb_visit', JSON.stringify(visit)); }catch(error){} };
       saveVisit();
-      const startedAt = visit.t0;
-      const sid = visit.sid;
-      const seconds = () => Math.round((Date.now() - startedAt) / 1000);
-      const referrer = visit.referrer;
-      const landing = visit.landing;
+      // 머문 시간 = 화면을 실제로 보고 있던 시간만 (2026-11-13 사장님: 1,500분 같은 값 — 탭을 열어 둔 채 다음 날 다시 보면
+      // 처음 연 시각부터 하루가 통째로 들어갔음). 탭이 가려져 있던 시간은 빼고, 30분 넘게 가려졌다 돌아오면 새 방문으로 셈
+      let visibleSince = document.visibilityState === 'visible' ? Date.now() : null;
+      const seconds = () => Math.round(((visit.active || 0) + (visibleSince ? Date.now() - visibleSince : 0)) / 1000);
       let searches = [], clicks = [], sends = 0, last = '', sentAt = 0, scrollMax = 0;
       // 얼마나 내려 봤나 (화면 아래 끝이 문서의 몇 %까지 왔나, 2026-11-08)
       const trackScroll = () => { const h = document.documentElement.scrollHeight || 1; scrollMax = Math.max(scrollMax, Math.min(100, Math.round((window.scrollY + window.innerHeight) / h * 100))); };
@@ -2792,7 +2791,7 @@
         visit.part = (visit.part || 0) + 1;
         saveVisit();
         const body = JSON.stringify({
-          sid, vid: browserId, part: visit.part, page: location.pathname, locale: uiState.locale, currency: uiState.currency, referrer, landing,
+          sid: visit.sid, vid: browserId, part: visit.part, page: location.pathname, locale: uiState.locale, currency: uiState.currency, referrer: visit.referrer, landing: visit.landing,
           mobile: isNarrowScreen(), duration_s: seconds(), scroll: scrollMax, searches, clicks
         });
         searches = []; clicks = [];
@@ -2802,8 +2801,13 @@
           }
         }catch(error){}
       }
-      document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'hidden') send(); });
-      window.addEventListener('pagehide', send);
+      const pause = () => { if(visibleSince){ visit.active = (visit.active || 0) + (Date.now() - visibleSince); visibleSince = null; saveVisit(); } };
+      document.addEventListener('visibilitychange', () => {
+        if(document.visibilityState === 'hidden'){ send(); pause(); return; }
+        if(Date.now() - (visit.last || 0) > 30 * 60 * 1000){ visit = newVisit('', location.pathname); sends = 0; sentAt = 0; scrollMax = 0; searches = []; clicks = []; saveVisit(); }
+        visibleSince = Date.now();
+      });
+      window.addEventListener('pagehide', () => { send(); pause(); });
       document.addEventListener('click', event => {
         const link = event.target.closest && event.target.closest('a[href^="http"]');
         if(!link || off) return;
