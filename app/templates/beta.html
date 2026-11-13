@@ -7267,7 +7267,7 @@
     // 호환 등급(getActiveCompatibilityTier)은 'Summilux 35' 검색에서 진짜 ASPH를 '안 맞음', Voigtlander를 '같은 모델'로 거꾸로 매겨서 가격순엔 매칭 품질을 씀
     // 모델 이름이 붙어 바디·렌즈로 분류된 부속품 ('Leica Daumenstütze Q2', 'Leica Q2 for サムサポート', 'Handgrip M(Typ240용)').
     // 본체에 딸려 오는 것('with case', '+ hood', 'フード付き', 'Set')은 부속품으로 보지 않음 (2026-11-13 사장님: 매물에 부속품이 섞여 나옴)
-    const ACCESSORY_TITLE = /(daumenst[uü]tze|thumbs?[\s-]?(rest|support|grip)|サムサポート|サムレスト|ポーチ|pouch|holster|half[\s-]?case|ever[\s-]?ready|速写ケース|hand[\s-]?g?rip|ハンドグリップ|핸드그립|lens[\s-]?hood|lens[\s-]?cap|body[\s-]?cap|ボディキャップ|eyecup|brochure|prospekt|bedienungsanleitung|取扱説明書|empty[\s-]?box|box[\s-]?only|元箱のみ|strap|ストラップ)/i;
+    const ACCESSORY_TITLE = /(daumenst[uü]tze|thumbs?[\s-]?(rest|support|grip)|サムサポート|サムレスト|ポーチ|pouch|holster|half[\s-]?case|ever[\s-]?ready|速写ケース|hand[\s-]?g?rip|ハンドグリップ|핸드그립|lens[\s-]?hood|lens[\s-]?cap|body[\s-]?cap|ボディキャップ|eyecup|brochure|prospekt|bedienungsanleitung|取扱説明書|empty[\s-]?box|box[\s-]?only|元箱のみ|strap|ストラップ|akku|ladeger(?:ä|ae)t|tasche|[ée]tui|custodia|caricabatterie|batteria|バッテリー|充電器)/i;
     const BUNDLED_TITLE = /(\bwith\b|\bmit\b|\bcon\b|\bavec\b|\+|&|\bset\b|\bkit\b|付き|付属|포함)/i;
     function isAccessoryTitle(title){
       const text = String(title || '');

@@ -962,6 +962,15 @@ _ACCESSORY_KW = [
     "カッター", "cutter", "距離計", "helicoid", "rewind crank", "サムレスト", "thumb rest", "thumbrest", "品各種",
 ]
 
+# 영어 밖 부속품 단어: 독일어·프랑스어·이탈리아어·스페인어·일본어 (배터리·충전기·케이스·가방)
+# 'batterie'는 'M6 batterie neuve'처럼 본품 설명에도 쓰여 넣지 않음
+_FOREIGN_ACC_KW = (
+    "akku", "ladegerät", "ladegeraet", "tasche", "etui", "étui", "sacoche", "chargeur",
+    "custodia", "borsa", "batteria", "caricabatterie", "funda", "cargador",
+    "バッテリー", "充電器", "ケース",
+)
+_FOREIGN_BUNDLE_BEFORE = r"(?:\bmit\b|\bwith\b|\bund\b|\bavec\b|\bet\b|\bcon\b|\by\b|\+|&|,|付き|付属|포함)"
+
 _LENS_PROTECT_KW = [
     # Leica 렌즈 패밀리
     "summicron", "summilux", "noctilux", "elmarit", "elmar",
@@ -1160,6 +1169,18 @@ def detect_category(
     if any(x in combined for x in ["캡", "cap", "filter", "필터"]) and not is_lens_protected_strong:
         reasons.append("cap_filter")
         return {"category": "Accessory", "category_confidence": 0.88, "category_reason": reasons}
+
+    # ── 2.5순위: 영어 밖 부속품 단어 (2026-11-13 사장님: X1 검색에 독일어 'Akku'·'Ledertasche'가 바디로 섞임) ──
+    # 본품 뒤에 붙은 구성품('M10 + Akku', 'X1 mit Tasche und Akku')은 본품 그대로 둔다.
+    if not is_lens_protected_strong:
+        for kw in _FOREIGN_ACC_KW:
+            at = combined.find(kw)
+            if at < 0:
+                continue
+            if re.search(_FOREIGN_BUNDLE_BEFORE, combined[max(0, at - 40):at]):
+                continue
+            reasons.append(f"acc_kw_foreign:{kw}")
+            return {"category": "Accessory", "category_confidence": 0.92, "category_reason": reasons}
 
     # ── 3순위: mount=Compact/PNS/Q → Body ──
     # 이 분기는 _HARD_ACC_KW를 통과한 것만 도달하므로
