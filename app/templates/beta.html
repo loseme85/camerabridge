@@ -5157,7 +5157,32 @@
     }
 
     // 모델을 골랐을 때 시세 칸: 정확한 버전이면 판매 완료 중앙값, '전체'나 판매 기록이 적으면 판매 중 가격대
+    // 나라를 고르면 '판매 중 가격대'도 그 나라 매물로 (2026-11-13 사장님: 일본만 보는데 체코 최저가가 나옴).
+    // 모델 요약(active_price_krw)은 전 세계 기준이라, 화면에 받은 판매 중 매물(부속품 빼고)의 물건 금액으로 다시 셈
+    function filteredActiveRange(){
+      const values = [];
+      let target = '';
+      getResults().forEach((result, index) => {
+        if(getMarketActivityInfo(result).section !== 'active' || priceSortGroup(result, index) === 2) return;
+        // 고른 모델(또는 그 아래 버전·기념판)에 연결된 매물만 — 모델 요약과 같은 기준
+        const entityId = String((result.final_output || {}).entity || result.entity || '');
+        if(entityId !== state.entity && !entityId.startsWith(state.entity + ':')) return;
+        const cost = computeLandedCost(result);
+        if(!cost || !Number.isFinite(cost.converted) || cost.converted <= 0) return;
+        target = cost.target;
+        values.push(cost.converted);
+      });
+      if(!values.length) return '';
+      const low = formatMoney(roundEstimate(Math.min(...values), target), target);
+      const high = formatMoney(roundEstimate(Math.max(...values), target), target);
+      return high !== low ? `${low} – ${high}` : low;
+    }
+
     function entityPriceSummary(entity){
+      if(!entity.feature && els['country-filter'] && els['country-filter'].value){
+        const filtered = filteredActiveRange();
+        if(filtered) return { caption: ec('price_range_label'), value: filtered, meta: '' };
+      }
       const range = entity.active_price_krw;
       const low = range ? krwToDisplay(range[0]) : null;
       const high = range ? krwToDisplay(range[1]) : null;
