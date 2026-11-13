@@ -886,7 +886,7 @@ ACCESSORY_CODES = [
 ]
 
 # 분류용 대략 환율 (가격 문자열 기호 → 원화)
-PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62, 'EUR': 1500, 'GBP': 1800, 'USD': 1350, 'HUF': 4, 'RON': 300}  # 코드 표기('EUR 1,290')도 — 없으면 1,290원으로 읽어 바디가 부속품이 됨 (2026-11-08)
+PRICE_SYMBOL_TO_KRW = {'¥': 9, '£': 1800, '€': 1500, 'A$': 880, '$': 1350, 'CHF': 1650, 'DKK': 200, 'MYR': 300, 'zł': 370, 'NZ$': 800, 'SEK': 130, 'Kč': 62, 'EUR': 1500, 'GBP': 1800, 'USD': 1350, 'HUF': 4, 'RON': 300, 'BRL': 260}  # 코드 표기('EUR 1,290')도 — 없으면 1,290원으로 읽어 바디가 부속품이 됨 (2026-11-08)
 
 def detect_category(name, price_str=""):
     """상품명/가격으로 카테고리 분류 (Accessory 최우선, 렌즈 보호)"""
@@ -13457,6 +13457,276 @@ def crawl_lsmanchester():
     return results
 
 
+# ══════════════════════════════════════════════════════
+# 2026-11-13 밤샘: Shopify 매장 (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+# ══════════════════════════════════════════════════════
+def _night_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _night_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _night_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab|artra|keks|k&f", title, re.I):
+        return title
+    return "Leica " + title
+
+
+_NIGHT_OTHER = re.compile(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|ttartisan|7artisans|minolta|rokkor|konica|hexanon|"
+                          r"canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|artra ?lab|keks|k&f|noname|light ?lens ?lab|pradovit.*isco|isco", re.I)
+
+
+def _night_is_leica(title, vendor=""):
+    return bool(re.search(r"\b(leica|leitz)\b|ライカ", f"{title} {vendor}", re.I)) and not _NIGHT_OTHER.search(title)
+
+
+def crawl_robertwhite():
+    """Robert White (영국 풀) - Shopify 'used-ex-demo-equipment' 컬렉션 중 라이카 ('Pre-Owned Leica …'). 가격 GBP.
+    등급 표기 없음, 설명 첫 문장 말투('Excellent condition … 12 month warranty')"""
+    import html as _html
+    import requests
+    from condition_grade import describe_text
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.robertwhite.co.uk"
+    print(f"\n  📂 Robert White 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/used-ex-demo-equipment/products.json", "Robert White"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        tags = [t.lower() for t in p.get("tags") or []]
+        if "brand_leica" not in tags and not re.search(r"\b(leica|leitz)\b", title, re.I):
+            continue
+        if re.search(r"panasonic|lumix", title, re.I):
+            continue
+        name = re.sub(r"^(?:pre-?owned|used|ex-?demo)\s+", "", title, flags=re.I)
+        results.append(_night_row("Robert White (영국)", base, p, _night_leica_name(name),
+                                  describe_text(_html.unescape(p.get("body_html") or "")), _night_price(p, "£"), "GBP"))
+    print(f"  ✅ Robert White 완료: {len(results)}개")
+    return results
+
+
+def crawl_artralab():
+    """Artra Lab (홍콩) - Shopify 전체(약 110점). 대부분 자체 M마운트 렌즈·어댑터라 판매자(vendor)가 Leica이거나
+    'Artra Collectibles' 태그인 빈티지 라이카만 ('1930 LEITZ LEICA I 50830 WITH NICKEL ELMAR'). 가격 HKD, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://artralab.com"
+    print(f"\n  📂 Artra Lab 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Artra Lab"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        tags = [t.lower() for t in p.get("tags") or []]
+        if str(p.get("vendor") or "").lower() != "leica" and "artra collectibles" not in tags:
+            continue
+        if not re.search(r"\b(leica|leitz)\b", title, re.I):
+            continue
+        name = re.sub(r"^\d{4}\s+", "", title)  # 앞의 제조 연도 '1930 '
+        results.append(_night_row("Artra Lab (홍콩)", base, p, _night_leica_name(name), None, _night_price(p, "HK$"), "HKD"))
+    print(f"  ✅ Artra Lab 완료: {len(results)}개")
+    return results
+
+
+def crawl_grandemarvin():
+    """Grande Marvin (이탈리아 토리노) - Shopify 전체(약 2,500점) 중 상품 종류 'Usato'이고 제목이 LEICA·LEITZ로 시작하는 것
+    (파나소닉 Leica DG·미놀타 'LEICA M' 렌즈 제외). 제목 끝 ' - USATO …' 뗌. 가격 EUR, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://grandemarvin.com"
+    print(f"\n  📂 Grande Marvin 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Grande Marvin"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if str(p.get("product_type") or "").lower() != "usato" or not re.match(r"(leica|leitz)\b", title, re.I):
+            continue
+        if _NIGHT_OTHER.search(title):
+            continue
+        name = re.sub(r"\s*-\s*USATO\b.*$", "", title, flags=re.I)
+        name = re.sub(r"\bF\s+(\d)", r"f\1", name)  # 'F 4.0' → 'f4.0'
+        results.append(_night_row("Grande Marvin (이탈리아)", base, p, name, None, _night_price(p, "€"), "EUR"))
+    print(f"  ✅ Grande Marvin 완료: {len(results)}개")
+    return results
+
+
+def crawl_yaotomi():
+    """八百富写真機店 (일본 오사카) - Shopify 'used' 컬렉션 중 제목에 ライカ·Leica·Leitz (K&F 어댑터 등 타사 제외).
+    일본어 제목은 ja_to_en. 등급은 제목·태그의 일본 표준 표기(美品·良品 등)가 있으면 그대로, 가격 JPY"""
+    import html as _html
+    import requests
+    from ja_normalize import ja_to_en
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.yaotomi.co.jp"
+    print(f"\n  📂 八百富 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/used/products.json", "八百富"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not _night_is_leica(title, p.get("vendor") or ""):
+            continue
+        tags = " ".join(p.get("tags") or [])
+        grade = re.search(r"(新品同様|極上品|美品|並品|良品|難あり|ジャンク|AB|A\+|A|B|C)(?:ランク)?", tags)
+        name = ja_to_en(re.sub(r"【[^】]*】|［[^］]*］", " ", title))
+        results.append(_night_row("八百富写真機店 (일본)", base, p, _night_leica_name(name),
+                                  grade.group(1) if grade else None, _night_price(p, "¥"), "JPY"))
+    print(f"  ✅ 八百富 완료: {len(results)}개")
+    return results
+
+
+def crawl_leicastorebr():
+    """Leica Store Brasil (상파울루, 라이카 공식점) - Shopify 'semi-novos'(중고) 컬렉션. 제목 끝 ' - SEMINOVO'·'(SEMI…' 뗌,
+    'NOVO'(새 상품)는 뺌. 포르투갈어 제목 그대로(부속품 분류는 기존 함수). 가격 BRL, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.leicastore.com.br"
+    print(f"\n  📂 Leica Store Brasil 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/semi-novos/products.json", "Leica Store Brasil"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if re.search(r"-\s*NOVO\b", title) and not re.search(r"semi", title, re.I):
+            continue
+        name = re.sub(r"\s*[-(]\s*SEMI[\s-]?NOVO\)?\s*$|\s*\(SEMI.*$", "", title, flags=re.I)
+        results.append(_night_row("Leica Store Brasil (브라질)", base, p, _night_leica_name(name), None, _night_price(p, "BRL "), "BRL"))
+    print(f"  ✅ Leica Store Brasil 완료: {len(results)}개")
+    return results
+
+
+def crawl_kamerastockholm():
+    """Kamera Stockholm (스웨덴) - Shopify 'leica' 컬렉션(중고만 파는 필름 카메라점). 가격 SEK, 등급 표기 없음
+    (설명 'Fint skick'·'Mycket fint skick' 말투 → 사진 등급 대기열)"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://kamerastockholm.se"
+    print(f"\n  📂 Kamera Stockholm 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/leica/products.json", "Kamera Stockholm"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if _NIGHT_OTHER.search(title):
+            continue
+        name = re.sub(r"\s*\((?:LÄS|READ)\)\s*", " ", title, flags=re.I)
+        results.append(_night_row("Kamera Stockholm (스웨덴)", base, p, _night_leica_name(name), None, _night_price(p, "SEK "), "SEK"))
+    print(f"  ✅ Kamera Stockholm 완료: {len(results)}개")
+    return results
+
+
+def crawl_grainoverpixel():
+    """Grain Over Pixel (독일 쾰른) - Shopify 'leica' 컬렉션 중 라이카·Leitz 제품만 (Voigtländer·TTartisan 'Leica M' 렌즈 제외).
+    가격 EUR, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://grainoverpixel.com"
+    print(f"\n  📂 Grain Over Pixel 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/leica/products.json", "Grain Over Pixel"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        vendor = str(p.get("vendor") or "")
+        if not (re.match(r"(leica|leitz)", vendor, re.I) or re.match(r"(leica|leitz)\b", title, re.I)) or _NIGHT_OTHER.search(title):
+            continue
+        results.append(_night_row("Grain Over Pixel (독일)", base, p, _night_leica_name(title), None, _night_price(p, "€"), "EUR"))
+    print(f"  ✅ Grain Over Pixel 완료: {len(results)}개")
+    return results
+
+
+def crawl_clickundsurr():
+    """click & surr (독일 베를린) - Shopify 전체(약 650점) 중 제목이 Leica·Leitz로 시작하는 것 (중고만 파는 매장).
+    'Leitz Objektiv 2/50mm'처럼 렌즈 이름이 없는 제목은 그대로 둠. 가격 EUR, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://clickundsurr.de"
+    print(f"\n  📂 click & surr 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "click & surr"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"(leica|leitz)\b", title, re.I) or _NIGHT_OTHER.search(title):
+            continue
+        name = re.sub(r"\s+[–-]\s+", " ", title)
+        name = re.sub(r"(\d(?:\.\d)?)/(\d{2,3})\s*mm", r"\2mm f\1", name)  # '2.8/135mm' → '135mm f2.8'
+        results.append(_night_row("click & surr (독일)", base, p, name, None, _night_price(p, "€"), "EUR"))
+    print(f"  ✅ click & surr 완료: {len(results)}개")
+    return results
+
+
+def crawl_carmarthen():
+    """Carmarthen Cameras (영국 웨일스) - Shopify 'leica-masters-of-precision-optics-and-timeless-design' 컬렉션 중
+    제목이 'Used …'인 것(새 상품 제외), 판매자 Leica. 제목 끝 '(… SH45834)' 재고 번호·구성품 괄호 뗌. 가격 GBP, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.carmarthencameras.com"
+    print(f"\n  📂 Carmarthen Cameras 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/leica-masters-of-precision-optics-and-timeless-design/products.json", "Carmarthen Cameras"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"used\b", title, re.I) or str(p.get("vendor") or "").lower() != "leica":
+            continue
+        name = re.sub(r"^used\s+", "", title, flags=re.I)
+        name = re.sub(r"\s*\([^)]*SH\d+\)\s*$", "", name)
+        results.append(_night_row("Carmarthen Cameras (영국)", base, p, _night_leica_name(name), None, _night_price(p, "£"), "GBP"))
+    print(f"  ✅ Carmarthen Cameras 완료: {len(results)}개")
+    return results
+
+
+def crawl_prophotosupply():
+    """Pro Photo Supply (미국 포틀랜드) - Shopify 'used-inventory' 컬렉션 중 판매자 Leica (파나소닉 Leica DG·Voigtländer 제외).
+    'Lecia' 오타 고침. 가격 USD, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://prophotosupply.com"
+    print(f"\n  📂 Pro Photo Supply 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/used-inventory/products.json", "Pro Photo Supply"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        title = re.sub(r"\bLecia\b", "Leica", title)
+        if str(p.get("vendor") or "").lower() != "leica" or _NIGHT_OTHER.search(title):
+            continue
+        name = re.sub(r"\s+(?:Digital\s+)?(?:Rangefinder\s+)?(?:Camera|Lens)\b(?:\s+for\s+[\w-]+(?:\s+mount)?)?", " ", title, flags=re.I)
+        results.append(_night_row("Pro Photo Supply (미국)", base, p, _night_leica_name(name), None, _night_price(p, "$"), "USD"))
+    print(f"  ✅ Pro Photo Supply 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13632,6 +13902,16 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
+        ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
+        ("Grande Marvin (이탈리아)", lambda: ce.wrap_full_run("Grande Marvin (이탈리아)", crawl_grandemarvin)),
+        ("八百富写真機店 (일본)", lambda: ce.wrap_full_run("八百富写真機店 (일본)", crawl_yaotomi)),
+        ("Leica Store Brasil (브라질)", lambda: ce.wrap_full_run("Leica Store Brasil (브라질)", crawl_leicastorebr)),
+        ("Kamera Stockholm (스웨덴)", lambda: ce.wrap_full_run("Kamera Stockholm (스웨덴)", crawl_kamerastockholm)),
+        ("Grain Over Pixel (독일)", lambda: ce.wrap_full_run("Grain Over Pixel (독일)", crawl_grainoverpixel)),
+        ("click & surr (독일)", lambda: ce.wrap_full_run("click & surr (독일)", crawl_clickundsurr)),
+        ("Carmarthen Cameras (영국)", lambda: ce.wrap_full_run("Carmarthen Cameras (영국)", crawl_carmarthen)),
+        ("Pro Photo Supply (미국)", lambda: ce.wrap_full_run("Pro Photo Supply (미국)", crawl_prophotosupply)),
         ("Leica Store Manchester (영국)", lambda: ce.wrap_full_run("Leica Store Manchester (영국)", crawl_lsmanchester)),
         ("Kamera Express (룩셈부르크)", lambda: ce.wrap_full_run("Kamera Express (룩셈부르크)", crawl_kameraexpresslu)),
         ("Camera Boutique Graz (오스트리아)", lambda: ce.wrap_full_run("Camera Boutique Graz (오스트리아)", crawl_cameraboutique)),
