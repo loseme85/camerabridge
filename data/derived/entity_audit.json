@@ -9,7 +9,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 829,
+   "count": 828,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -175,6 +175,12 @@
    "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
   },
   {
+   "a": "leica:body:m240:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 92,
+   "example": "[위탁] M 240 (Black)"
+  },
+  {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:meter",
    "count": 91,
@@ -191,12 +197,6 @@
    "b": "leica:feature:black-paint",
    "count": 91,
    "example": "Leica MP BlackPaint x0.72"
-  },
-  {
-   "a": "leica:body:m240:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 91,
-   "example": "[위탁] M 240 (Black)"
   },
   {
    "a": "leica:body:m7:standard",
@@ -613,22 +613,22 @@
    "example": "[중고] MDa (S)"
   },
   {
+   "a": "leica:feature:black-paint",
+   "b": "leica:lens:summicron-m:35:asph-black-paint",
+   "count": 23,
+   "example": "LEICA 35mm F2 ASPH black paint SUMMICRON-M sn.4001"
+  },
+  {
    "a": "leica:body:cl-film",
    "b": "leica:feature:meter",
-   "count": 24,
+   "count": 23,
    "example": "LEICA CL sn.1409"
   },
   {
    "a": "leica:body:cl-film",
    "b": "leica:feature:mechanical",
-   "count": 24,
-   "example": "LEICA CL sn.1409"
-  },
-  {
-   "a": "leica:feature:black-paint",
-   "b": "leica:lens:summicron-m:35:asph-black-paint",
    "count": 23,
-   "example": "LEICA 35mm F2 ASPH black paint SUMMICRON-M sn.4001"
+   "example": "LEICA CL sn.1409"
   },
   {
    "a": "leica:feature:titanium",
