@@ -13889,6 +13889,77 @@ def crawl_grainoverpixel():
     return results
 
 
+# 2026-11-13 밤샘: click & surr (독일) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _clickundsurr_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _clickundsurr_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _clickundsurr_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab|artra|keks|k&f", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def _clickundsurr_is_leica(title, vendor=""):
+    return bool(re.search(r"\b(leica|leitz)\b|ライカ", f"{title} {vendor}", re.I)) and not _CLICKUNDSURR_OTHER.search(title)
+
+
+_CLICKUNDSURR_OTHER = re.compile(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|ttartisan|7artisans|minolta|rokkor|konica|hexanon|"
+                          r"canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|artra ?lab|keks|k&f|noname|light ?lens ?lab|pradovit.*isco|isco", re.I)
+
+
+def crawl_clickundsurr():
+    """click & surr (독일 베를린) - Shopify 전체(약 650점) 중 제목이 Leica·Leitz로 시작하는 것 (중고만 파는 매장).
+    'Leitz Objektiv 2/50mm'처럼 렌즈 이름이 없는 제목은 그대로 둠. 가격 EUR, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://clickundsurr.de"
+    print(f"\n  📂 click & surr 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "click & surr"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"(leica|leitz)\b", title, re.I) or _CLICKUNDSURR_OTHER.search(title):
+            continue
+        name = re.sub(r"\s+[–-]\s+", " ", title)
+        name = re.sub(r"(\d(?:\.\d)?)/(\d{2,3})\s*mm", r"\2mm f\1", name)  # '2.8/135mm' → '135mm f2.8'
+        results.append(_clickundsurr_row("click & surr (독일)", base, p, name, None, _clickundsurr_price(p, "€"), "EUR"))
+    print(f"  ✅ click & surr 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14064,6 +14135,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("click & surr (독일)", lambda: ce.wrap_full_run("click & surr (독일)", crawl_clickundsurr)),
         ("Grain Over Pixel (독일)", lambda: ce.wrap_full_run("Grain Over Pixel (독일)", crawl_grainoverpixel)),
         ("Kamera Stockholm (스웨덴)", lambda: ce.wrap_full_run("Kamera Stockholm (스웨덴)", crawl_kamerastockholm)),
         ("Leica Store Brasil (브라질)", lambda: ce.wrap_full_run("Leica Store Brasil (브라질)", crawl_leicastorebr)),
