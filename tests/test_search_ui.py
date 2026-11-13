@@ -763,7 +763,7 @@ def test_price_ladder_spreads_overlapping_dots_and_zooms() -> None:
 def test_price_ladder_loads_with_results_not_after() -> None:
     beta = (PROJECT_ROOT / "beta.html").read_text(encoding="utf-8")
     assert "if(!append) loadPriceLadder();" in beta  # 목록과 동시에 시작
-    assert "Promise.all([page(0), page(100), page(200)])" in beta  # 3쪽 나란히
+    assert "Promise.all(offsets.map(page))" in beta  # 필요한 쪽(매물 수만큼)을 나란히 — 2026-11-13 늘 3쪽에서 바꿈
     assert "ladderState.key === ladderKey()" in beta  # 이전 모델 그래프가 남지 않게
 
 

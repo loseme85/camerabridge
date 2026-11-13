@@ -5220,10 +5220,10 @@
           return null;
         }
       };
-      // 첫 100개를 받아 보고 더 있을 때만 이어 받음 (예전엔 세 쪽을 한꺼번에 — 매물 100개 아래 모델도 서버를 세 번 불렀음, 2026-11-13)
-      const first = await page(0);
-      const more = first && first.pagination && first.pagination.has_more;
-      const pages = [first, ...(more ? await Promise.all([page(100), page(200)]) : [])];
+      // 모델 매물 수만큼만 쪽을 나란히 받음 (예전엔 늘 세 쪽 — 매물 100개 아래 모델도 서버를 세 번 불렀음, 2026-11-13 Vercel CPU 한도)
+      const count = Number(ladderEntity().listing_count) || 300;
+      const offsets = [0, 100, 200].filter(offset => offset === 0 || offset < count);
+      const pages = await Promise.all(offsets.map(page));
       if(ladderState.key !== key) return;
       const all = [];
       pages.forEach(payload => all.push(...((payload && payload.results) || [])));
