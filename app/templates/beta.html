@@ -5158,12 +5158,12 @@
 
     // 모델을 골랐을 때 시세 칸: 정확한 버전이면 판매 완료 중앙값, '전체'나 판매 기록이 적으면 판매 중 가격대
     // 나라를 고르면 '판매 중 가격대'도 그 나라 매물로 (2026-11-13 사장님: 일본만 보는데 체코 최저가가 나옴).
-    // 모델 요약(active_price_krw)은 전 세계 기준이라, 화면에 받은 판매 중 매물(부속품 빼고)의 물건 금액으로 다시 셈
+    // 모델 요약(active_price_krw)은 전 세계 기준이라, 화면에 받은 판매 중 본 매물(부속품·대여·리페인트 빼고)의 물건 금액으로 다시 셈
     function filteredActiveRange(){
       const values = [];
       let target = '';
       getResults().forEach((result, index) => {
-        if(getMarketActivityInfo(result).section !== 'active' || priceSortGroup(result, index) === 2) return;
+        if(getMarketActivityInfo(result).section !== 'active' || priceSortGroup(result, index) !== 0) return;
         // 고른 모델(또는 그 아래 버전·기념판)에 연결된 매물만 — 모델 요약과 같은 기준
         const entityId = String((result.final_output || {}).entity || result.entity || '');
         if(entityId !== state.entity && !entityId.startsWith(state.entity + ':')) return;
@@ -7306,6 +7306,15 @@
       if(!intent.accessory_intent && (category === 'accessory' || level === 'accessory_compatible' || isAccessoryTitle(result.title))) return 2;
       // 'Leica M6'(바디)를 찾았는데 마운트만 맞은 렌즈, 'Summilux 35'(렌즈)를 찾았는데 바디
       // 모델을 골랐으면 그 모델 종류로 판단 (검색 글자만 보면 'Leica M (Typ 240)'을 렌즈 찾기로 읽어 바디가 전부 아래로 갔음, 2026-11-13)
+      // 대여 매물은 판매가 아니라 아래로 (2026-11-13: 'Leica M6 + 35mm f2 Summicron lens – Rental' €160)
+      if(/\b(rental|for rent|to rent)\b|レンタル|대여/i.test(result.title || '')) return 1;
+      // 고른 모델(또는 그 아래 버전·기념판)에 연결된 매물은 본 매물 — 리페인트·개조만 아래로.
+      // 2026-11-13 사장님: M6 '비슷한 물건'에 정상 매물 — 기념판 바디+렌즈 세트(분류는 렌즈) 30개, 시세 계산용 '가격 이상치' 표시가 붙은 M6 11개가 아래로 갔음.
+      // 시세 계산에서 빼는 표시(이상치·세트·버전 경계)는 시세에만 쓰고 목록 위치에는 쓰지 않음
+      const pickedEntityId = String((result.final_output || {}).entity || result.entity || '');
+      if(state.entity && (pickedEntityId === state.entity || pickedEntityId.startsWith(state.entity + ':'))){
+        return /(repaint|repainted|modified|custom|改造)/i.test(result.title || '') ? 1 : 0;
+      }
       const pickedKind = (String(state.entity || '').match(/^leica:(body|lens):/) || [])[1] || '';
       const wantsBody = pickedKind ? pickedKind === 'body' : (Boolean(intent.body_intent) && !intent.focal_length);
       const wantsLens = pickedKind ? pickedKind === 'lens' : (!intent.body_intent && Boolean(intent.focal_length || intent.model_family));
