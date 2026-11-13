@@ -13455,7 +13455,6 @@ def crawl_lsmanchester():
                                   describe_text(body), _lsmanchester_price(p, "£"), "GBP"))
     print(f"  ✅ Leica Store Manchester 완료: {len(results)}개")
     return results
-
 # ══════════════════════════════════════════════════════
 # 2026-11-13 밤샘: Shopify 매장 (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
 # ══════════════════════════════════════════════════════
@@ -13594,7 +13593,10 @@ def crawl_yaotomi():
         title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
         # 제목이 ライカ·ライツ·Leica·Leitz로 시작하는 것만 (シュナイダー 'Leica Rマウント' 렌즈·RAYQUAL 어댑터·현미경 등 제외)
         title = re.sub(r"^(?:販売済み|SOLD)\s*", "", title)
-        if not re.match(r"(ライカ|ライツ|leica|leitz)", title, re.I) or re.search(r"顕微鏡|マイクロスコープ|マウントアダプター|Adapter", title, re.I):
+        if not re.search(r"ライカ|ライツ|\bleica\b|\bleitz\b", title, re.I):
+            continue
+        if re.search(r"シュナイダー|メイヤー|レイコール|ハンザ|RAYQUAL|K&F|Schneider|Meyer|Hansa|顕微鏡|マイクロスコープ|マウントアダプター|Adapter|"
+                     r"Lマウント用|for (?:Schneider|Meyer)|ソニー|ニコン|キヤノン|パナソニック|シグマ|フォクトレンダー", title, re.I):
             continue
         tags = " ".join(p.get("tags") or [])
         grade = re.search(r"(新品同様|極上品|美品|並品|良品|難あり|ジャンク|AB|A\+|A|B|C)(?:ランク)?", tags)
