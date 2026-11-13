@@ -266,3 +266,15 @@ def test_foreign_language_bundles_stay_main_item() -> None:
         ("Leica X1 (18400)", "Body"),
     ]:
         assert _classify(title)["category"] == category, title
+
+
+def test_foreign_parts_and_manuals() -> None:
+    # 2026-11-13 판매 중 가격대 점검: 바디 최저가가 이런 것이었음
+    for title in [
+        "Leica Schnelladespule f. M1 M2 M3 MD & OVP 14260",
+        "Leitz Wetzlar Visiflex II Spiegelkasten",
+        'Leica Borsetta "Andrea" C-Lux in pelle Black',
+        "Leica Anastigmat Anleitung von 1928 wie arbeitet man mit Leica Kamera",
+    ]:
+        assert _classify(title)["category"] == "Accessory", title
+    assert _classify("Leica M6 0.72 mit Anleitung und Box")["category"] == "Body"

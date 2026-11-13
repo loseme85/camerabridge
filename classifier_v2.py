@@ -968,6 +968,9 @@ _FOREIGN_ACC_KW = (
     "akku", "ladegerät", "ladegeraet", "tasche", "etui", "étui", "sacoche", "chargeur",
     "custodia", "borsa", "batteria", "caricabatterie", "funda", "cargador",
     "バッテリー", "充電器", "ケース",
+    # 2026-11-13 전체 점검: 판매 중 가격대 최저가가 이런 부속품·부품이었음 (M1~M3·MD 최저가가 필름 빨리 감는 스풀 등)
+    "anleitung", "schnelladespule", "ladespule", "zwischenring", "naheinstell", "nahvorsatz", "spiegelkasten",
+    "visiflex", "borsetta", "barilotto", "senza lenti", "schild oskar",
 )
 _FOREIGN_BUNDLE_BEFORE = r"(?:\bmit\b|\bwith\b|\bund\b|\bavec\b|\bet\b|\bcon\b|\by\b|\+|&|,|付き|付属|포함)"
 

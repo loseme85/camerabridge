@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import re
 import statistics
 import sys
 from pathlib import Path
@@ -189,6 +190,9 @@ def _home_quiz(records: list, catalog: dict, skip: set, to_krw: dict) -> list:
     return picked
 
 
+_NOT_FOR_PRICE = re.compile(r"Kamerastore: issue\b|for (?:restoration|repair)|\brestoration\b|lens head only|senza lenti|without (?:glass|optics)", re.I)
+
+
 def main() -> None:
     payload = json.loads(INDEX.read_text(encoding="utf-8"))
     records = payload["records"]
@@ -228,7 +232,9 @@ def main() -> None:
         grade = grade_of(final.get("source"), final.get("condition_raw"), final.get("title_raw"))[0] or final.get("image_grade")
         # 너무 싼 매물, 고장·부품용(X)은 가격 범위·시세에서 뺌 (매물 수에는 넣음).
         # 2026-11-12: Leica Store France M5 '부품용' 790€가 M5 최저가로 보이던 것
-        krw = price * rate if price and rate and id(record) not in too_cheap and grade != "X" else None
+        # 2026-11-13 전체 점검: 하자 매물(Kamerastore 'issue' = 곰팡이·심한 흐림·작동 문제)·수리용·유리 없는 경통도 가격 범위·시세에서 뺌
+        defect = bool(_NOT_FOR_PRICE.search(f"{final.get('condition_raw') or ''} {final.get('title_raw') or ''}"))
+        krw = price * rate if price and rate and id(record) not in too_cheap and grade != "X" and not defect else None
         prefix = "set_" if id(record) in sets else ""
         for eid in record.get("entity_ids") or []:
             s = stats[eid]
