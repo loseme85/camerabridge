@@ -244,3 +244,25 @@ def test_enlarger_lens_and_film_cassette_are_accessory() -> None:
         assert _classify(title)["category"] == "Accessory", title
     # 'Rapid Load' 장치가 붙은 M3 바디는 그대로 바디
     assert _classify("Leica M3 Single Stroke Rapid Load")["category"] == "Body"
+
+
+def test_foreign_language_accessory_words() -> None:
+    # 2026-11-13: X1 검색에 독일어 배터리·가죽 케이스가 바디로 섞임
+    for title in [
+        "Leica Akku für Leica X1 X2 BP-DC8 18706",
+        "Leica Ledertasche für X1 18709",
+        "Leica Bereitschaftstasche M / M-P (Typ 240) 14890",
+        "Leica Ladegerät BC-SCL6",
+        "Etui Leica X2",
+        "Custodia in pelle Leica X1",
+    ]:
+        assert _classify(title)["category"] == "Accessory", title
+
+
+def test_foreign_language_bundles_stay_main_item() -> None:
+    for title, category in [
+        ("Leica M10 + Akku + Ladegerät", "Body"),
+        ("Leica X1 mit Tasche und Akku", "Body"),
+        ("Leica X1 (18400)", "Body"),
+    ]:
+        assert _classify(title)["category"] == category, title
