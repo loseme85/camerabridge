@@ -1,8 +1,8 @@
 {
   "git": {
     "deploymentEnabled": {
-      "site-test/**": false,
-      "source-*": false
+      "**": false,
+      "main": true
     }
   },
   "functions": {
