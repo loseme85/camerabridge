@@ -13605,6 +13605,79 @@ def crawl_artralab():
     return results
 
 
+# 2026-11-13 밤샘: Grande Marvin (이탈리아) (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+def _grandemarvin_row(site, base, p, name, condition, price, currency):
+    """Shopify 상품 → 행 (밤샘 매장 공통 모양)"""
+    cat = detect_category(name, price)
+    img = p["images"][0].get("src", "") if p.get("images") else ""
+    return {
+        "게시일": _shopify_listed(p),
+        "site": site,
+        "label": auto_label(name),
+        "상품명": name,
+        "세대": detect_generation(name),
+        "컨디션": condition or "정보없음",
+        "가격": price,
+        "통화": currency,
+        "이미지": img,
+        "링크": f"{base}/products/{p['handle']}",
+        "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+        "예약중": False,
+        "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+        "category": cat,
+        "brand": detect_brand(name),
+    }
+
+
+def _grandemarvin_price(p, sign):
+    try:
+        return f"{sign}{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+    except (TypeError, ValueError):
+        return "문의요망"
+
+
+def _grandemarvin_leica_name(title):
+    """브랜드 없는 제목에 'Leica'를 붙임. 다른 회사 렌즈(Nokton·Biogon 등)에는 안 붙임"""
+    title = re.sub(r"\s+", " ", title).strip(" -,")
+    if re.match(r"(?:leica|leitz)\b", title, re.I):
+        return title
+    if re.search(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|\bZM\b|\bVM\b|ttartisan|7artisans|minolta|rokkor|"
+                 r"konica|hexanon|canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|light ?lens ?lab|artra|keks|k&f", title, re.I):
+        return title
+    return "Leica " + title
+
+
+def _grandemarvin_is_leica(title, vendor=""):
+    return bool(re.search(r"\b(leica|leitz)\b|ライカ", f"{title} {vendor}", re.I)) and not _GRANDEMARVIN_OTHER.search(title)
+
+
+_GRANDEMARVIN_OTHER = re.compile(r"voigtl|nokton|ultron|heliar|skopar|zeiss|biogon|planar|sonnar|distagon|ttartisan|7artisans|minolta|rokkor|konica|hexanon|"
+                          r"canon|nikon|cosina|sigma|panasonic|lumix|olympus|fuji|sony|kodak|artra ?lab|keks|k&f|noname|light ?lens ?lab|pradovit.*isco|isco", re.I)
+
+
+def crawl_grandemarvin():
+    """Grande Marvin (이탈리아 토리노) - Shopify 전체(약 2,500점) 중 상품 종류 'Usato'이고 제목이 LEICA·LEITZ로 시작하는 것
+    (파나소닉 Leica DG·미놀타 'LEICA M' 렌즈 제외). 제목 끝 ' - USATO …' 뗌. 가격 EUR, 등급 표기 없음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://grandemarvin.com"
+    print(f"\n  📂 Grande Marvin 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Grande Marvin"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if str(p.get("product_type") or "").lower() != "usato" or not re.match(r"(leica|leitz)\b", title, re.I):
+            continue
+        if _GRANDEMARVIN_OTHER.search(title):
+            continue
+        name = re.sub(r"\s*-\s*USATO\b.*$", "", title, flags=re.I)
+        name = re.sub(r"\bF\s+(\d)", r"f\1", name)  # 'F 4.0' → 'f4.0'
+        results.append(_grandemarvin_row("Grande Marvin (이탈리아)", base, p, name, None, _grandemarvin_price(p, "€"), "EUR"))
+    print(f"  ✅ Grande Marvin 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -13780,6 +13853,7 @@ def crawl_all():
         ("カメラコレクション (일본)", lambda: ce.wrap_full_run("カメラコレクション (일본)", crawl_cameracollection)),
         ("サンライズカメラ (일본)", lambda: ce.wrap_full_run("サンライズカメラ (일본)", crawl_sunrise)),
         ("モリッツ (일본)", lambda: ce.wrap_full_run("モリッツ (일본)", crawl_moritz)),
+        ("Grande Marvin (이탈리아)", lambda: ce.wrap_full_run("Grande Marvin (이탈리아)", crawl_grandemarvin)),
         ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
         ("Leica Store Manchester (영국)", lambda: ce.wrap_full_run("Leica Store Manchester (영국)", crawl_lsmanchester)),
