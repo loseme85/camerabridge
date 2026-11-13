@@ -13456,7 +13456,6 @@ def crawl_lsmanchester():
     print(f"  ✅ Leica Store Manchester 완료: {len(results)}개")
     return results
 
-
 # ══════════════════════════════════════════════════════
 # 2026-11-13 밤샘: Shopify 매장 (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
 # ══════════════════════════════════════════════════════
@@ -13593,7 +13592,9 @@ def crawl_yaotomi():
     print(f"\n  📂 八百富 크롤링 시작")
     for p in _shopify_all(sess, f"{base}/collections/used/products.json", "八百富"):
         title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
-        if not _night_is_leica(title, p.get("vendor") or ""):
+        # 제목이 ライカ·ライツ·Leica·Leitz로 시작하는 것만 (シュナイダー 'Leica Rマウント' 렌즈·RAYQUAL 어댑터·현미경 등 제외)
+        title = re.sub(r"^(?:販売済み|SOLD)\s*", "", title)
+        if not re.match(r"(ライカ|ライツ|leica|leitz)", title, re.I) or re.search(r"顕微鏡|マイクロスコープ|マウントアダプター|Adapter", title, re.I):
             continue
         tags = " ".join(p.get("tags") or [])
         grade = re.search(r"(新品同様|極上品|美品|並品|良品|難あり|ジャンク|AB|A\+|A|B|C)(?:ランク)?", tags)
@@ -13659,7 +13660,8 @@ def crawl_grainoverpixel():
         vendor = str(p.get("vendor") or "")
         if not (re.match(r"(leica|leitz)", vendor, re.I) or re.match(r"(leica|leitz)\b", title, re.I)) or _NIGHT_OTHER.search(title):
             continue
-        results.append(_night_row("Grain Over Pixel (독일)", base, p, _night_leica_name(title), None, _night_price(p, "€"), "EUR"))
+        name = re.sub(r"\b(Summicron|Summilux|Elmarit|Elmar|Telyt|Super-Angulon|Summarit|Macro-Elmar)\s+([RM])\b", r"\1-\2", title)  # 'Summicron R 50mm' → 'Summicron-R 50mm'
+        results.append(_night_row("Grain Over Pixel (독일)", base, p, _night_leica_name(name), None, _night_price(p, "€"), "EUR"))
     print(f"  ✅ Grain Over Pixel 완료: {len(results)}개")
     return results
 
@@ -13686,8 +13688,8 @@ def crawl_clickundsurr():
 
 
 def crawl_carmarthen():
-    """Carmarthen Cameras (영국 웨일스) - Shopify 'leica-masters-of-precision-optics-and-timeless-design' 컬렉션 중
-    제목이 'Used …'인 것(새 상품 제외), 판매자 Leica. 제목 끝 '(… SH45834)' 재고 번호·구성품 괄호 뗌. 가격 GBP, 등급 표기 없음"""
+    """Carmarthen Cameras (영국 웨일스) - Shopify 전체(약 3,500점) 중 제목이 'Used …'이고 판매자 Leica 또는 제목에 Leica·Leitz
+    (Voigtländer 'Leica M' 렌즈·Keks 등 제외). 제목 끝 '(… SH45834)' 재고 번호·구성품 괄호 뗌. 가격 GBP, 등급 표기 없음"""
     import html as _html
     import requests
     results = []
@@ -13695,9 +13697,13 @@ def crawl_carmarthen():
     sess.headers["User-Agent"] = random.choice(USER_AGENTS)
     base = "https://www.carmarthencameras.com"
     print(f"\n  📂 Carmarthen Cameras 크롤링 시작")
-    for p in _shopify_all(sess, f"{base}/collections/leica-masters-of-precision-optics-and-timeless-design/products.json", "Carmarthen Cameras"):
+    for p in _shopify_all(sess, f"{base}/products.json", "Carmarthen Cameras"):
         title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
-        if not re.match(r"used\b", title, re.I) or str(p.get("vendor") or "").lower() != "leica":
+        if not re.match(r"used\b", title, re.I):
+            continue
+        if not (str(p.get("vendor") or "").lower() in ("leica", "leitz") or re.search(r"\bused\s+(leica|leitz)\b", title, re.I)) or _NIGHT_OTHER.search(title):
+            continue
+        if re.search(r"binocular|ultravid|trinovid|noctivid|geovid|rangemaster|scope", title, re.I):
             continue
         name = re.sub(r"^used\s+", "", title, flags=re.I)
         name = re.sub(r"\s*\([^)]*SH\d+\)\s*$", "", name)
