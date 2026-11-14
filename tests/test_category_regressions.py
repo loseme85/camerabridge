@@ -56,3 +56,18 @@ def test_main_item_with_accessory_tail_is_main_item() -> None:
     }
     for title, want in cases.items():
         assert classify_listing_v2({"상품명": title, "가격": 0, "통화": "", "site": "", "description": ""})["category"] == want, title
+
+
+def test_main_item_with_accessory_links_to_its_model() -> None:
+    """'렌즈 + Lens Hood'·'바디 with Extra Battery'는 그 모델에 붙고, '바디 + 렌즈' 세트는 한쪽 모델에만 붙지 않는다."""
+    from entity_catalog import load_catalog, match_entities
+
+    catalog = load_catalog()
+
+    def ids(title: str, category: str) -> list[str]:
+        return match_entities({"final_output": {"title_raw": title, "category": category}}, catalog)
+
+    assert "leica:lens:noctilux-m:50:f1.0" in ids("Leica 50mm f1 Noctilux-M (Type III) (11821) + Lens Hood (50mm f1) (12544)", "Lens")
+    assert "leica:lens:summilux-r:50" in ids("Leica Leitz Summilux-R 50mm f/1.4 3cam + 12508 hood", "Lens")
+    assert "leica:body:sl2-s" in ids("Used Leica SL2-S with Extra Battery", "Body")
+    assert "leica:body:r7" not in ids("Leica R7 + Leitz Elmarit-R 35mm f2.8", "Body")

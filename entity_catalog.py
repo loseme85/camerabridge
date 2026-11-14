@@ -273,6 +273,13 @@ ACCESSORY_FOR = re.compile(
     r"|close[- ]?(?:focus|up)\s+device|\bSOOKY\b|\bADVOO|ghiera|diaframma|treppiede|parasoleil", re.I)
 
 
+# classifier_v2._BUNDLE_SPLIT과 같은 묶음말 (검색 쪽은 분류기를 불러오지 않으므로 따로 둠)
+BUNDLE_LENS_NAME = re.compile(r"summ|elmar|noctilux|hektor|telyt|angulon|rokkor|thambar|\bapo\b", re.I)
+BUNDLE_ACC_TAIL = re.compile(r"hood|shade|filter|adapter|adattat|finder|sucher|case|cap\b|tappo|tube|visoflex|ring|grip|"
+                             r"후드|필터|フード|フィルター|occhialini|glasses|follow focus", re.I)
+BUNDLE_SPLIT = re.compile(r"\s(?:\+|&(?!\s*\d)|with|w/|mit|und|avec|con|plus)\s|\s?\+\s?(?=[a-z])|付き?|付属", re.I)
+
+
 def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> list[str]:
     """매물이 해당하는 엔티티 ID들 (자식 + 그 부모)."""
     catalog = catalog or load_catalog()
@@ -287,6 +294,17 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
         hits = _rule_hits(catalog, {**final, "category": "Lens"}, title)
     if not hits:
         hits = _code_hits(title, final, catalog)
+    if not hits and final.get("category") in ("Lens", "Body"):
+        # 본품 + 구성품 ('Summicron-M ASPH. (11879) + Lens Hood (12526)'·'M10 with Extra Battery'): 뒤의 후드·배터리 말 때문에
+        # 모델 규칙(must_not)·번호 연결(NOT_THE_ITEM)이 막히므로 묶음말 앞부분으로 다시 본다 (2026-11-14, 분류는 classifier_v2 bundle_head)
+        split = BUNDLE_SPLIT.search(title)
+        tail = title[split.end():] if split else ""
+        # 뒤가 렌즈면 바디+렌즈 세트 ('R4 + Summilux-R 50mm'·'CL with 18-56mm') — 한쪽 모델에만 붙이면 시세가 오르므로 붙이지 않음.
+        # 후드·필터 설명의 초점거리('+ Lens Hood (35mm f1.4-2)')는 렌즈가 아님
+        lens_tail = (LENS_IN_TITLE.search(tail) or BUNDLE_LENS_NAME.search(tail)) and not BUNDLE_ACC_TAIL.search(tail)
+        if split and split.start() >= 6 and not lens_tail:
+            head = title[:split.start()]
+            hits = _rule_hits(catalog, final, head) or _code_hits(head, final, catalog)
     for i, hit in enumerate(hits):
         if hit in PRICE_SPLIT:
             cheaper, limit, marked = PRICE_SPLIT[hit]
