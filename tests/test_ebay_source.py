@@ -104,6 +104,7 @@ def test_ebay_browse_normalization_preserves_fields_and_rejects_expired_duplicat
             "EBAY_CLIENT_ID": "client-id",
             "EBAY_CLIENT_SECRET": "client-secret",
             "EBAY_MARKETPLACE_ID": "EBAY_US",
+            "EBAY_TRUSTED_SELLERS_ONLY": "false",
         },
         clear=True,
     ):
@@ -192,6 +193,41 @@ def test_ebay_timeout_is_fail_soft() -> None:
     assert response["status"] == "timeout"
     assert response["records"] == []
     assert response["diagnostics"]["error_code"] == "browse_timeout"
+
+
+def test_ebay_keeps_only_trusted_fixed_price_sellers_and_sends_affiliate_header() -> None:
+    """기본값: 피드백 99% 이상·500 이상, 경매·부품용 제외, 카메라 카테고리, EPN 캠페인 헤더."""
+    clear_ebay_caches()
+    seen: dict = {}
+
+    def fake_post(*args, **kwargs):
+        return _token_response()
+
+    def fake_get(*args, **kwargs):
+        seen.update(kwargs)
+        return _FakeResponse(200, _fixture_payload())
+
+    with patch.dict(
+        os.environ,
+        {
+            "EBAY_ACTIVE_LISTINGS_ENABLED": "true",
+            "EBAY_CLIENT_ID": "client-id",
+            "EBAY_CLIENT_SECRET": "client-secret",
+            "EBAY_EPN_CAMPAIGN_ID": "5338000000",
+        },
+        clear=True,
+    ):
+        response = search_active_listings(
+            "Leica M10", limit=10, now=dt.datetime(2026, 8, 5, 0, 0, tzinfo=dt.timezone.utc), post=fake_post, get=fake_get,
+        )
+
+    reasons = response["diagnostics"]["rejected_reasons"]
+    assert [r["final_output"]["seller"] for r in response["records"]] == ["rangefinder_store"]
+    assert reasons["auction_only"] == 1  # M11-P 경매
+    assert reasons["seller_feedback_percent"] == 3  # 98.9%·98.4%·97.1%
+    assert "buyingOptions:{FIXED_PRICE}" in seen["params"]["filter"]
+    assert seen["params"]["category_ids"] == "625"
+    assert seen["headers"]["X-EBAY-C-ENDUSERCTX"].startswith("affiliateCampaignId=5338000000")
 
 
 if __name__ == "__main__":

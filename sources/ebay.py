@@ -27,7 +27,13 @@ EBAY_BROWSE_SEARCH_URL = "https://api.ebay.com/buy/browse/v1/item_summary/search
 DEFAULT_MARKETPLACE_ID = "EBAY_US"
 DEFAULT_TIMEOUT_SECONDS = 4.5
 TOKEN_EXPIRY_SKEW_SECONDS = 90
-SEARCH_CACHE_TTL_SECONDS = 45
+SEARCH_CACHE_TTL_SECONDS = 3600  # 2026-11-14: 같은 검색어는 1시간 — eBay 하루 호출 한도(5,000)·Vercel CPU 아끼기 (EBAY_CACHE_SECONDS로 바꿈)
+# 우량 판매자만 (2026-11-14 사장님: eBay는 개인 판매도 섞여 있어 피드백 99% 이상·점수 500 이상 판매자만)
+DEFAULT_MIN_FEEDBACK_PERCENT = 99.0
+DEFAULT_MIN_FEEDBACK_SCORE = 500
+# 카메라·사진(625) 안에서, 경매 빼고(즉시 구매가만), 부품용(7000) 뺀 상태만
+DEFAULT_CATEGORY_IDS = "625"
+USED_CONDITION_FILTER = "conditionIds:{1000|1500|2000|2010|2020|2030|2500|2750|3000|4000|5000|6000}"
 TOKEN_SCOPE = "https://api.ebay.com/oauth/api_scope"
 ENABLED_VALUES = {"1", "true", "yes", "on"}
 
@@ -63,6 +69,42 @@ def _bool_env(key: str) -> bool:
 
 def _marketplace_id(value: str | None = None) -> str:
     return str(value or os.getenv("EBAY_MARKETPLACE_ID") or DEFAULT_MARKETPLACE_ID).strip() or DEFAULT_MARKETPLACE_ID
+
+
+def _float_env(key: str, default: float) -> float:
+    try:
+        return float(str(os.getenv(key) or "").strip() or default)
+    except ValueError:
+        return default
+
+
+def _trusted_sellers_only() -> bool:
+    return str(os.getenv("EBAY_TRUSTED_SELLERS_ONLY") or "true").strip().lower() in ENABLED_VALUES
+
+
+def _cache_seconds() -> int:
+    return int(_float_env("EBAY_CACHE_SECONDS", SEARCH_CACHE_TTL_SECONDS))
+
+
+def _trust_rejection(seller: Any, buying_options: list[str], condition_id: str) -> str | None:
+    """우량 판매자·즉시 구매·부품용 아님. 통과하면 None."""
+    if not _trusted_sellers_only():
+        return None
+    if buying_options and "FIXED_PRICE" not in buying_options:
+        return "auction_only"
+    if condition_id == "7000":
+        return "for_parts"
+    info = seller if isinstance(seller, dict) else {}
+    try:
+        percent = float(str(info.get("feedbackPercentage")))
+        score = int(float(str(info.get("feedbackScore"))))
+    except (TypeError, ValueError):
+        return "seller_unknown"
+    if percent < _float_env("EBAY_MIN_FEEDBACK_PERCENT", DEFAULT_MIN_FEEDBACK_PERCENT):
+        return "seller_feedback_percent"
+    if score < _float_env("EBAY_MIN_FEEDBACK_SCORE", DEFAULT_MIN_FEEDBACK_SCORE):
+        return "seller_feedback_score"
+    return None
 
 
 def _credentials() -> tuple[str, str]:
@@ -255,6 +297,9 @@ def _normalize_browse_item(
     condition_label = str(item.get("condition") or "").strip()
     condition_id = str(item.get("conditionId") or "").strip()
     condition_raw = condition_label or condition_id
+    trust_reason = _trust_rejection(seller, buying_options_list, condition_id)
+    if trust_reason:
+        return None, trust_reason
     seller_name = _seller_display_name(seller)
     created_at = _parse_timestamp(item.get("itemCreationDate") or item.get("itemOriginDate"))
     created_iso = created_at.isoformat() if created_at else ""
@@ -408,6 +453,13 @@ def search_active_listings(
         "X-EBAY-C-MARKETPLACE-ID": marketplace,
     }
     params = {"q": query, "limit": effective_limit}
+    if _trusted_sellers_only():
+        params["filter"] = f"buyingOptions:{{FIXED_PRICE}},{USED_CONDITION_FILTER}"
+        params["category_ids"] = str(os.getenv("EBAY_CATEGORY_IDS") or DEFAULT_CATEGORY_IDS).strip()
+    # eBay Partner Network: 캠페인 ID가 있으면 결과에 제휴 링크(itemAffiliateWebUrl)가 오고 화면은 그 링크로 보냄
+    campaign_id = str(os.getenv("EBAY_EPN_CAMPAIGN_ID") or "").strip()
+    if campaign_id:
+        headers["X-EBAY-C-ENDUSERCTX"] = f"affiliateCampaignId={campaign_id},affiliateReferenceId=camerabridge"
     http_get = get or requests.get
 
     def _run_search_request(headers_override: dict[str, str]) -> requests.Response:
@@ -508,7 +560,7 @@ def search_active_listings(
     _SEARCH_CACHE[cache_key] = {
         "records": deepcopy(records),
         "diagnostics": deepcopy(diagnostics),
-        "expires_at": requested_at + dt.timedelta(seconds=SEARCH_CACHE_TTL_SECONDS),
+        "expires_at": requested_at + dt.timedelta(seconds=_cache_seconds()),
     }
 
     return {
