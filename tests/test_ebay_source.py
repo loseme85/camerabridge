@@ -245,6 +245,26 @@ def test_live_ebay_records_survive_candidate_narrowing() -> None:
         assert live in selected
 
 
+def test_ebay_skips_sellers_we_already_crawl_as_shops() -> None:
+    """mkkcamera(M & K Kamera) 같은 매장의 eBay 매물은 빼고 매장 직접 매물만 (중복 방지)."""
+    clear_ebay_caches()
+    payload = _fixture_payload()
+    payload["itemSummaries"][0]["seller"]["username"] = "MKKCamera"
+
+    with patch.dict(
+        os.environ,
+        {"EBAY_ACTIVE_LISTINGS_ENABLED": "true", "EBAY_CLIENT_ID": "client-id", "EBAY_CLIENT_SECRET": "client-secret"},
+        clear=True,
+    ):
+        response = search_active_listings(
+            "Leica M10", limit=10, now=dt.datetime(2026, 8, 5, 0, 0, tzinfo=dt.timezone.utc),
+            post=lambda *a, **k: _token_response(), get=lambda *a, **k: _FakeResponse(200, payload),
+        )
+
+    assert response["diagnostics"]["rejected_reasons"]["seller_is_crawled_shop"] == 1
+    assert all(r["final_output"]["seller"] != "MKKCamera" for r in response["records"])
+
+
 if __name__ == "__main__":
     test_ebay_disabled_by_default()
     test_ebay_missing_credentials_is_fail_soft()
