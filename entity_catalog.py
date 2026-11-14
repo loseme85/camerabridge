@@ -24,6 +24,10 @@ PRICE_SPLIT = {
     "leica:lens:summicron-m:28:asph:unspecified": ("leica:lens:summicron-m:28:asph:v1", 5_000_000, re.compile(r"(?!)")),
     # CL: 필름(1973) 표기 없는 매물 중 170만 원 미만은 필름 CL (필름 약 60만~145만, 디지털 2017 약 190만~300만 원).
     # 디지털 표기(TL 렌즈·킷·19301 번호 등)가 있으면 가격 무시. 가격이 없으면('문의요망') 디지털 그대로
+    # 주미룩스 50 블랙 페인트: 복각(11713, 2021) 약 700만~900만 원, 1960년대 원판 2,000만 원 이상. 표기 없이 1,200만 원 미만은 복각
+    # (시세 이탈 2차 2026-11-15: 'GlossyBlackPaint[11713]' 0.42배·'OriginalBlackPaint 真鍮マウント' 2.6배가 한 칸에)
+    "leica:lens:summilux-m:50:black-paint": ("leica:lens:summilux-m:50:black-paint-reissue", 12_000_000,
+                                             re.compile(r"original|오리지널|원판|オリジナル|真鍮|brass|196\d|195\d|4th|v4|11623|200[0-9]|millen", re.I)),
     "leica:body:cl-digital:standard": ("leica:body:cl-film", 1_700_000,
                                        re.compile(r"\bTL\b|-TL\b|1930\d|kit|킷|digital|디지털|2017|18-5[06]|sigma|urban", re.I)),
 }
@@ -294,6 +298,9 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
         hits = _rule_hits(catalog, {**final, "category": "Lens"}, title)
     if not hits:
         hits = _code_hits(title, final, catalog)
+    # '세대 미지정'에 붙었는데 제목에 형제 버전의 제품 번호가 있으면 그 버전으로 ('Elmarit 90mm (11129)' → 1세대,
+    # 'Summicron 35 (11308)' → 8매 등). 시세 이탈 2차 점검 2026-11-15: 미지정 칸에 세대가 섞여 시세 폭이 넓어짐
+    hits = [_code_refined(hit, title, catalog) for hit in hits]
     if not hits and final.get("category") in ("Lens", "Body"):
         # 본품 + 구성품 ('Summicron-M ASPH. (11879) + Lens Hood (12526)'·'M10 with Extra Battery'): 뒤의 후드·배터리 말 때문에
         # 모델 규칙(must_not)·번호 연결(NOT_THE_ITEM)이 막히므로 묶음말 앞부분으로 다시 본다 (2026-11-14, 분류는 classifier_v2 bundle_head)
@@ -312,6 +319,27 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
             if krw and krw < limit and not marked.search(title):
                 hits[i] = cheaper
     return _with_parents(list(dict.fromkeys(hits)), catalog, title)
+
+
+GENERATION_NAME = re.compile(r"\b(1st|2nd|3rd|4th|5th|6th|gen|generation|version|elements?)\b", re.I)
+
+
+def _code_refined(hit: str, title: str, catalog: dict[str, Any]) -> str:
+    if not hit.endswith(":unspecified") or NOT_THE_ITEM.search(title):
+        return hit
+    ents = catalog["entities"]
+    parent = ents.get(hit, {}).get("parent")
+    if not parent:
+        return hit
+    found = CODE_IN_TITLE.findall(title) + [w.lower().replace("-", " ") for w in CODE_WORD_IN_TITLE.findall(title)]
+    picks = set()
+    for number in found:
+        owners = catalog.get("codes", {}).get(number) or []
+        # 세대 버전만 (한정판·사파리 같은 판은 번호만으로 정하지 않음 — 카탈로그 번호가 판마다 확실하지 않음)
+        if (len(owners) == 1 and ents.get(owners[0], {}).get("parent") == parent and owners[0] != hit
+                and GENERATION_NAME.search(ents[owners[0]].get("name") or "")):
+            picks.add(owners[0])
+    return picks.pop() if len(picks) == 1 else hit
 
 
 def _rule_hits(catalog: dict[str, Any], final: dict, title: str) -> list[str]:
