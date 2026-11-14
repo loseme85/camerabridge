@@ -1026,7 +1026,21 @@ _BARNACK_BODY_KW = [
     "barnack", "leica iiif", "leica iiig", "leica iiic",
     "leica iiia", "leica iiib", "leica standard",
     "leica iif", "leica if",
+    # 2026-11-14 시세 이탈 점검: 'Leica A型 Black (New Elmar 50mm付)'·'DRP … Sucherkamera mit Elmar'가 렌즈(Elmar 50)로 감
+    "leica a型", "leica c型", "sucherkamera", "leica ia ", "leica ic ", "leica i c ",
 ]
+
+# 본품이 아닌 것이 분명한 말 (2026-11-14 시세 이탈 점검): 바르낙 바디·콤팩트 판단보다 먼저 부속품으로.
+# 'Leica IIIc 取扱説明書'·'Leica MP for 巻き戻しクランク'·'FONDELLO LEICA M MONOCHROM'·'Leica M2 M3 black paint back door' 등.
+# 본품 뒤 구성품('M4 with Anleitung', 'Leicaflex mit Balgen')은 본품 그대로 (_FOREIGN_BUNDLE_BEFORE)
+_STRONG_ACC_KW = (
+    "説明書", "取説", "bedienungsanleitung", "anleitung", "brochure", "prospekt", "katalog",
+    "rückspulhebel", "ruckspulhebel", "rückspul", "fondello", "protektor", "multifunktionsprotektor", "視度",
+    "andruckplatte", "back door", "sonnenblende", "zubehör", "ersatzteile", "spare part", "dreifuß", "dreifuss", "stativ",
+    "kompaktblitz", "巻き戻し", "ポーチ", "サムサポート", "repose pouce", "handgriff", "extension tube", "zwischenring",
+    "balgen", "bellows", "schild oskar", "dummy", "werbung", "advertising", "blinkdisplay", "uhr kamera", "watch camera",
+    "deckkappe", "bodenplatte", "for case", "for 革case", "for 革ケース", "box für", "box for leica", "empty box", "box only", "元箱のみ",
+)
 
 
 _FX_FALLBACK_KRW = {"KRW": 1.0, "JPY": 9.0, "USD": 1350.0, "GBP": 1780.0, "EUR": 1500.0}
@@ -1099,6 +1113,17 @@ def detect_category(
         if code in combined:
             reasons.append(f"acc_code:{code}")
             return {"category": "Accessory", "category_confidence": 0.99, "category_reason": reasons}
+
+    # ── 0.3순위: 본품이 아닌 것이 분명한 말 → Accessory (바르낙·콤팩트 바디 판단보다 먼저) ──
+    for kw in _STRONG_ACC_KW:
+        at = combined.find(kw)
+        before = combined[max(0, at - 40):at]
+        # 본품 뒤 구성품('… w/ 1:1 Extension tube')이나 '… 100/4 (for bellows)'처럼 부속품용 본품이면 본품 그대로
+        # ('for'는 영어 단어에만 — 일본어 제목은 'Q2 for サムサポート'처럼 'for' 뒤가 부속품)
+        guard = _FOREIGN_BUNDLE_BEFORE + r"|\bw/" + (r"|\bfor\b[^a-z]{0,3}(?:macro\s+)?$" if kw.isascii() else "")
+        if at >= 0 and not re.search(guard, before):
+            reasons.append(f"strong_acc_kw:{kw}")
+            return {"category": "Accessory", "category_confidence": 0.95, "category_reason": reasons}
 
     # ── 0.5순위: Barnack 바디 강제 → Body (렌즈 키워드보다 우선) ──
     for kw in _BARNACK_BODY_KW:
