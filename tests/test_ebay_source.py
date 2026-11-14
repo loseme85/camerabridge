@@ -230,6 +230,21 @@ def test_ebay_keeps_only_trusted_fixed_price_sellers_and_sends_affiliate_header(
     assert seen["headers"]["X-EBAY-C-ENDUSERCTX"].startswith("affiliateCampaignId=5338000000")
 
 
+def test_live_ebay_records_survive_candidate_narrowing() -> None:
+    """후보 좁히기가 목록 순서로 자를 때 맨 뒤에 붙은 실시간 eBay 매물이 잘리지 않음 (2026-11-14 'leica m6' 0개)."""
+    import search_service as ss
+
+    def record(i: int, title: str, search_id: str) -> dict:
+        return {"search_id": search_id, "final_output": {"title_raw": title, "normalized_title": title.lower(),
+                "category": "Body", "sold_quality": "asking"}, "search_fields": {}}
+
+    local = [record(i, f"Leica M6 black {i}", f"local:{i}") for i in range(3000)]
+    live = record(0, "Leica M6 0.72 Black Body", "ebay:v1|1|0")
+    selected, stats = ss.narrow_candidate_records(ss.parse_query("leica m6"), local + [live], max_records=200)
+    if stats.get("applied"):
+        assert live in selected
+
+
 if __name__ == "__main__":
     test_ebay_disabled_by_default()
     test_ebay_missing_credentials_is_fail_soft()
