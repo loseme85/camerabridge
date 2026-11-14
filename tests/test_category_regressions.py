@@ -39,3 +39,20 @@ def test_accessory_plus_lens_sets_stay_lens() -> None:
 def test_military_m2_is_body() -> None:
     for title in ("Leica KS15-4 (M2-S)", "Leica KS-15 (4) M2 body", "Leica M2-(R)"):
         assert classify_listing_v2({"상품명": title, "가격": 0, "통화": "", "site": "", "description": ""})["category"] == "Body", title
+
+
+def test_main_item_with_accessory_tail_is_main_item() -> None:
+    """'렌즈 + Lens Hood (12526)'·'M10 with Extra Battery'는 본품, 'Motor Drive R4 con Impugnatura'·'M body & lens cap set'은 부속품."""
+    cases = {
+        "Leica 35mm f2 Summicron-M ASPH. (Type I) (Black, 11879) + Lens Hood (35mm f2 ASPH. / 28mm f2.8 ASPH.) (12526)": "Lens",
+        "Used Leica M10, black chrome with Extra Battery": "Body",
+        "Leica M2 Silver Film Rangefinder Camera with leather case": "Body",
+        "Leica MP Hammertone 0.72x LHSA with Leicavit": "Body",
+        "Leica Motor Drive R4 con Impugnatura": "Accessory",
+        "Leica M body & lens cap set": "Accessory",
+        "Leica 12480 Lens Cap f. Noctilux 11686 - like new with 2 years guarantee Accessory": "Accessory",
+        "Leica hood 12585H 35-50MM + cap 14033": "Accessory",
+        "Leica Visoflex II + Right-Angle Visoflex Prism Finder (OTXBO / 16460)": "Accessory",
+    }
+    for title, want in cases.items():
+        assert classify_listing_v2({"상품명": title, "가격": 0, "통화": "", "site": "", "description": ""})["category"] == want, title

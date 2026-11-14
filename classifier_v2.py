@@ -1051,6 +1051,8 @@ def _acc_with_lens_set(kw: str, combined: str, at: int) -> bool:
 
 
 _STRONG_ACC_KW = (
+    # 2026-11-14 본품+구성품 점검: 앞에 오면 부속품인 말
+    "motor drive", "motor-drive", "motor winder", "motor-winder", "motorwinder", "fondelli", "leicameter", "cinghia",
     "説明書", "取説", "bedienungsanleitung", "anleitung", "brochure", "prospekt", "katalog",
     "rückspulhebel", "ruckspulhebel", "rückspul", "fondello", "protektor", "multifunktionsprotektor", "視度",
     "andruckplatte", "back door", "sonnenblende", "zubehör", "ersatzteile", "spare part", "dreifuß", "dreifuss", "stativ",
@@ -1091,7 +1093,47 @@ def _price_krw(price_str: str, currency: Optional[str] = None) -> Optional[float
     return value * rate if rate else None
 
 
+# 본품 + 구성품 (2026-11-14 사장님 '액세서리 모델' 점검): 'Summicron 35 (11879) + Lens Hood (12526)'·'M10 with Extra Battery'·
+# 'M2 … with leather case'·'MP LHSA with Leicavit'가 뒤의 액세서리 말(후드 번호·case·battery)로 통째 액세서리가 되어
+# 시세·검색에서 빠지던 것(판매 중 약 130개). 묶음말 앞부분만 따로 판정해 확실한 본품이면 그 분류를 쓴다.
+_BUNDLE_SPLIT = re.compile(r"\s(?:\+|&(?!\s*\d)|with|w/|mit|und|avec|con|plus)\s|\s?\+\s?(?=[a-z])|付き?|付属", re.I)
+_SURE_HEAD = ("lens_protected", "body_kw:", "barnack_body_kw:", "mount_compact_pns_q")
+# 앞부분 자체가 부속품 이름이면 본품 아님 ('Motor Drive R4 con Impugnatura'·'Lens Cap f. Noctilux'·'Leicameter M PER Leica M3'·
+# 'Summicron-R Box + Bubble Case'·'Elmar 9cm & Hektor 13.5cm for accessory')
+_HEAD_ACC = re.compile(r"motor|winder|fondell|\btube\b|adatta|adapter|nooky|naheinstell|meter|\bcaps?\b|tappo|case|hood|filter|"
+                       r"(?<!range)(?<!range )finder|strap|cinghia|\bring\b|\bbox\b|\bf\.\s|ever.?ready|griff|grip|"
+                       r"ケース|フード|キャップ|후드|케이스|캡", re.I)
+_SAYS_ACCESSORY = re.compile(r"\baccessor(?:y|ies|io|ie)\b|\bzubehör\b", re.I)
+
+
 def detect_category(
+    normalized_name: str,
+    normalized_description: Optional[str] = None,
+    brand: Optional[str] = None,
+    mount: Optional[str] = None,
+    price_str: Optional[str] = None,
+    currency: Optional[str] = None,
+) -> dict:
+    result = _detect_category_core(normalized_name, normalized_description, brand, mount, price_str, currency)
+    if result["category"] != "Accessory":
+        return result
+    m = _BUNDLE_SPLIT.search(normalized_name or "")
+    if not m or m.start() < 6:
+        return result
+    head = normalized_name[:m.start()]
+    # 'Leicaflex / MK1 / SL/SL2 + Cinghia ever-ready case'처럼 앞부분이 맞는 바디 나열(/ 3개 이상)이면 부속품
+    if _HEAD_ACC.search(head) or _SAYS_ACCESSORY.search(normalized_name) or head.count("/") >= 3:
+        return result
+    sub = _detect_category_core(head, None, brand, mount, None, None)
+    # 'Leica M body & lens cap set'처럼 모델 없이 'body'만 있는 앞부분은 본품 아님 (캡 세트)
+    generic = re.fullmatch(r"\s*(?:leica\s+)?(?:ltm|m|r|l|sl)?\s*(?:body|바디)\s*", head, re.I)
+    if sub["category"] in ("Lens", "Body") and not generic and any(r.startswith(_SURE_HEAD) for r in sub["category_reason"]):
+        sub["category_reason"] = ["bundle_head"] + sub["category_reason"] + ["tail:" + ",".join(result["category_reason"])[:60]]
+        return sub
+    return result
+
+
+def _detect_category_core(
     normalized_name: str,
     normalized_description: Optional[str] = None,
     brand: Optional[str] = None,
