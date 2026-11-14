@@ -1278,6 +1278,11 @@ def _detect_category_core(
     # ── 3순위: mount=Compact/PNS/Q → Body ──
     # 이 분기는 _HARD_ACC_KW를 통과한 것만 도달하므로
     # hood/case/protector 등은 이미 위에서 Accessory로 빠져있다.
+    # 'Leica T 11-23mm … Super Vario Elmar'·'Leica T 35mm f1.4 Summilux'는 T 바디가 아니라 TL 렌즈 (2026-11-15 Digital Camera Warehouse)
+    if mount == "Compact" and re.search(r"\bleica t\b|\btl2?\b", n) and re.search(r"\d+(?:-\d+)?\s?mm", n) \
+            and re.search(r"summilux|summicron|elmarit|elmar\b", n) and not re.search(r"\bbody\b|\bkit\b|\bset\b|\bwith\b|\+", n):
+        reasons.append("tl_lens")
+        return {"category": "Lens", "category_confidence": 0.85, "category_reason": reasons}
     if mount in ("Compact", "PNS", "Q"):
         reasons.append(f"mount_compact_pns_q:{mount}")
         return {"category": "Body", "category_confidence": 0.90, "category_reason": reasons}
