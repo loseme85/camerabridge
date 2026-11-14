@@ -1051,6 +1051,11 @@ def _acc_with_lens_set(kw: str, combined: str, at: int) -> bool:
 
 
 _STRONG_ACC_KW = (
+    # 2026-11-15 Fotopia: 'Match Technical Thumbs-Up … for Leica M'·'Quick Rewind Crank for Leica M2'·'Leather Case for Leica Q'·
+    # 'BC-SCL7 Battery Charger … for Leica M11'·'Universal-Magnifier'·'Re-skin for Leica'·'Dealer Display Stand'·'Light Sign'이 바디로 잡힘
+    "thumbs-up", "thumbs up", "thumb-up", "rewind crank", "battery charger", "leather case for", "half case for", "case for leica",
+    "magnifier", "re-skin", "reskin", "display stand", "light sign", "leitzphone",
+    "lens cap", "hood cap", "aperture control ring",
     # 2026-11-14 본품+구성품 점검: 앞에 오면 부속품인 말
     "motor drive", "motor-drive", "motor winder", "motor-winder", "motorwinder", "fondelli", "leicameter", "cinghia",
     "説明書", "取説", "bedienungsanleitung", "anleitung", "brochure", "prospekt", "katalog",
@@ -1117,10 +1122,11 @@ def detect_category(
     result = _detect_category_core(normalized_name, normalized_description, brand, mount, price_str, currency)
     if result["category"] != "Accessory":
         return result
-    m = _BUNDLE_SPLIT.search(normalized_name or "")
+    name = re.sub(r"artisan ?& ?artist", "artisan-artist", normalized_name or "", flags=re.I)
+    m = _BUNDLE_SPLIT.search(name)
     if not m or m.start() < 6:
         return result
-    head = normalized_name[:m.start()]
+    head = name[:m.start()]
     # 'Leicaflex / MK1 / SL/SL2 + Cinghia ever-ready case'처럼 앞부분이 맞는 바디 나열(/ 3개 이상)이면 부속품
     if _HEAD_ACC.search(head) or _SAYS_ACCESSORY.search(normalized_name) or head.count("/") >= 3:
         return result
@@ -1157,6 +1163,8 @@ def _detect_category_core(
     combined = n + " " + desc
     # 'Rangefinder Camera'(카메라 종류)의 finder가 뷰파인더 부속품 키워드에 걸리지 않게
     combined = re.sub(r"(?<!for )range ?-?finder (?=(film |digital )?(camera|body))", "rf ", combined)
+    # 브랜드 이름 속 '&'는 묶음말이 아님 ('Artisan & Artist Leather Case for Leica Q'가 묶음으로 보여 바디가 됨, 2026-11-15)
+    combined = re.sub(r"artisan ?& ?artist", "artisan-artist", combined)
     reasons = []
 
     # ══════════════════════════════════════════════════════════════

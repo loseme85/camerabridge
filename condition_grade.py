@@ -157,6 +157,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return grade, "label"
     if cond.startswith(AKASAKA_PREFIX):
         return _AKASAKA.get(cond[len(AKASAKA_PREFIX):].strip()), "label"
+    if cond.startswith(FOTOPIA_PREFIX):
+        return _FOTOPIA.get(cond[len(FOTOPIA_PREFIX):].split(" / ")[0].strip().upper()), "label"
     if cond.startswith(GLAZERS_PREFIX):
         return _GLAZERS.get(cond[len(GLAZERS_PREFIX):].strip().upper()), "label"
     if cond.startswith(TAMARKIN_PREFIX):
@@ -482,6 +484,11 @@ AKASAKA_PREFIX = "Akasaka: "
 # 이 대응 기준 정확 일치 9/25 · 한 등급 이내 21/25 (사진이 평균 0.8등급 후함 — 기존 0.8과 같음).
 _AKASAKA = {"新品": "N", "新同品": "S", "極美品": "A", "美品": "B", "良品": "B", "中": "C", "並品": "D", "並": "D"}
 # 미국 Glazer's Camera: 제목 괄호 (M) Mint · (EX) Excellent · (VG) Very Good · (G)/(Good) · (Fair)
+# 홍콩 Fotopia: 외관 등급 Brand New·New In Box·Mint -Like New(~99%)·Mint(~97-98%)·Mint-(~94-96%)·A+(~91-93%)·A·A/B·B+·B·C+·C·AS IS
+# (매장 등급표, 2026-11-15). 퍼센트 대응(from_percent)과 같은 줄로 시작하고 사진 평가로 확인 (PR 본문)
+FOTOPIA_PREFIX = "Fotopia: "
+_FOTOPIA = {"BRAND NEW": "N", "NEW IN BOX": "N", "MINT -LIKE NEW": "S", "MINT": "S", "MINT-": "A", "A+": "A", "A": "B",
+            "A/B": "B", "B+": "C", "B": "C", "C+": "D", "C": "D", "AS IS": "X"}
 GLAZERS_PREFIX = "Glazers: "
 # 사진 평가(표기 가리고 25점, 사진 최대 3장, 2026-10-15): EX A 5·S 2 · VG A 7·B 1 · G A 3·B 2·C 1 · Fair B 3 · M A 1.
 # Fair는 모두 렌즈 안 흐림·접합 분리(Haze·Cement separation)라 사진엔 안 보여도 D.
