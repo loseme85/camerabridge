@@ -1059,6 +1059,9 @@ _STRONG_ACC_KW = (
     "kompaktblitz", "巻き戻し", "ポーチ", "サムサポート", "repose pouce", "handgriff", "extension tube", "zwischenring",
     "balgen", "bellows", "schild oskar", "dummy", "werbung", "advertising", "blinkdisplay", "uhr kamera", "watch camera",
     "deckkappe", "bodenplatte", "for case", "for 革case", "for 革ケース", "box für", "box for leica", "empty box", "box only", "元箱のみ",
+    # 2026-11-15 시세 이탈 2차: 접사 장치·필터가 렌즈 칸에 ('Nah Brille Nahvorsatz für Summicron'·'Nooky-Hesum närbildstillsats'·
+    # 'Naheinstellgerät für Hektor'·'Filtro x Elmar 50'·'Lマウント接写 Ring'·'ring Nichel x 50mm Hektor … per macro')
+    "närbildstillsats", "naheinstellgerät", "nah brille", "nahvorsatz", "filtro x", "接写", "per macro", "nooky", "sooky",
 )
 
 
