@@ -314,6 +314,9 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
     return _with_parents(list(dict.fromkeys(hits)), catalog, title)
 
 
+BUILT_IN_HOOD = re.compile(r"built[- ]?in[- ]?hood", re.I)
+
+
 def _rule_hits(catalog: dict[str, Any], final: dict, title: str) -> list[str]:
     hits: list[str] = []
     body_title = body_view(title)
@@ -321,7 +324,9 @@ def _rule_hits(catalog: dict[str, Any], final: dict, title: str) -> list[str]:
         if not _category_ok(rule, final, title) or not _mount_ok(rule, final, title):
             continue
         text = body_title if rule["category"] == "Body" and not FIXED_LENS_BODY.match(entity_id) else title
-        if all(p.search(text) for p in must) and not any(p.search(text) for p in must_not):
+        # 'Built-in-hood'(후드 붙은 렌즈 버전)은 부속품 후드가 아님 → '빼는 말'(hood) 검사에서만 다른 말로 (2026-11-15 Fotopia Summicron-M 90 v1)
+        text_nn = BUILT_IN_HOOD.sub("builtin-shade", text)
+        if all(p.search(text) for p in must) and not any(p.search(text_nn) for p in must_not):
             hits.append(entity_id)
     return hits
 

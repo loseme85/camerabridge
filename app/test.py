@@ -14187,6 +14187,64 @@ def crawl_yaotomi():
     return results
 
 
+# 2026-11-15 밤샘: Fotopia (홍콩) — 침사추이 라이카 중고 전문점, 자체 사이트(jQuery)가 ajax.php?a=stock/listAjax JSON으로 재고를 줌
+_FOTOPIA_COSMETIC = ["-", "Brand New", "New In Box", "Mint -Like New", "Mint", "Mint-", "A+", "A", "A/B", "B+", "B", "C+", "C", "AS IS", "QM2"]
+_FOTOPIA_OPTICAL = ["-", "Perfect Glass", "Mint Glass", "Ex++ Glass", "Ex+ Glass", "Ex Glass", "Average Glass", "AS IS", "Bright & Clear Viewfinder"]
+_FOTOPIA_OTHER = re.compile(r"voigtl|canon|nikon|zeiss|contax|hasselblad|rollei|minolta|konica|fuji|sony|ricoh|olympus|pentax|"
+                            r"ttartisan|7artisans|light ?lens ?lab|\bLLL\b|atumi|modification service|\bservice\b|meyer|thypoch|rudolph|plasmat|"
+                            r"projector lens|modified to m42", re.I)
+
+
+def crawl_fotopia():
+    """Fotopia (홍콩) - 재고 JSON 한 번에 (상품마다 재고 여러 개: status 13 판매 중·14 예약·15+ 판매 완료).
+    등급은 매장 표기 외관(Mint·A+·A…)과 렌즈(Perfect·Mint Glass…) → 'Fotopia: Mint- / Mint Glass'. 가격 HKD(현금가)"""
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.fotopia.com.hk"
+    print("\n  📂 Fotopia 크롤링 시작")
+    resp = sess.get(f"{base}/ajax.php", params={"a": "stock/listAjax"}, timeout=30)
+    resp.raise_for_status()
+    items = (resp.json() or {}).get("items") or {}
+    for stocks in items.values():
+        for st in stocks or []:
+            name = re.sub(r"\s+", " ", str(st.get("name") or "")).strip()
+            if not re.search(r"\b(leica|leitz)\b", name, re.I) or _FOTOPIA_OTHER.search(name):
+                continue
+            status = int(st.get("status") or 0)
+            try:
+                cos = _FOTOPIA_COSMETIC[int(st.get("cCond") or 0)]
+                opt = _FOTOPIA_OPTICAL[int(st.get("oCond") or 0)]
+            except (IndexError, ValueError):
+                cos, opt = "-", "-"
+            price = f"HK${int(st['price']):,}" if str(st.get("price") or "").isdigit() else "문의요망"
+            title = name
+            img = st.get("img") or []
+            cat = detect_category(title, price)
+            results.append({
+                "게시일": "",
+                "site": "Fotopia (홍콩)",
+                "label": auto_label(title),
+                "상품명": title,
+                "세대": detect_generation(title),
+                "컨디션": f"Fotopia: {cos} / {opt}",
+                "가격": price,
+                "통화": "HKD",
+                "이미지": f"{base}/productImg/t/{img[0]}.jpg" if img else "",
+                "링크": f"{base}/#!product/showAjax/{st.get('pId')}/{requests.utils.quote(name)}?stock={st.get('id')}",
+                "품절": status > 14,
+                "예약중": status == 14,
+                # 설명은 비움: '구성품: body cap·hood'가 분류에서 부속품 말로 잡혀 M3 바디가 부속품이 됨 (메모·구성품은 매장 화면에)
+                "description": "",
+                "mount": "Accessory" if cat == "Accessory" else detect_mount(title),
+                "category": cat,
+                "brand": detect_brand(title),
+            })
+    print(f"  ✅ Fotopia 완료: {len(results)}개 (판매 중 {sum(1 for r in results if not r['품절'])})")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14371,6 +14429,7 @@ def crawl_all():
         ("Leica Store Brasil (브라질)", lambda: ce.wrap_full_run("Leica Store Brasil (브라질)", crawl_leicastorebr)),
         ("Grande Marvin (이탈리아)", lambda: ce.wrap_full_run("Grande Marvin (이탈리아)", crawl_grandemarvin)),
         ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
+        ("Fotopia (홍콩)", lambda: ce.wrap_full_run("Fotopia (홍콩)", crawl_fotopia)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
         ("Leica Store Manchester (영국)", lambda: ce.wrap_full_run("Leica Store Manchester (영국)", crawl_lsmanchester)),
         ("Kamera Express (룩셈부르크)", lambda: ce.wrap_full_run("Kamera Express (룩셈부르크)", crawl_kameraexpresslu)),
