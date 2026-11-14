@@ -355,12 +355,6 @@
    "example": "[중고] Leica Q2 Monochrome"
   },
   {
-   "a": "leica:body:m9:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 48,
-   "example": "[중고] M9"
-  },
-  {
    "a": "leica:body:m11:black-paint",
    "b": "leica:feature:frameline-28",
    "count": 47,
@@ -371,6 +365,12 @@
    "b": "leica:feature:black-paint",
    "count": 47,
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
+  },
+  {
+   "a": "leica:body:m9:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 47,
+   "example": "[중고] M9"
   },
   {
    "a": "leica:body:m3:single-stroke",
@@ -1731,6 +1731,12 @@
    "example": "Leica M (Typ 240) (Black Paint, 10770)"
   },
   {
+   "entity": "leica:lens:summilux-r:50:v1",
+   "word": "safari",
+   "count": 5,
+   "example": "Leica Summilux-R 50mm/F1.4 E55 Ver.II V2 Safari 11776"
+  },
+  {
    "entity": "leica:feature:ttl-flash",
    "word": "anniversary",
    "count": 4,
@@ -1753,12 +1759,6 @@
    "word": "titan",
    "count": 4,
    "example": "Brand New Leica M-A \"Titan\" Set with APO-Summicron-M 50 f/2 ASPH. Titanium Film "
-  },
-  {
-   "entity": "leica:lens:summilux-r:50:v1",
-   "word": "safari",
-   "count": 4,
-   "example": "Leica Summilux-R 50mm/F1.4 E55 Ver.II V2 Safari 11776"
   },
   {
    "entity": "leica:body:i",
