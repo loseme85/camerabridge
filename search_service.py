@@ -752,6 +752,14 @@ def narrow_candidate_records(
         broad_limit = min(candidate_broad_records, remaining_slots) if remaining_slots > 0 else 0
         selected.extend(item[-1] for item in broad[:broad_limit])
 
+    # 실시간 eBay 매물은 목록 맨 뒤에 붙어서 위의 개수 제한(목록 순서)에 늘 잘렸음 — 'leica m6'에서 eBay 39개를 받고도 0개 표시
+    # (2026-11-14 eBay 켠 날). 기준이 하나라도 맞는 실시간 매물은 개수 제한 밖에서 전부 남긴다 (검색당 최대 50개)
+    chosen = {id(record) for record in selected}
+    selected.extend(
+        item[-1] for item in strong + broad
+        if id(item[-1]) not in chosen and str(item[-1].get("search_id") or "").startswith("ebay:")
+    )
+
     if not selected or len(selected) >= input_count:
         return records, stats
 

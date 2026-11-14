@@ -107,6 +107,22 @@ def _trust_rejection(seller: Any, buying_options: list[str], condition_id: str) 
     return None
 
 
+SELLER_SHOPS_PATH = PROJECT_ROOT / "data" / "config" / "ebay_seller_shops.json"
+
+
+def _crawled_shop_sellers() -> dict[str, str]:
+    """이미 크롤하는 매장의 eBay 판매자 이름 (소문자) → 매장 이름."""
+    cached = _RESOLUTION_CACHE.get("seller_shops")
+    if cached is None:
+        try:
+            raw = json.loads(SELLER_SHOPS_PATH.read_text(encoding="utf-8")).get("sellers") or {}
+        except (OSError, ValueError):
+            raw = {}
+        cached = {str(k).strip().lower(): str(v) for k, v in raw.items()}
+        _RESOLUTION_CACHE["seller_shops"] = cached
+    return cached
+
+
 def _credentials() -> tuple[str, str]:
     return (
         str(os.getenv("EBAY_CLIENT_ID") or "").strip(),
@@ -301,6 +317,9 @@ def _normalize_browse_item(
     if trust_reason:
         return None, trust_reason
     seller_name = _seller_display_name(seller)
+    # 우리가 이미 크롤하는 매장이 eBay에도 올린 물건 → 매장 직접 매물만 보여 줌 (중복 방지)
+    if seller_name and seller_name.strip().lower() in _crawled_shop_sellers():
+        return None, "seller_is_crawled_shop"
     created_at = _parse_timestamp(item.get("itemCreationDate") or item.get("itemOriginDate"))
     created_iso = created_at.isoformat() if created_at else ""
     end_iso = end_at.isoformat() if end_at else ""
