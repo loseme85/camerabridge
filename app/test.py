@@ -14187,6 +14187,55 @@ def crawl_yaotomi():
     return results
 
 
+# 2026-11-15 밤샘: Schouten Select (네덜란드) — 라이카 전문 중고점, Shopify 'leica' 컬렉션 (이 맥 주소는 Shopify 429라 GitHub 서버에서 시험)
+_SCHOUTEN_SKIP_TYPES = re.compile(r"books|literature|binocular|scope", re.I)
+
+
+def crawl_schouten():
+    """Schouten Select (네덜란드) - Shopify 'leica' 컬렉션(약 330개, 판매 완료도 남음). 책·쌍안경 제외.
+    등급 표기 없음 → 설명 앞 두 문장의 상태 말(schouten_condition). 가격 EUR"""
+    import html as _html
+    import requests
+    from condition_grade import schouten_condition
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://schouten-select.com"
+    print("\n  📂 Schouten Select 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/leica/products.json", "Schouten Select"):
+        if _SCHOUTEN_SKIP_TYPES.search(p.get("product_type") or ""):
+            continue
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.search(r"\b(leica|leitz)\b", title, re.I):
+            title = "Leica " + title
+        name = re.sub(r"\s*\+\s*(?:Original\s+)?Box\s*$", "", title, flags=re.I)  # 끝의 '+ Box'(상자 포함)는 이름에서 뺌
+        try:
+            price = f"€{float((p.get('variants') or [{}])[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = detect_category(name, price)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        results.append({
+            "게시일": _shopify_listed(p),
+            "site": "Schouten Select (네덜란드)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": schouten_condition(p.get("body_html") or "") or "정보없음",
+            "가격": price,
+            "통화": "EUR",
+            "이미지": img,
+            "링크": f"{base}/products/{p['handle']}",
+            "품절": not any(v.get("available") for v in (p.get("variants") or [{}])),
+            "예약중": False,
+            "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+    print(f"  ✅ Schouten Select 완료: {len(results)}개 (판매 중 {sum(1 for r in results if not r['품절'])})")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14371,6 +14420,7 @@ def crawl_all():
         ("Leica Store Brasil (브라질)", lambda: ce.wrap_full_run("Leica Store Brasil (브라질)", crawl_leicastorebr)),
         ("Grande Marvin (이탈리아)", lambda: ce.wrap_full_run("Grande Marvin (이탈리아)", crawl_grandemarvin)),
         ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
+        ("Schouten Select (네덜란드)", lambda: ce.wrap_full_run("Schouten Select (네덜란드)", crawl_schouten)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
         ("Leica Store Manchester (영국)", lambda: ce.wrap_full_run("Leica Store Manchester (영국)", crawl_lsmanchester)),
         ("Kamera Express (룩셈부르크)", lambda: ce.wrap_full_run("Kamera Express (룩셈부르크)", crawl_kameraexpresslu)),

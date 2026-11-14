@@ -1059,6 +1059,8 @@ _STRONG_ACC_KW = (
     "kompaktblitz", "巻き戻し", "ポーチ", "サムサポート", "repose pouce", "handgriff", "extension tube", "zwischenring",
     "balgen", "bellows", "schild oskar", "dummy", "werbung", "advertising", "blinkdisplay", "uhr kamera", "watch camera",
     "deckkappe", "bodenplatte", "for case", "for 革case", "for 革ケース", "box für", "box for leica", "empty box", "box only", "元箱のみ",
+    # 2026-11-15 Schouten Select: 'S.T. Dupont … Keyring'·'DMR Universal Focusing Screen'이 렌즈로
+    "keyring", "key ring", "focusing screen",
 )
 
 
