@@ -1002,6 +1002,8 @@ _BODY_KW = [
     "leica m7", "leica mp", "leica m-a", "leica ma ",  # "leica ma"만 쓰면 "Leica Macro-Elmar"가 바디로
     "leica m8", "leica m9", "leica m10", "leica m11", "leica m240",
     "mda", "leica mda",
+    # 군용·특수 M2 (2026-11-14 #369: 'Leica KS15-4 (M2-S)'가 M2 일반 모델에서 빠지며 렌즈 기본값으로 감)
+    "ks15", "ks-15", "ks 15", "(m2-s", "m2-s)", "m2-(r)",
     "typ 240",
     # R 바디
     "r3 ", "r4 ", "r5 ", "r6 ", "r7 ", "r8 ", "r9 ",
@@ -1026,7 +1028,38 @@ _BARNACK_BODY_KW = [
     "barnack", "leica iiif", "leica iiig", "leica iiic",
     "leica iiia", "leica iiib", "leica standard",
     "leica iif", "leica if",
+    # 2026-11-14 시세 이탈 점검: 'Leica A型 Black (New Elmar 50mm付)'·'DRP … Sucherkamera mit Elmar'가 렌즈(Elmar 50)로 감
+    "leica a型", "leica c型", "sucherkamera", "leica ia ", "leica ic ", "leica i c ",
 ]
+
+# 본품이 아닌 것이 분명한 말 (2026-11-14 시세 이탈 점검): 바르낙 바디·콤팩트 판단보다 먼저 부속품으로.
+# 'Leica IIIc 取扱説明書'·'Leica MP for 巻き戻しクランク'·'FONDELLO LEICA M MONOCHROM'·'Leica M2 M3 black paint back door' 등.
+# 본품 뒤 구성품('M4 with Anleitung', 'Leicaflex mit Balgen')은 본품 그대로 (_FOREIGN_BUNDLE_BEFORE)
+# 부속품 + 렌즈 세트 (2026-11-14 #369 점검): 'Balgen 16860 mit Macro-Elmar 100mm'·'Bellows-R + Macro-Elmar'·
+# 'Macro-Elmar R 100/4 … Bellows RSet'은 벨로즈 전용 렌즈 세트라 렌즈 시세로 본다.
+# 부속품 말 뒤에 묶음말(mit·with·con·+·付…) + 렌즈 이름이 오면 렌즈 세트. 'Extension Tube (90mm f4 Elmar)'·
+# 'Zwischenring für Elmar 90mm'처럼 묶음말 없이 '어느 렌즈용'만 적힌 것은 부속품 그대로.
+_LENS_NAME_RE = r"(?:leitz\s+|leica\s+)?(?:macro-?\s?elmar|elmarit|elmar|summ[a-z]*|telyt|hektor|noctilux|apo-)"
+_SET_AFTER_RE = re.compile(r"^[^,;|]{0,30}?(?:\bmit\b|\bwith\b|\bcon\b|\bavec\b|\+|&|付き?)\s*" + _LENS_NAME_RE)
+_BELLOWS_KW = ("bellows", "balgen")
+
+
+def _acc_with_lens_set(kw: str, combined: str, at: int) -> bool:
+    if kw in _BELLOWS_KW and re.search(r"macro-?\s?elmar", combined):
+        return True
+    return bool(_SET_AFTER_RE.search(combined[at + len(kw):]))
+
+
+_STRONG_ACC_KW = (
+    # 2026-11-14 본품+구성품 점검: 앞에 오면 부속품인 말
+    "motor drive", "motor-drive", "motor winder", "motor-winder", "motorwinder", "fondelli", "leicameter", "cinghia",
+    "説明書", "取説", "bedienungsanleitung", "anleitung", "brochure", "prospekt", "katalog",
+    "rückspulhebel", "ruckspulhebel", "rückspul", "fondello", "protektor", "multifunktionsprotektor", "視度",
+    "andruckplatte", "back door", "sonnenblende", "zubehör", "ersatzteile", "spare part", "dreifuß", "dreifuss", "stativ",
+    "kompaktblitz", "巻き戻し", "ポーチ", "サムサポート", "repose pouce", "handgriff", "extension tube", "zwischenring",
+    "balgen", "bellows", "schild oskar", "dummy", "werbung", "advertising", "blinkdisplay", "uhr kamera", "watch camera",
+    "deckkappe", "bodenplatte", "for case", "for 革case", "for 革ケース", "box für", "box for leica", "empty box", "box only", "元箱のみ",
+)
 
 
 _FX_FALLBACK_KRW = {"KRW": 1.0, "JPY": 9.0, "USD": 1350.0, "GBP": 1780.0, "EUR": 1500.0}
@@ -1060,7 +1093,47 @@ def _price_krw(price_str: str, currency: Optional[str] = None) -> Optional[float
     return value * rate if rate else None
 
 
+# 본품 + 구성품 (2026-11-14 사장님 '액세서리 모델' 점검): 'Summicron 35 (11879) + Lens Hood (12526)'·'M10 with Extra Battery'·
+# 'M2 … with leather case'·'MP LHSA with Leicavit'가 뒤의 액세서리 말(후드 번호·case·battery)로 통째 액세서리가 되어
+# 시세·검색에서 빠지던 것(판매 중 약 130개). 묶음말 앞부분만 따로 판정해 확실한 본품이면 그 분류를 쓴다.
+_BUNDLE_SPLIT = re.compile(r"\s(?:\+|&(?!\s*\d)|with|w/|mit|und|avec|con|plus)\s|\s?\+\s?(?=[a-z])|付き?|付属", re.I)
+_SURE_HEAD = ("lens_protected", "body_kw:", "barnack_body_kw:", "mount_compact_pns_q")
+# 앞부분 자체가 부속품 이름이면 본품 아님 ('Motor Drive R4 con Impugnatura'·'Lens Cap f. Noctilux'·'Leicameter M PER Leica M3'·
+# 'Summicron-R Box + Bubble Case'·'Elmar 9cm & Hektor 13.5cm for accessory')
+_HEAD_ACC = re.compile(r"motor|winder|fondell|\btube\b|adatta|adapter|nooky|naheinstell|meter|\bcaps?\b|tappo|case|hood|filter|"
+                       r"(?<!range)(?<!range )finder|strap|cinghia|\bring\b|\bbox\b|\bf\.\s|ever.?ready|griff|grip|"
+                       r"ケース|フード|キャップ|후드|케이스|캡", re.I)
+_SAYS_ACCESSORY = re.compile(r"\baccessor(?:y|ies|io|ie)\b|\bzubehör\b", re.I)
+
+
 def detect_category(
+    normalized_name: str,
+    normalized_description: Optional[str] = None,
+    brand: Optional[str] = None,
+    mount: Optional[str] = None,
+    price_str: Optional[str] = None,
+    currency: Optional[str] = None,
+) -> dict:
+    result = _detect_category_core(normalized_name, normalized_description, brand, mount, price_str, currency)
+    if result["category"] != "Accessory":
+        return result
+    m = _BUNDLE_SPLIT.search(normalized_name or "")
+    if not m or m.start() < 6:
+        return result
+    head = normalized_name[:m.start()]
+    # 'Leicaflex / MK1 / SL/SL2 + Cinghia ever-ready case'처럼 앞부분이 맞는 바디 나열(/ 3개 이상)이면 부속품
+    if _HEAD_ACC.search(head) or _SAYS_ACCESSORY.search(normalized_name) or head.count("/") >= 3:
+        return result
+    sub = _detect_category_core(head, None, brand, mount, None, None)
+    # 'Leica M body & lens cap set'처럼 모델 없이 'body'만 있는 앞부분은 본품 아님 (캡 세트)
+    generic = re.fullmatch(r"\s*(?:leica\s+)?(?:ltm|m|r|l|sl)?\s*(?:body|바디)\s*", head, re.I)
+    if sub["category"] in ("Lens", "Body") and not generic and any(r.startswith(_SURE_HEAD) for r in sub["category_reason"]):
+        sub["category_reason"] = ["bundle_head"] + sub["category_reason"] + ["tail:" + ",".join(result["category_reason"])[:60]]
+        return sub
+    return result
+
+
+def _detect_category_core(
     normalized_name: str,
     normalized_description: Optional[str] = None,
     brand: Optional[str] = None,
@@ -1099,6 +1172,23 @@ def detect_category(
         if code in combined:
             reasons.append(f"acc_code:{code}")
             return {"category": "Accessory", "category_confidence": 0.99, "category_reason": reasons}
+
+    # ── 0.3순위: 본품이 아닌 것이 분명한 말 → Accessory (바르낙·콤팩트 바디 판단보다 먼저) ──
+    for kw in _STRONG_ACC_KW:
+        at = combined.find(kw)
+        before = combined[max(0, at - 40):at]
+        # 본품 뒤 구성품('… w/ 1:1 Extension tube')이나 '… 100/4 (for bellows)'처럼 부속품용 본품이면 본품 그대로
+        # ('for'는 영어 단어에만 — 일본어 제목은 'Q2 for サムサポート'처럼 'for' 뒤가 부속품)
+        guard = _FOREIGN_BUNDLE_BEFORE + r"|\bw/" + (r"|\bfor\b[^a-z]{0,3}(?:macro\s+)?$" if kw.isascii() else "")
+        if at >= 0 and _acc_with_lens_set(kw, combined, at):
+            # 벨로즈 + Macro-Elmar는 벨로즈 전용 렌즈 세트 — 'Leicaflex … Bellows Con Macro-Elmar'처럼 바디 이름이 '어느 바디용'으로 붙어도 렌즈
+            if kw in _BELLOWS_KW and re.search(r"macro-?\s?elmar", combined):
+                reasons.append("bellows_macro_elmar_set")
+                return {"category": "Lens", "category_confidence": 0.9, "category_reason": reasons}
+            continue
+        if at >= 0 and not re.search(guard, before):
+            reasons.append(f"strong_acc_kw:{kw}")
+            return {"category": "Accessory", "category_confidence": 0.95, "category_reason": reasons}
 
     # ── 0.5순위: Barnack 바디 강제 → Body (렌즈 키워드보다 우선) ──
     for kw in _BARNACK_BODY_KW:

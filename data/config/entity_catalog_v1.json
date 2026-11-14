@@ -2791,7 +2791,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "後塗|repaint|リペイント|리페인트|\\bKS ?-?15|M2-?S\\b|M2-?\\(R\\)"
     ]
    }
   },
@@ -8058,7 +8059,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "titan|チタン|티탄"
     ]
    }
   },
@@ -18542,7 +18544,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "linhof|technorama"
     ]
    }
   },
@@ -28201,7 +28204,8 @@
      "kipon",
      "호환",
      "\\bcopy\\b",
-     "카피"
+     "카피",
+     "[ac]型|sucherkamera|\\bcamera\\b|\\bI ?[ac]\\b|\\bIII ?b"
     ]
    }
   },
@@ -28570,7 +28574,7 @@
     "title_must": [
      "\\belmar\\b(?!it)|elmar-[mc]\\b",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "3 ?el|3매"
+     "3 ?el|3매|triplet|tri-?プレット|トリプレット|3-?elemen|3 ?linser"
     ],
     "title_must_not": [
      "macro|tele|elmarit|-C\\b|elmar ?c\\b",
@@ -28672,7 +28676,8 @@
      "kipon",
      "호환",
      "\\bcopy\\b",
-     "카피"
+     "카피",
+     "triplet|tri-?プレット|トリプレット|3-?elemen|3 ?linser"
     ]
    }
   },

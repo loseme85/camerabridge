@@ -1,0 +1,869 @@
+{
+ "_note": "2026-11-14 PR #369에서 한 줄씩 확인한 분류(부속품 오분류 + 본품+구성품 세트). 분류 규칙을 고친 뒤에도 이 결과가 그대로여야 한다 (scripts/category_diff.py로 확인한 것을 더함).",
+ "cases": [
+  {
+   "title": "Linhof Technorama 612 PC II Body + 65mm f5.6 Super-Anglon Black SET",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Extension Tube (90mm f4 Elmar) (OTQNO /16468)",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Bellows-R (16860) + 100mm f4 Macro-Elmar (Bellows) (Type I) (11230)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 10mm Extension Tube (OUFRO / 16469Y)",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Q2 for エタスポーチ コーテッドキャンバス ミッドナイトBlue",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Macro Extension Tube for R100mm f/4 Macro Lens",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Repose pouce Q3 laiton",
+   "category": "Accessory"
+  },
+  {
+   "title": "FONDELLO LEICA M MONOCHROM TYP246",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Macro Bellows-R 16860",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica IIIc 取扱説明書",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica A型 50mm F3.5",
+   "category": "Body"
+  },
+  {
+   "title": "Leica AF-C1 説明書(独、英、仏)",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Q2 for サムサポート 19543",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica M2-(R)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica A型 Black (New Elmar 50mm F3.5付)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica A型(New Elmar 50/3.5)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica IIIb軍 for マリーン+Elmar-L 5cm/3.5(Collapsible)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica A型 Black 近接New Elmar 50/3.5付",
+   "category": "Body"
+  },
+  {
+   "title": "Leica A型 Elmar 50/3.5 Gold",
+   "category": "Body"
+  },
+  {
+   "title": "Leica A型(New Elmar 50/3.5)+距離計FODIS",
+   "category": "Body"
+  },
+  {
+   "title": "Leica A型 Black (近接New Elmar 50mm F3.5付)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M2 セルフナシ 後塗リ Black",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Multifunktions-Handgriff HG-SCL7",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica HG-DC1 Handgriff für Q3",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica HG-SCL6 Multifunktionshandgriff für Leica SL2",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica R4s NOT WORKING Dummy",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica CL \"DUMMY\" NOT WORKING SAMPLE",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica CL Dummy with rotating Leitz Display Hand",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica R 4 black NOT WORKING Dummy",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Multifunktionsprotektor Q3, black 18573",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica R Bellows Boxed",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica KS15-4 (M2-S)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Bellows-R 16860 with Macro-Elmar-R 100mm f4.0",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Bellows",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Macro-Elmar R 100/4 フォーカシング Bellows RSet",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Ic with Elmar 50mm f3.5 and Viewfinder 50mm",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M Bellows",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Ia Elmar 50mm f3.5 No. 7313",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Ic Elmar 50mm f3.5",
+   "category": "Body"
+  },
+  {
+   "title": "Leica IC + Elmar 50mm / 3.5",
+   "category": "Body"
+  },
+  {
+   "title": "Leica emtpy box only for Summicron-R 1:2 / 50mm Dummy lens 940309",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Kamera Protektor M/M-P (Typ 240) cognac 14887",
+   "category": "Accessory"
+  },
+  {
+   "title": "LEICA C1 Point and Shoot Box ONLY",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Balgen mit Elmar 90mm f4 L39",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Focusing Bellows Leica-R BR2",
+   "category": "Accessory"
+  },
+  {
+   "title": "Regolatore per Bellows Leica per sistema R 111082",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica R Leicaflex Leitz 16860 Bellows Bellows",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica R Leicaflex Leitz 16860 Bellows Bellows Con Macro-Elmar 100mm f4",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica M2 Body 後塗り黒",
+   "category": "Body"
+  },
+  {
+   "title": "Leica 視度－1 Leica M10-11 for",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica MP for 巻き戻しクランク 14437",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica IIIf for Case",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica C-LUX3 取扱説明書(取説)",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica AF-C1 (和文) 取扱説明書(取説)",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica SOOM Leica MP Filmrückspulhebel M2 M3 MP MA",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Multifunktionshandgriff HG-SCL4",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica CF D Kompaktblitz für Minilux",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Mini Dreifußstativ",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Sonnenblende A49 M2,8/28 12547",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leitz Box For Leica IIIf Loohw accessory",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leitz Box For Leica IIIf accessory",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leitz Box Only Fpr Leica IIIf Lookx, Lid Is Split And Worn accessory",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica R Balgengerät mit Macro Elmar 100mm f/4.0",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Balgen 16860 mit Macro-Elmar 100mm f/4.0",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 14182 Extension Tube for Telyt 560mm f400",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Multifunktions-Handgriff M 14495",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Zwischenring 16468X für Elmar 90mm f4.0",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Zwischenringe 5cm 1:1,5 1:2 1:3 Summitar, Summar, Elmar",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica DRP Ernst Leitz Wetzlar Sucherkamera mit Leitz Elmar 50mm f3.5 Objektiv",
+   "category": "Body"
+  },
+  {
+   "title": "Leica DRP Ernst Leitz Wetzlar Sucherkamera",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Bellows-R + Macro-Elmar 100mm f/4 + Leica M adapter",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica I Model A RARE BOX original Box für Leica I",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica R4 Uhr Kamera watch Camera RARE Leitz 99670 near mint wie neu",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica IC black nickel camera + Elmar 50mm f/3.5 lens set",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Rückspulkurbel silber Rewind crank for Leica MP 14437 98958 near mint",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Rückspulkurbel silber Rewind crank for Leica MP 14437 98839 near mint",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Schild Oskar Barnack 1879-1979 100 Jahre",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica M2 M3 black paint back door Filmandruckplatte",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica M2 M3 Zubehör Ersatzteile Accessories Spare part for parts",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Schild Advertising glas mirror 15×7,5cm Leica Leitz Wetzlar",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica IC I C camera + Elmar 50mm f/3.5 lens set",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Deckkappe Ersatzteile R4 gold Bodenplatte M39 R SET for parts",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Summicron-R 50mm Dummy Display lens 94399 ohne Funktion Attrappe for parts",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Summicron-R 50mm Dummy Display lens 94398 ohne Funktion Attrappe for parts",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Summicron M 50mm Dummy Display lens 94397 ohne Funktion for parts",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Werbung Display R3 Rare Blinkdisplay advertising",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica 50mm f2.0 Dummy + Doos",
+   "category": "Accessory"
+  },
+  {
+   "title": "LEICA M (Typ 240) with Grip and EVF2 Body",
+   "category": "Body"
+  },
+  {
+   "title": "Leica D-LUX4 + Case + SD메모리",
+   "category": "Body"
+  },
+  {
+   "title": "Leica D-Lux 8 Kit + Automatic Lens Cap + Extra Battery (19191)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica D-Lux 8 Kit + Screen Protector",
+   "category": "Body"
+  },
+  {
+   "title": "Leica D-lux 8 Kit + Screen Protector (19191)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica III 1934 + Leitz Summitar 50mm f/2 + Fondello CON Innesto Flash (L39) Leica V set",
+   "category": "Body"
+  },
+  {
+   "title": "Leica If Germany + Elmar 50mm f3.5 + Leitz OEINO u. SBOOI 50mm Viewfinder",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Kit Leica IA+ Elmar 3.5 + Rangefinder",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M Monochrom M246 with Leica Handgrip M and Finger Loop",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M10 Silver Chrome Kit + Grip + Visoflex (20001)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M10 black chrome with grip black",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M10-P + 라이카 엄지그립",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M2 Silver Film Rangefinder Camera with leather case",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M3 + MCMeter",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M3 with SUMMILUX 50mm f1.4 leather case",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M4 (No Serial) (Black Paint, 10402) + Meter MR",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M6 TTL Chrom 0,72 10434 mit Motor M",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M8 (Black, 10701) + M8/M9 Handgrip (14486)",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M8 + 2ème accu with case",
+   "category": "Body"
+  },
+  {
+   "title": "Leica M8 Silver + Case",
+   "category": "Body"
+  },
+  {
+   "title": "Leica MP + Akara Labs Case",
+   "category": "Body"
+  },
+  {
+   "title": "Leica MP Hammertone 0.72x LHSA with Leicavit",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Q Camera + Hand Grip",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Q2 Black + Leica Thumb Support",
+   "category": "Body"
+  },
+  {
+   "title": "Leica Q3 + 라이카 엄지그립",
+   "category": "Body"
+  },
+  {
+   "title": "Leica R4 solo corpo Nera con Dorso Data e Cap Originale Funziona Bene",
+   "category": "Body"
+  },
+  {
+   "title": "Leica R8 Body + Motor Wider R8+Blesk Leica SF58",
+   "category": "Body"
+  },
+  {
+   "title": "Leica R8+MOTOR-WINDER Silver",
+   "category": "Body"
+  },
+  {
+   "title": "Leica R8+MOTOR-WINDER Silver Film Camera",
+   "category": "Body"
+  },
+  {
+   "title": "Leica SL2 + Multifunctional Grip, black Body",
+   "category": "Body"
+  },
+  {
+   "title": "Leica X2 + Handgrip",
+   "category": "Body"
+  },
+  {
+   "title": "Leicaflex / MK1 / SL/SL2 + Cinghia ever-ready case",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leicaflex 50/2 Summmicron付 l カメラCase付",
+   "category": "Body"
+  },
+  {
+   "title": "MP Anthracite Body + Leicavit (10316)",
+   "category": "Body"
+  },
+  {
+   "title": "Used Leica D-Lux 6 with EVF 3 and Hand Grip",
+   "category": "Body"
+  },
+  {
+   "title": "Used Leica M10, black chrome with Extra Battery",
+   "category": "Body"
+  },
+  {
+   "title": "Used Leica Q (Typ 116), black with Half Case",
+   "category": "Body"
+  },
+  {
+   "title": "Used Leica SL2-S with Extra Battery",
+   "category": "Body"
+  },
+  {
+   "title": "Carl Zeiss Jena Sonnar 5cm f2 Nickel – Prewar 1935 with Leica M adapter",
+   "category": "Lens"
+  },
+  {
+   "title": "LEICA SUMMARON 3.5cm f3.5 mit Adapter-M",
+   "category": "Lens"
+  },
+  {
+   "title": "LEITZ Wetzlar Telyt 200mm f4 con Visoflex per M Mount",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 100mm f/2.8 APO-MACRO-ELMARIT-R + ELPRO 1654",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 100mm f2.8 APO Macro Elmarit-R Lens + Elpro 1:2 - 1:1",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 11897 Elmarit-M 21mm f/2.8 ASPH, Silver Chrome with Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 11898 Elmarit-M 24mm f/2.8 ASPH Silver Chrome with Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 16-18-21mm f4 Tri-Elmar-M ASPH & Universal Finder",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 19mm f2.8 Elmarit-R (Type II) (3-Cam) (11258) + SIMple Fit Follow Focus Gear (Medium) + Leica R - Canon EF Mount Adapter (6-Hole) + Lens Hood (19mm f2.8 R) (12546) + 80/85mm O.D. Simring (Leica R 19mm f2.8 VII)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 1g, 5cm Red Scale Elmar & SBOOI Finder",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 24mm f2.8 Elmarit-M ASPH. (Black, 11878) + Lens Hood (21mm f2.8 / 24mm f2.8 / 28-35-50mm f4) (12592)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 28mm f2.8 Elmarit (Type II) (11802) + Lens Hood (21mm f3.4 / 28mm f2.8) (12501)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 28mm f2.8 Elmarit (Type II) (Infinity Lock) + Lens Hood (21mm f3.4 / 28mm f2.8) (12501M)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 28mm f2.8 Elmarit-M ASPH. (11606) + Lens Hood (35mm f2 ASPH. / 28mm f2.8 ASPH.) (A42) (12526)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 28mm f2.8 Elmarit-R 3 Cam + Lens Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 35mm f/2.8 Summaron L39 w/ IROOA Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 35mm f2 Summicron (Type III) (11309) + Lens Hood (35mm f1.4-2) (12504) + 39mm UVa Filter (Black, 13131)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 35mm f2 Summicron ASPH 11673 with hood 12526 A42",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 35mm f2 Summicron-M (Type IV) (Black, 11310) + Lens Hood M2/35 (12524)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 35mm f2 Summicron-M ASPH. (Type I) (Black, 11879) + Lens Hood (35mm f2 ASPH. / 28mm f2.8 ASPH.) (A42) (12526)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 35mm f2 Summicron-M v4 with hood 12524 - Bokeh king",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 35mm f2.5 Summarit-M (11643) + Lens Hood (35/50mm f2.5) (12459)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f1 Noctilux with Lens hood (E58)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f1 Noctilux-M (Type II) (11821) + Lens Hood (50mm f1 II) (12539)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f1 Noctilux-M (Type III) (11821) + Lens Hood (50mm f1) (12544)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f2 Summicron (Type II) (Black Paint, 11117) + 39mm Green Filter X 1 C. E39",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f2 Summicron (Type II) (Black Paint, 11117) + Lens Hood (35/50mm f2-3.5) (IROOA / 12571)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f2 Summicron-R (Type I) (2-Cam) (11228) + Lens Hood (35mm f2.8 R / 50mm f2 R) (12564)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f2.8 Elmar-M (Black, 11831) + Lens Hood (50mm f2.8 Elmar-M) (12549)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 50mm f2.8 Elmar-M (Black, 11831) + Lens Hood (50mm f2.8 Elmar-M, Black) (12550)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 90mm f/4 MACRO-ELMAR-M BLACK + MACRO-ADAPTER-M",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 90mm f2 APO Asph Summicron-M Lens - 11884 + Leica UV Filter",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 90mm f2.8 Tele-Elmarit (Silver, 11800) + Lens Hood (90mm f2.8-4 / 135mm f4-4.5) (IUFOO / 12575)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 90mm f2.8 Tele-Elmarit-M (11800) + 39mm Collapsible Rubber Lens Hood (90mm f2.8 Tele-Elmarit-M) (11250)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica 90mm f2.8 Tele-Elmarit-M (11800) + Lens Hood (9cm f4 / 13.5cm f4.5)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica APO-TELE-ELMAR-S 180mm f3.5 CS (11053) with ELPRO 180mm (16032)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Elmar L 50/3.5+VALOOHood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Elmar-M 50/2.8 Silver + Hood12549",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Elmarit 90mm f/2.8 mit OTZFO/16464K Adapter",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Elmarit-R 2.8 / 19mm II with Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Hektor 135/4.5 ヘッドノミ + Visoflex for ヘリコイド 14071",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Hektor 135mm f/4.5 für M Bajonett mit Visoflex",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Hektor 135mm f/4.5 für M39 mit Visoflex",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Kit Elmar 9 cm f4 + Lens Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Kit Elmar 90mm f4 LTM + Leather Case",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Elmarit-R 19mm f/2.8 3-cam with hood, boxed",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Elmarit-R 24mm f/2.8 3-cam lens with Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Hektor 125mm f/2.5 w/ hood and caps (HKMOO, ORPBO, HGOOI), Visoflex lens",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Summarex 1.5 / 85mm LTM with Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Summicron-R 35mm f/2 3-cam with hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Summilux-R 50mm f/1.4 3cam + 12508 hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Tele-Elmar 135mm f/4 M + 12575 hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Tele-Elmar 135mm f4 M-mount, worn + 12575 lenshood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Tele-Elmarit 2.8 / 90mm + 12575 hood, M",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz Wetzlar 50mm f/1.4 Summilux-R + 12508 hood, 2-cam",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Leitz lPHOTAR 1:2,4 / 12,5 per Bellows con Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica M 24mm f2.8 Elmarit ASPH with hood 12592",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica M 28mm f/2 SUMMICRON-M ASPH 6-Bit with Squarehood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica M 50mm f/2 Summicron (iii) 11817 + lens hood E Tappo",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Macro-Elmar-R 100mm f/4.0 mit Macro-Adapter",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Noctilux M 50/1.2+Hood12503",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica PHOTAR 25mm f2 con Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Red Elmar L 50/3.5+VALOOHood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Summarit-M 50mm F2.4 Black (Leica M) 11680 w/ hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Summaron L3.5cm/3.5 + HoodFOOKH",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Summicron 35mm f2 11108 S con occhialini e Case n.2021674",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Summicron M 35/2 ツノ付(6枚玉) カナダ + Hood12504",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Summicron-M 35mm/F2.0 ASPH Silver + 12504 brass hood Black repaint 11882",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Summilux M 50mm/F1.4 E43 Ver.II V2 Black with hood 12586 11113",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Summilux-M 75mm/F1.4 Ver.I with hood 12539 11814",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Super-Angulon M 21mm/F3.4 Ser.VII Black with 12501 hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Super-Angulon-R 21/4(3CAM)+Hood12506",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Super-Angulon-R 21mm/F4.0 with 12506 hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Tele-Elmarit-M 90/2.8(Early)+HoodIUFOO",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Telyt 200mm f/4.0 mit 16466M Adapter für M39",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Telyt 200mm f/4.0 mit Visoflex M (M39)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Telyt 200mm f/4.0 mit Visoflex für M (M39)",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Tri-Elmar-M 16-18-21mm/F4.0 ASPH/ w/ finder Lens Yr.2007 Germany 11642",
+   "category": "Lens"
+  },
+  {
+   "title": "Leitz 50mm f1.4 Summilux + Leitz XOOIM Hood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leitz Elmarit-m 21mm f/2.8 11134 3267XXX boxed + filter UV Leica + lens hood + finder Leica 21 MM Astuccio",
+   "category": "Lens"
+  },
+  {
+   "title": "Leitz Leica Tele-Elmar 135mm f4 black + 12575 lenshood",
+   "category": "Lens"
+  },
+  {
+   "title": "Leitz MR-Telyt-R 500mm f8.0 (R-Cam) + UVa 13400",
+   "category": "Lens"
+  },
+  {
+   "title": "Leica Motor-Drive R4",
+   "category": "Accessory"
+  },
+  {
+   "title": "LEICAMETER BLACK PAINT",
+   "category": "Accessory"
+  },
+  {
+   "title": "LEICAMETER MR BLACK PAINT",
+   "category": "Accessory"
+  },
+  {
+   "title": "LEICAMETER MR-4 chrome",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Leicameter MR",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Motor Drive R",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leicameter V2, black chrome",
+   "category": "Accessory"
+  },
+  {
+   "title": "Leica Motor Drive R 4 + Impugnatura Con Scatole",
+   "category": "Accessory"
+  },
+  {
+   "title": "LEICA Motor-Drive R (Leica R4/R5/R6)(816xx)-e",
+   "category": "Accessory"
+  }
+ ]
+}

@@ -278,3 +278,27 @@ def test_foreign_parts_and_manuals() -> None:
     ]:
         assert _classify(title)["category"] == "Accessory", title
     assert _classify("Leica M6 0.72 mit Anleitung und Box")["category"] == "Body"
+
+
+def test_strong_accessory_words_before_body_rules() -> None:
+    # 2026-11-14 시세 이탈 점검: 바르낙·콤팩트 바디 판단보다 먼저 부속품
+    for title in [
+        "Leica IIIc 取扱説明書",
+        "Leica MP for 巻き戻しクランク 14437",
+        "Leica Q2 for サムサポート 19543",
+        "FONDELLO LEICA M MONOCHROM TYP246",
+        "Leica M2 M3 black paint back door Filmandruckplatte",
+        "Leica IIIf for Case",
+        "Leica A型 for 革Case",
+        "Leica Extension Tube (90mm f4 Elmar) (OTQNO /16468)",
+        "Leica Werbung Display R3 Rare Blinkdisplay advertising",
+    ]:
+        assert _classify(title)["category"] == "Accessory", title
+    for title, category in [
+        ("Leica A型 Black (New Elmar 50mm F3.5付)", "Body"),
+        ("Leica DRP Ernst Leitz Wetzlar Sucherkamera mit Leitz Elmar 50mm f3.5 Objektiv", "Body"),
+        ("Leica Macro-Elmarit-R 60mm/F2.8 w/ 1:1 Extension tube boxed 11203", "Lens"),
+        ("Leica Macro-Elmar 100/4(for bellows)", "Lens"),
+        ("Leica M6 0.72 mit Anleitung und Box", "Body"),
+    ]:
+        assert _classify(title)["category"] == category, title
