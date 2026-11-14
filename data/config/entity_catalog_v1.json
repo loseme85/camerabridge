@@ -31382,7 +31382,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "-TL?\\b|\\bTL\\b"
+     "-TL?\\b|\\bTL\\b|\\bleica t\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -31457,7 +31457,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])23(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "-TL?\\b|\\bTL\\b"
+     "-TL?\\b|\\bTL\\b|\\bleica t\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -31527,7 +31527,7 @@
     "title_must": [
      "elmarit",
      "(?<![\\d./\\-–])18(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "-TL?\\b|\\bTL\\b"
+     "-TL?\\b|\\bTL\\b|\\bleica t\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -31597,7 +31597,7 @@
     "title_must": [
      "macro.?elmarit",
      "(?<![\\d./\\-–])60(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "-TL?\\b|\\bTL\\b"
+     "-TL?\\b|\\bTL\\b|\\bleica t\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -31667,7 +31667,7 @@
     "title_must": [
      "vario.?elmar\\b",
      "11\\s?-\\s?23",
-     "-TL?\\b|\\bTL\\b"
+     "-TL?\\b|\\bTL\\b|\\bleica t\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -31737,7 +31737,7 @@
     "title_must": [
      "vario.?elmar\\b",
      "18\\s?-\\s?56",
-     "-TL?\\b|\\bTL\\b"
+     "-TL?\\b|\\bTL\\b|\\bleica t\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
@@ -31807,7 +31807,7 @@
     "title_must": [
      "vario.?elmar\\b",
      "55\\s?-\\s?135",
-     "-TL?\\b|\\bTL\\b"
+     "-TL?\\b|\\bTL\\b|\\bleica t\\b"
     ],
     "title_must_not": [
      "\\bSL\\b|-SL\\b",
