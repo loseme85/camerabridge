@@ -1477,7 +1477,11 @@
     .sort-group-divider{grid-column:1/-1;margin:18px 0 6px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted)}
     .archive-card h3 .section-count{font-family:var(--sans);font-size:14px;color:var(--text-muted);font-weight:400;margin-left:6px}
     .jump-history{font-family:var(--sans);font-size:13px;color:var(--text);text-decoration:underline;text-underline-offset:3px;margin-left:8px;white-space:nowrap}
-    #archive-region{scroll-margin-top:80px}
+    #archive-region,#ebay-region{scroll-margin-top:80px}
+    /* eBay 매물 칸: 매장 매물과 눈으로 구분되게 따로 (eBay API 약관 — 다른 매물과 섞지 않음) */
+    .ebay-region:empty{display:none}
+    .archive-card.section-ebay{margin-top:40px;padding:18px 16px;border:1px solid var(--rule);background:var(--surface-soft, rgba(127,127,127,.06))}
+    .archive-card.section-ebay h3 .ebay-badge{display:inline-block;margin-left:6px;padding:1px 6px;border:1px solid var(--rule);font-size:12px;font-weight:500;vertical-align:middle}
     .archive-card.section-history{margin-top:56px;padding-top:22px;border-top:3px double var(--rule)}
     .archive-card.section-history h3{color:var(--text-soft)}
     .result-card.is-history{background:transparent}
@@ -1830,6 +1834,8 @@
             <div id="sort-bar" class="sort-bar" hidden><div id="country-chips" class="country-chips"></div><label for="sort-select" data-i18n="filters.sort.label">Sort</label></div>
             <section id="results-grid" class="results-grid" aria-live="polite"></section>
             <div id="results-load-more-region" class="load-more-region" aria-live="polite"></div>
+            <!-- eBay 매물은 매장 매물과 섞지 않고 따로 (eBay API 약관 8.1(b)(2)(2), 2026-11-14) -->
+            <section id="ebay-region" class="ebay-region" aria-live="polite"></section>
             <section id="archive-region" aria-live="polite"></section>
             <div class="footer-note" id="warning-region"></div>
           </div>
@@ -2349,6 +2355,9 @@
         unknown: { ko: '미확인', en: 'Unknown', ja: '不明', 'zh-Hans': '未知', 'zh-Hant': '未知', pt: 'Desconhecido', es: 'Desconocido', de: 'Unbekannt', it: 'Sconosciuto' },
       },
       section: {
+        jump_ebay: { ko: 'eBay 매물 {count}개 ↓', en: '{count} on eBay ↓', ja: 'eBay の出品 {count}件 ↓', 'zh-Hans': 'eBay 在售 {count} 件 ↓', 'zh-Hant': 'eBay 在售 {count} 件 ↓', pt: '{count} no eBay ↓', es: '{count} en eBay ↓', de: '{count} bei eBay ↓', it: '{count} su eBay ↓' },
+        ebay_listings: { ko: 'eBay 매물', en: 'On eBay', ja: 'eBay の出品', 'zh-Hans': 'eBay 在售', 'zh-Hant': 'eBay 在售', pt: 'No eBay', es: 'En eBay', de: 'Bei eBay', it: 'Su eBay' },
+        ebay_subtitle: { ko: 'eBay 우량 판매자(평가 99% 이상·500건 이상)의 즉시 구매 매물이에요. eBay에서 바로 가져와 위 매장 매물·시세와 따로 보여 드려요. 누르면 eBay로 이동해요.', en: 'Buy It Now listings from top-rated eBay sellers (99%+ positive, 500+ ratings), fetched live from eBay and shown separately from the shop listings and prices above. Opens on eBay.', ja: '評価の高い eBay 出品者（好評価99%以上・500件以上）の即決出品です。eBay から直接取得し、上の店舗在庫・相場とは分けて表示します。押すと eBay に移動します。', 'zh-Hans': '来自 eBay 高评价卖家（好评 99% 以上、评价 500 条以上）的一口价商品，直接取自 eBay，与上面的店铺商品和行情分开显示。点击前往 eBay。', 'zh-Hant': '來自 eBay 高評價賣家（好評 99% 以上、評價 500 則以上）的直購商品，直接取自 eBay，與上方的店鋪商品和行情分開顯示。點擊前往 eBay。', pt: 'Anúncios “Compre já” de vendedores do eBay bem avaliados (99%+ positivos, 500+ avaliações), trazidos do eBay em tempo real e mostrados separados dos anúncios das lojas e preços acima. Abre no eBay.', es: 'Anuncios “Cómpralo ya” de vendedores de eBay con alta valoración (99 %+ positivas, 500+ valoraciones), obtenidos en directo de eBay y mostrados aparte de los anuncios de tiendas y precios de arriba. Se abre en eBay.', de: 'Sofort-Kaufen-Angebote von top bewerteten eBay-Verkäufern (99 %+ positiv, 500+ Bewertungen), live von eBay geladen und getrennt von den Händlerangeboten und Preisen oben angezeigt. Öffnet bei eBay.', it: 'Inserzioni “Compralo subito” di venditori eBay molto apprezzati (99%+ positivi, 500+ feedback), prese in tempo reale da eBay e mostrate separate dagli annunci dei negozi e dai prezzi qui sopra. Si apre su eBay.' },
         active_listings: { ko: '지금 살 수 있는 매물', en: 'For sale now', ja: 'いま買える在庫', 'zh-Hans': '当前在售', 'zh-Hant': '目前在售', pt: 'Anúncios ativos', es: 'Anuncios activos', de: 'Verfügbare Angebote', it: 'Annunci attivi' },
         market_history: { ko: '팔렸거나 내려간 기록', en: 'Sold or removed — price record', ja: '売れた・掲載終了の記録', 'zh-Hans': '历史成交 / 价格记录', 'zh-Hant': '歷史成交 / 價格紀錄', pt: 'Histórico de mercado', es: 'Historial de mercado', de: 'Markthistorie', it: 'Storico di mercato' },
         archive: { ko: '과거 기록', en: 'Archive', ja: 'アーカイブ', 'zh-Hans': '历史记录', 'zh-Hant': '歷史記錄', pt: 'Arquivo', es: 'Archivo', de: 'Archiv', it: 'Archivio' },
@@ -6248,7 +6257,7 @@
         'result-count','result-caption','active-count','active-count-caption',
         'market-price-value','market-price-caption','summary-meta','index-debug-line','page-indicator',
         'prev-button','next-button','state-region','market-entry-region','refinement-region',
-        'query-summary-region','results-grid','results-load-more-region','archive-region','warning-region'
+        'query-summary-region','results-grid','results-load-more-region','ebay-region','archive-region','warning-region'
       ].forEach(id => {
         els[id] = $(id);
       });
@@ -6815,6 +6824,7 @@
           state.stableOrder = false;
           state.response = payload;
           state.offset = Math.max(0, offset);
+          loadEbaySection();
           const initialSections = buildDisplaySections(getResults(), getSortMode());
           const requestedHistoryVisibleCount = Number.isFinite(Number(options.historyVisibleCount))
             ? Math.max(0, Number(options.historyVisibleCount))
@@ -7743,6 +7753,7 @@
       if(!state.appending){
         els['results-grid'].innerHTML = '';
         els['archive-region'].innerHTML = '';
+        els['ebay-region'].innerHTML = '';
       }
       els['results-load-more-region'].innerHTML = '';
 
@@ -7802,6 +7813,7 @@
       renderSortBar();
       els['results-grid'].innerHTML = renderResultSection('active', displaySections.active, renderLoadMore(displaySections.active.length), historyResults.length);
       els['results-load-more-region'].innerHTML = '';
+      els['ebay-region'].innerHTML = renderEbaySection();
       els['archive-region'].innerHTML = renderArchiveSection(historyResults);
     }
 
@@ -8208,7 +8220,7 @@
       return `
         <article class="archive-card ${isActive ? 'section-active' : 'section-history'}">
           <h3>${escapeHtml(title)}${isActive ? activeSectionCount(results.length) : ` <span class="section-count">${escapeHtml(formatListingCount(results.length))}</span>`}</h3>
-          <p>${escapeHtml(subtitle)}${isActive && historyCount ? ` <a class="jump-history" href="#archive-region">${escapeHtml(ux('section.jump_history', 'See {count} sold or removed ↓').replace('{count}', historyCount))}</a>` : ''}</p>
+          <p>${escapeHtml(subtitle)}${isActive && historyCount ? ` <a class="jump-history" href="#archive-region">${escapeHtml(ux('section.jump_history', 'See {count} sold or removed ↓').replace('{count}', historyCount))}</a>` : ''}${isActive ? ebayJumpLink() : ''}</p>
           ${
             results.length
               ? `<div class="${listClass}">${results.map((result, index) => sortGroupDivider(results, index, isActive) + renderCard(result, Number(result.__ui_original_index ?? index), !isActive)).join('')}</div>`
@@ -8225,6 +8237,53 @@
       if(!isActive || !group || (index > 0 && results[index - 1].__ui_sort_group === group)) return '';
       const label = group === 2 ? ux('section.group_accessory', 'Accessories, brochures and manuals') : ux('section.group_other', 'Other versions, repaints and similar items');
       return `<div class="sort-group-divider">${escapeHtml(label)}</div>`;
+    }
+
+    // eBay 매물 칸 (2026-11-14): 본 검색이 끝난 뒤 /api/search?live=ebay로 따로 받아 매장 매물 아래에 따로 보여 줌.
+    // eBay API 약관: eBay 매물은 다른 매물과 섞지 않고 눈으로 구분되게, 가격 추정·시세에 쓰지 않음 → 가격대·매물 수에 안 들어감
+    const ebayState = { key: '', results: [] };
+    const EBAY_SECTION_LIMIT = 12;
+
+    async function loadEbaySection(){
+      if(!state.query) return;
+      const params = buildParams(0, { limit: EBAY_SECTION_LIMIT });
+      params.set('live', 'ebay');
+      const key = params.toString();
+      if(ebayState.key === key) return;
+      ebayState.key = key;
+      ebayState.results = [];
+      try{
+        const response = await fetch('/api/search?' + key, { headers: { 'Accept': 'application/json' } });
+        const payload = response.ok ? await response.json() : null;
+        if(ebayState.key !== key) return;
+        ebayState.results = (payload && Array.isArray(payload.results) ? payload.results : [])
+          .filter(result => /ebay/i.test(String(result.source || '')));
+      }catch(error){
+        ebayState.results = [];
+      }
+      if(els['ebay-region'] && !state.loading && !state.error){
+        els['ebay-region'].innerHTML = renderEbaySection();
+        // 매장 매물 위 설명 줄에 'eBay n개 ↓' (매장 매물이 많으면 eBay 칸이 한참 아래라서) — 목록을 다시 그리지 않고 링크만 붙임
+        const line = document.querySelector('#results-grid .section-active > p');
+        if(line && !line.querySelector('.jump-ebay')) line.insertAdjacentHTML('beforeend', ebayJumpLink());
+      }
+    }
+
+    function ebayJumpLink(){
+      const count = (ebayState.results || []).length;
+      return count ? ` <a class="jump-history jump-ebay" href="#ebay-region">${escapeHtml(ux('section.jump_ebay', 'eBay listings {count} ↓').replace('{count}', count))}</a>` : '';
+    }
+
+    function renderEbaySection(){
+      const rows = ebayState.results || [];
+      if(!rows.length || !state.response || state.loading || state.error) return '';
+      return `
+        <article class="archive-card section-ebay">
+          <h3>${escapeHtml(ux('section.ebay_listings', 'On eBay'))} <span class="section-count">${escapeHtml(formatListingCount(rows.length))}</span></h3>
+          <p>${escapeHtml(ux('section.ebay_subtitle', 'Buy It Now listings from top-rated eBay sellers, shown separately from the shop listings and prices above.'))}</p>
+          <div class="archive-list active-list">${rows.map(result => renderCard(result, -1, false)).join('')}</div>
+        </article>
+      `;
     }
 
     function renderArchiveSection(results){

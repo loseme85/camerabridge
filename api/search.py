@@ -3794,6 +3794,38 @@ def parse_search_params(params: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def _first_param(params: Mapping[str, Any], key: str) -> str:
+    value = params.get(key)
+    if isinstance(value, (list, tuple)):
+        value = value[0] if value else ""
+    return str(value or "").strip().lower()
+
+
+def _ebay_only_response(parsed: dict[str, Any], search_records: Callable[..., dict[str, Any]]) -> dict[str, Any]:
+    """'eBay 매물' 칸용: 그 검색어의 eBay 실시간 매물만 (우리 매물·시세와 섞지 않음, eBay API 약관 8.1(b)(2)(2)).
+    결과는 같은 점수·모델 연결 규칙으로 고르고, 순서는 점수순."""
+    response = search_records(
+        query=parsed["query"],
+        records=[],
+        limit=parsed["limit"],
+        offset=0,
+        filters=parsed["filters"],
+        sort=parsed["sort"],
+        include_debug=parsed["include_debug"],
+        strong_only=parsed["strong_only"],
+        include_live=True,
+        **({"min_score": parsed["min_score"]} if parsed["min_score"] is not None else {}),
+    )
+    rows = [result for result in response.get("results") or [] if str(result.get("source") or "").lower() == "ebay"]
+    return {
+        "schema_version": "search_service.ebay_section.v1",
+        "query": parsed["query"],
+        "results": rows,
+        "result_count": len(rows),
+        "live_source_diagnostics": response.get("live_source_diagnostics"),
+    }
+
+
 def search_from_params(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
@@ -3805,6 +3837,8 @@ def search_from_params(
     load_and_search: Callable[..., dict[str, Any]] = runtime["load_and_search"]
     build_query_ui_hints: Callable[..., dict[str, Any]] = runtime["build_query_ui_hints"]
     parsed = parse_search_params(params)
+    if _first_param(params, "live") == "ebay":
+        return _ebay_only_response(parsed, search_records)
     evidence_limit = min(int(runtime.get("max_limit") or DEFAULT_MAX_LIMIT), max(parsed["limit"], PRICE_EVIDENCE_SCAN_LIMIT))
     resolved_path = _resolve_search_index_path(path) if (records is None or path is not None) else None
     response_meta = _build_index_meta(resolved_path, parsed["query"])

@@ -1044,13 +1044,19 @@ def search_records(
     min_score: float = DEFAULT_MIN_SCORE,
     strong_only: bool = False,
     use_candidate_narrowing: bool = True,
+    include_live: bool = False,
 ) -> dict[str, Any]:
-    live_source_records, live_source_diagnostics = _load_external_active_records(
-        query,
-        limit=limit,
-        offset=offset,
-        filters=filters,
-    )
+    # eBay 실시간 매물은 본 검색에 섞지 않음 (2026-11-14 eBay API 약관 8.1(b)(2)(2): eBay 매물은 다른 매물과 섞지 말고
+    # 따로 보여야 함). 화면이 /api/search?live=ebay로 따로 불러 'eBay 매물' 칸에 둠 → 본 검색은 eBay 응답을 기다리지 않음
+    if include_live:
+        live_source_records, live_source_diagnostics = _load_external_active_records(
+            query,
+            limit=limit,
+            offset=offset,
+            filters=filters,
+        )
+    else:
+        live_source_records, live_source_diagnostics = [], {"ebay": {"source": "eBay", "status": "separate_request"}}
     entity_id = (filters or {}).get("entity")
     if entity_id:
         # 엔티티 모드: 그 엔티티에 연결된 매물만 (실시간 eBay 매물은 카탈로그 규칙으로 판정)
