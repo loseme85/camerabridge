@@ -1,42 +1,32 @@
 {
-"total": 441,
+"total": 443,
 "by_hint": {
-"check": 300,
+"check": 301,
 "set": 81,
 "defect": 3,
 "edition": 44,
-"accessory": 13
+"accessory": 14
 },
 "new": [
 {
-"url": "https://kamerastore.com/products/leica-28mm-f2-8-elmarit-ii-prototype-leica-m-2",
-"entity": "leica:lens:elmarit-m:28:v2",
-"ratio": 2.58,
+"url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-5cm-12-8-m39-haze/",
+"entity": "leica:lens:elmar-m:50:f2.8:v1",
+"ratio": 0.35,
 "category": "Lens",
-"title": "Leica 28mm f2.8 Elmarit (Type II) (Infinity Lock) + Lens Hood (21mm f3.4 / 28mm f2.8) (12501M)",
-"price": "€2,624",
-"source": "Kamerastore (핀란드)",
-"hint": "accessory"
-},
-{
-"url": "https://fk-secondhand.com/shop/leica-elmarit-90mm-f-28-mit-otzfo-16464k-adapter-2126251/",
-"entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 0.36,
-"category": "Lens",
-"title": "Leica Elmarit 90mm f/2.8 mit OTZFO/16464K Adapter",
-"price": "EUR 199",
-"source": "FK Second Hand (오스트리아)",
-"hint": "accessory"
-},
-{
-"url": "https://www.leica-camera-france-occasions.com/en/occasion/telyt-viso-200-mm-f45",
-"entity": "leica:lens:telyt:visoflex:200",
-"ratio": 2.51,
-"category": "Lens",
-"title": "TELYT-VISO 200 MM F/4.5",
-"price": "€490",
-"source": "Leica Store France (프랑스)",
+"title": "Leica Leitz Elmar 50mm 1:2.8, M39, haze",
+"price": "€150",
+"source": "Fotohandel Delfshaven (네덜란드)",
 "hint": "check"
+},
+{
+"url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summicron-r-35mm-f-2-2-cam-lens-hood/",
+"entity": "leica:lens:summicron-r:35",
+"ratio": 0.44,
+"category": "Lens",
+"title": "Leica Leitz Summicron-R 35mm f/2 2-cam lens with hood",
+"price": "€500",
+"source": "Fotohandel Delfshaven (네덜란드)",
+"hint": "accessory"
 }
 ],
 "items": [
@@ -1591,6 +1581,16 @@
 "hint": "check"
 },
 {
+"url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-5cm-12-8-m39-haze/",
+"entity": "leica:lens:elmar-m:50:f2.8:v1",
+"ratio": 0.35,
+"category": "Lens",
+"title": "Leica Leitz Elmar 50mm 1:2.8, M39, haze",
+"price": "€150",
+"source": "Fotohandel Delfshaven (네덜란드)",
+"hint": "check"
+},
+{
 "url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-2-8-50mm-ltm/",
 "entity": "leica:lens:elmar-m:50:f2.8:v1",
 "ratio": 0.35,
@@ -1603,7 +1603,7 @@
 {
 "url": "https://www.peterloy.com/?p=22212",
 "entity": "leica:lens:elmar-m:50:f2.8:v1",
-"ratio": 0.41,
+"ratio": 0.42,
 "category": "Lens",
 "title": "Leitz 5cm f2.8 Elmar, screw mount",
 "price": "£149",
@@ -1613,7 +1613,7 @@
 {
 "url": "https://classic.leica-camera.com/en/LEITZ-ELMAR-M-1-2-8-50mm-silver-retractable/11823SH-3668363",
 "entity": "leica:lens:elmar-m:50:f2.8:v1",
-"ratio": 2.65,
+"ratio": 2.68,
 "category": "Lens",
 "title": "LEITZ ELMAR-M 50mm f2.8, silver, retractable",
 "price": "€1,150",
@@ -2151,16 +2151,6 @@
 "hint": "check"
 },
 {
-"url": "https://fotohandeldelfshaven.nl/product/leica-elmarit-90mm-f-2-8-chrome-m-mount/",
-"entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 0.36,
-"category": "Lens",
-"title": "Leica Elmarit 90mm f2.8 chrome M-mount",
-"price": "€200",
-"source": "Fotohandel Delfshaven (네덜란드)",
-"hint": "check"
-},
-{
 "url": "https://www.used-photo.de/product/leica-elmarit-m-90mm-f-28-s-n-2086445-iufoo/",
 "entity": "leica:lens:elmarit-m:90:unspecified",
 "ratio": 0.36,
@@ -2188,6 +2178,16 @@
 "title": "Leica Elmarit M 90mm f2.8 chrome 11129",
 "price": "€199",
 "source": "Camera Boutique Graz (오스트리아)",
+"hint": "check"
+},
+{
+"url": "https://fotohandeldelfshaven.nl/product/leica-elmarit-90mm-f-2-8-chrome-m-mount/",
+"entity": "leica:lens:elmarit-m:90:unspecified",
+"ratio": 0.37,
+"category": "Lens",
+"title": "Leica Elmarit 90mm f2.8 chrome M-mount",
+"price": "€200",
+"source": "Fotohandel Delfshaven (네덜란드)",
 "hint": "check"
 },
 {
@@ -2243,7 +2243,7 @@
 {
 "url": "https://www.photografica.com/products/leica-m-90-2-8-elmarit-black",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 0.41,
+"ratio": 0.42,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f2.8 BLACK",
 "price": "DKK 1,699",
@@ -2263,7 +2263,7 @@
 {
 "url": "https://five-star-camera.com/products/leica-elmarit-9028-1016",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 0.43,
+"ratio": 0.44,
 "category": "Lens",
 "title": "Leica As-Is Leica ELMARIT 90mm f2.8 Leica M Mount Lens",
 "price": "$263",
@@ -2273,7 +2273,7 @@
 {
 "url": "https://classic.leica-camera.com/en/ELMARIT-M-1-2-8-90-mm-silbern-verchromt/11808SH-3856269",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 2.73,
+"ratio": 2.75,
 "category": "Lens",
 "title": "Leica ELMARIT-M 90mm f2.8,silbern verchromt",
 "price": "€1,500",
@@ -2283,7 +2283,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Elmarit-M-90mm-f-2.8-11807/11807SH-3462649",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 2.94,
+"ratio": 2.96,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f2.8 11807",
 "price": "£1,350",
@@ -2293,7 +2293,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Elmarit-M-90mm-f-2.8-11807/11807SH-3623420",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 3.05,
+"ratio": 3.07,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f2.8 11807",
 "price": "£1,400",
@@ -2303,7 +2303,7 @@
 {
 "url": "https://www.cameraobscuraelburg.nl/product/leica-elmarit-90mm-f2-8-titanium/",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 3.09,
+"ratio": 3.11,
 "category": "Lens",
 "title": "Leica Elmarit 90mm f2.8 Titanium",
 "price": "€1,700",
@@ -2313,7 +2313,7 @@
 {
 "url": "https://www.nivo-schweitzer.nl/occasion-leica-11808-elmarit-m-90mm28-o-silver-sn-3807525/p33313",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 3.25,
+"ratio": 3.28,
 "category": "Lens",
 "title": "Leica 11808 Elmarit-M 90mm f2.8 silver",
 "price": "€1,790",
@@ -2323,7 +2323,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Elmarit-M-90mm-f-2.8-Silver-Chrome-11808/11808SH-3776442",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 4.03,
+"ratio": 4.06,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f2.8 Silver Chrome 11808",
 "price": "£1,850",
@@ -2333,7 +2333,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Elmarit-M-90mm-f-2.8-Silver-Chrome-11808/11808SH-3794652",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 4.33,
+"ratio": 4.36,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f2.8 Silver Chrome 11808",
 "price": "£1,990",
@@ -2343,7 +2343,7 @@
 {
 "url": "https://www.panajou.fr/objectifs-photo-d-occasion/leica-elmarit-m-90mm-f-2-8-silver-occasion_p42382",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 6.36,
+"ratio": 6.41,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f/2.8 Silver",
 "price": "€3,500",
@@ -3391,9 +3391,19 @@
 "hint": "edition"
 },
 {
+"url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summicron-r-35mm-f-2-2-cam-lens-hood/",
+"entity": "leica:lens:summicron-r:35",
+"ratio": 0.44,
+"category": "Lens",
+"title": "Leica Leitz Summicron-R 35mm f/2 2-cam lens with hood",
+"price": "€500",
+"source": "Fotohandel Delfshaven (네덜란드)",
+"hint": "accessory"
+},
+{
 "url": "https://occasion.fototrade.lu/boutique/objectifs-materiel-occasion/leica-objectifs-materiel-occasion-materiel-occasion/leica-r-35-f20/",
 "entity": "leica:lens:summicron-r:35",
-"ratio": 0.43,
+"ratio": 0.44,
 "category": "Lens",
 "title": "Leica R 35mm f2.0 Summicron-R",
 "price": "EUR 499",
@@ -3403,7 +3413,7 @@
 {
 "url": "https://www.photografica.com/products/brugt-leica-r-35-2-0-summicron-rom",
 "entity": "leica:lens:summicron-r:35",
-"ratio": 2.9,
+"ratio": 2.94,
 "category": "Lens",
 "title": "Leica Summicron-R 35mm f2.0 ROM",
 "price": "DKK 24,999",
@@ -3413,7 +3423,7 @@
 {
 "url": "https://www.leica-store-konstanz.de/leicastore_sh/summicron-r-50-2-0/",
 "entity": "leica:lens:summicron-r:50",
-"ratio": 0.42,
+"ratio": 0.43,
 "category": "Lens",
 "title": "Leica Summicron-R 50mm f2.0",
 "price": "€190",
@@ -3423,7 +3433,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summicron-R-1-2-50mm-ROM-11345/11345SH-3868985",
 "entity": "leica:lens:summicron-r:50",
-"ratio": 2.56,
+"ratio": 2.58,
 "category": "Lens",
 "title": "Leica Summicron-R 50mm f2.0, ROM 11345",
 "price": "€1,150",
@@ -3433,7 +3443,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summicron-R-50mm-f-2-V2-ROM-11345/11345SH-3667351",
 "entity": "leica:lens:summicron-r:50",
-"ratio": 2.66,
+"ratio": 2.69,
 "category": "Lens",
 "title": "Leica Summicron-R 50mm f2 V2 ROM 11345",
 "price": "£1,000",
@@ -3443,7 +3453,7 @@
 {
 "url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-r-50mm-f2-ii-7",
 "entity": "leica:lens:summicron-r:50",
-"ratio": 3.76,
+"ratio": 3.8,
 "category": "Lens",
 "title": "SUMMICRON-R 50mm f/2 (II)",
 "price": "€1,690",
@@ -3603,7 +3613,7 @@
 {
 "url": "https://www.fotoc.dk/brugte-objektiver/23837-leica-summicron-m-50mm-f2-rigid-v2.html",
 "entity": "leica:lens:summicron:50:rigid",
-"ratio": 0.37,
+"ratio": 0.38,
 "category": "Lens",
 "title": "Leica Summicron-M 50mm f2 Rigid (v2)",
 "price": "DKK 3,999",
@@ -3673,7 +3683,7 @@
 {
 "url": "https://www.photowarehouse.co.nz/shop/second-hand-products/rangefinders/leica-mf-35mm-f1-4-summilux-lens-in-m-mount-with-goggles-and-ollux-hood-s-h-5yk6h8",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 2.57,
+"ratio": 2.62,
 "category": "Lens",
 "title": "Leica 35mm f1.4 Summilux with Goggles and OLLUX Hood",
 "price": "NZ$18,500",
@@ -3683,7 +3693,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summilux-M-35mm-f-1.4-Infinity-Lock-11870/11870SH-2221507",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 2.82,
+"ratio": 2.88,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 Infinity Lock 11870",
 "price": "£8,500",
@@ -3693,7 +3703,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340590794",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 3.63,
+"ratio": 3.7,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥2,310,000",
@@ -3703,7 +3713,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340864772",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 3.77,
+"ratio": 3.84,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥2,400,000",
@@ -3713,7 +3723,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340211187",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 3.99,
+"ratio": 4.07,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥2,541,000",
@@ -3723,7 +3733,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340810229",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 4.18,
+"ratio": 4.27,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥2,664,800",
@@ -3733,7 +3743,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340866615",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 4.4,
+"ratio": 4.49,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥2,801,000",
@@ -3743,7 +3753,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340813985",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 4.66,
+"ratio": 4.76,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥2,970,000",
@@ -3753,7 +3763,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-M-Edition-60-Set-with-Summilux-M-35mm-f-1.4-10779/10779SH-9007779",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 4.81,
+"ratio": 4.91,
 "category": "Lens",
 "title": "Leica M Edition 60 Set with Summilux-M 35mm f1.4 10779",
 "price": "£14,500",
@@ -3763,7 +3773,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340928276",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 5.18,
+"ratio": 5.28,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥3,300,000",
@@ -3773,7 +3783,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340834317",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 5.18,
+"ratio": 5.28,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥3,300,000",
@@ -3783,7 +3793,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340980434",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 5.18,
+"ratio": 5.28,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥3,300,000",
@@ -3793,7 +3803,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340715722",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 5.58,
+"ratio": 5.69,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥3,553,000",
@@ -3803,7 +3813,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340863041",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 5.91,
+"ratio": 6.02,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm F1.4 EarlyChrome",
 "price": "¥3,762,000",
@@ -3813,7 +3823,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summilux-M-1.4-35mm-black/11300SH-4879863",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 6.78,
+"ratio": 6.91,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 black",
 "price": "CHF 22,650",
@@ -3833,7 +3843,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summilux-M-35mm-f-1.4-V2-Infinity-Lock-11870/11870SH-2347514",
 "entity": "leica:lens:summilux-m:35:v2",
-"ratio": 2.52,
+"ratio": 2.55,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 V2 Infinity Lock 11870",
 "price": "£6,200",
@@ -3843,7 +3853,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summilux-M-35mm-f-1.4-V2-Infinity-Lock-11870/11870SH-2167262",
 "entity": "leica:lens:summilux-m:35:v2",
-"ratio": 4.46,
+"ratio": 4.51,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 V2 Infinity Lock 11870",
 "price": "£10,990",
@@ -4433,7 +4443,7 @@
 {
 "url": "https://m-camera.com/c-item-detail?ic=A000000978",
 "entity": "leica:lens:xenon:50",
-"ratio": 0.26,
+"ratio": 0.27,
 "category": "Lens",
 "title": "Leica 50mm f2 XENON L39",
 "price": "¥55,000",
@@ -4443,7 +4453,7 @@
 {
 "url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23U0252",
 "entity": "leica:lens:xenon:50",
-"ratio": 0.38,
+"ratio": 0.39,
 "category": "Lens",
 "title": "Leica 50mm f/1.5 XENON chrome 3 RING",
 "price": "€450",

@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 944,
+   "count": 943,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -21,7 +21,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 682,
+   "count": 681,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -169,18 +169,6 @@
    "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
   },
   {
-   "a": "leica:body:m240:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 92,
-   "example": "[위탁] M 240 (Black)"
-  },
-  {
-   "a": "leica:feature:frameline-28",
-   "b": "leica:feature:no-meter",
-   "count": 91,
-   "example": "Leica M-A Black Chrome x0.72"
-  },
-  {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:meter",
    "count": 91,
@@ -197,6 +185,18 @@
    "b": "leica:feature:black-paint",
    "count": 91,
    "example": "Leica MP BlackPaint x0.72"
+  },
+  {
+   "a": "leica:body:m240:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 91,
+   "example": "[위탁] M 240 (Black)"
+  },
+  {
+   "a": "leica:feature:frameline-28",
+   "b": "leica:feature:no-meter",
+   "count": 90,
+   "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:body:m7:standard",
@@ -243,7 +243,7 @@
   {
    "a": "leica:body:m11-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 70,
+   "count": 69,
    "example": "Leica M11-P Silver"
   },
   {
@@ -415,28 +415,28 @@
    "example": "Leica M 35mm f2 Summicron 1st 8elements EYE Black Repaint"
   },
   {
+   "a": "leica:feature:black-paint",
+   "b": "leica:lens:summilux-m:50:black-paint",
+   "count": 39,
+   "example": "Leica M 50mm f1.4 Summilux 4th Black Paint"
+  },
+  {
    "a": "leica:body:m-a:standard",
    "b": "leica:feature:frameline-28",
-   "count": 39,
+   "count": 38,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:body:m-a:standard",
    "b": "leica:feature:no-meter",
-   "count": 39,
+   "count": 38,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:body:m-a:standard",
    "b": "leica:feature:mechanical",
-   "count": 39,
+   "count": 38,
    "example": "Leica M-A Black Chrome x0.72"
-  },
-  {
-   "a": "leica:feature:black-paint",
-   "b": "leica:lens:summilux-m:50:black-paint",
-   "count": 39,
-   "example": "Leica M 50mm f1.4 Summilux 4th Black Paint"
   },
   {
    "a": "leica:body:m-monochrom-ccd",
