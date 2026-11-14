@@ -14187,6 +14187,62 @@ def crawl_yaotomi():
     return results
 
 
+# 2026-11-15 밤샘: Digital Camera Warehouse (호주) — Neto 쇼핑몰, 라이카 브랜드 화면(/brand/leica/?pgnum=N)에 새 상품과 중고('| Secondhand')가 섞임
+def crawl_dcw():
+    """Digital Camera Warehouse (호주 시드니) - 라이카 브랜드 화면에서 '| Secondhand'만. 품절은 'Currently Unavailable'.
+    등급 표기 없음(사진 등급 대기열로). 가격 AUD. robots.txt: Crawl-delay 1, 필터(?rf=)는 막혀 있어 브랜드 화면을 씀"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.digitalcamerawarehouse.com.au"
+    print("\n  📂 Digital Camera Warehouse 크롤링 시작")
+    for page in range(1, 20):
+        resp = sess.get(f"{base}/brand/leica/", params={"pgnum": page}, timeout=30)
+        resp.raise_for_status()
+        cards = re.split(r"<article\b", resp.text)[1:]
+        found = 0
+        for card in cards:
+            card = re.sub(r"<!--.*?-->", "", card, flags=re.S)
+            name_m = re.search(r'data-name="([^"]+)"', card)
+            if not name_m:
+                continue
+            found += 1
+            raw = _html.unescape(name_m.group(1))
+            if "secondhand" not in raw.lower():
+                continue
+            name = re.sub(r"\s*\|\s*secondhand\s*$", "", raw, flags=re.I)
+            name = re.sub(r"\s*[^\x00-\x7F]+\s*\d{2}mm\b", "", name).strip()  # 'M Mount ¯82mm'·'�39mm' (필터 지름 기호 깨짐)
+            price_m = re.search(r'data-price="([\d.]+)"', card)
+            url_m = re.search(r'data-url="([^"]+)"', card)
+            img_m = re.search(r'<img\s+src="([^"]+)"', card)
+            price = f"A${float(price_m.group(1)):,.0f}" if price_m else "문의요망"
+            cat = detect_category(name, price)
+            results.append({
+                "게시일": "",
+                "site": "Digital Camera Warehouse (호주)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "AUD",
+                "이미지": (base + img_m.group(1)) if img_m and img_m.group(1).startswith("/") else (img_m.group(1) if img_m else ""),
+                "링크": url_m.group(1) if url_m else base,
+                "품절": "currently unavailable" in card.lower(),
+                "예약중": False,
+                "mount": "Accessory" if cat == "Accessory" else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        if not found:
+            break
+        time.sleep(1.5)
+    print(f"  ✅ Digital Camera Warehouse 완료: {len(results)}개 (판매 중 {sum(1 for r in results if not r['품절'])})")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14371,6 +14427,7 @@ def crawl_all():
         ("Leica Store Brasil (브라질)", lambda: ce.wrap_full_run("Leica Store Brasil (브라질)", crawl_leicastorebr)),
         ("Grande Marvin (이탈리아)", lambda: ce.wrap_full_run("Grande Marvin (이탈리아)", crawl_grandemarvin)),
         ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
+        ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
         ("Leica Store Manchester (영국)", lambda: ce.wrap_full_run("Leica Store Manchester (영국)", crawl_lsmanchester)),
         ("Kamera Express (룩셈부르크)", lambda: ce.wrap_full_run("Kamera Express (룩셈부르크)", crawl_kameraexpresslu)),
