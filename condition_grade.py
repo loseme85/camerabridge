@@ -157,6 +157,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return grade, "label"
     if cond.startswith(AKASAKA_PREFIX):
         return _AKASAKA.get(cond[len(AKASAKA_PREFIX):].strip()), "label"
+    if cond.startswith(SCHOUTEN_PREFIX):
+        return _SCHOUTEN.get(cond[len(SCHOUTEN_PREFIX):].strip().lower()), "text"
     if cond.startswith(GLAZERS_PREFIX):
         return _GLAZERS.get(cond[len(GLAZERS_PREFIX):].strip().upper()), "label"
     if cond.startswith(TAMARKIN_PREFIX):
@@ -482,6 +484,30 @@ AKASAKA_PREFIX = "Akasaka: "
 # 이 대응 기준 정확 일치 9/25 · 한 등급 이내 21/25 (사진이 평균 0.8등급 후함 — 기존 0.8과 같음).
 _AKASAKA = {"新品": "N", "新同品": "S", "極美品": "A", "美品": "B", "良品": "B", "中": "C", "並品": "D", "並": "D"}
 # 미국 Glazer's Camera: 제목 괄호 (M) Mint · (EX) Excellent · (VG) Very Good · (G)/(Good) · (Fair)
+# 네덜란드 Schouten Select: 등급 표기 없이 설명 첫 문장에 상태 말 ('Very nice in almost like new condition …',
+# 'Basically in like new condition, but rated a bit less …', 'New unused …'). 거의 모든 설명이 'like new'라
+# '거의·가까운·조금 덜'을 한 칸 내림 (2026-11-15 밤샘, 사진 평가는 PR 본문)
+SCHOUTEN_PREFIX = "Schouten: "
+_SCHOUTEN = {"new unused": "N", "never used": "N", "like new": "S", "mint": "S", "almost like new": "A",
+             "near mint": "A", "excellent": "A", "very nice": "A", "signs of use": "B", "good": "B", "used": "C", "fair": "C"}
+_SCHOUTEN_ORDER = [("new unused", r"\bnew,? unused\b|\bunused\b"), ("never used", r"\bnever (?:been )?used\b"),
+                   ("almost like new", r"(?:almost|close to|nearly|basically)[^.]{0,20}like new|like new[^.]{0,40}(?:rated a bit less|but rated)"),
+                   ("near mint", r"\bnear mint\b|\bmint-\b"), ("like new", r"\blike new\b"), ("mint", r"\bmint\b"),
+                   ("excellent", r"\bexcellent\b"), ("very nice", r"\bvery nice\b"),
+                   ("signs of use", r"(?:clear|normal|visible|some) signs of use|\bwear\b"), ("good", r"\bgood (?:condition|working)"),
+                   ("fair", r"\bfair\b|\bwell used\b|\bheavily used\b")]
+
+
+def schouten_condition(body_html: str) -> str | None:
+    """Schouten Select 설명 앞 두 문장에서 상태 말을 찾아 'Schouten: almost like new' 꼴로."""
+    text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", body_html or "")).strip()
+    head = " ".join(re.split(r"(?<=[.!?])\s+", text)[:2]).lower()
+    for label, pattern in _SCHOUTEN_ORDER:
+        if re.search(pattern, head, re.I):
+            return SCHOUTEN_PREFIX + label
+    return None
+
+
 GLAZERS_PREFIX = "Glazers: "
 # 사진 평가(표기 가리고 25점, 사진 최대 3장, 2026-10-15): EX A 5·S 2 · VG A 7·B 1 · G A 3·B 2·C 1 · Fair B 3 · M A 1.
 # Fair는 모두 렌즈 안 흐림·접합 분리(Haze·Cement separation)라 사진엔 안 보여도 D.
