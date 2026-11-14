@@ -113,6 +113,10 @@ jobs:
       - name: Audit entities (missing-model candidates)
         run: python3 scripts/entity_audit.py
 
+      - name: Audit price outliers (시세에서 크게 벗어난 매물 = 모델 연결 의심)
+        run: python3 scripts/price_outlier_audit.py
+        continue-on-error: true
+
       - name: Record weekly model prices (dealer price trends)
         run: python3 scripts/build_price_history.py
 
@@ -168,6 +172,13 @@ jobs:
           except Exception:
               audit_new = []
           bad += [f"🔍 빠진 모델 후보: {x.get('entity') or x.get('a')} ← {x.get('word') or x.get('b')} {x['count']}건 · {x['example'][:40]}" for x in audit_new[:5]]
+          try:
+              outlier_new = json.load(open("data/derived/price_outlier_audit.json")).get("new", [])
+          except Exception:
+              outlier_new = []
+          bad += [f"📉 시세 이탈 새 매물 ({x['hint']}): {x['entity'].replace('leica:', '')} ×{x['ratio']} · {x['title'][:40]} ({x['source'][:16]})" for x in outlier_new[:5]]
+          if len(outlier_new) > 5:
+              bad.append(f"📉 시세 이탈 새 매물 {len(outlier_new) - 5}건 더 — data/derived/price_outlier_audit.json")
           if s.get("new_items") or bad:
               lines = [f"✅ 크롤링 완료 · 신규 {s.get('new_items', 0)} · 총 {s.get('total_items')}개 · {s.get('seconds')}초"]
               lines += [f"🆕 {n['상품명'][:40]} ({n['site']})" for n in s.get("new_listings", [])[:10]]

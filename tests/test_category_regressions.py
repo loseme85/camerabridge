@@ -1,0 +1,41 @@
+"""분류 회귀 시험: 사람이 한 줄씩 확인한 매물 분류(tests/fixtures/category_regressions.json)가 규칙을 고친 뒤에도 그대로인지.
+
+2026-11-14 #369: 부속품 규칙을 넣다가 벨로즈 + Macro-Elmar 세트가 부속품으로, KS15-4 (M2-S) 바디가 렌즈로 바뀌었다.
+분류 규칙 PR은 scripts/category_diff.py로 바뀐 목록을 확인하고, 맞게 바뀐 것을 fixture에 더한다.
+"""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from classifier_v2 import classify_listing_v2  # noqa: E402
+
+CASES = json.load(open(ROOT / "tests/fixtures/category_regressions.json", encoding="utf-8"))["cases"]
+
+
+def test_reviewed_categories_stay_the_same() -> None:
+    wrong = []
+    for case in CASES:
+        got = classify_listing_v2({"상품명": case["title"], "가격": 0, "통화": "", "site": "", "description": ""})["category"]
+        if got != case["category"]:
+            wrong.append(f"{case['title']}: {got} (확인한 분류 {case['category']})")
+    assert not wrong, "\n".join(wrong)
+
+
+def test_accessory_plus_lens_sets_stay_lens() -> None:
+    for title in ("Leica Balgen 16860 mit Macro-Elmar 100mm f/4.0", "Leica Bellows-R + Macro-Elmar 100mm f/4 + Leica M adapter",
+                  "Leica Macro-Elmar R 100/4 フォーカシング Bellows RSet",
+                  "Leica R Leicaflex Leitz 16860 Bellows Bellows Con Macro-Elmar 100mm f4", "Leica Balgen mit Elmar 90mm f4 L39"):
+        assert classify_listing_v2({"상품명": title, "가격": 0, "통화": "", "site": "", "description": ""})["category"] == "Lens", title
+    for title in ("Leica Extension Tube (90mm f4 Elmar) (OTQNO /16468)", "Leica Zwischenring 16468X für Elmar 90mm f4.0",
+                  "Leica 50mm f2.0 Dummy + Doos", "Leica Macro Bellows-R 16860"):
+        assert classify_listing_v2({"상품명": title, "가격": 0, "통화": "", "site": "", "description": ""})["category"] == "Accessory", title
+
+
+def test_military_m2_is_body() -> None:
+    for title in ("Leica KS15-4 (M2-S)", "Leica KS-15 (4) M2 body", "Leica M2-(R)"):
+        assert classify_listing_v2({"상품명": title, "가격": 0, "통화": "", "site": "", "description": ""})["category"] == "Body", title
