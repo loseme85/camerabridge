@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 960,
+   "count": 958,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 276,
+   "count": 275,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 276,
+   "count": 275,
    "example": "Leica M3 Black Repaint"
   },
   {
@@ -75,7 +75,7 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 198,
+   "count": 197,
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
   },
   {
@@ -355,22 +355,22 @@
    "example": "[중고] Leica Q2 Monochrome"
   },
   {
-   "a": "leica:body:m11:black-paint",
+   "a": "leica:body:m9:standard",
    "b": "leica:feature:frameline-28",
    "count": 47,
+   "example": "[중고] M9"
+  },
+  {
+   "a": "leica:body:m11:black-paint",
+   "b": "leica:feature:frameline-28",
+   "count": 46,
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
   },
   {
    "a": "leica:body:m11:black-paint",
    "b": "leica:feature:black-paint",
-   "count": 47,
+   "count": 46,
    "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
-  },
-  {
-   "a": "leica:body:m9:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 47,
-   "example": "[중고] M9"
   },
   {
    "a": "leica:body:m3:single-stroke",
@@ -847,18 +847,6 @@
    "example": "[중고] Q (Titan)"
   },
   {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:no-meter",
-   "count": 12,
-   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
-  },
-  {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:mechanical",
-   "count": 12,
-   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
-  },
-  {
    "a": "leica:body:m-e",
    "b": "leica:feature:frameline-28",
    "count": 11,
@@ -905,6 +893,18 @@
    "b": "leica:feature:mechanical",
    "count": 11,
    "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
+  },
+  {
+   "a": "leica:body:m2:button-rewind",
+   "b": "leica:feature:no-meter",
+   "count": 11,
+   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
+  },
+  {
+   "a": "leica:body:m2:button-rewind",
+   "b": "leica:feature:mechanical",
+   "count": 11,
+   "example": "Leica M2 (Button Rewind) (Black Paint, KOOHE / 10800 / 10300)"
   },
   {
    "a": "leica:feature:safari",
