@@ -598,7 +598,7 @@ def test_pagination_fields_and_next_offset() -> None:
 def test_ebay_active_results_can_merge_into_search_results_without_breaking_response() -> None:
     diagnostics = {"ebay": {"enabled": True, "status": "ok", "accepted_count": 1, "returned_count": 1}}
     with patch("search_service._load_external_active_records", return_value=([EBAY_M10_BODY], diagnostics)):
-        response = search_records("Leica M10", [], limit=10, min_score=1)
+        response = search_records("Leica M10", [], limit=10, min_score=1, include_live=True)
 
     assert any(result["source"] == "eBay" for result in response["results"])
     ebay_result = next(result for result in response["results"] if result["source"] == "eBay")
@@ -611,7 +611,7 @@ def test_ebay_active_results_can_merge_into_search_results_without_breaking_resp
 def test_ebay_accessory_false_positive_does_not_outrank_clean_body_match() -> None:
     diagnostics = {"ebay": {"enabled": True, "status": "ok", "accepted_count": 1, "returned_count": 1}}
     with patch("search_service._load_external_active_records", return_value=([EBAY_M10_CASE], diagnostics)):
-        response = search_records("Leica M10", [LOCAL_M10_BODY], limit=10, min_score=1)
+        response = search_records("Leica M10", [LOCAL_M10_BODY], limit=10, min_score=1, include_live=True)
 
     assert response["results"][0]["source"] == "Local dealer"
     assert response["results"][0]["final_output"]["category"] == "Body"
@@ -622,11 +622,19 @@ def test_ebay_accessory_false_positive_does_not_outrank_clean_body_match() -> No
 def test_external_source_error_does_not_break_existing_search_results() -> None:
     diagnostics = {"ebay": {"enabled": True, "status": "timeout", "accepted_count": 0, "returned_count": 0}}
     with patch("search_service._load_external_active_records", return_value=([], diagnostics)):
-        response = search_records("35lux aa", [SUMMILUX_HIGH], limit=1)
+        response = search_records("35lux aa", [SUMMILUX_HIGH], limit=1, include_live=True)
 
     assert response["result_count"] == 1
     assert response["results"][0]["source_url"] == "https://example.invalid/high"
     assert response["live_source_diagnostics"]["ebay"]["status"] == "timeout"
+
+
+def test_main_search_does_not_call_ebay_or_mix_it_in() -> None:
+    """본 검색은 eBay를 부르지 않음 (eBay 약관: 다른 매물과 섞지 말 것, 검색 속도)."""
+    with patch("search_service._load_external_active_records") as live:
+        response = search_records("Leica M10", [LOCAL_M10_BODY], limit=10, min_score=1)
+    live.assert_not_called()
+    assert all(result["source"] != "eBay" for result in response["results"])
 
 
 def test_offset_pagination_returns_second_page() -> None:
