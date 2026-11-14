@@ -1470,6 +1470,11 @@
     .feedback-fab{border-radius:0;border:1px solid var(--rule);background:var(--bg);box-shadow:none;font-weight:500}
     .feedback-fab::before{content:none}
     .feedback-fab:hover{background:var(--text);color:#fff;border-color:var(--text)}
+    /* 2026-11-13 방문자 의견 '모바일에서 흰색 창이 계속 가려요' → 휴대폰에서는 내려 볼 때 숨기고, 위로 올리거나 맨 아래에서 다시 보임 */
+    @media(max-width:720px){
+      .feedback-fab{transition:transform .2s ease,opacity .2s ease;padding:7px 11px;font-size:12px;opacity:.92}
+      .feedback-fab.is-tucked{transform:translateY(160%);opacity:0;pointer-events:none}
+    }
     .feedback-dialog{border:1px solid var(--rule);border-radius:0;box-shadow:6px 6px 0 rgba(22,24,26,0.1)}
     .feedback-dialog h2{font-family:var(--serif);font-weight:500;font-size:24px}
     .feedback-dialog textarea,.feedback-dialog input[type=email]{border-radius:0}
@@ -2841,6 +2846,17 @@
       let openedAt = 0;
       const setStatus = (text, kind) => { status.textContent = text; status.className = `feedback-status${kind ? ' is-' + kind : ''}`; };
       open.addEventListener('click', () => { openedAt = Date.now(); setStatus('', ''); dialog.showModal(); message.focus(); });
+      // 휴대폰: 내려 보는 동안 버튼을 아래로 숨김 (카드·'판매처에서 보기'를 가리지 않게), 위로 올리거나 맨 아래면 다시
+      let lastY = window.scrollY;
+      const narrow = window.matchMedia('(max-width: 720px)');
+      window.addEventListener('scroll', () => {
+        if(!narrow.matches) return;
+        const y = window.scrollY;
+        const atBottom = window.innerHeight + y >= document.documentElement.scrollHeight - 40;
+        if(y > lastY + 4 && !atBottom) open.classList.add('is-tucked');
+        else if(y < lastY - 4 || atBottom) open.classList.remove('is-tucked');
+        lastY = y;
+      }, { passive: true });
       document.getElementById('feedback-close').addEventListener('click', () => dialog.close());
       form.addEventListener('submit', async event => {
         event.preventDefault();
