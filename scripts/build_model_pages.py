@@ -42,6 +42,50 @@ DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY", "de": "EUR", "it": "E
 # 잘못 연결됐을 가능성이 큰 매물은 페이지에서 뺀다: 대여 상품, 그 모델 B등급 기준가의 이 비율보다 싼 것
 RENTAL = re.compile(r"\brental\b|\bfor rent\b|대여|렌탈|レンタル", re.I)
 MIN_PRICE_RATIO = 0.35
+# 2026-11-12 사장님: 'M6 시세'로 들어왔는데 범위 최대가 $31,233(외레순 기념판+Summilux 세트)라 일반 M6 값과 안 맞음
+# → 한정판·기념판·희귀 사양·렌즈 세트는 위쪽 범위·설명 문구·답 문장에서 빼고, 목록 아래 따로 보여 줌 (매물은 다 보임)
+SPECIAL = re.compile(r"limited|limitiert|limitata|limitada|限定|한정|\bedition\b|edizione|edici[oó]n|anniversar|jubil|\bjahre\b|周年|주년|기념|記念|"
+                     r"commemorat|safari|사파리|サファリ|herm[eè]s|에르메스|エルメス|[aà] ?la ?carte|알라카르테|アラカルト|\bolive\b|올리브|オリーブ|"
+                     r"\bLHSA\b|platin|플래티넘|플라티눔|プラチナ|\bgold\b|골드|ゴールド|\b\d{1,4}\s?(?:of|/)\s?\d{2,4}\s?(?:units|pcs|made|stück)", re.I)
+REISSUE = re.compile(r"\(?\b(?:2022|2023|2024)\s+edition\)?", re.I)  # 'M6 black (2022 Edition)' = 리이슈 일반형
+LENS_IN_TITLE = re.compile(r"summi|elmar|noctilux|summaron|hektor|thambar|nokton|ultron|voigtl|zeiss|planar|biogon|sonnar|"
+                           r"\b\d{2,3}\s?mm\s*f\s?/?\d|\b\d{2,3}\s?/\s?\d(?:[.,]\d{1,2})?\b(?!\s?(?:\d|mm))|렌즈|レンズ", re.I)
+SET_WORD = re.compile(r"\bset\b|\bkit\b|bundle|combo|セット|세트|\+|\bwith\b|\bw/|\bmit\b|\bcon\b|\bavec\b|付", re.I)
+BODY_IN_TITLE = re.compile(r"\bM\s?-?(?:[2-9]|1[01])\b(?!\s?-?element)|\bM-?P\b|\bM-?A\b|\bCL\b|\bSL\d?\b|\bQ\d?\b|body|bodies|바디|ボディ|gehäuse", re.I)
+FIXED_LENS_BODY = re.compile(r"^leica:body:(?:q|x|d-lux|v-lux|digilux|c-lux|minilux|cm|z2x|sofort|mini|c\d)")  # 렌즈 붙은 카메라: 제목의 렌즈 이름은 세트 아님
+NOT_A_SET = re.compile(r"\b(?:for|per|für|pour)\s+(?:leica\s+)?M\s?\d+\w*|M3\s*(?:goggles|glasses|eyes)|goggles|glasses|眼鏡付?|メガネ付?|안경", re.I)  # 'Summicron 35 with M3 goggles' = 렌즈 한 버전
+RARE_RATIO = 3  # 일반형 중간값의 3배 넘는 값은 희귀 사양으로 따로 (M3 블랙페인트 원판 $262,046, Summilux 50 블랙페인트 등)
+
+
+def is_special(row: dict, page: dict, editions: set[str]) -> bool:
+    """이 모델 페이지에서 한정판·기념판·세트로 따로 볼 매물인가"""
+    if row["eids"] & editions:
+        return True
+    title = row["title"]
+    if SPECIAL.search(REISSUE.sub("", title)):
+        return True
+    if page["kind"] == "Body":
+        return not FIXED_LENS_BODY.match(page["id"]) and bool(LENS_IN_TITLE.search(title))
+    title = NOT_A_SET.sub(" ", title)
+    return bool(SET_WORD.search(title) and BODY_IN_TITLE.search(title))
+
+
+def split_special(all_rows: list[dict], page: dict, editions: set[str]) -> tuple[list[dict], list[dict]]:
+    """(일반형, 한정판·희귀 사양·세트). 페이지가 그 판 자체거나 일반형이 하나도 없으면 나누지 않음"""
+    if page.get("edition") or SPECIAL.search(page["name"]):
+        return all_rows, []
+    specials = [r for r in all_rows if is_special(r, page, editions - {page["id"]})]
+    ids = {id(r) for r in specials}
+    rows = [r for r in all_rows if id(r) not in ids]
+    if len(rows) >= 5:
+        cap = rows[len(rows) // 2]["krw"] * RARE_RATIO
+        rare = [r for r in rows if r["krw"] > cap]
+        if rare:
+            rows = [r for r in rows if r["krw"] <= cap]
+            specials = sorted(specials + rare, key=lambda r: r["krw"])
+    if not rows:
+        return all_rows, []
+    return rows, specials
 
 # 판매처 이름 끝 '(나라)' → 나라 이름. 괄호가 없으면 한국 매장 (Leica Store Miami만 예외)
 COUNTRY = {
@@ -141,6 +185,18 @@ T = {
 
 # 새 6개 언어 (2026-11-08)
 T.update({'de': {'title': '{name} gebraucht: Preise & Angebote | Camera Bridge', 'q_price': 'Was kostet eine gebrauchte {name}?', 'a_price': 'Aktuell sind {n} Stück bei {shops} Händlern in {countries} Ländern gelistet. Die Angebotspreise reichen von {low} bis {high}, der Median liegt bei {median}.', 'a_sold': ' Die letzten {k} verkauften Exemplare hatten einen mittleren letzten Angebotspreis von {sold}.', 'q_where': 'Wo ist eine gebrauchte {name} am günstigsten?', 'a_where': 'Günstigste Länder aktuell: {list}. Händlerpreise zum heutigen Kurs umgerechnet, ohne Versand und Einfuhrabgaben.', 'related': 'Ähnliche Modelle', 'sep': ', ', 'new': 'Neupreis (Leica UK)', 'vs_new': 'Gebraucht Zustand B / neu', 'vs_new_val': '{pct}% vom Neupreis', 'a_new': ' Neu kostet sie {new} bei Leica UK; gebraucht in Zustand B etwa {pct}% davon.', 'desc': '{active} gebrauchte {name} von {shops} Händlern, {range}. Leica-Händler in Korea, Japan, Europa und den USA mit Verkaufspreisen an einem Ort.', 'h1': '{name} gebraucht: Preise', 'active': 'Jetzt im Angebot', 'active_val': '{n} Angebote · {shops} Händler', 'range': 'Angebotspreise', 'sold': 'Median verkauft', 'sold_val': '{price} ({n} verkauft)', 'sold_note': 'Median des letzten Angebotspreises, bevor ein Angebot als verkauft markiert wurde. Tatsächliche Verkaufspreise können abweichen.', 'updated': 'Stand {time} · Händlerpreise zum heutigen Kurs in EUR umgerechnet', 'listings': 'Jetzt im Angebot (günstigste zuerst)', 'col_item': 'Angebot', 'col_shop': 'Händler', 'col_cond': 'Zustand', 'col_price': 'Preis', 'more': 'Alle {name} auf Camera Bridge suchen', 'children': 'Nach Generation / Version', 'parent': 'Alle ansehen', 'none': 'Derzeit keine Angebote.', 'index_title': 'Leica Gebrauchtpreise nach Modell | Camera Bridge', 'index_h1': 'Leica Gebrauchtpreise nach Modell', 'index_desc': 'Gebrauchtpreise und aktuelle Angebote für Leica Kameras und Objektive, nach Modell.', 'shops_h': 'Preise nach Händler', 'col_count': 'Angebote', 'col_low': 'Günstigster', 'col_cur': 'Währung', 'info_h': 'Modellinfo', 'kind': 'Art', 'kind_Body': 'Kameragehäuse', 'kind_Lens': 'Objektiv', 'mount': 'Bajonett', 'codes': 'Bestellnummern', 'bodies': 'Kameragehäuse', 'lenses': 'Objektive', 'aka': 'Auch bekannt als', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Preise nach Modell', 'approx': '≈ ', 'lead': 'Gebrauchte {name}: Marktwert Zustand B {b}, {n} im Angebot bei {shops} Händlern (Stand {date}).'}, 'it': {'title': '{name} usata: prezzi e annunci | Camera Bridge', 'q_price': 'Quanto costa una {name} usata?', 'a_price': 'Al momento ce ne sono {n} in vendita in {shops} negozi di {countries} paesi. I prezzi vanno da {low} a {high}, con una mediana di {median}.', 'a_sold': ' Gli ultimi {k} venduti avevano un ultimo prezzo richiesto mediano di {sold}.', 'q_where': 'Dove costa meno una {name} usata?', 'a_where': 'Paesi più economici ora: {list}. Prezzi dei negozi convertiti al cambio di oggi, spedizione e dazi esclusi.', 'related': 'Modelli simili', 'sep': ', ', 'new': 'Prezzo nuovo (Leica UK)', 'vs_new': 'Usato grado B / nuovo', 'vs_new_val': '{pct}% del nuovo', 'a_new': ' Nuova costa {new} da Leica UK; usata in grado B circa il {pct}%.', 'desc': '{active} {name} usate da {shops} negozi, {range}. Negozi Leica in Corea, Giappone, Europa e USA, con prezzi di vendita, in un solo posto.', 'h1': '{name} usata: prezzi', 'active': 'In vendita ora', 'active_val': '{n} annunci · {shops} negozi', 'range': 'Prezzi richiesti', 'sold': 'Mediana venduti', 'sold_val': '{price} ({n} venduti)', 'sold_note': "Mediana dell'ultimo prezzo visto prima che l'annuncio fosse segnato come venduto. I prezzi reali possono differire.", 'updated': 'Aggiornato {time} · prezzi convertiti in EUR al cambio di oggi', 'listings': 'In vendita ora (dal più economico)', 'col_item': 'Annuncio', 'col_shop': 'Negozio', 'col_cond': 'Condizione', 'col_price': 'Prezzo', 'more': 'Cerca tutte le {name} su Camera Bridge', 'children': 'Per generazione / versione', 'parent': 'Vedi tutto', 'none': 'Nessun annuncio al momento.', 'index_title': 'Prezzi Leica usate per modello | Camera Bridge', 'index_h1': 'Prezzi Leica usate per modello', 'index_desc': "Prezzi dell'usato e annunci attuali di fotocamere e obiettivi Leica, per modello.", 'shops_h': 'Prezzi per negozio', 'col_count': 'Annunci', 'col_low': 'Minimo', 'col_cur': 'Valuta', 'info_h': 'Scheda modello', 'kind': 'Tipo', 'kind_Body': 'Corpo macchina', 'kind_Lens': 'Obiettivo', 'mount': 'Innesto', 'codes': 'Codici prodotto', 'bodies': 'Corpi macchina', 'lenses': 'Obiettivi', 'aka': 'Conosciuta anche come', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Prezzi per modello', 'approx': '≈ ', 'lead': '{name} usata: valore di mercato grado B {b}, {n} in vendita in {shops} negozi (al {date}).'}, 'es': {'title': '{name} usada: precios y anuncios | Camera Bridge', 'q_price': '¿Cuánto cuesta una {name} usada?', 'a_price': 'Ahora hay {n} a la venta en {shops} tiendas de {countries} países. Los precios van de {low} a {high}, con una mediana de {median}.', 'a_sold': ' Las últimas {k} vendidas tuvieron un último precio pedido mediano de {sold}.', 'q_where': '¿Dónde es más barata una {name} usada?', 'a_where': 'Países más baratos ahora: {list}. Precios de tienda convertidos al cambio de hoy, sin envío ni impuestos de importación.', 'related': 'Modelos similares', 'sep': ', ', 'new': 'Precio nueva (Leica UK)', 'vs_new': 'Usada grado B / nueva', 'vs_new_val': '{pct}% de la nueva', 'a_new': ' Nueva cuesta {new} en Leica UK; usada en grado B, cerca del {pct}%.', 'desc': '{active} {name} usadas de {shops} tiendas, {range}. Tiendas Leica de Corea, Japón, Europa y EE. UU., con precios de venta, en un solo lugar.', 'h1': '{name} usada: precios', 'active': 'A la venta ahora', 'active_val': '{n} anuncios · {shops} tiendas', 'range': 'Precios pedidos', 'sold': 'Mediana vendidas', 'sold_val': '{price} ({n} vendidas)', 'sold_note': 'Mediana del último precio visto antes de que el anuncio se marcara como vendido. El precio real puede variar.', 'updated': 'A {time} · precios convertidos a EUR al cambio de hoy', 'listings': 'A la venta ahora (más baratas primero)', 'col_item': 'Anuncio', 'col_shop': 'Tienda', 'col_cond': 'Estado', 'col_price': 'Precio', 'more': 'Buscar todas las {name} en Camera Bridge', 'children': 'Por generación / versión', 'parent': 'Ver todo', 'none': 'No hay anuncios ahora.', 'index_title': 'Precios de Leica usadas por modelo | Camera Bridge', 'index_h1': 'Precios de Leica usadas por modelo', 'index_desc': 'Precios de segunda mano y anuncios actuales de cámaras y objetivos Leica, por modelo.', 'shops_h': 'Precios por tienda', 'col_count': 'Anuncios', 'col_low': 'Más barato', 'col_cur': 'Moneda', 'info_h': 'Ficha del modelo', 'kind': 'Tipo', 'kind_Body': 'Cuerpo de cámara', 'kind_Lens': 'Objetivo', 'mount': 'Montura', 'codes': 'Códigos de producto', 'bodies': 'Cuerpos de cámara', 'lenses': 'Objetivos', 'aka': 'También conocida como', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Precios por modelo', 'approx': '≈ ', 'lead': '{name} usada: valor de mercado grado B {b}, {n} a la venta en {shops} tiendas (a {date}).'}, 'pt': {'title': '{name} usada: preços e anúncios | Camera Bridge', 'q_price': 'Quanto custa uma {name} usada?', 'a_price': 'Agora há {n} à venda em {shops} lojas de {countries} países. Os preços vão de {low} a {high}, com mediana de {median}.', 'a_sold': ' As últimas {k} vendidas tiveram um último preço pedido mediano de {sold}.', 'q_where': 'Onde uma {name} usada é mais barata?', 'a_where': 'Países mais baratos agora: {list}. Preços das lojas convertidos ao câmbio de hoje, sem frete nem impostos de importação.', 'related': 'Modelos semelhantes', 'sep': ', ', 'new': 'Preço nova (Leica UK)', 'vs_new': 'Usada grau B / nova', 'vs_new_val': '{pct}% da nova', 'a_new': ' Nova custa {new} na Leica UK; usada em grau B, cerca de {pct}%.', 'desc': '{active} {name} usadas de {shops} lojas, {range}. Lojas Leica na Coreia, Japão, Europa e EUA, com preços de venda, num só lugar.', 'h1': '{name} usada: preços', 'active': 'À venda agora', 'active_val': '{n} anúncios · {shops} lojas', 'range': 'Preços pedidos', 'sold': 'Mediana vendidas', 'sold_val': '{price} ({n} vendidas)', 'sold_note': 'Mediana do último preço visto antes de o anúncio ser marcado como vendido. O preço real pode variar.', 'updated': 'Em {time} · preços convertidos em EUR ao câmbio de hoje', 'listings': 'À venda agora (mais baratas primeiro)', 'col_item': 'Anúncio', 'col_shop': 'Loja', 'col_cond': 'Estado', 'col_price': 'Preço', 'more': 'Procurar todas as {name} na Camera Bridge', 'children': 'Por geração / versão', 'parent': 'Ver tudo', 'none': 'Nenhum anúncio agora.', 'index_title': 'Preços de Leica usadas por modelo | Camera Bridge', 'index_h1': 'Preços de Leica usadas por modelo', 'index_desc': 'Preços de usados e anúncios atuais de câmeras e objetivas Leica, por modelo.', 'shops_h': 'Preços por loja', 'col_count': 'Anúncios', 'col_low': 'Mais barato', 'col_cur': 'Moeda', 'info_h': 'Ficha do modelo', 'kind': 'Tipo', 'kind_Body': 'Corpo de câmera', 'kind_Lens': 'Objetiva', 'mount': 'Encaixe', 'codes': 'Códigos do produto', 'bodies': 'Corpos de câmera', 'lenses': 'Objetivas', 'aka': 'Também conhecida como', 'count': '{n}', 'home': 'Camera Bridge', 'list': 'Preços por modelo', 'approx': '≈ ', 'lead': '{name} usada: valor de mercado grau B {b}, {n} à venda em {shops} lojas (em {date}).'}, 'zh-Hans': {'title': '{name} 二手价格与在售 | Camera Bridge', 'q_price': '二手 {name} 多少钱？', 'a_price': '目前 {countries} 个国家的 {shops} 家店铺共有 {n} 件在售，售价从 {low} 到 {high}，中位数为 {median}。', 'a_sold': ' 最近售出的 {k} 件，售出前最后标价的中位数为 {sold}。', 'q_where': '二手 {name} 哪个国家最便宜？', 'a_where': '目前各国最低价：{list}。按今日汇率换算的店铺标价，不含运费和进口税。', 'related': '相似型号', 'sep': '、', 'new': '新品价格（徕卡英国）', 'vs_new': '二手 B 级 / 新品', 'vs_new_val': '新品的 {pct}%', 'a_new': ' 新品在徕卡英国官方售价 {new}，二手 B 级约为其 {pct}%。', 'desc': '二手 {name} 在售 {active} 件（{shops} 家店铺），{range}。汇集韩国、日本、欧洲、美国徕卡店铺的在售与成交价格。', 'h1': '{name} 二手行情', 'active': '在售', 'active_val': '{n} 件 · {shops} 家店铺', 'range': '在售价格', 'sold': '成交中位数', 'sold_val': '{price}（已售 {n} 件）', 'sold_note': '这是标记为已售前最后看到的标价中位数，可能与实际成交价不同。', 'updated': '{time} · 店铺标价按今日汇率换算为人民币', 'listings': '在售商品（价格从低到高）', 'col_item': '商品', 'col_shop': '店铺', 'col_cond': '成色', 'col_price': '价格', 'more': '在 Camera Bridge 搜索全部 {name}', 'children': '按代数 / 版本', 'parent': '查看全部', 'none': '目前没有在售商品。', 'index_title': '徕卡二手行情 · 按型号 | Camera Bridge', 'index_h1': '徕卡二手行情（按型号）', 'index_desc': '徕卡相机和镜头的二手行情与在售商品，按型号查看。', 'shops_h': '各店铺价格', 'col_count': '在售', 'col_low': '最低价', 'col_cur': '货币', 'info_h': '型号信息', 'kind': '类别', 'kind_Body': '相机机身', 'kind_Lens': '镜头', 'mount': '卡口', 'codes': '产品编号', 'bodies': '相机机身', 'lenses': '镜头', 'aka': '别名', 'count': '{n} 件', 'home': 'Camera Bridge', 'list': '按型号行情', 'approx': '约', 'lead': '二手 {name}：B 级市场价 {b}，{shops} 家店铺在售 {n} 件（{date}）。'}, 'zh-Hant': {'title': '{name} 二手價格與在售 | Camera Bridge', 'q_price': '二手 {name} 多少錢？', 'a_price': '目前 {countries} 個國家的 {shops} 家店鋪共有 {n} 件在售，售價從 {low} 到 {high}，中位數為 {median}。', 'a_sold': ' 最近售出的 {k} 件，售出前最後標價的中位數為 {sold}。', 'q_where': '二手 {name} 哪個國家最便宜？', 'a_where': '目前各國最低價：{list}。按今日匯率換算的店鋪標價，不含運費和進口稅。', 'related': '相似型號', 'sep': '、', 'new': '新品價格（徠卡英國）', 'vs_new': '二手 B 級 / 新品', 'vs_new_val': '新品的 {pct}%', 'a_new': ' 新品在徠卡英國官方售價 {new}，二手 B 級約為其 {pct}%。', 'desc': '二手 {name} 在售 {active} 件（{shops} 家店鋪），{range}。匯集韓國、日本、歐洲、美國徠卡店鋪的在售與成交價格。', 'h1': '{name} 二手行情', 'active': '在售', 'active_val': '{n} 件 · {shops} 家店鋪', 'range': '在售價格', 'sold': '成交中位數', 'sold_val': '{price}（已售 {n} 件）', 'sold_note': '這是標記為已售前最後看到的標價中位數，可能與實際成交價不同。', 'updated': '{time} · 店鋪標價按今日匯率換算為港幣', 'listings': '在售商品（價格由低到高）', 'col_item': '商品', 'col_shop': '店鋪', 'col_cond': '成色', 'col_price': '價格', 'more': '在 Camera Bridge 搜尋全部 {name}', 'children': '按代數 / 版本', 'parent': '查看全部', 'none': '目前沒有在售商品。', 'index_title': '徠卡二手行情 · 按型號 | Camera Bridge', 'index_h1': '徠卡二手行情（按型號）', 'index_desc': '徠卡相機和鏡頭的二手行情與在售商品，按型號查看。', 'shops_h': '各店鋪價格', 'col_count': '在售', 'col_low': '最低價', 'col_cur': '貨幣', 'info_h': '型號資訊', 'kind': '類別', 'kind_Body': '相機機身', 'kind_Lens': '鏡頭', 'mount': '卡口', 'codes': '產品編號', 'bodies': '相機機身', 'lenses': '鏡頭', 'aka': '別名', 'count': '{n} 件', 'home': 'Camera Bridge', 'list': '按型號行情', 'approx': '約', 'lead': '二手 {name}：B 級市場價 {b}，{shops} 家店鋪在售 {n} 件（{date}）。'}})
+# 한정판·희귀 사양·세트 따로 보기 문구 (2026-11-12)
+X = {
+    "ko": {"range_note": "일반형 기준 · 한정판·희귀 사양·세트 {n}개는 아래 따로", "special_h": "한정판·기념판·희귀 사양·렌즈 세트 (싼 순)"},
+    "en": {"range_note": "Standard models · {n} limited editions, rare versions & sets listed separately below", "special_h": "Limited editions, rare versions & sets (cheapest first)"},
+    "ja": {"range_note": "通常品のみ · 限定品・希少仕様・セット {n} 点は下に別掲", "special_h": "限定品・記念モデル・希少仕様・レンズセット（安い順）"},
+    "de": {"range_note": "Nur Standardmodelle · {n} Sondereditionen, seltene Versionen & Sets unten separat", "special_h": "Sondereditionen, seltene Versionen & Sets (günstigste zuerst)"},
+    "it": {"range_note": "Solo modelli standard · {n} edizioni limitate, versioni rare e set qui sotto", "special_h": "Edizioni limitate, versioni rare e set (dal più economico)"},
+    "es": {"range_note": "Solo modelos estándar · {n} ediciones limitadas, versiones raras y kits abajo", "special_h": "Ediciones limitadas, versiones raras y kits (más baratos primero)"},
+    "pt": {"range_note": "Só modelos padrão · {n} edições limitadas, versões raras e kits abaixo", "special_h": "Edições limitadas, versões raras e kits (mais baratos primeiro)"},
+    "zh-Hans": {"range_note": "仅标准版 · {n} 件限量版、稀有版本和套装另列于下方", "special_h": "限量版、纪念版、稀有版本和镜头套装（价格从低到高）"},
+    "zh-Hant": {"range_note": "僅標準版 · {n} 件限量版、稀有版本和套裝另列於下方", "special_h": "限量版、紀念版、稀有版本和鏡頭套裝（價格由低到高）"},
+}
 # 첫 줄 한 줄 답 (AI 검색·검색엔진이 인용하기 쉬운 숫자 문장)
 for _l, _v in {'ko': '{name} 중고: B등급 시세 {b}, {shops}개 매장에 {n}개 판매 중 ({date} 기준).', 'en': 'Used {name}: grade B market value {b}, {n} for sale at {shops} shops (as of {date}).', 'ja': '中古 {name}：B等級の相場 {b}、{shops} 店で {n} 点販売中（{date} 時点）。'}.items():
     T[_l]["lead"] = _v
@@ -339,7 +395,8 @@ def build(out: Path) -> dict:
             if eid in listings:
                 listings[eid].append({"title": final.get("title_raw") or "", "source": final.get("source") or "",
                                       "url": final["source_url"], "cond": final.get("condition_raw") or "",
-                                      "price": price, "currency": currency, "krw": price * rate})
+                                      "price": price, "currency": currency, "krw": price * rate,
+                                      "eids": set(record.get("entity_ids") or [])})
 
     for lang in LANGS:
         shutil.rmtree(out / PATH[lang] / "leica", ignore_errors=True)
@@ -367,12 +424,14 @@ def build(out: Path) -> dict:
         """비슷한 모델 묶음: 주소 앞의 글자 부분 (q2→q, m262→m, sl2→sl, summilux-m-35…→summilux)"""
         return re.match(r"[a-z]+", slug).group(0) if re.match(r"[a-z]+", slug) else slug
 
+    editions = {x["id"] for x in entities if x.get("edition")}
     for e in picked:
         eid = e["id"]
         slug = slugs[eid]
         floor = (e.get("b_price_krw") or 0) * MIN_PRICE_RATIO
-        rows = sorted((r for r in listings[eid] if r["krw"] >= floor and not RENTAL.search(r["title"])), key=lambda r: r["krw"])
-        shops = len({r["source"] for r in rows})
+        all_rows = sorted((r for r in listings[eid] if r["krw"] >= floor and not RENTAL.search(r["title"])), key=lambda r: r["krw"])
+        shops = len({r["source"] for r in all_rows})
+        rows, specials = split_special(all_rows, e, editions)  # 범위·답 문장은 일반형(rows)으로
         children = [by_id[c] for c in e.get("children") or [] if c in slugs]
         parent = by_id.get(e.get("parent") or "") if (e.get("parent") or "") in slugs else None
         family_ids = {c["id"] for c in children} | ({parent["id"]} if parent else set()) | {eid}
@@ -389,7 +448,7 @@ def build(out: Path) -> dict:
             lo_hi = (rows[0]["krw"], rows[-1]["krw"]) if rows else None
             range_text = f"{money(conv(lo_hi[0]), cur, lang, True)} – {money(conv(lo_hi[1]), cur, lang, True)}" if lo_hi else "—"
             title = t["title"].format(name=name)
-            desc = t["desc"].format(name=name, active=len(rows), shops=shops, range=range_text)
+            desc = t["desc"].format(name=name, active=len(all_rows), shops=shops, range=range_text)
             json_ld = {"@context": "https://schema.org", "@type": "Product", "name": e["name"].replace(" (all)", ""),
                        "brand": {"@type": "Brand", "name": "Leica"}, "url": page_url(lang, slug)}
             if lo_hi:
@@ -408,10 +467,11 @@ def build(out: Path) -> dict:
                 parts.append(f'<p class="ko-name">{html.escape(e["name"].replace(" (all)", ""))}</p>')
             if rows:  # 한 줄 답: AI 검색·검색엔진이 그대로 인용하기 쉬운 숫자 문장
                 b = e.get("b_price_krw") or rows[len(rows) // 2]["krw"]
-                parts.append(f'<p class="lead">{html.escape(t["lead"].format(name=name, b=money(conv(b), cur, lang, True), n=len(rows), shops=shops, date=updated.date().isoformat()))}</p>')
+                parts.append(f'<p class="lead">{html.escape(t["lead"].format(name=name, b=money(conv(b), cur, lang, True), n=len(all_rows), shops=shops, date=updated.date().isoformat()))}</p>')
             parts.append("<dl>")
-            parts.append(f"<div><dt>{t['active']}</dt><dd>{t['active_val'].format(n=len(rows), shops=shops)}</dd></div>")
-            parts.append(f"<div><dt>{t['range']}</dt><dd>{range_text}</dd></div>")
+            parts.append(f"<div><dt>{t['active']}</dt><dd>{t['active_val'].format(n=len(all_rows), shops=shops)}</dd></div>")
+            range_note = f'<span class="orig">{X[lang]["range_note"].format(n=len(specials))}</span>' if specials else ""
+            parts.append(f"<div><dt>{t['range']}</dt><dd>{range_text}{range_note}</dd></div>")
             if e.get("sold_median_krw") and e.get("sold_price_count"):
                 sold = t["sold_val"].format(price=money(conv(e["sold_median_krw"]), cur, lang, True), n=e["sold_price_count"])
                 parts.append(f"<div><dt>{t['sold']}</dt><dd>{sold}</dd></div>")
@@ -461,7 +521,7 @@ def build(out: Path) -> dict:
             parts.append(f"<h2>{t['info_h']}</h2><dl>" + "".join(f"<div><dt>{k}</dt><dd class=\"small\">{v}</dd></div>" for k, v in info) + "</dl>")
             if rows:
                 by_shop: dict[str, list[dict]] = {}
-                for r in rows:
+                for r in all_rows:
                     by_shop.setdefault(r["source"], []).append(r)
                 parts.append(f'<h2>{t["shops_h"]}</h2><div class="table"><table><thead><tr><th>{t["col_shop"]}</th>'
                              f'<th>{t["col_count"]}</th><th>{t["col_cur"]}</th><th class="price">{t["col_low"]}</th></tr></thead><tbody>')
@@ -474,11 +534,14 @@ def build(out: Path) -> dict:
                     parts.append(f'<tr><td>{html.escape(shop)}<span class="orig">{COUNTRY[country][lang]}</span></td>'
                                  f'<td>{len(shop_rows)}</td><td>{html.escape(low["currency"])}</td><td class="price">{shown}</td></tr>')
                 parts.append("</tbody></table></div>")
-            parts.append(f"<h2>{t['listings']}</h2>")
-            if rows:
+            for heading, group in ((t["listings"], rows), (X[lang]["special_h"], specials)):
+              if heading != t["listings"] and not group:
+                continue
+              parts.append(f"<h2>{heading}</h2>")
+              if group:
                 parts.append(f'<div class="table"><table><thead><tr><th>{t["col_item"]}</th><th>{t["col_shop"]}</th>'
                              f'<th>{t["col_cond"]}</th><th class="price">{t["col_price"]}</th></tr></thead><tbody>')
-                for r in rows:
+                for r in group:
                     shop, country = shop_parts(r["source"])
                     shown = money(conv(r["krw"]), cur, lang, r["currency"] != cur)
                     orig = "" if r["currency"] == cur else f'<span class="orig">{money(r["price"], r["currency"], lang)}</span>'
@@ -488,7 +551,7 @@ def build(out: Path) -> dict:
                                  f'<td>{html.escape(shop)}<span class="orig">{COUNTRY[country][lang]}</span></td>'
                                  f'<td>{html.escape(condition_text(r["cond"]))}</td><td class="price">{shown}{orig}</td></tr>')
                 parts.append("</tbody></table></div>")
-            else:
+              else:
                 parts.append(f"<p>{t['none']}</p>")
             if related:
                 parts.append(f"<h2>{t['related']}</h2><ul class=\"links\">" + "".join(
