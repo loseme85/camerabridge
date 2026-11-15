@@ -70,6 +70,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _JP[up], "label"
     if site and "ffordes" in site.lower() and up in _FFORDES:
         return _FFORDES[up], "label"
+    if cond == "Grainlab: hervorragend":
+        return "B", "text"
     if cond.startswith(KS_PREFIX):
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(REALCAMERA_PREFIX):

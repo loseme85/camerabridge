@@ -14418,6 +14418,60 @@ def crawl_realcamera():
     return results
 
 
+def crawl_grainlab():
+    """Grainlab 공개 Leica 목록: Gambio 정적 HTML, 부속품 포함, 새 입고 리본은 신품 등급으로 쓰지 않음."""
+    import requests
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin, urlsplit
+    from condition_grade import de_condition
+    base = "https://www.grainlab.com/"
+    pending, seen, results = [base + "de/leica/"], set(), {}
+    sess = requests.Session()
+    sess.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    while pending:
+        url = pending.pop(0)
+        if url in seen:
+            continue
+        if len(seen) >= 25:
+            raise RuntimeError("Grainlab 목록 페이지 상한 초과")
+        if seen:
+            time.sleep(3)
+        response = sess.get(url, timeout=40)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        cards = soup.select("form.product-tile")
+        if not cards:
+            raise RuntimeError("Grainlab 목록 0개 — 재고·구조 확인 필요")
+        seen.add(url)
+        for card in cards:
+            anchor, price_node = card.select_one(".title a"), card.select_one(".current-price-container")
+            if not anchor or not price_node:
+                raise RuntimeError("Grainlab 필수 상품 정보 누락")
+            name = anchor.get_text(" ", strip=True)
+            if not re.match(r"(?:Leica|Leitz)\b", name, re.I):
+                continue
+            # 기존 분류기가 이해하는 부속품 명칭으로만 번역한다.
+            for de, en in [("Gegenlichtblende", "Lens Hood"), ("Bereitschaftstasche", "Camera Case"), ("Macrotar", "Macrotar Close-up Filter")]:
+                name = name.replace(de, en)
+            name = re.sub(r"1:(\d+(?:\.\d+)?)", r"f\1", name)
+            price = price_node.get_text(" ", strip=True)
+            if not re.fullmatch(r"[\d.,]+ EUR", price):
+                raise RuntimeError("Grainlab EUR 가격 형식 변경")
+            img, desc = card.select_one("figure img"), card.select_one(".description")
+            link = urljoin(base, anchor["href"])
+            results[link] = {"site": "Grainlab (독일)", "상품명": name, "label": auto_label(name),
+                "세대": detect_generation(name), "컨디션": ("Grainlab: hervorragend" if desc and "hervorragend" in desc.get_text().lower() else (de_condition(desc.get_text(" ", strip=True)) or "정보없음")) if desc else "정보없음",
+                "가격": price, "통화": "EUR", "이미지": urljoin(base, img.get("src", "")) if img else "",
+                "링크": link, "품절": not bool(card.select_one("button.js-btn-add-to-cart")), "예약중": False,
+                "mount": detect_mount(name), "category": detect_category(name, price), "brand": "Leica"}
+        for anchor in soup.select(".pagination a[href]"):
+            nxt = urljoin(base, anchor["href"])
+            if urlsplit(nxt).netloc == urlsplit(base).netloc and nxt not in seen and nxt not in pending:
+                pending.append(nxt)
+    print(f"  ✅ Grainlab 완료: {len(results)}개, 목록 {len(seen)}쪽")
+    return list(results.values())
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14604,6 +14658,7 @@ def crawl_all():
         ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
         ("Schouten Select (네덜란드)", lambda: ce.wrap_full_run("Schouten Select (네덜란드)", crawl_schouten)),
         ("The Real Camera Company (영국)", lambda: ce.wrap_full_run("The Real Camera Company (영국)", crawl_realcamera)),
+        ("Grainlab (독일)", lambda: ce.wrap_full_run("Grainlab (독일)", crawl_grainlab)),
         ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
         ("Fotopia (홍콩)", lambda: ce.wrap_full_run("Fotopia (홍콩)", crawl_fotopia)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
