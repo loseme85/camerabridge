@@ -1051,6 +1051,8 @@ def _acc_with_lens_set(kw: str, combined: str, at: int) -> bool:
 
 
 _STRONG_ACC_KW = (
+    # Real Camera: 촬영용 렌즈·바디가 아닌 복사 장치·확대기·프로젝터 부속품
+    "digicopy", "copy stand", "enlarger", "case for use", "projection lens",
     # 2026-11-15 Fotopia: 'Match Technical Thumbs-Up … for Leica M'·'Quick Rewind Crank for Leica M2'·'Leather Case for Leica Q'·
     # 'BC-SCL7 Battery Charger … for Leica M11'·'Universal-Magnifier'·'Re-skin for Leica'·'Dealer Display Stand'·'Light Sign'이 바디로 잡힘
     "thumbs-up", "thumbs up", "thumb-up", "rewind crank", "battery charger", "leather case for", "half case for", "case for leica",
@@ -1106,11 +1108,11 @@ def _price_krw(price_str: str, currency: Optional[str] = None) -> Optional[float
 # 본품 + 구성품 (2026-11-14 사장님 '액세서리 모델' 점검): 'Summicron 35 (11879) + Lens Hood (12526)'·'M10 with Extra Battery'·
 # 'M2 … with leather case'·'MP LHSA with Leicavit'가 뒤의 액세서리 말(후드 번호·case·battery)로 통째 액세서리가 되어
 # 시세·검색에서 빠지던 것(판매 중 약 130개). 묶음말 앞부분만 따로 판정해 확실한 본품이면 그 분류를 쓴다.
-_BUNDLE_SPLIT = re.compile(r"\s(?:\+|&(?!\s*\d)|with|w/|mit|und|avec|con|plus)\s|\s?\+\s?(?=[a-z0-9])|付き?|付属|純正", re.I)  # '+12564Hood'처럼 + 뒤가 숫자인 묶음도 (2026-11-15)
+_BUNDLE_SPLIT = re.compile(r"\s(?:\+|&(?!\s*\d)|with|w/|inc\.|mit|und|avec|con|plus)\s|\s?\+\s?(?=[a-z0-9])|付き?|付属|純正", re.I)  # '+12564Hood'처럼 + 뒤가 숫자인 묶음도 (2026-11-15)
 _SURE_HEAD = ("lens_protected", "body_kw:", "barnack_body_kw:", "mount_compact_pns_q")
 # 앞부분 자체가 부속품 이름이면 본품 아님 ('Motor Drive R4 con Impugnatura'·'Lens Cap f. Noctilux'·'Leicameter M PER Leica M3'·
 # 'Summicron-R Box + Bubble Case'·'Elmar 9cm & Hektor 13.5cm for accessory')
-_HEAD_ACC = re.compile(r"motor|winder|fondell|\btube\b|adatta|adapter|nooky|naheinstell|meter|\bcaps?\b|tappo|case|hood|filter|"
+_HEAD_ACC = re.compile(r"enlarger|valoy|focomat|copy stand|digicopy|motor|winder|fondell|\btube\b|adatta|adapter|nooky|naheinstell|meter|\bcaps?\b|tappo|case|hood|filter|"
                        r"(?<!range)(?<!range )finder|strap|cinghia|\bring\b|\bbox\b|\bf\.\s|ever.?ready|griff|grip|"
                        r"ケース|フード|キャップ|후드|케이스|캡", re.I)
 _SAYS_ACCESSORY = re.compile(r"\baccessor(?:y|ies|io|ie)\b|\bzubehör\b", re.I)
@@ -1167,7 +1169,7 @@ def _detect_category_core(
     desc = (normalized_description or "").lower()
     combined = n + " " + desc
     # 'Rangefinder Camera'(카메라 종류)의 finder가 뷰파인더 부속품 키워드에 걸리지 않게
-    combined = re.sub(r"(?<!for )range ?-?finder (?=(film |digital )?(camera|body))", "rf ", combined)
+    combined = re.sub(r"(?<!for )range ?-?finder (?=(film |digital )?(camera|body|lens))", "rf ", combined)
     # 브랜드 이름 속 '&'는 묶음말이 아님 ('Artisan & Artist Leather Case for Leica Q'가 묶음으로 보여 바디가 됨, 2026-11-15)
     combined = re.sub(r"artisan ?& ?artist", "artisan-artist", combined)
     reasons = []
@@ -1186,6 +1188,10 @@ def _detect_category_core(
             reasons.append(f"acc_code:{code}")
             return {"category": "Accessory", "category_confidence": 0.99, "category_reason": reasons}
 
+    # 확대기·복사 스탠드는 호환 렌즈 이름이나 함께 주는 렌즈가 있어도 촬영용 렌즈가 아니다.
+    if re.search(r"\b(?:focomat|valoy|digicopy|copy stand)\b", n):
+        return {"category": "Accessory", "category_confidence": 0.98, "category_reason": ["copy_enlarger_equipment"]}
+
     # ── 0.3순위: 본품이 아닌 것이 분명한 말 → Accessory (바르낙·콤팩트 바디 판단보다 먼저) ──
     for kw in _STRONG_ACC_KW:
         at = combined.find(kw)
@@ -1202,6 +1208,10 @@ def _detect_category_core(
         if at >= 0 and not re.search(guard, before):
             reasons.append(f"strong_acc_kw:{kw}")
             return {"category": "Accessory", "category_confidence": 0.95, "category_reason": reasons}
+
+    # X-U 고정렌즈 카메라의 23mm Summilux를 교환렌즈로 분류하지 않는다.
+    if re.search(r"\bleica\s+x-?u\b.*\b(?:digital\s+)?camera\b", n) and not _HEAD_ACC.search(n):
+        return {"category": "Body", "category_confidence": 0.95, "category_reason": ["body_kw:x-u"]}
 
     # ── 0.5순위: Barnack 바디 강제 → Body (렌즈 키워드보다 우선) ──
     for kw in _BARNACK_BODY_KW:
@@ -1238,7 +1248,7 @@ def _detect_category_core(
     for hit_type, signal in _iter_hard_accessory_hits(combined):
         # 단, 렌즈 본품 + hood 세트로 강하게 보이는 경우만 기존 보호를 유지한다.
         if is_lens_protected_strong and signal in {"hood", "후드"}:
-            if has_aperture and has_focal and has_lens_kw:
+            if has_aperture and (has_focal or re.search(r'\d+(?:\.\d+)?\s*cm\b', combined)) and has_lens_kw:
                 continue
         if signal in _FILTER_ACCESSORY_SIGNALS and _is_lens_filter_bundle(combined, is_lens_protected_strong):
             continue
