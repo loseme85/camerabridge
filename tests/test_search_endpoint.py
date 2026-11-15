@@ -254,27 +254,24 @@ def test_quality_options_are_connected() -> None:
 
 
 def test_ebay_active_results_do_not_change_market_price_summary() -> None:
+    """eBay 매물은 본 검색·시세에 섞이지 않고 live=ebay 요청으로만 따로 나옴 (eBay API 약관 8.1(b)(2)(2), 9.5)."""
     status, baseline = endpoint_response({"q": "35lux aa", "limit": "10"}, records=[SUMMILUX_35, SUMMILUX_LOW])
     assert status == 200
 
     diagnostics = {"ebay": {"enabled": True, "status": "ok", "accepted_count": 1, "returned_count": 1}}
     with patch("search_service._load_external_active_records", return_value=([EBAY_SUMMILUX], diagnostics)):
         status, response = endpoint_response({"q": "35lux aa", "limit": "10"}, records=[SUMMILUX_35, SUMMILUX_LOW])
+        live_status, live = endpoint_response({"q": "35lux aa", "limit": "10", "live": "ebay"}, records=[SUMMILUX_35, SUMMILUX_LOW])
 
     assert status == 200
     assert response["price_summary_band"] == baseline["price_summary_band"]
     assert response["display_price_band"] == baseline["display_price_band"]
-    assert response["live_source_diagnostics"]["ebay"]["accepted_count"] == 1
-    assert any(result["source"] == "eBay" for result in response["results"])
+    assert all(result["source"] != "eBay" for result in response["results"])
 
-    ebay_evidence = [
-        item
-        for item in response.get("display_visible_result_evidence", [])
-        if item.get("source") == "eBay"
-    ]
-    assert ebay_evidence
-    assert all(item.get("used_for_price") is False for item in ebay_evidence)
-    assert all("price-eligible" in " ".join(item.get("excluded_reason") or []).lower() for item in ebay_evidence)
+    assert live_status == 200
+    assert live["schema_version"] == "search_service.ebay_section.v1"
+    assert [result["source"] for result in live["results"]] == ["eBay"]
+    assert live["live_source_diagnostics"]["ebay"]["accepted_count"] == 1
 
 
 def test_empty_result_is_success_with_no_results_warning() -> None:
