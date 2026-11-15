@@ -270,7 +270,8 @@ def test_military_and_special_bodies_are_separate() -> None:
 def test_lens_bundled_with_hood_still_links() -> None:
     # 'with hood'는 렌즈 매물 (후드 단품은 그대로 제외)
     assert "leica:lens:summarex:85" in match_entities(_record("Leica Summarex L39 85mm/F1.5 with hood", mount=None))
-    assert match_entities(_record("Leica 12585 Metal Hood for Summaron M 35 / 50mm", category="Accessory")) == []
+    # 후드 단품은 렌즈 모델이 아니라 후드 모델에만 (부속품 모델, 2026-11-15)
+    assert match_entities(_record("Leica 12585 Metal Hood for Summaron M 35 / 50mm", category="Accessory")) == ["leica:acc:hood:12585"]
 
 
 def test_r_lenses_from_hong_kong_titles() -> None:
@@ -746,3 +747,12 @@ def test_m6_reissue_code_and_partner_aktion_not_classic() -> None:
     assert "leica:body:m6:classic" not in ids("Leica M6 0.72 10557")
     assert "leica:body:m6:partner-aktion" in ids("Leica M6 Partner Aktion Deutschland (nur 500 Stück) Body")
     assert "leica:body:m6:classic" in ids("Leica M6 black Body")
+
+
+def test_accessory_models_link_by_order_code() -> None:
+    """부속품 모델 (2026-11-15): 주문 번호·라이츠 코드로 연결, 렌즈 이름이 앞에 오는 세트는 부속품 모델에 안 붙임."""
+    assert match_entities(_record("Leica Lens Hood (90mm f2.8-4 / 135mm f4-4.5) (IUFOO / 12575)", category="Accessory")) == ["leica:acc:hood:12575"]
+    assert match_entities(_record("Leica OUBIO 16466M", category="Accessory")) == ["leica:acc:visoflex-adapter:16466"]
+    assert match_entities(_record("Leica E55 UVa 13373", category="Accessory")) == ["leica:acc:filter:13373"]
+    assert match_entities(_record("LEICA 400mm f/5 TELYT pour Visoflex with BAGUE 16466M", category="Accessory")) == []
+    assert "leica:acc:hood:12504" not in match_entities(_record("Leica 35mm f2 Summicron (11309) + Lens Hood (12504)", category="Lens"))

@@ -55,7 +55,7 @@ def main() -> None:
         price, currency = final.get("parsed_price_numeric"), str(final.get("currency") or "KRW").upper()
         if not price or currency not in to_krw or RENTAL.search(final.get("title_raw") or ""):
             continue
-        ids = [e for e in record.get("entity_ids") or [] if e in ents and not ents[e].get("feature")]
+        ids = [e for e in record.get("entity_ids") or [] if e in ents and not ents[e].get("feature") and ents[e].get("kind") != "Accessory"]
         if not ids:
             continue
         leaf = max(ids, key=lambda e: (e.count(":"), len(e)))

@@ -110,7 +110,8 @@ def _home_feed(records: list, catalog: dict) -> dict:
         if not (final.get("image_url") and final.get("parsed_price_numeric") and final.get("source_url")):
             continue
         leaf = next((e for e in record.get("entity_ids") or []
-                     if not entities[e].get("children") and not entities[e].get("feature")), None)
+                     if not entities[e].get("children") and not entities[e].get("feature")
+                     and entities[e].get("kind") != "Accessory"), None)  # 첫 화면은 바디·렌즈만 (부속품 모델 2026-11-15)
         if not leaf or leaf in seen:
             continue
         seen.add(leaf)
@@ -174,7 +175,8 @@ def _home_quiz(records: list, catalog: dict, skip: set, to_krw: dict) -> list:
         if final.get("sold_at_unknown") or when[:10] < cutoff or not final.get("image_url") or not final.get("parsed_price_numeric"):
             continue
         leaf = next((e for e in record.get("entity_ids") or []
-                     if not entities[e].get("children") and not entities[e].get("feature")), None)
+                     if not entities[e].get("children") and not entities[e].get("feature")
+                     and entities[e].get("kind") != "Accessory"), None)  # 첫 화면은 바디·렌즈만 (부속품 모델 2026-11-15)
         if not leaf or leaf in seen:
             continue
         rate = final.get("sold_fx_krw") or krw_per_unit_on(final.get("currency"), when) or to_krw.get(str(final.get("currency") or "KRW").upper())

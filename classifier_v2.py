@@ -1106,7 +1106,7 @@ def _price_krw(price_str: str, currency: Optional[str] = None) -> Optional[float
 # 본품 + 구성품 (2026-11-14 사장님 '액세서리 모델' 점검): 'Summicron 35 (11879) + Lens Hood (12526)'·'M10 with Extra Battery'·
 # 'M2 … with leather case'·'MP LHSA with Leicavit'가 뒤의 액세서리 말(후드 번호·case·battery)로 통째 액세서리가 되어
 # 시세·검색에서 빠지던 것(판매 중 약 130개). 묶음말 앞부분만 따로 판정해 확실한 본품이면 그 분류를 쓴다.
-_BUNDLE_SPLIT = re.compile(r"\s(?:\+|&(?!\s*\d)|with|w/|mit|und|avec|con|plus)\s|\s?\+\s?(?=[a-z])|付き?|付属", re.I)
+_BUNDLE_SPLIT = re.compile(r"\s(?:\+|&(?!\s*\d)|with|w/|mit|und|avec|con|plus)\s|\s?\+\s?(?=[a-z0-9])|付き?|付属|純正", re.I)  # '+12564Hood'처럼 + 뒤가 숫자인 묶음도 (2026-11-15)
 _SURE_HEAD = ("lens_protected", "body_kw:", "barnack_body_kw:", "mount_compact_pns_q")
 # 앞부분 자체가 부속품 이름이면 본품 아님 ('Motor Drive R4 con Impugnatura'·'Lens Cap f. Noctilux'·'Leicameter M PER Leica M3'·
 # 'Summicron-R Box + Bubble Case'·'Elmar 9cm & Hektor 13.5cm for accessory')
