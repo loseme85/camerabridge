@@ -6218,7 +6218,16 @@
         state.entity = '';
         renderEntityMenu(inputId);
       });
-      input.addEventListener('focus', () => { if(input.value.trim() && !state.entity) renderEntityMenu(inputId); });
+      // 2026-11-16 사장님: 검색창을 누르면 비워서 바로 다른 모델을 칠 수 있게. 아무것도 안 치고 나가면 원래 글자를 돌려놓음
+      let clearedValue = '';
+      input.addEventListener('focus', () => {
+        clearedValue = input.value;
+        if(clearedValue) syncSearchInputs('');
+      });
+      input.addEventListener('blur', () => {
+        if(clearedValue && !input.value) syncSearchInputs(clearedValue);
+        clearedValue = '';
+      });
       input.addEventListener('keydown', event => {
         const menu = document.getElementById(entityMenuId(inputId));
         const open = menu && !menu.hidden;
