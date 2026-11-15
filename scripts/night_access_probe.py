@@ -5,13 +5,7 @@ from urllib.parse import urlsplit
 from urllib.robotparser import RobotFileParser
 
 UA = 'CameraBridge/1.0 (+https://camerabridge.io)'
-URLS = [
- 'https://realcamera.co.uk/wp-json/wc/store/v1/products?search=leica&per_page=100&page=1',
- 'https://realcamera.co.uk/wp-json/wc/store/v1/products?search=leica&per_page=100&page=2',
- 'https://elle-et-lui-photographie.fr/boutique/occasion?marque=leica',
- 'https://elle-et-lui-photographie.fr/boutique/produit/7840',
- 'https://leicaboutique.co.za/used-leica-m-rangefinder-cameras',
-]
+URLS = ['https://www.grainlab.com/de/leica/', 'https://filmlab.lv/wp-json/wc/store/v1/products?search=leica&per_page=100', 'https://leicaboutique.co.za/used-leica-apo-summicron-m-90mm-f2-asph-filter']
 session = requests.Session()
 session.headers['User-Agent'] = UA
 robots = {}
