@@ -3177,7 +3177,8 @@
     const kstTime = text => Date.parse(String(text || '').replace(' ', 'T') + '+09:00');
     async function loadRecentModels(){
       const list = readRecentModels().filter(x => entityState.byId[x.id]);
-      if(!list.length || recentState.loading) return;
+      if(recentState.loading) return;
+      if(!list.length){ recentState.rows = []; renderRecentModels(); return; }
       recentState.loading = true;
       recentState.rows = await Promise.all(list.map(async item => {
         const entity = entityState.byId[item.id];
@@ -7983,8 +7984,13 @@
     }
 
     function render(){
+      const wasSearched = document.body.classList.contains('cb-searched');
       document.body.classList.toggle('cb-searched', Boolean(state.response || state.loading || state.error));
-      if(!document.body.classList.contains('cb-searched')) renderHome();  // 통화·언어를 바꾸면 첫 화면 가격도 다시
+      if(!document.body.classList.contains('cb-searched')){
+        renderHome();  // 통화·언어를 바꾸면 첫 화면 가격도 다시
+        // 검색하다가 로고·뒤로가기로 첫 화면에 돌아오면 '지난번 보신 모델'을 다시 계산 (2026-11-15: 처음 열 때만 계산해 안 보였음)
+        if(wasSearched && Object.keys(entityState.byId).length) loadRecentModels();
+      }
       renderCountryChips();
       updatePrefsSummary();
       renderEntityBar();
