@@ -190,7 +190,8 @@ def _home_quiz(records: list, catalog: dict, skip: set, to_krw: dict) -> list:
     return picked
 
 
-_NOT_FOR_PRICE = re.compile(r"Kamerastore: issue\b|for (?:restoration|repair)|\brestoration\b|lens head only|senza lenti|without (?:glass|optics)", re.I)
+# 대여(Rental, €100·€160)는 판매가가 아님 (시세 이탈 2차 2026-11-15, Fotohandel Delfshaven)
+_NOT_FOR_PRICE = re.compile(r"Kamerastore: issue\b|for (?:restoration|repair)|\brestoration\b|lens head only|senza lenti|without (?:glass|optics)|\brental\b|\bfor rent\b|レンタル|대여", re.I)
 
 
 def main() -> None:

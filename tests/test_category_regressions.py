@@ -71,3 +71,18 @@ def test_main_item_with_accessory_links_to_its_model() -> None:
     assert "leica:lens:summilux-r:50" in ids("Leica Leitz Summilux-R 50mm f/1.4 3cam + 12508 hood", "Lens")
     assert "leica:body:sl2-s" in ids("Used Leica SL2-S with Extra Battery", "Body")
     assert "leica:body:r7" not in ids("Leica R7 + Leitz Elmarit-R 35mm f2.8", "Body")
+
+
+def test_summilux_50_black_paint_reissue_is_separate() -> None:
+    """복각(11713, 2021)과 1960년대 원판 블랙 페인트가 한 칸에 섞여 시세 폭이 넓던 것 (시세 이탈 2차 2026-11-15)."""
+    from entity_catalog import load_catalog, match_entities
+
+    catalog = load_catalog()
+
+    def ids(title: str, price: float) -> list[str]:
+        return match_entities({"final_output": {"title_raw": title, "category": "Lens", "currency": "KRW", "parsed_price_numeric": price}}, catalog)
+
+    assert "leica:lens:summilux-m:50:black-paint-reissue" in ids("Leica Summilux-M 50mm f1.4 GlossyBlackPaint[11713]", 6_500_000)
+    assert "leica:lens:summilux-m:50:black-paint" in ids("Leica Summilux-M 50mm F1.4 OriginalBlackPaint 真鍮マウント", 40_000_000)
+    assert "leica:lens:summilux-m:50:black-paint-reissue" in ids("Leica Summilux-M 50mm f1.4 black paint", 7_000_000)
+    assert "leica:lens:summilux-m:50:black-paint" in ids("Leica M 50mm f1.4 Summilux 4th Black Paint", 11_500_000)
