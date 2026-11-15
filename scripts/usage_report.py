@@ -93,11 +93,22 @@ def visitor_key(e: dict) -> str:
     return f"{str(e.get('created_at', ''))[:10]}:{e['vtag']}" if e.get("vtag") else e["sid"]
 
 
+def is_shop_click(click: dict) -> bool:
+    """판매처로 나간 클릭만 (화면 안 버튼은 host가 '@'로 시작: '@alert' = 모델 이름 옆 알림 버튼, 2026-11-15)."""
+    return not str(click.get("host") or "").startswith("@")
+
+
+def has_shop_click(entry: dict) -> bool:
+    return any(is_shop_click(c) for c in entry.get("clicks", []))
+
+
 def summarize(entries: list[dict]) -> dict:
     entries = group_visits(entries)
     sessions = {visitor_key(e) for e in entries}
     searches = [s for e in entries for s in e.get("searches", [])]
-    clicks = [c for e in entries for c in e.get("clicks", [])]
+    all_clicks = [c for e in entries for c in e.get("clicks", [])]
+    clicks = [c for c in all_clicks if is_shop_click(c)]
+    actions = [c for c in all_clicks if not is_shop_click(c)]
     first = {}
     for e in sorted(entries, key=lambda e: (e.get("created_at", ""), e.get("part", 1))):
         first.setdefault(visitor_key(e), e)
@@ -105,7 +116,9 @@ def summarize(entries: list[dict]) -> dict:
     return {
         "visits": len(sessions),
         "visits_with_activity": len({visitor_key(e) for e in entries if e.get("searches") or e.get("clicks")}),
-        "visits_with_click": len({visitor_key(e) for e in entries if e.get("clicks")}),
+        "visits_with_click": len({visitor_key(e) for e in entries if has_shop_click(e)}),
+        "visits_with_alert_button": len({visitor_key(e) for e in entries if any(c.get("host") == "@alert" for c in e.get("clicks", []))}),
+        "actions": collections.Counter(c["host"] for c in actions).most_common(10),
         "searches": len(searches),
         "clicks": len(clicks),
         "referrers": collections.Counter(e.get("referrer") or "(직접·알 수 없음)" for e in first.values()).most_common(10),
