@@ -72,6 +72,14 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FFORDES[up], "label"
     if cond == "Grainlab: hervorragend":
         return "B", "text"
+    # Cape Town 20개 × 3장: 정확 12/20, 한 등급 이내 20/20. 일반 영문 대응보다 한 칸 후한 매장.
+    if site == "Leica Boutique Cape Town (남아공)" and cond.startswith("설명: "):
+        value = cond[4:].lower()
+        for pattern, grade in [(r"like new", "S"), (r"mint|excellent|minimal signs", "A"), (r"very good", "B"), (r"brassing", "C")]:
+            if re.search(pattern, value):
+                return grade, "text"
+    if cond.startswith("LeicaBoutique: "):
+        return {"LNIB": "S", "MINT": "A", "MINT-": "A"}.get(cond[15:].strip().upper()), "label"
     if cond.startswith(KS_PREFIX):
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
     if cond.startswith(REALCAMERA_PREFIX):

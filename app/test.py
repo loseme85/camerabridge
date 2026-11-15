@@ -11474,6 +11474,8 @@ DETAIL_CONDITION = {
 
 # 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
 SOURCE_MIN_INTERVAL_HOURS = {
+    "Leica Boutique Cape Town (남아공)": 12,  # 상세 상태 확인, 약 100개 × 3초 간격
+
     "gebrauchtkameras.de (독일)": 12,  # 라이카 상품 상세 100개쯤 (3분)
     "Midwest Photo (미국)": 12,  # 사이트맵 1만 개 받아 거름
     "Ffordes (영국)": 6,
@@ -14516,6 +14518,84 @@ def crawl_filmlab():
     return results
 
 
+def crawl_leicaboutique():
+    """남아공 Leica Boutique의 공개 중고 목록. 가격은 문의 방식으로 공개 가격을 만들지 않는다."""
+    from urllib.parse import urljoin, urlsplit
+    import requests
+    from bs4 import BeautifulSoup
+    from condition_grade import describe_text
+    base = "https://leicaboutique.co.za"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    sections = ["used-leica-m-rangefinder-cameras", "used-leica-q-cameras", "used-leica-lenses",
+                "used-leica-accessories", "used-leica-sl", "leica-vintage-camera-shop"]
+    pending = [f"{base}/{section}" for section in sections]
+    visited, results = set(), {}
+    while pending:
+        url = pending.pop(0)
+        if url in visited:
+            continue
+        if len(visited) >= 40:
+            raise RuntimeError("Leica Boutique 페이지 상한 초과")
+        if visited:
+            time.sleep(3)
+        response = sess.get(url, timeout=40)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, "html.parser")
+        cards = soup.select(".product-thumb")
+        if not cards and not soup.select("#content"):
+            raise RuntimeError("Leica Boutique 목록 구조 확인 필요")
+        visited.add(url)
+        for card in cards:
+            anchor = card.select_one("h4 a[href]")
+            img = card.select_one(".image img")
+            if not anchor:
+                raise RuntimeError("Leica Boutique 상품명 누락")
+            name = re.sub(r"^Pre-owned\s+", "", anchor.get_text(" ", strip=True), flags=re.I)
+            if not re.match(r"(?:leica|leitz|leicaflex)\b", name, re.I):
+                continue
+            # 이 제목은 상세 설명에 필터를 동봉한 렌즈로 확인됨.
+            if name == "Leica APO-Summicron-M 90mm f/2 ASPH., Filter":
+                name = "Leica APO-Summicron-M 90mm f/2 ASPH. with Filter"
+            # OpenCart가 분류별 주소를 붙이므로 같은 상품은 최종 slug로 합친다.
+            slug = urlsplit(anchor["href"]).path.rstrip("/").split("/")[-1]
+            link = f"{base}/{slug}"
+            price_node = card.select_one(".price")
+            price = price_node.get_text(" ", strip=True) if price_node else "문의요망"
+            state = re.search(r"\b(LNIB|Mint-?)(?:\s*)$", name, re.I)
+            condition = "LeicaBoutique: " + state.group(1).upper() if state else "정보없음"
+            results[link] = {"site": "Leica Boutique Cape Town (남아공)", "상품명": name,
+                "label": auto_label(name), "세대": detect_generation(name), "컨디션": condition,
+                "가격": price, "통화": "ZAR", "이미지": urljoin(base, img.get("src", "")) if img else "",
+                "링크": link, "품절": False, "예약중": False, "mount": detect_mount(name),
+                "category": detect_category(name, price), "brand": "Leica"}
+        for anchor in soup.select(".pagination a[href]"):
+            nxt = urljoin(base, anchor["href"])
+            if urlsplit(nxt).netloc == urlsplit(base).netloc and nxt not in visited and nxt not in pending:
+                pending.append(nxt)
+    # 제목에 상태가 없는 매물은 실제 판매 설명의 Condition 구간을 읽는다.
+    for row in results.values():
+        if row["컨디션"] != "정보없음":
+            continue
+        time.sleep(3)
+        response = sess.get(row["링크"], timeout=40)
+        response.raise_for_status()
+        detail = BeautifulSoup(response.text, "html.parser")
+        desc = detail.select_one("#tab-description")
+        if not desc:
+            raise RuntimeError("Leica Boutique 상세 설명 구조 확인 필요")
+        text = desc.get_text(" ", strip=True)
+        match = re.search(r"Condition\s+(.*?)(?:What's included|Key features|Compatibility|Buying from|$)", text, re.I)
+        if match:
+            part = match.group(1)
+            state = re.search(r"\b(LNIB|Mint-?)(?=[:.,\s]|$)", part, re.I)
+            row["컨디션"] = "LeicaBoutique: " + state.group(1).upper() if state else (describe_text(part) or "정보없음")
+    if not results:
+        raise RuntimeError("Leica Boutique 전체 재고 0개 — 구조·재고 확인 필요")
+    print(f"  ✅ Leica Boutique 완료: {len(results)}개, 목록 {len(visited)}쪽 (가격 문의)")
+    return list(results.values())
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14704,6 +14784,7 @@ def crawl_all():
         ("The Real Camera Company (영국)", lambda: ce.wrap_full_run("The Real Camera Company (영국)", crawl_realcamera)),
         ("Grainlab (독일)", lambda: ce.wrap_full_run("Grainlab (독일)", crawl_grainlab)),
         ("Film Lab (라트비아)", lambda: ce.wrap_full_run("Film Lab (라트비아)", crawl_filmlab)),
+        ("Leica Boutique Cape Town (남아공)", lambda: ce.wrap_full_run("Leica Boutique Cape Town (남아공)", crawl_leicaboutique)),
         ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
         ("Fotopia (홍콩)", lambda: ce.wrap_full_run("Fotopia (홍콩)", crawl_fotopia)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
