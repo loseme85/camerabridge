@@ -4848,6 +4848,16 @@
       }
     }
 
+    // 통화·배송 설정 창(<details>)은 저절로 안 닫힘 → 바깥 클릭·Esc·값을 고르면 닫기 (2026-11-15 사장님: PC에서 통화 고른 뒤 다른 곳을 눌러도 창이 그대로)
+    function bindPrefsClose(){
+      const prefs = document.getElementById('prefs');
+      if(!prefs) return;
+      const close = () => { if(prefs.open) prefs.open = false; };
+      document.addEventListener('click', event => { if(prefs.open && !event.target.closest('#prefs')) close(); });
+      document.addEventListener('keydown', event => { if(event.key === 'Escape' && prefs.open){ close(); prefs.querySelector('summary').focus(); } });
+      prefs.querySelectorAll('select').forEach(select => select.addEventListener('change', close));
+    }
+
     function bindLanguageSwitcher(){
       const button = document.getElementById('lang-button');
       const menu = document.getElementById('lang-menu');
@@ -8489,6 +8499,7 @@
     populateLandedOptions();
     renderLanguageSwitcher();
     bindLanguageSwitcher();
+    bindPrefsClose();
     loadLandedData();
     applyStaticTranslations();
     bindEvents();
