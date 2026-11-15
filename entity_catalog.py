@@ -114,7 +114,7 @@ def is_set(record: dict[str, Any], catalog: dict[str, Any] | None = None) -> boo
 # 제목에 렌즈 표기가 있으면 바디가 아님 (예: 50/2, 35mm, f1.4)
 LENS_IN_TITLE = re.compile(r"(\d{2,3}\s?mm\b|\b\d{2,3}/\d(\.\d)?\b|\bf/?\s?\d\.\d)", re.I)
 # 제목 앞쪽에 적힌 마운트 (예: "[중고] M 135/3.4", "Leica SL 50mm")
-TITLE_MOUNT = re.compile(r"^(?:\[[^\]]+\]\s*|신품\s+|중고\s+)*(?:leica\s+)?(M|SL|R|L|TL|S)\s*(?:apo\s+)?\d", re.I)
+TITLE_MOUNT = re.compile(r"^(?:\[[^\]]+\]\s*|신품\s+|중고\s+)*(?:leica\s+)?(M|SL|R|L|TL|T|S)\s*(?:apo\s+)?\d", re.I)  # T = 옛 TL 이름 ('Leica T 35mm f1.4 Summilux', 2026-11-15)
 # 한국 매장식 제목("[중고] M 50/2 Rigid")은 계열 이름을 생략함 → 초점거리/조리개로 라이카 계열 추론
 SHOP_LENS = re.compile(r"^(?:\[[^\]]+\]\s*|신품\s+|중고\s+)*(?:leica\s+)?(M|L|R|SL|TL)\s*(?:apo\s+)?(\d{2,3}(?:-\d{2,3})?)\s*(?:/\s*(\d+(?:\.\d+)?))?", re.I)
 IMPLIED_FAMILY = {("21", "1.4"): "Summilux", ("24", "1.4"): "Summilux", ("28", "1.4"): "Summilux", ("35", "1.4"): "Summilux",
