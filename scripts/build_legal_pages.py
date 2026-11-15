@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://camerabridge.io"
 LANGS = ("ko", "en", "ja")
 UPDATED = "2026-11-14"  # eBay 제휴 링크 안내 (4번)
-PRIVACY_UPDATED = "2026-11-11"
+PRIVACY_UPDATED = "2026-11-15"  # 브라우저 저장 항목·유럽 동의 (6번)
 
 # 통신판매업 신고번호·전화는 사장님이 정하면 채운다 (비어 있으면 화면에 안 나옴)
 # 2026-11-12 사장님: 스미싱 문자·전화가 와서 꼭 올려야 하는 게 아니면 숨김 — 대표자 이름·사업자등록번호는 비우고(화면에 안 나옴),
@@ -213,7 +213,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                     ("의견 보내기", "의견 내용, 이메일(선택 입력), 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함) — 의견 확인·답장, 스팸 막기(하루 5건 제한)"),
                     ("커뮤니티 게시판 (구글 로그인)", "구글 계정 고유번호를 알아볼 수 없게 바꾼 회원 번호(해시값), 닉네임, 글·댓글 내용(누구나 볼 수 있게 공개), 신고한 접속지 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함)과 신고 내용, 저장(스크랩)한 상품의 주소와 저장할 때의 제목·가격, 원하는 매물 알림 조건(모델·최소 등급·도착 총액 상한·받는 나라)과 이미 알린 매물 주소, 가격 알림을 직접 켠 경우에만 구글 계정 이메일 — 회원 확인·로그인 유지, 게시판 운영, 저장한 상품 보여 주기, 가격이 내리거나 팔리면 메일로 알림, 원하는 조건의 새 매물이 나오면 메일로 알림, 스팸·도배 막기(하루 글 5건·댓글 30건 제한), 신고 처리. 구글 이름·사진은 저장하지 않고, 이메일은 알림을 켠 동안만 저장"),
                     ("매장(딜러) 계정", "아이디, 매장 이름, 비밀번호(복원할 수 없는 해시값으로 저장) — 매장 전용 시세 화면 로그인"),
-                    ("방문 기록", "접속 나라 코드, 화면 언어·통화, 들어온 사이트 주소(도메인과 경로, 주소 뒤 검색값은 빼고)·첫 주소·사이트 안에서 본 페이지, 같은 날 같은 접속지를 한 번으로 세기 위한 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함), 모바일 여부, 머문 시간, 검색어·고른 모델·결과 수, 매장 링크 클릭, 탭마다 새로 만드는 방문 번호, 브라우저에 저장하는 무작위 식별값 — 서비스 개선과 재방문 횟수·첫 방문·최근 방문 통계. 브라우저 식별값은 IP·로그인 계정과 무관하게 생성하며 로그인 정보와 연결하지 않음. IP 주소 자체·이메일·쿠키는 남기지 않음"),
+                    ("방문 기록", "접속 나라 코드, 화면 언어·통화, 들어온 사이트 주소(도메인과 경로, 주소 뒤 검색값은 빼고)·첫 주소·사이트 안에서 본 페이지, 같은 날 같은 접속지를 한 번으로 세기 위한 식별값(IP 주소를 날짜별로 바꾼 해시값, IP 자체는 저장 안 함), 모바일 여부, 머문 시간, 검색어·고른 모델·결과 수, 매장 링크 클릭, 탭마다 새로 만드는 방문 번호, 브라우저에 저장하는 무작위 식별값 — 서비스 개선과 재방문 횟수·첫 방문·최근 방문 통계. 브라우저 식별값은 IP·로그인 계정과 무관하게 생성하며 로그인 정보와 연결하지 않음. IP 주소 자체·이메일은 남기지 않음. 유럽·영국·스위스에서는 브라우저 식별값·탭 방문 번호를 동의한 경우에만 저장(6번)"),
                     ("방문 통계", "Vercel Web Analytics의 집계 통계(쿠키 없음, 개인 식별 안 함) — 방문 수 확인"),
                 ])
                 + "<h2>2. 보유 기간</h2>" + _list([
@@ -234,8 +234,15 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 + "<p>국외 이전을 원하지 않으면 의견 보내기를 쓰지 않거나 이메일을 비워 두시면 됩니다. 다만 사이트 이용 자체는 Vercel을 거칩니다.</p>"
                 + "<h2>5. 이용자의 권리</h2><p>자신의 정보를 보거나 고치거나 지우거나 처리를 멈추라고 언제든 요청할 수 있습니다. "
                   f"{MAIL}로 연락하시면 지체 없이 처리합니다. 방문 기록은 사람을 알아볼 수 있는 정보와 연결되지 않아 특정 방문을 골라 지우기 어려울 수 있습니다.</p>"
-                + "<h2>6. 쿠키와 브라우저 저장소</h2><p>매장 계정으로 로그인할 때 로그인 유지용 쿠키(cb_dealer)를, 게시판에 구글로 로그인할 때 로그인 유지용 쿠키(cb_member, 90일)를 씁니다. "
-                  "일반 이용자에게는 쿠키를 쓰지 않으며, 고른 언어·통화·배송 나라를 기억하려고 브라우저 저장소(localStorage)를 씁니다. 브라우저 설정에서 지울 수 있습니다. 재방문 집계를 위한 무작위 식별값(cb_browser)도 localStorage에 생성 후 최대 1년 동안 저장합니다. 브라우저 데이터를 지우거나 다른 브라우저·기기를 쓰면 별도로 집계됩니다. <a href='/?notrack=1'>방문 기록 끄기</a>를 누르면 이 브라우저의 기록을 중단하고 식별값을 지웁니다. <a href='/?notrack=0'>다시 켜기</a>도 가능합니다.</p>"
+                + "<h2>6. 쿠키와 브라우저 저장소</h2><p>매장 계정으로 로그인할 때 로그인 유지용 쿠키(cb_dealer)를, 게시판에 구글로 로그인할 때 로그인 유지용 쿠키(cb_member, 90일)를 씁니다. 일반 이용자에게는 쿠키를 쓰지 않습니다. 대신 이 브라우저의 저장소(localStorage·sessionStorage)에 아래를 저장합니다.</p>"
+                + _rows([
+                    ("고른 언어·통화·배송 나라, 퀴즈 진행", "직접 고른 설정을 기억 — 이 브라우저에만"),
+                    ("지난번 보신 모델 (cb_recent_models)", "최근 본 모델 3개와 본 시각 — 첫 화면에 그 뒤 새 매물·가격 내림을 보여 줌. 이 브라우저에만 있고 서버로 보내지 않음"),
+                    ("브라우저 식별값 (cb_browser, 최대 1년)·탭 방문 번호 (cb_visit)", "재방문·방문 통계 (1번 '방문 기록')"),
+                    ("저장 동의 선택 (cb_storage_consent)", "아래 동의 선택을 기억"),
+                ])
+                + "<p><b>유럽연합·영국·스위스</b>에서 접속하면 '지난번 보신 모델'·브라우저 식별값·탭 방문 번호를 저장하기 전에 먼저 묻고, 허용한 경우에만 저장합니다. 거부해도 사이트는 그대로 쓸 수 있습니다. 모든 페이지 아래 <b>'저장 설정'</b>에서 언제든 바꿀 수 있고, 거부하면 저장된 값을 지웁니다. "
+                  "그 밖의 나라에서는 <a href='/?notrack=1'>방문 기록 끄기</a>로 기록을 멈추고 식별값을 지울 수 있습니다(<a href='/?notrack=0'>다시 켜기</a>). 모든 값은 브라우저 설정에서 지울 수 있습니다.</p>"
                 + "<h2>7. 안전 조치</h2><p>모든 연결은 HTTPS로 암호화하고, 저장 정보는 비공개 저장소에 두며 운영자만 볼 수 있습니다. 비밀번호는 해시값으로만 저장합니다.</p>"
                 + "<h2>8. 만 14세 미만</h2><p>카메라브릿지는 만 14세 미만 아동을 대상으로 하지 않으며, 알면서 아동의 정보를 받지 않습니다.</p>"
                 + "<h2>9. 개인정보 보호책임자</h2>" + _rows([("책임자", f"{o['rep']['ko']} (대표)" if o["rep"]["ko"] else "카메라브릿지 운영자"), ("연락처", MAIL)])
@@ -249,7 +256,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                     ("ご意見の送信", "内容、メールアドレス（任意）、接続元識別値（IP アドレスを日ごとに変換したハッシュ値。IP 自体は保存しません）— 内容の確認・返信、スパム防止（1日5件まで）"),
                     ("コミュニティ掲示板（Google ログイン）", "Google アカウント固有番号を特定できない形に変換した会員番号（ハッシュ値）、ニックネーム、投稿・コメントの内容（誰でも閲覧できる公開情報）、通報者の接続元識別値（IP アドレスを日ごとに変換したハッシュ値）と通報内容、保存した商品の URL と保存時のタイトル・価格、希望商品の通知条件（モデル・最低ランク・到着総額の上限・お届け先の国）と通知済みの商品 URL、価格通知をオンにした場合のみ Google アカウントのメールアドレス — 会員の確認・ログイン維持、掲示板の運営、保存した商品の表示、値下げ・売り切れのメール通知、条件に合う新しい商品のメール通知、スパム防止（1日に投稿5件・コメント30件まで）、通報対応。Google の名前・写真は保存せず、メールアドレスは通知をオンにしている間だけ保存します"),
                     ("店舗（ディーラー）アカウント", "ID、店舗名、パスワード（復元できないハッシュ値で保存）— 店舗専用画面へのログイン"),
-                    ("利用記録", "接続国コード、表示言語・通貨、参照元（ドメインとパス、クエリ部分は除く）・最初のページ・サイト内で見たページ、同じ日の同じ接続元を一回と数えるための識別値（IP アドレスを日ごとに変わるハッシュ値にしたもの、IP 自体は保存しません）、モバイルかどうか、滞在時間、検索語・選んだモデル・結果数、店舗リンクのクリック、タブごとの訪問番号と、ブラウザに保存するランダムな識別値 — サービス改善、再訪問回数・初回と最近の訪問の集計。ブラウザ識別値は IP やログインアカウントから作らず、ログイン情報とも結び付けません。IP アドレス自体・メール・Cookie は残しません"),
+                    ("利用記録", "接続国コード、表示言語・通貨、参照元（ドメインとパス、クエリ部分は除く）・最初のページ・サイト内で見たページ、同じ日の同じ接続元を一回と数えるための識別値（IP アドレスを日ごとに変わるハッシュ値にしたもの、IP 自体は保存しません）、モバイルかどうか、滞在時間、検索語・選んだモデル・結果数、店舗リンクのクリック、タブごとの訪問番号と、ブラウザに保存するランダムな識別値 — サービス改善、再訪問回数・初回と最近の訪問の集計。ブラウザ識別値は IP やログインアカウントから作らず、ログイン情報とも結び付けません。IP アドレス自体・メールは残しません。EU・英国・スイスでは、ブラウザ識別値とタブの訪問番号は同意した場合のみ保存します（6）"),
                     ("アクセス統計", "Vercel Web Analytics の集計統計（Cookie なし、個人を特定しません）"),
                 ])
                 + "<h2>2. 保存期間</h2>" + _list([
@@ -268,8 +275,15 @@ def privacy_body(lang: str) -> tuple[str, str]:
                     ("Google LLC（米国）", "掲示板の Google ログインの確認。ログインボタンの表示のため Google のスクリプトを読み込み、Google 独自の Cookie が使われる場合があります"),
                 ])
                 + f"<h2>5. 利用者の権利</h2><p>ご自身の情報の開示・訂正・削除・利用停止をいつでも求めることができます。{MAIL} までご連絡ください。</p>"
-                + "<h2>6. Cookie とブラウザ保存領域</h2><p>店舗アカウントでログインする場合はログイン維持用 Cookie（cb_dealer）、掲示板に Google でログインする場合はログイン維持用 Cookie（cb_member、90日）を使います。"
-                  "一般の利用者には Cookie を使わず、選んだ言語・通貨・配送先を覚えるためにブラウザの保存領域（localStorage）を使います。再訪問の集計用のランダムな識別値（cb_browser）も作成から最大1年間保存します。保存データの削除・別のブラウザや端末では別に集計されます。<a href='/?notrack=1'>利用記録を停止</a>すると識別値を削除し、このブラウザの記録を止めます。<a href='/?notrack=0'>再開</a>もできます。</p>"
+                + "<h2>6. Cookie とブラウザ保存領域</h2><p>店舗アカウントでログインする場合はログイン維持用 Cookie（cb_dealer）、掲示板に Google でログインする場合はログイン維持用 Cookie（cb_member、90日）を使います。一般の利用者には Cookie を使わず、このブラウザの保存領域（localStorage・sessionStorage）に次を保存します。</p>"
+                + _rows([
+                    ("選んだ言語・通貨・配送先、クイズの進行", "ご自身で選んだ設定を記憶 — このブラウザのみ"),
+                    ("前回見たモデル（cb_recent_models）", "最近見たモデル3つと見た時刻 — トップにその後の新着・値下げを表示。このブラウザのみで、サーバーには送りません"),
+                    ("ブラウザ識別値（cb_browser、最大1年）・タブの訪問番号（cb_visit）", "再訪問・アクセスの集計（1の「利用記録」）"),
+                    ("保存の同意（cb_storage_consent）", "下記の同意の選択を記憶"),
+                ])
+                + "<p><b>EU・英国・スイス</b>からのアクセスでは、「前回見たモデル」・ブラウザ識別値・タブの訪問番号を保存する前に確認し、許可した場合のみ保存します。拒否してもサイトはそのまま使えます。各ページ下の<b>「保存の設定」</b>からいつでも変更でき、拒否すると保存した値を削除します。"
+                  "その他の国では<a href='/?notrack=1'>利用記録を停止</a>すると識別値を削除し記録を止めます（<a href='/?notrack=0'>再開</a>）。すべての値はブラウザの設定から削除できます。</p>"
                 + "<h2>7. 安全対策</h2><p>通信はすべて HTTPS で暗号化し、保存情報は非公開の保存先で運営者のみが閲覧します。</p>"
                 + "<h2>8. 個人情報保護責任者</h2>" + _rows([("責任者", f"{o['rep']['ja']}（代表）" if o["rep"]["ja"] else "Camera Bridge 運営者"), ("連絡先", MAIL)])
                 + f"<h2>9. 改定</h2><p>改定する場合はこのページでお知らせします。施行日：{PRIVACY_UPDATED}</p>")
@@ -280,7 +294,7 @@ def privacy_body(lang: str) -> tuple[str, str]:
                 ("Feedback form", "Your message, email (optional), and a sender tag (a daily-rotating hash of your IP address; the IP itself is not stored) — to read and reply to feedback and to block spam (5 per day). Basis: your consent by sending it, and our legitimate interest in preventing abuse."),
                 ("Community board (Google sign-in)", "A member ID (a one-way hash of your Google account ID), your nickname, the text of your posts and comments (public — anyone can read them), for reports a sender tag (a daily-rotating hash of your IP address) and the report text, the listings you save (link plus title and price at the time you saved), your listing alerts (model, minimum grade, maximum delivered total and destination country, plus the listings already emailed), and — only if you turn on price alerts — your Google account email — to recognise you and keep you signed in, run the board, show your saved listings, email you when a saved listing drops in price or sells or when a new listing matches your alert, block spam (5 posts and 30 comments per day) and handle reports. Your Google name and photo are not stored; your email is stored only while alerts are on. Basis: your consent by signing in and posting, and our legitimate interest in preventing abuse."),
                 ("Shop (dealer) accounts", "Username, shop name and password (stored only as a one-way hash) — to sign in to the dealer view. Basis: contract with the shop."),
-                ("Usage log", "Country code of the connection, interface language and currency, referring page (domain and path, without the query string), first page and pages viewed on the site, an identifier to count the same connection once per day (a hash of the IP address that changes daily; the IP itself is not stored), mobile or not, time on page, searches, chosen models, result counts, clicks to shops, a visit ID per browser tab, and a random browser identifier — to improve the service and measure return visits, first visits and latest visits. The browser identifier is generated independently of IP addresses and accounts, and is not linked to sign-in information. No IP address itself, email or cookie is kept. Basis: legitimate interest in running and improving the service."),
+                ("Usage log", "Country code of the connection, interface language and currency, referring page (domain and path, without the query string), first page and pages viewed on the site, an identifier to count the same connection once per day (a hash of the IP address that changes daily; the IP itself is not stored), mobile or not, time on page, searches, chosen models, result counts, clicks to shops, a visit ID per browser tab, and a random browser identifier — to improve the service and measure return visits, first visits and latest visits. The browser identifier is generated independently of IP addresses and accounts, and is not linked to sign-in information. No IP address itself or email is kept. Basis: legitimate interest in running and improving the service; in the EU, UK and Switzerland the browser identifier and tab visit ID are stored on your device only with your consent (section 6)."),
                 ("Analytics", "Aggregated visit statistics from Vercel Web Analytics (cookieless, does not identify you)."),
             ])
             + "<h2>2. How long we keep it</h2>" + _list([
@@ -300,8 +314,15 @@ def privacy_body(lang: str) -> tuple[str, str]:
             + "<p>Data is transferred over the internet when you use the service. Transfers to the US rely on Vercel's standard contractual clauses / data processing terms.</p>"
             + f"<h2>5. Your rights</h2><p>You may ask to access, correct, delete or restrict the processing of your information, object to processing, or withdraw consent, at any time by emailing {MAIL}. "
               "If you are in the EU/UK you may also complain to your local data protection authority. Usage-log entries are not linked to anything that identifies you, so we may not be able to single out a particular visit.</p>"
-            + "<h2>6. Cookies and browser storage</h2><p>We set a sign-in cookie only when a shop signs in (cb_dealer) or when you sign in to the board with Google (cb_member, 90 days); both are strictly necessary to keep you signed in. "
-              "Regular visitors get no cookies. We use your browser's local storage to remember the language, currency and shipping country you chose; you can clear it in your browser settings. We also store a random browser identifier (cb_browser) for return-visit statistics for up to one year from creation. Clearing storage or using another browser or device starts a separate history. <a href='/?notrack=1'>Turn off usage logging</a> to delete this identifier and stop logging this browser, or <a href='/?notrack=0'>turn it back on</a>.</p>"
+            + "<h2>6. Cookies and browser storage</h2><p>We set a sign-in cookie only when a shop signs in (cb_dealer) or when you sign in to the board with Google (cb_member, 90 days); both are strictly necessary to keep you signed in. Regular visitors get no cookies. Instead we store the following in this browser's storage (localStorage and sessionStorage):</p>"
+            + _rows([
+                ("Language, currency and shipping country you chose; quiz progress", "To remember settings you picked — kept in this browser only"),
+                ("Models you looked at (cb_recent_models)", "Your last 3 models and when you viewed them — to show new listings and price drops since then on the home page. Kept in this browser only and never sent to us"),
+                ("Browser identifier (cb_browser, up to 1 year) and tab visit ID (cb_visit)", "Return-visit and usage statistics (see 'Usage log' in section 1)"),
+                ("Your storage choice (cb_storage_consent)", "To remember the choice below"),
+            ])
+            + "<p>If you visit from the <b>EU, UK or Switzerland</b>, we ask before storing “Models you looked at”, the browser identifier or the tab visit ID, and store them only if you allow it. The site works the same if you decline. You can change your choice at any time via <b>“Storage settings”</b> at the bottom of every page; declining deletes what was stored. "
+              "Elsewhere, <a href='/?notrack=1'>turn off usage logging</a> to delete the identifier and stop logging this browser (<a href='/?notrack=0'>turn it back on</a>). You can clear all of these in your browser settings.</p>"
             + "<h2>7. Security</h2><p>All connections use HTTPS. Stored data is kept in private storage that only the operator can access, and passwords are stored only as hashes.</p>"
             + "<h2>8. Children</h2><p>Camera Bridge is not directed to children under 14 (under 16 in the EU), and we do not knowingly collect their information.</p>"
             + "<h2>9. Controller and contact</h2>" + _rows([("Controller", f"{o['name']['en']}, {o['address']['en']}"), ("Privacy contact", f"{o['rep']['en'] or 'Camera Bridge operator'} — {MAIL}")])
