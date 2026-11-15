@@ -47,6 +47,8 @@ def family(eid: str) -> str:
 def main() -> None:
     rng = random.Random(20261107)
     summary = json.loads(SUMMARY.read_text(encoding="utf-8"))
+    # 퀴즈는 바디·렌즈만 (부속품 모델은 이름에 주문 번호가 들어 있어 문제가 안 됨, 2026-11-15)
+    summary["entities"] = [e for e in summary["entities"] if e.get("kind") != "Accessory"]
     ents = {e["id"]: e for e in summary["entities"]}
     name = lambda eid: ents[eid]["name"].replace(" (all)", "")  # noqa: E731
     questions: list[dict] = []

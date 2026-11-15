@@ -289,8 +289,8 @@ def match_entities(record: dict[str, Any], catalog: dict[str, Any] | None = None
     catalog = catalog or load_catalog()
     final = record.get("final_output") or {}
     title = record_title(record)
-    if ACCESSORY_FOR.search(title):
-        return []
+    if ACCESSORY_FOR.search(title) and final.get("category") != "Accessory":
+        return []  # 렌즈·바디 시세에 '… hood for Summilux' 같은 부속품이 섞이지 않게 (부속품 모델은 아래 규칙으로 따로, 2026-11-15)
     hits = _rule_hits(catalog, final, title)
     lens_at = LENS_SIGNAL.search(title)
     if not hits and final.get("category") == "Body" and lens_at and not BODY_WORD.search(title[:lens_at.start()]):

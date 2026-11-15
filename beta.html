@@ -4910,6 +4910,7 @@
       none_on_sale: { ko: '지금 판매 중 없음', en: 'None for sale now', ja: '現在販売中なし', 'zh-Hans': '目前无在售', 'zh-Hant': '目前無在售', pt: 'Nenhum à venda agora', es: 'Ninguno en venta ahora', de: 'Derzeit nicht verfügbar', it: 'Nessuno in vendita ora' },
       body: { ko: '바디', en: 'Body', ja: 'ボディ', 'zh-Hans': '机身', 'zh-Hant': '機身', pt: 'Corpo', es: 'Cuerpo', de: 'Gehäuse', it: 'Corpo' },
       lens: { ko: '렌즈', en: 'Lens', ja: 'レンズ', 'zh-Hans': '镜头', 'zh-Hant': '鏡頭', pt: 'Lente', es: 'Objetivo', de: 'Objektiv', it: 'Obiettivo' },
+      accessory: { ko: '액세서리', en: 'Accessory', ja: 'アクセサリー', 'zh-Hans': '配件', 'zh-Hant': '配件', pt: 'Acessório', es: 'Accesorio', de: 'Zubehör', it: 'Accessorio' },
       more_versions: { ko: '버전 바꾸기', en: 'Change version', ja: 'バージョンを変更', 'zh-Hans': '切换版本', 'zh-Hant': '切換版本', pt: 'Mudar versão', es: 'Cambiar versión', de: 'Version wechseln', it: 'Cambia versione' },
       hide_versions: { ko: '접기', en: 'Hide', ja: '閉じる', 'zh-Hans': '收起', 'zh-Hant': '收起', pt: 'Ocultar', es: 'Ocultar', de: 'Ausblenden', it: 'Nascondi' },
       all_versions: { ko: '모든 버전', en: 'All versions', ja: 'すべてのバージョン', 'zh-Hans': '全部版本', 'zh-Hant': '全部版本', pt: 'Todas as versões', es: 'Todas las versiones', de: 'Alle Versionen', it: 'Tutte le versioni' },
@@ -5850,7 +5851,7 @@
     }
 
     function entityMetaLine(entity){
-      const kind = entity.kind === 'Body' ? ec('body') : ec('lens');
+      const kind = entity.kind === 'Body' ? ec('body') : entity.kind === 'Accessory' ? ec('accessory') : ec('lens');
       // 바디·렌즈가 섞인 별칭 묶음(블랙페인트·티타늄 등)은 종류를 쓰지 않음
       const parts = entity.feature && !entity.mount ? [] : [entity.mount ? `${kind} · ${entity.mount}` : kind];
       if(entity.active_count){
