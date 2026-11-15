@@ -193,13 +193,53 @@ def _home_quiz(records: list, catalog: dict, skip: set, to_krw: dict) -> list:
 
 
 # 대여(Rental, €100·€160)는 판매가가 아님 (시세 이탈 2차 2026-11-15, Fotohandel Delfshaven)
-_NOT_FOR_PRICE = re.compile(r"Kamerastore: issue\b|for (?:restoration|repair)|\brestoration\b|lens head only|senza lenti|without (?:glass|optics)|\brental\b|\bfor rent\b|レンタル|대여", re.I)
+_NOT_FOR_PRICE = re.compile(r"Kamerastore: issue\b|for (?:restoration|repair)|\brestoration\b|lens head only|senza lenti|without (?:glass|optics)|\brental\b|\bfor rent\b|レンタル|대여|\bparts\s*[-–:]|\bparts only\b", re.I)  # 'Parts - Leica M6 …' 부품용 (2026-11-15)
+
+
+HISTORY = ROOT / "data" / "history"
+PRICE_DROP_DAYS = 60
+
+
+def annotate_price_drops(records: list[dict]) -> int:
+    """판매 중 매물에 마지막 가격 인하를 붙임: final_output.price_drop_at·prev_price_raw (크롤 변경 기록 'price' 사건, 최근 60일).
+    첫 화면 '지난번 보신 모델 — 가격 내린 매물 n개'용 (2026-11-15). 마지막 변경이 인상이면 붙이지 않음."""
+    from search_index import parse_price_numeric
+
+    cutoff = (dt.datetime.now() - dt.timedelta(days=PRICE_DROP_DAYS)).strftime("%Y-%m-%d")
+    last: dict[str, dict] = {}
+    for path in sorted(HISTORY.glob("events_*.jsonl")):
+        with path.open(encoding="utf-8") as fh:
+            for line in fh:
+                if '"type": "price"' not in line:
+                    continue
+                try:
+                    event = json.loads(line)
+                except ValueError:
+                    continue
+                if str(event.get("t") or "") >= cutoff and event.get("link"):
+                    last[event["link"]] = event  # 시간순이라 마지막 것이 남음
+    marked = 0
+    for record in records:
+        final = record.get("final_output") or {}
+        final.pop("price_drop_at", None)
+        final.pop("prev_price_raw", None)
+        event = last.get(final.get("source_url") or "")
+        if not event or final.get("sold_quality") != "asking":
+            continue
+        new, old = parse_price_numeric(event.get("price")), parse_price_numeric(event.get("prev_price"))
+        if new and old and new < old:
+            final["price_drop_at"] = event["t"]
+            final["prev_price_raw"] = event.get("prev_price")
+            marked += 1
+    return marked
 
 
 def main() -> None:
     payload = json.loads(INDEX.read_text(encoding="utf-8"))
     records = payload["records"]
     annotate_records(records)
+    drops = annotate_price_drops(records)
+    print(f"가격 인하 표시: {drops}개")
     catalog = load_catalog()
     value = _b_value(catalog)
     moved = infer_by_price(records, value, catalog)

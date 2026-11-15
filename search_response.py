@@ -53,6 +53,8 @@ FINAL_OUTPUT_FIELDS = [
     "listed_est",  # 게시 추정일 (사진 주소의 올린 날짜)
     "posted_at",  # 매장이 준 게시일 (Shopify 상품 등록일)
     "image_grade",  # 사진으로 매긴 등급
+    "price_drop_at",  # 마지막 가격 인하 시각 (첫 화면 '지난번 보신 모델 — 가격 내린 매물', 2026-11-15)
+    "prev_price_raw",  # 인하 전 가격
     "source_marketplace",
     "source_item_id",
     "legacy_item_id",

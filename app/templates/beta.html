@@ -168,6 +168,17 @@
     body:not(.cb-searched) .workspace{display:none}
     /* 첫 화면: 실제 매물·시세 (검색하면 숨김) */
     body.cb-searched .home-feed{display:none}
+    .recent-models{margin:18px 0 0;border-top:1px solid var(--rule);padding-top:12px}
+    .recent-models[hidden]{display:none}
+    .recent-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+    .recent-head h3{margin:0;font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--text-soft)}
+    .recent-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:2px}
+    .recent-item{display:grid;grid-template-columns:1fr auto;gap:2px 12px;width:100%;padding:8px 0;border:0;border-bottom:1px solid var(--border);background:none;text-align:left;font:inherit;color:var(--text);cursor:pointer}
+    .recent-item:hover .recent-name,.recent-item:focus-visible .recent-name{text-decoration:underline}
+    .recent-name{font-size:16px;font-weight:500}
+    .recent-change{grid-column:1;font-size:13px;color:var(--text-soft)}
+    .recent-change b{color:var(--accent);font-weight:600}
+    .recent-side{grid-column:2;grid-row:1 / span 2;align-self:center;text-align:right;font-size:13px;color:var(--text-soft)}
     .home-feed{display:grid;gap:28px;margin:8px 0 12px}
     .home-heading{margin:0 0 12px;font-size:15px;font-weight:700;display:flex;align-items:baseline;gap:8px}
     .home-heading small{color:var(--text-muted);font-weight:400;font-size:12px}
@@ -1686,6 +1697,8 @@
                 <button class="search-button" type="submit" data-i18n="search.button" data-i18n-aria-label="search.button_aria" aria-label="Search">Search</button>
               </form>
             </section>
+            <!-- 2026-11-15 재방문 개선 ②: 다시 온 손님에게 지난번 본 모델과 그 뒤 바뀐 것 (이 브라우저에만 저장, 서버로 안 보냄) -->
+            <section id="recent-models" class="recent-models" hidden></section>
             <!-- (예전 사진 16장 격자 — 2026-11-08 돌아가는 큰 사진으로 바꿈, 데이터는 같은 home_feed.json showcase) 2026-11-08 사장님: 글을 안 읽어도 뭐 하는 곳인지 보이게 — 수집가 추천 모델의 실제 매물 사진·최저가·매물 있는 나라 (home_feed.json showcase) -->
           </div>
           <!-- 2026-11-08 사장님: 물건을 하나씩 크게 몇 초씩 넘겨 보여 주고 지도를 보여 주기 — 꿈의 라이카 16개를 4초마다 -->
@@ -3097,6 +3110,95 @@
       renderHome();
     }
 
+    // ── 재방문 개선 ② (2026-11-15): 지난번 본 모델 — 이 브라우저 localStorage 'cb_recent_models' [{id, seen(ms)}] 최근 3개 ──
+    const RECENT_KEY = 'cb_recent_models';
+    const recentState = { rows: null, loading: false };
+    const RECENT_COPY = {
+      title: { ko: '지난번 보신 모델', en: 'Models you looked at', ja: '前回見たモデル', 'zh-Hans': '上次看过的型号', 'zh-Hant': '上次看過的型號', pt: 'Modelos que você viu', es: 'Modelos que viste', de: 'Zuletzt angesehene Modelle', it: 'Modelli visti di recente' },
+      clear: { ko: '지우기', en: 'Clear', ja: '消去', 'zh-Hans': '清除', 'zh-Hant': '清除', pt: 'Limpar', es: 'Borrar', de: 'Löschen', it: 'Cancella' },
+      since: { ko: '{d} 이후', en: 'Since {d}', ja: '{d}以降', 'zh-Hans': '{d}以来', 'zh-Hant': '{d}以來', pt: 'Desde {d}', es: 'Desde {d}', de: 'Seit {d}', it: 'Dal {d}' },
+      new_n: { ko: '새 매물 {n}개', en: '{n} new', ja: '新着 {n}件', 'zh-Hans': '新货 {n} 件', 'zh-Hant': '新貨 {n} 件', pt: '{n} novos', es: '{n} nuevos', de: '{n} neu', it: '{n} nuovi' },
+      drop_n: { ko: '가격 내림 {n}개', en: '{n} price drops', ja: '値下げ {n}件', 'zh-Hans': '降价 {n} 件', 'zh-Hant': '降價 {n} 件', pt: '{n} baixaram de preço', es: '{n} bajaron de precio', de: '{n} günstiger', it: '{n} ribassati' },
+      nothing: { ko: '새 소식 없음', en: 'No changes', ja: '変化なし', 'zh-Hans': '暂无变化', 'zh-Hant': '暫無變化', pt: 'Sem novidades', es: 'Sin cambios', de: 'Keine Änderungen', it: 'Nessuna novità' },
+      on_sale: { ko: '판매 중 {n}', en: '{n} for sale', ja: '販売中 {n}', 'zh-Hans': '在售 {n}', 'zh-Hant': '在售 {n}', pt: '{n} à venda', es: '{n} a la venta', de: '{n} im Angebot', it: '{n} in vendita' },
+      from: { ko: '최저 {p}', en: 'from {p}', ja: '最安 {p}', 'zh-Hans': '最低 {p}', 'zh-Hant': '最低 {p}', pt: 'a partir de {p}', es: 'desde {p}', de: 'ab {p}', it: 'da {p}' },
+    };
+    const rx = (key, vars = {}) => {
+      const row = RECENT_COPY[key] || {};
+      let text = row[uiState.locale] || row.en || key;
+      Object.entries(vars).forEach(([k, v]) => { text = text.replace(`{${k}}`, v); });
+      return text;
+    };
+    function readRecentModels(){
+      try{ const list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); return Array.isArray(list) ? list.filter(x => x && x.id && Number.isFinite(x.seen)).slice(0, 3) : []; }catch(error){ return []; }
+    }
+    function rememberRecentModel(entityId){
+      if(!entityId || !entityState.byId[entityId] || entityState.byId[entityId].kind === 'Accessory') return;
+      const list = readRecentModels().filter(x => x.id !== entityId);
+      list.unshift({ id: entityId, seen: Date.now() });
+      try{ localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 3))); }catch(error){}
+    }
+    const kstTime = text => Date.parse(String(text || '').replace(' ', 'T') + '+09:00');
+    async function loadRecentModels(){
+      const list = readRecentModels().filter(x => entityState.byId[x.id]);
+      if(!list.length || recentState.loading) return;
+      recentState.loading = true;
+      recentState.rows = await Promise.all(list.map(async item => {
+        const entity = entityState.byId[item.id];
+        try{
+          const params = new URLSearchParams({ q: entityDisplayName(entity), entity: entity.id, limit: '100' });
+          const response = await fetch('/api/search?' + params.toString(), { headers: { 'Accept': 'application/json' } });
+          const payload = response.ok ? await response.json() : null;
+          const active = ((payload && payload.results) || []).filter(r => (r.final_output || {}).sold_quality === 'asking');
+          return { item, entity, active,
+            fresh: active.filter(r => kstTime((r.final_output || {}).first_seen) > item.seen).length,
+            drops: active.filter(r => kstTime((r.final_output || {}).price_drop_at) > item.seen).length };
+        }catch(error){
+          return { item, entity, active: [], fresh: 0, drops: 0 };
+        }
+      }));
+      recentState.loading = false;
+      renderRecentModels();
+    }
+    function renderRecentModels(){
+      const box = document.getElementById('recent-models');
+      if(!box) return;
+      const rows = recentState.rows || [];
+      if(!rows.length){ box.hidden = true; box.innerHTML = ''; return; }
+      const day = ms => new Intl.DateTimeFormat(uiState.locale, { month: 'short', day: 'numeric' }).format(new Date(ms));
+      box.innerHTML = `<div class="recent-head"><h3>${escapeHtml(rx('title'))}</h3><button type="button" class="board-link-button" data-recent-clear>${escapeHtml(rx('clear'))}</button></div>
+        <ul class="recent-list">${rows.map(({ item, entity, active, fresh, drops }) => {
+          // 최저가는 판매 중 가격대와 같은 기준: 그 모델 본품만 (부속품·다른 버전·세트·중복·지나치게 싼 매물 제외)
+          const prices = active.filter(r => priceSortGroup(r) === 0 && r.grade !== 'X' && !/^\s*parts\b|for parts|ジャンク|부품용/i.test(r.title || '')
+              && !['too_cheap', 'set', 'duplicate'].includes((r.final_output || {}).entity_note))
+            .map(r => { const c = computeLandedCost(r); return c && c.converted; }).filter(v => Number.isFinite(v));
+          const low = prices.length ? formatMoney(roundEstimate(Math.min(...prices), uiState.currency), uiState.currency) : '';
+          const changes = [fresh ? `<b>${escapeHtml(rx('new_n', { n: String(fresh) }))}</b>` : '', drops ? `<b>${escapeHtml(rx('drop_n', { n: String(drops) }))}</b>` : ''].filter(Boolean);
+          return `<li><button type="button" class="recent-item" data-recent-entity="${escapeHtml(entity.id)}">
+            <span class="recent-name">${escapeHtml(homeName(entity))}</span>
+            <span class="recent-change">${escapeHtml(rx('since', { d: day(item.seen) }))} · ${changes.length ? changes.join(' · ') : escapeHtml(rx('nothing'))}</span>
+            <span class="recent-side">${escapeHtml(rx('on_sale', { n: String(Math.max(active.length, Number(entity.active_count) || 0)) }))}${low ? `<br>${escapeHtml(rx('from', { p: low }))}` : ''}</span>
+          </button></li>`;
+        }).join('')}</ul>`;
+      box.hidden = false;
+    }
+    function bindRecentModels(){
+      const box = document.getElementById('recent-models');
+      if(!box) return;
+      box.addEventListener('click', event => {
+        if(event.target.closest('[data-recent-clear]')){
+          try{ localStorage.removeItem(RECENT_KEY); }catch(error){}
+          recentState.rows = [];
+          renderRecentModels();
+          return;
+        }
+        const item = event.target.closest('[data-recent-entity]');
+        if(!item) return;
+        usageLog.action('recent');
+        selectEntity(item.dataset.recentEntity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
+      });
+    }
+
     function homeAgo(firstSeen){
       const at = Date.parse(String(firstSeen || '').replace(' ', 'T') + '+09:00');
       if(!Number.isFinite(at)) return '';
@@ -3206,6 +3308,7 @@
 
     function renderHome(){
       renderShowcase();
+      renderRecentModels();
       const section = document.getElementById('home-feed');
       const latestEl = document.getElementById('home-latest');
       if(!section || !latestEl) return;
@@ -5063,6 +5166,7 @@
         });
         entityState.vocab = [...vocab];
         renderHome();
+        if(!state.query && !state.entity) loadRecentModels();  // 첫 화면으로 들어왔을 때만 (모델 링크로 들어오면 첫 화면이 안 보임)
         // 모델만 있고 검색어가 없는 주소(모델 페이지의 '전 세계 매물 전부 보기' 버튼 /?entity=…): 그 모델 이름으로 검색 (2026-11-12 사장님: 홈페이지만 열림)
         const linked = state.entity && !state.query ? entityState.byId[state.entity] : null;
         if(linked){
@@ -6895,6 +6999,7 @@
           state.response = payload;
           state.offset = Math.max(0, offset);
           loadEbaySection();
+          if(state.entity) rememberRecentModel(state.entity);
           const initialSections = buildDisplaySections(getResults(), getSortMode());
           const requestedHistoryVisibleCount = Number.isFinite(Number(options.historyVisibleCount))
             ? Math.max(0, Number(options.historyVisibleCount))
@@ -8614,6 +8719,7 @@
     loadEntitySummary();
     loadHomeFeed();
     bindHome();
+    bindRecentModels();
     bindQuiz();
     loadQuizBank();
     bindMarketMap();

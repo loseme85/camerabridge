@@ -303,7 +303,10 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
                     label = f"🔎 {_esc(s.get('q'))}"
                 steps.append(_step(kind, s, "step typed" if via in ("typed", "pick") else "step", f"{label} <small>{tail}</small>"))
             else:
-                if str(s.get("host") or "") == "@alert":
+                if str(s.get("host") or "") == "@recent":
+                    model = " (" + _esc(s.get("entity")) + ")" if s.get("entity") else ""
+                    steps.append(_step(kind, s, "step", "🕘 지난번 본 모델" + model))
+                elif str(s.get("host") or "") == "@alert":
                     model = " (" + _esc(s.get("entity")) + ")" if s.get("entity") else ""
                     steps.append(_step(kind, s, "step", "🔔 알림 버튼" + model))
                 else:
@@ -358,6 +361,7 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 <div class=kpi><b>{r['visits_with_activity']}</b><span>검색·클릭한 방문</span></div>
 <div class=kpi><b>{r['visits_with_click']}</b><span>판매처까지 간 방문</span></div>
 <div class=kpi><b>{r.get('visits_with_alert_button', 0)}</b><span>알림 버튼 누른 방문</span></div>
+<div class=kpi><b>{r.get('visits_with_recent', 0)}</b><span>'지난번 본 모델' 누른 방문</span></div>
 <div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div></div>
 <div class=grid>
 {_bars(entries, days, date)}

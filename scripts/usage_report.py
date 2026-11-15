@@ -119,6 +119,7 @@ def summarize(entries: list[dict]) -> dict:
         "visits_with_click": len({visitor_key(e) for e in entries if has_shop_click(e)}),
         "visits_with_alert_button": len({visitor_key(e) for e in entries if any(c.get("host") == "@alert" for c in e.get("clicks", []))}),
         "actions": collections.Counter(c["host"] for c in actions).most_common(10),
+        "visits_with_recent": len({visitor_key(e) for e in entries if any(c.get("host") == "@recent" for c in e.get("clicks", []))}),
         "searches": len(searches),
         "clicks": len(clicks),
         "referrers": collections.Counter(e.get("referrer") or "(직접·알 수 없음)" for e in first.values()).most_common(10),
