@@ -5,7 +5,7 @@ from urllib.parse import urlsplit
 from urllib.robotparser import RobotFileParser
 
 UA = 'CameraBridge/1.0 (+https://camerabridge.io)'
-URLS = ['https://www.grainlab.com/de/leica/', 'https://filmlab.lv/wp-json/wc/store/v1/products?search=leica&per_page=100', 'https://leicaboutique.co.za/used-leica-apo-summicron-m-90mm-f2-asph-filter']
+URLS = ['https://www.cameraoccasion.com/leica/', 'https://www.cameraoccasion.com/leica-sl3-10607-164254198.html']
 session = requests.Session()
 session.headers['User-Agent'] = UA
 robots = {}
