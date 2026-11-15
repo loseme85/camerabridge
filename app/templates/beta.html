@@ -1319,6 +1319,7 @@
     .alert-pop{position:absolute;right:0;top:calc(100% + 8px);z-index:45;width:min(440px,calc(100vw - 32px));max-height:min(70vh,560px);overflow:auto;
       background:var(--bg);border:1px solid var(--rule);box-shadow:4px 4px 0 rgba(22,24,26,0.08);padding:4px 16px 12px}
     .alert-pop[hidden]{display:none}
+    .alert-pop-loading{margin:12px 0;color:var(--text-soft);font-size:14px}
     .alert-pop .want-box{border:0;margin:0;padding:0}
     .summary-alert{border:1px solid var(--rule);font-size:13px;padding:0 12px}
     .summary-alert:hover,.summary-alert:focus-visible{border-color:var(--text)}
@@ -2445,6 +2446,7 @@
         active_progress: { ko: '{loaded}개 불러옴', en: '{loaded} loaded', ja: '{loaded}件 読み込み済み', 'zh-Hans': '已加载 {loaded} 条', 'zh-Hant': '已載入 {loaded} 條', pt: '{loaded} carregados', es: '{loaded} cargados', de: '{loaded} geladen', it: '{loaded} caricati' },
         active_progress_loading: { ko: '더 불러오는 중…', en: 'loading more…', ja: 'さらに読み込み中…', 'zh-Hans': '正在加载更多…', 'zh-Hant': '正在載入更多…', pt: 'carregando mais…', es: 'cargando más…', de: 'lädt weitere…', it: 'caricamento…' },
         share: { ko: '공유', en: 'Share', ja: '共有', 'zh-Hans': '分享', 'zh-Hant': '分享', pt: 'Compartilhar', es: 'Compartir', de: 'Teilen', it: 'Condividi' },
+        alert_loading: { ko: '시세를 불러오는 중…', en: 'Loading prices…', ja: '相場を読み込み中…', 'zh-Hans': '正在加载行情…', 'zh-Hant': '正在載入行情…', pt: 'Carregando preços…', es: 'Cargando precios…', de: 'Preise werden geladen…', it: 'Caricamento prezzi…' },
         alert: { ko: '가격·새 매물 알림', en: 'Price & new listing alert', ja: '価格・新着の通知', 'zh-Hans': '价格与新货提醒', 'zh-Hant': '價格與新貨提醒', pt: 'Alerta de preço e novidades', es: 'Alerta de precio y novedades', de: 'Preis- & Neuheiten-Alarm', it: 'Avviso prezzo e novità' },
         link_copied: { ko: '주소를 복사했어요', en: 'Link copied', ja: 'リンクをコピーしました', 'zh-Hans': '已复制链接', 'zh-Hant': '已複製連結', pt: 'Link copiado', es: 'Enlace copiado', de: 'Link kopiert', it: 'Link copiato' },
         entity_sold_records: { ko: '팔린 기록 {n}개', en: '{n} sold records', ja: '販売済みの記録 {n}件', 'zh-Hans': '成交记录 {n} 条', 'zh-Hant': '成交紀錄 {n} 筆', pt: '{n} vendas registradas', es: '{n} ventas registradas', de: '{n} Verkäufe erfasst', it: '{n} vendite registrate' },
@@ -3797,7 +3799,20 @@
         wantState.inline = Boolean(html && inline);
         if(wantRegion) wantRegion.innerHTML = html && inline ? `<section class="value-calc want-box">${html}</section>` : '';
         const pop = document.getElementById('alert-pop');
-        if(pop && !pop.hidden){ if(html && !inline) pop.innerHTML = `<section class="value-calc want-box">${html}</section>`; else closeAlertPop(); }
+        if(pop && !pop.hidden){
+          const loading = Boolean(pop.querySelector('.alert-pop-loading'));
+          if(html && !inline){
+            // 입력 중(창 안에 커서)이면 다시 그리지 않음 — 매물을 더 불러올 때마다 다시 그려 입력하던 금액이 지워지던 것.
+            // 신청 결과·안내 문구가 바뀌었을 때는 다시 그림
+            const typing = pop.contains(document.activeElement) && wantState.message === wantState.popMessage;
+            if(!typing && html !== wantState.popHtml){
+              pop.innerHTML = `<section class="value-calc want-box">${html}</section>`;
+              wantState.popHtml = html; wantState.popMessage = wantState.message;
+              if(loading){ const input = pop.querySelector('[data-want-max]'); if(input) input.focus({ preventScroll: true }); }
+            }
+          }else if(html && inline){ closeAlertPop(); const box = wantRegion && wantRegion.querySelector('.want-box'); if(box) box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          else if(!loading) closeAlertPop();
+        }
         if(html) fillWantMine();
       };
       document.body.classList.toggle('cb-calc', Boolean(ready));
@@ -8396,7 +8411,7 @@
     function closeAlertPop(){
       const pop = document.getElementById('alert-pop');
       const button = document.getElementById('summary-alert');
-      if(pop && !pop.hidden){ pop.hidden = true; pop.innerHTML = ''; }
+      if(pop && !pop.hidden){ pop.hidden = true; pop.innerHTML = ''; wantState.popHtml = ''; }
       if(button) button.setAttribute('aria-expanded', 'false');
     }
 
@@ -8407,19 +8422,21 @@
       if(!pop.hidden){ closeAlertPop(); return; }
       usageLog.action('alert');
       if(wantState.message){ wantState.message = ''; renderValueCalc(); }  // 지난번 안내('금액을 확인해 주세요' 등)는 새로 열 때 지움
-      for(let i = 0; i < 30 && !wantState.html; i++) await new Promise(r => setTimeout(r, 150));  // 그래프용 매물을 받는 중이면 잠깐 기다림
-      if(!wantState.html) return;
-      if(wantState.inline){
+      if(wantState.html && wantState.inline){  // 판매 중 매물이 없는 모델: 알림 칸이 화면에 바로 있음
         const box = document.querySelector('#want-region .want-box');
         if(box){ box.scrollIntoView({ behavior: 'smooth', block: 'center' }); const input = box.querySelector('[data-want-max]'); if(input) setTimeout(() => input.focus({ preventScroll: true }), 400); }
         return;
       }
-      pop.innerHTML = `<section class="value-calc want-box">${wantState.html}</section>`;
+      // 창은 바로 열고, 그래프용 매물을 아직 받는 중이면 '불러오는 중'을 보여 준 뒤 준비되면 putWant가 채움 (2026-11-15: 로딩 중에 누르면 아무것도 안 뜨던 것)
+      wantState.popHtml = wantState.html; wantState.popMessage = wantState.message;
+      pop.innerHTML = wantState.html ? `<section class="value-calc want-box">${wantState.html}</section>` : `<p class="alert-pop-loading">${escapeHtml(ux('summary.alert_loading', 'Loading…'))}</p>`;
       pop.hidden = false;
       button.setAttribute('aria-expanded', 'true');
-      fillWantMine();
-      const input = pop.querySelector('[data-want-max]');
-      if(input) input.focus({ preventScroll: true });
+      if(wantState.html){
+        fillWantMine();
+        const input = pop.querySelector('[data-want-max]');
+        if(input) input.focus({ preventScroll: true });
+      }
     }
 
     function bindAlertPop(){
