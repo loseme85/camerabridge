@@ -81,7 +81,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 181,
+   "count": 180,
    "example": "[위탁] M10 Monochrom (Black)"
   },
   {
@@ -385,18 +385,6 @@
    "example": "LEICA M3 Single Stroke sn.1156"
   },
   {
-   "a": "leica:body:m-monochrom-246:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 43,
-   "example": "[중고] M Monochrom Typ 246 (Black)"
-  },
-  {
-   "a": "leica:body:m-monochrom-246:standard",
-   "b": "leica:feature:monochrom",
-   "count": 43,
-   "example": "[중고] M Monochrom Typ 246 (Black)"
-  },
-  {
    "a": "leica:body:m11-monochrom",
    "b": "leica:feature:frameline-28",
    "count": 42,
@@ -407,6 +395,18 @@
    "b": "leica:feature:monochrom",
    "count": 42,
    "example": "[위탁] M11 Monochrom"
+  },
+  {
+   "a": "leica:body:m-monochrom-246:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 42,
+   "example": "[중고] M Monochrom Typ 246 (Black)"
+  },
+  {
+   "a": "leica:body:m-monochrom-246:standard",
+   "b": "leica:feature:monochrom",
+   "count": 42,
+   "example": "[중고] M Monochrom Typ 246 (Black)"
   },
   {
    "a": "leica:feature:eyes",
@@ -1583,7 +1583,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 180,
+   "count": 179,
    "example": "[위탁] M10 Monochrom (Black)"
   },
   {
@@ -1833,12 +1833,6 @@
    "example": "Leica D-Lux 5 Titan Body"
   },
   {
-   "entity": "leica:body:q3",
-   "word": "black paint",
-   "count": 3,
-   "example": "LEICA Q3, black paint finish Body"
-  },
-  {
    "entity": "leica:body:mp6",
    "word": "black paint",
    "count": 3,
@@ -1867,6 +1861,12 @@
    "word": "anniversary",
    "count": 3,
    "example": "Leica 35mm f1.4 Summilux-M ASPH FLE + 50mm f0.95 Noctilux-M Silver Set \"70th Ann"
+  },
+  {
+   "entity": "leica:body:q3",
+   "word": "black paint",
+   "count": 3,
+   "example": "Leica Q3, black paint"
   }
  ],
  "new": []
