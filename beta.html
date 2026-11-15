@@ -168,6 +168,15 @@
     body:not(.cb-searched) .workspace{display:none}
     /* 첫 화면: 실제 매물·시세 (검색하면 숨김) */
     body.cb-searched .home-feed{display:none}
+    /* 브라우저 저장 동의 창 (유럽·영국·스위스): 허용·거부 같은 크기 */
+    .consent-bar{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:720px;margin:0 auto;padding:14px 16px;background:var(--bg);
+      border:1px solid var(--rule);box-shadow:4px 4px 0 rgba(22,24,26,0.08);display:grid;gap:10px;font-size:14px;line-height:1.5}
+    .consent-bar[hidden]{display:none}
+    .consent-bar p{margin:0}
+    .consent-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .consent-button{min-width:110px;height:40px;padding:0 16px;border:1px solid var(--text);background:var(--bg);color:var(--text);font:inherit;cursor:pointer}
+    .consent-button:hover,.consent-button:focus-visible{background:var(--text);color:var(--bg)}
+    .consent-actions a{font-size:13px;color:var(--text-soft);margin-left:4px}
     .recent-models{margin:18px 0 0;border-top:1px solid var(--rule);padding-top:12px}
     .recent-models[hidden]{display:none}
     .recent-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
@@ -1922,12 +1931,16 @@
           </div>
         </form>
       </dialog>
+      <div id="consent-bar" class="consent-bar" role="dialog" aria-live="polite" hidden>
+        <p id="consent-text"></p>
+        <div class="consent-actions"><button type="button" id="consent-no" class="consent-button"></button><button type="button" id="consent-yes" class="consent-button"></button><a id="consent-more" href="/en/privacy/"></a></div>
+      </div>
       <footer class="site-legal">
         <p class="legal-story"><span data-i18n="footer.story">Built by someone who used to set buying prices in Leica shops.</span> <a data-legal-page="about" data-legal-hash="#why" href="/en/about/#why" data-i18n="footer.why">Why I built this</a></p>
         <div class="legal-rule"></div>
         <p class="legal-mark"><span data-i18n="footer.brand">Camera Bridge</span> <i>by thehingemeta</i></p>
         <p class="legal-mail"><a href="mailto:thehingemeta@gmail.com">thehingemeta@gmail.com</a></p>
-        <nav class="legal-links"><a href="#board" data-i18n="board.title">Community</a><a data-legal-page="leica" href="/en/leica/" data-i18n="footer.models">Prices by model</a><a data-legal-page="about" href="/en/about/" data-i18n="footer.about">About &amp; contact</a><a data-legal-page="privacy" href="/en/privacy/" data-i18n="footer.privacy">Privacy</a><a data-legal-page="terms" href="/en/terms/" data-i18n="footer.terms">Terms</a><a href="/impressum/">Impressum</a></nav>
+        <nav class="legal-links"><a href="#board" data-i18n="board.title">Community</a><a data-legal-page="leica" href="/en/leica/" data-i18n="footer.models">Prices by model</a><a data-legal-page="about" href="/en/about/" data-i18n="footer.about">About &amp; contact</a><a data-legal-page="privacy" href="/en/privacy/" data-i18n="footer.privacy">Privacy</a><a data-legal-page="terms" href="/en/terms/" data-i18n="footer.terms">Terms</a><a href="/impressum/">Impressum</a><a href="#" id="consent-open" data-i18n="footer.storage">Storage settings</a></nav>
         <p class="site-disclaimer" data-i18n="footer.disclaimer">Prices and totals are estimates. Always check the original listing before you buy.</p>
         <p class="legal-tm" data-i18n="footer.trademark">Leica is a trademark of Leica Camera AG. Camera Bridge is an independent service and is not affiliated with Leica Camera AG.</p>
       </footer>
@@ -2187,6 +2200,11 @@
         trademark: { ko: 'Leica는 Leica Camera AG의 상표입니다. 카메라브릿지는 Leica Camera AG와 관계없는 독립 서비스입니다.', en: 'Leica is a trademark of Leica Camera AG. Camera Bridge is an independent service and is not affiliated with Leica Camera AG.', ja: 'Leica は Leica Camera AG の商標です。Camera Bridge は Leica Camera AG とは関係のない独立したサービスです。', 'zh-Hans': 'Leica 是 Leica Camera AG 的商标。Camera Bridge 是独立服务，与 Leica Camera AG 无关联。', 'zh-Hant': 'Leica 是 Leica Camera AG 的商標。Camera Bridge 是獨立服務，與 Leica Camera AG 無關聯。', pt: 'Leica é uma marca da Leica Camera AG. O Camera Bridge é um serviço independente, sem vínculo com a Leica Camera AG.', es: 'Leica es una marca de Leica Camera AG. Camera Bridge es un servicio independiente sin relación con Leica Camera AG.', de: 'Leica ist eine Marke der Leica Camera AG. Camera Bridge ist ein unabhängiger Dienst ohne Verbindung zur Leica Camera AG.', it: 'Leica è un marchio di Leica Camera AG. Camera Bridge è un servizio indipendente, non affiliato a Leica Camera AG.' },
         models: { ko: '모델별 시세', en: 'Prices by model', ja: 'モデル別相場', 'zh-Hans': '按型号查看行情', 'zh-Hant': '依型號查看行情', pt: 'Preços por modelo', es: 'Precios por modelo', de: 'Preise nach Modell', it: 'Prezzi per modello' },
         about: { ko: '운영자 정보', en: 'About & contact', ja: '運営者情報', 'zh-Hans': '关于与联系', 'zh-Hant': '關於與聯絡', pt: 'Sobre e contato', es: 'Acerca de y contacto', de: 'Über uns & Kontakt', it: 'Chi siamo e contatti' },
+        storage: { ko: '저장 설정', en: 'Storage settings', ja: '保存の設定', 'zh-Hans': '存储设置', 'zh-Hant': '儲存設定', pt: 'Armazenamento', es: 'Almacenamiento', de: 'Speicher-Einstellungen', it: 'Impostazioni di memoria' },
+        consent_text: { ko: '방문 통계와 첫 화면의 \'지난번 보신 모델\'을 위해 이 브라우저에 정보를 저장해도 될까요? 거부해도 사이트는 그대로 쓸 수 있어요.', en: 'May we store information in this browser for visit statistics and the “Models you looked at” list on the home page? The site works the same if you decline.', ja: '訪問統計とトップの「前回見たモデル」のために、このブラウザに情報を保存してもよいですか？拒否してもサイトはそのまま使えます。', 'zh-Hans': '为了访问统计和首页的“上次看过的型号”，可以在此浏览器中保存信息吗？拒绝也不影响使用网站。', 'zh-Hant': '為了訪問統計和首頁的「上次看過的型號」，可以在此瀏覽器中儲存資訊嗎？拒絕也不影響使用網站。', pt: 'Podemos guardar informações neste navegador para estatísticas de visitas e a lista “Modelos que você viu” na página inicial? O site funciona igual se recusar.', es: '¿Podemos guardar información en este navegador para estadísticas de visitas y la lista «Modelos que viste» de la portada? El sitio funciona igual si lo rechazas.', de: 'Dürfen wir für Besuchsstatistiken und die Liste „Zuletzt angesehene Modelle“ auf der Startseite Informationen in diesem Browser speichern? Die Seite funktioniert auch, wenn Sie ablehnen.', it: 'Possiamo salvare informazioni in questo browser per le statistiche di visita e l’elenco «Modelli visti di recente» in home? Il sito funziona allo stesso modo se rifiuti.' },
+        consent_yes: { ko: '허용', en: 'Allow', ja: '許可', 'zh-Hans': '允许', 'zh-Hant': '允許', pt: 'Permitir', es: 'Permitir', de: 'Erlauben', it: 'Consenti' },
+        consent_no: { ko: '거부', en: 'Decline', ja: '拒否', 'zh-Hans': '拒绝', 'zh-Hant': '拒絕', pt: 'Recusar', es: 'Rechazar', de: 'Ablehnen', it: 'Rifiuta' },
+        consent_more: { ko: '자세히', en: 'Details', ja: '詳細', 'zh-Hans': '详情', 'zh-Hant': '詳情', pt: 'Detalhes', es: 'Detalles', de: 'Details', it: 'Dettagli' },
         privacy: { ko: '개인정보처리방침', en: 'Privacy', ja: 'プライバシーポリシー', 'zh-Hans': '隐私政策', 'zh-Hant': '隱私權政策', pt: 'Privacidade', es: 'Privacidad', de: 'Datenschutz', it: 'Privacy' },
         terms: { ko: '이용약관', en: 'Terms', ja: '利用規約', 'zh-Hans': '使用条款', 'zh-Hant': '使用條款', pt: 'Termos', es: 'Términos', de: 'Nutzungsbedingungen', it: 'Termini' },
       },
@@ -2735,6 +2753,24 @@
     };
     const landedState = { fx: null, rules: null, manualCurrency: false, manualDestination: false };
 
+    // ── 브라우저 저장 동의 (2026-11-15): 유럽·영국·스위스(시간대 Europe/…)는 방문 측정용 브라우저 식별값·탭 방문 묶음·'지난번 보신 모델'을
+    // 동의 전에는 저장하지 않음 (ePrivacy 5(3)). 언어·통화·퀴즈처럼 사용자가 고른 것은 그대로. 그 밖의 나라는 처리방침 안내만.
+    const CONSENT_KEY = 'cb_storage_consent';
+    const consentRegion = (() => {
+      try{
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        return /^Europe\//.test(tz) || /^Atlantic\/(Canary|Madeira|Azores|Reykjavik|Faroe)$/.test(tz);
+      }catch(error){ return false; }
+    })();
+    function storageConsent(){
+      try{ return localStorage.getItem(CONSENT_KEY) || ''; }catch(error){ return ''; }
+    }
+    function optionalStorageAllowed(){
+      const choice = storageConsent();
+      if(choice === 'no') return false;
+      return choice === 'yes' || !consentRegion;
+    }
+
     function readStoredChoice(key){
       try{ return window.localStorage ? (window.localStorage.getItem(key) || '') : ''; }catch(error){ return ''; }
     }
@@ -2787,7 +2823,7 @@
       // 브라우저 재방문 식별: IP와 무관한 무작위 값, 생성 후 1년. track.js·beta.html 동기화.
       const browserId = (() => {
         try {
-          if (off) return null;
+          if (off || !optionalStorageAllowed()) return null;
           let saved = JSON.parse(localStorage.getItem('cb_browser') || 'null');
           const now = Date.now(), year = 365 * 24 * 60 * 60 * 1000;
           if (!saved || !/^[a-f0-9]{32}$/.test(saved.id) || !Number.isFinite(saved.expires) || saved.expires <= now || saved.expires > now + year) {
@@ -2802,7 +2838,7 @@
       // 같은 탭에서 모델 페이지 → 첫 화면처럼 옮겨 다녀도 한 방문으로 묶음 (track.js 와 같은 규칙, sessionStorage 'cb_visit')
       // 새 방문: 탭에 기록이 없거나, 바깥 사이트에서 다시 들어왔거나, 30분 넘게 지났을 때
       let visit = null;
-      try{ visit = JSON.parse(sessionStorage.getItem('cb_visit') || 'null'); }catch(error){}
+      try{ if(optionalStorageAllowed()) visit = JSON.parse(sessionStorage.getItem('cb_visit') || 'null'); }catch(error){}
       let outside = '';
       try{
         if(document.referrer){
@@ -2815,7 +2851,7 @@
         const utm = [...new URLSearchParams(location.search)].filter(([key]) => key.startsWith('utm_')).map(([key, value]) => `${key}=${value}`).join('&');
         visit = newVisit(outside, location.pathname + (utm ? '?' + utm : ''));
       }
-      const saveVisit = () => { visit.last = Date.now(); try{ sessionStorage.setItem('cb_visit', JSON.stringify(visit)); }catch(error){} };
+      const saveVisit = () => { visit.last = Date.now(); if(!optionalStorageAllowed()) return; try{ sessionStorage.setItem('cb_visit', JSON.stringify(visit)); }catch(error){} };
       saveVisit();
       // 머문 시간 = 화면을 실제로 보고 있던 시간만 (2026-11-13 사장님: 1,500분 같은 값 — 탭을 열어 둔 채 다음 날 다시 보면
       // 처음 연 시각부터 하루가 통째로 들어갔음). 탭이 가려져 있던 시간은 빼고, 30분 넘게 가려졌다 돌아오면 새 방문으로 셈
@@ -3133,7 +3169,7 @@
       try{ const list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); return Array.isArray(list) ? list.filter(x => x && x.id && Number.isFinite(x.seen)).slice(0, 3) : []; }catch(error){ return []; }
     }
     function rememberRecentModel(entityId){
-      if(!entityId || !entityState.byId[entityId] || entityState.byId[entityId].kind === 'Accessory') return;
+      if(!entityId || !entityState.byId[entityId] || entityState.byId[entityId].kind === 'Accessory' || !optionalStorageAllowed()) return;
       const list = readRecentModels().filter(x => x.id !== entityId);
       list.unshift({ id: entityId, seen: Date.now() });
       try{ localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 3))); }catch(error){}
@@ -4995,6 +5031,35 @@
     }
 
     // 통화·배송 설정 창(<details>)은 저절로 안 닫힘 → 바깥 클릭·Esc·값을 고르면 닫기 (2026-11-15 사장님: PC에서 통화 고른 뒤 다른 곳을 눌러도 창이 그대로)
+    function renderConsentBar(show){
+      const bar = document.getElementById('consent-bar');
+      if(!bar) return;
+      const t = key => ux(`footer.${key}`, key);
+      document.getElementById('consent-text').textContent = t('consent_text');
+      document.getElementById('consent-yes').textContent = t('consent_yes');
+      document.getElementById('consent-no').textContent = t('consent_no');
+      const more = document.getElementById('consent-more');
+      more.textContent = t('consent_more');
+      const privacy = document.querySelector('[data-legal-page="privacy"]');
+      if(privacy) more.href = privacy.getAttribute('href');
+      bar.hidden = !show;
+    }
+    function bindConsent(){
+      const decide = value => {
+        try{ localStorage.setItem(CONSENT_KEY, value); }catch(error){}
+        if(value === 'no'){
+          try{ localStorage.removeItem('cb_browser'); localStorage.removeItem(RECENT_KEY); sessionStorage.removeItem('cb_visit'); }catch(error){}
+          recentState.rows = [];
+          renderRecentModels();
+        }
+        renderConsentBar(false);
+      };
+      document.getElementById('consent-yes')?.addEventListener('click', () => decide('yes'));
+      document.getElementById('consent-no')?.addEventListener('click', () => decide('no'));
+      document.getElementById('consent-open')?.addEventListener('click', event => { event.preventDefault(); renderConsentBar(true); });
+      renderConsentBar(consentRegion && !storageConsent());
+    }
+
     function bindPrefsClose(){
       const prefs = document.getElementById('prefs');
       if(!prefs) return;
@@ -6412,6 +6477,7 @@
       populateLandedOptions();
       renderLanguageSwitcher();
       applyStaticTranslations();
+      { const bar = document.getElementById('consent-bar'); if(bar && !bar.hidden) renderConsentBar(true); }
       render();
       requestAnimationFrame(() => {
         window.scrollTo({ top: currentScrollY, behavior: 'auto' });
@@ -8709,6 +8775,7 @@
     renderLanguageSwitcher();
     bindLanguageSwitcher();
     bindPrefsClose();
+    bindConsent();
     loadLandedData();
     applyStaticTranslations();
     bindEvents();

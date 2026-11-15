@@ -11,7 +11,19 @@
   if (flag === '1') return;
   if (navigator.webdriver || /bot|crawl|spider|slurp|headless|lighthouse|preview/i.test(navigator.userAgent || '')) return;
 
-  const off = false;
+  // 브라우저 저장 동의 (beta.html과 같은 규칙, 2026-11-15): 유럽·영국·스위스(시간대 Europe/…)는 첫 화면 동의 창에서 '허용'한 경우에만,
+  // '거부'했으면 어디서든 브라우저 식별값·탭 방문 번호를 저장하지 않음. 기록 자체(저장 없이)는 그대로 보냄
+  var allowed = (function () {
+    var choice = '';
+    try { choice = localStorage.getItem('cb_storage_consent') || ''; } catch (error) {}
+    if (choice === 'no') return false;
+    if (choice === 'yes') return true;
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      return !(/^Europe\//.test(tz) || /^Atlantic\/(Canary|Madeira|Azores|Reykjavik|Faroe)$/.test(tz));
+    } catch (error) { return true; }
+  })();
+  const off = !allowed;
   // 브라우저 재방문 식별: IP와 무관한 무작위 값, 생성 후 1년. track.js·beta.html 동기화.
   const browserId = (() => {
     try {
@@ -29,7 +41,7 @@
   // 브라우저 재방문 식별 끝
 
   var visit = null;
-  try { visit = JSON.parse(sessionStorage.getItem('cb_visit') || 'null'); } catch (error) {}
+  try { if (allowed) visit = JSON.parse(sessionStorage.getItem('cb_visit') || 'null'); } catch (error) {}
   var outside = '';
   try {
     if (document.referrer) {
@@ -45,7 +57,7 @@
     try { new URLSearchParams(location.search).forEach(function (value, key) { if (key.indexOf('utm_') === 0) utm.push(key + '=' + value); }); } catch (error) {}
     visit = newVisit(outside, location.pathname + (utm.length ? '?' + utm.join('&') : ''));
   }
-  function save() { visit.last = Date.now(); try { sessionStorage.setItem('cb_visit', JSON.stringify(visit)); } catch (error) {} }
+  function save() { visit.last = Date.now(); if (!allowed) return; try { sessionStorage.setItem('cb_visit', JSON.stringify(visit)); } catch (error) {} }
   save();
 
   var slug = (location.pathname.match(/\/leica\/([^/]+)\//) || [])[1] || '';
