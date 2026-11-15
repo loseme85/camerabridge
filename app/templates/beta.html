@@ -1313,6 +1313,12 @@
     .summary-share[hidden]{display:none}
     .summary-share:hover,.summary-share:focus-visible{color:var(--text);background:var(--surface-2,rgba(0,0,0,.05))}
     .summary-share svg{flex:0 0 auto}
+    /* 모델 이름 옆 알림 버튼 (2026-11-15 재방문 개선 ①): 누르면 아래 '원하는 매물 알림' 칸으로, 금액 칸에 바로 입력 */
+    .summary-actions{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+    .summary-alert{border:1px solid var(--rule);font-size:13px;padding:0 12px}
+    .summary-alert:hover,.summary-alert:focus-visible{border-color:var(--text)}
+    @media(max-width:720px){.summary-alert-label{display:none}.summary-alert{border:0;padding:0 10px}}
+    .want-box.is-flash{outline:2px solid var(--accent);outline-offset:4px;transition:outline-color .6s ease}
     .summary-metrics{gap:0;margin-top:28px;border-top:1px solid var(--border)}
     .summary-metric{border:0;border-right:1px solid var(--border);border-radius:0;background:none;padding:14px 20px 0 0;margin-right:20px}
     .summary-metric:last-child{border-right:0;margin-right:0}
@@ -1797,7 +1803,10 @@
             <div id="summary-query-kicker" class="summary-kicker">Model</div>
             <div class="summary-title-row">
               <div id="summary-query-title" class="summary-title">Search Leica listings</div>
+              <div class="summary-actions">
+              <button id="summary-alert" class="summary-share summary-alert" type="button" hidden><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/></svg><span class="summary-alert-label">Price & new listing alert</span></button>
               <button id="summary-share" class="summary-share" type="button" hidden aria-label="Share" title="Share"><span class="summary-share-note" aria-live="polite"></span><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11"/><path d="M7.8 7.7 12 3.5l4.2 4.2"/><path d="M8.5 10.5H6.5v9.5h11v-9.5h-2"/></svg></button>
+              </div>
             </div>
             <div id="summary-query-subtitle" class="summary-subtitle">Search results, active listings, and market price appear here.</div>
             <div class="summary-metrics">
@@ -2430,6 +2439,7 @@
         active_progress: { ko: '{loaded}개 불러옴', en: '{loaded} loaded', ja: '{loaded}件 読み込み済み', 'zh-Hans': '已加载 {loaded} 条', 'zh-Hant': '已載入 {loaded} 條', pt: '{loaded} carregados', es: '{loaded} cargados', de: '{loaded} geladen', it: '{loaded} caricati' },
         active_progress_loading: { ko: '더 불러오는 중…', en: 'loading more…', ja: 'さらに読み込み中…', 'zh-Hans': '正在加载更多…', 'zh-Hant': '正在載入更多…', pt: 'carregando mais…', es: 'cargando más…', de: 'lädt weitere…', it: 'caricamento…' },
         share: { ko: '공유', en: 'Share', ja: '共有', 'zh-Hans': '分享', 'zh-Hant': '分享', pt: 'Compartilhar', es: 'Compartir', de: 'Teilen', it: 'Condividi' },
+        alert: { ko: '가격·새 매물 알림', en: 'Price & new listing alert', ja: '価格・新着の通知', 'zh-Hans': '价格与新货提醒', 'zh-Hant': '價格與新貨提醒', pt: 'Alerta de preço e novidades', es: 'Alerta de precio y novedades', de: 'Preis- & Neuheiten-Alarm', it: 'Avviso prezzo e novità' },
         link_copied: { ko: '주소를 복사했어요', en: 'Link copied', ja: 'リンクをコピーしました', 'zh-Hans': '已复制链接', 'zh-Hant': '已複製連結', pt: 'Link copiado', es: 'Enlace copiado', de: 'Link kopiert', it: 'Link copiato' },
         entity_sold_records: { ko: '팔린 기록 {n}개', en: '{n} sold records', ja: '販売済みの記録 {n}件', 'zh-Hans': '成交记录 {n} 条', 'zh-Hant': '成交紀錄 {n} 筆', pt: '{n} vendas registradas', es: '{n} ventas registradas', de: '{n} Verkäufe erfasst', it: '{n} vendite registrate' },
         active_progress_done: { ko: '전부 불러옴', en: 'all loaded', ja: 'すべて読み込み済み', 'zh-Hans': '已全部加载', 'zh-Hant': '已全部載入', pt: 'todos carregados', es: 'todos cargados', de: 'alle geladen', it: 'tutti caricati' },
@@ -2838,6 +2848,11 @@
           if(key === last) return;  // 같은 검색 다시 그리기는 한 번만
           last = key;
           searches.push({ q, entity: entity || '', results, active, s: seconds(), via: via || 'other', typed: typed || '' });
+        },
+        // 화면 안 버튼 (판매처 클릭과 따로 셈: host가 '@'로 시작 — 방문 현황 '알림 버튼 누른 방문')
+        action(name){
+          if(off) return;
+          clicks.push({ host: '@' + name, entity: state.entity || '', q: state.query || '', s: seconds() });
         }
       };
     })();
@@ -7739,6 +7754,15 @@
       const shareButton = document.getElementById('summary-share');
       if(shareButton){
         shareButton.hidden = !(pickedEntity && !state.loading && !state.error);
+        const alertButton = document.getElementById('summary-alert');
+        if(alertButton){
+          alertButton.hidden = shareButton.hidden;
+          const label = ux('summary.alert', 'Price & new listing alert');
+          alertButton.title = label;
+          alertButton.setAttribute('aria-label', label);
+          const span = alertButton.querySelector('.summary-alert-label');
+          if(span) span.textContent = label;
+        }
         shareButton.setAttribute('aria-label', ux('summary.share', 'Share'));
         shareButton.title = ux('summary.share', 'Share');
       }
@@ -8353,6 +8377,22 @@
       }
     }
 
+    // 모델 이름 옆 알림 버튼: 아래 '원하는 매물 알림' 칸으로 내려가 금액 칸에 바로 입력 (칸이 아직 안 그려졌으면 잠깐 기다림)
+    async function goToWantForm(){
+      usageLog.action('alert');
+      let box = null;
+      for(let i = 0; i < 30 && !(box = document.querySelector('#want-region .want-box')); i++) await new Promise(r => setTimeout(r, 150));
+      const target = box || document.getElementById('value-calc-region');
+      if(!target) return;
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if(box){
+        box.classList.add('is-flash');
+        setTimeout(() => box.classList.remove('is-flash'), 1600);
+        const input = box.querySelector('[data-want-max]');
+        if(input) setTimeout(() => input.focus({ preventScroll: true }), 400);
+      }
+    }
+
     // 모델 공유: 주소는 /?entity=… (그 모델 검색 화면으로 열림). 휴대폰은 기본 공유 창, PC는 주소 복사
     async function shareCurrentModel(){
       const button = document.getElementById('summary-share');
@@ -8376,6 +8416,8 @@
     function bindEvents(){
       const shareButton = document.getElementById('summary-share');
       if(shareButton) shareButton.addEventListener('click', shareCurrentModel);
+      const alertButton = document.getElementById('summary-alert');
+      if(alertButton) alertButton.addEventListener('click', goToWantForm);
       els['search-form'].addEventListener('submit', event => {
         event.preventDefault();
         submitEntitySearch('query-input');

@@ -202,7 +202,7 @@ def _day_table(entries: list[dict], days: int) -> str:
         es = by_day.get(d, [])
         sids = {visitor_key(e) for e in es}
         typed = {visitor_key(e) for e in es if any(x.get("via") in ("typed", "pick") for x in e.get("searches", []))}
-        clicked = {visitor_key(e) for e in es if e.get("clicks")}
+        clicked = {visitor_key(e) for e in es if any(not str(c.get("host") or "").startswith("@") for c in e.get("clicks", []))}
         firsts = {visitor_key(e): e for e in sorted(es, key=lambda e: e.get("created_at", ""), reverse=True)}.values()
         top = ", ".join(f"{n} {c}" for n, c in collections.Counter(_ref_name(e.get("referrer"), e.get("landing")) for e in firsts).most_common(3))
         rows.append(f"<tr><td class=nowrap><a href='?date={d}'>{d[5:]}</a></td><td class=n>{len(sids)}</td><td class=n>{len(typed)}</td>"
@@ -303,7 +303,11 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
                     label = f"🔎 {_esc(s.get('q'))}"
                 steps.append(_step(kind, s, "step typed" if via in ("typed", "pick") else "step", f"{label} <small>{tail}</small>"))
             else:
-                steps.append(_step(kind, s, "step click", f"↗ {_esc(s.get('host'))}"))
+                if str(s.get("host") or "") == "@alert":
+                    model = " (" + _esc(s.get("entity")) + ")" if s.get("entity") else ""
+                    steps.append(_step(kind, s, "step", "🔔 알림 버튼" + model))
+                else:
+                    steps.append(_step(kind, s, "step click", f"↗ {_esc(s.get('host'))}"))
         when = _kst_time(v["start"])
         prior = _prior_visit_badge(v, history)
         device = "📱" if v["mobile"] else "💻"
@@ -353,6 +357,7 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 <div class=kpi><b>{r['visits']}</b><span>방문</span></div>
 <div class=kpi><b>{r['visits_with_activity']}</b><span>검색·클릭한 방문</span></div>
 <div class=kpi><b>{r['visits_with_click']}</b><span>판매처까지 간 방문</span></div>
+<div class=kpi><b>{r.get('visits_with_alert_button', 0)}</b><span>알림 버튼 누른 방문</span></div>
 <div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div></div>
 <div class=grid>
 {_bars(entries, days, date)}
