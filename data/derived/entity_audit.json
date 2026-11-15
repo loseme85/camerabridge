@@ -9,25 +9,25 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 838,
+   "count": 840,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 723,
+   "count": 724,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 679,
+   "count": 680,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:meter",
    "b": "leica:feature:ttl-flash",
-   "count": 285,
+   "count": 287,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
@@ -51,7 +51,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:ttl-flash",
-   "count": 249,
+   "count": 250,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
@@ -87,7 +87,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:ttl-flash",
-   "count": 146,
+   "count": 148,
    "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
   },
   {
@@ -151,6 +151,24 @@
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
+   "a": "leica:body:m6:ttl",
+   "b": "leica:feature:ttl-flash",
+   "count": 95,
+   "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
+  },
+  {
+   "a": "leica:body:m6:ttl",
+   "b": "leica:feature:meter",
+   "count": 95,
+   "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
+  },
+  {
+   "a": "leica:body:m6:ttl",
+   "b": "leica:feature:mechanical",
+   "count": 95,
+   "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
+  },
+  {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:meter",
    "count": 93,
@@ -167,24 +185,6 @@
    "b": "leica:feature:black-paint",
    "count": 93,
    "example": "Leica MP BlackPaint x0.72"
-  },
-  {
-   "a": "leica:body:m6:ttl",
-   "b": "leica:feature:ttl-flash",
-   "count": 93,
-   "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
-  },
-  {
-   "a": "leica:body:m6:ttl",
-   "b": "leica:feature:meter",
-   "count": 93,
-   "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
-  },
-  {
-   "a": "leica:body:m6:ttl",
-   "b": "leica:feature:mechanical",
-   "count": 93,
-   "example": "Leica M6 TTL Olive Green x0.85 [Custom]"
   },
   {
    "a": "leica:body:mp-film:black-paint",
@@ -249,7 +249,7 @@
   {
    "a": "leica:body:m6:ttl",
    "b": "leica:feature:frameline-28",
-   "count": 66,
+   "count": 67,
    "example": "[중고] M6 TTL (Silver)"
   },
   {
