@@ -3276,6 +3276,8 @@
     const ASK_NOT = /없이|없어도|안\s*(필요|들|써)|필요\s*(없|않)|without|no\s+batter|don'?t\s+need|not\s+need/i;
     function askListHtml(question){
       if(!/배터리|건전지|전지|batter(y|ies)|電池|电池/i.test(question) || !ASK_LIST.test(question)) return '';
+      const rest = String(question).replace(/배터리|건전지|전지|batter(y|ies)|電池|电池/ig, ' ').replace(ASK_LIST, ' ').replace(ASK_NOT, ' ').replace(/필요|쓰는|들어가는|need(s|ed)?|require[sd]?|[?？가이한은는]/ig, ' ').trim();
+      if(rest && askParse(rest).models.length) return '';
       const data = askState.data;
       if(!data || !data.specs) return '';
       const groups = { none: [], meter: [], shutter: [] };
@@ -3287,7 +3289,8 @@
         else if(b.startsWith('노출계에만')) groups.meter.push(entity);
         else if(b.startsWith('필수 (전자식')) groups.shutter.push(entity);
       });
-      const byYear = (x, y) => String(askSpec(x.id).values.years || '').localeCompare(String(askSpec(y.id).values.years || ''));
+      const year = entity => Number((String(askSpec(entity.id).values.years || '').match(/\d{4}/) || [9999])[0]);
+      const byYear = (x, y) => year(x) - year(y);
       const block = (key, list) => list.length ? `<p class="ask-more">${escapeHtml(ux(`ask.bat_${key}`))} (${list.length})</p>${askChips(list.sort(byYear).map(entity => ({ q: entityDisplayName(entity) })))}` : '';
       askState.last = { field: 'battery', models: [] };
       if(ASK_NOT.test(question)){
