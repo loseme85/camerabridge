@@ -519,3 +519,21 @@ BASED_ON.update({
     L + "apo-summicron-m:50:red": L + "apo-summicron-m:50",
     L + "apo-summicron-m:50:titan": L + "apo-summicron-m:50",
 })
+
+
+# ═════════════ 배터리 (2026-11-16 사장님 예시 '배터리가 필요한 바디') ═════════════
+# 셔터·노출계 방식에서 나오는 값. 필름 바디는 직접 나눔, 디지털·필름 컴팩트는 종류로 '필수'.
+BAT_NONE, BAT_METER, BAT_SHUTTER, BAT_ALWAYS = "필요 없음 (완전 기계식)", "노출계에만 (없어도 셔터 작동)", "필수 (전자식 셔터)", "필수"
+_BATTERY = {
+    BAT_NONE: ["standard", "ic", "if", "ig", "i", "ii", "iia", "iic", "iif", "iii", "iii-black-paint", "iiia", "iiia-monte-en-sarre",
+               "iiib", "iiic", "iiid", "iiif", "iiig", "iiig-swedish", "250", "72", "barnack-military", "0-series-2004", "x-ray",
+               "i-compur", "md", "md-post", "m1", "m2", "m2-r", "m3", "m3j", "m4", "m4-2", "m4-p", "m4-mot", "m-a", "ke-7a"],
+    BAT_METER: ["m5", "m6", "mp-film", "mp3", "mp6", "cl-film", "cl-film-50-jahre", "leicaflex", "leicaflex-sl", "leicaflex-sl2", "r6", "r6-2"],
+    BAT_SHUTTER: ["m7", "r-e", "r3", "r4", "r4s", "r5", "r7", "r8", "r9"],
+}
+for _value, _ids in _BATTERY.items():
+    for _id in _ids:
+        SPECS.setdefault(B + _id, {})["battery"] = _value
+for _key, _spec in SPECS.items():
+    if _key.startswith(B) and "battery" not in _spec and _spec.get("kind") in (DIGI_RF, MIRRORLESS, COMPACT, FILM_COMPACT, MEDIUM, "즉석 카메라", "브리지 컴팩트"):
+        _spec["battery"] = BAT_ALWAYS

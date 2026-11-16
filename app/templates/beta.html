@@ -1528,6 +1528,21 @@
     .ask-market,.ask-note{margin:10px 0 0;color:var(--text-soft);font-size:13px}
     .ask-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
     .ask-badge{display:inline-block;margin-left:6px;padding:0 6px;border:1px solid #b42318;color:#b42318;font-size:11px;font-weight:400}
+    /* 대화 형식 (2026-11-16 사장님 '대화형식이면') — 질문·답이 차례로 쌓이고 입력창은 아래 */
+    #feedback-dialog:has(#ask-pane:not([hidden])){width:min(600px, calc(100% - 32px))}
+    .ask-thread{display:flex;flex-direction:column;gap:14px;margin:0 0 12px;min-height:180px;max-height:58vh;overflow:auto;padding:2px 2px 4px}
+    .ask-msg{max-width:100%}
+    .ask-msg.is-user{align-self:flex-end;max-width:80%;padding:8px 12px;background:var(--surface-soft);border:1px solid var(--border);font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+    .ask-msg.is-bot{align-self:stretch}
+    .ask-lead{margin:0 0 8px;font-size:15px;line-height:1.6;color:var(--text)}
+    .ask-msg .ask-table{margin-top:4px}
+    .ask-more{margin:12px 0 0;color:var(--text-soft);font-size:12px}
+    .ask-msg .ask-examples{margin-top:6px}
+    .ask-msg.is-loading .ask-lead{color:var(--text-soft)}
+    .is-soft .ask-msg.is-user{border-color:transparent;background:var(--accent-soft)}
+    .ask-style-b .ask-msg.is-user{background:rgba(255,255,255,0.75)}
+    .ask-style-c .ask-msg.is-user{border-radius:12px 12px 3px 12px}
+    @media(max-width:720px){.ask-thread{max-height:52vh}.ask-msg.is-user{max-width:88%}}
     /* 대화창 부드럽게 — 미리보기 비교 (?askstyle=a|b|c, 2026-11-16 사장님 '창이 너무 딱딱하다') */
     .feedback-dialog.is-soft{border:1px solid var(--border);box-shadow:0 18px 48px rgba(34,32,30,0.12),0 2px 6px rgba(34,32,30,0.05);padding:24px 24px 20px}
     .feedback-dialog.is-soft::backdrop{background:rgba(34,32,30,0.18);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
@@ -1962,16 +1977,15 @@
       <dialog id="feedback-dialog" class="feedback-dialog">
         <!-- 2026-11-16 사장님: 사양 질문 대화창 틀 — ?ask=1로 연 브라우저에만 탭이 보임. 사양은 손님이 물어볼 때만 보여 줌 -->
         <div class="ask-tabs" role="tablist" hidden>
-          <button type="button" role="tab" data-ask-tab="ask" aria-selected="false" data-i18n="ask.tab">Ask</button>
+          <button type="button" role="tab" data-ask-tab="ask" aria-selected="false" data-i18n="ask.tab">Specs</button>
           <button type="button" role="tab" data-ask-tab="feedback" aria-selected="true" data-i18n="feedback.button">Send feedback</button>
         </div>
         <section id="ask-pane" hidden>
+          <div id="ask-answer" class="ask-answer ask-thread" aria-live="polite"></div>
           <form id="ask-form" class="ask-form" novalidate>
             <input id="ask-input" type="text" autocomplete="off" maxlength="200" data-i18n-placeholder="ask.placeholder" placeholder="e.g. M6 vs M6 TTL">
-            <button type="submit" class="search-button" data-i18n="ask.submit">Ask</button>
+            <button type="submit" class="search-button" data-i18n="ask.submit">Find</button>
           </form>
-          <div id="ask-examples" class="ask-examples"></div>
-          <div id="ask-answer" class="ask-answer" aria-live="polite"></div>
           <div class="feedback-actions"><button type="button" class="ghost-button" data-ask-close data-i18n="feedback.close">Close</button></div>
         </section>
         <form id="feedback-form" method="dialog" novalidate>
@@ -2251,10 +2265,10 @@
       },
       // 물어보기: 2026-11-16 틀은 en·ko만 — 모두에게 열 때 9개 언어로 번역
       ask: {
-        tab: { ko: '물어보기', en: 'Ask' },
-        button: { ko: '물어보기 · 의견', en: 'Ask · Feedback' },
+        tab: { ko: '사양 찾기', en: 'Specs' },
+        button: { ko: '사양 찾기 · 의견', en: 'Specs · Feedback' },
         placeholder: { ko: '예: M6와 M6 TTL 차이', en: 'e.g. M6 vs M6 TTL' },
-        submit: { ko: '묻기', en: 'Ask' },
+        submit: { ko: '찾기', en: 'Find' },
         loading: { ko: '찾는 중…', en: 'Looking it up…' },
         not_found: { ko: '어떤 모델인지 못 찾았어요. 모델 이름을 넣어 다시 물어봐 주세요. 예: "SL과 SL2 차이", "주미룩스 50 최단거리"', en: 'We couldn’t tell which model you mean. Try a model name, e.g. "SL vs SL2" or "Summilux 50 close focus".' },
         no_spec: { ko: '이 모델 사양은 아직 정리 중이에요.', en: 'We’re still putting together specs for this model.' },
@@ -2270,14 +2284,36 @@
         col_count: { ko: '판매 중', en: 'For sale' },
         yes: { ko: '있음', en: 'Yes' },
         no: { ko: '없음', en: 'No' },
-        examples: { ko: 'SL과 SL2 차이|M6와 M6 TTL 차이|주미룩스 50 최단거리', en: 'SL vs SL2|M6 vs M6 TTL|Summilux 50 close focus' },
+        examples: { ko: 'M6와 M7 차이|배터리가 필요한 바디|주미룩스 50 최단거리', en: 'M6 vs M7|Which bodies need a battery?|Summilux 50 close focus' },
+        hello: { ko: '라이카 바디·렌즈 사양을 바로 찾아 드려요. 두 모델을 넣으면 다른 점만 골라 비교해 드려요.', en: 'Look up any Leica body or lens spec instantly. Enter two models and I’ll show just what’s different.' },
+        try: { ko: '이렇게 물어보세요', en: 'Try asking' },
+        more: { ko: '이어서 물어보기', en: 'Ask next' },
+        lead_diff: { ko: '{a} vs {b} — 사양표로 보면 다른 점이 {n}가지예요.', en: '{a} vs {b} — they differ in {n} of the specs we have.' },
+        lead_pair: { ko: '{a}{wa} {b}의 {field}{eun} 이래요.', en: 'Here’s the {field} for {a} and {b}.' },
+        lead_value: { ko: '{name}의 {field}{eun} {v}{ieyo}.', en: 'The {name}’s {field}: {v}.' },
+        lead_versions: { ko: '{name}{eun} 버전마다 {field}{ga} 조금씩 달라요.', en: 'The {field} varies by version of the {name}.' },
+        lead_versions_same: { ko: '{name}의 {field}{eun} 버전과 상관없이 {v}{ieyo}.', en: 'The {name}’s {field} is {v} on every version.' },
+        price_here: { ko: '여기서는 사양만 알려 드려요. 시세와 매물은 위 검색창에서 모델 이름으로 찾아보세요.', en: 'I only cover specs here. For prices and listings, search the model name in the search bar above.' },
+        list_battery: { ko: '디지털 바디는 모두 배터리가 있어야 해요. 필름 바디 중에서는 이렇게 나뉘어요.', en: 'Every digital body needs a battery. Among film bodies, it splits like this:' },
+        list_no_battery: { ko: '배터리 없이 셔터가 움직이는 완전 기계식 바디는 {n}가지예요. 노출계만 배터리를 쓰는 바디도 배터리 없이 찍을 수는 있어요.', en: '{n} bodies are fully mechanical and need no battery. Bodies that use one only for the meter also shoot fine without it.' },
+        bat_say_none: { ko: '{name}{eun} 배터리 없이 작동하는 완전 기계식이에요.', en: 'The {name} is fully mechanical — no battery needed.' },
+        bat_say_meter: { ko: '{name}{eun} 배터리를 노출계에만 써요. 배터리가 없어도 셔터는 작동해요.', en: 'The {name} uses a battery only for the meter; the shutter works without one.' },
+        bat_say_shutter: { ko: '{name}{eun} 셔터가 전자식이라 배터리가 있어야 제대로 작동해요.', en: 'The {name} has an electronic shutter, so it needs a battery.' },
+        bat_say_always: { ko: '{name}{eun} 배터리가 꼭 필요해요.', en: 'The {name} needs a battery.' },
+        bat_none: { ko: '배터리 없이 작동 (완전 기계식)', en: 'No battery needed (fully mechanical)' },
+        bat_meter: { ko: '노출계에만 배터리 (없어도 셔터는 작동)', en: 'Battery for the meter only (shutter works without)' },
+        bat_shutter: { ko: '배터리가 꼭 필요 (전자식 셔터)', en: 'Battery required (electronic shutter)' },
+        bat_digital: { ko: '디지털 바디·필름 컴팩트는 모두 배터리가 필요해요.', en: 'All digital bodies and film compacts need a battery.' },
+        specs_of: { ko: '{name} 사양 전체', en: 'All {name} specs' },
+        lead_model: { ko: '{name} 사양을 정리했어요.', en: 'Here’s a quick spec sheet for the {name}.' },
+        did_you_mean: { ko: '어떤 모델인지 잘 모르겠어요. 혹시 이 중에 있을까요?', en: 'I’m not sure which model you mean — is it one of these?' },
         f: {
           years: { ko: '출시', en: 'Years' }, kind: { ko: '종류', en: 'Type' }, mount: { ko: '마운트·렌즈', en: 'Mount / lens' },
           focal: { ko: '초점거리', en: 'Focal length' }, aperture: { ko: '조리개', en: 'Aperture' },
           min_focus_m: { ko: '최단 초점거리', en: 'Close focus' }, elements: { ko: '렌즈 구성 (매/군)', en: 'Elements / groups' },
           filter: { ko: '필터', en: 'Filter' }, sensor_mp: { ko: '화소', en: 'Resolution' }, sensor: { ko: '센서', en: 'Sensor' },
           mono: { ko: '흑백 전용', en: 'Monochrome' }, finder: { ko: '파인더', en: 'Viewfinder' }, framelines: { ko: '프레임라인', en: 'Framelines' },
-          meter: { ko: '노출계', en: 'Light meter' }, shutter: { ko: '셔터', en: 'Shutter' }, top_speed: { ko: '최고 셔터 속도', en: 'Top shutter speed' },
+          meter: { ko: '노출계', en: 'Light meter' }, battery: { ko: '배터리', en: 'Battery' }, shutter: { ko: '셔터', en: 'Shutter' }, top_speed: { ko: '최고 셔터 속도', en: 'Top shutter speed' },
           flash_ttl: { ko: 'TTL 플래시', en: 'TTL flash' }, ibis: { ko: '손떨림 보정', en: 'Stabilization' }, video: { ko: '동영상', en: 'Video' },
           weight_g: { ko: '무게', en: 'Weight' }, note: { ko: '특징', en: 'Notes' }
         }
@@ -3010,16 +3046,17 @@
     // ?ask=1로 연 브라우저에만 탭이 보이고(사장님 미리보기 — 확인 전 값도 '확인 전' 표시와 함께), ?ask=0이면 끔.
     // 사양은 손님이 물어볼 때만 보여 준다 (다른 화면에 먼저 띄우지 않음).
     const ASK_FIELD_ORDER = ['years', 'kind', 'mount', 'focal', 'aperture', 'min_focus_m', 'elements', 'filter', 'sensor_mp', 'sensor', 'mono',
-      'finder', 'framelines', 'meter', 'shutter', 'top_speed', 'flash_ttl', 'ibis', 'video', 'weight_g', 'note'];
+      'finder', 'framelines', 'meter', 'battery', 'shutter', 'top_speed', 'flash_ttl', 'ibis', 'video', 'weight_g', 'note'];
     // 질문 속 사양 낱말 → 항목 (위에서부터 먼저 맞는 하나만). 모델 이름에 들어가는 말(MP·Monochrom·TTL)은 넣지 않는다.
     const ASK_WORDS = [
       ['min_focus_m', /최단\s*(초점\s*)?거리|최단|최소\s*(초점\s*)?거리|근접\s*촬영|close[\s-]*focus(ing)?|minimum\s*(focus(ing)?\s*)?distance|最短撮影距離|最短|最近对焦|最近對焦/],
       ['weight_g', /무게|weight|重さ|重量|gewicht|peso/],
       ['filter', /필터|filter|フィルター|滤镜|濾鏡/],
-      ['sensor_mp', /화소|해상도|megapixels?|画素|像素/],
+      ['sensor_mp', /화소|해상도|megapixels?|resolution|画素|像素/],
       ['finder', /파인더|배율|viewfinder|finder|magnification|ファインダー|取景器/],
       ['framelines', /프레임\s*라인|frame\s*lines?/],
       ['meter', /노출계|측광|light\s*meter|metering/],
+      ['battery', /배터리|건전지|전지|batter(y|ies)|電池|电池/],
       ['flash_ttl', /플래시|flash/],
       ['ibis', /손떨림|흔들림\s*보정|ibis|stabili[sz]ation/],
       ['video', /동영상|영상|video|動画|视频|視頻/],
@@ -3031,7 +3068,7 @@
       ['years', /출시|발매|연도|언제\s*나왔|released|launch(ed)?|発売|发布|發布/],
       ['mount', /마운트|mount/]
     ];
-    const askState = { data: null, loading: null, preview: false };
+    const askState = { data: null, loading: null, preview: false, last: null };
 
     function askEnabled(){
       const flag = new URLSearchParams(location.search).get('ask');
@@ -3102,6 +3139,8 @@
         if(pattern.test(text)){ field = key; text = text.replace(pattern, ' '); break; }
       }
       text = text.replace(/차이점?|다른\s*점|뭐야|뭐예요|뭔가요|뭐지|무엇|알려\s*(줘|주세요)|비교|어때요?|어떤가요|궁금해요?|몇|얼마|[?？!]|\bdifferences?\b|\bdiffer\b|\bbetween\b|\bcompare\b|\bwhat(?:'s| is| are)?\b|\btell me\b|\bthe\b|\bof\b|\bhow\b|\bmuch\b/g, ' ');
+      // 묻는 말끝·조건 낱말 ("배터리 없이 돼?", "필요해?", "does it need")
+      text = text.replace(/필요(해요?|한가요|하나요|한지)?|없이|없어도|돼요?|되나요|되는지|있어요?|있나요|쓰나요|써요?|\b(need(s)?|without|do(es)?|it|work(s)?|a|an|is|have|has)\b/g, ' ');
       const parts = text
         .split(/\s(?:vs\.?|versus|and|or|대)\s|[,&]|(?<=\S)(?:이랑|랑|하고|와|과)\s/)
         .map(part => part.replace(/(은|는|이|가|의|을|를|에서|중에?)\s*$/, '').trim())
@@ -3175,15 +3214,127 @@
       return ux(`ask.f.${field}`, field);
     }
 
+    // 한국어 조사: 마지막 글자에 받침이 있는지 (영문·숫자는 읽는 소리로 대강)
+    function askHasBatchim(word){
+      const text = String(word || '').replace(/[\s)\]」'"’.]+$/, '');
+      const ch = text.slice(-1);
+      if(!ch) return false;
+      const code = ch.charCodeAt(0);
+      if(code >= 0xAC00 && code <= 0xD7A3) return (code - 0xAC00) % 28 !== 0;
+      if(/[0136789]/.test(ch)) return true;
+      if(/mm$|MP$/i.test(text)) return /MP$/i.test(text);
+      if(/\sm$/.test(text)) return false;
+      if(/\sg$/.test(text)) return true;
+      return /[lmnrLMNR]/.test(ch);
+    }
+    function askJosa(word, withB, withoutB){ return askHasBatchim(word) ? withB : withoutB; }
+    function askLead(key, vars){
+      const v = Object.assign({}, vars);
+      if(uiState.locale === 'ko'){
+        if(v.name !== undefined) v.eun = askJosa(v.name, '은', '는');
+        if(v.field !== undefined && key !== 'lead_versions') v.eun = askJosa(v.field, '은', '는');
+        if(v.field !== undefined) v.ga = askJosa(v.field, '이', '가');
+        if(v.a !== undefined) v.wa = askJosa(v.a, '과', '와');
+        if(v.v !== undefined) v.ieyo = askJosa(v.v, '이에요', '예요');
+      }
+      return `<p class="ask-lead">${escapeHtml(askVars(ux(`ask.${key}`), v))}</p>`;
+    }
+
+    // 배터리는 값 대신 말로: "M6는 배터리를 노출계에만 써요. 없어도 셔터는 작동해요."
+    function askBatteryLead(name, value){
+      const v = String(value || '');
+      const key = v.startsWith('필요 없음') ? 'none' : v.startsWith('노출계에만') ? 'meter' : v.startsWith('필수 (전자식') ? 'shutter' : 'always';
+      return askLead(`bat_say_${key}`, { name });
+    }
+
+    function askChips(items){
+      return items.length ? `<div class="ask-examples">${items.map(item => `<button type="button" data-ask-question="${escapeHtml(item.q)}">${escapeHtml(item.label || item.q)}</button>`).join('')}</div>` : '';
+    }
+
+    // 이어서 물어볼 항목: 렌즈는 최단거리·무게·필터, 바디는 화소·무게·파인더
+    function askFieldChips(entity, spec, skip){
+      if(!spec) return [];
+      const lens = /^leica:lens:/.test(entity.id);
+      const want = lens ? ['min_focus_m', 'weight_g', 'filter', 'elements'] : ['sensor_mp', 'weight_g', 'finder', 'meter'];
+      const name = entityDisplayName(entity);
+      return want.filter(key => key !== skip && spec.values[key] !== undefined).slice(0, 3)
+        .map(key => ({ q: `${name} ${askFieldLabel(key)}`, label: askFieldLabel(key) }));
+    }
+
+    function askMore(chips){
+      return chips ? `<p class="ask-more">${escapeHtml(ux('ask.more'))}</p>${chips}` : '';
+    }
+
+    // 앞 질문 이어 받기: "그럼 SL3는?" → 앞에서 물은 항목·비교 상대를 그대로
+    function askResolve(question){
+      const parsed = askParse(question);
+      const last = askState.last;
+      if(!last) return parsed;
+      const followUp = /(그럼|그러면|그건|이건|은|는|요)\s*[?？]*\s*$|^\s*(and|what about|how about|then)\b/i.test(String(question || '').trim());
+      if(!parsed.models.length && parsed.field) return { field: parsed.field, models: last.models };
+      if(parsed.models.length === 1 && !parsed.field && followUp){
+        if(last.models.length === 2){
+          const partner = last.models[1].id === parsed.models[0].id ? last.models[0] : last.models[1];
+          return { field: last.field, models: [partner, parsed.models[0]] };
+        }
+        if(last.field) return { field: last.field, models: parsed.models };
+      }
+      return parsed;
+    }
+
+    const ASK_PRICE = /시세|가격|얼마|매물|중고가|price|cost|how\s*much|worth|相場|価格|值多少|价格|價格/i;
+
+    // 목록 질문: 모델 이름 없이 조건만 ("배터리가 필요한 바디", "배터리 없이 쓰는 카메라")
+    const ASK_LIST = /바디|카메라|모델|어떤|어느|뭐|목록|bod(y|ies)|cameras?|which|list/i;
+    const ASK_NOT = /없이|없어도|안\s*(필요|들|써)|필요\s*(없|않)|without|no\s+batter|don'?t\s+need|not\s+need/i;
+    function askListHtml(question){
+      if(!/배터리|건전지|전지|batter(y|ies)|電池|电池/i.test(question) || !ASK_LIST.test(question)) return '';
+      const rest = String(question).replace(/배터리|건전지|전지|batter(y|ies)|電池|电池/ig, ' ').replace(new RegExp(ASK_LIST.source, 'ig'), ' ').replace(new RegExp(ASK_NOT.source, 'ig'), ' ').replace(/\b(a|an|the|do|does|i)\b/ig, ' ').replace(/필요|쓰는|들어가는|need(s|ed)?|require[sd]?|[?？]|(?<=\S)(가|이|한|은|는|해)(?=\s|$)/ig, ' ').trim();
+      if(rest && askParse(rest).models.length) return '';
+      const data = askState.data;
+      if(!data || !data.specs) return '';
+      const groups = { none: [], meter: [], shutter: [] };
+      Object.entries(data.specs).forEach(([id, values]) => {
+        const entity = entityState.byId[id];
+        if(!entity || entity.parent || !/^leica:body:/.test(id) || !askSpec(id)) return;
+        const b = String(values.battery || '');
+        if(b.startsWith('필요 없음')) groups.none.push(entity);
+        else if(b.startsWith('노출계에만')) groups.meter.push(entity);
+        else if(b.startsWith('필수 (전자식')) groups.shutter.push(entity);
+      });
+      const year = entity => Number((String(askSpec(entity.id).values.years || '').match(/\d{4}/) || [9999])[0]);
+      const byYear = (x, y) => year(x) - year(y);
+      const block = (key, list) => list.length ? `<p class="ask-more">${escapeHtml(ux(`ask.bat_${key}`))} (${list.length})</p>${askChips(list.sort(byYear).map(entity => ({ q: entityDisplayName(entity) })))}` : '';
+      askState.last = { field: 'battery', models: [] };
+      if(ASK_NOT.test(question)){
+        return `${askLead('list_no_battery', { n: String(groups.none.length) })}${block('none', groups.none)}${block('meter', groups.meter)}`;
+      }
+      return `${askLead('list_battery', {})}${block('shutter', groups.shutter)}${block('meter', groups.meter)}<p class="ask-note">${escapeHtml(ux('ask.bat_digital'))}</p>`;
+    }
+
     function askAnswerHtml(question){
-      const { field, models } = askParse(question);
-      if(!models.length) return `<p>${escapeHtml(ux('ask.not_found'))}</p>`;
-      const markets = models.map(entity => `<p class="ask-market">${escapeHtml(askMarketLine(entity))}</p>`).join('');
+      const listed = askListHtml(question);
+      if(listed) return listed;
+      if(ASK_PRICE.test(question)){
+        const { models: priced } = askParse(String(question).replace(ASK_PRICE, ' '));
+        const lead = `<p class="ask-lead">${escapeHtml(ux('ask.price_here'))}</p>`;
+        return priced.length ? `${lead}${askLinks(priced)}` : lead;
+      }
+      const { field, models } = askResolve(question);
+      if(!models.length){
+        const guesses = suggestEntities(question, 4).map(item => item.entity).filter(askIsModel);
+        if(guesses.length) return `${askLead('did_you_mean', {})}${askChips(guesses.map(entity => ({ q: entityDisplayName(entity) })))}`;
+        return `<p class="ask-lead">${escapeHtml(ux('ask.not_found'))}</p>`;
+      }
+      askState.last = { field, models };
+      // 2026-11-16 사장님: 대화창은 사양만. 시세·매물은 검색창에서 (매물 보기 단추로 넘김)
+      const markets = '';
       if(models.length === 2){
         const [a, b] = models;
+        const na = entityDisplayName(a), nb = entityDisplayName(b);
         const sa = askSpec(a.id), sb = askSpec(b.id);
-        const title = `<h3>${escapeHtml(entityDisplayName(a))} vs ${escapeHtml(entityDisplayName(b))}${askBadge(sa) || askBadge(sb)}</h3>`;
-        if(!sa || !sb) return `${title}<p>${escapeHtml(ux('ask.no_spec'))}</p>${markets}${askLinks(models)}`;
+        const badge = askBadge(sa) || askBadge(sb);
+        if(!sa || !sb) return `<p class="ask-lead">${escapeHtml(ux('ask.no_spec'))}</p>${markets}${askLinks(models)}`;
         const fields = field ? [field] : ASK_FIELD_ORDER;
         const rows = fields.filter(key => sa.values[key] !== undefined || sb.values[key] !== undefined).map(key => {
           const va = sa.values[key] === undefined ? '—' : askValue(key, sa.values[key]);
@@ -3192,41 +3343,52 @@
           return { diff: va !== vb, html: `<tr><th>${escapeHtml(askFieldLabel(key))}</th><td${diff}>${escapeHtml(va)}</td><td${diff}>${escapeHtml(vb)}</td></tr>` };
         });
         const shown = field ? rows : rows.filter(row => row.diff);
+        if(field && !rows.length) return `<p class="ask-lead">${escapeHtml(ux('ask.no_field'))}</p>${markets}${askLinks(models)}`;
+        const lead = field
+          ? askLead('lead_pair', { a: na, b: nb, field: askFieldLabel(field) })
+          : shown.length ? askLead('lead_diff', { a: na, b: nb, n: String(shown.length) }) : `<p class="ask-lead">${escapeHtml(ux('ask.no_diff'))}</p>`;
         const table = shown.length
-          ? `<table class="ask-table"><thead><tr><th></th><th>${escapeHtml(entityDisplayName(a))}</th><th>${escapeHtml(entityDisplayName(b))}</th></tr></thead><tbody>${shown.map(row => row.html).join('')}</tbody></table>`
-          : `<p>${escapeHtml(ux('ask.no_diff'))}</p>`;
-        return `${title}${table}${markets}${askLinks(models)}`;
+          ? `<table class="ask-table"><thead><tr><th></th><th>${escapeHtml(na)}</th><th>${escapeHtml(nb)}</th></tr></thead><tbody>${shown.map(row => row.html).join('')}</tbody></table>`
+          : '';
+        // 이어서: 비교한 두 모델 각각의 사양 전체
+        const next = models.map(entity => ({ q: entityDisplayName(entity), label: askVars(ux('ask.specs_of'), { name: entityDisplayName(entity) }) }));
+        return `${lead.replace('</p>', `${badge}</p>`)}${table}${markets}${askLinks(models)}${askMore(askChips(next))}`;
       }
       const entity = models[0];
       const spec = askSpec(entity.id);
       const name = entityDisplayName(entity);
       const kids = (entity.children || []).map(id => entityState.byId[id]).filter(kid => kid && !/unspecified/.test(kid.id));
       if(field){
+        const label = askFieldLabel(field);
         const versions = kids.map(kid => ({ kid, spec: askSpec(kid.id) })).filter(item => item.spec && item.spec.values[field] !== undefined);
         if(versions.length){
-          const rows = versions.map(item => `<tr><th>${escapeHtml(entityDisplayName(item.kid))}</th><td>${escapeHtml(askValue(field, item.spec.values[field]))}</td><td>${escapeHtml(item.kid.b_price_krw ? krwToDisplay(item.kid.b_price_krw) : '')}</td><td>${Number(item.kid.active_count || 0)}</td></tr>`).join('');
-          const title = askVars(ux('ask.by_version'), { field: askFieldLabel(field) });
+          const rows = versions.map(item => `<tr><th>${escapeHtml(entityDisplayName(item.kid))}</th><td>${escapeHtml(askValue(field, item.spec.values[field]))}</td></tr>`).join('');
           const kidsShown = versions.map(item => item.kid).sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 3);
-          const head = `<thead><tr><th></th><th>${escapeHtml(askFieldLabel(field))}</th><th>${escapeHtml(ux('ask.col_price'))}</th><th>${escapeHtml(ux('ask.col_count'))}</th></tr></thead>`;
-          return `<h3>${escapeHtml(name)} · ${escapeHtml(title)}${askBadge(versions[0].spec)}</h3><table class="ask-table">${head}<tbody>${rows}</tbody></table>${markets}${askLinks(kidsShown)}`;
+          const head = `<thead><tr><th></th><th>${escapeHtml(label)}</th></tr></thead>`;
+          const values = [...new Set(versions.map(item => askValue(field, item.spec.values[field])))];
+          const same = values.length === 1;
+          const lead = (same
+            ? (field === 'battery' ? askBatteryLead(name, values[0]) : askLead('lead_versions_same', { name, field: label, v: values[0] }))
+            : askLead('lead_versions', { name, field: label })).replace('</p>', `${askBadge(versions[0].spec)}</p>`);
+          return `${lead}${same ? '' : `<table class="ask-table">${head}<tbody>${rows}</tbody></table>`}${askLinks(kidsShown)}${askMore(askChips(askFieldChips(entity, askSpec(kidsShown[0].id), field).map(chip => ({ q: `${name} ${chip.label}`, label: chip.label }))))}`;
         }
         if(spec && spec.values[field] !== undefined){
-          return `<h3>${escapeHtml(name)}${askBadge(spec)}</h3><table class="ask-table"><tbody><tr><th>${escapeHtml(askFieldLabel(field))}</th><td>${escapeHtml(askValue(field, spec.values[field]))}</td></tr></tbody></table>${markets}${askLinks([entity])}`;
+          const lead = (field === 'battery' ? askBatteryLead(name, spec.values[field]) : askLead('lead_value', { name, field: label, v: askValue(field, spec.values[field]) })).replace('</p>', `${askBadge(spec)}</p>`);
+          return `${lead}${markets}${askLinks([entity])}${askMore(askChips(askFieldChips(entity, spec, field)))}`;
         }
-        return `<h3>${escapeHtml(name)}</h3><p>${escapeHtml(spec ? ux('ask.no_field') : ux('ask.no_spec'))}</p>${markets}${askLinks([entity])}`;
+        return `<p class="ask-lead">${escapeHtml(spec ? ux('ask.no_field') : ux('ask.no_spec'))}</p>${markets}${askLinks([entity])}${askMore(askChips(askFieldChips(entity, spec, field)))}`;
       }
       const table = spec
         ? `<table class="ask-table"><tbody>${ASK_FIELD_ORDER.filter(key => spec.values[key] !== undefined).map(key => `<tr><th>${escapeHtml(askFieldLabel(key))}</th><td>${escapeHtml(askValue(key, spec.values[key]))}</td></tr>`).join('')}</tbody></table>`
-        : `<p>${escapeHtml(ux('ask.no_spec'))}</p>`;
+        : '';
       // 비교 후보: 같은 부모 아래 형제 또는 자기 버전들 중 매물 많은 것
       const parent = entity.parent ? entityState.byId[entity.parent] : null;
       const pool = (kids.length ? kids : (parent ? (parent.children || []).map(id => entityState.byId[id]) : []))
         .filter(other => other && other.id !== entity.id && !/unspecified/.test(other.id) && askSpec(other.id))
-        .sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 4);
-      const compare = pool.length
-        ? `<p class="ask-note">${escapeHtml(ux('ask.compare_with'))}</p><div class="ask-links">${pool.map(other => `<button type="button" data-ask-question="${escapeHtml(`${entityDisplayName(entity)} vs ${entityDisplayName(other)}`)}">${escapeHtml(entityDisplayName(other))}</button>`).join('')}</div>`
-        : '';
-      return `<h3>${escapeHtml(name)}${askBadge(spec)}</h3>${table}${markets}${askLinks([entity])}${compare}`;
+        .sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 3);
+      const next = pool.map(other => ({ q: `${name} vs ${entityDisplayName(other)}`, label: `vs ${entityDisplayName(other)}` }));
+      const lead = spec ? askLead('lead_model', { name }).replace('</p>', `${askBadge(spec)}</p>`) : `<p class="ask-lead">${escapeHtml(ux('ask.no_spec'))}</p>`;
+      return `${lead}${table}${markets}${askLinks([entity])}${askMore(askChips(next))}`;
     }
 
     function bindAsk(){
@@ -3239,37 +3401,48 @@
       if(softStyle) dialog.classList.add('is-soft', `ask-style-${softStyle}`);
       tabs.hidden = false;
       openButton.setAttribute('data-i18n', 'ask.button');
-      openButton.textContent = ux('ask.button', 'Ask · Feedback');
+      openButton.textContent = ux('ask.button', 'Specs · Feedback');
       const pane = document.getElementById('ask-pane');
       const feedbackForm = document.getElementById('feedback-form');
       const input = document.getElementById('ask-input');
-      const answer = document.getElementById('ask-answer');
-      const examples = document.getElementById('ask-examples');
+      const thread = document.getElementById('ask-answer');
+      const addMsg = (who, html) => {
+        const el = document.createElement('div');
+        el.className = `ask-msg is-${who}`;
+        el.innerHTML = html;
+        thread.appendChild(el);
+        return el;
+      };
+      const hello = () => {
+        if(thread.childElementCount) return;
+        const examples = ux('ask.examples', '').split('|').filter(Boolean).map(q => ({ q }));
+        addMsg('bot', `<p class="ask-lead">${escapeHtml(ux('ask.hello'))}</p><p class="ask-more">${escapeHtml(ux('ask.try'))}</p>${askChips(examples)}`);
+      };
       const show = name => {
         tabs.querySelectorAll('[data-ask-tab]').forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.askTab === name)));
         pane.hidden = name !== 'ask';
         feedbackForm.hidden = name === 'ask';
-        if(name === 'ask'){ loadAskSpecs(); input.focus(); }
+        if(name === 'ask'){ hello(); loadAskSpecs(); input.focus(); }
       };
       const ask = async question => {
         const text = String(question || '').trim();
         if(!text) return;
-        input.value = text;
-        answer.innerHTML = `<p class="ask-note">${escapeHtml(ux('ask.loading'))}</p>`;
+        input.value = '';
+        const mine = addMsg('user', escapeHtml(text));
+        const reply = addMsg('bot', `<p class="ask-lead">${escapeHtml(ux('ask.loading'))}</p>`);
+        reply.classList.add('is-loading');
+        thread.scrollTop = mine.offsetTop - thread.offsetTop - 4;
         await loadAskSpecs();
-        answer.innerHTML = askAnswerHtml(text);
+        reply.innerHTML = askAnswerHtml(text);
+        reply.classList.remove('is-loading');
+        thread.scrollTop = mine.offsetTop - thread.offsetTop - 4;
         if(typeof usageLog !== 'undefined') usageLog.action('ask');
       };
-      const renderExamples = () => {
-        examples.innerHTML = ux('ask.examples', '').split('|').filter(Boolean)
-          .map(text => `<button type="button" data-ask-question="${escapeHtml(text)}">${escapeHtml(text)}</button>`).join('');
-      };
-      renderExamples();
       tabs.addEventListener('click', event => {
         const tab = event.target.closest('[data-ask-tab]');
         if(tab) show(tab.dataset.askTab);
       });
-      openButton.addEventListener('click', () => { renderExamples(); show('ask'); });
+      openButton.addEventListener('click', () => show('ask'));
       document.getElementById('ask-form').addEventListener('submit', event => { event.preventDefault(); ask(input.value); });
       dialog.addEventListener('click', event => {
         const close = event.target.closest('[data-ask-close]');
