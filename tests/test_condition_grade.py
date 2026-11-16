@@ -771,3 +771,9 @@ def test_realcamera_cosmetic_score():
     from condition_grade import grade_of, REALCAMERA_PREFIX
     for raw, expected in [("9.9", "S"), ("9.5", "A"), ("9", "B"), ("8.5", "B"), ("8", "C"), ("7", "D"), ("unknown", None)]:
         assert grade_of("The Real Camera Company (영국)", REALCAMERA_PREFIX + raw)[0] == expected
+
+def test_grainlab_description_grades():
+    from condition_grade import de_condition
+    for description, expected in [("Neuwertiger Zustand", "S"), ("Sehr guter Zustand", "B"), ("leichte Gebrauchsspuren", "B"), ("Gläser ohne Kratzer", None)]:
+        assert grade_of("Grainlab (독일)", de_condition(description))[0] == expected
+    assert grade_of("Grainlab (독일)", "Grainlab: hervorragend")[0] == "B"
