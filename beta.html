@@ -2292,6 +2292,8 @@
         lead_pair: { ko: '{a}{wa} {b}의 {field}{eun} 이래요.', en: 'Here’s the {field} for {a} and {b}.' },
         lead_value: { ko: '{name}의 {field}{eun} {v}{ieyo}.', en: 'The {name}’s {field}: {v}.' },
         lead_versions: { ko: '{name}{eun} 버전마다 {field}{ga} 조금씩 달라요. 시세와 판매 중인 매물도 같이 붙였어요.', en: 'The {field} varies by version of the {name}. Prices and listings are included.' },
+        lead_versions_same: { ko: '{name}의 {field}{eun} 버전과 상관없이 {v}{ieyo}. 버전별 시세도 같이 붙였어요.', en: 'The {name}’s {field} is {v} across versions. Prices by version below.' },
+        specs_of: { ko: '{name} 사양 전체', en: 'All {name} specs' },
         lead_model: { ko: '{name} 사양을 정리했어요.', en: 'Here’s a quick spec sheet for the {name}.' },
         did_you_mean: { ko: '어떤 모델인지 잘 모르겠어요. 혹시 이 중에 있을까요?', en: 'I’m not sure which model you mean — is it one of these?' },
         f: {
@@ -3282,13 +3284,15 @@
           return { diff: va !== vb, html: `<tr><th>${escapeHtml(askFieldLabel(key))}</th><td${diff}>${escapeHtml(va)}</td><td${diff}>${escapeHtml(vb)}</td></tr>` };
         });
         const shown = field ? rows : rows.filter(row => row.diff);
+        if(field && !rows.length) return `<p class="ask-lead">${escapeHtml(ux('ask.no_field'))}</p>${markets}${askLinks(models)}`;
         const lead = field
           ? askLead('lead_pair', { a: na, b: nb, field: askFieldLabel(field) })
           : shown.length ? askLead('lead_diff', { a: na, b: nb, n: String(shown.length) }) : `<p class="ask-lead">${escapeHtml(ux('ask.no_diff'))}</p>`;
         const table = shown.length
           ? `<table class="ask-table"><thead><tr><th></th><th>${escapeHtml(na)}</th><th>${escapeHtml(nb)}</th></tr></thead><tbody>${shown.map(row => row.html).join('')}</tbody></table>`
           : '';
-        const next = field ? [] : askFieldChips(b, sb, '').slice(0, 2).map(chip => ({ q: `${na} vs ${nb} ${chip.label}`, label: chip.label }));
+        // 이어서: 비교한 두 모델 각각의 사양 전체
+        const next = models.map(entity => ({ q: entityDisplayName(entity), label: askVars(ux('ask.specs_of'), { name: entityDisplayName(entity) }) }));
         return `${lead.replace('</p>', `${badge}</p>`)}${table}${markets}${askLinks(models)}${askMore(askChips(next))}`;
       }
       const entity = models[0];
@@ -3302,7 +3306,10 @@
           const rows = versions.map(item => `<tr><th>${escapeHtml(entityDisplayName(item.kid))}</th><td>${escapeHtml(askValue(field, item.spec.values[field]))}</td><td>${escapeHtml(item.kid.b_price_krw ? krwToDisplay(item.kid.b_price_krw) : '')}</td><td>${Number(item.kid.active_count || 0)}</td></tr>`).join('');
           const kidsShown = versions.map(item => item.kid).sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 3);
           const head = `<thead><tr><th></th><th>${escapeHtml(label)}</th><th>${escapeHtml(ux('ask.col_price'))}</th><th>${escapeHtml(ux('ask.col_count'))}</th></tr></thead>`;
-          const lead = askLead('lead_versions', { name, field: label }).replace('</p>', `${askBadge(versions[0].spec)}</p>`);
+          const values = [...new Set(versions.map(item => askValue(field, item.spec.values[field])))];
+          const lead = (values.length === 1
+            ? askLead('lead_versions_same', { name, field: label, v: values[0] })
+            : askLead('lead_versions', { name, field: label })).replace('</p>', `${askBadge(versions[0].spec)}</p>`);
           return `${lead}<table class="ask-table">${head}<tbody>${rows}</tbody></table>${askLinks(kidsShown)}${askMore(askChips(askFieldChips(entity, askSpec(kidsShown[0].id), field).map(chip => ({ q: `${name} ${chip.label}`, label: chip.label }))))}`;
         }
         if(spec && spec.values[field] !== undefined){
