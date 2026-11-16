@@ -2297,7 +2297,8 @@
         no: { ko: '없음', en: 'No' },
         examples: { ko: 'M6와 M7 차이|배터리가 필요한 바디|주미룩스 50 최단거리', en: 'M6 vs M7|Which bodies need a battery?|Summilux 50 close focus' },
         hint: { ko: '이렇게 물어보세요! {q}', en: 'Try asking: {q}' },
-        hint_q: { ko: 'm9과 m9-p 차이가 뭐예요?', en: 'What’s the difference between M9 and M9-P?' },
+        hint_q: { ko: 'm9과 m9-p 차이가 뭐예요?|배터리가 필요한 바디는?|M6와 M7 차이가 뭐예요?|주미룩스 50 최단거리는?|M3는 배터리 없이 돼요?|SL과 SL2 차이가 뭐예요?|M10-R 화소는?',
+          en: 'What’s the difference between M9 and M9-P?|Which bodies need a battery?|M6 vs M7?|Summilux 50 close focus?|Does the M3 need a battery?|SL vs SL2?|M10-R resolution?' },
         hello: { ko: '라이카 바디·렌즈 사양을 바로 찾아 드려요. 두 모델을 넣으면 다른 점만 골라 비교해 드려요.', en: 'Look up any Leica body or lens spec instantly. Enter two models and I’ll show just what’s different.' },
         try: { ko: '이렇게 물어보세요', en: 'Try asking' },
         more: { ko: '이어서 물어보기', en: 'Ask next' },
@@ -3456,7 +3457,7 @@
         if(tab) show(tab.dataset.askTab);
       });
       openButton.addEventListener('click', () => { hideHint(); show('ask'); });
-      // 버튼 위 말풍선: 1초 뒤 뜸 (2026-11-16 사장님 3초 → 1초). 누르면 그 질문으로 바로 답, ×나 한 번 써 보면 이 브라우저에서는 다시 안 뜸
+      // 버튼 위 말풍선: 1초 뒤 뜸 (2026-11-16 사장님 3초 → 1초). 누르면 그 질문으로 바로 답, ×를 누르면 이 브라우저에서는 다시 안 뜸
       let hint = null;
       function hideHint(remember){
         if(!hint) return;
@@ -3470,7 +3471,14 @@
       if(!hintDone){
         setTimeout(() => {
           if(dialog.open || openButton.hidden) return;
-          const q = ux('ask.hint_q', 'What’s the difference between M9 and M9-P?');
+          // 새로고침할 때마다 다음 질문 (2026-11-16 사장님)
+          const list = ux('ask.hint_q', 'What’s the difference between M9 and M9-P?').split('|').filter(Boolean);
+          let turn = 0;
+          try{
+            turn = (Number(localStorage.getItem('cb_ask_hint_i')) + 1) % list.length || 0;
+            localStorage.setItem('cb_ask_hint_i', String(turn));
+          }catch(error){ turn = Math.floor(Math.random() * list.length); }
+          const q = list[turn];
           hint = document.createElement('div');
           hint.className = 'ask-hint';
           hint.setAttribute('role', 'button');
@@ -3480,7 +3488,7 @@
           requestAnimationFrame(() => hint && hint.classList.add('is-on'));
           hint.addEventListener('click', event => {
             if(event.target.closest('.ask-hint-close')){ hideHint(true); return; }
-            hideHint(true);
+            hideHint(false);
             dialog.showModal();
             show('ask');
             ask(q);
