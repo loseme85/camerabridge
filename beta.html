@@ -3171,10 +3171,12 @@
       });
       // 비교인데 한 모델만 찾았으면 낱말마다 다시 ("m9 m9p 차이")
       if(wantsCompare && models.length < 2){
+        const byWord = [];
         parts.join(' ').split(/\s+/).filter(word => word.length >= 2).forEach(word => {
           const hit = askFindModel(word);
-          if(hit && !models.some(m => m.id === hit.id)) models.push(hit);
+          if(hit && !byWord.some(m => m.id === hit.id)) byWord.push(hit);
         });
+        if(byWord.length >= 2) models.splice(0, models.length, ...byWord);
       }
       if(!models.length && parts.length > 1){
         const hit = askFindModel(parts.join(' '));
@@ -3207,11 +3209,12 @@
       const exact = all.filter(entity => askBareName(entity) === query).sort((x, y) => (x.parent ? 1 : 0) - (y.parent ? 1 : 0) || byActive(x, y))[0];
       if(exact) return exact;
       const focal = (query.match(/\b(\d{2,3})\b(?!\.)/) || [])[1];
-      const aperture = (query.match(/(?:^|\s|f)(0\.95|1\.0|1\.2|1\.25|1\.4|1\.5|1\.7|1\.9|2\.0|2\.4|2\.5|2\.8|3\.4|3\.5|3\.8|4\.0|5\.6)\b/) || [])[1];
+      const aperture = (query.match(/(?:^|\s|f\/?)(0\.95|1\.0|1\.2|1\.25|1\.4|1\.5|1\.7|1\.9|2\.0|2\.4|2\.5|2\.8|3\.4|3\.5|3\.8|4\.0|5\.6)\b/) || [])[1];
       const suggested = suggestEntities(part, 5).map(item => item.entity).filter(askIsModel);
       if(focal && aperture){
         const ap = aperture.replace(/\.0$/, '');
-        const fits = entity => new RegExp(`\\b${focal}mm f/${ap.replace('.', '\\.')}\\b`).test(entity.name || '');
+        // f/1 이 f/1.2 에 맞지 않게: 뒤에 숫자·점이 더 붙으면 다른 조리개
+        const fits = entity => new RegExp(`\\b${focal}mm f/${ap.replace('.', '\\.')}(\\.0)?(?![.\\d])`).test(entity.name || '');
         const wantMount = /(^|\s)m(\s|$)/.test(query) ? 'M' : /(^|\s)r(\s|$)/.test(query) ? 'R' : /(^|\s)sl(\s|$)/.test(query) ? 'SL' : '';
         const lens = all.filter(entity => fits(entity) && !entity.parent && (!wantMount || entity.mount === wantMount)).sort(byActive)[0]
           || suggested.find(fits)
