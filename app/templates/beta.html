@@ -2296,8 +2296,8 @@
         yes: { ko: '있음', en: 'Yes' },
         no: { ko: '없음', en: 'No' },
         examples: { ko: 'M6와 M7 차이|배터리가 필요한 바디|주미룩스 50 최단거리', en: 'M6 vs M7|Which bodies need a battery?|Summilux 50 close focus' },
-        hint: { ko: '{q}, 물어보세요!', en: 'Try asking: {q}' },
-        hint_q: { ko: 'M6와 M7 차이', en: 'M6 vs M7' },
+        hint: { ko: '이렇게 물어보세요! {q}', en: 'Try asking: {q}' },
+        hint_q: { ko: 'm9과 m9-p 차이가 뭐예요?', en: 'What’s the difference between M9 and M9-P?' },
         hello: { ko: '라이카 바디·렌즈 사양을 바로 찾아 드려요. 두 모델을 넣으면 다른 점만 골라 비교해 드려요.', en: 'Look up any Leica body or lens spec instantly. Enter two models and I’ll show just what’s different.' },
         try: { ko: '이렇게 물어보세요', en: 'Try asking' },
         more: { ko: '이어서 물어보기', en: 'Ask next' },
@@ -3470,7 +3470,7 @@
       if(!hintDone){
         setTimeout(() => {
           if(dialog.open || openButton.hidden) return;
-          const q = ux('ask.hint_q', 'M6 vs M7');
+          const q = ux('ask.hint_q', 'What’s the difference between M9 and M9-P?');
           hint = document.createElement('div');
           hint.className = 'ask-hint';
           hint.setAttribute('role', 'button');
