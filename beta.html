@@ -2296,6 +2296,10 @@
         price_here: { ko: '여기서는 사양만 알려 드려요. 시세와 매물은 위 검색창에서 모델 이름으로 찾아보세요.', en: 'I only cover specs here. For prices and listings, search the model name in the search bar above.' },
         list_battery: { ko: '디지털 바디는 모두 배터리가 있어야 해요. 필름 바디 중에서는 이렇게 나뉘어요.', en: 'Every digital body needs a battery. Among film bodies, it splits like this:' },
         list_no_battery: { ko: '배터리 없이 셔터가 움직이는 완전 기계식 바디는 {n}가지예요. 노출계만 배터리를 쓰는 바디도 배터리 없이 찍을 수는 있어요.', en: '{n} bodies are fully mechanical and need no battery. Bodies that use one only for the meter also shoot fine without it.' },
+        bat_say_none: { ko: '{name}{eun} 배터리 없이 작동하는 완전 기계식이에요.', en: 'The {name} is fully mechanical — no battery needed.' },
+        bat_say_meter: { ko: '{name}{eun} 배터리를 노출계에만 써요. 배터리가 없어도 셔터는 작동해요.', en: 'The {name} uses a battery only for the meter; the shutter works without one.' },
+        bat_say_shutter: { ko: '{name}{eun} 셔터가 전자식이라 배터리가 있어야 제대로 작동해요.', en: 'The {name} has an electronic shutter, so it needs a battery.' },
+        bat_say_always: { ko: '{name}{eun} 배터리가 꼭 필요해요.', en: 'The {name} needs a battery.' },
         bat_none: { ko: '배터리 없이 작동 (완전 기계식)', en: 'No battery needed (fully mechanical)' },
         bat_meter: { ko: '노출계에만 배터리 (없어도 셔터는 작동)', en: 'Battery for the meter only (shutter works without)' },
         bat_shutter: { ko: '배터리가 꼭 필요 (전자식 셔터)', en: 'Battery required (electronic shutter)' },
@@ -3234,6 +3238,13 @@
       return `<p class="ask-lead">${escapeHtml(askVars(ux(`ask.${key}`), v))}</p>`;
     }
 
+    // 배터리는 값 대신 말로: "M6는 배터리를 노출계에만 써요. 없어도 셔터는 작동해요."
+    function askBatteryLead(name, value){
+      const v = String(value || '');
+      const key = v.startsWith('필요 없음') ? 'none' : v.startsWith('노출계에만') ? 'meter' : v.startsWith('필수 (전자식') ? 'shutter' : 'always';
+      return askLead(`bat_say_${key}`, { name });
+    }
+
     function askChips(items){
       return items.length ? `<div class="ask-examples">${items.map(item => `<button type="button" data-ask-question="${escapeHtml(item.q)}">${escapeHtml(item.label || item.q)}</button>`).join('')}</div>` : '';
     }
@@ -3353,13 +3364,14 @@
           const kidsShown = versions.map(item => item.kid).sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 3);
           const head = `<thead><tr><th></th><th>${escapeHtml(label)}</th></tr></thead>`;
           const values = [...new Set(versions.map(item => askValue(field, item.spec.values[field])))];
-          const lead = (values.length === 1
-            ? askLead('lead_versions_same', { name, field: label, v: values[0] })
+          const same = values.length === 1;
+          const lead = (same
+            ? (field === 'battery' ? askBatteryLead(name, values[0]) : askLead('lead_versions_same', { name, field: label, v: values[0] }))
             : askLead('lead_versions', { name, field: label })).replace('</p>', `${askBadge(versions[0].spec)}</p>`);
-          return `${lead}<table class="ask-table">${head}<tbody>${rows}</tbody></table>${askLinks(kidsShown)}${askMore(askChips(askFieldChips(entity, askSpec(kidsShown[0].id), field).map(chip => ({ q: `${name} ${chip.label}`, label: chip.label }))))}`;
+          return `${lead}${same ? '' : `<table class="ask-table">${head}<tbody>${rows}</tbody></table>`}${askLinks(kidsShown)}${askMore(askChips(askFieldChips(entity, askSpec(kidsShown[0].id), field).map(chip => ({ q: `${name} ${chip.label}`, label: chip.label }))))}`;
         }
         if(spec && spec.values[field] !== undefined){
-          const lead = askLead('lead_value', { name, field: label, v: askValue(field, spec.values[field]) }).replace('</p>', `${askBadge(spec)}</p>`);
+          const lead = (field === 'battery' ? askBatteryLead(name, spec.values[field]) : askLead('lead_value', { name, field: label, v: askValue(field, spec.values[field]) })).replace('</p>', `${askBadge(spec)}</p>`);
           return `${lead}${markets}${askLinks([entity])}${askMore(askChips(askFieldChips(entity, spec, field)))}`;
         }
         return `<p class="ask-lead">${escapeHtml(spec ? ux('ask.no_field') : ux('ask.no_spec'))}</p>${markets}${askLinks([entity])}${askMore(askChips(askFieldChips(entity, spec, field)))}`;
