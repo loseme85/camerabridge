@@ -1977,14 +1977,14 @@
       <dialog id="feedback-dialog" class="feedback-dialog">
         <!-- 2026-11-16 사장님: 사양 질문 대화창 틀 — ?ask=1로 연 브라우저에만 탭이 보임. 사양은 손님이 물어볼 때만 보여 줌 -->
         <div class="ask-tabs" role="tablist" hidden>
-          <button type="button" role="tab" data-ask-tab="ask" aria-selected="false" data-i18n="ask.tab">Ask</button>
+          <button type="button" role="tab" data-ask-tab="ask" aria-selected="false" data-i18n="ask.tab">Specs</button>
           <button type="button" role="tab" data-ask-tab="feedback" aria-selected="true" data-i18n="feedback.button">Send feedback</button>
         </div>
         <section id="ask-pane" hidden>
           <div id="ask-answer" class="ask-answer ask-thread" aria-live="polite"></div>
           <form id="ask-form" class="ask-form" novalidate>
             <input id="ask-input" type="text" autocomplete="off" maxlength="200" data-i18n-placeholder="ask.placeholder" placeholder="e.g. M6 vs M6 TTL">
-            <button type="submit" class="search-button" data-i18n="ask.submit">Ask</button>
+            <button type="submit" class="search-button" data-i18n="ask.submit">Find</button>
           </form>
           <div class="feedback-actions"><button type="button" class="ghost-button" data-ask-close data-i18n="feedback.close">Close</button></div>
         </section>
@@ -2265,10 +2265,10 @@
       },
       // 물어보기: 2026-11-16 틀은 en·ko만 — 모두에게 열 때 9개 언어로 번역
       ask: {
-        tab: { ko: '물어보기', en: 'Ask' },
-        button: { ko: '물어보기 · 의견', en: 'Ask · Feedback' },
+        tab: { ko: '사양 찾기', en: 'Specs' },
+        button: { ko: '사양 찾기 · 의견', en: 'Specs · Feedback' },
         placeholder: { ko: '예: M6와 M6 TTL 차이', en: 'e.g. M6 vs M6 TTL' },
-        submit: { ko: '묻기', en: 'Ask' },
+        submit: { ko: '찾기', en: 'Find' },
         loading: { ko: '찾는 중…', en: 'Looking it up…' },
         not_found: { ko: '어떤 모델인지 못 찾았어요. 모델 이름을 넣어 다시 물어봐 주세요. 예: "SL과 SL2 차이", "주미룩스 50 최단거리"', en: 'We couldn’t tell which model you mean. Try a model name, e.g. "SL vs SL2" or "Summilux 50 close focus".' },
         no_spec: { ko: '이 모델 사양은 아직 정리 중이에요.', en: 'We’re still putting together specs for this model.' },
@@ -2285,14 +2285,15 @@
         yes: { ko: '있음', en: 'Yes' },
         no: { ko: '없음', en: 'No' },
         examples: { ko: 'SL과 SL2 차이|M6와 M6 TTL 차이|주미룩스 50 최단거리', en: 'SL vs SL2|M6 vs M6 TTL|Summilux 50 close focus' },
-        hello: { ko: '안녕하세요! 라이카 바디·렌즈 사양이나 시세가 궁금하면 편하게 물어보세요. 두 모델을 비교해 드릴 수도 있어요.', en: 'Hi! Ask me anything about a Leica body or lens — specs, typical prices, or how two models differ.' },
+        hello: { ko: '라이카 바디·렌즈 사양을 바로 찾아 드려요. 두 모델을 넣으면 다른 점만 골라 비교해 드려요.', en: 'Look up any Leica body or lens spec instantly. Enter two models and I’ll show just what’s different.' },
         try: { ko: '이렇게 물어보세요', en: 'Try asking' },
         more: { ko: '이어서 물어보기', en: 'Ask next' },
         lead_diff: { ko: '{a} vs {b} — 사양표로 보면 다른 점이 {n}가지예요.', en: '{a} vs {b} — they differ in {n} of the specs we have.' },
         lead_pair: { ko: '{a}{wa} {b}의 {field}{eun} 이래요.', en: 'Here’s the {field} for {a} and {b}.' },
         lead_value: { ko: '{name}의 {field}{eun} {v}{ieyo}.', en: 'The {name}’s {field}: {v}.' },
-        lead_versions: { ko: '{name}{eun} 버전마다 {field}{ga} 조금씩 달라요. 시세와 판매 중인 매물도 같이 붙였어요.', en: 'The {field} varies by version of the {name}. Prices and listings are included.' },
-        lead_versions_same: { ko: '{name}의 {field}{eun} 버전과 상관없이 {v}{ieyo}. 버전별 시세도 같이 붙였어요.', en: 'The {name}’s {field} is {v} across versions. Prices by version below.' },
+        lead_versions: { ko: '{name}{eun} 버전마다 {field}{ga} 조금씩 달라요.', en: 'The {field} varies by version of the {name}.' },
+        lead_versions_same: { ko: '{name}의 {field}{eun} 버전과 상관없이 {v}{ieyo}.', en: 'The {name}’s {field} is {v} on every version.' },
+        price_here: { ko: '여기서는 사양만 알려 드려요. 시세와 매물은 위 검색창에서 모델 이름으로 찾아보세요.', en: 'I only cover specs here. For prices and listings, search the model name in the search bar above.' },
         specs_of: { ko: '{name} 사양 전체', en: 'All {name} specs' },
         lead_model: { ko: '{name} 사양을 정리했어요.', en: 'Here’s a quick spec sheet for the {name}.' },
         did_you_mean: { ko: '어떤 모델인지 잘 모르겠어요. 혹시 이 중에 있을까요?', en: 'I’m not sure which model you mean — is it one of these?' },
@@ -3261,7 +3262,14 @@
       return parsed;
     }
 
+    const ASK_PRICE = /시세|가격|얼마|매물|중고가|price|cost|how\s*much|worth|相場|価格|值多少|价格|價格/i;
+
     function askAnswerHtml(question){
+      if(ASK_PRICE.test(question)){
+        const { models: priced } = askParse(String(question).replace(ASK_PRICE, ' '));
+        const lead = `<p class="ask-lead">${escapeHtml(ux('ask.price_here'))}</p>`;
+        return priced.length ? `${lead}${askLinks(priced)}` : lead;
+      }
       const { field, models } = askResolve(question);
       if(!models.length){
         const guesses = suggestEntities(question, 4).map(item => item.entity).filter(askIsModel);
@@ -3269,7 +3277,8 @@
         return `<p class="ask-lead">${escapeHtml(ux('ask.not_found'))}</p>`;
       }
       askState.last = { field, models };
-      const markets = models.map(entity => `<p class="ask-market">${escapeHtml(askMarketLine(entity))}</p>`).join('');
+      // 2026-11-16 사장님: 대화창은 사양만. 시세·매물은 검색창에서 (매물 보기 단추로 넘김)
+      const markets = '';
       if(models.length === 2){
         const [a, b] = models;
         const na = entityDisplayName(a), nb = entityDisplayName(b);
@@ -3303,9 +3312,9 @@
         const label = askFieldLabel(field);
         const versions = kids.map(kid => ({ kid, spec: askSpec(kid.id) })).filter(item => item.spec && item.spec.values[field] !== undefined);
         if(versions.length){
-          const rows = versions.map(item => `<tr><th>${escapeHtml(entityDisplayName(item.kid))}</th><td>${escapeHtml(askValue(field, item.spec.values[field]))}</td><td>${escapeHtml(item.kid.b_price_krw ? krwToDisplay(item.kid.b_price_krw) : '')}</td><td>${Number(item.kid.active_count || 0)}</td></tr>`).join('');
+          const rows = versions.map(item => `<tr><th>${escapeHtml(entityDisplayName(item.kid))}</th><td>${escapeHtml(askValue(field, item.spec.values[field]))}</td></tr>`).join('');
           const kidsShown = versions.map(item => item.kid).sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 3);
-          const head = `<thead><tr><th></th><th>${escapeHtml(label)}</th><th>${escapeHtml(ux('ask.col_price'))}</th><th>${escapeHtml(ux('ask.col_count'))}</th></tr></thead>`;
+          const head = `<thead><tr><th></th><th>${escapeHtml(label)}</th></tr></thead>`;
           const values = [...new Set(versions.map(item => askValue(field, item.spec.values[field])))];
           const lead = (values.length === 1
             ? askLead('lead_versions_same', { name, field: label, v: values[0] })
@@ -3341,7 +3350,7 @@
       if(softStyle) dialog.classList.add('is-soft', `ask-style-${softStyle}`);
       tabs.hidden = false;
       openButton.setAttribute('data-i18n', 'ask.button');
-      openButton.textContent = ux('ask.button', 'Ask · Feedback');
+      openButton.textContent = ux('ask.button', 'Specs · Feedback');
       const pane = document.getElementById('ask-pane');
       const feedbackForm = document.getElementById('feedback-form');
       const input = document.getElementById('ask-input');
