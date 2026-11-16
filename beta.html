@@ -3139,6 +3139,8 @@
         if(pattern.test(text)){ field = key; text = text.replace(pattern, ' '); break; }
       }
       text = text.replace(/차이점?|다른\s*점|뭐야|뭐예요|뭔가요|뭐지|무엇|알려\s*(줘|주세요)|비교|어때요?|어떤가요|궁금해요?|몇|얼마|[?？!]|\bdifferences?\b|\bdiffer\b|\bbetween\b|\bcompare\b|\bwhat(?:'s| is| are)?\b|\btell me\b|\bthe\b|\bof\b|\bhow\b|\bmuch\b/g, ' ');
+      // 묻는 말끝·조건 낱말 ("배터리 없이 돼?", "필요해?", "does it need")
+      text = text.replace(/필요(해요?|한가요|하나요|한지)?|없이|없어도|돼요?|되나요|되는지|있어요?|있나요|쓰나요|써요?|\b(need(s)?|without|do(es)?|it|work(s)?|a|an|is|have|has)\b/g, ' ');
       const parts = text
         .split(/\s(?:vs\.?|versus|and|or|대)\s|[,&]|(?<=\S)(?:이랑|랑|하고|와|과)\s/)
         .map(part => part.replace(/(은|는|이|가|의|을|를|에서|중에?)\s*$/, '').trim())
@@ -3287,7 +3289,7 @@
     const ASK_NOT = /없이|없어도|안\s*(필요|들|써)|필요\s*(없|않)|without|no\s+batter|don'?t\s+need|not\s+need/i;
     function askListHtml(question){
       if(!/배터리|건전지|전지|batter(y|ies)|電池|电池/i.test(question) || !ASK_LIST.test(question)) return '';
-      const rest = String(question).replace(/배터리|건전지|전지|batter(y|ies)|電池|电池/ig, ' ').replace(ASK_LIST, ' ').replace(ASK_NOT, ' ').replace(/필요|쓰는|들어가는|need(s|ed)?|require[sd]?|[?？]|(?<=\S)(가|이|한|은|는|해)(?=\s|$)/ig, ' ').trim();
+      const rest = String(question).replace(/배터리|건전지|전지|batter(y|ies)|電池|电池/ig, ' ').replace(new RegExp(ASK_LIST.source, 'ig'), ' ').replace(new RegExp(ASK_NOT.source, 'ig'), ' ').replace(/\b(a|an|the|do|does|i)\b/ig, ' ').replace(/필요|쓰는|들어가는|need(s|ed)?|require[sd]?|[?？]|(?<=\S)(가|이|한|은|는|해)(?=\s|$)/ig, ' ').trim();
       if(rest && askParse(rest).models.length) return '';
       const data = askState.data;
       if(!data || !data.specs) return '';
