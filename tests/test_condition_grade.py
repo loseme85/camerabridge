@@ -765,3 +765,9 @@ def test_cameraboutique_grade():
     assert grade_of(site, "CBG: sehr gut", "")[0] == "B"
     assert grade_of(site, "CBG: gut", "")[0] == "C"
     assert grade_of(site, "CBG: stark gebraucht", "")[0] == "D"
+
+
+def test_realcamera_cosmetic_score():
+    from condition_grade import grade_of, REALCAMERA_PREFIX
+    for raw, expected in [("9.9", "S"), ("9.5", "A"), ("9", "B"), ("8.5", "B"), ("8", "C"), ("7", "D"), ("unknown", None)]:
+        assert grade_of("The Real Camera Company (영국)", REALCAMERA_PREFIX + raw)[0] == expected

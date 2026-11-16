@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import subprocess
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -9,7 +10,10 @@ from query_parser import parse_query
 
 
 def test_search_layer_does_not_import_classifier() -> None:
-    assert "classifier_v2" not in sys.modules
+    # 다른 시험이 먼저 classifier를 불러와도 검색 계층의 의존성만 검사한다.
+    subprocess.run([sys.executable, "-c",
+                    "import sys; import query_parser; assert 'classifier_v2' not in sys.modules"],
+                   cwd=Path(__file__).resolve().parents[1], check=True)
 
 
 def test_compact_lux_aa_query() -> None:

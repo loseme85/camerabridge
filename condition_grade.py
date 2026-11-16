@@ -72,6 +72,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FFORDES[up], "label"
     if cond.startswith(KS_PREFIX):
         return _KS_GRADE.get(cond[len(KS_PREFIX):]), "text"
+    if cond.startswith(REALCAMERA_PREFIX):
+        return realcamera_grade(cond[len(REALCAMERA_PREFIX):]), "label"
     if cond.startswith(SCANPHOTO_PREFIX):
         return _SCANPHOTO.get(cond[len(SCANPHOTO_PREFIX):].strip().lower()), "label"
     if cond.startswith(MEDIAJOY_PREFIX):
@@ -1113,3 +1115,22 @@ def _km_grade(score: str) -> str | None:
 # 사진이 표기보다 한 등급쯤 후해 wie neu→A, sehr gut→B, gut→C로 맞춤 (정확히 8/17, 한 등급 이내 17/17)
 CBG_PREFIX = "CBG: "
 _CBG = {"neu": "N", "wie neu": "A", "sehr gut": "B", "gut": "C", "akzeptabel": "D", "stark gebraucht": "D"}
+
+# 영국 The Real Camera Company: 설명 'CONDITION Cosmetic – 9.5 · Mechanical – 10 · Optical – 9.5' 중 외관(Cosmetic) 점수 (10점 만점)
+REALCAMERA_PREFIX = "RealCamera: "
+
+
+def realcamera_grade(score: str) -> str | None:
+    try:
+        s = float(score)
+    except ValueError:
+        return None
+    if s >= 9.9:
+        return "S"
+    if s >= 9.5:
+        return "A"
+    if s >= 8.5:
+        return "B"
+    if s >= 7.5:
+        return "C"
+    return "D"
