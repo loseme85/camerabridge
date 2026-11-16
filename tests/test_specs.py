@@ -33,3 +33,10 @@ def test_based_on_and_lens_versions():
 def test_every_body_and_lens_has_specs():
     empty = [i for i in PARENTS if i.split(":")[1] in ("body", "lens") and not spec_for(i, PARENTS)]
     assert empty == []
+
+
+def test_specs_json_matches_table():
+    """사양표를 고치고 scripts/build_specs_json.py를 안 돌렸으면 실패."""
+    import scripts.build_specs_json as b
+    on_disk = json.loads((ROOT / "data/derived/specs_v1.json").read_text(encoding="utf-8"))
+    assert on_disk == json.loads(json.dumps(b.build(), ensure_ascii=False))
