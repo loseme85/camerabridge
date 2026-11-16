@@ -1510,6 +1510,24 @@
     .feedback-dialog{border:1px solid var(--rule);border-radius:0;box-shadow:6px 6px 0 rgba(22,24,26,0.1)}
     .feedback-dialog h2{font-family:var(--serif);font-weight:500;font-size:24px}
     .feedback-dialog textarea,.feedback-dialog input[type=email]{border-radius:0}
+    /* 물어보기 (사양 질문 대화창 틀, 2026-11-16) */
+    .ask-tabs{display:flex;margin:-4px 0 14px;border-bottom:1px solid var(--rule)}
+    .ask-tabs button{width:auto;flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:6px 12px;font:inherit;font-size:14px;color:var(--text-soft);cursor:pointer;border-radius:0}
+    .ask-tabs button[aria-selected=true]{color:var(--text);border-bottom-color:var(--text)}
+    .ask-form{display:flex;gap:8px}
+    .ask-form input{flex:1 1 auto;min-width:0;padding:10px 12px;border:1px solid var(--border-strong);border-radius:0;font:inherit;font-size:15px;background:var(--bg);color:var(--text)}
+    .ask-form button{width:auto;flex:0 0 auto}
+    .ask-examples{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+    .ask-examples button,.ask-links button{width:auto;padding:5px 10px;border:1px solid var(--rule);background:none;color:var(--text);font:inherit;font-size:12px;cursor:pointer;border-radius:0}
+    .ask-answer{margin-top:14px;max-height:55vh;overflow:auto;font-size:14px}
+    .ask-answer h3{margin:0 0 8px;font-size:15px}
+    .ask-table{width:100%;border-collapse:collapse;font-size:13px}
+    .ask-table th,.ask-table td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+    .ask-table th{color:var(--text-soft);font-weight:500;white-space:nowrap}
+    .ask-table td.is-diff{font-weight:600}
+    .ask-market,.ask-note{margin:10px 0 0;color:var(--text-soft);font-size:13px}
+    .ask-links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+    .ask-badge{display:inline-block;margin-left:6px;padding:0 6px;border:1px solid #b42318;color:#b42318;font-size:11px;font-weight:400}
     /* 판매 중 / 팔렸거나 내려간 기록 구분 */
     .sort-group-divider{grid-column:1/-1;margin:18px 0 6px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted)}
     .archive-card h3 .section-count{font-family:var(--sans);font-size:14px;color:var(--text-muted);font-weight:400;margin-left:6px}
@@ -1917,6 +1935,20 @@
       </dialog>
       <button type="button" id="feedback-open" class="feedback-fab" data-i18n="feedback.button">Send feedback</button>
       <dialog id="feedback-dialog" class="feedback-dialog">
+        <!-- 2026-11-16 사장님: 사양 질문 대화창 틀 — ?ask=1로 연 브라우저에만 탭이 보임. 사양은 손님이 물어볼 때만 보여 줌 -->
+        <div class="ask-tabs" role="tablist" hidden>
+          <button type="button" role="tab" data-ask-tab="ask" aria-selected="false" data-i18n="ask.tab">Ask</button>
+          <button type="button" role="tab" data-ask-tab="feedback" aria-selected="true" data-i18n="feedback.button">Send feedback</button>
+        </div>
+        <section id="ask-pane" hidden>
+          <form id="ask-form" class="ask-form" novalidate>
+            <input id="ask-input" type="text" autocomplete="off" maxlength="200" data-i18n-placeholder="ask.placeholder" placeholder="e.g. M6 vs M6 TTL">
+            <button type="submit" class="search-button" data-i18n="ask.submit">Ask</button>
+          </form>
+          <div id="ask-examples" class="ask-examples"></div>
+          <div id="ask-answer" class="ask-answer" aria-live="polite"></div>
+          <div class="feedback-actions"><button type="button" class="ghost-button" data-ask-close data-i18n="feedback.close">Close</button></div>
+        </section>
         <form id="feedback-form" method="dialog" novalidate>
           <h2 data-i18n="feedback.title">What would make Camera Bridge better?</h2>
           <p class="feedback-intro" data-i18n="feedback.intro">Features you want, things that bugged you, shops we should add — anything.</p>
@@ -2191,6 +2223,39 @@
         too_short: { ko: '조금만 더 자세히 적어 주세요.', en: 'Please add a little more detail.', ja: 'もう少し詳しく書いてください。', 'zh-Hans': '请再写详细一点。', 'zh-Hant': '請再寫詳細一點。', pt: 'Escreva um pouco mais de detalhes.', es: 'Añade un poco más de detalle.', de: 'Bitte etwas ausführlicher schreiben.', it: 'Aggiungi qualche dettaglio in più.' },
         bad_email: { ko: '이메일 형식을 확인해 주세요.', en: 'Please check the email address.', ja: 'メールアドレスをご確認ください。', 'zh-Hans': '请检查邮箱格式。', 'zh-Hant': '請檢查電子郵件格式。', pt: 'Verifique o e-mail.', es: 'Revisa el correo electrónico.', de: 'Bitte E-Mail-Adresse prüfen.', it: 'Controlla l’indirizzo email.' },
         limit: { ko: '오늘은 더 보낼 수 없어요. 내일 다시 남겨 주세요.', en: 'You’ve reached today’s limit. Please try again tomorrow.', ja: '本日の送信上限に達しました。明日またお送りください。', 'zh-Hans': '今天已达发送上限，请明天再试。', 'zh-Hant': '今天已達傳送上限，請明天再試。', pt: 'Você atingiu o limite de hoje. Tente amanhã.', es: 'Has alcanzado el límite de hoy. Inténtalo mañana.', de: 'Tageslimit erreicht. Bitte morgen erneut versuchen.', it: 'Hai raggiunto il limite di oggi. Riprova domani.' },
+      },
+      // 물어보기: 2026-11-16 틀은 en·ko만 — 모두에게 열 때 9개 언어로 번역
+      ask: {
+        tab: { ko: '물어보기', en: 'Ask' },
+        button: { ko: '물어보기 · 의견', en: 'Ask · Feedback' },
+        placeholder: { ko: '예: M6와 M6 TTL 차이', en: 'e.g. M6 vs M6 TTL' },
+        submit: { ko: '묻기', en: 'Ask' },
+        loading: { ko: '찾는 중…', en: 'Looking it up…' },
+        not_found: { ko: '어떤 모델인지 못 찾았어요. 모델 이름을 넣어 다시 물어봐 주세요. 예: "SL과 SL2 차이", "주미룩스 50 최단거리"', en: 'We couldn’t tell which model you mean. Try a model name, e.g. "SL vs SL2" or "Summilux 50 close focus".' },
+        no_spec: { ko: '이 모델 사양은 아직 정리 중이에요.', en: 'We’re still putting together specs for this model.' },
+        no_field: { ko: '이 항목은 아직 사양표에 없어요.', en: 'We don’t have that spec for this model yet.' },
+        no_diff: { ko: '사양표에 있는 항목으로는 차이가 없어요.', en: 'No differences in the specs we have.' },
+        by_version: { ko: '버전별 {field}', en: '{field} by version' },
+        compare_with: { ko: '비교해 보기', en: 'Compare with' },
+        see: { ko: '{name} 매물 보기', en: 'See {name} listings' },
+        market: { ko: '{name}: 시세 약 {p} · 판매 중 {n}개', en: '{name}: typically {p} · {n} for sale' },
+        market_none: { ko: '{name}: 지금 판매 중 {n}개', en: '{name}: {n} for sale now' },
+        unchecked: { ko: '확인 전', en: 'unverified' },
+        col_price: { ko: '시세', en: 'Typical price' },
+        col_count: { ko: '판매 중', en: 'For sale' },
+        yes: { ko: '있음', en: 'Yes' },
+        no: { ko: '없음', en: 'No' },
+        examples: { ko: 'SL과 SL2 차이|M6와 M6 TTL 차이|주미룩스 50 최단거리', en: 'SL vs SL2|M6 vs M6 TTL|Summilux 50 close focus' },
+        f: {
+          years: { ko: '출시', en: 'Years' }, kind: { ko: '종류', en: 'Type' }, mount: { ko: '마운트·렌즈', en: 'Mount / lens' },
+          focal: { ko: '초점거리', en: 'Focal length' }, aperture: { ko: '조리개', en: 'Aperture' },
+          min_focus_m: { ko: '최단 초점거리', en: 'Close focus' }, elements: { ko: '렌즈 구성 (매/군)', en: 'Elements / groups' },
+          filter: { ko: '필터', en: 'Filter' }, sensor_mp: { ko: '화소', en: 'Resolution' }, sensor: { ko: '센서', en: 'Sensor' },
+          mono: { ko: '흑백 전용', en: 'Monochrome' }, finder: { ko: '파인더', en: 'Viewfinder' }, framelines: { ko: '프레임라인', en: 'Framelines' },
+          meter: { ko: '노출계', en: 'Light meter' }, shutter: { ko: '셔터', en: 'Shutter' }, top_speed: { ko: '최고 셔터 속도', en: 'Top shutter speed' },
+          flash_ttl: { ko: 'TTL 플래시', en: 'TTL flash' }, ibis: { ko: '손떨림 보정', en: 'Stabilization' }, video: { ko: '동영상', en: 'Video' },
+          weight_g: { ko: '무게', en: 'Weight' }, note: { ko: '특징', en: 'Notes' }
+        }
       },
       footer: {
         disclaimer: { ko: '가격과 예상 총액은 참고용입니다. 구매 전에 판매처 원문을 꼭 확인하세요.', en: 'Prices and totals are estimates. Always check the original listing before you buy.', ja: '価格と到着時の目安は参考値です。購入前に必ず販売元のページをご確認ください。', 'zh-Hans': '价格与到手价仅供参考，购买前请务必查看卖家原页面。', 'zh-Hant': '價格與到手價僅供參考，購買前請務必查看賣家原頁面。', pt: 'Preços e totais são estimativas. Confira sempre o anúncio original antes de comprar.', es: 'Los precios y totales son estimaciones. Revisa siempre el anuncio original antes de comprar.', de: 'Preise und Gesamtkosten sind Schätzungen. Prüfe vor dem Kauf immer das Originalangebot.', it: 'Prezzi e totali sono stime. Controlla sempre l’annuncio originale prima di acquistare.' },
@@ -2913,6 +2978,271 @@
         }
       };
     })();
+
+
+    // 물어보기 (사양 질문 대화창 틀, 2026-11-16 사장님)
+    // 저장해 둔 사양표(data/derived/specs_v1.json, catalog/specs.py에서 만듦)와 모델 시세에서만 답한다. 질문 때마다 찾아보지 않음.
+    // ?ask=1로 연 브라우저에만 탭이 보이고(사장님 미리보기 — 확인 전 값도 '확인 전' 표시와 함께), ?ask=0이면 끔.
+    // 사양은 손님이 물어볼 때만 보여 준다 (다른 화면에 먼저 띄우지 않음).
+    const ASK_FIELD_ORDER = ['years', 'kind', 'mount', 'focal', 'aperture', 'min_focus_m', 'elements', 'filter', 'sensor_mp', 'sensor', 'mono',
+      'finder', 'framelines', 'meter', 'shutter', 'top_speed', 'flash_ttl', 'ibis', 'video', 'weight_g', 'note'];
+    // 질문 속 사양 낱말 → 항목 (위에서부터 먼저 맞는 하나만). 모델 이름에 들어가는 말(MP·Monochrom·TTL)은 넣지 않는다.
+    const ASK_WORDS = [
+      ['min_focus_m', /최단\s*(초점\s*)?거리|최단|최소\s*(초점\s*)?거리|근접\s*촬영|close[\s-]*focus(ing)?|minimum\s*(focus(ing)?\s*)?distance|最短撮影距離|最短|最近对焦|最近對焦/],
+      ['weight_g', /무게|weight|重さ|重量|gewicht|peso/],
+      ['filter', /필터|filter|フィルター|滤镜|濾鏡/],
+      ['sensor_mp', /화소|해상도|megapixels?|画素|像素/],
+      ['finder', /파인더|배율|viewfinder|finder|magnification|ファインダー|取景器/],
+      ['framelines', /프레임\s*라인|frame\s*lines?/],
+      ['meter', /노출계|측광|light\s*meter|metering/],
+      ['flash_ttl', /플래시|flash/],
+      ['ibis', /손떨림|흔들림\s*보정|ibis|stabili[sz]ation/],
+      ['video', /동영상|영상|video|動画|视频|視頻/],
+      ['top_speed', /셔터\s*속도|shutter\s*speed/],
+      ['shutter', /셔터|shutter|シャッター|快门|快門/],
+      ['elements', /렌즈\s*구성|elements|レンズ構成/],
+      ['aperture', /조리개|aperture|絞り|光圈/],
+      ['sensor', /센서|sensor|センサー/],
+      ['years', /출시|발매|연도|언제\s*나왔|released|launch(ed)?|発売|发布|發布/],
+      ['mount', /마운트|mount/]
+    ];
+    const askState = { data: null, loading: null, preview: false };
+
+    function askEnabled(){
+      const flag = new URLSearchParams(location.search).get('ask');
+      try{
+        if(flag === '1') localStorage.setItem('cb_ask', '1');
+        if(flag === '0') localStorage.removeItem('cb_ask');
+        return localStorage.getItem('cb_ask') === '1';
+      }catch(error){
+        return flag === '1';
+      }
+    }
+
+    function loadAskSpecs(){
+      if(askState.data) return Promise.resolve(askState.data);
+      if(!askState.loading){
+        askState.loading = fetch('/data/derived/specs_v1.json', { cache: 'no-cache' })
+          .then(response => response.ok ? response.json() : null)
+          .then(data => { askState.data = data; return data; })
+          .catch(() => null);
+      }
+      return askState.loading;
+    }
+
+    function askVars(text, vars){
+      Object.entries(vars).forEach(([k, v]) => { text = text.split(`{${k}}`).join(v); });
+      return text;
+    }
+
+    function askSpec(entityId){
+      const data = askState.data;
+      if(!data || !data.specs || !data.specs[entityId]) return null;
+      const checked = !!(data.checked && data.checked[entityId]);
+      if(!checked && (data.checked_only && !askState.preview)) return null;
+      return { values: data.specs[entityId], checked };
+    }
+
+    function askValue(field, value){
+      if(value === true) return ux('ask.yes', 'Yes');
+      if(value === false) return ux('ask.no', 'No');
+      if(typeof value === 'number'){
+        if(field === 'min_focus_m') return `${value} m`;
+        if(field === 'weight_g') return `${value} g`;
+        if(field === 'sensor_mp') return `${value} MP`;
+        if(field === 'focal') return `${value}mm`;
+      }
+      if(field === 'focal' && /^[\d–·.\s-]+$/.test(String(value))) return `${value}mm`;
+      if(field === 'weight_g') return `${value} g`;
+      return String(value);
+    }
+
+    function askParse(raw){
+      let text = ` ${String(raw || '').toLowerCase()} `;
+      let field = '';
+      for(const [key, pattern] of ASK_WORDS){
+        if(pattern.test(text)){ field = key; text = text.replace(pattern, ' '); break; }
+      }
+      text = text.replace(/차이점?|다른\s*점|뭐야|뭐예요|뭔가요|뭐지|무엇|알려\s*(줘|주세요)|비교|어때요?|어떤가요|궁금해요?|몇|얼마|[?？!]|\bdifferences?\b|\bdiffer\b|\bbetween\b|\bcompare\b|\bwhat(?:'s| is| are)?\b|\btell me\b|\bthe\b|\bof\b|\bhow\b|\bmuch\b/g, ' ');
+      const parts = text
+        .split(/\s(?:vs\.?|versus|and|or|대)\s|[,&]|(?<=\S)(?:이랑|랑|하고|와|과)\s/)
+        .map(part => part.replace(/(은|는|이|가|의|을|를|에서|중에?)\s*$/, '').trim())
+        .filter(Boolean);
+      const models = [];
+      parts.forEach(part => {
+        const hit = askFindModel(part);
+        if(hit && !models.some(m => m.id === hit.id)) models.push(hit);
+      });
+      if(!models.length && parts.length > 1){
+        const hit = askFindModel(parts.join(' '));
+        if(hit) models.push(hit);
+      }
+      // 한쪽이 다른 쪽의 부모면(M6 전체 vs M6 TTL) 부모 대신 기본형(클래식·기본)과 비교
+      if(models.length === 2){
+        [0, 1].forEach(i => {
+          const other = models[1 - i];
+          if(other.parent === models[i].id) models[i] = askBaseChild(models[i]) || models[i];
+        });
+      }
+      return { field, models: models.slice(0, 2) };
+    }
+
+    const askIsModel = entity => entity && /^leica:(body|lens):/.test(entity.id);
+    const askBareName = entity => normalizeEntityText(String(entity.name || '').replace(/\(.*?\)/g, ' ')).replace(/^leica\s+/, '');
+
+    function askBaseChild(entity){
+      const kids = (entity.children || []).map(id => entityState.byId[id]).filter(Boolean);
+      return kids.find(kid => /:(classic|standard)$/.test(kid.id)) || null;
+    }
+
+    // 질문 한 조각 → 모델: ① 이름이 똑같은 모델(SL → SL Typ 601) ② 초점거리·조리개가 이름에 둘 다 있는 렌즈(m 50mm 1.4 → Summilux-M 50) ③ 검색창 후보
+    function askFindModel(part){
+      const query = normalizeEntityText(part).replace(/^(leica|라이카)\s+/, '');
+      if(!query || !entityState.summary) return null;
+      const all = (entityState.summary.entities || []).filter(askIsModel);
+      const byActive = (x, y) => (y.active_count || 0) - (x.active_count || 0);
+      const exact = all.filter(entity => askBareName(entity) === query).sort((x, y) => (x.parent ? 1 : 0) - (y.parent ? 1 : 0) || byActive(x, y))[0];
+      if(exact) return exact;
+      const focal = (query.match(/\b(\d{2,3})\b(?!\.)/) || [])[1];
+      const aperture = (query.match(/(?:^|\s|f)(0\.95|1\.0|1\.2|1\.25|1\.4|1\.5|1\.7|1\.9|2\.0|2\.4|2\.5|2\.8|3\.4|3\.5|3\.8|4\.0|5\.6)\b/) || [])[1];
+      const suggested = suggestEntities(part, 5).map(item => item.entity).filter(askIsModel);
+      if(focal && aperture){
+        const ap = aperture.replace(/\.0$/, '');
+        const fits = entity => new RegExp(`\\b${focal}mm f/${ap.replace('.', '\\.')}\\b`).test(entity.name || '');
+        const wantMount = /(^|\s)m(\s|$)/.test(query) ? 'M' : /(^|\s)r(\s|$)/.test(query) ? 'R' : /(^|\s)sl(\s|$)/.test(query) ? 'SL' : '';
+        const lens = all.filter(entity => fits(entity) && !entity.parent && (!wantMount || entity.mount === wantMount)).sort(byActive)[0]
+          || suggested.find(fits)
+          || all.filter(entity => fits(entity) && (!wantMount || entity.mount === wantMount)).sort(byActive)[0];
+        if(lens) return lens;
+      }
+      return suggested[0] || null;
+    }
+
+    function askMarketLine(entity){
+      const name = entityDisplayName(entity);
+      const n = Number(entity.active_count || 0);
+      const price = entity.b_price_krw ? krwToDisplay(entity.b_price_krw) : '';
+      return price ? askVars(ux('ask.market'), { name, p: price, n: String(n) }) : askVars(ux('ask.market_none'), { name, n: String(n) });
+    }
+
+    function askLinks(entities){
+      return `<div class="ask-links">${entities.map(entity => `<button type="button" data-ask-entity="${escapeHtml(entity.id)}">${escapeHtml(askVars(ux('ask.see'), { name: entityDisplayName(entity) }))}</button>`).join('')}</div>`;
+    }
+
+    function askBadge(spec){
+      return spec && !spec.checked ? `<span class="ask-badge">${escapeHtml(ux('ask.unchecked'))}</span>` : '';
+    }
+
+    function askFieldLabel(field){
+      return ux(`ask.f.${field}`, field);
+    }
+
+    function askAnswerHtml(question){
+      const { field, models } = askParse(question);
+      if(!models.length) return `<p>${escapeHtml(ux('ask.not_found'))}</p>`;
+      const markets = models.map(entity => `<p class="ask-market">${escapeHtml(askMarketLine(entity))}</p>`).join('');
+      if(models.length === 2){
+        const [a, b] = models;
+        const sa = askSpec(a.id), sb = askSpec(b.id);
+        const title = `<h3>${escapeHtml(entityDisplayName(a))} vs ${escapeHtml(entityDisplayName(b))}${askBadge(sa) || askBadge(sb)}</h3>`;
+        if(!sa || !sb) return `${title}<p>${escapeHtml(ux('ask.no_spec'))}</p>${markets}${askLinks(models)}`;
+        const fields = field ? [field] : ASK_FIELD_ORDER;
+        const rows = fields.filter(key => sa.values[key] !== undefined || sb.values[key] !== undefined).map(key => {
+          const va = sa.values[key] === undefined ? '—' : askValue(key, sa.values[key]);
+          const vb = sb.values[key] === undefined ? '—' : askValue(key, sb.values[key]);
+          const diff = va !== vb ? ' class="is-diff"' : '';
+          return { diff: va !== vb, html: `<tr><th>${escapeHtml(askFieldLabel(key))}</th><td${diff}>${escapeHtml(va)}</td><td${diff}>${escapeHtml(vb)}</td></tr>` };
+        });
+        const shown = field ? rows : rows.filter(row => row.diff);
+        const table = shown.length
+          ? `<table class="ask-table"><thead><tr><th></th><th>${escapeHtml(entityDisplayName(a))}</th><th>${escapeHtml(entityDisplayName(b))}</th></tr></thead><tbody>${shown.map(row => row.html).join('')}</tbody></table>`
+          : `<p>${escapeHtml(ux('ask.no_diff'))}</p>`;
+        return `${title}${table}${markets}${askLinks(models)}`;
+      }
+      const entity = models[0];
+      const spec = askSpec(entity.id);
+      const name = entityDisplayName(entity);
+      const kids = (entity.children || []).map(id => entityState.byId[id]).filter(kid => kid && !/unspecified/.test(kid.id));
+      if(field){
+        const versions = kids.map(kid => ({ kid, spec: askSpec(kid.id) })).filter(item => item.spec && item.spec.values[field] !== undefined);
+        if(versions.length){
+          const rows = versions.map(item => `<tr><th>${escapeHtml(entityDisplayName(item.kid))}</th><td>${escapeHtml(askValue(field, item.spec.values[field]))}</td><td>${escapeHtml(item.kid.b_price_krw ? krwToDisplay(item.kid.b_price_krw) : '')}</td><td>${Number(item.kid.active_count || 0)}</td></tr>`).join('');
+          const title = askVars(ux('ask.by_version'), { field: askFieldLabel(field) });
+          const kidsShown = versions.map(item => item.kid).sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 3);
+          const head = `<thead><tr><th></th><th>${escapeHtml(askFieldLabel(field))}</th><th>${escapeHtml(ux('ask.col_price'))}</th><th>${escapeHtml(ux('ask.col_count'))}</th></tr></thead>`;
+          return `<h3>${escapeHtml(name)} · ${escapeHtml(title)}${askBadge(versions[0].spec)}</h3><table class="ask-table">${head}<tbody>${rows}</tbody></table>${markets}${askLinks(kidsShown)}`;
+        }
+        if(spec && spec.values[field] !== undefined){
+          return `<h3>${escapeHtml(name)}${askBadge(spec)}</h3><table class="ask-table"><tbody><tr><th>${escapeHtml(askFieldLabel(field))}</th><td>${escapeHtml(askValue(field, spec.values[field]))}</td></tr></tbody></table>${markets}${askLinks([entity])}`;
+        }
+        return `<h3>${escapeHtml(name)}</h3><p>${escapeHtml(spec ? ux('ask.no_field') : ux('ask.no_spec'))}</p>${markets}${askLinks([entity])}`;
+      }
+      const table = spec
+        ? `<table class="ask-table"><tbody>${ASK_FIELD_ORDER.filter(key => spec.values[key] !== undefined).map(key => `<tr><th>${escapeHtml(askFieldLabel(key))}</th><td>${escapeHtml(askValue(key, spec.values[key]))}</td></tr>`).join('')}</tbody></table>`
+        : `<p>${escapeHtml(ux('ask.no_spec'))}</p>`;
+      // 비교 후보: 같은 부모 아래 형제 또는 자기 버전들 중 매물 많은 것
+      const parent = entity.parent ? entityState.byId[entity.parent] : null;
+      const pool = (kids.length ? kids : (parent ? (parent.children || []).map(id => entityState.byId[id]) : []))
+        .filter(other => other && other.id !== entity.id && !/unspecified/.test(other.id) && askSpec(other.id))
+        .sort((x, y) => (y.active_count || 0) - (x.active_count || 0)).slice(0, 4);
+      const compare = pool.length
+        ? `<p class="ask-note">${escapeHtml(ux('ask.compare_with'))}</p><div class="ask-links">${pool.map(other => `<button type="button" data-ask-question="${escapeHtml(`${entityDisplayName(entity)} vs ${entityDisplayName(other)}`)}">${escapeHtml(entityDisplayName(other))}</button>`).join('')}</div>`
+        : '';
+      return `<h3>${escapeHtml(name)}${askBadge(spec)}</h3>${table}${markets}${askLinks([entity])}${compare}`;
+    }
+
+    function bindAsk(){
+      const dialog = document.getElementById('feedback-dialog');
+      const tabs = dialog ? dialog.querySelector('.ask-tabs') : null;
+      const openButton = document.getElementById('feedback-open');
+      if(!tabs || !openButton || !askEnabled()) return;
+      askState.preview = true;
+      tabs.hidden = false;
+      openButton.setAttribute('data-i18n', 'ask.button');
+      openButton.textContent = ux('ask.button', 'Ask · Feedback');
+      const pane = document.getElementById('ask-pane');
+      const feedbackForm = document.getElementById('feedback-form');
+      const input = document.getElementById('ask-input');
+      const answer = document.getElementById('ask-answer');
+      const examples = document.getElementById('ask-examples');
+      const show = name => {
+        tabs.querySelectorAll('[data-ask-tab]').forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.askTab === name)));
+        pane.hidden = name !== 'ask';
+        feedbackForm.hidden = name === 'ask';
+        if(name === 'ask'){ loadAskSpecs(); input.focus(); }
+      };
+      const ask = async question => {
+        const text = String(question || '').trim();
+        if(!text) return;
+        input.value = text;
+        answer.innerHTML = `<p class="ask-note">${escapeHtml(ux('ask.loading'))}</p>`;
+        await loadAskSpecs();
+        answer.innerHTML = askAnswerHtml(text);
+        if(typeof usageLog !== 'undefined') usageLog.action('ask');
+      };
+      const renderExamples = () => {
+        examples.innerHTML = ux('ask.examples', '').split('|').filter(Boolean)
+          .map(text => `<button type="button" data-ask-question="${escapeHtml(text)}">${escapeHtml(text)}</button>`).join('');
+      };
+      renderExamples();
+      tabs.addEventListener('click', event => {
+        const tab = event.target.closest('[data-ask-tab]');
+        if(tab) show(tab.dataset.askTab);
+      });
+      openButton.addEventListener('click', () => { renderExamples(); show('ask'); });
+      document.getElementById('ask-form').addEventListener('submit', event => { event.preventDefault(); ask(input.value); });
+      dialog.addEventListener('click', event => {
+        const close = event.target.closest('[data-ask-close]');
+        if(close){ dialog.close(); return; }
+        const q = event.target.closest('[data-ask-question]');
+        if(q){ ask(q.dataset.askQuestion); return; }
+        const link = event.target.closest('[data-ask-entity]');
+        if(link){
+          dialog.close();
+          selectEntity(link.dataset.askEntity, 'query-input', { usageVia: 'chip', preserveResultsAnchor: false });
+        }
+      });
+    }
 
     // 의견 보내기: /api/feedback → 비공개 저장 + 텔레그램 알림
     function bindFeedback(){
@@ -8808,6 +9138,7 @@
     loadMarketMap();
     bindHeroSearchVisibility();
     bindFeedback();
+    bindAsk();
     hydrateFromUrl();
     bindBoard();
     bindSaves();
