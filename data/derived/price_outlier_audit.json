@@ -1,13 +1,94 @@
 {
-"total": 516,
+"total": 519,
 "by_hint": {
-"accessory": 56,
-"set": 89,
-"check": 316,
+"accessory": 54,
+"set": 90,
+"check": 320,
 "edition": 52,
 "defect": 3
 },
-"new": [],
+"new": [
+{
+"url": "https://kamerastore.com/products/leica-series-7-vii-filter-retaining-ring-14161-leica-r-t150727",
+"entity": "leica:acc:filter-ring:14161",
+"ratio": 0.43,
+"category": "Accessory",
+"title": "Leica Series 7 VII Filter Retaining Ring (14161)",
+"price": "€8",
+"source": "Kamerastore (핀란드)",
+"hint": "check"
+},
+{
+"url": "https://www.grainlab.com/de/leica-gegenlichtblende-12564-fuer-2-50-und-2-8-35.html",
+"entity": "leica:acc:hood:12564",
+"ratio": 101.72,
+"category": "Accessory",
+"title": "Leica Lens Hood 12564 für 2/50 und 2.8/35",
+"price": "59,00 EUR",
+"source": "Grainlab (독일)",
+"hint": "accessory"
+},
+{
+"url": "https://www.grainlab.com/de/leica-macro-adapter-r-14256.html",
+"entity": "leica:acc:macro:14256",
+"ratio": 38.35,
+"category": "Accessory",
+"title": "Leica Macro-Adapter-R - 14256",
+"price": "39,00 EUR",
+"source": "Grainlab (독일)",
+"hint": "accessory"
+},
+{
+"url": "https://www.grainlab.com/de/leica-macrotar-via-16531-e.html",
+"entity": "leica:acc:macro:16531",
+"ratio": 208.51,
+"category": "Accessory",
+"title": "Leica Macrotar Close-up Filter VIa - 16531 E",
+"price": "49,00 EUR",
+"source": "Grainlab (독일)",
+"hint": "check"
+},
+{
+"url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23C0373",
+"entity": "leica:acc:strap:14253",
+"ratio": 2.56,
+"category": "Accessory",
+"title": "Leica case M + strap 14253",
+"price": "€100",
+"source": "Newoldcamera (이탈리아)",
+"hint": "accessory"
+},
+{
+"url": "https://kamerastore.com/products/leica-tabletop-tripod-tooug-14100-t136785",
+"entity": "leica:acc:tripod:14100",
+"ratio": 0.43,
+"category": "Accessory",
+"title": "Leica Tabletop Tripod (TOOUG / 14100)",
+"price": "€39",
+"source": "Kamerastore (핀란드)",
+"hint": "check"
+},
+{
+"url": "https://kamerastore.com/products/leica-135mm-f4-elmar-optical-head-11951-ltm-m39-t118748",
+"entity": "leica:lens:elmar:135",
+"ratio": 0.45,
+"category": "Lens",
+"title": "Leica 135mm f4 Elmar (Optical Lens Unit)  (11951) + Short Focusing Mount (14071)",
+"price": "€112",
+"source": "Kamerastore (핀란드)",
+"hint": "set"
+},
+{
+"url": "https://www.grainlab.com/de/leica-elmarit-r-19mm-1-2-8-rom.html",
+"entity": "leica:lens:elmarit-r:19",
+"ratio": 0.0,
+"category": "Lens",
+"title": "Leica Elmarit-R 19mm f2.8 ROM",
+"price": "1.950,00 EUR",
+"source": "Grainlab (독일)",
+"hint": "check"
+}
+],
 "items": [
 {
 "url": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#179990",
@@ -22,7 +103,7 @@
 {
 "url": "https://classicconnection.com/product/leica-table-top-tripod-14100-leica-ball-socket-head-14110-w-box-mint-ln/",
 "entity": "leica:acc:ball-head:14110",
-"ratio": 2.72,
+"ratio": 2.75,
 "category": "Accessory",
 "title": "Leica Table-top Tripod #14100 & Leica Ball & Socket Head #14110 W/Box",
 "price": "$299",
@@ -57,6 +138,16 @@
 "title": "Leica Series VII Filter Retaining Ring Holder 14161 Germany",
 "price": "$5",
 "source": "Cardinal Camera Used (미국)",
+"hint": "check"
+},
+{
+"url": "https://kamerastore.com/products/leica-series-7-vii-filter-retaining-ring-14161-leica-r-t150727",
+"entity": "leica:acc:filter-ring:14161",
+"ratio": 0.43,
+"category": "Accessory",
+"title": "Leica Series 7 VII Filter Retaining Ring (14161)",
+"price": "€8",
+"source": "Kamerastore (핀란드)",
 "hint": "check"
 },
 {
@@ -272,7 +363,7 @@
 {
 "url": "https://cardinalcameraused.com/products/lens-hood-for-leica-r-19mm-f2-8-elmarit-r-v1-12529-leitz-shade-copy-1",
 "entity": "leica:acc:hood:12523",
-"ratio": 0.42,
+"ratio": 0.45,
 "category": "Accessory",
 "title": "Leica Hood for Leica R 24mm F2.8 Elmarit-R #12523 Leitz Shade",
 "price": "$32",
@@ -282,7 +373,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119341175174",
 "entity": "leica:acc:hood:12538",
-"ratio": 0.34,
+"ratio": 0.36,
 "category": "Accessory",
 "title": "Leica Hood 12538 プラ (Summicron50)",
 "price": "¥4,300",
@@ -290,19 +381,9 @@
 "hint": "accessory"
 },
 {
-"url": "https://shop.topcamera.co.jp/site/products/detail/65730",
-"entity": "leica:acc:hood:12538",
-"ratio": 0.39,
-"category": "Accessory",
-"title": "Leica Lens Hood 12538 plastic Summicron M 50mm F2.0 3rd for",
-"price": "¥4,980",
-"source": "トップカメラ (일본)",
-"hint": "accessory"
-},
-{
 "url": "https://cameranonaniwa.jp/shop/g/g2111012470632/",
 "entity": "leica:acc:hood:12538",
-"ratio": 0.4,
+"ratio": 0.41,
 "category": "Accessory",
 "title": "Leica Hood 12538(Summicron M 50/2 3rd for )",
 "price": "¥5,000",
@@ -310,23 +391,23 @@
 "hint": "accessory"
 },
 {
-"url": "https://shop.kitamura.jp/ec/used/2145460042349",
+"url": "https://shop.topcamera.co.jp/site/products/detail/65730",
 "entity": "leica:acc:hood:12538",
-"ratio": 0.43,
+"ratio": 0.41,
 "category": "Accessory",
-"title": "Leica Hood 12538 プラ (Summicron50)",
-"price": "¥5,500",
-"source": "기타무라 (일본)",
+"title": "Leica Lens Hood 12538 plastic Summicron M 50mm F2.0 3rd for",
+"price": "¥4,980",
+"source": "トップカメラ (일본)",
 "hint": "accessory"
 },
 {
-"url": "https://www.camera-ohnuki.com/products/ライカ-12538-レンズフード-4",
-"entity": "leica:acc:hood:12538",
-"ratio": 0.43,
+"url": "https://www.grainlab.com/de/leica-gegenlichtblende-12564-fuer-2-50-und-2-8-35.html",
+"entity": "leica:acc:hood:12564",
+"ratio": 101.72,
 "category": "Accessory",
-"title": "Leica 12538 Lens Hood",
-"price": "¥5,500",
-"source": "カメラの大貫 (일본)",
+"title": "Leica Lens Hood 12564 für 2/50 und 2.8/35",
+"price": "59,00 EUR",
+"source": "Grainlab (독일)",
 "hint": "accessory"
 },
 {
@@ -342,7 +423,7 @@
 {
 "url": "https://cameranonaniwa.jp/shop/g/g2221000156315/",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.23,
+"ratio": 0.24,
 "category": "Accessory",
 "title": "Leica フート ゛IUFOO",
 "price": "¥2,500",
@@ -352,7 +433,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2443890208091",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.26,
+"ratio": 0.27,
 "category": "Accessory",
 "title": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
 "price": "¥2,800",
@@ -362,7 +443,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119341083899",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.33,
+"ratio": 0.35,
 "category": "Accessory",
 "title": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
 "price": "¥3,600",
@@ -372,7 +453,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119341196803",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.33,
+"ratio": 0.35,
 "category": "Accessory",
 "title": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
 "price": "¥3,600",
@@ -382,7 +463,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2403280946552",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.33,
+"ratio": 0.35,
 "category": "Accessory",
 "title": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
 "price": "¥3,600",
@@ -392,7 +473,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119341221192",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.33,
+"ratio": 0.35,
 "category": "Accessory",
 "title": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
 "price": "¥3,600",
@@ -402,7 +483,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2445310028098",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.36,
+"ratio": 0.38,
 "category": "Accessory",
 "title": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
 "price": "¥3,900",
@@ -412,7 +493,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2442070106219",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.38,
+"ratio": 0.39,
 "category": "Accessory",
 "title": "Leica Hood IUFOO/12575 (90Elmar、135Hektor)",
 "price": "¥4,100",
@@ -422,7 +503,7 @@
 {
 "url": "https://cameranonaniwa.jp/shop/g/g2221070534372/",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.39,
+"ratio": 0.4,
 "category": "Accessory",
 "title": "Leica Hood IUFOO(Elmar 9cm/Hektor 13.5cm for )",
 "price": "¥4,200",
@@ -432,7 +513,7 @@
 {
 "url": "https://j-camera.net/itemp.php?id=211960864",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.41,
+"ratio": 0.42,
 "category": "Accessory",
 "title": "LEITZ 12575 Hood基部+短縮Hood部",
 "price": "¥4,400",
@@ -442,7 +523,7 @@
 {
 "url": "https://cameranonaniwa.jp/shop/g/g2111012470601/",
 "entity": "leica:acc:hood:12575",
-"ratio": 0.42,
+"ratio": 0.43,
 "category": "Accessory",
 "title": "Leica Hood IUFOO(Elmar 9cm/Hektor 13.5cm for )",
 "price": "¥4,500",
@@ -492,20 +573,20 @@
 {
 "url": "https://kamerastore.com/products/leica-center-ring-r-14135-leica-r-1",
 "entity": "leica:acc:macro:14135",
-"ratio": 0.39,
+"ratio": 0.29,
 "category": "Accessory",
 "title": "Leica Center Ring R (14135)",
-"price": "€11",
+"price": "€8",
 "source": "Kamerastore (핀란드)",
 "hint": "check"
 },
 {
 "url": "https://kamerastore.com/products/leica-center-ring-r-14135-leica-r",
 "entity": "leica:acc:macro:14135",
-"ratio": 0.39,
+"ratio": 0.29,
 "category": "Accessory",
 "title": "Leica Center Ring R (14135)",
-"price": "€11",
+"price": "€8",
 "source": "Kamerastore (핀란드)",
 "hint": "check"
 },
@@ -522,7 +603,7 @@
 {
 "url": "https://oneofmanycameras.com/products/leica-r-macro-adapter-14256",
 "entity": "leica:acc:macro:14256",
-"ratio": 0.34,
+"ratio": 0.33,
 "category": "Accessory",
 "title": "Leica R Macro Adapter 14256",
 "price": "DKK 250",
@@ -530,24 +611,44 @@
 "hint": "accessory"
 },
 {
-"url": "https://j-camera.net/itemp.php?id=197277996",
-"entity": "leica:acc:strap:14253",
-"ratio": 0.43,
+"url": "https://www.grainlab.com/de/leica-macro-adapter-r-14256.html",
+"entity": "leica:acc:macro:14256",
+"ratio": 38.35,
 "category": "Accessory",
-"title": "Leica キャ Ring-Strap(標準) 14253 「L E I C A」表記",
-"price": "¥3,300",
-"source": "J-カメラ (일본)",
+"title": "Leica Macro-Adapter-R - 14256",
+"price": "39,00 EUR",
+"source": "Grainlab (독일)",
 "hint": "accessory"
 },
 {
-"url": "https://www.fujikoshi-camera.com/shopdetail/000000021107/006/X/page5/order/",
+"url": "https://www.grainlab.com/de/leica-macrotar-via-16531-e.html",
+"entity": "leica:acc:macro:16531",
+"ratio": 208.51,
+"category": "Accessory",
+"title": "Leica Macrotar Close-up Filter VIa - 16531 E",
+"price": "49,00 EUR",
+"source": "Grainlab (독일)",
+"hint": "check"
+},
+{
+"url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23C0373",
 "entity": "leica:acc:strap:14253",
+"ratio": 2.56,
+"category": "Accessory",
+"title": "Leica case M + strap 14253",
+"price": "€100",
+"source": "Newoldcamera (이탈리아)",
+"hint": "accessory"
+},
+{
+"url": "https://kamerastore.com/products/leica-tabletop-tripod-tooug-14100-t136785",
+"entity": "leica:acc:tripod:14100",
 "ratio": 0.43,
 "category": "Accessory",
-"title": "Leica キャ Ring-Strap(標準) 14253 「L E I C A」表記",
-"price": "¥3,300",
-"source": "富士越カメラ (일본)",
-"hint": "accessory"
+"title": "Leica Tabletop Tripod (TOOUG / 14100)",
+"price": "€39",
+"source": "Kamerastore (핀란드)",
+"hint": "check"
 },
 {
 "url": "https://classicconnection.com/product/leica-table-top-tripod-14100-leica-small-ball-socket-head-14119-w-box-mint-ln/",
@@ -562,20 +663,10 @@
 {
 "url": "https://www.peterloy.com/?p=22966",
 "entity": "leica:acc:visoflex-adapter:16466",
-"ratio": 0.32,
+"ratio": 0.43,
 "category": "Accessory",
 "title": "Leitz 'OUBIO' adapter",
 "price": "£15",
-"source": "Peter Loy (영국)",
-"hint": "accessory"
-},
-{
-"url": "https://www.peterloy.com/?p=10871",
-"entity": "leica:acc:visoflex-adapter:16466",
-"ratio": 0.41,
-"category": "Accessory",
-"title": "Leitz 'OUBIO' adapter",
-"price": "£19",
 "source": "Peter Loy (영국)",
 "hint": "accessory"
 },
@@ -2370,6 +2461,16 @@
 "hint": "check"
 },
 {
+"url": "https://kamerastore.com/products/leica-135mm-f4-elmar-optical-head-11951-ltm-m39-t118748",
+"entity": "leica:lens:elmar:135",
+"ratio": 0.45,
+"category": "Lens",
+"title": "Leica 135mm f4 Elmar (Optical Lens Unit)  (11951) + Short Focusing Mount (14071)",
+"price": "€112",
+"source": "Kamerastore (핀란드)",
+"hint": "set"
+},
+{
 "url": "https://shphoto.de/ernst-leitz-wezlar-elmar-4-5-135-leica-m39-screw-mount-nickel.html",
 "entity": "leica:lens:elmar:135",
 "ratio": 2.64,
@@ -2942,7 +3043,7 @@
 {
 "url": "https://www.cameraobscuraelburg.nl/product/leica-elmarit-90mm-f2-8-titanium/",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 3.62,
+"ratio": 3.63,
 "category": "Lens",
 "title": "Leica Elmarit 90mm f2.8 Titanium",
 "price": "€1,700",
@@ -2952,7 +3053,7 @@
 {
 "url": "https://schouten-select.com/products/leica-90mm-f2-8-elmarit-m-titanium-3",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 4.58,
+"ratio": 4.59,
 "category": "Lens",
 "title": "Leica 90mm f2.8 Elmarit-M Titanium",
 "price": "€2,150",
@@ -2962,7 +3063,7 @@
 {
 "url": "https://schouten-select.com/products/leica-90mm-f2-8-elmarit-m-titanium",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 4.58,
+"ratio": 4.59,
 "category": "Lens",
 "title": "Leica 90mm f2.8 Elmarit-M Titanium",
 "price": "€2,150",
@@ -2972,7 +3073,7 @@
 {
 "url": "https://www.panajou.fr/objectifs-photo-d-occasion/leica-elmarit-m-90mm-f-2-8-silver-occasion_p42382",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 7.46,
+"ratio": 7.47,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f/2.8 Silver",
 "price": "€3,500",
@@ -3060,9 +3161,19 @@
 "hint": "check"
 },
 {
+"url": "https://www.grainlab.com/de/leica-elmarit-r-19mm-1-2-8-rom.html",
+"entity": "leica:lens:elmarit-r:19",
+"ratio": 0.0,
+"category": "Lens",
+"title": "Leica Elmarit-R 19mm f2.8 ROM",
+"price": "1.950,00 EUR",
+"source": "Grainlab (독일)",
+"hint": "check"
+},
+{
 "url": "https://www.newoldcamera.com/Scheda.aspx?Codice=25C2153",
 "entity": "leica:lens:elmarit-r:19",
-"ratio": 0.32,
+"ratio": 0.33,
 "category": "Lens",
 "title": "Leica 19mm f/2.8 ELMARIT-R",
 "price": "€790",
@@ -3492,7 +3603,7 @@
 {
 "url": "https://schouten-select.com/products/leica-50mm-f0-95-noctilux-m-asph-silver-70th-anniversary-republic-of-korea-box",
 "entity": "leica:lens:noctilux-m:50:f0.95",
-"ratio": 3.63,
+"ratio": 3.66,
 "category": "Lens",
 "title": "Leica 50mm f0.95 Noctilux-M ASPH Silver \"70th Anniversary Republic of Korea\"",
 "price": "€27,000",
@@ -3502,7 +3613,7 @@
 {
 "url": "https://www.cameraobscuraelburg.nl/product/leica-noctilux-0-95-50mm-asph-11612-edition-titan/",
 "entity": "leica:lens:noctilux-m:50:f0.95",
-"ratio": 9.75,
+"ratio": 9.83,
 "category": "Lens",
 "title": "Leica Noctilux 0.95/50mm ASPH. 11612 Edition ‘Titan’",
 "price": "€72,500",
@@ -3512,7 +3623,7 @@
 {
 "url": "https://schouten-select.com/products/leica-50mm-f0-95-noctilux-m-asph-titan-box-1",
 "entity": "leica:lens:noctilux-m:50:f0.95",
-"ratio": 10.09,
+"ratio": 10.17,
 "category": "Lens",
 "title": "Leica 50mm f0.95 Noctilux-M ASPH Titan",
 "price": "€75,000",
@@ -3922,7 +4033,7 @@
 {
 "url": "https://www.leica-camera-france-occasions.com/en/occasion/summicron-m-50-mm-f2-1954-1956",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 0.32,
+"ratio": 0.31,
 "category": "Lens",
 "title": "SUMMICRON-M 50 mm f/2 (1954-1956)",
 "price": "€450",
@@ -3932,7 +4043,7 @@
 {
 "url": "https://www.msmaterialefotografico.it/prodotti/obiettivo-leica-summicron-5cm-f-2-2/",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 0.32,
+"ratio": 0.31,
 "category": "Lens",
 "title": "Leica Summicron 50mm f2",
 "price": "€450",
@@ -4002,7 +4113,7 @@
 {
 "url": "https://www.ekangsan.com/product/detail.html?product_no=4440&cate_no=163&display_group=1",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 19.95,
+"ratio": 19.92,
 "category": "Lens",
 "title": "Leica Summicron 50mm F2 블렉페인트 시리얼 No, 1885... (5NO161002)",
 "price": "41,975,000원",
@@ -4382,7 +4493,7 @@
 {
 "url": "https://fotopro24.de/Leica_M/26846-Summilux-M_1_4_35_Canada_pre_ASPH_infinity_lock.html",
 "entity": "leica:lens:summilux-m:35:asph-unspecified",
-"ratio": 2.68,
+"ratio": 2.7,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 Canada pre ASPH infinity lock",
 "price": "€9,999",
@@ -4392,7 +4503,7 @@
 {
 "url": "https://fotopro24.de/Leica_M/49977-Summilux-M_1_4_35_Canada_pre_ASPH_Infinity_Lock_Brass_Tab_Version_II.html",
 "entity": "leica:lens:summilux-m:35:asph-unspecified",
-"ratio": 3.35,
+"ratio": 3.37,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 Canada pre ASPH Infinity Lock Brass Tab Version II",
 "price": "€12,499",
@@ -4712,7 +4823,7 @@
 {
 "url": "https://www.japancamerahunter.com/product/leica-super-angulon-r-21mm-f4/",
 "entity": "leica:lens:super-angulon-r:21",
-"ratio": 3.24,
+"ratio": 3.26,
 "category": "Lens",
 "title": "Leica Super Angulon R 21mm f4.0",
 "price": "$2,500",
