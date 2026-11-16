@@ -3456,7 +3456,7 @@
         if(tab) show(tab.dataset.askTab);
       });
       openButton.addEventListener('click', () => { hideHint(); show('ask'); });
-      // 버튼 위 말풍선: 3초 뒤 뜸. 누르면 그 질문으로 바로 답, ×나 한 번 써 보면 이 브라우저에서는 다시 안 뜸
+      // 버튼 위 말풍선: 1초 뒤 뜸 (2026-11-16 사장님 3초 → 1초). 누르면 그 질문으로 바로 답, ×나 한 번 써 보면 이 브라우저에서는 다시 안 뜸
       let hint = null;
       function hideHint(remember){
         if(!hint) return;
@@ -3486,7 +3486,7 @@
             ask(q);
           });
           hint.addEventListener('keydown', event => { if(event.key === 'Enter') hint.click(); });
-        }, 3000);
+        }, 1000);
       }
       document.getElementById('ask-form').addEventListener('submit', event => { event.preventDefault(); ask(input.value); });
       dialog.addEventListener('click', event => {
