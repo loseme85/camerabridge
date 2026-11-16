@@ -3,13 +3,13 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 960,
+   "count": 959,
    "example": "신품 Leica M-A Hammertone"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 877,
+   "count": 876,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 283,
+   "count": 282,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 283,
+   "count": 282,
    "example": "Leica M3 Black Repaint"
   },
   {
@@ -117,7 +117,7 @@
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 125,
+   "count": 123,
    "example": "[중고] M11 (Black)"
   },
   {
@@ -627,13 +627,13 @@
   {
    "a": "leica:body:cl-film",
    "b": "leica:feature:meter",
-   "count": 21,
+   "count": 20,
    "example": "LEICA CL sn.1409"
   },
   {
    "a": "leica:body:cl-film",
    "b": "leica:feature:mechanical",
-   "count": 21,
+   "count": 20,
    "example": "LEICA CL sn.1409"
   },
   {
@@ -811,16 +811,16 @@
    "example": "[위탁] MP3 (Black Paint)"
   },
   {
-   "a": "leica:body:m262",
-   "b": "leica:feature:frameline-28",
-   "count": 14,
-   "example": "LEICA M 262 sn.4982"
-  },
-  {
    "a": "leica:body:m6:lhsa",
    "b": "leica:feature:frameline-28",
    "count": 13,
    "example": "[위탁] M6 LHSA (Black Paint)"
+  },
+  {
+   "a": "leica:body:m262",
+   "b": "leica:feature:frameline-28",
+   "count": 13,
+   "example": "LEICA M 262 sn.4982"
   },
   {
    "a": "leica:body:m-e",
@@ -1899,18 +1899,5 @@
    "example": "Leica Q3, black paint"
   }
  ],
- "new": [
-  {
-   "entity": "leica:lens:summicron-m:35:asph",
-   "word": "safari",
-   "count": 3,
-   "example": "LEICA M-P Safari Edition 35mm F2 ASPH SUMMICRON-M sn.4934"
-  },
-  {
-   "a": "leica:lens:telyt-r:long:400",
-   "b": "leica:lens:telyt-r:long:560",
-   "count": 3,
-   "example": "[위탁] R Telyt 560, Telyt 400 SET"
-  }
- ]
+ "new": []
 }
