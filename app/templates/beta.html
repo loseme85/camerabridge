@@ -3276,7 +3276,7 @@
     const ASK_NOT = /없이|없어도|안\s*(필요|들|써)|필요\s*(없|않)|without|no\s+batter|don'?t\s+need|not\s+need/i;
     function askListHtml(question){
       if(!/배터리|건전지|전지|batter(y|ies)|電池|电池/i.test(question) || !ASK_LIST.test(question)) return '';
-      const rest = String(question).replace(/배터리|건전지|전지|batter(y|ies)|電池|电池/ig, ' ').replace(ASK_LIST, ' ').replace(ASK_NOT, ' ').replace(/필요|쓰는|들어가는|need(s|ed)?|require[sd]?|[?？가이한은는]/ig, ' ').trim();
+      const rest = String(question).replace(/배터리|건전지|전지|batter(y|ies)|電池|电池/ig, ' ').replace(ASK_LIST, ' ').replace(ASK_NOT, ' ').replace(/필요|쓰는|들어가는|need(s|ed)?|require[sd]?|[?？]|(?<=\S)(가|이|한|은|는|해)(?=\s|$)/ig, ' ').trim();
       if(rest && askParse(rest).models.length) return '';
       const data = askState.data;
       if(!data || !data.specs) return '';
