@@ -1543,6 +1543,17 @@
     .ask-style-b .ask-msg.is-user{background:rgba(255,255,255,0.75)}
     .ask-style-c .ask-msg.is-user{border-radius:12px 12px 3px 12px}
     @media(max-width:720px){.ask-thread{max-height:52vh}.ask-msg.is-user{max-width:88%}}
+    /* 버튼 위 말풍선 '…물어보세요' (2026-11-16 사장님) — 누르면 그 질문으로 바로 답 */
+    .ask-hint{position:fixed;right:16px;bottom:64px;z-index:51;max-width:min(260px, calc(100% - 32px));padding:9px 30px 9px 12px;background:var(--text);color:var(--bg);font-size:13px;line-height:1.45;cursor:pointer;
+      box-shadow:0 6px 18px rgba(34,32,30,0.16);opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease}
+    .ask-hint.is-on{opacity:1;transform:none}
+    .ask-hint::after{content:"";position:absolute;right:22px;bottom:-6px;border:6px solid transparent;border-bottom:0;border-top-color:var(--text)}
+    .ask-hint b{font-weight:600}
+    .ask-hint-close{position:absolute;top:4px;right:4px;width:22px;height:22px;padding:0;border:0;background:none;color:inherit;opacity:.65;font:inherit;font-size:15px;line-height:22px;cursor:pointer}
+    .ask-hint-close:hover{opacity:1}
+    .feedback-fab.is-tucked + .ask-hint{opacity:0;pointer-events:none}
+    @media(max-width:720px){.ask-hint{right:12px;bottom:52px;font-size:12px}}
+    @media(prefers-reduced-motion:reduce){.ask-hint{transition:none}}
     /* 대화창 부드럽게 — 미리보기 비교 (?askstyle=a|b|c, 2026-11-16 사장님 '창이 너무 딱딱하다') */
     .feedback-dialog.is-soft{border:1px solid var(--border);box-shadow:0 18px 48px rgba(34,32,30,0.12),0 2px 6px rgba(34,32,30,0.05);padding:24px 24px 20px}
     .feedback-dialog.is-soft::backdrop{background:rgba(34,32,30,0.18);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
@@ -2285,6 +2296,8 @@
         yes: { ko: '있음', en: 'Yes' },
         no: { ko: '없음', en: 'No' },
         examples: { ko: 'M6와 M7 차이|배터리가 필요한 바디|주미룩스 50 최단거리', en: 'M6 vs M7|Which bodies need a battery?|Summilux 50 close focus' },
+        hint: { ko: '{q}, 물어보세요!', en: 'Try asking: {q}' },
+        hint_q: { ko: 'M6와 M7 차이', en: 'M6 vs M7' },
         hello: { ko: '라이카 바디·렌즈 사양을 바로 찾아 드려요. 두 모델을 넣으면 다른 점만 골라 비교해 드려요.', en: 'Look up any Leica body or lens spec instantly. Enter two models and I’ll show just what’s different.' },
         try: { ko: '이렇게 물어보세요', en: 'Try asking' },
         more: { ko: '이어서 물어보기', en: 'Ask next' },
@@ -3442,7 +3455,39 @@
         const tab = event.target.closest('[data-ask-tab]');
         if(tab) show(tab.dataset.askTab);
       });
-      openButton.addEventListener('click', () => show('ask'));
+      openButton.addEventListener('click', () => { hideHint(); show('ask'); });
+      // 버튼 위 말풍선: 3초 뒤 뜸. 누르면 그 질문으로 바로 답, ×나 한 번 써 보면 이 브라우저에서는 다시 안 뜸
+      let hint = null;
+      function hideHint(remember){
+        if(!hint) return;
+        hint.classList.remove('is-on');
+        const el = hint; hint = null;
+        setTimeout(() => el.remove(), 300);
+        if(remember){ try{ localStorage.setItem('cb_ask_hint', 'done'); }catch(error){} }
+      }
+      let hintDone = false;
+      try{ hintDone = localStorage.getItem('cb_ask_hint') === 'done'; }catch(error){}
+      if(!hintDone){
+        setTimeout(() => {
+          if(dialog.open || openButton.hidden) return;
+          const q = ux('ask.hint_q', 'M6 vs M7');
+          hint = document.createElement('div');
+          hint.className = 'ask-hint';
+          hint.setAttribute('role', 'button');
+          hint.tabIndex = 0;
+          hint.innerHTML = `${askVars(escapeHtml(ux('ask.hint')), { q: `<b>${escapeHtml(q)}</b>` })}<button type="button" class="ask-hint-close" aria-label="${escapeHtml(ux('feedback.close'))}">×</button>`;
+          openButton.insertAdjacentElement('afterend', hint);
+          requestAnimationFrame(() => hint && hint.classList.add('is-on'));
+          hint.addEventListener('click', event => {
+            if(event.target.closest('.ask-hint-close')){ hideHint(true); return; }
+            hideHint(true);
+            dialog.showModal();
+            show('ask');
+            ask(q);
+          });
+          hint.addEventListener('keydown', event => { if(event.key === 'Enter') hint.click(); });
+        }, 3000);
+      }
       document.getElementById('ask-form').addEventListener('submit', event => { event.preventDefault(); ask(input.value); });
       dialog.addEventListener('click', event => {
         const close = event.target.closest('[data-ask-close]');
