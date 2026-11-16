@@ -28,3 +28,8 @@ def test_based_on_and_lens_versions():
     ii = spec_for("leica:lens:summilux-m:50:asph:asph-ii", PARENTS)
     assert ii["min_focus_m"] == 0.45 and ii["filter"] == "E46" and ii["aperture"] == "f/1.4"
     assert spec_for("leica:lens:summilux-m:50:v2", PARENTS)["min_focus_m"] == 1.0
+
+
+def test_every_body_and_lens_has_specs():
+    empty = [i for i in PARENTS if i.split(":")[1] in ("body", "lens") and not spec_for(i, PARENTS)]
+    assert empty == []
