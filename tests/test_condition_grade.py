@@ -777,3 +777,16 @@ def test_grainlab_description_grades():
     for description, expected in [("Neuwertiger Zustand", "S"), ("Sehr guter Zustand", "B"), ("leichte Gebrauchsspuren", "B"), ("Gläser ohne Kratzer", None)]:
         assert grade_of("Grainlab (독일)", de_condition(description))[0] == expected
     assert grade_of("Grainlab (독일)", "Grainlab: hervorragend")[0] == "B"
+
+def test_leicaboutique_conditions():
+    for label, expected in [("LNIB", "S"), ("MINT", "A"), ("MINT-", "A"), ("unknown", None)]:
+        assert grade_of("Leica Boutique Cape Town (남아공)", "LeicaBoutique: " + label, "Leica M9")[0] == expected
+
+
+def test_leicaboutique_detail_mint_matches_title():
+    assert grade_of("Leica Boutique Cape Town (남아공)", "설명: mint")[0] == "A"
+
+
+def test_leicaboutique_description_calibration():
+    for label, expected in [("excellent condition", "A"), ("very good condition", "B"), ("brassing", "C"), ("Like new", "S")]:
+        assert grade_of("Leica Boutique Cape Town (남아공)", "설명: " + label)[0] == expected
