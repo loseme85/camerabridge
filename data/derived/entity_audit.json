@@ -3,26 +3,26 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 939,
-   "example": "Leica M-A Black Chrome x0.72"
+   "count": 940,
+   "example": "신품 Leica M-A Hammertone"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 839,
+   "count": 838,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 725,
+   "count": 724,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
    "count": 680,
-   "example": "Leica M-A Black Chrome x0.72"
+   "example": "신품 Leica M-A Hammertone"
   },
   {
    "a": "leica:feature:meter",
@@ -201,8 +201,8 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:no-meter",
-   "count": 87,
-   "example": "Leica M-A Black Chrome x0.72"
+   "count": 88,
+   "example": "신품 Leica M-A Hammertone"
   },
   {
    "a": "leica:body:m240:standard",
@@ -297,18 +297,12 @@
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:meter",
-   "count": 57,
+   "count": 56,
    "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:mechanical",
-   "count": 57,
-   "example": "Leica MP Silver x0.72"
-  },
-  {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:frameline-28",
    "count": 56,
    "example": "Leica MP Silver x0.72"
   },
@@ -323,6 +317,12 @@
    "b": "leica:feature:mechanical",
    "count": 56,
    "example": "LEICA M3 Double stroke sn.8008"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 55,
+   "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:feature:mechanical",
@@ -369,7 +369,7 @@
   {
    "a": "leica:body:m9:standard",
    "b": "leica:feature:frameline-28",
-   "count": 47,
+   "count": 46,
    "example": "[중고] M9"
   },
   {
@@ -1393,6 +1393,24 @@
    "example": "Leica SUMMICRON-L 35mm f2 ASPH Limited品 11608 代引き不可"
   },
   {
+   "a": "leica:body:m-a:hammertone",
+   "b": "leica:feature:frameline-28",
+   "count": 3,
+   "example": "신품 Leica M-A Hammertone"
+  },
+  {
+   "a": "leica:body:m-a:hammertone",
+   "b": "leica:feature:no-meter",
+   "count": 3,
+   "example": "신품 Leica M-A Hammertone"
+  },
+  {
+   "a": "leica:body:m-a:hammertone",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "신품 Leica M-A Hammertone"
+  },
+  {
    "a": "leica:feature:safari",
    "b": "leica:lens:apo-summicron-m:90:safari",
    "count": 3,
@@ -1577,7 +1595,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 217,
+   "count": 216,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -1713,16 +1731,16 @@
    "example": "LEICA MP Edition HERMES SUMMICRON-M 1:2/35mm ASPH. sn.2940"
   },
   {
-   "entity": "leica:body:m9:standard",
-   "word": "black paint",
-   "count": 8,
-   "example": "Leica M9 (Black Paint, 10704)"
-  },
-  {
    "entity": "leica:lens:summicron-m:28:asph:unspecified",
    "word": "black paint",
    "count": 7,
    "example": "LEICA 28mm F2 ASPH SUMMICRON-M MATT BLACK PAINT FINISH sn.4792"
+  },
+  {
+   "entity": "leica:body:m9:standard",
+   "word": "black paint",
+   "count": 7,
+   "example": "Leica M9 (Black Paint, 10704)"
   },
   {
    "entity": "leica:lens:elmar:90:unspecified",
@@ -1869,5 +1887,24 @@
    "example": "Leica Q3, black paint"
   }
  ],
- "new": []
+ "new": [
+  {
+   "a": "leica:body:m-a:hammertone",
+   "b": "leica:feature:frameline-28",
+   "count": 3,
+   "example": "신품 Leica M-A Hammertone"
+  },
+  {
+   "a": "leica:body:m-a:hammertone",
+   "b": "leica:feature:no-meter",
+   "count": 3,
+   "example": "신품 Leica M-A Hammertone"
+  },
+  {
+   "a": "leica:body:m-a:hammertone",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "신품 Leica M-A Hammertone"
+  }
+ ]
 }
