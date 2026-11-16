@@ -9,7 +9,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 874,
+   "count": 872,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -81,7 +81,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 196,
+   "count": 197,
    "example": "[중고] M10 Monochrom"
   },
   {
@@ -223,22 +223,22 @@
    "example": "Leica M10-P Black"
   },
   {
+   "a": "leica:body:m8:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 75,
+   "example": "Leica M8 Silver"
+  },
+  {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:meter",
-   "count": 76,
+   "count": 74,
    "example": "LEICA M5 sn.1362"
   },
   {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:mechanical",
-   "count": 76,
+   "count": 74,
    "example": "LEICA M5 sn.1362"
-  },
-  {
-   "a": "leica:body:m8:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 75,
-   "example": "Leica M8 Silver"
   },
   {
    "a": "leica:body:m11-p:standard",
@@ -391,6 +391,18 @@
    "example": "[위탁] M Monochrom TYP 246 (Black)"
   },
   {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:frameline-28",
+   "count": 44,
+   "example": "[위탁] M11 Monochrom"
+  },
+  {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:monochrom",
+   "count": 44,
+   "example": "[위탁] M11 Monochrom"
+  },
+  {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:no-meter",
    "count": 44,
@@ -401,18 +413,6 @@
    "b": "leica:feature:mechanical",
    "count": 44,
    "example": "LEICA M3 Single Stroke sn.1156"
-  },
-  {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:frameline-28",
-   "count": 43,
-   "example": "[위탁] M11 Monochrom"
-  },
-  {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:monochrom",
-   "count": 43,
-   "example": "[위탁] M11 Monochrom"
   },
   {
    "a": "leica:body:m-monochrom-ccd",
@@ -1607,7 +1607,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 195,
+   "count": 196,
    "example": "[중고] M10 Monochrom"
   },
   {
