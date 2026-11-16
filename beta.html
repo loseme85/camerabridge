@@ -2297,7 +2297,8 @@
         no: { ko: '없음', en: 'No' },
         examples: { ko: 'M6와 M7 차이|배터리가 필요한 바디|주미룩스 50 최단거리', en: 'M6 vs M7|Which bodies need a battery?|Summilux 50 close focus' },
         hint: { ko: '이렇게 물어보세요! {q}', en: 'Try asking: {q}' },
-        hint_q: { ko: 'm9과 m9-p 차이가 뭐예요?', en: 'What’s the difference between M9 and M9-P?' },
+        hint_q: { ko: 'm9과 m9-p 차이가 뭐예요?|배터리가 필요한 바디는?|M6와 M7 차이가 뭐예요?|주미룩스 50 최단거리는?|M3는 배터리 없이 돼요?|SL과 SL2 차이가 뭐예요?|M10-R 화소는?',
+          en: 'What’s the difference between M9 and M9-P?|Which bodies need a battery?|M6 vs M7?|Summilux 50 close focus?|Does the M3 need a battery?|SL vs SL2?|M10-R resolution?' },
         hello: { ko: '라이카 바디·렌즈 사양을 바로 찾아 드려요. 두 모델을 넣으면 다른 점만 골라 비교해 드려요.', en: 'Look up any Leica body or lens spec instantly. Enter two models and I’ll show just what’s different.' },
         try: { ko: '이렇게 물어보세요', en: 'Try asking' },
         more: { ko: '이어서 물어보기', en: 'Ask next' },
@@ -3146,7 +3147,12 @@
     }
 
     function askParse(raw){
-      let text = ` ${String(raw || '').toLowerCase()} `;
+      // 띄어쓰기 맞추기 (2026-11-16 사장님 '띄어쓰기로 되고 안 되고'): 영문·숫자와 한글 사이를 띄움
+      // "m9과m9-p차이" → "m9 과 m9-p 차이", "주미룩스50최단거리" → "주미룩스 50 최단거리". 단 1세대·8매·6군·50주년은 붙여 둠
+      let text = ` ${String(raw || '').toLowerCase()
+        .replace(/([가-힣])(?=[a-z0-9])/g, '$1 ')
+        .replace(/([a-z0-9])(?!세대|군|매|주년|년|형)(?=[가-힣])/g, '$1 ')} `;
+      const wantsCompare = /차이|다른\s*점|비교|\bvs\b|versus|differ|compare/.test(text);
       let field = '';
       for(const [key, pattern] of ASK_WORDS){
         if(pattern.test(text)){ field = key; text = text.replace(pattern, ' '); break; }
@@ -3155,14 +3161,30 @@
       // 묻는 말끝·조건 낱말 ("배터리 없이 돼?", "필요해?", "does it need")
       text = text.replace(/필요(해요?|한가요|하나요|한지)?|없이|없어도|돼요?|되나요|되는지|있어요?|있나요|쓰나요|써요?|\b(need(s)?|without|do(es)?|it|work(s)?|a|an|is|have|has)\b/g, ' ');
       const parts = text
-        .split(/\s(?:vs\.?|versus|and|or|대)\s|[,&]|(?<=\S)(?:이랑|랑|하고|와|과)\s/)
+        .split(/\s(?:vs\.?|versus|and|or|대|와|과|랑|이랑|하고)\s|[,&]|(?<=\S)(?:이랑|랑|하고|와|과)\s/)
         .map(part => part.replace(/(은|는|이|가|의|을|를|에서|중에?)\s*$/, '').trim())
         .filter(Boolean);
       const models = [];
-      parts.forEach(part => {
-        const hit = askFindModel(part);
+      // 뒤쪽이 짧으면 앞 모델 이름을 이어받음: "summicron 35 v4 vs asph" → "summicron 35 asph"
+      const family = entity => entity ? entity.id.split(':').slice(0, 4).join(':') : '';
+      parts.forEach((part, i) => {
+        let hit = askFindModel(part);
+        if(i > 0 && models[0] && family(hit) !== family(models[0])){
+          const prefix = parts[0].split(/\s+/).slice(0, -1).join(' ');
+          const carried = prefix ? askFindModel(`${prefix} ${part}`) : null;
+          if(carried && family(carried) === family(models[0]) && carried.id !== models[0].id) hit = carried;
+        }
         if(hit && !models.some(m => m.id === hit.id)) models.push(hit);
       });
+      // 비교인데 한 모델만 찾았으면 낱말마다 다시 ("m9 m9p 차이")
+      if(wantsCompare && models.length < 2){
+        const byWord = [];
+        parts.join(' ').split(/\s+/).filter(word => word.length >= 2).forEach(word => {
+          const hit = askFindModel(word);
+          if(hit && !byWord.some(m => m.id === hit.id)) byWord.push(hit);
+        });
+        if(byWord.length >= 2) models.splice(0, models.length, ...byWord);
+      }
       if(!models.length && parts.length > 1){
         const hit = askFindModel(parts.join(' '));
         if(hit) models.push(hit);
@@ -3194,11 +3216,12 @@
       const exact = all.filter(entity => askBareName(entity) === query).sort((x, y) => (x.parent ? 1 : 0) - (y.parent ? 1 : 0) || byActive(x, y))[0];
       if(exact) return exact;
       const focal = (query.match(/\b(\d{2,3})\b(?!\.)/) || [])[1];
-      const aperture = (query.match(/(?:^|\s|f)(0\.95|1\.0|1\.2|1\.25|1\.4|1\.5|1\.7|1\.9|2\.0|2\.4|2\.5|2\.8|3\.4|3\.5|3\.8|4\.0|5\.6)\b/) || [])[1];
+      const aperture = (query.match(/(?:^|\s|f\/?)(0\.95|1\.0|1\.2|1\.25|1\.4|1\.5|1\.7|1\.9|2\.0|2\.4|2\.5|2\.8|3\.4|3\.5|3\.8|4\.0|5\.6)\b/) || [])[1];
       const suggested = suggestEntities(part, 5).map(item => item.entity).filter(askIsModel);
       if(focal && aperture){
         const ap = aperture.replace(/\.0$/, '');
-        const fits = entity => new RegExp(`\\b${focal}mm f/${ap.replace('.', '\\.')}\\b`).test(entity.name || '');
+        // f/1 이 f/1.2 에 맞지 않게: 뒤에 숫자·점이 더 붙으면 다른 조리개
+        const fits = entity => new RegExp(`\\b${focal}mm f/${ap.replace('.', '\\.')}(\\.0)?(?![.\\d])`).test(entity.name || '');
         const wantMount = /(^|\s)m(\s|$)/.test(query) ? 'M' : /(^|\s)r(\s|$)/.test(query) ? 'R' : /(^|\s)sl(\s|$)/.test(query) ? 'SL' : '';
         const lens = all.filter(entity => fits(entity) && !entity.parent && (!wantMount || entity.mount === wantMount)).sort(byActive)[0]
           || suggested.find(fits)
@@ -3456,7 +3479,7 @@
         if(tab) show(tab.dataset.askTab);
       });
       openButton.addEventListener('click', () => { hideHint(); show('ask'); });
-      // 버튼 위 말풍선: 1초 뒤 뜸 (2026-11-16 사장님 3초 → 1초). 누르면 그 질문으로 바로 답, ×나 한 번 써 보면 이 브라우저에서는 다시 안 뜸
+      // 버튼 위 말풍선: 1초 뒤 뜸 (2026-11-16 사장님 3초 → 1초). 누르면 그 질문으로 바로 답, ×를 누르면 이 브라우저에서는 다시 안 뜸
       let hint = null;
       function hideHint(remember){
         if(!hint) return;
@@ -3470,7 +3493,14 @@
       if(!hintDone){
         setTimeout(() => {
           if(dialog.open || openButton.hidden) return;
-          const q = ux('ask.hint_q', 'What’s the difference between M9 and M9-P?');
+          // 새로고침할 때마다 다음 질문 (2026-11-16 사장님)
+          const list = ux('ask.hint_q', 'What’s the difference between M9 and M9-P?').split('|').filter(Boolean);
+          let turn = 0;
+          try{
+            turn = (Number(localStorage.getItem('cb_ask_hint_i')) + 1) % list.length || 0;
+            localStorage.setItem('cb_ask_hint_i', String(turn));
+          }catch(error){ turn = Math.floor(Math.random() * list.length); }
+          const q = list[turn];
           hint = document.createElement('div');
           hint.className = 'ask-hint';
           hint.setAttribute('role', 'button');
@@ -3480,7 +3510,7 @@
           requestAnimationFrame(() => hint && hint.classList.add('is-on'));
           hint.addEventListener('click', event => {
             if(event.target.closest('.ask-hint-close')){ hideHint(true); return; }
-            hideHint(true);
+            hideHint(false);
             dialog.showModal();
             show('ask');
             ask(q);
