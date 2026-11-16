@@ -3147,7 +3147,12 @@
     }
 
     function askParse(raw){
-      let text = ` ${String(raw || '').toLowerCase()} `;
+      // 띄어쓰기 맞추기 (2026-11-16 사장님 '띄어쓰기로 되고 안 되고'): 영문·숫자와 한글 사이를 띄움
+      // "m9과m9-p차이" → "m9 과 m9-p 차이", "주미룩스50최단거리" → "주미룩스 50 최단거리". 단 1세대·8매·6군·50주년은 붙여 둠
+      let text = ` ${String(raw || '').toLowerCase()
+        .replace(/([가-힣])(?=[a-z0-9])/g, '$1 ')
+        .replace(/([a-z0-9])(?!세대|군|매|주년|년|형)(?=[가-힣])/g, '$1 ')} `;
+      const wantsCompare = /차이|다른\s*점|비교|\bvs\b|versus|differ|compare/.test(text);
       let field = '';
       for(const [key, pattern] of ASK_WORDS){
         if(pattern.test(text)){ field = key; text = text.replace(pattern, ' '); break; }
@@ -3156,7 +3161,7 @@
       // 묻는 말끝·조건 낱말 ("배터리 없이 돼?", "필요해?", "does it need")
       text = text.replace(/필요(해요?|한가요|하나요|한지)?|없이|없어도|돼요?|되나요|되는지|있어요?|있나요|쓰나요|써요?|\b(need(s)?|without|do(es)?|it|work(s)?|a|an|is|have|has)\b/g, ' ');
       const parts = text
-        .split(/\s(?:vs\.?|versus|and|or|대)\s|[,&]|(?<=\S)(?:이랑|랑|하고|와|과)\s/)
+        .split(/\s(?:vs\.?|versus|and|or|대|와|과|랑|이랑|하고)\s|[,&]|(?<=\S)(?:이랑|랑|하고|와|과)\s/)
         .map(part => part.replace(/(은|는|이|가|의|을|를|에서|중에?)\s*$/, '').trim())
         .filter(Boolean);
       const models = [];
@@ -3164,6 +3169,13 @@
         const hit = askFindModel(part);
         if(hit && !models.some(m => m.id === hit.id)) models.push(hit);
       });
+      // 비교인데 한 모델만 찾았으면 낱말마다 다시 ("m9 m9p 차이")
+      if(wantsCompare && models.length < 2){
+        parts.join(' ').split(/\s+/).filter(word => word.length >= 2).forEach(word => {
+          const hit = askFindModel(word);
+          if(hit && !models.some(m => m.id === hit.id)) models.push(hit);
+        });
+      }
       if(!models.length && parts.length > 1){
         const hit = askFindModel(parts.join(' '));
         if(hit) models.push(hit);
