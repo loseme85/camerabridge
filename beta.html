@@ -3165,8 +3165,15 @@
         .map(part => part.replace(/(은|는|이|가|의|을|를|에서|중에?)\s*$/, '').trim())
         .filter(Boolean);
       const models = [];
-      parts.forEach(part => {
-        const hit = askFindModel(part);
+      // 뒤쪽이 짧으면 앞 모델 이름을 이어받음: "summicron 35 v4 vs asph" → "summicron 35 asph"
+      const family = entity => entity ? entity.id.split(':').slice(0, 4).join(':') : '';
+      parts.forEach((part, i) => {
+        let hit = askFindModel(part);
+        if(i > 0 && models[0] && family(hit) !== family(models[0])){
+          const prefix = parts[0].split(/\s+/).slice(0, -1).join(' ');
+          const carried = prefix ? askFindModel(`${prefix} ${part}`) : null;
+          if(carried && family(carried) === family(models[0]) && carried.id !== models[0].id) hit = carried;
+        }
         if(hit && !models.some(m => m.id === hit.id)) models.push(hit);
       });
       // 비교인데 한 모델만 찾았으면 낱말마다 다시 ("m9 m9p 차이")
