@@ -1,0 +1,26 @@
+name: 신규 매장 공개 접속 확인
+on:
+  push:
+    branches: ['site-test/**']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 공개 목록과 상품 확인
+        shell: python
+        run: |
+          import urllib.request, time, json
+          urls = [
+              "https://www.cameraoccasion.com/robots.txt",
+              "https://www.cameraoccasion.com/leica/",
+              "https://www.cameraoccasion.com/leica-m-p-typ-240-zilver-10-772-occasion.html",
+          ]
+          for url in urls:
+              time.sleep(2)
+              req = urllib.request.Request(url, headers={"User-Agent": "CameraBridge/1.0 (+https://camerabridge.io)"})
+              with urllib.request.urlopen(req, timeout=35) as response:
+                  body = response.read().decode("utf-8", "replace")
+                  print(json.dumps({"url": url, "status": response.status, "bytes": len(body), "product_data": '"@type": "Product"' in body, "product_list": "product-block" in body}))
