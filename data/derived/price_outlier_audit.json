@@ -1,52 +1,62 @@
 {
-"total": 535,
+"total": 539,
 "by_hint": {
-"accessory": 55,
-"set": 88,
+"accessory": 58,
+"set": 89,
 "check": 337,
 "edition": 52,
 "defect": 3
 },
 "new": [
 {
-"url": "https://fotohandeldelfshaven.nl/product/leica-leitz-elmar-2-8-50mm-ltm/",
-"entity": "leica:lens:elmar-m:50:f2.8:v1",
-"ratio": 0.36,
-"category": "Lens",
-"title": "Leica Leitz Elmar 2.8 / 50mm LTM",
-"price": "€150",
-"source": "Fotohandel Delfshaven (네덜란드)",
-"hint": "check"
+"url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23U2440",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 3.44,
+"category": "Accessory",
+"title": "Leica hood 12585H 35-50MM + cap 14033",
+"price": "€95",
+"source": "Newoldcamera (이탈리아)",
+"hint": "accessory"
 },
 {
-"url": "https://cameranonaniwa.jp/shop/g/g2222240034548/",
-"entity": "leica:lens:elmar:90:unspecified",
-"ratio": 2.59,
-"category": "Lens",
-"title": "Leica Elmar L 90/4 All Chrome",
-"price": "¥99,800",
+"url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23U2492",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 3.62,
+"category": "Accessory",
+"title": "Leica hood 12585H 35-50MM + cap 14033",
+"price": "€100",
+"source": "Newoldcamera (이탈리아)",
+"hint": "accessory"
+},
+{
+"url": "https://www.sanpou.ne.jp/shopdetail/000000025051/",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 4.08,
+"category": "Accessory",
+"title": "Leica Hood 12585 + Cap 14033",
+"price": "¥19,800",
+"source": "三宝カメラ (일본)",
+"hint": "accessory"
+},
+{
+"url": "https://cameranonaniwa.jp/shop/g/g2222240073752/",
+"entity": "leica:acc:macro:14158",
+"ratio": 2.78,
+"category": "Accessory",
+"title": "Leica 14158 RLens for ノ純正接写 Ring(中間 Ring)",
+"price": "¥22,000",
 "source": "카메라노나니와 (일본)",
 "hint": "check"
 },
 {
-"url": "https://fotohandeldelfshaven.nl/product/leica-elmarit-90mm-f-2-8-chrome-m-mount/",
-"entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 0.43,
-"category": "Lens",
-"title": "Leica Elmarit 90mm f2.8 chrome M-mount",
-"price": "€200",
-"source": "Fotohandel Delfshaven (네덜란드)",
-"hint": "check"
-},
-{
-"url": "https://occasion.fototrade.lu/boutique/objectifs-materiel-occasion/leica-objectifs-materiel-occasion-materiel-occasion/leica-r-35-f20-2/",
-"entity": "leica:lens:summicron-r:35",
-"ratio": 0.43,
-"category": "Lens",
-"title": "Leica R 35mm f2.0 Summicron-R",
-"price": "EUR 499",
+"url": "https://occasion.fototrade.lu/boutique/appareils-photos-materiel-occasion/reflex-argentique-appareils-photos-materiel-occasion/leica-reflex-argentique-appareils-photos-materiel-occasion/leica-r3-mot-winder/",
+"entity": "leica:body:r3:standard",
+"ratio": 0.36,
+"category": "Body",
+"title": "Leica R3 MOT + Winder",
+"price": "EUR 69",
 "source": "Foto Trade Occasion (룩셈부르크)",
-"hint": "check"
+"hint": "set"
 }
 ],
 "items": [
@@ -63,7 +73,7 @@
 {
 "url": "https://classicconnection.com/product/leica-table-top-tripod-14100-leica-ball-socket-head-14110-w-box-mint-ln/",
 "entity": "leica:acc:ball-head:14110",
-"ratio": 2.75,
+"ratio": 2.81,
 "category": "Accessory",
 "title": "Leica Table-top Tripod #14100 & Leica Ball & Socket Head #14110 W/Box",
 "price": "$299",
@@ -181,9 +191,39 @@
 "hint": "check"
 },
 {
+"url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23U2440",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 3.44,
+"category": "Accessory",
+"title": "Leica hood 12585H 35-50MM + cap 14033",
+"price": "€95",
+"source": "Newoldcamera (이탈리아)",
+"hint": "accessory"
+},
+{
+"url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23U2492",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 3.62,
+"category": "Accessory",
+"title": "Leica hood 12585H 35-50MM + cap 14033",
+"price": "€100",
+"source": "Newoldcamera (이탈리아)",
+"hint": "accessory"
+},
+{
+"url": "https://www.sanpou.ne.jp/shopdetail/000000025051/",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 4.08,
+"category": "Accessory",
+"title": "Leica Hood 12585 + Cap 14033",
+"price": "¥19,800",
+"source": "三宝カメラ (일본)",
+"hint": "accessory"
+},
+{
 "url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23U2439",
 "entity": "leica:acc:hood-cap:14033",
-"ratio": 2.51,
+"ratio": 4.35,
 "category": "Accessory",
 "title": "Leica hood 12585H 35-50MM + cap 14033",
 "price": "€120",
@@ -193,7 +233,7 @@
 {
 "url": "https://oneofmanycameras.com/products/leica-lens-hood-12524-for-35mm-f2-summicron-v4-with-14033-cap",
 "entity": "leica:acc:hood-cap:14033",
-"ratio": 4.2,
+"ratio": 7.27,
 "category": "Accessory",
 "title": "Leica Lens Hood 12524 for 35mm f2 Summicron v4 with 14033 cap",
 "price": "DKK 1,500",
@@ -548,6 +588,16 @@
 "title": "Leica Center Ring R (14135)",
 "price": "€8",
 "source": "Kamerastore (핀란드)",
+"hint": "check"
+},
+{
+"url": "https://cameranonaniwa.jp/shop/g/g2222240073752/",
+"entity": "leica:acc:macro:14158",
+"ratio": 2.78,
+"category": "Accessory",
+"title": "Leica 14158 RLens for ノ純正接写 Ring(中間 Ring)",
+"price": "¥22,000",
+"source": "카메라노나니와 (일본)",
 "hint": "check"
 },
 {
@@ -2101,9 +2151,19 @@
 "hint": "check"
 },
 {
+"url": "https://occasion.fototrade.lu/boutique/appareils-photos-materiel-occasion/reflex-argentique-appareils-photos-materiel-occasion/leica-reflex-argentique-appareils-photos-materiel-occasion/leica-r3-mot-winder/",
+"entity": "leica:body:r3:standard",
+"ratio": 0.36,
+"category": "Body",
+"title": "Leica R3 MOT + Winder",
+"price": "EUR 69",
+"source": "Foto Trade Occasion (룩셈부르크)",
+"hint": "set"
+},
+{
 "url": "https://www.newoldcamera.com/Scheda.aspx?Codice=24C1025",
 "entity": "leica:body:r3:standard",
-"ratio": 3.16,
+"ratio": 3.17,
 "category": "Body",
 "title": "Leica R3 ELECTRONIC BLACK",
 "price": "€600",
@@ -2113,7 +2173,7 @@
 {
 "url": "https://photoqueen.gr/index.php?route=product/product&product_id=7986",
 "entity": "leica:body:r3:standard",
-"ratio": 3.16,
+"ratio": 3.17,
 "category": "Body",
 "title": "Leica R3 ELECTRONIC BODY",
 "price": "€600",
@@ -2883,7 +2943,7 @@
 {
 "url": "https://mkkcamera.com/products/leitz-leica-elmarit-m-28mm-f2-8-ver-iii-lens-yr-1982-canada-11804-23964",
 "entity": "leica:lens:elmarit-m:28:v3",
-"ratio": 0.35,
+"ratio": 0.34,
 "category": "Lens",
 "title": "LEITZ Leica Elmarit-M 28mm/F2.8 Ver.III Lens Yr.1982 Canada 11804",
 "price": "HK$2,800",
@@ -2961,6 +3021,26 @@
 "hint": "check"
 },
 {
+"url": "https://www.used-photo.de/product/leica-elmarit-m-90mm-f-28-s-n-2086445-iufoo/",
+"entity": "leica:lens:elmarit-m:90:unspecified",
+"ratio": 0.42,
+"category": "Lens",
+"title": "Leica Elmarit -M 90mm f2.8",
+"price": "€199",
+"source": "used-photo.de (독일)",
+"hint": "check"
+},
+{
+"url": "https://fk-secondhand.com/shop/leica-elmarit-90mm-f-28-mit-otzfo-16464k-adapter-2126251/",
+"entity": "leica:lens:elmarit-m:90:unspecified",
+"ratio": 0.42,
+"category": "Lens",
+"title": "Leica Elmarit 90mm f/2.8 mit OTZFO/16464K Adapter",
+"price": "EUR 199",
+"source": "FK Second Hand (오스트리아)",
+"hint": "accessory"
+},
+{
 "url": "https://leica-store-heidelberg.de/products/leitz-wetzlar-elmarit-f2-8-90mm",
 "entity": "leica:lens:elmarit-m:90:unspecified",
 "ratio": 0.43,
@@ -2981,29 +3061,9 @@
 "hint": "check"
 },
 {
-"url": "https://www.used-photo.de/product/leica-elmarit-m-90mm-f-28-s-n-2086445-iufoo/",
-"entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 0.43,
-"category": "Lens",
-"title": "Leica Elmarit -M 90mm f2.8",
-"price": "€199",
-"source": "used-photo.de (독일)",
-"hint": "check"
-},
-{
-"url": "https://fk-secondhand.com/shop/leica-elmarit-90mm-f-28-mit-otzfo-16464k-adapter-2126251/",
-"entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 0.43,
-"category": "Lens",
-"title": "Leica Elmarit 90mm f/2.8 mit OTZFO/16464K Adapter",
-"price": "EUR 199",
-"source": "FK Second Hand (오스트리아)",
-"hint": "accessory"
-},
-{
 "url": "https://classic.leica-camera.com/en/ELMARIT-M-1-2.8-90-mm/11807SH-3824199",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 2.52,
+"ratio": 2.51,
 "category": "Lens",
 "title": "Leica ELMARIT-M 90mm f2.8",
 "price": "CHF 1,090",
@@ -3033,7 +3093,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Elmarit-M-2.8-90mm/11807SH-3824996",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 2.77,
+"ratio": 2.76,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f2.8",
 "price": "€1,295",
@@ -3041,19 +3101,9 @@
 "hint": "check"
 },
 {
-"url": "https://www.leicastoremanchester.com/products/leica-90mm-f-2-8-elmarit-m-chrome-3776599",
-"entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 2.8,
-"category": "Lens",
-"title": "Leica 90mm f/2.8 Elmarit-M, Chrome",
-"price": "£1,095",
-"source": "Leica Store Manchester (영국)",
-"hint": "check"
-},
-{
 "url": "https://classic.leica-camera.com/en/ELMARIT-M-1-2-8-90-mm-silbern-verchromt/11808SH-3856269",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 3.21,
+"ratio": 3.2,
 "category": "Lens",
 "title": "Leica ELMARIT-M 90mm f2.8,silbern verchromt",
 "price": "€1,500",
@@ -3063,7 +3113,7 @@
 {
 "url": "https://www.cameraobscuraelburg.nl/product/leica-elmarit-90mm-f2-8-titanium/",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 3.63,
+"ratio": 3.62,
 "category": "Lens",
 "title": "Leica Elmarit 90mm f2.8 Titanium",
 "price": "€1,700",
@@ -3073,7 +3123,7 @@
 {
 "url": "https://schouten-select.com/products/leica-90mm-f2-8-elmarit-m-titanium-3",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 4.59,
+"ratio": 4.58,
 "category": "Lens",
 "title": "Leica 90mm f2.8 Elmarit-M Titanium",
 "price": "€2,150",
@@ -3083,7 +3133,7 @@
 {
 "url": "https://schouten-select.com/products/leica-90mm-f2-8-elmarit-m-titanium",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 4.59,
+"ratio": 4.58,
 "category": "Lens",
 "title": "Leica 90mm f2.8 Elmarit-M Titanium",
 "price": "€2,150",
@@ -3093,7 +3143,7 @@
 {
 "url": "https://www.panajou.fr/objectifs-photo-d-occasion/leica-elmarit-m-90mm-f-2-8-silver-occasion_p42382",
 "entity": "leica:lens:elmarit-m:90:unspecified",
-"ratio": 7.48,
+"ratio": 7.46,
 "category": "Lens",
 "title": "Leica Elmarit-M 90mm f/2.8 Silver",
 "price": "€3,500",
@@ -3713,7 +3763,7 @@
 {
 "url": "https://j-camera.net/itemp.php?id=209754283",
 "entity": "leica:lens:summar:50",
-"ratio": 11.24,
+"ratio": 11.25,
 "category": "Lens",
 "title": "Leica Summar-L 50mm f2.0 (ヒョットコ) Summar",
 "price": "¥770,000",
@@ -3723,7 +3773,7 @@
 {
 "url": "https://www.fujikoshi-camera.com/shopdetail/000000022429/006/X/page3/order/",
 "entity": "leica:lens:summar:50",
-"ratio": 11.24,
+"ratio": 11.25,
 "category": "Lens",
 "title": "Leica Summar-L 50mm f2.0 (ヒョットコ)",
 "price": "¥770,000",
@@ -4183,7 +4233,7 @@
 {
 "url": "https://www.ekangsan.com/product/detail.html?product_no=4440&cate_no=163&display_group=1",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 19.99,
+"ratio": 19.98,
 "category": "Lens",
 "title": "Leica Summicron 50mm F2 블렉페인트 시리얼 No, 1885... (5NO161002)",
 "price": "41,975,000원",
@@ -4883,7 +4933,7 @@
 {
 "url": "https://leica-storebando.co.kr/product/위탁-m6m-5014-summilux-4세대-150주년-edition/21630/category/442/display/1/",
 "entity": "leica:lens:summilux-m:50:v4",
-"ratio": 5.1,
+"ratio": 5.04,
 "category": "Lens",
 "title": "[위탁] M6+M 50/1.4 Summilux 4세대 150주년 Edition",
 "price": "19,800,000원",
@@ -5193,7 +5243,7 @@
 {
 "url": "https://occasion.fototrade.lu/boutique/objectifs-materiel-occasion/leica-objectifs-materiel-occasion-materiel-occasion/leica-r-35-70-f35/",
 "entity": "leica:lens:vario-elmar-r:35-70",
-"ratio": 0.36,
+"ratio": 0.37,
 "category": "Lens",
 "title": "Leica R 35-70mm f3.5",
 "price": "EUR 199",
@@ -5203,7 +5253,7 @@
 {
 "url": "https://www.roter-punkt-kamera.de/product/leica-vario-elmar-r-macro-objektiv-35-70-mm-f4-rom/",
 "entity": "leica:lens:vario-elmar-r:35-70",
-"ratio": 2.68,
+"ratio": 2.77,
 "category": "Lens",
 "title": "Leica Vario-Elmar-R MACRO 35-70mm f4.0 ROM",
 "price": "€1,499",
