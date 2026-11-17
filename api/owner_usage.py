@@ -265,19 +265,40 @@ def _return_rate(first: int, back: int) -> str:
 
 
 def _return_bars(stats: dict[str, list[int]], days: int) -> str:
-    """날짜별 재방문율 = 재방문 ÷ (첫 방문 + 재방문). 이전 방문 확인 불가는 분모에서 뺀다."""
+    """날짜별 재방문율 꺾은선 = 재방문 ÷ (첫 방문 + 재방문). 이전 방문 확인 불가는 분모에서 뺀다.
+
+    세로축은 기간 중 가장 높은 날 기준(작은 차이도 보이게). 확인된 방문이 없는 날은 점을 찍지 않고 선을 끊는다.
+    선은 늘어나는 SVG, 점·글자는 HTML이라 화면 폭이 바뀌어도 글자 크기는 그대로.
+    """
     today = dt.datetime.now(KST).date()
-    bars = []
-    for i in range(days - 1, -1, -1):
-        d = str(today - dt.timedelta(days=i))
+    labels = [str(today - dt.timedelta(days=i)) for i in range(days - 1, -1, -1)]
+    rates = []
+    for d in labels:
+        first, back, _ = stats.get(d, [0, 0, 0])
+        rates.append(back / (first + back) if first + back else None)
+    top = max([r for r in rates if r is not None] + [0.01])
+    xy = [((i + 0.5) / len(labels) * 100, 18 + 72 * (1 - r / top)) if r is not None else None for i, r in enumerate(rates)]
+    lines, run = [], []
+    for point in xy + [None]:
+        if point:
+            run.append(point)
+        elif run:
+            if len(run) > 1:
+                lines.append("<polyline points='" + " ".join(f"{x:.2f},{y:.2f}" for x, y in run) + "'/>")
+            run = []
+    points, days_row = [], []
+    for i, (d, point) in enumerate(zip(labels, xy)):
         first, back, unknown = stats.get(d, [0, 0, 0])
-        rate = back / (first + back) if first + back else 0
-        tip = f"{d}: 재방문 {back} / 확인된 방문 {first + back} (확인 불가 {unknown})"
-        bars.append(f"<div class=bar title='{_esc(tip)}'><a href='?date={_esc(d)}'><span style='height:{round(rate * 100)}%'></span>"
-                    f"<b>{_return_rate(first, back) if first + back else ''}</b><i>{_esc(d[-5:])}</i></a></div>")
+        if point:
+            tip = f"{d}: 재방문율 {_return_rate(first, back)} · 재방문 {back} / 확인된 방문 {first + back} (확인 불가 {unknown})"
+            points.append(f"<a class=pt href='?date={_esc(d)}' title='{_esc(tip)}' style='left:{point[0]:.2f}%;top:{point[1]:.2f}%'>"
+                          f"<b>{_return_rate(first, back)}</b></a>")
+        shown = days <= 14 or (len(labels) - 1 - i) % 5 == 0
+        days_row.append(f"<i>{_esc(d[-5:]) if shown else ''}</i>")
     return ("<section class='card wide'><h2>날짜별 재방문율</h2>"
-            "<p class=muted>재방문 ÷ (첫 방문 + 재방문). 이전 방문 확인 불가는 뺌. 방문 기준(같은 날 30분 넘게 비고 다시 와도 재방문)이라 사람 수·7일 유지율과 다름. 2026-11-11 브라우저 식별 시작</p>"
-            f"<div class='bars rate'>{''.join(bars)}</div></section>")
+            "<p class=muted>재방문 ÷ (첫 방문 + 재방문). 이전 방문 확인 불가는 뺌. 방문 기준(같은 날 30분 넘게 비고 다시 와도 재방문)이라 사람 수·7일 유지율과 다름. 2026-11-11 브라우저 식별 시작. 점을 누르면 그날 보기</p>"
+            f"<div class=rate-line><svg viewBox='0 0 100 100' preserveAspectRatio=none aria-hidden=true>{''.join(lines)}</svg>{''.join(points)}</div>"
+            f"<div class=rate-days>{''.join(days_row)}</div></section>")
 
 
 def _step_href(kind: str, s: dict) -> str | None:
@@ -384,6 +405,7 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 .days td a{{color:var(--text)}}.days tr.on td{{font-weight:700}}.bar a{{display:contents;color:inherit}}
 .bars{{display:flex;gap:4px;align-items:flex-end;height:130px}}.bar{{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}}
 .bar span{{display:block;width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:1px}}.bar b{{font-size:11px;order:-1}}.bar i{{font-size:10px;color:var(--muted);font-style:normal;white-space:nowrap}}
+.rate-line{{position:relative;height:140px}}.rate-line svg{{position:absolute;inset:0;width:100%;height:100%;overflow:visible}}.rate-line polyline{{fill:none;stroke:var(--accent);stroke-width:2;vector-effect:non-scaling-stroke}}.rate-line .pt{{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--accent);color:var(--text)}}.rate-line .pt b{{position:absolute;bottom:13px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap}}.rate-days{{display:flex}}.rate-days i{{flex:1;min-width:0;text-align:center;font-size:10px;color:var(--muted);font-style:normal;white-space:nowrap}}
 .note{{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:12px;font-size:13px}}a{{color:var(--accent)}}
 @media (max-width:900px){{
 .visit-table,.visit-table tbody{{display:block}}.visit-table thead{{display:none}}
