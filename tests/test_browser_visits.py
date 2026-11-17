@@ -140,3 +140,24 @@ def test_date_filter_and_clipped_session_use_earlier_complete_history():
 def test_unmatched_history_does_not_guess_first_visit():
     history = {BROWSER: {"visits": 10, "sessions": []}}
     assert "확인 불가" in owner_usage._prior_visit_badge({"vid": BROWSER, "start": event()["created_at"]}, history)
+
+
+def test_daily_return_rate_counts_every_visit_and_skips_unknown(monkeypatch):
+    import datetime as dt
+    monkeypatch.setattr(owner_usage.dt, "datetime", type("D", (dt.datetime,), {"now": classmethod(lambda c, tz=None: dt.datetime(2026, 11, 12, 23, tzinfo=tz))}))
+    # 하루 70방문(60행 표시 상한보다 많음): 첫 방문 60, 재방문 7, 확인 불가 3 → 7/67
+    rows, history = [], {}
+    for i in range(70):
+        vid = f"{i:032x}"
+        at = f"2026-11-12T{8 + i // 10:02d}:{i % 10 * 5:02d}:00+09:00"
+        rows.append(event(sid=f"v{i:07d}", vid=vid, created_at=at))
+        if i < 60:
+            history[vid] = {"sessions": [{"first_seen": at, "last_seen": at}]}
+        elif i < 67:
+            history[vid] = {"sessions": [{"first_seen": "2026-11-11T09:00:00+09:00", "last_seen": "2026-11-11T09:00:00+09:00"},
+                                         {"first_seen": at, "last_seen": at}]}
+    stats = owner_usage.return_stats(owner_usage.visits(rows), history)
+    assert stats["2026-11-12"] == [60, 7, 3]
+    page = owner_usage.render(rows, [], 7, False, history=history)
+    assert "날짜별 재방문율" in page and "10%" in page and "재방문율 (7/67)" in page
+    assert owner_usage._return_rate(0, 0) == "-"
