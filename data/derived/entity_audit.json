@@ -859,12 +859,6 @@
    "example": "LEICA M6 EIN STUCK sn.2300"
   },
   {
-   "a": "leica:body:m-e",
-   "b": "leica:feature:frameline-28",
-   "count": 12,
-   "example": "Leica M-E Gray [신형센서 교체]"
-  },
-  {
    "a": "leica:feature:eyes",
    "b": "leica:lens:summaron:35:f2.8-eyes",
    "count": 12,
@@ -911,6 +905,12 @@
    "b": "leica:feature:mechanical",
    "count": 12,
    "example": "LEICA M6J 40 Years Edition sn.1963"
+  },
+  {
+   "a": "leica:body:m-e",
+   "b": "leica:feature:frameline-28",
+   "count": 11,
+   "example": "Leica M-E Gray [신형센서 교체]"
   },
   {
    "a": "leica:feature:safari",
