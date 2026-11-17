@@ -4453,9 +4453,9 @@
       saveState.pending = null;
       if(url && !saveState.urls.has(url)) toggleSave(url);
       if(wantState.pending){
+        const pending = wantState.pending;
         wantState.pending = null;
-        const form = document.querySelector('.want-form');
-        if(form) submitWant(form);
+        await submitWantPayload(pending);
       }
     }
 
@@ -4569,7 +4569,8 @@
           if(html && !inline){
             // 입력 중(창 안에 커서)이면 다시 그리지 않음 — 매물을 더 불러올 때마다 다시 그려 입력하던 금액이 지워지던 것.
             // 신청 결과·안내 문구가 바뀌었을 때는 다시 그림
-            const typing = pop.contains(document.activeElement) && wantState.message === wantState.popMessage;
+            const currentForm = pop.querySelector('.want-form');
+            const typing = currentForm && currentForm.dataset.wantContext === wantState.context && pop.contains(document.activeElement) && wantState.message === wantState.popMessage;
             if(!typing && html !== wantState.popHtml){
               pop.innerHTML = `<section class="value-calc want-box">${html}</section>`;
               wantState.popHtml = html; wantState.popMessage = wantState.message;
@@ -4641,12 +4642,27 @@
     }
 
     // ── 원하는 매물 알림: 모델·최소 등급·도착 총액 상한 (세금은 서버가 화면과 같은 규칙으로 계산) ──
-    const wantState = { grade: '', max: '', message: '', pending: null, items: null, html: '', inline: false };
+    const wantState = { context: '', grade: '', max: null, message: '', pending: null, items: null, html: '', inline: false };
+    function wantContext(entity, currency, dest){
+      return JSON.stringify([entity, currency, dest]);
+    }
+
+    function rememberWantDraft(form){
+      if(!form || form.dataset.wantContext !== wantState.context) return;
+      wantState.grade = form.querySelector('[data-want-grade]').value;
+      wantState.max = form.querySelector('[data-want-max]').value;
+    }
+
     function renderWantForm(entity, suggest){
+      const context = wantContext(entity.id, uiState.currency, uiState.destination);
+      if(wantState.context !== context){
+        wantState.context = context;
+        wantState.grade = ''; wantState.max = null; wantState.message = '';
+      }
       const grade = wantState.grade || (['S', 'A', 'B', 'C'].includes(calcState.grade) ? calcState.grade : 'B');
-      const max = wantState.max || (suggest ? String(roundEstimate(suggest, uiState.currency)) : '');
+      const max = wantState.max ?? (suggest ? String(roundEstimate(suggest, uiState.currency)) : '');
       const options = ['S', 'A', 'B', 'C'].map(g => `<option value="${g}"${g === grade ? ' selected' : ''}>${escapeHtml(wx('grade', { g }))}</option>`).join('');
-      return `<div class="want-form" data-want-entity="${escapeHtml(entity.id)}" data-want-name="${escapeHtml(entity.name || entity.id)}">
+      return `<div class="want-form" data-want-context="${escapeHtml(context)}" data-want-currency="${escapeHtml(uiState.currency)}" data-want-dest="${escapeHtml(uiState.destination)}" data-want-entity="${escapeHtml(entity.id)}" data-want-name="${escapeHtml(entity.name || entity.id)}">
           <h4>${escapeHtml(wx('title'))}</h4>
           <p>${escapeHtml(wx('note'))}</p>
           <div class="want-row">
@@ -4663,21 +4679,32 @@
     async function submitWant(form){
       const grade = form.querySelector('[data-want-grade]').value;
       const max = Number(form.querySelector('[data-want-max]').value);
-      wantState.grade = grade; wantState.max = String(form.querySelector('[data-want-max]').value || '');
+      rememberWantDraft(form);
       if(!(max > 0)){ wantState.message = escapeHtml(wx('bad')); renderValueCalc(); return; }
       const payload = { action: 'want', entity: form.dataset.wantEntity, name: form.dataset.wantName, grade, max_total: max,
-                        currency: uiState.currency, dest: uiState.destination };
+                        currency: form.dataset.wantCurrency, dest: form.dataset.wantDest };
+      return submitWantPayload(payload);
+    }
+
+    async function submitWantPayload(payload){
+      const context = wantContext(payload.entity, payload.currency, payload.dest);
       const loginForWant = () => { wantState.pending = payload; boardState.pendingAlerts = true; openSaveLogin(null, wx('login_prompt')); };
       if(!boardState.member){ loginForWant(); return; }
       const { ok, data } = await boardSend(payload);
       if(!ok){
         if(data && data.error === 'login'){ boardState.member = null; loginForWant(); return; }
+        if(wantState.context !== context) return;
         wantState.message = escapeHtml(wx(data && data.error === 'limit' ? 'limit' : 'bad'));
         renderValueCalc();
         return;
       }
+      wantState.items = null;
+      if(wantState.context !== context){
+        if(!data.alerts) openAlertsConsent();
+        return;
+      }
       const matches = data.matches || [];
-      const list = matches.slice(0, 3).map(m => `<a href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${escapeHtml(m.title || m.url)}</a> · ${escapeHtml(m.grade)} · ${escapeHtml(formatMoney(m.total, uiState.currency))}`).join('<br>');
+      const list = matches.slice(0, 3).map(m => `<a href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${escapeHtml(m.title || m.url)}</a> · ${escapeHtml(m.grade)} · ${escapeHtml(formatMoney(m.total, payload.currency))}`).join('<br>');
       const email = boardState.member && boardState.member.alerts_email;
       wantState.message = '✓ ' + escapeHtml(wx('done', { n: String(matches.length) }))
         + (data.alerts && email ? ' ' + escapeHtml(wx('done_to', { e: email })) : '') + (list ? `<br>${list}` : '')
@@ -4721,6 +4748,11 @@
     }
 
     function bindValueCalc(){
+      const remember = event => {
+        if(event.target.matches('[data-want-max], [data-want-grade]')) rememberWantDraft(event.target.closest('.want-form'));
+      };
+      document.addEventListener('input', remember);
+      document.addEventListener('change', remember);
       document.addEventListener('click', event => {
         const button = event.target.closest('[data-calc-grade]');
         if(!button || button.disabled) return;
