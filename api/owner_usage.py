@@ -190,7 +190,7 @@ def _bars(entries: list[dict], days: int, date: str | None = None) -> str:
     return f"<section class='card wide'><h2>{_esc(title)} 방문</h2><div class=bars>{bars}</div></section>"
 
 
-def _day_table(entries: list[dict], days: int) -> str:
+def _day_table(entries: list[dict], days: int, stats: dict[str, list[int]] | None = None) -> str:
     """날짜별 한 줄: 방문·직접 검색한 방문·판매처 간 방문·많이 온 곳. 날짜를 누르면 그날 보기."""
     today = dt.datetime.now(KST).date()
     by_day: dict[str, list[dict]] = collections.defaultdict(list)
@@ -205,9 +205,11 @@ def _day_table(entries: list[dict], days: int) -> str:
         clicked = {visitor_key(e) for e in es if any(not str(c.get("host") or "").startswith("@") for c in e.get("clicks", []))}
         firsts = {visitor_key(e): e for e in sorted(es, key=lambda e: e.get("created_at", ""), reverse=True)}.values()
         top = ", ".join(f"{n} {c}" for n, c in collections.Counter(_ref_name(e.get("referrer"), e.get("landing")) for e in firsts).most_common(3))
+        first, back, _ = (stats or {}).get(d, [0, 0, 0])
         rows.append(f"<tr><td class=nowrap><a href='?date={d}'>{d[5:]}</a></td><td class=n>{len(sids)}</td><td class=n>{len(typed)}</td>"
-                    f"<td class=n>{len(clicked)}</td><td><small>{_esc(top) or '-'}</small></td></tr>")
-    head = "<tr><td class=muted>날짜</td><td class='muted n'>방문</td><td class='muted n'>직접 검색</td><td class='muted n'>판매처로</td><td class=muted>많이 온 곳</td></tr>"
+                    f"<td class=n>{len(clicked)}</td><td class=n>{_return_rate(first, back)}</td><td><small>{_esc(top) or '-'}</small></td></tr>")
+    head = ("<tr><td class=muted>날짜</td><td class='muted n'>방문</td><td class='muted n'>직접 검색</td><td class='muted n'>판매처로</td>"
+            "<td class='muted n'>재방문율</td><td class=muted>많이 온 곳</td></tr>")
     return f"<section class='card wide days'><h2>날짜별 (날짜를 누르면 그날 하루)</h2><table>{head}{''.join(rows)}</table></section>"
 
 
@@ -224,8 +226,8 @@ def load_browser_history(entries: list[dict]) -> dict[str, dict] | None:
         return None
 
 
-def _prior_visit_badge(v: dict, history: dict[str, dict] | None) -> str:
-    """이번 방문 전에 몇 번 왔는지만 표시. 뒤에 일어난 방문은 세지 않는다."""
+def _prior_visit_count(v: dict, history: dict[str, dict] | None) -> int | None:
+    """이번 방문 전에 몇 번 왔는지. 뒤에 일어난 방문은 세지 않고, 이력에서 못 찾으면 None."""
     record = (history or {}).get(v.get("vid"))
     if record:
         try:
@@ -234,12 +236,48 @@ def _prior_visit_badge(v: dict, history: dict[str, dict] | None) -> str:
                 first = dt.datetime.fromisoformat(str(span["first_seen"]).replace("Z", "+00:00"))
                 last = dt.datetime.fromisoformat(str(span["last_seen"]).replace("Z", "+00:00"))
                 if first <= when <= last:
-                    if previous == 0:
-                        return '<span class="prior-visit muted">첫 방문</span>'
-                    return f'<span class="prior-visit returning">이전에 {previous}번 방문</span>'
+                    return previous
         except (KeyError, TypeError, ValueError):
             pass
-    return '<span class="prior-visit muted">이전 방문 확인 불가</span>'
+    return None
+
+
+def _prior_visit_badge(v: dict, history: dict[str, dict] | None) -> str:
+    previous = _prior_visit_count(v, history)
+    if previous is None:
+        return '<span class="prior-visit muted">이전 방문 확인 불가</span>'
+    if previous == 0:
+        return '<span class="prior-visit muted">첫 방문</span>'
+    return f'<span class="prior-visit returning">이전에 {previous}번 방문</span>'
+
+
+def return_stats(all_visits: list[dict], history: dict[str, dict] | None) -> dict[str, list[int]]:
+    """날짜(한국 시간, 방문 시작 기준)별 [첫 방문, 재방문, 확인 불가]. 60행 표시 상한과 무관하게 전부 센다."""
+    stats: dict[str, list[int]] = collections.defaultdict(lambda: [0, 0, 0])
+    for v in all_visits:
+        previous = _prior_visit_count(v, history)
+        stats[_time_key(v["start"]).date().isoformat()][2 if previous is None else (1 if previous else 0)] += 1
+    return stats
+
+
+def _return_rate(first: int, back: int) -> str:
+    return f"{round(back / (first + back) * 100)}%" if first + back else "-"
+
+
+def _return_bars(stats: dict[str, list[int]], days: int) -> str:
+    """날짜별 재방문율 = 재방문 ÷ (첫 방문 + 재방문). 이전 방문 확인 불가는 분모에서 뺀다."""
+    today = dt.datetime.now(KST).date()
+    bars = []
+    for i in range(days - 1, -1, -1):
+        d = str(today - dt.timedelta(days=i))
+        first, back, unknown = stats.get(d, [0, 0, 0])
+        rate = back / (first + back) if first + back else 0
+        tip = f"{d}: 재방문 {back} / 확인된 방문 {first + back} (확인 불가 {unknown})"
+        bars.append(f"<div class=bar title='{_esc(tip)}'><a href='?date={_esc(d)}'><span style='height:{round(rate * 100)}%'></span>"
+                    f"<b>{_return_rate(first, back) if first + back else ''}</b><i>{_esc(d[-5:])}</i></a></div>")
+    return ("<section class='card wide'><h2>날짜별 재방문율</h2>"
+            "<p class=muted>재방문 ÷ (첫 방문 + 재방문). 이전 방문 확인 불가는 뺌. 방문 기준(같은 날 30분 넘게 비고 다시 와도 재방문)이라 사람 수·7일 유지율과 다름. 2026-11-11 브라우저 식별 시작</p>"
+            f"<div class='bars rate'>{''.join(bars)}</div></section>")
 
 
 def _step_href(kind: str, s: dict) -> str | None:
@@ -280,7 +318,10 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
         nxt = f"<a href='?date={next_d}'>다음날 ▶</a>" if next_d <= dt.datetime.now(KST).date() else ""
         tabs = f"<a href='?date={prev_d}'>◀ 전날</a><a class=on href='?date={date}'>{date[5:]}</a>{nxt}" + tabs
 
-    recent = visits(entries)[:60]
+    all_visits = visits(entries)
+    stats = return_stats(all_visits, history)
+    total_first, total_back = sum(x[0] for x in stats.values()), sum(x[1] for x in stats.values())
+    recent = all_visits[:60]
     rows = []
     for v in recent:
         steps = []
@@ -362,10 +403,12 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 <div class=kpi><b>{r['visits_with_click']}</b><span>판매처까지 간 방문</span></div>
 <div class=kpi><b>{r.get('visits_with_alert_button', 0)}</b><span>알림 버튼 누른 방문</span></div>
 <div class=kpi><b>{r.get('visits_with_recent', 0)}</b><span>'지난번 본 모델' 누른 방문</span></div>
-<div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div></div>
+<div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div>
+<div class=kpi><b>{_return_rate(total_first, total_back)}</b><span>재방문율 ({total_back}/{total_first + total_back})</span></div></div>
 <div class=grid>
 {_bars(entries, days, date)}
-{_day_table(entries, days) if days > 1 and not date else ''}
+{_return_bars(stats, days) if days > 1 and not date else ''}
+{_day_table(entries, days, stats) if days > 1 and not date else ''}
 {_table('어디서 왔나', ref_counts.most_common(12), note='휴대폰 앱(레딧·카카오톡 앱 등)은 출처를 안 알려 줘서 "직접·앱"으로 잡힘')}
 {_table('들어온 곳 자세히', ref_details.most_common(15), note='커뮤니티 글·사이트는 주소까지. 구글은 검색어를 안 알려 줌 → 검색어는 서치 콘솔에서')}
 {_table('처음 들어온 페이지', r['landings'])}
