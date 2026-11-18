@@ -910,6 +910,8 @@ def _is_lens_finder_bundle(combined: str, is_lens_protected_strong: bool) -> boo
     return bool(
         (is_lens_protected_strong and re.search(_FINDER_BUNDLE_REGEX, combined))
         or re.search(_LENS_INLINE_FINDER_BUNDLE_REGEX, combined)
+        # 구형 Telyt는 Visoflex용 렌즈이며 파인더 자체가 아니다.
+        or re.search(r"\b(?:200|280|400|560)\s*mm\b.{0,30}\btelyt\s+(?:for|für)\s+visoflex\b", combined)
     )
 
 

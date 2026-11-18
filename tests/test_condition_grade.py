@@ -790,3 +790,10 @@ def test_leicaboutique_detail_mint_matches_title():
 def test_leicaboutique_description_calibration():
     for label, expected in [("excellent condition", "A"), ("very good condition", "B"), ("brassing", "C"), ("Like new", "S")]:
         assert grade_of("Leica Boutique Cape Town (남아공)", "설명: " + label)[0] == expected
+
+
+def test_cameraoccasion_detail_condition():
+    assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Nieuwstaat")[0] == "A"
+    assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Vrijwel nieuwstaat")[0] == "A"
+    assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Gebruikt maar in zeer nette staat")[0] == "B"
+    assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: unknown") == (None, None)

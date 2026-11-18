@@ -70,6 +70,12 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _JP[up], "label"
     if site and "ffordes" in site.lower() and up in _FFORDES:
         return _FFORDES[up], "label"
+    if site == "CameraOccasion (네덜란드)" and cond.startswith("CameraOccasion: "):
+        state = cond.removeprefix("CameraOccasion: ").strip().lower()
+        # 목록 별 아이콘 대신 상세 상태 문구. 20개 사진 표본으로 보수적으로 대응.
+        mapped = {"nieuwstaat": "A", "vrijwel nieuwstaat": "A", "zo goed als nieuw": "A",
+                  "gebruikt maar in zeer nette staat": "B"}
+        return (mapped[state], "label") if state in mapped else (None, None)
     if cond == "Grainlab: hervorragend":
         return "B", "text"
     # Cape Town 20개 × 3장: 정확 12/20, 한 등급 이내 20/20. 일반 영문 대응보다 한 칸 후한 매장.

@@ -14420,6 +14420,89 @@ def crawl_realcamera():
     return results
 
 
+def crawl_cameraoccasion():
+    """CameraOccasion의 공개 Leica 목록·상세(JSON-LD). robots 간격 2초 준수."""
+    from urllib.parse import urljoin, urlsplit
+    import requests
+    from bs4 import BeautifulSoup
+    base = "https://www.cameraoccasion.com"
+    session = requests.Session()
+    session.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    pending, seen, products = [base + "/leica/"], set(), {}
+    def get(url):
+        time.sleep(2)
+        response = session.get(url, timeout=40)
+        response.raise_for_status()
+        return BeautifulSoup(response.text, "html.parser")
+    while pending:
+        url = pending.pop(0)
+        if url in seen:
+            continue
+        if len(seen) >= 20:
+            raise RuntimeError("CameraOccasion 목록 상한 초과")
+        seen.add(url)
+        soup = get(url)
+        for block in soup.select(".product-block"):
+            title = block.select_one("a.title")
+            if not title:
+                continue
+            name = title.get_text(" ", strip=True)
+            if not re.match(r"(?i)^(?:leica|leitz|leicaflex)\b", name):
+                continue
+            link = urljoin(base, title["href"])
+            if urlsplit(link).netloc != urlsplit(base).netloc:
+                continue
+            stars = block.select_one(".product-block-state .stars")
+            value = sum(1 for i in stars.select("i") if "fa-star" in i.get("class", [])) if stars else 0
+            value += sum(.5 for i in stars.select("i") if "fa-star-half" in i.get("class", [])) if stars else 0
+            products[link] = (name, f"{value:g}/5 stars" if value else "정보없음")
+        for a in soup.select("a[href]"):
+            link = urljoin(base, a["href"])
+            if re.fullmatch(re.escape(base) + r"/leica/page\d+\.html", link) and link not in seen and link not in pending:
+                pending.append(link)
+    rows = []
+    for link, (name, condition) in products.items():
+        soup = get(link)
+        # 목록의 별 아이콘은 빈 별에도 같은 클래스를 써 상세 상태 문구를 기준으로 한다.
+        state = soup.select_one(".productState_info")
+        condition = "CameraOccasion: " + state.get_text(" ", strip=True) if state else "정보없음"
+        # 매장 표기의 마운트·단수 철자를 기존 모델 이름 규칙에 맞춘다.
+        name = re.sub(r"(?i)Summilux SL\b", "Summilux-SL", name)
+        name = re.sub(r"(?i)Telyt-Visoflex\b", "Telyt for Visoflex", name)
+        name = re.sub(r"(?i)\bBellow\b", "Bellows", name)
+        if re.match(r"(?i)^Leica R3\b.*\+.*Elmarit", name):
+            name += " set"
+        product = None
+        for script in soup.select('script[type="application/ld+json"]'):
+            try:
+                entries = json.loads(script.get_text())
+            except (ValueError, TypeError):
+                continue
+            entries = entries if isinstance(entries, list) else [entries]
+            product = next((x for x in entries if isinstance(x, dict) and x.get("@type") == "Product"), product)
+        if not product:
+            raise RuntimeError("CameraOccasion 상품 구조 변경: " + link)
+        offer = product.get("offers") or {}
+        if not isinstance(offer, dict) or not str(offer.get("availability", "")).endswith("/InStock"):
+            continue
+        if offer.get("priceCurrency") != "EUR":
+            raise RuntimeError("CameraOccasion 통화 변경")
+        amount = float(offer.get("price") or 0)
+        if amount <= 0:
+            continue
+        price = f"€{amount:,.2f}"
+        image = product.get("image") or ""
+        if isinstance(image, list):
+            image = image[0] if image else ""
+        rows.append({"site": "CameraOccasion (네덜란드)", "상품명": name,
+                     "가격": price, "통화": "EUR", "컨디션": condition,
+                     "이미지": image, "링크": link, "품절": False, "예약중": False,
+                     "label": auto_label(name), "세대": detect_generation(name),
+                     "mount": detect_mount(name), "category": detect_category(name, price), "brand": "Leica"})
+    print(f"  ✅ CameraOccasion 완료: {len(rows)}개, 목록 {len(seen)}쪽")
+    return rows
+
+
 def crawl_grainlab():
     """Grainlab 공개 Leica 목록: Gambio 정적 HTML, 부속품 포함, 새 입고 리본은 신품 등급으로 쓰지 않음."""
     import requests
@@ -14782,6 +14865,7 @@ def crawl_all():
         ("Artra Lab (홍콩)", lambda: ce.wrap_full_run("Artra Lab (홍콩)", crawl_artralab)),
         ("Schouten Select (네덜란드)", lambda: ce.wrap_full_run("Schouten Select (네덜란드)", crawl_schouten)),
         ("The Real Camera Company (영국)", lambda: ce.wrap_full_run("The Real Camera Company (영국)", crawl_realcamera)),
+        ("CameraOccasion (네덜란드)", lambda: ce.wrap_full_run("CameraOccasion (네덜란드)", crawl_cameraoccasion)),
         ("Grainlab (독일)", lambda: ce.wrap_full_run("Grainlab (독일)", crawl_grainlab)),
         ("Film Lab (라트비아)", lambda: ce.wrap_full_run("Film Lab (라트비아)", crawl_filmlab)),
         ("Leica Boutique Cape Town (남아공)", lambda: ce.wrap_full_run("Leica Boutique Cape Town (남아공)", crawl_leicaboutique)),
