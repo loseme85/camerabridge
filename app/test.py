@@ -14557,6 +14557,58 @@ def crawl_grainlab():
     return list(results.values())
 
 
+def crawl_fotoschneider():
+    """오스트리아 Foto Schneider: Gebraucht Leica만, 공개 WooCommerce API와 독일어 상태 설명."""
+    import html as _html
+    import requests
+    from bs4 import BeautifulSoup
+    from condition_grade import de_condition
+    base = "https://www.foto-schneider-shop.at"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    results, page, pages = [], 1, 1
+    while page <= pages:
+        if page > 20:
+            raise RuntimeError("Foto Schneider 페이지 상한 초과")
+        if page > 1:
+            time.sleep(5)
+        response = sess.get(f"{base}/wp-json/wc/store/v1/products",
+                            params={"search": "leica", "per_page": 100, "page": page}, timeout=40)
+        response.raise_for_status()
+        items = response.json()
+        if not isinstance(items, list):
+            raise RuntimeError("Foto Schneider 상품 API 형식 변경")
+        pages = int(response.headers.get("X-WP-TotalPages", "1"))
+        for item in items:
+            if not item.get("is_in_stock"):
+                continue
+            name = re.sub(r"\s+", " ", _html.unescape(item.get("name") or "")).strip()
+            if not re.match(r"(?i)^Gebraucht:\s*(?:Leica|Leitz)\b", name):
+                continue
+            if re.search(r"fernglas|ferngläser|trino|ultravid|geovid|monovid|televid|zielfern|rifle", name, re.I):
+                continue
+            name = re.sub(r"(?i)^Gebraucht:\s*", "", name)
+            name = re.sub(r"(?i)\s*[–—-]\s*SN:.*$", "", name)
+            name = re.sub(r"(?i)(F\d+),(\d+)", r"\1.\2", name)
+            description = BeautifulSoup(item.get("short_description") or item.get("description") or "", "html.parser").get_text(" ", strip=True)
+            state = description.split("Lieferumfang:", 1)[0]
+            condition = de_condition(state) or "정보없음"
+            prices = item.get("prices") or {}
+            amount = int(prices.get("price") or 0) / (10 ** int(prices.get("currency_minor_unit", 2)))
+            if amount <= 0:
+                continue
+            price = f"€{amount:,.2f}"
+            images = item.get("images") or []
+            results.append({"site": "Foto Schneider (오스트리아)", "상품명": name, "label": auto_label(name),
+                "세대": detect_generation(name), "컨디션": condition,
+                "가격": price, "통화": "EUR", "이미지": images[0].get("src", "") if images else "",
+                "링크": item["permalink"], "품절": False, "예약중": False, "mount": detect_mount(name),
+                "category": detect_category(name, price), "brand": "Leica"})
+        page += 1
+    print(f"  ✅ Foto Schneider 완료: {len(results)}개, 목록 {pages}쪽")
+    return results
+
+
 def crawl_filmlab():
     """리가 Film Lab의 중고 Leica, WooCommerce 공개 API, EUR. 작동 검사만으로 외관 등급을 추정하지 않음."""
     import html as _html
@@ -14867,6 +14919,7 @@ def crawl_all():
         ("The Real Camera Company (영국)", lambda: ce.wrap_full_run("The Real Camera Company (영국)", crawl_realcamera)),
         ("CameraOccasion (네덜란드)", lambda: ce.wrap_full_run("CameraOccasion (네덜란드)", crawl_cameraoccasion)),
         ("Grainlab (독일)", lambda: ce.wrap_full_run("Grainlab (독일)", crawl_grainlab)),
+        ("Foto Schneider (오스트리아)", lambda: ce.wrap_full_run("Foto Schneider (오스트리아)", crawl_fotoschneider)),
         ("Film Lab (라트비아)", lambda: ce.wrap_full_run("Film Lab (라트비아)", crawl_filmlab)),
         ("Leica Boutique Cape Town (남아공)", lambda: ce.wrap_full_run("Leica Boutique Cape Town (남아공)", crawl_leicaboutique)),
         ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
