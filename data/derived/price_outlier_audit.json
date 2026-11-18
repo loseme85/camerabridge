@@ -1,32 +1,22 @@
 {
-"total": 536,
+"total": 537,
 "by_hint": {
 "accessory": 55,
-"set": 91,
+"set": 92,
 "check": 335,
 "edition": 52,
 "defect": 3
 },
 "new": [
 {
-"url": "https://www.newoldcamera.com/Scheda.aspx?Codice=26U4053",
-"entity": "leica:lens:fisheye-elmarit-r:16",
-"ratio": 0.4,
-"category": "Lens",
-"title": "Leica 16mm f/2.8 FISHEYE-ELMARIT-R",
-"price": "€320",
-"source": "Newoldcamera (이탈리아)",
-"hint": "check"
-},
-{
-"url": "https://fotohandeldelfshaven.nl/product/leica-leitz-summicron-r-35mm-f-2-2-cam-lens-hood/",
-"entity": "leica:lens:summicron-r:35",
-"ratio": 0.43,
-"category": "Lens",
-"title": "Leica Leitz Summicron-R 35mm f/2 2-cam lens with hood",
-"price": "€500",
-"source": "Fotohandel Delfshaven (네덜란드)",
-"hint": "accessory"
+"url": "https://artralab.com/products/1932-leitz-leica-standard-black-paint-with-nickel-elements-no-102904-elmar",
+"entity": "leica:body:standard",
+"ratio": 0.42,
+"category": "Body",
+"title": "LEITZ LEICA STANDARD BLACK PAINT WITH NICKEL ELEMENTS NO. 102904 ELMAR",
+"price": "HK$2,092",
+"source": "Artra Lab (홍콩)",
+"hint": "set"
 }
 ],
 "items": [
@@ -791,6 +781,16 @@
 "hint": "check"
 },
 {
+"url": "https://artralab.com/products/1930-leitz-leica-i-50830-with-nickel-elmar-50-mm-f3-5",
+"entity": "leica:body:i",
+"ratio": 0.15,
+"category": "Body",
+"title": "LEITZ LEICA I 50830 WITH NICKEL ELMAR 50 MM F3.5",
+"price": "HK$2,131",
+"source": "Artra Lab (홍콩)",
+"hint": "set"
+},
+{
 "url": "https://fotohandeldelfshaven.nl/product/leica-i-model-c-w-elmar-3-5-5cm-chrome/",
 "entity": "leica:body:i",
 "ratio": 0.18,
@@ -798,16 +798,6 @@
 "title": "Leica I (model C) w/ Elmar 3.5 / 50mm (CHROME)",
 "price": "€300",
 "source": "Fotohandel Delfshaven (네덜란드)",
-"hint": "set"
-},
-{
-"url": "https://artralab.com/products/1930-leitz-leica-i-50830-with-nickel-elmar-50-mm-f3-5",
-"entity": "leica:body:i",
-"ratio": 0.19,
-"category": "Body",
-"title": "LEITZ LEICA I 50830 WITH NICKEL ELMAR 50 MM F3.5",
-"price": "HK$2,750",
-"source": "Artra Lab (홍콩)",
 "hint": "set"
 },
 {
@@ -2183,7 +2173,7 @@
 {
 "url": "https://schouten-select.com/products/leica-sl-typ-601-box-1",
 "entity": "leica:body:sl601",
-"ratio": 2.52,
+"ratio": 2.51,
 "category": "Body",
 "title": "Leica SL (Typ 601)",
 "price": "€3,650",
@@ -2219,6 +2209,16 @@
 "price": "£195",
 "source": "Peter Loy (영국)",
 "hint": "check"
+},
+{
+"url": "https://artralab.com/products/1932-leitz-leica-standard-black-paint-with-nickel-elements-no-102904-elmar",
+"entity": "leica:body:standard",
+"ratio": 0.42,
+"category": "Body",
+"title": "LEITZ LEICA STANDARD BLACK PAINT WITH NICKEL ELEMENTS NO. 102904 ELMAR",
+"price": "HK$2,092",
+"source": "Artra Lab (홍콩)",
+"hint": "set"
 },
 {
 "url": "https://cameranonaniwa.jp/shop/g/g2222050268034/",
@@ -4313,7 +4313,7 @@
 {
 "url": "https://leica-store.my/products/pre-owned-leica-elmarit-m-21mm-f2-8-black-copy-1",
 "entity": "leica:lens:summicron-r:90",
-"ratio": 3.46,
+"ratio": 3.48,
 "category": "Lens",
 "title": "Leica Summicron-R 90mm f/2, Black",
 "price": "MYR 8,280",
@@ -5373,7 +5373,7 @@
 {
 "url": "https://m-camera.com/c-item-detail?ic=A000000978",
 "entity": "leica:lens:xenon:50",
-"ratio": 0.28,
+"ratio": 0.27,
 "category": "Lens",
 "title": "Leica 50mm f2 XENON L39",
 "price": "¥55,000",
@@ -5383,7 +5383,7 @@
 {
 "url": "https://www.newoldcamera.com/Scheda.aspx?Codice=23U0252",
 "entity": "leica:lens:xenon:50",
-"ratio": 0.4,
+"ratio": 0.39,
 "category": "Lens",
 "title": "Leica 50mm f/1.5 XENON chrome 3 RING",
 "price": "€450",
