@@ -243,16 +243,26 @@ ul.links li{margin:4px 0}
 ul.links span{color:var(--muted);font-size:13px}
 """
 
-# 비교 페이지 (2026-11-19 사장님 '가능하다면 제공하자'): 구글 트렌드 'q3 vs q2'·'mp vs m6' 등 비교 검색, 대화창 예시 질문 쌍
-# 둘 다 모델 페이지가 있을 때만 만든다. 주소 /<lang>/leica/compare/<a>-vs-<b>/
+# 비교 페이지 (2026-11-19 사장님 '가능하다면 제공하자'): 쌍은 구글 트렌드(5년, 전 세계)에서 실제로 'A vs B'로 찾는 것만
+# 숫자는 그 모델 관련 검색어 중 비교 검색어의 관심도(0~100), 급상승은 Breakout. 둘 다 모델 페이지가 있을 때만 만든다.
+# 주소 /<lang>/leica/compare/<a>-vs-<b>/
 COMPARE_PAIRS = [
-    ("leica:body:q", "leica:body:q2"), ("leica:body:q2", "leica:body:q3"), ("leica:body:q3", "leica:body:q3-43"),
-    ("leica:body:q2", "leica:body:q2-monochrom"), ("leica:body:q3", "leica:body:q3-monochrom"),
-    ("leica:body:m2", "leica:body:m3"), ("leica:body:m3", "leica:body:m6"), ("leica:body:m4", "leica:body:m4-p"),
-    ("leica:body:m6", "leica:body:m7"), ("leica:body:m6", "leica:body:m-a"), ("leica:body:m8", "leica:body:m9"),
-    ("leica:body:m9", "leica:body:m9-p"), ("leica:body:m240", "leica:body:m10"), ("leica:body:m10", "leica:body:m10-p"),
-    ("leica:body:m10", "leica:body:m10-r"), ("leica:body:m10", "leica:body:m11"), ("leica:body:m11", "leica:body:m11-p"),
-    ("leica:body:sl2", "leica:body:sl3"),
+    ("leica:body:q", "leica:body:q2"),           # leica q vs q2 35 (+170%)
+    ("leica:body:q2", "leica:body:q3"),          # leica q2 vs q3 23 (+3,000%)
+    ("leica:body:q3", "leica:body:q3-43"),       # leica q3 vs q3 43 100 (Breakout)
+    ("leica:body:m11", "leica:body:q3"),         # leica m11 vs q3 15 (Breakout)
+    ("leica:body:m6", "leica:body:mp-film"),     # leica m6 vs mp 71 (+90%)
+    ("leica:body:m6", "leica:body:m7"),          # leica m6 vs m7 52
+    ("leica:body:m8", "leica:body:m9"),          # leica m8 vs m9 43
+    ("leica:body:m9", "leica:body:m240"),        # leica m9 vs m240 45
+    ("leica:body:m9", "leica:body:m10"),         # leica m9 vs m10 28
+    ("leica:body:m9", "leica:body:m9-p"),        # 트렌드엔 없음 — 대화창 예시 질문 (사장님)
+    ("leica:body:m240", "leica:body:m10"),       # leica m240 vs m10 100
+    ("leica:body:m11", "leica:body:m10"),        # leica m11 vs m10 31 (Breakout)
+    ("leica:body:m11", "leica:body:m11-p"),      # leica m11 vs m11p 7 (Breakout)
+    ("leica:body:sl601", "leica:body:sl2"),      # leica sl vs sl2 41
+    ("leica:body:sl3", "leica:body:sl3-s"),      # leica sl3 vs sl3s 15 (Breakout)
+    ("leica:body:x2", "leica:body:x1"),          # leica x2 vs x1 24
 ]
 SPECS = ROOT / "data" / "derived" / "specs_v1.json"
 # 사양 값은 한국어로만 저장돼 있어(catalog/specs.py) 다른 언어에서는 한글이 없는 값(연도·화소·무게·셔터 속도 등)만 보여 준다
