@@ -4,10 +4,11 @@ os.makedirs("out", exist_ok=True)
 base = "https://www.cambrianphoto.co.uk"
 s = requests.Session(); s.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
 out = {}
-for col in ("used-leica",):
+for col in ("used-leica", "all"):
     items = []
-    for page in range(1, 10):
-        r = s.get(f"{base}/collections/{col}/products.json", params={"limit": 250, "page": page}, timeout=30)
+    for page in range(1, 30):
+        url = f"{base}/products.json" if col == "all" else f"{base}/collections/{col}/products.json"
+        r = s.get(url, params={"limit": 250, "page": page}, timeout=30)
         print(col, page, r.status_code)
         if r.status_code != 200:
             break
@@ -17,5 +18,7 @@ for col in ("used-leica",):
         items += ps
         time.sleep(3)
     out[col] = items
+import re
+out["all"] = [p for p in out.get("all", []) if re.search(r"(?i)leica|leitz|summicron|summilux|elmar|noctilux|summarit", p["title"] + " " + p["vendor"])]
 json.dump(out, open("out/cambrian.json", "w"), ensure_ascii=False)
 print({k: len(v) for k, v in out.items()})
