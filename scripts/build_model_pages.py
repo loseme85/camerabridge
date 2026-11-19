@@ -243,6 +243,117 @@ ul.links li{margin:4px 0}
 ul.links span{color:var(--muted);font-size:13px}
 """
 
+# 비교 페이지 (2026-11-19 사장님 '가능하다면 제공하자'): 쌍은 구글 트렌드(5년, 전 세계)에서 실제로 'A vs B'로 찾는 것만
+# 숫자는 그 모델 관련 검색어 중 비교 검색어의 관심도(0~100), 급상승은 Breakout. 둘 다 모델 페이지가 있을 때만 만든다.
+# 주소 /<lang>/leica/compare/<a>-vs-<b>/
+COMPARE_PAIRS = [
+    ("leica:body:q", "leica:body:q2"),           # leica q vs q2 35 (+170%)
+    ("leica:body:q2", "leica:body:q3"),          # leica q2 vs q3 23 (+3,000%)
+    ("leica:body:q3", "leica:body:q3-43"),       # leica q3 vs q3 43 100 (Breakout)
+    ("leica:body:m11", "leica:body:q3"),         # leica m11 vs q3 15 (Breakout)
+    ("leica:body:m6", "leica:body:mp-film"),     # leica m6 vs mp 71 (+90%)
+    ("leica:body:m6", "leica:body:m7"),          # leica m6 vs m7 52
+    ("leica:body:m8", "leica:body:m9"),          # leica m8 vs m9 43
+    ("leica:body:m9", "leica:body:m240"),        # leica m9 vs m240 45
+    ("leica:body:m9", "leica:body:m10"),         # leica m9 vs m10 28
+    ("leica:body:m9", "leica:body:m9-p"),        # 트렌드엔 없음 — 대화창 예시 질문 (사장님)
+    ("leica:body:m240", "leica:body:m10"),       # leica m240 vs m10 100
+    ("leica:body:m11", "leica:body:m10"),        # leica m11 vs m10 31 (Breakout)
+    ("leica:body:m11", "leica:body:m11-p"),      # leica m11 vs m11p 7 (Breakout)
+    ("leica:body:sl601", "leica:body:sl2"),      # leica sl vs sl2 41
+    ("leica:body:sl3", "leica:body:sl3-s"),      # leica sl3 vs sl3s 15 (Breakout)
+    ("leica:body:x2", "leica:body:x1"),          # leica x2 vs x1 24
+]
+SPECS = ROOT / "data" / "derived" / "specs_v1.json"
+# 사양 값은 한국어로만 저장돼 있어(catalog/specs.py) 다른 언어에서는 한글이 없는 값(연도·화소·무게·셔터 속도 등)만 보여 준다
+COMPARE_FIELDS = ["years", "kind", "mount", "sensor_mp", "sensor", "mono", "finder", "framelines", "meter", "shutter",
+                  "top_speed", "flash_ttl", "ibis", "video", "battery", "weight_g", "note"]
+C = {
+    "ko": {"title": "{a} vs {b} 중고 시세·사양 비교 | 카메라브릿지", "h1": "{a} vs {b} 중고 시세·사양 비교",
+           "desc": "{a}와 {b}의 중고 B등급 시세, 판매 중 매물 수, 최저가, 사양 차이를 한눈에. 한국·일본·유럽·미국 라이카 매장 기준.",
+           "lead": "중고 B등급 시세: {a} {pa} · {b} {pb} (차이 {diff}). 지금 판매 중: {a} {na}개 · {b} {nb}개 ({date} 기준).",
+           "price_h": "중고 시세 비교", "spec_h": "사양 비교", "b": "B등급 시세", "low": "최저가", "model_h": "모델별 시세 페이지",
+           "see": "{name} 중고 시세 전체 보기", "compare_h": "비교", "index_h": "모델 비교", "yes": "있음", "no": "없음",
+           "f": {"years": "출시", "kind": "종류", "mount": "마운트·렌즈", "sensor_mp": "화소", "sensor": "센서", "mono": "흑백 전용", "finder": "파인더", "framelines": "프레임라인", "meter": "노출계", "shutter": "셔터", "top_speed": "최고 셔터 속도", "flash_ttl": "TTL 플래시", "ibis": "손떨림 보정", "video": "동영상", "battery": "배터리", "weight_g": "무게", "note": "특징"}},
+    "en": {"title": "{a} vs {b}: Used Price & Specs Compared | Camera Bridge", "h1": "{a} vs {b}: used prices and specs",
+           "desc": "{a} vs {b}: grade B used market value, listings for sale, lowest price and spec differences, from Leica shops in Korea, Japan, Europe and the US.",
+           "lead": "Grade B used market value: {a} {pa}, {b} {pb} — a {diff} difference. For sale now: {a} {na}, {b} {nb} (as of {date}).",
+           "price_h": "Used prices", "spec_h": "Specs", "b": "Grade B market value", "low": "Lowest price", "model_h": "Model price pages",
+           "see": "All {name} used prices", "compare_h": "Compare", "index_h": "Model comparisons", "yes": "Yes", "no": "No",
+           "f": {"years": "Years", "kind": "Type", "mount": "Mount / lens", "sensor_mp": "Resolution", "sensor": "Sensor", "mono": "Monochrome", "finder": "Viewfinder", "framelines": "Framelines", "meter": "Light meter", "shutter": "Shutter", "top_speed": "Top shutter speed", "flash_ttl": "TTL flash", "ibis": "Stabilization", "video": "Video", "battery": "Battery", "weight_g": "Weight", "note": "Notes"}},
+    "ja": {"title": "{a} vs {b} 中古相場・仕様比較 | Camera Bridge", "h1": "{a} vs {b} 中古相場・仕様比較",
+           "desc": "{a} と {b} の中古B等級相場、販売中の在庫数、最安値、仕様の違いを比較。韓国・日本・欧州・米国のライカ取扱店から。",
+           "lead": "中古B等級の相場は {a} {pa}、{b} {pb}、差は {diff}。販売中：{a} {na} 点、{b} {nb} 点（{date} 時点）。",
+           "price_h": "中古相場の比較", "spec_h": "仕様の比較", "b": "B等級の相場", "low": "最安値", "model_h": "モデル別相場ページ",
+           "see": "{name} の中古相場をすべて見る", "compare_h": "比較", "index_h": "モデル比較", "yes": "あり", "no": "なし",
+           "f": {"years": "発売", "kind": "種類", "mount": "マウント・レンズ", "sensor_mp": "画素数", "sensor": "センサー", "mono": "モノクローム", "finder": "ファインダー", "framelines": "ブライトフレーム", "meter": "露出計", "shutter": "シャッター", "top_speed": "最高シャッター速度", "flash_ttl": "TTL フラッシュ", "ibis": "手ブレ補正", "video": "動画", "battery": "電池", "weight_g": "重さ", "note": "特徴"}},
+    "de": {"title": "{a} vs. {b}: Gebrauchtpreise & Daten im Vergleich | Camera Bridge", "h1": "{a} vs. {b}: Gebrauchtpreise und Daten",
+           "desc": "{a} vs. {b}: Marktwert gebraucht (Zustand B), Angebote, günstigster Preis und Unterschiede bei den Daten – von Leica-Händlern in Korea, Japan, Europa und den USA.",
+           "lead": "Marktwert gebraucht in Zustand B: {a} {pa}, {b} {pb} – {diff} Unterschied. Jetzt im Angebot: {a} {na}, {b} {nb} (Stand {date}).",
+           "price_h": "Gebrauchtpreise", "spec_h": "Technische Daten", "b": "Marktwert Zustand B", "low": "Günstigster Preis", "model_h": "Preisseiten der Modelle",
+           "see": "Alle Gebrauchtpreise der {name}", "compare_h": "Vergleichen", "index_h": "Modellvergleiche", "yes": "Ja", "no": "Nein",
+           "f": {"years": "Baujahre", "kind": "Art", "mount": "Bajonett / Objektiv", "sensor_mp": "Auflösung", "sensor": "Sensor", "mono": "Monochrom", "finder": "Sucher", "framelines": "Leuchtrahmen", "meter": "Belichtungsmesser", "shutter": "Verschluss", "top_speed": "Kürzeste Verschlusszeit", "flash_ttl": "TTL-Blitz", "ibis": "Bildstabilisierung", "video": "Video", "battery": "Batterie", "weight_g": "Gewicht", "note": "Besonderheiten"}},
+    "it": {"title": "{a} vs {b}: prezzi dell'usato e caratteristiche | Camera Bridge", "h1": "{a} vs {b}: prezzi dell'usato e caratteristiche",
+           "desc": "{a} vs {b}: valore di mercato dell'usato in grado B, annunci, prezzo minimo e differenze tecniche, dai negozi Leica di Corea, Giappone, Europa e USA.",
+           "lead": "Valore di mercato dell'usato in grado B: {a} {pa}, {b} {pb}, una differenza di {diff}. In vendita ora: {a} {na}, {b} {nb} (al {date}).",
+           "price_h": "Prezzi dell'usato", "spec_h": "Caratteristiche", "b": "Valore grado B", "low": "Prezzo minimo", "model_h": "Pagine dei modelli",
+           "see": "Tutti i prezzi dell'usato di {name}", "compare_h": "Confronta", "index_h": "Confronti tra modelli", "yes": "Sì", "no": "No",
+           "f": {"years": "Anni", "kind": "Tipo", "mount": "Innesto / obiettivo", "sensor_mp": "Risoluzione", "sensor": "Sensore", "mono": "Monocromatica", "finder": "Mirino", "framelines": "Cornici", "meter": "Esposimetro", "shutter": "Otturatore", "top_speed": "Tempo più veloce", "flash_ttl": "Flash TTL", "ibis": "Stabilizzazione", "video": "Video", "battery": "Batteria", "weight_g": "Peso", "note": "Note"}},
+    "es": {"title": "{a} vs {b}: precios de segunda mano y especificaciones | Camera Bridge", "h1": "{a} vs {b}: precios de segunda mano y especificaciones",
+           "desc": "{a} vs {b}: valor de mercado usada en grado B, anuncios, precio más bajo y diferencias técnicas, de tiendas Leica de Corea, Japón, Europa y EE. UU.",
+           "lead": "Valor de mercado usada en grado B: {a} {pa}, {b} {pb}, una diferencia de {diff}. A la venta ahora: {a} {na}, {b} {nb} (a {date}).",
+           "price_h": "Precios de segunda mano", "spec_h": "Especificaciones", "b": "Valor grado B", "low": "Precio más bajo", "model_h": "Páginas de cada modelo",
+           "see": "Todos los precios de {name} usada", "compare_h": "Comparar", "index_h": "Comparativas de modelos", "yes": "Sí", "no": "No",
+           "f": {"years": "Años", "kind": "Tipo", "mount": "Montura / objetivo", "sensor_mp": "Resolución", "sensor": "Sensor", "mono": "Monocromo", "finder": "Visor", "framelines": "Marcos", "meter": "Fotómetro", "shutter": "Obturador", "top_speed": "Velocidad máxima", "flash_ttl": "Flash TTL", "ibis": "Estabilización", "video": "Vídeo", "battery": "Batería", "weight_g": "Peso", "note": "Notas"}},
+    "pt": {"title": "{a} vs {b}: preços em segunda mão e especificações | Camera Bridge", "h1": "{a} vs {b}: preços usados e especificações",
+           "desc": "{a} vs {b}: valor de mercado usada (em segunda mão) grau B, anúncios, preço mais baixo e diferenças técnicas, de lojas Leica na Coreia, Japão, Europa e EUA.",
+           "lead": "Valor de mercado usada em grau B: {a} {pa}, {b} {pb}, uma diferença de {diff}. À venda agora: {a} {na}, {b} {nb} (em {date}).",
+           "price_h": "Preços usados", "spec_h": "Especificações", "b": "Valor grau B", "low": "Preço mais baixo", "model_h": "Páginas de cada modelo",
+           "see": "Todos os preços da {name} usada", "compare_h": "Comparar", "index_h": "Comparações de modelos", "yes": "Sim", "no": "Não",
+           "f": {"years": "Anos", "kind": "Tipo", "mount": "Encaixe / objetiva", "sensor_mp": "Resolução", "sensor": "Sensor", "mono": "Monocromática", "finder": "Visor", "framelines": "Molduras", "meter": "Fotômetro", "shutter": "Obturador", "top_speed": "Velocidade máxima", "flash_ttl": "Flash TTL", "ibis": "Estabilização", "video": "Vídeo", "battery": "Bateria", "weight_g": "Peso", "note": "Notas"}},
+    "zh-Hans": {"title": "{a} vs {b} 二手价格与规格对比 | Camera Bridge", "h1": "{a} vs {b} 二手价格与规格对比",
+           "desc": "{a} 与 {b} 的二手 B 级行情、在售数量、最低价和规格差异。汇集韩国、日本、欧洲、美国徕卡店铺。",
+           "lead": "二手 B 级行情：{a} {pa}，{b} {pb}，相差 {diff}。目前在售：{a} {na} 件，{b} {nb} 件（{date}）。",
+           "price_h": "二手价格对比", "spec_h": "规格对比", "b": "B 级行情", "low": "最低价", "model_h": "各型号行情页",
+           "see": "查看 {name} 全部二手行情", "compare_h": "对比", "index_h": "型号对比", "yes": "有", "no": "无",
+           "f": {"years": "年份", "kind": "类别", "mount": "卡口 / 镜头", "sensor_mp": "像素", "sensor": "传感器", "mono": "黑白", "finder": "取景器", "framelines": "取景框线", "meter": "测光表", "shutter": "快门", "top_speed": "最高快门速度", "flash_ttl": "TTL 闪光", "ibis": "防抖", "video": "视频", "battery": "电池", "weight_g": "重量", "note": "特点"}},
+    "zh-Hant": {"title": "{a} vs {b} 二手價格與規格比較 | Camera Bridge", "h1": "{a} vs {b} 二手價格與規格比較",
+           "desc": "{a} 與 {b} 的二手 B 級行情、在售數量、最低價和規格差異。匯集韓國、日本、歐洲、美國徠卡店鋪。",
+           "lead": "二手 B 級行情：{a} {pa}，{b} {pb}，相差 {diff}。目前在售：{a} {na} 件，{b} {nb} 件（{date}）。",
+           "price_h": "二手價格比較", "spec_h": "規格比較", "b": "B 級行情", "low": "最低價", "model_h": "各型號行情頁",
+           "see": "查看 {name} 全部二手行情", "compare_h": "比較", "index_h": "型號比較", "yes": "有", "no": "無",
+           "f": {"years": "年份", "kind": "類別", "mount": "卡口 / 鏡頭", "sensor_mp": "像素", "sensor": "感光元件", "mono": "黑白", "finder": "觀景窗", "framelines": "框線", "meter": "測光表", "shutter": "快門", "top_speed": "最高快門速度", "flash_ttl": "TTL 閃光", "ibis": "防手震", "video": "影片", "battery": "電池", "weight_g": "重量", "note": "特點"}},
+}
+
+
+def compare_slug(a_slug: str, b_slug: str) -> str:
+    return f"compare/{a_slug}-vs-{b_slug}"
+
+
+def spec_value(field: str, value, lang: str) -> str | None:
+    """사양 값 → 화면 글자. 한글 값은 한국어 페이지에서만 (번역 없이 한글을 보이면 안 됨)"""
+    if value is None or value == "":
+        return None
+    if value is True or value is False:
+        return C[lang]["yes"] if value else C[lang]["no"]
+    if field == "weight_g":
+        text = f"{value} g"
+    elif field == "sensor_mp" and isinstance(value, (int, float)):
+        text = f"{value} MP"
+    else:
+        text = str(value)
+    if lang != "ko" and re.search(r"[가-힣]", text):
+        return None
+    return text
+
+
+def short_name(name_a: str, name_b: str) -> str:
+    """'Leica Q2' vs 'Leica Q3' → 'Q3' (같은 앞말이면 뒤 이름에서 뺌)"""
+    for prefix in ("Leica ", "라이카 "):
+        if name_a.startswith(prefix) and name_b.startswith(prefix):
+            return name_b[len(prefix):]
+    return name_b
+
 SYMBOL = {"KRW": "₩", "USD": "$", "JPY": "¥", "EUR": "€", "CNY": "CN¥", "TWD": "NT$", "GBP": "£", "HKD": "HK$", "CHF": "CHF ", "DKK": "DKK ",
           "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$", "CLP": "CLP ", "SEK": "SEK ", "CZK": "Kč ", "HUF": "Ft ", "RON": "lei "}
 
@@ -435,6 +546,8 @@ def build(out: Path) -> dict:
         return re.match(r"[a-z]+", slug).group(0) if re.match(r"[a-z]+", slug) else slug
 
     editions = {x["id"] for x in entities if x.get("edition")}
+    pairs = [(a, b) for a, b in COMPARE_PAIRS if a in slugs and b in slugs]
+    stats: dict[str, dict] = {}  # 비교 페이지용 모델 숫자 (일반형 기준, 모델 페이지와 같은 계산)
     for e in picked:
         eid = e["id"]
         slug = slugs[eid]
@@ -451,6 +564,10 @@ def build(out: Path) -> dict:
         for r in rows:
             c = shop_parts(r["source"])[1]
             by_country[c] = min(by_country.get(c, r["krw"]), r["krw"])
+        stats[eid] = {"n": len(all_rows), "shops": shops, "lo": rows[0]["krw"] if rows else None, "hi": rows[-1]["krw"] if rows else None,
+                      "b": e.get("b_price_krw") or (rows[len(rows) // 2]["krw"] if rows else None),
+                      "sold": e.get("sold_median_krw") if e.get("sold_price_count") else None, "sold_n": e.get("sold_price_count") or 0}
+        my_pairs = [(a, b) for a, b in pairs if eid in (a, b)]
         for lang in LANGS:
             t, cur = T[lang], DISPLAY_CURRENCY[lang]
             conv = convert[cur]
@@ -565,6 +682,10 @@ def build(out: Path) -> dict:
                 parts.append("</tbody></table></div>")
               else:
                 parts.append(f"<p>{t['none']}</p>")
+            if my_pairs:
+                parts.append(f"<h2>{C[lang]['compare_h']}</h2><ul class=\"links\">" + "".join(
+                    f'<li><a href="/{PATH[lang]}/leica/{compare_slug(slugs[a], slugs[b])}/">{html.escape(display_name(by_id[a], lang))} vs {html.escape(short_name(display_name(by_id[a], lang), display_name(by_id[b], lang)))}</a></li>'
+                    for a, b in my_pairs) + "</ul>")
             if related:
                 parts.append(f"<h2>{t['related']}</h2><ul class=\"links\">" + "".join(
                     f'<li><a href="/{PATH[lang]}/leica/{slugs[x["id"]]}/">{html.escape(display_name(x, lang))}</a> <span>{t["count"].format(n=x.get("active_count", 0))}</span></li>'
@@ -588,9 +709,68 @@ def build(out: Path) -> dict:
                     parts.append(f'<li><a href="/{PATH[lang]}/leica/{slugs[e["id"]]}/">{html.escape(display_name(e, lang))}</a> '
                                  f'<span>{t["count"].format(n=e["active_count"])}</span></li>')
             parts.append("</ul>")
+        if pairs:
+            parts.append(f'<h2>{C[lang]["index_h"]}</h2><ul class="links">' + "".join(
+                f'<li><a href="/{PATH[lang]}/leica/{compare_slug(slugs[a], slugs[b])}/">{html.escape(display_name(by_id[a], lang))} vs {html.escape(short_name(display_name(by_id[a], lang), display_name(by_id[b], lang)))}</a></li>'
+                for a, b in pairs) + "</ul>")
         parts.append(f'<p class="note">{t["updated"].format(time=updated_text)}</p></main>{footer_for(lang)}</body></html>\n')
         (out / PATH[lang] / "leica" / "index.html").write_text("".join(parts), encoding="utf-8")
         mark(page_url(lang), "".join(parts))
+
+    # 비교 페이지
+    specs = json.loads(SPECS.read_text(encoding="utf-8")).get("specs", {}) if SPECS.exists() else {}
+    for a, b in pairs:
+        cslug = compare_slug(slugs[a], slugs[b])
+        sa, sb = stats[a], stats[b]
+        for lang in LANGS:
+            t, c, cur = T[lang], C[lang], DISPLAY_CURRENCY[lang]
+            conv = convert[cur]
+            na, nb_full = display_name(by_id[a], lang), display_name(by_id[b], lang)
+            nb = short_name(na, nb_full)
+            m = lambda k: money(conv(k), cur, lang, True) if k else "—"
+            title = c["title"].format(a=na, b=nb)
+            desc = c["desc"].format(a=na, b=nb_full)
+            crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": t["home"], "item": f"{SITE}/"},
+                {"@type": "ListItem", "position": 2, "name": t["list"], "item": page_url(lang)},
+                {"@type": "ListItem", "position": 3, "name": f"{na} vs {nb}", "item": page_url(lang, cslug)}]}
+            parts = [head(lang, title, desc, lambda l, s=cslug: page_url(l, s), [crumbs])]
+            parts.append(f'<nav><a href="/">{t["home"]}</a> › <a href="/{PATH[lang]}/leica/">{t["list"]}</a></nav>')
+            parts.append(f"<h1>{html.escape(c['h1'].format(a=na, b=nb))}</h1>")
+            if sa["b"] and sb["b"]:
+                parts.append(f'<p class="lead">{html.escape(c["lead"].format(a=na, b=nb, pa=m(sa["b"]), pb=m(sb["b"]), diff=m(abs(sa["b"] - sb["b"])), na=sa["n"], nb=sb["n"], date=updated.date().isoformat()))}</p>')
+            head_row = f'<tr><th></th><th>{html.escape(na)}</th><th>{html.escape(nb_full)}</th></tr>'
+            price_rows = [(c["b"], m(sa["b"]), m(sb["b"])),
+                          (t["active"], t["active_val"].format(n=sa["n"], shops=sa["shops"]), t["active_val"].format(n=sb["n"], shops=sb["shops"])),
+                          (c["low"], m(sa["lo"]), m(sb["lo"])),
+                          (t["range"], f'{m(sa["lo"])} – {m(sa["hi"])}' if sa["lo"] else "—", f'{m(sb["lo"])} – {m(sb["hi"])}' if sb["lo"] else "—")]
+            if sa["sold"] or sb["sold"]:
+                price_rows.append((t["sold"], m(sa["sold"]), m(sb["sold"])))
+            parts.append(f'<h2>{c["price_h"]}</h2><div class="table"><table><thead>{head_row}</thead><tbody>'
+                         + "".join(f"<tr><th>{k}</th><td>{html.escape(x)}</td><td>{html.escape(y)}</td></tr>" for k, x, y in price_rows)
+                         + "</tbody></table></div>")
+            spec_a, spec_b = specs.get(a) or {}, specs.get(b) or {}
+            spec_rows = []
+            for f in COMPARE_FIELDS:
+                va, vb = spec_value(f, spec_a.get(f), lang), spec_value(f, spec_b.get(f), lang)
+                # 한쪽 값이 한글이라 숨겨졌으면 행째 뺌 ('—'는 '정보 없음'으로 읽힘)
+                if (va is None and spec_a.get(f) not in (None, "")) or (vb is None and spec_b.get(f) not in (None, "")):
+                    continue
+                if va or vb:
+                    spec_rows.append((c["f"][f], va or "—", vb or "—", va != vb))
+            if spec_rows:
+                parts.append(f'<h2>{c["spec_h"]}</h2><div class="table"><table><thead>{head_row}</thead><tbody>'
+                             + "".join(f'<tr><th>{k}</th><td>{"<b>" if d else ""}{html.escape(x)}{"</b>" if d else ""}</td><td>{"<b>" if d else ""}{html.escape(y)}{"</b>" if d else ""}</td></tr>' for k, x, y, d in spec_rows)
+                             + "</tbody></table></div>")
+            parts.append(f'<p class="note">{t["updated"].format(time=updated_text)}</p>')
+            parts.append(f'<h2>{c["model_h"]}</h2><ul class="links">' + "".join(
+                f'<li><a href="/{PATH[lang]}/leica/{slugs[x]}/">{html.escape(c["see"].format(name=display_name(by_id[x], lang)))}</a> <span>{t["count"].format(n=stats[x]["n"])}</span></li>'
+                for x in (a, b)) + "</ul>")
+            parts.append(f"</main>{footer_for(lang)}</body></html>\n")
+            path = out / PATH[lang] / "leica" / cslug / "index.html"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("".join(parts), encoding="utf-8")
+            mark(page_url(lang, cslug), "".join(parts))
 
     # 사라진 옛 모델 주소: 지난번에 있던 페이지가 이번에 없으면 기록해 두고, 매번 넘김 페이지를 만듦
     redirects = json.loads(REDIRECTS.read_text(encoding="utf-8")) if REDIRECTS.exists() else {}
@@ -608,7 +788,7 @@ def build(out: Path) -> dict:
 
     # 사이트맵: 첫 화면 + 언어별 목록 + 모델 페이지 (언어별 짝 표시)
     urls = ['  <url><loc>https://camerabridge.io/</loc><changefreq>daily</changefreq></url>']
-    for slug in [None] + [slugs[e["id"]] for e in picked]:
+    for slug in [None] + [slugs[e["id"]] for e in picked] + [compare_slug(slugs[a], slugs[b]) for a, b in pairs]:
         alts = "".join(f'<xhtml:link rel="alternate" hreflang="{l}" href="{page_url(l, slug)}"/>' for l in LANGS)
         for lang in LANGS:
             urls.append(f"  <url><loc>{page_url(lang, slug)}</loc><lastmod>{marks[page_url(lang, slug)]['d']}</lastmod>{alts}</url>")
@@ -640,7 +820,8 @@ def build(out: Path) -> dict:
         LASTMOD.write_text(json.dumps(marks, ensure_ascii=False, indent=0, sort_keys=True), encoding="utf-8")
         REDIRECTS.write_text(json.dumps(redirects, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         PUBLISHED.write_text(json.dumps({"entity_ids": sorted(published | set(slugs))}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return {"pages": len(picked) * len(LANGS), "models": [slugs[e["id"]] for e in picked], "lastmod": marks}
+    return {"pages": len(picked) * len(LANGS), "models": [slugs[e["id"]] for e in picked], "lastmod": marks,
+            "compare": [compare_slug(slugs[a], slugs[b]) for a, b in pairs]}
 
 
 def main() -> None:
