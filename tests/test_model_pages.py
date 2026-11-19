@@ -25,7 +25,7 @@ def test_pages_sitemap_and_hreflang(tmp_path):
         assert '<p class="lead">' in page  # 한 줄 답
     assert (tmp_path / "llms.txt").read_text(encoding="utf-8").startswith("# Camera Bridge")
     sitemap = (tmp_path / "sitemap.xml").read_text(encoding="utf-8")
-    assert sitemap.count("<url>") == 1 + (len(models) + 1) * len(mp.LANGS)
+    assert sitemap.count("<url>") == 1 + (len(models) + 1 + len(result["compare"])) * len(mp.LANGS)  # 비교 페이지 포함 (2026-11-19)
     assert "<loc>https://camerabridge.io/</loc>" in sitemap
     # Search Console 404로 신고된 세 모델은 모든 언어에서 복원되어야 한다.
     for slug in ("x2-standard", "m4-50-jahre", "m6-leitz-wetzlar"):
