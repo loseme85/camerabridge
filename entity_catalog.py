@@ -519,6 +519,37 @@ def flag_too_cheap(records: list[dict[str, Any]], value, catalog: dict[str, Any]
     return flagged
 
 
+SET_WORD = re.compile(r"\b(?:set|kit)\b|セット|세트", re.I)  # outfit은 바르낙 딜러가 본체에 쓰는 말이라 뺌
+SET_PRICEY = 2.0  # 제목에 Set이 있고 모델 시세의 2배를 넘으면 세트 (렌즈 이름 없는 'Leica M3 - wunderbares Set', 2026-11-19)
+
+
+def flag_pricey_set(records: list[dict[str, Any]], value, catalog: dict[str, Any] | None = None) -> set[int]:
+    """바디에 연결됐고 제목에 Set·Kit이 있는데 렌즈 이름은 없고, 그 모델 중앙값의 SET_PRICEY배를 넘는 매물 → 세트로 본다.
+    기본형(:standard)에만 적용: 한정판·기념판 세트(M-A Titan set, M6 LHSA set 등)는 본체 자체라 세트로 보지 않는다."""
+    catalog = catalog or load_catalog()
+    entities = catalog["entities"]
+    by_entity: dict[str, list[float]] = {}
+    for record in records:
+        v = value(record)
+        for eid in record.get("entity_ids") or []:
+            if v and not entities[eid].get("children") and not entities[eid].get("feature"):
+                by_entity.setdefault(eid, []).append(v)
+    medians = {eid: sorted(vs)[len(vs) // 2] for eid, vs in by_entity.items() if len(vs) >= TOO_CHEAP_MIN_N}
+    flagged = set()
+    for record in records:
+        v = value(record)
+        title = record_title(record)
+        if not v or not SET_WORD.search(title):
+            continue
+        for eid in record.get("entity_ids") or []:
+            ent = entities.get(eid) or {}
+            if ent.get("kind") == "Body" and eid.endswith(":standard") and eid in medians and not ent.get("children") and not ent.get("feature") and v > SET_PRICEY * medians[eid]:
+                record.setdefault("final_output", {})["entity_note"] = "set"
+                flagged.add(id(record))
+                break
+    return flagged
+
+
 # ── 검색창 후보 (beta.html의 suggestEntities와 같은 규칙) ──
 STOP_TOKENS = {"leica", "라이카", "ライカ", "徕卡", "徠卡", "lens", "렌즈", "body", "바디",
                "0.58", "0.72", "0.85", "0.68", "black", "silver", "chrome", "블랙", "실버", "크롬",
