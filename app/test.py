@@ -14865,6 +14865,46 @@ def crawl_unit():
     return results
 
 
+def crawl_teds():
+    """Ted's Camera (호주) - Shopify 중고 컬렉션(secondhand·secondhand-lenses)에서 Leica·Leitz 판매 중만 (파나소닉·시그마 등 라이카 이름이 든 타사 제품은 뺌).
+    제목 끝 '| Secondhand' 제거. 설명에 'Images shown are not the actual product'라 사진은 참고용 — 사진 등급 대기열에서 뺀다. 등급 표기 없음.
+    이 맥은 Shopify 429라 GitHub 서버에서 시험."""
+    import requests, html
+    base = "https://www.teds.com.au"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    products, seen = [], set()
+    for col in ("secondhand", "secondhand-lenses"):
+        for p in _shopify_all(sess, f"{base}/collections/{col}/products.json", "Ted's " + col):
+            if p.get("handle") not in seen:
+                seen.add(p.get("handle"))
+                products.append(p)
+    results = []
+    for p in products:
+        name = re.sub(r"\s+", " ", html.unescape(p.get("title") or "")).strip()
+        name = re.sub(r"\s*\|\s*Secondhand\s*$", "", name, flags=re.I)
+        if not re.match(r"(?i)^(?:leica|leitz)\b", name):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+        if not link or link in globals().get('SOLD_LINKS', ()):
+            continue
+        try:
+            price = f"A${float(variants[0].get('price')):,.2f}"
+        except (TypeError, ValueError):
+            continue
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        cat = detect_category(name, price)
+        results.append({"site": "Ted's Camera (호주)", "label": auto_label(name), "상품명": name,
+                        "세대": detect_generation(name), "컨디션": "정보없음", "가격": price, "통화": "AUD",
+                        "이미지": img, "링크": link, "품절": False, "예약중": False,
+                        "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name), "category": cat, "brand": detect_brand(name)})
+    print(f"  ✅ Ted's Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -15072,6 +15112,7 @@ def crawl_all():
         ("トキワカメラ (일본)", lambda: ce.wrap_full_run("トキワカメラ (일본)", crawl_tokiwa)),
         ("Tim's Photo (캐나다)", lambda: ce.wrap_full_run("Tim's Photo (캐나다)", crawl_timsphoto)),
         ("UNIT Camera Shop (태국)", lambda: ce.wrap_full_run("UNIT Camera Shop (태국)", crawl_unit)),
+        ("Ted's Camera (호주)", lambda: ce.wrap_full_run("Ted's Camera (호주)", crawl_teds)),
     ]
     sources += [(site, (lambda site=site, cc=cc: ce.wrap_full_run(site, lambda: crawl_leica_classic(cc))))
                 for _, cc, site in LEICA_CLASSIC_COUNTRIES]
