@@ -11,7 +11,7 @@ import re
 
 GRADES = ["N", "S", "A", "B", "C", "D", "X"]
 
-_BROKEN = re.compile(r"고장|부품용|작동\s?불량|ジャンク|\bjunk\b|for parts|spares|as-?is\b|not working", re.I)
+_BROKEN = re.compile(r"고장|부품용|작동\s?불량|ジャンク|\bjunk\b|for parts|^\s*parts?\s*[-–:]|spares|as-?is\b|not working", re.I)  # 'Parts - Leica M6 Classic'($612) 시세에서 빼기 (2026-11-19)
 _NEW = re.compile(r"신품|미사용|未使用|新品|\bbrand new\b|\bunused\b|(?<!asph )(?<!asph\. )(?<!bit )\bnew\b(?! ?(old|york|elmar|summicron|summilux|version|ver|type|\(\d{4}))", re.I)
 
 # 일본 매장 (기타무라·나니와 등)

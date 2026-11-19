@@ -371,3 +371,11 @@ def test_old_r_bodies_and_rangefinder_bodies_stay_body() -> None:
     for title in ["Leica R4 Black", "Leicaflex (Mk.1) body", "Leica M6 Rangefinder Chrome", "Leica M2 ST Recovered, DAG Overhauled",
                   "Leica SL Typ 601 24MP 10850 Digitalkamera accessory"]:
         assert _classify(title)["category"] == "Body", title
+
+
+def test_rental_and_cool_shoe_are_not_bodies() -> None:
+    # 2026-11-19 수정사항 13·14번: 대여 매물과 핫슈 악세사리가 바디 시세에 섞이던 것
+    for title in ["Leica M6 Rental", "Leica M6 + 35mm f2 Summicron lens – Rental", "Leica M3/M2/M4 Cool Shoe - Black Paint"]:
+        assert _classify(title)["category"] == "Accessory", title
+    # 대여품을 파는 'ex-rental'은 본품 그대로
+    assert _classify("Leica M6 ex-rental body")["category"] == "Body"

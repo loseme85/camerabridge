@@ -827,6 +827,8 @@ _HARD_ACC_REGEX = (
     (r'\b(?:leica\s+)?m\s+motor\b|\bmotor\s+m\b', "motor_winder"),
     (r'\bbooks?\b', "book"),
     (r'\bfor\s*(?:lens|rear|front|body)?\s*cap\b|リア ?cap', "cap_for"),
+    # 대여 매물은 판매가 아니라 본품 시세에 섞이면 안 됨 ('Leica M6 + 35mm f2 Summicron lens – Rental' €160). 'ex-rental'(대여품 중고 판매)은 제외 (2026-11-19 수정사항 13번)
+    (r"(?<!ex[- ])(?<!ex)\brental\b|\bfor rent\b|レンタル|대여\b", "rental"),
     # 2026-11-19 악세사리 점검 (바디·렌즈로 분류되던 설명서·캡·링·박스·스풀·배터리). 앞에 with·+·and 같은 묶음말이 있으면 본체의 구성품이라 제외
     (r"(?<!with )(?<!\+ )(?<!\+)(?<!& )(?<!and )(?<!\be )(?<!con )(?<!mit )(?<!w/ )(?<!w/)(?<!, )\b(?:brief )?(?:instructions?|manual)\b(?!\s+(?:focus|mode|lens|exposure))", "manual"),
     (r"(?<!with )(?<!\+ )(?<!\+)(?<!& )(?<!and )(?<!\be )(?<!con )(?<!mit )(?<!w/ )(?<!w/)(?<!, )\bcap\b", "cap"),
@@ -1085,6 +1087,7 @@ _STRONG_ACC_KW = (
     "fokus rangefinder", "fokos rangefinder", "fokus rf", "fokos rf",  # Leica Fokus/FOKOS 초점 보조 악세사리 (Soper, M&K 2026-11-19)
     "digiscope",
     "elmarit-p2", "elmarit-p 2", "colorplan-p", "pradovit",  # 슬라이드 프로젝터 렌즈 (Cambrian 2026-11-19)
+    "cool shoe", "coolshoe",  # M3·M2·M4용 핫슈 악세사리 (Fotopia 'Leica M3/M2/M4 Cool Shoe - Black Paint'가 M3 블랙페인트 바디로, 수정사항 14번)
     # 2026-11-15 시세 이탈 2차: 접사 장치·필터가 렌즈 칸에 ('Nah Brille Nahvorsatz für Summicron'·'Nooky-Hesum närbildstillsats'·
     # 'Naheinstellgerät für Hektor'·'Filtro x Elmar 50'·'Lマウント接写 Ring'·'ring Nichel x 50mm Hektor … per macro')
     "närbildstillsats", "naheinstellgerät", "nah brille", "nahvorsatz", "filtro x", "接写", "per macro", "nooky", "sooky",
@@ -1147,6 +1150,8 @@ def detect_category(
     if result["category"] != "Accessory":
         return result
     name = re.sub(r"artisan ?& ?artist", "artisan-artist", normalized_name or "", flags=re.I)
+    if "hard_acc_rx:rental" in result["category_reason"]:
+        return result  # 대여는 '+' 앞 본품이 맞아도 판매가 아님 ('Leica M6 + 35mm f2 Summicron lens – Rental')
     m = _BUNDLE_SPLIT.search(name)
     if not m or m.start() < 6:
         return result

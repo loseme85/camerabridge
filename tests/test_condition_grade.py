@@ -825,3 +825,8 @@ def test_unit_camera_shop_condition():
     assert grade_of(site, "UNIT: minor")[0] == "B"
     assert grade_of(site, "UNIT: moderate")[0] == "C"
     assert grade_of(site, "UNIT: heavy")[0] == "D"
+
+def test_parts_prefix_is_parts_grade():
+    # 2026-11-19: 'Parts - Leica M6 Classic'($612)이 M6 시세에 섞이던 것
+    assert grade_of("Fotohandel", "", "Parts - Leica M6 Classic")[0] == "X"
+    assert grade_of("Fotohandel", "", "Leica M6 Parts camera")[0] != "X"
