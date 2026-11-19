@@ -45,6 +45,7 @@ WEIGHTS = {
     "aperture_hint": 5,
     "accessory_intent": 18,
     "accessory_code": 22,
+    "accessory_compat": 14,
 }
 
 MATCH_QUALITY_RANKS = {
@@ -1242,6 +1243,55 @@ def _score_aperture_hint(intent: dict[str, Any], text: str, breakdown: list[dict
     return awarded_total, possible
 
 
+# 악세사리 검색에서 질의에 적힌 M·R 바디 모델 ('leica m10 grip', 'm6 hood', 'r4 winder')
+_ACC_QUERY_MODEL = re.compile(r"(?<![a-z0-9])(m(?:240|262|11|10|9|8|7|6|5|4|3|2|1)(?:[-\s]?(?:p|d|r|e|a))?|mp|m[-\s]?(?:a|d|e|p)|r[3-9])(?![a-z0-9])")
+
+
+def _accessory_query_model(intent: dict[str, Any]) -> tuple[str, str, str] | None:
+    """질의 글자에서 바디 모델을 찾아 (마운트, 시스템 이름, 표시)로. Q·SL은 system/mount가 이미 따로 점수에 들어가므로 여기서는 M·R만."""
+    text = _normalize(intent.get("original_query") or "")
+    if not text or intent.get("system") or intent.get("mount"):
+        return None
+    match = _ACC_QUERY_MODEL.search(text)
+    if not match:
+        return None
+    token = re.sub(r"[-\s]", "", match.group(1))
+    if token.startswith("r"):
+        return "R", token.upper(), token.upper()
+    base = re.match(r"m(240|262|\d{1,2})", token)
+    system = ("M" + base.group(1)) if base and base.group(1) in {"8", "9", "10", "11", "240", "262"} else ""
+    return "M", system, token.upper()
+
+
+def _score_accessory_compat(
+    intent: dict[str, Any],
+    final: dict[str, Any],
+    breakdown: list[dict[str, Any]],
+    matched: list[str],
+    mismatches: list[str],
+) -> tuple[float, float]:
+    """'leica m10 grip'에서 SL3 그립이 1위로 오던 것 (2026-11-19). 같은 모델 > 같은 마운트 > 호환 정보 없음 > 다른 마운트.
+    호환 정보가 없는 매물이 3분의 2라 걸러내지 않고 순서만 바꾼다."""
+    if not intent.get("accessory_intent"):
+        return 0.0, 0.0
+    model = _accessory_query_model(intent)
+    if not model or _normalize(final.get("category")) != "accessory":
+        return 0.0, 0.0
+    mount, system, label = model
+    possible = float(WEIGHTS["accessory_compat"])
+    mounts = {str(m).upper() for m in final.get("compatible_mounts") or []}
+    systems = {str(m).upper() for m in final.get("compatible_systems") or []}
+    if system and system.upper() in systems:
+        return _add_score(breakdown, matched, ScoreItem("accessory_compat", label, sorted(systems)[0], possible, possible, "same_model", "compatible_systems")), possible
+    if mount in mounts or mount in systems:
+        return _add_score(breakdown, matched, ScoreItem("accessory_compat", label, mount, possible, possible * 0.65, "same_mount", "compatible_mounts")), possible
+    if not mounts and not systems:
+        return _add_score(breakdown, matched, ScoreItem("accessory_compat", label, None, possible, possible * 0.3, "compat_unknown", "compatible_mounts")), possible
+    mismatches.append("accessory_compat_mismatch")
+    breakdown.append(ScoreItem("accessory_compat", label, "/".join(sorted(mounts | systems)), possible, 0, "mismatch", "compatible_mounts").to_dict())
+    return 0.0, possible
+
+
 def _score_accessory_intent(
     intent: dict[str, Any],
     final: dict[str, Any],
@@ -1557,6 +1607,7 @@ def score_listing(intent: dict[str, Any], record: dict[str, Any]) -> dict[str, A
         lambda: _score_optical_formula(intent, final, text, breakdown, matched, mismatches),
         lambda: _score_aperture_hint(intent, text, breakdown, matched, mismatches),
         lambda: _score_accessory_intent(intent, final, text, breakdown, matched, mismatches),
+        lambda: _score_accessory_compat(intent, final, breakdown, matched, mismatches),
     ]:
         awarded, possible = scorer()
         raw_score += awarded

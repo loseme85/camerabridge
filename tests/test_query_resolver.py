@@ -1221,3 +1221,24 @@ if __name__ == "__main__":
     test_explicit_brand_query_does_not_add_implicit_preference()
     test_implicit_preference_does_not_promote_weak_result()
     print("test_query_resolver: ok")
+
+
+def test_accessory_compat_prefers_same_model_then_same_mount() -> None:
+    # 2026-11-19: 'leica m10 grip'에서 SL3 그립이 1위로 오던 것 → 같은 모델 > 같은 마운트 > 호환 정보 없음 > 다른 마운트
+    from query_resolver import _accessory_query_model, _score_accessory_compat
+    intent = {"original_query": "leica m10 grip", "accessory_intent": "grip"}
+    assert _accessory_query_model(intent) == ("M", "M10", "M10")
+    assert _accessory_query_model({"original_query": "leica m6 hood", "accessory_intent": "hood"}) == ("M", "", "M6")
+    assert _accessory_query_model({"original_query": "leica r4 winder", "accessory_intent": "winder"}) == ("R", "R4", "R4")
+    assert _accessory_query_model({"original_query": "leica q3 case", "system": "Q", "accessory_intent": "case"}) is None
+
+    def score(final: dict) -> float:
+        final = {"category": "Accessory", **final}
+        return _score_accessory_compat(intent, final, [], [], [])[0]
+    same_model = score({"compatible_mounts": ["M"], "compatible_systems": ["M10", "M"]})
+    same_mount = score({"compatible_mounts": ["M"], "compatible_systems": ["M"]})
+    unknown = score({"compatible_mounts": [], "compatible_systems": []})
+    other = score({"compatible_mounts": ["SL"], "compatible_systems": ["SL3", "SL"]})
+    assert same_model > same_mount > unknown > other == 0
+    # 악세사리 검색이 아니면 점수 없음
+    assert _score_accessory_compat({"original_query": "leica m10"}, {"category": "Body"}, [], [], []) == (0.0, 0.0)
