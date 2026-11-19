@@ -8,12 +8,12 @@ r = s.get(base + "/collections.json", params={"limit": 250}, timeout=30)
 print("collections.json", r.status_code)
 cols = [c["handle"] for c in r.json().get("collections", [])] if r.status_code == 200 else []
 out["collections"] = cols
-cand = [c for c in cols if re.search(r"(?i)second|used|pre-?owned|leica", c)]
+cand = ["secondhand-lenses", "secondhand-cameras", "secondhand-camera-bodies", "secondhand", "secondhand-leica", "secondhand-accessories", "secondhand-mirrorless-cameras", "secondhand-film-cameras", "used-leica", "leica"]
 print(len(cols), cand[:40])
 out["cand"] = cand
-for col in cand[:12]:
+for col in cand:
     items = []
-    for page in range(1, 8):
+    for page in range(1, 40):
         r = s.get(f"{base}/collections/{col}/products.json", params={"limit": 250, "page": page}, timeout=30)
         if r.status_code != 200:
             print(col, page, r.status_code); break
