@@ -379,3 +379,13 @@ def test_rental_and_cool_shoe_are_not_bodies() -> None:
         assert _classify(title)["category"] == "Accessory", title
     # 대여품을 파는 'ex-rental'은 본품 그대로
     assert _classify("Leica M6 ex-rental body")["category"] == "Body"
+
+def test_dash_extra_battery_depends_on_price() -> None:
+    # 2026-11-19 Leica Store Miami: 'M10-R … - Extra Battery'($6,995)는 본체에 딸린 배터리, 'SL3 - Extra Battery'는 배터리 단품
+    for title, price, category in [
+        ("Used Leica M10-R, silver chrome - Extra Battery - Recent Leica CLA", "$6,995", "Body"),
+        ("Used Leica M11 Monochrom - Extra Battery", "$8,995", "Body"),
+        ("Used Leica SL2 - Extra Battery", "$2,495", "Body"),
+        ("Used Leica SL3 - Extra Battery", "$135", "Accessory"),
+    ]:
+        assert classify_listing_v2({"상품명": title, "가격": price, "통화": "USD"})["category"] == category, title

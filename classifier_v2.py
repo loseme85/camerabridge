@@ -1206,6 +1206,9 @@ def _detect_category_core(
     combined = re.sub(r"(?:hood|フード|ﾌｰﾄﾞ)\s*(?:組込み?|組み込み|内蔵)|built[- ]?in[- ]?hood", " ", combined)
     # 'M2 ST Recovered'(가죽 새로 입힘)의 cover가 커버 부속품 키워드에 걸리지 않게
     combined = re.sub(r"\brecover(?:ed|ing)?\b", "releathered", combined)
+    # 'M10-R, silver chrome - Extra Battery' (Leica Store Miami): 값이 바디급(80만 원 이상)이면 본체에 딸린 배터리. 싸면 'SL3 - Extra Battery'처럼 배터리 단품
+    if (_price_krw(price_str or "", currency) or 0) >= 800000:
+        combined = re.sub(r"\s[-–]\s*(?:an?\s+)?extra\s+batter(?:y|ies)\b", " ", combined)
     combined = re.sub(r"(?:\bw\.|\bwith|\+)\s+(?:an?\s+)?(?:extension|adapter|focus\w*|macro)\s+ring\b", " ", combined)  # 렌즈에 딸린 링 ('Telyt 200mm … w. Extension Ring')
     combined = re.sub(r"\b(?:no|ohne|without|senza|sans)\s+(?:rear |front |lens |body )?cap\b", " ", combined)  # 'no rear cap'은 캡이 없다는 뜻
     if re.search(r"digitalkamera|digital camera", combined):
