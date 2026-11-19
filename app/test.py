@@ -14788,6 +14788,7 @@ def crawl_soper():
     print(f"  ✅ Soper 완료: {len(rows)}개, 확인한 상품 {len(urls)}개")
     return rows
 
+
 def crawl_cambrian():
     """Cambrian Photography (영국 웨일스) - Shopify JSON 전체 상품에서 제목이 'Used'로 시작하는 Leica·Leitz만.
     파나소닉 라이카 렌즈(마이크로 포서즈)는 라이카 본사 제품이 아니라 뺀다. 등급은 태그 Excellent/Good, 없으면 설명 'Condition: Used'."""
