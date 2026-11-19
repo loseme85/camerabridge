@@ -84,6 +84,10 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
             if re.search(pattern, value):
                 return grade, "text"
         return None, None
+
+    # Cambrian Photography (영국): 태그 Excellent/Good, 없으면 설명 'Condition: Used … light signs of use'. 2026-11-19 밤샘 사진 4개(렌즈·악세사리 전부): 4/4 일치.
+    if site == "Cambrian Photography (영국)" and cond.startswith("Cambrian: "):
+        return {"excellent": "A", "good": "B", "used": "B"}.get(cond.removeprefix("Cambrian: ").strip().lower()), "text"
     if cond == "Grainlab: hervorragend":
         return "B", "text"
     # Cape Town 20개 × 3장: 정확 12/20, 한 등급 이내 20/20. 일반 영문 대응보다 한 칸 후한 매장.
