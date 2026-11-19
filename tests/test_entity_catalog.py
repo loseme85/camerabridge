@@ -786,3 +786,11 @@ def test_pricey_set_word_on_standard_body_is_flagged_as_set() -> None:
     flagged = flag_pricey_set(records, lambda r: r["final_output"]["_krw"], catalog)
     assert flagged == {id(set_item)} and set_item["final_output"]["entity_note"] == "set"
     assert "entity_note" not in plain["final_output"] and "entity_note" not in cheap_set["final_output"]
+
+def test_m4p_anniversary_titles_go_to_70_jahre_not_standard() -> None:
+    def m4p(title: str) -> list[str]:
+        return [i for i in match_entities(_record(title, "Body")) if i.startswith("leica:body:m4-p:")]
+    assert m4p("Leica M4-P Anniversary") == ["leica:body:m4-p:70-jahre"]
+    assert m4p("Leica M4-P 70th Anniversary Edition") == ["leica:body:m4-p:70-jahre"]
+    assert m4p("Leica M4-P") == ["leica:body:m4-p:standard"]
+    assert m4p("Leica M4-P Everest 82") == ["leica:body:m4-p:everest"]
