@@ -5810,7 +5810,7 @@
     };
     const ENTITY_STOP_TOKENS = new Set(['leica', '라이카', 'ライカ', '徕卡', '徠卡', 'lens', '렌즈', 'body', '바디',
       '0.58', '0.72', '0.85', '0.68', 'black', 'silver', 'chrome', '블랙', '실버', '크롬', 'used', '중고', '신품', 'new', 'paint', '블랙페인트', 'mandler']);  // mandler: 설계자 이름 — 오타 고치기가 'moncler'로 잘못 맞춤
-    const entityState = { summary: null, byId: {}, suggestions: {}, active: {} };
+    const entityState = { summary: null, byId: {}, suggestions: {}, accessorySuggestions: {}, active: {} };
 
     function ec(key, vars = {}){
       const entry = ENTITY_COPY[key] || {};
@@ -5945,6 +5945,73 @@
       const union = tokenScore(entity._tokens);
       if(union === null) return 0;
       return 700 + 10 * known.length - 5 * ignored + union + 3 * Math.max(0, entity._tokens.size - known.length);
+    }
+
+    // 검색창 자동완성의 '악세사리 종류' 줄 (2026-11-19 사장님: 후드·케이스를 쳐도 후보가 안 떠서 없는 물건처럼 보임).
+    // key = 요약 파일 accessory_types의 종류, q = 검색에 쓸 영어 낱말, names = 화면 언어별 이름, alias = 이 말을 치면 후보로 (소문자)
+    const ACCESSORY_TYPES = [
+      { key: 'hood', q: 'hood', names: { ko: '후드', en: 'Lens hood', ja: 'レンズフード', 'zh-Hans': '遮光罩', 'zh-Hant': '遮光罩', pt: 'Para-sol', es: 'Parasol', de: 'Gegenlichtblende', it: 'Paraluce', fr: 'Pare-soleil' },
+        alias: ['hood', 'lens hood', '후드', 'フード', 'レンズフード', 'gegenlichtblende', 'parasol', 'para-sol', 'paraluce', 'pare-soleil', '遮光罩'] },
+      { key: 'filter', q: 'filter', names: { ko: '필터', en: 'Filter', ja: 'フィルター', 'zh-Hans': '滤镜', 'zh-Hant': '濾鏡', pt: 'Filtro', es: 'Filtro', de: 'Filter', it: 'Filtro', fr: 'Filtre' },
+        alias: ['filter', '필터', 'フィルター', 'filtro', 'filtre', '滤镜', '濾鏡', 'uv filter', 'uva'] },
+      { key: 'finder', q: 'finder', names: { ko: '파인더', en: 'Viewfinder', ja: 'ファインダー', 'zh-Hans': '取景器', 'zh-Hant': '觀景窗', pt: 'Visor', es: 'Visor', de: 'Sucher', it: 'Mirino', fr: 'Viseur' },
+        alias: ['finder', 'viewfinder', 'view finder', '파인더', 'ファインダー', 'sucher', 'visor', 'mirino', 'viseur', '取景器', '觀景窗'] },
+      { key: 'case', q: 'case', names: { ko: '케이스', en: 'Case', ja: 'ケース', 'zh-Hans': '保护套', 'zh-Hant': '保護套', pt: 'Estojo', es: 'Funda', de: 'Tasche', it: 'Custodia', fr: 'Étui' },
+        alias: ['case', '케이스', 'ケース', 'funda', 'etui', 'étui', 'custodia', 'estojo', '保护套', '保護套'] },
+      { key: 'bag', q: 'bag', names: { ko: '가방', en: 'Bag', ja: 'バッグ', 'zh-Hans': '相机包', 'zh-Hant': '相機包', pt: 'Bolsa', es: 'Bolso', de: 'Tasche', it: 'Borsa', fr: 'Sac' },
+        alias: ['bag', 'pouch', '가방', '파우치', 'バッグ', 'ポーチ', 'tasche', 'borsa', 'bolsa', 'bolso', 'sac', '相机包', '相機包'] },
+      { key: 'adapter', q: 'adapter', names: { ko: '어댑터', en: 'Adapter', ja: 'アダプター', 'zh-Hans': '转接环', 'zh-Hant': '轉接環', pt: 'Adaptador', es: 'Adaptador', de: 'Adapter', it: 'Adattatore', fr: 'Adaptateur' },
+        alias: ['adapter', 'adaptor', '어댑터', '어뎁터', 'アダプター', 'adaptador', 'adattatore', 'adaptateur', '转接环', '轉接環'] },
+      { key: 'grip', q: 'grip', names: { ko: '그립', en: 'Grip', ja: 'グリップ', 'zh-Hans': '手柄', 'zh-Hant': '手把', pt: 'Empunhadura', es: 'Empuñadura', de: 'Handgriff', it: 'Impugnatura', fr: 'Poignée' },
+        alias: ['grip', 'handgrip', '그립', 'グリップ', 'handgriff', 'impugnatura', 'empuñadura', 'poignée', '手柄', '手把'] },
+      { key: 'visoflex', q: 'visoflex', names: { ko: 'Visoflex', en: 'Visoflex', ja: 'ビゾフレックス', 'zh-Hans': 'Visoflex', 'zh-Hant': 'Visoflex', pt: 'Visoflex', es: 'Visoflex', de: 'Visoflex', it: 'Visoflex', fr: 'Visoflex' },
+        alias: ['visoflex', 'ビゾフレックス', '비조플렉스'] },
+      { key: 'cap', q: 'cap', names: { ko: '캡', en: 'Cap', ja: 'キャップ', 'zh-Hans': '镜头盖', 'zh-Hant': '鏡頭蓋', pt: 'Tampa', es: 'Tapa', de: 'Deckel', it: 'Tappo', fr: 'Bouchon' },
+        alias: ['cap', 'lens cap', 'body cap', '캡', 'キャップ', 'deckel', 'tappo', 'tapa', 'tampa', 'bouchon', '镜头盖', '鏡頭蓋'] },
+      { key: 'strap', q: 'strap', names: { ko: '스트랩', en: 'Strap', ja: 'ストラップ', 'zh-Hans': '背带', 'zh-Hant': '背帶', pt: 'Alça', es: 'Correa', de: 'Trageriemen', it: 'Tracolla', fr: 'Sangle' },
+        alias: ['strap', '스트랩', 'ストラップ', 'trageriemen', 'tracolla', 'correa', 'alça', 'sangle', '背带', '背帶'] },
+      { key: 'battery', q: 'battery', names: { ko: '배터리', en: 'Battery', ja: 'バッテリー', 'zh-Hans': '电池', 'zh-Hant': '電池', pt: 'Bateria', es: 'Batería', de: 'Akku', it: 'Batteria', fr: 'Batterie' },
+        alias: ['battery', 'charger', '배터리', '충전기', 'バッテリー', '充電器', 'akku', 'batteria', 'batería', 'bateria', 'batterie', '电池', '電池'] },
+      { key: 'flash', q: 'flash', names: { ko: '플래시', en: 'Flash', ja: 'フラッシュ', 'zh-Hans': '闪光灯', 'zh-Hant': '閃光燈', pt: 'Flash', es: 'Flash', de: 'Blitz', it: 'Flash', fr: 'Flash' },
+        alias: ['flash', '플래시', 'フラッシュ', 'blitz', '闪光灯', '閃光燈'] },
+    ];
+
+    // 입력이 악세사리 종류 이름이거나 그 이름을 앞부분으로 가지면 그 종류를 후보로. 'm6 hood'처럼 모델과 함께 쳐도 종류 줄만 보여 줌
+    // (악세사리 검색은 아직 모델 호환으로 좁히지 못해 'm6 hood'도 후드 전체가 나옴 — 모델이 반영되는 것처럼 보이지 않게 종류 이름만 씀)
+    function suggestAccessoryTypes(rawQuery, limit = 3){
+      const query = normalizeEntityText(rawQuery);
+      if(query.length < 2) return [];
+      const counts = (entityState.summary && entityState.summary.accessory_types) || {};
+      const out = [];
+      ACCESSORY_TYPES.forEach(type => {
+        const contained = type.alias.find(alias => alias.length >= 2 && new RegExp('(^| )' + alias.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '( |$)').test(query));
+        const prefix = !contained && type.alias.some(alias => alias.length > query.length && alias.startsWith(query));
+        if(!contained && !prefix) return;
+        out.push({ type, count: counts[type.key] || 0, score: contained ? 2 : 1 });
+      });
+      return out.sort((a, b) => b.score - a.score || b.count - a.count).slice(0, limit);
+    }
+
+    function accessoryTypeName(type){
+      return type.names[uiState.locale] || type.names.en;
+    }
+
+    // 자동완성의 악세사리 종류를 고르면 카테고리를 '액세서리'로 두고 검색 (모델을 고르면 다시 원래대로)
+    let accessoryCategoryAuto = false;
+    function runAccessoryTypeSearch(inputId, typeKey, options = {}){
+      const picked = (entityState.accessorySuggestions[inputId] || []).find(item => item.type.key === typeKey);
+      if(!picked) return;
+      const query = picked.type.q;
+      state.entity = '';
+      closeEntityMenu(inputId);
+      syncSearchInputs(query);
+      if(els['category-filter']){ els['category-filter'].value = 'Accessory'; accessoryCategoryAuto = true; }
+      runSearch(0, { usageVia: 'typed', historyMode: 'push', freeText: true, preferSticky: inputId === 'sticky-query-input', preserveResultsAnchor: true });
+    }
+
+    function clearAutoAccessoryCategory(){
+      if(accessoryCategoryAuto && els['category-filter'] && els['category-filter'].value === 'Accessory') els['category-filter'].value = '';
+      accessoryCategoryAuto = false;
     }
 
     function suggestEntities(rawQuery, limit = 12){
@@ -6760,19 +6827,26 @@
       if(!input || !menu) return;
       const raw = input.value.trim();
       const suggestions = suggestEntities(raw);
+      const accessories = suggestAccessoryTypes(raw);
       entityState.suggestions[inputId] = suggestions;
+      entityState.accessorySuggestions[inputId] = accessories;
       entityState.active[inputId] = -1;
-      if(!raw || !suggestions.length){
+      if(!raw || (!suggestions.length && !accessories.length)){
         closeEntityMenu(inputId);
         return;
       }
+      const accessoryItems = accessories.map(item => `
+        <li id="${inputId}-opt-acc-${item.type.key}" role="option" class="entity-option" data-index="acc:${item.type.key}" aria-selected="false">
+          <span class="entity-option-name">${escapeHtml(accessoryTypeName(item.type))}</span>
+          <span class="entity-option-meta">${escapeHtml(ec('accessory') + (item.count ? ' · ' + ec('on_sale', { n: String(item.count) }) : ''))}</span>
+        </li>`).join('');
       const items = suggestions.map((item, index) => `
         <li id="${inputId}-opt-${index}" role="option" class="entity-option" data-index="${index}" aria-selected="false">
           <span class="entity-option-name">${escapeHtml(entityDisplayName(item.entity))}</span>
           <span class="entity-option-meta">${escapeHtml(entityMetaLine(item.entity) + ((item.entity.codes || []).includes(normalizeEntityText(raw)) ? ` · #${normalizeEntityText(raw)}` : ''))}</span>
         </li>`).join('');
       const free = `<li id="${inputId}-opt-free" role="option" class="entity-option entity-option-free" data-index="free" aria-selected="false">${escapeHtml(ec('free_text', { q: raw }))}</li>`;
-      menu.innerHTML = items + free;
+      menu.innerHTML = items + accessoryItems + free;
       menu.hidden = false;
       input.setAttribute('aria-expanded', 'true');
     }
@@ -6799,6 +6873,7 @@
     function selectEntity(entityId, inputId, options = {}){
       const entity = entityState.byId[entityId];
       if(!entity) return;
+      clearAutoAccessoryCategory();
       state.entity = entity.id;
       closeEntityMenu(inputId);
       const label = entityDisplayName(entity);
@@ -6809,6 +6884,7 @@
     }
 
     function runFreeTextSearch(inputId, options = {}){
+      clearAutoAccessoryCategory();
       state.entity = '';
       closeEntityMenu(inputId);
       syncSearchInputs(els[inputId].value);
@@ -6825,6 +6901,7 @@
       if(menu && !menu.hidden && index >= 0){
         const option = menu.querySelectorAll('.entity-option')[index];
         if(option && option.dataset.index === 'free') return runFreeTextSearch(inputId, options);
+        if(option && String(option.dataset.index).startsWith('acc:')) return runAccessoryTypeSearch(inputId, option.dataset.index.slice(4), options);
         const item = (entityState.suggestions[inputId] || [])[Number(option.dataset.index)];
         if(item) return selectEntity(item.entity.id, inputId, options);
       }
@@ -6867,6 +6944,7 @@
         const option = event.target.closest('.entity-option');
         if(!option) return;
         if(option.dataset.index === 'free') return runFreeTextSearch(inputId, options);
+        if(String(option.dataset.index).startsWith('acc:')) return runAccessoryTypeSearch(inputId, option.dataset.index.slice(4), options);
         const item = (entityState.suggestions[inputId] || [])[Number(option.dataset.index)];
         if(item) selectEntity(item.entity.id, inputId, options);
       });
