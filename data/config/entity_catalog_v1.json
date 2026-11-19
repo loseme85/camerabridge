@@ -321,7 +321,7 @@
      "titan|티탄",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "LHSA",
      "광복 ?60|60th jubilee|60th.{0,20}independence",
      "jubilee",
@@ -653,7 +653,7 @@
      "\\bTL\\b|-TL\\b",
      "-R\\b",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "black[- ]?chrome|블랙 ?크롬|ブラッククローム|\\b11688\\b",
      "ASPH\\.? ?II\\b|ASPH\\.? ?2\\b|\\(type ii\\)|close ?focus|근접|\\b1172[89]\\b",
      "silver ?chrome|silber ?verchromt|verchromt|\\bchrome\\b|크롬|クローム|\\b11892\\b|\\bsilver\\b|실버|シルバ|silbern",
@@ -746,7 +746,7 @@
      "토륨|thorium|radioactive|collaps|침동",
      "compur",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "50주년|50th anniv",
      "leeworks",
      "light ?lens ?lab",
@@ -827,7 +827,7 @@
      "box only",
      "박스만",
      "전기|early|후기|late|1st|2nd",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -1543,7 +1543,7 @@
      "박스만",
      "\\bAPO\\b|apo-",
      "\\bL\\b(?!\\s?\\d{2,3}mm)|LTM|L39|M39|screw|스크류",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -2161,7 +2161,7 @@
      "MP ?3",
      "double ?stroke|더블 ?스트로크|\\bDS\\b",
      "single ?stroke|싱글 ?스트로크|\\bSS\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))",
      "olive|올리브|オリーブ",
      "\\b700\\d{3}\\b|\\b701000\\b|first ?batch|첫 ?생산",
      "段付き|段付|very early|初期",
@@ -2206,7 +2206,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "\\bM ?4\\b.{0,40}\\bM ?3\\b|boba ?fett"
     ]
    }
   },
@@ -2282,7 +2283,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "\\bM ?4\\b.{0,40}\\bM ?3\\b|boba ?fett"
     ]
    }
   },
@@ -2359,7 +2361,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "\\bM ?4\\b.{0,40}\\bM ?3\\b|boba ?fett"
     ]
    }
   },
@@ -2384,7 +2387,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?3\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\\bblack\\b(?!\\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\\s*크롬))"
     ],
     "title_must_not": [
      "M3 ?J",
@@ -2432,7 +2435,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "\\bM ?4\\b.{0,40}\\bM ?3\\b|boba ?fett"
     ]
    }
   },
@@ -2503,7 +2507,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "\\bM ?4\\b.{0,40}\\bM ?3\\b|boba ?fett"
     ]
    }
   },
@@ -2579,7 +2584,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "\\bM ?4\\b.{0,40}\\bM ?3\\b|boba ?fett"
     ]
    }
   },
@@ -2654,7 +2660,8 @@
      "manual",
      "설명서",
      "box only",
-     "박스만"
+     "박스만",
+     "\\bM ?4\\b.{0,40}\\bM ?3\\b|boba ?fett"
     ]
    }
   },
@@ -2747,7 +2754,7 @@
      "M2-?R",
      "\\bM ?24\\d",
      "M ?2 ?\\d{2}",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "button|버튼",
      "olive|military|\\barmy\\b|bundeswehr|올리브|군용|군납",
      "leeworks",
@@ -2817,7 +2824,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?2\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "M2-?R",
@@ -3538,7 +3545,7 @@
     ],
     "title_must_not": [
      "KE-? ?7A?\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "50 ?jahre|50 ?years|50th|anniversary",
      "olive|올리브",
      "leeworks",
@@ -3609,7 +3616,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?4\\b(?!-)",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "KE-? ?7A?\\b",
@@ -4655,7 +4662,7 @@
     ],
     "title_must_not": [
      "non.?ttl",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "gold ?logo|골드 ?로고|M6 ?G\\b",
      "platin|プラチナ|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
      "siber|hegner|125 ?(th|jahre|周年|주년)",
@@ -7330,7 +7337,7 @@
     "title_must": [
      "\\bM ?6\\b",
      "(?<!non )(?<!non-)(?<!non)TTL",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "re-?paint|리페인트|재도색|custom|커스텀",
@@ -8016,7 +8023,7 @@
      "oskar|barnack",
      "terry|테리 ?오닐",
      "광복|independence",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "50(th| ?jahre)|50주년|anthrac|안트라",
      "leeworks",
      "light ?lens ?lab",
@@ -8561,7 +8568,7 @@
     "mount": "M",
     "title_must": [
      "\\bMP\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "M-?P\\b ?(240|typ)",
@@ -9632,7 +9639,7 @@
     "title_must_not": [
      "herm[eè]s|에르메스",
      "\\bfoto\\s+rahn\\b|포토\\s?란|フォト\\s?ラーン",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -9845,7 +9852,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?9-?P\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "re-?paint|리페인트|재도색|custom|커스텀",
@@ -10360,7 +10367,7 @@
      "correspondent|kravitz|크라비츠",
      "safari|사파리",
      "광복|independence|70th anniv|70주년|\\b\\d{1,2}/70\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "\\bgrip\\b|gibson",
      "leeworks",
      "light ?lens ?lab",
@@ -10647,7 +10654,7 @@
     "mount": "M",
     "title_must": [
      "\\bM-P\\b|\\bM-?P ?(240|typ ?240)",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "M10|M11|M9",
@@ -11771,7 +11778,7 @@
      "\\bM ?10-?R\\b"
     ],
     "title_must_not": [
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -11837,7 +11844,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?10-?R\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "re-?paint|리페인트|재도색|custom|커스텀",
@@ -12119,7 +12126,7 @@
     "title_must_not": [
      "M11-?(P|D|V)\\b",
      "monochrom",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|glossy",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|glossy",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -12189,7 +12196,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?11\\b",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|glossy"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント|glossy"
     ],
     "title_must_not": [
      "M11-?(P|D|V)\\b",
@@ -18790,7 +18797,7 @@
      "\\bQ ?\\d",
      "magnifier|data ?back|soft ?release|vit\\b",
      "leicaflex",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "luftwaffe|\\bheer\\b|wehrmacht|kriegsmarine|eigentum|\\bW\\.?\\s?H\\.?(?=\\s|$)|\\bFl\\.?\\s?\\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\\s?K\\b|III ?c\\b.*(?:grey|gray|グレー|그레이)",
      "leeworks",
      "light ?lens ?lab",
@@ -19932,7 +19939,7 @@
     "mount": null,
     "title_must": [
      "\\bIII\\b(?! ?[a-g]\\b)",
-     "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bM ?\\d",
@@ -22380,7 +22387,7 @@
      "classic|클래식|reissue|복각",
      "millenn?ium|밀레니엄",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "ASPH",
      "leeworks",
      "light ?lens ?lab",
@@ -22467,7 +22474,7 @@
      "classic|클래식|reissue|복각",
      "millenn?ium|밀레니엄",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "ASPH",
      "leeworks",
      "light ?lens ?lab",
@@ -22555,7 +22562,7 @@
      "classic|클래식|reissue|복각",
      "millenn?ium|밀레니엄",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "ASPH",
      "leeworks",
      "light ?lens ?lab",
@@ -22654,7 +22661,7 @@
      "classic|클래식|reissue|복각",
      "millenn?ium|밀레니엄",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "ASPH",
      "leeworks",
      "light ?lens ?lab",
@@ -23219,7 +23226,7 @@
      "classic|클래식|reissue|복각",
      "millenn?ium|밀레니엄",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -23312,7 +23319,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -23863,7 +23870,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "\\btype ?i{1,3}v?\\b",
      "king ?of ?bokeh|bokeh ?king|\\bKOB\\b",
      "leeworks",
@@ -24041,7 +24048,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -24123,7 +24130,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -24372,7 +24379,7 @@
      "50 ?jahre",
      "토륨|thorium",
      "safari|사파리|サファリ",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "50주년|50th anniv",
      "collaps|침동|토륨|thorium|\\bL39\\b|\\bLTM\\b|\\bM39\\b",
      "rigid|리짓|리지드|고정",
@@ -25900,7 +25907,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "safari|사파리|サファリ",
      "titan|티탄|チタン",
      "leeworks",
@@ -36678,7 +36685,7 @@
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
      "ASPH",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -36762,7 +36769,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bSL\\b",
@@ -36854,7 +36861,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "11713|re-?issue|re-?edition|2021|glossy|グロッシー|グロツシー|복각|신품|brand new|\\bnew\\b"
     ],
     "title_must_not": [
@@ -37027,7 +37034,7 @@
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
      "ASPH",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -37352,7 +37359,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -37528,7 +37535,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -37615,7 +37622,7 @@
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])50(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
      "rigid|리짓|리지드",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -37981,7 +37988,7 @@
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL\\b",
      "-R\\b",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -38064,7 +38071,7 @@
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL\\b",
      "-R\\b",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -38149,7 +38156,7 @@
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL\\b",
      "-R\\b",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -38780,7 +38787,7 @@
     "title_must": [
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "\\bAPO\\b",
@@ -38850,7 +38857,7 @@
      "\\bAPO\\b|apo-",
      "(summicron|\\bcron\\b)",
      "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント"
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
     ],
     "title_must_not": [
      "re-?paint|리페인트|재도색",
@@ -39286,7 +39293,7 @@
     ],
     "title_must_not": [
      "\\bAPO\\b",
-     "black ?paint|블랙 ?페인트|블페|ブラックペイント",
+     "bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",

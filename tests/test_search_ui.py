@@ -214,9 +214,9 @@ def test_price_sort_keeps_one_price_line_and_puts_accessories_last() -> None:
         assert "match_quality" in _function_body(html, "priceSortGroup")
         assert "function sortGroupDivider(" in html
         # 2026-11-13: 부속품은 어느 정렬이든 맨 아래 묶음 (가격순은 비슷한 매물 묶음도)
-        assert "(isPriceSort(sortMode) ? item.sortGroup : (item.sortGroup === 2 ? 2 : null))" in html
+        assert "(isPriceSort(sortMode) ? item.sortGroup : ([1.5, 2].includes(item.sortGroup) ? item.sortGroup : null))" in html
         assert "isAccessoryTitle(result.title)" in _function_body(html, "priceSortGroup")
-        assert "group_accessory:" in html and "group_other:" in html
+        assert "group_accessory:" in html and "group_other:" in html and "group_set:" in html
 
 
 def test_language_switch_preserves_results_without_research() -> None:

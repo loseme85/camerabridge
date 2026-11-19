@@ -19,7 +19,7 @@ REPAINT = r"re-?paint|리페인트|재도색|custom|커스텀"
 MILITARY = r"luftwaffe|\bheer\b|wehrmacht|kriegsmarine|eigentum|\bW\.?\s?H\.?(?=\s|$)|\bFl\.?\s?\d{5}|military|militaire|milit[äa]r|군용|군납|III ?c-?\s?K\b|III ?c\b.*(?:grey|gray|グレー|그레이)"
 SWEDISH = r"swed|sweden|three ?crowns?|tre ?kronor|스웨덴|military|군용|군납"
 OLIVE_MILITARY = r"olive|military|\barmy\b|bundeswehr|올리브|군용|군납"
-BLACK_PAINT = (r"black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント", [REPAINT])
+BLACK_PAINT = (r"bl(?:ac|ca)k ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント", [REPAINT])
 
 
 def _short(name: str) -> str:
@@ -71,7 +71,9 @@ def v(slug, name, ko, marker, aliases=(), extra_not=()):
 BP = lambda base: v("black-paint", f"{base} Black Paint", f"{base} 블랙페인트", BLACK_PAINT[0], [f"{base.lower()} black paint", f"{base.lower()} 블랙페인트"], BLACK_PAINT[1])  # noqa: E731
 
 # ── M 필름 바디 ──
-fam("leica:body:m3", "Leica M3", "라이카 M3", "M", [r"\bM ?3\b"], [r"M3 ?J", r"MP ?3"], ["엠3"], [
+# M4에 M3 파인더를 단 매물, 보바 펫 개조품은 M3 바디가 아님 (2026-11-19)
+M3_NOT_M3_BODY = r"\bM ?4\b.{0,40}\bM ?3\b|boba ?fett"
+fam("leica:body:m3", "Leica M3", "라이카 M3", "M", [r"\bM ?3\b"], [r"M3 ?J", r"MP ?3", M3_NOT_M3_BODY], ["엠3"], [
     v("double-stroke", "Leica M3 Double Stroke", "M3 더블스트로크", r"double ?stroke|더블 ?스트로크|\bDS\b", ["m3 ds", "m3 더블"]),
     v("single-stroke", "Leica M3 Single Stroke", "M3 싱글스트로크", r"single ?stroke|싱글 ?스트로크|\bSS\b", ["m3 ss", "m3 싱글", "m3 싱글스트로크", "m3 싱글 스트로크", "싱글스트로크"]),
     v("black-paint", "Leica M3 Black Paint", "M3 블랙페인트", BLACK_PAINT[0] + r"|^(?!.*(?:re-?paint|리페인트|재도색|custom|커스텀)).*(?:\bblack\b(?!\s*(?:chrome|leather|case|grip))|ブラック(?!クローム)|블랙(?!\s*크롬))",

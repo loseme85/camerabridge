@@ -761,3 +761,13 @@ def test_accessory_models_link_by_order_code() -> None:
     assert match_entities(_record("Leica E55 UVa 13373", category="Accessory")) == ["leica:acc:filter:13373"]
     assert match_entities(_record("LEICA 400mm f/5 TELYT pour Visoflex with BAGUE 16466M", category="Accessory")) == []
     assert "leica:acc:hood:12504" not in match_entities(_record("Leica 35mm f2 Summicron (11309) + Lens Hood (12504)", category="Lens"))
+
+
+def test_m3_excludes_m4_with_m3_finder_and_boba_fett_mod() -> None:
+    def bodies(title: str) -> list[str]:
+        return [i for i in match_entities(_record(title, "Body")) if i.startswith("leica:body:m")]
+    assert not any(i.startswith("leica:body:m3") for i in bodies("Leica M4 Black Chrome (fitted with M3 finder)"))
+    assert any(i.startswith("leica:body:m4") for i in bodies("Leica M4 schwarz verchromt with M3 Viewfinder Body"))
+    assert not any(i.startswith("leica:body:m3") for i in bodies("Leica M3 Project Boba Fett 1977 Set"))
+    assert "leica:body:m3:standard" in bodies("Leica M3 Body")
+    assert "leica:body:m2:black-paint" in bodies("LEICA M2 Blcak paint")
