@@ -32,3 +32,19 @@ def test_every_language_has_compare_texts():
 def test_pairs_are_unique():
     assert len(set(bmp.COMPARE_PAIRS)) == len(bmp.COMPARE_PAIRS)
     assert all(a != b for a, b in bmp.COMPARE_PAIRS)
+
+
+def test_compare_trend_scales_to_today_and_needs_samples():
+    weeks = ["2026-09-28", "2026-10-05", "2026-10-12", "2026-11-02", "2026-11-16"]
+    a = [[0, 1.0, 1], [1, 1.0, 5], [2, 1.1, 5], [3, 1.0, 5], [4, 0.8, 6]]
+    b = [[1, 1.0, 4], [2, 1.0, 4], [3, 1.0, 4], [4, 1.0, 4]]
+    pts = bmp.compare_trend(a, b, weeks, 800.0, 1000.0)
+    assert [w for w, _, _ in pts] == ["2026-10-05", "2026-11-02", "2026-11-16"]  # 9월 주는 A 매물 1개라 뺌, 달마다 첫 주 + 마지막 주
+    assert pts[-1][1:] == (800.0, 1000.0)  # 마지막 = 지금 B등급 시세
+    assert round(pts[0][1]) == 1000  # A는 0.8로 내려옴 → 10월 초 추정 1000
+    assert bmp.compare_trend(a[:1], b, weeks, 1, 1) == []
+
+
+def test_trend_texts_every_language():
+    for lang in bmp.LANGS:
+        assert {"trend_h", "trend_lead", "trend_note", "trend_up", "trend_down", "trend_same"} <= set(bmp.C[lang]), lang

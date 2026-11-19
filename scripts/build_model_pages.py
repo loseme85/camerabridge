@@ -325,6 +325,35 @@ C = {
            "f": {"years": "年份", "kind": "類別", "mount": "卡口 / 鏡頭", "sensor_mp": "像素", "sensor": "感光元件", "mono": "黑白", "finder": "觀景窗", "framelines": "框線", "meter": "測光表", "shutter": "快門", "top_speed": "最高快門速度", "flash_ttl": "TTL 閃光", "ibis": "防手震", "video": "影片", "battery": "電池", "weight_g": "重量", "note": "特點"}},
 }
 
+# 비교 페이지 시세 흐름 (2026-11-19 사장님 '붙여보자'): data/dealer/price_weekly.json → build_dealer_data.price_trend
+for _l, (_h, _lead, _up, _down, _same, _col, _gap, _note) in {'ko': ('시세 흐름', '{since}부터 {a} {ca}, {b} {cb}. 두 모델 차이: {d0} → {d1} ({verb}).', '늘어남', '줄어듦', '거의 그대로', '주', '차이', '매장 표시 가격 기준 추정치입니다. 같은 매장끼리 주마다 가격 변화를 이어 붙였고, 지금 B등급 시세에 맞췄습니다. 새로 붙은 매장과 환율은 흐름에 넣지 않습니다.'), 'en': ('Price trend', 'Since {since}: {a} {ca}, {b} {cb}. The gap between them {verb} from {d0} to {d1}.', 'widened', 'narrowed', 'held', 'Week of', 'Gap', "Estimated from shop asking prices: week-to-week changes at the same shops, chained and scaled to today's grade B value. Newly added shops and exchange rates don't move the trend."), 'ja': ('相場の推移', '{since} から {a} {ca}、{b} {cb}。両モデルの差は {d0} から {d1} に{verb}。', '広がりました', '縮まりました', '変わりません', '週', '差', '各店の表示価格からの推定値です。同じ店どうしの週ごとの変化をつなぎ、現在のB等級相場に合わせました。新しく加わった店や為替は推移に含めません。'), 'de': ('Preisentwicklung', 'Seit {since}: {a} {ca}, {b} {cb}. Der Abstand hat sich von {d0} auf {d1} {verb}.', 'vergrößert', 'verringert', 'kaum verändert', 'Woche', 'Abstand', 'Schätzung aus Händlerpreisen: Wochenveränderungen bei denselben Händlern, verkettet und auf den heutigen Marktwert (Zustand B) skaliert. Neue Händler und Wechselkurse bewegen den Verlauf nicht.'), 'it': ('Andamento dei prezzi', 'Da {since}: {a} {ca}, {b} {cb}. La differenza è {verb} da {d0} a {d1}.', 'aumentata', 'diminuita', 'rimasta stabile', 'Settimana', 'Differenza', "Stima dai prezzi dei negozi: variazioni settimanali negli stessi negozi, concatenate e riportate al valore attuale in grado B. Nuovi negozi e cambi non spostano l'andamento."), 'es': ('Evolución del precio', 'Desde {since}: {a} {ca}, {b} {cb}. La diferencia {verb} de {d0} a {d1}.', 'creció', 'se redujo', 'se mantuvo', 'Semana', 'Diferencia', 'Estimación a partir de precios de tiendas: cambios semanales en las mismas tiendas, encadenados y ajustados al valor actual en grado B. Las tiendas nuevas y el tipo de cambio no mueven la tendencia.'), 'pt': ('Evolução do preço', 'Desde {since}: {a} {ca}, {b} {cb}. A diferença {verb} de {d0} para {d1}.', 'aumentou', 'diminuiu', 'manteve-se', 'Semana', 'Diferença', 'Estimativa a partir de preços das lojas: variações semanais nas mesmas lojas, encadeadas e ajustadas ao valor atual em grau B. Lojas novas e câmbio não alteram a tendência.'), 'zh-Hans': ('价格走势', '自 {since} 起：{a} {ca}，{b} {cb}。两者差价从 {d0} {verb}到 {d1}。', '扩大', '缩小', '维持', '周', '差价', '根据店铺标价估算：同一店铺每周价格变化连乘，并按当前 B 级行情换算。新加入的店铺和汇率不影响走势。'), 'zh-Hant': ('價格走勢', '自 {since} 起：{a} {ca}，{b} {cb}。兩者差價從 {d0} {verb}到 {d1}。', '擴大', '縮小', '維持', '週', '差價', '根據店鋪標價估算：同一店鋪每週價格變化連乘，並按目前 B 級行情換算。新加入的店鋪和匯率不影響走勢。')}.items():
+    C[_l].update({"trend_h": _h, "trend_lead": _lead, "trend_up": _up, "trend_down": _down, "trend_same": _same, "trend_col": _col, "trend_gap": _gap, "trend_note": _note})
+
+TREND_MIN_N = 3  # 그 주 두 모델 모두 매물이 이만큼 있어야 흐름 시작 (7월 전엔 매장 6곳뿐이라 흔들림)
+
+
+def pct_text(r: float) -> str:
+    return f"{(r - 1) * 100:+.0f}%"
+
+
+def compare_trend(series_a: list, series_b: list, weeks: list[str], b_a: float, b_b: float) -> list[tuple[str, float, float]]:
+    """두 모델 주별 지수 → [(주, A 추정 시세, B 추정 시세)] 달마다 첫 주 + 마지막 주. 지금 B등급 시세에 맞춤"""
+    ia = {i: (v, n) for i, v, n in series_a}
+    ib = {i: (v, n) for i, v, n in series_b}
+    common = [i for i in sorted(set(ia) & set(ib)) if ia[i][1] >= TREND_MIN_N and ib[i][1] >= TREND_MIN_N]
+    if len(common) < 2:
+        return []
+    last = common[-1]
+    picked, seen = [], set()
+    for i in common:
+        month = weeks[i][:7]
+        if month not in seen:
+            seen.add(month)
+            picked.append(i)
+    if picked[-1] != last:
+        picked.append(last)
+    return [(weeks[i], b_a * ia[i][0] / ia[last][0], b_b * ib[i][0] / ib[last][0]) for i in picked]
+
 
 def compare_slug(a_slug: str, b_slug: str) -> str:
     return f"compare/{a_slug}-vs-{b_slug}"
@@ -719,9 +748,20 @@ def build(out: Path) -> dict:
 
     # 비교 페이지
     specs = json.loads(SPECS.read_text(encoding="utf-8")).get("specs", {}) if SPECS.exists() else {}
+    from build_dealer_data import price_trend
+    # 주간 기록은 세부 모델(q2:standard, m6:classic …)에 쌓이므로, 모델마다 한정판이 아닌 자기·세부 모델 중 기록이 가장 긴 것을 씀
+    cand = {x: [x] + [ch for ch in (by_id[x].get("children") or []) if ch in by_id and not by_id[ch].get("edition")]
+            for pair in pairs for x in pair}
+    trend = price_trend({c for cs in cand.values() for c in cs}, lambda site: "all", to_krw) if pairs else {"weeks": [], "e": {}}
+    for x, cs in cand.items():
+        best = max((c for c in cs if c in trend["e"]), key=lambda c: (len(trend["e"][c]["all"]), sum(n for _, _, n in trend["e"][c]["all"])), default=None)
+        if best:
+            trend["e"][x] = trend["e"][best]
     for a, b in pairs:
         cslug = compare_slug(slugs[a], slugs[b])
         sa, sb = stats[a], stats[b]
+        points = (compare_trend(trend["e"][a]["all"], trend["e"][b]["all"], trend["weeks"], sa["b"], sb["b"])
+                  if sa["b"] and sb["b"] and a in trend["e"] and b in trend["e"] else [])
         for lang in LANGS:
             t, c, cur = T[lang], C[lang], DISPLAY_CURRENCY[lang]
             conv = convert[cur]
@@ -749,6 +789,15 @@ def build(out: Path) -> dict:
             parts.append(f'<h2>{c["price_h"]}</h2><div class="table"><table><thead>{head_row}</thead><tbody>'
                          + "".join(f"<tr><th>{k}</th><td>{html.escape(x)}</td><td>{html.escape(y)}</td></tr>" for k, x, y in price_rows)
                          + "</tbody></table></div>")
+            if len(points) >= 2:
+                (w0, a0, b0), (_, a1, b1) = points[0], points[-1]
+                d0, d1 = abs(a0 - b0), abs(a1 - b1)
+                verb = c["trend_same"] if abs(d1 - d0) <= 0.03 * max(d0, 1) else c["trend_up"] if d1 > d0 else c["trend_down"]
+                lead = c["trend_lead"].format(since=w0, a=na, b=nb, ca=pct_text(a1 / a0), cb=pct_text(b1 / b0), d0=m(d0), d1=m(d1), verb=verb)
+                parts.append(f'<h2>{c["trend_h"]}</h2><p>{html.escape(lead)}</p><div class="table"><table><thead>'
+                             f'<tr><th>{c["trend_col"]}</th><th>{html.escape(na)}</th><th>{html.escape(nb_full)}</th><th>{c["trend_gap"]}</th></tr></thead><tbody>'
+                             + "".join(f"<tr><td>{w}</td><td>{html.escape(m(x))}</td><td>{html.escape(m(y))}</td><td>{html.escape(m(abs(x - y)))}</td></tr>" for w, x, y in points)
+                             + f'</tbody></table></div><p class="note">{c["trend_note"]}</p>')
             spec_a, spec_b = specs.get(a) or {}, specs.get(b) or {}
             spec_rows = []
             for f in COMPARE_FIELDS:
