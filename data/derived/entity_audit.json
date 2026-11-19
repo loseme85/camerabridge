@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 981,
+   "count": 980,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 288,
+   "count": 287,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 288,
+   "count": 287,
    "example": "Leica M3 Black Repaint"
   },
   {
@@ -81,7 +81,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 193,
+   "count": 192,
    "example": "[중고] M10 Monochrom"
   },
   {
@@ -217,12 +217,6 @@
    "example": "[위탁] M135/2.8 Elmarit (Black)"
   },
   {
-   "a": "leica:body:m10-p:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 78,
-   "example": "Leica M10-P Black"
-  },
-  {
    "a": "leica:body:m5:standard",
    "b": "leica:feature:meter",
    "count": 78,
@@ -233,6 +227,12 @@
    "b": "leica:feature:mechanical",
    "count": 78,
    "example": "LEICA M5 sn.1364"
+  },
+  {
+   "a": "leica:body:m10-p:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 77,
+   "example": "Leica M10-P Black"
   },
   {
    "a": "leica:body:m8:standard",
@@ -379,18 +379,6 @@
    "example": "Leica M 35mm f2 Summicron 1st 8elements EYE Black Repaint"
   },
   {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:frameline-28",
-   "count": 45,
-   "example": "[위탁] M11 Monochrom"
-  },
-  {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:monochrom",
-   "count": 45,
-   "example": "[위탁] M11 Monochrom"
-  },
-  {
    "a": "leica:body:m-monochrom-246:standard",
    "b": "leica:feature:frameline-28",
    "count": 44,
@@ -401,6 +389,18 @@
    "b": "leica:feature:monochrom",
    "count": 44,
    "example": "[위탁] M Monochrom TYP 246 (Black)"
+  },
+  {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:frameline-28",
+   "count": 44,
+   "example": "[위탁] M11 Monochrom"
+  },
+  {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:monochrom",
+   "count": 44,
+   "example": "[위탁] M11 Monochrom"
   },
   {
    "a": "leica:body:m3:single-stroke",
@@ -583,12 +583,6 @@
    "example": "[위탁9] M9 -> M9-P 업그레이드(Silver)"
   },
   {
-   "a": "leica:body:q3-monochrom",
-   "b": "leica:feature:monochrom",
-   "count": 31,
-   "example": "Leica Q3 Monochrom 'Open Box'"
-  },
-  {
    "a": "leica:body:m11-d",
    "b": "leica:feature:frameline-28",
    "count": 30,
@@ -599,6 +593,12 @@
    "b": "leica:feature:safari",
    "count": 30,
    "example": "[중고] M11-P (Safari)"
+  },
+  {
+   "a": "leica:body:q3-monochrom",
+   "b": "leica:feature:monochrom",
+   "count": 30,
+   "example": "Leica Q3 Monochrom 'Open Box'"
   },
   {
    "a": "leica:body:md",
@@ -751,12 +751,6 @@
    "example": "[중고] M 28/2 Safari"
   },
   {
-   "a": "leica:body:m262",
-   "b": "leica:feature:frameline-28",
-   "count": 15,
-   "example": "Leica M Typ262 Black"
-  },
-  {
    "a": "leica:body:m6:reissue",
    "b": "leica:feature:frameline-28",
    "count": 15,
@@ -803,6 +797,12 @@
    "b": "leica:feature:titanium",
    "count": 15,
    "example": "LEICA M6 TTL Titan sn.2754"
+  },
+  {
+   "a": "leica:body:m262",
+   "b": "leica:feature:frameline-28",
+   "count": 14,
+   "example": "Leica M Typ262 Black"
   },
   {
    "a": "leica:body:mp3",
@@ -1607,7 +1607,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 192,
+   "count": 191,
    "example": "[중고] M10 Monochrom"
   },
   {
