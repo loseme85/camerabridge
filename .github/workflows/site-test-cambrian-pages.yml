@@ -1,0 +1,21 @@
+name: Cambrian pages
+on:
+  push:
+    branches: ['site-test/cambrian-pages-20261119']
+permissions:
+  contents: read
+jobs:
+  pages:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: python scripts/cambrian_pages.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cambrian-pages
+          path: out/
