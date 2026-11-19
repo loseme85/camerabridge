@@ -14731,6 +14731,64 @@ def crawl_leicaboutique():
     return list(results.values())
 
 
+def crawl_soper():
+    """Soper Photographic (영국 플리머스) 공개 사이트맵의 Leica·Leitz 상품 페이지(JSON-LD). 1초 간격."""
+    import html
+    import requests
+    base = "https://www.soperphotographic.co.uk"
+    session = requests.Session()
+    session.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    sitemap = session.get(base + "/sitemap_main.xml", timeout=40)
+    sitemap.raise_for_status()
+    # 상품 이름이 주소에 들어 있어 라이카 계열 말이 있는 것만 연다 (사이트 전체는 2천 개가 넘는 일반 카메라점)
+    wanted = re.compile(r"(?i)leica|leitz|summicron|summilux|elmar|hektor|telyt|noctilux|summaron|summarit")
+    urls = [u for u in re.findall(r"<loc>([^<]*/ourshop/prod_[^<]*)</loc>", sitemap.text) if wanted.search(u)]
+    if not urls:
+        raise RuntimeError("Soper 사이트맵 구조 변경")
+    rows = []
+    for link in urls[:200]:
+        time.sleep(1)
+        response = session.get(link, timeout=40)
+        response.raise_for_status()
+        product = None
+        for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', response.text, re.S):
+            try:
+                entries = json.loads(block)
+            except (ValueError, TypeError):
+                continue
+            entries = entries if isinstance(entries, list) else [entries]
+            product = next((x for x in entries if isinstance(x, dict) and x.get("@type") == "Product"), product)
+        if not product:
+            raise RuntimeError("Soper 상품 구조 변경: " + link)
+        offer = product.get("offers") or {}
+        offer = offer[0] if isinstance(offer, list) and offer else offer
+        if not isinstance(offer, dict) or not str(offer.get("availability", "")).endswith("/InStock"):
+            continue
+        if offer.get("priceCurrency") != "GBP":
+            raise RuntimeError("Soper 통화 변경")
+        amount = float(offer.get("price") or 0)
+        name = re.sub(r"\s+", " ", html.unescape(str(product.get("name") or ""))).strip()
+        if amount <= 1 or not name:
+            continue
+        # 'Leitz Elmar 3.5cm f3.5, LTM'처럼 앞에 브랜드가 없는 제목은 라이카 계열임을 알 수 있게 한다
+        if not re.match(r"(?i)^(?:leica|leitz|ernst leitz)\b", name):
+            name = "Leica " + name
+        description = html.unescape(str(product.get("description") or ""))
+        cosmetic = re.search(r"Cosmetic:\s*([^\r\n]+)", description)
+        condition = "Soper: " + re.sub(r"\s+", " ", cosmetic.group(1)).strip() if cosmetic else "정보없음"
+        price = f"£{amount:,.2f}"
+        image = product.get("image") or ""
+        if isinstance(image, list):
+            image = image[0] if image else ""
+        rows.append({"site": "Soper Photographic (영국)", "상품명": name,
+                     "가격": price, "통화": "GBP", "컨디션": condition,
+                     "이미지": image, "링크": link, "품절": False, "예약중": False,
+                     "label": auto_label(name), "세대": detect_generation(name),
+                     "mount": detect_mount(name), "category": detect_category(name, price), "brand": "Leica"})
+    print(f"  ✅ Soper 완료: {len(rows)}개, 확인한 상품 {len(urls)}개")
+    return rows
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14922,6 +14980,7 @@ def crawl_all():
         ("Foto Schneider (오스트리아)", lambda: ce.wrap_full_run("Foto Schneider (오스트리아)", crawl_fotoschneider)),
         ("Film Lab (라트비아)", lambda: ce.wrap_full_run("Film Lab (라트비아)", crawl_filmlab)),
         ("Leica Boutique Cape Town (남아공)", lambda: ce.wrap_full_run("Leica Boutique Cape Town (남아공)", crawl_leicaboutique)),
+        ("Soper Photographic (영국)", lambda: ce.wrap_full_run("Soper Photographic (영국)", crawl_soper)),
         ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
         ("Fotopia (홍콩)", lambda: ce.wrap_full_run("Fotopia (홍콩)", crawl_fotopia)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
