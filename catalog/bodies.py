@@ -118,7 +118,7 @@ fam("leica:body:cl-film-50-jahre", "Leica CL 50 Jahre (1975)", "라이카 CL 50�
 # 2026-10-30 기념판 목록 정리: Wikipedia 'Leica M6' 특별판 표 + adaminsights.com 'History of the Leica M6 Models and Special Editions'
 # (공식 목록이 아니라 수량은 출처마다 조금씩 다름. 한 대뿐인 유니크 바디·단면 모형은 넣지 않음)
 TTL = r"(?<!non )(?<!non-)(?<!non)TTL"
-PLATINUM = r"platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)"
+PLATINUM = r"platin|プラチナ|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)"
 M6 = r"\bM ?6\b"
 # (slug, 이름, 한국어 이름, 꼭 있어야 할 말(마지막이 그 판의 표시), 별칭)
 M6_EDITIONS = [
@@ -130,7 +130,7 @@ M6_EDITIONS = [
     ("columbus", "Leica M6 Colombo '92 (1492–1992)", "M6 콜롬보 92", [M6, r"colomb|columb|콜럼버스|콜롬보|コロンブス"],
      ["m6 columbus", "m6 colombo", "m6 콜럼버스", "m6 콜롬보"]),
     ("brunei", "Leica M6 Sultan of Brunei (Gold · Platinum)", "M6 브루나이 술탄", [M6, r"brunei|브루나이|sultan|술탄"], ["m6 brunei", "m6 sultan"]),
-    ("titan", "Leica M6 Titan", "M6 티탄", [M6, r"titan|티탄"], ["m6 titan", "m6 티탄"]),
+    ("titan", "Leica M6 Titan", "M6 티탄", [M6, r"titan|티탄|チタン|チタニウム"], ["m6 titan", "m6 티탄"]),
     ("lhsa", "Leica M6 LHSA", "M6 LHSA", [M6, r"LHSA"], ["m6 lhsa"]),
     ("royal-foto", "Leica M6 Royal-Foto Austria (1968–1993)", "M6 로열 포토 오스트리아", [M6, r"royal.?(foto|photo)\b(?!graphic)|austria|오스트리아"],
      ["m6 royal foto", "m6 royal photo austria"]),
@@ -143,14 +143,14 @@ M6_EDITIONS = [
     ("gold-dragon", "Leica M6 Gold Dragon (1995)", "M6 골드 드래곤", [M6, r"dragon|드래곤|ドラゴン|龍"], ["m6 gold dragon", "m6 dragon", "m6 드래곤"]),
     ("royal-wedding", "Leica M6 Danish Royal Wedding (1995)", "M6 덴마크 왕실 결혼", [M6, r"wedding|웨딩|결혼|danish|denmark|d(ä|ae)nemark|덴마크"],
      ["m6 royal wedding", "m6 danish royal wedding"]),
-    ("thailand", "Leica M6 Thai Jubilee (King Bhumibol 50 Years, 1996)", "M6 태국 국왕 즉위 50주년", [M6, r"thai|태국|bhumibol|타이 ?국왕|タイ国王"],
+    ("thailand", "Leica M6 Thai Jubilee (King Bhumibol 50 Years, 1996)", "M6 태국 국왕 즉위 50주년", [M6, r"thai|태국|bhumibol|타이 ?국왕|タイ(国|王国)|タイ国王"],
      ["m6 thai", "m6 thailand", "m6 king of thailand", "m6 태국"]),
     ("schmidt", "Leica M6 Schmidt Centenary", "M6 슈미트 100주년", [M6, r"schmidt|슈미트"], ["m6 schmidt"]),
     ("bruckner", "Leica M6 Anton Bruckner (1824–1896)", "M6 안톤 브루크너", [M6, r"bruckner|브루크너"], ["m6 bruckner", "m6 anton bruckner"]),
     ("partners", "Leica M6 Partners", "M6 파트너스", [M6, r"partners|파트너스"], ["m6 partners"]),
     ("benelux", "Leica M6 Demo Benelux '96", "M6 베네룩스 데모", [M6, r"benelux|베네룩스"], ["m6 benelux"]),
     ("polyphoto", "Leica M6 Polyphoto Demo", "M6 폴리포토 데모", [M6, r"polyphoto|폴리포토"], ["m6 polyphoto"]),
-    ("ein-stueck", "Leica M6 'Ein Stück Leica'", "M6 아인 슈튁 라이카", [M6, r"ein ?st(ü|ue|u)ck"], ["m6 ein stuck leica", "m6 ein stück leica"]),
+    ("ein-stueck", "Leica M6 'Ein Stück Leica'", "M6 아인 슈튁 라이카", [M6, r"ein ?st(ü|ue|u)ck|アインシュ[トテ]ック|アイン ?シュトゥ?ック"], ["m6 ein stuck leica", "m6 ein stück leica"]),
     ("canada", "Leica M6 Canada", "M6 캐나다", [M6, r"canada|캐나다"], ["m6 canada"]),
     ("rooster", "Leica M6 Year of the Rooster", "M6 닭띠", [M6, r"rooster|닭|酉"], ["m6 rooster", "m6 year of the rooster"]),
     # ── TTL (1998–2002) ──

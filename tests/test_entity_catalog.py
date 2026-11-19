@@ -396,6 +396,11 @@ def test_m6_special_editions_are_split_from_classic_and_ttl() -> None:
     assert m6("Leica M6 Safari 타조 custom 0.85") == ["leica:body:m6:classic"]  # 개인 도색은 한정판이 아님
     assert m6("Leica MP 0.72 Black Paint w/ M6 Dial FIRST BATCH") == []
     assert m6("[중고] M6 CLASSIC") == ["leica:body:m6:classic"]
+    # 2026-11-19: 일본어 표기 기념판이 클래식에 섞이던 것
+    assert m6("Leica M6 タイ王国50周年(50/2)Set") == ["leica:body:m6:thailand"]
+    assert m6("Leica M6 アインシュトック Summilux 35/1.4ASPHSet") == ["leica:body:m6:ein-stueck"]
+    assert m6("Leica M6 チタン Body") == ["leica:body:m6:titan"]
+    assert m6("Leica M6 0.72 Silver Body") == ["leica:body:m6:classic"]
     assert m6("Leica M6 TTL 0.72 Black") == ["leica:body:m6:ttl"]
 
 
