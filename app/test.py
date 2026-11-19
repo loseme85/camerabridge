@@ -14788,6 +14788,45 @@ def crawl_soper():
     print(f"  ✅ Soper 완료: {len(rows)}개, 확인한 상품 {len(urls)}개")
     return rows
 
+def crawl_cambrian():
+    """Cambrian Photography (영국 웨일스) - Shopify JSON 전체 상품에서 제목이 'Used'로 시작하는 Leica·Leitz만.
+    파나소닉 라이카 렌즈(마이크로 포서즈)는 라이카 본사 제품이 아니라 뺀다. 등급은 태그 Excellent/Good, 없으면 설명 'Condition: Used'."""
+    import requests, html
+    base = "https://www.cambrianphoto.co.uk"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    products = _shopify_all(sess, base + "/products.json", "Cambrian")
+    results = []
+    for p in products:
+        name = re.sub(r"\s+", " ", html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"(?i)^used\s+(?:leica|leitz)\b", name):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+        if not link or link in globals().get('SOLD_LINKS', ()):
+            continue
+        try:
+            price = f"£{float(variants[0].get('price')):,.2f}"
+        except (TypeError, ValueError):
+            continue
+        name = re.sub(r"(?i)^used\s+", "", name)
+        name = re.sub(r"(\d),(\d)", r"\1.\2", name)  # 1:2,8 → 1:2.8
+        tags = {str(t).strip().lower() for t in p.get("tags") or []}
+        text = re.sub(r"<[^>]+>", " ", html.unescape(p.get("body_html") or ""))
+        grade_tag = next((t.title() for t in ("excellent", "good") if t in tags), "")
+        used_text = bool(re.search(r"(?i)condition:\s*used", text))
+        condition = "Cambrian: " + (grade_tag or "Used") if (grade_tag or used_text) else "정보없음"
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        cat = detect_category(name, price)
+        results.append({"site": "Cambrian Photography (영국)", "label": auto_label(name), "상품명": name,
+                        "세대": detect_generation(name), "컨디션": condition, "가격": price, "통화": "GBP",
+                        "이미지": img, "링크": link, "품절": False, "예약중": False,
+                        "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name), "category": cat, "brand": detect_brand(name)})
+    print(f"  ✅ Cambrian 완료: {len(results)}개")
+    return results
+
 
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -14981,6 +15020,7 @@ def crawl_all():
         ("Film Lab (라트비아)", lambda: ce.wrap_full_run("Film Lab (라트비아)", crawl_filmlab)),
         ("Leica Boutique Cape Town (남아공)", lambda: ce.wrap_full_run("Leica Boutique Cape Town (남아공)", crawl_leicaboutique)),
         ("Soper Photographic (영국)", lambda: ce.wrap_full_run("Soper Photographic (영국)", crawl_soper)),
+        ("Cambrian Photography (영국)", lambda: ce.wrap_full_run("Cambrian Photography (영국)", crawl_cambrian)),
         ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
         ("Fotopia (홍콩)", lambda: ce.wrap_full_run("Fotopia (홍콩)", crawl_fotopia)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
