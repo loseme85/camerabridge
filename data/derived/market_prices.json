@@ -1,52 +1,10 @@
 {
-  "35mm Summicron": {
-    "weighted_median": 3400000,
-    "sample_count": 53,
-    "min": 1625780,
-    "max": 22784160,
-    "avg": 4830653
-  },
   "50mm Summicron": {
     "weighted_median": 2300000,
-    "sample_count": 182,
+    "sample_count": 183,
     "min": 411998,
     "max": 12500000,
-    "avg": 2615683
-  },
-  "50mm Summicron (침동)": {
-    "weighted_median": 1101537,
-    "sample_count": 23,
-    "min": 551807,
-    "max": 4052787,
-    "avg": 1349073
-  },
-  "90mm Summicron": {
-    "weighted_median": 1300000,
-    "sample_count": 39,
-    "min": 177203,
-    "max": 2693250,
-    "avg": 1456119
-  },
-  "Leica M11": {
-    "weighted_median": 10480000,
-    "sample_count": 155,
-    "min": 550000,
-    "max": 15000000,
-    "avg": 10745746
-  },
-  "35mm Summicron ASPH": {
-    "weighted_median": 3343857,
-    "sample_count": 156,
-    "min": 360000,
-    "max": 33000000,
-    "avg": 4373645
-  },
-  "35mm Summilux-R": {
-    "weighted_median": 5559071,
-    "sample_count": 7,
-    "min": 3991389,
-    "max": 5900000,
-    "avg": 5159627
+    "avg": 2618521
   },
   "90mm Elmarit": {
     "weighted_median": 1180000,
@@ -76,6 +34,13 @@
     "max": 6024466,
     "avg": 1921798
   },
+  "90mm Summicron": {
+    "weighted_median": 1300000,
+    "sample_count": 38,
+    "min": 177203,
+    "max": 2693250,
+    "avg": 1455321
+  },
   "50mm Summarit": {
     "weighted_median": 1380000,
     "sample_count": 32,
@@ -84,11 +49,11 @@
     "avg": 1315477
   },
   "Leica SL3": {
-    "weighted_median": 6735750,
-    "sample_count": 66,
+    "weighted_median": 6768201,
+    "sample_count": 67,
     "min": 4387853,
     "max": 9825578,
-    "avg": 6909308
+    "avg": 6943199
   },
   "70mm Elmarit": {
     "weighted_median": 2767500,
@@ -96,6 +61,13 @@
     "min": 2154930,
     "max": 9880000,
     "avg": 3349887
+  },
+  "Leica M11": {
+    "weighted_median": 10480000,
+    "sample_count": 155,
+    "min": 550000,
+    "max": 15000000,
+    "avg": 10759691
   },
   "28mm Summaron": {
     "weighted_median": 3000000,
@@ -139,6 +111,13 @@
     "max": 72750000,
     "avg": 9203764
   },
+  "35mm Summicron": {
+    "weighted_median": 3400000,
+    "sample_count": 52,
+    "min": 1625780,
+    "max": 22784160,
+    "avg": 4889571
+  },
   "Leica Barnack": {
     "weighted_median": 929938,
     "sample_count": 58,
@@ -155,10 +134,10 @@
   },
   "Leica Q2": {
     "weighted_median": 5180000,
-    "sample_count": 115,
+    "sample_count": 116,
     "min": 166894,
     "max": 8175724,
-    "avg": 5203311
+    "avg": 5201867
   },
   "280mm Elmarit": {
     "weighted_median": 6280000,
@@ -257,6 +236,13 @@
     "min": 1113631,
     "max": 2091250,
     "avg": 1492685
+  },
+  "35mm Summicron ASPH": {
+    "weighted_median": 3343857,
+    "sample_count": 155,
+    "min": 360000,
+    "max": 33000000,
+    "avg": 4381759
   },
   "Leica MINILUX": {
     "weighted_median": 1480000,
@@ -378,11 +364,11 @@
     "avg": 1607294
   },
   "35mm Elmar": {
-    "weighted_median": 597383,
-    "sample_count": 29,
+    "weighted_median": 685822,
+    "sample_count": 30,
     "min": 292625,
     "max": 9033468,
-    "avg": 1145054
+    "avg": 1134506
   },
   "18mm Elmar": {
     "weighted_median": 839956,
@@ -482,6 +468,20 @@
     "max": 12009227,
     "avg": 2608475
   },
+  "50mm Summicron (침동)": {
+    "weighted_median": 1101537,
+    "sample_count": 22,
+    "min": 551807,
+    "max": 4052787,
+    "avg": 1365092
+  },
+  "35mm Summilux-R": {
+    "weighted_median": 5892022,
+    "sample_count": 6,
+    "min": 4427651,
+    "max": 5900000,
+    "avg": 5354333
+  },
   "35mm Summicron-R": {
     "weighted_median": 1419089,
     "sample_count": 7,
@@ -560,11 +560,11 @@
     "avg": 5164058
   },
   "75mm Noctilux f1.25": {
-    "weighted_median": 14816777,
-    "sample_count": 11,
-    "min": 13200000,
+    "weighted_median": 14800000,
+    "sample_count": 12,
+    "min": 11257231,
     "max": 16041547,
-    "avg": 14738779
+    "avg": 14448650
   },
   "Summilux": {
     "weighted_median": 4166753,
@@ -694,10 +694,10 @@
   },
   "50mm Elmar f3.5": {
     "weighted_median": 800000,
-    "sample_count": 29,
+    "sample_count": 30,
     "min": 233751,
     "max": 4500000,
-    "avg": 1209473
+    "avg": 1193679
   },
   "28mm Elmarit": {
     "weighted_median": 1666675,

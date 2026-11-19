@@ -81,8 +81,8 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 192,
-   "example": "[중고] M10 Monochrom"
+   "count": 193,
+   "example": "[중고] M11 Monochrom"
   },
   {
    "a": "leica:feature:mechanical",
@@ -379,6 +379,18 @@
    "example": "Leica M 35mm f2 Summicron 1st 8elements EYE Black Repaint"
   },
   {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:frameline-28",
+   "count": 45,
+   "example": "[중고] M11 Monochrom"
+  },
+  {
+   "a": "leica:body:m11-monochrom",
+   "b": "leica:feature:monochrom",
+   "count": 45,
+   "example": "[중고] M11 Monochrom"
+  },
+  {
    "a": "leica:body:m-monochrom-246:standard",
    "b": "leica:feature:frameline-28",
    "count": 44,
@@ -389,18 +401,6 @@
    "b": "leica:feature:monochrom",
    "count": 44,
    "example": "[위탁] M Monochrom TYP 246 (Black)"
-  },
-  {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:frameline-28",
-   "count": 44,
-   "example": "[위탁] M11 Monochrom"
-  },
-  {
-   "a": "leica:body:m11-monochrom",
-   "b": "leica:feature:monochrom",
-   "count": 44,
-   "example": "[위탁] M11 Monochrom"
   },
   {
    "a": "leica:body:m3:single-stroke",
@@ -583,12 +583,6 @@
    "example": "[위탁9] M9 -> M9-P 업그레이드(Silver)"
   },
   {
-   "a": "leica:body:m11-d",
-   "b": "leica:feature:frameline-28",
-   "count": 30,
-   "example": "Leica M11-D Black"
-  },
-  {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:safari",
    "count": 30,
@@ -599,6 +593,12 @@
    "b": "leica:feature:monochrom",
    "count": 30,
    "example": "Leica Q3 Monochrom 'Open Box'"
+  },
+  {
+   "a": "leica:body:m11-d",
+   "b": "leica:feature:frameline-28",
+   "count": 29,
+   "example": "Leica M11-D Black"
   },
   {
    "a": "leica:body:md",
@@ -1601,14 +1601,14 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 225,
+   "count": 224,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 191,
-   "example": "[중고] M10 Monochrom"
+   "count": 192,
+   "example": "[중고] M11 Monochrom"
   },
   {
    "entity": "leica:feature:meter",
