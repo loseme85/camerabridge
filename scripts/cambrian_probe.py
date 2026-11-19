@@ -1,5 +1,6 @@
 """GitHub 서버에서 Cambrian Photography(Shopify) 중고 라이카 컬렉션을 받아 구조를 본다 (이 맥은 429)."""
-import json, time, requests
+import json, os, time, requests
+os.makedirs("out", exist_ok=True)
 base = "https://www.cambrianphoto.co.uk"
 s = requests.Session(); s.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
 out = {}
