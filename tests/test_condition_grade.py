@@ -797,3 +797,12 @@ def test_cameraoccasion_detail_condition():
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Vrijwel nieuwstaat")[0] == "A"
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Gebruikt maar in zeer nette staat")[0] == "B"
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: unknown") == (None, None)
+
+
+def test_soper_cosmetic_condition():
+    site = "Soper Photographic (영국)"
+    assert grade_of(site, "Soper: Excellent overall, very light signs of use")[0] == "A"
+    assert grade_of(site, "Soper: Very good overall, very light signs of use")[0] == "B"
+    assert grade_of(site, "Soper: Very good, very light signs of use")[0] == "B"
+    assert grade_of(site, "Soper: Good overall, some signs of use")[0] == "C"
+    assert grade_of(site, "정보없음") == (None, None)

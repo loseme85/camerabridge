@@ -76,6 +76,14 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         mapped = {"nieuwstaat": "A", "vrijwel nieuwstaat": "A", "zo goed als nieuw": "A",
                   "gebruikt maar in zeer nette staat": "B"}
         return (mapped[state], "label") if state in mapped else (None, None)
+    # Soper Photographic (영국): 상품 설명의 'Cosmetic: Excellent/Very good/Good overall…'. 2026-11-19 밤샘 사진 12개(카메라·렌즈 판매 중 전부) × 1장:
+    # 정확히 일치 9/12, 한 등급 이내 12/12 (Excellent 2개는 사진도 A, Very good 중 3개가 A와 B 경계).
+    if site == "Soper Photographic (영국)" and cond.startswith("Soper: "):
+        value = cond.removeprefix("Soper: ").strip().lower()
+        for pattern, grade in [(r"^(?:excellent|like new|mint)", "A"), (r"^very good", "B"), (r"^good", "C"), (r"^(?:fair|poor)", "D")]:
+            if re.search(pattern, value):
+                return grade, "text"
+        return None, None
     if cond == "Grainlab: hervorragend":
         return "B", "text"
     # Cape Town 20개 × 3장: 정확 12/20, 한 등급 이내 20/20. 일반 영문 대응보다 한 칸 후한 매장.
