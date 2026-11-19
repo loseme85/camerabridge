@@ -1091,8 +1091,8 @@ _STRONG_ACC_KW = (
 )
 
 
-_FX_FALLBACK_KRW = {"KRW": 1.0, "JPY": 9.0, "USD": 1350.0, "GBP": 1780.0, "EUR": 1500.0}
-_CURRENCY_SIGNS = (("£", "GBP"), ("€", "EUR"), ("US$", "USD"), ("$", "USD"), ("¥", "JPY"), ("円", "JPY"), ("원", "KRW"), ("₩", "KRW"))
+_FX_FALLBACK_KRW = {"KRW": 1.0, "JPY": 9.0, "USD": 1350.0, "GBP": 1780.0, "EUR": 1500.0, "THB": 40.0}
+_CURRENCY_SIGNS = (("£", "GBP"), ("€", "EUR"), ("฿", "THB"), ("US$", "USD"), ("$", "USD"), ("¥", "JPY"), ("円", "JPY"), ("원", "KRW"), ("₩", "KRW"))
 
 
 @lru_cache(maxsize=1)

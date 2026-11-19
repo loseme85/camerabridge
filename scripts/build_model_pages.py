@@ -435,7 +435,7 @@ def short_name(name_a: str, name_b: str) -> str:
     return name_b
 
 SYMBOL = {"KRW": "₩", "USD": "$", "JPY": "¥", "EUR": "€", "CNY": "CN¥", "TWD": "NT$", "GBP": "£", "HKD": "HK$", "CHF": "CHF ", "DKK": "DKK ",
-          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$", "CLP": "CLP ", "SEK": "SEK ", "CZK": "Kč ", "HUF": "Ft ", "RON": "lei "}
+          "AUD": "A$", "SGD": "S$", "CAD": "C$", "MYR": "RM ", "PLN": "zł ", "NZD": "NZ$", "CLP": "CLP ", "SEK": "SEK ", "CZK": "Kč ", "HUF": "Ft ", "RON": "lei ", "THB": "฿"}
 
 
 def money(amount: float, currency: str, lang: str, approx: bool = False) -> str:

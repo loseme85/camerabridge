@@ -813,3 +813,15 @@ def test_cambrian_condition():
     assert grade_of(site, "Cambrian: Good")[0] == "B"
     assert grade_of(site, "Cambrian: Used")[0] == "B"
     assert grade_of(site, "정보없음") == (None, None)
+
+def test_unit_camera_shop_condition():
+    from condition_grade import unit_condition
+    site = "UNIT Camera Shop (태국)"
+    assert unit_condition("<p>Condition: - Lens is fully functional - Lens glass has no fungus - Lens body has minor scratches - เลนส์</p>") == "UNIT: minor"
+    assert unit_condition("Condition: - Lens body has moderate scratches") == "UNIT: moderate"
+    assert unit_condition("Condition: - Camera body leatherette is cracked, with minor scratches") == "UNIT: moderate"
+    assert unit_condition("Condition: - Lens has fungus and heavy haze") == "UNIT: heavy"
+    assert unit_condition("no condition list") is None
+    assert grade_of(site, "UNIT: minor")[0] == "B"
+    assert grade_of(site, "UNIT: moderate")[0] == "C"
+    assert grade_of(site, "UNIT: heavy")[0] == "D"
