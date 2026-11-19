@@ -4535,11 +4535,11 @@
      "re-?issue|리이슈|복각|2022|\\b10557\\b",
      "\\bMP\\b",
      "gold ?logo|골드 ?로고|M6 ?G\\b",
-     "platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
+     "platin|プラチナ|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
      "siber|hegner|125 ?(th|jahre|周年|주년)",
      "colomb|columb|콜럼버스|콜롬보|コロンブス",
      "brunei|브루나이|sultan|술탄",
-     "titan|티탄",
+     "titan|티탄|チタン|チタニウム",
      "LHSA",
      "royal.?(foto|photo)\\b(?!graphic)|austria|오스트리아",
      "M6 ?J\\b",
@@ -4549,13 +4549,13 @@
      "historica|히스토리카",
      "dragon|드래곤|ドラゴン|龍",
      "wedding|웨딩|결혼|danish|denmark|d(ä|ae)nemark|덴마크",
-     "thai|태국|bhumibol|타이 ?국왕|タイ国王",
+     "thai|태국|bhumibol|타이 ?국왕|タイ(国|王国)|タイ国王",
      "schmidt|슈미트",
      "bruckner|브루크너",
      "partners|파트너스",
      "benelux|베네룩스",
      "polyphoto|폴리포토",
-     "ein ?st(ü|ue|u)ck",
+     "ein ?st(ü|ue|u)ck|アインシュ[トテ]ック|アイン ?シュトゥ?ック",
      "canada|캐나다",
      "rooster|닭|酉",
      "jaguar|재규어",
@@ -4568,7 +4568,7 @@
      "[øo0]resund|외레순",
      "\\bhansa\\b|한자",
      "al.?thani|알타니|sheikh",
-     "titan|티탄",
+     "titan|티탄|チタン|チタニウム",
      "1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999",
      "partner.?aktion",
      "leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー",
@@ -4657,11 +4657,11 @@
      "non.?ttl",
      "black ?paint|black ?lacquer(?:ed)?|schwarz ?lackiert|블랙 ?페인트|블페|ブラックペイント",
      "gold ?logo|골드 ?로고|M6 ?G\\b",
-     "platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
+     "platin|プラチナ|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
      "siber|hegner|125 ?(th|jahre|周年|주년)",
      "colomb|columb|콜럼버스|콜롬보|コロンブス",
      "brunei|브루나이|sultan|술탄",
-     "titan|티탄",
+     "titan|티탄|チタン|チタニウム",
      "LHSA",
      "royal.?(foto|photo)\\b(?!graphic)|austria|오스트리아",
      "M6 ?J\\b",
@@ -4671,13 +4671,13 @@
      "historica|히스토리카",
      "dragon|드래곤|ドラゴン|龍",
      "wedding|웨딩|결혼|danish|denmark|d(ä|ae)nemark|덴마크",
-     "thai|태국|bhumibol|타이 ?국왕|タイ国王",
+     "thai|태국|bhumibol|타이 ?국왕|タイ(国|王国)|タイ国王",
      "schmidt|슈미트",
      "bruckner|브루크너",
      "partners|파트너스",
      "benelux|베네룩스",
      "polyphoto|폴리포토",
-     "ein ?st(ü|ue|u)ck",
+     "ein ?st(ü|ue|u)ck|アインシュ[トテ]ック|アイン ?シュトゥ?ック",
      "canada|캐나다",
      "rooster|닭|酉",
      "jaguar|재규어",
@@ -4690,7 +4690,7 @@
      "[øo0]resund|외레순",
      "\\bhansa\\b|한자",
      "al.?thani|알타니|sheikh",
-     "titan|티탄",
+     "titan|티탄|チタン|チタニウム",
      "1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999",
      "partner.?aktion",
      "leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー",
@@ -4907,7 +4907,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?6\\b",
-     "platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)"
+     "platin|プラチナ|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)"
     ],
     "title_must_not": [
      "brunei|브루나이|sultan",
@@ -5189,7 +5189,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?6\\b",
-     "titan|티탄"
+     "titan|티탄|チタン|チタニウム"
     ],
     "title_must_not": [
      "(?<!non )(?<!non-)(?<!non)TTL",
@@ -5886,7 +5886,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?6\\b",
-     "thai|태국|bhumibol|타이 ?국왕|タイ国王"
+     "thai|태국|bhumibol|타이 ?국왕|タイ(国|王国)|タイ国王"
     ],
     "title_must_not": [
      "thai ?baht",
@@ -6292,7 +6292,7 @@
     "mount": "M",
     "title_must": [
      "\\bM ?6\\b",
-     "ein ?st(ü|ue|u)ck"
+     "ein ?st(ü|ue|u)ck|アインシュ[トテ]ック|アイン ?シュトゥ?ック"
     ],
     "title_must_not": [
      "leeworks",
@@ -7259,7 +7259,7 @@
     "title_must": [
      "\\bM ?6\\b",
      "(?<!non )(?<!non-)(?<!non)TTL",
-     "titan|티탄"
+     "titan|티탄|チタン|チタニウム"
     ],
     "title_must_not": [
      "leeworks",
@@ -7335,11 +7335,11 @@
     "title_must_not": [
      "re-?paint|리페인트|재도색|custom|커스텀",
      "gold ?logo|골드 ?로고|M6 ?G\\b",
-     "platin|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
+     "platin|プラチナ|플래티넘|플라티늄|150 ?(jahre|years|주년|周年)",
      "siber|hegner|125 ?(th|jahre|周年|주년)",
      "colomb|columb|콜럼버스|콜롬보|コロンブス",
      "brunei|브루나이|sultan|술탄",
-     "titan|티탄",
+     "titan|티탄|チタン|チタニウム",
      "LHSA",
      "royal.?(foto|photo)\\b(?!graphic)|austria|오스트리아",
      "M6 ?J\\b",
@@ -7349,13 +7349,13 @@
      "historica|히스토리카",
      "dragon|드래곤|ドラゴン|龍",
      "wedding|웨딩|결혼|danish|denmark|d(ä|ae)nemark|덴마크",
-     "thai|태국|bhumibol|타이 ?국왕|タイ国王",
+     "thai|태국|bhumibol|타이 ?국왕|タイ(国|王国)|タイ国王",
      "schmidt|슈미트",
      "bruckner|브루크너",
      "partners|파트너스",
      "benelux|베네룩스",
      "polyphoto|폴리포토",
-     "ein ?st(ü|ue|u)ck",
+     "ein ?st(ü|ue|u)ck|アインシュ[トテ]ック|アイン ?シュトゥ?ック",
      "canada|캐나다",
      "rooster|닭|酉",
      "jaguar|재규어",
@@ -7368,7 +7368,7 @@
      "[øo0]resund|외레순",
      "\\bhansa\\b|한자",
      "al.?thani|알타니|sheikh",
-     "titan|티탄",
+     "titan|티탄|チタン|チタニウム",
      "1984.?2002|letzte[n]? ?999|(last|final) ?999|마지막 ?999",
      "partner.?aktion",
      "leitz.{0,3}wetzlar|wetzlar|베츨라|ウェッツラー",
