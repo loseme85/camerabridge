@@ -1,0 +1,21 @@
+name: Teds rows
+on:
+  push:
+    branches: ['site-test/teds-rows-20261119']
+permissions:
+  contents: read
+jobs:
+  rows:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: GITHUB_ACTIONS=1 python scripts/teds_rows.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: teds-rows
+          path: out/
