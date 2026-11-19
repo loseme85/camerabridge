@@ -32,6 +32,8 @@ from grade_audit import _sheets  # noqa: E402
 INDEX = ROOT / "data/derived/results_search_index_v1.json"
 GRADES_PATH = ROOT / "data/config/photo_grades.json"
 SKIP_NOTES = ("too_cheap", "set", "duplicate")
+# 사진이 실제 상품이 아니라 참고용 이미지인 매장 (설명에 'Images shown are not the actual product') — 사진으로 등급을 매기면 틀림
+SKIP_SOURCES = ("Ted's Camera (호주)",)
 
 
 def _load_grades() -> dict:
@@ -51,6 +53,8 @@ def candidates() -> list[dict]:
         if final.get("sold_quality") != "asking" or not final.get("image_url") or not link or link in seen:
             continue
         if (final.get("entity_note") or "") in SKIP_NOTES:
+            continue
+        if final.get("source") in SKIP_SOURCES:
             continue
         leaves = [e for e in record.get("entity_ids") or [] if e in ents and not ents[e].get("children") and not ents[e].get("feature")]
         krw = price_krw(final)
