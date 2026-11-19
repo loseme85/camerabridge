@@ -76,6 +76,10 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         mapped = {"nieuwstaat": "A", "vrijwel nieuwstaat": "A", "zo goed als nieuw": "A",
                   "gebruikt maar in zeer nette staat": "B"}
         return (mapped[state], "label") if state in mapped else (None, None)
+    # Leica Store Miami (미국): 설명 'in mint/excellent condition'. 2026-11-19 밤샘 사진 12개(대표 사진이 있는 중고 전부): 모두 새것처럼 깨끗해 mint·excellent 둘 다 A.
+    # 케이프타운 매장과 같은 대응 (like new→S, mint·excellent→A, very good→B, good→C).
+    if site == "Leica Store Miami (미국)" and cond.startswith("Miami: "):
+        return {"like new": "S", "mint": "A", "excellent": "A", "very good": "B", "good": "C", "fair": "D"}.get(cond.removeprefix("Miami: ").strip().lower()), "text"
     if cond == "Grainlab: hervorragend":
         return "B", "text"
     # Cape Town 20개 × 3장: 정확 12/20, 한 등급 이내 20/20. 일반 영문 대응보다 한 칸 후한 매장.

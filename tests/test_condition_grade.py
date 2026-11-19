@@ -797,3 +797,12 @@ def test_cameraoccasion_detail_condition():
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Vrijwel nieuwstaat")[0] == "A"
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Gebruikt maar in zeer nette staat")[0] == "B"
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: unknown") == (None, None)
+
+
+def test_leica_store_miami_condition():
+    site = "Leica Store Miami (미국)"
+    assert grade_of(site, "Miami: mint")[0] == "A"
+    assert grade_of(site, "Miami: excellent")[0] == "A"
+    assert grade_of(site, "Miami: very good")[0] == "B"
+    assert grade_of(site, "Miami: like new")[0] == "S"
+    assert grade_of(site, "정보없음") == (None, None)

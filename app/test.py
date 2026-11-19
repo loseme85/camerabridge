@@ -14731,6 +14731,45 @@ def crawl_leicaboutique():
     return list(results.values())
 
 
+def crawl_leicamiami():
+    """Leica Store Miami (미국 플로리다 코랄 게이블스) - Shopify 전체 상품에서 제목이 'Used'로 시작하는 중고만 (새 상품·시계·행사는 뺌).
+    등급은 설명 'in mint/excellent condition'. 대표 사진이 'Click for more info!' 자리표시면 이미지를 비움. 이 맥은 Shopify 429라 GitHub 서버에서 시험."""
+    import requests, html
+    base = "https://leicastoremiami.com"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    products = _shopify_all(sess, base + "/products.json", "Leica Store Miami")
+    results = []
+    for p in products:
+        name = re.sub(r"\s+", " ", html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"(?i)^used\s+", name):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+        if not link or link in globals().get('SOLD_LINKS', ()):
+            continue
+        try:
+            price = f"${float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            continue
+        name = re.sub(r"(?i)^used\s+", "", name)
+        text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html.unescape(p.get("body_html") or "")))
+        m = re.search(r"(?i)in (?:an? )?(mint|excellent|very good|good|fair|like[- ]new)\s*\+?\s*condition", text)
+        condition = "Miami: " + m.group(1).lower().replace("-", " ") if m else "정보없음"
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        if "ClickforMoreInfo" in img:
+            img = ""
+        cat = detect_category(name, price)
+        results.append({"site": "Leica Store Miami (미국)", "label": auto_label(name), "상품명": name,
+                        "세대": detect_generation(name), "컨디션": condition, "가격": price, "통화": "USD",
+                        "이미지": img, "링크": link, "품절": False, "예약중": False,
+                        "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name), "category": cat, "brand": detect_brand(name)})
+    print(f"  ✅ Leica Store Miami 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14922,6 +14961,7 @@ def crawl_all():
         ("Foto Schneider (오스트리아)", lambda: ce.wrap_full_run("Foto Schneider (오스트리아)", crawl_fotoschneider)),
         ("Film Lab (라트비아)", lambda: ce.wrap_full_run("Film Lab (라트비아)", crawl_filmlab)),
         ("Leica Boutique Cape Town (남아공)", lambda: ce.wrap_full_run("Leica Boutique Cape Town (남아공)", crawl_leicaboutique)),
+        ("Leica Store Miami (미국)", lambda: ce.wrap_full_run("Leica Store Miami (미국)", crawl_leicamiami)),
         ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
         ("Fotopia (홍콩)", lambda: ce.wrap_full_run("Fotopia (홍콩)", crawl_fotopia)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),
