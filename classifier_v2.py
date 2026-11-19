@@ -1172,6 +1172,14 @@ def _detect_category_core(
     combined = n + " " + desc
     # 'Rangefinder Camera'(카메라 종류)의 finder가 뷰파인더 부속품 키워드에 걸리지 않게
     combined = re.sub(r"(?<!for )range ?-?finder (?=(film |digital )?(camera|body|lens))", "rf ", combined)
+    # 2026-11-19 악세사리 점검: 본체인데 부속품 키워드에 걸리던 표기들
+    #  'MP 0.72 Silver Chrome Rangefinder'(제목 끝 Rangefinder의 finder) · 'silver-chrome-plated Body'(plate) ·
+    #  '<<Strap付き>> … M3 Body'·'保護Filter付き Summicron'(딸려 오는 구성품) · 'M3 DS … Leicavit対応改造品'(라이카빗에 맞게 고친 바디) · 'M3 (Finder切替ナシ)'
+    combined = re.sub(r"(?<!for )(?<!for the )(?<!\+ )(?<!\+)(?<!with )\brange ?-?finder\b(?=\s*(?:$|[,;(\[\-–|/]|rare\b|camera\b|body\b|lens\b|film\b|digital\b|set\b|kit\b))", "rf", combined)
+    combined = re.sub(r"plated\b", "finish", combined)
+    combined = re.sub(r"[\w\-ー・]{0,8}(?:strap|filter|case|hood|cap|box|ストラップ|フィルター|ケース|フード|キャップ|箱)\s*(?:付き?|付属|込み?)", " ", combined)
+    combined = re.sub(r"leicavit\s*対応\s*改造", "modified", combined)
+    combined = re.sub(r"finder\s*切替", "切替", combined)
     # 브랜드 이름 속 '&'는 묶음말이 아님 ('Artisan & Artist Leather Case for Leica Q'가 묶음으로 보여 바디가 됨, 2026-11-15)
     combined = re.sub(r"artisan ?& ?artist", "artisan-artist", combined)
     reasons = []
