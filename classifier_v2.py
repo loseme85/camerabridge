@@ -826,6 +826,16 @@ _HARD_ACC_REGEX = (
     (r'\bbp-scl\d+\b', "battery_code"),
     (r'\b(?:leica\s+)?m\s+motor\b|\bmotor\s+m\b', "motor_winder"),
     (r'\bbooks?\b', "book"),
+    (r'\bfor\s*(?:lens|rear|front|body)?\s*cap\b|リア ?cap', "cap_for"),
+    # 2026-11-19 악세사리 점검 (바디·렌즈로 분류되던 설명서·캡·링·박스·스풀·배터리). 앞에 with·+·and 같은 묶음말이 있으면 본체의 구성품이라 제외
+    (r"(?<!with )(?<!\+ )(?<!\+)(?<!& )(?<!and )(?<!\be )(?<!con )(?<!mit )(?<!w/ )(?<!w/)(?<!, )\b(?:brief )?(?:instructions?|manual)\b(?!\s+(?:focus|mode|lens|exposure))", "manual"),
+    (r"(?<!with )(?<!\+ )(?<!\+)(?<!& )(?<!and )(?<!\be )(?<!con )(?<!mit )(?<!w/ )(?<!w/)(?<!, )\bcap\b", "cap"),
+    (r"^\s*(?:\[[^\]]*\]\s*)?(?:leica\s+)?box\b|\bleica box\b|\bempty box\b|packaging only|\bbox only\b", "box"),
+    (r"\b(?:take-?up |film )?spool\b|\bcann?ister\b", "spool"),
+    (r"(?<!w\. )(?<!with )(?<!\+ )\b(?:focus(?:ing)?|bayonet|adapter|adaptor|extension|ext\.?|macro|step(?:-up|-down)?|reverse|close-?up|setting|mount|ml|m-t|filter)\s+ring\b|(?:中間|変換|接写|접사)\s*ring|^\s*ring\b|\bring\s+(?:leica\s+)?(?:\d{5}|m-t|f\.|lenti)|(?<!\d )(?<!\d-)\bring\s*$", "ring"),
+    (r"\brechargeable\b[^+]{0,30}\bbattery\b|\bcharger\s+bc-|\bbc-scl\d", "battery_charger"),
+    (r"\btele ?converter\b|shutter (?:button|release)|\bdata back for\b|\b(?:slow speed )?shutter release\b", "misc_acc"),
+    (r"(?<!with )(?<!\+ )(?<!\+)(?<!& )(?<!and )(?<!\be )(?<!con )(?<!mit )(?<!w/ )(?<!w/)(?<!, )\bhood(?:\s+(?:olive|black|silver|chrome))?\s*$", "hood_tail"),  # 'Elmarit-R 90/2.8 for LensCap'은 렌즈 캡 (2026-11-19)
     # 확대기 렌즈·필름 카세트는 초점거리가 있어도 촬영용 렌즈가 아님 (2026-11-07 밤샘: 'LEITZ FOCOTAR 60mm F4.5'·'Rapid Loading System 14260'이 렌즈로 잡힘)
     (r'\bfocotar\b', "enlarger_lens"),
     (r'\b(?:film\s+)?cassettes?\b|\breloadable\b|\brapid\s+load(?:ing)?\s+(?:system|spool|kit)\b|\bspool\s+kit\b', "film_cassette"),
@@ -998,7 +1008,7 @@ _LENS_PROTECT_KW = [
 ]
 
 _BODY_KW = [
-    "body", "바디",
+    "body", "바디", "digitalkamera",
     # M 바디
     "leica m3", "leica m2", "leica m4", "leica m5", "leica m6",
     "leica m7", "leica mp", "leica m-a", "leica ma ",  # "leica ma"만 쓰면 "Leica Macro-Elmar"가 바디로
@@ -1059,7 +1069,8 @@ _STRONG_ACC_KW = (
     # 'BC-SCL7 Battery Charger … for Leica M11'·'Universal-Magnifier'·'Re-skin for Leica'·'Dealer Display Stand'·'Light Sign'이 바디로 잡힘
     "thumbs-up", "thumbs up", "thumb-up", "rewind crank", "battery charger", "leather case for", "half case for", "case for leica",
     "magnifier", "re-skin", "reskin", "display stand", "light sign", "leitzphone",
-    "lens cap", "hood cap", "aperture control ring",
+    "lens cap", "hood cap", "aperture control ring", "lenscap", "リアcap", "リアキャップ",
+    "mooly", "sl-mot", "sl2-mot", "motor-m ", "leica-motor", "rapid winder", "rapidwinder", "용 케이스", "case leica", "leica case",
     # 2026-11-14 본품+구성품 점검: 앞에 오면 부속품인 말
     "motor drive", "motor-drive", "motor winder", "motor-winder", "motorwinder", "fondelli", "leicameter", "cinghia",
     "説明書", "取説", "bedienungsanleitung", "anleitung", "brochure", "prospekt", "katalog",
@@ -1176,9 +1187,27 @@ def _detect_category_core(
     # 2026-11-19 악세사리 점검: 본체인데 부속품 키워드에 걸리던 표기들
     #  'MP 0.72 Silver Chrome Rangefinder'(제목 끝 Rangefinder의 finder) · 'silver-chrome-plated Body'(plate) ·
     #  '<<Strap付き>> … M3 Body'·'保護Filter付き Summicron'(딸려 오는 구성품) · 'M3 DS … Leicavit対応改造品'(라이카빗에 맞게 고친 바디) · 'M3 (Finder切替ナシ)'
+    # 제목에 라이카 바디 이름(M3·MP·CL·R4…)이 있으면 어디에 있든 'Rangefinder'는 카메라 종류 ('M6 Rangefinder Chrome'·'M4 Black Paint Rangefinder SNxx888')
+    if re.search(r"\b(?:m\d{1,2}(?:-[a-z])?|mp|cl|r\d)\b", combined):
+        combined = re.sub(r"(?<!for )(?<!for the )(?<!\+ )(?<!\+)(?<!with )\brange ?-?finder\b", "rf", combined)
+    combined = re.sub(r"レンジ ?finder", "rf ", combined)
     combined = re.sub(r"(?<!for )(?<!for the )(?<!\+ )(?<!\+)(?<!with )\brange ?-?finder\b(?=\s*(?:$|[,;(\[\-–|/]|rare\b|camera\b|body\b|lens\b|film\b|digital\b|set\b|kit\b))", "rf", combined)
     combined = re.sub(r"plated\b", "finish", combined)
-    combined = re.sub(r"[\w\-ー・]{0,8}(?:strap|filter|case|hood|cap|box|ストラップ|フィルター|ケース|フード|キャップ|箱)\s*(?:付き?|付属|込み?)", " ", combined)
+    combined = re.sub(r"[\w\-ー・]{0,8}(?:strap|filter|finder|case|hood|cap|box|ストラップ|フィルター|ファインダー|ケース|フード|キャップ|箱)\s*(?:\([^)]{0,12}\)\s*)?(?:付き?|付属|込み?)", " ", combined)
+    # 후드 내장 렌즈 ('Summilux M 75/1.4 Hood組込')는 후드 단품이 아님
+    combined = re.sub(r"(?:hood|フード|ﾌｰﾄﾞ)\s*(?:組込み?|組み込み|内蔵)|built[- ]?in[- ]?hood", " ", combined)
+    # 'M2 ST Recovered'(가죽 새로 입힘)의 cover가 커버 부속품 키워드에 걸리지 않게
+    combined = re.sub(r"\brecover(?:ed|ing)?\b", "releathered", combined)
+    combined = re.sub(r"(?:\bw\.|\bwith|\+)\s+(?:an?\s+)?(?:extension|adapter|focus\w*|macro)\s+ring\b", " ", combined)  # 렌즈에 딸린 링 ('Telyt 200mm … w. Extension Ring')
+    combined = re.sub(r"\b(?:no|ohne|without|senza|sans)\s+(?:rear |front |lens |body )?cap\b", " ", combined)  # 'no rear cap'은 캡이 없다는 뜻
+    if re.search(r"digitalkamera|digital camera", combined):
+        combined = re.sub(r"\baccessory\s*$", " ", combined)  # SHphoto는 제목 끝에 늘 'accessory'를 붙임 ('SL Typ 601 Digitalkamera accessory' 바디)
+    # Visoflex용 렌즈 (Telyt·Hektor·Elmar 65 등)는 렌즈. 마운트 링·어댑터·단독 Visoflex 본체는 그대로 부속품
+    if re.search(r"visoflex|ビゾフレックス|ビソフレックス", combined) \
+            and re.search(r"hektor|telyt|elmar|summicron|summilux|angulon|noctilux", combined) \
+            and re.search(r"\b\d{2,3}(?:\.\d)?\s*(?:mm|cm)?\s*/\s*f?\d|\b\d{2,3}(?:\.\d)?\s*(?:mm|cm)\b|\d\.\d\s*/\s*\d", combined) \
+            and not re.search(r"bague|\bring\b|adapter|adaptor|focusing|mount\b|helicoid|ヘリコイド単|16462|16464|16466|ouoo|for\\s*(?:リア|rear |lens ?|body )?cap|リア ?cap|キャップ", combined):
+        combined = re.sub(r"visoflex|ビゾフレックス|ビソフレックス", " ", combined)
     combined = re.sub(r"leicavit\s*対応\s*改造", "modified", combined)
     combined = re.sub(r"finder\s*切替", "切替", combined)
     # 브랜드 이름 속 '&'는 묶음말이 아님 ('Artisan & Artist Leather Case for Leica Q'가 묶음으로 보여 바디가 됨, 2026-11-15)
@@ -1326,6 +1355,8 @@ def _detect_category_core(
     if (
         not is_lens_protected_weak
         and not _is_body_finder_bundle(combined)
+        and not (has_lens_kw and re.search(r"\b\d{1,3}(?:\.\d)?\s*(?:cm)?\s*/\s*f?\d(?:\.\d)?\b", combined) and not re.search(r"for\\s*(?:リア|rear |lens ?|body )?cap|リア ?cap|キャップ", combined))  # 'Elmar 90/4'·'Hektor 135/4.5'
+        and not re.fullmatch(r"\s*(?:\[[^\]]*\]\s*)?(?:leica\s+)?(?:r[3-9](?:\.2)?|leicaflex(?:\s*\(?(?:sl2?|mk\.?\s?\d)\)?)?)\s*(?:body|black|silver|chrome)*\s*", combined)  # 'Leica R4 Black'·'Leicaflex SL' — R 시리즈는 싼 게 정상 (M 바디 15만 원은 계속 의심)
         and price_str
         and price_str not in ("문의요망", "")
     ):

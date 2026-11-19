@@ -336,3 +336,38 @@ def test_real_accessories_with_similar_words_stay_accessory() -> None:
 
 def test_lens_turret_is_accessory() -> None:
     assert _classify("Leica OROLF Lens Turret for screw mount lenses with M2/M3")["category"] == "Accessory"
+
+
+def test_built_in_hood_lenses_and_visoflex_lenses_stay_lens() -> None:
+    # 2026-11-19 전체 점검: 후드 내장 렌즈·Visoflex용 렌즈·f값 없는 싼 렌즈가 악세사리로 빠지던 것
+    for title in [
+        "Leica SUMMILUX M 75/1.4 Hood組込",
+        "Leica Noctilux-M 50mm f/1.0 E60 Hood組込 11822 代引き不可",
+        "Leica Summilux-M 35mm F1.4 ASPH - Black / 11726 / FLE / Built-in-hood",
+        "Leica Telyt 200/4(VISOFLEX)",
+        "Leitz Wetzlar Telyt 200mm f4 lens for Visoflex",
+        "Leica Hektor-M 135/4.5",
+        "Leica Elmar 9cm/4",
+        "Leitz Telyt 200mm f4 (L39) Screw Mount w. Extension Ring",
+        "Leica 50mm f/1.5 XENON chrome 3 RING",
+    ]:
+        assert _classify(title)["category"] == "Lens", title
+
+
+def test_manuals_caps_rings_boxes_are_accessories() -> None:
+    for title in [
+        "Leica Minilux Instructions",
+        "Leica 55mm (E55) Front Cap, Black, Snap-On, 14289, for 90mm f2",
+        "Leica Bayonet Ring 28/90MM",
+        "Leica box ROSSA IIIG",
+        "Leica Summilux 1:1.4 / 50 / 11114, Empty box / Packaging only",
+        "Leica Motor Chrome MOOLY",
+        "Leica Elmarit-R 90/2.8 for LensCap 14089",
+    ]:
+        assert _classify(title)["category"] == "Accessory", title
+
+
+def test_old_r_bodies_and_rangefinder_bodies_stay_body() -> None:
+    for title in ["Leica R4 Black", "Leicaflex (Mk.1) body", "Leica M6 Rangefinder Chrome", "Leica M2 ST Recovered, DAG Overhauled",
+                  "Leica SL Typ 601 24MP 10850 Digitalkamera accessory"]:
+        assert _classify(title)["category"] == "Body", title
