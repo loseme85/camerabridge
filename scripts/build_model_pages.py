@@ -29,7 +29,7 @@ from build_legal_pages import FOOTER_CSS, footer  # noqa: E402
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
 SITE = "https://camerabridge.io"
-LANGS = ("ko", "en", "ja", "de", "it", "es", "pt", "zh-Hans", "zh-Hant")  # 2026-11-08 사장님: 방문 늘리기 — 독일어·이탈리아어·스페인어·포르투갈어·중국어 2종 추가
+LANGS = ("ko", "en", "ja", "de", "fr", "it", "es", "pt", "zh-Hans", "zh-Hant")  # 2026-11-08 독일어·이탈리아어·스페인어·포르투갈어·중국어 2종, 2026-11-19 프랑스어 (Leica France occasions 클릭 3위인데 페이지 없음)
 PATH = {l: l.lower() for l in LANGS}  # 주소: /zh-hans/leica/…
 MIN_ACTIVE = 3           # 새 모델 페이지를 처음 공개할 때의 최소 판매 중 매물 수
 MAX_PAGES = 400          # 신규 공개 후보의 상위 모델 수 (이미 공개한 주소는 별도로 유지)
@@ -38,7 +38,7 @@ LASTMOD = ROOT / "data" / "derived" / "model_pages_lastmod.json"
 # 2026-11-12 구글 서치 콘솔 404: 모델이 나뉘거나 이름이 바뀌어 사라진 옛 주소 → 가장 가까운 페이지로 넘김 (한 번 생기면 계속 유지)
 REDIRECTS = ROOT / "data" / "derived" / "model_pages_redirects.json"  # 페이지별 내용 지문과 실제로 바뀐 날
 # 2026-11-12 사장님: 모델 페이지로 들어온 사람이 판매 중 매물을 다 보게 — 개수 제한 없음 (싼 순)
-DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY", "de": "EUR", "it": "EUR", "es": "EUR", "pt": "EUR", "zh-Hans": "CNY", "zh-Hant": "HKD"}
+DISPLAY_CURRENCY = {"ko": "KRW", "en": "USD", "ja": "JPY", "de": "EUR", "it": "EUR", "es": "EUR", "pt": "EUR", "fr": "EUR", "zh-Hans": "CNY", "zh-Hant": "HKD"}
 # 잘못 연결됐을 가능성이 큰 매물은 페이지에서 뺀다: 대여 상품, 그 모델 B등급 기준가의 이 비율보다 싼 것
 RENTAL = re.compile(r"\brental\b|\bfor rent\b|대여|렌탈|レンタル", re.I)
 MIN_PRICE_RATIO = 0.35
@@ -353,6 +353,57 @@ def compare_trend(series_a: list, series_b: list, weeks: list[str], b_a: float, 
     if picked[-1] != last:
         picked.append(last)
     return [(weeks[i], b_a * ia[i][0] / ia[last][0], b_b * ib[i][0] / ib[last][0]) for i in picked]
+
+# ── 프랑스어 (2026-11-19): 'leica d'occasion' 검색, 프랑스·벨기에·스위스 서부·퀘벡 ──
+COUNTRY_FR = {"한국": "Corée du Sud", "일본": "Japon", "미국": "États-Unis", "영국": "Royaume-Uni", "독일": "Allemagne", "프랑스": "France",
+              "이탈리아": "Italie", "네덜란드": "Pays-Bas", "덴마크": "Danemark", "스위스": "Suisse", "스페인": "Espagne", "포르투갈": "Portugal",
+              "오스트리아": "Autriche", "핀란드": "Finlande", "룩셈부르크": "Luxembourg", "홍콩": "Hong Kong", "싱가포르": "Singapour",
+              "말레이시아": "Malaisie", "아랍에미리트": "Émirats arabes unis", "호주": "Australie", "캐나다": "Canada", "폴란드": "Pologne",
+              "뉴질랜드": "Nouvelle-Zélande", "칠레": "Chili", "그리스": "Grèce", "노르웨이": "Norvège", "벨기에": "Belgique", "스웨덴": "Suède",
+              "체코": "Tchéquie", "헝가리": "Hongrie", "루마니아": "Roumanie"}
+for _ko, _fr in COUNTRY_FR.items():
+    COUNTRY.setdefault(_ko, {})["fr"] = _fr
+for _ko, _names in COUNTRY.items():  # 프랑스어 이름이 없는 나라는 영어 이름
+    _names.setdefault("fr", _names.get("en", _ko))
+T["fr"] = {
+    "title": "{name} d'occasion : prix et annonces | Camera Bridge",
+    "title_from": "{name} d'occasion dès {low} · {n} annonces | Camera Bridge",
+    "q_price": "Combien coûte un {name} d'occasion ?",
+    "a_price": "Actuellement, {n} sont en vente dans {shops} boutiques de {countries} pays. Les prix vont de {low} à {high}, avec une médiane de {median}.",
+    "a_sold": " Les {k} derniers vendus avaient un dernier prix affiché médian de {sold}.",
+    "q_where": "Où un {name} d'occasion est-il le moins cher ?",
+    "a_where": "Pays les moins chers en ce moment : {list}. Prix des boutiques convertis au taux du jour, hors livraison et taxes d'importation.",
+    "related": "Modèles similaires", "sep": ", ",
+    "new": "Prix neuf (Leica UK)", "vs_new": "Occasion grade B / neuf", "vs_new_val": "{pct} % du prix neuf",
+    "a_new": " Neuf, il coûte {new} chez Leica UK ; d'occasion en grade B, environ {pct} % de ce prix.",
+    "desc": "{active} {name} d'occasion dans {shops} boutiques, {range}. Boutiques Leica en Corée, au Japon, en Europe et aux États-Unis, avec les prix de vente, au même endroit.",
+    "h1": "{name} d'occasion : prix", "active": "En vente", "active_val": "{n} annonces · {shops} boutiques",
+    "range": "Prix affichés", "sold": "Médiane des ventes", "sold_val": "{price} ({n} vendus)",
+    "sold_note": "Médiane du dernier prix vu avant que l'annonce soit marquée comme vendue. Le prix réel peut différer.",
+    "updated": "Au {time} · prix des boutiques convertis en EUR au taux du jour", "listings": "En vente maintenant (du moins cher)",
+    "col_item": "Annonce", "col_shop": "Boutique", "col_cond": "État", "col_price": "Prix",
+    "more": "Chercher tous les {name} sur Camera Bridge", "children": "Par génération / version", "parent": "Tout voir",
+    "none": "Aucune annonce pour le moment.", "index_title": "Leica d'occasion : appareils et objectifs, prix par modèle | Camera Bridge",
+    "index_h1": "Leica d'occasion : prix par modèle", "index_desc": "Prix d'occasion et annonces en cours des appareils et objectifs Leica, par modèle.",
+    "shops_h": "Prix par boutique", "col_count": "Annonces", "col_low": "Le moins cher", "col_cur": "Devise", "info_h": "Fiche du modèle",
+    "kind": "Type", "kind_Body": "Boîtier", "kind_Lens": "Objectif", "mount": "Monture", "codes": "Références", "bodies": "Boîtiers",
+    "lenses": "Objectifs", "aka": "Aussi appelé", "count": "{n}", "home": "Camera Bridge", "list": "Prix par modèle", "approx": "≈ ",
+    "lead": "{name} d'occasion : valeur de marché grade B {b}, {n} en vente dans {shops} boutiques (au {date}).",
+}
+X["fr"] = {"range_note": "Modèles standard uniquement · {n} éditions limitées, versions rares et lots listés à part ci-dessous",
+           "special_h": "Éditions limitées, versions rares et lots (du moins cher)"}
+CTA["fr"] = ("Voir les {n} annonces dans le monde", "Photos · grades d'état (S–D) · total estimé jusqu'à chez vous, livraison et droits compris")
+C["fr"] = {"title": "{a} vs {b} : prix d'occasion et caractéristiques | Camera Bridge", "h1": "{a} vs {b} : prix d'occasion et caractéristiques",
+           "desc": "{a} vs {b} : valeur d'occasion en grade B, annonces en vente, prix le plus bas et différences techniques, dans les boutiques Leica de Corée, du Japon, d'Europe et des États-Unis.",
+           "lead": "Valeur d'occasion en grade B : {a} {pa}, {b} {pb}, soit {diff} d'écart. En vente : {a} {na}, {b} {nb} (au {date}).",
+           "price_h": "Prix d'occasion", "spec_h": "Caractéristiques", "b": "Valeur grade B", "low": "Prix le plus bas", "model_h": "Pages des modèles",
+           "see": "Tous les prix du {name} d'occasion", "compare_h": "Comparer", "index_h": "Comparatifs de modèles", "yes": "Oui", "no": "Non",
+           "f": {"years": "Années", "kind": "Type", "mount": "Monture / objectif", "sensor_mp": "Définition", "sensor": "Capteur", "mono": "Monochrome",
+                 "finder": "Viseur", "framelines": "Cadres", "meter": "Posemètre", "shutter": "Obturateur", "top_speed": "Vitesse maximale",
+                 "flash_ttl": "Flash TTL", "ibis": "Stabilisation", "video": "Vidéo", "battery": "Batterie", "weight_g": "Poids", "note": "Particularités"},
+           "trend_h": "Évolution des prix", "trend_lead": "Depuis le {since} : {a} {ca}, {b} {cb}. L'écart est passé de {d0} à {d1} ({verb}).",
+           "trend_up": "en hausse", "trend_down": "en baisse", "trend_same": "stable", "trend_col": "Semaine du", "trend_gap": "Écart",
+           "trend_note": "Estimation à partir des prix affichés : variations hebdomadaires dans les mêmes boutiques, enchaînées et ramenées à la valeur actuelle en grade B. Les nouvelles boutiques et les taux de change ne modifient pas la tendance."}
 
 
 def compare_slug(a_slug: str, b_slug: str) -> str:
