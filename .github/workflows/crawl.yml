@@ -134,7 +134,7 @@ jobs:
         run: |
           git config user.name "Camera Bridge Bot"
           git config user.email "bot@camerabridge.app"
-          git add -A data/ crawler/sessions/ ko/ en/ ja/ de/ it/ es/ pt/ zh-hans/ zh-hant/ sitemap.xml llms.txt
+          git add -A data/ crawler/sessions/ ko/ en/ ja/ de/ fr/ it/ es/ pt/ zh-hans/ zh-hant/ sitemap.xml llms.txt
           git diff --staged --quiet && echo "No changes" && exit 0
           git stash
           git pull --rebase origin main
@@ -142,13 +142,13 @@ jobs:
           if ! git stash pop; then
             BAD=$(git diff --name-only --diff-filter=U)
             echo "충돌 파일:"; echo "$BAD"
-            if echo "$BAD" | grep -vqE '^(data/derived/|(ko|en|ja|de|it|es|pt|zh-hans|zh-hant)/|sitemap\.xml$|llms\.txt$)'; then
+            if echo "$BAD" | grep -vqE '^(data/derived/|(ko|en|ja|de|fr|it|es|pt|zh-hans|zh-hant)/|sitemap\.xml$|llms\.txt$)'; then
               echo "다시 만드는 결과물이 아닌 파일이 충돌해 멈춤"; exit 1
             fi
             echo "$BAD" | while read -r f; do git checkout --theirs -- "$f"; git add -- "$f"; done
             git stash drop
           fi
-          git add -A data/ crawler/sessions/ ko/ en/ ja/ de/ it/ es/ pt/ zh-hans/ zh-hant/ sitemap.xml llms.txt
+          git add -A data/ crawler/sessions/ ko/ en/ ja/ de/ fr/ it/ es/ pt/ zh-hans/ zh-hant/ sitemap.xml llms.txt
           git commit -m "🤖 Auto crawl $(date '+%Y-%m-%d %H:%M KST' -d '+9 hours')"
           git pull --rebase origin main
           git push
