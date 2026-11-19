@@ -302,3 +302,33 @@ def test_strong_accessory_words_before_body_rules() -> None:
         ("Leica M6 0.72 mit Anleitung und Box", "Body"),
     ]:
         assert _classify(title)["category"] == category, title
+
+
+def test_bodies_and_lenses_with_accessory_words_stay_body_or_lens() -> None:
+    # 2026-11-19 악세사리 점검: 본체인데 부속품 키워드(finder·plate·strap·leicavit)에 걸려 악세사리로 빠지던 제목
+    expected = {
+        "Leica MP 0.72 Silver Chrome Rangefinder": "Body",
+        "Leica M3, silver-chrome-plated Body": "Body",
+        "Leica M4-2 black chrome-plated Body": "Body",
+        "Leica M3 ダブルストローク(Finder切替ナシ)": "Body",
+        "Leica M3 DS Black後塗 Leicavit対応改造品": "Body",
+        "Leica M5 Black 革Strap付": "Body",
+        "Leica <<Strap付き！！>> LEICA Leica M4 Body Silver Chrome 127万台 Mマウント #LE20275601": "Body",
+        "Leica ＜＜保護Filter付き！！＞＞ LEICA Leica Summicron M 50mm f2.0 Collapsible #LE2027600": "Lens",
+        "Leica M 35mm f1.4 SUMMILUX ASPH. Silver, Chrome-plated 미개봉신품": "Lens",
+    }
+    for title, category in expected.items():
+        assert _classify(title)["category"] == category, title
+
+
+def test_real_accessories_with_similar_words_stay_accessory() -> None:
+    for title in [
+        "Leica FOKOS Rangefinder fofer for camera",
+        "Leica 35mm View finder",
+        "Voigtlander 28-35mm Finder Black",
+        "Leica M6 for 底Case",
+        "Leica Leicavit M Black Paint",
+        "Leica baseplate M4 base plate",
+        "Viewfinder for rangefinder Leica M",
+    ]:
+        assert _classify(title)["category"] == "Accessory", title
