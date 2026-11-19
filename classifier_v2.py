@@ -1083,6 +1083,8 @@ _STRONG_ACC_KW = (
     "keyring", "key ring", "focusing screen",
     "lens turret", "turret",
     "fokus rangefinder", "fokos rangefinder", "fokus rf", "fokos rf",  # Leica Fokus/FOKOS 초점 보조 악세사리 (Soper, M&K 2026-11-19)
+    "digiscope",
+    "elmarit-p2", "elmarit-p 2", "colorplan-p", "pradovit",  # 슬라이드 프로젝터 렌즈 (Cambrian 2026-11-19)
     # 2026-11-15 시세 이탈 2차: 접사 장치·필터가 렌즈 칸에 ('Nah Brille Nahvorsatz für Summicron'·'Nooky-Hesum närbildstillsats'·
     # 'Naheinstellgerät für Hektor'·'Filtro x Elmar 50'·'Lマウント接写 Ring'·'ring Nichel x 50mm Hektor … per macro')
     "närbildstillsats", "naheinstellgerät", "nah brille", "nahvorsatz", "filtro x", "接写", "per macro", "nooky", "sooky",

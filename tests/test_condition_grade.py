@@ -805,4 +805,11 @@ def test_soper_cosmetic_condition():
     assert grade_of(site, "Soper: Very good overall, very light signs of use")[0] == "B"
     assert grade_of(site, "Soper: Very good, very light signs of use")[0] == "B"
     assert grade_of(site, "Soper: Good overall, some signs of use")[0] == "C"
+
+
+def test_cambrian_condition():
+    site = "Cambrian Photography (영국)"
+    assert grade_of(site, "Cambrian: Excellent")[0] == "A"
+    assert grade_of(site, "Cambrian: Good")[0] == "B"
+    assert grade_of(site, "Cambrian: Used")[0] == "B"
     assert grade_of(site, "정보없음") == (None, None)
