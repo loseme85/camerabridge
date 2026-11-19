@@ -14731,6 +14731,42 @@ def crawl_leicaboutique():
     return list(results.values())
 
 
+def crawl_unit():
+    """UNIT Camera Shop (태국 방콕) - Shopify 전체 상품에서 Leica·Leitz 판매 중만 (파나소닉 루믹스는 뺌).
+    등급 표기 없음, 설명 'Condition:' 목록(영어·태국어)을 minor/moderate/heavy로. 이 맥은 Shopify 429라 GitHub 서버에서 시험."""
+    import requests, html
+    from condition_grade import unit_condition
+    base = "https://unit-filmcamera.com"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = "CameraBridge/1.0 (+https://camerabridge.io)"
+    products = _shopify_all(sess, base + "/products.json", "UNIT")
+    results = []
+    for p in products:
+        name = re.sub(r"\s+", " ", html.unescape(p.get("title") or "")).strip()
+        name = re.sub(r"^\*[A-Za-z ]+\*\s*", "", name)  # '*READ*' 안내 표시
+        if not re.match(r"(?i)^(?:used\s+)?(?:leica|leitz|ernst leitz)\b", name):
+            continue
+        variants = p.get("variants") or [{}]
+        if not any(v.get("available") for v in variants):
+            continue
+        link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+        if not link or link in globals().get('SOLD_LINKS', ()):
+            continue
+        try:
+            price = f"฿{float(variants[0].get('price')):,.0f}"
+        except (TypeError, ValueError):
+            continue
+        name = re.sub(r"(?i)^used\s+", "", name)
+        img = p["images"][0].get("src", "") if p.get("images") else ""
+        cat = detect_category(name, price)
+        results.append({"site": "UNIT Camera Shop (태국)", "label": auto_label(name), "상품명": name,
+                        "세대": detect_generation(name), "컨디션": unit_condition(p.get("body_html") or "") or "정보없음",
+                        "가격": price, "통화": "THB", "이미지": img, "링크": link, "품절": False, "예약중": False,
+                        "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name), "category": cat, "brand": detect_brand(name)})
+    print(f"  ✅ UNIT 완료: {len(results)}개")
+    return results
+
+
 def crawl_all():
     from concurrent.futures import ThreadPoolExecutor, as_completed
     import crawl_engine as ce
@@ -14922,6 +14958,7 @@ def crawl_all():
         ("Foto Schneider (오스트리아)", lambda: ce.wrap_full_run("Foto Schneider (오스트리아)", crawl_fotoschneider)),
         ("Film Lab (라트비아)", lambda: ce.wrap_full_run("Film Lab (라트비아)", crawl_filmlab)),
         ("Leica Boutique Cape Town (남아공)", lambda: ce.wrap_full_run("Leica Boutique Cape Town (남아공)", crawl_leicaboutique)),
+        ("UNIT Camera Shop (태국)", lambda: ce.wrap_full_run("UNIT Camera Shop (태국)", crawl_unit)),
         ("Digital Camera Warehouse (호주)", lambda: ce.wrap_full_run("Digital Camera Warehouse (호주)", crawl_dcw)),
         ("Fotopia (홍콩)", lambda: ce.wrap_full_run("Fotopia (홍콩)", crawl_fotopia)),
         ("Robert White (영국)", lambda: ce.wrap_full_run("Robert White (영국)", crawl_robertwhite)),

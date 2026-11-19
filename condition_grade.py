@@ -76,6 +76,10 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         mapped = {"nieuwstaat": "A", "vrijwel nieuwstaat": "A", "zo goed als nieuw": "A",
                   "gebruikt maar in zeer nette staat": "B"}
         return (mapped[state], "label") if state in mapped else (None, None)
+    # UNIT Camera Shop (태국): 설명 'Condition:' 목록(영어·태국어)의 상태 말을 minor/moderate/heavy로. 2026-11-19 밤샘 사진 9개(판매 중 라이카 전부, 표기 가림):
+    # 정확히 일치 6/9, 한 등급 이내 9/9. 'minor scratches' 3개는 사진도 B, 금 간 가죽·광학 흐림은 C.
+    if site == "UNIT Camera Shop (태국)" and cond.startswith("UNIT: "):
+        return {"minor": "B", "moderate": "C", "heavy": "D"}.get(cond.removeprefix("UNIT: ").strip().lower()), "text"
     if cond == "Grainlab: hervorragend":
         return "B", "text"
     # Cape Town 20개 × 3장: 정확 12/20, 한 등급 이내 20/20. 일반 영문 대응보다 한 칸 후한 매장.
@@ -1150,3 +1154,19 @@ def realcamera_grade(score: str) -> str | None:
     if s >= 7.5:
         return "C"
     return "D"
+
+
+def unit_condition(text: str) -> str | None:
+    """UNIT Camera Shop 설명의 'Condition:' 목록에서 상태 수준을 뽑아 'UNIT: minor' 꼴로 (minor→B · moderate→C · heavy→D)."""
+    t = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", text or ""))
+    m = re.search(r"Condition:(.*)", t)
+    if not m:
+        return None
+    body = re.split(r"[\u0e00-\u0e7f]", m.group(1))[0]  # 영어 목록까지 (뒤따르는 태국어 번역은 버림)
+    if re.search(r"(?<!no )fungus(?! ,)|not working|corros|heavy|severe|dent", re.sub(r"no fungus", "", body, flags=re.I), re.I):
+        return "UNIT: heavy"
+    if re.search(r"moderate|cracked|not functioning|noticeable|significant", body, re.I):
+        return "UNIT: moderate"
+    if re.search(r"minor|light|slight|clean|like new", body, re.I):
+        return "UNIT: minor"
+    return None

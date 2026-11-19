@@ -797,3 +797,16 @@ def test_cameraoccasion_detail_condition():
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Vrijwel nieuwstaat")[0] == "A"
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: Gebruikt maar in zeer nette staat")[0] == "B"
     assert grade_of("CameraOccasion (네덜란드)", "CameraOccasion: unknown") == (None, None)
+
+
+def test_unit_camera_shop_condition():
+    from condition_grade import unit_condition
+    site = "UNIT Camera Shop (태국)"
+    assert unit_condition("<p>Condition: - Lens is fully functional - Lens glass has no fungus - Lens body has minor scratches - เลนส์</p>") == "UNIT: minor"
+    assert unit_condition("Condition: - Lens body has moderate scratches") == "UNIT: moderate"
+    assert unit_condition("Condition: - Camera body leatherette is cracked, with minor scratches") == "UNIT: moderate"
+    assert unit_condition("Condition: - Lens has fungus and heavy haze") == "UNIT: heavy"
+    assert unit_condition("no condition list") is None
+    assert grade_of(site, "UNIT: minor")[0] == "B"
+    assert grade_of(site, "UNIT: moderate")[0] == "C"
+    assert grade_of(site, "UNIT: heavy")[0] == "D"
