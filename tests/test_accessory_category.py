@@ -332,3 +332,7 @@ def test_real_accessories_with_similar_words_stay_accessory() -> None:
         "Viewfinder for rangefinder Leica M",
     ]:
         assert _classify(title)["category"] == "Accessory", title
+
+
+def test_lens_turret_is_accessory() -> None:
+    assert _classify("Leica OROLF Lens Turret for screw mount lenses with M2/M3")["category"] == "Accessory"

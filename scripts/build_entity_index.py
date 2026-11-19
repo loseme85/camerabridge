@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from condition_grade import grade_of  # noqa: E402
-from entity_catalog import annotate_records, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, merge_same_item, price_krw  # noqa: E402
+from entity_catalog import annotate_records, flag_pricey_set, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, merge_same_item, price_krw  # noqa: E402
 from fx_history import krw_per_unit_on  # noqa: E402
 from listing_date import as_datetime_text  # noqa: E402
 
@@ -251,6 +251,8 @@ def main() -> None:
         if id(record) not in too_cheap and id(record) not in dup_ids and is_set(record, catalog):
             record.setdefault("final_output", {})["entity_note"] = "set"
             sets.add(id(record))
+    pricey = flag_pricey_set([r for r in records if id(r) not in too_cheap and id(r) not in dup_ids and id(r) not in sets], value, catalog)
+    sets |= pricey
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     to_krw = krw_rates()

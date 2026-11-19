@@ -771,3 +771,18 @@ def test_m3_excludes_m4_with_m3_finder_and_boba_fett_mod() -> None:
     assert not any(i.startswith("leica:body:m3") for i in bodies("Leica M3 Project Boba Fett 1977 Set"))
     assert "leica:body:m3:standard" in bodies("Leica M3 Body")
     assert "leica:body:m2:black-paint" in bodies("LEICA M2 Blcak paint")
+
+
+def test_pricey_set_word_on_standard_body_is_flagged_as_set() -> None:
+    from entity_catalog import flag_pricey_set
+    catalog = load_catalog()
+    def rec(title: str, krw: float, entity: str = "leica:body:m3:standard") -> dict:
+        return {"entity_ids": [entity], "final_output": {"title_raw": title, "_krw": krw}}
+    base = [rec(f"Leica M3 Body {i}", 2_500_000) for i in range(6)]
+    set_item = rec("Leica M3 - wunderbares Set", 13_000_000)
+    plain = rec("Leica M3 Black Repaint", 13_000_000)  # Set 말이 없으면 비싸도 그대로
+    cheap_set = rec("Leica M3 Set", 3_000_000)         # 시세의 2배 안쪽이면 그대로
+    records = base + [set_item, plain, cheap_set]
+    flagged = flag_pricey_set(records, lambda r: r["final_output"]["_krw"], catalog)
+    assert flagged == {id(set_item)} and set_item["final_output"]["entity_note"] == "set"
+    assert "entity_note" not in plain["final_output"] and "entity_note" not in cheap_set["final_output"]
