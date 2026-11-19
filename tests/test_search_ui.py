@@ -849,3 +849,14 @@ def test_model_share_button() -> None:
         body = _function_body(html, "shareCurrentModel")
         assert "/?entity=" in body and "navigator.share" in body and "navigator.clipboard.writeText" in body
         assert "link_copied:" in html
+
+
+def test_search_box_suggests_accessory_types() -> None:
+    # 2026-11-19 사장님: 후드·케이스를 쳐도 자동완성에 안 떠서 없는 물건처럼 보임 → 악세사리 종류 줄
+    for html in _html_files(BETA_PATHS):
+        assert "const ACCESSORY_TYPES = [" in html
+        assert "function suggestAccessoryTypes(" in html and "function runAccessoryTypeSearch(" in html
+        assert "accessorySuggestions" in html and "startsWith('acc:')" in html
+        assert "clearAutoAccessoryCategory()" in _function_body(html, "selectEntity")
+        assert "clearAutoAccessoryCategory()" in _function_body(html, "runFreeTextSearch")
+        assert "accessory_types" in html

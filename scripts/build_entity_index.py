@@ -316,9 +316,15 @@ def main() -> None:
         if entity.get("feature"):  # 사양 묶음은 여러 모델이 섞여 시세를 내지 않음
             entities[-1].update({"feature": True, "members": entity["feature"]["members"], "active_price_krw": None, "sold_median_krw": None, "sold_price_count": 0,
                                  "b_price_krw": None, "b_price_n": 0, "b_price_basis": None})
+    acc_types: dict[str, int] = {}  # 검색창 자동완성의 '악세사리 종류' 줄에 보여 줄 판매 중 개수
+    for record in records:
+        final = record.get("final_output") or {}
+        if final.get("category") == "Accessory" and final.get("sold_quality") == "asking" and final.get("accessory_type") and id(record) not in dup_ids:
+            acc_types[final["accessory_type"]] = acc_types.get(final["accessory_type"], 0) + 1
     SUMMARY.write_text(json.dumps({"schema_version": "entity_summary_v1",
                                    "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
                                    "grade_factors": factors,
+                                   "accessory_types": acc_types,
                                    "entities": entities}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     feed = _home_feed(records, catalog)
     feed["quiz"] = _home_quiz(records, catalog, dup_ids | too_cheap | sets, to_krw)
