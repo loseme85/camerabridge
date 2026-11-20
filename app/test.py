@@ -7045,6 +7045,37 @@ def crawl_f64():
     return results
 
 
+def crawl_recycledphoto():
+    """Recycled Photo (미국 뉴욕 주, Shopify, 2026-11-21 밤샘) - 필름·빈티지 라이카와 부속품 중고점(eBay 병행). 제목이 Leica·Leitz로 시작하는 것 중
+    책·잡지·카탈로그·영사기·현미경 부품·진열품과 새 상품(NEW·NIB)은 뺌. products.json 전체(200개쯤), 가격 USD.
+    제목은 첫 ', ' 앞까지만 씀('…, very nice & clean, tested' 같은 홍보 문구 뗌). 등급은 설명 첫머리 'Excellent++ Condition'·'Mint- Condition'"""
+    import html as _html
+    import requests
+    from condition_grade import RECYCLED_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://recycledphoto.com"
+    skip = re.compile(r"(?i)\b(books?|guide|history|brochures?|catalog(?:ue)?|manual|handbook|magazines?|poster|projector|prodovit|microscope|display|"
+                      r"retaining ring|encyclopedia|lumix|panasonic|parts?)\b|wide at base|lens base|bellows[^,]*\+")
+    print(f"\n  📂 Recycled Photo 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Recycled Photo"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"(?i)(?:vintage\s+)?(leica|leitz)\b", title) or skip.search(title) or _KAMERASTOCKHOLM_OTHER.search(title):
+            continue
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or ""))).strip()
+        if re.match(r"(?i)(new\b|nib\b|for parts)", text) or re.search(r"(?i)\bNIB\b|\bNEW\b,|parts only", title):
+            continue
+        name = re.sub(r"(?i)^vintage\s+", "", title.split(", ")[0])
+        name = re.sub(r"\s*#\s*[A-Za-z0-9]+\s*$", "", name).strip(" ,")
+        m = re.match(r"(?i)(mint|excellent|exc|good)\s*([+\-=]*)", text)
+        word = {"exc": "excellent"}.get(m.group(1).lower(), m.group(1).lower()) if m else None
+        cond = f"{RECYCLED_PREFIX}{word}{m.group(2).replace('=', '')}" if m else None
+        results.append(_kamerastockholm_row("Recycled Photo (미국)", base, p, name, cond, _kamerastockholm_price(p, "$"), "USD"))
+    print(f"  ✅ Recycled Photo 완료: {len(results)}개")
+    return results
+
+
 def crawl_kameradoktorn():
     """Kameradoktorn (스웨덴 스톡홀름, 2026-11-12 밤샘) - 중고 분류 'Begagnat' 전체(200개쯤, 3쪽 — robots.txt는 Search?만 막음)에서
     이름이 'Beg Leica'·'Beg Leitz'로 시작하는 것만 (TTArtisan 'Leica M' 어댑터 등은 뺌). 가격 SEK, 목록의 재고 표시 'I lager'.
@@ -15035,6 +15066,7 @@ def crawl_all():
         ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
+        ("Recycled Photo (미국)", lambda: ce.wrap_full_run("Recycled Photo (미국)", crawl_recycledphoto)),
         ("Kameradoktorn (스웨덴)", lambda: ce.wrap_full_run("Kameradoktorn (스웨덴)", crawl_kameradoktorn)),
         ("Goecker (덴마크)", lambda: ce.wrap_full_run("Goecker (덴마크)", crawl_goecker)),
         ("NEBO (네덜란드)", lambda: ce.wrap_full_run("NEBO (네덜란드)", crawl_nebo)),
