@@ -9,7 +9,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 864,
+   "count": 863,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -625,22 +625,22 @@
    "example": "[중고] M 35/2 Summicron ASPH (Black paint)"
   },
   {
+   "a": "leica:feature:titanium",
+   "b": "leica:lens:summilux-m:50:titan",
+   "count": 21,
+   "example": "LEICA 50mm F1.4 SUMMILUX-M Titan sn.3661"
+  },
+  {
    "a": "leica:body:cl-film",
    "b": "leica:feature:meter",
-   "count": 21,
+   "count": 20,
    "example": "LEICA CL sn.1409"
   },
   {
    "a": "leica:body:cl-film",
    "b": "leica:feature:mechanical",
-   "count": 21,
+   "count": 20,
    "example": "LEICA CL sn.1409"
-  },
-  {
-   "a": "leica:feature:titanium",
-   "b": "leica:lens:summilux-m:50:titan",
-   "count": 21,
-   "example": "LEICA 50mm F1.4 SUMMILUX-M Titan sn.3661"
   },
   {
    "a": "leica:body:mp-film:a-la-carte",
@@ -925,6 +925,12 @@
    "example": "LEICA M6 Ein stuck 35mm F1.4 ASPH 181/996"
   },
   {
+   "a": "leica:body:m-e",
+   "b": "leica:feature:frameline-28",
+   "count": 11,
+   "example": "Leica M-E Gray [신형센서 교체]"
+  },
+  {
    "a": "leica:feature:safari",
    "b": "leica:lens:summilux-m:50:asph-safari",
    "count": 11,
@@ -953,12 +959,6 @@
    "b": "leica:feature:mechanical",
    "count": 11,
    "example": "LEICA M6 PLATINUM 150 JAHRE sn.1757"
-  },
-  {
-   "a": "leica:body:m-e",
-   "b": "leica:feature:frameline-28",
-   "count": 10,
-   "example": "Leica M-E Gray [신형센서 교체]"
   },
   {
    "a": "leica:body:m-d262",
