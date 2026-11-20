@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 979,
+   "count": 978,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -33,13 +33,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 276,
+   "count": 275,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 276,
+   "count": 275,
    "example": "Leica M3 Black Repaint"
   },
   {
@@ -57,13 +57,13 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:meter",
-   "count": 216,
+   "count": 215,
    "example": "[중고] M6 0.72 후기형 (SIlver)"
   },
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:mechanical",
-   "count": 216,
+   "count": 215,
    "example": "[중고] M6 0.72 후기형 (SIlver)"
   },
   {
@@ -75,7 +75,7 @@
   {
    "a": "leica:body:m6:classic",
    "b": "leica:feature:frameline-28",
-   "count": 204,
+   "count": 203,
    "example": "[중고] M6 0.72 후기형 (SIlver)"
   },
   {
@@ -117,7 +117,7 @@
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 124,
+   "count": 125,
    "example": "[중고] M11 (Black)"
   },
   {
@@ -219,7 +219,7 @@
   {
    "a": "leica:body:m11-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 78,
+   "count": 79,
    "example": "Leica M11-P Silver"
   },
   {
@@ -279,13 +279,19 @@
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:meter",
-   "count": 64,
+   "count": 65,
    "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:mechanical",
-   "count": 64,
+   "count": 65,
+   "example": "Leica MP Silver x0.72"
+  },
+  {
+   "a": "leica:body:mp-film:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 63,
    "example": "Leica MP Silver x0.72"
   },
   {
@@ -293,12 +299,6 @@
    "b": "leica:feature:frameline-28",
    "count": 62,
    "example": "Leica M-P Black"
-  },
-  {
-   "a": "leica:body:mp-film:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 62,
-   "example": "Leica MP Silver x0.72"
   },
   {
    "a": "leica:feature:titanium",
@@ -357,7 +357,7 @@
   {
    "a": "leica:body:m9:standard",
    "b": "leica:feature:frameline-28",
-   "count": 50,
+   "count": 49,
    "example": "[위탁] M9 (Black)"
   },
   {
@@ -1941,24 +1941,5 @@
    "example": "Leica Q3, black paint"
   }
  ],
- "new": [
-  {
-   "a": "leica:body:m6:ttl-dragon",
-   "b": "leica:feature:meter",
-   "count": 3,
-   "example": "Leica M6 TTL 0.85 Dragon 2000’Black paint 341-500"
-  },
-  {
-   "a": "leica:body:m6:ttl-dragon",
-   "b": "leica:feature:mechanical",
-   "count": 3,
-   "example": "Leica M6 TTL 0.85 Dragon 2000’Black paint 341-500"
-  },
-  {
-   "a": "leica:body:m6:ttl-dragon",
-   "b": "leica:feature:black-paint",
-   "count": 3,
-   "example": "Leica M6 TTL 0.85 Dragon 2000’Black paint 341-500"
-  }
- ]
+ "new": []
 }
