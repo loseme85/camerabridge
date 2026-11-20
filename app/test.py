@@ -7196,6 +7196,32 @@ def crawl_victorycamera():
     return results
 
 
+def crawl_cameramall():
+    """CameraMall (미국 뉴저지·캘리포니아, Shopify, 2026-11-21 밤샘) - 제목이 'Used'·'USED'로 시작하는 라이카·라이츠만(새 상품·타사 제품 제외).
+    products.json 전체(2,000개쯤), 가격 USD, 재고 없음은 판매 완료. 등급은 설명 'CONDITION: Excellent condition.' —
+    Excellent · Good · Fair (없으면 등급 없음). 이름 끝 '(#일련번호CM)'·'(CM)'은 뗌"""
+    import html as _html
+    import requests
+    from condition_grade import CAMERAMALL_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://cameramall.com"
+    print(f"\n  📂 CameraMall 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "CameraMall"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"(?i)used\s", title) or not _kamerastockholm_is_leica(title) or re.search(r"(?i)thypoch|ttartisan|megadap|patona|promaster|lumix|panasonic|sigma", title):
+            continue
+        name = re.sub(r"(?i)^used\s+", "", title)
+        name = re.sub(r"\s*\((?:#?[A-Za-z0-9]*CM|CM)\)\s*$", "", name).strip(" ,")
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or "")))
+        m = re.search(r"(?i)condition:?\s*(excellent|good|fair)\b", text)
+        cond = CAMERAMALL_PREFIX + m.group(1).lower() if m else None
+        results.append(_kamerastockholm_row("CameraMall (미국)", base, p, name, cond, _kamerastockholm_price(p, "$"), "USD"))
+    print(f"  ✅ CameraMall 완료: {len(results)}개")
+    return results
+
+
 def crawl_kameradoktorn():
     """Kameradoktorn (스웨덴 스톡홀름, 2026-11-12 밤샘) - 중고 분류 'Begagnat' 전체(200개쯤, 3쪽 — robots.txt는 Search?만 막음)에서
     이름이 'Beg Leica'·'Beg Leitz'로 시작하는 것만 (TTArtisan 'Leica M' 어댑터 등은 뺌). 가격 SEK, 목록의 재고 표시 'I lager'.
@@ -15186,6 +15212,7 @@ def crawl_all():
         ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
+        ("CameraMall (미국)", lambda: ce.wrap_full_run("CameraMall (미국)", crawl_cameramall)),
         ("Victory Camera (미국)", lambda: ce.wrap_full_run("Victory Camera (미국)", crawl_victorycamera)),
         ("KameraHaus (미국)", lambda: ce.wrap_full_run("KameraHaus (미국)", crawl_kamerahaus)),
         ("Loja Portssar (브라질)", lambda: ce.wrap_full_run("Loja Portssar (브라질)", crawl_lojaportssar)),

@@ -858,3 +858,10 @@ def test_victory_bracket():
     assert grade_of(site, VICTORY_PREFIX + "MINT")[0] == "S"
     assert grade_of(site, VICTORY_PREFIX + "EXC+")[0] == "B"
     assert grade_of(site, VICTORY_PREFIX + "GOOD")[0] == "D"
+
+def test_cameramall_condition():
+    from condition_grade import grade_of, CAMERAMALL_PREFIX
+    site = "CameraMall (미국)"
+    assert grade_of(site, CAMERAMALL_PREFIX + "excellent")[0] == "B"
+    assert grade_of(site, CAMERAMALL_PREFIX + "good")[0] == "C"
+    assert grade_of(site, CAMERAMALL_PREFIX + "fair")[0] == "D"
