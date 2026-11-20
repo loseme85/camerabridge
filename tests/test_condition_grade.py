@@ -830,3 +830,10 @@ def test_parts_prefix_is_parts_grade():
     # 2026-11-19: 'Parts - Leica M6 Classic'($612)이 M6 시세에 섞이던 것
     assert grade_of("Fotohandel", "", "Parts - Leica M6 Classic")[0] == "X"
     assert grade_of("Fotohandel", "", "Leica M6 Parts camera")[0] != "X"
+
+def test_recycled_condition():
+    from condition_grade import grade_of, RECYCLED_PREFIX
+    site = "Recycled Photo (미국)"
+    assert grade_of(site, RECYCLED_PREFIX + "mint-")[0] == "A"
+    assert grade_of(site, RECYCLED_PREFIX + "excellent++")[0] == "B"
+    assert grade_of(site, RECYCLED_PREFIX + "good")[0] == "D"
