@@ -7076,6 +7076,70 @@ def crawl_recycledphoto():
     return results
 
 
+def crawl_lojaportssar():
+    """Loja Portssar (브라질 상파울루, VTEX, 2026-11-21 밤샘) - 중고 분류 '/Seminovos/'에서 Leica·Leitz 제품만.
+    VTEX 공개 상품 검색 API('leica', 50개씩 2번쯤 — robots.txt는 /busca/만 막음). 가격 BRL, 재고 0은 뺌.
+    'Cópia de …'(같은 상품 복사 등록)·다른 회사 렌즈·어댑터·가방·'바디 COM 렌즈' 세트는 뺌. 등급은 설명 첫머리 'Nota 9'(10점 만점)"""
+    import html as _html
+    import requests
+    from condition_grade import PORTSSAR_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.lojaportssar.com.br"
+    print(f"\n  📂 Loja Portssar 크롤링 시작")
+    seen = set()
+    for start in range(0, 500, 50):
+        resp = sess.get(f"{base}/api/catalog_system/pub/products/search", params={"ft": "leica", "_from": start, "_to": start + 49}, timeout=30)
+        if resp.status_code not in (200, 206):
+            resp.raise_for_status()
+        batch = resp.json()
+        for p in batch:
+            cats = " ".join(p.get("categories") or [])
+            raw = re.sub(r"\s+", " ", _html.unescape(p.get("productName") or "")).strip()
+            if "Seminovos" not in cats or re.match(r"(?i)c[oó]pia de\b", raw) or p.get("productId") in seen:
+                continue
+            seen.add(p.get("productId"))
+            name = re.sub(r"(?i)^(objetiva|c[aâ]mera)\s+", "", raw)
+            name = re.sub(r"(?i)\s*[-–]\s*(usad[oa]s?|seminov[oa]s?)\s*$|\s+(usad[oa]|seminov[oa])\s*$", "", name).strip()
+            if (p.get("brand") or "").strip().lower() != "leica" and not re.match(r"(?i)(leica|leitz)\b", name):
+                continue
+            if _KAMERASTOCKHOLM_OTHER.search(name) or re.search(r"(?i)adaptador|bolsa|\scom\s", name):  # ' COM '은 바디+렌즈 세트(R-E COM SUMMILUX-R) — 어느 모델에도 안 붙어 뺌
+                continue
+            item = (p.get("items") or [{}])[0]
+            offer = ((item.get("sellers") or [{}])[0]).get("commertialOffer") or {}
+            if not offer.get("AvailableQuantity"):
+                continue
+            name = _kamerastockholm_leica_name(name)
+            desc = re.sub(r"<[^>]+>", " ", _html.unescape(p.get("description") or ""))
+            m = re.search(r"(?i)nota\s*(\d+(?:[.,]\d)?)", desc)
+            price = f"BRL {float(offer.get('Price') or 0):,.0f}" if offer.get("Price") else "문의요망"
+            imgs = item.get("images") or []
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Loja Portssar (브라질)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": PORTSSAR_PREFIX + m.group(1).replace(",", ".") + "/10" if m else "정보없음",
+                "가격": price,
+                "통화": "BRL",
+                "이미지": imgs[0].get("imageUrl", "") if imgs else "",
+                "링크": p.get("link") or "",
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {start // 50 + 1}번째 {len(batch)}개")
+        if len(batch) < 50:
+            break
+        time.sleep(1)
+    print(f"  ✅ Loja Portssar 완료: {len(results)}개")
+    return results
+
+
 def crawl_kameradoktorn():
     """Kameradoktorn (스웨덴 스톡홀름, 2026-11-12 밤샘) - 중고 분류 'Begagnat' 전체(200개쯤, 3쪽 — robots.txt는 Search?만 막음)에서
     이름이 'Beg Leica'·'Beg Leitz'로 시작하는 것만 (TTArtisan 'Leica M' 어댑터 등은 뺌). 가격 SEK, 목록의 재고 표시 'I lager'.
@@ -15066,6 +15130,7 @@ def crawl_all():
         ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
+        ("Loja Portssar (브라질)", lambda: ce.wrap_full_run("Loja Portssar (브라질)", crawl_lojaportssar)),
         ("Recycled Photo (미국)", lambda: ce.wrap_full_run("Recycled Photo (미국)", crawl_recycledphoto)),
         ("Kameradoktorn (스웨덴)", lambda: ce.wrap_full_run("Kameradoktorn (스웨덴)", crawl_kameradoktorn)),
         ("Goecker (덴마크)", lambda: ce.wrap_full_run("Goecker (덴마크)", crawl_goecker)),
