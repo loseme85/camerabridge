@@ -11,6 +11,9 @@ import html
 import re
 from pathlib import Path
 
+# 사이트 아이콘 (구글 검색 결과 로고): 실제 파일 주소여야 구글이 가져감. data: 주소는 안 됨 (2026-11-20)
+ICON_LINKS = ('<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96"><link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/apple-touch-icon.png">')
+
 ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://camerabridge.io"
 LANGS = ("ko", "en", "ja")
@@ -410,7 +413,7 @@ def page(lang: str, path: str, title: str, body: str, home: str) -> str:
     return (f'<!DOCTYPE html><html lang="{lang}"><head><meta charset="UTF-8">'
             '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
             f"<title>{html.escape(title)} | Camera Bridge</title><link rel=\"canonical\" href=\"{url}\">{FONTS}"
-            f"<style>{CSS}{FOOTER_CSS}</style></head><body><main><header class=\"mast\"><a class=\"home\" href=\"/\">{home}</a>"
+            f"<style>{CSS}{FOOTER_CSS}</style>{ICON_LINKS}</head><body><main><header class=\"mast\"><a class=\"home\" href=\"/\">{home}</a>"
             f"<nav>{nav}</nav></header><h1>{html.escape(title)}</h1>{body}</main>"
             f"{footer(base)}</body></html>\n")
 
