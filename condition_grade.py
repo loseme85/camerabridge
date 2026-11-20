@@ -134,6 +134,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _RECYCLED.get(cond[len(RECYCLED_PREFIX):].strip().lower()), "label"
     if cond.startswith(PORTSSAR_PREFIX):
         return _nebo(cond[len(PORTSSAR_PREFIX):].strip().split("/")[0]), "label"
+    if cond.startswith(KAMERAHAUS_PREFIX):
+        return _nebo(cond[len(KAMERAHAUS_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(NEBO_PREFIX):
         return _nebo(cond[len(NEBO_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(FOTOERHARDT_PREFIX):
@@ -1022,6 +1024,12 @@ _GOECKER = {"1": "A", "2": "B", "3": "C", "4": "D"}
 # 사진 평가(판매 중 라이카 3점 전부, 사진 1장씩, 2026-11-12 밤샘 — 점수를 먼저 봄): 7.5 A · 8 A 2 → 사진이 후한 기존 경향과 같아 점수대로
 # 9.5~10 S · 8.5~9 A · 7.5~8 B · 6.5~7 C · 그 아래 D: 정확 일치 0/3 · 한 등급 이내 3/3
 NEBO_PREFIX = "NEBO: "
+
+# 미국 KameraHaus: 설명 '9.5/10 Condition'(10점 만점, 6~10) — NEBO와 같은 환산(9.5↑ S · 8.5~9 A · 7.5~8 B · 6.5~7 C · 그 아래 D)
+# 사진 평가(점수별 2점씩 18점, 사진 2장씩, 2026-11-21 밤샘 — 점수를 먼저 봄): 정확 일치 8/18 · 한 등급 이내 18/18. 흰 배경 스튜디오 사진이라 9.5·10도 사진은 A,
+# 6~7.5는 닳은 흔적이 보임(M4 블랙페인트·크롬 렌즈) — 사진이 후한 기존 경향과 같아 점수대로 (S가 많아지는 것은 점수 10·9.5가 전체의 22%라서)
+KAMERAHAUS_PREFIX = "KameraHaus: "
+
 
 # 브라질 Loja Portssar: 설명 첫머리 'Nota 9'(10점 만점, 8·9·10) — NEBO와 같은 환산(9.5↑ S · 8.5~9 A · 7.5~8 B · 6.5~7 C)
 # 사진 평가(판매 중 라이카 12점, 사진 2장씩, 2026-11-21 밤샘 — 점수를 먼저 봄): 정확 일치 8/12 · 한 등급 이내 12/12
