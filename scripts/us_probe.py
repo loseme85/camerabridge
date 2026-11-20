@@ -1,7 +1,7 @@
 import json, re, requests, os
 UA = {"User-Agent": "Mozilla/5.0 (compatible; CameraBridgeBot/1.0; +https://camerabridge.io)"}
 os.makedirs("out", exist_ok=True)
-for d in ["kamerahaus.com", "victorycamera.com", "cameramall.com"]:
+for d in ["recycledphoto.com", "districtcamera.com"]:
     items = []; page = 1
     while page <= 20:
         r = requests.get(f"https://{d}/products.json?limit=250&page={page}", headers=UA, timeout=30)
