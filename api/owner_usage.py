@@ -260,6 +260,44 @@ def return_stats(all_visits: list[dict], history: dict[str, dict] | None) -> dic
     return stats
 
 
+def people_return_stats(history: dict[str, dict] | None) -> dict[str, list[int]]:
+    """사람(브라우저) 기준: 처음 온 날(한국 시간)별 [처음 온 사람, 그 뒤 다른 날 다시 온 사람].
+
+    같은 날 다시 온 것은 세지 않는다 (탭 다시 열기·잠깐 나갔다 오기 제외). 이력은 365일 전체라
+    처음 온 날이 기간 안이면 그 뒤 방문까지 모두 보인다. 최근 날일수록 다시 올 시간이 짧아 낮게 나온다.
+    """
+    stats: dict[str, list[int]] = collections.defaultdict(lambda: [0, 0])
+    for record in (history or {}).values():
+        days = sorted({_time_key(span.get("first_seen")).date() for span in record.get("sessions") or []
+                       if _time_key(span.get("first_seen")).year > 1})
+        if not days:
+            continue
+        row = stats[days[0].isoformat()]
+        row[0] += 1
+        row[1] += len(days) > 1
+    return stats
+
+
+def _people_return_table(people: dict[str, list[int]], days: int) -> str:
+    today = dt.datetime.now(KST).date()
+    labels = [str(today - dt.timedelta(days=i)) for i in range(days - 1, -1, -1)]
+    rows = []
+    for d in reversed(labels):
+        new, back = people.get(d, [0, 0])
+        if not new:
+            continue
+        waited = (today - dt.date.fromisoformat(d)).days
+        note = "오늘 처음 온 사람" if waited == 0 else (f"{waited}일 지남 · 아직 오를 수 있음" if waited < 7 else "7일 넘게 지켜봄")
+        rows.append(f"<tr><td><a href='?date={_esc(d)}'>{_esc(d[5:])}</a></td><td class=n>{new}</td><td class=n>{back}</td>"
+                    f"<td class=n><b>{_return_rate(new - back, back)}</b></td><td><small class=muted>{note}</small></td></tr>")
+    head = ("<tr><td class=muted>처음 온 날</td><td class='muted n'>처음 온 사람</td><td class='muted n'>다른 날 다시 옴</td>"
+            "<td class='muted n'>비율</td><td class=muted></td></tr>")
+    return ("<section class='card wide days'><h2>사람 기준 재방문 (다른 날 다시 온 사람)</h2>"
+            "<p class=muted>처음 온 날별로 브라우저를 묶어, 그 뒤 다른 날 한 번이라도 다시 온 비율. 같은 날 다시 온 것은 안 셈. "
+            "최근 날일수록 다시 올 시간이 짧아 낮게 나옴 → 7일 넘게 지켜본 날을 기준으로 보기. 브라우저 기준이라 기기·브라우저를 바꾸면 다른 사람으로 셈</p>"
+            f"<table>{head}{''.join(rows)}</table></section>")
+
+
 def _return_rate(first: int, back: int) -> str:
     return f"{round(back / (first + back) * 100)}%" if first + back else "-"
 
@@ -342,6 +380,10 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
     all_visits = visits(entries)
     stats = return_stats(all_visits, history)
     total_first, total_back = sum(x[0] for x in stats.values()), sum(x[1] for x in stats.values())
+    people = people_return_stats(history)
+    cohort_days = {str(dt.datetime.now(KST).date() - dt.timedelta(days=i)) for i in range(days)} if not date else {date}
+    people_new = sum(people[d][0] for d in cohort_days if d in people)
+    people_back = sum(people[d][1] for d in cohort_days if d in people)
     recent = all_visits[:60]
     rows = []
     for v in recent:
@@ -426,10 +468,12 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 <div class=kpi><b>{r.get('visits_with_alert_button', 0)}</b><span>알림 버튼 누른 방문</span></div>
 <div class=kpi><b>{r.get('visits_with_recent', 0)}</b><span>'지난번 본 모델' 누른 방문</span></div>
 <div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div>
-<div class=kpi><b>{_return_rate(total_first, total_back)}</b><span>재방문율 ({total_back}/{total_first + total_back})</span></div></div>
+<div class=kpi><b>{_return_rate(total_first, total_back)}</b><span>재방문율 ({total_back}/{total_first + total_back})</span></div>
+<div class=kpi><b>{_return_rate(people_new - people_back, people_back)}</b><span>다른 날 다시 온 사람 ({people_back}/{people_new})</span></div></div>
 <div class=grid>
 {_bars(entries, days, date)}
 {_return_bars(stats, days) if days > 1 and not date else ''}
+{_people_return_table(people, days) if days > 1 and not date and history is not None else ''}
 {_day_table(entries, days, stats) if days > 1 and not date else ''}
 {_table('어디서 왔나', ref_counts.most_common(12), note='휴대폰 앱(레딧·카카오톡 앱 등)은 출처를 안 알려 줘서 "직접·앱"으로 잡힘')}
 {_table('들어온 곳 자세히', ref_details.most_common(15), note='커뮤니티 글·사이트는 주소까지. 구글은 검색어를 안 알려 줌 → 검색어는 서치 콘솔에서')}
