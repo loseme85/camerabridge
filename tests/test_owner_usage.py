@@ -175,3 +175,25 @@ def test_steps_link_to_what_the_visitor_saw():
     assert "<span class='step click'>↗ www.ffordes.com</span>" in page
     assert "<script>x</script>" not in page
     assert owner_usage._step_href("페이지", {"page": "//evil.example"}) is None
+
+
+def test_people_return_counts_other_days_only():
+    import datetime as dt
+    from api.owner_usage import people_return_stats, _people_return_table, KST
+    utc = dt.timezone.utc
+    history = {
+        # 11/10 처음 → 11/12 다시 옴
+        "a": {"sessions": [{"first_seen": dt.datetime(2026, 11, 10, 3, tzinfo=utc), "last_seen": dt.datetime(2026, 11, 10, 3, 5, tzinfo=utc)},
+                           {"first_seen": dt.datetime(2026, 11, 12, 3, tzinfo=utc), "last_seen": dt.datetime(2026, 11, 12, 3, 5, tzinfo=utc)}]},
+        # 11/10 처음 → 같은 날 두 번 (안 셈)
+        "b": {"sessions": [{"first_seen": "2026-11-10T01:00:00+00:00", "last_seen": "2026-11-10T01:05:00+00:00"},
+                           {"first_seen": "2026-11-10T05:00:00+00:00", "last_seen": "2026-11-10T05:05:00+00:00"}]},
+        # 한국 시간으로 날이 바뀜: UTC 11/10 14:00 = KST 11/10 23:00, UTC 11/10 16:00 = KST 11/11 01:00 → 다른 날
+        "c": {"sessions": [{"first_seen": "2026-11-10T14:00:00+00:00", "last_seen": "2026-11-10T14:05:00+00:00"},
+                           {"first_seen": "2026-11-10T16:00:00+00:00", "last_seen": "2026-11-10T16:05:00+00:00"}]},
+    }
+    stats = people_return_stats(history)
+    assert stats["2026-11-10"] == [3, 2]
+    assert people_return_stats(None) == {}
+    html = _people_return_table(stats, 400)
+    assert "다른 날 다시 온 사람" in html and "67%" in html
