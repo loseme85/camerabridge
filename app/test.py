@@ -7167,6 +7167,35 @@ def crawl_kamerahaus():
     return results
 
 
+def crawl_victorycamera():
+    """Victory Camera (미국 콜로라도 볼더·덴버, Shopify, 2026-11-21 밤샘) - 필름 라이카 중심 중고점. 제목이 'Leica'·'Leitz'로 시작하는 것만
+    (Nikon·Voigtlander 등 타사·마운트 표기 제품 제외). products.json 전체(280개쯤), 가격 USD, 재고 없음은 판매 완료(품절 표시).
+    등급은 제목 끝 대괄호 '[EXC+]' — MINT · MINT- · EXC+ · EXC · EXC- · GOOD · BGN · BAR. 대괄호가 없으면 등급 없음.
+    제목의 '-YYE CLA-'(정비 표시)·대괄호는 이름에서 뗌"""
+    import html as _html
+    import requests
+    from condition_grade import VICTORY_PREFIX
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://victorycamera.com"
+    print(f"\n  📂 Victory Camera 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "Victory Camera"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        if not re.match(r"(?i)(leica|leitz)\b", title) or _KAMERASTOCKHOLM_OTHER.search(title) or re.search(r"(?i)thypoch|ttartisan|megadap|patona|enlarging|developing tank|take-up spool", title):
+            continue  # 확대기 렌즈·현상 탱크·되감기 스풀은 카메라 장비 시세에 안 맞아 뺌
+        m = re.search(r"\[([A-Za-z0-9+\-/ ]+)\]\s*$", title)
+        name = re.sub(r"\s*\[[^\]]*\]\s*$", "", title)
+        name = re.sub(r"\s*-[A-Z ]{2,12}-\s*", " ", name).strip(" -,")
+        name = re.sub(r"(?i)\b(?:35mm\s+)?(?:film\s+)?(?:slr|rangefinder)?\s*camera body\b|\b35mm\s+(?:film\s+)?(?:slr|rangefinder)\b|\bw/\s*box\b|\bprime lens\b|\b(?:telephoto|wide angle|standard)\b", " ", name)
+        name = re.sub(r"(?i)\b(?:lens\s+)?shade\b", "Hood", name)  # 'Lens Shade'는 분류가 렌즈로 읽어 'Hood'로 (부속품)
+        name = re.sub(r"\s+", " ", name).strip(" -,")
+        cond = VICTORY_PREFIX + m.group(1).strip().upper() if m else None
+        results.append(_kamerastockholm_row("Victory Camera (미국)", base, p, name, cond, _kamerastockholm_price(p, "$"), "USD"))
+    print(f"  ✅ Victory Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_kameradoktorn():
     """Kameradoktorn (스웨덴 스톡홀름, 2026-11-12 밤샘) - 중고 분류 'Begagnat' 전체(200개쯤, 3쪽 — robots.txt는 Search?만 막음)에서
     이름이 'Beg Leica'·'Beg Leitz'로 시작하는 것만 (TTArtisan 'Leica M' 어댑터 등은 뺌). 가격 SEK, 목록의 재고 표시 'I lager'.
@@ -15157,6 +15186,7 @@ def crawl_all():
         ("Foto K (스페인)", lambda: ce.wrap_full_run("Foto K (스페인)", crawl_fotok)),
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
+        ("Victory Camera (미국)", lambda: ce.wrap_full_run("Victory Camera (미국)", crawl_victorycamera)),
         ("KameraHaus (미국)", lambda: ce.wrap_full_run("KameraHaus (미국)", crawl_kamerahaus)),
         ("Loja Portssar (브라질)", lambda: ce.wrap_full_run("Loja Portssar (브라질)", crawl_lojaportssar)),
         ("Recycled Photo (미국)", lambda: ce.wrap_full_run("Recycled Photo (미국)", crawl_recycledphoto)),
