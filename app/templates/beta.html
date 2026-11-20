@@ -1409,14 +1409,14 @@
     .hist-axis{fill:var(--text-soft);font-size:12px}
     .hist-base{stroke:var(--text-soft);stroke-width:1.5;stroke-dasharray:5 4}
     .hist-line{fill:none;stroke:var(--text);stroke-width:2}
-    .hist-dot{fill:var(--accent);fill-opacity:.75;stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
-    .hist-dot:hover{fill-opacity:1}
-    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hist-dot{fill:#8cc5ad}:root:not([data-theme="light"]) .hist-key-dot{background:#8cc5ad}}
+    .hist-dot{fill:var(--hist-h);stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
+    .hist-dot:hover{opacity:1}
+    :root{--hist-h:#1f4a3a}
+    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hist-h:#8cc5ad}}
     /* 등급 색 (2026-11-08 사장님: 초록 진하기로는 구분이 어려움) — 색맹 검사를 통과한 범주 색 5개, 등급 모름은 회색 */
     :root{--g-S:#2a78d6;--g-A:#eb6834;--g-B:#1baf7a;--g-C:#eda100;--g-D:#e87ba4;--g-U:#a3a6a8}
     @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-S:#3987e5;--g-A:#d95926;--g-B:#199e70;--g-C:#c98500;--g-D:#d55181;--g-U:#7d8285}}
-    .hist-g-S{fill:var(--g-S);background:var(--g-S)}.hist-g-A{fill:var(--g-A);background:var(--g-A)}.hist-g-B{fill:var(--g-B);background:var(--g-B)}
-    .hist-g-C{fill:var(--g-C);background:var(--g-C)}.hist-g-D{fill:var(--g-D);background:var(--g-D)}.hist-g-U,.hist-g-N{fill:var(--g-U);background:var(--g-U)}
+    .hist-g-S{opacity:1}.hist-g-A{opacity:.78}.hist-g-B{opacity:.58}.hist-g-C{opacity:.4}.hist-g-D{opacity:.24}.hist-g-U,.hist-g-N{opacity:.4}
     .price-history{position:relative}
     .hist-tip{position:absolute;z-index:5;pointer-events:none;background:var(--bg,#fff);border:1px solid var(--text);padding:7px 10px;font-size:12px;line-height:1.45;white-space:nowrap;box-shadow:none}
     .hist-tip b{font-size:14px}
@@ -1426,10 +1426,10 @@
     .hist-grades button[aria-pressed="true"]{border-color:var(--text);font-weight:600}
     .hist-grades button:disabled{opacity:.35;cursor:default}
     .hist-grades small{color:var(--text-soft);font-weight:400}
-    .hist-g{display:inline-block;width:9px;height:9px;border-radius:50%}
+    .hist-g{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--hist-h)}
     .hist-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--text-soft);margin:4px 0 8px}
     .hist-legend i{display:inline-block;vertical-align:middle;margin-right:6px}
-    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);opacity:.75}
+    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:var(--hist-h);opacity:.6}
     .hist-key-line{width:18px;height:2px;background:var(--text)}
     .hist-key-base{width:18px;border-top:1.5px dashed var(--text-soft)}
     .hist-note{font-size:12px;color:var(--text-soft);margin:6px 0 0}
@@ -4760,7 +4760,7 @@
       if(!dot || !box) return;
       const tip = box.querySelector('.hist-tip');
       const [date, price, meta, g] = String(dot.dataset.tip || '').split('\n');
-      tip.innerHTML = `${escapeHtml(date)}<br><b>${escapeHtml(price)}</b><br>${escapeHtml(meta)}`;
+      tip.innerHTML = `${escapeHtml(date)}<br><b>${escapeHtml(price)}</b><br><i class="hist-g hist-g-${escapeHtml(g)}"></i> ${escapeHtml(meta)}`;
       tip.hidden = false;
       const a = dot.getBoundingClientRect(), b = box.getBoundingClientRect();
       const left = Math.min(a.left - b.left + 12, b.width - tip.offsetWidth - 4);
@@ -6345,7 +6345,7 @@
       const factorOf = g => (g && LADDER_GRADES.includes(g) && g !== 'N' ? gradeFactor(entity, g) : 0);
       const scale = pick ? (factorOf(pick) || 1) : 1;
       const counts = {}; sold.forEach(p => { counts[p.grade] = (counts[p.grade] || 0) + 1; });
-      const chips = `<div class="hist-grades">${['', 'S', 'A', 'B', 'C', 'D'].map(g => `<button type="button" data-hist-grade="${g}" aria-pressed="${g === pick}"${g && !counts[g] ? ' disabled' : ''}>${g ? `${escapeHtml(g)} <small>${counts[g] || 0}</small>` : escapeHtml(ec('hist_all'))}</button>`).join('')}</div>`;
+      const chips = `<div class="hist-grades">${['', 'S', 'A', 'B', 'C', 'D'].map(g => `<button type="button" data-hist-grade="${g}" aria-pressed="${g === pick}"${g && !counts[g] ? ' disabled' : ''}>${g ? `<i class="hist-g hist-g-${g}"></i>${escapeHtml(g)} <small>${counts[g] || 0}</small>` : escapeHtml(ec('hist_all'))}</button>`).join('')}</div>`;
       const W = Math.max(320, Math.round((region && region.clientWidth) || 900)), H = 260, L = W < 520 ? 52 : 70, R = 12, T = 14, B = 34;  // 실제 폭으로 그려 점·글자가 찌그러지지 않게
       const now = Date.now();
       const t0 = sold[0].t - 86400000, t1 = Math.max(now, sold[sold.length - 1].t) + 86400000;
@@ -6376,7 +6376,7 @@
         const label = `${fmtDate.format(p.t)} · ${money(p.v)} · ${p.grade === LADDER_UNKNOWN ? ec('ladder_unknown') : gradeLabel(p.grade)} · ${localizeSourceName(p.result.source || '')}`;
         const g = LADDER_GRADES.includes(p.grade) ? p.grade : 'U';
         const tip = [fmtDate.format(p.t), money(p.v), `${p.grade === LADDER_UNKNOWN ? ec('ladder_unknown') : gradeLabel(p.grade)} · ${localizeSourceName(p.result.source || '')}`, g].join('\n');
-        return `<a href="${escapeHtml(p.result.source_url || '#')}" target="_blank" rel="noopener" aria-label="${escapeHtml(label)}"><circle cx="${x(p.t).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="5" class="hist-dot" data-tip="${escapeHtml(tip)}"></circle></a>`;
+        return `<a href="${escapeHtml(p.result.source_url || '#')}" target="_blank" rel="noopener" aria-label="${escapeHtml(label)}"><circle cx="${x(p.t).toFixed(1)}" cy="${y(p.v).toFixed(1)}" r="5" class="hist-dot hist-g-${g}" data-tip="${escapeHtml(tip)}"></circle></a>`;
       }).join('');
       const gradeName = pick || 'B';
       const legend = `<div class="hist-legend"><span><i class="hist-key-dot"></i>${escapeHtml(ec('hist_dot'))} ${shown.length}</span>${path ? `<span><i class="hist-key-line"></i>${escapeHtml(ec('hist_line', { g: gradeName }))}</span>` : ''}${base ? `<span><i class="hist-key-base"></i>${escapeHtml(ec('hist_base', { g: gradeName }))} ${escapeHtml(money(base))}</span>` : ''}</div>`;
