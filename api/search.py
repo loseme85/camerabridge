@@ -3986,13 +3986,71 @@ def search_from_params(
     return response
 
 
+_ENTITY_SUMMARY_CACHE: dict[str, Any] = {}
+
+
+def _summary_entities() -> list[dict[str, Any]]:
+    if "entities" not in _ENTITY_SUMMARY_CACHE:
+        summary_path = Path(__file__).resolve().parents[1] / "data" / "derived" / "entity_summary_v1.json"
+        try:
+            _ENTITY_SUMMARY_CACHE["entities"] = json.loads(summary_path.read_text(encoding="utf-8")).get("entities") or []
+        except (OSError, JSONDecodeError):
+            _ENTITY_SUMMARY_CACHE["entities"] = []
+    return _ENTITY_SUMMARY_CACHE["entities"]
+
+
+def _zero_result_fallback_entities(query: str, entities: Optional[list[dict[str, Any]]] = None) -> list[dict[str, Any]]:
+    """자유 검색이 0건일 때 검색창 후보와 같은 규칙(entity_catalog.suggest)으로 모델 후보를 찾는다.
+    2026-11-20 방문 현황 '결과 0건 검색어': 'a la carte'·'100year'처럼 카탈로그에 모델이 있는데 '그대로 검색'하면 0건이었음."""
+    from entity_catalog import suggest  # noqa: WPS433
+
+    entities = _summary_entities() if entities is None else entities
+    if not query or not entities:
+        return []
+    return [entity for entity in suggest(query, entities, 5) if entity.get("listing_count")]
+
+
+def search_with_zero_result_fallback(
+    params: Mapping[str, Any],
+    records: Optional[list[dict[str, Any]]] = None,
+    path: str | Path | None = None,
+    entities: Optional[list[dict[str, Any]]] = None,
+) -> dict[str, Any]:
+    response = search_from_params(params, records=records, path=path)
+    normalized = _normalize_params(params)
+    if (
+        response.get("result_count")
+        or normalized.get("entity")
+        or _first_param(params, "live")
+        or str(normalized.get("offset") or "0").strip() not in ("", "0")
+    ):
+        return response
+    query = str(normalized.get("q") or "").strip()
+    candidates = _zero_result_fallback_entities(query, entities)
+    if not candidates:
+        return response
+    top = candidates[0]
+    fallback_params = {key: value for key, value in dict(params).items() if key != "q"}
+    fallback_params["entity"] = [top["id"]]
+    fallback = search_from_params(fallback_params, records=records, path=path)
+    if not fallback.get("result_count"):
+        return response
+    # 화면은 검색창 글자를 그대로 두고, 고른 모델과 다른 후보를 알 수 있게 남김
+    fallback["zero_result_fallback"] = {
+        "original_query": query,
+        "entity": top["id"],
+        "candidates": [entity["id"] for entity in candidates],
+    }
+    return fallback
+
+
 def endpoint_response(
     params: Mapping[str, Any],
     records: Optional[list[dict[str, Any]]] = None,
     path: str | Path | None = None,
 ) -> tuple[int, dict[str, Any]]:
     try:
-        return 200, search_from_params(params, records=records, path=path)
+        return 200, search_with_zero_result_fallback(params, records=records, path=path)
     except SearchEndpointError as exc:
         return exc.status, error_payload(exc.code, exc.message, exc.status, exc.details)
     except FileNotFoundError as exc:
