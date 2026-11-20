@@ -1410,13 +1410,18 @@
     .hist-base{stroke:var(--text-soft);stroke-width:1.5;stroke-dasharray:5 4}
     .hist-line{fill:none;stroke:var(--text);stroke-width:2}
     .hist-dot{fill:var(--hist-h);stroke:var(--bg, #fff);stroke-width:1.5;cursor:pointer}
-    .hist-dot:hover{opacity:1}
+    .hist-dot:hover{stroke:var(--text);stroke-width:2}
     :root{--hist-h:#1f4a3a}
     @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hist-h:#8cc5ad}}
     /* 등급 색 (2026-11-08 사장님: 초록 진하기로는 구분이 어려움) — 색맹 검사를 통과한 범주 색 5개, 등급 모름은 회색 */
     :root{--g-S:#2a78d6;--g-A:#eb6834;--g-B:#1baf7a;--g-C:#eda100;--g-D:#e87ba4;--g-U:#a3a6a8}
     @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--g-S:#3987e5;--g-A:#d95926;--g-B:#199e70;--g-C:#c98500;--g-D:#d55181;--g-U:#7d8285}}
-    .hist-g-S{opacity:1}.hist-g-A{opacity:.78}.hist-g-B{opacity:.58}.hist-g-C{opacity:.4}.hist-g-D{opacity:.24}.hist-g-U,.hist-g-N{opacity:.4}
+    :root{--hg-S:#06251a;--hg-A:#1d6b4c;--hg-B:#3fae80;--hg-C:#9ddcbd;--hg-D:#e6f7ee;--hg-U:#b5b9bb;--hg-edge:#1f4a3a}
+    @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hg-S:#effcf5;--hg-A:#a6e6c6;--hg-B:#4fb388;--hg-C:#22684b;--hg-D:#0f2e22;--hg-U:#5d6366;--hg-edge:#8cc5ad}}
+    .hist-g-S{fill:var(--hg-S);background:var(--hg-S)}.hist-g-A{fill:var(--hg-A);background:var(--hg-A)}.hist-g-B{fill:var(--hg-B);background:var(--hg-B)}
+    .hist-g-C{fill:var(--hg-C);background:var(--hg-C)}.hist-g-D{fill:var(--hg-D);background:var(--hg-D)}.hist-g-U,.hist-g-N{fill:var(--hg-U);background:var(--hg-U)}
+    .hist-dot.hist-g-C,.hist-dot.hist-g-D{stroke:var(--hg-edge);stroke-width:1.2}
+    .hist-g.hist-g-C,.hist-g.hist-g-D{box-shadow:inset 0 0 0 1px var(--hg-edge)}
     .price-history{position:relative}
     .hist-tip{position:absolute;z-index:5;pointer-events:none;background:var(--bg,#fff);border:1px solid var(--text);padding:7px 10px;font-size:12px;line-height:1.45;white-space:nowrap;box-shadow:none}
     .hist-tip b{font-size:14px}
@@ -1429,7 +1434,7 @@
     .hist-g{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--hist-h)}
     .hist-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--text-soft);margin:4px 0 8px}
     .hist-legend i{display:inline-block;vertical-align:middle;margin-right:6px}
-    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:var(--hist-h);opacity:.6}
+    .hist-key-dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(90deg,var(--hg-S),var(--hg-B),var(--hg-D));box-shadow:inset 0 0 0 1px var(--hg-edge)}
     .hist-key-line{width:18px;height:2px;background:var(--text)}
     .hist-key-base{width:18px;border-top:1.5px dashed var(--text-soft)}
     .hist-note{font-size:12px;color:var(--text-soft);margin:6px 0 0}
