@@ -138,6 +138,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _nebo(cond[len(KAMERAHAUS_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(VICTORY_PREFIX):
         return _VICTORY.get(cond[len(VICTORY_PREFIX):].strip().upper()), "label"
+    if cond.startswith(CAMERAMALL_PREFIX):
+        return _CAMERAMALL.get(cond[len(CAMERAMALL_PREFIX):].strip().lower()), "label"
     if cond.startswith(NEBO_PREFIX):
         return _nebo(cond[len(NEBO_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(FOTOERHARDT_PREFIX):
@@ -1026,6 +1028,13 @@ _GOECKER = {"1": "A", "2": "B", "3": "C", "4": "D"}
 # 사진 평가(판매 중 라이카 3점 전부, 사진 1장씩, 2026-11-12 밤샘 — 점수를 먼저 봄): 7.5 A · 8 A 2 → 사진이 후한 기존 경향과 같아 점수대로
 # 9.5~10 S · 8.5~9 A · 7.5~8 B · 6.5~7 C · 그 아래 D: 정확 일치 0/3 · 한 등급 이내 3/3
 NEBO_PREFIX = "NEBO: "
+
+# 미국 CameraMall: 설명 'CONDITION: Excellent condition.' — Excellent · Good · Fair
+# 사진 평가(사진이 있는 7점, 2026-11-21 밤샘 — 표기를 먼저 봄; 2점은 '촬영 중' 안내 이미지라 제외): Excellent 사진 A·B·B · Good B·B · Fair B(설명에 큰 닳음이 적혔으나 사진은 깨끗)
+# → 정확 일치 3/7 · 한 등급 이내 6/7. 표본이 작아 표기대로 (Excellent B · Good C · Fair D)
+CAMERAMALL_PREFIX = "CameraMall: "
+_CAMERAMALL = {"excellent": "B", "good": "C", "fair": "D"}
+
 
 # 미국 Victory Camera: 제목 끝 '[EXC+]' — MINT · MINT- · EXC+ · EXC · EXC- · GOOD · BGN · BAR (BGN·BAR는 많이 닳은 '저가' 등급)
 # 사진 평가(등급별 2점씩 13점, 사진 2장씩, 2026-11-21 밤샘 — 표기를 먼저 봄): MINT 사진 A 2 · MINT- A 2 · EXC+ A·B · EXC B·C · EXC- B 2 · GOOD C·D(황동 드러난 Summar) · BGN C
