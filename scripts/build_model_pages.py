@@ -24,7 +24,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from entity_catalog import krw_rates  # noqa: E402
-from build_legal_pages import FOOTER_CSS, footer  # noqa: E402
+from build_legal_pages import FOOTER_CSS, ICON_LINKS, footer  # noqa: E402
 
 SUMMARY = ROOT / "data" / "derived" / "entity_summary_v1.json"
 INDEX = ROOT / "data" / "derived" / "results_search_index_v1.json"
@@ -553,7 +553,7 @@ def head(lang: str, title: str, desc: str, url_for, json_ld: dict | None) -> str
             f'<meta property="og:url" content="{url_for(lang)}"><meta property="og:title" content="{html.escape(title)}">'
             f'<meta property="og:description" content="{html.escape(desc)}">{ld}<link rel=\"stylesheet\" href=\"/img/fonts/fonts.css\"><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\"><style>{CSS}{FOOTER_CSS}</style>'
             # 방문 기록(어디서 왔나·매장 클릭, 첫 화면과 같은 /api/usage)과 Vercel 방문 통계
-            f'<script defer src="/track.js"></script><script defer src="/_vercel/insights/script.js"></script></head><body><main>')
+            f'<script defer src="/track.js"></script><script defer src="/_vercel/insights/script.js"></script>{ICON_LINKS}</head><body><main>')
 
 
 def build(out: Path) -> dict:
