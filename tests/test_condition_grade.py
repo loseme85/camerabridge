@@ -837,3 +837,10 @@ def test_recycled_condition():
     assert grade_of(site, RECYCLED_PREFIX + "mint-")[0] == "A"
     assert grade_of(site, RECYCLED_PREFIX + "excellent++")[0] == "B"
     assert grade_of(site, RECYCLED_PREFIX + "good")[0] == "D"
+
+def test_portssar_nota():
+    from condition_grade import grade_of, PORTSSAR_PREFIX
+    site = "Loja Portssar (브라질)"
+    assert grade_of(site, PORTSSAR_PREFIX + "10/10")[0] == "S"
+    assert grade_of(site, PORTSSAR_PREFIX + "9/10")[0] == "A"
+    assert grade_of(site, PORTSSAR_PREFIX + "8/10")[0] == "B"

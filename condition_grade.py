@@ -132,6 +132,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _GOECKER.get(cond[len(GOECKER_PREFIX):].strip()), "label"
     if cond.startswith(RECYCLED_PREFIX):
         return _RECYCLED.get(cond[len(RECYCLED_PREFIX):].strip().lower()), "label"
+    if cond.startswith(PORTSSAR_PREFIX):
+        return _nebo(cond[len(PORTSSAR_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(NEBO_PREFIX):
         return _nebo(cond[len(NEBO_PREFIX):].strip().split("/")[0]), "label"
     if cond.startswith(FOTOERHARDT_PREFIX):
@@ -1020,6 +1022,12 @@ _GOECKER = {"1": "A", "2": "B", "3": "C", "4": "D"}
 # 사진 평가(판매 중 라이카 3점 전부, 사진 1장씩, 2026-11-12 밤샘 — 점수를 먼저 봄): 7.5 A · 8 A 2 → 사진이 후한 기존 경향과 같아 점수대로
 # 9.5~10 S · 8.5~9 A · 7.5~8 B · 6.5~7 C · 그 아래 D: 정확 일치 0/3 · 한 등급 이내 3/3
 NEBO_PREFIX = "NEBO: "
+
+# 브라질 Loja Portssar: 설명 첫머리 'Nota 9'(10점 만점, 8·9·10) — NEBO와 같은 환산(9.5↑ S · 8.5~9 A · 7.5~8 B · 6.5~7 C)
+# 사진 평가(판매 중 라이카 12점, 사진 2장씩, 2026-11-21 밤샘 — 점수를 먼저 봄): 정확 일치 8/12 · 한 등급 이내 12/12
+# (Nota 8: 사진 B 4·C 1(Meter M, 닳음) · Nota 9: 사진 A 5·B 2 · Nota 10: A) → 점수대로
+PORTSSAR_PREFIX = "Portssar: "
+
 
 # 미국 Recycled Photo: 설명 첫머리 'Excellent++ Condition'·'Mint- Condition'(영국식 +·- 표기)
 # 사진 평가(바디·렌즈 12점, 사진 2장씩, 2026-11-21 밤샘 — 표기를 먼저 봄): 정확 일치 9/12 · 한 등급 이내 12/12 (Digilux 2·Leica I는 표기와 한 칸 차) → 표기대로
