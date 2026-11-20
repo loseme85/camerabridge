@@ -844,3 +844,10 @@ def test_portssar_nota():
     assert grade_of(site, PORTSSAR_PREFIX + "10/10")[0] == "S"
     assert grade_of(site, PORTSSAR_PREFIX + "9/10")[0] == "A"
     assert grade_of(site, PORTSSAR_PREFIX + "8/10")[0] == "B"
+
+def test_kamerahaus_score():
+    from condition_grade import grade_of, KAMERAHAUS_PREFIX
+    site = "KameraHaus (미국)"
+    assert grade_of(site, KAMERAHAUS_PREFIX + "9.5/10")[0] == "S"
+    assert grade_of(site, KAMERAHAUS_PREFIX + "8.5/10")[0] == "A"
+    assert grade_of(site, KAMERAHAUS_PREFIX + "7/10")[0] == "C"
