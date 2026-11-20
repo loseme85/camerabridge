@@ -3,19 +3,19 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 978,
+   "count": 979,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 866,
+   "count": 867,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 757,
+   "count": 758,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -27,7 +27,7 @@
   {
    "a": "leica:feature:meter",
    "b": "leica:feature:ttl-flash",
-   "count": 304,
+   "count": 305,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
@@ -51,7 +51,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:ttl-flash",
-   "count": 266,
+   "count": 267,
    "example": "Leica M7 Black 0.72x [Japan Version]"
   },
   {
@@ -231,7 +231,7 @@
   {
    "a": "leica:body:m8:standard",
    "b": "leica:feature:frameline-28",
-   "count": 75,
+   "count": 76,
    "example": "Leica M8 Silver"
   },
   {
@@ -469,6 +469,24 @@
    "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
   },
   {
+   "a": "leica:body:m7:a-la-carte",
+   "b": "leica:feature:frameline-28",
+   "count": 37,
+   "example": "[중고] M7 A La Carte - Black Paint"
+  },
+  {
+   "a": "leica:body:m7:a-la-carte",
+   "b": "leica:feature:ttl-flash",
+   "count": 37,
+   "example": "[중고] M7 A La Carte - Black Paint"
+  },
+  {
+   "a": "leica:body:m7:a-la-carte",
+   "b": "leica:feature:meter",
+   "count": 37,
+   "example": "[중고] M7 A La Carte - Black Paint"
+  },
+  {
    "a": "leica:body:m4-2:standard",
    "b": "leica:feature:no-meter",
    "count": 36,
@@ -479,24 +497,6 @@
    "b": "leica:feature:mechanical",
    "count": 36,
    "example": "[위탁] Leica M4-2 (Black)"
-  },
-  {
-   "a": "leica:body:m7:a-la-carte",
-   "b": "leica:feature:frameline-28",
-   "count": 36,
-   "example": "[중고] M7 A La Carte - Black Paint"
-  },
-  {
-   "a": "leica:body:m7:a-la-carte",
-   "b": "leica:feature:ttl-flash",
-   "count": 36,
-   "example": "[중고] M7 A La Carte - Black Paint"
-  },
-  {
-   "a": "leica:body:m7:a-la-carte",
-   "b": "leica:feature:meter",
-   "count": 36,
-   "example": "[중고] M7 A La Carte - Black Paint"
   },
   {
    "a": "leica:body:m6:ttl-millennium",
@@ -625,22 +625,34 @@
    "example": "[중고] M 35/2 Summicron ASPH (Black paint)"
   },
   {
+   "a": "leica:body:cl-film",
+   "b": "leica:feature:meter",
+   "count": 21,
+   "example": "LEICA CL sn.1409"
+  },
+  {
+   "a": "leica:body:cl-film",
+   "b": "leica:feature:mechanical",
+   "count": 21,
+   "example": "LEICA CL sn.1409"
+  },
+  {
    "a": "leica:feature:titanium",
    "b": "leica:lens:summilux-m:50:titan",
    "count": 21,
    "example": "LEICA 50mm F1.4 SUMMILUX-M Titan sn.3661"
   },
   {
-   "a": "leica:body:cl-film",
-   "b": "leica:feature:meter",
+   "a": "leica:body:m1:standard",
+   "b": "leica:feature:no-meter",
    "count": 20,
-   "example": "LEICA CL sn.1409"
+   "example": "LEICA M1 sn.1060"
   },
   {
-   "a": "leica:body:cl-film",
+   "a": "leica:body:m1:standard",
    "b": "leica:feature:mechanical",
    "count": 20,
-   "example": "LEICA CL sn.1409"
+   "example": "LEICA M1 sn.1060"
   },
   {
    "a": "leica:body:mp-film:a-la-carte",
@@ -665,18 +677,6 @@
    "b": "leica:feature:mechanical",
    "count": 19,
    "example": "LEICA M2-R sn.1249"
-  },
-  {
-   "a": "leica:body:m1:standard",
-   "b": "leica:feature:no-meter",
-   "count": 19,
-   "example": "LEICA M1 sn.1060"
-  },
-  {
-   "a": "leica:body:m1:standard",
-   "b": "leica:feature:mechanical",
-   "count": 19,
-   "example": "LEICA M1 sn.1060"
   },
   {
    "a": "leica:body:iii",
@@ -1643,7 +1643,7 @@
   {
    "entity": "leica:feature:mechanical",
    "word": "black paint",
-   "count": 267,
+   "count": 268,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -1667,7 +1667,7 @@
   {
    "entity": "leica:feature:no-meter",
    "word": "black paint",
-   "count": 112,
+   "count": 113,
    "example": "Leica M2 BlackPaint"
   },
   {
