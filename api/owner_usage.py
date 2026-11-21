@@ -278,6 +278,24 @@ def people_return_stats(history: dict[str, dict] | None) -> dict[str, list[int]]
     return stats
 
 
+def previously_visited_people(history: dict[str, dict] | None, period_days: set[str]) -> tuple[int, int]:
+    """조회 기간에 온 사람(브라우저) 수와, 그중 그 전 날에도 온 적 있는 사람 수.
+
+    기간 안에서 가장 늦게 온 날보다 앞선 날(기간 이전 포함, 이력 365일)에 방문 기록이 있으면 '이전에 방문했던 사람'이다.
+    같은 날 여러 번 온 것은 세지 않는다.
+    """
+    total = back = 0
+    for record in (history or {}).values():
+        days = {_time_key(span.get("first_seen")).date() for span in record.get("sessions") or []
+                if _time_key(span.get("first_seen")).year > 1}
+        inside = [d for d in days if d.isoformat() in period_days]
+        if not inside:
+            continue
+        total += 1
+        back += any(d < max(inside) for d in days)
+    return total, back
+
+
 def _people_return_table(people: dict[str, list[int]], days: int) -> str:
     today = dt.datetime.now(KST).date()
     labels = [str(today - dt.timedelta(days=i)) for i in range(days - 1, -1, -1)]
@@ -382,8 +400,7 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
     total_first, total_back = sum(x[0] for x in stats.values()), sum(x[1] for x in stats.values())
     people = people_return_stats(history)
     cohort_days = {str(dt.datetime.now(KST).date() - dt.timedelta(days=i)) for i in range(days)} if not date else {date}
-    people_new = sum(people[d][0] for d in cohort_days if d in people)
-    people_back = sum(people[d][1] for d in cohort_days if d in people)
+    people_new, people_back = previously_visited_people(history, cohort_days)
     recent = all_visits[:60]
     rows = []
     for v in recent:
@@ -469,7 +486,7 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 <div class=kpi><b>{r.get('visits_with_recent', 0)}</b><span>'지난번 본 모델' 누른 방문</span></div>
 <div class=kpi><b>{pct(r['mobile_share'])}</b><span>휴대폰</span></div>
 <div class=kpi><b>{_return_rate(total_first, total_back)}</b><span>재방문율 ({total_back}/{total_first + total_back})</span></div>
-<div class=kpi><b>{_return_rate(people_new - people_back, people_back)}</b><span>다른 날 다시 온 사람 ({people_back}/{people_new})</span></div></div>
+<div class=kpi><b>{_return_rate(people_new - people_back, people_back)}</b><span>이전에 방문했던 사람 ({people_back}/{people_new})</span></div></div>
 <div class=grid>
 {_bars(entries, days, date)}
 {_return_bars(stats, days) if days > 1 and not date else ''}

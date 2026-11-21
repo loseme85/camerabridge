@@ -197,3 +197,18 @@ def test_people_return_counts_other_days_only():
     assert people_return_stats(None) == {}
     html = _people_return_table(stats, 400)
     assert "다른 날 다시 온 사람" in html and "67%" in html
+
+
+def test_previously_visited_people_in_period():
+    from api.owner_usage import previously_visited_people
+    h = {
+        # 어제 처음 → 오늘 다시 옴
+        "a": {"sessions": [{"first_seen": "2026-11-20T03:00:00+00:00"}, {"first_seen": "2026-11-21T03:00:00+00:00"}]},
+        # 오늘만 두 번
+        "b": {"sessions": [{"first_seen": "2026-11-21T01:00:00+00:00"}, {"first_seen": "2026-11-21T05:00:00+00:00"}]},
+        # 오늘은 안 옴
+        "c": {"sessions": [{"first_seen": "2026-11-19T03:00:00+00:00"}]},
+    }
+    assert previously_visited_people(h, {"2026-11-21"}) == (2, 1)
+    assert previously_visited_people(h, {"2026-11-20", "2026-11-21"}) == (2, 1)
+    assert previously_visited_people(None, {"2026-11-21"}) == (0, 0)
