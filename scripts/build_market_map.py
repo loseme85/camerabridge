@@ -50,7 +50,7 @@ def main() -> None:
     points: list[list[int]] = []
     for record in json.loads(INDEX.read_text(encoding="utf-8"))["records"]:
         final = record.get("final_output") or {}
-        if final.get("sold_quality") != "asking" or final.get("entity_note") in ("duplicate", "too_cheap", "set"):
+        if final.get("sold_quality") != "asking" or final.get("entity_note") in ("duplicate", "too_cheap", "set", "defect"):
             continue
         price, currency = final.get("parsed_price_numeric"), str(final.get("currency") or "KRW").upper()
         if not price or currency not in to_krw or RENTAL.search(final.get("title_raw") or ""):

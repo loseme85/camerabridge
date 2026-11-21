@@ -56,7 +56,7 @@ def main() -> None:
     by: dict[str, list] = defaultdict(list)
     for r in json.load(open(INDEX, encoding="utf-8"))["records"]:
         f = r["final_output"]
-        if f.get("sold_quality") != "asking" or f.get("entity_note") == "duplicate":
+        if f.get("sold_quality") != "asking" or f.get("entity_note") in ("duplicate", "defect"):
             continue
         price, rate = f.get("parsed_price_numeric"), rates.get(str(f.get("currency") or "KRW").upper())
         leaves = [e for e in r.get("entity_ids") or [] if leaf(e)]

@@ -99,7 +99,7 @@ fam("leica:body:nasa", "Leica NASA (MDa · Leicaflex SL MOT for space use)", "�
 fam("leica:body:ke-7a", "Leica KE-7A (US Army M4)", "라이카 KE-7A (미군 M4)", "M", [r"KE-? ?7A?\b"], [], ["ke7a", "ke-7a", "ke 7a", "leica ke-7a"])
 fam("leica:body:m4", "Leica M4", "라이카 M4", "M", [r"\bM ?4\b(?!-)"], [r"KE-? ?7A?\b"], ["엠4"], [
     BP("M4"),
-    v("50-jahre", "Leica M4 50 Jahre (Black Chrome)", "M4 50주년", r"50 ?jahre|50 ?years|50th|anniversary", ["m4 50 jahre", "m4 50th anniversary"]),  # M4 블랙은 원래 블랙 크롬이라 'black chrome'은 50주년 근거가 아님 (2026-11-02)
+    v("50-jahre", "Leica M4 50 Jahre (Black Chrome)", "M4 50주년", r"50 ?jahre|50 ?years|50th|anniversary|50 ?周年|50 ?주년", ["m4 50 jahre", "m4 50th anniversary"]),  # M4 블랙은 원래 블랙 크롬이라 'black chrome'은 50주년 근거가 아님 (2026-11-02)
     v("olive", "Leica M4 Olive", "M4 올리브", r"olive|올리브", [], [REPAINT]),
 ])
 fam("leica:body:m4-2", "Leica M4-2", "라이카 M4-2", "M", [r"\bM ?4-2\b"], [], ["m42"], [
@@ -111,7 +111,7 @@ fam("leica:body:m4-p", "Leica M4-P", "라이카 M4-P", "M", [r"\bM ?4-?P\b"], []
     v("everest", "Leica M4-P Everest '82", "M4-P 에베레스트", r"everest|에베레스트", ["m4-p everest"]),
 ])
 fam("leica:body:m5", "Leica M5", "라이카 M5", "M", [r"\bM ?5\b"], [], ["엠5"], [
-    v("50-jahre", "Leica M5 50 Jahre", "M5 50주년", r"50 ?jahre|50주년|50th anniv", ["m5 50 jahre", "m5 50주년"]),
+    v("50-jahre", "Leica M5 50 Jahre", "M5 50주년", r"50 ?jahre|50 ?주년|50th anniv|50 ?周年", ["m5 50 jahre", "m5 50주년"]),
 ])
 fam("leica:body:cl-film", "Leica CL (1973, film)", "라이카 CL (필름)", "M",
     [r"\bCL\b", r"(leitz|minolta|50 ?jahre|summicron-?c|rokkor|40\s?mm|film|필름|1973)"], [r"\bTL\b|\bSL\b", r"50 ?jahre|50주년"], ["leitz cl", "minolta cl", "cl film", "cl 필름"])
@@ -476,3 +476,8 @@ for model_name in ("R3", "R4", "R4s", "R5", "R-E", "R6", "R6.2", "R7", "R8", "R9
 fam("leica:body:0-series-2004", "Leica 0-Series Replica (Oskar Barnack Edition, 2004)", "라이카 0-시리즈 복각 (2004)", None,
     [r"(0-?series|o-?series|0 ?serie|null ?serie|oskar ?barnack.*(1879|2004))"], [r"\bMP\b"], ["0 series", "0-series replica", "oskar barnack edition", "0시리즈"])
 fam("leica:body:mini", "Leica mini · mini II · mini 3 · mini zoom", "라이카 미니", None, [r"\bmini\b(?!lux)"], [r"cooper|data ?back"], ["leica mini", "mini zoom", "mini ii", "미니"])
+
+# ── M 바디 갈래표 (2026-11-21 분류 설계 시범): 리페인트·캐나다·시제품·확인 필요 갈래를 더한다. 매물을 옮기는 건 body_buckets.py ──
+import buckets as _buckets  # noqa: E402
+
+_buckets.add_children(MODELS, PARENTS, ALIASES, NAME_KO)

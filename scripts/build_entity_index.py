@@ -18,7 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from condition_grade import grade_of  # noqa: E402
-from entity_catalog import annotate_records, flag_pricey_set, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, merge_same_item, price_krw  # noqa: E402
+from body_buckets import review_outliers  # noqa: E402
+from entity_catalog import _with_parents, record_title, annotate_records, flag_pricey_set, flag_too_cheap, infer_by_price, is_set, krw_rates, load_catalog, merge_same_item, price_krw  # noqa: E402
 from fx_history import krw_per_unit_on  # noqa: E402
 from listing_date import as_datetime_text  # noqa: E402
 
@@ -133,7 +134,7 @@ def _home_showcase(records: list, catalog: dict, skip: set, to_krw: dict, b_pric
     by_entity: dict[str, list] = {}
     for record in records:
         final = record.get("final_output") or {}
-        if final.get("sold_quality") != "asking" or id(record) in skip or final.get("entity_note") in ("duplicate", "too_cheap", "set"):
+        if final.get("sold_quality") != "asking" or id(record) in skip or final.get("entity_note") in ("duplicate", "too_cheap", "set", "defect"):
             continue
         price, currency = final.get("parsed_price_numeric"), str(final.get("currency") or "KRW").upper()
         if not price or currency not in to_krw:
@@ -253,6 +254,9 @@ def main() -> None:
             sets.add(id(record))
     pricey = flag_pricey_set([r for r in records if id(r) not in too_cheap and id(r) not in dup_ids and id(r) not in sets], value, catalog)
     sets |= pricey
+    # M 바디: 특징 없이 스탠다드 시세에서 크게 벗어난 매물 → '확인 필요' 갈래 (2026-11-21 분류 설계 시범)
+    reviewed = review_outliers(records, value, catalog, _with_parents, record_title, skip=too_cheap | dup_ids | sets)
+    print(f"M 바디 확인 필요로 옮김: {reviewed}개")
     INDEX.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     to_krw = krw_rates()
@@ -278,7 +282,7 @@ def main() -> None:
         # 너무 싼 매물, 고장·부품용(X)은 가격 범위·시세에서 뺌 (매물 수에는 넣음).
         # 2026-11-12: Leica Store France M5 '부품용' 790€가 M5 최저가로 보이던 것
         # 2026-11-13 전체 점검: 하자 매물(Kamerastore 'issue' = 곰팡이·심한 흐림·작동 문제)·수리용·유리 없는 경통도 가격 범위·시세에서 뺌
-        defect = bool(_NOT_FOR_PRICE.search(f"{final.get('condition_raw') or ''} {final.get('title_raw') or ''}"))
+        defect = final.get("entity_note") == "defect" or bool(_NOT_FOR_PRICE.search(f"{final.get('condition_raw') or ''} {final.get('title_raw') or ''}"))
         krw = price * rate if price and rate and id(record) not in too_cheap and grade != "X" and not defect else None
         prefix = "set_" if id(record) in sets else ""
         for eid in record.get("entity_ids") or []:

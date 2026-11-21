@@ -450,11 +450,15 @@ def fix_body_category(record: dict[str, Any]) -> bool:
 
 
 def annotate_records(records: Iterable[dict[str, Any]]) -> None:
+    from body_buckets import assign as assign_bucket  # M 바디 갈래 (2026-11-21 분류 설계 시범)
     catalog = load_catalog()
     for record in records:
         record["entity_ids"] = match_entities(record, catalog)
-        (record.get("final_output") or {}).pop("entity_note", None)
+        final = record.get("final_output") or {}
+        final.pop("entity_note", None)
+        final.pop("bucket", None)
         fix_body_category(record)
+        assign_bucket(record, catalog, _with_parents, record_title(record))
 
 
 def infer_by_price(records: list[dict[str, Any]], value, catalog: dict[str, Any] | None = None) -> int:

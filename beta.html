@@ -3838,7 +3838,7 @@
         <ul class="recent-list">${rows.map(({ item, entity, active, fresh, drops }) => {
           // 최저가는 판매 중 가격대와 같은 기준: 그 모델 본품만 (부속품·다른 버전·세트·중복·지나치게 싼 매물 제외)
           const prices = active.filter(r => priceSortGroup(r) === 0 && r.grade !== 'X' && !/^\s*parts\b|for parts|ジャンク|부품용/i.test(r.title || '')
-              && !['too_cheap', 'set', 'duplicate'].includes((r.final_output || {}).entity_note))
+              && !['too_cheap', 'set', 'duplicate', 'defect'].includes((r.final_output || {}).entity_note))
             .map(r => { const c = computeLandedCost(r); return c && c.converted; }).filter(v => Number.isFinite(v));
           const low = prices.length ? formatMoney(roundEstimate(Math.min(...prices), uiState.currency), uiState.currency) : '';
           const changes = [fresh ? `<b>${escapeHtml(rx('new_n', { n: String(fresh) }))}</b>` : '', drops ? `<b>${escapeHtml(rx('drop_n', { n: String(drops) }))}</b>` : ''].filter(Boolean);
@@ -4589,7 +4589,7 @@
       document.body.classList.toggle('cb-calc', Boolean(ready));
       if(!ready){ region.innerHTML = ''; putWant(''); return; }
       const money = v => formatMoney(roundEstimate(v, uiState.currency), uiState.currency);
-      const rows = ladderState.results.filter(r => r.grade && r.grade !== 'X' && !['too_cheap', 'set', 'duplicate'].includes((r.final_output || {}).entity_note))
+      const rows = ladderState.results.filter(r => r.grade && r.grade !== 'X' && !['too_cheap', 'set', 'duplicate', 'defect'].includes((r.final_output || {}).entity_note))
         .map(r => {
           const cost = computeLandedCost(r);
           const final = r.final_output || {};
@@ -6211,7 +6211,7 @@
     function ladderPoints(results){
       const points = [];
       results.forEach(result => {
-        if(result.grade === 'X' || ['too_cheap', 'set', 'duplicate'].includes((result.final_output || {}).entity_note)) return;
+        if(result.grade === 'X' || ['too_cheap', 'set', 'duplicate', 'defect'].includes((result.final_output || {}).entity_note)) return;
         const grade = LADDER_GRADES.includes(result.grade) ? result.grade : LADDER_UNKNOWN;
         const cost = computeLandedCost(result);
         const value = cost ? (cost.landed ? cost.landed.total : cost.converted) : 0;
