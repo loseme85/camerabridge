@@ -79,8 +79,17 @@ def read_confirmed() -> tuple[dict, str | None]:
             return {"schema_version": "entity_confirmed_v1", "links": {}}, None
 
 
-def save_confirmed(link: str, entity: str | None, note: str) -> str:
-    """link 를 entity 로 확정(None 이면 해제). 저장 뒤 메시지."""
+def save_confirmed(link: str, entity: str | None, note: str, _retry: bool = True) -> str:
+    """link 를 entity 로 확정(None 이면 해제). 저장 뒤 메시지. 다른 곳에서 먼저 고쳐 충돌(409)이면 한 번 다시 읽어 저장."""
+    try:
+        return _save_confirmed(link, entity, note)
+    except urllib.error.HTTPError as error:
+        if error.code in (409, 422) and _retry:
+            return save_confirmed(link, entity, note, False)
+        raise
+
+
+def _save_confirmed(link: str, entity: str | None, note: str) -> str:
     doc, sha = read_confirmed()
     if sha is None:
         raise PermissionError("GitHub 에서 확정 목록을 읽지 못했습니다 (GH_PAT 권한 확인)")
@@ -137,10 +146,26 @@ def _head(title: str) -> str:
             f"</style><main><h1>{_esc(title)}</h1>")
 
 
-COPY_JS = ("<script>document.addEventListener('click',function(e){var b=e.target.closest('button.copy');if(!b)return;var t=b.getAttribute('data-copy')||'';"
+COPY_JS = ("<div id=toast style='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:#191715;color:#fff;padding:8px 14px;display:none;z-index:9'></div><script>"
+           "(function(){var tq=Promise.resolve(),tt=null;"
+           "function toast(m,bad){var t=document.getElementById('toast');t.textContent=m;t.style.background=bad?'#a32020':'#191715';t.style.display='block';clearTimeout(tt);tt=setTimeout(function(){t.style.display='none'},2500)}"
+           "document.addEventListener('click',function(e){var b=e.target.closest('button.copy');if(!b)return;var t=b.getAttribute('data-copy')||'';"
            "function done(){var o=b.textContent;b.textContent='복사됨';setTimeout(function(){b.textContent=o},1200)}"
            "if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done)}"
-           "else{var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(x){}a.remove()}});</script>")
+           "else{var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');done()}catch(x){}a.remove()}});"
+           # 갈래 버튼: 페이지를 다시 불러오지 않고 제자리에서 저장 (화면이 위로 올라가지 않음). 연달아 눌러도 차례로 보냄
+           "document.addEventListener('submit',function(e){var f=e.target.closest('form.act');if(!f)return;e.preventDefault();"
+           "var clear=!!f.querySelector('[name=clear]'),item=f.closest('.item'),btn=f.querySelector('button');"
+           "tq=tq.then(function(){btn.disabled=true;return fetch(f.action,{method:'POST',credentials:'same-origin',headers:{'accept':'application/json','content-type':'application/x-www-form-urlencoded'},"
+           "body:new URLSearchParams(new FormData(f)).toString()}).then(function(r){return r.json()}).then(function(d){btn.disabled=false;toast(d.msg||'',!d.ok);if(!d.ok)return;"
+           "item.querySelectorAll('button.cur').forEach(function(x){x.classList.remove('cur')});"
+           "var sub=item.querySelector('.sub'),lab=item.querySelector('.conf');"
+           "if(clear){if(lab)lab.remove();f.remove();return}"
+           "btn.classList.add('cur');if(!lab&&sub){lab=document.createElement('span');lab.className='conf';lab.textContent=' · 사장님 확정';sub.appendChild(lab)}"
+           "if(!item.querySelector('[name=clear]')){var c=f.cloneNode(true);c.querySelector('[name=entity]').remove();c.querySelector('[name=note]').remove();"
+           "var h=document.createElement('input');h.type='hidden';h.name='clear';h.value='1';c.insertBefore(h,c.firstChild);c.querySelector('button').className='';c.querySelector('button').textContent='확정 해제';c.querySelector('button').disabled=false;f.parentNode.appendChild(c)}"
+           "}).catch(function(){btn.disabled=false;toast('저장하지 못했습니다 (연결 오류)',true)})})});"
+           "})();</script>")
 
 
 def _is_unstated(entity: dict) -> bool:
@@ -160,17 +185,17 @@ def _item_html(r: dict, kids: list[dict], model: str, bucket: str, confirmed: di
     out.append("<div class=meta>")
     out.append(f"<div class=t><a href='{_esc(link)}' target=_blank rel='noopener noreferrer'>{_esc(title)}</a> "
                f"<button type=button class=copy data-copy='{_esc(title)}'>복사</button></div>")
-    out.append(f"<div class=sub>{_won(price_krw(f))} · {_esc(raw.get('site'))}" + (" · 사장님 확정" if mine else "") + "</div>")
+    out.append(f"<div class=sub>{_won(price_krw(f))} · {_esc(raw.get('site'))}" + (" <span class=conf> · 사장님 확정</span>" if mine else "") + "</div>")
     hidden = (f"<input type=hidden name=model value='{_esc(model)}'><input type=hidden name=bucket value='{_esc(bucket)}'>"
               + ("<input type=hidden name=view value=review>" if model == "" else ""))
     for k in kids:
         on = (mine or bucket) == k["id"]
-        out.append("<form method=post action=/owner/classify>"
+        out.append("<form class=act method=post action=/owner/classify>"
                    f"<input type=hidden name=link value='{_esc(link)}'><input type=hidden name=entity value='{_esc(k['id'])}'>{hidden}"
                    f"<input type=hidden name=note value='{_esc(title[:60])}'>"
                    f"<button class='{'cur' if on else ''}'>{_esc(k.get('name_ko') or k.get('name'))}</button></form>")
     if mine:
-        out.append("<form method=post action=/owner/classify>"
+        out.append("<form class=act method=post action=/owner/classify>"
                    f"<input type=hidden name=link value='{_esc(link)}'><input type=hidden name=clear value=1>{hidden}"
                    "<button>확정 해제</button></form>")
     out.append("</div></div>")
@@ -333,4 +358,13 @@ class handler(BaseHTTPRequestHandler):
             back["err"] = f"저장하지 못했습니다 (GitHub {error.code}). " + ("GH_PAT 에 이 저장소 파일 쓰기 권한이 필요합니다." if error.code in (403, 404) else "잠시 뒤 다시 해 주세요.")
         except Exception as error:  # noqa: BLE001
             back["err"] = f"저장하지 못했습니다: {error}"[:200]
+        if "application/json" in (self.headers.get("accept") or ""):  # 화면이 제자리에서 저장할 때
+            body = json.dumps({"ok": "err" not in back, "msg": back.get("ok") or back.get("err") or ""}, ensure_ascii=False)
+            data = body.encode("utf-8")
+            self.send_response(200)
+            self.send_header("content-type", "application/json; charset=utf-8")
+            self.send_header("cache-control", "no-store")
+            self.end_headers()
+            self.wfile.write(data)
+            return
         return self._send(303, "", {"location": "/owner/classify?" + urlencode(back)})
