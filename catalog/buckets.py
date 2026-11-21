@@ -16,19 +16,24 @@ TRAITS: dict[str, str] = {
     "defect": r"for parts|parts only|\bparts\s*[-–:]|bastel|ジャンク|\bjunk\b|\bas[- ]is\b|faulty|defect|corroded|부품용|고장품|"
               r"\bLEGGI\b|ricambi|for (?:restoration|repair)|\brestoration\b|senza lenti",
     # 리페인트·커스텀 (비공식 도색·개조 외장)
-    "repaint": r"re-?paint|nachlackiert|neu ?lackiert|リペイント|再塗装|리페인트|재도색|shueido|秀栄堂|\bcustom\b(?!\s*(?:leather|leatherette|skin|strap|vulcanite))|カスタム|커스텀",  # 가죽만 바꾼 건 리페인트 아님
+    "repaint": r"re-?paint|nachlackiert|neu ?lackiert|リペイント|再塗装|리페인트|재도색|shueido|秀栄堂|後塗り|\bcustom\b(?!\s*(?:leather|leatherette|skin|strap|vulcanite))|カスタム|커스텀",  # 가죽만 바꾼 건 리페인트 아님
     # 캐나다(미드랜드) 생산 — 모델마다 뜻이 다름: M2·M3에선 희귀, M4-2·M4-P에선 기본이라 그 모델엔 갈래를 두지 않음
     "canada": r"\bELC\b|midland|\bcanada\b|カナダ|캐나다",
     # 모터 변형 (M2-M)
     "motor": r"\bM2-?M\b|\bM2M\b",
     # 시제품·사내용·선행 생산
-    "rare": r"prototype|試作|プロトタイプ|betriebs|pre[- ]?series|pre[- ]?production|null[- ]?serie|0-?serie",
+    "rare": r"prototype|試作|プロトタイプ|betriebs|pre[- ]?series|pre[- ]?production|null[- ]?serie|0-?serie|\bgold\b|red ?curtain|rideau ?rouge|tendina ?rossa|roter ?vorhang",
+    # 개조·변환 (바르낙 Umbau: I → II·III, IIIc → IIIf 등). 지금 모습(제목에서 뒤에 나온 모델)으로 보고 '개조·변환' 갈래
+    "converted": r"umbau|umgebaut|convert(?:ed|ion)|upgraded? to|factory ?upgraded|aufgerüstet|nachträglich|改造|standardi[sz]ed",
+    # 블랙/니켈 마감 — III(Model F)에선 크롬보다 비쌈(2026-11-21 데이터 2.1배), Leica I에선 기본 마감이라 갈래를 두지 않음
+    "black-nickel": r"black ?/ ?nickel|black ?(?:and|&) ?nickel|black ?nickel|schwarz ?/? ?nickel|\bblack\b|schwarz|ブラック|黒",
     # 기념판·한정판 표시 — 그 모델에 해당 판 갈래가 있으면 그 갈래가 먼저, 없으면 '확인 필요'
     "edition": r"\bedition\b|limited|限定|한정|signature|safari|サファリ|사파리|titan|チタン|티탄|anniversary|\bjahre\b|周年|주년",
 }
 
 # 특징 → 갈래 이름 (모델이 그 갈래를 가질 때만)
-TRAIT_BUCKET = {"repaint": "repaint", "canada": "canada", "motor": "m2-m", "rare": "rare", "edition": "review"}
+TRAIT_BUCKET = {"repaint": "repaint", "canada": "canada", "motor": "m2-m", "rare": "rare", "edition": "review",
+                "converted": "converted", "black-nickel": "black-nickel"}
 
 # 새 갈래 이름 (영어 표시명 꼬리, 한국어 꼬리)
 BUCKET_NAMES = {
@@ -36,6 +41,8 @@ BUCKET_NAMES = {
     "canada": ("Canada (Midland)", "캐나다 생산"),
     "rare": ("Prototype · Rare", "시제품·희귀"),
     "review": ("Needs review", "확인 필요"),
+    "converted": ("Converted (Umbau)", "개조·변환"),
+    "black-nickel": ("Black / Nickel", "블랙/니켈"),
 }
 
 # ── 모델별 갈래표 ──
@@ -67,8 +74,17 @@ FAMILIES: dict[str, dict] = {
     "leica:body:m11-p": {"standard": ["standard"], "new": ["repaint", "rare", "review"], "priority": _COMMON + ["standard"]},
 }
 
+# 바르낙 (2026-11-21 데이터로 정함: 레드 다이얼 IIIf 34개 1.1배·샤크스킨 IIIc 12개 1.1배 → 따로 두지 않음)
+_BARNACK = ["converted", "repaint", "canada", "rare", "black-nickel", "*", "review", "standard"]
+for _slug in ("i", "ic", "if", "ii", "iic", "iif", "iii", "iiia", "iiib", "iiic", "iiif", "iiig", "standard"):
+    FAMILIES[f"leica:body:{_slug}"] = {"standard": ["standard"], "barnack": True, "priority": _BARNACK, "review_high": 2.5,
+                                      "new": ["converted"] + (["black-nickel"] if _slug == "iii" else []) + (["canada"] if _slug == "iiif" else [])
+                                      + ["repaint", "rare", "review"]}
+
 # 가격 검문: 특징 없는 스탠다드 매물이 그 갈래 판매 중 중간값의 몇 배 밖이면 '확인 필요'
-REVIEW_HIGH = 2.0
+REVIEW_HIGH = 2.0  # 모델에 review_high가 있으면 그 값 (바르낙 2.5: 상태·정비에 따라 값 폭이 큼)
+# 같은 자리에서 두 모델이 걸리면 넓은 이름보다 구체적인 모델 ('Leica III F' → IIIf, 'Leica I c' → Ic)
+GENERIC_FAMILIES = {"leica:body:i", "leica:body:ii", "leica:body:iii", "leica:body:standard"}
 REVIEW_LOW = 0.4
 REVIEW_MIN_N = 6  # 중간값을 믿으려면 판매 중 매물이 이만큼은 있어야 함
 
@@ -80,6 +96,15 @@ def bucket_id(family: str, slug: str) -> str:
 def add_children(MODELS: dict, PARENTS: dict, ALIASES: dict, NAME_KO: dict) -> None:
     """갈래표의 새 갈래를 엔티티로 추가한다. 제목 규칙으로는 붙지 않고(title_must가 절대 안 맞음) body_buckets.py만 옮긴다."""
     for family, spec in FAMILIES.items():
+        if family not in PARENTS:  # 갈래가 없던 단일 모델(바르낙): 같은 ID를 '전체'로, 기존 규칙은 '스탠다드' 갈래로
+            single = MODELS.pop(family)
+            std = f"{family}:standard"
+            name, ko = single["display_name"], NAME_KO.get(family) or single["display_name"]
+            MODELS[std] = {**single, "model_key": std, "display_name": f"{name} (standard)"}
+            short = name.replace("Leica ", "").split(" (")[0].lower()
+            ALIASES[std] = [f"{short} standard", f"{short} 기본"]
+            NAME_KO[std] = f"{ko} 기본형"
+            PARENTS[family] = (f"{name} (all)", "Body", single["mount"], [std], ALIASES.pop(family, []), f"{ko} (전체)")
         name, kind, mount, kids, aliases, name_ko = PARENTS[family]
         base = name.replace(" (all)", "")
         base_ko = (name_ko or base).replace(" (전체)", "")
@@ -97,7 +122,8 @@ def add_children(MODELS: dict, PARENTS: dict, ALIASES: dict, NAME_KO: dict) -> N
                            "title_must": [r"(?!)"], "title_must_not": []}
             short = base.replace("Leica ", "").lower()
             words = {"repaint": ["repaint", "리페인트", "custom"], "canada": ["canada", "캐나다", "midland"],
-                     "rare": ["prototype", "시제품"], "review": ["needs review", "확인 필요"]}.get(slug, [])
+                     "rare": ["prototype", "시제품"], "review": ["needs review", "확인 필요"],
+                     "converted": ["umbau", "converted", "개조"], "black-nickel": ["black nickel", "블랙 니켈"]}.get(slug, [])
             ALIASES[key] = ["leica m2-m", "m2-m", "m2m", "m2 motor"] if slug == "m2-m" else [f"{short} {w}" for w in words]
             NAME_KO[key] = display_ko
             kids = kids + [key]

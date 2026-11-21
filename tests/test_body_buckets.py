@@ -46,7 +46,7 @@ def test_two_models_keep_first_and_prototype_is_rare() -> None:
 
 def test_unmapped_edition_goes_to_review_not_standard() -> None:
     assert _leaf("Leica M-P(Typ240)サファリ Body")[0] == ["leica:body:m-p240:review"]
-    assert _leaf("Leica M3 Gold Limited 15 DS")[0] == ["leica:body:m3:review"]
+    assert _leaf("Leica M3 Gold Limited 15 DS")[0] == ["leica:body:m3:rare"]  # 골드는 시제품·희귀 갈래
     assert _leaf("Leica M4 50周年 BlackChrome Body 038-I")[0] == ["leica:body:m4:50-jahre"]  # 일본어 '周年'도 50주년 갈래로
 
 
@@ -67,3 +67,37 @@ def test_price_outlier_without_trait_goes_to_review() -> None:
     assert "leica:body:m2:review" in records[-1]["entity_ids"] and "leica:body:m2:standard" not in records[-1]["entity_ids"]
     assert records[-1]["final_output"]["bucket"]["reason"].startswith("price:")
     assert all("leica:body:m2:standard" in r["entity_ids"] for r in records[:-1])
+
+
+def test_barnack_buckets() -> None:
+    # 바르낙 (2026-11-21): 단일 모델 → 전체 + 스탠다드 + 갈래
+    assert _leaf("Leica IIIf Midland Ontario Outfit 10000 Body")[0] == ["leica:body:iiif:canada"]
+    assert _leaf("Leica III BLACK/NICKEL Body")[0] == ["leica:body:iii:black-nickel"]
+    assert _leaf("Leica IIIf Red Dial w/ Self Timer Body")[0] == ["leica:body:iiif:standard"]  # 레드 다이얼은 값 차이 없음(데이터 1.1배)
+    assert _leaf("Leica IIIc Rideau Rouge")[0] == ["leica:body:iiic:rare"]
+    assert _leaf("Leica A型 Old Elmar付 Gold (後塗り) 8千台")[0] == ["leica:body:i:repaint"]  # 나중에 칠한 금색 = 리페인트
+
+
+def test_barnack_conversion_goes_to_current_model() -> None:
+    assert _leaf("Leica I Umbau zu III mit Nickel Elamr 50mm f/3.5")[0] == ["leica:body:iii:converted"]
+    assert _leaf("Leica IIIc body, war-time, converted to IIIf")[0] == ["leica:body:iiif:converted"]
+    assert _leaf("Leica IF upgrade to IIIF Selftimer")[0] == ["leica:body:iiif:converted"]
+    assert _leaf("Leica IIIC Umbau IIIF III F Shark Skin Summitar Leitz 50mm")[0] == ["leica:body:iiif:converted"]
+
+
+def test_barnack_same_place_prefers_specific_model() -> None:
+    assert _leaf("Leica III F Body")[0] == ["leica:body:iiif:standard"]  # 판매자의 'III F' = IIIf
+    assert _leaf("Leica I c")[0] == ["leica:body:ic:standard"]
+    assert _leaf("Linhof Technorama 612 PC II Body")[0] == []  # 다른 브랜드
+
+
+def test_review_bucket_has_no_model_page() -> None:
+    import importlib.util
+    from pathlib import Path
+    spec = importlib.util.spec_from_file_location("bmp", Path(__file__).resolve().parents[1] / "scripts/build_model_pages.py")
+    bmp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(bmp)
+    ents = [{"id": "leica:body:m4:review", "kind": "Body", "active_count": 9, "listing_count": 9, "parent": "leica:body:m4"},
+            {"id": "leica:body:m4", "kind": "Body", "active_count": 40, "listing_count": 40, "children": ["leica:body:m4:review"]}]
+    picked = {e["id"] for e in bmp.pick_entities(ents, {"leica:body:m4:review"})}
+    assert "leica:body:m4:review" not in picked and "leica:body:m4" in picked  # 이미 공개된 적 있어도 다시 만들지 않음
