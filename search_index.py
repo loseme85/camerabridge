@@ -39,6 +39,7 @@ RAW_ITEM_FIELDS = [
     "system",
     "label",
     "세대",
+    "매장정보",  # 상품 종류·태그·설명 앞부분 (Shopify, 분류 근거 — 2026-11-21 수집 보강)
 ]
 
 FINAL_OUTPUT_FIELDS = [

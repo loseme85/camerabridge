@@ -174,3 +174,18 @@ if __name__ == "__main__":
     test_load_search_index_reloads_when_file_changes()
     test_load_search_index_can_bypass_cache_for_timing_comparisons()
     print("test_search_index: ok")
+
+
+def test_store_meta_survives_compaction_and_shopify_meta_cleans_html() -> None:
+    import re
+    from search_index import compact_resolved_record
+    meta = {"type": "Cameras", "tags": ["Used"], "desc": "Repainted body"}
+    out = compact_resolved_record({"raw_item": {"상품명": "Leica M2", "링크": "https://x/1", "매장정보": meta},
+                                   "final_output": {"title_raw": "Leica M2"}})
+    assert out["raw_item"]["매장정보"] == meta
+    src = open("app/test.py", encoding="utf-8").read()
+    ns = {"re": re}
+    exec(src[src.index("def _shopify_meta"):src.index("DETAIL_SEEN = ")], ns)
+    got = ns["_shopify_meta"]({"product_type": "Cameras", "tags": "Used, M2", "body_html": "<p>A&nbsp;B</p>" + "x" * 900})
+    assert got["tags"] == ["Used", "M2"] and got["type"] == "Cameras" and len(got["desc"]) == 500 and got["desc"].startswith("A B")
+    assert ns["_shopify_meta"]({"title": "x"}) == {}
