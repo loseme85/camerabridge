@@ -125,3 +125,11 @@ def test_description_false_alarms_are_ignored() -> None:
         leaves, final = _leaf_desc("Leica M2 chrome", desc)
         assert leaves == ["leica:body:m2"] or leaves == ["leica:body:m2:standard"], (desc, leaves)
         assert final.get("entity_note") != "defect"
+
+
+def test_m6_ttl_japan_limited_is_its_own_bucket() -> None:
+    """사장님 2026-11-22: 진짜 Japan Limited 0.58은 일반 일본 내수 M6 TTL과 따로. '0.58'만 쓴 매물은 단정하지 않음"""
+    assert _leaf("Leica M6 TTL Japan Limited 0.58")[0] == ["leica:body:m6:ttl-japan-limited"]
+    assert _leaf("Leica M6 TTL ジャパンリミテッド 0.58")[0] == ["leica:body:m6:ttl-japan-limited"]
+    assert _leaf("Leica M6 TTL 0.58 Body Black")[0] == ["leica:body:m6:ttl"]
+    assert _leaf("[위탁] M6 TTL 0.85 'Japan' (Black)")[0] == ["leica:body:m6:ttl"]
