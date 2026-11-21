@@ -4892,7 +4892,6 @@ def _lecuit_name(title):
 # 실패한 매장은 원래 이전 데이터를 계속 보여 주므로, 고칠 때까지 여기에 넣어 숨긴다. 고치면 빼고 수집 목록에 다시 넣는다.
 PAUSED_SITES = {
     "Lecuit (룩셈부르크)": "2026-11-21 사이트 개편 — 예전 ePages 주소가 첫 화면으로 301, 사진 주소 전부 404",
-    "J-カメラ (일본)": "2026-11-04부터 j-camera.net 접속 시간 초과(GitHub 서버·한국 모두) — 17일 지난 매물 740개가 판매 중으로 남아 있었음, 한국에서는 링크도 안 열림. 막힌 것으로 보고 우회하지 않음",
 }
 
 
@@ -5967,7 +5966,9 @@ def crawl_jcamera():
         if page_num:
             time.sleep(10)
         try:
-            resp = sess.get(f"{base}/listp.php?{query}&p={page_num}", timeout=40)
+            # j-camera.net은 2026-11-04부터 GitHub(미국) 서버에서 접속이 안 돼(한국은 2026-11-22 확인 시 열림) Vercel 도쿄 중계 서버를 거침.
+            # 중계 설정(RELAY_URL·RELAY_KEY)이 없는 로컬에서는 직접 받음
+            resp = _ce.http_get(f"{base}/listp.php?{query}&p={page_num}", via_relay=True, timeout=40)
             resp.raise_for_status()
             text = resp.content.decode("utf-8", "replace")
         except Exception as e:
@@ -15349,6 +15350,7 @@ def crawl_all():
         ("K&M Camera (미국)", lambda: ce.wrap_full_run("K&M Camera (미국)", crawl_kmcamera)),
         ("Khrome (독일)", lambda: ce.wrap_full_run("Khrome (독일)", crawl_khrome)),
         ("Fotododici (이탈리아)", lambda: ce.wrap_full_run("Fotododici (이탈리아)", crawl_fotododici)),
+        ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),  # 2026-11-22 도쿄 중계로 되살림
         ("Profotica (네덜란드)", lambda: ce.wrap_full_run("Profotica (네덜란드)", crawl_profotica)),
         ("The Camera Store (캐나다)", lambda: ce.wrap_full_run("The Camera Store (캐나다)", crawl_thecamerastore)),
         ("トキワカメラ (일본)", lambda: ce.wrap_full_run("トキワカメラ (일본)", crawl_tokiwa)),
