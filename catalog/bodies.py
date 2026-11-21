@@ -167,6 +167,9 @@ M6_EDITIONS = [
     ("ttl-test-the-best", "Leica M6 TTL 'Test the Best' (Swiss demo)", "M6 TTL 테스트 더 베스트", [M6, r"test ?the ?best"], ["m6 test the best"]),
     ("ttl-ics", "Leica M6 ICS (Black Paint)", "M6 ICS", [M6, r"\bICS\b"], ["m6 ics"]),
     ("ttl-oresund", "Leica M6 TTL Øresundsbron (2000)", "M6 TTL 외레순 다리", [M6, r"[øo0]resund|외레순"], ["m6 oresund", "m6 øresund", "m6 외레순"]),
+    # 일본 시장 한정 0.58 (사장님 2026-11-22): 일반 일본 내수 M6 TTL과 구분. '0.58'만 쓴 매물은 진짜 한정판인지 제목으로 알 수 없어 넣지 않음
+    ("ttl-japan-limited", "Leica M6 TTL Japan Limited (0.58)", "M6 TTL 재팬 리미티드 (0.58)", [M6, TTL, r"japan ?limited|ジャパン ?リミテッド|日本限定|재팬 ?리미티드"],
+     ["m6 ttl japan limited", "m6 japan limited", "m6 ttl 재팬 리미티드", "m6 재팬 리미티드"]),
     ("ttl-hansa", "Leica M6 TTL Hansa", "M6 TTL 한자", [M6, r"\bhansa\b|한자"], ["m6 hansa"]),
     ("ttl-al-thani", "Leica M6 TTL Sheikh Saud Al-Thani", "M6 TTL 알타니", [M6, r"al.?thani|알타니|sheikh"], ["m6 al thani"]),
     ("ttl-titan", "Leica M6 TTL Titan", "M6 TTL 티탄", [M6, TTL, r"titan|티탄"], ["m6 ttl titan", "m6 ttl 티탄"]),
