@@ -454,8 +454,9 @@ def test_generation_counts_differ_by_country_and_steel_rim_reissue_without_label
     assert lens('Leica Summilux-M 35mm f1.4 "Original Steel Rim 1960"', sr) == [sr + "v1-steel-rim"]
     assert lens("LEICA 35mm F1.4 steel rim SUMMILUX sn.1765", sr) == [sr + "v1-steel-rim"]
     # 'V2'·'Ver.2'·'第2世代'는 세대 칸에만 (미표기 칸에 같이 들어가지 않음)
-    assert lens("Leica Summilux-M 35mm f1.4 V2 Infinity Lock 11870", sr) == [sr + "v2"]
-    assert lens("LEICA 35mm F1.4 Ver.2 infinity Lock SUMMILUX sn.2347", sr) == [sr + "v2"]
+    assert lens("Leica Summilux-M 35mm f1.4 V2 Infinity Lock 11870", sr) == [sr + "infinity-lock"]  # 사장님 2026-11-21: 일반 V2와 따로
+    assert lens("Leica Summilux-M 35/1.4 2nd ストッパー無 Germany", sr) == [sr + "v2"]  # 스토퍼 없음은 일반 V2
+    assert lens("LEICA 35mm F1.4 Ver.2 infinity Lock SUMMILUX sn.2347", sr) == [sr + "infinity-lock"]
     lux = "leica:lens:summilux-m:50:"
     # 해외 'Type III'(11868·11856)는 E46 후드 내장 = 한국 4세대, 한국 '5th'는 ASPH
     assert lens("Leica 50mm f1.4 Summilux-M (Type III) (Black, 11868)", lux) == [lux + "v4"]
