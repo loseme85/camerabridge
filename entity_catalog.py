@@ -449,6 +449,36 @@ def fix_body_category(record: dict[str, Any]) -> bool:
     return False
 
 
+# 제목에 없고 설명·주소에만 있는 단서로 갈래를 옮긴다 (2026-11-21 수집 보강 → 렌즈). (지금 갈래, 옮길 갈래, 단서, 이게 있으면 안 옮김)
+DESC_MOVES = [
+    # (지금 갈래들, 옮길 갈래, 단서, 이게 있으면 안 옮김, 지금 갈래가 구형 미표기일 때 같이 있어야 할 말)
+    (("leica:lens:summilux-m:35:v1-steel-rim", "leica:lens:summilux-m:35:pre-asph-unspecified"), "leica:lens:summilux-m:35:v1-steel-rim-goggles",
+     re.compile(r"goggles?|\bbrille\b|lunettes?|眼鏡|メガネ|고글", re.I),
+     re.compile(r"(?:remov(?:e|ed|ing)|without|ohne|sans|non|no)[ -]+(?:the )?(?:goggles?|brille|lunettes?)", re.I),  # 'mit Brille'(독일어: 아이 달림) 등
+     re.compile(r"steel ?rim|스틸 ?림", re.I)),
+]
+
+
+def refine_by_description(record: dict[str, Any], catalog: dict[str, Any]) -> bool:
+    """매장이 알려 준 설명·태그와 상품 주소에서 갈래를 가르는 말을 찾아 옮긴다. 옮겼으면 True."""
+    ids = record.get("entity_ids") or []
+    raw = record.get("raw_item") or {}
+    meta = raw.get("매장정보") or {}
+    text = " ".join([str(meta.get("desc") or ""), " ".join(meta.get("tags") or []), str(raw.get("링크") or "").replace("-", " ")])
+    for srcs, dst, yes, no, need in DESC_MOVES:
+        hit = next((s for s in srcs if s in ids), None)
+        if not hit or dst not in (catalog.get("entities") or {}) or not yes.search(text) or no.search(text):
+            continue
+        if hit != srcs[0] and not need.search(text):  # 첫 갈래가 아닌 곳에서 옮길 땐 스틸림 말도 같이 있어야
+            continue
+        ids = [dst if e == hit else e for e in ids]
+        record["entity_ids"] = _with_parents(list(dict.fromkeys(ids)), catalog, record_title(record))
+        final = record.setdefault("final_output", {})
+        final["bucket"] = {"traits": [], "reason": "desc:" + dst.split(":")[-1]}
+        return True
+    return False
+
+
 def annotate_records(records: Iterable[dict[str, Any]]) -> None:
     from body_buckets import assign as assign_bucket  # M 바디 갈래 (2026-11-21 분류 설계 시범)
     catalog = load_catalog()
@@ -459,6 +489,7 @@ def annotate_records(records: Iterable[dict[str, Any]]) -> None:
         final.pop("bucket", None)
         fix_body_category(record)
         assign_bucket(record, catalog, _with_parents, record_title(record))
+        refine_by_description(record, catalog)
 
 
 def infer_by_price(records: list[dict[str, Any]], value, catalog: dict[str, Any] | None = None) -> int:
