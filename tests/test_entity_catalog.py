@@ -838,3 +838,19 @@ def test_owner_confirmed_goggles_links_override_rules() -> None:
     other = {"final_output": dict(rec["final_output"]), "raw_item": {"상품명": "SUMMILUX-M 35 mm f/1.4 STEEL RIM (1961-1964)", "링크": "https://x.example/other"}}
     annotate_records([other])
     assert [e.split(":")[-1] for e in other["entity_ids"] if e.startswith("leica:lens:summilux-m:35:")] == ["v1-steel-rim"]
+
+
+def test_dlux_hyphen_generation_and_edition100() -> None:
+    """2026-11-22: 'D-Lux-6'(하이픈)이 세대 미표기로 빠지던 것, D-Lux 6 Edition 100(2014)과 D-Lux 8 100 Years(2025)는 다른 에디션"""
+    from entity_catalog import annotate_records
+    def leaves(title: str) -> set[str]:
+        rec = {"final_output": {"title_raw": title, "category": "Body", "sold_quality": "asking"}, "raw_item": {"상품명": title}}
+        annotate_records([rec])
+        return {e.split("leica:body:")[-1] for e in rec["entity_ids"] if e.startswith("leica:body:d-lux")}
+    assert "d-lux-6:edition-100" in leaves("Leica D-Lux-6 New Centennial Edition 100 Point & Shoot Camera")
+    assert "d-lux-6:edition-100" in leaves('Leica D-Lux 6 “Edition 100”')
+    assert "d-lux-6:standard" in leaves("Leica D-LUX 6")
+    assert "d-lux-unspecified" not in leaves("Leica D-Lux-6 Black")
+    assert "d-lux-8:100-years" in leaves("Leica D-Lux 8 100 Years of Leica Digital Camera")
+    assert not any("d-lux-6" in e for e in leaves("Leica D-Lux 8 100 Years of Leica Digital Camera"))
+    assert "d-lux-unspecified" in leaves("Leica D-Lux")

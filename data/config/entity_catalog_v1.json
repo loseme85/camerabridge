@@ -15746,7 +15746,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?1\\b"
+     "D-?Lux[ -]?1\\b"
     ],
     "title_must_not": [
      "leeworks",
@@ -15815,7 +15815,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?2\\b"
+     "D-?Lux[ -]?2\\b"
     ],
     "title_must_not": [
      "leeworks",
@@ -15886,7 +15886,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?3\\b"
+     "D-?Lux[ -]?3\\b"
     ],
     "title_must_not": [
      "leeworks",
@@ -15955,7 +15955,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?4\\b"
+     "D-?Lux[ -]?4\\b"
     ],
     "title_must_not": [
      "leeworks",
@@ -16028,7 +16028,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?5\\b"
+     "D-?Lux[ -]?5\\b"
     ],
     "title_must_not": [
      "leeworks",
@@ -16078,13 +16078,17 @@
   },
   {
    "id": "leica:body:d-lux-6",
-   "name": "Leica D-Lux 6",
-   "name_ko": "라이카 D-Lux 6",
+   "name": "Leica D-Lux 6 (all)",
+   "name_ko": "라이카 D-Lux 6 (전체)",
    "kind": "Body",
    "mount": null,
    "parent": "leica:body:d-lux",
-   "children": [],
+   "children": [
+    "leica:body:d-lux-6:standard",
+    "leica:body:d-lux-6:edition-100"
+   ],
    "aliases": [
+    "6 (all)",
     "d lux 6",
     "d-lux 6",
     "dlux6",
@@ -16097,57 +16101,7 @@
     "18461",
     "18462"
    ],
-   "match": {
-    "category": "Body",
-    "mount": null,
-    "title_must": [
-     "D-?Lux ?6\\b"
-    ],
-    "title_must_not": [
-     "leeworks",
-     "light ?lens ?lab",
-     "\\bLLL\\b",
-     "7 ?artisans",
-     "ttartisan",
-     "voigtl",
-     "zeiss",
-     "sigma",
-     "ms-?optics",
-     "kipon",
-     "호환",
-     "\\bcopy\\b",
-     "카피",
-     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
-     "후드",
-     "\\bcap\\b",
-     "캡",
-     "^(?!.*\\b(with|w/)\\s.*case).*case",
-     "케이스",
-     "strap",
-     "스트랩",
-     "holster",
-     "홀스터",
-     "grip",
-     "그립",
-     "battery",
-     "배터리",
-     "charger",
-     "충전기",
-     "protector",
-     "cover\\b",
-     "부속품",
-     "adapter",
-     "어댑터",
-     "plate",
-     "플레이트",
-     "thumb",
-     "썸",
-     "manual",
-     "설명서",
-     "box only",
-     "박스만"
-    ]
-   }
+   "match": null
   },
   {
    "id": "leica:body:d-lux-109",
@@ -16243,7 +16197,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?7\\b"
+     "D-?Lux[ -]?7\\b"
     ],
     "title_must_not": [
      "bape|bathing ?ape|stash",
@@ -16315,7 +16269,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?7\\b",
+     "D-?Lux[ -]?7\\b",
      "bape|bathing ?ape|stash"
     ],
     "title_must_not": [
@@ -16385,7 +16339,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?7\\b",
+     "D-?Lux[ -]?7\\b",
      "vans|barbee|반스"
     ],
     "title_must_not": [
@@ -16454,7 +16408,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?7\\b",
+     "D-?Lux[ -]?7\\b",
      "\\b007\\b"
     ],
     "title_must_not": [
@@ -16522,7 +16476,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?8\\b"
+     "D-?Lux[ -]?8\\b"
     ],
     "title_must_not": [
      "100 ?years|100주년|100 ?jahre",
@@ -16592,7 +16546,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux ?8\\b",
+     "D-?Lux[ -]?8\\b",
      "100 ?years|100주년|100 ?jahre"
     ],
     "title_must_not": [
@@ -16660,7 +16614,7 @@
     "category": "Body",
     "mount": null,
     "title_must": [
-     "D-?Lux(?! ?\\d)"
+     "D-?Lux(?![ -]?\\d)"
     ],
     "title_must_not": [
      "109",
@@ -50438,6 +50392,144 @@
      "\\bM ?6\\b",
      "(?<!non )(?<!non-)(?<!non)TTL",
      "japan ?limited|ジャパン ?リミテッド|日本限定|재팬 ?리미티드"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:d-lux-6:standard",
+   "name": "Leica D-Lux 6 (standard)",
+   "name_ko": "라이카 D-Lux 6 기본형",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:d-lux-6",
+   "children": [],
+   "aliases": [
+    "d-lux 6 standard",
+    "d-lux 6 기본"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "D-?Lux[ -]?6\\b"
+    ],
+    "title_must_not": [
+     "edition ?100|centennial",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:d-lux-6:edition-100",
+   "name": "Leica D-Lux 6 Edition 100 (2014 Centennial)",
+   "name_ko": "D-Lux 6 에디션 100 (2014 100주년)",
+   "kind": "Body",
+   "mount": null,
+   "parent": "leica:body:d-lux-6",
+   "children": [],
+   "aliases": [
+    "d-lux 6 centennial",
+    "d-lux 6 edition 100",
+    "d-lux 6 edition 100 (2014 centennial)",
+    "dlux6edition100(2014centennial)",
+    "edition 100",
+    "edition 100 (2014 centennial)",
+    "leica d-lux 6 edition 100 (2014 centennial)",
+    "라이카 d-lux 6 edition 100 (2014 centennial)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": null,
+    "title_must": [
+     "D-?Lux[ -]?6\\b",
+     "edition ?100|centennial"
     ],
     "title_must_not": [
      "leeworks",
