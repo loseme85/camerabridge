@@ -116,7 +116,8 @@ def load_accounts(*, fresh: bool = False) -> dict:
         result = _blob().get(ACCOUNTS_PATH, access="private", use_cache=False)
         data = json.loads(result.content)
     except Exception as error:  # noqa: BLE001
-        if type(error).__name__ != "BlobNotFoundError":
+        # 계정이 아직 하나도 없을 때: Vercel Blob 은 BlobNotFoundError, Neon(PgBlob) 은 FileNotFoundError (2026-11-22 첫 계정이 안 만들어지던 원인)
+        if type(error).__name__ != "BlobNotFoundError" and not isinstance(error, FileNotFoundError):
             raise
         data = {"accounts": {}}
     data.setdefault("accounts", {})

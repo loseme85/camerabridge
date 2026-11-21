@@ -171,3 +171,27 @@ def test_dealer_buy_view_shows_same_grade_counts_and_confidence():
     page = (Path(__file__).resolve().parents[1] / "app/templates/dealer.html").read_text(encoding="utf-8")
     assert "function sameGradeCount(eid, g)" in page and 't("same_n"' in page
     assert page.count("same_n:") == 10 and page.count("conf_low:") == 10  # 10개 언어
+
+
+def test_first_account_can_be_created_when_neon_has_no_accounts_file(monkeypatch) -> None:
+    """2026-11-22: Neon(PgBlob)은 파일이 없으면 FileNotFoundError — 첫 계정이 안 만들어지던 오류"""
+    import dealer_portal as portal
+    import pgstore
+    store: dict = {}
+
+    class Fake:
+        def get(self, path, **_k):
+            if path not in store:
+                raise FileNotFoundError(path)
+            return type("C", (), {"content": store[path]})()
+
+        def put(self, path, data, **_k):
+            store[path] = data
+
+    monkeypatch.setattr(pgstore, "blob_store", lambda: Fake())
+    portal._cache.update(at=0, data=None)
+    assert portal.load_accounts(fresh=True)["accounts"] == {}
+    password = portal.create_account("parkstudio", name="테스트", stores=[], country="KR", lang="ko")
+    assert len(password) >= portal.MIN_PASSWORD
+    assert "parkstudio" in portal.load_accounts(fresh=True)["accounts"]
+    portal._cache.update(at=0, data=None)
