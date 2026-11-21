@@ -31,6 +31,15 @@ TRAITS: dict[str, str] = {
     "edition": r"\bedition\b|limited|限定|한정|signature|safari|サファリ|사파리|titan|チタン|티탄|anniversary|\bjahre\b|周年|주년",
 }
 
+# 상점 설명(매장정보.desc)·태그에서 읽는 특징 — 제목용 TRAITS와 따로, 아주 좁게 (2026-11-21 Shopify 58,387개 시험:
+# 제목용 사전을 그대로 쓰면 'Ship to Canada'·'(Black)'·'gold contacts'·'no defects'가 걸려 오탐이 대부분이었음).
+# 부정문('no defects')·호환 안내('does not work with M240')는 빼고, 부품용·작동 불가·리페인트만 읽는다.
+DESC_TRAITS: dict[str, str] = {
+    "defect": r"for parts|parts only|parts or repair|spares? or repair|\bnot working\b|won.t power on|"
+              r"does(?:n.t| not) (?:work|function)(?!\s+(?:with|on|for|in|properly with))|\bjammed\b|ジャンク|bastelobjekt|ricambi",
+    "repaint": r"(?<!un)(?<!not )re-?paint|nachlackiert|neu ?lackiert|リペイント|再塗装|리페인트|재도색|shueido|秀栄堂",
+}
+
 # 특징 → 갈래 이름 (모델이 그 갈래를 가질 때만)
 TRAIT_BUCKET = {"repaint": "repaint", "canada": "canada", "motor": "m2-m", "rare": "rare", "edition": "review",
                 "converted": "converted", "black-nickel": "black-nickel"}
