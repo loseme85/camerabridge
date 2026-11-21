@@ -1,0 +1,22 @@
+name: JCamera recheck
+on:
+  push:
+    branches: ['site-test/jcamera-recheck']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt || pip install requests beautifulsoup4 lxml
+      - run: python scripts/probe_jcamera.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jcamera
+          path: out/
