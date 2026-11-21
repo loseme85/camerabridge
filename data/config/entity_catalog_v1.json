@@ -24151,6 +24151,7 @@
      "\\bR\\b|-R\\b",
      "APO",
      "macro",
+     "visoflex|visofex|16464|otzfo|lens head|ヘッドノミ|ヘッドのみ",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -24225,6 +24226,7 @@
      "\\bR\\b|-R\\b",
      "APO",
      "macro",
+     "visoflex|visofex|16464|otzfo|lens head|ヘッドノミ|ヘッドのみ",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -24295,6 +24297,7 @@
      "macro",
      "\\b1st\\b|\\b1th\\b|first|1세대|\\bv\\.?1\\b|\\b(type|ver\\.?|version) ?i\\b|\\bver(sion)?\\.? ?1\\b|第1世代",
      "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代",
+     "visoflex|visofex|16464|otzfo|lens head|ヘッドノミ|ヘッドのみ",
      "\\bSL\\b|-SL\\b",
      "\\bTL\\b|-TL?\\b",
      "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
@@ -39941,6 +39944,7 @@
    "children": [
     "leica:lens:elmarit-m:90:v1",
     "leica:lens:elmarit-m:90:v2",
+    "leica:lens:elmarit-m:90:visoflex-head",
     "leica:lens:elmarit-m:90:unspecified"
    ],
    "aliases": [
@@ -50730,6 +50734,80 @@
      "설명서",
      "box only",
      "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:lens:elmarit-m:90:visoflex-head",
+   "name": "Elmarit 90mm f/2.8 lens head for Visoflex (16464K mount)",
+   "name_ko": "엘마리트 90 비조플렉스용 헤드 (16464K)",
+   "kind": "Lens",
+   "mount": "M",
+   "parent": "leica:lens:elmarit-m:90",
+   "children": [],
+   "aliases": [
+    "90 elmarit lens head",
+    "90 elmarit visoflex",
+    "90 엘마리트 lens head",
+    "90 엘마리트 visoflex",
+    "elmarit 90 lens head",
+    "elmarit 90 visoflex",
+    "엘마리트 90 lens head",
+    "엘마리트 90 visoflex"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Lens",
+    "mount": "M",
+    "title_must": [
+     "elmarit",
+     "(?<![\\d./\\-–])90(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
+     "visoflex|visofex|16464|otzfo|lens head|ヘッドノミ|ヘッドのみ"
+    ],
+    "title_must_not": [
+     "tele",
+     "\\bR\\b|-R\\b",
+     "APO",
+     "macro",
+     "\\bSL\\b|-SL\\b",
+     "\\bTL\\b|-TL?\\b",
+     "-R\\b|\\bR ?\\d{2}|\\bR\\b ?\\d",
+     "-S\\b",
+     "\\bL ?\\d{2}/|LTM|M39|screw",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "부속품",
+     "filter\\b",
+     "필터",
+     "어댑터",
+     "finder",
+     "파인더",
+     "box only",
+     "박스만",
+     "manual",
+     "설명서",
+     "ghiera|diaframma",
+     "close[- ]?(?:focus|up) device|\\bSOOKY\\b|\\bADVOO\\b",
+     "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
+     "^box\\b|\\bbox rossa\\b",
+     "treppiede|tripod|三脚",
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피"
     ]
    }
   }

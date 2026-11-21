@@ -854,3 +854,18 @@ def test_dlux_hyphen_generation_and_edition100() -> None:
     assert "d-lux-8:100-years" in leaves("Leica D-Lux 8 100 Years of Leica Digital Camera")
     assert not any("d-lux-6" in e for e in leaves("Leica D-Lux 8 100 Years of Leica Digital Camera"))
     assert "d-lux-unspecified" in leaves("Leica D-Lux")
+
+
+def test_elmarit90_visoflex_head_is_not_the_m_mount_lens() -> None:
+    """2026-11-22 사장님: 1세대 Elmarit 90 렌즈 헤드를 16464K(OTZFO) 포커싱 마운트에 끼운 비조플렉스용은 M마운트 렌즈와 따로"""
+    from entity_catalog import annotate_records
+    def leaves(title: str) -> set[str]:
+        rec = {"final_output": {"title_raw": title, "category": "Lens", "mount": "M", "sold_quality": "asking"}, "raw_item": {"상품명": title}}
+        annotate_records([rec])
+        return {e.split(":")[-1] for e in rec["entity_ids"] if e.startswith("leica:lens:elmarit-m:90:")}
+    for title in ("Leica Leitz Elmarit 90mm f/2.8 lens head in 16464K focusing mount for visofex",
+                  "Leica Elmarit 90mm f/2.8 mit OTZFO/16464K Adapter",
+                  "Leica M Elmarit 90mm f2.8 2085713 e 16464K"):
+        assert leaves(title) == {"visoflex-head"}, title
+    assert leaves("Leica Elmarit-M 90mm f2.8") == {"unspecified"}
+    assert leaves("Leica Elmarit-M 90mm f2.8 2nd") == {"v2"}

@@ -272,10 +272,15 @@ group("leica:lens:elmarit-m:28", "Elmarit-M 28mm f/2.8", "엘마리트 28", "M",
     c("v4", "Elmarit-M 28mm f/2.8 4th", "엘마리트 28 4세대", GEN4, [], ["4th", "4세대"]),
 ], must_not=[r"\bR\b|-R\b", r"ASPH|ASAPH"], existing=["leica:lens:elmarit-m:28:asph"])
 # ───────────── M: 90mm f/2.8 ─────────────
+# 비조플렉스용 렌즈 헤드(16464K·OTZFO 포커싱 마운트에 낀 것)는 M마운트 렌즈가 아님 — 값이 훨씬 낮아 따로 (사장님 2026-11-22)
+EL90_VISO = r"visoflex|visofex|16464|otzfo|lens head|ヘッドノミ|ヘッドのみ"
 group("leica:lens:elmarit-m:90", "Elmarit-M 90mm f/2.8", "엘마리트 90", "M", "elmarit", "90", [
-    c("v1", "Elmarit 90mm f/2.8 1st", "엘마리트 90 1세대", GEN1, [], ["1st"]),
-    c("v2", "Elmarit-M 90mm f/2.8 2nd", "엘마리트 90 2세대", GEN2, [], ["2nd"]),
+    c("v1", "Elmarit 90mm f/2.8 1st", "엘마리트 90 1세대", GEN1, [EL90_VISO], ["1st"]),
+    c("v2", "Elmarit-M 90mm f/2.8 2nd", "엘마리트 90 2세대", GEN2, [EL90_VISO], ["2nd"]),
+    c("visoflex-head", "Elmarit 90mm f/2.8 lens head for Visoflex (16464K mount)", "엘마리트 90 비조플렉스용 헤드 (16464K)", EL90_VISO, [], ["visoflex", "lens head"]),
 ], must_not=[r"tele", r"\bR\b|-R\b", r"APO", r"macro"])
+# 'mit OTZFO/16464K Adapter'처럼 포커싱 마운트를 adapter라 부르는 제목도 이 헤드 구성 (렌즈에 공통인 adapter 제외를 이 갈래만 푼다)
+MODELS["leica:lens:elmarit-m:90:visoflex-head"]["title_must_not"] = [n for n in MODELS["leica:lens:elmarit-m:90:visoflex-head"]["title_must_not"] if n != "adapter"]
 group("leica:lens:tele-elmarit-m:90", "Tele-Elmarit 90mm f/2.8", "텔레엘마리트 90", "M", "tele-elmarit", "90", [
     c("fat", "Tele-Elmarit 90mm f/2.8 (fat, 1964)", "텔레엘마리트 90 팻", r"\bfat\b|팻|뚱|\b(1st|ver\.? ?I|type ?I)\b", [], ["fat"]),
     c("thin", "Tele-Elmarit-M 90mm f/2.8 (thin, 1974)", "텔레엘마리트 90 씬", r"\bthin\b|\bslim\b|씬|슬림|\b(2nd|ver\.? ?II|type ?II)\b", [], ["thin"]),
