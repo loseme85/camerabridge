@@ -454,8 +454,9 @@ def test_generation_counts_differ_by_country_and_steel_rim_reissue_without_label
     assert lens('Leica Summilux-M 35mm f1.4 "Original Steel Rim 1960"', sr) == [sr + "v1-steel-rim"]
     assert lens("LEICA 35mm F1.4 steel rim SUMMILUX sn.1765", sr) == [sr + "v1-steel-rim"]
     # 'V2'·'Ver.2'·'第2世代'는 세대 칸에만 (미표기 칸에 같이 들어가지 않음)
-    assert lens("Leica Summilux-M 35mm f1.4 V2 Infinity Lock 11870", sr) == [sr + "v2"]
-    assert lens("LEICA 35mm F1.4 Ver.2 infinity Lock SUMMILUX sn.2347", sr) == [sr + "v2"]
+    assert lens("Leica Summilux-M 35mm f1.4 V2 Infinity Lock 11870", sr) == [sr + "infinity-lock"]  # 사장님 2026-11-21: 일반 V2와 따로
+    assert lens("Leica Summilux-M 35/1.4 2nd ストッパー無 Germany", sr) == [sr + "v2"]  # 스토퍼 없음은 일반 V2
+    assert lens("LEICA 35mm F1.4 Ver.2 infinity Lock SUMMILUX sn.2347", sr) == [sr + "infinity-lock"]
     lux = "leica:lens:summilux-m:50:"
     # 해외 'Type III'(11868·11856)는 E46 후드 내장 = 한국 4세대, 한국 '5th'는 ASPH
     assert lens("Leica 50mm f1.4 Summilux-M (Type III) (Black, 11868)", lux) == [lux + "v4"]
@@ -794,3 +795,18 @@ def test_m4p_anniversary_titles_go_to_70_jahre_not_standard() -> None:
     assert m4p("Leica M4-P 70th Anniversary Edition") == ["leica:body:m4-p:70-jahre"]
     assert m4p("Leica M4-P") == ["leica:body:m4-p:standard"]
     assert m4p("Leica M4-P Everest 82") == ["leica:body:m4-p:everest"]
+
+
+def test_summilux35_early_chrome_goggles_double_a_leave_unspecified() -> None:
+    """2026-11-21 렌즈 갈래 시범: 세대 미표기 칸에 섞인 희귀 버전을 가격이 맞는 갈래로"""
+    from entity_catalog import annotate_records
+    def leaves(title: str) -> set[str]:
+        rec = {"final_output": {"title_raw": title, "category": "Lens", "mount": "M", "sold_quality": "asking"}}
+        annotate_records([rec])
+        return {e.split(":")[-1] for e in rec["entity_ids"] if e.startswith("leica:lens:summilux-m:35:")}
+    assert "v1-steel-rim" in leaves("Leica Summilux-M 35mm F1.4 EarlyChrome")
+    assert "v1-steel-rim-goggles" in leaves("Leica Summilux M 35mm f1.4 with Goggles")
+    assert "aa" in leaves('Leica 35mm f1.4 Summilux-M "Double A"')
+    assert "pre-asph-unspecified" not in leaves('Leica Summilux-M 35mm f1.4 "Leica M Edition 60" Lens Only')
+    assert leaves("Leica Summilux-M 35/1.4 2nd 眼鏡付 Black") == {"v2"}
+    assert "pre-asph-unspecified" in leaves("Leica Summilux-M 35mm f1.4 11870")

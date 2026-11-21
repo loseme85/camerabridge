@@ -148,16 +148,20 @@ SR_REISSUE = (r"re-?issue|복각|리이슈|202[12]|11301"
 
 # ───────────── M: Summilux 35 (기존 부모에 세대·에디션 추가) ─────────────
 SL35 = "leica:lens:summilux-m:35"
+# 인피니티 락(무한대 잠금) — 'no infinity lock'·ストッパー無(스토퍼 없음)은 제외. ストッパー付 = 스토퍼(잠금) 있음
+INF_LOCK = r"(?<!no )(?<!without )(?<!w/o )infinity ?lock|ストッパー付|無限遠ロック|무한대 ?(?:잠금|락)"
 EDITION_35LUX = [r"titan|티탄", r"leitz ?wetzlar", r"10 ?jahre", r"independence|광복", r"LHSA", r"classic|클래식"]
 for slug, name, ko, marker, extra_not, sfx in [
     # '1st·V1'만 쓴 매물은 따로 두지 않음 (2026-11-02): 국내는 스틸림, 일본 Ver.1은 그 뒤 구형 값이라 섞여서 → 구형(세대 미표기)에 두고 가격으로 스틸림을 가림
-    ("v1-steel-rim", "Summilux 35mm f/1.4 1st Steel Rim (original)", "주미룩스 35 1세대 스틸림 (오리지널)", r"steel ?rim|스틸 ?림", [SR_REISSUE], ["steel rim", "스틸림", "1st steel rim", "1st", "1세대"]),
+    ("v1-steel-rim", "Summilux 35mm f/1.4 1st Steel Rim (original)", "주미룩스 35 1세대 스틸림 (오리지널)", r"steel ?rim|스틸 ?림|early ?chrome", [SR_REISSUE], ["steel rim", "스틸림", "1st steel rim", "1st", "1세대"]),
     ("v2", "Summilux 35mm f/1.4 2nd (pre-ASPH)", "주미룩스 35 2세대", GEN2 + r"|pre-?asph", [], ["2nd", "2세대", "pre asph"]),
     # 국내 표기: 1세대 스틸림·1st, 2세대 pre-ASPH, 3세대 Aspherical(AA, 비구면 2매), 4세대 ASPH(1994), 그 뒤 FLE·FLE II
-    ("aa", "Summilux-M 35mm f/1.4 Aspherical (AA, 3rd gen, 1990)", "주미룩스 35 3세대 AA (Aspherical, 비구면 2매)", r"aspherical|\bAA\b|더블 ?어스|3세대|\b3rd\b|2매", [r"4세대|\b4th\b"], ["aa", "aspherical", "double aspherical", "3세대", "3rd", "3세대 aa", "2매"]),
+    ("aa", "Summilux-M 35mm f/1.4 Aspherical (AA, 3rd gen, 1990)", "주미룩스 35 3세대 AA (Aspherical, 비구면 2매)", r"aspherical|\bAA\b|double ?a\b|더블 ?어스|3세대|\b3rd\b|2매", [r"4세대|\b4th\b"], ["aa", "aspherical", "double aspherical", "3세대", "3rd", "3세대 aa", "2매"]),
     ("asph-1994", "Summilux-M 35mm f/1.4 ASPH (4th gen, 1994, pre-FLE)", "주미룩스 35 4세대 ASPH (1994, FLE 이전)", r"4세대|\b4th\b|non-?fle|11874|11883", [r"FLE", r"3세대|\b3rd\b"], ["asph 1994", "4세대", "4th", "asph 4세대", "asph non fle"]),
     ("asph-unspecified", "Summilux-M 35mm f/1.4 ASPH (version not stated)", "주미룩스 35 ASPH (버전 미표기)", r"ASPH|\bASH\b", [r"FLE", r"aspherical|\bAA\b", r"4세대|4th|non-?fle", r"\bnew\b"], ["asph"]),
-    ("pre-asph-unspecified", "Summilux 35mm f/1.4 pre-ASPH (generation not stated)", "주미룩스 35 구형 (세대 미표기)", r"^(?!.*(ASPH|\bASH\b|aspherical|\bAA\b|FLE|2nd|3rd|4th|2세대|3세대|4세대|2매|steel|스틸|복각|reissue|titan|티탄|classic|클래식)).*$", [], ["pre asph"]),
+    ("pre-asph-unspecified", "Summilux 35mm f/1.4 pre-ASPH (generation not stated)", "주미룩스 35 구형 (세대 미표기)", r"^(?!.*(ASPH|\bASH\b|aspherical|\bAA\b|FLE|2nd|3rd|4th|2세대|3세대|4세대|2매|steel|스틸|early ?chrome|goggles?|眼鏡|メガネ|고글|double ?a\b|edition ?60|복각|reissue|titan|티탄|classic|클래식)).*$", [], ["pre asph"]),
+    ("infinity-lock", "Summilux-M 35mm f/1.4 Infinity Lock (pre-ASPH, 2nd with lock)", "주미룩스 35 인피니티 락 (구형, 무한대 잠금)", INF_LOCK,
+     [r"FLE|aspherical|\bAA\b|4th|4세대|11874|11883"], ["infinity lock", "인피니티 락", "무한대 잠금"]),  # 사장님 2026-11-21: 일반 V2와 따로 (시리얼·잠금 소재·구조는 값이 달라 더 나눌 여지)
     ("titan", "Summilux-M 35mm f/1.4 Titan", "주미룩스 35 티탄", r"titan|티탄", [], ["titan", "티탄"]),
     ("classic", "Summilux-M 35mm f/1.4 'Classic'", "주미룩스 35 클래식", r"classic|클래식", [], ["classic", "클래식"]),  # 확인 필요
     ("leitz-wetzlar", "Summilux-M 35mm f/1.4 ASPH 'Leitz Wetzlar'", "주미룩스 35 라이츠 베츨라", r"leitz ?wetzlar", [], ["leitz wetzlar"]),
@@ -172,10 +176,12 @@ for slug, name, ko, marker, extra_not, sfx in [
 SR_GOGGLE = (r"^(?!.*(non-?|no |without |w/o )goggles?).*(goggles?|고글|안경|眼鏡|メガネ|\beyes?\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전"
              r"|\bM3\b|for ?M3|M3 ?용)")
 _add(f"{SL35}:v1-steel-rim-goggles", "Summilux 35mm f/1.4 1st Steel Rim with Goggles (M3, original)", "주미룩스 35 1세대 스틸림 아이 버전 (M3용 고글)", "M",
-     [FAM["summilux"][0], f("35"), r"steel ?rim|스틸 ?림", SR_GOGGLE], [SR_REISSUE] + EDITION_35LUX,
+     [FAM["summilux"][0], f("35"), r"steel ?rim|스틸 ?림|early ?chrome|goggles?|眼鏡|メガネ|고글", SR_GOGGLE], [SR_REISSUE, GEN2] + EDITION_35LUX,  # 2세대 표기가 있으면 2세대로 ('2nd 眼鏡付 Black' 2026-11-21)
      aliases("summilux", "35", ["steel rim eye", "steel rim goggles", "스틸림 아이", "스틸림 고글", "steel rim m3"], "M"))
 EXTEND_PARENTS.setdefault(SL35, []).append(f"{SL35}:v1-steel-rim-goggles")
 TIGHTEN[f"{SL35}:v1-steel-rim"] = [SR_GOGGLE]
+for _slug in ("v2", "asph-unspecified", "pre-asph-unspecified"):  # 인피니티 락은 따로 (v2·구형 미표기·'Pre-ASPH'라 적었다가 ASPH 칸에 들어간 매물)
+    TIGHTEN[f"{SL35}:{_slug}"] = TIGHTEN.get(f"{SL35}:{_slug}", []) + [INF_LOCK]
 MODELS[f"{SL35}:v1-steel-rim"]["display_name"] = "Summilux 35mm f/1.4 1st Steel Rim (original, no goggles or not stated)"
 NAME_KO[f"{SL35}:v1-steel-rim"] = "주미룩스 35 1세대 스틸림 (오리지널, 아이 없음·표기 없음)"
 for existing in ("asph-fle", "asph-fle2", "steel-rim-reissue"):
