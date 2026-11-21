@@ -145,8 +145,8 @@ class handler(BaseHTTPRequestHandler):
     def _page(self, notice: str = "", error: str = "", headers: dict | None = None) -> None:
         try:
             accounts = portal.load_accounts(fresh=True)["accounts"]
-        except Exception:  # noqa: BLE001
-            accounts, error = {}, error or "계정 저장소(Blob)를 읽지 못했습니다."
+        except Exception as failure:  # noqa: BLE001
+            accounts, error = {}, error or f"계정 저장소를 읽지 못했습니다 ({type(failure).__name__})."
         self._send(200, render(accounts, sites(), notice, error), headers)
 
     def do_GET(self):  # noqa: N802
@@ -164,6 +164,6 @@ class handler(BaseHTTPRequestHandler):
         form = parse_qs(self.rfile.read(length).decode("utf-8", "replace"))
         try:
             notice, error = handle_post(form, sites())
-        except Exception:  # noqa: BLE001
-            notice, error = "", "저장하지 못했습니다. 잠시 뒤 다시 해 주세요."
+        except Exception as failure:  # noqa: BLE001
+            notice, error = "", f"저장하지 못했습니다 ({type(failure).__name__}). 잠시 뒤 다시 해 주세요."
         return self._page(notice, error)
