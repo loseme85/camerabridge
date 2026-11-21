@@ -1,0 +1,22 @@
+name: Store meta sim
+on:
+  push:
+    branches: ['site-test/store-meta-sim']
+permissions:
+  contents: read
+jobs:
+  sim:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: mkdir -p out && python scripts/store_meta_sim.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: store-meta-sim
+          path: out/
