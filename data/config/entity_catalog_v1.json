@@ -12275,6 +12275,7 @@
     ],
     "title_must_not": [
      "safari|사파리",
+     "kevlar|케블라|ケブラー|aramid|아라미드",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -39514,6 +39515,7 @@
    "children": [
     "leica:body:m11-p:standard",
     "leica:body:m11-p:safari",
+    "leica:body:m11-p:kevlar",
     "leica:body:m11-p:repaint",
     "leica:body:m11-p:rare",
     "leica:body:m11-p:review"
@@ -50530,6 +50532,79 @@
     "title_must": [
      "D-?Lux[ -]?6\\b",
      "edition ?100|centennial"
+    ],
+    "title_must_not": [
+     "leeworks",
+     "light ?lens ?lab",
+     "\\bLLL\\b",
+     "7 ?artisans",
+     "ttartisan",
+     "voigtl",
+     "zeiss",
+     "sigma",
+     "ms-?optics",
+     "kipon",
+     "호환",
+     "\\bcopy\\b",
+     "카피",
+     "^(?!.*\\b(with|w/)\\s.*\\bhood).*\\bhood\\b",
+     "후드",
+     "\\bcap\\b",
+     "캡",
+     "^(?!.*\\b(with|w/)\\s.*case).*case",
+     "케이스",
+     "strap",
+     "스트랩",
+     "holster",
+     "홀스터",
+     "grip",
+     "그립",
+     "battery",
+     "배터리",
+     "charger",
+     "충전기",
+     "protector",
+     "cover\\b",
+     "부속품",
+     "adapter",
+     "어댑터",
+     "plate",
+     "플레이트",
+     "thumb",
+     "썸",
+     "manual",
+     "설명서",
+     "box only",
+     "박스만"
+    ]
+   }
+  },
+  {
+   "id": "leica:body:m11-p:kevlar",
+   "name": "Leica M11-P Kevlar Edition (New York Meatpacking Exclusive, 2024)",
+   "name_ko": "M11-P 케블라 에디션 (뉴욕 미트패킹 전용, 2024)",
+   "kind": "Body",
+   "mount": "M",
+   "parent": "leica:body:m11-p",
+   "children": [],
+   "aliases": [
+    "kevlar edition",
+    "kevlar edition (new york meatpacking exclusive, 2024)",
+    "leica m11-p kevlar edition (new york meatpacking exclusive, 2024)",
+    "m11-p kevlar",
+    "m11-p kevlar edition (new york meatpacking exclusive, 2024)",
+    "m11-p 케블라",
+    "m11p kevlar",
+    "m11pkevlaredition(newyorkmeatpackingexclusive,2024)",
+    "라이카 m11-p kevlar edition (new york meatpacking exclusive, 2024)"
+   ],
+   "codes": [],
+   "match": {
+    "category": "Body",
+    "mount": "M",
+    "title_must": [
+     "\\bM ?11-?P\\b",
+     "kevlar|케블라|ケブラー|aramid|아라미드"
     ],
     "title_must_not": [
      "leeworks",

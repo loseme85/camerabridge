@@ -315,6 +315,9 @@ fam("leica:body:m11", "Leica M11", "라이카 M11", "M", [r"\bM ?11\b"], [r"M11-
 ])
 fam("leica:body:m11-p", "Leica M11-P", "라이카 M11-P", "M", [r"\bM ?11-?P\b"], [], ["m11p"], [
     v("safari", "Leica M11-P Safari", "M11-P 사파리", r"safari|사파리", ["m11-p safari"]),  # 확인 필요
+    # 뉴욕 Leica Store Meatpacking 전용 특별 사양(2024), 가죽 대신 케블라(아라미드) 커버. 사장님 2026-11-22 자료 기준이며 생산 수량은 6~12대로 자료마다 달라 이름엔 쓰지 않음
+    v("kevlar", "Leica M11-P Kevlar Edition (New York Meatpacking Exclusive, 2024)", "M11-P 케블라 에디션 (뉴욕 미트패킹 전용, 2024)",
+      r"kevlar|케블라|ケブラー|aramid|아라미드", ["m11-p kevlar", "m11p kevlar", "m11-p 케블라"]),
 ])
 fam("leica:body:m11-monochrom", "Leica M11 Monochrom", "라이카 M11 모노크롬", "M", [r"\bM ?11\b", r"monochrom"], [], ["m11 mono", "m11 모노크롬", "m11 모노"])
 fam("leica:body:m11-d", "Leica M11-D", "라이카 M11-D", "M", [r"\bM ?11-?D\b"], [], ["m11d"])

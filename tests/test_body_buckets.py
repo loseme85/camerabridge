@@ -133,3 +133,10 @@ def test_m6_ttl_japan_limited_is_its_own_bucket() -> None:
     assert _leaf("Leica M6 TTL ジャパンリミテッド 0.58")[0] == ["leica:body:m6:ttl-japan-limited"]
     assert _leaf("Leica M6 TTL 0.58 Body Black")[0] == ["leica:body:m6:ttl"]
     assert _leaf("[위탁] M6 TTL 0.85 'Japan' (Black)")[0] == ["leica:body:m6:ttl"]
+
+
+def test_m11p_kevlar_edition_is_its_own_bucket() -> None:
+    """사장님 2026-11-22: 뉴욕 Meatpacking 전용 M11-P Kevlar Edition은 일반 M11-P와 따로"""
+    assert _leaf("Leica M11-P Kevlar Edition")[0] == ["leica:body:m11-p:kevlar"]
+    assert _leaf("Leica M11-P ケブラー")[0] == ["leica:body:m11-p:kevlar"]
+    assert _leaf("Leica M11-P Black")[0] == ["leica:body:m11-p:standard"]
