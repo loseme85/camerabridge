@@ -278,6 +278,10 @@ fam("leica:body:m-e240", "Leica M-E (Typ 240)", "라이카 M-E (240)", "M", [r"\
 fam("leica:body:m240", "Leica M (Typ 240)", "라이카 M240", "M", [r"(\bM ?240\b|typ ?240)"], [r"M-?P", r"monochrom", r"\bM-?E\b"], ["m typ 240", "m240", "엠240"], [
     v("edition-60", "Leica M Edition 60", "M 에디션 60", r"edition ?60|에디션 ?60", ["m edition 60"]),
     v("ara-guler", "Leica M (240) Ara Güler", "M240 아라 귈러", r"ara ?g[uü]ler", ["m240 ara guler"]),
+    # 2014 라이카 100주년 기념 한정판(사장님 자료 2026-11-22, 500대·실버/블랙). 'M Edition 100'(M-A + 모노크롬 + 렌즈 세트)과 다른 물건이라 그 말은 제외.
+    # 자료에 적힌 제품 번호가 일반 M240 번호와 같아 번호로는 연결하지 않음 (확인 필요)
+    v("100-years", "Leica M (Typ 240) 100 Years Anniversary Edition (2014)", "M240 100주년 기념판 (2014)",
+      r"100 ?jahre|100 ?years|100주년|100周年|100th ?anniv", ["m240 100 years", "m240 100 jahre", "m240 100주년"], [r"edition ?100", r"M-?A\b", r"monochrom"]),
 ])
 fam("leica:body:m-p240", "Leica M-P (Typ 240)", "라이카 M-P 240", "M", [r"\bM-P\b|\bM-?P ?(240|typ ?240)"], [r"M10|M11|M9", r"monochrom", r"\bMP\b(?! ?(240|typ))"], ["m-p 240", "mp 240", "m-p typ 240"], [
     v("correspondent", "Leica M-P Correspondent (Lenny Kravitz)", "M-P 코레스폰던트", r"correspondent|kravitz|크라비츠", ["m-p correspondent", "lenny kravitz m-p"]),
