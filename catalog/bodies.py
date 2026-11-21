@@ -380,19 +380,25 @@ fam("leica:body:x113", "Leica X (Typ 113)", "라이카 X (113)", None, [r"\bX\b 
 fam("leica:body:x-u", "Leica X-U (Typ 113)", "라이카 X-U", None, [r"\bX-?U\b"], [], ["xu"])
 fam("leica:body:x-e", "Leica X-E (Typ 102)", "라이카 X-E", None, [r"\bX-E\b"], [], ["xe"])
 DLUX_GENS = []
-for gen in ("1", "2", "3", "4", "5", "6"):
-    fam(f"leica:body:d-lux-{gen}", f"Leica D-Lux {gen}", f"라이카 D-Lux {gen}", None, [rf"D-?Lux ?{gen}\b"], [], [f"dlux{gen}", f"d lux {gen}", f"디룩스 {gen}"])
+# 'D-Lux-6'처럼 Lux와 번호 사이에 하이픈이 있는 제목도 그 세대로 (2026-11-22, 세대 미표기로 빠지던 'D-Lux-6 New Centennial Edition 100')
+for gen in ("1", "2", "3", "4", "5"):
+    fam(f"leica:body:d-lux-{gen}", f"Leica D-Lux {gen}", f"라이카 D-Lux {gen}", None, [rf"D-?Lux[ -]?{gen}\b"], [], [f"dlux{gen}", f"d lux {gen}", f"디룩스 {gen}"])
     DLUX_GENS.append(f"leica:body:d-lux-{gen}")
+# D-Lux 6 Edition 100 (2014 라이카 100주년). D-Lux 8의 '100 Years of Leica'(2025)와 다른 에디션
+fam("leica:body:d-lux-6", "Leica D-Lux 6", "라이카 D-Lux 6", None, [r"D-?Lux[ -]?6\b"], [], ["dlux6", "d lux 6", "디룩스 6"], [
+    v("edition-100", "Leica D-Lux 6 Edition 100 (2014 Centennial)", "D-Lux 6 에디션 100 (2014 100주년)", r"edition ?100|centennial", ["d-lux 6 edition 100", "d-lux 6 centennial"]),
+])
+DLUX_GENS.append("leica:body:d-lux-6")
 fam("leica:body:d-lux-109", "Leica D-Lux (Typ 109)", "라이카 D-Lux 109", None, [r"D-?Lux", r"109"], [], ["d-lux 109", "dlux 109", "d-lux typ 109", "디룩스 109"])
-fam("leica:body:d-lux-7", "Leica D-Lux 7", "라이카 D-Lux 7", None, [r"D-?Lux ?7\b"], [], ["dlux7", "디룩스 7"], [
+fam("leica:body:d-lux-7", "Leica D-Lux 7", "라이카 D-Lux 7", None, [r"D-?Lux[ -]?7\b"], [], ["dlux7", "디룩스 7"], [
     v("bape", "Leica D-Lux 7 'A Bathing Ape × Stash'", "D-Lux 7 베이프", r"bape|bathing ?ape|stash", ["d-lux 7 bape"]),
     v("vans", "Leica D-Lux 7 Vans × Ray Barbee", "D-Lux 7 반스", r"vans|barbee|반스", ["d-lux 7 vans"]),
     v("007", "Leica D-Lux 7 '007 Edition'", "D-Lux 7 007 에디션", r"\b007\b", ["d-lux 7 007"]),  # 확인 필요
 ])
-fam("leica:body:d-lux-8", "Leica D-Lux 8", "라이카 D-Lux 8", None, [r"D-?Lux ?8\b"], [], ["dlux8", "디룩스 8"], [
+fam("leica:body:d-lux-8", "Leica D-Lux 8", "라이카 D-Lux 8", None, [r"D-?Lux[ -]?8\b"], [], ["dlux8", "디룩스 8"], [
     v("100-years", "Leica D-Lux 8 '100 Years of Leica'", "D-Lux 8 100주년", r"100 ?years|100주년|100 ?jahre", ["d-lux 8 100 years"]),
 ])
-fam("leica:body:d-lux-unspecified", "Leica D-Lux (generation not stated)", "라이카 D-Lux (세대 미표기)", None, [r"D-?Lux(?! ?\d)"], [r"109", r"typ"], [])
+fam("leica:body:d-lux-unspecified", "Leica D-Lux (generation not stated)", "라이카 D-Lux (세대 미표기)", None, [r"D-?Lux(?![ -]?\d)"], [r"109", r"typ"], [])
 PARENTS["leica:body:d-lux"] = ("Leica D-Lux (all)", "Body", None, DLUX_GENS + ["leica:body:d-lux-109", "leica:body:d-lux-7", "leica:body:d-lux-8", "leica:body:d-lux-unspecified"],
                                ["leica d-lux", "d-lux", "dlux", "라이카 d-lux", "디룩스"], "라이카 D-Lux (전체)")
 fam("leica:body:c-lux", "Leica C-Lux (2018)", "라이카 C-Lux", None, [r"C-?Lux\b(?! ?[123]\b)"], [], ["clux", "씨룩스"])
