@@ -173,10 +173,10 @@ for slug, name, ko, marker, extra_not, sfx in [
     _add(key, name, ko, "M", [FAM["summilux"][0], f("35"), marker], nots, aliases("summilux", "35", sfx, "M"))
     EXTEND_PARENTS.setdefault(SL35, []).append(key)
 # 스틸림 오리지널은 M3용 아이(고글) 버전과 아이 없는 버전의 값이 달라 나눔 (2026-11-02 사장님). 'no goggle'·'without goggles'는 아이 없는 쪽
-SR_GOGGLE = (r"^(?!.*(non-?|no |without |w/o )goggles?).*(goggles?|고글|안경|眼鏡|メガネ|\beyes?\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전"
+SR_GOGGLE = (r"^(?!.*(non-?|no |without |w/o |remov(?:e|ed|ing) )goggles?|.*ohne brille).*(goggles?|brille|lunettes|고글|안경|眼鏡|メガネ|\beyes?\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전"
              r"|\bM3\b|for ?M3|M3 ?용)")
 _add(f"{SL35}:v1-steel-rim-goggles", "Summilux 35mm f/1.4 1st Steel Rim with Goggles (M3, original)", "주미룩스 35 1세대 스틸림 아이 버전 (M3용 고글)", "M",
-     [FAM["summilux"][0], f("35"), r"steel ?rim|스틸 ?림|early ?chrome|goggles?|眼鏡|メガネ|고글", SR_GOGGLE], [SR_REISSUE, GEN2] + EDITION_35LUX,  # 2세대 표기가 있으면 2세대로 ('2nd 眼鏡付 Black' 2026-11-21)
+     [FAM["summilux"][0], f("35"), r"steel ?rim|스틸 ?림|early ?chrome|goggles?|brille|眼鏡|メガネ|고글", SR_GOGGLE], [SR_REISSUE, GEN2] + EDITION_35LUX,  # 2세대 표기가 있으면 2세대로 ('2nd 眼鏡付 Black' 2026-11-21)
      aliases("summilux", "35", ["steel rim eye", "steel rim goggles", "스틸림 아이", "스틸림 고글", "steel rim m3"], "M"))
 EXTEND_PARENTS.setdefault(SL35, []).append(f"{SL35}:v1-steel-rim-goggles")
 TIGHTEN[f"{SL35}:v1-steel-rim"] = [SR_GOGGLE]

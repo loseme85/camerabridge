@@ -20655,7 +20655,7 @@
      "^(?:leica\\s+|leitz\\s+)?focus(?:ing)? mount",
      "^box\\b|\\bbox rossa\\b",
      "treppiede|tripod|三脚",
-     "^(?!.*(non-?|no |without |w/o )goggles?).*(goggles?|고글|안경|眼鏡|メガネ|\\beyes?\\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전|\\bM3\\b|for ?M3|M3 ?용)",
+     "^(?!.*(non-?|no |without |w/o |remov(?:e|ed|ing) )goggles?|.*ohne brille).*(goggles?|brille|lunettes|고글|안경|眼鏡|メガネ|\\beyes?\\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전|\\bM3\\b|for ?M3|M3 ?용)",
      "leeworks",
      "light ?lens ?lab",
      "\\bLLL\\b",
@@ -21642,8 +21642,8 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "steel ?rim|스틸 ?림|early ?chrome|goggles?|眼鏡|メガネ|고글",
-     "^(?!.*(non-?|no |without |w/o )goggles?).*(goggles?|고글|안경|眼鏡|メガネ|\\beyes?\\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전|\\bM3\\b|for ?M3|M3 ?용)"
+     "steel ?rim|스틸 ?림|early ?chrome|goggles?|brille|眼鏡|メガネ|고글",
+     "^(?!.*(non-?|no |without |w/o |remov(?:e|ed|ing) )goggles?|.*ohne brille).*(goggles?|brille|lunettes|고글|안경|眼鏡|メガネ|\\beyes?\\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전|\\bM3\\b|for ?M3|M3 ?용)"
     ],
     "title_must_not": [
      "re-?issue|복각|리이슈|202[12]|11301|^(?!.*(\\bM3\\b|1186[89]|11870|goggle|고글|안경|\\beyes?\\b|original|오리지널|\\b1st\\b|\\bv\\.?1\\b|first|196\\d|ollux|black ?paint|re-?paint)).*(summilux-m\\b.*(steel ?rim|스틸 ?림)|(steel ?rim|스틸 ?림).*summilux-m\\b)",
