@@ -2690,6 +2690,7 @@ def crawl_leicamiami():
             cat = detect_category(name, price)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Leica Store Miami",
                 "label": label,
                 "상품명": name,
@@ -2751,6 +2752,7 @@ def crawl_kamerastore():
             cond_text = ks_condition(p.get("body_html") or "") or "정보없음"
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Kamerastore (핀란드)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -2811,6 +2813,7 @@ def crawl_mkkamera():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "M & K Kamera (홍콩)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -2883,6 +2886,7 @@ def crawl_leicasg():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Leica Store Singapore (싱가포르)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -3335,6 +3339,7 @@ def crawl_harrison():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Harrison Cameras (영국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -3736,6 +3741,7 @@ def crawl_camerawest():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Camera West (미국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -4133,6 +4139,7 @@ def crawl_glazers():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Glazers Camera (미국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -4609,6 +4616,7 @@ def crawl_heidelberg():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Leica Store Heidelberg (독일)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -5053,6 +5061,7 @@ def crawl_ohnuki():
                 mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
                 results.append({
                     "게시일": _shopify_listed(p),
+                    "매장정보": _shopify_meta(p),
                     "site": site,
                     "label": auto_label(name),
                     "상품명": name,
@@ -5456,6 +5465,7 @@ def crawl_mfcamera():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "MF Camera (미국)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -6405,6 +6415,7 @@ def crawl_leicastoremy():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Leica Store Malaysia (말레이시아)",
             "label": auto_label(name),
             "상품명": name,
@@ -8588,6 +8599,7 @@ def crawl_imagefoto():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Image Foto (덴마크)",
             "label": auto_label(name),
             "상품명": name,
@@ -9209,6 +9221,19 @@ def _shopify_listed(p):
     return str(p.get("created_at") or p.get("published_at") or "")[:10]
 
 
+def _shopify_meta(p):
+    """Shopify 상품이 알려 주는 분류 근거 — 상품 종류(product_type)·태그·설명 앞 500자. 빈 값은 뺌.
+    제목에 없고 설명에만 있는 리페인트·부식·부품용 단서를 분류가 읽도록 저장만 한다 (2026-11-21 수집 보강)"""
+    desc = re.sub(r"<[^>]+>", " ", str(p.get("body_html") or ""))
+    desc = re.sub(r"&nbsp;|&#160;", " ", desc)
+    desc = re.sub(r"\s+", " ", desc).strip()[:500]
+    tags = p.get("tags") or []
+    if isinstance(tags, str):
+        tags = [t.strip() for t in tags.split(",") if t.strip()]
+    meta = {"type": str(p.get("product_type") or "").strip(), "tags": [str(t) for t in tags][:20], "desc": desc}
+    return {k: v for k, v in meta.items() if v}
+
+
 DETAIL_SEEN = "정보없음 (상세 봄)"  # 상세 화면을 봤는데 상태 표기가 없던 매물 — 다시 열지 않음
 
 
@@ -9824,6 +9849,7 @@ def crawl_photografica():
                 mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
                 results.append({
                     "게시일": _shopify_listed(p),
+                    "매장정보": _shopify_meta(p),
                     "site": "Photografica (덴마크)",
                     "label": auto_label(name),
                     "상품명": name,
@@ -10149,6 +10175,7 @@ def crawl_cardinal():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Cardinal Camera Used (미국)",
             "label": auto_label(name),
             "상품명": name,
@@ -10205,6 +10232,7 @@ def crawl_fivestar():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Five Star Camera (일본)",
             "label": auto_label(name),
             "상품명": name,
@@ -10974,6 +11002,7 @@ def crawl_oneofmany():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "One Of Many Cameras (덴마크)",
             "label": auto_label(name),
             "상품명": name,
@@ -11045,6 +11074,7 @@ def crawl_cavour():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Foto Ottica Cavour (이탈리아)",
             "label": auto_label(name),
             "상품명": name,
@@ -11130,6 +11160,7 @@ def crawl_suffren():
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Photo Suffren (프랑스)",
             "label": auto_label(name),
             "상품명": name,
@@ -11202,6 +11233,7 @@ def crawl_cameraelectronic():
             mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
             results.append({
                 "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
                 "site": "Camera Electronic (호주)",
                 "label": auto_label(name),
                 "상품명": name,
@@ -12108,6 +12140,7 @@ def crawl_filmcameratokyo():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Film Camera Tokyo (일본)",
             "label": auto_label(name),
             "상품명": name,
@@ -12970,6 +13003,7 @@ def _timsphoto_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13045,6 +13079,7 @@ def _tokiwa_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13114,6 +13149,7 @@ def _thecamerastore_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13177,6 +13213,7 @@ def _profotica_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13239,6 +13276,7 @@ def _fotododici_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13303,6 +13341,7 @@ def _khrome_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13366,6 +13405,7 @@ def _kmcamera_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13457,6 +13497,7 @@ def crawl_cameraboutique():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Camera Boutique Graz (오스트리아)",
             "label": auto_label(name),
             "상품명": name,
@@ -13516,6 +13557,7 @@ def _kameraexpresslu_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13582,6 +13624,7 @@ def _lsmanchester_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13651,6 +13694,7 @@ def _robertwhite_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13726,6 +13770,7 @@ def _artralab_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13799,6 +13844,7 @@ def _grandemarvin_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13872,6 +13918,7 @@ def _leicastorebr_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -13942,6 +13989,7 @@ def _kamerastockholm_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -14012,6 +14060,7 @@ def _grainoverpixel_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -14083,6 +14132,7 @@ def _clickundsurr_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -14154,6 +14204,7 @@ def _carmarthen_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -14229,6 +14280,7 @@ def _prophotosupply_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -14300,6 +14352,7 @@ def _yaotomi_row(site, base, p, name, condition, price, currency):
     img = p["images"][0].get("src", "") if p.get("images") else ""
     return {
         "게시일": _shopify_listed(p),
+        "매장정보": _shopify_meta(p),
         "site": site,
         "label": auto_label(name),
         "상품명": name,
@@ -14518,6 +14571,7 @@ def crawl_schouten():
         img = p["images"][0].get("src", "") if p.get("images") else ""
         results.append({
             "게시일": _shopify_listed(p),
+            "매장정보": _shopify_meta(p),
             "site": "Schouten Select (네덜란드)",
             "label": auto_label(name),
             "상품명": name,
