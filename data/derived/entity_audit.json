@@ -301,12 +301,6 @@
    "example": "Leica M6 + M 35mm f2 Summicron ASPH Titan SET"
   },
   {
-   "a": "leica:body:m-p240:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 61,
-   "example": "Leica M-P Black"
-  },
-  {
    "a": "leica:body:mp-film:standard",
    "b": "leica:feature:meter",
    "count": 61,
@@ -323,6 +317,12 @@
    "b": "leica:lens:summilux-m:35:titan",
    "count": 61,
    "example": "Leica M 35mm f1.4 Summilux ASPH 4th Titan"
+  },
+  {
+   "a": "leica:body:m-p240:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 60,
+   "example": "Leica M-P Black"
   },
   {
    "a": "leica:body:mp-film:standard",
@@ -1153,6 +1153,12 @@
    "example": "[중고] M 35/1.4 Safari"
   },
   {
+   "a": "leica:feature:eyes",
+   "b": "leica:lens:summaron:35:f3.5-eyes",
+   "count": 8,
+   "example": "LEICA 35mm F3.5 eye SUMMARON sn.1552"
+  },
+  {
    "a": "leica:body:m-e240",
    "b": "leica:feature:frameline-28",
    "count": 8,
@@ -1187,12 +1193,6 @@
    "b": "leica:feature:mechanical",
    "count": 7,
    "example": "[중고] M5 50주년 (Black)"
-  },
-  {
-   "a": "leica:feature:eyes",
-   "b": "leica:lens:summaron:35:f3.5-eyes",
-   "count": 7,
-   "example": "LEICA 35mm F3.5 eye SUMMARON sn.1552"
   },
   {
    "a": "leica:body:m6:ttl-nsh",
@@ -1935,24 +1935,5 @@
    "example": "Leica Q3, black paint"
   }
  ],
- "new": [
-  {
-   "a": "leica:body:m2:repaint",
-   "b": "leica:feature:no-meter",
-   "count": 4,
-   "example": "Leica M2 black nachlackiert"
-  },
-  {
-   "a": "leica:body:m2:repaint",
-   "b": "leica:feature:mechanical",
-   "count": 4,
-   "example": "Leica M2 black nachlackiert"
-  },
-  {
-   "a": "leica:body:m240:review",
-   "b": "leica:feature:frameline-28",
-   "count": 3,
-   "example": "Leica M 240 100 Jahre demo model + doos"
-  }
- ]
+ "new": []
 }
