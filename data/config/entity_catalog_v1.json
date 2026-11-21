@@ -20618,7 +20618,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "steel ?rim|스틸 ?림"
+     "steel ?rim|스틸 ?림|early ?chrome"
     ],
     "title_must_not": [
      "re-?issue|복각|리이슈|202[12]|11301|^(?!.*(\\bM3\\b|1186[89]|11870|goggle|고글|안경|\\beyes?\\b|original|오리지널|\\b1st\\b|\\bv\\.?1\\b|first|196\\d|ollux|black ?paint|re-?paint)).*(summilux-m\\b.*(steel ?rim|스틸 ?림)|(steel ?rim|스틸 ?림).*summilux-m\\b)",
@@ -20845,7 +20845,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "aspherical|\\bAA\\b|더블 ?어스|3세대|\\b3rd\\b|2매"
+     "aspherical|\\bAA\\b|double ?a\\b|더블 ?어스|3세대|\\b3rd\\b|2매"
     ],
     "title_must_not": [
      "4세대|\\b4th\\b",
@@ -21132,7 +21132,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "^(?!.*(ASPH|\\bASH\\b|aspherical|\\bAA\\b|FLE|2nd|3rd|4th|2세대|3세대|4세대|2매|steel|스틸|복각|reissue|titan|티탄|classic|클래식)).*$"
+     "^(?!.*(ASPH|\\bASH\\b|aspherical|\\bAA\\b|FLE|2nd|3rd|4th|2세대|3세대|4세대|2매|steel|스틸|early ?chrome|goggles?|眼鏡|メガネ|고글|double ?a\\b|edition ?60|복각|reissue|titan|티탄|classic|클래식)).*$"
     ],
     "title_must_not": [
      "titan|티탄",
@@ -21639,11 +21639,12 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "steel ?rim|스틸 ?림",
+     "steel ?rim|스틸 ?림|early ?chrome|goggles?|眼鏡|メガネ|고글",
      "^(?!.*(non-?|no |without |w/o )goggles?).*(goggles?|고글|안경|眼鏡|メガネ|\\beyes?\\b|(?<![가-힣])아이(?![가-힣])|아이 ?버전|\\bM3\\b|for ?M3|M3 ?용)"
     ],
     "title_must_not": [
      "re-?issue|복각|리이슈|202[12]|11301|^(?!.*(\\bM3\\b|1186[89]|11870|goggle|고글|안경|\\beyes?\\b|original|오리지널|\\b1st\\b|\\bv\\.?1\\b|first|196\\d|ollux|black ?paint|re-?paint)).*(summilux-m\\b.*(steel ?rim|스틸 ?림)|(steel ?rim|스틸 ?림).*summilux-m\\b)",
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代",
      "titan|티탄",
      "leitz ?wetzlar",
      "10 ?jahre",

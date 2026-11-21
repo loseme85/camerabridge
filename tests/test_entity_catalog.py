@@ -794,3 +794,18 @@ def test_m4p_anniversary_titles_go_to_70_jahre_not_standard() -> None:
     assert m4p("Leica M4-P 70th Anniversary Edition") == ["leica:body:m4-p:70-jahre"]
     assert m4p("Leica M4-P") == ["leica:body:m4-p:standard"]
     assert m4p("Leica M4-P Everest 82") == ["leica:body:m4-p:everest"]
+
+
+def test_summilux35_early_chrome_goggles_double_a_leave_unspecified() -> None:
+    """2026-11-21 렌즈 갈래 시범: 세대 미표기 칸에 섞인 희귀 버전을 가격이 맞는 갈래로"""
+    from entity_catalog import annotate_records
+    def leaves(title: str) -> set[str]:
+        rec = {"final_output": {"title_raw": title, "category": "Lens", "mount": "M", "sold_quality": "asking"}}
+        annotate_records([rec])
+        return {e.split(":")[-1] for e in rec["entity_ids"] if e.startswith("leica:lens:summilux-m:35:")}
+    assert "v1-steel-rim" in leaves("Leica Summilux-M 35mm F1.4 EarlyChrome")
+    assert "v1-steel-rim-goggles" in leaves("Leica Summilux M 35mm f1.4 with Goggles")
+    assert "aa" in leaves('Leica 35mm f1.4 Summilux-M "Double A"')
+    assert "pre-asph-unspecified" not in leaves('Leica Summilux-M 35mm f1.4 "Leica M Edition 60" Lens Only')
+    assert leaves("Leica Summilux-M 35/1.4 2nd 眼鏡付 Black") == {"v2"}
+    assert "pre-asph-unspecified" in leaves("Leica Summilux-M 35mm f1.4 11870")
