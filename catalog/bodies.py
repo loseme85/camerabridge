@@ -440,6 +440,7 @@ for slug, name, pattern in BARNACK:
         [short, f"barnack {short}", f"바르낙 {short}"])
 
 MODELS["leica:body:iii"]["title_must_not"].append(BLACK_PAINT[0])
+MODELS["leica:body:ii"]["title_must_not"].append(r"linhof|technorama")  # 'Linhof Technorama 612 PC II' (카탈로그 JSON에만 있던 규칙을 원본으로, 2026-11-21)
 MODELS["leica:body:i"]["title_must_not"].append(r"compur")
 fam("leica:body:i-compur", "Leica I Model B (Compur)", "라이카 I 콤푸어 (모델 B)", None, [r"compur"],
     [r"summicron|\bM ?\d", r"\bII+\b"], ["leica compur", "compur leica", "model b", "콤푸어 라이카"])

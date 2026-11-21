@@ -15,7 +15,7 @@ import re
 import statistics
 from typing import Any, Callable
 
-from catalog.buckets import FAMILIES, REVIEW_HIGH, REVIEW_LOW, REVIEW_MIN_N, TRAIT_BUCKET, TRAITS, bucket_id
+from catalog.buckets import FAMILIES, GENERIC_FAMILIES, REVIEW_HIGH, REVIEW_LOW, REVIEW_MIN_N, TRAIT_BUCKET, TRAITS, bucket_id
 
 TRAIT_RX = {name: re.compile(rx, re.I) for name, rx in TRAITS.items()}
 
@@ -57,13 +57,19 @@ def assign(record: dict[str, Any], catalog: dict[str, Any], with_parents: Callab
     final = record.setdefault("final_output", {})
     traits = traits_of(title)
     reasons = []
-    if len(fams) > 1:  # 서로 다른 M 바디 둘 이상 → 제목에서 먼저 나온 모델
-        keep = min(fams, key=lambda f: _first_position(f, title, catalog))
+    if len(fams) > 1:  # 서로 다른 모델 둘 이상 → 제목에서 먼저 나온 모델. 개조품('I Umbau zu III')은 지금 모습인 뒤 모델
+        if "converted" in traits:  # 지금 모습 = 제목 뒤쪽 모델. 구체적 모델(IIIf)이 있으면 넓은 이름(III)보다 먼저
+            pool = [f for f in fams if f not in GENERIC_FAMILIES] or list(fams)
+            keep = max(pool, key=lambda f: _first_position(f, title, catalog))
+        else:
+            keep = min(fams, key=lambda f: (_first_position(f, title, catalog), f in GENERIC_FAMILIES))
         reasons.append("conflict:" + ",".join(sorted(f.split(":")[-1] for f in fams)))
         fams = {keep: fams[keep]}
     family, fam_leaves = next(iter(fams.items()))
     spec = FAMILIES[family]
     slugs = {leaf[len(family) + 1:] for leaf in fam_leaves}
+    # 이 모델에서 뜻이 있는 특징만 남김 (예: '블랙'은 III에서만 갈래, M3에선 의미 없음) — 가격 검문이 특징 있는 매물을 건너뛰므로
+    traits = [t for t in traits if t == "defect" or TRAIT_BUCKET.get(t) in spec["new"] or TRAIT_BUCKET.get(t) in slugs]
     candidates = set(slugs)
     for trait in traits:
         slug = TRAIT_BUCKET.get(trait)
@@ -135,9 +141,9 @@ def review_outliers(records: list[dict[str, Any]], value: Callable[[dict], float
         if not v:
             continue
         ratio = v / medians[hit]
-        if REVIEW_LOW <= ratio <= REVIEW_HIGH:
-            continue
         family = standard_ids[hit]
+        if REVIEW_LOW <= ratio <= FAMILIES[family].get("review_high", REVIEW_HIGH):
+            continue
         review = bucket_id(family, "review")
         if review not in entities:
             continue
