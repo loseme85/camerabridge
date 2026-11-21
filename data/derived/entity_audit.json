@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1022,
+   "count": 1023,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -81,7 +81,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 200,
+   "count": 198,
    "example": "[중고] M11 Monochrom"
   },
   {
@@ -279,13 +279,13 @@
   {
    "a": "leica:body:m3:double-stroke",
    "b": "leica:feature:no-meter",
-   "count": 65,
+   "count": 66,
    "example": "LEICA M3 Double stroke sn.8008"
   },
   {
    "a": "leica:body:m3:double-stroke",
    "b": "leica:feature:mechanical",
-   "count": 65,
+   "count": 66,
    "example": "LEICA M3 Double stroke sn.8008"
   },
   {
@@ -331,18 +331,6 @@
    "example": "Leica MP Silver x0.72"
   },
   {
-   "a": "leica:body:m10-monochrom:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 57,
-   "example": "[중고] M10 Monochrom"
-  },
-  {
-   "a": "leica:body:m10-monochrom:standard",
-   "b": "leica:feature:monochrom",
-   "count": 57,
-   "example": "[중고] M10 Monochrom"
-  },
-  {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:titanium",
    "count": 56,
@@ -359,6 +347,18 @@
    "b": "leica:feature:mechanical",
    "count": 56,
    "example": "LEICA M3 Single Stroke sn.1156"
+  },
+  {
+   "a": "leica:body:m10-monochrom:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 55,
+   "example": "[중고] M10 Monochrom"
+  },
+  {
+   "a": "leica:body:m10-monochrom:standard",
+   "b": "leica:feature:monochrom",
+   "count": 55,
+   "example": "[중고] M10 Monochrom"
   },
   {
    "a": "leica:body:m9:standard",
@@ -691,6 +691,12 @@
    "example": "[중고] MP A la carte 0.72 (Silver)"
   },
   {
+   "a": "leica:body:m8-2:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 18,
+   "example": "LEICA M8.2 sn.3556"
+  },
+  {
    "a": "leica:body:m2-r",
    "b": "leica:feature:no-meter",
    "count": 18,
@@ -755,12 +761,6 @@
    "b": "leica:feature:frameline-28",
    "count": 17,
    "example": "[중고] MP A la carte 0.72 (Silver)"
-  },
-  {
-   "a": "leica:body:m8-2:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 17,
-   "example": "LEICA M8.2 sn.3556"
   },
   {
    "a": "leica:body:m-p240:black-paint",
@@ -1673,13 +1673,13 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 224,
+   "count": 225,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 199,
+   "count": 197,
    "example": "[중고] M11 Monochrom"
   },
   {
