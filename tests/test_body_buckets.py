@@ -140,3 +140,11 @@ def test_m11p_kevlar_edition_is_its_own_bucket() -> None:
     assert _leaf("Leica M11-P Kevlar Edition")[0] == ["leica:body:m11-p:kevlar"]
     assert _leaf("Leica M11-P ケブラー")[0] == ["leica:body:m11-p:kevlar"]
     assert _leaf("Leica M11-P Black")[0] == ["leica:body:m11-p:standard"]
+
+
+def test_m240_100_years_edition_is_its_own_bucket() -> None:
+    """사장님 2026-11-22: 2014 M (Typ 240) 100주년 기념판은 일반 M240과 따로. 'M Edition 100' 세트와는 다른 물건"""
+    assert _leaf("Leica M 240 100 Jahre demo model + doos")[0] == ["leica:body:m240:100-years"]
+    assert _leaf("Leica M (Typ 240) 100 Years Anniversary Edition")[0] == ["leica:body:m240:100-years"]
+    assert _leaf("Leica M (Typ 240) Black")[0] == ["leica:body:m240:standard"]
+    assert "leica:body:m240:100-years" not in _leaf("Leica M Edition 100 Set M-A Monochrom 240 100 years")[0]
