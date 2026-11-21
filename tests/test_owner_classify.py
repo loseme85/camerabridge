@@ -96,3 +96,23 @@ def test_model_view_hides_items_with_evidence_by_default(server):
     assert "근거 있는 것까지 전부 보기" in filtered and "확인할 것만 보기" in everything
     assert filtered.count("class=item") < everything.count("class=item")
     assert "class=copy" in everything
+
+
+def test_post_returns_json_for_in_place_save(server, monkeypatch):
+    """화면이 위로 올라가지 않도록 제자리에서 저장: Accept json 이면 이동(303) 없이 JSON"""
+    monkeypatch.setattr(oc, "save_confirmed", lambda *a, **k: "저장했습니다.")
+    req = urllib.request.Request(server + "/owner/classify", method="POST",
+                                 data=b"link=https://x/a&entity=leica:lens:summilux-m:35:v1-steel-rim",
+                                 headers={"cookie": f"cb_owner={KEY}", "accept": "application/json", "content-type": "application/x-www-form-urlencoded"})
+    with urllib.request.urlopen(req) as r:
+        assert r.status == 200 and json.loads(r.read()) == {"ok": True, "msg": "저장했습니다."}
+    bad = urllib.request.Request(server + "/owner/classify", method="POST", data=b"link=ftp://x&entity=a",
+                                 headers={"cookie": f"cb_owner={KEY}", "accept": "application/json"})
+    with urllib.request.urlopen(bad) as r:
+        body = json.loads(r.read())
+    assert body["ok"] is False and "주소" in body["msg"]
+
+
+def test_page_forms_are_in_place_forms(server):
+    status, page = _get(server + "/owner/classify?model=leica:lens:summilux-m:35&bucket=leica:lens:summilux-m:35:v1-steel-rim&all=1", KEY)
+    assert status == 200 and "form class=act" in page and "id=toast" in page
