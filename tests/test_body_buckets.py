@@ -101,3 +101,27 @@ def test_review_bucket_has_no_model_page() -> None:
             {"id": "leica:body:m4", "kind": "Body", "active_count": 40, "listing_count": 40, "children": ["leica:body:m4:review"]}]
     picked = {e["id"] for e in bmp.pick_entities(ents, {"leica:body:m4:review"})}
     assert "leica:body:m4:review" not in picked and "leica:body:m4" in picked  # 이미 공개된 적 있어도 다시 만들지 않음
+
+
+def _leaf_desc(title: str, desc: str, tags: list[str] | None = None) -> tuple[list[str], dict]:
+    record = _body(title)
+    record["raw_item"] = {"상품명": title, "매장정보": {"desc": desc, "tags": tags or []}}
+    annotate_records([record])
+    catalog = load_catalog()
+    leaves = [e for e in record["entity_ids"] if not catalog["entities"][e].get("children") and not catalog["entities"][e].get("feature")]
+    return leaves, record["final_output"]
+
+
+def test_description_only_repaint_and_defect() -> None:
+    leaves, final = _leaf_desc("Leica M2 #941805", "Kanto repaint & CLA. Great shooter.")
+    assert leaves == ["leica:body:m2:repaint"] and "desc:repaint" in final["bucket"]["reason"]
+    leaves, final = _leaf_desc("Leica IIIc chrome", "Being sold as is for parts. Body does not work.")
+    assert final.get("entity_note") == "defect"
+
+
+def test_description_false_alarms_are_ignored() -> None:
+    for desc in ["There are no dents nor major defects.", "Ship to Canada then to the US.", "Body (Black), gold contacts, prototype history.",
+                 "Handgrip does not work with M240.", "The sticker is not repainted."]:
+        leaves, final = _leaf_desc("Leica M2 chrome", desc)
+        assert leaves == ["leica:body:m2"] or leaves == ["leica:body:m2:standard"], (desc, leaves)
+        assert final.get("entity_note") != "defect"

@@ -15,13 +15,23 @@ import re
 import statistics
 from typing import Any, Callable
 
-from catalog.buckets import FAMILIES, GENERIC_FAMILIES, REVIEW_HIGH, REVIEW_LOW, REVIEW_MIN_N, TRAIT_BUCKET, TRAITS, bucket_id
+from catalog.buckets import DESC_TRAITS, FAMILIES, GENERIC_FAMILIES, REVIEW_HIGH, REVIEW_LOW, REVIEW_MIN_N, TRAIT_BUCKET, TRAITS, bucket_id
 
 TRAIT_RX = {name: re.compile(rx, re.I) for name, rx in TRAITS.items()}
 
 
 def traits_of(title: str) -> list[str]:
     return [name for name, rx in TRAIT_RX.items() if rx.search(title or "")]
+
+
+DESC_RX = {name: re.compile(rx, re.I) for name, rx in DESC_TRAITS.items()}
+
+
+def desc_traits_of(record: dict[str, Any]) -> list[str]:
+    """매장이 알려 준 설명·태그에서 읽은 특징 (제목에 없어도 잡음). 매장정보가 없으면 빈 목록."""
+    meta = (record.get("raw_item") or {}).get("매장정보") or {}
+    text = " ".join([str(meta.get("desc") or ""), " ".join(meta.get("tags") or [])])
+    return [name for name, rx in DESC_RX.items() if rx.search(text)]
 
 
 def _family_of(entity_id: str, entities: dict[str, Any]) -> str | None:
@@ -57,6 +67,10 @@ def assign(record: dict[str, Any], catalog: dict[str, Any], with_parents: Callab
     final = record.setdefault("final_output", {})
     traits = traits_of(title)
     reasons = []
+    for t in desc_traits_of(record):  # 설명에서만 나온 특징 (2026-11-21 수집 보강 2단계)
+        if t not in traits:
+            traits.append(t)
+            reasons.append(f"desc:{t}")
     if len(fams) > 1:  # 서로 다른 모델 둘 이상 → 제목에서 먼저 나온 모델. 개조품('I Umbau zu III')은 지금 모습인 뒤 모델
         if "converted" in traits:  # 지금 모습 = 제목 뒤쪽 모델. 구체적 모델(IIIf)이 있으면 넓은 이름(III)보다 먼저
             pool = [f for f in fams if f not in GENERIC_FAMILIES] or list(fams)
