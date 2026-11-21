@@ -81,3 +81,18 @@ def test_post_rejects_foreign_origin_and_bad_input(server, monkeypatch):
     assert status == 303 and "err=" in loc
     status, loc = post("link=https://x/a&entity=leica:lens:summilux-m:35:v1-steel-rim")
     assert status == 303 and "ok=" in loc
+
+
+def test_review_view_lists_only_unstated_and_has_copy_buttons(server):
+    status, page = _get(server + "/owner/classify?view=review", KEY)
+    assert status == 200
+    assert "확인 필요 모아 보기" in page and "class=copy" in page and "name=view value=review" in page
+
+
+def test_model_view_hides_items_with_evidence_by_default(server):
+    base = server + "/owner/classify?model=leica:lens:summilux-m:35&bucket=leica:lens:summilux-m:35:aa"
+    _, filtered = _get(base, KEY)
+    _, everything = _get(base + "&all=1", KEY)
+    assert "근거 있는 것까지 전부 보기" in filtered and "확인할 것만 보기" in everything
+    assert filtered.count("class=item") < everything.count("class=item")
+    assert "class=copy" in everything
