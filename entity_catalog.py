@@ -459,8 +459,36 @@ DESC_MOVES = [
 ]
 
 
+CONFIRMED_PATH = Path(__file__).resolve().parent / "data" / "config" / "entity_confirmed_v1.json"
+
+
+@lru_cache(maxsize=1)
+def load_confirmed() -> dict[str, str]:
+    """사장님이 직접 확인한 갈래 (상품 주소 → 엔티티 ID). 파일이 없거나 깨졌으면 빈 목록."""
+    try:
+        data = json.loads(CONFIRMED_PATH.read_text(encoding="utf-8")).get("links") or {}
+    except (OSError, ValueError):
+        return {}
+    return {url: str(v.get("entity")) for url, v in data.items() if isinstance(v, dict) and v.get("entity")}
+
+
+def _apply_confirmed(record: dict[str, Any], catalog: dict[str, Any]) -> bool:
+    entities = catalog.get("entities") or {}
+    dst = load_confirmed().get(str((record.get("raw_item") or {}).get("링크") or ""))
+    if not dst or dst not in entities:
+        return False
+    ids = record.get("entity_ids") or []
+    siblings = set(entities.get(entities[dst].get("parent") or "", {}).get("children") or [])
+    new_ids = [e for e in ids if e not in siblings] + [dst]
+    record["entity_ids"] = _with_parents(list(dict.fromkeys(new_ids)), catalog, record_title(record))
+    record.setdefault("final_output", {})["bucket"] = {"traits": [], "reason": "confirmed:" + dst.split(":")[-1]}
+    return True
+
+
 def refine_by_description(record: dict[str, Any], catalog: dict[str, Any]) -> bool:
     """매장이 알려 준 설명·태그와 상품 주소에서 갈래를 가르는 말을 찾아 옮긴다. 옮겼으면 True."""
+    if _apply_confirmed(record, catalog):
+        return True
     ids = record.get("entity_ids") or []
     raw = record.get("raw_item") or {}
     meta = raw.get("매장정보") or {}

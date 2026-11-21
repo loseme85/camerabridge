@@ -824,3 +824,17 @@ def test_steel_rim_goggles_from_description_and_remove_goggles_title() -> None:
     assert leaf("Leica Summilux-M 35mm V1 f1.4", "Steel Rim original, ohne Brille.") != "v1-steel-rim-goggles"  # 아이 없음은 안 옮김 (V1뿐이면 가격 추정 단계에서 스틸림으로)
     assert leaf("Leica Summilux-M 35mm V1 f1.4") != "v1-steel-rim-goggles"
     assert leaf("Leica Summilux M 35mm/F1.4 Steel Rim remove Goggles Version") == "v1-steel-rim"
+
+
+def test_owner_confirmed_goggles_links_override_rules() -> None:
+    """2026-11-21 사장님이 직접 확인: 제목·설명에 단서가 없어도 확정 목록의 주소는 아이 버전"""
+    from entity_catalog import annotate_records
+    link = "https://www.leica-camera-france-occasions.com/en/occasion/summilux-m-35-mm-f14-steel-rim-1961-1964"
+    rec = {"final_output": {"title_raw": "SUMMILUX-M 35 mm f/1.4 STEEL RIM (1961-1964)", "category": "Lens", "mount": "M", "sold_quality": "asking"},
+           "raw_item": {"상품명": "SUMMILUX-M 35 mm f/1.4 STEEL RIM (1961-1964)", "링크": link}}
+    annotate_records([rec])
+    leaves = [e.split(":")[-1] for e in rec["entity_ids"] if e.startswith("leica:lens:summilux-m:35:")]
+    assert leaves == ["v1-steel-rim-goggles"]
+    other = {"final_output": dict(rec["final_output"]), "raw_item": {"상품명": "SUMMILUX-M 35 mm f/1.4 STEEL RIM (1961-1964)", "링크": "https://x.example/other"}}
+    annotate_records([other])
+    assert [e.split(":")[-1] for e in other["entity_ids"] if e.startswith("leica:lens:summilux-m:35:")] == ["v1-steel-rim"]
