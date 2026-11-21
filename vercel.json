@@ -52,6 +52,14 @@
       "destination": "/api/board.py?r=owner"
     },
     {
+      "source": "/owner/classify",
+      "destination": "/api/owner_classify.py"
+    },
+    {
+      "source": "/owner/classify/",
+      "destination": "/api/owner_classify.py"
+    },
+    {
       "source": "/owner/usage",
       "destination": "/api/owner_usage.py"
     },
