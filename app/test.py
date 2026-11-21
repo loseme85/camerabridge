@@ -4880,6 +4880,14 @@ def _lecuit_name(title):
     return re.sub(r"\s+", " ", name).strip(" ,-")
 
 
+# 수집을 멈추고 화면에서도 매물을 빼는 매장 (사이트가 바뀌어 예전 매물·사진·링크가 깨진 경우).
+# 실패한 매장은 원래 이전 데이터를 계속 보여 주므로, 고칠 때까지 여기에 넣어 숨긴다. 고치면 빼고 수집 목록에 다시 넣는다.
+PAUSED_SITES = {
+    "Lecuit (룩셈부르크)": "2026-11-21 사이트 개편 — 예전 ePages 주소가 첫 화면으로 301, 사진 주소 전부 404",
+    "J-カメラ (일본)": "2026-11-04부터 j-camera.net 접속 시간 초과(GitHub 서버·한국 모두) — 17일 지난 매물 740개가 판매 중으로 남아 있었음, 한국에서는 링크도 안 열림. 막힌 것으로 보고 우회하지 않음",
+}
+
+
 def crawl_lecuit():
     """Lecuit (룩셈부르크) - 사진·광학 매장(ePages). 'SECONDE MAIN'(중고) 분류를 제조사 Leica Camera로 거른 화면
     (ViewAction=ViewFaceted, 60개씩 ?Page=N, 정적 HTML)에 이름·가격·사진·재고, 등급(A++~D)은 상품 화면 'Etat' 칸에만 있어
@@ -15162,7 +15170,6 @@ def crawl_all():
         ("Leica Store Heidelberg (독일)", lambda: ce.wrap_full_run("Leica Store Heidelberg (독일)", crawl_heidelberg)),
         # Vibe.pl (폴란드) 보류: 미국(GitHub)·도쿄 중계 서버 모두 상품 API 403 (데이터센터 IP 차단, 2026-10-19). 수집기는 남겨 둠
         ("Foto Köster (독일)", lambda: ce.wrap_full_run("Foto Köster (독일)", crawl_koester)),
-        ("Lecuit (룩셈부르크)", lambda: ce.wrap_full_run("Lecuit (룩셈부르크)", crawl_lecuit)),
         ("カメラの大貫 (일본)", lambda: ce.wrap_full_run("カメラの大貫 (일본)", crawl_ohnuki)),
         ("喜久屋カメラ (일본)", lambda: ce.wrap_full_run("喜久屋カメラ (일본)", crawl_kikuya)),
         ("가산카메라", lambda: ce.wrap_full_run("가산카메라", crawl_kasan)),
@@ -15195,7 +15202,6 @@ def crawl_all():
         ("used-photo.de (독일)", lambda: ce.wrap_full_run("used-photo.de (독일)", crawl_usedphoto)),
         ("Howard Parker (영국)", lambda: ce.wrap_full_run("Howard Parker (영국)", crawl_howardparker)),
         # PhotoCo (호주): GitHub 서버에서 매번 403이라 보류 (2026-11-02, 수집기는 남겨 둠)
-        ("J-カメラ (일본)", lambda: ce.wrap_full_run("J-カメラ (일본)", crawl_jcamera)),
         ("Kenmore Camera (미국)", lambda: ce.wrap_full_run("Kenmore Camera (미국)", crawl_kenmore)),
         ("Used.cl (칠레)", lambda: ce.wrap_full_run("Used.cl (칠레)", crawl_usedcl)),
         ("Foto Dotti (이탈리아)", lambda: ce.wrap_full_run("Foto Dotti (이탈리아)", crawl_fotodotti)),
@@ -15331,6 +15337,9 @@ def crawl_all():
     unique_results, all_events, site_stats = [], [], []
     site_order = list(dict.fromkeys([r.get("site") for r in prev_all] + [name for name, _ in sources]))
     for name in site_order:
+        if name in PAUSED_SITES:
+            print(f"  ⏸ {name}: 보류 ({PAUSED_SITES[name]}) → 이전 매물 {len(prev_by_site.get(name, []))}개 숨김")
+            continue
         prev_rows = prev_by_site.get(name, [])
         if name not in runs:
             unique_results.extend(prev_rows)
