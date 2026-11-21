@@ -8075,7 +8075,8 @@ def crawl_digitalstore():
         if "Nicht mehr verfügbar" in t:
             continue
         title = re.search(r'product-detail-name" itemprop="name">\s*(.*?)\s*</h1>', t, re.S)
-        price = re.search(r'itemprop="price"\s+content="([\d.]+)"', t)
+        # 가격: 예전 itemprop="price" 표기가 없어져(2026-11-10쯤) 상세 안 "price":"4499.00" 값도 읽는다
+        price = re.search(r'itemprop="price"\s+content="([\d.]+)"', t) or re.search(r'"price":\s*"?([\d.]+)"?', t)
         if not title or not price:
             continue
         zm = re.search(r"ZUSTAND:?\s*([A-D])\b", _html.unescape(re.sub(r"<[^>]+>", " ", t)))
