@@ -5544,9 +5544,10 @@ def _classicconnection_name(title):
 
 
 def crawl_classicconnection():
-    """Classic Connection (미국) - 라이카 중고 전문 딜러 WooCommerce 상품 API(Store API) JSON. 라이카 분류 아래 이름에
-    'Used'·'Demo'가 든 분류(M·스크루·SLR·SL·디지털 중고 등)만 골라 받고(400개쯤, 40초) 라이카·라이츠·판매 중만.
-    등급은 제목 끝(없으면 설명)의 'Ex++'·'Mint-'·'Ex+/++' 표기에서 낮은 쪽"""
+    """Classic Connection (미국) - 라이카 중고 전문 딜러. 2026-11 WooCommerce에서 Shopify로 옮겨(예전 /wp-json 주소 404, 11/20 이후 수집 실패)
+    Shopify 분류 JSON('/collections/<분류>/products.json')으로 읽는다. 분류 이름(handle)에 leica와 used·demo가 든 곳
+    (M·스크루·SLR·SL·디지털 중고 등, new가 든 곳은 새 상품이라 뺌)만 받고 라이카·라이츠·판매 중만.
+    등급은 제목 끝(없으면 설명)의 'Ex++'·'Mint-'·'Ex+/++' 표기에서 낮은 쪽. 429는 잠깐 쉬고 다시"""
     import html as _html
     import requests
     from condition_grade import CLASSICCONNECTION_PREFIX
@@ -5554,68 +5555,80 @@ def crawl_classicconnection():
     base = "https://classicconnection.com"
     headers = {"User-Agent": USER_AGENTS[1]}
     print(f"\n  📂 Classic Connection 크롤링 시작")
+
+    def get_json(url):
+        last = None
+        for attempt in range(5):
+            resp = requests.get(url, headers=headers, timeout=60)
+            if resp.status_code == 429:
+                last = resp
+                time.sleep(5 * (attempt + 1))
+                continue
+            resp.raise_for_status()
+            return resp.json()
+        last.raise_for_status()
+
     try:
-        resp = requests.get(f"{base}/wp-json/wc/store/v1/products/categories?per_page=100", headers=headers, timeout=60)
-        resp.raise_for_status()
-        cats = resp.json()
+        cols = get_json(f"{base}/collections.json?limit=250").get("collections") or []
     except Exception as e:
         raise RuntimeError(f"Classic Connection 분류 못 읽음: {e}")
-    leica_ids = {c["id"] for c in cats if _html.unescape(c.get("name") or "").strip() == "Leica"}
-    used_ids = [str(c["id"]) for c in cats if c.get("parent") in leica_ids and re.search(r"used|demo", _html.unescape(c.get("name") or ""), re.I)]
-    if not used_ids:
+    handles = [c["handle"] for c in cols
+               if "leica" in c["handle"] and re.search(r"used|demo", c["handle"]) and not re.search(r"new", c["handle"])]
+    if not handles:
         raise RuntimeError("Classic Connection 라이카 중고 분류를 못 찾음")
     seen = set()
-    for page_num in range(1, 30):
-        url = f"{base}/wp-json/wc/store/v1/products?category={','.join(used_ids)}&per_page=100&page={page_num}"
-        try:
-            resp = requests.get(url, headers=headers, timeout=60)
-            resp.raise_for_status()
-            products = resp.json()
-        except Exception as e:
-            raise RuntimeError(f"Classic Connection {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
-        if not products:
-            break
-        print(f"    └─ {page_num}페이지 {len(products)}개 상품 발견")
-        for p in products:
-            title = re.sub(r"\s+", " ", _html.unescape(p.get("name") or "")).strip()
-            if p.get("id") in seen or not re.match(r"(?:leica|leitz)\b", title, re.I) or not p.get("is_in_stock"):
-                continue
-            seen.add(p.get("id"))
-            if re.search(r"\bsold\b|on hold|(?<!like )\bnew\b(?!\s*(?:york|jersey))", title, re.I):
-                continue  # 판매됨·보류·새 상품(중고 분류에 섞임)
-            prices = p.get("prices") or {}
+    for handle in handles:
+        for page_num in range(1, 10):
             try:
-                value = int(prices.get("price")) / 10 ** int(prices.get("currency_minor_unit", 2))
-            except (TypeError, ValueError):
-                value = 0
-            if value <= 0:
-                continue  # 가격 없는 상품(문의)은 뺌
-            price = f"${value:,.0f}"
-            text = _html.unescape(re.sub(r"<[^>]+>", " ", (p.get("short_description") or "") + " " + (p.get("description") or "")))
-            grade = _classicconnection_grade(title) or _classicconnection_grade(re.sub(r"\s+", " ", text)[:400])
-            cond = CLASSICCONNECTION_PREFIX + grade if grade else "정보없음"
-            name = _classicconnection_name(title)
-            img = p["images"][0].get("src", "") if p.get("images") else ""
-            cat = detect_category(name, price)
-            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
-            results.append({
-                "site": "Classic Connection (미국)",
-                "label": auto_label(name),
-                "상품명": name,
-                "세대": detect_generation(name),
-                "컨디션": cond,
-                "가격": price,
-                "통화": "USD",
-                "이미지": img,
-                "링크": p.get("permalink") or "",
-                "품절": False,
-                "예약중": False,
-                "mount": mount,
-                "category": cat,
-                "brand": detect_brand(name),
-            })
-        if len(products) < 100:
-            break
+                products = get_json(f"{base}/collections/{handle}/products.json?limit=250&page={page_num}").get("products") or []
+            except Exception as e:
+                raise RuntimeError(f"Classic Connection {handle} {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            if not products:
+                break
+            print(f"    └─ {handle} {page_num}페이지 {len(products)}개 상품 발견")
+            for p in products:
+                title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+                available = any(v.get("available") for v in p.get("variants") or [])
+                if p.get("id") in seen or not re.match(r"(?:leica|leitz)\b", title, re.I) or not available:
+                    continue
+                seen.add(p.get("id"))
+                if re.search(r"\bsold\b|on hold|(?<!like )\bnew\b(?!\s*(?:york|jersey))", title, re.I) or "new-usa" in (p.get("handle") or ""):
+                    continue  # 판매됨·보류·새 상품(중고 분류에 섞임)
+                try:
+                    value = float((p.get("variants") or [{}])[0].get("price") or 0)
+                except (TypeError, ValueError):
+                    value = 0
+                if value <= 0:
+                    continue  # 가격 없는 상품(문의)은 뺌
+                price = f"${value:,.0f}"
+                text = _html.unescape(re.sub(r"<[^>]+>", " ", p.get("body_html") or ""))
+                grade = _classicconnection_grade(title) or _classicconnection_grade(re.sub(r"\s+", " ", text)[:400])
+                cond = CLASSICCONNECTION_PREFIX + grade if grade else "정보없음"
+                name = _classicconnection_name(title)
+                img = p["images"][0].get("src", "") if p.get("images") else ""
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "Classic Connection (미국)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "USD",
+                    "이미지": img,
+                    "링크": f"{base}/products/{p.get('handle')}",
+                    "게시일": _shopify_listed(p),
+                    "매장정보": _shopify_meta(p),
+                    "품절": False,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if len(products) < 250:
+                break
+            time.sleep(random.uniform(1.0, 2.0))
         time.sleep(random.uniform(1.0, 2.0))
     print(f"  ✅ Classic Connection 완료: {len(results)}개")
     return results
