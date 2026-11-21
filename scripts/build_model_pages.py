@@ -495,8 +495,8 @@ def pick_entities(entities: list[dict], published: set[str] | None = None) -> li
     for e in entities:
         if e.get("feature") or e["kind"] not in ("Body", "Lens"):
             continue
-        if "unspecified" in e["id"]:
-            continue
+        if "unspecified" in e["id"] or e["id"].endswith(":review"):
+            continue  # '확인 필요' 갈래는 분류가 덜 된 매물 모음이라 검색 페이지를 만들지 않음 (2026-11-21)
         if e["id"] in published:
             retained.append(e)
         if (e.get("active_count") or 0) < MIN_ACTIVE:
