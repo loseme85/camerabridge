@@ -7254,6 +7254,67 @@ def crawl_acephoto():
     return results
 
 
+def crawl_allenscamera():
+    """Allen's Camera (미국 펜실베이니아 필라델피아 레빗타운, BigCommerce, 2026-11-22 밤샘) - 중고 분류 '/used/'(제목 끝 '/USED')를 100개씩 넘겨 보며
+    라이카 제품만. 목록에는 품절(가격 없음)도 같이 나오므로 가격이 있는 판매 중만 담음. 가격 USD, 등급 표기 없음(전부 중고).
+    Panasonic·Sigma·Voigtlander·어댑터 등 타사 제품과 '/USED' 접미어는 뺌. robots.txt가 막는 /search.php는 안 씀"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://allenscamera.com"
+    other = re.compile(r"(?i)panasonic|lumix|sigma|voigt|nokton|fotasy|metabones|pholsy|fotodiox|adapter|apater|ttartisan|7artisans|zeiss|tamron|viltrox|artisan|case for|half case|\bfor leica\b")
+    print(f"\n  📂 Allen's Camera 크롤링 시작")
+    seen = set()
+    for page in range(1, 60):
+        resp = sess.get(f"{base}/used/", params={"limit": 100, "page": page}, timeout=40)
+        resp.raise_for_status()
+        items = re.findall(r'<li class="product-list-item".*?</li>', resp.text, flags=re.S)
+        fresh = 0
+        for it in items:
+            a = re.search(r'<a href="([^"]*)"[^>]*title="([^"]*)"', it)
+            if not a or a.group(1) in seen:
+                continue
+            fresh += 1
+            seen.add(a.group(1))
+            raw = re.sub(r"\s+", " ", _html.unescape(a.group(2))).strip()
+            price_m = re.search(r'class="price price--withoutTax">\s*\$([\d,\.]+)', it)
+            if not price_m or "Out of Stock" in it:
+                continue
+            name = re.sub(r"(?i)\s*/\s*USED\s*$", "", raw).strip()
+            if not re.match(r"(?i)(leica|leitz)\b", name) or other.search(name) or _KAMERASTOCKHOLM_OTHER.search(name):
+                continue
+            name = re.sub(r"(?i)\bType (\d{3})\b", r"Typ \1", name)
+            name = re.sub(r"(?i)\b(APO[- ])?(Summicron|Summilux)\s+(\d{2,3}\s?mm)\s+f/?\s*([\d.]+)\s+SL(\s+APO)?(\s+ASPH\.?)?(\s+APO)?",
+                          lambda m: f"{'APO-' if (m.group(1) or m.group(5) or m.group(7)) else ''}{m.group(2)}-SL {m.group(3)} f/{m.group(4)} ASPH", name)
+            img = re.search(r'data-src="([^"]*/products/[^"]*)"', it)
+            price = f"${price_m.group(1)}"
+            cat = detect_category(name, price)
+            results.append({
+                "site": "Allen's Camera (미국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "Used",
+                "가격": price,
+                "통화": "USD",
+                "이미지": img.group(1) if img else "",
+                "링크": a.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page}쪽 {len(items)}개 (새 {fresh})")
+        if fresh == 0 or len(items) < 100:
+            break
+        time.sleep(1)
+    print(f"  ✅ Allen's Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_kamerahaus():
     """KameraHaus (미국 캘리포니아 오렌지카운티 인근, Shopify, 2026-11-21 밤샘) - 'Pre-Owned …' 제목의 라이카·라이츠만(새 상품·Non Leica·타사 렌즈 제외).
     products.json 전체(1,000개쯤). 제목 앞 'Pre-Owned '와 끝 '#일련번호' 뗌, 가격 USD, 재고 없음은 팔린 것(품절 표시).
@@ -15370,6 +15431,7 @@ def crawl_all():
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
         ("CameraMall (미국)", lambda: ce.wrap_full_run("CameraMall (미국)", crawl_cameramall)),
         ("Ace Photo (미국)", lambda: ce.wrap_full_run("Ace Photo (미국)", crawl_acephoto)),
+        ("Allen's Camera (미국)", lambda: ce.wrap_full_run("Allen's Camera (미국)", crawl_allenscamera)),
         ("Victory Camera (미국)", lambda: ce.wrap_full_run("Victory Camera (미국)", crawl_victorycamera)),
         ("KameraHaus (미국)", lambda: ce.wrap_full_run("KameraHaus (미국)", crawl_kamerahaus)),
         ("Loja Portssar (브라질)", lambda: ce.wrap_full_run("Loja Portssar (브라질)", crawl_lojaportssar)),
