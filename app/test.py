@@ -4891,19 +4891,20 @@ def _lecuit_name(title):
 # 수집을 멈추고 화면에서도 매물을 빼는 매장 (사이트가 바뀌어 예전 매물·사진·링크가 깨진 경우).
 # 실패한 매장은 원래 이전 데이터를 계속 보여 주므로, 고칠 때까지 여기에 넣어 숨긴다. 고치면 빼고 수집 목록에 다시 넣는다.
 PAUSED_SITES = {
-    "Lecuit (룩셈부르크)": "2026-11-21 사이트 개편 — 예전 ePages 주소가 첫 화면으로 301, 사진 주소 전부 404",
     "J-カメラ (일본)": "2026-11-04부터 j-camera.net 접속 시간 초과(GitHub 서버·한국 모두) — 17일 지난 매물 740개가 판매 중으로 남아 있었음, 한국에서는 링크도 안 열림. 막힌 것으로 보고 우회하지 않음",
 }
 
 
 def crawl_lecuit():
-    """Lecuit (룩셈부르크) - 사진·광학 매장(ePages). 'SECONDE MAIN'(중고) 분류를 제조사 Leica Camera로 거른 화면
-    (ViewAction=ViewFaceted, 60개씩 ?Page=N, 정적 HTML)에 이름·가격·사진·재고, 등급(A++~D)은 상품 화면 'Etat' 칸에만 있어
-    새 매물만 상세를 읽고 아는 매물은 지난 등급을 씀. 전시품('• Ex-Display')도 같은 분류에 있음"""
+    """Lecuit (룩셈부르크) - 사진·광학 매장. 2026-11-21 사이트 개편(ePages → 자체 몰, 이전 주소 전부 첫 화면으로 301)에 맞춰 2026-11-22 다시 씀.
+    'Occasions'(중고) 분류를 제조사 Leica Camera로 거른 화면(/fr/catalogue/?rayon=occasions&id=fitb7gxng3&marque=leica-camera&page=N,
+    12개씩, 정적 HTML)에 이름·가격·재고 점이 있음. 등급(A++~D)은 상품 화면 'Etat' 칸에만 있어 새 매물만 상세를 읽고 아는 매물은 지난 등급을 씀.
+    사진은 목록이 JS로 채워서 상품 코드로 직접 만든 주소(/images/mdwr/<슬러그>-1.jpeg?s_id=<코드>). 전시품('• Ex-Display')도 같은 분류에 있음"""
     import html as _html
     import requests
+    from urllib.parse import quote
     from condition_grade import LECUIT_PREFIX
-    base = "https://www.lecuit.lu/epages/Lecuit.sf/fr_FR/"
+    base = "https://www.lecuit.lu"
     site = "Lecuit (룩셈부르크)"
     sess = requests.Session()
     sess.headers["User-Agent"] = random.choice(USER_AGENTS)
@@ -4915,39 +4916,38 @@ def crawl_lecuit():
         pass
     print(f"\n  📂 Lecuit 크롤링 시작 (이전 등급 {len(known)}개)")
     cards = []
-    for page_num in range(1, 15):
+    seen_paths = set()
+    for page_num in range(1, 40):
         try:
-            resp = sess.get(base, params={"ViewAction": "ViewFaceted", "ObjectID": "3114990", "PageSize": "60",
-                                          "FacetValue_CategoryID": "3114990", "CurrencyID": "EUR",
-                                          "FacetValue_Manufacturer": "Leica Camera", "Page": page_num}, timeout=40)
+            resp = sess.get(f"{base}/fr/catalogue/", params={"rayon": "occasions", "id": "fitb7gxng3", "marque": "leica-camera", "page": page_num}, timeout=40)
             resp.raise_for_status()
         except Exception as e:
             raise RuntimeError(f"Lecuit {page_num}쪽 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
-        boxes = resp.text.split('class="InfoArea"')[1:]
+        items = re.findall(r'<li class="product col-md-4 col-xs-6">.*?</li>', resp.text, flags=re.S)
         new = 0
-        for blk in boxes:
-            m = re.search(r'<h3[^>]*>\s*<a href="\?ObjectPath=([^"]+)"[^>]*>([^<]+)</a>', blk)
-            if not m or any(c[0] == m.group(1) for c in cards):
+        for blk in items:
+            m = re.search(r'<h2><a href="(/fr/produit/[^"]+)">([^<]+)</a></h2>', blk)
+            if not m or m.group(1) in seen_paths:
                 continue
-            pm = re.search(r"itemprop='price' content='([\d.]+)'", blk)
-            img = re.search(r'class="ProductSmallImage" src="([^"]+)"', blk)
-            cards.append((m.group(1), _html.unescape(m.group(2)).strip(), float(pm.group(1)) if pm else 0.0,
-                          img.group(1).replace("_m.jpg", "_ml.jpg") if img else "", "En stock" in blk))
+            seen_paths.add(m.group(1))
+            pm = re.search(r'class="amount">[^0-9]*([\d\s\u00a0.]+),(\d\d)', _html.unescape(blk))
+            price = float(re.sub(r"[\s\u00a0.]", "", pm.group(1)) + "." + pm.group(2)) if pm else 0.0
+            cards.append((_html.unescape(m.group(1)), _html.unescape(m.group(2)).strip(), price, 'title="En stock"' in blk))
             new += 1
-        print(f"    └─ {page_num}페이지 {len(boxes)}개")
-        if new == 0 or f"Page={page_num + 1}" not in resp.text:
+        print(f"    └─ {page_num}페이지 {len(items)}개")
+        if new == 0 or len(items) < 12:
             break
-        time.sleep(2)
+        time.sleep(1)
     if not cards:
         raise RuntimeError("Lecuit 목록이 비어 있음")  # 화면이 바뀌었으면 전부 판매완료로 바뀌지 않게
     results = []
-    for path, title, price, img, in_stock in cards:
+    for path, title, price, in_stock in cards:
         if price <= 0:
             continue
         name = _lecuit_name(title)
         if any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS) or re.search(r"Pradovit|Colorplan|Hektor-P|matchTechnical", name, re.I):
             continue  # 영사기 부품·다른 회사 액세서리
-        link = f"{base}?ObjectPath={path}"
+        link = base + quote(path, safe="/%")
         if re.search(r"Ex-?Display", title, re.I):
             cond = LECUIT_PREFIX + "Ex-Display"
         elif known.get(link):
@@ -4955,14 +4955,17 @@ def crawl_lecuit():
         else:
             cond = "정보없음"
             try:
-                page = sess.get(base, params={"ObjectPath": path}, timeout=30).text
-                em = re.search(r'AttributeLabel[^>]*>\s*Etat\s*</td>\s*<td[^>]*>(.*?)</td>', page, re.S)
+                page = sess.get(link, timeout=30).text
+                em = re.search(r'<th>Etat(?:&#xA0;|\s|\u00a0)*:</th>\s*<td>(.*?)</td>', page, re.S)
                 letter = re.match(r"\s*(A\+\+|A\+|A|B|C|D)\b", _html.unescape(re.sub(r"<[^>]+>", " ", em.group(1)))) if em else None
                 if letter:
                     cond = LECUIT_PREFIX + letter.group(1)
             except Exception as e:
                 print(f"    ⚠️ 상세 못 읽음 ({link}): {e}")
             time.sleep(1)
+        code = path.rstrip("/").rsplit("/", 1)[-1]
+        slug = path.rstrip("/").rsplit("/", 2)[-2]
+        img = f"{base}/images/mdwr/{quote(slug, safe='')}-1.jpeg?s_id={code.upper()}&imgfield=s_image1&imgwidth=600&imgheight=600"
         cat = detect_category(name, f"€{int(price):,}")
         mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
         results.append({
@@ -4973,7 +4976,7 @@ def crawl_lecuit():
             "컨디션": cond,
             "가격": f"€{int(round(price)):,}",
             "통화": "EUR",
-            "이미지": ("https://www.lecuit.lu" + img) if img.startswith("/") else img,
+            "이미지": img,
             "링크": link,
             "품절": not in_stock,
             "예약중": False,
@@ -15432,6 +15435,7 @@ def crawl_all():
         ("CameraMall (미국)", lambda: ce.wrap_full_run("CameraMall (미국)", crawl_cameramall)),
         ("Ace Photo (미국)", lambda: ce.wrap_full_run("Ace Photo (미국)", crawl_acephoto)),
         ("Allen's Camera (미국)", lambda: ce.wrap_full_run("Allen's Camera (미국)", crawl_allenscamera)),
+        ("Lecuit (룩셈부르크)", lambda: ce.wrap_full_run("Lecuit (룩셈부르크)", crawl_lecuit)),
         ("Victory Camera (미국)", lambda: ce.wrap_full_run("Victory Camera (미국)", crawl_victorycamera)),
         ("KameraHaus (미국)", lambda: ce.wrap_full_run("KameraHaus (미국)", crawl_kamerahaus)),
         ("Loja Portssar (브라질)", lambda: ce.wrap_full_run("Loja Portssar (브라질)", crawl_lojaportssar)),
