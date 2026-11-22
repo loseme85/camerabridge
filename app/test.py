@@ -7172,6 +7172,88 @@ def crawl_lojaportssar():
     return results
 
 
+def crawl_acephoto():
+    """Ace Photo (미국 BigCommerce, 2026-11-22 밤샘) - 브랜드 'Leica' 목록(/brands/Leica/)과 중고 분류(/pre-owned/)를 100개씩 넘겨 보며
+    제목에 Pre-Owned·Open Box·AS-IS가 있는 라이카 매물만 담음(새 상품은 뺌). 가격 USD, 등급 표기는 제목 접두어(Pre-Owned·Open Box·AS-IS).
+    robots.txt가 막는 /search.php는 안 씀. 분류 목록에는 품절이 안 나옴. 'Leica' 없이 'Leitz'만 있는 제목도 담음"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    from condition_grade import RECYCLED_PREFIX
+    base = "https://acephoto.net"
+    skip = re.compile(r"(?i)\b(magazine|manual|instruction|book|poster|projector|lfi|catalog(?:ue)?|lot of|leicina|movie|weston|isco|microscope|contact printer|display box|ocular|eyepiece|telescope|objectives|pinmaster|laser|binocular|ultravid|trinovid|geovid)\b|\bfor leica (?:q|sl|m|cl|t)\d*\b.*\b(grip|plate|cage|case)\b|polarpro|\bjjc\b")
+    print(f"\n  📂 Ace Photo 크롤링 시작")
+    seen = set()
+    for path in ("/brands/Leica/", "/pre-owned/"):
+        for page in range(1, 40):
+            resp = sess.get(f"{base}{path}", params={"limit": 100, "page": page}, timeout=40)
+            resp.raise_for_status()
+            cards = re.findall(r'<article class="card.*?</article>', resp.text, flags=re.S)
+            fresh = 0
+            for c in cards:
+                a = re.search(r'<a href="([^"]*)"', c)
+                t = re.search(r'title="([^"]*)"', c)
+                if not a or not t or a.group(1) in seen:
+                    continue
+                fresh += 1
+                seen.add(a.group(1))
+                raw = re.sub(r"\s+", " ", _html.unescape(t.group(1))).strip()
+                if not re.search(r"(?i)\b(leica|leitz)\b", raw) or _KAMERASTOCKHOLM_OTHER.search(raw):
+                    continue
+                m = re.search(r"(?i)pre-?owned|open box|as-is", raw)
+                if not m:
+                    continue
+                cond = {"preowned": "Pre-Owned", "pre-owned": "Pre-Owned", "openbox": "Open Box", "open box": "Open Box", "as-is": "As-Is"}[m.group(0).lower().replace("pre-owned", "pre-owned")]
+                name = re.sub(r"(?i)\*?\s*(pre-?owned|open box|as-is)\s*\*?|\*as-is\*|\d+ years? (accidental )?warranty|,\s*$", " ", raw)
+                name = re.sub(r"\s+", " ", name).strip(" -,*")
+                name = re.sub(r"^(?:-\s*)+", "", name)
+                g = re.match(r"(?i)(mint|excellent|exc|good)\s*([+\-=]*)\s*-?\s+(?=\S)", name)
+                if g:  # 제목 맨 앞 등급 말(Excellent- Leica …) → 등급 대응이 있는 Recycled 표기로
+                    name = name[g.end():].strip(" -,")
+                    word = "excellent" if g.group(1).lower() == "exc" else g.group(1).lower()
+                    cond = f"{RECYCLED_PREFIX}{word}{g.group(2).replace('=', '')}"
+                name = re.sub(r"^\([^)]*\)\s*", "", name)
+                name = re.sub(r"(?i)^(leica|leitz)\s*-\s+", r"\1 ", name)  # 'Leica - M (Type 240)' → 'Leica M (Type 240)'
+                name = re.sub(r"(?i)\bType (\d{3})\b", r"Typ \1", name)  # 카탈로그는 'Typ 240' 철자
+                # 'Summicron 50mm f/2 SL ASPH (APO)' → 카탈로그 이름 'Summicron-SL 50mm f/2 ASPH' ('APO-Summicron-SL')
+                name = re.sub(r"(?i)\b(APO[- ])?(Summicron|Summilux)\s+(\d{2,3}\s?mm)\s+f/?\s*([\d.]+)\s+SL(\s+APO)?(\s+ASPH\.?)?(\s+APO)?",
+                              lambda m: f"{'APO-' if (m.group(1) or m.group(5) or m.group(7)) else ''}{m.group(2)}-SL {m.group(3)} f/{m.group(4)} ASPH", name)
+                if (not re.match(r"(?i)(?:vintage\s+)?(?:genuine\s+)?(?:original\s+)?(?:leica|leitz|e\. ?leitz|ernst leitz)\b", name)
+                        or skip.search(name) or _KAMERASTOCKHOLM_OTHER.search(name)):
+                    continue
+                price_m = re.search(r'price price--withoutTax[^>]*>\s*\$?([\d,\.]+)', c)
+                if not price_m:
+                    continue
+                price = f"${price_m.group(1)}"
+                img = re.search(r'<img src="([^"]*)"', c)
+                link = a.group(1).split("?")[0]
+                cat = detect_category(name, price)
+                results.append({
+                    "site": "Ace Photo (미국)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": cond,
+                    "가격": price,
+                    "통화": "USD",
+                    "이미지": (img.group(1).replace("/400x400/", "/500x500/") if img else ""),
+                    "링크": link,
+                    "품절": False,
+                    "예약중": False,
+                    "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            print(f"    └─ {path} {page}쪽 {len(cards)}개 (새 {fresh})")
+            if fresh == 0 or len(cards) < 100:
+                break
+            time.sleep(1)
+    print(f"  ✅ Ace Photo 완료: {len(results)}개")
+    return results
+
+
 def crawl_kamerahaus():
     """KameraHaus (미국 캘리포니아 오렌지카운티 인근, Shopify, 2026-11-21 밤샘) - 'Pre-Owned …' 제목의 라이카·라이츠만(새 상품·Non Leica·타사 렌즈 제외).
     products.json 전체(1,000개쯤). 제목 앞 'Pre-Owned '와 끝 '#일련번호' 뗌, 가격 USD, 재고 없음은 팔린 것(품절 표시).
@@ -15287,6 +15369,7 @@ def crawl_all():
         ("LBPN (프랑스)", lambda: ce.wrap_full_run("LBPN (프랑스)", crawl_lbpn)),
         ("F64 (루마니아)", lambda: ce.wrap_full_run("F64 (루마니아)", crawl_f64)),
         ("CameraMall (미국)", lambda: ce.wrap_full_run("CameraMall (미국)", crawl_cameramall)),
+        ("Ace Photo (미국)", lambda: ce.wrap_full_run("Ace Photo (미국)", crawl_acephoto)),
         ("Victory Camera (미국)", lambda: ce.wrap_full_run("Victory Camera (미국)", crawl_victorycamera)),
         ("KameraHaus (미국)", lambda: ce.wrap_full_run("KameraHaus (미국)", crawl_kamerahaus)),
         ("Loja Portssar (브라질)", lambda: ce.wrap_full_run("Loja Portssar (브라질)", crawl_lojaportssar)),
