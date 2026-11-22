@@ -289,12 +289,51 @@
     "IT": { "currency": "EUR", "rule": "eu", "vat": 0.22 },
     "ES": { "currency": "EUR", "rule": "eu", "vat": 0.21 },
     "PT": { "currency": "EUR", "rule": "eu", "vat": 0.23 },
+    "AT": { "currency": "EUR", "rule": "eu", "vat": 0.20 },
+    "NL": { "currency": "EUR", "rule": "eu", "vat": 0.21 },
+    "SE": { "currency": "SEK", "rule": "eu", "vat": 0.25 },
     "BR": {
       "currency": "BRL",
       "rule": "br",
       "import_tax": 0.60,
       "icms": 0.20,
       "source": "https://www.gov.br/receitafederal"
+    },
+    "CA": {
+      "currency": "CAD",
+      "rule": "gst",
+      "_note": "Courier de minimis: CAD 20 from most countries; from US/MX (CUSMA) tax-free to CAD 40 and duty-free to CAD 150. Tax uses Ontario HST 13% (GST 5% + provincial share); other provinces differ (Alberta 5%, BC 12%, Quebec 14.975%). Cameras and lenses enter duty-free.",
+      "exempt": 20,
+      "exempt_from_origin": { "US": 40, "MX": 40 },
+      "duty_exempt": 20,
+      "duty_exempt_from_origin": { "US": 150, "MX": 150 },
+      "duty": { "Body": 0.0, "Body_digital": 0.0, "Lens": 0.0, "Accessory": 0.05 },
+      "gst": 0.13,
+      "handling": 10,
+      "source": "https://www.cbsa-asfc.gc.ca/publications/cn-ad/cn20-18-eng.html"
+    },
+    "AU": {
+      "currency": "AUD",
+      "rule": "gst",
+      "_note": "GST 10% on all imports (sellers collect it at or under AUD 1,000). Above AUD 1,000 a full import declaration: duty plus import processing charge (AUD 50 by air). Lens and accessory duty uses the 5% general rate; Japan-made goods are 0% under JAEPA.",
+      "exempt": 0,
+      "duty_exempt": 1000,
+      "duty": { "Body": 0.0, "Body_digital": 0.0, "Lens": 0.05, "Accessory": 0.05 },
+      "gst": 0.10,
+      "handling": 50,
+      "handling_over": 1000,
+      "source": "https://www.abf.gov.au/importing-exporting-and-manufacturing/importing/cost-of-importing-goods/gst-and-other-taxes"
+    },
+    "SG": {
+      "currency": "SGD",
+      "rule": "gst",
+      "_note": "GST 9% on CIF value: collected by the courier above SGD 400, and by GST-registered sellers at or under SGD 400. Cameras and lenses carry no customs duty.",
+      "exempt": 0,
+      "duty_exempt": 0,
+      "duty": { "Body": 0.0, "Body_digital": 0.0, "Lens": 0.0, "Accessory": 0.0 },
+      "gst": 0.09,
+      "handling": 0,
+      "source": "https://www.iras.gov.sg/taxes/goods-services-tax-(gst)/consumers/consumers-importing-goods-into-singapore"
     }
   },
   "eu_rule": {
