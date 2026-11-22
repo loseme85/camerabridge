@@ -1,13 +1,34 @@
 {
-"total": 458,
+"total": 459,
 "by_hint": {
-"accessory": 54,
+"accessory": 55,
 "set": 72,
 "check": 290,
 "edition": 40,
 "defect": 2
 },
-"new": [],
+"new": [
+{
+"url": "https://www.sanpou.ne.jp/shopdetail/000000025143/",
+"entity": "leica:acc:hood:12504",
+"ratio": 0.45,
+"category": "Accessory",
+"title": "Leica LensHood 12504 1:1.4/35 1:2/35",
+"price": "¥12,100",
+"source": "三宝カメラ (일본)",
+"hint": "accessory"
+},
+{
+"url": "https://shphoto.de/leitz-leica-gegenlichtblende-fuer-leica-m-1-4-35mm-2-0-35mm-12504.html",
+"entity": "leica:acc:hood:12504",
+"ratio": 0.45,
+"category": "Accessory",
+"title": "Leica Lens Hood for Leica M 35mm f1.4 35mm f2.0 12504 accessory",
+"price": "€69",
+"source": "SHphoto (독일)",
+"hint": "accessory"
+}
+],
 "items": [
 {
 "url": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#179990",
@@ -180,19 +201,29 @@
 "hint": "accessory"
 },
 {
-"url": "https://shop.kitamura.jp/ec/used/2119341119574",
+"url": "https://www.sanpou.ne.jp/shopdetail/000000025143/",
 "entity": "leica:acc:hood:12504",
-"ratio": 0.37,
+"ratio": 0.45,
 "category": "Accessory",
-"title": "Leica Hood 12504 (35Summilux)",
-"price": "¥10,000",
-"source": "기타무라 (일본)",
+"title": "Leica LensHood 12504 1:1.4/35 1:2/35",
+"price": "¥12,100",
+"source": "三宝カメラ (일본)",
+"hint": "accessory"
+},
+{
+"url": "https://shphoto.de/leitz-leica-gegenlichtblende-fuer-leica-m-1-4-35mm-2-0-35mm-12504.html",
+"entity": "leica:acc:hood:12504",
+"ratio": 0.45,
+"category": "Accessory",
+"title": "Leica Lens Hood for Leica M 35mm f1.4 35mm f2.0 12504 accessory",
+"price": "€69",
+"source": "SHphoto (독일)",
 "hint": "accessory"
 },
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340455451",
 "entity": "leica:acc:hood:12504",
-"ratio": 3.2,
+"ratio": 3.17,
 "category": "Accessory",
 "title": "Leica Hood 12504 (35Summilux)",
 "price": "¥85,500",
@@ -202,7 +233,7 @@
 {
 "url": "https://www.fotopia.com.hk/#!product/showAjax/1872/Leica%20Lens%20Hood%20-%20Silver%20Chrome%20/%2012504%20Style%20/%20Brass?stock=31769",
 "entity": "leica:acc:hood:12504",
-"ratio": 3.26,
+"ratio": 3.23,
 "category": "Accessory",
 "title": "Leica Lens Hood - Silver Chrome / 12504 Style / Brass",
 "price": "HK$4,300",
@@ -212,7 +243,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340931481",
 "entity": "leica:acc:hood:12504",
-"ratio": 3.31,
+"ratio": 3.27,
 "category": "Accessory",
 "title": "Leica 12504 真鍮Chrome",
 "price": "¥88,300",
@@ -222,7 +253,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2119340927682",
 "entity": "leica:acc:hood:12504",
-"ratio": 3.31,
+"ratio": 3.27,
 "category": "Accessory",
 "title": "Leica 12504 真鍮Chrome",
 "price": "¥88,300",
@@ -232,7 +263,7 @@
 {
 "url": "https://www.fotopia.com.hk/#!product/showAjax/4815/Leica%2012504%20Lens%20Hood%20-%20Kanto%20Repaint?stock=31538",
 "entity": "leica:acc:hood:12504",
-"ratio": 3.41,
+"ratio": 3.38,
 "category": "Accessory",
 "title": "Leica 12504 Lens Hood - Kanto Repaint",
 "price": "HK$4,500",
@@ -242,7 +273,7 @@
 {
 "url": "https://mkkcamera.com/products/leica-12504-rare-brass-silver-hood-for-m35-1-4-m35-2-0-24009",
 "entity": "leica:acc:hood:12504",
-"ratio": 3.64,
+"ratio": 3.6,
 "category": "Accessory",
 "title": "Leica 12504 Rare Brass Silver Hood for M35/1.4 & M35/2.0",
 "price": "HK$4,800",
@@ -1795,7 +1826,7 @@
 "ratio": 0.4,
 "category": "Body",
 "title": "LEITZ LEICA STANDARD BLACK PAINT WITH NICKEL ELEMENTS NO. 102904 ELMAR",
-"price": "HK$2,108",
+"price": "HK$2,107",
 "source": "Artra Lab (홍콩)",
 "hint": "set"
 },
@@ -3902,7 +3933,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summilux-M-1.4-35mm-black/11300SH-4879863",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 8.52,
+"ratio": 8.43,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 black",
 "price": "CHF 22,650",
@@ -3982,7 +4013,7 @@
 {
 "url": "https://leica-storebando.co.kr/product/위탁-m6m-5014-summilux-4세대-150주년-edition/21630/category/442/display/1/",
 "entity": "leica:lens:summilux-m:50:v4",
-"ratio": 5.07,
+"ratio": 5.1,
 "category": "Lens",
 "title": "[위탁] M6+M 50/1.4 Summilux 4세대 150주년 Edition",
 "price": "19,800,000원",
