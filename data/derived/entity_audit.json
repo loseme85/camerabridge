@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1057,
+   "count": 1058,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 923,
+   "count": 927,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 817,
+   "count": 819,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 771,
+   "count": 773,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -45,13 +45,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 244,
+   "count": 245,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 244,
+   "count": 245,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
@@ -1669,6 +1669,18 @@
    "example": "Leica M 240 100 Jahre demo model + doos"
   },
   {
+   "a": "leica:body:m6:review",
+   "b": "leica:feature:meter",
+   "count": 3,
+   "example": "Parts - Leica M6 Classic in Original Zinc Finish"
+  },
+  {
+   "a": "leica:body:m6:review",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "Parts - Leica M6 Classic in Original Zinc Finish"
+  },
+  {
    "a": "leica:lens:elmarit-m:135",
    "b": "leica:lens:elmarit-r:135",
    "count": 3,
@@ -1961,10 +1973,16 @@
  ],
  "new": [
   {
-   "a": "leica:feature:safari",
-   "b": "leica:lens:apo-summicron-m:90:safari",
+   "a": "leica:body:m6:review",
+   "b": "leica:feature:meter",
    "count": 3,
-   "example": "[중고] M 90/2 APO Safari"
+   "example": "Parts - Leica M6 Classic in Original Zinc Finish"
+  },
+  {
+   "a": "leica:body:m6:review",
+   "b": "leica:feature:mechanical",
+   "count": 3,
+   "example": "Parts - Leica M6 Classic in Original Zinc Finish"
   }
  ]
 }
