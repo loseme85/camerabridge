@@ -2894,8 +2894,8 @@
     };
 
     // ── 통화 환산·예상 총액 (data/fx_rates.json, data/config/landed_cost_rules.json) ──
-    const LANDED_CURRENCIES = ['KRW', 'USD', 'JPY', 'EUR', 'GBP', 'CNY', 'TWD', 'HKD', 'BRL'];
-    const LANDED_DESTINATIONS = ['KR', 'JP', 'CN', 'TW', 'HK', 'US', 'GB', 'DE', 'FR', 'IT', 'ES', 'PT', 'BR'];
+    const LANDED_CURRENCIES = ['KRW', 'USD', 'JPY', 'EUR', 'GBP', 'CNY', 'TWD', 'HKD', 'BRL', 'CAD', 'AUD', 'SGD', 'SEK'];
+    const LANDED_DESTINATIONS = ['KR', 'JP', 'CN', 'TW', 'HK', 'US', 'GB', 'DE', 'FR', 'IT', 'ES', 'PT', 'BR', 'CA', 'AU', 'SG', 'AT', 'NL', 'SE'];
     const LANDED_FALLBACK_DEFAULTS = {
       ko: { currency: 'KRW', destination: 'KR' }, en: { currency: 'USD', destination: 'US' },
       ja: { currency: 'JPY', destination: 'JP' }, 'zh-Hans': { currency: 'CNY', destination: 'CN' },
@@ -5177,7 +5177,7 @@
 
     // 예상치는 통화별로 보기 좋게 반올림 (원 1,000 · 엔 100 · 위안/대만달러/홍콩달러/헤알 10)
     function roundEstimate(value, currency){
-      const step = { KRW: 1000, JPY: 100, TWD: 10, CNY: 10, HKD: 10, BRL: 10 }[currency] || 1;
+      const step = { KRW: 1000, JPY: 100, TWD: 10, CNY: 10, HKD: 10, BRL: 10, SEK: 10 }[currency] || 1;
       return Math.round(value / step) * step;
     }
 
@@ -5292,6 +5292,20 @@
           const importTax = base * Number(destRule.import_tax || 0);
           const icmsRate = Number(destRule.icms || 0);
           tax = importTax + (icmsRate < 1 ? (base + importTax) / (1 - icmsRate) * icmsRate : 0);
+          break;
+        }
+        case 'gst': {
+          // 캐나다·호주·싱가포르: 받는 나라 통화 기준 면세선 → 관세(면세선 따로) → GST(과세가격+관세) + 통관 수수료
+          const local = destRule.currency;
+          const priceLocal = convertAmount(ctx.priceUsd, 'USD', local);
+          const exempt = Number((destRule.exempt_from_origin || {})[ctx.origin] ?? destRule.exempt ?? 0);
+          if(priceLocal === null || priceLocal > exempt){
+            const dutyExempt = Number((destRule.duty_exempt_from_origin || {})[ctx.origin] ?? destRule.duty_exempt ?? 0);
+            const duty = priceLocal === null || priceLocal > dutyExempt ? base * pick(destRule.duty) : 0;
+            const handling = priceLocal === null || priceLocal > Number(destRule.handling_over || 0)
+              ? (convertAmount(Number(destRule.handling || 0), local, 'USD') || 0) : 0;
+            tax = duty + (base + duty) * Number(destRule.gst || 0) + handling;
+          }
           break;
         }
         default:

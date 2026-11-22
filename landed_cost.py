@@ -12,7 +12,7 @@ from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-ROUND_STEP = {"KRW": 1000, "JPY": 100, "TWD": 10, "CNY": 10, "HKD": 10, "BRL": 10}
+ROUND_STEP = {"KRW": 1000, "JPY": 100, "TWD": 10, "CNY": 10, "HKD": 10, "BRL": 10, "SEK": 10}
 
 
 @lru_cache(maxsize=1)
@@ -133,6 +133,18 @@ def tax_usd(dest: str, dest_rule: dict, ctx: dict, rules: dict, rates: dict) -> 
         import_tax = base * _num(dest_rule.get("import_tax"))
         icms = _num(dest_rule.get("icms"))
         tax = import_tax + ((base + import_tax) / (1 - icms) * icms if icms < 1 else 0)
+    elif rule == "gst":
+        # 캐나다·호주·싱가포르: 받는 나라 통화 기준 면세선 → 관세(면세선 따로) → GST(과세가격+관세) + 통관 수수료
+        local = dest_rule.get("currency")
+        price_local = convert(ctx["price_usd"], "USD", local, rates)
+        exempt = _num((dest_rule.get("exempt_from_origin") or {}).get(ctx["origin"], dest_rule.get("exempt")))
+        if price_local is None or price_local > exempt:
+            duty_exempt = _num((dest_rule.get("duty_exempt_from_origin") or {}).get(ctx["origin"], dest_rule.get("duty_exempt")))
+            duty = base * pick(dest_rule.get("duty")) if price_local is None or price_local > duty_exempt else 0
+            handling = 0.0
+            if price_local is None or price_local > _num(dest_rule.get("handling_over")):
+                handling = convert(_num(dest_rule.get("handling")), local, "USD", rates) or 0
+            tax = duty + (base + duty) * _num(dest_rule.get("gst")) + handling
     return tax, flags
 
 
