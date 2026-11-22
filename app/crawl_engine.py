@@ -148,6 +148,10 @@ def merge_source(prev_rows: list[dict], run: dict, now: str) -> tuple[list[dict]
     """
     site = run["site"]
     stat = {"site": site, "coverage": run.get("coverage"), "pages": run.get("pages"), "seconds": run.get("seconds")}
+    if site == "라이카스토어 충무로":  # 충무로·대치 두 분류에 같은 상품이 두 번 잡히던 것 — 이전 기록·이번 수집 모두 합침 (cafe24_dedupe.py)
+        from cafe24_dedupe import dedupe_by_product_no
+        prev_rows = dedupe_by_product_no(prev_rows)
+        run = {**run, "rows": dedupe_by_product_no(run.get("rows") or [])}
     if not run.get("ok"):
         return list(prev_rows), [], {**stat, "status": "failed", "reason": run.get("error") or "수집 실패", "kept": len(prev_rows)}
     reason = check_health(prev_rows, run)
