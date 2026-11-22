@@ -21,7 +21,9 @@ ACC = [r"^(?!.*\b(with|w/)\s.*\bhood).*\bhood\b", r"후드", r"\bcap\b", r"캡",
        r"finder", r"파인더", r"box only", r"박스만", r"manual", r"설명서",
        # 2026-11-02 섞임 점검: 조리개 링 부품(이탈리아어)·접사 장치·포커싱 마운트·렌즈 헤드만·상자만·삼각대
        r"ghiera|diaframma", r"close[- ]?(?:focus|up) device|\bSOOKY\b|\bADVOO\b", r"^(?:leica\s+|leitz\s+)?focus(?:ing)? mount",
-       r"^box\b|\bbox rossa\b", r"treppiede|tripod|三脚"]
+       r"^box\b|\bbox rossa\b", r"treppiede|tripod|三脚",
+       # 2026-11-22 앞고리(Frontringe) — 제목에 렌즈 이름이 들어 있어 Summilux 35 AA에 섞임
+       r"front[- ]?rings?|frontringe?"]
 
 
 def f(n: str) -> str:
