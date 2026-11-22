@@ -805,6 +805,7 @@ _HARD_ACC_PHRASES = (
     "remote",
     "gimbal", "stabilizer", "cage", "케이지",
     "tripod", "트라이포드",
+    "frontring",  # 앞고리(독일어 Frontringe) — 제목에 렌즈 이름이 들어 있어 렌즈로 잡히던 것 (2026-11-22)
     "holster", "홀스터",
     "엄지그립", "엄지그림",
 )
