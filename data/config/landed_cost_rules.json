@@ -313,6 +313,32 @@
     "RO": { "currency": "EUR", "rule": "eu", "vat": 0.21 },
     "SK": { "currency": "EUR", "rule": "eu", "vat": 0.23 },
     "SI": { "currency": "EUR", "rule": "eu", "vat": 0.22 },
+    "MX": {
+      "currency": "MXN", "rule": "mx_import",
+      "_note": "Courier express (assumed): US/CA-origin $50 free, 17% to $117, 19% to $2,500; JP-origin $1 free; other origins 33.5% (combined IGI+IVA+DTA, no extra IVA/DTA). Above USD 2,500 formal entry: duty + DTA 0.8% (min MXN 461.61) + IVA 16% on value+duty+DTA. Film body 10%, digital body 0%, lens 0%, accessories unverified (0 used). Postal route (SEPOMEX) not modelled. Carrier clearance fees not included.",
+      "duty": { "Body": 0.10, "Body_digital": 0.0, "Lens": 0.0, "Accessory": null },
+      "vat": 0.16,
+      "courier": {
+        "max_customs_value_usd": 2500, "tax_exempt_usd": 0,
+        "tax_exempt_usd_overrides": { "JP": 1, "US": 50, "CA": 50 },
+        "global_tax": 0.335,
+        "us_ca_brackets": [ { "over_usd": 50, "up_to_usd": 117, "global_tax": 0.17 }, { "over_usd": 117, "up_to_usd": 2500, "global_tax": 0.19 } ],
+        "exempt_zone_dta_mxn": 461.61
+      },
+      "dta": { "rate": 0.008, "min_mxn": 461.61 },
+      "source": "https://www.sat.gob.mx/minisitio/NormatividadRMFyRGCE/documentos2026/rmf/compiladas/Compilado2daRMRGCEpara2026.pdf",
+      "checked_at": "2026-11-23"
+    },
+    "TR": {
+      "currency": "TRY", "rule": "tr_import",
+      "_note": "Since 2026-02-06 private parcels get formal clearance with no value exemption. Duty by item (film body 4.2%, digital body 4.9%, lens 6.7%; no EU A.TR preference applied). Digital camera ÖTV 20% on (CIF+duty+stamp). KDV 20% on CIF+duty+ÖTV+stamp. Stamp tax TRY 1,605.80 per declaration. Accessories unverified (0 used). Broker, storage and carrier fees not included. Used-goods import permission not checked.",
+      "duty": { "Body": 0.042, "Body_digital": 0.049, "Lens": 0.067, "Accessory": null },
+      "otv": { "Body": 0.0, "Body_digital": 0.20, "Lens": 0.0, "Accessory": null },
+      "vat": 0.20,
+      "stamp_try": 1605.80,
+      "source": "https://ticaret.gov.tr/data/68d2951f13b876c2509a480b/rejim%202026%20%2827-08-2026%29.zip",
+      "checked_at": "2026-11-23"
+    },
     "BR": {
       "currency": "BRL",
       "rule": "br",

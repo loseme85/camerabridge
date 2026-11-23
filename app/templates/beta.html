@@ -2894,8 +2894,8 @@
     };
 
     // ── 통화 환산·예상 총액 (data/fx_rates.json, data/config/landed_cost_rules.json) ──
-    const LANDED_CURRENCIES = ['KRW', 'USD', 'JPY', 'EUR', 'GBP', 'CNY', 'TWD', 'HKD', 'BRL', 'CAD', 'AUD', 'SGD', 'SEK'];
-    const LANDED_DESTINATIONS = ['KR', 'JP', 'CN', 'TW', 'HK', 'US', 'GB', 'DE', 'FR', 'IT', 'ES', 'PT', 'BR', 'CA', 'AU', 'SG', 'AT', 'NL', 'SE', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'GR', 'HU', 'IE', 'LV', 'LT', 'LU', 'MT', 'PL', 'RO', 'SK', 'SI'];
+    const LANDED_CURRENCIES = ['KRW', 'USD', 'JPY', 'EUR', 'GBP', 'CNY', 'TWD', 'HKD', 'BRL', 'CAD', 'AUD', 'SGD', 'SEK', 'MXN', 'TRY'];
+    const LANDED_DESTINATIONS = ['KR', 'JP', 'CN', 'TW', 'HK', 'US', 'GB', 'DE', 'FR', 'IT', 'ES', 'PT', 'BR', 'CA', 'AU', 'SG', 'AT', 'NL', 'SE', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'GR', 'HU', 'IE', 'LV', 'LT', 'LU', 'MT', 'PL', 'RO', 'SK', 'SI', 'MX', 'TR'];
     const LANDED_FALLBACK_DEFAULTS = {
       ko: { currency: 'KRW', destination: 'KR' }, en: { currency: 'USD', destination: 'US' },
       ja: { currency: 'JPY', destination: 'JP' }, 'zh-Hans': { currency: 'CNY', destination: 'CN' },
@@ -5177,7 +5177,7 @@
 
     // 예상치는 통화별로 보기 좋게 반올림 (원 1,000 · 엔 100 · 위안/대만달러/홍콩달러/헤알 10)
     function roundEstimate(value, currency){
-      const step = { KRW: 1000, JPY: 100, TWD: 10, CNY: 10, HKD: 10, BRL: 10, SEK: 10 }[currency] || 1;
+      const step = { KRW: 1000, JPY: 100, TWD: 10, CNY: 10, HKD: 10, BRL: 10, SEK: 10, MXN: 10, TRY: 10 }[currency] || 1;
       return Math.round(value / step) * step;
     }
 
@@ -5286,6 +5286,38 @@
           const priceEur = convertAmount(ctx.priceUsd, 'USD', 'EUR');
           const duty = priceEur !== null && priceEur > Number(euRule.duty_exempt_eur || 0) ? base * pick(euRule.duty) : 0;
           tax = duty + (base + duty) * Number(destRule.vat || 0) + (convertAmount(Number(euRule.handling_eur || 0), 'EUR', 'USD') || 0);
+          break;
+        }
+        case 'mx_import': {
+          // 멕시코: 특송 간이통관(통합세율, 2,500달러 이하) → 넘으면 정식통관(관세 + DTA + IVA)
+          const courier = destRule.courier || {};
+          if(base <= Number(courier.max_customs_value_usd ?? 2500)){
+            const free = Number((courier.tax_exempt_usd_overrides || {})[ctx.origin] ?? courier.tax_exempt_usd ?? 0);
+            if(base <= free){
+              tax = convertAmount(Number(courier.exempt_zone_dta_mxn || 0), 'MXN', 'USD') || 0;
+            }else{
+              let rate = Number(courier.global_tax || 0);
+              if(ctx.origin === 'US' || ctx.origin === 'CA'){
+                (courier.us_ca_brackets || []).forEach(b => {
+                  if(base > Number(b.over_usd || 0) && base <= Number(b.up_to_usd || 0)) rate = Number(b.global_tax || 0);
+                });
+              }
+              tax = base * rate;
+            }
+          }else{
+            const dtaCfg = destRule.dta || {};
+            const dta = Math.max(base * Number(dtaCfg.rate || 0), convertAmount(Number(dtaCfg.min_mxn || 0), 'MXN', 'USD') || 0);
+            const duty = base * pick(destRule.duty);
+            tax = duty + dta + (base + duty + dta) * Number(destRule.vat || 0);
+          }
+          break;
+        }
+        case 'tr_import': {
+          // 튀르키예: 소액 면세 없음, 정식통관 — 관세 → ÖTV(디지털 카메라) → 인지세 → KDV
+          const stamp = convertAmount(Number(destRule.stamp_try || 0), 'TRY', 'USD') || 0;
+          const duty = base * pick(destRule.duty);
+          const otv = (base + duty + stamp) * pick(destRule.otv);
+          tax = duty + otv + stamp + (base + duty + otv + stamp) * Number(destRule.vat || 0);
           break;
         }
         case 'br': {
