@@ -738,7 +738,8 @@ def test_leicaflex_written_apart_is_not_digital_sl() -> None:
     cat = load_catalog()
     def ids(title):
         return match_entities({"final_output": {"title": title, "title_raw": title, "category": "Body", "brand": "Leica"}}, cat)
-    assert ids("Leica FLEX SL2 50 JAHRE Black") == ["leica:body:leicaflex-sl2"]
+    assert "leica:body:leicaflex-sl2" in ids("Leica FLEX SL2 50 JAHRE Black")
+    assert "leica:body:sl2" not in ids("Leica FLEX SL2 50 JAHRE Black")
     assert "leica:body:sl2" in ids("Leica SL2 Body")
     assert "leica:body:sl3" in ids("Leica SL3 Reporter")
 

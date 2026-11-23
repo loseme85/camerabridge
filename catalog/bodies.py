@@ -477,7 +477,7 @@ fam("leica:body:iii-black-paint", "Leica III (Model F) Black Paint", "라이카 
     [r"\bM ?\d", REPAINT], ["iii black paint", "barnack iii black paint", "바르낙 iii 블랙페인트"])
 
 # ── R · 라이카플렉스 ──
-fam("leica:body:leicaflex", "Leicaflex (standard)", "라이카플렉스", "R", [LEICAFLEX], [rf"(?:{LEICAFLEX}) ?sl"], ["leicaflex", "라이카플렉스"])
+fam("leica:body:leicaflex", "Leicaflex", "라이카플렉스", "R", [LEICAFLEX], [rf"(?:{LEICAFLEX}) ?sl"], ["leicaflex", "라이카플렉스"])
 fam("leica:body:leicaflex-sl", "Leicaflex SL", "라이카플렉스 SL", "R", [rf"(?:{LEICAFLEX}) ?sl\b(?! ?2)"], [r"\bNASA\b"], ["leicaflex sl"])
 fam("leica:body:leicaflex-sl2", "Leicaflex SL2", "라이카플렉스 SL2", "R", [rf"(?:{LEICAFLEX}) ?sl ?2"], [], ["leicaflex sl2"])
 for model_name in ("R3", "R4", "R4s", "R5", "R-E", "R6", "R6.2", "R7", "R8", "R9"):
@@ -487,7 +487,7 @@ for model_name in ("R3", "R4", "R4s", "R5", "R-E", "R6", "R6.2", "R7", "R8", "R9
     variants = [v("gold", "Leica R3 Gold", "R3 골드", r"gold|골드", ["r3 gold"]),
                 v("safari", "Leica R3 Safari", "R3 사파리", r"safari|사파리", ["r3 safari"])] if model_name == "R3" else []
     fam(f"leica:body:{slug}", f"Leica {model_name}", f"라이카 {model_name}", "R", [pat],
-        [r"\b\d{2,3}\s?mm\b(?!.*(set|세트|\+))"], [], variants)
+        [r"\b\d{2,3}\s?mm\b(?!.*(set|세트|\+))", r"\bR ?\d[,.]\d{1,2}\s?/\s?\d{2,3}"], [], variants)  # 뒤쪽: R 렌즈 'R 4,0/21'(조리개/초점거리)
 
 # ── 그 밖 ──
 fam("leica:body:0-series-2004", "Leica 0-Series Replica (Oskar Barnack Edition, 2004)", "라이카 0-시리즈 복각 (2004)", None,
