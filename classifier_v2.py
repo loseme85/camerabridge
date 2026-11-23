@@ -767,6 +767,7 @@ _ACCESSORY_CODES = {
 _HARD_ACC_PHRASES = (
     # 어댑터/익스텐더
     "adapter", "adaptor", "어댑터",
+    "adaptador", "adattatore", "adaptateur",  # 포르투갈·스페인/이탈리아/프랑스어 (2026-11-23 Leica Store Brasil D-Lux 2 어댑터가 바디로)
     "extender", "익스텐더",
     # 케이스/백/스트랩
     "bag", "가방", "case", "케이스", "pouch", "파우치",
