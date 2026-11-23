@@ -148,3 +148,13 @@ def test_m240_100_years_edition_is_its_own_bucket() -> None:
     assert _leaf("Leica M (Typ 240) 100 Years Anniversary Edition")[0] == ["leica:body:m240:100-years"]
     assert _leaf("Leica M (Typ 240) Black")[0] == ["leica:body:m240:standard"]
     assert "leica:body:m240:100-years" not in _leaf("Leica M Edition 100 Set M-A Monochrom 240 100 years")[0]
+
+
+def test_r_bodies_get_buckets_and_r_lens_is_not_r4() -> None:
+    # 2026-11-23 ④ 넓히기: 라이카플렉스·R 바디도 갈래. 블랙페인트는 크롬보다 훨씬 비쌈, 'R 4,0/21'은 R4 바디가 아니라 렌즈
+    assert _leaf("Leicaflex SL black paint Body")[0] == ["leica:body:leicaflex-sl:black-paint"]
+    assert _leaf("Leicaflex Mark II Black Paint Film SLR Camera")[0] == ["leica:body:leicaflex:black-paint"]
+    assert _leaf("Leica R4 Body")[0] == ["leica:body:r4:standard"]
+    assert _leaf("Leica R4 Gold set 10051 Body")[0] == ["leica:body:r4:rare"]
+    assert _leaf("Leica R3 Safari Body")[0] == ["leica:body:r3:safari"]  # 기존 사파리 갈래가 먼저
+    assert "leica:body:r4:standard" not in _leaf("Leica R 4,0/21")[0]
