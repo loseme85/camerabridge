@@ -339,6 +339,24 @@
       "source": "https://ticaret.gov.tr/data/68d2951f13b876c2509a480b/rejim%202026%20%2827-08-2026%29.zip",
       "checked_at": "2026-11-23"
     },
+    "CH": {
+      "currency": "CHF", "rule": "gst",
+      "_note": "Swiss import VAT 8.1% on goods value + shipping. Parcels are VAT-free only if the tax is CHF 5 or less (goods value about CHF 62 at 8.1%); above that the whole amount is taxed. Customs duty for cameras and lenses NOT verified, so not included. Carrier clearance fees not included.",
+      "exempt": 62, "duty_exempt": 0,
+      "duty": { "Body": 0.0, "Body_digital": 0.0, "Lens": 0.0, "Accessory": 0.0 },
+      "gst": 0.081, "handling": 0,
+      "source": "https://international.post.ch/en/ecommerce-information/customs-regulations-of-switzerland",
+      "checked_at": "2026-11-23"
+    },
+    "NO": {
+      "currency": "NOK", "rule": "gst",
+      "_note": "Norwegian import VAT 25% on goods value + shipping (low-value exemption abolished 2024-01-01; VOEC-registered shops collect it at checkout, others charge on arrival). Customs duty for cameras and lenses NOT verified, so not included. Customs and carrier clearance fees not included.",
+      "exempt": 0, "duty_exempt": 0,
+      "duty": { "Body": 0.0, "Body_digital": 0.0, "Lens": 0.0, "Accessory": 0.0 },
+      "gst": 0.25, "handling": 0,
+      "source": "https://www.toll.no/en/online-shopping/the-voec-scheme",
+      "checked_at": "2026-11-23"
+    },
     "BR": {
       "currency": "BRL",
       "rule": "br",
