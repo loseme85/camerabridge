@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1056,
+   "count": 1057,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -21,7 +21,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 775,
+   "count": 776,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -81,7 +81,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 203,
+   "count": 204,
    "example": "[중고] M11 Monochrom"
   },
   {
@@ -141,7 +141,7 @@
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:no-meter",
-   "count": 109,
+   "count": 110,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -337,22 +337,22 @@
    "example": "Leica M-P Black"
   },
   {
-   "a": "leica:feature:titanium",
-   "b": "leica:lens:summilux-m:35:titan",
-   "count": 58,
-   "example": "Leica M 35mm f1.4 Summilux ASPH 4th Titan"
-  },
-  {
    "a": "leica:body:m10-monochrom:standard",
    "b": "leica:feature:frameline-28",
-   "count": 58,
+   "count": 59,
    "example": "[중고] M10 Monochrom"
   },
   {
    "a": "leica:body:m10-monochrom:standard",
    "b": "leica:feature:monochrom",
-   "count": 58,
+   "count": 59,
    "example": "[중고] M10 Monochrom"
+  },
+  {
+   "a": "leica:feature:titanium",
+   "b": "leica:lens:summilux-m:35:titan",
+   "count": 58,
+   "example": "Leica M 35mm f1.4 Summilux ASPH 4th Titan"
   },
   {
    "a": "leica:feature:mechanical",
@@ -613,6 +613,12 @@
    "example": "[중고] MDa (S)"
   },
   {
+   "a": "leica:body:q3-monochrom",
+   "b": "leica:feature:monochrom",
+   "count": 28,
+   "example": "Leica Q3 Monochrom 'Open Box'"
+  },
+  {
    "a": "leica:body:m11-d",
    "b": "leica:feature:frameline-28",
    "count": 27,
@@ -623,12 +629,6 @@
    "b": "leica:lens:summilux-m:35:v1-steel-rim",
    "count": 27,
    "example": "Leica M 35mm f1.4 Summilux 1st Silver [Steel Rim]"
-  },
-  {
-   "a": "leica:body:q3-monochrom",
-   "b": "leica:feature:monochrom",
-   "count": 27,
-   "example": "Leica Q3 Monochrom 'Open Box'"
   },
   {
    "a": "leica:feature:black-paint",
@@ -835,6 +835,24 @@
    "example": "LEICA M6 EIN STUCK sn.2300"
   },
   {
+   "a": "leica:body:m4-p:70-jahre",
+   "b": "leica:feature:frameline-28",
+   "count": 14,
+   "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
+  },
+  {
+   "a": "leica:body:m4-p:70-jahre",
+   "b": "leica:feature:no-meter",
+   "count": 14,
+   "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
+  },
+  {
+   "a": "leica:body:m4-p:70-jahre",
+   "b": "leica:feature:mechanical",
+   "count": 14,
+   "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
+  },
+  {
    "a": "leica:feature:black-paint",
    "b": "leica:lens:summicron:50:black-paint",
    "count": 13,
@@ -863,24 +881,6 @@
    "b": "leica:feature:frameline-28",
    "count": 13,
    "example": "LEICA M-P sn.4928"
-  },
-  {
-   "a": "leica:body:m4-p:70-jahre",
-   "b": "leica:feature:frameline-28",
-   "count": 13,
-   "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
-  },
-  {
-   "a": "leica:body:m4-p:70-jahre",
-   "b": "leica:feature:no-meter",
-   "count": 13,
-   "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
-  },
-  {
-   "a": "leica:body:m4-p:70-jahre",
-   "b": "leica:feature:mechanical",
-   "count": 13,
-   "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
   },
   {
    "a": "leica:body:m6:ttl-titan",
@@ -1709,7 +1709,7 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 202,
+   "count": 203,
    "example": "[중고] M11 Monochrom"
   },
   {
