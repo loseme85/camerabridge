@@ -158,3 +158,10 @@ def test_r_bodies_get_buckets_and_r_lens_is_not_r4() -> None:
     assert _leaf("Leica R4 Gold set 10051 Body")[0] == ["leica:body:r4:rare"]
     assert _leaf("Leica R3 Safari Body")[0] == ["leica:body:r3:safari"]  # 기존 사파리 갈래가 먼저
     assert "leica:body:r4:standard" not in _leaf("Leica R 4,0/21")[0]
+
+
+def test_compact_editions_go_to_their_own_bucket() -> None:
+    # 2026-11-23 ④ 넓히기: Sofort·Z2X 같은 콤팩트도 한정판은 스탠다드와 따로(확인 필요)
+    assert _leaf("Leica SOFORT LIMOLAND LIMITED EDITION")[0] == ["leica:body:sofort:review"]
+    assert _leaf("Leica Z2X Jaguar Edition")[0] == ["leica:body:z2x:review"]
+    assert _leaf("Leica Z2X Vario-Elmar 35-70")[0] == ["leica:body:z2x:standard"]
