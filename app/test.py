@@ -10481,6 +10481,88 @@ def crawl_procam():
     return results
 
 
+def crawl_focusfilme():
+    """Focus Filme (브라질 상파울루, Loja Virtual, 2026-11-23 밤샘) - 사이트맵(/sitemap.xml)에서 주소에 leica·leitz·summicron 등이 있고
+    usad·seminov(중고)·impec 말이 있는 상품만 골라 상세 페이지의 JSON-LD(Product)에서 이름·가격(BRL)·재고(InStock)를 읽음.
+    '_vendida'·'vendida'가 붙은 것은 판매 완료라 뺌. 새 상품(말 없음)·Sigma·Panasonic·NiSi 등 다른 회사 제품 제외. 등급 표기 없음.
+    robots.txt는 상품 화면을 막지 않음. 상세 페이지를 한 곳당 한 번 읽어(10개쯤) 3초 간격"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://www.focusfilme.com.br"
+    print(f"\n  📂 Focus Filme 크롤링 시작")
+    try:
+        resp = sess.get(f"{base}/sitemap.xml", timeout=40)
+        resp.raise_for_status()
+    except Exception as e:
+        raise RuntimeError(f"Focus Filme 사이트맵 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+    urls = re.findall(r"<loc>(https://www\.focusfilme\.com\.br/[^<]+/prod-\d+/)</loc>", resp.text)
+    pick = []
+    for u in urls:
+        slug = u.split("/")[-3].lower().replace("_", "").replace("-", "")
+        if not re.search(r"leica|leitz|summicron|summilux|elmar|noctilux|telyt|hektor", slug):
+            continue
+        if re.search(r"sigma|nisi|panasonic|lumix|cheecar|urth|handgrip|filtro|adaptador|vendid", slug):
+            continue
+        if not re.search(r"usad|seminov|impec", slug):
+            continue
+        pick.append(u)
+    print(f"    └─ 사이트맵 {len(urls)}개 중 중고 라이카 후보 {len(pick)}개")
+    for u in pick:
+        try:
+            r = sess.get(u, timeout=30)
+            r.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"Focus Filme 상품 못 읽음 {u}: {e}")
+        prod = None
+        for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>', r.text, re.S):
+            try:
+                j = json.loads(m.group(1))
+            except Exception:
+                continue
+            if isinstance(j, dict) and j.get("@type") == "Product":
+                prod = j
+                break
+        if not prod:
+            continue
+        offer = prod.get("offers") or {}
+        if "InStock" not in str(offer.get("availability")):
+            continue
+        name = re.sub(r"\s+", " ", _html.unescape(prod.get("name") or "")).strip()
+        name = re.sub(r"(?i)\b(usad[oa]|seminov[oa]|impec[aá]vel|na caixa original|c[âa]mera|lente)\b", " ", name)
+        name = re.sub(r"(?i)\s*-?\s*produto\s*$|\bf/(\d),(\d)", lambda m: "" if m.group(1) is None else f"f{m.group(1)}.{m.group(2)}", name)  # '400mm f/6,8 - Produto'
+        name = re.sub(r"\s+", " ", name).strip(" -,")
+        name = re.sub(r"^(?:Leica\s+)?400mm f6\.8\s*$", "Leica Telyt 400mm f6.8", name, flags=re.I)  # 이름 없이 '400mm f/6,8'만 적은 Telyt
+        if not re.match(r"(?:leica|leitz)\b", name, re.I):
+            name = "Leica " + name
+        try:
+            price = f"R${float(offer.get('price')):,.0f}"
+        except (TypeError, ValueError):
+            price = "문의요망"
+        cat = detect_category(name, price)
+        results.append({
+            "site": "Focus Filme (브라질)",
+            "label": auto_label(name),
+            "상품명": name,
+            "세대": detect_generation(name),
+            "컨디션": "정보없음",
+            "가격": price,
+            "통화": "BRL",
+            "이미지": prod.get("image") or "",
+            "링크": u,
+            "품절": False,
+            "예약중": False,
+            "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+            "category": cat,
+            "brand": detect_brand(name),
+        })
+        time.sleep(3)
+    print(f"  ✅ Focus Filme 완료: {len(results)}개")
+    return results
+
+
 def crawl_cardinal():
     """Cardinal Camera Used (미국) - 펜실베이니아 중고 전용 몰 Shopify products.json 전체(3,500개쯤, 14쪽)에서 브랜드 칸이 Leica인 것만.
     상품 종류(Rangefinder·Rangefinder camera lens·35mm lens·Filter·Caps…)로 액세서리를 거르고(종류 칸이 섞여 있어 바디·렌즈는 이름으로),
@@ -15587,6 +15669,7 @@ def crawl_all():
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
         ("Fotohandel Delfshaven (네덜란드)", lambda: ce.wrap_full_run("Fotohandel Delfshaven (네덜란드)", crawl_delfshaven)),
         ("Camera Tweedehands (네덜란드)", lambda: ce.wrap_full_run("Camera Tweedehands (네덜란드)", crawl_cameratweedehands)),
+        ("Focus Filme (브라질)", lambda: ce.wrap_full_run("Focus Filme (브라질)", crawl_focusfilme)),
         ("PROCAM (미국)", lambda: ce.wrap_full_run("PROCAM (미국)", crawl_procam)),
         ("District Camera (미국)", lambda: ce.wrap_full_run("District Camera (미국)", crawl_districtcamera)),
         ("OC Camera (미국)", lambda: ce.wrap_full_run("OC Camera (미국)", crawl_occamera)),
