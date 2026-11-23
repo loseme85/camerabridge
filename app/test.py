@@ -10422,6 +10422,39 @@ def crawl_occamera():
     return results
 
 
+def crawl_districtcamera():
+    """District Camera (미국 워싱턴 DC, Shopify, 2026-11-23 밤샘) - 'leica' 컬렉션 products.json(130개쯤) 중 product_type이 'USED'인 것만
+    (새 상품·시그마 같은 다른 회사 제품 제외). 제목 앞 'USED'는 뗌. 가격 USD, 재고 없음은 품절.
+    등급은 설명의 'is in Excellent+ condition'(Mint·Excellent+·Excellent·Good·Fair·AS IS), 없으면 등급 없음.
+    이 맥 주소는 Shopify 429에 묶여 GitHub 서버에서 시험함"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://districtcamera.com"
+    print(f"\n  📂 District Camera 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/collections/leica/products.json", "District Camera"):
+        if (p.get("product_type") or "") != "USED" or (p.get("vendor") or "").lower() != "leica":
+            continue
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        name = re.sub(r"(?i)^used\s+", "", title)
+        name = re.sub(r"\s*\((?:body only|body)\)\s*", " ", name, flags=re.I).strip(" -,")
+        name = re.sub(r"\*+[A-Za-z ]+\*+|\s*\[[^\]]*\]|\s*\((?:has|with|missing)[^)]*\)|\bGmbh Wetzlar\b|\bNo\.\s?\d+", " ", name, flags=re.I)
+        name = re.sub(r"\(Type (\d+)\)", r"(Typ \1)", name)
+        name = re.sub(r"\b9MM \(9CM\)", "9cm", name)
+        name = re.sub(r"^(?:Leica\s+)?9cm f/?4\s*$", "Leica Elmar 90mm f4", name, flags=re.I)  # 이름 없이 '9cm f4'만 적은 Elmar
+        name = re.sub(r"\s+", " ", name).strip(" -,")
+        if not re.match(r"(?:leica|leitz)\b", name, re.I):
+            name = "Leica " + name
+        body = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", _html.unescape(p.get("body_html") or "")))
+        m = re.search(r"\bis in (Mint|Excellent\+|Excellent|Good|Fair|AS IS)(?![A-Za-z+])", body, re.I)
+        cond = m.group(1) if m else None
+        results.append(_kamerastockholm_row("District Camera (미국)", base, p, name, cond, _kamerastockholm_price(p, "$"), "USD"))
+    print(f"  ✅ District Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_cardinal():
     """Cardinal Camera Used (미국) - 펜실베이니아 중고 전용 몰 Shopify products.json 전체(3,500개쯤, 14쪽)에서 브랜드 칸이 Leica인 것만.
     상품 종류(Rangefinder·Rangefinder camera lens·35mm lens·Filter·Caps…)로 액세서리를 거르고(종류 칸이 섞여 있어 바디·렌즈는 이름으로),
@@ -15527,6 +15560,7 @@ def crawl_all():
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
         ("Fotohandel Delfshaven (네덜란드)", lambda: ce.wrap_full_run("Fotohandel Delfshaven (네덜란드)", crawl_delfshaven)),
         ("Camera Tweedehands (네덜란드)", lambda: ce.wrap_full_run("Camera Tweedehands (네덜란드)", crawl_cameratweedehands)),
+        ("District Camera (미국)", lambda: ce.wrap_full_run("District Camera (미국)", crawl_districtcamera)),
         ("OC Camera (미국)", lambda: ce.wrap_full_run("OC Camera (미국)", crawl_occamera)),
         ("Pro Photo DC (미국)", lambda: ce.wrap_full_run("Pro Photo DC (미국)", crawl_prophotodc)),
         ("One Of Many Cameras (덴마크)", lambda: ce.wrap_full_run("One Of Many Cameras (덴마크)", crawl_oneofmany)),
