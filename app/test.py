@@ -10293,6 +10293,65 @@ def crawl_cameratweedehands():
     return results
 
 
+def crawl_prophotodc():
+    """Pro Photo DC (미국 워싱턴 DC) - Lightspeed 쇼핑몰. 중고 분류의 브랜드 Leica 필터에 ?format=json을 붙이면 JSON
+    ('/used-equipment/?brand=2721163', 24개씩 2쪽쯤, 40개쯤). 새 상품은 중고 분류에 없어 거르지 않는다. 가격 USD, 등급 표기 없음.
+    robots.txt의 Crawl-delay 2초를 지킨다"""
+    import requests
+    results, seen = [], set()
+    base = "https://www.prophotodc.com"
+    headers = {"User-Agent": random.choice(USER_AGENTS), "Accept": "application/json"}
+    print(f"\n  📂 Pro Photo DC 크롤링 시작")
+    pages, page_num = 1, 1
+    while page_num <= pages and page_num < 20:
+        url = f"{base}/used-equipment/" + (f"page{page_num}.html" if page_num > 1 else "") + "?brand=2721163&format=json"
+        try:
+            resp = requests.get(url, headers=headers, timeout=30)
+            resp.raise_for_status()
+            data = resp.json()
+            coll = data.get("collection") or {}
+        except Exception as e:
+            raise RuntimeError(f"Pro Photo DC {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        pages = int(coll.get("pages") or 1)
+        shop_id = (data.get("shop") or {}).get("id")
+        products = coll.get("products") or {}
+        products = list(products.values()) if isinstance(products, dict) else products
+        print(f"    └─ {page_num}/{pages}페이지 {len(products)}개 상품 발견")
+        for p in products:
+            if p.get("id") in seen or not p.get("available"):
+                continue
+            seen.add(p.get("id"))
+            name = re.sub(r"\s+", " ", p.get("title") or "").strip()
+            name = re.sub(r"\bf/(\d)", r"f\1", name)
+            if not re.match(r"(?:leica|leitz)\b", name, re.I):
+                name = "Leica " + name
+            amount = (p.get("price") or {}).get("price_incl") or (p.get("price") or {}).get("price")
+            price = f"${float(amount):,.0f}" if amount else "문의요망"
+            img = f"https://cdn.webshopapp.com/shops/{shop_id}/files/{p['image']}/600x600x2/image.jpg" if p.get("image") and shop_id else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "Pro Photo DC (미국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "USD",
+                "이미지": img,
+                "링크": f"{base}/{p.get('url')}",
+                "품절": False,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        page_num += 1
+        time.sleep(random.uniform(2.0, 3.0))
+    print(f"  ✅ Pro Photo DC 완료: {len(results)}개")
+    return results
+
+
 def crawl_cardinal():
     """Cardinal Camera Used (미국) - 펜실베이니아 중고 전용 몰 Shopify products.json 전체(3,500개쯤, 14쪽)에서 브랜드 칸이 Leica인 것만.
     상품 종류(Rangefinder·Rangefinder camera lens·35mm lens·Filter·Caps…)로 액세서리를 거르고(종류 칸이 섞여 있어 바디·렌즈는 이름으로),
@@ -15398,6 +15457,7 @@ def crawl_all():
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
         ("Fotohandel Delfshaven (네덜란드)", lambda: ce.wrap_full_run("Fotohandel Delfshaven (네덜란드)", crawl_delfshaven)),
         ("Camera Tweedehands (네덜란드)", lambda: ce.wrap_full_run("Camera Tweedehands (네덜란드)", crawl_cameratweedehands)),
+        ("Pro Photo DC (미국)", lambda: ce.wrap_full_run("Pro Photo DC (미국)", crawl_prophotodc)),
         ("One Of Many Cameras (덴마크)", lambda: ce.wrap_full_run("One Of Many Cameras (덴마크)", crawl_oneofmany)),
         ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),
         ("Photo Suffren (프랑스)", lambda: ce.wrap_full_run("Photo Suffren (프랑스)", crawl_suffren)),
