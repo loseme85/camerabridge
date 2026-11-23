@@ -30,7 +30,7 @@ TRAITS: dict[str, str] = {
     # 블랙페인트 — 라이카플렉스(SL)에서 크롬보다 훨씬 비쌈. M 바디는 기존 블랙페인트 갈래가 이미 있어 같은 결과
     "black-paint": r"black ?paint|blackpaint|블랙 ?페인트|ブラックペイント",
     # 기념판·한정판 표시 — 그 모델에 해당 판 갈래가 있으면 그 갈래가 먼저, 없으면 '확인 필요'
-    "edition": r"\bedition\b|limited|限定|한정|signature|safari|サファリ|사파리|titan|チタン|티탄|anniversary|\bjahre\b|周年|주년",
+    "edition": r"\bedition\b|limited|限定|한정|signature|safari|サファリ|사파리|titan|チタン|티탄|anniversary|\bjahre\b|周年|주년|\bjaguar\b",
 }
 
 # 상점 설명(매장정보.desc)·태그에서 읽는 특징 — 제목용 TRAITS와 따로, 아주 좁게 (2026-11-21 Shopify 58,387개 시험:

@@ -174,3 +174,8 @@ def test_vlux_generations_are_separate_models() -> None:
     assert _leaf("Leica V-LUX (Typ 114) schwarz 18193")[0] == ["leica:body:v-lux-typ-114"]
     assert _leaf("Leica V-LUX30")[0] == ["leica:body:v-lux-30"]
     assert _leaf("Leica V-LUX 25-400mm")[0] == ["leica:body:v-lux-unspecified"]
+
+
+def test_z2x_jaguar_without_edition_word() -> None:
+    # 2026-11-23 사장님: 'Leica Jaguar Z2X'처럼 Edition이 안 적힌 재규어도 스탠다드에 섞임
+    assert _leaf("Leica Jaguar Z2X")[0] == ["leica:body:z2x:review"]
