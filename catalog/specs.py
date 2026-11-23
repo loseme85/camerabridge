@@ -40,7 +40,7 @@ SPECS: dict[str, dict] = {
                    meter="TTL (LED)", shutter="기계식 천 셔터", top_speed="1/1000", flash_ttl=False, weight_g=560),
     B + "m6:ttl": dict(years="1998–2002", finder="0.58x·0.72x·0.85x", flash_ttl=True,
                        weight_g=None, note="TTL 플래시 측광, 셔터 다이얼이 크고 노출계 표시와 같은 방향, 윗판 2mm 높음"),
-    B + "m6:reissue": dict(years="2022–", finder="0.72x", flash_ttl=False, note="2022년 복각판, 노출계 표시·배터리 표시 개선"),
+    B + "m6:reissue": dict(years="2022–", finder="0.72x", flash_ttl=False, weight_g="575 (배터리 제외)", note="2022년 복각판, 노출계 표시·배터리 표시 개선"),
     B + "m7": dict(years="2002–2018", kind="필름 RF", mount="M", finder="0.58x·0.72x·0.85x", framelines="28·35·50·75·90·135",
                    meter="TTL (LED)", shutter="전자식 (조리개 우선 자동)", top_speed="1/1000", flash_ttl=True, weight_g=610,
                    note="배터리가 없으면 1/60·1/125만 기계식으로 작동"),
@@ -71,13 +71,14 @@ SPECS: dict[str, dict] = {
     # ───────────── SL · CL · Q · 컴팩트 ─────────────
     B + "sl601": dict(years="2015–2019", kind="미러리스", mount="L", sensor_mp=24, sensor="풀프레임 CMOS",
                       finder="EVF 440만 화소", ibis=False, video="4K", weight_g=847),
-    B + "sl2": dict(years="2019–", kind="미러리스", mount="L", sensor_mp=47, sensor="풀프레임 CMOS",
+    B + "sl2": dict(years="2019–", kind="미러리스", mount="L", sensor_mp=47, sensor="풀프레임 CMOS", weight_g=825,
                     finder="EVF 576만 화소", ibis=True, video="5K"),
     B + "sl2-s": dict(years="2020–", kind="미러리스", mount="L", sensor_mp=24, sensor="풀프레임 BSI CMOS",
                       finder="EVF 576만 화소", ibis=True, video="4K 10bit", note="SL2 몸체에 동영상·고감도 쪽 24MP 센서"),
     B + "sl3": dict(years="2024–", kind="미러리스", mount="L", sensor_mp=60, sensor="풀프레임 BSI CMOS",
                     finder="EVF 576만 화소", ibis=True, video="8K", note="틸트 액정"),
-    B + "sl3-s": dict(years="2025–", kind="미러리스", mount="L", sensor_mp=24, sensor="풀프레임 BSI CMOS", ibis=True),
+    B + "sl3-s": dict(years="2025–", kind="미러리스", mount="L", sensor_mp=24, sensor="풀프레임 BSI CMOS", ibis=True,
+                      video="6K", weight_g="768 (배터리·SD 카드 제외)"),
     B + "cl-digital": dict(years="2017–", kind="미러리스", mount="L (TL 렌즈)", sensor_mp=24, sensor="APS-C",
                            finder="EVF 236만 화소", video="4K", weight_g=403),
     B + "q": dict(years="2015–2019", kind="컴팩트", mount="고정 Summilux 28mm f/1.7", sensor_mp=24, sensor="풀프레임 CMOS",
@@ -164,7 +165,27 @@ BASED_ON: dict[str, str] = {
     L + "summilux-m:50:asph-black-paint": L + "summilux-m:50:asph",
 }
 
-CHECKED: dict[str, str] = {}  # 엔티티 ID → 출처 (확인한 것만)
+_OFF = "https://leica-camera.com/en-int/photography/cameras/"
+_WIKI = "https://en.wikipedia.org/wiki/"
+CHECKED: dict[str, str] = {  # 엔티티 ID → 출처 (확인한 것만)
+    # 2026-11-23 밤샘: 라이카 공식 technical-specification 페이지
+    B + "m11": _OFF + "m/m11-black/technical-specification",
+    B + "m11-p": _OFF + "m/m11-p-black/technical-specification",
+    B + "m11-monochrom": _OFF + "m/m11-monochrom/technical-specification",
+    B + "sl3": _OFF + "sl/sl3-black/technical-specification",
+    B + "sl3-s": _OFF + "sl/sl3-s-black/technical-specification",
+    B + "q3": _OFF + "q/q3-black/technical-specification",
+    B + "m6:reissue": _OFF + "m/m6/technical-specification",
+    B + "mp-film": _OFF + "m/mp-black-lacquered/technical-specification",
+    B + "m-a": _OFF + "m/m-a-typ-127-hammertone/technical-specification",
+    B + "m-ev1": _OFF + "m/m-ev1-black/technical-specification",
+    # 단종 모델: 공식 페이지가 없어 Wikipedia 사양표 (공식 값과 다르면 공식 우선)
+    B + "m9": _WIKI + "Leica_M9",
+    B + "m9-p": _WIKI + "Leica_M9",
+    B + "m7": _WIKI + "Leica_M7",
+    B + "sl2": _WIKI + "Leica_SL2",
+    B + "sl601": _WIKI + "Leica_SL_(Typ_601)",
+}
 
 
 def spec_for(entity_id: str, parents: dict[str, str | None]) -> dict:
@@ -220,14 +241,14 @@ SPECS.update({
     B + "m4-p": _b(FILM_RF, "M", "1981–1986", finder="0.72x", framelines="28·35·50·75·90·135", meter="없음",
                    shutter="기계식 천 셔터", top_speed="1/1000", note="M4-2에 28·75 프레임라인 추가"),
     B + "m4-mot": dict(note="모터 드라이브용 M4"),
-    B + "m-a": _b(FILM_RF, "M", "2014–", finder="0.72x", framelines="28·35·50·75·90·135", meter="없음",
+    B + "m-a": _b(FILM_RF, "M", "2014–", finder="0.72x", framelines="28·35·50·75·90·135", meter="없음", weight_g=578,
                   shutter="기계식 천 셔터", top_speed="1/1000", note="배터리 없이 작동하는 완전 기계식"),
     B + "mp6": _b(FILM_RF, "M"),
     B + "cl-film": _b(FILM_RF, "M", "1973–1976", framelines="40·50·90", meter="TTL (스윙 암)",
                       top_speed="1/1000", note="미놀타와 함께 만든 작은 M 마운트 바디"),
     # M 디지털
     B + "m8-2": dict(years="2008–", top_speed="1/4000", note="M8에 조용한 셔터·사파이어 액정"),
-    B + "m9-p": dict(years="2011–", note="M9에 사파이어 액정, 빨간 로고 없음"),
+    B + "m9-p": dict(years="2011–", weight_g=600, note="M9에 사파이어 액정, 빨간 로고 없음 (배터리 포함 600g)"),
     B + "m-e": dict(years="2012–", note="M9 바탕 보급형 (Typ 220)"),
     B + "m-monochrom-ccd": dict(years="2012–", sensor_mp=18, sensor="풀프레임 CCD", mono=True),
     B + "m-monochrom-246": dict(years="2015–", sensor_mp=24, sensor="풀프레임 CMOS", mono=True),
@@ -236,9 +257,10 @@ SPECS.update({
     B + "m-e240": dict(years="2019–"),
     B + "m10-d": dict(years="2018–", note="뒷면 액정 없음"),
     B + "m10-e": dict(),
-    B + "m11-monochrom": dict(years="2023–", mono=True),
+    B + "m11-monochrom": dict(years="2023–", mono=True, weight_g=542),
     B + "m11-d": dict(years="2024–", note="뒷면 액정 없음"),
-    B + "m-ev1": _b(MIRRORLESS, "M", "2025–", finder="EVF", note="거리계 대신 전자식 파인더를 단 M"),
+    B + "m-ev1": _b(MIRRORLESS, "M", "2025–", finder="EVF 576만 화소 (0.76x)", sensor_mp=60, sensor="풀프레임 BSI CMOS",
+                    top_speed="1/4000 (전자 1/16000)", weight_g=495, note="거리계 대신 전자식 파인더를 단 M (배터리 포함 495g)"),
     # SL·TL·X·Q·S
     B + "t701": _b(MIRRORLESS, "TL", "2014–", sensor_mp=16, sensor="APS-C", note="터치 화면 위주 조작"),
     B + "tl": _b(MIRRORLESS, "TL", "2016–", sensor_mp=16, sensor="APS-C"),
