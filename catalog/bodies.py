@@ -413,7 +413,18 @@ PARENTS["leica:body:d-lux"] = ("Leica D-Lux (all)", "Body", None, DLUX_GENS + ["
                                ["leica d-lux", "d-lux", "dlux", "라이카 d-lux", "디룩스"], "라이카 D-Lux (전체)")
 fam("leica:body:c-lux", "Leica C-Lux (2018)", "라이카 C-Lux", None, [r"C-?Lux\b(?! ?[123]\b)"], [], ["clux", "씨룩스"])
 fam("leica:body:c-lux-old", "Leica C-Lux 1 · 2 · 3", "라이카 C-Lux 1·2·3", None, [r"C-?Lux ?[123]\b"], [], ["c-lux 1", "c-lux 2", "c-lux 3"])
-fam("leica:body:v-lux", "Leica V-Lux (1 · 2 · 3 · 4 · 5 · Typ 114)", "라이카 V-Lux", None, [r"V-?Lux"], [], ["vlux", "v-lux 5", "v-lux 114"])
+# V-Lux는 세대마다 값이 크게 다름 (1~3·20·30: 10~30만 원대, 4: 약 40만, Typ 114: 55~70만, 5: 75~110만 — 2026-11-23 데이터). 세대가 안 적힌 것은 따로
+VLUX = [("1", "Leica V-Lux 1", r"v-?lux ?1\b"), ("2", "Leica V-Lux 2", r"v-?lux ?2\b"), ("3", "Leica V-Lux 3", r"v-?lux ?3\b"),
+        ("4", "Leica V-Lux 4", r"v-?lux ?4\b"), ("5", "Leica V-Lux 5", r"v-?lux ?5\b"), ("20", "Leica V-Lux 20", r"v-?lux ?20\b"),
+        ("30", "Leica V-Lux 30", r"v-?lux ?30\b"), ("typ-114", "Leica V-Lux (Typ 114)", r"v-?lux.{0,12}(?:typ|type) ?114|v-?lux ?114\b")]
+for slug, name, pat in VLUX:
+    num = "Typ 114" if slug == "typ-114" else slug
+    fam(f"leica:body:v-lux-{slug}", name, f"라이카 V-Lux {num}", None, [pat], [],
+        [f"v-lux {num.lower()}", f"vlux {num.lower()}", f"브이룩스 {num.lower()}"] + (["v-lux 114"] if slug == "typ-114" else []))
+fam("leica:body:v-lux-unspecified", "Leica V-Lux (generation not stated)", "라이카 V-Lux (세대 미표기)", None,
+    [r"v-?lux(?! ?(1|2|3|4|5|20|30)\b)"], [r"(?:typ|type) ?114"], [])
+PARENTS["leica:body:v-lux"] = ("Leica V-Lux (all)", "Body", None, [f"leica:body:v-lux-{s}" for s, _, _ in VLUX] + ["leica:body:v-lux-unspecified"],
+                              ["leica v-lux", "v-lux", "vlux", "라이카 v-lux", "브이룩스"], "라이카 V-Lux (전체)")
 DIGILUX = [("1", "Leica Digilux 1", r"digilux ?1\b"), ("2", "Leica Digilux 2", r"digilux ?2\b"), ("3", "Leica Digilux 3", r"digilux ?3\b"),
            ("4-3", "Leica Digilux 4.3", r"digilux ?4\.3"), ("zoom", "Leica Digilux Zoom", r"digilux ?zoom")]
 for slug, name, pat in DIGILUX:
