@@ -61,7 +61,7 @@ FAM = {  # 계열 → (제목 패턴, 별칭 이름들)
     "vario-elmar": (r"vario.?elmar\b", ["vario elmar", "바리오 엘마"]),
     "super-vario-elmar": (r"super.?vario.?elmar\b", ["super vario elmar"]),
     "super-vario-elmarit": (r"super.?vario.?elmarit", ["super vario elmarit"]),
-    "apo-vario-elmarit": (r"apo.?vario.?elmarit", ["apo vario elmarit"]),
+    "apo-vario-elmarit": (r"(apo.?vario|vario.?apo).?elmarit", ["apo vario elmarit"]),
     "apo-vario-elmar": (r"apo.?vario.?elmar\b", ["apo vario elmar"]),
     "fisheye-elmarit": (r"fish.?eye", ["fisheye elmarit", "fisheye", "어안"]),
     "apo-macro-summarit": (r"apo.?macro.?summarit", ["apo macro summarit"]),
@@ -92,7 +92,7 @@ def aliases(fam, focal, suffixes=("",), mount=None):
 
 
 COMPOUND_ELMAR = r"vario.?elmar|tri.?elmar|super.?elmar|tele.?elmar|macro.?elmar|apo.?elmar|elmar.?c\b"
-MOUNT_EVIDENCE = {"R": r"-R\b|\bR\s?\d|\bR\b|\bROM\b", "SL": r"-SL\b|\bSL\b", "TL": r"-TL?\b|\bTL\b",  # 2016 전 T 시스템 이름 (Summicron-T 23)
+MOUNT_EVIDENCE = {"R": r"-R\b|\bR\s?\d|\bR\b|\bROM\b", "SL": r"-SL\b|\bSL\b", "TL": r"-TL?\b|\bTL\b|\bleica t\b",  # 2016 전 T 시스템 이름 (Summicron-T 23)
     "S": r"-S\b|\bS\s?\d|\bS\b"}
 
 
@@ -262,7 +262,7 @@ _add(f"{SC50}:gen12-unspecified", "Summicron 50mm f/2 '1st·2nd' (generation cou
      [r"\bAPO\b", r"rigid|리짓", r"\bDR\b|dual ?range", r"collaps|침동", r"\bR\b ?50|-R\b", r"\bSL\b", r"\bL ?50|LTM|M39"],
      ["summicron 50 2nd", "summicron 50 1st", "주미크론 50 2세대", "주미크론 50 1세대"])
 EXTEND_PARENTS.setdefault(SC50, []).append(f"{SC50}:gen12-unspecified")
-TIGHTEN[f"{SC50}:gen12-unspecified"] = [GEN3, r"50 ?jahre", r"토륨|thorium", r"safari|사파리|サファリ", r"black ?paint|블랙 ?페인트|블페|ブラックペイント",
+TIGHTEN[f"{SC50}:gen12-unspecified"] = [GEN3, r"50 ?jahre", r"토륨|thorium", r"safari|사파리|サファリ", r"bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント",
                                      r"50주년|50th anniv", r"collaps|침동|토륨|thorium|\bL39\b|\bLTM\b|\bM39\b", r"rigid|리짓|리지드|고정",
                                      r"v\.?2\s?/\s?v\.?3|transition"]
 
@@ -352,7 +352,7 @@ ALIASES[_EL28 + ":elmar-m"] = ["elmar-m 50 2.8 1994", "엘마-m 50 2.8", "엘마
 lens("leica:lens:elmar:35", "Elmar 35mm f/3.5", "엘마 35", None, "elmar", "35", must_not=[r"\bAPO\b"])
 group("leica:lens:elmar:90", "Elmar 90mm f/4", "엘마 90", None, "elmar", "90", [
     c("collapsible", "Elmar 90mm f/4 Collapsible", "엘마 90 침동", r"collaps|침동", [], ["collapsible", "침동"]),
-    c("3-element", "Elmar 90mm f/4 3-element (rigid)", "엘마 90 3매", r"3 ?el|3매", [], ["3 element"]),
+    c("3-element", "Elmar 90mm f/4 3-element (rigid)", "엘마 90 3매", r"3 ?el|3매|triplet|tri-?プレット|トリプレット|3-?elemen|3 ?linser", [], ["3 element"]),
 ], must_not=[r"macro|tele|elmarit|-C\b|elmar ?c\b"])
 lens("leica:lens:elmar:65", "Elmar 65mm f/3.5 (Visoflex)", "엘마 65", None, "elmar", "65")
 lens("leica:lens:elmar:135", "Elmar 135mm f/4", "엘마 135", None, "elmar", "135", must_not=[r"tele"])
@@ -508,7 +508,7 @@ PARENTS[NX10] = ("Noctilux-M 50mm f/1.0 (all)", "Lens", "M", _nx_kids + [f"{NX10
 # ───────────── 자식 순서: 세대순 → 미표기 → 에디션 (검색창 후보가 이 순서로 뜸) ─────────────
 CHILD_ORDER = {
     SL35: ["v1-steel-rim", "v1-steel-rim-goggles", "v2", "aa", "asph-1994", "asph-fle", "asph-fle2", "asph-unspecified", "pre-asph-unspecified",
-           "steel-rim-reissue", "titan", "classic", "leitz-wetzlar", "10-jahre", "korea-70"],
+           "steel-rim-reissue", "titan", "classic", "leitz-wetzlar", "10-jahre", "korea-70", "safari"],
     SC35: ["v1-8element", "v1-eyes", "v2", "v3", "v4", "asph", "leica:lens:apo-summicron-m:35", "unspecified", "millennium", "ara-guler", "your-mark", "titan"],
     "leica:lens:summilux-m:50": ["v1", "v2", "v3", "v4", "asph", "unspecified", "classic", "titan", "millennium", "asph-lhsa", "asph-kravitz", "korea-70"],
 }
@@ -533,7 +533,7 @@ lens("leica:lens:vario-elmarit-sl:70-200", "Vario-Elmarit-SL 70-200mm f/2.8 ASPH
 
 
 # ───────────── 2026-10-04 시세가 다른 버전 (블랙 페인트·사파리·LHSA·기념판) ─────────────
-BP_L = r"black ?paint|블랙 ?페인트|블페|ブラックペイント"
+BP_L = r"bl(?:ac|ca)k ?paint|블랙 ?페인트|블페|ブラックペイント"
 SAFARI = r"safari|사파리|サファリ"
 LHSA = r"LHSA"
 KOREA_60 = r"광복 ?60|60th jubilee|60th.{0,20}independence"
@@ -545,11 +545,18 @@ SL50 = "leica:lens:summilux-m:50"
 for slug, name, ko, must, nots, als in [
     ("asph-safari", "Summilux-M 50mm f/1.4 ASPH Safari", "주미룩스 50 ASPH 사파리", [SAFARI], [], ["safari", "사파리"]),
     ("asph-black-paint", "Summilux-M 50mm f/1.4 ASPH Black Paint", "주미룩스 50 ASPH 블랙페인트", [r"ASPH", BP_L], [LHSA, r"kravitz|lenny", REPAINT_L], ["asph black paint", "asph 블랙페인트"]),
-    ("black-paint", "Summilux 50mm f/1.4 Black Paint (pre-ASPH)", "주미룩스 50 블랙페인트 (구형)", [BP_L], [r"ASPH", r"classic|클래식", r"millenn?ium|밀레니엄", r"titan|티탄", REPAINT_L], ["black paint", "블랙페인트"]),
+    ("black-paint", "Summilux 50mm f/1.4 Black Paint original (pre-ASPH, 1960s)", "주미룩스 50 블랙페인트 (구형)", [BP_L], [r"ASPH", r"classic|클래식", r"millenn?ium|밀레니엄", r"titan|티탄", REPAINT_L], ["black paint", "블랙페인트"]),
 ]:
     key = f"{SL50}:{slug}"
     _add(key, name, ko, "M", [LUX, f("50")] + must, [r"\bSL\b", r"\bTL\b"] + nots, aliases("summilux", "50", als, "M"))
     EXTEND_PARENTS.setdefault(SL50, []).append(key)
+# 2021 복각판(11713): 1960년대 원판 블랙페인트와 값이 완전히 달라 따로 (JSON에만 있던 것을 코드로 옮김, 2026-11-23)
+REISSUE_50 = r"11713|re-?issue|re-?edition|2021|glossy|グロッシー|グロツシー|복각"
+TIGHTEN[f"{SL50}:black-paint"] = [REISSUE_50]
+_add(f"{SL50}:black-paint-reissue", "Summilux 50mm f/1.4 Black Paint reissue (11713, 2021)", "주미룩스 50 블랙 페인트 복각 (11713, 2021)", "M",
+     [LUX, f("50"), BP_L, REISSUE_50 + r"|신품|brand new|\bnew\b"], [r"\bSL\b", r"\bTL\b", r"ASPH", r"classic|클래식", r"millenn?ium|밀레니엄", r"titan|티탄", REPAINT_L],
+     aliases("summilux", "50", ["black paint", "블랙페인트"], "M") + ["summilux 50 black paint reissue", "11713", "주미룩스 50 블페 복각"])
+EXTEND_PARENTS.setdefault(SL50, []).append(f"{SL50}:black-paint-reissue")
 for k in ("asph", "unspecified", "v1", "v2", "v3", "v4", "classic"):
     TIGHTEN[f"{SL50}:{k}"] = TIGHTEN.get(f"{SL50}:{k}", []) + [SAFARI] + ([BP_L] if k != "classic" else [])
 
@@ -693,3 +700,12 @@ MODELS[f"{NX10}:last-100"]["edition"] = True
 EXTEND_PARENTS.setdefault(NX10, []).append(f"{NX10}:last-100")
 for _k in [k for k in MODELS if k.startswith(NX10 + ":") and not k.endswith("last-100")]:
     TIGHTEN[_k] = TIGHTEN.get(_k, []) + [r"last ?100|letzten ?100"]
+
+
+# ── JSON에만 있던 보정을 코드로 옮김 (2026-11-23, 분류 설계: 원본은 코드 하나) ──
+_m = MODELS["leica:lens:elmar:105"]  # 'with/w/ ... hood' 예외에 'inc.'도
+_m["title_must_not"] = [x.replace(r"(with|w/)", r"(with|w/|inc\.)") if "hood" in x else x for x in _m["title_must_not"]]
+MODELS["leica:lens:elmar:50:f3.5:unspecified"]["title_must_not"].append(r"[ac]型|sucherkamera|\bcamera\b|\bI ?[ac]\b|\bIII ?b")  # 바디 이름이 붙은 매물
+_m = MODELS["leica:lens:elmar:90:unspecified"]  # 3매(triplet) 단서를 3-element 갈래와 같은 것으로 따로 뺌
+_m["title_must_not"] = [y for x in _m["title_must_not"] for y in (
+    (r"3 ?el|3매", r"triplet|tri-?プレット|トリプレット|3-?elemen|3 ?linser") if x.startswith("3 ?el|3매|triplet") else (x,))]

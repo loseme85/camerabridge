@@ -153,7 +153,7 @@ M6_EDITIONS = [
     ("benelux", "Leica M6 Demo Benelux '96", "M6 베네룩스 데모", [M6, r"benelux|베네룩스"], ["m6 benelux"]),
     ("polyphoto", "Leica M6 Polyphoto Demo", "M6 폴리포토 데모", [M6, r"polyphoto|폴리포토"], ["m6 polyphoto"]),
     ("ein-stueck", "Leica M6 'Ein Stück Leica'", "M6 아인 슈튁 라이카", [M6, r"ein ?st(ü|ue|u)ck|アインシュ[トテ]ック|アイン ?シュトゥ?ック"], ["m6 ein stuck leica", "m6 ein stück leica"]),
-    ("canada", "Leica M6 Canada", "M6 캐나다", [M6, r"canada|캐나다"], ["m6 canada"]),
+    ("canada", "Leica M6 Canada", "M6 캐나다", [M6, r"canada|캐나다"], ["m6 canada", "canada"]),
     ("rooster", "Leica M6 Year of the Rooster", "M6 닭띠", [M6, r"rooster|닭|酉"], ["m6 rooster", "m6 year of the rooster"]),
     # ── TTL (1998–2002) ──
     ("jaguar", "Leica M6 TTL Jaguar XK 50 (1948–1998)", "M6 재규어 XK50", [M6, r"jaguar|재규어"], ["m6 jaguar", "m6 재규어"]),
@@ -509,3 +509,12 @@ fam("leica:body:mini", "Leica mini · mini II · mini 3 · mini zoom", "라이�
 import buckets as _buckets  # noqa: E402
 
 _buckets.add_children(MODELS, PARENTS, ALIASES, NAME_KO)
+
+
+# 기본형(standard)에서만 빼는 말 — JSON에만 있던 것을 코드로 옮김 (2026-11-23). build_entity_catalog.py가 title_must_not에 더함
+TIGHTEN: dict[str, list[str]] = {
+    "leica:body:m2:standard": [r"後塗|repaint|リペイント|리페인트|\bKS ?-?15|M2-?S\b|M2-?\(R\)"],
+    "leica:body:mp-film:standard": [r"titan|チタン|티탄"],
+}
+# M6 TTL 티탄은 일본어 표기도 읽는다 (기본 갈래들의 '티탄 제외' 말은 그대로 두고 이 모델만 넓힘)
+MODELS["leica:body:m6:ttl-titan"]["title_must"] = [M6, TTL, r"titan|티탄|チタン|チタニウム"]

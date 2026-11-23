@@ -42,7 +42,7 @@ CODES: dict[str, list[str]] = {
     L + "summilux-m:50:titan": ["11869"],
     L + "summilux-m:50:millennium": ["11623"],
     L + "summilux-m:50:classic": ["11714"],
-    L + "summilux-m:50:black-paint": ["11713"],
+    L + "summilux-m:50:black-paint-reissue": ["11713"],
     L + "summilux-m:50:asph": ["11891", "11892", "11716", "11717", "11728", "11729"],
     L + "summilux-m:50:asph-black-paint": ["11688", "11715"],
     L + "summilux-m:50:asph-lhsa": ["11627", "11628"],
