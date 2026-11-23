@@ -813,6 +813,7 @@ _HARD_ACC_PHRASES = (
 _HARD_ACC_REGEX = (
     (r'\be\d{2,3}\s+uva(?:\s+ii)?\b', "e_uv_filter"),
     (r'\buva(?:\s+ii)?\b', "uva"),
+    (r'\b(?:picture|photo)\s+frames?\b', "picture_frame"),  # 2026-11-23 'Leica Picture Frame - Sofort Set'(액자)가 Sofort 바디로 잡힘
     (r'\buv(?:/ir)?\b', "uv"),
     (r'\buvir\b', "uvir_filter"),
     (r'\b(?:nd|skylight|yellow)\s+(?:filter|fiter)\b', "optical_filter"),
