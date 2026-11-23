@@ -813,6 +813,8 @@ _HARD_ACC_PHRASES = (
 _HARD_ACC_REGEX = (
     (r'\be\d{2,3}\s+uva(?:\s+ii)?\b', "e_uv_filter"),
     (r'\buva(?:\s+ii)?\b', "uva"),
+    # 2026-11-23 데이터백: 'Data back Minizoom / Minilux'·한국어 '데이타백'이 바디·렌즈로 잡힘. 'R4 Body con Data Back'처럼 바디에 딸린 것은 제외
+    (r'^(?!.*\b(?:with|con|mit|w/|inkl\.?|incl\.?)\s+data\s?back).*(?:\bdata\s?backs?\b|\bdatenr[üu]ckwand|데이[타터]백|データバック)', "data_back"),
     (r'\b(?:picture|photo)\s+frames?\b', "picture_frame"),  # 2026-11-23 'Leica Picture Frame - Sofort Set'(액자)가 Sofort 바디로 잡힘
     (r'\buv(?:/ir)?\b', "uv"),
     (r'\buvir\b', "uvir_filter"),
