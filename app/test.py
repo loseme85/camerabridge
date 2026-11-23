@@ -10455,6 +10455,32 @@ def crawl_districtcamera():
     return results
 
 
+def crawl_procam():
+    """PROCAM (미국 텍사스, Shopify, 2026-11-23 밤샘) - 전체 products.json(7,600개쯤)에서 제목이 '* USED * Leica/Leitz'로 시작하는 것만
+    (라이카 중고 6점쯤. Light Lens Lab·Panasonic·Sigma 등 라이카 마운트용 다른 회사 제품과 새 상품·오픈박스 제외). 가격 USD.
+    등급은 설명의 'CONDITION : Good.'(없으면 등급 없음). 전체를 읽어 오래 걸려 SOURCE_MIN_INTERVAL_HOURS로 간격을 둔다"""
+    import html as _html
+    import requests
+    results = []
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    base = "https://procam.com"
+    print(f"\n  📂 PROCAM 크롤링 시작")
+    for p in _shopify_all(sess, f"{base}/products.json", "PROCAM"):
+        title = re.sub(r"\s+", " ", _html.unescape(p.get("title") or "")).strip()
+        m0 = re.match(r"\*\s*USED\s*\*\s*((?:Leica|Leitz)\b.*)$", title, re.I)
+        if not m0:
+            continue
+        name = re.sub(r"\bASPH>", "ASPH.", m0.group(1))
+        name = re.sub(r"\s+\d{2} ?\d{3}\b|\s+Boxed\s*$", "", name).strip(" -,")
+        body = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", _html.unescape(p.get("body_html") or "")))
+        m = re.search(r"CONDITION\s*:\s*([A-Za-z+\- ]{2,20}?)\s*[.,]", body)
+        cond = m.group(1).strip().title() if m else None
+        results.append(_kamerastockholm_row("PROCAM (미국)", base, p, name, cond, _kamerastockholm_price(p, "$"), "USD"))
+    print(f"  ✅ PROCAM 완료: {len(results)}개")
+    return results
+
+
 def crawl_cardinal():
     """Cardinal Camera Used (미국) - 펜실베이니아 중고 전용 몰 Shopify products.json 전체(3,500개쯤, 14쪽)에서 브랜드 칸이 Leica인 것만.
     상품 종류(Rangefinder·Rangefinder camera lens·35mm lens·Filter·Caps…)로 액세서리를 거르고(종류 칸이 섞여 있어 바디·렌즈는 이름으로),
@@ -12013,6 +12039,7 @@ DETAIL_CONDITION = {
 
 # 사이트별 최소 수집 간격(시간). 없는 사이트는 매 실행마다. Ffordes는 서버가 느리고 매물이 130개 안팎이라 6시간.
 SOURCE_MIN_INTERVAL_HOURS = {
+    "PROCAM (미국)": 12,  # 전체 products.json 30쪽(7,600개)을 읽어 라이카 중고 6점쯤 거름
     "Leica Boutique Cape Town (남아공)": 12,  # 상세 상태 확인, 약 100개 × 3초 간격
 
     "gebrauchtkameras.de (독일)": 12,  # 라이카 상품 상세 100개쯤 (3분)
@@ -15560,6 +15587,7 @@ def crawl_all():
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
         ("Fotohandel Delfshaven (네덜란드)", lambda: ce.wrap_full_run("Fotohandel Delfshaven (네덜란드)", crawl_delfshaven)),
         ("Camera Tweedehands (네덜란드)", lambda: ce.wrap_full_run("Camera Tweedehands (네덜란드)", crawl_cameratweedehands)),
+        ("PROCAM (미국)", lambda: ce.wrap_full_run("PROCAM (미국)", crawl_procam)),
         ("District Camera (미국)", lambda: ce.wrap_full_run("District Camera (미국)", crawl_districtcamera)),
         ("OC Camera (미국)", lambda: ce.wrap_full_run("OC Camera (미국)", crawl_occamera)),
         ("Pro Photo DC (미국)", lambda: ce.wrap_full_run("Pro Photo DC (미국)", crawl_prophotodc)),
