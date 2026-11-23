@@ -10352,6 +10352,76 @@ def crawl_prophotodc():
     return results
 
 
+def crawl_occamera():
+    """OC Camera (미국 캘리포니아) - Volusion 쇼핑몰 검색 결과 정적 HTML ('/SearchResults.asp?Search=leica&show=100&page=N', 100개씩 5쪽쯤).
+    새 상품과 중고가 한 목록이라 '제목 끝 #재고번호' 또는 Mint·Near Mint·Very Clean·Excellent·Open Box·CLA 말이 있는 것만 중고로 본다.
+    품절 '(Out of Stock)'은 뺀다. 가격 USD, 등급은 제목 첫머리 말(없으면 정보없음)"""
+    import requests
+    import html as _html
+    results, seen = [], set()
+    base = "https://www.occamera.com"
+    used_re = re.compile(r"#\d{4,6}\b|\b(?:near mint|mint|excellent|very clean|open box|like new)\b|\bCLA\b", re.I)
+    cond_re = re.compile(r"^(Open Box Mint|Open Box|Near Mint|Mint|Very Clean|Extremely Clean|Excellent|Like New)\b", re.I)
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 OC Camera 크롤링 시작")
+    for page_num in range(1, 15):
+        url = f"{base}/SearchResults.asp?Search=leica&show=100&page={page_num}"
+        try:
+            resp = sess.get(url, timeout=30)
+            resp.raise_for_status()
+        except Exception as e:
+            raise RuntimeError(f"OC Camera {page_num}페이지 못 읽음: {e}")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        cards = re.split(r'<div class="v-product" itemscope', resp.text)[1:]
+        new = 0
+        for card in cards:
+            t = re.search(r'class="v-product__title[^>]*>\s*<span itemprop="name">([^<]+)', card)
+            l = re.search(r'href="(https://www\.occamera\.com/product-p/[^"]+)"', card)
+            if not t or not l or l.group(1) in seen:
+                continue
+            seen.add(l.group(1))
+            new += 1
+            if "Out of Stock" in card:
+                continue
+            raw = re.sub(r"\s+", " ", _html.unescape(t.group(1))).strip()
+            if not re.search(r"leica|leitz", raw, re.I) or not used_re.search(raw):
+                continue
+            if any(b in raw.lower() for b in THIRD_PARTY_BRANDS) or not re.match(r"(?:(?:open box mint|open box|near mint|mint|very clean|extremely clean|excellent|like new)\s+)?(?:leica|leitz)\b", raw, re.I):
+                continue  # Sigma·Techart 등 라이카 마운트용 다른 회사 제품
+            pr = re.search(r"itemprop='price' content='([\d.]+)'", card)
+            price = f"${float(pr.group(1)):,.0f}" if pr else "문의요망"
+            img = re.search(r'<img src="([^"]+)"', card)
+            cm = cond_re.match(raw)
+            name = re.sub(r"\s*#\d{4,6}\s*$", "", raw)
+            name = re.sub(r"\bf/(\d)", r"f\1", name)
+            name = re.sub(r"\s+35mm\s+(?:Film\s+)?(?:Rangefinder\s+)?(?:Manual Focus\s+)?Camera\b", " Camera", name)  # 'M2 35mm Film Rangefinder Camera'의 35mm가 초점거리로 읽힘
+            name = re.sub(r"\b(Screw ?Mount|Screwmount)\s+(?:Rangefinder\s+)?Lens", r"\1 Lens", name)
+            name = re.sub(r"\bHector\b", "Hektor", name)
+            cat = detect_category(name, price)
+            results.append({
+                "site": "OC Camera (미국)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cm.group(1) if cm else "정보없음",
+                "가격": price,
+                "통화": "USD",
+                "이미지": ("https:" + img.group(1) if img.group(1).startswith("//") else img.group(1)) if img else "",
+                "링크": l.group(1),
+                "품절": False,
+                "예약중": False,
+                "mount": 'Accessory' if cat == 'Accessory' else detect_mount(name),
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        print(f"    └─ {page_num}페이지 새 상품 {new}개")
+        if not new:
+            break
+        time.sleep(random.uniform(2.0, 3.0))
+    print(f"  ✅ OC Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_cardinal():
     """Cardinal Camera Used (미국) - 펜실베이니아 중고 전용 몰 Shopify products.json 전체(3,500개쯤, 14쪽)에서 브랜드 칸이 Leica인 것만.
     상품 종류(Rangefinder·Rangefinder camera lens·35mm lens·Filter·Caps…)로 액세서리를 거르고(종류 칸이 섞여 있어 바디·렌즈는 이름으로),
@@ -15457,6 +15527,7 @@ def crawl_all():
         ("SHphoto (독일)", lambda: ce.wrap_full_run("SHphoto (독일)", crawl_shphoto)),
         ("Fotohandel Delfshaven (네덜란드)", lambda: ce.wrap_full_run("Fotohandel Delfshaven (네덜란드)", crawl_delfshaven)),
         ("Camera Tweedehands (네덜란드)", lambda: ce.wrap_full_run("Camera Tweedehands (네덜란드)", crawl_cameratweedehands)),
+        ("OC Camera (미국)", lambda: ce.wrap_full_run("OC Camera (미국)", crawl_occamera)),
         ("Pro Photo DC (미국)", lambda: ce.wrap_full_run("Pro Photo DC (미국)", crawl_prophotodc)),
         ("One Of Many Cameras (덴마크)", lambda: ce.wrap_full_run("One Of Many Cameras (덴마크)", crawl_oneofmany)),
         ("Foto Ottica Cavour (이탈리아)", lambda: ce.wrap_full_run("Foto Ottica Cavour (이탈리아)", crawl_cavour)),
