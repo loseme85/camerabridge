@@ -154,12 +154,13 @@ PARENTS = {
 
 
 def build() -> dict:
+    import accessories
     import bodies
     import codes
     import features
     import lenses
 
-    for module in (bodies, lenses):
+    for module in (bodies, lenses, accessories):
         for key, spec in module.MODELS.items():
             assert key not in MODELS, key
             MODELS[key] = spec
@@ -175,18 +176,19 @@ def build() -> dict:
         name, kind, mount, kids, als, ko = PARENTS[parent]
         rank = {(slug if ":" in slug else f"{parent}:{slug}"): i for i, slug in enumerate(order)}
         PARENTS[parent] = (name, kind, mount, sorted(kids, key=lambda k: rank.get(k, len(rank))), als, ko)
-    for key, extra in lenses.TIGHTEN.items():
-        MODELS[key]["title_must_not"] = MODELS[key]["title_must_not"] + extra
+    for module in (bodies, lenses):
+        for key, extra in getattr(module, "TIGHTEN", {}).items():
+            MODELS[key]["title_must_not"] = MODELS[key]["title_must_not"] + extra
     for key, must in lenses.OVERRIDE_MUST.items():
         MODELS[key]["title_must"] = must
     all_codes: dict[str, list[str]] = {}
-    for key, numbers in codes.CODES.items():
+    for key, numbers in {**codes.CODES, **accessories.CODES}.items():
         assert key in MODELS or key in PARENTS, f"codes: unknown entity {key}"
         assert len(numbers) == len(set(numbers)), f"codes: duplicate on {key}"
         for number in numbers:
             assert re.fullmatch(r"\d{5}", number), number
         all_codes[key] = list(numbers)
-    for key, words in codes.CODE_WORDS.items():
+    for key, words in {**codes.CODE_WORDS, **accessories.CODE_WORDS}.items():
         assert key in MODELS or key in PARENTS, f"code words: unknown entity {key}"
         for word in words:
             assert re.fullmatch(r"[A-Z]{5}(-[A-Z]{1,2})?", word), word
