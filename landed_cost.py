@@ -12,7 +12,7 @@ from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-ROUND_STEP = {"KRW": 1000, "JPY": 100, "TWD": 10, "CNY": 10, "HKD": 10, "BRL": 10, "SEK": 10}
+ROUND_STEP = {"KRW": 1000, "JPY": 100, "TWD": 10, "CNY": 10, "HKD": 10, "BRL": 10, "SEK": 10, "MXN": 10, "TRY": 10}
 
 
 @lru_cache(maxsize=1)
@@ -77,6 +77,27 @@ def _pick(table, duty_key: str, category: str) -> float:
     return _num(table.get(category))
 
 
+def _mx_tax_usd(dest_rule: dict, ctx: dict, pick, rates: dict) -> float:
+    """멕시코: 특송 간이통관(통합세율, 2,500달러 이하) → 넘으면 정식통관(관세 + DTA + IVA). 화면 landedTaxUsd 'mx_import'와 같음"""
+    base = ctx["price_usd"] + ctx["shipping_usd"]
+    courier = dest_rule.get("courier") or {}
+    if base <= _num(courier.get("max_customs_value_usd"), 2500):
+        origin = ctx["origin"]
+        free = _num((courier.get("tax_exempt_usd_overrides") or {}).get(origin), _num(courier.get("tax_exempt_usd")))
+        if base <= free:
+            return convert(_num(courier.get("exempt_zone_dta_mxn")), "MXN", "USD", rates) or 0
+        rate = _num(courier.get("global_tax"))
+        if origin in ("US", "CA"):
+            for b in courier.get("us_ca_brackets") or []:
+                if base > _num(b.get("over_usd")) and base <= _num(b.get("up_to_usd")):
+                    rate = _num(b.get("global_tax"))
+        return base * rate
+    dta_cfg = dest_rule.get("dta") or {}
+    dta = max(base * _num(dta_cfg.get("rate")), convert(_num(dta_cfg.get("min_mxn")), "MXN", "USD", rates) or 0)
+    duty = base * pick(dest_rule.get("duty"))
+    return duty + dta + (base + duty + dta) * _num(dest_rule.get("vat"))
+
+
 def tax_usd(dest: str, dest_rule: dict, ctx: dict, rules: dict, rates: dict) -> tuple[float, list]:
     duty_key = "Body_digital" if ctx["category"] == "Body" and ctx["digital"] else ctx["category"]
     pick = lambda table: _pick(table, duty_key, ctx["category"])  # noqa: E731
@@ -129,6 +150,13 @@ def tax_usd(dest: str, dest_rule: dict, ctx: dict, rules: dict, rates: dict) -> 
         price_eur = convert(ctx["price_usd"], "USD", "EUR", rates)
         duty = base * pick(eu_rule.get("duty")) if price_eur is not None and price_eur > _num(eu_rule.get("duty_exempt_eur")) else 0
         tax = duty + (base + duty) * _num(dest_rule.get("vat")) + (convert(_num(eu_rule.get("handling_eur")), "EUR", "USD", rates) or 0)
+    elif rule == "mx_import":
+        tax = _mx_tax_usd(dest_rule, ctx, pick, rates)
+    elif rule == "tr_import":
+        stamp = convert(_num(dest_rule.get("stamp_try")), "TRY", "USD", rates) or 0
+        duty = base * pick(dest_rule.get("duty"))
+        otv = (base + duty + stamp) * pick(dest_rule.get("otv"))
+        tax = duty + otv + stamp + (base + duty + otv + stamp) * _num(dest_rule.get("vat"))
     elif rule == "br":
         import_tax = base * _num(dest_rule.get("import_tax"))
         icms = _num(dest_rule.get("icms"))
