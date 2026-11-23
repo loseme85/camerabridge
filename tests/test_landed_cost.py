@@ -25,7 +25,7 @@ CASES = [
     {"source": "Used.cl (칠레)", "currency": "CLP", "price": "CLP 2,080,000", "category": "Lens", "title": "Leica Summicron-M 35mm f2 ASPH"},
     {"source": "Five Star Camera (일본)", "currency": "USD", "price": "$95", "category": "Accessory", "title": "Leica 12526 hood"},
 ]
-TARGETS = [("KRW", "KR"), ("USD", "US"), ("JPY", "JP"), ("EUR", "DE"), ("GBP", "GB"), ("TWD", "TW"), ("CNY", "CN"), ("BRL", "BR"), ("CAD", "CA"), ("AUD", "AU"), ("SGD", "SG"), ("EUR", "AT"), ("EUR", "NL"), ("SEK", "SE"), ("EUR", "BE"), ("EUR", "PL"), ("EUR", "FI"), ("MXN", "MX"), ("TRY", "TR"), ("USD", "MX"), ("USD", "TR"), ("CHF", "CH"), ("NOK", "NO")]
+TARGETS = [("KRW", "KR"), ("USD", "US"), ("JPY", "JP"), ("EUR", "DE"), ("GBP", "GB"), ("TWD", "TW"), ("CNY", "CN"), ("BRL", "BR"), ("CAD", "CA"), ("AUD", "AU"), ("SGD", "SG"), ("EUR", "AT"), ("EUR", "NL"), ("SEK", "SE"), ("EUR", "BE"), ("EUR", "PL"), ("EUR", "FI"), ("MXN", "MX"), ("TRY", "TR"), ("USD", "MX"), ("USD", "TR"), ("CHF", "CH"), ("NOK", "NO"), ("USD", "IL")]
 
 
 def _js_functions() -> str:
