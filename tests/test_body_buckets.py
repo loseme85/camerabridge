@@ -165,3 +165,12 @@ def test_compact_editions_go_to_their_own_bucket() -> None:
     assert _leaf("Leica SOFORT LIMOLAND LIMITED EDITION")[0] == ["leica:body:sofort:review"]
     assert _leaf("Leica Z2X Jaguar Edition")[0] == ["leica:body:z2x:review"]
     assert _leaf("Leica Z2X Vario-Elmar 35-70")[0] == ["leica:body:z2x:standard"]
+
+
+def test_vlux_generations_are_separate_models() -> None:
+    # 2026-11-23: V-Lux 1~5·Typ 114는 값이 5배 넘게 다른데 한 모델이었음
+    assert _leaf("Leica V-Lux 4 Body")[0] == ["leica:body:v-lux-4"]
+    assert _leaf("Leica V-LUX5")[0] == ["leica:body:v-lux-5"]
+    assert _leaf("Leica V-LUX (Typ 114) schwarz 18193")[0] == ["leica:body:v-lux-typ-114"]
+    assert _leaf("Leica V-LUX30")[0] == ["leica:body:v-lux-30"]
+    assert _leaf("Leica V-LUX 25-400mm")[0] == ["leica:body:v-lux-unspecified"]

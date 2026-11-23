@@ -100,7 +100,7 @@ for _slug, _black in (("leicaflex", True), ("leicaflex-sl", True), ("leicaflex-s
                                       "priority": (["black-paint"] if _black else []) + ["repaint", "*", "rare", "review", "standard"]}
 
 # 필름·인스턴트·광학줌 콤팩트 (2026-11-23 ④ 넓히기): 한정판·시제품은 따로, 못 가린 것은 확인 필요. (D-Lux·Q·X는 이미 판별 갈래가 있음)
-for _slug in ("sofort", "z2x", "mini", "minilux", "v-lux"):
+for _slug in ("sofort", "z2x", "mini", "minilux"):
     FAMILIES[f"leica:body:{_slug}"] = {"standard": ["standard"], "new": ["rare", "review"], "priority": ["rare", "*", "review", "standard"]}
 
 # 가격 검문: 특징 없는 스탠다드 매물이 그 갈래 판매 중 중간값의 몇 배 밖이면 '확인 필요'
