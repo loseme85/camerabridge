@@ -357,6 +357,15 @@
       "source": "https://www.toll.no/en/online-shopping/the-voec-scheme",
       "checked_at": "2026-11-23"
     },
+    "IL": {
+      "currency": "USD", "rule": "gst",
+      "_note": "Israeli VAT 18% on (goods value + shipping + insurance); used goods are taxed on their real value. Film cameras (HS 9006) and lenses (HS 9002) carry no customs duty or purchase tax. Personal-import VAT exemption is reported as USD 130 (sources disagree: 130 vs 150), which only affects cheap items. Digital bodies and accessories NOT verified (duty and purchase tax assumed 0, may be higher). Carrier clearance fees not included. Currency is USD so the exemption can be stated in USD.",
+      "exempt": 130, "duty_exempt": 500,
+      "duty": { "Body": 0.0, "Body_digital": 0.0, "Lens": 0.0, "Accessory": 0.0 },
+      "gst": 0.18, "handling": 0,
+      "source": "https://www.gov.il/en/service/customs-tax-calculation-import-by-israelis",
+      "checked_at": "2026-11-23"
+    },
     "BR": {
       "currency": "BRL",
       "rule": "br",
