@@ -1142,6 +1142,16 @@ SITES = [
         "통화": "KRW",
     },
     {
+        "name": "펠리칸카메라",
+        "active_first": False,  # 판매 중·품절이 섞여 있을 수 있어 매번 전체 (중고라이카 분류)
+        "name_fix": lambda t: _pelican_name(t),
+        "base": "https://www.pelicancamera.com",
+        "categories": [
+            "https://www.pelicancamera.com/category/%EC%A4%91%EA%B3%A0%EB%9D%BC%EC%9D%B4%EC%B9%B4/42/",  # 중고라이카
+        ],
+        "통화": "KRW",
+    },
+    {
         "name": "사진집",
         "active_first": True,  # 판매 중이 목록 앞 → 증분 수집 가능
         "base": "https://www.sazinzibb.com",
@@ -1278,6 +1288,17 @@ def _ilkwang_name(title):
     t = re.sub(r"\s*(?:필름|디지털)카메라\s*", " ", t)
     t = re.sub(r"\[\d{2,3}%\]", " ", t)  # 상태 %는 카드 글에서 따로 읽음
     return re.sub(r"\s+", " ", t).strip()
+
+
+def _pelican_name(title):
+    """펠리칸카메라 제목 '라이카 주미룩스 M 50mm f1.4 ASPH 실버 렌즈' → 국민카메라와 같은 한글 렌즈 이름 변환(_kookmin_name) +
+    '엘마릿'·'수퍼 앙굴론'·'매크로' 같은 이 매장 표기, '중고'·'｜…' 뒤 문구·'렌즈'·'필름카메라' 빼기"""
+    t = re.sub(r"\s*[｜|].*$", "", title)
+    t = re.sub(r"(?:수퍼|슈퍼)\s*앙굴론", "Super-Angulon", t)
+    t = re.sub(r"매크로\s*엘마(?:릿|리트)", "Macro-Elmarit", t)
+    t = re.sub(r"엘마릿", "Elmarit", t)
+    t = re.sub(r"\s*(?:중고|렌즈|필름카메라|디지털카메라|바디)\s*", " ", t)
+    return _kookmin_name(t)
 
 
 def _scamera_name(title):
