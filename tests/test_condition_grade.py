@@ -865,3 +865,13 @@ def test_cameramall_condition():
     assert grade_of(site, CAMERAMALL_PREFIX + "excellent")[0] == "B"
     assert grade_of(site, CAMERAMALL_PREFIX + "good")[0] == "C"
     assert grade_of(site, CAMERAMALL_PREFIX + "fair")[0] == "D"
+
+
+def test_agf_camera_grades():
+    from condition_grade import AGF_PREFIX, grade_of
+    site = "AGF Camera (홍콩)"
+    assert grade_of(site, AGF_PREFIX + "NEW OLD STOCK", "Leica Summilux-M 50mm f1.4")[0] == "N"
+    assert grade_of(site, AGF_PREFIX + "MINT", "Leica M6 Body")[0] == "S"
+    assert grade_of(site, AGF_PREFIX + "MINT-", "Leica M6 Body")[0] == "A"
+    assert grade_of(site, AGF_PREFIX + "EX+", "Leica M6 Body")[0] == "B"
+    assert grade_of(site, AGF_PREFIX + "EX", "Leica M6 Body")[0] == "C"

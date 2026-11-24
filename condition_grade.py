@@ -207,6 +207,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _SCHOUTEN.get(cond[len(SCHOUTEN_PREFIX):].strip().lower()), "text"
     if cond.startswith(GLAZERS_PREFIX):
         return _GLAZERS.get(cond[len(GLAZERS_PREFIX):].strip().upper()), "label"
+    if cond.startswith(AGF_PREFIX):
+        return _AGF.get(cond[len(AGF_PREFIX):].strip().upper()), "label"
     if cond.startswith(TAMARKIN_PREFIX):
         return _TAMARKIN.get(cond[len(TAMARKIN_PREFIX):].strip().upper()), "label"
     if cond.startswith(LEICA_CLASSIC_PREFIX):
@@ -564,6 +566,10 @@ GLAZERS_PREFIX = "Glazers: "
 # Fair는 모두 렌즈 안 흐림·접합 분리(Haze·Cement separation)라 사진엔 안 보여도 D.
 # 이 대응 기준 정확 일치 7/25 · 한 등급 이내 19/25 (사진이 평균 0.88등급 후함 — 기존 0.8과 비슷).
 _GLAZERS = {"M": "S", "EX": "A", "VG": "B", "G": "C", "GOOD": "C", "FAIR": "D", "POOR": "D"}
+# 홍콩 AGF Camera: 제목 별표 표기 *NEW OLD STOCK*·*BRAND NEW*·*UNUSED* 새것, *MINT* 새것 같음, *MINT-* 거의 새것, *EX+* 좋음, *EX* 보통
+# (사진 평가는 아직 안 함 — 다른 매장의 MINT·EX 대응과 같게 둠)
+AGF_PREFIX = "AGF: "
+_AGF = {"NEW OLD STOCK": "N", "BRAND NEW": "N", "NEW": "N", "UNUSED": "N", "DISPLAY UNIT": "S", "MINT": "S", "MINT-": "A", "EX+": "B", "EX": "C"}
 # 미국 Tamarkin Camera: 상세 가격 아래 'Nr. 258xxxx, Ex++'. 매장 등급표: Mint(새것 같음)·Near Mint(흠 1~2곳)·
 # Ex++(아주 작은 흔적)·Ex+(평균보다 나음)·Ex(보통 사용감)·VG(많이 씀, 작동 정상)
 TAMARKIN_PREFIX = "Tamarkin: "
