@@ -4323,6 +4323,77 @@ def crawl_meteor():
     return results
 
 
+def crawl_lskamera():
+    """LS Kamera (홍콩) - 빈티지 라이카·렌즈 전문점(nopCommerce형 정적 HTML). 'newproducts?brand=4'(브랜드 Leica)를 쪽(pagenumber)마다
+    카드 11개씩 끝까지 읽음. 카드: 제목·가격('HK$ 25,800.00')·재고('In Stock'), 팔린 것은 목록에서 빠짐. 등급 표기 없음, 가격 HKD"""
+    import html as _html
+    import requests
+    base = "https://lskamera.com"
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 LS Kamera 크롤링 시작")
+    results, seen = [], set()
+    for page_num in range(1, 80):
+        text = None
+        for attempt in range(3):
+            try:
+                resp = sess.get(f"{base}/newproducts", params={"brand": 4, "pagenumber": page_num}, timeout=30)
+                resp.raise_for_status()
+                text = resp.text
+                break
+            except Exception as e:
+                print(f"    ⚠️ {page_num}페이지 오류: {e}")
+                time.sleep(5)
+        if text is None:
+            raise RuntimeError(f"LS Kamera {page_num}페이지 못 읽음")  # 빠진 쪽이 판매완료로 바뀌지 않게
+        cards = text.split('class="custom-product-item"')[1:]
+        if not cards:
+            break
+        for card in cards:
+            href = re.search(r'<a href="([^"]+)"', card)
+            title = re.search(r'<div class="title">([^<]+)</div>', card)
+            if not href or not title:
+                continue
+            name = re.sub(r"\s+", " ", _html.unescape(title.group(1))).strip()
+            if not re.match(r"leica|leitz", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            link = base + href.group(1)
+            if link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            pm = re.search(r'class="price actual-price">\s*HK\$\s*([\d,]+)', card)
+            price = f"HK${pm.group(1)}" if pm else "문의요망"
+            im = re.search(r'<img[^>]+src="([^"]+)"', card)
+            status = re.search(r'<div class="status">([^<]*)</div>', card)
+            sold = bool(status) and "stock" not in status.group(1).lower()
+            if re.search(r"\bcamera\b", name, re.I) and not re.search(r"flash|grip|viewfinder|battery|winder|thumb|strap|case|\bfor\b|\bkit\b|lens|with|\bw/", name, re.I):
+                name += " Body"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "site": "LS Kamera (홍콩)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": "정보없음",
+                "가격": price,
+                "통화": "HKD",
+                "이미지": im.group(1) if im else "",
+                "링크": link,
+                "품절": sold,
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+        nxt = re.findall(r"pagenumber=(\d+)", text)
+        if str(page_num + 1) not in nxt:
+            break
+        time.sleep(1.0)
+    print(f"  ✅ LS Kamera 완료: {len(results)}개")
+    return results
+
+
 def crawl_tamarkin():
     """Tamarkin Camera (미국, 시카고) - 라이카 딜러. 분류 화면 7곳(정적 HTML, 쪽 넘김 없음)의 카드에 이름·가격·사진,
     중고 여부와 등급은 상세 화면 가격 아래 'Nr. 258xxxx, Ex++' 줄에만 있어 카드마다 상세를 읽는다 (약 170개 · 1분)
@@ -15810,6 +15881,7 @@ def crawl_all():
         ("Glazers Camera (미국)", lambda: ce.wrap_full_run("Glazers Camera (미국)", crawl_glazers)),
         ("AGF Camera (홍콩)", lambda: ce.wrap_full_run("AGF Camera (홍콩)", crawl_agf)),
         ("Meteor (홍콩)", lambda: ce.wrap_full_run("Meteor (홍콩)", crawl_meteor)),
+        ("LS Kamera (홍콩)", lambda: ce.wrap_full_run("LS Kamera (홍콩)", crawl_lskamera)),
         ("Tamarkin Camera (미국)", lambda: ce.wrap_full_run("Tamarkin Camera (미국)", crawl_tamarkin)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
