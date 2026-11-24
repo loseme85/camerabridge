@@ -1152,6 +1152,16 @@ SITES = [
         "통화": "KRW",
     },
     {
+        "name": "거성카메라",
+        "active_first": False,  # 검색 결과에 새상품(시그마 라이카마운트)이 섞여 매번 전체
+        "name_fix": lambda t: _geosung_name(t),
+        "base": "https://www.geosungcamera.com",
+        "categories": [
+            "https://www.geosungcamera.com/product/search.html?keyword=%EB%9D%BC%EC%9D%B4%EC%B9%B4",  # '라이카' 검색 (중고 라이카만 남김)
+        ],
+        "통화": "KRW",
+    },
+    {
         "name": "사진집",
         "active_first": True,  # 판매 중이 목록 앞 → 증분 수집 가능
         "base": "https://www.sazinzibb.com",
@@ -1299,6 +1309,18 @@ def _pelican_name(title):
     t = re.sub(r"엘마릿", "Elmarit", t)
     t = re.sub(r"\s*(?:중고|렌즈|필름카메라|디지털카메라|바디)\s*", " ", t)
     return _kookmin_name(t)
+
+
+def _geosung_name(title):
+    """거성카메라 제목 '[중고] 라이카 D-LUX7 실버 중고카메라 디지털 카메라 디카' → 'Leica D-LUX7 실버'
+    ('[중고]'가 붙은 라이카 카메라만. 시그마 라이카마운트 새상품·'(주)거성' 신품은 빈 이름 → 목록에서 빠짐)"""
+    if not re.match(r"\s*\[중고\]\s*(?:라이카|leica)\b", title, re.I):
+        return ""
+    t = re.sub(r"^\s*\[중고\]\s*", "", title)
+    t = re.sub(r"\s*(?:중고카메라|디지털\s*카메라|풀프레임|콤팩트\s*디카|디카)\s*", " ", t)
+    t = re.sub(r"^(?:라이카\s+)", "Leica ", t)
+    t = re.sub(r"(\d)세대", lambda m: {"1": "1st", "2": "2nd", "3": "3rd"}.get(m.group(1), m.group(1) + "th"), t)
+    return re.sub(r"\s+", " ", t).strip()
 
 
 def _scamera_name(title):
