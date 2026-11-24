@@ -344,3 +344,18 @@ def test_want_add_sends_confirmation_email(monkeypatch):
     to, subject, body = sent[0]
     assert to == "a@example.com" and "Summicron 35 4th" in subject
     assert board.EMAIL_LOGO in body and "B등급 이상" in body and "KRW 2,500,000" in body and "한국" in body and "r=unsub" in body
+
+
+def test_alert_signup_is_logged_and_sent_to_owner_telegram(monkeypatch):
+    fake, _ = _setup(monkeypatch)
+    monkeypatch.setattr(board, "google_identity", lambda c: {"sub": "sub-a", "email": "film@example.com", "email_verified": True})
+    texts = []
+    monkeypatch.setattr(board, "_notify", lambda text: texts.append(text))
+    a = _join("tok-a", "필름러")
+    board.alerts_on({"credential": "x", "locale": "ko"}, a, current={}, send=lambda *x: True)
+    logs = [json.loads(v) if isinstance(v, str) else v for k, v in fake.store.items() if "board/alert-log/" in k]
+    assert len(logs) == 1 and logs[0]["kind"] == "on" and logs[0]["email"] == "fi**@example.com" and logs[0]["confirm_mailed"] is True
+    assert "film@example.com" not in json.dumps(logs)  # 기록에는 전체 이메일이 없음
+    assert len(texts) == 1 and "fi**@example.com" in texts[0] and "발송" in texts[0]
+    board.alerts_on({"credential": "x"}, a, current={}, send=lambda *x: False)  # 확인 메일이 실패해도 신청·기록은 그대로
+    assert "못 보냄" in texts[1]

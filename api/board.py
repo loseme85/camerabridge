@@ -156,6 +156,21 @@ def _mask(email: str) -> str:
     return f"{name[:2]}{'*' * max(1, len(name) - 2)}@{domain}" if domain else ""
 
 
+def _record_alert_signup(blob, kind: str, member_id: str, member: dict, email: str, detail: str, mailed: bool) -> None:
+    """사장님 확인용: 알림 신청이 들어오면 기록을 쌓고(board/alert-log/) 텔레그램으로 알린다 (2026-11-24 사장님).
+
+    이메일은 가린 모양(fi**@example.com)만 남긴다 — 개인정보 안내(켤 때만 저장, 끄면 삭제)를 지키기 위해. 실패해도 신청은 그대로."""
+    try:
+        now = _now()[0]
+        entry = {"at": now.isoformat(timespec="seconds"), "kind": kind, "member": member_id, "nick": member.get("nick"),
+                 "email": _mask(email), "detail": detail, "confirm_mailed": bool(mailed)}
+        _put(blob, f"board/alert-log/{now.strftime('%Y%m%d-%H%M%S')}-{secrets.token_hex(3)}.json", entry)
+        title = "🔔 가격 알림 신청" if kind == "on" else "🎯 원하는 매물 조건 등록"
+        _notify(f"{title}\n{_mask(email)}\n{detail}\n확인 메일: {'발송' if mailed else '못 보냄'}")
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def _public_member(member: dict) -> dict:
     alerts = member.get("alerts") or {}
     return {"nick": member.get("nick"), "alerts": bool(alerts.get("email")), "alerts_email": _mask(alerts.get("email") or "")}
@@ -191,11 +206,14 @@ def alerts_on(body: dict, member_id: str | None, current: dict | None = None, se
             item["notified_status"] = "asking" if listing.get("sold_quality") == "asking" else ("sold" if listing else "gone")
         _put(blob, f"board/saves/{member_id}.json", {"items": items})
     # 켰다는 확인 메일 (2026-11-08 사장님: 알림 신청하면 내 메일로 확인 메일) — 못 보내도 켜기는 그대로
+    mailed = False
+    saved_count = len(_saves(blob, member_id))
     try:
-        subject, html_body = _confirm_email(member_id, member["alerts"], len(_saves(blob, member_id)))
-        (send or _send_email)(member["alerts"]["email"], subject, html_body)
+        subject, html_body = _confirm_email(member_id, member["alerts"], saved_count)
+        mailed = bool((send or _send_email)(member["alerts"]["email"], subject, html_body))
     except Exception:  # noqa: BLE001
         pass
+    _record_alert_signup(blob, "on", member_id, member, member["alerts"]["email"], f"저장한 상품 {saved_count}개 · 언어 {member['alerts']['locale']}", mailed)
     return 200, {"ok": True, "member": _public_member(member)}
 
 
@@ -913,6 +931,9 @@ def want_add(body: dict, member_id: str | None, records=None, send=None) -> tupl
             mailed = bool((send or _send_email)(alerts["email"], subject, html_body))
         except Exception:  # noqa: BLE001 — 메일이 실패해도 알림 저장은 그대로
             mailed = False
+    if alerts.get("email"):
+        _record_alert_signup(blob, "want", member_id, member, alerts["email"],
+                             f"{want['name']} · 등급 {want['grade']} · 도착 총액 {want['max_total']:,} {want['currency']} 이하 · 받는 곳 {want['dest']} · 지금 맞는 매물 {len(matches)}개", mailed)
     return 200, {"ok": True, "want": {k: v for k, v in want.items() if k != "notified"}, "matches": matches[:10],
                  "alerts": bool(alerts.get("email")), "mailed": mailed}
 
