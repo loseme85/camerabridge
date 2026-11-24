@@ -109,22 +109,22 @@
    "example": "[중고] M11 (Black)"
   },
   {
-   "a": "leica:feature:black-paint",
-   "b": "leica:feature:no-meter",
-   "count": 127,
-   "example": "Leica M2 BlackPaint"
-  },
-  {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:no-meter",
-   "count": 127,
+   "count": 128,
    "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:mechanical",
-   "count": 127,
+   "count": 128,
    "example": "[위탁] M2 (Silver)"
+  },
+  {
+   "a": "leica:feature:black-paint",
+   "b": "leica:feature:no-meter",
+   "count": 127,
+   "example": "Leica M2 BlackPaint"
   },
   {
    "a": "leica:body:m7:standard",
@@ -793,18 +793,6 @@
    "example": "[중고] M11-P (Safari)"
   },
   {
-   "a": "leica:body:m4:50-jahre",
-   "b": "leica:feature:no-meter",
-   "count": 15,
-   "example": "LEICA M4 Black Chrome 50 JAHRE sn.1414"
-  },
-  {
-   "a": "leica:body:m4:50-jahre",
-   "b": "leica:feature:mechanical",
-   "count": 15,
-   "example": "LEICA M4 Black Chrome 50 JAHRE sn.1414"
-  },
-  {
    "a": "leica:body:m262",
    "b": "leica:feature:frameline-28",
    "count": 14,
@@ -845,6 +833,18 @@
    "b": "leica:feature:mechanical",
    "count": 14,
    "example": "LEICA M6 EIN STUCK sn.2300"
+  },
+  {
+   "a": "leica:body:m4:50-jahre",
+   "b": "leica:feature:no-meter",
+   "count": 14,
+   "example": "LEICA M4 Black Chrome 50 JAHRE sn.1414"
+  },
+  {
+   "a": "leica:body:m4:50-jahre",
+   "b": "leica:feature:mechanical",
+   "count": 14,
+   "example": "LEICA M4 Black Chrome 50 JAHRE sn.1414"
   },
   {
    "a": "leica:feature:black-paint",
@@ -1745,7 +1745,7 @@
   {
    "entity": "leica:feature:mechanical",
    "word": "anniversary",
-   "count": 55,
+   "count": 54,
    "example": "[위탁] MP 광복 70주년 (Black Paint)"
   },
   {
@@ -1799,7 +1799,7 @@
   {
    "entity": "leica:feature:no-meter",
    "word": "anniversary",
-   "count": 21,
+   "count": 20,
    "example": "LEICA M4-P \"1913-1983\" 70th Anniversary sn.1619"
   },
   {
