@@ -4266,6 +4266,63 @@ def crawl_agf():
     return results
 
 
+def crawl_meteor():
+    """Meteor (홍콩) - 라이카 딜러·중고 매장(Shopify). 라이카 컬렉션 4곳(leica-m·leica-digital-camera·leica-film-camera·leica-r)
+    products.json. 제목 끝 '#시리얼'·'(used)'는 떼고, 등급은 설명 글('Cosmetic: very good condition' 등)을 describe_text로 읽음. 가격 HKD"""
+    import requests
+    from condition_grade import describe_text
+    base = "https://meteor.com.hk"
+    cols = ["leica-m", "leica-digital-camera", "leica-film-camera", "leica-r"]
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    sess.headers["Accept"] = "application/json"
+    print(f"\n  📂 Meteor 크롤링 시작")
+    results, seen = [], set()
+    for col in cols:
+        for p in _shopify_all(sess, f"{base}/collections/{col}/products.json", f"Meteor {col}"):
+            title = (p.get("title") or "").strip()
+            name = re.sub(r"\s*#\d{5,}", " ", title)  # 시리얼 번호
+            name = re.sub(r"\s*\((?:used|brand new)\)", " ", name, flags=re.I)
+            name = re.sub(r"\s+", " ", name).strip(" ,")
+            if not re.match(r"leica|leitz", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            if re.search(r"\bcamera\b", name, re.I) and not re.search(r"flash|grip|viewfinder|battery|winder|thumb|strap|case|\bfor\b|\bkit\b|lens|with|\bw/", name, re.I):
+                name += " Body"
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not link or link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            variant = p["variants"][0] if p.get("variants") else {}
+            try:
+                price = f"HK${float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cond = describe_text(p.get("body_html") or "") or "정보없음"
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
+                "site": "Meteor (홍콩)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": cond,
+                "가격": price,
+                "통화": "HKD",
+                "이미지": img,
+                "링크": link,
+                "품절": not any(v.get("available") for v in p.get("variants") or [{}]),
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+    print(f"  ✅ Meteor 완료: {len(results)}개")
+    return results
+
+
 def crawl_tamarkin():
     """Tamarkin Camera (미국, 시카고) - 라이카 딜러. 분류 화면 7곳(정적 HTML, 쪽 넘김 없음)의 카드에 이름·가격·사진,
     중고 여부와 등급은 상세 화면 가격 아래 'Nr. 258xxxx, Ex++' 줄에만 있어 카드마다 상세를 읽는다 (약 170개 · 1분)
@@ -15752,6 +15809,7 @@ def crawl_all():
         ("Akasaka Camera (일본)", lambda: ce.wrap_full_run("Akasaka Camera (일본)", crawl_akasaka)),
         ("Glazers Camera (미국)", lambda: ce.wrap_full_run("Glazers Camera (미국)", crawl_glazers)),
         ("AGF Camera (홍콩)", lambda: ce.wrap_full_run("AGF Camera (홍콩)", crawl_agf)),
+        ("Meteor (홍콩)", lambda: ce.wrap_full_run("Meteor (홍콩)", crawl_meteor)),
         ("Tamarkin Camera (미국)", lambda: ce.wrap_full_run("Tamarkin Camera (미국)", crawl_tamarkin)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
