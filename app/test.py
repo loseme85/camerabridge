@@ -4203,6 +4203,69 @@ def crawl_glazers():
     return results
 
 
+def crawl_agf():
+    """AGF Camera (홍콩) - 중고·빈티지 라이카 전문점(Shopify). 라이카 컬렉션 6곳(M·디지털·필름·R·S/SL/CL/TL·액세서리) products.json 전부.
+    등급은 제목의 *MINT-*·*EX+*·*NEW OLD STOCK* 같은 별표 표기('in Box'는 박스 유무라 뗌), 가격은 HKD"""
+    import requests
+    from condition_grade import AGF_PREFIX
+    base = "https://agfcamera.com"
+    cols = ["leica-m", "leica-digital-cameras", "leica-film-digital-camera", "leica-r", "leica-s-cl-sl-tl", "leica-accessories"]
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    sess.headers["Accept"] = "application/json"
+    print(f"\n  📂 AGF Camera 크롤링 시작")
+    results, seen = [], set()
+    for col in cols:
+        for p in _shopify_all(sess, f"{base}/collections/{col}/products.json", f"AGF {col}"):
+            title = (p.get("title") or "").strip()
+            marks = [m.strip() for m in re.findall(r"\*([^*]+)\*", title)]
+            grade = ""
+            for m in marks:
+                gm = re.match(r"(NEW OLD STOCK|BRAND NEW|NEW|UNUSED|DISPLAY UNIT|MINT-|MINT|EX\+|EX)(?![A-Za-z0-9])", m.strip(), re.I)
+                if gm:
+                    grade = gm.group(1).upper()
+                    break
+            name = re.sub(r"\s*\*[^*]+\*\s*", " ", title)
+            name = re.sub(r"\s+", " ", name).strip(" ,")
+            # 카메라 제목('Digital Rangefinder Camera Black 20000')에는 Body 표기가 없어 분류가 부속품·렌즈로 가므로 Body를 붙임
+            if re.search(r"\bcamera\b", name, re.I) and not re.search(r"flash|grip|viewfinder|battery|winder|thumb|strap|case|\bfor\b|\bkit\b|lens", name, re.I):
+                name += " Body"
+            if not re.match(r"leica|leitz", name, re.I) or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                continue
+            link = f"{base}/products/{p['handle']}" if p.get("handle") else ""
+            if not link or link in seen or link in globals().get('SOLD_LINKS', ()):
+                continue
+            seen.add(link)
+            variant = p["variants"][0] if p.get("variants") else {}
+            try:
+                price = f"HK${float(variant.get('price')):,.0f}"
+            except (TypeError, ValueError):
+                price = "문의요망"
+            img = p["images"][0].get("src", "") if p.get("images") else ""
+            cat = detect_category(name, price)
+            mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+            results.append({
+                "게시일": _shopify_listed(p),
+                "매장정보": _shopify_meta(p),
+                "site": "AGF Camera (홍콩)",
+                "label": auto_label(name),
+                "상품명": name,
+                "세대": detect_generation(name),
+                "컨디션": AGF_PREFIX + grade if grade else "정보없음",
+                "가격": price,
+                "통화": "HKD",
+                "이미지": img,
+                "링크": link,
+                "품절": not any(v.get("available") for v in p.get("variants") or [{}]),
+                "예약중": False,
+                "mount": mount,
+                "category": cat,
+                "brand": detect_brand(name),
+            })
+    print(f"  ✅ AGF Camera 완료: {len(results)}개")
+    return results
+
+
 def crawl_tamarkin():
     """Tamarkin Camera (미국, 시카고) - 라이카 딜러. 분류 화면 7곳(정적 HTML, 쪽 넘김 없음)의 카드에 이름·가격·사진,
     중고 여부와 등급은 상세 화면 가격 아래 'Nr. 258xxxx, Ex++' 줄에만 있어 카드마다 상세를 읽는다 (약 170개 · 1분)
@@ -15688,6 +15751,7 @@ def crawl_all():
         ("Lucky Camera (일본)", lambda: ce.wrap_full_run("Lucky Camera (일본)", crawl_lucky)),
         ("Akasaka Camera (일본)", lambda: ce.wrap_full_run("Akasaka Camera (일본)", crawl_akasaka)),
         ("Glazers Camera (미국)", lambda: ce.wrap_full_run("Glazers Camera (미국)", crawl_glazers)),
+        ("AGF Camera (홍콩)", lambda: ce.wrap_full_run("AGF Camera (홍콩)", crawl_agf)),
         ("Tamarkin Camera (미국)", lambda: ce.wrap_full_run("Tamarkin Camera (미국)", crawl_tamarkin)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
