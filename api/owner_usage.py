@@ -83,6 +83,18 @@ def load(days: int, date: str | None = None) -> tuple[list[dict], list[dict], bo
     return _read_many(blob, usage_items[:MAX_READS]), _read_many(blob, feedback_items), cut
 
 
+def load_alert_log(limit: int = 30) -> list[dict]:
+    """알림 신청 기록(board/alert-log/, api/board.py 가 신청 때마다 한 건) 최신순. 못 읽으면 빈 목록."""
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        import board  # noqa: WPS433
+        blob = board._blob()
+        items = sorted(board._names(blob, "board/alert-log/"), key=lambda i: i.pathname, reverse=True)[:limit]
+        return [e for e in board._read_many(blob, items) if e]
+    except Exception:  # noqa: BLE001
+        return []
+
+
 COUNTRY_NAMES = {"KR": "한국", "JP": "일본", "US": "미국", "GB": "영국", "DE": "독일", "FR": "프랑스", "IT": "이탈리아",
                  "NL": "네덜란드", "CN": "중국", "TW": "대만", "HK": "홍콩", "SG": "싱가포르", "CA": "캐나다", "AU": "호주",
                  "CH": "스위스", "AT": "오스트리아", "ES": "스페인", "DK": "덴마크", "SE": "스웨덴", "BE": "벨기에"}
@@ -377,7 +389,7 @@ def _step(kind: str, s: dict, cls: str, label: str) -> str:
 
 
 def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date: str | None = None,
-           history: dict[str, dict] | None = None) -> str:
+           history: dict[str, dict] | None = None, alert_log: list[dict] | None = None) -> str:
     entries = [dict(e, created_at=_time_key(e.get("created_at", "")).isoformat())
                if _time_key(e.get("created_at", "")).year > 1 else dict(e) for e in entries]
     entries = group_visits(entries, history)
@@ -439,6 +451,10 @@ def render(entries: list[dict], feedback: list[dict], days: int, cut: bool, date
                     f"<td data-label='머문 시간'>{_esc(v['duration_s'] // 60)}분 {_esc(v['duration_s'] % 60)}초{f"<br><span class=muted>{_esc(v['scroll'])}% 내려 봄</span>" if v.get('scroll') else ''}</td><td data-label='한 일'>{''.join(steps)}</td></tr>")
     visit_table = "".join(rows) or "<tr class=empty><td colspan=5 class=muted>이 기간에 방문이 없습니다</td></tr>"
 
+    alert_rows = "".join(
+        f"<tr><td class=nowrap>{_esc(_kst_time(a.get('at', ''), '%m-%d %H:%M'))}</td><td>{'🔔 알림 켬' if a.get('kind') == 'on' else '🎯 원하는 매물'}</td>"
+        f"<td>{_esc(a.get('email'))}</td><td>{_esc(a.get('detail'))}</td><td>{'발송' if a.get('confirm_mailed') else '못 보냄'}</td></tr>"
+        for a in (alert_log or [])) or "<tr><td colspan=5 class=muted>아직 없음</td></tr>"
     fb_rows = "".join(f"<tr><td class=nowrap>{_esc(_kst_time(f.get('created_at', ''), "%m-%d %H:%M"))}</td><td>{_esc(f.get('locale') or '-')}</td><td>{_esc(f.get('message'))}</td></tr>" for f in feedback) \
         or "<tr><td colspan=3 class=muted>아직 없음</td></tr>"
 
@@ -506,6 +522,7 @@ table{{width:100%;border-collapse:collapse}}td{{overflow-wrap:anywhere;padding:6
 <section class='card wide'><h2>최근 방문</h2>
 <p class=muted>각 방문 아래에 그전에 방문한 횟수를 표시합니다. 기록된 최근 1년 · 같은 브라우저 기준입니다.</p>
 <table class=visit-table><thead><tr><th scope=col class=muted>방문 시각 (한국) · 이전 방문</th><th scope=col class=muted>어디서 · 처음 들어온 주소</th><th scope=col class=muted>나라·기기·언어</th><th scope=col class=muted>머문 시간</th><th scope=col class=muted>한 일</th></tr></thead><tbody>{visit_table}</tbody></table></section>
+<section class='card wide'><h2>알림 신청 기록 (🔔 최근 30건)</h2><p class=muted>이메일은 가린 모양만 저장합니다. 확인 메일 발송 여부는 신청 때 보낸 결과입니다.</p><table>{alert_rows}</table></section>
 <section class='card wide'><h2>최근 의견 (💬 의견 보내기)</h2><table>{fb_rows}</table></section>
 </div>
 <p class=note>2026-11-07 전 기록은 검색·클릭한 방문만 남아 있습니다. 집계 방식이 다른 <a href="{ANALYTICS_URL}" target=_blank rel=noopener>Vercel Analytics</a> 통계와 숫자가 다를 수 있습니다.
@@ -550,4 +567,4 @@ class handler(BaseHTTPRequestHandler):
             entries, feedback, cut = load(days, date)
         except Exception as error:  # noqa: BLE001
             return self._send(500, f"<!doctype html><meta charset=utf-8><p>기록을 읽지 못했습니다: {_esc(type(error).__name__)}</p>")
-        return self._send(200, render(entries, feedback, days, cut, date, load_browser_history(entries)), {"set-cookie": SKIP_USAGE_COOKIE})
+        return self._send(200, render(entries, feedback, days, cut, date, load_browser_history(entries), load_alert_log()), {"set-cookie": SKIP_USAGE_COOKIE})
