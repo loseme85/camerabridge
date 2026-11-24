@@ -212,3 +212,11 @@ def test_previously_visited_people_in_period():
     assert previously_visited_people(h, {"2026-11-21"}) == (2, 1)
     assert previously_visited_people(h, {"2026-11-20", "2026-11-21"}) == (2, 1)
     assert previously_visited_people(None, {"2026-11-21"}) == (0, 0)
+
+
+def test_alert_signup_log_is_shown():
+    log = [{"at": "2026-11-24T10:00:00+09:00", "kind": "on", "email": "fi**@example.com", "detail": "저장한 상품 2개", "confirm_mailed": True},
+           {"at": "2026-11-24T09:00:00+09:00", "kind": "want", "email": "<b>x</b>@a.com", "detail": "Summicron", "confirm_mailed": False}]
+    page = owner_usage.render(ENTRIES, [], 7, False, alert_log=log)
+    assert "알림 신청 기록" in page and "fi**@example.com" in page and "못 보냄" in page and "<b>x</b>@a.com" not in page
+    assert "아직 없음" in owner_usage.render(ENTRIES, [], 7, False)
