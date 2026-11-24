@@ -1,0 +1,45 @@
+name: HK probe
+on:
+  push:
+    branches: ['site-test/hk-20261124']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: |
+          mkdir -p out
+          python - <<'PY'
+          import requests, json, time
+          H = {"User-Agent": "Mozilla/5.0"}
+          plan = {"meteor.com.hk": ["leica-m", "leica-digital-camera", "leica-film-camera", "leica-r"],
+                  "agfcamera.com": ["leica-m", "leica-digital-cameras", "leica-film-digital-camera", "leica-r", "leica-s-cl-sl-tl", "leica-accessories"]}
+          for d, cols in plan.items():
+              out = {}
+              for c in cols:
+                  items = []
+                  for page in range(1, 6):
+                      r = requests.get(f"https://{d}/collections/{c}/products.json?limit=250&page={page}", headers=H, timeout=40)
+                      if r.status_code != 200:
+                          out[c + "_status"] = r.status_code
+                          break
+                      ps = r.json().get("products", [])
+                      if not ps:
+                          break
+                      items += ps
+                      time.sleep(2)
+                  out[c] = items
+                  print(d, c, len(items), out.get(c + "_status"))
+              json.dump(out, open(f"out/{d}.json", "w"))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hk
+          path: out/
