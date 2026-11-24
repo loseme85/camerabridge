@@ -82,7 +82,7 @@
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
    "count": 210,
-   "example": "[중고] M11 Monochrom"
+   "example": "Leica M11 Monochrome Black"
   },
   {
    "a": "leica:feature:mechanical",
@@ -105,7 +105,7 @@
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 131,
+   "count": 130,
    "example": "[중고] M11 (Black)"
   },
   {
@@ -376,13 +376,13 @@
    "a": "leica:body:m11-monochrom",
    "b": "leica:feature:frameline-28",
    "count": 50,
-   "example": "[중고] M11 Monochrom"
+   "example": "Leica M11 Monochrome Black"
   },
   {
    "a": "leica:body:m11-monochrom",
    "b": "leica:feature:monochrom",
    "count": 50,
-   "example": "[중고] M11 Monochrom"
+   "example": "Leica M11 Monochrome Black"
   },
   {
    "a": "leica:body:m-monochrom-246:standard",
@@ -763,6 +763,12 @@
    "example": "[위탁] M6 LHSA (Black Paint)"
   },
   {
+   "a": "leica:feature:safari",
+   "b": "leica:lens:summicron-m:28:safari",
+   "count": 17,
+   "example": "[중고] M 28/2 Safari"
+  },
+  {
    "a": "leica:body:m11-p:safari",
    "b": "leica:feature:frameline-28",
    "count": 16,
@@ -779,12 +785,6 @@
    "b": "leica:feature:black-paint",
    "count": 16,
    "example": "[중고] M-P (Black paint)"
-  },
-  {
-   "a": "leica:feature:safari",
-   "b": "leica:lens:summicron-m:28:safari",
-   "count": 16,
-   "example": "[중고] M 28/2 Safari"
   },
   {
    "a": "leica:body:m11-p:safari",
@@ -1710,7 +1710,7 @@
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
    "count": 209,
-   "example": "[중고] M11 Monochrom"
+   "example": "Leica M11 Monochrome Black"
   },
   {
    "entity": "leica:feature:meter",
