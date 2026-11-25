@@ -75,13 +75,13 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 232,
+   "count": 231,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:monochrom",
-   "count": 218,
+   "count": 217,
    "example": "Leica M11 Monochrome Black"
   },
   {
@@ -391,18 +391,6 @@
    "example": "Leica M 35mm f2 Summicron 1st 8elements EYE Black Repaint"
   },
   {
-   "a": "leica:body:m11:black-paint",
-   "b": "leica:feature:frameline-28",
-   "count": 51,
-   "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
-  },
-  {
-   "a": "leica:body:m11:black-paint",
-   "b": "leica:feature:black-paint",
-   "count": 51,
-   "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
-  },
-  {
    "a": "leica:body:m-a:standard",
    "b": "leica:feature:frameline-28",
    "count": 51,
@@ -433,15 +421,27 @@
    "example": "Leica M11 Monochrome Black"
   },
   {
+   "a": "leica:body:m11:black-paint",
+   "b": "leica:feature:frameline-28",
+   "count": 50,
+   "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
+  },
+  {
+   "a": "leica:body:m11:black-paint",
+   "b": "leica:feature:black-paint",
+   "count": 50,
+   "example": "신품 Leica M11 Glossy Black City Edition \"SEOUL\""
+  },
+  {
    "a": "leica:body:m-monochrom-ccd",
    "b": "leica:feature:frameline-28",
-   "count": 48,
+   "count": 47,
    "example": "[위탁] M Monochrom CCD"
   },
   {
    "a": "leica:body:m-monochrom-ccd",
    "b": "leica:feature:monochrom",
-   "count": 48,
+   "count": 47,
    "example": "[위탁] M Monochrom CCD"
   },
   {
@@ -1721,13 +1721,13 @@
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 242,
+   "count": 241,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "entity": "leica:feature:frameline-28",
    "word": "monochrom",
-   "count": 217,
+   "count": 216,
    "example": "Leica M11 Monochrome Black"
   },
   {
