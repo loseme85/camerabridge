@@ -1,7 +1,7 @@
 {
-"total": 467,
+"total": 469,
 "by_hint": {
-"accessory": 63,
+"accessory": 65,
 "set": 68,
 "check": 293,
 "edition": 40,
@@ -9,54 +9,24 @@
 },
 "new": [
 {
-"url": "https://www.fotootticacavour.com/products/leica-iii-model-f-chrome-finish-con-elmar-50mm-f-3-5316618-500957",
-"entity": "leica:body:iii:standard",
-"ratio": 2.51,
-"category": "Body",
-"title": "Leica III (Model F) + Elmar 50mm f3.5 + Elmar 90mm f4",
-"price": "€1,000",
-"source": "Foto Ottica Cavour (이탈리아)",
-"hint": "set"
+"url": "https://shop.kitamura.jp/ec/used/2119341126428",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 0.21,
+"category": "Accessory",
+"title": "Leica 14033 IROOA for HoodCap",
+"price": "¥2,200",
+"source": "기타무라 (일본)",
+"hint": "accessory"
 },
 {
-"url": "https://fotopro24.de/Analog/72215-III_DRP_Ernst_Leitz_Wetzlar_mit_Leitz_Elmar_3_5___5_cm_Objektiv.html",
-"entity": "leica:body:iii:standard",
-"ratio": 2.51,
-"category": "Body",
-"title": "Leica III DRP Ernst Leitz Wetzlar mit Leitz Elmar 50mm f3.5 Objektiv",
-"price": "€999",
-"source": "fotopro24 (독일)",
-"hint": "set"
-},
-{
-"url": "https://schouten-select.com/products/leica-sl-typ-601-box-1",
-"entity": "leica:body:sl601",
-"ratio": 2.5,
-"category": "Body",
-"title": "Leica SL (Typ 601)",
-"price": "€3,650",
-"source": "Schouten Select (네덜란드)",
-"hint": "check"
-},
-{
-"url": "https://www.leica-camera-france-occasions.com/en/occasion/elmar-m-90-mm-f4-1954-1963-0",
-"entity": "leica:lens:elmar:90:unspecified",
-"ratio": 0.45,
-"category": "Lens",
-"title": "ELMAR-M 90 mm f/4 (1954-1963)",
-"price": "€90",
-"source": "Leica Store France (프랑스)",
-"hint": "check"
-},
-{
-"url": "https://cameranonaniwa.jp/shop/g/g2221070549345/",
-"entity": "leica:lens:vario-elmar-r:70-210",
-"ratio": 0.45,
-"category": "Lens",
-"title": "Leica Vario Elmar R 70-210/F4.0 3CAM",
-"price": "¥18,800",
-"source": "카메라노나니와 (일본)",
-"hint": "check"
+"url": "https://oneofmanycameras.com/products/leica-lens-hood-12524-for-35mm-f2-summicron-v4-with-14033-cap",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 3.3,
+"category": "Accessory",
+"title": "Leica Lens Hood 12524 for 35mm f2 Summicron v4 with 14033 cap",
+"price": "DKK 1,500",
+"source": "One Of Many Cameras (덴마크)",
+"hint": "accessory"
 }
 ],
 "items": [
@@ -141,9 +111,19 @@
 "hint": "check"
 },
 {
+"url": "https://shop.kitamura.jp/ec/used/2119341126428",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 0.21,
+"category": "Accessory",
+"title": "Leica 14033 IROOA for HoodCap",
+"price": "¥2,200",
+"source": "기타무라 (일본)",
+"hint": "accessory"
+},
+{
 "url": "https://www.fujikoshi-camera.com/shopdetail/000000022605/006/X/page2/order/",
 "entity": "leica:acc:hood-cap:14033",
-"ratio": 0.27,
+"ratio": 0.41,
 "category": "Accessory",
 "title": "Leica 12575-12585Hood for HoodCap 「LEITZ」表記 14033",
 "price": "¥4,400",
@@ -153,7 +133,7 @@
 {
 "url": "https://www.fujikoshi-camera.com/shopdetail/000000022606/006/X/page2/order/",
 "entity": "leica:acc:hood-cap:14033",
-"ratio": 0.27,
+"ratio": 0.41,
 "category": "Accessory",
 "title": "Leica 12575-12585Hood for HoodCap 「LEICA」表記 14033",
 "price": "¥4,400",
@@ -163,7 +143,7 @@
 {
 "url": "https://www.fujikoshi-camera.com/shopdetail/000000022515/006/X/page3/order/",
 "entity": "leica:acc:hood-cap:14033",
-"ratio": 0.27,
+"ratio": 0.41,
 "category": "Accessory",
 "title": "Leica 12575-12585Hood for HoodCap 「Leica」表記 14033",
 "price": "¥4,400",
@@ -173,10 +153,20 @@
 {
 "url": "https://oneofmanycameras.com/products/leica-leitz-14033-lens-cap",
 "entity": "leica:acc:hood-cap:14033",
-"ratio": 0.28,
+"ratio": 0.44,
 "category": "Accessory",
 "title": "Leica Leitz 14033 Lens Cap",
 "price": "DKK 200",
+"source": "One Of Many Cameras (덴마크)",
+"hint": "accessory"
+},
+{
+"url": "https://oneofmanycameras.com/products/leica-lens-hood-12524-for-35mm-f2-summicron-v4-with-14033-cap",
+"entity": "leica:acc:hood-cap:14033",
+"ratio": 3.3,
+"category": "Accessory",
+"title": "Leica Lens Hood 12524 for 35mm f2 Summicron v4 with 14033 cap",
+"price": "DKK 1,500",
 "source": "One Of Many Cameras (덴마크)",
 "hint": "accessory"
 },
@@ -1803,7 +1793,7 @@
 {
 "url": "https://schouten-select.com/products/leica-sl-typ-601-box-1",
 "entity": "leica:body:sl601",
-"ratio": 2.5,
+"ratio": 2.51,
 "category": "Body",
 "title": "Leica SL (Typ 601)",
 "price": "€3,650",
@@ -1816,7 +1806,7 @@
 "ratio": 0.38,
 "category": "Body",
 "title": "LEITZ LEICA STANDARD BLACK PAINT WITH NICKEL ELEMENTS NO. 102904 ELMAR",
-"price": "HK$2,102",
+"price": "HK$2,103",
 "source": "Artra Lab (홍콩)",
 "hint": "set"
 },
