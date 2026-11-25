@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1152,
+   "count": 1151,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -211,33 +211,33 @@
    "example": "Leica MP BlackPaint x0.72"
   },
   {
-   "a": "leica:body:m11-p:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 88,
-   "example": "Leica M11-P Silver"
-  },
-  {
    "a": "leica:feature:eyes",
    "b": "leica:lens:elmarit-m:135",
    "count": 88,
    "example": "[위탁] M135/2.8 Elmarit (Black)"
   },
   {
+   "a": "leica:body:m11-p:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 87,
+   "example": "Leica M11-P Silver"
+  },
+  {
    "a": "leica:body:m3:double-stroke",
    "b": "leica:feature:no-meter",
-   "count": 88,
+   "count": 87,
    "example": "LEICA M3 Double Stroke Year 1955 sn.7364"
   },
   {
    "a": "leica:body:m3:double-stroke",
    "b": "leica:feature:mechanical",
-   "count": 88,
+   "count": 87,
    "example": "LEICA M3 Double Stroke Year 1955 sn.7364"
   },
   {
    "a": "leica:body:m8:standard",
    "b": "leica:feature:frameline-28",
-   "count": 81,
+   "count": 82,
    "example": "Leica M8 Silver"
   },
   {
@@ -345,7 +345,7 @@
   {
    "a": "leica:body:m-p240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 62,
+   "count": 61,
    "example": "Leica M-P Black"
   },
   {
@@ -1941,12 +1941,6 @@
    "example": "Brand New Leica M-A \"Titan\" Set with APO-Summicron-M 50 f/2 ASPH. Titanium Film "
   },
   {
-   "entity": "leica:lens:summilux-r:50:v1",
-   "word": "safari",
-   "count": 4,
-   "example": "Leica Summilux-R 50mm/F1.4 E55 Ver.II V2 Safari 11776"
-  },
-  {
    "entity": "leica:body:d-lux-5",
    "word": "titan",
    "count": 4,
@@ -1957,6 +1951,12 @@
    "word": "black paint",
    "count": 4,
    "example": "Leica MP 6 0.72 Black Paint Body Film Camera"
+  },
+  {
+   "entity": "leica:lens:summilux-r:50:v1",
+   "word": "safari",
+   "count": 3,
+   "example": "Leica Summilux-R 50mm/F1.4 E55 Ver.II V2 Safari 11776"
   },
   {
    "entity": "leica:lens:elmar:105",
