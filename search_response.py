@@ -325,7 +325,8 @@ def format_search_result(
             "match_quality_rank": ranked_result.get("match_quality_rank"),
             "mismatch_reasons": list(ranked_result.get("mismatch_reasons") or []),
             "classifier_output": (
-                source_record.get("classifier_output")
+                # 같으면 저장하지 않으므로(final_resolution_pipeline) 없으면 final_output이 같은 값
+                (source_record.get("classifier_output") or source_record.get("final_output"))
                 if isinstance(source_record, dict)
                 else None
             ),

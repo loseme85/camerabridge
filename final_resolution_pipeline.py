@@ -280,7 +280,15 @@ def write_resolved_outputs(
     report = build_override_report(resolved_records)
 
     _write_json(classified_output_path, classified_records)
-    _write_json(resolved_output_path, resolved_records)
+    # classifier_output이 final_output과 같으면(99.96%) 저장하지 않음 (2026-11-26): 레코드마다 중복이라 약 40%(42MB)를 차지해
+    # results_resolved_v2.json이 GitHub 100MB 한도에 걸렸음. 읽는 쪽은 없으면 final_output으로 대신함(search_response 디버그)
+    slim_records = [
+        {k: v for k, v in record.items() if k != "classifier_output"}
+        if record.get("classifier_output") == record.get("final_output")
+        else record
+        for record in resolved_records
+    ]
+    _write_json(resolved_output_path, slim_records)
     _write_json(override_report_path, report)
     search_index_result = write_search_index(
         resolved_path=resolved_output_path,
