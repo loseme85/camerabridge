@@ -4460,6 +4460,8 @@ def crawl_fotohobby():
                     continue
                 pm = re.search(r"<em>\s*\$([\d,]+)", card)
                 sold = bool(re.search(r"<em>\s*Sold\s*</em>", card, re.I))
+                if sold:
+                    continue  # 팔린 것은 가격 없이 'Sold'만 남아 쓸모가 없고, 결과 파일이 GitHub 한도(100MB)를 넘겨 저장이 막힘 (2026-11-26)
                 price = f"HK${pm.group(1)}" if pm else "문의요망"
                 im = re.search(r'<img src="([^"]+)"', card)
                 img = im.group(1).replace("/t/", "/") if im else ""
