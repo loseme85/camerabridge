@@ -3,7 +3,7 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1149,
+   "count": 1145,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -63,13 +63,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 255,
+   "count": 253,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 255,
+   "count": 253,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
@@ -99,7 +99,7 @@
   {
    "a": "leica:body:m10:standard",
    "b": "leica:feature:frameline-28",
-   "count": 152,
+   "count": 151,
    "example": "Leica M10 Black"
   },
   {
@@ -243,7 +243,7 @@
   {
    "a": "leica:body:m10-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 79,
+   "count": 78,
    "example": "Leica M10-P Black"
   },
   {
@@ -331,22 +331,22 @@
    "example": "[중고] M9"
   },
   {
+   "a": "leica:body:m-p240:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 61,
+   "example": "Leica M-P Black"
+  },
+  {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:no-meter",
-   "count": 62,
+   "count": 61,
    "example": "LEICA M3 Single Stroke sn.1156"
   },
   {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:mechanical",
-   "count": 62,
-   "example": "LEICA M3 Single Stroke sn.1156"
-  },
-  {
-   "a": "leica:body:m-p240:standard",
-   "b": "leica:feature:frameline-28",
    "count": 61,
-   "example": "Leica M-P Black"
+   "example": "LEICA M3 Single Stroke sn.1156"
   },
   {
    "a": "leica:feature:mechanical",
@@ -751,6 +751,12 @@
    "example": "LEICA M3 sn.1097"
   },
   {
+   "a": "leica:body:m262",
+   "b": "leica:feature:frameline-28",
+   "count": 18,
+   "example": "Leica M Typ262 Black"
+  },
+  {
    "a": "leica:body:m11-p:safari",
    "b": "leica:feature:frameline-28",
    "count": 18,
@@ -761,12 +767,6 @@
    "b": "leica:feature:frameline-28",
    "count": 18,
    "example": "LEICA M8.2 sn.3556"
-  },
-  {
-   "a": "leica:body:m262",
-   "b": "leica:feature:frameline-28",
-   "count": 17,
-   "example": "Leica M Typ262 Black"
   },
   {
    "a": "leica:body:m11-p:safari",
@@ -799,18 +799,6 @@
    "example": "[위탁] M6 Panda (Silver)"
   },
   {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:no-meter",
-   "count": 17,
-   "example": "Leica M2 Round Button Rewind Silver Film Rangefinder Camera Boxed"
-  },
-  {
-   "a": "leica:body:m2:button-rewind",
-   "b": "leica:feature:mechanical",
-   "count": 17,
-   "example": "Leica M2 Round Button Rewind Silver Film Rangefinder Camera Boxed"
-  },
-  {
    "a": "leica:body:m-p240:black-paint",
    "b": "leica:feature:frameline-28",
    "count": 16,
@@ -821,6 +809,18 @@
    "b": "leica:feature:black-paint",
    "count": 16,
    "example": "[중고] M-P (Black paint)"
+  },
+  {
+   "a": "leica:body:m2:button-rewind",
+   "b": "leica:feature:no-meter",
+   "count": 16,
+   "example": "Leica M2 Round Button Rewind Silver Film Rangefinder Camera Boxed"
+  },
+  {
+   "a": "leica:body:m2:button-rewind",
+   "b": "leica:feature:mechanical",
+   "count": 16,
+   "example": "Leica M2 Round Button Rewind Silver Film Rangefinder Camera Boxed"
   },
   {
    "a": "leica:feature:black-paint",
