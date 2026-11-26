@@ -1,13 +1,44 @@
 {
-"total": 468,
+"total": 470,
 "by_hint": {
 "accessory": 65,
-"set": 65,
-"check": 294,
+"set": 66,
+"check": 295,
 "edition": 41,
 "defect": 3
 },
-"new": [],
+"new": [
+{
+"url": "https://jbvfoto.de/leica-iii-mod-f-black-nickel-hektor-25-50mm",
+"entity": "leica:body:iii:black-nickel",
+"ratio": 2.51,
+"category": "Body",
+"title": "Leica III mod. F black nickel Hektor 50mm f2.5",
+"price": "€2,000",
+"source": "JBV Foto (독일)",
+"hint": "set"
+},
+{
+"url": "https://www.peterloy.com/?p=22500",
+"entity": "leica:body:iiic:standard",
+"ratio": 0.45,
+"category": "Body",
+"title": "Leica IIIc body, sharkskin",
+"price": "£165",
+"source": "Peter Loy (영국)",
+"hint": "check"
+},
+{
+"url": "https://khrome.de/products/leitz-wetzlar-elmar-m-4-90mm-s-n-2124578",
+"entity": "leica:lens:elmar:90:unspecified",
+"ratio": 2.51,
+"category": "Lens",
+"title": "Leitz Wetzlar Elmar-M 90mm f4",
+"price": "€500",
+"source": "Khrome (독일)",
+"hint": "check"
+}
+],
 "items": [
 {
 "url": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#179990",
@@ -990,24 +1021,24 @@
 "hint": "set"
 },
 {
+"url": "https://jbvfoto.de/leica-iii-mod-f-black-nickel-hektor-25-50mm",
+"entity": "leica:body:iii:black-nickel",
+"ratio": 2.51,
+"category": "Body",
+"title": "Leica III mod. F black nickel Hektor 50mm f2.5",
+"price": "€2,000",
+"source": "JBV Foto (독일)",
+"hint": "set"
+},
+{
 "url": "https://www.peterloy.com/?p=15256",
 "entity": "leica:body:iii:standard",
-"ratio": 0.4,
+"ratio": 0.41,
 "category": "Body",
 "title": "Leica III body, chrome",
 "price": "£135",
 "source": "Peter Loy (영국)",
 "hint": "check"
-},
-{
-"url": "https://www.fotootticacavour.com/products/leica-iii-model-f-chrome-finish-con-elmar-50mm-f-3-5316618-500957",
-"entity": "leica:body:iii:standard",
-"ratio": 2.51,
-"category": "Body",
-"title": "Leica III (Model F) + Elmar 50mm f3.5 + Elmar 90mm f4",
-"price": "€1,000",
-"source": "Foto Ottica Cavour (이탈리아)",
-"hint": "set"
 },
 {
 "url": "https://fotopro24.de/Analog/72215-III_DRP_Ernst_Leitz_Wetzlar_mit_Leitz_Elmar_3_5___5_cm_Objektiv.html",
@@ -1020,9 +1051,19 @@
 "hint": "set"
 },
 {
+"url": "https://www.fotootticacavour.com/products/leica-iii-model-f-chrome-finish-con-elmar-50mm-f-3-5316618-500957",
+"entity": "leica:body:iii:standard",
+"ratio": 2.52,
+"category": "Body",
+"title": "Leica III (Model F) + Elmar 50mm f3.5 + Elmar 90mm f4",
+"price": "€1,000",
+"source": "Foto Ottica Cavour (이탈리아)",
+"hint": "set"
+},
+{
 "url": "https://classic.leica-camera.com/en/Kit-Leica-III-negro-Elmar-50-Nickel/SH001-109316",
 "entity": "leica:body:iii:standard",
-"ratio": 3.26,
+"ratio": 3.27,
 "category": "Body",
 "title": "Leica Kit Leica III negro + Elmar 50 Nickel",
 "price": "€1,300",
@@ -1080,9 +1121,19 @@
 "hint": "check"
 },
 {
+"url": "https://www.peterloy.com/?p=22500",
+"entity": "leica:body:iiic:standard",
+"ratio": 0.45,
+"category": "Body",
+"title": "Leica IIIc body, sharkskin",
+"price": "£165",
+"source": "Peter Loy (영국)",
+"hint": "check"
+},
+{
 "url": "https://www.fotodotti.it/prodotti/leica/fotocamere/usato/fotocamera-analogoca-leica-iiic-matr-363115-con-elmar-5cm-f3-5.html",
 "entity": "leica:body:iiic:standard",
-"ratio": 2.65,
+"ratio": 2.58,
 "category": "Body",
 "title": "Fotocamera analogoca Leica IIIc matr.363115 con Elmar 5cm f3.5",
 "price": "€1,140",
@@ -1092,7 +1143,7 @@
 {
 "url": "https://www.newoldcamera.com/Scheda.aspx?Codice=19U4537",
 "entity": "leica:body:iiic:standard",
-"ratio": 3.23,
+"ratio": 3.15,
 "category": "Body",
 "title": "Leica IIIC + 50mm f/3.5 ELMAR \"FEDERICO GAROLLA\"",
 "price": "€1,390",
@@ -1102,7 +1153,7 @@
 {
 "url": "https://www.vintagecameragear.com/produkt/leica-iiic-summitar-5cm-50mm-special-number-660000-leitz-top-condition-93300/",
 "entity": "leica:body:iiic:standard",
-"ratio": 3.44,
+"ratio": 3.35,
 "category": "Body",
 "title": "Leica IIIc Summitar 5cm 50mm special number 660000 Leitz top condition",
 "price": "€1,480",
@@ -1432,7 +1483,7 @@
 {
 "url": "https://www.fotocuratolo.it/8868-Usato-garantito-2-anni-Usato-Leica-M3-OTTICA-SUMMILUX-50MM-F.-1,4-CUST....html",
 "entity": "leica:body:m3:standard",
-"ratio": 2.72,
+"ratio": 2.7,
 "category": "Body",
 "title": "Leica M3 with SUMMILUX 50mm f1.4 leather case",
 "price": "€4,490",
@@ -1442,7 +1493,7 @@
 {
 "url": "https://www.sazinzibb.com/product/leica-m3-m-50mm-f2-summicron-dr-brass-set/17028/category/28/display/1/",
 "entity": "leica:body:m3:standard",
-"ratio": 2.88,
+"ratio": 2.86,
 "category": "Body",
 "title": "Leica M3 + M 50mm f2 Summicron DR Brass SET",
 "price": "7,000,000원",
@@ -1452,7 +1503,7 @@
 {
 "url": "https://leicastore.pl/aparaty-6/leica-m3-wunderbares-set",
 "entity": "leica:body:m3:standard",
-"ratio": 4.48,
+"ratio": 4.44,
 "category": "Body",
 "title": "Leica M3 - wunderbares Set",
 "price": "33,000 zł",
@@ -1755,7 +1806,7 @@
 "ratio": 0.38,
 "category": "Body",
 "title": "LEITZ LEICA STANDARD BLACK PAINT WITH NICKEL ELEMENTS NO. 102904 ELMAR",
-"price": "HK$2,103",
+"price": "HK$2,104",
 "source": "Artra Lab (홍콩)",
 "hint": "set"
 },
@@ -2002,7 +2053,7 @@
 {
 "url": "https://shphoto.de/leitz-leica-mini-elmar-3-5-35.html",
 "entity": "leica:lens:elmar:35",
-"ratio": 0.32,
+"ratio": 0.33,
 "category": "Lens",
 "title": "Leica Elmar 35mm f3.5",
 "price": "€249",
@@ -2082,7 +2133,7 @@
 {
 "url": "https://cardinalcameraused.com/products/leica-leitz-elmar-lenses-f4-9cm-90mm-l39-ltm",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 0.36,
+"ratio": 0.37,
 "category": "Lens",
 "title": "Leica Leitz ELMAR lenses F4 9cm 90mm L39 LTM",
 "price": "$80",
@@ -2172,7 +2223,7 @@
 {
 "url": "https://fk-secondhand.com/shop/leica-elmar-9cm-f-40-fuer-m39-1381195/",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 0.44,
+"ratio": 0.45,
 "category": "Lens",
 "title": "Leica Elmar 90mm f/4.0 für M39",
 "price": "EUR 89",
@@ -2182,7 +2233,7 @@
 {
 "url": "https://fk-secondhand.com/shop/leica-elmar-9cm-f-40-fuer-leica-m-1503591/",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 0.44,
+"ratio": 0.45,
 "category": "Lens",
 "title": "Leica Elmar 90mm f/4.0",
 "price": "EUR 89",
@@ -2190,13 +2241,13 @@
 "hint": "check"
 },
 {
-"url": "https://imagefoto.dk/products/brugt-ernst-leitz-wetzlar-elmar-1-4-90mm-soelv",
+"url": "https://khrome.de/products/leitz-wetzlar-elmar-m-4-90mm-s-n-2124578",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 2.57,
+"ratio": 2.51,
 "category": "Lens",
-"title": "Leitz Elmar 90mm f4 Silver",
-"price": "DKK 3,850",
-"source": "Image Foto (덴마크)",
+"title": "Leitz Wetzlar Elmar-M 90mm f4",
+"price": "€500",
+"source": "Khrome (독일)",
 "hint": "check"
 },
 {
@@ -2210,9 +2261,19 @@
 "hint": "check"
 },
 {
+"url": "https://imagefoto.dk/products/brugt-ernst-leitz-wetzlar-elmar-1-4-90mm-soelv",
+"entity": "leica:lens:elmar:90:unspecified",
+"ratio": 2.58,
+"category": "Lens",
+"title": "Leitz Elmar 90mm f4 Silver",
+"price": "DKK 3,850",
+"source": "Image Foto (덴마크)",
+"hint": "check"
+},
+{
 "url": "https://kamerastore.com/products/leica-90mm-f4-elmar-11730-ltm-m39-t154198",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 2.65,
+"ratio": 2.66,
 "category": "Lens",
 "title": "Leica 90mm f4 Elmar (11730)",
 "price": "€531",
@@ -2222,7 +2283,7 @@
 {
 "url": "https://cameranonaniwa.jp/shop/g/g2111012519089/",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 2.75,
+"ratio": 2.76,
 "category": "Lens",
 "title": "Leica Elmar-L 9cm/4 ダルマ",
 "price": "¥96,000",
@@ -2232,7 +2293,7 @@
 {
 "url": "https://cameranonaniwa.jp/shop/g/g2222240034548/",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 2.86,
+"ratio": 2.87,
 "category": "Lens",
 "title": "Leica Elmar L 90/4 All Chrome",
 "price": "¥99,800",
@@ -2242,7 +2303,7 @@
 {
 "url": "https://www.fotopazdera.cz/katalog/bazar/podkategorie-bazar/objektivy/s-pevnym-ohniskem_403/produkt/objektiv-leica-bajonet-m-elmar-90mm-1-4f",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 3.07,
+"ratio": 3.08,
 "category": "Lens",
 "title": "Leica M-mount Elmar 90mm f4",
 "price": "Kč 15,000",
@@ -2252,7 +2313,7 @@
 {
 "url": "https://www.ffordes.com/p/SOR-28-087349/leica-m/90mm-f4-elmar",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 3.28,
+"ratio": 3.29,
 "category": "Lens",
 "title": "Leica 90mm F4 Elmar",
 "price": "£549.00",
@@ -2262,7 +2323,7 @@
 {
 "url": "https://www.leica-store-konstanz.de/leicastore_sh/elmar-9cm-4-0-676053/",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 3.4,
+"ratio": 3.41,
 "category": "Lens",
 "title": "Leica Elmar 90mm f4.0 L39",
 "price": "€680",
@@ -2272,7 +2333,7 @@
 {
 "url": "https://cardinalcameraused.com/products/leica-black-90mm-f2-8-fat-tele-elmarit-1",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 3.87,
+"ratio": 3.88,
 "category": "Lens",
 "title": "Leica Elmar 90mm F4 LTM - Black Paint / v1 no serial fat version Elmar",
 "price": "$849",
@@ -2282,7 +2343,7 @@
 {
 "url": "https://mkkcamera.com/products/leitz-leica-elmar-m-90mm-f4-0-silver-lens-yr-1965-germany-23857",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 3.96,
+"ratio": 3.97,
 "category": "Lens",
 "title": "LEITZ Leica Elmar M 90mm/F4.0 Silver Lens Yr.1965 Germany",
 "price": "HK$6,800",
@@ -2292,7 +2353,7 @@
 {
 "url": "https://mkkcamera.com/products/leitz-leica-elmar-l39-90mm-f4-0-fat-rare-black-paint-lens-ltm-germany-fat-21807",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 3.96,
+"ratio": 3.97,
 "category": "Lens",
 "title": "LEITZ Leica Elmar L39 90mm/F4.0 Fat/ Rare Black Paint Lens LTM Germany Fat",
 "price": "HK$6,800",
@@ -2302,7 +2363,7 @@
 {
 "url": "https://thecamera.co.kr/product/detail.html?product_no=6441&cate_no=344&display_group=1",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 4.42,
+"ratio": 4.43,
 "category": "Lens",
 "title": "Leica Elmar 90mm F4 M",
 "price": "1,300,000원",
@@ -2312,7 +2373,7 @@
 {
 "url": "https://mkkcamera.com/products/leitz-leica-elmar-l39-90mm-f4-0-fat-rare-black-paint-lens-ltm-germany-fat-23190",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 4.54,
+"ratio": 4.55,
 "category": "Lens",
 "title": "LEITZ Leica Elmar L39 90mm/F4.0 Fat/ Rare Black Paint Lens LTM Germany Fat",
 "price": "HK$7,800",
@@ -2322,7 +2383,7 @@
 {
 "url": "https://www.fotopia.com.hk/#!product/showAjax/1132/Leica%20Elmar%2090mm%20F4%20LTM%20-%20Black%20Paint%20/%20v1?stock=23252",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 5.12,
+"ratio": 5.13,
 "category": "Lens",
 "title": "Leica Elmar 90mm F4 LTM - Black Paint / v1",
 "price": "HK$8,800",
@@ -2332,7 +2393,7 @@
 {
 "url": "https://www.vintagecameragear.com/produkt/leica-fat-elmar-90mm-f4-objektiv-lens-black-nickel-leitz-97340/",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 5.75,
+"ratio": 5.76,
 "category": "Lens",
 "title": "Leica Fat Elmar 90mm f/4 lens Black nickel",
 "price": "€1,150",
@@ -2342,7 +2403,7 @@
 {
 "url": "https://leica-storebando.co.kr/product/위탁-m-904-elmar/21838/category/442/display/1/",
 "entity": "leica:lens:elmar:90:unspecified",
-"ratio": 6.9,
+"ratio": 6.91,
 "category": "Lens",
 "title": "[위탁] M 90/4 Elmar",
 "price": "2,030,000원",
@@ -2602,7 +2663,7 @@
 {
 "url": "https://www.calumet.de/product/leica-elmarit-r-24mm-2-8-gebraucht/gebraucht/stark-gebraucht/25L147736",
 "entity": "leica:lens:elmarit-r:24",
-"ratio": 0.36,
+"ratio": 0.37,
 "category": "Lens",
 "title": "Leica Elmarit-R 24mm/2,8",
 "price": "€289",
@@ -3152,7 +3213,7 @@
 {
 "url": "https://lskamera.com/leica-summarit-50mm-f15-ltm-screw-2",
 "entity": "leica:lens:summarit:50:f1.5",
-"ratio": 2.85,
+"ratio": 2.82,
 "category": "Lens",
 "title": "Leica Summarit 50mm f/1.5 LTM Screw",
 "price": "HK$16,800",
@@ -3282,7 +3343,7 @@
 {
 "url": "https://kookmincamera.co.kr/product/0531-라이카-m-35mm-f35-summicron-위탁/7050/category/530/display/1/",
 "entity": "leica:lens:summicron-m:35:unspecified",
-"ratio": 0.41,
+"ratio": 0.4,
 "category": "Lens",
 "title": "Leica M 35mm f3.5 summicron",
 "price": "1,100,000원",
@@ -3292,7 +3353,7 @@
 {
 "url": "https://shop.kitamura.jp/ec/used/2445480191158",
 "entity": "leica:lens:summicron-m:35:unspecified",
-"ratio": 2.57,
+"ratio": 2.53,
 "category": "Lens",
 "title": "Leica Summicron-M 35mm F2.0 Chrome 7枚玉",
 "price": "¥823,600",
@@ -3302,7 +3363,7 @@
 {
 "url": "https://www.japancamerahunter.com/product/leica-summicron-35-2-8-element-germany-clad/",
 "entity": "leica:lens:summicron-m:35:unspecified",
-"ratio": 2.98,
+"ratio": 2.93,
 "category": "Lens",
 "title": "Leica Summicron 35mm f2.0 8-Element Germany CLA'd",
 "price": "$6,000",
@@ -3312,7 +3373,7 @@
 {
 "url": "https://www.camerawest.com/products/leica-35mm-f2-summicron-8-element-black-1744530",
 "entity": "leica:lens:summicron-m:35:unspecified",
-"ratio": 9.95,
+"ratio": 9.77,
 "category": "Lens",
 "title": "Leica 35mm f2 Summicron 8-Element Black",
 "price": "$19,995",
@@ -3582,7 +3643,7 @@
 {
 "url": "https://classic.leica-camera.com/en/SUMMICRON-M-2-50-MM-Silver-ED.-COLOMBO-11825/11825SH-3623786",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 2.52,
+"ratio": 2.51,
 "category": "Lens",
 "title": "Leica SUMMICRON-M 50mm f2.0 Silver (ED. COLOMBO) (11825)",
 "price": "€3,600",
@@ -3592,7 +3653,7 @@
 {
 "url": "https://victorycamera.com/products/leica-summicron-m-50mm-f2-v4-rare-chrome-11825-lens-exc",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 3.16,
+"ratio": 3.15,
 "category": "Lens",
 "title": "Leica Summicron-M 50mm f2 V4 Rare Chrome 11825 Lens",
 "price": "$4,945",
@@ -3602,7 +3663,7 @@
 {
 "url": "https://victorycamera.com/products/leica-summicron-m-50mm-f2-v4-rare-chrome-11825-lens-mint",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 3.19,
+"ratio": 3.18,
 "category": "Lens",
 "title": "Leica Summicron-M 50mm f2 v4 Rare Chrome 11825 Lens",
 "price": "$4,995",
@@ -3612,7 +3673,7 @@
 {
 "url": "https://www.ekangsan.com/product/detail.html?product_no=4440&cate_no=163&display_group=1",
 "entity": "leica:lens:summicron-m:50:current",
-"ratio": 19.94,
+"ratio": 19.88,
 "category": "Lens",
 "title": "Leica Summicron 50mm F2 블렉페인트 시리얼 No, 1885... (5NO161002)",
 "price": "41,975,000원",
@@ -4012,7 +4073,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summilux-M-1.4-35mm-black/11300SH-4879863",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 8.46,
+"ratio": 8.42,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 black",
 "price": "CHF 22,650",
@@ -4042,7 +4103,7 @@
 {
 "url": "https://schouten-select.com/products/leica-50mm-f1-4-summilux-m-asph-titanium",
 "entity": "leica:lens:summilux-m:50:titan",
-"ratio": 2.93,
+"ratio": 2.82,
 "category": "Lens",
 "title": "Leica 50mm f1.4 Summilux-M ASPH Titanium From M7 Titanium Set",
 "price": "€11,000",
@@ -4150,19 +4211,9 @@
 "hint": "check"
 },
 {
-"url": "https://recycledphoto.com/products/leica-leitz-super-angulon-21mm-f4-11813-hood-boxed-mint",
-"entity": "leica:lens:super-angulon:21:f4",
-"ratio": 0.45,
-"category": "Lens",
-"title": "Leica Leitz Super Angulon 21mm f4 11813",
-"price": "$600",
-"source": "Recycled Photo (미국)",
-"hint": "check"
-},
-{
 "url": "https://cameranonaniwa.jp/shop/g/g2221070452775/",
 "entity": "leica:lens:tele-elmar-m:135",
-"ratio": 0.31,
+"ratio": 0.3,
 "category": "Lens",
 "title": "Leica TELE-ELMAR 135/4 ヘッドノミ",
 "price": "¥21,800",
@@ -4172,7 +4223,7 @@
 {
 "url": "https://leica-storebando.co.kr/product/위탁-m-1354/21604/category/442/display/1/",
 "entity": "leica:lens:tele-elmar-m:135",
-"ratio": 0.42,
+"ratio": 0.41,
 "category": "Lens",
 "title": "[위탁] M 135/4",
 "price": "250,000원",
@@ -4192,7 +4243,7 @@
 {
 "url": "https://mkkcamera.com/products/leica-tele-elmar-m-135mm-f4-0-e46-ver-ii-v2-lens-yr-1994-germany-11861-11912",
 "entity": "leica:lens:tele-elmar-m:135",
-"ratio": 2.82,
+"ratio": 2.78,
 "category": "Lens",
 "title": "Leica Tele-Elmar-M 135mm/F4.0 E46 Ver.II V2 Lens Yr.1994 Germany 11861",
 "price": "HK$9,800",
@@ -4202,7 +4253,7 @@
 {
 "url": "https://mkkcamera.com/products/leica-tele-elmar-m-135mm-f4-0-e46-ver-ii-v2-lens-yr-1992-germany-11861-11995",
 "entity": "leica:lens:tele-elmar-m:135",
-"ratio": 2.82,
+"ratio": 2.78,
 "category": "Lens",
 "title": "Leica Tele-Elmar-M 135mm/F4.0 E46 Ver.II V2 Lens Yr.1992 Germany 11861",
 "price": "HK$9,800",
@@ -4212,7 +4263,7 @@
 {
 "url": "https://kookmincamera.co.kr/product/4330-leica-라이카-tele-elmar-m-135mm-f4-위탁/3166/category/530/display/1/",
 "entity": "leica:lens:tele-elmar-m:135",
-"ratio": 3.02,
+"ratio": 2.98,
 "category": "Lens",
 "title": "Leica TELE-ELMAR-M 135mm f4.0",
 "price": "1,800,000원",
