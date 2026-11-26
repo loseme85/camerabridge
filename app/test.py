@@ -4394,6 +4394,102 @@ def crawl_lskamera():
     return results
 
 
+def _fotohobby_name(raw):
+    """FotoHobby 제목('全套齊, Like new **Leica M11 相機 （黑色 …）')에서 영어 모델명만 남김: 'Leica' 앞 설명·한자·한자 괄호·'連 …'(부속) 제거"""
+    t = re.sub(r"\s+", " ", raw).strip()
+    m = re.search(r"(?i)(leica|leitz)", t)
+    if not m:
+        return ""
+    t = t[m.start():]
+    t = re.sub(r"(?i)summrait", "Summarit", t)  # 사이트 오타
+    t = t.replace("德製7枚", "7-element").replace("德製8枚", "8-element")
+    t = re.sub(r"\s+[連连]\s.*$", "", t)
+    t = re.sub(r"[（(][^()（）]*[\u3400-\u9fff][^()（）]*[）)]", " ", t)
+    t = re.sub(r"[\u3400-\u9fff\uff00-\uffef]+", " ", t)
+    t = re.sub(r"\*+", " ", t)
+    t = re.sub(r"(?i)\s*[（(]?\s*(?:ccd\s+)?(?:shutter count|sc:|ccd id).*$", "", t)  # 셔터 수·CCD 번호는 모델과 무관
+    if t.count(")") > t.count("("):
+        t = t.replace(")", "")
+    return re.sub(r"\s+", " ", t).strip(" -,")
+
+
+def crawl_fotohobby():
+    """FotoHobby (홍콩) - 빈티지 라이카 전문점(BigCommerce Blueprint형 정적 HTML). 카테고리 '徠卡相機'(M·螺口·CL·小型)·'徠卡鏡頭'(M·R·螺口)·'徠卡收藏品'을
+    쪽(?page=N)마다 읽음. 카드: 제목·가격('$24,800.00' HKD)·'Sold'(팔림, 목록에 남아 있음). 등급 표기 없음(제목 형용사뿐), '【全新】'(새 상품)은 뺌"""
+    import html as _html
+    import requests
+    import urllib.parse as _up
+    base = "https://fotohobby.com.hk"
+    cats = ["徠卡相機/M機身", "徠卡相機/R機身", "徠卡相機/螺口機身", "徠卡相機/CL", "徠卡相機/小型相機",
+            "徠卡鏡頭/M-鏡頭", "徠卡鏡頭/R-鏡頭", "徠卡鏡頭/螺口鏡頭", "徠卡收藏品"]
+    sess = requests.Session()
+    sess.headers["User-Agent"] = random.choice(USER_AGENTS)
+    print(f"\n  📂 FotoHobby 크롤링 시작")
+    results, seen = [], set()
+    for c in cats:
+        url = f"{base}/categories/" + "/".join(_up.quote(x) for x in c.split("/")) + "/"
+        for page_num in range(1, 30):
+            text = None
+            for attempt in range(3):
+                try:
+                    resp = sess.get(url, params={"page": page_num} if page_num > 1 else None, timeout=30)
+                    resp.raise_for_status()
+                    text = resp.text
+                    break
+                except Exception as e:
+                    print(f"    ⚠️ {c} {page_num}페이지 오류: {e}")
+                    time.sleep(5)
+            if text is None:
+                raise RuntimeError(f"FotoHobby {c} {page_num}페이지 못 읽음")  # 빠진 쪽이 판매완료로 바뀌지 않게
+            cards = [x for x in text.split('<li class="')[1:] if 'class="ProductImage"' in x]
+            new_in_page = 0
+            for card in cards:
+                href = re.search(r'<strong><a href="([^"]+)"[^>]*>([^<]+)</a>', card)
+                if not href:
+                    continue
+                link = href.group(1)
+                if link in seen or link in globals().get('SOLD_LINKS', ()):
+                    continue
+                seen.add(link)
+                new_in_page += 1
+                raw = _html.unescape(href.group(2))
+                if "全新" in raw:
+                    continue
+                name = _fotohobby_name(raw)
+                if not name or any(b2 in name.lower() for b2 in THIRD_PARTY_BRANDS):
+                    continue
+                pm = re.search(r"<em>\s*\$([\d,]+)", card)
+                sold = bool(re.search(r"<em>\s*Sold\s*</em>", card, re.I))
+                price = f"HK${pm.group(1)}" if pm else "문의요망"
+                im = re.search(r'<img src="([^"]+)"', card)
+                img = im.group(1).replace("/t/", "/") if im else ""
+                if "相機" in raw and not re.search(r"(?i)\d\s*mm|lens|flash|grip|finder|battery|winder|strap|case|\bkit\b|\bfor\b", name) and not re.search(r"(?i)\bbody$", name):
+                    name += " Body"
+                cat = detect_category(name, price)
+                mount = 'Accessory' if cat == 'Accessory' else detect_mount(name)
+                results.append({
+                    "site": "FotoHobby (홍콩)",
+                    "label": auto_label(name),
+                    "상품명": name,
+                    "세대": detect_generation(name),
+                    "컨디션": "정보없음",
+                    "가격": price,
+                    "통화": "HKD",
+                    "이미지": img,
+                    "링크": link,
+                    "품절": sold,
+                    "예약중": False,
+                    "mount": mount,
+                    "category": cat,
+                    "brand": detect_brand(name),
+                })
+            if not cards or new_in_page == 0 or f"page={page_num + 1}" not in text:
+                break
+            time.sleep(0.8)
+    print(f"  ✅ FotoHobby 완료: {len(results)}개")
+    return results
+
+
 def crawl_tamarkin():
     """Tamarkin Camera (미국, 시카고) - 라이카 딜러. 분류 화면 7곳(정적 HTML, 쪽 넘김 없음)의 카드에 이름·가격·사진,
     중고 여부와 등급은 상세 화면 가격 아래 'Nr. 258xxxx, Ex++' 줄에만 있어 카드마다 상세를 읽는다 (약 170개 · 1분)
@@ -15882,6 +15978,7 @@ def crawl_all():
         ("AGF Camera (홍콩)", lambda: ce.wrap_full_run("AGF Camera (홍콩)", crawl_agf)),
         ("Meteor (홍콩)", lambda: ce.wrap_full_run("Meteor (홍콩)", crawl_meteor)),
         ("LS Kamera (홍콩)", lambda: ce.wrap_full_run("LS Kamera (홍콩)", crawl_lskamera)),
+        ("FotoHobby (홍콩)", lambda: ce.wrap_full_run("FotoHobby (홍콩)", crawl_fotohobby)),
         ("Tamarkin Camera (미국)", lambda: ce.wrap_full_run("Tamarkin Camera (미국)", crawl_tamarkin)),
         ("카메라노나니와 (일본)", lambda: ce.wrap_full_run("카메라노나니와 (일본)", crawl_naniwa)),
         ("Calumet (독일)", lambda: ce.wrap_full_run("Calumet (독일)", crawl_calumet)),
