@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1146,
+   "count": 1144,
    "example": "Leica M3 Black Repaint"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 1023,
+   "count": 1022,
    "example": "Leica M6 TTL Silver 0.85x"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 896,
+   "count": 895,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 849,
+   "count": 848,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -117,13 +117,13 @@
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:no-meter",
-   "count": 134,
+   "count": 133,
    "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:mechanical",
-   "count": 134,
+   "count": 133,
    "example": "[위탁] M2 (Silver)"
   },
   {
@@ -219,7 +219,7 @@
   {
    "a": "leica:body:m11-p:standard",
    "b": "leica:feature:frameline-28",
-   "count": 85,
+   "count": 86,
    "example": "Leica M11-P Silver"
   },
   {
@@ -475,18 +475,6 @@
    "example": "[중고] M6 TTL 0.72 Millennium (Black paint)"
   },
   {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:no-meter",
-   "count": 43,
-   "example": "[위탁] Leica M4-2 (Black)"
-  },
-  {
-   "a": "leica:body:m4-2:standard",
-   "b": "leica:feature:mechanical",
-   "count": 43,
-   "example": "[위탁] Leica M4-2 (Black)"
-  },
-  {
    "a": "leica:body:m6:ttl-millennium",
    "b": "leica:feature:meter",
    "count": 42,
@@ -497,6 +485,18 @@
    "b": "leica:feature:mechanical",
    "count": 42,
    "example": "[중고] M6 TTL 0.72 Millennium (Black paint)"
+  },
+  {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:no-meter",
+   "count": 42,
+   "example": "[위탁] Leica M4-2 (Black)"
+  },
+  {
+   "a": "leica:body:m4-2:standard",
+   "b": "leica:feature:mechanical",
+   "count": 42,
+   "example": "[위탁] Leica M4-2 (Black)"
   },
   {
    "a": "leica:body:m6:titan",
@@ -679,24 +679,6 @@
    "example": "Leica CL Black Film Rangefinder Camera"
   },
   {
-   "a": "leica:body:m6:reissue",
-   "b": "leica:feature:frameline-28",
-   "count": 21,
-   "example": "Leica M6 Re-Issue Black"
-  },
-  {
-   "a": "leica:body:m6:reissue",
-   "b": "leica:feature:meter",
-   "count": 21,
-   "example": "Leica M6 Re-Issue Black"
-  },
-  {
-   "a": "leica:body:m6:reissue",
-   "b": "leica:feature:mechanical",
-   "count": 21,
-   "example": "Leica M6 Re-Issue Black"
-  },
-  {
    "a": "leica:body:mp-film:a-la-carte",
    "b": "leica:feature:meter",
    "count": 21,
@@ -719,6 +701,24 @@
    "b": "leica:feature:mechanical",
    "count": 21,
    "example": "LEICA M1 sn.1060"
+  },
+  {
+   "a": "leica:body:m6:reissue",
+   "b": "leica:feature:frameline-28",
+   "count": 20,
+   "example": "Leica M6 Re-Issue Black"
+  },
+  {
+   "a": "leica:body:m6:reissue",
+   "b": "leica:feature:meter",
+   "count": 20,
+   "example": "Leica M6 Re-Issue Black"
+  },
+  {
+   "a": "leica:body:m6:reissue",
+   "b": "leica:feature:mechanical",
+   "count": 20,
+   "example": "Leica M6 Re-Issue Black"
   },
   {
    "a": "leica:feature:safari",
@@ -853,12 +853,6 @@
    "example": "LEICA M6 EIN STUCK sn.2300"
   },
   {
-   "a": "leica:body:q:titanium-gray",
-   "b": "leica:feature:titanium",
-   "count": 14,
-   "example": "[중고] Q (Titan)"
-  },
-  {
    "a": "leica:feature:safari",
    "b": "leica:lens:summicron:50:safari",
    "count": 14,
@@ -947,6 +941,12 @@
    "b": "leica:lens:summaron:35:f2.8-eyes",
    "count": 13,
    "example": "Leica M 35mm f2.8 Summaron EYE Silver"
+  },
+  {
+   "a": "leica:body:q:titanium-gray",
+   "b": "leica:feature:titanium",
+   "count": 13,
+   "example": "[중고] Q (Titan)"
   },
   {
    "a": "leica:body:iii-black-paint",
@@ -2019,12 +2019,5 @@
    "example": "Leica Q3, black paint"
   }
  ],
- "new": [
-  {
-   "a": "leica:feature:safari",
-   "b": "leica:lens:apo-summicron-m:90:safari",
-   "count": 3,
-   "example": "[중고] M 90/2 APO Safari"
-  }
- ]
+ "new": []
 }
