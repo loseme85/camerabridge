@@ -174,6 +174,8 @@ def grade_of(site: str | None, condition: str | None, title: str | None = "") ->
         return _FOTONO.get(cond[len(FOTONO_PREFIX):].strip()), "label"
     if cond.startswith(FCT_PREFIX):
         return _FCT.get(cond[len(FCT_PREFIX):].strip().upper()), "label"
+    if cond.startswith(ABC_PREFIX):
+        return _ABC.get(cond[len(ABC_PREFIX):].strip().upper()), "label"
     if cond.startswith(ITSCAMERA_PREFIX):
         return _ITSCAMERA.get(cond[len(ITSCAMERA_PREFIX):].strip().upper()), "label"
     if cond.startswith(LCF_PREFIX):
@@ -946,6 +948,11 @@ _SCANPHOTO = {"a-skick": "A", "b-skick": "B", "c-skick": "C", "d-skick": "D", "d
 # AAA·S 'A', AA·A 'B', B 'C' (국내 매장의 'A급'은 보통 사용감 조금 있는 중고)
 ITSCAMERA_PREFIX = "ItsCamera: "
 _ITSCAMERA = {"S": "A", "AAA": "A", "AA": "B", "A": "B", "B": "C"}
+
+# 한국 ABC카메라: 제목 속 'SS급'·'AA급'·'A급' (라이카 5점뿐, 2026-11-27) — 표본이 없어 사진 평가 없이 잇츠카메라와 같은 한국 매장 말투대로
+# SS·S 'A', AA·AAA 'B'(잇츠카메라 AA와 같음), A·B는 한 칸씩 아래, 새제품 미개봉 'S'
+ABC_PREFIX = "ABC: "
+_ABC = {"NEW": "S", "SS": "A", "S": "A", "AAA": "A", "AA": "B", "A": "B", "B": "C"}
 
 # 일본 Film Camera Tokyo: 설명 'Product status: A/Beautiful' (S/Brand New·A/Beautiful·B/Good·C/Normal·D).
 # 사진 평가(표기 가리고 26점, 사진 3장씩, 2026-11-05): S A 2 · A A 3 · B A 12·B 1 · C A 2·B 3·C 2 · D B 1.

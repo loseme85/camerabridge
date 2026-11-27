@@ -875,3 +875,11 @@ def test_agf_camera_grades():
     assert grade_of(site, AGF_PREFIX + "MINT-", "Leica M6 Body")[0] == "A"
     assert grade_of(site, AGF_PREFIX + "EX+", "Leica M6 Body")[0] == "B"
     assert grade_of(site, AGF_PREFIX + "EX", "Leica M6 Body")[0] == "C"
+
+
+def test_abccamera():
+    from condition_grade import ABC_PREFIX
+    site = "ABC카메라"
+    assert grade_of(site, ABC_PREFIX + "NEW")[0] == "S"
+    assert grade_of(site, ABC_PREFIX + "SS")[0] == "A"
+    assert grade_of(site, ABC_PREFIX + "AA")[0] == "B"

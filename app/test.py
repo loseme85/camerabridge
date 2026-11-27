@@ -1253,6 +1253,17 @@ SITES = [
         "통화": "KRW",
     },
     {
+        "name": "ABC카메라",
+        "active_first": False,  # 라이카 분류가 없어 사이트 검색 '라이카' 결과(5개 안팎, 판매 중·품절 섞임)
+        "name_fix": lambda t: _abccamera_name(t),
+        "cond_fix": lambda t: _abccamera_grade(t),
+        "base": "https://adcdica.cafe24.com",
+        "categories": [
+            "https://adcdica.cafe24.com/product/search.html?keyword=%EB%9D%BC%EC%9D%B4%EC%B9%B4",  # 검색 '라이카'
+        ],
+        "통화": "KRW",
+    },
+    {
         "name": "THE CAMERA",
         "active_first": False,  # 여러 브랜드가 섞인 중고·위탁 분류 (쪽당 100개), 라이카 위탁 60여 개
         "name_fix": lambda t: _thecamera_name(t),
@@ -1342,6 +1353,29 @@ def _scamera_grade(title):
     """제목 끝 등급 '(A+)' → 'SC: A+' (없으면 None)"""
     m = re.search(r"\((S|A\+|A|A-|B\+|B|B-|C\+|C)\)\s*$", title.strip())
     return "SC: " + m.group(1) if m else None
+
+
+def _abccamera_name(title):
+    """ABC카메라 검색 '라이카' 결과 다듬기: '[방문고객현금특가] 라이카D-LUX7 (실버)SS급!!' → 'Leica D-LUX7 (실버)'
+    (머리말 [..]·등급·'!!'·'(완벽검수)단품'·'새제품 미개봉상품 라이카코리아정품' 같은 말 빼기). 라이카가 아니면 빈 이름"""
+    t = re.sub(r"\[[^\]]*\]", " ", title)
+    t = re.sub(r"\(완벽검수\)\s*단품|새제품|미개봉상품|미개봉|라이카코리아정품|정품", " ", t)
+    t = re.sub(r"\b(?:SS|S|A{1,3}|B)급", " ", t)
+    t = re.sub(r"[!！]+", " ", t)
+    t = re.sub(r"\s+", " ", t).strip(" .")
+    if not re.match(r"(?:라이카|leica|leitz)", t, re.I) or re.search(r"파나소닉|panasonic", t, re.I):
+        return ""
+    t = re.sub(r"(?i)(?<![A-Za-z])typ\s*109(?!\d)", "D-Lux (Typ 109)", t)  # '라이카TYP109' = D-Lux (Typ 109)
+    t = re.sub(r"(?i)(?<![A-Za-z])d-lux\s*(\d)", r"D-Lux \1", t)  # 'D-LUX7' → 'D-Lux 7' (띄어쓰기 없는 표기)
+    return re.sub(r"^라이카\s*", "Leica ", t)
+
+
+def _abccamera_grade(title):
+    """ABC카메라 제목의 'AA급'·'SS급'(국내 매장 말투) → 'ABC: AA', '새제품 미개봉' → 'ABC: NEW' (없으면 None)"""
+    if re.search(r"새제품|미개봉", title):
+        return "ABC: NEW"
+    m = re.search(r"\b(SS|S|A{1,3}|B)급", title)
+    return "ABC: " + m.group(1) if m else None
 
 
 def _uacamera_name(title):
