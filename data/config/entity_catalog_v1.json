@@ -32732,7 +32732,7 @@
     "title_must": [
      "(summilux|\\blux\\b)",
      "(?<![\\d./\\-–])35(?!\\s?/\\s?\\d{3})(?![\\-–]\\d)(?:\\s?mm|/|\\b)",
-     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代|pre-?asph"
+     "\\b2nd\\b|second|2세대|\\bv\\.?2\\b|\\b(type|ver\\.?|version) ?ii\\b|\\bver(sion)?\\.? ?2\\b|第2世代|pre-?aspx"
     ],
     "title_must_not": [
      "titan|티탄",

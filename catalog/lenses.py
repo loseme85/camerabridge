@@ -156,7 +156,7 @@ EDITION_35LUX = [r"titan|티탄", r"leitz ?wetzlar", r"10 ?jahre", r"independenc
 for slug, name, ko, marker, extra_not, sfx in [
     # '1st·V1'만 쓴 매물은 따로 두지 않음 (2026-11-02): 국내는 스틸림, 일본 Ver.1은 그 뒤 구형 값이라 섞여서 → 구형(세대 미표기)에 두고 가격으로 스틸림을 가림
     ("v1-steel-rim", "Summilux 35mm f/1.4 1st Steel Rim (original)", "주미룩스 35 1세대 스틸림 (오리지널)", r"steel ?rim|스틸 ?림|early ?chrome", [SR_REISSUE], ["steel rim", "스틸림", "1st steel rim", "1st", "1세대"]),
-    ("v2", "Summilux 35mm f/1.4 2nd (pre-ASPH)", "주미룩스 35 2세대", GEN2 + r"|pre-?asph", [], ["2nd", "2세대", "pre asph"]),
+    ("v2", "Summilux 35mm f/1.4 2nd (pre-ASPH)", "주미룩스 35 2세대", GEN2 + r"|pre-?aspx", [], ["2nd", "2세대", "pre asph"]),
     # 국내 표기: 1세대 스틸림·1st, 2세대 pre-ASPH, 3세대 Aspherical(AA, 비구면 2매), 4세대 ASPH(1994), 그 뒤 FLE·FLE II
     ("aa", "Summilux-M 35mm f/1.4 Aspherical (AA, 3rd gen, 1990)", "주미룩스 35 3세대 AA (Aspherical, 비구면 2매)", r"aspherical|\bAA\b|double ?a\b|더블 ?어스|3세대|\b3rd\b|2매", [r"4세대|\b4th\b"], ["aa", "aspherical", "double aspherical", "3세대", "3rd", "3세대 aa", "2매"]),
     ("asph-1994", "Summilux-M 35mm f/1.4 ASPH (4th gen, 1994, pre-FLE)", "주미룩스 35 4세대 ASPH (1994, FLE 이전)", r"4세대|\b4th\b|non-?fle|11874|11883", [r"FLE", r"3세대|\b3rd\b"], ["asph 1994", "4세대", "4th", "asph 4세대", "asph non fle"]),
