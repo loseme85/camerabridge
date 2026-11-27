@@ -3,13 +3,13 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1149,
+   "count": 1153,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 1018,
+   "count": 1019,
    "example": "Leica M6 TTL Silver 0.85x"
   },
   {
@@ -63,13 +63,13 @@
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:no-meter",
-   "count": 254,
+   "count": 256,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
    "a": "leica:body:m3:standard",
    "b": "leica:feature:mechanical",
-   "count": 254,
+   "count": 256,
    "example": "Leica M3 + M 50mm f2 Summicron DR Brass SET"
   },
   {
@@ -105,26 +105,26 @@
   {
    "a": "leica:body:m11:standard",
    "b": "leica:feature:frameline-28",
-   "count": 137,
+   "count": 138,
    "example": "[중고] M11 (Black)"
+  },
+  {
+   "a": "leica:body:m2:standard",
+   "b": "leica:feature:no-meter",
+   "count": 137,
+   "example": "[위탁] M2 (Silver)"
+  },
+  {
+   "a": "leica:body:m2:standard",
+   "b": "leica:feature:mechanical",
+   "count": 137,
+   "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:no-meter",
    "count": 136,
    "example": "Leica M2 BlackPaint"
-  },
-  {
-   "a": "leica:body:m2:standard",
-   "b": "leica:feature:no-meter",
-   "count": 136,
-   "example": "[위탁] M2 (Silver)"
-  },
-  {
-   "a": "leica:body:m2:standard",
-   "b": "leica:feature:mechanical",
-   "count": 136,
-   "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m7:standard",
@@ -183,7 +183,7 @@
   {
    "a": "leica:body:m240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 105,
+   "count": 106,
    "example": "Leica M240 Silver"
   },
   {
@@ -325,22 +325,22 @@
    "example": "Leica MP Silver x0.72"
   },
   {
-   "a": "leica:body:m9:standard",
-   "b": "leica:feature:frameline-28",
-   "count": 62,
-   "example": "[중고] M9"
-  },
-  {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:no-meter",
-   "count": 62,
+   "count": 63,
    "example": "LEICA M3 Single Stroke sn.1156"
   },
   {
    "a": "leica:body:m3:single-stroke",
    "b": "leica:feature:mechanical",
-   "count": 62,
+   "count": 63,
    "example": "LEICA M3 Single Stroke sn.1156"
+  },
+  {
+   "a": "leica:body:m9:standard",
+   "b": "leica:feature:frameline-28",
+   "count": 62,
+   "example": "[중고] M9"
   },
   {
    "a": "leica:body:m-p240:standard",
@@ -541,6 +541,12 @@
    "example": "[중고] M6 TTL 0.72 Millennium (Black paint)"
   },
   {
+   "a": "leica:feature:black-paint",
+   "b": "leica:lens:summilux-m:50:black-paint",
+   "count": 40,
+   "example": "Leica M 50mm f1.4 Summilux 4th Black Paint"
+  },
+  {
    "a": "leica:body:m2:black-paint",
    "b": "leica:feature:no-meter",
    "count": 39,
@@ -557,12 +563,6 @@
    "b": "leica:feature:black-paint",
    "count": 39,
    "example": "Leica M2 BlackPaint"
-  },
-  {
-   "a": "leica:feature:black-paint",
-   "b": "leica:lens:summilux-m:50:black-paint",
-   "count": 39,
-   "example": "Leica M 50mm f1.4 Summilux 4th Black Paint"
   },
   {
    "a": "leica:body:m9-p:standard",
@@ -997,6 +997,12 @@
    "example": "LEICA MP LHSA grey hammertone sn.2947"
   },
   {
+   "a": "leica:lens:summilux-m:35:pre-asph-unspecified",
+   "b": "leica:lens:summilux-m:35:v2",
+   "count": 13,
+   "example": "LEITZ Leica Summilux M 35mm/F1.4 Pre-Asph Black Lens Yr.1979 Canada"
+  },
+  {
    "a": "leica:body:m9-p:black-paint",
    "b": "leica:feature:frameline-28",
    "count": 12,
@@ -1195,12 +1201,6 @@
    "example": "LEICA 90mm F2 ASPH APO-SUMMICRON-M TITANIUM sn.3926"
   },
   {
-   "a": "leica:feature:black-paint",
-   "b": "leica:lens:summilux-m:50:asph-black-paint",
-   "count": 8,
-   "example": "Leica Summilux-M 50mm f1.4 Pre-ASPH Black Paint Millennium"
-  },
-  {
    "a": "leica:feature:safari",
    "b": "leica:lens:summilux-m:35:safari",
    "count": 7,
@@ -1231,6 +1231,18 @@
    "example": "LEICA M-E (Typ240) sn.5548"
   },
   {
+   "a": "leica:body:m6:leitz-wetzlar",
+   "b": "leica:feature:meter",
+   "count": 7,
+   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
+  },
+  {
+   "a": "leica:body:m6:leitz-wetzlar",
+   "b": "leica:feature:mechanical",
+   "count": 7,
+   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
+  },
+  {
    "a": "leica:acc:macro:14135",
    "b": "leica:acc:macro:14158",
    "count": 7,
@@ -1255,16 +1267,10 @@
    "example": "Leica M4-2 Gold Painted Body"
   },
   {
-   "a": "leica:body:m6:leitz-wetzlar",
-   "b": "leica:feature:meter",
+   "a": "leica:feature:black-paint",
+   "b": "leica:lens:summilux-m:50:black-paint-reissue",
    "count": 6,
-   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
-  },
-  {
-   "a": "leica:body:m6:leitz-wetzlar",
-   "b": "leica:feature:mechanical",
-   "count": 6,
-   "example": "LEICA M6 Classic LEITZ WETZLAR sn.1712"
+   "example": "Leica Summilux-M 50mm f1.4 GlossyBlackPaint[11713]"
   },
   {
    "a": "leica:feature:black-paint",
@@ -1349,12 +1355,6 @@
    "b": "leica:feature:mechanical",
    "count": 5,
    "example": "LEICA CL 50 Jahre sn.1402"
-  },
-  {
-   "a": "leica:feature:black-paint",
-   "b": "leica:lens:summilux-m:50:black-paint-reissue",
-   "count": 5,
-   "example": "Leica Summilux-M 50mm f1.4 GlossyBlackPaint[11713]"
   },
   {
    "a": "leica:feature:titanium",
@@ -1493,12 +1493,6 @@
    "b": "leica:feature:mechanical",
    "count": 4,
    "example": "Leica M2 Betriebsk. #2006 Button Rewind 10300 Body"
-  },
-  {
-   "a": "leica:lens:summilux-m:50:asph-black-paint",
-   "b": "leica:lens:summilux-m:50:millennium",
-   "count": 4,
-   "example": "Leica Summilux-M 50mm f1.4 Pre-ASPH Black Paint Millennium"
   },
   {
    "a": "leica:body:m6:ttl-dragon",
@@ -2019,5 +2013,12 @@
    "example": "Leica Q3, black paint"
   }
  ],
- "new": []
+ "new": [
+  {
+   "a": "leica:lens:summilux-m:35:pre-asph-unspecified",
+   "b": "leica:lens:summilux-m:35:v2",
+   "count": 13,
+   "example": "LEITZ Leica Summilux M 35mm/F1.4 Pre-Asph Black Lens Yr.1979 Canada"
+  }
+ ]
 }
