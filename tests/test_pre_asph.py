@@ -37,3 +37,18 @@ def test_pre_asph_variant_has_no_plain_asph() -> None:
     # 세트에 ASPH 렌즈가 따로 있으면 ASPH도 남김
     both = detect_model("leica black paint set summicron-m 35/2 asph + summilux-m 50/1.4 pre-asph", None, "lens", "M")["variant"]
     assert "ASPH" in both and "Pre-ASPH" in both
+
+
+@pytest.mark.parametrize("title", [
+    "Leica Summilux-M 35mm f1.4 ASPH Pre-FLE 11874",
+    "Leica Summilux 35mm F1.4 Black (Pre-Fle) 11874",
+    "Leica Summilux-M 35mm F/1.4 ASPH. PRE-FLE E46 Lens 6Bit Black",
+    "Leica Summilux 35mm f1.4 Aspherical (11874 pre FLE)",
+])
+def test_pre_fle_is_4th_gen_asph(title: str) -> None:
+    """'Pre-FLE' = FLE 이전 ASPH 4세대(1994). FLE 글자로 FLE 모델에 가면 안 됨 (2026-11-28)."""
+    assert _first(title)[0] == "leica:lens:summilux-m:35:asph-1994", title
+
+
+def test_real_fle_still_fle() -> None:
+    assert _first("Leica Summilux-M 35mm f/1.4 ASPH FLE Black 11663")[0] == "leica:lens:summilux-m:35:asph-fle"

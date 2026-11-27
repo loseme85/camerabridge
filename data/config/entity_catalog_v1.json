@@ -72,6 +72,7 @@
      "classic|클래식",
      "aspherical|\\bAA\\b",
      "\\bnew\\b",
+     "non-?fle|11874|11883",
      "safari|사파리|サファリ",
      "leeworks",
      "light ?lens ?lab",
@@ -32870,6 +32871,7 @@
     ],
     "title_must_not": [
      "4세대|\\b4th\\b",
+     "11874|11883|non-?fle",
      "titan|티탄",
      "leitz ?wetzlar",
      "10 ?jahre",
@@ -32992,7 +32994,7 @@
      "4세대|\\b4th\\b|non-?fle|11874|11883"
     ],
     "title_must_not": [
-     "FLE",
+     "(?<!non-)(?<!non)FLE",
      "3세대|\\b3rd\\b",
      "titan|티탄",
      "leitz ?wetzlar",
