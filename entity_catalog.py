@@ -183,6 +183,12 @@ def load_catalog(path: str | None = None) -> dict[str, Any]:
     return {"entities": entities, "compiled": compiled, "codes": codes, "features": features}
 
 
+# 구형 표기: Pre-ASPH · Pre ASPH · PreASPH · pre-aspherical · non-ASPH
+PRE_ASPH_WORDS = re.compile(r"\b(?:pre|non)[\s_-]*asph(?:erical|eric)?\b|(?<![a-z])preasph\b", re.I)
+PRE_FLE_WORDS = re.compile(r"\bpre[\s_-]*fle\b", re.I)
+PRE_ASPH_TOKEN = "pre-ASPx"  # 'ASPH'가 안 들어 있는 말 (catalog/lenses.py의 v2 규칙 `pre-?aspx`와 같아야 함)
+
+
 def record_title(record: dict[str, Any]) -> str:
     final = record.get("final_output") or {}
     raw = record.get("raw_item") or {}
@@ -193,6 +199,11 @@ def record_title(record: dict[str, Any]) -> str:
     # 제품 번호·코드 이름이 적힌 제목은 그대로 둔다 (번호로 세대가 정해지고, 'FIKUS … 13.5cm' 같은 후드·부품이 렌즈로 가지 않게)
     if not (CODE_IN_TITLE.search(title) or CODE_WORD_IN_TITLE.search(title)):
         title = re.sub(r"(?<![\d.])(\d{1,2}(?:\.\d)?)\s?cm\b", lambda m: f"{round(float(m.group(1)) * 10):d}mm", title)
+    # 'Pre-ASPH'(비구면 이전 구형)는 ASPH 글자를 품고 있어, 구형 모델의 "ASPH 제외" 규칙에 막히고 ASPH 모델의 "ASPH" 규칙에 받혀
+    # ASPH 칸으로 들어갔다 (2026-11-27: 주미룩스 35·50, 엘마리트 21·28, 주미크론 35의 50건). ASPH 글자가 없는 말로 바꿔 규칙에 넘긴다.
+    title = PRE_ASPH_WORDS.sub(PRE_ASPH_TOKEN, title)
+    # 'Pre-FLE'(주미룩스 35 ASPH 4세대, 11874)는 FLE 글자 때문에 FLE 모델로 갔다 → 이미 규칙이 있는 'non-FLE'로 읽는다 (2026-11-28, 4건)
+    title = PRE_FLE_WORDS.sub("non-FLE", title)
     shop = SHOP_LENS.match(title)
     if shop and not FAMILY_WORD.search(title):
         mount, focal, aperture = shop.group(1).upper(), shop.group(2), shop.group(3) or ""

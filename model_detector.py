@@ -522,6 +522,11 @@ def detect_model(
         variants.append(canon)
         already.add(canon.lower())
 
+    # 'Pre-ASPH'는 ASPH 글자를 품고 있어 variant에 ASPH도 같이 붙었다 → 검색어 'asph'가 구형 매물에 점수를 줌 (2026-11-27).
+    # 'Pre-ASPH'를 뺀 제목에도 ASPH가 따로 있을 때만 ASPH를 남긴다 (세트: 'Summicron ASPH + Summilux pre-ASPH')
+    if "Pre-ASPH" in variants and "ASPH" in variants and not re.search(r"asph", re.sub(r"(?:pre|non)[\s_-]*asph", "", n)):
+        variants.remove("ASPH")
+
     return {
         "model_raw":       model_raw,
         "model_canonical": model_canonical,
