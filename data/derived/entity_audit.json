@@ -3,25 +3,25 @@
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:no-meter",
-   "count": 1144,
+   "count": 1149,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
    "a": "leica:feature:mechanical",
    "b": "leica:feature:meter",
-   "count": 1020,
+   "count": 1019,
    "example": "Leica M6 TTL Silver 0.85x"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:meter",
-   "count": 892,
+   "count": 891,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:feature:frameline-28",
    "b": "leica:feature:mechanical",
-   "count": 846,
+   "count": 845,
    "example": "Leica M-A Black Chrome x0.72"
   },
   {
@@ -39,7 +39,7 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:mechanical",
-   "count": 297,
+   "count": 296,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -75,7 +75,7 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 231,
+   "count": 230,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -93,7 +93,7 @@
   {
    "a": "leica:feature:black-paint",
    "b": "leica:feature:meter",
-   "count": 161,
+   "count": 160,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -117,13 +117,13 @@
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:no-meter",
-   "count": 133,
+   "count": 136,
    "example": "[위탁] M2 (Silver)"
   },
   {
    "a": "leica:body:m2:standard",
    "b": "leica:feature:mechanical",
-   "count": 133,
+   "count": 136,
    "example": "[위탁] M2 (Silver)"
   },
   {
@@ -147,13 +147,13 @@
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:no-meter",
-   "count": 120,
+   "count": 121,
    "example": "[중고] M4 (Silver)"
   },
   {
    "a": "leica:body:m4:standard",
    "b": "leica:feature:mechanical",
-   "count": 120,
+   "count": 121,
    "example": "[중고] M4 (Silver)"
   },
   {
@@ -189,25 +189,25 @@
   {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:meter",
-   "count": 103,
+   "count": 102,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:mechanical",
-   "count": 103,
+   "count": 102,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:black-paint",
-   "count": 103,
+   "count": 102,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "a": "leica:body:mp-film:black-paint",
    "b": "leica:feature:frameline-28",
-   "count": 100,
+   "count": 99,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -345,7 +345,7 @@
   {
    "a": "leica:body:m-p240:standard",
    "b": "leica:feature:frameline-28",
-   "count": 61,
+   "count": 60,
    "example": "Leica M-P Black"
   },
   {
@@ -757,12 +757,6 @@
    "example": "LEICA M3 sn.1097"
   },
   {
-   "a": "leica:body:m262",
-   "b": "leica:feature:frameline-28",
-   "count": 18,
-   "example": "Leica M Typ262 Black"
-  },
-  {
    "a": "leica:body:m11-p:safari",
    "b": "leica:feature:safari",
    "count": 18,
@@ -773,6 +767,12 @@
    "b": "leica:feature:frameline-28",
    "count": 18,
    "example": "LEICA M8.2 sn.3556"
+  },
+  {
+   "a": "leica:body:m262",
+   "b": "leica:feature:frameline-28",
+   "count": 17,
+   "example": "Leica M Typ262 Black"
   },
   {
    "a": "leica:body:m6:lhsa",
@@ -1715,13 +1715,13 @@
   {
    "entity": "leica:feature:mechanical",
    "word": "black paint",
-   "count": 296,
+   "count": 295,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
    "entity": "leica:feature:frameline-28",
    "word": "black paint",
-   "count": 240,
+   "count": 239,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -1733,7 +1733,7 @@
   {
    "entity": "leica:feature:meter",
    "word": "black paint",
-   "count": 173,
+   "count": 172,
    "example": "Leica MP BlackPaint x0.72"
   },
   {
@@ -1998,7 +1998,7 @@
    "entity": "leica:lens:summilux-m:35:infinity-lock",
    "word": "black paint",
    "count": 3,
-   "example": "Leica Summilux-M 35mm f1.4 Pre Asph with Black Paint Infinity Lock"
+   "example": "Leica Summilux 35mm f1.4 V2 with infinity lock and black paint goggles"
   },
   {
    "entity": "leica:lens:summaron-m:28:f5.6:reissue",
