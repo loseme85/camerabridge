@@ -52,3 +52,22 @@ def test_pre_fle_is_4th_gen_asph(title: str) -> None:
 
 def test_real_fle_still_fle() -> None:
     assert _first("Leica Summilux-M 35mm f/1.4 ASPH FLE Black 11663")[0] == "leica:lens:summilux-m:35:asph-fle"
+
+
+def test_search_asph_does_not_count_pre_asph_title() -> None:
+    """검색어 'asph'가 제목의 'Pre-ASPH' 글자로 구형에 variant 점수를 주면 안 됨 (2026-11-28 'elmarit 21 asph')."""
+    from query_parser import parse_query
+    from query_resolver import score_listing
+
+    intent = parse_query("elmarit 21 asph")
+
+    def rec(title: str, variant: list[str], entity: str) -> dict:
+        final = {"brand": "Leica", "category": "Lens", "mount": "M", "model_raw": "Elmarit-M", "model_canonical": "Elmarit-M",
+                 "focal_length": "21", "variant": variant, "title_raw": title}
+        return {"title": title, "final_output": final, "entity_ids": [entity]}
+
+    old = score_listing(intent, rec("Leica Elmarit-M 21mm f2.8 Pre-Asph 11134", ["Pre-ASPH"], "leica:lens:elmarit-m:21"))
+    new = score_listing(intent, rec("Leica Elmarit-M 21mm f2.8 ASPH", ["ASPH"], "leica:lens:elmarit-m:21:asph"))
+    assert old["match_quality"] != "strong"
+    assert new["match_quality"] == "strong"
+    assert new["score"] > old["score"]
