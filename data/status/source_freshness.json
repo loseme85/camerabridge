@@ -5,69 +5,69 @@
   "seconds": 1.0,
   "rows": 7,
   "active": 7,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "AGF Camera (홍콩)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 20.3,
+  "seconds": 50.3,
   "rows": 359,
   "active": 210,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Ace Photo (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 67.1,
+  "seconds": 68.6,
   "rows": 473,
   "active": 473,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "AdoPhoto (그리스)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 23.5,
+  "seconds": 24.9,
   "rows": 6,
   "active": 6,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Akasaka Camera (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 32.1,
-  "last_attempt": "2026-11-28 17:02:12",
+  "seconds": 32.2,
+  "last_attempt": "2026-11-28 20:02:23",
   "rows": 53,
   "active": 53,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23"
  },
  "Allen's Camera (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 31.4,
+  "seconds": 30.5,
   "rows": 13,
   "active": 13,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Aperture (영국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 13.3,
+  "seconds": 13.4,
   "rows": 82,
   "active": 82,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Artra Lab (홍콩)": {
   "status": "ok",
@@ -75,29 +75,30 @@
   "seconds": 3.6,
   "rows": 2,
   "active": 2,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Au Vieux Format (프랑스)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 3.1,
+  "seconds": 2.4,
   "rows": 4,
   "active": 4,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Blackdove Cameras (이탈리아)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 10.9,
+  "seconds": 0.8,
   "rows": 8,
   "active": 8,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "Expecting value: line 1 column 1 (char 0)"
  },
  "Calumet (독일)": {
   "status": "ok",
@@ -112,12 +113,12 @@
  "Cambrian Photography (영국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 68.4,
+  "seconds": 68.1,
   "rows": 8,
   "active": 8,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Camera Boutique Graz (오스트리아)": {
   "status": "ok",
@@ -125,40 +126,40 @@
   "seconds": 3.7,
   "rows": 42,
   "active": 42,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Camera Electronic (호주)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 0.6,
+  "seconds": 0.3,
   "rows": 70,
   "active": 70,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Camera Obscura Elburg (네덜란드)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 66.0,
+  "seconds": 67.6,
   "rows": 63,
   "active": 63,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Camera Tweedehands (네덜란드)": {
   "status": "failed",
   "coverage": "full",
-  "seconds": 0.9,
+  "seconds": 0.0,
   "rows": 116,
   "active": 116,
   "last_success": "2026-11-08 15:00:23",
   "last_full": "2026-11-08 15:00:23",
-  "last_attempt": "2026-11-28 17:02:12",
-  "reason": "Camera Tweedehands 1페이지 못 읽음: Expecting value: line 1 column 1 (char 0)"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "Camera Tweedehands 1페이지 못 읽음: 403 Client Error: Forbidden for url: https://www.camera-tweedehands.nl/brands/leica/?format=json"
  },
  "Camera West (미국)": {
   "status": "ok",
@@ -166,9 +167,9 @@
   "seconds": 49.7,
   "rows": 605,
   "active": 329,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "CameraMall (미국)": {
   "status": "ok",
@@ -176,69 +177,70 @@
   "seconds": 30.7,
   "rows": 10,
   "active": 9,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "CameraOccasion (네덜란드)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 74.8,
+  "seconds": 76.3,
   "rows": 28,
   "active": 28,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Camtec Photo (캐나다)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 21.5,
+  "seconds": 21.1,
   "rows": 20,
   "active": 20,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Cardinal Camera Used (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 55.0,
+  "seconds": 51.2,
   "rows": 301,
   "active": 301,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Carmarthen Cameras (영국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 101.5,
+  "seconds": 99.1,
   "rows": 4,
   "active": 3,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Chiswick Camera Centre (영국)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 1.9,
+  "seconds": 0.5,
   "rows": 1,
   "active": 1,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "0건"
  },
  "Classic Connection (미국)": {
   "status": "suspect",
   "coverage": "full",
-  "seconds": 21.5,
+  "seconds": 23.5,
   "rows": 366,
   "active": 366,
   "last_success": "2026-11-22 09:02:13",
   "last_full": "2026-11-22 09:02:13",
-  "last_attempt": "2026-11-28 17:02:12",
+  "last_attempt": "2026-11-28 20:02:23",
   "reason": "판매 중 366 → 193"
  },
  "Digital Camera Graz (오스트리아)": {
@@ -247,29 +249,29 @@
   "seconds": 30.0,
   "rows": 80,
   "active": 80,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Digital Camera Warehouse (호주)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 4.1,
+  "seconds": 5.0,
   "rows": 26,
   "active": 9,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Digitalstore (오스트리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 44.8,
+  "seconds": 46.4,
   "rows": 6,
   "active": 6,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "District Camera (미국)": {
   "status": "ok",
@@ -277,39 +279,40 @@
   "seconds": 3.5,
   "rows": 50,
   "active": 49,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "F64 (루마니아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 11.6,
+  "seconds": 13.3,
   "rows": 2,
   "active": 2,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "FK Second Hand (오스트리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 105.7,
+  "seconds": 106.5,
   "rows": 234,
   "active": 234,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "FOTO/C (덴마크)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 34.0,
+  "seconds": 0.1,
   "rows": 9,
   "active": 9,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "403 Client Error: Forbidden for url: https://www.fotoc.dk/42-brugt-udstyr?page=1"
  },
  "Ffordes (영국)": {
   "status": "ok",
@@ -324,102 +327,103 @@
  "Film Camera Tokyo (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 10.3,
+  "seconds": 10.2,
   "rows": 21,
   "active": 21,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Film Lab (라트비아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 1.5,
-  "last_attempt": "2026-11-28 17:02:12",
+  "seconds": 2.1,
+  "last_attempt": "2026-11-28 20:02:23",
   "rows": 1,
   "active": 1,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23"
  },
  "Five Star Camera (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 7.3,
+  "seconds": 7.6,
   "rows": 59,
   "active": 59,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Focus Filme (브라질)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 13.6,
+  "seconds": 13.3,
   "rows": 4,
   "active": 4,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Curatolo (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 9.4,
+  "seconds": 8.9,
   "rows": 2,
   "active": 2,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Dotti (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 114.9,
+  "seconds": 114.7,
   "rows": 691,
   "active": 691,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Erhardt (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 33.6,
+  "seconds": 32.5,
   "rows": 11,
   "active": 8,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Görlitz (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 1.1,
-  "last_attempt": "2026-11-28 17:02:12",
+  "seconds": 1.2,
+  "last_attempt": "2026-11-28 20:02:23",
   "rows": 18,
   "active": 18,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23"
  },
  "Foto Hebenstreit (오스트리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 37.4,
+  "seconds": 40.0,
   "rows": 23,
   "active": 23,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto K (스페인)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 15.7,
+  "seconds": 0.4,
   "rows": 8,
   "active": 8,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "0건"
  },
  "Foto Köster (독일)": {
   "status": "ok",
@@ -434,103 +438,102 @@
  "Foto Meyer (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 5.2,
+  "seconds": 5.0,
   "rows": 31,
   "active": 31,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Mundus (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 81.5,
-  "rows": 29,
-  "active": 29,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "seconds": 80.1,
+  "rows": 30,
+  "active": 30,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Ottica Cavour (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 18.6,
+  "seconds": 19.0,
   "rows": 201,
   "active": 201,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Pazdera (체코)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 44.2,
+  "seconds": 44.3,
   "rows": 16,
   "active": 16,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Schneider (오스트리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 2.8,
+  "seconds": 3.0,
   "rows": 4,
   "active": 4,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Sipkes (네덜란드)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 13.6,
+  "seconds": 13.5,
   "rows": 20,
   "active": 20,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto Trade Occasion (룩셈부르크)": {
-  "status": "failed",
+  "status": "ok",
   "coverage": "full",
-  "seconds": 30.6,
+  "seconds": 2.2,
   "rows": 78,
   "active": 78,
-  "last_success": "2026-11-28 15:02:27",
-  "last_full": "2026-11-28 15:02:27",
-  "last_attempt": "2026-11-28 17:02:12",
-  "reason": "HTTPSConnectionPool(host='occasion.fototrade.lu', port=443): Read timed out. (read timeout=30)"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Foto.no (노르웨이)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 16.9,
+  "seconds": 17.4,
   "rows": 7,
   "active": 7,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "FotoHobby (홍콩)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 18.2,
+  "seconds": 18.3,
   "rows": 17,
   "active": 17,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Fotododici (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 48.3,
+  "seconds": 47.7,
   "rows": 20,
   "active": 20,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Fotohandel Delfshaven (네덜란드)": {
   "status": "ok",
@@ -545,82 +548,82 @@
  "Fotoman (핀란드)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 12.6,
+  "seconds": 27.8,
   "rows": 19,
   "active": 19,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Fotopia (홍콩)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 2.1,
-  "rows": 512,
-  "active": 496,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "seconds": 1.3,
+  "rows": 515,
+  "active": 499,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Glazers Camera (미국)": {
   "status": "ok",
   "coverage": "full",
   "seconds": 8.8,
-  "last_attempt": "2026-11-28 17:02:12",
+  "last_attempt": "2026-11-28 20:02:23",
   "rows": 63,
   "active": 63,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23"
  },
  "Goecker (덴마크)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 0.9,
+  "seconds": 3.1,
   "rows": 19,
   "active": 19,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Grain Over Pixel (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 3.3,
+  "seconds": 3.2,
   "rows": 21,
   "active": 10,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Grainlab (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 3.4,
+  "seconds": 0.7,
   "rows": 7,
   "active": 7,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Grande Marvin (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 36.6,
+  "seconds": 36.8,
   "rows": 9,
   "active": 9,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Harrison Cameras (영국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 32.9,
-  "last_attempt": "2026-11-28 17:02:12",
+  "seconds": 36.4,
+  "last_attempt": "2026-11-28 20:02:23",
   "rows": 46,
   "active": 45,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23"
  },
  "Howard Parker (영국)": {
   "status": "ok",
@@ -635,12 +638,12 @@
  "Il Contatto Store (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 6.7,
+  "seconds": 7.2,
   "rows": 128,
   "active": 128,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Image Foto (덴마크)": {
   "status": "ok",
@@ -648,9 +651,9 @@
   "seconds": 3.6,
   "rows": 10,
   "active": 10,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "J-カメラ (일본)": {
   "status": "failed",
@@ -664,175 +667,175 @@
   "reason": "J-カメラ 5페이지 못 읽음: HTTPSConnectionPool(host='j-camera.net', port=443): Max retries exceeded with url: /listp.php?mk%5B%5D=14&sh%5B%5D=aikoudou&sh%5B%5D=esakura&sh%5B%5D=irohas&sh%5B%5D=Inherit&sh%5B%5D="
  },
  "JBV Foto (독일)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 18.0,
+  "seconds": 0.6,
   "rows": 115,
   "active": 115,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "0건"
  },
  "Japan Camera Hunter (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 0.3,
+  "seconds": 0.2,
   "rows": 65,
   "active": 65,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "K&M Camera (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 134.2,
+  "seconds": 135.3,
   "rows": 57,
   "active": 21,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "K-Camera": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 29.8,
+  "seconds": 24.0,
   "rows": 168,
   "active": 161,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "KOMEHYO (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 6.3,
+  "seconds": 6.0,
   "rows": 43,
   "active": 43,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Kamera Express (룩셈부르크)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 134.9,
+  "seconds": 134.5,
   "rows": 141,
-  "active": 78,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "active": 77,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Kamera Klinikum (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 16.3,
+  "seconds": 16.5,
   "rows": 3,
   "active": 3,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Kamera Stockholm (스웨덴)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 3.5,
+  "seconds": 3.6,
   "rows": 26,
   "active": 15,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "KameraHaus (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 15.0,
+  "seconds": 14.9,
   "rows": 323,
   "active": 74,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Kameradoktorn (스웨덴)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 27.6,
+  "seconds": 27.8,
   "rows": 13,
   "active": 13,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Kamerastore (핀란드)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 8.3,
+  "seconds": 7.9,
   "rows": 668,
   "active": 668,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Kenmore Camera (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 5.2,
+  "seconds": 6.0,
   "rows": 31,
   "active": 31,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Khrome (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 12.1,
+  "seconds": 12.2,
   "rows": 22,
   "active": 21,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Kücher (오스트리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 51.0,
+  "seconds": 50.5,
   "rows": 22,
   "active": 22,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "LBPN (프랑스)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 34.4,
+  "seconds": 33.6,
   "rows": 8,
   "active": 8,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "LS Kamera (홍콩)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 107.4,
+  "seconds": 106.6,
   "rows": 604,
   "active": 212,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Lampersky (헝가리)": {
-  "status": "failed",
+  "status": "ok",
   "coverage": "full",
-  "seconds": 136.1,
+  "seconds": 1.1,
   "rows": 5,
   "active": 5,
-  "last_success": "2026-11-28 15:02:27",
-  "last_full": "2026-11-28 15:02:27",
-  "last_attempt": "2026-11-28 17:02:12",
-  "reason": "HTTPSConnectionPool(host='lampersky.com', port=443): Max retries exceeded with url: /wp-json/wc/store/v1/products?search=leica&per_page=100&page=1 (Caused by ConnectTimeoutError(<HTTPSConnection(host="
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Lecuit (룩셈부르크)": {
   "status": "ok",
@@ -847,12 +850,12 @@
  "Leica Boutique Cape Town (남아공)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 351.5,
+  "seconds": 351.2,
   "rows": 108,
   "active": 108,
-  "last_success": "2026-11-28 07:02:36",
-  "last_full": "2026-11-28 07:02:36",
-  "last_attempt": "2026-11-28 07:02:36"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Classic (덴마크)": {
   "status": "ok",
@@ -990,69 +993,69 @@
   "seconds": 3.5,
   "rows": 6,
   "active": 3,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Store France (프랑스)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 25.6,
+  "seconds": 23.8,
   "rows": 291,
   "active": 259,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Store Heidelberg (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 2.5,
+  "seconds": 2.3,
   "rows": 79,
   "active": 79,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Store Konstanz (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 27.1,
-  "rows": 298,
-  "active": 298,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "seconds": 27.3,
+  "rows": 299,
+  "active": 299,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Store Malaysia (말레이시아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 3.4,
+  "seconds": 3.3,
   "rows": 16,
   "active": 16,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Store Manchester (영국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 15.3,
+  "seconds": 15.5,
   "rows": 358,
   "active": 94,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Store Miami": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 0.8,
+  "seconds": 0.2,
   "rows": 42,
   "active": 42,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Leica Store Poland (폴란드)": {
   "status": "ok",
@@ -1067,12 +1070,12 @@
  "Leica Store Singapore (싱가포르)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 2.7,
+  "seconds": 1.7,
   "rows": 19,
   "active": 19,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Loja Portssar (브라질)": {
   "status": "ok",
@@ -1080,49 +1083,49 @@
   "seconds": 1.7,
   "rows": 15,
   "active": 15,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Lucky Camera (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 89.4,
-  "rows": 215,
-  "active": 215,
-  "last_success": "2026-11-28 07:02:36",
-  "last_full": "2026-11-28 07:02:36",
-  "last_attempt": "2026-11-28 07:02:36"
+  "seconds": 120.0,
+  "rows": 213,
+  "active": 213,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "M & K Kamera (홍콩)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 8.6,
+  "seconds": 7.0,
   "rows": 708,
   "active": 708,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "M&S Materiale Fotografico (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 11.9,
+  "seconds": 11.7,
   "rows": 223,
   "active": 213,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "MF Camera (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 3.4,
+  "seconds": 3.2,
   "rows": 55,
   "active": 55,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Meteor (홍콩)": {
   "status": "ok",
@@ -1130,19 +1133,19 @@
   "seconds": 13.0,
   "rows": 217,
   "active": 58,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Midwest Photo (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 8.9,
+  "seconds": 8.3,
   "rows": 2,
   "active": 2,
-  "last_success": "2026-11-28 07:02:36",
-  "last_full": "2026-11-28 07:02:36",
-  "last_attempt": "2026-11-28 07:02:36"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "NEBO (네덜란드)": {
   "status": "ok",
@@ -1150,39 +1153,39 @@
   "seconds": 8.0,
   "rows": 3,
   "active": 3,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Newoldcamera (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 42.6,
+  "seconds": 41.7,
   "rows": 488,
   "active": 488,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Nivo Schweitzer (네덜란드)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 6.4,
+  "seconds": 6.6,
   "rows": 33,
   "active": 31,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "OC Camera (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 15.6,
+  "seconds": 16.0,
   "rows": 107,
   "active": 107,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "One Of Many Cameras (덴마크)": {
   "status": "ok",
@@ -1204,32 +1207,33 @@
  "PROCAM (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 102.2,
+  "seconds": 102.6,
   "rows": 6,
   "active": 6,
-  "last_success": "2026-11-28 07:02:36",
-  "last_full": "2026-11-28 07:02:36",
-  "last_attempt": "2026-11-28 07:02:36"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Pacific Rim Camera (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 18.9,
+  "seconds": 18.8,
   "rows": 140,
   "active": 140,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Panajou (프랑스)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 6.4,
+  "seconds": 54.4,
   "rows": 18,
   "active": 15,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "HTTPSConnectionPool(host='www.panajou.fr', port=443): Read timed out. (read timeout=30)"
  },
  "Peter Loy (영국)": {
   "status": "ok",
@@ -1237,19 +1241,19 @@
   "seconds": 1.0,
   "rows": 230,
   "active": 230,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Photo Suffren (프랑스)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 7.2,
+  "seconds": 6.9,
   "rows": 67,
   "active": 67,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Photo Warehouse (뉴질랜드)": {
   "status": "ok",
@@ -1264,12 +1268,12 @@
  "Photo19 (이탈리아)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 39.2,
+  "seconds": 38.5,
   "rows": 3,
   "active": 3,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "PhotoCo (호주)": {
   "status": "failed",
@@ -1279,24 +1283,25 @@
   "last_attempt": "2026-11-02 10:57:35"
  },
  "PhotoQueen (그리스)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 21.5,
+  "seconds": 0.2,
   "rows": 13,
   "active": 13,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "0건"
  },
  "Photografica (덴마크)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 5.8,
+  "seconds": 5.1,
   "rows": 111,
   "active": 111,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Photohaus Clickpic (독일)": {
   "status": "ok",
@@ -1304,29 +1309,29 @@
   "seconds": 1.2,
   "rows": 4,
   "active": 4,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Pro Photo DC (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 5.1,
+  "seconds": 5.3,
   "rows": 27,
   "active": 27,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Pro Photo Supply (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 7.2,
+  "seconds": 6.9,
   "rows": 11,
   "active": 11,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Profotica (네덜란드)": {
   "status": "ok",
@@ -1334,29 +1339,30 @@
   "seconds": 7.4,
   "rows": 48,
   "active": 30,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Rangefinder (홍콩)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 2.1,
+  "seconds": 0.7,
   "rows": 40,
   "active": 40,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "Rangefinder 1페이지 못 읽음: Expecting value: line 1 column 1 (char 0)"
  },
  "Recycled Photo (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 75.4,
+  "seconds": 75.1,
   "rows": 122,
   "active": 121,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Robert White (영국)": {
   "status": "ok",
@@ -1364,39 +1370,40 @@
   "seconds": 3.4,
   "rows": 3,
   "active": 2,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Romana Photo (이탈리아)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 1.9,
+  "seconds": 30.6,
   "rows": 19,
   "active": 19,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "HTTPSConnectionPool(host='www.romanaphoto.it', port=443): Read timed out. (read timeout=30)"
  },
  "Roter Punkt (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 6.9,
+  "seconds": 7.0,
   "rows": 85,
   "active": 85,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "SHphoto (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 40.6,
+  "seconds": 36.8,
   "rows": 339,
   "active": 339,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Sabatini Fotografia (이탈리아)": {
   "status": "failed",
@@ -1408,43 +1415,43 @@
  "Scandinavian Photo (스웨덴)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 0.5,
+  "seconds": 0.4,
   "rows": 7,
   "active": 6,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Schouten Select (네덜란드)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 8.1,
+  "seconds": 7.8,
   "rows": 295,
   "active": 279,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Soper Photographic (영국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 82.3,
+  "seconds": 75.6,
   "rows": 40,
   "active": 40,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "THE CAMERA": {
   "status": "ok",
   "coverage": "full",
   "pages": 9,
-  "seconds": 8.6,
+  "seconds": 7.1,
   "rows": 122,
   "active": 121,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Tamarkin Camera (미국)": {
   "status": "ok",
@@ -1459,63 +1466,64 @@
  "Ted's Camera (호주)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 10.7,
+  "seconds": 10.6,
   "rows": 8,
   "active": 8,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "The Camera Store (캐나다)": {
   "status": "suspect",
   "coverage": "full",
-  "seconds": 93.3,
+  "seconds": 95.3,
   "rows": 14,
   "active": 7,
   "last_success": "2026-11-21 01:08:28",
   "last_full": "2026-11-21 01:08:28",
-  "last_attempt": "2026-11-28 17:02:12",
+  "last_attempt": "2026-11-28 20:02:23",
   "reason": "전체 14 → 7"
  },
  "The Classic Camera (영국)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 26.4,
+  "seconds": 0.4,
   "rows": 84,
   "active": 84,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "The Classic Camera 1페이지 못 읽음: Expecting value: line 1 column 1 (char 0)"
  },
  "The Rangefinder (캐나다)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 2.8,
+  "seconds": 1.6,
   "rows": 11,
   "active": 11,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "The Real Camera Company (영국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 16.4,
+  "seconds": 20.4,
   "rows": 41,
   "active": 41,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Tim's Photo (캐나다)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 3.9,
+  "seconds": 3.7,
   "rows": 247,
   "active": 115,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "UA카메라": {
   "status": "ok",
@@ -1524,29 +1532,29 @@
   "seconds": 2.2,
   "rows": 34,
   "active": 20,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "UNIT Camera Shop (태국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 88.8,
+  "seconds": 88.7,
   "rows": 27,
   "active": 27,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Used.cl (칠레)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 4.2,
+  "seconds": 4.1,
   "rows": 22,
   "active": 21,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Vibe.pl (폴란드)": {
   "status": "failed",
@@ -1558,92 +1566,93 @@
  "Victory Camera (미국)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 130.0,
+  "seconds": 131.0,
   "rows": 571,
   "active": 209,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "Vintage Camera Gear (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 122.9,
-  "last_attempt": "2026-11-28 17:02:12",
+  "seconds": 121.3,
+  "last_attempt": "2026-11-28 20:02:23",
   "rows": 400,
   "active": 400,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23"
  },
  "Wex Photo Video (영국)": {
-  "status": "ok",
+  "status": "failed",
   "coverage": "full",
-  "seconds": 0.6,
+  "seconds": 0.1,
   "rows": 70,
   "active": 70,
   "last_success": "2026-11-28 17:02:12",
   "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "403 Client Error: Forbidden for url: https://www.wexphotovideo.com/qkax/search-gateway/1/indexes/*/queries"
  },
  "click & surr (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 11.3,
+  "seconds": 10.8,
   "rows": 11,
   "active": 11,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "e-darkroom (그리스)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 4.4,
+  "seconds": 4.2,
   "rows": 2,
   "active": 2,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "fotohandel.de (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 19.5,
+  "seconds": 20.5,
   "rows": 39,
   "active": 39,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "fotopro24 (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 12.0,
+  "seconds": 12.1,
   "rows": 297,
   "active": 297,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "gebrauchtkameras.de (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 255.0,
+  "seconds": 262.5,
   "rows": 94,
   "active": 94,
-  "last_success": "2026-11-28 07:02:36",
-  "last_full": "2026-11-28 07:02:36",
-  "last_attempt": "2026-11-28 07:02:36"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "used-photo.de (독일)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 9.4,
+  "seconds": 9.1,
   "rows": 70,
   "active": 70,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "カメラの大林 (일본)": {
   "status": "suspect",
@@ -1659,123 +1668,123 @@
  "カメラの大貫 (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 19.9,
+  "seconds": 19.2,
   "rows": 376,
   "active": 376,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "カメラコレクション (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 4.7,
-  "rows": 48,
-  "active": 48,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "seconds": 6.0,
+  "rows": 45,
+  "active": 45,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "サンライズカメラ (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 12.2,
-  "rows": 16,
-  "active": 16,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "seconds": 12.0,
+  "rows": 18,
+  "active": 18,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "トキワカメラ (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 55.4,
+  "seconds": 53.9,
   "rows": 9,
   "active": 9,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "トップカメラ (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 4.0,
+  "seconds": 3.9,
   "rows": 83,
   "active": 83,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "マツバラ光機 (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 35.3,
-  "rows": 168,
-  "active": 168,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "seconds": 35.1,
+  "rows": 169,
+  "active": 169,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "メディアジョイカメラ (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 26.7,
+  "seconds": 26.3,
   "rows": 11,
   "active": 11,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "モリッツ (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 2.3,
+  "seconds": 1.8,
   "rows": 10,
   "active": 10,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "三宝カメラ (일본)": {
   "status": "suspect",
   "coverage": "full",
-  "seconds": 7.9,
+  "seconds": 8.0,
   "rows": 50,
   "active": 50,
   "last_success": "2026-11-14 17:02:05",
   "last_full": "2026-11-14 17:02:05",
-  "last_attempt": "2026-11-28 17:02:12",
+  "last_attempt": "2026-11-28 20:02:23",
   "reason": "판매 중 50 → 29"
  },
  "三葉堂寫眞機店 (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 11.0,
+  "seconds": 10.6,
   "rows": 2,
   "active": 2,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "八百富写真機店 (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 7.4,
+  "seconds": 7.5,
   "rows": 16,
   "active": 15,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "喜久屋カメラ (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 1.8,
-  "rows": 32,
-  "active": 32,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "seconds": 0.9,
+  "rows": 31,
+  "active": 31,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "富士越カメラ (일본)": {
   "status": "ok",
@@ -1790,162 +1799,162 @@
  "銀座カツミ堂 (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 1.5,
+  "seconds": 1.3,
   "rows": 17,
   "active": 17,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "가산카메라": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 38.5,
+  "seconds": 33.5,
   "rows": 197,
   "active": 160,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "강산 중고샵": {
   "status": "ok",
   "coverage": "full",
   "pages": 13,
-  "seconds": 6.7,
+  "seconds": 5.9,
   "rows": 141,
   "active": 52,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "거성카메라": {
   "status": "ok",
   "coverage": "full",
   "pages": 1,
-  "seconds": 2.6,
+  "seconds": 2.1,
   "rows": 1,
   "active": 1,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "국민카메라": {
   "status": "ok",
   "coverage": "full",
   "pages": 10,
-  "seconds": 8.3,
+  "seconds": 6.7,
   "rows": 266,
   "active": 236,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "기타무라 (일본)": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 8.5,
-  "last_attempt": "2026-11-28 17:02:12",
-  "rows": 734,
-  "active": 734,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12"
+  "seconds": 8.4,
+  "last_attempt": "2026-11-28 20:02:23",
+  "rows": 736,
+  "active": 736,
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23"
  },
  "라이카스토어 충무로": {
   "status": "ok",
   "coverage": "active_zone",
   "pages": 13,
-  "seconds": 14.3,
+  "seconds": 10.0,
   "rows": 3199,
   "active": 551,
-  "last_success": "2026-11-28 17:02:12",
+  "last_success": "2026-11-28 20:02:23",
   "last_full": "2026-11-28 10:02:23",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "무한카메라": {
   "status": "ok",
   "coverage": "full",
   "pages": 56,
-  "seconds": 26.6,
+  "seconds": 21.9,
   "rows": 601,
   "active": 127,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "사진집": {
   "status": "ok",
   "coverage": "active_zone",
   "pages": 11,
-  "seconds": 8.5,
+  "seconds": 6.1,
   "rows": 324,
   "active": 316,
-  "last_success": "2026-11-28 17:02:12",
+  "last_success": "2026-11-28 20:02:23",
   "last_full": "2026-11-28 10:02:23",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "신성카메라": {
   "status": "ok",
   "coverage": "full",
   "pages": 2,
-  "seconds": 4.0,
+  "seconds": 3.7,
   "rows": 17,
   "active": 17,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "일광카메라": {
   "status": "ok",
   "coverage": "full",
   "pages": 33,
-  "seconds": 18.5,
+  "seconds": 16.4,
   "rows": 354,
   "active": 32,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "잇츠카메라": {
   "status": "ok",
   "coverage": "full",
-  "seconds": 4.5,
+  "seconds": 4.7,
   "rows": 35,
   "active": 27,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "장씨카메라": {
   "status": "ok",
   "coverage": "active_zone",
   "pages": 8,
-  "seconds": 5.2,
+  "seconds": 3.9,
   "rows": 3841,
   "active": 43,
-  "last_success": "2026-11-28 17:02:12",
+  "last_success": "2026-11-28 20:02:23",
   "last_full": "2026-11-28 10:02:23",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_attempt": "2026-11-28 20:02:23"
  },
  "카메라노나니와 (일본)": {
   "status": "suspect",
   "coverage": "full",
-  "seconds": 31.6,
+  "seconds": 30.1,
   "rows": 1124,
   "active": 1124,
   "last_success": "2026-11-28 10:02:23",
   "last_full": "2026-11-28 10:02:23",
-  "last_attempt": "2026-11-28 17:02:12",
-  "reason": "판매 중 1124 → 730"
+  "last_attempt": "2026-11-28 20:02:23",
+  "reason": "판매 중 1124 → 729"
  },
  "펠리칸카메라": {
   "status": "ok",
   "coverage": "full",
   "pages": 7,
-  "seconds": 7.5,
+  "seconds": 4.7,
   "rows": 128,
   "active": 127,
-  "last_success": "2026-11-28 17:02:12",
-  "last_full": "2026-11-28 17:02:12",
-  "last_attempt": "2026-11-28 17:02:12"
+  "last_success": "2026-11-28 20:02:23",
+  "last_full": "2026-11-28 20:02:23",
+  "last_attempt": "2026-11-28 20:02:23"
  }
 }
