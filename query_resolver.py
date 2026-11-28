@@ -1043,7 +1043,8 @@ def _score_variants(intent: dict[str, Any], final: dict[str, Any], text: str, br
                 matched,
                 ScoreItem("variant", variant, listing_variants, per_variant, per_variant, "exact", "variant"),
             )
-        elif variant_norm and re.search(rf"\b{re.escape(variant_norm)}\b", text):
+        # 'pre-asph'·'non-fle'처럼 그 말을 부정하는 표기는 일치로 세지 않는다 (2026-11-28: 'elmarit 21 asph'에 구형이 강한 일치로 나옴)
+        elif variant_norm and re.search(rf"(?<!pre-)(?<!pre )(?<!pre)(?<!non-)(?<!non )(?<!non)\b{re.escape(variant_norm)}\b", text):
             awarded_total += _add_score(
                 breakdown,
                 matched,
