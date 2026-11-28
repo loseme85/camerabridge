@@ -1,13 +1,44 @@
 {
-"total": 468,
+"total": 470,
 "by_hint": {
 "accessory": 66,
 "set": 61,
-"check": 298,
+"check": 300,
 "edition": 40,
 "defect": 3
 },
-"new": [],
+"new": [
+{
+"url": "https://www.peterloy.com/?p=20688",
+"entity": "leica:body:standard:standard",
+"ratio": 0.37,
+"category": "Body",
+"title": "Leica Standard body, chrome",
+"price": "£275",
+"source": "Peter Loy (영국)",
+"hint": "check"
+},
+{
+"url": "https://classicconnection.com/products/leica-standard-e-chrome-nr-261951-ex",
+"entity": "leica:body:standard:standard",
+"ratio": 0.37,
+"category": "Body",
+"title": "Leica Standard (E) Chrome Nr.261951",
+"price": "$369",
+"source": "Classic Connection (미국)",
+"hint": "check"
+},
+{
+"url": "https://www.foto-koester.de/standard-m.-summar-50-2.0/7700005118412",
+"entity": "leica:body:standard:standard",
+"ratio": 0.44,
+"category": "Body",
+"title": "Leica Standard m. Summar 50mm f2.0",
+"price": "€398",
+"source": "Foto Köster (독일)",
+"hint": "set"
+}
+],
 "items": [
 {
 "url": "https://www.pacificrimcamera.com/catalog/th_bh11.htm#179990",
@@ -1010,16 +1041,6 @@
 "hint": "set"
 },
 {
-"url": "https://jbvfoto.de/leica-iii-mod-f-black-nickel-hektor-25-50mm",
-"entity": "leica:body:iii:black-nickel",
-"ratio": 2.5,
-"category": "Body",
-"title": "Leica III mod. F black nickel Hektor 50mm f2.5",
-"price": "€2,000",
-"source": "JBV Foto (독일)",
-"hint": "set"
-},
-{
 "url": "https://www.peterloy.com/?p=15256",
 "entity": "leica:body:iii:standard",
 "ratio": 0.4,
@@ -1772,7 +1793,7 @@
 {
 "url": "https://artralab.com/products/1932-leitz-leica-standard-black-paint-with-nickel-elements-no-102904-elmar",
 "entity": "leica:body:standard:standard",
-"ratio": 0.38,
+"ratio": 0.27,
 "category": "Body",
 "title": "LEITZ LEICA STANDARD BLACK PAINT WITH NICKEL ELEMENTS NO. 102904 ELMAR",
 "price": "HK$2,104",
@@ -1782,7 +1803,7 @@
 {
 "url": "https://cameranonaniwa.jp/shop/g/g2222050268034/",
 "entity": "leica:body:standard:standard",
-"ratio": 0.4,
+"ratio": 0.29,
 "category": "Body",
 "title": "Leica Standard",
 "price": "¥45,000",
@@ -1790,9 +1811,39 @@
 "hint": "check"
 },
 {
+"url": "https://www.peterloy.com/?p=20688",
+"entity": "leica:body:standard:standard",
+"ratio": 0.37,
+"category": "Body",
+"title": "Leica Standard body, chrome",
+"price": "£275",
+"source": "Peter Loy (영국)",
+"hint": "check"
+},
+{
+"url": "https://classicconnection.com/products/leica-standard-e-chrome-nr-261951-ex",
+"entity": "leica:body:standard:standard",
+"ratio": 0.37,
+"category": "Body",
+"title": "Leica Standard (E) Chrome Nr.261951",
+"price": "$369",
+"source": "Classic Connection (미국)",
+"hint": "check"
+},
+{
+"url": "https://www.foto-koester.de/standard-m.-summar-50-2.0/7700005118412",
+"entity": "leica:body:standard:standard",
+"ratio": 0.44,
+"category": "Body",
+"title": "Leica Standard m. Summar 50mm f2.0",
+"price": "€398",
+"source": "Foto Köster (독일)",
+"hint": "set"
+},
+{
 "url": "https://www.japancamerahunter.com/product/leica-standard-model-e-nickel-elmar-5cm-3-5/",
 "entity": "leica:body:standard:standard",
-"ratio": 3.51,
+"ratio": 2.54,
 "category": "Body",
 "title": "Leica Standard Model E + Nickel Elmar 50mm f3.5",
 "price": "$2,500",
@@ -1802,7 +1853,7 @@
 {
 "url": "https://www.profotica.nl/products/leica-standard-5cm-3-5-elmar",
 "entity": "leica:body:standard:standard",
-"ratio": 3.83,
+"ratio": 2.77,
 "category": "Body",
 "title": "Leica Standard + 5cm 3.5 Elmar",
 "price": "€2,490",
@@ -4002,7 +4053,7 @@
 {
 "url": "https://schouten-select.com/products/leica-35mm-f1-4-summilux-m-asph-fle-silver-70th-anniversary-republic-of-korea-box",
 "entity": "leica:lens:summilux-m:35:asph-fle",
-"ratio": 4.14,
+"ratio": 4.18,
 "category": "Lens",
 "title": "Leica 35mm f1.4 Summilux-M ASPH FLE Silver \"70th Anniversary Republic of Korea\"",
 "price": "€14,500",
@@ -4012,7 +4063,7 @@
 {
 "url": "https://schouten-select.com/products/leica-35mm-f1-4-summilux-m-asph-fle-black-paint-70th-anniversary-republic-of-korea-box",
 "entity": "leica:lens:summilux-m:35:asph-fle",
-"ratio": 8.71,
+"ratio": 8.79,
 "category": "Lens",
 "title": "Leica 35mm f1.4 Summilux-M ASPH FLE Black Paint \"70th Anniversary Republic of Korea\"",
 "price": "€30,500",
@@ -4022,7 +4073,7 @@
 {
 "url": "https://classic.leica-camera.com/en/Leica-Summilux-M-1.4-35mm-black/11300SH-4879863",
 "entity": "leica:lens:summilux-m:35:pre-asph-unspecified",
-"ratio": 8.15,
+"ratio": 7.92,
 "category": "Lens",
 "title": "Leica Summilux-M 35mm f1.4 black",
 "price": "CHF 22,650",
@@ -4442,7 +4493,7 @@
 {
 "url": "https://www.japancamerahunter.com/product/leica-tri-elmar-28-35-50mm-f-4-asph-leica-historica-1975-2000/",
 "entity": "leica:lens:tri-elmar-m:28-35-50:e46",
-"ratio": 3.18,
+"ratio": 3.03,
 "category": "Lens",
 "title": "Leica Tri-Elmar 28-35-50mm f4.0 ASPH Leica Historica 1975-2000",
 "price": "$10,000",

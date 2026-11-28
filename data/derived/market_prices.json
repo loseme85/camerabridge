@@ -1,53 +1,4 @@
 {
-  "50mm APO-Summicron": {
-    "weighted_median": 7763886,
-    "sample_count": 82,
-    "min": 3500000,
-    "max": 72750000,
-    "avg": 8504935
-  },
-  "Leica M6": {
-    "weighted_median": 4886764,
-    "sample_count": 154,
-    "min": 800000,
-    "max": 21800000,
-    "avg": 5674240
-  },
-  "21mm Super-Angulon": {
-    "weighted_median": 1277078,
-    "sample_count": 32,
-    "min": 94500,
-    "max": 2693250,
-    "avg": 1260235
-  },
-  "28mm Elmarit": {
-    "weighted_median": 1421626,
-    "sample_count": 28,
-    "min": 479689,
-    "max": 6743250,
-    "avg": 2122406
-  },
-  "90mm Elmar": {
-    "weighted_median": 3162876,
-    "sample_count": 54,
-    "min": 88626,
-    "max": 6700000,
-    "avg": 2978354
-  },
-  "Tri-Elmar 16-18-21 (WATE)": {
-    "weighted_median": 4783323,
-    "sample_count": 15,
-    "min": 3900000,
-    "max": 7437500,
-    "avg": 5264527
-  },
-  "50mm Summilux ASPH": {
-    "weighted_median": 4274817,
-    "sample_count": 209,
-    "min": 1925884,
-    "max": 22800000,
-    "avg": 4809799
-  },
   "50mm Summilux (올드)": {
     "weighted_median": 3613018,
     "sample_count": 70,
@@ -103,6 +54,13 @@
     "min": 2188357,
     "max": 2412196,
     "avg": 2250206
+  },
+  "Leica M6": {
+    "weighted_median": 4947122,
+    "sample_count": 153,
+    "min": 800000,
+    "max": 21800000,
+    "avg": 5686597
   },
   "50mm Summicron": {
     "weighted_median": 2352452,
@@ -161,18 +119,18 @@
     "avg": 7136637
   },
   "Leica D-LUX": {
-    "weighted_median": 1782761,
-    "sample_count": 106,
+    "weighted_median": 1788368,
+    "sample_count": 107,
     "min": 675000,
     "max": 3313585,
-    "avg": 1652686
+    "avg": 1658073
   },
   "Leica M3": {
-    "weighted_median": 2498689,
-    "sample_count": 108,
+    "weighted_median": 2468238,
+    "sample_count": 109,
     "min": 174822,
     "max": 55665323,
-    "avg": 3001809
+    "avg": 2994218
   },
   "35mm APO-Summicron": {
     "weighted_median": 9298150,
@@ -399,11 +357,11 @@
     "avg": 1020010
   },
   "Leica M2": {
-    "weighted_median": 3218980,
-    "sample_count": 67,
+    "weighted_median": 3200000,
+    "sample_count": 68,
     "min": 131639,
     "max": 86609174,
-    "avg": 6037204
+    "avg": 5972686
   },
   "Leica X Vario": {
     "weighted_median": 1741250,
@@ -411,6 +369,13 @@
     "min": 950000,
     "max": 1980000,
     "avg": 1332944
+  },
+  "21mm Super-Angulon": {
+    "weighted_median": 1277078,
+    "sample_count": 31,
+    "min": 94500,
+    "max": 2693250,
+    "avg": 1231202
   },
   "50mm Summicron (침동)": {
     "weighted_median": 1225016,
@@ -432,6 +397,13 @@
     "min": 1894618,
     "max": 7550133,
     "avg": 3676183
+  },
+  "Tri-Elmar 16-18-21 (WATE)": {
+    "weighted_median": 5308713,
+    "sample_count": 13,
+    "min": 3900000,
+    "max": 7437500,
+    "avg": 5382146
   },
   "Elmarit": {
     "weighted_median": 1808098,
@@ -512,17 +484,17 @@
   },
   "Leica Barnack": {
     "weighted_median": 878837,
-    "sample_count": 58,
+    "sample_count": 60,
     "min": 506250,
     "max": 6313699,
-    "avg": 1233926
+    "avg": 1264911
   },
   "Leica Q2": {
-    "weighted_median": 5180000,
-    "sample_count": 116,
+    "weighted_median": 5181894,
+    "sample_count": 117,
     "min": 166894,
     "max": 8175724,
-    "avg": 5203805
+    "avg": 5214271
   },
   "50mm Summicron DR": {
     "weighted_median": 1474642,
@@ -664,6 +636,20 @@
     "max": 3690527,
     "avg": 2629579
   },
+  "50mm APO-Summicron": {
+    "weighted_median": 7763886,
+    "sample_count": 81,
+    "min": 3500000,
+    "max": 72750000,
+    "avg": 8563241
+  },
+  "50mm Summilux ASPH": {
+    "weighted_median": 4274817,
+    "sample_count": 209,
+    "min": 1925884,
+    "max": 22800000,
+    "avg": 4809799
+  },
   "24mm Elmarit-R": {
     "weighted_median": 572234,
     "sample_count": 4,
@@ -750,10 +736,10 @@
   },
   "Leica R5": {
     "weighted_median": 585449,
-    "sample_count": 12,
+    "sample_count": 11,
     "min": 33750,
     "max": 1110339,
-    "avg": 578966
+    "avg": 551830
   },
   "100mm APO-Macro-Elmarit-R": {
     "weighted_median": 1341096,
@@ -797,12 +783,19 @@
     "max": 3972802,
     "avg": 3113245
   },
+  "90mm Elmar": {
+    "weighted_median": 3095274,
+    "sample_count": 53,
+    "min": 88626,
+    "max": 6700000,
+    "avg": 2949644
+  },
   "Tri-Elmar 28-35-50 (MATE)": {
     "weighted_median": 1404156,
-    "sample_count": 10,
+    "sample_count": 11,
     "min": 219294,
     "max": 4800000,
-    "avg": 2345992
+    "avg": 2408671
   },
   "Leica M Monochrom": {
     "weighted_median": 4780000,
@@ -924,11 +917,18 @@
     "avg": 305501
   },
   "28mm Summilux": {
-    "weighted_median": 6784268,
-    "sample_count": 17,
+    "weighted_median": 6652458,
+    "sample_count": 18,
     "min": 3503250,
     "max": 8145878,
-    "avg": 6032722
+    "avg": 5931212
+  },
+  "28mm Elmarit": {
+    "weighted_median": 1398876,
+    "sample_count": 27,
+    "min": 479689,
+    "max": 6743250,
+    "avg": 2130946
   },
   "50mm Elmar": {
     "weighted_median": 653548,
